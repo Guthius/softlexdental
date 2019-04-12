@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="OpenDentalDiffDocumentation.xsl"?>
+<database version="19.1.9.0">
+    <table name="alertitem">
+        <summary></summary>
+        <column order="9" name="UserNum" type="bigint(20)" fk="userod">
+            <summary>FK to Userod.UserNum.  Will only be shown to that specific user.  0 is all users.</summary>
+        </column>
+    </table>
+    <table name="dunning">
+        <summary></summary>
+        <column order="10" name="IsSuperFamily" type="tinyint(4)">
+            <summary>Boolean. Is true when the message is specifically created for super families.</summary>
+        </column>
+    </table>
+    <table name="laboratory">
+        <summary></summary>
+        <column order="11" name="IsHidden" type="tinyint(4)">
+            <summary></summary>
+        </column>
+    </table>
+    <table name="mobileappdevice">
+        <summary></summary>
+        <column order="0" name="MobileAppDeviceNum" type="bigint(20)">
+            <summary>Primary key.</summary>
+        </column>
+        <column order="1" name="ClinicNum" type="bigint(20)" fk="clinic">
+            <summary>FK to clinic.ClinicNum.</summary>
+        </column>
+        <column order="2" name="DeviceName" type="varchar(255)">
+            <summary>The name of the device.</summary>
+        </column>
+        <column order="3" name="UniqueID" type="varchar(255)">
+            <summary>The unique identifier of the device. Platform specific.</summary>
+        </column>
+        <column order="4" name="IsAllowed" type="tinyint(4)">
+            <summary>Indicates whether the device is allowed to operate the checkin app.</summary>
+        </column>
+        <column order="5" name="LastAttempt" type="datetime">
+            <summary>The date and time of the last attempted login.</summary>
+        </column>
+        <column order="6" name="LastLogin" type="datetime">
+            <summary>The date and time of the last succesful login.</summary>
+        </column>
+    </table>
+    <table name="payconnectresponseweb">
+        <summary></summary>
+        <column order="0" name="PayConnectResponseWebNum" type="bigint(20)">
+            <summary>Primary key.</summary>
+        </column>
+        <column order="1" name="PatNum" type="bigint(20)" fk="patient">
+            <summary>FK to patient.PatNum.</summary>
+        </column>
+        <column order="2" name="PayNum" type="bigint(20)" fk="payment">
+            <summary>FK to payment.PayNum.</summary>
+        </column>
+        <column order="3" name="AccountToken" type="varchar(255)">
+            <summary>The account token used to poll the processing status.</summary>
+        </column>
+        <column order="4" name="PaymentToken" type="varchar(255)">
+            <summary>The payment token used to poll the processing status.</summary>
+        </column>
+        <column order="5" name="ProcessingStatus" type="varchar(255)">
+            <summary>Enum:PayConnectWebStatus Used to determine if the payment is pending, needs action, or is completed and attached to a payment.</summary>
+            <Enumeration name="PayConnectWebStatus">
+                <summary />
+                <EnumValue name="Created">0.</EnumValue>
+                <EnumValue name="CreatedError">1.</EnumValue>
+                <EnumValue name="Pending">2.</EnumValue>
+                <EnumValue name="PendingError">3.</EnumValue>
+                <EnumValue name="Expired">4.</EnumValue>
+                <EnumValue name="Completed">5.</EnumValue>
+                <EnumValue name="Cancelled">6.</EnumValue>
+                <EnumValue name="Unknown">7.</EnumValue>
+            </Enumeration>
+        </column>
+        <column order="6" name="DateTimeEntry" type="datetime">
+            <summary>Timestamp automatically generated and user not allowed to change.  The actual datetime of entry.</summary>
+        </column>
+        <column order="7" name="DateTimePending" type="datetime">
+            <summary>DateTime that the payment went to the pending status.</summary>
+        </column>
+        <column order="8" name="DateTimeCompleted" type="datetime">
+            <summary>DateTime that the payment went to the completed status and is attached to a payment.</summary>
+        </column>
+        <column order="9" name="DateTimeExpired" type="datetime">
+            <summary>DateTime that the payment opportunity time expired.</summary>
+        </column>
+        <column order="10" name="DateTimeLastError" type="datetime">
+            <summary>DateTime of the last time that the payment had an error.</summary>
+        </column>
+        <column order="11" name="LastResponseStr" type="text">
+            <summary>Raw JSON response (or error) from PayConnect.</summary>
+        </column>
+        <column order="12" name="CCSource" type="tinyint(4)">
+            <summary>Enum:CreditCardSource .</summary>
+            <Enumeration name="CreditCardSource">
+                <summary />
+                <EnumValue name="None">0 - Storing the actual credit card number. Not recommended.</EnumValue>
+                <EnumValue name="XServer">1 - Local installation of X-Charge</EnumValue>
+                <EnumValue name="XWeb">2 - Credit card created via X-Web (an eService)</EnumValue>
+                <EnumValue name="PayConnect">3 - PayConnect web service (from within OD).</EnumValue>
+                <EnumValue name="XServerPayConnect">4 - Credit card has been added through the local installation of X-Charge and the PayConnect web service.</EnumValue>
+                <EnumValue name="XWebPortalLogin">5 - Made from the login screen of the Patient Portal.</EnumValue>
+                <EnumValue name="PaySimple">6 - PaySimple web service (from within OD).</EnumValue>
+                <EnumValue name="PaySimpleACH">7 - PaySimple ACH web service (from within OD).</EnumValue>
+                <EnumValue name="PayConnectPortal">8 - PayConnect credit card (made from Patient Portal)</EnumValue>
+                <EnumValue name="PayConnectPortalLogin">9 - PayConnect credit card (made from Patient Portal Login screen).</EnumValue>
+            </Enumeration>
+        </column>
+        <column order="13" name="Amount" type="double">
+            <summary>The amount of the payment that is attempting to be made.</summary>
+        </column>
+        <column order="14" name="PayNote" type="varchar(255)">
+            <summary>The note entered when making a payment.</summary>
+        </column>
+    </table>
+    <table name="paysplit">
+        <summary></summary>
+        <column order="17" name="AdjNum" type="bigint(20)" fk="adjustment">
+            <summary>FK to adjustment.AdjNum.  Can be 0.  Indicates that this paysplit is meant to counteract an Adjustment.</summary>
+        </column>
+    </table>
+    <table name="providerclinic">
+        <summary></summary>
+        <column order="4" name="StateLicense" type="varchar(50)">
+            <summary>License number corresponding to the StateWhereLicensed.  Can include punctuation</summary>
+        </column>
+        <column order="5" name="StateRxID" type="varchar(255)">
+            <summary>Provider medical State ID.</summary>
+        </column>
+        <column order="6" name="StateWhereLicensed" type="varchar(15)">
+            <summary>The state abbreviation where the state license number in the StateLicense field is legally registered.</summary>
+        </column>
+    </table>
+    <table name="providercliniclink">
+        <summary></summary>
+        <column order="0" name="ProviderClinicLinkNum" type="bigint(20)">
+            <summary>Primary key.</summary>
+        </column>
+        <column order="1" name="ProvNum" type="bigint(20)" fk="provider">
+            <summary>FK to provider.ProvNum</summary>
+        </column>
+        <column order="2" name="ClinicNum" type="bigint(20)" fk="clinic">
+            <summary>FK to clinic.ClinicNum. An entry of -1 means the provider is associated to no clinics.</summary>
+        </column>
+    </table>
+    <table name="reactivation">
+        <summary></summary>
+        <column order="0" name="ReactivationNum" type="bigint(20)">
+            <summary>Primary key.</summary>
+        </column>
+        <column order="1" name="PatNum" type="bigint(20)" fk="patient">
+            <summary>FK to patient.PatNum.</summary>
+        </column>
+        <column order="2" name="ReactivationStatus" type="bigint(20)" fk="definition">
+            <summary>FK to definition.DefNum. Uses the existing RecallUnschedStatus DefCat.</summary>
+        </column>
+        <column order="3" name="ReactivationNote" type="text">
+            <summary>An administrative note for staff use.</summary>
+        </column>
+        <column order="4" name="DoNotContact" type="tinyint(4)">
+            <summary>The patient can set this property if they don't want to be contacted so that it won't interfere with the max attempts to contact option.</summary>
+        </column>
+    </table>
+    <table name="registrationkey">
+        <summary></summary>
+        <column order="13" name="HasEarlyAccess" type="tinyint(4)">
+            <summary>This is a customer that is allowed early access to certain features.  E.g. downloading the Alpha version of the software.</summary>
+        </column>
+    </table>
+    <table name="repeatcharge">
+        <summary></summary>
+        <column order="15" name="UnearnedTypes" type="varchar(4000)">
+            <summary>If UsePrepay is true, when the procedure is created from this repeat charge, it will allocate payments from these unearned types.
+            Stored as a comma separated list of DefNums of Category PaySplitUnearnedType. If empty, then all unearned types will be considered.</summary>
+        </column>
+    </table>
+    <table name="sheetfielddef">
+        <summary></summary>
+        <column order="25" name="LayoutMode" type="tinyint(4)">
+            <summary>Used when there are multiple modes for associated sheetDef, like chart module modes (base,treatment plan,ecw,orion,...).
+            SheetFieldLayoutMode.Default for all sheetdefs that do not have multiple modes.</summary>
+        </column>
+    </table>
+    <table name="tasklist">
+        <summary></summary>
+        <column order="9" name="GlobalTaskFilterType" type="tinyint(4)">
+            <summary>Enum:GlobalTaskFilterType 0=Disabled, 1=Default, 2=None, 3=Clinic, 4=Region.  If a type is selected, then tasks in this tasklist will be filtered by default 
+            such that only tasks that match the tasklist's GlobalFilterType will show in the view.</summary>
+            <Enumeration name="GlobalTaskFilterType">
+                <summary>Used to determine which tasks should be filtered to show in a tasklist.</summary>
+                <EnumValue name="Disabled">0 - Disabled.</EnumValue>
+                <EnumValue name="Default">1 - Default.</EnumValue>
+                <EnumValue name="None">2 - None.</EnumValue>
+                <EnumValue name="Clinic">3 - Clinic.</EnumValue>
+                <EnumValue name="Region">4 - Region.</EnumValue>
+            </Enumeration>
+        </column>
+    </table>
+    <table name="treatplan">
+        <summary></summary>
+        <column order="15" name="SignaturePractice" type="text">
+            <summary>The encrypted and bound signature in base64 format.  The signature is bound to the concatenation of the tp Note, DateTP, and to each proctp Descript and PatAmt.</summary>
+        </column>
+        <column order="16" name="DateTSigned" type="datetime">
+            <summary>The date of the treatment plan is signed.</summary>
+        </column>
+        <column order="17" name="DateTPracticeSigned" type="datetime">
+            <summary>The date of the treatment plan is signed by the office.</summary>
+        </column>
+        <column order="18" name="SignatureText" type="varchar(255)">
+            <summary>The typed name of the person who signed the treatplan.</summary>
+        </column>
+        <column order="19" name="SignaturePracticeText" type="varchar(255)">
+            <summary>The typed name of the person who signed the practice signature.</summary>
+        </column>
+    </table>
+</database>
