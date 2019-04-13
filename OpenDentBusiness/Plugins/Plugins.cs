@@ -19,8 +19,14 @@ namespace OpenDentBusiness
             Plugins.HookAddCode(sender, trigger, args);
         }
 
-        public static T Filter<T>(string filter, T value)
+        public static T Filter<T>(object sender, string filter, T value, params object[] args)
         {
+            var triggerArgs = new List<object>();
+            triggerArgs.Add(value);
+            triggerArgs.AddRange(args);
+
+            Trigger(sender, filter, triggerArgs.ToArray());
+
             return value;
         }
     }
