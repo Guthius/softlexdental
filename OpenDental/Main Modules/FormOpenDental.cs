@@ -2374,7 +2374,7 @@ namespace OpenDental
             // 
             // panelPhoneSmall
             // 
-            this.panelPhoneSmall.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.panelPhoneSmall.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.panelPhoneSmall.Controls.Add(this.butVoiceMails);
             this.panelPhoneSmall.Controls.Add(this.labelFieldType);
@@ -2576,7 +2576,7 @@ namespace OpenDental
             // 
             // splitContainerNoFlickerDashboard
             // 
-            this.splitContainerNoFlickerDashboard.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.splitContainerNoFlickerDashboard.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainerNoFlickerDashboard.BackColor = System.Drawing.SystemColors.Control;
             this.splitContainerNoFlickerDashboard.Location = new System.Drawing.Point(68, 26);

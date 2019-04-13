@@ -4788,6 +4788,9 @@
     <Compile Include="Main Modules\ContrAppt.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Main Modules\ContrAppt.Designer.cs">
+      <DependentUpon>ContrAppt.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main Modules\ContrChart.cs">
       <SubType>UserControl</SubType>
     </Compile>
