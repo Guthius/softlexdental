@@ -1,288 +1,266 @@
-using System;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
-using System.Windows.Forms;
 using OpenDentBusiness;
+using System;
+using System.Windows.Forms;
 
-namespace OpenDental{
-	/// <summary>
-	/// Summary description for FormBasicTemplate.
-	/// </summary>
-	public class FormUserPassword : ODForm {
-		private OpenDental.UI.Button butCancel;
-		private OpenDental.UI.Button butOK;
-		private System.Windows.Forms.Label labelNew;
-		private System.Windows.Forms.TextBox textPassword;
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.Container components = null;
-		private bool IsCreate;
-		private TextBox textUserName;
-		private Label label3;
-		private TextBox textCurrent;
-		private Label labelCurrent;
-		private CheckBox checkShow;
-		public bool IsInSecurityWindow;
-		public bool PasswordIsStrong;
-		public string PasswordTyped;
-		public PasswordContainer LoginDetails;
-		private bool _isPasswordReset;
+namespace OpenDental
+{
+    /// <summary>
+    /// Summary description for FormBasicTemplate.
+    /// </summary>
+    public class FormUserPassword : FormBase
+    {
+        private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.Button acceptButton;
+        private System.Windows.Forms.Label newPasswordLabel;
+        private System.Windows.Forms.TextBox newPasswordTextBox;
+        private System.Windows.Forms.TextBox userNameTextBox;
+        private System.Windows.Forms.Label userLabel;
+        private System.Windows.Forms.TextBox currentPasswordTextBox;
+        private System.Windows.Forms.Label currentPasswordLabel;
+        private System.Windows.Forms.CheckBox showCheckBox;
 
-		///<summary>Set true if creating rather than changing a password.</summary>
-		public FormUserPassword(bool isCreate,string username, bool isPasswordReset=false)
-		{
-			//
-			// Required for Windows Form Designer support
-			//
-			InitializeComponent();
-			Lan.F(this);
-			IsCreate=isCreate;
-			textUserName.Text=username;
-			_isPasswordReset=isPasswordReset;
-		}
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.Container components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
+        private bool IsCreate;
+        private bool _isPasswordReset;
+        public bool IsInSecurityWindow;
+        public bool PasswordIsStrong;
+        public string PasswordTyped;
+        public PasswordContainer LoginDetails;
 
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormUserPassword));
-			this.labelNew = new System.Windows.Forms.Label();
-			this.textPassword = new System.Windows.Forms.TextBox();
-			this.textUserName = new System.Windows.Forms.TextBox();
-			this.label3 = new System.Windows.Forms.Label();
-			this.textCurrent = new System.Windows.Forms.TextBox();
-			this.labelCurrent = new System.Windows.Forms.Label();
-			this.checkShow = new System.Windows.Forms.CheckBox();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.SuspendLayout();
-			// 
-			// labelNew
-			// 
-			this.labelNew.Location = new System.Drawing.Point(13, 80);
-			this.labelNew.Name = "labelNew";
-			this.labelNew.Size = new System.Drawing.Size(157, 18);
-			this.labelNew.TabIndex = 2;
-			this.labelNew.Text = "New Password";
-			this.labelNew.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textPassword
-			// 
-			this.textPassword.Location = new System.Drawing.Point(172, 79);
-			this.textPassword.Name = "textPassword";
-			this.textPassword.PasswordChar = '*';
-			this.textPassword.Size = new System.Drawing.Size(203, 20);
-			this.textPassword.TabIndex = 1;
-			// 
-			// textUserName
-			// 
-			this.textUserName.Location = new System.Drawing.Point(172, 23);
-			this.textUserName.Name = "textUserName";
-			this.textUserName.ReadOnly = true;
-			this.textUserName.Size = new System.Drawing.Size(203, 20);
-			this.textUserName.TabIndex = 5;
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(13, 24);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(157, 18);
-			this.label3.TabIndex = 6;
-			this.label3.Text = "User";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textCurrent
-			// 
-			this.textCurrent.Location = new System.Drawing.Point(172, 51);
-			this.textCurrent.Name = "textCurrent";
-			this.textCurrent.PasswordChar = '*';
-			this.textCurrent.Size = new System.Drawing.Size(203, 20);
-			this.textCurrent.TabIndex = 0;
-			// 
-			// labelCurrent
-			// 
-			this.labelCurrent.Location = new System.Drawing.Point(13, 52);
-			this.labelCurrent.Name = "labelCurrent";
-			this.labelCurrent.Size = new System.Drawing.Size(157, 18);
-			this.labelCurrent.TabIndex = 8;
-			this.labelCurrent.Text = "Current Password";
-			this.labelCurrent.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkShow
-			// 
-			this.checkShow.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkShow.Location = new System.Drawing.Point(82, 107);
-			this.checkShow.Name = "checkShow";
-			this.checkShow.Size = new System.Drawing.Size(104, 18);
-			this.checkShow.TabIndex = 9;
-			this.checkShow.Text = "Show";
-			this.checkShow.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkShow.UseVisualStyleBackColor = true;
-			this.checkShow.Click += new System.EventHandler(this.checkShow_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(264, 158);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 26);
-			this.butOK.TabIndex = 1;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(357, 158);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 26);
-			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// FormUserPassword
-			// 
-			this.ClientSize = new System.Drawing.Size(484, 209);
-			this.Controls.Add(this.checkShow);
-			this.Controls.Add(this.textCurrent);
-			this.Controls.Add(this.labelCurrent);
-			this.Controls.Add(this.textUserName);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.textPassword);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butCancel);
-			this.Controls.Add(this.labelNew);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "FormUserPassword";
-			this.ShowInTaskbar = false;
-			this.Text = "Change Password";
-			this.Load += new System.EventHandler(this.FormUserPassword_Load);
-			this.ResumeLayout(false);
-			this.PerformLayout();
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormUserPassword"/> class.
+        /// </summary>
+        /// <param name="isCreate">Set true if creating rather than changing a password.</param>
+        public FormUserPassword(bool isCreate, string username, bool isPasswordReset = false)
+        {
+            InitializeComponent();
 
-		}
-		#endregion
+            IsCreate = isCreate;
+            userNameTextBox.Text = username;
+            _isPasswordReset = isPasswordReset;
+        }
 
-		private void FormUserPassword_Load(object sender, System.EventArgs e) {
-			if(IsCreate){
-				Text=Lan.g(this,"Create Password");
-			}
-			if(IsInSecurityWindow) {
-				labelCurrent.Visible=false;
-				textCurrent.Visible=false;
-			}
-			if(_isPasswordReset) {
-				labelCurrent.Text="New Password";
-				labelNew.Text="Re-Enter Password";
-				butCancel.Visible=false;
-				butOK.Location=butCancel.Location;
-				this.ControlBox=false;
-			}
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
 
-		private void checkShow_Click(object sender,EventArgs e) {
-			//char ch=textPassword.PasswordChar;
-			if(checkShow.Checked) {
-				textPassword.PasswordChar='\0';
-			}
-			else {
-				textPassword.PasswordChar='*';
-			}
-		}
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.newPasswordLabel = new System.Windows.Forms.Label();
+            this.newPasswordTextBox = new System.Windows.Forms.TextBox();
+            this.userNameTextBox = new System.Windows.Forms.TextBox();
+            this.userLabel = new System.Windows.Forms.Label();
+            this.currentPasswordTextBox = new System.Windows.Forms.TextBox();
+            this.currentPasswordLabel = new System.Windows.Forms.Label();
+            this.showCheckBox = new System.Windows.Forms.CheckBox();
+            this.acceptButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // newPasswordLabel
+            // 
+            this.newPasswordLabel.Location = new System.Drawing.Point(13, 76);
+            this.newPasswordLabel.Name = "newPasswordLabel";
+            this.newPasswordLabel.Size = new System.Drawing.Size(149, 18);
+            this.newPasswordLabel.TabIndex = 4;
+            this.newPasswordLabel.Text = "New Password";
+            this.newPasswordLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // newPasswordTextBox
+            // 
+            this.newPasswordTextBox.Location = new System.Drawing.Point(168, 75);
+            this.newPasswordTextBox.Name = "newPasswordTextBox";
+            this.newPasswordTextBox.PasswordChar = '*';
+            this.newPasswordTextBox.Size = new System.Drawing.Size(203, 23);
+            this.newPasswordTextBox.TabIndex = 5;
+            // 
+            // userNameTextBox
+            // 
+            this.userNameTextBox.Location = new System.Drawing.Point(168, 19);
+            this.userNameTextBox.Name = "userNameTextBox";
+            this.userNameTextBox.ReadOnly = true;
+            this.userNameTextBox.Size = new System.Drawing.Size(203, 23);
+            this.userNameTextBox.TabIndex = 1;
+            // 
+            // userLabel
+            // 
+            this.userLabel.Location = new System.Drawing.Point(13, 20);
+            this.userLabel.Name = "userLabel";
+            this.userLabel.Size = new System.Drawing.Size(149, 18);
+            this.userLabel.TabIndex = 0;
+            this.userLabel.Text = "User";
+            this.userLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // currentPasswordTextBox
+            // 
+            this.currentPasswordTextBox.Location = new System.Drawing.Point(168, 47);
+            this.currentPasswordTextBox.Name = "currentPasswordTextBox";
+            this.currentPasswordTextBox.PasswordChar = '*';
+            this.currentPasswordTextBox.Size = new System.Drawing.Size(203, 23);
+            this.currentPasswordTextBox.TabIndex = 3;
+            // 
+            // currentPasswordLabel
+            // 
+            this.currentPasswordLabel.Location = new System.Drawing.Point(13, 48);
+            this.currentPasswordLabel.Name = "currentPasswordLabel";
+            this.currentPasswordLabel.Size = new System.Drawing.Size(149, 18);
+            this.currentPasswordLabel.TabIndex = 2;
+            this.currentPasswordLabel.Text = "Current Password";
+            this.currentPasswordLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // showCheckBox
+            // 
+            this.showCheckBox.AutoSize = true;
+            this.showCheckBox.Location = new System.Drawing.Point(168, 104);
+            this.showCheckBox.Name = "showCheckBox";
+            this.showCheckBox.Size = new System.Drawing.Size(55, 19);
+            this.showCheckBox.TabIndex = 6;
+            this.showCheckBox.Text = "Show";
+            this.showCheckBox.UseVisualStyleBackColor = true;
+            this.showCheckBox.CheckedChanged += new System.EventHandler(this.showCheckBox_CheckedChanged);
+            // 
+            // acceptButton
+            // 
+            this.acceptButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.acceptButton.Location = new System.Drawing.Point(145, 158);
+            this.acceptButton.Name = "acceptButton";
+            this.acceptButton.Size = new System.Drawing.Size(110, 30);
+            this.acceptButton.TabIndex = 7;
+            this.acceptButton.Text = "&OK";
+            this.acceptButton.Click += new System.EventHandler(this.acceptButton_Click);
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(261, 158);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(110, 30);
+            this.cancelButton.TabIndex = 8;
+            this.cancelButton.Text = "&Cancel";
+            // 
+            // FormUserPassword
+            // 
+            this.AcceptButton = this.acceptButton;
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(384, 201);
+            this.Controls.Add(this.showCheckBox);
+            this.Controls.Add(this.currentPasswordTextBox);
+            this.Controls.Add(this.currentPasswordLabel);
+            this.Controls.Add(this.userNameTextBox);
+            this.Controls.Add(this.userLabel);
+            this.Controls.Add(this.newPasswordTextBox);
+            this.Controls.Add(this.acceptButton);
+            this.Controls.Add(this.cancelButton);
+            this.Controls.Add(this.newPasswordLabel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FormUserPassword";
+            this.ShowInTaskbar = false;
+            this.Text = "Change Password";
+            this.Load += new System.EventHandler(this.FormUserPassword_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-		private void butOK_Click(object sender, System.EventArgs e) {
-			if(_isPasswordReset) {
-				if(textPassword.Text!=textCurrent.Text || string.IsNullOrWhiteSpace(textPassword.Text)) {
-					MsgBox.Show(this,"Passwords must match and not be empty.");
-					return;
-				}
-			}
-			else if(!IsInSecurityWindow
-				&& !Authentication.CheckPassword(Security.CurUser,textCurrent.Text))
-			{
-				MsgBox.Show(this,"Current password incorrect.");
-				return;
-			}
-			string explanation=Userods.IsPasswordStrong(textPassword.Text);
-			if(PrefC.GetBool(PrefName.PasswordsMustBeStrong)) {
-				if(explanation!="") {
-					MessageBox.Show(explanation);
-					return;
-				}
-			}
-			//If the PasswordsMustBeStrong preference is off, still store whether or not the password is strong in case the preference is turned on later
-			PasswordIsStrong=string.IsNullOrEmpty(explanation);
-			if(Programs.UsingEcwTightOrFullMode()) {//Same check as FormLogOn
-				LoginDetails=Authentication.GenerateLoginDetails(textPassword.Text,HashTypes.MD5_ECW);
-			}
-			else {
-				LoginDetails=Authentication.GenerateLoginDetailsSHA512(textPassword.Text);
-			}
-			PasswordTyped=textPassword.Text; //update the stored typed password for middle tier refresh
-			DialogResult=DialogResult.OK;
-		}
+        }
+        #endregion
 
-		private void butCancel_Click(object sender, System.EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+        void FormUserPassword_Load(object sender, EventArgs e)
+        {
+            if (IsCreate)
+            {
+                Text = Translation.Language.lang_create_password;
+            }
 
-		
+            if (IsInSecurityWindow)
+            {
+                currentPasswordLabel.Visible = false;
+                currentPasswordTextBox.Visible = false;
+            }
 
-		
+            if (_isPasswordReset)
+            {
+                currentPasswordLabel.Text = Translation.Language.lang_new_password;
+                newPasswordLabel.Text = Translation.Language.lang_re_enter_password;
+                cancelButton.Visible = false;
+                acceptButton.Location = cancelButton.Location;
 
+                ControlBox = false;
+            }
+        }
 
-	}
+        void showCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (showCheckBox.Checked)
+            {
+                newPasswordTextBox.PasswordChar = default(char);
+            }
+            else
+            {
+                newPasswordTextBox.PasswordChar = '*';
+            }
+        }
+
+        void acceptButton_Click(object sender, System.EventArgs e)
+        {
+            if (_isPasswordReset)
+            {
+                if (newPasswordTextBox.Text != currentPasswordTextBox.Text || string.IsNullOrWhiteSpace(newPasswordTextBox.Text))
+                {
+                    MsgBox.Show(this, Translation.Language.lang_password_must_match_and_not_be_empty);
+                    return;
+                }
+            }
+            else if (!IsInSecurityWindow && !Authentication.CheckPassword(Security.CurUser, currentPasswordTextBox.Text))
+            {
+                MsgBox.Show(this, Translation.Language.lang_current_password_incorrect);
+                return;
+            }
+
+            string explanation = Userods.IsPasswordStrong(newPasswordTextBox.Text);
+            if (PrefC.GetBool(PrefName.PasswordsMustBeStrong))
+            {
+                if (explanation != "")
+                {
+                    MessageBox.Show(explanation);
+                    return;
+                }
+            }
+
+            // If the PasswordsMustBeStrong preference is off, still store whether or not the password is strong in case the preference is turned on later
+            PasswordIsStrong = string.IsNullOrEmpty(explanation);
+            if (Programs.UsingEcwTightOrFullMode())
+            {
+                LoginDetails = Authentication.GenerateLoginDetails(newPasswordTextBox.Text, HashTypes.MD5_ECW);
+            }
+            else
+            {
+                LoginDetails = Authentication.GenerateLoginDetailsSHA512(newPasswordTextBox.Text);
+            }
+
+            PasswordTyped = newPasswordTextBox.Text; // update the stored typed password for middle tier refresh
+            DialogResult = DialogResult.OK;
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

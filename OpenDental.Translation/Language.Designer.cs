@@ -70,6 +70,51 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create Password.
+        /// </summary>
+        public static string lang_create_password {
+            get {
+                return ResourceManager.GetString("lang_create_password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current password incorrect..
+        /// </summary>
+        public static string lang_current_password_incorrect {
+            get {
+                return ResourceManager.GetString("lang_current_password_incorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Password.
+        /// </summary>
+        public static string lang_new_password {
+            get {
+                return ResourceManager.GetString("lang_new_password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passwords must match and not be empty..
+        /// </summary>
+        public static string lang_password_must_match_and_not_be_empty {
+            get {
+                return ResourceManager.GetString("lang_password_must_match_and_not_be_empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Re-Enter Password.
+        /// </summary>
+        public static string lang_re_enter_password {
+            get {
+                return ResourceManager.GetString("lang_re_enter_password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you would like to log off?.
         /// </summary>
         public static string LogOffConfirmation {

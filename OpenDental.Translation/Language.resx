@@ -120,6 +120,21 @@
   <data name="DoNotShowThisMessageAgain" xml:space="preserve">
     <value>Do not show me this message again.</value>
   </data>
+  <data name="lang_create_password" xml:space="preserve">
+    <value>Create Password</value>
+  </data>
+  <data name="lang_current_password_incorrect" xml:space="preserve">
+    <value>Current password incorrect.</value>
+  </data>
+  <data name="lang_new_password" xml:space="preserve">
+    <value>New Password</value>
+  </data>
+  <data name="lang_password_must_match_and_not_be_empty" xml:space="preserve">
+    <value>Passwords must match and not be empty.</value>
+  </data>
+  <data name="lang_re_enter_password" xml:space="preserve">
+    <value>Re-Enter Password</value>
+  </data>
   <data name="LogOffConfirmation" xml:space="preserve">
     <value>Are you sure you would like to log off?</value>
   </data>
