@@ -412,6 +412,15 @@
     <Compile Include="Bridges\VixWinOld.cs" />
     <Compile Include="Bridges\XVWeb.cs" />
     <Compile Include="Bridges\ZImage.cs" />
+    <Compile Include="FormBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormAbout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormAbout.Designer.cs">
+      <DependentUpon>FormAbout.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms Reports\FormRpProcNotBilledIns.designer.cs">
       <DependentUpon>FormRpProcNotBilledIns.cs</DependentUpon>
     </Compile>
@@ -578,7 +587,6 @@
     <Compile Include="InternalTools\Job Manager\UserControlSprintManager.Designer.cs">
       <DependentUpon>UserControlSprintManager.cs</DependentUpon>
     </Compile>
-    <Compile Include="Logic\aaLogicUI.cs" />
     <Compile Include="Logic\ActionNeededL.cs" />
     <Compile Include="Logic\AppointmentL.cs" />
     <Compile Include="Misc\WebServiceRequest.cs" />
@@ -778,16 +786,8 @@
     <Compile Include="Forms\FormPaySimple.designer.cs">
       <DependentUpon>FormPaySimple.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\BasicTemplateMVC\BasicTemplateController.cs" />
-    <Compile Include="Forms\BasicTemplateMVC\BasicTemplateModel.cs" />
     <Compile Include="Forms Reports\FormRpProdGoal.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\BasicTemplateMVC\BasicTemplateView.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\BasicTemplateMVC\BasicTemplateView.Designer.cs">
-      <DependentUpon>BasicTemplateView.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormBugSubmission.cs">
       <SubType>Form</SubType>
@@ -1542,12 +1542,6 @@
     </Compile>
     <Compile Include="Forms\FormSpellChecker.designer.cs">
       <DependentUpon>FormSpellChecker.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\BasicTemplate.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\BasicTemplate.designer.cs">
-      <DependentUpon>BasicTemplate.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormConnectionLost.cs">
       <SubType>Form</SubType>
@@ -4049,9 +4043,6 @@
     <Compile Include="Forms\FormLanguagesUsed.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormAbout.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\FormAccountEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -5300,6 +5291,9 @@
     <EmbeddedResource Include="Bridges\FormOryxUserSettings.resx">
       <DependentUpon>FormOryxUserSettings.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormAbout.resx">
+      <DependentUpon>FormAbout.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormLayoutSheetDefs.resx">
       <DependentUpon>FormLayoutSheetDefs.cs</DependentUpon>
     </EmbeddedResource>
@@ -5446,9 +5440,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPaySimple.resx">
       <DependentUpon>FormPaySimple.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\BasicTemplateMVC\BasicTemplateView.resx">
-      <DependentUpon>BasicTemplateView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormBugSubmission.resx">
       <DependentUpon>FormBugSubmission.cs</DependentUpon>
@@ -5833,9 +5824,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormSpellChecker.resx">
       <DependentUpon>FormSpellChecker.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\BasicTemplate.resx">
-      <DependentUpon>BasicTemplate.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormConnectionLost.resx">
       <DependentUpon>FormConnectionLost.cs</DependentUpon>
@@ -7158,10 +7146,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormLanguagesUsed.resx">
       <DependentUpon>FormLanguagesUsed.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAbout.resx">
-      <DependentUpon>FormAbout.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAccountEdit.resx">
@@ -9598,6 +9582,10 @@
       <Project>{84688345-BB6A-4F2F-8672-A82B52FD433B}</Project>
       <Name>xODR</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OpenDental.Translation\OpenDental.Translation.csproj">
+      <Project>{1180aa61-8cbc-479f-9143-b1ab1b149028}</Project>
+      <Name>OpenDental.Translation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OpenDentalCloud\OpenDentalCloud.csproj">
       <Project>{f90d0481-3d97-4c72-af6e-dd81177e3de1}</Project>
       <Name>OpenDentalCloud</Name>
@@ -9620,9 +9608,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Forms Agg Reports\" />
     <Folder Include="Resources\OutlookBar\" />
-    <Folder Include="SmartCards\Linux\" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

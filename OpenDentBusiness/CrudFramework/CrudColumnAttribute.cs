@@ -3,49 +3,56 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace OpenDentBusiness {
-	[AttributeUsage(AttributeTargets.Field,AllowMultiple=false)]
-	public class CrudColumnAttribute : Attribute {
-		public CrudColumnAttribute() {
-			this.isPriKey=false;
-			this.specialType=CrudSpecialColType.None;
-			this.isNotDbColumn=false;
-			this.isPriKeyMobile1=false;
-			this.isPriKeyMobile2=false;
-		}
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+    public class CrudColumnAttribute : Attribute
+    {
+        public CrudColumnAttribute()
+        {
+            this.isPriKey = false;
+            this.specialType = CrudSpecialColType.None;
+            this.isNotDbColumn = false;
+            this.isPriKeyMobile1 = false;
+            this.isPriKeyMobile2 = false;
+        }
 
-		private bool isPriKey;
-		public bool IsPriKey {
-			get { return isPriKey; }
-			set { isPriKey=value; }
-		}
+        private bool isPriKey;
+        public bool IsPriKey
+        {
+            get { return isPriKey; }
+            set { isPriKey = value; }
+        }
 
-		private CrudSpecialColType specialType;
-		public CrudSpecialColType SpecialType {
-			get { return specialType; }
-			set { specialType=value; }
-		}
+        private CrudSpecialColType specialType;
+        public CrudSpecialColType SpecialType
+        {
+            get { return specialType; }
+            set { specialType = value; }
+        }
 
-		private bool isNotDbColumn;
-		public bool IsNotDbColumn {
-			get { return isNotDbColumn; }
-			set { isNotDbColumn=value; }
-		}
+        private bool isNotDbColumn;
+        public bool IsNotDbColumn
+        {
+            get { return isNotDbColumn; }
+            set { isNotDbColumn = value; }
+        }
 
-		private bool isPriKeyMobile1;
-		///<summary>Always present in a mobile table.  Always CustomerNum, FK to PatNum.</summary>
-		public bool IsPriKeyMobile1 {
-			get { return isPriKeyMobile1; }
-			set { isPriKeyMobile1=value; }
-		}
+        private bool isPriKeyMobile1;
+        ///<summary>Always present in a mobile table.  Always CustomerNum, FK to PatNum.</summary>
+        public bool IsPriKeyMobile1
+        {
+            get { return isPriKeyMobile1; }
+            set { isPriKeyMobile1 = value; }
+        }
 
-		private bool isPriKeyMobile2;
-		///<summary>Always present in a mobile table.  Always the ordinary priKey of the table, used together with CustomerNum.</summary>
-		public bool IsPriKeyMobile2 {
-			get { return isPriKeyMobile2; }
-			set { isPriKeyMobile2=value; }
-		}
+        private bool isPriKeyMobile2;
+        ///<summary>Always present in a mobile table.  Always the ordinary priKey of the table, used together with CustomerNum.</summary>
+        public bool IsPriKeyMobile2
+        {
+            get { return isPriKeyMobile2; }
+            set { isPriKeyMobile2 = value; }
+        }
 
-	}
+    }
 
 	///<summary>There are also some patterns we follow that do not require special types.  For enums, crud automatically generates tinyint.  For itemorders, we manually change mysql type to smallint?.  </summary>
 	[Flags]

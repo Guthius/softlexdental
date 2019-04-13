@@ -9,32 +9,44 @@ using CodeBase;
 
 namespace ProximityOD {
 
-	///<summary>Auto scans serial ports for presence of a Maxbotics Sonic Sensor. Robust, will recover from many errors. 
-	///Simply wire up to events ProximityChanged and RangeChanged to use.</summary>
+	/// <summary>
+    /// Auto scans serial ports for presence of a Maxbotics Sonic Sensor. 
+    /// Robust, will recover from many errors. 
+	/// Simply wire up to events ProximityChanged and RangeChanged to use.
+    /// </summary>
 	public class ODSonicSensor : IDisposable {
+
 		///<summary>When range reading in inches changes to be less than range proximal, this event will fire with a bool indicating proximity.</summary>
 		public event Action<bool> ProximityChanged = null;
-		///<summary>When range reading in inches changes, this event will fire with the new range as a parameter.</summary>
+		
+        ///<summary>When range reading in inches changes, this event will fire with the new range as a parameter.</summary>
 		public event Action<int> RangeChanged = null;
-		private SerialPort _port;
-		///<summary>Background thread used to take reading from the serial port and save to _range and _isProximal properties.</summary>
+
+        private SerialPort _port;
+		
+        ///<summary>Background thread used to take reading from the serial port and save to _range and _isProximal properties.</summary>
 		private Thread _threadRead;
 
 		///<summary>When true, signals the _threadRead to quit gracfully on next loop.</summary>
 		public bool ThreadExit {get;set;}
 
 		private int _range;
-		public int Range {
-			get {
-				return _range;
-			}
-			private set {
-				if(Range!=value) {
-					_range=value;
-					RangeChanged?.Invoke(value);
-				}
-			}
-		}
+
+		public int Range
+        {
+            get
+            {
+                return _range;
+            }
+            private set
+            {
+                if (Range != value)
+                {
+                    _range = value;
+                    RangeChanged?.Invoke(value);
+                }
+            }
+        }
 
 		private bool _isProximal;
 		public bool IsProximal {

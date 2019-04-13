@@ -18,9 +18,6 @@ namespace OpenDental {
 		}
 
 		public override void OnPostInit() {
-			_view.AddDatabaseType("MySQL");
-			_view.AddDatabaseType("Oracle");
-			_view.SetDatabaseType(0);
 			_view.FillComboComputerNames(CentralConnections.GetComputerNames());
 		}
 

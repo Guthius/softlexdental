@@ -2,13 +2,11 @@
 <ConnectionSettings>
   <DatabaseConnection>
     <ComputerName>localhost</ComputerName>
-    <Database>development164</Database>
+    <Database>opendental</Database>
     <User>root</User>
-    <Password>
-    </Password>
+    <Password>softlex</Password>
     <UserLow>root</UserLow>
-    <PasswordLow>
-    </PasswordLow>
+    <PasswordLow>softlex</PasswordLow>
     <DatabaseType>MySql</DatabaseType>
     <ApplicationName>/OpenDentalServer</ApplicationName>
   </DatabaseConnection>

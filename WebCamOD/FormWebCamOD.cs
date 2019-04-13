@@ -62,7 +62,7 @@ namespace ProximityOD {
 			#region Database Connection
 			try {
 #if DEBUG
-				new DataConnection().SetDb("localhost","customers","root","","","",DatabaseType.MySql);
+				new DataConnection().SetDb("localhost","opendental","root","softlex","","",DatabaseType.MySql);
 #else
 				new DataConnection().SetDb("10.10.1.200","customers","root","","","",DatabaseType.MySql);
 #endif

@@ -262,22 +262,14 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		///<summary>Returns the major and minor version of MySQL for the current connection.  Returns a version of 0.0 if the MySQL version cannot be determined.</summary>
-		public static string GetMySqlVersion() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetString(MethodBase.GetCurrentMethod());
-			}
-			string command="SELECT @@version";
-			DataTable table=Db.GetTable(command);
-			string version=PIn.String(table.Rows[0][0].ToString());
-			string[] arrayVersion=version.Split('.');
-			try {
-				return int.Parse(arrayVersion[0])+"."+int.Parse(arrayVersion[1]);
-			}
-			catch {
-			}
-			return "0.0";
-		}
+        ///<summary>Returns the major and minor version of MySQL for the current connection.  Returns a version of 0.0 if the MySQL version cannot be determined.</summary>
+        public static string GetMySqlVersion()
+        {
+            string command = "SELECT @@version";
+            DataTable table = Db.GetTable(command);
+            return PIn.String(table.Rows[0][0].ToString());
+
+        }
 
 		///<summary>Gets the human readable host name of the database server, even when using the middle-tier.  This will return an empty string if Dns lookup fails.</summary>
 		public static string GetODServer() {

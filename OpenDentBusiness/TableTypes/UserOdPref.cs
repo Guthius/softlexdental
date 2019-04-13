@@ -3,30 +3,43 @@ using System.Collections;
 using System.Drawing;
 
 namespace OpenDentBusiness {
-	///<summary></summary>
-	[Serializable]
-	[CrudTable(IsSynchable=true)]
-	public class UserOdPref:TableBase {
-		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey = true)]
-		public long UserOdPrefNum;
-		///<summary>FK to userod.UserNum.</summary>
-		public long UserNum;
-		///<summary>Foreign key to a table associated with FkeyType.  Can be 0 if the user preference does not need a foreign key.</summary>
-		public long Fkey;
-		///<summary>Enum:UserOdFkeyType Specifies which flag is overridden for the specified definition, since an individual definition can have multiple flags.</summary>
-		public UserOdFkeyType FkeyType;
-		///<summary>Used to hold the override, which might be a simple primitive value, a comma separated list, or a complex document in xml.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
-		public string ValueString;
-		///<summary>FK to Clinic.ClinicNum.</summary>
-		public long ClinicNum;
 
-		///<summary></summary>
-		public UserOdPref Clone() {
-			return (UserOdPref)this.MemberwiseClone();
-		}
-	}
+    [Serializable]
+    [CrudTable(IsSynchable = true)]
+    public class UserOdPref : TableBase
+    {
+        [CrudColumn(IsPriKey = true)]
+        public long UserOdPrefNum;
+
+        /// <summary>
+        /// FK to userod.UserNum.
+        /// </summary>
+        public long UserNum;
+        
+        /// <summary>
+        /// Foreign key to a table associated with FkeyType.  Can be 0 if the user preference does not need a foreign key.
+        /// </summary>
+        public long Fkey;
+        
+        /// <summary>
+        /// Enum:UserOdFkeyType Specifies which flag is overridden for the specified definition, since an individual definition can have multiple flags.
+        /// </summary>
+        public UserOdFkeyType FkeyType;
+        
+        ///<summary>
+        ///Used to hold the override, which might be a simple primitive value, a comma separated list, or a complex document in xml.
+        ///</summary>
+        [CrudColumn(SpecialType = CrudSpecialColType.TextIsClob)]
+        public string ValueString;
+        
+        ///<summary>FK to Clinic.ClinicNum.</summary>
+        public long ClinicNum;
+
+        public UserOdPref Clone()
+        {
+            return (UserOdPref)this.MemberwiseClone();
+        }
+    }
 
 	///<summary>These FKey Types are to be used as an identifier for what table the Fkey column is associated to, or what type of override it is.
 	///Not always associated to a database table.  Example:  TaskCollapse,SuppressLogOffMessage,AcctProcBreakdown.

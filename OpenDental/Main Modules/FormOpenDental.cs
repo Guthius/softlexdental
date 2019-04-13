@@ -15,47 +15,29 @@ redistributed.
 
 
 //#define ORA_DB
-using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.Drawing.Printing;
-using System.Data;
-using System.Diagnostics;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.Media;
-using Microsoft.Win32;
-using System.Net;
-using System.Net.Sockets;
-using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Security.Permissions;
-using System.Security.Policy;
-using System.Security.Principal;
-using System.Threading;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using OpenDentBusiness;
-using OpenDentBusiness.UI;
 using CodeBase;
 using DataConnectionBase;
-using System.Security.AccessControl;
-using System.Xml;
-using System.Xml.XPath;
-using System.Xml.Serialization;
-using SparksToothChart;
+using Microsoft.Win32;
 //using OpenDental.SmartCards;
 using OpenDental.UI;
-using System.ServiceProcess;
-using System.Linq;
-using OpenDental.Bridges;
-using OpenDentBusiness.WebServiceMainHQ;
+using OpenDentBusiness;
+using OpenDentBusiness.UI;
 using ServiceManager;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Diagnostics;
 using System.DirectoryServices;
+using System.Drawing;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Media;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
+using System.Xml;
+using System.Xml.XPath;
 #if EHRTEST
 using EHR;
 #endif
@@ -64,9 +46,10 @@ using EHR;
 //using OD_CRYPTO;
 //#endif
 
-namespace OpenDental{
-	///<summary></summary>
-	public partial class FormOpenDental:ODForm {
+namespace OpenDental
+{
+    ///<summary></summary>
+    public partial class FormOpenDental:ODForm {
 		#region Classwide Variables
 		///<summary>This is the singleton instance of the FormOpenDental. This allows us to have S_ methods that are public static
 		///and can be called from anywhere in the program to update FormOpenDental.</summary>
@@ -6225,36 +6208,38 @@ namespace OpenDental{
 			}
 		}
 
-		/*private void moduleStaffBilling_GoToChanged(object sender,GoToEventArgs e) {
-			if(e.PatNum==0) {
-				return;
-			}
-			CurPatNum=e.PatNum;
-			Patient pat=Patients.GetPat(CurPatNum);
-			RefreshCurrentModule();
-			FillPatientButton(CurPatNum,pat.GetNameLF(),pat.Email!="",pat.ChartNumber);
-		}*/
 
-		#region MenuEvents
-		private void menuItemLogOff_Click(object sender, System.EventArgs e) {
-			UserOdPref logOffMessage=UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum,UserOdFkeyType.SuppressLogOffMessage).FirstOrDefault();
-			if(logOffMessage==null) {//Doesn't exist in the database
-				InputBox checkResult=new InputBox(Lan.g(this,"Are you sure you would like to log off?"),Lan.g(this,"Do not show me this message again."),true,new Point(0,40));
-				checkResult.ShowDialog();
-				if(checkResult.DialogResult==DialogResult.Cancel) {
-					return;
-				}
-				else if(checkResult.DialogResult==DialogResult.OK) {
-					if(checkResult.checkBoxResult.Checked) {
-						UserOdPrefs.Insert(new UserOdPref() {
-							UserNum=Security.CurUser.UserNum,
-							FkeyType=UserOdFkeyType.SuppressLogOffMessage
-						});
-					}
-				}
-			}
-			LogOffNow(false);
-		}
+        #region MenuEvents
+
+        private void menuItemLogOff_Click(object sender, EventArgs e)
+        {
+            UserOdPref logOffMessage = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum, UserOdFkeyType.SuppressLogOffMessage).FirstOrDefault();
+            if (logOffMessage == null) // Doesn't exist in the database
+            {
+                InputBox checkResult = new InputBox(
+                    OpenDental.Translation.Language.LogOffConfirmation, 
+                    OpenDental.Translation.Language.DoNotShowThisMessageAgain, 
+                    true, new Point(0, 40));
+
+                checkResult.ShowDialog();
+                if (checkResult.DialogResult == DialogResult.Cancel)
+                {
+                    return;
+                }
+                else if (checkResult.DialogResult == DialogResult.OK)
+                {
+                    if (checkResult.checkBoxResult.Checked)
+                    {
+                        UserOdPrefs.Insert(new UserOdPref()
+                        {
+                            UserNum = Security.CurUser.UserNum,
+                            FkeyType = UserOdFkeyType.SuppressLogOffMessage
+                        });
+                    }
+                }
+            }
+            LogOffNow(false);
+        }
 
 		#region File
 

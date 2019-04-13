@@ -1610,7 +1610,15 @@ namespace OpenDental.UI {
 				Color cTitleTop=ODColorTheme.TitleTopBrush.Color;
 				Color cTitleBottom=ODColorTheme.TitleBottomBrush.Color;
 				LinearGradientBrush brushTitleBackground=new LinearGradientBrush(new Rectangle(0,0,Width,titleHeight),cTitleTop,cTitleBottom,LinearGradientMode.Vertical);
-				g.FillRectangle(brushTitleBackground,0,0,Width,titleHeight);
+
+                brushTitleBackground = new LinearGradientBrush(
+                    new Point(0, 0),
+                    new Point(0, titleHeight),
+                    Color.FromArgb(40, 110, 240),
+                    Color.FromArgb(0, 70, 140));
+
+
+                g.FillRectangle(brushTitleBackground,0,0,Width,titleHeight);
 				g.DrawString(title,_titleFont,ODColorTheme.GridTextBrush,Width/2-g.MeasureString(title,_titleFont).Width/2,2); //draws title text
 				if(HasAddButton) {
 					int addW=titleHeight;

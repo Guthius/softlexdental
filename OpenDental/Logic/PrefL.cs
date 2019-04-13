@@ -1019,44 +1019,7 @@ namespace OpenDental {
 				return true;
 			}
 			bool hasBackup=false;
-			string thisVersion=MiscData.GetMySqlVersion();
-			Version versionMySQL=new Version(thisVersion);
-			if(versionMySQL < new Version(5,0)) {
-				FormOpenDental.ExitCode=110;//MySQL version lower than 5.0
-				if(!isSilent) {
-					//We will force users to upgrade to 5.0, but not yet to 5.5
-					MessageBox.Show(Lan.g("Prefs","Your version of MySQL won't work with this program")+": "+thisVersion
-						+".  "+Lan.g("Prefs","You should upgrade to MySQL 5.0 using the installer on our website."));
-				}
-				return false;
-			}
-			if(!PrefC.ContainsKey("MySqlVersion")) {//db has not yet been updated to store this pref
-				//We're going to skip this.  We will recommend that people first upgrade OD, then MySQL, so this won't be an issue.
-			}
-			else {//Using a version that stores the MySQL version as a preference.
-				//There was an old bug where the MySQLVersion preference could be stored as 5,5 instead of 5.5 due to converting the version into a float.
-				//Replace any commas with periods before checking if the preference is going to change.
-				//This is simply an attempt to avoid making unnecessary backups for users with a corrupt version (e.g. 5,5).
-				if(PrefC.GetString(PrefName.MySqlVersion).Contains(",")) {
-					Prefs.UpdateString(PrefName.MySqlVersion,PrefC.GetString(PrefName.MySqlVersion).Replace(",","."));
-				}
-				//Now check to see if the MySQL version has been updated.  If it has, make an automatic backup, repair, and optimize all tables.
-				if(Prefs.UpdateString(PrefName.MySqlVersion,(thisVersion))) {
-#if !DEBUG
-					if(!isSilent) {
-						if(!MsgBox.Show("Prefs",MsgBoxButtons.OKCancel,"Tables will now be backed up, optimized, and repaired.  This will take a minute or two.  Continue?")) {
-							FormOpenDental.ExitCode=0;
-							return false;
-						}
-					}
-					if(!Shared.BackupRepairAndOptimize(isSilent,BackupLocation.ConvertScript,false)) {
-						FormOpenDental.ExitCode=101;//Database Backup failed
-						return false;
-					}
-					hasBackup=true;
-#endif
-				}
-			}
+
 			if(PrefC.ContainsKey("DatabaseConvertedForMySql41")) {
 				return true;//already converted
 			}
@@ -1088,11 +1051,12 @@ namespace OpenDental {
 			if(DataConnection.DBtype!=DatabaseType.MySql) {
 				return;
 			}
-			string thisVersion=MiscData.GetMySqlVersion();
-			Version versionMySQL=new Version(thisVersion);
-			if(versionMySQL < new Version(5,5) && !Programs.IsEnabled(ProgramName.eClinicalWorks)) {//Do not show msg if MySQL version is 5.5 or greater or eCW is enabled
-				MsgBox.Show("Prefs","You should upgrade to MySQL 5.5 using the installer posted on our website.  It's not urgent, but until you upgrade, you are likely to get a few errors each day which will require restarting the MySQL service.");
-			}
+            // TODO: Fix me.
+			//string thisVersion=MiscData.GetMySqlVersion();
+			//Version versionMySQL=new Version(thisVersion);
+			//if(versionMySQL < new Version(5,5) && !Programs.IsEnabled(ProgramName.eClinicalWorks)) {//Do not show msg if MySQL version is 5.5 or greater or eCW is enabled
+			//	MsgBox.Show("Prefs","You should upgrade to MySQL 5.5 using the installer posted on our website.  It's not urgent, but until you upgrade, you are likely to get a few errors each day which will require restarting the MySQL service.");
+			//}
 		}
 
 		///<summary></summary>
