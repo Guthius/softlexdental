@@ -18,6 +18,11 @@ namespace OpenDentBusiness
         {
             Plugins.HookAddCode(sender, trigger, args);
         }
+
+        public static T Filter<T>(string filter, T value)
+        {
+            return value;
+        }
     }
 
     public class Plugins
