@@ -33,133 +33,132 @@ namespace OpenDental {
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormLogOn));
-			this.butExit = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
-			this.listUser = new System.Windows.Forms.ListBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label2 = new System.Windows.Forms.Label();
-			this.textPassword = new System.Windows.Forms.TextBox();
-			this.textUser = new System.Windows.Forms.TextBox();
-			this.checkShowCEMTUsers = new System.Windows.Forms.CheckBox();
-			this.SuspendLayout();
-			// 
-			// butCancel
-			// 
-			this.butExit.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butExit.Autosize = true;
-			this.butExit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butExit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butExit.CornerRadius = 4F;
-			this.butExit.Location = new System.Drawing.Point(361, 321);
-			this.butExit.Name = "butExit";
-			this.butExit.Size = new System.Drawing.Size(75, 26);
-			this.butExit.TabIndex = 2;
-			this.butExit.Text = "Exit";
-			this.butExit.Click += new System.EventHandler(this.butExit_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(361, 280);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 26);
-			this.butOK.TabIndex = 1;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// listUser
-			// 
-			this.listUser.Location = new System.Drawing.Point(31, 31);
-			this.listUser.Name = "listBoxUsers";
-			this.listUser.Size = new System.Drawing.Size(141, 316);
-			this.listUser.TabIndex = 2;
-			this.listUser.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listUser_MouseUp);
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(30, 10);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(122, 18);
-			this.label1.TabIndex = 6;
-			this.label1.Text = "User";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(188, 10);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(122, 18);
-			this.label2.TabIndex = 7;
-			this.label2.Text = "Password";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// textPassword
-			// 
-			this.textPassword.Location = new System.Drawing.Point(189, 31);
-			this.textPassword.Name = "textPassword";
-			this.textPassword.PasswordChar = '*';
-			this.textPassword.Size = new System.Drawing.Size(215, 20);
-			this.textPassword.TabIndex = 0;
-			// 
-			// textUser
-			// 
-			this.textUser.Location = new System.Drawing.Point(31, 31);
-			this.textUser.Name = "textUser";
-			this.textUser.Size = new System.Drawing.Size(141, 20);
-			this.textUser.TabIndex = 8;
-			this.textUser.Visible = false;
-			// 
-			// checkShowCEMTUsers
-			// 
-			this.checkShowCEMTUsers.Location = new System.Drawing.Point(191, 68);
-			this.checkShowCEMTUsers.Name = "checkShowCEMTUsers";
-			this.checkShowCEMTUsers.Size = new System.Drawing.Size(213, 24);
-			this.checkShowCEMTUsers.TabIndex = 9;
-			this.checkShowCEMTUsers.Text = "Show CEMT users";
-			this.checkShowCEMTUsers.UseVisualStyleBackColor = true;
-			this.checkShowCEMTUsers.Visible = false;
-			this.checkShowCEMTUsers.CheckedChanged += new System.EventHandler(this.checkShowCEMTUsers_CheckedChanged);
-			// 
-			// FormLogOn
-			// 
-			this.AcceptButton = this.butOK;
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(464, 378);
-			this.Controls.Add(this.checkShowCEMTUsers);
-			this.Controls.Add(this.textUser);
-			this.Controls.Add(this.textPassword);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butExit);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.listUser);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximizeBox = false;
-			this.Name = "FormLogOn";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Log On";
-			this.Load += new System.EventHandler(this.FormLogOn_Load);
-			this.ResumeLayout(false);
-			this.PerformLayout();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormLogOn));
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.acceptButton = new System.Windows.Forms.Button();
+            this.userListBox = new System.Windows.Forms.ListBox();
+            this.userLabel = new System.Windows.Forms.Label();
+            this.passwordLabel = new System.Windows.Forms.Label();
+            this.passwordTextBox = new System.Windows.Forms.TextBox();
+            this.userTextBox = new System.Windows.Forms.TextBox();
+            this.CEMTUsersCheckBox = new System.Windows.Forms.CheckBox();
+            this.SuspendLayout();
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.Location = new System.Drawing.Point(341, 335);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(110, 30);
+            this.cancelButton.TabIndex = 3;
+            this.cancelButton.Text = "Exit";
+            this.cancelButton.Click += new System.EventHandler(this.cancelButton_Click);
+            // 
+            // acceptButton
+            // 
+            this.acceptButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.acceptButton.Location = new System.Drawing.Point(341, 299);
+            this.acceptButton.Name = "acceptButton";
+            this.acceptButton.Size = new System.Drawing.Size(110, 30);
+            this.acceptButton.TabIndex = 2;
+            this.acceptButton.Text = "&OK";
+            this.acceptButton.Click += new System.EventHandler(this.acceptButton_Click);
+            // 
+            // userListBox
+            // 
+            this.userListBox.IntegralHeight = false;
+            this.userListBox.ItemHeight = 15;
+            this.userListBox.Location = new System.Drawing.Point(13, 34);
+            this.userListBox.Margin = new System.Windows.Forms.Padding(3, 3, 30, 3);
+            this.userListBox.Name = "userListBox";
+            this.userListBox.Size = new System.Drawing.Size(150, 331);
+            this.userListBox.TabIndex = 6;
+            this.userListBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listUser_MouseUp);
+            // 
+            // userLabel
+            // 
+            this.userLabel.AutoSize = true;
+            this.userLabel.Location = new System.Drawing.Point(10, 16);
+            this.userLabel.Name = "userLabel";
+            this.userLabel.Size = new System.Drawing.Size(30, 15);
+            this.userLabel.TabIndex = 4;
+            this.userLabel.Text = "User";
+            this.userLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // passwordLabel
+            // 
+            this.passwordLabel.AutoSize = true;
+            this.passwordLabel.Location = new System.Drawing.Point(193, 16);
+            this.passwordLabel.Name = "passwordLabel";
+            this.passwordLabel.Size = new System.Drawing.Size(57, 15);
+            this.passwordLabel.TabIndex = 7;
+            this.passwordLabel.Text = "Password";
+            this.passwordLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // passwordTextBox
+            // 
+            this.passwordTextBox.Location = new System.Drawing.Point(196, 34);
+            this.passwordTextBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 20);
+            this.passwordTextBox.Name = "passwordTextBox";
+            this.passwordTextBox.PasswordChar = '*';
+            this.passwordTextBox.Size = new System.Drawing.Size(215, 23);
+            this.passwordTextBox.TabIndex = 0;
+            // 
+            // userTextBox
+            // 
+            this.userTextBox.Location = new System.Drawing.Point(13, 34);
+            this.userTextBox.Margin = new System.Windows.Forms.Padding(3, 3, 30, 3);
+            this.userTextBox.Name = "userTextBox";
+            this.userTextBox.Size = new System.Drawing.Size(150, 23);
+            this.userTextBox.TabIndex = 5;
+            this.userTextBox.Visible = false;
+            // 
+            // CEMTUsersCheckBox
+            // 
+            this.CEMTUsersCheckBox.AutoSize = true;
+            this.CEMTUsersCheckBox.Location = new System.Drawing.Point(196, 80);
+            this.CEMTUsersCheckBox.Name = "CEMTUsersCheckBox";
+            this.CEMTUsersCheckBox.Size = new System.Drawing.Size(120, 19);
+            this.CEMTUsersCheckBox.TabIndex = 1;
+            this.CEMTUsersCheckBox.Text = "Show CEMT users";
+            this.CEMTUsersCheckBox.UseVisualStyleBackColor = true;
+            this.CEMTUsersCheckBox.Visible = false;
+            this.CEMTUsersCheckBox.CheckedChanged += new System.EventHandler(this.CEMTUsersCheckBox_CheckedChanged);
+            // 
+            // FormLogOn
+            // 
+            this.AcceptButton = this.acceptButton;
+            this.ClientSize = new System.Drawing.Size(464, 378);
+            this.Controls.Add(this.CEMTUsersCheckBox);
+            this.Controls.Add(this.userTextBox);
+            this.Controls.Add(this.passwordTextBox);
+            this.Controls.Add(this.acceptButton);
+            this.Controls.Add(this.cancelButton);
+            this.Controls.Add(this.passwordLabel);
+            this.Controls.Add(this.userLabel);
+            this.Controls.Add(this.userListBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FormLogOn";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.Text = "Log On";
+            this.Load += new System.EventHandler(this.FormLogOn_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 		#endregion
 
-		private OpenDental.UI.Button butExit;
-		private OpenDental.UI.Button butOK;
-		private System.Windows.Forms.ListBox listUser;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.TextBox textPassword;
-		private System.Windows.Forms.TextBox textUser;
-		private System.Windows.Forms.CheckBox checkShowCEMTUsers;
+		private System.Windows.Forms.Button cancelButton;
+		private System.Windows.Forms.Button acceptButton;
+		private System.Windows.Forms.ListBox userListBox;
+		private System.Windows.Forms.Label userLabel;
+		private System.Windows.Forms.Label passwordLabel;
+		private System.Windows.Forms.TextBox passwordTextBox;
+		private System.Windows.Forms.TextBox userTextBox;
+		private System.Windows.Forms.CheckBox CEMTUsersCheckBox;
 	}
 }
