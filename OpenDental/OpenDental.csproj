@@ -4803,12 +4803,6 @@
     <Compile Include="Main Modules\ContrTreat.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Main Modules\FormCommandLinePassOff.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Main Modules\FormCommandLinePassOff.Designer.cs">
-      <DependentUpon>FormCommandLinePassOff.cs</DependentUpon>
-    </Compile>
     <Compile Include="Main Modules\FormOpenDental.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -9341,10 +9335,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="InternalTools\Phones\UserControlPhoneSmall.resx">
       <DependentUpon>UserControlPhoneSmall.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Main Modules\FormCommandLinePassOff.resx">
-      <DependentUpon>FormCommandLinePassOff.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ReportingForRdl\Allocators\FormProgressViewer.resx">
