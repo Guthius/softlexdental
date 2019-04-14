@@ -40,7 +40,7 @@ namespace CentralManager {
 				Process.Start("OpenDental.exe",args);
 			}
 			catch {
-				OpenDental.MessageBox.Show("Unable to start the process OpenDental.exe.");
+				MessageBox.Show("Unable to start the process OpenDental.exe.");
 			}
 		}
 

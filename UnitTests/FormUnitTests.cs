@@ -54,7 +54,7 @@ namespace UnitTests {
 					serverPort="3306";
 				}
 				if(!UnitTestsCore.DatabaseTools.SetDbConnection("",serverAddr,serverPort,textUserName.Text,textPassword.Text,_isOracle)) {
-					OpenDental.MessageBox.Show("Could not connect");
+					MessageBox.Show("Could not connect");
 					return;
 				}
 			}

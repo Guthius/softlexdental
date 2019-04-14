@@ -4947,7 +4947,6 @@
     <Compile Include="UI\ComboBoxOD.Designer.cs">
       <DependentUpon>ComboBoxOD.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\MessageBox.cs" />
     <Compile Include="UI\MsgBoxCopyPaste.cs">
       <SubType>Form</SubType>
     </Compile>

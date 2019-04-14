@@ -244,7 +244,7 @@ namespace CentralManager {
 				labelFetch.Visible=false;
 				if(!_hasWarningShown && _invalidConnsLog!="") {
 					_hasWarningShown=true;//Keeps the message box from showing up for subsequent threads.
-					OpenDental.MessageBox.Show(this,Lan.g(this,"Could not connect to the following servers")+":"+_invalidConnsLog);
+					MessageBox.Show(this,Lan.g(this,"Could not connect to the following servers")+":"+_invalidConnsLog);
 				}
 			}
 			else {

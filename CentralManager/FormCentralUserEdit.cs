@@ -89,11 +89,11 @@ namespace CentralManager {
 
 		private void butOK_Click(object sender,EventArgs e) {
 			if(textUserName.Text=="") {
-				OpenDental.MessageBox.Show(this,"Please enter a username.");
+				MessageBox.Show(this,"Please enter a username.");
 				return;
 			}
 			if(listUserGroup.SelectedItems.Count == 0) {
-				OpenDental.MessageBox.Show(this,"Every user must be associated to at least one User Group.");
+				MessageBox.Show(this,"Every user must be associated to at least one User Group.");
 				return;
 			}
 			List<AlertSub> listAlertSubsCur=new List<AlertSub>();
@@ -125,7 +125,7 @@ namespace CentralManager {
 				}
 			}
 			catch(Exception ex){
-				OpenDental.MessageBox.Show(ex.Message);
+				MessageBox.Show(ex.Message);
 				return;
 			}
 			Cache.Refresh(InvalidType.Security);

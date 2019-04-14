@@ -116,7 +116,7 @@ namespace CentralManager {
 			if(textDateFrom.errorProvider1.GetError(textDateFrom)!=""
 				|| textDateTo.errorProvider1.GetError(textDateTo)!=""
 				) {
-				OpenDental.MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
+				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
 			_dateFrom=PIn.Date(textDateFrom.Text);
@@ -149,7 +149,7 @@ namespace CentralManager {
 			if(textDateFrom.errorProvider1.GetError(textDateFrom)!=""
 				|| textDateTo.errorProvider1.GetError(textDateTo)!=""
 				) {
-				OpenDental.MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
+				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
 			_dateFrom=PIn.Date(textDateFrom.Text);

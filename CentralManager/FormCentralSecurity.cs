@@ -171,7 +171,7 @@ namespace CentralManager {
 				GroupPermissions.Insert(perm);
 			}
 			catch(Exception ex) {
-				OpenDental.MessageBox.Show(ex.Message);
+				MessageBox.Show(ex.Message);
 				return DialogResult.Cancel;
 			}
 			return FormCRS.DialogResult;

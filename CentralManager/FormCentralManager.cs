@@ -84,7 +84,7 @@ namespace CentralManager {
 		private bool GetConfigAndConnect() {
 			string xmlPath=Path.Combine(Application.StartupPath,"CentralManagerConfig.xml");
 			if(!File.Exists(xmlPath)) {
-				OpenDental.MessageBox.Show("Please create CentralManagerConfig.xml according to the manual before using this tool.");
+				MessageBox.Show("Please create CentralManagerConfig.xml according to the manual before using this tool.");
 				_hasFatalError=true;
 				Application.Exit();
 				return false;
@@ -103,7 +103,7 @@ namespace CentralManager {
 				//See if there's a DatabaseConnection
 				nav=Navigator.SelectSingleNode("//DatabaseConnection");
 				if(nav==null) {
-					OpenDental.MessageBox.Show("DatabaseConnection element missing from CentralManagerConfig.xml.");
+					MessageBox.Show("DatabaseConnection element missing from CentralManagerConfig.xml.");
 					Application.Exit();
 					return false;
 				}
@@ -123,7 +123,7 @@ namespace CentralManager {
 			}
 			catch(Exception ex) {
 				//Common error: root element is missing
-				OpenDental.MessageBox.Show(ex.Message);
+				MessageBox.Show(ex.Message);
 				Application.Exit();
 				return false;
 			}
@@ -150,7 +150,7 @@ namespace CentralManager {
 					return true;
 				}
 				catch(Exception ex) {
-					OpenDental.MessageBox.Show(ex.Message);
+					MessageBox.Show(ex.Message);
 					_hasFatalError=true;
 					Application.Exit();
 					return false;
@@ -261,7 +261,7 @@ namespace CentralManager {
 				return;
 			}
 			if(string.IsNullOrEmpty(conn.DatabaseName) && string.IsNullOrEmpty(conn.ServiceURI)) {
-				OpenDental.MessageBox.Show("Either a database or a Middle Tier URI must be specified in the connection.");
+				MessageBox.Show("Either a database or a Middle Tier URI must be specified in the connection.");
 				return;
 			}
 			CentralConnectionHelper.LaunchOpenDental(conn,checkDynamicMode.Checked,checkAutoLog.Checked);
@@ -379,7 +379,7 @@ namespace CentralManager {
 				Userods.Update(Security.CurUser);
 			}
 			catch(Exception ex) {
-				OpenDental.MessageBox.Show(ex.Message);
+				MessageBox.Show(ex.Message);
 			}
 		}
 
