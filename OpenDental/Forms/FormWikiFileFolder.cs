@@ -1,75 +1,124 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.IO;
 using System.Windows.Forms;
-using OpenDentBusiness;
-using OpenDental.UI;
 
-namespace OpenDental {
-	public partial class FormWikiFileFolder:ODForm {
-		public bool IsFolderMode;
-		public string SelectedLink;
+namespace OpenDental
+{
+    public partial class FormWikiFileFolder : FormBase
+    {
+        /// <summary>
+        /// Gets or sets a value indicating whether the 
+        /// </summary>
+        public bool IsFolderMode { get; set; } = false;
 
-		public FormWikiFileFolder() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        /// <summary>
+        /// Gets or sets the selected link.
+        /// </summary>
+        public string SelectedLink
+        {
+            get => linkTextBox.Text.Trim();
+            set
+            {
+                linkTextBox.Text = value;
+            }
+        }
 
-		private void FormWikiFileFolder_Load(object sender,EventArgs e) {
-			if(IsFolderMode) {
-				Text=Lan.g(this,"Insert Folder Link");
-			}
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormWikiFileFolder"/> class.
+        /// </summary>
+        public FormWikiFileFolder()
+        {
+            InitializeComponent();
+        }
 
-		private void butBrowse_Click(object sender,EventArgs e) {
-			if(IsFolderMode) {
-				FolderBrowserDialog folderBD=new FolderBrowserDialog();
-				if(folderBD.ShowDialog()!=DialogResult.OK) {
-					return;
-				}
-				textLink.Text=folderBD.SelectedPath;
-				return;
-			}
-			OpenFileDialog openFileD=new OpenFileDialog();
-			if(openFileD.ShowDialog()!=DialogResult.OK) {
-				return;
-			}
-			textLink.Text=openFileD.FileName;
-		}
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormWikiFileFolder_Load(object sender, EventArgs e)
+        {
+            if (IsFolderMode)
+            {
+                Text = Translation.Language.WikiInsertFolderLink;
+            }
+        }
 
-		private void butOK_Click(object sender,EventArgs e) {
-			if(IsFolderMode){
-				if(!Directory.Exists(textLink.Text)) {
-					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Folder does not exist. Continue anyway?")) {
-						return;
-					}
-					/*try {
-						Directory.CreateDirectory(textLink.Text);
-					}
-					catch(Exception ex) {
-						MessageBox.Show(this,ex.Message);
-						return;
-					}*/
-				}
-			}
-			else{//file mode
-				if(!File.Exists(textLink.Text)) {
-					if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"File does not exist. Continue anyway?")) {
-						return;
-					}
-				}
-			}
-			SelectedLink=textLink.Text;
-			DialogResult=DialogResult.OK;
-		}
+        /// <summary>
+        /// Opens the browse dialog to select a file or folder, depending on mode.
+        /// </summary>
+        void browseButton_Click(object sender, EventArgs e)
+        {
+            if (IsFolderMode)
+            {
+                using (var folderBrowserDialog = new FolderBrowserDialog())
+                {
+                    if (folderBrowserDialog.ShowDialog(this) == DialogResult.OK)
+                    {
+                        SelectedLink = folderBrowserDialog.SelectedPath;
+                    }
+                }
+                return;
+            }
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+            using (var openFileDialog = new OpenFileDialog())
+            {
+                if (openFileDialog.ShowDialog(this) == DialogResult.OK)
+                {
+                    SelectedLink = openFileDialog.FileName;
+                }
+            }
+        }
 
-	}
+        /// <summary>
+        /// Checks whether a valid path has been selected and if so, closes the form.
+        /// </summary>
+        void acceptButton_Click(object sender, EventArgs e)
+        {
+            if (IsFolderMode)
+            {
+                if (!Directory.Exists(SelectedLink))
+                {
+                    var result =
+                        MessageBox.Show(
+                            Translation.Language.WikiFolderDoesNotExistContinueAnyway,
+                            Translation.Language.WikiInsertFolderLink,
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question);
+
+                    if (result == DialogResult.No) return;
+
+                    // Try to create the folder.
+                    try
+                    {
+                        Directory.CreateDirectory(SelectedLink);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(
+                            ex.Message,
+                            Translation.Language.WikiInsertFolderLink,
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                if (!File.Exists(SelectedLink))
+                {
+                    var result = 
+                        MessageBox.Show(
+                            Translation.Language.WikiFileDoesNotExistContinueAnyway,
+                            Translation.Language.WikiInsertFileLink,
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Question);
+
+                    if (result == DialogResult.No) return;
+                }
+            }
+
+            DialogResult = DialogResult.OK;
+        }
+    }
 }

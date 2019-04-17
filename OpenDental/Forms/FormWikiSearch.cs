@@ -1,139 +1,221 @@
+using OpenDental.UI;
+using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using OpenDentBusiness;
-using OpenDental.UI;
 
-namespace OpenDental {
-	///<summary></summary>
-	public delegate void NavToPageDeligate(string pageTitle);
+namespace OpenDental
+{
+    public partial class FormWikiSearch : FormBase
+    {
+        List<string> pageTitleList;
 
-	public partial class FormWikiSearch:ODForm {
-		private List<string> listWikiPageTitles;
-		public string wikiPageTitleSelected;
-		public NavToPageDeligate NavToPage;
+        /// <summary>
+        /// Gets the title of the selected page.
+        /// </summary>
+        public string SelectedPageTitle
+        {
+            get
+            {
+                if (wikiPagesGrid.SelectedIndices.Length > 0)
+                {
+                    return pageTitleList[wikiPagesGrid.SelectedIndices[0]];
+                }
+                return string.Empty;
+            }
+        }
 
-		public FormWikiSearch() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        /// <summary>
+        /// Raised when the search form wants to navigate to a page.
+        /// </summary>
+        public event EventHandler<WikiPageEventArgs> Navigate;
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormWikiSearch"/> class.
+        /// </summary>
+        public FormWikiSearch() => InitializeComponent();
 
-		private void FormWikiSearch_Load(object sender,EventArgs e) {
-			SetFilterControlsAndAction(() => FillGrid(),
-				(int)TimeSpan.FromSeconds(0.5).TotalMilliseconds,
-				textSearch);
-			Rectangle rectWorkingArea=System.Windows.Forms.Screen.GetWorkingArea(this);
-			Top=0;
-			Left=Math.Max(0,((rectWorkingArea.Width-1200)/2)+rectWorkingArea.Left);
-			Width=Math.Min(rectWorkingArea.Width,1200);
-			Height=rectWorkingArea.Height;
-			FillGrid();
-			wikiPageTitleSelected="";
-		}
+        /// <summary>
+        /// Invokes the <see cref="Navigate"/> event.
+        /// </summary>
+        /// <param name="pageTitle">The title of the page to navigate to.</param>
+        protected virtual void OnNavigate(string pageTitle) => Navigate?.Invoke(this, new WikiPageEventArgs(pageTitle));
+        
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormWikiSearch_Load(object sender, EventArgs e)
+        {
+            SetFilterControlsAndAction(() => LoadPageList(), (int)TimeSpan.FromSeconds(0.5).TotalMilliseconds, searchTextBox);
 
-		private void LoadWikiPage(string WikiPageTitleCur) {
-			webBrowserWiki.AllowNavigation=true;
-			butRestore.Enabled=false;
-			try {
-				if(checkArchivedOnly.Checked) {
-					webBrowserWiki.DocumentText=MarkupEdit.TranslateToXhtml(WikiPages.GetByTitle(WikiPageTitleCur,isDeleted:true).PageContent,true);
-					butRestore.Enabled=true;
-				}
-				else {
-					webBrowserWiki.DocumentText=MarkupEdit.TranslateToXhtml(WikiPages.GetByTitle(WikiPageTitleCur).PageContent,true);
-				}
-			}
-			catch(Exception ex) {
-				webBrowserWiki.DocumentText="";
-				MessageBox.Show(this,Lan.g(this,"This page is broken and cannot be viewed.  Error message:")+" "+ex.Message);
-			}
-		}
+            LoadPageList();
+        }
 
-		/// <summary></summary>
-		private void FillGrid() {
-			gridMain.BeginUpdate();
-			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Title"),70);
-			gridMain.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g(this,"Saved"),42);
-			//gridMain.Columns.Add(col);
-			gridMain.Rows.Clear();
-			if(checkArchivedOnly.Checked) {
-				//This used to search the wikipagehist table, now archived pages are stored in wikipage.  See JobNum 4429.
-				listWikiPageTitles=WikiPages.GetForSearch(textSearch.Text,checkIgnoreContent.Checked,isDeleted:true);
-			}
-			else {
-				listWikiPageTitles=WikiPages.GetForSearch(textSearch.Text,checkIgnoreContent.Checked);
-			}
-			for(int i=0;i<listWikiPageTitles.Count;i++) {
-				ODGridRow row=new ODGridRow();
-				row.Cells.Add(listWikiPageTitles[i]);
-				gridMain.Rows.Add(row);
-			}
-			gridMain.EndUpdate();
-			webBrowserWiki.DocumentText="";
-		}
+        /// <summary>
+        /// Loads the page with the specified title.
+        /// </summary>
+        /// <param name="pageTitle">The title of the page to load.</param>
+        void LoadPage(string pageTitle)
+        {
+            restoreButton.Enabled = false;
 
-		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
-			LoadWikiPage(listWikiPageTitles[e.Row]);
-			gridMain.Focus();
-		}
+            wikiWebBrowser.AllowNavigation = true;
+            try
+            {
+                if (archivedOnlyCheckBox.Checked)
+                {
+                    wikiWebBrowser.DocumentText = MarkupEdit.TranslateToXhtml(WikiPages.GetByTitle(pageTitle, isDeleted: true).PageContent, true);
+                    restoreButton.Enabled = true;
+                }
+                else
+                {
+                    wikiWebBrowser.DocumentText = MarkupEdit.TranslateToXhtml(WikiPages.GetByTitle(pageTitle).PageContent, true);
+                }
+            }
+            catch (Exception ex)
+            {
+                wikiWebBrowser.DocumentText = "";
 
-		private void gridMain_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {			
-			//SelectedWikiPage=listWikiPages[e.Row];
-			if(checkArchivedOnly.Checked) {
-				return;
-			}
-			wikiPageTitleSelected=listWikiPageTitles[e.Row];
-			NavToPage(wikiPageTitleSelected);
-			Close();
-		}
+                MessageBox.Show(
+                    Translation.Language.WikiPageIsBroken + " " + ex.Message,
+                    Translation.Language.WikiSearch, 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+            }
+        }
 
-		private void checkIgnoreContent_CheckedChanged(object sender,EventArgs e) {
-			FillGrid();
-		}
+        /// <summary>
+        /// Populates the grid.
+        /// </summary>
+        void LoadPageList()
+        {
+            wikiPagesGrid.BeginUpdate();
+            wikiPagesGrid.Columns.Clear();
+            wikiPagesGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnTitle, 70));
+            wikiPagesGrid.Rows.Clear();
 
-		private void checkArchivedOnly_CheckedChanged(object sender,EventArgs e) {
-			butOK.Enabled=!checkArchivedOnly.Checked;
-			FillGrid();
-		}
+            if (archivedOnlyCheckBox.Checked)
+            {
+                pageTitleList = WikiPages.GetForSearch(searchTextBox.Text, ignoreContentCheckBox.Checked, isDeleted: true);
+            }
+            else
+            {
+                pageTitleList = WikiPages.GetForSearch(searchTextBox.Text, ignoreContentCheckBox.Checked);
+            }
 
-		private void webBrowserWiki_Navigated(object sender,WebBrowserNavigatedEventArgs e) {
-			webBrowserWiki.AllowNavigation=false;//to disable links in pages.
-		}
+            for (int i = 0; i < pageTitleList.Count; i++)
+            {
+                var row = new ODGridRow();
+                row.Cells.Add(pageTitleList[i]);
+                wikiPagesGrid.Rows.Add(row);
+            }
 
-		private void butRestore_Click(object sender,EventArgs e) {
-			if(gridMain.GetSelectedIndex()==-1) {
-				return;//should never happen.
-			}
-			wikiPageTitleSelected=listWikiPageTitles[gridMain.SelectedIndices[0]];
-			if(WikiPages.GetByTitle(wikiPageTitleSelected)!=null) {
-				MsgBox.Show(this,"Selected page has already been restored.");//should never happen.
-				return;
-			}
-			WikiPage wikiPageRestored=WikiPages.GetByTitle(listWikiPageTitles[gridMain.SelectedIndices[0]],isDeleted:true);
-			if(wikiPageRestored==null) {
-				MsgBox.Show(this,"Selected page has already been restored.");//should never happen.
-				return;
-			}
-			WikiPages.WikiPageRestore(wikiPageRestored,Security.CurUser.UserNum);
-			Close();
-		}
+            wikiPagesGrid.EndUpdate();
+            wikiWebBrowser.DocumentText = "";
+        }
 
-		private void butOK_Click(object sender,EventArgs e) {
-			if(gridMain.SelectedIndices.Length>0) {
-				wikiPageTitleSelected=listWikiPageTitles[gridMain.SelectedIndices[0]];
-			}
-			NavToPage(wikiPageTitleSelected);
-			Close();
-		}
+        /// <summary>
+        /// Load a page when the user clicks on one in the grid.
+        /// </summary>
+        void wikiPagesGrid_CellClick(object sender, ODGridClickEventArgs e)
+        {
+            LoadPage(pageTitleList[e.Row]);
+            wikiPagesGrid.Focus();
+        }
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			Close();
-		}
-	}
+        /// <summary>
+        /// Click the accept button automatically when the user double clicks on a page in the grid.
+        /// </summary>
+        void wikiPagesGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
+        {
+            wikiPagesGrid.SetSelected(e.Row, true);
+            acceptButton_Click(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Reload the list of pages when the state of the 'Ignore Content' checkbox changes.
+        /// </summary>
+        void checkIgnoreContent_CheckedChanged(object sender, EventArgs e) => LoadPageList();
+        
+        /// <summary>
+        /// Reload the list of pages when the state of the 'Archived Only' checkbox changes.
+        /// If 'Archived Only' is checked we also disable the accept button.
+        /// </summary>
+        void checkArchivedOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            acceptButton.Enabled = !archivedOnlyCheckBox.Checked;
+            LoadPageList();
+        }
+
+        /// <summary>
+        /// After navigation disallow navigation, this will disable links within the page.
+        /// </summary>
+        void wikiWebBrowser_Navigated(object sender, WebBrowserNavigatedEventArgs e) => wikiWebBrowser.AllowNavigation = false;
+
+        /// <summary>
+        /// Attempt to restore the selected page.
+        /// </summary>
+        void restoreButton_Click(object sender, EventArgs e)
+        {
+            if (wikiPagesGrid.GetSelectedIndex() == -1) return;
+            
+            if (WikiPages.GetByTitle(SelectedPageTitle) != null)
+            {
+                MessageBox.Show(
+                    Translation.Language.WikiSelectedPageAlreadyRestored,
+                    Translation.Language.WikiSearch);
+                return;
+            }
+
+            var wikiPageRestored = WikiPages.GetByTitle(pageTitleList[wikiPagesGrid.SelectedIndices[0]], isDeleted: true);
+            if (wikiPageRestored == null)
+            {
+                MessageBox.Show(
+                    Translation.Language.WikiSelectedPageAlreadyRestored,
+                    Translation.Language.WikiSearch);
+                return;
+            }
+
+            WikiPages.WikiPageRestore(wikiPageRestored, Security.CurUser.UserNum);
+
+            // TODO: Should we navigate to the restored page?
+
+            Close();
+        }
+
+        /// <summary>
+        /// Navigates to the selected page (if it's not a archived page) and closes the form.
+        /// </summary>
+        void acceptButton_Click(object sender, EventArgs e)
+        {
+            if (archivedOnlyCheckBox.Checked) return;
+            
+            if (!string.IsNullOrEmpty(SelectedPageTitle))
+            {
+                OnNavigate(SelectedPageTitle);
+            }
+
+            Close();
+        }
+    }
+
+    //
+    // TODO: This class needs to be moved to a more appropriate location...
+    //
+    public class WikiPageEventArgs : EventArgs
+    {
+        /// <summary>
+        /// Gets the title of the page.
+        /// </summary>
+        public string PageTitle { get; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WikiPageEventArgs"/> class.
+        /// </summary>
+        /// <param name="pageTitle"></param>
+        public WikiPageEventArgs(string pageTitle)
+        {
+            PageTitle = pageTitle ?? "";
+        }
+    }
 }

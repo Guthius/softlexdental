@@ -8698,11 +8698,10 @@ namespace OpenDental
 
         private void menuItemWiki_Click(object sender, EventArgs e)
         {
-            if (Plugins.HookMethod(this, "FormOpenDental.menuItemWiki_Click"))
+            if (Plugin.Filter(this, "FormOpenDental_MenuItem_Wiki", false))
             {
                 return;
             }
-            //We want to allow as many wiki pages open as possible to maximize efficiency in the office.
             new FormWiki().Show();
         }
 
@@ -8735,11 +8734,6 @@ namespace OpenDental
 
         private void menuItemAutoClosePayPlans_Click(object sender, EventArgs e)
         {
-            if (DataConnection.DBtype == DatabaseType.Oracle)
-            {
-                MsgBox.Show(this, "Tool does not currently support Oracle.  Please call support to see if you need this fix.");
-                return;
-            }
             if (!Security.IsAuthorized(Permissions.Setup))
             {
                 return;

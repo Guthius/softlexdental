@@ -1,136 +1,159 @@
+using OpenDental.UI;
+using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using OpenDentBusiness;
-using OpenDental.UI;
 
-namespace OpenDental {
-	public partial class FormWikiAllPages:ODForm {
-		private List<WikiPage> listWikiPages;
-		///<summary>Need a reference to the form where this was launched from so that we can tell it to refresh later.</summary>
-		public FormWikiEdit OwnerForm;
+namespace OpenDental
+{
+    public partial class FormWikiAllPages : FormBase
+    {
+        List<WikiPage> wikiPagesList;
 
-		public FormWikiAllPages() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        /// <summary>
+        /// Need a reference to the form where this was launched from so that we can tell it to refresh later.
+        /// </summary>
+        public FormWikiEdit OwnerForm;
 
-		private void FormWikiAllPages_Load(object sender,EventArgs e) {
-			FillGrid();
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormWikiAllPages"/> class.
+        /// </summary>
+        public FormWikiAllPages() => InitializeComponent();
+        
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormWikiAllPages_Load(object sender, EventArgs e) => LoadWikiPages();
 
-		private void textSearch_TextChanged(object sender,EventArgs e) {
-			FillGrid();
-			//gridMain.SetSelected(0,true);
-			//LoadWikiPage(listWikiPages[0]);
-		}
+        /// <summary>
+        /// Reload the pages (matching the search criteria).
+        /// </summary>
+        void textSearch_TextChanged(object sender, EventArgs e) => LoadWikiPages();
 
-		private void LoadWikiPage(WikiPage WikiPageCur) {
-			try {
-				webBrowserWiki.DocumentText=MarkupEdit.TranslateToXhtml(WikiPageCur.PageContent,false);
-			}
-			catch(Exception ex) {
-				webBrowserWiki.DocumentText="";
-				MessageBox.Show(this,Lan.g(this,"This page is broken and cannot be viewed.  Error message:")+" "+ex.Message);
-			}
-		}
+        /// <summary>
+        /// Loads the specified wiki page.
+        /// </summary>
+        /// <param name="wikiPage">The wiki page to load.</param>
+        void LoadWikiPage(WikiPage wikiPage)
+        {
+            wikiWebBrowser.AllowNavigation = true;
+            try
+            {
+                wikiWebBrowser.DocumentText = MarkupEdit.TranslateToXhtml(wikiPage.PageContent, false);
+            }
+            catch (Exception ex)
+            {
+                wikiWebBrowser.DocumentText = "";
 
-		/// <summary></summary>
-		private void FillGrid() {
-			gridMain.BeginUpdate();
-			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Title"),70);
-			gridMain.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g(this,"Saved"),42);
-			//gridMain.Columns.Add(col);
-			gridMain.Rows.Clear();
-			listWikiPages=WikiPages.GetByTitleContains(textSearch.Text);
-			for(int i=0;i<listWikiPages.Count;i++) {
-				ODGridRow row=new ODGridRow();
-				//if(listWikiPages[i].IsDeleted) {//color is not a good way to indicate deleted because it is not self explanatory.  Need another column for Deleted X.
-				//	row.ColorText=Color.Red;
-				//}
-				row.Cells.Add(listWikiPages[i].PageTitle);
-				gridMain.Rows.Add(row);
-			}
-			gridMain.EndUpdate();
-		}
+                MessageBox.Show(
+                    "This page is broken and cannot be viewed. " + ex.Message,
+                    "All Wiki Pages", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+            }
+        }
 
-		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
-			webBrowserWiki.AllowNavigation=true;
-			LoadWikiPage(listWikiPages[e.Row]);
-			gridMain.Focus();
-		}
+        /// <summary>
+        /// Loads all wiki pages (matching the specified search criteria).
+        /// </summary>
+        void LoadWikiPages()
+        {
+            pagesGrid.BeginUpdate();
+            pagesGrid.Columns.Clear();
+            pagesGrid.Columns.Add(new ODGridColumn("Title", 70));
+            pagesGrid.Rows.Clear();
 
-		private void gridMain_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
-			if(OwnerForm!=null && !OwnerForm.IsDisposed) {
-				OwnerForm.RefreshPage(listWikiPages[e.Row]);
-			}
-			Close();
-		}
+            wikiPagesList = WikiPages.GetByTitleContains(searchTextBox.Text);
+            for (int i = 0; i < wikiPagesList.Count; i++)
+            {
+                ODGridRow row = new ODGridRow();
 
-		private void webBrowserWiki_Navigated(object sender,WebBrowserNavigatedEventArgs e) {
-			webBrowserWiki.AllowNavigation=false;//to disable links in pages.
-		}
+                // TODO: Add a indicator for deleted columns...
 
-		///<summary>Adds a new wikipage.</summary>
-		private void butAdd_Click(object sender,EventArgs e) {
-			FormWikiRename FormWR=new FormWikiRename();
-			FormWR.ShowDialog();
-			if(FormWR.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			Action<string> onWikiSaved=new Action<string>((pageTitleNew) => {
-				//return the new wikipage added to FormWikiEdit
-				WikiPage wp=WikiPages.GetByTitle(pageTitleNew);
-				if(wp!=null && OwnerForm!=null && !OwnerForm.IsDisposed) {
-					OwnerForm.RefreshPage(wp);
-				}
-			});
-			FormWikiEdit FormWE=new FormWikiEdit(onWikiSaved);
-			FormWE.WikiPageCur=new WikiPage();
-			FormWE.WikiPageCur.IsNew=true;
-			FormWE.WikiPageCur.PageTitle=FormWR.PageTitle;
-			FormWE.WikiPageCur.PageContent="[["+OwnerForm.WikiPageCur.PageTitle+"]]\r\n"//link back
-				+"<h1>"+FormWR.PageTitle+"</h1>\r\n";//page title
-			FormWE.Show();
-			Close();
-		}
+                row.Cells.Add(wikiPagesList[i].PageTitle);
+                pagesGrid.Rows.Add(row);
+            }
 
-		/// <summary></summary>
-		private void butBrackets_Click(object sender,EventArgs e) {
-			if(OwnerForm!=null && !OwnerForm.IsDisposed) {
-				OwnerForm.RefreshPage(null);
-			}
-			Close();
-		}
+            pagesGrid.EndUpdate();
+        }
 
-		/// <summary></summary>
-		private void butOK_Click(object sender,EventArgs e) {
-			if(gridMain.GetSelectedIndex()==-1) {
-				MsgBox.Show(this,"Please select a page first.");
-				return;
-			}
-			if(OwnerForm!=null && !OwnerForm.IsDisposed) {
-				OwnerForm.RefreshPage(listWikiPages[gridMain.GetSelectedIndex()]);
-			}
-			Close();
-		}
+        void pagesGrid_CellClick(object sender, ODGridClickEventArgs e)
+        {
+            LoadWikiPage(wikiPagesList[e.Row]);
+            pagesGrid.Focus();
+        }
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			Close();
-		}
+        void pagesGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
+        {
+            pagesGrid.SetSelected(false);
+            pagesGrid.SetSelected(e.Row, true);
 
-		
+            acceptButton_Click(this, EventArgs.Empty);
+        }
 
-		
+        void webBrowserWiki_Navigated(object sender, WebBrowserNavigatedEventArgs e) => wikiWebBrowser.AllowNavigation = false;
+        
+        /// <summary>
+        /// Adds a new wikipage.
+        /// </summary>
+        void addButton_Click(object sender, EventArgs e)
+        {
+            using (var formWikiRename = new FormWikiRename())
+            {
+                if (formWikiRename.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
 
-		
+                var onWikiSaved = new Action<string>((pageTitleNew) =>
+                {
+                    var wikiPage = WikiPages.GetByTitle(pageTitleNew);
+                    if (wikiPage != null && OwnerForm != null && !OwnerForm.IsDisposed)
+                    {
+                        OwnerForm.RefreshPage(wikiPage);
+                    }
+                });
 
-		
-	}
+                var formWikiEdit = new FormWikiEdit(onWikiSaved);
+                formWikiEdit.WikiPageCur = new WikiPage();
+                formWikiEdit.WikiPageCur.IsNew = true;
+                formWikiEdit.WikiPageCur.PageTitle = formWikiRename.PageTitle;
+                formWikiEdit.WikiPageCur.PageContent = "[[" + OwnerForm.WikiPageCur.PageTitle + "]]\r\n<h1>" + formWikiRename.PageTitle + "</h1>\r\n";
+                formWikiEdit.Show();
+            }
+
+            Close();
+        }
+
+        void bracketsButton_Click(object sender, EventArgs e)
+        {
+            // TODO: What is this supposed to do??
+
+            if (OwnerForm != null && !OwnerForm.IsDisposed)
+            {
+                OwnerForm.RefreshPage(null);
+            }
+            Close();
+        }
+
+        void acceptButton_Click(object sender, EventArgs e)
+        {
+            if (pagesGrid.GetSelectedIndex() == -1)
+            {
+                MessageBox.Show(
+                    "Please select a page first.",
+                    "All Wiki Pages", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
+
+                return;
+            }
+
+            if (OwnerForm != null && !OwnerForm.IsDisposed)
+            {
+                OwnerForm.RefreshPage(wikiPagesList[pagesGrid.GetSelectedIndex()]);
+            }
+            Close();
+        }
+    }
 }

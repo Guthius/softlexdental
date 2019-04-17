@@ -1,388 +1,349 @@
-namespace OpenDental{
-	partial class FormWikiListEdit {
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+namespace OpenDental
+{
+    partial class FormWikiListEdit
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing) {
-			if(disposing && (components != null)) {
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent() {
-			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormWikiListEdit));
-			this.groupBox3 = new System.Windows.Forms.GroupBox();
-			this.butHistory = new OpenDental.UI.Button();
-			this.butRenameList = new OpenDental.UI.Button();
-			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.butAddItem = new OpenDental.UI.Button();
-			this.labelSearch = new System.Windows.Forms.Label();
-			this.textSearch = new System.Windows.Forms.TextBox();
-			this.butDelete = new OpenDental.UI.Button();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.butColumnDelete = new OpenDental.UI.Button();
-			this.butHeaders = new OpenDental.UI.Button();
-			this.butColumnInsert = new OpenDental.UI.Button();
-			this.butColumnRight = new OpenDental.UI.Button();
-			this.butColumnLeft = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butClose = new OpenDental.UI.Button();
-			this.butAdvSearch = new OpenDental.UI.Button();
-			this.butClearAdvSearch = new OpenDental.UI.Button();
-			this.radioButHighlight = new System.Windows.Forms.RadioButton();
-			this.radioButFilter = new System.Windows.Forms.RadioButton();
-			this.groupBox3.SuspendLayout();
-			this.groupBox2.SuspendLayout();
-			this.groupBox1.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// groupBox3
-			// 
-			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox3.Controls.Add(this.butHistory);
-			this.groupBox3.Controls.Add(this.butRenameList);
-			this.groupBox3.Location = new System.Drawing.Point(861, 27);
-			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(87, 81);
-			this.groupBox3.TabIndex = 6;
-			this.groupBox3.TabStop = false;
-			this.groupBox3.Text = "List";
-			// 
-			// butHistory
-			// 
-			this.butHistory.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butHistory.Autosize = true;
-			this.butHistory.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butHistory.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butHistory.CornerRadius = 4F;
-			this.butHistory.Location = new System.Drawing.Point(8, 49);
-			this.butHistory.Name = "butHistory";
-			this.butHistory.Size = new System.Drawing.Size(71, 24);
-			this.butHistory.TabIndex = 1;
-			this.butHistory.Text = "History";
-			this.butHistory.Click += new System.EventHandler(this.butHistory_Click);
-			// 
-			// butRenameList
-			// 
-			this.butRenameList.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRenameList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butRenameList.Autosize = true;
-			this.butRenameList.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRenameList.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRenameList.CornerRadius = 4F;
-			this.butRenameList.Location = new System.Drawing.Point(8, 19);
-			this.butRenameList.Name = "butRenameList";
-			this.butRenameList.Size = new System.Drawing.Size(71, 24);
-			this.butRenameList.TabIndex = 0;
-			this.butRenameList.Text = "Rename";
-			this.butRenameList.Click += new System.EventHandler(this.butRenameList_Click);
-			// 
-			// groupBox2
-			// 
-			this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox2.Controls.Add(this.butAddItem);
-			this.groupBox2.Location = new System.Drawing.Point(861, 261);
-			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(87, 51);
-			this.groupBox2.TabIndex = 8;
-			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "Rows";
-			// 
-			// butAddItem
-			// 
-			this.butAddItem.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAddItem.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butAddItem.Autosize = true;
-			this.butAddItem.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddItem.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAddItem.CornerRadius = 4F;
-			this.butAddItem.Location = new System.Drawing.Point(8, 19);
-			this.butAddItem.Name = "butAddItem";
-			this.butAddItem.Size = new System.Drawing.Size(71, 24);
-			this.butAddItem.TabIndex = 31;
-			this.butAddItem.Text = "Add";
-			this.butAddItem.Click += new System.EventHandler(this.butAddItem_Click);
-			// 
-			// labelSearch
-			// 
-			this.labelSearch.Location = new System.Drawing.Point(12, 15);
-			this.labelSearch.Name = "labelSearch";
-			this.labelSearch.Size = new System.Drawing.Size(166, 16);
-			this.labelSearch.TabIndex = 38;
-			this.labelSearch.Text = "Search";
-			this.labelSearch.TextAlign = System.Drawing.ContentAlignment.TopRight;
-			// 
-			// textSearch
-			// 
-			this.textSearch.Location = new System.Drawing.Point(184, 12);
-			this.textSearch.Name = "textSearch";
-			this.textSearch.Size = new System.Drawing.Size(218, 20);
-			this.textSearch.TabIndex = 0;
-			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(12, 589);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(75, 24);
-			this.butDelete.TabIndex = 9;
-			this.butDelete.Text = "Delete";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox1.Controls.Add(this.butColumnDelete);
-			this.groupBox1.Controls.Add(this.butHeaders);
-			this.groupBox1.Controls.Add(this.butColumnInsert);
-			this.groupBox1.Controls.Add(this.butColumnRight);
-			this.groupBox1.Controls.Add(this.butColumnLeft);
-			this.groupBox1.Location = new System.Drawing.Point(861, 114);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(87, 141);
-			this.groupBox1.TabIndex = 7;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Columns";
-			// 
-			// butColumnDelete
-			// 
-			this.butColumnDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butColumnDelete.Autosize = true;
-			this.butColumnDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butColumnDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butColumnDelete.CornerRadius = 4F;
-			this.butColumnDelete.Location = new System.Drawing.Point(8, 109);
-			this.butColumnDelete.Name = "butColumnDelete";
-			this.butColumnDelete.Size = new System.Drawing.Size(71, 24);
-			this.butColumnDelete.TabIndex = 34;
-			this.butColumnDelete.Text = "Delete";
-			this.butColumnDelete.Click += new System.EventHandler(this.butColumnDelete_Click);
-			// 
-			// butHeaders
-			// 
-			this.butHeaders.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butHeaders.Autosize = true;
-			this.butHeaders.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butHeaders.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butHeaders.CornerRadius = 4F;
-			this.butHeaders.Location = new System.Drawing.Point(8, 49);
-			this.butHeaders.Name = "butHeaders";
-			this.butHeaders.Size = new System.Drawing.Size(71, 24);
-			this.butHeaders.TabIndex = 31;
-			this.butHeaders.Text = "Edit";
-			this.butHeaders.Click += new System.EventHandler(this.butColumnEdit_Click);
-			// 
-			// butColumnInsert
-			// 
-			this.butColumnInsert.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butColumnInsert.Autosize = true;
-			this.butColumnInsert.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butColumnInsert.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butColumnInsert.CornerRadius = 4F;
-			this.butColumnInsert.Location = new System.Drawing.Point(8, 79);
-			this.butColumnInsert.Name = "butColumnInsert";
-			this.butColumnInsert.Size = new System.Drawing.Size(71, 24);
-			this.butColumnInsert.TabIndex = 33;
-			this.butColumnInsert.Text = "Add";
-			this.butColumnInsert.Click += new System.EventHandler(this.butColumnAdd_Click);
-			// 
-			// butColumnRight
-			// 
-			this.butColumnRight.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butColumnRight.Autosize = true;
-			this.butColumnRight.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butColumnRight.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butColumnRight.CornerRadius = 4F;
-			this.butColumnRight.Location = new System.Drawing.Point(49, 19);
-			this.butColumnRight.Name = "butColumnRight";
-			this.butColumnRight.Size = new System.Drawing.Size(30, 24);
-			this.butColumnRight.TabIndex = 30;
-			this.butColumnRight.Text = "R";
-			this.butColumnRight.Click += new System.EventHandler(this.butColumnRight_Click);
-			// 
-			// butColumnLeft
-			// 
-			this.butColumnLeft.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butColumnLeft.Autosize = true;
-			this.butColumnLeft.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butColumnLeft.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butColumnLeft.CornerRadius = 4F;
-			this.butColumnLeft.Location = new System.Drawing.Point(8, 19);
-			this.butColumnLeft.Name = "butColumnLeft";
-			this.butColumnLeft.Size = new System.Drawing.Size(30, 24);
-			this.butColumnLeft.TabIndex = 29;
-			this.butColumnLeft.Text = "L";
-			this.butColumnLeft.Click += new System.EventHandler(this.butColumnLeft_Click);
-			// 
-			// gridMain
-			// 
-			this.gridMain.AllowSortingByColumn = true;
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormWikiListEdit));
+            this.listGroupBox = new System.Windows.Forms.GroupBox();
+            this.listHistoryButton = new System.Windows.Forms.Button();
+            this.listRenameButton = new System.Windows.Forms.Button();
+            this.rowsGroupBox = new System.Windows.Forms.GroupBox();
+            this.rowAddButton = new System.Windows.Forms.Button();
+            this.searchLabel = new System.Windows.Forms.Label();
+            this.searchTextBox = new System.Windows.Forms.TextBox();
+            this.deleteButton = new System.Windows.Forms.Button();
+            this.columnsGroupBox = new System.Windows.Forms.GroupBox();
+            this.columnDeleteButton = new System.Windows.Forms.Button();
+            this.columnEditButton = new System.Windows.Forms.Button();
+            this.columnAddButton = new System.Windows.Forms.Button();
+            this.columnRightButton = new System.Windows.Forms.Button();
+            this.columnLeftButton = new System.Windows.Forms.Button();
+            this.itemsGrid = new OpenDental.UI.ODGrid();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.advSearchButton = new System.Windows.Forms.Button();
+            this.advSearchClearButton = new System.Windows.Forms.Button();
+            this.highlightRadioButton = new System.Windows.Forms.RadioButton();
+            this.filterRadioButton = new System.Windows.Forms.RadioButton();
+            this.listGroupBox.SuspendLayout();
+            this.rowsGroupBox.SuspendLayout();
+            this.columnsGroupBox.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // listGroupBox
+            // 
+            this.listGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.listGroupBox.Controls.Add(this.listHistoryButton);
+            this.listGroupBox.Controls.Add(this.listRenameButton);
+            this.listGroupBox.Location = new System.Drawing.Point(721, 48);
+            this.listGroupBox.Name = "listGroupBox";
+            this.listGroupBox.Padding = new System.Windows.Forms.Padding(3, 10, 3, 3);
+            this.listGroupBox.Size = new System.Drawing.Size(110, 106);
+            this.listGroupBox.TabIndex = 7;
+            this.listGroupBox.TabStop = false;
+            this.listGroupBox.Text = "List";
+            // 
+            // listHistoryButton
+            // 
+            this.listHistoryButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listHistoryButton.Location = new System.Drawing.Point(6, 62);
+            this.listHistoryButton.Name = "listHistoryButton";
+            this.listHistoryButton.Size = new System.Drawing.Size(98, 30);
+            this.listHistoryButton.TabIndex = 1;
+            this.listHistoryButton.Text = "History";
+            this.listHistoryButton.Click += new System.EventHandler(this.listHistoryButton_Click);
+            // 
+            // listRenameButton
+            // 
+            this.listRenameButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.listRenameButton.Location = new System.Drawing.Point(6, 26);
+            this.listRenameButton.Name = "listRenameButton";
+            this.listRenameButton.Size = new System.Drawing.Size(98, 30);
+            this.listRenameButton.TabIndex = 0;
+            this.listRenameButton.Text = "Rename";
+            this.listRenameButton.Click += new System.EventHandler(this.listRenameButton_Click);
+            // 
+            // rowsGroupBox
+            // 
+            this.rowsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.rowsGroupBox.Controls.Add(this.rowAddButton);
+            this.rowsGroupBox.Location = new System.Drawing.Point(721, 350);
+            this.rowsGroupBox.Name = "rowsGroupBox";
+            this.rowsGroupBox.Padding = new System.Windows.Forms.Padding(3, 10, 3, 3);
+            this.rowsGroupBox.Size = new System.Drawing.Size(110, 70);
+            this.rowsGroupBox.TabIndex = 9;
+            this.rowsGroupBox.TabStop = false;
+            this.rowsGroupBox.Text = "Rows";
+            // 
+            // rowAddButton
+            // 
+            this.rowAddButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rowAddButton.Location = new System.Drawing.Point(6, 28);
+            this.rowAddButton.Name = "rowAddButton";
+            this.rowAddButton.Size = new System.Drawing.Size(98, 30);
+            this.rowAddButton.TabIndex = 0;
+            this.rowAddButton.Text = "Add";
+            this.rowAddButton.Click += new System.EventHandler(this.rowAddButton_Click);
+            // 
+            // searchLabel
+            // 
+            this.searchLabel.AutoSize = true;
+            this.searchLabel.Location = new System.Drawing.Point(72, 22);
+            this.searchLabel.Name = "searchLabel";
+            this.searchLabel.Size = new System.Drawing.Size(42, 15);
+            this.searchLabel.TabIndex = 0;
+            this.searchLabel.Text = "Search";
+            this.searchLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // searchTextBox
+            // 
+            this.searchTextBox.Location = new System.Drawing.Point(120, 19);
+            this.searchTextBox.Name = "searchTextBox";
+            this.searchTextBox.Size = new System.Drawing.Size(218, 23);
+            this.searchTextBox.TabIndex = 1;
+            // 
+            // deleteButton
+            // 
+            this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.deleteButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.deleteButton.Location = new System.Drawing.Point(13, 598);
+            this.deleteButton.Name = "deleteButton";
+            this.deleteButton.Size = new System.Drawing.Size(110, 30);
+            this.deleteButton.TabIndex = 10;
+            this.deleteButton.Text = "Delete";
+            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
+            // 
+            // columnsGroupBox
+            // 
+            this.columnsGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.columnsGroupBox.Controls.Add(this.columnDeleteButton);
+            this.columnsGroupBox.Controls.Add(this.columnEditButton);
+            this.columnsGroupBox.Controls.Add(this.columnAddButton);
+            this.columnsGroupBox.Controls.Add(this.columnRightButton);
+            this.columnsGroupBox.Controls.Add(this.columnLeftButton);
+            this.columnsGroupBox.Location = new System.Drawing.Point(721, 164);
+            this.columnsGroupBox.Name = "columnsGroupBox";
+            this.columnsGroupBox.Padding = new System.Windows.Forms.Padding(3, 10, 3, 3);
+            this.columnsGroupBox.Size = new System.Drawing.Size(110, 180);
+            this.columnsGroupBox.TabIndex = 8;
+            this.columnsGroupBox.TabStop = false;
+            this.columnsGroupBox.Text = "Columns";
+            // 
+            // columnDeleteButton
+            // 
+            this.columnDeleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.columnDeleteButton.Location = new System.Drawing.Point(6, 137);
+            this.columnDeleteButton.Name = "columnDeleteButton";
+            this.columnDeleteButton.Size = new System.Drawing.Size(98, 30);
+            this.columnDeleteButton.TabIndex = 4;
+            this.columnDeleteButton.Text = "Delete";
+            this.columnDeleteButton.Click += new System.EventHandler(this.columnDeleteButton_Click);
+            // 
+            // columnEditButton
+            // 
+            this.columnEditButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.columnEditButton.Location = new System.Drawing.Point(6, 65);
+            this.columnEditButton.Name = "columnEditButton";
+            this.columnEditButton.Size = new System.Drawing.Size(98, 30);
+            this.columnEditButton.TabIndex = 2;
+            this.columnEditButton.Text = "Edit";
+            this.columnEditButton.Click += new System.EventHandler(this.columnEditButton_Click);
+            // 
+            // columnAddButton
+            // 
+            this.columnAddButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.columnAddButton.Location = new System.Drawing.Point(6, 101);
+            this.columnAddButton.Name = "columnAddButton";
+            this.columnAddButton.Size = new System.Drawing.Size(98, 30);
+            this.columnAddButton.TabIndex = 3;
+            this.columnAddButton.Text = "Add";
+            this.columnAddButton.Click += new System.EventHandler(this.columnAddButton_Click);
+            // 
+            // columnRightButton
+            // 
+            this.columnRightButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.columnRightButton.Location = new System.Drawing.Point(59, 29);
+            this.columnRightButton.Name = "columnRightButton";
+            this.columnRightButton.Size = new System.Drawing.Size(45, 30);
+            this.columnRightButton.TabIndex = 1;
+            this.columnRightButton.Text = "R";
+            this.columnRightButton.Click += new System.EventHandler(this.columnRightButton_Click);
+            // 
+            // columnLeftButton
+            // 
+            this.columnLeftButton.Location = new System.Drawing.Point(6, 29);
+            this.columnLeftButton.Name = "columnLeftButton";
+            this.columnLeftButton.Size = new System.Drawing.Size(45, 30);
+            this.columnLeftButton.TabIndex = 0;
+            this.columnLeftButton.Text = "L";
+            this.columnLeftButton.Click += new System.EventHandler(this.columnLeftButton_Click);
+            // 
+            // itemsGrid
+            // 
+            this.itemsGrid.AllowSortingByColumn = true;
+            this.itemsGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
-			this.gridMain.EditableAcceptsCR = true;
-			this.gridMain.HasAddButton = false;
-			this.gridMain.HasAutoWrappedHeaders = true;
-			this.gridMain.HasDropDowns = false;
-			this.gridMain.HasMultilineHeaders = true;
-			this.gridMain.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridMain.HeaderHeight = 30;
-			this.gridMain.HScrollVisible = true;
-			this.gridMain.Location = new System.Drawing.Point(12, 46);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
-			this.gridMain.Size = new System.Drawing.Size(843, 540);
-			this.gridMain.TabIndex = 5;
-			this.gridMain.Title = "";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellTextChanged += new System.EventHandler(this.gridMain_CellTextChanged);
-			this.gridMain.CellLeave += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellLeave);
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(865, 589);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75, 24);
-			this.butClose.TabIndex = 10;
-			this.butClose.Text = "Close";
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// butAdvSearch
-			// 
-			this.butAdvSearch.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAdvSearch.Autosize = true;
-			this.butAdvSearch.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdvSearch.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdvSearch.CornerRadius = 4F;
-			this.butAdvSearch.Location = new System.Drawing.Point(408, 10);
-			this.butAdvSearch.Name = "butAdvSearch";
-			this.butAdvSearch.Size = new System.Drawing.Size(75, 23);
-			this.butAdvSearch.TabIndex = 1;
-			this.butAdvSearch.Text = "Adv. Search";
-			this.butAdvSearch.UseVisualStyleBackColor = true;
-			this.butAdvSearch.Click += new System.EventHandler(this.butAdvSearch_Click);
-			// 
-			// butClearAdvSearch
-			// 
-			this.butClearAdvSearch.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butClearAdvSearch.Autosize = true;
-			this.butClearAdvSearch.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClearAdvSearch.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClearAdvSearch.CornerRadius = 4F;
-			this.butClearAdvSearch.Location = new System.Drawing.Point(489, 10);
-			this.butClearAdvSearch.Name = "butClearAdvSearch";
-			this.butClearAdvSearch.Size = new System.Drawing.Size(75, 23);
-			this.butClearAdvSearch.TabIndex = 2;
-			this.butClearAdvSearch.Text = "Clear";
-			this.butClearAdvSearch.UseVisualStyleBackColor = true;
-			this.butClearAdvSearch.Click += new System.EventHandler(this.butClearAdvSearch_Click);
-			// 
-			// radioButHighlight
-			// 
-			this.radioButHighlight.Location = new System.Drawing.Point(594, 13);
-			this.radioButHighlight.Name = "radioButHighlight";
-			this.radioButHighlight.Size = new System.Drawing.Size(89, 17);
-			this.radioButHighlight.TabIndex = 3;
-			this.radioButHighlight.TabStop = true;
-			this.radioButHighlight.Text = "Highlight";
-			this.radioButHighlight.UseVisualStyleBackColor = true;
-			this.radioButHighlight.CheckedChanged += new System.EventHandler(this.radioButHighlight_CheckedChanged);
-			// 
-			// radioButFilter
-			// 
-			this.radioButFilter.Location = new System.Drawing.Point(689, 14);
-			this.radioButFilter.Name = "radioButFilter";
-			this.radioButFilter.Size = new System.Drawing.Size(73, 17);
-			this.radioButFilter.TabIndex = 4;
-			this.radioButFilter.TabStop = true;
-			this.radioButFilter.Text = "Filter";
-			this.radioButFilter.UseVisualStyleBackColor = true;
-			this.radioButFilter.CheckedChanged += new System.EventHandler(this.radioButFilter_CheckedChanged);
-			// 
-			// FormWikiListEdit
-			// 
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(952, 613);
-			this.Controls.Add(this.radioButFilter);
-			this.Controls.Add(this.radioButHighlight);
-			this.Controls.Add(this.butClearAdvSearch);
-			this.Controls.Add(this.butAdvSearch);
-			this.Controls.Add(this.groupBox3);
-			this.Controls.Add(this.groupBox2);
-			this.Controls.Add(this.labelSearch);
-			this.Controls.Add(this.textSearch);
-			this.Controls.Add(this.butDelete);
-			this.Controls.Add(this.groupBox1);
-			this.Controls.Add(this.gridMain);
-			this.Controls.Add(this.butClose);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MinimumSize = new System.Drawing.Size(768, 387);
-			this.Name = "FormWikiListEdit";
-			this.Text = "Edit Wiki List";
-			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.Load += new System.EventHandler(this.FormWikiListEdit_Load);
-			this.groupBox3.ResumeLayout(false);
-			this.groupBox2.ResumeLayout(false);
-			this.groupBox1.ResumeLayout(false);
-			this.ResumeLayout(false);
-			this.PerformLayout();
+            this.itemsGrid.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
+            this.itemsGrid.EditableAcceptsCR = true;
+            this.itemsGrid.EditableEnterMovesDown = false;
+            this.itemsGrid.HasAddButton = false;
+            this.itemsGrid.HasAutoWrappedHeaders = true;
+            this.itemsGrid.HasDropDowns = false;
+            this.itemsGrid.HasMultilineHeaders = true;
+            this.itemsGrid.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
+            this.itemsGrid.HeaderHeight = 30;
+            this.itemsGrid.HScrollVisible = true;
+            this.itemsGrid.Location = new System.Drawing.Point(13, 48);
+            this.itemsGrid.Name = "itemsGrid";
+            this.itemsGrid.ScrollValue = 0;
+            this.itemsGrid.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+            this.itemsGrid.Size = new System.Drawing.Size(702, 544);
+            this.itemsGrid.TabIndex = 6;
+            this.itemsGrid.Title = "";
+            this.itemsGrid.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            this.itemsGrid.TitleHeight = 18;
+            this.itemsGrid.TranslationName = "";
+            this.itemsGrid.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(721, 598);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(110, 30);
+            this.cancelButton.TabIndex = 11;
+            this.cancelButton.Text = "Close";
+            // 
+            // advSearchButton
+            // 
+            this.advSearchButton.Location = new System.Drawing.Point(339, 18);
+            this.advSearchButton.Name = "advSearchButton";
+            this.advSearchButton.Size = new System.Drawing.Size(60, 25);
+            this.advSearchButton.TabIndex = 2;
+            this.advSearchButton.Text = "Adv. Search";
+            this.advSearchButton.UseVisualStyleBackColor = true;
+            this.advSearchButton.Click += new System.EventHandler(this.advSearchButton_Click);
+            // 
+            // advSearchClearButton
+            // 
+            this.advSearchClearButton.Location = new System.Drawing.Point(399, 18);
+            this.advSearchClearButton.Margin = new System.Windows.Forms.Padding(3, 3, 50, 3);
+            this.advSearchClearButton.Name = "advSearchClearButton";
+            this.advSearchClearButton.Size = new System.Drawing.Size(60, 25);
+            this.advSearchClearButton.TabIndex = 3;
+            this.advSearchClearButton.Text = "Clear";
+            this.advSearchClearButton.UseVisualStyleBackColor = true;
+            this.advSearchClearButton.Click += new System.EventHandler(this.advSearchClearButton_Click);
+            // 
+            // highlightRadioButton
+            // 
+            this.highlightRadioButton.AutoSize = true;
+            this.highlightRadioButton.Location = new System.Drawing.Point(512, 21);
+            this.highlightRadioButton.Margin = new System.Windows.Forms.Padding(3, 3, 30, 3);
+            this.highlightRadioButton.Name = "highlightRadioButton";
+            this.highlightRadioButton.Size = new System.Drawing.Size(75, 19);
+            this.highlightRadioButton.TabIndex = 4;
+            this.highlightRadioButton.TabStop = true;
+            this.highlightRadioButton.Text = "Highlight";
+            this.highlightRadioButton.UseVisualStyleBackColor = true;
+            this.highlightRadioButton.CheckedChanged += new System.EventHandler(this.highlightRadioButton_CheckedChanged);
+            // 
+            // filterRadioButton
+            // 
+            this.filterRadioButton.AutoSize = true;
+            this.filterRadioButton.Location = new System.Drawing.Point(620, 21);
+            this.filterRadioButton.Name = "filterRadioButton";
+            this.filterRadioButton.Size = new System.Drawing.Size(51, 19);
+            this.filterRadioButton.TabIndex = 5;
+            this.filterRadioButton.TabStop = true;
+            this.filterRadioButton.Text = "Filter";
+            this.filterRadioButton.UseVisualStyleBackColor = true;
+            this.filterRadioButton.CheckedChanged += new System.EventHandler(this.filterRadioButton_CheckedChanged);
+            // 
+            // FormWikiListEdit
+            // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(844, 641);
+            this.Controls.Add(this.filterRadioButton);
+            this.Controls.Add(this.highlightRadioButton);
+            this.Controls.Add(this.advSearchClearButton);
+            this.Controls.Add(this.advSearchButton);
+            this.Controls.Add(this.listGroupBox);
+            this.Controls.Add(this.rowsGroupBox);
+            this.Controls.Add(this.searchLabel);
+            this.Controls.Add(this.searchTextBox);
+            this.Controls.Add(this.deleteButton);
+            this.Controls.Add(this.columnsGroupBox);
+            this.Controls.Add(this.itemsGrid);
+            this.Controls.Add(this.cancelButton);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(860, 540);
+            this.Name = "FormWikiListEdit";
+            this.Text = "Edit Wiki List";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.FormWikiListEdit_Load);
+            this.listGroupBox.ResumeLayout(false);
+            this.rowsGroupBox.ResumeLayout(false);
+            this.columnsGroupBox.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private UI.Button butClose;
-		private UI.ODGrid gridMain;
-		private System.Windows.Forms.GroupBox groupBox1;
-		private UI.Button butHeaders;
-		private UI.Button butColumnRight;
-		private UI.Button butColumnLeft;
-		private UI.Button butAddItem;
-		private UI.Button butColumnDelete;
-		private UI.Button butColumnInsert;
-		private UI.Button butDelete;
-		private System.Windows.Forms.Label labelSearch;
-		private System.Windows.Forms.TextBox textSearch;
-		private System.Windows.Forms.GroupBox groupBox2;
-		private System.Windows.Forms.GroupBox groupBox3;
-		private UI.Button butRenameList;
-		private UI.Button butHistory;
-		private UI.Button butAdvSearch;
-		private UI.Button butClearAdvSearch;
-		private System.Windows.Forms.RadioButton radioButHighlight;
-		private System.Windows.Forms.RadioButton radioButFilter;
-	}
+        private System.Windows.Forms.Button cancelButton;
+        private UI.ODGrid itemsGrid;
+        private System.Windows.Forms.GroupBox columnsGroupBox;
+        private System.Windows.Forms.Button columnEditButton;
+        private System.Windows.Forms.Button columnRightButton;
+        private System.Windows.Forms.Button columnLeftButton;
+        private System.Windows.Forms.Button rowAddButton;
+        private System.Windows.Forms.Button columnAddButton;
+        private System.Windows.Forms.Button deleteButton;
+        private System.Windows.Forms.Label searchLabel;
+        private System.Windows.Forms.TextBox searchTextBox;
+        private System.Windows.Forms.GroupBox rowsGroupBox;
+        private System.Windows.Forms.GroupBox listGroupBox;
+        private System.Windows.Forms.Button listRenameButton;
+        private System.Windows.Forms.Button listHistoryButton;
+        private System.Windows.Forms.Button advSearchButton;
+        private System.Windows.Forms.Button advSearchClearButton;
+        private System.Windows.Forms.RadioButton highlightRadioButton;
+        private System.Windows.Forms.RadioButton filterRadioButton;
+        private System.Windows.Forms.Button columnDeleteButton;
+    }
 }

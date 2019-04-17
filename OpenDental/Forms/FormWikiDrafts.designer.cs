@@ -23,156 +23,128 @@ namespace OpenDental {
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormWikiDrafts));
-			this.textNumbers = new System.Windows.Forms.TextBox();
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butEdit = new OpenDental.UI.Button();
-			this.textContent = new OpenDental.TextBoxWiki();
-			this.webBrowserWiki = new System.Windows.Forms.WebBrowser();
-			this.butClose = new OpenDental.UI.Button();
-			this.butDelete = new OpenDental.UI.Button();
-			this.SuspendLayout();
-			// 
-			// textNumbers
-			// 
-			this.textNumbers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormWikiDrafts));
+            this.wikiPagesGrid = new OpenDental.UI.ODGrid();
+            this.editButton = new System.Windows.Forms.Button();
+            this.textContent = new OpenDental.TextBoxWiki();
+            this.wikiWebBrowser = new System.Windows.Forms.WebBrowser();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.deleteButton = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // wikiPagesGrid
+            // 
+            this.wikiPagesGrid.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-			this.textNumbers.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.textNumbers.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(117)))), ((int)(((byte)(133)))));
-			this.textNumbers.Location = new System.Drawing.Point(266, 12);
-			this.textNumbers.Multiline = true;
-			this.textNumbers.Name = "textNumbers";
-			this.textNumbers.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textNumbers.Size = new System.Drawing.Size(46, 614);
-			this.textNumbers.TabIndex = 83;
-			this.textNumbers.Text = "1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7\r\n8\r\n9\r\n10\r\n11\r\n12\r\n13\r\n188\r\n288";
-			this.textNumbers.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.wikiPagesGrid.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
+            this.wikiPagesGrid.EditableEnterMovesDown = false;
+            this.wikiPagesGrid.HasAddButton = false;
+            this.wikiPagesGrid.HasDropDowns = false;
+            this.wikiPagesGrid.HasMultilineHeaders = false;
+            this.wikiPagesGrid.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
+            this.wikiPagesGrid.HeaderHeight = 15;
+            this.wikiPagesGrid.HScrollVisible = false;
+            this.wikiPagesGrid.Location = new System.Drawing.Point(13, 19);
+            this.wikiPagesGrid.Name = "wikiPagesGrid";
+            this.wikiPagesGrid.ScrollValue = 0;
+            this.wikiPagesGrid.Size = new System.Drawing.Size(250, 609);
+            this.wikiPagesGrid.TabIndex = 0;
+            this.wikiPagesGrid.Title = "Drafts";
+            this.wikiPagesGrid.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            this.wikiPagesGrid.TitleHeight = 18;
+            this.wikiPagesGrid.TranslationName = "TableWikiDrafts";
+            this.wikiPagesGrid.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.wikiPagesGrid_CellDoubleClick);
+            this.wikiPagesGrid.Click += new System.EventHandler(this.wikiPagesGrid_Click);
+            // 
+            // editButton
+            // 
+            this.editButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.editButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.editButton.Location = new System.Drawing.Point(981, 19);
+            this.editButton.Name = "editButton";
+            this.editButton.Size = new System.Drawing.Size(110, 30);
+            this.editButton.TabIndex = 4;
+            this.editButton.Text = "&Edit";
+            this.editButton.Click += new System.EventHandler(this.editButton_Click);
+            // 
+            // textContent
+            // 
+            this.textContent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-			this.gridMain.HasAddButton = false;
-			this.gridMain.HasMultilineHeaders = false;
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12, 12);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(248, 614);
-			this.gridMain.TabIndex = 5;
-			this.gridMain.Title = "Drafts";
-			this.gridMain.TranslationName = "TableWikiDrafts";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.Click += new System.EventHandler(this.gridMain_Click);
-			// 
-			// butEdit
-			// 
-			this.butEdit.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butEdit.Autosize = true;
-			this.butEdit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEdit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butEdit.CornerRadius = 4F;
-			this.butEdit.Image = global::OpenDental.Properties.Resources.editPencil;
-			this.butEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butEdit.Location = new System.Drawing.Point(1067, 12);
-			this.butEdit.Name = "butEdit";
-			this.butEdit.Size = new System.Drawing.Size(75, 24);
-			this.butEdit.TabIndex = 84;
-			this.butEdit.Text = "Edit";
-			this.butEdit.Click += new System.EventHandler(this.butEdit_Click);
-			// 
-			// textContent
-			// 
-			this.textContent.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-			this.textContent.Location = new System.Drawing.Point(294, 12);
-			this.textContent.Name = "textContent";
-			this.textContent.ReadOnly = true;
-			this.textContent.SelectedText = "";
-			this.textContent.SelectionLength = 0;
-			this.textContent.SelectionStart = 0;
-			this.textContent.Size = new System.Drawing.Size(347, 614);
-			this.textContent.TabIndex = 82;
-			// 
-			// webBrowserWiki
-			// 
-			this.webBrowserWiki.AllowWebBrowserDrop = false;
-			this.webBrowserWiki.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.textContent.ContextMenuStripWiki = null;
+            this.textContent.Location = new System.Drawing.Point(269, 19);
+            this.textContent.Name = "textContent";
+            this.textContent.ReadOnly = true;
+            this.textContent.SelectedText = "";
+            this.textContent.SelectionLength = 0;
+            this.textContent.SelectionStart = 0;
+            this.textContent.Size = new System.Drawing.Size(347, 609);
+            this.textContent.TabIndex = 2;
+            // 
+            // wikiWebBrowser
+            // 
+            this.wikiWebBrowser.AllowWebBrowserDrop = false;
+            this.wikiWebBrowser.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.webBrowserWiki.IsWebBrowserContextMenuEnabled = false;
-			this.webBrowserWiki.Location = new System.Drawing.Point(647, 12);
-			this.webBrowserWiki.MinimumSize = new System.Drawing.Size(20, 20);
-			this.webBrowserWiki.Name = "webBrowserWiki";
-			this.webBrowserWiki.Size = new System.Drawing.Size(414, 614);
-			this.webBrowserWiki.TabIndex = 6;
-			this.webBrowserWiki.WebBrowserShortcutsEnabled = false;
-			this.webBrowserWiki.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.webBrowserWiki_Navigated);
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(1067, 602);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75, 24);
-			this.butClose.TabIndex = 2;
-			this.butClose.Text = "Close";
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(1067, 53);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(75, 24);
-			this.butDelete.TabIndex = 85;
-			this.butDelete.Text = "Delete";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
-			// FormWikiDrafts
-			// 
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(1154, 638);
-			this.Controls.Add(this.butDelete);
-			this.Controls.Add(this.butEdit);
-			this.Controls.Add(this.textContent);
-			this.Controls.Add(this.textNumbers);
-			this.Controls.Add(this.webBrowserWiki);
-			this.Controls.Add(this.gridMain);
-			this.Controls.Add(this.butClose);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MinimumSize = new System.Drawing.Size(800, 400);
-			this.Name = "FormWikiDrafts";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Wiki Drafts";
-			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.Load += new System.EventHandler(this.FormWikiDrafts_Load);
-			this.ResumeLayout(false);
-			this.PerformLayout();
+            this.wikiWebBrowser.IsWebBrowserContextMenuEnabled = false;
+            this.wikiWebBrowser.Location = new System.Drawing.Point(647, 19);
+            this.wikiWebBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+            this.wikiWebBrowser.Name = "wikiWebBrowser";
+            this.wikiWebBrowser.Size = new System.Drawing.Size(328, 609);
+            this.wikiWebBrowser.TabIndex = 3;
+            this.wikiWebBrowser.WebBrowserShortcutsEnabled = false;
+            this.wikiWebBrowser.Navigated += new System.Windows.Forms.WebBrowserNavigatedEventHandler(this.wikiWebBrowser_Navigated);
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(981, 598);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(110, 30);
+            this.cancelButton.TabIndex = 6;
+            this.cancelButton.Text = "&Close";
+            // 
+            // deleteButton
+            // 
+            this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.deleteButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.deleteButton.Location = new System.Drawing.Point(981, 55);
+            this.deleteButton.Name = "deleteButton";
+            this.deleteButton.Size = new System.Drawing.Size(110, 30);
+            this.deleteButton.TabIndex = 5;
+            this.deleteButton.Text = "&Delete";
+            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
+            // 
+            // FormWikiDrafts
+            // 
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(1104, 641);
+            this.Controls.Add(this.deleteButton);
+            this.Controls.Add(this.editButton);
+            this.Controls.Add(this.textContent);
+            this.Controls.Add(this.wikiWebBrowser);
+            this.Controls.Add(this.wikiPagesGrid);
+            this.Controls.Add(this.cancelButton);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(800, 400);
+            this.Name = "FormWikiDrafts";
+            this.ShowInTaskbar = false;
+            this.Text = "Wiki Drafts";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.FormWikiDrafts_Load);
+            this.ResumeLayout(false);
 
 		}
 
 		#endregion
 
-		private OpenDental.UI.Button butClose;
-		private UI.ODGrid gridMain;
-		private System.Windows.Forms.WebBrowser webBrowserWiki;
+		private System.Windows.Forms.Button cancelButton;
+		private UI.ODGrid wikiPagesGrid;
+		private System.Windows.Forms.WebBrowser wikiWebBrowser;
 		private TextBoxWiki textContent;
-		private System.Windows.Forms.TextBox textNumbers;
-		private UI.Button butEdit;
-		private UI.Button butDelete;
+		private System.Windows.Forms.Button editButton;
+		private System.Windows.Forms.Button deleteButton;
 	}
 }

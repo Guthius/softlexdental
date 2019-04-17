@@ -1,83 +1,135 @@
+using OpenDental.UI;
+using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using OpenDentBusiness;
-using OpenDental.UI;
 
-namespace OpenDental {
-	public partial class FormWikiIncomingLinks:ODForm {
-		public string PageTitleCur;
-		public WikiPage JumpToPage;
-		private List<WikiPage> ListWikiPages;
+namespace OpenDental
+{
+    public partial class FormWikiIncomingLinks : FormBase
+    {
+        string          wikiPageTitle;
+        List<WikiPage>  wikiPagesList;
 
-		public FormWikiIncomingLinks() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        /// <summary>
+        /// Gets the currently selected page.
+        /// </summary>
+        public WikiPage SelectedPage
+        {
+            get
+            {
+                if (wikiPagesGrid.SelectedIndices.Length > 0)
+                {
+                    return wikiPagesList[wikiPagesGrid.SelectedIndices[0]];
+                }
+                return null;
+            }
+        }
 
-		private void FormWiki_Load(object sender,EventArgs e) {
-			Text="Incoming links to "+PageTitleCur;
-			FillGrid();
-			if(ListWikiPages.Count==0) {
-				MsgBox.Show(this,"This page has no incoming links.");
-				Close();
-			}
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormWikiIncomingLinks"/> class.
+        /// </summary>
+        /// <param name="wikiPageTitle"</param>
+        public FormWikiIncomingLinks(string wikiPageTitle)
+        {
+            InitializeComponent();
 
-		private void LoadWikiPage(WikiPage wikiPage) {
-			try {
-				webBrowserWiki.DocumentText=MarkupEdit.TranslateToXhtml(wikiPage.PageContent,false);
-			}
-			catch(Exception ex) {
-				webBrowserWiki.DocumentText="";
-				MessageBox.Show(this,Lan.g(this,"This page is broken and cannot be viewed.  Error message:")+" "+ex.Message);
-			}
-		}
+            this.wikiPageTitle = wikiPageTitle;
+        }
+        
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormWiki_Load(object sender, EventArgs e)
+        {
+            Text = string.Format(Translation.Language.WikiIncomingLinksTo0, wikiPageTitle);
 
-		/// <summary></summary>
-		private void FillGrid() {
-			gridMain.BeginUpdate();
-			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Page Title"),70);
-			gridMain.Columns.Add(col);
-			//col=new ODGridColumn(Lan.g(this,"Saved"),42);
-			//gridMain.Columns.Add(col);
-			gridMain.Rows.Clear();
-			ListWikiPages=WikiPages.GetIncomingLinks(PageTitleCur);
-			for(int i=0;i<ListWikiPages.Count;i++) {
-				ODGridRow row=new ODGridRow();
-				row.Cells.Add(ListWikiPages[i].PageTitle);
-				//row.Cells.Add(page.DateTimeSaved.ToString());
-				gridMain.Rows.Add(row);
-			}
-			gridMain.EndUpdate();
-		}
+            LoadWikiPageList();
 
-		private void gridMain_Click(object sender,EventArgs e) {
-			if(gridMain.SelectedIndices.Length<1) {
-				return;
-			}
-			webBrowserWiki.AllowNavigation=true;
-			LoadWikiPage(ListWikiPages[gridMain.SelectedIndices[0]]);
-			gridMain.Focus();
-		}
+            if (wikiPagesList.Count == 0)
+            {
+                MessageBox.Show(
+                    Translation.Language.WikiPageHasNoIncomingLinks,
+                    Translation.Language.WikiIncomingLinks, 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Information);
 
-		private void gridMain_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
-			JumpToPage=ListWikiPages[e.Row];
-			DialogResult=DialogResult.OK;
-		}
+                Close();
+            }
+        }
 
-		private void webBrowserWiki_Navigated(object sender,WebBrowserNavigatedEventArgs e) {
-			webBrowserWiki.AllowNavigation=false;//to disable links in pages.
-		}
+        /// <summary>
+        /// Loadsthe specified page.
+        /// </summary>
+        /// <param name="wikiPage">The page to load.</param>
+        void LoadWikiPage(WikiPage wikiPage)
+        {
+            wikiWebBrowser.AllowNavigation = true;
+            try
+            {
+                wikiWebBrowser.DocumentText = MarkupEdit.TranslateToXhtml(wikiPage.PageContent, false);
+            }
+            catch (Exception ex)
+            {
+                wikiWebBrowser.DocumentText = "";
 
-		private void butClose_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+                MessageBox.Show(
+                    Translation.Language.WikiPageIsBroken + " " + ex.Message,
+                    Translation.Language.WikiIncomingLinks, 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+            }
+        }
 
-	}
+        /// <summary>
+        /// Loads the list of wiki pages and populates the grid.
+        /// </summary>
+        void LoadWikiPageList()
+        {
+            wikiPagesGrid.BeginUpdate();
+            wikiPagesGrid.Columns.Clear();
+            wikiPagesGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnPageTitle, 70));
+
+            wikiPagesGrid.Rows.Clear();
+
+            wikiPagesList = WikiPages.GetIncomingLinks(wikiPageTitle);
+            for (int i = 0; i < wikiPagesList.Count; i++)
+            {
+                var row = new ODGridRow();
+                row.Cells.Add(wikiPagesList[i].PageTitle);
+                wikiPagesGrid.Rows.Add(row);
+            }
+            wikiPagesGrid.EndUpdate();
+        }
+
+        /// <summary>
+        /// When the user clicks on a page in the grid, load the page preview.
+        /// </summary>
+        void wikiPagesGrid_Click(object sender, EventArgs e)
+        {
+            if (wikiPagesGrid.SelectedIndices.Length < 1)
+            {
+                return;
+            }
+            
+            LoadWikiPage(wikiPagesList[wikiPagesGrid.SelectedIndices[0]]);
+            wikiPagesGrid.Focus();
+        }
+
+        /// <summary>
+        /// Close the form when the user double clicks on a page in the grid.
+        /// </summary>
+        void wikiPagesGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
+        {
+            if (SelectedPage != null)
+            {
+                DialogResult = DialogResult.OK;
+            }
+        }
+
+        /// <summary>
+        /// Disable further navigation after the preview browser completes navigation.
+        /// </summary>
+        void wikiWebBrowser_Navigated(object sender, WebBrowserNavigatedEventArgs e) => wikiWebBrowser.AllowNavigation = false;
+    }
 }

@@ -61,6 +61,96 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Column.
+        /// </summary>
+        public static string ColumnColumn {
+            get {
+                return ResourceManager.GetString("ColumnColumn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ColumnName.
+        /// </summary>
+        public static string ColumnColumnName {
+            get {
+                return ResourceManager.GetString("ColumnColumnName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Del.
+        /// </summary>
+        public static string ColumnDel {
+            get {
+                return ResourceManager.GetString("ColumnDel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Input Text.
+        /// </summary>
+        public static string ColumnInputText {
+            get {
+                return ResourceManager.GetString("ColumnInputText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Page Title.
+        /// </summary>
+        public static string ColumnPageTitle {
+            get {
+                return ResourceManager.GetString("ColumnPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Saved.
+        /// </summary>
+        public static string ColumnSaved {
+            get {
+                return ResourceManager.GetString("ColumnSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string ColumnTitle {
+            get {
+                return ResourceManager.GetString("ColumnTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User.
+        /// </summary>
+        public static string ColumnUser {
+            get {
+                return ResourceManager.GetString("ColumnUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value.
+        /// </summary>
+        public static string ColumnValue {
+            get {
+                return ResourceManager.GetString("ColumnValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Width.
+        /// </summary>
+        public static string ColumnWidth {
+            get {
+                return ResourceManager.GetString("ColumnWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do not show me this message again..
         /// </summary>
         public static string DoNotShowThisMessageAgain {
@@ -84,6 +174,15 @@ namespace OpenDental.Translation {
         public static string lang_current_password_incorrect {
             get {
                 return ResourceManager.GetString("lang_current_password_incorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last Saved.
+        /// </summary>
+        public static string lang_last_saved {
+            get {
+                return ResourceManager.GetString("lang_last_saved", resourceCulture);
             }
         }
         
@@ -124,6 +223,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User.
+        /// </summary>
+        public static string lang_user {
+            get {
+                return ResourceManager.GetString("lang_user", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User {0} has logged on.
         /// </summary>
         public static string lang_user_has_logged_on {
@@ -147,6 +255,375 @@ namespace OpenDental.Translation {
         public static string LogOffConfirmation {
             get {
                 return ResourceManager.GetString("LogOffConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wiki.
+        /// </summary>
+        public static string Wiki {
+            get {
+                return ResourceManager.GetString("Wiki", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Archive this wiki page? It will still be available from the Search window if needed..
+        /// </summary>
+        public static string WikiArchiveWikiPageConfirm {
+            get {
+                return ResourceManager.GetString("WikiArchiveWikiPageConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot archive homepage..
+        /// </summary>
+        public static string WikiCannotArchiveHomepage {
+            get {
+                return ResourceManager.GetString("WikiCannotArchiveHomepage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot rename the default homepage..
+        /// </summary>
+        public static string WikiCannotRenameTheDefaultHomepage {
+            get {
+                return ResourceManager.GetString("WikiCannotRenameTheDefaultHomepage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Column names cannot contain spaces..
+        /// </summary>
+        public static string WikiColumnCannotContainSpaces {
+            get {
+                return ResourceManager.GetString("WikiColumnCannotContainSpaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Column names cannot contain special characters..
+        /// </summary>
+        public static string WikiColumnCannotContainSpecialCharacters {
+            get {
+                return ResourceManager.GetString("WikiColumnCannotContainSpecialCharacters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Column cannot start with numbers..
+        /// </summary>
+        public static string WikiColumnCannotStartWithNumbers {
+            get {
+                return ResourceManager.GetString("WikiColumnCannotStartWithNumbers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Column name &apos;{0}&apos; is a reserved word in MySQL..
+        /// </summary>
+        public static string WikiColumnName0IsReservedWord {
+            get {
+                return ResourceManager.GetString("WikiColumnName0IsReservedWord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Column name is a reserved word in MySQL..
+        /// </summary>
+        public static string WikiColumnNameIsReservedWord {
+            get {
+                return ResourceManager.GetString("WikiColumnNameIsReservedWord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Column widths must only contain positive integers..
+        /// </summary>
+        public static string WikiColumnWidthsMustOnlyContainPositiveIntegers {
+            get {
+                return ResourceManager.GetString("WikiColumnWidthsMustOnlyContainPositiveIntegers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete this draft?.
+        /// </summary>
+        public static string WikiDeleteDraft {
+            get {
+                return ResourceManager.GetString("WikiDeleteDraft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete this list item and all references to it?.
+        /// </summary>
+        public static string WikiDeleteItemAndReferences {
+            get {
+                return ResourceManager.GetString("WikiDeleteItemAndReferences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wiki Drafts.
+        /// </summary>
+        public static string WikiDrafts {
+            get {
+                return ResourceManager.GetString("WikiDrafts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duplicate column name detected.
+        /// </summary>
+        public static string WikiDuplicateColumnNameDetected {
+            get {
+                return ResourceManager.GetString("WikiDuplicateColumnNameDetected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit List Item.
+        /// </summary>
+        public static string WikiEditListItem {
+            get {
+                return ResourceManager.GetString("WikiEditListItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Wiki List Headers.
+        /// </summary>
+        public static string WikiEditWikiListHeaders {
+            get {
+                return ResourceManager.GetString("WikiEditWikiListHeaders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Wiki List Item.
+        /// </summary>
+        public static string WikiEditWikiListItem {
+            get {
+                return ResourceManager.GetString("WikiEditWikiListItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File does not exist. Continue anyway?.
+        /// </summary>
+        public static string WikiFileDoesNotExistContinueAnyway {
+            get {
+                return ResourceManager.GetString("WikiFileDoesNotExistContinueAnyway", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Folder does not exist. Continue anyway?.
+        /// </summary>
+        public static string WikiFolderDoesNotExistContinueAnyway {
+            get {
+                return ResourceManager.GetString("WikiFolderDoesNotExistContinueAnyway", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wiki History.
+        /// </summary>
+        public static string WikiHistory {
+            get {
+                return ResourceManager.GetString("WikiHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incoming Links.
+        /// </summary>
+        public static string WikiIncomingLinks {
+            get {
+                return ResourceManager.GetString("WikiIncomingLinks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incoming links to {0}.
+        /// </summary>
+        public static string WikiIncomingLinksTo0 {
+            get {
+                return ResourceManager.GetString("WikiIncomingLinksTo0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert File Link.
+        /// </summary>
+        public static string WikiInsertFileLink {
+            get {
+                return ResourceManager.GetString("WikiInsertFileLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert Folder Link.
+        /// </summary>
+        public static string WikiInsertFolderLink {
+            get {
+                return ResourceManager.GetString("WikiInsertFolderLink", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List already exists with that name. Would you like to edit existing list?.
+        /// </summary>
+        public static string WikiListAlreadyExistsWithThatName {
+            get {
+                return ResourceManager.GetString("WikiListAlreadyExistsWithThatName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List name cannot be blank..
+        /// </summary>
+        public static string WikiListNameCannotBeBlank {
+            get {
+                return ResourceManager.GetString("WikiListNameCannotBeBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List name is a reserved word in MySQL..
+        /// </summary>
+        public static string WikiListNameIsReservedWord {
+            get {
+                return ResourceManager.GetString("WikiListNameIsReservedWord", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wiki Lists.
+        /// </summary>
+        public static string WikiLists {
+            get {
+                return ResourceManager.GetString("WikiLists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New List Name.
+        /// </summary>
+        public static string WikiNewListName {
+            get {
+                return ResourceManager.GetString("WikiNewListName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Pick List Option.
+        /// </summary>
+        public static string WIkiNewPickListOption {
+            get {
+                return ResourceManager.GetString("WIkiNewPickListOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to That page does not exist. Would you like to create it?.
+        /// </summary>
+        public static string WikiPageDoesNotExist {
+            get {
+                return ResourceManager.GetString("WikiPageDoesNotExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to That page does not exist and cannot be made because the page title contains invalid characters..
+        /// </summary>
+        public static string WikiPageDoesNotExistAndTitleInvalid {
+            get {
+                return ResourceManager.GetString("WikiPageDoesNotExistAndTitleInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This page has no incoming links..
+        /// </summary>
+        public static string WikiPageHasNoIncomingLinks {
+            get {
+                return ResourceManager.GetString("WikiPageHasNoIncomingLinks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This page has one or more drafts associated with it. Would you like to open a draft instead of the current Wiki page?.
+        /// </summary>
+        public static string WikiPageHasOneOrMoreDrafts {
+            get {
+                return ResourceManager.GetString("WikiPageHasOneOrMoreDrafts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This page is broken and cannot be viewed..
+        /// </summary>
+        public static string WikiPageIsBroken {
+            get {
+                return ResourceManager.GetString("WikiPageIsBroken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Page Title.
+        /// </summary>
+        public static string WikiPageTitle {
+            get {
+                return ResourceManager.GetString("WikiPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Page title already exists..
+        /// </summary>
+        public static string WikiPageTitleAlreadyExists {
+            get {
+                return ResourceManager.GetString("WikiPageTitleAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Page title cannot be empty..
+        /// </summary>
+        public static string WikiPageTitleCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("WikiPageTitleCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Revert page to currently selected revision?.
+        /// </summary>
+        public static string WikiRevertPageToSelectedRevision {
+            get {
+                return ResourceManager.GetString("WikiRevertPageToSelectedRevision", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wiki Search.
+        /// </summary>
+        public static string WikiSearch {
+            get {
+                return ResourceManager.GetString("WikiSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected page has already been restored..
+        /// </summary>
+        public static string WikiSelectedPageAlreadyRestored {
+            get {
+                return ResourceManager.GetString("WikiSelectedPageAlreadyRestored", resourceCulture);
             }
         }
     }

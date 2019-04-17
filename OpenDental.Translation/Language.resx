@@ -147,4 +147,163 @@
   <data name="lang_you_must_change_password_to_stronger_password" xml:space="preserve">
     <value>You must change your password to a strong password due to the current Security settings.</value>
   </data>
+  <data name="WikiArchiveWikiPageConfirm" xml:space="preserve">
+    <value>Archive this wiki page? It will still be available from the Search window if needed.</value>
+  </data>
+  <data name="WikiCannotArchiveHomepage" xml:space="preserve">
+    <value>Cannot archive homepage.</value>
+  </data>
+  <data name="WikiPageDoesNotExistAndTitleInvalid" xml:space="preserve">
+    <value>That page does not exist and cannot be made because the page title contains invalid characters.</value>
+  </data>
+  <data name="WikiPageDoesNotExist" xml:space="preserve">
+    <value>That page does not exist. Would you like to create it?</value>
+  </data>
+  <data name="WikiPageHasOneOrMoreDrafts" xml:space="preserve">
+    <value>This page has one or more drafts associated with it. Would you like to open a draft instead of the current Wiki page?</value>
+  </data>
+  <data name="WikiPageIsBroken" xml:space="preserve">
+    <value>This page is broken and cannot be viewed.</value>
+  </data>
+  <data name="lang_last_saved" xml:space="preserve">
+    <value>Last Saved</value>
+  </data>
+  <data name="lang_user" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="WikiDeleteDraft" xml:space="preserve">
+    <value>Delete this draft?</value>
+  </data>
+  <data name="WikiDrafts" xml:space="preserve">
+    <value>Wiki Drafts</value>
+  </data>
+  <data name="ColumnTitle" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="WikiSelectedPageAlreadyRestored" xml:space="preserve">
+    <value>Selected page has already been restored.</value>
+  </data>
+  <data name="WikiSearch" xml:space="preserve">
+    <value>Wiki Search</value>
+  </data>
+  <data name="ColumnDel" xml:space="preserve">
+    <value>Del</value>
+  </data>
+  <data name="ColumnSaved" xml:space="preserve">
+    <value>Saved</value>
+  </data>
+  <data name="ColumnUser" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="WikiCannotRenameTheDefaultHomepage" xml:space="preserve">
+    <value>Cannot rename the default homepage.</value>
+  </data>
+  <data name="WikiFileDoesNotExistContinueAnyway" xml:space="preserve">
+    <value>File does not exist. Continue anyway?</value>
+  </data>
+  <data name="WikiFolderDoesNotExistContinueAnyway" xml:space="preserve">
+    <value>Folder does not exist. Continue anyway?</value>
+  </data>
+  <data name="WikiHistory" xml:space="preserve">
+    <value>Wiki History</value>
+  </data>
+  <data name="WikiInsertFileLink" xml:space="preserve">
+    <value>Insert File Link</value>
+  </data>
+  <data name="WikiInsertFolderLink" xml:space="preserve">
+    <value>Insert Folder Link</value>
+  </data>
+  <data name="WikiPageTitle" xml:space="preserve">
+    <value>Page Title</value>
+  </data>
+  <data name="WikiPageTitleAlreadyExists" xml:space="preserve">
+    <value>Page title already exists.</value>
+  </data>
+  <data name="WikiPageTitleCannotBeEmpty" xml:space="preserve">
+    <value>Page title cannot be empty.</value>
+  </data>
+  <data name="WikiListAlreadyExistsWithThatName" xml:space="preserve">
+    <value>List already exists with that name. Would you like to edit existing list?</value>
+  </data>
+  <data name="WikiListNameCannotBeBlank" xml:space="preserve">
+    <value>List name cannot be blank.</value>
+  </data>
+  <data name="WikiListNameIsReservedWord" xml:space="preserve">
+    <value>List name is a reserved word in MySQL.</value>
+  </data>
+  <data name="WikiLists" xml:space="preserve">
+    <value>Wiki Lists</value>
+  </data>
+  <data name="WikiNewListName" xml:space="preserve">
+    <value>New List Name</value>
+  </data>
+  <data name="ColumnColumn" xml:space="preserve">
+    <value>Column</value>
+  </data>
+  <data name="ColumnValue" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="WikiDeleteItemAndReferences" xml:space="preserve">
+    <value>Delete this list item and all references to it?</value>
+  </data>
+  <data name="WikiEditListItem" xml:space="preserve">
+    <value>Edit List Item</value>
+  </data>
+  <data name="WikiEditWikiListItem" xml:space="preserve">
+    <value>Edit Wiki List Item</value>
+  </data>
+  <data name="Wiki" xml:space="preserve">
+    <value>Wiki</value>
+  </data>
+  <data name="WikiRevertPageToSelectedRevision" xml:space="preserve">
+    <value>Revert page to currently selected revision?</value>
+  </data>
+  <data name="ColumnColumnName" xml:space="preserve">
+    <value>ColumnName</value>
+  </data>
+  <data name="ColumnInputText" xml:space="preserve">
+    <value>Input Text</value>
+  </data>
+  <data name="ColumnWidth" xml:space="preserve">
+    <value>Width</value>
+  </data>
+  <data name="WikiColumnCannotContainSpaces" xml:space="preserve">
+    <value>Column names cannot contain spaces.</value>
+  </data>
+  <data name="WikiColumnCannotContainSpecialCharacters" xml:space="preserve">
+    <value>Column names cannot contain special characters.</value>
+  </data>
+  <data name="WikiColumnCannotStartWithNumbers" xml:space="preserve">
+    <value>Column cannot start with numbers.</value>
+  </data>
+  <data name="WikiColumnName0IsReservedWord" xml:space="preserve">
+    <value>Column name '{0}' is a reserved word in MySQL.</value>
+  </data>
+  <data name="WikiColumnNameIsReservedWord" xml:space="preserve">
+    <value>Column name is a reserved word in MySQL.</value>
+  </data>
+  <data name="WikiColumnWidthsMustOnlyContainPositiveIntegers" xml:space="preserve">
+    <value>Column widths must only contain positive integers.</value>
+  </data>
+  <data name="WikiDuplicateColumnNameDetected" xml:space="preserve">
+    <value>Duplicate column name detected</value>
+  </data>
+  <data name="WikiEditWikiListHeaders" xml:space="preserve">
+    <value>Edit Wiki List Headers</value>
+  </data>
+  <data name="WIkiNewPickListOption" xml:space="preserve">
+    <value>New Pick List Option</value>
+  </data>
+  <data name="ColumnPageTitle" xml:space="preserve">
+    <value>Page Title</value>
+  </data>
+  <data name="WikiIncomingLinks" xml:space="preserve">
+    <value>Incoming Links</value>
+  </data>
+  <data name="WikiIncomingLinksTo0" xml:space="preserve">
+    <value>Incoming links to {0}</value>
+  </data>
+  <data name="WikiPageHasNoIncomingLinks" xml:space="preserve">
+    <value>This page has no incoming links.</value>
+  </data>
 </root>

@@ -1,78 +1,140 @@
+using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental {
-	public partial class FormWikiLists:ODForm {
-		private List<string> wikiLists;
+namespace OpenDental
+{
+    public partial class FormWikiLists : FormBase
+    {
+        List<string> wikiLists;
 
-		public FormWikiLists() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormWikiLists"/> class.
+        /// </summary>
+        public FormWikiLists() => InitializeComponent();
+        
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormWikiLists_Load(object sender, EventArgs e) => LoadLists();
+        
+        /// <summary>
+        /// Populates the lists listbox.
+        /// </summary>
+        void LoadLists()
+        {
+            listBox.Items.Clear();
 
-		private void FormWikiLists_Load(object sender,EventArgs e) {
-			FillList();
-		}
+            wikiLists = WikiLists.GetAllLists();
+            foreach (string wikiList in wikiLists)
+            {
+                listBox.Items.Add(wikiList);
+            }
+        }
 
-		private void FillList() {
-			listBox1.Items.Clear();
-			wikiLists = WikiLists.GetAllLists();
-			foreach(string list in wikiLists) {
-				listBox1.Items.Add(list.Substring(9));
-			}
-		}
+        /// <summary>
+        /// Open the edit window when the user double clicks on a list in the listbox.
+        /// </summary>
+        void listBox_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            var index = listBox.IndexFromPoint(e.Location);
 
-		private void listBox1_DoubleClick(object sender,EventArgs e) {
-			if(listBox1.SelectedIndices.Count<1) {
-				return;
-			}
-			FormWikiListEdit FormWLE = new FormWikiListEdit();
-			FormWLE.WikiListCurName=wikiLists[listBox1.SelectedIndex].Substring(9);
-			FormWLE.ShowDialog();
-			FillList();
-		}
+            if (index != -1)
+            {
+                if (listBox.Items[index] is string listName)
+                {
+                    using (var formWikiListEdit = new FormWikiListEdit())
+                    {
+                        formWikiListEdit.WikiListCurName = listName;
+                        formWikiListEdit.ShowDialog();
+                    }
 
-		private void butAdd_Click(object sender,EventArgs e) {
-			if(!Security.IsAuthorized(Permissions.WikiListSetup)) {
-				return;
-			}
-			InputBox inputListName = new InputBox("New List Name");
-			inputListName.ShowDialog();
-			if(inputListName.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			//Format input as it would be saved in the database--------------------------------------------
-			inputListName.textResult.Text=inputListName.textResult.Text.ToLower().Replace(" ","");
-			//Validate list name---------------------------------------------------------------------------
-			if(DbHelper.isMySQLReservedWord(inputListName.textResult.Text)) {
-				//Can become an issue when retrieving column header names.
-				MsgBox.Show(this,"List name is a reserved word in MySQL.");
-				return;
-			}
-			if(inputListName.textResult.Text=="") {
-				MsgBox.Show(this,"List name cannot be blank.");
-				return;
-			}
-			if(WikiLists.CheckExists(inputListName.textResult.Text)) {
-				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"List already exists with that name. Would you like to edit existing list?")) {
-					return;
-				}
-			}
-			FormWikiListEdit FormWLE = new FormWikiListEdit();
-			FormWLE.WikiListCurName = inputListName.textResult.Text;
-			//FormWLE.IsNew=true;//set within the form.
-			FormWLE.ShowDialog();
-			FillList();
-		}
+                    LoadLists(); // TODO: Just update the single item instead of reloading everything...
+                }
+            }
+        }
 
-		private void butClose_Click(object sender,EventArgs e) {
-			Close();
-		}
-	}
+        /// <summary>
+        /// Prompts the user to enter a name for a new list.
+        /// </summary>
+        /// <param name="listName">The name for a new list.</param>
+        /// <returns>True if the user gave a name; otherwise, false.</returns>
+        bool TryGetNewListName(out string listName)
+        {
+            listName = string.Empty;
+
+            using (InputBox inputBox = new InputBox(Translation.Language.WikiNewListName))
+            {
+                if (inputBox.ShowDialog() == DialogResult.OK)
+                {
+                    listName = inputBox.textResult.Text.ToLower().Replace(" ", "");
+
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Creates a new list.
+        /// </summary>
+        void addButton_Click(object sender, EventArgs e)
+        {
+            if (!Security.IsAuthorized(Permissions.WikiListSetup)) return;
+            
+            if (!TryGetNewListName(out string listName))
+            {
+                return;
+            }
+
+            if (DbHelper.isMySQLReservedWord(listName)) // TODO: Why is this a issue???
+            {
+                MessageBox.Show(
+                    Translation.Language.WikiListNameIsReservedWord,
+                    Translation.Language.WikiLists,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(listName))
+            {
+                MessageBox.Show(
+                    Translation.Language.WikiListNameCannotBeBlank,
+                    Translation.Language.WikiLists,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (WikiLists.CheckExists(listName))
+            {
+                var result =
+                    MessageBox.Show(
+                        Translation.Language.WikiListAlreadyExistsWithThatName,
+                        Translation.Language.WikiLists,
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+
+                if (result == DialogResult.No)
+                {
+                    return;
+                }
+            }
+
+            using (var formWikiListEdit = new FormWikiListEdit())
+            {
+                formWikiListEdit.WikiListCurName = listName;
+                formWikiListEdit.ShowDialog();
+            }
+
+            LoadLists();
+        }
+
+        /// <summary>
+        /// Closes the form.
+        /// </summary>
+        void cancelButton_Click(object sender, EventArgs e) => Close();
+    }
 }

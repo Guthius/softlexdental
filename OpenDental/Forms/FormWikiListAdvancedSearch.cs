@@ -1,52 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using OpenDental.UI;
 using OpenDentBusiness;
-using OpenDental.UI;
+using System;
+using System.Collections.Generic;
 
-namespace OpenDental {
-	public partial class FormWikiListAdvancedSearch:ODForm {
-		public int[] SelectedColumnIndices=new int[0];
-		private List<WikiListHeaderWidth> _listColHeaders;
+namespace OpenDental
+{
+    public partial class FormWikiListAdvancedSearch : FormBase
+    {
+        List<WikiListHeaderWidth> columnHeaders;
 
-		public FormWikiListAdvancedSearch(List<WikiListHeaderWidth> headers) {
-			InitializeComponent();
-			_listColHeaders=headers;
-			Lan.F(this);
-		}
+        /// <summary>
+        /// Gets the indices of the selected columns.
+        /// </summary>
+        public int[] SelectedColumnIndices => gridMain.SelectedIndices;
 
-		private void FormWikiListAdvancedSearch_Load(object sender,EventArgs e) {
-			FillGrid();
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormWikiListAdvancedSearch"/> class.
+        /// </summary>
+        /// <param name="columnHeaders"></param>
+        public FormWikiListAdvancedSearch(List<WikiListHeaderWidth> columnHeaders)
+        {
+            InitializeComponent();
+            this.columnHeaders = columnHeaders;
+        }
 
-		/// <summary>Populates the grid with the current Wiki's column headers</summary>
-		private void FillGrid() {
-			gridMain.BeginUpdate();
-			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("",80);
-			gridMain.Columns.Add(col);
-			gridMain.Rows.Clear();
-			ODGridRow row;
-			foreach(WikiListHeaderWidth header in _listColHeaders){
-				row=new ODGridRow(header.ColName);
-				gridMain.Rows.Add(row);
-			}
-			gridMain.EndUpdate();
-		}
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormWikiListAdvancedSearch_Load(object sender, EventArgs e) => FillGrid();
 
-		private void butOkay_Click(object sender,EventArgs e) {
-			SelectedColumnIndices=gridMain.SelectedIndices;
-			DialogResult=DialogResult.OK;
-		}
+        /// <summary>
+        /// Populates the grid with the current Wiki's column headers.
+        /// </summary>
+        void FillGrid()
+        {
+            gridMain.BeginUpdate();
+            gridMain.Columns.Clear();
+            gridMain.Columns.Add(new ODGridColumn("", 80));
+            gridMain.Rows.Clear();
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
-	}
+            foreach (var columnHeader in columnHeaders)
+            {
+                gridMain.Rows.Add(new ODGridRow(columnHeader.ColName));
+            }
+
+            gridMain.EndUpdate();
+        }
+    }
 }

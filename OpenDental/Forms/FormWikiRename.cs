@@ -1,74 +1,91 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using OpenDentBusiness;
+using System;
+using System.Windows.Forms;
 
-namespace OpenDental {
-	public partial class FormWikiRename:ODForm {
-		public string PageTitle;
+namespace OpenDental
+{
+    public partial class FormWikiRename : FormBase
+    {
+        /// <summary>
+        /// Gets or sets the page title.
+        /// </summary>
+        public string PageTitle
+        {
+            get => textPageTitle.Text.Trim();
+            set
+            {
+                textPageTitle.Text = value;
+            }
+        }
 
-		public FormWikiRename() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormWikiRename"/> class.
+        /// </summary>
+        public FormWikiRename() => InitializeComponent();
 
-		private void FormWikiRename_Load(object sender,EventArgs e) {
-			if(PageTitle!="" && PageTitle!=null) {
-				textPageTitle.Text=PageTitle;
-				Text="Page Title - "+PageTitle;
-				textPageTitle.Text=PageTitle;
-			}
-			if(textPageTitle.Text=="Home") {//TODO later:replace this with a dynamic "Home" pagename lookup like: PrefC.GetString(PrefName.WikiHomePage);
-				MsgBox.Show(this,"Cannot rename the default homepage.");
-				//butOK.Enabled=false;
-				//textPageTitle.Enabled=false;
-				DialogResult=DialogResult.Cancel;//user doesn't need to see this form
-			}
-		}
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormWikiRename_Load(object sender, EventArgs e)
+        {
+            Text = 
+                !string.IsNullOrEmpty(PageTitle) ? 
+                    Translation.Language.WikiPageTitle + " - " + PageTitle :
+                    Translation.Language.WikiPageTitle;
 
-		private bool ValidateTitle() {
-			if(textPageTitle.Text=="") {
-				MsgBox.Show(this,"Page title cannot be empty.");
-				return false;
-			}
-			if(textPageTitle.Text==PageTitle) {
-				//"rename" to the same thing.
-				DialogResult=DialogResult.Cancel;
-				return false;
-			}
-			string errorMsg="";
-			if(!WikiPages.IsWikiPageTitleValid(textPageTitle.Text,out errorMsg)) {
-				MessageBox.Show(errorMsg);//errorMsg was already translated.
-				return false;
-			}
-			if(PageTitle!=null && textPageTitle.Text.ToLower()==PageTitle.ToLower()) {
-				//the user is just trying to change the capitalization, which is allowed
-				return true;
-			}
-			WikiPage wp=WikiPages.GetByTitle(textPageTitle.Text);//this is case insensitive, so it won't let you name it the same as another page even if capitalization is different.
-			if(wp!=null){
-				MsgBox.Show(this,"Page title already exists.");
-				return false;
-			}
-			return true;
-		}
+            if (PageTitle.ToLower() == "home")
+            {
+                MessageBox.Show(
+                    Translation.Language.WikiCannotRenameTheDefaultHomepage,
+                    Translation.Language.WikiPageTitle,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
 
-		private void butOK_Click(object sender,EventArgs e) {
-			if(!ValidateTitle()) {
-				return;
-			}
-			PageTitle=textPageTitle.Text;
-			//do not save here. Save is handled where this form is called from.
-			DialogResult=DialogResult.OK;
-		}
+                DialogResult = DialogResult.Cancel;
+            }
+        }
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+        /// <summary>
+        /// Validates if the specified title is valid and if so closes the form.
+        /// The actual save should be handled by whoever called this form.
+        /// </summary>
+        void acceptButton_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(PageTitle))
+            {
+                MessageBox.Show(
+                    Translation.Language.WikiPageTitleCannotBeEmpty,
+                    Translation.Language.WikiPageTitle,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
 
-	}
+                return;
+            }
+
+            if (!WikiPages.IsWikiPageTitleValid(textPageTitle.Text, out string errorMsg))
+            {
+                MessageBox.Show(
+                    errorMsg,
+                    Translation.Language.WikiPageTitle,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            var wikiPage = WikiPages.GetByTitle(textPageTitle.Text);
+            if (wikiPage != null)
+            {
+                MessageBox.Show(
+                    Translation.Language.WikiPageTitleAlreadyExists,
+                    Translation.Language.WikiPageTitle,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            DialogResult = DialogResult.OK;
+        }
+    }
 }

@@ -1,126 +1,119 @@
-namespace OpenDental{
-	partial class FormWikiFileFolder {
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+namespace OpenDental
+{
+    partial class FormWikiFileFolder
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing) {
-			if(disposing && (components != null)) {
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormWikiFileFolder));
-			this.label1 = new System.Windows.Forms.Label();
-			this.textLink = new System.Windows.Forms.TextBox();
-			this.butBrowse = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.SuspendLayout();
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(10, 24);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(76, 18);
-			this.label1.TabIndex = 15;
-			this.label1.Text = "Path";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textLink
-			// 
-			this.textLink.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.linkLabel = new System.Windows.Forms.Label();
+            this.linkTextBox = new System.Windows.Forms.TextBox();
+            this.browseButton = new System.Windows.Forms.Button();
+            this.acceptButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // linkLabel
+            // 
+            this.linkLabel.AutoSize = true;
+            this.linkLabel.Location = new System.Drawing.Point(83, 29);
+            this.linkLabel.Name = "linkLabel";
+            this.linkLabel.Size = new System.Drawing.Size(31, 15);
+            this.linkLabel.TabIndex = 15;
+            this.linkLabel.Text = "Path";
+            this.linkLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // linkTextBox
+            // 
+            this.linkTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.textLink.Location = new System.Drawing.Point(88, 23);
-			this.textLink.Name = "textLink";
-			this.textLink.Size = new System.Drawing.Size(382, 20);
-			this.textLink.TabIndex = 14;
-			// 
-			// butBrowse
-			// 
-			this.butBrowse.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butBrowse.Autosize = true;
-			this.butBrowse.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBrowse.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butBrowse.CornerRadius = 4F;
-			this.butBrowse.Location = new System.Drawing.Point(476, 23);
-			this.butBrowse.Name = "butBrowse";
-			this.butBrowse.Size = new System.Drawing.Size(23, 20);
-			this.butBrowse.TabIndex = 18;
-			this.butBrowse.Text = "...";
-			this.butBrowse.Click += new System.EventHandler(this.butBrowse_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(478, 87);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 24);
-			this.butOK.TabIndex = 17;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(559, 87);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 16;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// FormWikiFileFolder
-			// 
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(646, 123);
-			this.Controls.Add(this.butBrowse);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butCancel);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.textLink);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "FormWikiFileFolder";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Insert File Link";
-			this.Load += new System.EventHandler(this.FormWikiFileFolder_Load);
-			this.ResumeLayout(false);
-			this.PerformLayout();
+            this.linkTextBox.Location = new System.Drawing.Point(120, 26);
+            this.linkTextBox.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
+            this.linkTextBox.Name = "linkTextBox";
+            this.linkTextBox.Size = new System.Drawing.Size(375, 23);
+            this.linkTextBox.TabIndex = 14;
+            // 
+            // browseButton
+            // 
+            this.browseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.browseButton.Location = new System.Drawing.Point(501, 25);
+            this.browseButton.Name = "browseButton";
+            this.browseButton.Size = new System.Drawing.Size(30, 25);
+            this.browseButton.TabIndex = 18;
+            this.browseButton.Text = "...";
+            this.browseButton.Click += new System.EventHandler(this.browseButton_Click);
+            // 
+            // acceptButton
+            // 
+            this.acceptButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.acceptButton.Location = new System.Drawing.Point(305, 78);
+            this.acceptButton.Name = "acceptButton";
+            this.acceptButton.Size = new System.Drawing.Size(110, 30);
+            this.acceptButton.TabIndex = 17;
+            this.acceptButton.Text = "&OK";
+            this.acceptButton.Click += new System.EventHandler(this.acceptButton_Click);
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.Location = new System.Drawing.Point(421, 78);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(110, 30);
+            this.cancelButton.TabIndex = 16;
+            this.cancelButton.Text = "&Cancel";
+            // 
+            // FormWikiFileFolder
+            // 
+            this.AcceptButton = this.acceptButton;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(544, 121);
+            this.Controls.Add(this.browseButton);
+            this.Controls.Add(this.acceptButton);
+            this.Controls.Add(this.cancelButton);
+            this.Controls.Add(this.linkLabel);
+            this.Controls.Add(this.linkTextBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FormWikiFileFolder";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Insert File Link";
+            this.Load += new System.EventHandler(this.FormWikiFileFolder_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox textLink;
-		private UI.Button butOK;
-		private UI.Button butCancel;
-		private UI.Button butBrowse;
-
-
-	}
+        private System.Windows.Forms.Label linkLabel;
+        private System.Windows.Forms.TextBox linkTextBox;
+        private System.Windows.Forms.Button acceptButton;
+        private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.Button browseButton;
+    }
 }
