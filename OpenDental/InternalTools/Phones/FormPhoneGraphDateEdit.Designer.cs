@@ -76,7 +76,7 @@ namespace OpenDental{
 			this.gridGraph.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridGraph.TitleHeight = 18;
 			this.gridGraph.TranslationName = "TablePhoneGraphDate";
-			this.gridGraph.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridGraph_CellClick);
+			this.gridGraph.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridGraph_CellClick);
 			// 
 			// label11
 			// 

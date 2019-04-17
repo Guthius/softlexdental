@@ -110,8 +110,8 @@ namespace OpenDental {
 			gridSprintJobs.Columns.Add(new ODGridColumn("Priority",90,HorizontalAlignment.Center));
 			gridSprintJobs.Columns.Add(new ODGridColumn("Owner",55,HorizontalAlignment.Center));
 			gridSprintJobs.Columns.Add(new ODGridColumn("Owner Action",110));
-			gridSprintJobs.Columns.Add(new ODGridColumn("EstHrs",60,HorizontalAlignment.Center,GridSortingStrategy.AmountParse));
-			gridSprintJobs.Columns.Add(new ODGridColumn("ActHrs",60,HorizontalAlignment.Center,GridSortingStrategy.AmountParse));
+			gridSprintJobs.Columns.Add(new ODGridColumn("EstHrs",60,HorizontalAlignment.Center,ODGridSortingStrategy.AmountParse));
+			gridSprintJobs.Columns.Add(new ODGridColumn("ActHrs",60,HorizontalAlignment.Center,ODGridSortingStrategy.AmountParse));
 			gridSprintJobs.Columns.Add(new ODGridColumn("",300));
 			gridSprintJobs.Rows.Clear();
 			List<long> listLinkedJobNums=_listJobSprintLinks.Select(x => x.JobNum).ToList();

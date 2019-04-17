@@ -33,10 +33,10 @@ namespace OpenDental {
 			col=new ODGridColumn("Units",65);
 			gridResultHist.Columns.Add(col);
 			col=new ODGridColumn("Date/Time Reported",130);//OBR-22, Date/Time Observations Reported
-			col.SortingStrategy=GridSortingStrategy.DateParse;
+			col.SortingStrategy=ODGridSortingStrategy.DateParse;
 			gridResultHist.Columns.Add(col);
 			col=new ODGridColumn("Date/Time Observed",130);//OBX-11, Date/Time of Observation
-			col.SortingStrategy=GridSortingStrategy.DateParse;
+			col.SortingStrategy=ODGridSortingStrategy.DateParse;
 			gridResultHist.Columns.Add(col);
 			col=new ODGridColumn("Status",70);
 			gridResultHist.Columns.Add(col);

@@ -118,7 +118,7 @@
 			this.gridOptions.TitleHeight = 18;
 			this.gridOptions.TranslationName = "FormEServicesSetup";
 			this.gridOptions.WrapText = false;
-			this.gridOptions.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridOptions_CellClick);
+			this.gridOptions.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridOptions_CellClick);
 			// 
 			// butCopy
 			// 

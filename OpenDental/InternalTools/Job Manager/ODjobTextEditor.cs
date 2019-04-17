@@ -228,7 +228,7 @@ namespace OpenDental {
 		private void FillGridRequirements() {
 			gridRequirements.BeginUpdate();
 			gridRequirements.Columns.Clear();
-			gridRequirements.Columns.Add(new ODGridColumn("Requirements List",0,!ReadOnlyRequirementsGrid));
+			gridRequirements.Columns.Add(new ODGridColumn("Requirements List",0, isEditable: !ReadOnlyRequirementsGrid));
 			gridRequirements.Columns.Add(new ODGridColumn("Expert",60,HorizontalAlignment.Center));
 			gridRequirements.Columns.Add(new ODGridColumn("Engineer",60,HorizontalAlignment.Center));
 			gridRequirements.Columns.Add(new ODGridColumn("Reviewer",60,HorizontalAlignment.Center));

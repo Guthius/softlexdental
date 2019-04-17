@@ -270,7 +270,7 @@ namespace OpenDental {
 			this.gridAttachments.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridAttachments.TitleHeight = 18;
 			this.gridAttachments.TranslationName = "TableAttachments";
-			this.gridAttachments.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAttachments_CellDoubleClick);
+			this.gridAttachments.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAttachments_CellDoubleClick);
 			this.gridAttachments.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridAttachments_MouseDown);
 			// 
 			// contextMenuAttachments

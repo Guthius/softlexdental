@@ -104,8 +104,8 @@ namespace OpenDental
             this.itemDataGrid.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.itemDataGrid.TitleHeight = 18;
             this.itemDataGrid.TranslationName = "";
-            this.itemDataGrid.CellLeave += new OpenDental.UI.ODGridClickEventHandler(this.itemDataGrid_CellLeave);
-            this.itemDataGrid.CellEnter += new OpenDental.UI.ODGridClickEventHandler(this.itemDataGrid_CellEnter);
+            this.itemDataGrid.CellLeave += new System.EventHandler<UI.ODGridClickEventArgs>(this.itemDataGrid_CellLeave);
+            this.itemDataGrid.CellEnter += new System.EventHandler<UI.ODGridClickEventArgs>(this.itemDataGrid_CellEnter);
             // 
             // FormWikiListItemEdit
             // 

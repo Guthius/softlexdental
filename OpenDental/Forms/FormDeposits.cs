@@ -104,7 +104,7 @@ namespace OpenDental{
 			this.grid.TitleHeight = 18;
 			this.grid.TranslationName = "TableDepositSlips";
 			this.grid.WrapText = false;
-			this.grid.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid_CellDoubleClick);
+			this.grid.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellDoubleClick);
 			// 
 			// butAdd
 			// 

@@ -175,7 +175,7 @@ namespace OpenDental{
 			this.gridMeds.TabIndex = 65;
 			this.gridMeds.Title = "Medications";
 			this.gridMeds.TranslationName = "TableMedications";
-			this.gridMeds.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMeds_CellDoubleClick);
+			this.gridMeds.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMeds_CellDoubleClick);
 			// 
 			// butPickRxListImage
 			// 

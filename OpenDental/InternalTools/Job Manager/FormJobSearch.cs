@@ -175,19 +175,19 @@ namespace OpenDental {
 			JobEvent.Fire(ODEventType.Job,"Filling grid...");
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			gridMain.Columns.Add(new ODGridColumn("Job\r\nNum",50,GridSortingStrategy.AmountParse));
-			gridMain.Columns.Add(new ODGridColumn("Priority",50,HorizontalAlignment.Center));
+			gridMain.Columns.Add(new ODGridColumn("Job\r\nNum",50,sortingStrategy: ODGridSortingStrategy.AmountParse));
+			gridMain.Columns.Add(new ODGridColumn("Priority",50, textAlignment: HorizontalAlignment.Center));
 			gridMain.Columns.Add(new ODGridColumn("Phase",85));
 			gridMain.Columns.Add(new ODGridColumn("Category",80));
 			gridMain.Columns.Add(new ODGridColumn("Job Title",-1));
 			gridMain.Columns.Add(new ODGridColumn("Version",80));
 			gridMain.Columns.Add(new ODGridColumn("Expert",75));
 			gridMain.Columns.Add(new ODGridColumn("Engineer",75));
-			gridMain.Columns.Add(new ODGridColumn("Est.\r\nHours",60,GridSortingStrategy.AmountParse));
-			gridMain.Columns.Add(new ODGridColumn("Act.\r\nHours",60,GridSortingStrategy.AmountParse));
-			gridMain.Columns.Add(new ODGridColumn("Job\r\nMatch",45,HorizontalAlignment.Center));
-			gridMain.Columns.Add(new ODGridColumn("Bug\r\nMatch",45,HorizontalAlignment.Center));
-			gridMain.Columns.Add(new ODGridColumn("FR\r\nMatch",45,HorizontalAlignment.Center));
+			gridMain.Columns.Add(new ODGridColumn("Est.\r\nHours",60, sortingStrategy: ODGridSortingStrategy.AmountParse));
+			gridMain.Columns.Add(new ODGridColumn("Act.\r\nHours",60, sortingStrategy: ODGridSortingStrategy.AmountParse));
+			gridMain.Columns.Add(new ODGridColumn("Job\r\nMatch",45, textAlignment: HorizontalAlignment.Center));
+			gridMain.Columns.Add(new ODGridColumn("Bug\r\nMatch",45, textAlignment: HorizontalAlignment.Center));
+			gridMain.Columns.Add(new ODGridColumn("FR\r\nMatch",45, textAlignment: HorizontalAlignment.Center));
 			gridMain.Rows.Clear();
 			_listJobsFiltered=new List<Job>();
 			foreach(Job jobCur in _listJobsAll) {

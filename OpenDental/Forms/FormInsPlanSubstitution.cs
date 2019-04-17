@@ -50,7 +50,7 @@ namespace OpenDental {
 				gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"ProcCode"),90));
 				gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"AbbrDesc"),100));
 				gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"SubstOnlyIf"),100,_listSubConditions));//Dropdown combobox
-				gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"SubstCode"),90,true));//Can edit cell
+				gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"SubstCode"),90, isEditable: true));//Can edit cell
 				gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"SubstDesc"),90));
 				gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"InsOnly"),0));
 			}

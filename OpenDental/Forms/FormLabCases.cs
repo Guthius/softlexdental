@@ -152,7 +152,7 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 1;
 			this.gridMain.Title = "Lab Cases";
 			this.gridMain.TranslationName = "TableLabCases";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butRefresh
 			// 
@@ -303,7 +303,7 @@ namespace OpenDental{
 			gridMain.Columns.Clear();
 			ODGridColumn col;
 			col=new ODGridColumn(Lan.g("TableLabCases","Appt Date Time"),120);
-			col.SortingStrategy=GridSortingStrategy.DateParse;
+			col.SortingStrategy=ODGridSortingStrategy.DateParse;
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableLabCases","Procedures"),200);
 			gridMain.Columns.Add(col);

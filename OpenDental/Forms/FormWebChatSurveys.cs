@@ -34,10 +34,10 @@ namespace OpenDental {
 		private void FillGridWebChatSurveys() {
 			gridWebChatSurveys.BeginUpdate();
 			if(gridWebChatSurveys.Columns.Count==0) {
-				gridWebChatSurveys.Columns.Add(new ODGridColumn("DateTime",80,HorizontalAlignment.Center,GridSortingStrategy.DateParse));
+				gridWebChatSurveys.Columns.Add(new ODGridColumn("DateTime",80,HorizontalAlignment.Center,ODGridSortingStrategy.DateParse));
 				gridWebChatSurveys.Columns.Add(new ODGridColumn("Owner",80,HorizontalAlignment.Left));
-				gridWebChatSurveys.Columns.Add(new ODGridColumn("PatNum",80,HorizontalAlignment.Right,GridSortingStrategy.AmountParse));
-				gridWebChatSurveys.Columns.Add(new ODGridColumn("SessionNum",90,HorizontalAlignment.Right,GridSortingStrategy.AmountParse));
+				gridWebChatSurveys.Columns.Add(new ODGridColumn("PatNum",80,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse));
+				gridWebChatSurveys.Columns.Add(new ODGridColumn("SessionNum",90,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse));
 				gridWebChatSurveys.Columns.Add(new ODGridColumn("Rating",80,HorizontalAlignment.Center));
 				gridWebChatSurveys.Columns.Add(new ODGridColumn("Comment",0,HorizontalAlignment.Left));
 				gridWebChatSurveys.Columns.Add(new ODGridColumn("Experience",0,HorizontalAlignment.Left));

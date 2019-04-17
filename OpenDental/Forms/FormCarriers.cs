@@ -184,8 +184,8 @@ namespace OpenDental{
 			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridMain.TitleHeight = 18;
 			this.gridMain.TranslationName = "TableCarriers";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
 			// checkCDAnet
 			// 
@@ -442,7 +442,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableCarriers","ElectID"),50);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableCarriers","Hidden"),50,HorizontalAlignment.Center);
+			col=new ODGridColumn(Lan.g("TableCarriers","Hidden"),50,textAlignment: HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableCarriers","Plans"),50);
 			gridMain.Columns.Add(col);
@@ -476,7 +476,7 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["Phone"].ToString());
 				if(Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
 					row.Cells[row.Cells.Count-1].ColorText=Color.Blue;
-					row.Cells[row.Cells.Count-1].Underline=YN.Yes;
+					row.Cells[row.Cells.Count-1].Underline= true;
 				}
 				row.Cells.Add(table.Rows[i]["Address"].ToString());
 				//row.Cells.Add(table.Rows[i]["Address2"].ToString());
@@ -531,7 +531,7 @@ namespace OpenDental{
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
 			ODGridCell gridCellCur=gridMain.Rows[e.Row].Cells[e.Col];
 			//Only grid cells with phone numbers are blue and underlined.
-			if(gridCellCur.ColorText==System.Drawing.Color.Blue && gridCellCur.Underline==YN.Yes && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
+			if(gridCellCur.ColorText==System.Drawing.Color.Blue && gridCellCur.Underline==true && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
 				DentalTek.PlaceCall(gridCellCur.Text);
 			}
 		}

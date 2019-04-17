@@ -113,7 +113,7 @@ namespace OpenDental {
 					row.Cells.Add(Lan.g(this,"any"));
 				}
 				row.Cells.Add(dunnCur.DunMessage);
-				row.Cells.Add(new ODGridCell(dunnCur.MessageBold) { Bold=YN.Yes,ColorText=Color.DarkRed });
+				row.Cells.Add(new ODGridCell(dunnCur.MessageBold) { Bold=true,ColorText=Color.DarkRed });
 				row.Cells.Add((!string.IsNullOrEmpty(dunnCur.EmailBody) || !string.IsNullOrEmpty(dunnCur.EmailSubject))?"X":"");
 				if(PrefC.GetBool(PrefName.ShowFeatureSuperfamilies)) {
 					row.Cells.Add(dunnCur.IsSuperFamily?"X":"");

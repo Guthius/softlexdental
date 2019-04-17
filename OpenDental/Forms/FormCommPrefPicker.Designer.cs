@@ -65,7 +65,7 @@
 			this.gridMain.Title = "Comm Pref";
 			this.gridMain.TranslationName = "FormMedicationPicker";
 			this.gridMain.WrapText = false;
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// FormCommPrefPicker
 			// 

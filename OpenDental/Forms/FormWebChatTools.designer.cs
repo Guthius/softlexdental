@@ -76,7 +76,7 @@ namespace OpenDental{
 			this.gridWebChatSessions.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridWebChatSessions.TitleHeight = 18;
 			this.gridWebChatSessions.TranslationName = "gridWebChatSessions";
-			this.gridWebChatSessions.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridWebChatSessions_CellDoubleClick);
+			this.gridWebChatSessions.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridWebChatSessions_CellDoubleClick);
 			// 
 			// checkShowEndedSessions
 			// 

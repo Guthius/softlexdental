@@ -1311,7 +1311,7 @@
 			this.gridNotes.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridNotes.TitleHeight = 18;
 			this.gridNotes.TranslationName = "TableNotes";
-			this.gridNotes.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridNotes_CellDoubleClick);
+			this.gridNotes.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridNotes_CellDoubleClick);
 			// 
 			// gridSpecimen
 			// 
@@ -1333,7 +1333,7 @@
 			this.gridSpecimen.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridSpecimen.TitleHeight = 18;
 			this.gridSpecimen.TranslationName = "TaleSpecimens";
-			this.gridSpecimen.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSpecimen_CellDoubleClick);
+			this.gridSpecimen.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSpecimen_CellDoubleClick);
 			// 
 			// gridMain
 			// 
@@ -1356,8 +1356,8 @@
 			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridMain.TitleHeight = 18;
 			this.gridMain.TranslationName = "TableLabResults";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
 			// FormEhrLabOrderEdit2014
 			// 

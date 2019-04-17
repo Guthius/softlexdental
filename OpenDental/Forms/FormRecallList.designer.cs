@@ -448,8 +448,8 @@
 			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridMain.TitleHeight = 18;
 			this.gridMain.TranslationName = "TableRecallList";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.grid_CellClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellClick);
 			// 
 			// groupBox3
 			// 
@@ -1059,8 +1059,8 @@
 			this.gridReactivations.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridReactivations.TitleHeight = 18;
 			this.gridReactivations.TranslationName = "TableReactivationList";
-			this.gridReactivations.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridReactivations_CellDoubleClick);
-			this.gridReactivations.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.grid_CellClick);
+			this.gridReactivations.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridReactivations_CellDoubleClick);
+			this.gridReactivations.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellClick);
 			// 
 			// groupBox6
 			// 

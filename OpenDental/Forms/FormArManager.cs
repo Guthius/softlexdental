@@ -631,8 +631,8 @@ namespace OpenDental {
 			Dictionary<string,Tuple<int,int>> retval=new Dictionary<string,Tuple<int,int>>();
 			int xPos=grid.Location.X-hScrollValue;
 			foreach(ODGridColumn column in grid.Columns) {
-				retval[column.Heading]=Tuple.Create(xPos+1,column.ColWidth+1);//+1 because the textbox lines seem to be slightly thinner than the grid column lines
-				xPos+=column.ColWidth;
+				retval[column.Heading]=Tuple.Create(xPos+1,column.Width+1);//+1 because the textbox lines seem to be slightly thinner than the grid column lines
+				xPos+=column.Width;
 			}
 			return retval;
 		}
@@ -652,16 +652,16 @@ namespace OpenDental {
 				if(fieldCur.InternalName=="Clinic" && !PrefC.HasClinicsEnabled) {
 					continue;//skip the clinic column if clinics are not enabled
 				}
-				GridSortingStrategy sortingStrat=GridSortingStrategy.StringCompare;
+				ODGridSortingStrategy sortingStrat=ODGridSortingStrategy.StringCompare;
 				HorizontalAlignment hAlign=HorizontalAlignment.Left;
 				if(fieldCur.InternalName.In("0-30 Days","31-60 Days","61-90 Days","> 90 Days","Total","-Ins Est","=Patient","PayPlan Due",
 					DisplayFields.InternalNames.ArManagerUnsentGrid.DaysBalBegan)) 
 				{
-					sortingStrat=GridSortingStrategy.AmountParse;
+					sortingStrat=ODGridSortingStrategy.AmountParse;
 					hAlign=HorizontalAlignment.Right;
 				}
 				else if(fieldCur.InternalName.In("Last Paid","Last Proc","DateTime Suspended",DisplayFields.InternalNames.ArManagerUnsentGrid.DateBalBegan)) {
-					sortingStrat=GridSortingStrategy.DateParse;
+					sortingStrat=ODGridSortingStrategy.DateParse;
 					hAlign=HorizontalAlignment.Center;
 				}
 				else if(!fieldCur.InternalName.In("Guarantor","Clinic","Prov","Billing Type")) {
@@ -676,9 +676,9 @@ namespace OpenDental {
 			//widthColsAndScroll is width of columns as set in the display fields, i.e. haven't grown or shrunk due to form resizing so won't be shrunk to
 			//less than the sizes set in display fields, only grown from there.  Thus the display field sizes are basically a minimum size.
 			if(widthColsAndScroll<gridUnsent.Width) {
-				gridUnsent.Columns.ToList().ForEach(x => x.ColWidth=(int)Math.Round((float)x.ColWidth*gridUnsent.Width/widthColsAndScroll,MidpointRounding.AwayFromZero));
+				gridUnsent.Columns.ToList().ForEach(x => x.Width=(int)Math.Round((float)x.Width*gridUnsent.Width/widthColsAndScroll,MidpointRounding.AwayFromZero));
 				//adjust the last col width to take any remaining pixels so that the cols take the full width of the grid (to account for rounding above)
-				gridUnsent.Columns[gridUnsent.Columns.Count-1].ColWidth-=gridUnsent.WidthAllColumns+20-gridUnsent.Width;
+				gridUnsent.Columns[gridUnsent.Columns.Count-1].Width-=gridUnsent.WidthAllColumns+20-gridUnsent.Width;
 			}
 			#endregion Set Grid Title and Columns
 			#region Fill Grid Rows
@@ -1438,16 +1438,16 @@ namespace OpenDental {
 				if(fieldCur.InternalName=="Clinic" && !PrefC.HasClinicsEnabled) {
 					continue;//skip the clinic column if clinics are not enabled
 				}
-				GridSortingStrategy sortingStrat=GridSortingStrategy.StringCompare;
+				ODGridSortingStrategy sortingStrat=ODGridSortingStrategy.StringCompare;
 				HorizontalAlignment hAlign=HorizontalAlignment.Left;
 				if(fieldCur.InternalName.In("0-30 Days","31-60 Days","61-90 Days","> 90 Days","Total","-Ins Est","=Patient","PayPlan Due",
 					DisplayFields.InternalNames.ArManagerSentGrid.DaysBalBegan)) 
 				{
-					sortingStrat=GridSortingStrategy.AmountParse;
+					sortingStrat=ODGridSortingStrategy.AmountParse;
 					hAlign=HorizontalAlignment.Right;
 				}
 				else if(fieldCur.InternalName.In("Last Paid","Last Proc",DisplayFields.InternalNames.ArManagerSentGrid.DateBalBegan)) {
-					sortingStrat=GridSortingStrategy.DateParse;
+					sortingStrat=ODGridSortingStrategy.DateParse;
 					hAlign=HorizontalAlignment.Center;
 				}
 				else if(!fieldCur.InternalName.In("Guarantor","Clinic","Prov","Demand Type","Last Transaction")) {
@@ -1461,9 +1461,9 @@ namespace OpenDental {
 			int widthColsAndScroll=gridSent.WidthAllColumns+20;//+20 for vertical scroll bar
 			if(widthColsAndScroll<gridSent.Width) {
 				//don't grow/shrink column widths until all columns are visible, i.e no horizontal scroll bar active, all columns fully visible
-				gridSent.Columns.ToList().ForEach(x => x.ColWidth=(int)Math.Round((float)x.ColWidth*gridSent.Width/widthColsAndScroll,MidpointRounding.AwayFromZero));
+				gridSent.Columns.ToList().ForEach(x => x.Width=(int)Math.Round((float)x.Width*gridSent.Width/widthColsAndScroll,MidpointRounding.AwayFromZero));
 				//increase the last col width to be the full width of the grid (to account for rounding away from zero above)
-				gridSent.Columns[gridSent.Columns.Count-1].ColWidth-=gridSent.WidthAllColumns+20-gridSent.Width;
+				gridSent.Columns[gridSent.Columns.Count-1].Width-=gridSent.WidthAllColumns+20-gridSent.Width;
 			}
 			#endregion Set Grid Title and Columns
 			#region Fill Grid Rows

@@ -208,7 +208,7 @@ namespace OpenDental{
 			this.gridProperties.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridProperties.TitleHeight = 18;
 			this.gridProperties.TranslationName = "GridProperties";
-			this.gridProperties.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridProperties_CellDoubleClick);
+			this.gridProperties.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProperties_CellDoubleClick);
 			// 
 			// radioDoseSpotLegacy
 			// 

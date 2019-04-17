@@ -103,14 +103,14 @@ namespace OpenDental {
 		private void FillGrid() {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			gridMain.Columns.Add(new ODGridColumn("Date",70,GridSortingStrategy.DateParse));
-			gridMain.Columns.Add(new ODGridColumn("Patient",-100,GridSortingStrategy.StringCompare));//grows dynamically
-			gridMain.Columns.Add(new ODGridColumn("Prov",-40,GridSortingStrategy.StringCompare));//grows dynamically
-			gridMain.Columns.Add(new ODGridColumn("Code",-50,GridSortingStrategy.StringCompare));//grows dynamically
-			gridMain.Columns.Add(new ODGridColumn("Tooth",45,GridSortingStrategy.ToothNumberParse));
-			gridMain.Columns.Add(new ODGridColumn("Description",-200,GridSortingStrategy.StringCompare));//grows dynamically
-			gridMain.Columns.Add(new ODGridColumn("Charges",65,HorizontalAlignment.Right,GridSortingStrategy.AmountParse));
-			gridMain.Columns.Add(new ODGridColumn("Credits",65,HorizontalAlignment.Right,GridSortingStrategy.AmountParse));
+			gridMain.Columns.Add(new ODGridColumn("Date",70, sortingStrategy: ODGridSortingStrategy.DateParse));
+			gridMain.Columns.Add(new ODGridColumn("Patient",-100));//grows dynamically
+			gridMain.Columns.Add(new ODGridColumn("Prov",-40));//grows dynamically
+			gridMain.Columns.Add(new ODGridColumn("Code",-50));//grows dynamically
+			gridMain.Columns.Add(new ODGridColumn("Tooth",45, sortingStrategy: ODGridSortingStrategy.ToothNumberParse));
+			gridMain.Columns.Add(new ODGridColumn("Description",-200));//grows dynamically
+			gridMain.Columns.Add(new ODGridColumn("Charges",65,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse));
+			gridMain.Columns.Add(new ODGridColumn("Credits",65,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse));
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			foreach(LimitedRow limitedRow in _listLimitedRows.FindAll(x => x.Type.In(comboBoxMultiTransTypes.SelectedTags<AccountEntryType>()))) {

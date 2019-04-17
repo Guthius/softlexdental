@@ -262,8 +262,8 @@ namespace OpenDental{
 			this.gridEmp.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridEmp.TitleHeight = 18;
 			this.gridEmp.TranslationName = "TableEmpClock";
-			this.gridEmp.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridEmp_CellDoubleClick);
-			this.gridEmp.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridEmp_CellClick);
+			this.gridEmp.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridEmp_CellDoubleClick);
+			this.gridEmp.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridEmp_CellClick);
 			// 
 			// labelCurrentTime
 			// 

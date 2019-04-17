@@ -50,14 +50,14 @@ namespace OpenDental {
 				,includeTPProc,includeCompletedProc,includeAppointments,listClinicNums);
 			gridMain.BeginUpdate();
 			if(gridMain.Columns.Count==0) {
-				gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"PatNum"),75,GridSortingStrategy.AmountParse));
-				gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"PatStatusCur"),100,GridSortingStrategy.StringCompare));
-				gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"PatStatusNew"),100,GridSortingStrategy.StringCompare));
-				gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"First Name"),125,GridSortingStrategy.StringCompare));
-				gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Last Name"),125,GridSortingStrategy.StringCompare));
-				gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Birthdate"),75,GridSortingStrategy.DateParse));
+				gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"PatNum"),75, sortingStrategy: ODGridSortingStrategy.AmountParse));
+				gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"PatStatusCur"),100));
+				gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"PatStatusNew"),100));
+				gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"First Name"),125));
+				gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Last Name"),125));
+				gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Birthdate"),75, sortingStrategy: ODGridSortingStrategy.DateParse));
 				if(PrefC.HasClinicsEnabled) {
-					gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Clinic"),75,GridSortingStrategy.StringCompare));
+					gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Clinic"),75));
 				}
 			}
 			gridMain.Rows.Clear();

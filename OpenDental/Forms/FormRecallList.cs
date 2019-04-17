@@ -1553,15 +1553,15 @@ namespace OpenDental{
 					RecallListEvent.Fire(ODEventType.RecallList,Lans.g(this,"Filling the Recently Contacted grid..."));
 					gridRecentlyContacted.BeginUpdate();
 					gridRecentlyContacted.Columns.Clear();
-					ODGridColumn col=new ODGridColumn(Lan.g(this,"Date Time Sent"),140,GridSortingStrategy.DateParse);
+					ODGridColumn col=new ODGridColumn(Lan.g(this,"Date Time Sent"),140,sortingStrategy: ODGridSortingStrategy.DateParse);
 					gridRecentlyContacted.Columns.Add(col);
 					col=new ODGridColumn(Lan.g(this,"Patient"),200);
 					gridRecentlyContacted.Columns.Add(col);
 					col=new ODGridColumn(Lan.g(this,"Reminder Type"),180);
 					gridRecentlyContacted.Columns.Add(col);
-					col=new ODGridColumn(Lan.g(this,"Age"),50,GridSortingStrategy.AmountParse);
+					col=new ODGridColumn(Lan.g(this,"Age"),50, sortingStrategy: ODGridSortingStrategy.AmountParse);
 					gridRecentlyContacted.Columns.Add(col);
-					col=new ODGridColumn(Lan.g(this,"Due Date"),100,GridSortingStrategy.DateParse);
+					col=new ODGridColumn(Lan.g(this,"Due Date"),100, sortingStrategy: ODGridSortingStrategy.DateParse);
 					gridRecentlyContacted.Columns.Add(col);
 					col=new ODGridColumn(Lan.g(this,"Recall Type"),130);
 					gridRecentlyContacted.Columns.Add(col);

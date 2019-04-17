@@ -95,8 +95,8 @@ namespace OpenDental {
 			Application.DoEvents();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			gridMain.Columns.Add(new ODGridColumn("Date & Time Reported",135,GridSortingStrategy.DateParse));//most recent date and time a result came in
-			gridMain.Columns.Add(new ODGridColumn("Date & Time Entered",135,GridSortingStrategy.DateParse));
+			gridMain.Columns.Add(new ODGridColumn("Date & Time Reported",135, sortingStrategy: ODGridSortingStrategy.DateParse));//most recent date and time a result came in
+			gridMain.Columns.Add(new ODGridColumn("Date & Time Entered",135, sortingStrategy: ODGridSortingStrategy.DateParse));
 			gridMain.Columns.Add(new ODGridColumn("Status",75));
 			gridMain.Columns.Add(new ODGridColumn("Patient",180));
 			gridMain.Columns.Add(new ODGridColumn("Provider",70));

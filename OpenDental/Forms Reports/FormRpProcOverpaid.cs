@@ -371,17 +371,17 @@ namespace OpenDental {
 					RefreshReport();
 					gridMain.BeginUpdate();
 					if(gridMain.Columns.Count==0) {
-						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Patient"),_colWidthPatName,GridSortingStrategy.StringCompare));
-						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Date"),_colWidthProcDate,HorizontalAlignment.Center,GridSortingStrategy.DateParse));
-						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Code"),_colWidthProcCode,GridSortingStrategy.StringCompare));
-						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Tth"),_colWidthProcTth,GridSortingStrategy.StringCompare));
-						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Prov"),_colWidthProv,GridSortingStrategy.StringCompare));
-						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Fee"),_colWidthFee,HorizontalAlignment.Right,GridSortingStrategy.AmountParse));
-						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Ins Paid"),_colWidthInsPay,HorizontalAlignment.Right,GridSortingStrategy.AmountParse));
-						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Write-off"),_colWidthWO,HorizontalAlignment.Right,GridSortingStrategy.AmountParse));
-						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Pt Paid"),_colWidthPtPaid,HorizontalAlignment.Right,GridSortingStrategy.AmountParse));
-						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Adjust"),_colWidthAdj,HorizontalAlignment.Right,GridSortingStrategy.AmountParse));
-						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Overpayment"),_colWidthOverpay,HorizontalAlignment.Right,GridSortingStrategy.AmountParse));
+						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Patient"),_colWidthPatName));
+						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Date"),_colWidthProcDate, textAlignment: HorizontalAlignment.Center, sortingStrategy: ODGridSortingStrategy.DateParse));
+						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Code"),_colWidthProcCode));
+						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Tth"),_colWidthProcTth));
+						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Prov"),_colWidthProv));
+						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Fee"),_colWidthFee, textAlignment: HorizontalAlignment.Right, sortingStrategy: ODGridSortingStrategy.AmountParse));
+						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Ins Paid"),_colWidthInsPay, textAlignment: HorizontalAlignment.Right, sortingStrategy: ODGridSortingStrategy.AmountParse));
+						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Write-off"),_colWidthWO, textAlignment: HorizontalAlignment.Right, sortingStrategy: ODGridSortingStrategy.AmountParse));
+						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Pt Paid"),_colWidthPtPaid, textAlignment: HorizontalAlignment.Right, sortingStrategy: ODGridSortingStrategy.AmountParse));
+						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Adjust"),_colWidthAdj, textAlignment: HorizontalAlignment.Right, sortingStrategy: ODGridSortingStrategy.AmountParse));
+						gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Overpayment"),_colWidthOverpay,textAlignment: HorizontalAlignment.Right, sortingStrategy: ODGridSortingStrategy.AmountParse));
 					}
 					gridMain.Rows.Clear();
 					ODGridRow row;

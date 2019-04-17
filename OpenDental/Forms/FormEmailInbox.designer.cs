@@ -142,8 +142,8 @@ namespace OpenDental{
 			this.gridInbox.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridInbox.TitleHeight = 18;
 			this.gridInbox.TranslationName = "TableApptProcs";
-			this.gridInbox.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridInboxSent_CellDoubleClick);
-			this.gridInbox.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridInboxSent_CellClick);
+			this.gridInbox.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridInboxSent_CellDoubleClick);
+			this.gridInbox.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridInboxSent_CellClick);
 			// 
 			// emailPreview
 			// 
@@ -586,8 +586,8 @@ namespace OpenDental{
 			this.gridSent.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridSent.TitleHeight = 18;
 			this.gridSent.TranslationName = "TableApptProcs";
-			this.gridSent.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridInboxSent_CellDoubleClick);
-			this.gridSent.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridInboxSent_CellClick);
+			this.gridSent.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridInboxSent_CellDoubleClick);
+			this.gridSent.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridInboxSent_CellClick);
 			// 
 			// emailPreviewControl1
 			// 

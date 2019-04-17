@@ -52,7 +52,7 @@ namespace OpenDental {
 				col=new ODGridColumn(Lan.g(this,"Deleted"),60,HorizontalAlignment.Center);
 				gridVoiceMails.Columns.Add(col);
 			}
-			col=new ODGridColumn(Lan.g(this,"Note"),200,true);
+			col=new ODGridColumn(Lan.g(this,"Note"), 200, isEditable: true);
 			col.Tag=nameof(VoiceMail.Note);
 			gridVoiceMails.Columns.Add(col);
 			gridVoiceMails.Rows.Clear();

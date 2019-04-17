@@ -48,7 +48,7 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"Variable"),200));
-			gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"Value"),200,true));
+			gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"Value"),200,isEditable: true));
 			gridMain.Rows.Clear();
 			foreach(string strSetStmt in listSetStmts) { //for each SET statement
 				List<QuerySetStmtObject> listQObjs = GetListQuerySetStmtObjs(strSetStmt); //find the variable name

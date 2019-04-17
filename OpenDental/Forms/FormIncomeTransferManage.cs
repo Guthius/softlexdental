@@ -136,9 +136,9 @@ namespace OpenDental {
 				gridCharges.Columns.Add(new ODGridColumn(Lan.g(this,"Clinic"),60));
 			}
 			gridCharges.Columns.Add(new ODGridColumn(Lan.g(this,"Codes"),-200));//negative so it will dynamically grow when no clinic column is present
-			gridCharges.Columns.Add(new ODGridColumn(Lan.g(this,"Amt Orig"),61,HorizontalAlignment.Right,GridSortingStrategy.AmountParse));
-			gridCharges.Columns.Add(new ODGridColumn(Lan.g(this,"Amt Start"),61,HorizontalAlignment.Right,GridSortingStrategy.AmountParse));
-			gridCharges.Columns.Add(new ODGridColumn(Lan.g(this,"Amt End"),61,HorizontalAlignment.Right,GridSortingStrategy.AmountParse));
+			gridCharges.Columns.Add(new ODGridColumn(Lan.g(this,"Amt Orig"),61,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse));
+			gridCharges.Columns.Add(new ODGridColumn(Lan.g(this,"Amt Start"),61,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse));
+			gridCharges.Columns.Add(new ODGridColumn(Lan.g(this,"Amt End"),61,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse));
 			gridCharges.Rows.Clear();
 			decimal chargeTotal=0;
 			//Item1=ProvNum,Item2=ClinicNum,Item3=PatNum

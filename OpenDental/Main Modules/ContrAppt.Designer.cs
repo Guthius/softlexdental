@@ -1049,7 +1049,7 @@ namespace OpenDental
             this.gridProv.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.gridProv.TitleHeight = 18;
             this.gridProv.TranslationName = "TableAppProv";
-            this.gridProv.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridProv_CellDoubleClick);
+            this.gridProv.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProv_CellDoubleClick);
             // 
             // tabReminders
             // 
@@ -1083,7 +1083,7 @@ namespace OpenDental
             this.gridReminders.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.gridReminders.TitleHeight = 18;
             this.gridReminders.TranslationName = "TableReminders";
-            this.gridReminders.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridReminders_CellDoubleClick);
+            this.gridReminders.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridReminders_CellDoubleClick);
             this.gridReminders.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridReminders_MouseDown);
             // 
             // timerWaitingRoom

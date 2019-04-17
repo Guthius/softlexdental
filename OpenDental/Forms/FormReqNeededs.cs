@@ -223,7 +223,7 @@ namespace OpenDental{
       this.gridMain.TabIndex = 13;
       this.gridMain.Title = "Requirements Needed";
       this.gridMain.TranslationName = "TableRequirementsNeeded";
-      this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+      this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
       // 
       // butOk
       // 

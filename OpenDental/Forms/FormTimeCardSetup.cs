@@ -168,7 +168,7 @@ namespace OpenDental{
 			this.gridRules.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridRules.TitleHeight = 18;
 			this.gridRules.TranslationName = "FormTimeCardSetup";
-			this.gridRules.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridRules_CellDoubleClick);
+			this.gridRules.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridRules_CellDoubleClick);
 			// 
 			// gridMain
 			// 
@@ -191,7 +191,7 @@ namespace OpenDental{
 			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridMain.TitleHeight = 18;
 			this.gridMain.TranslationName = "TablePayPeriods";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butAdd
 			// 
@@ -393,17 +393,17 @@ namespace OpenDental{
 				.ToList();
 			gridRules.BeginUpdate();
 			gridRules.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("Employee",150,GridSortingStrategy.StringCompare);
+			ODGridColumn col=new ODGridColumn("Employee",150);
 			gridRules.Columns.Add(col);
-			col=new ODGridColumn("OT before x Time",105,GridSortingStrategy.TimeParse);
+			col=new ODGridColumn("OT before x Time",105, sortingStrategy: ODGridSortingStrategy.TimeParse);
 			gridRules.Columns.Add(col);
-			col=new ODGridColumn("OT after x Time",100,GridSortingStrategy.TimeParse);
+			col=new ODGridColumn("OT after x Time",100, sortingStrategy: ODGridSortingStrategy.TimeParse);
 			gridRules.Columns.Add(col);
-			col=new ODGridColumn("OT after x Hours",110,GridSortingStrategy.TimeParse);
+			col=new ODGridColumn("OT after x Hours",110, sortingStrategy: ODGridSortingStrategy.TimeParse);
 			gridRules.Columns.Add(col);
-			col=new ODGridColumn("Min Clock In Time",105,GridSortingStrategy.TimeParse);
+			col=new ODGridColumn("Min Clock In Time",105, sortingStrategy: ODGridSortingStrategy.TimeParse);
 			gridRules.Columns.Add(col);
-			col=new ODGridColumn("Is OT Exempt",100,HorizontalAlignment.Center,GridSortingStrategy.StringCompare);
+			col=new ODGridColumn("Is OT Exempt",100,textAlignment: HorizontalAlignment.Center);
 			gridRules.Columns.Add(col);
 			gridRules.Rows.Clear();
 			UI.ODGridRow row;

@@ -337,7 +337,7 @@ namespace OpenDental{
 			this.grid.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.grid.TitleHeight = 18;
 			this.grid.TranslationName = "TableAudit";
-			this.grid.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid_CellDoubleClick);
+			this.grid.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellDoubleClick);
 			// 
 			// checkIncludeArchived
 			// 
@@ -495,8 +495,8 @@ namespace OpenDental{
 			}
 			grid.BeginUpdate();
 			grid.Columns.Clear();
-			grid.Columns.Add(new ODGridColumn(Lan.g("TableAudit","Date"),70,GridSortingStrategy.DateParse));
-			grid.Columns.Add(new ODGridColumn(Lan.g("TableAudit","Time"),60,GridSortingStrategy.DateParse));
+			grid.Columns.Add(new ODGridColumn(Lan.g("TableAudit","Date"),70,sortingStrategy: ODGridSortingStrategy.DateParse));
+			grid.Columns.Add(new ODGridColumn(Lan.g("TableAudit","Time"),60, sortingStrategy: ODGridSortingStrategy.DateParse));
 			grid.Columns.Add(new ODGridColumn(Lan.g("TableAudit","Patient"),100));
 			grid.Columns.Add(new ODGridColumn(Lan.g("TableAudit","User"),70));
 			grid.Columns.Add(new ODGridColumn(Lan.g("TableAudit","Permission"),190));

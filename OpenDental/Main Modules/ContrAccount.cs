@@ -891,7 +891,7 @@ namespace OpenDental {
 			this.gridAcctPat.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridAcctPat.TitleHeight = 18;
 			this.gridAcctPat.TranslationName = "TableAccountPat";
-			this.gridAcctPat.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAcctPat_CellClick);
+			this.gridAcctPat.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAcctPat_CellClick);
 			// 
 			// tabShow
 			// 
@@ -1382,7 +1382,7 @@ namespace OpenDental {
 			this.gridPatInfo.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridPatInfo.TitleHeight = 18;
 			this.gridPatInfo.TranslationName = "TableAccountPat";
-			this.gridPatInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPatInfo_CellDoubleClick);
+			this.gridPatInfo.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPatInfo_CellDoubleClick);
 			// 
 			// splitContainerParent
 			// 
@@ -1449,7 +1449,7 @@ namespace OpenDental {
 			this.gridRepeat.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridRepeat.TitleHeight = 18;
 			this.gridRepeat.TranslationName = "TableRepeatCharges";
-			this.gridRepeat.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridRepeat_CellDoubleClick);
+			this.gridRepeat.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridRepeat_CellDoubleClick);
 			// 
 			// gridPayPlan
 			// 
@@ -1472,7 +1472,7 @@ namespace OpenDental {
 			this.gridPayPlan.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridPayPlan.TitleHeight = 18;
 			this.gridPayPlan.TranslationName = "TablePaymentPlans";
-			this.gridPayPlan.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPayPlan_CellDoubleClick);
+			this.gridPayPlan.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPayPlan_CellDoubleClick);
 			// 
 			// splitContainerAccountCommLog
 			// 
@@ -1547,8 +1547,8 @@ namespace OpenDental {
 			this.gridAccount.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridAccount.TitleHeight = 18;
 			this.gridAccount.TranslationName = "TableAccount";
-			this.gridAccount.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAccount_CellDoubleClick);
-			this.gridAccount.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAccount_CellClick);
+			this.gridAccount.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAccount_CellDoubleClick);
+			this.gridAccount.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAccount_CellClick);
 			// 
 			// tabPageOrtho
 			// 
@@ -1601,7 +1601,7 @@ namespace OpenDental {
 			this.gridOrtho.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridOrtho.TitleHeight = 18;
 			this.gridOrtho.TranslationName = "TableOrthoInfo";
-			this.gridOrtho.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridOrtho_CellDoubleClick);
+			this.gridOrtho.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridOrtho_CellDoubleClick);
 			// 
 			// groupBox2
 			// 
@@ -1948,7 +1948,7 @@ namespace OpenDental {
 			this.gridProg.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridProg.TitleHeight = 18;
 			this.gridProg.TranslationName = "TableProg";
-			this.gridProg.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridProg_CellDoubleClick);
+			this.gridProg.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProg_CellDoubleClick);
 			// 
 			// gridComm
 			// 
@@ -1971,7 +1971,7 @@ namespace OpenDental {
 			this.gridComm.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridComm.TitleHeight = 18;
 			this.gridComm.TranslationName = "TableCommLogAccount";
-			this.gridComm.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridComm_CellDoubleClick);
+			this.gridComm.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridComm_CellDoubleClick);
 			// 
 			// butCreditCard
 			// 
@@ -2619,7 +2619,7 @@ namespace OpenDental {
 			gridAcctPat.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableAccountPat","Patient"),105);
 			gridAcctPat.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableAccountPat","Bal"),49,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TableAccountPat","Bal"),49,textAlignment: HorizontalAlignment.Right);
 			gridAcctPat.Columns.Add(col);
 			gridAcctPat.Rows.Clear();
 			ODGridRow row;
@@ -2831,13 +2831,13 @@ namespace OpenDental {
 			gridRepeat.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableRepeatCharges","Description"),150);
 			gridRepeat.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRepeatCharges","Amount"),60,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TableRepeatCharges","Amount"),60,textAlignment: HorizontalAlignment.Right);
 			gridRepeat.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRepeatCharges","Start Date"),70,HorizontalAlignment.Center);
+			col=new ODGridColumn(Lan.g("TableRepeatCharges","Start Date"),70, textAlignment: HorizontalAlignment.Center);
 			gridRepeat.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRepeatCharges","Stop Date"),70,HorizontalAlignment.Center);
+			col=new ODGridColumn(Lan.g("TableRepeatCharges","Stop Date"),70, textAlignment: HorizontalAlignment.Center);
 			gridRepeat.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRepeatCharges","Enabled"),55,HorizontalAlignment.Center);
+			col=new ODGridColumn(Lan.g("TableRepeatCharges","Enabled"),55, textAlignment: HorizontalAlignment.Center);
 			gridRepeat.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRepeatCharges","Note"),355);
 			gridRepeat.Columns.Add(col);
@@ -2924,25 +2924,25 @@ namespace OpenDental {
 			gridPayPlan.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TablePaymentPlans","Patient"),100);
 			gridPayPlan.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePaymentPlans","Type"),30,HorizontalAlignment.Center);
+			col=new ODGridColumn(Lan.g("TablePaymentPlans","Type"),30,textAlignment: HorizontalAlignment.Center);
 			gridPayPlan.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePaymentPlans","Category"),60,HorizontalAlignment.Center);
+			col=new ODGridColumn(Lan.g("TablePaymentPlans","Category"),60, textAlignment: HorizontalAlignment.Center);
 			gridPayPlan.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePaymentPlans","Principal"),60,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TablePaymentPlans","Principal"),60, textAlignment: HorizontalAlignment.Right);
 			gridPayPlan.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePaymentPlans","Total Cost"),60,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TablePaymentPlans","Total Cost"),60, textAlignment: HorizontalAlignment.Right);
 			gridPayPlan.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePaymentPlans","Paid"),60,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TablePaymentPlans","Paid"),60, textAlignment: HorizontalAlignment.Right);
 			gridPayPlan.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePaymentPlans","PrincPaid"),60,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TablePaymentPlans","PrincPaid"),60, textAlignment: HorizontalAlignment.Right);
 			gridPayPlan.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TablePaymentPlans","Balance"),60,HorizontalAlignment.Right);
+			col=new ODGridColumn(Lan.g("TablePaymentPlans","Balance"),60, textAlignment: HorizontalAlignment.Right);
 			gridPayPlan.Columns.Add(col);
 			if(PrefC.GetBool(PrefName.PayPlanHideDueNow)) {
-				col=new ODGridColumn("Closed",60,HorizontalAlignment.Center);
+				col=new ODGridColumn("Closed",60, textAlignment: HorizontalAlignment.Center);
 			}
 			else {
-				col=new ODGridColumn(Lan.g("TablePaymentPlans","Due Now"),60,HorizontalAlignment.Right);
+				col=new ODGridColumn(Lan.g("TablePaymentPlans","Due Now"),60, textAlignment: HorizontalAlignment.Right);
 			}
 			gridPayPlan.Columns.Add(col);
 			gridPayPlan.Rows.Clear();
@@ -2958,7 +2958,7 @@ namespace OpenDental {
 				row.Cells.Add(table.Rows[i]["date"].ToString());
 				if(table.Rows[i]["InstallmentPlanNum"].ToString()!="0" && table.Rows[i]["PatNum"].ToString()!=PatCur.Guarantor.ToString()) {//Installment plan and not on guar
 					cell=new ODGridCell(((string)"Invalid Guarantor"));
-					cell.Bold=YN.Yes;
+					cell.Bold=true;
 					cell.ColorText=Color.Red;
 				}
 				else {
@@ -2992,7 +2992,7 @@ namespace OpenDental {
 					if(PrefC.GetInt(PrefName.PayPlansVersion).In((int)PayPlanVersions.DoNotAge,(int)PayPlanVersions.AgeCreditsOnly,(int)PayPlanVersions.NoCharges)) 
 					{
 						if(table.Rows[i]["type"].ToString()!="Ins") {
-							cell.Bold=YN.Yes;
+							cell.Bold=true;
 							cell.ColorText=Color.Red;
 						}
 					}
@@ -3112,14 +3112,14 @@ namespace OpenDental {
 					align=HorizontalAlignment.Center;
 				}
 				if(fieldsForMainGrid[i].Description=="") {
-					col=new ODGridColumn(fieldsForMainGrid[i].InternalName,fieldsForMainGrid[i].ColumnWidth,align);
+					col=new ODGridColumn(fieldsForMainGrid[i].InternalName,fieldsForMainGrid[i].ColumnWidth, textAlignment: align);
 				}
 				else {
-					col=new ODGridColumn(fieldsForMainGrid[i].Description,fieldsForMainGrid[i].ColumnWidth,align);
+					col=new ODGridColumn(fieldsForMainGrid[i].Description,fieldsForMainGrid[i].ColumnWidth, textAlignment: align);
 				}
 				gridAccount.Columns.Add(col);
 			}
-			if(gridAccount.Columns.Sum(x => x.ColWidth) > gridAccount.Width) {
+			if(gridAccount.Columns.Sum(x => x.Width) > gridAccount.Width) {
 				gridAccount.HScrollVisible=true;
 			}
 			else {
@@ -5612,13 +5612,13 @@ namespace OpenDental {
 			gridProg.Columns.Add(col);
 			col = new ODGridColumn(Lan.g("TableProg", "Prov"), 42);
 			gridProg.Columns.Add(col);
-			col = new ODGridColumn(Lan.g("TableProg", "Amount"), 48, HorizontalAlignment.Right);
+			col = new ODGridColumn(Lan.g("TableProg", "Amount"), 48, textAlignment: HorizontalAlignment.Right);
 			gridProg.Columns.Add(col);
-			col = new ODGridColumn(Lan.g("TableProg", "ADA Code"), 62, HorizontalAlignment.Center);
+			col = new ODGridColumn(Lan.g("TableProg", "ADA Code"), 62, textAlignment: HorizontalAlignment.Center);
 			gridProg.Columns.Add(col);
-			col = new ODGridColumn(Lan.g("TableProg", "User"), 62, HorizontalAlignment.Center);
+			col = new ODGridColumn(Lan.g("TableProg", "User"), 62, textAlignment: HorizontalAlignment.Center);
 			gridProg.Columns.Add(col);
-			col = new ODGridColumn(Lan.g("TableProg", "Signed"), 55, HorizontalAlignment.Center);
+			col = new ODGridColumn(Lan.g("TableProg", "Signed"), 55, textAlignment: HorizontalAlignment.Center);
 			gridProg.Columns.Add(col);
 			gridProg.NoteSpanStart = 2;
 			gridProg.NoteSpanStop = 7;

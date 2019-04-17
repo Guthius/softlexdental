@@ -103,7 +103,7 @@ namespace OpenDental{
 			this.gridCalculatedJobs.TitleHeight = 18;
 			this.gridCalculatedJobs.TranslationName = "Jobs";
 			this.gridCalculatedJobs.Visible = false;
-			this.gridCalculatedJobs.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridCalculatedJobs_CellDoubleClick);
+			this.gridCalculatedJobs.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCalculatedJobs_CellDoubleClick);
 			// 
 			// panel2
 			// 

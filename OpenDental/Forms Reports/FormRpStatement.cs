@@ -1089,10 +1089,10 @@ namespace OpenDental{
 					grow.Cells.Add(tablePP.Rows[p]["credits"].ToString());
 					gcell=new ODGridCell(tablePP.Rows[p]["balance"].ToString());
 					if(p==tablePP.Rows.Count-1){
-						gcell.Bold=YN.Yes;
+						gcell.Bold=true;
 					}
 					else if(tablePP.Rows[p+1]["balance"].ToString()==""){//if next row balance is blank.
-						gcell.Bold=YN.Yes;
+						gcell.Bold= true;
 					}
 					grow.Cells.Add(gcell);
 					gridPP.Rows.Add(grow);

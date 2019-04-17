@@ -1486,7 +1486,7 @@
 			this.gridNotes.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridNotes.TitleHeight = 18;
 			this.gridNotes.TranslationName = "TableNotes";
-			this.gridNotes.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridNotes_CellDoubleClick);
+			this.gridNotes.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridNotes_CellDoubleClick);
 			// 
 			// FormEhrLabResultEdit2014
 			// 

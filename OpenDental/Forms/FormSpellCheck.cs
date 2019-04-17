@@ -27,7 +27,7 @@ namespace OpenDental {
 			_listDictCustom=DictCustoms.GetDeepCopy();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn("",200,false);
+			ODGridColumn col=new ODGridColumn("",200);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;

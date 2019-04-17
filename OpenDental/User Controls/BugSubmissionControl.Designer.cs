@@ -465,8 +465,8 @@
 			this.gridCustomerSubs.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridCustomerSubs.TitleHeight = 18;
 			this.gridCustomerSubs.TranslationName = "TableSubmissions";
-			this.gridCustomerSubs.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridCustomerSubs_CellDoubleClick);
-			this.gridCustomerSubs.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridCustomerSubs_CellClick);
+			this.gridCustomerSubs.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCustomerSubs_CellDoubleClick);
+			this.gridCustomerSubs.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCustomerSubs_CellClick);
 			// 
 			// gridOfficeInfo
 			// 

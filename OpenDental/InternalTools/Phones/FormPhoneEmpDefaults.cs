@@ -110,7 +110,7 @@ namespace OpenDental{
 			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridMain.TitleHeight = 18;
 			this.gridMain.TranslationName = "";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butPhoneComps
 			// 
@@ -160,7 +160,7 @@ namespace OpenDental{
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			col=new ODGridColumn("EmployeeNum",80,GridSortingStrategy.AmountParse);
+			col=new ODGridColumn("EmployeeNum",80, sortingStrategy: ODGridSortingStrategy.AmountParse);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("EmpName",90);
 			gridMain.Columns.Add(col);
@@ -170,7 +170,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Queue",65);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("PhoneExt",55,GridSortingStrategy.AmountParse);
+			col=new ODGridColumn("PhoneExt",55, sortingStrategy: ODGridSortingStrategy.AmountParse);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("StatusOverride",90);
 			gridMain.Columns.Add(col);

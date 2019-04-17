@@ -441,8 +441,8 @@
 			this.gridObservations.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridObservations.TitleHeight = 18;
 			this.gridObservations.TranslationName = "TableObservations";
-			this.gridObservations.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridObservations_CellDoubleClick);
-			this.gridObservations.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridObservations_CellClick);
+			this.gridObservations.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridObservations_CellDoubleClick);
+			this.gridObservations.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridObservations_CellClick);
 			// 
 			// butUngroupObservations
 			// 

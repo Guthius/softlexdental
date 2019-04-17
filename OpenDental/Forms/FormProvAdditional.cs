@@ -32,13 +32,13 @@ namespace OpenDental {
 			gridProvProperties.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableProviderProperties","Clinic"),120);
 			gridProvProperties.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProviderProperties","DEA Num"),120,true);
+			col=new ODGridColumn(Lan.g("TableProviderProperties","DEA Num"),120,isEditable: true);
 			gridProvProperties.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProviderProperties","State License Num"),120,true);
+			col=new ODGridColumn(Lan.g("TableProviderProperties","State License Num"),120, isEditable: true);
 			gridProvProperties.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProviderProperties","State Rx ID"),120,true);
+			col=new ODGridColumn(Lan.g("TableProviderProperties","State Rx ID"),120, isEditable: true);
 			gridProvProperties.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProviderProperties","State Where Licensed"),120,true);
+			col=new ODGridColumn(Lan.g("TableProviderProperties","State Where Licensed"),120, isEditable: true);
 			gridProvProperties.Columns.Add(col);
 			gridProvProperties.Rows.Clear();
 			ODGridRow row;

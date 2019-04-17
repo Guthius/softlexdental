@@ -37,8 +37,8 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			//It is important that the Ext column (editable) is the first column in the grid.  See gridMain_CellLeave().
-			gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"Ext"),-1,GridSortingStrategy.AmountParse,true));
-			gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"CompName"),-2,GridSortingStrategy.StringCompare));
+			gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"Ext"),-1, sortingStrategy: ODGridSortingStrategy.AmountParse, isEditable: true));
+			gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"CompName"),-2));
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			foreach(PhoneComp phoneComp in _listPhoneComps) {

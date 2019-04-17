@@ -125,7 +125,7 @@ namespace OpenDental{
 			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridMain.TitleHeight = 18;
 			this.gridMain.TranslationName = "TableJournal";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// ToolBarMain
 			// 
@@ -460,7 +460,7 @@ namespace OpenDental{
 			dictColWidths["Balance"]=Tuple.Create(colW,HorizontalAlignment.Right);
 			if((isPrinting || isResizing) && gridToFill.Columns!=null && gridToFill.Columns.Count>0) {//printing/resizing and cols already filled, adjust widths
 				Tuple<int,HorizontalAlignment> colCurTuple;
-				gridToFill.Columns.ForEach(x => x.ColWidth=(dictColWidths.TryGetValue(x.Heading,out colCurTuple)?colCurTuple.Item1:x.ColWidth));
+				gridToFill.Columns.ForEach(x => x.Width=(dictColWidths.TryGetValue(x.Heading,out colCurTuple)?colCurTuple.Item1:x.Width));
 			}
 			else {//if not printing/resizing or cols have not been filled, fill cols
 				gridToFill.Columns.Clear();

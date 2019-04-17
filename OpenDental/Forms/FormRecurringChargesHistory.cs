@@ -71,25 +71,25 @@ namespace OpenDental {
 			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"PatNum"),55,GridSortingStrategy.AmountParse));
+			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"PatNum"),55, sortingStrategy: ODGridSortingStrategy.AmountParse));
 			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Name"),185));
 			if(PrefC.HasClinicsEnabled) {
 				gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Clinic"),65));
 			}
 			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Date Charge"),135,HorizontalAlignment.Center,
-				GridSortingStrategy.DateParse));
+				ODGridSortingStrategy.DateParse));
 			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Charge Status"),90));
 			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"User"),90));
 			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Family Bal"),PrefC.HasClinicsEnabled ? 70 : 85,HorizontalAlignment.Right,
-				GridSortingStrategy.AmountParse));
+				ODGridSortingStrategy.AmountParse));
 			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"PayPlan Due"),PrefC.HasClinicsEnabled ? 80 : 90,HorizontalAlignment.Right,
-				GridSortingStrategy.AmountParse));
+				ODGridSortingStrategy.AmountParse));
 			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Total Due"),PrefC.HasClinicsEnabled ? 65 : 80,HorizontalAlignment.Right,
-				GridSortingStrategy.AmountParse));
+				ODGridSortingStrategy.AmountParse));
 			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Repeat Amt"),PrefC.HasClinicsEnabled ? 75 : 90,HorizontalAlignment.Right,
-				GridSortingStrategy.AmountParse));
+				ODGridSortingStrategy.AmountParse));
 			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Charge Amt"),PrefC.HasClinicsEnabled ? 85 : 95,HorizontalAlignment.Right,
-				GridSortingStrategy.AmountParse));
+				ODGridSortingStrategy.AmountParse));
 			if(gridMain.WidthAllColumns > gridMain.Width) {
 				gridMain.HScrollVisible=true;
 			}

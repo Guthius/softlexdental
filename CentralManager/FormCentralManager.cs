@@ -198,16 +198,16 @@ namespace CentralManager {
 			gridMain.Columns.Clear();
 			ODGridColumn col;
 			col=new ODGridColumn("#",40);
-			col.SortingStrategy=GridSortingStrategy.AmountParse;
+			col.SortingStrategy=ODGridSortingStrategy.AmountParse;
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Database",320);
-			col.SortingStrategy=GridSortingStrategy.StringCompare;
+			col.SortingStrategy=ODGridSortingStrategy.StringCompare;
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Note",300);
-			col.SortingStrategy=GridSortingStrategy.StringCompare;
+			col.SortingStrategy=ODGridSortingStrategy.StringCompare;
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Status",100,HorizontalAlignment.Center);
-			col.SortingStrategy=GridSortingStrategy.StringCompare;
+			col.SortingStrategy=ODGridSortingStrategy.StringCompare;
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
@@ -232,7 +232,7 @@ namespace CentralManager {
 				else if(status=="OK") {
 					row.Cells.Add(status);
 					row.Cells[3].ColorText=Color.Green;
-					row.Cells[3].Bold=YN.Yes;
+					row.Cells[3].Bold= true;
 				}
 				else if(status=="OFFLINE") {
 					row.Cells.Add(status);

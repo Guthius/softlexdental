@@ -185,7 +185,7 @@ namespace OpenDental {
 			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridMain.TitleHeight = 18;
 			this.gridMain.TranslationName = "TableRequests";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butClose
 			// 
@@ -414,25 +414,25 @@ namespace OpenDental {
 			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableRequest","Req#"),40,GridSortingStrategy.AmountParse);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableRequest","Req#"),40, sortingStrategy: ODGridSortingStrategy.AmountParse);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRequest","Mine"),40,GridSortingStrategy.StringCompare);
+			col=new ODGridColumn(Lan.g("TableRequest","Mine"),40);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRequest","My Votes"),60,GridSortingStrategy.StringCompare);
+			col=new ODGridColumn(Lan.g("TableRequest","My Votes"),60);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRequest","Total Votes"),70,GridSortingStrategy.StringCompare);
+			col=new ODGridColumn(Lan.g("TableRequest","Total Votes"),70);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRequest","Comments"),70,GridSortingStrategy.AmountParse);
+			col=new ODGridColumn(Lan.g("TableRequest","Comments"),70, sortingStrategy: ODGridSortingStrategy.AmountParse);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRequest","Version\r\nCompleted"),75,GridSortingStrategy.VersionNumber);
+			col=new ODGridColumn(Lan.g("TableRequest","Version\r\nCompleted"),75, sortingStrategy: ODGridSortingStrategy.VersionNumber);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRequest","Diff"),40,GridSortingStrategy.AmountParse);
+			col=new ODGridColumn(Lan.g("TableRequest","Diff"),40, sortingStrategy: ODGridSortingStrategy.AmountParse);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRequest","Weight"),45,HorizontalAlignment.Right,GridSortingStrategy.AmountParse);
+			col=new ODGridColumn(Lan.g("TableRequest","Weight"),45,HorizontalAlignment.Right, sortingStrategy: ODGridSortingStrategy.AmountParse);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRequest","Approval"),90,GridSortingStrategy.StringCompare);
+			col=new ODGridColumn(Lan.g("TableRequest","Approval"),90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableRequest","Description"),500,GridSortingStrategy.StringCompare);
+			col=new ODGridColumn(Lan.g("TableRequest","Description"),500);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;

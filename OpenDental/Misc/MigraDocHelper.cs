@@ -340,7 +340,7 @@ namespace OpenDental {
 			Column col;
 			col=table.AddColumn(Unit.FromInch(dummyColW/100));
 			for(int i=0;i<grid.Columns.Count;i++){
-				col=table.AddColumn(Unit.FromInch((double)grid.Columns[i].ColWidth/96));
+				col=table.AddColumn(Unit.FromInch((double)grid.Columns[i].Width/96));
 				col.LeftPadding=Unit.FromInch(.01);
 				col.RightPadding=Unit.FromInch(.01);
 			}
@@ -381,10 +381,10 @@ namespace OpenDental {
 				for(int j=0;j<grid.Columns.Count;j++){
 					cell = row.Cells[j+1];
 					par=cell.AddParagraph();
-					if(grid.Rows[i].Cells[j].Bold==YN.Unknown){
+					if(grid.Rows[i].Cells[j].Bold==null){
 						isBold=grid.Rows[i].Bold;
 					}
-					else if(grid.Rows[i].Cells[j].Bold==YN.Yes){
+					else if(grid.Rows[i].Cells[j].Bold==true){
 						isBold=true;
 					}
 					else{// if(grid.Rows[i].Cells[j].Bold==YN.No){
@@ -405,7 +405,7 @@ namespace OpenDental {
 					else {
 						xFont=new XFont("Arial",11.65);//Yep, a guess-and-check value here too.
 					}
-					int colWidth=grid.Columns[j].ColWidth;
+					int colWidth=grid.Columns[j].Width;
 					string cellText=grid.Rows[i].Cells[j].Text;
 					List<string> listWords=cellText.Split(new[] {" ","\t","\n","\r\n" },StringSplitOptions.RemoveEmptyEntries)
 						 .Where(x => !string.IsNullOrWhiteSpace(x)).ToList();//PdfSharp.MeasureString sometimes throws an exception when measuring whitespace

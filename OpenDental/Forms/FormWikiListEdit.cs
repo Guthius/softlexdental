@@ -99,7 +99,7 @@ namespace OpenDental
 
             for (int c = 0; c < _listColumnHeaders.Count; c++)
             {
-                var col = new ODGridColumn(_listColumnHeaders[c].ColName, _listColumnHeaders[c].ColWidth + 20, false);
+                var col = new ODGridColumn(_listColumnHeaders[c].ColName, _listColumnHeaders[c].ColWidth + 20, isEditable: false);
                 itemsGrid.Columns.Add(col);
             }
 

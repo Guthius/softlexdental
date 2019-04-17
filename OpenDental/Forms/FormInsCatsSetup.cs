@@ -147,7 +147,7 @@ namespace OpenDental {
 			this.gridMain.TabIndex = 14;
 			this.gridMain.Title = "Coverage Spans";
 			this.gridMain.TranslationName = "TableCovSpans";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// groupBox1
 			// 

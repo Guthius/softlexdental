@@ -80,7 +80,7 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 11;
 			this.gridMain.Title = "Appointment Rules";
 			this.gridMain.TranslationName = "TablePayPeriods";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butAdd
 			// 

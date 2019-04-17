@@ -67,9 +67,9 @@ namespace OpenDental {
 			gridTasks.BeginUpdate();
 			gridTasks.Columns.Clear();
 			gridTasks.Rows.Clear();
-			ODGridColumn col=new ODGridColumn("Created",70,HorizontalAlignment.Left,false);
+			ODGridColumn col=new ODGridColumn("Created",70,HorizontalAlignment.Left);
 			gridTasks.Columns.Add(col);
-			col=new ODGridColumn("Completed",70,HorizontalAlignment.Left,false);
+			col=new ODGridColumn("Completed",70,HorizontalAlignment.Left);
 			gridTasks.Columns.Add(col);
 			col=new ODGridColumn("Description",0);
 			gridTasks.Columns.Add(col);

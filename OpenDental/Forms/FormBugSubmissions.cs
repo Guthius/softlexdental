@@ -187,12 +187,12 @@ namespace OpenDental {
 			gridSubs.BeginUpdate();
 			gridSubs.Columns.Clear();
 			gridSubs.Columns.Add(new ODGridColumn("Submitter",140));
-			gridSubs.Columns.Add(new ODGridColumn("Vers.",55,GridSortingStrategy.VersionNumber));
+			gridSubs.Columns.Add(new ODGridColumn("Vers.",55,sortingStrategy: ODGridSortingStrategy.VersionNumber));
 			if(comboGrouping.SelectedIndex==0) {//Group by 'None'
-				gridSubs.Columns.Add(new ODGridColumn("DateTime",75,GridSortingStrategy.DateParse));
+				gridSubs.Columns.Add(new ODGridColumn("DateTime",75, sortingStrategy: ODGridSortingStrategy.DateParse));
 			}
 			else {
-				gridSubs.Columns.Add(new ODGridColumn("#",30,HorizontalAlignment.Right,GridSortingStrategy.AmountParse));
+				gridSubs.Columns.Add(new ODGridColumn("#",30,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse));
 			}
 			gridSubs.Columns.Add(new ODGridColumn("Flag",50,HorizontalAlignment.Center));
 			gridSubs.Columns.Add(new ODGridColumn("Msg Text",0));

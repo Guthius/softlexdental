@@ -66,7 +66,7 @@ namespace OpenDental{
 			this.gridObservations.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridObservations.TitleHeight = 18;
 			this.gridObservations.TranslationName = "TableOservations";
-			this.gridObservations.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridObservations_CellDoubleClick);
+			this.gridObservations.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridObservations_CellDoubleClick);
 			// 
 			// butAdd
 			// 

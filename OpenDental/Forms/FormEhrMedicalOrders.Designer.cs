@@ -84,7 +84,7 @@
 			this.gridMedOrders.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridMedOrders.TitleHeight = 18;
 			this.gridMedOrders.TranslationName = "TableOrders";
-			this.gridMedOrders.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMedOrders_CellDoubleClick);
+			this.gridMedOrders.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMedOrders_CellDoubleClick);
 			// 
 			// FormEhrMedicalOrders
 			// 

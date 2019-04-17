@@ -1005,7 +1005,7 @@ namespace OpenDental {
 			this.gridCharges.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridCharges.TitleHeight = 18;
 			this.gridCharges.TranslationName = "TableOutstandingCharges";
-			this.gridCharges.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridCharges_CellClick);
+			this.gridCharges.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCharges_CellClick);
 			// 
 			// checkShowSuperfamily
 			// 
@@ -1072,8 +1072,8 @@ namespace OpenDental {
 			this.gridSplits.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridSplits.TitleHeight = 18;
 			this.gridSplits.TranslationName = "TableCurrentSplits";
-			this.gridSplits.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSplits_CellDoubleClick);
-			this.gridSplits.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSplits_CellClick);
+			this.gridSplits.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSplits_CellDoubleClick);
+			this.gridSplits.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSplits_CellClick);
 			// 
 			// tabPageAllocated
 			// 
@@ -1956,21 +1956,21 @@ namespace OpenDental {
 			gridSplits.BeginUpdate();
 			gridSplits.Columns.Clear();
 			ODGridColumn col;
-			col=new ODGridColumn(Lan.g(this,"Date"),65,HorizontalAlignment.Center,GridSortingStrategy.DateParse);
+			col=new ODGridColumn(Lan.g(this,"Date"),65,HorizontalAlignment.Center,ODGridSortingStrategy.DateParse);
 			gridSplits.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Prov"),40, GridSortingStrategy.StringCompare);
+			col=new ODGridColumn(Lan.g(this,"Prov"),40);
 			gridSplits.Columns.Add(col);
 			if(PrefC.HasClinicsEnabled) {//Clinics
-				col=new ODGridColumn(Lan.g(this,"Clinic"),40, GridSortingStrategy.StringCompare);
+				col=new ODGridColumn(Lan.g(this,"Clinic"),40);
 				gridSplits.Columns.Add(col);
 			}
-			col=new ODGridColumn(Lan.g(this,"Patient"),100,GridSortingStrategy.StringCompare);
+			col=new ODGridColumn(Lan.g(this,"Patient"),100);
 			gridSplits.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Code"),60, GridSortingStrategy.StringCompare);
+			col=new ODGridColumn(Lan.g(this,"Code"),60);
 			gridSplits.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Type"),100, GridSortingStrategy.StringCompare);
+			col=new ODGridColumn(Lan.g(this,"Type"),100);
 			gridSplits.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Amount"),55,HorizontalAlignment.Right, GridSortingStrategy.AmountParse);
+			col=new ODGridColumn(Lan.g(this,"Amount"),55,HorizontalAlignment.Right, ODGridSortingStrategy.AmountParse);
 			gridSplits.Columns.Add(col);
 			gridSplits.Rows.Clear();
 			ODGridRow row;
@@ -2059,11 +2059,11 @@ namespace OpenDental {
 				}
 				col=new ODGridColumn(Lan.g(this,"Codes"),checkPayTypeNone.Checked?170:249);
 				gridCharges.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"Amt Orig"),70,HorizontalAlignment.Right,GridSortingStrategy.AmountParse);
+				col=new ODGridColumn(Lan.g(this,"Amt Orig"),70,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse);
 				gridCharges.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"Amt Start"),70,HorizontalAlignment.Right,GridSortingStrategy.AmountParse);
+				col=new ODGridColumn(Lan.g(this,"Amt Start"),70,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse);
 				gridCharges.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"Amt End"),70,HorizontalAlignment.Right,GridSortingStrategy.AmountParse);
+				col=new ODGridColumn(Lan.g(this,"Amt End"),70,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse);
 				gridCharges.Columns.Add(col);
 				gridCharges.Rows.Clear();
 				ODGridRow row;
@@ -2132,11 +2132,11 @@ namespace OpenDental {
 				gridCharges.Columns.Add(col);
 				col=new ODGridColumn(Lan.g(this,"Codes"),checkPayTypeNone.Checked?130:200);
 				gridCharges.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"Amt Orig"),70,HorizontalAlignment.Right,GridSortingStrategy.AmountParse);
+				col=new ODGridColumn(Lan.g(this,"Amt Orig"),70,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse);
 				gridCharges.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"Amt Start"),70,HorizontalAlignment.Right,GridSortingStrategy.AmountParse);
+				col=new ODGridColumn(Lan.g(this,"Amt Start"),70,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse);
 				gridCharges.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"Amt End"),70,HorizontalAlignment.Right,GridSortingStrategy.AmountParse);
+				col=new ODGridColumn(Lan.g(this,"Amt End"),70,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse);
 				gridCharges.Columns.Add(col);
 				gridCharges.Rows.Clear();
 				ODGridRow row;
@@ -2196,27 +2196,27 @@ namespace OpenDental {
 				}
 			}
 			else { //Group by 'None'
-				col=new ODGridColumn(Lan.g(this,"Date"),65,GridSortingStrategy.DateParse);
+				col=new ODGridColumn(Lan.g(this,"Date"),65, sortingStrategy: ODGridSortingStrategy.DateParse);
 				gridCharges.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"Patient"),92,GridSortingStrategy.StringCompare);
+				col=new ODGridColumn(Lan.g(this,"Patient"),92);
 				gridCharges.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"Prov"),40,GridSortingStrategy.StringCompare);
+				col=new ODGridColumn(Lan.g(this,"Prov"),40);
 				gridCharges.Columns.Add(col);
 				if(PrefC.HasClinicsEnabled) {//Clinics
-					col=new ODGridColumn(Lan.g(this,"Clinic"),55,GridSortingStrategy.StringCompare);
+					col=new ODGridColumn(Lan.g(this,"Clinic"),55);
 					gridCharges.Columns.Add(col);
 				}
-				col=new ODGridColumn(Lan.g(this,"Code"),45,GridSortingStrategy.StringCompare);
+				col=new ODGridColumn(Lan.g(this,"Code"),45);
 				gridCharges.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"Tth"),25,GridSortingStrategy.ToothNumberParse);
+				col=new ODGridColumn(Lan.g(this,"Tth"),25, sortingStrategy: ODGridSortingStrategy.ToothNumberParse);
 				gridCharges.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"Type"),90,GridSortingStrategy.StringCompare);
+				col=new ODGridColumn(Lan.g(this,"Type"),90);
 				gridCharges.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"AmtOrig"),55,HorizontalAlignment.Right,GridSortingStrategy.AmountParse);
+				col=new ODGridColumn(Lan.g(this,"AmtOrig"),55,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse);
 				gridCharges.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"AmtStart"),57,HorizontalAlignment.Right,GridSortingStrategy.AmountParse);
+				col=new ODGridColumn(Lan.g(this,"AmtStart"),57,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse);
 				gridCharges.Columns.Add(col);
-				col=new ODGridColumn(Lan.g(this,"AmtEnd"),55,HorizontalAlignment.Right,GridSortingStrategy.AmountParse);
+				col=new ODGridColumn(Lan.g(this,"AmtEnd"),55,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse);
 				gridCharges.Columns.Add(col);
 				gridCharges.Rows.Clear();
 				ODGridRow row;

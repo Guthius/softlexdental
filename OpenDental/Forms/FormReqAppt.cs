@@ -218,7 +218,7 @@ namespace OpenDental{
 			this.gridAttached.TabIndex = 23;
 			this.gridAttached.Title = "Currently Attached Requirements";
 			this.gridAttached.TranslationName = "TableReqStudentMany";
-			this.gridAttached.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAttached_CellDoubleClick);
+			this.gridAttached.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAttached_CellDoubleClick);
 			// 
 			// gridStudents
 			// 
@@ -230,7 +230,7 @@ namespace OpenDental{
 			this.gridStudents.TabIndex = 3;
 			this.gridStudents.Title = "Students";
 			this.gridStudents.TranslationName = "TableReqStudentMany";
-			this.gridStudents.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridStudents_CellClick);
+			this.gridStudents.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridStudents_CellClick);
 			// 
 			// butCancel
 			// 

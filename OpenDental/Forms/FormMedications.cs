@@ -175,8 +175,8 @@ namespace OpenDental{
 			this.gridAllMedications.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridAllMedications.TitleHeight = 18;
 			this.gridAllMedications.TranslationName = "FormMedications";
-			this.gridAllMedications.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAllMedications_CellDoubleClick);
-			this.gridAllMedications.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAllMedications_CellClick);
+			this.gridAllMedications.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAllMedications_CellDoubleClick);
+			this.gridAllMedications.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAllMedications_CellClick);
 			// 
 			// textSearch
 			// 
@@ -394,17 +394,17 @@ namespace OpenDental{
 			gridAllMedications.BeginUpdate();
 			gridAllMedications.Columns.Clear();
 			//The order of these columns is important.  See gridAllMedications_CellClick()
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Drug Name"),120,GridSortingStrategy.StringCompare);
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"Drug Name"),120);
 			gridAllMedications.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Generic Name"),120,GridSortingStrategy.StringCompare);
+			col=new ODGridColumn(Lan.g(this,"Generic Name"),120);
 			gridAllMedications.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"InUse"),55,HorizontalAlignment.Center,GridSortingStrategy.StringCompare);
+			col=new ODGridColumn(Lan.g(this,"InUse"),55, textAlignment: HorizontalAlignment.Center);
 			gridAllMedications.Columns.Add(col);
 			if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
-				col=new ODGridColumn(Lan.g(this,"RxNorm"),70,GridSortingStrategy.StringCompare);
+				col=new ODGridColumn(Lan.g(this,"RxNorm"),70);
 				gridAllMedications.Columns.Add(col);
 			}
-			col=new ODGridColumn(Lan.g(this,"Notes for Generic"),250,GridSortingStrategy.StringCompare);
+			col=new ODGridColumn(Lan.g(this,"Notes for Generic"),250);
 			gridAllMedications.Columns.Add(col);
 			gridAllMedications.Rows.Clear();
 			List <Medication> listMeds=Medications.GetList(textSearch.Text);
@@ -428,7 +428,7 @@ namespace OpenDental{
 				if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
 					if(med.RxCui==0) {
 						row.Cells.Add(Lan.g(this,"(select)"));
-						row.Cells[row.Cells.Count-1].Bold=YN.Yes;
+						row.Cells[row.Cells.Count-1].Bold=true;
 					}
 					else {
 						row.Cells.Add(med.RxCui.ToString());
@@ -455,9 +455,9 @@ namespace OpenDental{
 			bool isSortAscending=gridMissing.SortedIsAscending;
 			gridMissing.BeginUpdate();
 			gridMissing.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"RxNorm"),70,GridSortingStrategy.StringCompare);
+			ODGridColumn col=new ODGridColumn(Lan.g(this,"RxNorm"),70);
 			gridMissing.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Drug Description"),0,GridSortingStrategy.StringCompare);
+			col=new ODGridColumn(Lan.g(this,"Drug Description"),0);
 			gridMissing.Columns.Add(col);
 			gridMissing.Rows.Clear();
 			List<MedicationPat> listMedPats=MedicationPats.GetAllMissingMedications();

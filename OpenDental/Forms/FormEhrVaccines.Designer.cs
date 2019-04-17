@@ -108,7 +108,7 @@
 			this.gridVaccine.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridVaccine.TitleHeight = 18;
 			this.gridVaccine.TranslationName = "TableVaccines";
-			this.gridVaccine.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridVaccine_CellDoubleClick);
+			this.gridVaccine.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridVaccine_CellDoubleClick);
 			// 
 			// listVacShareOk
 			// 

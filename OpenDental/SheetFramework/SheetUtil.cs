@@ -1862,10 +1862,10 @@ namespace OpenDental{
 				case GrowthBehaviorEnum.FillDownFitColumns://Only grids have access to this option.
 					int width=0;
 					if(targetControl is ODGrid) {
-						width=(targetControl as ODGrid).Columns.Sum(x => x.ColWidth)+20;//+20 for border and vertical scroll bar width
+						width=(targetControl as ODGrid).Columns.Sum(x => x.Width)+20;//+20 for border and vertical scroll bar width
 					}
 					else {//Must contain a ODGrid directly then
-						width=(targetControl.Controls.OfType<Control>().First(x => x is ODGrid) as ODGrid).Columns.Sum(x => x.ColWidth)+22;//+22 for border and vertical scroll bar width
+						width=(targetControl.Controls.OfType<Control>().First(x => x is ODGrid) as ODGrid).Columns.Sum(x => x.Width)+22;//+22 for border and vertical scroll bar width
 					}
 					targetControl.Width=Math.Max(width,524);
 					targetControl.Height=Math.Max(1,(parentControl.Height-fieldDef.YPos-fillHeightAdj)-1);

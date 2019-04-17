@@ -132,7 +132,7 @@ namespace OpenDental {
 				gridMain.HScrollVisible=true;
 			}
 			FillGrid();
-			if(Parent.Width<gridMain.Width || Width<gridMain.Columns.Sum(x => x.ColWidth)) {
+			if(Parent.Width<gridMain.Width || Width<gridMain.Columns.Sum(x => x.Width)) {
 				gridMain.HScrollVisible=true;
 			}
 			else {

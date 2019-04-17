@@ -88,8 +88,8 @@ namespace OpenDental{
 			this.gridMain.Title = "Files in path";
 			this.gridMain.TitleHeight = 18;
 			this.gridMain.TranslationName = "FilePickerTable";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
 			// textPath
 			// 

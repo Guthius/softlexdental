@@ -1,4 +1,6 @@
-﻿namespace OpenDental {
+﻿using System;
+
+namespace OpenDental {
 	partial class UserControlPhonePanel {
 		/// <summary> 
 		/// Required designer variable.
@@ -262,7 +264,7 @@
 			this.gridEmp.TitleHeight = 18;
 			this.gridEmp.TranslationName = "TableEmpClock";
 			this.gridEmp.WrapText = false;
-			this.gridEmp.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridEmp_CellClick);
+			this.gridEmp.CellClick += new EventHandler<UI.ODGridClickEventArgs>(this.gridEmp_CellClick);
 			this.gridEmp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridEmp_MouseUp);
 			// 
 			// UserControlPhonePanel

@@ -80,8 +80,8 @@ namespace OpenDental {
 			gridCalculatedJobs.Visible=true;
 			gridCalculatedJobs.BeginUpdate();
 			gridCalculatedJobs.Columns.Clear();
-			gridCalculatedJobs.Columns.Add(new ODGridColumn("EstHrs",60) { TextAlign=HorizontalAlignment.Center,SortingStrategy=GridSortingStrategy.AmountParse });
-			gridCalculatedJobs.Columns.Add(new ODGridColumn("ActHrs",60) { TextAlign=HorizontalAlignment.Center,SortingStrategy=GridSortingStrategy.AmountParse });
+			gridCalculatedJobs.Columns.Add(new ODGridColumn("EstHrs",60) { TextAlign=HorizontalAlignment.Center,SortingStrategy=ODGridSortingStrategy.AmountParse });
+			gridCalculatedJobs.Columns.Add(new ODGridColumn("ActHrs",60) { TextAlign=HorizontalAlignment.Center,SortingStrategy=ODGridSortingStrategy.AmountParse });
 			gridCalculatedJobs.Columns.Add(new ODGridColumn("",300));
 			gridCalculatedJobs.Rows.Clear();
 			foreach(Job job in listJobs.OrderBy(x => x.HoursEstimate)) {

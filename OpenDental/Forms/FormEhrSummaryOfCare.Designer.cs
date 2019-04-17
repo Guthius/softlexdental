@@ -127,7 +127,7 @@
 			this.gridRec.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridRec.TitleHeight = 18;
 			this.gridRec.TranslationName = "TableReceived";
-			this.gridRec.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridRec_CellDoubleClick);
+			this.gridRec.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridRec_CellDoubleClick);
 			// 
 			// gridSent
 			// 
@@ -150,7 +150,7 @@
 			this.gridSent.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridSent.TitleHeight = 18;
 			this.gridSent.TranslationName = "TableSent";
-			this.gridSent.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSent_CellDoubleClick);
+			this.gridSent.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSent_CellDoubleClick);
 			// 
 			// groupBox2
 			// 

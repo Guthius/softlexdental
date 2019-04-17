@@ -77,7 +77,7 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 33;
 			this.gridMain.Title = "Recalls";
 			this.gridMain.TranslationName = "TableRecallsPat";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butClose
 			// 

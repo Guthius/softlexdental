@@ -350,7 +350,7 @@ namespace OpenDental{
 			this.gridStudents.TabIndex = 15;
 			this.gridStudents.Title = "Students";
 			this.gridStudents.TranslationName = "TableStudents";
-			this.gridStudents.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridStudents_CellClick);
+			this.gridStudents.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridStudents_CellClick);
 			// 
 			// butScan
 			// 

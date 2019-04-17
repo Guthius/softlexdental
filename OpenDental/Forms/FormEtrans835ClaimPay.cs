@@ -218,7 +218,7 @@ namespace OpenDental {
 			this.gridClaimAdjustments.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridClaimAdjustments.TitleHeight = 18;
 			this.gridClaimAdjustments.TranslationName = "FormEtrans835Edit";
-			this.gridClaimAdjustments.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridClaimAdjustments_CellDoubleClick);
+			this.gridClaimAdjustments.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridClaimAdjustments_CellDoubleClick);
 			// 
 			// gridProcedureBreakdown
 			// 
@@ -242,7 +242,7 @@ namespace OpenDental {
 			this.gridProcedureBreakdown.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridProcedureBreakdown.TitleHeight = 18;
 			this.gridProcedureBreakdown.TranslationName = "FormEtrans835Edit";
-			this.gridProcedureBreakdown.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridProcedureBreakdown_CellDoubleClick);
+			this.gridProcedureBreakdown.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProcedureBreakdown_CellDoubleClick);
 			// 
 			// gridPayments
 			// 
@@ -265,8 +265,8 @@ namespace OpenDental {
 			this.gridPayments.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridPayments.TitleHeight = 18;
 			this.gridPayments.TranslationName = "TableClaimProc";
-			this.gridPayments.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridPayments.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPayments_CellClick);
+			this.gridPayments.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
+			this.gridPayments.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPayments_CellClick);
 			this.gridPayments.CellTextChanged += new System.EventHandler(this.gridMain_CellTextChanged);
 			// 
 			// textDedApplied
@@ -648,27 +648,27 @@ namespace OpenDental {
 			gridPayments.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableClaimProc","Fee Billed"),62,HorizontalAlignment.Right);
 			gridPayments.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimProc","Deduct"),62,HorizontalAlignment.Right,true);
+			col=new ODGridColumn(Lan.g("TableClaimProc","Deduct"),62,HorizontalAlignment.Right,isEditable: true);
 			gridPayments.Columns.Add(col);
 			deductIndex=gridPayments.Columns.Count-1;
-			col=new ODGridColumn(Lan.g("TableClaimProc","Allowed"),62,HorizontalAlignment.Right,true);
+			col=new ODGridColumn(Lan.g("TableClaimProc","Allowed"),62,HorizontalAlignment.Right, isEditable: true);
 			gridPayments.Columns.Add(col);
 			allowedIndex=gridPayments.Columns.Count-1;
 			string insTitle="InsPay";
 			if(_claimPaid.IsPreauth) {
 				insTitle="InsEst";
 			}
-			col=new ODGridColumn(Lan.g("TableClaimProc",insTitle),62,HorizontalAlignment.Right,true);
+			col=new ODGridColumn(Lan.g("TableClaimProc",insTitle),62,HorizontalAlignment.Right, isEditable: true);
 			gridPayments.Columns.Add(col);
 			insPayEstIndex=gridPayments.Columns.Count-1;
-			col=new ODGridColumn(Lan.g("TableClaimProc","Writeoff"),62,HorizontalAlignment.Right,isWOIncluded);
+			col=new ODGridColumn(Lan.g("TableClaimProc","Writeoff"),62,HorizontalAlignment.Right, isEditable: isWOIncluded);
 			gridPayments.Columns.Add(col);
 			writeoffIndex=gridPayments.Columns.Count-1;
 			col=new ODGridColumn(Lan.g("TableClaimProc","Status"),50,HorizontalAlignment.Center);
 			gridPayments.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableClaimProc","Pmt"),30,HorizontalAlignment.Center);
 			gridPayments.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableClaimProc","Remarks"),0,true);
+			col=new ODGridColumn(Lan.g("TableClaimProc","Remarks"),0, isEditable: true);
 			gridPayments.Columns.Add(col);
 			remarkIndex=gridPayments.Columns.Count-1;
 			gridPayments.Rows.Clear();

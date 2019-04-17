@@ -120,8 +120,8 @@ namespace OpenDental{
 			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridMain.TitleHeight = 18;
 			this.gridMain.TranslationName = "TablePharmacies";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
 			// butAdd
 			// 
@@ -230,7 +230,7 @@ namespace OpenDental{
 				row.Cells.Add(pharm.Phone);
 				if(Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
 					row.Cells[row.Cells.Count-1].ColorText=Color.Blue;
-					row.Cells[row.Cells.Count-1].Underline=YN.Yes;
+					row.Cells[row.Cells.Count-1].Underline=true;
 				}
 				row.Cells.Add(pharm.Fax);
 				txt=pharm.Address;
@@ -279,7 +279,7 @@ namespace OpenDental{
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
 			ODGridCell gridCellCur=gridMain.Rows[e.Row].Cells[e.Col];
 			//Only grid cells with phone numbers are blue and underlined.
-			if(gridCellCur.ColorText==System.Drawing.Color.Blue && gridCellCur.Underline==YN.Yes && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
+			if(gridCellCur.ColorText==System.Drawing.Color.Blue && gridCellCur.Underline==true && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
 				DentalTek.PlaceCall(gridCellCur.Text);
 			}
 		}

@@ -87,7 +87,7 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 2;
 			this.gridMain.Title = "Student Requirements";
 			this.gridMain.TranslationName = "TableReqStudentOne";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// FormReqStudentOne
 			// 

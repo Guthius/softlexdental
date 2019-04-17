@@ -510,7 +510,7 @@ namespace OpenDental{
 			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridMain.TitleHeight = 18;
 			this.gridMain.TranslationName = "TableProviderSetup";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butStudBulkEdit
 			// 
@@ -709,7 +709,7 @@ namespace OpenDental{
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			if(!PrefC.GetBool(PrefName.EasyHideDentalSchools)) {
-				gridMain.Columns.Add(new ODGridColumn(Lan.g("TableProviderSetup","ProvNum"),60,GridSortingStrategy.AmountParse));
+				gridMain.Columns.Add(new ODGridColumn(Lan.g("TableProviderSetup","ProvNum"),60, sortingStrategy: ODGridSortingStrategy.AmountParse));
 			}
 			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableProviderSetup","Abbrev"),90));
 			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableProviderSetup","Last Name"),90));
@@ -721,8 +721,8 @@ namespace OpenDental{
 				gridMain.Columns.Add(new ODGridColumn(Lan.g("TableProviderSetup","Class"),90));
 				gridMain.Columns.Add(new ODGridColumn(Lan.g("TableProviderSetup","Instructor"),60,HorizontalAlignment.Center));
 			}
-			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableProviderSetup","PriPats"),50,HorizontalAlignment.Center,GridSortingStrategy.AmountParse));
-			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableProviderSetup","SecPats"),50,HorizontalAlignment.Center,GridSortingStrategy.AmountParse));
+			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableProviderSetup","PriPats"),50,HorizontalAlignment.Center,ODGridSortingStrategy.AmountParse));
+			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableProviderSetup","SecPats"),50,HorizontalAlignment.Center,ODGridSortingStrategy.AmountParse));
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			foreach(DataRow rowCur in _tableProvs.Rows) {

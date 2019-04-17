@@ -465,8 +465,8 @@ namespace OpenDental{
 			this.gridLR.TabIndex = 62;
 			this.gridLR.Title = "Lower Right Corner";
 			this.gridLR.TranslationName = "TableLowerRight";
-			this.gridLR.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridLR_CellDoubleClick);
-			this.gridLR.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridLR_CellClick);
+			this.gridLR.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridLR_CellDoubleClick);
+			this.gridLR.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridLR_CellClick);
 			// 
 			// gridUR
 			// 
@@ -480,8 +480,8 @@ namespace OpenDental{
 			this.gridUR.TabIndex = 61;
 			this.gridUR.Title = "Upper Right Corner";
 			this.gridUR.TranslationName = "TableUpperRight";
-			this.gridUR.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridUR_CellDoubleClick);
-			this.gridUR.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridUR_CellClick);
+			this.gridUR.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridUR_CellDoubleClick);
+			this.gridUR.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridUR_CellClick);
 			// 
 			// gridMain
 			// 
@@ -495,8 +495,8 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 60;
 			this.gridMain.Title = "Main List";
 			this.gridMain.TranslationName = "TableMainList";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
 			// label8
 			// 
@@ -520,7 +520,7 @@ namespace OpenDental{
 			this.gridAvailable.TabIndex = 61;
 			this.gridAvailable.Title = "Available Rows";
 			this.gridAvailable.TranslationName = "TableAvailableRows";
-			this.gridAvailable.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAvailable_CellClick);
+			this.gridAvailable.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAvailable_CellClick);
 			// 
 			// gridApptFieldDefs
 			// 
@@ -534,7 +534,7 @@ namespace OpenDental{
 			this.gridApptFieldDefs.TabIndex = 62;
 			this.gridApptFieldDefs.Title = "Appt Field Defs";
 			this.gridApptFieldDefs.TranslationName = "TableApptFieldDefs";
-			this.gridApptFieldDefs.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridApptFieldDefs_CellClick);
+			this.gridApptFieldDefs.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridApptFieldDefs_CellClick);
 			// 
 			// gridPatFieldDefs
 			// 
@@ -548,7 +548,7 @@ namespace OpenDental{
 			this.gridPatFieldDefs.TabIndex = 63;
 			this.gridPatFieldDefs.Title = "Patient Field Defs";
 			this.gridPatFieldDefs.TranslationName = "TablePatFieldDefs";
-			this.gridPatFieldDefs.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPatFieldDefs_CellClick);
+			this.gridPatFieldDefs.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPatFieldDefs_CellClick);
 			// 
 			// comboClinic
 			// 

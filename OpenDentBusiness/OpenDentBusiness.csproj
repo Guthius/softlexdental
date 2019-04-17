@@ -371,6 +371,15 @@
     <Compile Include="TableTypes\ProcMultiVisit.cs" />
     <Compile Include="TableTypes\Reactivation.cs" />
     <Compile Include="TableTypes\ProviderClinicLink.cs" />
+    <Compile Include="UI\GridSelectionMode.cs" />
+    <Compile Include="UI\ODGridClickEventArgs.cs" />
+    <Compile Include="UI\ODGridKeyEventArgs.cs" />
+    <Compile Include="UI\ODGridPageEventArgs.cs" />
+    <Compile Include="UI\ODGridPageNav.Designer.cs">
+      <DependentUpon>ODGridPageNav.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ODGridSortingStrategy.cs" />
+    <Compile Include="UI\ODPrintRow.cs" />
     <Compile Include="UI\PrefBinding\IPrefBinding.cs" />
     <Compile Include="UI\PrefBinding\ODCheckBoxPref.cs">
       <SubType>Component</SubType>

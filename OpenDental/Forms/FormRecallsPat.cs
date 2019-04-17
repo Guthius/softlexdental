@@ -88,7 +88,7 @@ namespace OpenDental {
 				else{
 					cell=new ODGridCell(RecallList[i].DateDue.ToShortDateString());
 					if(RecallList[i].DateDue<DateTime.Today){
-						cell.Bold=YN.Yes;
+						cell.Bold= true;
 						cell.ColorText=Color.Firebrick;
 					}
 					row.Cells.Add(cell);

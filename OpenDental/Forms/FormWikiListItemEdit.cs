@@ -39,7 +39,7 @@ namespace OpenDental
             itemDataGrid.BeginUpdate();
             itemDataGrid.Columns.Clear();
             itemDataGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnColumn, 200));
-            itemDataGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnValue, 400, true));
+            itemDataGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnValue, 400, isEditable: true));
             itemDataGrid.Rows.Clear();
 
             for (int i = 1; i < itemDataTable.Columns.Count; i++)
@@ -104,10 +104,10 @@ namespace OpenDental
             pickListComboBox.Location =
                 new Point(
                     itemDataGrid.Rows[e.Row].RowLoc + itemDataGrid.Location.Y + itemDataGrid.HeaderHeight + itemDataGrid.TitleHeight + 1,
-                    itemDataGrid.Columns[0].ColWidth + itemDataGrid.Location.X + 1);
+                    itemDataGrid.Columns[0].Width + itemDataGrid.Location.X + 1);
 
             // Set the correct size of the combobox and display it.
-            pickListComboBox.Width = itemDataGrid.Columns[1].ColWidth + 1;
+            pickListComboBox.Width = itemDataGrid.Columns[1].Width + 1;
             pickListComboBox.Height = itemDataGrid.Rows[e.Row].RowHeight - 1;
             pickListComboBox.Visible = true;
             pickListComboBox.Focus();

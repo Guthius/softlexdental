@@ -176,7 +176,7 @@ namespace OpenDental{
 			this.gridCustomers.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridCustomers.TitleHeight = 18;
 			this.gridCustomers.TranslationName = "FormTaskEdit";
-			this.gridCustomers.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridCustomers_CellClick);
+			this.gridCustomers.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCustomers_CellClick);
 			this.gridCustomers.TitleAddClick += new System.EventHandler(this.gridCustomers_TitleAddClick);
 			// 
 			// tabSubscribers
@@ -209,7 +209,7 @@ namespace OpenDental{
 			this.gridSubscribers.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridSubscribers.TitleHeight = 18;
 			this.gridSubscribers.TranslationName = "FormTaskEdit";
-			this.gridSubscribers.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSubscribers_CellClick);
+			this.gridSubscribers.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSubscribers_CellClick);
 			this.gridSubscribers.TitleAddClick += new System.EventHandler(this.gridSubscribers_TitleAddClick);
 			// 
 			// tabRequests
@@ -242,7 +242,7 @@ namespace OpenDental{
 			this.gridFeatureReq.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridFeatureReq.TitleHeight = 18;
 			this.gridFeatureReq.TranslationName = "FormTaskEdit";
-			this.gridFeatureReq.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridFeatureReq_CellClick);
+			this.gridFeatureReq.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridFeatureReq_CellClick);
 			this.gridFeatureReq.TitleAddClick += new System.EventHandler(this.gridFeatureReq_TitleAddClick);
 			// 
 			// tabBugs
@@ -275,8 +275,8 @@ namespace OpenDental{
 			this.gridBugs.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridBugs.TitleHeight = 18;
 			this.gridBugs.TranslationName = "FormTaskEdit";
-			this.gridBugs.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridBugs_CellDoubleClick);
-			this.gridBugs.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridBugs_CellClick);
+			this.gridBugs.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridBugs_CellDoubleClick);
+			this.gridBugs.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridBugs_CellClick);
 			this.gridBugs.TitleAddClick += new System.EventHandler(this.gridBugs_TitleAddClick);
 			// 
 			// tabTasks
@@ -309,8 +309,8 @@ namespace OpenDental{
 			this.gridTasks.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridTasks.TitleHeight = 18;
 			this.gridTasks.TranslationName = "FormTaskEdit";
-			this.gridTasks.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridTasks_CellDoubleClick);
-			this.gridTasks.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridTasks_CellClick);
+			this.gridTasks.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTasks_CellDoubleClick);
+			this.gridTasks.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTasks_CellClick);
 			this.gridTasks.TitleAddClick += new System.EventHandler(this.gridTasks_TitleAddClick);
 			// 
 			// tabQuotes
@@ -343,8 +343,8 @@ namespace OpenDental{
 			this.gridQuotes.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridQuotes.TitleHeight = 18;
 			this.gridQuotes.TranslationName = "FormTaskEdit";
-			this.gridQuotes.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridQuotes_CellDoubleClick);
-			this.gridQuotes.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridQuotes_CellClick);
+			this.gridQuotes.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridQuotes_CellDoubleClick);
+			this.gridQuotes.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridQuotes_CellClick);
 			this.gridQuotes.TitleAddClick += new System.EventHandler(this.gridCustomerQuotes_TitleAddClick);
 			// 
 			// tableLayoutPanel1

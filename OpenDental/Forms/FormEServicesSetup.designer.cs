@@ -1235,7 +1235,7 @@ namespace OpenDental{
 			this.gridPatPortalInviteRules.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridPatPortalInviteRules.TitleHeight = 18;
 			this.gridPatPortalInviteRules.TranslationName = "TableInviteRules";
-			this.gridPatPortalInviteRules.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPatPortalInviteRules_CellDoubleClick);
+			this.gridPatPortalInviteRules.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPatPortalInviteRules_CellDoubleClick);
 			// 
 			// checkIsPPInvitesEnabled
 			// 
@@ -2992,7 +2992,7 @@ namespace OpenDental{
 			this.gridConfStatuses.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridConfStatuses.TitleHeight = 18;
 			this.gridConfStatuses.TranslationName = "TableStatuses";
-			this.gridConfStatuses.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridConfStatuses_CellDoubleClick);
+			this.gridConfStatuses.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridConfStatuses_CellDoubleClick);
 			// 
 			// checkUseDefaultsEC
 			// 
@@ -3273,7 +3273,7 @@ namespace OpenDental{
 			this.gridRemindersMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridRemindersMain.TitleHeight = 18;
 			this.gridRemindersMain.TranslationName = "TableRules";
-			this.gridRemindersMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridRemindersMain_CellDoubleClick);
+			this.gridRemindersMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridRemindersMain_CellDoubleClick);
 			// 
 			// tabMisc
 			// 

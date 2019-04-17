@@ -289,17 +289,17 @@ namespace OpenDental {
       int colPatientPixCount=140;
       int variableWidth=gridInbox.Width-10-colFromPixCount-colReceivedDatePixCount-colMessageTypePixCount-colSigPixCount-colPatientPixCount;
 			gridInbox.Columns.Add(new UI.ODGridColumn(Lan.g(this,"From"),colFromPixCount,HorizontalAlignment.Left));//0
-      gridInbox.Columns[gridInbox.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
+      gridInbox.Columns[gridInbox.Columns.Count-1].SortingStrategy=UI.ODGridSortingStrategy.StringCompare;
 			gridInbox.Columns.Add(new UI.ODGridColumn(Lan.g(this,"Subject"),variableWidth,HorizontalAlignment.Left));//1
-			gridInbox.Columns[gridInbox.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
+			gridInbox.Columns[gridInbox.Columns.Count-1].SortingStrategy=UI.ODGridSortingStrategy.StringCompare;
 			gridInbox.Columns.Add(new UI.ODGridColumn(Lan.g(this,"Date Received"),colReceivedDatePixCount,HorizontalAlignment.Left));//2
-			gridInbox.Columns[gridInbox.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.DateParse;
+			gridInbox.Columns[gridInbox.Columns.Count-1].SortingStrategy=UI.ODGridSortingStrategy.DateParse;
 			gridInbox.Columns.Add(new UI.ODGridColumn(Lan.g(this,"MessageType"),colMessageTypePixCount,HorizontalAlignment.Left));//3
-			gridInbox.Columns[gridInbox.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
+			gridInbox.Columns[gridInbox.Columns.Count-1].SortingStrategy=UI.ODGridSortingStrategy.StringCompare;
 			gridInbox.Columns.Add(new UI.ODGridColumn(Lan.g(this,"Sig"),colSigPixCount,HorizontalAlignment.Center));//4
-			gridInbox.Columns[gridInbox.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
+			gridInbox.Columns[gridInbox.Columns.Count-1].SortingStrategy=UI.ODGridSortingStrategy.StringCompare;
 			gridInbox.Columns.Add(new UI.ODGridColumn(Lan.g(this,"Patient"),colPatientPixCount,HorizontalAlignment.Left));//5
-      gridInbox.Columns[gridInbox.Columns.Count-1].SortingStrategy=UI.GridSortingStrategy.StringCompare;
+      gridInbox.Columns[gridInbox.Columns.Count-1].SortingStrategy=UI.ODGridSortingStrategy.StringCompare;
       List<EmailMessage> listEmailsFiltered;
       if(_isSearching) { //if searching, use the search list. Should already be filled.
         listEmailsFiltered=_listInboxSearched.Where(x => EmailMessages.GetAddressSimple(x.RecipientAddress).Contains(AddressCur.EmailUsername)).ToList();
@@ -402,22 +402,22 @@ namespace OpenDental {
       gridSent.Columns.Clear();
       //add columns
       ODGridColumn col=new ODGridColumn("Sent To",colSentToPixCount,HorizontalAlignment.Left);
-      col.SortingStrategy=GridSortingStrategy.StringCompare;
+      col.SortingStrategy=ODGridSortingStrategy.StringCompare;
       gridSent.Columns.Add(col);
       col=new ODGridColumn("Subject",variableWidth,HorizontalAlignment.Left);
-      col.SortingStrategy=GridSortingStrategy.StringCompare;
+      col.SortingStrategy=ODGridSortingStrategy.StringCompare;
       gridSent.Columns.Add(col);
       col=new ODGridColumn("Date Sent",colSentDatePixCount,HorizontalAlignment.Left);
-      col.SortingStrategy=GridSortingStrategy.DateParse;
+      col.SortingStrategy=ODGridSortingStrategy.DateParse;
       gridSent.Columns.Add(col);
       col=new ODGridColumn("MsgType",colMessageTypePixCount,HorizontalAlignment.Left);
-      col.SortingStrategy=GridSortingStrategy.StringCompare;
+      col.SortingStrategy=ODGridSortingStrategy.StringCompare;
       gridSent.Columns.Add(col);
       col=new ODGridColumn("Sig",colSigPixCount,HorizontalAlignment.Center);
-      col.SortingStrategy=GridSortingStrategy.StringCompare;
+      col.SortingStrategy=ODGridSortingStrategy.StringCompare;
       gridSent.Columns.Add(col);
       col=new ODGridColumn("Patient",colPatientPixCount,HorizontalAlignment.Left);
-      col.SortingStrategy=GridSortingStrategy.StringCompare;
+      col.SortingStrategy=ODGridSortingStrategy.StringCompare;
       gridSent.Columns.Add(col);
       gridSent.Rows.Clear();
       List<EmailMessage> listEmailsFiltered;

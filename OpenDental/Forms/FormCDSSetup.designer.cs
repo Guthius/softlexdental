@@ -45,7 +45,7 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 60;
 			this.gridMain.Title = "Users";
 			this.gridMain.TranslationName = "TableSecurity";
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
 			// radioGroup
 			// 

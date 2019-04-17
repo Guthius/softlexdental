@@ -155,10 +155,10 @@ namespace OpenDental {
 			col=new ODGridColumn("Filler Specimen ID",120);//lab assigned specimen ID
 			gridLabs.Columns.Add(col);
 			col=new ODGridColumn("Date & Time Entered",135);
-			col.SortingStrategy=GridSortingStrategy.DateParse;
+			col.SortingStrategy=ODGridSortingStrategy.DateParse;
 			gridLabs.Columns.Add(col);
 			col=new ODGridColumn("Date & Time Reported",135);
-			col.SortingStrategy=GridSortingStrategy.DateParse;
+			col.SortingStrategy=ODGridSortingStrategy.DateParse;
 			gridLabs.Columns.Add(col);
 			gridLabs.Rows.Clear();
 			ODGridRow row;

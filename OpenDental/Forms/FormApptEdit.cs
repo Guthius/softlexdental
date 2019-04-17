@@ -665,7 +665,7 @@ namespace OpenDental{
 				row.Cells.Add(table.Rows[i]["value"].ToString());
 				if(table.Rows[i]["field"].ToString().EndsWith("Phone")  && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
 					row.Cells[row.Cells.Count-1].ColorText=System.Drawing.Color.Blue;
-					row.Cells[row.Cells.Count-1].Underline=YN.Yes;
+					row.Cells[row.Cells.Count-1].Underline=true;
 				}
 				gridPatient.Rows.Add(row);
 			}
@@ -1369,7 +1369,7 @@ namespace OpenDental{
 		private void gridPatient_CellClick(object sender,ODGridClickEventArgs e) {
 			ODGridCell gridCellCur=gridPatient.Rows[e.Row].Cells[e.Col];
 			//Only grid cells with phone numbers are blue and underlined.
-			if(gridCellCur.ColorText==System.Drawing.Color.Blue && gridCellCur.Underline==YN.Yes && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
+			if(gridCellCur.ColorText==System.Drawing.Color.Blue && gridCellCur.Underline==true && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
 				DentalTek.PlaceCall(gridCellCur.Text);
 			}
 		}

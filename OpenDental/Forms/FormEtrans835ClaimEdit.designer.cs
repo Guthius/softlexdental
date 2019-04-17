@@ -306,7 +306,7 @@ namespace OpenDental{
 			this.gridClaimAdjustments.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridClaimAdjustments.TitleHeight = 18;
 			this.gridClaimAdjustments.TranslationName = "FormEtrans835Edit";
-			this.gridClaimAdjustments.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridClaimAdjustments_CellDoubleClick);
+			this.gridClaimAdjustments.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridClaimAdjustments_CellDoubleClick);
 			// 
 			// gridAdjudicationInfo
 			// 
@@ -330,7 +330,7 @@ namespace OpenDental{
 			this.gridAdjudicationInfo.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridAdjudicationInfo.TitleHeight = 18;
 			this.gridAdjudicationInfo.TranslationName = "FormEtrans835Edit";
-			this.gridAdjudicationInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAdjudicationInfo_CellDoubleClick);
+			this.gridAdjudicationInfo.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAdjudicationInfo_CellDoubleClick);
 			// 
 			// gridProcedureBreakdown
 			// 
@@ -355,7 +355,7 @@ namespace OpenDental{
 			this.gridProcedureBreakdown.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridProcedureBreakdown.TitleHeight = 18;
 			this.gridProcedureBreakdown.TranslationName = "FormEtrans835Edit";
-			this.gridProcedureBreakdown.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridProcedureBreakdown_CellDoubleClick);
+			this.gridProcedureBreakdown.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProcedureBreakdown_CellDoubleClick);
 			// 
 			// butClose
 			// 
@@ -394,7 +394,7 @@ namespace OpenDental{
 			this.gridSupplementalInfo.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridSupplementalInfo.TitleHeight = 18;
 			this.gridSupplementalInfo.TranslationName = "FormEtrans835Edit";
-			this.gridSupplementalInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSupplementalInfo_CellDoubleClick);
+			this.gridSupplementalInfo.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSupplementalInfo_CellDoubleClick);
 			// 
 			// textDatePayerReceived
 			// 

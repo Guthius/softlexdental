@@ -40,10 +40,10 @@ namespace OpenDental {
 			gridMain.Columns.Clear();
 			ODGridColumn col;
 			col=new ODGridColumn("PatNum",60,HorizontalAlignment.Center);
-			col.SortingStrategy=GridSortingStrategy.AmountParse;
+			col.SortingStrategy=ODGridSortingStrategy.AmountParse;
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Full Name",200);
-			col.SortingStrategy=GridSortingStrategy.StringCompare;
+			col.SortingStrategy=ODGridSortingStrategy.StringCompare;
 			gridMain.Columns.Add(col);
 			for(int i=0;i<elementList.Count;i++) {
 				if(orderByColumn==-1 && elementList[i].OrderBy) {
@@ -55,7 +55,7 @@ namespace OpenDental {
 				switch(elementList[i].Restriction) {
 					case EhrRestrictionType.Birthdate:
 						col=new ODGridColumn("Birthdate",80,HorizontalAlignment.Center);
-						col.SortingStrategy=GridSortingStrategy.DateParse;
+						col.SortingStrategy=ODGridSortingStrategy.DateParse;
 						gridMain.Columns.Add(col);
 						break;
 					case EhrRestrictionType.Gender:
@@ -64,19 +64,19 @@ namespace OpenDental {
 						break;
 					case EhrRestrictionType.LabResult:
 						colWidth=System.Convert.ToInt32(g.MeasureString("Lab Value: "+elementList[i].CompareString,this.Font).Width);
-						col.SortingStrategy=GridSortingStrategy.AmountParse;
+						col.SortingStrategy=ODGridSortingStrategy.AmountParse;
 						colWidth=colWidth+(colWidth/10);//Add 10%
 						col=new ODGridColumn("Lab Value: "+elementList[i].CompareString,colWidth,HorizontalAlignment.Center);
 						gridMain.Columns.Add(col);
 						break;
 					case EhrRestrictionType.Medication:
 						col=new ODGridColumn("Medication",90,HorizontalAlignment.Center);
-						col.SortingStrategy=GridSortingStrategy.StringCompare;
+						col.SortingStrategy=ODGridSortingStrategy.StringCompare;
 						gridMain.Columns.Add(col);
 						break;
 					case EhrRestrictionType.Problem:
 						col=new ODGridColumn("Disease",160,HorizontalAlignment.Center);
-						col.SortingStrategy=GridSortingStrategy.StringCompare;
+						col.SortingStrategy=ODGridSortingStrategy.StringCompare;
 						gridMain.Columns.Add(col);
 						break;
 					default:

@@ -50,7 +50,7 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 5;
 			this.gridMain.Title = "CDS Interventions";
 			this.gridMain.TranslationName = "";
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
 			// butOK
 			// 

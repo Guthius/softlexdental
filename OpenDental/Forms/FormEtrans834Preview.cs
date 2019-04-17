@@ -40,17 +40,17 @@ namespace OpenDental {
 			gridInsPlans.BeginUpdate();
 			if(gridInsPlans.Columns.Count==0) {
 				gridInsPlans.Columns.Clear();
-				gridInsPlans.Columns.Add(new UI.ODGridColumn("Name",200,HorizontalAlignment.Left,UI.GridSortingStrategy.StringCompare));
-				gridInsPlans.Columns.Add(new UI.ODGridColumn("Birthdate",74,HorizontalAlignment.Center,UI.GridSortingStrategy.DateParse));
-				gridInsPlans.Columns.Add(new UI.ODGridColumn("SSN",66,HorizontalAlignment.Center,UI.GridSortingStrategy.StringCompare));
+				gridInsPlans.Columns.Add(new UI.ODGridColumn("Name",200,sortingStrategy: UI.ODGridSortingStrategy.StringCompare));
+				gridInsPlans.Columns.Add(new UI.ODGridColumn("Birthdate",74, textAlignment: HorizontalAlignment.Center, sortingStrategy: UI.ODGridSortingStrategy.DateParse));
+				gridInsPlans.Columns.Add(new UI.ODGridColumn("SSN",66, textAlignment: HorizontalAlignment.Center));
 				_patNumCol=gridInsPlans.Columns.Count;
-				gridInsPlans.Columns.Add(new UI.ODGridColumn("PatNum",68,HorizontalAlignment.Center,UI.GridSortingStrategy.StringCompare));
-				gridInsPlans.Columns.Add(new UI.ODGridColumn("Date Begin",84,HorizontalAlignment.Center,UI.GridSortingStrategy.DateParse));
-				gridInsPlans.Columns.Add(new UI.ODGridColumn("Date Term",84,HorizontalAlignment.Center,UI.GridSortingStrategy.DateParse));
-				gridInsPlans.Columns.Add(new UI.ODGridColumn("Relation",70,HorizontalAlignment.Center,UI.GridSortingStrategy.StringCompare));
-				gridInsPlans.Columns.Add(new UI.ODGridColumn("SubscriberID",96,HorizontalAlignment.Left,UI.GridSortingStrategy.StringCompare));
-				gridInsPlans.Columns.Add(new UI.ODGridColumn("GroupNum",100,HorizontalAlignment.Left,UI.GridSortingStrategy.StringCompare));
-				gridInsPlans.Columns.Add(new UI.ODGridColumn("Payer",0,HorizontalAlignment.Left,UI.GridSortingStrategy.StringCompare));
+				gridInsPlans.Columns.Add(new UI.ODGridColumn("PatNum",68, textAlignment: HorizontalAlignment.Center));
+				gridInsPlans.Columns.Add(new UI.ODGridColumn("Date Begin",84, textAlignment: HorizontalAlignment.Center, sortingStrategy: UI.ODGridSortingStrategy.DateParse));
+				gridInsPlans.Columns.Add(new UI.ODGridColumn("Date Term",84, textAlignment: HorizontalAlignment.Center, sortingStrategy: UI.ODGridSortingStrategy.DateParse));
+				gridInsPlans.Columns.Add(new UI.ODGridColumn("Relation",70, textAlignment: HorizontalAlignment.Center));
+				gridInsPlans.Columns.Add(new UI.ODGridColumn("SubscriberID",96));
+				gridInsPlans.Columns.Add(new UI.ODGridColumn("GroupNum",100));
+				gridInsPlans.Columns.Add(new UI.ODGridColumn("Payer",0));
 				_sortedByColumnIdx=0;//Sort by Patient Last Name by default.
 				_isSortAscending=true;//Start with A and progress to Z.
 			}

@@ -1497,13 +1497,13 @@ namespace OpenDental {
 					cell=new ODGridCell(Rows[i].NewValDisplay);
 					if(Rows[i].IsFlagged) {
 						cell.ColorText=Color.Firebrick;
-						cell.Bold=YN.Yes;
+						cell.Bold=true;
 					}
 					row.Cells.Add(cell);
 					cell=new ODGridCell(Rows[i].ImpValDisplay);
 					if(Rows[i].IsFlaggedImp) {
 						cell.ColorText=Color.Firebrick;
-						cell.Bold=YN.Yes;
+						cell.Bold= true;
 					}
 					row.Cells.Add(cell);
 					if(Rows[i].DoImport) {

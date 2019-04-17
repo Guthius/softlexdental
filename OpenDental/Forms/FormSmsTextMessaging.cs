@@ -290,19 +290,19 @@ namespace OpenDental {
 			gridMessages.BeginUpdate();
 			gridMessages.Rows.Clear();
 			gridMessages.Columns.Clear();
-			gridMessages.Columns.Add(new UI.ODGridColumn("DateTime",140,HorizontalAlignment.Left) { SortingStrategy=UI.GridSortingStrategy.DateParse });
-			gridMessages.Columns.Add(new UI.ODGridColumn("Sent /\r\nReceived",80,HorizontalAlignment.Center){SortingStrategy=UI.GridSortingStrategy.StringCompare} );
-			gridMessages.Columns.Add(new UI.ODGridColumn("Status",70,HorizontalAlignment.Center) { SortingStrategy=UI.GridSortingStrategy.StringCompare });
+			gridMessages.Columns.Add(new UI.ODGridColumn("DateTime",140,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.DateParse });
+			gridMessages.Columns.Add(new UI.ODGridColumn("Sent /\r\nReceived",80,HorizontalAlignment.Center){SortingStrategy=UI.ODGridSortingStrategy.StringCompare} );
+			gridMessages.Columns.Add(new UI.ODGridColumn("Status",70,HorizontalAlignment.Center) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
 			_columnStatusIdx=gridMessages.Columns.Count-1;
-			gridMessages.Columns.Add(new UI.ODGridColumn("#Phone\r\nMatches",60,HorizontalAlignment.Center) { SortingStrategy=UI.GridSortingStrategy.AmountParse });
-			gridMessages.Columns.Add(new UI.ODGridColumn("Patient\r\nPhone",100,HorizontalAlignment.Center) { SortingStrategy=UI.GridSortingStrategy.StringCompare });
-			gridMessages.Columns.Add(new UI.ODGridColumn("Patient",150,HorizontalAlignment.Left) { SortingStrategy=UI.GridSortingStrategy.StringCompare });
-			gridMessages.Columns.Add(new UI.ODGridColumn("Cost",32,HorizontalAlignment.Right) { SortingStrategy=UI.GridSortingStrategy.AmountParse });
+			gridMessages.Columns.Add(new UI.ODGridColumn("#Phone\r\nMatches",60,HorizontalAlignment.Center) { SortingStrategy=UI.ODGridSortingStrategy.AmountParse });
+			gridMessages.Columns.Add(new UI.ODGridColumn("Patient\r\nPhone",100,HorizontalAlignment.Center) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
+			gridMessages.Columns.Add(new UI.ODGridColumn("Patient",150,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
+			gridMessages.Columns.Add(new UI.ODGridColumn("Cost",32,HorizontalAlignment.Right) { SortingStrategy=UI.ODGridSortingStrategy.AmountParse });
 			if(PrefC.HasClinicsEnabled) {
-				gridMessages.Columns.Add(new UI.ODGridColumn("Clinic",130,HorizontalAlignment.Left) { SortingStrategy=UI.GridSortingStrategy.StringCompare });
+				gridMessages.Columns.Add(new UI.ODGridColumn("Clinic",130,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
 			}
 			if(checkHidden.Checked) {
-				gridMessages.Columns.Add(new UI.ODGridColumn("Hidden",46,HorizontalAlignment.Center){SortingStrategy=UI.GridSortingStrategy.StringCompare});
+				gridMessages.Columns.Add(new UI.ODGridColumn("Hidden",46,HorizontalAlignment.Center){SortingStrategy=UI.ODGridSortingStrategy.StringCompare});
 			}
 			foreach(SmsFromMobile smsFromMobile in _listSmsFromMobile) {
 				if(!checkHidden.Checked && smsFromMobile.IsHidden) {
@@ -422,15 +422,15 @@ namespace OpenDental {
 			gridMessages.BeginUpdate();
 			gridMessages.Rows.Clear();
 			gridMessages.Columns.Clear();
-			gridMessages.Columns.Add(new UI.ODGridColumn("DateTime",140,HorizontalAlignment.Left) { SortingStrategy=UI.GridSortingStrategy.DateParse });
-			gridMessages.Columns.Add(new UI.ODGridColumn("Status",100,HorizontalAlignment.Left) { SortingStrategy=UI.GridSortingStrategy.StringCompare });
+			gridMessages.Columns.Add(new UI.ODGridColumn("DateTime",140,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.DateParse });
+			gridMessages.Columns.Add(new UI.ODGridColumn("Status",100,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
 			_columnStatusIdx=gridMessages.Columns.Count-1;
-			gridMessages.Columns.Add(new UI.ODGridColumn("Patient\r\nPhone",100,HorizontalAlignment.Center) { SortingStrategy=UI.GridSortingStrategy.StringCompare });
-			gridMessages.Columns.Add(new UI.ODGridColumn("Patient",150,HorizontalAlignment.Left) { SortingStrategy=UI.GridSortingStrategy.StringCompare });
+			gridMessages.Columns.Add(new UI.ODGridColumn("Patient\r\nPhone",100,HorizontalAlignment.Center) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
+			gridMessages.Columns.Add(new UI.ODGridColumn("Patient",150,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
 			if(PrefC.HasClinicsEnabled) {
-				gridMessages.Columns.Add(new UI.ODGridColumn("Clinic",130,HorizontalAlignment.Left) { SortingStrategy=UI.GridSortingStrategy.StringCompare });
+				gridMessages.Columns.Add(new UI.ODGridColumn("Clinic",130,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
 			}
-			gridMessages.Columns.Add(new UI.ODGridColumn("Latest Message",150,HorizontalAlignment.Left) { SortingStrategy=UI.GridSortingStrategy.StringCompare });			
+			gridMessages.Columns.Add(new UI.ODGridColumn("Latest Message",150,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });			
 			List<TextMessageGrouped> groupAll=GetMessageGroups();
 			foreach(TextMessageGrouped sms in groupAll) {				
 				UI.ODGridRow row=new UI.ODGridRow();

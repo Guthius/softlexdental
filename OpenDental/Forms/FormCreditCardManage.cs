@@ -49,7 +49,7 @@ namespace OpenDental {
 			if(PrefC.HasOnlinePaymentEnabled()) {
 				gridMain.Columns.Add(new ODGridColumn("XWeb",45,HorizontalAlignment.Center));
 			}
-			if(gridMain.Columns.Sum(x => x.ColWidth) > gridMain.Width) {
+			if(gridMain.Columns.Sum(x => x.Width) > gridMain.Width) {
 				gridMain.HScrollVisible=true;
 			}
 			gridMain.Rows.Clear();

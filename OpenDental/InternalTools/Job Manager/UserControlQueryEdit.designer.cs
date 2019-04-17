@@ -133,7 +133,7 @@
 			this.gridFiles.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridFiles.TitleHeight = 18;
 			this.gridFiles.TranslationName = "";
-			this.gridFiles.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridFiles_CellDoubleClick);
+			this.gridFiles.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridFiles_CellDoubleClick);
 			this.gridFiles.TitleAddClick += new System.EventHandler(this.gridFiles_TitleAddClick);
 			this.gridFiles.MouseMove += new System.Windows.Forms.MouseEventHandler(this.gridFiles_MouseMove);
 			// 
@@ -157,8 +157,8 @@
 			this.gridAppointments.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridAppointments.TitleHeight = 18;
 			this.gridAppointments.TranslationName = "FormTaskEdit";
-			this.gridAppointments.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAppointments_CellDoubleClick);
-			this.gridAppointments.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAppointments_CellClick);
+			this.gridAppointments.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAppointments_CellDoubleClick);
+			this.gridAppointments.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAppointments_CellClick);
 			this.gridAppointments.TitleAddClick += new System.EventHandler(this.gridAppointments_TitleAddClick);
 			// 
 			// gridTasks
@@ -181,8 +181,8 @@
 			this.gridTasks.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridTasks.TitleHeight = 18;
 			this.gridTasks.TranslationName = "FormTaskEdit";
-			this.gridTasks.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridTasks_CellDoubleClick);
-			this.gridTasks.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridTasks_CellClick);
+			this.gridTasks.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTasks_CellDoubleClick);
+			this.gridTasks.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTasks_CellClick);
 			this.gridTasks.TitleAddClick += new System.EventHandler(this.gridTasks_TitleAddClick);
 			// 
 			// panel3
@@ -820,7 +820,7 @@
 			this.gridNotes.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridNotes.TitleHeight = 18;
 			this.gridNotes.TranslationName = "FormTaskEdit";
-			this.gridNotes.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridNotes_CellDoubleClick);
+			this.gridNotes.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridNotes_CellDoubleClick);
 			this.gridNotes.TitleAddClick += new System.EventHandler(this.gridNotes_TitleAddClick);
 			// 
 			// tabReviews
@@ -855,7 +855,7 @@
 			this.gridReview.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridReview.TitleHeight = 18;
 			this.gridReview.TranslationName = "TableReviews";
-			this.gridReview.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridReview_CellDoubleClick);
+			this.gridReview.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridReview_CellDoubleClick);
 			this.gridReview.TitleAddClick += new System.EventHandler(this.gridReview_TitleAddClick);
 			// 
 			// tabHistory
@@ -901,7 +901,7 @@
 			this.gridHistory.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridHistory.TitleHeight = 18;
 			this.gridHistory.TranslationName = "TableHistory";
-			this.gridHistory.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridHistory_CellDoubleClick);
+			this.gridHistory.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridHistory_CellDoubleClick);
 			// 
 			// panel1
 			// 

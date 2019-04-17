@@ -206,7 +206,7 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 60;
 			this.gridMain.Title = "Criteria Used";
 			this.gridMain.TranslationName = "FormEvaluationDefEdit";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butOK
 			// 

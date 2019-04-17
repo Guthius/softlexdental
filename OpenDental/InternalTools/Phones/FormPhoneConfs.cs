@@ -33,12 +33,12 @@ namespace OpenDental {
 			gridConfRoom.BeginUpdate();
 			gridConfRoom.Columns.Clear();
 			//No translations due to HQ only.
-			gridConfRoom.Columns.Add(new ODGridColumn("Extension",70,HorizontalAlignment.Center,GridSortingStrategy.AmountParse));
-			gridConfRoom.Columns.Add(new ODGridColumn("MsgBtn",60,HorizontalAlignment.Center,GridSortingStrategy.AmountParse));
+			gridConfRoom.Columns.Add(new ODGridColumn("Extension",70,HorizontalAlignment.Center,ODGridSortingStrategy.AmountParse));
+			gridConfRoom.Columns.Add(new ODGridColumn("MsgBtn",60,HorizontalAlignment.Center,ODGridSortingStrategy.AmountParse));
 			gridConfRoom.Columns.Add(new ODGridColumn("Site",100));
 			gridConfRoom.Columns.Add(new ODGridColumn("UserReserved",100));
-			gridConfRoom.Columns.Add(new ODGridColumn("DateTimeReserved",110,HorizontalAlignment.Center,GridSortingStrategy.DateParse));
-			gridConfRoom.Columns.Add(new ODGridColumn("Occupants",0,HorizontalAlignment.Center,GridSortingStrategy.AmountParse));
+			gridConfRoom.Columns.Add(new ODGridColumn("DateTimeReserved",110,HorizontalAlignment.Center,ODGridSortingStrategy.DateParse));
+			gridConfRoom.Columns.Add(new ODGridColumn("Occupants",0,HorizontalAlignment.Center,ODGridSortingStrategy.AmountParse));
 			gridConfRoom.Rows.Clear();
 			ODGridRow row;
 			foreach(PhoneConf conf in listPhoneConfs) {

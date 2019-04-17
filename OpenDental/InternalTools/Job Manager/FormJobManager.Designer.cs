@@ -247,7 +247,7 @@
 			this.gridPatternReview.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridPatternReview.TitleHeight = 18;
 			this.gridPatternReview.TranslationName = "FormJobManager";
-			this.gridPatternReview.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPatternReview_CellClick);
+			this.gridPatternReview.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPatternReview_CellClick);
 			// 
 			// tabAction
 			// 
@@ -297,8 +297,8 @@
 			this.gridAction.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridAction.TitleHeight = 18;
 			this.gridAction.TranslationName = "FormJobManager";
-			this.gridAction.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAction_CellDoubleClick);
-			this.gridAction.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAction_CellClick);
+			this.gridAction.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAction_CellDoubleClick);
+			this.gridAction.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAction_CellClick);
 			this.gridAction.MouseMove += new System.Windows.Forms.MouseEventHandler(this.gridAction_MouseMove);
 			// 
 			// tabSpecialProjects
@@ -349,8 +349,8 @@
 			this.gridSpecial.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridSpecial.TitleHeight = 18;
 			this.gridSpecial.TranslationName = "FormTaskEdit";
-			this.gridSpecial.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSpecial_CellDoubleClick);
-			this.gridSpecial.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSpecial_CellClick);
+			this.gridSpecial.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSpecial_CellDoubleClick);
+			this.gridSpecial.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSpecial_CellClick);
 			// 
 			// tabDocumentation
 			// 
@@ -406,8 +406,8 @@
 			this.gridDocumentation.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridDocumentation.TitleHeight = 18;
 			this.gridDocumentation.TranslationName = "FormTaskEdit";
-			this.gridDocumentation.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridDocumentation_CellDoubleClick);
-			this.gridDocumentation.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridDocumention_CellClick);
+			this.gridDocumentation.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridDocumentation_CellDoubleClick);
+			this.gridDocumentation.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridDocumention_CellClick);
 			// 
 			// tabTesting
 			// 
@@ -509,8 +509,8 @@
 			this.gridTesting.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridTesting.TitleHeight = 18;
 			this.gridTesting.TranslationName = "FormTaskEdit";
-			this.gridTesting.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridTesting_CellDoubleClick);
-			this.gridTesting.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridTesting_CellClick);
+			this.gridTesting.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTesting_CellDoubleClick);
+			this.gridTesting.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTesting_CellClick);
 			// 
 			// tabQuery
 			// 
@@ -634,8 +634,8 @@
 			this.gridQueries.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridQueries.TitleHeight = 18;
 			this.gridQueries.TranslationName = "Job Edit";
-			this.gridQueries.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridQueries_CellDoubleClick);
-			this.gridQueries.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridQueries_CellClick);
+			this.gridQueries.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridQueries_CellDoubleClick);
+			this.gridQueries.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridQueries_CellClick);
 			// 
 			// tabNotify
 			// 
@@ -669,8 +669,8 @@
 			this.gridNotify.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridNotify.TitleHeight = 18;
 			this.gridNotify.TranslationName = "FormTaskEdit";
-			this.gridNotify.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridNotify_CellDoubleClick);
-			this.gridNotify.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridNotify_CellClick);
+			this.gridNotify.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridNotify_CellDoubleClick);
+			this.gridNotify.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridNotify_CellClick);
 			// 
 			// tabSubscribed
 			// 
@@ -720,8 +720,8 @@
 			this.gridSubscribedJobs.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridSubscribedJobs.TitleHeight = 18;
 			this.gridSubscribedJobs.TranslationName = "Job Edit";
-			this.gridSubscribedJobs.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSubscribedJobs_CellDoubleClick);
-			this.gridSubscribedJobs.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSubscribedJobs_CellClick);
+			this.gridSubscribedJobs.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSubscribedJobs_CellDoubleClick);
+			this.gridSubscribedJobs.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSubscribedJobs_CellClick);
 			// 
 			// tabNeedsEngineer
 			// 
@@ -756,8 +756,8 @@
 			this.gridAvailableJobs.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridAvailableJobs.TitleHeight = 18;
 			this.gridAvailableJobs.TranslationName = "Job Edit";
-			this.gridAvailableJobs.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAvailableJobs_CellDoubleClick);
-			this.gridAvailableJobs.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAvailableJobs_CellClick);
+			this.gridAvailableJobs.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAvailableJobs_CellDoubleClick);
+			this.gridAvailableJobs.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAvailableJobs_CellClick);
 			// 
 			// tabNeedsExpert
 			// 
@@ -792,8 +792,8 @@
 			this.gridAvailableJobsExpert.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridAvailableJobsExpert.TitleHeight = 18;
 			this.gridAvailableJobsExpert.TranslationName = "Job Edit";
-			this.gridAvailableJobsExpert.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAvailableJobsExpert_CellDoubleClick);
-			this.gridAvailableJobsExpert.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAvailableJobsExpert_CellClick);
+			this.gridAvailableJobsExpert.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAvailableJobsExpert_CellDoubleClick);
+			this.gridAvailableJobsExpert.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAvailableJobsExpert_CellClick);
 			// 
 			// tabOnHold
 			// 
@@ -828,8 +828,8 @@
 			this.gridJobsOnHold.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridJobsOnHold.TitleHeight = 18;
 			this.gridJobsOnHold.TranslationName = "Job Edit";
-			this.gridJobsOnHold.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridJobsOnHold_CellDoubleClick);
-			this.gridJobsOnHold.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridJobsOnHold_CellClick);
+			this.gridJobsOnHold.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridJobsOnHold_CellDoubleClick);
+			this.gridJobsOnHold.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridJobsOnHold_CellClick);
 			// 
 			// tabSearch
 			// 
@@ -958,8 +958,8 @@
 			this.gridSearch.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridSearch.TitleHeight = 18;
 			this.gridSearch.TranslationName = "Job Edit";
-			this.gridSearch.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSearch_CellDoubleClick);
-			this.gridSearch.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSearch_CellClick);
+			this.gridSearch.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSearch_CellDoubleClick);
+			this.gridSearch.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSearch_CellClick);
 			// 
 			// tabTree
 			// 

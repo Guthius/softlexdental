@@ -151,8 +151,8 @@ namespace OpenDental{
 			this.gridSuperFam.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridSuperFam.TitleHeight = 18;
 			this.gridSuperFam.TranslationName = "TableSuper";
-			this.gridSuperFam.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSuperFam_CellDoubleClick);
-			this.gridSuperFam.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSuperFam_CellClick);
+            this.gridSuperFam.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSuperFam_CellDoubleClick);
+			this.gridSuperFam.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSuperFam_CellClick);
 			// 
 			// gridRecall
 			// 
@@ -173,7 +173,7 @@ namespace OpenDental{
 			this.gridRecall.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridRecall.TitleHeight = 18;
 			this.gridRecall.TranslationName = "TableRecall";
-			this.gridRecall.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridRecall_CellDoubleClick);
+			this.gridRecall.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridRecall_CellDoubleClick);
 			this.gridRecall.DoubleClick += new System.EventHandler(this.gridRecall_DoubleClick);
 			// 
 			// gridFamily
@@ -195,8 +195,8 @@ namespace OpenDental{
 			this.gridFamily.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridFamily.TitleHeight = 18;
 			this.gridFamily.TranslationName = "TableFamily";
-			this.gridFamily.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridFamily_CellDoubleClick);
-			this.gridFamily.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridFamily_CellClick);
+			this.gridFamily.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridFamily_CellDoubleClick);
+			this.gridFamily.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridFamily_CellClick);
 			// 
 			// gridPat
 			// 
@@ -219,8 +219,8 @@ namespace OpenDental{
 			this.gridPat.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridPat.TitleHeight = 18;
 			this.gridPat.TranslationName = "TablePatient";
-			this.gridPat.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPat_CellDoubleClick);
-			this.gridPat.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPat_CellClick);
+			this.gridPat.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPat_CellDoubleClick);
+			this.gridPat.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPat_CellClick);
 			// 
 			// gridIns
 			// 
@@ -244,7 +244,7 @@ namespace OpenDental{
 			this.gridIns.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridIns.TitleHeight = 18;
 			this.gridIns.TranslationName = "TableCoverage";
-			this.gridIns.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridIns_CellDoubleClick);
+			this.gridIns.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridIns_CellDoubleClick);
 			// 
 			// splitSuperClones
 			// 
@@ -286,7 +286,7 @@ namespace OpenDental{
 			this.gridPatientClones.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridPatientClones.TitleHeight = 18;
 			this.gridPatientClones.TranslationName = "TablePatientClones";
-			this.gridPatientClones.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPatientClone_CellClick);
+			this.gridPatientClones.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPatientClone_CellClick);
 			// 
 			// picturePat
 			// 
@@ -740,7 +740,7 @@ namespace OpenDental{
 			ODGridCell gridCellCur=gridPat.Rows[e.Row].Cells[e.Col];
 			//Only grid cells with phone numbers are blue and underlined. 
 			//If we support color and underline in the future, this might be changed to a regex of the cell text.
-			if(gridCellCur.ColorText==System.Drawing.Color.Blue && gridCellCur.Underline==YN.Yes && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
+			if(gridCellCur.ColorText==System.Drawing.Color.Blue && gridCellCur.Underline== true && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
 				DentalTek.PlaceCall(gridCellCur.Text);
 			}
 		}
@@ -954,7 +954,7 @@ namespace OpenDental{
 						}
 						if(Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
 							row.Cells[row.Cells.Count-1].ColorText=Color.Blue;
-							row.Cells[row.Cells.Count-1].Underline=YN.Yes;
+							row.Cells[row.Cells.Count-1].Underline= true;
 						}
 						break;
 					#endregion Hm Phone
@@ -1214,7 +1214,7 @@ namespace OpenDental{
 						}
 						if(Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
 							row.Cells[row.Cells.Count-1].ColorText=Color.Blue;
-							row.Cells[row.Cells.Count-1].Underline=YN.Yes;
+							row.Cells[row.Cells.Count-1].Underline=true;
 						}
 						break;
 					#endregion Wireless Ph
@@ -1226,7 +1226,7 @@ namespace OpenDental{
 						}
 						if(Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
 							row.Cells[row.Cells.Count-1].ColorText=Color.Blue;
-							row.Cells[row.Cells.Count-1].Underline=YN.Yes;
+							row.Cells[row.Cells.Count-1].Underline=true;
 						}
 						break;
 					#endregion Wk Phone
@@ -1300,7 +1300,7 @@ namespace OpenDental{
 				if(recallDate.Year>1880){
 					cell.Text=recallDate.ToShortDateString();
 					if(recallDate<DateTime.Today){
-						cell.Bold=YN.Yes;
+						cell.Bold=true;
 						cell.ColorText=Color.Firebrick;
 					}
 				}
@@ -1755,7 +1755,7 @@ namespace OpenDental{
 							else {
 								cell=new ODGridCell(recallListPat[i].DateDue.ToShortDateString());
 								if(recallListPat[i].DateDue<DateTime.Today) {
-									cell.Bold=YN.Yes;
+									cell.Bold=true;
 									cell.ColorText=Color.Firebrick;
 								}
 								row.Cells.Add(cell);
@@ -1873,7 +1873,7 @@ namespace OpenDental{
 				row.Cells.Add(superfam);
 				row.Tag=SuperFamilyGuarantors[i].PatNum;
 				if(i==0) {
-					row.Cells[0].Bold=YN.Yes;
+					row.Cells[0].Bold=true;
 					row.Cells[0].ColorText=Color.OrangeRed;
 				}
 				if(SuperFamilyGuarantors[i].HasSuperBilling) {
@@ -2126,7 +2126,7 @@ namespace OpenDental{
 			}
 			//The first entry will always be the original or master patient which we want to stand out a little bit much like the Super Family grid.
 			if(gridPatientClones.Rows.Count > 0) {
-				gridPatientClones.Rows[0].Cells[0].Bold=YN.Yes;
+				gridPatientClones.Rows[0].Cells[0].Bold= true;
 				gridPatientClones.Rows[0].Cells[0].ColorText=Color.OrangeRed;
 			}
 			gridPatientClones.EndUpdate();
@@ -2823,7 +2823,7 @@ namespace OpenDental{
 				cell=new ODGridCell();
 				cell.Text=planArray[i].PlanNote;
 				cell.ColorText=Color.Red;
-				cell.Bold=YN.Yes;
+				cell.Bold= true;
 				row.Cells.Add(cell);
 			}
 			gridIns.Rows.Add(row);
@@ -2834,7 +2834,7 @@ namespace OpenDental{
 				cell=new ODGridCell();
 				cell.Text=subArray[i].SubscNote;
 				cell.ColorText=Color.Red;
-				cell.Bold=YN.Yes;
+				cell.Bold= true;
 				row.Cells.Add(cell);
 			}
 			row.ColorLborder=Color.Black;

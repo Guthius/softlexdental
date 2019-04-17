@@ -239,7 +239,7 @@
 			this.gridInterventions.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridInterventions.TitleHeight = 18;
 			this.gridInterventions.TranslationName = "TableIntervention";
-			this.gridInterventions.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridInterventions_CellDoubleClick);
+			this.gridInterventions.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridInterventions_CellDoubleClick);
 			// 
 			// radioMedInterventions
 			// 
@@ -390,7 +390,7 @@
 			this.gridAssessments.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridAssessments.TitleHeight = 18;
 			this.gridAssessments.TranslationName = "TableAssessment";
-			this.gridAssessments.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAssessments_CellDoubleClick);
+			this.gridAssessments.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAssessments_CellDoubleClick);
 			// 
 			// radioAllStatuses
 			// 

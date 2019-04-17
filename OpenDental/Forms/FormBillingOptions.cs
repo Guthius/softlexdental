@@ -480,7 +480,7 @@ namespace OpenDental{
 			this.gridDun.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridDun.TitleHeight = 18;
 			this.gridDun.TranslationName = "TableBillingMessages";
-			this.gridDun.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridDun_CellDoubleClick);
+			this.gridDun.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridDun_CellDoubleClick);
 			// 
 			// butDunningSetup
 			// 
@@ -1158,7 +1158,7 @@ namespace OpenDental{
 					row.Cells.Add(Lan.g(this,"any"));
 				}
 				row.Cells.Add(dunnCur.DunMessage);
-				row.Cells.Add(new ODGridCell(dunnCur.MessageBold) { Bold=YN.Yes,ColorText=Color.DarkRed });
+				row.Cells.Add(new ODGridCell(dunnCur.MessageBold) { Bold= true, ColorText=Color.DarkRed });
 				if(dunnCur.EmailBody!="" || dunnCur.EmailSubject!="") {
 					row.Cells.Add("X");
 				}

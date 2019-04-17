@@ -72,7 +72,7 @@
 			this.gridEdu.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridEdu.TitleHeight = 18;
 			this.gridEdu.TranslationName = "TableResources";
-			this.gridEdu.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridEdu_CellDoubleClick);
+			this.gridEdu.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridEdu_CellDoubleClick);
 			// 
 			// FormEduResourceSetup
 			// 

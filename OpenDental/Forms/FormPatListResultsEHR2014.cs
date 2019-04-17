@@ -40,19 +40,19 @@ namespace OpenDental {
 			gridMain.Columns.Clear();
 			ODGridColumn col;
 			col=new ODGridColumn("PatNum",60,HorizontalAlignment.Center);
-			col.SortingStrategy=GridSortingStrategy.AmountParse;
+			col.SortingStrategy=ODGridSortingStrategy.AmountParse;
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Full Name",200);
-			col.SortingStrategy=GridSortingStrategy.StringCompare;
+			col.SortingStrategy=ODGridSortingStrategy.StringCompare;
 			gridMain.Columns.Add(col);
 			for(int i=0;i<elementList.Count;i++) {
 				switch(elementList[i].Restriction) {
 					case EhrRestrictionType.Birthdate:
 						col=new ODGridColumn("Birthdate",80,HorizontalAlignment.Center);
-						col.SortingStrategy=GridSortingStrategy.DateParse;
+						col.SortingStrategy=ODGridSortingStrategy.DateParse;
 						gridMain.Columns.Add(col);
 						col=new ODGridColumn("Age",80,HorizontalAlignment.Center);
-						col.SortingStrategy=GridSortingStrategy.AmountParse;
+						col.SortingStrategy=ODGridSortingStrategy.AmountParse;
 						gridMain.Columns.Add(col);
 						break;
 					case EhrRestrictionType.Gender:
@@ -61,35 +61,35 @@ namespace OpenDental {
 						break;
 					case EhrRestrictionType.LabResult:
 						colWidth=System.Convert.ToInt32(g.MeasureString("Lab Value: "+elementList[i].CompareString,this.Font).Width);
-						col.SortingStrategy=GridSortingStrategy.AmountParse;
+						col.SortingStrategy=ODGridSortingStrategy.AmountParse;
 						colWidth=colWidth+(colWidth/10);//Add 10%
 						col=new ODGridColumn("Lab Value: "+elementList[i].CompareString,colWidth,HorizontalAlignment.Center);
 						gridMain.Columns.Add(col);
 						colWidth=System.Convert.ToInt32(g.MeasureString("Lab Date: "+elementList[i].CompareString,this.Font).Width);
 						colWidth=colWidth+(colWidth/10);//Add 10%
 						col=new ODGridColumn("Lab Date: "+elementList[i].CompareString,colWidth,HorizontalAlignment.Center);
-						col.SortingStrategy=GridSortingStrategy.DateParse;
+						col.SortingStrategy=ODGridSortingStrategy.DateParse;
 						gridMain.Columns.Add(col);
 						break;
 					case EhrRestrictionType.Medication:
 						colWidth=System.Convert.ToInt32(g.MeasureString("Prescription Date: "+elementList[i].CompareString,this.Font).Width);
 						colWidth=colWidth+(colWidth/10);//Add 10%
 						col=new ODGridColumn("Prescription Date: "+elementList[i].CompareString,colWidth,HorizontalAlignment.Center);
-						col.SortingStrategy=GridSortingStrategy.DateParse;
+						col.SortingStrategy=ODGridSortingStrategy.DateParse;
 						gridMain.Columns.Add(col);
 						break;
 					case EhrRestrictionType.Problem:
 						colWidth=System.Convert.ToInt32(g.MeasureString("Date Diagnosed: "+DiseaseDefs.GetNameByCode(elementList[i].CompareString),this.Font).Width);
 						colWidth=colWidth+(colWidth/10);//Add 10%
 						col=new ODGridColumn("Date Diagnosed: "+DiseaseDefs.GetNameByCode(elementList[i].CompareString),colWidth,HorizontalAlignment.Center);
-						col.SortingStrategy=GridSortingStrategy.DateParse;
+						col.SortingStrategy=ODGridSortingStrategy.DateParse;
 						gridMain.Columns.Add(col);
 						break;
 					case EhrRestrictionType.Allergy:
 						colWidth=System.Convert.ToInt32(g.MeasureString("Date Alergic Reaction: "+elementList[i].CompareString,this.Font).Width);
 						colWidth=colWidth+(colWidth/10);//Add 10%
 						col=new ODGridColumn("Date Alergic Reaction: "+elementList[i].CompareString,colWidth,HorizontalAlignment.Center);
-						col.SortingStrategy=GridSortingStrategy.DateParse;
+						col.SortingStrategy=ODGridSortingStrategy.DateParse;
 						gridMain.Columns.Add(col);
 						break;
 					case EhrRestrictionType.CommPref:

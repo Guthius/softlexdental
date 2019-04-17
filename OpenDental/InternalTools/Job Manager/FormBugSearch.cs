@@ -47,7 +47,7 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			gridMain.Columns.Add(new ODGridColumn("BugId",50));
-			gridMain.Columns.Add(new ODGridColumn("Date",75){SortingStrategy=GridSortingStrategy.DateParse});
+			gridMain.Columns.Add(new ODGridColumn("Date",75){SortingStrategy=ODGridSortingStrategy.DateParse});
 			gridMain.Columns.Add(new ODGridColumn("Status",75){TextAlign=HorizontalAlignment.Center});
 			gridMain.Columns.Add(new ODGridColumn("Pri",50) { TextAlign=HorizontalAlignment.Center });
 			gridMain.Columns.Add(new ODGridColumn("Vers. Found",75));

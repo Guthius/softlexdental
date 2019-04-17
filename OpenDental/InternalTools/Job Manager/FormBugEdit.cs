@@ -48,8 +48,8 @@ namespace OpenDental {
 			gridSubs.BeginUpdate();
 			if(gridSubs.Columns.Count==0) {
 				gridSubs.Columns.Add(new ODGridColumn("Reg Key",125));
-				gridSubs.Columns.Add(new ODGridColumn("Version",60,GridSortingStrategy.VersionNumber));
-				gridSubs.Columns.Add(new ODGridColumn("DateTime",75,GridSortingStrategy.DateParse));
+				gridSubs.Columns.Add(new ODGridColumn("Version",60, sortingStrategy: ODGridSortingStrategy.VersionNumber));
+				gridSubs.Columns.Add(new ODGridColumn("DateTime",75, sortingStrategy: ODGridSortingStrategy.DateParse));
 				gridSubs.AllowSortingByColumn=true;
 			}
 			gridSubs.Rows.Clear();

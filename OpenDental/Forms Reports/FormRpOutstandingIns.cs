@@ -324,8 +324,8 @@ namespace OpenDental {
 			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridMain.TitleHeight = 18;
 			this.gridMain.TranslationName = "TableOustandingInsClaims";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
 			// comboBoxMultiClinics
 			// 
@@ -1023,7 +1023,7 @@ namespace OpenDental {
 			List<DisplayField> listDisplayFields = DisplayFields.GetForCategory(DisplayFieldCategory.OutstandingInsReport);
 			foreach(DisplayField fieldCur in listDisplayFields) {
 				HorizontalAlignment textAlign=HorizontalAlignment.Left;
-				GridSortingStrategy sortingStrat = GridSortingStrategy.StringCompare;
+				ODGridSortingStrategy sortingStrat = ODGridSortingStrategy.StringCompare;
 				if(fieldCur.InternalName == "DateService"
 					|| fieldCur.InternalName == "DateSent"
 					|| fieldCur.InternalName == "DateSentOrig"
@@ -1031,11 +1031,11 @@ namespace OpenDental {
 					|| fieldCur.InternalName == "SubDOB"
 					|| fieldCur.InternalName == "PatDOB") 
 				{
-					sortingStrat=GridSortingStrategy.DateParse;
+					sortingStrat=ODGridSortingStrategy.DateParse;
 					textAlign=HorizontalAlignment.Center;
 				}
 				else if(fieldCur.InternalName == "Amount") {
-					sortingStrat=GridSortingStrategy.AmountParse;
+					sortingStrat=ODGridSortingStrategy.AmountParse;
 					textAlign=HorizontalAlignment.Right;
 				}
 				gridMain.Columns.Add(new ODGridColumn(string.IsNullOrEmpty(fieldCur.Description) ? fieldCur.InternalName : fieldCur.Description

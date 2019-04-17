@@ -113,7 +113,7 @@ namespace OpenDental{
 			this.gridZipCode.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridZipCode.TitleHeight = 18;
 			this.gridZipCode.TranslationName = "TableZipCodes";
-			this.gridZipCode.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridZipCode_CellDoubleClick);
+			this.gridZipCode.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridZipCode_CellDoubleClick);
 			// 
 			// FormZipCodes
 			// 

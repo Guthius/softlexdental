@@ -76,8 +76,8 @@ namespace OpenDental{
 			this.gridItems.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridItems.TitleHeight = 18;
 			this.gridItems.TranslationName = "TableSupplies";
-			this.gridItems.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridOrderItem_CellDoubleClick);
-			this.gridItems.CellLeave += new OpenDental.UI.ODGridClickEventHandler(this.gridItems_CellLeave);
+			this.gridItems.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridOrderItem_CellDoubleClick);
+			this.gridItems.CellLeave += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridItems_CellLeave);
 			// 
 			// gridOrders
 			// 
@@ -97,8 +97,8 @@ namespace OpenDental{
 			this.gridOrders.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridOrders.TitleHeight = 18;
 			this.gridOrders.TranslationName = "TableHistory";
-			this.gridOrders.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridOrder_CellDoubleClick);
-			this.gridOrders.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridOrder_CellClick);
+			this.gridOrders.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridOrder_CellDoubleClick);
+			this.gridOrders.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridOrder_CellClick);
 			// 
 			// butPrint
 			// 

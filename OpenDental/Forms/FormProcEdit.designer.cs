@@ -1688,7 +1688,7 @@
 			this.gridPay.TitleHeight = 18;
 			this.gridPay.TranslationName = "TableProcPay";
 			this.gridPay.WrapText = false;
-			this.gridPay.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPay_CellDoubleClick);
+			this.gridPay.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPay_CellDoubleClick);
 			// 
 			// gridAdj
 			// 
@@ -1709,7 +1709,7 @@
 			this.gridAdj.TitleHeight = 18;
 			this.gridAdj.TranslationName = "TableProcAdj";
 			this.gridAdj.WrapText = false;
-			this.gridAdj.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAdj_CellDoubleClick);
+			this.gridAdj.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAdj_CellDoubleClick);
 			// 
 			// label20
 			// 
@@ -1780,7 +1780,7 @@
 			this.gridIns.TitleHeight = 18;
 			this.gridIns.TranslationName = "TableProcIns";
 			this.gridIns.WrapText = false;
-			this.gridIns.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridIns_CellDoubleClick);
+			this.gridIns.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridIns_CellDoubleClick);
 			// 
 			// tabPageMedical
 			// 

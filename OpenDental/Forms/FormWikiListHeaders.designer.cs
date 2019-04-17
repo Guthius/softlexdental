@@ -80,7 +80,7 @@ namespace OpenDental
             this.columnHeadersGrid.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.columnHeadersGrid.TitleHeight = 18;
             this.columnHeadersGrid.TranslationName = "TableWikiListHeaders";
-            this.columnHeadersGrid.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.columnHeadersGrid_CellClick);
+            this.columnHeadersGrid.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.columnHeadersGrid_CellClick);
             // 
             // pickListGrid
             // 
@@ -104,8 +104,8 @@ namespace OpenDental
             this.pickListGrid.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.pickListGrid.TitleHeight = 18;
             this.pickListGrid.TranslationName = "TableWikiListHeaderPickList";
-            this.pickListGrid.CellLeave += new OpenDental.UI.ODGridClickEventHandler(this.pickListGrid_CellLeave);
-            this.pickListGrid.CellEnter += new OpenDental.UI.ODGridClickEventHandler(this.pickListGrid_CellEnter);
+            this.pickListGrid.CellLeave += new System.EventHandler<UI.ODGridClickEventArgs>(this.pickListGrid_CellLeave);
+            this.pickListGrid.CellEnter += new System.EventHandler<UI.ODGridClickEventArgs>(this.pickListGrid_CellEnter);
             // 
             // addButton
             // 

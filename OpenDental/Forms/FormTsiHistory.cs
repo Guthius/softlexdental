@@ -116,12 +116,12 @@ namespace OpenDental {
 			}
 			gridMain.Columns.Add(new ODGridColumn("User",-100));
 			gridMain.Columns.Add(new ODGridColumn("Trans Type",-80));
-			gridMain.Columns.Add(new ODGridColumn("Trans Date Time",-120,HorizontalAlignment.Center,GridSortingStrategy.DateParse));
+			gridMain.Columns.Add(new ODGridColumn("Trans Date Time",-120,HorizontalAlignment.Center,ODGridSortingStrategy.DateParse));
 			gridMain.Columns.Add(new ODGridColumn("Demand Type",-85));
 			gridMain.Columns.Add(new ODGridColumn("Service Code",-85));
 			gridMain.Columns.Add(new ODGridColumn("Client ID",-75));
-			gridMain.Columns.Add(new ODGridColumn("Trans Amt",-70,HorizontalAlignment.Right,GridSortingStrategy.AmountParse));
-			gridMain.Columns.Add(new ODGridColumn("Account Bal",-80,HorizontalAlignment.Right,GridSortingStrategy.AmountParse));
+			gridMain.Columns.Add(new ODGridColumn("Trans Amt",-70,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse));
+			gridMain.Columns.Add(new ODGridColumn("Account Bal",-80,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse));
 			gridMain.Columns.Add(new ODGridColumn("Key Type",-100));
 			#endregion Set Grid Columns
 			#region Fill Grid Rows

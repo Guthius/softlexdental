@@ -64,8 +64,8 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 16;
 			this.gridMain.Title = "Available Images";
 			this.gridMain.TranslationName = "TableWikiSearchPages";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
 			// picturePreview
 			// 

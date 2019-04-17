@@ -77,7 +77,7 @@ namespace OpenDental{
             this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.gridMain.TitleHeight = 24;
             this.gridMain.TranslationName = "TableAllergies";
-            this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+            this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
             // 
             // butAdd
             // 

@@ -284,7 +284,7 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 95;
 			this.gridMain.Title = "Claim Payment Splits";
 			this.gridMain.TranslationName = "TableClaimPaySplits";
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
 			// FormClaimPayEditOld
 			// 

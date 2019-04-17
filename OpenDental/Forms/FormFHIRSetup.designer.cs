@@ -70,8 +70,8 @@ namespace OpenDental{
 			this.gridMain.Title = "API Keys";
 			this.gridMain.TitleHeight = 18;
 			this.gridMain.TranslationName = "tableAPIKeys";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
 			// labelPerm
 			// 

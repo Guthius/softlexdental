@@ -115,7 +115,7 @@ namespace OpenDental{
 			this.gridCourses.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridCourses.TitleHeight = 18;
 			this.gridCourses.TranslationName = "TableCourses";
-			this.gridCourses.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridCourses_CellClick);
+			this.gridCourses.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCourses_CellClick);
 			// 
 			// gridInstructors
 			// 
@@ -139,7 +139,7 @@ namespace OpenDental{
 			this.gridInstructors.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridInstructors.TitleHeight = 18;
 			this.gridInstructors.TranslationName = "TableInstructors";
-			this.gridInstructors.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridInstructors_CellClick);
+			this.gridInstructors.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridInstructors_CellClick);
 			// 
 			// gridStudents
 			// 

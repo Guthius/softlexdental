@@ -189,7 +189,7 @@ namespace OpenDental {
 				gridMain.Columns.Add(col);
 			}
 			col=new ODGridColumn("Test Date",70);
-			col.SortingStrategy=GridSortingStrategy.DateParse;
+			col.SortingStrategy=ODGridSortingStrategy.DateParse;
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("LOINC",60);//LoincCode
 			gridMain.Columns.Add(col);

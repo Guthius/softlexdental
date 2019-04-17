@@ -374,8 +374,8 @@ namespace OpenDental{
 			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridMain.TitleHeight = 18;
 			this.gridMain.TranslationName = "TableTreatmentFinder";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
 			// buttonExport
 			// 
@@ -623,28 +623,28 @@ namespace OpenDental{
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			//0=PatNum
-			ODGridColumn col=new ODGridColumn(Lan.g("TableTreatmentFinder","LName"),100,GridSortingStrategy.StringCompare);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableTreatmentFinder","LName"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTreatmentFinder","FName"),100,GridSortingStrategy.StringCompare);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","FName"),100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Contact"),120,GridSortingStrategy.StringCompare);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Contact"),120);
 			gridMain.Columns.Add(col);
 			//4=address
 			//5=cityStateZip
-			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Annual Max"),80,HorizontalAlignment.Right,GridSortingStrategy.AmountParse);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Annual Max"),80,textAlignment: HorizontalAlignment.Right,sortingStrategy: ODGridSortingStrategy.AmountParse);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Amt Used"),70,HorizontalAlignment.Right,GridSortingStrategy.AmountParse);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Amt Used"),70, textAlignment: HorizontalAlignment.Right, sortingStrategy: ODGridSortingStrategy.AmountParse);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Amt Pend"),70,HorizontalAlignment.Right,GridSortingStrategy.AmountParse);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Amt Pend"),70, textAlignment: HorizontalAlignment.Right, sortingStrategy: ODGridSortingStrategy.AmountParse);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Amt Rem"),70,HorizontalAlignment.Right,GridSortingStrategy.AmountParse);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Amt Rem"),70, textAlignment: HorizontalAlignment.Right, sortingStrategy: ODGridSortingStrategy.AmountParse);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Treat Plan"),70,HorizontalAlignment.Right,GridSortingStrategy.AmountParse);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Treat Plan"),70, textAlignment: HorizontalAlignment.Right, sortingStrategy: ODGridSortingStrategy.AmountParse);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Insurance Carrier"),225,HorizontalAlignment.Left,GridSortingStrategy.StringCompare);
+			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Insurance Carrier"),225);
 			gridMain.Columns.Add(col);
 			if(PrefC.HasClinicsEnabled) {
-				col=new ODGridColumn(Lan.g("TableTreatmentFinder","Clinic"),120,HorizontalAlignment.Left,GridSortingStrategy.StringCompare);
+				col=new ODGridColumn(Lan.g("TableTreatmentFinder","Clinic"),120);
 				gridMain.Columns.Add(col);
 			}
 			gridMain.Rows.Clear();

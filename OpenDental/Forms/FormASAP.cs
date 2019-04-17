@@ -616,7 +616,7 @@ namespace OpenDental {
 			this.gridAppts.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridAppts.TitleHeight = 18;
 			this.gridAppts.TranslationName = "TableASAP";
-			this.gridAppts.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridAppts_CellDoubleClick);
+			this.gridAppts.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAppts_CellDoubleClick);
 			this.gridAppts.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridAppts_MouseUp);
 			// 
 			// tabPageRecalls
@@ -661,7 +661,7 @@ namespace OpenDental {
 			this.gridRecalls.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridRecalls.TitleHeight = 18;
 			this.gridRecalls.TranslationName = "TableASAP";
-			this.gridRecalls.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridRecalls_CellDoubleClick);
+			this.gridRecalls.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridRecalls_CellDoubleClick);
 			// 
 			// textDateStart
 			// 
@@ -977,7 +977,7 @@ namespace OpenDental {
 					gridAppts.Columns.Add(col);
 					int widths=0;
 					for(int i=0;i<gridAppts.Columns.Count;i++) {
-						widths+=gridAppts.Columns[i].ColWidth;
+						widths+=gridAppts.Columns[i].Width;
 					}
 					if(widths > Width) {
 						gridAppts.HScrollVisible=true;

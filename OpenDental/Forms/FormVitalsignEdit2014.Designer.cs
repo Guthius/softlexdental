@@ -487,7 +487,7 @@
 			this.gridInterventions.TabIndex = 0;
 			this.gridInterventions.Title = "Interventions and/or Medications";
 			this.gridInterventions.TranslationName = "TableMedication";
-			this.gridInterventions.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridInterventions_CellDoubleClick);
+			this.gridInterventions.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridInterventions_CellDoubleClick);
 			// 
 			// butDelete
 			// 

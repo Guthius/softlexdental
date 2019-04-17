@@ -212,7 +212,7 @@ namespace OpenDental{
 			this.gridFormats.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridFormats.TitleHeight = 18;
 			this.gridFormats.TranslationName = "TaleFormats";
-			this.gridFormats.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridFormats_CellClick);
+			this.gridFormats.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridFormats_CellClick);
 			// 
 			// radioSimpleChart
 			// 

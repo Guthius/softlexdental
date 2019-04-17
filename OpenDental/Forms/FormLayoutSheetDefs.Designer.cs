@@ -99,7 +99,7 @@
 			this.gridOtherLayouts.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridOtherLayouts.TitleHeight = 18;
 			this.gridOtherLayouts.TranslationName = "TableInternal";
-			this.gridOtherLayouts.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridOtherLayouts_CellDoubleClick);
+			this.gridOtherLayouts.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridOtherLayouts_CellDoubleClick);
 			this.gridOtherLayouts.Click += new System.EventHandler(this.gridOtherLayouts_Click);
 			// 
 			// gridCustomLayouts
@@ -121,7 +121,7 @@
 			this.gridCustomLayouts.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridCustomLayouts.TitleHeight = 18;
 			this.gridCustomLayouts.TranslationName = "TableCustom";
-			this.gridCustomLayouts.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridCustomLayouts_CellDoubleClick);
+			this.gridCustomLayouts.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCustomLayouts_CellDoubleClick);
 			this.gridCustomLayouts.Click += new System.EventHandler(this.gridCustomLayouts_Click);
 			// 
 			// butNew

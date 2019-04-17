@@ -49,15 +49,15 @@ namespace OpenDental {
 		private void FillGridInsPlanFiles() {
 			gridInsPlanFiles.BeginUpdate();
 			if(gridInsPlanFiles.Columns.Count==0) {
-				gridInsPlanFiles.Columns.Add(new UI.ODGridColumn("FileName",300,UI.GridSortingStrategy.StringCompare));
+				gridInsPlanFiles.Columns.Add(new UI.ODGridColumn("FileName",300));
 				_colDateIndex=gridInsPlanFiles.Columns.Count;
-				gridInsPlanFiles.Columns.Add(new UI.ODGridColumn("Date",80,UI.GridSortingStrategy.StringCompare));
+				gridInsPlanFiles.Columns.Add(new UI.ODGridColumn("Date",80));
 				_colPatCountIndex=gridInsPlanFiles.Columns.Count;
-				gridInsPlanFiles.Columns.Add(new UI.ODGridColumn("PatCount",80,UI.GridSortingStrategy.AmountParse));
+				gridInsPlanFiles.Columns.Add(new UI.ODGridColumn("PatCount",80, sortingStrategy: UI.ODGridSortingStrategy.AmountParse));
 				_colPlanCountIndex=gridInsPlanFiles.Columns.Count;
-				gridInsPlanFiles.Columns.Add(new UI.ODGridColumn("PlanCount",80,UI.GridSortingStrategy.AmountParse));
+				gridInsPlanFiles.Columns.Add(new UI.ODGridColumn("PlanCount",80, sortingStrategy: UI.ODGridSortingStrategy.AmountParse));
 				_colErrorIndex=gridInsPlanFiles.Columns.Count;
-				gridInsPlanFiles.Columns.Add(new UI.ODGridColumn("Errors",0,UI.GridSortingStrategy.StringCompare));
+				gridInsPlanFiles.Columns.Add(new UI.ODGridColumn("Errors",0));
 			}			
 			gridInsPlanFiles.Rows.Clear();
 			gridInsPlanFiles.EndUpdate();

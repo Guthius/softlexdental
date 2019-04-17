@@ -484,8 +484,8 @@ namespace OpenDental{
 			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridMain.TitleHeight = 18;
 			this.gridMain.TranslationName = "TableProcedures";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellLeave += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellLeave);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
+			this.gridMain.CellLeave += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellLeave);
 			// 
 			// label5
 			// 
@@ -1440,11 +1440,11 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableProcedures","Code"),50);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Fee 1",50,HorizontalAlignment.Right,true);
+			col=new ODGridColumn("Fee 1",50,HorizontalAlignment.Right, isEditable: true);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Fee 2",50,HorizontalAlignment.Right,true);
+			col=new ODGridColumn("Fee 2",50,HorizontalAlignment.Right, isEditable: true);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Fee 3",50,HorizontalAlignment.Right,true);
+            col =new ODGridColumn("Fee 3",50,HorizontalAlignment.Right, isEditable: true);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;

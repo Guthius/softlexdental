@@ -740,7 +740,7 @@
 			this.gridFields.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridFields.TitleHeight = 18;
 			this.gridFields.TranslationName = "FormApptEdit";
-			this.gridFields.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridFields_CellDoubleClick);
+			this.gridFields.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridFields_CellDoubleClick);
 			// 
 			// gridPatient
 			// 
@@ -762,7 +762,7 @@
 			this.gridPatient.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridPatient.TitleHeight = 18;
 			this.gridPatient.TranslationName = "TableApptPtInfo";
-			this.gridPatient.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPatient_CellClick);
+			this.gridPatient.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPatient_CellClick);
 			this.gridPatient.MouseMove += new System.Windows.Forms.MouseEventHandler(this.gridPatient_MouseMove);
 			// 
 			// gridComm
@@ -786,7 +786,7 @@
 			this.gridComm.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridComm.TitleHeight = 18;
 			this.gridComm.TranslationName = "TableCommLog";
-			this.gridComm.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridComm_CellDoubleClick);
+			this.gridComm.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridComm_CellDoubleClick);
 			this.gridComm.MouseMove += new System.Windows.Forms.MouseEventHandler(this.gridComm_MouseMove);
 			// 
 			// gridProc
@@ -811,8 +811,8 @@
 			this.gridProc.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridProc.TitleHeight = 18;
 			this.gridProc.TranslationName = "TableApptProcs";
-			this.gridProc.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridProc_CellDoubleClick);
-			this.gridProc.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridProc_CellClick);
+			this.gridProc.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProc_CellDoubleClick);
+			this.gridProc.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProc_CellClick);
 			// 
 			// labelPlannedComplete
 			// 

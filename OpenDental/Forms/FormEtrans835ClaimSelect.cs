@@ -77,13 +77,13 @@ namespace OpenDental {
 			gridClaims.BeginUpdate();
 			gridClaims.Rows.Clear();
 			gridClaims.Columns.Clear();
-			gridClaims.Columns.Add(new UI.ODGridColumn("Date Service",100,HorizontalAlignment.Center) { SortingStrategy=UI.GridSortingStrategy.DateParse });
-			gridClaims.Columns.Add(new UI.ODGridColumn("Carrier",240,HorizontalAlignment.Center) { SortingStrategy=UI.GridSortingStrategy.StringCompare });
-			gridClaims.Columns.Add(new UI.ODGridColumn("Status",120,HorizontalAlignment.Center) { SortingStrategy=UI.GridSortingStrategy.StringCompare });			
+			gridClaims.Columns.Add(new UI.ODGridColumn("Date Service",100,HorizontalAlignment.Center) { SortingStrategy=UI.ODGridSortingStrategy.DateParse });
+			gridClaims.Columns.Add(new UI.ODGridColumn("Carrier",240,HorizontalAlignment.Center) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
+			gridClaims.Columns.Add(new UI.ODGridColumn("Status",120,HorizontalAlignment.Center) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });			
 			if(PrefC.HasClinicsEnabled) {//Using clinics
-				gridClaims.Columns.Add(new UI.ODGridColumn("Clinic",190,HorizontalAlignment.Left) { SortingStrategy=UI.GridSortingStrategy.StringCompare });
+				gridClaims.Columns.Add(new UI.ODGridColumn("Clinic",190,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
 			}
-			gridClaims.Columns.Add(new UI.ODGridColumn("ClaimFee",70,HorizontalAlignment.Right) { SortingStrategy=UI.GridSortingStrategy.AmountParse });
+			gridClaims.Columns.Add(new UI.ODGridColumn("ClaimFee",70,HorizontalAlignment.Right) { SortingStrategy=UI.ODGridSortingStrategy.AmountParse });
 			List<Claim> listClaims=Claims.Refresh(_patNum);
 			for(int i=0;i<listClaims.Count;i++) {
 				UI.ODGridRow row=new UI.ODGridRow();

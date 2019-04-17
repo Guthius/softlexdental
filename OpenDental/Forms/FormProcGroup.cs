@@ -370,7 +370,7 @@ namespace OpenDental{
 			this.gridPat.TitleHeight = 18;
 			this.gridPat.TranslationName = "TablePatient";
 			this.gridPat.Visible = false;
-			this.gridPat.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPat_CellDoubleClick);
+			this.gridPat.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPat_CellDoubleClick);
 			// 
 			// butRx
 			// 
@@ -520,7 +520,7 @@ namespace OpenDental{
 			this.gridPlanned.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridPlanned.TitleHeight = 18;
 			this.gridPlanned.TranslationName = "TablePlannedAppts";
-			this.gridPlanned.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPlanned_CellDoubleClick);
+			this.gridPlanned.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPlanned_CellDoubleClick);
 			// 
 			// butNew
 			// 

@@ -285,7 +285,7 @@
 			this.gridMu.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridMu.TitleHeight = 18;
 			this.gridMu.TranslationName = "TableMeaningfulUse";
-			this.gridMu.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMu_CellClick);
+			this.gridMu.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMu_CellClick);
 			// 
 			// butClinicalSummary
 			// 

@@ -83,7 +83,7 @@ namespace OpenDental{
 			this.grid1.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.grid1.TitleHeight = 18;
 			this.grid1.TranslationName = "TableInternal";
-			this.grid1.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid1_CellDoubleClick);
+			this.grid1.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid1_CellDoubleClick);
 			// 
 			// grid2
 			// 
@@ -106,7 +106,7 @@ namespace OpenDental{
 			this.grid2.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.grid2.TitleHeight = 18;
 			this.grid2.TranslationName = "TableCustom";
-			this.grid2.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid2_CellDoubleClick);
+			this.grid2.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid2_CellDoubleClick);
 			// 
 			// butDuplicate
 			// 

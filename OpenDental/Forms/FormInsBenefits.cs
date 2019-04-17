@@ -1192,7 +1192,7 @@ namespace OpenDental{
 			this.gridBenefits.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridBenefits.TitleHeight = 18;
 			this.gridBenefits.TranslationName = "TableInsBenefits";
-			this.gridBenefits.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridBenefits_CellDoubleClick);
+			this.gridBenefits.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridBenefits_CellDoubleClick);
 			// 
 			// butDelete
 			// 

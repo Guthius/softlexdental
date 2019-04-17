@@ -96,7 +96,7 @@ namespace OpenDental.User_Controls {
 			string allowedColumnTitle=Lans.g(this,"Allowed");
 			string subMenuColumnTitle=Lans.g(this,"Sub\r\nMenu");
 			string hiddenColumnTitle=Lans.g(this,"Hidden");
-			gridProdInc.Columns.Add(new ODGridColumn(displayColumnTitle,widthDisplayNameCol,!_isPermissionMode));
+			gridProdInc.Columns.Add(new ODGridColumn(displayColumnTitle,widthDisplayNameCol,isEditable: _isPermissionMode));
 			if(_isPermissionMode) {
 				gridProdInc.Columns.Add(new ODGridColumn(allowedColumnTitle,0,HorizontalAlignment.Center));
 			}
@@ -105,7 +105,7 @@ namespace OpenDental.User_Controls {
 				gridProdInc.Columns.Add(new ODGridColumn(hiddenColumnTitle,0,HorizontalAlignment.Center));
 			}
 			gridDaily.Columns.Clear();
-			gridDaily.Columns.Add(new ODGridColumn(displayColumnTitle,widthDisplayNameCol,!_isPermissionMode));
+			gridDaily.Columns.Add(new ODGridColumn(displayColumnTitle,widthDisplayNameCol,isEditable: !_isPermissionMode));
 			if(_isPermissionMode) {
 				gridDaily.Columns.Add(new ODGridColumn(allowedColumnTitle,0,HorizontalAlignment.Center));
 			}
@@ -114,7 +114,7 @@ namespace OpenDental.User_Controls {
 				gridDaily.Columns.Add(new ODGridColumn(hiddenColumnTitle,0,HorizontalAlignment.Center));
 			}
 			gridMonthly.Columns.Clear();
-			gridMonthly.Columns.Add(new ODGridColumn(displayColumnTitle,widthDisplayNameCol,!_isPermissionMode));
+			gridMonthly.Columns.Add(new ODGridColumn(displayColumnTitle,widthDisplayNameCol, isEditable: !_isPermissionMode));
 			if(_isPermissionMode) {
 				gridMonthly.Columns.Add(new ODGridColumn(allowedColumnTitle,0,HorizontalAlignment.Center));
 			}
@@ -123,7 +123,7 @@ namespace OpenDental.User_Controls {
 				gridMonthly.Columns.Add(new ODGridColumn(hiddenColumnTitle,0,HorizontalAlignment.Center));
 			}
 			gridLists.Columns.Clear();
-			gridLists.Columns.Add(new ODGridColumn(displayColumnTitle,widthDisplayNameCol,!_isPermissionMode));
+			gridLists.Columns.Add(new ODGridColumn(displayColumnTitle,widthDisplayNameCol, isEditable: !_isPermissionMode));
 			if(_isPermissionMode) {
 				gridLists.Columns.Add(new ODGridColumn(allowedColumnTitle,0,HorizontalAlignment.Center));
 			}
@@ -132,7 +132,7 @@ namespace OpenDental.User_Controls {
 				gridLists.Columns.Add(new ODGridColumn(hiddenColumnTitle,0,HorizontalAlignment.Center));
 			}
 			gridPublicHealth.Columns.Clear();
-			gridPublicHealth.Columns.Add(new ODGridColumn(displayColumnTitle,widthDisplayNameCol,!_isPermissionMode));
+			gridPublicHealth.Columns.Add(new ODGridColumn(displayColumnTitle,widthDisplayNameCol, isEditable: !_isPermissionMode));
 			if(_isPermissionMode) {
 				gridPublicHealth.Columns.Add(new ODGridColumn(allowedColumnTitle,0,HorizontalAlignment.Center));
 			}

@@ -71,7 +71,7 @@ namespace OpenDental{
 			this.grid.TabIndex = 1;
 			this.grid.Title = "Existing Reconciles";
 			this.grid.TranslationName = "TableReconciles";
-			this.grid.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.grid_CellDoubleClick);
+			this.grid.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellDoubleClick);
 			// 
 			// butClose
 			// 

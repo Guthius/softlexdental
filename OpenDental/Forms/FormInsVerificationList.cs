@@ -380,11 +380,11 @@ namespace OpenDental {
 					}
 					col=new ODGridColumn(Lans.g(this,"Patient"),120);
 					grid.Columns.Add(col);
-					col=new ODGridColumn(Lans.g(this,"Appt Date Time"),130,HorizontalAlignment.Center,GridSortingStrategy.DateParse);
+					col=new ODGridColumn(Lans.g(this,"Appt Date Time"),130,HorizontalAlignment.Center,ODGridSortingStrategy.DateParse);
 					grid.Columns.Add(col);
 					col=new ODGridColumn(Lans.g(this,"Carrier"),160);
 					grid.Columns.Add(col);
-					col=new ODGridColumn(Lans.g(this,"Last Verified"),90,HorizontalAlignment.Center,GridSortingStrategy.DateParse);
+					col=new ODGridColumn(Lans.g(this,"Last Verified"),90,HorizontalAlignment.Center,ODGridSortingStrategy.DateParse);
 					grid.Columns.Add(col);
 					col=new ODGridColumn(Lans.g(this,"Status"),110);
 					grid.Columns.Add(col);
@@ -635,12 +635,12 @@ namespace OpenDental {
 					}
 					col=new ODGridColumn(Lans.g(this,"Patient"),120);
 					gridAssign.Columns.Add(col);
-					col=new ODGridColumn(Lans.g(this,"Appt Date Time"),130,GridSortingStrategy.DateParse);
+					col=new ODGridColumn(Lans.g(this,"Appt Date Time"),130, sortingStrategy: ODGridSortingStrategy.DateParse);
 					col.TextAlign=HorizontalAlignment.Center;
 					gridAssign.Columns.Add(col);
 					col=new ODGridColumn(Lans.g(this,"Carrier"),160);
 					gridAssign.Columns.Add(col);
-					col=new ODGridColumn(Lans.g(this,"Last Verified"),90,GridSortingStrategy.DateParse);
+					col=new ODGridColumn(Lans.g(this,"Last Verified"),90, sortingStrategy: ODGridSortingStrategy.DateParse);
 					col.TextAlign=HorizontalAlignment.Center;
 					gridAssign.Columns.Add(col);
 					col=new ODGridColumn(Lans.g(this,"Status"),110);

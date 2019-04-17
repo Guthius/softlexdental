@@ -522,7 +522,7 @@ namespace OpenDental{
 			this.gridResults.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridResults.TitleHeight = 18;
 			this.gridResults.TranslationName = "TableTestResults";
-			this.gridResults.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridResults_CellDoubleClick);
+			this.gridResults.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridResults_CellDoubleClick);
 			// 
 			// butShowHL7
 			// 

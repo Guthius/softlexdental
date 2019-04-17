@@ -76,8 +76,8 @@ namespace OpenDental{
 			this.gridElectIDs.TabIndex = 140;
 			this.gridElectIDs.Title = "";
 			this.gridElectIDs.TranslationName = "TableApptProcs";
-			this.gridElectIDs.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridElectIDs_CellDoubleClick);
-			this.gridElectIDs.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridElectIDs_CellClick);
+			this.gridElectIDs.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridElectIDs_CellDoubleClick);
+			this.gridElectIDs.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridElectIDs_CellClick);
 			// 
 			// butOK
 			// 

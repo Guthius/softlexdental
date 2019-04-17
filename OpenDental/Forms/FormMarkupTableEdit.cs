@@ -109,7 +109,7 @@ namespace OpenDental {
 			gridMain.Columns.Clear();
 			ODGridColumn col;
 			for(int c=0;c<ColNames.Count;c++){
-				col=new ODGridColumn(ColNames[c],ColWidths[c],true);
+				col=new ODGridColumn(ColNames[c],ColWidths[c], isEditable: true);
 				gridMain.Columns.Add(col);
 			}
 			gridMain.Rows.Clear();

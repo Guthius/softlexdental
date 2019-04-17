@@ -94,7 +94,7 @@ namespace OpenDental
 			this.gridMain.TabIndex = 125;
 			this.gridMain.Title = "Procedures";
 			this.gridMain.TranslationName = "TableClaimProc";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			this.gridMain.CellTextChanged += new System.EventHandler(this.gridMain_CellTextChanged);
 			// 
 			// textTotal
@@ -198,9 +198,9 @@ namespace OpenDental
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Fee"),55,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Estimate"),55,HorizontalAlignment.Right,true);
+			col=new ODGridColumn(Lan.g(this,"Estimate"),55,HorizontalAlignment.Right,isEditable: true);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Remarks"),170,true);
+			col=new ODGridColumn(Lan.g(this,"Remarks"),170, isEditable: true);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;

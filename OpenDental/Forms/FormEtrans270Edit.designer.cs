@@ -149,7 +149,7 @@ namespace OpenDental{
 			this.gridBen.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridBen.TitleHeight = 18;
 			this.gridBen.TranslationName = "FormEtrans270Edit";
-			this.gridBen.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridBen_CellDoubleClick);
+			this.gridBen.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridBen_CellDoubleClick);
 			// 
 			// gridDates
 			// 
@@ -191,7 +191,7 @@ namespace OpenDental{
 			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridMain.TitleHeight = 18;
 			this.gridMain.TranslationName = "FormEtrans270Edit";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// groupImport
 			// 

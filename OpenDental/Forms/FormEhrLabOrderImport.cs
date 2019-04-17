@@ -96,7 +96,7 @@ namespace OpenDental {
 			gridMain.Columns.Clear();
 			ODGridColumn col;
 			col=new ODGridColumn("Date Time",80);//Formatted yyyyMMdd
-			col.SortingStrategy=GridSortingStrategy.DateParse;
+			col.SortingStrategy=ODGridSortingStrategy.DateParse;
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Placer Order Number",180);//Should be PK but might not be. Instead use Placer Order Num.
 			gridMain.Columns.Add(col);

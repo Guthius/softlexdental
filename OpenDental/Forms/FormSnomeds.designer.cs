@@ -114,8 +114,8 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 20;
 			this.gridMain.Title = "SNOMED CT Codes";
 			this.gridMain.TranslationName = "FormSnomedctCodes";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
 			// butMapICD9
 			// 

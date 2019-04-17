@@ -109,7 +109,7 @@ namespace OpenDental
                         break;
                     }
                 }
-                var col = new ODGridColumn(_tableOld.Columns[c].ColumnName, colWidth, false);
+                var col = new ODGridColumn(_tableOld.Columns[c].ColumnName, colWidth);
                 oldRevisionGrid.Columns.Add(col);
             }
 
@@ -146,7 +146,7 @@ namespace OpenDental
                         break;
                     }
                 }
-                col = new ODGridColumn(_tableCur.Columns[c].ColumnName, colWidth, false);
+                col = new ODGridColumn(_tableCur.Columns[c].ColumnName, colWidth);
                 currentRevisionGrid.Columns.Add(col);
             }
             currentRevisionGrid.Rows.Clear();

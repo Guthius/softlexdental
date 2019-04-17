@@ -102,7 +102,7 @@ namespace OpenDental{
 			this.gridTables.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridTables.TitleHeight = 18;
 			this.gridTables.TranslationName = "TableAvailable";
-			this.gridTables.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridTables_CellDoubleClick);
+			this.gridTables.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTables_CellDoubleClick);
 			this.gridTables.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.gridTables_KeyPress);
 			// 
 			// butRunQ

@@ -52,13 +52,13 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			col=new ODGridColumn("Code System",200,false);
+			col=new ODGridColumn("Code System",200);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Current Version",100,false);
+			col=new ODGridColumn("Current Version",100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Available Version",100,false);
+			col=new ODGridColumn("Available Version",100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Download Status",100,false);
+			col=new ODGridColumn("Download Status",100);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;

@@ -49,8 +49,8 @@ namespace OpenDental
         {
             columnHeadersGrid.BeginUpdate();
             columnHeadersGrid.Columns.Clear();
-            columnHeadersGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnColumnName, 100, true));
-            columnHeadersGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnWidth, 0, true));
+            columnHeadersGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnColumnName, 100, isEditable: true));
+            columnHeadersGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnWidth, 0, isEditable: true));
 
             columnHeadersGrid.Rows.Clear();
             for (int i = 0; i < columnHeadersList.Count; i++)
@@ -71,7 +71,7 @@ namespace OpenDental
         {
             pickListGrid.BeginUpdate();
             pickListGrid.Columns.Clear();
-            pickListGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnInputText, 100, true));
+            pickListGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnInputText, 100, isEditable: true));
             pickListGrid.Rows.Clear();
 
             if (columnHeadersGrid.SelectedCell.Y != -1)

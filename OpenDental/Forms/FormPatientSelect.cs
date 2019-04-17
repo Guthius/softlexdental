@@ -785,8 +785,8 @@ namespace OpenDental{
 			this.gridMain.TitleHeight = 18;
 			this.gridMain.TranslationName = "FormPatientSelect";
 			this.gridMain.WrapText = false;
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			this.gridMain.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridMain_KeyDown);
 			// 
 			// FormPatientSelect
@@ -1322,14 +1322,14 @@ namespace OpenDental{
 							row.Cells.Add(_DataTablePats.Rows[i]["HmPhone"].ToString());
 							if(Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
 								row.Cells[row.Cells.Count-1].ColorText=Color.Blue;
-								row.Cells[row.Cells.Count-1].Underline=YN.Yes;
+								row.Cells[row.Cells.Count-1].Underline= true;
 							}
 							break;
 						case "Wk Phone":
 							row.Cells.Add(_DataTablePats.Rows[i]["WkPhone"].ToString());
 							if(Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
 								row.Cells[row.Cells.Count-1].ColorText=Color.Blue;
-								row.Cells[row.Cells.Count-1].Underline=YN.Yes;
+								row.Cells[row.Cells.Count-1].Underline= true;
 							}
 							break;
 						case "PatNum":
@@ -1381,7 +1381,7 @@ namespace OpenDental{
 							row.Cells.Add(_DataTablePats.Rows[i]["WirelessPhone"].ToString());
 							if(Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
 								row.Cells[row.Cells.Count-1].ColorText=Color.Blue;
-								row.Cells[row.Cells.Count-1].Underline=YN.Yes;
+								row.Cells[row.Cells.Count-1].Underline= true;
 							}
 							break;
 						case "Sec Prov":
@@ -1423,7 +1423,7 @@ namespace OpenDental{
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
 			ODGridCell gridCellCur=gridMain.Rows[e.Row].Cells[e.Col];
 			//Only grid cells with phone numbers are blue and underlined.
-			if(gridCellCur.ColorText==Color.Blue && gridCellCur.Underline==YN.Yes && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
+			if(gridCellCur.ColorText==Color.Blue && gridCellCur.Underline==true && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled) {
 				DentalTek.PlaceCall(gridCellCur.Text);
 			}
 		}

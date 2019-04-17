@@ -32,7 +32,7 @@ namespace OpenDental {
 				textBoxAutoNoteName.BackColor=SystemColors.Window;
 			}
 			else {//user has permission to edit auto notes
-				gridMain.CellDoubleClick+=new ODGridClickEventHandler(gridMain_CellDoubleClick);
+				gridMain.CellDoubleClick+=new EventHandler<ODGridClickEventArgs>(gridMain_CellDoubleClick);
 			}
 			textBoxAutoNoteName.Text=AutoNoteCur.AutoNoteName;
 			textMain.Text=AutoNoteCur.MainText;

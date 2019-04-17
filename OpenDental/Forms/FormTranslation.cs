@@ -84,7 +84,7 @@ namespace OpenDental{
 			this.gridLan.TabIndex = 7;
 			this.gridLan.Title = "Translations";
 			this.gridLan.TranslationName = "TableLan";
-			this.gridLan.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridLan_CellDoubleClick);
+			this.gridLan.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridLan_CellDoubleClick);
 			// 
 			// butDeleteUnused
 			// 

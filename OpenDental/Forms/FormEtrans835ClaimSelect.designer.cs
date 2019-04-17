@@ -107,8 +107,8 @@ namespace OpenDental{
 			this.gridClaims.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridClaims.TitleHeight = 18;
 			this.gridClaims.TranslationName = "TableClaims";
-			this.gridClaims.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridClaims_CellDoubleClick);
-			this.gridClaims.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridClaims_CellClick);
+			this.gridClaims.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridClaims_CellDoubleClick);
+			this.gridClaims.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridClaims_CellClick);
 			// 
 			// textDateTo
 			// 

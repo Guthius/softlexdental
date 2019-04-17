@@ -55,7 +55,7 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			gridMain.AllowSortingByColumn=true;
-			ODGridColumn col=new ODGridColumn(Lan.g("TableRadiologyOrders","Date"),90,HorizontalAlignment.Center,GridSortingStrategy.DateParse);
+			ODGridColumn col=new ODGridColumn(Lan.g("TableRadiologyOrders","Date"),90,HorizontalAlignment.Center,ODGridSortingStrategy.DateParse);
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableRadiologyOrders","Name"),220);
 			gridMain.Columns.Add(col);

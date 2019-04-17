@@ -1321,7 +1321,7 @@
 			this.gridSent.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridSent.TitleHeight = 18;
 			this.gridSent.TranslationName = "gridSent";
-			this.gridSent.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSent_CellDoubleClick);
+			this.gridSent.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSent_CellDoubleClick);
 			// 
 			// tabMisc
 			// 
@@ -2900,7 +2900,7 @@
 			this.gridStatusHistory.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridStatusHistory.TitleHeight = 18;
 			this.gridStatusHistory.TranslationName = "TableStatusHistory";
-			this.gridStatusHistory.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridStatusHistory_CellDoubleClick);
+			this.gridStatusHistory.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridStatusHistory_CellDoubleClick);
 			// 
 			// butViewEra
 			// 
@@ -3083,8 +3083,8 @@
 			this.gridPay.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridPay.TitleHeight = 18;
 			this.gridPay.TranslationName = "TableClaimPay";
-			this.gridPay.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPay_CellDoubleClick);
-			this.gridPay.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPay_CellClick);
+			this.gridPay.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPay_CellDoubleClick);
+			this.gridPay.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPay_CellClick);
 			// 
 			// groupEnterPayment
 			// 
@@ -3191,8 +3191,8 @@
 			this.gridProc.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridProc.TitleHeight = 18;
 			this.gridProc.TranslationName = "TableClaimProc";
-			this.gridProc.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridProc_CellDoubleClick);
-			this.gridProc.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridProc_CellClick);
+			this.gridProc.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProc_CellDoubleClick);
+			this.gridProc.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProc_CellClick);
 			// 
 			// butSplit
 			// 

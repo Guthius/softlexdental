@@ -2141,7 +2141,7 @@ namespace OpenDental {
 			this.gridPlanned.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridPlanned.TitleHeight = 18;
 			this.gridPlanned.TranslationName = "TablePlannedAppts";
-			this.gridPlanned.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPlanned_CellDoubleClick);
+            this.gridPlanned.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPlanned_CellDoubleClick);
 			// 
 			// butDown
 			// 
@@ -2478,8 +2478,8 @@ namespace OpenDental {
 			this.gridChartViews.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridChartViews.TitleHeight = 18;
 			this.gridChartViews.TranslationName = "TableChartViews";
-			this.gridChartViews.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridChartViews_DoubleClick);
-			this.gridChartViews.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridChartViews_CellClick);
+            this.gridChartViews.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridChartViews_DoubleClick);
+            this.gridChartViews.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridChartViews_CellClick);
 			// 
 			// textSearch
 			// 
@@ -2947,8 +2947,8 @@ namespace OpenDental {
 			this.gridCustomerViews.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridCustomerViews.TitleHeight = 18;
 			this.gridCustomerViews.TranslationName = "TableCustomerViews";
-			this.gridCustomerViews.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridCustomerViews_CellDoubleClick);
-			this.gridCustomerViews.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridCustomerViews_CellClick);
+			this.gridCustomerViews.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCustomerViews_CellDoubleClick);
+			this.gridCustomerViews.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCustomerViews_CellClick);
 			// 
 			// menuConsent
 			// 
@@ -3088,8 +3088,8 @@ namespace OpenDental {
 			this.gridTreatPlans.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridTreatPlans.TitleHeight = 18;
 			this.gridTreatPlans.TranslationName = "TableTPList";
-			this.gridTreatPlans.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridTreatPlans_CellDoubleClick);
-			this.gridTreatPlans.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridTreatPlans_CellClick);
+			this.gridTreatPlans.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTreatPlans_CellDoubleClick);
+			this.gridTreatPlans.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTreatPlans_CellClick);
 			// 
 			// gridTpProcs
 			// 
@@ -3113,7 +3113,7 @@ namespace OpenDental {
 			this.gridTpProcs.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridTpProcs.TitleHeight = 18;
 			this.gridTpProcs.TranslationName = "TableTP";
-			this.gridTpProcs.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridTpProcs_CellDoubleClick);
+            this.gridTpProcs.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTpProcs_CellDoubleClick);
 			// 
 			// label4
 			// 
@@ -3289,7 +3289,7 @@ namespace OpenDental {
 			this.gridPtInfo.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridPtInfo.TitleHeight = 18;
 			this.gridPtInfo.TranslationName = "TableChartPtInfo";
-			this.gridPtInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPtInfo_CellDoubleClick);
+			this.gridPtInfo.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPtInfo_CellDoubleClick);
 			// 
 			// textTreatmentNotes
 			// 
@@ -3386,8 +3386,8 @@ namespace OpenDental {
 			this.gridProg.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridProg.TitleHeight = 18;
 			this.gridProg.TranslationName = "TableProg";
-			this.gridProg.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridProg_CellDoubleClick);
-			this.gridProg.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridProg_CellClick);
+			this.gridProg.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProg_CellDoubleClick);
+			this.gridProg.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProg_CellClick);
 			this.gridProg.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridProg_KeyDown);
 			this.gridProg.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridProg_MouseDown);
 			// 
@@ -5960,7 +5960,7 @@ namespace OpenDental {
 						else {
 							cell.Text=fieldCur.Description;
 						}
-						cell.Bold=YN.Yes;
+						cell.Bold= true;
 						row.Cells.Add(cell);
 						row.ColorBackG=listMiscColorDefs[3].ItemColor;
 						row.Tag="tabAllergies";
@@ -5974,7 +5974,7 @@ namespace OpenDental {
 						for(int i = 0;allergyList.Count>i;i++) {
 							row=new ODGridRow();
 							cell=new ODGridCell(AllergyDefs.GetOne(allergyList[i].AllergyDefNum).Description);
-							cell.Bold=YN.Yes;
+							cell.Bold= true;
 							cell.ColorText=Color.Red;
 							row.Cells.Add(cell);
 							row.Cells.Add(allergyList[i].Reaction);
@@ -6070,7 +6070,7 @@ namespace OpenDental {
 						cell=new ODGridCell();
 						cell.Text=PatCur.MedUrgNote;
 						cell.ColorText=Color.Red;
-						cell.Bold=YN.Yes;
+						cell.Bold= true;
 						row.Cells.Add(cell);
 						row.ColorBackG=listMiscColorDefs[3].ItemColor;
 						row.Tag="tabMedical";
@@ -6103,7 +6103,7 @@ namespace OpenDental {
 						else {
 							cell.Text=fieldCur.Description;
 						}
-						cell.Bold=YN.Yes;
+						cell.Bold=true;
 						row.Cells.Add(cell);
 						row.ColorBackG=listMiscColorDefs[3].ItemColor;
 						row.Tag="tabMedications";
@@ -6217,7 +6217,7 @@ namespace OpenDental {
 								cell.Text=fieldCur.Description;
 							}
 							cell.ColorText=Color.Red;
-							cell.Bold=YN.Yes;
+							cell.Bold= true;
 							row.Cells.Add(cell);
 							row.ColorBackG=listMiscColorDefs[3].ItemColor;
 							row.Tag="tabMedical";
@@ -6257,7 +6257,7 @@ namespace OpenDental {
 						else {
 							cell.Text=fieldCur.Description;
 						}
-						cell.Bold=YN.Yes;
+						cell.Bold= true;
 						row.Cells.Add(cell);
 						row.ColorBackG=listMiscColorDefs[3].ItemColor;
 						row.Tag="tabProblems";
@@ -6274,7 +6274,7 @@ namespace OpenDental {
 							if(DiseaseList[i].DiseaseDefNum!=0) {
 								cell=new ODGridCell(DiseaseDefs.GetName(DiseaseList[i].DiseaseDefNum));
 								cell.ColorText=Color.Red;
-								cell.Bold=YN.Yes;
+								cell.Bold= true;
 								row.Cells.Add(cell);
 								row.Cells.Add(DiseaseList[i].PatNote);
 							}
@@ -6282,7 +6282,7 @@ namespace OpenDental {
 								row.Cells.Add("");
 								cell=new ODGridCell(DiseaseDefs.GetItem(DiseaseList[i].DiseaseDefNum)?.DiseaseName??Lan.g(this,"INVALID PROBLEM"));
 								cell.ColorText=Color.Red;
-								cell.Bold=YN.Yes;
+								cell.Bold=true;
 								row.Cells.Add(cell);
 								//row.Cells.Add(DiseaseList[i].PatNote);//no place to show a pat note
 							}
@@ -6455,7 +6455,7 @@ namespace OpenDental {
 						List<EhrMeasureEvent> listTobaccoStatuses=_loadData.ListTobaccoStatuses
 							.OrderByDescending(x => x.DateTEvent).Take(3).ToList();//only display the last three assessments at most
 						row=new ODGridRow() { ColorBackG=listMiscColorDefs[3].ItemColor,Tag="tabTobaccoUse" };
-						row.Cells.Add(new ODGridCell(Text=fieldCur.Description==""?fieldCur.InternalName:fieldCur.Description) { Bold=YN.Yes });
+						row.Cells.Add(new ODGridCell(Text=fieldCur.Description==""?fieldCur.InternalName:fieldCur.Description) { Bold= true });
 						row.Cells.Add(listTobaccoStatuses.Count>0?"":Lan.g("TableChartPtInfo","none"));
 						if(listTobaccoStatuses.Count>0) {
 							gridPtInfo.Rows.Add(row);
@@ -6770,13 +6770,13 @@ namespace OpenDental {
 					col=new ODGridColumn(fields[i].Description,fields[i].ColumnWidth);
 				}
 				if(fields[i].InternalName=="Th") {
-					col.SortingStrategy=GridSortingStrategy.ToothNumberParse;
+					col.SortingStrategy=ODGridSortingStrategy.ToothNumberParse;
 				}
 				if(fields[i].InternalName=="Date") {
-					col.SortingStrategy=GridSortingStrategy.DateParse;
+					col.SortingStrategy=ODGridSortingStrategy.DateParse;
 				}
 				if(fields[i].InternalName=="Amount") {
-					col.SortingStrategy=GridSortingStrategy.AmountParse;
+					col.SortingStrategy=ODGridSortingStrategy.AmountParse;
 					col.TextAlign=HorizontalAlignment.Right;
 				}
 				if(fields[i].InternalName=="Proc Code"

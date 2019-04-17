@@ -85,8 +85,8 @@ namespace OpenDental{
 			this.gridCustom.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridCustom.TitleHeight = 18;
 			this.gridCustom.TranslationName = "TablePermissions";
-			this.gridCustom.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridCustom_CellDoubleClick);
-			this.gridCustom.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridCustom_CellClick);
+			this.gridCustom.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCustom_CellDoubleClick);
+			this.gridCustom.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCustom_CellClick);
 			this.gridCustom.TitleAddClick += new System.EventHandler(this.gridCustom_TitleAddClick);
 			// 
 			// comboUserGroup
@@ -139,7 +139,7 @@ namespace OpenDental{
 			this.gridInternal.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridInternal.TitleHeight = 18;
 			this.gridInternal.TranslationName = "TableInternal";
-			this.gridInternal.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridInternal_CellDoubleClick);
+			this.gridInternal.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridInternal_CellDoubleClick);
 			// 
 			// butCopy
 			// 

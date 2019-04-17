@@ -65,7 +65,7 @@
 			this.gridConflicts.Title = "Conflicting Appoinments";
 			this.gridConflicts.TitleHeight = 18;
 			this.gridConflicts.TranslationName = "TableApptConflicts";
-			this.gridConflicts.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridConflicts_DoubleClick);
+			this.gridConflicts.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridConflicts_DoubleClick);
 			// 
 			// butClose
 			// 

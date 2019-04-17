@@ -590,7 +590,7 @@ namespace OpenDental{
 			this.gridCharges.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridCharges.TitleHeight = 18;
 			this.gridCharges.TranslationName = "PayPlanAmortization";
-			this.gridCharges.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridCharges_CellDoubleClick);
+			this.gridCharges.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCharges_CellDoubleClick);
 			// 
 			// textNote
 			// 
@@ -1551,7 +1551,7 @@ namespace OpenDental{
 			gridCharges.EndUpdate();
 			if(gridCharges.Rows.Count>0 && totalsRowIndex != -1) {
 				gridCharges.Rows[totalsRowIndex].ColorLborder=Color.Black;
-				gridCharges.Rows[totalsRowIndex].Cells[6].Bold=YN.Yes;
+				gridCharges.Rows[totalsRowIndex].Cells[6].Bold=true;
 			}
 			textAccumulatedDue.Text=PayPlans.GetAccumDue(_payPlanCur.PayPlanNum,_listPayPlanCharges).ToString("f");
 			textPrincPaid.Text=PayPlans.GetPrincPaid(AmtPaid,_payPlanCur.PayPlanNum,_listPayPlanCharges).ToString("f");

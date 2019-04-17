@@ -52,7 +52,7 @@ namespace OpenDental {
 			gridJobs.Columns.Add(new ODGridColumn("Actual",75) { TextAlign=HorizontalAlignment.Center });
 			gridJobs.Columns.Add(new ODGridColumn("Today",75) { TextAlign=HorizontalAlignment.Center });
 			gridJobs.Columns.Add(new ODGridColumn("To Add",75,listAvailableIncrements) { TextAlign=HorizontalAlignment.Center });
-			gridJobs.Columns.Add(new ODGridColumn("Note",200,true));
+			gridJobs.Columns.Add(new ODGridColumn("Note",200,isEditable: true));
 			gridJobs.Rows.Clear();
 			foreach(Job job in listJobsSorted) {
 				ODGridRow row=new ODGridRow() { Tag=job };

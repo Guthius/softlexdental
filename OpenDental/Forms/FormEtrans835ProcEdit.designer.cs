@@ -287,7 +287,7 @@ namespace OpenDental{
 			this.gridSupplementalInfo.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridSupplementalInfo.TitleHeight = 18;
 			this.gridSupplementalInfo.TranslationName = "FormEtrans835Edit";
-			this.gridSupplementalInfo.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSupplementalInfo_CellDoubleClick);
+			this.gridSupplementalInfo.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSupplementalInfo_CellDoubleClick);
 			// 
 			// gridProcedureAdjustments
 			// 
@@ -312,7 +312,7 @@ namespace OpenDental{
 			this.gridProcedureAdjustments.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridProcedureAdjustments.TitleHeight = 18;
 			this.gridProcedureAdjustments.TranslationName = "FormEtrans835Edit";
-			this.gridProcedureAdjustments.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridProcedureAdjustments_CellDoubleClick);
+			this.gridProcedureAdjustments.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProcedureAdjustments_CellDoubleClick);
 			// 
 			// gridRemarks
 			// 
@@ -336,7 +336,7 @@ namespace OpenDental{
 			this.gridRemarks.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridRemarks.TitleHeight = 18;
 			this.gridRemarks.TranslationName = "FormEtrans835Edit";
-			this.gridRemarks.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridRemarks_CellDoubleClick);
+			this.gridRemarks.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridRemarks_CellDoubleClick);
 			// 
 			// butClose
 			// 

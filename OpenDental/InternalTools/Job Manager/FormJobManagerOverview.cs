@@ -183,10 +183,10 @@ namespace OpenDental {
 			gridJobs.Columns.Add(new ODGridColumn("Priority",75) { TextAlign=HorizontalAlignment.Center });
 			gridJobs.Columns.Add(new ODGridColumn("Expert",75) { TextAlign=HorizontalAlignment.Center });
 			gridJobs.Columns.Add(new ODGridColumn("Engineer",75) { TextAlign=HorizontalAlignment.Center });
-			gridJobs.Columns.Add(new ODGridColumn("Hrs Est",90) { TextAlign=HorizontalAlignment.Center,SortingStrategy=GridSortingStrategy.AmountParse });
-			gridJobs.Columns.Add(new ODGridColumn("Hrs Last 7 Days",90) { TextAlign=HorizontalAlignment.Center,SortingStrategy=GridSortingStrategy.AmountParse });
-			gridJobs.Columns.Add(new ODGridColumn("Hrs Total",90) { TextAlign=HorizontalAlignment.Center,SortingStrategy=GridSortingStrategy.AmountParse });
-			gridJobs.Columns.Add(new ODGridColumn("Est Completion %",110) { TextAlign=HorizontalAlignment.Center,SortingStrategy=GridSortingStrategy.AmountParse });
+			gridJobs.Columns.Add(new ODGridColumn("Hrs Est",90) { TextAlign=HorizontalAlignment.Center,SortingStrategy=ODGridSortingStrategy.AmountParse });
+			gridJobs.Columns.Add(new ODGridColumn("Hrs Last 7 Days",90) { TextAlign=HorizontalAlignment.Center,SortingStrategy=ODGridSortingStrategy.AmountParse });
+			gridJobs.Columns.Add(new ODGridColumn("Hrs Total",90) { TextAlign=HorizontalAlignment.Center,SortingStrategy=ODGridSortingStrategy.AmountParse });
+			gridJobs.Columns.Add(new ODGridColumn("Est Completion %",110) { TextAlign=HorizontalAlignment.Center,SortingStrategy=ODGridSortingStrategy.AmountParse });
 			gridJobs.Columns.Add(new ODGridColumn("Last Updated",90) { TextAlign=HorizontalAlignment.Center });
 			gridJobs.Rows.Clear();
 			foreach(Job job in listJobs) {

@@ -38,7 +38,7 @@ namespace CentralManager {
 			gridDatabasesTo.Columns.Clear();
 			gridDatabasesTo.Columns.Add(new ODGridColumn(Lan.g("TableDatabases","Databases"),150));
 			gridDatabasesTo.Columns.Add(new ODGridColumn(Lan.g("TableDatabases","Note"),200));
-			gridDatabasesTo.Columns.Add(new ODGridColumn("Status",30,HorizontalAlignment.Center));
+			gridDatabasesTo.Columns.Add(new ODGridColumn("Status",30, textAlignment: HorizontalAlignment.Center));
 			gridDatabasesTo.Rows.Clear();
 			ODGridRow row;
 			foreach(CentralConnection conn in _listConnectionsToTransferTo) {
@@ -64,7 +64,7 @@ namespace CentralManager {
 			gridPatients.Columns.Clear();
 			gridPatients.Columns.Add(new ODGridColumn(Lan.g("TablePatients","PatNum"),140));
 			gridPatients.Columns.Add(new ODGridColumn(Lan.g("TablePatients","LName"),140));
-			gridPatients.Columns.Add(new ODGridColumn(Lan.g("TablePatients","FName"),140,true));
+			gridPatients.Columns.Add(new ODGridColumn(Lan.g("TablePatients","FName"),140, isEditable: true));
 			gridPatients.Rows.Clear();
 			ODGridRow row;
 			foreach(DataRow pat in _listPatientDataRows) {

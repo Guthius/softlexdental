@@ -32,7 +32,7 @@ namespace OpenDental {
 			gridUserProperties.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableUserPrefProperties","Clinic"),120);
 			gridUserProperties.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableUserPrefProperties","DoseSpot User ID"),120,true);
+			col=new ODGridColumn(Lan.g("TableUserPrefProperties","DoseSpot User ID"),120, isEditable: true);
 			gridUserProperties.Columns.Add(col);
 			gridUserProperties.Rows.Clear();
 			ODGridRow row;

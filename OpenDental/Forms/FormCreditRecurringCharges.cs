@@ -143,21 +143,21 @@ namespace OpenDental {
 			if(PrefC.HasClinicsEnabled) {
 				gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Clinic"),65));
 			}
-			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Date"),PrefC.HasClinicsEnabled?80:80,HorizontalAlignment.Right));
-			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Family Bal"),PrefC.HasClinicsEnabled?70:85,HorizontalAlignment.Right));
-			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","PayPlan Due"),PrefC.HasClinicsEnabled?75:85,HorizontalAlignment.Right));
-			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Total Due"),PrefC.HasClinicsEnabled?65:80,HorizontalAlignment.Right));
-			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Repeat Amt"),PrefC.HasClinicsEnabled?75:90,HorizontalAlignment.Right));//RptChrgAmt
-			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Charge Amt"),PrefC.HasClinicsEnabled?85:100,HorizontalAlignment.Right));
+			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Date"),PrefC.HasClinicsEnabled?80:80, textAlignment: HorizontalAlignment.Right));
+			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Family Bal"),PrefC.HasClinicsEnabled?70:85, textAlignment: HorizontalAlignment.Right));
+			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","PayPlan Due"),PrefC.HasClinicsEnabled?75:85, textAlignment: HorizontalAlignment.Right));
+			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Total Due"),PrefC.HasClinicsEnabled?65:80, textAlignment: HorizontalAlignment.Right));
+			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Repeat Amt"),PrefC.HasClinicsEnabled?75:90, textAlignment: HorizontalAlignment.Right));//RptChrgAmt
+			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Charge Amt"),PrefC.HasClinicsEnabled?85:100, textAlignment: HorizontalAlignment.Right));
 			if(Programs.HasMultipleCreditCardProgramsEnabled()) {
 				if(Programs.IsEnabled(ProgramName.Xcharge)) {
-					gridMain.Columns.Add(new ODGridColumn("X-Charge",PrefC.HasClinicsEnabled ? 70 : 80,HorizontalAlignment.Center));
+					gridMain.Columns.Add(new ODGridColumn("X-Charge",PrefC.HasClinicsEnabled ? 70 : 80, textAlignment: HorizontalAlignment.Center));
 				}
 				if(Programs.IsEnabled(ProgramName.PayConnect)) {
-					gridMain.Columns.Add(new ODGridColumn("PayConnect",PrefC.HasClinicsEnabled ? 85 : 95,HorizontalAlignment.Center));
+					gridMain.Columns.Add(new ODGridColumn("PayConnect",PrefC.HasClinicsEnabled ? 85 : 95,textAlignment: HorizontalAlignment.Center));
 				}
 				if(Programs.IsEnabled(ProgramName.PaySimple)) {
-					gridMain.Columns.Add(new ODGridColumn("PaySimple",PrefC.HasClinicsEnabled ? 80 : 90,HorizontalAlignment.Center));
+					gridMain.Columns.Add(new ODGridColumn("PaySimple",PrefC.HasClinicsEnabled ? 80 : 90, textAlignment: HorizontalAlignment.Center));
 				}
 			}
 			gridMain.Rows.Clear();
@@ -215,12 +215,12 @@ namespace OpenDental {
 						//don't bold anything
 					}
 					else if(diff>0) {
-						row.Cells[6].Bold=YN.Yes;//"Repeating Amt"
-						row.Cells[7].Bold=YN.Yes;//"Charge Amt"
+						row.Cells[6].Bold=true;//"Repeating Amt"
+						row.Cells[7].Bold=true;//"Charge Amt"
 					}
 					else if(diff<0) {
-						row.Cells[5].Bold=YN.Yes;//"Total Due"
-						row.Cells[7].Bold=YN.Yes;//"Charge Amt"
+						row.Cells[5].Bold=true;//"Total Due"
+						row.Cells[7].Bold=true;//"Charge Amt"
 					}
 				}
 				if(Programs.HasMultipleCreditCardProgramsEnabled()) {

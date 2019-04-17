@@ -77,7 +77,7 @@ namespace OpenDental {
 			ODGridColumn col;
 			col=new ODGridColumn(Lan.g(this,"Name"),240);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Balance"),100,GridSortingStrategy.AmountParse);
+			col=new ODGridColumn(Lan.g(this,"Balance"),100, sortingStrategy: ODGridSortingStrategy.AmountParse);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;

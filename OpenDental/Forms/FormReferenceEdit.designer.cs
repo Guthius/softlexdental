@@ -147,7 +147,7 @@ namespace OpenDental{
 			this.gridMain.Title = "Used as a Reference for These New Customers";
 			this.gridMain.TranslationName = "FormPatientSelect";
 			this.gridMain.WrapText = false;
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butToday
 			// 

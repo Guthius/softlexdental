@@ -100,7 +100,7 @@ namespace OpenDental {
 			this.GridPrepayment.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.GridPrepayment.TitleHeight = 18;
 			this.GridPrepayment.TranslationName = "gridPrepayments";
-			this.GridPrepayment.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.GridPrepayment_CellDoubleClick);
+			this.GridPrepayment.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.GridPrepayment_CellDoubleClick);
 			// 
 			// butAddMonths
 			// 

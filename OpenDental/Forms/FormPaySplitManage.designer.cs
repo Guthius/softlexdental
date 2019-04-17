@@ -116,7 +116,7 @@ namespace OpenDental{
 			this.gridCharges.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridCharges.TitleHeight = 18;
 			this.gridCharges.TranslationName = "TableOutstandingCharges";
-			this.gridCharges.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridCharges_CellClick);
+			this.gridCharges.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCharges_CellClick);
 			// 
 			// gridSplits
 			// 
@@ -140,8 +140,8 @@ namespace OpenDental{
 			this.gridSplits.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridSplits.TitleHeight = 18;
 			this.gridSplits.TranslationName = "TableCurrentSplits";
-			this.gridSplits.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSplits_CellDoubleClick);
-			this.gridSplits.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSplits_CellClick);
+			this.gridSplits.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSplits_CellDoubleClick);
+			this.gridSplits.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSplits_CellClick);
 			// 
 			// buttAddMany
 			// 

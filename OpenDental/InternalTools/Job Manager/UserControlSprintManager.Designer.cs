@@ -122,7 +122,7 @@
 			this.gridSprintJobs.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridSprintJobs.TitleHeight = 18;
 			this.gridSprintJobs.TranslationName = "Jobs";
-			this.gridSprintJobs.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridSprintJobs_CellDoubleClick);
+			this.gridSprintJobs.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSprintJobs_CellDoubleClick);
 			this.gridSprintJobs.TitleAddClick += new System.EventHandler(this.gridSprintJobs_TitleAddClick);
 			this.gridSprintJobs.MouseClick += new System.Windows.Forms.MouseEventHandler(this.gridSprintJobs_MouseClick);
 			// 

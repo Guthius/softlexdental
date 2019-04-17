@@ -172,7 +172,7 @@ namespace OpenDental {
 					col=new ODGridColumn(columnHeader,field.ColumnWidth,listComboOptions);
 				}
 				else {
-					col=new ODGridColumn(columnHeader,field.ColumnWidth,true);
+					col=new ODGridColumn(columnHeader,field.ColumnWidth, isEditable: true);
 					if(field.InternalName=="Signature") {
 						_sigColIdx=gridMain.Columns.Count;
 						col.TextAlign=HorizontalAlignment.Center;

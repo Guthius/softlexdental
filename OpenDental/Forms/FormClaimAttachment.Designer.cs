@@ -110,7 +110,7 @@
 			this.gridAttachedImages.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridAttachedImages.TitleHeight = 18;
 			this.gridAttachedImages.TranslationName = "TableImagesToSend";
-			this.gridAttachedImages.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.CellDoubleClick_EditImage);
+			this.gridAttachedImages.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.CellDoubleClick_EditImage);
 			// 
 			// textClaimStatus
 			// 

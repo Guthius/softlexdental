@@ -231,8 +231,8 @@ namespace OpenDental{
 			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridMain.TitleHeight = 18;
 			this.gridMain.TranslationName = "TableTP";
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
-			this.gridMain.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
+			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
 			// gridPrint
 			// 
@@ -273,8 +273,8 @@ namespace OpenDental{
 			this.gridPreAuth.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridPreAuth.TitleHeight = 18;
 			this.gridPreAuth.TranslationName = "TablePreAuth";
-			this.gridPreAuth.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPreAuth_CellDoubleClick);
-			this.gridPreAuth.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPreAuth_CellClick);
+			this.gridPreAuth.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPreAuth_CellDoubleClick);
+			this.gridPreAuth.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPreAuth_CellClick);
 			// 
 			// gridPlans
 			// 
@@ -295,8 +295,8 @@ namespace OpenDental{
 			this.gridPlans.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridPlans.TitleHeight = 18;
 			this.gridPlans.TranslationName = "TableTPList";
-			this.gridPlans.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPlans_CellDoubleClick);
-			this.gridPlans.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPlans_CellClick);
+			this.gridPlans.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPlans_CellDoubleClick);
+			this.gridPlans.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPlans_CellClick);
 			// 
 			// dateTimeTP
 			// 

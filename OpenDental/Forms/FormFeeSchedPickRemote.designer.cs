@@ -73,8 +73,8 @@ namespace OpenDental{
 			this.gridFeeSchedFiles.TabIndex = 140;
 			this.gridFeeSchedFiles.Title = "Fee Sched Files";
 			this.gridFeeSchedFiles.TranslationName = "TableApptProcs";
-			this.gridFeeSchedFiles.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridFeeSchedFiles_CellDoubleClick);
-			this.gridFeeSchedFiles.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridFeeSchedFiles_CellClick);
+			this.gridFeeSchedFiles.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridFeeSchedFiles_CellDoubleClick);
+			this.gridFeeSchedFiles.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridFeeSchedFiles_CellClick);
 			// 
 			// FormFeeSchedPickRemote
 			// 

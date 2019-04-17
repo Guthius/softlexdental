@@ -66,7 +66,7 @@ namespace OpenDental{
 			this.gridMain.Title = "ICD10 Codes";
 			this.gridMain.TranslationName = "FormIcd10Codes";
 			this.gridMain.WrapText = false;
-			this.gridMain.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridMain_CellDoubleClick);
+			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butSearch
 			// 

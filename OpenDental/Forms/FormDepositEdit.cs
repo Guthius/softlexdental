@@ -487,7 +487,7 @@ namespace OpenDental{
 			this.gridIns.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridIns.TitleHeight = 18;
 			this.gridIns.TranslationName = "TableDepositSlipIns";
-			this.gridIns.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridIns_CellClick);
+			this.gridIns.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridIns_CellClick);
 			this.gridIns.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridIns_MouseUp);
 			// 
 			// butPrint
@@ -553,7 +553,7 @@ namespace OpenDental{
 			this.gridPat.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridPat.TitleHeight = 18;
 			this.gridPat.TranslationName = "TableDepositSlipPat";
-			this.gridPat.CellClick += new OpenDental.UI.ODGridClickEventHandler(this.gridPat_CellClick);
+			this.gridPat.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPat_CellClick);
 			this.gridPat.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridPat_MouseUp);
 			// 
 			// butOK

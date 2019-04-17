@@ -171,10 +171,10 @@ namespace OpenDental{
 			gridMain.Columns.Clear();
 			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"LName"),100));
 			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"FName"),100));
-			gridMain.Columns.Add(new ODGridColumn(_monthT2.ToString("MMMM yyyy"),100,HorizontalAlignment.Right,GridSortingStrategy.AmountParse));
-			gridMain.Columns.Add(new ODGridColumn(_monthT1.ToString("MMMM yyyy"),100,HorizontalAlignment.Right,GridSortingStrategy.AmountParse));
+			gridMain.Columns.Add(new ODGridColumn(_monthT2.ToString("MMMM yyyy"),100,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse));
+			gridMain.Columns.Add(new ODGridColumn(_monthT1.ToString("MMMM yyyy"),100,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse));
 			if(!checkIgnore.Checked) {
-				gridMain.Columns.Add(new ODGridColumn(_monthT0.ToString("MMMM yyyy"),100,HorizontalAlignment.Right,GridSortingStrategy.AmountParse));
+				gridMain.Columns.Add(new ODGridColumn(_monthT0.ToString("MMMM yyyy"),100,HorizontalAlignment.Right,ODGridSortingStrategy.AmountParse));
 			}
 			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Letter"),100));
 			gridMain.Rows.Clear();

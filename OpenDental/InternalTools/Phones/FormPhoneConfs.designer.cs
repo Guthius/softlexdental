@@ -72,7 +72,7 @@ namespace OpenDental{
 			this.gridConfRoom.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
 			this.gridConfRoom.TitleHeight = 18;
 			this.gridConfRoom.TranslationName = "TableConfRooms";
-			this.gridConfRoom.CellDoubleClick += new OpenDental.UI.ODGridClickEventHandler(this.gridConfRoom_CellDoubleClick);
+			this.gridConfRoom.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridConfRoom_CellDoubleClick);
 			// 
 			// butRefresh
 			// 
