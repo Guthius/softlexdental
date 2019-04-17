@@ -4897,8 +4897,6 @@
     <Compile Include="SheetFramework\GraphicsHelper.cs" />
     <Compile Include="SheetFramework\LabelSingle.cs" />
     <Compile Include="Misc\ObjectDateComparer.cs" />
-    <Compile Include="Misc\Pop3.cs" />
-    <Compile Include="Misc\Tooth.cs" />
     <Compile Include="Misc\VisiQuick.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SheetFramework\SheetEditMobileCtrl.cs">
@@ -9399,7 +9397,6 @@
     <None Include="Resources\arrowUpTriangle.gif" />
     <None Include="Resources\topazPen10.gif" />
     <None Include="Resources\deleteX10.gif" />
-    <None Include="ClassDiagram1.cd" />
     <None Include="Resources\Med History.gif" />
     <None Include="Resources\notify.wav" />
     <None Include="Resources\printPreview20.gif" />
