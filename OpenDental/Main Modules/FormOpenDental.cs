@@ -10065,7 +10065,7 @@ namespace OpenDental
                 }
                 Security.CurUser.PasswordIsStrong = FormUP.PasswordIsStrong;
                 Security.CurUser.LoginDetails = FormUP.LoginDetails;
-                Security.PasswordTyped = FormUP.PasswordTyped;
+                Security.PasswordTyped = FormUP.Password;
                 DataValid.SetInvalid(InvalidType.Security);
             }
         }
