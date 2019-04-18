@@ -2796,7 +2796,7 @@ namespace OpenDental
                 {
                     try
                     {
-                        CentralConnections.TryToConnect(chooseDatabaseModel.CentralConnectionCur, chooseDatabaseModel.DbType,
+                        CentralConnections.TryToConnect(chooseDatabaseModel.CentralConnectionCur,
                             chooseDatabaseModel.ConnectionString, (chooseDatabaseModel.NoShow == YN.Yes), chooseDatabaseModel.ListAdminCompNames,
                             (CommandLineArgs.Length != 0), chooseDatabaseModel.UseDynamicMode);
                     }
@@ -3345,8 +3345,7 @@ namespace OpenDental
             {
                 return false;
             }
-            if (DataConnection.DBtype == DatabaseType.MySql)
-            {
+
                 try
                 {
                     MiscData.SetSqlMode();
@@ -3378,7 +3377,7 @@ namespace OpenDental
                         return false;//Either the user canceled out of the window or clicked the override button which 
                     }
                 }
-            }
+            
             //if RemotingRole.ClientWeb, version will have already been checked at login, so no danger here.
             //ClientWeb version can be older than this version, but that will be caught in a moment.
             if (isSilentUpdate)
@@ -6547,35 +6546,6 @@ namespace OpenDental
             Plugins.HookAddCode(this, "FormOpenDental_KeyDown_end", e);
         }
 
-        ///<summary>Gets the encrypted connection string for the Oracle database from a config file.</summary>
-        public bool GetOraConfig()
-        {
-            if (!File.Exists("ODOraConfig.xml"))
-            {
-                return false;
-            }
-            try
-            {
-                XmlDocument document = new XmlDocument();
-                document.Load("ODOraConfig.xml");
-                XPathNavigator Navigator = document.CreateNavigator();
-                XPathNavigator nav;
-                nav = Navigator.SelectSingleNode("//DatabaseConnection");
-                if (nav != null)
-                {
-                    connStr = nav.SelectSingleNode("ConnectionString").Value;
-                    key = nav.SelectSingleNode("Key").Value;
-                }
-                DataConnection.DBtype = DatabaseType.Oracle;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return false;
-            }
-        }
-
         ///<summary>Decrypt the connection string and try to connect to the database directly. Only called if using a connection string and ChooseDatabase is not to be shown. Must call GetOraConfig first.</summary>
         public bool TryWithConnStr()
         {
@@ -8192,11 +8162,6 @@ namespace OpenDental
         {
             if (!Security.IsAuthorized(Permissions.UserQuery))
             {
-                return;
-            }
-            if (DataConnection.DBtype == DatabaseType.Oracle)
-            {
-                MsgBox.Show(this, "Not allowed while using Oracle.");
                 return;
             }
             if (Security.IsAuthorized(Permissions.UserQueryAdmin, true))

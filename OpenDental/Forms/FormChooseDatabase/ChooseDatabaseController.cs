@@ -14,7 +14,7 @@ namespace OpenDental {
 			//The model can be requested from the form once the form has officially loaded.
 			ChooseDatabaseModel chooseDatabaseModel;
 			_view.TryGetModelFromView(out chooseDatabaseModel);
-			_view.FillComboDatabases(CentralConnections.GetDatabases(chooseDatabaseModel.CentralConnectionCur,chooseDatabaseModel.DbType));
+			_view.FillComboDatabases(CentralConnections.GetDatabases(chooseDatabaseModel.CentralConnectionCur));
 		}
 
 		public override void OnPostInit() {
@@ -24,15 +24,14 @@ namespace OpenDental {
 		internal void DatabaseDropDown(object sender,EventArgs e) {
 			ChooseDatabaseModel chooseDatabaseModel;
 			_view.TryGetModelFromView(out chooseDatabaseModel);
-			_view.FillComboDatabases(CentralConnections.GetDatabases(chooseDatabaseModel.CentralConnectionCur
-				,chooseDatabaseModel.DbType));
+			_view.FillComboDatabases(CentralConnections.GetDatabases(chooseDatabaseModel.CentralConnectionCur));
 		}
 
 		internal bool butOK_Click(object sender,EventArgs e) {
 			ChooseDatabaseModel chooseDatabaseModel;
 			_view.TryGetModelFromView(out chooseDatabaseModel);
 			try {
-				CentralConnections.TryToConnect(chooseDatabaseModel.CentralConnectionCur,chooseDatabaseModel.DbType,chooseDatabaseModel.ConnectionString,
+				CentralConnections.TryToConnect(chooseDatabaseModel.CentralConnectionCur,chooseDatabaseModel.ConnectionString,
 					(chooseDatabaseModel.NoShow==YN.Yes),chooseDatabaseModel.ListAdminCompNames,
 					useDynamicMode:chooseDatabaseModel.UseDynamicMode);
 			}

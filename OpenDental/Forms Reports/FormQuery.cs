@@ -785,17 +785,6 @@ namespace OpenDental{
 			_reportSimpleGrid=new ReportSimpleGrid();
 			_reportSimpleGrid.Query=textQuery.Text;
 			_reportSimpleGrid.IsSqlValidated=isSqlValidated;
-			if(DataConnection.DBtype==DatabaseType.Oracle) { //Can't cancel User queries for Oracle. this is still from the main thread so we should be ok.
-				try {
-					if(isSqlValidated || Db.IsSqlAllowed(_reportSimpleGrid.Query)) { //Throws Exception
-						SubmitQuery();
-					}
-				}
-				catch(Exception e){
-					FriendlyException.Show(Lan.g(this,"Error submitting query."),e);
-				}
-				return;
-			}
 			_tableHuman=null;
 			LayoutHelperForState(QueryExecuteState.Executing);
 			_queryExceptionStateCur=QueryExceptionState.Throw;

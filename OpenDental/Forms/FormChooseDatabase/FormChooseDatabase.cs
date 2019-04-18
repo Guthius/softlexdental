@@ -46,7 +46,6 @@ namespace OpenDental
                 _model.CentralConnectionCur.MySqlUser = textUser.Text;
                 _model.CentralConnectionCur.MySqlPassword = textPassword.Text;
                 _model.NoShow = (checkNoShow.Checked ? YN.Yes : YN.No);
-                _model.DbType = DatabaseType.MySql;
                 _model.ConnectionString = textConnectionString.Text;
                 _model.UseDynamicMode = checkDynamicMode.Checked;
             }

@@ -643,10 +643,6 @@ namespace OpenDental {
 			if(!Security.IsAuthorized(Permissions.UserQuery)) {
 				return;
 			}
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				MsgBox.Show(this,"Not allowed while using Oracle.");
-				return;
-			}
 			FormQuery FormQ;
 			if(Security.IsAuthorized(Permissions.UserQueryAdmin,true)) {
 				FormQ = new FormQuery(null);

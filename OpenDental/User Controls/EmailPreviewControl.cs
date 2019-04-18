@@ -497,15 +497,12 @@ namespace OpenDental {
 					}
 				}
 				else if(IsORU_R01message(strFilePathAttach)) {
-					if(DataConnection.DBtype==DatabaseType.Oracle) {
-						MsgBox.Show(this,"Labs not supported with Oracle.  Opening raw file instead.");
-					}
-					else {
+
 						FormEhrLabOrderImport FormELOI =new FormEhrLabOrderImport();
 						FormELOI.Hl7LabMessage=FileAtoZ.ReadAllText(strFilePathAttach);
 						FormELOI.ShowDialog();
 						return;
-					}
+					
 				}
 				FileAtoZ.OpenFile(FileAtoZ.CombinePaths(EmailAttaches.GetAttachPath(),emailAttach.ActualFileName),emailAttach.DisplayedFileName);
 			}

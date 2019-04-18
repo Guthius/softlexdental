@@ -76,7 +76,7 @@ namespace OpenDental.Bridges {
 			try {
 				Process.Start(path);
 			}
-			catch (Exception e) {
+			catch {
 				MessageBox.Show(path+" is not available.");
 			}
 		}

@@ -1266,21 +1266,21 @@ namespace OpenDental {
 			DataConnection dcon=new DataConnection();
 			//Keep track of the original connection settings so that we can revert back to them once finished archiving.
 			string connectionStrOrig=DataConnection.GetCurrentConnectionString();
-			DatabaseType dbTypeOrig=DataConnection.DBtype;
+
 			//Keep track of what the current global exit code is (should always be zero) so that we can put it back to what it was after upgrading.
 			int exitCodeOld=FormOpenDental.ExitCode;
 			try {
 				Version versionDbOrig=new Version(PrefC.GetString(PrefName.DataBaseVersion));
-				string connectionStrArchive=DataConnection.BuildSimpleConnectionString(DatabaseType.MySql,
+				string connectionStrArchive=DataConnection.BuildSimpleConnectionString(
 					textArchiveServerName.Text,
 					MiscData.GetArchiveDatabaseName(),
 					textArchiveUser.Text,
 					textArchivePass.Text);
-				DatabaseType dbTypeArchive=DataConnection.DBtype;
+
 				#region Connect or create archive database
 				//Attempt to connect to the archive database.
 				try { 
-					dcon.SetDbT(connectionStrArchive,"",dbTypeArchive,true);
+					dcon.SetDbT(connectionStrArchive,"",true);
 				}
 				catch(Exception ex) {
 					if(ex.Message=="Unable to connect to any of the specified MySQL hosts.") {
@@ -1301,7 +1301,7 @@ namespace OpenDental {
 							+"Would you like to create it?\r\n\r\n"
 							+"WARNING: This can take a while, DO NOT CLOSE THE PROGRAM!"))
 						{
-							if(!CreateArchiveDB(dcon,connectionStrOrig,dbTypeOrig,connectionStrArchive,dbTypeArchive)) {
+							if(!CreateArchiveDB(dcon,connectionStrOrig,connectionStrArchive)) {
 								return;//Creating archive database failed.
 							}
 						}
@@ -1333,11 +1333,11 @@ namespace OpenDental {
 						return;
 					}
 					//Back the archive database up and upgrade it to the version that we are currently connected with.
-					if(!new ClassConvertDatabase().Convert(versionDbArchive.ToString(),versionDbOrig.ToString(),true,this,false)) {
-						MsgBox.Show(this,"Error backing up or upgrading archive database - error code: "+FormOpenDental.ExitCode+"\r\n"
-							+"Please call support.");
-						return;
-					}
+					//if(!new ClassConvertDatabase().Convert(versionDbArchive.ToString(),versionDbOrig.ToString(),true,this,false)) {
+					//	MsgBox.Show(this,"Error backing up or upgrading archive database - error code: "+FormOpenDental.ExitCode+"\r\n"
+					//		+"Please call support.");
+					//	return;
+					//}
 				}
 				else if(versionDbArchive>versionDbOrig) {
 					MsgBox.Show(this,"Archive database version is higher than the current database.  Process cannot continue.");
@@ -1351,7 +1351,7 @@ namespace OpenDental {
 				}
 				#endregion
 				#region Commence archive process
-				if(Archive(dcon,connectionStrOrig,dbTypeOrig,connectionStrArchive,dbTypeArchive,dateArchived,dbKey)) {
+				if(Archive(dcon,connectionStrOrig,connectionStrArchive,dateArchived,dbKey)) {
 					//Successful archive was made.
 					MsgBox.Show(this,"Archive process completed successfully.");
 				}
@@ -1361,7 +1361,7 @@ namespace OpenDental {
 				FriendlyException.Show("Unexpected error.",ex);
 			}
 			finally {//Always put the connection back to the original no matter what happened above when trying to make an archive.
-				dcon.SetDbT(connectionStrOrig,"",dbTypeOrig);//It is acceptable to crash the program if this fails.
+				dcon.SetDbT(connectionStrOrig,"");//It is acceptable to crash the program if this fails.
 				//Always set the global exit code back to whatever it was before we tried messing around with the archive.
 				FormOpenDental.ExitCode=exitCodeOld;
 			}
@@ -1369,8 +1369,7 @@ namespace OpenDental {
 
 		///<summary>Creates an archive database for the connection information passed in.  Shows error messages to the user.
 		///Returns true if the archive database was created; Overwise, false.</summary>
-		private bool CreateArchiveDB(DataConnection dcon,string connectionStrOrig,DatabaseType dbTypeOrig,string connectionStrArchive,
-			DatabaseType dbTypeArchive) 
+		private bool CreateArchiveDB(DataConnection dcon,string connectionStrOrig,string connectionStrArchive) 
 		{
 			bool isSuccess=false;
 			ODProgress.ShowAction(
@@ -1412,7 +1411,7 @@ namespace OpenDental {
 					#region Execute table queries and copy preferences
 					DataTable preferences=Prefs.GetTableFromCache(true);//Copy preferences from current db.
 					//Switch connection to archive db so we can create tables and copy over preferences (keeps track of db version)
-					dcon.SetDbT(connectionStrArchive,"",dbTypeArchive,true);
+					dcon.SetDbT(connectionStrArchive,"",true);
 					MiscDataEvent.Fire(ODEventType.MiscData,"Making new tables");
 					MiscData.MakeTables(listTableCommands);
 					MiscDataEvent.Fire(ODEventType.MiscData,"Inserting preferences");
@@ -1426,14 +1425,14 @@ namespace OpenDental {
 				odEventType:ODEventType.MiscData
 			);
 			//No matter what happened above, set the db context back to the original connection.
-			dcon.SetDbT(connectionStrOrig,"",dbTypeOrig);
+			dcon.SetDbT(connectionStrOrig,"");
 			return isSuccess;
 		}
 
 		///<summary>Performs the actual archive process.  Shows error messages to the user.
 		///Returns true if the archive process was successful; Overwise, false.</summary>
-		private bool Archive(DataConnection dcon,string connectionStrOrig,DatabaseType dbTypeOrig,string connectionStrArchive,
-			DatabaseType dbTypeArchive,DateTime dateArchived,string dbKey) 
+		private bool Archive(DataConnection dcon,string connectionStrOrig,string connectionStrArchive,
+			DateTime dateArchived,string dbKey) 
 		{
 			bool isSuccess=false;
 			ODProgress.ShowAction(
@@ -1455,7 +1454,7 @@ namespace OpenDental {
 					#endregion
 					#region Insert items from original to archive
 					//Reset to the original db once again.  Bulk insert securitylog entries and securityloghash entries that are prior to the selected date.
-					dcon.SetDbT(connectionStrOrig,"",dbTypeOrig);
+					dcon.SetDbT(connectionStrOrig,"");
 					//Insert security logs and security log hashes using our large table helper logic.
 					//Uses insert batches, multiple threads, and makes sure inserts are under the max allowed packet size.
 					MiscDataEvent.Fire(ODEventType.MiscData,"Inserting security logs");
@@ -1475,7 +1474,7 @@ namespace OpenDental {
 					}
 					#endregion
 					#region Verify archive integrity
-					dcon.SetDbT(connectionStrArchive,"",dbTypeArchive,true);
+					dcon.SetDbT(connectionStrArchive,"",true);
 					if(maxPriKeySecurityLog!=0 && SecurityLogs.GetOne(maxPriKeySecurityLog)==null) {
 						throw new ApplicationException("Archival process failed.  The archive securitylog table does not have all of the archived rows.\r\n"
 							+"Please call support.");
@@ -1486,7 +1485,7 @@ namespace OpenDental {
 					}
 					#endregion
 					#region Delete items from original database
-					dcon.SetDbT(connectionStrOrig,"",dbTypeOrig);//Reset to the original db once again.
+					dcon.SetDbT(connectionStrOrig,"");//Reset to the original db once again.
 					//Cleaning up - Delete SecurityLog and SecurityLogHash items in our original databasesecurity logs
 					MiscDataEvent.Fire(ODEventType.MiscData,"Deleting security logs");
 					SecurityLogs.DeleteWithMaxPriKey(maxPriKeySecurityLog);//Due to the nature of bulk inserts (and how the rows were selected for insert) we only know the maximum primary key.
@@ -1494,12 +1493,12 @@ namespace OpenDental {
 					SecurityLogHashes.DeleteWithMaxPriKey(maxPriKeySecurityLogHash);//Due to the nature of bulk inserts (and how the rows were selected for insert) we only know the maximum primary key.
 					#endregion
 					#region Save ArchiveDate and defaults
-					dcon.SetDbT(connectionStrArchive,"",dbTypeArchive,true);
+					dcon.SetDbT(connectionStrArchive,"",true);
 					Prefs.UpdateStringNoCache(PrefName.ArchiveDate,POut.DateT(dateTimeArchive.Value,false));
 					if(string.IsNullOrEmpty(archiveKey)) {//Update archive db's archivekey, if it's not set.
 						Prefs.UpdateStringNoCache(PrefName.ArchiveKey,dbKey);
 					}
-					dcon.SetDbT(connectionStrOrig,"",dbTypeOrig);
+					dcon.SetDbT(connectionStrOrig,"");
 					Prefs.UpdateDateT(PrefName.ArchiveDate,dateTimeArchive.Value);
 					Prefs.UpdateString(PrefName.ArchiveServerName,textArchiveServerName.Text);
 					Prefs.UpdateString(PrefName.ArchiveUserName,textArchiveUser.Text);
@@ -1517,7 +1516,7 @@ namespace OpenDental {
 				odEventType:ODEventType.MiscData
 			);
 			//No matter what happened above, set the db context back to the original connection.
-			dcon.SetDbT(connectionStrOrig,"",dbTypeOrig);
+			dcon.SetDbT(connectionStrOrig,"");
 			return isSuccess;
 		}
 

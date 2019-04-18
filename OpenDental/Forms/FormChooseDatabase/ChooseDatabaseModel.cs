@@ -24,7 +24,7 @@ namespace OpenDental {
 		///<summary>When silently running GetConfig() without showing UI, this gets set to true if either NoShowOnStartup or UsingEcw is found in config file.</summary>
 		public YN NoShow;
 		///<summary></summary>
-		public DatabaseType DbType;
+
 		///<summary>Stored so that they don't get deleted when re-writing the FreeDentalConfig file.</summary>
 		public List<string> ListAdminCompNames=new List<string>();
 
@@ -37,7 +37,6 @@ namespace OpenDental {
 			retVal.ConnectionString=this.ConnectionString;
 			retVal.IsAccessedFromMainMenu=this.IsAccessedFromMainMenu;
 			retVal.NoShow=this.NoShow;
-			retVal.DbType=this.DbType;
 			retVal.ListAdminCompNames=this.ListAdminCompNames.Select(x => x).ToList();
 			retVal.UseDynamicMode=this.UseDynamicMode;
 			return retVal;
@@ -55,7 +54,7 @@ namespace OpenDental {
 			//The only time we do not need to do that is if a direct DB has been passed in.
 			if(string.IsNullOrEmpty(databaseName)) {
 				CentralConnections.GetChooseDatabaseConnectionSettings(out chooseDatabaseModel.CentralConnectionCur,out chooseDatabaseModel.ConnectionString
-					,out chooseDatabaseModel.NoShow,out chooseDatabaseModel.DbType,out chooseDatabaseModel.ListAdminCompNames,out chooseDatabaseModel.UseDynamicMode);
+					,out chooseDatabaseModel.NoShow,out chooseDatabaseModel.ListAdminCompNames,out chooseDatabaseModel.UseDynamicMode);
 			}
 			//Command line args should always trump settings from the config file.
 			#region Command Line Arguements

@@ -2469,7 +2469,7 @@ namespace OpenDental {
 			try {
 				job=(Job)grid.Rows[rowSelection].Tag;
 			}
-			catch(Exception ex) {
+			catch {
 				job=null;
 			}
 			return job;

@@ -190,10 +190,10 @@ namespace OpenDental {
 				DataConnection dcon;
 				//use the one table that we know exists
 				if(textMysqlUser.Text=="") {
-					dcon=new DataConnection(textServerName.Text,"mysql","root",textMysqlPass.Text,DatabaseType.MySql);
+					dcon=new DataConnection(textServerName.Text,"mysql","root",textMysqlPass.Text);
 				}
 				else {
-					dcon=new DataConnection(textServerName.Text,"mysql",textMysqlUser.Text,textMysqlPass.Text,DatabaseType.MySql);
+					dcon=new DataConnection(textServerName.Text,"mysql",textMysqlUser.Text,textMysqlPass.Text);
 				}
 				string command="SHOW DATABASES";
 				//if this next step fails, table will simply have 0 rows

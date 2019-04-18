@@ -282,7 +282,7 @@ namespace OpenDental {
 				Func<bool> funcTestConnection=() => {
 					using(DataConnection dconn=new DataConnection()) {
 						try {
-							dconn.SetDb(DataConnection.GetCurrentConnectionString(),"",DataConnection.DBtype);
+							dconn.SetDb(DataConnection.GetCurrentConnectionString(),"");
 							//Tell everyone that the data connection has been found.
 							DataConnectionEvent.Fire(new DataConnectionEventArgs(DataConnectionEventType.ConnectionRestored,true,e.ConnectionString));
 						}
@@ -475,9 +475,9 @@ namespace OpenDental {
 				return;//Don't waste time processing phone metrics when no one is logged in and sitting at the log on screen.
 			}
 #if DEBUG
-			new DataConnection().SetDbT("localhost","customers","root","","","",DatabaseType.MySql,true);
+			new DataConnection().SetDbT("localhost","customers","root","","","",true);
 #else
-			new DataConnection().SetDbT("server","customers","root","","","",DatabaseType.MySql,true);
+			new DataConnection().SetDbT("server","customers","root","","","",true);
 #endif
 			if(_listMaps.Count>0 
 				&& DateTime.Now.Subtract(_hqOfficeDownLastRefreshed).TotalSeconds>PrefC.GetInt(PrefName.ProcessSigsIntervalInSecs)) 
