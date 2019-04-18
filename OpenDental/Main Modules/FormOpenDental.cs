@@ -3382,7 +3382,7 @@ namespace OpenDental
             //ClientWeb version can be older than this version, but that will be caught in a moment.
             if (isSilentUpdate)
             {
-                if (!PrefL.ConvertDB(true, Application.ProductVersion, this, false))
+                if (!PrefL.ConvertDB(true, this, false))
                 {//refreshes Prefs if converted successfully.
                     if (ExitCode == 0)
                     {//Unknown error occurred
@@ -3394,14 +3394,8 @@ namespace OpenDental
             }
             else
             {
-
-                //Application.ProductVersion
-                // string pref = PrefC.GetString(PrefName.DataBaseVersion);
-
-                // TODO: Check if database is compatible...
-
-                if (!PrefL.ConvertDB(this, model?.UseDynamicMode ?? false)) //?? 
-                {//refreshes Prefs if converted successfully.
+                if (!PrefL.ConvertDB(false, this, false)) 
+                {
                     return false;
                 }
             }
