@@ -78,56 +78,10 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CodeBase\Progress\IODProgress.cs">
-      <Link>IODProgress.cs</Link>
-    </Compile>
-    <Compile Include="..\CodeBase\Utilities\Logger.cs">
-      <Link>Logger.cs</Link>
-    </Compile>
-    <Compile Include="..\CodeBase\Utilities\MiscUtils.cs">
-      <Link>MiscUtils.cs</Link>
-    </Compile>
-    <Compile Include="..\CodeBase\Utilities\MsgBoxCopyPaste.cs">
-      <Link>MsgBoxCopyPaste.cs</Link>
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="..\CodeBase\Utilities\ODBoxItem.cs">
-      <Link>ODBoxItem.cs</Link>
-    </Compile>
-    <Compile Include="..\CodeBase\Utilities\ODClassExtensions.cs">
-      <Link>ODClassExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\CodeBase\Utilities\ODException.cs">
-      <Link>ODException.cs</Link>
-    </Compile>
-    <Compile Include="..\CodeBase\Utilities\ODFileUtils.cs">
-      <Link>ODFileUtils.cs</Link>
-    </Compile>
-    <Compile Include="..\CodeBase\Utilities\ODInvokeExtensions.cs">
-      <Link>ODInvokeExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\CodeBase\Utilities\ODThread.cs">
-      <Link>ODThread.cs</Link>
-    </Compile>
-    <Compile Include="..\CodeBase\Utilities\ODUIExtensions.cs">
-      <Link>ODUIExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\CodeBase\Utilities\ODPrimitiveExtensions.cs">
-      <Link>ODPrimitiveExtensions.cs</Link>
-    </Compile>
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -136,13 +90,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="..\CodeBase\Utilities\MsgBoxCopyPaste.resx">
-      <Link>MsgBoxCopyPaste.resx</Link>
-    </EmbeddedResource>
-    <EmbeddedResource Include="..\CodeBase\Utilities\ODBoxItem.resx">
-      <Link>ODBoxItem.resx</Link>
-      <DependentUpon>ODBoxItem.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
       <SubType>Designer</SubType>

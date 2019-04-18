@@ -19,7 +19,7 @@ namespace UpdateFileCopier.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -57,6 +57,96 @@ namespace UpdateFileCopier.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cleaning up....
+        /// </summary>
+        internal static string LangCleaningUp {
+            get {
+                return ResourceManager.GetString("LangCleaningUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done.
+        /// </summary>
+        internal static string LangDone {
+            get {
+                return ResourceManager.GetString("LangDone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preparing to Copy Files....
+        /// </summary>
+        internal static string LangPreparingToCopyFiles {
+            get {
+                return ResourceManager.GetString("LangPreparingToCopyFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some files failed to copy. Verify network access and permissions are correct, then click Retry..
+        /// </summary>
+        internal static string LangSomeFilesFailedToCopy {
+            get {
+                return ResourceManager.GetString("LangSomeFilesFailedToCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Backing up: {0}.
+        /// </summary>
+        internal static string LangStatusBackingUp {
+            get {
+                return ResourceManager.GetString("LangStatusBackingUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copying: {0}.
+        /// </summary>
+        internal static string LangStatusCopying {
+            get {
+                return ResourceManager.GetString("LangStatusCopying", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reverting: {0}.
+        /// </summary>
+        internal static string LangStatusReverting {
+            get {
+                return ResourceManager.GetString("LangStatusReverting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are files still in use. Please make sure all instances of Imedisoft are closed then click Retry..
+        /// </summary>
+        internal static string LangThereAreFilesInUse {
+            get {
+                return ResourceManager.GetString("LangThereAreFilesInUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to access {0}..
+        /// </summary>
+        internal static string LangUnableToAccess {
+            get {
+                return ResourceManager.GetString("LangUnableToAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update File Copier.
+        /// </summary>
+        internal static string LangUpdateFileCopier {
+            get {
+                return ResourceManager.GetString("LangUpdateFileCopier", resourceCulture);
             }
         }
     }
