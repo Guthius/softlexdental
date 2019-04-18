@@ -2420,7 +2420,7 @@ namespace OpenDental
             this.comboTriageCoordinator.Location = new System.Drawing.Point(0, 42);
             this.comboTriageCoordinator.MaxDropDownItems = 10;
             this.comboTriageCoordinator.Name = "comboTriageCoordinator";
-            this.comboTriageCoordinator.Size = new System.Drawing.Size(213, 21);
+            this.comboTriageCoordinator.Size = new System.Drawing.Size(213, 23);
             this.comboTriageCoordinator.TabIndex = 87;
             this.comboTriageCoordinator.SelectionChangeCommitted += new System.EventHandler(this.comboTriageCoordinator_SelectionChangeCommitted);
             // 
@@ -2592,17 +2592,18 @@ namespace OpenDental
             // 
             // FormOpenDental
             // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(982, 413);
             this.Controls.Add(this.splitContainerNoFlickerDashboard);
             this.Controls.Add(this.panelPhoneSmall);
             this.Controls.Add(this.panelSplitter);
             this.Controls.Add(this.lightSignalGrid1);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Menu = this.mainMenu;
             this.Name = "FormOpenDental";
             this.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.Text = "Open Dental";
+            this.Text = "Softlex";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Deactivate += new System.EventHandler(this.FormOpenDental_Deactivate);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormOpenDental_FormClosing);
@@ -6836,11 +6837,9 @@ namespace OpenDental
 
         #region File
 
-        //File
-        private void menuItemPassword_Click(object sender, EventArgs e)
-        {
-            SecurityL.ChangePassword(false);
-        }
+
+        void menuItemPassword_Click(object sender, EventArgs e) => SecurityL.ChangePassword(false);
+        
 
         private void menuItemUserEmailAddress_Click(object sender, EventArgs e)
         {

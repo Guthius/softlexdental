@@ -61,6 +61,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change Password.
+        /// </summary>
+        public static string ChangePassword {
+            get {
+                return ResourceManager.GetString("ChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Column.
         /// </summary>
         public static string ColumnColumn {
@@ -151,6 +160,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current password incorrect..
+        /// </summary>
+        public static string CurrentPasswordIncorrect {
+            get {
+                return ResourceManager.GetString("CurrentPasswordIncorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do not show me this message again..
         /// </summary>
         public static string DoNotShowThisMessageAgain {
@@ -165,15 +183,6 @@ namespace OpenDental.Translation {
         public static string lang_create_password {
             get {
                 return ResourceManager.GetString("lang_create_password", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Current password incorrect..
-        /// </summary>
-        public static string lang_current_password_incorrect {
-            get {
-                return ResourceManager.GetString("lang_current_password_incorrect", resourceCulture);
             }
         }
         
@@ -201,15 +210,6 @@ namespace OpenDental.Translation {
         public static string lang_new_password {
             get {
                 return ResourceManager.GetString("lang_new_password", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Passwords must match and not be empty..
-        /// </summary>
-        public static string lang_password_must_match_and_not_be_empty {
-            get {
-                return ResourceManager.GetString("lang_password_must_match_and_not_be_empty", resourceCulture);
             }
         }
         
@@ -255,6 +255,33 @@ namespace OpenDental.Translation {
         public static string LogOffConfirmation {
             get {
                 return ResourceManager.GetString("LogOffConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Dental.
+        /// </summary>
+        public static string OpenDental {
+            get {
+                return ResourceManager.GetString("OpenDental", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passwords must match and not be empty..
+        /// </summary>
+        public static string PasswordsMustMatchAndNotBeEmpty {
+            get {
+                return ResourceManager.GetString("PasswordsMustMatchAndNotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use the CEMT tool to change your password..
+        /// </summary>
+        public static string UseTheCEMTToolToChangeYourPassword {
+            get {
+                return ResourceManager.GetString("UseTheCEMTToolToChangeYourPassword", resourceCulture);
             }
         }
         

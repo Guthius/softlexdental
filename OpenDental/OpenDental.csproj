@@ -807,10 +807,10 @@
     <Compile Include="Forms\FormBugSubmission.designer.cs">
       <DependentUpon>FormBugSubmission.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormChooseDatabase\FormChooseDatabase.cs">
+    <Compile Include="Forms\FormChooseDatabase.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormChooseDatabase\FormChooseDatabase.Designer.cs">
+    <Compile Include="Forms\FormChooseDatabase.Designer.cs">
       <DependentUpon>FormChooseDatabase.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormCommItem\CommItemController.cs" />
@@ -5447,7 +5447,7 @@
     <EmbeddedResource Include="Forms\FormBugSubmission.resx">
       <DependentUpon>FormBugSubmission.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormChooseDatabase\FormChooseDatabase.resx">
+    <EmbeddedResource Include="Forms\FormChooseDatabase.resx">
       <DependentUpon>FormChooseDatabase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormCommItem\FormCommItem.resx">

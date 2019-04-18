@@ -651,10 +651,6 @@ namespace OpenDentBusiness {
 		///<summary>Surround with try/catch because it can throw exceptions.
 		///Same as Update(), only the Validate call skips checking duplicate names for hidden users.</summary>
 		public static void UpdatePassword(Userod userod,PasswordContainer loginDetails,bool isPasswordStrong) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),userod,loginDetails,isPasswordStrong);
-				return;
-			}
 			Userod userToUpdate=userod.Copy();
 			userToUpdate.LoginDetails=loginDetails;
 			userToUpdate.PasswordIsStrong=isPasswordStrong;
