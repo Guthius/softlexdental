@@ -14,11 +14,9 @@ namespace OpenDentBusiness.WebServices {
 		private string _password="";
 		private string _userLow="";
 		private string _passLow="";
-		private DatabaseType _dbType=DatabaseType.MySql;
 
 		///<summary>Optionally pass in database connection settings to override using the parent thread database context.</summary>
-		public OpenDentalServerMockIIS(string server="",string db="",string user="",string password="",string userLow="",string passLow=""
-			,DatabaseType dbType=DatabaseType.MySql)
+		public OpenDentalServerMockIIS(string server="",string db="",string user="",string password="",string userLow="",string passLow="")
 		{
 			_server=server;
 			_db=db;
@@ -26,7 +24,6 @@ namespace OpenDentBusiness.WebServices {
 			_password=password;
 			_userLow=userLow;
 			_passLow=passLow;
-			_dbType=dbType;
 		}
 
 		public string ProcessRequest(string dtoString) {
@@ -46,7 +43,7 @@ namespace OpenDentBusiness.WebServices {
 					&& !string.IsNullOrEmpty(_db)
 					&& !string.IsNullOrEmpty(_user))
 				{
-					new DataConnection().SetDbT(_server,_db,_user,_password,_userLow,_passLow,DatabaseType.MySql);
+					new DataConnection().SetDbT(_server,_db,_user,_password,_userLow,_passLow);
 				}
 				//Execute the func that was passed in now that our remoting role and database connection are correct.
 				o.Tag=funcWebMethod();

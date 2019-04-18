@@ -14,115 +14,84 @@ namespace OpenDentBusiness {
 		///Oracle will cut up a section of the CLOB column using SUBSTR.  The portion is dictated by starting at startIndex for substringLength chars.
 		///When using MySQL you simply order by the column name because it is smart enough to allow users to ORDER BY 'text' data type.</summary>
 		public static string ClobOrderBy(string columnName,int startIndex=1,int substringLength=1000) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "DBMS_LOB.SUBSTR("+columnName+","+POut.Int(substringLength)+","+POut.Int(startIndex)+")";
-			}
 			return columnName;
 		}
 
 		///<summary>Returns a safe drop table string that does not need to be surrounded with a try catch.</summary>
 		public static string DropTableIfExist(string tableName) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "BEGIN EXECUTE IMMEDIATE 'DROP TABLE "+tableName+"'; EXCEPTION WHEN OTHERS THEN NULL; END;";
-			}
-			else {
+
 				return "DROP TABLE IF EXISTS "+tableName;
-			}
+			
 		}
 
 		///<summary>Use when you already have a WHERE clause in the query. Uses AND RowNum... for Oracle.</summary>
 		public static string LimitAnd(int n) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "AND RowNum <= " + n;
-			}
-			else {
+
 				return "LIMIT " + n;
-			}
+			
 		}
 
 		///<summary>Use when you do not otherwise have a WHERE clause in the query. Uses WHERE RowNum... for Oracle.</summary>
 		public static string LimitWhere(int n) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "WHERE RowNum <= " + n;
-			}
-			else {
+
 				return "LIMIT " + n;
-			}
+			
 		}
 
 		///<summary>Use when there is an ORDER BY clause in the query. Uses RowNum... for Oracle.</summary>
 		public static string LimitOrderBy(string query,int n) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "SELECT * FROM (" + query + ") WHERE RowNum <= " + n;
-			}
-			else {
+
 				return query + " LIMIT " + n;
-			}
+			
 		}
 
 		///<summary>Use when there is an ORDER BY clause in the query.  Uses RowNum... for Oracle.  Returns n rows after skipping offset number of rows.</summary>
 		public static string LimitOrderByOffset(string query,int n,int offset) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "SELECT * FROM ("+query+") WHERE RowNum > "+offset+" AND RowNum <= "+(offset+n);
-			}
-			else {
+
 				return query + " LIMIT "+offset+","+n;
-			}
+			
 		}
 
-		/// <summary>Concatenates the fields and/or literals passed as params for Oracle or MySQL. If passing in a literal, surround with single quotes.</summary>
-		public static string Concat(params string[] values) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				string result="(";
-				for(int i=0;i<values.Length;i++) {
-					if(i!=0) {
-						result+=" || ";
-					}
-					result+=values[i];
-				}
-				result+=")";
-				return result;
-			}
-			else {
-				string result="CONCAT(";
-				for(int i=0;i<values.Length; i++) {
-					if(i!=0) {
-						result+=",";
-					}
-					result+=values[i];
-				}
-				result+=")";
-				return result;
-			}
-		}
+        /// <summary>Concatenates the fields and/or literals passed as params for Oracle or MySQL. If passing in a literal, surround with single quotes.</summary>
+        public static string Concat(params string[] values)
+        {
 
-		///<summary>Specify column for equivalent of "GROUP_CONCAT(column)" in MySQL. Adds DISTINCT (MySQL only) and ORDERBY and SEPARATOR as specified.
-		///SEPARATOR not used for Oracle.
-		///Call using parameters by name, example: GroupConcat(column,distinct:true,separator:" | ").</summary>
-		public static string GroupConcat(string column,bool distinct=false,bool orderby=false,string separator=",") {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				if(orderby) {
-					return "RTRIM(REPLACE(REPLACE(XMLAgg(XMLElement(\"x\","+column+") ORDER BY "+column+"),'<x>'),'</x>',','),',')";
-				}
-				else {
-					return "RTRIM(REPLACE(REPLACE(XMLAgg(XMLElement(\"x\","+column+")),'<x>'),'</x>',','),',')";
-				}//Distinct ignored for Oracle case.
-			}
-			else {
-				if(distinct && orderby) {
-					return "GROUP_CONCAT(DISTINCT "+column+" ORDER BY "+column+" SEPARATOR '"+separator+"')";
-				}
-				if(distinct &&  !orderby) {
-					return "GROUP_CONCAT(DISTINCT "+column+" SEPARATOR '"+separator+"')";
-				}
-				if(!distinct && orderby) {
-					return "GROUP_CONCAT("+column+" ORDER BY "+column+" SEPARATOR '"+separator+"')";
-				}
-				else {
-					return "GROUP_CONCAT("+column+" SEPARATOR '"+separator+"')";
-				}
-			}
-		}
+            string result = "CONCAT(";
+            for (int i = 0; i < values.Length; i++)
+            {
+                if (i != 0)
+                {
+                    result += ",";
+                }
+                result += values[i];
+            }
+            result += ")";
+            return result;
+
+        }
+
+        ///<summary>Specify column for equivalent of "GROUP_CONCAT(column)" in MySQL. Adds DISTINCT (MySQL only) and ORDERBY and SEPARATOR as specified.
+        ///SEPARATOR not used for Oracle.
+        ///Call using parameters by name, example: GroupConcat(column,distinct:true,separator:" | ").</summary>
+        public static string GroupConcat(string column, bool distinct = false, bool orderby = false, string separator = ",")
+        {
+            if (distinct && orderby)
+            {
+                return "GROUP_CONCAT(DISTINCT " + column + " ORDER BY " + column + " SEPARATOR '" + separator + "')";
+            }
+            if (distinct && !orderby)
+            {
+                return "GROUP_CONCAT(DISTINCT " + column + " SEPARATOR '" + separator + "')";
+            }
+            if (!distinct && orderby)
+            {
+                return "GROUP_CONCAT(" + column + " ORDER BY " + column + " SEPARATOR '" + separator + "')";
+            }
+            else
+            {
+                return "GROUP_CONCAT(" + column + " SEPARATOR '" + separator + "')";
+            }
+        }
 
 		///<summary>If the MySQL variable eq_range_index_dive_limit exists (MySQL 5.6 and above) and is set to a value>0, this will break a query with
 		///eq_range_index_dive_limit or more items in an IN clause into multiple statements separated by either a UNION ALL for SELECT statements or a
@@ -166,56 +135,32 @@ namespace OpenDentBusiness {
 
 		///<summary>In Oracle, union order by combos can only use ordinals and not column names. Values for ordinal start at 1.</summary>
 		public static string UnionOrderBy(string colName,int ordinal) {
-			//Using POut doesn't name sense for column names or ordinal numbers because they are not values they are part of the query.
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return ordinal.ToString();
-			}
 			return colName;
 		}
 
 		///<summary>Helper for getting the correct "use index" syntax that will force a query to use the index passed in.
 		///tableName is required for Oracle and it CANNOT reference the schema name E.g. "customers.patient" fails, just pass in "patient".</summary>
 		public static string UseIndex(string indexName,string tableName) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				//For Oracle, they have this chaos calld "index hint" and the syntax looks crazy.
-				//E.g. "  SELECT /*+ INDEX(table,index) */ col1,col2,col3 FROM table  "
-				return "/*+ INDEX("+tableName+","+indexName+") */";
-			}
 			return "USE INDEX("+indexName+")";
 		}
 
 		public static string DateAddDay(string date,string days) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return date+" +"+days;//Can handle negatives even with '+' hardcoded.
-			}
 			return "ADDDATE("+date+","+days+")";
 		}
 
 		public static string DateAddMonth(string date,string months) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "ADD_MONTHS("+date+","+months+")";
-			}
 			return "ADDDATE("+date+",INTERVAL "+months+" MONTH)";
 		}
 
 		public static string DateAddYear(string date,string years) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "ADD_MONTHS("+date+","+years+"*12)";
-			}
 			return "ADDDATE("+date+",INTERVAL "+years+" YEAR)";
 		}
 
 		public static string DateAddMinute(string date,string minutes) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return date+" +"+minutes+"/1440";//1 minute is 1/1440 of a day
-			}
 			return "ADDDATE("+date+",INTERVAL "+minutes+" MINUTE)";
 		}
 
 		public static string DateAddSecond(string date,string seconds) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return date+" +"+seconds+"/86400";//1 second is 1/86400 of a day
-			}
 			return "ADDDATE("+date+",INTERVAL "+seconds+" SECOND)";
 		}
 
@@ -227,9 +172,6 @@ namespace OpenDentBusiness {
 		///<summary>Use the overload taking three arguments in order to take advantage of indexes on the column.
 		///TO_DATE() for datetime columns where we only want the date.</summary>
 		public static string DtimeToDate(string colName) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "TO_DATE("+colName+")";
-			}
 			return "DATE("+colName+")";
 		}
 
@@ -306,15 +248,7 @@ namespace OpenDentBusiness {
 		public static string DateFormatColumn(string colName,string format) {
 			//MySQL DATE_FORMAT() reference: http://dev.mysql.com/doc/refman/5.0/en/date-and-time-functions.html#function_date-format
 			//Oracle TO_CHAR() reference: http://download.oracle.com/docs/cd/B19306_01/server.102/b14200/sql_elements004.htm#i34510
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				if(format=="%c/%d/%Y") {
-					return "TO_CHAR("+colName+",'MM/DD/YYYY')";//Sadly, not exactly the same but closest option.
-				}
-				else if(format=="%m/%d/%Y") {
-					return "TO_CHAR("+colName+",'MM/DD/YYYY')";//Sadly, not exactly the same but closest option.
-				}
-				throw new Exception("Unrecognized date format string.");
-			}
+
 			//MySQL-----------------------------------------------------------------------------
 			if(System.Globalization.CultureInfo.CurrentCulture.Name.EndsWith("US")) {
 				return "DATE_FORMAT("+colName+",'"+format+"')";
@@ -331,15 +265,6 @@ namespace OpenDentBusiness {
 
 		///<summary>The format must be the MySQL format.  The following formats are currently acceptable as input: %c/%d/%Y %H:%i:%s and %m/%d/%Y %H:%i:%s.</summary>
 		public static string DateTFormatColumn(string colName,string format) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				if(format=="%c/%d/%Y %H:%i:%s") {
-					return "TO_CHAR("+colName+",'MM/DD/YYYY %HH24:%MI:%SS')";//Sadly, not exactly the same but closest option.
-				}
-				else if(format=="%m/%d/%Y %H:%i:%s") {
-					return "TO_CHAR("+colName+",'MM/DD/YYYY %HH24:%MI:%SS')";//Sadly, not exactly the same but closest option.
-				}
-				throw new Exception("Unrecognized datetime format string.");
-			}
 			//MySQL-----------------------------------------------------------------------------
 			if(System.Globalization.CultureInfo.CurrentCulture.Name.EndsWith("US")) {
 				return "DATE_FORMAT("+colName+",'"+format+"')";
@@ -365,27 +290,16 @@ namespace OpenDentBusiness {
 
 		///<summary>Helper for Oracle that will return equivalent of MySql CURDATE()</summary>
 		public static string Curdate() {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				//return "(SELECT TO_CHAR(SYSDATE,'YYYY-MM-DD') FROM DUAL)";
-				return "SYSDATE";
-			}
 			return "CURDATE()";
 		}
 
 		///<summary>Helper for Oracle that will return equivalent of MySql NOW()</summary>
 		public static string Now() {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				//return "(SELECT TO_CHAR(SYSDATE,'YYYY-MM-DD HH24:MI:SS') FROM DUAL)";
-				return "SYSDATE";
-			}
 			return "NOW()";
 		}
 
 		///<summary>Helper for Oracle that will return equivalent of MySql YEAR()</summary>
 		public static string Year(string date) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "CAST(TO_CHAR("+date+",'YYYY') AS NUMBER)";
-			}
 			return "YEAR("+date+")";
 		}
 		
@@ -396,19 +310,12 @@ namespace OpenDentBusiness {
 
 		///<summary>Helper for Oracle that will return equivalent of MySql "input REGEXP 'pattern'". Also changes pattern:[0-9] to [:digit:] for Oracle. Takes matches param for "does [not] match this regexp."</summary>
 		public static string Regexp(string input,string pattern,bool matches) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				pattern.Replace("[0-9]","[[:digit:]]");
-				return (matches?"":"NOT ")+"REGEXP_LIKE("+input+",'"+pattern+"')";
-			}
 			return input+(matches?"":" NOT")+" REGEXP '"+pattern+"'";
 		}
 
 		///<summary>Gets the database specific character used for parameters.  For example, : or @.</summary>
 		public static string ParamChar {
 			get {
-				if(DataConnection.DBtype==DatabaseType.Oracle) {
-					return ":";
-				}
 				return "@";
 			}
 		}
@@ -433,12 +340,9 @@ namespace OpenDentBusiness {
 
 		public static string CastToChar(string expr) {
 			string result="CAST(";
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				result+=expr+" AS VARCHAR2(4000))";
-			}
-			else {
+
 				result+=expr+" AS CHAR(4000))";
-			}
+			
 			return result;
 		}
 
@@ -699,9 +603,6 @@ namespace OpenDentBusiness {
 
 		///<summary>Helper for Oracle that will return equivalent of MySQL IFNULL().</summary>
 		public static string IfNull(string expr,int valWhenNull) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "CASE WHEN ("+expr+") IS NULL THEN "+valWhenNull+" ELSE "+expr+" END";
-			}
 			return "IFNULL("+expr+","+valWhenNull+")";
 		}
 
@@ -714,9 +615,6 @@ namespace OpenDentBusiness {
 		public static string IfNull(string expr,string valWhenNull,bool isValEncapsulated) {
 			if(isValEncapsulated) {
 				valWhenNull="'"+valWhenNull+"'";
-			}
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "CASE WHEN ("+expr+") IS NULL THEN "+valWhenNull+" ELSE "+expr+" END";
 			}
 			return "IFNULL("+expr+","+valWhenNull+")";
 		}

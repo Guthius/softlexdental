@@ -194,15 +194,8 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SmsBilling into the database.  Returns the new priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(SmsBilling smsBilling){
-			if(DataConnection.DBtype==DatabaseType.MySql) {
 				return InsertNoCache(smsBilling,false);
-			}
-			else {
-				if(DataConnection.DBtype==DatabaseType.Oracle) {
-					smsBilling.SmsBillingNum=DbHelper.GetNextOracleKey("smsbilling","SmsBillingNum"); //Cacheless method
-				}
-				return InsertNoCache(smsBilling,true);
-			}
+
 		}
 
 		///<summary>Inserts one SmsBilling into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>

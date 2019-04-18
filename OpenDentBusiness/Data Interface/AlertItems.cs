@@ -180,7 +180,6 @@ namespace OpenDentBusiness{
 				curUserNum=Security.CurUser.UserNum;
 			}
 			string command="";
-			if(DataConnection.DBtype==DatabaseType.MySql) {
 				command="SELECT * FROM alertitem "
 					+"WHERE Type IN ("+String.Join(",",listAlertTypes.Cast<int>().ToList())+") "
 					+"AND (UserNum=0 OR UserNum="+POut.Long(curUserNum)+") "
@@ -188,13 +187,7 @@ namespace OpenDentBusiness{
 					//When provNum is 0 the initial WHEN check below will not bring any rows by definition of the FKey column.
 					+"AND (CASE TYPE WHEN "+POut.Int((int)AlertType.RadiologyProcedures)+" THEN FKey="+POut.Long(provNum)+" "
 					+"ELSE ClinicNum = "+POut.Long(clinicNum)+" OR ClinicNum=-1 END)";
-			}
-			else {//oracle
-				//Case statements cannot change column return results unless they are within the SELECT case.
-				command="SELECT AlertItemNum,CASE Type WHEN 3 THEN ClinicNum ELSE 0 END ClinicNum,Description,Type,Severity,Actions,FormToOpen,CASE Type WHEN 3 THEN 0 ELSE FKey END FKey,ItemValue "
-					+"FROM alertitem "
-					+"WHERE Type IN ("+String.Join(",",listAlertTypes.Cast<int>().ToList())+") ";
-			}
+
 			return Crud.AlertItemCrud.SelectMany(command);
 		}
 

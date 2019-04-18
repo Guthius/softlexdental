@@ -27,12 +27,8 @@ namespace OpenDentBusiness {
 			}
 			query+="procedurelog.ProcFee*(procedurelog.UnitQty+procedurelog.BaseUnits)"
 				+"-COALESCE(SUM(claimproc.WriteOff),0) ";//\"$fee\" "  //if no writeoff, then subtract 0
-			if(DataConnection.DBtype==DatabaseType.MySql) {
-				query+="$fee ";
-			}
-			else {//Oracle needs quotes.
-				query+="\"$fee\" ";
-			}
+			query+="$fee ";
+
 			query+="FROM patient "
 				+"INNER JOIN procedurelog ON procedurelog.PatNum=patient.PatNum "
 				+"INNER JOIN procedurecode ON procedurecode.CodeNum=procedurelog.CodeNum "
@@ -61,13 +57,8 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod(),dateFrom,dateTo,listProvNums,listClinicNums,procCode,hasAllProvs);
 			}
-			string query="SELECT procs.ItemName,procs.ProcCode,procs.Descript,";
-			if(DataConnection.DBtype==DatabaseType.MySql) {
-				query+="Count(*),FORMAT(ROUND(AVG(procs.fee),2),2) $AvgFee,SUM(procs.fee) AS $TotFee ";
-			}
-			else {//Oracle needs quotes.
-				query+="Count(*),AVG(procs.fee) \"$AvgFee\",SUM(procs.fee) AS \"$TotFee\" ";
-			}
+			string query="SELECT procs.ItemName,procs.ProcCode,procs.Descript,Count(*),FORMAT(ROUND(AVG(procs.fee),2),2) $AvgFee,SUM(procs.fee) AS $TotFee ";
+
 			query+="FROM ( "
 				+"SELECT procedurelog.ProcFee*(procedurelog.UnitQty+procedurelog.BaseUnits) -COALESCE(SUM(claimproc.WriteOff),0) fee, "
 				+"procedurecode.ProcCode,	procedurecode.Descript,	definition.ItemName, definition.ItemOrder "

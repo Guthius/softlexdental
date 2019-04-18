@@ -2033,16 +2033,16 @@ namespace OpenDentBusiness {
 						+"INNER JOIN inssub ON inssub.InsSubNum=patplan.InsSubNum "
 						+"INNER JOIN insplan ON insplan.PlanNum=inssub.PlanNum AND insplan.IsMedical "
 						+"GROUP BY patplan.PatNum ";
-				if(DataConnection.DBtype==DatabaseType.MySql) {
+
 					command+="ORDER BY NULL";
-				}
+				
 				command+=") medplan ON medplan.PatNum=patplan.PatNum AND medplan.Ordinal=patplan.Ordinal "
 					+"INNER JOIN inssub ON inssub.InsSubNum=patplan.InsSubNum "
 					+"INNER JOIN insplan ON insplan.PlanNum=inssub.PlanNum "
 					+"GROUP BY patplan.PatNum ";
-				if(DataConnection.DBtype==DatabaseType.MySql) {
+
 					command+="ORDER BY NULL";
-				}
+				
 				dictPatNumMedFeeSchedNum=Db.GetTable(command).Select()
 					.ToDictionary(x => PIn.Long(x["PatNum"].ToString()),x => PIn.Long(x["medFeeSched"].ToString()));
 			}
@@ -2384,7 +2384,7 @@ namespace OpenDentBusiness {
 			if(listWhereClauses.Count>0) {
 				whereClause="WHERE "+string.Join(" AND ",listWhereClauses)+" ";
 			}
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+
 				string command="SET @row=0,@maxProcNum=0;"
 					+"SELECT procNum,@row totalCount FROM ("
 						+"SELECT @row:=@row+1 rowNum,@maxProcNum:=ProcNum procNum FROM ("
@@ -2397,27 +2397,8 @@ namespace OpenDentBusiness {
 					_totCount=PIn.Int(tableCur.Rows[0]["totalCount"].ToString());
 					retval=tableCur.Select().Select(x => PIn.Long(x["procNum"].ToString())).ToList();
 				}
-			}
-			else {//oracle
-				//different strategy for oracle, but not used for MySQL because it's much slower
-				long groupMaxPatNum;
-				int groupNum=0;
-				do {
-					groupMaxPatNum=0;
-					string command="SELECT MAX(ProcNum) procNumMax,COUNT(*) groupCount FROM ("
-						+DbHelper.LimitOrderByOffset("SELECT ProcNum FROM procedurelog "+whereClause+"ORDER BY ProcNum",numPerGroup,groupNum)+") patNumGroup";
-					DataTable tableCur=Db.GetTable(command);//increase timeout to 5 minutes for this query
-					if(tableCur.Rows.Count==0) {
-						break;
-					}
-					groupMaxPatNum=PIn.Long(tableCur.Rows[0]["procNumMax"].ToString());
-					if(groupMaxPatNum>0) {
-						retval.Add(groupMaxPatNum);
-					}
-					_totCount+=PIn.Int(tableCur.Rows[0]["groupCount"].ToString());
-					groupNum+=numPerGroup;
-				} while(groupMaxPatNum>0);
-			}
+			
+
 			return retval;
 		}
 

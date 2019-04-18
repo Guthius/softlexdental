@@ -67,12 +67,9 @@ namespace OpenDentBusiness{
 			if(isUnattached) {
 				command+="WHERE NOT EXISTS(SELECT * FROM transaction WHERE deposit.DepositNum=transaction.DepositNum) ";
 			}
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+
 				command+="GROUP BY deposit.DepositNum ";
-			}
-			else {//Oracle
-				command+="GROUP BY deposit.DepositNum,deposit.DateDeposit,deposit.BankAccountInfo,deposit.Amount,deposit.Memo  ";
-			}
+
 			command+="ORDER BY deposit.DateDeposit";
 			DataTable table=Db.GetTable(command);
 			List <Deposit> listDeposits=Crud.DepositCrud.TableToList(table);

@@ -156,18 +156,12 @@ namespace OpenDentBusiness{
 		}
 
 		public static Ucum GetByCode(string ucumCode) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Ucum>(MethodBase.GetCurrentMethod(),ucumCode);
-			}
 			string command;
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				command="SELECT * FROM ucum WHERE UcumCode='"+POut.String(ucumCode)+"'";
-			}
-			else {
+
 				//because when we search for UnumCode 'a' for 'year [time]' used for age we sometimes get 'A' for 'Ampere [electric current]'
 				//since MySQL is case insensitive, so we compare the binary values of 'a' and 'A' which are 0x61 and 0x41 in Hex respectively.
 				command="SELECT * FROM ucum WHERE CAST(UcumCode AS BINARY)=CAST('"+POut.String(ucumCode)+"' AS BINARY)";
-			}
+			
 			return Crud.UcumCrud.SelectOne(command);
 		}
 

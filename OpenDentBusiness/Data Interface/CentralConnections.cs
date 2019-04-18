@@ -23,13 +23,12 @@ namespace OpenDentBusiness{
 		///<summary>Gets all of the connection setting information from the FreeDentalConfig.xml
 		///Throws exceptions.</summary>
 		public static void GetChooseDatabaseConnectionSettings(out CentralConnection centralConnection,out string connectionString,out YN noShow
-			,out DatabaseType dbType,out List<string> listAdminCompNames,out bool useDynamicMode) 
+			,out List<string> listAdminCompNames,out bool useDynamicMode) 
 		{
 			//No remoting role check; out parameters are used.
 			centralConnection=new CentralConnection();
 			connectionString="";
 			noShow=YN.Unknown;
-			dbType=DatabaseType.MySql;
 			listAdminCompNames=new List<string>();
 			useDynamicMode=false;
 			string xmlPath=ODFileUtils.CombinePaths(Application.StartupPath,"FreeDentalConfig.xml");
@@ -76,12 +75,6 @@ namespace OpenDentBusiness{
 				#endregion
 				#region Nodes from Choose Database Window
 				#region Nodes with No Group Box
-				//Database Type
-				nav=Navigator.SelectSingleNode("//DatabaseType");
-				dbType=DatabaseType.MySql;
-				if(nav!=null && nav.Value=="Oracle") {
-					dbType=DatabaseType.Oracle;
-				}
 				//ConnectionString
 				nav=Navigator.SelectSingleNode("//ConnectionString");
 				if(nav!=null) {
@@ -248,22 +241,18 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static string[] GetDatabases(CentralConnection centralConnection,DatabaseType dbType) {
+		public static string[] GetDatabases(CentralConnection centralConnection) {
 			if(centralConnection.ServerName=="") {
 				return new string[0];
-			}
-			if(dbType!=DatabaseType.MySql) {
-				return new string[0];//because SHOW DATABASES won't work
 			}
 			try {
 				DataConnection dcon;
 				//use the one table that we know exists
 				if(centralConnection.MySqlUser=="") {
-					dcon=new DataConnection(centralConnection.ServerName,"mysql","root",centralConnection.MySqlPassword,dbType);
+					dcon=new DataConnection(centralConnection.ServerName,"mysql","root",centralConnection.MySqlPassword);
 				}
 				else {
-					dcon=new DataConnection(centralConnection.ServerName,"mysql",centralConnection.MySqlUser,centralConnection.MySqlPassword
-						,dbType);
+					dcon=new DataConnection(centralConnection.ServerName,"mysql",centralConnection.MySqlUser,centralConnection.MySqlPassword);
 				}
 				string command="SHOW DATABASES";
 				//if this next step fails, table will simply have 0 rows
@@ -280,7 +269,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Throws an exception to display to the user if anything goes wrong.</summary>
-		public static void TryToConnect(CentralConnection centralConnection,DatabaseType dbType,string connectionString="",bool noShowOnStartup=false,
+		public static void TryToConnect(CentralConnection centralConnection,string connectionString="",bool noShowOnStartup=false,
 			List<string> listAdminCompNames=null,bool isCommandLineArgs=false,bool useDynamicMode=false) 
 		{
 			if(!string.IsNullOrEmpty(centralConnection.ServiceURI)) {
@@ -319,21 +308,20 @@ namespace OpenDentBusiness{
 				}
 			}
 			else {
-				DataConnection.DBtype=dbType;
 				DataConnection dcon=new DataConnection();
 				if(connectionString.Length > 0) {
-					dcon.SetDb(connectionString,"",DataConnection.DBtype);
+					dcon.SetDb(connectionString,"");
 				}
 				else {
 					//Password could be plain text password from the Password field of the config file, the decrypted password from the MySQLPassHash field
 					//of the config file, or password entered by the user and can be blank (empty string) in all cases
 					dcon.SetDb(centralConnection.ServerName,centralConnection.DatabaseName,centralConnection.MySqlUser
-						,centralConnection.MySqlPassword,"","",DataConnection.DBtype);
+						,centralConnection.MySqlPassword,"","");
 				}
 				//a direct connection does not utilize lower privileges.
 				RemotingClient.RemotingRole=RemotingRole.ClientDirect;
 			}
-			TrySaveConnectionSettings(centralConnection,dbType,connectionString,noShowOnStartup,listAdminCompNames,isCommandLineArgs,useDynamicMode);
+			TrySaveConnectionSettings(centralConnection,connectionString,noShowOnStartup,listAdminCompNames,isCommandLineArgs,useDynamicMode);
 		}
 
 		///<summary>If MiddleTierProxyConfix.xml is present, this loads the three variables from that file into memory.
@@ -353,7 +341,7 @@ namespace OpenDentBusiness{
 		///<summary>Returns true if the connection settings were successfully saved to the FreeDentalConfig file.  Otherwise, false.
 		///Set isCommandLineArgs to true in order to preserve settings within FreeDentalConfig.xml that are not command line args.
 		///E.g. the current value within the FreeDentalConfig.xml for NoShowOnStartup will be preserved instead of the value passed in.</summary>
-		public static bool TrySaveConnectionSettings(CentralConnection centralConnection,DatabaseType dbType,string connectionString=""
+		public static bool TrySaveConnectionSettings(CentralConnection centralConnection,string connectionString=""
 			,bool noShowOnStartup=false,List<string> listAdminCompNames=null,bool isCommandLineArgs=false,bool useDynamicMode=false) 
 		{
 			try {
@@ -454,14 +442,6 @@ namespace OpenDentBusiness{
 						writer.WriteEndElement();//end UsingEcw
 						writer.WriteEndElement();//end ServerConnection
 					}
-					writer.WriteStartElement("DatabaseType");
-					if(dbType==DatabaseType.MySql) {
-						writer.WriteString("MySql");
-					}
-					else {
-						writer.WriteString("Oracle");
-					}
-					writer.WriteEndElement();
 					writer.WriteStartElement("UseDynamicMode");
 					writer.WriteString(useDynamicMode.ToString());
 					writer.WriteEndElement();

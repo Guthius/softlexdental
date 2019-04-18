@@ -249,7 +249,7 @@ namespace OpenDentBusiness {
 				RemotingClient.ServerURI=conn.ServiceURI;
 			}
 			else {
-				new DataConnection().SetDb(conn.ServerName,conn.DatabaseName,conn.MySqlUser,conn.MySqlPassword,"","",DatabaseType.MySql,skipValidation);
+				new DataConnection().SetDb(conn.ServerName,conn.DatabaseName,conn.MySqlUser,conn.MySqlPassword,"","",skipValidation);
 			}
 			return conn;
 		}
@@ -262,10 +262,10 @@ namespace OpenDentBusiness {
 				RemotingClient.SetRemotingT(conn.ServiceURI,RemotingRole.ClientWeb,(dbName==ConnectionNames.DentalOfficeReportServer));
 			}
 			else if(!string.IsNullOrEmpty(conn.ConnectionString)) {
-				new DataConnection().SetDbT(conn.ConnectionString,"",DatabaseType.MySql);
+				new DataConnection().SetDbT(conn.ConnectionString,"");
 			}
 			else {
-				new DataConnection().SetDbT(conn.ServerName,conn.DatabaseName,conn.MySqlUser,conn.MySqlPassword,"","",DatabaseType.MySql,true);
+				new DataConnection().SetDbT(conn.ServerName,conn.DatabaseName,conn.MySqlUser,conn.MySqlPassword,"","",true);
 			}
 			return conn;
 		}
@@ -349,17 +349,6 @@ namespace OpenDentBusiness {
 			public string DatabaseType;
 			///<summary>Must deserialize to a ConnectionNames enum value.</summary>
 			public string Note;
-
-			[XmlIgnore]
-			public DatabaseType DbType {
-				get {
-					DatabaseType dbType;
-					if(!Enum.TryParse<DatabaseType>(this.DatabaseType,out dbType)) {
-						dbType=DataConnectionBase.DatabaseType.MySql;
-					}
-					return dbType;
-				}
-			}
 		}
 	}
 }

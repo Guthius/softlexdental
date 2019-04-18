@@ -3395,7 +3395,13 @@ namespace OpenDental
             }
             else
             {
-                if (!PrefL.ConvertDB(this, model?.UseDynamicMode ?? false))
+
+                //Application.ProductVersion
+                // string pref = PrefC.GetString(PrefName.DataBaseVersion);
+
+                // TODO: Check if database is compatible...
+
+                if (!PrefL.ConvertDB(this, model?.UseDynamicMode ?? false)) //?? 
                 {//refreshes Prefs if converted successfully.
                     return false;
                 }

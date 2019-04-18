@@ -134,7 +134,7 @@ namespace OpenDentBusiness {
 			}
 			bool hasInsert=false;
 			string command="";
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+	
 				command="INSERT INTO programproperty (ProgramNum,PropertyDesc,PropertyValue,ComputerName,ClinicNum) ";
 				for(int i=0;i<listClinicNums.Count;i++) {
 					if(i>0) {
@@ -146,30 +146,8 @@ namespace OpenDentBusiness {
 						+"AND ClinicNum=0";
 				}
 				hasInsert=(Db.NonQ(command) > 0);
-			}
-			else {//Oracle
-				command="SELECT ProgramNum,PropertyDesc,PropertyValue,ComputerName "
-					+"FROM programproperty "
-					+"WHERE ProgramNum="+POut.Long(programNum)+" "
-					+"AND ClinicNum=0";
-				DataTable tableProgProps=Db.GetTable(command);
-				//Loop through all program properties for this program.
-				foreach(DataRow row in tableProgProps.Rows) {
-					//Insert this program property for every single clinic passed in.
-					foreach(long clinicNum in listClinicNums) {
-						command="INSERT INTO programproperty (ProgramPropertyNum,ProgramNum,PropertyDesc,PropertyValue,ComputerName,ClinicNum) "
-							+"VALUES("
-							+"(SELECT COALESCE(MAX(ProgramPropertyNum),0)+1 FROM programproperty),"
-							+row["ProgramNum"].ToString()+","
-							+"'"+row["PropertyDesc"].ToString()+"',"
-							+"'"+row["PropertyValue"].ToString()+"',"
-							+"'"+row["ComputerName"].ToString()+"',"
-							+POut.Long(clinicNum)+")";
-						Db.NonQ(command);
-						hasInsert=true;
-					}
-				}
-			}
+			
+
 			return hasInsert;
 		}
 

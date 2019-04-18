@@ -178,9 +178,7 @@ namespace OpenDentBusiness{
 			}
 			//Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
 			insSub.SecUserNumEntry=Security.CurUser.UserNum;
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return Crud.InsSubCrud.Insert(insSub);//Oracle ALWAYS uses existing PKs because they do not support auto-incrementing.
-			}
+
 			return Crud.InsSubCrud.Insert(insSub,useExistingPK);
 		}
 

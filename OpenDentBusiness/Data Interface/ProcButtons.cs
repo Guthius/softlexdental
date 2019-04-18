@@ -142,12 +142,9 @@ namespace OpenDentBusiness{
 			Db.NonQ(command);
 			command="DELETE FROM definition WHERE Category=26";
 			Db.NonQ(command);
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+
 				SetToDefaultMySQL();
-			}
-			else {
-				SetToDefaultOracle();
-			}
+
 		}
 
 		private static void SetToDefaultMySQL() {
@@ -422,10 +419,6 @@ namespace OpenDentBusiness{
 						+","+ProcedureCodes.GetCodeNum("D4342")+",0)";
 				Db.NonQ(command);
 			}
-		}
-
-		private static void SetToDefaultOracle() {
-			throw new ApplicationException("SetToDefaultOracle is not currently Oracle compatible.  Please call support.");
 		}
 	}
 

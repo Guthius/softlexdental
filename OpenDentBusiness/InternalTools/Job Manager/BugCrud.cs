@@ -142,15 +142,8 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Bug into the database.  Returns the new priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(Bug bug){
-			if(DataConnection.DBtype==DatabaseType.MySql) {
-				return InsertNoCache(bug,false);
-			}
-			else {
-				if(DataConnection.DBtype==DatabaseType.Oracle) {
-					bug.BugId=DbHelper.GetNextOracleKey("bug","BugId"); //Cacheless method
-				}
-				return InsertNoCache(bug,true);
-			}
+			return InsertNoCache(bug,false);
+
 		}
 
 		///<summary>Inserts one Bug into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>

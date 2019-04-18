@@ -47,12 +47,9 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT * FROM orthochart WHERE PatNum ="+POut.Long(patNum);
 			//FieldValue='' were stored as a result of a bug. DBM now removes those rows from the DB. This prevents them from being seen until DBM is run.
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+
 				command+=" AND FieldValue!=''";
-			}
-			else {//Oracle
-				command+=" AND FieldValue IS NOT NULL";//Empty VARCHAR2 cells are treated as NULL.  Yup...
-			}
+
 			return Crud.OrthoChartCrud.SelectMany(command);
 		}
 

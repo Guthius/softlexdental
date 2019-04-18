@@ -65,9 +65,7 @@ namespace OpenDentBusiness {
 			tableTotals.Columns.Add("famBal");
 			DataRow row;
 			string datesql="CURDATE()";//This is used to find out how much people owe currently and has nothing to do with the selected range
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				datesql="(SELECT CURRENT_DATE FROM dual)";
-			}
+
 			//Oracle TODO:  Either put entire query without GROUP BY in SUBSELECT and then GROUP BY outside, or rewrite query to use joins instead of subselects.
 			string command="SELECT FName,LName,MiddleI,PlanNum,Preferred,PlanNum, "
 				+"COALESCE((SELECT SUM(Principal+Interest) FROM payplancharge WHERE payplancharge.PayPlanNum=payplan.PayPlanNum "

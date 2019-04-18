@@ -158,9 +158,6 @@ namespace OpenDentBusiness{
 			string commTypeStr=type==CommItemTypeAuto.RECALL?"Recall":"Reactivation";
 			string command;
 			string datesql="CURDATE()";
-			if(DataConnection.DBtype==DatabaseType.Oracle){
-				datesql="(SELECT CURRENT_DATE FROM dual)";
-			}
 			if(commType!=0){
 				command="SELECT * FROM commlog WHERE ";
 				command+=DbHelper.DtimeToDate("CommDateTime")+" = "+datesql;

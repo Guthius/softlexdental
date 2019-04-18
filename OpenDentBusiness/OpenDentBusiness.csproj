@@ -349,9 +349,7 @@
     <Compile Include="InternalTools\WebChat\TableTypes\WebChatSurvey.cs" />
     <Compile Include="InternalTools\WebChat\WebChatSurveys.cs" />
     <Compile Include="Logic\USlocales.cs" />
-    <Compile Include="Misc\ConvertDatabases.cs" />
     <Compile Include="Misc\Authentication.cs" />
-    <Compile Include="Misc\ConvertDatabases6.cs" />
     <Compile Include="InternalTools\WebChat\WebChatMessages.cs" />
     <Compile Include="InternalTools\WebChat\WebChatPrefs.cs" />
     <Compile Include="InternalTools\WebChat\WebChatSessions.cs" />
@@ -1081,14 +1079,9 @@
     <Compile Include="InternalTools\Phones\TableTypes\PhoneNumber.cs" />
     <Compile Include="InternalTools\Phones\TableTypes\SiteLink.cs" />
     <Compile Include="InternalTools\Phones\VoiceMails.cs" />
-    <Compile Include="Misc\ConvertDatabases3.cs" />
-    <Compile Include="Misc\ConvertDatabases4.cs" />
-    <Compile Include="Misc\ConvertDatabases5.cs" />
     <Compile Include="Misc\EhrCCD.cs" />
     <Compile Include="Misc\FileAtoZ.cs" />
     <Compile Include="Misc\InnoDb.cs" />
-    <Compile Include="Misc\ConvertDatabases2.cs" />
-    <Compile Include="Misc\ConvertDatabases1.cs" />
     <Compile Include="Misc\Mime.cs" />
     <Compile Include="Misc\NTPv4.cs" />
     <Compile Include="Misc\TsiMsgConstructor.cs" />

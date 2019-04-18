@@ -15,12 +15,9 @@ namespace OpenDentBusiness {
 				SELECT @pos:=@pos+1 patCount, result.* FROM (SELECT dateFirstProc,patient.LName,patient.FName,"
 				+DbHelper.Concat("referral.LName","IF(referral.FName='','',', ')","referral.FName")+" refname,"
 				+"SUM(procedurelog.ProcFee*(procedurelog.UnitQty+procedurelog.BaseUnits)) ";
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+
 				query+="$HowMuch";
-			}
-			else { //Oracle needs quotes.
-				query+="\"$HowMuch\"";
-			}
+
 			if(includeAddress) {
 				query+=",patient.Preferred,patient.Address,patient.Address2,patient.City,patient.State,patient.Zip";
 			}
@@ -45,12 +42,7 @@ namespace OpenDentBusiness {
 				query+=",patient.Preferred,patient.Address,patient.Address2,patient.City,patient.State,patient.Zip";
 			}
 			if(excludeNoProd) {
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					query+=" HAVING $HowMuch > 0";
-				}
-				else {//Oracle needs quotes.
-					query+=" HAVING \"$HowMuch\" > 0";
-				}
+				query+=" HAVING $HowMuch > 0";
 			}
 			query+=" ORDER BY dateFirstProc,patient.LName,patient.FName) result";
 			return ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(query));

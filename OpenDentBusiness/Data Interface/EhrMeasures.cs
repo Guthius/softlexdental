@@ -2262,11 +2262,6 @@ namespace OpenDentBusiness{
 					#endregion
 					#region Lab
 					case EhrMeasureType.Lab:
-						if(DataConnection.DBtype==DatabaseType.Oracle) {
-							mu.Details="Labs not supported with Oracle";
-							mu.Met=MuMet.False;
-							break;
-						}
 						List<EhrLab> listLabOrders=EhrLabs.GetAllForPatInDateRange(pat.PatNum,DateTime.Today.AddYears(-1),DateTime.Today);
 						if(listLabOrders.Count==0) {
 							mu.Details="No lab orders";
@@ -2648,7 +2643,7 @@ namespace OpenDentBusiness{
 				+POut.Int((int)EhrMeasureType.SyndromicSurveillance)+","
 				+POut.Int((int)EhrMeasureType.PatientList)+","
 				+POut.Int((int)EhrMeasureType.ClinicalInterventionRules)+") ";
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+
 				command+="ORDER BY FIELD(MeasureType,"
 					+POut.Int((int)EhrMeasureType.ProblemList)+","
 					+POut.Int((int)EhrMeasureType.MedicationList)+","
@@ -2679,10 +2674,7 @@ namespace OpenDentBusiness{
 					+POut.Int((int)EhrMeasureType.SyndromicSurveillance)+","
 					+POut.Int((int)EhrMeasureType.PatientList)+","
 					+POut.Int((int)EhrMeasureType.ClinicalInterventionRules)+") ";
-			}
-			else {
-				//TODO: Order the measures nicely for Oracle users.
-			}
+
 			List<EhrMeasure> retVal=Crud.EhrMeasureCrud.SelectMany(command);
 			return retVal;
 		}
@@ -4265,7 +4257,7 @@ namespace OpenDentBusiness{
 				+POut.Int((int)EhrMeasureType.SyndromicSurveillance)+","
 				+POut.Int((int)EhrMeasureType.PatientList)+","
 				+POut.Int((int)EhrMeasureType.ClinicalInterventionRules)+") ";
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+
 				command+="ORDER BY FIELD(MeasureType,"
 					+POut.Int((int)EhrMeasureType.CPOE_MedOrdersOnly)+","
 					+POut.Int((int)EhrMeasureType.CPOE_LabOrdersOnly)+","
@@ -4296,10 +4288,8 @@ namespace OpenDentBusiness{
 					+POut.Int((int)EhrMeasureType.SyndromicSurveillance)+","
 					+POut.Int((int)EhrMeasureType.PatientList)+","
 					+POut.Int((int)EhrMeasureType.ClinicalInterventionRules)+") ";//Is always going to be excluded
-			}
-			else {
-				//TODO: Order the measures nicely for Oracle users.
-			}
+
+
 			List<EhrMeasure> retVal=Crud.EhrMeasureCrud.SelectMany(command);
 			return retVal;
 		}
@@ -4316,9 +4306,9 @@ namespace OpenDentBusiness{
 			List<EhrMeasure> retVal=GetMU2List();
 			List<MedicationPat> medList=MedicationPats.Refresh(pat.PatNum,true);
 			List<EhrLab> ehrLabList=new List<EhrLab>();
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+
 				ehrLabList=EhrLabs.GetAllForPat(pat.PatNum);
-			}
+			
 			List<Procedure> listRadCpoeProcs=Procedures.GetProcsRadiologyCpoeForPat(pat.PatNum);
 			List<EhrMeasureEvent> listMeasureEvents=EhrMeasureEvents.Refresh(pat.PatNum);
 			List<RefAttach> listRefAttach=RefAttaches.Refresh(pat.PatNum);
@@ -4415,11 +4405,6 @@ namespace OpenDentBusiness{
 					#endregion
 					#region CPOE_LabOrdersOnly
 					case EhrMeasureType.CPOE_LabOrdersOnly:
-						if(DataConnection.DBtype==DatabaseType.Oracle) {
-							mu.Details="Labs not supported with Oracle";
-							mu.Met=MuMet.False;
-							break;
-						}
 						int labOrderCount=0;
 						int labOrderCpoeCount=0;
 						for(int m=0;m<ehrLabList.Count;m++) {
@@ -4452,11 +4437,6 @@ namespace OpenDentBusiness{
 					#endregion
 					#region CPOE_RadiologyOrdersOnly
 					case EhrMeasureType.CPOE_RadiologyOrdersOnly:
-						if(DataConnection.DBtype==DatabaseType.Oracle) {
-							mu.Details="Labs not supported with Oracle";
-							mu.Met=MuMet.False;
-							break;
-						}
 						int radOrderCount=0;
 						int radOrderCpoeCount=0;
 						//Loop through all the EHR lab orders and find the ones that are related to RAD LOINC codes.
@@ -4655,11 +4635,6 @@ namespace OpenDentBusiness{
 					#endregion
 					#region Lab
 					case EhrMeasureType.Lab:
-						if(DataConnection.DBtype==DatabaseType.Oracle) {
-							mu.Details="Labs not supported with Oracle";
-							mu.Met=MuMet.False;
-							break;
-						}
 						if(ehrLabList.Count==0) {
 							mu.Details="No lab orders";
 							mu.Met=MuMet.NA;
@@ -4988,11 +4963,6 @@ namespace OpenDentBusiness{
 					#endregion
 					#region LabImages
 					case EhrMeasureType.LabImages:
-						if(DataConnection.DBtype==DatabaseType.Oracle) {
-							mu.Details="Labs not supported with Oracle";
-							mu.Met=MuMet.False;
-							break;
-						}
 						int labCount=0;
 						int labCountImages=0;
 						List<EhrLab> listEhrLabs=EhrLabs.GetAllForPatInDateRange(pat.PatNum,DateTime.Now.AddYears(-1),DateTime.Now.AddDays(1));
@@ -5154,7 +5124,7 @@ namespace OpenDentBusiness{
 				+POut.Int((int)EhrMeasureType.ProblemList)+","
 				+POut.Int((int)EhrMeasureType.MedicationList)+","
 				+POut.Int((int)EhrMeasureType.AllergyList)+") ";
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+
 				command+="ORDER BY FIELD(MeasureType,"
 					+POut.Int((int)EhrMeasureType.ProtectElectHealthInfo)+","
 					+POut.Int((int)EhrMeasureType.ClinicalInterventionRules)+","
@@ -5179,19 +5149,13 @@ namespace OpenDentBusiness{
 					+POut.Int((int)EhrMeasureType.ProblemList)+","
 					+POut.Int((int)EhrMeasureType.MedicationList)+","
 					+POut.Int((int)EhrMeasureType.AllergyList)+") ";
-			}
-			else {
-				//TODO: Order the measures nicely for Oracle users.
-			}
+
 			List<EhrMeasure> retVal=Crud.EhrMeasureCrud.SelectMany(command);
 			return retVal;
 		}
 		
 		///<summary>Only called from FormEHR to load the patient specific MU data and tell the user what action to take to get closer to meeting MU.</summary>
 		public static List<EhrMu> GetMu2Mod(Patient pat) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<EhrMu>>(MethodBase.GetCurrentMethod(),pat);
-			}
 			List<EhrMu> list=new List<EhrMu>();
 			//add one of each type
 			EhrMu mu;
@@ -5199,9 +5163,9 @@ namespace OpenDentBusiness{
 			List<EhrMeasure> retVal=GetMU2ModList();
 			List<MedicationPat> medList=MedicationPats.Refresh(pat.PatNum,true);
 			List<EhrLab> ehrLabList=new List<EhrLab>();
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+
 				ehrLabList=EhrLabs.GetAllForPat(pat.PatNum);
-			}
+			
 			List<Procedure> listRadCpoeProcs=Procedures.GetProcsRadiologyCpoeForPat(pat.PatNum);
 			List<EhrMeasureEvent> listMeasureEvents=EhrMeasureEvents.Refresh(pat.PatNum);
 			List<RefAttach> listRefAttach=RefAttaches.Refresh(pat.PatNum);
@@ -5298,11 +5262,6 @@ namespace OpenDentBusiness{
 					#endregion
 					#region CPOE_LabOrdersOnly
 					case EhrMeasureType.CPOE_LabOrdersOnly:
-						if(DataConnection.DBtype==DatabaseType.Oracle) {
-							mu.Details="Labs not supported with Oracle";
-							mu.Met=MuMet.False;
-							break;
-						}
 						int labOrderCount=0;
 						int labOrderCpoeCount=0;
 						for(int m=0;m<ehrLabList.Count;m++) {
@@ -5335,11 +5294,6 @@ namespace OpenDentBusiness{
 					#endregion
 					#region CPOE_RadiologyOrdersOnly
 					case EhrMeasureType.CPOE_RadiologyOrdersOnly:
-						if(DataConnection.DBtype==DatabaseType.Oracle) {
-							mu.Details="Labs not supported with Oracle";
-							mu.Met=MuMet.False;
-							break;
-						}
 						int radOrderCount=0;
 						int radOrderCpoeCount=0;
 						//Loop through all the EHR lab orders and find the ones that are related to RAD LOINC codes.

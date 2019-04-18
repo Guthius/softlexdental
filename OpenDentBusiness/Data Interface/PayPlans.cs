@@ -86,13 +86,9 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<PayPlan>>(MethodBase.GetCurrentMethod(),patNum,planNum,insSubNum,claimNum);
 			}
 			string command="";
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+
 				command+="SELECT payplan.*,MAX(claimproc.ClaimNum) ClaimNum";
-			}
-			else {
-				command+="SELECT payplan.PayPlanNum,payplan.PatNum,payplan.Guarantor,payplan.PayPlanDate,"
-					+"payplan.APR,payplan.Note,payplan.PlanNum,payplan.CompletedAmt,payplan.InsSubNum,MAX(claimproc.ClaimNum) ClaimNum";
-			}
+
 			command+=" FROM payplan"
 				+" LEFT JOIN claimproc ON claimproc.PayPlanNum=payplan.PayPlanNum"
 				+" WHERE payplan.PatNum="+POut.Long(patNum)
@@ -101,13 +97,9 @@ namespace OpenDentBusiness{
 			if(claimNum>0) {
 				command+=" AND (claimproc.ClaimNum IS NULL OR claimproc.ClaimNum="+POut.Long(claimNum)+")";//payplans with no claimprocs attached or only claimprocs from the same claim
 			}
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+
 				command+=" GROUP BY payplan.PayPlanNum";
-			}
-			else {
-				command+=" GROUP BY payplan.PayPlanNum,payplan.PatNum,payplan.Guarantor,payplan.PayPlanDate,"
-					+"payplan.APR,payplan.Note,payplan.PlanNum,payplan.CompletedAmt,payplan.InsSubNum";
-			}
+
 			command+=" HAVING payplan.CompletedAmt>SUM(COALESCE(claimproc.InsPayAmt,0))";//has not been paid in full yet
 			if(claimNum==0) {//if current claimproc is not attached to a claim, do not return payplans with claimprocs from existing claims already attached
 				command+=" AND (MAX(claimproc.ClaimNum) IS NULL OR MAX(claimproc.ClaimNum)=0)";

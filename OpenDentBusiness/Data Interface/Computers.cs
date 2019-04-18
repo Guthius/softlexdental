@@ -170,10 +170,7 @@ namespace OpenDentBusiness{
             }
             //heartbeat is every three minutes.  We'll allow four to be generous.
             string command = "SELECT * FROM computer WHERE LastHeartBeat > SUBTIME(NOW(),'00:04:00')";
-            if (DataConnection.DBtype == DatabaseType.Oracle)
-            {
-                command = "SELECT * FROM computer WHERE LastHeartBeat > SYSDATE - (4/1440)";
-            }
+
             return Crud.ComputerCrud.SelectMany(command);
         }
 

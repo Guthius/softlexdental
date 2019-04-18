@@ -54,14 +54,9 @@ namespace OpenDentBusiness {
 				int kilobyte=1024;//1KB
 				int megabyte=kilobyte*kilobyte;//1MB
 				int retVal=megabyte;
-				if(DataConnection.DBtype==DatabaseType.MySql) {
+
 					retVal=MiscData.GetMaxAllowedPacket()-8*kilobyte;//Minus 8KB to allow for MySQL header information. Ex see PrefL.CopyFromHereToUpdateFiles()
-				}
-				else {//oracle
-					//There may not be a packet size maximum.  If there is, then it is not documented very well.
-					//Since we currently have no customers using Oracle, we can make a reasonable guess for now and change it later if needed.
-					retVal=megabyte;
-				}
+
 				_maxAllowedPacket=Math.Min(Math.Max(retVal,8*kilobyte),megabyte);//Minimum of 8K (for network packet headers), maximum of 1MB for parallel.
 				return _maxAllowedPacket;
 			}

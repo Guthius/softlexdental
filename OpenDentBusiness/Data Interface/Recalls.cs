@@ -746,9 +746,6 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetBool(MethodBase.GetCurrentMethod());
 			}
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				throw new ApplicationException("SynchAllPatients is not Oracle compatible, please call support.");
-			}
 			if(_odThreadQueueData!=null) {
 				return false;
 			}

@@ -21,9 +21,6 @@ namespace OpenDentBusiness {
 				return Meth.GetObject<DateTime>(MethodBase.GetCurrentMethod());
 			}
 			string command="SELECT NOW()";
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				command="SELECT CURRENT_TIMESTAMP FROM DUAL";
-			}
 			DataTable table=Db.GetTable(command);
 			return PIn.DateT(table.Rows[0][0].ToString());
 		}
@@ -35,7 +32,7 @@ namespace OpenDentBusiness {
 			}
 			string command;
 			string dbtime;
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+
 				command="SELECT NOW()"; //Only up to 1 second precision pre-Mysql 5.6.4.  Does not round milliseconds.
 				dbtime=Db.GetScalar(command);
 				int secondInit=PIn.DateT(dbtime).Second;
@@ -46,11 +43,7 @@ namespace OpenDentBusiness {
 					secondCur=PIn.DateT(dbtime).Second;
 				}
 				while(secondInit==secondCur);
-			}
-			else {
-				command="SELECT CURRENT_TIMESTAMP(3) FROM DUAL"; //Timestamp with milliseconds
-				dbtime=Db.GetScalar(command);
-			}
+
 			return PIn.DateT(dbtime);
 		}
 
@@ -152,10 +145,6 @@ namespace OpenDentBusiness {
 		
 		///<summary></summary>
 		public static void CreateArchiveDatabase() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod());
-				return;
-			}
 			string command="CREATE DATABASE `"+GetArchiveDatabaseName()+"` CHARACTER SET utf8";
 			Db.NonQ(command);//We should already be connected to the archive server.
 		}
@@ -185,15 +174,10 @@ namespace OpenDentBusiness {
 			}
 			string command="";
 			foreach(DataRow row in preferences.Rows) {
-				if(DataConnection.DBtype==DatabaseType.MySql) {
+
 					command="INSERT INTO preference (PrefName,ValueString) VALUES('"+POut.String(row[1].ToString())+"','"+POut.String(row[2].ToString())+"')";
 					Db.NonQ(command);
-				}
-				else {//oracle
-					command="INSERT INTO preference (PrefNum,PrefName,ValueString) "
-						+"VALUES((SELECT COALESCE(MAX(PrefNum),0)+1 FROM preference),'"+POut.String(row[1].ToString())+"','"+POut.String(row[2].ToString())+"')";
-					Db.NonQ(command);
-				}
+
 			}
 		}
 
@@ -223,7 +207,7 @@ namespace OpenDentBusiness {
 					Lans.g(nameof(MiscData),"Archive databases may only be created or accessed on a direct database connection."));
 			}
 			string connectionStrOrig=DataConnection.GetCurrentConnectionString();
-			DatabaseType dbTypeOrig=DataConnection.DBtype;
+
 			DataConnection dcon=new DataConnection();
 			try {
 				//Keep track of the original connection settings so that we can revert back to them once finished archiving.
@@ -233,7 +217,7 @@ namespace OpenDentBusiness {
 				string decryptedPass;
 				CDT.Class1.Decrypt(PrefC.GetString(PrefName.ArchivePassHash),out decryptedPass);
 				//Connect to the archive database.  This can throw many exceptions.
-				dcon.SetDb(archiveServerName,MiscData.GetArchiveDatabaseName(),archiveUserName,decryptedPass,"","",dbTypeOrig);
+				dcon.SetDb(archiveServerName,MiscData.GetArchiveDatabaseName(),archiveUserName,decryptedPass,"","");
 				#region Validate archive database version
 				//At this point there is an active connection to the archive database, validate the DataBaseVersion.
 				string version=PrefC.GetStringNoCache(PrefName.DataBaseVersion);
@@ -258,7 +242,7 @@ namespace OpenDentBusiness {
 				return f();
 			}
 			finally {//Always put the connection back to the original no matter what happened above when trying to make an archive.
-				dcon.SetDb(connectionStrOrig,"",dbTypeOrig);//It is acceptable to crash the program if this fails.
+				dcon.SetDb(connectionStrOrig,"");//It is acceptable to crash the program if this fails.
 			}
 		}
 

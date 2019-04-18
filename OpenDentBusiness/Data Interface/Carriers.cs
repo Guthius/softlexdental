@@ -140,12 +140,8 @@ namespace OpenDentBusiness{
 				+"WHERE "
 				+"CarrierName LIKE '%"+POut.String(carrierName)+"%' ";
 			if(regexp!="") {
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					command+="AND Phone REGEXP '"+POut.String(regexp)+"' ";
-				}
-				else {//oracle
-					command+="AND (SELECT REGEXP_INSTR(Phone,'"+POut.String(regexp)+"') FROM dual)<>0";
-				}
+				command+="AND Phone REGEXP '"+POut.String(regexp)+"' ";
+
 			}
 			if(isCanadian){
 				command+="AND IsCDA=1 ";
@@ -153,14 +149,8 @@ namespace OpenDentBusiness{
 			if(!showHidden){
 				command+="AND carrier.IsHidden=0 ";
 			}
-			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command+="GROUP BY carrier.CarrierNum ";
-			}
-			else {//Oracle
-				command+="GROUP BY Address,Address2,canadiannetwork.Abbrev,carrier.CarrierNum,"
-				+"CarrierName,CDAnetVersion,City,ElectID,IsCDA,"
-				+"carrier.IsHidden,Phone,State,Zip ";
-			}
+			command+="GROUP BY carrier.CarrierNum ";
+
 			command+="ORDER BY CarrierName";
 			tableRaw=Db.GetTable(command);
 			table=new DataTable();

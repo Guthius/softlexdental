@@ -17,7 +17,7 @@ namespace OpenDentBusiness {
 		private static DataConnection SetConnection(bool isWebChatDb) {
 			DataConnection con=new DataConnection();
 #if DEBUG
-			con.SetDbT("localhost",isWebChatDb?"webchat":"customers","root","","","",DatabaseType.MySql,true);
+			con.SetDbT("localhost",isWebChatDb?"webchat":"customers","root","","","",true);
 #else
 			con.SetDbT(isWebChatDb?"server201":"server",isWebChatDb?"webchat":"customers","root","","","",DatabaseType.MySql,true);
 #endif

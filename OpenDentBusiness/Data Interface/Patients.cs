@@ -1440,7 +1440,7 @@ namespace OpenDentBusiness {
 						AND	pl2.DateTimeLink > pl1.DateTimeLink						
 					WHERE pl2.PatNumTo IS NULL AND pl1.LinkType="+POut.Int((int)PatientLinkType.Merge)+") ";
 			}
-			if(DataConnection.DBtype==DatabaseType.MySql) {//LIKE is case insensitive in mysql.
+
 				if(lname.Length>0) {
 					if(limit) {//normal behavior is fast
 						if(PrefC.GetBool(PrefName.DistributorKey)) {
@@ -1468,27 +1468,9 @@ namespace OpenDentBusiness {
 						command+="AND patient.FName LIKE '"+POut.String(fname)+"%' ";
 					}
 				}
-			}
-			else {//oracle, case matters in a like statement
-				if(lname.Length>0) {
-					if(limit) {
-						command+="AND LOWER(patient.LName) LIKE '"+POut.String(lname)+"%' ";
-					}
-					else {
-						command+="AND LOWER(patient.LName) LIKE '%"+POut.String(lname)+"%' ";
-					}
-				}
-				if(fname.Length>0) {
-					if(PrefC.GetBool(PrefName.PatientSelectUseFNameForPreferred)) {
-						command+="AND (LOWER(patient.FName) LIKE '"+POut.String(fname)+"%' OR LOWER(patient.Preferred) LIKE '"+POut.String(fname)+"%') ";
-					}
-					else {
-						command+="AND LOWER(patient.FName) LIKE '"+POut.String(fname)+"%' ";
-					}
-				}
-			}
+
 			if(regexp!="") {
-				if(DataConnection.DBtype==DatabaseType.MySql) {
+
 					command+="AND (patient.HmPhone REGEXP '"+POut.String(regexp)+"' "
 						+"OR patient.WkPhone REGEXP '"+POut.String(regexp)+"' "
 						+"OR patient.WirelessPhone REGEXP '"+POut.String(regexp)+"' ";
@@ -1496,12 +1478,7 @@ namespace OpenDentBusiness {
 						command+="OR phonenumber.PhoneNumberVal REGEXP '"+POut.String(regexp)+"' ";
 					}
 					command+=") ";
-				}
-				else {//oracle
-					command+="AND ((SELECT REGEXP_INSTR(p.HmPhone,'"+POut.String(regexp)+"') FROM dual)<>0"
-						+"OR (SELECT REGEXP_INSTR(p.WkPhone,'"+POut.String(regexp)+"') FROM dual)<>0 "
-						+"OR (SELECT REGEXP_INSTR(p.WirelessPhone,'"+POut.String(regexp)+"') FROM dual)<>0) ";
-				}
+
 			}
 			//Do a mathematical comparison for the patNumStr.
 			command+=DbHelper.LongBetween("patient.PatNum",patNumStr);
@@ -1512,7 +1489,7 @@ namespace OpenDentBusiness {
 			string strAddress=Regex.Replace(POut.String(address), @"[°\-.,:;_""'/\\)(#\s&]","%");
 			char[] arrayRegKeyChars=regKey.Where(x => char.IsLetterOrDigit(x)).ToArray();
 			string strRegKey=new string(arrayRegKeyChars);
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+
 				if(PrefC.IsODHQ) {
 					//Search both Address and Address2 for HQ
 					command+=(strAddress.Length>0 ? "AND (patient.Address LIKE '%"+strAddress
@@ -1529,18 +1506,8 @@ namespace OpenDentBusiness {
 					+(email.Length>0?"AND patient.Email LIKE '%"+POut.String(email)+"%' ":"")//LIKE is case insensitive in mysql.
 					+(country.Length>0?"AND patient.Country LIKE '%"+POut.String(country)+"%' ":"")//LIKE is case insensitive in mysql.
 					+(regKey.Length>0?"AND registrationkey.RegKey LIKE '%"+POut.String(strRegKey)+"%' ":"");//LIKE is case insensitive in mysql.
-			}
-			else {//oracle
-				command+=(address.Length>0 ? "AND LOWER(patient.Address) LIKE '%"+strAddress.ToLower()+"%' " : "")//case matters in a like statement in oracle.
-					+(city.Length>0?"AND LOWER(patient.City) LIKE '"+POut.String(city).ToLower()+"%' ":"")//case matters in a like statement in oracle.
-					+(state.Length>0?"AND LOWER(patient.State) LIKE '"+POut.String(state).ToLower()+"%' ":"")//case matters in a like statement in oracle.
-					+(ssn.Length>0?"AND LOWER(patient.SSN) LIKE '"+POut.String(ssn).ToLower()+"%' ":"")//In case an office uses this field for something else.
-					//+(patNumStr.Length>0?"AND patient.PatNum LIKE '"+POut.String(patNumStr)+"%' ":"")//case matters in a like statement in oracle.
-					+(chartnumber.Length>0?"AND LOWER(patient.ChartNumber) LIKE '"+POut.String(chartnumber).ToLower()+"%' ":"")//case matters in a like statement in oracle.
-					+(email.Length>0?"AND LOWER(patient.Email) LIKE '%"+POut.String(email).ToLower()+"%' ":"")//case matters in a like statement in oracle.
-					+(country.Length>0?"AND LOWER(patient.Country) LIKE '%"+POut.String(country).ToLower()+"%' ":"")//case matters in a like statement in oracle.
-					+(regKey.Length>0?"AND LOWER(registrationkey.RegKey) LIKE '%"+POut.String(strRegKey).ToLower()+"%' ":"");//case matters in a like statement in oracle.
-			}
+			
+
 			if(birthdate.Year>1880 && birthdate.Year<2100){
 				command+="AND patient.Birthdate ="+POut.Date(birthdate)+" ";
 			}
@@ -1699,9 +1666,7 @@ namespace OpenDentBusiness {
 		///Note: some of the clauses of this query are dependent on the join clauses of the query constructed in GetPtDataTable().</summary>
 		private static string GetExactMatchSnippet(PatientSearchArgs args) {
 			//No need to check RemotingRole; private method and no call to db.
-			if(DataConnection.DBtype!=DatabaseType.MySql) {//Oracle
-				return "'0'";
-			}
+
 			List<string> listClauses=new List<string>();
 			listClauses.Add(string.IsNullOrEmpty(args.lname) ? "" : "(LName='"+args.lname+"')");
 			listClauses.Add(string.IsNullOrEmpty(args.fname) ? "" : "(FName='"+args.fname+"')");
@@ -1964,16 +1929,10 @@ namespace OpenDentBusiness {
 			}
 			command+=@"patient.FName,patient.Preferred";
 			//Probably an unnecessary MySQL / Oracle split but I didn't want to affect the old GROUP BY functionality for MySQL just be Oracle is lame.
-			if(DataConnection.DBtype==DatabaseType.MySql) {
-				command+=@"
+			command+=@"
 					HAVING ((StartBal>0.005 OR StartBal<-0.005) OR (AfterIns>0.005 OR AfterIns<-0.005))
 					ORDER BY IsNotGuar,Birthdate,ProvNum,FName,Preferred";
-			}
-			else {//Oracle.
-				command+=@",(CASE WHEN Guarantor!=patient.PatNum THEN 1 ELSE 0 END),Birthdate
-					HAVING ((SUM(AmtBal)>0.005 OR SUM(AmtBal)<-0.005) OR (SUM(AmtBal-tempfambal.InsEst)>0.005 OR SUM(AmtBal-tempfambal.InsEst)<-0.005))
-					ORDER BY IsNotGuar,patient.Birthdate,tempfambal.ProvNum,patient.FName,patient.Preferred";
-			}
+
 			return Db.GetTable(command);
 		}
 
@@ -2376,10 +2335,6 @@ namespace OpenDentBusiness {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<PatAging>>(MethodBase.GetCurrentMethod(),age,lastStatement,billingNums,excludeAddr,excludeNeg,excludeLessThan,
 					excludeInactive,ignoreInPerson,clinicNums,isSuperStatements,isSinglePatient,listPendingInsPatNums,listUnsentPatNums,dictPatNumMaxDate);
-			}
-			if(DataConnection.DBtype!=DatabaseType.MySql) {
-				//We are going to purposefully throw an exception so that users will call in and complain.
-				throw new ApplicationException(Lans.g("Patients","Aging not currently supported by Oracle.  Please call us for support."));
 			}
 			List <int> listPatStatusExclude=new List<int>();
 			listPatStatusExclude.Add((int)PatientStatus.Deleted);//Always hide deleted.
@@ -3504,11 +3459,6 @@ namespace OpenDentBusiness {
 			//Now modify all PatNum foreign keys from 'patFrom' to 'patTo' to complete the majority of the
 			//merge of the records between the two accounts.			
 			for(int i=0;i<patNumForeignKeys.Length;i++) {
-				if(DataConnection.DBtype==DatabaseType.Oracle 
-					&& patNumForeignKeys[i]=="ehrlab.PatNum") //Oracle does not currently support EHR labs.
-				{
-					continue;
-				}
 				string[] tableAndKeyName=patNumForeignKeys[i].Split(new char[] {'.'});
 				command="UPDATE "+tableAndKeyName[0]
 					+" SET "+tableAndKeyName[1]+"="+POut.Long(patTo)
@@ -4380,9 +4330,6 @@ namespace OpenDentBusiness {
 		public static List<long> GetPatNumMaxForGroups(int numPerGroup,List<PatientStatus> listPatStatuses) {
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetObject<List<long>>(MethodBase.GetCurrentMethod(),numPerGroup,listPatStatuses);
-			}
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				throw new ApplicationException("GetPatNumMaxForGroups is not Oracle compatible.  Please call support.");
 			}
 			List<long> retval=new List<long>();
 			if(numPerGroup<1) {

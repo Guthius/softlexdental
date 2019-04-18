@@ -121,7 +121,7 @@ namespace OpenDental {
 			//Starting in v15.3, we always insert the UpdateFiles into the database.
 			int maxAllowedPacket=0;
 			int defaultMaxAllowedPacketSize=41943040;//40MB
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+
 				ODEvent.Fire(ODEventType.PrefL,Lan.g("Prefs","Getting MySQL max allowed packet setting..."));
 				maxAllowedPacket=MiscData.GetMaxAllowedPacket();
 				//If trying to get the max_allowed_packet value for MySQL failed, assume they can handle 40MB of data.
@@ -141,7 +141,7 @@ namespace OpenDental {
 						});
 					}
 				}
-			}
+			
 			//Only change maxAllowedPacket if we couldn't successfully get the current value from the database or using Oracle.
 			//This will let the program attempt to insert the UpdateFiles into the db with the assumption that they are using our default setting (40MB).
 			//Worst case scenario, the user will hit the max_packet_allowed error below which will simply notify them to update their my.ini manually.
@@ -713,9 +713,9 @@ namespace OpenDental {
 				File.Delete(tempFile);//Cleanup install file.
 			}
 		}
-
-		///<summary>Returns true if the download at the specified remoteUri with the given registration code should be downloaded and installed as an update, and false is returned otherwise. Also, information about the decision making process is stored in the updateInfoMajor and updateInfoMinor strings, but only holds significance to a human user.</summary>
-		public static bool ShouldDownloadUpdate(string remoteUri,string updateCode,out string updateInfoMajor,out string updateInfoMinor) {
+        
+        ///<summary>Returns true if the download at the specified remoteUri with the given registration code should be downloaded and installed as an update, and false is returned otherwise. Also, information about the decision making process is stored in the updateInfoMajor and updateInfoMinor strings, but only holds significance to a human user.</summary>
+        public static bool ShouldDownloadUpdate(string remoteUri,string updateCode,out string updateInfoMajor,out string updateInfoMinor) {
 			updateInfoMajor="";
 			updateInfoMinor="";
 			bool shouldDownload=false;
@@ -1015,9 +1015,6 @@ namespace OpenDental {
 
 		///<summary>This ONLY runs when first opening the program.  Gets run early in the sequence. Returns false if the program should exit.</summary>
 		public static bool CheckMySqlVersion(bool isSilent) {
-			if(DataConnection.DBtype!=DatabaseType.MySql) {
-				return true;
-			}
 			bool hasBackup=false;
 
 			if(PrefC.ContainsKey("DatabaseConvertedForMySql41")) {
@@ -1048,9 +1045,6 @@ namespace OpenDental {
 
 		///<summary>This runs when first opening the program.  If MySql is not at 5.5 or higher, it reminds the user, but does not force them to upgrade.</summary>
 		public static void MySqlVersion55Remind(){
-			if(DataConnection.DBtype!=DatabaseType.MySql) {
-				return;
-			}
             // TODO: Fix me.
 			//string thisVersion=MiscData.GetMySqlVersion();
 			//Version versionMySQL=new Version(thisVersion);

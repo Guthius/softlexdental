@@ -456,9 +456,6 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				return Meth.GetTable(MethodBase.GetCurrentMethod());
 			}
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				throw new ApplicationException("Currently not Oracle compatible.  Please call support.");
-			}
 			byte orthoMonthsTreat=PrefC.GetByte(PrefName.OrthoDefaultMonthsTreat);
 			long orthoDefaultAutoCodeNum=PrefC.GetLong(PrefName.OrthoAutoProcCodeNum);
 			List<long> listOrthoBandingCodeNums = ProcedureCodes.GetOrthoBandingCodeNums();

@@ -705,12 +705,9 @@ namespace OpenDentBusiness{
 				else {
 					command+=POut.Long(aptNum);
 				}
-				if(DataConnection.DBtype==DatabaseType.MySql) {
+
 					command+=") GROUP BY procedurelog.ProcNum";
-				}
-				else {//Oracle
-					command+=") GROUP BY procedurelog.ProcNum,AptNum,PlannedAptNum,ProcFee";
-				}
+
 				rawProc=dcon.GetTable(command);
 				if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && rawProc.Rows.Count>0) {//Canadian. en-CA or fr-CA
 					command="SELECT procedurelog.ProcNum,ProcNumLab,ProcFee,"
@@ -738,12 +735,9 @@ namespace OpenDentBusiness{
 						}
 						command+=rawProc.Rows[i]["ProcNum"].ToString();
 					}
-					if(DataConnection.DBtype==DatabaseType.MySql) {
+
 						command+=") GROUP BY procedurelog.ProcNum";
-					}
-					else {//Oracle
-						command+=") GROUP BY procedurelog.ProcNum,ProcNumLab,ProcFee";
-					}
+
 					rawProcLab=dcon.GetTable(command);
 				}
 			}
@@ -1293,14 +1287,10 @@ namespace OpenDentBusiness{
 				+"AND DateTimeArrived > "+POut.Date(DateTime.Now)+" "//midnight earlier today
 				+"AND DateTimeArrived < "+DbHelper.Now()+" "
 				+"AND "+DbHelper.DtimeToDate("DateTimeArrived")+"="+DbHelper.DtimeToDate("AptDateTime")+" ";//prevents people from getting "stuck" in waiting room.
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				command+="AND TO_NUMBER(TO_CHAR(DateTimeSeated,'SSSSS')) = 0 "
-					+"AND TO_NUMBER(TO_CHAR(DateTimeDismissed,'SSSSS')) = 0 ";
-			}
-			else{
+
 				command+="AND TIME(DateTimeSeated) = 0 "
 					+"AND TIME(DateTimeDismissed) = 0 ";
-			}
+			
 			command+="AND AptStatus IN ("+POut.Int((int)ApptStatus.Complete)+","
 																	 +POut.Int((int)ApptStatus.Scheduled)+") "//None of the other statuses
 				+"ORDER BY AptDateTime";
@@ -1649,12 +1639,9 @@ namespace OpenDentBusiness{
 			else if(!showRecall && !showNonRecall && showHygPresched) {//Show hygiene prescheduled only (the All option was not selected)
 				//Example: LogDateTime="2014-11-26 13:00".  Filter is 11-26, giving "2014-11-27 00:00" to compare against.  This captures all times for 11-26.
 				string aptDateSql="";
-				if(DataConnection.DBtype==DatabaseType.MySql) {
-					aptDateSql="DATE(appointment.AptDateTime-INTERVAL 2 MONTH)";
-				}
-				else {
-					aptDateSql="ADD_MONTHS(TO_CHAR(appointment.AptDateTime,'MM/DD/YYYY %HH24:%MI:%SS'),-2)";
-				}
+
+                aptDateSql ="DATE(appointment.AptDateTime-INTERVAL 2 MONTH)";
+
 				//Hygiene Prescheduled will consider both the IsHygiene flag on the appointment OR on any associated procedure codes.
 				command+="AND (securitylog.PatNum IS NULL OR securitylog.LogDateTime < "+aptDateSql+") "
 					+"AND (appointment.IsHygiene=1 "
@@ -2547,14 +2534,9 @@ namespace OpenDentBusiness{
 
 		///<summary>Insert an appointment, and an invalid appointment signalod. Only pass in secUserNum if InsertIncludeAptNum would otherwise overwrite it. </summary>
 		public static void Insert(Appointment appt,long secUserNum=0) {
-			//No need to check RemotingRole; no call to db.
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+
 				InsertIncludeAptNum(appt,false,secUserNum);
-			}
-			else {//Oracle must always have a valid PK.
-				appt.AptNum=DbHelper.GetNextOracleKey("appointment","AptNum");
-				InsertIncludeAptNum(appt,true,secUserNum);
-			}
+
 			Signalods.SetInvalidAppt(appt);
 		}
 

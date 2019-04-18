@@ -421,7 +421,7 @@ namespace OpenDentBusiness {
 					listActions.Add(new Action(() => {
 						if(!string.IsNullOrEmpty(_serverTo)) {//SetDbT here if server is specified
 							DataConnection dcon=new DataConnection();
-							dcon.SetDbT(_serverTo,_databaseTo,_userTo,_passwordTo,"","",DatabaseType.MySql);
+							dcon.SetDbT(_serverTo,_databaseTo,_userTo,_passwordTo,"","");
 						}
 						bool isBatchQueued=false;
 						bool insertFailed=true;
@@ -665,12 +665,6 @@ namespace OpenDentBusiness {
 		///To see if that index already exists, the parameters would be tableName="claimproc" and colNames="ClaimPaymentNum,Status,InsPayAmt".
 		///Not case sensitive.  This will always return false for Oracle.</summary>
 		public static bool IndexExists(string tableName,string colNames) {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {//Oracle will not allow the same column to be indexed more than once
-				return false;
-			}
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetBool(MethodBase.GetCurrentMethod(),tableName,colNames);
-			}
 			string command="SELECT COUNT(*) FROM ("
 				+"SELECT GROUP_CONCAT(LOWER(COLUMN_NAME) ORDER BY SEQ_IN_INDEX) ColNames "
 				+"FROM INFORMATION_SCHEMA.STATISTICS "

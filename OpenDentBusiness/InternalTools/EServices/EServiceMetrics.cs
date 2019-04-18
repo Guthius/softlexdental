@@ -104,7 +104,7 @@ namespace OpenDentBusiness {
 						}
 					},
 					PrefC.GetString(PrefName.ServicesHqServer),PrefC.GetString(PrefName.ServicesHqDatabase),PrefC.GetString(PrefName.ServicesHqMySqlUser),
-					dbPassword,"","",DatabaseType.MySql);
+					dbPassword,"","");
 			}
 			catch(Exception ex) {
 				eServiceMetric.ErrorMessage=ex.Message;

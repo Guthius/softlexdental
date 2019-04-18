@@ -303,9 +303,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<Sheet>>(MethodBase.GetCurrentMethod(),patNum);
 			}
 			string datesql="CURDATE()";
-			if(DataConnection.DBtype==DatabaseType.Oracle){
-				datesql="(SELECT CURRENT_DATE FROM dual)";
-			}
+
 			string command="SELECT * FROM sheet WHERE PatNum="+POut.Long(patNum)+" "
 				+"AND "+DbHelper.DtimeToDate("DateTimeSheet")+" = "+datesql+" "
 				+"AND IsDeleted=0";
@@ -328,7 +326,7 @@ namespace OpenDentBusiness{
 				return Meth.GetObject<List<Sheet>>(MethodBase.GetCurrentMethod(),docNum);
 			}
 			string command="";
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+
 				command="SELECT sheet.* FROM sheetfield "
 					+"LEFT JOIN sheet ON sheet.SheetNum = sheetfield.SheetNum "
 					+"WHERE IsDeleted=0 "
@@ -341,18 +339,8 @@ namespace OpenDentBusiness{
 					+"WHERE sheet.SheetType="+POut.Int((int)SheetTypeEnum.ReferralLetter)+" "
 					+"AND sheet.IsDeleted=0 "
 					+"AND sheet.DocNum="+POut.Long(docNum);
-			}
-			else {//Oracle
-				//This query has so much unique Oracle problems that it made more sense to just rewrite it.
-				command="SELECT sheet.SheetNum,sheet.SheetType,sheet.PatNum,sheet.DateTimeSheet,sheet.FontSize,sheet.FontName,sheet.Width"
-					+",sheet.Height,sheet.IsLandscape,DBMS_LOB.SUBSTR(sheet.InternalNote,1000,1),sheet.Description,sheet.ShowInTerminal,sheet.IsWebForm FROM sheet "
-					+"LEFT JOIN sheetfield ON sheet.SheetNum = sheetfield.SheetNum "
-					+"WHERE IsDeleted=0 "
-					+"AND FieldType = 10 "//PatImage
-					+"AND TO_CHAR(FieldValue) = '"+POut.Long(docNum)+"' "//FieldName == DocCategory, which we do not care about here.
-					+"GROUP BY sheet.SheetNum,sheet.SheetType,sheet.PatNum,sheet.DateTimeSheet,sheet.FontSize,sheet.FontName,sheet.Width"
-					+",sheet.Height,sheet.IsLandscape,DBMS_LOB.SUBSTR(sheet.InternalNote,1000,1),sheet.Description,sheet.ShowInTerminal,sheet.IsWebForm";
-			}
+			
+
 			return Crud.SheetCrud.SelectMany(command);
 		}
 

@@ -184,12 +184,9 @@ namespace OpenDentBusiness{
 				SetToDefaultCanada();
 				return;
 			}
-			if(DataConnection.DBtype==DatabaseType.MySql) {
+
 				SetToDefaultMySQL();
-			}
-			else {//Oracle
-				SetToDefaultOracle();
-			}
+
 		}
 
 		private static void SetToDefaultMySQL() {
@@ -934,9 +931,6 @@ namespace OpenDentBusiness{
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
 				Meth.GetVoid(MethodBase.GetCurrentMethod());
 				return;
-			}
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				throw new ApplicationException("SetToDefaultCanada is not Oracle compatible.  Please call support.");
 			}
 			string command;
 			long autoCodeNum;
