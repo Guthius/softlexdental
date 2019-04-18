@@ -46,7 +46,7 @@
     
     mimetype: application/x-microsoft.net.object.binary.base64
     value   : The object must be serialized with 
-            : System.Serialization.Formatters.Binary.BinaryFormatter
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
     
     mimetype: application/x-microsoft.net.object.soap.base64
@@ -60,6 +60,7 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -68,9 +69,10 @@
               <xsd:sequence>
                 <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="name" use="required" type="xsd:string" />
               <xsd:attribute name="type" type="xsd:string" />
               <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
@@ -85,9 +87,10 @@
                 <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
                 <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
               <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
               <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
@@ -109,9 +112,77 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="LangCannotLeaveDatabaseBlank" xml:space="preserve">
+    <value>Cannot leave database field blank.</value>
+  </data>
+  <data name="LangCannotLeaveServerBlank" xml:space="preserve">
+    <value>Cannot leave server field blank.</value>
+  </data>
+  <data name="LangCannotLeaveUserBlank" xml:space="preserve">
+    <value>Cannot leave user field blank.</value>
+  </data>
+  <data name="LangErrorConnectingToDatabase" xml:space="preserve">
+    <value>Error connecting to database.</value>
+  </data>
+  <data name="LangErrorUpdatingPermissions" xml:space="preserve">
+    <value>The service was successfully installed but there was a problem updating the permissions for managing the service.
+The service may have to be manually stopped and started via an administrative user.
+This can be cumbersome when updating to newer versions of the software.</value>
+  </data>
+  <data name="LangErrorWritingConfigurationFile" xml:space="preserve">
+    <value>There was a problem writing a file to the system.</value>
+  </data>
+  <data name="LangExecutableFiles" xml:space="preserve">
+    <value>Executable Files</value>
+  </data>
+  <data name="LangInstallationFailedWithExitCode" xml:space="preserve">
+    <value>Installation failed with exit code {0}.</value>
+  </data>
+  <data name="LangManageService" xml:space="preserve">
+    <value>Manage Service</value>
+  </data>
+  <data name="LangOpenDentalWebConfigSettings" xml:space="preserve">
+    <value>OpenDentalWebConfig.xml Settings</value>
+  </data>
+  <data name="LangSelectAService" xml:space="preserve">
+    <value>Select a Service</value>
+  </data>
+  <data name="LangSelectAValidServicePath" xml:space="preserve">
+    <value>Select a valid service path</value>
+  </data>
+  <data name="LangSelectedServiceHasInvalidPath" xml:space="preserve">
+    <value>The selected service has an invalid path.</value>
+  </data>
+  <data name="LangServiceNameMustBeginWithOpenDent" xml:space="preserve">
+    <value>Service name must begin with "OpenDent".</value>
+  </data>
+  <data name="LangServiceNameOrDirectoryInUse" xml:space="preserve">
+    <value>Either a service with this name is already installed or there is another service installed from this directory.</value>
+  </data>
+  <data name="LangStatusInstalled" xml:space="preserve">
+    <value>Installed</value>
+  </data>
+  <data name="LangStatusNotInstalled" xml:space="preserve">
+    <value>Not Installed</value>
+  </data>
+  <data name="LangStatusRunning" xml:space="preserve">
+    <value>Running</value>
+  </data>
+  <data name="LangStatusStopped" xml:space="preserve">
+    <value>Stopped</value>
+  </data>
+  <data name="LangUnexpectedErrorInstall" xml:space="preserve">
+    <value>Unexpected error installing the service.</value>
+  </data>
+  <data name="LangUnexpectedErrorUninstall" xml:space="preserve">
+    <value>Unexpected error uninstalling the service.</value>
+  </data>
+  <data name="LangUninstallFailedWithExitCode" xml:space="preserve">
+    <value>Uninstall failed with exit code {0}.</value>
+  </data>
 </root>

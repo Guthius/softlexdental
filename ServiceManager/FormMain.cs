@@ -1,35 +1,70 @@
-﻿using CodeBase;
-using System;
+﻿using System;
+using System.ServiceProcess;
 using System.Windows.Forms;
 
-namespace ServiceManager {
-	public partial class FormMain:Form {
-		public FormMain() {
-			InitializeComponent();
-		}
+namespace ServiceManager
+{
+    public partial class FormMain : Form
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormMain"/> class.
+        /// </summary>
+        public FormMain() => InitializeComponent();
 
-		private void FormMain_Load(object sender,EventArgs e) {
-			FillList();
-		}
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void FormMain_Load(object sender, EventArgs e) => LoadServices();
 
-		private void FillList() {
-			listMain.Items.Clear();
-			ServicesHelper.GetAllOpenDentServices().ForEach(x => listMain.Items.Add(x.ServiceName));
-		}
+        /// <summary>
+        /// Populates the services list.
+        /// </summary>
+        void LoadServices()
+        {
+            servicesListBox.Items.Clear();
 
-		private void listMain_DoubleClick(object sender,EventArgs e) {
-			if(listMain.SelectedIndex==-1) {
-				return;
-			}
-			FormServiceManage FormS=new FormServiceManage(listMain.SelectedItem.ToString(),false,false);
-			FormS.ShowDialog();
-			FillList();
-		}
+            var services = ServiceController.GetServices();
+            foreach (var service in services)
+            {
+                if (service.ServiceName.StartsWith("OpenDent"))
+                {
+                    servicesListBox.Items.Add(service.ServiceName);
+                }
+            }
+        }
 
-		private void butAdd_Click(object sender,EventArgs e) {
-			FormServiceManage FormS=new FormServiceManage("OpenDent",false,true);
-			FormS.ShowDialog();
-			FillList();
-		}
-	}
+        /// <summary>
+        /// Opens the details of the selected service.
+        /// </summary>
+        void servicesListBox_DoubleClick(object sender, EventArgs e)
+        {
+            if (servicesListBox.SelectedIndex == -1) return;
+
+            using (var formServiceManage = new FormServiceManage(servicesListBox.SelectedItem.ToString(), false))
+            {
+                formServiceManage.ShowInTaskbar = false;
+                if (formServiceManage.ShowDialog() == DialogResult.OK)
+                {
+                    LoadServices();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Opens the form to create a new service.
+        /// </summary>
+        void addButton_Click(object sender, EventArgs e)
+        {
+            using (var formServiceManage = new FormServiceManage("OpenDent", true))
+            {
+                formServiceManage.ShowInTaskbar = false;
+                if (formServiceManage.ShowDialog() == DialogResult.OK)
+                {
+                    LoadServices();
+                }
+            }
+        }
+    }
 }

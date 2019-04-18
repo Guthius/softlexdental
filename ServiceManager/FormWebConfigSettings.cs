@@ -1,181 +1,225 @@
-﻿using System;
+﻿using DataConnectionBase;
+using ServiceManager.Properties;
+using System;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
 using System.Xml;
-using System.Xml.XPath;
-using CodeBase;
-using DataConnectionBase;
 
-namespace ServiceManager {
-	public partial class FormWebConfigSettings:Form {
-		private FileInfo _serviceFile;
+namespace ServiceManager
+{
+    public partial class FormWebConfigSettings : Form
+    {
+        string servicePath;
 
-		///<summary>Pass in the file information for the service file that is being installed.  We will use the file path to determine where to put the config file.</summary>
-		public FormWebConfigSettings(FileInfo serviceFile) {
-			InitializeComponent();
-			_serviceFile=serviceFile;
-		}
+        /// <summary>
+        /// Gets or sets the server.
+        /// </summary>
+        public string Server
+        {
+            get => serverTextBox.Text;
+            set
+            {
+                serverTextBox.Text = value;
+            }
+        }
 
-		private void FormWebConfigSettings_Load(object sender,EventArgs e) {
-			string xmlPath=Path.Combine(Application.StartupPath,"FreeDentalConfig.xml");
-			XmlDocument document=new XmlDocument();
-			try {//Try FreeDentalConfig.xml first
-				document.Load(xmlPath);
-				XPathNavigator Navigator=document.CreateNavigator();
-				XPathNavigator nav;
-				nav=Navigator.SelectSingleNode("//DatabaseConnection");
-				if(nav==null) {
-					throw new Exception("DatabaseConnection element missing from FreeDentalConfig.xml, which is required.");
-				}
-				textServer.Text=nav.SelectSingleNode("ComputerName").Value;
-				textDatabase.Text=nav.SelectSingleNode("Database").Value;
-				textUser.Text=nav.SelectSingleNode("User").Value;
-				textPassword.Text=nav.SelectSingleNode("Password").Value;
-				XPathNavigator encryptedPwdNode=nav.SelectSingleNode("MySQLPassHash");
-				string decryptedPwd;
-				if(textPassword.Text==""
-					&& encryptedPwdNode!=null
-					&& encryptedPwdNode.Value!=""
-					&& CDT.Class1.Decrypt(encryptedPwdNode.Value,out decryptedPwd))
-				{
-					textPassword.Text=decryptedPwd;
-				}
-				textPassword.PasswordChar=textPassword.Text==""?default(char):'*';//mask password
-				textUserLow.Text="";
-				textPasswordLow.Text="";
-				comboLogLevel.Items.AddRange(Enum.GetNames(typeof(LogLevel)));//Isn't included in FreeDentalConfig, but is needed for the web service.
-				comboLogLevel.SelectedItem=comboLogLevel.Items[0];
-			}
-			catch(Exception ex) {//FreeDentalConfig didn't load correctly
-				ex.DoNothing();
-				textServer.Text="localhost";
-				textDatabase.Text="opendental";
-				textUser.Text="root";
-				textPassword.Text="";
-				textUserLow.Text="";
-				textPasswordLow.Text="";
-				comboLogLevel.Items.AddRange(Enum.GetNames(typeof(LogLevel)));
-				comboLogLevel.SelectedItem=comboLogLevel.Items[0];
-			}
-			comboDatabaseType.Items.AddRange(Enum.GetNames(typeof(DatabaseType)));
-			comboDatabaseType.SelectedIndex=0;//MySQL
-		}
+        /// <summary>
+        /// Gets or sets the name of the database.
+        /// </summary>
+        public string Database
+        {
+            get => databaseTextBox.Text;
+            set
+            {
+                databaseTextBox.Text = value;
+            }
+        }
 
-		private void textPassword_TextChanged(object sender,EventArgs e) {
-			if(textPassword.Text=="") {
-				textPassword.PasswordChar=default(char);//if text is cleared, turn off password char mask
-			}
-		}
+        /// <summary>
+        /// Gets or sets the username.
+        /// </summary>
+        public string User
+        {
+            get => userTextBox.Text;
+            set
+            {
+                userTextBox.Text = value;
+            }
+        }
 
-		private void textPassword_Leave(object sender,EventArgs e) {
-			textPassword.PasswordChar=textPassword.Text==""?default(char):'*';//mask password on leave
-		}
+        /// <summary>
+        /// Gets or sets the password.
+        /// </summary>
+        public string Password
+        {
+            get => passwordTextBox.Text;
+            set
+            {
+                passwordTextBox.Text = value;
+            }
+        }
 
-		public bool TestConnection() {
-			DataConnection con=new DataConnection();
-			try {
-				con.SetDb(textServer.Text,textDatabase.Text,textUser.Text,textPassword.Text,textUserLow.Text,textPasswordLow.Text,
-					(DatabaseType)comboDatabaseType.SelectedIndex);
-				return true;
-			}
-			catch(Exception ex) {
-				MessageBox.Show("Error connecting to database: "+ex.Message);
-				return false;
-			}
-		}
+        /// <summary>
+        /// Gets or sets the username of the low priviledge user.
+        /// </summary>
+        public string UserLow
+        {
+            get => userLowTextBox.Text;
+            set
+            {
+                userLowTextBox.Text = value;
+            }
+        }
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-			this.Close();
-		}
+        /// <summary>
+        /// Gets or sets the password of the low priviledge user.
+        /// </summary>
+        public string PasswordLow
+        {
+            get => passwordLowTextBox.Text;
+            set
+            {
+                passwordLowTextBox.Text = value;
+            }
+        }
 
-		private void butOk_Click(object sender,EventArgs e) {
-			XmlDocument document=new XmlDocument();
-			if(textServer.Text=="") {
-				MessageBox.Show("Cannot leave server field blank.");
-				return;
-			}
-			if(textDatabase.Text=="") {
-				MessageBox.Show("Cannot leave database field blank.");
-				return;
-			}
-			if(textUser.Text=="") {
-				MessageBox.Show("Cannot leave user field blank.");
-				return;
-			}
-			if(!TestConnection()) {
-				return;
-			}
-			//Creating Nodes
-			XmlNode connSettings=document.CreateNode(XmlNodeType.Element,"ConnectionSettings","");
-			XmlNode databaseConnection=document.CreateNode(XmlNodeType.Element,"DatabaseConnection","");
-			XmlNode compName=document.CreateNode(XmlNodeType.Element,"ComputerName","");
-			compName.InnerText=textServer.Text;
-			XmlNode database=document.CreateNode(XmlNodeType.Element,"Database","");
-			database.InnerText=textDatabase.Text;
-			XmlNode user=document.CreateNode(XmlNodeType.Element,"User","");
-			user.InnerText=textUser.Text;
-			string encryptedPwd;
-			CDT.Class1.Encrypt(textPassword.Text,out encryptedPwd);
-			XmlNode password=document.CreateNode(XmlNodeType.Element,"Password","");
-			password.InnerText=string.IsNullOrEmpty(encryptedPwd)?textPassword.Text:"";//only write the mysql password in plain text if encryption fails
-			XmlNode mysqlPassHash=document.CreateNode(XmlNodeType.Element,"MySQLPassHash","");
-			mysqlPassHash.InnerText=encryptedPwd??"";//if encryptedPwd is null write empty string
-			XmlNode userLow=document.CreateNode(XmlNodeType.Element,"UserLow","");
-			userLow.InnerText=textUserLow.Text;
-			XmlNode passwordLow=document.CreateNode(XmlNodeType.Element,"PasswordLow","");
-			passwordLow.InnerText=textPasswordLow.Text;
-			XmlNode dbType=document.CreateNode(XmlNodeType.Element,"DatabaseType","");
-			dbType.InnerText="MySql";//Not going to support Oracle until someone complains.
-			XmlNode logLevelOfApp=document.CreateNode(XmlNodeType.Element,"LogLevelOfApplication","");
-			logLevelOfApp.InnerText=comboLogLevel.Items[comboLogLevel.SelectedIndex].ToString();
-			//Assigning Structure
-			databaseConnection.AppendChild(compName);
-			databaseConnection.AppendChild(database);
-			databaseConnection.AppendChild(user);
-			databaseConnection.AppendChild(password);
-			databaseConnection.AppendChild(mysqlPassHash);
-			databaseConnection.AppendChild(userLow);
-			databaseConnection.AppendChild(passwordLow);
-			databaseConnection.AppendChild(dbType);
-			connSettings.AppendChild(databaseConnection);
-			connSettings.AppendChild(logLevelOfApp);
-			document.AppendChild(connSettings);
-			//Outputting completed XML document
-			StringBuilder strb=new StringBuilder();
-			XmlWriterSettings settings=new XmlWriterSettings();
-			settings.Indent=true;
-			settings.IndentChars="   ";
-			settings.NewLineChars="\r\n";
-			settings.OmitXmlDeclaration=true;
-			XmlWriter xmlWriter=XmlWriter.Create(strb,settings);
-			document.WriteTo(xmlWriter);
-			xmlWriter.Flush();
-			string fileName="OpenDentalWebConfig.xml";
-			if(_serviceFile.Name=="OpenDentalService.exe") {
-				fileName="OpenDentalServiceConfig.xml";
-			}
-			try {
-				File.WriteAllText(Path.Combine(_serviceFile.DirectoryName,fileName),strb.ToString());
-			}
-			catch {
-				MessageBox.Show("There was a problem writing a file to the system. Please see manual for more information.");
-				return;
-			}
-			xmlWriter.Close();
-			strb.Clear();
-			DialogResult=DialogResult.OK;
-		}
-	}
-	
-	///<summary>0=Error, 1=Information, 2=Verbose</summary>
-	public enum LogLevel {
-		///<summary>0 Logs only errors.</summary>
-		Error=0,
-		///<summary>1 Logs information plus errors.</summary>
-		Information=1,
-		///<summary>2 Most verbose form of logging (use sparingly for very specific troubleshooting). Logs all entries all the time.</summary>
-		Verbose=2
-	}
+        /// <summary>
+        /// Pass in the file information for the service file that is being installed. 
+        /// We will use the file path to determine where to put the config file.
+        /// </summary>
+        public FormWebConfigSettings(string servicePath)
+        {
+            InitializeComponent();
+
+            this.servicePath = servicePath;
+        }
+
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormWebConfigSettings_Load(object sender, EventArgs e)
+        {
+            logLevelComboBox.SelectedIndex = 0;
+        }
+
+        /// <summary>
+        /// Displays the specified error message.
+        /// </summary>
+        /// <param name="errorMessage">The error message.</param>
+        void ShowError(string errorMessage)
+        {
+            if (!string.IsNullOrEmpty(errorMessage))
+            {
+                MessageBox.Show(
+                    errorMessage,
+                    Resources.LangOpenDentalWebConfigSettings,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Test the connection with the database.
+        /// </summary>
+        /// <returns>True if the connection was succesful; otherwise, false.</returns>
+        bool TestConnection()
+        {
+            var dataConnection = new DataConnection();
+
+            try
+            {
+                dataConnection.SetDb(
+                    serverTextBox.Text, 
+                    databaseTextBox.Text, 
+                    userTextBox.Text, 
+                    passwordTextBox.Text, 
+                    userLowTextBox.Text, 
+                    passwordLowTextBox.Text);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ShowError(Resources.LangErrorConnectingToDatabase + " " + ex.Message);
+
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Generates the XML configuration file and close the form.
+        /// </summary>
+        void acceptButton_Click(object sender, EventArgs e)
+        {
+            var document = new XmlDocument();
+
+            if (Server == "")
+            {
+                ShowError(Resources.LangCannotLeaveServerBlank);
+                return;
+            }
+
+            if (databaseTextBox.Text == "")
+            {
+                ShowError(Resources.LangCannotLeaveDatabaseBlank);
+                return;
+            }
+
+            if (userTextBox.Text == "")
+            {
+                ShowError(Resources.LangCannotLeaveUserBlank);
+                return;
+            }
+
+            // Check the connection details.
+            if (!TestConnection()) return;
+
+            // Determine the name of the configuration file based on the service executable name.
+            var fileName =
+                Path.GetFileName(servicePath).ToLower() == "opendentalservice.exe" ?
+                    "OpenDentalServiceConfig.xml" :
+                    "OpenDentalWebConfig.xml";
+
+            // Try to save the configuration file.
+            try
+            {
+                using (var fileStream = File.OpenWrite(fileName))
+                {
+                    var xmlWriterSettings = new XmlWriterSettings
+                    {
+                        Indent = true,
+                        NewLineChars = "\r\n",
+                        OmitXmlDeclaration = true
+                    };
+
+                    using (var xmlWriter = XmlWriter.Create(fileStream, xmlWriterSettings))
+                    {
+                        CDT.Class1.Encrypt(passwordTextBox.Text, out string encryptedPassword);
+
+                        xmlWriter.WriteStartElement("ConnectionSettings");
+                        xmlWriter.WriteStartElement("DatabaseConnection");
+                        xmlWriter.WriteElementString("ComputerName", Server);
+                        xmlWriter.WriteElementString("Database", Database);
+                        xmlWriter.WriteElementString("User", User);
+                        xmlWriter.WriteElementString("Password", string.IsNullOrEmpty(encryptedPassword) ? Password : ""); // Only write the mysql password in plain text if encryption failed.
+                        xmlWriter.WriteElementString("MySQLPassHash", encryptedPassword);
+                        xmlWriter.WriteElementString("UserLow", UserLow);
+                        xmlWriter.WriteElementString("PasswordLow", PasswordLow);
+                        xmlWriter.WriteEndElement();
+                        xmlWriter.WriteElementString("LogLevelOfApplication", logLevelComboBox.Items[logLevelComboBox.SelectedIndex].ToString());
+                        xmlWriter.WriteEndElement();
+                        xmlWriter.Flush();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowError(Resources.LangErrorWritingConfigurationFile + " " + ex.Message);
+
+                return;
+            }
+
+            DialogResult = DialogResult.OK;
+        }
+    }
 }

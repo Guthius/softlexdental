@@ -1,198 +1,320 @@
 ﻿using CodeBase;
 using Microsoft.Win32;
+using ServiceManager.Properties;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.ServiceProcess;
 using System.Windows.Forms;
 
-namespace ServiceManager {
-	public partial class FormServiceManage:Form {
-		///<summary>Indicates if a service was successfully installed while the service manager was showing.</summary>
-		public bool HadServiceInstalled=false;
-		private bool _isInstallOnly=false;
-		private bool _isNew;
+namespace ServiceManager
+{
+    public partial class FormServiceManage : Form
+    {
+        public bool HadServiceInstalled = false;
 
-		private FileInfo _serviceFileInfo {
-			get {
-				if(File.Exists(textPathToExe.Text)) {
-					return new FileInfo(textPathToExe.Text);
-				}
-				return null;
-			}
-		}
+        bool isInstallOnly = false;
 
-		///<summary>Pass in empty string to create a new service. Pass in OpenDent string to manage an existing service.</summary>
-		public FormServiceManage(string serviceName,bool isInstallOnly,bool isNew) {
-			InitializeComponent();
-			textName.Text=serviceName;
-			textPathToExe.Text=Directory.GetCurrentDirectory();
-			_isInstallOnly=isInstallOnly;
-			_isNew=isNew;
-		}
+        /// <summary>
+        /// Gets or sets the service name.
+        /// </summary>
+        public string ServiceName
+        {
+            get => serviceNameTextBox.Text.Trim();
+            set
+            {
+                serviceNameTextBox.Text = value;
+            }
+        }
 
-		private void FormServiceManager_Load(object sender,EventArgs e) {
-			if(_isNew) {
-				return;//Don't do validation if we're adding a new service via the "Add" button.
-			}
-			RefreshFormData();
-		}
+        /// <summary>
+        /// Gets or sets the executable path of the service.
+        /// </summary>
+        public string FullPath
+        {
+            get => pathTextBox.Text.Trim();
+            set
+            {
+                pathTextBox.Text = value;
+            }
+        }
 
-		private void RefreshFormData() {
-			ServiceController service=ServicesHelper.GetOpenDentServiceByName(textName.Text);
-			if(service!=null) {//installed
-				RegistryKey hklm=Registry.LocalMachine;
-				hklm=hklm.OpenSubKey(@"System\CurrentControlSet\Services\"+service.ServiceName);
-				textPathToExe.Text=hklm.GetValue("ImagePath").ToString().Replace("\"","");
-				textStatus.Text="Installed";
-				butInstall.Enabled=false;
-				butUninstall.Enabled=true;
-				butBrowse.Enabled=false;
-				textPathToExe.ReadOnly=true;
-				textName.ReadOnly=true;
-				if(service.Status==ServiceControllerStatus.Running) {
-					textStatus.Text+=", Running";
-					butStart.Enabled=false;
-					butStop.Enabled=true;
-				}
-				else {
-					textStatus.Text+=", Stopped";
-					butStart.Enabled=true;
-					butStop.Enabled=false;
-				}
-			}
-			else {
-				textStatus.Text="Not installed";
-				textName.ReadOnly=false;
-				textPathToExe.ReadOnly=false;
-				butInstall.Enabled=true;
-				butUninstall.Enabled=false;
-				butStart.Enabled=false;
-				butStop.Enabled=false;
-			}
-			if(_isInstallOnly) {
-				butUninstall.Enabled=false;
-			}
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormServiceManage"/> class.
+        /// </summary>
+        /// <param name="serviceName">The name of the service to manage.</param>
+        /// <param name="isInstallOnly">Value indicating whether the only allow the install option.</param>
+        public FormServiceManage(string serviceName, bool isInstallOnly)
+        {
+            InitializeComponent();
 
-		private void butInstall_Click(object sender,EventArgs e) {
-			if(_serviceFileInfo==null) {
-				MessageBox.Show("Select a valid service path");
-				return;
-			}
-			string serviceName=textName.Text;
-			if(serviceName.Length<8 || serviceName.Substring(0,8)!="OpenDent") {
-				MessageBox.Show("Error.  Service name must begin with \"OpenDent\".");
-				return;
-			}
-			if(ServicesHelper.HasService(serviceName,_serviceFileInfo)) {
-				MessageBox.Show("Error.  Either a service with this name is already installed or there is another service installed from this directory.");
-				return;
-			}
-			if(_serviceFileInfo.Name=="OpenDentalEConnector.exe" || _serviceFileInfo.Name=="OpenDentalService.exe") {
-				FormWebConfigSettings FormWCS=new FormWebConfigSettings(_serviceFileInfo);
-				FormWCS.ShowDialog();
-				if(FormWCS.DialogResult!=DialogResult.OK) {
-					return;
-				}
-			}
-			try {
-				string standardOutput;
-				int exitCode;
-				ServicesHelper.Install(serviceName,_serviceFileInfo,out standardOutput,out exitCode);
-				if(exitCode!=0) {
-					MessageBox.Show("Error. Exit code: "+exitCode+"\r\n"+standardOutput.Trim());
-				}
-			}
-			catch(Exception ex) {
-				MessageBox.Show("Unexpected error installing the service:\r\n"+ex.Message);
-			}
-			ServiceController service=null;
-			try {
-				service=ServicesHelper.GetServiceByServiceName(serviceName);
-			}
-			catch(Exception ex) {
-				ex.DoNothing();
-			}
-			if(service!=null) {
-				HadServiceInstalled=true;//We verified that the service was successfully installed
-				//Try to grant access to "Everyone" so that the service can be stopped and started by all users.
-				try {
-					ServicesHelper.SetSecurityDescriptorToAllowEveryoneToManageService(service);
-				}
-				catch(Exception ex) {
-					MessageBox.Show("The service was successfully installed but there was a problem updating the permissions for managing the service."
-						+"\r\nThe service may have to be manually stopped and started via an administrative user."
-						+"\r\nThis can be cumbersome when updating to newer versions of the software."
-						+"\r\n\r\n"+ex.Message);
-				}
-			}
-			RefreshFormData();
-		}
+            ServiceName = serviceName;
+            FullPath = Directory.GetCurrentDirectory();
 
-		private void butUninstall_Click(object sender,EventArgs e) {
-			if(_serviceFileInfo==null) {
-				MessageBox.Show("Selected service has an invalid path");
-				return;
-			}
-			try {
-				string standardOutput;
-				int exitCode;
-				ServicesHelper.Uninstall(textName.Text,out standardOutput,out exitCode);
-				if(exitCode!=0) {
-					MessageBox.Show("Error. Exit code: "+exitCode+"\r\n"+standardOutput.Trim());
-					return;
-				}
-			}
-			catch(Exception ex) {
-				MessageBox.Show("Unexpected error uninstalling the service:\r\n"+ex.Message);
-				return;
-			}
-			DialogResult=DialogResult.OK;
-		}
+            this.isInstallOnly = isInstallOnly;
+        }
 
-		private void butStart_Click(object sender,EventArgs e) {
-			Cursor=Cursors.WaitCursor;
-			try {
-				ServicesHelper.Start(textName.Text,true);
-			}
-			catch(Exception ex) {
-				Cursor=Cursors.Default;
-				MessageBox.Show(ex.Message);
-			}
-			Cursor=Cursors.Default;
-			RefreshFormData();
-		}
+        /// <summary>
+        /// Fetch the details of the service and update the state of the controls accordingly.
+        /// </summary>
+        void FetchServiceInformation()
+        {
+            var service = ServicesHelper.GetOpenDentServiceByName(serviceNameTextBox.Text);
+            if (service != null)
+            {
+                var registryKey = Registry.LocalMachine.OpenSubKey(@"System\CurrentControlSet\Services\" + service.ServiceName);
+                if (registryKey == null)
+                {
+                    return;
+                }
 
-		private void butStop_Click(object sender,EventArgs e) {
-			Cursor=Cursors.WaitCursor;
-			try {
-				ServicesHelper.Stop(textName.Text,true);
-			}
-			catch(Exception ex) {
-				Cursor=Cursors.Default;
-				MessageBox.Show(ex.Message);
-			}
-			Cursor=Cursors.Default;
-			RefreshFormData();
-		}
+                serviceNameTextBox.ReadOnly = true;
+                pathTextBox.Text = registryKey.GetValue("ImagePath").ToString().Replace("\"", "");
+                pathTextBox.ReadOnly = true;
+                browseButton.Enabled = false;
+                statusTextBox.Text = Resources.LangStatusInstalled;
+                installButton.Enabled = false;
+                uninstallButton.Enabled = true;
+                
+                if (service.Status == ServiceControllerStatus.Running)
+                {
+                    statusTextBox.Text += ", " + Resources.LangStatusRunning;
+                    startButton.Enabled = false;
+                    stopButton.Enabled = true;
+                }
+                else
+                {
+                    statusTextBox.Text += ", " + Resources.LangStatusStopped;
+                    startButton.Enabled = true;
+                    stopButton.Enabled = false;
+                }
+            }
+            else
+            {
+                statusTextBox.Text = Resources.LangStatusNotInstalled;
+                serviceNameTextBox.ReadOnly = false;
+                pathTextBox.ReadOnly = false;
+                installButton.Enabled = true;
+                uninstallButton.Enabled = false;
+                startButton.Enabled = false;
+                stopButton.Enabled = false;
+            }
 
-		private void butRefresh_Click(object sender,EventArgs e) {
-			RefreshFormData();
-		}
+            if (isInstallOnly) uninstallButton.Enabled = false;
+        }
 
-		private void butBrowse_Click(object sender,EventArgs e) {
-			OpenFileDialog fdlg=new OpenFileDialog();
-			fdlg.Title="Select a Service";
-			fdlg.InitialDirectory=Directory.GetCurrentDirectory();
-			fdlg.Filter="Executable files(*.exe)|*.exe";
-			fdlg.RestoreDirectory=true;
-			if(fdlg.ShowDialog()!=DialogResult.OK) {
-				return;
-			}
-			textPathToExe.Text=fdlg.FileName;
-		}
-	}
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormServiceManager_Load(object sender, EventArgs e) => FetchServiceInformation();
+
+        /// <summary>
+        /// Open the dialog to browse for a executable file.
+        /// </summary>
+        void browseButton_Click(object sender, EventArgs e)
+        {
+            using (var openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Title = Resources.LangSelectAService;
+                openFileDialog.InitialDirectory = Directory.GetCurrentDirectory();
+                openFileDialog.Filter = Resources.LangExecutableFiles + " (*.exe)|*.exe";
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    FullPath = openFileDialog.FileName;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Refresh the details of the service.
+        /// </summary>
+        void refreshButton_Click(object sender, EventArgs e) => FetchServiceInformation();
+
+        /// <summary>
+        /// Install the service.
+        /// </summary>
+        void installButton_Click(object sender, EventArgs e)
+        {
+            if (!File.Exists(FullPath))
+            {
+                MessageBox.Show(
+                    Resources.LangSelectAValidServicePath,
+                    Resources.LangManageService,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            // Check whether a valid service name has been specified.
+            if (ServiceName.Length < 8 || ServiceName.Substring(0, 8) != "OpenDent")
+            {
+                MessageBox.Show(
+                    Resources.LangServiceNameMustBeginWithOpenDent,
+                    Resources.LangManageService,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            // Check whether there is a service installed with the specified name or executable.
+            if (ServicesHelper.HasService(ServiceName, FullPath))
+            {
+                MessageBox.Show(
+                    Resources.LangServiceNameOrDirectoryInUse,
+                    Resources.LangManageService,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            // When creating a eConnector or OpenDental service open the form to make the configuration file.
+            string fileName = Path.GetFileName(FullPath).ToLower();
+            if (fileName == "opendentaleconnector.exe" || fileName == "opendentalservice.exe")
+            {
+                using (var formWebConfigSettings = new FormWebConfigSettings(FullPath))
+                {
+                    if (formWebConfigSettings.ShowDialog() != DialogResult.OK)
+                    {
+                        return;
+                    }
+                }
+            }
+
+            // Install the service.
+            try
+            {
+                ServicesHelper.Install(ServiceName, FullPath, out string standardOutput, out int exitCode);
+                if (exitCode != 0)
+                {
+                    MessageBox.Show(
+                        string.Format(Resources.LangInstallationFailedWithExitCode, exitCode) + "\r\n" + standardOutput.Trim(),
+                        Resources.LangManageService,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    Resources.LangUnexpectedErrorInstall + "\r\n" + ex.Message,
+                    Resources.LangManageService,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+
+            // Check whether the service was installed correctly.
+            try
+            {
+                var service = ServicesHelper.GetServiceByServiceName(ServiceName);
+                if (service != null)
+                {
+                    HadServiceInstalled = true; //We verified that the service was successfully installed
+                                                //Try to grant access to "Everyone" so that the service can be stopped and started by all users.
+                    try
+                    {
+                        ServicesHelper.SetSecurityDescriptorToAllowEveryoneToManageService(service);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(
+                           Resources.LangErrorUpdatingPermissions + "\r\n\r\n" + ex.Message,
+                           Resources.LangManageService,
+                           MessageBoxButtons.OK,
+                           MessageBoxIcon.Warning);
+                    }
+                }
+            }
+            catch
+            {
+            }
+
+            FetchServiceInformation();
+        }
+
+        /// <summary>
+        /// Uninstalls the service and closes the form on success.
+        /// </summary>
+        void uninstallButton_Click(object sender, EventArgs e)
+        {
+            if (!File.Exists(FullPath))
+            {
+                MessageBox.Show(
+                    Resources.LangSelectedServiceHasInvalidPath,
+                    Resources.LangManageService, 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            try
+            {
+                ServicesHelper.Uninstall(serviceNameTextBox.Text, out string standardOutput, out int exitCode);
+                if (exitCode != 0)
+                {
+                    MessageBox.Show(
+                        string.Format(Resources.LangUninstallFailedWithExitCode, exitCode) + "\r\n" + standardOutput.Trim(),
+                        Resources.LangManageService,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    Resources.LangUnexpectedErrorUninstall + "\r\n" + ex.Message,
+                    Resources.LangManageService,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            DialogResult = DialogResult.OK;
+        }
+
+        /// <summary>
+        /// Starts the selected service.
+        /// </summary>
+        void startButton_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            try
+            {
+                ServicesHelper.Start(serviceNameTextBox.Text, true);
+            }
+            catch (Exception ex)
+            {
+                Cursor = Cursors.Default;
+                MessageBox.Show(ex.Message);
+            }
+            Cursor = Cursors.Default;
+            FetchServiceInformation();
+        }
+
+        /// <summary>
+        /// Stops the selected service.
+        /// </summary>
+        void stopButton_Click(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            try
+            {
+                ServicesHelper.Stop(serviceNameTextBox.Text, true);
+            }
+            catch (Exception ex)
+            {
+                Cursor = Cursors.Default;
+                MessageBox.Show(ex.Message);
+            }
+            Cursor = Cursors.Default;
+            FetchServiceInformation();
+        }
+    }
 }

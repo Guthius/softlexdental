@@ -19,7 +19,7 @@ namespace ServiceManager.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -57,6 +57,206 @@ namespace ServiceManager.Properties {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot leave database field blank..
+        /// </summary>
+        internal static string LangCannotLeaveDatabaseBlank {
+            get {
+                return ResourceManager.GetString("LangCannotLeaveDatabaseBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot leave server field blank..
+        /// </summary>
+        internal static string LangCannotLeaveServerBlank {
+            get {
+                return ResourceManager.GetString("LangCannotLeaveServerBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot leave user field blank..
+        /// </summary>
+        internal static string LangCannotLeaveUserBlank {
+            get {
+                return ResourceManager.GetString("LangCannotLeaveUserBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error connecting to database..
+        /// </summary>
+        internal static string LangErrorConnectingToDatabase {
+            get {
+                return ResourceManager.GetString("LangErrorConnectingToDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The service was successfully installed but there was a problem updating the permissions for managing the service.
+        ///The service may have to be manually stopped and started via an administrative user.
+        ///This can be cumbersome when updating to newer versions of the software..
+        /// </summary>
+        internal static string LangErrorUpdatingPermissions {
+            get {
+                return ResourceManager.GetString("LangErrorUpdatingPermissions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was a problem writing a file to the system..
+        /// </summary>
+        internal static string LangErrorWritingConfigurationFile {
+            get {
+                return ResourceManager.GetString("LangErrorWritingConfigurationFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Executable Files.
+        /// </summary>
+        internal static string LangExecutableFiles {
+            get {
+                return ResourceManager.GetString("LangExecutableFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Installation failed with exit code {0}..
+        /// </summary>
+        internal static string LangInstallationFailedWithExitCode {
+            get {
+                return ResourceManager.GetString("LangInstallationFailedWithExitCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage Service.
+        /// </summary>
+        internal static string LangManageService {
+            get {
+                return ResourceManager.GetString("LangManageService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OpenDentalWebConfig.xml Settings.
+        /// </summary>
+        internal static string LangOpenDentalWebConfigSettings {
+            get {
+                return ResourceManager.GetString("LangOpenDentalWebConfigSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a Service.
+        /// </summary>
+        internal static string LangSelectAService {
+            get {
+                return ResourceManager.GetString("LangSelectAService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select a valid service path.
+        /// </summary>
+        internal static string LangSelectAValidServicePath {
+            get {
+                return ResourceManager.GetString("LangSelectAValidServicePath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The selected service has an invalid path..
+        /// </summary>
+        internal static string LangSelectedServiceHasInvalidPath {
+            get {
+                return ResourceManager.GetString("LangSelectedServiceHasInvalidPath", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service name must begin with &quot;OpenDent&quot;..
+        /// </summary>
+        internal static string LangServiceNameMustBeginWithOpenDent {
+            get {
+                return ResourceManager.GetString("LangServiceNameMustBeginWithOpenDent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Either a service with this name is already installed or there is another service installed from this directory..
+        /// </summary>
+        internal static string LangServiceNameOrDirectoryInUse {
+            get {
+                return ResourceManager.GetString("LangServiceNameOrDirectoryInUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Installed.
+        /// </summary>
+        internal static string LangStatusInstalled {
+            get {
+                return ResourceManager.GetString("LangStatusInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Installed.
+        /// </summary>
+        internal static string LangStatusNotInstalled {
+            get {
+                return ResourceManager.GetString("LangStatusNotInstalled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Running.
+        /// </summary>
+        internal static string LangStatusRunning {
+            get {
+                return ResourceManager.GetString("LangStatusRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stopped.
+        /// </summary>
+        internal static string LangStatusStopped {
+            get {
+                return ResourceManager.GetString("LangStatusStopped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected error installing the service..
+        /// </summary>
+        internal static string LangUnexpectedErrorInstall {
+            get {
+                return ResourceManager.GetString("LangUnexpectedErrorInstall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unexpected error uninstalling the service..
+        /// </summary>
+        internal static string LangUnexpectedErrorUninstall {
+            get {
+                return ResourceManager.GetString("LangUnexpectedErrorUninstall", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uninstall failed with exit code {0}..
+        /// </summary>
+        internal static string LangUninstallFailedWithExitCode {
+            get {
+                return ResourceManager.GetString("LangUninstallFailedWithExitCode", resourceCulture);
             }
         }
     }

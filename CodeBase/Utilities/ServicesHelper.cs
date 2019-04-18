@@ -32,11 +32,11 @@ namespace CodeBase {
 		}
 
 		///<summary>Returns true if the service was installed successfully.</summary>
-		public static bool Install(string serviceName,FileInfo serviceFileInfo) {
+		public static bool Install(string serviceName, string servicePath) {
 			try {
 				string standardOutput;
 				int exitCode;
-				Install(serviceName,serviceFileInfo,out standardOutput,out exitCode);
+				Install(serviceName, servicePath, out standardOutput,out exitCode);
 				//Check to see if the service was successfully installed.
 				ServiceController serviceController=GetServiceByServiceName(serviceName);
 				if(serviceController!=null) {
@@ -53,13 +53,13 @@ namespace CodeBase {
 
 		///<summary>Utilizes "installutil.exe" to install the serviceFileInfo with the corresponding serviceName passed in.
 		///The out parameters "standardOutput" and "exitCode" will contain the results of the "Process" execution.</summary>
-		public static void Install(string serviceName,FileInfo serviceFileInfo,out string standardOutput,out int exitCode) {
+		public static void Install(string serviceName,string servicePath, out string standardOutput,out int exitCode) {
 			//Use the Windows Service Controller to show the "security descriptor" for the current service via a command prompt.
 			ExecuteProcess(_installUtilPath
-				,"/ServiceName="+serviceName+" \""+serviceFileInfo.FullName+"\""
+				,"/ServiceName="+serviceName+" \""+ servicePath + "\""
 				,out standardOutput
 				,out exitCode
-				,serviceFileInfo.DirectoryName);
+				,Path.GetDirectoryName(servicePath));
 		}
 
 		///<summary>Returns true if the service was able to uninstall successfully.</summary>
@@ -415,7 +415,7 @@ namespace CodeBase {
 		///<summary>Returns true if a service is currently installed with the specified service name.
 		///Optionally pass in the file info for the desired service and this method will also return true if there is a service utilizing the same 
 		///executable.</summary>
-		public static bool HasService(string serviceName,FileInfo serviceFileInfo = null) {
+		public static bool HasService(string serviceName, string servicePath) {
 			//Old way is to search the registry. This can tend to throw exceptions based on Windows user permissions, especially if runnong on a Domain Controller.
 			//Let's try it this way first so as not to break any back-compatibility.
 			try {
@@ -424,13 +424,13 @@ namespace CodeBase {
 					if(serviceName==service.ServiceName) {
 						return true;
 					}
-					if(serviceFileInfo==null) {
+					if(servicePath == null) {
 						continue;
 					}
 					RegistryKey hklm=Registry.LocalMachine;
 					hklm=hklm.OpenSubKey(@"System\CurrentControlSet\Services\"+service.ServiceName);
 					string installedServicePath=hklm.GetValue("ImagePath").ToString().Replace("\"","");
-					if(installedServicePath.Contains(serviceFileInfo.FullName)) {
+					if(installedServicePath.Contains(servicePath)) {
 						return true;
 					}
 				}
@@ -446,7 +446,7 @@ namespace CodeBase {
 				return true;
 			}
 			//Check the new path against all installed service paths. Typically installed service paths are encapsulated by \"  \" so use Contains().
-			if(serviceFileInfo!=null && asWmi.Any(x => x.PathName.ToLower().Contains(serviceFileInfo.FullName.ToLower()))) { //Path match. Already exists.
+			if(servicePath != null && asWmi.Any(x => x.PathName.ToLower().Contains(servicePath.ToLower()))) { //Path match. Already exists.
 				return true;
 			}
 			//Service does not exist.
