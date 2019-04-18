@@ -530,6 +530,9 @@
     <Compile Include="Forms\FormRecallList.designer.cs">
       <DependentUpon>FormRecallList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormUserPassword.Designer.cs">
+      <DependentUpon>FormUserPassword.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormWebChatSurveys.cs">
       <SubType>Form</SubType>
     </Compile>

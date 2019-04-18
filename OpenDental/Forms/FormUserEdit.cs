@@ -752,7 +752,7 @@ namespace OpenDental{
 			}
 			UserCur.LoginDetails=FormU.LoginDetails;
 			UserCur.PasswordIsStrong=FormU.PasswordIsStrong;
-			_passwordTyped=FormU.PasswordTyped;
+			_passwordTyped=FormU.Password;
 			if(string.IsNullOrEmpty(UserCur.PasswordHash)) {
 				butPassword.Text=Lan.g(this,"Create Password");
 			}
