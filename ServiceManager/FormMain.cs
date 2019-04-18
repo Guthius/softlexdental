@@ -14,8 +14,6 @@ namespace ServiceManager
         /// <summary>
         /// Loads the form.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         void FormMain_Load(object sender, EventArgs e) => LoadServices();
 
         /// <summary>
@@ -45,7 +43,8 @@ namespace ServiceManager
             using (var formServiceManage = new FormServiceManage(servicesListBox.SelectedItem.ToString(), false))
             {
                 formServiceManage.ShowInTaskbar = false;
-                if (formServiceManage.ShowDialog() == DialogResult.OK)
+                formServiceManage.StartPosition = FormStartPosition.CenterParent;
+                if (formServiceManage.ShowDialog(this) == DialogResult.OK)
                 {
                     LoadServices();
                 }
@@ -60,7 +59,8 @@ namespace ServiceManager
             using (var formServiceManage = new FormServiceManage("OpenDent", true))
             {
                 formServiceManage.ShowInTaskbar = false;
-                if (formServiceManage.ShowDialog() == DialogResult.OK)
+                formServiceManage.StartPosition = FormStartPosition.CenterParent;
+                if (formServiceManage.ShowDialog(this) == DialogResult.OK)
                 {
                     LoadServices();
                 }
