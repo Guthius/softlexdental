@@ -299,7 +299,6 @@ namespace OpenDentBusiness{
 					//ecw requires hash, but non-ecw requires actual password
 					Security.CurUser=Security.LogInWeb(username,password,"",Application.ProductVersion,useEcwAlgorithm);
 					Security.PasswordTyped=password;//for ecw, this is already encrypted.
-					UserOdPrefs.SetThemeForUserIfNeeded();
 				}
 				catch(Exception ex) {
 					RemotingClient.ServerURI=originalURI;

@@ -53,7 +53,7 @@ namespace OpenDental {
 			Security.CurUser=userEntered;
 			Security.IsUserLoggedIn=true;
 			RemotingClient.HasLoginFailed=false;
-			UserOdPrefs.SetThemeForUserIfNeeded();
+
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb 
 				&& string.IsNullOrEmpty(userEntered.PasswordHash) 
 				&& string.IsNullOrEmpty(textPassword.Text)) 

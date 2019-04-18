@@ -22,23 +22,6 @@ namespace OpenDental {
 			if(_suppressLogOffMessage!=null) {//Does exist in the database
 				checkSuppressMessage.Checked=true;
 			}
-			FillThemeCombo();
-		}
-
-		private void FillThemeCombo() {
-			foreach(OdTheme theme in Enum.GetValues(typeof(OdTheme))) {
-				if(theme==OdTheme.None) {
-					continue;
-				}
-				comboTheme.Items.Add(theme);
-			}
-			_themePref=UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum,UserOdFkeyType.UserTheme).FirstOrDefault();
-			if(_themePref!=null) {//user has chosen a theme before. Display their currently chosen theme.
-				comboTheme.SelectedIndex=comboTheme.Items.IndexOf((OdTheme)_themePref.Fkey);
-			}
-			else {//user has not chosen a theme before. Show them the current default.
-				comboTheme.SelectedIndex=PrefC.GetInt(PrefName.ColorTheme);
-			}
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
@@ -50,18 +33,6 @@ namespace OpenDental {
 			}
 			else if(!checkSuppressMessage.Checked && _suppressLogOffMessage!=null) {
 				UserOdPrefs.Delete(_suppressLogOffMessage.UserOdPrefNum);
-			}
-			if(_themePref==null) {
-				_themePref=new UserOdPref() {UserNum=Security.CurUser.UserNum,FkeyType=UserOdFkeyType.UserTheme};
-			}
-			_themePref.Fkey=comboTheme.SelectedIndex;
-			UserOdPrefs.Upsert(_themePref);
-			if(PrefC.GetBool(PrefName.ThemeSetByUser)) {
-				UserOdPrefs.SetThemeForUserIfNeeded();
-			}
-			else {
-				//No need to return, just showing a warning so they know why the theme will not change.
-				MsgBox.Show("Theme will not take effect until the miscellaneous preference has been set for users can set their own theme.");
 			}
 			DialogResult=DialogResult.OK;
 		}

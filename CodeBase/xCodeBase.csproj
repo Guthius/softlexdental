@@ -182,7 +182,6 @@
     <Compile Include="Controls\OpenGLWinFormsControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Controls\ODErrorProvider.cs" />
     <Compile Include="Controls\PrintPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -229,10 +228,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Themes\OdThemeBlue.cs" />
-    <Compile Include="Themes\OdThemeModernBlue.cs" />
-    <Compile Include="Themes\OdThemeModernGrey.cs" />
-    <Compile Include="Themes\OdThemeOriginal.cs" />
     <Compile Include="Utilities\ConvertWebCore.cs" />
     <Compile Include="Utilities\DateDefaultToday.cs" />
     <Compile Include="Utilities\DateRange.cs" />

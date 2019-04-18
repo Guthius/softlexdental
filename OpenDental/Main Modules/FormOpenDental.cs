@@ -7385,7 +7385,7 @@ namespace OpenDental
                 timerSignals.Interval = PrefC.GetInt(PrefName.ProcessSigsIntervalInSecs) * 1000;
                 timerSignals.Enabled = true;
             }
-            UserOdPrefs.SetThemeForUserIfNeeded();
+
             SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Misc");
         }
 
@@ -9983,7 +9983,7 @@ namespace OpenDental
                 Security.IsUserLoggedIn = true;//This might be wrong.  We set to true for backward compatibility.
                 return;
             }
-            UserOdPrefs.SetThemeForUserIfNeeded();
+
             #region eCW Tight or Full
             //Leave Security.CurUser null if a user was passed in on the commandline.  If starting OD manually, it continues below.
             if (Programs.UsingEcwTightOrFullMode() && odUser != "")
@@ -10001,7 +10001,7 @@ namespace OpenDental
                 {
                     bool isEcwTightOrFullMode = Programs.UsingEcwTightOrFullMode();
                     Security.CurUser = Userods.CheckUserAndPassword(odUser, odPassword, isEcwTightOrFullMode);
-                    UserOdPrefs.SetThemeForUserIfNeeded();
+
                     if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
                     {
                         string pw = odPassword;
@@ -10035,7 +10035,7 @@ namespace OpenDental
                 {
                     Security.CurUser = Userods.GetUserNoCache(userNumFirstAdminNoPass);
                     CheckForPasswordReset();
-                    UserOdPrefs.SetThemeForUserIfNeeded();
+
                     SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff, 0, Lan.g(this, "User:") + " " + Security.CurUser.UserName + " " + Lan.g(this, "has logged on."));
                 }
                 #endregion
@@ -10070,7 +10070,7 @@ namespace OpenDental
                             {
                                 Security.CurUser = Userods.GetUserNoCache(dictDomainUserNumsAndNames.Keys.ElementAt(box.SelectedIndex));
                                 CheckForPasswordReset();
-                                UserOdPrefs.SetThemeForUserIfNeeded();
+
                                 SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff, 0, Lan.g(this, "User:") + " " + Security.CurUser.UserName + " "
                                     + Lan.g(this, "has logged on automatically via ActiveDirectory."));
                             }
@@ -10083,7 +10083,7 @@ namespace OpenDental
                         { //log on automatically if only one user is linked to current domain user
                             Security.CurUser = Userods.GetUserNoCache(dictDomainUserNumsAndNames.Keys.First());
                             CheckForPasswordReset();
-                            UserOdPrefs.SetThemeForUserIfNeeded();
+
                             SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff, 0, Lan.g(this, "User:") + " " + Security.CurUser.UserName + " "
                                     + Lan.g(this, "has logged on automatically via ActiveDirectory."));
                         }

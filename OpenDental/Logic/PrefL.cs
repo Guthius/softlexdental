@@ -19,18 +19,19 @@ namespace OpenDental {
 
 		///<summary>This ONLY runs when first opening the program.  It returns true if either no conversion is necessary, or if conversion was successful.  False for other situations like corrupt db, trying to convert to older version, etc.  Silent mode is mostly used from internal tools.  It is currently used in the Main Program if the silent command line argument is set.</summary>
 		public static bool ConvertDB(bool silent,string toVersion,Form currentForm,bool useDynamicMode) {
-			ClassConvertDatabase ClassConvertDatabase2=new ClassConvertDatabase();
-			string pref=PrefC.GetString(PrefName.DataBaseVersion);
-			if(ClassConvertDatabase2.Convert(pref,toVersion,silent,currentForm,useDynamicMode)) {
-				return true;
-			}
-			else {
-				if(FormOpenDental.ExitCode==0) {
-					FormOpenDental.ExitCode=200;//Convert Database has failed during execution (Unknown Error)
-				}
-				Environment.Exit(FormOpenDental.ExitCode);
-				return false;
-			}
+            //ClassConvertDatabase ClassConvertDatabase2=new ClassConvertDatabase();
+            //string pref=PrefC.GetString(PrefName.DataBaseVersion);
+            //if(ClassConvertDatabase2.Convert(pref,toVersion,silent,currentForm,useDynamicMode)) {
+            //	return true;
+            //}
+            //else {
+            //	if(FormOpenDental.ExitCode==0) {
+            //		FormOpenDental.ExitCode=200;//Convert Database has failed during execution (Unknown Error)
+            //	}
+            //	Environment.Exit(FormOpenDental.ExitCode);
+            //	return false;
+            //}
+            return true;
 		}
 
 		///<summary>This ONLY runs when first opening the program.  It returns true if either no conversion is necessary, or if conversion was successful.  False for other situations like corrupt db, trying to convert to older version, etc.</summary>
@@ -1152,8 +1153,7 @@ namespace OpenDental {
 					return true;//An eConnector service is already installed.
 				}
 				string eConnectorExePath=ODFileUtils.CombinePaths(Directory.GetCurrentDirectory(),"OpenDentalEConnector","OpenDentalEConnector.exe");
-				FileInfo eConnectorExeFI=new FileInfo(eConnectorExePath);
-				if(!ServicesHelper.Install("OpenDentalEConnector",eConnectorExeFI)) {
+				if(!ServicesHelper.Install("OpenDentalEConnector", eConnectorExePath)) {
 					if(!isSilent) {
 						throw new ApplicationException(Lans.g("ServicesHelper","Unable to install the OpenDentalEConnector service."));
 					}
@@ -1207,8 +1207,7 @@ namespace OpenDental {
 					return true;//An Open Dental Service is already installed.
 				}
 				string odServiceFilePath=ODFileUtils.CombinePaths(Directory.GetCurrentDirectory(),"OpenDentalService","OpenDentalService.exe");
-				FileInfo odServiceExeFI=new FileInfo(odServiceFilePath);
-				if(!ServicesHelper.Install("OpenDentalService",odServiceExeFI)) {
+				if(!ServicesHelper.Install("OpenDentalService", odServiceFilePath)) {
 					AlertItems.CreateGenericAlert(Lans.g("ServicesHelper","Open Dental Service Error"),Lans.g("ServicesHelper","Failed to install OpenDentalService, try running as admin."));
 					return false;
 				}

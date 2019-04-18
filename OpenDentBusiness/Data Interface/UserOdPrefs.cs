@@ -6,38 +6,42 @@ using System.Reflection;
 using System.Text;
 using CodeBase;
 
-namespace OpenDentBusiness{
-	///<summary></summary>
-	public class UserOdPrefs {
-		#region Get Methods
-		#endregion
+namespace OpenDentBusiness
+{
+    ///<summary></summary>
+    public class UserOdPrefs
+    {
+        #region Get Methods
+        #endregion
 
-		#region Modification Methods
-		
-		#region Insert
-		#endregion
+        #region Modification Methods
 
-		#region Update
-		///<summary></summary>
-		public static void Sync(List<UserOdPref> listNew,List<UserOdPref> listDB){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),listNew,listDB);
-				return;
-			}
-			Crud.UserOdPrefCrud.Sync(listNew,listDB);
-		}
-		#endregion
+        #region Insert
+        #endregion
 
-		#region Delete
-		#endregion
+        #region Update
+        ///<summary></summary>
+        public static void Sync(List<UserOdPref> listNew, List<UserOdPref> listDB)
+        {
+            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
+            {
+                Meth.GetVoid(MethodBase.GetCurrentMethod(), listNew, listDB);
+                return;
+            }
+            Crud.UserOdPrefCrud.Sync(listNew, listDB);
+        }
+        #endregion
 
-		#endregion
+        #region Delete
+        #endregion
 
-		#region Misc Methods
-		#endregion
+        #endregion
+
+        #region Misc Methods
+        #endregion
 
 
-		/*
+        /*
 		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.
 		#region CachePattern
 
@@ -116,7 +120,7 @@ namespace OpenDentBusiness{
 
 		#endregion
 		*/
-		/*
+        /*
 		///<summary></summary>
 		public static List<UserOdPref> Refresh(long userNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
@@ -135,215 +139,225 @@ namespace OpenDentBusiness{
 		}
 		*/
 
-		///<summary></summary>
-		public static void Update(UserOdPref userOdPref){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),userOdPref);
-				return;
-			}
-			Crud.UserOdPrefCrud.Update(userOdPref);
-		}
+        ///<summary></summary>
+        public static void Update(UserOdPref userOdPref)
+        {
+            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
+            {
+                Meth.GetVoid(MethodBase.GetCurrentMethod(), userOdPref);
+                return;
+            }
+            Crud.UserOdPrefCrud.Update(userOdPref);
+        }
 
-		///<summary></summary>
-		public static long Insert(UserOdPref userOdPref) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				userOdPref.UserOdPrefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),userOdPref);
-				return userOdPref.UserOdPrefNum;
-			}
-			return Crud.UserOdPrefCrud.Insert(userOdPref);
-		}
+        ///<summary></summary>
+        public static long Insert(UserOdPref userOdPref)
+        {
+            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
+            {
+                userOdPref.UserOdPrefNum = Meth.GetLong(MethodBase.GetCurrentMethod(), userOdPref);
+                return userOdPref.UserOdPrefNum;
+            }
+            return Crud.UserOdPrefCrud.Insert(userOdPref);
+        }
 
-		///<summary></summary>
-		public static void Upsert(List<UserOdPref> listUserOdPrefs) {
-			//This remoting role isn't necessary but helps significantly with speed due to looping.
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),listUserOdPrefs);
-				return;
-			}
-			foreach(UserOdPref userOdPref in listUserOdPrefs) {
-				Upsert(userOdPref);
-			}
-		}
+        ///<summary></summary>
+        public static void Upsert(List<UserOdPref> listUserOdPrefs)
+        {
+            //This remoting role isn't necessary but helps significantly with speed due to looping.
+            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
+            {
+                Meth.GetVoid(MethodBase.GetCurrentMethod(), listUserOdPrefs);
+                return;
+            }
+            foreach (UserOdPref userOdPref in listUserOdPrefs)
+            {
+                Upsert(userOdPref);
+            }
+        }
 
-		///<summary></summary>
-		public static long Upsert(UserOdPref userOdPref) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				userOdPref.UserOdPrefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),userOdPref);
-				return userOdPref.UserOdPrefNum;
-			}
-			if(userOdPref.UserOdPrefNum==0) {
-				return Crud.UserOdPrefCrud.Insert(userOdPref);
-			}
-			Crud.UserOdPrefCrud.Update(userOdPref);
-			return userOdPref.UserOdPrefNum;
-		}
+        ///<summary></summary>
+        public static long Upsert(UserOdPref userOdPref)
+        {
+            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
+            {
+                userOdPref.UserOdPrefNum = Meth.GetLong(MethodBase.GetCurrentMethod(), userOdPref);
+                return userOdPref.UserOdPrefNum;
+            }
+            if (userOdPref.UserOdPrefNum == 0)
+            {
+                return Crud.UserOdPrefCrud.Insert(userOdPref);
+            }
+            Crud.UserOdPrefCrud.Update(userOdPref);
+            return userOdPref.UserOdPrefNum;
+        }
 
-		///<summary></summary>
-		public static void Delete(long userOdPrefNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),userOdPrefNum);
-				return;
-			}
-			Crud.UserOdPrefCrud.Delete(userOdPrefNum);
-		}
+        ///<summary></summary>
+        public static void Delete(long userOdPrefNum)
+        {
+            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
+            {
+                Meth.GetVoid(MethodBase.GetCurrentMethod(), userOdPrefNum);
+                return;
+            }
+            Crud.UserOdPrefCrud.Delete(userOdPrefNum);
+        }
 
-		///<summary>This will ensure that when inserting this preference that there are no other preferences that are of the same fkey/fkeytype/user combination.
-		///This will likely only be used in specific scenarios where there is only 1 userodpref for the fkey/fkeytype passed in.
-		///To use this method with multiple userodprefs, you must make ValueString contain a JSON object or equivalent complex document.</summary>
-		public static void DeleteMany(long userNum,long fkey,UserOdFkeyType fkeyType) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),userNum,fkey,fkeyType);
-				return;
-			}
-			//Delete any userodpref rows that match its usernum/fkey/fkeytype.
-			string command="DELETE FROM userodpref WHERE UserNum="+POut.Long(userNum)
-				+" AND FkeyType="+POut.Int((int)fkeyType)
-				+" AND Fkey="+POut.Long(fkey);
-			Db.NonQ(command);
-		}
+        ///<summary>This will ensure that when inserting this preference that there are no other preferences that are of the same fkey/fkeytype/user combination.
+        ///This will likely only be used in specific scenarios where there is only 1 userodpref for the fkey/fkeytype passed in.
+        ///To use this method with multiple userodprefs, you must make ValueString contain a JSON object or equivalent complex document.</summary>
+        public static void DeleteMany(long userNum, long fkey, UserOdFkeyType fkeyType)
+        {
+            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
+            {
+                Meth.GetVoid(MethodBase.GetCurrentMethod(), userNum, fkey, fkeyType);
+                return;
+            }
+            //Delete any userodpref rows that match its usernum/fkey/fkeytype.
+            string command = "DELETE FROM userodpref WHERE UserNum=" + POut.Long(userNum)
+                + " AND FkeyType=" + POut.Int((int)fkeyType)
+                + " AND Fkey=" + POut.Long(fkey);
+            Db.NonQ(command);
+        }
 
-		public static List<UserOdPref> GetByUserAndFkeyType(long userNum,UserOdFkeyType fkeyType) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<UserOdPref>>(MethodBase.GetCurrentMethod(),userNum,fkeyType);
-			}
-			string command = "SELECT * FROM userodpref WHERE UserNum="+POut.Long(userNum)+" AND FkeyType="+POut.Int((int)fkeyType);
-			return Crud.UserOdPrefCrud.SelectMany(command);
-		}
+        public static List<UserOdPref> GetByUserAndFkeyType(long userNum, UserOdFkeyType fkeyType)
+        {
+            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
+            {
+                return Meth.GetObject<List<UserOdPref>>(MethodBase.GetCurrentMethod(), userNum, fkeyType);
+            }
+            string command = "SELECT * FROM userodpref WHERE UserNum=" + POut.Long(userNum) + " AND FkeyType=" + POut.Int((int)fkeyType);
+            return Crud.UserOdPrefCrud.SelectMany(command);
+        }
 
-		public static List<UserOdPref> GetByFkeyAndFkeyType(long fkey,UserOdFkeyType fkeyType) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<UserOdPref>>(MethodBase.GetCurrentMethod(),fkey,fkeyType);
-			}
-			string command = "SELECT * FROM userodpref WHERE Fkey="+POut.Long(fkey)+" AND FkeyType="+POut.Int((int)fkeyType);
-			return Crud.UserOdPrefCrud.SelectMany(command);
-		}
+        public static List<UserOdPref> GetByFkeyAndFkeyType(long fkey, UserOdFkeyType fkeyType)
+        {
+            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
+            {
+                return Meth.GetObject<List<UserOdPref>>(MethodBase.GetCurrentMethod(), fkey, fkeyType);
+            }
+            string command = "SELECT * FROM userodpref WHERE Fkey=" + POut.Long(fkey) + " AND FkeyType=" + POut.Int((int)fkeyType);
+            return Crud.UserOdPrefCrud.SelectMany(command);
+        }
 
-		public static List<UserOdPref> GetByUserFkeyAndFkeyType(long userNum,long fkey,UserOdFkeyType fkeyType) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<UserOdPref>>(MethodBase.GetCurrentMethod(),userNum,fkey,fkeyType);
-			}
-			string command="SELECT * FROM userodpref WHERE UserNum="+POut.Long(userNum)+" AND Fkey="+POut.Long(fkey)
-				+" AND FkeyType="+POut.Int((int)fkeyType);
-			return Crud.UserOdPrefCrud.SelectMany(command);
-		}
+        public static List<UserOdPref> GetByUserFkeyAndFkeyType(long userNum, long fkey, UserOdFkeyType fkeyType)
+        {
+            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
+            {
+                return Meth.GetObject<List<UserOdPref>>(MethodBase.GetCurrentMethod(), userNum, fkey, fkeyType);
+            }
+            string command = "SELECT * FROM userodpref WHERE UserNum=" + POut.Long(userNum) + " AND Fkey=" + POut.Long(fkey)
+                + " AND FkeyType=" + POut.Int((int)fkeyType);
+            return Crud.UserOdPrefCrud.SelectMany(command);
+        }
 
-		public static UserOdPref GetFirstOrNewByUserAndFkeyType(long userNum,UserOdFkeyType fkeyType) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<UserOdPref>(MethodBase.GetCurrentMethod(),userNum,fkeyType);
-			}
-			string command = "SELECT * FROM userodpref WHERE UserNum="+POut.Long(userNum)+" AND FkeyType="+POut.Int((int)fkeyType)+" LIMIT 1";
-			return ODMethodsT.Coalesce(
-				//Get the db value if it exists.
-				Crud.UserOdPrefCrud.SelectOne(command),
-				//Create a new instance if db value does not exist.
-				new UserOdPref() {
-					IsNew=true,
-					UserOdPrefNum=0,
-					Fkey=0,
-					FkeyType=fkeyType,
-					UserNum=userNum,
-					ValueString="",
-					ClinicNum=0,
-				});
-		}
+        public static UserOdPref GetFirstOrNewByUserAndFkeyType(long userNum, UserOdFkeyType fkeyType)
+        {
+            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
+            {
+                return Meth.GetObject<UserOdPref>(MethodBase.GetCurrentMethod(), userNum, fkeyType);
+            }
+            string command = "SELECT * FROM userodpref WHERE UserNum=" + POut.Long(userNum) + " AND FkeyType=" + POut.Int((int)fkeyType) + " LIMIT 1";
+            return ODMethodsT.Coalesce(
+                //Get the db value if it exists.
+                Crud.UserOdPrefCrud.SelectOne(command),
+                //Create a new instance if db value does not exist.
+                new UserOdPref()
+                {
+                    IsNew = true,
+                    UserOdPrefNum = 0,
+                    Fkey = 0,
+                    FkeyType = fkeyType,
+                    UserNum = userNum,
+                    ValueString = "",
+                    ClinicNum = 0,
+                });
+        }
 
-		///<summary>Will return a list of UserOdPrefs corresponding to the usernum/fkey/fkeytype combination given.</summary>
-		public static List<UserOdPref> GetByUserAndFkeyAndFkeyType(long userNum,long fkey,UserOdFkeyType fkeyType,List<long> listClinicNums=null) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<UserOdPref>>(MethodBase.GetCurrentMethod(),userNum,fkey,fkeyType,listClinicNums);
-			}
-			string command="SELECT * FROM userodpref WHERE UserNum="+POut.Long(userNum)
-				+" AND Fkey="+POut.Long(fkey)+" AND FkeyType="+POut.Int((int)fkeyType);
-			if(listClinicNums!=null && listClinicNums.Count>0) {
-				command+=" AND ClinicNum IN("+String.Join(", ",listClinicNums)+") ";
-			}
-			return Crud.UserOdPrefCrud.SelectMany(command);
-		}
+        ///<summary>Will return a list of UserOdPrefs corresponding to the usernum/fkey/fkeytype combination given.</summary>
+        public static List<UserOdPref> GetByUserAndFkeyAndFkeyType(long userNum, long fkey, UserOdFkeyType fkeyType, List<long> listClinicNums = null)
+        {
+            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
+            {
+                return Meth.GetObject<List<UserOdPref>>(MethodBase.GetCurrentMethod(), userNum, fkey, fkeyType, listClinicNums);
+            }
+            string command = "SELECT * FROM userodpref WHERE UserNum=" + POut.Long(userNum)
+                + " AND Fkey=" + POut.Long(fkey) + " AND FkeyType=" + POut.Int((int)fkeyType);
+            if (listClinicNums != null && listClinicNums.Count > 0)
+            {
+                command += " AND ClinicNum IN(" + String.Join(", ", listClinicNums) + ") ";
+            }
+            return Crud.UserOdPrefCrud.SelectMany(command);
+        }
 
-		///<summary>Will return the UserOdPref corresponding to the usernum/fkey/fkeytype/ClinicNum composite key given.</summary>
-		public static UserOdPref GetByCompositeKey(long userNum,long fkey,UserOdFkeyType fkeyType,long clinicNum=0) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<UserOdPref>(MethodBase.GetCurrentMethod(),userNum,fkey,fkeyType,clinicNum);
-			}
-			string command="SELECT * FROM userodpref WHERE UserNum="+POut.Long(userNum)
-				+" AND Fkey="+POut.Long(fkey)+" AND FkeyType="+POut.Int((int)fkeyType)
-				+" AND ClinicNum="+POut.Long(clinicNum);
-			return ODMethodsT.Coalesce(
-				//Get the db value if it exists.
-				Crud.UserOdPrefCrud.SelectOne(command),
-				//Create a new instance if db value does not exist.
-				new UserOdPref() {
-					IsNew=true,
-					UserOdPrefNum=0,
-					Fkey=fkey,
-					FkeyType=fkeyType,
-					UserNum=userNum,
-					ValueString="",
-					ClinicNum=clinicNum,
-				});
-		}
-		public static List<UserOdPref> GetAllByFkeyAndFkeyType(long fkey,UserOdFkeyType fkeyType) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<UserOdPref>>(MethodBase.GetCurrentMethod(),fkey,fkeyType);
-			}
-			string command="SELECT * FROM userodpref WHERE Fkey="+POut.Long(fkey)+" AND FkeyType="+POut.Int((int)fkeyType);
-			return Crud.UserOdPrefCrud.SelectMany(command);
-		}
+        ///<summary>Will return the UserOdPref corresponding to the usernum/fkey/fkeytype/ClinicNum composite key given.</summary>
+        public static UserOdPref GetByCompositeKey(long userNum, long fkey, UserOdFkeyType fkeyType, long clinicNum = 0)
+        {
+            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
+            {
+                return Meth.GetObject<UserOdPref>(MethodBase.GetCurrentMethod(), userNum, fkey, fkeyType, clinicNum);
+            }
+            string command = "SELECT * FROM userodpref WHERE UserNum=" + POut.Long(userNum)
+                + " AND Fkey=" + POut.Long(fkey) + " AND FkeyType=" + POut.Int((int)fkeyType)
+                + " AND ClinicNum=" + POut.Long(clinicNum);
+            return ODMethodsT.Coalesce(
+                //Get the db value if it exists.
+                Crud.UserOdPrefCrud.SelectOne(command),
+                //Create a new instance if db value does not exist.
+                new UserOdPref()
+                {
+                    IsNew = true,
+                    UserOdPrefNum = 0,
+                    Fkey = fkey,
+                    FkeyType = fkeyType,
+                    UserNum = userNum,
+                    ValueString = "",
+                    ClinicNum = clinicNum,
+                });
+        }
+        public static List<UserOdPref> GetAllByFkeyAndFkeyType(long fkey, UserOdFkeyType fkeyType)
+        {
+            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
+            {
+                return Meth.GetObject<List<UserOdPref>>(MethodBase.GetCurrentMethod(), fkey, fkeyType);
+            }
+            string command = "SELECT * FROM userodpref WHERE Fkey=" + POut.Long(fkey) + " AND FkeyType=" + POut.Int((int)fkeyType);
+            return Crud.UserOdPrefCrud.SelectMany(command);
+        }
 
-		///<summary>Deletes UserOdPref with provided parameters.  If "userNum" is 0 then will delete all UserOdPref's with corresponding fkeyType and fkey.</summary>
-		public static void DeleteForFkey(long userNum,UserOdFkeyType fkeyType,long fkey) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),userNum,fkeyType,fkey);
-				return;
-			}
-			string command = "DELETE FROM userodpref "
-				+"WHERE Fkey="+POut.Long(fkey)+" AND FkeyType="+POut.Int((int)fkeyType);
-			if(userNum!=0) {
-				command+=" AND UserNum="+POut.Long(userNum);
-			}
-			Db.NonQ(command);
-		}
+        ///<summary>Deletes UserOdPref with provided parameters.  If "userNum" is 0 then will delete all UserOdPref's with corresponding fkeyType and fkey.</summary>
+        public static void DeleteForFkey(long userNum, UserOdFkeyType fkeyType, long fkey)
+        {
+            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
+            {
+                Meth.GetVoid(MethodBase.GetCurrentMethod(), userNum, fkeyType, fkey);
+                return;
+            }
+            string command = "DELETE FROM userodpref "
+                + "WHERE Fkey=" + POut.Long(fkey) + " AND FkeyType=" + POut.Int((int)fkeyType);
+            if (userNum != 0)
+            {
+                command += " AND UserNum=" + POut.Long(userNum);
+            }
+            Db.NonQ(command);
+        }
 
-		///<summary>Deletes UserOdPref with provided parameters.
-		///If "userNum" is 0 then will delete all UserOdPref's with corresponding fkeyType and valueString.</summary>
-		public static void DeleteForValueString(long userNum,UserOdFkeyType fkeyType,string valueString) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),userNum,fkeyType,valueString);
-				return;
-			}
-			string command = "DELETE FROM userodpref "
-				+"WHERE ValueString='"+POut.String(valueString)+"' AND FkeyType="+POut.Int((int)fkeyType);
-			if(userNum!=0) {
-				command+=" AND UserNum="+POut.Long(userNum);
-			}
-			Db.NonQ(command);
-		}
-
-		///<summary>This should be called when the user is changed (excluding temporay logins such as job review logins).
-		///In the future, we could also call this if we detect the office theme has changed via signal preference cache refresh or if
-		///another person using the same login information changes the theme for a group of users.</summary>
-		public static void SetThemeForUserIfNeeded() {
-			OdTheme themeDefault=OdTheme.Original;
-			try {
-				themeDefault=(OdTheme)PrefC.GetInt(PrefName.ColorTheme);
-			}
-			catch {
-				//try/catch in case you are trying to convert from an older version of OD and need to update the DB.
-			}
-			if(Security.CurUser==null) {//no current user, set to the default practice theme.
-				ODColorTheme.SetTheme(themeDefault);
-				return;
-			}
-			UserOdPref themePref=UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum,UserOdFkeyType.UserTheme).FirstOrDefault();
-			//user theme not allowed or hasn't been set
-			if(!PrefC.GetBool(PrefName.ThemeSetByUser) || themePref==null) {
-				ODColorTheme.SetTheme(themeDefault);
-			}
-			else if(themePref!=null) {//user theme allowed but needs to update for user pref
-				ODColorTheme.SetTheme((OdTheme)themePref.Fkey);
-			}
-		}
-
-	}
-
+        ///<summary>Deletes UserOdPref with provided parameters.
+        ///If "userNum" is 0 then will delete all UserOdPref's with corresponding fkeyType and valueString.</summary>
+        public static void DeleteForValueString(long userNum, UserOdFkeyType fkeyType, string valueString)
+        {
+            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
+            {
+                Meth.GetVoid(MethodBase.GetCurrentMethod(), userNum, fkeyType, valueString);
+                return;
+            }
+            string command = "DELETE FROM userodpref "
+                + "WHERE ValueString='" + POut.String(valueString) + "' AND FkeyType=" + POut.Int((int)fkeyType);
+            if (userNum != 0)
+            {
+                command += " AND UserNum=" + POut.Long(userNum);
+            }
+            Db.NonQ(command);
+        }
+    }
 }

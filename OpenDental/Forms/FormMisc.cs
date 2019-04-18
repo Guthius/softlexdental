@@ -714,13 +714,7 @@ namespace OpenDental {
 			else {
 				textInactiveSignal.Text=PrefC.GetLong(PrefName.SignalInactiveMinutes).ToString();
 			}
-			foreach(OdTheme theme in Enum.GetValues(typeof(OdTheme))) {
-				if(theme==OdTheme.None) {
-					continue;
-				}
-				comboTheme.Items.Add(theme);
-			}
-			comboTheme.SelectedIndex=PrefC.GetInt(PrefName.ColorTheme);
+
 			checkUserTheme.Checked=PrefC.GetBool(PrefName.ThemeSetByUser);
       checkTimeCardUseLocal.Checked=PrefC.GetBool(PrefName.LocalTimeOverridesServerTime);
 			checkRefresh.Checked=!PrefC.GetBool(PrefName.PatientSelectUsesSearchButton);
