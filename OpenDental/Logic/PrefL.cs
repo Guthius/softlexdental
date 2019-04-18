@@ -460,7 +460,7 @@ namespace OpenDental
         ///<param name="currentForm">The form where the method is being called from.</param>
         ///<param name="isSilent">Whether this is a silent update. A silent update will have no UI elements appear.</param>
         ///<param name="model">May be null. The model for the choose database window. Stores all information entered within the window.</param>
-        public static bool CheckProgramVersion(Form currentForm, bool isSilent, ChooseDatabaseModel model)
+        public static bool CheckProgramVersion(Form currentForm, bool isSilent)
         {
 #if DEBUG
             return true;//Development mode never needs to check versions or copy files to other directories.  Simply return true at this point.
@@ -647,119 +647,7 @@ namespace OpenDental
 #endif
         }
 
-        ///<summary>Launches the correct version of Open Dental based on the parameters passed in.
-        ///Has the potential to launch an executable that lives within another versioned folder or it may launch the installed executable.
-        ///This method will first check the version within the installation folder to see if it should launch the installed version.
-        ///Otherwise, it creates a new DynamicMode "version" folder if one is not found and fills it with the corresponding binaries from the db.
-        ///If a corresponding versioned folder was found with the correct binaries, it simply launches said dynamic mode executable.</summary>
-        ///<param name="storedVersion">A version object that represents the ProgramVersion preference in the database.</param>
-        ///<param name="currentVersion">A version object that represents the currently running version (Application.ProductVersion).</param>
-        ///<param name="isInDynamicModeFolder">Indicates whether the current installation is within a dynamic mode folder that was then launched 
-        ///and attempting to connect to an incorrect version.</param>
-        ///<param name="model">The model from the choose database database. This will include all information neccessary to pass the database information
-        ///to the correct version of Open Dental when it is launched.</param>
-        private static void LaunchCorrespondingVersion(Version storedVersion, Version currentVersion, bool isInDynamicModeFolder,
-            ChooseDatabaseModel model)
-        {
-            //The full path to the official installation folder for Open Dental.
-            string installationFolder = isInDynamicModeFolder ?
-                Directory.GetParent(Directory.GetParent(Application.StartupPath).FullName).FullName : Application.StartupPath;
-            //The full path to the dynamic mode folder.
-            string dynamicModeFolder = ODFileUtils.CombinePaths(installationFolder, "DynamicMode");
-            //The full path to the DynamicMode folder for the ProgramVersion in the database.
-            string currentServerVersionFolder = ODFileUtils.CombinePaths(dynamicModeFolder, storedVersion.ToString());
-            //Create dynamic mode folder if it does not exist
-            if (!TryCreateDirectory(dynamicModeFolder))
-            {
-                return;
-            }
-            if (isInDynamicModeFolder)
-            {
-                //The following code should only be run in the case of the user opening an incorrect version within a separate dynamic mode folder.
-                //If this were to run on the main installation of Open Dental, it would continue to try and open itself again and again due to the check
-                //below. This prevents users from updating dynamic mode folders.
-                string installedVersionExePath = ODFileUtils.CombinePaths(installationFolder, MiscUtils.GetCurrentExeFileName());
-                //This is the version that is installed in their base directory.
-                string installedVersionRaw = "";
-                Version installedVersion = null;
-                try
-                {
-                    installedVersionRaw = FileVersionInfo.GetVersionInfo(installedVersionExePath).ProductVersion;
-                    installedVersion = new Version(installedVersionRaw);
-                }
-                catch (Exception ex)
-                {
-                    FriendlyException.Show(Lans.g("Prefs", "Unable to get the file information from") + " " + installedVersionExePath, ex);
-                    return;
-                }
-                //This means their main installation is the correct version.
-                if (storedVersion == installedVersion)
-                {
-                    try
-                    {
-                        Process.Start(installedVersionExePath);
-                    }
-                    catch (Exception ex)
-                    {
-                        FriendlyException.Show(Lans.g("Prefs", "Unable to start installed version. Please open the program from the installation "
-                            + "directory."), ex);
-                    }
-                    return;//Will close Open Dental
-                }
-            }
-            //Path to the executable that does or will exist in the dynamic mode folder for the server version
-            string serverVersionExePath = ODFileUtils.CombinePaths(currentServerVersionFolder, MiscUtils.GetCurrentExeFileName());
-            //The files do not exist or the server version is a different dynamic mode or is the incorrect version due to human error
-            if (!File.Exists(serverVersionExePath) || FileVersionInfo.GetVersionInfo(serverVersionExePath).ProductVersion != storedVersion.ToString())
-            {
-                if (!TryCreateDirectory(currentServerVersionFolder))
-                {
-                    return;
-                }
-                //Move server files to dynamic mode folder
-                try
-                {
-                    //do not kill services as this could be an update computer for another server
-                    if (!UpdateClientFromServerUpdateFiles(storedVersion, currentVersion, currentServerVersionFolder, false, true, false))
-                    {
-                        return;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    ex.DoNothing();//Swallow silently and shut down Open Dental.
-                    return;
-                }
-            }
-            //Correct file now exists for sure. Launch this version.
-            try
-            {
-                Process.Start(serverVersionExePath, GenerateArgumentsFromModel(model));
-            }
-            catch (Exception ex)
-            {
-                FriendlyException.Show(Lans.g("Prefs", "Unable to execute the correct version."), ex);
-            }
-        }
-
-        ///<summary>Model can be null. Generate command line arguments based on the model passed. This ensures when launching a version of OD using dynamic mode
-        ///that the choose database window does not show.</summary>
-        private static string GenerateArgumentsFromModel(ChooseDatabaseModel model)
-        {
-            if (model == null || model.CentralConnectionCur == null)
-            {
-                return "";
-            }
-            string arguments = "UserName=" + model.CentralConnectionCur.OdUser + " "
-                + "WebServiceUri=" + model.CentralConnectionCur.ServiceURI + " "
-                + "OdPassword=" + model.CentralConnectionCur.OdPassword + " "
-                + "ServerName=" + model.CentralConnectionCur.ServerName + " "
-                + "DatabaseName=" + model.CentralConnectionCur.DatabaseName + " "
-                + "MySqlUser=" + model.CentralConnectionCur.MySqlUser + " "
-                + "MySqlPassword=" + model.CentralConnectionCur.MySqlPassword + " ";
-            return arguments;
-        }
-
+        
         ///<summary>Returns true if the directory passed in was created or already exists.
         ///Otherwise; returns false after displaying an error message to the user.</summary>
         private static bool TryCreateDirectory(string fullPath)

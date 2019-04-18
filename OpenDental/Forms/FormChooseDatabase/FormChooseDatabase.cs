@@ -1,123 +1,170 @@
+using DataConnectionBase;
 using OpenDentBusiness;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
-using DataConnectionBase;
 
 namespace OpenDental
 {
-    public partial class FormChooseDatabase : BaseFormChooseDatabase
+    public partial class FormChooseDatabase : FormBase
     {
+        public CentralConnection CentralConnectionCur = new CentralConnection();
+        public bool IsAccessedFromMainMenu;
+        public List<string> ListAdminCompNames = new List<string>();
 
+        /// <summary>
+        /// Gets or sets the computer name.
+        /// </summary>
+        public string ComputerName
+        {
+            get => computerNameComboBox.Text;
+            set
+            {
+                computerNameComboBox.Text = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the database name.
+        /// </summary>
+        public string Database
+        {
+            get => databaseComboBox.Text;
+            set
+            {
+                databaseComboBox.Text = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the user.
+        /// </summary>
+        public string User
+        {
+            get => userTextBox.Text;
+            set
+            {
+                userTextBox.Text = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the password.
+        /// </summary>
+        public string Password
+        {
+            get => passwordTextBox.Text;
+            set
+            {
+                passwordTextBox.Text = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to hide this window on startup.
+        /// </summary>
+        public bool NoShow
+        {
+            get => checkNoShow.Checked;
+            set
+            {
+                checkNoShow.Checked = value;
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormChooseDatabase"/> class.
+        /// </summary>
         public FormChooseDatabase()
         {
             InitializeComponent();
-            Lan.F(this);
+
+            CentralConnections.GetChooseDatabaseConnectionSettings(
+                out CentralConnectionCur,
+                out string connectionString,
+                out bool noShow,
+                out ListAdminCompNames,
+                out bool useDynamicMode);
         }
 
-        private void ChooseDatabaseView_Load(object sender, EventArgs e)
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void ChooseDatabaseView_Load(object sender, EventArgs e)
         {
-            if (_model.IsAccessedFromMainMenu)
+            var computerNames = CentralConnections.GetComputerNames();
+            foreach (var computerName in computerNames)
             {
-                comboComputerName.Enabled = false;
-                _model.CentralConnectionCur.ServerName = DataConnection.GetServerName();
-                comboDatabase.Enabled = false;
-                _model.CentralConnectionCur.DatabaseName = DataConnection.GetDatabaseName();
+                computerNameComboBox.Items.Add(computerName);
             }
 
-            groupDirect.Enabled = true;
-
-            comboComputerName.Text = _model.CentralConnectionCur.ServerName;
-            comboDatabase.Text = _model.CentralConnectionCur.DatabaseName;
-            textUser.Text = _model.CentralConnectionCur.MySqlUser;
-            textPassword.Text = _model.CentralConnectionCur.MySqlPassword;
-            textPassword.PasswordChar = (textPassword.Text == "" ? default(char) : '*');
-            textConnectionString.Text = _model.ConnectionString;
-            checkNoShow.Checked = (_model.NoShow == YN.Yes);
-            checkDynamicMode.Checked = _model.UseDynamicMode;
-        }
-
-        public override bool TryGetModelFromView(out ChooseDatabaseModel model)
-        {
-            model = null;
-            try
+            if (IsAccessedFromMainMenu)
             {
-                _model.CentralConnectionCur.ServerName = comboComputerName.Text;
-                _model.CentralConnectionCur.DatabaseName = comboDatabase.Text;
-                _model.CentralConnectionCur.MySqlUser = textUser.Text;
-                _model.CentralConnectionCur.MySqlPassword = textPassword.Text;
-                _model.NoShow = (checkNoShow.Checked ? YN.Yes : YN.No);
-                _model.ConnectionString = textConnectionString.Text;
-                _model.UseDynamicMode = checkDynamicMode.Checked;
+                computerNameComboBox.Enabled = false;
+                CentralConnectionCur.ServerName = DataConnection.GetServerName();
+
+                databaseComboBox.Enabled = false;
+                CentralConnectionCur.DatabaseName = DataConnection.GetDatabaseName();
             }
-            catch (Exception)
-            {
-                return false;
-            }
-            model = _model.Copy();
-            return true;
+
+            ComputerName    = CentralConnectionCur.ServerName;
+            Database        = CentralConnectionCur.DatabaseName;
+            User            = CentralConnectionCur.MySqlUser;
+            Password        = CentralConnectionCur.MySqlPassword;
         }
 
-        public void SetController(ChooseDatabaseController controller)
+        /// <summary>
+        /// Updates the connection details.
+        /// </summary>
+        void UpdateConnection()
         {
-            _controller = controller;
+            CentralConnectionCur.ServerName     = ComputerName;
+            CentralConnectionCur.DatabaseName   = Database;
+            CentralConnectionCur.MySqlUser      = User;
+            CentralConnectionCur.MySqlPassword  = Password;
         }
 
-        public void FillComboComputerNames(string[] arrayComputerNames)
-        {
-            comboComputerName.Items.Clear();
-            comboComputerName.Items.AddRange(arrayComputerNames);
-        }
-
-        public void FillComboDatabases(string[] arrayDatabases)
-        {
-            comboDatabase.Items.Clear();
-            comboDatabase.Items.AddRange(arrayDatabases);
-        }
-
-        private void comboDatabase_DropDown(object sender, EventArgs e)
+        /// <summary>
+        /// Loads the list of databases.
+        /// </summary>
+        void databaseComboBox_DropDown(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
-            _controller.DatabaseDropDown(sender, e);
+ 
+            UpdateConnection();
+
+            databaseComboBox.Items.Clear();
+
+            var databases = CentralConnections.GetDatabases(CentralConnectionCur);
+            foreach (var database in databases)
+            {
+                databaseComboBox.Items.Add(database);
+            }
+
             Cursor = Cursors.Default;
         }
 
-        private void textPassword_TextChanged(object sender, EventArgs e)
+        /// <summary>
+        /// Try to connect with the current settings. If connection is succesful close the form.
+        /// </summary>
+        void acceptButton_Click(object sender, EventArgs e)
         {
-            if (textPassword.Text == "")
+            UpdateConnection();
+            try
             {
-                textPassword.PasswordChar = default(char);//if text is cleared, turn off password char mask
+                CentralConnections.TryToConnect(
+                    CentralConnectionCur, 
+                    "",
+                    NoShow, 
+                    ListAdminCompNames);
             }
-        }
-
-        private void textPassword_Leave(object sender, EventArgs e)
-        {
-            textPassword.PasswordChar = (textPassword.Text == "" ? default(char) : '*');//mask password if loaded from the config file
-        }
-
-        private void butOK_Click(object sender, EventArgs e)
-        {
-            if (!_controller.butOK_Click(sender, e))
+            catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
                 return;
             }
+
             DialogResult = DialogResult.OK;
         }
-
-        private void butCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-        }
-
-        private void checkDynamicMode_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkDynamicMode.Checked)
-            {
-                checkNoShow.Checked = false;
-            }
-            checkNoShow.Enabled = !checkDynamicMode.Checked;
-        }
     }
-
-    ///<summary>Required so that Visual Studio can design this form.  The designer does not allow directly extending classes with generics.</summary>
-    public class BaseFormChooseDatabase : ODFormMVC<ChooseDatabaseModel, FormChooseDatabase, ChooseDatabaseController> { }
 }

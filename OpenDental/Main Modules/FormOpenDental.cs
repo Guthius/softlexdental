@@ -2645,15 +2645,13 @@ namespace OpenDental
             string odUser = "";
             string odPassHash = "";
             string webServiceUri = "";
-            YN webServiceIsEcw = YN.Unknown;
-            bool isSilentUpdate = false;
             string odPassword = "";
             string serverName = "";
             string databaseName = "";
             string mySqlUser = "";
             string mySqlPassword = "";
             string mySqlPassHash = "";
-            bool useDynamicMode = false;
+
             if (CommandLineArgs.Length != 0)
             {
                 for (int i = 0; i < CommandLineArgs.Length; i++)
@@ -2669,17 +2667,6 @@ namespace OpenDental
                     if (CommandLineArgs[i].StartsWith("WebServiceUri=") && CommandLineArgs[i].Length > 14)
                     {
                         webServiceUri = CommandLineArgs[i].Substring(14).Trim('"');
-                    }
-                    if (CommandLineArgs[i].StartsWith("WebServiceIsEcw=") && CommandLineArgs[i].Length > 16)
-                    {
-                        if (CommandLineArgs[i].Substring(16).Trim('"') == "True")
-                        {
-                            webServiceIsEcw = YN.Yes;
-                        }
-                        else
-                        {
-                            webServiceIsEcw = YN.No;
-                        }
                     }
                     if (CommandLineArgs[i].StartsWith("OdPassword=") && CommandLineArgs[i].Length > 11)
                     {
@@ -2705,81 +2692,20 @@ namespace OpenDental
                     {
                         mySqlPassHash = CommandLineArgs[i].Substring(14).Trim('"');
                     }
-                    if (CommandLineArgs[i].StartsWith("IsSilentUpdate=") && CommandLineArgs[i].Length > 15)
-                    {
-                        if (CommandLineArgs[i].Substring(15).Trim('"').ToLower() == "true")
-                        {
-                            isSilentUpdate = true;
-                        }
-                        else
-                        {
-                            isSilentUpdate = false;
-                        }
-                    }
-                    if (CommandLineArgs[i].StartsWith("DynamicMode="))
-                    {
-                        useDynamicMode = CommandLineArgs[i].ToLower().Contains("true");
-                    }
                 }
             }
-            YN noShow = YN.Unknown;
-            if (webServiceUri != "")
-            {//a web service was specified
-                if (odUser != "" && odPassword != "")
-                {//and both a username and password were specified
-                    noShow = YN.Yes;
-                }
-            }
-            else if (databaseName != "")
-            {
-                noShow = YN.Yes;
-            }
-            //Users that want to silently update MUST pass in the following command line args.
-            if (isSilentUpdate && (odUser.Trim() == ""
-                    || (odPassword.Trim() == "" && odPassHash.Trim() == "")
-                    || serverName.Trim() == ""
-                    || databaseName.Trim() == ""
-                    || mySqlUser.Trim() == ""
-                    || (mySqlPassword.Trim() == "" && mySqlPassHash.Trim() == "")))
-            {
-                ExitCode = 104;//Required command line arguments have not been set for silent updating
-                Environment.Exit(ExitCode);
-                return;
-            }
+
+
             Version versionOd = Assembly.GetAssembly(typeof(FormOpenDental)).GetName().Version;
             Version versionObBus = Assembly.GetAssembly(typeof(Db)).GetName().Version;
             if (versionOd != versionObBus)
             {
-                if (isSilentUpdate)
-                {
-                    ExitCode = 105;//File versions do not match
-                }
-                else
-                {//Not a silent update.  Show a warning message.
-                 //No MsgBox or Lan.g() here, because we don't want to access the database if there is a version conflict.
-                    MessageBox.Show("Mismatched program file versions. Please run the Open Dental setup file again on this computer.");
-                }
-                Environment.Exit(ExitCode);
-                return;
-            }
-
-            ChooseDatabaseModel chooseDatabaseModel = new ChooseDatabaseModel();
-            try
-            {
-                chooseDatabaseModel = ChooseDatabaseModel.GetChooseDatabaseModelFromConfig(webServiceUri, webServiceIsEcw, odUser, serverName, databaseName
-                    , mySqlUser, mySqlPassword, mySqlPassHash, noShow, odPassword, useDynamicMode);
-            }
-            catch (ODException ode)
-            {
-                if (isSilentUpdate)
-                {
-                    //Technically the only way GetChooseDatabaseModelFromConfig() can throw an exception when silent updating is if DatabaseName wasn't set.
-                    ExitCode = 104;//Required command line arguments have not been set for silent updating
-                }
-                else
-                {
-                    MessageBox.Show(ode.Message);
-                }
+                MessageBox.Show(
+                    "Mismatched program file versions. Please run the Open Dental setup file again on this computer.",
+                    "Open Dental", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+                
                 Environment.Exit(ExitCode);
                 return;
             }
@@ -2787,103 +2713,100 @@ namespace OpenDental
             //Hook up MT connection lost event. Nothing prior to this point fires LostConnection events.
             MiddleTierConnectionEvent.Fired += MiddleTierConnection_ConnectionLost;
             Action actionCloseSplashWindow = null;
-            FormChooseDatabase FormCD = new FormChooseDatabase();
-            ChooseDatabaseController chooseDatabaseController = new ChooseDatabaseController(FormCD);
-            ChooseDatabaseModel modelFromForm = null;
-            while (true)
-            {//Most users will loop through once.  If user tries to connect to a db with replication failure, they will loop through again.
-                if (chooseDatabaseModel.NoShow == YN.Yes)
+
+            // Open the form to pick the database.
+            using (var formChooseDatabase = new FormChooseDatabase())
+            {
+                formChooseDatabase.NoShow = (databaseName != "");
+
+                while (true)
                 {
+                    // Most users will loop through once. If user tries to connect to a db with replication failure, they will loop through again.
+                    if (formChooseDatabase.NoShow)
+                    {
+                        try
+                        {
+                            CentralConnections.TryToConnect(
+                                formChooseDatabase.CentralConnectionCur,
+                                "",
+                                formChooseDatabase.NoShow,
+                                formChooseDatabase.ListAdminCompNames,
+                                (CommandLineArgs.Length != 0),
+                                false);
+                        }
+                        catch (Exception)
+                        {
+                            if (formChooseDatabase.ShowDialog(this) == DialogResult.Cancel)
+                            {
+                                Environment.Exit(ExitCode);
+                                return;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (formChooseDatabase.ShowDialog(this) == DialogResult.Cancel)
+                        {
+                            Environment.Exit(ExitCode);
+                            return;
+                        }
+                    }
+
+                    Cursor = Cursors.WaitCursor;
                     try
                     {
-                        CentralConnections.TryToConnect(chooseDatabaseModel.CentralConnectionCur,
-                            chooseDatabaseModel.ConnectionString, (chooseDatabaseModel.NoShow == YN.Yes), chooseDatabaseModel.ListAdminCompNames,
-                            (CommandLineArgs.Length != 0), chooseDatabaseModel.UseDynamicMode);
+                        Plugins.LoadAllPlugins(this);
                     }
-                    catch (Exception)
+                    catch
                     {
-                        if (isSilentUpdate)
-                        {
-                            ExitCode = 106;//Connection to specified database has failed
-                            Environment.Exit(ExitCode);
-                            return;
-                        }
-                        //The current connection settings are invalid so simply show the choose database window for the user to correct them.
-                        FormCD.ShowDialog(chooseDatabaseModel, chooseDatabaseController);
-                        if (FormCD.DialogResult == DialogResult.Cancel)
-                        {
-                            Environment.Exit(ExitCode);
-                            return;
-                        }
-                        modelFromForm = FormCD.Model;
                     }
-                }
-                else
-                {
-                    FormCD.ShowDialog(chooseDatabaseModel, chooseDatabaseController);
-                    if (FormCD.DialogResult == DialogResult.Cancel)
+
+
+                    if (CommandLineArgs.Length == 0 && !Web.IsWeb) //eCW doesn't load splash screen
+                    { 
+                        //don't show splash screen a second time if web is enabled
+                        actionCloseSplashWindow = ShowSplash();
+                    }
+
+                    if (!PrefsStartup()) //In Release, refreshes the Pref cache if conversion successful.
                     {
+                        Cursor = Cursors.Default;
+                        actionCloseSplashWindow?.Invoke();
+                        if (ExitCode == 0)
+                        {
+                            // PrefsStartup failed and ExitCode is still 0 which means an unexpected error must have occured.
+                            // Set the exit code to 999 which will represent an Unknown Error
+                            ExitCode = 999;
+                        }
                         Environment.Exit(ExitCode);
                         return;
                     }
-                    modelFromForm = FormCD.Model;
-                }
-                Cursor = Cursors.WaitCursor;
 
-                try
-                {
-                    Plugins.LoadAllPlugins(this);//moved up from near RefreshLocalData(invalidTypes). New position might cause problems.
-                }
-                catch
-                {
-                    //Do nothing since this will likely only fail if a column is added to the program table, 
-                    //due to this method getting called before the update script.  If the plugins do not load, then the simple solution is to restart OD.
-                }
-
-                if (CommandLineArgs.Length == 0 //eCW doesn't load splash screen
-                    && !Web.IsWeb)
-                { //don't show splash screen a second time if web is enabled
-                    actionCloseSplashWindow = ShowSplash();
-                }
-                //If there is no model and they are trying to run dynamic mode via command line arguments, use the model from the 
-                //command line args/config file for use in PrefL to launch the appropriate version.
-                if (modelFromForm == null && chooseDatabaseModel.NoShow == YN.Yes && chooseDatabaseModel.UseDynamicMode)
-                {
-                    modelFromForm = chooseDatabaseModel;
-                }
-                if (!PrefsStartup(isSilentUpdate, modelFromForm))
-                {//In Release, refreshes the Pref cache if conversion successful.
-                    Cursor = Cursors.Default;
-                    actionCloseSplashWindow?.Invoke();
-                    if (ExitCode == 0)
+                    if (ReplicationServers.Server_id != 0 && 
+                        ReplicationServers.Server_id == PrefC.GetLong(PrefName.ReplicationFailureAtServer_id))
                     {
-                        //PrefsStartup failed and ExitCode is still 0 which means an unexpected error must have occured.
-                        //Set the exit code to 999 which will represent an Unknown Error
-                        ExitCode = 999;
+                        MessageBox.Show( 
+                            "This database is temporarily unavailable. Please connect instead to your alternate database at the other location.", 
+                            "Open Dental", 
+                            MessageBoxButtons.OK, 
+                            MessageBoxIcon.Information);
+
+                        formChooseDatabase.NoShow = false; // This ensures they will get a choose db window next time through the loop.
+                        ReplicationServers.Server_id = -1;
+                        continue;
                     }
-                    Environment.Exit(ExitCode);
-                    return;
+                    break;
                 }
-                if (isSilentUpdate)
-                {
-                    //The db was successfully updated so there is nothing else that needs to be done after this point.
-                    Application.Exit();//Exits with ExitCode=0
-                    return;
-                }
-                if (ReplicationServers.Server_id != 0 && ReplicationServers.Server_id == PrefC.GetLong(PrefName.ReplicationFailureAtServer_id))
-                {
-                    MsgBox.Show(this, "This database is temporarily unavailable.  Please connect instead to your alternate database at the other location.");
-                    chooseDatabaseModel.NoShow = YN.No;//This ensures they will get a choose db window next time through the loop.
-                    ReplicationServers.Server_id = -1;
-                    continue;
-                }
-                break;
             }
+
+
+
             Logger.DoVerboseLogging = PrefC.IsVerboseLoggingSession;
             if (Programs.UsingEcwTightOrFullMode())
             {
                 actionCloseSplashWindow?.Invoke();
             }
+
             CreateFHIRConfigFile();
             //Setting the time that we want to wait when the database connection has been lost.
             //We don't want a LostConnection event to fire when updating because of Silent Updating which would fail due to window pop-ups from this event.
@@ -3314,17 +3237,10 @@ namespace OpenDental
             });
         }
 
-        private bool PrefsStartup()
-        {
-            //Default usePreviousVersions to false as this is only called after Open Dental is already fully functional. No versions will have changed
-            //by the time this is called.
-            return PrefsStartup(false, null);
-        }
-
         ///<summary>Returns false if it can't complete a conversion, find datapath, or validate registration key.</summary>
         ///<param name="isSilentUpdate">Whether this is a silent update. A silent update will have no UI elements appear.</param>
         ///<param name="model">The model for the choose database window. Stores all information entered within the window.</param>
-        private bool PrefsStartup(bool isSilentUpdate, ChooseDatabaseModel model)
+        private bool PrefsStartup(bool isSilentUpdate = false)
         {
             try
             {
@@ -3403,7 +3319,7 @@ namespace OpenDental
             {
                 PrefL.MySqlVersion55Remind();
             }
-            if (!PrefL.CheckProgramVersion(this, isSilentUpdate, model))
+            if (!PrefL.CheckProgramVersion(this, isSilentUpdate))
             {
                 return false;
             }
@@ -5245,7 +5161,7 @@ namespace OpenDental
             if (e.OnlyLocal)
             {//Currently used after doing a restore from FormBackup so that the local cache is forcefully updated.
                 ODEvent.Fire(ODEventType.Cache, suffix + Lan.g(nameof(Cache), "PrefsStartup"));
-                if (!PrefsStartup())
+                if (!PrefsStartup(false))
                 {//??
                     return;
                 }
@@ -6982,15 +6898,18 @@ namespace OpenDental
                 return;
             }
             SecurityLogs.MakeLogEntry(Permissions.ChooseDatabase, 0, "");//make the entry before switching databases.
-            ChooseDatabaseModel chooseDatabaseModel = ChooseDatabaseModel.GetChooseDatabaseModelFromConfig();
-            chooseDatabaseModel.IsAccessedFromMainMenu = true;
-            FormChooseDatabase FormCD = new FormChooseDatabase();
-            if (FormCD.ShowDialog(chooseDatabaseModel, new ChooseDatabaseController(FormCD)) != DialogResult.OK)
+
+            using (var formChooseDatabase = new FormChooseDatabase())
             {
-                return;
+                formChooseDatabase.IsAccessedFromMainMenu = true;
+                if (formChooseDatabase.ShowDialog(this) == DialogResult.Cancel)
+                {
+                    return;
+                }
             }
+
             CurPatNum = 0;
-            RefreshCurrentModule();//clumsy but necessary. Sets child PatNums to 0.
+            RefreshCurrentModule(); // clumsy but necessary. Sets child PatNums to 0.
             FillPatientButton(null);
             if (!PrefsStartup())
             {

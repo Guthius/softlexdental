@@ -807,7 +807,6 @@
     <Compile Include="Forms\FormBugSubmission.designer.cs">
       <DependentUpon>FormBugSubmission.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormChooseDatabase\ChooseDatabaseModel.cs" />
     <Compile Include="Forms\FormChooseDatabase\FormChooseDatabase.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -834,7 +833,6 @@
     <Compile Include="Forms\FormDoseSpotAssignUserId.designer.cs">
       <DependentUpon>FormDoseSpotAssignUserId.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormChooseDatabase\ChooseDatabaseController.cs" />
     <Compile Include="Forms\FormFamilyBalancer.cs">
       <SubType>Form</SubType>
     </Compile>

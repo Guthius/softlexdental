@@ -22,13 +22,13 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all of the connection setting information from the FreeDentalConfig.xml
 		///Throws exceptions.</summary>
-		public static void GetChooseDatabaseConnectionSettings(out CentralConnection centralConnection,out string connectionString,out YN noShow
+		public static void GetChooseDatabaseConnectionSettings(out CentralConnection centralConnection,out string connectionString,out bool noShow
 			,out List<string> listAdminCompNames,out bool useDynamicMode) 
 		{
 			//No remoting role check; out parameters are used.
 			centralConnection=new CentralConnection();
 			connectionString="";
-			noShow=YN.Unknown;
+			noShow=false;
 			listAdminCompNames=new List<string>();
 			useDynamicMode=false;
 			string xmlPath=ODFileUtils.CombinePaths(Application.StartupPath,"FreeDentalConfig.xml");
@@ -111,10 +111,10 @@ namespace OpenDentBusiness{
 					XPathNavigator noshownav=nav.SelectSingleNode("NoShowOnStartup");
 					if(noshownav!=null) {
 						if(noshownav.Value=="True") {
-							noShow=YN.Yes;
+							noShow=true;
 						}
 						else {
-							noShow=YN.No;
+							noShow=false;
 						}
 					}
 				}
@@ -132,7 +132,7 @@ namespace OpenDentBusiness{
 					centralConnection.ServiceURI=nav.SelectSingleNode("URI").Value;
 					XPathNavigator ecwnav=nav.SelectSingleNode("UsingEcw");
 					if(ecwnav!=null && ecwnav.Value=="True") {
-						noShow=YN.Yes;
+						noShow=true;
 						centralConnection.WebServiceIsEcw=true;
 					}
 					XPathNavigator autoLoginNav=nav.SelectSingleNode("UsingAutoLogin");
@@ -144,7 +144,7 @@ namespace OpenDentBusiness{
 							centralConnection.OdPassword=
 								PasswordVaultWrapper.RetrievePassword(centralConnection.ServiceURI,centralConnection.OdUser);
 							//Must set this so FormChooseDatabase() does not launch
-							noShow=YN.Yes;
+							noShow=true;
 							centralConnection.IsAutomaticLogin=true;
 						}
 						catch(Exception ex) {
