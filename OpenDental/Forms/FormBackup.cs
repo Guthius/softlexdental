@@ -17,6 +17,8 @@ namespace OpenDental {
 	/// Summary description for FormBasicTemplate.
 	/// </summary>
 	public class FormBackup : ODForm {
+        // TODO: This needs to be completely reworked so it works with MariaDB 10.3
+
 		private OpenDental.UI.Button butCancel;
 		private System.Windows.Forms.Label label1;
 		private OpenDental.UI.Button butRestore;
@@ -793,11 +795,6 @@ namespace OpenDental {
 				}
 			}
 			string dbName=MiscData.GetCurrentDatabase();
-			if(InnoDb.HasInnoDbTables(dbName)) {
-				//Database has innodb tables. Backup tool does not work on dbs with InnoDb tables. 
-				MsgBox.Show(this,"InnoDb tables detected. Backup tool cannot run with InnoDb tables.");
-				return;
-			}
 			if(!Directory.Exists(ODFileUtils.CombinePaths(textBackupFromPath.Text,dbName))){// C:\mysql\data\opendental
 				MsgBox.Show(this,"Backup FROM path is invalid.");
 				return;
@@ -1073,11 +1070,6 @@ namespace OpenDental {
 			}
 			//pointless to save defaults
 			string dbName=MiscData.GetCurrentDatabase();
-			if(InnoDb.HasInnoDbTables(dbName)) {
-				//Database has innodb tables. Restore tool does not work on dbs with InnoDb tables. 
-				MsgBox.Show(this,"InnoDb tables detected. Restore tool cannot run with InnoDb tables.");
-				return;
-			}
 			if(!Directory.Exists(ODFileUtils.CombinePaths(textBackupRestoreFromPath.Text,dbName))){// D:\opendental
 				MessageBox.Show(Lan.g(this,"Restore FROM path is invalid.  Unable to find folder named ")+dbName);
 				return;

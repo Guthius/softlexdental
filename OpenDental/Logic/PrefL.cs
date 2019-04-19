@@ -309,32 +309,6 @@ namespace OpenDental
                     return false;
                 }
                 string errorStr = Lan.g("Prefs", "Failed inserting update files into the database.");
-                if (myEx.Number.In((int)MySqlErrorCode.TooLongString, (int)MySqlErrorCode.WarningAllowedPacketOverflowed, (int)MySqlErrorCode.PacketTooLarge))
-                {
-                    errorStr += "\r\n" + Lan.g("Prefs", "Please call us or have your IT admin increase the max_allowed_packet to 40MB in the my.ini file.");
-                    try
-                    {
-                        string innoDBTableNames = InnoDb.GetInnodbTableNames();
-                        if (innoDBTableNames != "")
-                        {
-                            //Starting in MySQL 5.6 you can specify innodb_log_file_size in the my.ini and it typicaly needs to be set higher than 48 MB (default).
-                            //There is danger in manipulating this value so we should not do it for the customer but have their IT do it.
-                            //Since the innodb_log_size variable only exists in MySQL 5.6 and greater, if the user adds this setting to their my.ini file for an
-                            //older version, then MySQL will fail to start.  
-                            //An alternative solution would be to convert their tables over to MyISAM instead of letting them continue with InnoDB (if possible).
-                            //The following message to the user is vague on purpose to avoid listing version numbers.
-                            errorStr += "\r\n" + Lan.g("Prefs", "InnoDB tables have been detected, you may need to increase the innodb_log_file_size variable.");
-                        }
-                    }
-                    catch (Exception)
-                    {
-                        //Do not add the additional InnoDB warning because it will often times just confuse our typical users (odds are they are using MyISAM).
-                    }
-                }
-                else
-                {
-                    errorStr += "\r\n" + Lan.g("Prefs", "MySqlException") + ": " + myEx.Message;
-                }
                 currentForm.InvokeIfRequired(() =>
                 {
                     MessageBox.Show(errorStr);
