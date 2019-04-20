@@ -4,10 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 	///<summary>A dental supply or office supply item.</summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true)]
-	public class Supply : TableBase {
+	[ODTable(IsSynchable=true)]
+	public class Supply : ODTable {
 		/// <summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long SupplyNum;
 		/// <summary>FK to supplier.SupplierNum</summary>
 		public long SupplierNum;

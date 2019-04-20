@@ -8,10 +8,10 @@ namespace OpenDentBusiness{
 
 	///<summary>A clinic is usually a separate physical office location.  If multiple clinics are sharing one database, then this is used.  Patients, Operatories, Claims, and many other types of objects can be assigned to a clinic.</summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true)]
-	public class Clinic:TableBase {
+	[ODTable(IsSynchable=true)]
+	public class Clinic:ODTable {
 		///<summary>Primary key.  Used in patient,payment,claimpayment,appointment,procedurelog, etc.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ClinicNum;
 		///<summary>Use Abbr for all user-facing forms.  Description is required and should not be blank.</summary>
 		public string Description;
@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to provider.ProvNum.  Used in place of the default practice provider when making new patients.</summary>
 		public long DefaultProv;
 		///<summary>DateSMSContract was signed.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime SmsContractDate;
 		///<summary>Always stored in USD, this is the desired limit for SMS out for a given month.</summary>
 		public double SmsMonthlyLimit;
@@ -97,7 +97,7 @@ namespace OpenDentBusiness{
 		public bool HasProcOnRx;
 
 		///<summary>List of specialty DefLinks for the clinic.  Not a database column.  Filled when the clinic cache is filled.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		private List<DefLink> _listClinicSpecialtyDefLinks;
 		
 		///<summary>List of specialty DefLinks for the clinic.  Not a database column.  Filled when the clinic cache is filled.</summary>

@@ -6,9 +6,9 @@ namespace OpenDentBusiness {
 	///Medical lab specimen.  Contains data from the SPM segment.  Each MedLab object can have 0 to many specimen segments.
 	///Each segment will be its own row in this table.</summary>
 	[Serializable]
-	public class MedLabSpecimen:TableBase {
+	public class MedLabSpecimen:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long MedLabSpecimenNum;
 		///<summary>FK to medlab.MedLabNum.  Each MedLab object can have 0 to many specimens pointing to it.</summary>
 		public long MedLabNum;
@@ -20,7 +20,7 @@ namespace OpenDentBusiness {
 		///<summary>SPM.17 - Specimen Collection Date/Time.  yyyyMMddHHmm format in the message, no seconds.  The date and time when the specimen was
 		///acquired from the source.  This is a DR - Date/Time Range data type, so it may have more than one component if a specimen was collected over
 		///a period of time.  The first component is the start date/time so we will make sure to only store SPM.17.1 in this field.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeCollected;
 
 		///<summary></summary>

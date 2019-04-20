@@ -4,9 +4,9 @@ namespace OpenDentBusiness {
 	///<summary>State abbreviations are always copied to patient records rather than linked.  
 	///Items in this list can be freely altered or deleted without harming patient data.</summary>
 	[Serializable]
-	public class StateAbbr:TableBase {
+	public class StateAbbr:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long StateAbbrNum;
 		///<summary>Full state name</summary>
 		public string Description;

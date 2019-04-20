@@ -5,15 +5,15 @@ namespace OpenDentBusiness{
 
 	///<summary>Used in the accounting section of the program.  Each row is one transaction in the ledger, and must always have at least two splits.  All splits must always add up to zero.</summary>
 	[Serializable]
-	public class Transaction:TableBase {
+	public class Transaction:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long TransactionNum;
 		///<summary>Not user editable.  Server time.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime DateTimeEntry;
 		///<summary>FK to userod.UserNum. The user that entered this transaction.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
 		public long UserNum;
 		///<summary>FK to deposit.DepositNum.  Will eventually be replaced by a source document table, and deposits will just be one of many types.</summary>
 		public long DepositNum;
@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to userod.UserNum. The user who last edited this transaction.</summary>
 		public long SecUserNumEdit;
 		///<summary>The last time this transaction was edited.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime SecDateTEdit;
 
 		///<summary></summary>

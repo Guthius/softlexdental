@@ -6,9 +6,9 @@ namespace OpenDentBusiness {
 
 	///<summary>There is either one or zero per claim.</summary>
 	[Serializable()]
-	public class ClaimCondCodeLog:TableBase {
+	public class ClaimCondCodeLog:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ClaimCondCodeLogNum;
 		///<summary>FK to claim.ClaimNum.</summary>
 		public long ClaimNum;

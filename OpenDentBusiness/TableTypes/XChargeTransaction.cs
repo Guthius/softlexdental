@@ -7,9 +7,9 @@ namespace OpenDentBusiness {
 
 	///<summary>XCharge transactions that have been imported into OD.  Used by reconcile tool.  Keeps a history, but no references to these rows from other tables.</summary>
 	[Serializable()]
-	public class XChargeTransaction:TableBase {
+	public class XChargeTransaction:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long XChargeTransactionNum;
 		///<summary>Usually "CCPurchase."</summary>
 		public string TransType;
@@ -38,7 +38,7 @@ namespace OpenDentBusiness {
 		///<summary>Approval code. 6 characters. 72142Z for example.</summary>
 		public string ApprCode;
 		///<summary>TransactionDateTime. Is taken from the Date and Time columns in X-Charge.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime TransactionDateTime;
 
 

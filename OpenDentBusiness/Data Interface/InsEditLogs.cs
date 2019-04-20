@@ -130,8 +130,8 @@ namespace OpenDentBusiness
         {
             //No need to check RemotingRole; no call to db.
             T priKeyItem = itemCur == null ? itemOld : itemCur;
-            FieldInfo priKeyField = priKeyItem.GetType().GetFields().Where(x => x.IsDefined(typeof(CrudColumnAttribute))
-             && ((CrudColumnAttribute)x.GetCustomAttribute(typeof(CrudColumnAttribute))).IsPriKey).First();
+            FieldInfo priKeyField = priKeyItem.GetType().GetFields().Where(x => x.IsDefined(typeof(ODTableColumn))
+             && ((ODTableColumn)x.GetCustomAttribute(typeof(ODTableColumn))).PrimaryKey).First();
             long priKey = (long)priKeyField.GetValue(priKeyItem);
             string priKeyColName = priKeyField.Name;
             long parentKey = priKeyItem.GetType() == typeof(Benefit) ? ((Benefit)(object)priKeyItem).PlanNum : 0; //parentKey only filled for Benefits.
@@ -171,11 +171,11 @@ namespace OpenDentBusiness
             }
             foreach (FieldInfo prop in priKeyItem.GetType().GetFields())
             {
-                if (prop.IsDefined(typeof(CrudColumnAttribute))
-                && (((CrudColumnAttribute)prop.GetCustomAttribute(typeof(CrudColumnAttribute))).SpecialType.HasFlag(CrudSpecialColType.DateEntry)
-                 || ((CrudColumnAttribute)prop.GetCustomAttribute(typeof(CrudColumnAttribute))).SpecialType.HasFlag(CrudSpecialColType.DateTEntry)
-                 || ((CrudColumnAttribute)prop.GetCustomAttribute(typeof(CrudColumnAttribute))).SpecialType.HasFlag(CrudSpecialColType.ExcludeFromUpdate)
-                 || ((CrudColumnAttribute)prop.GetCustomAttribute(typeof(CrudColumnAttribute))).SpecialType.HasFlag(CrudSpecialColType.TimeStamp)))
+                if (prop.IsDefined(typeof(ODTableColumn))
+                && (((ODTableColumn)prop.GetCustomAttribute(typeof(ODTableColumn))).SpecialType.HasFlag(CrudSpecialColType.DateEntry)
+                 || ((ODTableColumn)prop.GetCustomAttribute(typeof(ODTableColumn))).SpecialType.HasFlag(CrudSpecialColType.DateTEntry)
+                 || ((ODTableColumn)prop.GetCustomAttribute(typeof(ODTableColumn))).SpecialType.HasFlag(CrudSpecialColType.ExcludeFromUpdate)
+                 || ((ODTableColumn)prop.GetCustomAttribute(typeof(ODTableColumn))).SpecialType.HasFlag(CrudSpecialColType.TimeStamp)))
                 {
                     continue; //skip logs that are not user editable.
                 }

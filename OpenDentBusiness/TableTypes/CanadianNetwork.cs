@@ -7,9 +7,9 @@ namespace OpenDentBusiness{
 
 	///<summary>Not user-editable.</summary>
 	[Serializable()]
-	public class CanadianNetwork:TableBase{
+	public class CanadianNetwork:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long CanadianNetworkNum;
 		///<summary>This will also be the folder name</summary>
 		public string Abbrev;

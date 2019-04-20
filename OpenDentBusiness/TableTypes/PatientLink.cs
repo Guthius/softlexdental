@@ -3,9 +3,9 @@
 namespace OpenDentBusiness {
 	///<summary></summary>
 	[Serializable]
-	public class PatientLink:TableBase {
+	public class PatientLink:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PatientLinkNum;
 		///<summary>FK to patient.PatNum. The patient that is linked from.
 		///For a Merge type, this is that patient that was merged from.
@@ -18,7 +18,7 @@ namespace OpenDentBusiness {
 		///<summary>Enum:PatientLinkType The type of link.</summary>
 		public PatientLinkType LinkType;
 		///<summary>The time the link was created.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime DateTimeLink;
 
 		///<summary></summary>

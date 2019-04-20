@@ -6,9 +6,9 @@ namespace OpenDentBusiness{
 
 	///<summary>Describes the templates for letter merges to Word.</summary>
 	[Serializable]
-	public class LetterMerge:TableBase {
+	public class LetterMerge:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long LetterMergeNum;
 		///<summary>Description of this letter.</summary>
 		public string Description;
@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 		///Can be 0 which means 'None' will be selected.</summary>
 		public long ImageFolder;
 		///<summary>Not a database column.  Filled using fk from the lettermergefields table.  A collection of strings representing field names.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public List<string> Fields;
 
 		

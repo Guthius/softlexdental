@@ -4,9 +4,9 @@ using System;
 namespace OpenDentBusiness {
 	///<summary>For EHR module, lab request that contains all required fields for HL7 Lab Reporting Interface (LRI).  OBR.13.*</summary>
 	[Serializable]
-	public class EhrLabClinicalInfo:TableBase {
+	public class EhrLabClinicalInfo:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EhrLabClinicalInfoNum;
 		///<summary>FK to ehrlab.EhrLabNum.</summary>
 		public long EhrLabNum;

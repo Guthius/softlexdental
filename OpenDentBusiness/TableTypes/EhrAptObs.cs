@@ -6,10 +6,10 @@ using System.Text;
 namespace OpenDentBusiness {
 	///<summary>An EHR appointment observation.  Needed for syndromic surveillance messaging.  Each syndromic message requires at least one observation.</summary>
 	[Serializable]
-	public class EhrAptObs:TableBase {
+	public class EhrAptObs:ODTable {
 
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EhrAptObsNum;
 		///<summary>FK to appointment.AptNum.  There can be an unlimited number of observations per appointment.</summary>
 		public long AptNum;

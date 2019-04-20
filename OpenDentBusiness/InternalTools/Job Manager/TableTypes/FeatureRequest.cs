@@ -8,7 +8,7 @@ namespace OpenDentBusiness {
 	///<summary>This schema is created directly from the Requests.GetTable() return value within WebServiceCustomersUpdates.sln
 	///Do not rename the columns here.</summary>
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true)]
+	[ODTable(IsMissingInGeneral=true)]
 	public class FeatureRequest {
 		public long FeatReqNum;
 		public long Votes;

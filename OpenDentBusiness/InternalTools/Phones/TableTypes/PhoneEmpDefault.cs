@@ -5,10 +5,10 @@ using System.Drawing;
 namespace OpenDentBusiness{
 	///<summary>This table is not part of the general release.  User would have to add it manually.</summary>
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true)]
-	public class PhoneEmpDefault:TableBase {
+	[ODTable(IsMissingInGeneral=true)]
+	public class PhoneEmpDefault:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EmployeeNum;
 		///<summary></summary>
 		public bool IsGraphed;

@@ -5,9 +5,9 @@ namespace OpenDentBusiness{
 	
 	///<summary>In the accounting section, this automates entries into the database when user enters a payment into a patient account.  This table presents the user with a picklist specific to that payment type.  For example, a cash payment would create a picklist of cashboxes for user to put the cash into.</summary>
 	[Serializable()]
-	public class AccountingAutoPay:TableBase{
+	public class AccountingAutoPay:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long AccountingAutoPayNum;
 		///<summary>FK to definition.DefNum.</summary>
 		public long PayType;

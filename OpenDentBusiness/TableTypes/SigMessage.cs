@@ -6,9 +6,9 @@ using System.Text;
 namespace OpenDentBusiness {
 	///<summary></summary>
 	[Serializable]
-	public class SigMessage:TableBase,IComparable {
+	public class SigMessage:ODTable,IComparable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long SigMessageNum;
 		///<summary>The text on the button</summary>
 		public string ButtonText;
@@ -22,10 +22,10 @@ namespace OpenDentBusiness {
 		///<summary>Text version of 'user' this message was sent to, which can actually be any description of a group or individual.</summary>
 		public string ToUser;
 		///<summary>Automatically set to the date and time upon insert.  Uses server time.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime MessageDateTime;
 		///<summary>This date time will get set as soon as this message has been acknowledged.  How lights get turned off.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime AckDateTime;
 		///<summary>The text that shows for the element, like the user name or the two word message.  No long text is stored here.</summary>
 		public string SigText;

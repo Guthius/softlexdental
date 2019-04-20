@@ -9,10 +9,10 @@ namespace OpenDentBusiness{
 
 	///<summary>Every InsPlan has a Carrier.  The carrier stores the name and address.</summary>
 	[Serializable()]
-	[CrudTable(IsSecurityStamped=true)]
-	public class Carrier:TableBase{
+	[ODTable(IsSecurityStamped=true)]
+	public class Carrier:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long CarrierNum;
 		///<summary>Name of the carrier.</summary>
 		public string CarrierName;
@@ -47,14 +47,14 @@ namespace OpenDentBusiness{
 		///<summary>Bit flags.</summary>
 		public CanSupTransTypes CanadianSupportedTypes;
 		///<summary>FK to userod.UserNum.  Set to the user logged in when the row was inserted at SecDateEntry date and time.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
 		public long SecUserNumEntry;
 		///<summary>Timestamp automatically generated and user not allowed to change.  The actual date of entry.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateEntry)]
 		public DateTime SecDateEntry;
 		///<summary>Automatically updated by MySQL every time a row is added or changed. Could be changed due to user editing, custom queries or program
 		///updates.  Not user editable with the UI.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime SecDateTEdit;
 		///<summary>Tax ID Number.  Not user editable.  No UI for this field.
 		///Used in when importing insurance plans from 834s to uniquely identify carriers.</summary>

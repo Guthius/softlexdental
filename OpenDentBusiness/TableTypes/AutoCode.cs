@@ -5,9 +5,9 @@ namespace OpenDentBusiness{
 	
 	///<summary>An autocode automates entering procedures.  The user only has to pick composite, for instance, and the autocode figures out the code based on the number of surfaces, and posterior vs. anterior.  Autocodes also enforce and suggest changes to a procedure code if the number of surfaces or other properties change.</summary>
 	[Serializable()]
-	public class AutoCode:TableBase{
+	public class AutoCode:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long AutoCodeNum;
 		///<summary>Displays meaningful decription, like "Amalgam".</summary>
 		public string Description;

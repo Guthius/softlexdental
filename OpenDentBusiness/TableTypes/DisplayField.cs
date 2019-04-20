@@ -6,9 +6,9 @@ namespace OpenDentBusiness{
 	
 	///<summary>Allows customization of which fields display in various lists and grids.  For now, the only grid is ProgressNotes.  Will also eventually let users set column widths and translate titles.  For now, the selections are the same for all computers.</summary>
 	[Serializable]
-	public class DisplayField:TableBase{
+	public class DisplayField:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long DisplayFieldNum;
 		///<summary>This is the internal name that OD uses to identify the field within this category.
 		///This will be the default description if the user doesn't specify an alternate.
@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to chartview.ChartViewNum. 0 if attached to a category.</summary>
 		public long ChartViewNum;
 		///<summary>Newline delimited string which contains the selectable options in combo box dropdowns.  Specifically for the Ortho chart.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string PickList;
 		///<summary>Because ortho chart display fields utilize the InternalName field for signatures, this field is here to override description.
 		///Some users want to use different fields but use the same description for mulitple tabs.

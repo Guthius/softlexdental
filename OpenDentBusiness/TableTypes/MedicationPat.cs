@@ -4,19 +4,19 @@ namespace OpenDentBusiness{
 
 	///<summary>Links medications to patients.  For ehr, some of these can be considered 'medication orders', but only if they contain a PatNote (instructions), a ProvNum, and a DateStart.</summary>
 	[Serializable]
-	public class MedicationPat:TableBase {
+	public class MedicationPat:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long MedicationPatNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
 		///<summary>FK to medication.MedicationNum.  If 0, implies that the medication order came from eRx.  This was done to allow MU2 measures to be set by either creating a medication from the medical window, or by creating an manual prescription.</summary>
 		public long MedicationNum;
 		///<summary>Medication notes specific to this patient.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string PatNote;
 		///<summary>The last date and time this row was altered.  Not user editable.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>Date that the medication was started.  Can be minval if unknown.</summary>
 		public DateTime DateStart;

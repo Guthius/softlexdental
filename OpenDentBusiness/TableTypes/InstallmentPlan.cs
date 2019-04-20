@@ -5,9 +5,9 @@ namespace OpenDentBusiness{
 	
 	///<summary>Simpler than a payment plan.  Does not affect running account balances.  Allows override of finance charges.  Affects the "pay now" on statements.  Only one installmentplan is allowed for a family, attached to guarantor only.  This is loosely enforced.</summary>
 	[Serializable]
-	public class InstallmentPlan:TableBase{
+	public class InstallmentPlan:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long InstallmentPlanNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;

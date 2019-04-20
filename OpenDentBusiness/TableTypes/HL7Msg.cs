@@ -4,24 +4,24 @@ using System.Collections;
 namespace OpenDentBusiness{
 	///<summary>HL7 messages sent and received.</summary>
 	[Serializable()]
-	public class HL7Msg:TableBase {
+	public class HL7Msg:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long HL7MsgNum;
 		///<summary>Enum:HL7MessageStatus Out/In are relative to Open Dental.  This is in contrast to the names of the old ecw folders, which were relative to the other program.  OutPending, OutSent, InReceived, InProcessed.</summary>
 		public HL7MessageStatus HL7Status;
 		///<summary>The actual HL7 message in its entirity.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string MsgText;
 		///<summary>FK to appointment.AptNum.  Many of the messages contain "Visit ID" which is equivalent to our AptNum.</summary>
 		public long AptNum;
 		///<summary>Used to determine which messages are old so that they can be cleaned up.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		/// <summary>FK to patient.PatNum.</summary>
 		public long PatNum;
 		/// <summary></summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		
 		public HL7Msg Copy(){

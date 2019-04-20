@@ -5,17 +5,17 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>A vaccine given to a patient on a date.</summary>
 	[Serializable]
-	public class VaccinePat:TableBase {
+	public class VaccinePat:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long VaccinePatNum;
 		///<summary>FK to vaccinedef.VaccineDefNum.  Can be 0 if and only if CompletionStatus=NotAdministered, in which case CVX code is assumed to be 998 (not administered) and there is no manufacturer.</summary>
 		public long VaccineDefNum;
 		///<summary>The datetime that the vaccine was administered.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeStart;
 		///<summary>Typically set to the same as DateTimeStart.  User can change.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeEnd;
 		///<summary>Size of the dose of the vaccine.  0 indicates unknown and gets converted to 999 on HL7 output.</summary>
 		public float AdministeredAmt;
@@ -27,7 +27,7 @@ namespace OpenDentBusiness {
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
 		///<summary>Documentation sometimes required.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		///<summary>The city where the vaccine was filled.  This can be different than the practice office city for historical vaccine information.  Exported in HL7 ORC-3.</summary>
 		public string FilledCity;

@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness{
 	///<summary>A code system used in EHR.  Healhtcare Common Procedure Coding System.  Another system used to describe procedure codes.</summary>
 	[Serializable()]
-	public class Hcpcs:TableBase{
+	public class Hcpcs:ODTable{
 		///<summary>Primary key..</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long HcpcsNum;
 		///<summary>Examples: AQ, J1040</summary>
 		public string HcpcsCode;

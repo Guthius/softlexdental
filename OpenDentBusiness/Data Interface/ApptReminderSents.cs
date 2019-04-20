@@ -4,77 +4,21 @@ using System.Data;
 using System.Reflection;
 using System.Text;
 
-namespace OpenDentBusiness{
-	///<summary></summary>
-	public class ApptReminderSents{
+namespace OpenDentBusiness
+{
+    public class ApptReminderSents
+    {
+        public static List<ApptReminderSent> GetForApt(long aptNum)
+        {
+            return Crud.ApptReminderSentCrud.SelectMany("SELECT * FROM apptremindersent WHERE ApptNum=" + POut.Long(aptNum));
+        }
 
-		#region Get Methods
+        public static long Insert(ApptReminderSent apptReminderSent) => Crud.ApptReminderSentCrud.Insert(apptReminderSent);
 
-		public static List<ApptReminderSent> GetForApt(long aptNum) {
-			string command="SELECT * FROM apptremindersent WHERE ApptNum="+POut.Long(aptNum);
-			return Crud.ApptReminderSentCrud.SelectMany(command);
-		}
+        public static void InsertMany(List<ApptReminderSent> listApptReminderSents) => Crud.ApptReminderSentCrud.InsertMany(listApptReminderSents);
 
-		#endregion
+        public static void Update(ApptReminderSent apptReminderSent) => Crud.ApptReminderSentCrud.Update(apptReminderSent);
 
-		#region Modification Methods
-
-		#region Insert
-		#endregion
-
-		#region Update
-		#endregion
-
-		#region Delete
-		#endregion
-
-		#endregion
-
-		#region Misc Methods
-		#endregion
-
-		///<summary></summary>
-		public static long Insert(ApptReminderSent apptReminderSent) {
-			return Crud.ApptReminderSentCrud.Insert(apptReminderSent);
-		}
-
-		///<summary></summary>
-		public static void InsertMany(List<ApptReminderSent> listApptReminderSents) {
-			Crud.ApptReminderSentCrud.InsertMany(listApptReminderSents);
-		}
-
-		///<summary></summary>
-		public static void Update(ApptReminderSent apptReminderSent) {
-			Crud.ApptReminderSentCrud.Update(apptReminderSent);
-		}
-
-		///<summary></summary>
-		public static void Delete(long apptReminderSentNum) {
-			Crud.ApptReminderSentCrud.Delete(apptReminderSentNum);
-		}
-
-
-		/*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
-		///<summary></summary>
-		public static List<ApptReminderSent> Refresh(long patNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<ApptReminderSent>>(MethodBase.GetCurrentMethod(),patNum);
-			}
-			string command = "SELECT * FROM apptremindersent WHERE PatNum = "+POut.Long(patNum);
-			return Crud.ApptReminderSentCrud.SelectMany(command);
-		}
-
-		///<summary>Gets one ApptReminderSent from the db.</summary>
-		public static ApptReminderSent GetOne(long apptReminderSentNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<ApptReminderSent>(MethodBase.GetCurrentMethod(),apptReminderSentNum);
-			}
-			return Crud.ApptReminderSentCrud.SelectOne(apptReminderSentNum);
-		}
-
-		*/
-	}
+        public static void Delete(long apptReminderSentNum) => Crud.ApptReminderSentCrud.Delete(apptReminderSentNum);
+    }
 }
- 

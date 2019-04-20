@@ -4,9 +4,9 @@ using System.ComponentModel;
 namespace OpenDentBusiness {
 	///<summary>Communication item from OD Cloud to workstation.</summary>
 	[Serializable]
-	public class EServiceSignal:TableBase {
+	public class EServiceSignal:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EServiceSignalNum;
 		///<summary>Service which this signal applies to. Defined by eServiceCodes.</summary>
 		public int ServiceCode;
@@ -18,13 +18,13 @@ namespace OpenDentBusiness {
 		///<summary>.</summary>
 		public eServiceSignalSeverity Severity;
 		///<summary>Human readable description of what this signal means, or a message for the user.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Description;
 		///<summary>Time signal was sent.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime SigDateTime;
 		///<summary>Used to store serialized data that can be used for processing this signal.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Tag;
 		///<summary>After a message has been processed or acknowledged this is set true. Not currently used for heartbeat or service status signals.</summary>
 		public bool IsProcessed;

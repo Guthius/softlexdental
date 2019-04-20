@@ -3,10 +3,10 @@
 namespace OpenDentBusiness {
 	///<summary></summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true)]
-	public class AlertCategoryLink:TableBase{
+	[ODTable(IsSynchable=true)]
+	public class AlertCategoryLink:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long AlertCategoryLinkNum;
 		///<summary>FK to AlertCategory.AlertCategoryNum.</summary>
 		public long AlertCategoryNum;

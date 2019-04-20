@@ -3,11 +3,11 @@
 namespace OpenDentBusiness {
 	///<summary>Used in the accounting section in chart of accounts.  Not related to patient accounts in any way.</summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true,IsMissingInGeneral=true)]
+	[ODTable(IsSynchable=true,IsMissingInGeneral=true)]
 	//[CrudTable(IsMissingInGeneral=true)]
-	public class PhoneEmpSubGroup:TableBase{
+	public class PhoneEmpSubGroup:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PhoneEmpSubGroupNum;
 		///<summary>FK to PhoneEmpDefault.EmployeeNum.</summary>
 		public long EmployeeNum;

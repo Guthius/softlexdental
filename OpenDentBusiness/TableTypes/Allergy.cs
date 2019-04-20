@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>An allergy attached to a patient and linked to an AllergyDef.</summary>
 	[Serializable]
-	public class Allergy:TableBase {
+	public class Allergy:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long AllergyNum;
 		///<summary>FK to allergydef.AllergyDefNum</summary>
 		public long AllergyDefNum;
@@ -18,7 +18,7 @@ namespace OpenDentBusiness {
 		///<summary>True if still an active allergy.  False helps hide it from the list of active allergies.</summary>
 		public bool StatusIsActive;
 		///<summary>To be used for synch with web server for CertTimelyAccess.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>The historical date that the patient had the adverse reaction to this agent.</summary>
 		public DateTime DateAdverseReaction;

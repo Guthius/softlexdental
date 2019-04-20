@@ -9,10 +9,10 @@ using System.Xml.Serialization;
 namespace OpenDentBusiness {
 	///<summary>Helper table for HQ only that links additional information to a particular site.</summary>
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true)]
-	public class SiteLink:TableBase {
+	[ODTable(IsMissingInGeneral=true)]
+	public class SiteLink:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long SiteLinkNum;
 		///<summary>FK to site.SiteNum</summary>
 		public long SiteNum;

@@ -4,9 +4,9 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>MapArea object will be placed on a MapAreaPanel and shown to give a physical layout of a location.</summary>
 	[Serializable]
-	public class MapArea:TableBase {
+	public class MapArea:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long MapAreaNum;
 		///<summary>FK to Phone.Extension.  Typically 0.  Only used by HQ and when ItemType is set to Room.</summary>
 		public int Extension;

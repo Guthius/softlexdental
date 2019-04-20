@@ -7,9 +7,9 @@ namespace OpenDentBusiness{
 	///The fee schedule associated to the discount plan will be used with the UCR fee schedule in order to determine the "discount".
 	///The associated DefNum will be the adjustment type that is used so that users can quickly query adjustments to see discount plan usage.</summary>
 	[Serializable()]
-	public class DiscountPlan:TableBase{
+	public class DiscountPlan:ODTable{
 		///<summary>Primary key</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long DiscountPlanNum;
 		///<summary>Description of this discount plan</summary>
 		public string Description;

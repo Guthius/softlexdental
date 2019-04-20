@@ -3,10 +3,10 @@
 namespace OpenDentBusiness {
 	///<summary></summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true)]
-	public class AlertCategory:TableBase{
+	[ODTable(IsSynchable=true)]
+	public class AlertCategory:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long AlertCategoryNum;
 		///<summary>False by default, indicates that this is a row that can not be edited or deleted.</summary>
 		public bool IsHQCategory;

@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>For EHR module, automate measure calculation.</summary>
 	[Serializable]
-	public class EhrMeasure:TableBase {
+	public class EhrMeasure:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EhrMeasureNum;
 		///<summary>Enum:EhrMeasureType</summary>
 		public EhrMeasureType MeasureType;
@@ -16,31 +16,31 @@ namespace OpenDentBusiness {
 		///<summary>0-100, -1 indicates not entered yet.</summary>
 		public int Denominator;
 		///<summary>Not a database column.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string Objective;
 		///<summary>Not a database column.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string Measure;
 		///<summary>Not a database column.  More than this percent for meaningful use.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public int PercentThreshold;
 		///<summary>Not a database column.  An explanation of which patients qualify for enumerator.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string NumeratorExplain;
 		///<summary>Not a database column.  An explanation of which patients qualify for denominator.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string DenominatorExplain;
 		///<summary>Not a database column.  Used for timing calculation of each measure.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public TimeSpan ElapsedTime;
 		///<summary>Not a database column.  An explanation of the conditions which would allow a Provider to be excluded from this requirement.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string ExclusionExplain;
 		///<summary>Not a database column.  Some exclusions have an associated count that the Provider must report if they are to attest to exclusion from this requirement.  Can be 0.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public int ExclusionCount;
 		///<summary>Not a database column.  A description of what the count is.  Example: If a Provider writes fewer than 100 Rx's during the reporting period, they can be excluded from reporting the ProvOrderEntry - CPOE measure.  The count would be the number of Rx's entered by the Provider during the reporting period and the label would identify the number as such.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string ExclusionCountDescript;
 
 		///<summary></summary>

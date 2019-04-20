@@ -5,10 +5,10 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>This table is not part of the general release.  User would have to add it manually.  Links computers to extensions.</summary>
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true,IsSynchable=true)]
-	public class PhoneComp:TableBase {
+	[ODTable(IsMissingInGeneral=true,IsSynchable=true)]
+	public class PhoneComp:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PhoneCompNum;
 		///<summary>The phone extension that is assigned to the corresponding computer.</summary>
 		public int PhoneExt;

@@ -5,9 +5,9 @@ using System.Xml.Serialization;
 namespace OpenDentBusiness{
 	///<summary>.</summary>
 	[Serializable()]
-	public class HL7Def:TableBase{
+	public class HL7Def:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long HL7DefNum;
 		///<summary></summary>
 		public string Description;
@@ -36,7 +36,7 @@ namespace OpenDentBusiness{
 		///<summary>If this is set, then there will be no child tables. Internal types are fully defined within the C# code rather than in the database.</summary>
 		public bool IsInternal;
 		///<summary>Stored in db as string, but used in OD as enum HL7InternalType. Example: eCWTight.  This will always have a value because we always start with a copy of some internal type.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL7InternalType InternalType;
 		///<summary>Example: 12.2.14. This will be empty if IsInternal. This records the version at which they made their copy. We might have made significant improvements since their copy.</summary>
 		public string InternalTypeVersion;
@@ -44,7 +44,7 @@ namespace OpenDentBusiness{
 		public bool IsEnabled;
 		///<summary></summary>
 //TODO: This column may need to be changed to the TextIsClobNote attribute to remove more than 50 consecutive new line characters.
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		///<summary>The machine name of the computer where the OpenDentHL7 service for this def is running.</summary>
 		public string HL7Server;
@@ -76,7 +76,7 @@ namespace OpenDentBusiness{
 
 
 		///<Summary>List of messages associated with this hierarchical definition.  Use items in this list to get to items lower in the hierarchy.</Summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		[XmlIgnore]
 		public List<HL7DefMessage> hl7DefMessages;
 

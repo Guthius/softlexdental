@@ -6,14 +6,14 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>A single autonote template.</summary>
 	[Serializable()]
-	public class AutoNote:TableBase{
+	public class AutoNote:ODTable{
 		///<summary>Primary key</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long AutoNoteNum;
 		///<summary>Name of AutoNote</summary>
 		public string AutoNoteName;
 		///<summary>Was 'ControlsToInc' in previous versions.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string MainText;
 		// <summary></summary>
 		//public string AutoNoteOutput;

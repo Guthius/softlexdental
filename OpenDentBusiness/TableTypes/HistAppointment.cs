@@ -8,15 +8,15 @@ namespace OpenDentBusiness {
 	///<summary>Inherits from appointment. A historical copy of an appointment.  These are generated as a result of an appointment being edited.  
 	///When creating for insertion it needs a passed in Appointment object.</summary>
 	[Serializable]
-	[CrudTable(IsTableHist=true,IsLargeTable=true)]
+	[ODTable(IsTableHist=true,IsLargeTable=true)]
 	public class HistAppointment:Appointment {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long HistApptNum;
 		///<summary>FK to userod.UserNum  Identifies the user that changed this appointment from previous state, not the person who originally wrote it.</summary>
 		public long HistUserNum;
 		///<summary>The date and time that this appointment was edited and added to the Hist table.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime HistDateTStamp;
 		///<summary>Enum:HistAppointmentAction .</summary>
 		public HistAppointmentAction HistApptAction;

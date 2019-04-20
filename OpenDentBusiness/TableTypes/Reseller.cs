@@ -4,9 +4,9 @@ namespace OpenDentBusiness {
 
 	///<summary>Only used at HQ.  If a row is present in this table, then this customer is a reseller.  Also holds their credentials for the reseller portal.</summary>
 	[Serializable]
-	public class Reseller:TableBase {
+	public class Reseller:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ResellerNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;

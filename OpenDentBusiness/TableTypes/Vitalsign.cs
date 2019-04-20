@@ -3,9 +3,9 @@
 namespace OpenDentBusiness {
 	///<summary>For EHR module, one dated vital sign entry.  BMI is calulated on demand based on height and weight and may be one of 4 ALOINC codes. 39156-5 "Body mass index (BMI) [Ratio]" is most applicable.</summary>
 	[Serializable]
-	public class Vitalsign:TableBase {
+	public class Vitalsign:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long VitalsignNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
@@ -24,7 +24,7 @@ namespace OpenDentBusiness {
 		///<summary>If a BMI was not recorded, this must be true in order to meet quality measurement.  For children, this is used as an IsPregnant flag, the only valid reason for not taking BMI on children.</summary>//intervention? I think these should be deprecated and use an Intervention object instead.
 		public bool IsIneligible;
 		///<summary>For HasFollowupPlan or IsIneligible, this documents the specifics.</summary>//intervention? I think these should be deprecated and use an Intervention object instead.
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Documentation;
 		///<summary>.</summary>//intervention? I think these should be deprecated and use an Intervention object instead.
 		public bool ChildGotNutrition;

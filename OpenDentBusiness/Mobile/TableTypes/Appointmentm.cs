@@ -4,13 +4,13 @@ using System.Collections;
 namespace OpenDentBusiness.Mobile{
 	///<summary>Appointments can show in the Appointments module, or they can be on the unscheduled list.  An appointment object is also used to store the Planned appointment.  The planned appointment never gets scheduled, but instead gets copied.</summary>
 	[Serializable()]
-	[CrudTable(IsMobile=true)]
-	public class Appointmentm:TableBase{
+	[ODTable(IsMobile=true)]
+	public class Appointmentm:ODTable{
 		///<summary>Primary key 1.</summary>
-		[CrudColumn(IsPriKeyMobile1=true)]
+		[ODTableColumn(IsPriKeyMobile1=true)]
 		public long CustomerNum;
 		///<summary>Primary key 2.</summary>
-		[CrudColumn(IsPriKeyMobile2=true)]
+		[ODTableColumn(IsPriKeyMobile2=true)]
 		public long AptNum;
 		///<summary>FK to patient.PatNum.  The patient that the appointment is for.</summary>
 		public long PatNum;
@@ -29,7 +29,7 @@ namespace OpenDentBusiness.Mobile{
 		///<summary>FK to provider.ProvNum.  Optional.  Only used if a hygienist is assigned to this appt.</summary>
 		public long ProvHyg;
 		///<summary>Appointment Date and time.  If you need just the date or time for an SQL query, you can use DATE(AptDateTime) and TIME(AptDateTime) in your query.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime AptDateTime;
 		///<summary>This is the first appoinment this patient has had at this office.  Somewhat automated.</summary>
 		public bool IsNewPatient;

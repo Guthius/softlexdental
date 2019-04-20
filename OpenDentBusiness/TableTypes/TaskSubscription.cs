@@ -5,9 +5,9 @@ namespace OpenDentBusiness{
 
 	///<summary>A subscription of one user to either a tasklist or to a task.</summary>
 	[Serializable()]
-	public class TaskSubscription : TableBase {
+	public class TaskSubscription : ODTable {
 		/// <summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long TaskSubscriptionNum;
 		/// <summary>FK to userod.UserNum</summary>
 		public long UserNum;

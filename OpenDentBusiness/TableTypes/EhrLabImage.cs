@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>Used to link images to an EHR lab.</summary>
 	[Serializable()]
-	public class EhrLabImage:TableBase {
+	public class EhrLabImage:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EhrLabImageNum;
 		///<summary>FK to ehrlab.EhrLabNum.</summary>
 		public long EhrLabNum;

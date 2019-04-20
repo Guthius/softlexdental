@@ -4,9 +4,9 @@ using System.Collections;
 namespace OpenDentBusiness{
 	///<summary>All recalls are based on these recall types.  Recall triggers are in their own table.</summary>
 	[Serializable()]
-	public class RecallType:TableBase {
+	public class RecallType:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long RecallTypeNum;
 		///<summary>.</summary>
 		public string Description;

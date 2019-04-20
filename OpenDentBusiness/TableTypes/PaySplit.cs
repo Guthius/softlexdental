@@ -6,10 +6,10 @@ namespace OpenDentBusiness{
 
 	///<summary>Always attached to a payment.  Always affects exactly one patient account and one provider.</summary>
 	[Serializable]
-	[CrudTable(IsSecurityStamped=true,IsSynchable=true,HasBatchWriteMethods=true)]
-	public class PaySplit:TableBase {
+	[ODTable(IsSecurityStamped=true,IsSynchable=true,HasBatchWriteMethods=true)]
+	public class PaySplit:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long SplitNum;
 		///<summary>Amount of split.</summary>
 		public double SplitAmt;
@@ -33,33 +33,33 @@ namespace OpenDentBusiness{
 		///<summary>FK to procedurelog.ProcNum.  0 if not attached to a procedure.</summary>
 		public long ProcNum;
 		///<summary>Date this paysplit was created.  User not allowed to edit.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateEntry)]
 		public DateTime DateEntry;
 		///<summary>FK to definition.DefNum.  Usually 0 unless this is a special unearned split.</summary>
 		public long UnearnedType;
 		///<summary>FK to clinic.ClinicNum.  Can be 0.  Need not match the ClinicNum of the Payment, because a payment can be split between clinics.</summary>
 		public long ClinicNum;
 		///<summary>FK to userod.UserNum.  Set to the user logged in when the row was inserted at SecDateEntry date and time.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
 		public long SecUserNumEntry;
 		//No SecDateEntry, DateEntry already exists and is set by MySQL when the row is inserted and never updated
 		///<summary>Automatically updated by MySQL every time a row is added or changed. Could be changed due to user editing, custom queries or program
 		///updates.  Not user editable with the UI.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime SecDateTEdit;
 		///<summary>FK to paysplit.SplitNum.  Can be 0.  Indicates that this paysplit is meant to counteract another Paysplit.</summary>
 		public long FSplitNum;
 		///<summary>FK to adjustment.AdjNum.  Can be 0.  Indicates that this paysplit is meant to counteract an Adjustment.</summary>
 		public long AdjNum;
 
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public bool IsInterestSplit;
 		///<summary>The amount of this split that is applied to an Outstanding Charge (AccountEntry).</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public decimal AccountEntryAmtPaid;
 
 		public PaySplit() {
-			TagOD=Guid.NewGuid().ToString();//Used to identify PaySplits that have not been entered into the database yet.
+			Tag=Guid.NewGuid().ToString();//Used to identify PaySplits that have not been entered into the database yet.
 		}
 
 		///<summary>Returns a copy of this PaySplit.</summary>
@@ -72,7 +72,7 @@ namespace OpenDentBusiness{
 			if(this.SplitNum==otherSplit.SplitNum && this.SplitNum!=0) {
 				return true;
 			}
-			if(this.TagOD==otherSplit.TagOD) {
+			if(this.Tag==otherSplit.Tag) {
 				return true;
 			}
 			return false;

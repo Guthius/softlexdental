@@ -4,10 +4,10 @@ using System.ComponentModel;
 namespace OpenDentBusiness {
 	///<summary>Messages are only inserted into this table after they are accepted by ODHQ.</summary>
 	[Serializable]
-	[CrudTable(HasBatchWriteMethods=true)]
-	public class SmsToMobile:TableBase {
+	[ODTable(HasBatchWriteMethods=true)]
+	public class SmsToMobile:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long SmsToMobileNum;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;
@@ -24,7 +24,7 @@ namespace OpenDentBusiness {
 		///<summary>Enum:SmsMessageSource  This is used to identify where in the program this message originated from.</summary>
 		public SmsMessageSource MsgType;
 		///<summary>The contents of the message.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
 		public string MsgText;
 		///<summary>Enum:SmsDeliveryStatus  Set by the Listener, tracks status of SMS.</summary>
 		public SmsDeliveryStatus SmsStatus;
@@ -38,10 +38,10 @@ namespace OpenDentBusiness {
 		///<summary>Only used when SmsDeliveryStatus==Failed.</summary>
 		public string CustErrorText;
 		///<summary>Time message was accepted at ODHQ.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeSent;
 		///<summary>Date time that the message was either successfully delivered or failed.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeTerminated;
 		///<summary>Messages are hidden, not deleted.</summary>
 		public bool IsHidden;

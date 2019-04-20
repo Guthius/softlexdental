@@ -6,17 +6,17 @@ using System.Text;
 namespace OpenDentBusiness {
 	///<summary></summary>
 	[Serializable]
-	public class ErxLog:TableBase {
+	public class ErxLog:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ErxLogNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
 		///<summary>Holds up to 16MB.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string MsgText;
 		///<summary>Automatically updated by MySQL every time a row is added or changed.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>FK to provider.ProvNum. The provider that the prescription request was sent by or on behalf of.</summary>
 		public long ProvNum;

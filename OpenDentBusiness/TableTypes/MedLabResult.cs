@@ -7,9 +7,9 @@ namespace OpenDentBusiness {
 	///services in the future.  These fields are required for the LabCorp result report, used to link the result to an order,
 	///or for linking a parent and child result.  Contains data from the OBX, ZEF, and applicable NTE segments.</summary>
 	[Serializable]
-	public class MedLabResult:TableBase {
+	public class MedLabResult:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long MedLabResultNum;
 		///<summary>FK to medlab.medLabNum.  Each MedLab object can have one or more results pointing to it.</summary>
 		public long MedLabNum;
@@ -39,12 +39,12 @@ namespace OpenDentBusiness {
 		///OBX|6|TX|001180^Potassium, Serum^L||||3.5-5.5|||N|C|19830527||200511071406|01|
 		///NTE|1|L|Red cells observed in serum. Glucose may be falsely decreased.
 		///NTE|2|L|Potassium may be falsely increased.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ObsValue;
 		///<summary>OBX.5.3 - Data Subtype.  Used to identify the coding system. Required if Discrete Microbiology testing is ordered to identify
 		///Microbiology Result Type.  Example of use: If OBX.5.3 is ORM, then the observation sub ID in OBX.4 is used to associate the result with
 		///a specific organism.  OBX.4 might contain 1, 2, or 3 meaning the result is for organism #1, organism #2, or organism #3.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public DataSubtype ObsSubType;
 		///<summary>OBX.6.1 - Identifier.  LabCorp report field "UNITS".  Units of measure, if too large it will be in the NTE segment.</summary>
 		public string ObsUnits;
@@ -52,14 +52,14 @@ namespace OpenDentBusiness {
 		public string ReferenceRange;
 		///<summary>OBX.8 - Abnormal Flags.  LabCorp report field "FLAG".  Blank or null is normal.  When this is displayed on the LabCorp report
 		///it must be the human readable display name, so for example _gt (>) is displayed as "Panic High" and _lt (&lt;) is "Panic Low".</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public AbnormalFlag AbnormalFlag;
 		///<summary>OBX.11 - Observation Result Status.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public ResultStatus ResultStatus;
 		///<summary>OBX.14 - Date/Time of Observation.  yyyyMMddHHmm format in the message, no seconds.
 		///Date and time tech entered result into the Lab System.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeObs;
 		///<summary>OBX.15 - Producer ID (Producer’s Reference).  LabCorp report field "LAB".  ID of LabCorp Facility responsible for performing the
 		///testing.  The Lab Name is supplied in the ZPS segment.</summary>
@@ -72,7 +72,7 @@ namespace OpenDentBusiness {
 		public long DocNum;
 		///<summary>NTE.3 at the OBX level.  The NTE segment is repeatable and the Comment Text component is limited to 78 characters.  Multiple NTE
 		///segments can be used for longer comments.  All NTE segments at the OBX level will be concatenated and stored in this one field.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 
 		///<summary></summary>

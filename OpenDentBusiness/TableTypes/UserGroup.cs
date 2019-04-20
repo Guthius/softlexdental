@@ -4,9 +4,9 @@ namespace OpenDentBusiness{
 
 	///<summary>A group of users.  Security permissions are determined by the usergroup of a user.</summary>
 	[Serializable]
-	public class UserGroup:TableBase {
+	public class UserGroup:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long UserGroupNum;
 		///<summary>.</summary>
 		public string Description;

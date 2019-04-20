@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>EHR education resource.  Only one of the 3 FK fields will be used at a time (DiseaseDefNum, MedicationNum, or LabResultID).  The other two will be blank.   Displays a clickable URL if the patient meets certain criteria.  </summary>
 	[Serializable]
-	public class EduResource:TableBase {
+	public class EduResource:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EduResourceNum;
 		///<summary>FK to diseasedef.DiseaseDefNum.  This now also handles ICD9s and Snomeds via the entry in DiseaseDef.</summary>
 		public long DiseaseDefNum;

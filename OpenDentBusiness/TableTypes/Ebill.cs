@@ -3,10 +3,10 @@ using System;
 namespace OpenDentBusiness {
 	///<summary>Keeps track of account details of e-statements per clinic.</summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true)]
-	public class Ebill:TableBase {
+	[ODTable(IsSynchable=true)]
+	public class Ebill:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EbillNum;
 		///<summary>FK to clinic.ClinicNum</summary>
 		public long ClinicNum;

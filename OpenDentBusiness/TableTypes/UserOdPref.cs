@@ -5,10 +5,10 @@ using System.Drawing;
 namespace OpenDentBusiness {
 
     [Serializable]
-    [CrudTable(IsSynchable = true)]
-    public class UserOdPref : TableBase
+    [ODTable(IsSynchable = true)]
+    public class UserOdPref : ODTable
     {
-        [CrudColumn(IsPriKey = true)]
+        [ODTableColumn(PrimaryKey = true)]
         public long UserOdPrefNum;
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace OpenDentBusiness {
         ///<summary>
         ///Used to hold the override, which might be a simple primitive value, a comma separated list, or a complex document in xml.
         ///</summary>
-        [CrudColumn(SpecialType = CrudSpecialColType.TextIsClob)]
+        [ODTableColumn(SpecialType = CrudSpecialColType.TextIsClob)]
         public string ValueString;
         
         ///<summary>FK to Clinic.ClinicNum.</summary>

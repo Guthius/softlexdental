@@ -5,9 +5,9 @@ namespace OpenDentBusiness{
 
 	/// <summary>Each row represents the linking of one insplan to one patient for current coverage.  Dropping a plan will delete the entry in this table.  Deleting a plan will delete the actual insplan (if no dependencies).</summary>
 	[Serializable]
-	public class PatPlan:TableBase {
+	public class PatPlan:ODTable {
 		/// <summary>Primary key</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PatPlanNum;
 		/// <summary>FK to  patient.PatNum.  The patient who currently has the insurance.  Not the same as the subscriber.</summary>
 		public long PatNum;

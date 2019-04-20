@@ -60,7 +60,7 @@ namespace OpenDentalGraph {
 				return _dockedControlHolder.Contr;
 			}
 		}
-		public OpenDentBusiness.TableBase DockedControlTag {
+		public OpenDentBusiness.ODTable DockedControlTag {
 			get {
 				if(_dockedControlHolder==null) {
 					return null;

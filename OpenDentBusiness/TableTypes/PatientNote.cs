@@ -4,27 +4,27 @@ namespace OpenDentBusiness{
 
 	///<summary>Essentially more columns in the patient table.  They are stored here because these fields can contain a lot of information, and we want to try to keep the size of the patient table a bit smaller.</summary>
 	[Serializable]
-	public class PatientNote:TableBase {
+	public class PatientNote:ODTable {
 		///<summary>FK to patient.PatNum.  Also the primary key for this table. Always one to one relationship with patient table.  A new patient might not have an entry here until needed.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PatNum;
 		///<summary>Only one note per family stored with guarantor.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate | CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate | CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
 		public string FamFinancial;
 		///<summary>No longer used.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ApptPhone;
 		///<summary>Medical Summary</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
 		public string Medical;
 		///<summary>Service notes</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
 		public string Service;
 		///<summary>Complete current Medical History</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
 		public string MedicalComp;
 		///<summary>Shows in the Chart module just below the graphical tooth chart.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
 		public string Treatment;
 		///<summary>In Case of Emergency Name.</summary>
 		public string ICEName;

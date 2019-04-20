@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>A vaccine definition.  Should not be altered once linked to VaccinePat.</summary>
 	[Serializable]
-	public class VaccineDef:TableBase {
+	public class VaccineDef:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long VaccineDefNum;
 		///<summary>RXA-5-1.</summary>
 		public string CVXCode;

@@ -4,9 +4,9 @@ using System.Collections;
 namespace OpenDentBusiness{
 	///<summary>Links one procedurecode to one recalltype.  The presence of this trigger is used when determining DatePrevious in the recall table.</summary>
 	[Serializable()]
-	public class RecallTrigger:TableBase {
+	public class RecallTrigger:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long RecallTriggerNum;
 		///<summary>FK to recalltype.RecallTypeNum</summary>
 		public long RecallTypeNum;

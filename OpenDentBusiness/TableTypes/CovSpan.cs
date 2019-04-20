@@ -5,9 +5,9 @@ namespace OpenDentBusiness{
 
 	///<summary>Always attached to covcats, this describes the span of procedure codes to which the category applies.</summary>
 	[Serializable]
-	public class CovSpan:TableBase {
+	public class CovSpan:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long CovSpanNum;
 		///<summary>FK to covcat.CovCatNum.</summary>
 		public long CovCatNum;

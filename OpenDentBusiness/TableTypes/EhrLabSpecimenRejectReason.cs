@@ -4,9 +4,9 @@ using System;
 namespace OpenDentBusiness {
 	///<summary>For EHR module, the specimen upon which the lab orders were/are to be performed on.  (May Repeat) SPM.21</summary>
 	[Serializable]
-	public class EhrLabSpecimenRejectReason:TableBase {
+	public class EhrLabSpecimenRejectReason:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EhrLabSpecimenRejectReasonNum;
 		///<summary>FK to ehrlab.EhrLabNum.  May be 0.</summary>
 		public long EhrLabSpecimenNum;

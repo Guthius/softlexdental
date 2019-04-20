@@ -6,10 +6,10 @@ namespace OpenDentBusiness{
 
 	///<summary>A task is a single todo item.</summary>
 	[Serializable]
-	[CrudTable(AuditPerms=CrudAuditPerm.TaskNoteEdit)]
-	public class Task:TableBase {
+	[ODTable(AuditPerms=CrudAuditPerm.TaskNoteEdit)]
+	public class Task:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long TaskNum;
 		///<summary>FK to tasklist.TaskListNum.  If 0, then it will show in the trunk of a section.  </summary>
 		public long TaskListNum;
@@ -19,7 +19,7 @@ namespace OpenDentBusiness{
 		public long KeyNum;
 		///<summary>The description of this task.  Might be very long.</summary>
 //TODO: This column may need to be changed to the TextIsClobNote attribute to remove more than 50 consecutive new line characters.
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Descript;
 		///<summary>Enum:TaskStatusEnum New,Viewed,Done.  We may want to put an index on this column someday.</summary>
 		public TaskStatusEnum TaskStatus;
@@ -33,21 +33,21 @@ namespace OpenDentBusiness{
 		public TaskObjectType ObjectType;
 		///<summary>The date and time that this task was added.  User editable.
 		///For reminder tasks, this field is used to indicate the date and time the reminder will take effect.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeEntry;
 		///<summary>FK to userod.UserNum.  The person who created the task.</summary>
 		public long UserNum;
 		///<summary>The date and time that this task was marked "done".</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeFinished;
 		///<summary>Only used when tracking unread status by user instead of by task.  This gets set to true to indicate it has not yet been read.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public bool IsUnread;
 		///<Summary>Not a database column.  A string description of the parent of this task.  It will only include the immediate parent.</Summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string ParentDesc;
 		///<Summary>Not a database column.  Attached patient's name (NameLF) if there is an attached patient.</Summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string PatientName;
 		///<summary>FK to definition.DefNum.  The priority for this task which is used when filling task lists.  The placement of the task in the list is dependent on the item order of the definitions.</summary>
 		public long PriorityDefNum;
@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 		public int ReminderFrequency;
 		///<summary>The original datetime that the row was inserted.  Used to sort the list by the order entered.
 		///Using taskhist.DateTimeOriginal will get the datetime that the taskhist row was inserted, not the task.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime DateTimeOriginal;
 
 		///<summary></summary>

@@ -531,7 +531,7 @@ namespace OpenDentalGraph {
 		#endregion
 
 		#region IDashboardDockContainer Implementation
-		public DashboardDockContainer CreateDashboardDockContainer(TableBase dbItem=null) {
+		public DashboardDockContainer CreateDashboardDockContainer(ODTable dbItem=null) {
 			string json="";
 			DashboardDockContainer ret=new DashboardDockContainer(
 				this,

@@ -7,10 +7,10 @@ namespace OpenDentBusiness {
 	///using this table should be performed against the primary customers database regardless of the database the user is currently connected to.
 	///</summary>
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true)]
-	public class TaskTaken:TableBase {
+	[ODTable(IsMissingInGeneral=true)]
+	public class TaskTaken:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long TaskTakenNum;
 		///<summary>FK to task.TaskNum. This value should be unique in the table at any one time.</summary>
 		public long TaskNum;

@@ -3,9 +3,9 @@ using System;
 namespace OpenDentBusiness {
 	///<summary>Stores the original insurance writeoff, fee, and expected insurance payment information on claims.</summary>
 	[Serializable()]
-	public class ClaimSnapshot:TableBase {
+	public class ClaimSnapshot:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ClaimSnapshotNum;
 		///<summary>FK to procedurelog.ProcNum</summary>
 		public long ProcNum;
@@ -18,7 +18,7 @@ namespace OpenDentBusiness {
 		///<summary>Procedure's ProcFee</summary>
 		public double Fee;
 		///<summary>The date/time that the snapshot was created.  Not user editable.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime DateTEntry;
 		///<summary>FK to claimproc.ClaimProcNum</summary>
 		public long ClaimProcNum;

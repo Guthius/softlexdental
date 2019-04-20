@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OpenDentBusiness {
 	///<summary>Provides a cache pattern for S-classes that use a Dictionary to store data instead of a list.</summary>
-	public abstract class CacheDictAbs<T,KEY_TYPE,VALUE_TYPE> : CacheAbs<T> where T : TableBase {
+	public abstract class CacheDictAbs<T,KEY_TYPE,VALUE_TYPE> : CacheAbs<T> where T : ODTable {
 		protected abstract DataTable DictToTable(Dictionary<KEY_TYPE,VALUE_TYPE> dictAllItems);
 		///<summary>Return the expected key for the dictionary (typically the primary key).</summary>
 		protected abstract KEY_TYPE GetDictKey(T tableBase);

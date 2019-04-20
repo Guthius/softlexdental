@@ -10,10 +10,10 @@ namespace OpenDentBusiness{
 	///<summary>Transworld Systems Inc (TSI) transaction log.  Logs communication between the Open Dental program and TSI.  Entries contain information
 	///about accounts placed with TSI, payments or adjustments to accounts placed, or transactions to Suspend, Reinstate or Cancel accounts.</summary>
 	[Serializable]
-	[CrudTable(HasBatchWriteMethods=true)]
-	public class TsiTransLog:TableBase {
+	[ODTable(HasBatchWriteMethods=true)]
+	public class TsiTransLog:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long TsiTransLogNum;
 		///<summary>FK to patient.PatNum for the guarantor of the account sent to TSI for collection services.  TSI refers to this as the Debtor Reference
 		///or Responsible Party Account Number.</summary>
@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 		public TsiTransType TransType;
 		///<summary>Timestamp at which this row was created. Auto generated on insert.  Identifies exactly when the action happened in OD to cause the
 		///message to be sent to TSI.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime TransDateTime;
 		///<summary>Enum:TsiDemandType - for placements, this is the type of collection activity that will start on the account being placed.</summary>
 		public TsiDemandType DemandType;
@@ -50,7 +50,7 @@ namespace OpenDentBusiness{
 		public string RawMsgText;
 		///<summary>Json serialized string representation of the TsiTrans list used to calculate the account balance for this guarantor at the time of
 		///placement with Transworld.  Used to update Transworld if any of the transactions are modified after placement.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string TransJson;
 		///<summary>FK to clinic.ClinicNum.  This will be 0 if clinics are not enabled.  This will be 0 for logs prior to version 18.4.</summary>
 		public long ClinicNum;
@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 		///<summary>Not a database column.  The dictionary with key=Tuple&lt;TsiFKeyType,long>, value=the trans with that type and pri key for the guar at
 		///the time of placement with Transworld.</summary>
 		[XmlIgnore,JsonIgnore]
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		private Dictionary<Tuple<TsiFKeyType,long>,TsiTrans> _dictTransByType;
 
 		///<summary>The dictionary with key=Tuple&lt;TsiFKeyType,long>, value=the trans with the type and pri key for the guar when placed with Transworld.</summary>

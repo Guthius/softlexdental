@@ -6,9 +6,9 @@ using System.Drawing;
 namespace OpenDentBusiness{
 	///<summary>Each condition evaluates to true or false.  A series of conditions for a single automation is ANDed together.</summary>
 	[Serializable]
-	public class AutomationCondition:TableBase{
+	public class AutomationCondition:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long AutomationConditionNum;
 		///<summary>FK to automation.AutomationNum. </summary>
 		public long AutomationNum;

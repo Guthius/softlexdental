@@ -5,10 +5,10 @@ namespace OpenDentBusiness{
 
 	///<summary>A patient payment.  Always has at least one split.</summary>
 	[Serializable]
-	[CrudTable(IsSecurityStamped=true)]
-	public class Payment:TableBase {
+	[ODTable(IsSecurityStamped=true)]
+	public class Payment:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PayNum;
 		///<summary>FK to definition.DefNum.  This will be 0 if this is an income transfer to another provider.</summary>
 		public long PayType;
@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 		///<summary>Bank-branch for checks.</summary>
 		public string BankBranch;
 		///<summary>Any admin note.  Not for patient to see.  Length 4000.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
 		public string PayNote;
 		///<summary>No longer used.  Set to true to indicate that a payment has more than one paysplit.</summary>
 		public bool IsSplit;
@@ -30,23 +30,23 @@ namespace OpenDentBusiness{
 		///<summary>FK to clinic.ClinicNum.  Can be 0 to indicate no clinic (unassigned). Copied from patient.ClinicNum when creating payment, but user can override.  Not used in provider income transfers.  Cannot be used in financial reporting when grouping by clinic, because payments may be split between clinics.</summary>
 		public long ClinicNum;
 		///<summary>The date that this payment was entered.  Not user editable.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateEntry)]
 		public DateTime DateEntry;
 		///<summary>FK to deposit.DepositNum.  0 if not attached to any deposits.  Cash does not usually get attached to a deposit; only checks.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
 		public long DepositNum;
 		///<summary>Text of printed receipt if the payment was done electronically. Allows reprinting if needed.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Receipt;
 		///<summary>True if this was an automatically added recurring CC charge rather then one entered by the user.  This was set to true for all historical entries before version 11.1, but will be accurate after that.</summary>
 		public bool IsRecurringCC;
 		///<summary>FK to userod.UserNum.  Set to the user logged in when the row was inserted at SecDateEntry date and time.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
 		public long SecUserNumEntry;
 		//No SecDateEntry, DateEntry already exists and is set by MySQL when the row is inserted and never updated
 		///<summary>Automatically updated by MySQL every time a row is added or changed. Could be changed due to user editing, custom queries or program
 		///updates.  Not user editable with the UI.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime SecDateTEdit;
 		///<summary>Enum:CreditCardSource Indicates the origin of the payment if the payment came from a credit card. Will be 'None' if this payment 
 		///did not use a credit card.</summary>

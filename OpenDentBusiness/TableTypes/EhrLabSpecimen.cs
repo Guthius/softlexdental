@@ -5,9 +5,9 @@ using System.Collections.Generic;
 namespace OpenDentBusiness {
 	///<summary>For EHR module, the specimen upon which the lab orders were/are to be performed on.  NTE.*</summary>
 	[Serializable]
-	public class EhrLabSpecimen:TableBase {
+	public class EhrLabSpecimen:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EhrLabSpecimenNum;
 		///<summary>FK to ehrlab.EhrLabNum.  May be 0.</summary>
 		public long EhrLabNum;
@@ -34,10 +34,10 @@ namespace OpenDentBusiness {
 		///<summary>May be empty.  Stored as string in the format YYYYMMDD[HH[MM[SS]]] where bracketed values are optional.  SPM.17.2.1</summary>
 		public string CollectionDateTimeEnd;
 		///<summary>[0..*]This is not a data column but is stored in a seperate table named EhrLabSpecimenRejectReason.  SPM.21</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		private List<EhrLabSpecimenRejectReason> _listEhrLabSpecimenRejectReason;
 		///<summary>[0..*]This is not a data column but is stored in a seperate table named EhrLabSpecimenCondition.  SPM.24</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		private List<EhrLabSpecimenCondition> _listEhrLabSpecimenCondition;
 
 

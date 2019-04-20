@@ -5,18 +5,18 @@ namespace OpenDentBusiness{
 
 	///<summary>A template email which can be used as the basis for a new email.</summary>
 	[Serializable]
-	public class EmailTemplate:TableBase {
+	public class EmailTemplate:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EmailTemplateNum;
 		///<summary>Default subject line.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Subject;
 		///<summary>Body of the email</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string BodyText;
 		///<summary>Different than Subject.  The description of the email template.  This is what the user sees in the list.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Description;
 		///<summary>True flags the emailtemplate as being in HTML format, false if plain text.</summary>
 		public bool IsHtml;

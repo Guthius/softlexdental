@@ -7,9 +7,9 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>One credit card along with any recurring charge information.</summary>
 	[Serializable]
-	public class CreditCard:TableBase {
+	public class CreditCard:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long CreditCardNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
@@ -41,7 +41,7 @@ namespace OpenDentBusiness {
 		///<summary>Expiration for the PayConnect token.  Used with the PayConnect token instead of the actual credit card number and expiration.</summary>
 		public DateTime PayConnectTokenExp;
 		///<summary>What procedures will go on this card as a recurring charge.  Comma delimited list of ProcCodes.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Procedures;
 		///<summary>Enum:CreditCardSource Indicates which application made this credit card and token.</summary>
 		public CreditCardSource CCSource;

@@ -6,9 +6,9 @@ using System.Xml.Serialization;
 namespace OpenDentBusiness{
 		///<summary>(User OD since "user" is a reserved word) Users are a completely separate entity from Providers and Employees even though they can be linked.  A usernumber can never be changed, ensuring a permanent way to record database entries and leave an audit trail.  A user can be a provider, employee, or neither.</summary>
 	[Serializable()]
-	public class Userod:TableBase{
+	public class Userod:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long UserNum;
 		///<summary>.</summary>
 		public string UserName;
@@ -42,7 +42,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to userod.UserNum.  The user num within the Central Manager database.  Only editable via CEMT.  Can change when CEMT syncs.</summary>
 		public long UserNumCEMT;
 		///<summary>The date and time of the most recent log in failure for this user.  Set to MinValue after user logs in successfully.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTFail;
 		///<summary>The number of times this user has failed to log into their account.  Set to 0 after user logs in successfully.</summary>
 		public byte FailedAttempts;

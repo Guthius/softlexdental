@@ -5,9 +5,9 @@ namespace OpenDentBusiness {
 
 	/// <summary>This defines the light buttons on the left of the main screen.</summary>
 	[Serializable]
-	public class SigButDef:TableBase {
+	public class SigButDef:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long SigButDefNum;
 		///<summary>The text on the button</summary>
 		public string ButtonText;

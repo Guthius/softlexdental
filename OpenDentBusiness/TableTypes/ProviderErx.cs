@@ -4,10 +4,10 @@ using System.Drawing;
 
 namespace OpenDentBusiness {
 	///<summary>Tracks which providers have access to eRx based on NPI.  Synchronized with HQ.</summary>
-	[Serializable,CrudTable(IsSynchable=true)]
-	public class ProviderErx:TableBase {
+	[Serializable,ODTable(IsSynchable=true)]
+	public class ProviderErx:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ProviderErxNum;
 		///<summary>FK to patient.PatNum.  Holder of registration key only for HQ record, in customer record this will be 0.</summary>
 		public long PatNum;

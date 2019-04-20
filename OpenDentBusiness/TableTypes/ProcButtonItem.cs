@@ -5,9 +5,9 @@ namespace OpenDentBusiness{
 
 	///<summary>Attached to procbuttons.  These tell the program what to do when a user clicks on a button.  There are two types: proccodes or autocodes.</summary>
 	[Serializable]
-	public class ProcButtonItem:TableBase {
+	public class ProcButtonItem:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ProcButtonItemNum;
 		///<summary>FK to procbutton.ProcButtonNum.</summary>
 		public long ProcButtonNum;

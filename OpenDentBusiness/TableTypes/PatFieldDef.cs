@@ -5,17 +5,17 @@ namespace OpenDentBusiness{
 
 	/// <summary>These are the definitions for the custom patient fields added and managed by the user.</summary>
 	[Serializable]
-	[CrudTable(IsSynchable=true)]
-	public class PatFieldDef:TableBase {
+	[ODTable(IsSynchable=true)]
+	public class PatFieldDef:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PatFieldDefNum;
 		///<summary>The name of the field that the user will be allowed to fill in the patient info window.</summary>
 		public string FieldName;
 		///<summary>Enum:PatFieldType Text=0,PickList=1,Date=2,Checkbox=3,Currency=4</summary>
 		public PatFieldType FieldType;
 		///<summary>The text that contains pick list values.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string PickList;
 		//<summary>Enum:PatFieldMapping Certain reports such as Medicaid make use of patient fields that are explicitly mapped.</summary>
 		//public PatFieldMapping FieldMapping;

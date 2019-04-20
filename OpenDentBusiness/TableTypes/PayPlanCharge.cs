@@ -8,10 +8,10 @@ namespace OpenDentBusiness{
 
 	///<summary>One of the dated charges attached to a payment plan.  This has nothing to do with payments, but rather just causes the amount due to increase on the date of the charge.  The amount of the charge is the sum of the principal and the interest.</summary>
 	[Serializable]
-	[CrudTable(IsSynchable=true)]
-	public class PayPlanCharge:TableBase {
+	[ODTable(IsSynchable=true)]
+	public class PayPlanCharge:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PayPlanChargeNum;
 		///<summary>FK to payplan.PayPlanNum.</summary>
 		public long PayPlanNum;
@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 		///<summary>For Debits, this is the interest portion of this payment.  Always 0 for Credits.</summary>
 		public double Interest;
 		///<summary>Any note about this particular payment plan charge</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		///<summary>FK to provider.ProvNum.  Since there is no ProvNum field at the payplan level, the provider must be the same for all payplancharges.  
 		///It's initially assigned as the patient priProv.  Payments applied should be to this provnum, 
@@ -42,10 +42,10 @@ namespace OpenDentBusiness{
 		///Always 0 for debits.  Can be 0 for credits not attached to a procedure.</summary>
 		public long ProcNum;
 		///<summary>DateTime payplancharge was added to the payplan. Not editable by user.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime SecDateTEntry;
 		///<summary>DateTime payplancharge was edited. Not editable by user.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime SecDateTEdit;
 		///<summary>FK to statement.StatementNum.  Only used when the statement in an invoice.</summary>
 		public long StatementNum;

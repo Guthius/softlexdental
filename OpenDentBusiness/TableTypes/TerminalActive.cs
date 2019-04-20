@@ -4,9 +4,9 @@ namespace OpenDentBusiness{
 
 	///<summary>Each row is 1 computer, or if in RDP session, 1 connection from 1 computer, currently acting as a terminal for patient input.</summary>
 	[Serializable]
-	public class TerminalActive:TableBase {
+	public class TerminalActive:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long TerminalActiveNum;
 		///<summary>The name of the computer where the terminal is active.</summary>
 		public string ComputerName;

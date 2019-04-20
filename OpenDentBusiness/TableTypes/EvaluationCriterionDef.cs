@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness{
 	///<summary>Rows on an evaluation def.  The individual items that will be graded. Criterion Defs</summary>
 	[Serializable]
-	public class EvaluationCriterionDef:TableBase{
+	public class EvaluationCriterionDef:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EvaluationCriterionDefNum;
 		///<summary>FK to evaluationdef.EvaluationDefNum.</summary>
 		public long EvaluationDefNum;

@@ -6,10 +6,10 @@ namespace OpenDentBusiness{
 
 	///<summary>One item is needed for each field on a claimform.</summary>
 	[Serializable()]
-	public class ClaimFormItem:TableBase {
+	public class ClaimFormItem:ODTable {
 		///<summary>Primary key.</summary>
 		//[XmlIgnore]
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ClaimFormItemNum;
 		///<summary>FK to claimform.ClaimFormNum</summary>
 		//[XmlIgnore]

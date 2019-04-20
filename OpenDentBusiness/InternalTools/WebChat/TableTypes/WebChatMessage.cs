@@ -3,17 +3,17 @@
 namespace OpenDentBusiness {
 
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true,CrudExcludePrefC=true)]
-	public class WebChatMessage:TableBase {
+	[ODTable(IsMissingInGeneral=true,CrudExcludePrefC=true)]
+	public class WebChatMessage:ODTable {
 
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long WebChatMessageNum;
 		///<summary>FK to webchatsession.WebChatSessionNum</summary>
 		public long WebChatSessionNum;
 		///<summary>Blank when MessageType is System.</summary>
 		public string UserName;
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateT;
 		///<summary>The chat message content.</summary>
 		public string MessageText;

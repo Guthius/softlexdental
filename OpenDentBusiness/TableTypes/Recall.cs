@@ -15,10 +15,10 @@ namespace OpenDentBusiness{
 	///When a user tries to delete a recall, they will only be successful if the trigger conditions do not apply.  
 	///Otherwise, they will have to disable the recall instead.</summary>
 	[Serializable]
-	[CrudTableAttribute(HasBatchWriteMethods=true,IsLargeTable=true)]
-	public class Recall:TableBase {
+	[ODTableAttribute(HasBatchWriteMethods=true,IsLargeTable=true)]
+	public class Recall:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long RecallNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
@@ -38,13 +38,13 @@ namespace OpenDentBusiness{
 		///<summary>FK to definition.DefNum, or 0 for none.</summary>
 		public long RecallStatus;
 		///<summary>An administrative note for staff use.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		///<summary>If true, this recall type will be disabled (there's only one type right now). 
 		///This is usually used rather than deleting the recall type from the patient because trigger conditions must be enforced for all patients.</summary>
 		public bool IsDisabled;
 		///<summary>Last datetime that this row was inserted or updated.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>FK to recalltype.RecallTypeNum.</summary>
 		public long RecallTypeNum;

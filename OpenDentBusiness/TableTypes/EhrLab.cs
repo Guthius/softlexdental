@@ -6,9 +6,9 @@ using System.Text.RegularExpressions;
 namespace OpenDentBusiness {
 	///<summary>For EHR module, lab request that contains all required fields for HL7 Lab Reporting Interface (LRI).</summary>
 	[Serializable]
-	public class EhrLab:TableBase {
+	public class EhrLab:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EhrLabNum;
 		///<summary>FK to patient.PatNum.  PID-3.1</summary>
 		public long PatNum;
@@ -16,7 +16,7 @@ namespace OpenDentBusiness {
 		//public long EhrLabMessageNum;
 		#region ORC fields
 		///<summary>Always RE unless importing from outside sources.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70119 OrderControlCode;
 
 		#region Order Numbers
@@ -76,10 +76,10 @@ namespace OpenDentBusiness {
 		public string OrderingProviderAssigningAuthorityIDType;
 		#endregion
 		///<summary>Describes the type of name used.  ORC.12.10</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70200 OrderingProviderNameTypeCode;
 		///<summary>Must be value from HL70203 code set, see note at bottom of EhrLab.cs for usage.  ORC.12.13</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70203 OrderingProviderIdentifierTypeCode;
 		#endregion
 
@@ -114,16 +114,16 @@ namespace OpenDentBusiness {
 		///<summary>May be empty.  Stored as string in the format YYYY[MM[DD[HH[MM[SS]]]]] where bracketed values are optional.  OBR.8.1</summary>
 		public string ObservationDateTimeEnd;
 		///<summary>OBR.11</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70065 SpecimenActionCode;
 		///<summary>[0..*]This is not a data column but is stored in a seperate table named EhrLabClinicalInfo.  OBR.13.*</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		private List<EhrLabClinicalInfo> _listRelevantClinicalInformation;
 		//OBR.OrderingProvider same as above.
 		///<summary>Date Time that the result was stored or last updated.  Stored in the format YYYYMMDDHHmmss.  Required to be accurate to the second.  OBR.22.1</summary>
 		public string ResultDateTime;
 		///<summary>OBR.25</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70123 ResultStatus;
 		#region Parent Result OBR.26
 		///<summary>OBR.26.1.1</summary>
@@ -145,7 +145,7 @@ namespace OpenDentBusiness {
 		public string ParentObservationSubID;
 		#endregion
 		///<summary>[0..*]This is not a data column but is stored in a seperate table named EhrLabResultsCopyTo. OBR.28.*</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		private List<EhrLabResultsCopyTo> _listEhrLabResultsCopyTo;
 		#region Parent Document/Order OBR.29
 		#region Parent Placer Order Num OBR.29.1
@@ -176,7 +176,7 @@ namespace OpenDentBusiness {
 		#endregion OBR
 		#region NTE segments pertaining to OBR;  NTE.*
 		///<summary>[0..*]This is not a data column but is stored in a seperate table named EhrLabNote. NTE.*</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		private List<EhrLabNote> _listEhrLabNotes;
 		#endregion
 		#region TQ1 fields.
@@ -190,13 +190,13 @@ namespace OpenDentBusiness {
 		///<summary>This gets set when a provider is logged in with a valid EHR key and then creates a lab.</summary>
 		public bool IsCpoe;
 		///<summary>The PID Segment from the HL7 message used to generate or update the lab order.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string OriginalPIDSegment;
 		///<summary>[0..*] This is not a data column but is stored in a seperate table named EhrLabResult. OBX.*</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		private List<EhrLabResult> _listEhrLabResults;
 		///<summary>[0..*] This is not a data column but is stored in a seperate table named EhrLabSpecimen. SPM.*</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		private List<EhrLabSpecimen> _listEhrLabSpecimen;
 
 		///<summary></summary>

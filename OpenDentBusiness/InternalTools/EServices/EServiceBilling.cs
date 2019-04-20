@@ -11,10 +11,10 @@ using System.Reflection;
 namespace OpenDentBusiness {
 	///<summary>Only used internally by OpenDental, Inc.  Not used by anyone else. Aggregates customer charges for EServices.</summary>
 	[Serializable()]
-	[CrudTable(IsMissingInGeneral=true)]//Remove this line to perform one-time CRUD updated to this class. Place back before committing changes.
-	public class EServiceBilling:TableBase {
+	[ODTable(IsMissingInGeneral=true)]//Remove this line to perform one-time CRUD updated to this class. Place back before committing changes.
+	public class EServiceBilling:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EServiceBillingNum;
 		///<summary>Should be unique in this table per DateUsage.</summary>
 		public long RegistrationKeyNum;
@@ -23,10 +23,10 @@ namespace OpenDentBusiness {
 		///<summary>From patient.BillingCycleDay. The day of the month that this patient receives their bill.</summary>
 		public int BillingCycleDay;
 		///<summary>Timestamp when this row is entered.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime DateTimeEntry;
 		///<summary>Timestamp when this row was processed by RepeatCharge tool and procedures were posted. If MinVal then this row has not been processed yet.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeProceduresPosted;
 		///<summary>Date only. Indicates the exact date on which the bill should post to the procedure log.</summary>
 		public DateTime DateOfBill;
@@ -45,19 +45,19 @@ namespace OpenDentBusiness {
 		public DateTime UsageCycleEnd;
 		///<summary>The produced output of the billing algorithm is a json serialized collection (List) of procedures. 
 		///This will later be deserialized by OD proper and inserted into the procedurelog table.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ProceduresJson;
 		///<summary>Dictionary of eServiceCode, ChargeUSD. Will be deserialized by Broadcast Monitor to show performance by eService in a graph.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ChargesJson;
 		///<summary>Information was previously held in SmsBilling table as structured data.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string NexmoInfoJson;
 		///<summary>Human readable explanation of how the confirmation charges were calculated.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string LogInfo;
 		///<summary>1 line per charge per clinic. To be used by accounting for invoicing.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ItemizedCharges;
 
 		public EServiceBilling Clone() {

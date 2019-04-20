@@ -214,7 +214,7 @@ namespace OpenDentBusiness.Crud{
 					sbRow.Append(POut.DateT(smsToMobile.DateTimeTerminated)); sbRow.Append(",");
 					sbRow.Append(POut.Bool(smsToMobile.IsHidden)); sbRow.Append(",");
 					sbRow.Append(POut.Float(smsToMobile.MsgDiscountUSD)); sbRow.Append(")");
-					if(sbCommands.Length+sbRow.Length+1 > TableBase.MaxAllowedPacketCount) {
+					if(sbCommands.Length+sbRow.Length+1 > ODTable.MaxAllowedPacketCount) {
 						Db.NonQ(sbCommands.ToString());
 						sbCommands=null;
 					}

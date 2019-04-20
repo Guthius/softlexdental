@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>Other tables generally use the ICD10Code string as their foreign key.  It is implied that these are all ICD10CMs, although that may not be the case in the future.</summary>
 	[Serializable]
-	public class Icd10:TableBase {
+	public class Icd10:ODTable {
 		///<summary>Primary key. Also identical to "Order Number" column in ICD10 documentation.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long Icd10Num;
 		///<summary>ICD-10-CM or ICD-10-PCS code. Dots are included. Not allowed to edit this column once saved in the database.</summary>
 		public string Icd10Code;

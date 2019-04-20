@@ -5,10 +5,10 @@ using System.ComponentModel;
 namespace OpenDentBusiness {
 	///<summary>A notification table for changes made to a job. Notifies subscribed users a change has been made.</summary>
 	[Serializable()]
-	[CrudTable(IsMissingInGeneral=true,IsSynchable=true)]
-	public class JobNotification:TableBase{
+	[ODTable(IsMissingInGeneral=true,IsSynchable=true)]
+	public class JobNotification:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long JobNotificationNum;
 		///<summary>FK to job.JobNum.</summary>
 		public long JobNum;

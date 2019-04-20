@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness{
 	///<summary>An evaluation is for one student and is copied from an EvaluationDef.</summary>
 	[Serializable]
-	public class Evaluation:TableBase{
+	public class Evaluation:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EvaluationNum;
 		///<summary>FK to provider.ProvNum.</summary>
 		public long InstructNum;
@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 		///<summary>Always recalculated as each individual criterion is changed, so no risk of getting out of synch.  Only considers criteria on the evaluation that use the same grading scale as the evaluation itself.  It's an average of all those criteria.  When averaging, the result will almost never exactly equal one of the numbers in the scale, so the nearest one must be found and used here.  For example, if the average is 3.6 on a 4 point scale, this will show 4.  Percentages will be rounded to the nearest whole number.  This is the value that will be returned in reports and also used in calculations of the student's grade for the term.</summary>
 		public float OverallGradeNumber;
 		///<summary>Any note that the instructor wishes to place at the bottom of this evaluation.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Notes;
 
 		///<summary></summary>

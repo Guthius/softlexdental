@@ -5,28 +5,28 @@ namespace OpenDentBusiness {
 
 	///<summary>An actual signal that gets sent out as part of the messaging functionality.</summary>
 	[Serializable]
-	[CrudTable(HasBatchWriteMethods=true)]
-	public class Signalod:TableBase {
+	[ODTable(HasBatchWriteMethods=true)]
+	public class Signalod:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long SignalNum;
 		///<summary>If IType=Date, then this is the affected date in the Appointments module.</summary>
 		public DateTime DateViewing;
 		///<summary>The exact server time when this signal was entered into db.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime SigDateTime;
 		///<summary>Usually identifies the object that was edited to cause the signal to be created.
 		///Can be used for special scenarios based on the FKeyType.  E.g. for SmsMsgUnreadCount, this represents a count, not an FK.</summary>
 		public long FKey;
 		///<summary>Describes the type of object referenced by the FKey.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public KeyType FKeyType;
 		///<summary>Enum:InvalidType Indicates what cache or entity has been changed.</summary>
 		public InvalidType IType;
 		///<summary>Enum:RemotingRole The RemotingRole of the instance that created this signal.</summary>
 		public RemotingRole RemoteRole;
 		///<summary>Message value of the signal.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string MsgValue;
 
 		///<summary></summary>

@@ -10,10 +10,10 @@ namespace OpenDentBusiness {
 	///All schema changes are done directly on our live database as needed.
 	///Used to store a brief history of a job including approved job states and cahnges to expert or engineer.</summary>
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true,IsSynchable=true)]
-	public class JobLog:TableBase {
+	[ODTable(IsMissingInGeneral=true,IsSynchable=true)]
+	public class JobLog:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long JobLogNum;
 		///<summary>FK to job.JobNum.  Links this event to the source job.</summary>
 		public long JobNum;
@@ -24,20 +24,20 @@ namespace OpenDentBusiness {
 		///<summary>FK to userod.UserNum. Usernum of the engineer on the job at the time of the log entry.</summary>
 		public long UserNumEngineer;
 		///<summary>Date/Time the event was created.</summary>
-		[CrudColumn(SpecialType = CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.DateTEntry)]
 		public DateTime DateTimeEntry;
 		///<summary>Human readable description of what was changed.</summary>
 		public string Description;
 		///<summary>Copy of the job implementation rtf</summary>
-		[CrudColumn(SpecialType = CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.TextIsClob)]
 		public string MainRTF; 
 		///<summary>Copy of the job title.</summary>
 		public string Title;
 		///<summary>Copy of the job requirements rtf</summary>
-		[CrudColumn(SpecialType = CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.TextIsClob)]
 		public string RequirementsRTF;
 		///<summary>Copy of the job Time Estimate</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanLong)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeSpanLong)]
 		[XmlIgnore]
 		public TimeSpan TimeEstimate;
 

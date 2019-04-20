@@ -6,13 +6,13 @@ namespace OpenDentBusiness.Mobile {
 
 	///<summary>One username/password for one customer.</summary>
 	[Serializable]
-	[CrudTable(IsMobile=true)]
-	public class Providerm:TableBase {
+	[ODTable(IsMobile=true)]
+	public class Providerm:ODTable {
 		///<summary>Primary key 1.</summary>
-		[CrudColumn(IsPriKeyMobile1=true)]
+		[ODTableColumn(IsPriKeyMobile1=true)]
 		public long CustomerNum;
 		///<summary>Primary key 2.</summary>
-		[CrudColumn(IsPriKeyMobile2=true)]
+		[ODTableColumn(IsPriKeyMobile2=true)]
 		public long ProvNum;
 		///<summary>Abbreviation.</summary>
 		public string Abbr;

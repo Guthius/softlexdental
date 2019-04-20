@@ -6,9 +6,9 @@ namespace OpenDentBusiness{
 
 	///<summary>The amount of time it takes for a lab case to be processed at the lab.  Used to compute due dates.</summary>
 	[Serializable]
-	public class LabTurnaround:TableBase {
+	public class LabTurnaround:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long LabTurnaroundNum;
 		///<summary>FK to laboratory.LaboratoryNum. The lab that this item is attached to.</summary>
 		public long LaboratoryNum;

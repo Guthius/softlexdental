@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>Used to customize quick buttons in the chart module.</summary>
 	[Serializable]
-	public class ProcButtonQuick:TableBase {
+	public class ProcButtonQuick:ODTable {
 	   ///<summary>Primary Key.</summary>
-	   [CrudColumn(IsPriKey=true)]
+	   [ODTableColumn(PrimaryKey=true)]
 	   public long ProcButtonQuickNum;
 	   ///<summary>Description used for display.</summary>
 	   public string Description;

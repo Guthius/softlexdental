@@ -13,17 +13,17 @@ using OpenDentBusiness.HL7;
 
 namespace OpenDentBusiness
 {
-
-    ///<summary>Appointment S-Class.  Sends signalods for Invalid Appointments whenever a call to the db is made.</summary>
+    /// <summary>
+    /// Appointment S-Class. 
+    /// Sends signalods for Invalid Appointments whenever a call to the db is made.
+    /// </summary>
     public class Appointments
     {
-
-        #region Get Methods
         public static DataTable GetCommTable(string patNum, long aptNum)
         {
             DataTable table = new DataTable("Comm");
             DataRow row;
-            //columns that start with lowercase are altered for display rather than being raw data.
+            // Columns that start with lowercase are altered for display rather than being raw data.
             table.Columns.Add("commDateTime", typeof(DateTime));
             table.Columns.Add("CommlogNum");
             table.Columns.Add("CommType");
@@ -31,8 +31,8 @@ namespace OpenDentBusiness
             table.Columns.Add("Subject");
             table.Columns.Add("Note");
             table.Columns.Add("EmailMessageHideIn");
-            string command = "SELECT * FROM commlog WHERE PatNum=" + patNum//+" AND IsStatementSent=0 "//don't include StatementSent
-                + " ORDER BY CommDateTime";
+
+            string command = "SELECT * FROM commlog WHERE PatNum=" + patNum + " ORDER BY CommDateTime"; //+" AND IsStatementSent=0 "//don't include StatementSent
             DataTable rawComm = Db.GetTable(command);
             for (int i = 0; i < rawComm.Rows.Count; i++)
             {
@@ -147,13 +147,16 @@ namespace OpenDentBusiness
             return table;
         }
 
-        ///<summary>Returns a list of appointments that are scheduled between start date and end datetime. 
-        ///The end of the appointment must also be in the period.</summary>
+        /// <summary>
+        /// Returns a list of appointments that are scheduled between start date and end datetime. 
+        /// The end of the appointment must also be in the period.
+        /// </summary>
         public static List<Appointment> GetAppointmentsForPeriod(DateTime start, DateTime end, params ApptStatus[] arrayIgnoreStatuses)
         {
-            //jsalmon - leaving start.Date even though this doesn't make much sense.
+            // jsalmon - leaving start.Date even though this doesn't make much sense.
             List<Appointment> retVal = GetAppointmentsStartingWithinPeriod(start.Date, end, arrayIgnoreStatuses);
-            //Now that we have all appointments that start within our period, make sure that the entire appointment fits within.
+
+            // Now that we have all appointments that start within our period, make sure that the entire appointment fits within.
             for (int i = retVal.Count - 1; i >= 0; i--)
             {
                 if (retVal[i].AptDateTime.AddMinutes(retVal[i].Pattern.Length * PrefC.GetInt(PrefName.AppointmentTimeIncrement)) > end)
@@ -164,13 +167,17 @@ namespace OpenDentBusiness
             return retVal;
         }
 
-        ///<summary>Returns a list of appointments that are scheduled between start date and end date.
-        ///This method only considers the AptDateTime and does not check to see if the appointment </summary>
+        /// <summary>
+        /// Returns a list of appointments that are scheduled between start date and end date.
+        /// This method only considers the AptDateTime and does not check to see if the appointment
+        /// </summary>
         public static List<Appointment> GetAppointmentsStartingWithinPeriod(DateTime start, DateTime end, params ApptStatus[] arrayIgnoreStatuses)
         {
-            string command = "SELECT * FROM appointment "
-                + "WHERE AptDateTime >= " + POut.DateT(start) + " "
-                + "AND AptDateTime <= " + POut.DateT(end);
+            string command =
+                "SELECT * FROM appointment " +
+                "WHERE AptDateTime >= " + POut.DateT(start) + " " +
+                "AND AptDateTime <= " + POut.DateT(end);
+
             if (arrayIgnoreStatuses.Length > 0)
             {
                 command += "AND AptStatus NOT IN (";
@@ -182,22 +189,24 @@ namespace OpenDentBusiness
                     }
                     command += POut.Int((int)arrayIgnoreStatuses[i]);
                 }
-                command += ") ";
+                command += ")";
             }
             List<Appointment> retVal = Crud.AppointmentCrud.TableToList(Db.GetTable(command));
             return retVal;
         }
 
-        ///<summary>Gets all appointments scheduled in the operatories passed in that fall within the start and end dates.
-        ///Does not currently consider the time portion of the DateTimes passed in.</summary>
-        public static List<Appointment> GetAppointmentsForOpsByPeriod(List<long> opNums, DateTime dateStart, DateTime dateEnd = new DateTime(),
-            Logger.IWriteLine log = null, List<long> listProvNums = null)
+        ///<summary>
+        /// Gets all appointments scheduled in the operatories passed in that fall within the start and end dates.
+        /// Does not currently consider the time portion of the DateTimes passed in.
+        ///</summary>
+        public static List<Appointment> GetAppointmentsForOpsByPeriod(List<long> opNums, DateTime dateStart, DateTime dateEnd = new DateTime(), Logger.IWriteLine log = null, List<long> listProvNums = null)
         {
             string command = "SELECT * FROM appointment WHERE Op > 0 ";
             if (opNums != null && opNums.Count > 0)
             {
                 command += "AND Op IN(" + String.Join(",", opNums) + ") ";
             }
+
             //It is very important to format these filters as DateT. That will allow the index to be used. 
             //Truncate dateStart/dateEnd down to .Date in order to mimic the behavior of DbHelper.DtimeToDate().
             command += "AND AptStatus!=" + POut.Int((int)ApptStatus.UnschedList) + " "
@@ -219,25 +228,28 @@ namespace OpenDentBusiness
             return Crud.AppointmentCrud.SelectMany(command);
         }
 
-        ///<summary>Gets the appointments for the dates and operatories passed in.</summary>
-        ///<param name="listDateOps">DateTime is the AptDate, long is the OperatoryNum.</param>
-        public static List<Appointment> GetApptsForDatesOps(List<ODTuple<DateTime, long>> listDateOps)
+        /// <summary>
+        /// Gets the appointments for the dates and operatories passed in.
+        /// </summary>
+        /// <param name="listDateOps">DateTime is the AptDate, long is the OperatoryNum.</param>
+        public static List<Appointment> GetApptsForDatesOps(List<Tuple<DateTime, long>> listDateOps)
         {
-            if (listDateOps.Count == 0)
-            {
-                return new List<Appointment>();
-            }
-            string command = "SELECT * FROM appointment WHERE AptStatus NOT IN(" + POut.Int((int)ApptStatus.UnschedList) + ","
-                + POut.Int((int)ApptStatus.Planned) + ") AND "
-                + string.Join(" OR ", listDateOps.Select(x => DbHelper.BetweenDates("AptDateTime", x.Item1, x.Item1) + " AND Op=" + POut.Long(x.Item2)));
+            if (listDateOps.Count == 0) return new List<Appointment>();
+
+            string command =
+                "SELECT * FROM appointment " +
+                "WHERE AptStatus NOT IN(" + POut.Int((int)ApptStatus.UnschedList) + "," + POut.Int((int)ApptStatus.Planned) + ") " +
+                "AND " + string.Join(" OR ", listDateOps.Select(x => DbHelper.BetweenDates("AptDateTime", x.Item1, x.Item1) + " AND Op=" + POut.Long(x.Item2)));
+
             return Crud.AppointmentCrud.SelectMany(command);
         }
 
-        ///<summary>Returns a list containing every appointment associated to the provided patnum.</summary>
+        /// <summary>
+        /// Returns a list containing every appointment associated to the provided patnum.
+        /// </summary>
         public static List<Appointment> GetAppointmentsForPat(long patNum)
         {
-            string command = "SELECT * FROM appointment WHERE PatNum=" + POut.Long(patNum) + " ORDER BY AptDateTime";
-            return Crud.AppointmentCrud.TableToList(Db.GetTable(command));
+            return Crud.AppointmentCrud.TableToList(Db.GetTable("SELECT * FROM appointment WHERE PatNum=" + POut.Long(patNum) + " ORDER BY AptDateTime"));
         }
 
         ///<summary>Returns a dictionary containing the last completed appointment date of each patient.</summary>
@@ -281,53 +293,66 @@ namespace OpenDentBusiness
             return retVal;
         }
 
-        /// <summary>Get a dictionary of all procedure codes for all scheduled, ASAP, and completed appointments</summary>
+        /// <summary>
+        /// Get a dictionary of all procedure codes for all scheduled, ASAP, and completed appointments
+        /// </summary>
         public static Dictionary<long, List<long>> GetCodeNumsAllApts()
         {
             Dictionary<long, List<long>> retVal = new Dictionary<long, List<long>>();
-            string command = "SELECT appointment.AptNum,procedurelog.CodeNum "
-                + "FROM appointment "
-                + "LEFT JOIN procedurelog ON procedurelog.AptNum=appointment.AptNum";
-            DataTable table = Db.GetTable(command);
+
+            DataTable table = Db.GetTable(
+                "SELECT appointment.AptNum,procedurelog.CodeNum " +
+                "FROM appointment " +
+                "LEFT JOIN procedurelog ON procedurelog.AptNum=appointment.AptNum");
+
             for (int i = 0; i < table.Rows.Count; i++)
             {
                 long aptNum = PIn.Long(table.Rows[i]["AptNum"].ToString());
                 long codeNum = PIn.Long(table.Rows[i]["CodeNum"].ToString());
                 if (retVal.ContainsKey(aptNum))
                 {
-                    retVal[aptNum].Add(codeNum);//Add the current CodeNum to the list of CodeNums for the appointment.
+                    retVal[aptNum].Add(codeNum); // Add the current CodeNum to the list of CodeNums for the appointment.
                 }
                 else
                 {
-                    retVal.Add(aptNum, new List<long> { codeNum });//Initialize the list of CodeNums for the current appointment and include the current CodeNum.
+                    retVal.Add(aptNum, new List<long> { codeNum }); // Initialize the list of CodeNums for the current appointment and include the current CodeNum.
                 }
             }
             return retVal;
         }
 
-        ///<summary>Gets all appointments associated to the procedures passed in.  Returns an empty list if no procedure is linked to an appt.</summary>
+        /// <summary>
+        /// Gets all appointments associated to the procedures passed in.
+        /// Returns an empty list if no procedure is linked to an appt.
+        /// </summary>
         public static List<Appointment> GetAppointmentsForProcs(List<Procedure> listProcs)
         {
             if (listProcs.Count < 1)
             {
                 return new List<Appointment>();
             }
-            string command = "SELECT * FROM appointment "
-                + "WHERE AptNum IN(" + string.Join(",", listProcs.Select(x => x.AptNum).Distinct().ToList()) + ") "
-                    + "OR AptNum IN(" + string.Join(",", listProcs.Select(x => x.PlannedAptNum).Distinct().ToList()) + ") "
-                + "ORDER BY AptDateTime";
+
+            string command =
+                "SELECT * FROM appointment " +
+                "WHERE AptNum IN(" + string.Join(",", listProcs.Select(x => x.AptNum).Distinct().ToList()) + ") " +
+                "OR AptNum IN(" + string.Join(",", listProcs.Select(x => x.PlannedAptNum).Distinct().ToList()) + ") " +
+                "ORDER BY AptDateTime";
+
             return Crud.AppointmentCrud.SelectMany(command);
         }
 
-        ///<summary>Returns a list of appointments that are scheduled (have scheduled or ASAP status) to start between start date and end date.</summary>
+        /// <summary>
+        /// Returns a list of appointments that are scheduled (have scheduled or ASAP status) to start between start date and end date.
+        /// </summary>
         public static List<Appointment> GetSchedApptsForPeriod(DateTime start, DateTime end)
         {
-            string command = "SELECT * FROM appointment "
-                + "WHERE AptDateTime >= " + POut.DateT(start) + " "
-                + "AND AptDateTime <= " + POut.DateT(end) + " "
-                + "AND AptStatus=" + POut.Int((int)ApptStatus.Scheduled);
-            List<Appointment> retVal = Crud.AppointmentCrud.TableToList(Db.GetTable(command));
-            return retVal;
+            string command = 
+                "SELECT * FROM appointment " +
+                "WHERE AptDateTime >= " + POut.DateT(start) + " " +
+                "AND AptDateTime <= " + POut.DateT(end) + " " +
+                "AND AptStatus=" + POut.Int((int)ApptStatus.Scheduled);
+
+            return Crud.AppointmentCrud.TableToList(Db.GetTable(command));
         }
 
         ///<summary>Uses the input parameters to construct a List&lt;ApptSearchProviderSchedule&gt;. It is written to reduce the number of queries to the database.</summary>
@@ -338,8 +363,7 @@ namespace OpenDentBusiness
         /// Intended to be all schedules between search start date and search start date plus 2 years. This is to reduce queries to DB.</param>
         /// <param name="listAppointments">A List of Appointments containing all of the schedules for the given day, or possibly more. 
         /// Intended to be all Appointments between search start date and search start date plus 2 years. This is to reduce queries to DB.</param>
-        public static Dictionary<DateTime, List<ApptSearchProviderSchedule>> GetApptSearchProviderScheduleForProvidersAndDate(List<long> listProvNums
-            , DateTime dateScheduleStart, DateTime dateScheduleStop, List<Schedule> listSchedules, List<Appointment> listAppointments)
+        public static Dictionary<DateTime, List<ApptSearchProviderSchedule>> GetApptSearchProviderScheduleForProvidersAndDate(List<long> listProvNums, DateTime dateScheduleStart, DateTime dateScheduleStop, List<Schedule> listSchedules, List<Appointment> listAppointments)
         {//Not working properly when scheduled but no ops are set.
          //No need to check RemotingRole; no call to db.
             Dictionary<DateTime, List<ApptSearchProviderSchedule>> dictProviderSchedulesByDate = new Dictionary<DateTime, List<ApptSearchProviderSchedule>>();
@@ -469,26 +493,28 @@ namespace OpenDentBusiness
         ///<summary>Gets the ProvNum for the last completed or scheduled appointment for a patient. If none, returns 0.</summary>
         public static long GetProvNumFromLastApptForPat(long patNum)
         {
-            string command = "SELECT ProvNum FROM appointment WHERE AptStatus IN (" + (int)ApptStatus.Complete + "," + (int)ApptStatus.Scheduled + ")"
-                + " AND AptDateTime<=" + POut.DateT(System.DateTime.Now)
-                + " AND PatNum=" + POut.Long(patNum)
-                + " ORDER BY AptDateTime DESC LIMIT 1";
+            string command = 
+                "SELECT ProvNum FROM appointment WHERE AptStatus IN (" + (int)ApptStatus.Complete + "," + (int)ApptStatus.Scheduled + ") " +
+                "AND AptDateTime<=" + POut.DateT(DateTime.Now) + " " +
+                "AND PatNum=" + POut.Long(patNum) + " " +
+                "ORDER BY AptDateTime DESC LIMIT 1";
+
             string result = Db.GetScalar(command);
-            if (String.IsNullOrWhiteSpace(result))
+            if (string.IsNullOrWhiteSpace(result))
             {
                 return 0;
             }
             return PIn.Long(result);
         }
 
-        ///<summary>Gets the appt confirmation status for a single appt.</summary>
+        /// <summary>
+        /// Gets the appt confirmation status for a single appt.
+        /// </summary>
         public static long GetApptConfirmationStatus(long aptNum)
         {
-            string command = "SELECT Confirmed FROM appointment WHERE AptNum=" + POut.Long(aptNum);
-            return PIn.Long(Db.GetScalar(command));
+            return PIn.Long(Db.GetScalar("SELECT Confirmed FROM appointment WHERE AptNum=" + POut.Long(aptNum)));
         }
 
-        ///<summary></summary>
         public static DataSet GetApptEdit(long aptNum)
         {
             DataSet retVal = new DataSet();
@@ -510,7 +536,6 @@ namespace OpenDentBusiness
             return retVal;
         }
 
-        ///<summary></summary>
         public static DataSet RefreshOneApt(long aptNum, bool isPlanned, List<long> listOpNums = null, List<long> listProvNums = null)
         {
             DataSet retVal = new DataSet();
@@ -2580,10 +2605,6 @@ namespace OpenDentBusiness
             return retVal;
         }
 
-        #endregion
-
-        #region Modification Methods
-        #region Insert Methods
         ///<summary>Creates and inserts a "new patient" appointment using the information passed in.  Validation must be done prior to calling this.
         ///Also, does not flag the patient as prospective.  That must be done outside this method as well.
         ///Used by multiple applications so be very careful when changing this method.  E.g. Open Dental and Web Sched.</summary>
@@ -2774,10 +2795,9 @@ namespace OpenDentBusiness
             return retVal;
         }
 
-        #endregion
-
-        #region Update Methods
-        ///<summary>Use to send to unscheduled list, to set broken, etc.  Do not use to set complete.  Inserts an invalid appointment signalod.</summary>
+        /// <summary>
+        /// Use to send to unscheduled list, to set broken, etc.  Do not use to set complete.  Inserts an invalid appointment signalod.
+        /// </summary>
         public static void SetAptStatus(Appointment appt, ApptStatus newStatus, bool suppressHistory = false)
         {
             string command = "UPDATE appointment SET AptStatus=" + POut.Long((int)newStatus);
@@ -3133,9 +3153,7 @@ namespace OpenDentBusiness
             public List<Appointment> ListAppts;
             public bool DoRunAutomation;
         }
-        #endregion
 
-        #region Delete Methods
         ///<summary>Deletes the apt and cleans up objects pointing to this apt.  If the patient is new, sets DateFirstVisit.
         ///Updates procedurelog.ProcDate to today for procedures attached to the appointment if the ProcDate is invalid.
         ///Updates procedurelog.PlannedAptNum (for planned apts) or procedurelog.AptNum (for all other AptStatuses); sets to 0.
@@ -3267,37 +3285,30 @@ namespace OpenDentBusiness
             Db.NonQ(command);
             if (listPlannedAptNums.Count != 0)
             {
-                command = "UPDATE procedurelog SET PlannedAptNum=0 WHERE PlannedAptNum IN(" + String.Join(",", listPlannedAptNums) + ")";
-                Db.NonQ(command);
+                Db.NonQ("UPDATE procedurelog SET PlannedAptNum=0 WHERE PlannedAptNum IN(" + String.Join(",", listPlannedAptNums) + ")");
             }
             if (listNotPlannedAptNums.Count != 0)
             {
-                command = "UPDATE procedurelog SET AptNum=0 WHERE AptNum IN(" + String.Join(",", listNotPlannedAptNums) + ")";
-                Db.NonQ(command);
+                Db.NonQ("UPDATE procedurelog SET AptNum=0 WHERE AptNum IN(" + String.Join(",", listNotPlannedAptNums) + ")");
             }
             //labcases
             if (listPlannedAptNums.Count != 0)
             {
-                command = "UPDATE labcase SET PlannedAptNum=0 WHERE PlannedAptNum IN(" + String.Join(",", listPlannedAptNums) + ")";
-                Db.NonQ(command);
+                Db.NonQ("UPDATE labcase SET PlannedAptNum=0 WHERE PlannedAptNum IN(" + String.Join(",", listPlannedAptNums) + ")");
             }
             if (listNotPlannedAptNums.Count != 0)
             {
-                command = "UPDATE labcase SET AptNum=0 WHERE AptNum IN(" + String.Join(",", listNotPlannedAptNums) + ")";
-                Db.NonQ(command);
+                Db.NonQ("UPDATE labcase SET AptNum=0 WHERE AptNum IN(" + String.Join(",", listNotPlannedAptNums) + ")");
             }
             //plannedappt
-            command = "DELETE FROM plannedappt WHERE AptNum IN(" + String.Join(",", listAllAptNums) + ")";
-            Db.NonQ(command);
+            Db.NonQ("DELETE FROM plannedappt WHERE AptNum IN(" + String.Join(",", listAllAptNums) + ")");
             //if deleting a planned appt, make sure there are no appts with NextAptNum (which should be named PlannedAptNum) pointing to this appt
             if (listPlannedAptNums.Count != 0)
             {
-                command = "UPDATE appointment SET NextAptNum=0 WHERE NextAptNum IN(" + String.Join(",", listNotPlannedAptNums) + ")";
-                Db.NonQ(command);
+                Db.NonQ("UPDATE appointment SET NextAptNum=0 WHERE NextAptNum IN(" + String.Join(",", listNotPlannedAptNums) + ")");
             }
             //apptfield
-            command = "DELETE FROM apptfield WHERE AptNum IN(" + String.Join(",", listAllAptNums) + ")";
-            Db.NonQ(command);
+            Db.NonQ("DELETE FROM apptfield WHERE AptNum IN(" + String.Join(",", listAllAptNums) + ")");
             Appointments.ClearFkey(listAllAptNums);//Zero securitylog FKey column for row to be deleted.
                                                    //we will not reset item orders here
                                                    //ApptComms.DeleteForAppts(listAllAptNums);
@@ -3305,11 +3316,10 @@ namespace OpenDentBusiness
             List<Appointment> listApts = Crud.AppointmentCrud.SelectMany(command);
             listApts.ForEach(x => HistAppointments.CreateHistoryEntry(x, HistAppointmentAction.Deleted));
             AlertItems.DeleteFor(AlertType.CallbackRequested, listApts.Select(x => x.AptNum).ToList());
-            command = "DELETE FROM appointment WHERE AptNum IN(" + String.Join(",", listAllAptNums) + ")";
-            Db.NonQ(command);
+
+            Db.NonQ("DELETE FROM appointment WHERE AptNum IN(" + String.Join(",", listAllAptNums) + ")");
             Signalods.SetInvalid(InvalidType.Appointment);
         }
-        #endregion
 
         ///<summary>Inserts, updates, or deletes db rows to match listNew.  No need to pass in userNum, it's set before remoting role check and passed to
         ///the server if necessary.  Doesn't create ApptComm items, but will delete them.  If you use Sync, you must create new Apptcomm items.
@@ -3335,11 +3345,12 @@ namespace OpenDentBusiness
             }
             return isChanged;
         }
-        #endregion
 
-        #region Misc Methods
-        ///<summary>Returns the time pattern after combining all codes together for the providers passed in.
-        ///If make5minute is false, then result will be in 10 or 15 minute blocks and will need a later conversion step before going to db.</summary>
+        /// <summary>
+        /// Returns the time pattern after combining all codes together for the providers passed in.
+        /// If make5minute is false, then result will be in 10 or 15 minute blocks and will need a later 
+        /// conversion step before going to db.
+        /// </summary>
         public static string CalculatePattern(long provDent, long provHyg, List<long> codeNums, bool make5minute)
         {
             //No need to check RemotingRole; no call to db.
@@ -3982,12 +3993,12 @@ namespace OpenDentBusiness
             #endregion HL7
         }
 
-        ///<summary>Creates a scheduled appointment from planned appointment passed in.</summary>
+        ///<summary>
+        ///Creates a scheduled appointment from planned appointment passed in.
+        ///</summary>
         ///<param name="listApptFields">This can be null. The fields will just be fetched from the database.</param>
-        ///<returns>The newly scheduled appointment and a boolean indicating whether at least one attached procedure was already attached to another
-        ///appointment.</returns>
-        public static ODTuple<Appointment, bool> SchedulePlannedApt(Appointment plannedApt, Patient pat, List<ApptField> listApptFields, DateTime aptDateTime,
-            long opNum)
+        ///<returns>The newly scheduled appointment and a boolean indicating whether at least one attached procedure was already attached to another appointment.</returns>
+        public static Tuple<Appointment, bool> SchedulePlannedApt(Appointment plannedApt, Patient pat, List<ApptField> listApptFields, DateTime aptDateTime, long opNum)
         {
             Appointment newAppt = plannedApt.Copy();
             newAppt.NextAptNum = plannedApt.AptNum;
@@ -4041,7 +4052,7 @@ namespace OpenDentBusiness
             {
                 LabCases.AttachToAppt(lab.LabCaseNum, newAppt.AptNum);
             }
-            return new ODTuple<Appointment, bool>(newAppt, procAlreadyAttached);
+            return new Tuple<Appointment, bool>(newAppt, procAlreadyAttached);
         }
 
         ///<summary>Modifies apt.Op with closest OpNum which has an opening at the specified apt.AptDateTime. 
@@ -4130,10 +4141,12 @@ namespace OpenDentBusiness
             return savePattern.ToString();
         }
 
-        /// <summary>Converts time pattern from 5 to current increment preference.</summary>
+        /// <summary>
+        /// Converts time pattern from 5 to current increment preference.
+        /// </summary>
         public static string ConvertPatternFrom5(string timepattern)
         {
-            //convert time pattern from 5 to current increment.
+            // Convert time pattern from 5 to current increment.
             StringBuilder strBTime = new StringBuilder();
             for (int i = 0; i < timepattern.Length; i++)
             {
@@ -4151,17 +4164,20 @@ namespace OpenDentBusiness
             return strBTime.ToString();
         }
 
-        ///<summary>Returns a new Appointment with various field values copied into it from the supplied Appointment.</summary>
+        /// <summary>
+        /// Returns a new Appointment with various field values copied into it from the supplied Appointment.
+        /// </summary>
         public static Appointment CopyStructure(Appointment appt)
         {
-            Appointment apptNew = new Appointment();
-            apptNew.PatNum = appt.PatNum;
-            apptNew.ProvNum = appt.ProvNum;
-            apptNew.Pattern = appt.Pattern;//Cannot copy length directly.
-            apptNew.Note = appt.Note;
-            apptNew.AptStatus = ApptStatus.Scheduled;//Always set to scheduled
-            apptNew.AppointmentTypeNum = appt.AppointmentTypeNum;
-            return apptNew;
+            return new Appointment
+            {
+                PatNum = appt.PatNum,
+                ProvNum = appt.ProvNum,
+                Pattern = appt.Pattern,
+                Note = appt.Note,
+                AptStatus = ApptStatus.Scheduled,
+                AppointmentTypeNum = appt.AppointmentTypeNum
+            };
         }
 
         ///<summary>Takes all time patterns passed in and fuses them into one final time pattern that should be used on appointments.
@@ -4221,11 +4237,12 @@ namespace OpenDentBusiness
             return timePatternFinal;
         }
 
-        ///<summary>Return the default time pattern for an appointment with no procedures attached using the AppointmentWithoutProcsDefaultLength pref.
-        ///Returns "/" if the defaultLength is set to 0. (preserves old behavior). Returned pattern is always in 5 minute increments.</summary>
+        /// <summary>
+        /// Return the default time pattern for an appointment with no procedures attached using the AppointmentWithoutProcsDefaultLength pref.
+        /// Returns "/" if the defaultLength is set to 0. (preserves old behavior). Returned pattern is always in 5 minute increments.
+        /// </summary>
         public static string GetApptTimePatternForNoProcs()
         {
-            //No need to check RemotingRole; no call to db.
             int defaultLength = PrefC.GetInt(PrefName.AppointmentWithoutProcsDefaultLength);
             if (defaultLength > 0)
             {
@@ -4234,9 +4251,11 @@ namespace OpenDentBusiness
             return "/";//Preserves old behavior
         }
 
-        ///<summary>Returns true if the patient has any broken appointments, future appointments, unscheduled appointments, or unsched planned appointments.  
-        ///This adds intelligence when user attempts to schedule an appointment by only showing the appointments for the patient when needed rather than always.
-        ///Setting exludePlannedAppts to true will remove them from the search.</summary>
+        /// <summary>
+        /// Returns true if the patient has any broken appointments, future appointments, unscheduled appointments, or unsched planned appointments.  
+        /// This adds intelligence when user attempts to schedule an appointment by only showing the appointments for the patient when needed rather than always.
+        /// Setting exludePlannedAppts to true will remove them from the search.
+        /// </summary>
         public static bool HasOutstandingAppts(long patNum, bool excludePlannedAppts = false)
         {
             string command = "SELECT COUNT(*) FROM appointment "
@@ -4247,8 +4266,10 @@ namespace OpenDentBusiness
                                                                                                                                  //planned appts that are already scheduled will also show because they are caught on the line above rather then on the next line
             if (!excludePlannedAppts)
             {
-                command += "OR (AptStatus='" + POut.Long((int)ApptStatus.Planned) + "' "//planned, not sched
-                    + "AND NOT EXISTS(SELECT * FROM appointment a2 WHERE a2.PatNum='" + POut.Long(patNum) + "' AND a2.NextAptNum=appointment.AptNum)) ";
+                command += //planned, not sched
+                    "OR (AptStatus='" + POut.Long((int)ApptStatus.Planned) + "' " +
+                    "AND NOT EXISTS(SELECT * FROM appointment a2 WHERE a2.PatNum='" + POut.Long(patNum) + "' " +
+                    "AND a2.NextAptNum=appointment.AptNum))";
             }
             command += ")";
             if (Db.GetScalar(command) == "0")
@@ -4258,7 +4279,9 @@ namespace OpenDentBusiness
             return true;
         }
 
-        ///<summary>Returns true if appt has at least 1 proc attached.</summary>
+        /// <summary>
+        /// Returns true if appt has at least 1 proc attached.
+        /// </summary>
         public static bool HasProcsAttached(long aptNum)
         {
             string command = "SELECT COUNT(*) FROM procedurelog WHERE AptNum=" + POut.Long(aptNum);
@@ -4269,25 +4292,29 @@ namespace OpenDentBusiness
             return false;
         }
 
-        /// <summary>Checks if the specialty exists in the list of specialties for the clinic.</summary>
+        /// <summary>
+        /// Checks if the specialty exists in the list of specialties for the clinic.
+        /// </summary>
         public static bool ClinicHasSpecialty(Def defPatSpecialty, long clinicNum)
         {
             if (defPatSpecialty == null)
             {
-                return true;//Patient does not have a specialty, so any clinic is fair game.
+                return true; // Patient does not have a specialty, so any clinic is fair game.
             }
             return DefLinks.GetDefLinksByType(DefLinkType.Clinic, defPatSpecialty.DefNum).Any(x => x.FKey == clinicNum);
         }
 
-        /// <summary>Throws Exception. Determines if the patient for this appointment has a specialty which is included in the list of specialties 
-        /// associated to the clinic for this appointment. UI independent.</summary>
+        /// <summary>
+        /// Throws Exception. Determines if the patient for this appointment has a specialty which is included in the list of specialties 
+        /// associated to the clinic for this appointment. UI independent.
+        /// </summary>
         public static void HasSpecialtyConflict(long patNum, long clinicNum)
         {
-            if (!PrefC.HasClinicsEnabled
-                || (ApptSchedEnforceSpecialty)PrefC.GetInt(PrefName.ApptSchedEnforceSpecialty) == ApptSchedEnforceSpecialty.DontEnforce)
+            if (!PrefC.HasClinicsEnabled || (ApptSchedEnforceSpecialty)PrefC.GetInt(PrefName.ApptSchedEnforceSpecialty) == ApptSchedEnforceSpecialty.DontEnforce)
             {
-                return;//Clinics off OR enforce preference off
+                return; // Clinics off OR enforce preference off
             }
+
             Def def = Patients.GetPatientSpecialtyDef(patNum);
             if (!Appointments.ClinicHasSpecialty(def, clinicNum))
             {
@@ -4295,8 +4322,8 @@ namespace OpenDentBusiness
                 switch ((ApptSchedEnforceSpecialty)PrefC.GetInt(PrefName.ApptSchedEnforceSpecialty))
                 {
                     case ApptSchedEnforceSpecialty.Warn:
-                        //From MobileWeb, we will handle both Warn and Block with an error message.  The Warn option will direct the user to the desktop
-                        //application if they truly want to schedule this specialty mismatch appointment.
+                        // From MobileWeb, we will handle both Warn and Block with an error message.  The Warn option will direct the user to the desktop
+                        // application if they truly want to schedule this specialty mismatch appointment.
                         msgText = "The patient's specialty is not found in the operatory's/clinic's listed specialties.";
                         break;
                     case ApptSchedEnforceSpecialty.Block:
@@ -4309,23 +4336,18 @@ namespace OpenDentBusiness
             }
         }
 
-        ///<summary>Only called from the mobile server, not from any workstation.  Pass in an apptViewNum of 0 for now.  We might use that parameter later.</summary>
-        public static string GetMobileBitmap(DateTime date, long apptViewNum)
-        {
-            //For testing pass a resource image.
-            return POut.Bitmap(Properties.Resources.ApptBackTest, ImageFormat.Gif);
-        }
-
         public static DataTable GetPeriodEmployeeSchedTable(DateTime dateStart, DateTime dateEnd)
         {
-            //No need to check RemotingRole; no call to db.
             return Schedules.GetPeriodEmployeeSchedTable(dateStart, dateEnd, 0);
         }
 
-        ///<summary>Used in Chart module to test whether a procedure is attached to an appointment with today's date. The procedure might have a different date if still TP status.  ApptList should include all appointments for this patient. Does not make a call to db.</summary>
+        /// <summary>
+        /// Used in Chart module to test whether a procedure is attached to an appointment with today's date. 
+        /// The procedure might have a different date if still TP status.
+        /// ApptList should include all appointments for this patient. Does not make a call to db.
+        /// </summary>
         public static bool ProcIsToday(Appointment[] apptList, Procedure proc)
         {
-            //No need to check RemotingRole; no call to db.
             for (int i = 0; i < apptList.Length; i++)
             {
                 if (apptList[i].AptDateTime.Date == DateTime.Today
@@ -4342,7 +4364,6 @@ namespace OpenDentBusiness
 
         public static Appointment TableToObject(DataTable table)
         {
-            //No need to check RemotingRole; no call to db.
             if (table.Rows.Count == 0)
             {
                 return null;
@@ -4711,8 +4732,10 @@ namespace OpenDentBusiness
             return apt;
         }
 
-        ///<summary>Used to set an appointment complete when it is right-clicked set complete.  Insert an invalid appointment signalod.</summary>
-        public static ODTuple<Appointment, List<Procedure>> CompleteClick(Appointment apt, List<Procedure> listProcsForAppt, bool removeCompletedProcs)
+        /// <summary>
+        /// Used to set an appointment complete when it is right-clicked set complete.  Insert an invalid appointment signalod.
+        /// </summary>
+        public static Tuple<Appointment, List<Procedure>> CompleteClick(Appointment apt, List<Procedure> listProcsForAppt, bool removeCompletedProcs)
         {
             Family fam = Patients.GetFamily(apt.PatNum);
             Patient pat = fam.GetPatient(apt.PatNum);
@@ -4766,8 +4789,9 @@ namespace OpenDentBusiness
                 }
             }
             Recalls.SynchScheduledApptFull(apt.PatNum);
-            //No need to enter an invalid signal here, the SetAptStatus and SetAptStatusComplete calls will have already done so
-            return new ODTuple<Appointment, List<Procedure>>(apt, listProcsForAppt);
+
+            // No need to enter an invalid signal here, the SetAptStatus and SetAptStatusComplete calls will have already done so
+            return new Tuple<Appointment, List<Procedure>>(apt, listProcsForAppt);
         }
 
         ///<summary>Determines if a specified Appointment is a recall Appointment.  
@@ -4816,14 +4840,15 @@ namespace OpenDentBusiness
             return false;
         }
 
-        #endregion
-
-        ///<summary>All appointment statuses that are real appointments and show up on the apppointment book.</summary>
+        /// <summary>
+        /// All appointment statuses that are real appointments and show up on the apppointment book.
+        /// </summary>
         public static List<ApptStatus> ListScheduledApptStatuses
         {
             get
             {
-                return new List<ApptStatus> {
+                return new List<ApptStatus>
+                {
                     ApptStatus.Scheduled,
                     ApptStatus.Complete,
                     ApptStatus.Broken
@@ -4832,20 +4857,34 @@ namespace OpenDentBusiness
         }
     }
 
-    ///<summary>Holds information about a provider's Schedule. Not actual database table.</summary>
+    /// <summary>
+    /// Holds information about a provider's Schedule. Not actual database table.
+    /// </summary>
     [Serializable]
     public class ApptSearchProviderSchedule
     {
-        ///<summary>FK to Provider</summary>
+        /// <summary>
+        /// FK to Provider
+        /// </summary>
         public long ProviderNum;
-        ///<summary>Date of the ProviderSchedule.</summary>
+        
+        /// <summary>
+        /// Date of the ProviderSchedule.
+        /// </summary>
         public DateTime SchedDate;
-        ///<summary>This contains a bool for each 5 minute block throughout the day. True means provider is scheduled to work, False means provider is not scheduled to work.</summary>
+        
+        /// <summary>
+        /// This contains a bool for each 5 minute block throughout the day. True means provider is scheduled to work, 
+        /// False means provider is not scheduled to work.
+        /// </summary>
         public bool[] IsProvScheduled;
-        ///<summary>This contains a bool for each 5 minute block throughout the day. True means available, False means something is scheduled there or the provider is not scheduled to work.</summary>
+        
+        /// <summary>
+        /// This contains a bool for each 5 minute block throughout the day. True means available, 
+        /// False means something is scheduled there or the provider is not scheduled to work.
+        /// </summary>
         public bool[] IsProvAvailable;
 
-        ///<summary>Constructor.</summary>
         public ApptSearchProviderSchedule()
         {
             IsProvScheduled = new bool[288];
@@ -4853,7 +4892,9 @@ namespace OpenDentBusiness
         }
     }
 
-    ///<summary>A lite version of the Appointment object designed for populating the OtherAppts window.</summary>
+    /// <summary>
+    /// A lite version of the Appointment object designed for populating the OtherAppts window.
+    /// </summary>
     [Serializable]
     public class ApptOther
     {
@@ -4867,12 +4908,16 @@ namespace OpenDentBusiness
         public string ProcDescript;
         public string Note;
 
-        ///<summary>Required for serialization purposes.</summary>
+        /// <summary>
+        /// Required for serialization purposes.
+        /// </summary>
         public ApptOther()
         {
         }
 
-        ///<summary>Only preserves information from the appointment passed in that is necessary to fill the OtherAppts window.</summary>
+        /// <summary>
+        /// Only preserves information from the appointment passed in that is necessary to fill the OtherAppts window.
+        /// </summary>
         public ApptOther(Appointment appt)
         {
             AptNum = appt.AptNum;
@@ -4887,15 +4932,20 @@ namespace OpenDentBusiness
         }
     }
 
-    ///<summary>Holds information about broken appt logic. Not actual database table.</summary>
+    /// <summary>
+    /// Holds information about broken appt logic. Not actual database table.
+    /// </summary>
     public enum BrokenApptProcedure
     {
         ///<summary>0 - Do not chart a procedure.</summary>
         None,
+        
         ///<summary>1 - Chart D9986.</summary>
         Missed,
+        
         ///<summary>2 - Chart D9987.</summary>
         Cancelled,
+        
         ///<summary> - Chart D9986 and D9987.</summary>
         Both
     }

@@ -655,7 +655,7 @@ namespace OpenDental {
 							ColorText=(job.Priority==_listJobPriorities.FirstOrDefault(y => y.ItemValue.Contains("Urgent")).DefNum) ? Color.White : Color.Black,
 						},
 						new ODGridCell(FlagHelper(job,gridAction.Rows.Count)) {
-							ColorText=job.TagOD!=null ? (Color)job.TagOD : Color.Black//Set in FlagCellHelper(...), tag is reset everytime FillGridActions() is called.
+							ColorText=job.Tag!=null ? (Color)job.Tag : Color.Black//Set in FlagCellHelper(...), tag is reset everytime FillGridActions() is called.
 							},
 						new ODGridCell(ownerString),
 						new ODGridCell(job.ToString()) { CellColor=(job.ToString().ToLower().Contains(textSearch.Text.ToLower())&&!string.IsNullOrWhiteSpace(textSearch.Text) ? Color.LightYellow : 
@@ -778,7 +778,7 @@ namespace OpenDental {
 							ColorText=(job.Priority==_listJobPriorities.FirstOrDefault(y => y.ItemValue.Contains("Urgent")).DefNum) ? Color.White : Color.Black,
 						},
 						new ODGridCell(FlagHelper(job,gridSpecial.Rows.Count)) {
-							ColorText=job.TagOD!=null ? (Color)job.TagOD : Color.Black//Set in FlagCellHelper(...), tag is reset everytime FillGridActions() is called.
+							ColorText=job.Tag!=null ? (Color)job.Tag : Color.Black//Set in FlagCellHelper(...), tag is reset everytime FillGridActions() is called.
 							},
 						new ODGridCell(ownerString),
 						new ODGridCell(job.ToString()) { CellColor=(job.ToString().ToLower().Contains(textSearch.Text.ToLower())&&!string.IsNullOrWhiteSpace(textSearch.Text) ? Color.LightYellow : 
@@ -2071,27 +2071,27 @@ namespace OpenDental {
 		private string FlagHelper(Job jobCur,int gridIndex) {
 			List<string> listNotes=new List<string>();
 			if(jobCur.PhaseCur.In(JobPhase.Concept,JobPhase.Quote) && jobCur.ListJobQuotes.Count>0) {
-				jobCur.TagOD=Color.Red;
+				jobCur.Tag=Color.Red;
 				listNotes.Add("$: Quote Pending");
 			}
 			if(jobCur.PhaseCur.In(JobPhase.Development,JobPhase.Definition) && jobCur.ListJobQuotes.Count>0) {
-				jobCur.TagOD=Color.Black;
+				jobCur.Tag=Color.Black;
 				listNotes.Add("$: Quote Approved");
 			}
 			if(jobCur.ListJobReviews.Exists(x => x.ReviewStatus==JobReviewStatus.Done)) {
-				jobCur.TagOD=Color.Black;
+				jobCur.Tag=Color.Black;
 				listNotes.Add("R: Reviewed");
 			}
 			else if(jobCur.ListJobLinks.Exists(x => x.LinkType==JobLinkType.Appointment)) {
-				jobCur.TagOD=Color.Red;
+				jobCur.Tag=Color.Red;
 				listNotes.Add("A: Appt");
 			}
 			if(jobCur.ListJobReviews.Exists(x => x.ReviewStatus==JobReviewStatus.SaveCommit)) {
-				jobCur.TagOD=Color.Red;
+				jobCur.Tag=Color.Red;
 				listNotes.Add("S: Save Commit");
 			}
 			else if(jobCur.ListJobReviews.Exists(x => x.ReviewStatus==JobReviewStatus.SaveCommitted)) {
-				jobCur.TagOD=Color.Black;
+				jobCur.Tag=Color.Black;
 				listNotes.Add("S: Save Committed");
 			}
 			_dicRowNotes.Add(gridIndex,listNotes);//To be used on mouse hover.

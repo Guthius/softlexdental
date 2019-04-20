@@ -18,16 +18,16 @@ namespace OpenDentBusiness{
 	///He does not have any future scheduled appointments.  Johnny would be included in the list of "Reactivation" patients, with a single contact 
 	///attempt having been made already.</summary>
 	[Serializable]
-	public class Reactivation:TableBase {
+	public class Reactivation:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ReactivationNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
 		///<summary>FK to definition.DefNum. Uses the existing RecallUnschedStatus DefCat.</summary>
 		public long ReactivationStatus;
 		///<summary>An administrative note for staff use.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ReactivationNote;
 		///<summary>The patient can set this property if they don't want to be contacted so that it won't interfere with the max attempts to contact option.</summary>
 		public bool DoNotContact;

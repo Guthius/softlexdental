@@ -4,13 +4,13 @@ using System.Collections;
 namespace OpenDentBusiness.Mobile{
 	///<summary>One row for each patient.  Unlike main program, this does not include deleted patients.  Primary key is first two fields combined.</summary>
 	[Serializable()]
-	[CrudTable(IsMobile=true)]
-	public class Patientm:TableBase {
+	[ODTable(IsMobile=true)]
+	public class Patientm:ODTable {
 		///<summary>Primary key 1.</summary>
-		[CrudColumn(IsPriKeyMobile1=true)]
+		[ODTableColumn(IsPriKeyMobile1=true)]
 		public long CustomerNum;
 		///<summary>Primary key 2.</summary>
-		[CrudColumn(IsPriKeyMobile2=true)]
+		[ODTableColumn(IsPriKeyMobile2=true)]
 		public long PatNum;
 		/// <summary>Last name.</summary>
 		public string LName;
@@ -47,7 +47,7 @@ namespace OpenDentBusiness.Mobile{
 		/// <summary>FK to patientm.PatNum.  Head of household.</summary>
 		public long Guarantor;
 		/// <summary>Derived from Birthdate.  Not in the database table.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public int Age;
 		/// <summary>.</summary>
 		public string Email;

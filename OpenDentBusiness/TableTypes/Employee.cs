@@ -5,9 +5,9 @@ namespace OpenDentBusiness{
 
 	///<summary>An employee at the dental office.</summary>
 	[Serializable]
-	public class Employee:TableBase {
+	public class Employee:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EmployeeNum;
 		///<summary>Employee's last name.</summary>
 		public string LName;

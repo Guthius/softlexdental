@@ -5,9 +5,9 @@ namespace OpenDentBusiness{
 
 	///<summary>Used to view employee timecards.  Timecard entries are not linked to a pay period.  Instead, payperiods are setup, and the user can only view specific pay periods.  So it feels like they are linked, but it's date based.</summary>
 	[Serializable]
-	public class PayPeriod:TableBase {
+	public class PayPeriod:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PayPeriodNum;
 		///<summary>The first day of the payperiod</summary>
 		public DateTime DateStart;

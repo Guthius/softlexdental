@@ -6,9 +6,9 @@ using System.Xml.Serialization;
 namespace OpenDentBusiness{
 	///<summary>An individual procedure code color range.</summary>
 	[Serializable]
-	public class ProcApptColor : TableBase{
+	public class ProcApptColor : ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ProcApptColorNum;
 		///<summary>Procedure code range defined by user.  Includes commas and dashes, but no spaces.  The codes need not be valid since they are ranges.</summary>
 		public string CodeRange;

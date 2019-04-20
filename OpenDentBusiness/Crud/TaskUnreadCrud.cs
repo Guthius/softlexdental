@@ -135,7 +135,7 @@ namespace OpenDentBusiness.Crud{
 					}
 					sbRow.Append(POut.Long(taskUnread.TaskNum)); sbRow.Append(",");
 					sbRow.Append(POut.Long(taskUnread.UserNum)); sbRow.Append(")");
-					if(sbCommands.Length+sbRow.Length+1 > TableBase.MaxAllowedPacketCount) {
+					if(sbCommands.Length+sbRow.Length+1 > ODTable.MaxAllowedPacketCount) {
 						Db.NonQ(sbCommands.ToString());
 						sbCommands=null;
 					}

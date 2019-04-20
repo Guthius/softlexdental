@@ -11,10 +11,10 @@ namespace OpenDentBusiness {
 	///<summary>This table is not part of the general release.  User would have to add it manually.
 	///Most schema changes are done directly on our live database as needed.  Base object for use in the job tracking system.</summary>
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true)]
-	public class Job:TableBase {
+	[ODTable(IsMissingInGeneral=true)]
+	public class Job:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey = true)]
+		[ODTableColumn(PrimaryKey = true)]
 		public long JobNum;
 		///<summary>FK to userod.UserNum.  Used for Query Creator as well.</summary>
 		public long UserNumConcept;
@@ -40,39 +40,39 @@ namespace OpenDentBusiness {
 		///<summary>FK to job.JobNum.</summary>
 		public long ParentNum;
 		///<summary>The date/time that the customer was contacted.</summary>
-		[CrudColumn(SpecialType = CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.DateT)]
 		public DateTime DateTimeCustContact;
 		///<summary>FK to definition.DefNum</summary>
 		public long Priority;
 		///<summary>Classifies the type of the job.  E.g. Feature, Bug, etc.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public JobCategory Category;
 		///<summary>String representation of the version that this job is for. Example: Head Only(18.1), 15.4.19, 16.1.1, etc.</summary>
 		public string JobVersion;
 		///<summary>The estimated time a job will take to code.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanLong),XmlIgnore]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeSpanLong),XmlIgnore]
 		public TimeSpan TimeEstimateDevelopment;
 		///<summary>Deprecated: The actual time a job took.  Use HoursActual (or something similar to the logic within) instead.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanLong),XmlIgnore]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeSpanLong),XmlIgnore]
 		public TimeSpan TimeActual;
 		///<summary>The date/time that the job was created.  Not user editable.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime DateTimeEntry;
 		///<summary>The implementation of the job. RTF content of the main body of the Job.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]//Text
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]//Text
 		public string Implementation;
 		///<summary>Used to record what was documented for this job and where it was documented.</summary>
-		[CrudColumn(SpecialType = CrudSpecialColType.TextIsClob)]//Text
+		[ODTableColumn(SpecialType = CrudSpecialColType.TextIsClob)]//Text
 		public string Documentation;
 		///<summary>The short title of the job.</summary>
 		public string Title;
 		///<summary>The current status of the job.  Historical statuses for this job can be found in the jobevent table.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public JobPhase PhaseCur;
 		///<summary>Applies to Several status.</summary>
 		public bool IsApprovalNeeded;
 		///<summary>Not yet used. Will be used for tracking acknowledgement of Bugs by Nathan. Should not halt development.</summary>
-		[CrudColumn(SpecialType = CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.DateT)]
 		public DateTime AckDateTime;
 		///<summary>FK to userod.UserNum.</summary>
 		public long UserNumQuoter;
@@ -81,26 +81,26 @@ namespace OpenDentBusiness {
 		///<summary>FK to userod.UserNum.</summary>
 		public long UserNumCustQuote;
 		///<summary>The requirements of the job. RTF content of the main requirements of the Job.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]//Text
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]//Text
 		public string Requirements;
 		///<summary>FK to userod.UserNum.  The user that has taken or was assigned this job in order to perform testing.</summary>
 		public long UserNumTester;
 		///<summary>FK to definition.DefNum.  Since testing can happen at during any phase, the testing department has this separate Priority.</summary>
 		public long PriorityTesting;
 		///<summary>Used to mark the date and time the testing was completed.</summary>
-		[CrudColumn(SpecialType = CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.DateT)]
 		public DateTime DateTimeTested;
 		///<summary>The estimated time a job will take to write the concept.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanLong),XmlIgnore]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeSpanLong),XmlIgnore]
 		public TimeSpan TimeEstimateConcept;
 		///<summary>The estimated time a job will take to write the writeup.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanLong),XmlIgnore]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeSpanLong),XmlIgnore]
 		public TimeSpan TimeEstimateWriteup;
 		///<summary>The estimated time a job will take to review.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanLong),XmlIgnore]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeSpanLong),XmlIgnore]
 		public TimeSpan TimeEstimateReview;
 		///<summary>List of JobRequirement objects. Stored as a JSON string to display in a grid.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]//Text
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]//Text
 		public string RequirementsJSON;
 		///<summary>Enum:JobPatternReviewProject The project that this job is associated to.</summary>
 		public JobPatternReviewProject PatternReviewProject;
@@ -110,25 +110,25 @@ namespace OpenDentBusiness {
 		//The following variables should be filled by the class that uses them, not filled from an S class.
 		//Just a convenient way to package a job for passing around in the job manager.
 		///<summary>Not a data column.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public List<JobLink> ListJobLinks=new List<JobLink>();
 		///<summary>Not a data column.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public List<JobNote> ListJobNotes=new List<JobNote>();
 		///<summary>Not a data column.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public List<JobReview> ListJobReviews=new List<JobReview>();
 		///<summary>Not a data column.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public List<JobReview> ListJobTimeLogs=new List<JobReview>();
 		///<summary>Not a data column.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public List<JobQuote> ListJobQuotes=new List<JobQuote>();
 		///<summary>Not a data column.</summary>
-		[CrudColumn(IsNotDbColumn = true)]
+		[ODTableColumn(IsNotDbColumn = true)]
 		public List<JobLog> ListJobLogs = new List<JobLog>();
 		///<summary>Not a data column.</summary>
-		[CrudColumn(IsNotDbColumn = true)]
+		[ODTableColumn(IsNotDbColumn = true)]
 		public List<JobNotification> ListJobNotifications = new List<JobNotification>();
 
 		///<summary>Used only for serialization purposes.</summary>

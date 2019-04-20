@@ -6,10 +6,10 @@ namespace OpenDentBusiness{
 
 	///<summary>Used by the Central Manager.  Stores the information needed to establish a connection to a remote database.</summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true)]
-	public class CentralConnection:TableBase {
+	[ODTable(IsSynchable=true)]
+	public class CentralConnection:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long CentralConnectionNum;
 		///<summary>If direct db connection.  Can be ip address.</summary>
 		public string ServerName;
@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 		///<summary>Deprecated.  If connecting to the web service.  Symmetrically encrypted.</summary>
 		public string OdPassword;
 		///<summary>When being used by ConnectionStore xml file, must deserialize to a ConnectionNames enum value. Otherwise just used as a generic notes field.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		///<summary>0-based.</summary>
 		public int ItemOrder;
@@ -36,11 +36,11 @@ namespace OpenDentBusiness{
 		///nothing for not checked, and OFFLINE if previously couldn't connect.</summary>
 		public string ConnectionStatus;
 		///<summary>Set when reading from the config file. Not an actual DB column.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public bool IsAutomaticLogin;
 		///<summary>This is a helper variable used for Reports. If we want to start supporting connection string for the 
 		///Reporting Server, we need to add this as a db column. This was needed for the scenario where a customer connected to OD using a connection string.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string ConnectionString;
 
 		///<summary>Returns a copy.</summary>

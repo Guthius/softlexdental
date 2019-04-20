@@ -4,10 +4,10 @@ using System.ComponentModel;
 namespace OpenDentBusiness {
 	///<summary>Used to communicate to patients that are on the ASAP list.</summary>
 	[Serializable]
-	[CrudTable(HasBatchWriteMethods=true)]
-	public class AsapComm:TableBase {
+	[ODTable(HasBatchWriteMethods=true)]
+	public class AsapComm:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long AsapCommNum;
 		///<summary>FK to the object for which this communication was made. Usually AptNum or RecallNum.</summary>
 		public long FKey;
@@ -22,44 +22,44 @@ namespace OpenDentBusiness {
 		///<summary>An identifier that is used to communicate with OD HQ regarding this communication item.</summary>
 		public string ShortGUID;
 		///<summary>When this communication item was entered into the database.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime DateTimeEntry;
 		///<summary>When this communication item will expire.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeExpire;
 		///<summary>The date and time when a text message is scheduled to be sent.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeSmsScheduled; 
 		///<summary>Enum:AutoCommStatus The status of sending the text for this communication.</summary>
 		public AutoCommStatus SmsSendStatus;
 		///<summary>Enum:AutoCommStatus The status of sending the email for this communication.</summary>
 		public AutoCommStatus EmailSendStatus;
 		///<summary>The date and time a text message was sent.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeSmsSent;
 		///<summary>The date and time an email was sent.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeEmailSent;
 		///<summary>FK to emailmessage.EmailMessageNum. The email message that was sent to the patient.</summary>
 		public long EmailMessageNum;
 		///<summary>Enum:AsapRSVPStatus How the patient has responded to this communication.</summary>
 		public AsapRSVPStatus ResponseStatus;
 		///<summary>The date and time of the appointment when this communication was made or the date and time of the recall date due.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeOrig;
 		///<summary>The template that will be used when sending a text message.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string TemplateText;
 		///<summary>The template that will be used when creating the body of the email message.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string TemplateEmail;
 		///<summary>The template that will be used for the email subject line.</summary>
 		public string TemplateEmailSubj;
 		///<summary>Any notes regarding this communication item.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		///<summary>FK to smstomobile.GuidMessage. Generated at HQ when the SMS is generated.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string GuidMessageToMobile;
 
 

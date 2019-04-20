@@ -6,10 +6,10 @@ using System.Xml.Serialization;
 namespace OpenDentBusiness{
 	///<summary>One row for each patient.  Includes deleted patients.</summary>
 	[Serializable()]
-	[CrudTable(AuditPerms=CrudAuditPerm.PatientPortal,IsSecurityStamped=true,IsLargeTable=true)]
-	public class Patient : TableBase, IComparable {
+	[ODTable(AuditPerms=CrudAuditPerm.PatientPortal,IsSecurityStamped=true,IsLargeTable=true)]
+	public class Patient : ODTable, IComparable {
 		/// <summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PatNum;
 		/// <summary>Last name.</summary>
 		public string LName;
@@ -30,10 +30,10 @@ namespace OpenDentBusiness{
 		/// <summary>In the US, this is 9 digits, no dashes. For all other countries, any punctuation or format is allowed.</summary>
 		public string SSN;
 		/// <summary>.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.CleanText)]
 		public string Address;
 		/// <summary>Optional second address line.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.CleanText)]
 		public string Address2;
 		/// <summary>.</summary>
 		public string City;
@@ -50,7 +50,7 @@ namespace OpenDentBusiness{
 		/// <summary>FK to patient.PatNum.  Head of household.</summary>
 		public long Guarantor;
 		/// <summary>Derived from Birthdate.  Not in the database table.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		private int _age;
 		/// <summary>Single char. Shows at upper right corner of appointments.  Suggested use is A,B,or C to designate creditworthiness, 
 		/// but it can actually be used for any purpose.</summary>
@@ -75,13 +75,13 @@ namespace OpenDentBusiness{
 		/// <summary>Name of folder where images will be stored. Not editable for now.</summary>
 		public string ImageFolder;
 		/// <summary>Address or phone note.  Unlimited length in order to handle data from other programs during a conversion.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
 		public string AddrNote;
 		/// <summary>Family financial urgent note.  Only stored with guarantor, and shared for family.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
 		public string FamFinUrgNote;
 		/// <summary>Individual patient note for Urgent medical.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.CleanText)]
 		public string MedUrgNote;
 		/// <summary>Individual patient note for Appointment module note.</summary>
 		public string ApptModNote;
@@ -163,7 +163,7 @@ namespace OpenDentBusiness{
 		public long SiteNum;
 		///<summary>Automatically updated by MySQL every time a row is added or changed. Could be changed due to user editing, custom queries or 
 		///program updates.  Not user editable.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>FK to patient.PatNum. Can be zero.  Person responsible for medical decisions rather than finances.  Guarantor is still responsible
 		///for finances.  This is useful for nursing home residents.  Part of public health.</summary>
@@ -188,16 +188,16 @@ namespace OpenDentBusiness{
 		public string Country;
 		///<summary>Needed for EHR syndromic surveillance messaging.  Used in HL7 PID-29.  Also for feature request #3040.  Date and time because we 
 		///need precision to the minute in syndromic surveillence messging.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeDeceased;
 		///<summary>A number between 1 and 31 that is the day of month that repeat charges should be applied to this account. 
 		///Previously this was determined by the start date of the repeate charges.</summary>
 		public int BillingCycleDay;
 		///<summary>FK to userod.UserNum.  Set to the user logged in when the row was inserted at SecDateEntry date and time.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
 		public long SecUserNumEntry;
 		///<summary>Timestamp automatically generated and user not allowed to change.  The actual date of entry.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateEntry)]
 		public DateTime SecDateEntry;
 		//No SecDateTEdit, DateTStamp already exists and is the timestamp updated by MySQL when a row is added or changed
 		///<summary>0 by default.  If true, this guarantor should be included in superbilling statements.</summary>

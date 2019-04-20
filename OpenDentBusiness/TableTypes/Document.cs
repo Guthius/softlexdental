@@ -5,15 +5,15 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary>Represents a single document in the images module.</summary>
 	[Serializable]
-	[CrudTable(AuditPerms=CrudAuditPerm.ImageDelete|CrudAuditPerm.ImageEdit,IsLargeTable=true)]
-	public class Document:TableBase {
+	[ODTable(AuditPerms=CrudAuditPerm.ImageDelete|CrudAuditPerm.ImageEdit,IsLargeTable=true)]
+	public class Document:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long DocNum;
 		/// <summary>Description of the document.</summary>
 		public string Description;
 		/// <summary>Date/time created.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateCreated;
 		/// <summary>FK to definition.DefNum. Categories for documents.</summary>
 		public long DocCategory;
@@ -30,12 +30,12 @@ namespace OpenDentBusiness{
 		/// <summary>Incomplete.  An optional list of tooth numbers separated by commas.  The tooth numbers will be in American format and must be processed for display.  When displayed, dashes will be used for sequences of 3 or more tooth numbers.</summary>
 		public string ToothNumbers;
 		/// <summary>.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		/// <summary>True if the signature is in Topaz format rather than OD format.</summary>
 		public bool SigIsTopaz;
 		/// <summary>The encrypted and bound signature in base64 format.  The signature is bound to the byte sequence of the original image.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Signature;
 		/// <summary>Crop rectangle X in original image pixel coordinates.  May be negative.</summary>
 		public int CropX;
@@ -52,18 +52,18 @@ namespace OpenDentBusiness{
 		/// <summary>FK to mountitem.MountItemNum. If set, then this image will only show on a mount, not in the main tree. If set to 0, then no mount item is associated with this document.</summary>
 		public long MountItemNum;
 		/// <summary>Date/time last altered.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>The raw file data encoded as base64.  Only used if there is no AtoZ folder.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string RawBase64;
 		///<summary>Thumbnail encoded as base64.  Only present if not using AtoZ folder. 100x100 pixels, jpg, takes around 5.5k.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Thumbnail;
 		///<summary>The primary key associated to a document hosted on an external source.</summary>
 		public string ExternalGUID;
 		///<summary>Enum:ExternalSourceType The source for the corresponding ExternalGUID.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public ExternalSourceType ExternalSource;
 
 		///<summary>Returns a copy of this Document.</summary>

@@ -8,10 +8,10 @@ namespace OpenDentBusiness {
 	///<summary>Holds credentials for web applications.  Each userweb entry should be linked to a table type or entity of sorts.
 	///E.g. Patient Portal credentials will have an FKey to patient.PatNum and an FKeyType linked to "UserWebFKeyType.PatientPortal".</summary>
   [Serializable]
-	[CrudTable(HasBatchWriteMethods=true)]
-	public class UserWeb:TableBase {
+	[ODTable(HasBatchWriteMethods=true)]
+	public class UserWeb:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long UserWebNum;
 		///<summary>Foreign key to the table defined by the corresponding FKeyType.</summary>
 		public long FKey;
@@ -28,7 +28,7 @@ namespace OpenDentBusiness {
 		///<summary>Set to true to require a user to change their UserName.</summary>
 		public bool RequireUserNameChange;
 		///<summary>The last time when the user used their credentials to log in.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeLastLogin;
 		///<summary>Set to true to require a user to change their Password.</summary>
 		public bool RequirePasswordChange;

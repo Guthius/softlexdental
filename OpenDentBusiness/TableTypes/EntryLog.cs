@@ -4,10 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 	///<summary>Stores entries made for AppointmentCreate. Acts as an additional securitylog entry.</summary>
 	[Serializable]
-	[CrudTable(HasBatchWriteMethods=true)]
-	public class EntryLog:TableBase {
+	[ODTable(HasBatchWriteMethods=true)]
+	public class EntryLog:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey = true)]
+		[ODTableColumn(PrimaryKey = true)]
 		public long EntryLogNum;
 		///<summary>FK to userod.UserNum</summary>
 		public long UserNum;
@@ -19,7 +19,7 @@ namespace OpenDentBusiness{
 		public LogSources LogSource;
 		///<summary>The date and time of the entry.  Its value is set when inserting and can never change.  Even if a user changes the date on their computer, 
 		///this remains accurate because it uses server time.</summary>
-		[CrudColumn(SpecialType = CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.DateTEntry)]
 		public DateTime EntryDateTime;
 
 		public EntryLog() {

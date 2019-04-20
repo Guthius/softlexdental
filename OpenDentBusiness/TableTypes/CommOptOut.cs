@@ -6,10 +6,10 @@ using System.Xml.Serialization;
 namespace OpenDentBusiness {
 	///<summary>The patient does not want to recieve messages for a particular type of communication.</summary>
 	[Serializable]
-	[CrudTable(HasBatchWriteMethods=true)]
-	public class CommOptOut:TableBase {
+	[ODTable(HasBatchWriteMethods=true)]
+	public class CommOptOut:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long CommOptOutNum;
 		///<summary>FK to patient.PatNum. The patient who is opting out of this form of communication.</summary>
 		public long PatNum;

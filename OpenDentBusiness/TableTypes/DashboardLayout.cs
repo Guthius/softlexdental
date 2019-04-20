@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace OpenDentBusiness {
 	///<summary>Each tab in the dashboard has a corresponding DashboardLayout. DashboardLayout and DashboardCell work in conjunction to form the dashboard layout.</summary>
 	[Serializable]
-	public class DashboardLayout:TableBase {
+	public class DashboardLayout:ODTable {
 		///<summary>PK.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long DashboardLayoutNum;
 		///<summary>FK to userod.UserNum.</summary>
 		public long UserNum;
@@ -23,7 +23,7 @@ namespace OpenDentBusiness {
 		///<summary>Groups multiple DashboardLayout(s) together.</summary>
 		public string DashboardGroupName;		
 
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public List<DashboardCell> Cells=new List<DashboardCell>();
 
 		///<summary></summary>

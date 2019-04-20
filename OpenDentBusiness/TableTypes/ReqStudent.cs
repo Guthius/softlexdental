@@ -5,9 +5,9 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary>For Dental Schools.  The purpose of this table changed significantly in version 4.5.  This now only stores completed requirements.  There can be multiple completed requirements of each ReqNeededNum.  No need to synchronize any longer.</summary>
 	[Serializable]
-	public class ReqStudent:TableBase {
+	public class ReqStudent:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ReqStudentNum;
 		///<summary>FK to reqneeded.ReqNeededNum.</summary>
 		public long ReqNeededNum;

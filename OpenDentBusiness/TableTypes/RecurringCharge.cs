@@ -6,16 +6,16 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>This table holds a record of recurring charges that have been attempted.</summary>
 	[Serializable]
-	public class RecurringCharge:TableBase {
+	public class RecurringCharge:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long RecurringChargeNum;
 		///<summary>FK to patient.PatNum. The patient this recurring charge is for.</summary>
 		public long PatNum;
 		///<summary>FK to patient.ClinicNum. The clinic this recurring charge is for.</summary>
 		public long ClinicNum;
 		///<summary>The date time of the charge. </summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeCharge;
 		///<summary>Enum:RecurringChargeStatus </summary>
 		public RecurringChargeStatus ChargeStatus;
@@ -36,7 +36,7 @@ namespace OpenDentBusiness {
 		///<summary>FK to creditcard.CreditCardNum. The credit card that caused this charge.</summary>
 		public long CreditCardNum;
 		///<summary>Any error message from processing this charge.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ErrorMsg;
 
 		///<summary></summary>

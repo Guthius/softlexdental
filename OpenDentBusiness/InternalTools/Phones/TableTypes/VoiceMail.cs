@@ -5,10 +5,10 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>HQ only table. This table stores voicemails that need to be listened to by triage operators.</summary>
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true)]
-	public class VoiceMail:TableBase {
+	[ODTable(IsMissingInGeneral=true)]
+	public class VoiceMail:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long VoiceMailNum;
 		///<summary>FK to userod.UserNum. The user who has taken ownership of this voicemail. Will be 0 if no one has claimed it yet.</summary>
 		public long UserNum;
@@ -16,7 +16,7 @@ namespace OpenDentBusiness {
 		///will be 48015 (Misc.). If multiple patients are found with a matching phone number, this value will be zero.</summary>
 		public long PatNum;
 		///<summary>The date/time that the voicemail was made. Not necessarily the time the row is entered into the database.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateCreated;
 		///<summary>The duration in seconds of the message. Will be -1 if the duration is not known.</summary>
 		public int Duration;
@@ -30,14 +30,14 @@ namespace OpenDentBusiness {
 		public string Note;
 		///<summary>The most recent date/time that the voicemail was claimed by another tech. Used to prevent a tech from claiming a voicemail that
 		///has just been claimed by another tech.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateClaimed;
 
 		///<summary>The user name of the tech who has claimed this voicemail.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string UserName;
 		///<summary>The patient name that this voicemail is attached to. Will say '(Multiple)' if more than one match is found.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string PatientName;
 
 		///<summary></summary>

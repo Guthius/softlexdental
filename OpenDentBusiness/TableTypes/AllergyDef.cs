@@ -5,16 +5,16 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>An allergy definition.  Gets linked to an allergy and patient.  Allergies will not show in CCD messages unless they have a valid Medication (that has an RxNorm) or UniiCode.</summary>
 	[Serializable]
-	public class AllergyDef:TableBase {
+	public class AllergyDef:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long AllergyDefNum;
 		///<summary>Name of the drug.  User can change this.  If an RxCui is present, the RxNorm string can be pulled from the in-memory table for UI display in addition to the Description.</summary>
 		public string Description;
 		///<summary>Because user can't delete.</summary>
 		public bool IsHidden;
 		///<summary>The last date and time this row was altered.  Not user editable.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>Enum:SnomedAllergy SNOMED Allergy Type Code.  Only used to create CCD in FormSummaryOfCare.</summary>
 		public SnomedAllergy SnomedType;

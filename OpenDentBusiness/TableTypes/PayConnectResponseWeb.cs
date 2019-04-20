@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace OpenDentBusiness {
 	///<summary>This table will never delete records, only upsert.</summary>
 	[Serializable]
-	public class PayConnectResponseWeb:TableBase {
+	public class PayConnectResponseWeb:ODTable {
 		/// <summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PayConnectResponseWebNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
@@ -28,25 +28,25 @@ namespace OpenDentBusiness {
 		///<summary>The payment token used to poll the processing status.</summary>
 		public string PaymentToken;
 		///<summary>Enum:PayConnectWebStatus Used to determine if the payment is pending, needs action, or is completed and attached to a payment.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public PayConnectWebStatus ProcessingStatus;
 		///<summary>Timestamp automatically generated and user not allowed to change.  The actual datetime of entry.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime DateTimeEntry;
 		///<summary>DateTime that the payment went to the pending status.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimePending;
 		///<summary>DateTime that the payment went to the completed status and is attached to a payment.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeCompleted;
 		///<summary>DateTime that the payment opportunity time expired.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeExpired;
 		///<summary>DateTime of the last time that the payment had an error.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeLastError;
 		///<summary>Raw JSON response (or error) from PayConnect.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string LastResponseStr;
 
 		///<summary>Returns the DateTime of the greatest value between DateTimeEntry, DateTimePending, and DateTimeLastError.

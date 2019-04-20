@@ -62,7 +62,7 @@ namespace OpenDental {
 		///Is static so can be referenced from multiple instances of this control.  Locked each time it is accessed so it is thread safe.</summary>
 		private static List<long> _listSubscribedTaskListNums=new List<long>();
 		///<summary>The action which occurs when the Toggle Chat button is clicked.  Only set for OD HQ triage.</summary>
-		private Action _actionChatToggle=null;
+		//private Action _actionChatToggle=null;
 		///<summary>Defines which filter type is currently in use for filtering the Task grid.</summary>
 		private GlobalTaskFilterType _globalFilterType;
 		///<summary>Foreign key to either a Clinic or a Region Def.  Indicates current filter on the selected TaskList.</summary>

@@ -5,20 +5,20 @@ namespace OpenDentBusiness{
 
 	///<summary>Stores an ongoing record of database activity for security purposes.  User not allowed to edit.</summary>
 	[Serializable]
-	[CrudTable(IsLargeTable=true)]
-	public class SecurityLog:TableBase {
+	[ODTable(IsLargeTable=true)]
+	public class SecurityLog:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long SecurityLogNum;
 		///<summary>Enum:Permissions</summary>
 		public Permissions PermType;
 		///<summary>FK to userod.UserNum</summary>
 		public long UserNum;
 		///<summary>The date and time of the entry.  It's value is set when inserting and can never change.  Even if a user changes the date on their ocmputer, this remains accurate because it uses server time.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime LogDateTime;
 		///<summary>The description of exactly what was done. Varies by permission type.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string LogText;
 		///<summary>FK to patient.PatNum.  Can be 0 if not applicable.</summary>
 		public long PatNum;
@@ -40,17 +40,17 @@ namespace OpenDentBusiness{
 		public LogSources LogSource;
 
 		///<summary>PatNum-NameLF</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string PatientName;
 		///<summary>Existing LogHash from SecurityLogHash table</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string LogHash;
 		///<summary>Not used.</summary>
 		public long DefNum;
 		///<summary>Not used.</summary>
 		public long DefNumError;
 		///<summary>Used to store the previous DateTStamp or SecDateTEdit of the object FKey refers to.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTPrevious;
 
 	}

@@ -5,9 +5,9 @@ namespace OpenDentBusiness {
 
 	///<summary>Used to identify the source of payment for a given patient at a given point in time.  As insurance is added and removed, rows should be either automatically inserted into this table, or the user should be prompted to specify what the new payor type is.  The DateStart of one payor type is interpreted as the end date of the previous payor type.  Example: Patient with no insurance may have payortype.SopCode=81 ("SelfPay").  Patient then adds Medicaid insurance and gets a second new PayorType entry with SopCode=2 (Medicaid).</summary>
 	[Serializable]
-	public class PayorType:TableBase {
+	public class PayorType:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PayorTypeNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
@@ -16,7 +16,7 @@ namespace OpenDentBusiness {
 		///<summary>FK to sop.SopCode. Examples: 121, 3115, etc. </summary>
 		public string SopCode;
 		///<summary></summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 
 		///<summary>Returns a copy of this PayorType.</summary>

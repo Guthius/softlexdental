@@ -6,18 +6,18 @@ namespace OpenDentBusiness{
 
 	///<summary>Since we can send e-claims to multiple clearinghouses, this table keeps track of each clearinghouse.  Will eventually be used for individual carriers as well if they accept </summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true)]
-	public class Clearinghouse:TableBase {
+	[ODTable(IsSynchable=true)]
+	public class Clearinghouse:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ClearinghouseNum;
 		///<summary>Description of this clearinghouse</summary>
 		public string Description;
 		///<summary>The path to export the X12 file to. \ is now optional.  Can be overridden by clinic-level clearinghouses.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ExportPath;
 		///<summary>A list of all payors which should have claims sent to this clearinghouse. Comma delimited with no spaces.  Not necessary if IsDefault.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Payors;
 		///<summary>Enum:ElectronicClaimFormat The format of the file that gets sent electronically.</summary>
 		public ElectronicClaimFormat Eformat;
@@ -43,7 +43,7 @@ namespace OpenDentBusiness{
 		///because the user may have changed the installation directory or exe name.  Can be overridden by clinic-level clearinghouses.</summary>
 		public string ClientProgram;
 		///<summary>Each clearinghouse increments their batch numbers by one each time a claim file is sent.  User never sees this number.  Maxes out at 999, then loops back to 1.  This field must NOT be cached and must be ignored in the code except where it explicitly retrieves it from the db.  Defaults to 0 for brand new clearinghouses, which causes the first batch to go out as #1.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
 		public int LastBatchNumber;
 		///<summary>Was not used.  1,2,3,or 4. The port that the modem is connected to if applicable. Always uses 9600 baud and standard settings. Will crash if port or modem not valid.</summary>
 		public byte ModemPort;

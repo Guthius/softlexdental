@@ -6,9 +6,9 @@ namespace OpenDentBusiness {
 
 	///<summary>For internal use only.</summary>
 	[Serializable]
-	public class CustRefEntry:TableBase {
+	public class CustRefEntry:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long CustRefEntryNum;
 		///<summary>FK to patient.PatNum.  The customer seeking a reference.</summary>
 		public long PatNumCust;

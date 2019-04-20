@@ -4,13 +4,13 @@ namespace OpenDentBusiness.Mobile {
 
 	///<summary>A list of medications, not attached to any particular patient. Patient portal version </summary>
 	[Serializable]
-	[CrudTable(IsMobile=true)]
-	public class Medicationm:TableBase {
+	[ODTable(IsMobile=true)]
+	public class Medicationm:ODTable {
 		///<summary>Primary key 1.</summary>
-		[CrudColumn(IsPriKeyMobile1=true)]
+		[ODTableColumn(IsPriKeyMobile1=true)]
 		public long CustomerNum;
 		///<summary>Primary key 2.</summary>
-		[CrudColumn(IsPriKeyMobile2=true)]
+		[ODTableColumn(IsPriKeyMobile2=true)]
 		public long MedicationNum;
 		///<summary>Name of the medication.</summary>
 		public string MedName;

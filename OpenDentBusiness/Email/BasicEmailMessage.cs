@@ -26,7 +26,7 @@ namespace OpenDentBusiness.Email {
 		public string ToAddress;
 		///<summary>The list of attachments for this email. The first string is the full file path. The second string is the name of the file 
 		///(the one displayed to users). The file should already be downloaded and accessible.</summary>
-		public List<ODTuple<string,string>> ListAttachments;
+		public List<Tuple<string,string>> ListAttachments;
 		///<summary>A list of paths to images that are included in the HTML body. The file should already be downloaded and accessible.</summary>
 		public List<string> ListHtmlImages;
 		///<summary>The body in the case that email is HTML. Should be scrubbed/tidyed before hand. This includes replacing image tags.</summary>

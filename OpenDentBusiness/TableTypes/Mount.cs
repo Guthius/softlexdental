@@ -5,9 +5,9 @@ using System.Text;
 namespace OpenDentBusiness {
 	/// <summary>A mount shows in the images module just like other images in the tree.  But it is just a container for images within it rather than an actual image itself.</summary>
 	[Serializable()]
-	public class Mount : TableBase {
+	public class Mount : ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long MountNum;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;
@@ -18,7 +18,7 @@ namespace OpenDentBusiness {
 		/// <summary>Used to provide a document description in the image module tree-view.</summary>
 		public string Description;
 		/// <summary>To allow the user to enter specific information regarding the exam and tooth numbers, as well as points on interest in the xray images.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		/// <summary>Enum:ImageType This is so that an image can be properly associated with the mount in the image module tree-view.</summary>
 		public ImageType ImgType;

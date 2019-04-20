@@ -1499,13 +1499,13 @@ namespace OpenDentBusiness
 
         ///<summary>Returns a list of attachments for the given od email message. The first item in the tuple is the full path to the attachment and
         ///the second item is the display name. Downloads the attachments to ensure they are accessible before returning.</summary>
-        private static List<ODTuple<string, string>> GetListAttachmentsAndDownload(EmailMessage odMessage)
+        private static List<Tuple<string, string>> GetListAttachmentsAndDownload(EmailMessage odMessage)
         {
             if (odMessage.Attachments.IsNullOrEmpty())
             {
                 return null;
             }
-            List<ODTuple<string, string>> listFilePaths = new List<ODTuple<string, string>>();
+            List<Tuple<string, string>> listFilePaths = new List<Tuple<string, string>>();
             string attachPath = EmailAttaches.GetAttachPath();
             foreach (EmailAttach attach in odMessage.Attachments)
             {
@@ -1520,7 +1520,7 @@ namespace OpenDentBusiness
                 {
                     attachFullPath = ODFileUtils.CombinePaths(attachPath, attach.ActualFileName);
                 }
-                listFilePaths.Add(new ODTuple<string, string>(attachFullPath, attach.DisplayedFileName));
+                listFilePaths.Add(new Tuple<string, string>(attachFullPath, attach.DisplayedFileName));
             }
             return listFilePaths;
         }

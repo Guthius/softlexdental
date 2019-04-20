@@ -5,10 +5,10 @@ namespace OpenDentBusiness{
 
 	///<summary>Links procedures to claims.  Also links ins payments to procedures or claims.  Also used for estimating procedures even if no claim yet.  Warning: One proc might be linked twice to a given claim if insurance made two payments.  Many of the important fields are actually optional.  For instance, ProcNum is only required if itemizing ins payment, and ClaimNum is blank if Status=adjustment,cap,or estimate.</summary>
 	[Serializable()]
-	[CrudTable(IsSecurityStamped=true,IsLargeTable=true)]
-	public class ClaimProc:TableBase {
+	[ODTable(IsSecurityStamped=true,IsLargeTable=true)]
+	public class ClaimProc:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ClaimProcNum;
 		///<summary>FK to procedurelog.ProcNum.  Is 0 for payments by total.</summary>
 		public long ProcNum;
@@ -43,10 +43,10 @@ namespace OpenDentBusiness{
 		///<summary>The allowed fee (not the override) is a complex calculation which is performed on the fly in Procedure.ComputeEstimates/ClaimProc.ComputeBaseEst.  It is the amount that the percentage is based on.  If this carrier has a lower UCR than the office, then the allowed fee is where that is handled.  It can be pulled from an allowed fee schedule.  It is also where substitutions for posterior composites are handled.  The AllowedOverride allows the user to override the calculation.  -1 indicates blank.  A new use of this field is for when entering insurance payments.  On the eob, it will tell you what the allowed/UCR fee is.  The user will now be able to enter this information into the AllowedOverride field.  They will simultaneously pass the info to the allowed fee schedule.  AllowedOverride is never changed automatically by the program except to sometimes set it to -1 if NoBillIns.</summary>
 		public double AllowedOverride;
 		///<summary>-1 if blank.  Otherwise a number between 0 and 100.  The percentage that insurance pays on this procedure, as determined from insurance categories. Not user editable.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TinyIntSigned)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TinyIntSigned)]
 		public int Percentage;
 		///<summary>-1 if blank.  Otherwise a number between 0 and 100.  Can only be changed by user.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TinyIntSigned)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TinyIntSigned)]
 		public int PercentOverride;
 		///<summary>-1 if blank. Calculated automatically. User cannot edit but can use CopayOverride instead.  Opposite of InsEst, because this is the patient portion estimate.  Two different uses: 1. For capitation, this automates calculation of writeoff. 2. For any other insurance, it gets deducted during calculation as shown in the edit window. Neither use directly affects patient balance.</summary>
 		public double CopayAmt;
@@ -88,21 +88,21 @@ namespace OpenDentBusiness{
 		///<summary>1-indexed.  Allows user to sort the order of payments on an EOB.  All claimprocs for a payment will have the same PaymentRow value.</summary>
 		public int PaymentRow;
 		///<summary>Not a database column.  Used to help manage passing lists around.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public bool DoDelete;
 		///<summary>FK to payplan.PayPlanNum.  0 if not attached to a payplan.</summary>
 		public long PayPlanNum;
 		///<summary>FK to definition.DefNum.  Connected to the ClaimPaymentTracking DefCat.</summary>
 		public long ClaimPaymentTracking;
 		///<summary>FK to userod.UserNum.  Set to the user logged in when the row was inserted at SecDateEntry date and time.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
 		public long SecUserNumEntry;
 		///<summary>Timestamp automatically generated and user not allowed to change.  The actual date of entry.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateEntry)]
 		public DateTime SecDateEntry;
 		///<summary>Automatically updated by MySQL every time a row is added or changed. Could be changed due to user editing, custom queries or program
 		///updates.  Not user editable with the UI.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime SecDateTEdit;
 		///<summary>The date the claim proc was first set to received or supplemental. If status is set to something other than received/supplemental,
 		///this field will be set to DateTime.MinValue if DateSuppReceived is today.  If DateSuppReceived is set to a day in the past and the status is 

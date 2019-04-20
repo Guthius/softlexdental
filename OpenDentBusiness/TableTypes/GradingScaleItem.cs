@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness{
 	///<summary>Only used when GradingScale.ScaleType=PickList, not Percentage or Points.  The specific grades allowed on a scale.  Contains both the GradeShowing and the equivalent number.  There are no FKs to these items.  The values are all copied from here into student records as they are used.</summary>
 	[Serializable]
-	public class GradingScaleItem:TableBase{
+	public class GradingScaleItem:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long GradingScaleItemNum;
 		///<summary>FK to gradingscale.GradingScaleNum</summary>
 		public long GradingScaleNum;

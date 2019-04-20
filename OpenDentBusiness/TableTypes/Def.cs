@@ -11,17 +11,17 @@ namespace OpenDentBusiness {
 	///Make sure to look at the Defs class to see how the definitions are used.  Loaded into memory ahead of time for speed.  Some types of info such as 
 	///operatories started out life in this table, but then got moved to their own table when more complexity was needed.</summary>
 	[Serializable]
-	[CrudTable(TableName="definition")]
-	public class Def:TableBase {
+	[ODTable(TableName="definition")]
+	public class Def:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long DefNum;
 		///<summary>Enum:DefCat</summary>
 		public DefCat Category;
 		///<summary>Order that each item shows on various lists. 0-indexed.</summary>
 		public int ItemOrder;
 		///<summary>Each category is a little different.  This field is usually the common name of the item.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.CleanText)]
 		public string ItemName;
 		///<summary>This field can be used to store extra info about the item.</summary>
 		public string ItemValue;

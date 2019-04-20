@@ -6,42 +6,27 @@ using System.Text;
 
 namespace OpenDentBusiness
 {
-    ///<summary></summary>
     public class Allergies
     {
-        ///<summary></summary>
         public static List<Allergy> Refresh(long patNum)
         {
-            string command = "SELECT * FROM allergy WHERE PatNum = " + POut.Long(patNum);
-            return Crud.AllergyCrud.SelectMany(command);
+            return Crud.AllergyCrud.SelectMany("SELECT * FROM allergy WHERE PatNum = " + POut.Long(patNum));
         }
 
-        ///<summary>Gets one Allergy from the db.</summary>
-        public static Allergy GetOne(long allergyNum)
-        {
-            return Crud.AllergyCrud.SelectOne(allergyNum);
-        }
+        public static Allergy GetOne(long allergyNum) => Crud.AllergyCrud.SelectOne(allergyNum);
 
-        ///<summary></summary>
-        public static long Insert(Allergy allergy)
-        {
-            return Crud.AllergyCrud.Insert(allergy);
-        }
+        public static long Insert(Allergy allergy) => Crud.AllergyCrud.Insert(allergy);
 
-        ///<summary></summary>
-        public static void Update(Allergy allergy)
-        {
-            Crud.AllergyCrud.Update(allergy);
-        }
+        public static void Update(Allergy allergy) => Crud.AllergyCrud.Update(allergy);
 
-        ///<summary></summary>
         public static void Delete(long allergyNum)
         {
-            string command = "DELETE FROM allergy WHERE AllergyNum = " + POut.Long(allergyNum);
-            Db.NonQ(command);
+            Db.NonQ("DELETE FROM allergy WHERE AllergyNum = " + POut.Long(allergyNum));
         }
 
-        ///<summary>Gets all allergies for patient whether active or not.</summary>
+        /// <summary>
+        /// Gets all allergies for patient whether active or not.
+        /// </summary>
         public static List<Allergy> GetAll(long patNum, bool showInactive)
         {
             string command = "SELECT * FROM allergy WHERE PatNum = " + POut.Long(patNum);
@@ -64,7 +49,9 @@ namespace OpenDentBusiness
             return allergynums;
         }
 
-        ///<summary>Used along with GetChangedSinceAllergyNums</summary>
+        /// <summary>
+        /// Used along with GetChangedSinceAllergyNums
+        /// </summary>
         public static List<Allergy> GetMultAllergies(List<long> allergyNums)
         {
             string strAllergyNums = "";
@@ -91,13 +78,16 @@ namespace OpenDentBusiness
             return allergyList;
         }
 
-        ///<summary>Returns an array of all patient names who are using this allergy.</summary>
+        /// <summary>
+        /// Returns an array of all patient names who are using this allergy.
+        /// </summary>
         public static string[] GetPatNamesForAllergy(long allergyDefNum)
         {
-            string command = "SELECT CONCAT(CONCAT(CONCAT(CONCAT(LName,', '),FName),' '),Preferred) FROM allergy,patient "
-                + "WHERE allergy.PatNum=patient.PatNum "
-                + "AND allergy.AllergyDefNum=" + POut.Long(allergyDefNum);
-            DataTable table = Db.GetTable(command);
+            DataTable table = Db.GetTable(
+                "SELECT CONCAT(CONCAT(CONCAT(CONCAT(LName,', '),FName),' '),Preferred) FROM allergy,patient " +
+                "WHERE allergy.PatNum=patient.PatNum " +
+                "AND allergy.AllergyDefNum=" + POut.Long(allergyDefNum));
+
             string[] retVal = new string[table.Rows.Count];
             for (int i = 0; i < table.Rows.Count; i++)
             {
@@ -106,26 +96,33 @@ namespace OpenDentBusiness
             return retVal;
         }
 
-        ///<summary>Returns a list of PatNums that have an allergy from the PatNums that are passed in.</summary>
+        /// <summary>
+        /// Returns a list of PatNums that have an allergy from the PatNums that are passed in.
+        /// </summary>
         public static List<long> GetPatientsWithAllergy(List<long> listPatNums)
         {
             if (listPatNums.Count == 0)
             {
                 return new List<long>();
             }
-            string command = "SELECT DISTINCT PatNum FROM allergy WHERE PatNum IN (" + string.Join(",", listPatNums) + ") "
-                + "AND allergy.AllergyDefNum != " + POut.Long(PrefC.GetLong(PrefName.AllergiesIndicateNone));
-            return Db.GetListLong(command);
+
+            return Db.GetListLong(
+                "SELECT DISTINCT PatNum FROM allergy " +
+                "WHERE PatNum IN (" + string.Join(",", listPatNums) + ") " +
+                "AND allergy.AllergyDefNum != " + POut.Long(PrefC.GetLong(PrefName.AllergiesIndicateNone)));
         }
 
-        ///<summary>Changes the value of the DateTStamp column to the current time stamp for all allergies of a patient</summary>
+        /// <summary>
+        /// Changes the value of the DateTStamp column to the current time stamp for all allergies of a patient
+        /// </summary>
         public static void ResetTimeStamps(long patNum)
         {
-            string command = "UPDATE allergy SET DateTStamp = CURRENT_TIMESTAMP WHERE PatNum =" + POut.Long(patNum);
-            Db.NonQ(command);
+            Db.NonQ("UPDATE allergy SET DateTStamp = CURRENT_TIMESTAMP WHERE PatNum =" + POut.Long(patNum));
         }
 
-        ///<summary>Changes the value of the DateTStamp column to the current time stamp for all allergies of a patient that are the status specified</summary>
+        /// <summary>
+        /// Changes the value of the DateTStamp column to the current time stamp for all allergies of a patient that are the status specified
+        /// </summary>
         public static void ResetTimeStamps(long patNum, bool onlyActive)
         {
             string command = "UPDATE allergy SET DateTStamp = CURRENT_TIMESTAMP WHERE PatNum =" + POut.Long(patNum);
@@ -135,7 +132,5 @@ namespace OpenDentBusiness
             }
             Db.NonQ(command);
         }
-
-
     }
 }

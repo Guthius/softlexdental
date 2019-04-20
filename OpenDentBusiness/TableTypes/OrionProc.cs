@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness{
 	///<summary>This table is only used by one customer.  1:1 relationship to procedurelog table.</summary>
 	[Serializable]
-	public class OrionProc:TableBase{
+	public class OrionProc:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long OrionProcNum;
 		///<summary>FK to procedurelog.ProcNum</summary>
 		public long ProcNum;

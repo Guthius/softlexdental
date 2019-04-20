@@ -7,9 +7,9 @@ namespace OpenDentBusiness {
 	///<summary>Details of a Technology mediated contact point (phone, fax, email, etc.). https://www.hl7.org/fhir/datatypes.html#contactpoint 
 	///.</summary>
 	[Serializable]
-	public class FHIRContactPoint:TableBase {
+	public class FHIRContactPoint:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long FHIRContactPointNum;
 		///<summary>FK to fhirsubscription.FHIRSubscriptionNum.</summary>
 		public long FHIRSubscriptionNum;

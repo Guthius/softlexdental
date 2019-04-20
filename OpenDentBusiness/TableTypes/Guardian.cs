@@ -9,10 +9,10 @@ namespace OpenDentBusiness{
 	///and we did not want to risk breaking queries by changing the table or column names. User can specify any relationship as a guardian or not a guardian.
 	///For example, a retired person might specify their brother or child as their guardian, or the user may want to record the brother of a patient as a non-guardian.</summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true)]
-	public class Guardian:TableBase{
+	[ODTable(IsSynchable=true)]
+	public class Guardian:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long GuardianNum;
 		///<summary>FK to patient.PatNum.  If Relationship is "Mother", then this PatNum is the child of the mother.</summary>
 		public long PatNumChild;

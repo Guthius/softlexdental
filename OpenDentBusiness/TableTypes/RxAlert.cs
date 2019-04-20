@@ -5,9 +5,9 @@ namespace OpenDentBusiness {
 
 	///<summary>Many-to-many relationship connecting Rx with DiseaseDef, AllergyDef, or Medication.  Only one of those links may be specified in a single row; the other two will be 0.</summary>
 	[Serializable]
-	public class RxAlert:TableBase {
+	public class RxAlert:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long RxAlertNum;
 		///<summary>FK to rxdef.RxDefNum.  This alert is to be shown when user attempts to write an Rx for this RxDef.</summary>
 		public long RxDefNum;

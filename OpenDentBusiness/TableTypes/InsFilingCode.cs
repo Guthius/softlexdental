@@ -4,9 +4,9 @@ using System.Collections;
 namespace OpenDentBusiness{
 	///<summary>An optional field on insplan and claims.  This lets user customize so that they can track insurance types.</summary>
 	[Serializable()]
-	public class InsFilingCode : TableBase{
+	public class InsFilingCode : ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long InsFilingCodeNum;
 		///<summary>Description of the insurance filing code.</summary>
 		public string Descript;

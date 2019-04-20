@@ -6,11 +6,11 @@ using System.Text;
 namespace OpenDentBusiness {
 	///<summary>This table is not part of the general release.  User would have to add it manually.  All schema changes are done directly on our live database as needed.</summary>
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true,IsSynchable=true)]
+	[ODTable(IsMissingInGeneral=true,IsSynchable=true)]
 	//[CrudTable(IsSynchable=true)]
-	public class JobLink:TableBase {
+	public class JobLink:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long JobLinkNum;
 		///<summary>FK to job.JobNum.</summary>
 		public long JobNum;

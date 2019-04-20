@@ -22,9 +22,9 @@ namespace OpenDentBusiness{
 	/// <para>4BW every 6 months: None, D0274, Limitations, -1, -1, None, Months, 6,None.</para>
 	/// <para>The text above might be difficult to read.  We are trying to improve the white spacing.</para></summary>
 	[Serializable()]
-	public class Benefit:TableBase, IComparable {
+	public class Benefit:ODTable, IComparable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long BenefitNum;
 		///<summary>FK to insplan.PlanNum.  Most benefits should be attached using PlanNum.  The exception would be if each patient has a different percentage.  If PlanNum is used, then PatPlanNum should be 0.</summary>
 		public long PlanNum;
@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 		///<summary>Enum:InsBenefitType Corresponds to X12 EB01. Examples: 0=ActiveCoverage, 1=CoInsurance, 2=Deductible, 3=CoPayment, 4=Exclusions, 5=Limitations. ActiveCoverage doesn't really provide meaningful information.</summary>
 		public InsBenefitType BenefitType;
 		///<summary>Only used if BenefitType=CoInsurance.  Valid values are 0 to 100.  -1 indicates empty, which is almost always true if not CoInsurance.  The percentage that insurance will pay on the procedure.  Note that benefits coming from carriers are usually backwards, indicating the percetage that the patient is responsible for.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TinyIntSigned)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TinyIntSigned)]
 		public int Percent;
 		///<summary>Used for CoPayment, Limitations, and Deductible.  -1 indicates empty</summary>
 		public double MonetaryAmt;

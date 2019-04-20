@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness{
 	///<summary>Logical Observation Identifiers Names and Codes (LOINC) used to identify both lab panels and lab results. Widths specified are from LOINC documentation and may not represent length of fields in the Open Dental Database.</summary>
 	[Serializable()]
-	public class Loinc:TableBase{
+	public class Loinc:ODTable{
 		///<summary>Primary key. Internal use only.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long LoincNum;
 		///<summary>#EULA REQUIRED# Also called LOINC_NUM in the official LOINCDB. Width-10. LOINC244 column 1.</summary>
 		public string LoincCode;//LOINC_NUM;
@@ -41,7 +41,7 @@ namespace OpenDentBusiness{
 		///<summary>A value in this field means that the content should be delivered in the named field/subfield of the HL7 message. When NULL, the data for this data element should be sent in an OBX segment with this LOINC code stored in OBX-3 and with the value in the OBX-5. Width 50. LOINC244 column 32.</summary>
 		public string HL7FieldSubfieldID;//HL7_Field_Subfield_ID;
 		///<summary>External copyright holders copyright notice for this LOINC code. LOINC244 column 33.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ExternalCopyrightNotice;//External_Copyright_Notice;
 		///<summary>This field contains the LOINC term in a more readable format than the fully specified name. The long common names have been created via a table driven algorithmic process. Most abbreviations and acronyms that are used in the LOINC database have been fully spelled out in English. Width 255. LOINC244 column 35.</summary>
 		public string NameLongCommon;//LONG_COMMON_NAME;

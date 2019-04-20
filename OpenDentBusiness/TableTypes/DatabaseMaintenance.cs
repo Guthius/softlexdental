@@ -9,9 +9,9 @@ using System.Reflection;
 namespace OpenDentBusiness {
 	///<summary></summary>
 	[Serializable()]
-	public class DatabaseMaintenance:TableBase {
+	public class DatabaseMaintenance:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long DatabaseMaintenanceNum;
 		///<summary>The name of the databasemaintenance name.</summary>
 		public string MethodName;
@@ -20,7 +20,7 @@ namespace OpenDentBusiness {
 		///<summary>Set to true to indicate that the method is old.</summary>
 		public bool IsOld;
 		///<summary>Updates the date and time they run the method.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateLastRun;
 
 		///<summary></summary>

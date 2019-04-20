@@ -4,9 +4,9 @@ using System;
 namespace OpenDentBusiness {
 	///<summary>For EHR module, the specimen upon which the lab orders were/are to be performed on.  SPM.24</summary>
 	[Serializable]
-	public class EhrLabSpecimenCondition:TableBase {
+	public class EhrLabSpecimenCondition:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EhrLabSpecimenConditionNum;
 		///<summary>FK to ehrlabspecimen.EhrLabSpecimenNum.</summary>
 		public long EhrLabSpecimenNum;

@@ -5,9 +5,9 @@ namespace OpenDentBusiness{
 
 	///<summary>One item on one supply order.  This table links supplies to orders as well as storing a small amount of additional info.</summary>
 	[Serializable()]
-	public class SupplyOrderItem : TableBase {
+	public class SupplyOrderItem : ODTable {
 		/// <summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long SupplyOrderItemNum;
 		/// <summary>FK to supplyorder.supplyOrderNum.</summary>
 		public long SupplyOrderNum;

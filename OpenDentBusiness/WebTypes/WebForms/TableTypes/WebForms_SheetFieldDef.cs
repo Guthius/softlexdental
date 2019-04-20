@@ -7,10 +7,10 @@ using System;
 
 namespace OpenDentBusiness.WebTypes.WebForms {
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true,CrudLocationOverride=@"..\..\..\OpenDentBusiness\WebTypes\WebForms\Crud",NamespaceOverride="OpenDentBusiness.WebTypes.WebForms.Crud",CrudExcludePrefC=true)]
-	public class WebForms_SheetFieldDef:TableBase {
+	[ODTable(IsMissingInGeneral=true,CrudLocationOverride=@"..\..\..\OpenDentBusiness\WebTypes\WebForms\Crud",NamespaceOverride="OpenDentBusiness.WebTypes.WebForms.Crud",CrudExcludePrefC=true)]
+	public class WebForms_SheetFieldDef:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long WebSheetFieldDefID;
 		///<summary>FK to webforms_sheetdef.WebSheetDefID</summary>
 		public long WebSheetDefID;
@@ -19,7 +19,7 @@ namespace OpenDentBusiness.WebTypes.WebForms {
 		///<summary></summary>
 		public string FieldName;
 		///<summary></summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string FieldValue;
 		///<summary></summary>
 		public float FontSize;
@@ -44,7 +44,7 @@ namespace OpenDentBusiness.WebTypes.WebForms {
 		///<summary></summary>
 		public bool IsRequired;
 		///<summary></summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ImageData;
 		///<summary></summary>
 		public int TabOrder;

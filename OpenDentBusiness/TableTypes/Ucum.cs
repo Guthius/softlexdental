@@ -5,9 +5,9 @@ namespace OpenDentBusiness{
 
 	///<summary>Unified Code for Units of Measure.  UCUM is not a stricly defined list of codes but is instead a language definition that allows for all units and derived units to be named.  Examples: g (grams), g/L (grams per liter), g/L/s (grams per liter per second), g/L/s/s (grams per liter per second per second), etc... are all allowed units meaning there is an infinite number of units that can be defined using UCUM conventions.  The codes stored in this table are merely a common subset that was readily available and premade.</summary>
 	[Serializable()]
-	public class Ucum:TableBase{
+	public class Ucum:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long UcumNum;
 		///<summary>Indexed.  Also called concept code. Example: mol/mL</summary>
 		public string UcumCode;

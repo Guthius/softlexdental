@@ -5,9 +5,9 @@ namespace OpenDentBusiness {
 
 	///<summary>Mostly used for EHR.  This rigorously records encounters using rich automation, so that reporting can be easy and meaningful.  Encounters can also be tracked separately using billable procedures.  In contrast, encounters in this table are not billable.  There can be multiple encounters at one appointment because there can be different types.</summary>
 	[Serializable]
-	public class Encounter:TableBase {
+	public class Encounter:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EncounterNum;
 		///<summary>FK to patient.PatNum. </summary>
 		public long PatNum;
@@ -18,7 +18,7 @@ namespace OpenDentBusiness {
 		///<summary>FK to codesystem.CodeSystemName. This will determine which specific code system table the CodeValue is a FK to.  We only allow the following CodeSystems in this table: CDT, CPT, HCPCS, and SNOMEDCT. </summary>
 		public string CodeSystem;
 		///<summary></summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		///<summary>Date the encounter occurred</summary>
 		public DateTime DateEncounter;

@@ -5,9 +5,9 @@ namespace OpenDentBusiness{
 
 	///<summary>Used in dental schools.  eg. Dental 2009 or Hygiene 2007.</summary>
 	[Serializable]
-	public class SchoolClass:TableBase {
+	public class SchoolClass:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long SchoolClassNum;
 		///<summary>The year this class will graduate</summary>
 		public int GradYear;

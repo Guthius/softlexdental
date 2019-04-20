@@ -5,16 +5,16 @@ using EhrLaboratories;
 namespace OpenDentBusiness {
 	///<summary>For EHR module, lab result that contains all required fields for HL7 Lab Reporting Interface (LRI).  OBX</summary>
 	[Serializable]
-	public class EhrLabResult:TableBase {
+	public class EhrLabResult:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EhrLabResultNum;
 		///<summary>FK to ehrlab.EhrLabNum.</summary>
 		public long EhrLabNum;
 		///<summary>Enumerates the OBX segments within a single message starting with 1.  OBX.1</summary>
 		public long SetIdOBX;
 		///<summary>This field identifies the data type used for ObservationValue (OBX-5).  OBX.2</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70125 ValueType;
 
 
@@ -113,10 +113,10 @@ namespace OpenDentBusiness {
 		///<summary>Comma Delimited list of Abnormal Flags using HL70078 enum values.  OBX.8.*</summary>
 		public string AbnormalFlags;
 		///<summary>[0..*] This is not a data column but is stored in a seperate table named EhrLabNote. OBX.*</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		private List<EhrLabNote> _listEhrLabResultNotes;
 		///<summary>Coded status of result.  OBX.11</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70085 ObservationResultStatus;
 		///<summary>Stored as string in the format YYYYMMDD[HH[MM[SS]]]. "For specimen based test, if it is valued it must be the same as SPM-17.  
 		///If SPM-17 is present and relates to the same observation, then OBX-14 must be within the DR range."  OBX.14.1</summary>
@@ -135,7 +135,7 @@ namespace OpenDentBusiness {
 		public string PerformingOrganizationNameAssigningAuthorityUniversalIdType;
 		#endregion
 		///<summary>OBX.23.7</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70203 PerformingOrganizationIdentifierTypeCode;
 		///<summary>OBX.23.10</summary>
 		public string PerformingOrganizationIdentifier;
@@ -148,14 +148,14 @@ namespace OpenDentBusiness {
 		///<summary>OBX.24.3</summary>
 		public string PerformingOrganizationAddressCity;
 		///<summary>USPS Alpha State Codes.  OBX.24.4</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public USPSAlphaStateCode PerformingOrganizationAddressStateOrProvince;
 		///<summary>OBX.24.5</summary>
 		public string PerformingOrganizationAddressZipOrPostalCode;
 		///<summary>Should be the three letter Alpha Code derived from ISO 3166 alpha-3 code set. http://www.nationsonline.org/oneworld/country_code_list.htm OBX.24.6</summary>
 		public string PerformingOrganizationAddressCountryCode;
 		///<summary>OBX.24.7</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70190 PerformingOrganizationAddressAddressType;
 		///<summary>Should be based on FIPS 6-4. We are just importing the string as is. OBX.24.8</summary>
 		public string PerformingOrganizationAddressCountyOrParishCode;
@@ -182,10 +182,10 @@ namespace OpenDentBusiness {
 		public string MedicalDirectorAssigningAuthorityIDType;
 		#endregion
 		///<summary>Describes the type of name used.  OBX.25.10</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70200 MedicalDirectorNameTypeCode;
 		///<summary>Must be value from HL70203 code set, see note at bottom of EhrLab.cs for usage.  OBX.25.13</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70203 MedicalDirectorIdentifierTypeCode;
 		#endregion
 

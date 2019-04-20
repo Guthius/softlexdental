@@ -204,7 +204,7 @@ namespace OpenDentBusiness.Crud{
 					sbRow.Append("'"+POut.String(tsiTransLog.TransJson)+"'"); sbRow.Append(",");
 					sbRow.Append(POut.Long(tsiTransLog.ClinicNum)); sbRow.Append(",");
 					sbRow.Append(POut.Long(tsiTransLog.AggTransLogNum)); sbRow.Append(")");
-					if(sbCommands.Length+sbRow.Length+1 > TableBase.MaxAllowedPacketCount) {
+					if(sbCommands.Length+sbRow.Length+1 > ODTable.MaxAllowedPacketCount) {
 						Db.NonQ(sbCommands.ToString());
 						sbCommands=null;
 					}

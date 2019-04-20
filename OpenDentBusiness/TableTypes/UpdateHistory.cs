@@ -6,12 +6,12 @@ namespace OpenDentBusiness{
 	///New entries will always be for the newest version being used so that users can see a "history" of how long they used previous versions.
 	///This will also help EHR customers when attesting or when they get audited.</summary>
 	[Serializable]
-	public class UpdateHistory:TableBase{
+	public class UpdateHistory:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long UpdateHistoryNum;
 		///<summary>DateTime that OD was updated to the Version.</summary>
-		[CrudColumn(SpecialType =CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType =CrudSpecialColType.DateTEntry)]
 		public DateTime DateTimeUpdated;
 		///<summary>The version that OD was updated to.</summary>
 		public string ProgramVersion;

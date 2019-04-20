@@ -3,12 +3,12 @@
 namespace OpenDentBusiness {
 	///<summary></summary>
 	[Serializable]
-	public class OIDInternal:TableBase {
+	public class OIDInternal:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long OIDInternalNum;
 		///<summary>Internal data type to be associated with OIDRoot</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public IdentifierType IDType;
 		///<summary>This is the root OID for this data type, when combined with extension, uniquely identifies a single object.</summary>
 		public string IDRoot;

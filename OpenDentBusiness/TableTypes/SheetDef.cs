@@ -12,9 +12,9 @@ namespace OpenDentBusiness{
 
 	///<summary>A definition (template) for a sheet.  Can be pulled from the database, or it can be internally defined.</summary>
 	[Serializable()]
-	public class SheetDef:TableBase {
+	public class SheetDef:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long SheetDefNum;
 		///<summary>The description of this sheetdef.</summary>
 		public string Description;
@@ -40,11 +40,11 @@ namespace OpenDentBusiness{
 		public bool HasMobileLayout;
 
 		///<Summary>A collection of all parameters for this sheetdef.  There's usually only one parameter.  The first parameter will be a List long if it's a batch.  If a sheet has already been filled, saved to the database, and printed, then there is no longer any need for the parameters in order to fill the data.  So a retrieved sheet will have no parameters, signalling a skip in the fill phase.  There will still be parameters tucked away in the Field data in the database, but they won't become part of the sheet.</Summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		[XmlIgnore]
 		public List<SheetParameter> Parameters;
 		///<Summary></Summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		[XmlIgnore]
 		public List<SheetFieldDef> SheetFieldDefs;
 

@@ -247,7 +247,6 @@
     <Compile Include="Utilities\ODMethodsT.cs" />
     <Compile Include="Utilities\ODNetworkConnection.cs" />
     <Compile Include="Utilities\ODprintout.cs" />
-    <Compile Include="Utilities\ODTuple.cs" />
     <Compile Include="Utilities\PasswordVaultWrapper.cs" />
     <Compile Include="Utilities\ServicesHelper.cs" />
     <Compile Include="Utilities\WindowsApiWrapper.cs" />

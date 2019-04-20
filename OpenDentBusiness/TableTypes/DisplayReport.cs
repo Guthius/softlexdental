@@ -6,10 +6,10 @@ namespace OpenDentBusiness{
 
 	///<summary>One row per standard report.</summary>
 	[Serializable()]
-	[CrudTable(IsSynchable = true)]
-	public class DisplayReport:TableBase {
+	[ODTable(IsSynchable = true)]
+	public class DisplayReport:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long DisplayReportNum;
 		///<summary>.</summary>
 		public string InternalName;

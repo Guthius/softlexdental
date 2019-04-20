@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness{
 	///<summary>Enables viewing a variety of views in chart module.</summary>
 	[Serializable]
-	public class ChartView:TableBase{
+	public class ChartView:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ChartViewNum;
 		///<summary>Description of this view.  Gets displayed at top of Progress Notes grid.</summary>
 		public string Description;

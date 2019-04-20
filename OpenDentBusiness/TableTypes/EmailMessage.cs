@@ -6,28 +6,28 @@ using System.ComponentModel;
 namespace OpenDentBusiness {
 	///<summary>Stores both sent and received emails, as well as saved emails which are still in composition.</summary>
 	[Serializable]
-	public class EmailMessage:TableBase {
+	public class EmailMessage:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EmailMessageNum;
 		///<summary>FK to patient.PatNum. The patient whom is sending this message. May be sent by a guarantor on behalf of a dependent.</summary>
 		public long PatNum;
 		///<summary>Either a single email address or a comma-delimited list of addresses.  
 		///For web mail messages, this will not be an email address.  Instead, it will be the name of the corresponding patient or provider.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ToAddress;
 		///<summary>Valid email address.  For web mail messages, this will not be an email address.  Instead, it will be the name of the corresponding patient or provider.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string FromAddress;
 		///<summary>Subject line.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Subject;
 		///<summary>Body of the email</summary>
 //TODO: This column may need to be changed to the TextIsClobNote attribute to remove more than 50 consecutive new line characters.
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string BodyText;
 		///<summary>Date and time the message was sent. Automated at the UI level.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime MsgDateTime;
 		///<summary>Enum:EmailSentOrReceived Neither, Received, Read, WebMailReceived, WebMailRecdRead, WebMailSent, WebMailSentRead, SentDirect, ReceivedEncrypted, ReceivedDirect, ReadDirect, AckDirectProcessed, AckDirectNotSent</summary>
 		public EmailSentOrReceived SentOrReceived;
@@ -40,20 +40,20 @@ namespace OpenDentBusiness {
 		///Can be used for debugging if there are any issues parsing the content.
 		///This will bloat the database a little bit, but we need it for now to ensure our inbox is working in real world scenarios.
 		///Might be blank for a few emails downloaded immediately after the email inbox feature was created.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string RawEmailIn;
 		///<summary>Not a database column.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public List<EmailAttach> Attachments;
 		///<summary>FK to provider.ProvNum.  The provider to whom this message was sent or from whom this message was sent.  Only used when EmailSentOrReceived is WebMailReceived, WebMailRecdRead, WebMailSent, or WebMailSentRead.  Will be 0 if not a web mail message.</summary>
 		public long ProvNumWebMail;
 		///<summary>FK to patient.PatNum. Represents the patient to whom this email message is addressed, or from whom it is being sent on behalf of. If guarantor is sending on behalf of self then this field will match PatNum field.</summary>
 		public long PatNumSubj;
 		///<summary>Single address or comma-delimited list of addresses.  User may enter multiple email addresses for visible carbon copies.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string CcAddress;
 		///<summary>Single email address or comma-delimited list of addresses.  User may enter multiple email addresses for blind carbon copies.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string BccAddress;
 		///<summary>Enum:HideInFlags None=0,EmailInbox=1,ApptEdit=2,ContrChartProgNotes=4,ContrAccountGridProg.  Indicates which places in the program that should not show this email message, bitwise.</summary>
 		public HideInFlags HideIn;
@@ -64,11 +64,11 @@ namespace OpenDentBusiness {
 		///<summary>True if the email message was sent in HTML.  False if Plain Text.</summary>
 		public bool IsHtml;
 		///<summary>Not a database column.  Only set when IsHtml is true.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string HtmlText;
 		///<summary>Not a database column.  When true, the img tags will contain paths to local temp files where the images are stored. If false, the images
 		///need to be downloaded from the cloud.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public bool AreImagesDownloaded;
 
 		///<summary>Constructor</summary>

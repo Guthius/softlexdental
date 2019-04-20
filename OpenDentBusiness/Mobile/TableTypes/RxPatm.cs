@@ -4,13 +4,13 @@ namespace OpenDentBusiness.Mobile {
 
 	///<summary>One Rx for one patient.</summary>
 	[Serializable]
-	[CrudTable(IsMobile=true)]
-	public class RxPatm:TableBase {
+	[ODTable(IsMobile=true)]
+	public class RxPatm:ODTable {
 		///<summary>Primary key 1.</summary>
-		[CrudColumn(IsPriKeyMobile1=true)]
+		[ODTableColumn(IsPriKeyMobile1=true)]
 		public long CustomerNum;
 		///<summary>Primary key 2.</summary>
-		[CrudColumn(IsPriKeyMobile2=true)]
+		[ODTableColumn(IsPriKeyMobile2=true)]
 		public long RxNum;
 		///<summary>FK to patientm.PatNum.</summary>
 		public long PatNum;

@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace OpenDentBusiness {
 	///<summary></summary>
 	[Serializable()]
-	[CrudTable(HasBatchWriteMethods = true)]
-	public class DbmLog:TableBase {
+	[ODTable(HasBatchWriteMethods = true)]
+	public class DbmLog:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long DbmLogNum;
 		///<summary>FK to userod.UserNum.  This is the assigned user dbm log.</summary>
 		public long UserNum;
@@ -21,12 +21,12 @@ namespace OpenDentBusiness {
 		///<summary>Enum:DbmLogActionType The type of verification.</summary>
 		public DbmLogActionType ActionType;
 		///<summary>DateTime the row was added.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime DateTimeEntry;
 		///<summary>The name of the DBM that created this row.</summary>
 		public string MethodName;
 		///<summary>The description of exactly what was done.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string LogText;
 
 		public DbmLog() {

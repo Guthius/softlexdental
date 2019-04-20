@@ -7,9 +7,9 @@ using System.Xml.Serialization;
 namespace OpenDentBusiness {
 	///<summary>multiple segments per message</summary>
 	[Serializable]
-	public class HL7DefSegment:TableBase {
+	public class HL7DefSegment:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long HL7DefSegmentNum;
 		///<summary>FK to hl7defmessage.HL7DefMessageNum</summary>
 		public long HL7DefMessageNum;
@@ -20,15 +20,15 @@ namespace OpenDentBusiness {
 		///<summary>If this is false, and an incoming message is missing this segment, then it gets logged as an error/failure.  If this is true, then it will gracefully skip a missing incoming segment.  Not used for outgoing.</summary>
 		public bool IsOptional;
 		///<summary>Stored in db as string, but used in OD as enum SegmentNameHL7. Example: PID.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public SegmentNameHL7 SegmentName;
 		///<summary>.</summary>
 //TODO: This column may need to be changed to the TextIsClobNote attribute to remove more than 50 consecutive new line characters.
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 
 		///<Summary>List of segments associated with this hierarchical definition.  Use items in this list to get to items lower in the hierarchy.</Summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		[XmlIgnore]
 		public List<HL7DefField> hl7DefFields;
 

@@ -5,9 +5,9 @@ using Newtonsoft.Json;
 namespace OpenDentBusiness {
 	///<summary>A Mobile Originating SMS bound for the office. Will usually be a re-constructed message.</summary>
 	[Serializable]
-	public class SmsFromMobile:TableBase {
+	public class SmsFromMobile:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long SmsFromMobileNum;
 		///<summary>FK to patient.PatNum. Not sent from HQ.</summary>
 		public long PatNum;
@@ -16,10 +16,10 @@ namespace OpenDentBusiness {
 		///<summary>FK to commlog.CommlogNum. Not sent from HQ.</summary>
 		public long CommlogNum;
 		///<summary>Contents of the message.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
 		public string MsgText;
 		///<summary>Date and time message was inserted into the DB. Not sent from HQ.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeReceived;
 		///<summary>This is the Phone Number of the office that the mobile device sent a message to.</summary>
 		public string SmsPhoneNumber;

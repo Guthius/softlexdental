@@ -5,14 +5,14 @@ namespace OpenDentBusiness{
 
 	///<summary>Generally used by mobile clinics to track the temporary locations where treatment is performed, such as schools, nursing homes, and community centers.  Replaces the old school table.</summary>
 	[Serializable()]
-	public class Site : TableBase {
+	public class Site : ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long SiteNum;
 		///<summary>.</summary>
 		public string Description;
 		///<summary>Notes could include phone, contacts, etc.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		///<summary></summary>
 		public string Address;

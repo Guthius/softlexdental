@@ -4,13 +4,13 @@ namespace OpenDentBusiness.Mobile {
 
 	///<summary>One username/password for one customer.</summary>
 	[Serializable]
-	[CrudTable(IsMobile=true)]
-	public class Userm:TableBase {
+	[ODTable(IsMobile=true)]
+	public class Userm:ODTable {
 		///<summary>Primary key 1.</summary>
-		[CrudColumn(IsPriKeyMobile1=true)]
+		[ODTableColumn(IsPriKeyMobile1=true)]
 		public long CustomerNum;
 		///<summary>Primary key 2.  Just here for compatibility with existing crud.  Always set to 1.</summary>
-		[CrudColumn(IsPriKeyMobile2=true)]
+		[ODTableColumn(IsPriKeyMobile2=true)]
 		public long UsermNum;
 		///<summary></summary>
 		public string UserName;

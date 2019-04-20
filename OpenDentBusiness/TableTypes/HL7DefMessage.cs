@@ -7,17 +7,17 @@ using System.Xml.Serialization;
 namespace OpenDentBusiness {
 	///<summary>There is no field for MessageStructureHL7 (ADT_A01), because that will be inferred. Defined in HL7 specs, section 2.16.3.</summary>
 	[Serializable]
-	public class HL7DefMessage:TableBase {
+	public class HL7DefMessage:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long HL7DefMessageNum;
 		///<summary>FK to hl7def.HL7DefNum</summary>
 		public long HL7DefNum;
 		///<summary>Stored in db as string, but used in OD as enum MessageTypeHL7. Example: ADT</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public MessageTypeHL7 MessageType;
 		///<summary>Stored in db as string, but used in OD as enum EventTypeHL7. Example: A04, which is only used with ADT/ACK.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public EventTypeHL7 EventType;
 		///<summary>Enum:InOutHL7 Incoming, Outgoing</summary>
 		public InOutHL7 InOrOut;
@@ -25,15 +25,15 @@ namespace OpenDentBusiness {
 		public int ItemOrder;
 		///<summary>text</summary>
 //TODO: This column may need to be changed to the TextIsClobNote attribute to remove more than 50 consecutive new line characters.
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		///<summary>Stored in db as string, but used in OD as enum MessageStructure. Example: ADT_A01, which is the structure used for event types A01, A04, A08, and A13.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public MessageStructureHL7 MessageStructure;
 //VendorCustomized, an enumeration.  Example: PDF TPs.
 
 		///<Summary>List of segments associated with this hierarchical definition.  Use items in this list to get to items lower in the hierarchy.</Summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		[XmlIgnore]
 		public List<HL7DefSegment> hl7DefSegments;
 

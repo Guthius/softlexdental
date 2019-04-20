@@ -4,9 +4,9 @@ using System.Collections;
 namespace OpenDentBusiness{
 	/// <summary>THIS TABLE IS NOT BEING USED.  These can be freely deleted, renamed, moved, etc. without affecting any patient info.  mountitemdef</summary>
 	[Serializable()]
-	public class MountDef : TableBase {
+	public class MountDef : ODTable {
 		/// <summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long MountDefNum;
 		/// <summary>.</summary>
 		public string Description;

@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>User to specify user level permissions used for CDS interventions.  Unlike normal permissions and security, each permission has its own column and each employee has their own row.</summary>
 	[Serializable]
-	public class CDSPermission:TableBase {
+	public class CDSPermission:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long CDSPermissionNum;
 		///<summary>FK to userod.UserNum.  </summary>
 		public long UserNum;

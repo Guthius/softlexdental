@@ -4,9 +4,9 @@ using System.Collections;
 namespace OpenDentBusiness{
 	///<summary>Like a rolodex for businesses that the office interacts with.  Used to store pharmacies, etc.</summary>
 	[Serializable]
-	public class Contact:TableBase {
+	public class Contact:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ContactNum;
 		///<summary>Last name or, frequently, the entire name.</summary>
 		public string LName;
@@ -19,7 +19,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to definition.DefNum</summary>
 		public long Category;
 		///<summary>Note for this contact.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Notes;
 	}
 

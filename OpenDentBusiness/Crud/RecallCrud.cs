@@ -199,7 +199,7 @@ namespace OpenDentBusiness.Crud{
 					sbRow.Append(POut.Date(recall.DisableUntilDate)); sbRow.Append(",");
 					sbRow.Append(POut.Date(recall.DateScheduled)); sbRow.Append(",");
 					sbRow.Append(POut.Int((int)recall.Priority)); sbRow.Append(")");
-					if(sbCommands.Length+sbRow.Length+1 > TableBase.MaxAllowedPacketCount) {
+					if(sbCommands.Length+sbRow.Length+1 > ODTable.MaxAllowedPacketCount) {
 						Db.NonQ(sbCommands.ToString());
 						sbCommands=null;
 					}

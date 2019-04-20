@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness{
 	///<summary>Used in Evaluations.  Describes a scale to be used in grading.  Freeform scales are not allowed.  Percentage scales are handled a little differently than the other scales.</summary>
 	[Serializable]
-	public class GradingScale:TableBase{
+	public class GradingScale:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long GradingScaleNum;
 		///<summary>Enum:EnumScaleType Used to determine method of assigning grades.  PickList will be the only type that has GradingScaleItems.</summary>
 		public EnumScaleType ScaleType;

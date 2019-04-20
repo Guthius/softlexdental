@@ -5,10 +5,10 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>Links one orthocharttab to one displayfield.  Allows for displayfields to be part of multiple orthocharttabs.</summary>
 	[Serializable]
-	[CrudTable(IsSynchable=true)]
-	public class OrthoChartTabLink:TableBase {
+	[ODTable(IsSynchable=true)]
+	public class OrthoChartTabLink:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long OrthoChartTabLinkNum;
 		///<summary>Overrides the displayfield ItemOrder, so that each display field can have a different order in each ortho chart tab.</summary>
 		public int ItemOrder;

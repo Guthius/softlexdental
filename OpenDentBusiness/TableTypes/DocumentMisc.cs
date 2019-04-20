@@ -5,9 +5,9 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary>For storing docs/images in database.  This table is for the various miscellaneous documents that are not in the normal patient subfolders.</summary>
 	[Serializable]
-	public class DocumentMisc:TableBase {
+	public class DocumentMisc:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long DocMiscNum;
 		/// <summary>Date created.</summary>
 		public DateTime DateCreated;
@@ -19,7 +19,7 @@ namespace OpenDentBusiness{
 		/// <summary>Enum:DocumentMiscType Corresponds to the same subfolder within AtoZ folder. eg. UpdateFiles</summary>
 		public DocumentMiscType DocMiscType;
 		///<summary>The raw file data encoded as base64.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string RawBase64;
 
 		///<summary>Returns a copy of this DocumentMisc.</summary>

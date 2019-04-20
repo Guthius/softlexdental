@@ -10,10 +10,10 @@ namespace OpenDentBusiness{
 	/// removed from active and inactive treatment plans. Saved treatment plans use proctps, which are copies of the procedure, 
 	/// and will not change after being saved. </summary>
 	[Serializable]
-	[CrudTable(IsSecurityStamped=true,IsLargeTable=true)]
-	public class TreatPlan:TableBase {
+	[ODTable(IsSecurityStamped=true,IsLargeTable=true)]
+	public class TreatPlan:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long TreatPlanNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
@@ -22,10 +22,10 @@ namespace OpenDentBusiness{
 		///<summary>The heading that shows at the top of the treatment plan.  Usually 'Proposed Treatment Plan'</summary>
 		public string Heading;
 		///<summary>A note specific to this treatment plan that shows at the bottom.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		///<summary>The encrypted and bound signature in base64 format.  The signature is bound to the concatenation of the tp Note, DateTP, and to each proctp Descript and PatAmt.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Signature;
 		///<summary>True if the signature is in Topaz format rather than OD format.</summary>
 		public bool SigIsTopaz;
@@ -36,14 +36,14 @@ namespace OpenDentBusiness{
 		///<summary>Determines the type of treatment plan this is. 0 - Saved, 1 - Active, 2 - Inactive.</summary>
 		public TreatPlanStatus TPStatus;
 		///<summary>FK to userod.UserNum.  Set to the user logged in when the row was inserted at SecDateEntry date and time.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
 		public long SecUserNumEntry;
 		///<summary>Timestamp automatically generated and user not allowed to change.  The actual date of entry.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateEntry)]
 		public DateTime SecDateEntry;
 		///<summary>Automatically updated by MySQL every time a row is added or changed. Could be changed due to user editing, custom queries or program
 		///updates.  Not user editable with the UI.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime SecDateTEdit;
 		///<summary>FK to userod.UserNum. The user that will present the treatment plan. 
 		///Defaults to the user that entered the treatment plan, but can be changed with the TreatPlanPresenterEdit permission.</summary>
@@ -51,13 +51,13 @@ namespace OpenDentBusiness{
 		///<summary>Enum:TreatPlanType Determines the type of insurance this treatment plan was saved with.  Used for displaying proper information when loading.</summary>
 		public TreatPlanType TPType;
 		///<summary>The encrypted and bound signature in base64 format.  The signature is bound to the concatenation of the tp Note, DateTP, and to each proctp Descript and PatAmt.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string SignaturePractice;
 		///<summary>The date of the treatment plan is signed.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTSigned;
 		///<summary>The date of the treatment plan is signed by the office.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTPracticeSigned;
 		///<summary>The typed name of the person who signed the treatplan.</summary>
 		public string SignatureText;
@@ -65,7 +65,7 @@ namespace OpenDentBusiness{
 		public string SignaturePracticeText;
 
 		///<summary>Used to pass the list of ProcTPs in memory with the TreatPlan.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		[XmlIgnore]
 		public List<ProcTP> ListProcTPs;
 

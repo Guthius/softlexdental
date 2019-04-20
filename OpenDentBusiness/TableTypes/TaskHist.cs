@@ -7,15 +7,15 @@ namespace OpenDentBusiness {
 	///<summary>Inherits from task. A historical copy of a task.  These are generated as a result of a task being edited.  When creating for insertion it needs a passed in Task object.</summary>
 	//[IsHistTable=Task]
 	[Serializable]
-	[CrudTable(IsTableHist=true)]
+	[ODTable(IsTableHist=true)]
 	public class TaskHist:Task {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long TaskHistNum;
 		///<summary>FK to userod.UserNum  Identifies the user that changed this task from this state, not the person who originally wrote it.</summary>
 		public long UserNumHist;
 		///<summary>The date and time that this task was edited and added to the Hist table.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime DateTStamp;
 		///<summary>True if the note was changed when this historical copy was created.</summary>
 		public bool IsNoteChange;

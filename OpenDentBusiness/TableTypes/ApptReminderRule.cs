@@ -22,51 +22,51 @@ namespace OpenDentBusiness {
 	///on the schedule.</para>
 	/// </summary>
 	[Serializable()]
-	[CrudTable(IsSynchable =true)]
-	public class ApptReminderRule : TableBase {
+	[ODTable(IsSynchable =true)]
+	public class ApptReminderRule : ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey = true)]
+		[ODTableColumn(PrimaryKey = true)]
 		public long ApptReminderRuleNum;
 		///<summary>Enum:ApptReminderType </summary>
 		public ApptReminderType TypeCur;
 		///<summary>Time before appointment that this confirmation should be sent.</summary>
 		[XmlIgnore]
-		[CrudColumn(SpecialType = CrudSpecialColType.TimeSpanLong)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.TimeSpanLong)]
 		public TimeSpan TSPrior;
 		///<summary>Comma Delimited List of comm types. Enum values of ApptComm.CommType. 0=pref,1=sms,2=email; Like the deprecated pref "ApptReminderSendOrder"</summary>
 		public string SendOrder;
 		///<summary>Set to True if both an email AND a text should be sent.</summary>
 		public bool IsSendAll;
 		///<summary>If using SMS, this template will be used to generate the body of the text message.</summary>
-		[CrudColumn(SpecialType = CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.TextIsClob)]
 		public string TemplateSMS;
 		///<summary>If using email, this template will be used to generate the subject of the email.</summary>
-		[CrudColumn(SpecialType = CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.TextIsClob)]
 		public string TemplateEmailSubject;
 		///<summary>If using email, this template will be used to generate the body of the email.</summary>
-		[CrudColumn(SpecialType = CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.TextIsClob)]
 		public string TemplateEmail;
 		///<summary>FK to clinic.ClinicNum.  Allows reminder rules to be configured on a per clinic basis. If ClinicNum==0 then it is the practice/HQ/default settings.</summary>
 		public long ClinicNum;
 		///<summary>Used when aggregating multiple appointments together into a single message.</summary>
-		[CrudColumn(SpecialType = CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.TextIsClob)]
 		public string TemplateSMSAggShared;
 		///<summary>Used when aggregating multiple appointments together into a single message.</summary>
-		[CrudColumn(SpecialType = CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.TextIsClob)]
 		public string TemplateSMSAggPerAppt;
 		///<summary>Used when aggregating multiple appointments together into a single message.</summary>
-		[CrudColumn(SpecialType = CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.TextIsClob)]
 		public string TemplateEmailSubjAggShared;
 		///<summary>Used when aggregating multiple appointments together into a single message.</summary>
-		[CrudColumn(SpecialType = CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.TextIsClob)]
 		public string TemplateEmailAggShared;
 		///<summary>Used when aggregating multiple appointments together into a single message.</summary>
-		[CrudColumn(SpecialType = CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.TextIsClob)]
 		public string TemplateEmailAggPerAppt;
 		///<summary>The time before the appointment in which this reminder should NOT be sent. E.g., if this value is 2 days, and an appt is created one
 		///day in the future, a reminder will not be sent.</summary>
 		[XmlIgnore]
-		[CrudColumn(SpecialType = CrudSpecialColType.TimeSpanLong)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.TimeSpanLong)]
 		public TimeSpan DoNotSendWithin;
 
 		///<summary>Used only for serialization purposes</summary>

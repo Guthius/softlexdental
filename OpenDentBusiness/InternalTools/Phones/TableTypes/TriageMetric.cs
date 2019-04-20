@@ -9,10 +9,10 @@ namespace OpenDentBusiness {
 	///Every workstation in the office will be selecting the most recent entry at its leisure.  New entries are made every ~1.6 seconds.
 	///The table gets cleaned up every ~5 mintues.</summary>
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true)]
-	public class TriageMetric:TableBase {
+	[ODTable(IsMissingInGeneral=true)]
+	public class TriageMetric:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long TriageMetricNum;
 		///<summary></summary>
 		public int CountBlueTasks;
@@ -21,13 +21,13 @@ namespace OpenDentBusiness {
 		///<summary></summary>
 		public int CountRedTasks;
 		///<summary>Time of oldest triage task or tasknote if one exists.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeOldestTriageTaskOrTaskNote;
 		///<summary>Time of oldest urgent task or tasknote if one exists.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeOldestUrgentTaskOrTaskNote;
 		///<summary></summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 	}
 }

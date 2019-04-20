@@ -7,9 +7,9 @@ namespace OpenDentBusiness {
 	///This datatype is only used if the program is being run from a distributor installation.
 	///A single customer is allowed to have more than one key, to accommodate for various circumstances, including having multiple physical business locations.</summary>
 	[Serializable]
-	public class RegistrationKey:TableBase {
+	public class RegistrationKey:ODTable {
 		///<summary>Primary Key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long RegistrationKeyNum;
 		///<summary>FK to patient.PatNum. The customer to which this registration key applies.</summary>
 		public long PatNum;

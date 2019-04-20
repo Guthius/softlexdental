@@ -7,13 +7,13 @@ namespace OpenDentBusiness{
 	
 	///<summary>A list setup ahead of time with all the procedure codes used by the office.  Every procedurelog entry which is attached to a patient is also linked to this table.</summary>
 	[Serializable]
-	[CrudTable(AuditPerms=CrudAuditPerm.ProcFeeEdit)]
-	public class ProcedureCode:TableBase{
+	[ODTable(AuditPerms=CrudAuditPerm.ProcFeeEdit)]
+	public class ProcedureCode:ODTable{
 		///<summary>Primary Key.  This happened in version 4.8.7.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long CodeNum;
 		///<summary>Was Primary key, but now CodeNum is primary key.  Can hold dental codes, medical codes, custom codes, etc.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
 		public string ProcCode;
 		///<summary>The main description.</summary>
 		public string Descript;
@@ -31,7 +31,7 @@ namespace OpenDentBusiness{
 		///<summary>True if Crown,Bridge,Denture, or RPD. Forces user to enter Initial or Replacement and Date.</summary>
 		public bool IsProsth;
 		///<summary>The default procedure note to copy when marking complete.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string DefaultNote;
 		///<summary>Identifies hygiene procedures so that the correct provider can be selected.</summary>
 		public bool IsHygiene;
@@ -71,7 +71,7 @@ namespace OpenDentBusiness{
 		//[XmlIgnore]
 		public SubstitutionCondition SubstOnlyIf;
 		///<summary>Last datetime that this row was inserted or updated.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>Set to true if the procedure takes more than one appointment to complete.</summary>
 		public bool IsMultiVisit;
@@ -84,15 +84,15 @@ namespace OpenDentBusiness{
 		///<summary>For Canadian customers, tracks scaling insurance and periodontal scaling units for patients depending on coverage.</summary>
 		public double CanadaTimeUnits;
 		///<summary>Not a database column.  Only used for xml import function.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		private string procCatDescript;
 		///<summary>Set to true for radiology procedures.  An EHR core measure uses this flag to help determine the denominator for rad orders.</summary>
 		public bool IsRadiology;
 		///<summary>Default note inserted to claim note when claim is created.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string DefaultClaimNote;
 		///<summary>The default procedure note used when creating a new treatment planned procedure.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string DefaultTPNote;
 		///<summary>Enum:BypassLockStatus Specifies whether a proceduce with this code can be created before the global lock date. The only values that
 		///should be used for this field are NeverBypass and BypassIfZero.</summary>

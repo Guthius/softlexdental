@@ -4,9 +4,9 @@ namespace OpenDentBusiness {
 
 	///<summary>An entry in a list of services for a specific reseller to pick from.  To determine which services a certain customer has access to, check the repeating charges table.</summary>
 	[Serializable]
-	public class ResellerService:TableBase {
+	public class ResellerService:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ResellerServiceNum;
 		///<summary>FK to reseller.ResellerNum.</summary>
 		public long ResellerNum;

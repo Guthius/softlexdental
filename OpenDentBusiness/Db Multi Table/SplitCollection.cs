@@ -25,13 +25,13 @@ namespace OpenDentBusiness {
 		}
 
 		public void Add(PaySplit paysplit) {
-			if(_listSplits.Any(x => x.TagOD==paysplit.TagOD
+			if(_listSplits.Any(x => x.Tag==paysplit.Tag
 				|| (x.SplitNum==paysplit.SplitNum && x.SplitNum!=0))) 
 			{
 				return;
 			}
-			if(string.IsNullOrEmpty((string)paysplit.TagOD)) {
-				paysplit.TagOD=Guid.NewGuid().ToString();
+			if(string.IsNullOrEmpty((string)paysplit.Tag)) {
+				paysplit.Tag=Guid.NewGuid().ToString();
 			}
 			_listSplits.Add(paysplit);
 		}
@@ -47,7 +47,7 @@ namespace OpenDentBusiness {
 		}
 
 		public bool Contains(PaySplit paysplit) {
-			return _listSplits.Any(x => x.TagOD==paysplit.TagOD
+			return _listSplits.Any(x => x.Tag==paysplit.Tag
 				|| (x.SplitNum==paysplit.SplitNum && x.SplitNum!=0));
 		}
 
@@ -58,7 +58,7 @@ namespace OpenDentBusiness {
 		}
 
 		public bool Remove(PaySplit paySplit) {
-			return _listSplits.RemoveAll(x => x.TagOD==paySplit.TagOD || (x.SplitNum==paySplit.SplitNum && x.SplitNum!=0)) > 0;
+			return _listSplits.RemoveAll(x => x.Tag==paySplit.Tag || (x.SplitNum==paySplit.SplitNum && x.SplitNum!=0)) > 0;
 		}
 
 		public IEnumerator<PaySplit> GetEnumerator() {

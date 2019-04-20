@@ -7,10 +7,10 @@ namespace OpenDentBusiness{
 	///it means that provider is linked to all clinics. This is different from the ProviderClinic table. That table holds override information for
 	///providers for certain clinics.</summary>
 	[Serializable]
-	[CrudTable(IsSynchable=true)]
-	public class ProviderClinicLink:TableBase{
+	[ODTable(IsSynchable=true)]
+	public class ProviderClinicLink:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ProviderClinicLinkNum;
 		///<summary>FK to provider.ProvNum</summary>
 		public long ProvNum;

@@ -6,10 +6,10 @@ namespace OpenDentBusiness {
 	///<summary>Only used if clinics enabled.  Allows the user to specify DEA number override and other overrides for the provider at the specified 
 	///clinic. This is different from the ProviderClinicLink table. That table records which providers are restricted to which clinics.</summary>
 	[Serializable]
-	[CrudTable(IsSynchable = true)]
-	public class ProviderClinic:TableBase {
+	[ODTable(IsSynchable = true)]
+	public class ProviderClinic:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ProviderClinicNum;
 		///<summary>FK to provider.ProvNum.</summary>
 		public long ProvNum;

@@ -6,9 +6,9 @@ namespace OpenDentBusiness{
 	
 	///<summary>Enables viewing a variety of operatories or providers.  This table holds the views that the user picks between.  The apptviewitem table holds the items attached to each view.</summary>
 	[Serializable()]
-	public class ApptView:TableBase{
+	public class ApptView:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ApptViewNum;
 		///<summary>Description of this view.  Gets displayed in Appt module.</summary>
 		public string Description;

@@ -4,9 +4,9 @@ using System.Collections;
 namespace OpenDentBusiness{
 	///<summary>Ehr</summary>
 	[Serializable]
-	public class ReminderRule:TableBase{
+	public class ReminderRule:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ReminderRuleNum;
 		///<summary>Enum:EhrCriterion Problem,Medication,Allergy,Age,Gender,LabResult.</summary>
 		public EhrCriterion ReminderCriterion;

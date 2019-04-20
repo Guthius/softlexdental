@@ -9,10 +9,10 @@ using System.Xml.Serialization;
 namespace OpenDentBusiness{
 	///<summary>One field on a sheet.</summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true,HasBatchWriteMethods=true,IsLargeTable=true)]
-	public class SheetField:TableBase {
+	[ODTable(IsSynchable=true,HasBatchWriteMethods=true,IsLargeTable=true)]
+	public class SheetField:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long SheetFieldNum;
 		///<summary>FK to sheet.SheetNum.</summary>
 		public long SheetNum;
@@ -35,7 +35,7 @@ namespace OpenDentBusiness{
 		///<para>ScreenChart: Contains a semicolon delimited list of a single number followed by groups of comma separated surfaces.
 		///The first digit represents what type of ScreenChart it is.  0 = Permanent, 1 = Primary
 		///It may look like 0;S,P,N;S,S,S;... etc.</para></summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string FieldValue;
 		///<summary>The fontSize for this field regardless of the default for the sheet.  The actual font must be saved with each sheetField.</summary>
 		public float FontSize;
@@ -71,10 +71,10 @@ namespace OpenDentBusiness{
 		[XmlIgnore]
 		public Color ItemColor;
 		///<summary>Used to store the key to display signature box when printing.  Not stored in DB.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string SigKey;
 		///<summary>DateTime that a sheet was signed.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeSig;
 		///<summary>Tab stop order for all fields of a mobile sheet. One-based.  Only mobile fields can have values other than 0.
 		///If all SheetFieldDefs for a given SheetField are 0 then assume that this sheet has no mobile-specific view.</summary>

@@ -5,9 +5,9 @@ using System.Text;
 namespace OpenDentBusiness {
 	/// <summary>These are always attached to a mount and are constant. Should not be deleted, but rather updated if geometry changes.  Documents are then attached to MountItems using Document.MountItemNum field.</summary>
 	[Serializable()]
-	public class MountItem : TableBase {
+	public class MountItem : ODTable {
 		/// <summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long MountItemNum ;
 		/// <summary>FK to mount.MountNum.</summary>
 		public long MountNum;

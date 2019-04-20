@@ -6,12 +6,12 @@ namespace OpenDentBusiness {
 	///rows, we will notify the user and force them to decide whether an aging calculation has already begun or an error happened that prevented the
 	///calculations from finishing and the rows are left over and can be deleted.</summary>
 	[Serializable]
-	[CrudTable(HasBatchWriteMethods=true)]
-	public class FamAging:TableBase {
+	[ODTable(HasBatchWriteMethods=true)]
+	public class FamAging:ODTable {
 		///<summary>FK to patient.PatNum.  Also the primary key for this table.  Always the PatNum for the Guarantor of a family.  A guarantor may not
 		///exist in this table if the family does not have a balance.  i.e. If a PatNum is not in this table, the aged balance columns on the patient table
 		///are set to 0, so either the patient is not the guarantor or the family has a zero balance.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PatNum;
 		///<summary>Aged balance from 0 to 30 days old. Aging numbers are for entire family.  Only stored with guarantor.</summary>
 		public double Bal_0_30;

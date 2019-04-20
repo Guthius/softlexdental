@@ -3,21 +3,21 @@
 namespace OpenDentBusiness {
 
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true,CrudExcludePrefC=true)]
-	public class WebChatSurvey:TableBase {
+	[ODTable(IsMissingInGeneral=true,CrudExcludePrefC=true)]
+	public class WebChatSurvey:ODTable {
 
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long WebChatSurveyNum;
 		///<summary>FK to webchatsession.WebChatSessionNum</summary>
 		public long WebChatSessionNum;
 		///<summary>Overall rating for technician for the session.</summary>
 		public TechSurveyRating TechRating;
 		///<summary>Comments from customers.  Similar CRUD special type to commlog notes.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
 		public string CustomerComment;
 		///<summary>Experience notes from customers.  Similar CRUD special type to commlog notes.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
 		public string CustomerExperience;
 
 		///<summary></summary>

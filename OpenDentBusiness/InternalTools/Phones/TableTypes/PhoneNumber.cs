@@ -4,10 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 	///<summary>Only used internally by OpenDental, Inc.  Not used by anyone else.</summary>
 	[Serializable()]
-	[CrudTable(IsMissingInGeneral=true)]//It actually is present, but the s classs is in a weird place.
-	public class PhoneNumber : TableBase{
+	[ODTable(IsMissingInGeneral=true)]//It actually is present, but the s classs is in a weird place.
+	public class PhoneNumber : ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PhoneNumberNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;

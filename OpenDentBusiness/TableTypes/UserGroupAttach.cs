@@ -4,9 +4,9 @@ namespace OpenDentBusiness{
 
 	///<summary>Allows multiple groups to be attached to a user.  Security permissions are determined by the usergroups of a user.</summary>
 	[Serializable]
-	public class UserGroupAttach:TableBase {
+	public class UserGroupAttach:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long UserGroupAttachNum;
 		///<summary>FK to userod.UserNum.</summary>
 		public long UserNum;

@@ -6,22 +6,22 @@ using System.Xml.Serialization;
 
 namespace OpenDentBusiness {
 	///<summary>When a reminder is sent for an appointment a record of that send is stored here. This is used to prevent re-sends of the same reminder.</summary>
-	[Serializable,CrudTable(HasBatchWriteMethods=true)]
-	public class ApptReminderSent:TableBase {
+	[Serializable,ODTable(HasBatchWriteMethods=true)]
+	public class ApptReminderSent:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ApptReminderSentNum;
 		///<summary>FK to appointment.AptNum.</summary>
 		public long ApptNum;
 		///<summary>The Date and time of the original appointment. We need this in case the appointment was moved and needs another reminder sent out.</summary>
-		[CrudColumn(SpecialType = CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.DateT)]
 		public DateTime ApptDateTime;
 		///<summary>Once sent, this was the date and time that the reminder was sent out on.</summary>
-		[CrudColumn(SpecialType = CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.DateT)]
 		public DateTime DateTimeSent;
 		///<summary>This was the TSPrior used to send this reminder. </summary>
 		[XmlIgnore]
-		[CrudColumn(SpecialType = CrudSpecialColType.TimeSpanLong)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.TimeSpanLong)]
 		public TimeSpan TSPrior;
 		///<summary>FK to apptreminderrule.ApptReminderRuleNum. Allows us to look up the rules to determine how to send this apptcomm out.</summary>
 		public long ApptReminderRuleNum;

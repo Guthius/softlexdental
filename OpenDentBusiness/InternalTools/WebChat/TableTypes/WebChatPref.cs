@@ -3,10 +3,10 @@
 namespace OpenDentBusiness {
 
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true,CrudExcludePrefC=true)]
-	public class WebChatPref:TableBase {
+	[ODTable(IsMissingInGeneral=true,CrudExcludePrefC=true)]
+	public class WebChatPref:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long WebChatPrefNum;
 		///<summary>Preference name, must match a value from WebChatPrefName.</summary>
 		public string PrefName;

@@ -2,10 +2,10 @@
 
 namespace OpenDentBusiness{
 	[Serializable]
-	public class EhrCarePlan:TableBase {
+	public class EhrCarePlan:ODTable {
 
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EhrCarePlanNum;
 		///<summary>FK to patient.PatNum. </summary>
 		public long PatNum;

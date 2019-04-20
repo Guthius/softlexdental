@@ -5,9 +5,9 @@ namespace OpenDentBusiness{
 	
 	///<summary>Links a specific claim within an ERA 835 to an actual claim in the claims table.</summary>
 	[Serializable]
-	public class Etrans835Attach:TableBase{
+	public class Etrans835Attach:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long Etrans835AttachNum;
 		///<summary>FK to etrans.EtransNum.</summary>
 		public long EtransNum;
@@ -17,10 +17,10 @@ namespace OpenDentBusiness{
 		///This index is unique, even if there are multiple 835 transactions within the X12 document.</summary>
 		public int ClpSegmentIndex;
 		///<summary>DateTime that the row was inserted.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime DateTimeEntry;
 		///<summary>Copied from etrans.DateTimeTrans based on EtransNum above.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public DateTime DateTimeTrans;
 
 		///<summary></summary>

@@ -6,9 +6,9 @@ using System.Text;
 namespace OpenDentBusiness {
 	///<summary>Vaccine observation.  There may be multiple vaccine observations for each vaccine.</summary>
 	[Serializable]
-	public class VaccineObs:TableBase {
+	public class VaccineObs:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long VaccineObsNum;
 		///<summary>FK to vaccinepat.VaccinePatNum. </summary>
 		public long VaccinePatNum;

@@ -505,7 +505,7 @@ namespace OpenDental {
 				List<PaySplit> listOrig=listAssociated.Select(x=>x.PaySplitOrig).ToList();
 				List<PaySplit> listLinked=listAssociated.Select(x=>x.PaySplitLinked).ToList();
 				List<PaySplit> listPaySplitFromGrid=ListSplitsCur.FindAll(x=> x.SplitAmt<0 && !listOrig.Exists(y => y==x) && !listLinked.Exists(y => y==x) 
-					&& x.TagOD!=PaySplitCur.TagOD && x.FSplitNum==SplitAssociated.PaySplitOrig.SplitNum);
+					&& x.Tag!=PaySplitCur.Tag && x.FSplitNum==SplitAssociated.PaySplitOrig.SplitNum);
 				//add only paysplits from the left grid. 
 				listPaySplitAllocatedElseWhere.AddRange(listPaySplitFromGrid);
 				prepayAmt=(decimal)paySplitPrePayOrig.SplitAmt;
@@ -677,7 +677,7 @@ namespace OpenDental {
 
 		private void butDetachPrepay_Click(object sender,EventArgs e) {
 			labelPrePayWarning.Visible=false;
-			PaySplit splitCur=ListSplitsCur.FirstOrDefault(x => x.TagOD==PaySplitCur.TagOD);
+			PaySplit splitCur=ListSplitsCur.FirstOrDefault(x => x.Tag==PaySplitCur.Tag);
 			if(splitCur!=null) {
 				splitCur.FSplitNum=0;//list and object are same but different. List is from copy so need to modify both.
 			}

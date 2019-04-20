@@ -5,9 +5,9 @@ namespace OpenDentBusiness{
 
 	///<summary>Rx definitions.  Can safely delete or alter, because they get copied to the rxPat table, not referenced.</summary>
 	[Serializable]
-	public class RxDef:TableBase {
+	public class RxDef:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long RxDefNum;
 		///<summary>The name of the drug.</summary>
 		public string Drug;
@@ -26,7 +26,7 @@ namespace OpenDentBusiness{
 		///<summary>If true will require procedure be attached to this prescription when printed.  Usually true if IsControlled is true.</summary>
 		public bool IsProcRequired;
 		///<summary>Directions intended for the patient.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string PatientInstruction;
 
 		///<summary></summary>

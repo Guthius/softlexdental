@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>Also used by OD customer support to store and track Ehr Quarterly Keys for customers.</summary>
 	[Serializable]
-	public class EhrQuarterlyKey:TableBase {
+	public class EhrQuarterlyKey:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EhrQuarterlyKeyNum;
 		///<summary>Example 11</summary>
 		public int YearValue;
@@ -20,7 +20,7 @@ namespace OpenDentBusiness {
 		///<summary>FK to patient.PatNum.  Always zero for customer databases.  When used by OD customer support, this is the customer num.</summary>
 		public long PatNum;
 		///<summary>Any notes that the tech wishes to include regarding this situation.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Notes;
 
 		///<summary></summary>

@@ -4,9 +4,9 @@ namespace OpenDentBusiness{
 
 	///<summary>Used in public health.  The database table only has 3 columns.  There are 5 additional columns in C# that are not in the databae.  These extra columns are used in the UI to organize input, and are transferred to the screen table as needed.</summary>
 	[Serializable]
-	public class ScreenGroup:TableBase {
+	public class ScreenGroup:ODTable {
 		///<summary>Primary key</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ScreenGroupNum;
 		///<summary>Up to the user.</summary>
 		public string Description;

@@ -5,9 +5,9 @@ namespace OpenDentBusiness{
 
 	///<summary>When doing a lettermerge, a data file is created with certain fields.  This is a list of those fields for each lettermerge.</summary>
 	[Serializable]
-	public class LetterMergeField:TableBase {
+	public class LetterMergeField:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long FieldNum;
 		///<summary>FK to lettermerge.LetterMergeNum.</summary>
 		public long LetterMergeNum;

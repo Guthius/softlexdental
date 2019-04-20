@@ -183,7 +183,7 @@ namespace OpenDentBusiness.Crud{
 					sbRow.Append("'"+POut.String(patientPortalInvite.TemplateEmail)+"'"); sbRow.Append(",");
 					sbRow.Append("'"+POut.String(patientPortalInvite.TemplateEmailSubj)+"'"); sbRow.Append(",");
 					sbRow.Append("'"+POut.String(patientPortalInvite.Note)+"'"); sbRow.Append(")");
-					if(sbCommands.Length+sbRow.Length+1 > TableBase.MaxAllowedPacketCount) {
+					if(sbCommands.Length+sbRow.Length+1 > ODTable.MaxAllowedPacketCount) {
 						Db.NonQ(sbCommands.ToString());
 						sbCommands=null;
 					}

@@ -5,18 +5,18 @@ using System.Text;
 
 namespace OpenDentBusiness.Mobile {
 	[Serializable]
-	[CrudTable(IsMobile=true)]
-	public class LabResultm:TableBase {
+	[ODTable(IsMobile=true)]
+	public class LabResultm:ODTable {
 		///<summary>Primary key 1.</summary>
-		[CrudColumn(IsPriKeyMobile1=true)]
+		[ODTableColumn(IsPriKeyMobile1=true)]
 		public long CustomerNum;
 		///<summary>Primary key 2.</summary>
-		[CrudColumn(IsPriKeyMobile2=true)]
+		[ODTableColumn(IsPriKeyMobile2=true)]
 		public long LabResultNum;
 		///<summary>FK to labpanel.LabPanelNum.</summary>
 		public long LabPanelNum;
 		///<summary>OBX-14.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeTest;
 		///<summary>OBX-3, text portion.</summary>
 		public string TestName;

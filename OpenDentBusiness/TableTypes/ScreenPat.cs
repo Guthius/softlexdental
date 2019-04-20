@@ -5,10 +5,10 @@ using System.Drawing;
 namespace OpenDentBusiness{
 	///<summary> This allows users to set up a list of students prior to actually going to the school.  It also serves to attach the exam sheet to the screening.</summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true)]
-	public class ScreenPat:TableBase{
+	[ODTable(IsSynchable=true)]
+	public class ScreenPat:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ScreenPatNum;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;

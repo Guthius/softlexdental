@@ -5,10 +5,10 @@ namespace OpenDentBusiness{
 	///Each row will have a corresponding FieldLocation, where this def type needs to be hidden from the user (All field defs are shown by default).
 	///The presence of an entry in this table will cause field defs of that particular field type not to show up in the specified location.</summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true)]
-	public class FieldDefLink:TableBase{
+	[ODTable(IsSynchable=true)]
+	public class FieldDefLink:ODTable{
 		///<summary>Primary key</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long FieldDefLinkNum;
 		///<summary>A generic FieldDefNum FK to any particular field def item that will be defined by the FieldDefType column.</summary>
 		public long FieldDefNum;

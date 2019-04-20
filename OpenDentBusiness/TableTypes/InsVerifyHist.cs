@@ -6,10 +6,10 @@ using System.Text;
 namespace OpenDentBusiness {
 	///<summary>Inherits from insverify. A historical copy of an insurance verification record.</summary>
 	[Serializable]
-	[CrudTable(IsTableHist=true)]
+	[ODTable(IsTableHist=true)]
 	public class InsVerifyHist:InsVerify {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long InsVerifyHistNum;
 		///<summary>FK to userod.UserNum.  User that was logged on when row was inserted.</summary>
 		public long VerifyUserNum;

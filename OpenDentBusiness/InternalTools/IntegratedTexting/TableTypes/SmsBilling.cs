@@ -5,10 +5,10 @@ namespace OpenDentBusiness{
 	///<summary>DEPRECATED. As of 17.1, this table is no longer used by HQ. It has been replaced by EServiceBilling.
 	///Only used internally by OpenDental, Inc.  Not used by anyone else. Aggregates customer charges for integrated texting.</summary>
 	[Serializable()]
-	[CrudTable(IsMissingInGeneral=true)]//Remove this line to perform one-time CRUD updated to this class. Place back before committing changes.
-	public class SmsBilling:TableBase {
+	[ODTable(IsMissingInGeneral=true)]//Remove this line to perform one-time CRUD updated to this class. Place back before committing changes.
+	public class SmsBilling:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long SmsBillingNum;
 		///<summary>Should be unique in this table per DateUsage.</summary>
 		public long RegistrationKeyNum;
@@ -57,10 +57,10 @@ namespace OpenDentBusiness{
 		///In short, texting is included for free if you use confirmations.</summary>
 		public float ConfirmationChargeTotalUSD;
 		///<summary>Human readable explanation of how the SMS charges were calculated.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string BillingDescSms;
 		///<summary>Human readable explanation of how the confirmation charges were calculated.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string BillingDescConfirmation;
 
 		public SmsBilling Clone() {

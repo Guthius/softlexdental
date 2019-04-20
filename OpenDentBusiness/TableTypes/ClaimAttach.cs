@@ -5,9 +5,9 @@ using System.Text;
 namespace OpenDentBusiness {
 	///<summary>Keeps track of one image file attached to a claim.  Multiple files can be attached to a claim using this method.</summary>
 	[Serializable()]
-	public class ClaimAttach:TableBase {
+	public class ClaimAttach:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ClaimAttachNum;
 		///<summary>FK to claim.ClaimNum</summary>
 		public long ClaimNum;

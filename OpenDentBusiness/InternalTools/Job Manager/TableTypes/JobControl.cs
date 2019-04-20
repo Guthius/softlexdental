@@ -9,10 +9,10 @@ namespace OpenDentBusiness {
 	///This table is used to keep track of user preferences in regards to which 'controls' they want to have open within the Job Manager Dashboard
 	///window and their location.</summary>
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true)]
-	public class JobControl:TableBase {//deprecated
+	[ODTable(IsMissingInGeneral=true)]
+	public class JobControl:ODTable {//deprecated
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long JobControlNum;
 		///<summary></summary>
 		public long UserNum;

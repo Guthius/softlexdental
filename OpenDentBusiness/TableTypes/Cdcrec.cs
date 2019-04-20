@@ -5,9 +5,9 @@
 namespace OpenDentBusiness {
 	///<summary>CDC Race and Ethnicity.  About 200 rows.  This table is not used anywhere right now.</summary>
 	[Serializable]
-	public class Cdcrec:TableBase {
+	public class Cdcrec:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long CdcrecNum;
 		///<summary>CDCREC Code.  Example: 1002-5.  Not allowed to edit this column once saved in the database.</summary>
 		public string CdcrecCode;

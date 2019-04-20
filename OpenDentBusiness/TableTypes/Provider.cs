@@ -7,9 +7,9 @@ namespace OpenDentBusiness{
 	
 	///<summary>A provider is usually a dentist or a hygienist.  But a provider might also be a denturist, a dental student, or a dental hygiene student.  A provider might also be a 'dummy', used only for billing purposes or for notes in the Appointments module.  There is no limit to the number of providers that can be added.</summary>
 	[Serializable()]
-	public class Provider:TableBase{
+	public class Provider:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ProvNum;
 		///<summary>Abbreviation.  There was a limit of 5 char before version 5.4.  The new limit is 255 char.  This will allow more elegant solutions to various problems.  Providers will no longer be referred to by FName and LName.  Abbr is used as a human readable primary key.</summary>
 		public string Abbr;
@@ -58,7 +58,7 @@ namespace OpenDentBusiness{
 		///<summary>Canadian field required for e-claims.  Assigned by CDA.  It's OK to have multiple providers with the same OfficeNum.  Max length should be 4.</summary>
 		public string CanadianOfficeNum;
 		/// <summary>.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		/// <summary> FK to ??. Field used to set the Anesthesia Provider type. Used to filter the provider dropdowns on FormAnestheticRecord</summary>
 		public long AnesthProvType;
@@ -95,7 +95,7 @@ namespace OpenDentBusiness{
 		/// <summary>The birthdate of the provider.</summary>
 		public DateTime Birthdate;
 		///<summary>The description of the provider that is displayed to patients in Web Sched.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string WebSchedDescript;
 		///<summary>The image of the provider that is displayed to patients in Web Sched. File name only (path not included).
 		///This should be a file name in the A to Z folder.</summary>

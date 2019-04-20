@@ -5,16 +5,16 @@ using System.Drawing;
 namespace OpenDentBusiness {
   ///<summary>Ehr. Lab and radiology orders.  Medication orders are simply fields in medicationPat.</summary>
   [Serializable]
-  public class MedicalOrder:TableBase {
+  public class MedicalOrder:ODTable {
     ///<summary>Primary key.</summary>
-    [CrudColumn(IsPriKey=true)]
+    [ODTableColumn(PrimaryKey=true)]
     public long MedicalOrderNum;
     ///<summary>Enum:MedicalOrderType Laboratory=0,Radiology=1.</summary>
     public MedicalOrderType MedOrderType;
     ///<summary>FK to patient.PatNum</summary>
     public long PatNum;
     ///<summary>Date and time of order.</summary>
-    [CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+    [ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
     public DateTime DateTimeOrder;
 		///<summary>User will be required to type entire order out from scratch.</summary>
 		public string Description;

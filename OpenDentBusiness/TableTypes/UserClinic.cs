@@ -5,10 +5,10 @@ using System.Text;
 namespace OpenDentBusiness{
 		///<summary>This linker table will enable users to be associated with multiple clinics.</summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true)]
-	public class UserClinic:TableBase{
+	[ODTable(IsSynchable=true)]
+	public class UserClinic:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long UserClinicNum;
 		///<summary>FK to userod.UserNum</summary>
 		public long UserNum;

@@ -4,9 +4,9 @@ using System.Collections;
 namespace OpenDentBusiness{
 	///<summary>Links one planned appointment to one patient.  Allows multiple planned appointments per patient.  Also see the PlannedIsDone field. A planned appointment is an appointment that will show in the Chart module and in the Planned appointment tracker. It will never show in the Appointments module. In other words, it is the suggested next appoinment rather than an appointment that has already been scheduled.</summary>
 	[Serializable()]
-	public class PlannedAppt:TableBase {
+	public class PlannedAppt:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PlannedApptNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;

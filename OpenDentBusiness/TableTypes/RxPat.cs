@@ -4,10 +4,10 @@ namespace OpenDentBusiness{
 
 	///<summary>One Rx for one patient. Copied from rxdef rather than linked to it.</summary>
 	[Serializable]
-	[CrudTable(AuditPerms=CrudAuditPerm.RxCreate|CrudAuditPerm.RxEdit)]
-	public class RxPat:TableBase {
+	[ODTable(AuditPerms=CrudAuditPerm.RxCreate|CrudAuditPerm.RxEdit)]
+	public class RxPat:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long RxNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
@@ -30,7 +30,7 @@ namespace OpenDentBusiness{
 		///<summary>Is a controlled substance.  This will affect the way it prints.</summary>
 		public bool IsControlled;
 		///<summary>The last date and time this row was altered.  Not user editable.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>Enum:RxSendStatus </summary>
 		public RxSendStatus SendStatus;
@@ -52,7 +52,7 @@ namespace OpenDentBusiness{
 		///<summary>The number of days this prescription is intended to last.  Only used when IsProcRequired is true.</summary>
 		public double DaysOfSupply;
 		///<summary>Directions intended for the patient.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string PatientInstruction;
 		///<summary>FK to clinic.ClinicNum.</summary>
 		public long ClinicNum;

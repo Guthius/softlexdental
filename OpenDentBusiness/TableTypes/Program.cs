@@ -4,9 +4,9 @@ namespace OpenDentBusiness{
 
 	///<summary>Each row is a bridge to an outside program, frequently an imaging program.  Most of the bridges are hard coded, and simply need to be enabled.  But user can also add their own custom bridge.</summary>
 	[Serializable]
-	public class Program:TableBase {
+	public class Program:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ProgramNum;
 		///<summary>Unique name for built-in program bridges. Not user-editable. enum ProgramName</summary>
 		public string ProgName;
@@ -19,16 +19,16 @@ namespace OpenDentBusiness{
 		///<summary>Some programs will accept command line arguments.</summary>
 		public string CommandLine;
 		///<summary>Notes about this program link. Peculiarities, etc.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		///<summary>If this is a Plugin, then this is the filename of the dll.  The dll must be located in the application directory.</summary>
 		public string PluginDllName;
 		///<summary>If no image, then will be an empty string.  In this case, the bitmap will be null when loaded from the database.
 		///Must be a 22 x 22 image, and thus needs (width) x (height) x (depth) = 22 x 22 x 4 = 1936 bytes.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ButtonImage;
 		/// <summary>For custom program links only.  Stores the template of a file to be generated when launching the program link.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string FileTemplate;
 		/// <summary>For custom program links only.  Stores the path of a file to be generated when launching the program link.</summary>
 		public string FilePath;

@@ -7,16 +7,16 @@ namespace OpenDentBusiness {
 	///<summary>This table is not part of the general release.  User would have to add it manually.  All schema changes are done directly on our live database as needed.
 	/// Gives permission if a row exists.</summary>
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true,IsSynchable=true)]
+	[ODTable(IsMissingInGeneral=true,IsSynchable=true)]
 	//[CrudTable(IsSynchable=true)]
-	public class JobPermission:TableBase {
+	public class JobPermission:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long JobPermissionNum;
 		///<summary>FK to userod.UserNum.</summary>
 		public long UserNum;
 		///<summary>Enum:JobPermissions The role type that this user has.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public JobPerm JobPermType;
 
 		///<summary></summary>

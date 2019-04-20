@@ -6,11 +6,11 @@ namespace OpenDentBusiness{
 
 	///<summary>Every user group has certain permissions.  This defines a permission for a group.  The absense of permission would cause that row to be deleted from this table.</summary>
 	[Serializable]
-	[CrudTable(IsSynchable=true)]
+	[ODTable(IsSynchable=true)]
 
-	public class GroupPermission:TableBase {
+	public class GroupPermission:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long GroupPermNum;
 		///<summary>Only granted permission if newer than this date.  Can be Minimum (01-01-0001) to always grant permission.</summary>
 		public DateTime NewerDate;

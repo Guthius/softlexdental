@@ -7,10 +7,10 @@ namespace OpenDentBusiness{
 	
 	///<summary>Appointment type is used to override appointment color.  Might control other properties on appointments in the future.</summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true)]
-	public class AppointmentType:TableBase{
+	[ODTable(IsSynchable=true)]
+	public class AppointmentType:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long AppointmentTypeNum;
 		///<summary></summary>
 		public string AppointmentTypeName;

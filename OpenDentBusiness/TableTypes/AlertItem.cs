@@ -7,10 +7,10 @@ namespace OpenDentBusiness {
 	///<summary>Any row in this table will show up in the main menu of Open Dental to get the attention of the user.
 	///The user will be able to click on the alert and take an action.  The actions available to the user are also determined in this row.</summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true)]
-	public class AlertItem:TableBase{
+	[ODTable(IsSynchable=true)]
+	public class AlertItem:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long AlertItemNum;
 		///<summary>FK to clinic.ClinicNum. Can be 0 or -1. -1 indicates show the alert in all clinics.</summary>
 		public long ClinicNum;

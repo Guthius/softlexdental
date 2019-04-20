@@ -3,9 +3,9 @@ using System;
 namespace OpenDentBusiness {
 	///<summary>Keeps track of the last appointment view used on a per user basis.  Users can have multiple rows in this table when using clinics.</summary>
 	[Serializable()]
-	public class UserodApptView:TableBase {
+	public class UserodApptView:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long UserodApptViewNum;
 		///<summary>FK to userod.UserNum.</summary>
 		public long UserNum;

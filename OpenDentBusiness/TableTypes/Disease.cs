@@ -5,19 +5,19 @@ namespace OpenDentBusiness {
 
 	/// <summary>Each row is one disease that one patient has.  Now called a problem in the UI.  Must have a DiseaseDefNum.</summary>
 	[Serializable]
-	public class Disease:TableBase {
+	public class Disease:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long DiseaseNum;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;
 		///<summary>FK to diseasedef.DiseaseDefNum.  The disease description is in that table.</summary>
 		public long DiseaseDefNum;
 		///<summary>Any note about this disease that is specific to this patient.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string PatNote;
 		///<summary>The last date and time this row was altered.  Not user editable.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		//This column was removed 
 		/////<summary>FK to icd9.ICD9Num.  Will be zero if DiseaseDefNum has a value.</summary>

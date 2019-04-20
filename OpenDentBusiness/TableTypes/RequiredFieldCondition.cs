@@ -3,14 +3,14 @@
 namespace OpenDentBusiness {
 	///<summary>When one of these conditions is true, the corresponding requiredfield will be triggered.</summary>
 	[Serializable]
-	public class RequiredFieldCondition:TableBase {
+	public class RequiredFieldCondition:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long RequiredFieldConditionNum;
 		///<summary>FK to requiredfield.RequiredFieldNum.</summary>
 		public long RequiredFieldNum;
 		///<summary>Enum:RequiredFieldName </summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public RequiredFieldName ConditionType;
 		///<summary>Enum:ConditionOperator . The operator that is being applied to the ConditionType.</summary>
 		public ConditionOperator Operator;

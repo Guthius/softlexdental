@@ -5,9 +5,9 @@ namespace OpenDentBusiness {
 
 	///<summary>In the program, this is now called an autonote prompt.</summary>
 	[Serializable()]
-	public class AutoNoteControl:TableBase {
+	public class AutoNoteControl:ODTable {
 		///<summary>Primary key</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long AutoNoteControlNum;
 		///<summary>The description of the prompt as it will be referred to from other windows.</summary>
 		public string Descript;
@@ -16,7 +16,7 @@ namespace OpenDentBusiness {
 		///<summary>The prompt text.</summary>
 		public string ControlLabel;
 		///<summary>For TextBox, this is the default text.  For a ComboBox, this is the list of possible responses, one per line.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ControlOptions;
 		
 

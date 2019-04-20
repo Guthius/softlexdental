@@ -4,9 +4,9 @@ using System.Collections;
 namespace OpenDentBusiness{
 	///<summary>Holds one recorded cell value for a tooth grid, which is a special kind of sheet field type that shows a grid with 32 rows and configurable columns.  The entire grid is a single large sheet field.</summary>
 	[Serializable]
-	public class ToothGridCell : TableBase{
+	public class ToothGridCell : ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ToothGridCellNum;
 		///<summary>FK to sheetfield.SheetFieldNum.  Required.</summary>
 		public long SheetFieldNum;

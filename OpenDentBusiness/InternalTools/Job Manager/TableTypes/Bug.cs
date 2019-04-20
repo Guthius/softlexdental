@@ -6,13 +6,13 @@ namespace OpenDentBusiness{
 	
 	///<summary>This schema is copied directly from JRMT. Do not rename columns here.</summary>
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true)]
+	[ODTable(IsMissingInGeneral=true)]
 	public class Bug{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long BugId;
 		///<summary>Includes time.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime CreationDate;
 		public BugStatus Status_;
 		public BugType Type_;

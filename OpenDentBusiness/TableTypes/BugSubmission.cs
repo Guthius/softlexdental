@@ -15,13 +15,13 @@ namespace OpenDentBusiness {
 	///This table is only in OpenDentBusiness because the bug table from the bugs database lives here as well,
 	/// and we want to follow that pattern since this table links to it.</summary>
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true)]
-	public class BugSubmission:TableBase {
+	[ODTable(IsMissingInGeneral=true)]
+	public class BugSubmission:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long BugSubmissionNum;
 		/// <summary>Automatically set to the date and time upon insert. Uses server time.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime SubmissionDateTime;
 		///<summary>FK to bug.BugId. Can be 0.</summary>
 		public long BugId;
@@ -33,20 +33,20 @@ namespace OpenDentBusiness {
 		///<summary>The string from an excetions.GetMessage</summary>
 		public string ExceptionMessageText;
 		///<summary>The raw full statck trace.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ExceptionStackTrace;
 		///<summary>A JSON object storing important key value pairs for backwards/forwards compatibility.
 		///Will contain important preferences, as well as DbInfoField values, in the "key":"value" format of JSON
 		///Automatically set in constructor.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string DbInfoJson;
 		///<summary>Used to add general notes to a submissions.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string DevNote;
 		///<summary>True when this bug submission should not be shown in UI, otherwise false.</summary>
 		public bool IsHidden;
 		///<summary>CSV category tags.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string CategoryTags;
 
 		///<summary>Sometimes set to the bug object identified by the BugId column.  Will be null if instantiating method did not set or no bug found.
@@ -62,7 +62,7 @@ namespace OpenDentBusiness {
 		}
 
 		[XmlIgnore,JsonIgnore]
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		private string _simplifiedStackTrace;
 
 		///<summary>Returns ExceptionStackTrace without the line numbers and file paths.</summary>
@@ -77,7 +77,7 @@ namespace OpenDentBusiness {
 		}
 		
 		[XmlIgnore,JsonIgnore]
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		private List<string> _listOdExceptionLines;
 
 		///<summary>Returns list of OD exception lines from ExceptionStackTrace.</summary>
@@ -99,7 +99,7 @@ namespace OpenDentBusiness {
 		}
 		
 		[XmlIgnore,JsonIgnore]
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		private string _odStackSignature;
 
 		///<summary>Helper to who ListOdExceptionLines in a single string.</summary>
@@ -116,7 +116,7 @@ namespace OpenDentBusiness {
 		}
 		
 		[XmlIgnore,JsonIgnore]
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		private SubmissionInfo _info;
 		
 		///<summary>Any additional information gathered at the time the bug is submitted.</summary>

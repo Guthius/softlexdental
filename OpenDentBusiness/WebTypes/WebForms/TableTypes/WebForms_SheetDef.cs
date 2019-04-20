@@ -5,10 +5,10 @@ using System.Collections.Generic;
 
 namespace OpenDentBusiness.WebTypes.WebForms {
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true,CrudLocationOverride=@"..\..\..\OpenDentBusiness\WebTypes\WebForms\Crud",NamespaceOverride="OpenDentBusiness.WebTypes.WebForms.Crud",CrudExcludePrefC=true)]
-	public class WebForms_SheetDef:TableBase {
+	[ODTable(IsMissingInGeneral=true,CrudLocationOverride=@"..\..\..\OpenDentBusiness\WebTypes\WebForms\Crud",NamespaceOverride="OpenDentBusiness.WebTypes.WebForms.Crud",CrudExcludePrefC=true)]
+	public class WebForms_SheetDef:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long WebSheetDefID;
 		///<summary>FK to customers.patient.PatNum.</summary>
 		public long DentalOfficeID;
@@ -29,7 +29,7 @@ namespace OpenDentBusiness.WebTypes.WebForms {
 		///<summary>FK to sheetdef.SheetDefNum</summary>
 		public long SheetDefNum;
 		///<Summary></Summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		[XmlIgnore]
 		public List<WebForms_SheetFieldDef> SheetFieldDefs;
 		///<summary>If true then this Sheet has been designed for mobile and will be displayed as a mobile-friendly WebForm.</summary>

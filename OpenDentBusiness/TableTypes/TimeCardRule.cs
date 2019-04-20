@@ -7,10 +7,10 @@ using System.Xml.Serialization;
 namespace OpenDentBusiness{
 	///<summary>A rule for automation of timecard overtime.  Can apply to one employee or all.</summary>
 	[Serializable]
-	[CrudTableAttribute(HasBatchWriteMethods=true)]
-	public class TimeCardRule:TableBase{
+	[ODTableAttribute(HasBatchWriteMethods=true)]
+	public class TimeCardRule:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long TimeCardRuleNum;
 		///<summary>FK to employee.EmployeeNum. If zero, then this rule applies to all employees.</summary>
 		public long EmployeeNum;

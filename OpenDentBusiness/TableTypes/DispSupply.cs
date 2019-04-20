@@ -5,9 +5,9 @@ namespace OpenDentBusiness{
 
 	///<summary>A dental supply or office supply item that has been dispensed.</summary>
 	[Serializable]
-	public class DispSupply : TableBase {
+	public class DispSupply : ODTable {
 		/// <summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long DispSupplyNum;
 		/// <summary>FK to supply.SupplyNum</summary>
 		public long SupplyNum;
@@ -18,7 +18,7 @@ namespace OpenDentBusiness{
 		/// <summary>Quantity given out.</summary>
 		public float DispQuantity;
 		///<summary>Notes on the dispensed supply.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
 		public string Note;
 	}
 

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace OpenDentBusiness {
 	///<summary>The procedure "In Process" status is a derived status in the UI based on the existence of a link between procedures in this table.</summary>
 	[Serializable]
-	public class ProcMultiVisit:TableBase {
+	public class ProcMultiVisit:ODTable {
 		///<summary>Primary key</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ProcMultiVisitNum;
 		///<summary>FK to progmultivisit.ProcMultiVisitNum.  Groups procmultivisit rows.  Set to the ProcMultiVisitNum of the first row in the group.</summary>
 		public long GroupProcMultiVisitNum;

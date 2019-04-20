@@ -3243,7 +3243,7 @@ namespace OpenDentBusiness
         ///<returns>bool: True if the claim was created successfully.
         ///					Claim: The claim that was created. Will be a new claim if success was not achieved.
         ///					string: Any errors from attempting to create the claim.</returns>
-        public static ODTuple<bool, Claim, string> CreateClaim(Claim ClaimCur, string claimType, List<PatPlan> PatPlanList,
+        public static Tuple<bool, Claim, string> CreateClaim(Claim ClaimCur, string claimType, List<PatPlan> PatPlanList,
             List<InsPlan> planList, List<ClaimProc> ClaimProcList, List<Procedure> procsForPat, List<InsSub> subList,
             Patient pat, PatientNote patNote, List<Procedure> listSelectedProcs, string claimError, InsPlan PlanCur,
             InsSub SubCur, Relat relatOther, List<Fee> listFees = null)
@@ -3258,12 +3258,12 @@ namespace OpenDentBusiness
             if ((claimType == "P" || claimType == "S") && Procedures.GetUniqueDiagnosticCodes(listProcs, false).Count > 4)
             {
                 claimError = claimError.AppendLine(Lans.g("ContrAccount", "Claim has more than 4 unique diagnosis codes.  Create multiple claims instead."));
-                return new ODTuple<bool, Claim, string>(false, new Claim(), claimError);
+                return new Tuple<bool, Claim, string>(false, new Claim(), claimError);
             }
             if (Procedures.GetUniqueDiagnosticCodes(listProcs, true).Count > 12)
             {
                 claimError = claimError.AppendLine(Lans.g("ContrAccount", "Claim has more than 12 unique diagnosis codes.  Create multiple claims instead."));
-                return new ODTuple<bool, Claim, string>(false, new Claim(), claimError);
+                return new Tuple<bool, Claim, string>(false, new Claim(), claimError);
             }
             for (int i = 0; i < listProcs.Count; i++)
             {
@@ -3271,7 +3271,7 @@ namespace OpenDentBusiness
                 if (Procedures.NoBillIns(proc, ClaimProcList, PlanCur.PlanNum))
                 {
                     claimError = claimError.AppendLine(Lans.g("ContrAccount", "Not allowed to send procedures to insurance that are marked 'Do not bill to ins'."));
-                    return new ODTuple<bool, Claim, string>(false, new Claim(), claimError);
+                    return new Tuple<bool, Claim, string>(false, new Claim(), claimError);
                 }
             }
             for (int i = 0; i < listProcs.Count; i++)
@@ -3280,7 +3280,7 @@ namespace OpenDentBusiness
                 if (Procedures.IsAlreadyAttachedToClaim(proc, ClaimProcList, SubCur.InsSubNum))
                 {
                     claimError = claimError.AppendLine(Lans.g("ContrAccount", "Not allowed to send a procedure to the same insurance company twice."));
-                    return new ODTuple<bool, Claim, string>(false, new Claim(), claimError);
+                    return new Tuple<bool, Claim, string>(false, new Claim(), claimError);
                 }
             }
             proc = listProcs[0];
@@ -3292,12 +3292,12 @@ namespace OpenDentBusiness
                 if (PrefC.HasClinicsEnabled && clinicNum != proc.ClinicNum)
                 {
                     claimError = claimError.AppendLine(Lans.g("ContrAccount", "All procedures do not have the same clinic."));
-                    return new ODTuple<bool, Claim, string>(false, new Claim(), claimError);
+                    return new Tuple<bool, Claim, string>(false, new Claim(), claimError);
                 }
                 if (!PrefC.GetBool(PrefName.EasyHidePublicHealth) && proc.PlaceService != placeService)
                 {
                     claimError = claimError.AppendLine(Lans.g("ContrAccount", "All procedures do not have the same place of service."));
-                    return new ODTuple<bool, Claim, string>(false, new Claim(), claimError);
+                    return new Tuple<bool, Claim, string>(false, new Claim(), claimError);
                 }
             }
             List<Procedure> listInProcessProcs = new List<Procedure>();
@@ -3313,7 +3313,7 @@ namespace OpenDentBusiness
             {
                 claimError = claimError.AppendLine(Lans.g("ContrAccount", "Not allowed to send procedures which are currently in process.\r\nProcs: ")
                     + String.Join(",", ProcedureCodes.GetCodesForCodeNums(listInProcessProcs.Select(x => x.CodeNum).ToList()).Select(x => x.ProcCode)));
-                return new ODTuple<bool, Claim, string>(false, new Claim(), claimError);
+                return new Tuple<bool, Claim, string>(false, new Claim(), claimError);
             }
             ClaimProc[] claimProcs = new ClaimProc[listProcs.Count];//1:1 with listProcs
             for (int i = 0; i < listProcs.Count; i++)
@@ -3332,7 +3332,7 @@ namespace OpenDentBusiness
                     if (claimProcs[i].NoBillIns)
                     {
                         claimError = claimError.AppendLine(Lans.g("ContrAccount", "Not allowed to send procedures to insurance that are marked 'Do not bill to ins'."));
-                        return new ODTuple<bool, Claim, string>(false, new Claim(), claimError);
+                        return new Tuple<bool, Claim, string>(false, new Claim(), claimError);
                     }
                 }
             }
@@ -3639,7 +3639,7 @@ namespace OpenDentBusiness
             {
                 ClaimSnapshots.CreateClaimSnapshot(ClaimProcs.Refresh(pat.PatNum).FindAll(x => x.ClaimNum == ClaimCur.ClaimNum), ClaimSnapshotTrigger.ClaimCreate, claimType);
             }
-            return new ODTuple<bool, Claim, string>(true, ClaimCur, claimError);
+            return new Tuple<bool, Claim, string>(true, ClaimCur, claimError);
         }
 
         ///<summary>A class simply used to transfer data that is used for creating a claim.</summary>

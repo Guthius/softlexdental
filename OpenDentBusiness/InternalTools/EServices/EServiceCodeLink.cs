@@ -11,11 +11,11 @@ namespace OpenDentBusiness
     ///<summary>This table is the link between eServices and procedure codes.
     ///Users will not be able to manually add any of these procedure codes as repeating charges.  They are handled by the sign up portal.</summary>
     [Serializable]
-    [CrudTable(IsMissingInGeneral = true)]
-    public class EServiceCodeLink : TableBase
+    [ODTable(IsMissingInGeneral = true)]
+    public class EServiceCodeLink : ODTable
     {
         ///<summary>Primary key</summary>
-        [CrudColumn(IsPriKey = true)]
+        [ODTableColumn(PrimaryKey = true)]
         public long EServiceCodeLinkNum;
         ///<summary>FK to procedurecode.CodeNum</summary>
         public long CodeNum;
@@ -23,7 +23,7 @@ namespace OpenDentBusiness
         public eServiceCode EService;
 
         [XmlIgnore]
-        [CrudColumn(IsNotDbColumn = true)]
+        [ODTableColumn(IsNotDbColumn = true)]
         public string ProcCode;
 
         public EServiceCodeLink Copy()

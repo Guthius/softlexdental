@@ -5,18 +5,18 @@ using System.Drawing;
 namespace OpenDentBusiness{
 	///<summary>Used to store preferences specific to clinics.</summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true)]
-	public class ClinicPref:TableBase{
+	[ODTable(IsSynchable=true)]
+	public class ClinicPref:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ClinicPrefNum;
 		///<summary>FK to clinic.ClinicNum.</summary>
 		public long ClinicNum;
 		///<summary>Enum: </summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public PrefName PrefName;
 		///<summary>The stored value.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ValueString;
 
 		public ClinicPref() {

@@ -6,17 +6,17 @@ namespace OpenDentBusiness{
 	//Any changes made to this tabletype needs to be documented on the Online Manual
 	///<summary>Subscribers can share insplans by using the InsSub table.  The patplan table determines coverage for individual patients.  InsPlans can also exist without any subscriber. </summary>
 	[Serializable]
-	[CrudTable(AuditPerms=CrudAuditPerm.InsPlanChangeCarrierName,IsSecurityStamped=true)]
-	public class InsPlan:TableBase{
+	[ODTable(AuditPerms=CrudAuditPerm.InsPlanChangeCarrierName,IsSecurityStamped=true)]
+	public class InsPlan:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PlanNum;
 		///<summary>Optional</summary>
 		public string GroupName;
 		///<summary>Optional.  In Canada, this is called the Plan Number.</summary>
 		public string GroupNum;
 		///<summary>Note for this plan.  Same for all subscribers.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string PlanNote;
 		///<summary>FK to feesched.FeeSchedNum.</summary>
 		public long FeeSched;
@@ -69,14 +69,14 @@ namespace OpenDentBusiness{
 		///<summary>FK to sop.SopCode. Examples: 121, 3115, etc.  Acts as default for all patients using this insurance.  When code is changed for an insplan, it should change automatically for patients having that primary insurance. </summary>
 		public string SopCode;
 		///<summary>FK to userod.UserNum.  Set to the user logged in when the row was inserted at SecDateEntry date and time.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
 		public long SecUserNumEntry;
 		///<summary>Timestamp automatically generated and user not allowed to change.  The actual date of entry.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateEntry)]
 		public DateTime SecDateEntry;
 		///<summary>Automatically updated by MySQL every time a row is added or changed. Could be changed due to user editing, custom queries or program
 		///updates.  Not user editable with the UI.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime SecDateTEdit;
 		///<summary>Is false if this plan needs to be verified.</summary>
 		public bool HideFromVerifyList;
@@ -100,7 +100,7 @@ namespace OpenDentBusiness{
 		public ExclusionRule ExclusionFeeRule;
 
 		///<summary>This is not a database column.  It is just used to display the number of plans with the same info.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public int NumberSubscribers;
 
 		/*

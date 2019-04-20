@@ -187,13 +187,13 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Returns a Tuple with Item1=log string and Item2=whether the table checks were successful.</summary>
-        public static ODTuple<string, bool> MySQLTables(bool verbose, DbmMode modeCur)
+        public static Tuple<string, bool> MySQLTables(bool verbose, DbmMode modeCur)
         {
             string log = "";
             bool success = true;
             if (PrefC.GetBool(PrefName.DatabaseMaintenanceSkipCheckTable))
             {
-                return new ODTuple<string, bool>("", success);
+                return new Tuple<string, bool>("", success);
             }
             string command = "DROP TABLE IF EXISTS `signal`";//Signal is keyword for MySQL 5.5.  Was renamed to signalod so drop if exists.
             Db.NonQ(command);
@@ -249,7 +249,7 @@ namespace OpenDentBusiness
                     log += Lans.g("FormDatabaseMaintenance", "Tables validated successfully.  No corrupted tables.") + "\r\n";
                 }
             }
-            return new ODTuple<string, bool>(log, success);
+            return new Tuple<string, bool>(log, success);
         }
 
         ///<summary>If using MySQL, tries to repair and then optimize each table.
@@ -270,7 +270,7 @@ namespace OpenDentBusiness
             for (int i = 0; i < tableNames.Length; i++)
             {
                 //Alert anyone that cares that we are optimizing this table.
-                MiscDataEvent.Fire(ODEventType.MiscData, Lans.g("MiscData", "Optimizing table") + ": " + tableNames[i]);
+                MiscDataEvent.Fire(ODEventType.MiscData, "Optimizing table: " + tableNames[i]);
                 string optimizeResult = OptimizeTable(tableNames[i], isLogged);
                 if (isLogged)
                 {
@@ -280,7 +280,7 @@ namespace OpenDentBusiness
             for (int i = 0; i < tableNames.Length; i++)
             {
                 //Alert anyone that cares that we are repairing this table.
-                MiscDataEvent.Fire(ODEventType.MiscData, Lans.g("MiscData", "Repairing table") + ": " + tableNames[i]);
+                MiscDataEvent.Fire(ODEventType.MiscData, "Repairing table: " + tableNames[i]);
                 command = "REPAIR TABLE `" + tableNames[i] + "`";
                 if (!isLogged)
                 {
@@ -870,7 +870,7 @@ namespace OpenDentBusiness
                         }
                         if (listAptNums.Count > 0)
                         {
-                            List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(CrudTableAttribute.GetCrudAuditPermForClass(typeof(Appointment)));
+                            List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(ODTableAttribute.GetCrudAuditPermForClass(typeof(Appointment)));
                             List<SecurityLog> listSecurityLogs = SecurityLogs.GetFromFKeysAndType(listAptNums, listPerms);
                             Appointments.ClearFkey(listAptNums);//Zero securitylog FKey column for rows to be deleted.
                                                                 //Add securitylog changes to listDbmLogs
@@ -938,7 +938,7 @@ namespace OpenDentBusiness
                     }
                     if (listAptNums.Count > 0)
                     {
-                        List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(CrudTableAttribute.GetCrudAuditPermForClass(typeof(Appointment)));
+                        List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(ODTableAttribute.GetCrudAuditPermForClass(typeof(Appointment)));
                         List<SecurityLog> listSecurityLogs = SecurityLogs.GetFromFKeysAndType(listAptNums, listPerms);
                         Appointments.ClearFkey(listAptNums);//Zero securitylog FKey column for rows to be deleted.
                                                             //Add changes to listDbmLogs
@@ -1802,7 +1802,7 @@ namespace OpenDentBusiness
                     }
                     if (listClaimNums.Count > 0)
                     {
-                        List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(CrudTableAttribute.GetCrudAuditPermForClass(typeof(Claim)));
+                        List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(ODTableAttribute.GetCrudAuditPermForClass(typeof(Claim)));
                         List<SecurityLog> listSecurityLogs = SecurityLogs.GetFromFKeysAndType(listClaimNums, listPerms);
                         Claims.ClearFkey(listClaimNums);//Zero securitylog FKey column for rows to be deleted.
                                                         //Insert changes to DbmLogs
@@ -1942,7 +1942,7 @@ namespace OpenDentBusiness
                 case DbmMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
-                        log += Lans.g("FormDatabaseMaintenance", "Claims found with invalid patients attached: ") + table.Rows.Count.ToString() + "\r\n";
+                        log += "Claims found with invalid patients attached: " + table.Rows.Count.ToString() + "\r\n";
                     }
                     break;
                 case DbmMode.Fix:
@@ -1962,7 +1962,7 @@ namespace OpenDentBusiness
                     if (numberFixed > 0 || verbose)
                     {
                         Crud.DbmLogCrud.InsertMany(listDbmLogs);
-                        log += Lans.g("FormDatabaseMaintenance", "Claim with invalid PatNums fixed: ") + numberFixed.ToString() + "\r\n";
+                        log += "Claim with invalid PatNums fixed: " + numberFixed.ToString() + "\r\n";
                     }
                     break;
             }
@@ -4432,7 +4432,7 @@ namespace OpenDentBusiness
                             Db.NonQ(command);
                             listClaimProc.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurUser.UserNum, x.ClaimProcNum, DbmLogFKeyType.ClaimProc,
                                 DbmLogActionType.Delete, methodName, "Deleted claimproc from InsPlanInvalidNum.")));
-                            List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(CrudTableAttribute.GetCrudAuditPermForClass(typeof(InsSub)));
+                            List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(ODTableAttribute.GetCrudAuditPermForClass(typeof(InsSub)));
                             listSecurityLogs = SecurityLogs.GetFromFKeysAndType(new List<long> { insSubNum }, listPerms);
                             InsSubs.ClearFkey(insSubNum);
                             listSecurityLogs.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurUser.UserNum, x.SecurityLogNum, DbmLogFKeyType.Securitylog,
@@ -4481,7 +4481,7 @@ namespace OpenDentBusiness
                         countUsed += PIn.Int(Db.GetCount(command));
                         if (countUsed == 0)
                         {//There are no other pointers to this invalid plannum or this inssub, delete this inssub
-                            List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(CrudTableAttribute.GetCrudAuditPermForClass(typeof(InsSub)));
+                            List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(ODTableAttribute.GetCrudAuditPermForClass(typeof(InsSub)));
                             listSecurityLogs = SecurityLogs.GetFromFKeysAndType(new List<long> { insSubNum }, listPerms);
                             InsSubs.ClearFkey(insSubNum);
                             listSecurityLogs.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurUser.UserNum, x.SecurityLogNum, DbmLogFKeyType.Securitylog,
@@ -4849,7 +4849,7 @@ namespace OpenDentBusiness
                     }
                     if (listClaimNums.Count > 0)
                     {
-                        List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(CrudTableAttribute.GetCrudAuditPermForClass(typeof(Claim)));
+                        List<Permissions> listPerms = GroupPermissions.GetPermsFromCrudAuditPerm(ODTableAttribute.GetCrudAuditPermForClass(typeof(Claim)));
                         List<SecurityLog> listSecurityLogs = SecurityLogs.GetFromFKeysAndType(listClaimNums, listPerms);
                         Claims.ClearFkey(listClaimNums);//Zero securitylog FKey column for rows to be deleted.
                         listSecurityLogs.ForEach(x => listDbmLogs.Add(new DbmLog(Security.CurUser.UserNum, x.SecurityLogNum, DbmLogFKeyType.Securitylog,

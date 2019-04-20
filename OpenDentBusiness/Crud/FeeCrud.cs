@@ -180,7 +180,7 @@ namespace OpenDentBusiness.Crud{
 					sbRow.Append(POut.Long(fee.SecUserNumEntry)); sbRow.Append(",");
 					sbRow.Append(DbHelper.Now()); sbRow.Append(")");
 					//SecDateTEdit can only be set by MySQL
-					if(sbCommands.Length+sbRow.Length+1 > TableBase.MaxAllowedPacketCount) {
+					if(sbCommands.Length+sbRow.Length+1 > ODTable.MaxAllowedPacketCount) {
 						Db.NonQ(sbCommands.ToString());
 						sbCommands=null;
 					}

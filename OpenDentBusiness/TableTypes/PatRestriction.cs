@@ -4,9 +4,9 @@ namespace OpenDentBusiness {
 	///<summary>This table is similar to the GroupPermission table.  However, unlike the GroupPermissions table, existence of a row for a patient in
 	///this table means the action is NOT allowed.  Hence the name PatRestrictions.</summary>
 	[Serializable]
-	public class PatRestriction:TableBase {
+	public class PatRestriction:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PatRestrictionNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;

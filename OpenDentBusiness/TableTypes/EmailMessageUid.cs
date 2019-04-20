@@ -7,12 +7,12 @@ namespace OpenDentBusiness {
 	///Not linked to the email message itself because no link is needed.
 	///If we decide to add a foreign key to a EmailMessage later, we should consider what do to when an email message is deleted (set the foreign key to 0 perhaps).</summary>
 	[Serializable]
-	public class EmailMessageUid:TableBase {
+	public class EmailMessageUid:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EmailMessageUidNum;
 		///<summary>The unique id for the associated EmailMessage.  </summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string MsgId;
 		///<summary>Copied from the EmailAddress.EmailUsername field when a message is received into the inbox.
 		///Similar to the ToAddress of the EmailMessage, except the ToAddress could contain multiple recipient addresses

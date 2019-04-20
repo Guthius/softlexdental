@@ -5,14 +5,14 @@ namespace OpenDentBusiness{
 
 	///<summary>A deposit slip.  Contains multiple insurance and patient checks.</summary>
 	[Serializable]
-	public class Deposit:TableBase{
+	public class Deposit:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long DepositNum;
 		///<summary>The date of the deposit.</summary>
 		public DateTime DateDeposit;
 		///<summary>User editable.  Usually includes name on the account and account number.  Possibly the bank name as well.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string BankAccountInfo;
 		///<summary>Total amount of the deposit. User not allowed to directly edit.</summary>
 		public double Amount;
@@ -24,7 +24,7 @@ namespace OpenDentBusiness{
 		public long DepositAccountNum;
 		///<summary>Not in the database table.  Identifies the clinic(s) that the deposit is associated to.
 		///'(None)', specific clinic abbr or '(Multiple)'.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string ClinicAbbr;
 		
 		///<summary></summary>

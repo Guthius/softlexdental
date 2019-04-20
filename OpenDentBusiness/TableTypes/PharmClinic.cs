@@ -4,10 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 	///<summary>Links a pharmacy store to a clinic.</summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true)]
-	public class PharmClinic : TableBase{
+	[ODTable(IsSynchable=true)]
+	public class PharmClinic : ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PharmClinicNum;
 		///<summary>FK to pharmacy.PharmacyNum.</summary>
 		public long PharmacyNum;

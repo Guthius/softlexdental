@@ -8,10 +8,10 @@ namespace OpenDentBusiness{
 
 	///<summary>The claim table holds information about individual claims.  Each row represents one claim.</summary>
 	[Serializable()]
-	[CrudTable(AuditPerms=CrudAuditPerm.ClaimHistoryEdit,IsSecurityStamped=true)]
-	public class Claim:TableBase{
+	[ODTable(AuditPerms=CrudAuditPerm.ClaimHistoryEdit,IsSecurityStamped=true)]
+	public class Claim:ODTable{
 		///<summary>Primary key</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ClaimNum;
 		///<summary>FK to patient.PatNum.  Must always match claimProc.PatNum</summary>
 		public long PatNum;//
@@ -165,14 +165,14 @@ namespace OpenDentBusiness{
 		///enters a value.  This field was added for Denti-Cal certification, but can go out for any clearinghouse.</summary>
 		public double ShareOfCost;
 		///<summary>FK to userod.UserNum.  Set to the user logged in when the row was inserted at SecDateEntry date and time.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
 		public long SecUserNumEntry;
 		///<summary>Timestamp automatically generated and user not allowed to change.  The actual date of entry.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateEntry)]
 		public DateTime SecDateEntry;
 		///<summary>Automatically updated by MySQL every time a row is added or changed. Could be changed due to user editing, custom queries or program
 		///updates.  Not user editable with the UI.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime SecDateTEdit;
 		///<summary>FK to referral.ReferralNum.  Goes hand-in-hand with ProvOrderOverride.  Medical eclaims only.  Defaults to zero.
 		///If set, and the ProvOrderOverride is not set, then this referral will go out at the ordering provider on medical e-claims.</summary>
@@ -181,7 +181,7 @@ namespace OpenDentBusiness{
 		public DateTime DateSentOrig;
 
 		///<summary>Not a data column.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public List<ClaimAttach> Attachments;
 
 		public Claim(){

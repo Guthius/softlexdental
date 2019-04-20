@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>Manufacturer of a vaccine.</summary>
 	[Serializable]
-	public class DrugManufacturer:TableBase {
+	public class DrugManufacturer:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long DrugManufacturerNum;
 		///<summary>.</summary>
 		public string ManufacturerName;

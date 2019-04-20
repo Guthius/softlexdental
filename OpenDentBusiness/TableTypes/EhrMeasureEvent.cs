@@ -5,13 +5,13 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>Stores events for EHR that are needed for reporting purposes.</summary>
 	[Serializable]
-	[CrudTable(HasBatchWriteMethods = true)]
-	public class EhrMeasureEvent:TableBase {
+	[ODTable(HasBatchWriteMethods = true)]
+	public class EhrMeasureEvent:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EhrMeasureEventNum;
 		///<summary>Date and time of measure event.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTEvent;
 		///<summary>Enum:EhrMeasureEventType .</summary>
 		public EhrMeasureEventType EventType;

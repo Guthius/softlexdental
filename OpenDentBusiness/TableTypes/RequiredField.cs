@@ -4,17 +4,17 @@ using System.Collections.Generic;
 namespace OpenDentBusiness {
 	///<summary>Each row represents a field that is required to be filled out.</summary>
 	[Serializable]
-	public class RequiredField:TableBase {
+	public class RequiredField:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long RequiredFieldNum;
 		///<summary>Enum:RequiredFieldType . The area of the program that uses this field.</summary>
 		public RequiredFieldType FieldType;
 		///<summary>Enum:RequiredFieldName </summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public RequiredFieldName FieldName;
 		///<summary>This is not a data column but is stored in a seperate table named RequiredFieldCondition.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		private List<RequiredFieldCondition> _listRequiredFieldConditions;
 
 		public List<RequiredFieldCondition> ListRequiredFieldConditions {

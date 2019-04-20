@@ -4,9 +4,9 @@ namespace OpenDentBusiness {
 	///<summary>Medical lab facility that performed the test procedure(s).  Contains data from the ZPS segment.  Each MedLab object can have one to
 	///many places of service, each in a repetition of the ZPS segment.  Each repetition will be its own row in this table.</summary>
 	[Serializable]
-	public class MedLabFacility:TableBase {
+	public class MedLabFacility:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long MedLabFacilityNum;
 		///<summary>ZPS.3 - Facility Name.  Medical lab location name that performed the testing.</summary>
 		public string FacilityName;

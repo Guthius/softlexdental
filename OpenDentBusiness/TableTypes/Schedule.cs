@@ -7,10 +7,10 @@ namespace OpenDentBusiness{
 
 	///<summary>One block of time.  Either for practice, provider, employee, or blockout.</summary>
 	[Serializable]
-	[CrudTable(HasBatchWriteMethods=true,IsLargeTable=true)]
-	public class Schedule:TableBase {
+	[ODTable(HasBatchWriteMethods=true,IsLargeTable=true)]
+	public class Schedule:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ScheduleNum;
 		///<summary>Date for this timeblock.</summary>
 		public DateTime SchedDate;
@@ -28,7 +28,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to definition.DefNum if blockout.  eg. HighProduction, RCT Only, Emerg.</summary>
 		public long BlockoutType;
 		///<summary>This contains various types of text entered by the user.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		///<summary>Enum:SchedStatus enumeration 0=Open,1=Closed,2=Holiday.  All blocks have a status of Open, but user doesn't see the status.
 		///The "closed" status was previously used to override the defaults when the last timeblock was deleted.  But it's nearly phased out now.
@@ -38,10 +38,10 @@ namespace OpenDentBusiness{
 		///<summary>FK to employee.EmployeeNum.</summary>
 		public long EmployeeNum;
 		///<summary>Last datetime that this row was inserted or updated.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>Not a db column.  Holds a list of ops that this schedule is assigned to.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public List<long> Ops;
 		///<summary>FK to clinic.ClinicNum if SchedType.Practice (holidays and practice notes) and applies to one clinic (operatories for one clinic). If
 		///SchedType.Practice and this applies to all clinics, or if any other SchedType, ClinicNum will be 0.  There won't be any scheduleop rows linking

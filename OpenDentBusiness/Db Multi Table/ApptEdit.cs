@@ -39,7 +39,7 @@ namespace OpenDentBusiness
 
         ///<summary>Adds procedures to the appointment.</summary>
         ///<returns>First item of tuple is the newly added procedures. Second item is all procedures for the appointment.</returns>
-        public static ODTuple<List<Procedure>, List<Procedure>> QuickAddProcs(Appointment apt, Patient pat, List<string> listProcCodesToAdd, long provNum,
+        public static Tuple<List<Procedure>, List<Procedure>> QuickAddProcs(Appointment apt, Patient pat, List<string> listProcCodesToAdd, long provNum,
             long provHyg, List<InsSub> SubList, List<InsPlan> listInsPlans, List<PatPlan> listPatPlans, List<Benefit> listBenefits)
         {
             Procedures.SetDateFirstVisit(apt.AptDateTime.Date, 1, pat);
@@ -77,7 +77,7 @@ namespace OpenDentBusiness
                     listFees);
                 listAddedProcs.Add(proc);
             }
-            return new ODTuple<List<Procedure>, List<Procedure>>(listAddedProcs, Procedures.GetProcsForApptEdit(apt));
+            return new Tuple<List<Procedure>, List<Procedure>>(listAddedProcs, Procedures.GetProcsForApptEdit(apt));
         }
 
         ///<summary>The data necesary to load FormApptEdit.</summary>

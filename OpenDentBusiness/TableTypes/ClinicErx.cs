@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace OpenDentBusiness {
 	///<summary>Tracks which clinics have access to eRx based on ClinicDescr.  Synchronized with HQ.</summary>
-	[Serializable,CrudTable(IsSynchable=true)]
-	public class ClinicErx:TableBase {
+	[Serializable,ODTable(IsSynchable=true)]
+	public class ClinicErx:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ClinicErxNum;
 		///<summary>FK to patient.PatNum.  Holder of registration key only for HQ record, in customer record this will be 0.</summary>
 		public long PatNum;

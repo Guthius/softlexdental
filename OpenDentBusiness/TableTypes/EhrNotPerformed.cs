@@ -3,9 +3,9 @@
 namespace OpenDentBusiness {
 	///<summary>For EHR module, these are all the items 'not performed' on patients.  Each row will link to the ehrcode table to retrieve relevant data.  To join this table to the ehrcode table you must join on CodeValue and CodeSystem.  Some items will have associated reasons attached to specify why it was not performed.  Those reasons will also be defined in the ehrcode table, so it may be necessary to join with that table again for the data relevant to the reason.</summary>
 	[Serializable]
-	public class EhrNotPerformed:TableBase {
+	public class EhrNotPerformed:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EhrNotPerformedNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
@@ -20,7 +20,7 @@ namespace OpenDentBusiness {
 		///<summary>FK to codesystem.CodeSystemName. The code system name for this code.  Possible value is: SNOMEDCT.</summary>
 		public string CodeSystemReason;
 		///<summary>Relevant notes for this not performed item.  Just in case users want it, does not get reported in EHR quality measure reporting.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		///<summary>The date and time this item was created.  Can be edited to the date and time the item actually occurred.</summary>
 		public DateTime DateEntry;

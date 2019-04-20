@@ -3,9 +3,9 @@
 namespace OpenDentBusiness {
 	///<summary></summary>
 	[Serializable()]
-	public class StmtLink:TableBase {
+	public class StmtLink:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long StmtLinkNum;
 		///<summary>FK to statement.StatementNum.</summary>
 		public long StatementNum;

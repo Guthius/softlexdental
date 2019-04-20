@@ -6,10 +6,10 @@ using System.Text;
 namespace OpenDentBusiness {
 	///<summary>Deprecated. This table is not part of the general release.  User would have to add it manually.  All schema changes are done directly on our live database as needed.</summary>
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true)]
-	public class JobProject:TableBase {//deprecated
+	[ODTable(IsMissingInGeneral=true)]
+	public class JobProject:ODTable {//deprecated
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long JobProjectNum;
 		///<summary>FK to project.ProjectNum.  Links this project to the source project.</summary>
 		public long RootProjectNum;

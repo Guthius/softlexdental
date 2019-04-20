@@ -5,7 +5,7 @@ using OpenDentBusiness;
 namespace OpenDentalGraph {
 	///<summary>Provides a method to create a DashboardDockContainer. All controls that want to be available for docking in DashboardCellCtrl should implement this interface.</summary>
 	public interface IDashboardDockContainer {
-		DashboardDockContainer CreateDashboardDockContainer(OpenDentBusiness.TableBase dbItem);
+		DashboardDockContainer CreateDashboardDockContainer(OpenDentBusiness.ODTable dbItem);
 		DashboardCellType GetCellType();
 		string GetCellSettings();
 	}
@@ -19,7 +19,7 @@ namespace OpenDentalGraph {
 		private EventHandler _onDropComplete;
 		private EventHandler _onRefreshCache;
 		private IODGraphPrinter _printer;
-		private OpenDentBusiness.TableBase _dbItem;
+		private OpenDentBusiness.ODTable _dbItem;
 		public Control Contr {
 			get { return _contr; }
 		}
@@ -41,7 +41,7 @@ namespace OpenDentalGraph {
 		public IODGraphPrinter Printer {
 			get { return _printer; }
 		}
-		public OpenDentBusiness.TableBase DbItem {
+		public OpenDentBusiness.ODTable DbItem {
 			get { return _dbItem; }
 		}
 		public DashboardDockContainer(
@@ -52,7 +52,7 @@ namespace OpenDentalGraph {
 			EventHandler onEditCancel = null,
 			EventHandler onDropComplete = null,
 			EventHandler onRefreshCache = null,
-			TableBase dbItem =null) {
+			ODTable dbItem =null) {
 			_contr=c;
 			_printer=printer;
 			_onEditClick=onEditClick;

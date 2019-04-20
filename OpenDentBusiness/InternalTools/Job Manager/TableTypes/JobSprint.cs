@@ -11,10 +11,10 @@ namespace OpenDentBusiness {
 	///<summary>This table is not part of the general release.  User would have to add it manually.
 	///Most schema changes are done directly on our live database as needed.  Keeps track of sprints for versions.</summary>
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true)]
-	public class JobSprint:TableBase {
+	[ODTable(IsMissingInGeneral=true)]
+	public class JobSprint:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey = true)]
+		[ODTableColumn(PrimaryKey = true)]
 		public long JobSprintNum;
 		///<summary>Main description of the sprint. Usually a version.</summary>
 		public string Title;

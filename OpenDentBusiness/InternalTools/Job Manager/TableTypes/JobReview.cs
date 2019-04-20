@@ -6,27 +6,27 @@ using System.Text;
 namespace OpenDentBusiness {
 	///<summary>This table is not part of the general release.  User would have to add it manually.  All schema changes are done directly on our live database as needed.</summary>
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true,IsSynchable=true)]
+	[ODTable(IsMissingInGeneral=true,IsSynchable=true)]
 	//[CrudTable(IsSynchable=true)]
-	public class JobReview:TableBase {
+	public class JobReview:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long JobReviewNum;
 		///<summary>FK to job.JobNum.</summary>
 		public long JobNum;
 		///<summary>FK to userod.UserNum.</summary>
 		public long ReviewerNum;
 		///<summary>Date/Time the review was created.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>The text in this review.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Description;
 		///<summary>The status of this review.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public JobReviewStatus ReviewStatus;
 		///<summary>The time spent on this review.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeSpanLong)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeSpanLong)]
 		public TimeSpan TimeReview;
 
 		///<summary></summary>

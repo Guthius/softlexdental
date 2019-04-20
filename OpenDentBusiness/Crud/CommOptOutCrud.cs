@@ -140,7 +140,7 @@ namespace OpenDentBusiness.Crud{
 					sbRow.Append(POut.Long(commOptOut.PatNum)); sbRow.Append(",");
 					sbRow.Append(POut.Int((int)commOptOut.CommType)); sbRow.Append(",");
 					sbRow.Append(POut.Int((int)commOptOut.CommMode)); sbRow.Append(")");
-					if(sbCommands.Length+sbRow.Length+1 > TableBase.MaxAllowedPacketCount) {
+					if(sbCommands.Length+sbRow.Length+1 > ODTable.MaxAllowedPacketCount) {
 						Db.NonQ(sbCommands.ToString());
 						sbCommands=null;
 					}

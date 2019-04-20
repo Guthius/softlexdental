@@ -4,10 +4,10 @@ namespace OpenDentBusiness{
 
 	///<summary>One row can hold up to six measurements for one tooth, all of the same type.  Always attached to a perioexam.</summary>
 	[Serializable]
-	[CrudTable(IsLargeTable=true)]
-	public class PerioMeasure:TableBase {
+	[ODTable(IsLargeTable=true)]
+	public class PerioMeasure:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PerioMeasureNum;
 		///<summary>FK to perioexam.PerioExamNum.</summary>
 		public long PerioExamNum;

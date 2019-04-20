@@ -4,9 +4,9 @@ using System.Collections;
 namespace OpenDentBusiness{
 	/// <summary>THIS TABLE IS NOT BEING USED.  These are always attached to mountdefs.  Can be deleted without any problems.</summary>
 	[Serializable()]
-	public class MountItemDef : TableBase {
+	public class MountItemDef : ODTable {
 		/// <summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long MountItemDefNum;
 		/// <summary>FK to mountdef.MountDefNum.</summary>
 		public long MountDefNum;

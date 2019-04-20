@@ -1368,7 +1368,7 @@ namespace OpenDental {
 					#region Generate table queries
 					//Create the shell of an archive database from the original.
 					//The following section of code was donated by the Crud Generator - A very selfless act (Also Form1 when running the crud)
-					Type typeTableBase=typeof(TableBase);
+					Type typeTableBase=typeof(ODTable);
 					List<string> listTableCommands=new List<string>();
 					Assembly assembly=Assembly.GetAssembly(typeTableBase);
 					foreach(Type typeClass in assembly.GetTypes()) {
@@ -1376,13 +1376,13 @@ namespace OpenDental {
 							try { 
 								//Some tables have a different name than the tabletype object from Assembly. (preference vs. pref for instance)
 								string tableName=typeClass.Name.ToLower();
-								object[] attributes=typeClass.GetCustomAttributes(typeof(CrudTableAttribute),true);
+								object[] attributes=typeClass.GetCustomAttributes(typeof(ODTableAttribute),true);
 								for(int i=0;i<attributes.Length;i++) {
-									if(attributes[i].GetType()!=typeof(CrudTableAttribute)) {
+									if(attributes[i].GetType()!=typeof(ODTableAttribute)) {
 										continue;
 									}
-									if(((CrudTableAttribute)attributes[i]).TableName!="") {
-										tableName=((CrudTableAttribute)attributes[i]).TableName;
+									if(((ODTableAttribute)attributes[i]).TableName!="") {
+										tableName=((ODTableAttribute)attributes[i]).TableName;
 									}
 								}
 								listTableCommands.Add(MiscData.GenerateTableQuery(tableName));//Generate CREATE TABLE statements from current db.

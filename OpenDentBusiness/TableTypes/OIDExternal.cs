@@ -3,12 +3,12 @@
 namespace OpenDentBusiness {
 	///<summary></summary>
 	[Serializable]
-	public class OIDExternal:TableBase {
+	public class OIDExternal:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long OIDExternalNum;
 		///<summary>Internal data type to be associated with.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public IdentifierType IDType;
 		///<summary>This should be a Primary Key to a Table Type defined by the IDType field. Example: If IDType==Patient, then this field should be a PatNum that is a FK to Patient.Patnum</summary>
 		public long IDInternal;

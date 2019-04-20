@@ -5,10 +5,10 @@ namespace OpenDentBusiness{
 	///<summary>Links active and inactive treatment plans to procedurelog rows.  
 	///These rows will be deleted as their corresponding procedures get set complete.</summary>
 	[Serializable]
-	[CrudTable(IsSynchable=true)]
-	public class TreatPlanAttach:TableBase {
+	[ODTable(IsSynchable=true)]
+	public class TreatPlanAttach:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long TreatPlanAttachNum;
 		///<summary>FK to treatplan.TreatPlanNum.</summary>
 		public long TreatPlanNum;

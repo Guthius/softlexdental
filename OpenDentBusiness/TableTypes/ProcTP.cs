@@ -5,10 +5,10 @@ namespace OpenDentBusiness{
 
 	///<summary>These are copies of procedures that are attached to saved treatment plans.  The ProcNumOrig points to the actual procedurelog row.</summary>
 	[Serializable]
-	[CrudTable(IsSecurityStamped=true)]
-	public class ProcTP:TableBase {
+	[ODTable(IsSecurityStamped=true)]
+	public class ProcTP:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ProcTPNum;
 		///<summary>FK to treatplan.TreatPlanNum.  The treatment plan to which this proc is attached.</summary>
 		public long TreatPlanNum;
@@ -45,14 +45,14 @@ namespace OpenDentBusiness{
 		///<summary>The ProcedureCode abbreviation.  Can be changed by user at any time.</summary>
 		public string ProcAbbr;
 		///<summary>FK to userod.UserNum.  Set to the user logged in when the row was inserted at SecDateEntry date and time.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
 		public long SecUserNumEntry;
 		///<summary>Timestamp automatically generated and user not allowed to change.  The actual date of entry.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateEntry)]
 		public DateTime SecDateEntry;
 		///<summary>Automatically updated by MySQL every time a row is added or changed. Could be changed due to user editing, custom queries or program
 		///updates.  Not user editable with the UI.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime SecDateTEdit;
 		///<summary>The amount primary insurance allows. Should be the exact amount in the FormClaimProc allowed amount field. May be either the PPO fee
 		///or the out of network allowed fee.</summary>

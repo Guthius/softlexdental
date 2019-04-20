@@ -8,24 +8,19 @@ using CodeBase;
 
 namespace OpenDentBusiness
 {
-    ///<summary></summary>
     public class ClaimTrackings
     {
-        #region Get Methods
-        ///<summary>Gets one ClaimTracking from the db.</summary>
         public static ClaimTracking GetOne(long claimTrackingNum)
         {
             return Crud.ClaimTrackingCrud.SelectOne(claimTrackingNum);
         }
 
-        ///<summary></summary>
         public static List<ClaimTracking> Refresh(long usernum)
         {
             string command = "SELECT * FROM claimtracking WHERE UserNum = " + POut.Long(usernum);
             return Crud.ClaimTrackingCrud.SelectMany(command);
         }
 
-        ///<summary></summary>
         public static List<ClaimTracking> RefreshForUsers(ClaimTrackingType type, List<long> listUserNums)
         {
             if (listUserNums == null || listUserNums.Count == 0)
@@ -49,12 +44,6 @@ namespace OpenDentBusiness
             return Crud.ClaimTrackingCrud.SelectMany(command);
         }
 
-        #endregion
-
-        #region Modification Methods
-
-        #region Insert
-        ///<summary></summary>
         public static long Insert(ClaimTracking claimTracking)
         {
             return Crud.ClaimTrackingCrud.Insert(claimTracking);
@@ -75,37 +64,26 @@ namespace OpenDentBusiness
             claimTracking.Note = note;
             return Crud.ClaimTrackingCrud.Insert(claimTracking);
         }
-        #endregion
 
-        #region Update
-        ///<summary></summary>
         public static void Update(ClaimTracking claimTracking)
         {
             Crud.ClaimTrackingCrud.Update(claimTracking);
         }
 
-        ///<summary></summary>
         public static void Sync(List<ClaimTracking> listNew, List<ClaimTracking> listOld)
         {
             Crud.ClaimTrackingCrud.Sync(listNew, listOld);
         }
-        #endregion
 
-        #region Delete
-        ///<summary></summary>
         public static void Delete(long claimTrackingNum)
         {
             Crud.ClaimTrackingCrud.Delete(claimTrackingNum);
         }
-        #endregion
 
-        #endregion
-
-        #region Misc Methods
         ///<summary>Attempts to create or update ClaimTrackings and calls sync to update the database at the end.
         ///Will update ClaimTracking if one has been inserted for a given claim that did not have one prior to calling this method.
         ///When called please ensure dictClaimTracking has entries.</summary>
-        public static List<ClaimTracking> Assign(List<ODTuple<long, long>> listTrackingNumsAndClaimNums, long assignUserNum)
+        public static List<ClaimTracking> Assign(List<Tuple<long, long>> listTrackingNumsAndClaimNums, long assignUserNum)
         {
             string command = "SELECT * FROM claimtracking WHERE claimtracking.TrackingType='" + POut.String(ClaimTrackingType.ClaimUser.ToString()) + "' "
                 + "AND claimTracking.ClaimNum IN(" + string.Join(",", listTrackingNumsAndClaimNums.Select(x => x.Item2).ToList()) + ")";
@@ -162,6 +140,5 @@ namespace OpenDentBusiness
             ClaimTrackings.Sync(listClaimTrackingNew, listClaimTrackingDb);
             return listClaimTrackingNew;
         }
-        #endregion
     }
 }

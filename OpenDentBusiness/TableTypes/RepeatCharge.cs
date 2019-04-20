@@ -4,9 +4,9 @@ namespace OpenDentBusiness{
 
 	/// <summary>Each row represents one charge that will be added monthly.</summary>
 	[Serializable]
-	public class RepeatCharge:TableBase {
+	public class RepeatCharge:ODTable {
 		/// <summary>Primary key</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long RepeatChargeNum;
 		/// <summary>FK to patient.PatNum.</summary>
 		public long PatNum;
@@ -21,7 +21,7 @@ namespace OpenDentBusiness{
 		///<summary>The last date on which a charge is allowed.  So if you want 12 charges, and the start date is 8/1/05, then the stop date should be 7/1/05, not 8/1/05.  Can be blank (0001-01-01) to represent a perpetual repeating charge.</summary>
 		public DateTime DateStop;
 		///<summary>Any note for internal use.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		///<summary>Indicates that the note should be copied to the corresponding procedure billing note.</summary>
 		public bool CopyNoteToProc;
@@ -32,13 +32,13 @@ namespace OpenDentBusiness{
 		///<summary>Set to true to use prepayments for repeating charges.</summary>
 		public bool UsePrepay;
 		///<summary>Stores the NPI of the provider on this repeating charge for Erx.  This used to be stored in the Note field but got moved over to its own column in 17.2.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Npi;
 		///<summary>Stores the Erx Account ID on this repeating charge for Erx.  This used to be stored in the Note field but got moved over to its own column in 17.2.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ErxAccountId;
 		///<summary>Stores the name of the provider on this repeating charge for Erx.  Value is received directly from NewCrop.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ProviderName;
 		///<summary>HQ Only. An alternate amount to be charged for this RepeatCharge in some cases. 
 		///Should always defaul to -1 as -1 will be used as a flag to indicate it has not been set.

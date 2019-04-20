@@ -6,17 +6,17 @@ namespace OpenDentBusiness{
 	
 	///<summary>A trigger event causes one or more actions.</summary>
 	[Serializable()]
-	public class Automation:TableBase{
+	public class Automation:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long AutomationNum;
 		///<summary>.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Description;
 		///<summary>Enum:AutomationTrigger What triggers this automation</summary>
 		public AutomationTrigger Autotrigger;
 		///<summary>If this has a CompleteProcedure trigger, this is a comma-delimited list of codes that will trigger the action.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ProcCodes;
 		///<summary>Enum:AutomationAction The action taken as a result of the trigger.  To get more than one action, create multiple automation entries.</summary>
 		public AutomationAction AutoAction;
@@ -25,7 +25,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to definition.DefNum. Only used if action is CreateCommlog.</summary>
 		public long CommType;
 		///<summary>If a commlog action, then this is the text that goes in the commlog.  If this is a ShowStatementNoteBold action, then this is the NoteBold. Might later be expanded to work with email or to use variables.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string MessageContent;
 		///<summary>Enum:ApptStatus . This column is not used anymore.</summary>
 		public ApptStatus AptStatus;

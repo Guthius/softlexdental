@@ -5,9 +5,9 @@ namespace OpenDentBusiness {
 	///both, so this will link the facility to EITHER a MedLab OR a MedLabResult object.
 	///Every MedLab and MedLabResult will have 1 to many laboratories attached.</summary>
 	[Serializable]
-	public class MedLabFacAttach:TableBase {
+	public class MedLabFacAttach:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long MedLabFacAttachNum;
 		///<summary>FK to medlab.MedLabNum.</summary>
 		public long MedLabNum;

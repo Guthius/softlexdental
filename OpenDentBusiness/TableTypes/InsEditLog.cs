@@ -5,10 +5,10 @@ namespace OpenDentBusiness{
 	
 	///<summary></summary>
 	[Serializable()]
-	[CrudTable(IsLargeTable=true)]
-	public class InsEditLog:TableBase{
+	[ODTable(IsLargeTable=true)]
+	public class InsEditLog:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long InsEditLogNum;
 		///<summary>Key to the foreign table.</summary>
 		public long FKey;
@@ -23,7 +23,7 @@ namespace OpenDentBusiness{
 		///<summary>FK to userod.UserNum. The user that made this change.</summary>
 		public long UserNum;
 		///<summary>Time that the row was inserted into the DB.</summary>
-		[CrudColumn(SpecialType = CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType = CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>Stores the key to the parent table (insplan.PlanNum) when LogType = 2 (Benefit).</summary>
 		public long ParentKey;

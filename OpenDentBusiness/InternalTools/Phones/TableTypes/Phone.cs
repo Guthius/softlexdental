@@ -7,17 +7,17 @@ using System.Xml.Serialization;
 namespace OpenDentBusiness {
 	///<summary>This table is not part of the general release.  User would have to add it manually.  All schema changes are done directly on our live database as needed.</summary>
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true)]
-	public class Phone:TableBase {
+	[ODTable(IsMissingInGeneral=true)]
+	public class Phone:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PhoneNum;
 		///<summary></summary>
 		public int Extension;
 		///<summary></summary>
 		public string EmployeeName;
 		///<summary>This enum is stored in the db as a string, so it needs special handling.  In phoneTrackingServer initialize, this value is pulled from employee.ClockStatus as Home, Lunch, Break, or Working(which gets converted to Available).  After that, the phone server uses those 4 in addition to WrapUp, Off, Training, TeamAssist, OfflineAssist, Backup, and None(which is displayed as an empty string).  The main program sets Unavailable sometimes, and pulls from employee.ClockStatus sometimes.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public ClockStatusEnum ClockStatus;
 		///<summary>Either blank or 'In use'</summary>
 		public string Description;
@@ -36,12 +36,12 @@ namespace OpenDentBusiness {
 		///<summary>FK to patient.PatNum.  The customer.</summary>
 		public long PatNum;
 		///<summary>The date/time that the phonecall started.  Used to calculate how long user has been on phone.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeStart;
 		///<summary>Always set to the phone number of the caller.</summary>
 		public string CustomerNumberRaw;
 		///<summary>A copy of DateTimeStart made when a call has ended.  Gets set to 0001-01-01 after the 30 second wrap up thread has run.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime LastCallTimeStart;
 		///<summary>Enum:AsteriskRingGroups 0=all, 1=none, 2=backup.  This represents the active ring group for this extension.
 		///This is different (and will often times differ) from the phoneempdefault.RingGroups which is just a default value for the extension.</summary>

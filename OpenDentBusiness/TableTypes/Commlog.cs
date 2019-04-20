@@ -6,20 +6,20 @@ namespace OpenDentBusiness{
 	
 	/// <summary>Tracks all forms of communications with patients, including emails, phonecalls, postcards, etc.</summary>
 	[Serializable]
-	[CrudTable(IsLargeTable=true)]
-	public class Commlog:TableBase{
+	[ODTable(IsLargeTable=true)]
+	public class Commlog:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long CommlogNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
 		///<summary>Date and time of entry</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime CommDateTime;
 		///<summary>FK to definition.DefNum. This will be 0 if IsStatementSent.  Used to be an enumeration in previous versions.</summary>
 		public long CommType;
 		///<summary>Note for this commlog entry.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
 		public string Note;
 		///<summary>Enum:CommItemMode Phone, email, etc.</summary>
 		public CommItemMode Mode_;
@@ -30,15 +30,15 @@ namespace OpenDentBusiness{
 		///<summary>FK to userod.UserNum.</summary>
 		public long UserNum;
 		///<summary>Signature.  For details, see procedurelog.Signature.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Signature;
 		///<summary>True if signed using the Topaz signature pad, false otherwise.</summary>
 		public bool SigIsTopaz;
 		///<summary>Automatically updated by MySQL every time a row is added or changed.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>Date and time when commlog ended.  Mainly for internal use.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeEnd;
 		///<summary>Enum:CommItemSource Set to the source of the entity that created this commlog.  E.g. WebSched.</summary>
 		public CommItemSource CommSource;

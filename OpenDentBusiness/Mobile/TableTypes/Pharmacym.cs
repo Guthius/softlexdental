@@ -5,13 +5,13 @@ using System.Text;
 
 namespace OpenDentBusiness.Mobile {
 	[Serializable()]
-	[CrudTable(IsMobile=true)]
-	public class Pharmacym:TableBase {
+	[ODTable(IsMobile=true)]
+	public class Pharmacym:ODTable {
 		///<summary>Primary key 1.</summary>
-		[CrudColumn(IsPriKeyMobile1=true)]
+		[ODTableColumn(IsPriKeyMobile1=true)]
 		public long CustomerNum;
 		///<summary>Primary key 2.</summary>
-		[CrudColumn(IsPriKeyMobile2=true)]
+		[ODTableColumn(IsPriKeyMobile2=true)]
 		public long PharmacyNum;
 		///<summary>For now, it can just be a common description.  Later, it might have to be an official designation.</summary>
 		public string StoreName;

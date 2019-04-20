@@ -9,30 +9,30 @@ namespace OpenDentBusiness
     /// This table is currently filled dynmically at run time, but the plan is to fill it using a tool that parses the code.
     /// </summary>
     [Serializable]
-    public class Language : TableBase
+    public class Language : ODTable
     {
         /// <summary>
         /// Primary key.
         /// </summary>
-        [CrudColumn(IsPriKey = true)]
+        [ODTableColumn(PrimaryKey = true)]
         public long LanguageNum;
         
         /// <summary>
         /// No longer used.
         /// </summary>
-        [CrudColumn(SpecialType = CrudSpecialColType.TextIsClob)]
+        [ODTableColumn(SpecialType = CrudSpecialColType.TextIsClob)]
         public string EnglishComments;
         
         /// <summary>
         /// A string representing the class where the translation is used.
         /// </summary>
-        [CrudColumn(SpecialType = CrudSpecialColType.TextIsClob)]
+        [ODTableColumn(SpecialType = CrudSpecialColType.TextIsClob)]
         public string ClassType;
         
         /// <summary>
         /// The English version of the phrase, case sensitive.
         /// </summary>
-        [CrudColumn(SpecialType = CrudSpecialColType.TextIsClob)]
+        [ODTableColumn(SpecialType = CrudSpecialColType.TextIsClob)]
         public string English;
         
         /// <summary>

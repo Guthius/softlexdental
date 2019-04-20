@@ -14,9 +14,9 @@ namespace OpenDentBusiness {
 	///
 	/// </summary>
 	[Serializable]
-	public class MedLab:TableBase {
+	public class MedLab:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long MedLabNum;
 		///<summary>FK to provider.ProvNum.  Can be 0. Attempt to match ordering prov external IDs to internal provnum.</summary>
 		public long ProvNum;
@@ -67,7 +67,7 @@ namespace OpenDentBusiness {
 		public string ObsTestLoincText;
 		///<summary>OBR.7 - Observation/Specimen Collection Date/Time.  LabCorp report field "Date &amp; Time Collected".
 		///yyyyMMddHHmm format in the message, no seconds.  May be blank.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeCollected;
 		///<summary>OBR.9 - Collection/Urine Volume (Quantity/Field Value).  LabCorp report field "Total Volume".
 		///The LabCorp document says this field is "Numeric Characters", but the HL7 documentation data type as CQ, which is a number with units
@@ -77,14 +77,14 @@ namespace OpenDentBusiness {
 		///The default unit of measurement is ML, so if the field is a number only we will add ML.</summary>
 		public string TotalVolume;
 		///<summary>OBR.11 - Action Code.  Blank for normal result, "G" for reflex result.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public ResultAction ActionCode;
 		///<summary>OBR.13.1 - Relevant Clinical Information.  LabCorp report field "Additional Information".  The report field will be filled with this
 		///value from the first OBR record in the message.  The message limits this field to 64 characters, the rest is truncated.</summary>
 		public string ClinicalInfo;
 		///<summary>OBR.14 - Date/Time of Specimen Receipt in Lab.  LabCorp report field "Date Entered".  yyyyMMddHHmm format in the message, no seconds.
 		///Date and time the order was entered in the Lab System.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeEntered;
 		///<summary>ORC.12.1 and OBR.16.1 - Ordering Provider ID Number.  LabCorp report field "NPI".  ORC.12.* and OBR.16.* are repeatable, the eighth
 		///component identifies the source of the ID in the first component.  Component 8 possible values: "U"-UPIN,
@@ -102,10 +102,10 @@ namespace OpenDentBusiness {
 		public string SpecimenIDAlt;
 		///<summary>OBR.22 - Date/Time Observations Reported.  LabCorp report field "Date &amp; Time Reported".  yyyyMMddHHmm format in the message, no secs.
 		///Date and time the results were released from the Lab System.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeReported;
 		///<summary>OBR.25 - Order Result Status.  LabCorp possible values: "F" - Final, "P" - Preliminary, "X" - Cancelled, "C" - Corrected.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public ResultStatus ResultStatus;
 		///<summary>OBR.26.1 - Link to Parent Result or Organism Link to Susceptibility.
 		///A reflex test will have the parent's OBX.3.1 value here for linking.</summary>
@@ -115,11 +115,11 @@ namespace OpenDentBusiness {
 		#endregion OBR/ORC Fields
 		///<summary>NTE.3 - Comment Text, PID Level.  The NTE segment is repeatable and the Comment Text component is limited to 78 characters.  Multiple
 		///NTE segments can be used for longer comments.  All NTE segments at the PID level will be concatenated and stored in this one field.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string NotePat;
 		///<summary>NTE.3 - Comment Text, OBR level.  The NTE segment is repeatable and the Comment Text component is limited to 78 characters.  Multiple
 		///NTE segments can be used for longer comments.  All NTE segments at the OBR level will be concatenated and stored in this one field.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string NoteLab;
 		///<summary>Not unique. More than one MedLab object can point to the same FileName, so deleting the MedLab object does not necessarily mean the
 		///file can also be deleted.  This is the filename of the original archived message that was processed to create this medlab object as well as
@@ -132,10 +132,10 @@ namespace OpenDentBusiness {
 		///Use: string pathToFile=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),FileName)</summary>
 		public string FileName;
 		///<summary>The PID Segment from the HL7 message used to generate this MedLab object.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string OriginalPIDSegment;
 		///<summary>This isn't a db column but is stored in the MedLabResult table.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		private List<MedLabResult> _listMedLabResults;
 
 		///<summary>Read-only property that indicates whether the test is marked as preliminary or any result returned for the test which is the most

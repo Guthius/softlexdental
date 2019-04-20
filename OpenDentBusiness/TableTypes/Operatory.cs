@@ -5,10 +5,10 @@ using System.Collections.Generic;
 namespace OpenDentBusiness{
 	///<summary>Each row is a single operatory or column in the appts module.</summary>
 	[Serializable]
-	[CrudTable(IsSynchable=true)]
-	public class Operatory:TableBase{
+	[ODTable(IsSynchable=true)]
+	public class Operatory:ODTable{
 		///<summary>Primary key</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long OperatoryNum;
 		///<summary>The full name to show in the column.</summary>
 		public string OpName;
@@ -29,7 +29,7 @@ namespace OpenDentBusiness{
 		///<summary>If true patients put into this operatory will have status set to prospective.</summary>
 		public bool SetProspective;
 		///<summary>Not user editable. The last time this row was edited.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>Operatories with IsWebSched set to true will be the ONLY operatories considered when searching for available time slots.</summary>
 		public bool IsWebSched;
@@ -39,12 +39,12 @@ namespace OpenDentBusiness{
 		public bool IsNewPatAppt;
 
 		///<summary>True if the current op is in an HQ view.  Defaults to true for safety.  Not stored in the db.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public bool IsInHQView=true;
 		///<summary>DefNums of category WebSchedNewPatApptTypes that this operatory is associated to.  Filled within the OperatoryCache.
 		///Necessary for the sync method so that DefLink enteries can be made for newly created operatories.
 		///Also, used as an indicator that this operatory is ready for WSNPA (replaces IsNewPatAppt bool column above).</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public List<long> ListWSNPAOperatoryDefNums;
 
 		///<summary>Returns a copy of this Operatory.</summary>

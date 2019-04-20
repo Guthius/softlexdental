@@ -4,10 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness{
 	///<summary>Fee schedule names used to be in the definition table, but now they have their own table.  We are about to have many many more fee schedules as we start automating allowed fees.</summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true,IsSecurityStamped=true)]
-	public class FeeSched : TableBase{
+	[ODTable(IsSynchable=true,IsSecurityStamped=true)]
+	public class FeeSched : ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long FeeSchedNum;
 		///<summary>The name of the fee schedule.</summary>
 		public string Description;
@@ -20,14 +20,14 @@ namespace OpenDentBusiness{
 		///<summary>True if the fee schedule is used globally and linked to the HQ. (Localization of the fees are not allowed)</summary>
 		public bool IsGlobal;
 		///<summary>FK to userod.UserNum.  Set to the user logged in when the row was inserted at SecDateEntry date and time.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
 		public long SecUserNumEntry;
 		///<summary>Timestamp automatically generated and user not allowed to change.  The actual date of entry.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateEntry)]
 		public DateTime SecDateEntry;
 		///<summary>Automatically updated by MySQL every time a row is added or changed. Could be changed due to user editing, custom queries or program
 		///updates.  Not user editable with the UI.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime SecDateTEdit;
 
 		public FeeSched Copy(){

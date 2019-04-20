@@ -6,34 +6,32 @@ using System.Text;
 
 namespace OpenDentBusiness
 {
-    ///<summary></summary>
     public class AllergyDefs
     {
-        ///<summary>Gets one AllergyDef from the db.</summary>
-        public static AllergyDef GetOne(long allergyDefNum)
-        {
-            return Crud.AllergyDefCrud.SelectOne(allergyDefNum);
-        }
+        public static AllergyDef GetOne(long allergyDefNum) => Crud.AllergyDefCrud.SelectOne(allergyDefNum);
 
-        ///<summary>Gets one AllergyDef matching the specified allergyDefNum from the list passed in. If none found will search the db for a matching allergydef. Returns null if not found in the db.</summary>
+        /// <summary>
+        /// Gets one AllergyDef matching the specified allergyDefNum from the list passed in. 
+        /// If none found will search the db for a matching allergydef. Returns null if not found in the db.
+        /// </summary>
         public static AllergyDef GetOne(long allergyDefNum, List<AllergyDef> listAllergyDef)
         {
-            //No need to check RemotingRole; no call to db.
             for (int i = 0; i < listAllergyDef.Count; i++)
             {
                 if (allergyDefNum == listAllergyDef[i].AllergyDefNum)
                 {
-                    return listAllergyDef[i];//Gets the allergydef matching the allergy so we can use it to populate the grid
+                    return listAllergyDef[i];
                 }
             }
             return GetOne(allergyDefNum);
         }
 
-        ///<summary>Gets one AllergyDef from the db with matching description, returns null if not found.</summary>
+        /// <summary>
+        /// Gets one AllergyDef from the db with matching description, returns null if not found.
+        /// </summary>
         public static AllergyDef GetByDescription(string allergyDescription)
         {
-            string command = "SELECT * FROM allergydef WHERE Description='" + POut.String(allergyDescription) + "'";
-            List<AllergyDef> retVal = Crud.AllergyDefCrud.SelectMany(command);
+            List<AllergyDef> retVal = Crud.AllergyDefCrud.SelectMany("SELECT * FROM allergydef WHERE Description='" + POut.String(allergyDescription) + "'");
             if (retVal.Count > 0)
             {
                 return retVal[0];
@@ -41,40 +39,26 @@ namespace OpenDentBusiness
             return null;
         }
 
-        ///<summary></summary>
-        public static long Insert(AllergyDef allergyDef)
-        {
-            return Crud.AllergyDefCrud.Insert(allergyDef);
-        }
+        public static long Insert(AllergyDef allergyDef) => Crud.AllergyDefCrud.Insert(allergyDef);
 
-        ///<summary></summary>
-        public static void Update(AllergyDef allergyDef)
-        {
-            Crud.AllergyDefCrud.Update(allergyDef);
-        }
+        public static void Update(AllergyDef allergyDef) => Crud.AllergyDefCrud.Update(allergyDef);
 
-        ///<summary></summary>
-        public static List<AllergyDef> TableToList(DataTable table)
-        {
-            //No need to check RemotingRole; no call to db.
-            return Crud.AllergyDefCrud.TableToList(table);
-        }
+        public static List<AllergyDef> TableToList(DataTable table) => Crud.AllergyDefCrud.TableToList(table);
 
-        ///<summary></summary>
         public static void Delete(long allergyDefNum)
         {
-            string command = "DELETE FROM allergydef WHERE AllergyDefNum = " + POut.Long(allergyDefNum);
-            Db.NonQ(command);
+            Db.NonQ("DELETE FROM allergydef WHERE AllergyDefNum = " + POut.Long(allergyDefNum));
         }
 
-        ///<summary>Gets all AllergyDefs based on hidden status.</summary>
+        /// <summary>
+        /// Gets all AllergyDefs based on hidden status.
+        /// </summary>
         public static List<AllergyDef> GetAll(bool isHidden)
         {
             string command = "";
             if (!isHidden)
             {
-                command = "SELECT * FROM allergydef WHERE IsHidden=" + POut.Bool(isHidden)
-                    + " ORDER BY Description";
+                command = "SELECT * FROM allergydef WHERE IsHidden=" + POut.Bool(isHidden) + " ORDER BY Description";
             }
             else
             {
@@ -83,19 +67,21 @@ namespace OpenDentBusiness
             return Crud.AllergyDefCrud.SelectMany(command);
         }
 
-        ///<summary>Returns true if the allergy def is in use and false if not.</summary>
+        /// <summary>
+        /// Returns true if the allergy def is in use and false if not.
+        /// </summary>
         public static bool DefIsInUse(long allergyDefNum)
         {
-            string command = "SELECT COUNT(*) FROM allergy WHERE AllergyDefNum=" + POut.Long(allergyDefNum);
-            if (Db.GetCount(command) != "0")
+            if (Db.GetCount("SELECT COUNT(*) FROM allergy WHERE AllergyDefNum=" + POut.Long(allergyDefNum)) != "0")
             {
                 return true;
             }
-            command = "SELECT COUNT(*) FROM rxalert WHERE AllergyDefNum=" + POut.Long(allergyDefNum);
-            if (Db.GetCount(command) != "0")
+
+            if (Db.GetCount("SELECT COUNT(*) FROM rxalert WHERE AllergyDefNum=" + POut.Long(allergyDefNum)) != "0")
             {
                 return true;
             }
+
             if (allergyDefNum == PrefC.GetLong(PrefName.AllergiesIndicateNone))
             {
                 return true;
@@ -105,20 +91,24 @@ namespace OpenDentBusiness
 
         public static List<long> GetChangedSinceAllergyDefNums(DateTime changedSince)
         {
-            string command = "SELECT AllergyDefNum FROM allergydef WHERE DateTStamp > " + POut.DateT(changedSince);
-            DataTable dt = Db.GetTable(command);
+            DataTable dt = Db.GetTable("SELECT AllergyDefNum FROM allergydef WHERE DateTStamp > " + POut.DateT(changedSince));
+
             List<long> allergyDefNums = new List<long>(dt.Rows.Count);
             for (int i = 0; i < dt.Rows.Count; i++)
             {
                 allergyDefNums.Add(PIn.Long(dt.Rows[i]["AllergyDefNum"].ToString()));
             }
+
             return allergyDefNums;
         }
 
-        ///<summary>Used along with GetChangedSinceAllergyDefNums</summary>
+        /// <summary>
+        /// Used along with GetChangedSinceAllergyDefNums
+        /// </summary>
         public static List<AllergyDef> GetMultAllergyDefs(List<long> allergyDefNums)
         {
             string strAllergyDefNums = "";
+
             DataTable table;
             if (allergyDefNums.Count > 0)
             {
@@ -130,24 +120,27 @@ namespace OpenDentBusiness
                     }
                     strAllergyDefNums += "AllergyDefNum='" + allergyDefNums[i].ToString() + "' ";
                 }
-                string command = "SELECT * FROM allergydef WHERE " + strAllergyDefNums;
-                table = Db.GetTable(command);
+                table = Db.GetTable("SELECT * FROM allergydef WHERE " + strAllergyDefNums);
             }
             else
             {
                 table = new DataTable();
             }
+
             AllergyDef[] multAllergyDefs = Crud.AllergyDefCrud.TableToList(table).ToArray();
             List<AllergyDef> allergyDefList = new List<AllergyDef>(multAllergyDefs);
             return allergyDefList;
         }
 
-        ///<summary>Do not call from outside of ehr.  Returns the text for a SnomedAllergy Enum as it should appear in human readable form for a CCD.</summary>
+        /// <summary>
+        /// Do not call from outside of ehr. 
+        /// Returns the text for a SnomedAllergy Enum as it should appear in human readable form for a CCD.
+        /// </summary>
         public static string GetSnomedAllergyDesc(SnomedAllergy snomed)
         {
             string result;
             switch (snomed)
-            {//TODO: hide snomed code from foreign users
+            {
                 case SnomedAllergy.AdverseReactions:
                     result = "420134006 - Propensity to adverse reactions (disorder)";
                     break;
@@ -185,7 +178,9 @@ namespace OpenDentBusiness
             return result;
         }
 
-        ///<summary>Returns the name of the allergy. Returns an empty string if allergyDefNum=0.</summary>
+        /// <summary>
+        /// Returns the name of the allergy. Returns an empty string if allergyDefNum=0.
+        /// </summary>
         public static string GetDescription(long allergyDefNum)
         {
             if (allergyDefNum == 0)
@@ -195,40 +190,44 @@ namespace OpenDentBusiness
             return Crud.AllergyDefCrud.SelectOne(allergyDefNum).Description;
         }
 
-        ///<summary>Returns the AllergyDef with the corresponding SNOMED allergyTo code. Returns null if codeValue is empty string.</summary>
+        /// <summary>
+        /// Returns the AllergyDef with the corresponding SNOMED allergyTo code. Returns null if codeValue is empty string.
+        /// </summary>
         public static AllergyDef GetAllergyDefFromCode(string codeValue)
         {
             if (codeValue == "")
             {
                 return null;
             }
-            string command = "SELECT * FROM allergydef WHERE SnomedAllergyTo=" + POut.String(codeValue);
-            return Crud.AllergyDefCrud.SelectOne(command);
+            return Crud.AllergyDefCrud.SelectOne("SELECT * FROM allergydef WHERE SnomedAllergyTo=" + POut.String(codeValue));
         }
 
-        ///<summary>Returns the AllergyDef with the corresponding Medication. Returns null if medicationNum is 0.</summary>
+        /// <summary>
+        /// Returns the AllergyDef with the corresponding Medication. Returns null if medicationNum is 0.
+        /// </summary>
         public static AllergyDef GetAllergyDefFromMedication(long medicationNum)
         {
             if (medicationNum == 0)
             {
                 return null;
             }
-            string command = "SELECT * FROM allergydef WHERE MedicationNum=" + POut.Long(medicationNum);
-            return Crud.AllergyDefCrud.SelectOne(command);
+            return Crud.AllergyDefCrud.SelectOne("SELECT * FROM allergydef WHERE MedicationNum=" + POut.Long(medicationNum));
         }
 
-        ///<summary>Returns the AllergyDef set to SnomedType 2 (DrugAllergy) or SnomedType 3 (DrugIntolerance) that is attached to a medication with this rxnorm.  Returns null if rxnorm is 0 or no allergydef for this rxnorm exists.  Used by HL7 service for inserting drug allergies for patients.</summary>
+        /// <summary>
+        /// Returns the AllergyDef set to SnomedType 2 (DrugAllergy) or SnomedType 3 (DrugIntolerance) that is 
+        /// attached to a medication with this rxnorm.  Returns null if rxnorm is 0 or no allergydef for this rxnorm exists.
+        /// Used by HL7 service for inserting drug allergies for patients.
+        /// </summary>
         public static AllergyDef GetAllergyDefFromRxnorm(long rxnorm)
         {
-            if (rxnorm == 0)
-            {
-                return null;
-            }
-            string command = "SELECT allergydef.* FROM allergydef "
-                + "INNER JOIN medication ON allergydef.MedicationNum=medication.MedicationNum "
-                + "AND medication.RxCui=" + POut.Long(rxnorm) + " "
-                + "WHERE allergydef.SnomedType IN(" + (int)SnomedAllergy.DrugAllergy + "," + (int)SnomedAllergy.DrugIntolerance + ") ";
-            return Crud.AllergyDefCrud.SelectOne(command);
+            if (rxnorm == 0) return null;
+
+            return Crud.AllergyDefCrud.SelectOne(
+                "SELECT allergydef.* FROM allergydef " +
+                "INNER JOIN medication ON allergydef.MedicationNum=medication.MedicationNum " +
+                "AND medication.RxCui=" + POut.Long(rxnorm) + " " +
+                "WHERE allergydef.SnomedType IN(" + (int)SnomedAllergy.DrugAllergy + "," + (int)SnomedAllergy.DrugIntolerance + ")");
         }
     }
 }

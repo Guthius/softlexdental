@@ -3,11 +3,11 @@
 namespace OpenDentBusiness {
 
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true,CrudExcludePrefC=true)]
-	public class WebChatSession:TableBase {
+	[ODTable(IsMissingInGeneral=true,CrudExcludePrefC=true)]
+	public class WebChatSession:ODTable {
 
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long WebChatSessionNum;
 		///<summary>Optional.  The name of the person who initiated the chat session.</summary>
 		public string UserName;
@@ -24,15 +24,15 @@ namespace OpenDentBusiness {
 		///<summary>Optional.  The name of the technician who is in the chat session.</summary>
 		public string TechName;
 		///<summary>The date and time the chat was created.  Can never be modified.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTcreated;
 		///<summary>The date and time the session ended.  Is set to 0001-01-01 if session is active.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTend;
 		///<summary>FKey to patient.PatNum.  Optional.  Stores the patient the WebChatSession is associated to.</summary>
 		public long PatNum;
 		///<summary>Notes for webchatsessions, similar to commlog notes.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
 		public string Note;
 
 		///<summary></summary>

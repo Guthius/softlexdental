@@ -4,10 +4,10 @@ using System.Collections;
 namespace OpenDentBusiness {
 	///<summary>Stores hashes of audit logs for detecting alteration.  User not allowed to edit.</summary>
 	[Serializable]
-	[CrudTable(HasBatchWriteMethods=true,IsLargeTable=true)]
-	public class SecurityLogHash:TableBase {
+	[ODTable(HasBatchWriteMethods=true,IsLargeTable=true)]
+	public class SecurityLogHash:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long SecurityLogHashNum;
 		///<summary>FK to securityLog.SecurityLogNum.</summary>
 		public long SecurityLogNum;

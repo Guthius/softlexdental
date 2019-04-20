@@ -6,9 +6,9 @@ namespace OpenDentBusiness {
 
 	///<summary>Enables preference specification for individual computers on a customer network.</summary>
 	[Serializable]
-	public class ComputerPref:TableBase {
+	public class ComputerPref:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ComputerPrefNum;
 		///<summary>The human-readable name of the computer on the network (not the IP address).</summary>
 		public string ComputerName;
@@ -67,7 +67,7 @@ namespace OpenDentBusiness {
 		///<summary>If true, don't warn user if the region's decimal setting is not 2.</summary>
 		public bool NoShowDecimal;
 		///<summary>The current operating system platform for the computer.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public PlatformOD ComputerOS;
 
 

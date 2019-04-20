@@ -5,19 +5,19 @@ using System.Drawing;
 namespace OpenDentBusiness{
 	///<summary>Medical labs, not dental labs.  Multiple labresults are attached to a labpanel.  Loosely corresponds to the OBX segment in HL7.</summary>
 	[Serializable]
-	public class LabResult:TableBase{
+	public class LabResult:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long LabResultNum;
 		///<summary>FK to labpanel.LabPanelNum.</summary>
 		public long LabPanelNum;
 		///<summary>OBX-14.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeTest;
 		///<summary>OBX-3-1, text portion.</summary>
 		public string TestName;
 		///<summary>To be used for synch with web server.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>OBX-3-0, id portion, LOINC.  For example, 10676-5.</summary>
 		public string TestID;

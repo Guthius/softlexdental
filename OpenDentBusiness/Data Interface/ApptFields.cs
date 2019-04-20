@@ -6,38 +6,22 @@ using System.Text;
 
 namespace OpenDentBusiness
 {
-    ///<summary></summary>
     public class ApptFields
     {
-        ///<summary>Gets one ApptField from the db.</summary>
-        public static ApptField GetOne(long apptFieldNum)
-        {
-            return Crud.ApptFieldCrud.SelectOne(apptFieldNum);
-        }
+        public static ApptField GetOne(long apptFieldNum) => Crud.ApptFieldCrud.SelectOne(apptFieldNum);
 
-        ///<summary></summary>
-        public static long Insert(ApptField apptField)
-        {
-            return Crud.ApptFieldCrud.Insert(apptField);
-        }
+        public static long Insert(ApptField apptField) => Crud.ApptFieldCrud.Insert(apptField);
 
-        ///<summary></summary>
-        public static void Update(ApptField apptField)
-        {
-            Crud.ApptFieldCrud.Update(apptField);
-        }
+        public static void Update(ApptField apptField) => Crud.ApptFieldCrud.Update(apptField);
 
-        ///<summary></summary>
         public static void Delete(long apptFieldNum)
         {
-            string command = "DELETE FROM apptfield WHERE ApptFieldNum = " + POut.Long(apptFieldNum);
-            Db.NonQ(command);
+            Db.NonQ("DELETE FROM apptfield WHERE ApptFieldNum = " + POut.Long(apptFieldNum));
         }
 
         public static List<ApptField> GetForAppt(long aptNum)
         {
-            string command = "SELECT * FROM apptfield WHERE AptNum = " + POut.Long(aptNum);
-            return Crud.ApptFieldCrud.SelectMany(command);
+            return Crud.ApptFieldCrud.SelectMany("SELECT * FROM apptfield WHERE AptNum = " + POut.Long(aptNum));
         }
     }
 }

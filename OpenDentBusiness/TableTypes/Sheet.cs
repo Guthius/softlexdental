@@ -30,16 +30,16 @@ namespace OpenDentBusiness{
 	*/
 	///<summary>One sheet for one patient.</summary>
 	[Serializable()]
-	public class Sheet:TableBase {
+	public class Sheet:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long SheetNum;
 		///<summary>Enum:SheetTypeEnum</summary>
 		public SheetTypeEnum SheetType;
 		///<summary>FK to patient.PatNum.  A saved sheet is always attached to a patient (except deposit slip).  There are a few sheets that are so minor that they don't get saved, such as a Carrier label.</summary>
 		public long PatNum;
 		///<summary>The date and time of the sheet as it will be displayed in the commlog.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateTimeSheet;
 		///<summary>The default fontSize for the sheet.  The actual font must still be saved with each sheetField.</summary>
 		public float FontSize;
@@ -52,7 +52,7 @@ namespace OpenDentBusiness{
 		///<summary>.</summary>
 		public bool IsLandscape;
 		///<summary>An internal note for the use of the office staff regarding the sheet.  Not to be printed on the sheet in any way.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string InternalNote;
 		///<summary>Copied from the SheetDef description.</summary>
 		public string Description;
@@ -75,7 +75,7 @@ namespace OpenDentBusiness{
 		///<summary>The date and time the sheet was inserted or last time someone opened the sheet and clicked OK on FormSheetFillEdit.
 		///Gets updated even if no changes were made to the sheet or sheetfields, because we don't want to do the lengthy work of comparing all fields.
 		///Used when editing a sheet to warn user if the sheet has been edited by someone else.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntryEditable)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntryEditable)]
 		public DateTime DateTSheetEdited;
 		///<summary>If true then this Sheet has been designed for mobile and will be displayed as a mobile-friendly WebForm.</summary>
 		public bool HasMobileLayout;
@@ -88,11 +88,11 @@ namespace OpenDentBusiness{
 		}	
 
 		///<Summary>A collection of all parameters for this sheetdef.  There's usually only one parameter.  The first parameter will be a List long if it's a batch.  If a sheet has already been filled, saved to the database, and printed, then there is no longer any need for the parameters in order to fill the data.  So a retrieved sheet will have no parameters, signalling a skip in the fill phase.  There will still be parameters tucked away in the Field data in the database, but they won't become part of the sheet.</Summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		[XmlIgnore]
 		public List<SheetParameter> Parameters;
 		///<Summary></Summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		[XmlIgnore]
 		public List<SheetField> SheetFields;
 

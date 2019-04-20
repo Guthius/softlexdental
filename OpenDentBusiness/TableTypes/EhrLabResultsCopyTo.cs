@@ -4,9 +4,9 @@ using System;
 namespace OpenDentBusiness {
 	///<summary>For EHR module, copy results to... that contains all required fields for HL7 Lab Reporting Interface (LRI).</summary>
 	[Serializable]
-	public class EhrLabResultsCopyTo:TableBase {
+	public class EhrLabResultsCopyTo:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EhrLabResultsCopyToNum;
 		///<summary>FK to ehrlab.EhrLabNum.</summary>
 		public long EhrLabNum;
@@ -32,10 +32,10 @@ namespace OpenDentBusiness {
 		public string CopyToAssigningAuthorityIDType;
 		#endregion
 		///<summary>Describes the type of name used.  OBR.28.10</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70200 CopyToNameTypeCode;
 		///<summary>Must be value from HL70203 code set, see note at bottom of EhrLab.cs for usage.  OBR.28.13</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.EnumAsString)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
 		public HL70203 CopyToIdentifierTypeCode;
 		#endregion
 

@@ -6,9 +6,9 @@ namespace OpenDentBusiness{
 
 	///<summary>One printer selection for one situation for one computer.</summary>
 	[Serializable]
-	public class Printer:TableBase {
+	public class Printer:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long PrinterNum;
 		///<summary>FK to computer.ComputerNum.  This will be changed some day to refer to the computername, because it would make more sense as a key than a cryptic number.</summary>
 		public long ComputerNum;

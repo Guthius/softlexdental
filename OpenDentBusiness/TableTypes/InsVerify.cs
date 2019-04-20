@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness {
   ///<summary></summary>
   [Serializable]
-	public class InsVerify:TableBase {
+	public class InsVerify:ODTable {
     ///<summary>Primary key.</summary>
-    [CrudColumn(IsPriKey=true)]
+    [ODTableColumn(PrimaryKey=true)]
 		public long InsVerifyNum;
 		///<summary>The date of the last successful verification.</summary>
 		public DateTime DateLastVerified;
@@ -22,38 +22,38 @@ namespace OpenDentBusiness {
 		///<summary>The date of the last assignment of this verification.</summary>
 		public DateTime DateLastAssigned;
 		///<summary>Note for this insurance verification.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob | CrudSpecialColType.CleanText)]
 		public string Note;
 		///<summary>DateTime the row was added.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateTEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateTEntry)]
 		public DateTime DateTimeEntry;
 		///<summary>Number of hours that were available from the time the insurance needed verified to the date of the appointment.
 		///Includes minutes if applicable.</summary>
 		public double HoursAvailableForVerification;
 		
 		///<summary>Not a database column.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public long PatNum;
 		///<summary>Not a database column.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public long PlanNum;
 		///<summary>Not a database column.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public long PatPlanNum;
 		///<summary>Not a database column.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string ClinicName;
 		///<summary>Not a database column.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string PatientName;
 		///<summary>Not a database column.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string CarrierName;
 		///<summary>Not a database column.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public DateTime AppointmentDateTime;
 		///<summary>Not a database column.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public long AptNum;
 
 

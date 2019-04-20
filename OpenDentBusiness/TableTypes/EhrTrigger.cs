@@ -7,51 +7,51 @@ namespace OpenDentBusiness {
 	///<summary>CDS Triggers when referenced in UI. Used for CDS automation.  May later be expanded to replace "automation."
 	///</summary>
 	[Serializable]
-	public class EhrTrigger:TableBase {
+	public class EhrTrigger:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EhrTriggerNum;
 		///<summary>Short description to describe the trigger.</summary>
 		public string Description;
 		///<summary></summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ProblemSnomedList;
 		///<summary></summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ProblemIcd9List;
 		///<summary></summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ProblemIcd10List;
 		///<summary></summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ProblemDefNumList;
 		///<summary></summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string MedicationNumList;
 		///<summary></summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string RxCuiList;
 		///<summary></summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string CvxList;
 		///<summary></summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string AllergyDefNumList;
 		///<summary>Age, Gender.  Can be multiple age entries but only one gender entry as coma delimited values.  Example: " age,>18  age,&lt;=55  gender,male"</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string DemographicsList;
 		/////<summary>Tab delimited list, sub-components separated by semicolon. Loinc;Value;Units\t Example: Cholesterol [Mass/volume] in Serum or Plasma>150mg/dL=="2093-3;>150;mg/dL"</summary>
 		///<summary>List of loinc codes padded with spaces.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string LabLoincList;
 		///<summary>Examples:  Height,>=72  Weight&lt;,100  BMI=  (BP currently not implemented.)</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string VitalLoincList;
 		///<summary>The reccomended course of action for this intervention.  </summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Instructions;
 		///<summary>Bibliographic information, not a URL. </summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Bibliography;
 		///<summary>Requires One, OneOfEachCategory, TwoOrMore, or All for trigger to match.  </summary>
 		public MatchCardinality Cardinality;

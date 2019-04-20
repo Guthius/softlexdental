@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace OpenDentBusiness {
 	///<summary></summary>
 	[Serializable]
-	[CrudTable(IsSynchable = true)]
-	public class DefLink:TableBase {
+	[ODTable(IsSynchable = true)]
+	public class DefLink:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long DefLinkNum;
 		///<summary>FK to definition.DefNum. The definition that is linked to </summary>
 		public long DefNum;

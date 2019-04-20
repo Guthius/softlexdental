@@ -7,9 +7,9 @@ using System.Text;
 namespace OpenDentBusiness {
 	///<summary>Each item is attached to a row in the apptview table.  Each item specifies ONE of: OpNum, ProvNum, ElementDesc, or ApptFieldDefNum.  The other three will be 0 or "".</summary>
 	[Serializable]
-	public class ApptViewItem:TableBase {
+	public class ApptViewItem:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ApptViewItemNum;//
 		///<summary>FK to apptview.</summary>
 		public long ApptViewNum;

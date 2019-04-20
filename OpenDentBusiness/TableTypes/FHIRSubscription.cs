@@ -8,9 +8,9 @@ using Newtonsoft.Json;
 namespace OpenDentBusiness {
 	///<summary>A subscription by a client that requests an alert whenever a change is made to a FHIR resource.</summary>
 	[Serializable]
-	public class FHIRSubscription:TableBase {
+	public class FHIRSubscription:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long FHIRSubscriptionNum;
 		///<summary>Rule for server push criteria.</summary>
 		public string Criteria;
@@ -19,7 +19,7 @@ namespace OpenDentBusiness {
 		///<summary>Enum:SubscriptionStatus </summary>
 		public SubscriptionStatus SubStatus;
 		///<summary>Latest error note.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ErrorNote;
 		///<summary>Enum:SubscriptionChannelType </summary>
 		public SubscriptionChannelType ChannelType;
@@ -30,12 +30,12 @@ namespace OpenDentBusiness {
 		///<summary>Usage depends on the channel type.</summary>
 		public string ChannelHeader;
 		///<summary>When to automatically delete the subscription.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateT)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
 		public DateTime DateEnd;
 		///<summary>A hash of the API key that was used in the request to create this subscription.</summary>
 		public string APIKeyHash;
 		///<summary>List of attached ContactPoints for this Subscription.  Limit in db: 16M char.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		private List<FHIRContactPoint> _listContactPoints;
 
 		///<summary>Set list to null to force refresh.</summary>

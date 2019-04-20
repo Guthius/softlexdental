@@ -11,10 +11,10 @@ using CodeBase;
 namespace OpenDentBusiness{
 	///<summary>One field on a sheetDef.</summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true)]
-	public class SheetFieldDef:TableBase {
+	[ODTable(IsSynchable=true)]
+	public class SheetFieldDef:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long SheetFieldDefNum;
 		///<summary>FK to sheetdef.SheetDefNum.</summary>
 		public long SheetDefNum;
@@ -39,7 +39,7 @@ namespace OpenDentBusiness{
 		///<para>For Pat Images, this is blank.  The filename of a PatImage will later be stored in SheetField.FieldValue.</para>
 		///<para>For ComboBoxes, the chosen option, semicolon, then a pipe delimited list of options such as: March;January|February|March|April</para>
 		///<para>For ScreenCharts, a semicolon delimited list of comma separated surfaces.  It may look like S,P,N;S,S,S;... etc.</para></summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string FieldValue;
 		///<summary>The fontSize for this field regardless of the default for the sheet.  The actual font must be saved with each sheetField.</summary>
 		public float FontSize;
@@ -66,7 +66,7 @@ namespace OpenDentBusiness{
 		///<summary>Set to true if this field is required to have a value before the sheet is closed.</summary>
 		public bool IsRequired;
 		///<summary>The Bitmap should be converted to Base64 using POut.Bitmap() before placing in this field.  Not stored in the database.  Only used when uploading SheetDefs to the web server.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string ImageData;
 		///<summary>Tab stop order for all fields. One-based.  Only checkboxes and input fields can have values other than 0.</summary>
 		public int TabOrder;
@@ -108,7 +108,7 @@ namespace OpenDentBusiness{
 		///dispose this field to prevent resource leaks.</summary>
 		[XmlIgnore]
 		[JsonIgnore]
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public Image ImageField;
 		
 		[XmlIgnore]

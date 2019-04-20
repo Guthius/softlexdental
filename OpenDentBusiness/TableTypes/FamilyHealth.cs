@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>For EHR, this lets us record medical problems for family members.  These family members will usually not be in our database, and they are just recorded by relationship.</summary>
 	[Serializable]
-	public class FamilyHealth:TableBase {
+	public class FamilyHealth:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long FamilyHealthNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;

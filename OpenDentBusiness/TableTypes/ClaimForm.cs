@@ -6,10 +6,10 @@ using System.Collections.Generic;
 namespace OpenDentBusiness{
 	///<summary>Stores the information for printing different types of claim forms.  Each claimform has many claimformitems attached to it, one for each field on the claimform.  This table has nothing to do with the actual claims.  It just describes how to print them.</summary>
 	[Serializable()]
-	public class ClaimForm:TableBase{
+	public class ClaimForm:ODTable{
 		///<summary>Primary key.</summary>
 		//[XmlIgnore]
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ClaimFormNum;
 		///<summary>eg. ADA2002 or CA Medicaid</summary>
 		public string Description;
@@ -35,11 +35,11 @@ namespace OpenDentBusiness{
 		///<summary>The height of the claim form.</summary>
 		public int Height;
 		///<summary>This is not a database column.  It is list of all claimformItems that are attached to this ClaimForm.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		[XmlIgnore]
 		public List<ClaimFormItem> Items=new List<ClaimFormItem>();
 		///<summary>This is not a database column. If this claimform is internal, it cannot be edited.</summary>
-		[CrudColumn(IsNotDbColumn = true)]
+		[ODTableColumn(IsNotDbColumn = true)]
 		public bool IsInternal;
 
 		///<summary>Default constructor.</summary>

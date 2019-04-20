@@ -5,10 +5,10 @@ using System.Text;
 namespace OpenDentBusiness{
 	///<summary>For Dental Schools.  Requirements needed in order to complete a course.</summary>
 	[Serializable]
-	[CrudTable(IsSynchable=true)]
-	public class ReqNeeded:TableBase {
+	[ODTable(IsSynchable=true)]
+	public class ReqNeeded:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ReqNeededNum;
 		///<summary>.</summary>
 		public string Descript;

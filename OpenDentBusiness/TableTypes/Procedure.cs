@@ -6,10 +6,10 @@ using System.Xml.Serialization;
 namespace OpenDentBusiness {
 	///<summary>Database table is procedurelog.  A procedure for a patient.  Can be treatment planned or completed.  Once it's completed, it gets tracked more closely be the security portion of the program.  A procedure can NEVER be deleted.  Status can just be changed to "deleted".</summary>
 	[Serializable()]
-	[CrudTable(TableName="procedurelog",IsDeleteForbidden=true,IsSynchable=true,IsSecurityStamped=true,IsLargeTable=true)]
-	public class Procedure:TableBase{
+	[ODTable(TableName="procedurelog",IsDeleteForbidden=true,IsSynchable=true,IsSecurityStamped=true,IsLargeTable=true)]
+	public class Procedure:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ProcNum;
 		///<summary>FK to patient.PatNum</summary>
 		public long PatNum;
@@ -46,7 +46,7 @@ namespace OpenDentBusiness {
 		///<summary>This note goes out on e-claims.  Not visible in Canada.</summary>
 		public string ClaimNote;
 		///<summary>This is the date this procedure was entered or set complete.  If not status C, then the value is ignored.  This date is set automatically when Insert, but older data or converted data might not have this value set.  It gets updated when set complete.  User never allowed to edit.  This will be enhanced later.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateEntryEditable)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateEntryEditable)]
 		public DateTime DateEntryC;
 		///<summary>FK to clinic.ClinicNum.  0 if no clinic.</summary>
 		public long ClinicNum;
@@ -97,7 +97,7 @@ namespace OpenDentBusiness {
 		[XmlIgnore]
 		public TimeSpan ProcTimeEnd;
 		///<summary>Automatically updated by MySQL every time a row is added or changed.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>FK to definition.DefNum, which contains text of the Prognosis.</summary>
 		public long Prognosis;
@@ -142,10 +142,10 @@ namespace OpenDentBusiness {
 		///If a staff person is logged in and enters this procedure then this is non-CPOE, so false.</summary>
 		public bool IsCpoe;
 		///<summary>FK to userod.UserNum.  Set to the user logged in when the row was inserted at SecDateEntry date and time.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.ExcludeFromUpdate)]
 		public long SecUserNumEntry;
 		///<summary>Timestamp automatically generated and user not allowed to change.  The actual date of entry.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.DateEntry)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.DateEntry)]
 		public DateTime SecDateEntry;
 		//No SecDateTEdit, DateTStamp already exists and is the timestamp updated by MySQL when a row is added or changed
 		///<summary>The date the procedure was originally set complete. If status is set complete and then set to something other than complete, this 
@@ -158,20 +158,20 @@ namespace OpenDentBusiness {
 		public long OrderingReferralNum;
 
 		///<summary>Not a database column.  Saved in database in the procnote table.  This note is only the most recent note from that table.  If user changes it, then the business layer handles it by adding another procnote to that table.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string Note="";
 		///<summary>Not a database column.  Just used for now to set the user so that it can be saved with the ProcNote.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public long UserNum;
 		///<summary>Not a database column.  If viewing an individual procedure, then this will contain the encrypted signature.  If viewing a procedure list, this will typically just contain an "X" if a signature is present.  If user signs note, the signature will be encrypted before placing into this field.  Then it will be passed down and saved directly as is.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public string Signature="";
 		///<summary>Not a database column.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public bool SigIsTopaz;
 		/// <summary>Not a database column.  This variable is set to true if the procedure is part of a set several procedures. It is used when 
 		/// calculating auto codes to correctly determine the right procedure code for the "first" and "eachAdditional" auto code rules.</summary>
-		[CrudColumn(IsNotDbColumn=true)]
+		[ODTableColumn(IsNotDbColumn=true)]
 		public bool IsAdditional;
 		///<summary>Holds the Sales Tax estimate for this procedure.  Becomes a finalized amount when the procedure is marked complete.</summary>
 		public double TaxAmt;

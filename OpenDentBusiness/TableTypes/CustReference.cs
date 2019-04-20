@@ -8,9 +8,9 @@ namespace OpenDentBusiness {
 
 	///<summary>One to one relation with the patient table representing each customer as a reference.</summary>
 	[Serializable]
-	public class CustReference:TableBase {
+	public class CustReference:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long CustReferenceNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;

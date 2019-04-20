@@ -3,10 +3,10 @@
 namespace OpenDentBusiness {
 	///<summary>Used in the Central Enterprise Management Tool for creating a group of connections.</summary>
 	[Serializable()]
-	[CrudTable(IsSynchable=true)]
-	public class ConnectionGroup:TableBase {
+	[ODTable(IsSynchable=true)]
+	public class ConnectionGroup:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ConnectionGroupNum;
 		///<summary>Description of the connection group</summary>
 		public string Description;

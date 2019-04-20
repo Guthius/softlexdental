@@ -6,10 +6,10 @@ using System.Runtime.Serialization;
 
 namespace OpenDentBusiness.WebTypes.WebForms {
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true,CrudLocationOverride=@"..\..\..\OpenDentBusiness\WebTypes\WebForms\Crud",NamespaceOverride="OpenDentBusiness.WebTypes.WebForms.Crud",CrudExcludePrefC=true)]
-	public class WebForms_Preference:TableBase {
+	[ODTable(IsMissingInGeneral=true,CrudLocationOverride=@"..\..\..\OpenDentBusiness\WebTypes\WebForms\Crud",NamespaceOverride="OpenDentBusiness.WebTypes.WebForms.Crud",CrudExcludePrefC=true)]
+	public class WebForms_Preference:ODTable {
 		///<summary>This is not a primar key but the CRUD generator requires one.  FK to customers.patient.PatNum.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long DentalOfficeID;
 		///<summary></summary>
 		[XmlIgnore]

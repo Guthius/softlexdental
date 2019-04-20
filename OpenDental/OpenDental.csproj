@@ -4881,8 +4881,6 @@
     <Compile Include="ReportingForRdl\Allocators\MyAllocator1\SupportingCode\GuarantorLedgerItemsCollection.cs" />
     <Compile Include="ReportingForRdl\Allocators\MyAllocator1\SupportingCode\Guarantors.cs" />
     <Compile Include="ReportingForRdl\Allocators\MyAllocator1\SupportingCode\MakeLedgerObj.cs" />
-    <Compile Include="ReportingForRdl\Allocators\MyAllocator1\SupportingCode\ODCheckQuerries.cs" />
-    <Compile Include="ReportingForRdl\Allocators\MyAllocator1\SupportingCode\ODTableDefs.cs" />
     <Compile Include="ReportingForRdl\Allocators\MyAllocator1\SupportingCode\ODTablesUsed.cs" />
     <Compile Include="ReportingForRdl\Allocators\MyAllocator1\SupportingCode\PP_LedgerItem.cs" />
     <Compile Include="ReportingForRdl\Allocators\MyAllocator1\SupportingCode\PP_LedgerItemGenerator.cs" />

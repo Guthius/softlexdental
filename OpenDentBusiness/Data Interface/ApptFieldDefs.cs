@@ -7,56 +7,29 @@ using System.Text;
 
 namespace OpenDentBusiness
 {
-    ///<summary></summary>
     public class ApptFieldDefs
     {
-        #region Get Methods
-        #endregion
-
-        #region Modification Methods
-
-        #region Insert
-        #endregion
-
-        #region Update
-        #endregion
-
-        #region Delete
-        #endregion
-
-        #endregion
-
-        #region Misc Methods
-        #endregion
-
-        #region CachePattern
         private class ApptFieldDefCache : CacheListAbs<ApptFieldDef>
         {
             protected override List<ApptFieldDef> GetCacheFromDb()
             {
-                string command = "SELECT * FROM apptfielddef ORDER BY FieldName";
-                return Crud.ApptFieldDefCrud.SelectMany(command);
+                return Crud.ApptFieldDefCrud.SelectMany("SELECT * FROM apptfielddef ORDER BY FieldName");
             }
-            protected override List<ApptFieldDef> TableToList(DataTable table)
-            {
-                return Crud.ApptFieldDefCrud.TableToList(table);
-            }
-            protected override ApptFieldDef Copy(ApptFieldDef apptFieldDef)
-            {
-                return apptFieldDef.Clone();
-            }
+
+            protected override List<ApptFieldDef> TableToList(DataTable table) => Crud.ApptFieldDefCrud.TableToList(table);
+
+
+            protected override ApptFieldDef Copy(ApptFieldDef apptFieldDef) => apptFieldDef.Clone();
+
             protected override DataTable ListToTable(List<ApptFieldDef> listApptFieldDefs)
             {
                 return Crud.ApptFieldDefCrud.ListToTable(listApptFieldDefs, "ApptFieldDef");
             }
-            protected override void FillCacheIfNeeded()
-            {
-                ApptFieldDefs.GetTableFromCache(false);
-            }
+
+            protected override void FillCacheIfNeeded() => ApptFieldDefs.GetTableFromCache(false);
         }
 
-        ///<summary>The object that accesses the cache in a thread-safe manner.</summary>
-        private static ApptFieldDefCache _apptFieldDefCache = new ApptFieldDefCache();
+        static ApptFieldDefCache _apptFieldDefCache = new ApptFieldDefCache();
 
         public static bool GetExists(Predicate<ApptFieldDef> match, bool isShort = false)
         {
@@ -73,65 +46,72 @@ namespace OpenDentBusiness
             return _apptFieldDefCache.GetFirstOrDefault(match, isShort);
         }
 
-        ///<summary>Refreshes the cache and returns it as a DataTable. This will refresh the ClientWeb's cache and the ServerWeb's cache.</summary>
-        public static DataTable RefreshCache()
-        {
-            return GetTableFromCache(true);
-        }
+        /// <summary>
+        /// Refreshes the cache and returns it as a DataTable. This will refresh the ClientWeb's cache and the ServerWeb's cache.
+        /// </summary>
+        public static DataTable RefreshCache() => GetTableFromCache(true);
 
-        ///<summary>Fills the local cache with the passed in DataTable.</summary>
         public static void FillCacheFromTable(DataTable table)
         {
             _apptFieldDefCache.FillCacheFromTable(table);
         }
 
-        ///<summary>Always refreshes the ClientWeb's cache.</summary>
         public static DataTable GetTableFromCache(bool doRefreshCache)
         {
             return _apptFieldDefCache.GetTableFromCache(doRefreshCache);
         }
-        #endregion
 
-        ///<summary>Must supply the old field name so that the apptFields attached to appointments can be updated.  Will throw exception if new FieldName is already in use.</summary>
+        /// <summary>
+        /// Must supply the old field name so that the apptFields attached to appointments can be updated. 
+        /// Will throw exception if new FieldName is already in use.
+        /// </summary>
         public static void Update(ApptFieldDef apptFieldDef, string oldFieldName)
         {
-            string command = "SELECT COUNT(*) FROM apptfielddef WHERE FieldName='" + POut.String(apptFieldDef.FieldName) + "' "
-                + "AND ApptFieldDefNum != " + POut.Long(apptFieldDef.ApptFieldDefNum);
+            string command =
+                "SELECT COUNT(*) FROM apptfielddef " +
+                "WHERE FieldName='" + POut.String(apptFieldDef.FieldName) + "' " +
+                "AND ApptFieldDefNum != " + POut.Long(apptFieldDef.ApptFieldDefNum);
+
             if (Db.GetCount(command) != "0")
             {
-                throw new ApplicationException(Lans.g("FormApptFieldDefEdit", "Field name already in use."));
+                throw new ApplicationException("Field name already in use.");
             }
+
             Crud.ApptFieldDefCrud.Update(apptFieldDef);
-            command = "UPDATE apptfield SET FieldName='" + POut.String(apptFieldDef.FieldName) + "' "
-                + "WHERE FieldName='" + POut.String(oldFieldName) + "'";
-            Db.NonQ(command);
+
+            Db.NonQ(
+                "UPDATE apptfield SET FieldName='" + POut.String(apptFieldDef.FieldName) + "' " +
+                "WHERE FieldName='" + POut.String(oldFieldName) + "'");
         }
 
-        ///<summary>Surround with try/catch in case field name already in use.</summary>
+        /// <summary>
+        /// Surround with try/catch in case field name already in use.
+        /// </summary>
         public static long Insert(ApptFieldDef apptFieldDef)
         {
-            string command = "SELECT COUNT(*) FROM apptfielddef WHERE FieldName='" + POut.String(apptFieldDef.FieldName) + "'";
-            if (Db.GetCount(command) != "0")
+            if (Db.GetCount("SELECT COUNT(*) FROM apptfielddef WHERE FieldName='" + POut.String(apptFieldDef.FieldName) + "'") != "0")
             {
-                throw new ApplicationException(Lans.g("FormApptFieldDefEdit", "Field name already in use."));
+                throw new ApplicationException("Field name already in use.");
             }
+
             return Crud.ApptFieldDefCrud.Insert(apptFieldDef);
         }
 
         ///<summary>Surround with try/catch, because it will throw an exception if any appointment is using this def.</summary>
         public static void Delete(ApptFieldDef apptFieldDef)
         {
-            string command = "SELECT LName,FName,AptDateTime "
-                + "FROM patient,apptfield,appointment WHERE "
-                + "patient.PatNum=appointment.PatNum "
-                + "AND appointment.AptNum=apptfield.AptNum "
-                + "AND FieldName='" + POut.String(apptFieldDef.FieldName) + "'";
+            string command =
+                "SELECT LName,FName,AptDateTime " +
+                "FROM patient,apptfield,appointment " +
+                "WHERE patient.PatNum=appointment.PatNum " +
+                "AND appointment.AptNum=apptfield.AptNum " +
+                "AND FieldName='" + POut.String(apptFieldDef.FieldName) + "'";
+
             DataTable table = Db.GetTable(command);
             DateTime aptDateTime;
             if (table.Rows.Count > 0)
             {
-                string s = Lans.g("FormApptFieldDefEdit", "Not allowed to delete. Already in use by ") + table.Rows.Count.ToString()
-                    + " " + Lans.g("FormApptFieldDefEdit", "appointments, including") + " \r\n";
+                string s = "Not allowed to delete. Already in use by " + table.Rows.Count.ToString() + " appointments, including\r\n";
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
                     if (i > 5)
@@ -143,58 +123,36 @@ namespace OpenDentBusiness
                 }
                 throw new ApplicationException(s);
             }
-            command = "DELETE FROM apptfielddef WHERE ApptFieldDefNum =" + POut.Long(apptFieldDef.ApptFieldDefNum);
-            Db.NonQ(command);
+            Db.NonQ("DELETE FROM apptfielddef WHERE ApptFieldDefNum =" + POut.Long(apptFieldDef.ApptFieldDefNum));
         }
-
-        /*
-		Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-
-		///<summary></summary>
-		public static List<ApptFieldDef> Refresh(long patNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<ApptFieldDef>>(MethodBase.GetCurrentMethod(),patNum);
-			}
-			string command="SELECT * FROM apptfielddef WHERE PatNum = "+POut.Long(patNum);
-			return Crud.ApptFieldDefCrud.SelectMany(command);
-		}
-
-		///<summary>Gets one ApptFieldDef from the db.</summary>
-		public static ApptFieldDef GetOne(long apptFieldDefNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<ApptFieldDef>(MethodBase.GetCurrentMethod(),apptFieldDefNum);
-			}
-			return Crud.ApptFieldDefCrud.SelectOne(apptFieldDefNum);
-		}
-		*/
 
         public static string GetFieldName(long apptFieldDefNum)
         {
-            //No need to check RemotingRole; no call to db.
             ApptFieldDef apptFieldDef = GetFirstOrDefault(x => x.ApptFieldDefNum == apptFieldDefNum);
             return (apptFieldDef == null ? "" : apptFieldDef.FieldName);
         }
 
-        /// <summary>GetPickListByFieldName returns the pick list identified by the field name passed as a parameter.</summary>
+        /// <summary>
+        /// GetPickListByFieldName returns the pick list identified by the field name passed as a parameter.
+        /// </summary>
         public static string GetPickListByFieldName(string FieldName)
         {
-            //No need to check RemotingRole; no call to db.
             ApptFieldDef apptFieldDef = GetFirstOrDefault(x => x.FieldName == FieldName);
             return (apptFieldDef == null ? "" : apptFieldDef.PickList);
         }
 
-        ///<summary>Returns true if there are any duplicate field names in the entire apptfielddef table.</summary>
+        /// <summary>
+        /// Returns true if there are any duplicate field names in the entire apptfielddef table.
+        /// </summary>
         public static bool HasDuplicateFieldNames()
         {
-            string command = "SELECT COUNT(*) FROM apptfielddef GROUP BY FieldName HAVING COUNT(FieldName) > 1";
-            return (Db.GetScalar(command) != "");
+            return (Db.GetScalar("SELECT COUNT(*) FROM apptfielddef GROUP BY FieldName HAVING COUNT(FieldName) > 1") != "");
         }
 
-        ///<summary>Returns the ApptFieldDef for the specified field name. Returns null if an ApptFieldDef does not exist for that field name.</summary>
-        public static ApptFieldDef GetFieldDefByFieldName(string fieldName)
-        {
-            //No need to check RemotingRole; no call to db.
-            return GetFirstOrDefault(x => x.FieldName == fieldName);
-        }
+        /// <summary>
+        /// Returns the ApptFieldDef for the specified field name. 
+        /// Returns null if an ApptFieldDef does not exist for that field name.
+        /// </summary>
+        public static ApptFieldDef GetFieldDefByFieldName(string fieldName) => GetFirstOrDefault(x => x.FieldName == fieldName);
     }
 }

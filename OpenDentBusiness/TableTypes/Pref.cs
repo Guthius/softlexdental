@@ -12,13 +12,13 @@ namespace OpenDentBusiness
     /// Any data that's too small to warrant its own table will usually end up here.
     /// </summary>
     [Serializable]
-    [CrudTable(TableName = "preference")]
-    public class Pref : TableBase
+    [ODTable(TableName = "preference")]
+    public class Pref : ODTable
     {
         /// <summary>
         /// Primary key.
         /// </summary>
-        [CrudColumn(IsPriKey = true)]
+        [ODTableColumn(PrimaryKey = true)]
         public long PrefNum;
 
         /// <summary>
@@ -29,13 +29,13 @@ namespace OpenDentBusiness
         /// <summary>
         /// The stored value.
         /// </summary>
-        [CrudColumn(SpecialType = CrudSpecialColType.TextIsClob)]
+        [ODTableColumn(SpecialType = CrudSpecialColType.TextIsClob)]
         public string ValueString;
         
         /// <summary>
         /// Documentation on usage and values of each pref.  Mostly deprecated now in favor of using XML comments in the code.
         /// </summary>
-        [CrudColumn(SpecialType = CrudSpecialColType.TextIsClob)]
+        [ODTableColumn(SpecialType = CrudSpecialColType.TextIsClob)]
         public string Comments;
 
         /// <summary>

@@ -3,10 +3,10 @@
 namespace OpenDentBusiness {
 	///<summary>For EHR module, these are all the codes from various code sets that will affect reporting clinical quality measures.  Users cannot edit.  This is not an actual table in the database.  The codes are loaded from the EHR.dll, so it is a static object, no inserts/updates.  Selecting from this 'table' will always use the cache pattern.</summary>
 	[Serializable]
-	[CrudTable(IsMissingInGeneral=true)]
-	public class EhrCode:TableBase {
+	[ODTable(IsMissingInGeneral=true)]
+	public class EhrCode:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EhrCodeNum;
 		///<summary>Clinical quality measure test ID's that utilize this code.  Comma delimited list.  Example: 69v2,147v2.</summary>
 		public string MeasureIds;

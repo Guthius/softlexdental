@@ -3,9 +3,9 @@
 namespace OpenDentBusiness {
 	///<summary>An intervention ordered or performed.  Examples: smoking cessation and weightloss counseling.  Links to a definition in the ehrcode table using the CodeValue and CodeSystem.</summary>
 	[Serializable]
-	public class Intervention:TableBase {
+	public class Intervention:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long InterventionNum;
 		///<summary>FK to patient.PatNum.</summary>
 		public long PatNum;
@@ -16,7 +16,7 @@ namespace OpenDentBusiness {
 		///<summary>FK to codesystem.CodeSystemName. The code system name for this code.  Possible values are: CPT, HCPCS, ICD9CM, ICD10CM, and SNOMEDCT.</summary>
 		public string CodeSystem;
 		///<summary>User-entered details about the intervention for this patient.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		///<summary>The date of the intervention.</summary>
 		public DateTime DateEntry;

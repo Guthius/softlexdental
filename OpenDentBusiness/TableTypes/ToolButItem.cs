@@ -4,9 +4,9 @@ namespace OpenDentBusiness{
 
 	///<summary>Each row represents one toolbar button to be placed on a toolbar and linked to a program.</summary>
 	[Serializable]
-	public class ToolButItem:TableBase {
+	public class ToolButItem:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ToolButItemNum;
 		///<summary>FK to program.ProgramNum.</summary>
 		public long ProgramNum;

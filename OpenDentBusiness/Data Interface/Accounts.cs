@@ -10,46 +10,17 @@ using System.Linq;
 
 namespace OpenDentBusiness
 {
-
     public class Accounts
     {
-        #region Get Methods
-        #endregion
-
-        #region Modification Methods
-
-        #region Insert
-        #endregion
-
-        #region Update
-        #endregion
-
-        #region Delete
-        #endregion
-
-        #endregion
-
-        #region Misc Methods
-        #endregion
-
-        #region Cache Pattern
-
         private class AccountCache : CacheListAbs<Account>
         {
-            protected override Account Copy(Account account)
-            {
-                return account.Clone();
-            }
+            protected override Account Copy(Account account) => account.Clone();
 
-            protected override void FillCacheIfNeeded()
-            {
-                Accounts.GetTableFromCache(false);
-            }
+            protected override void FillCacheIfNeeded() => Accounts.GetTableFromCache(false);
 
             protected override List<Account> GetCacheFromDb()
             {
-                string command = "SELECT * FROM account ORDER BY AcctType,Description";
-                return Crud.AccountCrud.SelectMany(command);
+                return Crud.AccountCrud.SelectMany("SELECT * FROM account ORDER BY AcctType,Description");
             }
 
             protected override DataTable ListToTable(List<Account> listAccounts)
@@ -62,66 +33,57 @@ namespace OpenDentBusiness
                 return Crud.AccountCrud.TableToList(table);
             }
 
-            protected override bool IsInListShort(Account account)
-            {
-                return !account.Inactive;
-            }
+            protected override bool IsInListShort(Account account) => !account.Inactive;
         }
 
-        ///<summary>The object that accesses the cache in a thread-safe manner.</summary>
-        private static AccountCache _accountCache = new AccountCache();
+        static AccountCache _accountCache = new AccountCache();
 
-        ///<summary>Refreshes the cache and returns it as a DataTable. This will refresh the ClientWeb's cache and the ServerWeb's cache.</summary>
-        public static DataTable RefreshCache()
-        {
-            return GetTableFromCache(true);
-        }
+        /// <summary>
+        /// Refreshes the cache and returns it as a DataTable. 
+        /// This will refresh the ClientWeb's cache and the ServerWeb's cache.
+        /// </summary>
+        public static DataTable RefreshCache() => GetTableFromCache(true);
 
-        public static List<Account> GetDeepCopy(bool isShort = false)
-        {
-            return _accountCache.GetDeepCopy(isShort);
-        }
+        public static List<Account> GetDeepCopy(bool isShort = false) => _accountCache.GetDeepCopy(isShort);
 
         public static Account GetFirstOrDefault(Func<Account, bool> match, bool isShort = false)
         {
             return _accountCache.GetFirstOrDefault(match, isShort);
         }
 
-        ///<summary>Fills the local cache with the passed in DataTable.</summary>
+        /// <summary>
+        /// Fills the local cache with the passed in DataTable.
+        /// </summary>
         public static void FillCacheFromTable(DataTable table)
         {
             _accountCache.FillCacheFromTable(table);
         }
 
-        ///<summary>Always refreshes the ClientWeb's cache.</summary>
         public static DataTable GetTableFromCache(bool doRefreshCache)
         {
             return _accountCache.GetTableFromCache(doRefreshCache);
         }
 
-        #endregion Cache Pattern
+        public static long Insert(Account acct) => Crud.AccountCrud.Insert(acct);
 
-        ///<summary></summary>
-        public static long Insert(Account acct)
-        {
-            return Crud.AccountCrud.Insert(acct);
-        }
+        /// <summary>
+        /// Does not update existing journal splits. To that use the other overload for this method.
+        /// </summary>
+        public static void Update(Account acct) => Crud.AccountCrud.Update(acct);
+        
 
-        ///<summary>Does not update existing journal splits. To that use the other overload for this method.</summary>
-        public static void Update(Account acct)
-        {
-            Crud.AccountCrud.Update(acct);
-        }
-
-        ///<summary>Also updates existing journal entry splits linked to this account that have not been locked.</summary>
+        /// <summary>
+        /// Also updates existing journal entry splits linked to this account that have not been locked.
+        /// </summary>
         public static void Update(Account acct, Account acctOld)
         {
             Crud.AccountCrud.Update(acct, acctOld);
             if (acct.Description == acctOld.Description)
             {
-                return;//No need to update splits on attached journal entries.
+                return; // No need to update splits on attached journal entries.
             }
-            //The account was renamed, so update journalentry.Splits.
+
+            // The account was renamed, so update journalentry.Splits.
             string command = @"SELECT je2.*,account.Description
 					FROM journalentry 
 					INNER JOIN journalentry je2 ON je2.TransactionNum=journalentry.TransactionNum
@@ -135,12 +97,13 @@ namespace OpenDentBusiness
                 return;
             }
             List<JournalEntry> listJournalEntries = Crud.JournalEntryCrud.TableToList(table);
-            //Construct a dictionary that has the description for each JournalEntryNum.
+            
+            // Construct a dictionary that has the description for each JournalEntryNum.
             Dictionary<long, string> dictJournalEntryDescriptions = table.Rows.Cast<DataRow>()
                 .GroupBy(x => PIn.Long(x["JournalEntryNum"].ToString()))
                 .ToDictionary(x => x.Key, x => PIn.String(x.First()["Description"].ToString()));
-            //Now we will loop through all the journal entries and find the other journal entries that are attached to the same transaction and update
-            //those splits.
+            
+            // Now we will loop through all the journal entries and find the other journal entries that are attached to the same transaction and update those splits.
             List<int> listIndexesForTrans = new List<int>();
             long curTransactionNum = listJournalEntries[0].TransactionNum;
             for (int i = 0; i < listJournalEntries.Count; i++)
@@ -158,30 +121,29 @@ namespace OpenDentBusiness
             UpdateJournalEntrySplits(listJournalEntries, listIndexesForTrans, dictJournalEntryDescriptions, acct);
         }
 
-        ///<summary>Updates the splits on the journal entries whose indexes are passed in.</summary>
-        ///<param name="listJournalEntries">All journal entries for a particular account.</param>
-        ///<param name="listIndexesForTrans">The index of the journal entries in listJournalEntries. These are the ones that will be updated.</param>
-        ///<param name="dictJournalEntryDescriptions">A dictionary where the key is the JournalEntryNum and the value is the journal entry's 
-        ///account description.</param>
-        ///<param name="acct">The account that whose description is being updates.</param>
-        private static void UpdateJournalEntrySplits(List<JournalEntry> listJournalEntries, List<int> listIndexesForTrans,
-            Dictionary<long, string> dictJournalEntryDescriptions, Account acct)
+        /// <summary>
+        /// Updates the splits on the journal entries whose indexes are passed in.
+        /// </summary>
+        /// <param name="listJournalEntries">All journal entries for a particular account.</param>
+        /// <param name="listIndexesForTrans">The index of the journal entries in listJournalEntries. These are the ones that will be updated.</param>
+        /// <param name="dictJournalEntryDescriptions">A dictionary where the key is the JournalEntryNum and the value is the journal entry's account description.</param>
+        /// <param name="acct">The account that whose description is being updates.</param>
+        static void UpdateJournalEntrySplits(List<JournalEntry> listJournalEntries, List<int> listIndexesForTrans, Dictionary<long, string> dictJournalEntryDescriptions, Account acct)
         {
-            //No need to check RemotingRole; no call to db.
             foreach (int index in listIndexesForTrans.Where(x => listJournalEntries[x].AccountNum != acct.AccountNum))
             {
                 JournalEntry journalEntry = listJournalEntries[index];
                 if (listIndexesForTrans.Count <= 2)
                 {
-                    //When a transaction only has two splits, the Splits column will simply be the name of the account of the other split.
+                    // When a transaction only has two splits, the Splits column will simply be the name of the account of the other split.
                     journalEntry.Splits = acct.Description;
                 }
                 else
                 {
-                    //When a transaction has three or more splits, the Splits column will be the names of the account and the amount of the other splits.
-                    //Ex.: 
-                    //Patient Fee Income 85.00
-                    //Supplies 110.00
+                    // When a transaction has three or more splits, the Splits column will be the names of the account and the amount of the other splits.
+                    // Ex.: 
+                    // Patient Fee Income 85.00
+                    // Supplies 110.00
                     journalEntry.Splits = string.Join("\r\n", listIndexesForTrans
                         .Where(x => listJournalEntries[x].JournalEntryNum != journalEntry.JournalEntryNum)
                         .Select(x => dictJournalEntryDescriptions[listJournalEntries[x].JournalEntryNum] + " " +
@@ -193,56 +155,55 @@ namespace OpenDentBusiness
             }
         }
 
-
-        ///<summary>Loops through listLong to find a description for the specified account.  0 returns an empty string.</summary>
+        /// <summary>
+        /// Loops through listLong to find a description for the specified account.  0 returns an empty string.
+        /// </summary>
         public static string GetDescript(long accountNum)
         {
-            //No need to check RemotingRole; no call to db.
             Account account = GetFirstOrDefault(x => x.AccountNum == accountNum);
             return (account == null ? "" : account.Description);
         }
 
-        ///<summary>Loops through listLong to find an account.  Will return null if accountNum is 0.</summary>
-        public static Account GetAccount(long accountNum)
-        {
-            //No need to check RemotingRole; no call to db.
-            return GetFirstOrDefault(x => x.AccountNum == accountNum);
-        }
+        /// <summary>
+        /// Loops through listLong to find an account.  Will return null if accountNum is 0.
+        /// </summary>
+        public static Account GetAccount(long accountNum) => GetFirstOrDefault(x => x.AccountNum == accountNum);
 
-        ///<summary>Throws exception if account is in use.</summary>
+        /// <summary>
+        /// Throws exception if account is in use.
+        /// </summary>
         public static void Delete(Account acct)
         {
-            //check to see if account has any journal entries
-            string command = "SELECT COUNT(*) FROM journalentry WHERE AccountNum=" + POut.Long(acct.AccountNum);
-            if (Db.GetCount(command) != "0")
+            // Check to see if account has any journal entries
+            if (Db.GetCount("SELECT COUNT(*) FROM journalentry WHERE AccountNum=" + POut.Long(acct.AccountNum)) != "0")
             {
-                throw new ApplicationException(Lans.g("FormAccountEdit",
-                    "Not allowed to delete an account with existing journal entries."));
+                throw new ApplicationException( "Not allowed to delete an account with existing journal entries.");
             }
-            //Check various preference entries
-            command = "SELECT ValueString FROM preference WHERE PrefName='AccountingDepositAccounts'";
-            string result = Db.GetCount(command);
+
+            // Check various preference entries
+            string result = Db.GetCount("SELECT ValueString FROM preference WHERE PrefName='AccountingDepositAccounts'");
             string[] strArray = result.Split(new char[] { ',' });
             for (int i = 0; i < strArray.Length; i++)
             {
                 if (strArray[i] == acct.AccountNum.ToString())
                 {
-                    throw new ApplicationException(Lans.g("FormAccountEdit", "Account is in use in the setup section."));
+                    throw new ApplicationException("Account is in use in the setup section.");
                 }
             }
-            command = "SELECT ValueString FROM preference WHERE PrefName='AccountingIncomeAccount'";
-            result = Db.GetCount(command);
+
+            result = Db.GetCount("SELECT ValueString FROM preference WHERE PrefName='AccountingIncomeAccount'");
             if (result == acct.AccountNum.ToString())
             {
                 throw new ApplicationException(Lans.g("FormAccountEdit", "Account is in use in the setup section."));
             }
-            command = "SELECT ValueString FROM preference WHERE PrefName='AccountingCashIncomeAccount'";
-            result = Db.GetCount(command);
+
+            result = Db.GetCount("SELECT ValueString FROM preference WHERE PrefName='AccountingCashIncomeAccount'");
             if (result == acct.AccountNum.ToString())
             {
                 throw new ApplicationException(Lans.g("FormAccountEdit", "Account is in use in the setup section."));
             }
-            //check AccountingAutoPay entries
+
+            // Check AccountingAutoPay entries
             List<AccountingAutoPay> listAutoPays = AccountingAutoPays.GetDeepCopy();
             for (int i = 0; i < listAutoPays.Count; i++)
             {
@@ -251,38 +212,44 @@ namespace OpenDentBusiness
                 {
                     if (strArray[s] == acct.AccountNum.ToString())
                     {
-                        throw new ApplicationException(Lans.g("FormAccountEdit", "Account is in use in the setup section."));
+                        throw new ApplicationException("Account is in use in the setup section.");
                     }
                 }
             }
-            command = "DELETE FROM account WHERE AccountNum = " + POut.Long(acct.AccountNum);
-            Db.NonQ(command);
+
+            Db.NonQ("DELETE FROM account WHERE AccountNum = " + POut.Long(acct.AccountNum));
         }
 
-        ///<summary>Used to test the sign on debits and credits for the five different account types</summary>
+        /// <summary>
+        /// Used to test the sign on debits and credits for the five different account types
+        /// </summary>
         public static bool DebitIsPos(AccountType type)
         {
-            //No need to check RemotingRole; no call to db.
+            // No need to check RemotingRole; no call to db.
             switch (type)
             {
                 case AccountType.Asset:
                 case AccountType.Expense:
                     return true;
                 case AccountType.Liability:
-                case AccountType.Equity://because liabilities and equity are treated the same
+                case AccountType.Equity: //Because liabilities and equity are treated the same
                 case AccountType.Income:
                     return false;
             }
-            return true;//will never happen
+            return true; // Will never happen
         }
 
-        ///<summary>Gets the balance of an account directly from the database.</summary>
+        /// <summary>
+        /// Gets the balance of an account directly from the database.
+        /// </summary>
         public static double GetBalance(long accountNum, AccountType acctType)
         {
-            string command = "SELECT SUM(DebitAmt),SUM(CreditAmt) FROM journalentry "
-                + "WHERE AccountNum=" + POut.Long(accountNum)
-                + " GROUP BY AccountNum";
-            DataTable table = Db.GetTable(command);
+            DataTable table = Db.GetTable(
+                "SELECT SUM(DebitAmt),SUM(CreditAmt) " +
+                "FROM journalentry " +
+                "WHERE AccountNum=" + POut.Long(accountNum) + " " +
+                "GROUP BY AccountNum");
+
             double debit = 0;
             double credit = 0;
             if (table.Rows.Count > 0)
@@ -298,18 +265,15 @@ namespace OpenDentBusiness
             {
                 return credit - debit;
             }
-            /*}
-			catch {
-				Debug.WriteLine(command);
-				MessageBox.Show(command);
-			}
-			return 0;*/
         }
 
-        ///<summary>Checks the loaded prefs to see if user has setup deposit linking.  Returns true if so.</summary>
+        /// <summary>
+        /// Checks the loaded prefs to see if user has setup deposit linking.
+        /// Returns true if so.
+        /// </summary>
         public static bool DepositsLinked()
         {
-            //No need to check RemotingRole; no call to db.
+            // No need to check RemotingRole; no call to db.
             if (PrefC.GetInt(PrefName.AccountingSoftware) == (int)AccountingSoftware.QuickBooks)
             {
                 if (PrefC.GetString(PrefName.QuickBooksDepositAccounts) == "")
@@ -332,14 +296,17 @@ namespace OpenDentBusiness
                     return false;
                 }
             }
-            //might add a few more checks later.
+
+            // Might add a few more checks later.
             return true;
         }
 
-        ///<summary>Checks the loaded prefs and accountingAutoPays to see if user has setup auto pay linking.  Returns true if so.</summary>
+        /// <summary>
+        /// Checks the loaded prefs and accountingAutoPays to see if user has setup auto pay linking.
+        /// Returns true if so.
+        /// </summary>
         public static bool PaymentsLinked()
         {
-            //No need to check RemotingRole; no call to db.
             if (AccountingAutoPays.GetCount() == 0)
             {
                 return false;
@@ -348,17 +315,14 @@ namespace OpenDentBusiness
             {
                 return false;
             }
-            //might add a few more checks later.
             return true;
         }
 
-        ///<summary></summary>
         public static long[] GetDepositAccounts()
         {
-            //No need to check RemotingRole; no call to db.
             string depStr = PrefC.GetString(PrefName.AccountingDepositAccounts);
             string[] depStrArray = depStr.Split(new char[] { ',' });
-            ArrayList depAL = new ArrayList();
+            List<long> depAL = new List<long>();
             for (int i = 0; i < depStrArray.Length; i++)
             {
                 if (depStrArray[i] == "")
@@ -367,15 +331,11 @@ namespace OpenDentBusiness
                 }
                 depAL.Add(PIn.Long(depStrArray[i]));
             }
-            long[] retVal = new long[depAL.Count];
-            depAL.CopyTo(retVal);
-            return retVal;
+            return depAL.ToArray();
         }
 
-        ///<summary></summary>
         public static List<string> GetDepositAccountsQB()
         {
-            //No need to check RemotingRole; no call to db.
             string depStr = PrefC.GetString(PrefName.QuickBooksDepositAccounts);
             string[] depStrArray = depStr.Split(new char[] { ',' });
             List<string> retVal = new List<string>();
@@ -390,10 +350,8 @@ namespace OpenDentBusiness
             return retVal;
         }
 
-        ///<summary></summary>
         public static List<string> GetIncomeAccountsQB()
         {
-            //No need to check RemotingRole; no call to db.
             string incomeStr = PrefC.GetString(PrefName.QuickBooksIncomeAccount);
             string[] incomeStrArray = incomeStr.Split(new char[] { ',' });
             List<string> retVal = new List<string>();
@@ -408,7 +366,9 @@ namespace OpenDentBusiness
             return retVal;
         }
 
-        ///<summary>Gets the full list to display in the Chart of Accounts, including balances.</summary>
+        /// <summary>
+        /// Gets the full list to display in the Chart of Accounts, including balances.
+        /// </summary>
         public static DataTable GetFullList(DateTime asOfDate, bool showInactive)
         {
             DataTable table = new DataTable("Accounts");
@@ -545,7 +505,9 @@ namespace OpenDentBusiness
             return table;
         }
 
-        ///<summary>Gets the full GeneralLedger list.</summary>
+        /// <summary>
+        /// Gets the full GeneralLedger list.
+        /// </summary>
         public static DataTable GetGeneralLedger(DateTime dateStart, DateTime dateEnd)
         {
             string queryString = @"SELECT DATE(" + POut.Date(new DateTime(dateStart.Year - 1, 12, 31)) + @") DateDisplayed,
@@ -610,26 +572,20 @@ namespace OpenDentBusiness
             return Db.GetTable(queryString);
         }
 
-        ///<summary>Gets the full list to display in the Chart of Accounts, including balances.</summary>
-        public static DataTable GetAssetTable(DateTime asOfDate)
-        {
-            //No need to check RemotingRole; no call to db.
-            return GetAccountTotalByType(asOfDate, AccountType.Asset);
-        }
+        /// <summary>
+        /// Gets the full list to display in the Chart of Accounts, including balances.
+        /// </summary>
+        public static DataTable GetAssetTable(DateTime asOfDate) => GetAccountTotalByType(asOfDate, AccountType.Asset);
 
-        ///<summary>Gets the full list to display in the Chart of Accounts, including balances.</summary>
-        public static DataTable GetLiabilityTable(DateTime asOfDate)
-        {
-            //No need to check RemotingRole; no call to db.
-            return GetAccountTotalByType(asOfDate, AccountType.Liability);
-        }
+        /// <summary>
+        /// Gets the full list to display in the Chart of Accounts, including balances.
+        /// </summary>
+        public static DataTable GetLiabilityTable(DateTime asOfDate) => GetAccountTotalByType(asOfDate, AccountType.Liability);
 
-        ///<summary>Gets the full list to display in the Chart of Accounts, including balances.</summary>
-        public static DataTable GetEquityTable(DateTime asOfDate)
-        {
-            //No need to check RemotingRole; no call to db.
-            return GetAccountTotalByType(asOfDate, AccountType.Equity);
-        }
+        /// <summary>
+        /// Gets the full list to display in the Chart of Accounts, including balances.
+        /// </summary>
+        public static DataTable GetEquityTable(DateTime asOfDate) => GetAccountTotalByType(asOfDate, AccountType.Equity);
 
         public static DataTable GetAccountTotalByType(DateTime asOfDate, AccountType acctType)
         {
@@ -639,27 +595,33 @@ namespace OpenDentBusiness
                 sumTotalStr = "SUM(ROUND(DebitAmt,3)-ROUND(CreditAmt,3))";
             }
             else
-            {//Liability or equity
+            {
                 sumTotalStr = "SUM(ROUND(CreditAmt,3)-ROUND(DebitAmt,3))";
             }
-            string command = "SELECT Description, " + sumTotalStr + " SumTotal, AcctType "
-                + "FROM account, journalentry "
-                + "WHERE account.AccountNum=journalentry.AccountNum AND DateDisplayed <= " + POut.Date(asOfDate) + " AND AcctType=" + POut.Int((int)acctType) + " "
-                + "GROUP BY account.AccountNum "
-                + "ORDER BY Description, DateDisplayed ";
-            return Db.GetTable(command);
+
+            return Db.GetTable(
+                "SELECT Description, " + sumTotalStr + " SumTotal, AcctType " +
+                "FROM account, journalentry " +
+                "WHERE account.AccountNum=journalentry.AccountNum AND DateDisplayed <= " + POut.Date(asOfDate) + " " +
+                "AND AcctType=" + POut.Int((int)acctType) + " " +
+                "GROUP BY account.AccountNum " +
+                "ORDER BY Description, DateDisplayed");
         }
 
-        ///<Summary>Gets sum of all income-expenses for all previous years. asOfDate could be any date</Summary>
+        /// <Summary>
+        /// Gets sum of all income-expenses for all previous years. asOfDate could be any date
+        /// </Summary>
         public static double RetainedEarningsAuto(DateTime asOfDate)
         {
             DateTime firstOfYear = new DateTime(asOfDate.Year, 1, 1);
-            string command = "SELECT SUM(ROUND(CreditAmt,3)), SUM(ROUND(DebitAmt,3)), AcctType "
-            + "FROM journalentry,account "
-            + "WHERE journalentry.AccountNum=account.AccountNum "
-            + "AND DateDisplayed < " + POut.Date(firstOfYear)
-            + " GROUP BY AcctType";
-            DataTable table = Db.GetTable(command);
+
+            DataTable table = Db.GetTable(
+                "SELECT SUM(ROUND(CreditAmt,3)), SUM(ROUND(DebitAmt,3)), AcctType " +
+                "FROM journalentry,account " +
+                "WHERE journalentry.AccountNum=account.AccountNum " +
+                "AND DateDisplayed < " + POut.Date(firstOfYear) + " " +
+                "GROUP BY AcctType");
+
             double retVal = 0;
             for (int i = 0; i < table.Rows.Count; i++)
             {
@@ -674,17 +636,21 @@ namespace OpenDentBusiness
             return retVal;
         }
 
-        ///<Summary>asOfDate is typically 12/31/...  </Summary>
+        /// <Summary>
+        /// asOfDate is typically 12/31/...  
+        /// </Summary>
         public static double NetIncomeThisYear(DateTime asOfDate)
         {
             DateTime firstOfYear = new DateTime(asOfDate.Year, 1, 1);
-            string command = "SELECT SUM(ROUND(CreditAmt,3)), SUM(ROUND(DebitAmt,3)), AcctType "
-            + "FROM journalentry,account "
-            + "WHERE journalentry.AccountNum=account.AccountNum "
-            + "AND DateDisplayed >= " + POut.Date(firstOfYear)
-            + " AND DateDisplayed <= " + POut.Date(asOfDate)
-            + " GROUP BY AcctType";
-            DataTable table = Db.GetTable(command);
+
+            DataTable table = Db.GetTable(
+                "SELECT SUM(ROUND(CreditAmt,3)), SUM(ROUND(DebitAmt,3)), AcctType " +
+                "FROM journalentry,account " +
+                "WHERE journalentry.AccountNum=account.AccountNum " +
+                "AND DateDisplayed >= " + POut.Date(firstOfYear) + " " +
+                "AND DateDisplayed <= " + POut.Date(asOfDate) + " " +
+                "GROUP BY AcctType");
+
             double retVal = 0;
             for (int i = 0; i < table.Rows.Count; i++)
             {

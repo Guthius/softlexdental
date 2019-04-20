@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace OpenDentBusiness {
 	///<summary>Entries in this table will represent procedurecodes that the insurance plan wants to SKIP when considering substitution codes.</summary>
 	[Serializable]
-	[CrudTable(IsSynchable=true,HasBatchWriteMethods=true)]
-	public class SubstitutionLink:TableBase {
+	[ODTable(IsSynchable=true,HasBatchWriteMethods=true)]
+	public class SubstitutionLink:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long SubstitutionLinkNum;
 		///<summary>FK to insplan.PlanNum.</summary>
 		public long PlanNum;

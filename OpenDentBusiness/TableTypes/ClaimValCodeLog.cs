@@ -5,9 +5,9 @@ using System.Text;
 namespace OpenDentBusiness {
 	///<summary>Value codes for institutional 'claims'.  Can have up to 12 per claim.</summary>
 	[Serializable()]
-	public class ClaimValCodeLog:TableBase {
+	public class ClaimValCodeLog:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ClaimValCodeLogNum;
 		///<summary>FK to claim.ClaimNum.</summary>
 		public long ClaimNum;

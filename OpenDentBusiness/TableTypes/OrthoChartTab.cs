@@ -5,10 +5,10 @@ using System.Drawing;
 namespace OpenDentBusiness {
 	///<summary>Corresponds to one tab full of display fields inside the ortho chart.</summary>
 	[Serializable]
-	[CrudTable(IsSynchable=true)]
-	public class OrthoChartTab:TableBase {
+	[ODTable(IsSynchable=true)]
+	public class OrthoChartTab:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long OrthoChartTabNum;
 		///<summary>The description of the tab which shows in the UI.  User editable.</summary>
 		public string TabName;

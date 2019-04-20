@@ -5,9 +5,9 @@ namespace OpenDentBusiness{
 
 	///<summary>All info about a referral is stored with that referral even if a patient.  That way, it's available for easy queries.</summary>
 	[Serializable]
-	public class Referral:TableBase {
+	public class Referral:ODTable {
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long ReferralNum;
 		///<summary>Last name.</summary>
 		public string LName;
@@ -34,7 +34,7 @@ namespace OpenDentBusiness{
 		///<summary>.</summary>
 		public string Zip;
 		///<summary>Holds important info about the referral.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Note;
 		///<summary>Additional phone no restrictions</summary>
 		public string Phone2;
@@ -57,7 +57,7 @@ namespace OpenDentBusiness{
 		///<summary>True if checkbox E-mail Trust for Direct is checked.</summary>
 		public bool IsTrustedDirect;
 		///<summary>The datetime this referral was last edited.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TimeStamp)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TimeStamp)]
 		public DateTime DateTStamp;
 		///<summary>True if the referral is a preferred referral.</summary>
 		public bool IsPreferred;

@@ -5,9 +5,9 @@ using System.Drawing;
 namespace OpenDentBusiness{
 	///<summary>One row on an evaluation.</summary>
 	[Serializable]
-	public class EvaluationCriterion:TableBase{
+	public class EvaluationCriterion:ODTable{
 		///<summary>Primary key.</summary>
-		[CrudColumn(IsPriKey=true)]
+		[ODTableColumn(PrimaryKey=true)]
 		public long EvaluationCriterionNum;
 		///<summary>FK to evaluation.EvaluationNum</summary>
 		public long EvaluationNum;
@@ -22,7 +22,7 @@ namespace OpenDentBusiness{
 		///<summary>Copied from gradingscaleitem.GradeNumber.  Required.  For example A=4, A-=3.8, pass=1, percentages stored as 89, etc.  Except for percentages, must come from pick list.</summary>
 		public float GradeNumber;
 		///<summary>A note about why this student received this particular grade on this criterion.</summary>
-		[CrudColumn(SpecialType=CrudSpecialColType.TextIsClob)]
+		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string Notes;
 		///<summary>Copied from item order of def.  Defines the order that all the criteria show on the evaluation.  User not allowed to change here, only in the def.</summary>
 		public int ItemOrder;
