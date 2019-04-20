@@ -7,31 +7,11 @@ using System.Data;
 using System.Diagnostics;
 using System.Reflection;
 
-namespace OpenDentBusiness{
+namespace OpenDentBusiness
+{
     ///<summary></summary>
     public class Computers
     {
-
-        #region Get Methods
-        #endregion
-
-        #region Modification Methods
-
-        #region Insert
-        #endregion
-
-        #region Update
-        #endregion
-
-        #region Delete
-        #endregion
-
-        #endregion
-
-        #region Misc Methods
-        #endregion
-
-
         #region CachePattern
 
         private class ComputerCache : CacheListAbs<Computer>
@@ -89,12 +69,7 @@ namespace OpenDentBusiness{
         {
             //It is important to call EnsureComputerInDB prior to the remoting role check.
             EnsureComputerInDB(Environment.MachineName);
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                DataTable table = Meth.GetTable(MethodBase.GetCurrentMethod(), doRefreshCache);
-                _computerCache.FillCacheFromTable(table);
-                return table;
-            }
+
             return _computerCache.GetTableFromCache(doRefreshCache);
         }
 
@@ -102,11 +77,6 @@ namespace OpenDentBusiness{
 
         public static void EnsureComputerInDB(string computerName)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), computerName);
-                return;
-            }
             string command =
                 "SELECT * from computer "
                 + "WHERE compname = '" + computerName + "'";
@@ -122,34 +92,12 @@ namespace OpenDentBusiness{
         ///<summary>ONLY use this if compname is not already present</summary>
         public static long Insert(Computer comp)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                comp.ComputerNum = Meth.GetLong(MethodBase.GetCurrentMethod(), comp);
-                return comp.ComputerNum;
-            }
             return Crud.ComputerCrud.Insert(comp);
         }
-
-        /*
-		///<summary></summary>
-		public static void Update(){
-			string command= "UPDATE computer SET "
-				+"compname = '"    +POut.PString(CompName)+"' "
-				//+"printername = '" +POut.PString(PrinterName)+"' "
-				+"WHERE ComputerNum = '"+POut.PInt(ComputerNum)+"'";
-			//MessageBox.Show(string command);
-			DataConnection dcon=new DataConnection();
- 			Db.NonQ(command);
-		}*/
 
         ///<summary></summary>
         public static void Delete(Computer comp)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), comp);
-                return;
-            }
             string command = "DELETE FROM computer WHERE computernum = '" + comp.ComputerNum.ToString() + "'";
             Db.NonQ(command);
         }
@@ -164,10 +112,6 @@ namespace OpenDentBusiness{
         ///<summary>Returns all computers with an active heart beat.  A heart beat less than 4 minutes old is considered active.</summary>
         public static List<Computer> GetRunningComputers()
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                return Meth.GetObject<List<Computer>>(MethodBase.GetCurrentMethod());
-            }
             //heartbeat is every three minutes.  We'll allow four to be generous.
             string command = "SELECT * FROM computer WHERE LastHeartBeat > SUBTIME(NOW(),'00:04:00')";
 
@@ -177,11 +121,6 @@ namespace OpenDentBusiness{
         /// <summary>When starting up, in an attempt to be fast, it will not add a new computer to the list.</summary>
         public static void UpdateHeartBeat(string computerName, bool isStartup)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), computerName, isStartup);
-                return;
-            }
             string command;
             if (!isStartup)
             {
@@ -201,22 +140,12 @@ namespace OpenDentBusiness{
 
         public static void ClearHeartBeat(string computerName)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), computerName);
-                return;
-            }
             string command = "UPDATE computer SET LastHeartBeat=" + POut.Date(new DateTime(0001, 1, 1), true) + " WHERE CompName = '" + POut.String(computerName) + "'";
             Db.NonQ(command);
         }
 
         public static void ClearAllHeartBeats(string machineNameException)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), machineNameException);
-                return;
-            }
             string command = "UPDATE computer SET LastHeartBeat=" + POut.Date(new DateTime(0001, 1, 1), true) + " "
                 + "WHERE CompName != '" + POut.String(machineNameException) + "'";
             Db.NonQ(command);
@@ -229,7 +158,6 @@ namespace OpenDentBusiness{
         public static List<string> GetServiceInfo()
         {
             List<string> retVal = new List<string>();
-
 
             DataTable table = Db.GetTable("SHOW VARIABLES WHERE Variable_name = 'socket'");//service name
             if (table.Rows.Count > 0)

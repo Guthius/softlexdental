@@ -51,10 +51,6 @@ namespace OpenDentBusiness{
 
         public static DataTable GetByName(string listName, string orderBy)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                return Meth.GetTable(MethodBase.GetCurrentMethod(), listName, orderBy);
-            }
             DataTable tableDescript = Db.GetTable("DESCRIBE wikilist_" + POut.String(listName));
             string command = "SELECT * FROM wikilist_" + POut.String(listName);
             //Manual ovverride of Order By
@@ -81,11 +77,6 @@ namespace OpenDentBusiness{
         /// <summary>Creates empty table with a single column for PK. List name must be formatted correctly before being passed here. Ie. no spaces, all lowercase.</summary>
         public static void CreateNewWikiList(string listName)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), listName);
-                return;
-            }
             //listname is checked in the UI for proper format.
             string command = "CREATE TABLE wikilist_" + POut.String(listName) + " (" + POut.String(listName) + "Num bigint NOT NULL auto_increment PRIMARY KEY ) DEFAULT CHARSET=utf8";
             Db.NonQ(command);
@@ -99,11 +90,6 @@ namespace OpenDentBusiness{
         ///<summary>Column is automatically named "Column#" where # is the number of columns+1.</summary>
         public static void AddColumn(string listName)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), listName);
-                return;
-            }
             //Find Valid column name-----------------------------------------------------------------------------------------
             DataTable columnNames = Db.GetTable("DESCRIBE wikilist_" + POut.String(listName));
             string newColumnName = "Column1";//default in case table has no columns. Should never happen.
@@ -142,10 +128,6 @@ namespace OpenDentBusiness{
         ///<summary>Check to see if column can be deleted, returns true is the column contains only nulls.</summary>
         public static bool CheckColumnEmpty(string listName, string colName)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                return Meth.GetBool(MethodBase.GetCurrentMethod(), listName, colName);
-            }
             string command = "SELECT COUNT(*) FROM wikilist_" + POut.String(listName) + " WHERE " + POut.String(colName) + "!=''";
             return Db.GetCount(command).Equals("0");
         }
@@ -153,11 +135,6 @@ namespace OpenDentBusiness{
         ///<summary>Check to see if column can be deleted, returns true is the column contains only nulls.</summary>
         public static void DeleteColumn(string listName, string colName)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), listName, colName);
-                return;
-            }
             string command = "ALTER TABLE wikilist_" + POut.String(listName) + " DROP " + POut.String(colName);
             Db.NonQ(command);
             WikiListHeaderWidths.Delete(listName, colName);
@@ -166,11 +143,6 @@ namespace OpenDentBusiness{
         /// <summary>Shifts the column to the left, does nothing if trying to shift leftmost two columns.</summary>
         public static void ShiftColumnLeft(string listName, string colName)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), listName, colName);
-                return;
-            }
             DataTable columnNames = Db.GetTable("DESCRIBE wikilist_" + POut.String(listName));
             if (columnNames.Rows.Count < 3)
             {
@@ -200,11 +172,6 @@ namespace OpenDentBusiness{
         /// <summary>Shifts the column to the right, does nothing if trying to shift the rightmost column.</summary>
         public static void ShiftColumnRight(string listName, string colName)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), listName, colName);
-                return;
-            }
             DataTable columnNames = Db.GetTable("DESCRIBE wikilist_" + POut.String(listName));
             if (columnNames.Rows.Count < 3)
             {
@@ -233,10 +200,6 @@ namespace OpenDentBusiness{
         ///<summary>Adds one item to wiki list and returns the new PK.</summary>
         public static long AddItem(string listName)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                return Meth.GetLong(MethodBase.GetCurrentMethod(), listName);
-            }
             string command = "INSERT INTO wikilist_" + POut.String(listName) + " VALUES ()";//inserts empty row with auto generated PK.
             return Db.NonQ(command, true);
         }
@@ -245,11 +208,6 @@ namespace OpenDentBusiness{
         /// <param name="ItemTable">Should be a DataTable object with a single DataRow containing the item.</param>
         public static void UpdateItem(string listName, DataTable ItemTable)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), listName, ItemTable);
-                return;
-            }
             if (ItemTable.Columns.Count < 2)
             {
                 //if the table contains only a PK column.
@@ -274,22 +232,12 @@ namespace OpenDentBusiness{
 
         public static void DeleteItem(string listName, long itemNum)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), listName, itemNum);
-                return;
-            }
             string command = "DELETE FROM wikilist_" + POut.String(listName) + " WHERE " + POut.String(listName) + "Num = " + POut.Long(itemNum);
             Db.NonQ(command);
         }
 
         public static void DeleteList(string listName)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), listName);
-                return;
-            }
             string command = "DROP TABLE wikilist_" + POut.String(listName);
             Db.NonQ(command);
             WikiListHeaderWidths.DeleteForList(listName);

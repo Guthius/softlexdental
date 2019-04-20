@@ -11,9 +11,6 @@ namespace OpenDentBusiness{
 		#region Get Methods
 		///<summary>Gets all payplancharges for a specific payment plan.</summary>
 		public static List<PayPlanCharge> GetForPayPlan(long payPlanNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<PayPlanCharge>>(MethodBase.GetCurrentMethod(),payPlanNum);
-			}
 			string command=
 				"SELECT * FROM payplancharge "
 				+"WHERE PayPlanNum="+POut.Long(payPlanNum)
@@ -24,9 +21,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a list of payplancharges associated to the passed in payplannums.  Will return a blank list if none.</summary>
 		public static List<PayPlanCharge> GetForPayPlans(List<long> listPayPlanNums) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<PayPlanCharge>>(MethodBase.GetCurrentMethod(),listPayPlanNums);
-			}
 			if(listPayPlanNums==null || listPayPlanNums.Count<1) {
 				return new List<PayPlanCharge>();
 			}
@@ -39,19 +33,13 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all payplan charges for the payplans passed in where the specified patient is the Guarantor.  Based on today's date.  
 		///Will return both credits and debits.  Does not return insurance payment plan charges.</summary>
-		public static List<PayPlanCharge> GetDueForPayPlan(PayPlan payPlan,long patNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<PayPlanCharge>>(MethodBase.GetCurrentMethod(),payPlan,patNum);
-			}			
+		public static List<PayPlanCharge> GetDueForPayPlan(PayPlan payPlan,long patNum) {		
 			return GetDueForPayPlans(new List<PayPlan> { payPlan },patNum);
 		}
 
 		///<summary>Gets all payplan charges for the payplans passed in where the specified patient is the Guarantor.  Based on today's date.  
 		///Will return both credits and debits.  Does not return insurance payment plan charges.</summary>
 		public static List<PayPlanCharge> GetDueForPayPlans(List<PayPlan> listPayPlans,long patNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<PayPlanCharge>>(MethodBase.GetCurrentMethod(),listPayPlans,patNum);
-			}
 			if(listPayPlans.Count < 1) {
 				return new List<PayPlanCharge>();
 			}
@@ -67,9 +55,6 @@ namespace OpenDentBusiness{
 		///<summary>Gets all payplan charges for the payplans passed in where the any of the patients in the list are the Guarantor or the patient on the
 		///payment plan.  Based on today's date.  Will return both credits and debits.  Does not return insurance payment plan charges.</summary>
 		public static List<PayPlanCharge> GetDueForPayPlans(List<PayPlan> listPayPlans,List<long> listPatNums) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<PayPlanCharge>>(MethodBase.GetCurrentMethod(),listPayPlans,listPatNums);
-			}
 			if(listPayPlans.Count < 1 || listPatNums.Count < 1) {
 				return new List<PayPlanCharge>();
 			}
@@ -83,9 +68,6 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<PayPlanCharge> GetChargesForPayPlanChargeType(long payPlanNum, PayPlanChargeType chargeType) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<PayPlanCharge>>(MethodBase.GetCurrentMethod(),payPlanNum,chargeType);
-			}
 			string command="SELECT * FROM payplancharge "
 				+"WHERE PayPlanNum="+POut.Long(payPlanNum)+" "
 				+"AND ChargeType="+POut.Int((int)chargeType);
@@ -95,18 +77,12 @@ namespace OpenDentBusiness{
 		///<summary>Takes a procNum and returns a list of all payment plan charge credits associated to the procedure.
 		///Returns an empty list if there are none.</summary>
 		public static List<PayPlanCharge> GetFromProc(long procNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<PayPlanCharge>>(MethodBase.GetCurrentMethod(),procNum);
-			}
 			string command="SELECT * FROM payplancharge WHERE payplancharge.ProcNum="+POut.Long(procNum);
 			return Crud.PayPlanChargeCrud.SelectMany(command);
 		}
 
 		///<summary></summary>
 		public static PayPlanCharge GetOne(long payPlanChargeNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<PayPlanCharge>(MethodBase.GetCurrentMethod(),payPlanChargeNum);
-			}
 			string command=
 				"SELECT * FROM payplancharge "
 				+"WHERE PayPlanChargeNum="+POut.Long(payPlanChargeNum);
@@ -119,10 +95,6 @@ namespace OpenDentBusiness{
 		#region Insert
 		///<summary></summary>
 		public static long Insert(PayPlanCharge charge) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				charge.PayPlanChargeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),charge);
-				return charge.PayPlanChargeNum;
-			}
 			return Crud.PayPlanChargeCrud.Insert(charge);
 		}
 		#endregion
@@ -133,10 +105,6 @@ namespace OpenDentBusiness{
 		///If a non-complete procedure is passed in, it will update the charges associated to MaxValue.
 		///Does nothing if there are no charges attached to the passed-in procedure.</summary>
 		public static void UpdateAttachedPayPlanCharges(Procedure proc) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),proc);
-				return;
-			}
 			List<PayPlanCharge> listCharges=GetFromProc(proc.ProcNum);
 			foreach(PayPlanCharge chargeCur in listCharges) {
 				chargeCur.ChargeDate=DateTime.MaxValue;
@@ -151,19 +119,11 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(PayPlanCharge charge){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),charge);
-				return;
-			}
 			Crud.PayPlanChargeCrud.Update(charge);
 		}
 
 		///<summary>Inserts, updates, or deletes database rows to match supplied list.  Must always pass in payPlanNum.</summary>
 		public static void Sync(List<PayPlanCharge> listPayPlanCharges,long payPlanNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),listPayPlanCharges,payPlanNum);
-				return;
-			}
 			List<PayPlanCharge> listDB=PayPlanCharges.GetForPayPlan(payPlanNum);
 			Crud.PayPlanChargeCrud.Sync(listPayPlanCharges,listDB);
 		}
@@ -172,10 +132,6 @@ namespace OpenDentBusiness{
 		#region Delete
 		///<summary>Will delete all PayPlanCharges associated to the passed-in procNum from the database.  Does nothing if the procNum = 0.</summary>
 		public static void DeleteForProc(long procNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),procNum);
-				return;
-			}
 			if(procNum==0) {
 				return;
 			}
@@ -187,10 +143,6 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(PayPlanCharge charge){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),charge);
-				return;
-			}
 			string command= "DELETE from payplancharge WHERE PayPlanChargeNum = '"
 				+POut.Long(charge.PayPlanChargeNum)+"'";
  			Db.NonQ(command);
@@ -198,10 +150,5 @@ namespace OpenDentBusiness{
 		#endregion
 
 		#endregion
-
-		#region Misc Methods
-		#endregion
-
-		
 	}
 }

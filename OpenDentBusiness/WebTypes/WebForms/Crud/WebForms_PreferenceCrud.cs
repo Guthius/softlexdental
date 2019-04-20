@@ -21,9 +21,6 @@ namespace OpenDentBusiness.WebTypes.WebForms.Crud{
 
 		///<summary>Gets one WebForms_Preference object from the database using a query.</summary>
 		public static WebForms_Preference SelectOne(string command) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
-			}
 			List<WebForms_Preference> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -33,9 +30,6 @@ namespace OpenDentBusiness.WebTypes.WebForms.Crud{
 
 		///<summary>Gets a list of WebForms_Preference objects from the database using a query.</summary>
 		public static List<WebForms_Preference> SelectMany(string command) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
-			}
 			List<WebForms_Preference> list=TableToList(Db.GetTable(command));
 			return list;
 		}

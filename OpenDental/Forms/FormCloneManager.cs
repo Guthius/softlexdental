@@ -15,9 +15,7 @@ namespace OpenDental {
 	public partial class FormCloneManager:ODForm {
 		//private Patient PatCur;
 		private List<Patient> _listPatClones;
-		private bool _isSelected; //currently not necessary since using inversion method. 
-		///<summary>Invoke this action in order to close the patient clone progress window.</summary>
-		private Action _actionCloseCloneFixProgress=null;
+
 		/// <summary></summary>
 		public FormCloneManager() {
 			InitializeComponent();

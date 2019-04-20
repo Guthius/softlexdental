@@ -6,236 +6,244 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace OpenDentBusiness{
+namespace OpenDentBusiness
+{
 
-///<summary></summary>
-	public class UserQueries{
-		#region Get Methods
-		#endregion
+    ///<summary></summary>
+    public class UserQueries
+    {
+        #region Get Methods
+        #endregion
 
-		#region Modification Methods
-		
-		#region Insert
-		#endregion
+        #region Modification Methods
 
-		#region Update
-		#endregion
+        #region Insert
+        #endregion
 
-		#region Delete
-		#endregion
+        #region Update
+        #endregion
 
-		#endregion
+        #region Delete
+        #endregion
 
-		#region Misc Methods
-		///<summary>Splits the given query string on the passed-in split string parameters. 
-		///DOES NOT split on the split strings when within single quotes, double quotes, parans, or case/if/concat statements.</summary>
-		public static List<string> SplitQuery(string queryStr,bool includeDelimeters=false,params string[] listSplitStrs) {
-			List<string> listStrSplit = new List<string>(); //returned list of strings.
-			string totalStr = "";
-			char quoteMode = '-'; //tracks whether we are currently within quotes.
-			Stack<string> stackFuncs = new Stack<string>(); //tracks whether we are currently within a CASE, IF, or CONCAT statement.
-			foreach(char c in queryStr) {
-				if(quoteMode != '-') {
-					if(c == quoteMode) {
-						quoteMode='-';
-					}
-					//The current char is in the list of split strings.
-					if(listSplitStrs.Contains(c.ToString())) {
-						//First check to make sure we aren't in quote mode still.
-						if(quoteMode!='-') {
-							quoteMode='-';
-						}
-						AddTotalStrToList(c,includeDelimeters,ref totalStr,ref listStrSplit);
-					}
-					else {
-						totalStr+=c;
-					}
-				}
-				else if(stackFuncs.Count > 0) {
-					if((totalStr + c).ToLower().EndsWith("case")) {
-						stackFuncs.Push("end");
-					}
-					else if((totalStr + c).ToLower().EndsWith("(")) {
-						stackFuncs.Push(")");
-					}
-					else if((totalStr + c).ToLower().EndsWith(stackFuncs.Peek())) {
-						stackFuncs.Pop();
-					}
-					if(listSplitStrs.Contains(c.ToString())) {
-						AddTotalStrToList(c,includeDelimeters,ref totalStr,ref listStrSplit);
-						stackFuncs.Clear();
-					}
-					else {
-						totalStr+=c;
-					}
-				}
-				else {
-					if((totalStr + c).ToLower().EndsWith("case")) {
-						stackFuncs.Push("end");
-						totalStr+=c;
-					}
-					else if((totalStr + c).ToLower().EndsWith("(")) {
-						stackFuncs.Push(")");
-						totalStr+=c;
-					}
-					else if(listSplitStrs.Contains(c.ToString())) {
-						AddTotalStrToList(c,includeDelimeters,ref totalStr,ref listStrSplit);
-					}
-					else {
-						if(c == '\'' || c =='"') {
-							quoteMode = c;
-						}
-						totalStr+=c;
-					}
-				}
-			}
-			listStrSplit.Add(totalStr);
-			return listStrSplit;
-		}
+        #endregion
 
-		///<summary>Adds the totalStr to the listStrSplit passed in and then clears the totalStr.  Sets totalStr to the delimeter if includeDelimeters
-		///is true.</summary>
-		private static void AddTotalStrToList(char c,bool includeDelimeters,ref string totalStr,ref List<string> listStrSplit) {
-			listStrSplit.Add(totalStr);
-			totalStr="";
-			if(includeDelimeters) {
-				totalStr+=c;
-			}
-		}
+        #region Misc Methods
+        ///<summary>Splits the given query string on the passed-in split string parameters. 
+        ///DOES NOT split on the split strings when within single quotes, double quotes, parans, or case/if/concat statements.</summary>
+        public static List<string> SplitQuery(string queryStr, bool includeDelimeters = false, params string[] listSplitStrs)
+        {
+            List<string> listStrSplit = new List<string>(); //returned list of strings.
+            string totalStr = "";
+            char quoteMode = '-'; //tracks whether we are currently within quotes.
+            Stack<string> stackFuncs = new Stack<string>(); //tracks whether we are currently within a CASE, IF, or CONCAT statement.
+            foreach (char c in queryStr)
+            {
+                if (quoteMode != '-')
+                {
+                    if (c == quoteMode)
+                    {
+                        quoteMode = '-';
+                    }
+                    //The current char is in the list of split strings.
+                    if (listSplitStrs.Contains(c.ToString()))
+                    {
+                        //First check to make sure we aren't in quote mode still.
+                        if (quoteMode != '-')
+                        {
+                            quoteMode = '-';
+                        }
+                        AddTotalStrToList(c, includeDelimeters, ref totalStr, ref listStrSplit);
+                    }
+                    else
+                    {
+                        totalStr += c;
+                    }
+                }
+                else if (stackFuncs.Count > 0)
+                {
+                    if ((totalStr + c).ToLower().EndsWith("case"))
+                    {
+                        stackFuncs.Push("end");
+                    }
+                    else if ((totalStr + c).ToLower().EndsWith("("))
+                    {
+                        stackFuncs.Push(")");
+                    }
+                    else if ((totalStr + c).ToLower().EndsWith(stackFuncs.Peek()))
+                    {
+                        stackFuncs.Pop();
+                    }
+                    if (listSplitStrs.Contains(c.ToString()))
+                    {
+                        AddTotalStrToList(c, includeDelimeters, ref totalStr, ref listStrSplit);
+                        stackFuncs.Clear();
+                    }
+                    else
+                    {
+                        totalStr += c;
+                    }
+                }
+                else
+                {
+                    if ((totalStr + c).ToLower().EndsWith("case"))
+                    {
+                        stackFuncs.Push("end");
+                        totalStr += c;
+                    }
+                    else if ((totalStr + c).ToLower().EndsWith("("))
+                    {
+                        stackFuncs.Push(")");
+                        totalStr += c;
+                    }
+                    else if (listSplitStrs.Contains(c.ToString()))
+                    {
+                        AddTotalStrToList(c, includeDelimeters, ref totalStr, ref listStrSplit);
+                    }
+                    else
+                    {
+                        if (c == '\'' || c == '"')
+                        {
+                            quoteMode = c;
+                        }
+                        totalStr += c;
+                    }
+                }
+            }
+            listStrSplit.Add(totalStr);
+            return listStrSplit;
+        }
 
-		///<summary>Returns a string with SQL comments removed.
-		///E.g. removes /**/ and -- SQL comments from the query passed in.</summary>
-		public static string RemoveSQLComments(string queryText) {
-			Regex blockComments = new Regex(@"/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/");
-			Regex lineComments = new Regex(@"--.*");
-			string retVal = blockComments.Replace(queryText,"");
-			retVal = lineComments.Replace(retVal,"");
-			return retVal;
-		}
+        ///<summary>Adds the totalStr to the listStrSplit passed in and then clears the totalStr.  Sets totalStr to the delimeter if includeDelimeters
+        ///is true.</summary>
+        private static void AddTotalStrToList(char c, bool includeDelimeters, ref string totalStr, ref List<string> listStrSplit)
+        {
+            listStrSplit.Add(totalStr);
+            totalStr = "";
+            if (includeDelimeters)
+            {
+                totalStr += c;
+            }
+        }
 
-		///<summary>Helper method to remove leading and trailing spaces from every element in a list of strings.</summary>
-		public static void TrimList(List<string> trimList) {
-			for(int i = 0;i < trimList.Count;i++) {
-				trimList[i]=trimList[i].Trim();
-			}
-		}
+        ///<summary>Returns a string with SQL comments removed.
+        ///E.g. removes /**/ and -- SQL comments from the query passed in.</summary>
+        public static string RemoveSQLComments(string queryText)
+        {
+            Regex blockComments = new Regex(@"/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*+/");
+            Regex lineComments = new Regex(@"--.*");
+            string retVal = blockComments.Replace(queryText, "");
+            retVal = lineComments.Replace(retVal, "");
+            return retVal;
+        }
 
-		///<summary>Takes the passed-in query text and returns a list of SET statements within the query.
-		///Pass in the entire query.</summary>
-		public static List<string> ParseSetStatements(string queryText) {
-			queryText=RemoveSQLComments(queryText);
-			List<string> stmts = SplitQuery(queryText,false,";");
-			TrimList(stmts);
-			stmts.RemoveAll(x => string.IsNullOrEmpty(x));
-			return stmts.Where(x => x.ToLower().StartsWith("set ")).ToList();
-		}
-		#endregion
-		
-		#region CachePattern
+        ///<summary>Helper method to remove leading and trailing spaces from every element in a list of strings.</summary>
+        public static void TrimList(List<string> trimList)
+        {
+            for (int i = 0; i < trimList.Count; i++)
+            {
+                trimList[i] = trimList[i].Trim();
+            }
+        }
 
-		private class UserQueryCache:CacheListAbs<UserQuery> {
-			protected override UserQuery Copy(UserQuery userQuery) {
-				return userQuery.Copy();
-			}
+        ///<summary>Takes the passed-in query text and returns a list of SET statements within the query.
+        ///Pass in the entire query.</summary>
+        public static List<string> ParseSetStatements(string queryText)
+        {
+            queryText = RemoveSQLComments(queryText);
+            List<string> stmts = SplitQuery(queryText, false, ";");
+            TrimList(stmts);
+            stmts.RemoveAll(x => string.IsNullOrEmpty(x));
+            return stmts.Where(x => x.ToLower().StartsWith("set ")).ToList();
+        }
+        #endregion
 
-			protected override void FillCacheIfNeeded() {
-				UserQueries.GetTableFromCache(false);
-			}
+        #region CachePattern
 
-			protected override List<UserQuery> GetCacheFromDb() {
-				string command="SELECT * FROM userquery ORDER BY description";
-				return Crud.UserQueryCrud.SelectMany(command);
-			}
+        private class UserQueryCache : CacheListAbs<UserQuery>
+        {
+            protected override UserQuery Copy(UserQuery userQuery)
+            {
+                return userQuery.Copy();
+            }
 
-			protected override DataTable ListToTable(List<UserQuery> listUserQueries) {
-				return Crud.UserQueryCrud.ListToTable(listUserQueries,"UserQuery");
-			}
+            protected override void FillCacheIfNeeded()
+            {
+                UserQueries.GetTableFromCache(false);
+            }
 
-			protected override List<UserQuery> TableToList(DataTable table) {
-				return Crud.UserQueryCrud.TableToList(table);
-			}
+            protected override List<UserQuery> GetCacheFromDb()
+            {
+                string command = "SELECT * FROM userquery ORDER BY description";
+                return Crud.UserQueryCrud.SelectMany(command);
+            }
 
-			protected override bool IsInListShort(UserQuery userQuery) {
-				return  userQuery.IsReleased;
-			}
-		}
+            protected override DataTable ListToTable(List<UserQuery> listUserQueries)
+            {
+                return Crud.UserQueryCrud.ListToTable(listUserQueries, "UserQuery");
+            }
 
-		///<summary>The object that accesses the cache in a thread-safe manner.</summary>
-		private static UserQueryCache _userQueryCache=new UserQueryCache();
+            protected override List<UserQuery> TableToList(DataTable table)
+            {
+                return Crud.UserQueryCrud.TableToList(table);
+            }
 
-		public static List<UserQuery> GetDeepCopy(bool isShort=false) {
-			return _userQueryCache.GetDeepCopy(isShort);
-		}
+            protected override bool IsInListShort(UserQuery userQuery)
+            {
+                return userQuery.IsReleased;
+            }
+        }
 
-		public static List<UserQuery> GetWhere(Predicate<UserQuery> match,bool isShort=false) {
-			return _userQueryCache.GetWhere(match,isShort);
-		}
+        ///<summary>The object that accesses the cache in a thread-safe manner.</summary>
+        private static UserQueryCache _userQueryCache = new UserQueryCache();
 
-		///<summary>Refreshes the cache and returns it as a DataTable. This will refresh the ClientWeb's cache and the ServerWeb's cache.</summary>
-		public static DataTable RefreshCache() {
-			return GetTableFromCache(true);
-		}
+        public static List<UserQuery> GetDeepCopy(bool isShort = false)
+        {
+            return _userQueryCache.GetDeepCopy(isShort);
+        }
 
-		///<summary>Fills the local cache with the passed in DataTable.</summary>
-		public static void FillCacheFromTable(DataTable table) {
-			_userQueryCache.FillCacheFromTable(table);
-		}
+        public static List<UserQuery> GetWhere(Predicate<UserQuery> match, bool isShort = false)
+        {
+            return _userQueryCache.GetWhere(match, isShort);
+        }
 
-		///<summary>Always refreshes the ClientWeb's cache.</summary>
-		public static DataTable GetTableFromCache(bool doRefreshCache) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				DataTable table=Meth.GetTable(MethodBase.GetCurrentMethod(),doRefreshCache);
-				_userQueryCache.FillCacheFromTable(table);
-				return table;
-			}
-			return _userQueryCache.GetTableFromCache(doRefreshCache);
-		}
+        ///<summary>Refreshes the cache and returns it as a DataTable. This will refresh the ClientWeb's cache and the ServerWeb's cache.</summary>
+        public static DataTable RefreshCache()
+        {
+            return GetTableFromCache(true);
+        }
 
-		#endregion
+        ///<summary>Fills the local cache with the passed in DataTable.</summary>
+        public static void FillCacheFromTable(DataTable table)
+        {
+            _userQueryCache.FillCacheFromTable(table);
+        }
 
-		///<summary></summary>
-		public static long Insert(UserQuery Cur){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Cur.QueryNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
-				return Cur.QueryNum;
-			}
-			return Crud.UserQueryCrud.Insert(Cur);
-		}
-		
-		///<summary></summary>
-		public static void Delete(UserQuery Cur){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
-			}
-			string command = "DELETE from userquery WHERE querynum = '"+POut.Long(Cur.QueryNum)+"'";
-			Db.NonQ(command);
-		}
+        ///<summary>Always refreshes the ClientWeb's cache.</summary>
+        public static DataTable GetTableFromCache(bool doRefreshCache)
+        {
+            return _userQueryCache.GetTableFromCache(doRefreshCache);
+        }
 
-		///<summary></summary>
-		public static void Update(UserQuery Cur){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
-			}
-			Crud.UserQueryCrud.Update(Cur);
-		}
-	}
+        #endregion
 
-	
+        ///<summary></summary>
+        public static long Insert(UserQuery Cur)
+        {
+            return Crud.UserQueryCrud.Insert(Cur);
+        }
 
-	
+        ///<summary></summary>
+        public static void Delete(UserQuery Cur)
+        {
+            string command = "DELETE from userquery WHERE querynum = '" + POut.Long(Cur.QueryNum) + "'";
+            Db.NonQ(command);
+        }
+
+        ///<summary></summary>
+        public static void Update(UserQuery Cur)
+        {
+            Crud.UserQueryCrud.Update(Cur);
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

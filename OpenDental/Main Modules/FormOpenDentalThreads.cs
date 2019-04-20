@@ -645,49 +645,6 @@ namespace OpenDental {
 		}
 
 		#endregion
-		#region MiddleTierConnectionMonitorThread
-
-		private void BeginMiddleTierConnectionMonitorThread(MiddleTierConnectionEventArgs e) {
-			if(_odThreadMiddleTierConnectionLost!=null) {
-				return;
-			}
-			RemotingClient.HasMiddleTierConnectionFailed=true;
-			_odThreadMiddleTierConnectionLost=new ODThread((o) => {
-				//Stop all appropriate threads and timers, and open the Connection Lost window.
-				SetTimersAndThreads(false);
-				string errorMessage=(string)e.Tag;
-				Func<bool> funcShouldWindowClose=() => {
-					//Very simple MiddleTier communication, small payload.
-					if(RemotingClient.IsMiddleTierAvailable()) {
-						//Tell everyone that the Middle Tier is back online.
-						RemotingClient.HasMiddleTierConnectionFailed=false;
-						MiddleTierConnectionEvent.Fire(new MiddleTierConnectionEventArgs(true));
-						return true;//Middle Tier is back online so close the Connection Lost window.
-					}
-					else {
-						return false;//Middle Tier is not back online yet so don't close the Connection Lost window.
-					}
-				};
-				FormConnectionLost FormCL=new FormConnectionLost(funcShouldWindowClose,ODEventType.MiddleTierConnection,errorMessage
-					,typeof(MiddleTierConnectionEvent));
-				//Halt the thread here until clicking 'Retry' is successful, clicking 'Exit Program', or an event fires indicating connection is back.
-				if(FormCL.ShowDialog()==DialogResult.Cancel) {
-					//This is problematic because it causes DirectX to cause a UE but there doesn't seem to be a better way to close without using the database.
-					ExitCode=107;//Connection to the Middle Tier has failed
-					Environment.Exit(ExitCode);
-					return;
-				}
-				//Start up threads and timers after a successful reconnection.
-				SetTimersAndThreads(true);
-			});
-			_odThreadMiddleTierConnectionLost.AddExceptionHandler((ex) => ex.DoNothing());
-			_odThreadMiddleTierConnectionLost.AddExitHandler((ex) => _odThreadMiddleTierConnectionLost=null);
-			_odThreadMiddleTierConnectionLost.GroupName=FormODThreadNames.MiddleTierConnectionLost.GetDescription();
-			_odThreadMiddleTierConnectionLost.Name=FormODThreadNames.MiddleTierConnectionLost.GetDescription();
-			_odThreadMiddleTierConnectionLost.Start();
-		}
-
-		#endregion
 		#region ODServiceMonitorThread
 
 		///<summary>Begins a thread that monitor's the Open Dental Service heartbeat and alerts the user if the service is not running.</summary>

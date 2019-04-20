@@ -5,7 +5,6 @@
         string _folder;
         string _fileName;
         byte[] _fileContent = new byte[1];
-        string _fileId;
 
         /// <summary>
         /// If a file is greater than 2MB in size, we will break it up into chunks when uploading it to Dropbox.

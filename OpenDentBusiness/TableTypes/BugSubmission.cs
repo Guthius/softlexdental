@@ -212,7 +212,7 @@ namespace OpenDentBusiness {
 				_info.UserNumCur=Security.CurUser.UserNum;
 				_info.PatientNumCur=patNum;
 				_info.IsOfficeOnReplication=(ReplicationServers.GetCount() > 0 ? true : false);
-				_info.IsOfficeUsingMiddleTier=(RemotingClient.RemotingRole==RemotingRole.ClientWeb ? true : false);
+                _info.IsOfficeUsingMiddleTier = false;
 				_info.WindowsVersion=MiscData.GetOSVersionInfo();
 				_info.CompName=Security.CurComputerName;
 				List<UpdateHistory> listHist=UpdateHistories.GetPreviouUpdateHistories(2);//Ordered by newer versions first.

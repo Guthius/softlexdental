@@ -1467,7 +1467,7 @@ namespace OpenDental{
 				//last trans date value and send only that data as it's all that GetAgingList needs.
 				List<long> listPendingInsPatNums=new List<long>();
 				List<long> listUnsentPatNums=new List<long>();
-				SerializableDictionary<long,DateTime> dictPatNumMaxDate=new SerializableDictionary<long,DateTime>();
+                Dictionary<long,DateTime> dictPatNumMaxDate=new Dictionary<long,DateTime>();
 				if(checkExcludeInsPending.Checked || checkExcludeIfProcs.Checked || checkIncludeChanged.Checked) {
 					foreach(KeyValuePair<long,PatAgingData> kvp in dictPatAgingData) {
 						if(PrefC.HasClinicsEnabled && !listClinicNums.IsNullOrEmpty() && !listClinicNums.Contains(kvp.Value.ClinicNum)) {

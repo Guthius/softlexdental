@@ -4,135 +4,120 @@ using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
 
-namespace OpenDentBusiness{
-  ///<summary></summary>
-	public class ZipCodes{
-		#region Get Methods
-		#endregion
+namespace OpenDentBusiness
+{
+    ///<summary></summary>
+    public class ZipCodes
+    {
+        #region Get Methods
+        #endregion
 
-		#region Modification Methods
-		
-		#region Insert
-		#endregion
+        #region Modification Methods
 
-		#region Update
-		#endregion
+        #region Insert
+        #endregion
 
-		#region Delete
-		#endregion
+        #region Update
+        #endregion
 
-		#endregion
+        #region Delete
+        #endregion
 
-		#region Misc Methods
-		#endregion
+        #endregion
 
-		#region CachePattern
+        #region Misc Methods
+        #endregion
 
-		private class ZipCodeCache : CacheListAbs<ZipCode> {
-			protected override List<ZipCode> GetCacheFromDb() {
-				string command="SELECT * from zipcode ORDER BY ZipCodeDigits";
-				return Crud.ZipCodeCrud.SelectMany(command);
-			}
-			protected override List<ZipCode> TableToList(DataTable table) {
-				return Crud.ZipCodeCrud.TableToList(table);
-			}
-			protected override ZipCode Copy(ZipCode zipCode) {
-				return zipCode.Copy();
-			}
-			protected override DataTable ListToTable(List<ZipCode> listZipCodes) {
-				return Crud.ZipCodeCrud.ListToTable(listZipCodes,"ZipCode");
-			}
-			protected override void FillCacheIfNeeded() {
-				ZipCodes.GetTableFromCache(false);
-			}
+        #region CachePattern
 
-			/// <summary>The zipcode "Short" list is for zipcodes marked frequent, not hidden.</summary>
-			protected override bool IsInListShort(ZipCode zipCode) {
-				return zipCode.IsFrequent;
-			}
-		}
-		
-		///<summary>The object that accesses the cache in a thread-safe manner.</summary>
-		private static ZipCodeCache _zipCodeCache=new ZipCodeCache();
+        private class ZipCodeCache : CacheListAbs<ZipCode>
+        {
+            protected override List<ZipCode> GetCacheFromDb()
+            {
+                string command = "SELECT * from zipcode ORDER BY ZipCodeDigits";
+                return Crud.ZipCodeCrud.SelectMany(command);
+            }
+            protected override List<ZipCode> TableToList(DataTable table)
+            {
+                return Crud.ZipCodeCrud.TableToList(table);
+            }
+            protected override ZipCode Copy(ZipCode zipCode)
+            {
+                return zipCode.Copy();
+            }
+            protected override DataTable ListToTable(List<ZipCode> listZipCodes)
+            {
+                return Crud.ZipCodeCrud.ListToTable(listZipCodes, "ZipCode");
+            }
+            protected override void FillCacheIfNeeded()
+            {
+                ZipCodes.GetTableFromCache(false);
+            }
 
-		public static List<ZipCode> GetWhere(Predicate<ZipCode> match,bool isShort=false) {
-			return _zipCodeCache.GetWhere(match,isShort);
-		}
+            /// <summary>The zipcode "Short" list is for zipcodes marked frequent, not hidden.</summary>
+            protected override bool IsInListShort(ZipCode zipCode)
+            {
+                return zipCode.IsFrequent;
+            }
+        }
 
-		public static List<ZipCode> GetDeepCopy(bool isShort=false) {
-			return _zipCodeCache.GetDeepCopy(isShort);
-		}
+        ///<summary>The object that accesses the cache in a thread-safe manner.</summary>
+        private static ZipCodeCache _zipCodeCache = new ZipCodeCache();
 
-		///<summary>Refreshes the cache and returns it as a DataTable. This will refresh the ClientWeb's cache and the ServerWeb's cache.</summary>
-		public static DataTable RefreshCache() {
-			return GetTableFromCache(true);
-		}
+        public static List<ZipCode> GetWhere(Predicate<ZipCode> match, bool isShort = false)
+        {
+            return _zipCodeCache.GetWhere(match, isShort);
+        }
 
-		///<summary>Fills the local cache with the passed in DataTable.</summary>
-		public static void FillCacheFromTable(DataTable table) {
-			_zipCodeCache.FillCacheFromTable(table);
-		}
+        public static List<ZipCode> GetDeepCopy(bool isShort = false)
+        {
+            return _zipCodeCache.GetDeepCopy(isShort);
+        }
 
-		///<summary>Always refreshes the ClientWeb's cache.</summary>
-		public static DataTable GetTableFromCache(bool doRefreshCache) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				DataTable table=Meth.GetTable(MethodBase.GetCurrentMethod(),doRefreshCache);
-				_zipCodeCache.FillCacheFromTable(table);
-				return table;
-			}
-			return _zipCodeCache.GetTableFromCache(doRefreshCache);
-		}
+        ///<summary>Refreshes the cache and returns it as a DataTable. This will refresh the ClientWeb's cache and the ServerWeb's cache.</summary>
+        public static DataTable RefreshCache()
+        {
+            return GetTableFromCache(true);
+        }
 
-		#endregion
+        ///<summary>Fills the local cache with the passed in DataTable.</summary>
+        public static void FillCacheFromTable(DataTable table)
+        {
+            _zipCodeCache.FillCacheFromTable(table);
+        }
 
-		///<summary></summary>
-		public static long Insert(ZipCode Cur){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Cur.ZipCodeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),Cur);
-				return Cur.ZipCodeNum;
-			}
-			return Crud.ZipCodeCrud.Insert(Cur);
-		}
+        ///<summary>Always refreshes the ClientWeb's cache.</summary>
+        public static DataTable GetTableFromCache(bool doRefreshCache)
+        {
+            return _zipCodeCache.GetTableFromCache(doRefreshCache);
+        }
 
-		///<summary></summary>
-		public static void Update(ZipCode Cur){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
-			}
-			Crud.ZipCodeCrud.Update(Cur);
-		}
+        #endregion
 
-		///<summary></summary>
-		public static void Delete(ZipCode Cur){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),Cur);
-				return;
-			}
-			string command = "DELETE from zipcode WHERE zipcodenum = '"+POut.Long(Cur.ZipCodeNum)+"'";
-			Db.NonQ(command);
-		}
+        ///<summary></summary>
+        public static long Insert(ZipCode Cur)
+        {
+            return Crud.ZipCodeCrud.Insert(Cur);
+        }
 
-		///<summary></summary>
-		public static List<ZipCode> GetALMatches(string zipCodeDigits) {
-			//No need to check RemotingRole; no call to db.
-			return GetWhere(x => x.ZipCodeDigits==zipCodeDigits);
-		}
-	}
+        ///<summary></summary>
+        public static void Update(ZipCode Cur)
+        {
+            Crud.ZipCodeCrud.Update(Cur);
+        }
 
-	
+        ///<summary></summary>
+        public static void Delete(ZipCode Cur)
+        {
+            string command = "DELETE from zipcode WHERE zipcodenum = '" + POut.Long(Cur.ZipCodeNum) + "'";
+            Db.NonQ(command);
+        }
 
+        ///<summary></summary>
+        public static List<ZipCode> GetALMatches(string zipCodeDigits)
+        {
+            //No need to check RemotingRole; no call to db.
+            return GetWhere(x => x.ZipCodeDigits == zipCodeDigits);
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

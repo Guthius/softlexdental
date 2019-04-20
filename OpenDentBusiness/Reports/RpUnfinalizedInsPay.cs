@@ -11,9 +11,6 @@ namespace OpenDentBusiness {
 	public class RpUnfinalizedInsPay {
 		///<summary>Gets a list of unfinalized insurance payments.</summary>
 		public static List<UnfinalizedInsPay> GetUnfinalizedInsPay(string carrierName) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<UnfinalizedInsPay>>(MethodBase.GetCurrentMethod(),carrierName);
-			}
 			string command=@"
 				SELECT partialpay.PayType,partialpay.PatNum,partialpay.ClaimPaymentNum,partialpay.ClinicNum,partialpay.CarrierName,partialpay.Date,
 				partialpay.DOS,partialpay.Amount,partialpay.ClaimNum,partialpay.CountPats

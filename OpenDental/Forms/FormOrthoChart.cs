@@ -55,9 +55,6 @@ namespace OpenDental {
 		}
 
 		private void FormOrthoChart_Load(object sender,EventArgs e) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {//Archive not supported over MT connection.
-				checkIncludeArchived.Enabled=false;
-			}
 			if(string.IsNullOrEmpty(PrefC.GetString(PrefName.ArchiveServerName))) {//Archive db not setup.
 				checkIncludeArchived.Enabled=false;
 			}

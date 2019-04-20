@@ -5,156 +5,159 @@ using System.Collections;
 using System.Reflection;
 using System.Collections.Generic;
 
-namespace OpenDentBusiness {
-	///<summary></summary>
-	public class PatFieldDefs {
-		#region Get Methods
-		#endregion
+namespace OpenDentBusiness
+{
+    ///<summary></summary>
+    public class PatFieldDefs
+    {
+        #region Get Methods
+        #endregion
 
-		#region Modification Methods
-		
-		#region Insert
-		#endregion
+        #region Modification Methods
 
-		#region Update
-		#endregion
+        #region Insert
+        #endregion
 
-		#region Delete
-		#endregion
+        #region Update
+        #endregion
 
-		#endregion
+        #region Delete
+        #endregion
 
-		#region Misc Methods
-		#endregion
+        #endregion
 
-		#region CachePattern
+        #region Misc Methods
+        #endregion
 
-		private class PatFieldDefCache : CacheListAbs<PatFieldDef> {
-			protected override List<PatFieldDef> GetCacheFromDb() {
-				string command="SELECT * FROM patfielddef ORDER BY ItemOrder";
-				return Crud.PatFieldDefCrud.SelectMany(command);
-			}
-			protected override List<PatFieldDef> TableToList(DataTable table) {
-				return Crud.PatFieldDefCrud.TableToList(table);
-			}
-			protected override PatFieldDef Copy(PatFieldDef patFieldDef) {
-				return patFieldDef.Copy();
-			}
-			protected override DataTable ListToTable(List<PatFieldDef> listPatFieldDefs) {
-				return Crud.PatFieldDefCrud.ListToTable(listPatFieldDefs,"PatFieldDef");
-			}
-			protected override void FillCacheIfNeeded() {
-				PatFieldDefs.GetTableFromCache(false);
-			}
-			protected override bool IsInListShort(PatFieldDef patFieldDef) {
-				return !patFieldDef.IsHidden;
-			}
-		}
-		
-		///<summary>The object that accesses the cache in a thread-safe manner.</summary>
-		private static PatFieldDefCache _patFieldDefCache=new PatFieldDefCache();
+        #region CachePattern
 
-		public static bool GetExists(Predicate<PatFieldDef> match,bool isShort=false) {
-			return _patFieldDefCache.GetExists(match,isShort);
-		}
+        private class PatFieldDefCache : CacheListAbs<PatFieldDef>
+        {
+            protected override List<PatFieldDef> GetCacheFromDb()
+            {
+                string command = "SELECT * FROM patfielddef ORDER BY ItemOrder";
+                return Crud.PatFieldDefCrud.SelectMany(command);
+            }
+            protected override List<PatFieldDef> TableToList(DataTable table)
+            {
+                return Crud.PatFieldDefCrud.TableToList(table);
+            }
+            protected override PatFieldDef Copy(PatFieldDef patFieldDef)
+            {
+                return patFieldDef.Copy();
+            }
+            protected override DataTable ListToTable(List<PatFieldDef> listPatFieldDefs)
+            {
+                return Crud.PatFieldDefCrud.ListToTable(listPatFieldDefs, "PatFieldDef");
+            }
+            protected override void FillCacheIfNeeded()
+            {
+                PatFieldDefs.GetTableFromCache(false);
+            }
+            protected override bool IsInListShort(PatFieldDef patFieldDef)
+            {
+                return !patFieldDef.IsHidden;
+            }
+        }
 
-		public static List<PatFieldDef> GetDeepCopy(bool isShort=false) {
-			return _patFieldDefCache.GetDeepCopy(isShort);
-		}
+        ///<summary>The object that accesses the cache in a thread-safe manner.</summary>
+        private static PatFieldDefCache _patFieldDefCache = new PatFieldDefCache();
 
-		public static PatFieldDef GetFirstOrDefault(Func<PatFieldDef,bool> match,bool isShort=false) {
-			return _patFieldDefCache.GetFirstOrDefault(match,isShort);
-		}
+        public static bool GetExists(Predicate<PatFieldDef> match, bool isShort = false)
+        {
+            return _patFieldDefCache.GetExists(match, isShort);
+        }
 
-		///<summary>Refreshes the cache and returns it as a DataTable. This will refresh the ClientWeb's cache and the ServerWeb's cache.</summary>
-		public static DataTable RefreshCache() {
-			return GetTableFromCache(true);
-		}
+        public static List<PatFieldDef> GetDeepCopy(bool isShort = false)
+        {
+            return _patFieldDefCache.GetDeepCopy(isShort);
+        }
 
-		///<summary>Fills the local cache with the passed in DataTable.</summary>
-		public static void FillCacheFromTable(DataTable table) {
-			_patFieldDefCache.FillCacheFromTable(table);
-		}
+        public static PatFieldDef GetFirstOrDefault(Func<PatFieldDef, bool> match, bool isShort = false)
+        {
+            return _patFieldDefCache.GetFirstOrDefault(match, isShort);
+        }
 
-		///<summary>Always refreshes the ClientWeb's cache.</summary>
-		public static DataTable GetTableFromCache(bool doRefreshCache) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				DataTable table=Meth.GetTable(MethodBase.GetCurrentMethod(),doRefreshCache);
-				_patFieldDefCache.FillCacheFromTable(table);
-				return table;
-			}
-			return _patFieldDefCache.GetTableFromCache(doRefreshCache);
-		}
+        ///<summary>Refreshes the cache and returns it as a DataTable. This will refresh the ClientWeb's cache and the ServerWeb's cache.</summary>
+        public static DataTable RefreshCache()
+        {
+            return GetTableFromCache(true);
+        }
 
-		#endregion
+        ///<summary>Fills the local cache with the passed in DataTable.</summary>
+        public static void FillCacheFromTable(DataTable table)
+        {
+            _patFieldDefCache.FillCacheFromTable(table);
+        }
 
-		///<summary>Must supply the old field name so that the patient lists can be updated.</summary>
-		public static void Update(PatFieldDef patFieldDef, string oldFieldName) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),patFieldDef,oldFieldName);
-				return;
-			}
-			Crud.PatFieldDefCrud.Update(patFieldDef);
-			string command="UPDATE patfield SET FieldName='"+POut.String(patFieldDef.FieldName)+"' "
-				+"WHERE FieldName='"+POut.String(oldFieldName)+"'";
-			Db.NonQ(command);
-		}
+        ///<summary>Always refreshes the ClientWeb's cache.</summary>
+        public static DataTable GetTableFromCache(bool doRefreshCache)
+        {
+            return _patFieldDefCache.GetTableFromCache(doRefreshCache);
+        }
 
-		///<summary></summary>
-		public static long Insert(PatFieldDef patFieldDef) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				patFieldDef.PatFieldDefNum=Meth.GetLong(MethodBase.GetCurrentMethod(),patFieldDef);
-				return patFieldDef.PatFieldDefNum;
-			}
-			return Crud.PatFieldDefCrud.Insert(patFieldDef);
-		}
+        #endregion
 
-		///<summary>Surround with try/catch, because it will throw an exception if any patient is using this def.</summary>
-		public static void Delete(PatFieldDef patFieldDef) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),patFieldDef);
-				return;
-			}
-			string command="SELECT LName,FName FROM patient,patfield WHERE "
-				+"patient.PatNum=patfield.PatNum "
-				+"AND FieldName='"+POut.String(patFieldDef.FieldName)+"'";
-			DataTable table=Db.GetTable(command);
-			if(table.Rows.Count>0){
-				string s=Lans.g("PatFieldDef","Not allowed to delete. Already in use by ")+table.Rows.Count.ToString()
-					+" "+Lans.g("PatFieldDef","patients, including")+" \r\n";
-				for(int i=0;i<table.Rows.Count;i++){
-					if(i>5){
-						break;
-					}
-					s+=table.Rows[i][0].ToString()+", "+table.Rows[i][1].ToString()+"\r\n";
-				}
-				throw new ApplicationException(s);
-			}
-			command="DELETE FROM patfielddef WHERE PatFieldDefNum ="+POut.Long(patFieldDef.PatFieldDefNum);
-			Db.NonQ(command);
-		}
+        ///<summary>Must supply the old field name so that the patient lists can be updated.</summary>
+        public static void Update(PatFieldDef patFieldDef, string oldFieldName)
+        {
+            Crud.PatFieldDefCrud.Update(patFieldDef);
+            string command = "UPDATE patfield SET FieldName='" + POut.String(patFieldDef.FieldName) + "' "
+                + "WHERE FieldName='" + POut.String(oldFieldName) + "'";
+            Db.NonQ(command);
+        }
 
-		/// <summary>GetFieldName returns the field name identified by the field definition number passed as a parameter.</summary>
-		public static string GetFieldName(long patFieldDefNum) {
-			//No need to check RemotingRole; no call to db.
-			PatFieldDef patFieldDef=GetFirstOrDefault(x => x.PatFieldDefNum==patFieldDefNum,true);
-			return (patFieldDef==null ? "" : patFieldDef.FieldName);
-		}
+        ///<summary></summary>
+        public static long Insert(PatFieldDef patFieldDef)
+        {
+            return Crud.PatFieldDefCrud.Insert(patFieldDef);
+        }
 
-		/// <summary>GetPickListByFieldName returns the pick list identified by the field name passed as a parameter.</summary>
-		public static string GetPickListByFieldName(string FieldName) {
-			//No need to check RemotingRole; no call to db.
-			PatFieldDef patFieldDef=GetFirstOrDefault(x => x.FieldName==FieldName,true);
-			return (patFieldDef==null ? "" : patFieldDef.PickList);
-		}
+        ///<summary>Surround with try/catch, because it will throw an exception if any patient is using this def.</summary>
+        public static void Delete(PatFieldDef patFieldDef)
+        {
+            string command = "SELECT LName,FName FROM patient,patfield WHERE "
+                + "patient.PatNum=patfield.PatNum "
+                + "AND FieldName='" + POut.String(patFieldDef.FieldName) + "'";
+            DataTable table = Db.GetTable(command);
+            if (table.Rows.Count > 0)
+            {
+                string s = Lans.g("PatFieldDef", "Not allowed to delete. Already in use by ") + table.Rows.Count.ToString()
+                    + " " + Lans.g("PatFieldDef", "patients, including") + " \r\n";
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    if (i > 5)
+                    {
+                        break;
+                    }
+                    s += table.Rows[i][0].ToString() + ", " + table.Rows[i][1].ToString() + "\r\n";
+                }
+                throw new ApplicationException(s);
+            }
+            command = "DELETE FROM patfielddef WHERE PatFieldDefNum =" + POut.Long(patFieldDef.PatFieldDefNum);
+            Db.NonQ(command);
+        }
 
-		///<summary>Sync pattern, must sync entire table. Probably only to be used in the master problem list window.</summary>
-		public static void Sync(List<PatFieldDef> listDefs,List<PatFieldDef> listDefsOld) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),listDefs,listDefsOld);
-				return;
-			}
-			Crud.PatFieldDefCrud.Sync(listDefs,listDefsOld);
-		}
-	}
+        /// <summary>GetFieldName returns the field name identified by the field definition number passed as a parameter.</summary>
+        public static string GetFieldName(long patFieldDefNum)
+        {
+            //No need to check RemotingRole; no call to db.
+            PatFieldDef patFieldDef = GetFirstOrDefault(x => x.PatFieldDefNum == patFieldDefNum, true);
+            return (patFieldDef == null ? "" : patFieldDef.FieldName);
+        }
+
+        /// <summary>GetPickListByFieldName returns the pick list identified by the field name passed as a parameter.</summary>
+        public static string GetPickListByFieldName(string FieldName)
+        {
+            //No need to check RemotingRole; no call to db.
+            PatFieldDef patFieldDef = GetFirstOrDefault(x => x.FieldName == FieldName, true);
+            return (patFieldDef == null ? "" : patFieldDef.PickList);
+        }
+
+        ///<summary>Sync pattern, must sync entire table. Probably only to be used in the master problem list window.</summary>
+        public static void Sync(List<PatFieldDef> listDefs, List<PatFieldDef> listDefsOld)
+        {
+            Crud.PatFieldDefCrud.Sync(listDefs, listDefsOld);
+        }
+    }
 }

@@ -7,24 +7,6 @@ using System.Reflection;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class CovSpans {
-		#region Get Methods
-		#endregion
-
-		#region Modification Methods
-		
-		#region Insert
-		#endregion
-
-		#region Update
-		#endregion
-
-		#region Delete
-		#endregion
-
-		#endregion
-
-		#region Misc Methods
-		#endregion
 
 		#region CachePattern
 
@@ -74,11 +56,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Always refreshes the ClientWeb's cache.</summary>
 		public static DataTable GetTableFromCache(bool doRefreshCache) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				DataTable table=Meth.GetTable(MethodBase.GetCurrentMethod(),doRefreshCache);
-				_covSpanCache.FillCacheFromTable(table);
-				return table;
-			}
 			return _covSpanCache.GetTableFromCache(doRefreshCache);
 		}
 
@@ -86,10 +63,6 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(CovSpan span) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),span);
-				return;
-			}
 			Validate(span);
 			Crud.CovSpanCrud.Update(span);
 			return;
@@ -97,10 +70,6 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static long Insert(CovSpan span) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				span.CovSpanNum=Meth.GetLong(MethodBase.GetCurrentMethod(),span);
-				return span.CovSpanNum;
-			}
 			Validate(span);
 			return Crud.CovSpanCrud.Insert(span);
 		}
@@ -118,10 +87,6 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(CovSpan span) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),span);
-				return;
-			}
 			string command="DELETE FROM covspan"
 				+" WHERE CovSpanNum = '"+POut.Long(span.CovSpanNum)+"'";
 			Db.NonQ(command);
@@ -129,10 +94,6 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void DeleteForCat(long covCatNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),covCatNum);
-				return;
-			}
 			string command="DELETE FROM covspan WHERE CovCatNum = "+POut.Long(covCatNum);
 			Db.NonQ(command);
 		}

@@ -11,23 +11,12 @@ namespace OpenDentBusiness
     ///<summary></summary>
     public class UserOdPrefs
     {
-        #region Get Methods
-        #endregion
-
         #region Modification Methods
-
-        #region Insert
-        #endregion
 
         #region Update
         ///<summary></summary>
         public static void Sync(List<UserOdPref> listNew, List<UserOdPref> listDB)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), listNew, listDB);
-                return;
-            }
             Crud.UserOdPrefCrud.Sync(listNew, listDB);
         }
         #endregion
@@ -142,22 +131,12 @@ namespace OpenDentBusiness
         ///<summary></summary>
         public static void Update(UserOdPref userOdPref)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), userOdPref);
-                return;
-            }
             Crud.UserOdPrefCrud.Update(userOdPref);
         }
 
         ///<summary></summary>
         public static long Insert(UserOdPref userOdPref)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                userOdPref.UserOdPrefNum = Meth.GetLong(MethodBase.GetCurrentMethod(), userOdPref);
-                return userOdPref.UserOdPrefNum;
-            }
             return Crud.UserOdPrefCrud.Insert(userOdPref);
         }
 
@@ -165,11 +144,6 @@ namespace OpenDentBusiness
         public static void Upsert(List<UserOdPref> listUserOdPrefs)
         {
             //This remoting role isn't necessary but helps significantly with speed due to looping.
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), listUserOdPrefs);
-                return;
-            }
             foreach (UserOdPref userOdPref in listUserOdPrefs)
             {
                 Upsert(userOdPref);
@@ -179,11 +153,6 @@ namespace OpenDentBusiness
         ///<summary></summary>
         public static long Upsert(UserOdPref userOdPref)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                userOdPref.UserOdPrefNum = Meth.GetLong(MethodBase.GetCurrentMethod(), userOdPref);
-                return userOdPref.UserOdPrefNum;
-            }
             if (userOdPref.UserOdPrefNum == 0)
             {
                 return Crud.UserOdPrefCrud.Insert(userOdPref);
@@ -195,11 +164,6 @@ namespace OpenDentBusiness
         ///<summary></summary>
         public static void Delete(long userOdPrefNum)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), userOdPrefNum);
-                return;
-            }
             Crud.UserOdPrefCrud.Delete(userOdPrefNum);
         }
 
@@ -208,11 +172,6 @@ namespace OpenDentBusiness
         ///To use this method with multiple userodprefs, you must make ValueString contain a JSON object or equivalent complex document.</summary>
         public static void DeleteMany(long userNum, long fkey, UserOdFkeyType fkeyType)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), userNum, fkey, fkeyType);
-                return;
-            }
             //Delete any userodpref rows that match its usernum/fkey/fkeytype.
             string command = "DELETE FROM userodpref WHERE UserNum=" + POut.Long(userNum)
                 + " AND FkeyType=" + POut.Int((int)fkeyType)
@@ -222,30 +181,18 @@ namespace OpenDentBusiness
 
         public static List<UserOdPref> GetByUserAndFkeyType(long userNum, UserOdFkeyType fkeyType)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                return Meth.GetObject<List<UserOdPref>>(MethodBase.GetCurrentMethod(), userNum, fkeyType);
-            }
             string command = "SELECT * FROM userodpref WHERE UserNum=" + POut.Long(userNum) + " AND FkeyType=" + POut.Int((int)fkeyType);
             return Crud.UserOdPrefCrud.SelectMany(command);
         }
 
         public static List<UserOdPref> GetByFkeyAndFkeyType(long fkey, UserOdFkeyType fkeyType)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                return Meth.GetObject<List<UserOdPref>>(MethodBase.GetCurrentMethod(), fkey, fkeyType);
-            }
             string command = "SELECT * FROM userodpref WHERE Fkey=" + POut.Long(fkey) + " AND FkeyType=" + POut.Int((int)fkeyType);
             return Crud.UserOdPrefCrud.SelectMany(command);
         }
 
         public static List<UserOdPref> GetByUserFkeyAndFkeyType(long userNum, long fkey, UserOdFkeyType fkeyType)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                return Meth.GetObject<List<UserOdPref>>(MethodBase.GetCurrentMethod(), userNum, fkey, fkeyType);
-            }
             string command = "SELECT * FROM userodpref WHERE UserNum=" + POut.Long(userNum) + " AND Fkey=" + POut.Long(fkey)
                 + " AND FkeyType=" + POut.Int((int)fkeyType);
             return Crud.UserOdPrefCrud.SelectMany(command);
@@ -253,10 +200,6 @@ namespace OpenDentBusiness
 
         public static UserOdPref GetFirstOrNewByUserAndFkeyType(long userNum, UserOdFkeyType fkeyType)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                return Meth.GetObject<UserOdPref>(MethodBase.GetCurrentMethod(), userNum, fkeyType);
-            }
             string command = "SELECT * FROM userodpref WHERE UserNum=" + POut.Long(userNum) + " AND FkeyType=" + POut.Int((int)fkeyType) + " LIMIT 1";
             return ODMethodsT.Coalesce(
                 //Get the db value if it exists.
@@ -277,10 +220,6 @@ namespace OpenDentBusiness
         ///<summary>Will return a list of UserOdPrefs corresponding to the usernum/fkey/fkeytype combination given.</summary>
         public static List<UserOdPref> GetByUserAndFkeyAndFkeyType(long userNum, long fkey, UserOdFkeyType fkeyType, List<long> listClinicNums = null)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                return Meth.GetObject<List<UserOdPref>>(MethodBase.GetCurrentMethod(), userNum, fkey, fkeyType, listClinicNums);
-            }
             string command = "SELECT * FROM userodpref WHERE UserNum=" + POut.Long(userNum)
                 + " AND Fkey=" + POut.Long(fkey) + " AND FkeyType=" + POut.Int((int)fkeyType);
             if (listClinicNums != null && listClinicNums.Count > 0)
@@ -293,10 +232,6 @@ namespace OpenDentBusiness
         ///<summary>Will return the UserOdPref corresponding to the usernum/fkey/fkeytype/ClinicNum composite key given.</summary>
         public static UserOdPref GetByCompositeKey(long userNum, long fkey, UserOdFkeyType fkeyType, long clinicNum = 0)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                return Meth.GetObject<UserOdPref>(MethodBase.GetCurrentMethod(), userNum, fkey, fkeyType, clinicNum);
-            }
             string command = "SELECT * FROM userodpref WHERE UserNum=" + POut.Long(userNum)
                 + " AND Fkey=" + POut.Long(fkey) + " AND FkeyType=" + POut.Int((int)fkeyType)
                 + " AND ClinicNum=" + POut.Long(clinicNum);
@@ -317,10 +252,6 @@ namespace OpenDentBusiness
         }
         public static List<UserOdPref> GetAllByFkeyAndFkeyType(long fkey, UserOdFkeyType fkeyType)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                return Meth.GetObject<List<UserOdPref>>(MethodBase.GetCurrentMethod(), fkey, fkeyType);
-            }
             string command = "SELECT * FROM userodpref WHERE Fkey=" + POut.Long(fkey) + " AND FkeyType=" + POut.Int((int)fkeyType);
             return Crud.UserOdPrefCrud.SelectMany(command);
         }
@@ -328,11 +259,6 @@ namespace OpenDentBusiness
         ///<summary>Deletes UserOdPref with provided parameters.  If "userNum" is 0 then will delete all UserOdPref's with corresponding fkeyType and fkey.</summary>
         public static void DeleteForFkey(long userNum, UserOdFkeyType fkeyType, long fkey)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), userNum, fkeyType, fkey);
-                return;
-            }
             string command = "DELETE FROM userodpref "
                 + "WHERE Fkey=" + POut.Long(fkey) + " AND FkeyType=" + POut.Int((int)fkeyType);
             if (userNum != 0)
@@ -346,11 +272,6 @@ namespace OpenDentBusiness
         ///If "userNum" is 0 then will delete all UserOdPref's with corresponding fkeyType and valueString.</summary>
         public static void DeleteForValueString(long userNum, UserOdFkeyType fkeyType, string valueString)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), userNum, fkeyType, valueString);
-                return;
-            }
             string command = "DELETE FROM userodpref "
                 + "WHERE ValueString='" + POut.String(valueString) + "' AND FkeyType=" + POut.Int((int)fkeyType);
             if (userNum != 0)

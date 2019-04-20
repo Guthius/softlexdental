@@ -25,23 +25,6 @@ namespace OpenDentBusiness {
 		public decimal AmountStart;
 		public decimal AmountEnd;
 		public SplitCollection SplitCollection=new SplitCollection();
-
-		[XmlElement(nameof(Tag))]
-		public DtoObject TagXml {
-			get {
-				if(Tag==null) {
-					return null;
-				}
-				return new DtoObject(Tag,Tag.GetType());
-			}
-			set {
-				if(value==null) {
-					Tag=null;
-					return;
-				}
-				Tag=value.Obj;
-			}
-		}
 		
 		public new Type GetType() {
 			return Tag.GetType();

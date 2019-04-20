@@ -37,8 +37,6 @@ namespace OpenDental{
 		private OpenDental.UI.Button butFullPage;
 		private System.ComponentModel.Container components = null;
 		private int totalPages;
-		///<summary>Holds the data for one statement.</summary>
-		private DataSet dataSett;
 		private Statement Stmt;
 
 		//private ImageStoreBase imageStore;

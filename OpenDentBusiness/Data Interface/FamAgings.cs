@@ -17,10 +17,6 @@ namespace OpenDentBusiness {
 		///<summary>Inserts many into the FamAging table.  Uses the existing pri key since these are basically copies of the patient table data and should
 		///always be inserted using the patient.PatNum as the pri key value in order to join on the patient table for update later.</summary>
 		public static void InsertMany(List<FamAging> listFamAgings) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),listFamAgings);
-				return;
-			}
 			Crud.FamAgingCrud.InsertMany(listFamAgings,true);//true to use existing pri key so these will match the patient.PatNums for joining later
 		}
 

@@ -31,9 +31,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a list of all patplans for a given patient</summary>
 		public static List<PatPlan> Refresh(long patNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<PatPlan>>(MethodBase.GetCurrentMethod(),patNum);
-			} 
 			string command="SELECT * from patplan"
 				+" WHERE PatNum = "+patNum.ToString()
 				+" ORDER BY Ordinal";
@@ -42,38 +39,18 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(PatPlan patPlan) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),patPlan);
-				return;
-			}
 			//ordinal was already set using SetOrdinal, but it's harmless to set it again.
 			Crud.PatPlanCrud.Update(patPlan);
 		}
 
 		///<summary></summary>
 		public static long Insert(PatPlan patPlan) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				patPlan.PatPlanNum=Meth.GetLong(MethodBase.GetCurrentMethod(),patPlan);
-				return patPlan.PatPlanNum;
-			}
 			//Cameron_ Possibly create outbound ADT message to update insurance info
 			long patPlanNum=Crud.PatPlanCrud.Insert(patPlan);
 			//Insert an InsVerify for the patplan to ensure that the patplan can be verified.
 			InsVerifies.InsertForPatPlanNum(patPlanNum);
 			return patPlanNum;
 		}
-
-		/*
-		///<summary>Supply a PatPlan list.  This function loops through the list and returns the plan num of the specified ordinal.  If ordinal not valid, then it returns 0.  The main purpose of this function is so we don't have to check the length of the list.</summary>
-		public static long GetPlanNum(List<PatPlan> list,int ordinal) {
-			//No need to check RemotingRole; no call to db.
-			for(int i=0;i<list.Count;i++){
-				if(list[i].Ordinal==ordinal){
-					return list[i].PlanNum;
-				}
-			}
-			return 0;
-		}*/
 
 		///<summary>Supply a PatPlan list.  This function loops through the list and returns the insSubNum of the specified ordinal.  If ordinal not valid, then it returns 0.  The main purpose of this function is so we don't have to check the length of the list.</summary>
 		public static long GetInsSubNum(List<PatPlan> list,int ordinal) {
@@ -87,9 +64,6 @@ namespace OpenDentBusiness{
 		}
 
         public static PatPlan GetByPatPlanNum(long patPlanNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<PatPlan>(MethodBase.GetCurrentMethod(),patPlanNum);
-			}
 			return Crud.PatPlanCrud.SelectOne(patPlanNum);
         }
 
@@ -208,9 +182,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Sets the ordinal of the specified patPlan.  Rearranges the other patplans for the patient to keep the ordinal sequence contiguous.  Estimates must be recomputed after this.  FormInsPlan currently updates estimates every time it closes.  Only used in one place.  Returns the new ordinal.</summary>
 		public static int SetOrdinal(long patPlanNum,int newOrdinal) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),patPlanNum,newOrdinal);
-			}
 			string command="SELECT PatNum FROM patplan WHERE PatPlanNum="+POut.Long(patPlanNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0){
@@ -279,9 +250,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets directly from database.  Used by Trojan.</summary>
 		public static PatPlan[] GetByPlanNum(long planNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<PatPlan[]>(MethodBase.GetCurrentMethod(),planNum);
-			} 
 			//string command="SELECT * FROM patplan WHERE PlanNum='"+POut.Long(planNum)+"'";
 			//The left join will get extra info about each plan, namely the PlanNum.  No need for a GROUP BY.  The PlanNum is used to filter.
 			string command=@"SELECT * FROM patplan 
@@ -292,17 +260,11 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static int GetCountBySubNum(long insSubNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),insSubNum);
-			}
 			string command="SELECT COUNT(*) FROM patplan WHERE InsSubNum='"+POut.Long(insSubNum)+"'";
 			return PIn.Int(Db.GetCount(command));
 		}
 
 		public static int GetCountForPatAndInsSub(long insSubNum, long patNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),insSubNum,patNum);
-			}
 			string command="SELECT COUNT(*) FROM patplan WHERE InsSubNum='"+POut.Long(insSubNum)+"' "
 				+"AND PatNum='"+POut.Long(patNum)+"'";
 			return PIn.Int(Db.GetCount(command));
@@ -310,9 +272,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Will return null if none exists.</summary>
 		public static PatPlan GetPatPlan(long patNum,int ordinal) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<PatPlan>(MethodBase.GetCurrentMethod(),patNum,ordinal);
-			}
 			string command="SELECT * FROM patplan WHERE PatNum="+POut.Long(patNum)
 				+" AND Ordinal="+POut.Long(ordinal);
 			return Crud.PatPlanCrud.SelectOne(command);
@@ -320,9 +279,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Will return an empty list if none exists.</summary>
 		public static List<PatPlan> GetPatPlans(List<long> listPatPlanNums) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<PatPlan>>(MethodBase.GetCurrentMethod(),listPatPlanNums);
-			}
 			string command="SELECT * FROM patplan WHERE PatPlanNum IN ("+string.Join(",",listPatPlanNums)+")";
 			return Crud.PatPlanCrud.SelectMany(command);
 		}
@@ -331,17 +287,11 @@ namespace OpenDentBusiness{
 			if(patNum==0) {
 				return new List<PatPlan>();
 			}
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<PatPlan>>(MethodBase.GetCurrentMethod(),patNum);
-			}
 			string command="SELECT * FROM patplan WHERE PatNum="+POut.Long(patNum);
 			return Crud.PatPlanCrud.SelectMany(command);
 		}
 
 		public static List<PatPlan> GetPatPlansForPats(List<long> listPatNums) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<PatPlan>>(MethodBase.GetCurrentMethod(),listPatNums);
-			}
 			if(listPatNums==null || listPatNums.Count < 1) {
 				return new List<PatPlan>();
 			}
@@ -352,10 +302,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Deletes the patplan with the specified patPlanNum.  Rearranges the other patplans for the patient to keep the ordinal sequence contiguous.  Then, recomputes all estimates for this patient because their coverage is now different.  Also sets patient.HasIns to the correct value.</summary>
 		public static void Delete(long patPlanNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),patPlanNum);
-				return;
-			} 
 			string command="SELECT PatNum FROM patplan WHERE PatPlanNum="+POut.Long(patPlanNum);
 			DataTable table=Db.GetTable(command);
 			if(table.Rows.Count==0) {
@@ -427,10 +373,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Deletes the patplan and benefits with the specified patPlanNum.  Does not rearrange the other patplans for the patient.  A patplan must be inserted after this function is called to take the place of the patplan being deleted.</summary>
 		public static void DeleteNonContiguous(long patPlanNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),patPlanNum);
-				return;
-			}
 			string command="DELETE FROM patplan WHERE PatPlanNum="+POut.Long(patPlanNum);
 			Db.NonQ(command);
 			command="DELETE FROM benefit WHERE PatPlanNum=" +POut.Long(patPlanNum);
@@ -440,9 +382,6 @@ namespace OpenDentBusiness{
 
 		///<summary>There can be multiple PatPlans returned for a single InsSubNum.</summary>
 		public static List<PatPlan> GetListByInsSubNums(List<long> listInsSubNums) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<PatPlan>>(MethodBase.GetCurrentMethod(),listInsSubNums);
-			}
 			List<PatPlan> listPatPlans=new List<PatPlan>();
 			if(listInsSubNums==null || listInsSubNums.Count<1) {
 				return listPatPlans;
@@ -453,9 +392,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all patplans with DateNextClaims that are today or in the past.</summary>
 		public static DataTable GetOutstandingOrtho() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod());
-			}
 			byte orthoMonthsTreat=PrefC.GetByte(PrefName.OrthoDefaultMonthsTreat);
 			long orthoDefaultAutoCodeNum=PrefC.GetLong(PrefName.OrthoAutoProcCodeNum);
 			List<long> listOrthoBandingCodeNums = ProcedureCodes.GetOrthoBandingCodeNums();

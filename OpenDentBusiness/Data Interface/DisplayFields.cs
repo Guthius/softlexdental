@@ -11,26 +11,6 @@ using OpenDentBusiness;
 
 namespace OpenDentBusiness {
 	public class DisplayFields {
-		#region Get Methods
-		#endregion
-
-		#region Modification Methods
-		
-		#region Insert
-		#endregion
-
-		#region Update
-		#endregion
-
-		#region Delete
-		#endregion
-
-		#endregion
-
-		#region Misc Methods
-		#endregion
-
-
 		#region CachePattern
 
 		private class DisplayFieldCache : CacheListAbs<DisplayField> {
@@ -71,11 +51,6 @@ namespace OpenDentBusiness {
 
 		///<summary>Always refreshes the ClientWeb's cache.</summary>
 		public static DataTable GetTableFromCache(bool doRefreshCache) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				DataTable table=Meth.GetTable(MethodBase.GetCurrentMethod(),doRefreshCache);
-				_displayFieldCache.FillCacheFromTable(table);
-				return table;
-			}
 			return _displayFieldCache.GetTableFromCache(doRefreshCache);
 		}
 
@@ -83,38 +58,22 @@ namespace OpenDentBusiness {
 		
 		///<summary></summary>
 		public static long Insert(DisplayField field) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				field.DisplayFieldNum=Meth.GetLong(MethodBase.GetCurrentMethod(),field);
-				return field.DisplayFieldNum;
-			}
 			return Crud.DisplayFieldCrud.Insert(field);
 		}
 
 		///<summary></summary>
 		public static void Update(DisplayField field) {			
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),field);
-				return;
-			}
 			Crud.DisplayFieldCrud.Update(field);
 		}
 
 		///<summary></summary>
 		public static void Delete(long displayFieldNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),displayFieldNum);
-				return;
-			}
 			string command="DELETE FROM displayfield WHERE DisplayFieldNum = "+POut.Long(displayFieldNum);
 			Db.NonQ(command);
 		}
 
 		///<summary></summary>
 		public static void DeleteForChartView(long chartViewNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),chartViewNum);
-				return;
-			}
 			string command="DELETE FROM displayfield WHERE ChartViewNum = "+POut.Long(chartViewNum);
 			Db.NonQ(command);
 		}
@@ -1080,10 +1039,6 @@ namespace OpenDentBusiness {
 		}
 
 		public static void SaveListForCategory(List<DisplayField> ListShowing,DisplayFieldCategory category){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),ListShowing,category);
-				return;
-			}
 			bool isDefault=true;
 			List<DisplayField> defaultList=GetDefaultList(category);
 			if(ListShowing.Count!=defaultList.Count){
@@ -1117,10 +1072,6 @@ namespace OpenDentBusiness {
 		}
 
 		public static void SaveListForChartView(List<DisplayField> ListShowing,long ChartViewNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),ListShowing,ChartViewNum);
-				return;
-			}
 			//Odds are, that if they are creating a custom view, that the fields are not default. If they are default, this code still works.
 			string command="DELETE FROM displayfield WHERE ChartViewNum="+POut.Long((long)ChartViewNum);
 			Db.NonQ(command);

@@ -27,24 +27,21 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a dicitonary such that the key is a clinicNum and the value is a count of patients whith a matching patient.ClinicNum.
 		///Excludes all patients with PatStatus of Deleted, Archived, Deceased, or NonPatient unless IsAllStatuses is set to true.</summary>
-		public static SerializableDictionary<long,int> GetClinicalPatientCount(bool IsAllStatuses=false) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetSerializableDictionary<long,int>(MethodBase.GetCurrentMethod(),IsAllStatuses);
-			}
+		public static Dictionary<long,int> GetClinicalPatientCount(bool IsAllStatuses=false) {
 			string command="SELECT ClinicNum,COUNT(*) AS Count FROM patient ";
 			if(!IsAllStatuses) {
 				command+="WHERE PatStatus NOT IN ("+POut.Int((int)PatientStatus.Deleted)+","+POut.Int((int)PatientStatus.Archived)+","
 					+POut.Int((int)PatientStatus.Deceased)+","+POut.Int((int)PatientStatus.NonPatient)+") ";
 			} 
 			command+="GROUP BY ClinicNum";
-			return Db.GetTable(command).Select().ToSerializableDictionary(x => PIn.Long(x["ClinicNum"].ToString()),x => PIn.Int(x["Count"].ToString()));
+			return Db.GetTable(command).Select().ToDictionary(x => PIn.Long(x["ClinicNum"].ToString()),x => PIn.Int(x["Count"].ToString()));
 		}
 
 		///<summary>Gets a list of Clinics for a given pharmacyNum.</summary>
 		///<param name="pharmacyNum">The primary key of the pharmacy.</param>
 		public static List<Clinic> GetClinicsForPharmacy(long pharmacyNum) {
-			//No need to check RemotingRole; no call to db.
-			SerializableDictionary<long,List<Clinic>> dict=GetDictClinicsForPharmacy(pharmacyNum);
+            //No need to check RemotingRole; no call to db.
+            Dictionary<long,List<Clinic>> dict=GetDictClinicsForPharmacy(pharmacyNum);
 			List<Clinic> listClinics;
 			if(!dict.TryGetValue(pharmacyNum,out listClinics)) {
 				listClinics=new List<Clinic>();
@@ -54,13 +51,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a SerializableDictionary of Lists of Clinics for given pharmacyNums.</summary>
 		///<param name="arrPharmacyNums">The primary key of the pharmacy.</param>
-		public static SerializableDictionary<long,List<Clinic>> GetDictClinicsForPharmacy(params long[] arrPharmacyNums) {
-			SerializableDictionary<long,List<Clinic>> dict=new SerializableDictionary<long,List<Clinic>>();
+		public static Dictionary<long,List<Clinic>> GetDictClinicsForPharmacy(params long[] arrPharmacyNums) {
+            Dictionary<long,List<Clinic>> dict=new Dictionary<long,List<Clinic>>();
 			if(arrPharmacyNums.Length==0) {
 				return dict;
-			}
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<SerializableDictionary<long,List<Clinic>>>(MethodBase.GetCurrentMethod(),arrPharmacyNums);
 			}
 			string command="SELECT pharmclinic.PharmacyNum,clinic.* "
 				+"FROM clinic "
@@ -81,22 +75,6 @@ namespace OpenDentBusiness{
 			}
 			return dict;
 		}
-		#endregion
-
-		#region Modification Methods
-
-		#region Insert
-		#endregion
-
-		#region Update
-		#endregion
-
-		#region Delete
-		#endregion
-
-		#endregion
-
-		#region Misc Methods
 		#endregion
 
 		///<summary>Currently active clinic within OpenDental.  Reflects FormOpenDental.ClinicNum</summary>
@@ -173,23 +151,13 @@ namespace OpenDentBusiness{
 
 		///<summary>Always refreshes the ClientWeb's cache.</summary>
 		public static DataTable GetTableFromCache(bool doRefreshCache) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				DataTable table=Meth.GetTable(MethodBase.GetCurrentMethod(),doRefreshCache);
-				_clinicCache.FillCacheFromTable(table);
-				return table;
-			}
 			return _clinicCache.GetTableFromCache(doRefreshCache);
 		}
 
 		#endregion Cache Pattern
 
-
 		///<summary></summary>
 		public static long Insert(Clinic clinic,bool useExistingPK = false) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				clinic.ClinicNum=Meth.GetLong(MethodBase.GetCurrentMethod(),clinic,useExistingPK);
-				return clinic.ClinicNum;
-			}
 			return Crud.ClinicCrud.Insert(clinic,useExistingPK);
 		}
 
@@ -306,27 +274,16 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(Clinic clinic){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),clinic);
-				return;
-			}
 			Crud.ClinicCrud.Update(clinic);
 		}
 
 		///<summary>Only sync changed fields.</summary>
 		public static bool Update(Clinic clinic,Clinic oldClinic) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetBool(MethodBase.GetCurrentMethod(),clinic,oldClinic);
-			}
 			return Crud.ClinicCrud.Update(clinic,oldClinic);
 		}
 
 		///<summary>Checks dependencies first.  Throws exception if can't delete.</summary>
 		public static void Delete(Clinic clinic) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),clinic);
-				return;
-			}
 			//Check FK dependencies.
 			#region Patients
 			string command="SELECT LName,FName FROM patient WHERE ClinicNum ="
@@ -515,9 +472,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns null if clinic not found.  Pulls from database.</summary>
 		public static Clinic GetClinicNoCache(long clinicNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Clinic>(MethodBase.GetCurrentMethod(),clinicNum);
-			}
 			string command="SELECT * FROM clinic WHERE ClinicNum="+POut.Long(clinicNum);
 			return Crud.ClinicCrud.SelectOne(command);
 		}
@@ -537,9 +491,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Syncs two supplied lists of Clinics. Returns true if db changes were made.</summary>
 		public static bool Sync(List<Clinic> listNew,List<Clinic> listOld) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetBool(MethodBase.GetCurrentMethod(),listNew,listOld);
-			}
 			return Crud.ClinicCrud.Sync(listNew,listOld);
 		}
 
@@ -548,9 +499,6 @@ namespace OpenDentBusiness{
 		///  returns the clinic associated to the appointment (scheduled or completed) with the largest date.
 		///Returns null if the patient doesn't have a clinic or if the clinics feature is not activate.</summary>
 		public static Clinic GetClinicForRecall(long recallNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<Clinic>(MethodBase.GetCurrentMethod(),recallNum);
-			}
 			if(!PrefC.HasClinicsEnabled) {
 				return null;
 			}
@@ -578,9 +526,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a list of all clinics.  Doesn't use the cache.  Includes hidden clinics.</summary>
 		public static List<Clinic> GetClinicsNoCache() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Clinic>>(MethodBase.GetCurrentMethod());
-			}
 			string command="SELECT * FROM clinic";
 			return Crud.ClinicCrud.SelectMany(command);
 		}

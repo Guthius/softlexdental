@@ -93,9 +93,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns the currently defined OID for a given IndentifierType.  If not defined, IDroot will be empty string.</summary>
 		public static OIDInternal GetForType(IdentifierType IDType) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<OIDInternal>(MethodBase.GetCurrentMethod(),IDType);
-			}
 			InsertMissingValues();//
 			string command="SELECT * FROM oidinternal WHERE IDType='"+IDType.ToString()+"'";//should only return one row.
 			return Crud.OIDInternalCrud.SelectOne(command);
@@ -103,10 +100,6 @@ namespace OpenDentBusiness{
 
 		///<summary>There should always be one entry in the DB per IdentifierType enumeration.</summary>
 		public static void InsertMissingValues() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod());
-				return;
-			}
 			//string command= "SELECT COUNT(*) FROM oidinternal";
 			//if(PIn.Long(Db.GetCount(command))==Enum.GetValues(typeof(IdentifierType)).Length) {
 			//	return;//The DB table has the right count. Which means there is probably nothing wrong with the values in it. This may need to be enhanced if customers have any issues.
@@ -132,9 +125,6 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static List<OIDInternal> GetAll() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<OIDInternal>>(MethodBase.GetCurrentMethod());
-			}
 			InsertMissingValues();//there should always be one entry in the DB for each IdentifierType enumeration, insert any missing
 			string command="SELECT * FROM oidinternal";
 			return Crud.OIDInternalCrud.SelectMany(command);
@@ -142,10 +132,6 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(OIDInternal oIDInternal) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),oIDInternal);
-				return;
-			}
 			Crud.OIDInternalCrud.Update(oIDInternal);
 		}
 

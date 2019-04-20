@@ -44,7 +44,7 @@ namespace OpenDental {
 		private long _clinicNumTo=-1;
 		///<summary>Set to true prior to loading to include a 'Headquarters' option.</summary>
 		public bool IncludeHQInList;
-		private SerializableDictionary<long,int> _dictClinicalCounts;
+		private Dictionary<long,int> _dictClinicalCounts;
 		private List<DefLink> _listClinicDefLinksAllOld;
 		///<summary>Pass in a list of clinics that should be pre-selected. 
 		///When this form is closed, this list will be the list of clinics that the user selected.</summary>
@@ -404,7 +404,7 @@ namespace OpenDental {
 			ListClinics.Sort(ClinicSort);
 			_listClinicsOld=ListClinics.Select(x => x.Copy()).ToList();
 			_listClinicDefLinksAllOld=DefLinks.GetDefLinksByType(DefLinkType.Clinic);
-			_dictClinicalCounts=new SerializableDictionary<long,int>();
+			_dictClinicalCounts=new Dictionary<long,int>();
 			if(IsSelectionMode) {
 				butAdd.Visible=false;
 				butOK.Visible=true;

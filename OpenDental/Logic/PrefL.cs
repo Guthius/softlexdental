@@ -301,7 +301,7 @@ namespace OpenDental
                     throw ex;
                 }
             }
-            catch (MySqlException myEx)
+            catch (MySqlException)
             {
                 FormOpenDental.ExitCode = 303;//Failed inserting update files into the database.
                 if (isSilent)
@@ -1175,14 +1175,6 @@ namespace OpenDental
         public static bool UpgradeOrInstallEConnector(bool isSilent, out bool isListening)
         {
             isListening = false;
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                if (!isSilent)
-                {
-                    MsgBox.Show("ServicesHelper", "Not allowed to install services when using the middle tier.");
-                }
-                return false;
-            }
             try
             {
                 //Check to see if CustListener service is installed and needs to be uninstalled.
@@ -1254,14 +1246,6 @@ namespace OpenDental
         ///Set isSilent to false to show meaningful error messages, otherwise fails silently.</summary>
         public static bool TryInstallOpenDentalService(bool isSilent)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                if (!isSilent)
-                {
-                    MsgBox.Show("ServicesHelper", "Not allowed to install services when using the middle tier.");
-                }
-                return false;
-            }
             try
             {
                 List<ServiceController> listOpenDentalServices = ServicesHelper.GetServicesByExe("OpenDentalService.exe");

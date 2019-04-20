@@ -114,54 +114,53 @@ namespace OpenDentBusiness {
 #endregion
 
 #region S-Class
-namespace OpenDentBusiness {
-	public class EServiceBillings {		
-		///<summary></summary>
-		public static long Insert(EServiceBilling eServiceBilling){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				eServiceBilling.EServiceBillingNum=Meth.GetLong(MethodBase.GetCurrentMethod(),eServiceBilling);
-				return eServiceBilling.EServiceBillingNum;
-			}
-			return Crud.EServiceBillingCrud.Insert(eServiceBilling);
-		}
-		
-		///<summary>Should only be called if ODHQ.</summary>
-		public static List<Procedure> AddEServiceRepeatingChargesHelper(DateTime dateRun) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<Procedure>>(MethodBase.GetCurrentMethod(),dateRun);
-			}
-			DateTime monthRun=new DateTime(dateRun.Year,dateRun.Month,1);
-			//Get all bills that are due to be posted as of this date.
-			string command="SELECT * FROM eservicebilling "+
-				"WHERE DateOfBill <= "+POut.Date(dateRun.Date,true)+" AND DateTimeProceduresPosted = '0001-01-01 00:00:00'";			
-			List<EServiceBilling> listBillsDue=Crud.EServiceBillingCrud.SelectMany(command);
-			//This table will all ProcedureCodes which are included in the EServiceCodeLink table.
-			command="SELECT * FROM procedurecode "
-				+"INNER JOIN eservicecodelink ON procedurecode.CodeNum=eservicecodelink.CodeNum";
-			List<ProcedureCode> listProcCodes=OpenDentBusiness.Crud.ProcedureCodeCrud.TableToList(DataCore.GetTable(command));
-			//Get completed procedures that have already been posted.
-			List<Procedure> listProcsComplete=Procedures.GetCompletedForDateRange(monthRun,dateRun,listProcCodes.Select(x => x.CodeNum).ToList());			
-			List<Procedure> retVal=new List<Procedure>();
-			foreach(EServiceBilling eServiceBilling in listBillsDue) {
-				//List of procedures for this billing cycle was serialized to EServiceBilling.ProceduresJson by AccountMaint thread. Deserialize and post them.
-				List<Procedure> listProcs=JsonConvert.DeserializeObject<List<Procedure>>(eServiceBilling.ProceduresJson);
-				foreach(Procedure proc in listProcs) {
-					//For a short time in May 2017 this procedure would have been checked against procedures already posted for the same month for the same eService.
-					//If a duplicate was found then this procedure would have been skipped. This blocking code was removed and now a similar procedure can be posted on the same month.
-					//This needs to be allowed to happen so that the first month can have 2 charges. 
-					//1) For the pro-rated few days until their next BillingCycleDay is reached. 
-					//     Note, pro-rating is a future feature that may be allowed to happen via the signup portal. It is not currently but this particular code would no longer prevent it.
-					//2) For their typicaly BillingCycleDay charge.
-					Procedures.Insert(proc);
-					retVal.Add(proc);
-					listProcsComplete.Add(proc);
-				}
-				eServiceBilling.DateTimeProceduresPosted=DateTime.Now;
-				Crud.EServiceBillingCrud.Update(eServiceBilling);
-			}
-			return retVal;
-		}
-	}
+namespace OpenDentBusiness
+{
+    public class EServiceBillings
+    {
+        ///<summary></summary>
+        public static long Insert(EServiceBilling eServiceBilling)
+        {
+            return Crud.EServiceBillingCrud.Insert(eServiceBilling);
+        }
+
+        ///<summary>Should only be called if ODHQ.</summary>
+        public static List<Procedure> AddEServiceRepeatingChargesHelper(DateTime dateRun)
+        {
+            DateTime monthRun = new DateTime(dateRun.Year, dateRun.Month, 1);
+            //Get all bills that are due to be posted as of this date.
+            string command = "SELECT * FROM eservicebilling " +
+                "WHERE DateOfBill <= " + POut.Date(dateRun.Date, true) + " AND DateTimeProceduresPosted = '0001-01-01 00:00:00'";
+            List<EServiceBilling> listBillsDue = Crud.EServiceBillingCrud.SelectMany(command);
+            //This table will all ProcedureCodes which are included in the EServiceCodeLink table.
+            command = "SELECT * FROM procedurecode "
+                + "INNER JOIN eservicecodelink ON procedurecode.CodeNum=eservicecodelink.CodeNum";
+            List<ProcedureCode> listProcCodes = OpenDentBusiness.Crud.ProcedureCodeCrud.TableToList(DataCore.GetTable(command));
+            //Get completed procedures that have already been posted.
+            List<Procedure> listProcsComplete = Procedures.GetCompletedForDateRange(monthRun, dateRun, listProcCodes.Select(x => x.CodeNum).ToList());
+            List<Procedure> retVal = new List<Procedure>();
+            foreach (EServiceBilling eServiceBilling in listBillsDue)
+            {
+                //List of procedures for this billing cycle was serialized to EServiceBilling.ProceduresJson by AccountMaint thread. Deserialize and post them.
+                List<Procedure> listProcs = JsonConvert.DeserializeObject<List<Procedure>>(eServiceBilling.ProceduresJson);
+                foreach (Procedure proc in listProcs)
+                {
+                    //For a short time in May 2017 this procedure would have been checked against procedures already posted for the same month for the same eService.
+                    //If a duplicate was found then this procedure would have been skipped. This blocking code was removed and now a similar procedure can be posted on the same month.
+                    //This needs to be allowed to happen so that the first month can have 2 charges. 
+                    //1) For the pro-rated few days until their next BillingCycleDay is reached. 
+                    //     Note, pro-rating is a future feature that may be allowed to happen via the signup portal. It is not currently but this particular code would no longer prevent it.
+                    //2) For their typicaly BillingCycleDay charge.
+                    Procedures.Insert(proc);
+                    retVal.Add(proc);
+                    listProcsComplete.Add(proc);
+                }
+                eServiceBilling.DateTimeProceduresPosted = DateTime.Now;
+                Crud.EServiceBillingCrud.Update(eServiceBilling);
+            }
+            return retVal;
+        }
+    }
 }
 #endregion
 
@@ -181,9 +180,6 @@ namespace OpenDentBusiness.Crud {
 
 		///<summary>Gets one EServiceBilling object from the database using a query.</summary>
 		public static EServiceBilling SelectOne(string command) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
-			}
 			List<EServiceBilling> list=TableToList(Db.GetTable(command));
 			if(list.Count==0) {
 				return null;
@@ -193,9 +189,6 @@ namespace OpenDentBusiness.Crud {
 
 		///<summary>Gets a list of EServiceBilling objects from the database using a query.</summary>
 		public static List<EServiceBilling> SelectMany(string command) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				throw new ApplicationException("Not allowed to send sql directly.  Rewrite the calling class to not use this query:\r\n"+command);
-			}
 			List<EServiceBilling> list=TableToList(Db.GetTable(command));
 			return list;
 		}

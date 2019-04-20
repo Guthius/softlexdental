@@ -44,7 +44,7 @@ namespace OpenDentBusiness{
 		public DateTime SecDateTEdit;
 		///<summary>(Deprecated) Holds the Avalara transaction ID associated with this adjustment so that we can track reported adjustments.
 		///Not editable in the UI.</summary>
-		[Obsolete("This column has been deprecated. Do not use.",false)]
+		//[Obsolete("This column has been deprecated. Do not use.",false)]
 		public long TaxTransID;
 
 		///<summary></summary>

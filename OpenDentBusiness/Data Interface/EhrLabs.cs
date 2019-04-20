@@ -7,26 +7,6 @@ using EhrLaboratories;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class EhrLabs {
-		#region Get Methods
-		#endregion
-
-		#region Modification Methods
-		
-		#region Insert
-		#endregion
-
-		#region Update
-		#endregion
-
-		#region Delete
-		#endregion
-
-		#endregion
-
-		#region Misc Methods
-		#endregion
-
-
 		#region HL7 Message Processing
 
 		///<summary>Given an HL7 message, will attempt to fin the corresponding patient.  Will return null if not found.</summary>
@@ -679,9 +659,6 @@ namespace OpenDentBusiness{
 		///<summary>Saves EhrLab to DB and all child elements.  Note: this can be used to overwrite new data with old data when viewing old messages.  
 		///Make sure you want to save all new data.</summary>
 		public static EhrLab SaveToDB(EhrLab ehrLab) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<EhrLab>(MethodBase.GetCurrentMethod(),ehrLab);
-			}
 			//check for existing EhrLab by universal identifier. 
 			if(GetByGUID(ehrLab.PlacerOrderUniversalID,ehrLab.PlacerOrderNum)!=null) {
 				ehrLab.EhrLabNum=GetByGUID(ehrLab.PlacerOrderUniversalID,ehrLab.PlacerOrderNum).EhrLabNum;//identified by placer order num... should be the case
@@ -727,16 +704,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets one EhrLab from the db.</summary>
 		public static EhrLab GetOne(long ehrLabNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<EhrLab>(MethodBase.GetCurrentMethod(),ehrLabNum);
-			}
 			return Crud.EhrLabCrud.SelectOne(ehrLabNum);
 		}
 
 		public static long GetNextOrderNum() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetLong(MethodBase.GetCurrentMethod());
-			}
 			string command="SELECT MAX(EhrLabNum) FROM ehrlab";
 			long retVal=0;
 			try {
@@ -767,9 +738,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets one EhrLab from the db.</summary>
 		public static EhrLab GetByGUID(string root, string extension) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<EhrLab>(MethodBase.GetCurrentMethod(),root, extension);
-			}
 			string command="SELECT * FROM ehrlab WHERE (PlacerOrderNum='"+extension+"' AND PlacerOrderUniversalID='"+root+"'AND PlacerOrderNum!='' AND PlacerOrderUniversalID!='') "
 			+"OR (FillerOrderNum='"+extension+"' AND FillerOrderUniversalID='"+root+"' AND FillerOrderNum!='' AND FillerOrderUniversalID!='')";
 			return Crud.EhrLabCrud.SelectOne(command);
@@ -777,9 +745,6 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static List<EhrLab> GetAllForPat(long patNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<EhrLab>>(MethodBase.GetCurrentMethod(),patNum);
-			}
 			string command="SELECT * FROM ehrlab WHERE PatNum = "+POut.Long(patNum);
 			List<EhrLab> retVal=Crud.EhrLabCrud.SelectMany(command);
 
@@ -788,9 +753,6 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static List<EhrLab> GetAllForPatInDateRange(long patNum, DateTime dateStart, DateTime dateEnd) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<EhrLab>>(MethodBase.GetCurrentMethod(),patNum,dateStart,dateEnd);
-			}
 			//TODO: Finish this with Travis' Stuff
 			string command="SELECT * FROM ehrlab WHERE PatNum = "+POut.Long(patNum);
 			List<EhrLab> retVal=Crud.EhrLabCrud.SelectMany(command);
@@ -922,28 +884,16 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static long Insert(EhrLab ehrLab) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				ehrLab.EhrLabNum=Meth.GetLong(MethodBase.GetCurrentMethod(),ehrLab);
-				return ehrLab.EhrLabNum;
-			}
 			return Crud.EhrLabCrud.Insert(ehrLab);
 		}
 
 		///<summary></summary>
 		public static void Update(EhrLab ehrLab) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrLab);
-				return;
-			}
 			Crud.EhrLabCrud.Update(ehrLab);
 		}
 
 		///<summary>Deletes EhrLab, EhrLabResults, EhrLabResultsCopyTos, EhrLabClinicalInfos, and EhrLabSpecimens.</summary>
 		public static void Delete(long ehrLabNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),ehrLabNum);
-				return;
-			}
 			string command= "DELETE FROM ehrlab WHERE EhrLabNum = "+POut.Long(ehrLabNum);
 			Db.NonQ(command);
 			EhrLabNotes.DeleteForLab(ehrLabNum);

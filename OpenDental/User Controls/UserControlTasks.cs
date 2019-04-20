@@ -719,8 +719,7 @@ namespace OpenDental {
 		///Otherwise, a full refresh will only be run when certain types of signals corresonding to the current selected tabs are found in listSignals.
 		///</summary>
 		private void FillGrid(List<Signalod> listSignals=null){
-			if(Security.CurUser==null 
-				|| (RemotingClient.RemotingRole==RemotingRole.ClientWeb && !Security.IsUserLoggedIn)) 
+			if(Security.CurUser==null) 
 			{
 				gridMain.BeginUpdate();
 				gridMain.Rows.Clear();
@@ -959,7 +958,7 @@ namespace OpenDental {
 				gridMain.Rows.Add(row);
 			}
 			List<long> listAptNums=_listTasks.Where(x => x.ObjectType==TaskObjectType.Appointment).Select(y => y.KeyNum).ToList();
-			SerializableDictionary<long,string> dictApptObjDescripts=Tasks.GetApptObjDescripts(listAptNums);
+            Dictionary<long,string> dictApptObjDescripts=Tasks.GetApptObjDescripts(listAptNums);
 			int selectedTaskIndex=-1;
 			for(int i=0;i<_listTasks.Count;i++) {
 				dateStr="";

@@ -169,10 +169,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Copies one fee schedule to one or more fee schedules.  fromClinicNum, fromProvNum, and toProvNum can be zero.  Set listClinicNumsTo to copy to multiple clinic overrides.  If this list is null or empty, clinicNum 0 will be used.</summary>
 		public static void CopyFeeSchedule(FeeSched fromFeeSched,long fromClinicNum,long fromProvNum,FeeSched toFeeSched,List<long> listClinicNumsTo,long toProvNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),fromFeeSched,fromClinicNum,fromProvNum,toFeeSched,listClinicNumsTo,toProvNum);
-				return;
-			}
 			if(listClinicNumsTo==null) {
 				listClinicNumsTo=new List<long>();
 			}
@@ -585,11 +581,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Always refreshes the ClientWeb's cache.</summary>
 		public static DataTable GetTableFromCache(bool doRefreshCache) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				DataTable table=Meth.GetTable(MethodBase.GetCurrentMethod(),doRefreshCache);
-				_feeSchedCache.FillCacheFromTable(table);
-				return table;
-			}
 			return _feeSchedCache.GetTableFromCache(doRefreshCache);
 		}
 
@@ -597,10 +588,6 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static long Insert(FeeSched feeSched) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				feeSched.FeeSchedNum=Meth.GetLong(MethodBase.GetCurrentMethod(),feeSched);
-				return feeSched.FeeSchedNum;
-			}
 			//Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
 			feeSched.SecUserNumEntry=Security.CurUser.UserNum;
 			return Crud.FeeSchedCrud.Insert(feeSched);
@@ -608,18 +595,11 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(FeeSched feeSched) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),feeSched);
-				return;
-			}
 			Crud.FeeSchedCrud.Update(feeSched);
 		}
 
 		///<summary>Inserts, updates, or deletes database rows to match supplied list.</summary>
 		public static bool Sync(List<FeeSched> listNew,List<FeeSched> listOld) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetBool(MethodBase.GetCurrentMethod(),listNew,listOld);
-			}
 			//Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
 			return Crud.FeeSchedCrud.Sync(listNew,listOld,Security.CurUser.UserNum);
 		}
@@ -679,9 +659,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Deletes FeeScheds that are hidden and not attached to any insurance plans.  Returns the number of deleted fee scheds.</summary>
 		public static long CleanupAllowedScheds() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetLong(MethodBase.GetCurrentMethod());
-			}
 			long result;
 			//Detach allowed FeeSchedules from any hidden InsPlans.
 			string command="UPDATE insplan "
@@ -703,9 +680,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Hides FeeScheds that are not hidden and not in use by anything. Returns the number of fee scheds that were hidden.</summary>
 		public static long HideUnusedScheds() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetLong(MethodBase.GetCurrentMethod());
-			}
 			ODEvent.Fire(ODEventType.HideUnusedFeeSchedules,Lans.g("FormFeeScheds","Finding unused fee schedules..."));
 			string command=@"SELECT feesched.FeeSchedNum 
 				FROM feesched

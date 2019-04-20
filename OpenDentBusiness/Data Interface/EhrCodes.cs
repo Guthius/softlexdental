@@ -41,13 +41,8 @@ namespace OpenDentBusiness {
 					if(listt==null) {//instead of refreshing the cache using the normal pattern we must retrieve the cache from the EHR.dll. No call to DB.
 						object ObjEhrCodeList;
 						Assembly AssemblyEHR;
-						string dllPathEHR;
-						if(RemotingClient.RemotingRole==RemotingRole.ServerWeb) {
-							dllPathEHR=CodeBase.ODFileUtils.CombinePaths(System.Web.Hosting.HostingEnvironment.ApplicationPhysicalPath,@"bin\EHR.dll");
-						}
-						else {
-							dllPathEHR=CodeBase.ODFileUtils.CombinePaths(System.Windows.Forms.Application.StartupPath,"EHR.dll");
-						}
+						string dllPathEHR=CodeBase.ODFileUtils.CombinePaths(System.Windows.Forms.Application.StartupPath,"EHR.dll");
+						
 						ObjEhrCodeList=null;
 						AssemblyEHR=null;
 						if(System.IO.File.Exists(dllPathEHR)) {//EHR.dll is available, so load it up

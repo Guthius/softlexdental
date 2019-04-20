@@ -10,26 +10,6 @@ using DataConnectionBase;
 namespace OpenDentBusiness{
 	///<summary></summary>
 	public class CreditCards{
-		#region Get Methods
-		#endregion
-
-		#region Modification Methods
-		
-		#region Insert
-		#endregion
-
-		#region Update
-		#endregion
-
-		#region Delete
-		#endregion
-
-		#endregion
-
-		#region Misc Methods
-		#endregion
-
-
 		///<summary>If patNum==0 then does not filter on PatNum; otherwise filters on PatNum. Only includes credit cards whose source is Open Dental
 		///proper.</summary>
 		public static List<CreditCard> Refresh(long patNum){
@@ -41,9 +21,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Get all credit cards by a given list of CreditCardSource(s). Optionally filter by a given patNum.</summary>
 		public static List<CreditCard> RefreshBySource(long patNum,List<CreditCardSource> listSources) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<CreditCard>>(MethodBase.GetCurrentMethod(),patNum,listSources);
-			}
 			if(listSources.Count==0) {
 				return new List<CreditCard>();
 			}
@@ -57,18 +34,11 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets one CreditCard from the db.</summary>
 		public static CreditCard GetOne(long creditCardNum){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetObject<CreditCard>(MethodBase.GetCurrentMethod(),creditCardNum);
-			}
 			return Crud.CreditCardCrud.SelectOne(creditCardNum);
 		}
 
 		///<summary></summary>
 		public static long Insert(CreditCard creditCard){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				creditCard.CreditCardNum=Meth.GetLong(MethodBase.GetCurrentMethod(),creditCard);
-				return creditCard.CreditCardNum;
-			}
 			return Crud.CreditCardCrud.Insert(creditCard);
 		}
 
@@ -104,28 +74,17 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Update(CreditCard creditCard){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),creditCard);
-				return;
-			}
 			Crud.CreditCardCrud.Update(creditCard);
 		}
 
 		///<summary></summary>
 		public static void Delete(long creditCardNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),creditCardNum);
-				return;
-			}
 			string command= "DELETE FROM creditcard WHERE CreditCardNum = "+POut.Long(creditCardNum);
 			Db.NonQ(command);
 		}
 
 		///<summary>Gets the masked CC# and exp date for all cards setup for monthly charges for the specified patient.  Only used for filling [CreditCardsOnFile] variable when emailing statements.</summary>
 		public static string GetMonthlyCardsOnFile(long patNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetString(MethodBase.GetCurrentMethod(),patNum);
-			}
 			string result="";
 			string command="SELECT * FROM creditcard WHERE PatNum="+POut.Long(patNum)
 				+" AND ("+DbHelper.Year("DateStop")+"<1880 OR DateStop>"+DbHelper.Now()+") "//Recurring card is active.
@@ -143,9 +102,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns list of active credit cards.</summary>
 		public static List<CreditCard> GetActiveCards(long patNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<CreditCard>>(MethodBase.GetCurrentMethod(),patNum);
-			}
 			string command="SELECT * FROM creditcard WHERE PatNum="+POut.Long(patNum)
 				+" AND ("+DbHelper.Year("DateStop")+"<1880 OR DateStop>="+DbHelper.Curdate()+") "
 				+" AND ("+DbHelper.Year("DateStart")+">1880 AND DateStart<="+DbHelper.Curdate()+") "//Recurring card is active.
@@ -155,10 +111,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Updates the Procedures column on all cards that have not stopped that are not marked to exclude from sync.  Only used at HQ.</summary>
 		public static void SyncDefaultProcs(List<string> listProcCodes) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),listProcCodes);
-				return;
-			}
 			string command="UPDATE creditcard SET Procedures='"+string.Join(",",listProcCodes.Select(x => POut.String(x)))+"'"
 				+" WHERE ("+DbHelper.Year("DateStop")+"<1880 OR DateStop>="+DbHelper.Curdate()+") "//Stop date has not past
 				+" AND ExcludeProcSync=0"
@@ -170,9 +122,6 @@ namespace OpenDentBusiness{
 		///should contain all clinics the current user is authorized to access.  Further filtering by selected clinics is done at the UI level to save
 		///DB calls.</summary>
 		public static List<RecurringChargeData> GetRecurringChargeList(List<long> listClinicNums,DateTime curDate) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<RecurringChargeData>>(MethodBase.GetCurrentMethod(),listClinicNums,curDate);
-			}
 			List<RecurringChargeData> listChargeData=new List<RecurringChargeData>();
 			//This query will return patient information and the latest recurring payment whom:
 			//	-have recurring charges setup and today's date falls within the start and stop range.
@@ -295,9 +244,6 @@ namespace OpenDentBusiness{
 		
 		/// <summary>Adds up the total fees for the procedures passed in that have been completed since the last billing day.</summary>
 		public static double TotalRecurringCharges(long patNum,string procedures,int billingDay) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetDouble(MethodBase.GetCurrentMethod(),patNum,procedures,billingDay);
-			}
 			//Find the beginning of the current billing cycle, use that date to total charges between now and then for this cycle only.
 			//Include that date only when we are not on the first day of the current billing cycle.
 			DateTime startBillingCycle;
@@ -348,9 +294,6 @@ namespace OpenDentBusiness{
 
 		/// <summary>Returns true if the procedure passed in is linked to any other active card on the patient's account.</summary>
 		public static bool ProcLinkedToCard(long patNum,string procCode,long cardNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetBool(MethodBase.GetCurrentMethod(),patNum,procCode,cardNum);
-			}
 			string command="SELECT CreditCardNum,Procedures "
 				+"FROM creditcard "
 				+"WHERE PatNum="+POut.Long(patNum)+" "
@@ -535,9 +478,6 @@ namespace OpenDentBusiness{
 			if(string.IsNullOrEmpty(token)) {
 				return 0;
 			}
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),token,includeXWeb);
-			}
 			string command=$"SELECT COUNT(*) FROM creditcard WHERE XChargeToken='{POut.String(token)}' ";
 			if(!includeXWeb) {
 				command+=$"AND CCSource NOT IN({POut.Int((int)CreditCardSource.XWeb)},{POut.Int((int)CreditCardSource.XWebPortalLogin)}) ";
@@ -550,9 +490,6 @@ namespace OpenDentBusiness{
 			if(string.IsNullOrEmpty(token)) {
 				return 0;
 			}
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),token);
-			}
 			string command=$"SELECT COUNT(*) FROM creditcard WHERE PayConnectToken='{POut.String(token)}' ";
 			return Db.GetInt(command);
 		}
@@ -561,9 +498,6 @@ namespace OpenDentBusiness{
 		public static int GetPaySimpleTokenCount(string token,bool isAch) {
 			if(string.IsNullOrEmpty(token)) {
 				return 0;
-			}
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetInt(MethodBase.GetCurrentMethod(),token,isAch);
 			}
 			string command=$"SELECT COUNT(*) FROM creditcard WHERE PaySimpleToken='{POut.String(token)}' ";
 			if(!isAch) {
@@ -585,9 +519,6 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<CreditCard> GetCardsByToken(string token,List<CreditCardSource> listSources) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<CreditCard>>(MethodBase.GetCurrentMethod(),token,listSources);
-			}
 			if(listSources.Count==0) {
 				return new List<CreditCard>();
 			}
@@ -610,9 +541,6 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<CreditCard> GetCardsWithTokenBySource(List<CreditCardSource> listSources) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<CreditCard>>(MethodBase.GetCurrentMethod(),listSources);
-			}
 			if(listSources.Count==0) {
 				return new List<CreditCard>();
 			}
@@ -636,9 +564,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets every credit card in the db with an X-Charge token that was created from the specified source.</summary>
 		public static List<CreditCard> GetCardsWithXChargeTokens(CreditCardSource ccSource=CreditCardSource.XServer) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<CreditCard>>(MethodBase.GetCurrentMethod(),ccSource);
-			}
 			string command="SELECT * FROM creditcard WHERE XChargeToken!=\"\" "
 				+"AND CCSource="+POut.Int((int)ccSource);
 			return Crud.CreditCardCrud.SelectMany(command);
@@ -646,9 +571,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets every credit card in the db with a PayConnect token.</summary>
 		public static List<CreditCard> GetCardsWithPayConnectTokens() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<CreditCard>>(MethodBase.GetCurrentMethod());
-			}
 			string command = "SELECT * FROM creditcard WHERE PayConnectToken!=\"\"";
 			return Crud.CreditCardCrud.SelectMany(command);
 		}

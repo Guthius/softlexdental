@@ -332,7 +332,6 @@
     <Compile Include="Email\EmailRequest.cs" />
     <Compile Include="Email\EmailResult.cs" />
     <Compile Include="Email\SendEmails.cs" />
-    <Compile Include="Email\SerializeEmail.cs" />
     <Compile Include="InternalTools\Job Manager\JobNotifications.cs" />
     <Compile Include="Data Interface\ProviderClinics.cs" />
     <Compile Include="Data Interface\RecurringCharges.cs" />
@@ -360,7 +359,6 @@
     <Compile Include="Misc\Introspection.cs" />
     <Compile Include="ODEvents\ODEvents.cs" />
     <Compile Include="ODEvents\MiddleTierConnectionEvent.cs" />
-    <Compile Include="Remoting\XmlConverter.cs" />
     <Compile Include="Reports\RpProcOverpaid.cs" />
     <Compile Include="Reports\RpProdGoal.cs" />
     <Compile Include="TableTypes\MobileAppDevice.cs" />
@@ -411,8 +409,6 @@
     <Compile Include="WebBridges\PDMP\PDMPScript.cs" />
     <Compile Include="WebServices\CustomerUpdatesProxy.cs" />
     <Compile Include="Misc\IFileAtoZ.cs" />
-    <Compile Include="Remoting\DtoProcessor.cs" />
-    <Compile Include="Remoting\NullObject.cs" />
     <Compile Include="TableTypes\CommOptOut.cs" />
     <Compile Include="TableTypes\DbmLog.cs" />
     <Compile Include="TableTypes\ProviderClinic.cs" />
@@ -1139,7 +1135,6 @@
     <Compile Include="Mobile\TableTypes\Statementm.cs" />
     <Compile Include="Mobile\TableTypes\Userm.cs" />
     <Compile Include="Mobile\TableTypes\RxPatm.cs" />
-    <Compile Include="Remoting\ClientSL.cs" />
     <Compile Include="Data Interface\AccountingAutoPays.cs" />
     <Compile Include="Data Interface\Accounts.cs" />
     <Compile Include="Data Interface\Adjustments.cs" />
@@ -1288,7 +1283,6 @@
     <Compile Include="Data Interface\UserGroups.cs" />
     <Compile Include="Data Interface\UserQueries.cs" />
     <Compile Include="Data Interface\ZipCodes.cs" />
-    <Compile Include="Remoting\DtoObject.cs" />
     <Compile Include="HL7old\EcwADT.cs" />
     <Compile Include="HL7\ComponentHL7.cs" />
     <Compile Include="HL7old\EcwDFT.cs" />
@@ -1300,7 +1294,6 @@
     <Compile Include="Imaging\ImageHelper.cs" />
     <Compile Include="Imaging\ImageStore.cs" />
     <Compile Include="Db Multi Table\MiscData.cs" />
-    <Compile Include="Remoting\DataTransferObject.cs" />
     <Compile Include="Db\Enumerations.cs" />
     <Compile Include="Data Interface\Lans.cs" />
     <Compile Include="Logic\aaLogic.cs" />
@@ -1316,7 +1309,6 @@
     <Compile Include="Logic\Tooth.cs" />
     <Compile Include="Logic\ToothComparer.cs" />
     <Compile Include="Data Interface\Userods.cs" />
-    <Compile Include="Remoting\Meth.cs" />
     <Compile Include="Db\DbHelper.cs" />
     <Compile Include="Db\DbSchema.cs" />
     <Compile Include="Misc\HouseCallsQueries.cs" />
@@ -1335,7 +1327,6 @@
     <Compile Include="Plugins\PluginBase.cs" />
     <Compile Include="Plugins\PluginContainer.cs" />
     <Compile Include="Plugins\Plugins.cs" />
-    <Compile Include="Remoting\SerializableDictionary.cs" />
     <Compile Include="Remoting\WebSerializer.cs" />
     <Compile Include="Reports\RpCustomAging.cs" />
     <Compile Include="Reports\RpInsAging.cs" />
@@ -1612,16 +1603,12 @@
     <Compile Include="WebServices\IOpenDentalServer.cs" />
     <Compile Include="WebServices\ISheetsSynch.cs" />
     <Compile Include="WebServices\IWebServiceMainHQ.cs" />
-    <Compile Include="WebServices\OpenDentalServerMockIIS.cs" />
-    <Compile Include="WebServices\OpenDentalServerReal.cs" />
     <Compile Include="WebServices\PayloadHelper.cs" />
     <Compile Include="WebServices\SheetsSynchProxy.cs" />
     <Compile Include="WebServices\WebServiceMainHQMockDemo.cs" />
-    <Compile Include="WebServices\OpenDentalServerProxy.cs" />
     <Compile Include="WebServices\SheetsSynchReal.cs" />
     <Compile Include="WebServices\WebServiceMainHQReal.cs" />
     <Compile Include="WebServices\WebServiceMainHQProxy.cs" />
-    <Compile Include="WebServiceTests.cs" />
     <Compile Include="WebTypes\eConnector\EConnectorStatistics.cs" />
     <Compile Include="WebTypes\Shared\XWeb\XWeb.cs" />
     <Compile Include="WebTypes\Shared\XWeb\XWebCrud.cs" />
@@ -1679,7 +1666,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Remoting\RemotingClient.cs" />
     <Compile Include="Reports\Reports.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SheetFramework\SheetEnums.cs">
@@ -1846,7 +1832,6 @@
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
     <Compile Include="X12\X12object.cs" />
-    <Compile Include="Remoting\XmlConverterSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CodeBase\xCodeBase.csproj">

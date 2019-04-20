@@ -38,14 +38,14 @@ namespace OpenDentBusiness {
 		public string eMeasureDenexcepId;
 		public string eMeasureIppId;
 		public List<EhrCqmPatient> ListEhrPats;
-		public SerializableDictionary<long,List<EhrCqmEncounter>> DictPatNumListEncounters;
-		public SerializableDictionary<long,List<EhrCqmProc>> DictPatNumListProcs;
-		public SerializableDictionary<long,List<EhrCqmIntervention>> DictPatNumListInterventions;
-		public SerializableDictionary<long,List<EhrCqmMeasEvent>> DictPatNumListMeasureEvents;
-		public SerializableDictionary<long,List<EhrCqmMedicationPat>> DictPatNumListMedPats;
-		public SerializableDictionary<long,List<EhrCqmNotPerf>> DictPatNumListNotPerfs;
-		public SerializableDictionary<long,List<EhrCqmProblem>> DictPatNumListProblems;
-		public SerializableDictionary<long,List<EhrCqmVitalsign>> DictPatNumListVitalsigns;
+		public Dictionary<long,List<EhrCqmEncounter>> DictPatNumListEncounters;
+		public Dictionary<long,List<EhrCqmProc>> DictPatNumListProcs;
+		public Dictionary<long,List<EhrCqmIntervention>> DictPatNumListInterventions;
+		public Dictionary<long,List<EhrCqmMeasEvent>> DictPatNumListMeasureEvents;
+		public Dictionary<long,List<EhrCqmMedicationPat>> DictPatNumListMedPats;
+		public Dictionary<long,List<EhrCqmNotPerf>> DictPatNumListNotPerfs;
+		public Dictionary<long,List<EhrCqmProblem>> DictPatNumListProblems;
+		public Dictionary<long,List<EhrCqmVitalsign>> DictPatNumListVitalsigns;
 		
 		///<summary></summary>
 		public QualityMeasure Copy() {
@@ -59,14 +59,14 @@ namespace OpenDentBusiness {
 
 		public QualityMeasure() {
 			ListEhrPats=new List<EhrCqmPatient>();
-			DictPatNumListEncounters=new SerializableDictionary<long,List<EhrCqmEncounter>>();
-			DictPatNumListProcs=new SerializableDictionary<long,List<EhrCqmProc>>();
-			DictPatNumListInterventions=new SerializableDictionary<long,List<EhrCqmIntervention>>();
-			DictPatNumListMeasureEvents=new SerializableDictionary<long,List<EhrCqmMeasEvent>>();
-			DictPatNumListMedPats=new SerializableDictionary<long,List<EhrCqmMedicationPat>>();
-			DictPatNumListNotPerfs=new SerializableDictionary<long,List<EhrCqmNotPerf>>();
-			DictPatNumListProblems=new SerializableDictionary<long,List<EhrCqmProblem>>();
-			DictPatNumListVitalsigns=new SerializableDictionary<long,List<EhrCqmVitalsign>>();
+			DictPatNumListEncounters=new Dictionary<long,List<EhrCqmEncounter>>();
+			DictPatNumListProcs=new Dictionary<long,List<EhrCqmProc>>();
+			DictPatNumListInterventions=new Dictionary<long,List<EhrCqmIntervention>>();
+			DictPatNumListMeasureEvents=new Dictionary<long,List<EhrCqmMeasEvent>>();
+			DictPatNumListMedPats=new Dictionary<long,List<EhrCqmMedicationPat>>();
+			DictPatNumListNotPerfs=new Dictionary<long,List<EhrCqmNotPerf>>();
+			DictPatNumListProblems=new Dictionary<long,List<EhrCqmProblem>>();
+			DictPatNumListVitalsigns=new Dictionary<long,List<EhrCqmVitalsign>>();
 		}
 	}
 

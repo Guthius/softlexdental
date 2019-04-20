@@ -10,125 +10,107 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Linq;
 
-namespace OpenDentBusiness {
-		#region Get Methods
-		#endregion
+namespace OpenDentBusiness
+{
 
-		#region Modification Methods
-		
-		#region Insert
-		#endregion
+    ///<summary>Used to keep track of which product keys have been assigned to which customers. This class is only used if the program is being run from a distributor installation.</summary>
+    public class RegistrationKeys
+    {
+        ///<summary>Retrieves all registration keys for a particular customer's family. There can be multiple keys assigned to a single customer, or keys assigned to individual family members, since the customer may have multiple physical locations of business.</summary>
+        public static RegistrationKey[] GetForPatient(long patNum)
+        {
 
-		#region Update
-		#endregion
+            string command = "SELECT * FROM registrationkey WHERE ";
+            Family fam = Patients.GetFamily(patNum);
+            for (int i = 0; i < fam.ListPats.Length; i++)
+            {
+                command += "PatNum=" + POut.Long(fam.ListPats[i].PatNum) + " ";
+                if (i < fam.ListPats.Length - 1)
+                {
+                    command += "OR ";
+                }
+            }
+            return Crud.RegistrationKeyCrud.SelectMany(command).ToArray();
+        }
 
-		#region Delete
-		#endregion
+        ///<summary>Updates the given key data to the database.</summary>
+        public static void Update(RegistrationKey registrationKey)
+        {
 
-		#endregion
+            Crud.RegistrationKeyCrud.Update(registrationKey);
+        }
 
-		#region Misc Methods
-		#endregion
+        ///<summary>Inserts a new and unique registration key into the database.</summary>
+        public static long Insert(RegistrationKey registrationKey)
+        {
 
-	///<summary>Used to keep track of which product keys have been assigned to which customers. This class is only used if the program is being run from a distributor installation.</summary>
-	public class RegistrationKeys {
-		///<summary>Retrieves all registration keys for a particular customer's family. There can be multiple keys assigned to a single customer, or keys assigned to individual family members, since the customer may have multiple physical locations of business.</summary>
-		public static RegistrationKey[] GetForPatient(long patNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<RegistrationKey[]>(MethodBase.GetCurrentMethod(),patNum);
-			}
-			string command="SELECT * FROM registrationkey WHERE ";
-			Family fam=Patients.GetFamily(patNum);
-			for(int i=0;i<fam.ListPats.Length;i++){
-				command+="PatNum="+POut.Long(fam.ListPats[i].PatNum)+" ";
-				if(i<fam.ListPats.Length-1){
-					command+="OR ";
-				}
-			}
-			return Crud.RegistrationKeyCrud.SelectMany(command).ToArray();
-		}
+            do
+            {
+                if (registrationKey.IsForeign)
+                {
+                    Random rand = new Random();
+                    StringBuilder strBuild = new StringBuilder();
+                    for (int i = 0; i < 16; i++)
+                    {
+                        int r = rand.Next(0, 35);
+                        if (r < 10)
+                        {
+                            strBuild.Append((char)('0' + r));
+                        }
+                        else
+                        {
+                            strBuild.Append((char)('A' + r - 10));
+                        }
+                    }
+                    registrationKey.RegKey = strBuild.ToString();
+                }
+                else
+                {
+                    registrationKey.RegKey = CDT.Class1.GenerateRandKey();
+                }
+                if (registrationKey.RegKey == "")
+                {
+                    //Don't loop forever when software is unverified.
+                    return 0;//not sure what consequence this would have.
+                }
+            }
+            while (KeyIsInUse(registrationKey.RegKey));
+            return Crud.RegistrationKeyCrud.Insert(registrationKey);
+        }
 
-		///<summary>Updates the given key data to the database.</summary>
-		public static void Update(RegistrationKey registrationKey){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),registrationKey);
-				return;
-			}
-			Crud.RegistrationKeyCrud.Update(registrationKey);
-		}
+        public static void Delete(long registrationKeyNum)
+        {
+            string command = "DELETE FROM registrationkey WHERE RegistrationKeyNum='"
+                + POut.Long(registrationKeyNum) + "'";
+            Db.NonQ(command);
+        }
 
-		///<summary>Inserts a new and unique registration key into the database.</summary>
-		public static long Insert(RegistrationKey registrationKey){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				registrationKey.RegistrationKeyNum=Meth.GetLong(MethodBase.GetCurrentMethod(),registrationKey);
-				return registrationKey.RegistrationKeyNum;
-			}
-			do{
-				if(registrationKey.IsForeign){
-					Random rand=new Random();
-					StringBuilder strBuild=new StringBuilder();
-					for(int i=0;i<16;i++){
-						int r=rand.Next(0,35);
-						if(r<10){
-							strBuild.Append((char)('0'+r));
-						}
-						else{
-							strBuild.Append((char)('A'+r-10));
-						}
-					}
-					registrationKey.RegKey=strBuild.ToString();
-				}
-				else{
-					registrationKey.RegKey=CDT.Class1.GenerateRandKey();
-				}
-				if(registrationKey.RegKey==""){
-					//Don't loop forever when software is unverified.
-					return 0;//not sure what consequence this would have.
-				}
-			} 
-			while(KeyIsInUse(registrationKey.RegKey));
-			return Crud.RegistrationKeyCrud.Insert(registrationKey);
-		}
+        ///<summary>Returns true if the given registration key is currently in use by a customer, false otherwise.</summary>
+        public static bool KeyIsInUse(string regKey)
+        {
+            string command = "SELECT RegKey FROM registrationkey WHERE RegKey='" + POut.String(regKey) + "'";
+            DataTable table = Db.GetTable(command);
+            return (table.Rows.Count > 0);
+        }
 
-		public static void Delete(long registrationKeyNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),registrationKeyNum);
-				return;
-			}
-			string command="DELETE FROM registrationkey WHERE RegistrationKeyNum='"
-				+POut.Long(registrationKeyNum)+"'";
-			Db.NonQ(command);
-		}
+        ///<summary></summary>
+        public static bool KeyIsEnabled(RegistrationKey registrationKey)
+        {
+            //No need to check RemotingRole; no call to db.
+            if (registrationKey.DateDisabled.Year > 1880
+                || registrationKey.DateStarted > DateTime.Today
+                || (registrationKey.DateEnded.Year > 1880 && registrationKey.DateEnded < DateTime.Today))
+            {
+                return false;
+            }
+            return true;
+        }
 
-		///<summary>Returns true if the given registration key is currently in use by a customer, false otherwise.</summary>
-		public static bool KeyIsInUse(string regKey) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetBool(MethodBase.GetCurrentMethod(),regKey);
-			}
-			string command="SELECT RegKey FROM registrationkey WHERE RegKey='"+POut.String(regKey)+"'";
-			DataTable table=Db.GetTable(command);
-			return (table.Rows.Count>0);
-		}
-
-		///<summary></summary>
-		public static bool KeyIsEnabled(RegistrationKey registrationKey) {
-			//No need to check RemotingRole; no call to db.
-			if(registrationKey.DateDisabled.Year > 1880
-				|| registrationKey.DateStarted > DateTime.Today
-				|| (registrationKey.DateEnded.Year > 1880 && registrationKey.DateEnded < DateTime.Today)) 
-			{
-				return false;
-			}
-			return true;
-		}
-
-		///<Summary>Returns any active registration keys that have no repeating charges on any corresponding family members.  Columns include PatNum, LName, FName, and RegKey.</Summary>
-		public static DataTable GetAllWithoutCharges() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod());
-			}
-			#region Old Code
-			/*
+        ///<Summary>Returns any active registration keys that have no repeating charges on any corresponding family members.  Columns include PatNum, LName, FName, and RegKey.</Summary>
+        public static DataTable GetAllWithoutCharges()
+        {
+            #region Old Code
+            /*
 			DataTable table=new DataTable();
 			table.Columns.Add("dateStop");
 			table.Columns.Add("family");
@@ -207,10 +189,10 @@ namespace OpenDentBusiness {
 			}
 			return table;
 			*/
-			#endregion
-			//The detailed queries above were taking far too long and were too complicated.
-			//Instead, we will look for any active registration keys that have no repeating charges on any corresponding family members.
-			string command=@"SELECT registrationkey.PatNum,registrationkey.RegKey,patient.LName,patient.FName
+            #endregion
+            //The detailed queries above were taking far too long and were too complicated.
+            //Instead, we will look for any active registration keys that have no repeating charges on any corresponding family members.
+            string command = @"SELECT registrationkey.PatNum,registrationkey.RegKey,patient.LName,patient.FName
 				FROM registrationkey
 				LEFT JOIN patient ON registrationkey.PatNum=patient.PatNum
 				LEFT JOIN (
@@ -226,67 +208,65 @@ namespace OpenDentBusiness {
 				AND registrationkey.IsFreeVersion=0 
 				AND registrationkey.IsOnlyForTesting=0
 				AND ISNULL(activecharges.PatNum)";
-			return Db.GetTable(command);
-		}
-		
-		///<summary>Does not validate regkey like GetByKey().
-		///Returns a dictionary such that the key is a registration key and the value is the patient.</summary>
-		public static SerializableDictionary<string,Patient> GetPatientsByKeys(List<string> listRegKeyStrs) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<SerializableDictionary<string,Patient>>(MethodBase.GetCurrentMethod(),listRegKeyStrs);
-			}
-			if(listRegKeyStrs==null || listRegKeyStrs.Count==0) {
-				return new SerializableDictionary<string, Patient>();
-			}
-			string command="SELECT * FROM  registrationkey WHERE RegKey IN("+String.Join(",",listRegKeyStrs.Distinct().Select(x => "'"+POut.String(x)+"'").ToList())+")";
-			List<RegistrationKey> listRegKeys=Crud.RegistrationKeyCrud.TableToList(Db.GetTable(command));
-			Patient[] pats=Patients.GetMultPats(listRegKeys.Select(x => x.PatNum).ToList());
-			return listRegKeys.Select(x => new { RegKeyStr=x.RegKey, PatientCur=pats.FirstOrDefault(y => y.PatNum==x.PatNum)??new Patient() })
-				.ToSerializableDictionary(x => x.RegKeyStr,x => x.PatientCur);
-		}
+            return Db.GetTable(command);
+        }
 
-	
-		public static RegistrationKey GetByKey(string regKey) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<RegistrationKey>(MethodBase.GetCurrentMethod(),regKey);
-			}
-			if(!Regex.IsMatch(regKey,@"^[A-Z0-9]{16}$")) {
-				throw new ApplicationException("Invalid registration key format.");
-			}
-			string command="SELECT * FROM  registrationkey WHERE RegKey='"+POut.String(regKey)+"'";
-			DataTable table=Db.GetTable(command);
-			if(table.Rows.Count==0) {
-				throw new ApplicationException("Invalid registration key.");
-			}
-			RegistrationKey key=null;
-			for(int i=0;i<table.Rows.Count;i++) {
-				key=new RegistrationKey();
-				key.RegistrationKeyNum	=PIn.Int(table.Rows[i][0].ToString());
-				key.PatNum							=PIn.Int(table.Rows[i][1].ToString());
-				key.RegKey							=PIn.String(table.Rows[i][2].ToString());
-				key.Note								=PIn.String(table.Rows[i][3].ToString());
-				key.DateStarted 				=PIn.Date(table.Rows[i][4].ToString());
-				key.DateDisabled				=PIn.Date(table.Rows[i][5].ToString());
-				key.DateEnded   				=PIn.Date(table.Rows[i][6].ToString());
-				key.IsForeign   				=PIn.Bool(table.Rows[i][7].ToString());
-				//key.UsesServerVersion  	=PIn.PBool(table.Rows[i][8].ToString());
-				key.IsFreeVersion  			=PIn.Bool(table.Rows[i][9].ToString());
-				key.IsOnlyForTesting  	=PIn.Bool(table.Rows[i][10].ToString());
-				//key.VotesAllotted     	=PIn.PInt(table.Rows[i][11].ToString());
-			}
-			//if(key.DateDisabled.Year>1880){
-			//	throw new ApplicationException("This key has been disabled.  Please call for assistance.");
-			//}
-			return key;
-		}
-		
-		///<summary>Get the list of all RegistrationKey rows. DO NOT REMOVE! Used by OD WebApps solution.</summary>
-		public static List<RegistrationKey> GetAll() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<RegistrationKey>>(MethodBase.GetCurrentMethod());
-			}
-			string command="SELECT * FROM registrationkey";
-			return Crud.RegistrationKeyCrud.SelectMany(command);
-		}
-	}
+        ///<summary>Does not validate regkey like GetByKey().
+        ///Returns a dictionary such that the key is a registration key and the value is the patient.</summary>
+        public static Dictionary<string, Patient> GetPatientsByKeys(List<string> listRegKeyStrs)
+        {
+            if (listRegKeyStrs == null || listRegKeyStrs.Count == 0)
+            {
+                return new Dictionary<string, Patient>();
+            }
+            string command = "SELECT * FROM  registrationkey WHERE RegKey IN(" + String.Join(",", listRegKeyStrs.Distinct().Select(x => "'" + POut.String(x) + "'").ToList()) + ")";
+            List<RegistrationKey> listRegKeys = Crud.RegistrationKeyCrud.TableToList(Db.GetTable(command));
+            Patient[] pats = Patients.GetMultPats(listRegKeys.Select(x => x.PatNum).ToList());
+            return listRegKeys.Select(x => new { RegKeyStr = x.RegKey, PatientCur = pats.FirstOrDefault(y => y.PatNum == x.PatNum) ?? new Patient() })
+                .ToDictionary(x => x.RegKeyStr, x => x.PatientCur);
+        }
+
+
+        public static RegistrationKey GetByKey(string regKey)
+        {
+            if (!Regex.IsMatch(regKey, @"^[A-Z0-9]{16}$"))
+            {
+                throw new ApplicationException("Invalid registration key format.");
+            }
+            string command = "SELECT * FROM  registrationkey WHERE RegKey='" + POut.String(regKey) + "'";
+            DataTable table = Db.GetTable(command);
+            if (table.Rows.Count == 0)
+            {
+                throw new ApplicationException("Invalid registration key.");
+            }
+            RegistrationKey key = null;
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                key = new RegistrationKey();
+                key.RegistrationKeyNum = PIn.Int(table.Rows[i][0].ToString());
+                key.PatNum = PIn.Int(table.Rows[i][1].ToString());
+                key.RegKey = PIn.String(table.Rows[i][2].ToString());
+                key.Note = PIn.String(table.Rows[i][3].ToString());
+                key.DateStarted = PIn.Date(table.Rows[i][4].ToString());
+                key.DateDisabled = PIn.Date(table.Rows[i][5].ToString());
+                key.DateEnded = PIn.Date(table.Rows[i][6].ToString());
+                key.IsForeign = PIn.Bool(table.Rows[i][7].ToString());
+                //key.UsesServerVersion  	=PIn.PBool(table.Rows[i][8].ToString());
+                key.IsFreeVersion = PIn.Bool(table.Rows[i][9].ToString());
+                key.IsOnlyForTesting = PIn.Bool(table.Rows[i][10].ToString());
+                //key.VotesAllotted     	=PIn.PInt(table.Rows[i][11].ToString());
+            }
+            //if(key.DateDisabled.Year>1880){
+            //	throw new ApplicationException("This key has been disabled.  Please call for assistance.");
+            //}
+            return key;
+        }
+
+        ///<summary>Get the list of all RegistrationKey rows. DO NOT REMOVE! Used by OD WebApps solution.</summary>
+        public static List<RegistrationKey> GetAll()
+        {
+            string command = "SELECT * FROM registrationkey";
+            return Crud.RegistrationKeyCrud.SelectMany(command);
+        }
+    }
 }

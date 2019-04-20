@@ -393,9 +393,6 @@ namespace OpenDental{
 		#endregion
 
 		private void FormAudit_Load(object sender, System.EventArgs e) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {//Archive not supported over MT connection.
-				checkIncludeArchived.Enabled=false;
-			}
 			if(string.IsNullOrEmpty(PrefC.GetString(PrefName.ArchiveServerName))) {//Archive db not setup.
 				checkIncludeArchived.Enabled=false;
 			}

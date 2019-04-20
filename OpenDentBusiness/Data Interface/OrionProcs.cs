@@ -111,17 +111,11 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets one OrionProc from the db.</summary>
 		public static OrionProc GetOne(long orionProcNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<OrionProc>(MethodBase.GetCurrentMethod(),orionProcNum);
-			}
 			return Crud.OrionProcCrud.SelectOne(orionProcNum);
 		}
 
 		///<summary>Gets one OrionProc from the db by ProcNum</summary>
 		public static OrionProc GetOneByProcNum(long ProcNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<OrionProc>(MethodBase.GetCurrentMethod(),ProcNum);
-			}
 			string command="SELECT * FROM orionproc "
 				+"WHERE ProcNum="+POut.Long(ProcNum)+" "+DbHelper.LimitAnd(1);
 			return Crud.OrionProcCrud.SelectOne(command);
@@ -129,26 +123,15 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static long Insert(OrionProc orionProc) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				orionProc.OrionProcNum=Meth.GetLong(MethodBase.GetCurrentMethod(),orionProc);
-				return orionProc.OrionProcNum;
-			}
 			return Crud.OrionProcCrud.Insert(orionProc);
 		}
 
 		///<summary></summary>
 		public static void Update(OrionProc orionProc) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),orionProc);
-				return;
-			}
 			Crud.OrionProcCrud.Update(orionProc);
 		}
 
 		public static DataTable GetCancelledScheduleDateByToothOrSurf(long PatNum, string ToothNum, string Surf) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),PatNum,ToothNum,Surf);
-			}
 			string optionalclause="";
 			if(POut.String(ToothNum)==""){
 				optionalclause=" AND procedurelog.Surf='"+POut.String(Surf)+"'";
@@ -168,10 +151,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Loops through every procedure attached to an appt and sets the Status2 to complete.</summary>
 		public static void SetCompleteInAppt(List<Procedure> procsInAppt) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),procsInAppt);
-				return;
-			}
 			OrionProc orionProc;
 			for(int i=0;i<procsInAppt.Count;i++) {
 				orionProc=GetOneByProcNum(procsInAppt[i].ProcNum);

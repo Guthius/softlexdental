@@ -77,11 +77,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Always refreshes the ClientWeb's cache.</summary>
 		public static DataTable GetTableFromCache(bool doRefreshCache) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				DataTable table=Meth.GetTable(MethodBase.GetCurrentMethod(),doRefreshCache);
-				_orthoChartTabCache.FillCacheFromTable(table);
-				return table;
-			}
 			return _orthoChartTabCache.GetTableFromCache(doRefreshCache);
 		}
 
@@ -89,9 +84,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Inserts, updates, or deletes the passed in list against the stale list listOld.  Returns true if db changes were made.</summary>
 		public static bool Sync(List<OrthoChartTab> listNew,List<OrthoChartTab> listOld) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetBool(MethodBase.GetCurrentMethod(),listNew,listOld);
-			}
 			return Crud.OrthoChartTabCrud.Sync(listNew,listOld);
 		}
 

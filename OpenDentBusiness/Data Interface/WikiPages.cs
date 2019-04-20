@@ -22,21 +22,11 @@ namespace OpenDentBusiness
         #region Update
         public static void Update(WikiPage wikiPage)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), wikiPage);
-                return;
-            }
             Crud.WikiPageCrud.Update(wikiPage);
         }
 
         public static void Update(WikiPage wikiPage, WikiPage oldWikiPage)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), wikiPage, oldWikiPage);
-                return;
-            }
             Crud.WikiPageCrud.Update(wikiPage, oldWikiPage);
         }
         #endregion
@@ -79,7 +69,7 @@ namespace OpenDentBusiness
         {
             //No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
             string command = "SELECT * FROM wikipage WHERE PageTitle='_Master' AND IsDraft=0";//There is currently no way for a master page to be a draft.
-            DataTable table = Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(), command);
+            DataTable table = Db.GetTable(command);
             table.TableName = "WikiPage";
             FillCache(table);
             return table;
@@ -100,10 +90,6 @@ namespace OpenDentBusiness
             {
                 return new List<WikiPage>();
             }
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(), listWikiPageNums);
-            }
 
             string command = "SELECT * FROM wikipage  "
                 + "WHERE IsDraft=0 "
@@ -114,10 +100,6 @@ namespace OpenDentBusiness
         ///<summary>Returns null if page does not exist. Does not return drafts.</summary>
         public static WikiPage GetByTitle(string pageTitle, bool isDeleted = false)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                return Meth.GetObject<WikiPage>(MethodBase.GetCurrentMethod(), pageTitle, isDeleted);
-            }
             string command = "SELECT * FROM wikipage "
                 + "WHERE PageTitle='" + POut.String(pageTitle) + "' "
                 + "AND IsDraft=0 "
@@ -129,10 +111,6 @@ namespace OpenDentBusiness
         ///Does not return drafts.</summary>
         public static List<WikiPage> GetByTitleContains(string searchText)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(), searchText);
-            }
             string command = "SELECT * FROM wikipage WHERE PageTitle NOT LIKE '\\_%' AND IsDraft=0 "
                 + "AND PageTitle LIKE '%" + POut.String(searchText) + "%' ORDER BY PageTitle";
             return Crud.WikiPageCrud.SelectMany(command);
@@ -198,11 +176,6 @@ namespace OpenDentBusiness
         ///<summary>Should only be used for inserting drafts.  Inserting a non-draft wikipage should call InsertAndArchive.</summary>
         public static void InsertAsDraft(WikiPage wikiPage)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), wikiPage);
-                return;
-            }
             wikiPage.IsDraft = true;
             Crud.WikiPageCrud.Insert(wikiPage);
         }
@@ -210,11 +183,6 @@ namespace OpenDentBusiness
         ///<summary>Throws Exceptions, surround with try catch. Should only be used for updating drafts.  Updating a non-draft wikipage should never happen.</summary>
         public static void UpdateDraft(WikiPage wikiPage)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), wikiPage);
-                return;
-            }
             if (!wikiPage.IsDraft)
             {
                 throw new Exception("Can only use for updating drafts.");
@@ -225,10 +193,6 @@ namespace OpenDentBusiness
         ///<summary>Searches keywords, title, content.  Does not return pagetitles for drafts.</summary>
         public static List<string> GetForSearch(string searchText, bool ignoreContent, bool isDeleted = false)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod(), searchText, ignoreContent, isDeleted);
-            }
             List<string> retVal = new List<string>();
             DataTable tableResults = new DataTable();
             string[] searchTokens = POut.String(searchText).Split(' ');
@@ -304,10 +268,6 @@ namespace OpenDentBusiness
         ///<summary>Returns a list of all pages that reference "PageTitle".  No historical pages or drafts.</summary>
         public static List<WikiPage> GetIncomingLinks(string pageTitle)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                return Meth.GetObject<List<WikiPage>>(MethodBase.GetCurrentMethod(), pageTitle);
-            }
             List<WikiPage> retVal = new List<WikiPage>();
             WikiPage wp = GetByTitle(pageTitle);
             if (wp != null)
@@ -323,11 +283,6 @@ namespace OpenDentBusiness
         ///the newly renamed page, which is fine.  Also renamed drafts, so that we can still match them to their parent wiki page.</summary>
         public static void Rename(WikiPage wikiPage, string newPageTitle)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Meth.GetVoid(MethodBase.GetCurrentMethod(), wikiPage, newPageTitle);
-                return;
-            }
             //Security.CurUser.UserNum gets set on MT by the DtoProcessor so it matches the user from the client WS.
             wikiPage.UserNum = Security.CurUser.UserNum;
             //a later improvement would be to validate again here in the business layer.
@@ -348,10 +303,6 @@ namespace OpenDentBusiness
         ///<summary>Used in TranslateToXhtml to know whether to mark a page as not exists.</summary>
         public static List<bool> CheckPageNamesExist(List<string> pageTitles)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                return Meth.GetObject<List<bool>>(MethodBase.GetCurrentMethod(), pageTitles);
-            }
             string command = "SELECT PageTitle FROM wikipage WHERE ";
             for (int i = 0; i < pageTitles.Count; i++)
             {
@@ -410,10 +361,6 @@ namespace OpenDentBusiness
         ///otherwise this will invalidate every wiki page link.</summary>
         public static string ConvertTitlesToPageNums(string pageContent)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                return Meth.GetString(MethodBase.GetCurrentMethod(), pageContent);
-            }
             MatchCollection mc = Regex.Matches(pageContent, @"\[\[.+?\]\]");//Find [[ and ]] pairs in the pageContent string.
             List<string> listWikiLinks = new List<string>();
             foreach (Match match in mc)
@@ -453,10 +400,6 @@ namespace OpenDentBusiness
 
         public static List<string> GetMissingPageTitles(string pageContent)
         {
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                return Meth.GetObject<List<string>>(MethodBase.GetCurrentMethod(), pageContent);
-            }
             List<string> listInvalidLinks = new List<string>();
             MatchCollection mc = Regex.Matches(pageContent, @"\[\[.+?\]\]");//Find [[ and ]] pairs in the pageContent string.
             List<string> listWikiLinks = new List<string>();

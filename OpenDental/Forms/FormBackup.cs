@@ -660,11 +660,6 @@ namespace OpenDental {
 		#endregion
 
 		private void FormBackup_Load(object sender, System.EventArgs e) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {//Archive not supported over MT connection. Show warning if Middle Tier is in use.
-				butArchive.Enabled=false;
-				labelWarning.Text=Lan.g(this,"Not available when using a Middle Tier connection. Archives may only be created when directly connected to the server.");
-				labelWarning.Visible=true;
-			}
 			#region Backup Tab
 			//already include the \
 			checkExcludeImages.Checked=PrefC.GetBool(PrefName.BackupExcludeImageFolder);

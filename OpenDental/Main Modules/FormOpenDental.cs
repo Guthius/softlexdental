@@ -142,9 +142,6 @@ namespace OpenDental
         private MenuItem menuItemLaboratories;
         ///<summary>A list of button definitions for this computer.  These button defs display in the lightSignalGrid1 control.</summary>
         private SigButDef[] SigButDefList;
-        /// <summary>Added these 3 fields for Oracle encrypted connection string</summary>
-        private string connStr;
-        private string key;
         private MenuItem menuItemGraphics;
         private MenuItem menuItemLabCases;
         private MenuItem menuItemRequirementsNeeded;
@@ -2712,7 +2709,6 @@ namespace OpenDental
             }
 
             //Hook up MT connection lost event. Nothing prior to this point fires LostConnection events.
-            MiddleTierConnectionEvent.Fired += MiddleTierConnection_ConnectionLost;
             Action actionCloseSplashWindow = null;
 
             // Open the form to pick the database.
@@ -2818,7 +2814,6 @@ namespace OpenDental
             DataConnection.DoThrowOnAutoRetryTimeout = false;//Depend on the Connection Lost window after the timeout has been reached.
             DataConnection.CrashedTableTimeoutSeconds = TimeSpan.FromMinutes(1).TotalSeconds;
             CrashedTableEvent.Fired += CrashedTable_Detected;
-            CredentialsFailedAfterLoginEvent.Fired += DataConnection_CredentialsFailedAfterLogin;
             ODUIExtensions.ItemTranslator = new LansTranslate();
             RefreshLocalData(InvalidType.Prefs);//should only refresh preferences so that SignalLastClearedDate preference can be used in ClearOldSignals()
             Signalods.ClearOldSignals();
@@ -5866,10 +5861,6 @@ namespace OpenDental
                         }
                     }
                 }
-                if (RemotingClient.RemotingRole == RemotingRole.ClientWeb && !Security.IsUserLoggedIn)
-                {//User isn't actually logged in, so don't popup a task on their computer.
-                    return;
-                }
                 List<TaskList> listUserTaskListSubsTrunk = TaskLists.RefreshUserTrunk(Security.CurUser.UserNum);//Get the list of directly subscribed tasklists.
                 List<long> listUserTaskListSubNums = listUserTaskListSubsTrunk.Select(x => x.TaskListNum).ToList();
                 bool isUserSubscribed = listUserTaskListSubNums.Contains(taskPopup.TaskListNum);//First check if user is directly subscribed.
@@ -6457,32 +6448,6 @@ namespace OpenDental
             Plugins.HookAddCode(this, "FormOpenDental_KeyDown_end", e);
         }
 
-        ///<summary>Decrypt the connection string and try to connect to the database directly. Only called if using a connection string and ChooseDatabase is not to be shown. Must call GetOraConfig first.</summary>
-        public bool TryWithConnStr()
-        {
-            DataConnection dcon = new DataConnection();
-            try
-            {
-                if (connStr != null)
-                {
-#if ORA_DB
-					OD_CRYPTO.Decryptor crypto=new OD_CRYPTO.Decryptor();
-					dconnStr=crypto.Decrypt(connStr,key);
-					crypto=null;
-					dcon.SetDb(dconnStr,"",DatabaseType.Oracle);
-#endif
-                }
-                //a direct connection does not utilize lower privileges.
-                RemotingClient.RemotingRole = RemotingRole.ClientDirect;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return false;
-            }
-        }
-
         ///<summary>This method stops all (local) timers and displays a connection lost window that will let users attempt to reconnect.
         ///At any time during the lifespan of the application connection to the database can be lost for unknown reasons.
         ///When anything spawned by FormOpenDental (main thread) tries to connect to the database and fails, this event will get fired.</summary>
@@ -6491,10 +6456,6 @@ namespace OpenDental
             if (InvokeRequired)
             {
                 this.BeginInvoke(() => DataConnection_ConnectionLost(e));
-                return;
-            }
-            if (RemotingClient.RemotingRole != RemotingRole.ClientDirect)
-            {
                 return;
             }
             if (e == null || e.EventType != ODEventType.DataConnection || e.IsConnectionRestored)
@@ -6512,89 +6473,11 @@ namespace OpenDental
                 this.BeginInvoke(() => CrashedTable_Detected(e));
                 return;
             }
-            if (RemotingClient.RemotingRole != RemotingRole.ClientDirect)
-            {
-                return;
-            }
             if (e == null || e.EventType != ODEventType.CrashedTable || !e.IsTableCrashed)
             {
                 return;
             }
             BeginCrashedTableMonitorThread(e);
-        }
-
-        ///At any time during the lifespan of the application connection to the Middle Tier server can be lost for unknown reasons.
-        ///When anything spawned by FormOpenDental (main thread) tries to connect to the MiddleTier server and fails, this event will fire.</summary>
-        private void MiddleTierConnection_ConnectionLost(MiddleTierConnectionEventArgs e)
-        {
-            if (InvokeRequired)
-            {
-                this.BeginInvoke(() => MiddleTierConnection_ConnectionLost(e));
-                return;
-            }
-            if (RemotingClient.RemotingRole != RemotingRole.ClientWeb)
-            {
-                return;
-            }
-            if (e == null || e.EventType != ODEventType.MiddleTierConnection || e.IsConnectionRestored)
-            {
-                return;
-            }
-            BeginMiddleTierConnectionMonitorThread(e);
-        }
-
-        ///<summary>This method stops all (local) timers and displays a bad credentials window that will let users attempt to login again.  This is to
-        ///handle the situation where a user is logged into multiple computers via middle tier and changes their password on 1 connection.  The other
-        ///connection(s) would attempt to access the database using the old password (for signal refreshes etc) and lock the user's account for too many
-        ///failed attempts.  FormLoginFailed will not allow a different user to login, only the current user or exit the program.</summary>
-        private void DataConnection_CredentialsFailedAfterLogin(ODEventArgs e)
-        {
-            if (InvokeRequired)
-            {
-                this.BeginInvoke(() => DataConnection_CredentialsFailedAfterLogin(e));
-                return;
-            }
-            if (RemotingClient.RemotingRole != RemotingRole.ClientWeb)
-            {
-                return;
-            }
-            if (e != null && e.EventType != ODEventType.ServiceCredentials)
-            {
-                return;
-            }
-            if (Security.CurUser == null)
-            {
-                Environment.Exit(0);//shouldn't be possible, would have to have a user logged in to get here, but just in case, exit the program
-            }
-            if (RemotingClient.HasLoginFailed || (_formLoginFailed != null && !_formLoginFailed.IsDisposed))
-            {//_formLoginFailed already displayed, wait for _formLoginFailed to close
-                return;
-            }
-            RemotingClient.HasLoginFailed = true;//first thread to get the lock (or invoke this method so the main thread gets the lock) will display the login form
-            try
-            {
-                SetTimersAndThreads(false);
-                Security.IsUserLoggedIn = false;
-                string errorMsg = (string)e.Tag;
-                _formLoginFailed = new FormLoginFailed(errorMsg);
-                _formLoginFailed.ShowDialog();
-                if (_formLoginFailed.DialogResult == DialogResult.Cancel)
-                {
-                    Environment.Exit(0);
-                }
-                SetTimersAndThreads(true);
-                Security.DateTimeLastActivity = DateTime.Now;
-            }
-            catch (Exception ex)
-            {
-                ex.DoNothing();
-                throw;
-            }
-            finally
-            {
-                RemotingClient.HasLoginFailed = false;
-                _formLoginFailed = null;
-            }
         }
 
         public static void S_TaskGoTo(TaskObjectType taskOT, long keyNum)
@@ -9913,16 +9796,6 @@ namespace OpenDental
                 {
                     bool isEcwTightOrFullMode = Programs.UsingEcwTightOrFullMode();
                     Security.CurUser = Userods.CheckUserAndPassword(odUser, odPassword, isEcwTightOrFullMode);
-
-                    if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-                    {
-                        string pw = odPassword;
-                        if (isEcwTightOrFullMode)
-                        {//ecw requires hash, but non-ecw requires actual password
-                            pw = Authentication.HashPasswordMD5(pw, true);
-                        }
-                        Security.PasswordTyped = pw;
-                    }
                 }
                 catch (Exception ex)
                 {
@@ -9969,7 +9842,7 @@ namespace OpenDental
                             Security.IsUserLoggedIn = true;
                             return;
                         }
-                        SerializableDictionary<long, string> dictDomainUserNumsAndNames = Userods.GetUsersByDomainUserNameNoCache(Environment.UserName);
+                        Dictionary<long, string> dictDomainUserNumsAndNames = Userods.GetUsersByDomainUserNameNoCache(Environment.UserName);
                         if (dictDomainUserNumsAndNames.Count == 0)
                         { //Log on normally if no user linked the current domain user
                             ShowLogOn();
@@ -10266,10 +10139,6 @@ namespace OpenDental
             RefreshTasksNotification();
             Security.IsUserLoggedIn = false;
             Text = PatientL.GetMainTitle(null, 0);
-            if (RemotingClient.RemotingRole == RemotingRole.ClientWeb)
-            {
-                Security.CurUser = oldUser;//so that the queries in FormLogOn() will work for the web service, since the web service requires a valid user to run queries.
-            }
             SetTimersAndThreads(false);
             userControlPatientDashboard.CloseDashboard(true);
             ShowLogOn();

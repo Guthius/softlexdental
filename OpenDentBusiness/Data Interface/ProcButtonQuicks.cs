@@ -108,9 +108,6 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static List<ProcButtonQuick> GetAll(){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<ProcButtonQuick>>(MethodBase.GetCurrentMethod());
-			}
 			string command="SELECT * FROM procbuttonquick";
 			return Crud.ProcButtonQuickCrud.SelectMany(command);
 		}
@@ -126,19 +123,11 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static long Insert(ProcButtonQuick procButtonQuick){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				procButtonQuick.ProcButtonQuickNum=Meth.GetLong(MethodBase.GetCurrentMethod(),procButtonQuick);
-				return procButtonQuick.ProcButtonQuickNum;
-			}
 			return Crud.ProcButtonQuickCrud.Insert(procButtonQuick);
 		}
 
 		///<summary></summary>
 		public static void Update(ProcButtonQuick procButtonQuick){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),procButtonQuick);
-				return;
-			}
 			Crud.ProcButtonQuickCrud.Update(procButtonQuick);
 		}
 
@@ -152,10 +141,6 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(long procButtonQuickNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),procButtonQuickNum);
-				return;
-			}
 			string command= "DELETE FROM procbuttonquick WHERE ProcButtonQuickNum = "+POut.Long(procButtonQuickNum);
 			Db.NonQ(command);
 		}

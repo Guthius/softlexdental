@@ -67,11 +67,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Always refreshes the ClientWeb's cache.</summary>
 		public static DataTable GetTableFromCache(bool doRefreshCache) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				DataTable table=Meth.GetTable(MethodBase.GetCurrentMethod(),doRefreshCache);
-				_procApptColorCache.FillCacheFromTable(table);
-				return table;
-			}
 			return _procApptColorCache.GetTableFromCache(doRefreshCache);
 		}
 
@@ -79,28 +74,16 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static long Insert(ProcApptColor procApptColor){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				procApptColor.ProcApptColorNum=Meth.GetLong(MethodBase.GetCurrentMethod(),procApptColor);
-				return procApptColor.ProcApptColorNum;
-			}
 			return Crud.ProcApptColorCrud.Insert(procApptColor);
 		}
 
 		///<summary></summary>
 		public static void Update(ProcApptColor procApptColor){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),procApptColor);
-				return;
-			}
 			Crud.ProcApptColorCrud.Update(procApptColor);
 		}
 
 		///<summary></summary>
 		public static void Delete(long procApptColorNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),procApptColorNum);
-				return;
-			}
 			string command= "DELETE FROM procapptcolor WHERE ProcApptColorNum = "+POut.Long(procApptColorNum);
 			Db.NonQ(command);
 		}

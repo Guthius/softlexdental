@@ -29,8 +29,8 @@ namespace OpenDentBusiness{
 		public static DataTable RefreshCache(){
 			//No need to check RemotingRole; Calls GetTableRemotelyIfNeeded().
 			string command="SELECT * FROM phoneempdefault";
-			DataTable table=Cache.GetTableRemotelyIfNeeded(MethodBase.GetCurrentMethod(),command);
-			table.TableName="PhoneEmpDefault";
+            DataTable table = Db.GetTable(command);
+            table.TableName="PhoneEmpDefault";
 			FillCache(table);
 			return table;
 		}
@@ -44,18 +44,12 @@ namespace OpenDentBusiness{
 		
 		///<summary></summary>
 		public static List<PhoneEmpDefault> Refresh(){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<PhoneEmpDefault>>(MethodBase.GetCurrentMethod());
-			}
 			string command="SELECT * FROM phoneempdefault ORDER BY PhoneExt";//because that's the order we are used to in the phone panel.
 			return Crud.PhoneEmpDefaultCrud.SelectMany(command);
 		}
 
 		/// <summary>use sparingly as this makes a db call every time. only used for validating user is not modifying "dirty" data</summary>
 		public static bool GetGraphedStatusForEmployeeDate(long employeeNum,DateTime dateEntry) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetBool(MethodBase.GetCurrentMethod(),employeeNum,dateEntry);
-			}
 			PhoneEmpDefault phoneEmpDefault=Crud.PhoneEmpDefaultCrud.SelectOne(employeeNum);
 			if(phoneEmpDefault==null) {
 				return false;
@@ -70,9 +64,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets one PhoneEmpDefault from the db.  Can return null.</summary>
 		public static PhoneEmpDefault GetOne(long employeeNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<PhoneEmpDefault>(MethodBase.GetCurrentMethod(),employeeNum);
-			}
 			return Crud.PhoneEmpDefaultCrud.SelectOne(employeeNum);
 		}
 
@@ -89,9 +80,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Can return null.</summary>
 		public static PhoneEmpDefault GetByExtAndEmp(int extension,long employeeNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<PhoneEmpDefault>(MethodBase.GetCurrentMethod(),extension,employeeNum);
-			}
 			string command="SELECT * FROM phoneempdefault WHERE PhoneExt="+POut.Int(extension)+" "
 				+"AND EmployeeNum="+POut.Long(employeeNum);
 			return Crud.PhoneEmpDefaultCrud.SelectOne(command);
@@ -125,10 +113,6 @@ namespace OpenDentBusiness{
 		///Moves any other employee who currently has this extension set (in phoneempdefault) to extension zero.  
 		///This prevents duplicate extensions in phoneempdefault.</summary>
 		public static void SetAvailable(int extension,long empNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),extension,empNum);
-				return;
-			}
 			Employee emp=Employees.GetEmp(empNum);
 			if(emp==null) {//Should never happen. This means the employee that's changing their status doesn't exist in the employee table.
 				return;
@@ -149,29 +133,17 @@ namespace OpenDentBusiness{
 	
 		///<summary></summary>
 		public static long Insert(PhoneEmpDefault phoneEmpDefault){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				phoneEmpDefault.EmployeeNum=Meth.GetLong(MethodBase.GetCurrentMethod(),phoneEmpDefault);
-				return phoneEmpDefault.EmployeeNum;
-			}
 			return Crud.PhoneEmpDefaultCrud.Insert(phoneEmpDefault,true);//user specifies the PK
 		}
 
 		///<summary></summary>
 		public static void Update(PhoneEmpDefault phoneEmpDefault){
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),phoneEmpDefault);
-				return;
-			}
 			Crud.PhoneEmpDefaultCrud.Update(phoneEmpDefault);
 		}
 
 		///<summary>Invalidates all rows' EscalationOrder and updates to the escalation ordering as given in the listPED input argument.</summary>
 		/// <param name="listPED">The new list. EscalationOrder should be 1-based and ordered appropriately. Any employees that should not be included in escalation should have EscalationOrder==-1.</param>
 		public static void UpdateEscalationOrder(List<PhoneEmpDefault> listPED) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),listPED);
-				return;
-			}
 			//Invalidate all rows.
 			string command= "UPDATE PhoneEmpDefault SET EscalationOrder=-1";
 			Db.NonQ(command);
@@ -183,10 +155,6 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static void Delete(long employeeNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),employeeNum);
-				return;
-			}
 			string command= "DELETE FROM phoneempdefault WHERE EmployeeNum = "+POut.Long(employeeNum);
 			Db.NonQ(command);
 		}

@@ -29,19 +29,12 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all unique email ids for the given recipient email address.  The result is used to determine which emails to download for a particular inbox address.</summary>
 		public static List<EmailMessageUid> GetForRecipientAddress(string strRecipientAddress) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<EmailMessageUid>>(MethodBase.GetCurrentMethod(),strRecipientAddress);
-			}
 			string command="SELECT * FROM emailmessageuid WHERE RecipientAddress='"+POut.String(strRecipientAddress)+"'";
 			return Crud.EmailMessageUidCrud.SelectMany(command);
 		}
 
 		///<summary></summary>
 		public static long Insert(EmailMessageUid emailMessageUid) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				emailMessageUid.EmailMessageUidNum=Meth.GetLong(MethodBase.GetCurrentMethod(),emailMessageUid);
-				return emailMessageUid.EmailMessageUidNum;
-			}
 			return Crud.EmailMessageUidCrud.Insert(emailMessageUid);
 		}
 

@@ -28,19 +28,12 @@ namespace OpenDentBusiness{
 
 		///<summary></summary>
 		public static long Insert(ErxLog erxLog) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				erxLog.ErxLogNum=Meth.GetLong(MethodBase.GetCurrentMethod(),erxLog);
-				return erxLog.ErxLogNum;
-			}
 			return Crud.ErxLogCrud.Insert(erxLog);
 		}
 
 		///<summary>Returns the latest ErxLog entry for the specified patient and before the specified dateTimeMax. Can return null.
 		///Called from Chart when fetching prescriptions from NewCrop to determine the provider on incoming prescriptions.</summary>
 		public static ErxLog GetLatestForPat(long patNum,DateTime dateTimeMax) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<ErxLog>(MethodBase.GetCurrentMethod(),patNum,dateTimeMax);
-			}
 			string command=DbHelper.LimitOrderBy("SELECT * FROM erxlog WHERE PatNum="+POut.Long(patNum)+" AND DateTStamp<"+POut.DateT(dateTimeMax)+" ORDER BY DateTStamp DESC",1);
 			List <ErxLog> listErxLog=Crud.ErxLogCrud.SelectMany(command);
 			if(listErxLog.Count==0) {

@@ -59,10 +59,12 @@ namespace OpenDentBusiness
                 {
                     _lock.ExitReadLock();
                 }
-                if (isListPluginsNull && RemotingClient.RemotingRole == RemotingRole.ServerWeb)
-                {
-                    LoadAllPlugins(null);
-                }
+
+                // TODO: Should we load plugins at this time???
+                //if (isListPluginsNull /* && RemotingClient.RemotingRole == RemotingRole.ServerWeb */)
+                //{
+                //    LoadAllPlugins(null);
+                //}
                 List<PluginContainer> listPlugins = null;
                 _lock.EnterReadLock();
                 try
@@ -112,10 +114,7 @@ namespace OpenDentBusiness
             foreach (Program program in Programs.GetWhere(x => x.Enabled && !string.IsNullOrEmpty(x.PluginDllName)))
             {
                 string dllPath = ODFileUtils.CombinePaths(Application.StartupPath, program.PluginDllName);
-                if (RemotingClient.RemotingRole == RemotingRole.ServerWeb)
-                {
-                    dllPath = ODFileUtils.CombinePaths(System.Web.HttpContext.Current.Server.MapPath(null), program.PluginDllName);
-                }
+
                 //Check for the versioning trigger.
                 //For example, the plug-in might be entered as MyPlugin[VersionMajMin].dll. The bracketed section will be removed when loading the dll.
                 //So it will look for MyPlugin.dll as the dll to load. However, before it loads, it will look for a similar dll with a version number.
@@ -165,11 +164,10 @@ namespace OpenDentBusiness
                 catch (Exception ex)
                 {
                     //Never try and show message boxes when on the middle tier, there is no UI.  We should instead log to a file or the event viewer.
-                    if (RemotingClient.RemotingRole != RemotingRole.ServerWeb)
-                    {
-                        //Notify the user that their plug-in is not loaded.
-                        MessageBox.Show("Error loading Plugin:" + program.PluginDllName + "\r\n" + ex.Message);
-                    }
+
+                    //Notify the user that their plug-in is not loaded.
+                    MessageBox.Show("Error loading Plugin:" + program.PluginDllName + "\r\n" + ex.Message);
+
                     continue;//Don't add it to plugin list.
                 }
                 //The plug-in was successfully loaded and will start getting hook notifications.  Add it to the list of loaded plug-ins.

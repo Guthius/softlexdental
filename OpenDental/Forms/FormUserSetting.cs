@@ -11,7 +11,6 @@ namespace OpenDental {
 	/// </summary>
 	public partial class FormUserSetting:ODForm {
 		private UserOdPref _suppressLogOffMessage;
-		private UserOdPref _themePref=null;
 
 		public FormUserSetting() {
 			InitializeComponent();

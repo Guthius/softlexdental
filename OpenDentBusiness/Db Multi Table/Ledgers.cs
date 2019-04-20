@@ -19,9 +19,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a rough guess on how long RunAging() will take in milliseconds based on the amount of data within certain tables that are used to compute aging.</summary>
 		public static double GetAgingComputationTime() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetDouble(MethodBase.GetCurrentMethod());
-			}
 			//Factor of 0.0042680625638876 was discovered by timing aging on a large database.  It proved to be very accurate when tested on other databases.
 			//A large database with 6091757 rows in the following tables took on average 26 seconds (26000 ms) to run aging.  26000(ms) / 6091757(rows) = 0.0042680625638876
 			string command=@"SELECT ((SELECT COUNT(*) FROM patient)
@@ -212,9 +209,6 @@ namespace OpenDentBusiness{
 
 		///<summary>Generates a dictionary where the Key:PatNum and Val:FamilyBalance for passed-in guarantors.</summary>
 		public static Dictionary<long,double> GetBalancesForFamilies(List<long> listGuarantorNums) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetSerializableDictionary<long,double>(MethodBase.GetCurrentMethod(),listGuarantorNums);
-			}
 			string command = GetAgingQueryString(DateTime.Today,listGuarantorNums);
 			return Db.GetTable(command).Rows.OfType<DataRow>().ToDictionary(x => PIn.Long(x["PatNum"].ToString()),y => PIn.Double(y["BalTotal"].ToString()));
 		}
@@ -539,9 +533,6 @@ namespace OpenDentBusiness{
 		}
 
 		public static List<TsiTrans> GetTransForGuars(List<long> listGuarNums) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<TsiTrans>>(MethodBase.GetCurrentMethod(),listGuarNums);
-			}
 			string familyPatNums="";
 			string command="";
 			if(listGuarNums!=null && listGuarNums.Count>0) {
@@ -573,13 +564,10 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the earliest date of any portion of the current balance for all guarantors in the database.  Used for A/R Manager (Transworld).
 		///Returns SerializableDictionary&lt;long,DateTime> with Key=GuarNum, Value=earliest date of balance or MinValue if no balance.</summary>
-		public static SerializableDictionary<long,DateTime> GetDateBalanceBegan() {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetSerializableDictionary<long,DateTime>(MethodBase.GetCurrentMethod());
-			}
+		public static Dictionary<long,DateTime> GetDateBalanceBegan() {
 			return GetGuarDateBals(DateTime.Today)//Create a dictionary that tells a story about the transactions and their dates for each family.
 				//find the earliest trans that uses up the account credits and is therefore the trans date for which the account balance is "first" positive
-				.ToSerializableDictionary(x => x.Key,x => x.Value.Where(y => y.Bal>0.005).Select(y => y.TranDate).DefaultIfEmpty(DateTime.MinValue).Min());
+				.ToDictionary(x => x.Key,x => x.Value.Where(y => y.Bal>0.005).Select(y => y.TranDate).DefaultIfEmpty(DateTime.MinValue).Min());
 		}
 		
 		///<summary>Returns a data table with columns: PatNum, DateAccountAge, DateZeroBal, and ClinicNum.  If listGuarantors is empty or null, gets for
@@ -587,9 +575,6 @@ namespace OpenDentBusiness{
 		///first trans date after the most recent date the balance for the family was 0.  Both dates will be DateTime.MinValue if the family has no
 		///balance.  PatNum and ClinicNum are for the guarantor of the family or superhead.</summary>
 		public static DataTable GetDateBalanceBegan(List<PatAging> listGuarantors,DateTime dateAsOf,bool isSuperBills,List<long> listClinicNums=null) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetTable(MethodBase.GetCurrentMethod(),listGuarantors,dateAsOf,isSuperBills,listClinicNums);
-			}
 			DataTable retval=new DataTable();
 			retval.Columns.Add("PatNum");
 			retval.Columns.Add("DateAccountAge");

@@ -34,24 +34,7 @@ namespace OpenDentBusiness {
 		///<summary>Perform the given action in the context of the webforms db.</summary>
 		public static void RunMobileWebForms(Action a) {
 			Run(a,ConnectionNames.WebForms);
-		}
-
-		///<summary>Perform the given action as a Middle Tier client using OpenDentalServerMockIIS.</summary>
-		public static void RunMiddleTierMock(Action a) {
-			RemotingRole remotingRolePrevious=RemotingClient.RemotingRole;
-			OpenDentBusiness.WebServices.OpenDentalServerMockIIS mockPrevious=OpenDentBusiness.WebServices.OpenDentalServerProxy.MockOpenDentalServerCur;
-			if(mockPrevious==null) {
-				OpenDentBusiness.WebServices.OpenDentalServerProxy.MockOpenDentalServerCur=new OpenDentBusiness.WebServices.OpenDentalServerMockIIS();
-			}
-			RemotingClient.RemotingRole=RemotingRole.ClientWeb;
-			try {
-				a();
-			}
-			finally {
-				OpenDentBusiness.WebServices.OpenDentalServerProxy.MockOpenDentalServerCur=mockPrevious;
-				RemotingClient.RemotingRole=remotingRolePrevious;
-			}
-		}		
+		}	
 
 		/// <summary>Perform the given action in the context of the manual publisher database.</summary>
 		public static void RunManualPublisher(Action a) {

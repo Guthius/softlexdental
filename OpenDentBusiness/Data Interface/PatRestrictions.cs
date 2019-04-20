@@ -5,29 +5,30 @@ using System.Reflection;
 using System.Text;
 
 namespace OpenDentBusiness {
-	///<summary></summary>
-	public class PatRestrictions{
-		#region Get Methods
-		#endregion
+    ///<summary></summary>
+    public class PatRestrictions
+    {
+        #region Get Methods
+        #endregion
 
-		#region Modification Methods
-		
-		#region Insert
-		#endregion
+        #region Modification Methods
 
-		#region Update
-		#endregion
+        #region Insert
+        #endregion
 
-		#region Delete
-		#endregion
+        #region Update
+        #endregion
 
-		#endregion
+        #region Delete
+        #endregion
 
-		#region Misc Methods
-		#endregion
+        #endregion
 
-		//If this table type will exist as cached data, uncomment the CachePattern region below and edit.
-		/*
+        #region Misc Methods
+        #endregion
+
+        //If this table type will exist as cached data, uncomment the CachePattern region below and edit.
+        /*
 		#region CachePattern
 
 		private class PatRestrictionCache : CacheListAbs<PatRestriction> {
@@ -106,68 +107,64 @@ namespace OpenDentBusiness {
 		#endregion
 		*/
 
-		///<summary>Gets all patrestrictions for the specified patient.</summary>
-		public static List<PatRestriction> GetAllForPat(long patNum) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb) {
-				return Meth.GetObject<List<PatRestriction>>(MethodBase.GetCurrentMethod(),patNum);
-			}
-			string command="SELECT * FROM patrestriction WHERE PatNum="+POut.Long(patNum);
-			return Crud.PatRestrictionCrud.SelectMany(command);
-		}
+        ///<summary>Gets all patrestrictions for the specified patient.</summary>
+        public static List<PatRestriction> GetAllForPat(long patNum)
+        {
+            string command = "SELECT * FROM patrestriction WHERE PatNum=" + POut.Long(patNum);
+            return Crud.PatRestrictionCrud.SelectMany(command);
+        }
 
-		///<summary>This will only insert a new PatRestriction if there is not already an existing PatRestriction in the db for this patient and type.
-		///If exists, returns the PatRestrictionNum of the first one found.  Otherwise returns the PatRestrictionNum of the newly inserted one.</summary>
-		public static long Upsert(long patNum,PatRestrict patRestrictType) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetLong(MethodBase.GetCurrentMethod(),patNum,patRestrictType);
-			}
-			List<PatRestriction> listPatRestricts=GetAllForPat(patNum).FindAll(x => x.PatRestrictType==patRestrictType);
-			if(listPatRestricts.Count>0) {
-				return listPatRestricts[0].PatRestrictionNum;
-			}
-			return Crud.PatRestrictionCrud.Insert(new PatRestriction() { PatNum=patNum,PatRestrictType=patRestrictType });
-		}
+        ///<summary>This will only insert a new PatRestriction if there is not already an existing PatRestriction in the db for this patient and type.
+        ///If exists, returns the PatRestrictionNum of the first one found.  Otherwise returns the PatRestrictionNum of the newly inserted one.</summary>
+        public static long Upsert(long patNum, PatRestrict patRestrictType)
+        {
+            List<PatRestriction> listPatRestricts = GetAllForPat(patNum).FindAll(x => x.PatRestrictType == patRestrictType);
+            if (listPatRestricts.Count > 0)
+            {
+                return listPatRestricts[0].PatRestrictionNum;
+            }
+            return Crud.PatRestrictionCrud.Insert(new PatRestriction() { PatNum = patNum, PatRestrictType = patRestrictType });
+        }
 
-		///<summary>Checks for an existing patrestriction for the specified patient and PatRestrictType.
-		///If one exists, returns true (IsRestricted).  If none exist, returns false (!IsRestricted).</summary>
-		public static bool IsRestricted(long patNum,PatRestrict patRestrictType) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				return Meth.GetBool(MethodBase.GetCurrentMethod(),patNum,patRestrictType);
-			}
-			string command="SELECT COUNT(*) FROM patrestriction WHERE PatNum="+POut.Long(patNum)+" AND PatRestrictType="+POut.Int((int)patRestrictType);
-			if(PIn.Int(Db.GetCount(command))>0) {
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
+        ///<summary>Checks for an existing patrestriction for the specified patient and PatRestrictType.
+        ///If one exists, returns true (IsRestricted).  If none exist, returns false (!IsRestricted).</summary>
+        public static bool IsRestricted(long patNum, PatRestrict patRestrictType)
+        {
+            string command = "SELECT COUNT(*) FROM patrestriction WHERE PatNum=" + POut.Long(patNum) + " AND PatRestrictType=" + POut.Int((int)patRestrictType);
+            if (PIn.Int(Db.GetCount(command)) > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
-		///<summary>Gets the human readable description of the patrestriction, passed through Lans.g.
-		///Returns empty string if the enum was not found in the switch statement.</summary>
-		public static string GetPatRestrictDesc(PatRestrict patRestrictType) {
-			switch(patRestrictType) {
-				case PatRestrict.ApptSchedule:
-					return Lans.g("patRestrictEnum","Appointment Scheduling");
-				case PatRestrict.None:
-				default:
-					return "";
-			}
-		}
+        ///<summary>Gets the human readable description of the patrestriction, passed through Lans.g.
+        ///Returns empty string if the enum was not found in the switch statement.</summary>
+        public static string GetPatRestrictDesc(PatRestrict patRestrictType)
+        {
+            switch (patRestrictType)
+            {
+                case PatRestrict.ApptSchedule:
+                    return Lans.g("patRestrictEnum", "Appointment Scheduling");
+                case PatRestrict.None:
+                default:
+                    return "";
+            }
+        }
 
-		///<summary>Deletes any patrestrictions for the specified patient and type.</summary>
-		public static void RemovePatRestriction(long patNum,PatRestrict patRestrictType) {
-			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
-				Meth.GetVoid(MethodBase.GetCurrentMethod(),patNum,patRestrictType);
-				return;
-			}
-			string command="DELETE FROM patrestriction WHERE PatNum="+POut.Long(patNum)+" AND PatRestrictType="+POut.Int((int)patRestrictType);
-			Db.NonQ(command);
-			return;
-		}
+        ///<summary>Deletes any patrestrictions for the specified patient and type.</summary>
+        public static void RemovePatRestriction(long patNum, PatRestrict patRestrictType)
+        {
+            string command = "DELETE FROM patrestriction WHERE PatNum=" + POut.Long(patNum) + " AND PatRestrictType=" + POut.Int((int)patRestrictType);
+            Db.NonQ(command);
+            return;
+        }
 
-		//Only pull out the methods below as you need them.  Otherwise, leave them commented out.
-		/*
+        //Only pull out the methods below as you need them.  Otherwise, leave them commented out.
+        /*
 		///<summary>Gets one PatRestriction from the db.</summary>
 		public static PatRestriction GetOne(long patRestrictionNum){
 			if(RemotingClient.RemotingRole==RemotingRole.ClientWeb){
@@ -197,5 +194,5 @@ namespace OpenDentBusiness {
 
 
 
-	}
+    }
 }
