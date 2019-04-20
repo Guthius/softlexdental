@@ -161,16 +161,16 @@ namespace OpenDental {
 								|| x.CodeSent==proc.ProcCodeBilled
 								&& (decimal)x.FeeBilled==proc.ProcFee
 								&& x.Status==ClaimProcStatus.Received
-								&& x.Tag==null)
+								&& x.ODTag == null)
 							);
 							if(claimProcForClaim==null) {
 								continue;
 							}
-							claimProcForClaim.Tag=true;
+							claimProcForClaim.ODTag = true;
 						}
 					}
 					//Remove all claimProcs that were not matched, to avoid entering payment on unmatched claimprocs.
-					listClaimCopyProcs.RemoveAll(x => x.Tag==null);
+					listClaimCopyProcs.RemoveAll(x => x.ODTag == null);
 				}
 				//Selection logic inside ClaimProcs.CreateSuppClaimProcs() mimics FormClaimEdit "Supplemental" button click.
 				listClaimProcsToEdit=ClaimProcs.CreateSuppClaimProcs(listClaimCopyProcs,claimPaid.IsReversal,false);
@@ -185,12 +185,12 @@ namespace OpenDental {
 						|| (x.CodeSent==proc.ProcCodeBilled 
 						&& (decimal)x.FeeBilled==proc.ProcFee
 						&& x.Status==ClaimProcStatus.NotReceived
-						&& x.Tag==null))
+						&& x.ODTag == null))
 					);
 					if(claimProcFromClaim==null) {//Not found, By Total payment row will be inserted.
 						continue;
 					}
-					claimProcFromClaim.Tag=true;
+					claimProcFromClaim.ODTag = true;
 					listClaimProcsToEdit.Add(claimProcFromClaim);
 				}
 			}
@@ -386,7 +386,7 @@ namespace OpenDental {
 					claimCur=new Claim();//ClaimNum will be 0, indicating that this is not a real claim.
 					listClaims[index]=claimCur;
 				}
-				claimCur.Tag=claim;
+				claimCur.ODTag = claim;
 			}
 			#endregion
 			if(listClaims.Count==0) {
@@ -410,7 +410,7 @@ namespace OpenDental {
 					if(listClaims.Exists(x => x.ClaimNum==0)) {//There is a claim that could not be found in the DB. Must consider Hx835_Claims.PatientName lengths.
 						maxX835NameLength=listClaims
 						.Where(x => x.ClaimNum==0)
-						.Max(x => ((Hx835_Claim)x.Tag).PatientName.ToString().Length);
+						.Max(x => ((Hx835_Claim)x.ODTag).PatientName.ToString().Length);
 					}
 					int maxColumnLength=Math.Max(maxNamesLength,maxX835NameLength);
 					#endregion
@@ -422,7 +422,7 @@ namespace OpenDental {
 					msg+="-------------------------------------------------------------------\r\n";
 					for(int i = 0;i<listClaims.Count;i++) {
 						if(listClaims[i].ClaimNum==0) {//Current claim was not found in DB and was not detached, so we will use the Hx835_Claim object to get name.
-							Hx835_Claim xClaimCur=(Hx835_Claim)listClaims[i].Tag;
+							Hx835_Claim xClaimCur=(Hx835_Claim)listClaims[i].ODTag;
 							msg+="".PadRight(patNumColumnLength)+"\t"//Blank PatNum because unknown.
 								+xClaimCur.PatientName.ToString().PadRight(maxColumnLength)+"\t"
 								+xClaimCur.DateServiceStart.ToShortDateString()+"\t"

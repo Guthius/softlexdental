@@ -59,7 +59,7 @@ namespace OpenDentBusiness{
 		public decimal AccountEntryAmtPaid;
 
 		public PaySplit() {
-			Tag=Guid.NewGuid().ToString();//Used to identify PaySplits that have not been entered into the database yet.
+            ODTag = Guid.NewGuid().ToString();//Used to identify PaySplits that have not been entered into the database yet.
 		}
 
 		///<summary>Returns a copy of this PaySplit.</summary>
@@ -72,7 +72,7 @@ namespace OpenDentBusiness{
 			if(this.SplitNum==otherSplit.SplitNum && this.SplitNum!=0) {
 				return true;
 			}
-			if(this.Tag==otherSplit.Tag) {
+			if(this.ODTag == otherSplit.ODTag) {
 				return true;
 			}
 			return false;

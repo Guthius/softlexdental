@@ -999,13 +999,13 @@ namespace OpenDental{
 			for(int i=0;i<ProcTPSelectList.Length;i++) {
 				row=new TpRow();
 				isDone=false;
-				if(ProcTPSelectList[i].Tag==null) {
-					ProcTPSelectList[i].Tag=0L;
+				if(ProcTPSelectList[i].ODTag == null) {
+					ProcTPSelectList[i].ODTag=0L;
 				}
 				for(int j=0;j<ProcList.Count;j++) {
 					if(ProcList[j].ProcNum==ProcTPSelectList[i].ProcNumOrig) {
-						if((long)ProcTPSelectList[i].Tag==0) {
-							ProcTPSelectList[i].Tag=ProcList[j].ProcNumLab;
+						if((long)ProcTPSelectList[i].ODTag == 0) {
+							ProcTPSelectList[i].ODTag = ProcList[j].ProcNumLab;
 						}
 						if(ProcList[j].ProcStatus==ProcStat.C) {
 							isDone=true;
@@ -1625,13 +1625,13 @@ namespace OpenDental{
 			if(!CultureInfo.CurrentCulture.Name.EndsWith("CA")) {
 				return;
 			}
-			long selectedProcNumLab=(long)selectedProcTp.Tag;//0 or FK to parent proc
+			long selectedProcNumLab=(long)selectedProcTp.ODTag;//0 or FK to parent proc
 			for(int i=0;i<gridMain.Rows.Count;i++) {
 				if(gridMain.Rows[i].Tag==null){
 					continue;//skip any hightlighted subtotal lines
 				}
 				long rowProcNumOrig=((ProcTP)gridMain.Rows[i].Tag).ProcNumOrig;
-				long rowParentProcNum=(long)((ProcTP)gridMain.Rows[i].Tag).Tag;//0 or FK to parent proc
+				long rowParentProcNum=(long)((ProcTP)gridMain.Rows[i].Tag).ODTag;//0 or FK to parent proc
 				if(rowProcNumOrig==selectedProcNumLab //User clicked lab, select parent proc too.
 					|| (rowParentProcNum!=0 && rowParentProcNum==selectedProcNumLab)//User clicked lab, select other labs associated to same parent proc.
 					|| (selectedProcTp.ProcNumOrig==rowParentProcNum))//User clicked parent, select associated lab procs.
@@ -2348,7 +2348,7 @@ namespace OpenDental{
 				procTP.FeeAllowed=PIn.Double(row.FeeAllowed.ToString());
 				procTP.TaxAmt=PIn.Double(row.TaxEst.ToString());
 				retVal.Add(procTP);
-				procTP.Tag=proc.ProcNumLab;//Used for selection logic. See gridMain_CellClick(...).
+				procTP.ODTag = proc.ProcNumLab;//Used for selection logic. See gridMain_CellClick(...).
 				row.Tag=procTP;
 				RowsMain.Add(row);
 				#region subtotal

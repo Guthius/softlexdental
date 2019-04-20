@@ -2572,7 +2572,7 @@ namespace OpenDental
                     bool procAlreadyAttached;
                     try
                     {
-                        ODTuple<Appointment, bool> aptTuple = Appointments.SchedulePlannedApt(aptCur, PatCur, listApptFields, aptCur.AptDateTime, aptCur.Op);//Appointments S-Class handles Signalods
+                        Tuple<Appointment, bool> aptTuple = Appointments.SchedulePlannedApt(aptCur, PatCur, listApptFields, aptCur.AptDateTime, aptCur.Op);//Appointments S-Class handles Signalods
                         aptCur = aptTuple.Item1;
                         procAlreadyAttached = aptTuple.Item2;
                         isCreate = true;
@@ -5633,7 +5633,7 @@ namespace OpenDental
             }
             #endregion Provider Term Date Check
             bool removeCompletedProcs = ProcedureL.DoRemoveCompletedProcs(apt, listProcs.FindAll(x => x.ProcStatus == ProcStat.C));
-            ODTuple<Appointment, List<Procedure>> result = Appointments.CompleteClick(apt, listProcs, removeCompletedProcs);
+            Tuple<Appointment, List<Procedure>> result = Appointments.CompleteClick(apt, listProcs, removeCompletedProcs);
             apt = result.Item1;
             listProcs = result.Item2;
             if (apt.AptStatus != ApptStatus.PtNote)

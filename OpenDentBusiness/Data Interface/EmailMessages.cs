@@ -3357,7 +3357,11 @@ b21wb25lbnQ+DQogICA8L2NvbXBvbmVudD4NCjwvQ2xpbmljYWxEb2N1bWVudD4=
             return true;
         }
 
-        ///<summary>This is required by the interface.</summary>
+        /// <summary>
+        /// This is required by the interface.
+        /// </summary>
+        #pragma warning disable 67
         public event Action<ICertificateResolver, Exception> Error;
+        #pragma warning restore 67
     }
 }

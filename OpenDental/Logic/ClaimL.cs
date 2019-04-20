@@ -378,7 +378,7 @@ namespace OpenDental {
 				default:
 					break;
 			}
-			ODTuple<bool,Claim,string> result=AccountModules.CreateClaim(claimCur,claimType,createClaimDataWrapper.ClaimData.ListPatPlans
+            Tuple<bool,Claim,string> result=AccountModules.CreateClaim(claimCur,claimType,createClaimDataWrapper.ClaimData.ListPatPlans
 				,createClaimDataWrapper.ClaimData.ListInsPlans,createClaimDataWrapper.ClaimData.ListClaimProcs,createClaimDataWrapper.ClaimData.ListProcs
 				,createClaimDataWrapper.ClaimData.ListInsSubs,pat,createClaimDataWrapper.ClaimData.PatNote,listSelectedProcs
 				,createClaimDataWrapper.ErrorMessage,PlanCur,SubCur,relatOther);

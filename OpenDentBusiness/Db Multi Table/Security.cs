@@ -358,7 +358,6 @@ namespace OpenDentBusiness
 
         private static Permissions PermofModule(int i)
         {
-            //No need to check RemotingRole; no call to db.
             switch (i)
             {
                 case 0:

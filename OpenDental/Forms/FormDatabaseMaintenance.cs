@@ -1489,7 +1489,7 @@ namespace OpenDental {
 			bool verbose=checkShow.Checked;
 			StringBuilder logText=new StringBuilder();
 			//Create a window that will stay open until the thread doing the work is complete
-			ODTuple<string,bool> tableCheckResult=null;
+			Tuple<string,bool> tableCheckResult=null;
 			ODProgress.ShowAction(() => tableCheckResult=DatabaseMaintenances.MySQLTables(verbose,modeCur),
 				eventType:typeof(DatabaseMaintEvent),
 				odEventType:ODEventType.DatabaseMaint);

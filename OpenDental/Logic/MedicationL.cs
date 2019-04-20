@@ -22,9 +22,9 @@ namespace OpenDental {
 
 		///<summary>Inserts any new medications in listNewMeds, as well as updating any existing medications in listExistingMeds in conflict with 
 		///the corresponding new medication.</summary>
-		public static int ImportMedications(List<ODTuple<Medication,string>> listImportMeds,List<Medication> listMedsExisting) {
+		public static int ImportMedications(List<Tuple<Medication,string>> listImportMeds,List<Medication> listMedsExisting) {
 			int countImportedMedications=0;
-			foreach(ODTuple<Medication,string> medGenPair in listImportMeds) {//Loop through new medications/given generic name pairs.
+			foreach(Tuple<Medication,string> medGenPair in listImportMeds) {//Loop through new medications/given generic name pairs.
 				//Find any duplicate existing medications with the new medication
 				if(IsDuplicateMed(medGenPair,listMedsExisting)) {
 					continue;//medNew already exists, skip it.
@@ -43,7 +43,7 @@ namespace OpenDental {
 		///A duplicate is defined as MedName is equal, GenericName is equal, RxCui is equal and either Notes is equal or not defined.
 		///A new medication with all properties being equal to an existing medication except with a blank Notes property is considered to be a 
 		///duplicate, as it is likely the existing Medication is simply a user edited version of the same Medication.</summary>
-		private static bool IsDuplicateMed(ODTuple<Medication,string> medGenNamePair,List<Medication> listMedsExisting) {
+		private static bool IsDuplicateMed(Tuple<Medication,string> medGenNamePair,List<Medication> listMedsExisting) {
 			Medication med=medGenNamePair.Item1;
 			string genericName=medGenNamePair.Item2;
 			bool isNoteChecked=true;
@@ -62,7 +62,7 @@ namespace OpenDental {
 		///<summary>Inserts the given medNew.
 		///Given medGennamePair is a medication that we are checking and the given generic name if set.
 		///ListMedsExisting is used to identify the GenericNum for medNew.</summary>
-		private static void InsertNewMed(ODTuple<Medication,string> medGenNamePair,List<Medication> listMedsExisting) {
+		private static void InsertNewMed(Tuple<Medication,string> medGenNamePair,List<Medication> listMedsExisting) {
 			Medication medNew=medGenNamePair.Item1;
 			string genericName=medGenNamePair.Item2;
 			long genNum=listMedsExisting.FirstOrDefault(x => x.MedName==genericName)?.MedicationNum??0;
@@ -100,8 +100,8 @@ namespace OpenDental {
 		///Returns the list of new medications with all generic medications before brand medications.
 		///File required to be formatted such that each row contain: MedName\tGenericName\tNotes\tRxCui
 		///</summary>
-		public static List<ODTuple<Medication,string>> GetMedicationsFromFile(string filename,bool isTempFile=false) {
-			List<ODTuple<Medication,string>> listMedsNew=new List<ODTuple<Medication,string>>();
+		public static List<Tuple<Medication,string>> GetMedicationsFromFile(string filename,bool isTempFile=false) {
+			List<Tuple<Medication,string>> listMedsNew=new List<Tuple<Medication,string>>();
 			if(string.IsNullOrEmpty(filename)) {
 				return listMedsNew;	
 			}
@@ -119,7 +119,7 @@ namespace OpenDental {
 				string genericName=PIn.String(medLine[1]).Trim();//GenericName, not a field in Medication.cs but used for matching.
 				medication.Notes=PIn.String(medLine[2]).Trim();//Notes
 				medication.RxCui=PIn.Long(medLine[3]);//RxCui
-				listMedsNew.Add(new ODTuple<Medication, string>(medication,genericName));
+				listMedsNew.Add(new Tuple<Medication, string>(medication,genericName));
 			}
 			return SortMedGenericsFirst(listMedsNew);
 		}
@@ -146,10 +146,10 @@ namespace OpenDental {
 
 		///<summary>Custom sorting so that generic medications are above branded medications.
 		///Given list elements are a ODTuple of a medication and the given generic name if set.</summary>
-		private static List<ODTuple<Medication,string>> SortMedGenericsFirst(List<ODTuple<Medication,string>> listMedLines) {
-			List<ODTuple<Medication,string>> listMedGeneric=new List<ODTuple<Medication,string>>();
-			List<ODTuple<Medication,string>> listMedBranded=new List<ODTuple<Medication,string>>();
-			foreach(ODTuple<Medication,string> pair in listMedLines) {
+		private static List<Tuple<Medication,string>> SortMedGenericsFirst(List<Tuple<Medication,string>> listMedLines) {
+			List<Tuple<Medication,string>> listMedGeneric=new List<Tuple<Medication,string>>();
+			List<Tuple<Medication,string>> listMedBranded=new List<Tuple<Medication,string>>();
+			foreach(Tuple<Medication,string> pair in listMedLines) {
 				Medication med=pair.Item1;
 				string genericName=pair.Item2;
 				if(med.MedName.ToLower().In(genericName.ToLower(),"")) {//Generic if names directly match, or assume generic if no genericName provided.

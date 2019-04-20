@@ -417,7 +417,7 @@ namespace OpenDental{
 			#endregion
 			#region Determine if any appts conflict exist and potentially show them
 			//List of all appointments for all child ops. If conflict was detected the appointments OperatoryNum will bet set to -1
-			List<ODTuple<Appointment,bool>> listTupleApptsToMerge=Operatories.MergeApptCheck(masterOpNum,listSelectedOpNums.FindAll(x => x!=masterOpNum));
+			List<Tuple<Appointment,bool>> listTupleApptsToMerge=Operatories.MergeApptCheck(masterOpNum,listSelectedOpNums.FindAll(x => x!=masterOpNum));
 			ListConflictingAppts=listTupleApptsToMerge.Where(x => x.Item2).Select(x => x.Item1).ToList();
 			List<Appointment> listApptsToMerge=listTupleApptsToMerge.Select(x => x.Item1).ToList();
 			if(ListConflictingAppts.Count > 0) {//Appointments conflicts exist, can not merge

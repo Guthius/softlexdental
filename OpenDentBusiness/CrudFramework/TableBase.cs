@@ -27,7 +27,7 @@ namespace OpenDentBusiness
         /// Tag can be useful when you need to associate this object to another object and do not have a control Tag.
         /// </summary>
         [XmlIgnore]
-        public object Tag { get; set; }
+        public object ODTag { get; set; }
 
         /// <summary>
         /// We cannot make the returned value too large, because we want to allow the server to 

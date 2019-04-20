@@ -518,7 +518,7 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.Setup)) {
 				return;
 			}
-			List<ODTuple<Medication,string>> listImportMeds=new List<ODTuple<Medication,string>>();
+			List<Tuple<Medication,string>> listImportMeds=new List<Tuple<Medication,string>>();
 			//Leaving code here to include later when we have developed a default medications list available for download.
 			//if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Click Yes to download and import default medication list.\r\nClick No to import from a file.")) {
 			//	Cursor=Cursors.WaitCursor;
@@ -551,8 +551,8 @@ namespace OpenDental{
 
 		///<summary>Attempts to download the default medication list from HQ.
 		///If there is an exception returns an empty list after showing the user an error prompt.</summary>
-		private List<ODTuple<Medication,string>> DownloadDefaultMedications() {
-			List<ODTuple<Medication,string>> listMedsNew=new List<ODTuple<Medication,string>>();
+		private List<Tuple<Medication,string>> DownloadDefaultMedications() {
+			List<Tuple<Medication,string>> listMedsNew=new List<Tuple<Medication,string>>();
 			string tempFile="";
 			try {
 				tempFile=MedicationL.DownloadDefaultMedicationsFile();

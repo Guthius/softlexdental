@@ -1398,7 +1398,7 @@ namespace OpenDental{
 					return;
 				}
 			}
-			ODTuple<List<Procedure>,List<Procedure>> result=ApptEdit.QuickAddProcs(AptCur,pat,codes.ToList(),_selectedProvNum,_selectedProvHygNum,SubList,
+			Tuple<List<Procedure>,List<Procedure>> result=ApptEdit.QuickAddProcs(AptCur,pat,codes.ToList(),_selectedProvNum,_selectedProvHygNum,SubList,
 				PlanList,_listPatPlans,_benefitList);
 			List<Procedure> listAddedProcs=result.Item1;
 			_listProcsForAppt=result.Item2;

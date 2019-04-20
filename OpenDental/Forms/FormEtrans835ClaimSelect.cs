@@ -214,13 +214,13 @@ namespace OpenDental {
 						|| (x.CodeSent==proc.ProcCodeBilled
 						&& (decimal)x.FeeBilled==proc.ProcFee
 						&& (isSupplemental && x.Status==ClaimProcStatus.Received || !isSupplemental && x.Status==ClaimProcStatus.NotReceived)
-						&& x.Tag==null))
+						&& x.ODTag == null))
 					);
 				if(claimProc==null) {//Not found
 					listUnMatchedEraProcs.Add(proc);
 				}
 				else {
-					claimProc.Tag=true;//Flag set to indicate that claimProc has been handled
+					claimProc.ODTag = true;//Flag set to indicate that claimProc has been handled
 					listMatchedEraProcs.Add(new Tuple<Hx835_Proc,ClaimProc>(proc,claimProc));
 				}
 			}
@@ -265,7 +265,7 @@ namespace OpenDental {
 			#endregion
 			#region Claim claimProcs that could not be matched.
 			foreach(ClaimProc claimProc in _listClaimProcsForClaim) {
-				if(claimProc.Tag!=null) {
+				if(claimProc.ODTag != null) {
 					continue;
 				}
 				UI.ODGridRow row=new UI.ODGridRow();
@@ -349,7 +349,7 @@ namespace OpenDental {
 						x.ProcNum!=0 && ((x.ProcNum==proc.ProcNum)//Consider using Hx835_Proc.TryGetMatchedClaimProc(...)
 						|| (x.CodeSent==proc.ProcCodeBilled 
 						&& (decimal)x.FeeBilled==proc.ProcFee
-						&& x.Tag!=null))//Tag set in FillClaimDetails(...)
+						&& x.ODTag != null))//Tag set in FillClaimDetails(...)
 					);
 				if(matchedClaimProc==null){
 					return false;//The ERA proc could not be matched to any of the selected claims claim procs.

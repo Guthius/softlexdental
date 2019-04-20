@@ -1314,7 +1314,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select at least one claim to assign a user.");
 				return;
 			}
-			List<ODTuple<long,long>> listTrackingNumsAndClaimNums=new List<ODTuple<long,long>>();
+			List<Tuple<long,long>> listTrackingNumsAndClaimNums=new List<Tuple<long,long>>();
 			foreach(int index in gridMain.SelectedIndices) {
 				RpOutstandingIns.OutstandingInsClaim outstandingInsClaim = (RpOutstandingIns.OutstandingInsClaim)gridMain.Rows[index].Tag;
 				long claimTrackingNum=_listNewClaimTrackings.FirstOrDefault(x => x.ClaimNum==outstandingInsClaim.ClaimNum)?.ClaimTrackingNum??0;

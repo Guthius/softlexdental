@@ -1075,26 +1075,12 @@ namespace OpenDental {
 		}
 
 		///<summary>Holds the start and end char indices for the currently visible text.</summary>
-		public class CharBounds:ODTuple<int,int> {
-			public int StartCharIndex {
-				get {
-					return Item1;
-				}
-				set {
-					Item1=value;
-				}
-			}
+		public class CharBounds {
+            public int StartCharIndex { get; set; }
 
-			public int EndCharIndex {
-				get {
-					return Item2;
-				}
-				set {
-					Item2=value;
-				}
-			}
+            public int EndCharIndex { get; set; }
 
-			public CharBounds(int startCharIndex,int endCharIndex) : base(startCharIndex,endCharIndex) {
+            public CharBounds(int startCharIndex,int endCharIndex) {
 
 			}
 		}
