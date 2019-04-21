@@ -1490,13 +1490,9 @@ namespace OpenDental.InternalTools.Job_Manager {
 		}
 
 		private void butCommlog_Click(object sender,EventArgs e) {
-			FormCommItem FormCI=new FormCommItem();
-			if(FormCI.ShowDialog(
-				new CommItemModel() { CommlogCur=GetNewCommlog() },
-				new CommItemController(FormCI) { IsNew=true })==DialogResult.OK) 
-			{
-				//Do Nothing
-			}
+			FormCommItem FormCI=new FormCommItem(GetNewCommlog());
+            FormCI.IsNew = true;
+            FormCI.ShowDialog();
 		}
 
 		///<summary>This is a helper method to get a new commlog object for the commlog tool bar buttons.</summary>

@@ -776,12 +776,12 @@ namespace OpenDental {
 				_commlog.UserNum=Security.CurUser.UserNum;
 				_commlog.IsNew=true;
 			}
-			FormCommItem FormCI=new FormCommItem();
-			if(FormCI.ShowDialog(
-				new CommItemModel() { CommlogCur=_commlog },
-				new CommItemController(FormCI) { IsNew=_commlog.IsNew })==DialogResult.OK) 
+			FormCommItem FormCI=new FormCommItem(_commlog);
+            FormCI.IsNew = _commlog.IsNew;
+
+            if (FormCI.ShowDialog()==DialogResult.OK) 
 			{
-				_commlog=FormCI.Model.CommlogCur;
+				_commlog=FormCI.CommlogCur;
 				//if the commlog was deleted, clear the stored object
 				if(_commlog==null || Commlogs.GetOne(_commlog.CommlogNum)==null) {
 					_commlog=null;

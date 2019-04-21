@@ -4208,10 +4208,9 @@ namespace OpenDental
             {
                 return;
             }
-            FormCommItem FormCI = new FormCommItem();
-            if (FormCI.ShowDialog(
-                new CommItemModel() { CommlogCur = GetNewCommlog() },
-                new CommItemController(FormCI) { IsNew = true }) == DialogResult.OK)
+            FormCommItem FormCI = new FormCommItem(GetNewCommlog());
+            FormCI.IsNew = true;
+            if (FormCI.ShowDialog() == DialogResult.OK)
             {
                 RefreshCurrentModule();
             }
@@ -4226,9 +4225,8 @@ namespace OpenDental
             FormCommItem FormCI = Application.OpenForms.OfType<FormCommItem>().FirstOrDefault(x => !x.IsDisposed);
             if (FormCI == null)
             {
-                FormCI = new FormCommItem();
-                //This manually connects the MVC wiring which will allow use to call Form.Show() below for either case.
-                FormCI.Init(new CommItemModel() { CommlogCur = GetNewCommlog() }, new CommItemController(FormCI) { IsPersistent = true });
+                FormCI = new FormCommItem(GetNewCommlog());
+                FormCI.IsPersistent = true;
             }
             if (FormCI.WindowState == FormWindowState.Minimized)
             {
@@ -6665,11 +6663,9 @@ namespace OpenDental
                 {
                     return;
                 }
-                FormCommItem FormCI = new FormCommItem();
-                CommItemController commItemController = new CommItemController(FormCI);
+                
                 if (commlog == null)
                 {
-                    commItemController.IsNew = true;
                     commlog = new Commlog();
                     commlog.PatNum = CurPatNum;
                     commlog.CommDateTime = DateTime.Now;
@@ -6677,8 +6673,11 @@ namespace OpenDental
                     commlog.Mode_ = CommItemMode.Phone;
                     commlog.SentOrReceived = CommSentOrReceived.Received;
                     commlog.UserNum = Security.CurUser.UserNum;
+                    commlog.IsNew = true;
                 }
-                if (FormCI.ShowDialog(new CommItemModel() { CommlogCur = commlog }, commItemController) == DialogResult.OK)
+                FormCommItem FormCI = new FormCommItem(commlog);
+                FormCI.IsNew = commlog.IsNew;
+                if (FormCI.ShowDialog() == DialogResult.OK)
                 {
                     RefreshCurrentModule();
                 }

@@ -5448,10 +5448,8 @@ namespace OpenDental {
 			CommlogCur.Mode_=CommItemMode.Phone;
 			CommlogCur.SentOrReceived=CommSentOrReceived.Received;
 			CommlogCur.UserNum=Security.CurUser.UserNum;
-			FormCommItem FormCI=new FormCommItem();
-			if(FormCI.ShowDialog(new CommItemModel() { CommlogCur=CommlogCur },new CommItemController(FormCI) { IsNew=true })==DialogResult.OK) {
-				ModuleSelected(PatCur.PatNum);
-			}
+			FormCommItem FormCI=new FormCommItem(CommlogCur);
+            FormCI.IsNew = true;
 		}
 
 		private void Tool_EHR_Click(bool onLoadShowOrders) {
@@ -8405,8 +8403,8 @@ namespace OpenDental {
 					MsgBox.Show(this,"This commlog has been deleted by another user.");
 				}
 				else { 
-					FormCommItem FormCI=new FormCommItem();
-					if(FormCI.ShowDialog(new CommItemModel() { CommlogCur=comm },new CommItemController(FormCI))!=DialogResult.OK) {
+					FormCommItem FormCI=new FormCommItem(comm);
+					if(FormCI.ShowDialog()!=DialogResult.OK) {
 						return;
 					}
 				}

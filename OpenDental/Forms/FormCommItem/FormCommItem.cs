@@ -1,357 +1,578 @@
+using CodeBase;
 using OpenDentBusiness;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using CodeBase;
-using System.Threading;
 
-namespace OpenDental {
-	public partial class FormCommItem : BaseFormCommItem {
-		private const string _autoNotePromptRegex=@"\[Prompt:""[a-zA-Z_0-9 ]+""\]";
-		private bool _sigChanged;
-		private bool _isStartingUp;
+namespace OpenDental
+{
+    public partial class FormCommItem : FormBase
+    {
+        bool _sigChanged;
+        bool _isStartingUp;
 
-		public FormCommItem() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        UserOdPref userOdPrefClearNote;
+        UserOdPref userOdPrefEndDate;
+        UserOdPref userOdPrefUpdateDateTimeNewPat;
+        List<Def> commlogTypeDefsList;
 
-		private void FormCommItem_Load(object sender,EventArgs e) {
-			_isStartingUp=true;
-			//there will usually be a commtype set before this dialog is opened
-			for(int i=0;i<_model.ListCommlogTypeDefs.Count;i++){
-				listType.Items.Add(_model.ListCommlogTypeDefs[i].ItemName);
-				if(_model.ListCommlogTypeDefs[i].DefNum==_model.CommlogCur.CommType) {
-					listType.SelectedIndex=i;
-				}
-			}
-			for(int i=0;i<Enum.GetNames(typeof(CommItemMode)).Length;i++){
-				listMode.Items.Add(Lan.g("enumCommItemMode",Enum.GetNames(typeof(CommItemMode))[i]));
-			}
-			for(int i=0;i<Enum.GetNames(typeof(CommSentOrReceived)).Length;i++) {
-				listSentOrReceived.Items.Add(Lan.g("enumCommSentOrReceived",Enum.GetNames(typeof(CommSentOrReceived))[i]));
-			}
-			if(!PrefC.IsODHQ) {
-				labelDateTimeEnd.Visible=false;
-				textDateTimeEnd.Visible=false;
-				butNow.Visible=false;
-				butNowEnd.Visible=false;
-			}
-			if(!Security.IsAuthorized(Permissions.CommlogEdit,_model.CommlogCur.CommDateTime)) {
-				//The user does not have permissions to create or edit commlogs.
-				if(_controller.GetIsNew() || _controller.GetIsPersistent()) {
-					DialogResult=DialogResult.Cancel;
-					Close();
-					return;
-				}
-				butDelete.Enabled=false;
-				butOK.Enabled=false;
-				butEditAutoNote.Enabled=false;
-			}
-			textNote.Select();
-			string keyData=GetSignatureKey();
-			signatureBoxWrapper.FillSignature(_model.CommlogCur.SigIsTopaz,keyData,_model.CommlogCur.Signature);
-			signatureBoxWrapper.BringToFront();
-			butEditAutoNote.Visible=GetHasAutoNotePrompt();
-			if(_controller.GetIsPersistent()) {
-				_controller.RefreshUserOdPrefs();
-				labelCommlogNum.Visible=false;
-				textCommlogNum.Visible=false;
-				butUserPrefs.Visible=true;
-				butOK.Text=Lan.g(this,"Create");
-				butCancel.Text=Lan.g(this,"Close");
-				butDelete.Visible=false;
-			}
-			if(_controller.GetIsNew() && PrefC.GetBool(PrefName.CommLogAutoSave)) {
-				timerAutoSave.Start();
-			}
-			textPatientName.Text=_controller.GetPatientNameFL(_model.CommlogCur.PatNum);
-			textUser.Text=_controller.GetUserodName(_model.CommlogCur.UserNum);
-			textDateTime.Text=_model.CommlogCur.CommDateTime.ToShortDateString()+"  "+_model.CommlogCur.CommDateTime.ToShortTimeString();
-			if(_model.CommlogCur.DateTimeEnd.Year>1880) {
-				textDateTimeEnd.Text=_model.CommlogCur.DateTimeEnd.ToShortDateString()+"  "+_model.CommlogCur.DateTimeEnd.ToShortTimeString();
-			}
-			listMode.SelectedIndex=(int)_model.CommlogCur.Mode_;
-			listSentOrReceived.SelectedIndex=(int)_model.CommlogCur.SentOrReceived;
-			textNote.Text=_model.CommlogCur.Note;
-			textNote.SelectionStart=textNote.Text.Length;
-#if !DEBUG
-			labelCommlogNum.Visible=false;
-			textCommlogNum.Visible=false;
-#endif
-			textCommlogNum.Text=_model.CommlogCur.CommlogNum.ToString();
-			_isStartingUp=false;
-		}
+        public Commlog CommlogCur;
 
-		public bool TryGetCommItem(bool showMsg,out Commlog commlog) {
-			commlog=null;
-			if(!ValidateCommlog(showMsg)) {
-				return false;
-			}
-			CommItemModel model;
-			if(!TryGetModelFromView(out model)) {
-				//Currently the only way for this method to fail is when saving the signature.
-				MsgBox.Show(this,"Error saving signature.");
-				return false;
-			}
-			commlog=model.CommlogCur;
-			return true;
-		}
+        /// <summary>
+        /// Gets or sets a value indicating whether the commlog item is new.
+        /// </summary>
+        public bool IsNew { get; set; }
 
-		public override bool TryGetModelFromView(out CommItemModel model) {
-			model=null;
-			_model.CommlogCur.DateTimeEnd=PIn.DateT(textDateTimeEnd.Text);
-			_model.CommlogCur.CommDateTime=PIn.DateT(textDateTime.Text);
-			//there may not be a commtype selected.
-			if(listType.SelectedIndex==-1) {
-				_model.CommlogCur.CommType=0;
-			}
-			else {
-				_model.CommlogCur.CommType=_model.ListCommlogTypeDefs[listType.SelectedIndex].DefNum;
-			}
-			_model.CommlogCur.Mode_=(CommItemMode)listMode.SelectedIndex;
-			_model.CommlogCur.SentOrReceived=(CommSentOrReceived)listSentOrReceived.SelectedIndex;
-			_model.CommlogCur.Note=textNote.Text;
-			try {
-				if(_sigChanged) {
-					string keyData=GetSignatureKey();
-					_model.CommlogCur.Signature=signatureBoxWrapper.GetSignature(keyData);
-					_model.CommlogCur.SigIsTopaz=signatureBoxWrapper.GetSigIsTopaz();
-				}
-			}
-			catch(Exception) {
-				return false;
-			}
-			model=_model.Copy();
-			return true;
-		}
+        /// <summary>
+        /// Gets or sets a value indicating whether the form is persistent.
+        /// </summary>
+        public bool IsPersistent { get; set; }
 
-		public void SetPatNum(long patNum) {
-			_model.CommlogCur.PatNum=patNum;
-			textPatientName.Text=_controller.GetPatientNameFL(_model.CommlogCur.PatNum);
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormCommItem"/> class.
+        /// </summary>
+        /// <param name="commlog"></param>
+        public FormCommItem(Commlog commlog)
+        {
+            InitializeComponent();
 
-		public void SetUserNum(long userNum) {
-			_model.CommlogCur.UserNum=Security.CurUser.UserNum;
-			textUser.Text=_controller.GetUserodName(_model.CommlogCur.UserNum);
-		}
+            CommlogCur = commlog;
+        }
 
-		///<summary>This is a hack in order to set the PK of the current commlog object associated to the view's model.
-		///This method needs to get call as soon as the commlog has been inserted into the db so that subsequent updates can actually work.</summary>
-		public void SetCommlogNum(long commlogNum) {
-			_model.CommlogCur.CommlogNum=commlogNum;
-			textCommlogNum.Text=_model.CommlogCur.CommlogNum.ToString();
-		}
+        /// <summary>
+        /// Refreshes the preferences of the current user.
+        /// </summary>
+        void RefreshUserPreferences()
+        {
+            if (Security.CurUser == null || Security.CurUser.UserNum < 1) return;
+            
+            userOdPrefClearNote             = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum, UserOdFkeyType.CommlogPersistClearNote).FirstOrDefault();
+            userOdPrefEndDate               = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum, UserOdFkeyType.CommlogPersistClearEndDate).FirstOrDefault();
+            userOdPrefUpdateDateTimeNewPat  = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum, UserOdFkeyType.CommlogPersistUpdateDateTimeWithNewPatient).FirstOrDefault();
+        }
 
-		///<summary>Helper method to update textDateTime with DateTime.Now</summary>
-		public void UpdateButNow() {
-			textDateTime.Text=DateTime.Now.ToShortDateString()+"  "+DateTime.Now.ToShortTimeString();
-		}
+        /// <summary>
+        /// Gets the name of the patient with the specified <paramref name="patNum"/>.
+        /// </summary>
+        /// <param name="patNum">The patient number.</param>
+        /// <returns>The name of the patient.</returns>
+        string GetPatientName(long patNum) => Patients.GetLim(patNum).GetNameFL();
+        
+        /// <summary>
+        /// Gets the name of the user with the specified <paramref name="userNum"/>.
+        /// </summary>
+        /// <param name="userNum">The user number.</param>
+        /// <returns>The name of the user. Can by blank.</returns>
+        string GetUserodName(long userNum) => Userods.GetName(userNum);
 
-		public void ClearNote() {
-			textNote.Clear();
-		}
+        /// <summary>
+        /// Saves the current commlog to the database.
+        /// </summary>
+        /// <param name="showMsg">A value indicating whether to show a message when the commlog cannot be saved.</param>
+        /// <returns>True if the commlog was saved to the database; otherwise, false.</returns>
+        bool Save(bool showMsg)
+        {
+            // In persistent mode, we don't want to save empty commlogs.
+            if (IsPersistent && string.IsNullOrWhiteSpace(CommlogCur.Note))
+            { 
+                return false;
+            }
 
-		public void ClearDateTimeEnd() {
-			textDateTimeEnd.Clear();
-		}
+            if (IsNew || IsPersistent)
+            {
+                CommlogCur.CommlogNum = Commlogs.Insert(CommlogCur);
 
-		private bool GetHasAutoNotePrompt() {
-			return Regex.IsMatch(textNote.Text,_autoNotePromptRegex);
-		}
+                SecurityLogs.MakeLogEntry(Permissions.CommlogEdit, CommlogCur.PatNum, "Insert");
 
-		private bool ValidateCommlog(bool showMsg) {
-			if(textDateTime.Text=="") {
-				if(showMsg) {
-					MsgBox.Show(this,"Please enter a date first.");
-				}
-				return false;
-			}
-			try {
-				DateTime.Parse(textDateTime.Text);
-			}
-			catch {
-				if(showMsg) {
-					MsgBox.Show(this,"Date / Time invalid.");
-				}
-				return false;
-			}
-			if(textDateTimeEnd.Text!="") {
-				try {
-					DateTime.Parse(textDateTimeEnd.Text);
-				}
-				catch {
-					if(showMsg) {
-						MsgBox.Show(this,"End date and time invalid.");
-					}
-					return false;
-				}
-			}
-			return true;
-		}
+                // Post insert persistent user preferences.
+                if (IsPersistent)
+                {
+                    if (userOdPrefClearNote == null || PIn.Bool(userOdPrefClearNote.ValueString))
+                    {
+                        clearNoteButton_Click(this, EventArgs.Empty);
+                    }
 
-		private void signatureBoxWrapper_SignatureChanged(object sender,EventArgs e) {
-			_controller.signatureBoxWrapper_SignatureChanged(sender,e);
-			_sigChanged=true;
-		}
-		
-		private void ClearSignature() {
-			if(!_isStartingUp//so this happens only if user changes the note
-				&& !_sigChanged)//and the original signature is still showing.
-			{
-				//SigChanged=true;//happens automatically through the event.
-				signatureBoxWrapper.ClearSignature();
-			}
-		}
+                    if (userOdPrefEndDate == null || PIn.Bool(userOdPrefEndDate.ValueString))
+                    {
+                        endTextBox.Text = "";
+                    }
 
-		private void ClearSignature_Event(object sender,EventArgs e) {
-			ClearSignature();
-		}
+                    ODException.SwallowAnyException(() => FormOpenDental.S_RefreshCurrentModule());
+                }
+            }
+            else
+            {
+                Commlogs.Update(CommlogCur);
 
-		private string GetSignatureKey() {
-			string keyData=_model.CommlogCur.UserNum.ToString();
-			keyData+=_model.CommlogCur.CommDateTime.ToString();
-			keyData+=_model.CommlogCur.Mode_.ToString();
-			keyData+=_model.CommlogCur.SentOrReceived.ToString();
-			if(_model.CommlogCur.Note!=null) {
-				keyData+=_model.CommlogCur.Note.ToString();
-			}
-			return keyData;
-		}
+                SecurityLogs.MakeLogEntry(Permissions.CommlogEdit, CommlogCur.PatNum, "");
+            }
+            return true;
+        }
 
-		private void timerAutoSave_Tick(object sender,EventArgs e) {
-			if(_controller.GetIsPersistent()) {
-				//Just in case the auto save timer got turned on in persistent mode.
-				timerAutoSave.Stop();
-				return;
-			}
-			Commlog commlog;
-			if(!TryGetCommItem(false,out commlog)) {
-				return;
-			}
-			if(_modelOld.CommlogCur.Compare(commlog)) {//They're equal, don't bother saving
-				return;
-			}
-			_controller.AutoSaveCommItem(commlog);
-			_modelOld.CommlogCur=commlog;
-			//Getting this far means that the commlog was successfully updated so we need to update the UI to reflect that event.
-			if(_controller.GetIsNew()) {
-				textCommlogNum.Text=_model.CommlogCur.CommlogNum.ToString();
-				butCancel.Enabled=false;
-			}
-			this.Text=Lan.g(this,"Communication Item - Saved:")+" "+DateTime.Now;
-		}
+        /// <summary>
+        /// Deletes the current commlog.
+        /// </summary>
+        /// <param name="logText">The log message.</param>
+        void Delete(string logText = "Delete")
+        {
+            Commlogs.Delete(CommlogCur);
 
-		private void butUserPrefs_Click(object sender,EventArgs e) {
-			FormCommItemUserPrefs FormCIUP=new FormCommItemUserPrefs();
-			FormCIUP.ShowDialog();
-			if(FormCIUP.DialogResult==DialogResult.OK) {
-				_controller.RefreshUserOdPrefs();
-			}
-		}
+            SecurityLogs.MakeLogEntry(Permissions.CommlogEdit, CommlogCur.PatNum, logText);
+        }
 
-		private void butNow_Click(object sender,EventArgs e) {
-			UpdateButNow();
-		}
+        public void SetPatNum(long patNum)
+        {
+            CommlogCur.PatNum = patNum;
+            patientTextBox.Text = GetPatientName(CommlogCur.PatNum);
+        }
 
-		private void butNowEnd_Click(object sender,EventArgs e) {
-			textDateTimeEnd.Text=DateTime.Now.ToShortDateString()+"  "+DateTime.Now.ToShortTimeString();
-		}
+        public void SetUserNum(long userNum)
+        {
+            CommlogCur.UserNum = Security.CurUser.UserNum;
+            userTextBox.Text = GetUserodName(CommlogCur.UserNum);
+        }
 
-		private void butAutoNote_Click(object sender,EventArgs e) {
-			FormAutoNoteCompose FormA=new FormAutoNoteCompose();
-			FormA.ShowDialog();
-			if(FormA.DialogResult==DialogResult.OK) {
-				textNote.AppendText(FormA.CompletedNote);
-				butEditAutoNote.Visible=GetHasAutoNotePrompt();
-			}
-		}
+        void CommItemSaveEvent_Fired(ODEventArgs e)
+        {
+            if (e.EventType != ODEventType.CommItemSave)
+            {
+                return;
+            }
 
-		private void butEditAutoNote_Click(object sender,EventArgs e) {
-			if(GetHasAutoNotePrompt()) {
-				FormAutoNoteCompose FormA=new FormAutoNoteCompose();
-				FormA.MainTextNote=textNote.Text;
-				FormA.ShowDialog();
-				if(FormA.DialogResult==DialogResult.OK) {
-					textNote.Text=FormA.CompletedNote;
-					butEditAutoNote.Visible=GetHasAutoNotePrompt();
-				}
-			}
-			else {
-				MessageBox.Show(Lan.g(this,"No Auto Note available to edit."));
-			}
-		}
+            // Save the item.
+            Save(false);
+        }
 
-		private void butClearNote_Click(object sender,EventArgs e) {
-			textNote.Clear();
-		}
+        void signatureBoxWrapper_SignatureChanged(object sender, EventArgs e)
+        {
+            SetUserNum(Security.CurUser.UserNum);
+        }
 
-		private void butDelete_Click(object sender,EventArgs e) {
-			if(_controller.GetIsNew()) {
-				DialogResult=DialogResult.Cancel;
-				return;
-			}
-			//button not enabled if no permission and is invisible for persistent mode.
-			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete?")) {
-				return;
-			}
-			try {
-				_controller.DeleteCommlog(_model.CommlogCur);
-				DialogResult=DialogResult.OK;
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);//Tell the user what went wrong with deleting the commlog.
-			}
-		}
+        void PatientChangedEvent_Fired(ODEventArgs e)
+        {
+            if (e.EventType != ODEventType.Patient)
+            {
+                return;
+            }
 
-		private void butOK_Click(object sender,EventArgs e) {
-			//button not enabled if no permission
-			if(!_controller.SaveCommItem(true)) {
-				return;
-			}
-			if(_controller.GetIsPersistent()) {
-				//Show the user an indicator that the commlog has been saved but do not close the window.
-				ShowManualSaveLabel();
-				return;
-			}
-			DialogResult=DialogResult.OK;
-		}
+            if (e.Tag is long patNum)
+            {
+                SetPatNum(patNum);
+                if (IsPersistent && (userOdPrefUpdateDateTimeNewPat == null || PIn.Bool(userOdPrefUpdateDateTimeNewPat.ValueString)))
+                {
+                    startNowButton_Click(this, EventArgs.Empty);
+                }
+            }
+        }
 
-		///<summary>Shows the saved manually label for 1.5 seconds.</summary>
-		private void ShowManualSaveLabel() {
-			labelSavedManually.Visible=true;
-			ODThread odThread=new ODThread((o) => {
-				Thread.Sleep((int)TimeSpan.FromSeconds(1.5).TotalMilliseconds);
-				this.InvokeIfNotDisposed(() => {
-					labelSavedManually.Visible=false;
-				});
-			});
-			odThread.Start();
-		}
+        /// <summary>
+        /// The list of non-hidden CommLogTypes defs.  
+        /// This property is mainly used as an example to show how we might use business logic within models.
+        /// </summary>
+        public List<Def> ListCommlogTypeDefs
+        {
+            get
+            {
+                if (commlogTypeDefsList == null)
+                {
+                    commlogTypeDefsList = Defs.GetDefsForCategory(DefCat.CommLogTypes, true);
+                    if (!PrefC.IsODHQ)
+                    {
+                        commlogTypeDefsList.RemoveAll(x => x.ItemValue == CommItemTypeAuto.ODHQ.ToString());
+                    }
+                }
+                return commlogTypeDefsList;
+            }
+        }
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-			Close();
-		}
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormCommItem_Load(object sender, EventArgs e)
+        {
+            if (IsPersistent)
+            {
+                PatientChangedEvent.Fired += PatientChangedEvent_Fired;
+            }
+            CommItemSaveEvent.Fired += CommItemSaveEvent_Fired;
 
-		private void FormCommItem_FormClosing(object sender,FormClosingEventArgs e) {
-			_controller.CommItemView_FormClosing(sender,e);
-			if(_controller.GetIsPersistent()) {
-				return;
-			}
-			if(DialogResult==DialogResult.Cancel && timerAutoSave.Enabled && !_controller.GetIsNew()) {
-				try {
-					_controller.DeleteCommlog(_model.CommlogCur,"Autosaved Commlog Deleted");
-				}
-				catch(Exception ex) {
-					MessageBox.Show(this,ex.Message);
-				}
-			}
-			timerAutoSave.Stop();
-			timerAutoSave.Enabled=false;
-		}
-	}
+            _isStartingUp = true;
 
-	///<summary>Required so that Visual Studio can design this form.  The designer does not allow directly extending classes with generics.</summary>
-	public class BaseFormCommItem : ODFormMVC<CommItemModel,FormCommItem,CommItemController> { }
+            if (!PrefC.IsODHQ)
+            {
+                endLabel.Visible = false;
+                endTextBox.Visible = false;
+                startNowButton.Visible = false;
+                endNowButton.Visible = false;
+            }
+
+            // Check whether the user is allowed to edit commlog items.
+            if (!Security.IsAuthorized(Permissions.CommlogEdit, CommlogCur.CommDateTime))
+            {
+                // The user does not have permissions to create or edit commlogs.
+                if (IsNew || IsPersistent)
+                {
+                    DialogResult = DialogResult.Cancel;
+                    Close();
+                    return;
+                }
+
+                deleteButton.Enabled = false;
+                acceptButton.Enabled = false;
+                editAutoNoteButton.Enabled = false;
+            }
+
+            // There will usually be a commtype set before this dialog is opened
+            for (int i = 0; i < ListCommlogTypeDefs.Count; i++)
+            {
+                typeListBox.Items.Add(ListCommlogTypeDefs[i].ItemName);
+                if (ListCommlogTypeDefs[i].DefNum == CommlogCur.CommType)
+                {
+                    typeListBox.SelectedIndex = i;
+                }
+            }
+
+            for (int i = 0; i < Enum.GetNames(typeof(CommItemMode)).Length; i++)
+            {
+                modeListBox.Items.Add(Lan.g("enumCommItemMode", Enum.GetNames(typeof(CommItemMode))[i]));
+            }
+            modeListBox.SelectedIndex = (int)CommlogCur.Mode_;
+
+            for (int i = 0; i < Enum.GetNames(typeof(CommSentOrReceived)).Length; i++)
+            {
+                sendOrReceivedListBox.Items.Add(Lan.g("enumCommSentOrReceived", Enum.GetNames(typeof(CommSentOrReceived))[i]));
+            }
+            sendOrReceivedListBox.SelectedIndex = (int)CommlogCur.SentOrReceived;
+
+
+            signatureBoxWrapper.FillSignature(CommlogCur.SigIsTopaz, GetSignatureKey(), CommlogCur.Signature);
+            signatureBoxWrapper.BringToFront();
+
+            editAutoNoteButton.Visible = HasAutoNotePrompt;
+
+            if (IsPersistent)
+            {
+                RefreshUserPreferences();
+                userPrefsButton.Visible = true;
+                acceptButton.Text = "Create";
+                cancelButton.Text = "Close";
+                deleteButton.Visible = false;
+            }
+
+            if (IsNew && PrefC.GetBool(PrefName.CommLogAutoSave))
+            {
+                autoSaveTimer.Start();
+            }
+
+            patientTextBox.Text = GetPatientName(CommlogCur.PatNum);
+            userTextBox.Text = GetUserodName(CommlogCur.UserNum);
+            startTextBox.Text = CommlogCur.CommDateTime.ToShortDateString() + "  " + CommlogCur.CommDateTime.ToShortTimeString();
+            if (CommlogCur.DateTimeEnd.Year > 1880)
+            {
+                endTextBox.Text = CommlogCur.DateTimeEnd.ToShortDateString() + "  " + CommlogCur.DateTimeEnd.ToShortTimeString();
+            }
+
+            noteTextBox.Select();
+            noteTextBox.Text = CommlogCur.Note;
+            noteTextBox.SelectionStart = noteTextBox.Text.Length;
+
+            _isStartingUp = false;
+        }
+
+        /// <summary>
+        /// Displays the specified error message.
+        /// </summary>
+        /// <param name="errorMessage">The error message.</param>
+        void Error(string errorMessage)
+        {
+            MessageBox.Show(
+                errorMessage,
+                "Communication Item",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+        }
+
+        /// <summary>
+        /// Perform cleanup when the form is closing.
+        /// </summary>
+        void FormCommItem_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            CommItemSaveEvent.Fired -= CommItemSaveEvent_Fired;
+            if (IsPersistent)
+            {
+                PatientChangedEvent.Fired -= PatientChangedEvent_Fired;
+                return;
+            }
+
+            // If the dialog is cancalle and the autosave timer is enabled, we need to delete the autosaved commlog.
+            if (DialogResult == DialogResult.Cancel && autoSaveTimer.Enabled && !IsNew)
+            {
+                try
+                {
+                    Delete("Autosaved Commlog Deleted");
+                }
+                catch (Exception ex)
+                {
+                    Error(ex.Message);
+                }
+            }
+
+            autoSaveTimer.Stop();
+            autoSaveTimer.Enabled = false;
+        }
+
+        /// <summary>
+        /// Checks whether the note contains a auto note prompt.
+        /// </summary>
+        bool HasAutoNotePrompt => Regex.IsMatch(noteTextBox.Text, @"\[Prompt:""[a-zA-Z_0-9 ]+""\]");
+        
+        /// <summary>
+        /// Validates the commlog.
+        /// </summary>
+        /// <param name="showMsg"></param>
+        /// <returns></returns>
+        bool ValidateLog(bool showMsg)
+        {
+            var start = startTextBox.Text.Trim();
+            if (start.Length == 0)
+            {
+                if (showMsg)
+                {
+                    Error("Please enter a date first.");
+                }
+                return false;
+            }
+
+            if (!DateTime.TryParse(start, out var dateTimeStart))
+            {
+                if (showMsg)
+                {
+                    Error("Start date and time invalid.");
+                }
+                return false;
+            }
+
+            if (endTextBox.Text != "")
+            {
+                if (!DateTime.TryParse(endTextBox.Text, out var dateTimeEnd))
+                {
+                    if (showMsg)
+                    {
+                        Error("End date and time invalid.");
+                    }
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Clears the current signature.
+        /// </summary>
+        void ClearSignature_Event(object sender, EventArgs e)
+        {
+            if (!_isStartingUp && !_sigChanged)
+            {
+                signatureBoxWrapper.ClearSignature();
+            }
+        }
+
+        /// <summary>
+        /// Generate the encryption key for the signature.
+        /// </summary>
+        /// <returns></returns>
+        string GetSignatureKey()
+        {
+            var keyData =
+                CommlogCur.UserNum.ToString() +
+                CommlogCur.CommDateTime.ToString() +
+                CommlogCur.Mode_.ToString() +
+                CommlogCur.SentOrReceived.ToString();
+
+            if (CommlogCur.Note != null)
+            {
+                keyData += CommlogCur.Note.ToString();
+            }
+
+            return keyData;
+        }
+
+        /// <summary>
+        /// Creates a autosave of the current commlog.
+        /// </summary>
+        void autoSaveTimer_Tick(object sender, EventArgs e)
+        {
+            if (IsNew)
+            {
+                CommlogCur.CommlogNum = Commlogs.Insert(CommlogCur);
+
+                SecurityLogs.MakeLogEntry(Permissions.CommlogEdit, CommlogCur.PatNum, "Autosave Insert");
+
+                IsNew = false;
+            }
+            else Commlogs.Update(CommlogCur);
+
+            // Getting this far means that the commlog was successfully updated so we need to update the UI to reflect that event.
+            if (IsNew)
+            {
+                cancelButton.Enabled = false;
+            }
+
+            Text = "Communication Item - Saved: " + DateTime.Now;
+        }
+
+        /// <summary>
+        /// Open the user preferences form and refresh the preferences.
+        /// </summary>
+        void userPrefsButton_Click(object sender, EventArgs e)
+        {
+            using (var formCommItemUserPrefs = new FormCommItemUserPrefs())
+            {
+                if (formCommItemUserPrefs.ShowDialog() == DialogResult.OK)
+                {
+                    RefreshUserPreferences();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the start date/time textbox the the current date and time.
+        /// </summary>
+        void startNowButton_Click(object sender, EventArgs e)
+        {
+            startTextBox.Text = DateTime.Now.ToShortDateString() + "  " + DateTime.Now.ToShortTimeString();
+        }
+
+        /// <summary>
+        /// Sets the end date/time textbox to the current date and time.
+        /// </summary>
+        void endNowButton_Click(object sender, EventArgs e)
+        {
+            endTextBox.Text = DateTime.Now.ToShortDateString() + "  " + DateTime.Now.ToShortTimeString();
+        }
+
+        /// <summary>
+        /// Open the form to edit the current auto note.
+        /// </summary>
+        void editAutoNoteButton_Click(object sender, EventArgs e)
+        {
+            if (HasAutoNotePrompt)
+            {
+                using (var formAutoNoteCompose = new FormAutoNoteCompose())
+                {
+                    formAutoNoteCompose.MainTextNote = noteTextBox.Text;
+                    if (formAutoNoteCompose.ShowDialog() == DialogResult.OK)
+                    {
+                        noteTextBox.Text = formAutoNoteCompose.CompletedNote;
+
+                        editAutoNoteButton.Visible = HasAutoNotePrompt;
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show(
+                    "No Auto Note available to edit.",
+                    "Communication Item", 
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+        }
+
+        /// <summary>
+        /// Open the form to create a auto note.
+        /// </summary>
+        void autoNoteButton_Click(object sender, EventArgs e)
+        {
+            using (var formAutoNoteCompose = new FormAutoNoteCompose())
+            {
+                if (formAutoNoteCompose.ShowDialog() == DialogResult.OK)
+                {
+                    noteTextBox.AppendText(formAutoNoteCompose.CompletedNote);
+
+                    editAutoNoteButton.Visible = HasAutoNotePrompt;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Clears the note textbox.
+        /// </summary>
+        void clearNoteButton_Click(object sender, EventArgs e) => noteTextBox.Clear();
+
+        /// <summary>
+        /// Deletes the item.
+        /// </summary>
+        /// <remarks>
+        /// Button not enabled if no permission and is invisible for persistent mode.
+        /// </remarks>
+        void deleteButton_Click(object sender, EventArgs e)
+        {
+            if (IsNew)
+            {
+                DialogResult = DialogResult.Cancel;
+                return;
+            }
+
+            var result =
+                MessageBox.Show(
+                    "Delete?",
+                    "Communication Item", 
+                    MessageBoxButtons.YesNo, 
+                    MessageBoxIcon.Question, 
+                    MessageBoxDefaultButton.Button2);
+
+            if (result == DialogResult.No) return;
+            
+            try
+            {
+                Delete();
+
+                DialogResult = DialogResult.OK;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Communication Item",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        /// <summary>
+        /// Saves the item and closes the form.
+        /// </summary>
+        async void acceptButton_Click(object sender, EventArgs e)
+        {
+            // Button not enabled if no permission
+            if (!Save(true))
+            {
+                return;
+            }
+
+            // Show the user an indicator that the commlog has been saved but do not close the window.
+            if (IsPersistent)
+            {
+                await ShowManualSaveLabel();
+                return;
+            }
+
+            DialogResult = DialogResult.OK;
+        }
+
+        /// <summary>
+        /// Shows the saved manually label for 1.5 seconds.
+        /// </summary>
+        async System.Threading.Tasks.Task ShowManualSaveLabel()
+        {
+            savedManuallyLabel.Visible = true;
+
+            await System.Threading.Tasks.Task.Delay(TimeSpan.FromSeconds(1.5));
+
+            savedManuallyLabel.Visible = false;
+        }
+    }
 }

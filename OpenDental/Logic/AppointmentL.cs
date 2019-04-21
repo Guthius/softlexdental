@@ -205,8 +205,9 @@ namespace OpenDental{
 				CommlogCur.Note=Lan.g("Appointment","Appt BROKEN for")+" "+appt.ProcDescript+"  "+appt.AptDateTime.ToString();
 				CommlogCur.Mode_=CommItemMode.None;
 				CommlogCur.UserNum=Security.CurUser.UserNum;
-				FormCommItem FormCI=new FormCommItem();
-				FormCI.ShowDialog(new CommItemModel() { CommlogCur=CommlogCur },new CommItemController(FormCI) { IsNew=true });
+				FormCommItem FormCI=new FormCommItem(CommlogCur);
+                FormCI.IsNew = true;
+				FormCI.ShowDialog();
 			}
 			#endregion
 			AppointmentEvent.Fire(ODEventType.AppointmentEdited,appt);

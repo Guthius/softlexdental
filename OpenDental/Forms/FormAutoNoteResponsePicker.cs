@@ -1,67 +1,98 @@
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
+using System;
+using System.Windows.Forms;
 
-namespace OpenDental {
-	public partial class FormAutoNoteResponsePicker:ODForm {
-		///<summary>This will have the Response text and the chosen AutoNote in the format "Response text : {AutoNoteName}".</summary>
-		public string AutoNoteResponseText;
+namespace OpenDental
+{
+    public partial class FormAutoNoteResponsePicker : FormBase
+    {
+        /// <summary>
+        /// This will have the Response text and the chosen AutoNote in the format "Response text : {AutoNoteName}".
+        /// </summary>
+        public string AutoNoteResponseText;
 
-		public FormAutoNoteResponsePicker() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormAutoNoteResponsePicker"/> class.
+        /// </summary>
+        public FormAutoNoteResponsePicker() => InitializeComponent();
 
-		private void FormAutoNoteResponsePicker_Load(object sender,EventArgs e) {
-			FillGrid();
-		}
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormAutoNoteResponsePicker_Load(object sender, EventArgs e) => LoadAutoNotes();
 
-		private void FillGrid() {
-			AutoNotes.RefreshCache();
-			List<AutoNote> listAutoNotes=AutoNotes.GetDeepCopy();
-			gridMain.BeginUpdate();
-			gridMain.Columns.Clear();
-			gridMain.Columns.Add(new ODGridColumn("",100));
-			gridMain.Rows.Clear();
-			ODGridRow row;
-			foreach(AutoNote autoNote in listAutoNotes) {
-				row=new ODGridRow();
-				row.Cells.Add(autoNote.AutoNoteName);
-				row.Tag=autoNote;
-				gridMain.Rows.Add(row);
-			}
-			gridMain.EndUpdate();
-		}
+        /// <summary>
+        /// Loads all autonotes and populates the grid.
+        /// </summary>
+        void LoadAutoNotes()
+        {
+            AutoNotes.RefreshCache();
 
-		///<summary>Sets the AutoNoteResponseText with the selected AutoNote in the format "Auto Note Response Text : {AutoNoteName}".</summary>
-		private void butOK_Click(object sender,EventArgs e) {
-			if(string.IsNullOrEmpty(textResponseText.Text)) {
-				MsgBox.Show(this,"Please enter a response text.");
-				return;
-			}
-			if(gridMain.GetSelectedIndex()==-1) {
-				MsgBox.Show(this,"Please select an AutoNote.");
-				return;
-			}
-			AutoNote autoNoteSelected=gridMain.SelectedTag<AutoNote>();
-			if(autoNoteSelected==null) {
-				MsgBox.Show(this,"Invalid AutoNote selected. Please select a new one.");
-				gridMain.SetSelected(false);
-				return;//This shouldn't happen.
-			}
-			//The AutoNoteResponseText should be in format "Auto Note Response Text : {AutoNoteName}"
-			//This format is needed so the text processing logic can parse through it correctly.
-			//If this format changes, we need to change the logic in FormAutoNoteCompose.PromptForAutoNotes()
-			//If this format changes, you will also need to modify FormAutoNoteCompose.GetAutoNoteName() and FormAutoNoteCompose.GetAutoNoteResponseText
-			AutoNoteResponseText=textResponseText.Text+" : {"+autoNoteSelected.AutoNoteName+"}";
-			DialogResult=DialogResult.OK;
-		}
+            autoNotesGrid.BeginUpdate();
+            autoNotesGrid.Columns.Clear();
+            autoNotesGrid.Columns.Add(new ODGridColumn("", 100));
+            autoNotesGrid.Rows.Clear();
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+            var listAutoNotes = AutoNotes.GetDeepCopy();
+            foreach (var autoNote in listAutoNotes)
+            {
+                var row = new ODGridRow();
+                row.Cells.Add(autoNote.AutoNoteName);
+                row.Tag = autoNote;
+                autoNotesGrid.Rows.Add(row);
+            }
 
-	}
+            autoNotesGrid.EndUpdate();
+        }
+
+        /// <summary>
+        /// Sets the AutoNoteResponseText with the selected AutoNote in the format "Auto Note Response Text : {AutoNoteName}".
+        /// </summary>
+        void acceptButton_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(responseTextBox.Text))
+            {
+                MessageBox.Show(
+                    "Please enter a response text.",
+                    "Auto Note Response Picker", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Information);
+
+                return;
+            }
+
+            if (autoNotesGrid.GetSelectedIndex() == -1)
+            {
+                MessageBox.Show(
+                    "Please select an AutoNote.",
+                    "Auto Note Response Picker",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                return;
+            }
+
+            var autoNoteSelected = autoNotesGrid.SelectedTag<AutoNote>();
+            if (autoNoteSelected == null)
+            {
+                MessageBox.Show(
+                    "Invalid AutoNote selected. Please select a new one.", 
+                    "Auto Note Response Picker",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                autoNotesGrid.SetSelected(false);
+
+                return;
+            }
+
+            // The AutoNoteResponseText should be in format "Auto Note Response Text : {AutoNoteName}"
+            // This format is needed so the text processing logic can parse through it correctly.
+            // If this format changes, we need to change the logic in FormAutoNoteCompose.PromptForAutoNotes()
+            // If this format changes, you will also need to modify FormAutoNoteCompose.GetAutoNoteName() and FormAutoNoteCompose.GetAutoNoteResponseText
+            AutoNoteResponseText = responseTextBox.Text + " : {" + autoNoteSelected.AutoNoteName + "}";
+            DialogResult = DialogResult.OK;
+        }
+    }
 }

@@ -5457,8 +5457,8 @@ namespace OpenDental {
 					ModuleSelected(PatCur.PatNum);
 				}
 				else {
-					FormCommItem FormCI=new FormCommItem();
-					if(FormCI.ShowDialog(new CommItemModel() { CommlogCur=CommlogCur },new CommItemController(FormCI))==DialogResult.OK) {
+					FormCommItem FormCI=new FormCommItem(CommlogCur);
+					if(FormCI.ShowDialog()==DialogResult.OK) {
 						ModuleSelected(PatCur.PatNum);
 					}
 				}
@@ -5716,8 +5716,8 @@ namespace OpenDental {
 					MsgBox.Show(this,"This commlog has been deleted by another user.");
 				}
 				else { 
-					FormCommItem FormCI=new FormCommItem();
-					if(FormCI.ShowDialog(new CommItemModel() { CommlogCur=comm },new CommItemController(FormCI))!=DialogResult.OK) {
+					FormCommItem FormCI=new FormCommItem(comm);
+					if(FormCI.ShowDialog()!=DialogResult.OK) {
 						return;
 					}
 				}

@@ -768,8 +768,8 @@ namespace OpenDental{
 					MsgBox.Show(this,"This commlog has been deleted by another user.");
 					return;
 				}
-				FormCommItem FormCI=new FormCommItem();
-				FormCI.ShowDialog(new CommItemModel() { CommlogCur=item },new CommItemController(FormCI));
+				FormCommItem FormCI=new FormCommItem(item);
+				FormCI.ShowDialog();
 			}
 			else if (msgNum>0) {
 				EmailMessage email=EmailMessages.GetOne(msgNum);
@@ -950,8 +950,9 @@ namespace OpenDental{
 			CommlogCur.CommDateTime=DateTime.Now;
 			CommlogCur.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.APPT);
 			CommlogCur.UserNum=Security.CurUser.UserNum;
-			FormCommItem FormCI=new FormCommItem();
-			FormCI.ShowDialog(new CommItemModel() { CommlogCur=CommlogCur },new CommItemController(FormCI) { IsNew=true });
+			FormCommItem FormCI=new FormCommItem(CommlogCur);
+            FormCI.IsNew = true;
+			FormCI.ShowDialog();
 			_tableComms=Appointments.GetCommTable(AptCur.PatNum.ToString(),AptCur.AptNum);	
 			FillComm();
 		}

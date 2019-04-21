@@ -496,8 +496,9 @@ namespace OpenDental{
 					}
 					CommlogCur.Note+=".  ";
 					CommlogCur.UserNum=Security.CurUser.UserNum;
-					FormCommItem FormCI=new FormCommItem();
-					FormCI.ShowDialog(new CommItemModel() { CommlogCur=CommlogCur },new CommItemController(FormCI) { IsNew=true });
+					FormCommItem FormCI=new FormCommItem(CommlogCur);
+                    FormCI.IsNew = true;
+                    FormCI.ShowDialog();
 				}
 			}
 			FillMain();
@@ -1470,10 +1471,9 @@ namespace OpenDental{
 						CommlogCur.Note+="  "+Lan.g(this,"Status None");
 					}
 				}
-				FormCommItem FormCI=new FormCommItem();
-				if(FormCI.ShowDialog(
-					new CommItemModel() { CommlogCur=CommlogCur },
-					new CommItemController(FormCI) { IsNew=true })!=DialogResult.OK) 
+				FormCommItem FormCI=new FormCommItem(CommlogCur);
+                FormCI.IsNew = true;
+                if (FormCI.ShowDialog()!=DialogResult.OK) 
 				{
 					_gridCur.FillGrid();
 					return;
