@@ -170,15 +170,15 @@ namespace OpenDental {
 				ShowImageAttachmentItemEdit(image);
 			}
 			catch(System.IO.FileNotFoundException ex) {
-				FriendlyException.Show(Lan.g(this,"The selected file at: "+selectedFile+" could not be found"),ex);
+                FormFriendlyException.Show(Lan.g(this,"The selected file at: "+selectedFile+" could not be found"),ex);
 			}
 			catch(System.OutOfMemoryException ex) {
-				//Image.FromFile() will throw an OOM exception when the image format is invalid or not supported.
-				//See MSDN if you have trust issues:  https://msdn.microsoft.com/en-us/library/stf701f5(v=vs.110).aspx
-				FriendlyException.Show(Lan.g(this,"The file does not have a valid image format. Please try again or call support."+"\r\n"+ex.Message),ex);
+                //Image.FromFile() will throw an OOM exception when the image format is invalid or not supported.
+                //See MSDN if you have trust issues:  https://msdn.microsoft.com/en-us/library/stf701f5(v=vs.110).aspx
+                FormFriendlyException.Show(Lan.g(this,"The file does not have a valid image format. Please try again or call support."+"\r\n"+ex.Message),ex);
 			}
 			catch(Exception ex) {
-				FriendlyException.Show(Lan.g(this,"An error occurred. Please try again or call support.")+"\r\n"+ex.Message,ex);
+                FormFriendlyException.Show(Lan.g(this,"An error occurred. Please try again or call support.")+"\r\n"+ex.Message,ex);
 			}
 		}
 

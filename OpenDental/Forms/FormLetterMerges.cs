@@ -593,7 +593,7 @@ namespace OpenDental{
 					SaveToImageFolder(tempFilePath,letterCur);
 				}
 				catch(Exception ex) {
-					FriendlyException.Show(Lan.g(this,"Error saving file to the Image module:")+"\r\n"+ex.Message,ex);
+                    FormFriendlyException.Show(Lan.g(this,"Error saving file to the Image module:")+"\r\n"+ex.Message,ex);
 				}
 			}
 			//Close the original form document since just one record.
@@ -693,7 +693,7 @@ namespace OpenDental{
 					}
 				}
 				catch(Exception ex) {
-					FriendlyException.Show(Lan.g(this,"Error saving file to the Image module:")+"\r\n"+ex.Message,ex);
+                    FormFriendlyException.Show(Lan.g(this,"Error saving file to the Image module:")+"\r\n"+ex.Message,ex);
 				}
 			}
 			//Close the original form document since just one record.

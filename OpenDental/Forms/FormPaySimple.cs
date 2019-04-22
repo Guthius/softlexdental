@@ -372,7 +372,7 @@ namespace OpenDental {
 				return null;
 			}
 			catch(Exception ex) {
-				FriendlyException.Show(Lan.g(this,"Error:")+" "+ex.Message,ex);
+                FormFriendlyException.Show(Lan.g(this,"Error:")+" "+ex.Message,ex);
 				return null;
 			}
 			if(!_isAddingCard) {

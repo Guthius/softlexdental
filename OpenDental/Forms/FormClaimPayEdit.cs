@@ -947,7 +947,7 @@ namespace OpenDental{
 				}
 			}
 			catch(Exception ex) {
-				FriendlyException.Show(Lan.g(this,"Error processing transaction.\r\n\r\nPlease contact support with the details of this error:")
+                FormFriendlyException.Show(Lan.g(this,"Error processing transaction.\r\n\r\nPlease contact support with the details of this error:")
 					//The rest of the message is not translated on purpose because we here at HQ need to always be able to quickly read this part.
 					+"\r\nLast valid milestone reached: "+form.XchargeMilestone,ex);
 			}

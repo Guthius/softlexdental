@@ -114,7 +114,7 @@ namespace OpenDental.UI {
 					InitializeTopaz();
 				}
 				catch(Exception ex) {
-					FriendlyException.Show(Lans.g(this,"Unable to initialize Topaz."),ex);
+                    FormFriendlyException.Show(Lans.g(this,"Unable to initialize Topaz."),ex);
 					return false;
 				}
 			}

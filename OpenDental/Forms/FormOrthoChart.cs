@@ -691,7 +691,7 @@ namespace OpenDental {
 					DateTime.MinValue,DateTime.Today,checkIncludeArchived.Checked);
 			}
 			catch(Exception ex) {
-				FriendlyException.Show(Lan.g(this,"There was a problem loading the Audit Trail."),ex);
+                FormFriendlyException.Show(Lan.g(this,"There was a problem loading the Audit Trail."),ex);
 				return;
 			}
 			SortedDictionary<DateTime,List<SecurityLog>> dictDatesOfServiceLogEntries=new SortedDictionary<DateTime,List<SecurityLog>>();

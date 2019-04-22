@@ -140,7 +140,7 @@ namespace OpenDental{
 				LogList=SecurityLogs.Refresh(PatNum,PermTypes,FKey,checkIncludeArchived.Checked);
 			}
 			catch(Exception ex) {
-				FriendlyException.Show(Lan.g(this,"There was a problem refreshing the Audit Trail with the current filters."),ex);
+                FormFriendlyException.Show(Lan.g(this,"There was a problem refreshing the Audit Trail with the current filters."),ex);
 				LogList=new SecurityLog[0];
 			}
 			grid.BeginUpdate();

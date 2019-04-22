@@ -254,7 +254,7 @@ namespace OpenDental {
 				emailFolder=ImageStore.GetEmailImagePath();//will create the folder if it doesn't exist already. 
 			}
 			catch(Exception ex) {
-				FriendlyException.Show(Lans.g(this,"Unable to find Email Images folder"),ex);
+                FormFriendlyException.Show(Lans.g(this,"Unable to find Email Images folder"),ex);
 				return;
 			}
 			FormImagePicker FormIP=new FormImagePicker(emailFolder); 

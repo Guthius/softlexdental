@@ -720,7 +720,7 @@ namespace OpenDental {
 				RefreshModuleData(patNum);
 			}
 			catch(Exception ex) {
-				FriendlyException.Show(Lan.g(this,"Error accessing images."),ex);
+                FormFriendlyException.Show(Lan.g(this,"Error accessing images."),ex);
 			}
 			RefreshModuleScreen();
 			if(panelNote.Visible) {//Notes and sig box may have been visible previously, with info from another image/patient
@@ -836,10 +836,10 @@ namespace OpenDental {
 				_threadImageRequest=new ODThread(ImagesOnThreadStart,PatCur.Copy());
 				_threadImageRequest.AddExceptionHandler(new ODThread.ExceptionDelegate((ex) => {
 					if(InvokeRequired) {
-						Invoke((Action)(() => FriendlyException.Show(Lan.g(this,"Unable to display Apteryx Images"),ex)));
+						Invoke((Action)(() => FormFriendlyException.Show(Lan.g(this,"Unable to display Apteryx Images"),ex)));
 					}
 					else {
-						FriendlyException.Show(Lan.g(this,"Unable to display Apteryx Images"),ex);
+                        FormFriendlyException.Show(Lan.g(this,"Unable to display Apteryx Images"),ex);
 					}
 				}));
 				_threadImageRequest.Name="ImageRequestThread";
@@ -988,7 +988,7 @@ namespace OpenDental {
 				}
 				catch(ApplicationException ex) {
 					actionCloseDownloadProgress?.Invoke();
-					FriendlyException.Show(ex.Message,(ex.InnerException==null ? ex : ex.InnerException));
+                    FormFriendlyException.Show(ex.Message,(ex.InnerException==null ? ex : ex.InnerException));
 				}
 				bool isExportable=pictureBoxMain.Visible;
 				if(ImagesCur[0]==null) {
@@ -1058,7 +1058,7 @@ namespace OpenDental {
 					ImagesCur=ImageStore.OpenImagesAmd(amd);
 				}
 				catch(ApplicationException ex) {
-					FriendlyException.Show(ex.Message,(ex.InnerException==null ? ex : ex.InnerException));
+                    FormFriendlyException.Show(ex.Message,(ex.InnerException==null ? ex : ex.InnerException));
 				}
 				bool isExportable=pictureBoxMain.Visible;
 				if(ImagesCur[0]==null) {
@@ -1180,10 +1180,10 @@ namespace OpenDental {
 			}));
 			threadGetBitmap.AddExceptionHandler(new ODThread.ExceptionDelegate((ex) => {
 				if(InvokeRequired) {
-						Invoke((Action)(() => FriendlyException.Show(Lan.g(this,"Unable to download image."),ex)));
+						Invoke((Action)(() => FormFriendlyException.Show(Lan.g(this,"Unable to download image."),ex)));
 					}
 					else {
-						FriendlyException.Show(Lan.g(this,"Unable to download image."),ex);
+						FormFriendlyException.Show(Lan.g(this,"Unable to download image."),ex);
 					}
 			}));
 			//display the progress dialog to the user:
@@ -1983,7 +1983,7 @@ namespace OpenDental {
 				bitmapScanned=Bitmap.FromHbitmap(hbitmap);//Sometimes throws 'A generic error occurred in GDI+.'
 			}
 			catch(Exception ex) {
-				FriendlyException.Show(Lan.g(this,"Error importing eob")+": "+ex.Message,ex);
+                FormFriendlyException.Show(Lan.g(this,"Error importing eob")+": "+ex.Message,ex);
 				return;
 			}			
 			bitmapScanned.SetResolution((float)xdpi,(float)ydpi);

@@ -1068,7 +1068,7 @@ namespace OpenDental {
 				},
 				startingMessage:"Refreshing Grid...",
 				actionException:e => this.Invoke(() => {
-					FriendlyException.Show(Lan.g(this,"Error filling the Claims grid."),e);
+                    FormFriendlyException.Show(Lan.g(this,"Error filling the Claims grid."),e);
 				})
 			);
 			if(listRows==null) {//There was an error running the query and it did not finish.

@@ -632,7 +632,7 @@ namespace OpenDental
             }
             catch (Exception ex)
             {
-                FriendlyException.Show(Lans.g("Prefs", "Unable to create the following directory:") + " " + fullPath, ex);
+                FormFriendlyException.Show(Lans.g("Prefs", "Unable to create the following directory:") + " " + fullPath, ex);
                 return false;
             }
             return true;
@@ -808,7 +808,7 @@ namespace OpenDental
             }
             catch (Exception ex)
             {
-                FriendlyException.Show(Lan.g("FormUpdate", "Error deleting file:") + "\r\n" + ex.Message, ex);
+                FormFriendlyException.Show(Lan.g("FormUpdate", "Error deleting file:") + "\r\n" + ex.Message, ex);
                 MiscData.UnlockWorkstationsForDbs(dblist);//unlock workstations since nothing was actually done.
                 Prefs.UpdateString(PrefName.UpdateInProgressOnComputerName, "");
                 return;
@@ -859,7 +859,7 @@ namespace OpenDental
                         }
                         catch (Exception ex)
                         {
-                            FriendlyException.Show(Lan.g("FormUpdate", "Error deleting file:") + "\r\n" + ex.Message, ex);
+                            FormFriendlyException.Show(Lan.g("FormUpdate", "Error deleting file:") + "\r\n" + ex.Message, ex);
                             MiscData.UnlockWorkstationsForDbs(dblist);//unlock workstations since nothing was actually done.
                             Prefs.UpdateString(PrefName.UpdateInProgressOnComputerName, "");
                             return;
@@ -1436,7 +1436,7 @@ namespace OpenDental
                 }
                 catch (Exception ex)
                 {
-                    FriendlyException.Show(Lan.g("Prefs", "Unable to delete update files from local temp folder. Try closing and reopening the program."), ex);
+                    FormFriendlyException.Show(Lan.g("Prefs", "Unable to delete update files from local temp folder. Try closing and reopening the program."), ex);
                     FormOpenDental.ExitCode = 301;//UpdateFiles folder cannot be deleted
                     Environment.Exit(FormOpenDental.ExitCode);
                     return false;
@@ -1506,7 +1506,7 @@ namespace OpenDental
             }
             catch (Exception ex)
             {
-                FriendlyException.Show(Lans.g("Prefs", "Unable to copy ") + "UpdateFileCopier.exe " + Lans.g("Prefs", "from ") + updateFileCopierLocation + ".", ex);
+                FormFriendlyException.Show(Lans.g("Prefs", "Unable to copy ") + "UpdateFileCopier.exe " + Lans.g("Prefs", "from ") + updateFileCopierLocation + ".", ex);
                 return false;
             }
             //wait a moment to make sure the file was copied
@@ -1529,7 +1529,7 @@ namespace OpenDental
             }
             catch (Exception ex)
             {
-                FriendlyException.Show(Lan.g("Prefs", "Unable to start the update file copier. Try closing and reopening the program."), ex);
+                FormFriendlyException.Show(Lan.g("Prefs", "Unable to start the update file copier. Try closing and reopening the program."), ex);
                 FormOpenDental.ExitCode = 305;//Unable to start the UpdateFileCopier.exe process.
                 Environment.Exit(FormOpenDental.ExitCode);
                 return false;

@@ -1611,7 +1611,7 @@ namespace OpenDental{
 					listShortGuidUrls=WebServiceMainHQProxy.GetShortGUIDs(listPatAging.Count,countForSms,clinicNum,eServiceCode.PatientPortalViewStatement);
 				}
 				catch(Exception ex) {
-					FriendlyException.Show(Lans.g(this,"Unable to create a unique URL for each statement. The Patient Portal URL will be used instead."),ex);
+                    FormFriendlyException.Show(Lans.g(this,"Unable to create a unique URL for each statement. The Patient Portal URL will be used instead."),ex);
 					listShortGuidUrls=listPatAging.Select(x => new WebServiceMainHQProxy.ShortGuidResult {
 						MediumURL=PrefC.GetString(PrefName.PatientPortalURL),
 						ShortURL=PrefC.GetString(PrefName.PatientPortalURL),

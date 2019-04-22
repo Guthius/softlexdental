@@ -156,7 +156,7 @@ namespace OpenDental {
 			catch(WebException we) {
 				actionCloseProgress?.Invoke();
 				this.ForceBringToFront();
-				FriendlyException.Show(Lan.g(this,"Could not reach HQ.  Please make sure you have an internet connection and try again or call support."),we);
+                FormFriendlyException.Show(Lan.g(this,"Could not reach HQ.  Please make sure you have an internet connection and try again or call support."),we);
 				//Set the dialog result to Abort so that FormClosing knows to not try and save any changes.
 				DialogResult=DialogResult.Abort;
 				Close();
@@ -164,7 +164,7 @@ namespace OpenDental {
 			catch(Exception e) {
 				actionCloseProgress?.Invoke();
 				this.ForceBringToFront();
-				FriendlyException.Show(Lan.g(this,"There was a problem loading the eServices Setup window.  Please try again or call support."),e);
+                FormFriendlyException.Show(Lan.g(this,"There was a problem loading the eServices Setup window.  Please try again or call support."),e);
 				//Set the dialog result to Abort so that FormClosing knows to not try and save any changes.
 				DialogResult=DialogResult.Abort;
 				Close();

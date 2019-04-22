@@ -1675,7 +1675,7 @@ namespace OpenDental{
 				pictureWebSched.Image=FileAtoZ.GetImage(fullImagePath);
 			}
 			catch(Exception ex) {
-				Shown+=new EventHandler((o,e) => FriendlyException.Show(Lans.g(this,"Unable to display image."),ex));
+				Shown+=new EventHandler((o,e) => FormFriendlyException.Show(Lans.g(this,"Unable to display image."),ex));
 			}
 		}
 
@@ -1796,7 +1796,7 @@ namespace OpenDental{
 				FileAtoZ.Upload(localFileName,atoZFileName);
 			}
 			catch(Exception ex) {
-				FriendlyException.Show(Lans.g(this,"Unable to upload image."),ex);
+                FormFriendlyException.Show(Lans.g(this,"Unable to upload image."),ex);
 				return;
 			}
 			ProvCur.WebSchedImageLocation=Path.GetFileName(atoZFileName);
@@ -1805,7 +1805,7 @@ namespace OpenDental{
 			}
 			catch(Exception ex) {
 				pictureWebSched.Image=null;
-				FriendlyException.Show(Lans.g(this,"Unable to display image."),ex);
+                FormFriendlyException.Show(Lans.g(this,"Unable to display image."),ex);
 			}
 		}
 

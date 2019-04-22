@@ -487,7 +487,7 @@ namespace OpenDental{
 				}
 			}
 			catch(Exception ex) {
-				FriendlyException.Show(Lan.g(this,"There was a problem refreshing the Audit Trail with the current filters."),ex);
+				FormFriendlyException.Show(Lan.g(this,"There was a problem refreshing the Audit Trail with the current filters."),ex);
 				logList=new SecurityLog[0];
 			}
 			grid.BeginUpdate();

@@ -105,7 +105,7 @@ namespace OpenDental {
 				SecurityLogs.MakeLogEntry(Permissions.PatientMerge,_patTo.PatNum,
 					"Error occurred while merging Patient: "+_patFrom.GetNameFL()+"\r\nPatNum From: "+_patFrom.PatNum+"\r\nPatNum To: "+_patTo.PatNum);
 				Cursor=Cursors.Default;
-				FriendlyException.Show(Lan.g(this,"Unable to fully merge patients.  Contact support."),ex);
+                FormFriendlyException.Show(Lan.g(this,"Unable to fully merge patients.  Contact support."),ex);
 			}
 			if(isSuccessfulMerge) {
 				//The patient has been successfully merged.

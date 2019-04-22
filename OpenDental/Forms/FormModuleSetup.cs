@@ -4563,7 +4563,7 @@ namespace OpenDental{
 				FillControlsHelper();
 			}
 			catch(Exception ex) {
-				FriendlyException.Show(Lan.g(this,"An error has occured while attempting to load preferences.  Run database maintenance and try again."),ex);
+                FormFriendlyException.Show(Lan.g(this,"An error has occured while attempting to load preferences.  Run database maintenance and try again."),ex);
 				DialogResult=DialogResult.Abort;
 				return;
 			}

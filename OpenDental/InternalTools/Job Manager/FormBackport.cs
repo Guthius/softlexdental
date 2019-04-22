@@ -174,7 +174,7 @@ namespace OpenDental {
 			});
 			odThread.AddExceptionHandler(ex => {
 				this.InvokeIfNotDisposed(() => {//If there's an exception after the form is closed, swallow and do not do anything.
-					FriendlyException.Show("Error refreshing data.",ex);
+                    FormFriendlyException.Show("Error refreshing data.",ex);
 				});
 			});
 			odThread.GroupName="FormBackport_Refresh";

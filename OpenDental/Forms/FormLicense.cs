@@ -122,7 +122,7 @@ namespace OpenDental
         /// </summary>
         private void FillListBoxLicense()
         {
-            listBoxLicense.Items.Add(new ODBoxItem<string>("OpenDental", Properties.Resources.OpenDentalLicense));
+            //listBoxLicense.Items.Add(new ODBoxItem<string>("OpenDental", Properties.Resources.OpenDentalLicense));
             listBoxLicense.Items.Add(new ODBoxItem<string>("AForge", Properties.Resources.AForge));
             listBoxLicense.Items.Add(new ODBoxItem<string>("Bouncy Castle", Properties.Resources.BouncyCastle));
             listBoxLicense.Items.Add(new ODBoxItem<string>("BSD", Properties.Resources.Bsd));

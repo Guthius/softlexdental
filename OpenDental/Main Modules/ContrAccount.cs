@@ -5125,7 +5125,7 @@ namespace OpenDental {
 					FileAtoZ.StartProcess(imgPath);
 				}
 				catch(Exception ex) {
-					FriendlyException.Show($"Unable to open the following file: {doc.FileName}",ex);
+                    FormFriendlyException.Show($"Unable to open the following file: {doc.FileName}",ex);
 				}
 #else
 				//Thread thread=new Thread(new ParameterizedThreadStart(SheetPrinting.PrintStatement));

@@ -412,7 +412,7 @@ namespace OpenDental {
 				},
 				startingMessage: "Refreshing Grid...",
 				actionException: e => this.Invoke(() => {
-					FriendlyException.Show(Lan.g(this,"Error filling the Procedures Overpaid grid."),e);
+                    FormFriendlyException.Show(Lan.g(this,"Error filling the Procedures Overpaid grid."),e);
 				})
 			);
 		}
@@ -436,7 +436,7 @@ namespace OpenDental {
 					},
 					startingMessage: "Refreshing the Grid Data...",
 					actionException: e => this.Invoke(() => {
-						FriendlyException.Show(Lan.g(this,"Error filling the Procedures Overpaid grid."),e);
+                        FormFriendlyException.Show(Lan.g(this,"Error filling the Procedures Overpaid grid."),e);
 					})
 				);
 			}

@@ -2504,7 +2504,7 @@ namespace OpenDental{
 					}
 				}
 				catch(Exception ex) {
-					FriendlyException.Show(ex.Message,ex);
+                    FormFriendlyException.Show(ex.Message,ex);
 					if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Would you like to continue sending the claim?")) {
 						return;
 					}
@@ -3347,7 +3347,7 @@ namespace OpenDental{
 						MessageBox.Show(ex.Message);
 					}
 					catch(Exception ex) {
-						FriendlyException.Show(ex.Message,ex);
+                        FormFriendlyException.Show(ex.Message,ex);
 					}
 				}
 				//if(MsgBox.Show(this,true,"Send electronic claim immediately?")){

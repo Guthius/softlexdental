@@ -1831,7 +1831,7 @@ namespace OpenDental{
 						},
 						startingMessage:"Deleteing Statements...",
 						actionException:ex => this.Invoke(() => {
-							FriendlyException.Show(Lan.g(this,"Error deleting statements."),ex);
+                            FormFriendlyException.Show(Lan.g(this,"Error deleting statements."),ex);
 						}),
 						eventType:typeof(BillingEvent),
 						odEventType:ODEventType.Billing

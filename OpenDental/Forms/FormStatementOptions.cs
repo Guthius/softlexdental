@@ -1561,7 +1561,7 @@ namespace OpenDental{
 				FileAtoZ.StartProcess(fileName);
 			}
 			catch(Exception ex) {
-				FriendlyException.Show($"Unable to open the following file: {doc.FileName}",ex);
+                FormFriendlyException.Show($"Unable to open the following file: {doc.FileName}",ex);
 			}
 		}
 
@@ -1874,7 +1874,7 @@ namespace OpenDental{
 						ImageStore.DeleteDocuments(listdocs,patFolder);
 					}
 					catch(Exception ex) {  //Image could not be deleted, in use.
-						FriendlyException.Show(Lan.g(this,"Error retrieving patient folder."),ex);
+                        FormFriendlyException.Show(Lan.g(this,"Error retrieving patient folder."),ex);
 						return;
 					}
 				}
@@ -1893,7 +1893,7 @@ namespace OpenDental{
 							ImageStore.DeleteDocuments(listdocs,patFolder);
 						}
 						catch(Exception ex) {  //Image could not be deleted, in use.
-							FriendlyException.Show(Lan.g(this,"Error retrieving patient folder."),ex);
+                            FormFriendlyException.Show(Lan.g(this,"Error retrieving patient folder."),ex);
 							return;
 						}
 					}

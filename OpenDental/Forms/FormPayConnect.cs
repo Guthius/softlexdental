@@ -97,7 +97,7 @@ namespace OpenDental {
 					}
 				}
 				catch(Exception ex) {
-					FriendlyException.Show("Unable to create the config file for the terminal. Trying running the program as an administrator.",ex);
+                    FormFriendlyException.Show("Unable to create the config file for the terminal. Trying running the program as an administrator.",ex);
 					//We will still allow them to run the transaction. Probably the worse that will happen is the timeout variable will be less than desired.
 				}
 			}

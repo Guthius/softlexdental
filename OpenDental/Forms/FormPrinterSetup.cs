@@ -575,7 +575,7 @@ namespace OpenDental{
 				installedPrinters=PrinterSettings.InstalledPrinters;
 			}
 			catch(Exception ex) {//do not let the window open if printers cannot be accessed
-				FriendlyException.Show(Lan.g(this,"Unable to access installed printers."),ex);
+                FormFriendlyException.Show(Lan.g(this,"Unable to access installed printers."),ex);
 				DialogResult=DialogResult.Cancel;
 				return;
 			}

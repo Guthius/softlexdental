@@ -1247,7 +1247,7 @@ namespace OpenDental{
 			double totalRounded=Math.Round(totalRaw,digits,MidpointRounding.AwayFromZero);
 			if(!amountRounded.IsEqual(totalRounded)) {
 				if(!isSilent) {
-					FriendlyException.Show("Amounts do not match.",new ApplicationException("Variables:\r\n"
+                    FormFriendlyException.Show("Amounts do not match.",new ApplicationException("Variables:\r\n"
 						+"NumberFormatInfo.CurrentInfo.NumberDecimalDigits: "+digits+"\r\n"
 						+"amountRaw: "+amountRaw+"\r\n"
 						+"amountRounded: "+amountRounded+"\r\n"

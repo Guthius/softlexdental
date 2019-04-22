@@ -1345,7 +1345,7 @@ namespace OpenDental {
 				#endregion
 			}
 			catch(Exception ex) {
-				FriendlyException.Show("Unexpected error.",ex);
+                FormFriendlyException.Show("Unexpected error.",ex);
 			}
 			finally {//Always put the connection back to the original no matter what happened above when trying to make an archive.
 				dcon.SetDbT(connectionStrOrig,"");//It is acceptable to crash the program if this fails.
@@ -1407,7 +1407,7 @@ namespace OpenDental {
 					isSuccess=true;
 				},
 				startingMessage:"Creating archive database...",
-				actionException:e => FriendlyException.Show(Lan.g(this,"Error creating the archive database."),e),
+				actionException:e => FormFriendlyException.Show(Lan.g(this,"Error creating the archive database."),e),
 				eventType:typeof(MiscDataEvent),
 				odEventType:ODEventType.MiscData
 			);
@@ -1497,7 +1497,7 @@ namespace OpenDental {
 				},
 				startingMessage:"Archiving...",
 				actionException:ex => this.Invoke(() => {
-					FriendlyException.Show(Lan.g(this,"Error during the archival process."),ex);
+                    FormFriendlyException.Show(Lan.g(this,"Error during the archival process."),ex);
 				}),
 				eventType:typeof(MiscDataEvent),
 				odEventType:ODEventType.MiscData

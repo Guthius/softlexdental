@@ -170,7 +170,7 @@ namespace OpenDental.User_Controls {
 				Clipboard.SetText(textSchedulingURL.Text);
 			}
 			catch(Exception ex) {
-				FriendlyException.Show(Lan.g(this,"Unable to copy to clipboard."),ex);
+                FormFriendlyException.Show(Lan.g(this,"Unable to copy to clipboard."),ex);
 			}
 		}
 

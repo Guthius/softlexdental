@@ -112,7 +112,7 @@ namespace OpenDental {
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
 				string friendlyMessage=Lan.g(this,"Error checking for updates.");
-				FriendlyException.Show(friendlyMessage,ex);
+                FormFriendlyException.Show(friendlyMessage,ex);
 				textConnectionMessage.Text=friendlyMessage;
 				return;
 			}
@@ -123,7 +123,7 @@ namespace OpenDental {
 			}
 			catch(Exception ex) {
 				string friendlyMessage=Lan.g(this,"Error checking for updates.");
-				FriendlyException.Show(friendlyMessage,ex);
+                FormFriendlyException.Show(friendlyMessage,ex);
 				textConnectionMessage.Text=friendlyMessage;
 				return;
 			}
@@ -357,7 +357,7 @@ namespace OpenDental {
 				Process.Start(fileName);
 			}
 			catch(Exception ex) {
-				FriendlyException.Show(Lan.g(this,"There was a problem launching")+" "+fileName,ex);
+                FormFriendlyException.Show(Lan.g(this,"There was a problem launching")+" "+fileName,ex);
 			}
 		}
 

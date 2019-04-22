@@ -1834,7 +1834,7 @@ namespace OpenDental
             }
             catch (Exception ex)
             {
-                FriendlyException.Show(Lan.g(this, "Unable to initialize audio input. Try plugging a different microphone into the computer."), ex);
+                FormFriendlyException.Show(Lan.g(this, "Unable to initialize audio input. Try plugging a different microphone into the computer."), ex);
             }
         }
 

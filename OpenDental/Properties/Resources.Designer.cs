@@ -19,7 +19,7 @@ namespace OpenDental.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -667,6 +667,36 @@ namespace OpenDental.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap IconBulletArrowDown {
+            get {
+                object obj = ResourceManager.GetObject("IconBulletArrowDown", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap IconBulletArrowUp {
+            get {
+                object obj = ResourceManager.GetObject("IconBulletArrowUp", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap IconPrint {
+            get {
+                object obj = ResourceManager.GetObject("IconPrint", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copyright 2015-present Drifty Co.
         ///
         ///MIT License
@@ -916,11 +946,11 @@ namespace OpenDental.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open Dental, Copyright 2003-2018, Jordan S. Sparks, DMD.
+        ///   Looks up a localized string similar to Open Dental, Copyright 2003-2019, Jordan S. Sparks, DMD.
         ///
         ///Open Dental Software, Inc distributes and supports this software through authorized purchase.  A Registration Key is provided to purchaser at time of sale and is valid for exactly one physical location where patients are treated.  Each separate physical location where patients are treated requires a separate purchase and Registration Key.  Mobile treatment units are each treated as one physical location.  Purchaser may install this software on any  [rest of string was truncated]&quot;;.
         /// </summary>
-        public static string OpenDentalLicense {
+        public static string opendentallicense {
             get {
                 return ResourceManager.GetString("opendentallicense", resourceCulture);
             }

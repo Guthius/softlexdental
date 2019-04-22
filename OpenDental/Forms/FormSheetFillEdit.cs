@@ -183,7 +183,7 @@ namespace OpenDental {
 					}
 				}
 				else {//The user does not have the permission. Show them the message and return.
-					FriendlyException.Show(Lans.g(this,message),ex);
+                    FormFriendlyException.Show(Lans.g(this,message),ex);
 				}
 				OkClose();
 				return;
@@ -488,7 +488,7 @@ namespace OpenDental {
 						}
 					}
 					catch(Exception ex) {
-						FriendlyException.Show(Lan.g(this,"Error pasting clipboard content."),ex);
+                        FormFriendlyException.Show(Lan.g(this,"Error pasting clipboard content."),ex);
 					}
 					e.Handled=true;//Do not let the base Paste function to be invoked because it allows pasting formatted text, pictures, etc.
 				}));
@@ -1202,7 +1202,7 @@ namespace OpenDental {
 				Process.Start(filePathAndName);
 			}
 			catch(Exception ex) {
-				FriendlyException.Show(Lan.g(this,"Unable to open the file."),ex);
+                FormFriendlyException.Show(Lan.g(this,"Unable to open the file."),ex);
 				return;
 			}
 			SecurityLogs.MakeLogEntry(Permissions.SheetEdit,SheetCur.PatNum,SheetCur.Description+" from "+SheetCur.DateTimeSheet.ToShortDateString()+" pdf was created");

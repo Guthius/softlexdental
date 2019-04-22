@@ -1685,7 +1685,7 @@ namespace OpenDental {
 					SendWebSched();
 				}
 				catch(Exception ex) {
-					FriendlyException.Show(Lan.g(this,"Error sending Web Sched messages."),ex);
+                    FormFriendlyException.Show(Lan.g(this,"Error sending Web Sched messages."),ex);
 				}
 			}
 			_hasClickedWebSched=false;

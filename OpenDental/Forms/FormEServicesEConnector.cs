@@ -184,7 +184,7 @@ namespace OpenDental {
 			catch(Exception ex) {
 				string error=Lan.g(this,"There was an problem starting eConnector Services.  Try running eConnector in administrator "
 					+"mode or manually start the services.");
-				FriendlyException.Show(error,ex);
+                FormFriendlyException.Show(error,ex);
 				return;
 			}
 			if(listEConnectorServices.Count==0) {

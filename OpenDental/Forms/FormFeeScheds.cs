@@ -574,7 +574,7 @@ namespace OpenDental{
 			}
 			catch(Exception ex) {
 				actionProgress?.Invoke();
-				FriendlyException.Show(Lans.g(this,"Unable to make a backup. No fee schedules have been altered."),ex);
+                FormFriendlyException.Show(Lans.g(this,"Unable to make a backup. No fee schedules have been altered."),ex);
 				return;
 			}
 			ODEvent.Fire(ODEventType.HideUnusedFeeSchedules,Lans.g(this,"Hiding unused fee schedules..."));

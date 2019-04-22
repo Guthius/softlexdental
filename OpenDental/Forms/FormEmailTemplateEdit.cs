@@ -512,7 +512,7 @@ namespace OpenDental {
 					_hasTextChanged=false;
 				}
 				catch(Exception ex) {
-					FriendlyException.Show("Error loading HTML.",ex);
+                    FormFriendlyException.Show("Error loading HTML.",ex);
 				}
 			}
 			if(isHtml) {

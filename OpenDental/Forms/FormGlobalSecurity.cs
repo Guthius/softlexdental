@@ -68,7 +68,7 @@ namespace OpenDental {
 						textDomainLoginPath.Text="LDAP://"+defaultNamingContext;
 					}
 					catch(Exception ex) {
-						FriendlyException.Show(Lan.g(this,"Unable to bind to the current domain."),ex);
+                        FormFriendlyException.Show(Lan.g(this,"Unable to bind to the current domain."),ex);
 					}
 				}
 			}
@@ -90,7 +90,7 @@ namespace OpenDental {
 						SearchResultCollection testResults = search.FindAll(); //Just do a generic search to verify the object might have users on it
 					}
 					catch(Exception ex) {
-						FriendlyException.Show(Lan.g(this,"An error occurred while attempting to access the provided Domain Login Path."),ex);
+                        FormFriendlyException.Show(Lan.g(this,"An error occurred while attempting to access the provided Domain Login Path."),ex);
 					}
 				}
 			}

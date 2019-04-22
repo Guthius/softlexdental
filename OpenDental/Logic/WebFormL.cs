@@ -182,7 +182,7 @@ namespace OpenDental {
 						}
 						catch(Exception ex) {
 							currentForm.Cursor=Cursors.Default;
-							FriendlyException.Show(ex.Message,ex);
+                            FormFriendlyException.Show(ex.Message,ex);
 							return false;
 						}
 					}
@@ -193,14 +193,14 @@ namespace OpenDental {
 					}
 				}
 				else {
-					FriendlyException.Show(wex.Message,wex);
+                    FormFriendlyException.Show(wex.Message,wex);
 					return false;
 				}
 				return false;
 			}
 			catch(Exception ex) {
 				currentForm.Cursor=Cursors.Default;
-				FriendlyException.Show(ex.Message,ex);
+                FormFriendlyException.Show(ex.Message,ex);
 				return false;
 			}
 		}

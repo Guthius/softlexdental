@@ -8637,6 +8637,9 @@
     <None Include="Web References\NewCrop\Update1.wsdl" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\IconPrint.png" />
+    <None Include="Resources\IconBulletArrowUp.png" />
+    <None Include="Resources\IconBulletArrowDown.png" />
     <Resource Include="Resources\webChatIcon.png" />
     <None Include="Resources\opendentallicense.txt" />
     <None Include="Resources\Midway_Icon_22x22.bmp" />

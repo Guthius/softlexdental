@@ -164,7 +164,7 @@ namespace OpenDental.Bridges {
 					#endregion
 				}
 				catch(Exception ex) {
-					FriendlyException.Show(Lan.g("Sirona","Error preparing Sidexis for patient message."),ex);
+                    FormFriendlyException.Show(Lan.g("Sirona","Error preparing Sidexis for patient message."),ex);
 					return;
 				}
 			}//if patient is loaded

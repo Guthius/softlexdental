@@ -1543,7 +1543,7 @@ namespace OpenDental {
 				}
 			}));
 			_threadRunDBM.AddExitHandler(ThreadRunDBMExitHandler);
-			_threadRunDBM.AddExceptionHandler(ex => this.InvokeIfRequired(() => FriendlyException.Show("Error during database maintenance.",ex)));
+			_threadRunDBM.AddExceptionHandler(ex => this.InvokeIfRequired(() => FormFriendlyException.Show("Error during database maintenance.",ex)));
 			_threadRunDBM.Name="RunDBMThread";
 			_threadRunDBM.Start();
 			Cursor=Cursors.Default;

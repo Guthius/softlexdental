@@ -8110,10 +8110,10 @@ namespace OpenDental {
 			});
 			_threadImageRequest.AddExceptionHandler(e => {
 				if(e is ApplicationException) {
-					FriendlyException.Show(e.Message,e);
+                    FormFriendlyException.Show(e.Message,e);
 				}
 				else {
-					FriendlyException.Show("Unable to download images from XVWeb.",e);
+                    FormFriendlyException.Show("Unable to download images from XVWeb.",e);
 				}
 			});
 			_threadImageRequest.Name="XVWebImageDownload";
@@ -10652,7 +10652,7 @@ namespace OpenDental {
 			}
 			ODThread thread=new ODThread((o) => SearchProgNotes(o,listSearchWords,_dateTimeLastSearch,listSearchResults,currentSearchText));
 			thread.Name="SearchProgNotes";
-			thread.AddExceptionHandler((e) => this.Invoke(() => FriendlyException.Show(Lans.g(this,"Error searching progress notes"),e)));
+			thread.AddExceptionHandler((e) => this.Invoke(() => FormFriendlyException.Show(Lans.g(this,"Error searching progress notes"),e)));
 			thread.Start();
 		}
 		

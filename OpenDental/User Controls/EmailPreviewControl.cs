@@ -226,7 +226,7 @@ namespace OpenDental {
 						InitializeHtmlEmail();//web browser needs to be set and made visible to show the translated text.
 					}
 					catch(Exception ex) {
-						FriendlyException.Show("Error loading HTML.",ex);
+                        FormFriendlyException.Show("Error loading HTML.",ex);
 					}
 				}
 				lableUserName.Visible=true;
@@ -276,7 +276,7 @@ namespace OpenDental {
 					_hasMessageTextChanged=false;
 				}
 				catch(Exception ex) {
-					FriendlyException.Show("Error loading HTML.",ex);
+                    FormFriendlyException.Show("Error loading HTML.",ex);
 				}
 			}
 			if(isHtml) {

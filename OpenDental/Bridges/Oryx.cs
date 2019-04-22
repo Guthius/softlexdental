@@ -66,7 +66,7 @@ namespace OpenDental.Bridges {
 				Process.Start(response.redirectUrl);
 			}
 			catch(Exception ex) {
-				FriendlyException.Show(Lans.g("Oryx","Unable to launch Oryx."),ex);
+				FormFriendlyException.Show(Lans.g("Oryx","Unable to launch Oryx."),ex);
 			}
 		}
 
