@@ -13,8 +13,6 @@ namespace OpenDental
         [STAThread]
         static void Main(string[] args)
         {
-            var res = Web.Start();
-
             Application.EnableVisualStyles();
 
             // Initialize Open Dental.

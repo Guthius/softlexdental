@@ -2763,12 +2763,6 @@ namespace OpenDental
                     {
                     }
 
-                    if (CommandLineArgs.Length == 0 && !Web.IsWeb) //eCW doesn't load splash screen
-                    { 
-                        //don't show splash screen a second time if web is enabled
-                        actionCloseSplashWindow = ShowSplash();
-                    }
-
                     if (!PrefsStartup()) //In Release, refreshes the Pref cache if conversion successful.
                     {
                         Cursor = Cursors.Default;
