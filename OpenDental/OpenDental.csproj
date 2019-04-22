@@ -816,10 +816,10 @@
     <Compile Include="Forms\FormChooseDatabase.Designer.cs">
       <DependentUpon>FormChooseDatabase.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormCommItem\FormCommItem.cs">
+    <Compile Include="Forms\FormCommItem.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormCommItem\FormCommItem.Designer.cs">
+    <Compile Include="Forms\FormCommItem.Designer.cs">
       <DependentUpon>FormCommItem.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormLoginFailed.cs">
@@ -5440,7 +5440,7 @@
     <EmbeddedResource Include="Forms\FormChooseDatabase.resx">
       <DependentUpon>FormChooseDatabase.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormCommItem\FormCommItem.resx">
+    <EmbeddedResource Include="Forms\FormCommItem.resx">
       <DependentUpon>FormCommItem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormLoginFailed.resx">
