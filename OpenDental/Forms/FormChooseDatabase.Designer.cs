@@ -196,7 +196,7 @@ namespace OpenDental
             this.Controls.Add(this.passwordLabel);
             this.Controls.Add(this.userLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.HeaderText = "Enter the database connection details below";
+            this.HeaderText = "Enter the database connection details below.";
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;

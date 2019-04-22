@@ -75,6 +75,7 @@ namespace OpenDental
         bool Save(bool showMsg)
         {
             // In persistent mode, we don't want to save empty commlogs.
+            CommlogCur.Note = noteTextBox.Text.Trim();
             if (IsPersistent && string.IsNullOrWhiteSpace(CommlogCur.Note))
             { 
                 return false;

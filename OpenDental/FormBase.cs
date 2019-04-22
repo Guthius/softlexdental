@@ -1,6 +1,7 @@
 ﻿using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -94,6 +95,7 @@ namespace OpenDental
         /// <summary>
         /// Gets or sets the description.
         /// </summary>
+        [DefaultValue("")]
         public string HeaderText
         {
             get => headerText;
@@ -133,8 +135,10 @@ namespace OpenDental
 
             if (!string.IsNullOrEmpty(HeaderText))
             {
-                TextRenderer.DrawText(e.Graphics, HeaderText, Font, new Point(10, 10), Color.Black);
+                TextRenderer.DrawText(e.Graphics, HeaderText, Font, new Point(10, 18), Color.Black);
             }
+
+            e.Graphics.DrawLine(Pens.White, new Point(0, 46), new Point(ClientSize.Width, 46));
 
             base.OnPaint(e);
         }
