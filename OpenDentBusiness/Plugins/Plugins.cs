@@ -73,6 +73,16 @@ namespace OpenDentBusiness
         }
 
         /// <summary>
+        /// Triggers the filter with the specified name and returns the resulting value.
+        /// </summary>
+        /// <typeparam name="TValue">The type of value to return.</typeparam>
+        /// <param name="sender">The object that is triggering the filter.</param>
+        /// <param name="filter">The filter.</param>
+        /// <param name="args">Arguments for the filter.</param>
+        /// <returns>The value.</returns>
+        public static TValue Trigger<TValue>(object sender, string filter, params object[] args) => Filter(sender, filter, default(TValue), args);
+
+        /// <summary>
         /// Triggers the specified action asynchronously.
         /// </summary>
         /// <param name="sender">The object that is triggering the action.</param>
