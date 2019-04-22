@@ -22,7 +22,7 @@ namespace OpenDental
         }
 
         /// <summary>
-        /// Paint the form.
+        /// Paints the form.
         /// </summary>
         /// <param name="e"></param>
         protected override void OnPaint(PaintEventArgs e)
@@ -81,6 +81,62 @@ namespace OpenDental
                         tuple.Item2);
                 }
             }
+        }
+    }
+
+    /// <summary>
+    /// This should be used for forms that represent simple dialogs which require a header text.
+    /// </summary>
+    public class FormBaseDialog : FormBase
+    {
+        string headerText = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        public string HeaderText
+        {
+            get => headerText;
+            set
+            {
+                if (value != headerText)
+                {
+                    headerText = value ?? "";
+                    Invalidate();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormBaseDialog"/> class.
+        /// </summary>
+        public FormBaseDialog()
+        {
+            Padding = new Padding(10, 56, 10, 10);
+        }
+
+        /// <summary>
+        /// Paints the form.
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            using (var brush = 
+                new LinearGradientBrush(
+                    new Point(0, 6),
+                    new Point(ClientSize.Width, 6),
+                    Color.FromArgb(255, 255, 255),
+                    Color.FromArgb(240, 240, 240)))
+            {
+                e.Graphics.FillRectangle(brush, new Rectangle(0, 6, ClientSize.Width, 40));
+            }
+
+            if (!string.IsNullOrEmpty(HeaderText))
+            {
+                TextRenderer.DrawText(e.Graphics, HeaderText, Font, new Point(10, 10), Color.Black);
+            }
+
+            base.OnPaint(e);
         }
     }
 }

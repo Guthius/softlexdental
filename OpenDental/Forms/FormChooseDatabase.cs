@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace OpenDental
 {
-    public partial class FormChooseDatabase : FormBase
+    public partial class FormChooseDatabase : FormBaseDialog
     {
         public CentralConnection CentralConnectionCur = new CentralConnection();
         public bool IsAccessedFromMainMenu;

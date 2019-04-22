@@ -576,6 +576,9 @@ namespace OpenDental
             ContrManage2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
                 | System.Windows.Forms.AnchorStyles.Right | System.Windows.Forms.AnchorStyles.Bottom)));
             ContrManage2.Size = new Size(splitContainerNoFlickerDashboard.Panel1.Width, splitContainerNoFlickerDashboard.Panel1.Height);
+
+            modules.Add(ContrManage2);
+
             splitContainerNoFlickerDashboard.Panel1.Controls.Add(ContrManage2);
             UpdateSplashProgress("Loading dashboards", 85);
             userControlPatientDashboard = new UserControlDashboard();
@@ -4488,15 +4491,40 @@ namespace OpenDental
             return _listReminderTasks.FindAll(x => x.TaskStatus == TaskStatusEnum.New && x.DateTimeEntry <= DateTime.Now).Count;
         }
 
-        private void menuItemTaskNewForUser_Click(object sender, EventArgs e)
+        List<Module> modules = new List<Module>();
+
+        public bool Navigate(string target, params object[] args)
         {
-            ContrManage2.LaunchTaskWindow(false, UserControlTasksTab.ForUser);//Set the tab to the "for [User]" tab.
+            if (target == null) return false;
+
+            target = target.Trim().ToLower();
+            if (target.Length == 0)
+            {
+                return false;
+            }
+
+            foreach (var module in modules)
+            {
+                if (module.Navigate(target, args))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
-        private void menuItemTaskReminders_Click(object sender, EventArgs e)
+        void menuItemTaskNewForUser_Click(object sender, EventArgs e)
         {
-            ContrManage2.LaunchTaskWindow(false, UserControlTasksTab.Reminders);//Set the tab to the "Reminders" tab
+            Navigate(NavigationTargets.Tasks, false, UserControlTasksTab.ForUser);
         }
+
+        void menuItemTaskReminders_Click(object sender, EventArgs e)
+        {
+            Navigate(NavigationTargets.Tasks, false, UserControlTasksTab.Reminders);
+        }
+
+
 
         private delegate void ToolBarMainClick(long patNum);
 
