@@ -3516,7 +3516,7 @@ namespace OpenDentBusiness
                 {//Canada
                     SetCanadianLabFeesCompleteForProc(procCur);
                 }
-                Plugins.HookAddCode(null, "Procedures.SetCompleteInAppt_procLoop", procCur, procOld);
+                Plugin.Trigger(null, "Procedures_SetCompleteInAppt", procCur, procOld);
                 Update(procCur, procOld);//Updates payplan charges for the procedure if it went from any status to complete.
                 ComputeEstimates(procCur, apt.PatNum, ref claimProcList, false, planList, patPlans, benefitList,
                     histList, loopList, true,

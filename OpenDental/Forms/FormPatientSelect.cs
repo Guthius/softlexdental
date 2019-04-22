@@ -1476,9 +1476,6 @@ namespace OpenDental{
 			Patient PatCur=Patients.CreateNewPatient(textLName.Text,textFName.Text,PIn.Date(textBirthdate.Text),priProv,Clinics.ClinicNum
 				,Lan.g(this,"Created from Select Patient window."));
 			Family FamCur=Patients.GetFamily(PatCur.PatNum);
-			if(Plugins.HookMethod(this,"FormPatientSelect.butAddPt_Click_showForm",PatCur,FamCur)) {
-				return;
-			}
 			FormPatientEdit FormPE=new FormPatientEdit(PatCur,FamCur);
 			FormPE.IsNew=true;
 			FormPE.ShowDialog();

@@ -567,9 +567,8 @@ namespace OpenDental{
 			textNote.Focus();
 			textNote.SelectionStart = 0;
 			_isOnLoad=false;
-			Plugins.HookAddCode(this,"FormApptEdit.Load_End",pat,butText);
-			Plugins.HookAddCode(this,"FormApptEdit.Load_end2",AptCur);//Lower casing the code area (_end) is the newer pattern for this.
-			Plugins.HookAddCode(this,"FormApptEdit.Load_end3",AptCur,pat);
+
+            Plugin.Trigger(this, "FormApptEdit_Loaded", AptCur, pat);
 		}
 
 		private void comboClinic_SelectedIndexChanged(object sender,EventArgs e) {
@@ -958,9 +957,7 @@ namespace OpenDental{
 		}
 
 		private void butText_Click(object sender,EventArgs e) {
-			if(Plugins.HookMethod(this,"FormApptEdit.butText_Click_start",pat,AptCur,this)) {
-				return;
-			}
+            if (Plugin.Trigger(this, "FormApptEdit_Button_Text", pat, AptCur)) return;
 			bool updateTextYN=false;
 			if(pat.TxtMsgOk==YN.No) {
 				if(MsgBox.Show(this,MsgBoxButtons.YesNo,"This patient is marked to not receive text messages. "
@@ -2585,7 +2582,7 @@ namespace OpenDental{
 					Close();
 				}
 			}
-			Plugins.HookAddCode(this,"FormApptEdit.butDelete_Click_end",AptCur);
+            Plugin.Trigger(this, "FormApptEdit_Button_Delete", AptCur);
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -2615,7 +2612,8 @@ namespace OpenDental{
 			if(!UpdateListAndDB(true,true,true)) {
 				return;
 			}
-			Plugins.HookAddCode(this,"FormApptEdit.butOK_Click_end",AptCur,AptOld,pat);
+
+            Plugin.Trigger(this, "FormApptEdit_OK", AptCur, AptOld, pat);
 			DialogResult=DialogResult.OK;
 			if(!this.Modal) {
 				Close();

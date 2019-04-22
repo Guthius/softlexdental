@@ -400,7 +400,7 @@ namespace OpenDental{
 				listClaimPayGroups.Items.Add(_listClaimPayGroupDefs[i].ItemName);
 			}
 			listClaimPayGroups.Visible=false;
-			Plugins.HookAddCode(this,"FormPaymentSheet_Load_end");
+            Plugin.Trigger(this, "FormPaymentSheet_Loaded");
 		}
 
 		private void checkAllProv_Click(object sender,EventArgs e) {

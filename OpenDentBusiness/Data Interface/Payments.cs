@@ -104,9 +104,8 @@ namespace OpenDentBusiness
             //It was an internal complaint that checks on the same date show up in a 'random' order.
             //The real fix for this issue would be to add a time column and order by it by that instead of the PK.
             command += " ORDER BY PayDate,PayNum";//Not usual pattern to order by PK
-            object[] parameters = { command, payTypes };
-            Plugins.HookAddCode(null, "Payments.GetForDeposit_beforequeryrun", parameters);
-            command = (string)parameters[0];
+            command = Plugin.Filter(null, "Data_Payments_GetForDeposit_Query", command, payTypes);
+
             return Crud.PaymentCrud.SelectMany(command);
         }
 

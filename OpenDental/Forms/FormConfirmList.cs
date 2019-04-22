@@ -549,7 +549,7 @@ namespace OpenDental{
 			FillMain();			
 			FillComboEmail();
 			Cursor=Cursors.Default;
-			Plugins.HookAddCode(this,"FormConfirmList.Load_End",butText);
+            Plugin.Trigger(this, "FormConfirmList_Loaded");
 		}
 
 		private void FillComboEmail() {

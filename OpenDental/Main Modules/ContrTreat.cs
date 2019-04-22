@@ -718,7 +718,7 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Sign TP"),-1,"","Sign"));
 			ProgramL.LoadToolbar(ToolBarMain,ToolBarsAvail.TreatmentPlanModule);
 			ToolBarMain.Invalidate();
-			Plugins.HookAddCode(this,"ContrTreat.LayoutToolBar_end",PatCur);
+			//Plugins.HookAddCode(this,"ContrTreat.LayoutToolBar_end",PatCur);
 			UpdateToolbarButtons();
 		}
 
@@ -729,7 +729,7 @@ namespace OpenDental{
 			}
 			RefreshModuleData(patNum);
 			RefreshModuleScreen(false);
-			Plugins.HookAddCode(this,"ContrTreat.ModuleSelected_end",patNum);
+			//Plugins.HookAddCode(this,"ContrTreat.ModuleSelected_end",patNum);
 		}
 
 		///<summary></summary>
@@ -747,7 +747,7 @@ namespace OpenDental{
 			//Procedures.MissingTeeth=null;
 			_patNumLast=0;//Clear out the last pat num so that a security log gets entered that the module was "visited" or "refreshed".
 			HasNoteChanged=false;
-			Plugins.HookAddCode(this,"ContrTreat.ModuleUnselected_end");
+			//Plugins.HookAddCode(this,"ContrTreat.ModuleUnselected_end");
 		}
 
 		private void RefreshModuleData(long patNum) {
@@ -851,7 +851,7 @@ namespace OpenDental{
 			else if(e.Button.Tag.GetType()==typeof(Program)) {
 				ProgramL.Execute(((Program)e.Button.Tag).ProgramNum,PatCur);
 			}
-			Plugins.HookAddCode(this,"ContrTreat.ToolBarMain_ButtonClick_end",PatCur,e);
+			//Plugins.HookAddCode(this,"ContrTreat.ToolBarMain_ButtonClick_end",PatCur,e);
 		}
 
 		private void butNewTP_Click(object sender,EventArgs e) {

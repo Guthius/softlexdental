@@ -286,7 +286,7 @@ namespace OpenDental
 		private void FormRpBirthday_Load(object sender, System.EventArgs e){
 			SetNextMonth();
 			textPostcardMsg.Text=PrefC.GetString(PrefName.BirthdayPostcardMsg);
-			Plugins.HookAddCode(this,"FormRpBirthday.Load_end");
+            Plugin.Trigger(this, "FormRpBirthday_Loaded");
 		}
 
 		private void butLeft_Click(object sender, System.EventArgs e) {

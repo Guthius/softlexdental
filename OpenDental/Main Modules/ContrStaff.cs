@@ -791,38 +791,6 @@ namespace OpenDental{
 			//}
 			//InitializedOnStartup=true;
 			//can't use Lan.F
-			Lan.C(this,new Control[]
-				{
-				groupBox2,
-				label1,
-				butSend,
-				groupBox1,
-				butTimeCard,
-				labelCurrentTime,
-				butClaimPay,
-				butClockIn,
-				butClockOut,
-				butEmailInbox,
-				butSendClaims,
-				butBilling,
-				butDeposit,
-				butSupply,
-				butTasks,
-				butBackup,
-				butAccounting,
-				butBreaks,
-				label3,
-				label4,
-				label5,
-				label7,
-				labelSending,
-				checkIncludeAck,
-				labelDays,
-				butAck,
-				label6,
-				gridEmp,
-				gridMessages,
-				});
 			RefreshFullMessages();//after this, messages just get added to the list.
 			//But if checkIncludeAck is clicked,then it does RefreshMessages again.
 		}
@@ -832,13 +800,13 @@ namespace OpenDental{
 			PatCurNum=patNum;
 			RefreshModuleData(patNum);
 			RefreshModuleScreen();
-			Plugins.HookAddCode(this,"ContrStaff.ModuleSelected_end",patNum);
+            Plugin.Trigger(this, "ContrStaff_ModuleSelected", patNum);
 		}
 
 		///<summary></summary>
 		public void ModuleUnselected(){
 			//this is not getting triggered yet.
-			Plugins.HookAddCode(this,"ContrStaff.ModuleUnselected_end");
+            Plugin.Trigger(this, "ContrStaff_ModuleUnselected");
 		}
 
 		private void RefreshModuleData(long patNum) {
@@ -1367,19 +1335,21 @@ namespace OpenDental{
 					return;
 				}
 			}
-			try{
-				bool[] authorized=new bool[1] { false };
-				if(Plugins.HookMethod(this,"ContrStaff.butClockIn_Click_ClockIn",authorized,EmployeeCur)) {
-					if(!authorized[0]) {
-						throw new Exception(Lans.g(this,"You need to authenticate to clock-in"));
-					}
-				}
-				ClockEvents.ClockIn(EmployeeCur.EmployeeNum);
-			}
-			catch(Exception ex){
-				MessageBox.Show(ex.Message);
-				return;
-			}
+            try
+            {
+                if (!Plugin.Filter(this, "ContrStaff_ClockIn", false, EmployeeCur))
+                {
+                    throw new Exception("You need to authenticate to clock-in");
+                }
+
+                ClockEvents.ClockIn(EmployeeCur.EmployeeNum);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+
 			EmployeeCur.ClockStatus=Lan.g(this,"Working");
 			Employees.Update(EmployeeCur);
 			if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
@@ -1407,21 +1377,21 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a status first.");
 				return;
 			}
-			try{
-				bool[] authorized=new bool[1] { false };
-				if(Plugins.HookMethod(this,"ContrStaff.butClockOut_Click_ClockOut",authorized,EmployeeCur,
-					_listShownTimeClockStatuses[listStatus.SelectedIndex])) 
-				{
-					if(!authorized[0]) {
-						throw new Exception(Lans.g(this,"You need to authenticate to clock-out"));
-					}
-				}
-				ClockEvents.ClockOut(EmployeeCur.EmployeeNum,_listShownTimeClockStatuses[listStatus.SelectedIndex]);
-			}
-			catch(Exception ex){
-				MessageBox.Show(ex.Message);
-				return;
-			}
+
+            try
+            {
+                if (!Plugin.Filter(this, "ContrStaff_ClockOut", false, EmployeeCur, _listShownTimeClockStatuses[listStatus.SelectedIndex]))
+                {
+                    throw new Exception("You need to authenticate to clock-out");
+                }
+                ClockEvents.ClockOut(EmployeeCur.EmployeeNum, _listShownTimeClockStatuses[listStatus.SelectedIndex]);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+
 			EmployeeCur.ClockStatus=Lan.g("enumTimeClockStatus",(_listShownTimeClockStatuses[listStatus.SelectedIndex]).GetDescription());
 			Employees.Update(EmployeeCur);
 			ModuleSelected(PatCurNum);

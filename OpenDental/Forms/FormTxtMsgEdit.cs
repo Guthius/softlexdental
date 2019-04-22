@@ -52,12 +52,6 @@ namespace OpenDental {
 		/// but this is needed for Confirmations, Recalls, etc.). CanIncreaseLimit will prompt the user to increase the spending limit if sending the 
 		/// text would exceed that limit. Should only be true when this method is called from this form. </summary>
 		public bool SendText(long patNum,string wirelessPhone,string message,YN txtMsgOk,long clinicNum,SmsMessageSource smsMessageSource,bool canIncreaseLimit=false) {
-			if(Plugins.HookMethod(this,"FormTxtMsgEdit.SendText_Start",patNum,wirelessPhone,message,txtMsgOk)) {
-				return false;
-			}
-			if(Plugins.HookMethod(this,"FormTxtMsgEdit.SendText_Start2",patNum,wirelessPhone,message,txtMsgOk)) {
-				return true;
-			}
 			if(wirelessPhone=="") {
 				MsgBox.Show(this,"Please enter a phone number.");
 				return false;

@@ -584,9 +584,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormLabCaseEdit_Load(object sender, System.EventArgs e) {
-			if(Plugins.HookMethod(this,"FormLabCaseEdit.Load_start",CaseCur,IsNew)) {
-				return;
-			}
+            if (Plugin.Trigger(this, "FormLabCaseEdit_Load", CaseCur, IsNew)) return;
+
 			textPatient.Text=Patients.GetPat(CaseCur.PatNum).GetNameFL();
 			ListLabs=Laboratories.Refresh();
 			//Include the current lab, even if it is hidden.
@@ -645,7 +644,8 @@ namespace OpenDental{
 			else {
 				butSlip.Text=Lan.g(this,"Edit Slip");
 			}
-			Plugins.HookAddCode(this,"FormLabCaseEdit.Load_end",CaseCur,IsNew);
+
+            Plugin.Trigger(this, "FormLabCaseEdit_Loaded", CaseCur, IsNew);
 		}
 
 		private void textDateDue_TextChanged(object sender,EventArgs e) {
@@ -865,11 +865,12 @@ namespace OpenDental{
 			}
 			CaseCur.Instructions=textInstructions.Text;
 			CaseCur.LabFee=PIn.Double(textLabFee.Text);
-			object[] parameters= { true };
-			Plugins.HookAddCode(this,"FormLabCaseEdit.SaveToDb_update",parameters);
-			if(!(bool)parameters[0]) {
-				return false;
-			}
+
+            if (!Plugin.Filter(this, "FormLabCaseEdit_Save", true, CaseCur))
+            {
+                return false;
+            }
+
 			try{
 				//if(IsNew){//No.  Always created ahead of time
 				LabCases.Update(CaseCur);

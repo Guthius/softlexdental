@@ -1011,7 +1011,7 @@ namespace OpenDental{
 			}
 			#endregion Bulk Edit
 			_listImageCatDefs=Defs.GetDefsForCategory(DefCat.ImageCats,true);
-			Plugins.HookAddCode(this,"FormStatementOptions_Load_end");
+            Plugin.Trigger(this, "FormStatementOptions_Loaded");
 		}
 
 		private void butToday_Click(object sender,EventArgs e) {

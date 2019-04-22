@@ -2752,12 +2752,13 @@ namespace OpenDental
                     Cursor = Cursors.WaitCursor;
                     try
                     {
-                        Plugins.LoadAllPlugins(this);
+                        PluginManager.LoadDirectory(
+                            Path.Combine(
+                                Application.StartupPath, "Plugins"));
                     }
                     catch
                     {
                     }
-
 
                     if (CommandLineArgs.Length == 0 && !Web.IsWeb) //eCW doesn't load splash screen
                     { 
@@ -3061,7 +3062,8 @@ namespace OpenDental
             Signalods.SignalLastRefreshed = MiscData.GetNowDateTime();
             Signalods.ApptSignalLastRefreshed = Signalods.SignalLastRefreshed;
             SetTimersAndThreads(true);
-            Plugins.HookAddCode(this, "FormOpenDental.Load_end");
+
+            Plugin.Trigger(this, "FormOpenDental_Loaded");
         }
 
         private void menuItemInternalTools_Click(object sender, System.EventArgs e)
@@ -3844,7 +3846,8 @@ namespace OpenDental
             }
             ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Popups"), -1, Lan.g(this, "Edit popups for this patient"), "Popups"));
             ProgramL.LoadToolbar(ToolBarMain, ToolBarsAvail.MainToolbar);
-            Plugins.HookAddCode(this, "FormOpenDental.LayoutToolBar_end");
+
+            Plugin.Trigger(this, "FormOpenDental_LayoutToolBar", ToolBarMain);
             ToolBarMain.Invalidate();
         }
 
@@ -3922,7 +3925,7 @@ namespace OpenDental
                     RefreshCurrentModule();
                 }
                 FillPatientButton(pat);
-                Plugins.HookAddCode(this, "FormOpenDental.OnPatient_Click_end");
+                Plugin.Trigger(this, "FormOpenDental_PatientClicked", pat);
             }
         }
 
@@ -4019,14 +4022,18 @@ namespace OpenDental
                 ToolBarMain.Buttons["Popups"].Enabled = true;
             }
             ToolBarMain.Invalidate();
+
             if (PopupEventList == null)
             {
                 PopupEventList = new List<PopupEvent>();
             }
-            if (Plugins.HookMethod(this, "FormOpenDental.FillPatientButton_popups", pat, PopupEventList, patChanged))
+
+            PopupEventList = Plugin.Filter(this, "FormOpenDental_FillPatientButtonPopups", PopupEventList, pat, patChanged);
+            if (PopupEventList.Count == 0)
             {
                 return;
             }
+
             if (!patChanged)
             {
                 return;
@@ -4204,15 +4211,15 @@ namespace OpenDental
 
         private void OnCommlog_Click()
         {
-            if (Plugins.HookMethod(this, "FormOpenDental.OnCommlog_Click", CurPatNum))
+            if (Plugin.Trigger(this, "FormOpenDental_Button_Commlog", CurPatNum)) return;
+
+            using (var formCommItem = new FormCommItem(GetNewCommlog()))
             {
-                return;
-            }
-            FormCommItem FormCI = new FormCommItem(GetNewCommlog());
-            FormCI.IsNew = true;
-            if (FormCI.ShowDialog() == DialogResult.OK)
-            {
-                RefreshCurrentModule();
+                formCommItem.IsNew = true;
+                if (formCommItem.ShowDialog() == DialogResult.OK)
+                {
+                    RefreshCurrentModule();
+                }
             }
         }
 
@@ -4917,10 +4924,8 @@ namespace OpenDental
         private void FormOpenDental_Resize(object sender, EventArgs e)
         {
             LayoutControls();
-            if (Plugins.PluginsAreLoaded)
-            {
-                Plugins.HookAddCode(this, "FormOpenDental.FormOpenDental_Resize_end");
-            }
+
+            Plugin.Trigger(this, "FormOpenDental_Resized");
         }
 
         ///<summary>This used to be called much more frequently when it was an actual layout event.</summary>
@@ -5171,7 +5176,7 @@ namespace OpenDental
             }
             if (e.ITypes.Contains(InvalidType.Task) || e.ITypes.Contains(InvalidType.TaskPopup))
             {
-                Plugins.HookAddCode(this, "FormOpenDental.DataValid_BecameInvalid_taskInvalidTypes");
+                Plugin.Trigger(this, "FormOpenDental_DataBecameInvalid");
                 if (ContrChart2?.Visible ?? false)
                 {
                     ODEvent.Fire(ODEventType.Cache, suffix + Lan.g(nameof(Cache), "Chart Module"));
@@ -5991,7 +5996,8 @@ namespace OpenDental
                 Logger.LogToPath("SigMessages", LogPath.Signals, LogPhase.End);
             }
             #endregion Sig Messages
-            Plugins.HookAddCode(this, "FormOpenDental.ProcessSignals_end", listSignals);
+
+            Plugin.Trigger(this, "FormOpenDental_ProcessSignals", listSignals);
         }
 
         ///<summary>Will invoke a refresh of tasks on the only instance of FormOpenDental. listRefreshedTaskNotes and listBlockedTaskLists are only used 
@@ -6443,7 +6449,8 @@ namespace OpenDental
                 FormRE.PatNum = CurPatNum;
                 FormRE.ShowDialog();
             }
-            Plugins.HookAddCode(this, "FormOpenDental_KeyDown_end", e);
+
+            Plugin.Trigger(this, "FormOpenDental_KeyDown", e);
         }
 
         ///<summary>This method stops all (local) timers and displays a connection lost window that will let users attempt to reconnect.
@@ -6640,10 +6647,8 @@ namespace OpenDental
             PhoneEmpDefault ped = PhoneEmpDefaults.GetByExtAndEmp(phoneSmall.Extension, Security.CurUser.EmployeeNum);
             if (ped != null && ped.IsTriageOperator)
             {
-                if (Plugins.HookMethod(this, "FormOpenDental.phoneSmall_GoToChanged_IsTriage", pat, phoneSmall.Extension))
-                {
-                    return;
-                }
+                if (Plugin.Trigger(this, "FormOpenDental_GoToChanged_IsTriage", pat, phoneSmall.Extension)) return;
+
                 Task task = new Task();
                 task.TaskListNum = -1;//don't show it in any list yet.
                 Tasks.Insert(task);
@@ -6658,11 +6663,9 @@ namespace OpenDental
                 FormTE.Show();
             }
             else
-            {//Not a triage operator.
-                if (Plugins.HookMethod(this, "FormOpenDental.phoneSmall_GoToChanged_NotTriage", pat))
-                {
-                    return;
-                }
+            {
+                if (Plugin.Trigger(this, "FormOpenDental_GoToChanged_NotTriage", pat, phoneSmall.Extension)) return;
+
                 
                 if (commlog == null)
                 {
@@ -7122,10 +7125,9 @@ namespace OpenDental
             {
                 return;
             }
-            if (Plugins.HookMethod(this, "FormOpenDental.menuItemLaboratories_Click"))
-            {
-                return;
-            }
+
+            if (Plugin.Trigger(this, "FormOpenDental_MenuItem_Laboratories")) return;
+
             FormLaboratories FormL = new FormLaboratories();
             FormL.ShowDialog();
             SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Laboratories");
@@ -9980,21 +9982,21 @@ namespace OpenDental
             List<Form> listOpenForms = GetOpenForms();
             foreach (Form openForm in listOpenForms)
             {
-                //If force closing, we HAVE to forcefully close everything related to Open Dental, regardless of plugins.  Otherwise, give plugins a chance to stop the log off event.
+                // If force closing, we HAVE to forcefully close everything related to Open Dental, regardless of plugins.
+                // Otherwise, give plugins a chance to stop the log off event.
                 if (!isForceClose)
                 {
-                    //This hook was moved into this method so that the form closing loop could be shared.
-                    //It is correctly named and was not updated to say "FormOpenDental.CloseOpenForms" on purpose for backwards compatibility.
-                    if (Plugins.HookMethod(this, "FormOpenDental.LogOffNow_loopingforms", openForm))
+                    if (Plugin.Filter(this, "FormOpenDental_CloseForm", true, openForm) == false)
                     {
-                        continue;//if some criteria are met in the hook, don't close a certain form
+                        continue;
                     }
                 }
+
                 if (openForm.Name == "FormWikiEdit")
                 {
                     if (!isForceClose)
                     {
-                        if (!MsgBox.Show(this, MsgBoxButtons.OKCancel, "You are currently editing a wiki page and it will be saved as a draft.  Continue?"))
+                        if (!MsgBox.Show(this, MsgBoxButtons.OKCancel, "You are currently editing a wiki page and it will be saved as a draft. Continue?"))
                         {
                             return false;//This form needs to stay open and the close operation should be aborted.
                         }
@@ -10111,7 +10113,8 @@ namespace OpenDental
                 this.Invoke(() => { FinishLogOff(isForced); });
                 return;
             }
-            Plugins.HookAddCode(this, "FormOpenDental.FinishLogOff_start", isForced);//perform logoff 
+            Plugin.Trigger(this, "LogOff", isForced);
+
             LastModule = myOutlookBar.SelectedIndex;
             myOutlookBar.SelectedIndex = -1;
             myOutlookBar.Invalidate();
@@ -10315,7 +10318,6 @@ namespace OpenDental
             {
                 //We will only reach here if we error out of getting the temp folder path
                 //If we can't get the path, then none of the stuff below matters
-                Plugins.HookAddCode(null, "FormOpenDental.FormClosing_end");
                 return;
             }
             for (int i = 0; i < arrayFileNames.Length; i++)
@@ -10368,7 +10370,7 @@ namespace OpenDental
                     //This folder will most likely get deleted next time Open Dental closes.
                 }
             }
-            Plugins.HookAddCode(null, "FormOpenDental.FormClosing_end");
+            Plugin.Trigger(this, "FormOpenDental_FormClosed");
         }
 
         private void FormOpenDental_FormClosed(object sender, FormClosedEventArgs e)

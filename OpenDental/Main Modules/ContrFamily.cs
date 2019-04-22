@@ -332,7 +332,7 @@ namespace OpenDental{
 		public void ModuleSelected(long patNum) {
 			RefreshModuleData(patNum);
 			RefreshModuleScreen();
-			Plugins.HookAddCode(this,"ContrFamily.ModuleSelected_end",patNum);
+            Plugin.Trigger(this, "ContrFamily_ModuleSelected", patNum);
 		}
 
 		///<summary></summary>
@@ -340,7 +340,7 @@ namespace OpenDental{
 			FamCur=null;
 			PlanList=null;
 			_patNumLast=0;//Clear out the last pat num so that a security log gets entered that the module was "visited" or "refreshed".
-			Plugins.HookAddCode(this,"ContrFamily.ModuleUnselected_end");
+            Plugin.Trigger(this, "ContrFamily_ModuleUnselected");
 		}
 
 		private void RefreshModuleData(long patNum) {
@@ -507,7 +507,7 @@ namespace OpenDental{
 			FillInsData();
 			FillGridSuperFam();
 			FillGridPatientClones();
-			Plugins.HookAddCode(this,"ContrFamily.RefreshModuleScreen_end");
+            Plugin.Trigger(this, "ContrFamily_RefreshModuleScreen");
 		} 
 
 		private void FillPatientPicture(){
@@ -601,7 +601,7 @@ namespace OpenDental{
 			}
 			ProgramL.LoadToolbar(ToolBarMain,ToolBarsAvail.FamilyModule);
 			ToolBarMain.Invalidate();
-			Plugins.HookAddCode(this,"ContrFamily.LayoutToolBar_end",PatCur);
+            Plugin.Trigger(this, "ContrFamily_LayoutToolBar", PatCur);
 		}
 
 		private void ToolBarMain_ButtonClick(object sender, OpenDental.UI.ODToolBarButtonClickEventArgs e) {
@@ -657,9 +657,7 @@ namespace OpenDental{
 		#region gridPatient
 
 		private void gridPat_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(Plugins.HookMethod(this,"ContrFamily.gridPat_CellDoubleClick",PatCur)) {
-				return;
-			}
+            if (Plugin.Trigger(this, "ContrFamily_PatientCellDoubleClick", PatCur)) return;
 			if(TerminalActives.PatIsInUse(PatCur.PatNum)){
 				MsgBox.Show(this,"Patient is currently entering info at a reception terminal.  Please try again later.");
 				return;

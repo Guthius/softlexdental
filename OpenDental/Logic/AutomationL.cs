@@ -46,14 +46,13 @@ namespace OpenDental {
 				FormSheetFillEdit FormSF;
 				Appointment aptNew;
 				Appointment aptOld;
-				switch(listAutomations[i].AutoAction) {
-					case AutomationAction.CreateCommlog:
-            if(Plugins.HookMethod(null,"AutomationL.Trigger_CreateCommlog_start",patNum,aptNum,listAutomations[i].CommType,
-							listAutomations[i].MessageContent,trigger))
-						{
-                automationHappened=true;
-                continue;
-            }
+                switch (listAutomations[i].AutoAction) {
+                    case AutomationAction.CreateCommlog:
+                        if (Plugin.Trigger(null, "Automation_Trigger_CreateCommlog", patNum, aptNum, listAutomations[i].CommType, listAutomations[i].MessageContent, trigger))
+                        {
+                            automationHappened = true;
+                            continue;
+                        }
 						Commlog commlogCur=new Commlog();
 						commlogCur.PatNum=patNum;
 						commlogCur.CommDateTime=DateTime.Now;

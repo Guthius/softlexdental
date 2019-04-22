@@ -24,22 +24,20 @@ namespace OpenDental
         public FormSplash(bool hasProgress = false) : base(ODEventType.SplashScreenProgress, typeof(SplashProgressEvent))
         {
             InitializeComponent();
-            Lan.F(this);
+
             if (!hasProgress)
             {
                 progressBar.Hide();
                 labelProgress.Hide();
-                this.ClientSize = new Size(500, 300);
+
+                ClientSize = new Size(500, 300);
             }
         }
 
 
         void FormSplash_Load(object sender, EventArgs e)
         {
-            if (Plugins.PluginsAreLoaded)
-            {
-                Plugins.HookAddCode(this, "FormSplash.FormSplash_Load_end");
-            }
+            Plugin.Trigger(this, "FormSplash_Loaded"); // TODO: Are plugins even loaded before FormSplash is loaded?
         }
 
         public sealed override void UpdateProgress(string status, ProgressBarHelper progHelper, bool hasProgHelper)
@@ -62,7 +60,6 @@ namespace OpenDental
             }
         }
 
-
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
@@ -71,7 +68,9 @@ namespace OpenDental
             {
                 e.Graphics.DrawRectangle(
                     pen,
-                    new Rectangle(0, 0, ClientSize.Width - 1, ClientSize.Height - 1));
+                    new Rectangle(0, 0, 
+                        ClientSize.Width - 1, 
+                        ClientSize.Height - 1));
             }
         }
 

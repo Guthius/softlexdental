@@ -171,7 +171,7 @@ namespace OpenDental{
 			//Etc.
 			FillMain();
 			FillComboEmail();
-			Plugins.HookAddCode(this,"FormRecallList.Load_End",_tableRecalls);
+            Plugin.Trigger(this, "FormRecallList_Loaded", _tableRecalls);
 		}
 
 		private void CheckClinicsSignedUpForWebSched() {

@@ -287,7 +287,7 @@ namespace OpenDental{
 			if(RefAttachList.Count>0 && !IsSelectionMode) {
 				gridMain.SetSelected(0,true);
 			}
-			Plugins.HookAddCode(this,"FormReferralsPatient.Load_end");
+            Plugin.Trigger(this, "FormReferralsPatient_Loaded");
 		}
 
 		private void checkShowAll_Click(object sender,EventArgs e) {

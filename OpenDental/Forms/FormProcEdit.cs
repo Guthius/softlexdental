@@ -1847,7 +1847,7 @@ namespace OpenDental {
 				ToothInitials.SetValue(_procCur.PatNum,_procCur.ToothNum,ToothInitialType.Missing);
 			}
 			ProcNoteUiHelper();
-			Plugins.HookAddCode(this,"FormProcEdit.butSetComplete_Click_end",_procCur,_procOld,textNotes);
+            Plugin.Trigger(this, "FormProcEdit_Button_SetComplete", _procCur, _procOld, textNotes);
 			comboProcStatus.SelectedIndex=-1;
 			_procCur.ProcStatus=ProcStat.C;
 			_procCur.SiteNum=_patCur.SiteNum;
@@ -2527,49 +2527,57 @@ namespace OpenDental {
 			textDiagnosticCode4.Text="";
 		}
 
-		private void butDelete_Click(object sender, System.EventArgs e) {
-			if(IsNew) {
-				DialogResult=DialogResult.Cancel;//verified that this triggers a delete when window closed from all places where FormProcEdit is used, and where proc could be new.
-				return;
-			}
-			//If this is an existing completed proc, then this delete button is only enabled if the user has permission for ProcComplEdit based on the ProcDate.
-			if(!_procOld.ProcStatus.In(ProcStat.C,ProcStat.EO,ProcStat.EC)
-				&& !Security.IsAuthorized(Permissions.ProcDelete,_procCur.ProcDate)) //This should be a much more lenient permission since completed procedures are already safeguarded.
-			{
-				return;
-			}
-			if(!Procedures.IsProcComplEditAuthorized(_procOld,true)) {
-				return;
-			}
-			if(MessageBox.Show(Lan.g(this,"Delete Procedure?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK){
-				return;
-			}
-			try{
-				Procedures.Delete(_procCur.ProcNum);//also deletes the claimProcs and adjustments. Might throw exception.
-				_isEstimateRecompute=true;
-				Recalls.Synch(_procCur.PatNum);//needs to be moved into Procedures.Delete
-				Permissions perm=Permissions.ProcDelete;
-				string tag="";
-				switch(_procOld.ProcStatus) {
-					case ProcStat.C:
-						perm=Permissions.ProcComplEdit;
-						tag=", "+Lan.g(this,"Deleted");
-						break;
-					case ProcStat.EO:
-					case ProcStat.EC:
-						perm=Permissions.ProcExistingEdit;
-						tag=", "+Lan.g(this,"Deleted");
-						break;
-				}
-				SecurityLogs.MakeLogEntry(perm,_procOld.PatNum,
-					ProcedureCodes.GetProcCode(_procOld.CodeNum).ProcCode+" ("+_procOld.ProcStatus+"), "+_procOld.ProcFee.ToString("c")+tag);
-				DialogResult=DialogResult.OK;
-				Plugins.HookAddCode(this,"FormProcEdit.butDelete_Click_end",_procCur);
-			}
-			catch(Exception ex){
-				MessageBox.Show(ex.Message);
-			}
-		}
+        private void butDelete_Click(object sender, System.EventArgs e)
+        {
+            if (IsNew)
+            {
+                DialogResult = DialogResult.Cancel;//verified that this triggers a delete when window closed from all places where FormProcEdit is used, and where proc could be new.
+                return;
+            }
+            //If this is an existing completed proc, then this delete button is only enabled if the user has permission for ProcComplEdit based on the ProcDate.
+            if (!_procOld.ProcStatus.In(ProcStat.C, ProcStat.EO, ProcStat.EC)
+                && !Security.IsAuthorized(Permissions.ProcDelete, _procCur.ProcDate)) //This should be a much more lenient permission since completed procedures are already safeguarded.
+            {
+                return;
+            }
+            if (!Procedures.IsProcComplEditAuthorized(_procOld, true))
+            {
+                return;
+            }
+            if (MessageBox.Show(Lan.g(this, "Delete Procedure?"), "", MessageBoxButtons.OKCancel) != DialogResult.OK)
+            {
+                return;
+            }
+            try
+            {
+                Procedures.Delete(_procCur.ProcNum);//also deletes the claimProcs and adjustments. Might throw exception.
+                _isEstimateRecompute = true;
+                Recalls.Synch(_procCur.PatNum);//needs to be moved into Procedures.Delete
+                Permissions perm = Permissions.ProcDelete;
+                string tag = "";
+                switch (_procOld.ProcStatus)
+                {
+                    case ProcStat.C:
+                        perm = Permissions.ProcComplEdit;
+                        tag = ", " + Lan.g(this, "Deleted");
+                        break;
+                    case ProcStat.EO:
+                    case ProcStat.EC:
+                        perm = Permissions.ProcExistingEdit;
+                        tag = ", " + Lan.g(this, "Deleted");
+                        break;
+                }
+                SecurityLogs.MakeLogEntry(perm, _procOld.PatNum,
+                    ProcedureCodes.GetProcCode(_procOld.CodeNum).ProcCode + " (" + _procOld.ProcStatus + "), " + _procOld.ProcFee.ToString("c") + tag);
+
+                Plugin.Trigger(this, "FormProcEdit_Button_Delete", _procCur);
+                DialogResult = DialogResult.OK;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
 
 		private bool EntriesAreValid(){
 			#region Surfaces, Tooth, Sextant, Arch, Date UI
@@ -3343,7 +3351,7 @@ namespace OpenDental {
 				return;
 			}
 			SaveAndClose();
-			Plugins.HookAddCode(this,"FormProcEdit.butOK_Click_end",_procCur); 
+            Plugin.Trigger(this, "FormProcEdit_OK", _procCur);
 		}
 
 		private void butCancel_Click(object sender,System.EventArgs e) {

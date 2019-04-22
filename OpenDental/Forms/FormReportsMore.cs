@@ -452,7 +452,7 @@ namespace OpenDental {
 		#endregion
 
 		private void FormReportsMore_Load(object sender,EventArgs e) {
-			Plugins.HookAddCode(this,"FormReportsMore.FormReportsMore_Load_beginning");
+            Plugin.Trigger(this, "FormReportsMore_Load");
 			butPW.Visible=Programs.IsEnabled(ProgramName.PracticeWebReports);
 			//hiding feature for 13.3
 			//butPatList.Visible=PrefC.GetBool(PrefName.ShowFeatureEhr);

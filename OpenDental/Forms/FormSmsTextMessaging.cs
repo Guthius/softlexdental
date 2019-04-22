@@ -232,7 +232,7 @@ namespace OpenDental {
 				}
 				UserOdPrefs.Upsert(_groupByPref);
 			});
-			Plugins.HookAddCode(this,"FormSmsTextMessaging.Load_end");
+            Plugin.Trigger(this, "FormSmsTextMessaging_Loaded");
 		}
 
 		private void RadioGroupBy_CheckedChanged(object sender,EventArgs e) {
@@ -928,9 +928,11 @@ namespace OpenDental {
 				return;
 			}
 			try {
-				if(Plugins.HookMethod(this,"FormSmsTextMessaging.butReply_Click_sendSmsSingle",_selectedPatNum,_selectedMobileNumber,textReply.Text,YN.Yes)) {
-					goto HookSkipSmsCall;
-				}
+                if (Plugin.Trigger(this, "FormSmsTextMessaging_SendSMS", _selectedPatNum, _selectedMobileNumber, textReply.Text))
+                {
+                    goto HookSkipSmsCall;
+                }
+
 				SmsToMobiles.SendSmsSingle(_selectedPatNum,_selectedMobileNumber,textReply.Text,clinicNum,SmsMessageSource.DirectSms,user: Security.CurUser);
 			}
 			catch(Exception ex) {

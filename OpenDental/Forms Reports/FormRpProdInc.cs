@@ -591,7 +591,7 @@ namespace OpenDental {
 				Close();
 			}
 			Text+=PrefC.ReportingServer.DisplayStr=="" ? "" : " - "+Lan.g(this,"Reporting Server:") +" "+ PrefC.ReportingServer.DisplayStr;
-			Plugins.HookAddCode(this,"FormProduction_Load_end");
+            Plugin.Trigger(this, "FormProduction_Loaded");
 		}
 
 		private void checkAllProv_Click(object sender,EventArgs e) {
@@ -773,9 +773,8 @@ namespace OpenDental {
     }
 
 		private void RunDaily() {
-			if(Plugins.HookMethod(this,"FormRpProdInc.RunDaily_Start",PIn.Date(textDateFrom.Text),PIn.Date(textDateTo.Text))) {
-				return;
-			}
+            if (Plugin.Filter(this, "FormRpProdInc_RunDaily", false, PIn.Date(textDateFrom.Text), PIn.Date(textDateTo.Text))) return;
+
 			//The old daily prod and inc report (prior to report complex) had portait mode for non-clinic users and landscape for clinic users.
 			bool isLandscape=false;
 			if((PrefC.HasClinicsEnabled && checkClinicInfo.Checked) || radioWriteoffBoth.Checked) {
@@ -1092,9 +1091,10 @@ namespace OpenDental {
 		}
 
 		private void RunMonthly(){
-			if(Plugins.HookMethod(this,"FormRpProdInc.RunMonthly_Start",PIn.Date(textDateFrom.Text),PIn.Date(textDateTo.Text))) {
-				return;
-			}
+            if (Plugin.Filter(this, "FormRpProdInc_RunMonthly", false, PIn.Date(textDateFrom.Text), PIn.Date(textDateTo.Text)))
+            {
+                return;
+            }
 			//If adding the unearned column, need more space. Set report to landscape.
 			ReportComplex report=new ReportComplex(true,radioWriteoffBoth.Checked || checkUnearned.Checked);
 			if(checkAllProv.Checked) {
@@ -1297,9 +1297,10 @@ namespace OpenDental {
 		}
 
 		private void RunAnnual(){
-			if(Plugins.HookMethod(this,"FormRpProdInc.RunAnnual_Start",PIn.Date(textDateFrom.Text),PIn.Date(textDateTo.Text))) {
-				return;
-			}
+            if (Plugin.Filter(this, "FormRpProdInc_RunAnnual", false, PIn.Date(textDateFrom.Text), PIn.Date(textDateTo.Text)))
+            {
+                return;
+            }
 			//If adding the unearned column, need more space. Set report to landscape.
 			ReportComplex report=new ReportComplex(true,radioWriteoffBoth.Checked || checkUnearned.Checked);
 			if(checkAllProv.Checked) {

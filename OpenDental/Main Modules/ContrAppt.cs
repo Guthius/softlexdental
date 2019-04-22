@@ -287,7 +287,7 @@ namespace OpenDental
             RefreshModuleScreenPeriod();
             //Call after refreshing data and screen. Values calculated above can effect ones used in LayoutScrollOpProv
             LayoutScrollOpProv();
-            Plugins.HookAddCode(this, "ContrAppt.ModuleSelected_end", patNum);
+            Plugin.Trigger(this, "ContrAppt_ModuleSelected", patNum);
         }
 
         ///<summary>Refreshes everything except the patient info. If false, will not refresh the appointment bubble.
@@ -373,7 +373,7 @@ namespace OpenDental
             //}
             //We have to go to the db because we need to get the most recent patient info. Mainly used for the AskedToArriveEarly time.
             PatCur = Patients.GetPat(patNum);
-            Plugins.HookAddCode(this, "ContrAppt.RefreshModuleDataPatient_end");
+            Plugin.Trigger(this, "ContrAppt_RefreshModuleDataPatient");
         }
 
         ///<summary>If needed, refreshes the _dtAppointments, _dtApptFields, and _dtPatFields tables.</summary>
@@ -1245,7 +1245,7 @@ namespace OpenDental
         {
             //Cleanup the resources.
             ContrApptSheet2.DisposeAppointments();
-            Plugins.HookAddCode(this, "ContrAppt.ModuleUnselected_end");
+            Plugin.Trigger(this, "ContrAppt_ModuleUnselected");
         }
 
         /*This was resulting in too many firings of ModuleSelected
@@ -1487,7 +1487,7 @@ namespace OpenDental
             }
             ProgramL.LoadToolbar(ToolBarMain, ToolBarsAvail.ApptModule);
             ToolBarMain.Invalidate();
-            Plugins.HookAddCode(this, "ContrAppt.LayoutToolBar_end", PatCur);
+            Plugin.Trigger(this, "ContrAppt_LayoutToolBar", PatCur);
         }
 
         ///<summary>Not in use.  See InstantClasses instead.</summary>
@@ -2344,7 +2344,7 @@ namespace OpenDental
                     return;
                 }
                 //This hook is specifically called after we know a valid appointment has been identified.
-                Plugins.HookAddCode(this, "ContrAppt.pinBoard_MouseUp_validation_end", aptCur);
+                Plugin.Trigger(this, "ContrAppt_PinBoard_Appointment", aptCur);
                 Appointment aptOld = aptCur.Copy();
                 RefreshModuleDataPatient(pinBoard.SelectedAppt.PatNum);//redundant?
                                                                        //Patient pat=Patients.GetPat(pinBoard.SelectedAppt.PatNum);
@@ -2707,7 +2707,7 @@ namespace OpenDental
                 }
                 AppointmentEvent.Fire(ODEventType.AppointmentEdited, aptCur);
                 Recalls.SynchScheduledApptFull(aptCur.PatNum);
-                Plugins.HookAddCode(this, "ContrAppt.pinBoard_MouseUp_end", aptCur, PatCur);
+                Plugin.Trigger(this, "ContrAppt_PinBoard_MouseUp", aptCur, PatCur);
                 #endregion Update UI and cache
             }
             finally
@@ -2833,10 +2833,8 @@ namespace OpenDental
         ///<summary>Mouse down event anywhere on the sheet.  Could be a blank space or on an actual appointment.</summary>
         private void ContrApptSheet2_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            if (Plugins.HookMethod(this, "ContrApptSheet2_MouseDown_start", ContrApptSingle.ClickedAptNum, e))
-            {
-                return;
-            }
+            if (Plugin.Trigger(this, "ContrApptSheet2_MouseDown", ContrApptSingle.ClickedAptNum, e)) return;
+
             if (infoBubble.Visible)
             {
                 infoBubble.Visible = false;
@@ -3023,7 +3021,8 @@ namespace OpenDental
                 {
                     menuItem.Enabled = false;
                 }
-                Plugins.HookAddCode(this, "ContrAppt.MouseDownAppointment_menuApt_right_click", menuApt);
+                Plugin.Trigger(this, "ContrAppt_Appointment_ContextMenu", menuApt);
+
                 menuApt.Show(ContrApptSheet2, new Point(e.X, e.Y));
             }
             else
@@ -3447,7 +3446,7 @@ namespace OpenDental
                     return;
                 }
                 //This hook is specifically called after we know a valid appointment has been identified.
-                Plugins.HookAddCode(this, "ContrAppt.ContrApptSheet2_MouseUp_validation_end", apt);
+                //Plugins.HookAddCode(this, "ContrAppt.ContrApptSheet2_MouseUp_validation_end", apt);
                 aptOld = apt.Copy();
                 int tHr = ApptDrawing.ConvertToHour
                     (TempApptSingle.Location.Y - ContrApptSheet2.Location.Y - panelSheet.Location.Y);
@@ -3528,7 +3527,7 @@ namespace OpenDental
                 Recalls.SynchScheduledApptFull(apt.PatNum);
                 AppointmentEvent.Fire(ODEventType.AppointmentEdited, apt);
                 #endregion Update UI and cache
-                Plugins.HookAddCode(this, "ContrAppt.ContrApptSheet2_MouseUp_end", apt, aptOld);
+                Plugin.Trigger(this, "ContrApptSheet2_MouseUp", apt, aptOld);
             }
             finally
             { //Cleanup. We are done with mouse up so we can't possibly be resizing or moving an appt.
@@ -3542,7 +3541,7 @@ namespace OpenDental
             InfoBubbleDraw(new Point(-1, -1));
             timerInfoBubble.Enabled = false;//redundant?
             Cursor = Cursors.Default;
-            Plugins.HookAddCode(this, "ContrAppt.ContrApptSheet2_MouseLeave_end");
+            Plugin.Trigger(this, "ContrApptSheet2_MouseLeave");
         }
 
         ///<summary></summary>
@@ -3998,10 +3997,8 @@ namespace OpenDental
         ///<summary>Double click on appt sheet or on a single appointment.</summary>
         private void ContrApptSheet2_DoubleClick(object sender, System.EventArgs e)
         {
-            if (Plugins.HookMethod(this, "ContrApptSheet2_DoubleClick_start", ContrApptSingle.ClickedAptNum, e))
-            {
-                return;
-            }
+            if (Plugin.Trigger(this, "ContrApptSheet2_DoubleClick", ContrApptSingle.ClickedAptNum)) return;
+
             HideDraggableContrApptSingle();
             //this logic is a little different than mouse down for now because on the first click of a 
             //double click, an appointment control is created under the mouse.
@@ -4156,7 +4153,7 @@ namespace OpenDental
                 }
                 else
                 {//new patient not added
-                    if (Appointments.HasOutstandingAppts(PatCur.PatNum) | (Plugins.HookMethod(this, "ContrAppt.ContrApptSheet2_DoubleClick_apptOtherShow")))
+                    if (Appointments.HasOutstandingAppts(PatCur.PatNum) /*| Plugins.HookMethod(this, "ContrAppt.ContrApptSheet2_DoubleClick_apptOtherShow")*/)
                     {
                         DisplayOtherDlg(true);
                     }
@@ -5472,7 +5469,7 @@ namespace OpenDental
             Patient pat = Patients.GetPat(ContrApptSheet2[thisI].PatNum);
             AppointmentL.SetApptUnschedHelper(apt, pat);
             ModuleSelected(pat.PatNum);
-            Plugins.HookAddCode(this, "ContrAppt.OnUnsched_Click_end", apt, PatCur);
+            Plugin.Trigger(this, "ContrAppt_OnUnsched", apt, PatCur);
         }
 
         private void OnBreak_Click()
@@ -5522,7 +5519,7 @@ namespace OpenDental
                 return;
             }
             //This hook is specifically called after we know a valid appointment has been identified.
-            Plugins.HookAddCode(this, "ContrAppt.OnBreak_Click_validation_end", apt);
+            //Plugins.HookAddCode(this, "ContrAppt.OnBreak_Click_validation_end", apt);
             AppointmentL.BreakApptHelper(apt, pat, procCodeBroke);
             if (hasBrokenProcs)
             {//FormApptBreak was shown and user made a selection
@@ -5546,7 +5543,7 @@ namespace OpenDental
                 }
             }
             ModuleSelected(pat.PatNum);//Must be ran after the "D9986" break logic due to the addition of a completed procedure.
-            Plugins.HookAddCode(this, "ContrAppt.OnBreak_Click_end", apt, PatCur);
+            Plugin.Trigger(this, "ContrAppt_OnBreak", apt, PatCur);
         }
 
         private void OnASAP_Click(object sender, EventArgs e)
@@ -5567,7 +5564,7 @@ namespace OpenDental
                 return;
             }
             Appointments.SetPriority(apt, ApptPriority.ASAP);
-            Plugins.HookAddCode(this, "ContrAppt.OnASAP_Click_end", apt, PatCur);
+            Plugin.Trigger(this, "ContrAppt_OnASAP", apt, PatCur);
         }
 
         private void OnComplete_Click()
@@ -5642,7 +5639,7 @@ namespace OpenDental
             }
             ModuleSelected(apt.PatNum);
             AppointmentEvent.Fire(ODEventType.AppointmentEdited, apt);
-            Plugins.HookAddCode(this, "ContrAppt.OnComplete_Click_end", apt, PatCur);
+            Plugin.Trigger(this, "ContrAppt_OnComplete", apt, PatCur);
         }
 
         private void OnDelete_Click(bool isSkipDeletePrompt = false)
@@ -5765,7 +5762,7 @@ namespace OpenDental
                 ModuleSelected(PatCur.PatNum);
             }
             Recalls.SynchScheduledApptFull(apt.PatNum);
-            Plugins.HookAddCode(this, "ContrAppt.OnDelete_Click_end", apt, PatCur);
+            Plugin.Trigger(this, "ContrAppt_OnDelete", apt, PatCur);
         }
 
         private void PrintApptLabel()
@@ -6299,14 +6296,16 @@ namespace OpenDental
                     //if no dentist/hygenist is assigned to spot, then keep the original dentist/hygenist without prompt.  All appts must have prov.
                     if ((assignedDent != 0 && assignedDent != apt.ProvNum) || (assignedHyg != 0 && assignedHyg != apt.ProvHyg))
                     {
-                        object[] parameters3 = { apt, assignedDent, assignedHyg, procsForSingleApt, this };//Only used in following plugin hook.
-                        if ((Plugins.HookMethod(this, "ContrAppt.ContrApptSheet2_MouseUp_apptProvChangeQuestion", parameters3)))
-                        {
-                            apt = (Appointment)parameters3[0];
-                            assignedDent = (long)parameters3[1];
-                            assignedDent = (long)parameters3[2];
-                            goto PluginApptProvChangeQuestionEnd;
-                        }
+                        // TODO: Reimplement...
+                        //object[] parameters3 = { apt, assignedDent, assignedHyg, procsForSingleApt, this };//Only used in following plugin hook.
+                        //if ((Plugins.HookMethod(this, "ContrAppt.ContrApptSheet2_MouseUp_apptProvChangeQuestion", parameters3)))
+                        //{
+                        //    apt = (Appointment)parameters3[0];
+                        //    assignedDent = (long)parameters3[1];
+                        //    assignedDent = (long)parameters3[2];
+                        //    goto PluginApptProvChangeQuestionEnd;
+                        //}
+
                         if (isOpUpdate || MsgBox.Show(this, MsgBoxButtons.YesNo, "Change provider?"))
                         {//Short circuit logic.  If we're updating op through right click, never ask.
                             if (assignedDent != 0)
@@ -6448,12 +6447,15 @@ namespace OpenDental
                 }
                 #endregion Patient status
                 #region Update Appt's AptStatus, ClinicNum, Confirmed
-                object[] parameters2 = { apt.AptDateTime, aptOld.AptDateTime, apt.AptStatus };
-                if ((Plugins.HookMethod(this, "ContrAppt.ContrApptSheet2_MouseUp_apptDoNotUnbreakApptSameDay", parameters2)))
-                {
-                    apt.AptStatus = (ApptStatus)parameters2[2];
-                    goto PluginApptDoNotUnbreakApptSameDay;
-                }
+
+                // TODO: Reimplement...
+                //object[] parameters2 = { apt.AptDateTime, aptOld.AptDateTime, apt.AptStatus };
+                //if ((Plugins.HookMethod(this, "ContrAppt.ContrApptSheet2_MouseUp_apptDoNotUnbreakApptSameDay", parameters2)))
+                //{
+                //    apt.AptStatus = (ApptStatus)parameters2[2];
+                //    goto PluginApptDoNotUnbreakApptSameDay;
+                //}
+
                 if (apt.AptStatus == ApptStatus.Broken && (timeWasMoved || isOpChanged))
                 {
                     apt.AptStatus = ApptStatus.Scheduled;
@@ -6627,7 +6629,7 @@ namespace OpenDental
                     ProviderList.Add(listProvidersShort[i]);
                 }
             }
-            Plugins.HookAddCode(this, "ContrAppt.ShowSearch_end", _listBoxProviders, pinBoard.SelectedAppt.AptNum);
+            Plugin.Trigger(this, "ContrAppt_ShowSearch", _listBoxProviders, pinBoard.SelectedAppt.AptNum);
             groupSearch.Visible = true;
         }
 

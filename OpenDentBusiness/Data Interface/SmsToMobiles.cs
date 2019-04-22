@@ -124,11 +124,11 @@ namespace OpenDentBusiness
         ///<summary>Surround with Try/Catch.  Sent as time sensitive message.</summary>
         public static bool SendSmsSingle(long patNum, string wirelessPhone, string message, long clinicNum, SmsMessageSource smsMessageSource, bool makeCommLog = true, Userod user = null, bool canCheckBal = true)
         {
-            //No need to check RemotingRole; no call to db.
-            if (Plugins.HookMethod(null, "SmsToMobiles.SendSmsSingle_start", patNum, wirelessPhone, message, clinicNum))
+            if (Plugin.Filter(null, "Data_SmsToMobiles_SendSmsSingle", false, patNum, wirelessPhone, message, clinicNum))
             {
                 return true;
             }
+
             double balance = SmsPhones.GetClinicBalance(clinicNum);
             if (balance - CHARGE_PER_MSG < 0 && canCheckBal)
             { //ODException.ErrorCode 1 will be processed specially by caller.
@@ -215,11 +215,11 @@ namespace OpenDentBusiness
         ///All Integrated Texting should use this method, CallFire texting does not use this method.</summary>
         public static bool SendSms(List<SmsToMobile> listMessages)
         {
-            //No need to check RemotingRole; no call to db.
-            if (Plugins.HookMethod(null, "SmsToMobiles.SendSms_start", listMessages))
+            if (Plugin.Filter(null, "Data_SmsToMobiles_SendSms", false, listMessages))
             {
                 return true;
             }
+
             if (listMessages == null || listMessages.Count == 0)
             {
                 throw new Exception("No messages to send.");

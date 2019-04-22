@@ -106,9 +106,9 @@ namespace OpenDental{
 		///Accepts null for pat and 0 for clinicNum.</summary>
 		public static string GetMainTitle(Patient pat,long clinicNum) {
 			string retVal=PrefC.GetString(PrefName.MainWindowTitle);
-			object[] parameters = { retVal };
-			Plugins.HookAddCode(null,"PatientL.GetMainTitle_beginning",parameters);
-			retVal = (string)parameters[0];
+
+            retVal = Plugin.Filter(null, "Patient_FilterMainTitle", retVal);
+
 			//Figure out if the patient passed in is different than the currently selected patient.
 			bool hasPatChanged=((_patSelectedCur==null && pat!=null)
 				|| (_patSelectedCur!=null && pat==null)

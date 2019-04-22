@@ -255,7 +255,7 @@ namespace OpenDental {
 				panelMain.Enabled=false;
 				butUnlock.Visible=true;
 			}
-			Plugins.HookAddCode(this, "FormSheetFillEdit_Load_End");
+            Plugin.Trigger(this, "FormSheetFillEdit_Loaded");
 		}
 
 		private void FormSheetFillEdit_MouseWheelScroll(object sender,MouseEventArgs e) {

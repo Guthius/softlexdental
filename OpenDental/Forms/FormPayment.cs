@@ -1731,7 +1731,7 @@ namespace OpenDental {
 				ToggleShowHideSplits();//set hidden
 			}
 			textCheckNum.Select();
-			Plugins.HookAddCode(this,"FormPayment.Load_end",_paymentCur,IsNew);
+            Plugin.Trigger(this, "FormPayment_Loaded", _paymentCur, IsNew);
 		}
 
 		private void FillCreditCards() {
@@ -4770,8 +4770,8 @@ namespace OpenDental {
 			if(!SavePaymentToDb()) {
 				return;
 			}
+            Plugin.Trigger(this, "FormPayment_OK", _paymentCur, _listSplitsCur);
 			DialogResult=DialogResult.OK;
-			Plugins.HookAddCode(this,"FormPayment.butOK_Click_end",_paymentCur,_listSplitsCur);
 		}
 
 		private void butCancel_Click(object sender,System.EventArgs e) {

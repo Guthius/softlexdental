@@ -2878,7 +2878,9 @@ namespace OpenDentBusiness
                 AlertItems.DeleteFor(AlertType.CallbackRequested, new List<long> { appt.AptNum });
             }
             Signalods.SetInvalidAppt(appt);
-            Plugins.HookAddCode(null, "Appointments.SetConfirmed_end", appt.AptNum, newStatus);
+
+            Plugin.Trigger(null, "Data_Appointment_Confirmed", appt.AptNum, newStatus);
+
             HistAppointments.CreateHistoryEntry(appt.AptNum, HistAppointmentAction.Changed);
         }
 
@@ -3369,8 +3371,9 @@ namespace OpenDentBusiness
             }
             //Tack all time portions together to make an end result.
             string pattern = GetApptTimePatternFromProcPatterns(listProcPatterns);
-            //Creating a new StringBuilder to preserve old hook parameter object Types.
-            Plugins.HookAddCode(null, "Appointments.CalculatePattern_end", new StringBuilder(pattern), provDent, provHyg, codeNums);
+
+            Plugin.Trigger(null, "Data_Appointment_PatternCalculated", pattern, provDent, provHyg, codeNums);
+
             if (make5minute)
             {
                 return ConvertPatternTo5(pattern);

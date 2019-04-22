@@ -182,7 +182,6 @@ namespace OpenDental.UI {
 				drawLoc=DrawElement(g,elementI,drawLoc,apptViewCur.StackBehavUR,ApptViewAlignment.UR,backBrush,dataRoww,apptRows,tableApptFields,tablePatFields,totalWidth,totalHeight,fontSize,isPrinting);
 				elementI++;
 			}
-			Plugins.HookAddCode(null,"OpenDentBusiness.UI.ApptSingleDrawing.DrawEntireAppt_UR",dataRoww,g,drawLoc);
 			#endregion
 			#region LR
 			drawLoc=new Point((int)totalWidth-1,(int)totalHeight-1);//in the LR area, we refer to the lower right corner of each element.
@@ -546,9 +545,6 @@ namespace OpenDental.UI {
 						break;
 				}
 			#endregion
-			object[] parameters={ dataRoww["PatNum"].ToString(),apptRows[elementI].PatFieldDefNum,text };
-			Plugins.HookAddCode(null,"ApptSingleDrawing.DrawElement_afterFillText",parameters);
-			text=(string)parameters[2];
 			if(text=="" && !isGraphic) {
 				return drawLoc;//next element will draw at the same position as this one would have.
 			}

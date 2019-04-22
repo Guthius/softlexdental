@@ -679,7 +679,7 @@ namespace OpenDental {
 			}
 			ToolBarMain.Invalidate();
 			ToolBarPaint.Invalidate();
-			Plugins.HookAddCode(this,"ContrDocs.LayoutToolBar_end",PatCur);
+            Plugin.Trigger(this, "ContrImages_LayoutToolBar", PatCur);
 		}
 
 		///<summary>Toolbar Layout for Amendments</summary>
@@ -730,7 +730,7 @@ namespace OpenDental {
 			if(docNum!=0) {
 				SelectTreeNode(GetNodeById(MakeIdDoc(docNum)));
 			}
-			Plugins.HookAddCode(this,"ContrImages.ModuleSelected_end",patNum,docNum);
+            Plugin.Trigger(this, "ContrImages_ModuleSelected");
 		}
 
 		///<summary>This overload is for batch claim payment (EOB) images.</summary>
@@ -792,7 +792,7 @@ namespace OpenDental {
 			//Cancel current image capture.
 			xRayImageController.KillXRayThread();
 			_patNumLast=0;//Clear out the last pat num so that a security log gets entered that the module was "visited" or "refreshed".
-			Plugins.HookAddCode(this,"ContrImages.ModuleUnselected_end");
+            Plugin.Trigger(this, "ContrImages_ModuleUnselected");
 		}
 
 		///<summary></summary>
@@ -2225,10 +2225,13 @@ namespace OpenDental {
 		}
 
 		private void ToolBarImport_Click() {
-			if(Plugins.HookMethod(this,"ContrImages.ToolBarImport_Click_Start",PatCur)) {
-				FillDocList(true);
-				return;
-			}
+            if (Plugin.Trigger(this, "ContrImages_ToolBar_Import", PatCur))
+            {
+                FillDocList(true);
+                return;
+            }
+
+
 			if(EhrAmendmentCur!=null) {
 				if(EhrAmendmentCur.FileName!=null && EhrAmendmentCur.FileName!="") {
 					if(!MsgBox.Show(this,true,"This will delete your old file. Proceed?")) {

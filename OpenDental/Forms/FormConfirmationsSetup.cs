@@ -19,7 +19,7 @@ namespace OpenDental {
 
 		public void FormConfirmationSetup_Load(object sender,System.EventArgs e) {
 			FillTabManualConfirmation();
-			Plugins.HookAddCode(this,"FormConfirmationSetup.Load_end");
+            Plugin.Trigger(this, "FormConfirmationSetup_Loaded");
 		}
 
 		//===============================================================================================

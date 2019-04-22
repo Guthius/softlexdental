@@ -71,7 +71,7 @@ namespace OpenDental {
 				labelAcctType.Visible=true;
 				textAccountType.Visible=true;
 			}
-			Plugins.HookAddCode(this,"FormCreditCardEdit.Load_end",PatCur);
+            Plugin.Trigger(this, "FormCreditCardEdit_Loaded");
 		}
 
 		private void FillFrequencyCombos() {

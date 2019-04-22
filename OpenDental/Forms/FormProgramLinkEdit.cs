@@ -542,7 +542,7 @@ namespace OpenDental{
 
 		private void FillGrid(){
 			List<ProgramProperty> ProgramPropertiesForProgram=ProgramProperties.GetForProgram(ProgramCur.ProgramNum);
-			Plugins.HookAddCode(this,"FormProgramLinkEdit.FillGrid_GetProgramProperties",ProgramPropertiesForProgram,ProgramCur);
+            Plugin.Trigger(this, "FormProgramLinkEdit_GetProgramProperties", ProgramPropertiesForProgram, ProgramCur);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g(this,"Property"),260);

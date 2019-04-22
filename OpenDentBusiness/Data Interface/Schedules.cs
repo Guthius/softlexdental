@@ -924,12 +924,13 @@ namespace OpenDentBusiness
                 {
                     continue;
                 }
-                //matching sched found
-                Plugins.HookAddCode(null, "Schedules.GetAssignedProvNumForSpot_Found", isSecondary);
+
+                Plugin.Trigger(null, "Schedules_GetAssignedProvNumForSpot_Found", isSecondary);
                 return listForPeriod[i].ProvNum;
             }
+
             //if no matching sched found, then use the operatory
-            Plugins.HookAddCode(null, "Schedules.GetAssignedProvNumForSpot_None", isSecondary);
+            Plugin.Trigger(null, "Schedules_GetAssignedProvNumForSpot_None", isSecondary);
             if (isSecondary)
             {
                 return op.ProvHygienist;
@@ -938,7 +939,6 @@ namespace OpenDentBusiness
             {
                 return op.ProvDentist;
             }
-            //return 0;//none
         }
 
         ///<summary>Comma delimits multiple schedules and creates a nice clean sting for screen ledgibility</summary>

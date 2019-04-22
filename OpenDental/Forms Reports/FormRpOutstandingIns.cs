@@ -1214,7 +1214,7 @@ namespace OpenDental {
 		}
 		
 		private void butRefresh_Click(object sender,EventArgs e) {
-			Plugins.HookAddCode(this,"FormRpOutstandingIns.butRefresh_begin");
+            Plugin.Trigger(this, "FormRpOutstandingIns_Button_Refresh");
 			FillGrid();
 		}
 

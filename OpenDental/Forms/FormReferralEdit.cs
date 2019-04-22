@@ -806,9 +806,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormReferralEdit_Load(object sender, System.EventArgs e) {
-			if(Plugins.HookMethod(this,"FormReferralEdit.Load",RefCur,IsNew)) {
-				return;
-			}
+            if (Plugin.Trigger(this, "FormReferralEdit_Load", RefCur, IsNew)) return;
+
 			listSpecialty.Items.Clear();
 			Def[] specDefs=Defs.GetDefsForCategory(DefCat.ProviderSpecialties,true).ToArray();
 			for(int i=0;i<specDefs.Length;i++) {

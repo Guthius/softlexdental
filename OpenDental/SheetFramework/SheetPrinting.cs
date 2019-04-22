@@ -1732,7 +1732,8 @@ namespace OpenDental {
 		}
 
 		public static void DrawFieldText(SheetField field,Sheet sheet,Graphics g,XGraphics gx) {
-			Plugins.HookAddCode(null,"SheetPrinting.pd_PrintPage_drawFieldLoop",field);
+            Plugin.Trigger(null, "SheetPrinting_PrintPage_DrawField", field);
+
 			RectangleF boundsActual;
 			if(gx==null){
 				FontStyle fontstyle=(field.FontIsBold?FontStyle.Bold:FontStyle.Regular);

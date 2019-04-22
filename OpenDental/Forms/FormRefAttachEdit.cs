@@ -485,9 +485,9 @@ namespace OpenDental{
 		#endregion
 
 		private void FormRefAttachEdit_Load(object sender,EventArgs e) {
-			if(Plugins.HookMethod(this,"FormRefAttachEdit.Load",RefAttachCur,IsNew)) {
-				return;
-			}
+            if (Plugin.Trigger(this, "FormRefAttachEdit_Load", RefAttachCur, IsNew)) return;
+
+
 			if(IsNew){
 				Text=Lan.g(this,"Add Referral Attachment");
       }

@@ -619,7 +619,7 @@ namespace OpenDental{
 			FillSpecialty();
 			FillComboZip();
 			_isLoad=false;
-			Plugins.HookAddCode(this,"FormPatientEdit.Load_end",PatCur);
+            Plugin.Trigger(this, "FormPatientEdit_Loaded", PatCur);
 		}
 
 		private void comboClinic_SelectedIndexChanged(object sender,EventArgs e) {
@@ -1367,7 +1367,6 @@ namespace OpenDental{
 				return;
 			}
 			SetRequiredFields();
-			Plugins.HookAddCode(this,"FormPatientEdit.ListBox_SelectedIndexChanged_end",PatCur);
 		}
 
 		private void ComboBox_SelectionChangeCommited(object sender,System.EventArgs e) {
@@ -1648,7 +1647,7 @@ namespace OpenDental{
 			if(sender.GetType()!=typeof(ValidPhone)) {
 				return;
 			}
-			Plugins.HookAddCode(sender,"FormPatientEdit.textAnyPhoneNumber_TextChanged_end");
+            Plugin.Trigger(this, "FormPatientEdit_AnyPhoneNumberChanged");
 		}
 
 		private void butAuto_Click(object sender, System.EventArgs e) {
@@ -2605,12 +2604,10 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender ,System.EventArgs e) {
-			bool isValid=true;
-			object[] parameters=new object[] { isValid,PatCur };
-			Plugins.HookAddCode(this,"FormPatientEdit.butOK_Click_beginning",parameters);
-			if((bool)parameters[0]==false) {//Didn't pass plug-in validation
-				return;
-			}
+            if (!Plugin.Filter(this, "FormPatientEdit_Validating", true, PatCur))
+            {
+                return; //Didn't pass plug-in validation
+            }
 			bool CDSinterventionCheckRequired=false;//checks selected values
 			if(  textBirthdate.errorProvider1.GetError(textBirthdate)!=""
 				|| textDateFirstVisit.errorProvider1.GetError(textDateFirstVisit)!=""
@@ -3076,7 +3073,7 @@ namespace OpenDental{
 				Patients.InsertAddressChangeSecurityLogEntry(PatOld,PatCur);
 				PatientEvent.Fire(ODEventType.Patient,PatCur);
 			}
-			Plugins.HookAddCode(this,"FormPatientEdit.butOK_Click_end",PatCur,PatOld);
+            Plugin.Trigger(this, "FormPatientEdit_OK", PatCur, PatOld);
 			DialogResult=DialogResult.OK;
 		}
 

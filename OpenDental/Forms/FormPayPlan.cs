@@ -2687,8 +2687,8 @@ namespace OpenDental{
 				}
 			}
 			SaveData();
+            Plugin.Trigger(this, "FormPaymentPlan_OK", PatCur, _payPlanCur, IsNew);
 			DialogResult=DialogResult.OK;
-			Plugins.HookAddCode(this,"FormPaymentPlan.butOK_Click_end",PatCur,_payPlanCur,IsNew);
 		}
 
 		private void butCancel_Click(object sender,System.EventArgs e) {

@@ -631,10 +631,10 @@ namespace OpenDentBusiness{
 		}
 
 		public static bool IsTextingEnabled(long clinicNum) {
-			//No need to check RemotingRole; no call to db.
-			if(Plugins.HookMethod(null,"Clinics.IsTextingEnabled_start",clinicNum)) {
-				return true;
-			}
+            if (Plugin.Filter(null, "Data_Clinic_IsTextingEnabled", false, clinicNum))
+            {
+                return true;
+            }
 			if(clinicNum==0) {
 				if(PrefC.HasClinicsEnabled) {
 					clinicNum=PrefC.GetLong(PrefName.TextingDefaultClinicNum);

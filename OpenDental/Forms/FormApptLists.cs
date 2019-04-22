@@ -306,7 +306,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormApptLists_Load(object sender, System.EventArgs e) {
-			Plugins.HookAddCode(this,"FormApptLists.Load_start");
+            Plugin.Trigger(this, "FormApptLists_Load");
 		}
 
 		private void butRecall_Click(object sender, System.EventArgs e) {

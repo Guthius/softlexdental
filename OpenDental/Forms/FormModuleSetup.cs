@@ -4572,7 +4572,7 @@ namespace OpenDental{
 			if(PrefC.RandomKeys) {
 				groupTreatPlanSort.Visible=false;
 			}
-			Plugins.HookAddCode(this,"FormModuleSetup.FormModuleSetup_Load_end");
+            Plugin.Trigger(this, "FormModuleSetup_Loaded");
 		}
 
 		private void FillControlsHelper() {

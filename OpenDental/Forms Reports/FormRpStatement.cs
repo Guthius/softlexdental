@@ -354,9 +354,12 @@ namespace OpenDental{
 		///<summary>Supply pd so that we know the paper size and margins.</summary>
 		private MigraDoc.DocumentObjectModel.Document CreateDocument(PrintDocument pd,Family fam,Patient pat,DataSet dataSet){
 			MigraDoc.DocumentObjectModel.Document doc= new MigraDoc.DocumentObjectModel.Document();
-			if(Plugins.HookMethod(this,"FormRpStatement.CreateDocument",doc,pd,fam,pat,dataSet,Stmt)) {
-				return doc;
-			}
+
+            if(Plugin.Trigger(this, "FormRpStatement_CreateDocument", doc, pd, fam, pat, dataSet, Stmt))
+            {
+                return doc;
+            }
+
 			doc.DefaultPageSetup.PageWidth=Unit.FromInch((double)pd.DefaultPageSettings.PaperSize.Width/100);
 			doc.DefaultPageSetup.PageHeight=Unit.FromInch((double)pd.DefaultPageSettings.PaperSize.Height/100);
 			doc.DefaultPageSetup.TopMargin=Unit.FromInch((double)pd.DefaultPageSettings.Margins.Top/100);

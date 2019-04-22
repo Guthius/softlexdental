@@ -3527,7 +3527,7 @@ namespace OpenDental {
 			if(Programs.UsingOrion) {
 				tabProc.SelectedTab=tabPatInfo;
 			}
-			Plugins.HookAddCode(this,"ContrChart.InitializeOnStartup_end",PatCur);
+			//Plugins.HookAddCode(this,"ContrChart.InitializeOnStartup_end",PatCur);
 		}
 
 		private void FillListPriorities() {
@@ -3728,7 +3728,7 @@ namespace OpenDental {
 			}
 			ProgramL.LoadToolbar(ToolBarMain,ToolBarsAvail.ChartModule);
 			ToolBarMain.Invalidate();
-			Plugins.HookAddCode(this,"ContrChart.LayoutToolBar_end",PatCur);
+			//Plugins.HookAddCode(this,"ContrChart.LayoutToolBar_end",PatCur);
 		}
 
 		///<summary>This function does not follow our usual pattern. This function is just like ModuleSelected() but also syncs any eRx data which
@@ -3774,7 +3774,7 @@ namespace OpenDental {
 			}
 			RefreshSheetLayout();//Must be before LayoutToolBar().
 			Logger.LogAction("RefreshModuleScreen",LogPath.ChartModule,() => RefreshModuleScreen(isClinicRefresh));//Update UI to reflect any changed dynamic SheetDefs.
-			Plugins.HookAddCode(this,"ContrChart.ModuleSelected_end",patNum);
+			//Plugins.HookAddCode(this,"ContrChart.ModuleSelected_end",patNum);
 		}
 
 		///<summary></summary>
@@ -3793,7 +3793,7 @@ namespace OpenDental {
 			if(odInternalCustomerGrids.Visible) {
 				odInternalCustomerGrids.TryHideGrids();
 			}
-			Plugins.HookAddCode(this,"ContrChart.ModuleUnselected_end");
+			//Plugins.HookAddCode(this,"ContrChart.ModuleUnselected_end");
 		}
 
 		private void PlannedApptPromptHelper() {
@@ -4829,12 +4829,12 @@ namespace OpenDental {
 					if(!isEmp && Security.CurUser.ProvNum!=0) {//Not a proxy clinician, so we want to validate that they are allowed access.
 						DoseSpot.ValidateProvider(prov,clinicNum);
 						//hook for additional authorization before prescription is saved
-						bool[] authorized=new bool[1] { false };
-						if(Plugins.HookMethod(this,"ContrChart.Tool_eRx_Click_Authorize",authorized,prov)) {
-							if(!authorized[0]) {
-								isDoseSpotAccessAllowed=false;
-							}
-						}
+						//bool[] authorized=new bool[1] { false };
+						//if(Plugins.HookMethod(this,"ContrChart.Tool_eRx_Click_Authorize",authorized,prov)) {
+						//	if(!authorized[0]) {
+						//		isDoseSpotAccessAllowed=false;
+						//	}
+						//}
 						string provNpi=Regex.Replace(prov.NationalProvID,"[^0-9]*","");//NPI with all non-numeric characters removed.
 						UpdateErxAccess(provNpi,doseSpotUserID,clinicNum,doseSpotClinicID,doseSpotClinicKey,erxOption);
 						ProviderErx provErxDoseSpot=ProviderErxs.GetOneForNpiAndOption(provNpi,erxOption);
@@ -4930,12 +4930,12 @@ namespace OpenDental {
 				}
 				Erx.ValidateProv(prov,clinic);
 				//hook for additional authorization before prescription is saved
-				bool[] authorized=new bool[1] { false };
-				if(Plugins.HookMethod(this,"ContrChart.Tool_eRx_Click_Authorize2",authorized,prov)) {
-					if(!authorized[0]) {
-						throw new ODException(Lans.g("Erx","Provider is not authenticated"));
-					}
-				}
+				//bool[] authorized=new bool[1] { false };
+				//if(Plugins.HookMethod(this,"ContrChart.Tool_eRx_Click_Authorize2",authorized,prov)) {
+				//	if(!authorized[0]) {
+				//		throw new ODException(Lans.g("Erx","Provider is not authenticated"));
+				//	}
+				//}
 				Erx.ValidatePat(PatCur);
 			}
 			catch(ODException ex) {//Purposefully only catch exceptions we throw due to validation
@@ -5890,9 +5890,9 @@ namespace OpenDental {
 		}
 
 		public void FillPtInfo(bool doRefreshData = true) {
-			if(Plugins.HookMethod(this,"ContrChart.FillPtInfo",PatCur)) {
-				return;
-			}
+			//if(Plugins.HookMethod(this,"ContrChart.FillPtInfo",PatCur)) {
+			//	return;
+			//}
 			textTreatmentNotes.Text="";
 			if(PatCur==null) {
 				gridPtInfo.BeginUpdate();
@@ -6667,7 +6667,7 @@ namespace OpenDental {
 
 		///<summary>Do not call this method. Call FillProgNotes instead.</summary>
 		public void FillProgNotesInternal(bool retainToothSelection=false,bool doRefreshData=true,bool isSearch=false,bool isForceFirstPage=false) {
-			Plugins.HookAddCode(this,"ContrChart.FillProgNotes_begin");
+			//Plugins.HookAddCode(this,"ContrChart.FillProgNotes_begin");
 			//Make a reference to all of the tags (custom DataRow) that are currently selected within gridProg for reselecting.
 			List<DataRow> listSelectedDataRows=gridProg.SelectedTags<DataRow>();
 			gridProg.BeginUpdate();
@@ -8387,11 +8387,11 @@ namespace OpenDental {
 				}
 				else{
 					FormProcEdit FormP=new FormProcEdit(proc,PatCur,FamCur);
-					Plugins.HookAddCode(this, "ContrChart.gridProg_CellDoubleClick_proc", proc, FormP);
+					//Plugins.HookAddCode(this, "ContrChart.gridProg_CellDoubleClick_proc", proc, FormP);
 					if(!FormP.IsDisposed) { //Form might be disposed by the above hook.
 						FormP.ShowDialog();
 					} 
-					Plugins.HookAddCode(this, "ContrChart.gridProg_CellDoubleClick_proc2", proc, FormP);
+					//Plugins.HookAddCode(this, "ContrChart.gridProg_CellDoubleClick_proc2", proc, FormP);
 					if(FormP.DialogResult!=DialogResult.OK) {
 						return;
 					}
@@ -8582,7 +8582,7 @@ namespace OpenDental {
 		///AddProcedure and AddQuick both call AddProcHelper, where most of the logic for setting the fields for a new procedure is located.
 		///No validation is done before adding the procedure so check all permissions and such prior to calling this method.</summary>
 		private void AddQuick(Procedure ProcCur,List<Fee> listFees) {
-			Plugins.HookAddCode(this,"ContrChart.AddQuick_begin",ProcCur,listFees);
+			//Plugins.HookAddCode(this,"ContrChart.AddQuick_begin",ProcCur,listFees);
 			if(!AddProcHelper(ProcCur,listFees)) { //Procedure was deleted.
 				return;
 			}
@@ -10987,9 +10987,9 @@ namespace OpenDental {
 		}
 
 		private void gridPtInfo_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(Plugins.HookMethod(this,"ContrChart.gridPtInfo_CellDoubleClick",PatCur,FamCur,e,PatientNoteCur)) {
-				return;
-			}
+			//if(Plugins.HookMethod(this,"ContrChart.gridPtInfo_CellDoubleClick",PatCur,FamCur,e,PatientNoteCur)) {
+			//	return;
+			//}
 			if(TerminalActives.PatIsInUse(PatCur.PatNum)) {
 				MsgBox.Show(this,"Patient is currently entering info at a reception terminal.  Please try again later.");
 				return;
@@ -11137,7 +11137,7 @@ namespace OpenDental {
 					menuItemPrintDay.Visible=true;
 				}
 				//This hook was here before we changed this method to be MouseDown instead of MouseUp
-				Plugins.HookAddCode(this,"ContrChart.gridProg_MouseUp_end",menuProgRight,gridProg,PatCur);
+				//Plugins.HookAddCode(this,"ContrChart.gridProg_MouseUp_end",menuProgRight,gridProg,PatCur);
 			}
 		}
 
@@ -11542,7 +11542,7 @@ namespace OpenDental {
 					//Only change the status of IsCpoe to true.  Never set it back to false for any reason.  Once true, always true.
 					procNew.IsCpoe=true;
 				}
-				Plugins.HookAddCode(this,"ContrChart.menuItemSetComplete_Click_procLoop",procNew,procOld);
+				//Plugins.HookAddCode(this,"ContrChart.menuItemSetComplete_Click_procLoop",procNew,procOld);
 				ProcedureCode procCode=ProcedureCodes.GetProcCode(procNew.CodeNum);
 				Procedures.FormProcEditUpdate(procNew,procOld,procCode);
 				Procedures.ComputeEstimates(procNew,procNew.PatNum,listClaimProcs,false,PlanList,PatPlanList,BenefitList,PatCur.Age,SubList);
@@ -11928,7 +11928,7 @@ namespace OpenDental {
 				text=PatCur.GetNameFirst()[0]+". "+PatCur.LName;//example: J. Sparks
 			}
 			string[] headerText={ text };
-			Plugins.HookAddCode(this,"ContrChart.pd2_PrintPage_middle",PatCur,e,g,headerText);
+			//Plugins.HookAddCode(this,"ContrChart.pd2_PrintPage_middle",PatCur,e,g,headerText);
 			text=headerText[0];
 			g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
 			text="Page "+(pagesPrinted+1);

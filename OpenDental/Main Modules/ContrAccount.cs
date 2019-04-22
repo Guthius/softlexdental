@@ -2230,7 +2230,7 @@ namespace OpenDental {
 			LayoutPanels();
 			checkShowFamilyComm.Checked=PrefC.GetBoolSilent(PrefName.ShowAccountFamilyCommEntries,true);
 			checkShowCompletePayPlans.Checked=PrefC.GetBool(PrefName.AccountShowCompletedPaymentPlans);
-			Plugins.HookAddCode(this,"ContrAccount.InitializeOnStartup_end");
+			//Plugins.HookAddCode(this,"ContrAccount.InitializeOnStartup_end");
 		}
 
 		private void textQuickCharge_MouseClick(object sender,MouseEventArgs e) {
@@ -2310,7 +2310,7 @@ namespace OpenDental {
 			}
 			ProgramL.LoadToolbar(ToolBarMain,ToolBarsAvail.AccountModule);
 			ToolBarMain.Invalidate();
-			Plugins.HookAddCode(this,"ContrAccount.LayoutToolBar_end",PatCur);
+			//Plugins.HookAddCode(this,"ContrAccount.LayoutToolBar_end",PatCur);
 		}
 
 		///<summary>This gets run just prior to the contextMenuQuickCharge menu displaying to the user.</summary>
@@ -2414,7 +2414,7 @@ namespace OpenDental {
 			}
 			Logger.LogAction("RefreshModuleData",LogPath.AccountModule,() => RefreshModuleData(patNum,isSelectingFamily));
 			Logger.LogAction("RefreshModuleScreen",LogPath.AccountModule,() => RefreshModuleScreen(isSelectingFamily));
-			Plugins.HookAddCode(this,"ContrAccount.ModuleSelected_end",patNum,isSelectingFamily);
+			//Plugins.HookAddCode(this,"ContrAccount.ModuleSelected_end",patNum,isSelectingFamily);
 		}
 
 		///<summary>Used when jumping to this module and directly to a claim.</summary>
@@ -2443,7 +2443,7 @@ namespace OpenDental {
 			FamCur=null;
 			RepeatChargeList=null;
 			_patNumLast=0;//Clear out the last pat num so that a security log gets entered that the module was "visited" or "refreshed".
-			Plugins.HookAddCode(this,"ContrAccount.ModuleUnselected_end");
+			//Plugins.HookAddCode(this,"ContrAccount.ModuleUnselected_end");
 		}
 
 		///<summary></summary>
@@ -2454,7 +2454,7 @@ namespace OpenDental {
 				PatCur=null;
 				FamCur=null;
 				DataSetMain=null;
-				Plugins.HookAddCode(this,"ContrAccount.RefreshModuleData_null");
+				//Plugins.HookAddCode(this,"ContrAccount.RefreshModuleData_null");
 				return;
 			}
 			DateTime fromDate=DateTime.MinValue;
@@ -2489,7 +2489,7 @@ namespace OpenDental {
 			PatientNoteCur=_loadData.PatNote;
 			_patFieldList=_loadData.ArrPatFields;
 			FillSummary();
-			Plugins.HookAddCode(this,"ContrAccount.RefreshModuleData_end",FamCur,PatCur,DataSetMain,PPBalanceTotal,isSelectingFamily);
+			//Plugins.HookAddCode(this,"ContrAccount.RefreshModuleData_end",FamCur,PatCur,DataSetMain,PPBalanceTotal,isSelectingFamily);
 		}
 
 		///<summary>Returns a deep copy of the corresponding table from the main data set.
@@ -2531,7 +2531,7 @@ namespace OpenDental {
 				textFinNote.Enabled=false;
 				//butComm.Enabled=false;
 				tabControlShow.Enabled=false;
-				Plugins.HookAddCode(this,"ContrAccount.RefreshModuleScreen_null");
+				//Plugins.HookAddCode(this,"ContrAccount.RefreshModuleScreen_null");
 			}
 			else{
 				tabControlAccount.Enabled=true;
@@ -2586,7 +2586,7 @@ namespace OpenDental {
 				panelProgNotes.Visible = false;
 				FillComm();
 			}
-			Plugins.HookAddCode(this,"ContrAccount.RefreshModuleScreen_end",FamCur,PatCur,DataSetMain,PPBalanceTotal,isSelectingFamily);
+			//Plugins.HookAddCode(this,"ContrAccount.RefreshModuleScreen_end",FamCur,PatCur,DataSetMain,PPBalanceTotal,isSelectingFamily);
 		}
 
 		///<summary>Call this before inserting new repeat charge to update patient.BillingCycleDay if no other repeat charges exist.
@@ -2724,9 +2724,9 @@ namespace OpenDental {
 		}
 
 		private void FillAging(bool isSelectingFamily) {
-			if(Plugins.HookMethod(this,"ContrAccount.FillAging",FamCur,PatCur,DataSetMain,isSelectingFamily)) {
-				return;
-			}
+			//if(Plugins.HookMethod(this,"ContrAccount.FillAging",FamCur,PatCur,DataSetMain,isSelectingFamily)) {
+			//	return;
+			//}
 			if(PatCur!=null) {
 				textOver90.Text=FamCur.ListPats[0].BalOver90.ToString("F");
 				text61_90.Text=FamCur.ListPats[0].Bal_61_90.ToString("F");
@@ -3877,7 +3877,7 @@ namespace OpenDental {
 								return true;//Allow user to the payment window.
 							})
 						);
-						Plugins.HookAddCode(this,"ContrAccount.ToolBarMain_ButtonClick_paymentInputBox",inputBox,PatCur);
+						//Plugins.HookAddCode(this,"ContrAccount.ToolBarMain_ButtonClick_paymentInputBox",inputBox,PatCur);
 						if(inputBox.ShowDialog()!=DialogResult.OK) {
 							break;
 						}
@@ -3926,7 +3926,7 @@ namespace OpenDental {
 			else if(e.Button.Tag.GetType()==typeof(Program)) {
 				ProgramL.Execute(((Program)e.Button.Tag).ProgramNum,PatCur);
 			}
-			Plugins.HookAddCode(this,"ContrAccount.ToolBarMain_ButtonClick_end",PatCur,e);
+			//Plugins.HookAddCode(this,"ContrAccount.ToolBarMain_ButtonClick_end",PatCur,e);
 		}
 
 		private void toolBarButPay_Click(double payAmt,bool preferCurrentPat=false,bool isPrePay=false,bool isIncomeTransfer=false,bool isPayPressed=false,bool isTsiPayment=false) {

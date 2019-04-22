@@ -880,13 +880,13 @@ namespace OpenDental{
 			RxPatCur.SendStatus=(RxSendStatus)comboSendStatus.SelectedIndex;
 			RxPatCur.PatientInstruction=textPatInstructions.Text;
 			RxPatCur.ClinicNum=(comboClinic.SelectedClinicNum==-1 ? RxPatCur.ClinicNum : comboClinic.SelectedClinicNum);//If no selection, don't change the ClinicNum
-			// hook for additional authorization before prescription is saved
-			bool[] authorized=new bool[1] { false };
-			if(Plugins.HookMethod(this,"FormRxEdit.SaveRx_Authorize",authorized,prov,RxPatCur,_rxPatOld)) {
-				if(!authorized[0]) {
-					return false;
-				}
-			}
+			
+            // hook for additional authorization before prescription is saved
+            if (!Plugin.Filter(this, "FormRxEdit_AuthorizeSave", false, prov, RxPatCur, _rxPatOld))
+            {
+                return false;
+            }
+
 			//pharmacy is set when using pick button.
 			if(IsNew){
 				RxPatCur.RxNum=RxPats.Insert(RxPatCur);

@@ -1323,8 +1323,6 @@
     <Compile Include="Mobile\TableTypes\Appointmentm.cs" />
     <Compile Include="Mobile\TableTypes\Patientm.cs" />
     <Compile Include="Mobile\TableTypes\Prefm.cs" />
-    <Compile Include="Plugins\PluginBase.cs" />
-    <Compile Include="Plugins\PluginContainer.cs" />
     <Compile Include="Plugins\Plugins.cs" />
     <Compile Include="Remoting\WebSerializer.cs" />
     <Compile Include="Reports\RpCustomAging.cs" />

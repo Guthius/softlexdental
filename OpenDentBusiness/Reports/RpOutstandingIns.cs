@@ -113,9 +113,8 @@ namespace OpenDentBusiness
                 command += ") ";
             }
             command += "ORDER BY carrier.CarrierName,claim.DateService,patient.LName,patient.FName,claim.ClaimType";
-            object[] parameters = { command };
-            Plugins.HookAddCode(null, "Claims.GetOutInsClaims_beforequeryrun", parameters);//Moved entire method from Claims.cs
-            command = (string)parameters[0];
+            command = Plugin.Filter(null, "Data_Claim_GetOutInsClaims_Query", command); // TODO: Give this filter a better name...
+
             DataTable table = Db.GetTable(command);
             List<OutstandingInsClaim> listOutstandingInsClaims = table.Rows.OfType<DataRow>().Select(x => new OutstandingInsClaim(x)).ToList();
             return listOutstandingInsClaims;
