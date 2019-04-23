@@ -29,7 +29,7 @@ namespace OpenDental {
 			}
 			if(_passwordPref!=null) {
 				string passwordPlain;
-				CDT.Class1.Decrypt(_passwordPref.ValueString,out passwordPlain);
+                Encryption.TryDecrypt(_passwordPref.ValueString,out passwordPlain);
 				textPassword.Text=passwordPlain;
 			}
 		}
@@ -46,7 +46,7 @@ namespace OpenDental {
 				UserNum=Security.CurUser.UserNum,
 			};
 			_userNamePref.ValueString=textUsername.Text;
-			CDT.Class1.Encrypt(textPassword.Text,out _passwordPref.ValueString);
+            Encryption.TryEncrypt(textPassword.Text,out _passwordPref.ValueString);
 			UserOdPrefs.Upsert(_userNamePref);
 			UserOdPrefs.Upsert(_passwordPref);
 			DialogResult=DialogResult.OK;

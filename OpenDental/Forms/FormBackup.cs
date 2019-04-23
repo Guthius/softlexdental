@@ -677,7 +677,7 @@ namespace OpenDental {
 			#endregion
 			#region Archive Tab
 			string decryptedPass;
-			CDT.Class1.Decrypt(PrefC.GetString(PrefName.ArchivePassHash),out decryptedPass);
+            Encryption.TryDecrypt(PrefC.GetString(PrefName.ArchivePassHash),out decryptedPass);
 			textArchivePass.Text=decryptedPass;
 			textArchivePass.PasswordChar=(textArchivePass.Text=="" ? default(char) : '*');
 			textArchiveServerName.Text=PrefC.GetString(PrefName.ArchiveServerName);
@@ -1490,7 +1490,7 @@ namespace OpenDental {
 					Prefs.UpdateString(PrefName.ArchiveServerName,textArchiveServerName.Text);
 					Prefs.UpdateString(PrefName.ArchiveUserName,textArchiveUser.Text);
 					string encryptedPass;
-					CDT.Class1.Encrypt(textArchivePass.Text,out encryptedPass);
+                    Encryption.TryEncrypt(textArchivePass.Text,out encryptedPass);
 					Prefs.UpdateString(PrefName.ArchivePassHash,encryptedPass);
 					#endregion
 					isSuccess=true;
@@ -1511,7 +1511,7 @@ namespace OpenDental {
 			Prefs.UpdateString(PrefName.ArchiveServerName,textArchiveServerName.Text);
 			Prefs.UpdateString(PrefName.ArchiveUserName,textArchiveUser.Text);
 			string encryptedPass;
-      CDT.Class1.Encrypt(textArchivePass.Text,out encryptedPass);
+            Encryption.TryEncrypt(textArchivePass.Text,out encryptedPass);
 			Prefs.UpdateString(PrefName.ArchivePassHash,encryptedPass);
 			DataValid.SetInvalid(InvalidType.Prefs);
 			MsgBox.Show(this,"Saved");

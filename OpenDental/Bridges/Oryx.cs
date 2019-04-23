@@ -39,7 +39,7 @@ namespace OpenDental.Bridges {
 				}
 				string apiUrl=clientUrl.TrimEnd('/')+"/api/auth/opendental/v1/login";
 				string passwordPlain;
-				if(!CDT.Class1.Decrypt(passwordPref.ValueString,out passwordPlain)) {
+				if(!Encryption.TryDecrypt(passwordPref.ValueString,out passwordPlain)) {
 					MsgBox.Show("Oryx","Unable to decrypt password");
 					return;
 				}

@@ -1252,25 +1252,6 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary>Pass in a clearinghouse with an unconcealed password. Will do nothing if the password is blank.</summary>
-		private void ConcealClearinghousePass(Clearinghouse clearinghouse) {
-			string concealedPassword = "";
-			if(string.IsNullOrEmpty(clearinghouse.Password)) {
-				return;
-			}
-			if(CDT.Class1.ConcealClearinghouse(clearinghouse.Password,out concealedPassword)) {
-				clearinghouse.Password=concealedPassword;
-			}
-		}
-
-		///<summary>Pass in a clearinghouse with a concealed password. Will do nothing if the password is blank.</summary>
-		private void RevealClearinghousePass(Clearinghouse clearinghouse) {
-			string revealedClearinghousePass = Clearinghouses.GetRevealPassword(clearinghouse.Password);
-			if(revealedClearinghousePass!="") {
-				clearinghouse.Password=revealedClearinghousePass;
-			}
-		}
-
 		///<summary>All cached clearinghouses' passwords are NOT hashed. 
 		///Hashing in this form only happens when transferring data between the database and the program.</summary>
 		private bool SaveToCache() {
@@ -1604,15 +1585,6 @@ namespace OpenDental{
 			if(!SaveToCache()) {//Validation failed.
 				return;//Block user from leaving.
 			}
-			//When saving, hash all passwords.
-			ConcealClearinghousePass(ClearinghouseHq);
-			ListClearinghousesClinCur.ForEach(x => {
-				ConcealClearinghousePass(x);
-			});
-			ConcealClearinghousePass(ClearinghouseHqOld);
-			ListClearinghousesClinOld.ForEach(x => {
-				ConcealClearinghousePass(x);
-			});
 			if(IsNew) {
 				long clearinghouseNumNew=Clearinghouses.Insert(ClearinghouseHq);
 				for(int i=0;i<ListClearinghousesClinCur.Count;i++) {
@@ -1623,16 +1595,6 @@ namespace OpenDental{
 				Clearinghouses.Update(ClearinghouseHq,ClearinghouseHqOld);
 			}
 			Clearinghouses.Sync(ListClearinghousesClinCur,ListClearinghousesClinOld);
-			//After saving, reveal all passwords.
-			RevealClearinghousePass(ClearinghouseHq);
-			foreach(Clearinghouse c in ListClearinghousesClinCur) {
-				RevealClearinghousePass(c);
-			}
-			//Reveal the "olds" just in case someone uses them outside this form.
-			RevealClearinghousePass(ClearinghouseHqOld);
-			foreach(Clearinghouse c in ListClearinghousesClinOld) {
-				RevealClearinghousePass(c);
-			}
 			//If the DXC attachment saving preference changed send a signal to have all clients update their preference cache.
 			if(Prefs.UpdateBool(PrefName.SaveDXCAttachments,checkSaveDXC.Checked)) {
 				DataValid.SetInvalid(InvalidType.Prefs);

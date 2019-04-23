@@ -1043,7 +1043,7 @@ namespace OpenDental
                 }
             }
             string mySqlPassHash;
-            CDT.Class1.Encrypt(DataConnection.GetMysqlPass(), out mySqlPassHash);
+            Encryption.TryEncrypt(DataConnection.GetMysqlPass(), out mySqlPassHash);
             return ServicesHelper.CreateServiceConfigFile(eConnectorConfigPath
                 , DataConnection.GetServerName()
                 , DataConnection.GetDatabaseName()
@@ -1067,7 +1067,7 @@ namespace OpenDental
             }
             //At this point we know that Open Dental Service does not have a config file present.
             string mySqlPassHash;
-            CDT.Class1.Encrypt(DataConnection.GetMysqlPass(), out mySqlPassHash);
+            Encryption.TryEncrypt(DataConnection.GetMysqlPass(), out mySqlPassHash);
             return ServicesHelper.CreateServiceConfigFile(odServiceConfigPath
                 , DataConnection.GetServerName()
                 , DataConnection.GetDatabaseName()

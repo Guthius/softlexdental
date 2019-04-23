@@ -8,7 +8,6 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using CodeBase;
-using CDT;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -759,24 +758,25 @@ namespace OpenDental{
 		private Image GetImage(ClaimFormItem claimFormItem,out string extension) {
 			extension="";
 			Image img=null;
+            // TODO: What's the point of this? Why are these images randomly coming from CDT??
 			if(claimFormItem.ImageFileName=="ADA2006.gif") {
-				img=CDT.Class1.GetADA2006();
+				//img=CDT.Class1.GetADA2006();
 				extension=".gif";
 			}
 			else if(claimFormItem.ImageFileName=="ADA2012.gif") {
-				img=CDT.Class1.GetADA2012();
+				//img=CDT.Class1.GetADA2012();
 				extension=".gif";
 			}
 			else if(claimFormItem.ImageFileName=="ADA2012_J430D.gif") {
-				img=CDT.Class1.GetADA2012_J430D();
+				//img=CDT.Class1.GetADA2012_J430D();
 				extension=".gif";
 			}
 			else if(claimFormItem.ImageFileName=="ADA2018_J432.gif") {
-				img=CDT.Class1.GetADA2018_J432();
+				//img=CDT.Class1.GetADA2018_J432();
 				extension=".gif";
 			}
 			else if(claimFormItem.ImageFileName=="1500_02_12.gif") {
-				img=Properties.Resources._1500_02_12;
+				//img=Properties.Resources._1500_02_12;
 				extension=".gif";
 			}
 			else {
@@ -1365,21 +1365,21 @@ namespace OpenDental{
 					}
 					string fileName=FileAtoZ.CombinePaths(ImageStore.GetPreferredAtoZpath(),_claimFormCur.Items[i].ImageFileName);
 					Image thisImage=null;
-					switch(_claimFormCur.Items[i].ImageFileName) {
+					switch(_claimFormCur.Items[i].ImageFileName) { // TODO: Fix these images??
 						case "ADA2006.gif":
-							thisImage=CDT.Class1.GetADA2006();
+							//thisImage=CDT.Class1.GetADA2006();
 							break;
 						case "ADA2012.gif":
-							thisImage=CDT.Class1.GetADA2012();
+							//thisImage=CDT.Class1.GetADA2012();
 							break;
 						case "ADA2012_J430D.gif":
-							thisImage=CDT.Class1.GetADA2012_J430D();
+							//thisImage=CDT.Class1.GetADA2012_J430D();
 							break;
 						case "ADA2018_J432.gif":
-							thisImage=CDT.Class1.GetADA2018_J432();
+							//thisImage=CDT.Class1.GetADA2018_J432();
 							break;
 						case "1500_02_12.gif":
-							thisImage=Properties.Resources._1500_02_12;
+							//thisImage=Properties.Resources._1500_02_12;
 							break;
 						default:
 							if(!FileAtoZ.Exists(fileName)) {

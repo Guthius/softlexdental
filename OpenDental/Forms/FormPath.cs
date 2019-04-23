@@ -1009,10 +1009,6 @@ namespace OpenDental{
 				textSftpUsername.Text=_ppSftpUsername.PropertyValue;
 				textSftpPassword.Text=_ppSftpPassword.PropertyValue;
 				if(textSftpPassword.Text.Length>0) {
-					string pass="";
-					if(CDT.Class1.DecryptSftp(textSftpPassword.Text,out pass)) {
-						textSftpPassword.Text=pass;
-					}
 					textSftpPassword.UseSystemPasswordChar=true;
 					textSftpPassword.ReadOnly=true;
 				}
@@ -1109,8 +1105,7 @@ namespace OpenDental{
 			if(radioSftp.Checked && (ProgramProperties.UpdateProgramPropertyWithValue(_ppSftpPathAtoZ,textSftpAtoZ.Text)
 					| ProgramProperties.UpdateProgramPropertyWithValue(_ppSftpHostname,textSftpHostname.Text)
 					| ProgramProperties.UpdateProgramPropertyWithValue(_ppSftpUsername,textSftpUsername.Text)
-					| (CDT.Class1.EncryptSftp(textSftpPassword.Text,out sftpPass) 
-						&& ProgramProperties.UpdateProgramPropertyWithValue(_ppSftpPassword,sftpPass)))) 
+					| ProgramProperties.UpdateProgramPropertyWithValue(_ppSftpPassword,textSftpPassword.Text))) 
 			{
 				DataValid.SetInvalid(InvalidType.Programs);
 			}

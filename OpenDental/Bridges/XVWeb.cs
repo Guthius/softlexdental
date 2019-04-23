@@ -121,7 +121,7 @@ namespace OpenDental.Bridges {
 			}
 			//decrypt hashed password from database before sending
 			string decryptedPassword;
-			CDT.Class1.Decrypt(ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb),ProgramProps.Password),out decryptedPassword);
+            Encryption.TryDecrypt(ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb),ProgramProps.Password),out decryptedPassword);
 			UriBuilder uriBuilder=GetApiUri(true);
 			uriBuilder.Path+="token";
 			HttpWebRequest request=(HttpWebRequest)WebRequest.Create(uriBuilder.ToString());

@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDental.Translation", "O
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{76FD9850-AF95-4961-9ACB-5C44970CCE84}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDental.Security", "OpenDental.Security\OpenDental.Security.csproj", "{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Alpha_Debug|Any CPU = Alpha_Debug|Any CPU
@@ -642,6 +644,42 @@ Global
 		{1180AA61-8CBC-479F-9143-B1AB1B149028}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{1180AA61-8CBC-479F-9143-B1AB1B149028}.Release|x86.ActiveCfg = Release|Any CPU
 		{1180AA61-8CBC-479F-9143-B1AB1B149028}.Release|x86.Build.0 = Release|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Alpha_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Alpha_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Alpha_Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Alpha_Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Alpha_Debug|x86.ActiveCfg = Debug|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Alpha_Debug|x86.Build.0 = Debug|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Alpha_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Alpha_Release|Any CPU.Build.0 = Release|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Alpha_Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Alpha_Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Alpha_Release|x86.ActiveCfg = Release|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Alpha_Release|x86.Build.0 = Release|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Debug_Web|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Debug_Web|Any CPU.Build.0 = Debug|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Debug_Web|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Debug_Web|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Debug_Web|x86.ActiveCfg = Debug|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Debug_Web|x86.Build.0 = Debug|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Debug|x86.Build.0 = Debug|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.LinuxRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.LinuxRelease|Any CPU.Build.0 = Release|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.LinuxRelease|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.LinuxRelease|Mixed Platforms.Build.0 = Release|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.LinuxRelease|x86.ActiveCfg = Release|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.LinuxRelease|x86.Build.0 = Release|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Release|x86.ActiveCfg = Release|Any CPU
+		{A2AD6AD8-2A7B-41B1-8B1F-DF8618CE4263}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

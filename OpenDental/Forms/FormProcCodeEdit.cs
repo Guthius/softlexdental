@@ -1164,7 +1164,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormProcCodeEdit_Load(object sender, System.EventArgs e) {
-			List<ProcedureCode> listCodes=CDT.Class1.GetADAcodes();
+            // TODO: CDT.Class1.GetADAcodes()
+            List<ProcedureCode> listCodes= new List<ProcedureCode>();
 			if(listCodes.Count>0 && ProcCode.ProcCode.Length==5 && ProcCode.ProcCode.Substring(0,1)=="D") {
 				for(int i=0;i<listCodes.Count;i++) {
 					if(listCodes[i].ProcCode==ProcCode.ProcCode) {

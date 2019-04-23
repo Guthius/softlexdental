@@ -158,7 +158,7 @@ namespace OpenDental{
 			textProperty.Text=ProgramPropertyCur.PropertyDesc;
 			if(_isPassword && ProgramPropertyCur.PropertyValue!="") {
 				string decryptedText;
-				CDT.Class1.Decrypt(ProgramPropertyCur.PropertyValue,out decryptedText);
+                Encryption.TryDecrypt(ProgramPropertyCur.PropertyValue,out decryptedText);
 				textValue.Text=decryptedText;
 			}
 			else {
@@ -170,7 +170,7 @@ namespace OpenDental{
 			ProgramPropertyCur.PropertyValue=textValue.Text;
 			if(_isPassword) {
 				string encryptedText;
-				CDT.Class1.Encrypt(ProgramPropertyCur.PropertyValue,out encryptedText);
+                Encryption.TryEncrypt(ProgramPropertyCur.PropertyValue,out encryptedText);
 				ProgramPropertyCur.PropertyValue=encryptedText;
 			}
 			ProgramProperties.Update(ProgramPropertyCur);

@@ -453,7 +453,7 @@ namespace OpenDental {
 			}
 			Text="AVENGINEERS MODE ACTIVE";
 			string str="";
-			CDT.Class1.Decrypt(MSG,out str);
+            Encryption.TryDecrypt(MSG,out str);
 			textTitle.Text="Welcome Director Fury";
 			textConcept.MainText=str;
 			return false;

@@ -119,10 +119,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\AxInterop.AcroPDFLib.dll</HintPath>
     </Reference>
-    <Reference Include="CDT, Version=19.1.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Required dlls\CDT.dll</HintPath>
-    </Reference>
     <Reference Include="DpsPos, Version=1.0.6191.28914, Culture=neutral, PublicKeyToken=fed6c2461985275f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\DpsPos.dll</HintPath>
@@ -9371,6 +9367,10 @@
     <ProjectReference Include="..\ODR\xODR.csproj">
       <Project>{84688345-BB6A-4F2F-8672-A82B52FD433B}</Project>
       <Name>xODR</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\OpenDental.Security\OpenDental.Security.csproj">
+      <Project>{a2ad6ad8-2a7b-41b1-8b1f-df8618ce4263}</Project>
+      <Name>OpenDental.Security</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpenDental.Translation\OpenDental.Translation.csproj">
       <Project>{1180aa61-8cbc-479f-9143-b1ab1b149028}</Project>

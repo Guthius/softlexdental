@@ -559,7 +559,7 @@ namespace OpenDental{
 				row.Cells.Add(property.PropertyDesc);
 				if(ProgramCur.ProgName==ProgramName.XVWeb.ToString() && property.PropertyDesc==XVWeb.ProgramProps.Password) {
 					string decrypted;
-					CDT.Class1.Decrypt(property.PropertyValue,out decrypted);
+                    Encryption.TryDecrypt(property.PropertyValue,out decrypted);
 					row.Cells.Add(new string('*',decrypted.Length));//Show the password as '*'
 				}
 				else if(ProgramCur.ProgName==ProgramName.XVWeb.ToString() && property.PropertyDesc==XVWeb.ProgramProps.ImageCategory) {

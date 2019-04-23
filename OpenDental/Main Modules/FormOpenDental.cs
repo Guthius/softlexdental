@@ -1258,7 +1258,7 @@ namespace OpenDental
             }
 
             // Check whether there is a valid registration key.
-            if (!FormRegistrationKey.ValidateKey(PrefC.GetString(PrefName.RegistrationKey)))
+            if (!License.ValidateKey(PrefC.GetString(PrefName.RegistrationKey)))
             {
                 using (var formRegistrationKey = new FormRegistrationKey())
                 {
