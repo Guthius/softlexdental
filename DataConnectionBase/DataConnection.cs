@@ -652,9 +652,8 @@ namespace DataConnectionBase
                     return (table.Rows[0]["Msg_text"].ToString().Trim().ToUpper() != "OK");//Any Msg_text other than 'OK' means the table is crashed.
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                ex.DoNothing();
                 return false;
             }
         }
@@ -951,9 +950,8 @@ namespace DataConnectionBase
                 ODException.SwallowAnyException(() => connection.Close());
                 throw;//A different MySQL Exception, bubble it up.
             }
-            catch (Exception ex)
+            catch 
             {
-                ex.DoNothing();
                 //Close() will throw a different exception if it cannot close the connection. Swallow this and move on.
                 ODException.SwallowAnyException(() => connection.Close());
                 throw;
@@ -1065,15 +1063,13 @@ namespace DataConnectionBase
                     DataConnectionEvent.Fire(new DataConnectionEventArgs(DataConnectionEventType.ConnectionRestored, true, connectionString));
                     o.QuitAsync();
                 }
-                catch (Exception ex)
+                catch
                 {
-                    ex.DoNothing();//Connection has not been restored yet.  Wait a little bit and then try again.
                 }
             });
             threadRetry.Name = "DataConnectionAutoRetryThread";
             threadRetry.AddExceptionHandler((e) =>
             {
-                e.DoNothing();
                 //Unhandled exception so tell caller to throw. Letting caller continue would lead us right back here and potentially cause a stack overflow.
                 doRetry = false;
             });
@@ -1126,7 +1122,6 @@ namespace DataConnectionBase
             threadCrashedTableMonitor.Name = "CrashedTableAutoRetryThread";
             threadCrashedTableMonitor.AddExceptionHandler((e) =>
             {
-                e.DoNothing();
                 //Unhandled exception so tell caller to throw. Letting caller continue would lead us right back here and potentially cause a stack overflow.
                 doRetry = false;
             });

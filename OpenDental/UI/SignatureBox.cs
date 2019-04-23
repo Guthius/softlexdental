@@ -158,10 +158,8 @@ namespace OpenDental.UI
                 }
                 Invalidate();
             }
-            catch (Exception e)
+            catch
             {
-                e.DoNothing();
-                //this will leave the list with zero points
             }
         }
 
@@ -324,7 +322,7 @@ namespace OpenDental.UI
             {
                 return Encoding.UTF8.GetString(pointList.SelectMany(x => new[] { x.X, x.Y }).Where(x => x > int.MinValue).Select(x => (byte)x).ToArray());
             }
-            catch (Exception ex) { ex.DoNothing(); }
+            catch { }
             return "";
         }
 

@@ -591,6 +591,9 @@
     <Compile Include="Main Modules\ContrStaff.Designer.cs">
       <DependentUpon>ContrStaff.cs</DependentUpon>
     </Compile>
+    <Compile Include="Main Modules\FormOpenDental.Designer.cs">
+      <DependentUpon>FormOpenDental.cs</DependentUpon>
+    </Compile>
     <Compile Include="Misc\WebServiceRequest.cs" />
     <Compile Include="Module.cs">
       <SubType>UserControl</SubType>

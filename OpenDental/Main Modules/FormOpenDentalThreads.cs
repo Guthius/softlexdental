@@ -143,7 +143,6 @@ namespace OpenDental {
 			ODThread odThread=new ODThread((int)TimeSpan.FromHours(1).TotalMilliseconds,(o) => {
 				ItransNCpl.TryCarrierUpdate();
 			});
-			odThread.AddExceptionHandler((e) => e.DoNothing());
 			odThread.GroupName=FormODThreadNames.CanadianItransCarrier.GetDescription();
 			odThread.Name=FormODThreadNames.CanadianItransCarrier.GetDescription();
 			odThread.Start();
@@ -161,7 +160,6 @@ namespace OpenDental {
 			long clinicNumCur=Clinics.ClinicNum;
 			long userNumCur=Security.CurUser.UserNum;
 			ODThread.WorkerDelegate getAlerts=new ODThread.WorkerDelegate((o) => {
-				Logger.LogToPath("",LogPath.Signals,LogPhase.Start);
 				//List of AlertSubs for current clinic and user combo.
 				List<AlertSub> listUserAlertSubs=AlertSubs.GetAllForUser(userNumCur,clinicNumCur);
 				List<long> listAlertCatNums=listUserAlertSubs.Select(y => y.AlertCategoryNum).ToList();
@@ -184,7 +182,6 @@ namespace OpenDental {
 				return;
 			}
 			ODThread odThread=new ODThread(getAlerts);
-			odThread.AddExceptionHandler((ex) => ex.DoNothing());
 			odThread.GroupName=FormODThreadNames.CheckAlerts.GetDescription();
 			odThread.Name=FormODThreadNames.CheckAlerts.GetDescription();
 			odThread.Start(true);
@@ -211,7 +208,6 @@ namespace OpenDental {
 				}
 				Clearinghouses.RetrieveReportsAutomatic(false);//only run for the selected clinic, if clinics are enabled
 			});
-			odThread.AddExceptionHandler(ex => ex.DoNothing());
 			odThread.GroupName=FormODThreadNames.ClaimReport.GetDescription();
 			odThread.Name=FormODThreadNames.ClaimReport.GetDescription();
 			odThread.Start();
@@ -229,7 +225,6 @@ namespace OpenDental {
 					Computers.UpdateHeartBeat(Environment.MachineName,false);
 				});
 			});
-			threadCompHeartbeat.AddExceptionHandler((e) => e.DoNothing());
 			threadCompHeartbeat.GroupName=FormODThreadNames.ComputerHeartbeat.GetDescription();
 			threadCompHeartbeat.Name=FormODThreadNames.ComputerHeartbeat.GetDescription();
 			threadCompHeartbeat.Start();
@@ -261,7 +256,6 @@ namespace OpenDental {
 					return;
 				}
 			});
-			_odThreadCrashedTableMonitor.AddExceptionHandler((ex) => ex.DoNothing());
 			_odThreadCrashedTableMonitor.AddExitHandler((ex) => _odThreadCrashedTableMonitor=null);
 			_odThreadCrashedTableMonitor.GroupName=FormODThreadNames.CrashedTableMonitor.GetDescription();
 			_odThreadCrashedTableMonitor.Name=FormODThreadNames.CrashedTableMonitor.GetDescription();
@@ -286,8 +280,7 @@ namespace OpenDental {
 							//Tell everyone that the data connection has been found.
 							DataConnectionEvent.Fire(new DataConnectionEventArgs(DataConnectionEventType.ConnectionRestored,true,e.ConnectionString));
 						}
-						catch(Exception ex) {
-							ex.DoNothing();
+						catch {
 							return false;//Data connection is still lost so do not close the Connection Lost window.
 						}
 					}
@@ -303,7 +296,6 @@ namespace OpenDental {
 				SetTimersAndThreads(true);
 			});
 			//Add exception handling just in case MySQL is unreachable at any point in the lifetime of this session.
-			_odThreadDataConnectionLost.AddExceptionHandler((ex) => ex.DoNothing());
 			_odThreadDataConnectionLost.AddExitHandler((ex) => _odThreadDataConnectionLost=null);
 			_odThreadDataConnectionLost.GroupName=FormODThreadNames.DataConnectionLost.GetDescription();
 			_odThreadDataConnectionLost.Name=FormODThreadNames.DataConnectionLost.GetDescription();
@@ -330,7 +322,6 @@ namespace OpenDental {
 					EhrCodes.UpdateList();
 				});
 			});
-			odThread.AddExceptionHandler((e) => e.DoNothing());
 			odThread.GroupName=FormODThreadNames.EhrCodeList.GetDescription();
 			odThread.Name=FormODThreadNames.EhrCodeList.GetDescription();
 			odThread.Start();
@@ -345,7 +336,6 @@ namespace OpenDental {
 				return;
 			}
 			ODThread odThread=new ODThread((o) => { EnableFeaturesWorker(); });
-			odThread.AddExceptionHandler((ex) => ex.DoNothing());
 			odThread.GroupName=FormODThreadNames.EnableAdditionalFeatures.GetDescription();
 			odThread.Name=FormODThreadNames.EnableAdditionalFeatures.GetDescription();
 			odThread.Start(true);
@@ -408,7 +398,6 @@ namespace OpenDental {
 			//Currently we don't want to do anything if the eService signal processing fails.  Simply try again in a minute.  
 			//Most likely cause for exceptions will be database IO when computers are just sitting around not doing anything.
 			//Implementing this delegate allows us to NOT litter ProcessEServiceSignals() with try catches.  
-			odThread.AddExceptionHandler((e) => e.DoNothing());
 			odThread.GroupName=FormODThreadNames.EServiceMonitoring.GetDescription();
 			odThread.Name=FormODThreadNames.EServiceMonitoring.GetDescription();
 			odThread.Start();
@@ -462,7 +451,6 @@ namespace OpenDental {
 				ProcessHqMetricsPhones();
 				ProcessHqMetricsEServices();
 			});
-			odThread.AddExceptionHandler(ex => ex.DoNothing());
 			odThread.GroupName=FormODThreadNames.HqMetrics.GetDescription();
 			odThread.Name=FormODThreadNames.HqMetrics.GetDescription();
 			odThread.Start();
@@ -569,8 +557,7 @@ namespace OpenDental {
 				try {
 					openForm=Application.OpenForms[f];
 				}
-				catch(Exception ex) {
-					ex.DoNothing();//We have received a bug submission for an index out of range exception from the above line.
+				catch {
 					continue;
 				}
 				if(openForm.Name=="FormTerminal") {
@@ -654,7 +641,6 @@ namespace OpenDental {
 			}
 			ODThread threadOpenDentalServiceCheck=new ODThread((int)TimeSpan.FromMinutes(10).TotalMilliseconds,
 				(o) => { AlertItems.CheckODServiceHeartbeat(); });
-			threadOpenDentalServiceCheck.AddExceptionHandler(ex => ex.DoNothing());
 			threadOpenDentalServiceCheck.GroupName=FormODThreadNames.ODServiceMonitor.GetDescription();
 			threadOpenDentalServiceCheck.Name=FormODThreadNames.ODServiceMonitor.GetDescription();
 			threadOpenDentalServiceCheck.Start();
@@ -677,7 +663,6 @@ namespace OpenDental {
 				}
 			});
 			//If the thread that attempts to start all Open Dental services fails for any reason, silently fail.
-			odThread.AddExceptionHandler(ex => ex.DoNothing());
 			odThread.GroupName=FormODThreadNames.ODServiceStarter.GetDescription();
 			odThread.Name=FormODThreadNames.ODServiceStarter.GetDescription();
 			odThread.Start(true);
@@ -693,7 +678,6 @@ namespace OpenDental {
 				InitDashboards(Security.CurUser.UserNum,CurPatNum);
 			});
 			//If the thread that attempts to start Open Dental dashboard fails for any reason, silently fail.
-			odThread.AddExceptionHandler(ex => ex.DoNothing());
 			odThread.GroupName=FormODThreadNames.Dashboard.GetDescription();
 			odThread.Name=FormODThreadNames.Dashboard.GetDescription();
 			odThread.Start(true);
@@ -708,10 +692,8 @@ namespace OpenDental {
 				return;
 			}
 			ODThread odThread=new ODThread((o) => {
-				Logger.LogToPath("PhoneConf",LogPath.Signals,LogPhase.Start);
 				List<PhoneConf> listPhoneConfs=PhoneConfs.GetAll();
 				this.Invoke((() => lightSignalGrid1.SetConfs(listPhoneConfs)));
-				Logger.LogToPath("PhoneConf",LogPath.Signals,LogPhase.End);
 			});
 			odThread.AddExceptionHandler(ex => SignalsTickExceptionHandler(ex));
 			odThread.GroupName=FormODThreadNames.PhoneConference.GetDescription();
@@ -726,7 +708,6 @@ namespace OpenDental {
 		private void BeginPlaySoundsThread(List<SigMessage> listSigMessages) {
 			//Do not check if the thread is already running. If there are more sounds to play, play them. 
 			ODThread odThread=new ODThread((o) => PlaySoundsWorker(listSigMessages));
-			odThread.AddExceptionHandler((e) => e.DoNothing());
 			odThread.GroupName=FormODThreadNames.PlaySounds.GetDescription();
 			odThread.Name=FormODThreadNames.PlaySounds.GetDescription();
 			odThread.Start();
@@ -780,7 +761,7 @@ namespace OpenDental {
 			}
 			ODThread odThread=new ODThread(Podium.PodiumThreadIntervalMS,((ODThread o) => { Podium.ThreadPodiumSendInvitations(false); }));
 			odThread.AddExceptionHandler((ex) => {
-				Logger.WriteException(ex,Podium.LOG_DIRECTORY_PODIUM);
+				Logger.Write(ex);
 			});
 			odThread.GroupName=FormODThreadNames.Podium.GetDescription();
 			odThread.Name=FormODThreadNames.Podium.GetDescription();
@@ -798,7 +779,6 @@ namespace OpenDental {
 			ODThread odThread=new ODThread(o => {
 				RegKeyIsForTesting=PrefL.IsRegKeyForTesting();
 			});
-			odThread.AddExceptionHandler(ex => ex.DoNothing());//silently fail.
 			odThread.GroupName=FormODThreadNames.RegKeyIsForTesting.GetDescription();
 			odThread.Name=FormODThreadNames.RegKeyIsForTesting.GetDescription();
 			odThread.Start(true);
@@ -814,7 +794,6 @@ namespace OpenDental {
 				return;
 			}
 			ODThread odThread=new ODThread((int)TimeSpan.FromSeconds(10).TotalMilliseconds,(o) => { ReplicationMonitorWorker(o); });
-			odThread.AddExceptionHandler((ex) => ex.DoNothing());
 			odThread.GroupName=FormODThreadNames.ReplicationMonitor.GetDescription();
 			odThread.Name=FormODThreadNames.ReplicationMonitor.GetDescription();
 			odThread.Start();
@@ -896,10 +875,8 @@ namespace OpenDental {
 			ODThread odThread=new ODThread((o) => {
 				if(PrefC.IsODHQ) {
 					ODThread webCamKillThread = new ODThread(((o2) => { Process.GetProcessesByName("WebCamOD").ToList().ForEach(x => x.Kill()); }));
-					webCamKillThread.AddExceptionHandler((ex) => ex.DoNothing());
 					webCamKillThread.Start();
 					ODThread proximityKillThread = new ODThread(((o2) => { Process.GetProcessesByName("ProximityOD").ToList().ForEach(x => x.Kill()); }));
-					proximityKillThread.AddExceptionHandler((ex) => ex.DoNothing());
 					proximityKillThread.Start();
 				}
 				Thread.Sleep(15000);//15 seconds
@@ -934,7 +911,6 @@ namespace OpenDental {
 				this.Invoke((() => HandleRefreshedTasks(listSignalTasks,listEditedTaskNums,listRefreshedTasks,listRefreshedTaskNotes,
 					listBlockedTaskLists)));
 			}));
-			threadTasks.AddExceptionHandler((e) => e.DoNothing());
 			threadTasks.GroupName=FormODThreadNames.Tasks.GetDescription();
 			threadTasks.Name=FormODThreadNames.Tasks.GetDescription();
 			threadTasks.Start();
@@ -954,7 +930,6 @@ namespace OpenDental {
 			}
 			//OpenDental has EHR enabled and is running on the same machine as the mysql server it is connected to.
 			ODThread odThread=new ODThread((int)TimeSpan.FromHours(4).TotalMilliseconds,TimeSyncWorker);
-			odThread.AddExceptionHandler((e) => e.DoNothing());
 			odThread.GroupName=FormODThreadNames.TimeSync.GetDescription();
 			odThread.Name=FormODThreadNames.TimeSync.GetDescription();
 			odThread.Start();
@@ -992,7 +967,6 @@ namespace OpenDental {
 					this.Text=mainTitleText;
 				});
 			});
-			odThreadUpdateFormText.AddExceptionHandler((e) => e.DoNothing());
 			odThreadUpdateFormText.GroupName=FormODThreadNames.UpdateFormText.GetDescription();
 			odThreadUpdateFormText.Name=FormODThreadNames.UpdateFormText.GetDescription();
 			odThreadUpdateFormText.Start();
@@ -1009,7 +983,6 @@ namespace OpenDental {
 				return;
 			}
 			ODThread odThread=new ODThread((int)TimeSpan.FromSeconds(3).TotalMilliseconds,VoicemailWorker);
-			odThread.AddExceptionHandler(ex => ex.DoNothing());
 			odThread.GroupName=FormODThreadNames.VoicemailHQ.GetDescription();
 			odThread.Name=FormODThreadNames.VoicemailHQ.GetDescription();
 			odThread.Start(true);
@@ -1031,11 +1004,10 @@ namespace OpenDental {
 				}
 				this.Invoke(() => { SetVoicemailMetrics(false,listVoiceMails.Count,ageOfOldestVoicemail); });
 			}
-			catch(Exception ex) {
+			catch {
 				//Something went wrong with determining how many voicemails there are.  Sleep for 4 minutes then try again.
 				ODException.SwallowAnyException(() => this.Invoke(() => { SetVoicemailMetrics(true,0,new TimeSpan(0)); }));
 				odThread.Wait((int)TimeSpan.FromMinutes(4).TotalMilliseconds);
-				ex.DoNothing();
 			}
 		}
 
@@ -1089,7 +1061,6 @@ namespace OpenDental {
 					FormEServicesSetup.SynchFromMain(false);
 				});
 			});
-			odThread.AddExceptionHandler((e) => e.DoNothing());
 			odThread.GroupName=FormODThreadNames.WebSync.GetDescription();
 			odThread.Name=FormODThreadNames.WebSync.GetDescription();
 			odThread.Start();
@@ -1116,7 +1087,6 @@ namespace OpenDental {
 						});						
 					}
 				});
-			threadRegistrationKeyIsDisabled.AddExceptionHandler(ex => ex.DoNothing());
 			threadRegistrationKeyIsDisabled.GroupName=FormODThreadNames.RegistrationKeyIsDisabled.GetDescription();
 			threadRegistrationKeyIsDisabled.Name=FormODThreadNames.RegistrationKeyIsDisabled.GetDescription();
 			threadRegistrationKeyIsDisabled.Start();

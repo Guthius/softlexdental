@@ -25,9 +25,8 @@ namespace DataConnectionBase
                 System.Drawing.Bitmap image = new System.Drawing.Bitmap(stream);
                 return image;
             }
-            catch (Exception ex)
+            catch
             {
-                ex.DoNothing();
                 return null;
             }
         }
@@ -98,9 +97,8 @@ namespace DataConnectionBase
                 return (DateTime.Parse(myString));//DateTimeKind.Unspecified, which prevents -7:00, for example, from being tacked onto the end during serialization.
                                                   //return DateTime.Parse(myString,CultureInfo.InvariantCulture);
             }
-            catch (Exception ex)
+            catch 
             {
-                ex.DoNothing();
                 return DateTime.MinValue;
             }
         }
@@ -114,9 +112,8 @@ namespace DataConnectionBase
             {
                 return (DateTime.Parse(myString));
             }
-            catch (Exception ex)
+            catch
             {
-                ex.DoNothing();
                 return DateTime.MinValue;
             }
         }
@@ -134,9 +131,8 @@ namespace DataConnectionBase
                 {
                     return System.Convert.ToDecimal(myString);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    ex.DoNothing();
                     return 0;
                 }
             }
@@ -164,9 +160,8 @@ namespace DataConnectionBase
                     }
                     return System.Convert.ToDouble(myString);//In Europe, comes in as a comma, parsed according to culture.
                 }
-                catch (Exception ex)
+                catch 
                 {
-                    ex.DoNothing();
                     return 0;
                 }
             }
@@ -207,9 +202,8 @@ namespace DataConnectionBase
             {
                 return System.Convert.ToSingle(myString);
             }
-            catch (Exception ex)
-            {//because this will fail when getting the mysql version on startup, which always comes back with a period.
-                ex.DoNothing();
+            catch 
+            {
                 return System.Convert.ToSingle(myString, CultureInfo.InvariantCulture);
             }
         }
@@ -346,9 +340,8 @@ namespace DataConnectionBase
                 return (TimeSpan.Parse(myString));
 
             }
-            catch (Exception ex)
+            catch
             {
-                ex.DoNothing();
                 return TimeSpan.Zero;
             }
         }
@@ -366,9 +359,8 @@ namespace DataConnectionBase
                 return (TimeSpan.Parse(myString));
 
             }
-            catch (Exception ex)
+            catch 
             {
-                ex.DoNothing();
                 return TimeSpan.Zero;
             }
         }

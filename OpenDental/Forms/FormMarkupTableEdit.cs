@@ -410,9 +410,9 @@ namespace OpenDental {
 			try {
 				clipBoardText=Clipboard.GetText();
 			}
-			catch(Exception ex) {
+			catch {
 				MsgBox.Show(this,"Could not paste contents from the clipboard.  Please try again.");
-				ex.DoNothing();
+				
 				return;
 			}
 			string[] arrayTableRows = clipBoardText.Split(new string[] {"\r\n"},StringSplitOptions.None);

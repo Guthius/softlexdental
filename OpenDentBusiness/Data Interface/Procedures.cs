@@ -655,10 +655,9 @@ namespace OpenDentBusiness
             {
                 Procedures.Delete(procLab.ProcNum);
             }
-            catch (Exception ex)
+            catch 
             {
                 //The lab procedure could be attached to a claim or adjustment. If so, it seems harmless to keep the procedure around with a $0 fee.
-                ex.DoNothing();
                 if (procLab.ProcFee.IsEqual(0))
                 {
                     return;
@@ -2192,9 +2191,9 @@ namespace OpenDentBusiness
 #endif
                         }
                     }
-                    catch (Exception ex)
+                    catch
                     {//queue must be empty even though we just checked it before entering the while loop, just loop again and wait if necessary
-                        ex.DoNothing();
+
                         continue;
                     }
                     batchNumber++;
@@ -2387,9 +2386,8 @@ namespace OpenDentBusiness
                 FeeSchedEvent.Fire(ODEventType.FeeSched, new ProgressBarHelper("Fees Updated Successfully",
                         progressBarEventType: ProgBarEventType.TextMsg));
             }//end of try
-            catch (Exception ex)
+            catch 
             {
-                ex.DoNothing();
             }
             finally
             {
@@ -2495,9 +2493,9 @@ namespace OpenDentBusiness
                         , progressBarEventType: ProgBarEventType.TextMsg));
                 }));
             }
-            catch (Exception ex)
+            catch 
             {
-                ex.DoNothing();//if error happens, just swallow the error and kill the thread
+                //if error happens, just swallow the error and kill the thread
             }
             finally
             {//always make sure to notify the main thread that the thread is done so the main thread doesn't wait for eternity

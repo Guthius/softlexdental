@@ -223,14 +223,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\ConvertWebCore.cs" />
-    <Compile Include="Utilities\DateDefaultToday.cs" />
     <Compile Include="Utilities\DateRange.cs" />
     <Compile Include="Utilities\DateTimeOD.cs" />
     <Compile Include="Utilities\EmailUtils.cs" />
     <Compile Include="Progress\IODProgress.cs" />
     <Compile Include="Themes\ODColorTheme.cs" />
-    <Compile Include="Utilities\LoggerOld.cs" />
     <Compile Include="Utilities\ODBuild.cs" />
     <Compile Include="Utilities\ODClassExtensions.cs" />
     <Compile Include="Utilities\ODInitialize.cs" />
@@ -259,7 +256,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Utilities\ODThread.cs" />
-    <Compile Include="Utilities\ODThreadAbs.cs" />
     <Compile Include="Utilities\ODUIExtensions.cs" />
   </ItemGroup>
   <ItemGroup>

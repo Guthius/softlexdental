@@ -587,13 +587,12 @@ namespace OpenDental.InternalTools.Job_Manager {
 				try {
 					System.Diagnostics.Process.Start(link.Tag);
 				}
-				catch(Exception ex) {
-					ex.DoNothing();
+				catch {
 					MessageBox.Show("Unable to open file.");
 					try {
 						System.Diagnostics.Process.Start(link.Tag.Substring(0,link.Tag.LastIndexOf('\\')));
 					}
-					catch(Exception exc) { exc.DoNothing(); }
+					catch { }
 				}
 			});
 			if(link.Tag.Contains("\\")) {
@@ -603,10 +602,10 @@ namespace OpenDental.InternalTools.Job_Manager {
 						try {
 							System.Diagnostics.Process.Start(folder);
 						}
-						catch(Exception ex) { ex.DoNothing(); }
+						catch {  }
 					});
 				}
-				catch(Exception ex) { ex.DoNothing(); }
+				catch { }
 			}
 			menu.MenuItems.Add("-");
 			menu.MenuItems.Add("Unlink File",(o,arg) => {
@@ -3307,8 +3306,7 @@ namespace OpenDental.InternalTools.Job_Manager {
 			try {
 				System.Diagnostics.Process.Start(((JobLink)gridFiles.Rows[e.Row].Tag).Tag);
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
 				MessageBox.Show("Unable to open file.");
 			}
 		}

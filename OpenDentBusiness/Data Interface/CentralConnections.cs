@@ -166,9 +166,8 @@ namespace OpenDentBusiness
                             noShow = true;
                             centralConnection.IsAutomaticLogin = true;
                         }
-                        catch (Exception ex)
+                        catch
                         {
-                            ex.DoNothing();//We still want to display the server URI and the user name if getting the password fails.
                         }
                     }
                 }

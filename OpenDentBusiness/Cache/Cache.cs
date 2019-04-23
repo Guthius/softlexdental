@@ -37,7 +37,6 @@ namespace OpenDentBusiness
         public static DataSet GetCacheDs(bool doRefreshServerCache, params InvalidType[] arrayITypes)
         {
             string suffix = Lans.g(nameof(Cache), "Refreshing Caches") + ": ";
-            Logger.LogToPath("", LogPath.Signals, LogPhase.Start, "InvalidType(s): " + string.Join(" - ", arrayITypes.OrderBy(x => x.ToString())));
             List<InvalidType> listITypes = arrayITypes.ToList();
             //so this part below only happens if direct or server------------------------------------------------
             bool isAll = false;
@@ -460,7 +459,6 @@ namespace OpenDentBusiness
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.ZipCodes.ToString());
                 ds.Tables.Add(ZipCodes.GetTableFromCache(doRefreshServerCache));
             }
-            Logger.LogToPath("", LogPath.Signals, LogPhase.End);
             return ds;
         }
 

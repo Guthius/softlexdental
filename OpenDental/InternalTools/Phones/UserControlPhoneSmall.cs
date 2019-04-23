@@ -332,8 +332,7 @@ namespace OpenDental {
 					throw new ApplicationException("Invalid PhoneEmpDefault");
 				}
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
 				MsgBox.Show(this,"This extension is not currently associated to a valid PhoneEmpDefault row.");
 				return;
 			}

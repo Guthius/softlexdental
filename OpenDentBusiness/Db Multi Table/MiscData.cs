@@ -61,9 +61,9 @@ namespace OpenDentBusiness
                 ManagementObject systemInfo = mangementQuery.Get().Cast<ManagementObject>().FirstOrDefault();
                 versionInfo += " Build " + systemInfo.Properties["Version"].Value;
             }
-            catch (Exception e)
+            catch 
             {
-                e.DoNothing();
+               
             }
             return versionInfo;
         }
@@ -275,9 +275,9 @@ namespace OpenDentBusiness
             {
                 retval = Dns.GetHostEntry(rawHostName).HostName;//Return the human readable name (full domain name) corresponding to the rawHostName.
             }
-            catch (Exception ex)
+            catch
             {
-                ex.DoNothing();
+               
             }
             return retval;
         }

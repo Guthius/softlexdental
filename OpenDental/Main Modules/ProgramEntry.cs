@@ -73,9 +73,8 @@ namespace OpenDental
                         BugSubmissions.SubmitException(e, threadName, FormOpenDental.CurPatNum, formOD.GetSelectedModuleName());
                     }
                 }
-                catch (Exception ex)
+                catch
                 {
-                    ex.DoNothing();
                 }
                 FormFriendlyException.Show("Critical Error: " + e.Message, e, "Quit");
                 formOD.ProcessKillCommand();

@@ -386,8 +386,8 @@ namespace OpenDental{
 					}
 					ctrl.Enabled=false;
 				}
-				catch(Exception e) {//Just in case.
-					e.DoNothing();
+				catch {//Just in case.
+
 				}
 			}
 		}
@@ -1144,8 +1144,7 @@ namespace OpenDental{
 				try {
 					Process.Start(pathAndFileName);
 				}
-				catch(Exception ex) {
-					ex.DoNothing();
+				catch {
 					MsgBox.Show(this,"Could not open the attachment.");
 				}
 			}

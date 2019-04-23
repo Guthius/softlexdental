@@ -105,7 +105,7 @@ namespace OpenDental {
 			else {
 				groupClinics.Visible=false;
 			}
-			_charger=new RecurringChargerator(new ShowErrors(this),new FileAtoZInst(),true);
+			_charger=new RecurringChargerator(new FileAtoZInst(),true);
 			_charger.SingleCardFinished=new Action(() => {
 				this.Invoke(() => {
 					labelCharged.Text=Lans.g(this,"Charged=")+_charger.Success;

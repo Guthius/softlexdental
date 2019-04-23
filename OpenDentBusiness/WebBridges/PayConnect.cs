@@ -247,17 +247,10 @@ namespace OpenDentBusiness {
 		///Used by EConnector to monitor XWeb gateway.</summary>
 		public class Monitor {
 			#region Events
-			public static EventHandler<Logger.LoggerEventArgs> LoggerEvent;
-			///<summary>Any logging event. Sent as Verbose by default but can be sent as any log level.</summary>
-			protected static void OnLoggerEvent(string s,LogLevel logLevel = LogLevel.Verbose) {
-				if(LoggerEvent!=null) {
-					LoggerEvent?.Invoke(null,new Logger.LoggerEventArgs(s,logLevel));
-				}
-			}
 			///<summary>Logging event for a specific PayConnect. Uses json serializer so use sparingly if speed is an issue. 
 			///Sent as Verbose by default but can be sent as any log level.</summary>
 			protected static void OnLoggerEventForSingleResponse(XWebResponse response,string s,LogLevel logLevel = LogLevel.Verbose) {
-				OnLoggerEvent(s+"\r\n\t"+JsonConvert.SerializeObject(response),logLevel);
+                Logger.Write(logLevel, s + "\r\n\t" + JsonConvert.SerializeObject(response));
 			}
 			#endregion
 
@@ -274,7 +267,7 @@ namespace OpenDentBusiness {
 					}
 				}
 				catch(Exception e) {
-					OnLoggerEvent(e.Message,LogLevel.Error);
+                    Logger.Write(LogLevel.Error, e.Message);
 					//Something unforeseen went wrong, throttle the next run interval a bit.
 					odThread.TimeIntervalMS=(int)TimeSpan.FromSeconds(10).TotalMilliseconds;
 				}
@@ -282,10 +275,10 @@ namespace OpenDentBusiness {
 
 			///<summary>Returns number of pending transactions remaining after completion.</summary>
 			private static int ProcessOutstandingTransactions() {
-				OnLoggerEvent("Checking for outstanding OTKs.");
+                Logger.Write(LogLevel.Info, "Checking for outstanding OTKs.");
 				//TODO: implement method
 				int remaining=-1;
-				OnLoggerEvent(remaining.ToString()+" OTKs still pending after processing.",LogLevel.Information);
+                Logger.Write(LogLevel.Info, remaining.ToString()+" OTKs still pending after processing.");
 				return remaining;
 			}
 		}
@@ -564,9 +557,9 @@ namespace OpenDentBusiness {
 					string errorMsg=wex.Message+(string.IsNullOrWhiteSpace(res) ? "" : "\r\nRaw response:\r\n"+res);
 					throw new Exception(errorMsg,wex);//If we got this far and haven't rethrown, simply throw the entire exception.
 				}
-				catch(Exception ex) {
+				catch {
 					//WebClient returned an http status code >= 300
-					ex.DoNothing();
+
 					//For now, rethrow error and let whoever is expecting errors to handle them.
 					//We may enhance this to care about codes at some point.
 					throw;

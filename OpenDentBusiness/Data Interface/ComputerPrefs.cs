@@ -82,10 +82,9 @@ namespace OpenDentBusiness
             if (table.Rows.Count > 1)
             {
                 //Should never happen (would only happen if the primary key showed up more than once).
-                Logger.openlog.LogMB("Corrupt computerpref table in database. The computer name '"
+                Logger.Write(LogLevel.Warning, "Corrupt computerpref table in database. The computer name '"
                     + POut.String(computerName) + "' is a primary key in multiple records. Please run the "
-                    + "database maintenance tool, then call us for help if you still get this message.",
-                    Logger.Severity.WARNING);
+                    + "database maintenance tool, then call us for help if you still get this message.");
             }
             computerPref = Crud.ComputerPrefCrud.TableToList(table)[0];
             return computerPref;

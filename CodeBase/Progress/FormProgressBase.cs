@@ -65,9 +65,9 @@ namespace CodeBase {
 					return;
 				}
 			}));
-			threadForceCloseMonitor.AddExceptionHandler((ex) => {
-				ex.DoNothing();//The form might stay open forever which was already happening... we tried our best.
-			});
+
+			threadForceCloseMonitor.AddExceptionHandler((ex) => {});
+
 			threadForceCloseMonitor.Name="FormProgressStatusMonitor_"+DateTime.Now.Ticks;
 			threadForceCloseMonitor.Start();
 		}
@@ -121,8 +121,7 @@ namespace CodeBase {
 				}
 				UpdateProgress(status,progHelper,hasProgHelper);
 			}
-			catch(Exception ex) {
-				ex.DoNothing();//It's just progress...
+			catch {
 			}
 		}
 

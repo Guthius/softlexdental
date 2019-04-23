@@ -158,8 +158,7 @@ namespace OpenDental {
 			try {
 				Process.Start(url);
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
 			}
 		}
 

@@ -235,8 +235,8 @@ namespace OpenDentBusiness{
 					return retVal;
 				}
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
+	
 			}
 			#endregion
 			#region Depricated, log written in english
@@ -248,8 +248,8 @@ namespace OpenDentBusiness{
 					}
 				}
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
+				
 			}
 			#endregion
 			#region Depricated, log written in current culture
@@ -262,8 +262,8 @@ namespace OpenDentBusiness{
 					}
 				}
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
+			
 			}
 			#endregion
 			#region Depricated, log written in non-english non-current culture

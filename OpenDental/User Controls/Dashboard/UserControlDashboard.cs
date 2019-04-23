@@ -127,7 +127,6 @@ namespace OpenDental {
 #endif
 			});
 			_threadRefresh.Name="DashboardRefresh_"+_sheetDefDashboard.Description+"_Thread";
-			_threadRefresh.AddExceptionHandler((ex) => { ex.DoNothing(); });//Swallow all exceptions.  Don't crash program because a Dashboard refresh fails.
 			_threadRefresh.Start();
 		}
 

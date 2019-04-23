@@ -127,9 +127,9 @@ namespace OpenDentBusiness
                 }
                 return listPaths[0].Value;//Return the first one in the list.
             }
-            catch (Exception ex)
+            catch 
             {
-                ex.DoNothing();
+                
                 return Phones.PathPhoneMsg;//If all else fails, return a hard-coded path.
             }
         }
@@ -147,9 +147,9 @@ namespace OpenDentBusiness
                 listPaths = JsonConvert.DeserializeObject<List<KeyValuePair<string, string>>>
                     (PrefC.GetString(PrefName.VoiceMailOriginationPath));
             }
-            catch (Exception ex)
+            catch 
             {//If the preference value was not a well formed JSON list, start over with a new list.
-                ex.DoNothing();
+               
                 listPaths = new List<KeyValuePair<string, string>>();
             }
             bool didUpdatePath = false;

@@ -75,7 +75,6 @@ namespace OpenDental {
 				}
 			});
 			_threadShouldWindowClose.Name="FormConnectionLost_ShouldCloseMonitorThread";
-			_threadShouldWindowClose.AddExceptionHandler((e) => e.DoNothing());
 			_threadShouldWindowClose.AddExitHandler((e) => _threadShouldWindowClose=null);
 			_threadShouldWindowClose.Start();
 		}
@@ -92,8 +91,7 @@ namespace OpenDental {
 					_shouldWindowClose=true;
 				}
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
 			}
 		}
 
@@ -109,8 +107,7 @@ namespace OpenDental {
 					_shouldWindowClose=true;
 				}
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
 			}
 		}
 
@@ -126,8 +123,8 @@ namespace OpenDental {
 					_shouldWindowClose=true;
 				}
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
+
 			}
 		}
 

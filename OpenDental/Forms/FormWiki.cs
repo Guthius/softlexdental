@@ -707,9 +707,9 @@ namespace OpenDental
                 {
                     System.Diagnostics.Process.Start(fileName);
                 }
-                catch (Exception ex)
+                catch 
                 {
-                    ex.DoNothing();
+               
                 }
                 e.Cancel = true;
                 return;
@@ -727,9 +727,9 @@ namespace OpenDental
                 {
                     System.Diagnostics.Process.Start(folderName);
                 }
-                catch (Exception ex)
+                catch 
                 {
-                    ex.DoNothing();
+                    
                 }
                 e.Cancel = true;
                 return;
@@ -747,9 +747,9 @@ namespace OpenDental
                 {
                     FileAtoZ.StartProcess(fileName);
                 }
-                catch (Exception ex)
+                catch 
                 {
-                    ex.DoNothing();
+                  
                 }
                 e.Cancel = true;
                 return;
@@ -767,9 +767,9 @@ namespace OpenDental
                 {
                     FileAtoZ.OpenDirectory(folderName);
                 }
-                catch (Exception ex)
+                catch 
                 {
-                    ex.DoNothing();
+         
                 }
                 e.Cancel = true;
                 return;
@@ -780,9 +780,8 @@ namespace OpenDental
                 {
                     System.Diagnostics.Process.Start(e.Url.ToString());
                 }
-                catch (Exception ex)
+                catch
                 {
-                    ex.DoNothing();
                 }
                 e.Cancel = true;//Stops the page from loading in FormWiki.
                 return;

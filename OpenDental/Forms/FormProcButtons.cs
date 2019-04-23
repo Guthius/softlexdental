@@ -310,8 +310,8 @@ namespace OpenDental{
 				panelQuickButtons.Size=controlArray[0].Size;
 				labelEdit.Location=new Point(panelQuickButtons.Location.X,panelQuickButtons.Bounds.Bottom+20);
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
+
 				//could not locate the gridquickbuttons control.
 			}
 

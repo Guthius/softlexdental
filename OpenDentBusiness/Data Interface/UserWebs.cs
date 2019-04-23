@@ -126,7 +126,7 @@ namespace OpenDentBusiness
             int i = 0;
             while (!isUserNameOk)
             {
-                retVal = pat.FName + ODRandom.Next(100, 100000);
+                retVal = pat.FName + MiscUtils.ODRandom.Next(100, 100000);
                 if (!UserWebs.UserNameExists(retVal, fkeyType))
                 {
                     if (!listExcludedNames.Contains(retVal))
@@ -235,7 +235,7 @@ namespace OpenDentBusiness
                 }
                 else
                 {
-                    nextLeftGroupsOrderIdx = ODRandom.Next(0, lastLeftGroupsOrderIdx);
+                    nextLeftGroupsOrderIdx = MiscUtils.ODRandom.Next(0, lastLeftGroupsOrderIdx);
                 }
                 //Get the actual index of the character group, from which we will
                 //pick the next character.
@@ -250,7 +250,7 @@ namespace OpenDentBusiness
                 }
                 else
                 {
-                    nextCharIdx = ODRandom.Next(0, lastCharIdx + 1);
+                    nextCharIdx = MiscUtils.ODRandom.Next(0, lastCharIdx + 1);
                 }
                 //Add this character to the password.
                 password[i] = charGroups[nextGroupIdx][nextCharIdx];

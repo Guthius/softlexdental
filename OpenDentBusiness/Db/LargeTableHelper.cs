@@ -479,9 +479,9 @@ namespace OpenDentBusiness
                                 Db.NonQ(batch.CommandValuesInsert);
                                 insertFailed = false;
                             }
-                            catch (Exception ex)
+                            catch 
                             {//just loop again and wait if necessary
-                                ex.DoNothing();
+
                                 insertFailed = true;
                                 if (!string.IsNullOrEmpty(batch.CommandBulkInsert))
                                 {
@@ -492,9 +492,8 @@ namespace OpenDentBusiness
                                         Db.NonQ(batch.CommandBulkInsert);
                                         insertFailed = false;
                                     }
-                                    catch (Exception ex2)
+                                    catch
                                     {
-                                        ex2.DoNothing();
                                         insertFailed = true;
                                     }
                                 }
@@ -559,9 +558,8 @@ namespace OpenDentBusiness
                 odThreadQueueData.Start(true);
                 InsertBatches();
             }
-            catch (Exception ex)
+            catch
             {
-                ex.DoNothing();
                 throw;
             }
             finally
@@ -616,11 +614,11 @@ namespace OpenDentBusiness
             {
                 SetListPriKeyMaxPerBatch();
             }
-            catch (Exception ex)
+            catch
             {
                 //MySQL 5.0 cannot run the command in the above method.
                 Db.NonQ(alterTableStmt);//execute the alter table statement on the original table
-                ex.DoNothing();
+
                 return;
             }
             if (_listPriKeyMaxPerBatch.Count <= 1)
@@ -708,9 +706,9 @@ namespace OpenDentBusiness
                     }
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                ex.DoNothing();
+              
                 throw;
             }
             finally
@@ -749,9 +747,8 @@ namespace OpenDentBusiness
                     return false;
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                ex.DoNothing();
                 return false;//might happen if user does not have permission to query information schema tables.
             }
             return true;

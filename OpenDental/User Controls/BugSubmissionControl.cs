@@ -126,8 +126,8 @@ namespace OpenDental.UI {
 				labelSubNum.Text=POut.Long(sub.BugSubmissionNum);
 				labelLastCall.Text=Commlogs.GetDateTimeOfLastEntryForPat(_patCur?.PatNum??0).ToString();
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
+
 			}
 			butGoToAccount.Enabled=true;
 			butBugTask.Enabled=true;

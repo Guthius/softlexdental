@@ -164,8 +164,7 @@ namespace OpenDental {
 					isImeComposition=PrefC.GetBool(PrefName.ImeCompositionCompatibility);
 				}
 			}
-			catch(Exception ex) {
-				ex.DoNothing();//Do nothing.  Just treat the ODTextBox like it always has (no composition support).
+			catch{
 			}
 			InitializeComponent();// Required for Windows.Forms Class Composition Designer support
 			_spellCheckIsEnabled=true;
@@ -177,8 +176,7 @@ namespace OpenDental {
 				try {
 					HunspellGlobal=new Hunspell(Properties.Resources.en_US_aff,Properties.Resources.en_US_dic);
 				}
-				catch(Exception ex) {
-					ex.DoNothing();
+				catch {
 					System.IO.File.Copy(@"..\..\..\Required dlls\Hunspellx64.dll","Hunspellx64.dll");
 					System.IO.File.Copy(@"..\..\..\Required dlls\Hunspellx86.dll","Hunspellx86.dll");
 					HunspellGlobal=new Hunspell(Properties.Resources.en_US_aff,Properties.Resources.en_US_dic);
@@ -909,8 +907,7 @@ namespace OpenDental {
 					//The Rtf property will throw an ArgumentException saying "File format is not valid" when this is the case.
 					rtb.Rtf=this.Rtf;
 				}
-				catch(ArgumentException ae) {
-					ae.DoNothing();
+				catch(ArgumentException) {
 					return new List<int>();//Do nothing, it's just spell checking.  Maybe it will be valid RTF the next time around.
 				}
 				rtb.Size=new Size((widthOverride==-1 ? this.Size.Width : widthOverride),this.Size.Height);

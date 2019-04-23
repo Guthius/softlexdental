@@ -98,8 +98,7 @@ namespace OpenDentBusiness {
 				//Communication succeeded so that is considered a pass.
 				return true;
 			}
-			catch (Exception e) {
-				e.DoNothing();
+			catch {
 				return false;
 			}
 		}

@@ -1019,9 +1019,8 @@ namespace OpenDental
                 {
                     File.Delete(destinationPath);//Try to clean up after ourselves.
                 }
-                catch (Exception ex)
+                catch
                 {
-                    ex.DoNothing();
                 }
             }
         }
@@ -1558,10 +1557,9 @@ namespace OpenDental
                 XmlNode node = doc.SelectSingleNode("//IsDevKey");
                 return PIn.Bool(node.InnerText);
             }
-            catch (Exception ex)
+            catch 
             {
                 //They don't have an external internet connection.
-                ex.DoNothing();
                 return false;
             }
         }

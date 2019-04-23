@@ -165,9 +165,9 @@ namespace OpenDentBusiness
                         table.Rows[i]["IsInHQView"] = POut.Bool(listOperatories[i].IsInHQView);
                     }
                 }
-                catch (Exception e)
+                catch 
                 {
-                    e.DoNothing();
+                   
                 }
                 return table;
             }

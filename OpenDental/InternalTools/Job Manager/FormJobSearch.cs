@@ -141,9 +141,8 @@ namespace OpenDental {
 				Jobs.FillInMemoryLists(listJobs,true);
 				_listJobsAll.AddRange(listJobs);
 			}
-			catch(OutOfMemoryException oome) {
+			catch(OutOfMemoryException) {
 				actionCloseProgress();
-				oome.DoNothing();
 				MsgBox.Show(this,"Not enough memory to complete the search.  Please refine search filters.");
 				return;
 			}

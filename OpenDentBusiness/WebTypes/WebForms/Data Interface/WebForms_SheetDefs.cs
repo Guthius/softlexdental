@@ -23,8 +23,7 @@ namespace OpenDentBusiness.WebTypes.WebForms {
 					SheetsSynchProxy.GetWebServiceInstance().DownloadSheetDefs(payload),"Success"
 				);
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
 				return false;
 			}
 			return true;
@@ -57,8 +56,7 @@ namespace OpenDentBusiness.WebTypes.WebForms {
 				string payload=PayloadHelper.CreatePayloadWebHostSynch(regKey,listPayloadItems.ToArray());
 				SheetsSynchProxy.GetWebServiceInstance().DeleteSheetDef(payload);
 			}
-			catch (Exception ex) {
-				ex.DoNothing();
+			catch {
 				return false;
 			}
 			return true;
@@ -81,11 +79,11 @@ namespace OpenDentBusiness.WebTypes.WebForms {
 				string payload=PayloadHelper.CreatePayloadWebHostSynch(regKey,listPayloadItems.ToArray());
 				SheetsSynchProxy.GetWebServiceInstance().UpdateSheetDef(payload);
 			}
-			catch (Exception ex) {
+			catch  {
 				if(!doCatchExceptions) {
 					throw;
 				}
-				ex.DoNothing();
+
 				return false;
 			}
 			return true;

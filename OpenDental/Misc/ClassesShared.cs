@@ -330,7 +330,7 @@ namespace OpenDental {
 	}
 
 	///<summary>Displays any error messages in a MessageBox.</summary>
-	public class ShowErrors:Logger.IWriteLine {
+	public class ShowErrors {
 		private Control _parent;
 
 		public ShowErrors() {

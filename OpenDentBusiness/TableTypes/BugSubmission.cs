@@ -221,8 +221,8 @@ namespace OpenDentBusiness {
 				_info.ModuleNameCur=moduleName;
 				_info.DatabaseName=DataConnection.GetDatabaseName();
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
+				
 			}
 			return JsonConvert.SerializeObject(_info);
 		}

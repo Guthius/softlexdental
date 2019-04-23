@@ -810,8 +810,7 @@ namespace OpenDental{
 				_serverThreadID=0;
 				FillForm();
 			}
-			catch(Exception e) {
-				e.DoNothing();
+			catch {
 			}
 		}
 
@@ -1760,9 +1759,8 @@ namespace OpenDental{
 			try {
 				Clipboard.SetDataObject(textQuery.Text);
 			}
-			catch(Exception ex) {
+			catch {
 				MsgBox.Show(this,"Could not copy contents to the clipboard.  Please try again.");
-				ex.DoNothing();
 			}
 		}
 
@@ -1771,9 +1769,8 @@ namespace OpenDental{
 			try {
 				iData=Clipboard.GetDataObject();
 			}
-			catch(Exception ex) {
+			catch {
 				MsgBox.Show(this,"Could not paste contents from the clipboard.  Please try again.");
-				ex.DoNothing();
 				return;
 			}
 			if(iData.GetDataPresent(DataFormats.Text)){

@@ -223,7 +223,8 @@ namespace OpenDental {
 
 		///<summary></summary>
 		public ContrAccount() {
-			Logger.openlog.Log("Initializing account module...",Logger.Severity.INFO);
+			Logger.Write(LogLevel.Info, "Initializing account module...");
+
 			InitializeComponent();// This call is required by the Windows.Forms Form Designer.
 		}
 
@@ -2412,10 +2413,11 @@ namespace OpenDental {
 			else {
 				checkShowDetail.Checked=PIn.Bool(userOdPrefProcBreakdown.ValueString);
 			}
-			Logger.LogAction("RefreshModuleData",LogPath.AccountModule,() => RefreshModuleData(patNum,isSelectingFamily));
-			Logger.LogAction("RefreshModuleScreen",LogPath.AccountModule,() => RefreshModuleScreen(isSelectingFamily));
-			//Plugins.HookAddCode(this,"ContrAccount.ModuleSelected_end",patNum,isSelectingFamily);
-		}
+            RefreshModuleData(patNum, isSelectingFamily);
+            RefreshModuleScreen(isSelectingFamily);
+
+            //Plugins.HookAddCode(this,"ContrAccount.ModuleSelected_end",patNum,isSelectingFamily);
+        }
 
 		///<summary>Used when jumping to this module and directly to a claim.</summary>
 		public void ModuleSelected(long patNum,long claimNum) {
@@ -2479,9 +2481,9 @@ namespace OpenDental {
 				_patNumLast=patNum;
 			}
 			bool doGetOrtho=PrefC.GetBool(PrefName.OrthoEnabled);
-			Logger.LogAction("Patients.GetFamily",LogPath.AccountModule,() => _loadData=AccountModules.GetAll(patNum,viewingInRecall,fromDate,toDate,isSelectingFamily
-				,checkShowDetail.Checked,	true,true,doMakeSecLog,doGetOrtho));
-			lock(_lockDataSetMain) {
+            _loadData = AccountModules.GetAll(patNum, viewingInRecall, fromDate, toDate, isSelectingFamily, checkShowDetail.Checked, true, true, doMakeSecLog, doGetOrtho);
+
+            lock (_lockDataSetMain) {
 				DataSetMain=_loadData.DataSetMain;
 			}
 			FamCur=_loadData.Fam;
@@ -2559,22 +2561,25 @@ namespace OpenDental {
 				//butComm.Enabled=true;
 				tabControlShow.Enabled=true;
 			}
-			Logger.LogAction("FillPats",LogPath.AccountModule,() => FillPats(isSelectingFamily));
-			Logger.LogAction("FillMisc",LogPath.AccountModule,() => FillMisc());
-			Logger.LogAction("FillAging",LogPath.AccountModule,() => FillAging(isSelectingFamily));
-			//must be in this order.
-			Logger.LogAction("FillRepeatCharges",LogPath.AccountModule,() => FillRepeatCharges());//1
-			Logger.LogAction("FillPaymentPlans",LogPath.AccountModule,() => FillPaymentPlans());//2
-			Logger.LogAction("FillMain",LogPath.AccountModule,() => FillMain());//3
-			if(PrefC.GetBool(PrefName.OrthoEnabled)){
+            FillPats(isSelectingFamily);
+            FillMisc();
+            FillAging(isSelectingFamily);
+            //must be in this order.
+            FillRepeatCharges();
+            FillPaymentPlans();
+            FillMain();
+
+            if (PrefC.GetBool(PrefName.OrthoEnabled)){
 				FillOrtho(false);
 			}
-			Logger.LogAction("FillPatInfo",LogPath.AccountModule,() => FillPatInfo());
-			LayoutPanels();
+            FillPatInfo();
+
+            LayoutPanels();
 			if(ViewingInRecall || PrefC.GetBoolSilent(PrefName.FuchsOptionsOn,false)) {
 				panelProgNotes.Visible = true;
-				Logger.LogAction("FillProgNotes",LogPath.AccountModule,() => FillProgNotes());
-				if(PrefC.GetBool(PrefName.FuchsOptionsOn) && PatCur!=null){//show prog note options
+                FillProgNotes();
+
+                if (PrefC.GetBool(PrefName.FuchsOptionsOn) && PatCur!=null){//show prog note options
 					groupBox6.Visible = true;
 					groupBox7.Visible = true;
 					butShowAll.Visible = true;

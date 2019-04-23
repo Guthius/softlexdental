@@ -82,8 +82,8 @@ namespace OpenDentBusiness {
 				try {
 					RefreshInvalidFees(feeSched);
 				}
-				catch(ApplicationException ae) {
-					ae.DoNothing();
+				catch(ApplicationException) {
+
 					//Something went terribly wrong and we couldn't refresh the fee schedule from the database as planned.
 					//Make sure that this entire fee schedule is flagged as invalid within the new FeeCache that is getting returned.
 					//This isn't a big enough of a deal to throw the exception from right here.  GetFee() or other methods will throw the exception later.

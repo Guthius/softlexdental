@@ -116,8 +116,6 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		private static LogWriter _logger=new LogWriter(LogDetailLevel,"AvaTax");
-
 		#endregion Properties
 
 		public AvaTax() {
@@ -153,7 +151,7 @@ namespace OpenDentBusiness {
 			bool retVal=IsTaxable(proc.PatNum) && !string.IsNullOrWhiteSpace(procCode.TaxCode) && proc.ProcFee > 0;//repeat charges for prepay use ProcFee=0
 			if(retVal && !Patients.HasValidUSZipCode(proc.PatNum)) {//Only checks zip code if the procedure is taxable.
 				if(isSilent) {
-					_logger.WriteLine($"Invalid ZipCode for PatNum {proc.PatNum} while running Repeat Charge Tool on {DateTime.Today}",LogLevel.Error);
+					Logger.Write(LogLevel.Error, $"Invalid ZipCode for PatNum {proc.PatNum} while running Repeat Charge Tool on {DateTime.Today}");
 				}
 				else {
 					MessageBox.Show(Lans.g("Procedures","A valid zip code is required to process sales tax on procedures in this patient's state. "
@@ -179,8 +177,8 @@ namespace OpenDentBusiness {
 			foreach(string entry in arrayOverrides) {
 				string[] parts=entry.Split('-');
 				if(parts.Count()!=3) {
-					_logger.WriteLine("Tax Code Override entry is incorrect: "+entry+".  "
-						+"Fix this entry in AvaTax setup to resume processing overrides.",LogLevel.Error);
+					Logger.Write(LogLevel.Error, "Tax Code Override entry is incorrect: "+entry+".  "
+						+"Fix this entry in AvaTax setup to resume processing overrides.");
 					hasFormatError=true;
 					continue;
 				}
@@ -226,11 +224,10 @@ namespace OpenDentBusiness {
 				return result.totalTax.Value;
 			}
 			catch(Exception ex) {
-				_logger.WriteLine($"Error getting estimate from Avatax for PatNum: {patNum}",LogLevel.Error);
+				Logger.Write(LogLevel.Error, $"Error getting estimate from Avatax for PatNum: {patNum}");
 				if(hasExceptions) {
 					throw ex;//Loses call stack, but everywhere that catches this only cares about the message.
 				}
-				ex.DoNothing();
 				//For now we just enter $0 because we don't have any proc or adjustment to attach this to, and we already have logging for errors
 				return 0;
 			}
@@ -254,11 +251,11 @@ namespace OpenDentBusiness {
 				return true;
 			}
 			catch(AvaTaxError at) {
-				_logger.WriteLine("Encountered an Avatax error: "+JsonConvert.SerializeObject(at.error.error),LogLevel.Error);
+				Logger.Write(LogLevel.Error, "Encountered an Avatax error: " +JsonConvert.SerializeObject(at.error.error));
 				message=at.error.error.message;
 			}
 			catch(Exception ex) {
-				_logger.WriteLine("Unable to send or receive transaction: "+JsonConvert.SerializeObject(ex),LogLevel.Error);
+				Logger.Write(LogLevel.Error, "Unable to send or receive transaction: " +JsonConvert.SerializeObject(ex));
 				message=ex.Message;
 			}
 			adj.AdjNote=AddNote(adj.AdjNote,"An error occurred processing the transacton: "+message+".  See local logs for more details.");

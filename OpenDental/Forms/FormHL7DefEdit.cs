@@ -448,8 +448,8 @@ namespace OpenDental {
 						try {
 							int.Parse(strAddressPort[1]);
 						}
-						catch(Exception ex) {
-							ex.DoNothing();
+						catch {
+
 							MsgBox.Show(this,"The Sftp Server Port must be a valid integer.");
 							return false;
 						}

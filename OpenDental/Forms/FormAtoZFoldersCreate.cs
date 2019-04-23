@@ -219,7 +219,7 @@ namespace OpenDental{
 				//Prefs_client.RefreshClient();
 			}
 			catch(Exception ex) {
-				Logger.openlog.LogMB("Failed to create A to Z folders: "+ex.ToString(),Logger.Severity.ERROR);
+				Logger.Write(LogLevel.Error, "Failed to create A to Z folders: "+ex.ToString());
 			}
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Created AtoZ Folder");
 			DialogResult=DialogResult.OK;

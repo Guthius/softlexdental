@@ -260,8 +260,8 @@ namespace OpenDental{
 					//Let HQ know the program link change.
 					Programs.SendEnabledProgramsToHQ();
 				}
-				catch(Exception ex) {
-					ex.DoNothing();
+				catch {
+					
 				}
 				DataValid.SetInvalid(InvalidType.Programs, InvalidType.ToolBut);
 			}

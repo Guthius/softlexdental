@@ -262,9 +262,8 @@ namespace OpenDental {
 				webBrowser.DocumentText=HtmlText;
 				webBrowser.BringToFront();
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
-				//invalid preview
+			catch {
+
 			}
 		}
 
@@ -532,8 +531,7 @@ namespace OpenDental {
 					return false;
 				}
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
 				return false;
 			}
 			return true;

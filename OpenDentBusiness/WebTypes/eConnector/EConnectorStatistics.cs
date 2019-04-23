@@ -74,8 +74,8 @@ namespace OpenDentBusiness.WebTypes {
 					try {
 						eConnStats.ListEServicePrefs.Add(Prefs.GetPref(prefName.ToString()));
 					}
-					catch(Exception ex) {
-						ex.DoNothing();
+					catch {
+						
 					}
 				}
 			}
@@ -116,14 +116,12 @@ namespace OpenDentBusiness.WebTypes {
 			try {
 				return JsonConvert.DeserializeObject<List<EConnectorStatistics>>(jsonString)??new List<EConnectorStatistics>();
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
 				try {
 					//Previous to 17.3.21ish, eConnectors sent over a single EConnectorStats instead of a list.
 					return new List<EConnectorStatistics> { JsonConvert.DeserializeObject<EConnectorStatistics>(jsonString)??new EConnectorStatistics() };
 				}
-				catch(Exception e) {
-					e.DoNothing();
+				catch {
 				}
 				return new List<EConnectorStatistics>();
 			}
@@ -141,8 +139,7 @@ namespace OpenDentBusiness.WebTypes {
 					.Select(x => x.First()).ToList();
 				return listOut;
 			}
-			catch(Exception e) {
-				e.DoNothing();
+			catch{
 			}
 			return listIn;
 		}

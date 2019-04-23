@@ -85,8 +85,6 @@ namespace OpenDentBusiness
                     if (PrefC.GetString(PrefName.HasVerboseLogging).ToLower().Split(',').ToList().Exists(x => x == Environment.MachineName.ToLower()))
                     {
                         _isVerboseLoggingSession = YN.Yes;
-                        //Switch logger to a directory that won't have permissions issues.
-                        Logger.UseMyDocsDirectory();
                     }
                     else
                     {
@@ -95,9 +93,8 @@ namespace OpenDentBusiness
                 }
                 return _isVerboseLoggingSession == YN.Yes;
             }
-            catch (Exception e)
+            catch
             {
-                e.DoNothing();
                 return false;
             }
         }
@@ -139,9 +136,8 @@ namespace OpenDentBusiness
                 {
                     DateTime.Today.ToString(format);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    ex.DoNothing();
                     format = "d";//Default to "d" which is equivalent to .ToShortDateString()
                 }
                 return format;

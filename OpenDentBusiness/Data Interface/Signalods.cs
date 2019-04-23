@@ -79,26 +79,23 @@ namespace OpenDentBusiness
         public static void SignalsTick(Action onShutdown, Action<List<ISignalProcessor>, List<Signalod>> onProcess, Action onDone)
         {
             //No need to check RemotingRole; no call to db.
-            Logger.LogToPath("", LogPath.Signals, LogPhase.Start);
             List<Signalod> listSignals = new List<Signalod>();
             ODThread threadRefreshSignals = new ODThread(new ODThread.WorkerDelegate((o) =>
             {
                 //Get new signals from DB.
-                Logger.LogToPath("RefreshTimed", LogPath.Signals, LogPhase.Start);
                 listSignals = RefreshTimed(SignalLastRefreshed);
-                Logger.LogToPath("RefreshTimed", LogPath.Signals, LogPhase.End);
                 //Only update the time stamp with signals retreived from the DB. Do NOT use listLocalSignals to set timestamp.
                 if (listSignals.Count > 0)
                 {
                     SignalLastRefreshed = listSignals.Max(x => x.SigDateTime);
                     ApptSignalLastRefreshed = SignalLastRefreshed;
                 }
-                Logger.LogToPath("Found " + listSignals.Count.ToString() + " signals", LogPath.Signals, LogPhase.Unspecified);
+
                 if (listSignals.Count == 0)
                 {
                     return;
                 }
-                Logger.LogToPath("Signal count(s)", LogPath.Signals, LogPhase.Unspecified, string.Join(" - ", listSignals.GroupBy(x => x.IType).Select(x => x.Key.ToString() + ": " + x.Count())));
+
                 if (listSignals.Exists(x => x.IType == InvalidType.ShutDownNow))
                 {
                     onShutdown();
@@ -134,7 +131,6 @@ namespace OpenDentBusiness
             }));
             threadRefreshSignals.AddExitHandler(new ODThread.WorkerDelegate((o) =>
             {
-                Logger.LogToPath("", LogPath.Signals, LogPhase.End);
                 onDone();
             }));
             threadRefreshSignals.Name = "SignalsTick";

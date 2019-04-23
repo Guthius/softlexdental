@@ -294,8 +294,7 @@ namespace OpenDental.UI {
 				try {
 					_listBugSubs=BugSubmissions.GetBugSubsForRegKeys(listKeys,datePickerHqBugSub.GetDateTimeFrom(),datePickerHqBugSub.GetDateTimeTo());
 				}
-				catch(Exception ex) {//Should only occur if running in debug at HQ and no bugs database on local machine.
-					ex.DoNothing();
+				catch {//Should only occur if running in debug at HQ and no bugs database on local machine.
 					label1.Text="NO BUGS DB";//Inform dev of issue.
 				}
 				_listJobLinks=JobLinks.GetManyForType(JobLinkType.Bug,_listBugSubs.Select(x => x.BugId).ToList());

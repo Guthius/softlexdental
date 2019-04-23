@@ -330,8 +330,8 @@ namespace OpenDental {
 						}
 						room.Invalidate(true);
 					}
-					catch(Exception e) {
-						e.DoNothing();
+					catch {
+
 					}
 				}
 				refreshCurrentTabHelper(peds,phones,listSubGroups);

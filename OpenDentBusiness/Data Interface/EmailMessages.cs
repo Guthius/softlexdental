@@ -425,9 +425,9 @@ namespace OpenDentBusiness
             {
                 GetDirectAgentForEmailAddress(strSenderAddress);//This line is where the refresh occurs.
             }
-            catch (Exception ex)
+            catch 
             {//Likely a permission issue
-                ex.DoNothing();
+                
             }
         }
 
@@ -1707,9 +1707,9 @@ namespace OpenDentBusiness
                 GetDirectAgentForEmailAddress(strAddressTest);//Force the cert stores to be refreshed within our DirectAgent instance.
                 return true;
             }
-            catch (Exception ex)
+            catch 
             {//Likely a network issue (FindPublicCertForAddress) or a permissions issue opening the anchors store.
-                ex.DoNothing();
+                
                 return false;
             }
         }
@@ -1742,9 +1742,9 @@ namespace OpenDentBusiness
             {
                 address = new MailAddress(emailAddress);
             }
-            catch (Exception ex)
+            catch 
             {//This can happen if emailAddress is not formatted according to the email standard.
-                ex.DoNothing();
+                
                 return null;
             }
             X509Certificate2Collection privCerts = null;
@@ -1752,9 +1752,9 @@ namespace OpenDentBusiness
             {
                 privCerts = new EmailPrivateResolver().GetCertificates(address);
             }
-            catch (Exception ex)
+            catch 
             {
-                ex.DoNothing();//The private certificate store either does not exist or the user does not have read permission.  Probably does not exist.
+                //The private certificate store either does not exist or the user does not have read permission.  Probably does not exist.
             }
             if (privCerts == null || privCerts.Count == 0)
             {

@@ -611,7 +611,7 @@ namespace OpenDental{
 			try {
 				System.Diagnostics.Process.Start(Dlg.FileName);
 			}
-			catch(Exception ex) { ex.DoNothing(); }
+			catch { }
 			Cursor=Cursors.Default;
 			MsgBox.Show(this,"Recipient list exported.");
 		}

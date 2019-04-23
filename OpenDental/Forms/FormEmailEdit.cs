@@ -397,8 +397,8 @@ namespace OpenDental {
 				webBrowserEmail.DocumentText=text;
 				_isInvalidPreview=false;
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
+
 				_isInvalidPreview=true;
 			}
 		}

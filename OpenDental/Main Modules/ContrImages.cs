@@ -178,7 +178,7 @@ namespace OpenDental {
 		///<summary></summary>
 		public ContrImages() {
 			ZoomImage=1;
-			Logger.openlog.Log("Initializing Document Module...",Logger.Severity.INFO);
+			Logger.Write(LogLevel.Info, "Initializing Document Module...");
 			InitializeComponent();
 			//The context menu causes strange bugs in MONO when performing selections on the tree.
 			//Perhaps when MONO is more developed we can remove this check.
@@ -214,7 +214,7 @@ namespace OpenDental {
 			this.xRayImageController.OnCaptureReady+=new System.EventHandler(this.OnCaptureReady);
 			this.xRayImageController.OnCaptureComplete+=new System.EventHandler(this.OnCaptureComplete);
 			this.xRayImageController.OnCaptureFinalize+=new System.EventHandler(this.OnCaptureFinalize);
-			Logger.openlog.Log("Document Module initialization complete.",Logger.Severity.INFO);
+			Logger.Write(LogLevel.Info, "Document Module initialization complete.");
 		}
 
 		///<summary></summary>
@@ -1136,8 +1136,7 @@ namespace OpenDental {
 					//so it will get deleted later (either when switching preview images or closing Open Dental
 				}
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
 				//An exception can happen if they do not have Adobe Acrobat Reader version 8.0 or later installed.
 				//Simply ignore this exception and do nothing. We never used to display .pdf files anyway, so we
 				//essentially revert back to the old behavior in this case.
@@ -1158,8 +1157,7 @@ namespace OpenDental {
 					try {
 						File.Delete(pdfFilePath);//Delete temp file
 					}
-					catch (Exception ex) {
-						ex.DoNothing();
+					catch  {
 						//Can happen if user is clicking around very quickly and EraseCurrentImages() hasn't quite freed up the file.
 						//Do nothing, worst case we orphan a temp pdf that will clean up next time it's previewed.
 					}
@@ -2435,8 +2433,8 @@ namespace OpenDental {
 				try {
 					ImageStore.DeleteDocuments(new List<Document> { apteryxDoc },PatFolder);
 				}
-				catch(Exception ex) {  //Image could not be deleted, in use.
-					ex.DoNothing();//The user doesn't even know this document exists, so there's not any point in telling them we couldn't delete it.
+				catch {  //Image could not be deleted, in use.
+					//The user doesn't even know this document exists, so there's not any point in telling them we couldn't delete it.
 				}
 			}
 		}
@@ -2470,9 +2468,8 @@ namespace OpenDental {
 				try {
 					Clipboard.SetDataObject(bitmapCopy);
 				}
-				catch(Exception ex) {
+				catch {
 					MsgBox.Show(this,"Could not copy contents to the clipboard.  Please try again.");
-					ex.DoNothing();
 					return;
 				}
 				//Can't do this, or the clipboard object goes away.
@@ -2498,9 +2495,8 @@ namespace OpenDental {
 			try {
 				clipboard=Clipboard.GetDataObject();
 			}
-			catch(Exception ex) {
+			catch {
 				MsgBox.Show(this,"Could not paste contents from the clipboard.  Please try again.");
-				ex.DoNothing();
 				return;
 			}
 			if(!clipboard.GetDataPresent(DataFormats.Bitmap)) {
@@ -3870,9 +3866,8 @@ namespace OpenDental {
 			try {
 				clipboard=Clipboard.GetDataObject();
 			}
-			catch(Exception ex) {
+			catch {
 				clipboard=null;
-				ex.DoNothing();
 			}
 			MountMenu.Items.Clear();
 			//Only show the copy option in the mount menu if the item in the mount selected contains an image.

@@ -2049,9 +2049,9 @@ namespace OpenDental {
 			try {
 				Clipboard.SetText(CreateCopyTask());
 			}
-			catch(Exception ex) {
+			catch {
 				MsgBox.Show(this,"Could not copy contents to the clipboard.  Please try again.");
-				ex.DoNothing();
+
 				return;
 			}
 			Tasks.TaskEditCreateLog(Lan.g(this,"Copied Task Note"),_taskCur);
@@ -2166,11 +2166,9 @@ namespace OpenDental {
 		public void OnTaskEdited() {
 			//This gets hit even when this window is the one that made a change.  This means we will refresh the grid even though we just did.
 			//In the future we might think about enhancing this window to keep track of which signals it inserted.
-			Logger.LogToPath("",LogPath.Signals,LogPhase.Start,"TaskNum: "+_taskCur.TaskNum.ToString());
 			Task taskDb=Tasks.GetOne(_taskCur.TaskNum);
 			if(taskDb==null) {//Task was deleted
 				SetFormToDeletedMode();
-				Logger.LogToPath("",LogPath.Signals,LogPhase.End,"TaskNum: "+_taskCur.TaskNum.ToString());
 				return;
 			}
 			if(!taskDb.Equals(_taskOld)) {
@@ -2181,7 +2179,6 @@ namespace OpenDental {
 			FillGrid();
 			FillComboJobs();
 			FillObject();
-			Logger.LogToPath("",LogPath.Signals,LogPhase.End,"TaskNum: "+_taskCur.TaskNum.ToString());
 		}
 
 		///<summary>Does validation and then updates the _taskCur object with the current content of the TaskEdit window.</summary>

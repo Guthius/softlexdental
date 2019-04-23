@@ -31,11 +31,8 @@ namespace CodeBase {
 					action();
 				});
 			}
-			catch(Exception ex) {
-				if(!invokeSuccessful) {//Only swallow if the exception threw while trying to invoke.
-					ex.DoNothing();
-				}
-				else {
+			catch {
+				if(invokeSuccessful) {
 					throw;
 				}
 			}

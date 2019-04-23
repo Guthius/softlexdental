@@ -293,8 +293,7 @@ namespace OpenDental {
 				try {
 					apt=AppointmentL.CreateRecallApt(patCur,listInsPlans,-1,listInsSubs);
 				}
-				catch(Exception ex) {
-					ex.DoNothing();
+				catch {
 					continue;
 				}
 				AptNumsSelected.Add(apt.AptNum);

@@ -90,9 +90,8 @@ namespace OpenDental.Bridges
                 {
                     MessageBox.Show(ex.Message);
                 }
-                catch (Exception ex)
+                catch 
                 {
-                    ex.DoNothing();
                     MessageBox.Show(path + " is not available.");
                 }
             }

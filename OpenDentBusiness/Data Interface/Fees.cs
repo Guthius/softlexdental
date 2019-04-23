@@ -637,10 +637,10 @@ namespace OpenDentBusiness{
 		#region Misc Methods
 		///<summary></summary>
 		public static void InvalidateFeeSchedules(List<long> listFeeScheduleNums) {
-			Logger.LogAction("",LogPath.Signals,() => FillCacheOrWait());
-			//Using _cache instead of _Cache because we are changing the internal dictionary.
-			//if we add a preference to remove lazy loading, it would put a refreshcache call right here.
-			if(PrefC.GetBool(PrefName.FeesUseCache)){
+            FillCacheOrWait();
+            //Using _cache instead of _Cache because we are changing the internal dictionary.
+            //if we add a preference to remove lazy loading, it would put a refreshcache call right here.
+            if (PrefC.GetBool(PrefName.FeesUseCache)){
 				listFeeScheduleNums.ForEach(x => _cache.Invalidate(x));
 			}
 		}

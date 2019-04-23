@@ -199,7 +199,7 @@ namespace OpenDentBusiness
         /// Gets all appointments scheduled in the operatories passed in that fall within the start and end dates.
         /// Does not currently consider the time portion of the DateTimes passed in.
         ///</summary>
-        public static List<Appointment> GetAppointmentsForOpsByPeriod(List<long> opNums, DateTime dateStart, DateTime dateEnd = new DateTime(), Logger.IWriteLine log = null, List<long> listProvNums = null)
+        public static List<Appointment> GetAppointmentsForOpsByPeriod(List<long> opNums, DateTime dateStart, DateTime dateEnd = new DateTime(), List<long> listProvNums = null)
         {
             string command = "SELECT * FROM appointment WHERE Op > 0 ";
             if (opNums != null && opNums.Count > 0)
@@ -224,7 +224,7 @@ namespace OpenDentBusiness
                 }
             }
             command += "ORDER BY AptDateTime,Op";//Ordering by AptDateTime then Op is important for speed when checking for collisions in Web Sched.
-            log?.WriteLine("command: " + command, LogLevel.Verbose);
+            Logger.Write(LogLevel.Verbose, "command: " + command);
             return Crud.AppointmentCrud.SelectMany(command);
         }
 
@@ -3895,9 +3895,8 @@ namespace OpenDentBusiness
             {
                 Appointments.Update(apt, aptOld);
             }
-            catch (ApplicationException ex)
+            catch
             {
-                ex.DoNothing();
                 throw;
             }
             #endregion Update Appt in db
@@ -4620,7 +4619,7 @@ namespace OpenDentBusiness
             {
                 if (logErrors)
                 {
-                    Logger.WriteException(e, "SendFollowUpErrors");
+                    Logger.Write(e);
                 }
             }
         }

@@ -418,7 +418,7 @@ namespace OpenDental {
 
 		///<summary></summary>
 		public ContrChart(){
-			Logger.openlog.Log("Initializing chart module...",Logger.Severity.INFO);
+			Logger.Write(LogLevel.Info, "Initializing chart module...");
 			InitializeComponent();
 			tabControlImages.DrawItem += new DrawItemEventHandler(OnDrawItem);
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
@@ -3766,14 +3766,15 @@ namespace OpenDental {
 		///<summary>Only use this overload when isFullRefresh is set to false.  This is ONLY in a few places and only for eCW at this point.  Speeds things up by refreshing less data.</summary>
 		public void ModuleSelected(long patNum,bool isFullRefresh,bool isClinicRefresh) {
 			EasyHideClinicalData();
-			Logger.LogAction("RefreshModuleData",LogPath.ChartModule,() => RefreshModuleData(patNum,isFullRefresh));
-			if(PrefC.IsODHQ) {
+            RefreshModuleData(patNum, isFullRefresh);
+
+            if (PrefC.IsODHQ) {
 				odInternalCustomerGrids.Visible=true;
 				odInternalCustomerGrids.BringToFront();
 				odInternalCustomerGrids.PatCur=PatCur;
 			}
 			RefreshSheetLayout();//Must be before LayoutToolBar().
-			Logger.LogAction("RefreshModuleScreen",LogPath.ChartModule,() => RefreshModuleScreen(isClinicRefresh));//Update UI to reflect any changed dynamic SheetDefs.
+            RefreshModuleScreen(isClinicRefresh);//Update UI to reflect any changed dynamic SheetDefs.
 			//Plugins.HookAddCode(this,"ContrChart.ModuleSelected_end",patNum);
 		}
 
@@ -3852,8 +3853,8 @@ namespace OpenDental {
 				doMakeSecLog=true;
 				_patNumLast=patNum;
 			}
-			Logger.LogAction("GetFamily",LogPath.ChartModule,() => _loadData=ChartModules.GetAll(patNum,checkAudit.Checked,GetChartModuleComponents(),doMakeSecLog));
-			FamCur=_loadData.Fam;
+            _loadData = ChartModules.GetAll(patNum, checkAudit.Checked, GetChartModuleComponents(), doMakeSecLog);
+            FamCur =_loadData.Fam;
 			PatCur=_loadData.Pat;
 			SubList=_loadData.ListInsSubs;
 			PlanList=_loadData.ListInsPlans;
@@ -4129,7 +4130,7 @@ namespace OpenDental {
 			}
 			ToolBarMain.Invalidate();
 			ClearButtons();
-			Logger.LogAction("FillChartViewsGrid",LogPath.ChartModule,() => FillChartViewsGrid(false));
+            FillChartViewsGrid(false);
 			if(IsDistributorKey) {
 				FillCustomerTab();
 			}
@@ -4139,12 +4140,13 @@ namespace OpenDental {
 				SearchProgNotes();
 			}
 			else {
-				Logger.LogAction("FillProgNotes",LogPath.ChartModule,() => FillProgNotes(doRefreshData: false));
-			}
-			Logger.LogAction("FillPlanned",LogPath.ChartModule,() => FillPlanned());
-			Logger.LogAction("FillPtInfo",LogPath.ChartModule,() => FillPtInfo(false));
-			Logger.LogAction("FillDxProcImage",LogPath.ChartModule,() => FillDxProcImage(false));
-			Logger.LogAction("FillImages",LogPath.ChartModule,() => FillImages());
+                FillProgNotes(doRefreshData: false);
+
+            }
+            FillPlanned();
+            FillPtInfo(false);
+            FillDxProcImage(false);
+            FillImages();
 		}
 
 		private void EasyHideClinicalData(){
@@ -5055,8 +5057,7 @@ namespace OpenDental {
 						ModuleSelectedDoseSpot();
 					}
 				}
-				catch(Exception ex) {
-					ex.DoNothing();
+				catch {
 					SetErxButtonNotification(0,0,0,true);
 				}
 			});
@@ -5328,8 +5329,7 @@ namespace OpenDental {
 						}
 					}
 				}
-				catch(Exception ex) {
-					ex.DoNothing();
+				catch {
 					//Failed to contact server and/or update provider IsEnabled statuses.  We will simply use what we already know in the local database.
 				}
 			}

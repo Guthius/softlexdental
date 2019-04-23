@@ -57,7 +57,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public ContrFamily(){
-			Logger.openlog.Log("Initializing family module...",Logger.Severity.INFO);
+			Logger.Write(LogLevel.Info, "Initializing family module...");
 			InitializeComponent();// This call is required by the Windows.Forms Form Designer.
 		}
 

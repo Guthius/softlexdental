@@ -383,8 +383,8 @@ namespace OpenDental {
 				//If we were unable to create the printdocument this will throw an exception.
 				TryPrint(sheet,dataSet,copies,isRxControlled,stmt,medLab,isPrintDocument,isPreviewMode);
 			}
-			catch(InvalidPrinterException ex) {//Dont catch other exceptions so that customer calls and we can be aware.
-				ex.DoNothing();//Error msg shown, see TryPrint(...)
+			catch(InvalidPrinterException) {//Dont catch other exceptions so that customer calls and we can be aware.
+				//Error msg shown, see TryPrint(...)
 			}
 		}
 
@@ -654,8 +654,7 @@ namespace OpenDental {
 								bmpOriginal=new Bitmap(Image.FromStream(stream));
 								bmpOriginalFormat=ImageFormat.Bmp;
 							}
-							catch(Exception ex) {
-								ex.DoNothing();
+							catch {
 								return;//If the image is not an actual image file, leave the image field blank.
 							}
 						}
@@ -2620,8 +2619,7 @@ namespace OpenDental {
 							continue;
 						}
 					}
-					catch(Exception ex) {
-						ex.DoNothing();
+					catch {
 						continue;//If the image is not an actual image file, leave the image field blank.
 					}
 				}

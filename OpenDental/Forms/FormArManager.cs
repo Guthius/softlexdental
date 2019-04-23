@@ -213,8 +213,7 @@ namespace OpenDental {
 				}
 				SecurityLogs.MakeLogEntry(Permissions.AgingRan,0,"Aging Ran Automatically - AR Manager");
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
 				msgText="There was a problem running aging.  Would you like to load the accounts grid with currently existing account information?";
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,msgText)) {
 					Close();
@@ -922,9 +921,9 @@ namespace OpenDental {
 				}
 				_toolTipUnsentErrors.SetToolTip(gridUnsent,Lan.g(this,"Invalid")+" "+string.Join(" "+Lan.g(this,"and")+" ",listErrors));
 			}
-			catch(Exception ex) {
+			catch{
 				_toolTipUnsentErrors.RemoveAll();
-				ex.DoNothing();
+
 			}
 			finally {
 				_lastCursorPos=e.Location;
@@ -1349,8 +1348,7 @@ namespace OpenDental {
 					};
 					state.Execute(false);
 				}
-				catch(Exception ex) {
-					ex.DoNothing();
+				catch {
 					listFailedPatNums.AddRange(kvp.Value.Keys);
 					continue;
 				}
@@ -1392,8 +1390,7 @@ namespace OpenDental {
 					};
 					state.Execute(false);
 				}
-				catch(Exception ex) {
-					ex.DoNothing();
+				catch{
 					listFailedPatNums.AddRange(kvp.Value.Keys);
 					continue;
 				}
@@ -1887,8 +1884,7 @@ namespace OpenDental {
 					};
 					state.Execute(false);
 				}
-				catch(Exception ex) {
-					ex.DoNothing();
+				catch {
 					listFailedPatNums.AddRange(kvp.Value.Keys);
 					continue;
 				}

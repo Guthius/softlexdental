@@ -230,9 +230,9 @@ namespace OpenDentBusiness
                 }, false);
                 retVal = (T)Convert.ChangeType(val, typeof(T));
             }
-            catch (Exception ex)
+            catch 
             {
-                ex.DoNothing();
+                
                 return false;
             }
             return true;

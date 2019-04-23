@@ -22,8 +22,8 @@ namespace OpenDentBusiness.WebTypes.WebForms {
 				//Get all pending sheets for the office, will not limit to 20 anymore.
 				listWebFormsSheets=WebSerializer.DeserializeTag<List<WebForms_Sheet>>(SheetsSynchProxy.GetWebServiceInstance().GetWebFormSheets(payload),"Success");
 			}
-			catch (Exception ex) {
-				ex.DoNothing();
+			catch  {
+
 				return false;
 			}
 			return true;
@@ -44,8 +44,7 @@ namespace OpenDentBusiness.WebTypes.WebForms {
 				string payload=PayloadHelper.CreatePayloadWebHostSynch(regKey,listPayloadItems.ToArray());
 				SheetsSynchProxy.GetWebServiceInstance().DeleteSheetData(payload);
 			}
-			catch (Exception ex) {
-				ex.DoNothing();
+			catch{
 			}
 		}
 

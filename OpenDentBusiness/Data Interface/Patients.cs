@@ -3482,13 +3482,13 @@ namespace OpenDentBusiness
                 {
                     isMergeSuccessful = MergeTwoPatientPointOfNoReturn(patTo, patFrom, patFieldsToDelete, patFieldsToUpdate);
                 }
-                catch (Exception ex)
+                catch 
                 {
                     if (retryCount <= 0)
                     {
                         throw;//Throw exception after retrying 5 times.
                     }
-                    ex.DoNothing();
+                    
                 }
             }
             return isMergeSuccessful;
@@ -4820,9 +4820,9 @@ namespace OpenDentBusiness
                         SmsPhone = SmsToMobiles.ConvertPhoneToInternational(SmsPhone, curCulture, smsPhoneCountryCode);
                         IsSmsPhoneFormatOk = true;
                     }
-                    catch (Exception e)
+                    catch 
                     { //Formatting for sms failed to set to empty so we don't try to use it.
-                        e.DoNothing();
+
                         SmsPhone = "";
                     }
                 }

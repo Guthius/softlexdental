@@ -92,9 +92,9 @@ namespace OpenDental
                 webBrowserWiki.DocumentText = MarkupEdit.TranslateToXhtml(textContent.Text, true, true);
                 _isInvalidPreview = false;
             }
-            catch (Exception ex)
+            catch 
             {
-                ex.DoNothing();
+               
                 _isInvalidPreview = true;
                 //don't refresh
             }

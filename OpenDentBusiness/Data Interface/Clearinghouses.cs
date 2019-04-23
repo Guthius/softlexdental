@@ -619,9 +619,8 @@ namespace OpenDentBusiness
                             {
                                 Process.Start(@"http://www.dentalxchange.com");
                             }
-                            catch (Exception ex)
+                            catch 
                             {
-                                ex.DoNothing();
                                 return Lans.g("FormClaimReports", "Could not locate the site.");
                             }
                         }
@@ -712,9 +711,8 @@ namespace OpenDentBusiness
                     Directory.CreateDirectory(archiveDir);
                 }
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
-                ex.DoNothing();
                 return Lans.g("FormClaimReports", "Access to the Report Path is denied.  Try running as administrator or contact your network administrator.");
             }
             List<string> listFailedFiles = new List<string>();
@@ -742,9 +740,8 @@ namespace OpenDentBusiness
                 {
                     File.Move(fileSource, fileDestination);
                 }
-                catch (Exception ex)
+                catch
                 {
-                    ex.DoNothing();//OK to continue, since ProcessIncomingReport() above saved the raw report into the etrans table.
                     listFailedFiles.Add(fileSource);
                     continue;//Skip current report file and leave in folder to processing later.
                 }
@@ -756,9 +753,8 @@ namespace OpenDentBusiness
                         File.ReadAllText(fileDestination),
                         Security.CurUser.UserNum);
                 }
-                catch (Exception ex)
+                catch 
                 {
-                    ex.DoNothing();
                     listFailedFiles.Add(fileSource);
                     File.Move(fileDestination, fileSource);//Move file back so that the archived folder only contains succesfully processed reports.
                 }

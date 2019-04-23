@@ -42,7 +42,7 @@ namespace OpenDental
         /// </summary>
         public ContrStaff()
         {
-            Logger.openlog.Log("Initializing management module...", Logger.Severity.INFO);
+            Logger.Write(LogLevel.Info, "Initializing management module...");
 
             InitializeComponent();
         }

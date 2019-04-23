@@ -20,9 +20,8 @@ namespace OpenDental.Bridges{
 					Process.Start("http://www.opendental.com/resources/redirects/redirectpracticebynumbers.html");
 				}
 			}
-			catch(Exception ex) {
+			catch {
 				MsgBox.Show("PracticeByNumbers","Failed to open web browser.  Please make sure you have a default browser set and are connected to the internet then try again.");
-				ex.DoNothing();
 			}
 		}
 	}

@@ -120,7 +120,7 @@ namespace OpenDental{
 
 		///<summary></summary>
 		public ContrTreat(){
-			Logger.openlog.Log("Initializing treatment module...",Logger.Severity.INFO);
+			Logger.Write(LogLevel.Info, "Initializing treatment module...");
 			InitializeComponent();// This call is required by the Windows.Forms Form Designer.
 		}
 

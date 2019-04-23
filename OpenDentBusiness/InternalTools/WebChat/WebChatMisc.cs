@@ -37,11 +37,11 @@ namespace OpenDentBusiness {
 		}
 
 		public static void LogException(Exception ex) {
-			Logger.WriteException(ex,"WebChatLogs");
+			Logger.Write(ex);
 		}
 
 		public static void LogError(string errorMsg) {
-			Logger.WriteError(errorMsg,"WebChatLogs");
+			Logger.Write(LogLevel.Error, errorMsg);
 		}
 
 	}

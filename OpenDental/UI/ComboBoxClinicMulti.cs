@@ -142,8 +142,8 @@ namespace OpenDental.UI {
 					ListSelectedClinicNums=new List<long> { Clinics.ClinicNum };
 				}
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
+
 			}
 		}
 		

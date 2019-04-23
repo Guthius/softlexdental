@@ -213,9 +213,9 @@ namespace OpenDentBusiness
             {
                 return Crud.PhoneCrud.SelectMany(command);
             }
-            catch (Exception e)
+            catch 
             {
-                e.DoNothing();
+               
                 //Phone table may not even exist. "Is Missing In General"
                 return new List<Phone>();
             }

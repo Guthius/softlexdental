@@ -21,8 +21,8 @@ namespace OpenDentBusiness.WebTypes.WebForms {
 				string payload=PayloadHelper.CreatePayloadWebHostSynch(regKey,new PayloadItem(regKey,"RegKey"));
 				return WebSerializer.DeserializeTag<long>(SheetsSynchProxy.GetWebServiceInstance().GetDentalOfficeID(payload),"Success");
 			}
-			catch (Exception ex) {
-				ex.DoNothing();
+			catch  {
+				
 			}
 			return 0;
 		}
@@ -38,8 +38,8 @@ namespace OpenDentBusiness.WebTypes.WebForms {
 				string payload=PayloadHelper.CreatePayloadWebHostSynch(regKey,new PayloadItem(regKey,"RegKey"));
 				return WebSerializer.DeserializeTag<string>(SheetsSynchProxy.GetWebServiceInstance().GetSheetDefAddress(payload),"Success");
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
+
 			}
 			return "";
 		}

@@ -1468,8 +1468,8 @@ namespace OpenDental {
 					long prevClinic=PrefC.GetLong(PrefName.GlobalUpdateWriteOffLastClinicCompleted);
 					indexPrevClinic=listWriteoffClinics.FindIndex(x => x.ClinicNum==prevClinic);
 				}
-				catch(Exception ex) {
-					ex.DoNothing();//if pref is not a long, leave prevClinic as -1 so it will run as if it was not previously interrupted
+				catch {
+					//if pref is not a long, leave prevClinic as -1 so it will run as if it was not previously interrupted
 				}
 			}
 			if(indexPrevClinic>-1 //only true if clinics are enabled, the user is not restricted, updating all clinics, and the pref has been set from previous run

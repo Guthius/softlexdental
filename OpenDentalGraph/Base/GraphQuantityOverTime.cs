@@ -864,8 +864,8 @@ namespace OpenDentalGraph {
 				textChartTitle.Text=GraphTitle;
 				comboBreakdownBy.UpdateDisplayName(BreakdownType.items,LegendTitle.ToString()+"s");
 			}
-			catch(Exception e) {
-				e.DoNothing();
+			catch {
+
 			}
 		}
 

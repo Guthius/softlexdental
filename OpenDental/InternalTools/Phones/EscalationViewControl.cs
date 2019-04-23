@@ -275,9 +275,9 @@ namespace OpenDental {
 					#endregion
 				}
 			}
-			catch(Exception ex) {
+			catch {
 				//Something went wrong with paiting the control.  No reason to crash the program.  Odds are paint will get called again very soon.
-				ex.DoNothing();
+
 			}
 			finally {
 				penOuter.Dispose();

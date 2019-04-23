@@ -108,8 +108,8 @@ namespace OpenDental {
 				if(tabToRefresh!=UserControlTasksTab.Invalid && control.TaskTab!=tabToRefresh) {
 					continue;
 				}
-				Logger.LogAction("UserControlTasks.RefreshTasks",LogPath.Signals,() => control.FillGrid(listSignals));
-			}
+                control.FillGrid(listSignals);
+            }
 		}
 
 		///<summary>Resets the currently applied filter to either the preference TasksGlobalFilterType, or the selected TaskList's override, for all 

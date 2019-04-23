@@ -41,8 +41,8 @@ namespace OpenDental {
 				string text=MarkupEdit.TranslateToXhtml(_emailPlainTextShared,isPreviewOnly:true,hasWikiPageTitles:false,isEmail:true);
 				browserEmailBody.DocumentText=text;
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
+
 			}
 		}
 		

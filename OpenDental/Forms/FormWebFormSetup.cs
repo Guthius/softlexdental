@@ -375,9 +375,8 @@ namespace OpenDental {
 			try {
 				Clipboard.SetText(textURLs.Text);
 			}
-			catch(Exception ex) {
+			catch {
 				MsgBox.Show(this,"Could not copy contents to the clipboard.  Please try again.");
-				ex.DoNothing();
 			}
 		}
 

@@ -28,8 +28,8 @@ namespace OpenDental {
 			try {
 				FillHiddenPrefs();
 			}
-			catch(Exception ex) {
-				ex.DoNothing();//Suppress unhandled exceptions from hidden preferences, since they are read only.
+			catch {
+				//Suppress unhandled exceptions from hidden preferences, since they are read only.
 			}
 		}
 
@@ -137,8 +137,8 @@ namespace OpenDental {
 				Pref hiddenPref=Prefs.GetOne(pref);
 				return hiddenPref.ValueString;
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
+
 				return null;
 			}
 		}
@@ -341,8 +341,8 @@ namespace OpenDental {
 						throw new Exception();
 					}
 				}
-				catch(Exception e) {
-					e.DoNothing();
+				catch {
+
 					errorMsg+="Log off after minutes is invalid. Must be a positive number.\r\n";
 				}
 			}

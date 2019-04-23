@@ -347,8 +347,8 @@ namespace OpenDental {
 			try {
 				docc=ImageStore.Import(tempPath,category,Patients.GetPat(_medLabCur.PatNum));
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
+		
 				Cursor=Cursors.Default;
 				MsgBox.Show(this,"Error saving document.");
 				return;
@@ -415,8 +415,8 @@ namespace OpenDental {
 				try {
 					dateModified=File.GetLastWriteTime(filePath).ToString();
 				}
-				catch(Exception ex) {
-					ex.DoNothing();
+				catch {
+					
 					//dateModified will be min value, do nothing?
 				}
 				listFileNamesDateMod.Add(new string[] { filePath,dateModified });
@@ -490,8 +490,8 @@ namespace OpenDental {
 					try {
 						File.Copy(fromFilePath,destFilePath);
 					}
-					catch(Exception ex) {
-						ex.DoNothing();
+					catch {
+						
 						fileMoveFailures++;
 						continue;
 					}
@@ -499,8 +499,8 @@ namespace OpenDental {
 					try {
 						File.Delete(fromFilePath);
 					}
-					catch(Exception ex) {
-						ex.DoNothing();
+					catch {
+						
 						//If we cannot delete the file, could be a permission issue or someone has the file open currently
 						//Just skip deleting the file, which means there could be an image in the old pat's folder that may need to be deleted manually
 						fileMoveFailures++;

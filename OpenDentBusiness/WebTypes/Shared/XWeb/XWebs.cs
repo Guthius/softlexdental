@@ -72,21 +72,21 @@ namespace OpenDentBusiness.WebTypes.Shared.XWeb {
 		#endregion
 
 		#region Events
-		public static EventHandler<Logger.LoggerEventArgs> InputEvent;
-		public static EventHandler<Logger.LoggerEventArgs> OutputEvent;
+		//public static EventHandler<Logger.LoggerEventArgs> InputEvent;
+		//public static EventHandler<Logger.LoggerEventArgs> OutputEvent;
 		public static EventHandler WakeupMonitor;
-		///<summary>XWeb Gateway input event. Always sent as Verbose.</summary>
-		protected static void OnInputEvent(object sender,string s) {
-			if(InputEvent!=null) {
-				InputEvent(sender,new Logger.LoggerEventArgs(s,LogLevel.Verbose));
-			}
-		}
-		///<summary>XWeb Gateway output event. Always sent as Verbose.</summary>
-		protected static void OnOutputEvent(object sender,string s) {
-			if(OutputEvent!=null) {
-				OutputEvent(sender,new Logger.LoggerEventArgs(s,LogLevel.Verbose));
-			}
-		}
+		/////<summary>XWeb Gateway input event. Always sent as Verbose.</summary>
+		//protected static void OnInputEvent(object sender,string s) {
+		//	if(InputEvent!=null) {
+		//		InputEvent(sender,new Logger.LoggerEventArgs(s,LogLevel.Verbose));
+		//	}
+		//}
+		/////<summary>XWeb Gateway output event. Always sent as Verbose.</summary>
+		//protected static void OnOutputEvent(object sender,string s) {
+		//	if(OutputEvent!=null) {
+		//		OutputEvent(sender,new Logger.LoggerEventArgs(s,LogLevel.Verbose));
+		//	}
+		//}
 		///<summary>New OTK is available. Send wakeup event to EConnector so it will start processing immediately.</summary>
 		protected static void OnWakeupMonitor(object sender,EventArgs e) {
 			if(WakeupMonitor!=null) {
@@ -243,14 +243,14 @@ namespace OpenDentBusiness.WebTypes.Shared.XWeb {
 				if(inputBytes.Length>=2048) {
 					throw new ODException("X-Web gateway request is too long.",ODException.ErrorCodes.MaxRequestDataExceeded);
 				}
-				OnInputEvent(this,PrettyPrintXml(input));
+				//OnInputEvent(this,PrettyPrintXml(input));
 				//Create HTTPS connection to X-Web gateway and send GET request.
 				using(WebClient webClient = new WebClient()) {
 					//Upload the XML request to the X-Web gateway and retrieve the response string.
 					byte[] response=webClient.UploadData(_gatewayUrl,inputBytes);
 					//Convert the byte array to a string for parsing.
 					string ret=webClient.Encoding.GetString(response);
-					OnOutputEvent(this,PrettyPrintXml(ret));
+					//OnOutputEvent(this,PrettyPrintXml(ret));
 					return ret;
 				}
 			}

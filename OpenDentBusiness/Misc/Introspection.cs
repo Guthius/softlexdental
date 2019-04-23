@@ -32,8 +32,8 @@ namespace OpenDentBusiness {
 					//If this throws, the engineer will get a UE later in the program stating that their corresponding IntrospectionEntity could not be found (dictionary not filled out correctly).
 					_dictOverrides=JsonConvert.DeserializeObject<Dictionary<IntrospectionEntity,string>>(introspectionItems);
 				}
-				catch(Exception ex) {
-					ex.DoNothing();
+				catch {
+					
 				}
 				return _dictOverrides;
 			}

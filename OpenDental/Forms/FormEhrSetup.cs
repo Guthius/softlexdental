@@ -148,8 +148,8 @@ namespace OpenDental {
 			try {
 				webResp=wr.GetResponse();
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
+
 				return null;
 			}
 			DownloadFileWorker(codeSystemURL,zipFileDestination);

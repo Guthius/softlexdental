@@ -105,24 +105,27 @@ namespace CodeBase.MVC {
 			ShowHelpButtonSafe();
 		}
 
-		///<summary>Sets the entire form into "read only" mode by disabling all controls on the form.
-		///Pass in any controls that should say enabled (e.g. Cancel button). 
-		///This can be used to stop users from clicking items they do not have permission for.</summary>
-		public void DisableForm(params Control[] enabledControls) {
-			foreach(Control ctrl in this.Controls) {
-				if(enabledControls.Contains(ctrl)) {
-					continue;
-				}
-				//Attempt to disable the control.
-				try {
-					ctrl.Enabled=false;
-				}
-				catch(Exception ex) {
-					//Some controls do not support being disabled.  E.g. the WebBrowser control will throw an exception here.
-					ex.DoNothing();
-				}
-			}
-		}
+        ///<summary>Sets the entire form into "read only" mode by disabling all controls on the form.
+        ///Pass in any controls that should say enabled (e.g. Cancel button). 
+        ///This can be used to stop users from clicking items they do not have permission for.</summary>
+        public void DisableForm(params Control[] enabledControls)
+        {
+            foreach (Control ctrl in this.Controls)
+            {
+                if (enabledControls.Contains(ctrl))
+                {
+                    continue;
+                }
+                //Attempt to disable the control.
+                try
+                {
+                    ctrl.Enabled = false;
+                }
+                catch
+                {
+                }
+            }
+        }
 
 		public void Restore() {
 			if(WindowState==FormWindowState.Minimized) {
@@ -134,10 +137,11 @@ namespace CodeBase.MVC {
 		protected virtual void ShowHelp(string name) {
 		}
 
-		///<summary>Base handler for the IODProcessor interface. Wrap it with logging and callback to OnProcess().</summary>
-		public void ProcessObjects(List<P> listObjs) {
-			Logger.LogAction("ODFormAbs.ProcessObjects",LogPath.Signals,() => OnProcessObjects(listObjs),this.GetType().Name);
-		}
+        ///<summary>Base handler for the IODProcessor interface. Wrap it with logging and callback to OnProcess().</summary>
+        public void ProcessObjects(List<P> listObjs)
+        {
+            OnProcessObjects(listObjs);
+        }
 
 		///<summary>Override this if your form cares about object processing.</summary>
 		public virtual void OnProcessObjects(List<P> listObjs) {

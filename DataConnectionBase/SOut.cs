@@ -57,9 +57,8 @@ namespace DataConnectionBase
                 }
                 return outDate;
             }
-            catch (Exception ex)
+            catch 
             {
-                ex.DoNothing();
                 return "";//this saves zeros to a mysql database
             }
         }
@@ -84,9 +83,8 @@ namespace DataConnectionBase
                 }
                 return outDate;
             }
-            catch (Exception ex)
+            catch 
             {
-                ex.DoNothing();
                 return "";//this saves zeros to the database
             }
         }
@@ -110,9 +108,8 @@ namespace DataConnectionBase
                 retval += hours.ToString().PadLeft(2, '0') + ":" + myTimeSpan.Minutes.ToString().PadLeft(2, '0') + ":" + myTimeSpan.Seconds.ToString().PadLeft(2, '0');
                 return retval;
             }
-            catch (Exception ex)
+            catch
             {
-                ex.DoNothing();
                 return "00:00:00";
             }
         }
@@ -156,9 +153,8 @@ namespace DataConnectionBase
                     return myDouble.ToString();
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                ex.DoNothing();
                 return "0";
             }
         }
@@ -171,9 +167,8 @@ namespace DataConnectionBase
                 //because decimal is a comma in Europe, this sends it to db with period instead 
                 return myDecimal.ToString("f", CultureInfo.InvariantCulture);
             }
-            catch (Exception ex)
+            catch 
             {
-                ex.DoNothing();
                 return "0";
             }
         }

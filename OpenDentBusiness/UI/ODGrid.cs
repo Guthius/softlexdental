@@ -3230,9 +3230,8 @@ namespace OpenDental.UI
                     {
                         Directory.CreateDirectory(PrefC.GetString(PrefName.ExportPath));
                     }
-                    catch (Exception ex)
+                    catch 
                     {
-                        ex.DoNothing();
                         saveFileDialog.InitialDirectory = "";
                     }
                 }
@@ -3260,9 +3259,9 @@ namespace OpenDental.UI
                     }
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                ex.DoNothing();
+                
                 return "File in use by another program.  Close and try again.";
             }
             return "File created successfully";
@@ -3819,9 +3818,8 @@ namespace OpenDental.UI
                     return;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                ex.DoNothing();
                 return;
             }
             //ODGrids are not only used within the Open Dental project.  Often times they are used in projects that do not have a DB connection.
@@ -3832,9 +3830,9 @@ namespace OpenDental.UI
                 //It is not worth it to force users to log off and back on again, or to run the link removal code below EVERY time, even if the pref is disabled.
                 doWikiLogic = PrefC.GetBool(PrefName.WikiDetectLinks);//if this fails then we do not have a pref table or a wiki, so don't bother going with this part.
             }
-            catch (Exception ex)
+            catch 
             {
-                ex.DoNothing();
+               
             }
             removeContextMenuLinks();
             int rowClick = PointToRow(CurrentClickLocation.Y);
@@ -3880,9 +3878,9 @@ namespace OpenDental.UI
                         MailAddress emailAddress = new MailAddress(match);
                         continue;//'match' is a valid email address, which at this time we don't want to create a ContextMenu Web link for.
                     }
-                    catch (FormatException fe)
+                    catch (FormatException)
                     {
-                        fe.DoNothing();//Not a valid email address format, so it should be a web link.  Carry on to creating the item in the ContextMenu.
+                        //Not a valid email address format, so it should be a web link.  Carry on to creating the item in the ContextMenu.
                     }
                     string title = match;
                     if (title.Length >= 25)
@@ -3943,9 +3941,8 @@ namespace OpenDental.UI
                     return;
                 }
             }
-            catch (Exception ex)
+            catch 
             {
-                ex.DoNothing();
                 return;
             }
             if (this.ContextMenu == null)

@@ -173,8 +173,7 @@ namespace OpenDental {
 							this.Width=width;
 						}));
 					}
-					catch(Exception e) {
-						e.DoNothing();
+					catch {
 						//ApptDrawing uses a lot of statics that are being set outside of this thread. 
 						//Expect those to throw exceptions when they are being modified by the main thread while this worker thread is still drawing.				
 						//Also, in rare cases (changing modules during a redraw for instance) our double buffer bitmap will be disposed by the main thread right out from under this thread.
@@ -232,7 +231,7 @@ namespace OpenDental {
 						//throw new OutOfMemoryException("test");
 						g.DrawImage(_shadow,0,0);
 					}
-					catch(Exception ex) {
+					catch {
 						//Out of memory exceptions have been occurring for some of our large customers.  See job #9459, task #1570555.
 						//Online research suggests that out of memory exceptions are a more generic exception which could happen for a variety of reasons.
 						//This issue could be due to the shadow bitmap being small enough to fit in system memory but too small to fit in graphcis memory.
@@ -240,7 +239,6 @@ namespace OpenDental {
 						//The shadow bitmap is a double buffering mechanism.  We might be able to fix this out of memory issue in the future,
 						//if we instead use the Microsoft flag ContrApptSheet.DoubleBuffered and draw directly onto the graphics device provided in OnPaint().
 						//For now, when this exception occurs, the shadow will not be drawn and will cause the appointment book to show a red X.
-						ex.DoNothing();
 						DisposeShadow();//Invalidate the shadow so that it might be regenerated correctly next time.
 					}
 				}

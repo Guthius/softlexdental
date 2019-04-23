@@ -682,8 +682,8 @@ namespace OpenDentBusiness
             logOther($"addRows {table.Rows.Count} rows");
             swTotal.Stop();
 #if DEBUG
-            Logger.WriteLine($"\r\n----------SUMMARY TOTAL {swTotal.Elapsed.TotalSeconds.ToString("0.00")}s\r\n{info}\r\n\r\n", "FillRecallTableInfo");
-            Logger.WriteLine($"\r\n----------INFO TOTAL {swTotal.Elapsed.TotalSeconds.ToString("0.00")}s\r\n{info}\r\n\r\n----------\r\n{verbose}\r\n\r\n", "FillRecallTableVerbose");
+            Logger.Write(LogLevel.Info, $"\r\n----------SUMMARY TOTAL {swTotal.Elapsed.TotalSeconds.ToString("0.00")}s\r\n{info}\r\n\r\n");
+            Logger.Write(LogLevel.Info, $"\r\n----------INFO TOTAL {swTotal.Elapsed.TotalSeconds.ToString("0.00")}s\r\n{info}\r\n\r\n----------\r\n{verbose}\r\n\r\n");
 #endif
             return table;
         }
@@ -894,9 +894,8 @@ namespace OpenDentBusiness
                             dictPatBatchData = _queueBatchData.Dequeue();
                         }
                     }
-                    catch (Exception ex)
-                    {//queue must be empty even though we just checked it before entering the while loop, just loop again and wait if necessary
-                        ex.DoNothing();
+                    catch
+                    {
                         continue;
                     }
                     //not likely to happen, this is checked when filling the queue, but just in case
@@ -1080,9 +1079,8 @@ namespace OpenDentBusiness
                     #endregion Insert New Recalls
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                ex.DoNothing();
             }
             finally
             {
@@ -1191,9 +1189,8 @@ namespace OpenDentBusiness
                     }
                 }
             }
-            catch (Exception ex)
+            catch
             {
-                ex.DoNothing();//if error happens, just swallow the error and kill the thread
             }
             finally
             {//always make sure to notify the main thread that the thread is done so the main thread doesn't wait for eternity
@@ -1934,9 +1931,8 @@ namespace OpenDentBusiness
                         {
                             recent.ReminderType = Lans.g(lanThis, PIn.Enum<CommItemMode>(PIn.Int(row["CommMode"].ToString())).GetDescription());
                         }
-                        catch (Exception ex)
+                        catch
                         {
-                            ex.DoNothing();
                             recent.ReminderType = Lans.g(lanThis, "UNKNOWN");
                         }
                         break;
@@ -2120,7 +2116,6 @@ namespace OpenDentBusiness
                     AlertItems.Insert(alert);
                 });
                 thread.Name = "FinishWebSchedRecallAppt";
-                thread.AddExceptionHandler(e => e.DoNothing());
                 thread.Start(true);
                 if (RunWebSchedSynchronously)
                 {

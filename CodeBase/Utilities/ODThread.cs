@@ -212,12 +212,18 @@ namespace CodeBase {
 		private bool HandleUnhandledExceptionOrThrow(Exception e) {
 			//In this case it is safe to quit this thread because the application is probably about to either hard crash or exit gracefully.
 			_hasQuit=true;
-			if(OnUnhandledException!=null) {
+
+
+            return true;
+
+            if (OnUnhandledException!=null) {
 				OnUnhandledException(e,_thread);
 				return false;
 			}
-			//If we get here the entire program will shutdown without warning and only leave a vague reference to KERNELBASE.dll in the event viewer.
-			throw e;
+            //If we get here the entire program will shutdown without warning and only leave a vague reference to KERNELBASE.dll in the event viewer.
+            //throw e;
+
+            return true;
 		}
 
 		///<summary>Forces the calling thread to synchronously wait for the current thread to finish doing work.  Pass Timeout.Infinite into timeoutMS if you wish to wait as long as necessary for the thread to join.  The thread will be aborted if the timeout was reached and then will return false.</summary>
@@ -371,25 +377,6 @@ namespace CodeBase {
 			return TimeSpan.Zero;
 		}
 
-		public static bool MakeThread(IODThread threadClass,bool isAutoStart=false,string groupName="") {
-			if(threadClass.IsInit) {
-				return false;
-			}
-			ODThread thread=new ODThread(threadClass.GetThreadRunIntervalMS(),threadClass.OnThreadRun);
-			thread.Name=threadClass.GetThreadName();
-			if(groupName!="") {
-				thread.GroupName=groupName;
-			}
-			thread.AddExceptionHandler(new ExceptionDelegate(threadClass.OnThreadException));
-			thread.AddExitHandler(new WorkerDelegate(threadClass.OnThreadExit));
-			if(isAutoStart) {
-				thread.Start();
-			}
-			threadClass.IsInit=true;
-			threadClass.ODThread=thread;
-			return true;
-		}
-
 		///<summary>Spread the given actions over the given numThreads. Blocks until threads have completed or timeout is reached.
 		///If numThreads is not provided then numThreads will default to Environment.ProcessorCount. This is typically what you should let happen.
 		///If onException is provided then one and only one onException event will be raised when any number of exceptions occur.
@@ -506,26 +493,4 @@ namespace CodeBase {
 		///<summary>Pointer delegate to the method that gets called when the worker delegate throws an unhandled exception.</summary>
 		public delegate void ExceptionDelegate(Exception e);
 	}
-
-	///<summary>This interface is needed for the MakeThread method so that we don't have to copy additional files to the UpdateFileCopier project.</summary>
-	public interface IODThread {
-
-		ODThread ODThread {
-			get;
-			set;
-		}
-
-		bool IsInit {
-			get;
-			set;
-		}
-
-		int GetThreadRunIntervalMS();
-		void OnThreadRun(ODThread odThread);
-		void OnThreadException(Exception e);
-		void OnThreadExit(ODThread odThread);
-		string GetLogDirectoryName();
-		string GetThreadName();
-	}
-
 }

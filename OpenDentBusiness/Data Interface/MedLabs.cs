@@ -172,9 +172,9 @@ namespace OpenDentBusiness
                         fileTextCur = FileAtoZ.ReadAllText(FileAtoZ.CombinePaths(ImageStore.GetPreferredAtoZpath(), relativePath));
                     }
                 }
-                catch (Exception ex)
+                catch 
                 {
-                    ex.DoNothing();//To avoid a warning message.  The ex is needed to ensure all exceptions are caught.
+                    //To avoid a warning message.  The ex is needed to ensure all exceptions are caught.
                     failedCount++;
                     continue;
                 }
@@ -231,9 +231,9 @@ namespace OpenDentBusiness
                 {
                     ImageStore.DeleteDocuments(new List<Document> { doc }, ImageStore.GetPatientFolder(docPat, ImageStore.GetPreferredAtoZpath()));
                 }
-                catch (Exception ex)
+                catch 
                 {
-                    ex.DoNothing();//To avoid a warning message.  The ex is needed to ensure all exceptions are caught.
+                    //To avoid a warning message.  The ex is needed to ensure all exceptions are caught.
                     failedCount++;
                 }
             }

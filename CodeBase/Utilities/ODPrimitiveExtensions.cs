@@ -306,8 +306,7 @@ namespace CodeBase {
 				dictOrig.CompareDictionary(dictFinal,funcCompare);
 				return true;
 			}
-			catch(Exception e) {
-				e.DoNothing();
+			catch {
 			}
 			return false;
 		}
@@ -354,8 +353,7 @@ namespace CodeBase {
 						try {
 							property.SetValue(sourceObj,property.GetValue(sourceObj,null),null);
 						}
-						catch(Exception e) { //For Get-only-properties.
-							e.DoNothing();
+						catch{
 						} 
 					}
 				}
@@ -377,8 +375,7 @@ namespace CodeBase {
 				first.CompareList(second,funcCompare);
 				return true;
 			}
-			catch(Exception e) {
-				e.DoNothing();
+			catch {
 			}
 			return false;
 		}
@@ -396,8 +393,7 @@ namespace CodeBase {
 				}
 				return ODHQ.IsODHQ;
 			}
-			catch(Exception e) {
-				e.DoNothing();
+			catch {
 				return false;
 			}
 		}

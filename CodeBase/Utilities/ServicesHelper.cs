@@ -45,8 +45,7 @@ namespace CodeBase {
 					return true;
 				}
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
 			}
 			return false;
 		}
@@ -71,8 +70,7 @@ namespace CodeBase {
 				//Check to see if the service was successfully removed.
 				return (GetServiceByServiceName(service.ServiceName)!=null);
 			}
-			catch(Exception ex) {
-				ex.DoNothing();
+			catch {
 			}
 			return false;
 		}
@@ -292,8 +290,7 @@ namespace CodeBase {
 				try {
 					SetSecurityDescriptorToAllowEveryoneToManageService(service);
 				}
-				catch(Exception ex) {
-					ex.DoNothing();
+				catch {
 				}
 			}
 		}
@@ -436,8 +433,7 @@ namespace CodeBase {
 				}
 				return false;
 			}
-			catch(Exception e) {
-				e.DoNothing();
+			catch {
 			}
 			//Querying the registry failed so let's try querying Window Management Interface (WMI).
 			//If this throws also then let it throw. It means we absolutely cannot determine that status of this service.

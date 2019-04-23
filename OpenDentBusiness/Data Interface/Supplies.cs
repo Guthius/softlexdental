@@ -173,9 +173,9 @@ namespace OpenDentBusiness
             {
                 return PIn.Int(Db.GetScalar(command));
             }
-            catch (Exception ex)
+            catch 
             {
-                ex.DoNothing();
+
                 return 0;
             }
         }

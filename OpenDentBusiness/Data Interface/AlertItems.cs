@@ -102,7 +102,7 @@ namespace OpenDentBusiness
         /// This method grabs all unread webmails, and creates/modifies/deletes alerts for the 
         /// providers and linked users the webmails are addressed to.
         /// </summary>
-        public static void CreateAlertsForNewWebmail(Logger.IWriteLine log)
+        public static void CreateAlertsForNewWebmail()
         {
             // This method first collect all unread webmails, and counts how many each provider has.
             // It then fetches all WebMailRecieved alerts, and will create/modify alerts for each provider who was counted before.
@@ -112,11 +112,11 @@ namespace OpenDentBusiness
             // If the user has no unread webmail and an existing alert, it will be deleted.
             // Key: ProvNum, Value: Number of unread webmails
             Dictionary<long, long> dictRecievedCount = EmailMessages.GetProvUnreadWebMailCount();
-            log.WriteLine("Collected Webmails for the following providers (ProvNum: # Webmails): " + String.Join(", ", dictRecievedCount.Select(x => POut.Long(x.Key) + ":" + POut.Long(x.Value))), LogLevel.Verbose);
+            Logger.Write(LogLevel.Verbose, "Collected Webmails for the following providers (ProvNum: # Webmails): " + String.Join(", ", dictRecievedCount.Select(x => POut.Long(x.Key) + ":" + POut.Long(x.Value))));
 
             // This list contains every single WebMailRecieved alert and is synced with listAlerts later.
             List<AlertItem> listOldAlerts = AlertItems.RefreshForType(AlertType.WebMailRecieved);
-            log.WriteLine("Fetched current alerts for users: " + String.Join(", ", listOldAlerts.Select(x => POut.Long(x.UserNum))), LogLevel.Verbose);
+            Logger.Write(LogLevel.Verbose, "Fetched current alerts for users: " + String.Join(", ", listOldAlerts.Select(x => POut.Long(x.UserNum))));
 
             // If a user doesn't have any unread webmail, they won't be placed on this list, and any alert they have in listOldAlerts will be deleted.
             List<AlertItem> listAlerts = new List<AlertItem>();
@@ -145,7 +145,7 @@ namespace OpenDentBusiness
                         alertForUser.UserNum = usernum;
                         alertForUser.Description = POut.Long(kvp.Value);
                         listAlerts.Add(alertForUser);
-                        log.WriteLine("Created webmail alert for user " + POut.Long(usernum), LogLevel.Verbose);
+                        Logger.Write(LogLevel.Verbose, "Created webmail alert for user " + POut.Long(usernum));
                     }
                     else
                     {
@@ -164,7 +164,7 @@ namespace OpenDentBusiness
                             }
                         }
                         listAlerts.Add(selectedAlert);
-                        log.WriteLine("Modified webmail alert for user " + POut.Long(usernum), LogLevel.Verbose);
+                        Logger.Write(LogLevel.Verbose, "Modified webmail alert for user " + POut.Long(usernum));
                     }
                 }
             }
@@ -173,7 +173,7 @@ namespace OpenDentBusiness
             Sync(listAlerts, listOldAlerts);
 
             List<AlertItem> listDeletedAlerts = listOldAlerts.Where(x => !listAlerts.Any(y => y.AlertItemNum == x.AlertItemNum)).ToList();
-            log.WriteLine("Deleted webmail alerts for users: " + String.Join(", ", listDeletedAlerts.Select(x => POut.Long(x.UserNum))), LogLevel.Verbose);
+            Logger.Write(LogLevel.Verbose, "Deleted webmail alerts for users: " + String.Join(", ", listDeletedAlerts.Select(x => POut.Long(x.UserNum))));
 
             // Make sure to mark alerts that were deleted, modified (not created) and increased as unread.
             listChangedAlertItemNums.AddRange(listDeletedAlerts.Select(x => x.AlertItemNum));

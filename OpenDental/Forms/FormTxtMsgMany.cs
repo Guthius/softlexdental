@@ -96,8 +96,7 @@ namespace OpenDental {
 						numTextsSent++;
 					}
 				}
-				catch(Exception ex) {
-					ex.DoNothing();
+				catch {
 					Cursor=Cursors.Default;
 					string errorMsg=Lan.g(this,"There was an error sending to")+" "+listPatComms.First().WirelessPhone+". "
 						+Lan.g(this,"Do you want to continue sending messages?");

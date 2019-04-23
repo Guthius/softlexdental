@@ -215,8 +215,8 @@ namespace OpenDental {
 					BugSubmissionEvent.Fire(ODEventType.BugSubmission,Lan.g(this,"Refreshing Data: Patients"));
 					_dictPatients=RegistrationKeys.GetPatientsByKeys(_listAllSubs.Select(x => x.RegKey).ToList());
 				}
-				catch(Exception e) {
-					e.DoNothing();
+				catch {
+
 					_dictPatients=new Dictionary<string, Patient>();
 				}
 				BugSubmissionEvent.Fire(ODEventType.BugSubmission,Lan.g(this,"Refreshing Data: JobLinks"));
@@ -515,8 +515,8 @@ namespace OpenDental {
 					RegistrationKey key=RegistrationKeys.GetByKey(_subCur.RegKey);
 					_patCur=Patients.GetPat(key.PatNum);
 				}
-				catch(Exception ex) {
-					ex.DoNothing();
+				catch {
+
 					_patCur=new Patient();//Just in case, needed mostly for debug.
 				}
 				_dictPatients.Add(_subCur.RegKey,_patCur);

@@ -174,9 +174,9 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "The MySQL server variable 'sql_mode' has been changed from") + " " + sqlmodeDisplay + " "
                             + Lans.g("FormDatabaseMaintenance", "to blank") + ".\r\n";
                     }
-                    catch (Exception ex)
+                    catch 
                     {
-                        ex.DoNothing();//prevent vs warning
+                        //prevent vs warning
                         log += Lans.g("FormDatabaseMaintenance", "Unable to set the MySQL server variable 'sql_mode', probably due to permissions") + ".  "
                             + Lans.g("FormDatabaseMaintenance", "The sql_mode must be blank or NO_AUTO_CREATE_USER and is currently set to")
                             + " " + sqlmodeDisplay + ".\r\n";

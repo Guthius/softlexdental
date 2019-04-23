@@ -1284,8 +1284,8 @@ namespace OpenDental {
 						File.Delete(_tempPdfFile);
 					}
 				}
-				catch(Exception ex) {
-					ex.DoNothing();
+				catch{
+
 				}
 				//Get a temporary location for the file
 				_tempPdfFile=PrefC.GetRandomTempFile(".pdf");

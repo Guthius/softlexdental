@@ -55,71 +55,80 @@ namespace OpenDentBusiness
             DataSet dataSetAccount = new DataSet();
             //Done building the tree.
             //Get Patient and family fetching out of the way.  These would be called first if a part of the tree anyway.
-            Logger.LogAction("Patients.GetFamily", LogPath.AccountModule, () => fam = Patients.GetFamily(patNum));
+            fam = Patients.GetFamily(patNum);
             if (intermingled)
             {
                 patNum = fam.ListPats[0].PatNum;//guarantor
             }
-            Logger.LogAction("Family.GetPatient", LogPath.AccountModule, () => pat = fam.GetPatient(patNum));
+            pat = fam.GetPatient(patNum);
             //We've gotten the patient and family objects, so now we can make a plethora of actions to run in parallel.
             #region Actions
             //Actions that have leaves
+
             Action refreshForFam = new Action(() =>
             {
-                Logger.LogAction("InsSubs.RefreshForFam", LogPath.AccountModule, () => retVal.ListInsSubs = InsSubs.RefreshForFam(fam));
-                Logger.LogAction("InsPlans.RefreshSubList", LogPath.AccountModule, () => retVal.ListInsPlans = InsPlans.RefreshForSubList(retVal.ListInsSubs));
-            });//InsSubs.RefreshForFam
+                retVal.ListInsSubs = InsSubs.RefreshForFam(fam);
+                retVal.ListInsPlans = InsPlans.RefreshForSubList(retVal.ListInsSubs);
+            });
+
             Action refreshOrGetFirstOrthoProcDate = new Action(() =>
             {
-                Logger.LogAction("PatientNotes.Refresh", LogPath.AccountModule, () => retVal.PatNote = PatientNotes.Refresh(pat.PatNum, pat.Guarantor));
+                retVal.PatNote = PatientNotes.Refresh(pat.PatNum, pat.Guarantor);
                 if (doGetOrtho)
                 {
-                    Logger.LogAction("Procedures.GetFirstOrthoProcDate", LogPath.AccountModule, () => retVal.FirstOrthoProcDate = Procedures.GetFirstOrthoProcDate(retVal.PatNote));
+                    retVal.FirstOrthoProcDate = Procedures.GetFirstOrthoProcDate(retVal.PatNote);
                 }
-            });//PatientNotes.Refresh / Procedures.GetFirstOrthoProcDate
+            });
+
             Action refreshBenefits = new Action(() =>
             {
-                Logger.LogAction("Benefits.Refresh", LogPath.AccountModule, () => retVal.ListBenefits = Benefits.Refresh(retVal.ListPatPlans, retVal.ListInsSubs));
-            });//Benefits.Refresh
+                retVal.ListBenefits = Benefits.Refresh(retVal.ListPatPlans, retVal.ListInsSubs);
+            });
+
             Action getAccount = new Action(() =>
             {
-                Logger.LogAction("Get Account", LogPath.AccountModule, () => dataSetAccount = GetAccount(patNum, fromDate, toDate, intermingled, singlePatient, 0
-                  , showProcBreakdown, showPayNotes, false, showAdjNotes, false, pat, fam, out payPlanDue, out balanceForward));
+                dataSetAccount = GetAccount(patNum, fromDate, toDate, intermingled, singlePatient, 0
+                  , showProcBreakdown, showPayNotes, false, showAdjNotes, false, pat, fam, out payPlanDue, out balanceForward);
                 for (int i = 0; i < dataSetAccount.Tables.Count; i++)
                 {
                     retVal.DataSetMain.Tables.Add(dataSetAccount.Tables[i].Copy());
                 }
-            });//GetAccount
-               //Actions that are leaves
+            });
+
+
             Action getMergeLinks = new Action(() =>
             {
-                Logger.LogAction("PatientLinks.GetLinks", LogPath.AccountModule, () =>
-                      retVal.ListMergeLinks = PatientLinks.GetLinks(fam.ListPats.Select(x => x.PatNum).ToList(), PatientLinkType.Merge));
+                retVal.ListMergeLinks = PatientLinks.GetLinks(fam.ListPats.Select(x => x.PatNum).ToList(), PatientLinkType.Merge);
             });
+
             Action getPrePayForFam = new Action(() =>
             {
-                Logger.LogAction("PaySplits.GetPrepayForFam", LogPath.AccountModule, () => retVal.ListPrePayments = PaySplits.GetPrepayForFam(fam));
-            });//PaySplits.GetPrepayForFam
+                retVal.ListPrePayments = PaySplits.GetPrepayForFam(fam);
+            });
+
             Action refreshRepeatCharges = new Action(() =>
             {
-                Logger.LogAction("RepeatCharges.Refresh", LogPath.AccountModule, () => retVal.ArrRepeatCharges = RepeatCharges.Refresh(pat.PatNum));
-            });//RepeatCharges.Refresh
+                retVal.ArrRepeatCharges = RepeatCharges.Refresh(pat.PatNum);
+            });
+
             Action getProgNotesCommLog = new Action(() =>
             {
                 if (viewingInRecall)
                 {
-                    Logger.LogAction("GetProgNotes", LogPath.AccountModule, () => retVal.DataSetMain.Tables.Add(
-                          ChartModules.GetProgNotes(patNum, false, new ChartModuleComponentsToLoad())));
+                    retVal.DataSetMain.Tables.Add(ChartModules.GetProgNotes(patNum, false, new ChartModuleComponentsToLoad()));
                 }
                 else
                 {
-                    Logger.LogAction("GetCommLog", LogPath.AccountModule, () => retVal.DataSetMain.Tables.Add(GetCommLog(pat, fam)));
+                    retVal.DataSetMain.Tables.Add(GetCommLog(pat, fam));
                 }
-            });//GetProgNotes / GetCommLog
+            });
+
             Action refreshPatFields = new Action(() =>
             {
-                Logger.LogAction("PatFields.Refresh", LogPath.AccountModule, () => retVal.ArrPatFields = PatFields.Refresh(pat.PatNum));
+                retVal.ArrPatFields = PatFields.Refresh(pat.PatNum);
             });//PatFields.Refresh
+
+
             Action dateOrthoLastClaims = new Action(() =>
             {
                 if (doGetOrtho)
@@ -128,52 +137,61 @@ namespace OpenDentBusiness
                     foreach (PatPlan patPlan in retVal.ListPatPlans)
                     {
                         InsPlan plan = new InsPlan();
-                        Logger.LogAction("InsPlans.GetPlan", LogPath.AccountModule, () => plan = InsPlans.GetPlan(InsSubs.GetSub(patPlan.InsSubNum, retVal.ListInsSubs).PlanNum, retVal.ListInsPlans));
-                        Logger.LogAction("DateLastOrthoClaims", LogPath.AccountModule, () => retVal.DictDateLastOrthoClaims.Add(patPlan.PatPlanNum, Claims.GetDateLastOrthoClaim(patPlan, plan.OrthoType)));
+                        plan = InsPlans.GetPlan(InsSubs.GetSub(patPlan.InsSubNum, retVal.ListInsSubs).PlanNum, retVal.ListInsPlans);
+
+                        retVal.DictDateLastOrthoClaims.Add(patPlan.PatPlanNum, Claims.GetDateLastOrthoClaim(patPlan, plan.OrthoType));
                     }
                 }
             });//InsPlans.GetPlans / DateOrthoLastClaims
+
+
             Action refreshClaims = new Action(() =>
             {
-                Logger.LogAction("Claims.Refresh", LogPath.AccountModule, () => retVal.ListClaims = Claims.Refresh(pat.PatNum));
+                retVal.ListClaims = Claims.Refresh(pat.PatNum);
             });//Claims.Refresh
+
+
             Action claimProcsGetHistList = new Action(() =>
             {
-                Logger.LogAction("ClaimProcs.GetHistList", LogPath.AccountModule, () => retVal.HistList = ClaimProcs.GetHistList(pat.PatNum, retVal.ListBenefits, retVal.ListPatPlans
-                  , retVal.ListInsPlans, DateTime.Today, retVal.ListInsSubs));
+                retVal.HistList = ClaimProcs.GetHistList(pat.PatNum, retVal.ListBenefits, retVal.ListPatPlans, retVal.ListInsPlans, DateTime.Today, retVal.ListInsSubs);
             });//ClaimProcs.GetHistList
+
+
             Action getMisc = new Action(() =>
             {
-                Logger.LogAction("GetMisc", LogPath.AccountModule, () =>
-                      retVal.DataSetMain.Tables.Add(GetMisc(fam, patNum, payPlanDue, balanceForward, StmtType.NotSet, null)));
+                retVal.DataSetMain.Tables.Add(GetMisc(fam, patNum, payPlanDue, balanceForward, StmtType.NotSet, null));
             });//GetMisc
+
+
             Action getFamily = new Action(() =>
             {
-                //GetFamily is called twice because we need to refresh the family data after running aging.
-                Logger.LogAction("Patients.GetFamily", LogPath.AccountModule, () => retVal.Fam = Patients.GetFamily(patNum));//have to get family after dataset due to aging calc.
+                retVal.Fam = Patients.GetFamily(patNum);
             });//Patients.GetFamily
+
             Action refreshPatPlans = new Action(() =>
             {
-                Logger.LogAction("PatPlans.Refresh", LogPath.AccountModule, () =>
-                {
+                retVal.ListPatPlans = PatPlans.Refresh(pat.PatNum);
+                if (!PatPlans.IsPatPlanListValid(retVal.ListPatPlans))
+                {//PatPlans had invalid references and need to be refreshed.
                     retVal.ListPatPlans = PatPlans.Refresh(pat.PatNum);
-                    if (!PatPlans.IsPatPlanListValid(retVal.ListPatPlans))
-                    {//PatPlans had invalid references and need to be refreshed.
-                        retVal.ListPatPlans = PatPlans.Refresh(pat.PatNum);
-                    }
-                });
-            });//PatPlans.Refresh
+                }
+            });
+
             Action getFirstOrthoProcDate = new Action(() =>
             {
                 if (doGetOrtho)
                 {
-                    Logger.LogAction("Procedures.GetFirstOrthoProcDate", LogPath.AccountModule, () => retVal.FirstOrthoProcDate = Procedures.GetFirstOrthoProcDate(retVal.PatNote));
+                    retVal.FirstOrthoProcDate = Procedures.GetFirstOrthoProcDate(retVal.PatNote);
                 }
             });//Procedures.GetFirstOrthoProcDate
+
+
             Action getFieldDefLinksForLocation = new Action(() =>
             {
-                Logger.LogAction("FieldDefLinks.GetForLocation", LogPath.AccountModule, () => retVal.ListFieldDefLinksAcct = FieldDefLinks.GetForLocation(FieldLocations.Account));
+                retVal.ListFieldDefLinksAcct = FieldDefLinks.GetForLocation(FieldLocations.Account);
             });//FieldDefLinks.GetForLocation
+
+
             #endregion Actions
             //Put each of our actions in sets in the order they must execute.  actionSetMisc is the only set where order doesn't matter.
             Action actionSetFamily = () =>

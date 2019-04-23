@@ -86,8 +86,8 @@ namespace OpenDental.UI {
 			try {
 				InitializeTopaz();
 			}
-			catch(Exception ex) {
-				ex.DoNothing();//Most offices don't use Topaz so we won't let the user know yet that it didn't initialize.
+			catch {
+
 			}
 			butTopazSign.BringToFront();
 			butClearSig.BringToFront();

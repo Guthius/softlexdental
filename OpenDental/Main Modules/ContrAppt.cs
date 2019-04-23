@@ -174,7 +174,7 @@ namespace OpenDental
         /// </summary>
         public ContrAppt()
         {
-            Logger.openlog.Log("Initializing appointment module...", Logger.Severity.INFO);
+            Logger.Write(LogLevel.Info, "Initializing appointment module...");
 
             InitializeComponent();
 
@@ -855,7 +855,6 @@ namespace OpenDental
         ///<summary>This is public so that FormOpenDental can pass refreshed tasks here in order to avoid an extra query.</summary>
         public void RefreshReminders(List<Task> listReminderTasks)
         {
-            Logger.LogToPath("", LogPath.Signals, LogPhase.Start);
             List<Task> listSortedReminderTasks = listReminderTasks
                 .Where(x => x.DateTimeEntry.Date <= DateTimeOD.Today)
                 .OrderBy(x => x.DateTimeEntry)
@@ -883,7 +882,6 @@ namespace OpenDental
                 gridReminders.Rows.Add(row);
             }
             gridReminders.EndUpdate();
-            Logger.LogToPath("", LogPath.Signals, LogPhase.End);
         }
 
         ///<summary>This logic mimics filling a row within UserControlTasks.FillGrid().

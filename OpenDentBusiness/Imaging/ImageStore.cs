@@ -312,8 +312,8 @@ namespace OpenDentBusiness {
 								bmp=new Bitmap(ms);
 							}
 						}
-						catch(Exception e) {
-							e.DoNothing();
+						catch {
+							
 						}
 					}
 					return bmp;
@@ -495,8 +495,8 @@ namespace OpenDentBusiness {
 					Bitmap bmp=new Bitmap(pathImportFrom);//check to see if file is an image and add .jpg extension
 					doc.FileName=".jpg";
 				}
-				catch(Exception ex) {
-					ex.DoNothing(); //catch the error and do nothing. Default the file to .txt to prevent errors.
+				catch {
+					 //catch the error and do nothing. Default the file to .txt to prevent errors.
 					doc.FileName=".txt";
 				}
 			}
@@ -571,8 +571,8 @@ namespace OpenDentBusiness {
 					//no thumbnail yet
 				}
 			}
-			catch(Exception e) {
-				e.DoNothing();
+			catch {
+				
 				Documents.Delete(doc);
 				throw;
 			}
