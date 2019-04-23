@@ -8625,6 +8625,13 @@
     <None Include="Web References\NewCrop\Update1.wsdl" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Icon32Tooth.png" />
+    <None Include="Resources\Icon32Listing.png" />
+    <None Include="Resources\Icon32Settings.png" />
+    <None Include="Resources\Icon32Images.png" />
+    <None Include="Resources\Icon32Family.png" />
+    <None Include="Resources\Icon32Calendar.png" />
+    <None Include="Resources\Icon32Account.png" />
     <None Include="Resources\IconPrint.png" />
     <None Include="Resources\IconBulletArrowUp.png" />
     <None Include="Resources\IconBulletArrowDown.png" />

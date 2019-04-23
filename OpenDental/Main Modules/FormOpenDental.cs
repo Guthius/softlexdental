@@ -450,7 +450,7 @@ namespace OpenDental
 
             myOutlookBar = new OutlookBar();
             myOutlookBar.Location = new Point(0, 0);
-            myOutlookBar.Size = new Size(51, 626);
+            myOutlookBar.Size = new Size(70, 400);
             myOutlookBar.Dock = DockStyle.Left;
             myOutlookBar.ButtonClicked += new EventHandler<OutlookBarButtonEventArgs>(myOutlookBar_ButtonClicked);
             this.Controls.Add(myOutlookBar);
@@ -464,6 +464,7 @@ namespace OpenDental
                 | System.Windows.Forms.AnchorStyles.Right | System.Windows.Forms.AnchorStyles.Bottom)));
             ContrAppt2.Size = new Size(splitContainerNoFlickerDashboard.Panel1.Width, splitContainerNoFlickerDashboard.Panel1.Height);
             splitContainerNoFlickerDashboard.Panel1.Controls.Add(ContrAppt2);
+
             //contrFamily
             UpdateSplashProgress("Initializing family module", 20);
             ContrFamily2 = new ContrFamily() { Visible = false };
@@ -728,7 +729,9 @@ namespace OpenDental
                                                //Lan.Refresh();//automatically skips if current culture is en-US
                                                //LanguageForeigns.Refresh(CultureInfo.CurrentCulture);//automatically skips if current culture is en-US			
             comboTriageCoordinator.MouseWheel += new MouseEventHandler(comboTriageCoordinator_MouseWheel);
-            myOutlookBar.RefreshButtons();
+
+            // TODO: Create buttons
+            //myOutlookBar.RefreshButtons();
 
             if (!File.Exists("Help.chm"))
             {
@@ -1335,7 +1338,7 @@ namespace OpenDental
                     menuClinics.Visible = true;
                 }
                 //See other solution @3401 for past commented out code.
-                myOutlookBar.RefreshButtons();
+                // TODO: myOutlookBar.RefreshButtons();
                 if (PrefC.GetBool(PrefName.EasyHideDentalSchools))
                 {
                     menuItemSchoolClass.Visible = false;
@@ -2812,8 +2815,8 @@ namespace OpenDental
             {
                 RefreshCurrentModule();//calls ModuleSelected of the current module, don't do this if ContrAppt2 is visible since it was just done above
             }
-            myOutlookBar.RefreshButtons();
-            myOutlookBar.Invalidate();
+            // TODO: myOutlookBar.RefreshButtons();
+            //myOutlookBar.Invalidate();
         }
 
         private void menuClick_OpenPickList(object sender, EventArgs e)
@@ -5261,7 +5264,7 @@ namespace OpenDental
             {
                 return;
             }
-            myOutlookBar.RefreshButtons();
+            // TODO: myOutlookBar.RefreshButtons();
             RefreshCurrentModule();
         }
 

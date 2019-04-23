@@ -457,4 +457,25 @@
   <data name="IconPrint" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IconPrint.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Icon32Account" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon32Account.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon32Calendar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon32Calendar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon32Family" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon32Family.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon32Images" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon32Images.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon32Listing" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon32Listing.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon32Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon32Settings.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon32Tooth" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon32Tooth.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
