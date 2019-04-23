@@ -12,13 +12,9 @@ for more details, available at http://www.opensource.org/licenses/gpl-license.ph
 Any changes to this program must follow the guidelines of the GPL license if a modified version is to be
 redistributed.
 ===============================================================================================================*/
-
-
-//#define ORA_DB
 using CodeBase;
 using DataConnectionBase;
 using Microsoft.Win32;
-//using OpenDental.SmartCards;
 using OpenDental.UI;
 using OpenDentBusiness;
 using OpenDentBusiness.UI;
@@ -252,6 +248,8 @@ namespace OpenDental
         private static List<FormMapHQ> _listMaps = new List<FormMapHQ>();
         private MenuItem menuItemServiceManager;
         private static Dictionary<long, Dictionary<long, DateTime>> _dicBlockedAutomations;
+        
+        
         ///<summary>Dictionary of AutomationNums mapped to a dictionary of patNums and dateTimes. 
         ///<para>The dateTime is the time that the given automation for a specific patient should be blocked until.</para>
         ///<para>Dictionary removes any entries whos blocked until dateTime is greater than DateTime.Now before returning.</para>
@@ -287,6 +285,8 @@ namespace OpenDental
                 return _dicBlockedAutomations;
             }
         }
+
+
         private MenuItem menuItemFHIR;
         private FormJobManager _formJobManager;
         private ContextMenu menuTask;
@@ -446,12 +446,16 @@ namespace OpenDental
             this.Controls.Add(ToolBarMain);
             //outlook bar
             UpdateSplashProgress("Loading outlook bar", 10);
+
+
             myOutlookBar = new OutlookBar();
             myOutlookBar.Location = new Point(0, 0);
             myOutlookBar.Size = new Size(51, 626);
             myOutlookBar.Dock = DockStyle.Left;
             myOutlookBar.ButtonClicked += new EventHandler<OutlookBarButtonEventArgs>(myOutlookBar_ButtonClicked);
             this.Controls.Add(myOutlookBar);
+
+
             //MAIN MODULE CONTROLS
             //contrAppt
             UpdateSplashProgress("Initializing appointment module", 15);
@@ -572,8 +576,9 @@ namespace OpenDental
             //Affects WPF RichTextBoxes accross the entire program.
             ODException.SwallowAnyException(() =>
             {
-                System.Windows.Automation.AutomationElement.FromHandle(this.Handle);//Just invoking this method wakes up something deep within Windows...
+                System.Windows.Automation.AutomationElement.FromHandle(Handle);//Just invoking this method wakes up something deep within Windows...
             });
+
             //Flag the userod cache as NOT allowed to cache any items for security purposes.
             Userods.SetIsCacheAllowed(false);
             //FormSplash can cause FormOpenDental to open behind other applications.
@@ -589,61 +594,12 @@ namespace OpenDental
             DataConnection.DoThrowOnAutoRetryTimeout = true;
             allNeutral();
             string odUser = "";
-            string odPassHash = "";
-            string webServiceUri = "";
             string odPassword = "";
-            string serverName = "";
             string databaseName = "";
-            string mySqlUser = "";
-            string mySqlPassword = "";
-            string mySqlPassHash = "";
-
-            if (CommandLineArgs.Length != 0)
-            {
-                for (int i = 0; i < CommandLineArgs.Length; i++)
-                {
-                    if (CommandLineArgs[i].StartsWith("UserName=") && CommandLineArgs[i].Length > 9)
-                    {
-                        odUser = CommandLineArgs[i].Substring(9).Trim('"');
-                    }
-                    if (CommandLineArgs[i].StartsWith("PassHash=") && CommandLineArgs[i].Length > 9)
-                    {
-                        odPassHash = CommandLineArgs[i].Substring(9).Trim('"');
-                    }
-                    if (CommandLineArgs[i].StartsWith("WebServiceUri=") && CommandLineArgs[i].Length > 14)
-                    {
-                        webServiceUri = CommandLineArgs[i].Substring(14).Trim('"');
-                    }
-                    if (CommandLineArgs[i].StartsWith("OdPassword=") && CommandLineArgs[i].Length > 11)
-                    {
-                        odPassword = CommandLineArgs[i].Substring(11).Trim('"');
-                    }
-                    if (CommandLineArgs[i].StartsWith("ServerName=") && CommandLineArgs[i].Length > 11)
-                    {
-                        serverName = CommandLineArgs[i].Substring(11).Trim('"');
-                    }
-                    if (CommandLineArgs[i].StartsWith("DatabaseName=") && CommandLineArgs[i].Length > 13)
-                    {
-                        databaseName = CommandLineArgs[i].Substring(13).Trim('"');
-                    }
-                    if (CommandLineArgs[i].StartsWith("MySqlUser=") && CommandLineArgs[i].Length > 10)
-                    {
-                        mySqlUser = CommandLineArgs[i].Substring(10).Trim('"');
-                    }
-                    if (CommandLineArgs[i].StartsWith("MySqlPassword=") && CommandLineArgs[i].Length > 14)
-                    {
-                        mySqlPassword = CommandLineArgs[i].Substring(14).Trim('"');
-                    }
-                    if (CommandLineArgs[i].StartsWith("MySqlPassHash=") && CommandLineArgs[i].Length > 14)
-                    {
-                        mySqlPassHash = CommandLineArgs[i].Substring(14).Trim('"');
-                    }
-                }
-            }
 
 
-            Version versionOd = Assembly.GetAssembly(typeof(FormOpenDental)).GetName().Version;
-            Version versionObBus = Assembly.GetAssembly(typeof(Db)).GetName().Version;
+            var versionOd = Assembly.GetAssembly(typeof(FormOpenDental)).GetName().Version;
+            var versionObBus = Assembly.GetAssembly(typeof(Db)).GetName().Version;
             if (versionOd != versionObBus)
             {
                 MessageBox.Show(
@@ -656,13 +612,10 @@ namespace OpenDental
                 return;
             }
 
-            //Hook up MT connection lost event. Nothing prior to this point fires LostConnection events.
-            Action actionCloseSplashWindow = null;
-
             // Open the form to pick the database.
             using (var formChooseDatabase = new FormChooseDatabase())
             {
-                formChooseDatabase.NoShow = (databaseName != "");
+                formChooseDatabase.NoShow = databaseName != "";
 
                 while (true)
                 {
@@ -698,20 +651,13 @@ namespace OpenDental
                     }
 
                     Cursor = Cursors.WaitCursor;
-                    try
-                    {
-                        PluginManager.LoadDirectory(
-                            Path.Combine(
-                                Application.StartupPath, "Plugins"));
-                    }
-                    catch
-                    {
-                    }
+                    PluginManager.LoadDirectory(
+                        Path.Combine(
+                            Application.StartupPath, "Plugins"));
 
-                    if (!PrefsStartup()) //In Release, refreshes the Pref cache if conversion successful.
+                    if (!LoadPreferences()) //In Release, refreshes the Pref cache if conversion successful.
                     {
                         Cursor = Cursors.Default;
-                        actionCloseSplashWindow?.Invoke();
                         if (ExitCode == 0)
                         {
                             // PrefsStartup failed and ExitCode is still 0 which means an unexpected error must have occured.
@@ -739,13 +685,7 @@ namespace OpenDental
                 }
             }
 
-
-
             // TODO: Logger.DoVerboseLogging = PrefC.IsVerboseLoggingSession;
-            if (Programs.UsingEcwTightOrFullMode())
-            {
-                actionCloseSplashWindow?.Invoke();
-            }
 
             CreateFHIRConfigFile();
             //Setting the time that we want to wait when the database connection has been lost.
@@ -789,15 +729,12 @@ namespace OpenDental
                                                //LanguageForeigns.Refresh(CultureInfo.CurrentCulture);//automatically skips if current culture is en-US			
             comboTriageCoordinator.MouseWheel += new MouseEventHandler(comboTriageCoordinator_MouseWheel);
             myOutlookBar.RefreshButtons();
-            Lan.C("MainMenu", mainMenu);
-            if (CultureInfo.CurrentCulture.Name == "en-US")
-            {
-                menuItemTranslation.Visible = false;
-            }
+
             if (!File.Exists("Help.chm"))
             {
                 menuItemHelpWindows.Visible = false;
             }
+
             if (Environment.OSVersion.Platform == PlatformID.Unix)
             {//Create A to Z unsupported on Unix for now.
                 menuItemCreateAtoZFolders.Visible = false;
@@ -814,7 +751,7 @@ namespace OpenDental
             //Spawn a thread so that attempting to start services on this computer does not hinder the loading time of Open Dental.
             //This is placed before login on pupose so it will run even when the user does not login properly.
             BeginODServiceStarterThread();
-            actionCloseSplashWindow?.Invoke();
+
             LogOnOpenDentalUser(odUser, odPassword);
             //At this point a user has successfully logged in.  Flag the userod cache as safe to cache data.
             Userods.SetIsCacheAllowed(true);
@@ -829,22 +766,30 @@ namespace OpenDental
             }
             BeginODDashboardStarterThread();
             FillSignalButtons();
+
+
             if (PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ)
             {
                 string prefImagePath = ImageStore.GetPreferredAtoZpath();
                 if (prefImagePath == null || !Directory.Exists(prefImagePath))
-                {//AtoZ folder not found
-                 //Cache.Refresh(InvalidType.Security);
-                    FormPath FormP = new FormPath();
-                    FormP.IsStartingUp = true;
-                    FormP.ShowDialog();
-                    if (FormP.DialogResult != DialogResult.OK)
+                {
+                    using (var formPath = new FormPath())
                     {
-                        MsgBox.Show(this, "Invalid A to Z path.  Closing program.");
-                        Application.Exit();
+                        formPath.IsStartingUp = true;
+                        if (formPath.ShowDialog() != DialogResult.OK)
+                        {
+                            MessageBox.Show(
+                                "Invalid A to Z path. Closing program.",
+                                "Open Dental",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+
+                            Application.Exit();
+                        }
                     }
                 }
             }
+
             IsTreatPlanSortByTooth = PrefC.GetBool(PrefName.TreatPlanSortByTooth); //not a great place for this, but we don't have a better alternative.
             if (userControlTasks1.Visible)
             {
@@ -865,10 +810,17 @@ namespace OpenDental
             LayoutToolBar();
             RefreshMenuReports();
             Cursor = Cursors.Default;
+
             if (myOutlookBar.SelectedIndex == -1)
             {
-                MsgBox.Show(this, "You do not have permission to use any modules.");
+                MessageBox.Show(
+                    "You do not have permission to use any modules.", 
+                    "Open Dental", 
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
             }
+
+
             Bridges.Trojan.StartupCheck();
             FormUAppoint.StartThreadIfEnabled();
             Bridges.ICat.StartFileWatcher();
@@ -1005,8 +957,89 @@ namespace OpenDental
             Signalods.ApptSignalLastRefreshed = Signalods.SignalLastRefreshed;
             SetTimersAndThreads(true);
 
+
             Plugin.Trigger(this, "FormOpenDental_Loaded");
         }
+
+
+
+
+
+
+
+
+
+
+        MenuItem CreateMenuItem(string name, string caption, Action action)
+        {
+            var menuItem = CreateMenu(name, caption);
+
+            if (action == null)
+            {
+                menuItem.Enabled = false;
+            }
+            else
+            {
+                menuItem.Click += (s, e) =>
+                {
+                    try
+                    {
+                        action();
+                    }
+                    catch { } // TODO: Add some better error handling and logging here...
+                };
+            }
+
+            return menuItem;
+        }
+
+        MenuItem CreateMenu(string name, string caption)
+        {
+            return
+                Plugin.Filter(this, "new_menu",
+                    mainMenu.MenuItems.Add(caption),
+                    name, 
+                    mainMenu);
+        }
+
+        MenuItem CreateMenuItem(MenuItem menu, string name, string caption, Action action)
+        {
+            var menuItem = CreateMenuItem(menu, name, caption);
+
+            if (action == null)
+            {
+                menuItem.Enabled = false;
+            }
+            else
+            {
+                menuItem.Click += (s, e) =>
+                {
+                    try
+                    {
+                        action();
+                    }
+                    catch { } // TODO: Add some better error handling and logging here...
+                };
+            }
+
+            return menuItem;
+        }
+
+        MenuItem CreateMenuItem(MenuItem menu, string name, string caption)
+        {
+            return
+                Plugin.Filter(this, "new_menu_item", 
+                    menu.MenuItems.Add(caption), 
+                    name, 
+                    mainMenu, 
+                    menu);
+        }
+
+
+
+
+
+
 
         private void menuItemInternalTools_Click(object sender, System.EventArgs e)
         {
@@ -1177,10 +1210,10 @@ namespace OpenDental
             });
         }
 
-        ///<summary>Returns false if it can't complete a conversion, find datapath, or validate registration key.</summary>
-        ///<param name="isSilentUpdate">Whether this is a silent update. A silent update will have no UI elements appear.</param>
-        ///<param name="model">The model for the choose database window. Stores all information entered within the window.</param>
-        private bool PrefsStartup(bool isSilentUpdate = false)
+        /// <summary>
+        /// Loads and validates the preferences.
+        /// </summary>
+        bool LoadPreferences()
         {
             try
             {
@@ -1188,118 +1221,81 @@ namespace OpenDental
             }
             catch (Exception ex)
             {
-                if (isSilentUpdate)
-                {
-                    ExitCode = 100;//Database could not be accessed for cache refresh
-                    Environment.Exit(ExitCode);
-                    return false;
-                }
                 MessageBox.Show(ex.Message);
-                return false;//shuts program down.
-            }
-            if (!PrefL.CheckMySqlVersion(isSilentUpdate))
-            {
                 return false;
             }
 
-                try
-                {
-                    MiscData.SetSqlMode();
-                }
-                catch
-                {
-                    if (isSilentUpdate)
-                    {
-                        ExitCode = 111;//Global SQL mode could not be set
-                        Environment.Exit(ExitCode);
-                        return false;
-                    }
-                    MessageBox.Show("Unable to set global sql mode.  User probably does not have enough permission.");
-                    return false;
-                }
-                string updateComputerName = PrefC.GetStringSilent(PrefName.UpdateInProgressOnComputerName);
-                if (updateComputerName != "" && Environment.MachineName.ToUpper() != updateComputerName.ToUpper())
-                {
-                    if (isSilentUpdate)
-                    {
-                        ExitCode = 120;//Computer trying to access DB during update
-                        Environment.Exit(ExitCode);
-                        return false;
-                    }
-                    FormUpdateInProgress formUIP = new FormUpdateInProgress(updateComputerName);
-                    DialogResult result = formUIP.ShowDialog();
-                    if (result != DialogResult.OK)
-                    {
-                        return false;//Either the user canceled out of the window or clicked the override button which 
-                    }
-                }
-            
-            //if RemotingRole.ClientWeb, version will have already been checked at login, so no danger here.
-            //ClientWeb version can be older than this version, but that will be caught in a moment.
-            if (isSilentUpdate)
+            // TODO: Check if there is a recent backup.
+
+            try
             {
-                if (!PrefL.ConvertDB(true, this, false))
-                {//refreshes Prefs if converted successfully.
-                    if (ExitCode == 0)
-                    {//Unknown error occurred
-                        ExitCode = 200;//Convert Database has failed during execution (Unknown Error)
-                    }
-                    Environment.Exit(ExitCode);
-                    return false;
-                }
+                MiscData.SetSqlMode();
             }
-            else
+            catch
             {
-                if (!PrefL.ConvertDB(false, this, false)) 
-                {
-                    return false;
-                }
-            }
-            if (!isSilentUpdate)
-            {
-                PrefL.MySqlVersion55Remind();
-            }
-            if (!PrefL.CheckProgramVersion(this, isSilentUpdate))
-            {
+                MessageBox.Show(
+                    "Unable to set global sql mode. User probably does not have enough permission.",
+                    "Open Dental",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
                 return false;
             }
+
+            // TODO: 
+
+            string updateComputerName = PrefC.GetStringSilent(PrefName.UpdateInProgressOnComputerName);
+            if (updateComputerName != "" && Environment.MachineName.ToUpper() != updateComputerName.ToUpper())
+            {
+                using (var formUpdateInProgress = new FormUpdateInProgress(updateComputerName))
+                {
+                    if (formUpdateInProgress.ShowDialog() != DialogResult.OK)
+                    {
+                        // Either the user canceled out of the window or clicked the override button which
+                        return false;
+                    }
+                }
+            }
+
+            // Check whether there is a valid registration key.
             if (!FormRegistrationKey.ValidateKey(PrefC.GetString(PrefName.RegistrationKey)))
             {
-                if (isSilentUpdate)
+                using (var formRegistrationKey = new FormRegistrationKey())
                 {
-                    ExitCode = 311;//Registration Key could not be validated
-                    Environment.Exit(ExitCode);
-                    return false;
+                    if (formRegistrationKey.ShowDialog() != DialogResult.OK)
+                    {
+                        Environment.Exit(ExitCode);
+                        return false;
+                    }
+                    Cache.Refresh(InvalidType.Prefs);
                 }
-                FormRegistrationKey FormR = new FormRegistrationKey();
-                FormR.ShowDialog();
-                if (FormR.DialogResult != DialogResult.OK)
-                {
-                    Environment.Exit(ExitCode);
-                    return false;
-                }
-                Cache.Refresh(InvalidType.Prefs);
             }
+
+
             //This must be done at startup in case the user does not perform any action to save something to temp file.
             //This will cause slowdown, but only for the first week.
             if (DateTime.Today < PrefC.GetDate(PrefName.TempFolderDateFirstCleaned).AddDays(7))
             {
-                PrefC.GetTempFolderPath();//We don't care about the return value.  Just trying to trigger the one-time cleanup and create the temp/opendental directory.
+                PrefC.GetTempFolderPath(); //We don't care about the return value. Just trying to trigger the one-time cleanup and create the temp/opendental directory.
             }
-            Lans.RefreshCache();//automatically skips if current culture is en-US
-            LanguageForeigns.RefreshCache();//automatically skips if current culture is en-US
-                                            //menuItemMergeDatabases.Visible=PrefC.GetBool(PrefName.RandomPrimaryKeys");
+
             return true;
         }
 
-        ///<summary>Refreshes certain rarely used data from database.  Must supply the types of data to refresh as flags.  Also performs a few other tasks that must be done when local data is changed.</summary>
-        private void RefreshLocalData(params InvalidType[] arrayITypes)
+        /// <summary>
+        /// Refreshes certain rarely used data from database. Must supply the types of data to refresh as flags.
+        /// Also performs a few other tasks that must be done when local data is changed.
+        /// </summary>
+        void RefreshLocalData(params InvalidType[] arrayITypes)
         {
             RefreshLocalData(true, arrayITypes);
         }
 
-        ///<summary>Refreshes certain rarely used data from database.  Must supply the types of data to refresh as flags.  Also performs a few other tasks that must be done when local data is changed.</summary>
-        private void RefreshLocalData(bool doRefreshServerCache, params InvalidType[] arrayITypes)
+        /// <summary>
+        /// Refreshes certain rarely used data from database. Must supply the types of data to refresh as flags.
+        /// Also performs a few other tasks that must be done when local data is changed.
+        /// </summary>
+        void RefreshLocalData(bool doRefreshServerCache, params InvalidType[] arrayITypes)
         {
             if (arrayITypes == null || arrayITypes.Length == 0)
             {
@@ -3126,7 +3122,7 @@ namespace OpenDental
             if (e.OnlyLocal)
             {//Currently used after doing a restore from FormBackup so that the local cache is forcefully updated.
                 ODEvent.Fire(ODEventType.Cache, suffix + Lan.g(nameof(Cache), "PrefsStartup"));
-                if (!PrefsStartup(false))
+                if (!LoadPreferences())
                 {//??
                     return;
                 }
@@ -4744,7 +4740,7 @@ namespace OpenDental
             CurPatNum = 0;
             RefreshCurrentModule(); // clumsy but necessary. Sets child PatNums to 0.
             FillPatientButton(null);
-            if (!PrefsStartup())
+            if (!LoadPreferences())
             {
                 return;
             }
@@ -7268,7 +7264,6 @@ namespace OpenDental
 
         #endregion
 
-        #region Startup methods
         ///<summary></summary>
         private void ProcessCommandLine(string[] args)
         {
@@ -7526,12 +7521,23 @@ namespace OpenDental
             }
         }
 
-        ///<summary>Fires an OD event for the Splash Screen Progress Bar</summary>
-        private void UpdateSplashProgress(string status, int percentage)
+
+        ///< summary>
+        ///Fires an OD event for the Splash Screen Progress Bar
+        ///</summary>
+        void UpdateSplashProgress(string status, int percentage)
         {
-            SplashProgressEvent.Fire(ODEventType.SplashScreenProgress, new ProgressBarHelper(Lan.g(this, status), percentage.ToString() + "%", percentage, 100, ProgBarStyle.Continuous, "Update"));
+            SplashProgressEvent.Fire(
+                ODEventType.SplashScreenProgress, 
+                new ProgressBarHelper(
+                    status, percentage.ToString() + "%", 
+                    percentage, 100, 
+                    ProgBarStyle.Continuous, 
+                    "Update"));
         }
-        #endregion Startup methods
+
+
+
 
         #region HQ only metrics
 
@@ -8172,35 +8178,23 @@ namespace OpenDental
             }
         }
 
-        private void FormOpenDental_FormClosing(object sender, FormClosingEventArgs e)
+        void FormOpenDental_FormClosing(object sender, FormClosingEventArgs e)
         {
-            try
-            {
-                FormOpenDentalClosing(sender, e);
-            }
-            catch (Exception ex)
-            {
-                try
-                {
-                    // Allow the program to close quietly, but send us at HQ a bug report so we can look into the problem.
-                    BugSubmissions.SubmitException(ex, patNumCur: CurPatNum);
-                }
-                catch
-                {
-                }
-            }
+            FormOpenDentalClosing(sender, e);
         }
 
         private void FormOpenDentalClosing(object sender, FormClosingEventArgs e)
         {
-            //ExitCode will only be set if trying to silently update.  
-            //If we start using ExitCode for anything other than silently updating, this can be moved towards the bottom of this closing.
-            //If moved to the bottom, all of the clean up code that this closing event does needs to be considered in regards to updating silently from a CEMT computer.
+            // ExitCode will only be set if trying to silently update.  
+            // If we start using ExitCode for anything other than silently updating, this can be moved towards the bottom of this closing.
+            // If moved to the bottom, all of the clean up code that this closing event does needs to be considered in regards to updating silently from a CEMT computer.
             if (ExitCode != 0)
             {
                 Environment.Exit(ExitCode);
             }
-            bool hadMultipleFormsOpen = (Application.OpenForms.Count > 1);
+
+            bool hadMultipleFormsOpen = Application.OpenForms.Count > 1;
+
             //CloseOpenForms should have already been called with isForceClose=true if we are force closing Open Dental
             //In that scenario, calling CloseOpenForms with isForceClose=false should not leave the program open.
             //However, if Open Dental is closing from any other means, we want to give all forms the opportunity to stop closing.

@@ -508,6 +508,9 @@
     <Compile Include="Forms\FormReactivationSetup.designer.cs">
       <DependentUpon>FormReactivationSetup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormRegistrationKey.Designer.cs">
+      <DependentUpon>FormRegistrationKey.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormRegistrationKeyEdit.designer.cs">
       <DependentUpon>FormRegistrationKeyEdit.cs</DependentUpon>
     </Compile>
@@ -8148,10 +8151,6 @@
     <EmbeddedResource Include="User Controls\ContrFamilyEcw.resx">
       <DependentUpon>ContrFamilyEcw.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="User Controls\ContrKeyboard.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ContrKeyboard.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="User Controls\ContrNewPatHostedURL.resx">
       <DependentUpon>ContrNewPatHostedURL.cs</DependentUpon>
     </EmbeddedResource>
@@ -8409,12 +8408,6 @@
     </Compile>
     <Compile Include="User Controls\ContrCalendar.cs">
       <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="User Controls\ContrKeyboard.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="User Controls\ContrKeyboard.Designer.cs">
-      <DependentUpon>ContrKeyboard.cs</DependentUpon>
     </Compile>
     <Compile Include="User Controls\ContrPerio.cs">
       <SubType>Component</SubType>

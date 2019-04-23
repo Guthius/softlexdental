@@ -190,7 +190,6 @@
             this.menuItemEvaluations = new System.Windows.Forms.MenuItem();
             this.menuItemTerminal = new System.Windows.Forms.MenuItem();
             this.menuItemTerminalManager = new System.Windows.Forms.MenuItem();
-            this.menuItemTranslation = new System.Windows.Forms.MenuItem();
             this.menuItemMobileSetup = new System.Windows.Forms.MenuItem();
             this.menuItemNewCropBilling = new System.Windows.Forms.MenuItem();
             this.menuItemOrthoAuto = new System.Windows.Forms.MenuItem();
@@ -1185,7 +1184,6 @@
             this.menuItemEvaluations,
             this.menuItemTerminal,
             this.menuItemTerminalManager,
-            this.menuItemTranslation,
             this.menuItemMobileSetup,
             this.menuItemNewCropBilling,
             this.menuItemOrthoAuto,
@@ -1427,82 +1425,76 @@
             this.menuItemTerminalManager.Text = "Kiosk Manager";
             this.menuItemTerminalManager.Click += new System.EventHandler(this.menuItemTerminalManager_Click);
             // 
-            // menuItemTranslation
-            // 
-            this.menuItemTranslation.Index = 15;
-            this.menuItemTranslation.Text = "Language Translation";
-            this.menuItemTranslation.Click += new System.EventHandler(this.menuItemTranslation_Click);
-            // 
             // menuItemMobileSetup
             // 
-            this.menuItemMobileSetup.Index = 16;
+            this.menuItemMobileSetup.Index = 15;
             this.menuItemMobileSetup.Text = "Mobile Synch";
             this.menuItemMobileSetup.Click += new System.EventHandler(this.menuItemMobileSetup_Click);
             // 
             // menuItemNewCropBilling
             // 
-            this.menuItemNewCropBilling.Index = 17;
+            this.menuItemNewCropBilling.Index = 16;
             this.menuItemNewCropBilling.Text = "NewCrop Billing";
             this.menuItemNewCropBilling.Click += new System.EventHandler(this.menuItemNewCropBilling_Click);
             // 
             // menuItemOrthoAuto
             // 
-            this.menuItemOrthoAuto.Index = 18;
+            this.menuItemOrthoAuto.Index = 17;
             this.menuItemOrthoAuto.Text = "Ortho Auto Claims";
             this.menuItemOrthoAuto.Click += new System.EventHandler(this.menuItemOrthoAuto_Click);
             // 
             // menuItemPendingPayments
             // 
-            this.menuItemPendingPayments.Index = 19;
+            this.menuItemPendingPayments.Index = 18;
             this.menuItemPendingPayments.Text = "Pending &Online Payments";
             this.menuItemPendingPayments.Click += new System.EventHandler(this.menuItemPendingPayments_Click);
             // 
             // menuItemScreening
             // 
-            this.menuItemScreening.Index = 20;
+            this.menuItemScreening.Index = 19;
             this.menuItemScreening.Text = "Public Health Screening";
             this.menuItemScreening.Click += new System.EventHandler(this.menuItemScreening_Click);
             // 
             // menuItemRepeatingCharges
             // 
-            this.menuItemRepeatingCharges.Index = 21;
+            this.menuItemRepeatingCharges.Index = 20;
             this.menuItemRepeatingCharges.Text = "Repeating Charges";
             this.menuItemRepeatingCharges.Click += new System.EventHandler(this.menuItemRepeatingCharges_Click);
             // 
             // menuItemResellers
             // 
-            this.menuItemResellers.Index = 22;
+            this.menuItemResellers.Index = 21;
             this.menuItemResellers.Text = "Resellers";
             this.menuItemResellers.Visible = false;
             this.menuItemResellers.Click += new System.EventHandler(this.menuItemResellers_Click);
             // 
             // menuItemSetupWizard
             // 
-            this.menuItemSetupWizard.Index = 23;
+            this.menuItemSetupWizard.Index = 22;
             this.menuItemSetupWizard.Text = "Setup Wizard";
             this.menuItemSetupWizard.Click += new System.EventHandler(this.menuItemSetupWizard_Click);
             // 
             // menuItemReqStudents
             // 
-            this.menuItemReqStudents.Index = 24;
+            this.menuItemReqStudents.Index = 23;
             this.menuItemReqStudents.Text = "Student Requirements";
             this.menuItemReqStudents.Click += new System.EventHandler(this.menuItemReqStudents_Click);
             // 
             // menuItemWebForms
             // 
-            this.menuItemWebForms.Index = 25;
+            this.menuItemWebForms.Index = 24;
             this.menuItemWebForms.Text = "Web Forms";
             this.menuItemWebForms.Click += new System.EventHandler(this.menuItemWebForms_Click);
             // 
             // menuItemWiki
             // 
-            this.menuItemWiki.Index = 26;
+            this.menuItemWiki.Index = 25;
             this.menuItemWiki.Text = "Wiki";
             this.menuItemWiki.Click += new System.EventHandler(this.menuItemWiki_Click);
             // 
             // menuItemXWebTrans
             // 
-            this.menuItemXWebTrans.Index = 27;
+            this.menuItemXWebTrans.Index = 26;
             this.menuItemXWebTrans.Text = "&XWeb Transactions";
             this.menuItemXWebTrans.Click += new System.EventHandler(this.menuItemXWebTrans_Click);
             // 
@@ -1746,7 +1738,7 @@
             // 
             // panelPhoneSmall
             // 
-            this.panelPhoneSmall.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.panelPhoneSmall.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
             this.panelPhoneSmall.Controls.Add(this.butVoiceMails);
             this.panelPhoneSmall.Controls.Add(this.labelFieldType);
@@ -1948,7 +1940,7 @@
             // 
             // splitContainerNoFlickerDashboard
             // 
-            this.splitContainerNoFlickerDashboard.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            this.splitContainerNoFlickerDashboard.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainerNoFlickerDashboard.BackColor = System.Drawing.SystemColors.Control;
             this.splitContainerNoFlickerDashboard.Location = new System.Drawing.Point(68, 26);
@@ -2016,7 +2008,6 @@
         private System.Windows.Forms.MenuItem menuItemSched;
         private System.Windows.Forms.MenuItem menuItem5;
         private System.Windows.Forms.MenuItem menuItem6;
-        private System.Windows.Forms.MenuItem menuItemTranslation;
         private System.Windows.Forms.MenuItem menuItemFile;
         private System.Windows.Forms.MenuItem menuItem7;
         private System.Windows.Forms.MenuItem menuItemLists;
