@@ -48,7 +48,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(701, 370);
 			this.gridMain.TabIndex = 68;
 			this.gridMain.Title = "Invalid X-Charge Tokens";
-			this.gridMain.TranslationName = "FormDisplayFields";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// labelWarning

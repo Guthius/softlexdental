@@ -48,8 +48,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(857, 317);
 			this.gridMain.TabIndex = 27;
 			this.gridMain.Title = "Code Systems Available";
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableCodeSystems";
 			// 
 			// butCheckUpdates
 			// 

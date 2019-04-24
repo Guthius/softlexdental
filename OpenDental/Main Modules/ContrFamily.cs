@@ -2104,12 +2104,12 @@ namespace OpenDental
         {
             gridPatientClones.BeginUpdate();
             gridPatientClones.Columns.Clear();
-            gridPatientClones.Columns.Add(new ODGridColumn(Lan.g(gridPatientClones.TranslationName, "Name"), 150));
+            gridPatientClones.Columns.Add(new ODGridColumn("Name", 150));
             if (PrefC.HasClinicsEnabled)
             {
-                gridPatientClones.Columns.Add(new ODGridColumn(Lan.g(gridPatientClones.TranslationName, "Clinic"), 80));
+                gridPatientClones.Columns.Add(new ODGridColumn("Clinic", 80));
             }
-            gridPatientClones.Columns.Add(new ODGridColumn(Lan.g(gridPatientClones.TranslationName, "Specialty"), 0));
+            gridPatientClones.Columns.Add(new ODGridColumn( "Specialty", 0));
             gridPatientClones.Rows.Clear();
             if (PatCur == null)
             {

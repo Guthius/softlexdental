@@ -45,7 +45,6 @@
 			this.gridMain.Size = new System.Drawing.Size(901, 612);
 			this.gridMain.TabIndex = 11;
 			this.gridMain.Title = "LOINC Codes";
-			this.gridMain.TranslationName = "FormLoincCodes";
 			this.gridMain.WrapText = false;
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 

@@ -85,9 +85,6 @@
             this.gridSuperFam.Size = new System.Drawing.Size(320, 250);
             this.gridSuperFam.TabIndex = 33;
             this.gridSuperFam.Title = "Super Family";
-            this.gridSuperFam.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridSuperFam.TitleHeight = 18;
-            this.gridSuperFam.TranslationName = "TableSuper";
             this.gridSuperFam.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridSuperFam_CellDoubleClick);
             this.gridSuperFam.CellClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridSuperFam_CellClick);
             // 
@@ -108,9 +105,6 @@
             this.gridRecall.Size = new System.Drawing.Size(525, 100);
             this.gridRecall.TabIndex = 32;
             this.gridRecall.Title = "Recall";
-            this.gridRecall.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridRecall.TitleHeight = 18;
-            this.gridRecall.TranslationName = "TableRecall";
             this.gridRecall.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridRecall_CellDoubleClick);
             this.gridRecall.DoubleClick += new System.EventHandler(this.gridRecall_DoubleClick);
             // 
@@ -131,9 +125,6 @@
             this.gridFamily.Size = new System.Drawing.Size(480, 100);
             this.gridFamily.TabIndex = 31;
             this.gridFamily.Title = "Family Members";
-            this.gridFamily.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridFamily.TitleHeight = 18;
-            this.gridFamily.TranslationName = "TableFamily";
             this.gridFamily.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridFamily_CellDoubleClick);
             this.gridFamily.CellClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridFamily_CellClick);
             // 
@@ -155,10 +146,6 @@
             this.gridPat.SelectionMode = OpenDental.UI.GridSelectionMode.None;
             this.gridPat.Size = new System.Drawing.Size(250, 513);
             this.gridPat.TabIndex = 30;
-            this.gridPat.Title = "Patient Information";
-            this.gridPat.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridPat.TitleHeight = 18;
-            this.gridPat.TranslationName = "TablePatient";
             this.gridPat.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridPat_CellDoubleClick);
             this.gridPat.CellClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridPat_CellClick);
             // 
@@ -181,10 +168,6 @@
             this.gridIns.SelectionMode = OpenDental.UI.GridSelectionMode.None;
             this.gridIns.Size = new System.Drawing.Size(898, 510);
             this.gridIns.TabIndex = 29;
-            this.gridIns.Title = "Insurance Plans";
-            this.gridIns.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridIns.TitleHeight = 18;
-            this.gridIns.TranslationName = "TableCoverage";
             this.gridIns.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridIns_CellDoubleClick);
             // 
             // superClonesSplitContainer
@@ -223,9 +206,6 @@
             this.gridPatientClones.Size = new System.Drawing.Size(320, 256);
             this.gridPatientClones.TabIndex = 34;
             this.gridPatientClones.Title = "Patient Clones";
-            this.gridPatientClones.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridPatientClones.TitleHeight = 18;
-            this.gridPatientClones.TranslationName = "TablePatientClones";
             this.gridPatientClones.CellClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridPatientClone_CellClick);
             // 
             // patientPictureBox

@@ -48,7 +48,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(401, 258);
 			this.gridMain.TabIndex = 21;
 			this.gridMain.Title = "EB (benefit) Elements";
-			this.gridMain.TranslationName = "FormEtrans270EBraw";
 			// 
 			// butClose
 			// 

@@ -222,7 +222,6 @@ namespace OpenDental{
       this.gridMain.Size = new System.Drawing.Size(433, 556);
       this.gridMain.TabIndex = 13;
       this.gridMain.Title = "Requirements Needed";
-      this.gridMain.TranslationName = "TableRequirementsNeeded";
       this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
       // 
       // butOk

@@ -55,9 +55,6 @@
 			this.gridBillingList.Size = new System.Drawing.Size(1010, 563);
 			this.gridBillingList.TabIndex = 0;
 			this.gridBillingList.Title = "Providers Using NewCrop";
-			this.gridBillingList.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridBillingList.TitleHeight = 18;
-			this.gridBillingList.TranslationName = "TableProviders";
 			// 
 			// textBillingFilePath
 			// 

@@ -328,9 +328,6 @@
 			this.gridMain.Size = new System.Drawing.Size(833, 294);
 			this.gridMain.TabIndex = 13;
 			this.gridMain.Title = "Audit";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableAudit";
 			// 
 			// textExclusExceptNA
 			// 

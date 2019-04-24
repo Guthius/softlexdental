@@ -75,9 +75,6 @@ namespace OpenDental{
 			this.gridCustomSheet.Size = new System.Drawing.Size(376, 583);
 			this.gridCustomSheet.TabIndex = 1;
 			this.gridCustomSheet.Title = "Custom Sheet";
-			this.gridCustomSheet.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridCustomSheet.TitleHeight = 18;
-			this.gridCustomSheet.TranslationName = "TableSheet";
 			// 
 			// label1
 			// 

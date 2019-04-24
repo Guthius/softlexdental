@@ -99,9 +99,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(839, 261);
 			this.gridMain.TabIndex = 74;
 			this.gridMain.Title = "Referrals Attached";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableRefList";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// checkShowAll

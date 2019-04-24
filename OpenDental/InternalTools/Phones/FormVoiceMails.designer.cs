@@ -142,9 +142,6 @@ namespace OpenDental{
 			this.gridVoiceMails.TabIndex = 57;
 			this.gridVoiceMails.TabStop = false;
 			this.gridVoiceMails.Title = "Voice Mails";
-			this.gridVoiceMails.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridVoiceMails.TitleHeight = 18;
-			this.gridVoiceMails.TranslationName = "FormVoiceMails";
 			this.gridVoiceMails.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridVoiceMails_CellClick);
 			this.gridVoiceMails.CellLeave += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridVoiceMails_CellLeave);
 			// 

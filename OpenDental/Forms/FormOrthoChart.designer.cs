@@ -100,9 +100,6 @@ namespace OpenDental{
 			this.gridOrtho.Size = new System.Drawing.Size(364, 144);
 			this.gridOrtho.TabIndex = 112;
 			this.gridOrtho.Title = "Ortho Info";
-			this.gridOrtho.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridOrtho.TitleHeight = 18;
-			this.gridOrtho.TranslationName = "TableOrthoInfo";
 			this.gridOrtho.Visible = false;
 			// 
 			// tabControl
@@ -245,9 +242,6 @@ namespace OpenDental{
 			this.gridPat.Size = new System.Drawing.Size(582, 231);
 			this.gridPat.TabIndex = 6;
 			this.gridPat.Title = "Patient Fields";
-			this.gridPat.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridPat.TitleHeight = 18;
-			this.gridPat.TranslationName = "TablePatientFields";
 			this.gridPat.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPat_CellDoubleClick);
 			// 
 			// gridMain
@@ -269,9 +263,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(952, 266);
 			this.gridMain.TabIndex = 5;
 			this.gridMain.Title = "Ortho Chart";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableOrthoChart";
 			this.gridMain.CellSelectionCommitted += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellSelectionCommitted);
 			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			this.gridMain.CellLeave += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellLeave);

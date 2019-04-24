@@ -123,9 +123,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(1044, 615);
 			this.gridMain.TabIndex = 11;
 			this.gridMain.Title = null;
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableJournal";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// ToolBarMain
@@ -495,7 +492,7 @@ namespace OpenDental{
 		private void Print_Click(){
 			_pagesPrinted=0;
 			_headingPrinted=false;
-			gridMainPrint=new ODGrid() { Width=1050,TranslationName="",HideScrollBars=true };
+			gridMainPrint=new ODGrid() { Width=1050,HideScrollBars=true };
 			FillGrid(isPrinting:true);//not nessecary to explicity name parameter but makes code easier to read.
 			PrintoutOrientation orient=PrintoutOrientation.Default;
 			if(gridMainPrint.WidthAllColumns>800) {

@@ -88,7 +88,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(285, 300);
 			this.gridMain.TabIndex = 11;
 			this.gridMain.Title = "Proc Code Ranges";
-			this.gridMain.TranslationName = "FormProcApptColors";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butAdd

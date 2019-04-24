@@ -90,9 +90,6 @@
 			this.gridMain.Size = new System.Drawing.Size(585, 228);
 			this.gridMain.TabIndex = 30;
 			this.gridMain.Title = "History";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableHistory";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// FormPayorTypes

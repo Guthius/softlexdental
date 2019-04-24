@@ -173,9 +173,6 @@ namespace OpenDental{
 			this.gridCustomers.Size = new System.Drawing.Size(539, 348);
 			this.gridCustomers.TabIndex = 263;
 			this.gridCustomers.Title = "Customers";
-			this.gridCustomers.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridCustomers.TitleHeight = 18;
-			this.gridCustomers.TranslationName = "FormTaskEdit";
 			this.gridCustomers.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCustomers_CellClick);
 			this.gridCustomers.TitleAddClick += new System.EventHandler(this.gridCustomers_TitleAddClick);
 			// 
@@ -206,9 +203,6 @@ namespace OpenDental{
 			this.gridSubscribers.Size = new System.Drawing.Size(539, 348);
 			this.gridSubscribers.TabIndex = 226;
 			this.gridSubscribers.Title = "Subscribers";
-			this.gridSubscribers.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridSubscribers.TitleHeight = 18;
-			this.gridSubscribers.TranslationName = "FormTaskEdit";
 			this.gridSubscribers.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSubscribers_CellClick);
 			this.gridSubscribers.TitleAddClick += new System.EventHandler(this.gridSubscribers_TitleAddClick);
 			// 
@@ -239,9 +233,6 @@ namespace OpenDental{
 			this.gridFeatureReq.Size = new System.Drawing.Size(539, 348);
 			this.gridFeatureReq.TabIndex = 229;
 			this.gridFeatureReq.Title = "Feature Requests";
-			this.gridFeatureReq.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridFeatureReq.TitleHeight = 18;
-			this.gridFeatureReq.TranslationName = "FormTaskEdit";
 			this.gridFeatureReq.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridFeatureReq_CellClick);
 			this.gridFeatureReq.TitleAddClick += new System.EventHandler(this.gridFeatureReq_TitleAddClick);
 			// 
@@ -272,9 +263,6 @@ namespace OpenDental{
 			this.gridBugs.Size = new System.Drawing.Size(539, 348);
 			this.gridBugs.TabIndex = 261;
 			this.gridBugs.Title = "Bugs/Enhancements";
-			this.gridBugs.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridBugs.TitleHeight = 18;
-			this.gridBugs.TranslationName = "FormTaskEdit";
 			this.gridBugs.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridBugs_CellDoubleClick);
 			this.gridBugs.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridBugs_CellClick);
 			this.gridBugs.TitleAddClick += new System.EventHandler(this.gridBugs_TitleAddClick);
@@ -306,9 +294,6 @@ namespace OpenDental{
 			this.gridTasks.Size = new System.Drawing.Size(539, 348);
 			this.gridTasks.TabIndex = 228;
 			this.gridTasks.Title = "Tasks";
-			this.gridTasks.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridTasks.TitleHeight = 18;
-			this.gridTasks.TranslationName = "FormTaskEdit";
 			this.gridTasks.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTasks_CellDoubleClick);
 			this.gridTasks.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTasks_CellClick);
 			this.gridTasks.TitleAddClick += new System.EventHandler(this.gridTasks_TitleAddClick);
@@ -340,9 +325,6 @@ namespace OpenDental{
 			this.gridQuotes.Size = new System.Drawing.Size(539, 348);
 			this.gridQuotes.TabIndex = 227;
 			this.gridQuotes.Title = "Quotes";
-			this.gridQuotes.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridQuotes.TitleHeight = 18;
-			this.gridQuotes.TranslationName = "FormTaskEdit";
 			this.gridQuotes.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridQuotes_CellDoubleClick);
 			this.gridQuotes.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridQuotes_CellClick);
 			this.gridQuotes.TitleAddClick += new System.EventHandler(this.gridCustomerQuotes_TitleAddClick);

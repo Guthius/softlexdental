@@ -69,9 +69,6 @@
 			this.gridMain.Size = new System.Drawing.Size(646, 362);
 			this.gridMain.TabIndex = 2;
 			this.gridMain.Title = "Reminder Rules";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableRules";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// FormReminderRules

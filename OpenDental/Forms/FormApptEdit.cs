@@ -2058,7 +2058,6 @@ namespace OpenDental{
 			//Procedure List--------------------------------------------------------------------------------------------------------
 			#region Procedure List
 			ODGrid gridProg=new ODGrid();
-			gridProg.TranslationName="";
 			this.Controls.Add(gridProg);//Only added temporarily so that printing will work. Removed at end with Dispose().
 			gridProg.BeginUpdate();
 			gridProg.Columns.Clear();

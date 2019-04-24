@@ -331,9 +331,6 @@ namespace OpenDental{
 			this.gridMeds.Size = new System.Drawing.Size(771, 386);
 			this.gridMeds.TabIndex = 59;
 			this.gridMeds.Title = "Medications";
-			this.gridMeds.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMeds.TitleHeight = 18;
-			this.gridMeds.TranslationName = "TableMedications";
 			this.gridMeds.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMeds_CellDoubleClick);
 			this.gridMeds.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMeds_CellClick);
 			// 
@@ -355,9 +352,6 @@ namespace OpenDental{
 			this.gridDiseases.Size = new System.Drawing.Size(771, 386);
 			this.gridDiseases.TabIndex = 60;
 			this.gridDiseases.Title = "Problems";
-			this.gridDiseases.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridDiseases.TitleHeight = 18;
-			this.gridDiseases.TranslationName = "TableDiseases";
 			this.gridDiseases.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridDiseases_CellDoubleClick);
 			this.gridDiseases.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridDiseases_CellClick);
 			// 
@@ -391,9 +385,6 @@ namespace OpenDental{
 			this.gridAllergies.Size = new System.Drawing.Size(771, 386);
 			this.gridAllergies.TabIndex = 63;
 			this.gridAllergies.Title = "Allergies";
-			this.gridAllergies.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridAllergies.TitleHeight = 18;
-			this.gridAllergies.TranslationName = "TableDiseases";
 			this.gridAllergies.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAllergies_CellDoubleClick);
 			this.gridAllergies.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAllergies_CellClick);
 			// 
@@ -476,9 +467,6 @@ namespace OpenDental{
 			this.gridFamilyHealth.Size = new System.Drawing.Size(771, 386);
 			this.gridFamilyHealth.TabIndex = 69;
 			this.gridFamilyHealth.Title = "Family Health History";
-			this.gridFamilyHealth.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridFamilyHealth.TitleHeight = 18;
-			this.gridFamilyHealth.TranslationName = "TableDiseases";
 			this.gridFamilyHealth.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridFamilyHealth_CellDoubleClick);
 			// 
 			// butAddFamilyHistory
@@ -820,9 +808,6 @@ namespace OpenDental{
 			this.gridVitalSigns.Size = new System.Drawing.Size(771, 386);
 			this.gridVitalSigns.TabIndex = 4;
 			this.gridVitalSigns.Title = "Vital Signs";
-			this.gridVitalSigns.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridVitalSigns.TitleHeight = 18;
-			this.gridVitalSigns.TranslationName = "TableVitals";
 			this.gridVitalSigns.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridVitalSigns_CellDoubleClick);
 			// 
 			// tabTobaccoUse
@@ -937,9 +922,6 @@ namespace OpenDental{
 			this.gridAssessments.Size = new System.Drawing.Size(730, 177);
 			this.gridAssessments.TabIndex = 9;
 			this.gridAssessments.Title = "Assessment History";
-			this.gridAssessments.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridAssessments.TitleHeight = 18;
-			this.gridAssessments.TranslationName = "TableAssessment";
 			this.gridAssessments.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAssessments_CellDoubleClick);
 			// 
 			// labelTobaccoStatus
@@ -1126,9 +1108,6 @@ namespace OpenDental{
 			this.gridInterventions.Size = new System.Drawing.Size(730, 177);
 			this.gridInterventions.TabIndex = 9;
 			this.gridInterventions.Title = "Intervention History";
-			this.gridInterventions.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridInterventions.TitleHeight = 18;
-			this.gridInterventions.TranslationName = "TableIntervention";
 			this.gridInterventions.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridInterventions_CellDoubleClick);
 			// 
 			// label5
@@ -1457,7 +1436,7 @@ namespace OpenDental{
 
 		private void butPrint_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
-			gridMedsPrint=new ODGrid() { Width=800,TranslationName="" };
+			gridMedsPrint=new ODGrid() { Width=800 };
 			FillMeds(isForPrinting:true);//not nessecary to explicity name parameter but makes code easier to read.
 			pagesPrinted=0;
 			headingPrinted=false;

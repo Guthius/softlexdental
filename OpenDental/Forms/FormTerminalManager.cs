@@ -205,8 +205,6 @@ namespace OpenDental {
 			this.gridMain.Size = new System.Drawing.Size(424, 206);
 			this.gridMain.TabIndex = 2;
 			this.gridMain.Title = "Active Kiosks";
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableTerminals";
 			// 
 			// butClear
 			// 

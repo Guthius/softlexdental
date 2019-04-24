@@ -72,7 +72,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(842, 137);
 			this.gridMain.TabIndex = 26;
 			this.gridMain.Title = "";
-			this.gridMain.TranslationName = "";
 			// 
 			// FormWikiTableHeaders
 			// 

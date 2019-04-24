@@ -91,9 +91,6 @@
 			this.gridMain.Size = new System.Drawing.Size(378, 283);
 			this.gridMain.TabIndex = 16;
 			this.gridMain.Title = "History";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableHistory";
 			// 
 			// label1
 			// 

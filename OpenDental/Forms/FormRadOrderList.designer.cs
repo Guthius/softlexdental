@@ -50,7 +50,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(852, 642);
 			this.gridMain.TabIndex = 143;
 			this.gridMain.Title = "Non-CPOE Radiology Orders";
-			this.gridMain.TranslationName = "TableRadiologyOrders";
 			// 
 			// label1
 			// 

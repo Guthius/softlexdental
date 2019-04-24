@@ -46,7 +46,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(683, 560);
 			this.gridMain.TabIndex = 199;
 			this.gridMain.Title = "CDS Triggers";
-			this.gridMain.TranslationName = "TableCDSTriggers";
 			this.gridMain.WrapText = false;
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 

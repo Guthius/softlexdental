@@ -121,9 +121,6 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 0;
 			this.gridMain.TabStop = false;
 			this.gridMain.Title = "Select  References";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "FormPatientSelect";
 			this.gridMain.WrapText = false;
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			this.gridMain.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridMain_KeyDown);

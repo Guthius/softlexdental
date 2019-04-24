@@ -145,7 +145,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(403, 241);
 			this.gridMain.TabIndex = 135;
 			this.gridMain.Title = "Used as a Reference for These New Customers";
-			this.gridMain.TranslationName = "FormPatientSelect";
 			this.gridMain.WrapText = false;
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 

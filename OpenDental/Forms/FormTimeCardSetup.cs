@@ -165,9 +165,6 @@ namespace OpenDental{
 			this.gridRules.Size = new System.Drawing.Size(687, 523);
 			this.gridRules.TabIndex = 13;
 			this.gridRules.Title = "Rules";
-			this.gridRules.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridRules.TitleHeight = 18;
-			this.gridRules.TranslationName = "FormTimeCardSetup";
 			this.gridRules.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridRules_CellDoubleClick);
 			// 
 			// gridMain
@@ -188,9 +185,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(272, 523);
 			this.gridMain.TabIndex = 11;
 			this.gridMain.Title = "Pay Periods";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TablePayPeriods";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butAdd

@@ -247,9 +247,6 @@
 			this.gridEmployees.Size = new System.Drawing.Size(182, 727);
 			this.gridEmployees.TabIndex = 25;
 			this.gridEmployees.Title = "Employees";
-			this.gridEmployees.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridEmployees.TitleHeight = 18;
-			this.gridEmployees.TranslationName = "TableEmployees";
 			// 
 			// mapAreaPanel
 			// 

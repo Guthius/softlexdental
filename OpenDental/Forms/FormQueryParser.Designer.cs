@@ -120,9 +120,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(791, 181);
 			this.gridMain.TabIndex = 0;
 			this.gridMain.Title = "Set Variables";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableQueryVariables";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			this.gridMain.CellLeave += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellLeave);

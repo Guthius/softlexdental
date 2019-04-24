@@ -94,9 +94,6 @@ namespace OpenDental
             this.autoNotesGrid.Size = new System.Drawing.Size(320, 500);
             this.autoNotesGrid.TabIndex = 3;
             this.autoNotesGrid.Title = "Available Auto Notes";
-            this.autoNotesGrid.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.autoNotesGrid.TitleHeight = 18;
-            this.autoNotesGrid.TranslationName = "FormAutoNoteEdit";
             // 
             // FormAutoNoteResponsePicker
             // 

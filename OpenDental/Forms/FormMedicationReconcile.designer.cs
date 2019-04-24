@@ -151,7 +151,6 @@ namespace OpenDental{
 			this.gridReconcileEvents.Size = new System.Drawing.Size(445, 175);
 			this.gridReconcileEvents.TabIndex = 67;
 			this.gridReconcileEvents.Title = "Reconciles";
-			this.gridReconcileEvents.TranslationName = "gridReconcile";
 			// 
 			// label2
 			// 
@@ -174,7 +173,6 @@ namespace OpenDental{
 			this.gridMeds.Size = new System.Drawing.Size(445, 395);
 			this.gridMeds.TabIndex = 65;
 			this.gridMeds.Title = "Medications";
-			this.gridMeds.TranslationName = "TableMedications";
 			this.gridMeds.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMeds_CellDoubleClick);
 			// 
 			// butPickRxListImage

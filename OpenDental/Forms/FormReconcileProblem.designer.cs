@@ -48,7 +48,6 @@ namespace OpenDental{
 			this.gridProbExisting.Size = new System.Drawing.Size(477, 245);
 			this.gridProbExisting.TabIndex = 65;
 			this.gridProbExisting.Title = "Current Problems";
-			this.gridProbExisting.TranslationName = "GridProbExisting";
 			// 
 			// gridProbImport
 			// 
@@ -62,7 +61,6 @@ namespace OpenDental{
 			this.gridProbImport.Size = new System.Drawing.Size(480, 245);
 			this.gridProbImport.TabIndex = 77;
 			this.gridProbImport.Title = "Transition of Care/Referral Summary";
-			this.gridProbImport.TranslationName = "GridProbImport";
 			// 
 			// butRemoveRec
 			// 
@@ -142,7 +140,6 @@ namespace OpenDental{
 			this.gridProbReconcile.Size = new System.Drawing.Size(973, 300);
 			this.gridProbReconcile.TabIndex = 67;
 			this.gridProbReconcile.Title = "Reconciled Problem";
-			this.gridProbReconcile.TranslationName = "gridProbReconcile";
 			// 
 			// butClose
 			// 

@@ -464,7 +464,6 @@ namespace OpenDental{
 			this.gridLR.Size = new System.Drawing.Size(175, 174);
 			this.gridLR.TabIndex = 62;
 			this.gridLR.Title = "Lower Right Corner";
-			this.gridLR.TranslationName = "TableLowerRight";
 			this.gridLR.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridLR_CellDoubleClick);
 			this.gridLR.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridLR_CellClick);
 			// 
@@ -479,7 +478,6 @@ namespace OpenDental{
 			this.gridUR.Size = new System.Drawing.Size(175, 174);
 			this.gridUR.TabIndex = 61;
 			this.gridUR.Title = "Upper Right Corner";
-			this.gridUR.TranslationName = "TableUpperRight";
 			this.gridUR.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridUR_CellDoubleClick);
 			this.gridUR.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridUR_CellClick);
 			// 
@@ -494,7 +492,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(175, 473);
 			this.gridMain.TabIndex = 60;
 			this.gridMain.Title = "Main List";
-			this.gridMain.TranslationName = "TableMainList";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
@@ -519,7 +516,6 @@ namespace OpenDental{
 			this.gridAvailable.Size = new System.Drawing.Size(175, 255);
 			this.gridAvailable.TabIndex = 61;
 			this.gridAvailable.Title = "Available Rows";
-			this.gridAvailable.TranslationName = "TableAvailableRows";
 			this.gridAvailable.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAvailable_CellClick);
 			// 
 			// gridApptFieldDefs
@@ -533,7 +529,6 @@ namespace OpenDental{
 			this.gridApptFieldDefs.Size = new System.Drawing.Size(175, 106);
 			this.gridApptFieldDefs.TabIndex = 62;
 			this.gridApptFieldDefs.Title = "Appt Field Defs";
-			this.gridApptFieldDefs.TranslationName = "TableApptFieldDefs";
 			this.gridApptFieldDefs.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridApptFieldDefs_CellClick);
 			// 
 			// gridPatFieldDefs
@@ -547,7 +542,6 @@ namespace OpenDental{
 			this.gridPatFieldDefs.Size = new System.Drawing.Size(175, 106);
 			this.gridPatFieldDefs.TabIndex = 63;
 			this.gridPatFieldDefs.Title = "Patient Field Defs";
-			this.gridPatFieldDefs.TranslationName = "TablePatFieldDefs";
 			this.gridPatFieldDefs.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPatFieldDefs_CellClick);
 			// 
 			// comboClinic

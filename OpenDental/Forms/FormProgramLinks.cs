@@ -117,9 +117,6 @@ namespace OpenDental{
 			this.gridProgram.Size = new System.Drawing.Size(429, 575);
 			this.gridProgram.TabIndex = 45;
 			this.gridProgram.Title = "Programs";
-			this.gridProgram.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridProgram.TitleHeight = 18;
-			this.gridProgram.TranslationName = "TablePrograms";
 			this.gridProgram.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProgram_CellDoubleClick);
 			// 
 			// FormProgramLinks

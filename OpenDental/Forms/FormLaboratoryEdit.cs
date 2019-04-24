@@ -219,9 +219,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(561, 261);
 			this.gridMain.TabIndex = 128;
 			this.gridMain.Title = "Turnaround Times";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableLabTurnaround";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butAdd

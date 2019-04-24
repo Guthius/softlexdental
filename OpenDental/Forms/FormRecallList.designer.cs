@@ -445,9 +445,6 @@
 			this.gridMain.Size = new System.Drawing.Size(965, 544);
 			this.gridMain.TabIndex = 126;
 			this.gridMain.Title = "Recall List";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableRecallList";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellClick);
 			// 
@@ -744,9 +741,6 @@
 			this.gridRecentlyContacted.Size = new System.Drawing.Size(965, 607);
 			this.gridRecentlyContacted.TabIndex = 127;
 			this.gridRecentlyContacted.Title = "Recall Patients Recently Contacted";
-			this.gridRecentlyContacted.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridRecentlyContacted.TitleHeight = 18;
-			this.gridRecentlyContacted.TranslationName = "";
 			// 
 			// groupBox4
 			// 
@@ -1056,9 +1050,6 @@
 			this.gridReactivations.Size = new System.Drawing.Size(965, 544);
 			this.gridReactivations.TabIndex = 145;
 			this.gridReactivations.Title = "Reactivation List";
-			this.gridReactivations.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridReactivations.TitleHeight = 18;
-			this.gridReactivations.TranslationName = "TableReactivationList";
 			this.gridReactivations.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridReactivations_CellDoubleClick);
 			this.gridReactivations.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellClick);
 			// 

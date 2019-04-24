@@ -63,9 +63,6 @@ namespace OpenDental
             this.gridMain.Size = new System.Drawing.Size(263, 609);
             this.gridMain.TabIndex = 0;
             this.gridMain.Title = "Wiki List History";
-            this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridMain.TitleHeight = 18;
-            this.gridMain.TranslationName = "TableWikiListHistory";
             this.gridMain.Click += new System.EventHandler(this.gridMain_Click);
             // 
             // revertButton
@@ -108,9 +105,6 @@ namespace OpenDental
             this.oldRevisionGrid.Size = new System.Drawing.Size(283, 609);
             this.oldRevisionGrid.TabIndex = 1;
             this.oldRevisionGrid.Title = "Old Revision";
-            this.oldRevisionGrid.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.oldRevisionGrid.TitleHeight = 18;
-            this.oldRevisionGrid.TranslationName = "TableOldRevision";
             // 
             // currentRevisionGrid
             // 
@@ -132,9 +126,6 @@ namespace OpenDental
             this.currentRevisionGrid.Size = new System.Drawing.Size(288, 609);
             this.currentRevisionGrid.TabIndex = 2;
             this.currentRevisionGrid.Title = "Current Revision";
-            this.currentRevisionGrid.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.currentRevisionGrid.TitleHeight = 18;
-            this.currentRevisionGrid.TranslationName = "TableCurrentRevision";
             // 
             // historySplitContainer
             // 

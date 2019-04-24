@@ -62,9 +62,6 @@
 			this.gridEdu.Size = new System.Drawing.Size(847, 264);
 			this.gridEdu.TabIndex = 1;
 			this.gridEdu.Title = "Educational Resources";
-			this.gridEdu.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridEdu.TitleHeight = 18;
-			this.gridEdu.TranslationName = "TableResources";
 			this.gridEdu.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridEdu_CellClick);
 			// 
 			// label1
@@ -96,9 +93,6 @@
 			this.gridProvided.Size = new System.Drawing.Size(847, 273);
 			this.gridProvided.TabIndex = 3;
 			this.gridProvided.Title = "Education Provided";
-			this.gridProvided.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridProvided.TitleHeight = 18;
-			this.gridProvided.TranslationName = "TableProvided";
 			// 
 			// label2
 			// 

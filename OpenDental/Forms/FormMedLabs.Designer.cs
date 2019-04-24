@@ -266,9 +266,6 @@
 			this.gridMain.Size = new System.Drawing.Size(950, 436);
 			this.gridMain.TabIndex = 5;
 			this.gridMain.Title = "Labs";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableLabs";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// FormMedLabs

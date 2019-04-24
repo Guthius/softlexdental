@@ -167,7 +167,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(592, 538);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Patient Forms and Medical Histories";
-			this.gridMain.TranslationName = "FormPatientForms";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butCancel

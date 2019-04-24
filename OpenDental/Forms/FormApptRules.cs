@@ -79,7 +79,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(485,369);
 			this.gridMain.TabIndex = 11;
 			this.gridMain.Title = "Appointment Rules";
-			this.gridMain.TranslationName = "TablePayPeriods";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butAdd

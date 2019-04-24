@@ -256,9 +256,6 @@
 			this.gridMain.Size = new System.Drawing.Size(412, 171);
 			this.gridMain.TabIndex = 10;
 			this.gridMain.Title = "Lab Orders for the Patient Above";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TablePatientOrders";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// textPatName2

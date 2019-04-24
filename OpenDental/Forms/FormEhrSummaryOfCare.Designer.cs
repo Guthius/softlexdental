@@ -124,9 +124,6 @@
 			this.gridRec.Size = new System.Drawing.Size(178, 323);
 			this.gridRec.TabIndex = 17;
 			this.gridRec.Title = "Received";
-			this.gridRec.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridRec.TitleHeight = 18;
-			this.gridRec.TranslationName = "TableReceived";
 			this.gridRec.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridRec_CellDoubleClick);
 			// 
 			// gridSent
@@ -147,9 +144,6 @@
 			this.gridSent.Size = new System.Drawing.Size(185, 234);
 			this.gridSent.TabIndex = 16;
 			this.gridSent.Title = "Sent";
-			this.gridSent.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridSent.TitleHeight = 18;
-			this.gridSent.TranslationName = "TableSent";
 			this.gridSent.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSent_CellDoubleClick);
 			// 
 			// groupBox2

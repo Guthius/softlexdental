@@ -443,9 +443,6 @@ namespace OpenDental{
 			this.gridOut.Size = new System.Drawing.Size(732, 212);
 			this.gridOut.TabIndex = 99;
 			this.gridOut.Title = "All Outstanding Claims";
-			this.gridOut.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridOut.TitleHeight = 18;
-			this.gridOut.TranslationName = "TableClaimPaySplits";
 			this.gridOut.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridOut_CellDoubleClick);
 			// 
 			// groupBox1
@@ -691,9 +688,6 @@ namespace OpenDental{
 			this.gridAttached.Size = new System.Drawing.Size(732, 209);
 			this.gridAttached.TabIndex = 95;
 			this.gridAttached.Title = "Attached to this Payment";
-			this.gridAttached.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridAttached.TitleHeight = 18;
-			this.gridAttached.TranslationName = "TableClaimPaySplits";
 			this.gridAttached.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAttached_CellDoubleClick);
 			// 
 			// butDelete

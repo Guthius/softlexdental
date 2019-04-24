@@ -152,9 +152,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(766, 440);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Email Addresses";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableEmailAddresses";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butAdd

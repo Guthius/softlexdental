@@ -747,7 +747,6 @@ namespace OpenDental {
 		private ODGrid CreateGridHelper(List<DisplayField> columns) {
 			ODGrid odGrid=new ODGrid();
 			odGrid.Width=0;
-			odGrid.TranslationName="";
 			for(int c=0;c<columns.Count;c++) {
 				odGrid.Width+=columns[c].ColumnWidth;
 			}
@@ -772,7 +771,6 @@ namespace OpenDental {
 		private ODGrid CreateDyanmicGrid(SheetFieldDef fieldDef,List<DisplayField> listColumns) {
 			ODGrid odGrid=new ODGrid();
 			odGrid.Width=fieldDef.Width;
-			odGrid.TranslationName="";
 			odGrid.BeginUpdate();
 			odGrid.Columns.Clear();
 			foreach(DisplayField column in listColumns) { 

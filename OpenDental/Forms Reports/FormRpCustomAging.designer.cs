@@ -134,9 +134,6 @@ namespace OpenDental {
 			this.gridMain.Size = new System.Drawing.Size(703, 695);
 			this.gridMain.TabIndex = 96;
 			this.gridMain.Title = "Aging";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableCustomAging";
 			// 
 			// contextMenuStrip
 			// 
@@ -190,9 +187,6 @@ namespace OpenDental {
 			this.gridTotals.Size = new System.Drawing.Size(703, 20);
 			this.gridTotals.TabIndex = 98;
 			this.gridTotals.Title = "Aging";
-			this.gridTotals.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridTotals.TitleHeight = 0;
-			this.gridTotals.TranslationName = "TableCustomAgingTotals";
 			// 
 			// checkExcludeBadAddresses
 			// 

@@ -634,7 +634,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(564, 132);
 			this.gridMain.TabIndex = 199;
 			this.gridMain.Title = "Knowledge Request Items";
-			this.gridMain.TranslationName = "";
 			this.gridMain.WrapText = false;
 			// 
 			// butPreviewRequest

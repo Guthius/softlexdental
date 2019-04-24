@@ -2272,9 +2272,6 @@ namespace OpenDental{
 			this.gridBenefits.Size = new System.Drawing.Size(504, 326);
 			this.gridBenefits.TabIndex = 146;
 			this.gridBenefits.Title = "Benefit Information";
-			this.gridBenefits.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridBenefits.TitleHeight = 18;
-			this.gridBenefits.TranslationName = "TableBenefits";
 			this.gridBenefits.DoubleClick += new System.EventHandler(this.gridBenefits_DoubleClick);
 			// 
 			// textPlanNote
@@ -2895,8 +2892,7 @@ namespace OpenDental{
 			ODGrid grid=new ODGrid() {
 				Size=new Size(475,300),
 				Location=new Point(5,5),
-				Title="Subscribers",
-				TranslationName=""
+				Title="Subscribers"
 			};
 			UI.Button butClose=new UI.Button() {
 				Size=new Size(75,23),

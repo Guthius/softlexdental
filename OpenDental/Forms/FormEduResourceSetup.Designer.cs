@@ -69,9 +69,6 @@
 			this.gridEdu.Size = new System.Drawing.Size(868, 478);
 			this.gridEdu.TabIndex = 3;
 			this.gridEdu.Title = "Educational Resources";
-			this.gridEdu.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridEdu.TitleHeight = 18;
-			this.gridEdu.TranslationName = "TableResources";
 			this.gridEdu.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridEdu_CellDoubleClick);
 			// 
 			// FormEduResourceSetup

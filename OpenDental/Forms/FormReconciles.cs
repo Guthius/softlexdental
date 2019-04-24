@@ -70,7 +70,6 @@ namespace OpenDental{
 			this.grid.Size = new System.Drawing.Size(191,450);
 			this.grid.TabIndex = 1;
 			this.grid.Title = "Existing Reconciles";
-			this.grid.TranslationName = "TableReconciles";
 			this.grid.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellDoubleClick);
 			// 
 			// butClose

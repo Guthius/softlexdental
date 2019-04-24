@@ -498,9 +498,6 @@ namespace OpenDental {
             this.gridMain.Size = new System.Drawing.Size(790, 421);
             this.gridMain.TabIndex = 0;
             this.gridMain.Title = "Database Methods";
-            this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridMain.TitleHeight = 18;
-            this.gridMain.TranslationName = "TableClaimPaySplits";
             this.gridMain.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
             this.gridMain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridMain_MouseUp);
             // 
@@ -670,9 +667,6 @@ namespace OpenDental {
             this.gridHidden.Size = new System.Drawing.Size(790, 421);
             this.gridHidden.TabIndex = 2;
             this.gridHidden.Title = "Hidden Methods";
-            this.gridHidden.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridHidden.TitleHeight = 18;
-            this.gridHidden.TranslationName = "TableHiddenDbmMethods";
             this.gridHidden.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridHidden_MouseUp);
             // 
             // tabOld
@@ -816,9 +810,6 @@ namespace OpenDental {
             this.gridOld.Size = new System.Drawing.Size(790, 421);
             this.gridOld.TabIndex = 4;
             this.gridOld.Title = "Old Methods";
-            this.gridOld.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridOld.TitleHeight = 18;
-            this.gridOld.TranslationName = "TableOldDbmMethods";
             this.gridOld.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridOld_MouseUp);
             // 
             // tabTools

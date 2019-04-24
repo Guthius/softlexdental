@@ -86,7 +86,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(476, 441);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Adjustments";
-			this.gridMain.TranslationName = "TableAjdustmentPicker";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// FormAdjustmentPicker

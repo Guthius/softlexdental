@@ -2139,9 +2139,6 @@ namespace OpenDental {
 			this.gridPlanned.Size = new System.Drawing.Size(516, 208);
 			this.gridPlanned.TabIndex = 193;
 			this.gridPlanned.Title = "Planned Appointments";
-			this.gridPlanned.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridPlanned.TitleHeight = 18;
-			this.gridPlanned.TranslationName = "TablePlannedAppts";
             this.gridPlanned.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPlanned_CellDoubleClick);
 			// 
 			// butDown
@@ -2476,9 +2473,6 @@ namespace OpenDental {
 			this.gridChartViews.Size = new System.Drawing.Size(191, 173);
 			this.gridChartViews.TabIndex = 44;
 			this.gridChartViews.Title = "Chart Views";
-			this.gridChartViews.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridChartViews.TitleHeight = 18;
-			this.gridChartViews.TranslationName = "TableChartViews";
             this.gridChartViews.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridChartViews_DoubleClick);
             this.gridChartViews.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridChartViews_CellClick);
 			// 
@@ -2945,9 +2939,6 @@ namespace OpenDental {
 			this.gridCustomerViews.Size = new System.Drawing.Size(191, 173);
 			this.gridCustomerViews.TabIndex = 45;
 			this.gridCustomerViews.Title = "Chart Views";
-			this.gridCustomerViews.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridCustomerViews.TitleHeight = 18;
-			this.gridCustomerViews.TranslationName = "TableCustomerViews";
 			this.gridCustomerViews.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCustomerViews_CellDoubleClick);
 			this.gridCustomerViews.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCustomerViews_CellClick);
 			// 
@@ -3086,9 +3077,6 @@ namespace OpenDental {
 			this.gridTreatPlans.Size = new System.Drawing.Size(430, 43);
 			this.gridTreatPlans.TabIndex = 214;
 			this.gridTreatPlans.Title = "Treatment Plans";
-			this.gridTreatPlans.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridTreatPlans.TitleHeight = 18;
-			this.gridTreatPlans.TranslationName = "TableTPList";
 			this.gridTreatPlans.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTreatPlans_CellDoubleClick);
 			this.gridTreatPlans.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTreatPlans_CellClick);
 			// 
@@ -3111,9 +3099,6 @@ namespace OpenDental {
 			this.gridTpProcs.Size = new System.Drawing.Size(446, 60);
 			this.gridTpProcs.TabIndex = 213;
 			this.gridTpProcs.Title = "Procedures";
-			this.gridTpProcs.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridTpProcs.TitleHeight = 18;
-			this.gridTpProcs.TranslationName = "TableTP";
             this.gridTpProcs.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTpProcs_CellDoubleClick);
 			// 
 			// label4
@@ -3285,9 +3270,6 @@ namespace OpenDental {
 			this.gridPtInfo.Size = new System.Drawing.Size(411, 297);
 			this.gridPtInfo.TabIndex = 193;
 			this.gridPtInfo.Title = "Patient Info";
-			this.gridPtInfo.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridPtInfo.TitleHeight = 18;
-			this.gridPtInfo.TranslationName = "TableChartPtInfo";
 			this.gridPtInfo.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPtInfo_CellDoubleClick);
 			// 
 			// textTreatmentNotes
@@ -3382,9 +3364,6 @@ namespace OpenDental {
 			this.gridProg.Size = new System.Drawing.Size(520, 109);
 			this.gridProg.TabIndex = 192;
 			this.gridProg.Title = "Progress Notes";
-			this.gridProg.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridProg.TitleHeight = 18;
-			this.gridProg.TranslationName = "TableProg";
 			this.gridProg.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProg_CellDoubleClick);
 			this.gridProg.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProg_CellClick);
 			this.gridProg.KeyDown += new System.Windows.Forms.KeyEventHandler(this.gridProg_KeyDown);

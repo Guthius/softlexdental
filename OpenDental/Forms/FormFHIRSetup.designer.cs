@@ -68,8 +68,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(493, 388);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "API Keys";
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "tableAPIKeys";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 

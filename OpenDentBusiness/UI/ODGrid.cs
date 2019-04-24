@@ -119,7 +119,8 @@ namespace OpenDental.UI
 
         #endregion
 
-
+        public int TitleHeight => TitleVisible ? titleHeight : 0;
+        public bool TitleVisible { get; set; } = true; // TODO: Implement this...
 
         ///<summary>A function that defines how to create a gridrow row given an object for the row when paging is enabled.</summary>
         public Func<object, ODGridRow> FuncConstructGridRow;
@@ -140,7 +141,7 @@ namespace OpenDental.UI
 
         private string title;
         public Font FontForSheets;
-        protected int titleHeight = 18;
+        protected int titleHeight = 24;
         private VScrollBar vScroll;
         private HScrollBar hScroll;
 
@@ -337,8 +338,6 @@ namespace OpenDental.UI
                     _format = null;
                 }
                 QuitThread();
-                TitleFont?.Dispose();
-                TitleFont = null;
                 HeaderFont?.Dispose();
                 HeaderFont = null;
                 CellFont?.Dispose();
@@ -417,9 +416,6 @@ namespace OpenDental.UI
 
         #region Properties
 
-        [Category("Appearance"), Description("Sets a font for the Title")]
-        public Font TitleFont { get; set; } = new Font(FontFamily.GenericSansSerif, 10, FontStyle.Bold);
-
         [Category("Appearance")]
         [Description("Sets a font for Headers.")]
         public Font HeaderFont { get; set; } = new Font(FontFamily.GenericSansSerif, 8.5f, FontStyle.Bold);
@@ -427,18 +423,6 @@ namespace OpenDental.UI
         [Category("Appearance")]
         [Description("Sets a font for Cells")]
         public Font CellFont { get; set; } = new Font(FontFamily.GenericSansSerif, 8.5f);
-
-        public int TitleHeight
-        {
-            get
-            {
-                return titleHeight;
-            }
-            set
-            {
-                titleHeight = value;
-            }
-        }
 
         /// <summary>
         /// Gets or sets the height of the grid header.
@@ -762,10 +746,6 @@ namespace OpenDental.UI
         [Category("Behavior"), Description("Set false to disable row selection when user clicks.  Row selection should then be handled by the form using the cellClick event.")]
         [DefaultValue(true)]
         public bool AllowSelection { get; set; }
-
-        ///<summary>Uniquely identifies the grid for translation to another language.</summary>
-        [Category("Appearance"), Description("Uniquely identifies the grid for translation to another language.")]
-        public string TranslationName { get; set; }
 
         ///<summary>The background color that is used for selected rows.</summary>
         [Category("Appearance"), Description("The background color that is used for selected rows.")]
@@ -1175,9 +1155,9 @@ namespace OpenDental.UI
                 }
                 if (yPosCur //start position of row
                     + Rows[i].RowHeight //+row height
-                    + (drawTitle ? TitleHeight : 0) //+title height if needed
+                    + (drawTitle ? titleHeight : 0) //+title height if needed
                     + (drawHeader ? HeaderHeight : 0) //+header height if needed
-                    + (drawFooter ? TitleHeight : 0) //+footer height if needed.
+                    + (drawFooter ? titleHeight : 0) //+footer height if needed.
                     >= bottomCurPage)
                 {
                     if (i > 0)
@@ -1190,10 +1170,10 @@ namespace OpenDental.UI
                 }
                 #endregion
                 PrintRows.Add(new ODPrintRow(yPosCur, drawTitle, drawHeader, false, drawFooter));
-                yPosCur += (drawTitle ? TitleHeight : 0);
+                yPosCur += (drawTitle ? titleHeight : 0);
                 yPosCur += (drawHeader ? HeaderHeight : 0);
                 yPosCur += Rows[i].RowHeight;
-                yPosCur += (drawFooter ? TitleHeight : 0);
+                yPosCur += (drawFooter ? titleHeight : 0);
                 drawTitle = drawHeader = drawFooter = false;//reset all flags for next row.
                 if (i == Rows.Count - 1)
                 {//set print height equal to the bottom of the last row.
@@ -1342,11 +1322,7 @@ namespace OpenDental.UI
 
 
                 string stringException = null;
-                if (TranslationName == null)
-                {
-                    stringException = new ArgumentNullException("TranslationName").ToString();
-                }
-                else if (this.ParentForm != null && PagingMode != GridPagingMode.Disabled && PageChanged == null)
+                if (this.ParentForm != null && PagingMode != GridPagingMode.Disabled && PageChanged == null)
                 {
                     stringException = new ArgumentNullException("PageChangeEventHandler").ToString();
                 }
@@ -1730,69 +1706,93 @@ namespace OpenDental.UI
             }
         }
 
+
+        static Font titleFont;
+        static StringFormat titleStringFormat = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
+
+        /// <summary>
+        /// Paints the title of the grid.
+        /// </summary>
+        /// <param name="g"></param>
+        void PaintTitle(Graphics g)
+        {
+            if (titleHeight == 0) return;
+
+            var titleBounds = new Rectangle(0, 0, Width, titleHeight);
+
+            using (var brush = 
+                new LinearGradientBrush(
+                    titleBounds, 
+                    Color.FromArgb(40, 110, 240), 
+                    Color.FromArgb(0, 70, 140), 
+                    LinearGradientMode.Vertical))
+            {
+
+                g.FillRectangle(brush, 0, 0, Width, titleHeight);
+                if (title != null)
+                {
+                    titleFont = titleFont ?? new Font(Font, FontStyle.Bold);
+
+                    g.DrawString(
+                        title,
+                        titleFont,
+                        Brushes.White,
+                        titleBounds,
+                        titleStringFormat);
+                }
+
+                PaintTitleButton(g);
+            }
+        }
+
+        void PaintTitleButton(Graphics g)
+        {
+            // TODO: Implement this back...
+
+            //if (HasAddButton)
+            //{
+            //    int addW = titleHeight;
+            //    int dividerX = Width - addW - 3;
+            //    const int dividerLineWidth = 1;
+            //    const int plusSignWidth = 4;
+            //    Brush brushPlusSign = new SolidBrush(ODColorTheme.GridTextBrush.Color);//cannot dispose a brush from ODColorTheme
+            //    if (!GetIsAddButtonEnabled())
+            //    {
+            //        //"gray out" darkest background color for plus sign
+            //        const double fadeFactor = 0.8;
+            //        brushPlusSign = new LinearGradientBrush(new Rectangle(0, 0, Width, titleHeight),
+            //            Color.FromArgb((int)(cTitleTop.R * fadeFactor), (int)(cTitleTop.G * fadeFactor), (int)(cTitleTop.B * fadeFactor)),
+            //            Color.FromArgb((int)(cTitleBottom.R * fadeFactor), (int)(cTitleBottom.G * fadeFactor), (int)(cTitleBottom.B * fadeFactor)),
+            //            LinearGradientMode.Vertical);//"gray out" AddButton
+            //    }
+            //    using (Pen pDark = new Pen(Color.FromArgb(102, 102, 122)))
+            //    {
+            //        g.DrawLine(Pens.LightGray, new Point(dividerX, 0), new Point(dividerX, this.TitleHeight));//divider line(right side)
+            //        g.DrawLine(pDark, new Point(dividerX - dividerLineWidth, 0), new Point(dividerX - dividerLineWidth, this.TitleHeight));//divider line(left side)
+            //        g.FillRectangle(brushPlusSign,//vertical bar in "+" sign
+            //            Width - addW / 2 - plusSignWidth, 2,
+            //            plusSignWidth, addW - plusSignWidth);
+            //        //Width-addW/2+2,addW-2);
+            //        g.FillRectangle(brushPlusSign,//horizontal bar in "+" sign
+            //            Width - addW, (addW - plusSignWidth) / 2,
+            //            addW - plusSignWidth, plusSignWidth);
+            //        //Width-2,addW/2+2);
+            //        //g.DrawString("+",titleFont,brushTitleText,Width-addW+4,2);
+            //    }
+            //    if (brushPlusSign != null)
+            //    {
+            //        brushPlusSign.Dispose();
+            //        brushPlusSign = null;
+            //    }
+            //    AddButtonWidth = addW;
+            //}
+        }
+
+
+
         private void DrawTitleAndHeaders(Graphics g)
         {
-            //Title----------------------------------------------------------------------------------------------------
-            if (TitleHeight != 0)
-            {
-                Color cTitleTop = ODColorTheme.TitleTopBrush.Color;
-                Color cTitleBottom = ODColorTheme.TitleBottomBrush.Color;
-                LinearGradientBrush brushTitleBackground = new LinearGradientBrush(new Rectangle(0, 0, Width, titleHeight), cTitleTop, cTitleBottom, LinearGradientMode.Vertical);
-
-                brushTitleBackground = new LinearGradientBrush(
-                    new Point(0, 0),
-                    new Point(0, titleHeight),
-                    Color.FromArgb(40, 110, 240),
-                    Color.FromArgb(0, 70, 140));
-
-
-                g.FillRectangle(brushTitleBackground, 0, 0, Width, titleHeight);
-                g.DrawString(title, TitleFont, ODColorTheme.GridTextBrush, Width / 2 - g.MeasureString(title, TitleFont).Width / 2, 2); //draws title text
-                if (HasAddButton)
-                {
-                    int addW = titleHeight;
-                    int dividerX = Width - addW - 3;
-                    const int dividerLineWidth = 1;
-                    const int plusSignWidth = 4;
-                    Brush brushPlusSign = new SolidBrush(ODColorTheme.GridTextBrush.Color);//cannot dispose a brush from ODColorTheme
-                    if (!GetIsAddButtonEnabled())
-                    {
-                        //"gray out" darkest background color for plus sign
-                        const double fadeFactor = 0.8;
-                        brushPlusSign = new LinearGradientBrush(new Rectangle(0, 0, Width, titleHeight),
-                            Color.FromArgb((int)(cTitleTop.R * fadeFactor), (int)(cTitleTop.G * fadeFactor), (int)(cTitleTop.B * fadeFactor)),
-                            Color.FromArgb((int)(cTitleBottom.R * fadeFactor), (int)(cTitleBottom.G * fadeFactor), (int)(cTitleBottom.B * fadeFactor)),
-                            LinearGradientMode.Vertical);//"gray out" AddButton
-                    }
-                    using (Pen pDark = new Pen(Color.FromArgb(102, 102, 122)))
-                    {
-                        g.DrawLine(Pens.LightGray, new Point(dividerX, 0), new Point(dividerX, this.TitleHeight));//divider line(right side)
-                        g.DrawLine(pDark, new Point(dividerX - dividerLineWidth, 0), new Point(dividerX - dividerLineWidth, this.TitleHeight));//divider line(left side)
-                        g.FillRectangle(brushPlusSign,//vertical bar in "+" sign
-                            Width - addW / 2 - plusSignWidth, 2,
-                            plusSignWidth, addW - plusSignWidth);
-                        //Width-addW/2+2,addW-2);
-                        g.FillRectangle(brushPlusSign,//horizontal bar in "+" sign
-                            Width - addW, (addW - plusSignWidth) / 2,
-                            addW - plusSignWidth, plusSignWidth);
-                        //Width-2,addW/2+2);
-                        //g.DrawString("+",titleFont,brushTitleText,Width-addW+4,2);
-                    }
-                    if (brushPlusSign != null)
-                    {
-                        brushPlusSign.Dispose();
-                        brushPlusSign = null;
-                    }
-                    AddButtonWidth = addW;
-                }
-                if (brushTitleBackground != null)
-                {
-                    brushTitleBackground.Dispose();
-                    brushTitleBackground = null;
-                }
-            }
-
-
+            PaintTitle(g);
 
             //Column Headers-----------------------------------------------------------------------------------------
             if (HeaderHeight != 0)
@@ -2000,7 +2000,7 @@ namespace OpenDental.UI
         {
             if (HasAddButton //only check this if we are showing the "add button"
                 && TitleAddClick != null //there is an event handler
-                && ((MouseEventArgs)e).X >= Width - TitleHeight - 5 && ((MouseEventArgs)e).Y <= TitleHeight)
+                && ((MouseEventArgs)e).X >= Width - titleHeight - 5 && ((MouseEventArgs)e).Y <= titleHeight)
             {
                 TitleAddClick(this, e);
             }
@@ -2617,11 +2617,13 @@ namespace OpenDental.UI
 
         public void PrintTitle(Graphics g, int x, int y)
         {
+            titleFont = titleFont ?? new Font(Font, FontStyle.Bold);
+
             Color cTitleTop = ODColorTheme.TitleTopBrush.Color;
             Color cTitleBottom = ODColorTheme.TitleBottomBrush.Color;
             LinearGradientBrush brushTitleBackground = new LinearGradientBrush(new Rectangle(x, y, Width, titleHeight), cTitleTop, cTitleBottom, LinearGradientMode.Vertical);
             g.FillRectangle(brushTitleBackground, x, y, Width, titleHeight);
-            g.DrawString(title, TitleFont, ODColorTheme.GridTextBrush, x + (Width / 2 - g.MeasureString(title, TitleFont).Width / 2), y + 2);
+            g.DrawString(title, titleFont, ODColorTheme.GridTextBrush, x + (Width / 2 - g.MeasureString(title, titleFont).Width / 2), y + 2);
             //Outline the Title
             //Draw line from LL to UL to UR to LR. top three sides of a rectangle.
             g.DrawLines(ODColorTheme.GridOutlinePen, new Point[] {
@@ -2639,13 +2641,14 @@ namespace OpenDental.UI
 
         public void PrintTitleX(XGraphics g, int x, int y)
         {
+            titleFont = titleFont ?? new Font(Font, FontStyle.Bold);
             Color cTitleTop = ODColorTheme.TitleTopBrush.Color;
             Color cTitleBottom = ODColorTheme.TitleBottomBrush.Color;
             Color cTitleText = ODColorTheme.GridTextBrush.Color;
             LinearGradientBrush brushTitleBackground = new LinearGradientBrush(new Rectangle(x, y, Width, titleHeight), cTitleTop, cTitleBottom, LinearGradientMode.Vertical);
             XSolidBrush brushTitleText = new XSolidBrush(cTitleText);
             g.DrawRectangle(brushTitleBackground, p(x), p(y), p(Width), p(titleHeight));
-            XFont xTitleFont = new XFont(TitleFont.FontFamily.ToString(), TitleFont.Size, XFontStyle.Bold);
+            XFont xTitleFont = new XFont(titleFont.FontFamily.ToString(), titleFont.Size, XFontStyle.Bold);
             //g.DrawString(title,titleFont,brushTitleText,p((float)x+(float)(Width/2-g.MeasureString(title,titleFont).Width/2)),p(y+2));
             DrawStringX(g, title, xTitleFont, brushTitleText, new XRect((float)x + (float)(Width / 2), y, 100, 100), XStringAlignment.Center);
             //Outline the Title

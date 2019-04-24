@@ -117,9 +117,6 @@ namespace OpenDental {
 			this.gridMain.Size = new System.Drawing.Size(467, 612);
 			this.gridMain.TabIndex = 11;
 			this.gridMain.Title = "Insurance Filing Codes";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableInsFilingCodes";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butAdd

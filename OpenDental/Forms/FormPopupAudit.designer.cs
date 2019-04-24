@@ -56,7 +56,6 @@ namespace OpenDental{
 			this.gridPopupAudit.Size = new System.Drawing.Size(595, 255);
 			this.gridPopupAudit.TabIndex = 4;
 			this.gridPopupAudit.Title = "Audit Trail";
-			this.gridPopupAudit.TranslationName = "TableAudit";
 			this.gridPopupAudit.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPopupAudit_CellDoubleClick);
 			// 
 			// FormPopupAudit

@@ -124,9 +124,6 @@ namespace OpenDental
             this.promptsGrid.Size = new System.Drawing.Size(300, 442);
             this.promptsGrid.TabIndex = 6;
             this.promptsGrid.Title = "Available Prompts";
-            this.promptsGrid.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.promptsGrid.TitleHeight = 18;
-            this.promptsGrid.TranslationName = "FormAutoNoteEdit";
             // 
             // insertButton
             // 

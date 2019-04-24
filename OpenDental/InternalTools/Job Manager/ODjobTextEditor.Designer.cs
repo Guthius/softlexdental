@@ -522,9 +522,6 @@
 			this.gridRequirements.Size = new System.Drawing.Size(855, 124);
 			this.gridRequirements.TabIndex = 0;
 			this.gridRequirements.Title = "Requirements";
-			this.gridRequirements.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridRequirements.TitleHeight = 0;
-			this.gridRequirements.TranslationName = "JobRequirements";
 			this.gridRequirements.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridRequirements_CellClick);
 			this.gridRequirements.CellLeave += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridRequirements_CellLeave);
 			this.gridRequirements.CellKeyDown += new OpenDental.UI.ODGridKeyEventHandler(this.gridRequirements_CellKeyDown);

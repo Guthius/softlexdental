@@ -47,9 +47,6 @@ namespace OpenDental{
 			this.gridCarePlans.Size = new System.Drawing.Size(958, 653);
 			this.gridCarePlans.TabIndex = 4;
 			this.gridCarePlans.Title = null;
-			this.gridCarePlans.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridCarePlans.TitleHeight = 18;
-			this.gridCarePlans.TranslationName = "TableCarePlans";
 			this.gridCarePlans.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCarePlans_CellDoubleClick);
 			// 
 			// butClose

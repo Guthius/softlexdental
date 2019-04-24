@@ -216,9 +216,6 @@ namespace OpenDental{
 			this.gridHistory.Size = new System.Drawing.Size(982, 252);
 			this.gridHistory.TabIndex = 33;
 			this.gridHistory.Title = "History";
-			this.gridHistory.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridHistory.TitleHeight = 18;
-			this.gridHistory.TranslationName = "TableClaimHistory";
 			this.gridHistory.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridHistory_CellDoubleClick);
 			// 
 			// panel1
@@ -313,9 +310,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(982, 350);
 			this.gridMain.TabIndex = 32;
 			this.gridMain.Title = "Claims Waiting to Send";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableQueue";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// ToolBarMain

@@ -68,7 +68,6 @@ namespace OpenDental.Bridges{
 			this.gridMain.Size = new System.Drawing.Size(439,449);
 			this.gridMain.TabIndex = 140;
 			this.gridMain.Title = "Unpaired Folders";
-			this.gridMain.TranslationName = "FormTrophyNamePick";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butOK

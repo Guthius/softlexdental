@@ -92,7 +92,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(266, 465);
 			this.gridMain.TabIndex = 14;
 			this.gridMain.Title = "Evaluation Definitions";
-			this.gridMain.TranslationName = "TableEvaluationSetup";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// comboCourse

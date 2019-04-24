@@ -97,9 +97,6 @@ namespace OpenDental {
 			this.GridPrepayment.Size = new System.Drawing.Size(593, 153);
 			this.GridPrepayment.TabIndex = 9;
 			this.GridPrepayment.Title = "Prepayments";
-			this.GridPrepayment.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.GridPrepayment.TitleHeight = 18;
-			this.GridPrepayment.TranslationName = "gridPrepayments";
 			this.GridPrepayment.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.GridPrepayment_CellDoubleClick);
 			// 
 			// butAddMonths
@@ -198,9 +195,6 @@ namespace OpenDental {
 			this.GridCodes.Size = new System.Drawing.Size(383, 189);
 			this.GridCodes.TabIndex = 87;
 			this.GridCodes.Title = "Codes";
-			this.GridCodes.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.GridCodes.TitleHeight = 18;
-			this.GridCodes.TranslationName = "GridSupport";
 			// 
 			// label3
 			// 
@@ -343,9 +337,6 @@ namespace OpenDental {
 			this.GridCompletedProcs.Size = new System.Drawing.Size(593, 132);
 			this.GridCompletedProcs.TabIndex = 127;
 			this.GridCompletedProcs.Title = "Previously Completed Procedures";
-			this.GridCompletedProcs.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.GridCompletedProcs.TitleHeight = 18;
-			this.GridCompletedProcs.TranslationName = "gridPreviousProc";
 			// 
 			// butPreviousProc
 			// 

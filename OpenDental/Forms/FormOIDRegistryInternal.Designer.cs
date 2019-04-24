@@ -105,9 +105,6 @@
 			this.gridMain.Size = new System.Drawing.Size(560, 278);
 			this.gridMain.TabIndex = 3;
 			this.gridMain.Title = "Object Identifiers";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableObjectIdentifiers";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// FormOIDRegistryInternal

@@ -78,9 +78,6 @@
 			this.gridEHRMeasureEvents.Size = new System.Drawing.Size(240, 261);
 			this.gridEHRMeasureEvents.TabIndex = 13;
 			this.gridEHRMeasureEvents.Title = "Clinical Summaries Sent to Patient";
-			this.gridEHRMeasureEvents.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridEHRMeasureEvents.TitleHeight = 18;
-			this.gridEHRMeasureEvents.TranslationName = "TableSummaries";
 			// 
 			// butDelete
 			// 

@@ -73,7 +73,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(869, 672);
 			this.gridMain.TabIndex = 142;
 			this.gridMain.Title = "Issues Needing Action Taken";
-			this.gridMain.TranslationName = "TableActionNeeded";
 			// 
 			// FormActionNeeded
 			// 

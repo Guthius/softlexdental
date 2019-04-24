@@ -173,8 +173,6 @@ namespace OpenDental{
 			this.gridRecipients.Size = new System.Drawing.Size(906, 250);
 			this.gridRecipients.TabIndex = 226;
 			this.gridRecipients.Title = "Recipients";
-			this.gridRecipients.TitleHeight = 18;
-			this.gridRecipients.TranslationName = "FormTaskEdit";
 			this.gridRecipients.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridRecipients_CellClick);
 			// 
 			// textVersions

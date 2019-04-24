@@ -84,9 +84,6 @@ namespace OpenDental {
 			this.gridMain.Size = new System.Drawing.Size(895,572);
 			this.gridMain.TabIndex = 19;
 			this.gridMain.Title = "Possible Clones";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif",10F,System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableCloneList";
 			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
 			// menuRightClick

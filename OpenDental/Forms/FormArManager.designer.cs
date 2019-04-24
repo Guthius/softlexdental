@@ -507,9 +507,6 @@ namespace OpenDental{
 			this.gridUnsent.Size = new System.Drawing.Size(1198, 441);
 			this.gridUnsent.TabIndex = 2;
 			this.gridUnsent.Title = "Guarantors - Not Sent to TSI";
-			this.gridUnsent.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridUnsent.TitleHeight = 18;
-			this.gridUnsent.TranslationName = "TableNotSent";
 			this.gridUnsent.OnSortByColumn += new System.EventHandler(this.gridUnsentMain_OnSortByColumn);
 			this.gridUnsent.OnHScroll += new System.Windows.Forms.ScrollEventHandler(this.gridUnsentMain_OnHScroll);
 			this.gridUnsent.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridUnsentMain_MouseDown);
@@ -1198,9 +1195,6 @@ namespace OpenDental{
 			this.gridSent.Size = new System.Drawing.Size(1198, 441);
 			this.gridSent.TabIndex = 2;
 			this.gridSent.Title = "Guarantors - Sent To TSI";
-			this.gridSent.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridSent.TitleHeight = 18;
-			this.gridSent.TranslationName = "TableSent";
 			this.gridSent.OnSortByColumn += new System.EventHandler(this.gridSentMain_OnSortByColumn);
 			this.gridSent.OnHScroll += new System.Windows.Forms.ScrollEventHandler(this.gridSentMain_OnHScroll);
 			this.gridSent.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridSentMain_MouseDown);

@@ -334,9 +334,6 @@ namespace OpenDental{
 			this.grid.Size = new System.Drawing.Size(1093, 576);
 			this.grid.TabIndex = 2;
 			this.grid.Title = "Audit Trail";
-			this.grid.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.grid.TitleHeight = 18;
-			this.grid.TranslationName = "TableAudit";
 			this.grid.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellDoubleClick);
 			// 
 			// checkIncludeArchived

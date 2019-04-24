@@ -90,9 +90,6 @@
 			this.gridProdInc.Size = new System.Drawing.Size(255, 151);
 			this.gridProdInc.TabIndex = 214;
 			this.gridProdInc.Title = "Production & Income";
-			this.gridProdInc.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridProdInc.TitleHeight = 18;
-			this.gridProdInc.TranslationName = "TableProductionIncome";
 			this.gridProdInc.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellClick);
 			this.gridProdInc.CellLeave += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellLeave);
 			// 
@@ -112,9 +109,6 @@
 			this.gridDaily.Size = new System.Drawing.Size(255, 151);
 			this.gridDaily.TabIndex = 215;
 			this.gridDaily.Title = "Daily";
-			this.gridDaily.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridDaily.TitleHeight = 18;
-			this.gridDaily.TranslationName = "TableDaily";
 			this.gridDaily.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellClick);
 			this.gridDaily.CellLeave += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellLeave);
 			// 
@@ -134,9 +128,6 @@
 			this.gridMonthly.Size = new System.Drawing.Size(255, 261);
 			this.gridMonthly.TabIndex = 216;
 			this.gridMonthly.Title = "Monthly";
-			this.gridMonthly.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMonthly.TitleHeight = 18;
-			this.gridMonthly.TranslationName = "TableMonthly";
 			this.gridMonthly.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellClick);
 			this.gridMonthly.CellLeave += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellLeave);
 			// 
@@ -156,9 +147,6 @@
 			this.gridLists.Size = new System.Drawing.Size(255, 308);
 			this.gridLists.TabIndex = 217;
 			this.gridLists.Title = "Lists";
-			this.gridLists.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridLists.TitleHeight = 18;
-			this.gridLists.TranslationName = "TableLists";
 			this.gridLists.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellClick);
 			this.gridLists.CellLeave += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellLeave);
 			// 
@@ -194,9 +182,6 @@
 			this.gridPublicHealth.Size = new System.Drawing.Size(255, 103);
 			this.gridPublicHealth.TabIndex = 218;
 			this.gridPublicHealth.Title = "Public Health";
-			this.gridPublicHealth.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridPublicHealth.TitleHeight = 18;
-			this.gridPublicHealth.TranslationName = "TableHealth";
 			this.gridPublicHealth.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellClick);
 			this.gridPublicHealth.CellLeave += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellLeave);
 			// 

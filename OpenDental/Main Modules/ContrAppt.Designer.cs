@@ -977,9 +977,6 @@ namespace OpenDental
             this.gridWaiting.Size = new System.Drawing.Size(211, 140);
             this.gridWaiting.TabIndex = 78;
             this.gridWaiting.Title = "Waiting Room";
-            this.gridWaiting.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridWaiting.TitleHeight = 18;
-            this.gridWaiting.TranslationName = "TableApptWaiting";
             // 
             // tabSched
             // 
@@ -1011,9 +1008,6 @@ namespace OpenDental
             this.gridEmpSched.Size = new System.Drawing.Size(211, 140);
             this.gridEmpSched.TabIndex = 77;
             this.gridEmpSched.Title = "Employee Schedules";
-            this.gridEmpSched.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridEmpSched.TitleHeight = 18;
-            this.gridEmpSched.TranslationName = "TableApptEmpSched";
             this.gridEmpSched.DoubleClick += new System.EventHandler(this.gridEmpSched_DoubleClick);
             // 
             // tabProv
@@ -1046,9 +1040,6 @@ namespace OpenDental
             this.gridProv.Size = new System.Drawing.Size(211, 140);
             this.gridProv.TabIndex = 79;
             this.gridProv.Title = "Provider Schedules";
-            this.gridProv.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridProv.TitleHeight = 18;
-            this.gridProv.TranslationName = "TableAppProv";
             this.gridProv.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridProv_CellDoubleClick);
             // 
             // tabReminders
@@ -1080,9 +1071,6 @@ namespace OpenDental
             this.gridReminders.Size = new System.Drawing.Size(211, 140);
             this.gridReminders.TabIndex = 0;
             this.gridReminders.Title = "Reminders";
-            this.gridReminders.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridReminders.TitleHeight = 18;
-            this.gridReminders.TranslationName = "TableReminders";
             this.gridReminders.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridReminders_CellDoubleClick);
             this.gridReminders.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridReminders_MouseDown);
             // 

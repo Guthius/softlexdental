@@ -380,9 +380,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(498, 199);
 			this.gridMain.TabIndex = 2;
 			this.gridMain.Title = "Splits";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableTransSplits";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// groupBox1

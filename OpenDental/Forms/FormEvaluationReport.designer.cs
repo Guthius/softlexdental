@@ -112,9 +112,6 @@ namespace OpenDental{
 			this.gridCourses.Size = new System.Drawing.Size(308, 362);
 			this.gridCourses.TabIndex = 16;
 			this.gridCourses.Title = "Courses";
-			this.gridCourses.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridCourses.TitleHeight = 18;
-			this.gridCourses.TranslationName = "TableCourses";
 			this.gridCourses.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCourses_CellClick);
 			// 
 			// gridInstructors
@@ -136,9 +133,6 @@ namespace OpenDental{
 			this.gridInstructors.Size = new System.Drawing.Size(308, 362);
 			this.gridInstructors.TabIndex = 15;
 			this.gridInstructors.Title = "Instructors";
-			this.gridInstructors.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridInstructors.TitleHeight = 18;
-			this.gridInstructors.TranslationName = "TableInstructors";
 			this.gridInstructors.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridInstructors_CellClick);
 			// 
 			// gridStudents
@@ -159,9 +153,6 @@ namespace OpenDental{
 			this.gridStudents.Size = new System.Drawing.Size(308, 362);
 			this.gridStudents.TabIndex = 14;
 			this.gridStudents.Title = "Students";
-			this.gridStudents.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridStudents.TitleHeight = 18;
-			this.gridStudents.TranslationName = "TableStudents";
 			// 
 			// butAllStudents
 			// 

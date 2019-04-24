@@ -138,8 +138,7 @@ namespace OpenDental {
 			ODGrid grid=new ODGrid() {
 				Size=new Size(475,300),
 				Location=new Point(5,5),
-				Title="Patients",
-				TranslationName=""
+				Title="Patients"
 			};
 			UI.Button butClose=new UI.Button() {
 				Size=new Size(75,23),

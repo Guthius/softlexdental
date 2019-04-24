@@ -331,9 +331,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(200, 454);
 			this.gridMain.TabIndex = 56;
 			this.gridMain.Title = "Available Web Forms";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableSheetDefs";
 			this.gridMain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridMain_MouseUp);
 			// 
 			// textboxWebHostAddress

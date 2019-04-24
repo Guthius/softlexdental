@@ -59,9 +59,6 @@
 			this.gridEscalation.Size = new System.Drawing.Size(175, 464);
 			this.gridEscalation.TabIndex = 65;
 			this.gridEscalation.Title = "Escalation Order";
-			this.gridEscalation.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridEscalation.TitleHeight = 18;
-			this.gridEscalation.TranslationName = "TableEscalation";
 			// 
 			// gridEmployees
 			// 
@@ -81,9 +78,6 @@
 			this.gridEmployees.Size = new System.Drawing.Size(175, 464);
 			this.gridEmployees.TabIndex = 62;
 			this.gridEmployees.Title = "Employees";
-			this.gridEmployees.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridEmployees.TitleHeight = 18;
-			this.gridEmployees.TranslationName = "TableEmployee";
 			// 
 			// butUp
 			// 

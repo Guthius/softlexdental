@@ -75,9 +75,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(728, 505);
 			this.gridMain.TabIndex = 7;
 			this.gridMain.Title = "Query Results";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableQueryResults";
 			// 
 			// gridTables
 			// 
@@ -99,9 +96,6 @@ namespace OpenDental{
 			this.gridTables.Size = new System.Drawing.Size(228, 505);
 			this.gridTables.TabIndex = 8;
 			this.gridTables.Title = "Tables Available";
-			this.gridTables.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridTables.TitleHeight = 18;
-			this.gridTables.TranslationName = "TableAvailable";
 			this.gridTables.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTables_CellDoubleClick);
 			this.gridTables.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.gridTables_KeyPress);
 			// 

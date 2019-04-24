@@ -130,9 +130,6 @@
 			this.gridFiles.Size = new System.Drawing.Size(235, 155);
 			this.gridFiles.TabIndex = 260;
 			this.gridFiles.Title = "Files";
-			this.gridFiles.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridFiles.TitleHeight = 18;
-			this.gridFiles.TranslationName = "";
 			this.gridFiles.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridFiles_CellDoubleClick);
 			this.gridFiles.TitleAddClick += new System.EventHandler(this.gridFiles_TitleAddClick);
 			this.gridFiles.MouseMove += new System.Windows.Forms.MouseEventHandler(this.gridFiles_MouseMove);
@@ -154,9 +151,6 @@
 			this.gridAppointments.Size = new System.Drawing.Size(235, 154);
 			this.gridAppointments.TabIndex = 228;
 			this.gridAppointments.Title = "Appointments";
-			this.gridAppointments.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridAppointments.TitleHeight = 18;
-			this.gridAppointments.TranslationName = "FormTaskEdit";
 			this.gridAppointments.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAppointments_CellDoubleClick);
 			this.gridAppointments.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAppointments_CellClick);
 			this.gridAppointments.TitleAddClick += new System.EventHandler(this.gridAppointments_TitleAddClick);
@@ -178,9 +172,6 @@
 			this.gridTasks.Size = new System.Drawing.Size(235, 153);
 			this.gridTasks.TabIndex = 227;
 			this.gridTasks.Title = "Tasks";
-			this.gridTasks.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridTasks.TitleHeight = 18;
-			this.gridTasks.TranslationName = "FormTaskEdit";
 			this.gridTasks.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTasks_CellDoubleClick);
 			this.gridTasks.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTasks_CellClick);
 			this.gridTasks.TitleAddClick += new System.EventHandler(this.gridTasks_TitleAddClick);
@@ -292,9 +283,6 @@
 			this.gridRoles.Size = new System.Drawing.Size(232, 100);
 			this.gridRoles.TabIndex = 304;
 			this.gridRoles.Title = "Query Roles";
-			this.gridRoles.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridRoles.TitleHeight = 18;
-			this.gridRoles.TranslationName = "FormTaskEdit";
 			// 
 			// tableLayoutPanel1
 			// 
@@ -817,9 +805,6 @@
 			this.gridNotes.Size = new System.Drawing.Size(252, 553);
 			this.gridNotes.TabIndex = 194;
 			this.gridNotes.Title = "Discussion";
-			this.gridNotes.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridNotes.TitleHeight = 18;
-			this.gridNotes.TranslationName = "FormTaskEdit";
 			this.gridNotes.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridNotes_CellDoubleClick);
 			this.gridNotes.TitleAddClick += new System.EventHandler(this.gridNotes_TitleAddClick);
 			// 
@@ -852,9 +837,6 @@
 			this.gridReview.TabIndex = 22;
 			this.gridReview.TabStop = false;
 			this.gridReview.Title = "Reviews";
-			this.gridReview.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridReview.TitleHeight = 18;
-			this.gridReview.TranslationName = "TableReviews";
 			this.gridReview.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridReview_CellDoubleClick);
 			this.gridReview.TitleAddClick += new System.EventHandler(this.gridReview_TitleAddClick);
 			// 
@@ -898,9 +880,6 @@
 			this.gridHistory.TabIndex = 19;
 			this.gridHistory.TabStop = false;
 			this.gridHistory.Title = "History Events";
-			this.gridHistory.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridHistory.TitleHeight = 18;
-			this.gridHistory.TranslationName = "TableHistory";
 			this.gridHistory.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridHistory_CellDoubleClick);
 			// 
 			// panel1

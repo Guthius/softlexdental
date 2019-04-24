@@ -313,7 +313,6 @@ namespace OpenDental{
 			this.gridEquip.Size = new System.Drawing.Size(372, 180);
 			this.gridEquip.TabIndex = 18;
 			this.gridEquip.Title = "Equipment";
-			this.gridEquip.TranslationName = "TableEquipment";
 			// 
 			// gridDispSupply
 			// 
@@ -325,7 +324,6 @@ namespace OpenDental{
 			this.gridDispSupply.Size = new System.Drawing.Size(378, 180);
 			this.gridDispSupply.TabIndex = 17;
 			this.gridDispSupply.Title = "Dispensed Supply";
-			this.gridDispSupply.TranslationName = "TableDispensed";
 			// 
 			// gridSupply
 			// 
@@ -337,7 +335,6 @@ namespace OpenDental{
 			this.gridSupply.Size = new System.Drawing.Size(372, 310);
 			this.gridSupply.TabIndex = 16;
 			this.gridSupply.Title = "Supply";
-			this.gridSupply.TranslationName = "TableSupply";
 			// 
 			// gridStudents
 			// 
@@ -349,7 +346,6 @@ namespace OpenDental{
 			this.gridStudents.Size = new System.Drawing.Size(378, 310);
 			this.gridStudents.TabIndex = 15;
 			this.gridStudents.Title = "Students";
-			this.gridStudents.TranslationName = "TableStudents";
 			this.gridStudents.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridStudents_CellClick);
 			// 
 			// butScan

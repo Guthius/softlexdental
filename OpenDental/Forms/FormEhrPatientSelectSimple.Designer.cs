@@ -46,7 +46,6 @@
 			this.gridMain.Size = new System.Drawing.Size(559, 527);
 			this.gridMain.TabIndex = 10;
 			this.gridMain.Title = "Select Patient";
-			this.gridMain.TranslationName = "FormPatientSelect";
 			this.gridMain.WrapText = false;
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 

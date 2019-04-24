@@ -108,9 +108,6 @@ namespace OpenDental{
 			this.gridSubs.Size = new System.Drawing.Size(532, 619);
 			this.gridSubs.TabIndex = 4;
 			this.gridSubs.Title = "Submissions";
-			this.gridSubs.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridSubs.TitleHeight = 18;
-			this.gridSubs.TranslationName = "TableSubmissions";
 			this.gridSubs.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSubs_CellDoubleClick);
 			this.gridSubs.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSubs_CellClick);
 			// 

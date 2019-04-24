@@ -109,8 +109,6 @@ namespace OpenDental{
 			this.gridRace.Size = new System.Drawing.Size(321, 222);
 			this.gridRace.TabIndex = 56;
 			this.gridRace.Title = "Race";
-			this.gridRace.TitleHeight = 18;
-			this.gridRace.TranslationName = "FormPatientRaceEthnicity";
 			// 
 			// gridEthnicity
 			// 
@@ -125,8 +123,6 @@ namespace OpenDental{
 			this.gridEthnicity.Size = new System.Drawing.Size(321, 219);
 			this.gridEthnicity.TabIndex = 60;
 			this.gridEthnicity.Title = "Ethnicity";
-			this.gridEthnicity.TitleHeight = 18;
-			this.gridEthnicity.TranslationName = "FormPatientRaceEthnicity";
 			// 
 			// treeRaces
 			// 

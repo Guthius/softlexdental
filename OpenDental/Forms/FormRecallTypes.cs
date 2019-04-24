@@ -105,7 +105,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(842,262);
 			this.gridMain.TabIndex = 11;
 			this.gridMain.Title = "RecallTypes";
-			this.gridMain.TranslationName = "TableRecallTypes";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butAdd

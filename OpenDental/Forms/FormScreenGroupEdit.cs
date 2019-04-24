@@ -278,9 +278,6 @@ namespace OpenDental{
 			this.gridScreenPats.Size = new System.Drawing.Size(390, 144);
 			this.gridScreenPats.TabIndex = 148;
 			this.gridScreenPats.Title = "Patients for Screening";
-			this.gridScreenPats.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridScreenPats.TitleHeight = 18;
-			this.gridScreenPats.TranslationName = "TableScreeningGroupPatients";
 			this.gridScreenPats.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridScreenPats_CellDoubleClick);
 			// 
 			// gridMain
@@ -300,9 +297,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(860, 438);
 			this.gridMain.TabIndex = 147;
 			this.gridMain.Title = "Screenings";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableScreenings";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butStartScreens

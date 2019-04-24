@@ -130,9 +130,6 @@
 			this.gridPriorities.Size = new System.Drawing.Size(359, 96);
 			this.gridPriorities.TabIndex = 106;
 			this.gridPriorities.Title = "Contact Methods";
-			this.gridPriorities.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridPriorities.TitleHeight = 18;
-			this.gridPriorities.TranslationName = "TableContactMethods";
 			// 
 			// butUp
 			// 

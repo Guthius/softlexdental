@@ -275,9 +275,6 @@
 			this.gridReject.Size = new System.Drawing.Size(295, 166);
 			this.gridReject.TabIndex = 11;
 			this.gridReject.Title = "Reject Reasons";
-			this.gridReject.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridReject.TitleHeight = 18;
-			this.gridReject.TranslationName = "TableReject";
 			// 
 			// gridCondition
 			// 
@@ -297,9 +294,6 @@
 			this.gridCondition.Size = new System.Drawing.Size(295, 166);
 			this.gridCondition.TabIndex = 5;
 			this.gridCondition.Title = "Condition Codes";
-			this.gridCondition.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridCondition.TitleHeight = 18;
-			this.gridCondition.TranslationName = "TableCodes";
 			// 
 			// FormEhrLabSpecimenEdit
 			// 

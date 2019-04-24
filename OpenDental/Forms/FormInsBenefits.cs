@@ -1189,9 +1189,6 @@ namespace OpenDental{
 			this.gridBenefits.Size = new System.Drawing.Size(574, 180);
 			this.gridBenefits.TabIndex = 37;
 			this.gridBenefits.Title = "Other Benefits";
-			this.gridBenefits.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridBenefits.TitleHeight = 18;
-			this.gridBenefits.TranslationName = "TableInsBenefits";
 			this.gridBenefits.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridBenefits_CellDoubleClick);
 			// 
 			// butDelete

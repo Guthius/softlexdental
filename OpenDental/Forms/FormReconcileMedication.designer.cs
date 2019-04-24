@@ -48,7 +48,6 @@ namespace OpenDental{
 			this.gridMedExisting.Size = new System.Drawing.Size(480, 245);
 			this.gridMedExisting.TabIndex = 65;
 			this.gridMedExisting.Title = "Current Medications";
-			this.gridMedExisting.TranslationName = "GridMedExisting";
 			// 
 			// gridMedImport
 			// 
@@ -62,7 +61,6 @@ namespace OpenDental{
 			this.gridMedImport.Size = new System.Drawing.Size(480, 245);
 			this.gridMedImport.TabIndex = 77;
 			this.gridMedImport.Title = "Transition of Care/Referral Summary";
-			this.gridMedImport.TranslationName = "GridMedImport";
 			// 
 			// gridMedReconcile
 			// 
@@ -76,7 +74,6 @@ namespace OpenDental{
 			this.gridMedReconcile.Size = new System.Drawing.Size(973, 300);
 			this.gridMedReconcile.TabIndex = 67;
 			this.gridMedReconcile.Title = "Reconciled Medications";
-			this.gridMedReconcile.TranslationName = "gridMedReconcile";
 			// 
 			// butRemoveRec
 			// 

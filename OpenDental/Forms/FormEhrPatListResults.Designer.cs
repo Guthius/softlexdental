@@ -90,7 +90,6 @@
 			this.gridMain.Size = new System.Drawing.Size(781, 367);
 			this.gridMain.TabIndex = 10;
 			this.gridMain.Title = "Results";
-			this.gridMain.TranslationName = "FormPatientListResults";
 			// 
 			// butPrint
 			// 

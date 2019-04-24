@@ -156,9 +156,6 @@ namespace OpenDental{
 			this.gridMain.TabIndex = 18;
 			this.gridMain.TabStop = false;
 			this.gridMain.Title = "Links";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableLinks";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// FormJobLinks

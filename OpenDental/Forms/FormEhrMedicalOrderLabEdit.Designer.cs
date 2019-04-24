@@ -137,9 +137,6 @@
 			this.gridMain.Size = new System.Drawing.Size(385, 131);
 			this.gridMain.TabIndex = 24;
 			this.gridMain.Title = "Attached Lab Panels";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableAttachedPanels";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butAttach

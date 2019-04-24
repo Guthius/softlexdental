@@ -1483,9 +1483,6 @@
 			this.gridNotes.Size = new System.Drawing.Size(287, 208);
 			this.gridNotes.TabIndex = 232;
 			this.gridNotes.Title = "Notes";
-			this.gridNotes.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridNotes.TitleHeight = 18;
-			this.gridNotes.TranslationName = "TableNotes";
 			this.gridNotes.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridNotes_CellDoubleClick);
 			// 
 			// FormEhrLabResultEdit2014

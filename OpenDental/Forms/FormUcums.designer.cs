@@ -62,7 +62,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(675, 641);
 			this.gridMain.TabIndex = 20;
 			this.gridMain.Title = "UCUM Codes";
-			this.gridMain.TranslationName = "";
 			this.gridMain.WrapText = false;
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 

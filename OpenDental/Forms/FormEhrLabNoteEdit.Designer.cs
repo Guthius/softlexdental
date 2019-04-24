@@ -61,9 +61,6 @@
 			this.gridMain.Size = new System.Drawing.Size(609, 339);
 			this.gridMain.TabIndex = 5;
 			this.gridMain.Title = "Lab Note Comments";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableLabNote";
 			// 
 			// butSave
 			// 

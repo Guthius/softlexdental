@@ -288,9 +288,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(859, 415);
 			this.gridMain.TabIndex = 1;
 			this.gridMain.Title = "Incomplete Procedure Notes";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableIncompleteProcNotes";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 

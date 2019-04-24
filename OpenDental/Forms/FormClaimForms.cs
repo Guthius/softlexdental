@@ -251,9 +251,6 @@ namespace OpenDental{
 			this.gridCustom.Size = new System.Drawing.Size(260, 372);
 			this.gridCustom.TabIndex = 17;
 			this.gridCustom.Title = "Custom Claim Forms";
-			this.gridCustom.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridCustom.TitleHeight = 18;
-			this.gridCustom.TranslationName = "TableClaimFormsCustom";
 			this.gridCustom.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCustom_CellDoubleClick);
 			// 
 			// gridInternal
@@ -273,9 +270,6 @@ namespace OpenDental{
 			this.gridInternal.Size = new System.Drawing.Size(186, 372);
 			this.gridInternal.TabIndex = 16;
 			this.gridInternal.Title = "Internal Claim Forms";
-			this.gridInternal.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridInternal.TitleHeight = 18;
-			this.gridInternal.TranslationName = "TableClaimFormsInternal";
 			this.gridInternal.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridInternal_CellDoubleClick);
 			// 
 			// butCopy

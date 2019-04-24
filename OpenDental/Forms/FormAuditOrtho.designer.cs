@@ -57,7 +57,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(731, 547);
 			this.gridMain.TabIndex = 3;
 			this.gridMain.Title = "Audit Trail";
-			this.gridMain.TranslationName = "TableOrthoAudit";
 			// 
 			// gridHist
 			// 
@@ -71,7 +70,6 @@ namespace OpenDental{
 			this.gridHist.Size = new System.Drawing.Size(160, 547);
 			this.gridHist.TabIndex = 6;
 			this.gridHist.Title = "Date Service";
-			this.gridHist.TranslationName = "OrthoAudit";
 			this.gridHist.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridHist_CellClick);
 			// 
 			// FormAuditOrtho

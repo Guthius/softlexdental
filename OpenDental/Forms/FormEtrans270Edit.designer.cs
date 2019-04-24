@@ -146,9 +146,6 @@ namespace OpenDental{
 			this.gridBen.Size = new System.Drawing.Size(383, 246);
 			this.gridBen.TabIndex = 118;
 			this.gridBen.Title = "Current Benefits";
-			this.gridBen.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridBen.TitleHeight = 18;
-			this.gridBen.TranslationName = "FormEtrans270Edit";
 			this.gridBen.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridBen_CellDoubleClick);
 			// 
 			// gridDates
@@ -166,9 +163,6 @@ namespace OpenDental{
 			this.gridDates.Size = new System.Drawing.Size(407, 119);
 			this.gridDates.TabIndex = 117;
 			this.gridDates.Title = "Dates";
-			this.gridDates.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridDates.TitleHeight = 18;
-			this.gridDates.TranslationName = "FormEtrans270Edit";
 			// 
 			// gridMain
 			// 
@@ -188,9 +182,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(956, 254);
 			this.gridMain.TabIndex = 114;
 			this.gridMain.Title = "Response Benefit Information";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "FormEtrans270Edit";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// groupImport

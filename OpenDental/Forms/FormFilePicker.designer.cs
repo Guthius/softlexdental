@@ -86,8 +86,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(356, 461);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Files in path";
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "FilePickerTable";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 

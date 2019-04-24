@@ -184,9 +184,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(675, 503);
 			this.gridMain.TabIndex = 140;
 			this.gridMain.Title = "Procedures";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableProcSelect";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 

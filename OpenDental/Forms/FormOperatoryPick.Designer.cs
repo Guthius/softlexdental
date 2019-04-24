@@ -43,8 +43,6 @@
 			this.gridMain.Size = new System.Drawing.Size(849, 449);
 			this.gridMain.TabIndex = 8;
 			this.gridMain.Title = "Select the Operatory to Keep";
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableOperatories";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butOK

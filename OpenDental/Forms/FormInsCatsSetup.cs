@@ -146,7 +146,6 @@ namespace OpenDental {
 			this.gridMain.Size = new System.Drawing.Size(476,578);
 			this.gridMain.TabIndex = 14;
 			this.gridMain.Title = "Coverage Spans";
-			this.gridMain.TranslationName = "TableCovSpans";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// groupBox1

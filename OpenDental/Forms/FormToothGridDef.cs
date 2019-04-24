@@ -118,7 +118,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(292, 425);
 			this.gridMain.TabIndex = 3;
 			this.gridMain.Title = "Fields Showing";
-			this.gridMain.TranslationName = "FormDisplayFields";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// labelCustomField

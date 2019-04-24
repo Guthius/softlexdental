@@ -106,9 +106,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(840, 429);
 			this.gridMain.TabIndex = 87;
 			this.gridMain.Title = "Messages";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableConfirmMsgs";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// comboStatusTextMessagedConfirm

@@ -259,9 +259,6 @@ namespace OpenDental{
 			this.gridProc.Size = new System.Drawing.Size(858, 222);
 			this.gridProc.TabIndex = 193;
 			this.gridProc.Title = "Procedures";
-			this.gridProc.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridProc.TitleHeight = 18;
-			this.gridProc.TranslationName = "TableProg";
 			// 
 			// textDateEntry
 			// 
@@ -366,9 +363,6 @@ namespace OpenDental{
 			this.gridPat.Size = new System.Drawing.Size(400, 81);
 			this.gridPat.TabIndex = 195;
 			this.gridPat.Title = "Patient Fields";
-			this.gridPat.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridPat.TitleHeight = 18;
-			this.gridPat.TranslationName = "TablePatient";
 			this.gridPat.Visible = false;
 			this.gridPat.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPat_CellDoubleClick);
 			// 
@@ -517,9 +511,6 @@ namespace OpenDental{
 			this.gridPlanned.Size = new System.Drawing.Size(400, 131);
 			this.gridPlanned.TabIndex = 204;
 			this.gridPlanned.Title = "Planned Appointments";
-			this.gridPlanned.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridPlanned.TitleHeight = 18;
-			this.gridPlanned.TranslationName = "TablePlannedAppts";
 			this.gridPlanned.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPlanned_CellDoubleClick);
 			// 
 			// butNew

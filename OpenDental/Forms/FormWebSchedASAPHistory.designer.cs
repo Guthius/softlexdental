@@ -71,9 +71,6 @@ namespace OpenDental{
 			this.gridHistory.Size = new System.Drawing.Size(811, 400);
 			this.gridHistory.TabIndex = 9;
 			this.gridHistory.Title = "Web Sched ASAP Messages";
-			this.gridHistory.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridHistory.TitleHeight = 18;
-			this.gridHistory.TranslationName = "";
 			// 
 			// datePicker
 			// 

@@ -282,9 +282,6 @@
 			this.gridMu.Size = new System.Drawing.Size(688, 598);
 			this.gridMu.TabIndex = 24;
 			this.gridMu.Title = "Stage 1 Meaningful Use for this patient";
-			this.gridMu.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMu.TitleHeight = 18;
-			this.gridMu.TranslationName = "TableMeaningfulUse";
 			this.gridMu.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMu_CellClick);
 			// 
 			// butClinicalSummary

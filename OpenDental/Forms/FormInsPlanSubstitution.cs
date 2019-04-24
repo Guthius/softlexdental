@@ -47,12 +47,12 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Rows.Clear();
 			if(gridMain.Columns.Count==0) {
-				gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"ProcCode"),90));
-				gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"AbbrDesc"),100));
-				gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"SubstOnlyIf"),100,_listSubConditions));//Dropdown combobox
-				gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"SubstCode"),90, isEditable: true));//Can edit cell
-				gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"SubstDesc"),90));
-				gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"InsOnly"),0));
+				gridMain.Columns.Add(new ODGridColumn("ProcCode",90));
+				gridMain.Columns.Add(new ODGridColumn("AbbrDesc",100));
+				gridMain.Columns.Add(new ODGridColumn("SubstOnlyIf",100,_listSubConditions));//Dropdown combobox
+				gridMain.Columns.Add(new ODGridColumn("SubstCode",90, isEditable: true));//Can edit cell
+				gridMain.Columns.Add(new ODGridColumn("SubstDesc",90));
+				gridMain.Columns.Add(new ODGridColumn("InsOnly",0));
 			}
 			//Add all substitution codes for procedure code level
 			foreach(ProcedureCode procCode in _listSubstProcCodes) {

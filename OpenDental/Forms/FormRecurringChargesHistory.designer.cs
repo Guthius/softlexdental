@@ -81,9 +81,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(1005, 584);
 			this.gridMain.TabIndex = 30;
 			this.gridMain.Title = "Recurring Charges";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableRecurring";
 			// 
 			// contextMenu
 			// 

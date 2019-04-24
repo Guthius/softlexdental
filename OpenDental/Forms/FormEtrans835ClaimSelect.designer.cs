@@ -104,9 +104,6 @@ namespace OpenDental{
 			this.gridClaims.Size = new System.Drawing.Size(744, 320);
 			this.gridClaims.TabIndex = 171;
 			this.gridClaims.Title = "Claims";
-			this.gridClaims.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridClaims.TitleHeight = 18;
-			this.gridClaims.TranslationName = "TableClaims";
 			this.gridClaims.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridClaims_CellDoubleClick);
 			this.gridClaims.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridClaims_CellClick);
 			// 
@@ -211,9 +208,6 @@ namespace OpenDental{
 			this.gridClaimDetails.Size = new System.Drawing.Size(582, 161);
 			this.gridClaimDetails.TabIndex = 173;
 			this.gridClaimDetails.Title = "Procedure Matching Details";
-			this.gridClaimDetails.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridClaimDetails.TitleHeight = 18;
-			this.gridClaimDetails.TranslationName = "TableDetails";
 			// 
 			// labelSplitClaims
 			// 

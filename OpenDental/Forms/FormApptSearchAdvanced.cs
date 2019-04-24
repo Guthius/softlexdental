@@ -144,11 +144,11 @@ namespace OpenDental {
 		private void FillGrid() {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(gridMain.TranslationName,"Day"),85);
+			ODGridColumn col=new ODGridColumn("Day",85);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(gridMain.TranslationName,"Date"),85,HorizontalAlignment.Center);
+			col=new ODGridColumn("Date",85,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(gridMain.TranslationName,"Time"),85,HorizontalAlignment.Center);
+			col=new ODGridColumn("Time",85,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;

@@ -71,9 +71,6 @@ namespace OpenDental{
 			this.gridEras.Size = new System.Drawing.Size(471, 259);
 			this.gridEras.TabIndex = 5;
 			this.gridEras.Title = "ERA List";
-			this.gridEras.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridEras.TitleHeight = 18;
-			this.gridEras.TranslationName = "TableERA";
 			this.gridEras.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridEras_CellDoubleClick);
 			// 
 			// FormEtrans835PickEra

@@ -160,9 +160,6 @@ namespace OpenDental {
 			this.gridConditions.Size = new System.Drawing.Size(397, 240);
 			this.gridConditions.TabIndex = 60;
 			this.gridConditions.Title = "Conditions";
-			this.gridConditions.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridConditions.TitleHeight = 18;
-			this.gridConditions.TranslationName = "FormRequiredFields";
 			this.gridConditions.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridConditions_CellDoubleClick);
 			// 
 			// butRight
@@ -195,9 +192,6 @@ namespace OpenDental {
 			this.gridMain.Size = new System.Drawing.Size(236, 484);
 			this.gridMain.TabIndex = 56;
 			this.gridMain.Title = "Required Fields";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "FormRequiredFields";
 			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
 			// butClose

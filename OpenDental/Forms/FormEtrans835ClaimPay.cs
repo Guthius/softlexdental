@@ -215,9 +215,6 @@ namespace OpenDental {
 			this.gridClaimAdjustments.TabIndex = 200;
 			this.gridClaimAdjustments.TabStop = false;
 			this.gridClaimAdjustments.Title = "EOB Claim Adjustments";
-			this.gridClaimAdjustments.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridClaimAdjustments.TitleHeight = 18;
-			this.gridClaimAdjustments.TranslationName = "FormEtrans835Edit";
 			this.gridClaimAdjustments.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridClaimAdjustments_CellDoubleClick);
 			// 
 			// gridProcedureBreakdown
@@ -239,9 +236,6 @@ namespace OpenDental {
 			this.gridProcedureBreakdown.TabIndex = 199;
 			this.gridProcedureBreakdown.TabStop = false;
 			this.gridProcedureBreakdown.Title = "EOB Procedure Breakdown";
-			this.gridProcedureBreakdown.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridProcedureBreakdown.TitleHeight = 18;
-			this.gridProcedureBreakdown.TranslationName = "FormEtrans835Edit";
 			this.gridProcedureBreakdown.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProcedureBreakdown_CellDoubleClick);
 			// 
 			// gridPayments
@@ -262,9 +256,6 @@ namespace OpenDental {
 			this.gridPayments.Size = new System.Drawing.Size(956, 257);
 			this.gridPayments.TabIndex = 125;
 			this.gridPayments.Title = "Enter Payments";
-			this.gridPayments.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridPayments.TitleHeight = 18;
-			this.gridPayments.TranslationName = "TableClaimProc";
 			this.gridPayments.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			this.gridPayments.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPayments_CellClick);
 			this.gridPayments.CellTextChanged += new System.EventHandler(this.gridMain_CellTextChanged);

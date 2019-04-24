@@ -89,9 +89,6 @@ namespace OpenDental{
 			this.gridStudents.Size = new System.Drawing.Size(388, 459);
 			this.gridStudents.TabIndex = 14;
 			this.gridStudents.Title = "Students";
-			this.gridStudents.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridStudents.TitleHeight = 18;
-			this.gridStudents.TranslationName = "TableStudent";
 			// 
 			// label7
 			// 

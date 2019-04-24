@@ -127,8 +127,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(669, 671);
 			this.gridMain.TabIndex = 12;
 			this.gridMain.Title = "Contacts";
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableContact";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// FormContacts

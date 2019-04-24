@@ -139,9 +139,6 @@ namespace OpenDental{
 			this.gridInbox.Size = new System.Drawing.Size(1065, 606);
 			this.gridInbox.TabIndex = 140;
 			this.gridInbox.Title = "Inbox";
-			this.gridInbox.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridInbox.TitleHeight = 18;
-			this.gridInbox.TranslationName = "TableApptProcs";
 			this.gridInbox.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridInboxSent_CellDoubleClick);
 			this.gridInbox.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridInboxSent_CellClick);
 			// 
@@ -583,9 +580,6 @@ namespace OpenDental{
 			this.gridSent.Size = new System.Drawing.Size(1065, 606);
 			this.gridSent.TabIndex = 141;
 			this.gridSent.Title = "Sent Messages";
-			this.gridSent.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridSent.TitleHeight = 18;
-			this.gridSent.TranslationName = "TableApptProcs";
 			this.gridSent.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridInboxSent_CellDoubleClick);
 			this.gridSent.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridInboxSent_CellClick);
 			// 

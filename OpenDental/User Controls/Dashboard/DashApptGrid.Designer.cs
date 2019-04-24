@@ -46,9 +46,6 @@
 			this.gridMain.Size = new System.Drawing.Size(897, 398);
 			this.gridMain.TabIndex = 68;
 			this.gridMain.Title = "Appointments for Patient";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "FormDisplayFields";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// DashApptGrid

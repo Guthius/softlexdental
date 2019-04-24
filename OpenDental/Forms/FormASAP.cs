@@ -613,9 +613,6 @@ namespace OpenDental {
 			this.gridAppts.Size = new System.Drawing.Size(905, 357);
 			this.gridAppts.TabIndex = 8;
 			this.gridAppts.Title = "Appointment ASAP List";
-			this.gridAppts.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridAppts.TitleHeight = 18;
-			this.gridAppts.TranslationName = "TableASAP";
 			this.gridAppts.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAppts_CellDoubleClick);
 			this.gridAppts.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridAppts_MouseUp);
 			// 
@@ -658,9 +655,6 @@ namespace OpenDental {
 			this.gridRecalls.Size = new System.Drawing.Size(910, 334);
 			this.gridRecalls.TabIndex = 9;
 			this.gridRecalls.Title = "Recall ASAP List";
-			this.gridRecalls.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridRecalls.TitleHeight = 18;
-			this.gridRecalls.TranslationName = "TableASAP";
 			this.gridRecalls.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridRecalls_CellDoubleClick);
 			// 
 			// textDateStart
@@ -745,9 +739,6 @@ namespace OpenDental {
 			this.gridWebSched.TabIndex = 9;
 			this.gridWebSched.TabStop = false;
 			this.gridWebSched.Title = "Web Sched ASAP Messages";
-			this.gridWebSched.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridWebSched.TitleHeight = 18;
-			this.gridWebSched.TranslationName = "";
 			// 
 			// mainMenu
 			// 

@@ -149,9 +149,6 @@ namespace OpenDental{
 			this.gridSprints.Size = new System.Drawing.Size(253, 555);
 			this.gridSprints.TabIndex = 0;
 			this.gridSprints.Title = "Sprints";
-			this.gridSprints.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridSprints.TitleHeight = 18;
-			this.gridSprints.TranslationName = "Jobs";
 			this.gridSprints.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSprints_CellClick);
 			this.gridSprints.TitleAddClick += new System.EventHandler(this.gridSprints_TitleAddClick);
 			this.gridSprints.MouseClick += new System.Windows.Forms.MouseEventHandler(this.gridSprints_MouseClick);
@@ -219,9 +216,6 @@ namespace OpenDental{
 			this.gridJobs.Size = new System.Drawing.Size(1223, 313);
 			this.gridJobs.TabIndex = 12;
 			this.gridJobs.Title = "Jobs";
-			this.gridJobs.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridJobs.TitleHeight = 18;
-			this.gridJobs.TranslationName = "Jobs";
 			this.gridJobs.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridJobs_CellDoubleClick);
 			// 
 			// panel1

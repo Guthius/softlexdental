@@ -64,9 +64,6 @@ namespace OpenDental{
 			this.gridProviders.Size = new System.Drawing.Size(446, 242);
 			this.gridProviders.TabIndex = 4;
 			this.gridProviders.Title = "Providers";
-			this.gridProviders.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridProviders.TitleHeight = 18;
-			this.gridProviders.TranslationName = "TableProviders";
 			// 
 			// butNotIdpd
 			// 

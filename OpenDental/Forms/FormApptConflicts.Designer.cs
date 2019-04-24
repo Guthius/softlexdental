@@ -62,9 +62,6 @@
 			this.gridConflicts.ScrollValue = 0;
 			this.gridConflicts.Size = new System.Drawing.Size(836, 616);
 			this.gridConflicts.TabIndex = 23;
-			this.gridConflicts.Title = "Conflicting Appoinments";
-			this.gridConflicts.TitleHeight = 18;
-			this.gridConflicts.TranslationName = "TableApptConflicts";
 			this.gridConflicts.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridConflicts_DoubleClick);
 			// 
 			// butClose

@@ -114,9 +114,6 @@
 			this.gridOptions.Size = new System.Drawing.Size(645, 59);
 			this.gridOptions.TabIndex = 318;
 			this.gridOptions.Title = "Options";
-			this.gridOptions.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridOptions.TitleHeight = 18;
-			this.gridOptions.TranslationName = "FormEServicesSetup";
 			this.gridOptions.WrapText = false;
 			this.gridOptions.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridOptions_CellClick);
 			// 

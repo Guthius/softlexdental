@@ -217,9 +217,6 @@ namespace OpenDental{
 			this.gridBill.Size = new System.Drawing.Size(772, 590);
 			this.gridBill.TabIndex = 28;
 			this.gridBill.Title = "Bills";
-			this.gridBill.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridBill.TitleHeight = 18;
-			this.gridBill.TranslationName = "TableBilling";
 			this.gridBill.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridBill_CellDoubleClick);
 			this.gridBill.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridBill_CellClick);
 			this.gridBill.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridBill_MouseDown);

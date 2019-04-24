@@ -209,9 +209,6 @@ namespace OpenDental{
 			this.gridFormats.Size = new System.Drawing.Size(821, 223);
 			this.gridFormats.TabIndex = 8;
 			this.gridFormats.Title = "Available Graphics Formats";
-			this.gridFormats.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridFormats.TitleHeight = 18;
-			this.gridFormats.TranslationName = "TaleFormats";
 			this.gridFormats.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridFormats_CellClick);
 			// 
 			// radioSimpleChart

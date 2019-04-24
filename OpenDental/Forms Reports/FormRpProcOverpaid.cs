@@ -179,9 +179,6 @@ namespace OpenDental {
 			this.gridMain.Size = new System.Drawing.Size(991, 581);
 			this.gridMain.TabIndex = 69;
 			this.gridMain.Title = "Procedures Overpaid";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableProcedures";
 			// 
 			// contextMenuGrid
 			// 

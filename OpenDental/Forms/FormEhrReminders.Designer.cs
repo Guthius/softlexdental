@@ -70,9 +70,6 @@
 			this.gridMain.Size = new System.Drawing.Size(535, 244);
 			this.gridMain.TabIndex = 3;
 			this.gridMain.Title = "Reminders";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableReminders";
 			// 
 			// butClose
 			// 
@@ -125,9 +122,6 @@
 			this.gridProvided.Size = new System.Drawing.Size(535, 258);
 			this.gridProvided.TabIndex = 7;
 			this.gridProvided.Title = "Reminders Sent";
-			this.gridProvided.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridProvided.TitleHeight = 18;
-			this.gridProvided.TranslationName = "TableRemindersSent";
 			// 
 			// butEdit
 			// 

@@ -107,9 +107,6 @@
 			this.gridAttachedImages.Size = new System.Drawing.Size(460, 231);
 			this.gridAttachedImages.TabIndex = 10;
 			this.gridAttachedImages.Title = "Images to Send";
-			this.gridAttachedImages.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridAttachedImages.TitleHeight = 18;
-			this.gridAttachedImages.TranslationName = "TableImagesToSend";
 			this.gridAttachedImages.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.CellDoubleClick_EditImage);
 			// 
 			// textClaimStatus

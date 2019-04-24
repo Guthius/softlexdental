@@ -48,9 +48,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(335, 235);
 			this.gridMain.TabIndex = 5;
 			this.gridMain.Title = "Grading Scales";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableScales";
 			this.gridMain.DoubleClick += new System.EventHandler(this.gridMain_DoubleClick);
 			// 
 			// butOK

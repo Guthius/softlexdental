@@ -172,9 +172,6 @@
 			this.gridCustomers.Size = new System.Drawing.Size(276, 100);
 			this.gridCustomers.TabIndex = 262;
 			this.gridCustomers.Title = "Customers";
-			this.gridCustomers.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridCustomers.TitleHeight = 18;
-			this.gridCustomers.TranslationName = "FormTaskEdit";
 			this.gridCustomers.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCustomers_CellClick);
 			this.gridCustomers.TitleAddClick += new System.EventHandler(this.gridCustomers_TitleAddClick);
 			// 
@@ -195,9 +192,6 @@
 			this.gridFiles.Size = new System.Drawing.Size(276, 105);
 			this.gridFiles.TabIndex = 260;
 			this.gridFiles.Title = "Files";
-			this.gridFiles.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridFiles.TitleHeight = 18;
-			this.gridFiles.TranslationName = "";
 			this.gridFiles.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridFiles_CellDoubleClick);
 			this.gridFiles.TitleAddClick += new System.EventHandler(this.gridFiles_TitleAddClick);
 			// 
@@ -218,9 +212,6 @@
 			this.gridSubscribers.Size = new System.Drawing.Size(276, 100);
 			this.gridSubscribers.TabIndex = 225;
 			this.gridSubscribers.Title = "Subscribers";
-			this.gridSubscribers.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridSubscribers.TitleHeight = 18;
-			this.gridSubscribers.TranslationName = "FormTaskEdit";
 			this.gridSubscribers.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridWatchers_CellClick);
 			this.gridSubscribers.TitleAddClick += new System.EventHandler(this.gridWatchers_TitleAddClick);
 			// 
@@ -241,9 +232,6 @@
 			this.gridBugs.Size = new System.Drawing.Size(276, 100);
 			this.gridBugs.TabIndex = 259;
 			this.gridBugs.Title = "Bugs/Enhancements";
-			this.gridBugs.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridBugs.TitleHeight = 18;
-			this.gridBugs.TranslationName = "FormTaskEdit";
 			this.gridBugs.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridBugs_CellDoubleClick);
 			this.gridBugs.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridBugs_CellClick);
 			this.gridBugs.TitleAddClick += new System.EventHandler(this.gridBugs_TitleAddClick);
@@ -265,9 +253,6 @@
 			this.gridQuotes.Size = new System.Drawing.Size(276, 100);
 			this.gridQuotes.TabIndex = 226;
 			this.gridQuotes.Title = "Quotes";
-			this.gridQuotes.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridQuotes.TitleHeight = 18;
-			this.gridQuotes.TranslationName = "FormTaskEdit";
 			this.gridQuotes.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCustomerQuotes_CellDoubleClick);
 			this.gridQuotes.TitleAddClick += new System.EventHandler(this.gridCustomerQuotes_TitleAddClick);
 			// 
@@ -288,9 +273,6 @@
 			this.gridFeatureReq.Size = new System.Drawing.Size(276, 100);
 			this.gridFeatureReq.TabIndex = 228;
 			this.gridFeatureReq.Title = "Feature Requests";
-			this.gridFeatureReq.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridFeatureReq.TitleHeight = 18;
-			this.gridFeatureReq.TranslationName = "FormTaskEdit";
 			this.gridFeatureReq.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridFeatureReq_CellDoubleClick);
 			this.gridFeatureReq.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridFeatureReq_CellClick);
 			this.gridFeatureReq.TitleAddClick += new System.EventHandler(this.gridFeatureReq_TitleAddClick);
@@ -312,9 +294,6 @@
 			this.gridTasks.Size = new System.Drawing.Size(276, 100);
 			this.gridTasks.TabIndex = 227;
 			this.gridTasks.Title = "Tasks";
-			this.gridTasks.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridTasks.TitleHeight = 18;
-			this.gridTasks.TranslationName = "FormTaskEdit";
 			this.gridTasks.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTasks_CellDoubleClick);
 			this.gridTasks.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTasks_CellClick);
 			this.gridTasks.TitleAddClick += new System.EventHandler(this.gridTasks_TitleAddClick);
@@ -336,9 +315,6 @@
 			this.gridAppointments.Size = new System.Drawing.Size(276, 100);
 			this.gridAppointments.TabIndex = 261;
 			this.gridAppointments.Title = "Appointments";
-			this.gridAppointments.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridAppointments.TitleHeight = 18;
-			this.gridAppointments.TranslationName = "gridAppts";
 			this.gridAppointments.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAppointments_CellDoubleClick);
 			this.gridAppointments.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAppointments_CellClick);
 			this.gridAppointments.TitleAddClick += new System.EventHandler(this.gridAppointments_TitleAddClick);
@@ -609,9 +585,6 @@
 			this.gridNotes.Size = new System.Drawing.Size(791, 190);
 			this.gridNotes.TabIndex = 194;
 			this.gridNotes.Title = "Discussion";
-			this.gridNotes.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridNotes.TitleHeight = 18;
-			this.gridNotes.TranslationName = "FormTaskEdit";
 			this.gridNotes.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridNotes_CellDoubleClick);
 			this.gridNotes.TitleAddClick += new System.EventHandler(this.gridNotes_TitleAddClick);
 			// 
@@ -644,9 +617,6 @@
 			this.gridReview.TabIndex = 21;
 			this.gridReview.TabStop = false;
 			this.gridReview.Title = "Reviews";
-			this.gridReview.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridReview.TitleHeight = 18;
-			this.gridReview.TranslationName = "TableReviews";
 			this.gridReview.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridReview_CellDoubleClick);
 			this.gridReview.TitleAddClick += new System.EventHandler(this.gridReview_TitleAddClick);
 			// 
@@ -719,9 +689,6 @@
 			this.gridLog.TabIndex = 19;
 			this.gridLog.TabStop = false;
 			this.gridLog.Title = "Log Events";
-			this.gridLog.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridLog.TitleHeight = 18;
-			this.gridLog.TranslationName = "TableHistoryEvents";
 			this.gridLog.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridHistory_CellDoubleClick);
 			// 
 			// panel1
@@ -833,9 +800,6 @@
 			this.gridTestingNotes.Size = new System.Drawing.Size(718, 159);
 			this.gridTestingNotes.TabIndex = 195;
 			this.gridTestingNotes.Title = "Notes";
-			this.gridTestingNotes.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridTestingNotes.TitleHeight = 18;
-			this.gridTestingNotes.TranslationName = "TableTestingNotes";
 			this.gridTestingNotes.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTestingNotes_CellDoubleClick);
 			this.gridTestingNotes.TitleAddClick += new System.EventHandler(this.gridTestingNotes_TitleAddClick);
 			// 
@@ -1045,9 +1009,6 @@
 			this.gridRoles.Size = new System.Drawing.Size(207, 220);
 			this.gridRoles.TabIndex = 304;
 			this.gridRoles.Title = "JobRoles";
-			this.gridRoles.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridRoles.TitleHeight = 18;
-			this.gridRoles.TranslationName = "FormTaskEdit";
 			// 
 			// textParent
 			// 

@@ -137,9 +137,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(516, 274);
 			this.gridMain.TabIndex = 39;
 			this.gridMain.Title = "Customers";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableCustomers";
 			// 
 			// gridServices
 			// 
@@ -159,9 +156,6 @@ namespace OpenDental{
 			this.gridServices.Size = new System.Drawing.Size(248, 274);
 			this.gridServices.TabIndex = 252;
 			this.gridServices.Title = "Available Services";
-			this.gridServices.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridServices.TitleHeight = 18;
-			this.gridServices.TranslationName = "TableAvailableServices";
 			this.gridServices.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridServices_CellDoubleClick);
 			// 
 			// label1

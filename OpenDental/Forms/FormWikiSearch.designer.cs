@@ -58,9 +58,6 @@ namespace OpenDental
             this.wikiPagesGrid.Size = new System.Drawing.Size(250, 580);
             this.wikiPagesGrid.TabIndex = 2;
             this.wikiPagesGrid.Title = "Wiki Pages";
-            this.wikiPagesGrid.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.wikiPagesGrid.TitleHeight = 18;
-            this.wikiPagesGrid.TranslationName = "TableWikiSearchPages";
             this.wikiPagesGrid.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.wikiPagesGrid_CellDoubleClick);
             this.wikiPagesGrid.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.wikiPagesGrid_CellClick);
             // 

@@ -65,9 +65,6 @@ namespace OpenDental{
 			this.gridInsPlanFiles.Size = new System.Drawing.Size(950, 512);
 			this.gridInsPlanFiles.TabIndex = 8;
 			this.gridInsPlanFiles.Title = "Ins Plan Files To Import";
-			this.gridInsPlanFiles.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridInsPlanFiles.TitleHeight = 18;
-			this.gridInsPlanFiles.TranslationName = "TableImport";
 			// 
 			// label2
 			// 

@@ -46,9 +46,6 @@
 			this.gridResultHist.Size = new System.Drawing.Size(950, 352);
 			this.gridResultHist.TabIndex = 5;
 			this.gridResultHist.Title = "Result History";
-			this.gridResultHist.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridResultHist.TitleHeight = 18;
-			this.gridResultHist.TranslationName = "TableResult";
 			// 
 			// butClose
 			// 

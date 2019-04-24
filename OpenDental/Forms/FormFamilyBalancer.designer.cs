@@ -178,9 +178,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(433, 278);
 			this.gridMain.TabIndex = 0;
 			this.gridMain.Title = "Family Balance Breakdown";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableFamilyBalanceBreakdown";
 			// 
 			// butTransfer
 			// 

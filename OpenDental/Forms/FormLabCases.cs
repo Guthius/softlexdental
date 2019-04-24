@@ -151,7 +151,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(916, 420);
 			this.gridMain.TabIndex = 1;
 			this.gridMain.Title = "Lab Cases";
-			this.gridMain.TranslationName = "TableLabCases";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butRefresh

@@ -207,9 +207,6 @@
 			this.gridMonday.Size = new System.Drawing.Size(210, 160);
 			this.gridMonday.TabIndex = 70;
 			this.gridMonday.Title = null;
-			this.gridMonday.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMonday.TitleHeight = 18;
-			this.gridMonday.TranslationName = "TableMonday";
 			// 
 			// butAddMonday
 			// 
@@ -262,9 +259,6 @@
 			this.gridSunday.Size = new System.Drawing.Size(210, 160);
 			this.gridSunday.TabIndex = 69;
 			this.gridSunday.Title = null;
-			this.gridSunday.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridSunday.TitleHeight = 18;
-			this.gridSunday.TranslationName = "TableSunday";
 			// 
 			// butAddSunday
 			// 
@@ -307,9 +301,6 @@
 			this.gridSaturday.Size = new System.Drawing.Size(210, 160);
 			this.gridSaturday.TabIndex = 100;
 			this.gridSaturday.Title = null;
-			this.gridSaturday.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridSaturday.TitleHeight = 18;
-			this.gridSaturday.TranslationName = "TableSaturday";
 			// 
 			// butAddSaturday
 			// 
@@ -352,9 +343,6 @@
 			this.gridFriday.Size = new System.Drawing.Size(210, 160);
 			this.gridFriday.TabIndex = 74;
 			this.gridFriday.Title = null;
-			this.gridFriday.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridFriday.TitleHeight = 18;
-			this.gridFriday.TranslationName = "TableFriday";
 			// 
 			// butAddFriday
 			// 
@@ -397,9 +385,6 @@
 			this.gridThursday.Size = new System.Drawing.Size(210, 160);
 			this.gridThursday.TabIndex = 73;
 			this.gridThursday.Title = null;
-			this.gridThursday.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridThursday.TitleHeight = 18;
-			this.gridThursday.TranslationName = "TableThursday";
 			// 
 			// butAddThursday
 			// 
@@ -442,9 +427,6 @@
 			this.gridWednesday.Size = new System.Drawing.Size(210, 160);
 			this.gridWednesday.TabIndex = 72;
 			this.gridWednesday.Title = null;
-			this.gridWednesday.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridWednesday.TitleHeight = 18;
-			this.gridWednesday.TranslationName = "TableWednesday";
 			// 
 			// butAddWednesday
 			// 
@@ -487,9 +469,6 @@
 			this.gridTuesday.Size = new System.Drawing.Size(210, 160);
 			this.gridTuesday.TabIndex = 71;
 			this.gridTuesday.Title = null;
-			this.gridTuesday.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridTuesday.TitleHeight = 18;
-			this.gridTuesday.TranslationName = "TableTuesday";
 			// 
 			// butAddTuesday
 			// 

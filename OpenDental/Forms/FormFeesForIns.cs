@@ -236,9 +236,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(799, 537);
 			this.gridMain.TabIndex = 2;
 			this.gridMain.Title = "Ins Plans that might need to be changed";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TablePlans";
 			// 
 			// butOK
 			// 

@@ -80,9 +80,6 @@ namespace OpenDental{
 			this.gridDisplayed.Size = new System.Drawing.Size(270, 360);
 			this.gridDisplayed.TabIndex = 4;
 			this.gridDisplayed.Title = "Visible Fields";
-			this.gridDisplayed.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridDisplayed.TitleHeight = 18;
-			this.gridDisplayed.TranslationName = "TableVisible";
 			// 
 			// gridHidden
 			// 
@@ -99,9 +96,6 @@ namespace OpenDental{
 			this.gridHidden.Size = new System.Drawing.Size(270, 360);
 			this.gridHidden.TabIndex = 5;
 			this.gridHidden.Title = "Hidden Fields ";
-			this.gridHidden.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridHidden.TitleHeight = 18;
-			this.gridHidden.TranslationName = "TableHidden";
 			// 
 			// butRight
 			// 

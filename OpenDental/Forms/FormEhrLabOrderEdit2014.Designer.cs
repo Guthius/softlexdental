@@ -1252,9 +1252,6 @@
 			this.gridResultsCopyTo.Size = new System.Drawing.Size(217, 101);
 			this.gridResultsCopyTo.TabIndex = 255;
 			this.gridResultsCopyTo.Title = "Results Copy To";
-			this.gridResultsCopyTo.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridResultsCopyTo.TitleHeight = 18;
-			this.gridResultsCopyTo.TranslationName = "TableResultsCopyTo";
 			// 
 			// butPatientPick
 			// 
@@ -1287,9 +1284,6 @@
 			this.gridClinicalInformation.Size = new System.Drawing.Size(206, 101);
 			this.gridClinicalInformation.TabIndex = 11;
 			this.gridClinicalInformation.Title = "Clinical Information";
-			this.gridClinicalInformation.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridClinicalInformation.TitleHeight = 18;
-			this.gridClinicalInformation.TranslationName = "TableClinicalInformation";
 			// 
 			// gridNotes
 			// 
@@ -1308,9 +1302,6 @@
 			this.gridNotes.Size = new System.Drawing.Size(428, 101);
 			this.gridNotes.TabIndex = 20;
 			this.gridNotes.Title = "Notes";
-			this.gridNotes.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridNotes.TitleHeight = 18;
-			this.gridNotes.TranslationName = "TableNotes";
 			this.gridNotes.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridNotes_CellDoubleClick);
 			// 
 			// gridSpecimen
@@ -1330,9 +1321,6 @@
 			this.gridSpecimen.Size = new System.Drawing.Size(206, 145);
 			this.gridSpecimen.TabIndex = 19;
 			this.gridSpecimen.Title = "Specimens";
-			this.gridSpecimen.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridSpecimen.TitleHeight = 18;
-			this.gridSpecimen.TranslationName = "TaleSpecimens";
 			this.gridSpecimen.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSpecimen_CellDoubleClick);
 			// 
 			// gridMain
@@ -1353,9 +1341,6 @@
 			this.gridMain.Size = new System.Drawing.Size(651, 165);
 			this.gridMain.TabIndex = 0;
 			this.gridMain.Title = "Lab Results";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableLabResults";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 

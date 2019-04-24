@@ -1318,9 +1318,6 @@
 			this.gridSent.Size = new System.Drawing.Size(261, 224);
 			this.gridSent.TabIndex = 0;
 			this.gridSent.Title = "Attachments Sent";
-			this.gridSent.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridSent.TitleHeight = 18;
-			this.gridSent.TranslationName = "gridSent";
 			this.gridSent.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSent_CellDoubleClick);
 			// 
 			// tabMisc
@@ -2897,9 +2894,6 @@
 			this.gridStatusHistory.Size = new System.Drawing.Size(1066, 233);
 			this.gridStatusHistory.TabIndex = 156;
 			this.gridStatusHistory.Title = "Claim Custom Tracking Status History";
-			this.gridStatusHistory.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridStatusHistory.TitleHeight = 18;
-			this.gridStatusHistory.TranslationName = "TableStatusHistory";
 			this.gridStatusHistory.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridStatusHistory_CellDoubleClick);
 			// 
 			// butViewEra
@@ -3080,9 +3074,6 @@
 			this.gridPay.Size = new System.Drawing.Size(569, 86);
 			this.gridPay.TabIndex = 135;
 			this.gridPay.Title = "Insurance Payments";
-			this.gridPay.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridPay.TitleHeight = 18;
-			this.gridPay.TranslationName = "TableClaimPay";
 			this.gridPay.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPay_CellDoubleClick);
 			this.gridPay.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPay_CellClick);
 			// 
@@ -3188,9 +3179,6 @@
 			this.gridProc.Size = new System.Drawing.Size(1087, 200);
 			this.gridProc.TabIndex = 128;
 			this.gridProc.Title = "Procedures";
-			this.gridProc.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridProc.TitleHeight = 18;
-			this.gridProc.TranslationName = "TableClaimProc";
 			this.gridProc.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProc_CellDoubleClick);
 			this.gridProc.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProc_CellClick);
 			// 

@@ -87,7 +87,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(516,181);
 			this.gridMain.TabIndex = 1;
 			this.gridMain.Title = "Insurance Plans for Family";
-			this.gridMain.TranslationName = "TableInsPlans";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// label1

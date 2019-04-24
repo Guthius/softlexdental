@@ -730,9 +730,7 @@ namespace OpenDental {
 			//The passed in textBox's tag points to the grid of options.
 			//The created grid's tag will point to the textBox.
 			if(textBox.Tag==null) {
-				textBox.Tag=new ODGrid() {
-					TranslationName="",
-				};
+				textBox.Tag=new ODGrid();
 			}
 			ODGrid gridContacts=(ODGrid)textBox.Tag;
 			//textBox.Text could contain multiple email addresses.
@@ -815,7 +813,6 @@ namespace OpenDental {
 			gridContacts.SelectionMode=GridSelectionMode.MultiExtended;
 			gridContacts.MouseClick+=EmailAuto_Click;
 			gridContacts.Tag=textBox;
-			gridContacts.TitleHeight=0;
 			gridContacts.Parent=this;
 			gridContacts.BringToFront();
 			Point menuPosition=textBox.Location;

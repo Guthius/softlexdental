@@ -231,9 +231,6 @@ namespace OpenDental
             this.itemsGrid.Size = new System.Drawing.Size(702, 544);
             this.itemsGrid.TabIndex = 6;
             this.itemsGrid.Title = "";
-            this.itemsGrid.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.itemsGrid.TitleHeight = 18;
-            this.itemsGrid.TranslationName = "";
             this.itemsGrid.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
             // 
             // cancelButton

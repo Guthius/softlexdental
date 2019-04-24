@@ -148,9 +148,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(1112, 517);
 			this.gridMain.TabIndex = 61;
 			this.gridMain.Title = "Claims Not Sent";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableClaimsNotSent";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// groupBoxFilters
@@ -267,22 +264,22 @@ namespace OpenDental{
 			gridMain.Columns.Clear();
 			ODGridColumn col;
 			if(PrefC.HasClinicsEnabled) {
-				col=new ODGridColumn(Lan.g(gridMain.TranslationName,"Clinic"),90);
+				col=new ODGridColumn("Clinic",90);
 				gridMain.Columns.Add(col);
 			}
-			col=new ODGridColumn(Lan.g(gridMain.TranslationName,"Date of Service"),90, sortingStrategy: ODGridSortingStrategy.DateParse);
+			col=new ODGridColumn("Date of Service",90, sortingStrategy: ODGridSortingStrategy.DateParse);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(gridMain.TranslationName,"Claim Type"),90);
+			col=new ODGridColumn("Claim Type",90);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(gridMain.TranslationName,"Claim Status"),100);
+			col=new ODGridColumn("Claim Status",100);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(gridMain.TranslationName,"Patient Name"),150);
+			col=new ODGridColumn("Patient Name",150);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(gridMain.TranslationName,"Carrier Name"),150);
+			col=new ODGridColumn("Carrier Name",150);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(gridMain.TranslationName,"Claim Fee"),90, sortingStrategy: ODGridSortingStrategy.AmountParse);
+			col=new ODGridColumn("Claim Fee",90, sortingStrategy: ODGridSortingStrategy.AmountParse);
 			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(gridMain.TranslationName,"Proc Codes"),100);
+			col=new ODGridColumn("Proc Codes",100);
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;

@@ -173,7 +173,6 @@ namespace OpenDental{
 			this.gridReqs.Size = new System.Drawing.Size(268,637);
 			this.gridReqs.TabIndex = 26;
 			this.gridReqs.Title = "Requirements";
-			this.gridReqs.TranslationName = "TableReqStudentMany";
 			// 
 			// butAdd
 			// 
@@ -217,7 +216,6 @@ namespace OpenDental{
 			this.gridAttached.Size = new System.Drawing.Size(384,225);
 			this.gridAttached.TabIndex = 23;
 			this.gridAttached.Title = "Currently Attached Requirements";
-			this.gridAttached.TranslationName = "TableReqStudentMany";
 			this.gridAttached.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAttached_CellDoubleClick);
 			// 
 			// gridStudents
@@ -229,7 +227,6 @@ namespace OpenDental{
 			this.gridStudents.Size = new System.Drawing.Size(207,637);
 			this.gridStudents.TabIndex = 3;
 			this.gridStudents.Title = "Students";
-			this.gridStudents.TranslationName = "TableReqStudentMany";
 			this.gridStudents.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridStudents_CellClick);
 			// 
 			// butCancel

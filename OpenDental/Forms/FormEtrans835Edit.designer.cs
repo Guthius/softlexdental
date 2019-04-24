@@ -412,9 +412,6 @@ namespace OpenDental{
 			this.gridProviderAdjustments.TabIndex = 170;
 			this.gridProviderAdjustments.TabStop = false;
 			this.gridProviderAdjustments.Title = "Provider Adjustments";
-			this.gridProviderAdjustments.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridProviderAdjustments.TitleHeight = 18;
-			this.gridProviderAdjustments.TranslationName = "FormEtrans835Edit";
 			this.gridProviderAdjustments.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProviderAdjustments_CellDoubleClick);
 			// 
 			// gridClaimDetails
@@ -437,9 +434,6 @@ namespace OpenDental{
 			this.gridClaimDetails.TabIndex = 0;
 			this.gridClaimDetails.TabStop = false;
 			this.gridClaimDetails.Title = "Claims Paid";
-			this.gridClaimDetails.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridClaimDetails.TitleHeight = 18;
-			this.gridClaimDetails.TranslationName = "FormEtrans835Edit";
 			this.gridClaimDetails.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridClaimDetails_CellDoubleClick);
 			// 
 			// groupBalancing

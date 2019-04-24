@@ -1684,9 +1684,6 @@
 			this.gridPay.Size = new System.Drawing.Size(449, 72);
 			this.gridPay.TabIndex = 117;
 			this.gridPay.Title = "Patient Payments";
-			this.gridPay.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridPay.TitleHeight = 18;
-			this.gridPay.TranslationName = "TableProcPay";
 			this.gridPay.WrapText = false;
 			this.gridPay.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPay_CellDoubleClick);
 			// 
@@ -1705,9 +1702,6 @@
 			this.gridAdj.Size = new System.Drawing.Size(494, 72);
 			this.gridAdj.TabIndex = 116;
 			this.gridAdj.Title = "Adjustments";
-			this.gridAdj.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridAdj.TitleHeight = 18;
-			this.gridAdj.TranslationName = "TableProcAdj";
 			this.gridAdj.WrapText = false;
 			this.gridAdj.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAdj_CellDoubleClick);
 			// 
@@ -1776,9 +1770,6 @@
 			this.gridIns.Size = new System.Drawing.Size(949, 102);
 			this.gridIns.TabIndex = 113;
 			this.gridIns.Title = "Insurance Estimates and Payments";
-			this.gridIns.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridIns.TitleHeight = 18;
-			this.gridIns.TranslationName = "TableProcIns";
 			this.gridIns.WrapText = false;
 			this.gridIns.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridIns_CellDoubleClick);
 			// 

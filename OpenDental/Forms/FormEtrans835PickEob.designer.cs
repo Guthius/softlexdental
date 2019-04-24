@@ -71,9 +71,6 @@ namespace OpenDental{
 			this.gridEobs.Size = new System.Drawing.Size(305, 259);
 			this.gridEobs.TabIndex = 5;
 			this.gridEobs.Title = "EOB List";
-			this.gridEobs.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridEobs.TitleHeight = 18;
-			this.gridEobs.TranslationName = "TableEOB";
 			this.gridEobs.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridEobs_CellDoubleClick);
 			// 
 			// FormEtrans835PickEob

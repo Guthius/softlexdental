@@ -76,8 +76,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(726, 642);
 			this.gridMain.TabIndex = 21;
 			this.gridMain.Title = "";
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableTimeCard";
 			// 
 			// butClose
 			// 

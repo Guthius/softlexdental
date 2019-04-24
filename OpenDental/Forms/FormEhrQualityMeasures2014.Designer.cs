@@ -136,9 +136,6 @@
 			this.gridMain.Size = new System.Drawing.Size(770, 366);
 			this.gridMain.TabIndex = 0;
 			this.gridMain.Title = "Clinical Quality Measures 2014";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableMeasures";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// FormEhrQualityMeasures2014

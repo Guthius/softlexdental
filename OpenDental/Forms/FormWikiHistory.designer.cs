@@ -90,9 +90,6 @@ namespace OpenDental
             this.wikiPagesGrid.Size = new System.Drawing.Size(250, 609);
             this.wikiPagesGrid.TabIndex = 0;
             this.wikiPagesGrid.Title = "Page History";
-            this.wikiPagesGrid.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.wikiPagesGrid.TitleHeight = 18;
-            this.wikiPagesGrid.TranslationName = "TableWikiHistory";
             this.wikiPagesGrid.Click += new System.EventHandler(this.gridMain_Click);
             // 
             // cancelButton

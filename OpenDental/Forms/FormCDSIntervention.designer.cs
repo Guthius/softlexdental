@@ -49,7 +49,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(899, 233);
 			this.gridMain.TabIndex = 5;
 			this.gridMain.Title = "CDS Interventions";
-			this.gridMain.TranslationName = "";
 			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
 			// butOK

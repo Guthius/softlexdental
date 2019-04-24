@@ -194,9 +194,6 @@ namespace OpenDental{
 			this.gridMessages.Size = new System.Drawing.Size(803, 593);
 			this.gridMessages.TabIndex = 4;
 			this.gridMessages.Title = "Text Messages - Right click for options - Unread messages always shown";
-			this.gridMessages.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMessages.TitleHeight = 18;
-			this.gridMessages.TranslationName = "FormSmsTextMessaging";
 			this.gridMessages.OnSelectionCommitted += new System.EventHandler(this.gridMessages_OnSelectionCommitted);
 			// 
 			// checkRead

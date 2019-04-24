@@ -940,9 +940,6 @@ namespace OpenDental{
 			this.gridNotes.TabIndex = 0;
 			this.gridNotes.TabStop = false;
 			this.gridNotes.Title = "Notes and Times for Specific Providers";
-			this.gridNotes.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridNotes.TitleHeight = 18;
-			this.gridNotes.TranslationName = "TableProcedureNotes";
 			this.gridNotes.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridNotes_CellDoubleClick);
 			// 
 			// tabPage2
@@ -979,9 +976,6 @@ namespace OpenDental{
 			this.gridTpNotes.TabIndex = 41;
 			this.gridTpNotes.TabStop = false;
 			this.gridTpNotes.Title = "Notes and Times for Specific Providers";
-			this.gridTpNotes.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridTpNotes.TitleHeight = 18;
-			this.gridTpNotes.TranslationName = "TableTpProcedureNotes";
 			this.gridTpNotes.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridTpNotes_CellDoubleClick);
 			// 
 			// textTpNote
@@ -1077,9 +1071,6 @@ namespace OpenDental{
 			this.gridFees.TabIndex = 0;
 			this.gridFees.TabStop = false;
 			this.gridFees.Title = "Default Fees";
-			this.gridFees.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridFees.TitleHeight = 18;
-			this.gridFees.TranslationName = "TableProcFee";
 			this.gridFees.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridFees_CellDoubleClick);
 			// 
 			// FormProcCodeEdit

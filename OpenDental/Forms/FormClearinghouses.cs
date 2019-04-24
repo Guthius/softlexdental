@@ -261,9 +261,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(879, 340);
 			this.gridMain.TabIndex = 17;
 			this.gridMain.Title = "Clearinghouses";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableClearinghouses";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// radioInterval

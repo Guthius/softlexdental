@@ -1049,7 +1049,7 @@ namespace OpenDental{
 			ODGridColumn gcol;
 			ODGridRow grow;
 			ODGrid gridPP = new ODGrid();
-			gridPP.TranslationName="";
+
 			this.Controls.Add(gridPP);
 			gridPP.BeginUpdate();
 			gridPP.Columns.Clear();
@@ -1118,7 +1118,7 @@ namespace OpenDental{
 			//Body Table definition---------------------------------------------------------------------------------------------
 			#region Body Table definition
 			ODGrid gridPat = new ODGrid();
-			gridPat.TranslationName="";
+
 			this.Controls.Add(gridPat);
 			gridPat.BeginUpdate();
 			gridPat.Columns.Clear();

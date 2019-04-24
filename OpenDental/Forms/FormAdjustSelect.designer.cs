@@ -204,9 +204,6 @@ namespace OpenDental{
 			this.gridAdjusts.Size = new System.Drawing.Size(322, 336);
 			this.gridAdjusts.TabIndex = 5;
 			this.gridAdjusts.Title = "Unattached Adjustments";
-			this.gridAdjusts.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridAdjusts.TitleHeight = 18;
-			this.gridAdjusts.TranslationName = "gridAdjusts";
 			this.gridAdjusts.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAdjusts_CellDoubleClick);
 			this.gridAdjusts.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAdjusts_CellClick);
 			// 

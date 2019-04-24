@@ -101,7 +101,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(451,527);
 			this.gridMain.TabIndex = 2;
 			this.gridMain.Title = "Images";
-			this.gridMain.TranslationName = "FormImageSelect";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// FormImageSelect

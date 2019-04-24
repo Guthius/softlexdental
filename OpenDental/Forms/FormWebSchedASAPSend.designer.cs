@@ -231,9 +231,6 @@ namespace OpenDental{
 			this.gridSendDetails.Size = new System.Drawing.Size(638, 164);
 			this.gridSendDetails.TabIndex = 82;
 			this.gridSendDetails.Title = "Send Details";
-			this.gridSendDetails.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridSendDetails.TitleHeight = 18;
-			this.gridSendDetails.TranslationName = "FormWebSchedASAPSend";
 			// 
 			// FormWebSchedASAPSend
 			// 

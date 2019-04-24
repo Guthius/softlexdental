@@ -303,9 +303,6 @@ namespace OpenDental{
 			this.gridClaimAdjustments.TabIndex = 198;
 			this.gridClaimAdjustments.TabStop = false;
 			this.gridClaimAdjustments.Title = "EOB Claim Adjustments";
-			this.gridClaimAdjustments.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridClaimAdjustments.TitleHeight = 18;
-			this.gridClaimAdjustments.TranslationName = "FormEtrans835Edit";
 			this.gridClaimAdjustments.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridClaimAdjustments_CellDoubleClick);
 			// 
 			// gridAdjudicationInfo
@@ -327,9 +324,6 @@ namespace OpenDental{
 			this.gridAdjudicationInfo.TabIndex = 197;
 			this.gridAdjudicationInfo.TabStop = false;
 			this.gridAdjudicationInfo.Title = "EOB Claim Adjudication Info";
-			this.gridAdjudicationInfo.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridAdjudicationInfo.TitleHeight = 18;
-			this.gridAdjudicationInfo.TranslationName = "FormEtrans835Edit";
 			this.gridAdjudicationInfo.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAdjudicationInfo_CellDoubleClick);
 			// 
 			// gridProcedureBreakdown
@@ -352,9 +346,6 @@ namespace OpenDental{
 			this.gridProcedureBreakdown.TabIndex = 0;
 			this.gridProcedureBreakdown.TabStop = false;
 			this.gridProcedureBreakdown.Title = "EOB Procedure Breakdown";
-			this.gridProcedureBreakdown.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridProcedureBreakdown.TitleHeight = 18;
-			this.gridProcedureBreakdown.TranslationName = "FormEtrans835Edit";
 			this.gridProcedureBreakdown.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProcedureBreakdown_CellDoubleClick);
 			// 
 			// butClose
@@ -391,9 +382,6 @@ namespace OpenDental{
 			this.gridSupplementalInfo.TabIndex = 211;
 			this.gridSupplementalInfo.TabStop = false;
 			this.gridSupplementalInfo.Title = "EOB Supplemental Info";
-			this.gridSupplementalInfo.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridSupplementalInfo.TitleHeight = 18;
-			this.gridSupplementalInfo.TranslationName = "FormEtrans835Edit";
 			this.gridSupplementalInfo.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSupplementalInfo_CellDoubleClick);
 			// 
 			// textDatePayerReceived

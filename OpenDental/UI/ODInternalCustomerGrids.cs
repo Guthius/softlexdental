@@ -102,9 +102,6 @@ namespace OpenDental.UI {
 			this.gridBugsInProgress.Size = new System.Drawing.Size(395, 246);
 			this.gridBugsInProgress.TabIndex = 1;
 			this.gridBugsInProgress.Title = "";
-			this.gridBugsInProgress.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridBugsInProgress.TitleHeight = 0;
-			this.gridBugsInProgress.TranslationName = "BugsGrid";
 			this.gridBugsInProgress.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridBugs_CellDoubleClick);
 			// 
 			// tabBugsFixed
@@ -136,9 +133,6 @@ namespace OpenDental.UI {
 			this.gridBugsFixed.Size = new System.Drawing.Size(395, 246);
 			this.gridBugsFixed.TabIndex = 0;
 			this.gridBugsFixed.Title = "";
-			this.gridBugsFixed.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridBugsFixed.TitleHeight = 0;
-			this.gridBugsFixed.TranslationName = "BugsGrid";
 			this.gridBugsFixed.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridBugs_CellDoubleClick);
 			// 
 			// tabBugSubs
@@ -170,9 +164,6 @@ namespace OpenDental.UI {
 			this.gridBugSubmissions.Size = new System.Drawing.Size(395, 246);
 			this.gridBugSubmissions.TabIndex = 1;
 			this.gridBugSubmissions.Title = "";
-			this.gridBugSubmissions.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridBugSubmissions.TitleHeight = 0;
-			this.gridBugSubmissions.TranslationName = "BugSubsGrid";
 			this.gridBugSubmissions.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridBugSubmissions_CellDoubleClick);
 			// 
 			// label1

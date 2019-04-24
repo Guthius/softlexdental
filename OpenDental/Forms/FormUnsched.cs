@@ -132,9 +132,6 @@ namespace OpenDental{
 			this.grid.Size = new System.Drawing.Size(775, 577);
 			this.grid.TabIndex = 8;
 			this.grid.Title = "Unscheduled List";
-			this.grid.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.grid.TitleHeight = 18;
-			this.grid.TranslationName = "TableUnsched";
 			this.grid.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellDoubleClick);
 			this.grid.MouseUp += new System.Windows.Forms.MouseEventHandler(this.grid_MouseUp);
 			// 
@@ -460,7 +457,7 @@ namespace OpenDental{
 			if(e.Button==MouseButtons.Right && grid.SelectedIndices.Length>0) {
 				//To maintain legacy behavior we will use the last selected index if multiple are selected.
 				Patient pat=Patients.GetLim(_listUnschedApt[grid.SelectedIndices[grid.SelectedIndices.Length-1]].PatNum);
-				toolStripMenuItemSelectPatient.Text=Lan.g(grid.TranslationName,"Select Patient")+" ("+pat.GetNameFL()+")";
+				toolStripMenuItemSelectPatient.Text="Select Patient ("+pat.GetNameFL()+")";
 			}
 		}
 

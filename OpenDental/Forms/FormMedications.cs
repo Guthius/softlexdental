@@ -172,9 +172,6 @@ namespace OpenDental{
 			this.gridAllMedications.Size = new System.Drawing.Size(907, 558);
 			this.gridAllMedications.TabIndex = 37;
 			this.gridAllMedications.Title = "All Medications";
-			this.gridAllMedications.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridAllMedications.TitleHeight = 18;
-			this.gridAllMedications.TranslationName = "FormMedications";
 			this.gridAllMedications.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAllMedications_CellDoubleClick);
 			this.gridAllMedications.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAllMedications_CellClick);
 			// 
@@ -319,9 +316,6 @@ namespace OpenDental{
 			this.gridMissing.Size = new System.Drawing.Size(907, 559);
 			this.gridMissing.TabIndex = 38;
 			this.gridMissing.Title = "Medications Missing Generic or Brand";
-			this.gridMissing.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMissing.TitleHeight = 18;
-			this.gridMissing.TranslationName = "FormMedications";
 			// 
 			// FormMedications
 			// 

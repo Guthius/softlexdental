@@ -237,9 +237,6 @@
 			this.gridMain.Size = new System.Drawing.Size(1003, 669);
 			this.gridMain.TabIndex = 8;
 			this.gridMain.Title = "ERAs";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableEtrans835s";
 			this.gridMain.DoubleClick += new System.EventHandler(this.gridMain_DoubleClick);
 			// 
 			// butClose

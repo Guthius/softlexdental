@@ -98,9 +98,8 @@ namespace OpenDental.UI {
 			this.gridMain.Size = new System.Drawing.Size(120, 70);
 			this.gridMain.TabIndex = 3;
 			this.gridMain.Title = null;
-			this.gridMain.TranslationName = "Misc";
 			this.gridMain.HeaderHeight=0;
-			this.gridMain.TitleHeight=0;
+            this.gridMain.TitleVisible = false;
 			this.gridMain.Visible = false;
 			this.gridMain.Margin=new Padding(0);
 			this.gridMain.Padding=new Padding(0);

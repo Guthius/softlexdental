@@ -260,9 +260,6 @@ namespace OpenDental {
 			this.gridEmp.Size = new System.Drawing.Size(428, 299);
 			this.gridEmp.TabIndex = 22;
 			this.gridEmp.Title = "Phones";
-			this.gridEmp.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridEmp.TitleHeight = 18;
-			this.gridEmp.TranslationName = "TableEmpClock";
 			this.gridEmp.WrapText = false;
 			this.gridEmp.CellClick += new EventHandler<UI.ODGridClickEventArgs>(this.gridEmp_CellClick);
 			this.gridEmp.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridEmp_MouseUp);

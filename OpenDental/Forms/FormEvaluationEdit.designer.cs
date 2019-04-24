@@ -219,7 +219,6 @@ namespace OpenDental{
 			this.gridGrades.Size = new System.Drawing.Size(314, 342);
 			this.gridGrades.TabIndex = 150;
 			this.gridGrades.Title = "Grading Scale";
-			this.gridGrades.TranslationName = "FormEvaluationDefEdit";
 			this.gridGrades.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridGrades_CellClick);
 			// 
 			// textDate
@@ -255,7 +254,6 @@ namespace OpenDental{
 			this.gridCriterion.Size = new System.Drawing.Size(487, 342);
 			this.gridCriterion.TabIndex = 143;
 			this.gridCriterion.Title = "Criterion";
-			this.gridCriterion.TranslationName = "FormEvaluationDefEdit";
 			this.gridCriterion.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCriterion_CellClick);
 			this.gridCriterion.CellLeave += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCriterion_CellLeave);
 			this.gridCriterion.CellEnter += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCriterion_CellEnter);

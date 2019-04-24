@@ -48,9 +48,6 @@
 			this.gridMain.Size = new System.Drawing.Size(470, 222);
 			this.gridMain.TabIndex = 25;
 			this.gridMain.Title = "Amendments";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableAmendments";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butClose

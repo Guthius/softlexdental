@@ -54,7 +54,6 @@ namespace OpenDental{
 			this.gridTaskHist.Size = new System.Drawing.Size(731, 377);
 			this.gridTaskHist.TabIndex = 5;
 			this.gridTaskHist.Title = "History";
-			this.gridTaskHist.TranslationName = "TableHist";
 			// 
 			// FormTaskHist
 			// 

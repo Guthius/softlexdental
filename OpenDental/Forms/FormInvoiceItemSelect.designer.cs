@@ -61,9 +61,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(559, 505);
 			this.gridMain.TabIndex = 140;
 			this.gridMain.Title = "Invoice Items";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableInvoiceItems";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butOK

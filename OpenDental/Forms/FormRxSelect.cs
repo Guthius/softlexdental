@@ -137,8 +137,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(738, 611);
 			this.gridMain.TabIndex = 16;
 			this.gridMain.Title = "Prescriptions";
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableRxSetup";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// groupBox1

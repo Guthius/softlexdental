@@ -438,9 +438,6 @@
 			this.gridObservations.Size = new System.Drawing.Size(254, 110);
 			this.gridObservations.TabIndex = 284;
 			this.gridObservations.Title = "Observations";
-			this.gridObservations.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridObservations.TitleHeight = 18;
-			this.gridObservations.TranslationName = "TableObservations";
 			this.gridObservations.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridObservations_CellDoubleClick);
 			this.gridObservations.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridObservations_CellClick);
 			// 

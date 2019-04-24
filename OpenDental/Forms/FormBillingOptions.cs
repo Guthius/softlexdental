@@ -477,9 +477,6 @@ namespace OpenDental{
 			this.gridDun.Size = new System.Drawing.Size(561, 366);
 			this.gridDun.TabIndex = 1;
 			this.gridDun.Title = "Dunning Messages";
-			this.gridDun.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridDun.TitleHeight = 18;
-			this.gridDun.TranslationName = "TableBillingMessages";
 			this.gridDun.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridDun_CellDoubleClick);
 			// 
 			// butDunningSetup

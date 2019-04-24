@@ -68,7 +68,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(299, 384);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = null;
-			this.gridMain.TranslationName = "TablePreviousVersions";
 			// 
 			// FormPreviousVersions
 			// 

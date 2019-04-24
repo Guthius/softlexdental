@@ -462,9 +462,6 @@
 			this.gridCustomerSubs.Size = new System.Drawing.Size(255, 118);
 			this.gridCustomerSubs.TabIndex = 44;
 			this.gridCustomerSubs.Title = "Customer Submissions";
-			this.gridCustomerSubs.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridCustomerSubs.TitleHeight = 18;
-			this.gridCustomerSubs.TranslationName = "TableSubmissions";
 			this.gridCustomerSubs.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCustomerSubs_CellDoubleClick);
 			this.gridCustomerSubs.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCustomerSubs_CellClick);
 			// 
@@ -486,9 +483,6 @@
 			this.gridOfficeInfo.Size = new System.Drawing.Size(255, 402);
 			this.gridOfficeInfo.TabIndex = 42;
 			this.gridOfficeInfo.Title = "Office Info";
-			this.gridOfficeInfo.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridOfficeInfo.TitleHeight = 18;
-			this.gridOfficeInfo.TranslationName = "TableOfficeInfo";
 			// 
 			// BugSubmissionControl
 			// 

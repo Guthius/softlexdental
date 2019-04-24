@@ -173,9 +173,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(950, 541);
 			this.gridMain.TabIndex = 16;
 			this.gridMain.Title = "Employee Time Cards";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableTimeCard";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butDaily

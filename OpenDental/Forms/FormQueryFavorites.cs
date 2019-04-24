@@ -172,9 +172,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(443, 509);
 			this.gridMain.TabIndex = 38;
 			this.gridMain.Title = "";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 0;
-			this.gridMain.TranslationName = "TableQueryFavorites";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
@@ -323,9 +320,9 @@ namespace OpenDental{
 			}
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"Query"),350));
+			gridMain.Columns.Add(new ODGridColumn("Query",350));
 			if(Security.IsAuthorized(Permissions.UserQueryAdmin,true)) {
-				gridMain.Columns.Add(new ODGridColumn(Lan.g(gridMain.TranslationName,"Released"),55,HorizontalAlignment.Center));
+				gridMain.Columns.Add(new ODGridColumn("Released",55,HorizontalAlignment.Center));
 			}
 			gridMain.Rows.Clear();
 			foreach(UserQuery queryCur in listDisplayQueries) {

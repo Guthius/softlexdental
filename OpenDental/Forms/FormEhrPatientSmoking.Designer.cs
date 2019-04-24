@@ -236,9 +236,6 @@
 			this.gridInterventions.Size = new System.Drawing.Size(559, 160);
 			this.gridInterventions.TabIndex = 9;
 			this.gridInterventions.Title = "Intervention History";
-			this.gridInterventions.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridInterventions.TitleHeight = 18;
-			this.gridInterventions.TranslationName = "TableIntervention";
 			this.gridInterventions.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridInterventions_CellDoubleClick);
 			// 
 			// radioMedInterventions
@@ -387,9 +384,6 @@
 			this.gridAssessments.Size = new System.Drawing.Size(559, 160);
 			this.gridAssessments.TabIndex = 9;
 			this.gridAssessments.Title = "Assessment History";
-			this.gridAssessments.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridAssessments.TitleHeight = 18;
-			this.gridAssessments.TranslationName = "TableAssessment";
 			this.gridAssessments.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridAssessments_CellDoubleClick);
 			// 
 			// radioAllStatuses

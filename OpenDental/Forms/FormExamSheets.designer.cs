@@ -113,9 +113,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(397, 390);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Exam Sheets";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "FormPatientForms";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butCancel

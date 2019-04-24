@@ -622,9 +622,6 @@ namespace OpenDental {
 			this.gridSpecialty.Size = new System.Drawing.Size(368, 105);
 			this.gridSpecialty.TabIndex = 0;
 			this.gridSpecialty.Title = "Clinic Specialty";
-			this.gridSpecialty.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridSpecialty.TitleHeight = 18;
-			this.gridSpecialty.TranslationName = "TableClinicSpecialty";
 			// 
 			// butAdd
 			// 
@@ -1230,7 +1227,7 @@ namespace OpenDental {
 			Dictionary<long,Def> dictClinicDefs=Defs.GetDefsForCategory(DefCat.ClinicSpecialty).ToDictionary(x => x.DefNum);
 			gridSpecialty.BeginUpdate();
 			gridSpecialty.Columns.Clear();
-			gridSpecialty.Columns.Add(new ODGridColumn(Lan.g(gridSpecialty.TranslationName,"Specialty"),100));
+			gridSpecialty.Columns.Add(new ODGridColumn("Specialty",100));
 			gridSpecialty.Rows.Clear();
 			ODGridRow row;
 			string specialtyDescript;

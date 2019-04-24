@@ -125,7 +125,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(553, 407);
 			this.gridMain.TabIndex = 193;
 			this.gridMain.Title = "Provider Keys";
-			this.gridMain.TranslationName = "";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// gridQ
@@ -141,7 +140,6 @@ namespace OpenDental{
 			this.gridQ.Size = new System.Drawing.Size(522, 407);
 			this.gridQ.TabIndex = 199;
 			this.gridQ.Title = "Quarterly Keys";
-			this.gridQ.TranslationName = "";
 			this.gridQ.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridQ_CellDoubleClick);
 			// 
 			// butAddQuarterly

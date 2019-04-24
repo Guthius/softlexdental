@@ -88,9 +88,6 @@ namespace OpenDental{
 			this.gridJobs.Size = new System.Drawing.Size(1078, 465);
 			this.gridJobs.TabIndex = 4;
 			this.gridJobs.Title = "Job Hours -";
-			this.gridJobs.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridJobs.TitleHeight = 18;
-			this.gridJobs.TranslationName = "JobTime";
 			this.gridJobs.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridJobs_CellDoubleClick);
 			// 
 			// FormJobTime

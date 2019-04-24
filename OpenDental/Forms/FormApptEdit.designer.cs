@@ -737,9 +737,6 @@
 			this.gridFields.Size = new System.Drawing.Size(259, 118);
 			this.gridFields.TabIndex = 159;
 			this.gridFields.Title = "Appt Fields";
-			this.gridFields.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridFields.TitleHeight = 18;
-			this.gridFields.TranslationName = "FormApptEdit";
 			this.gridFields.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridFields_CellDoubleClick);
 			// 
 			// gridPatient
@@ -759,9 +756,6 @@
 			this.gridPatient.Size = new System.Drawing.Size(258, 291);
 			this.gridPatient.TabIndex = 0;
 			this.gridPatient.Title = "Patient Info";
-			this.gridPatient.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridPatient.TitleHeight = 18;
-			this.gridPatient.TranslationName = "TableApptPtInfo";
 			this.gridPatient.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPatient_CellClick);
 			this.gridPatient.MouseMove += new System.Windows.Forms.MouseEventHandler(this.gridPatient_MouseMove);
 			// 
@@ -783,9 +777,6 @@
 			this.gridComm.Size = new System.Drawing.Size(335, 291);
 			this.gridComm.TabIndex = 1;
 			this.gridComm.Title = "Communications Log - Appointment Scheduling";
-			this.gridComm.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridComm.TitleHeight = 18;
-			this.gridComm.TranslationName = "TableCommLog";
 			this.gridComm.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridComm_CellDoubleClick);
 			this.gridComm.MouseMove += new System.Windows.Forms.MouseEventHandler(this.gridComm_MouseMove);
 			// 
@@ -808,9 +799,6 @@
 			this.gridProc.Size = new System.Drawing.Size(538, 375);
 			this.gridProc.TabIndex = 139;
 			this.gridProc.Title = "Procedures on this Appointment";
-			this.gridProc.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridProc.TitleHeight = 18;
-			this.gridProc.TranslationName = "TableApptProcs";
 			this.gridProc.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProc_CellDoubleClick);
 			this.gridProc.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProc_CellClick);
 			// 

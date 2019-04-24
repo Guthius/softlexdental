@@ -109,9 +109,6 @@ namespace OpenDental{
 			this.gridAll.Size = new System.Drawing.Size(426, 469);
 			this.gridAll.TabIndex = 59;
 			this.gridAll.Title = "Available Procedures";
-			this.gridAll.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridAll.TitleHeight = 18;
-			this.gridAll.TranslationName = "FormDisplayFields";
 			this.gridAll.MouseDown += new System.Windows.Forms.MouseEventHandler(this.grids_MouseDown);
 			// 
 			// gridTP
@@ -131,9 +128,6 @@ namespace OpenDental{
 			this.gridTP.Size = new System.Drawing.Size(426, 469);
 			this.gridTP.TabIndex = 56;
 			this.gridTP.Title = "Treatment Planned Procedures";
-			this.gridTP.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridTP.TitleHeight = 18;
-			this.gridTP.TranslationName = "FormDisplayFields";
 			this.gridTP.MouseDown += new System.Windows.Forms.MouseEventHandler(this.grids_MouseDown);
 			// 
 			// butMakeActive

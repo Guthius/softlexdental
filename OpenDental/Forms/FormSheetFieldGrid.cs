@@ -48,7 +48,6 @@ namespace OpenDental {
 			}
 			textWidth.Text=SheetFieldDefCur.Width.ToString();
 			UI.ODGrid odGrid=new ODGrid();
-			odGrid.TranslationName="";
 			using(Graphics g=Graphics.FromImage(new Bitmap(100,100))) {
 				if(SheetFieldDefCur.FieldName=="EraClaimsPaid" || SheetDefs.IsDashboardType(SheetDefCur) || _isDynamicSheetType) {
 					//Do not modify grid heights for Eras, Appt grid and dynamic layouts as the heights are calculated elsewhere.

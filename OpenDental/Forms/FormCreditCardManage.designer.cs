@@ -144,9 +144,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(378, 185);
 			this.gridMain.TabIndex = 41;
 			this.gridMain.Title = null;
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableManage";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// FormCreditCardManage

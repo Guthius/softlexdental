@@ -110,8 +110,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(851, 508);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Insurance Payments (EOBs)";
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "FormClaimPayList";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// labelClinic

@@ -51,7 +51,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(747, 605);
 			this.gridMain.TabIndex = 5;
 			this.gridMain.Title = "Sheet Import";
-			this.gridMain.TranslationName = "FormSheetImport";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 

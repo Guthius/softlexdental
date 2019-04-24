@@ -384,10 +384,6 @@ namespace OpenDental{
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.Size = new System.Drawing.Size(851, 580);
 			this.gridMain.TabIndex = 13;
-			this.gridMain.Title = "Time Card";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableTimeCard";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// textRateTwo2

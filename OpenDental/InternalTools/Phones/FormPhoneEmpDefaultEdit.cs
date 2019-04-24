@@ -381,9 +381,6 @@ namespace OpenDental{
 			this.gridGraph.Size = new System.Drawing.Size(162, 362);
 			this.gridGraph.TabIndex = 47;
 			this.gridGraph.Title = "Phone Graph Edits";
-			this.gridGraph.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridGraph.TitleHeight = 18;
-			this.gridGraph.TranslationName = "TablePhoneGraph";
 			this.gridGraph.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridGraph_CellDoubleClick);
 			// 
 			// textPhoneExt

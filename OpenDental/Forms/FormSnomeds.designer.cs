@@ -113,7 +113,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(830, 641);
 			this.gridMain.TabIndex = 20;
 			this.gridMain.Title = "SNOMED CT Codes";
-			this.gridMain.TranslationName = "FormSnomedctCodes";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 

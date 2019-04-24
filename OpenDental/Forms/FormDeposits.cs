@@ -101,8 +101,6 @@ namespace OpenDental{
 			this.grid.Size = new System.Drawing.Size(339, 567);
 			this.grid.TabIndex = 1;
 			this.grid.Title = "Deposit Slips";
-			this.grid.TitleHeight = 18;
-			this.grid.TranslationName = "TableDepositSlips";
 			this.grid.WrapText = false;
 			this.grid.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.grid_CellDoubleClick);
 			// 

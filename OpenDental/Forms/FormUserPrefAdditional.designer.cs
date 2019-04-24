@@ -79,9 +79,6 @@ namespace OpenDental {
 			this.gridUserProperties.Size = new System.Drawing.Size(249, 397);
 			this.gridUserProperties.TabIndex = 4;
 			this.gridUserProperties.Title = "Additional User Properties";
-			this.gridUserProperties.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridUserProperties.TitleHeight = 18;
-			this.gridUserProperties.TranslationName = "TableUserPrefProperties";
 			this.gridUserProperties.CellLeave += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProvProperties_CellLeave);
 			// 
 			// FormUserPrefAdditional

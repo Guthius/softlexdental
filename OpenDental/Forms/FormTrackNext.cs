@@ -132,9 +132,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(737, 541);
 			this.gridMain.TabIndex = 2;
 			this.gridMain.Title = "Planned Appointments";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "FormTrackNext";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			this.gridMain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.grid_MouseUp);
 			// 
@@ -503,7 +500,7 @@ namespace OpenDental{
 		private void grid_MouseUp(object sender,MouseEventArgs e) {
 			if(e.Button==MouseButtons.Right && gridMain.SelectedIndices.Length>0) {
 				Patient pat=Patients.GetLim(_listPlannedAppts[gridMain.SelectedIndices[gridMain.SelectedIndices.Length-1]].PatNum);
-				toolStripMenuItemSelectPatient.Text=Lan.g(gridMain.TranslationName,"Select Patient")+" ("+pat.GetNameFL()+")";
+				toolStripMenuItemSelectPatient.Text="Select Patient ("+pat.GetNameFL()+")";
 			}
 		}
 

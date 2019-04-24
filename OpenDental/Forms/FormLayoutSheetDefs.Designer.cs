@@ -96,9 +96,6 @@
 			this.gridOtherLayouts.Size = new System.Drawing.Size(370, 304);
 			this.gridOtherLayouts.TabIndex = 8;
 			this.gridOtherLayouts.Title = "Internal and Other User Layouts";
-			this.gridOtherLayouts.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridOtherLayouts.TitleHeight = 18;
-			this.gridOtherLayouts.TranslationName = "TableInternal";
 			this.gridOtherLayouts.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridOtherLayouts_CellDoubleClick);
 			this.gridOtherLayouts.Click += new System.EventHandler(this.gridOtherLayouts_Click);
 			// 
@@ -118,9 +115,6 @@
 			this.gridCustomLayouts.Size = new System.Drawing.Size(367, 304);
 			this.gridCustomLayouts.TabIndex = 9;
 			this.gridCustomLayouts.Title = "My Custom Layouts";
-			this.gridCustomLayouts.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridCustomLayouts.TitleHeight = 18;
-			this.gridCustomLayouts.TranslationName = "TableCustom";
 			this.gridCustomLayouts.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCustomLayouts_CellDoubleClick);
 			this.gridCustomLayouts.Click += new System.EventHandler(this.gridCustomLayouts_Click);
 			// 

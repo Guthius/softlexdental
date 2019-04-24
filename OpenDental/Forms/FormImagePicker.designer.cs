@@ -63,7 +63,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(248, 444);
 			this.gridMain.TabIndex = 16;
 			this.gridMain.Title = "Available Images";
-			this.gridMain.TranslationName = "TableWikiSearchPages";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 

@@ -86,9 +86,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(282, 560);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "PhoneComp Table";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TablePhoneComps";
 			this.gridMain.CellLeave += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellLeave);
 			// 
 			// listBoxComputers

@@ -564,9 +564,6 @@ namespace OpenDental{
 			this.gridListenerServiceStatusHistory.Size = new System.Drawing.Size(917, 157);
 			this.gridListenerServiceStatusHistory.TabIndex = 249;
 			this.gridListenerServiceStatusHistory.Title = "eConnector History";
-			this.gridListenerServiceStatusHistory.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridListenerServiceStatusHistory.TitleHeight = 18;
-			this.gridListenerServiceStatusHistory.TranslationName = "FormEServicesSetup";
 			this.gridListenerServiceStatusHistory.WrapText = false;
 			// 
 			// butStartListenerService
@@ -1232,9 +1229,6 @@ namespace OpenDental{
 			this.gridPatPortalInviteRules.Size = new System.Drawing.Size(379, 558);
 			this.gridPatPortalInviteRules.TabIndex = 171;
 			this.gridPatPortalInviteRules.Title = "Patient Portal Invite Rules";
-			this.gridPatPortalInviteRules.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridPatPortalInviteRules.TitleHeight = 18;
-			this.gridPatPortalInviteRules.TranslationName = "TableInviteRules";
 			this.gridPatPortalInviteRules.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPatPortalInviteRules_CellDoubleClick);
 			// 
 			// checkIsPPInvitesEnabled
@@ -1744,9 +1738,6 @@ namespace OpenDental{
 			this.gridWebSchedTimeSlots.Size = new System.Drawing.Size(174, 176);
 			this.gridWebSchedTimeSlots.TabIndex = 302;
 			this.gridWebSchedTimeSlots.Title = "Time Slots";
-			this.gridWebSchedTimeSlots.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridWebSchedTimeSlots.TitleHeight = 18;
-			this.gridWebSchedTimeSlots.TranslationName = "FormEServicesSetup";
 			this.gridWebSchedTimeSlots.WrapText = false;
 			// 
 			// textWebSchedDateStart
@@ -1817,9 +1808,6 @@ namespace OpenDental{
 			this.gridWebSchedOperatories.Size = new System.Drawing.Size(532, 202);
 			this.gridWebSchedOperatories.TabIndex = 307;
 			this.gridWebSchedOperatories.Title = "Operatories Considered";
-			this.gridWebSchedOperatories.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridWebSchedOperatories.TitleHeight = 18;
-			this.gridWebSchedOperatories.TranslationName = "FormEServicesSetup";
 			this.gridWebSchedOperatories.WrapText = false;
 			this.gridWebSchedOperatories.DoubleClick += new System.EventHandler(this.gridWebSchedOperatories_DoubleClick);
 			// 
@@ -1891,9 +1879,6 @@ namespace OpenDental{
 			this.gridWebSchedRecallTypes.Size = new System.Drawing.Size(342, 202);
 			this.gridWebSchedRecallTypes.TabIndex = 307;
 			this.gridWebSchedRecallTypes.Title = "Recall Types";
-			this.gridWebSchedRecallTypes.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridWebSchedRecallTypes.TitleHeight = 18;
-			this.gridWebSchedRecallTypes.TranslationName = "FormEServicesSetup";
 			this.gridWebSchedRecallTypes.WrapText = false;
 			this.gridWebSchedRecallTypes.DoubleClick += new System.EventHandler(this.gridWebSchedRecallTypes_DoubleClick);
 			// 
@@ -2103,9 +2088,6 @@ namespace OpenDental{
 			this.gridWebSchedNewPatApptOps.Size = new System.Drawing.Size(675, 142);
 			this.gridWebSchedNewPatApptOps.TabIndex = 309;
 			this.gridWebSchedNewPatApptOps.Title = "Operatories Considered";
-			this.gridWebSchedNewPatApptOps.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridWebSchedNewPatApptOps.TitleHeight = 18;
-			this.gridWebSchedNewPatApptOps.TranslationName = "FormEServicesSetup";
 			this.gridWebSchedNewPatApptOps.WrapText = false;
 			this.gridWebSchedNewPatApptOps.DoubleClick += new System.EventHandler(this.gridWebSchedNewPatApptOps_DoubleClick);
 			// 
@@ -2221,9 +2203,6 @@ namespace OpenDental{
 			this.gridWebSchedNewPatApptTimeSlots.Size = new System.Drawing.Size(174, 169);
 			this.gridWebSchedNewPatApptTimeSlots.TabIndex = 302;
 			this.gridWebSchedNewPatApptTimeSlots.Title = "Time Slots";
-			this.gridWebSchedNewPatApptTimeSlots.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridWebSchedNewPatApptTimeSlots.TitleHeight = 18;
-			this.gridWebSchedNewPatApptTimeSlots.TranslationName = "FormEServicesSetup";
 			this.gridWebSchedNewPatApptTimeSlots.WrapText = false;
 			// 
 			// textWebSchedNewPatApptsDateStart
@@ -2253,9 +2232,6 @@ namespace OpenDental{
 			this.gridWSNPAReasons.Size = new System.Drawing.Size(301, 142);
 			this.gridWSNPAReasons.TabIndex = 303;
 			this.gridWSNPAReasons.Title = "Appointment Types";
-			this.gridWSNPAReasons.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridWSNPAReasons.TitleHeight = 18;
-			this.gridWSNPAReasons.TranslationName = "FormEServicesSetup";
 			this.gridWSNPAReasons.DoubleClick += new System.EventHandler(this.gridWSNPAReasons_DoubleClick);
 			// 
 			// label41
@@ -2896,9 +2872,6 @@ namespace OpenDental{
 			this.gridSmsSummary.Size = new System.Drawing.Size(1150, 522);
 			this.gridSmsSummary.TabIndex = 252;
 			this.gridSmsSummary.Title = "Text Messaging Phone Number and Usage Summary";
-			this.gridSmsSummary.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridSmsSummary.TitleHeight = 18;
-			this.gridSmsSummary.TranslationName = "FormEServicesSetup";
 			this.gridSmsSummary.WrapText = false;
 			// 
 			// butFwdMonth
@@ -2989,9 +2962,6 @@ namespace OpenDental{
 			this.gridConfStatuses.Size = new System.Drawing.Size(272, 213);
 			this.gridConfStatuses.TabIndex = 265;
 			this.gridConfStatuses.Title = "Confirmation Statuses";
-			this.gridConfStatuses.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridConfStatuses.TitleHeight = 18;
-			this.gridConfStatuses.TranslationName = "TableStatuses";
 			this.gridConfStatuses.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridConfStatuses_CellDoubleClick);
 			// 
 			// checkUseDefaultsEC
@@ -3270,9 +3240,6 @@ namespace OpenDental{
 			this.gridRemindersMain.Size = new System.Drawing.Size(852, 517);
 			this.gridRemindersMain.TabIndex = 68;
 			this.gridRemindersMain.Title = "eReminder and eConfirmation Rules";
-			this.gridRemindersMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridRemindersMain.TitleHeight = 18;
-			this.gridRemindersMain.TranslationName = "TableRules";
 			this.gridRemindersMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridRemindersMain_CellDoubleClick);
 			// 
 			// tabMisc

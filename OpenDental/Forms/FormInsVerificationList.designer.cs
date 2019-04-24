@@ -190,9 +190,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(946, 312);
 			this.gridMain.TabIndex = 4;
 			this.gridMain.Title = "Insurance Verify List";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableInsVerify";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
@@ -223,9 +220,6 @@ namespace OpenDental{
 			this.gridPastDue.Size = new System.Drawing.Size(946, 312);
 			this.gridPastDue.TabIndex = 5;
 			this.gridPastDue.Title = "Insurance Verify List";
-			this.gridPastDue.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridPastDue.TitleHeight = 18;
-			this.gridPastDue.TranslationName = "TableInsVerify";
 			this.gridPastDue.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPastDue_CellDoubleClick);
 			this.gridPastDue.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPastDue_CellClick);
 			// 
@@ -569,9 +563,6 @@ namespace OpenDental{
 			this.gridAssign.Size = new System.Drawing.Size(950, 343);
 			this.gridAssign.TabIndex = 5;
 			this.gridAssign.Title = "Insurance Verification Assignment List";
-			this.gridAssign.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridAssign.TitleHeight = 18;
-			this.gridAssign.TranslationName = "TableInsVerifyAssign";
 			// 
 			// groupBox1
 			// 

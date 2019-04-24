@@ -69,9 +69,6 @@ namespace OpenDental {
 			this.gridMain.TabIndex = 0;
 			this.gridMain.Title = "Available Procedures                                                 Payment Plan" +
     " Credits              ";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TablePaymentPlanProcsAndCreds";
 			this.gridMain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridMain_MouseUp);
 			// 
 			// butOK

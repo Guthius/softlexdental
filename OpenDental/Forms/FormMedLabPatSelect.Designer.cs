@@ -63,9 +63,6 @@
 			this.gridLabs.Size = new System.Drawing.Size(800, 188);
 			this.gridLabs.TabIndex = 5;
 			this.gridLabs.Title = "Labs";
-			this.gridLabs.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridLabs.TitleHeight = 18;
-			this.gridLabs.TranslationName = "TableLabs";
 			// 
 			// butSave
 			// 
@@ -140,9 +137,6 @@
 			this.gridPidInfo.Size = new System.Drawing.Size(800, 117);
 			this.gridPidInfo.TabIndex = 251;
 			this.gridPidInfo.Title = "Patient Information From Message(s)";
-			this.gridPidInfo.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridPidInfo.TitleHeight = 18;
-			this.gridPidInfo.TranslationName = "TablePatientInformation";
 			// 
 			// FormMedLabPatSelect
 			// 

@@ -202,7 +202,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(589, 392);
 			this.gridMain.TabIndex = 202;
 			this.gridMain.Title = "Trigger Conditions";
-			this.gridMain.TranslationName = "";
 			this.gridMain.WrapText = false;
 			// 
 			// groupBox2

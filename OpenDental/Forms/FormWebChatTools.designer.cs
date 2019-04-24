@@ -73,9 +73,6 @@ namespace OpenDental{
 			this.gridWebChatSessions.Size = new System.Drawing.Size(1206, 566);
 			this.gridWebChatSessions.TabIndex = 4;
 			this.gridWebChatSessions.Title = "Web Chat Sessions";
-			this.gridWebChatSessions.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridWebChatSessions.TitleHeight = 18;
-			this.gridWebChatSessions.TranslationName = "gridWebChatSessions";
 			this.gridWebChatSessions.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridWebChatSessions_CellDoubleClick);
 			// 
 			// checkShowEndedSessions

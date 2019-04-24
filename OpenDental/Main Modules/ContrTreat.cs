@@ -229,9 +229,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(790, 469);
 			this.gridMain.TabIndex = 59;
 			this.gridMain.Title = "Procedures";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableTP";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
 			// 
@@ -251,9 +248,6 @@ namespace OpenDental{
 			this.gridPrint.Size = new System.Drawing.Size(150, 150);
 			this.gridPrint.TabIndex = 0;
 			this.gridPrint.Title = null;
-			this.gridPrint.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridPrint.TitleHeight = 18;
-			this.gridPrint.TranslationName = "TablePrint";
 			// 
 			// gridPreAuth
 			// 
@@ -271,9 +265,6 @@ namespace OpenDental{
 			this.gridPreAuth.Size = new System.Drawing.Size(252, 146);
 			this.gridPreAuth.TabIndex = 62;
 			this.gridPreAuth.Title = "Pre Authorizations";
-			this.gridPreAuth.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridPreAuth.TitleHeight = 18;
-			this.gridPreAuth.TranslationName = "TablePreAuth";
 			this.gridPreAuth.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPreAuth_CellDoubleClick);
 			this.gridPreAuth.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPreAuth_CellClick);
 			// 
@@ -293,9 +284,6 @@ namespace OpenDental{
 			this.gridPlans.Size = new System.Drawing.Size(426, 151);
 			this.gridPlans.TabIndex = 60;
 			this.gridPlans.Title = "Treatment Plans";
-			this.gridPlans.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridPlans.TitleHeight = 18;
-			this.gridPlans.TranslationName = "TableTPList";
 			this.gridPlans.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPlans_CellDoubleClick);
 			this.gridPlans.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridPlans_CellClick);
 			// 
@@ -2626,7 +2614,6 @@ namespace OpenDental{
 			#region printBenefits
 			if(checkShowIns.Checked) {
 				ODGrid gridFamIns=new ODGrid();
-				gridFamIns.TranslationName="";
 				this.Controls.Add(gridFamIns);
 				gridFamIns.BeginUpdate();
 				gridFamIns.Columns.Clear();
@@ -2660,7 +2647,6 @@ namespace OpenDental{
 				gridFamIns.Dispose();
 				//Individual Insurance---------------------
 				ODGrid gridIns=new ODGrid();
-				gridIns.TranslationName="";
 				this.Controls.Add(gridIns);
 				gridIns.BeginUpdate();
 				gridIns.Columns.Clear();

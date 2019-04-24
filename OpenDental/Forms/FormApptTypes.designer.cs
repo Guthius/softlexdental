@@ -81,8 +81,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(331, 401);
 			this.gridMain.TabIndex = 155;
 			this.gridMain.Title = "Appointment Types";
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// butDown

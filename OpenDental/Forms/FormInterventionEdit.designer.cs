@@ -101,9 +101,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(628, 394);
 			this.gridMain.TabIndex = 3;
 			this.gridMain.Title = "Intervention Codes";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableIntervention";
 			// 
 			// textNote
 			// 

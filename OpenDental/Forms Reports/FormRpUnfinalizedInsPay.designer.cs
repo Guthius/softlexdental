@@ -126,9 +126,6 @@ namespace OpenDental {
 			this.gridMain.Size = new System.Drawing.Size(961, 393);
 			this.gridMain.TabIndex = 65;
 			this.gridMain.Title = "Unfinalized Insurance Payment";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableUnfinalizedInsPay";
 			this.gridMain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.gridMain_MouseUp);
 			// 
 			// contextMenuStrip1

@@ -58,7 +58,6 @@ namespace OpenDental{
 			this.gridAllergyExisting.Size = new System.Drawing.Size(477, 245);
 			this.gridAllergyExisting.TabIndex = 65;
 			this.gridAllergyExisting.Title = "Current Allergies";
-			this.gridAllergyExisting.TranslationName = "GridAllergyExisting";
 			// 
 			// gridAllergyImport
 			// 
@@ -72,7 +71,6 @@ namespace OpenDental{
 			this.gridAllergyImport.Size = new System.Drawing.Size(480, 245);
 			this.gridAllergyImport.TabIndex = 77;
 			this.gridAllergyImport.Title = "Transition of Care/Referral Summary";
-			this.gridAllergyImport.TranslationName = "GridAllergyImport";
 			// 
 			// butRemoveRec
 			// 
@@ -152,7 +150,6 @@ namespace OpenDental{
 			this.gridAllergyReconcile.Size = new System.Drawing.Size(973, 300);
 			this.gridAllergyReconcile.TabIndex = 67;
 			this.gridAllergyReconcile.Title = "Reconciled Allergies";
-			this.gridAllergyReconcile.TranslationName = "gridAllergyReconcile";
 			// 
 			// butClose
 			// 

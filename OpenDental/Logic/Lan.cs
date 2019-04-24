@@ -92,10 +92,6 @@ namespace OpenDental {
 		///<summary></summary>
 		public static void C(string classType,Control[] arrayControls,bool isRecursive) {
 			foreach(Control contr in arrayControls) {
-				if(contr.GetType()==typeof(UI.ODGrid)) {
-					TranslateGrid(contr);
-					continue;
-				}
 				contr.Text=Lans.ConvertString(classType,contr.Text);
 				if(isRecursive) {
 					Cchildren(classType,contr);
@@ -110,23 +106,6 @@ namespace OpenDental {
 					Cchildren(classType,contr);
 				}
 				contr.Text=Lans.ConvertString(classType,contr.Text);
-			}
-		}
-
-		private static void TranslateGrid(Control contr) {
-			if(contr.GetType()!=typeof(UI.ODGrid)) {
-				return;
-			}
-			UI.ODGrid grid=((UI.ODGrid)contr);
-			grid.Title=Lans.ConvertString(grid.TranslationName,grid.Title);
-			foreach(UI.ODGridColumn col in grid.Columns) {
-				col.Heading=Lans.ConvertString(grid.TranslationName,col.Heading);
-			}
-			if(grid.ContextMenu!=null) {
-				C(grid.TranslationName,grid.ContextMenu);
-			}
-			if(grid.ContextMenuStrip!=null) {
-				C(grid.TranslationName,grid.ContextMenuStrip);
 			}
 		}
 
@@ -202,9 +181,6 @@ namespace OpenDental {
 				if(contrType==typeof(GroupBox)) {
 					ShiftChildControls(contr);
 					TranslateControl(sender.GetType().Name,contr);
-				}
-				else if(contr.GetType()==typeof(UI.ODGrid)) {
-					TranslateGrid(contr);
 				}
 				else if(contrType==typeof(Panel)) {
 					ShiftChildControls(contr);

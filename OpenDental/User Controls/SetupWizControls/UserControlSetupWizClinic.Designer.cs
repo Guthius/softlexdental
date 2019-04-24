@@ -100,9 +100,6 @@
 			this.gridMain.Size = new System.Drawing.Size(769, 457);
 			this.gridMain.TabIndex = 31;
 			this.gridMain.Title = "Clinics";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableProviderSetup";
 			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
 			// 
 			// pictureAdd

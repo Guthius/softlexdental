@@ -1002,9 +1002,6 @@ namespace OpenDental {
 			this.gridCharges.Size = new System.Drawing.Size(588, 229);
 			this.gridCharges.TabIndex = 143;
 			this.gridCharges.Title = "Outstanding Charges";
-			this.gridCharges.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridCharges.TitleHeight = 18;
-			this.gridCharges.TranslationName = "TableOutstandingCharges";
 			this.gridCharges.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridCharges_CellClick);
 			// 
 			// checkShowSuperfamily
@@ -1069,9 +1066,6 @@ namespace OpenDental {
 			this.gridSplits.Size = new System.Drawing.Size(479, 229);
 			this.gridSplits.TabIndex = 0;
 			this.gridSplits.Title = "Current Payment Splits";
-			this.gridSplits.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridSplits.TitleHeight = 18;
-			this.gridSplits.TranslationName = "TableCurrentSplits";
 			this.gridSplits.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSplits_CellDoubleClick);
 			this.gridSplits.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridSplits_CellClick);
 			// 
@@ -1103,9 +1097,6 @@ namespace OpenDental {
 			this.gridAllocated.Size = new System.Drawing.Size(475, 225);
 			this.gridAllocated.TabIndex = 117;
 			this.gridAllocated.Title = "Split Allocations";
-			this.gridAllocated.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridAllocated.TitleHeight = 18;
-			this.gridAllocated.TranslationName = "TablePaySplitAllocations";
 			// 
 			// butDelete
 			// 

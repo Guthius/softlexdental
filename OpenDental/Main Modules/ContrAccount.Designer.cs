@@ -710,9 +710,6 @@
             this.gridAcctPat.Size = new System.Drawing.Size(180, 176);
             this.gridAcctPat.TabIndex = 72;
             this.gridAcctPat.Title = "Select Patient";
-            this.gridAcctPat.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridAcctPat.TitleHeight = 18;
-            this.gridAcctPat.TranslationName = "TableAccountPat";
             this.gridAcctPat.CellClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridAcctPat_CellClick);
             // 
             // textFinNote
@@ -1281,9 +1278,6 @@
             this.patientInfoGrid.Size = new System.Drawing.Size(200, 150);
             this.patientInfoGrid.TabIndex = 217;
             this.patientInfoGrid.Title = "Patient Information";
-            this.patientInfoGrid.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.patientInfoGrid.TitleHeight = 18;
-            this.patientInfoGrid.TranslationName = "TableAccountPat";
             this.patientInfoGrid.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridPatInfo_CellDoubleClick);
             // 
             // splitContainerParent
@@ -1350,9 +1344,6 @@
             this.gridRepeat.Size = new System.Drawing.Size(749, 85);
             this.gridRepeat.TabIndex = 74;
             this.gridRepeat.Title = "Repeating Charges";
-            this.gridRepeat.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridRepeat.TitleHeight = 18;
-            this.gridRepeat.TranslationName = "TableRepeatCharges";
             this.gridRepeat.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridRepeat_CellDoubleClick);
             // 
             // gridPayPlan
@@ -1374,9 +1365,6 @@
             this.gridPayPlan.Size = new System.Drawing.Size(749, 107);
             this.gridPayPlan.TabIndex = 217;
             this.gridPayPlan.Title = "Payment Plans";
-            this.gridPayPlan.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridPayPlan.TitleHeight = 18;
-            this.gridPayPlan.TranslationName = "TablePaymentPlans";
             this.gridPayPlan.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridPayPlan_CellDoubleClick);
             // 
             // splitContainerAccountCommLog
@@ -1451,9 +1439,6 @@
             this.gridAccount.Size = new System.Drawing.Size(743, 181);
             this.gridAccount.TabIndex = 73;
             this.gridAccount.Title = "Patient Account";
-            this.gridAccount.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridAccount.TitleHeight = 18;
-            this.gridAccount.TranslationName = "TableAccount";
             this.gridAccount.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridAccount_CellDoubleClick);
             this.gridAccount.CellClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridAccount_CellClick);
             // 
@@ -1507,9 +1492,6 @@
             this.gridOrtho.Size = new System.Drawing.Size(398, 226);
             this.gridOrtho.TabIndex = 1;
             this.gridOrtho.Title = "Ortho Info";
-            this.gridOrtho.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridOrtho.TitleHeight = 18;
-            this.gridOrtho.TranslationName = "TableOrthoInfo";
             this.gridOrtho.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridOrtho_CellDoubleClick);
             // 
             // groupBox2
@@ -1825,9 +1807,6 @@
             this.gridProg.Size = new System.Drawing.Size(574, 289);
             this.gridProg.TabIndex = 211;
             this.gridProg.Title = "Progress Notes";
-            this.gridProg.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridProg.TitleHeight = 18;
-            this.gridProg.TranslationName = "TableProg";
             this.gridProg.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridProg_CellDoubleClick);
             // 
             // gridComm
@@ -1849,9 +1828,6 @@
             this.gridComm.Size = new System.Drawing.Size(666, 280);
             this.gridComm.TabIndex = 71;
             this.gridComm.Title = "Communications Log";
-            this.gridComm.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridComm.TitleHeight = 18;
-            this.gridComm.TranslationName = "TableCommLogAccount";
             this.gridComm.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridComm_CellDoubleClick);
             // 
             // ToolBarMain

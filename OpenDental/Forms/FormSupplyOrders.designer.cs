@@ -73,9 +73,6 @@ namespace OpenDental{
 			this.gridItems.Size = new System.Drawing.Size(788, 432);
 			this.gridItems.TabIndex = 17;
 			this.gridItems.Title = "Supplies on One Order";
-			this.gridItems.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridItems.TitleHeight = 18;
-			this.gridItems.TranslationName = "TableSupplies";
 			this.gridItems.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridOrderItem_CellDoubleClick);
 			this.gridItems.CellLeave += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridItems_CellLeave);
 			// 
@@ -94,9 +91,6 @@ namespace OpenDental{
 			this.gridOrders.Size = new System.Drawing.Size(647, 184);
 			this.gridOrders.TabIndex = 15;
 			this.gridOrders.Title = "Order History";
-			this.gridOrders.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridOrders.TitleHeight = 18;
-			this.gridOrders.TranslationName = "TableHistory";
 			this.gridOrders.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridOrder_CellDoubleClick);
 			this.gridOrders.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridOrder_CellClick);
 			// 

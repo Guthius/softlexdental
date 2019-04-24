@@ -99,9 +99,6 @@ namespace OpenDental{
 			this.gridMain.Size = new System.Drawing.Size(666, 623);
 			this.gridMain.TabIndex = 2;
 			this.gridMain.Title = "Customers";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableCustomers";
 			// 
 			// butClose
 			// 

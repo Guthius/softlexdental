@@ -166,9 +166,6 @@
             this.employeeGrid.Size = new System.Drawing.Size(303, 242);
             this.employeeGrid.TabIndex = 0;
             this.employeeGrid.Title = "Employee";
-            this.employeeGrid.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.employeeGrid.TitleHeight = 18;
-            this.employeeGrid.TranslationName = "TableEmpClock";
             this.employeeGrid.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridEmp_CellDoubleClick);
             this.employeeGrid.CellClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.employeeGrid_CellClick);
             // 
@@ -342,9 +339,6 @@
             this.gridMessages.Size = new System.Drawing.Size(541, 261);
             this.gridMessages.TabIndex = 18;
             this.gridMessages.Title = "Message History";
-            this.gridMessages.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-            this.gridMessages.TitleHeight = 18;
-            this.gridMessages.TranslationName = "TableTextMessages";
             // 
             // checkIncludeAck
             // 

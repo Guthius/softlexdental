@@ -390,9 +390,6 @@ namespace OpenDental{
 			this.gridRemainTimeUnits.Size = new System.Drawing.Size(378, 322);
 			this.gridRemainTimeUnits.TabIndex = 4;
 			this.gridRemainTimeUnits.Title = "Time Units Remaining";
-			this.gridRemainTimeUnits.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridRemainTimeUnits.TitleHeight = 18;
-			this.gridRemainTimeUnits.TranslationName = "TableTimeRemaining";
 			// 
 			// butClose
 			// 

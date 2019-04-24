@@ -58,9 +58,6 @@ namespace OpenDental{
 			this.odGrid1.Size = new System.Drawing.Size(907, 564);
 			this.odGrid1.TabIndex = 3;
 			this.odGrid1.Title = null;
-			this.odGrid1.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.odGrid1.TitleHeight = 18;
-			this.odGrid1.TranslationName = "TableMonthView";
 			// 
 			// FormMonthView
 			// 
