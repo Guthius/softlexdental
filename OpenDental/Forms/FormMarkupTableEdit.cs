@@ -95,7 +95,7 @@ namespace OpenDental {
 			MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(Markup);
 			msgbox.ShowDialog();
 			if(msgbox.DialogResult==DialogResult.OK) {
-				Markup=msgbox.textMain.Text;
+				Markup=msgbox.Content;
 				ParseMarkup();//try again
 			}
 			else {
@@ -190,7 +190,7 @@ namespace OpenDental {
 			if(msgbox.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			Markup=msgbox.textMain.Text;
+			Markup=msgbox.Content;
 			ParseMarkup();
 			FillGrid();
 		}

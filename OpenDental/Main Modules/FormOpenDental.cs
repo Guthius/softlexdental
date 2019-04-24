@@ -136,12 +136,8 @@ namespace OpenDental
         private FormLogOn FormLogOn_;
         ///<summary>When auto log off is in use, we don't want to log off user if they are in the FormLogOn window.  Mostly a problem when using web service because CurUser is not null.</summary>
         private bool IsFormLogOnLastActive;
-        private Panel panelPhoneSmall;
-        private UI.Button butTriage;
-        private UI.Button butBigPhones;
-        private Label labelWaitTime;
-        private Label labelTriage;
-        private Label labelMsg;
+        
+
         private MenuItem menuItemWiki;
         private MenuItem menuItemProcLockTool;
         private MenuItem menuItemHL7;
@@ -150,9 +146,6 @@ namespace OpenDental
         private MenuItem menuItemResellers;
         private MenuItem menuItemXChargeReconcile;
         private FormCreditRecurringCharges FormCRC;
-        private UI.Button butMapPhones;
-        private ComboBox comboTriageCoordinator;
-        private Label labelFieldType;
         private MenuItem menuItemAppointments;
         private MenuItem menuItem8;
         private MenuItem menuItemPreferencesAppts;
@@ -4578,17 +4571,23 @@ namespace OpenDental
         }
 
 
-        #region MenuEvents
+        #region Menu
 
-        private void menuItemLogOff_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Log out of the current database.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void menuItemLogOff_Click(object sender, EventArgs e)
         {
-            UserOdPref logOffMessage = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum, UserOdFkeyType.SuppressLogOffMessage).FirstOrDefault();
+            var logOffMessage = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum, UserOdFkeyType.SuppressLogOffMessage).FirstOrDefault();
             if (logOffMessage == null) // Doesn't exist in the database
             {
-                InputBox checkResult = new InputBox(
-                    OpenDental.Translation.Language.LogOffConfirmation,
-                    OpenDental.Translation.Language.DoNotShowThisMessageAgain,
-                    true, new Point(0, 40));
+                var checkResult = 
+                    new InputBox(
+                        OpenDental.Translation.Language.LogOffConfirmation,
+                        OpenDental.Translation.Language.DoNotShowThisMessageAgain,
+                        true, new Point(0, 40));
 
                 checkResult.ShowDialog();
                 if (checkResult.DialogResult == DialogResult.Cancel)
@@ -4607,70 +4606,88 @@ namespace OpenDental
                     }
                 }
             }
+
             LogOffNow(false);
         }
 
-        #region File
+        #region Menu: File
 
-
+        /// <summary>
+        /// Open the dialog to let the user change their password.
+        /// </summary>
         void menuItemPassword_Click(object sender, EventArgs e) => SecurityL.ChangePassword(false);
         
-
-        private void menuItemUserEmailAddress_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Open the dialog to let the user configurate their e-mail address.
+        /// </summary>
+        void menuItemUserEmailAddress_Click(object sender, EventArgs e)
         {
-            EmailAddress emailAddressCur = EmailAddresses.GetForUser(Security.CurUser.UserNum);
-            FormEmailAddressEdit formEAE;
-            if (emailAddressCur == null)
+            var emailAddress = EmailAddresses.GetForUser(Security.CurUser.UserNum);
+
+            using (var formEmailAddressEdit =
+                (emailAddress == null) ?
+                    new FormEmailAddressEdit(Security.CurUser.UserNum) :
+                    new FormEmailAddressEdit(emailAddress))
             {
-                formEAE = new FormEmailAddressEdit(Security.CurUser.UserNum);
+                formEmailAddressEdit.ShowDialog();
             }
-            else
-            {
-                formEAE = new FormEmailAddressEdit(emailAddressCur);
-            }
-            formEAE.ShowDialog();
         }
 
-        private void menuItemUserSettings_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Opens the user settings dialog.
+        /// </summary>
+        void menuItemUserSettings_Click(object sender, EventArgs e)
         {
-            FormUserSetting FormUS = new OpenDental.FormUserSetting();
-            FormUS.ShowDialog();
+            using (var formUserSetting = new FormUserSetting())
+            {
+                formUserSetting.ShowDialog();
+            }
         }
 
-        private void menuItemPrinter_Click(object sender, System.EventArgs e)
+        /// <summary>
+        /// Opens the printer setup dialog.
+        /// </summary>
+        void menuItemPrinter_Click(object sender, EventArgs e)
         {
-            if (!Security.IsAuthorized(Permissions.Setup))
+            if (!Security.IsAuthorized(Permissions.Setup)) return;
+
+            using (var formPrinterSetup = new FormPrinterSetup())
             {
-                return;
+                formPrinterSetup.ShowDialog();
+
+                SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Printers");
             }
-            FormPrinterSetup FormPS = new FormPrinterSetup();
-            FormPS.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Printers");
         }
 
-        private void menuItemGraphics_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Opens the graphics settings dialog.
+        /// </summary>
+        void menuItemGraphics_Click(object sender, EventArgs e)
         {
-            if (!Security.IsAuthorized(Permissions.GraphicsEdit))
-            {
-                return;
-            }
+            if (!Security.IsAuthorized(Permissions.GraphicsEdit)) return;
+            
             Cursor = Cursors.WaitCursor;
-            FormGraphics fg = new FormGraphics();
-            fg.ShowDialog();
-            Cursor = Cursors.Default;
-            if (fg.DialogResult == DialogResult.OK)
+
+            using (var formGraphics = new FormGraphics())
             {
-                ContrChart2.InitializeLocalData();
-                RefreshCurrentModule();
+                if (formGraphics.ShowDialog() == DialogResult.OK)
+                {
+                    ContrChart2.InitializeLocalData();
+
+                    RefreshCurrentModule();
+                }
             }
+
+            Cursor = Cursors.Default;
         }
 
-        private void menuItemConfig_Click(object sender, System.EventArgs e)
+        /// <summary>
+        /// Open the dialog to switch to another database.
+        /// </summary>
+        void menuItemConfig_Click(object sender, System.EventArgs e)
         {
-            if (!Security.IsAuthorized(Permissions.ChooseDatabase))
-            {
-                return;
-            }
+            if (!Security.IsAuthorized(Permissions.ChooseDatabase)) return;
+            
             SecurityLogs.MakeLogEntry(Permissions.ChooseDatabase, 0, "");//make the entry before switching databases.
 
             using (var formChooseDatabase = new FormChooseDatabase())
@@ -4685,24 +4702,26 @@ namespace OpenDental
             CurPatNum = 0;
             RefreshCurrentModule(); // clumsy but necessary. Sets child PatNums to 0.
             FillPatientButton(null);
+
             if (!LoadPreferences())
             {
                 return;
             }
+
             RefreshLocalData(InvalidType.AllLocal);
         }
 
-        private void menuItemExit_Click(object sender, System.EventArgs e)
-        {
-            Application.Exit();
-        }
-
+        /// <summary>
+        /// Exits the application.
+        /// </summary>
+        void menuItemExit_Click(object sender, EventArgs e) => Application.Exit();
+        
         #endregion
+
+
 
         #region Setup
 
-        //FormBackupJobsSelect FormBJS=new FormBackupJobsSelect();
-        //FormBJS.ShowDialog();	
 
         //Setup
         private void menuItemApptFieldDefs_Click(object sender, EventArgs e)
@@ -7200,11 +7219,18 @@ namespace OpenDental
             SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Update Version");
         }
 
-        private void menuItemAbout_Click(object sender, System.EventArgs e)
+        /// <summary>
+        /// Shows the about dialog.
+        /// </summary>
+        void menuItemAbout_Click(object sender, EventArgs e)
         {
-            FormAbout FormA = new FormAbout();
-            FormA.ShowDialog();
+            using (var formAbout = new FormAbout())
+            {
+                formAbout.ShowDialog();
+            }
         }
+
+
         #endregion
 
         #endregion
@@ -7999,7 +8025,7 @@ namespace OpenDental
         {
             if (!CloseOpenForms(isForced))
             {
-                return;//A form is still open.  Do not continue to log the user off.
+                return; //A form is still open.  Do not continue to log the user off.
             }
             FinishLogOff(isForced);
         }

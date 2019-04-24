@@ -1,38 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace OpenDental
+{
+    partial class FormLogOn
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-namespace OpenDental {
-	partial class FormLogOn {
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (components != null)
+                {
+                    components.Dispose();
+                }
+            }
+            base.Dispose(disposing);
+        }
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			if( disposing )
-			{
-				if(components != null)
-				{
-					components.Dispose();
-				}
-			}
-			base.Dispose( disposing );
-		}
-
-		#region Windows Form Designer generated code
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        #region Windows Form Designer generated code
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormLogOn));
             this.cancelButton = new System.Windows.Forms.Button();
             this.acceptButton = new System.Windows.Forms.Button();
@@ -42,12 +38,14 @@ namespace OpenDental {
             this.passwordTextBox = new System.Windows.Forms.TextBox();
             this.userTextBox = new System.Windows.Forms.TextBox();
             this.CEMTUsersCheckBox = new System.Windows.Forms.CheckBox();
+            this.pictureOpenDental = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureOpenDental)).BeginInit();
             this.SuspendLayout();
             // 
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cancelButton.Location = new System.Drawing.Point(341, 335);
+            this.cancelButton.Location = new System.Drawing.Point(341, 338);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(110, 30);
             this.cancelButton.TabIndex = 3;
@@ -57,7 +55,7 @@ namespace OpenDental {
             // acceptButton
             // 
             this.acceptButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.acceptButton.Location = new System.Drawing.Point(341, 299);
+            this.acceptButton.Location = new System.Drawing.Point(341, 302);
             this.acceptButton.Name = "acceptButton";
             this.acceptButton.Size = new System.Drawing.Size(110, 30);
             this.acceptButton.TabIndex = 2;
@@ -68,17 +66,17 @@ namespace OpenDental {
             // 
             this.userListBox.IntegralHeight = false;
             this.userListBox.ItemHeight = 15;
-            this.userListBox.Location = new System.Drawing.Point(13, 34);
+            this.userListBox.Location = new System.Drawing.Point(13, 103);
             this.userListBox.Margin = new System.Windows.Forms.Padding(3, 3, 30, 3);
             this.userListBox.Name = "userListBox";
-            this.userListBox.Size = new System.Drawing.Size(150, 331);
+            this.userListBox.Size = new System.Drawing.Size(150, 265);
             this.userListBox.TabIndex = 6;
             this.userListBox.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listUser_MouseUp);
             // 
             // userLabel
             // 
             this.userLabel.AutoSize = true;
-            this.userLabel.Location = new System.Drawing.Point(10, 16);
+            this.userLabel.Location = new System.Drawing.Point(10, 85);
             this.userLabel.Name = "userLabel";
             this.userLabel.Size = new System.Drawing.Size(30, 15);
             this.userLabel.TabIndex = 4;
@@ -88,7 +86,7 @@ namespace OpenDental {
             // passwordLabel
             // 
             this.passwordLabel.AutoSize = true;
-            this.passwordLabel.Location = new System.Drawing.Point(193, 16);
+            this.passwordLabel.Location = new System.Drawing.Point(193, 85);
             this.passwordLabel.Name = "passwordLabel";
             this.passwordLabel.Size = new System.Drawing.Size(57, 15);
             this.passwordLabel.TabIndex = 7;
@@ -97,7 +95,7 @@ namespace OpenDental {
             // 
             // passwordTextBox
             // 
-            this.passwordTextBox.Location = new System.Drawing.Point(196, 34);
+            this.passwordTextBox.Location = new System.Drawing.Point(196, 103);
             this.passwordTextBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 20);
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.PasswordChar = '*';
@@ -106,7 +104,7 @@ namespace OpenDental {
             // 
             // userTextBox
             // 
-            this.userTextBox.Location = new System.Drawing.Point(13, 34);
+            this.userTextBox.Location = new System.Drawing.Point(13, 103);
             this.userTextBox.Margin = new System.Windows.Forms.Padding(3, 3, 30, 3);
             this.userTextBox.Name = "userTextBox";
             this.userTextBox.Size = new System.Drawing.Size(150, 23);
@@ -116,7 +114,7 @@ namespace OpenDental {
             // CEMTUsersCheckBox
             // 
             this.CEMTUsersCheckBox.AutoSize = true;
-            this.CEMTUsersCheckBox.Location = new System.Drawing.Point(196, 80);
+            this.CEMTUsersCheckBox.Location = new System.Drawing.Point(196, 149);
             this.CEMTUsersCheckBox.Name = "CEMTUsersCheckBox";
             this.CEMTUsersCheckBox.Size = new System.Drawing.Size(120, 19);
             this.CEMTUsersCheckBox.TabIndex = 1;
@@ -125,10 +123,21 @@ namespace OpenDental {
             this.CEMTUsersCheckBox.Visible = false;
             this.CEMTUsersCheckBox.CheckedChanged += new System.EventHandler(this.CEMTUsersCheckBox_CheckedChanged);
             // 
+            // pictureOpenDental
+            // 
+            this.pictureOpenDental.Image = ((System.Drawing.Image)(resources.GetObject("pictureOpenDental.Image")));
+            this.pictureOpenDental.Location = new System.Drawing.Point(13, 19);
+            this.pictureOpenDental.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
+            this.pictureOpenDental.Name = "pictureOpenDental";
+            this.pictureOpenDental.Size = new System.Drawing.Size(200, 50);
+            this.pictureOpenDental.TabIndex = 59;
+            this.pictureOpenDental.TabStop = false;
+            // 
             // FormLogOn
             // 
             this.AcceptButton = this.acceptButton;
-            this.ClientSize = new System.Drawing.Size(464, 378);
+            this.ClientSize = new System.Drawing.Size(464, 381);
+            this.Controls.Add(this.pictureOpenDental);
             this.Controls.Add(this.CEMTUsersCheckBox);
             this.Controls.Add(this.userTextBox);
             this.Controls.Add(this.passwordTextBox);
@@ -142,23 +151,24 @@ namespace OpenDental {
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormLogOn";
-            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "Log On";
             this.Load += new System.EventHandler(this.FormLogOn_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureOpenDental)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
-		}
-		#endregion
+        }
+        #endregion
 
-		private System.Windows.Forms.Button cancelButton;
-		private System.Windows.Forms.Button acceptButton;
-		private System.Windows.Forms.ListBox userListBox;
-		private System.Windows.Forms.Label userLabel;
-		private System.Windows.Forms.Label passwordLabel;
-		private System.Windows.Forms.TextBox passwordTextBox;
-		private System.Windows.Forms.TextBox userTextBox;
-		private System.Windows.Forms.CheckBox CEMTUsersCheckBox;
-	}
+        private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.Button acceptButton;
+        private System.Windows.Forms.ListBox userListBox;
+        private System.Windows.Forms.Label userLabel;
+        private System.Windows.Forms.Label passwordLabel;
+        private System.Windows.Forms.TextBox passwordTextBox;
+        private System.Windows.Forms.TextBox userTextBox;
+        private System.Windows.Forms.CheckBox CEMTUsersCheckBox;
+        private System.Windows.Forms.PictureBox pictureOpenDental;
+    }
 }

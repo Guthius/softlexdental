@@ -533,7 +533,6 @@ namespace OpenDental{
 					row.Cells.Add(logCur.LogText.Left(200,true));
 					row.Tag=(Action)(()=> {
 						MsgBoxCopyPaste formText = new MsgBoxCopyPaste(logCur.LogText);
-						formText.NormalizeContent();
 						formText.Show();
 					});
 				}

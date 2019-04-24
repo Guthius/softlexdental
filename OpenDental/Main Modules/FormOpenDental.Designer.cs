@@ -243,9 +243,9 @@
             this.labelFieldType = new System.Windows.Forms.Label();
             this.comboTriageCoordinator = new System.Windows.Forms.ComboBox();
             this.labelMsg = new System.Windows.Forms.Label();
-            this.butMapPhones = new OpenDental.UI.Button();
-            this.butTriage = new OpenDental.UI.Button();
-            this.butBigPhones = new OpenDental.UI.Button();
+            this.butMapPhones = new System.Windows.Forms.Button();
+            this.butTriage = new System.Windows.Forms.Button();
+            this.butBigPhones = new System.Windows.Forms.Button();
             this.labelWaitTime = new System.Windows.Forms.Label();
             this.labelTriage = new System.Windows.Forms.Label();
             this.menuText = new System.Windows.Forms.ContextMenu();
@@ -1801,11 +1801,6 @@
             // 
             // butMapPhones
             // 
-            this.butMapPhones.AdjustImageLocation = new System.Drawing.Point(0, 0);
-            this.butMapPhones.Autosize = true;
-            this.butMapPhones.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butMapPhones.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-            this.butMapPhones.CornerRadius = 4F;
             this.butMapPhones.Location = new System.Drawing.Point(192, 0);
             this.butMapPhones.Name = "butMapPhones";
             this.butMapPhones.Size = new System.Drawing.Size(19, 24);
@@ -1815,11 +1810,6 @@
             // 
             // butTriage
             // 
-            this.butTriage.AdjustImageLocation = new System.Drawing.Point(0, 0);
-            this.butTriage.Autosize = true;
-            this.butTriage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butTriage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-            this.butTriage.CornerRadius = 4F;
             this.butTriage.Location = new System.Drawing.Point(154, 0);
             this.butTriage.Name = "butTriage";
             this.butTriage.Size = new System.Drawing.Size(18, 24);
@@ -1829,11 +1819,6 @@
             // 
             // butBigPhones
             // 
-            this.butBigPhones.AdjustImageLocation = new System.Drawing.Point(0, 0);
-            this.butBigPhones.Autosize = true;
-            this.butBigPhones.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butBigPhones.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-            this.butBigPhones.CornerRadius = 4F;
             this.butBigPhones.Location = new System.Drawing.Point(173, 0);
             this.butBigPhones.Name = "butBigPhones";
             this.butBigPhones.Size = new System.Drawing.Size(18, 24);
@@ -2050,5 +2035,14 @@
         private System.Windows.Forms.MenuItem menuItemOperatories;
         private System.Windows.Forms.Timer timerSignals;
         private OpenDental.UI.LightSignalGrid lightSignalGrid1;
+        private System.Windows.Forms.Button butTriage;
+        private System.Windows.Forms.Button butBigPhones;
+        private System.Windows.Forms.Label labelWaitTime;
+        private System.Windows.Forms.Label labelTriage;
+        private System.Windows.Forms.Label labelMsg;
+        private System.Windows.Forms.Button butMapPhones;
+        private System.Windows.Forms.ComboBox comboTriageCoordinator;
+        private System.Windows.Forms.Label labelFieldType;
+        private System.Windows.Forms.Panel panelPhoneSmall;
     }
 }

@@ -1,8 +1,6 @@
-using System;
-using OpenDentBusiness;
 using CodeBase;
-using System.Globalization;
-using System.IO;
+using OpenDentBusiness;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -34,7 +32,6 @@ namespace OpenDental
             }
         }
 
-
         void FormSplash_Load(object sender, EventArgs e)
         {
             Plugin.Trigger(this, "FormSplash_Loaded"); // TODO: Are plugins even loaded before FormSplash is loaded?
@@ -64,7 +61,7 @@ namespace OpenDental
         {
             base.OnPaint(e);
 
-            using (var pen = new Pen(Color.FromArgb(0, 0, 0)))
+            using (var pen = new Pen(Color.FromArgb(0, 70, 140)))
             {
                 e.Graphics.DrawRectangle(
                     pen,
@@ -72,11 +69,6 @@ namespace OpenDental
                         ClientSize.Width - 1, 
                         ClientSize.Height - 1));
             }
-        }
-
-        private void progressBar_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

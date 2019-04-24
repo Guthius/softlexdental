@@ -27,6 +27,8 @@ namespace CodeBase
         ///It is necessary to keep track of so that we can unregister it when this progress window is closed.</summary>
         private EventInfo _eventInfoFired;
 
+        public FormProgressBase() { }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FormProgressBase"/> class.
         /// </summary>

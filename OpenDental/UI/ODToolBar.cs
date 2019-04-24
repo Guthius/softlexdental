@@ -216,9 +216,15 @@ namespace OpenDental.UI
 
             if (button != null)
             {
-                hotButton = button;
-                hotButton.State = ToolBarButtonState.Hover;
-                Invalidate(hotButton.Bounds);
+                // Do another check to see if the mouse is still over the button. If this mouse up event resulted
+                // in a click and inside of the click handler a modal dialog was shown, the mouse cursor may have moved.
+                if (!IsDisposed && button.Bounds.Contains(PointToClient(new Point(MousePosition.X, MousePosition.Y))))
+                {
+                    hotButton = button;
+                    hotButton.State = ToolBarButtonState.Hover;
+
+                    Invalidate(hotButton.Bounds);
+                }
             }
         }
 
@@ -360,7 +366,7 @@ namespace OpenDental.UI
                 try
                 {
                     var x = button.Bounds.Left + 5;
-                    var y = button.Bounds.Top + ((textBounds.Height - button.Image.Height) / 2) + 1;
+                    var y = button.Bounds.Top + ((textBounds.Height - button.Image.Height) / 2);
 
                     if (button.State == ToolBarButtonState.Pressed)
                     {
@@ -427,6 +433,8 @@ namespace OpenDental.UI
 
                 g.FillPolygon(triangleBrush, triangle);
             }
+
+            // TODO: Add style of ToggleButton...
         }
 
         void PaintButtonText(Graphics g, string text, Brush textColor, Rectangle bounds, bool enabled)

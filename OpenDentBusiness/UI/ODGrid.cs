@@ -1890,33 +1890,29 @@ namespace OpenDental.UI
                     hScroll.Height);
             }
 
-            ControlPaint.DrawVisualStyleBorder(g, new Rectangle(0, 0, Width - 1, Height - 1));
+            using (var pen = new Pen(Color.FromArgb(0, 70, 140)))
+            {
+                g.DrawRectangle(pen, new Rectangle(0, 0, Width - 1, Height - 1));
+            }
         }
 
 
         #endregion
 
         #region Clicking
-        ///<summary></summary>
+
         protected void OnCellDoubleClick(int col, int row)
         {
             ODGridClickEventArgs gArgs = new ODGridClickEventArgs(col, row, MouseButtons.Left);
-            if (CellDoubleClick != null)
-            {
-                CellDoubleClick(this, gArgs);
-            }
+            CellDoubleClick?.Invoke(this, gArgs);
         }
 
         protected void OnCellSelectionChangeCommitted(int col, int row)
         {
             ODGridClickEventArgs gArgs = new ODGridClickEventArgs(col, row, MouseButtons.Left);
-            if (CellSelectionCommitted != null)
-            {
-                CellSelectionCommitted(this, gArgs);
-            }
+            CellSelectionCommitted?.Invoke(this, gArgs);
         }
 
-        ///<summary></summary>
         protected override void OnDoubleClick(EventArgs e)
         {
             base.OnDoubleClick(e);

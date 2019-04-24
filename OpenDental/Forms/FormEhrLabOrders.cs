@@ -52,21 +52,21 @@ namespace OpenDental {
 
 		private void butImport_Click(object sender,EventArgs e) {
 			MsgBoxCopyPaste MBCP = new MsgBoxCopyPaste("Paste HL7 Lab Message Text Here.");
-			MBCP.textMain.SelectAll();
+			//MBCP.mainTextBox.SelectAll();
 			MBCP.ShowDialog();
 			if(MBCP.DialogResult!=DialogResult.OK) {
 				return;
 			}
 			List<EhrLab> listEhrLabs;
 			try {
-				listEhrLabs=EhrLabs.ProcessHl7Message(MBCP.textMain.Text);//Not a typical use of the msg box copy paste
+				listEhrLabs=EhrLabs.ProcessHl7Message(MBCP.Content);//Not a typical use of the msg box copy paste
 				if(listEhrLabs[0].PatNum==PatCur.PatNum) {//only need to check the first lab.
 					//nothing to do here. Imported lab matches the current patient.
 				}
 				else{//does not match current patient, redirect to import form which displays patient information and is build for importing.
 					FormEhrLabOrderImport FormLOI=new FormEhrLabOrderImport();
 					FormLOI.PatCur=PatCur;
-					FormLOI.Hl7LabMessage=MBCP.textMain.Text;
+					FormLOI.Hl7LabMessage=MBCP.Content;
 					FormLOI.ShowDialog();
 					FillGrid();
 					return;

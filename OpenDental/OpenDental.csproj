@@ -434,6 +434,12 @@
     <Compile Include="Forms\FormClaimProc.designer.cs">
       <DependentUpon>FormClaimProc.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormGraphics.Designer.cs">
+      <DependentUpon>FormGraphics.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormLicense.Designer.cs">
+      <DependentUpon>FormLicense.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormMobileAppDevices.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -485,6 +491,9 @@
     <Compile Include="Forms\FormPerioVoice.cs">
       <DependentUpon>FormPerio.cs</DependentUpon>
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormPrinterSetup.Designer.cs">
+      <DependentUpon>FormPrinterSetup.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormProcCodes2.cs">
       <SubType>Form</SubType>
@@ -4957,12 +4966,7 @@
     <Compile Include="UI\ComboBoxOD.Designer.cs">
       <DependentUpon>ComboBoxOD.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\MsgBoxCopyPaste.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\MsgBoxCopyPaste.Designer.cs">
-      <DependentUpon>MsgBoxCopyPaste.cs</DependentUpon>
-    </Compile>
+    <Compile Include="UI\MsgBoxCopyPaste.cs" />
     <Compile Include="UI\ODCodeRangeFilter.cs">
       <SubType>UserControl</SubType>
     </Compile>
