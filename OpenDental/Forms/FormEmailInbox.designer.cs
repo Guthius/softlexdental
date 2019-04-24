@@ -625,7 +625,6 @@ namespace OpenDental{
 			this.odToolBarButton1.Bounds = new System.Drawing.Rectangle(0, 0, 0, 0);
 			this.odToolBarButton1.DropDownMenu = null;
 			this.odToolBarButton1.Enabled = true;
-			this.odToolBarButton1.ImageIndex = -1;
 			this.odToolBarButton1.PageMax = 0;
 			this.odToolBarButton1.PageValue = 0;
 			this.odToolBarButton1.Pushed = false;

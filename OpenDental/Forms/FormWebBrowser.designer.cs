@@ -56,12 +56,11 @@ namespace OpenDental{
 			// ToolBarMain
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ToolBarMain.ImageList = this.imageList1;
 			this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
 			this.ToolBarMain.Name = "ToolBarMain";
 			this.ToolBarMain.Size = new System.Drawing.Size(974, 25);
 			this.ToolBarMain.TabIndex = 32;
-			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
+			this.ToolBarMain.ButtonClick += new System.EventHandler<UI.ODToolBarButtonClickEventArgs>(this.ToolBarMain_ButtonClick);
 			// 
 			// FormErx
 			// 

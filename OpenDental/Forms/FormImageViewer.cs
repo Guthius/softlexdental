@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
 using System.Collections.Generic;
+using OpenDental.Properties;
 
 namespace OpenDental{
 	///<summary>Eventually, the user will be able to edit some image display settings and do a Documents.UpdateCur, but they can't actually make changes to the image.</summary>
@@ -117,12 +118,11 @@ namespace OpenDental{
 			// ToolBarMain
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ToolBarMain.ImageList = this.imageListTools;
 			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
 			this.ToolBarMain.Name = "ToolBarMain";
 			this.ToolBarMain.Size = new System.Drawing.Size(903,25);
 			this.ToolBarMain.TabIndex = 11;
-			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
+			this.ToolBarMain.ButtonClick += new EventHandler<ODToolBarButtonClickEventArgs>(this.ToolBarMain_ButtonClick);
 			// 
 			// FormImageViewer
 			// 
@@ -224,9 +224,9 @@ namespace OpenDental{
 		public void LayoutToolBar(){
 			//ODToolBarButton button;
 			ToolBarMain.Buttons.Clear();
-			ToolBarMain.Buttons.Add(new ODToolBarButton("",0,Lan.g(this,"Zoom In"),"ZoomIn"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton("",1,Lan.g(this,"Zoom Out"),"ZoomOut"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"White"),-1,Lan.g(this,"Clear screen to solid white"),"White"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconZoomIn, Lan.g(this,"Zoom In"),"ZoomIn"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconZoomOut, Lan.g(this,"Zoom Out"),"ZoomOut"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"White"),null,Lan.g(this,"Clear screen to solid white"),"White"));
 			ToolBarMain.Invalidate();
 		}
 

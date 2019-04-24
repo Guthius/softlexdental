@@ -14,6 +14,7 @@ using OpenDentBusiness;
 using OpenDental.UI;
 using CodeBase;
 using System.Linq;
+using OpenDental.Properties;
 
 namespace OpenDental{
 	public delegate List<Document> SaveFileAsDocDelegate(bool isSigSave,Sheet sheetTP);
@@ -238,13 +239,11 @@ namespace OpenDental{
 			// ToolBarMain
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ToolBarMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			this.ToolBarMain.ImageList = this.imageListMain;
 			this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
 			this.ToolBarMain.Name = "ToolBarMain";
 			this.ToolBarMain.Size = new System.Drawing.Size(1159, 25);
 			this.ToolBarMain.TabIndex = 5;
-			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
+			this.ToolBarMain.ButtonClick += new EventHandler<ODToolBarButtonClickEventArgs>(this.ToolBarMain_ButtonClick);
 			// 
 			// previewContr
 			// 
@@ -377,15 +376,15 @@ namespace OpenDental{
 			ToolBarMain.Buttons.Clear();
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Print"),0,"","Print"));
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton("",1,"Go Back One Page","Back"));
-			ODToolBarButton button=new ODToolBarButton("",-1,"","PageNum");
+			ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconResultPrevious, "Go Back One Page","Back"));
+			ODToolBarButton button=new ODToolBarButton("",null,"","PageNum");
 			button.Style=ODToolBarButtonStyle.Label;
 			ToolBarMain.Buttons.Add(button);
-			ToolBarMain.Buttons.Add(new ODToolBarButton("",2,"Go Forward One Page","Fwd"));
-			button=new ODToolBarButton(Lan.g(this,"FullPage"),-1,Lan.g(this,"FullPage"),"FullPage");
+			ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconResultNext, "Go Forward One Page","Fwd"));
+			button=new ODToolBarButton(Lan.g(this,"FullPage"),null,Lan.g(this,"FullPage"),"FullPage"); // TODO: Add icon for this...
 			button.Style=ODToolBarButtonStyle.ToggleButton;
 			ToolBarMain.Buttons.Add(button);
-			button=new ODToolBarButton(Lan.g(this,"100%"),-1,Lan.g(this,"100%"),"100");
+			button=new ODToolBarButton(Lan.g(this,"100%"),null,Lan.g(this,"100%"),"100"); // TODO: Add icon for this...
 			button.Style=ODToolBarButtonStyle.ToggleButton;
 			ToolBarMain.Buttons.Add(button);
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));

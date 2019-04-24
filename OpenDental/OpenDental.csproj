@@ -587,6 +587,9 @@
     </Compile>
     <Compile Include="Logic\ActionNeededL.cs" />
     <Compile Include="Logic\AppointmentL.cs" />
+    <Compile Include="Main Modules\ContrAccount.Designer.cs">
+      <DependentUpon>ContrAccount.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main Modules\ContrStaff.Designer.cs">
       <DependentUpon>ContrStaff.cs</DependentUpon>
     </Compile>
@@ -609,6 +612,8 @@
     <Compile Include="Tables Old Grids\TableTimeBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UI\ODToolBarButtonClickEventArgs.cs" />
+    <Compile Include="UI\ODToolBarButtonPageNavEventArgs.cs" />
     <Compile Include="UI\SheetUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -8625,6 +8630,112 @@
     <None Include="Web References\NewCrop\Update1.wsdl" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\IconTransformCrop.png" />
+    <None Include="Resources\IconFlipHorizontal.png" />
+    <None Include="Resources\IconDocumentInfo.png" />
+    <None Include="Resources\IconXray.png" />
+    <None Include="Resources\IconScanner.png" />
+    <None Include="Resources\IconRotateRight.png" />
+    <None Include="Resources\IconRotateLeft.png" />
+    <None Include="Resources\IconPhoto.png" />
+    <None Include="Resources\IconInformation.png" />
+    <None Include="Resources\IconHand.png" />
+    <None Include="Resources\IconFolderSearch.png" />
+    <None Include="Resources\IconFolderImport.png" />
+    <None Include="Resources\IconFolderExport.png" />
+    <None Include="Resources\IconFolder.png" />
+    <None Include="Resources\IconFlipVertical.png" />
+    <None Include="Resources\IconRawAccessLog.png" />
+    <None Include="Resources\IconErrorsLog.png" />
+    <None Include="Resources\IconReceiptInvoice.png" />
+    <None Include="Resources\IconReceipt.png" />
+    <None Include="Resources\IconChartLine.png" />
+    <None Include="Resources\IconStar.png" />
+    <None Include="Resources\IconUserGo.png" />
+    <None Include="Resources\IconTagBlue.png" />
+    <None Include="Resources\IconReportMagnify.png" />
+    <None Include="Resources\IconReport.png" />
+    <None Include="Resources\IconPageWhiteText.png" />
+    <None Include="Resources\IconPageWhiteCopy.png" />
+    <None Include="Resources\IconTick.png" />
+    <None Include="Resources\IconPageWhiteMagnify.png" />
+    <None Include="Resources\IconPageWhite.png" />
+    <None Include="Resources\IconRename.png" />
+    <None Include="Resources\IconDirectoryListing.png" />
+    <None Include="Resources\IconPageWhiteStack.png" />
+    <None Include="Resources\IconLinkGo.png" />
+    <None Include="Resources\IconSearch.png" />
+    <None Include="Resources\IconHistoryClock.png" />
+    <None Include="Resources\IconCog.png" />
+    <None Include="Resources\IconHomePage.png" />
+    <None Include="Resources\IconUndo.png" />
+    <None Include="Resources\IconTextAlignRight.png" />
+    <None Include="Resources\IconFontColors.png" />
+    <None Include="Resources\IconColorSwatch.png" />
+    <None Include="Resources\IconLockOpen.png" />
+    <None Include="Resources\IconLock.png" />
+    <None Include="Resources\IconSaveAll.png" />
+    <None Include="Resources\IconSave.png" />
+    <None Include="Resources\IconRefreshSmall.png" />
+    <None Include="Resources\IconRefresh.png" />
+    <None Include="Resources\IconPaste.png" />
+    <None Include="Resources\IconLinkExternal.png" />
+    <None Include="Resources\IconLink.png" />
+    <None Include="Resources\IconImage.png" />
+    <None Include="Resources\IconCut.png" />
+    <None Include="Resources\IconCopyWhite.png" />
+    <None Include="Resources\IconCopy.png" />
+    <None Include="Resources\IconCancel.png" />
+    <None Include="Resources\IconFontSizeIncrease.png" />
+    <None Include="Resources\IconFontSizeDecrease.png" />
+    <None Include="Resources\IconFont.png" />
+    <None Include="Resources\IconTextUnderline.png" />
+    <None Include="Resources\IconTextStrikethrough.png" />
+    <None Include="Resources\IconTextItalic.png" />
+    <None Include="Resources\IconTextHeading6.png" />
+    <None Include="Resources\IconTextHeading5.png" />
+    <None Include="Resources\IconTextHeading4.png" />
+    <None Include="Resources\IconTextHeading3.png" />
+    <None Include="Resources\IconTextHeading2.png" />
+    <None Include="Resources\IconTextHeading1.png" />
+    <None Include="Resources\IconTextBold.png" />
+    <None Include="Resources\IconTextAlignLeft.png" />
+    <None Include="Resources\IconTextAlignJustify.png" />
+    <None Include="Resources\IconTextAlignCenter.png" />
+    <None Include="Resources\IconTable.png" />
+    <None Include="Resources\IconSaveDraft.png" />
+    <None Include="Resources\IconListBullets.png" />
+    <None Include="Resources\IconInsurance.png" />
+    <None Include="Resources\IconMoneyAdd.png" />
+    <None Include="Resources\IconExportExcel.png" />
+    <None Include="Resources\IconExportAccess.png" />
+    <None Include="Resources\IconResultPrevious.png" />
+    <None Include="Resources\IconResultFirst.png" />
+    <None Include="Resources\IconZoomReset.png" />
+    <None Include="Resources\IconZoomOut.png" />
+    <None Include="Resources\IconZoomIn.png" />
+    <None Include="Resources\IconZoom.png" />
+    <None Include="Resources\IconResultNext.png" />
+    <None Include="Resources\IconResultLast.png" />
+    <None Include="Resources\IconPDF.png" />
+    <None Include="Resources\IconExportXml.png" />
+    <None Include="Resources\IconExportWord.png" />
+    <None Include="Resources\IconExportText.png" />
+    <None Include="Resources\IconExportTable.png" />
+    <None Include="Resources\IconExportPDF.png" />
+    <None Include="Resources\IconEmail.png" />
+    <None Include="Resources\IconEdit.png" />
+    <None Include="Resources\IconDelete.png" />
+    <None Include="Resources\IconAdd.png" />
+    <None Include="Resources\IconTextMessage.png" />
+    <None Include="Resources\IconUser.png" />
+    <None Include="Resources\IconTasks.png" />
+    <None Include="Resources\IconLog.png" />
+    <None Include="Resources\IconEraser.png" />
+    <None Include="Resources\IconBulletArrowRight.png" />
+    <None Include="Resources\IconBulletArrowLeft.png" />
+    <None Include="Resources\IconPrinter.png" />
+    <None Include="Resources\IconPhoneHandset.png" />
     <None Include="Resources\Icon32Tooth.png" />
     <None Include="Resources\Icon32Listing.png" />
     <None Include="Resources\Icon32Settings.png" />

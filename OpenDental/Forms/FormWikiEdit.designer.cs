@@ -116,12 +116,11 @@ namespace OpenDental
             // 
             // toolBar2
             // 
-            this.toolBar2.ImageList = this.imageListMain;
             this.toolBar2.Location = new System.Drawing.Point(0, 26);
             this.toolBar2.Name = "toolBar2";
             this.toolBar2.Size = new System.Drawing.Size(863, 25);
             this.toolBar2.TabIndex = 82;
-            this.toolBar2.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.toolBar2_ButtonClick);
+            this.toolBar2.ButtonClick += new System.EventHandler<UI.ODToolBarButtonClickEventArgs>(this.toolBar2_ButtonClick);
             // 
             // webBrowserWiki
             // 
@@ -140,12 +139,11 @@ namespace OpenDental
             // 
             // ToolBarMain
             // 
-            this.ToolBarMain.ImageList = this.imageListMain;
             this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
             this.ToolBarMain.Name = "ToolBarMain";
             this.ToolBarMain.Size = new System.Drawing.Size(863, 25);
             this.ToolBarMain.TabIndex = 3;
-            this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
+            this.ToolBarMain.ButtonClick += new System.EventHandler<UI.ODToolBarButtonClickEventArgs>(this.ToolBarMain_ButtonClick);
             // 
             // textContent
             // 

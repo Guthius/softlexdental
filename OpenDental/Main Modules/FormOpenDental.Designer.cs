@@ -1751,7 +1751,7 @@
             this.panelPhoneSmall.Controls.Add(this.labelTriage);
             this.panelPhoneSmall.Location = new System.Drawing.Point(71, 333);
             this.panelPhoneSmall.Name = "panelPhoneSmall";
-            this.panelPhoneSmall.Size = new System.Drawing.Size(213, 184);
+            this.panelPhoneSmall.Size = new System.Drawing.Size(213, 399);
             this.panelPhoneSmall.TabIndex = 56;
             // 
             // butVoiceMails
@@ -1920,9 +1920,10 @@
             // 
             // lightSignalGrid1
             // 
-            this.lightSignalGrid1.Location = new System.Drawing.Point(0, 463);
+            this.lightSignalGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lightSignalGrid1.Location = new System.Drawing.Point(-2, 423);
             this.lightSignalGrid1.Name = "lightSignalGrid1";
-            this.lightSignalGrid1.Size = new System.Drawing.Size(50, 206);
+            this.lightSignalGrid1.Size = new System.Drawing.Size(70, 206);
             this.lightSignalGrid1.TabIndex = 20;
             this.lightSignalGrid1.Text = "lightSignalGrid1";
             this.lightSignalGrid1.ButtonClick += new OpenDental.UI.ODLightSignalGridClickEventHandler(this.lightSignalGrid1_ButtonClick);
@@ -1957,7 +1958,7 @@
             // FormOpenDental
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(982, 413);
+            this.ClientSize = new System.Drawing.Size(982, 628);
             this.Controls.Add(this.splitContainerNoFlickerDashboard);
             this.Controls.Add(this.panelPhoneSmall);
             this.Controls.Add(this.panelSplitter);
@@ -2048,5 +2049,6 @@
         private System.Windows.Forms.MenuItem menuItemClinics;
         private System.Windows.Forms.MenuItem menuItemOperatories;
         private System.Windows.Forms.Timer timerSignals;
+        private OpenDental.UI.LightSignalGrid lightSignalGrid1;
     }
 }

@@ -18,6 +18,7 @@ using System.Linq;
 using System.Windows.Forms;
 using CodeBase;
 using OpenDental.Bridges;
+using OpenDental.Properties;
 using OpenDental.UI;
 using OpenDentBusiness;
 using OpenDentBusiness.HL7;
@@ -1477,11 +1478,11 @@ namespace OpenDental
             //button.Style=ODToolBarButtonStyle.DropDownButton;
             //button.DropDownMenu=menuPatient;
             //ToolBarMain.Buttons.Add(button);
-            ToolBarMain.Buttons.Add(new ODToolBarButton("", 2, Lan.g(this, "Appointment Lists"), "Lists"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton("", 1, Lan.g(this, "Print Schedule"), "Print"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconListBullets, Lan.g(this, "Appointment Lists"), "Lists"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconPrint, Lan.g(this, "Print Schedule"), "Print"));
             if (!ProgramProperties.IsAdvertisingDisabled(ProgramName.RapidCall))
             {
-                ToolBarMain.Buttons.Add(new ODToolBarButton("", 3, Lan.g(this, "Rapid Call"), "RapidCall"));
+                ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconPhoneHandset, Lan.g(this, "Rapid Call"), "RapidCall"));
             }
             ProgramL.LoadToolbar(ToolBarMain, ToolBarsAvail.ApptModule);
             ToolBarMain.Invalidate();

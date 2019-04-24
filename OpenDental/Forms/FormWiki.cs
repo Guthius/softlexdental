@@ -1,5 +1,6 @@
 using CodeBase;
 using DataConnectionBase;
+using OpenDental.Properties;
 using OpenDental.UI;
 using OpenDentBusiness;
 using System;
@@ -193,27 +194,27 @@ namespace OpenDental
         private void LayoutToolBar()
         {
             ToolBarMain.Buttons.Clear();
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Back"), 0, "", "Back"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Fwd"), 1, "", "Forward"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Setup"), 2, Lan.g(this, "Setup master page and styles."), "Setup"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Back"), Resources.IconResultPrevious, "", "Back"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Fwd"), Resources.IconResultNext, "", "Forward"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Setup"), Resources.IconCog, Lan.g(this, "Setup master page and styles."), "Setup"));
             ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-            ODToolBarButton buttonHome = new ODToolBarButton(Lan.g(this, "Home"), 3, "", "Home");
+            ODToolBarButton buttonHome = new ODToolBarButton(Lan.g(this, "Home"), Resources.IconHomePage, "", "Home");
             buttonHome.Style = ODToolBarButtonStyle.DropDownButton;
             buttonHome.DropDownMenu = menuHomeDropDown;
             ToolBarMain.Buttons.Add(buttonHome);
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Edit"), 4, "", "Edit"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Print"), 5, "", "Print"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Rename"), 6, "", "Rename"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Archive"), 7, "", "Archive"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Hist"), 8, "", "History"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Drafts"), 14, "", "Drafts"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "In-Links"), 9, "", "Inc Links"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Edit"), Resources.IconEdit, "", "Edit"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Print"), Resources.IconPrint, "", "Print"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Rename"), Resources.IconRename, "", "Rename"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Archive"), Resources.IconDelete, "", "Archive"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Hist"), Resources.IconHistoryClock, "", "History"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Drafts"), Resources.IconPageWhiteStack, "", "Drafts"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "In-Links"), Resources.IconLinkGo, "", "Inc Links"));
             ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Add"), 10, "", "Add"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Lists"), 13, "", "Lists"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Add"), Resources.IconAdd, "", "Add"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Lists"), Resources.IconDirectoryListing, "", "Lists")); // TODO: Is this a appropriate icon?
             
             //ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"All Pages"),11,"","All Pages"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Search"), 12, "", "Search"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Search"), Resources.IconSearch, "", "Search"));
         }
 
         private void ToolBarMain_ButtonClick(object sender, OpenDental.UI.ODToolBarButtonClickEventArgs e)

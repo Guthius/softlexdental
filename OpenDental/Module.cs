@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace OpenDental
@@ -6,6 +7,14 @@ namespace OpenDental
     public class Module : UserControl
     {
         public event EventHandler<NavigationEventArgs> Navigating;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Module"/> class.
+        /// </summary>
+        public Module()
+        {
+            Font = new Font("Segoe UI", 9f);
+        }
 
         /// <summary>
         /// Attempt to navigate to the specified target.

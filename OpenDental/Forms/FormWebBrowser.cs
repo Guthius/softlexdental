@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Text;
+using OpenDental.Properties;
 
 namespace OpenDental {
 	///<summary>A wrapper form to display an Internet browser within an Open Dental window.
@@ -69,11 +70,11 @@ namespace OpenDental {
 		///<summary></summary>
 		public void LayoutToolBars() {
 			ToolBarMain.Buttons.Clear();
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Back"),0,"","Back"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Forward"),1,"","Forward"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Refresh"),-1,"","Refresh"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Print"),-1,"","Print"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Close"),-1,"","Close"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Back"), Resources.IconResultPrevious, "","Back"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Forward"), Resources.IconResultNext, "","Forward"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Refresh"), Resources.IconRefresh, "","Refresh"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Print"), Resources.IconPrint, "","Print"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Close"),null,"","Close"));
 			ToolBarMain.Invalidate();
 		}
 

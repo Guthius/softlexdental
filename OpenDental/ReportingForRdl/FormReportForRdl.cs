@@ -11,6 +11,7 @@ using fyiReporting.RDL;
 using OpenDental.UI;
 using OpenDentBusiness;
 using CodeBase;
+using OpenDental.Properties;
 
 //SEE THE BOTTOM OF THIS FILE FOR INFO ON HOW TO EDIT THE ORIGINAL RDL FILES TO MAKE THEM WORK BETTER WITH OPEN DENTAL.
 //THIS WILL ALLOW US TO UPDATE VERSIONS OF RDL WITHOUT 'BREAKING' THE EXISTING FUNCTIONALITY
@@ -96,12 +97,11 @@ namespace OpenDental{
 			// ToolBarMain
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ToolBarMain.ImageList = this.imageListMain;
 			this.ToolBarMain.Location = new System.Drawing.Point(0,0);
 			this.ToolBarMain.Name = "ToolBarMain";
 			this.ToolBarMain.Size = new System.Drawing.Size(987,25);
 			this.ToolBarMain.TabIndex = 5;
-			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
+			this.ToolBarMain.ButtonClick += new EventHandler<ODToolBarButtonClickEventArgs>(this.ToolBarMain_ButtonClick);
 			// 
 			// imageListMain
 			// 
@@ -199,7 +199,7 @@ namespace OpenDental{
 		///<summary>Causes the toolbar to be laid out again.</summary>
 		public void LayoutToolBar(){
 			ToolBarMain.Buttons.Clear();
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Print"),0,"","Print"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Print"), Resources.IconPrint, "","Print"));
 //ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Save PDF"),4,"Save as Adobe PDF","PDF"));
 //ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Export"),3,"","Export"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
@@ -208,13 +208,13 @@ namespace OpenDental{
 			//button.Style=ODToolBarButtonStyle.Label;
 			//ToolBarMain.Buttons.Add(button);
 			//ToolBarMain.Buttons.Add(new ODToolBarButton("",2,"Go Forward One Page","Fwd"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Zoom In"),6,"","Zoom"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Zoom In"), Resources.IconZoomIn, "","Zoom"));
 			//ODToolBarButton button=new ODToolBarButton("Scroll Mode",-1,"","");
 			//button.Style=ODToolBarButtonStyle.DropDownButton;
 			//button.DropDownMenu=menuScrollMode;
 			//ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Close"),-1,"Close This Window","Close"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Close"),null,"Close This Window","Close"));
 			//ToolBarMain.Invalidate();
 		}
 
@@ -356,14 +356,16 @@ namespace OpenDental{
 				//then zoom in
 				viewer.ZoomMode=fyiReporting.RdlViewer.ZoomEnum.FitWidth;
 				ToolBarMain.Buttons["Zoom"].Text=Lan.g(this,"Zoom Out");
-				ToolBarMain.Buttons["Zoom"].ImageIndex=6;
-			}
+                ToolBarMain.Buttons["Zoom"].Image = Resources.IconZoomOut;
+
+            }
 			else{
 				//zoom out
 				viewer.ZoomMode=fyiReporting.RdlViewer.ZoomEnum.FitPage;
 				ToolBarMain.Buttons["Zoom"].Text=Lan.g(this,"Zoom In");
-				ToolBarMain.Buttons["Zoom"].ImageIndex=5;
-			}
+                ToolBarMain.Buttons["Zoom"].Image = Resources.IconZoomIn;
+
+            }
 			ToolBarMain.Invalidate();
 		}
 

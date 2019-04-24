@@ -22,6 +22,7 @@ using MigraDoc.DocumentObjectModel.Shapes;
 using MigraDoc.Rendering;
 using MigraDoc.Rendering.Printing;
 using Document=OpenDentBusiness.Document;
+using OpenDental.Properties;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -589,13 +590,11 @@ namespace OpenDental{
 			// ToolBarMain
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ToolBarMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			this.ToolBarMain.ImageList = this.imageListMain;
 			this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
 			this.ToolBarMain.Name = "ToolBarMain";
 			this.ToolBarMain.Size = new System.Drawing.Size(1195, 25);
 			this.ToolBarMain.TabIndex = 58;
-			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
+			this.ToolBarMain.ButtonClick += new EventHandler<ODToolBarButtonClickEventArgs>(this.ToolBarMain_ButtonClick);
 			// 
 			// textNote
 			// 
@@ -709,13 +708,13 @@ namespace OpenDental{
 		public void LayoutToolBar(){
 			ToolBarMain.Buttons.Clear();
 			//ODToolBarButton button;
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"PreAuthorization"),-1,"","PreAuth"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Discount"),-1,"","Discount"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Update Fees"),1,"","Update"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"PreAuthorization"),null,"","PreAuth"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Discount"),null,"","Discount"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Update Fees"), Resources.IconRefresh, "","Update"));
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Save TP"),3,"","Create"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Print TP"),2,"","Print"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Email TP"),-1,"","Email"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Sign TP"),-1,"","Sign"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Print TP"), Resources.IconPrint, "","Print"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Email TP"), Resources.IconEmail, "","Email"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Sign TP"),null,"","Sign"));
 			ProgramL.LoadToolbar(ToolBarMain,ToolBarsAvail.TreatmentPlanModule);
 			ToolBarMain.Invalidate();
 			//Plugins.HookAddCode(this,"ContrTreat.LayoutToolBar_end",PatCur);

@@ -10,6 +10,7 @@ using OpenDental.UI;
 using OpenDentBusiness;
 using System.Linq;
 using CodeBase;
+using OpenDental.Properties;
 
 namespace OpenDental {
 	public partial class UserControlTasks:UserControl {
@@ -349,12 +350,12 @@ namespace OpenDental {
 			butOptions.ToolTipText=Lan.g(this,"Set session specific task options.");
 			butOptions.Tag="Options";
 			ToolBarMain.Buttons.Add(butOptions);
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add Task List"),0,"","AddList"));
-			ODToolBarButton butTask=new ODToolBarButton(Lan.g(this,"Add Task"),1,"","AddTask");
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add Task List"),null,"","AddList")); // TODO: Find a icon for this...
+			ODToolBarButton butTask=new ODToolBarButton(Lan.g(this,"Add Task"), Resources.IconAdd, "","AddTask");
 			butTask.Style=ODToolBarButtonStyle.DropDownButton;
 			butTask.DropDownMenu=menuTask;
 			ToolBarMain.Buttons.Add(butTask);
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Search"),-1,"","Search"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Search"),null,"","Search"));
 			ODToolBarButton button=new ODToolBarButton();
 			button.Text=Lan.g(this,"Manage Blocks");
 			button.ToolTipText=Lan.g(this,"Manage which task lists will have popups blocked even when subscribed.");
@@ -370,7 +371,7 @@ namespace OpenDental {
 				else {
 					textBut="Filtered by "+_globalFilterType.GetDescription();
 				}
-				_butFilter=new ODToolBarButton(textBut,-1,"Select filter.","Filter");
+				_butFilter=new ODToolBarButton(textBut,null,"Select filter.","Filter");
 				_butFilter.Style=ODToolBarButtonStyle.DropDownButton;
 				_butFilter.DropDownMenu=menuFilter;
 				ToolBarMain.Buttons.Add(_butFilter);

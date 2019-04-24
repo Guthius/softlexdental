@@ -1,20 +1,20 @@
-using System;
-using System.Data;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
-using System.IO;
-using System.Windows.Forms;
+using CodeBase;
+using OpenDental.Properties;
 using OpenDental.UI;
 using OpenDentBusiness;
-using CodeBase;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Windows.Forms;
 
-namespace OpenDental{
-	/// <summary>
-	/// Summary description for FormBasicTemplate.
-	/// </summary>
-	public class FormAccounting:ODForm {
+namespace OpenDental
+{
+    /// <summary>
+    /// Summary description for FormBasicTemplate.
+    /// </summary>
+    public class FormAccounting:ODForm {
 		private OpenDental.UI.ODToolBar ToolBarMain;
 		private OpenDental.UI.ODGrid gridMain;
 		private IContainer components;
@@ -65,181 +65,181 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAccounting));
-			this.imageListMain = new System.Windows.Forms.ImageList(this.components);
-			this.checkInactive = new System.Windows.Forms.CheckBox();
-			this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
-			this.menuItemSetup = new System.Windows.Forms.MenuItem();
-			this.menuItemLock = new System.Windows.Forms.MenuItem();
-			this.menuItem1 = new System.Windows.Forms.MenuItem();
-			this.menuItemGL = new System.Windows.Forms.MenuItem();
-			this.menuItemBalSheet = new System.Windows.Forms.MenuItem();
-			this.labelDate = new System.Windows.Forms.Label();
-			this.butToday = new OpenDental.UI.Button();
-			this.butRefresh = new OpenDental.UI.Button();
-			this.textDate = new OpenDental.ValidDate();
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.ToolBarMain = new OpenDental.UI.ODToolBar();
-			this.SuspendLayout();
-			// 
-			// imageListMain
-			// 
-			this.imageListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListMain.ImageStream")));
-			this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageListMain.Images.SetKeyName(0, "Add.gif");
-			this.imageListMain.Images.SetKeyName(1, "editPencil.gif");
-			this.imageListMain.Images.SetKeyName(2, "butExport.gif");
-			// 
-			// checkInactive
-			// 
-			this.checkInactive.AutoSize = true;
-			this.checkInactive.Location = new System.Drawing.Point(313, 34);
-			this.checkInactive.Name = "checkInactive";
-			this.checkInactive.Size = new System.Drawing.Size(150, 17);
-			this.checkInactive.TabIndex = 2;
-			this.checkInactive.Text = "Include Inactive Accounts";
-			this.checkInactive.UseVisualStyleBackColor = true;
-			this.checkInactive.Click += new System.EventHandler(this.checkInactive_Click);
-			// 
-			// mainMenu1
-			// 
-			this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAccounting));
+            this.imageListMain = new System.Windows.Forms.ImageList(this.components);
+            this.checkInactive = new System.Windows.Forms.CheckBox();
+            this.mainMenu1 = new System.Windows.Forms.MainMenu(this.components);
+            this.menuItemSetup = new System.Windows.Forms.MenuItem();
+            this.menuItemLock = new System.Windows.Forms.MenuItem();
+            this.menuItem1 = new System.Windows.Forms.MenuItem();
+            this.menuItemGL = new System.Windows.Forms.MenuItem();
+            this.menuItemBalSheet = new System.Windows.Forms.MenuItem();
+            this.labelDate = new System.Windows.Forms.Label();
+            this.butToday = new OpenDental.UI.Button();
+            this.butRefresh = new OpenDental.UI.Button();
+            this.textDate = new OpenDental.ValidDate();
+            this.gridMain = new OpenDental.UI.ODGrid();
+            this.ToolBarMain = new OpenDental.UI.ODToolBar();
+            this.SuspendLayout();
+            // 
+            // imageListMain
+            // 
+            this.imageListMain.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListMain.ImageStream")));
+            this.imageListMain.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageListMain.Images.SetKeyName(0, "Add.gif");
+            this.imageListMain.Images.SetKeyName(1, "editPencil.gif");
+            this.imageListMain.Images.SetKeyName(2, "butExport.gif");
+            // 
+            // checkInactive
+            // 
+            this.checkInactive.AutoSize = true;
+            this.checkInactive.Location = new System.Drawing.Point(313, 34);
+            this.checkInactive.Name = "checkInactive";
+            this.checkInactive.Size = new System.Drawing.Size(150, 17);
+            this.checkInactive.TabIndex = 2;
+            this.checkInactive.Text = "Include Inactive Accounts";
+            this.checkInactive.UseVisualStyleBackColor = true;
+            this.checkInactive.Click += new System.EventHandler(this.checkInactive_Click);
+            // 
+            // mainMenu1
+            // 
+            this.mainMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemSetup,
             this.menuItemLock,
             this.menuItem1});
-			// 
-			// menuItemSetup
-			// 
-			this.menuItemSetup.Index = 0;
-			this.menuItemSetup.Text = "Setup";
-			this.menuItemSetup.Click += new System.EventHandler(this.menuItemSetup_Click);
-			// 
-			// menuItemLock
-			// 
-			this.menuItemLock.Index = 1;
-			this.menuItemLock.Text = "Lock";
-			this.menuItemLock.Click += new System.EventHandler(this.menuItemLock_Click);
-			// 
-			// menuItem1
-			// 
-			this.menuItem1.Index = 2;
-			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            // 
+            // menuItemSetup
+            // 
+            this.menuItemSetup.Index = 0;
+            this.menuItemSetup.Text = "Setup";
+            this.menuItemSetup.Click += new System.EventHandler(this.menuItemSetup_Click);
+            // 
+            // menuItemLock
+            // 
+            this.menuItemLock.Index = 1;
+            this.menuItemLock.Text = "Lock";
+            this.menuItemLock.Click += new System.EventHandler(this.menuItemLock_Click);
+            // 
+            // menuItem1
+            // 
+            this.menuItem1.Index = 2;
+            this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemGL,
             this.menuItemBalSheet});
-			this.menuItem1.Text = "Reports";
-			// 
-			// menuItemGL
-			// 
-			this.menuItemGL.Index = 0;
-			this.menuItemGL.Text = "General Ledger Detail";
-			this.menuItemGL.Click += new System.EventHandler(this.menuItemGL_Click);
-			// 
-			// menuItemBalSheet
-			// 
-			this.menuItemBalSheet.Index = 1;
-			this.menuItemBalSheet.Text = "Balance Sheet";
-			this.menuItemBalSheet.Click += new System.EventHandler(this.menuItemBalSheet_Click);
-			// 
-			// labelDate
-			// 
-			this.labelDate.Location = new System.Drawing.Point(3, 33);
-			this.labelDate.Name = "labelDate";
-			this.labelDate.Size = new System.Drawing.Size(72, 18);
-			this.labelDate.TabIndex = 7;
-			this.labelDate.Text = "As of Date";
-			this.labelDate.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-			// 
-			// butToday
-			// 
-			this.butToday.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butToday.Autosize = true;
-			this.butToday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butToday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butToday.CornerRadius = 4F;
-			this.butToday.Location = new System.Drawing.Point(238, 32);
-			this.butToday.Name = "butToday";
-			this.butToday.Size = new System.Drawing.Size(70, 23);
-			this.butToday.TabIndex = 10;
-			this.butToday.Text = "Today";
-			this.butToday.UseVisualStyleBackColor = true;
-			this.butToday.Click += new System.EventHandler(this.butToday_Click);
-			// 
-			// butRefresh
-			// 
-			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRefresh.Autosize = true;
-			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(163, 32);
-			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(70, 23);
-			this.butRefresh.TabIndex = 9;
-			this.butRefresh.Text = "Refresh";
-			this.butRefresh.UseVisualStyleBackColor = true;
-			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
-			// 
-			// textDate
-			// 
-			this.textDate.Location = new System.Drawing.Point(76, 34);
-			this.textDate.Name = "textDate";
-			this.textDate.Size = new System.Drawing.Size(81, 20);
-			this.textDate.TabIndex = 8;
-			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.menuItem1.Text = "Reports";
+            // 
+            // menuItemGL
+            // 
+            this.menuItemGL.Index = 0;
+            this.menuItemGL.Text = "General Ledger Detail";
+            this.menuItemGL.Click += new System.EventHandler(this.menuItemGL_Click);
+            // 
+            // menuItemBalSheet
+            // 
+            this.menuItemBalSheet.Index = 1;
+            this.menuItemBalSheet.Text = "Balance Sheet";
+            this.menuItemBalSheet.Click += new System.EventHandler(this.menuItemBalSheet_Click);
+            // 
+            // labelDate
+            // 
+            this.labelDate.Location = new System.Drawing.Point(3, 33);
+            this.labelDate.Name = "labelDate";
+            this.labelDate.Size = new System.Drawing.Size(72, 18);
+            this.labelDate.TabIndex = 7;
+            this.labelDate.Text = "As of Date";
+            this.labelDate.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            // 
+            // butToday
+            // 
+            this.butToday.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butToday.Autosize = true;
+            this.butToday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butToday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butToday.CornerRadius = 4F;
+            this.butToday.Location = new System.Drawing.Point(238, 32);
+            this.butToday.Name = "butToday";
+            this.butToday.Size = new System.Drawing.Size(70, 23);
+            this.butToday.TabIndex = 10;
+            this.butToday.Text = "Today";
+            this.butToday.UseVisualStyleBackColor = true;
+            this.butToday.Click += new System.EventHandler(this.butToday_Click);
+            // 
+            // butRefresh
+            // 
+            this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butRefresh.Autosize = true;
+            this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butRefresh.CornerRadius = 4F;
+            this.butRefresh.Location = new System.Drawing.Point(163, 32);
+            this.butRefresh.Name = "butRefresh";
+            this.butRefresh.Size = new System.Drawing.Size(70, 23);
+            this.butRefresh.TabIndex = 9;
+            this.butRefresh.Text = "Refresh";
+            this.butRefresh.UseVisualStyleBackColor = true;
+            this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
+            // 
+            // textDate
+            // 
+            this.textDate.Location = new System.Drawing.Point(76, 34);
+            this.textDate.Name = "textDate";
+            this.textDate.Size = new System.Drawing.Size(81, 20);
+            this.textDate.TabIndex = 8;
+            // 
+            // gridMain
+            // 
+            this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
-			this.gridMain.HasAddButton = false;
-			this.gridMain.HasDropDowns = false;
-			this.gridMain.HasMultilineHeaders = false;
-			this.gridMain.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridMain.HeaderHeight = 15;
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(0, 57);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(492, 450);
-			this.gridMain.TabIndex = 1;
-			this.gridMain.Title = "Chart of Accounts";
-			this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
-			this.gridMain.TitleHeight = 18;
-			this.gridMain.TranslationName = "TableChartOfAccounts";
-			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
-			// 
-			// ToolBarMain
-			// 
-			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ToolBarMain.ImageList = this.imageListMain;
-			this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
-			this.ToolBarMain.Name = "ToolBarMain";
-			this.ToolBarMain.Size = new System.Drawing.Size(492, 25);
-			this.ToolBarMain.TabIndex = 0;
-			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
-			// 
-			// FormAccounting
-			// 
-			this.ClientSize = new System.Drawing.Size(492, 507);
-			this.Controls.Add(this.butToday);
-			this.Controls.Add(this.butRefresh);
-			this.Controls.Add(this.textDate);
-			this.Controls.Add(this.labelDate);
-			this.Controls.Add(this.checkInactive);
-			this.Controls.Add(this.gridMain);
-			this.Controls.Add(this.ToolBarMain);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximizeBox = false;
-			this.Menu = this.mainMenu1;
-			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(485, 190);
-			this.Name = "FormAccounting";
-			this.Text = "Accounting";
-			this.Load += new System.EventHandler(this.FormAccounting_Load);
-			this.ResumeLayout(false);
-			this.PerformLayout();
+            this.gridMain.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
+            this.gridMain.EditableEnterMovesDown = false;
+            this.gridMain.HasAddButton = false;
+            this.gridMain.HasDropDowns = false;
+            this.gridMain.HasMultilineHeaders = false;
+            this.gridMain.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
+            this.gridMain.HeaderHeight = 15;
+            this.gridMain.HScrollVisible = false;
+            this.gridMain.Location = new System.Drawing.Point(0, 57);
+            this.gridMain.Name = "gridMain";
+            this.gridMain.ScrollValue = 0;
+            this.gridMain.Size = new System.Drawing.Size(492, 450);
+            this.gridMain.TabIndex = 1;
+            this.gridMain.Title = "Chart of Accounts";
+            this.gridMain.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
+            this.gridMain.TitleHeight = 18;
+            this.gridMain.TranslationName = "TableChartOfAccounts";
+            this.gridMain.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
+            // 
+            // ToolBarMain
+            // 
+            this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
+            this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
+            this.ToolBarMain.Name = "ToolBarMain";
+            this.ToolBarMain.Size = new System.Drawing.Size(492, 27);
+            this.ToolBarMain.TabIndex = 0;
+            this.ToolBarMain.ButtonClick += new System.EventHandler<OpenDental.UI.ODToolBarButtonClickEventArgs>(this.ToolBarMain_ButtonClick);
+            // 
+            // FormAccounting
+            // 
+            this.ClientSize = new System.Drawing.Size(492, 507);
+            this.Controls.Add(this.butToday);
+            this.Controls.Add(this.butRefresh);
+            this.Controls.Add(this.textDate);
+            this.Controls.Add(this.labelDate);
+            this.Controls.Add(this.checkInactive);
+            this.Controls.Add(this.gridMain);
+            this.Controls.Add(this.ToolBarMain);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.Menu = this.mainMenu1;
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(485, 190);
+            this.Name = "FormAccounting";
+            this.Text = "Accounting";
+            this.Load += new System.EventHandler(this.FormAccounting_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 		#endregion
@@ -253,16 +253,16 @@ namespace OpenDental{
 		///<summary>Causes the toolbar to be laid out again.</summary>
 		public void LayoutToolBar() {
 			ToolBarMain.Buttons.Clear();
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add"),0,"","Add"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add"), Resources.IconAdd, "","Add"));
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Edit"),1,Lan.g(this,"Edit Selected Account"),"Edit"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Edit"), Resources.IconEdit, Lan.g(this,"Edit Selected Account"),"Edit"));
 			/*ODToolBarButton button=new ODToolBarButton("",-1,"","PageNum");
 			button.Style=ODToolBarButtonStyle.Label;
 			ToolBarMain.Buttons.Add(button);
 			ToolBarMain.Buttons.Add(new ODToolBarButton("",2,"Go Forward One Page","Fwd"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));*/
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Export"),2,Lan.g(this,"Export the Chart of Accounts"),"Export"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Close"),-1,"Close This Window","Close"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Export"), Resources.IconExportTable, Lan.g(this,"Export the Chart of Accounts"),"Export"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Close"),null,"Close This Window","Close"));
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {

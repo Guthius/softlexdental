@@ -14,6 +14,7 @@ using OpenDental.UI;
 using OpenDentBusiness;
 using System.Collections.Generic;
 using CodeBase;
+using OpenDental.Properties;
 
 namespace OpenDental.ReportingComplex
 {
@@ -103,13 +104,12 @@ namespace OpenDental.ReportingComplex
 			// ToolBarMain
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ToolBarMain.ImageList = this.imageListMain;
 			this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
 			this.ToolBarMain.Name = "ToolBarMain";
 			this.ToolBarMain.Size = new System.Drawing.Size(831, 25);
 			this.ToolBarMain.TabIndex = 5;
-			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
-			this.ToolBarMain.PageNav += new OpenDental.UI.ODToolBarButtonPageNavEventHandler(this.ToolBarMain_PageNav);
+			this.ToolBarMain.ButtonClick += new EventHandler<ODToolBarButtonClickEventArgs>(this.ToolBarMain_ButtonClick);
+			this.ToolBarMain.PageNav += new EventHandler<ODToolBarButtonPageNavEventArgs>(this.ToolBarMain_PageNav);
 			// 
 			// splitContainer1
 			// 
@@ -183,29 +183,30 @@ namespace OpenDental.ReportingComplex
 			}
     }
 
-		///<summary>Causes the toolbar to be laid out again.</summary>
-		public void LayoutToolBar(){
-			ToolBarMain.Buttons.Clear();
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Print"),0,"","Print"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton("",1,Lan.g(this,"Go Back One Page"),"Back"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(0,0,"","PageNum"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton("",2,Lan.g(this,"Go Forward One Page"),"Fwd"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton("",4,"","ZoomIn"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton("",5,"","ZoomOut"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton("100",-1,"","ZoomReset"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-      ODToolBarButton butWrapText=new ODToolBarButton(Lan.g(this,"Wrap Text"),-1,Lan.g(this,"Wrap Text In Columns"),"WrapText");
-      butWrapText.Style=ODToolBarButtonStyle.ToggleButton;
-      butWrapText.Pushed=_isWrappingText;
-      ToolBarMain.Buttons.Add(butWrapText);
-      ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Export"),3,"","Export"));
-      ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			//ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Close"),-1,Lan.g(this,"Close This Window"),"Close"));
-			//ToolBarMain.Invalidate();
-		}
+        ///<summary>Causes the toolbar to be laid out again.</summary>
+        public void LayoutToolBar()
+        {
+            ToolBarMain.Buttons.Clear();
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Print"), Resources.IconPrint, "", "Print"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+            ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconResultPrevious, Lan.g(this, "Go Back One Page"), "Back"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(0, 0, "", "PageNum"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconResultNext, Lan.g(this, "Go Forward One Page"), "Fwd"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+            ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconZoomIn, "", "ZoomIn"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconZoomOut, "", "ZoomOut"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton("100", Resources.IconZoomReset, "", "ZoomReset"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+            ODToolBarButton butWrapText = new ODToolBarButton(Lan.g(this, "Wrap Text"), null, Lan.g(this, "Wrap Text In Columns"), "WrapText");
+            butWrapText.Style = ODToolBarButtonStyle.ToggleButton;
+            butWrapText.Pushed = _isWrappingText;
+            ToolBarMain.Buttons.Add(butWrapText);
+            ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Export"), Resources.IconExportTable, "", "Export"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+            //ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Close"),-1,Lan.g(this,"Close This Window"),"Close"));
+            //ToolBarMain.Invalidate();
+        }
 
 		///<summary>Sets the default zoom factor based on the reports orientation.</summary>
 		private void SetDefaultZoom() {

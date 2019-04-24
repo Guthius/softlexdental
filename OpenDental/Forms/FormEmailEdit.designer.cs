@@ -127,23 +127,19 @@ namespace OpenDental{
 			// 
 			// toolBarBottom
 			// 
-			this.toolBarBottom.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			this.toolBarBottom.ImageList = this.imageListMain;
 			this.toolBarBottom.Location = new System.Drawing.Point(0, 27);
 			this.toolBarBottom.Name = "toolBarBottom";
 			this.toolBarBottom.Size = new System.Drawing.Size(863, 25);
 			this.toolBarBottom.TabIndex = 83;
-			this.toolBarBottom.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.toolBarBottom_ButtonClick);
+			this.toolBarBottom.ButtonClick += new System.EventHandler<UI.ODToolBarButtonClickEventArgs>(this.toolBarBottom_ButtonClick);
 			// 
 			// toolBarTop
 			// 
-			this.toolBarTop.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			this.toolBarTop.ImageList = this.imageListMain;
 			this.toolBarTop.Location = new System.Drawing.Point(0, 0);
 			this.toolBarTop.Name = "toolBarTop";
 			this.toolBarTop.Size = new System.Drawing.Size(863, 25);
 			this.toolBarTop.TabIndex = 4;
-			this.toolBarTop.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.toolBarTop_ButtonClick);
+			this.toolBarTop.ButtonClick += new System.EventHandler<UI.ODToolBarButtonClickEventArgs>(this.toolBarTop_ButtonClick);
 			// 
 			// labelPreview
 			// 

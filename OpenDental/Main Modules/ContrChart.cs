@@ -29,6 +29,7 @@ using OpenDental.Bridges;
 using System.Drawing.Imaging;
 using System.Threading;
 using SharpDX;
+using OpenDental.Properties;
 #if EHRTEST
 using EHR;
 #endif
@@ -3247,13 +3248,11 @@ namespace OpenDental {
 			// ToolBarMain
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ToolBarMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			this.ToolBarMain.ImageList = this.imageListMain;
 			this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
 			this.ToolBarMain.Name = "ToolBarMain";
 			this.ToolBarMain.Size = new System.Drawing.Size(939, 25);
 			this.ToolBarMain.TabIndex = 177;
-			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
+			this.ToolBarMain.ButtonClick += new EventHandler<ODToolBarButtonClickEventArgs>(this.ToolBarMain_ButtonClick);
 			// 
 			// button1
 			// 
@@ -3644,7 +3643,7 @@ namespace OpenDental {
 				if(UsingEcwTightOrFull()) {
 					if(!Environment.Is64BitOperatingSystem) {
 						//ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
-						button=new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx");
+						button=new ODToolBarButton(Lan.g(this,"New Rx"), Resources.IconReceipt, "","Rx");
 						button.Style=ODToolBarButtonStyle.DropDownButton;
 						button.DropDownMenu=_contextMenuRxManage;
 						ToolBarMain.Buttons.Add(button);
@@ -3653,29 +3652,29 @@ namespace OpenDental {
 				}
 				else {
 					//ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx"));
-					button=new ODToolBarButton(Lan.g(this,"New Rx"),1,"","Rx");
+					button=new ODToolBarButton(Lan.g(this,"New Rx"), Resources.IconReceipt, "","Rx");
 					button.Style=ODToolBarButtonStyle.DropDownButton;
 					button.DropDownMenu=_contextMenuRxManage;
 					ToolBarMain.Buttons.Add(button);
 					if(_butErx==null) {
-						_butErx=new ODToolBarButton(Lan.g(this,"eRx"),1,"","eRx");
+						_butErx=new ODToolBarButton(Lan.g(this,"eRx"), Resources.IconReceipt, "","eRx");
 						_butErx.Style=ODToolBarButtonStyle.DropDownButton;
 						_butErx.DropDownMenu=menuErx;
 					}
 					ToolBarMain.Buttons.Add(_butErx);
 				}
 			}
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),-1,"","LabCase"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"LabCase"),null,"","LabCase"));
 			if(!Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
-				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Perio Chart"),2,"","Perio"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Perio Chart"), Resources.IconChartLine, "","Perio"));
 			}
-			button=new ODToolBarButton(OrthoChartTabs.GetFirst(true).TabName,-1,"","Ortho");
+			button=new ODToolBarButton(OrthoChartTabs.GetFirst(true).TabName, null, "","Ortho");
 			if(OrthoChartTabs.GetCount(true) > 1) {
 				button.Style=ODToolBarButtonStyle.DropDownButton;
 				button.DropDownMenu=menuOrthoChart;
 			}
 			ToolBarMain.Buttons.Add(button);
-			button=new ODToolBarButton(Lan.g(this,"Consent"),-1,"","Consent");
+			button=new ODToolBarButton(Lan.g(this,"Consent"), null, "","Consent");
 			if(SheetDefs.GetCustomForType(SheetTypeEnum.Consent).Count>0) {
 				button.Style=ODToolBarButtonStyle.DropDownButton;
 				button.DropDownMenu=menuConsent;
@@ -3685,30 +3684,30 @@ namespace OpenDental {
 			//	ToolBarMain.Buttons.Add(new ODToolBarButton("                   .",-1,"",""));
 			//}
 			if(!Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
-				button=new ODToolBarButton(Lan.g(this,"Tooth Chart"),-1,"","ToothChart");
+				button=new ODToolBarButton(Lan.g(this,"Tooth Chart"), null, "","ToothChart");
 				button.Style=ODToolBarButtonStyle.DropDownButton;
 				button.DropDownMenu=menuToothChart;
 				ToolBarMain.Buttons.Add(button);
 			}
-			button=new ODToolBarButton(Lan.g(this,"Exam Sheet"),-1,"","ExamSheet");
+			button=new ODToolBarButton(Lan.g(this,"Exam Sheet"), null, "","ExamSheet");
 			button.Style=ODToolBarButtonStyle.PushButton;
 			ToolBarMain.Buttons.Add(button);
 			if(UsingEcwTight()) {//button will show in this toolbar instead of the usual one.
-				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),4,Lan.g(this,"New Commlog Entry"),"Commlog"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Commlog"),Resources.IconRawAccessLog, Lan.g(this,"New Commlog Entry"),"Commlog"));
 			}
 			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
-				ToolBarMain.Buttons.Add(new ODToolBarButton("EHR",-1,"","EHR"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton("EHR", null, "","EHR"));
 			}
 			HL7Def hl7Def=HL7Defs.GetOneDeepEnabled();
 			if(hl7Def!=null && !UsingEcwTightOrFull()) {
-				ToolBarMain.Buttons.Add(new ODToolBarButton(hl7Def.Description,-1,"","HL7"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton(hl7Def.Description, null, "","HL7"));
 			}
 			HL7Def hl7DefMedLab=HL7Defs.GetOneDeepEnabled(true);
 			if(hl7DefMedLab!=null) {
-				ToolBarMain.Buttons.Add(new ODToolBarButton(hl7DefMedLab.Description,-1,"","MedLab"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton(hl7DefMedLab.Description, null, "","MedLab"));
 			}
 			if(ListLayoutSheetDefs!=null && ListLayoutSheetDefs.Count>0) {
-				button=new ODToolBarButton("Layout",-1,"","Layout");
+				button=new ODToolBarButton("Layout", null, "","Layout");
 				button.Style=ODToolBarButtonStyle.DropDownButton;
 				List<MenuItem> listMenuItems=new List<MenuItem>(new[] { new MenuItem(Lan.g(this,"Add/Edit Layouts"),LayoutMenuItem_Click),new MenuItem("-") });
 				long selectedLayoutSheetDefNum=(DynamicLayoutCur?.SheetDefNum??PrefC.GetLong(PrefName.ChartDefaultLayoutSheetDefNum));

@@ -403,36 +403,19 @@ namespace OpenDental{
 				if(ProgramProperties.IsAdvertisingDisabled(programCur)) {
 					continue;
 				}
-				string key=programCur.ProgramNum.ToString()+programCur.ProgName.ToString();
-				if(ToolBarMain.ImageList.Images.ContainsKey(key)) {
-					//Dispose the existing image only if it already exists, because the image might have changed.
-					ToolBarMain.ImageList.Images[ToolBarMain.ImageList.Images.IndexOfKey(key)].Dispose();
-					ToolBarMain.ImageList.Images.RemoveByKey(key);
-				}
+                Image image = null;
 				if(programCur.ButtonImage!="") {
-					Image image=PIn.Bitmap(programCur.ButtonImage);
-					ToolBarMain.ImageList.Images.Add(key,image);
+					image=PIn.Bitmap(programCur.ButtonImage);
 				}
 				else if(programCur.ProgName==ProgramName.Midway.ToString()) {
-					Image image=global::OpenDental.Properties.Resources.Midway_Icon_22x22;
-					ToolBarMain.ImageList.Images.Add(key,image);
+					image=global::OpenDental.Properties.Resources.Midway_Icon_22x22;
 				}
 				if(toolBarsAvail!=ToolBarsAvail.MainToolbar) {
 					ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 				}
-				ODToolBarButton button=new ODToolBarButton(toolButItemCur.ButtonText,-1,"",programCur);
+				ODToolBarButton button=new ODToolBarButton(toolButItemCur.ButtonText, image, "",programCur);
 				AddDropDown(button,programCur);
 				ToolBarMain.Buttons.Add(button);
-			}
-			for(int i=0;i<ToolBarMain.Buttons.Count;i++) {//Reset the new index, because it might have changed due to removing/adding to the Images list.
-				if(ToolBarMain.Buttons[i].Tag.GetType()!=typeof(Program)) {
-					continue;
-				}
-				Program programCur=(Program)ToolBarMain.Buttons[i].Tag;
-				string key=programCur.ProgramNum.ToString()+programCur.ProgName.ToString();
-				if(ToolBarMain.ImageList.Images.ContainsKey(key)) {
-					ToolBarMain.Buttons[i].ImageIndex=ToolBarMain.ImageList.Images.IndexOfKey(key);
-				}
 			}
 		}
 

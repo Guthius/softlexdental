@@ -15,6 +15,7 @@ redistributed.
 using CodeBase;
 using DataConnectionBase;
 using Microsoft.Win32;
+using OpenDental.Properties;
 using OpenDental.UI;
 using OpenDentBusiness;
 using OpenDentBusiness.UI;
@@ -57,7 +58,7 @@ namespace OpenDental
         private MenuItem menuItemQuestions;
         private MenuItem menuItemCustomReports;
         private MenuItem menuItemMessaging;
-        private OpenDental.UI.LightSignalGrid lightSignalGrid1;
+        
         private MenuItem menuItemMessagingButs;
         private Bitmap bitmapIcon;
         private MenuItem menuItemCreateAtoZFolders;
@@ -441,8 +442,7 @@ namespace OpenDental
             ToolBarMain.Location = new Point(51, 0);
             ToolBarMain.Size = new Size(931, 25);
             ToolBarMain.Dock = DockStyle.Top;
-            ToolBarMain.ImageList = imageListMain;
-            ToolBarMain.ButtonClick += new ODToolBarButtonClickEventHandler(ToolBarMain_ButtonClick);
+            ToolBarMain.ButtonClick += new EventHandler<ODToolBarButtonClickEventArgs>(ToolBarMain_ButtonClick);
             this.Controls.Add(ToolBarMain);
             //outlook bar
             UpdateSplashProgress("Loading outlook bar", 10);
@@ -1723,38 +1723,30 @@ namespace OpenDental
         private void LayoutToolBar()
         {
             ToolBarMain.Buttons.Clear();
-            if (ODColorTheme.HasFlatIcons)
-            {
-                ToolBarMain.ImageList = imageListFlat;
-            }
-            else
-            {
-                ToolBarMain.ImageList = imageListMain;
-            }
             ODToolBarButton button;
-            button = new ODToolBarButton(Lan.g(this, "Select Patient"), 0, "", "Patient");
+            button = new ODToolBarButton(Lan.g(this, "Select Patient"), Resources.IconUser, "", "Patient");
             button.Style = ODToolBarButtonStyle.DropDownButton;
             button.DropDownMenu = menuPatient;
             ToolBarMain.Buttons.Add(button);
             if (!Programs.UsingEcwTightMode())
             {//eCW tight only gets Patient Select and Popups toolbar buttons
-                button = new ODToolBarButton(Lan.g(this, "Commlog"), 1, Lan.g(this, "New Commlog Entry"), "Commlog");
+                button = new ODToolBarButton(Lan.g(this, "Commlog"), Resources.IconLog, Lan.g(this, "New Commlog Entry"), "Commlog");
                 if (PrefC.IsODHQ)
                 {
                     button.Style = ODToolBarButtonStyle.DropDownButton;
                     button.DropDownMenu = menuCommlog;
                 }
                 ToolBarMain.Buttons.Add(button);
-                button = new ODToolBarButton(Lan.g(this, "E-mail"), 2, Lan.g(this, "Send E-mail"), "Email");
+                button = new ODToolBarButton(Lan.g(this, "E-mail"), Resources.IconEmail, Lan.g(this, "Send E-mail"), "Email");
                 button.Style = ODToolBarButtonStyle.DropDownButton;
                 button.DropDownMenu = menuEmail;
                 ToolBarMain.Buttons.Add(button);
-                button = new ODToolBarButton(Lan.g(this, "WebMail"), 2, Lan.g(this, "Secure WebMail"), "WebMail");
+                button = new ODToolBarButton(Lan.g(this, "WebMail"), Resources.IconEmail, Lan.g(this, "Secure WebMail"), "WebMail");
                 button.Enabled = true;//Always enabled.  If the patient does not have an email address, then the user will be blocked from the FormWebMailMessageEdit window.
                 ToolBarMain.Buttons.Add(button);
                 if (_butText == null)
                 {//If laying out again (after modifying setup), we keep the button to preserve the current notification text.
-                    _butText = new ODToolBarButton(Lan.g(this, "Text"), 5, Lan.g(this, "Send Text Message"), "Text");
+                    _butText = new ODToolBarButton(Lan.g(this, "Text"), Resources.IconTextMessage, Lan.g(this, "Send Text Message"), "Text");
                     _butText.Style = ODToolBarButtonStyle.DropDownButton;
                     _butText.DropDownMenu = menuText;
                     _butText.Enabled = Programs.IsEnabled(ProgramName.CallFire) || SmsPhones.IsIntegratedTextingEnabled();
@@ -1765,27 +1757,27 @@ namespace OpenDental
                     }
                 }
                 ToolBarMain.Buttons.Add(_butText);
-                button = new ODToolBarButton(Lan.g(this, "Letter"), -1, Lan.g(this, "Quick Letter"), "Letter");
+                button = new ODToolBarButton(Lan.g(this, "Letter"), null, Lan.g(this, "Quick Letter"), "Letter");
                 button.Style = ODToolBarButtonStyle.DropDownButton;
                 button.DropDownMenu = menuLetter;
                 ToolBarMain.Buttons.Add(button);
-                button = new ODToolBarButton(Lan.g(this, "Forms"), -1, "", "Form");
+                button = new ODToolBarButton(Lan.g(this, "Forms"), null, "", "Form");
                 //button.Style=ODToolBarButtonStyle.DropDownButton;
                 //button.DropDownMenu=menuForm;
                 ToolBarMain.Buttons.Add(button);
                 if (_butTask == null)
                 {
-                    _butTask = new ODToolBarButton(Lan.g(this, "Tasks"), 3, Lan.g(this, "Open Tasks"), "Tasklist");
+                    _butTask = new ODToolBarButton(Lan.g(this, "Tasks"), Resources.IconTasks, Lan.g(this, "Open Tasks"), "Tasklist");
                     _butTask.Style = ODToolBarButtonStyle.DropDownButton;
                     _butTask.DropDownMenu = menuTask;
                 }
                 ToolBarMain.Buttons.Add(_butTask);
-                button = new ODToolBarButton(Lan.g(this, "Label"), 4, Lan.g(this, "Print Label"), "Label");
+                button = new ODToolBarButton(Lan.g(this, "Label"), Resources.IconPrint, Lan.g(this, "Print Label"), "Label");
                 button.Style = ODToolBarButtonStyle.DropDownButton;
                 button.DropDownMenu = menuLabel;
                 ToolBarMain.Buttons.Add(button);
             }
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Popups"), -1, Lan.g(this, "Edit popups for this patient"), "Popups"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Popups"), null, Lan.g(this, "Edit popups for this patient"), "Popups"));
             ProgramL.LoadToolbar(ToolBarMain, ToolBarsAvail.MainToolbar);
 
             Plugin.Trigger(this, "FormOpenDental_LayoutToolBar", ToolBarMain);
@@ -3272,7 +3264,7 @@ namespace OpenDental
                         {
                             try
                             {
-                                PaintOnIcon(butDef.SynchIcon, Color.White);
+                                //PaintOnIcon(butDef.SynchIcon, Color.White);
                             }
                             catch
                             {
@@ -3305,7 +3297,7 @@ namespace OpenDental
                         {
                             try
                             {
-                                PaintOnIcon(butDef.SynchIcon, color);
+                                //PaintOnIcon(butDef.SynchIcon, color);
                             }
                             catch 
                             {
@@ -3321,8 +3313,9 @@ namespace OpenDental
             }
         }
 
-        ///<summary>Refreshes the entire lightSignalGrid1 control to the current state according to the database.
-        ///This is typically used when the program is first starting up or when a signal is processed for a change to the SigButDef cache.</summary>
+        /// <summary>
+        /// Refreshes the entire lightSignalGrid1 control to the current state according to the database.
+        /// This is typically used when the program is first starting up or when a signal is processed for a change to the SigButDef cache.</summary>
         private void FillSignalButtons()
         {
             if (!DoFillSignalButtons())
@@ -3348,58 +3341,7 @@ namespace OpenDental
             return true;
         }
 
-        ///<summary>Pass in the cellNum as 1-based.</summary>
-        private void PaintOnIcon(int cellNum, Color color)
-        {
-            Graphics g;
-            if (bitmapIcon == null)
-            {
-                bitmapIcon = new Bitmap(16, 16);
-                g = Graphics.FromImage(bitmapIcon);
-                g.FillRectangle(new SolidBrush(Color.White), 0, 0, 15, 15);
-                //horizontal
-                g.DrawLine(Pens.Black, 0, 0, 15, 0);
-                g.DrawLine(Pens.Black, 0, 5, 15, 5);
-                g.DrawLine(Pens.Black, 0, 10, 15, 10);
-                g.DrawLine(Pens.Black, 0, 15, 15, 15);
-                //vertical
-                g.DrawLine(Pens.Black, 0, 0, 0, 15);
-                g.DrawLine(Pens.Black, 5, 0, 5, 15);
-                g.DrawLine(Pens.Black, 10, 0, 10, 15);
-                g.DrawLine(Pens.Black, 15, 0, 15, 15);
-                g.Dispose();
-            }
-            if (cellNum == 0)
-            {
-                return;
-            }
-            g = Graphics.FromImage(bitmapIcon);
-            int x = 0;
-            int y = 0;
-            switch (cellNum)
-            {
-                case 1: x = 1; y = 1; break;
-                case 2: x = 6; y = 1; break;
-                case 3: x = 11; y = 1; break;
-                case 4: x = 1; y = 6; break;
-                case 5: x = 6; y = 6; break;
-                case 6: x = 11; y = 6; break;
-                case 7: x = 1; y = 11; break;
-                case 8: x = 6; y = 11; break;
-                case 9: x = 11; y = 11; break;
-            }
-            g.FillRectangle(new SolidBrush(color), x, y, 4, 4);
-            IntPtr intPtr = bitmapIcon.GetHicon();
-            Icon icon = Icon.FromHandle(intPtr);
-            Icon = (Icon)icon.Clone();
-            DestroyIcon(intPtr);
-            icon.Dispose();
-            g.Dispose();
-        }
-
-        [System.Runtime.InteropServices.DllImport("user32.dll", CharSet = CharSet.Auto)]
-        extern static bool DestroyIcon(IntPtr handle);
-
+        
         private void lightSignalGrid1_ButtonClick(object sender, OpenDental.UI.ODLightSignalGridClickEventArgs e)
         {
             if (e.ActiveSignal != null)

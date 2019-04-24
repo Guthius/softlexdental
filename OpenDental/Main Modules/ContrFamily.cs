@@ -11,6 +11,7 @@ using System.Linq;
 using System.Windows.Forms;
 using CodeBase;
 using OpenDental.Bridges;
+using OpenDental.Properties;
 using OpenDental.UI;
 using OpenDentBusiness;
 
@@ -300,13 +301,11 @@ namespace OpenDental{
 			// ToolBarMain
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ToolBarMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-			this.ToolBarMain.ImageList = this.imageListToolBar;
 			this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
 			this.ToolBarMain.Name = "ToolBarMain";
 			this.ToolBarMain.Size = new System.Drawing.Size(939, 25);
 			this.ToolBarMain.TabIndex = 19;
-			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
+			this.ToolBarMain.ButtonClick += new EventHandler<ODToolBarButtonClickEventArgs>(this.ToolBarMain_ButtonClick);
 			// 
 			// ContrFamily
 			// 
@@ -562,39 +561,39 @@ namespace OpenDental{
 			ODToolBarButton button;
 			//ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Recall"),1,"","Recall"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			button=new ODToolBarButton(Lan.g(this,"Family Members:"),-1,"","");
+			button=new ODToolBarButton(Lan.g(this,"Family Members:"), null, "","");
 			button.Style=ODToolBarButtonStyle.Label;
 			ToolBarMain.Buttons.Add(button);
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add"),2,"Add Family Member","Add"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Delete"),3,Lan.g(this,"Delete Family Member"),"Delete"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Set Guarantor"),4,Lan.g(this,"Set as Guarantor"),"Guarantor"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Move"),5,Lan.g(this,"Move to Another Family"),"Move"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add"), Resources.IconAdd, "Add Family Member","Add"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Delete"), Resources.IconDelete, Lan.g(this,"Delete Family Member"),"Delete"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Set Guarantor"), Resources.IconStar, Lan.g(this,"Set as Guarantor"),"Guarantor"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Move"), Resources.IconUserGo, Lan.g(this,"Move to Another Family"),"Move"));
 			if(PrefC.GetBool(PrefName.ShowFeaturePatientClone)) {
 				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-				button=new ODToolBarButton(Lan.g(this,"Clones:"),-1,"","");
+				button=new ODToolBarButton(Lan.g(this,"Clones:"),null,"","");
 				button.Style=ODToolBarButtonStyle.Label;
 				ToolBarMain.Buttons.Add(button);
-				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add"),-1,Lan.g(this,"Creates a clone of the currently selected patient."),"AddClone"));
-				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Synch"),-1,Lan.g(this,"Synch information to the clone patient or create a clone of the currently selected patient if one does not exist"),"SynchClone"));
-				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Break"),-1,Lan.g(this,"Remove selected patient from the clone group."),"BreakClone"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add"), null, Lan.g(this,"Creates a clone of the currently selected patient."),"AddClone"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Synch"), null, Lan.g(this,"Synch information to the clone patient or create a clone of the currently selected patient if one does not exist"),"SynchClone"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Break"), null, Lan.g(this,"Remove selected patient from the clone group."),"BreakClone"));
 			}
 			if(PrefC.GetBool(PrefName.ShowFeatureSuperfamilies)){
 				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-				button=new ODToolBarButton(Lan.g(this,"Super Family:"),-1,"","");
+				button=new ODToolBarButton(Lan.g(this,"Super Family:"), null, "","");
 				button.Style=ODToolBarButtonStyle.Label;
 				ToolBarMain.Buttons.Add(button);
-				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add"),-1,"Add selected patient to a super family","AddSuper"));
-				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Remove"),-1,Lan.g(this,"Remove selected patient, and their family, from super family"),"RemoveSuper"));
-				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Disband"),-1,Lan.g(this,"Disband the current super family by removing all members of the super family."),"DisbandSuper"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add"), null, "Add selected patient to a super family","AddSuper"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Remove"), null, Lan.g(this,"Remove selected patient, and their family, from super family"),"RemoveSuper"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Disband"), null, Lan.g(this,"Disband the current super family by removing all members of the super family."),"DisbandSuper"));
 			}
 			if(!PrefC.GetBool(PrefName.EasyHideInsurance)){
 				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-				button=new ODToolBarButton(Lan.g(this,"Add Insurance"),6,"","Ins");
+				button=new ODToolBarButton(Lan.g(this,"Add Insurance"), Resources.IconInsurance, "","Ins");
 				button.Style=ODToolBarButtonStyle.DropDownButton;
 				button.DropDownMenu=menuInsurance;
 				ToolBarMain.Buttons.Add(button);
 				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-				button=new ODToolBarButton(Lan.g(this,"Discount Plan"),-1,"","Discount");
+				button=new ODToolBarButton(Lan.g(this,"Discount Plan"), null, "","Discount");
 				button.Style=ODToolBarButtonStyle.DropDownButton;
 				button.DropDownMenu=menuDiscount;
 				ToolBarMain.Buttons.Add(button);

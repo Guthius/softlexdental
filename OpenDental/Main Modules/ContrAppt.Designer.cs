@@ -318,7 +318,7 @@ namespace OpenDental
             // butBack
             // 
             this.butBack.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.butBack.Image = ((System.Drawing.Image)(resources.GetObject("butBack.Image")));
+            this.butBack.Image = global::OpenDental.Properties.Resources.IconBulletArrowLeft;
             this.butBack.Location = new System.Drawing.Point(66, 0);
             this.butBack.Name = "butBack";
             this.butBack.Size = new System.Drawing.Size(19, 22);
@@ -328,7 +328,7 @@ namespace OpenDental
             // butFwd
             // 
             this.butFwd.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.butFwd.Image = ((System.Drawing.Image)(resources.GetObject("butFwd.Image")));
+            this.butFwd.Image = global::OpenDental.Properties.Resources.IconBulletArrowRight;
             this.butFwd.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.butFwd.Location = new System.Drawing.Point(139, 0);
             this.butFwd.Name = "butFwd";
@@ -644,7 +644,7 @@ namespace OpenDental
             // 
             // butClearPin
             // 
-            this.butClearPin.Image = ((System.Drawing.Image)(resources.GetObject("butClearPin.Image")));
+            this.butClearPin.Image = global::OpenDental.Properties.Resources.IconEraser;
             this.butClearPin.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.butClearPin.Location = new System.Drawing.Point(43, 260);
             this.butClearPin.Name = "butClearPin";
@@ -919,7 +919,7 @@ namespace OpenDental
             // 
             // butSearchNext
             // 
-            this.butSearchNext.Image = ((System.Drawing.Image)(resources.GetObject("butSearchNext.Image")));
+            this.butSearchNext.Image = global::OpenDental.Properties.Resources.IconBulletArrowRight;
             this.butSearchNext.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.butSearchNext.Location = new System.Drawing.Point(111, 9);
             this.butSearchNext.Name = "butSearchNext";
@@ -1049,7 +1049,7 @@ namespace OpenDental
             this.gridProv.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.gridProv.TitleHeight = 18;
             this.gridProv.TranslationName = "TableAppProv";
-            this.gridProv.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridProv_CellDoubleClick);
+            this.gridProv.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridProv_CellDoubleClick);
             // 
             // tabReminders
             // 
@@ -1083,7 +1083,7 @@ namespace OpenDental
             this.gridReminders.TitleFont = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold);
             this.gridReminders.TitleHeight = 18;
             this.gridReminders.TranslationName = "TableReminders";
-            this.gridReminders.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridReminders_CellDoubleClick);
+            this.gridReminders.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridReminders_CellDoubleClick);
             this.gridReminders.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridReminders_MouseDown);
             // 
             // timerWaitingRoom
@@ -1159,13 +1159,11 @@ namespace OpenDental
             // 
             // ToolBarMain
             // 
-            this.ToolBarMain.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.ToolBarMain.ImageList = this.imageListMain;
             this.ToolBarMain.Location = new System.Drawing.Point(680, 2);
             this.ToolBarMain.Name = "ToolBarMain";
-            this.ToolBarMain.Size = new System.Drawing.Size(203, 25);
+            this.ToolBarMain.Size = new System.Drawing.Size(203, 27);
             this.ToolBarMain.TabIndex = 73;
-            this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
+            this.ToolBarMain.ButtonClick += new System.EventHandler<OpenDental.UI.ODToolBarButtonClickEventArgs>(this.ToolBarMain_ButtonClick);
             // 
             // menuReminderEdit
             // 

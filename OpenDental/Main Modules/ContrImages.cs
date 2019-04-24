@@ -31,6 +31,7 @@ using xImageDeviceManager;
 using System.Text.RegularExpressions;
 using System.Linq;
 using OpenDental.Bridges;
+using OpenDental.Properties;
 
 namespace OpenDental {
 
@@ -471,21 +472,19 @@ namespace OpenDental {
 			// ToolBarMain
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ToolBarMain.ImageList = this.imageListTools2;
 			this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
 			this.ToolBarMain.Name = "ToolBarMain";
 			this.ToolBarMain.Size = new System.Drawing.Size(939, 25);
 			this.ToolBarMain.TabIndex = 10;
-			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
+			this.ToolBarMain.ButtonClick += new  EventHandler<ODToolBarButtonClickEventArgs>(this.ToolBarMain_ButtonClick);
 			// 
 			// ToolBarPaint
 			// 
-			this.ToolBarPaint.ImageList = this.imageListTools2;
 			this.ToolBarPaint.Location = new System.Drawing.Point(440, 24);
 			this.ToolBarPaint.Name = "ToolBarPaint";
 			this.ToolBarPaint.Size = new System.Drawing.Size(499, 25);
 			this.ToolBarPaint.TabIndex = 14;
-			this.ToolBarPaint.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.paintTools_ButtonClick);
+			this.ToolBarPaint.ButtonClick += new  EventHandler<ODToolBarButtonClickEventArgs>(this.paintTools_ButtonClick);
 			// 
 			// sliderBrightnessContrast
 			// 
@@ -589,29 +588,29 @@ namespace OpenDental {
 			ToolBarMain.Buttons.Clear();
 			ToolBarPaint.Buttons.Clear();
 			ODToolBarButton button;
-			ToolBarMain.Buttons.Add(new ODToolBarButton("",1,Lan.g(this,"Print"),"Print"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton("",2,Lan.g(this,"Delete"),"Delete"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconPrint, Lan.g(this,"Print"),"Print"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconDelete, Lan.g(this,"Delete"),"Delete"));
 			if(ClaimPaymentNum==0) {
-				ToolBarMain.Buttons.Add(new ODToolBarButton("",3,Lan.g(this,"Item Info"),"Info"));
-				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Sign"),-1,Lan.g(this,"Sign this document"),"Sign"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconDocumentInfo, Lan.g(this,"Item Info"),"Info"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Sign"),null,Lan.g(this,"Sign this document"),"Sign"));
 			}
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			button=new ODToolBarButton(Lan.g(this,"Scan:"),-1,"","");
+			button=new ODToolBarButton(Lan.g(this,"Scan:"),null,"","");
 			button.Style=ODToolBarButtonStyle.Label;
 			ToolBarMain.Buttons.Add(button);
-			ToolBarMain.Buttons.Add(new ODToolBarButton("",14,Lan.g(this,"Scan Document"),"ScanDoc"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton("",18,Lan.g(this,"Scan Multi-Page Document"),"ScanMultiDoc"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconScanner, Lan.g(this,"Scan Document"),"ScanDoc"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconScanner, Lan.g(this,"Scan Multi-Page Document"),"ScanMultiDoc"));
 			if(ClaimPaymentNum==0) {
-				ToolBarMain.Buttons.Add(new ODToolBarButton("",16,Lan.g(this,"Scan Radiograph"),"ScanXRay"));
-				ToolBarMain.Buttons.Add(new ODToolBarButton("",15,Lan.g(this,"Scan Photo"),"ScanPhoto"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconXray, Lan.g(this,"Scan Radiograph"),"ScanXRay"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconPhoto, Lan.g(this,"Scan Photo"),"ScanPhoto"));
 			}
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Import"),5,Lan.g(this,"Import From File"),"Import"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Export"),19,Lan.g(this,"Export To File"),"Export"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Copy"),17,Lan.g(this,"Copy displayed image to clipboard"),"Copy"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Paste"),6,Lan.g(this,"Paste From Clipboard"),"Paste"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Import"), Resources.IconFolderImport, Lan.g(this,"Import From File"),"Import"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Export"), Resources.IconFolderExport, Lan.g(this,"Export To File"),"Export"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Copy"), Resources.IconCopy, Lan.g(this,"Copy displayed image to clipboard"),"Copy"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Paste"), Resources.IconPaste, Lan.g(this,"Paste From Clipboard"),"Paste"));
 			if(ClaimPaymentNum==0) {
-				button=new ODToolBarButton(Lan.g(this,"Templates"),-1,"","Forms");
+				button=new ODToolBarButton(Lan.g(this,"Templates"),null,"","Forms");
 				button.Style=ODToolBarButtonStyle.DropDownButton;
 				menuForms=new ContextMenu();
 				string formDir=FileAtoZ.CombinePaths(ImageStore.GetPreferredAtoZpath(),"Forms");
@@ -644,7 +643,7 @@ namespace OpenDental {
 				}
 				button.DropDownMenu=menuForms;
 				ToolBarMain.Buttons.Add(button);
-				button=new ODToolBarButton(Lan.g(this,"Capture"),-1,"Capture Image From Device","Capture");
+				button=new ODToolBarButton(Lan.g(this,"Capture"),null,"Capture Image From Device","Capture");
 				button.Style=ODToolBarButtonStyle.ToggleButton;
 				ToolBarMain.Buttons.Add(button);
 				//Program links:
@@ -652,30 +651,30 @@ namespace OpenDental {
 			}
 			else {//claimpayment
 				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Close"),-1,Lan.g(this,"Close window"),"Close"));
+				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Close"),null,Lan.g(this,"Close window"),"Close"));
 			}
 			if(ClaimPaymentNum==0) {
-				button=new ODToolBarButton("",7,Lan.g(this,"Crop Tool"),"Crop");
+				button=new ODToolBarButton("", Resources.IconTransformCrop, Lan.g(this,"Crop Tool"),"Crop");
 				button.Style=ODToolBarButtonStyle.ToggleButton;
 				button.Pushed=IsCropMode;
 				ToolBarPaint.Buttons.Add(button);
-				button=new ODToolBarButton("",10,Lan.g(this,"Hand Tool"),"Hand");
+				button=new ODToolBarButton("", Resources.IconHand, Lan.g(this,"Hand Tool"),"Hand");
 				button.Style=ODToolBarButtonStyle.ToggleButton;
 				button.Pushed=!IsCropMode;
 				ToolBarPaint.Buttons.Add(button);
 				ToolBarPaint.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			}
-			ToolBarPaint.Buttons.Add(new ODToolBarButton("",8,Lan.g(this,"Zoom In"),"ZoomIn"));
-			ToolBarPaint.Buttons.Add(new ODToolBarButton("",9,Lan.g(this,"Zoom Out"),"ZoomOut"));
-			ToolBarPaint.Buttons.Add(new ODToolBarButton("100",-1,Lan.g(this,"Zoom 100"),"Zoom100"));
+			ToolBarPaint.Buttons.Add(new ODToolBarButton("", Resources.IconZoomIn, Lan.g(this,"Zoom In"),"ZoomIn"));
+			ToolBarPaint.Buttons.Add(new ODToolBarButton("", Resources.IconZoomOut, Lan.g(this,"Zoom Out"),"ZoomOut"));
+			ToolBarPaint.Buttons.Add(new ODToolBarButton("100", Resources.IconZoomReset, Lan.g(this,"Zoom 100"),"Zoom100"));
 			if(ClaimPaymentNum==0) {
 				ToolBarPaint.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-				button=new ODToolBarButton(Lan.g(this,"Rotate:"),-1,"","");
+				button=new ODToolBarButton(Lan.g(this,"Rotate:"),null,"","");
 				button.Style=ODToolBarButtonStyle.Label;
 				ToolBarPaint.Buttons.Add(button);
-				ToolBarPaint.Buttons.Add(new ODToolBarButton("",11,Lan.g(this,"Flip"),"Flip"));
-				ToolBarPaint.Buttons.Add(new ODToolBarButton("",12,Lan.g(this,"Rotate Left"),"RotateL"));
-				ToolBarPaint.Buttons.Add(new ODToolBarButton("",13,Lan.g(this,"Rotate Right"),"RotateR"));
+				ToolBarPaint.Buttons.Add(new ODToolBarButton("", Resources.IconFlipHorizontal, Lan.g(this,"Flip"),"Flip"));
+				ToolBarPaint.Buttons.Add(new ODToolBarButton("", Resources.IconRotateLeft, Lan.g(this,"Rotate Left"),"RotateL"));
+				ToolBarPaint.Buttons.Add(new ODToolBarButton("", Resources.IconRotateRight, Lan.g(this,"Rotate Right"),"RotateR"));
 			}
 			ToolBarMain.Invalidate();
 			ToolBarPaint.Invalidate();
@@ -687,24 +686,24 @@ namespace OpenDental {
 			ToolBarMain.Buttons.Clear();
 			ToolBarPaint.Buttons.Clear();
 			ODToolBarButton button;
-			ToolBarMain.Buttons.Add(new ODToolBarButton("",1,Lan.g(this,"Print"),"Print"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton("",2,Lan.g(this,"Delete"),"Delete"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconPrint, Lan.g(this,"Print"),"Print"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconDelete, Lan.g(this,"Delete"),"Delete"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			button=new ODToolBarButton(Lan.g(this,"Scan:"),-1,"","");
+			button=new ODToolBarButton(Lan.g(this,"Scan:"),null,"","");
 			button.Style=ODToolBarButtonStyle.Label;
 			ToolBarMain.Buttons.Add(button);
-			ToolBarMain.Buttons.Add(new ODToolBarButton("",14,Lan.g(this,"Scan Document"),"ScanDoc"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton("",18,Lan.g(this,"Scan Multi-Page Document"),"ScanMultiDoc"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconScanner, Lan.g(this,"Scan Document"),"ScanDoc"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton("", Resources.IconScanner, Lan.g(this,"Scan Multi-Page Document"),"ScanMultiDoc"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Import"),5,Lan.g(this,"Import From File"),"Import"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Export"),19,Lan.g(this,"Export To File"),"Export"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Copy"),17,Lan.g(this,"Copy displayed image to clipboard"),"Copy"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Paste"),6,Lan.g(this,"Paste From Clipboard"),"Paste"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Import"), Resources.IconFolderImport, Lan.g(this,"Import From File"),"Import"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Export"), Resources.IconFolderExport, Lan.g(this,"Export To File"),"Export"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Copy"), Resources.IconCopy, Lan.g(this,"Copy displayed image to clipboard"),"Copy"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Paste"), Resources.IconPaste, Lan.g(this,"Paste From Clipboard"),"Paste"));
 			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Close"),-1,Lan.g(this,"Close window"),"Close"));
-			ToolBarPaint.Buttons.Add(new ODToolBarButton("",8,Lan.g(this,"Zoom In"),"ZoomIn"));
-			ToolBarPaint.Buttons.Add(new ODToolBarButton("",9,Lan.g(this,"Zoom Out"),"ZoomOut"));
-			ToolBarPaint.Buttons.Add(new ODToolBarButton("100",-1,Lan.g(this,"Zoom 100"),"Zoom100"));
+			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Close"),null,Lan.g(this,"Close window"),"Close"));
+			ToolBarPaint.Buttons.Add(new ODToolBarButton("", Resources.IconZoomIn, Lan.g(this,"Zoom In"),"ZoomIn"));
+			ToolBarPaint.Buttons.Add(new ODToolBarButton("", Resources.IconZoomOut, Lan.g(this,"Zoom Out"),"ZoomOut"));
+			ToolBarPaint.Buttons.Add(new ODToolBarButton("100", Resources.IconZoomReset, Lan.g(this,"Zoom 100"),"Zoom100"));
 			ToolBarMain.Invalidate();
 			ToolBarPaint.Invalidate();
 		}

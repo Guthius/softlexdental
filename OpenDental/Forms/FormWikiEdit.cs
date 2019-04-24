@@ -6,6 +6,7 @@ using OpenDental.UI;
 using CodeBase;
 using System.Text.RegularExpressions;
 using System.Linq;
+using OpenDental.Properties;
 
 namespace OpenDental
 {
@@ -215,45 +216,45 @@ namespace OpenDental
         {
             ToolBarMain.Buttons.Clear();
             //Refresh no longer needed.
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Save"), 1, "", "Save"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Save as Draft"), 18, "", "SaveDraft"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Cancel"), 2, "", "Cancel"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Save"), Resources.IconSave, "", "Save"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Save as Draft"), Resources.IconSaveDraft, "", "SaveDraft"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Cancel"), Resources.IconCancel, "", "Cancel"));
             ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Int Link"), 7, "", "Int Link"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Bookmark"), 7, "", "Bookmark"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "File"), 7, "", "File Link"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Folder"), 7, "", "Folder Link"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Ext Link"), 8, "", "Ext Link"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Int Link"), Resources.IconLink, "", "Int Link"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Bookmark"), Resources.IconLink, "", "Bookmark"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "File"), Resources.IconLink, "", "File Link"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Folder"), Resources.IconLink, "", "Folder Link"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Ext Link"), Resources.IconLinkExternal, "", "Ext Link"));
             ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Heading1"), 9, "", "H1"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Heading2"), 10, "", "H2"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Heading3"), 11, "", "H3"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Heading1"), Resources.IconTextHeading1, "", "H1"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Heading2"), Resources.IconTextHeading2, "", "H2"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Heading3"), Resources.IconTextHeading3, "", "H3"));
             ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Table"), 15, "", "Table"));
-            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Image"), 16, "", "Image"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Table"), Resources.IconTable, "", "Table"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Image"), Resources.IconImage, "", "Image"));
             ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
             if (Security.IsAuthorized(Permissions.WikiAdmin, true))
             {
                 if (WikiPageCur.IsLocked)
                 {
-                    ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Unlock"), 19, "", "Lock"));
+                    ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Unlock"), Resources.IconLockOpen, "", "Lock"));
                 }
                 else
                 {
-                    ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Lock"), 20, "", "Lock"));
+                    ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Lock"), Resources.IconLock, "", "Lock"));
                 }
             }
             toolBar2.Buttons.Clear();
-            toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this, "Cut"), 3, "", "Cut"));
-            toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this, "Copy"), 4, "", "Copy"));
-            toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this, "Paste"), 5, "", "Paste"));
+            toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this, "Cut"), Resources.IconCut, "", "Cut"));
+            toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this, "Copy"), Resources.IconCopy, "", "Copy"));
+            toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this, "Paste"), Resources.IconPaste, "", "Paste"));
             toolBar2.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-            toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this, "Undo"), 6, "", "Undo"));
+            toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this, "Undo"), Resources.IconUndo, "", "Undo"));
             toolBar2.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-            toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this, "Bold"), 12, "", "Bold"));
-            toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this, "Italic"), 13, "", "Italic"));
-            toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this, "Color"), 14, "", "Color"));
-            toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this, "Font"), 17, "", "Font"));
+            toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this, "Bold"), Resources.IconTextBold, "", "Bold"));
+            toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this, "Italic"), Resources.IconTextItalic, "", "Italic"));
+            toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this, "Color"), Resources.IconFontColors, "", "Color"));
+            toolBar2.Buttons.Add(new ODToolBarButton(Lan.g(this, "Font"), Resources.IconFont, "", "Font"));
         }
 
         private void ToolBarMain_ButtonClick(object sender, OpenDental.UI.ODToolBarButtonClickEventArgs e)
@@ -309,13 +310,13 @@ namespace OpenDental
                     {
                         //The wiki page is was locked, switch the icon to the unlock symbol because they locked it.
                         e.Button.Text = Lan.g(this, "Unlock");
-                        e.Button.ImageIndex = 19;
+                        e.Button.Image = Resources.IconLockOpen;
                     }
                     else
                     {
                         //The wiki page is was unlocked, switch the icon to the lock symbol because they unlocked it.
                         e.Button.Text = Lan.g(this, "Lock");
-                        e.Button.ImageIndex = 20;
+                        e.Button.Image = Resources.IconLock;
                     }
                     ToolBarMain.Invalidate();
                     break;

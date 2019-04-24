@@ -15,6 +15,7 @@ using OpenDental.UI;
 using OpenDentBusiness;
 using CodeBase;
 using OpenDentBusiness.Eclaims;
+using OpenDental.Properties;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -235,12 +236,11 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.ToolBarHistory.BackColor = System.Drawing.SystemColors.Control;
-			this.ToolBarHistory.ImageList = this.imageList1;
 			this.ToolBarHistory.Location = new System.Drawing.Point(1, 1);
 			this.ToolBarHistory.Name = "ToolBarHistory";
 			this.ToolBarHistory.Size = new System.Drawing.Size(353, 25);
 			this.ToolBarHistory.TabIndex = 43;
-			this.ToolBarHistory.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarHistory_ButtonClick);
+			this.ToolBarHistory.ButtonClick += new EventHandler<ODToolBarButtonClickEventArgs>(this.ToolBarHistory_ButtonClick);
 			// 
 			// comboClinic
 			// 
@@ -321,12 +321,11 @@ namespace OpenDental{
 			// ToolBarMain
 			// 
 			this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
-			this.ToolBarMain.ImageList = this.imageList1;
 			this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
 			this.ToolBarMain.Name = "ToolBarMain";
 			this.ToolBarMain.Size = new System.Drawing.Size(994, 25);
 			this.ToolBarMain.TabIndex = 31;
-			this.ToolBarMain.ButtonClick += new OpenDental.UI.ODToolBarButtonClickEventHandler(this.ToolBarMain_ButtonClick);
+			this.ToolBarMain.ButtonClick += new EventHandler<ODToolBarButtonClickEventArgs>(this.ToolBarMain_ButtonClick);
 			// 
 			// contextMenuHistory
 			// 
@@ -479,62 +478,59 @@ namespace OpenDental{
 			}
 		}
 
-		///<summary></summary>
-		public void LayoutToolBars(){
-			ToolBarMain.Buttons.Clear();
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Preview"),0,Lan.g(this,"Preview the Selected Claim"),"Preview"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Blank"),1,Lan.g(this,"Print a Blank Claim Form"),"Blank"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Print"),2,Lan.g(this,"Print Selected Claims"),"Print"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Labels"),6,Lan.g(this,"Print Single Labels"),"Labels"));
-			/*ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+        ///<summary></summary>
+        public void LayoutToolBars()
+        {
+            ToolBarMain.Buttons.Clear();
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Preview"), Resources.IconPageWhiteMagnify, Lan.g(this, "Preview the Selected Claim"), "Preview"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Blank"), Resources.IconPageWhite, Lan.g(this, "Print a Blank Claim Form"), "Blank"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Print"), Resources.IconPrint, Lan.g(this, "Print Selected Claims"), "Print"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Labels"), Resources.IconTagBlue, Lan.g(this, "Print Single Labels"), "Labels"));
+            /*ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
 			ODToolBarButton button=new ODToolBarButton(Lan.g(this,"Change Status"),-1,Lan.g(this,"Changes Status of Selected Claims"),"Status");
 			button.Style=ODToolBarButtonStyle.DropDownButton;
 			button.DropDownMenu=contextMenuStatus;
 			ToolBarMain.Buttons.Add(button);*/
-			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ODToolBarButton button=new ODToolBarButton(Lan.g(this,"Send E-Claims"),4,Lan.g(this,"Send claims Electronically"),"Eclaims");
-			button.Style=ODToolBarButtonStyle.DropDownButton;
-			button.DropDownMenu=contextMenuEclaims;
-			ToolBarMain.Buttons.Add(button);
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Validate Claims"),-1,Lan.g(this,"Refresh and Validate Selected Claims"),"Validate"));
-			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
-				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Outstanding"),-1,Lan.g(this,"Get Outstanding Transactions"),"Outstanding"));
-				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Payment Rec"),-1,Lan.g(this,"Get Payment Reconciliation Transactions"),"PayRec"));
-				//ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Summary Rec"),-1,Lan.g(this,"Get Summary Reconciliation Transactions"),"SummaryRec"));
-			}
-			else {
-				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Get Reports"),5,Lan.g(this,"Get Reports from Other Clearinghouses"),"Reports"));
-			}
-			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Refresh"),-1,Lan.g(this,"Refresh the Grid"),"Refresh"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Procs Not Billed"),-1,"","ProcsNotBilled"));
-			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Close"),-1,"","Close"));
-			/*ArrayList toolButItems=ToolButItems.GetForToolBar(ToolBarsAvail.ClaimsSend);
-			for(int i=0;i<toolButItems.Count;i++){
-				ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-				ToolBarMain.Buttons.Add(new ODToolBarButton(((ToolButItem)toolButItems[i]).ButtonText
-					,-1,"",((ToolButItem)toolButItems[i]).ProgramNum));
-			}*/
-			ToolBarMain.Invalidate();
-			ToolBarHistory.Buttons.Clear();
-			ToolBarHistory.Buttons.Add(new ODToolBarButton(Lan.g(this,"Refresh"),-1,Lan.g(this,"Refresh this list."),"Refresh"));
-			ToolBarHistory.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarHistory.Buttons.Add(new ODToolBarButton(Lan.g(this,"Undo"),-1,
-				Lan.g(this,"Change the status of claims back to 'Waiting'."),"Undo"));
-			ToolBarHistory.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			ToolBarHistory.Buttons.Add(new ODToolBarButton(Lan.g(this,"Print List"),2,
-				Lan.g(this,"Print history list."),"PrintList"));
-			ToolBarHistory.Buttons.Add(new ODToolBarButton(Lan.g(this,"Outstanding Claims"),-1,"","OutstandingClaims"));
-			/*#if DEBUG
+            ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+            ODToolBarButton button = new ODToolBarButton(Lan.g(this, "Send E-Claims"), null, Lan.g(this, "Send claims Electronically"), "Eclaims"); // TODO: Find a icon for this...
+            button.Style = ODToolBarButtonStyle.DropDownButton;
+            button.DropDownMenu = contextMenuEclaims;
+            ToolBarMain.Buttons.Add(button);
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Validate Claims"), null, Lan.g(this, "Refresh and Validate Selected Claims"), "Validate"));
+            if (CultureInfo.CurrentCulture.Name.EndsWith("CA"))
+            {//Canadian. en-CA or fr-CA
+                ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Outstanding"), null, Lan.g(this, "Get Outstanding Transactions"), "Outstanding"));
+                ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Payment Rec"), null, Lan.g(this, "Get Payment Reconciliation Transactions"), "PayRec"));
+                //ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Summary Rec"),-1,Lan.g(this,"Get Summary Reconciliation Transactions"),"SummaryRec"));
+            }
+            else
+            {
+                // TODO: Get a better icon for this...
+                ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Get Reports"), Resources.IconReport, Lan.g(this, "Get Reports from Other Clearinghouses"), "Reports"));
+            }
+            ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Refresh"), Resources.IconRefresh, Lan.g(this, "Refresh the Grid"), "Refresh"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Procs Not Billed"), null, "", "ProcsNotBilled"));
+            ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Close"), null, "", "Close"));
+
+            ToolBarMain.Invalidate();
+            ToolBarHistory.Buttons.Clear();
+            ToolBarHistory.Buttons.Add(new ODToolBarButton(Lan.g(this, "Refresh"), Resources.IconRefresh, Lan.g(this, "Refresh this list."), "Refresh"));
+            ToolBarHistory.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+            ToolBarHistory.Buttons.Add(new ODToolBarButton(Lan.g(this, "Undo"), Resources.IconUndo, Lan.g(this, "Change the status of claims back to 'Waiting'."), "Undo"));
+            ToolBarHistory.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
+            ToolBarHistory.Buttons.Add(new ODToolBarButton(Lan.g(this, "Print List"), Resources.IconPrint, Lan.g(this, "Print history list."), "PrintList"));
+            ToolBarHistory.Buttons.Add(new ODToolBarButton(Lan.g(this, "Outstanding Claims"), null, "", "OutstandingClaims"));
+            /*#if DEBUG
 			ToolBarHistory.Buttons.Add(new ODToolBarButton(Lan.g(this,"Print Item"),2,
 				Lan.g(this,"For debugging, this will simply display the first item in the list."),"PrintItem"));
 			#else
 			ToolBarHistory.Buttons.Add(new ODToolBarButton(Lan.g(this,"Print Item"),2,
 				Lan.g(this,"Print one item from the list."),"PrintItem"));
 			#endif*/
-			ToolBarHistory.Invalidate();
-		}
+            ToolBarHistory.Invalidate();
+        }
 
 		private void FormClaimsSend_Resize(object sender,EventArgs e) {
 			AdjustPanelSplit();

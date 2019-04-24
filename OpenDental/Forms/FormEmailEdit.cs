@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using CodeBase;
 using System.Diagnostics;
+using OpenDental.Properties;
 
 namespace OpenDental {
 	public partial class FormEmailEdit:ODForm {
@@ -63,33 +64,33 @@ namespace OpenDental {
 
 		private void LayoutToolBars() {
 			toolBarTop.Buttons.Clear();
-			toolBarTop.Buttons.Add(new ODToolBarButton(Lan.g(this,"Setup"),19,Lan.g(this,"Setup master page and styles."),"Setup"));
+			toolBarTop.Buttons.Add(new ODToolBarButton(Lan.g(this,"Setup"), Resources.IconCog, Lan.g(this,"Setup master page and styles."),"Setup"));
 			toolBarTop.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			toolBarTop.Buttons.Add(new ODToolBarButton(Lan.g(this,"Ext Link"),8,"","Ext Link"));
-			toolBarTop.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading1"),9,"","H1"));
-			toolBarTop.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading2"),10,"","H2"));
-			toolBarTop.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading3"),11,"","H3"));
+			toolBarTop.Buttons.Add(new ODToolBarButton(Lan.g(this,"Ext Link"), Resources.IconLinkExternal, "","Ext Link"));
+			toolBarTop.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading1"), Resources.IconTextHeading1, "","H1"));
+			toolBarTop.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading2"), Resources.IconTextHeading2, "","H2"));
+			toolBarTop.Buttons.Add(new ODToolBarButton(Lan.g(this,"Heading3"), Resources.IconTextHeading3, "","H3"));
 			toolBarTop.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			toolBarTop.Buttons.Add(new ODToolBarButton(Lan.g(this,"Table"),15,"","Table"));
-			toolBarTop.Buttons.Add(new ODToolBarButton(Lan.g(this,"Image"),16,"","Image"));
+			toolBarTop.Buttons.Add(new ODToolBarButton(Lan.g(this,"Table"), Resources.IconTable, "","Table"));
+			toolBarTop.Buttons.Add(new ODToolBarButton(Lan.g(this,"Image"), Resources.IconImage, "","Image"));
 			//The autograph button and drop down
-			ODToolBarButton buttonAutograph=new ODToolBarButton(Lan.g(this,"Autograph"),-1,"","Autograph");
+			ODToolBarButton buttonAutograph=new ODToolBarButton(Lan.g(this,"Autograph"),null,"","Autograph");
 			buttonAutograph.Style=ODToolBarButtonStyle.DropDownButton;
 			FillAutographDropdown();
 			buttonAutograph.DropDownMenu=menuAutographDropdown;
 			toolBarTop.Buttons.Add(buttonAutograph);
 			//Create the tool bar on the bottom
 			toolBarBottom.Buttons.Clear();
-			toolBarBottom.Buttons.Add(new ODToolBarButton(Lan.g(this,"Cut"),3,"","Cut"));
-			toolBarBottom.Buttons.Add(new ODToolBarButton(Lan.g(this,"Copy"),4,"","Copy"));
-			toolBarBottom.Buttons.Add(new ODToolBarButton(Lan.g(this,"Paste"),5,"","Paste"));
+			toolBarBottom.Buttons.Add(new ODToolBarButton(Lan.g(this,"Cut"), Resources.IconCut, "","Cut"));
+			toolBarBottom.Buttons.Add(new ODToolBarButton(Lan.g(this,"Copy"), Resources.IconCopy, "","Copy"));
+			toolBarBottom.Buttons.Add(new ODToolBarButton(Lan.g(this,"Paste"), Resources.IconPaste, "","Paste"));
 			toolBarBottom.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			toolBarBottom.Buttons.Add(new ODToolBarButton(Lan.g(this,"Undo"),6,"","Undo"));
+			toolBarBottom.Buttons.Add(new ODToolBarButton(Lan.g(this,"Undo"), Resources.IconUndo, "","Undo"));
 			toolBarBottom.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
-			toolBarBottom.Buttons.Add(new ODToolBarButton(Lan.g(this,"Bold"),12,"","Bold"));
-			toolBarBottom.Buttons.Add(new ODToolBarButton(Lan.g(this,"Italic"),13,"","Italic"));
-			toolBarBottom.Buttons.Add(new ODToolBarButton(Lan.g(this,"Color"),14,"","Color"));
-			toolBarBottom.Buttons.Add(new ODToolBarButton(Lan.g(this,"Font"),17,"","Font"));
+			toolBarBottom.Buttons.Add(new ODToolBarButton(Lan.g(this,"Bold"), Resources.IconTextBold, "","Bold"));
+			toolBarBottom.Buttons.Add(new ODToolBarButton(Lan.g(this,"Italic"), Resources.IconTextItalic, "","Italic"));
+			toolBarBottom.Buttons.Add(new ODToolBarButton(Lan.g(this,"Color"), Resources.IconFontColors, "","Color"));
+			toolBarBottom.Buttons.Add(new ODToolBarButton(Lan.g(this,"Font"), Resources.IconFont, "","Font"));
 		}
 
 		private void toolBarTop_ButtonClick(object sender,ODToolBarButtonClickEventArgs e) {
