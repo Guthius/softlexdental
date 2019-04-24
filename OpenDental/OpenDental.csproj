@@ -602,6 +602,9 @@
     <Compile Include="Main Modules\ContrFamily.Designer.cs">
       <DependentUpon>ContrFamily.cs</DependentUpon>
     </Compile>
+    <Compile Include="Main Modules\ContrImages.Designer.cs">
+      <DependentUpon>ContrImages.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main Modules\ContrStaff.Designer.cs">
       <DependentUpon>ContrStaff.cs</DependentUpon>
     </Compile>
