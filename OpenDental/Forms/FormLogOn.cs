@@ -5,6 +5,7 @@ using System.Windows.Forms;
 
 namespace OpenDental
 {
+    [ODHelpButton]
     public partial class FormLogOn : FormBase
     {
         /// <summary>

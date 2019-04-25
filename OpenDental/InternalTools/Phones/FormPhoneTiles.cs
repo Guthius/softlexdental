@@ -47,12 +47,6 @@ namespace OpenDental {
 			}
 		}
 
-		protected override bool HasHelpKey {
-			get {
-				return false;
-			}
-		}
-
 		///<summary>Filters phone list. Checks the checkHideClockedOut and will remove phones if employee is not clocked in.</summary>
 		private void FilterPhoneList() {
 			List<Phone> listFiltered=new List<Phone>();

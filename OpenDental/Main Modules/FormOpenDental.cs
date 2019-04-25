@@ -537,30 +537,47 @@ namespace OpenDental
             actionCloseSplashWindow?.Invoke();
         }
 
-        protected override string ShowHelpOverride()
+
+        protected override void OnHelp(ODHelpEventArgs e)
         {
             string moduleText = GetSelectedModuleName();
-            //ODHelp uses the form/module's name in the code, not displayed text.
+
             switch (moduleText)
             {
                 case "Appts":
-                    return nameof(ContrAppt);
+                    e.FormName = nameof(ContrAppt);
+                    break;
+
                 case "Family":
-                    return nameof(ContrFamily);
+                    e.FormName = nameof(ContrFamily);
+                    break;
+
                 case "Account":
-                    return nameof(ContrAccount);
+                    e.FormName = nameof(ContrAccount);
+                    break;
+
                 case "Treat' Plan":
-                    return nameof(ContrTreat);
+                    e.FormName = nameof(ContrTreat);
+                    break;
+
                 case "Chart":
-                    return nameof(ContrChart);
+                    e.FormName = nameof(ContrChart);
+                    break;
+
                 case "Images":
-                    return nameof(ContrImages);
+                    e.FormName = nameof(ContrImages);
+                    break;
+
                 case "Manage":
-                    return nameof(ContrStaff);
+                    e.FormName = nameof(ContrStaff);
+                    break;
+
                 default:
-                    return "";
+                    e.Handled = true;
+                    break;
             }
         }
+
 
         private void FormOpenDental_Load(object sender, System.EventArgs e)
         {
@@ -8070,7 +8087,6 @@ namespace OpenDental
             SetTimersAndThreads(false);
             userControlPatientDashboard.CloseDashboard(true);
             ShowLogOn();
-            ShowHelpButtonSafe();
             //If a different user logs on and they have clinics enabled, then clear the patient drop down history
             //since the current user may not have permission to access patients from the same clinic(s) as the old user
             if (oldUser.UserNum != Security.CurUser.UserNum && PrefC.HasClinicsEnabled)
