@@ -4773,7 +4773,7 @@ namespace OpenDental {
 							if(FormPP.DialogResult==DialogResult.Cancel) {
 								return;
 							}
-							List<Userod> listDoseUsers=Userods.GetWhere(x => x.ProvNum==FormPP.SelectedProvNum,true);//Only consider non-hidden users.
+							List<User> listDoseUsers=Userods.GetWhere(x => x.ProvNum==FormPP.SelectedProvNum,true);//Only consider non-hidden users.
 							listDoseUsers=listDoseUsers.FindAll(x => {//Finds users that have a DoseSpot ID
 								try {
 									return !string.IsNullOrWhiteSpace(DoseSpot.GetUserID(x,clinicNum));
@@ -4782,7 +4782,7 @@ namespace OpenDental {
 									return false;
 								}
 							});
-							Userod userOnBehalfOf=null;
+							User userOnBehalfOf=null;
 							if(listDoseUsers.Count==1) {
 								userOnBehalfOf=listDoseUsers[0];
 							}

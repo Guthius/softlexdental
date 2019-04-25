@@ -16,7 +16,7 @@ namespace OpenDental {
 		private DataTable _tableTasks;
 		private List<long> _listPreLoadedTaskNums;
 		private List<Def> _listTaskPriorities;
-		private List<Userod> _listUsers;
+		private List<User> _listUsers;
 		public TaskObjectType GotoType;
 		public long UserNum;
 		public long GotoKeyNum;

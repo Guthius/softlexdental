@@ -96,7 +96,7 @@ namespace OpenDentBusiness
 						guarantor.FName as GuarFName
 					FROM patient pat
 					INNER JOIN procedurelog proc ON pat.PatNum=proc.PatNum AND proc.ProcStatus={POut.Int((int)ProcStat.C)}
-					LEFT JOIN appointment appt ON pat.PatNum=appt.PatNum AND appt.AptDateTime >= {DbHelper.Curdate()} 
+					LEFT JOIN appointment appt ON pat.PatNum=appt.PatNum AND appt.AptDateTime >= CURDATE() 
 					LEFT JOIN (
 						SELECT
 							commlog.PatNum,

@@ -8,7 +8,6 @@ using System.Threading;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
-using DataConnectionBase;
 
 namespace OpenDental {
 	public partial class FormReplicationSetup:ODForm {
@@ -159,74 +158,73 @@ namespace OpenDental {
 		}
 
 		private void butSynch_Click(object sender,EventArgs e) {
-			if(textUsername.Text=="") {
-				MsgBox.Show(this,"Please enter a username first.");
-				return;
-			}
-			if(_listReplicationServers.Count==0) {
-				MsgBox.Show(this,"Please add at servers to the list first.");
-				return;
-			}
-			Cursor=Cursors.WaitCursor;
-			string databaseNameOriginal=MiscData.GetCurrentDatabase();
-			string compNameOriginal=DataConnection.GetServerName();
-			DataConnection dc;
-			bool isReplicationSucessfull=true;
-			for(int i=0;i<_listReplicationServers.Count;i++) {
-				string compName=_listReplicationServers[i].Descript;
-				dc=new DataConnection();
-				try {
-					dc.SetDb(compName,databaseNameOriginal,textUsername.Text,textPassword.Text,"","");
-					//Connection is considered to be successfull at this point. Now restart the slave process to force replication.
-					string command="STOP SLAVE; START SLAVE; SHOW SLAVE STATUS;";
-					DataTable slaveStatus=dc.GetTable(command);
-					//Wait for the slave process to become active again.
-					for(int j=0;j<40 && slaveStatus.Rows[0]["Slave_IO_Running"].ToString().ToLower()!="yes";j++) {
-						Thread.Sleep(1000);
-						command="SHOW SLAVE STATUS";
-						slaveStatus=dc.GetTable(command);
-					}
-					if(slaveStatus.Rows[0]["Slave_IO_Running"].ToString().ToLower()!="yes") {
-						throw new ApplicationException(Lan.g(this,"Slave IO is not running on server")+" "+compName);
-					}
-					if(slaveStatus.Rows[0]["Slave_SQL_Running"].ToString().ToLower()!="yes") {
-						throw new ApplicationException(Lan.g(this,"Slave SQL is not running on server")+" "+compName);
-					}
-					//Wait for replication to complete.
-					while(slaveStatus.Rows[0]["Slave_IO_State"].ToString().ToLower()!="waiting for master to send event" || 
-						slaveStatus.Rows[0]["Seconds_Behind_Master"].ToString()!="0") {
-						slaveStatus=dc.GetTable(command);
-					}
-				}
-				catch(Exception ex) {
-					Cursor=Cursors.Default;
-					MessageBox.Show(Lan.g(this,"Error forcing synch on server")+" "+compName+": "+ex.Message);
-					isReplicationSucessfull=false;
-					break;//Cancel operation.
-				}
-			}
-			if(isReplicationSucessfull) {
-				Cursor=Cursors.Default;
-				MessageBox.Show(Lan.g(this,"Database synch completed successfully."));
-			}
-			//Do not leave this function without connecting back to original database, or closing program.
-			//At this point we are still connected to the last replication server in the list, try to connect back up to the original database.
-			bool isReconnectSuccessful=false;
-			while(!isReconnectSuccessful) {
-				try {
-					//Reconnect back to original database.
-					dc=new DataConnection();
-					dc.SetDb(compNameOriginal,databaseNameOriginal,textUsername.Text,textPassword.Text,"","");
-					isReconnectSuccessful=true;//No exception thrown, leave while loop.
-				}
-				catch(Exception ex) {
-					if(MessageBox.Show(Lan.g(this,"Error reconnecting to server")+" "+compNameOriginal+": "+ex.Message+"\r\n"+
-						Lan.g(this,"Would you like to retry?  Cancel will close the program."),"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
-					{
-						FormOpenDental.S_ProcessKillCommand();
-					}
-				}
-			}
+            // TODO: Fix this.
+
+			//if(textUsername.Text=="") {
+			//	MsgBox.Show(this,"Please enter a username first.");
+			//	return;
+			//}
+			//if(_listReplicationServers.Count==0) {
+			//	MsgBox.Show(this,"Please add at servers to the list first.");
+			//	return;
+			//}
+			//Cursor=Cursors.WaitCursor;
+			//string databaseNameOriginal=MiscData.GetCurrentDatabase();
+			//string compNameOriginal=DataConnection.Server;
+			//bool isReplicationSucessfull=true;
+			//for(int i=0;i<_listReplicationServers.Count;i++) {
+			//	string compName=_listReplicationServers[i].Descript;
+			//	try {
+            //        DataConnection.SetDb(compName,databaseNameOriginal,textUsername.Text,textPassword.Text);
+			//		//Connection is considered to be successfull at this point. Now restart the slave process to force replication.
+			//		string command="STOP SLAVE; START SLAVE; SHOW SLAVE STATUS;";
+			//		DataTable slaveStatus= DataConnection.GetTable(command);
+			//		//Wait for the slave process to become active again.
+			//		for(int j=0;j<40 && slaveStatus.Rows[0]["Slave_IO_Running"].ToString().ToLower()!="yes";j++) {
+			//			Thread.Sleep(1000);
+			//			command="SHOW SLAVE STATUS";
+			//			slaveStatus= DataConnection.GetTable(command);
+			//		}
+			//		if(slaveStatus.Rows[0]["Slave_IO_Running"].ToString().ToLower()!="yes") {
+			//			throw new ApplicationException(Lan.g(this,"Slave IO is not running on server")+" "+compName);
+			//		}
+			//		if(slaveStatus.Rows[0]["Slave_SQL_Running"].ToString().ToLower()!="yes") {
+			//			throw new ApplicationException(Lan.g(this,"Slave SQL is not running on server")+" "+compName);
+			//		}
+			//		//Wait for replication to complete.
+			//		while(slaveStatus.Rows[0]["Slave_IO_State"].ToString().ToLower()!="waiting for master to send event" || 
+			//			slaveStatus.Rows[0]["Seconds_Behind_Master"].ToString()!="0") {
+			//			slaveStatus= DataConnection.GetTable(command);
+			//		}
+			//	}
+			//	catch(Exception ex) {
+			//		Cursor=Cursors.Default;
+			//		MessageBox.Show(Lan.g(this,"Error forcing synch on server")+" "+compName+": "+ex.Message);
+			//		isReplicationSucessfull=false;
+			//		break;//Cancel operation.
+			//	}
+			//}
+			//if(isReplicationSucessfull) {
+			//	Cursor=Cursors.Default;
+			//	MessageBox.Show(Lan.g(this,"Database synch completed successfully."));
+			//}
+			////Do not leave this function without connecting back to original database, or closing program.
+			////At this point we are still connected to the last replication server in the list, try to connect back up to the original database.
+			//bool isReconnectSuccessful=false;
+			//while(!isReconnectSuccessful) {
+			//	try {
+			//		//Reconnect back to original database.
+            //        DataConnection.SetDb(compNameOriginal,databaseNameOriginal,textUsername.Text,textPassword.Text);
+			//		isReconnectSuccessful=true;//No exception thrown, leave while loop.
+			//	}
+			//	catch(Exception ex) {
+			//		if(MessageBox.Show(Lan.g(this,"Error reconnecting to server")+" "+compNameOriginal+": "+ex.Message+"\r\n"+
+			//			Lan.g(this,"Would you like to retry?  Cancel will close the program."),"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
+			//		{
+			//			FormOpenDental.S_ProcessKillCommand();
+			//		}
+			//	}
+			//}
 		}
 
 		private void butResetReplicationFailureAtServer_id_Click(object sender,EventArgs e) {

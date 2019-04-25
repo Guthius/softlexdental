@@ -8,7 +8,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using CodeBase;
-using DataConnectionBase;
 using OpenDentBusiness.HL7;
 
 namespace OpenDentBusiness
@@ -258,7 +257,7 @@ namespace OpenDentBusiness
             Dictionary<long, DateTime> retVal = new Dictionary<long, DateTime>();
             string command = "SELECT PatNum,MAX(AptDateTime) DateLastAppt "
                     + "FROM appointment "
-                    + "WHERE " + DbHelper.DtimeToDate("AptDateTime") + "<=" + DbHelper.Curdate() + " "
+                    + "WHERE " + DbHelper.DtimeToDate("AptDateTime") + "<=CURDATE() "
                     + "GROUP BY PatNum";
             DataTable tableLastVisit = Db.GetTable(command);
             for (int i = 0; i < tableLastVisit.Rows.Count; i++)
@@ -553,7 +552,6 @@ namespace OpenDentBusiness
         public static DataTable GetPeriodApptsTable(DateTime dateStart, DateTime dateEnd, long aptNum, bool isPlanned, List<long> listPinApptNums = null,
             List<long> listOpNums = null, List<long> listProvNums = null, bool doRunQueryOnNoOps = true)
         {
-            DataConnection dcon = new DataConnection();
             DataTable table = new DataTable("Appointments");
             //columns that start with lowercase are altered for display rather than being raw data.
             table.Columns.Add("adjustmentTotal");
@@ -702,7 +700,7 @@ namespace OpenDentBusiness
                 }
                 command += ")";
             }
-            DataTable raw = dcon.GetTable(command);
+            DataTable raw = DataConnection.GetTable(command);
             //rawProc table was historically used for other purposes.  It is currently only used for production--------------------------
             //rawProcLab table is only used for Canada and goes hand in hand with the rawProc table, also only used for production.
             DataTable rawProc;
@@ -776,7 +774,7 @@ namespace OpenDentBusiness
 
                 command += ") GROUP BY procedurelog.ProcNum";
 
-                rawProc = dcon.GetTable(command);
+                rawProc = DataConnection.GetTable(command);
                 if (CultureInfo.CurrentCulture.Name.EndsWith("CA") && rawProc.Rows.Count > 0)
                 {//Canadian. en-CA or fr-CA
                     command = "SELECT procedurelog.ProcNum,ProcNumLab,ProcFee,"
@@ -809,7 +807,7 @@ namespace OpenDentBusiness
 
                     command += ") GROUP BY procedurelog.ProcNum";
 
-                    rawProcLab = dcon.GetTable(command);
+                    rawProcLab = DataConnection.GetTable(command);
                 }
             }
             List<long> listPatNums = new List<long>();
@@ -846,7 +844,7 @@ namespace OpenDentBusiness
                     + "AND procedurelog.ProcDate >= " + POut.Date(DateTime.Now.AddYears(-1)) + " "//I'm sure this is the slow part.  Should be easy to make faster with less range
                     + "AND procedurelog.ProcDate <= " + POut.Date(DateTime.Now) + " "
                     + "GROUP BY patient.PatNum, patient.Guarantor";
-                rawInsProc = dcon.GetTable(command);
+                rawInsProc = DataConnection.GetTable(command);
             }
             //Guardians-------------------------------------------------------------------------------------------------------------------
             command = "SELECT PatNumChild,PatNumGuardian,Relationship,patient.FName,patient.Preferred "
@@ -866,7 +864,7 @@ namespace OpenDentBusiness
                     command += raw.Rows[i]["apptPatNum"].ToString();
                 }
             command += ") ORDER BY Relationship";
-            DataTable rawGuardians = dcon.GetTable(command);
+            DataTable rawGuardians = DataConnection.GetTable(command);
             DataTable tableCarriers = InsPlans.GetCarrierNames(listPlanNums);
             Dictionary<long, string> dictCarriers = tableCarriers.Select().ToDictionary(x => PIn.Long(x["PlanNum"].ToString()), x => PIn.String(x["CarrierName"].ToString()));
             Dictionary<long, string> dictCarrierColors = tableCarriers.Select().ToDictionary(x => PIn.Long(x["PlanNum"].ToString()), x => x["CarrierColor"].ToString());
@@ -1340,7 +1338,7 @@ namespace OpenDentBusiness
 				FROM appointment appt
 				WHERE appt.ProvNum=" + POut.Long(provNum) +
                 " AND appt.AptDateTime BETWEEN " + POut.DateT(dateTimeAppointmentStart.Date) + " AND " + POut.DateT(dateTimeAppointmentStart.AddDays(1).Date);
-            return dcon.GetTable(command);
+            return DataConnection.GetTable(command);
         }
 
         ///<summary>Pass in the appointments table so that we can search based on appointments.</summary>
@@ -1375,7 +1373,7 @@ namespace OpenDentBusiness
                 }
             command += ")";
             DataConnection dcon = new DataConnection();
-            DataTable table = dcon.GetTable(command);
+            DataTable table = DataConnection.GetTable(command);
             table.TableName = "ApptFields";
             return table;
         }
@@ -1392,7 +1390,7 @@ namespace OpenDentBusiness
                 + "FROM patfield "
                 + "WHERE PatNum IN (" + String.Join(",", listPatNums) + ")";
             DataConnection dcon = new DataConnection();
-            DataTable table = dcon.GetTable(command);
+            DataTable table = DataConnection.GetTable(command);
             table.TableName = "PatFields";
             return table;
         }
@@ -1414,7 +1412,7 @@ namespace OpenDentBusiness
                 + "WHERE fielddeflink.FieldDefLinkNum IS NULL "
                 + "ORDER BY apptfielddef.FieldName";
             DataConnection dcon = new DataConnection();
-            DataTable table = dcon.GetTable(command);
+            DataTable table = DataConnection.GetTable(command);
             table.TableName = "ApptFields";
             return table;
         }
@@ -1444,7 +1442,7 @@ namespace OpenDentBusiness
             command += "AND AptStatus IN (" + POut.Int((int)ApptStatus.Complete) + ","
                                                                      + POut.Int((int)ApptStatus.Scheduled) + ") "//None of the other statuses
                 + "ORDER BY AptDateTime";
-            DataTable raw = dcon.GetTable(command);
+            DataTable raw = DataConnection.GetTable(command);
             TimeSpan timeArrived;
             //DateTime timeSeated;
             DateTime waitTime;
@@ -3181,12 +3179,12 @@ namespace OpenDentBusiness
                 Procedures.SetDateFirstVisit(DateTime.MinValue, 3, pat);
             }
             //procs
-            command = "UPDATE procedurelog SET ProcDate=" + DbHelper.Curdate()
+            command = "UPDATE procedurelog SET ProcDate=CURDATE()"
                 + " WHERE ProcDate<" + POut.Date(new DateTime(1880, 1, 1))
                 + " AND PlannedAptNum=" + POut.Long(aptNum)
                 + " AND procedurelog.ProcStatus=" + POut.Int((int)ProcStat.TP);//Only change procdate for TP procedures
             Db.NonQ(command);
-            command = "UPDATE procedurelog SET ProcDate=" + DbHelper.Curdate()
+            command = "UPDATE procedurelog SET ProcDate=CURDATE()"
                 + " WHERE ProcDate<" + POut.Date(new DateTime(1880, 1, 1))
                 + " AND AptNum=" + POut.Long(aptNum)
                 + " AND procedurelog.ProcStatus=" + POut.Int((int)ProcStat.TP);//Only change procdate for TP procedures
@@ -3280,7 +3278,7 @@ namespace OpenDentBusiness
                 listAllAptNums.Add(PIn.Long(row["AptNum"].ToString()));
             }
             //procs
-            command = "UPDATE procedurelog SET ProcDate=" + DbHelper.Curdate()
+            command = "UPDATE procedurelog SET ProcDate=CURDATE()"
                 + " WHERE ProcDate<" + POut.Date(new DateTime(1880, 1, 1))
                 + " AND (AptNum IN(" + String.Join(",", listAllAptNums) + ") OR PlannedAptNum IN(" + String.Join(",", listAllAptNums) + "))"
                 + " AND procedurelog.ProcStatus=" + POut.Int((int)ProcStat.TP);//Only change procdate for TP procedures
@@ -4264,7 +4262,7 @@ namespace OpenDentBusiness
                 + "WHERE PatNum='" + POut.Long(patNum) + "' "
                 + "AND (AptStatus='" + POut.Long((int)ApptStatus.Broken) + "' "
                 + "OR AptStatus='" + POut.Long((int)ApptStatus.UnschedList) + "' "
-                + "OR (AptStatus='" + POut.Long((int)ApptStatus.Scheduled) + "' AND AptDateTime > " + DbHelper.Curdate() + " ) ";//future scheduled
+                + "OR (AptStatus='" + POut.Long((int)ApptStatus.Scheduled) + "' AND AptDateTime > CURDATE() ) ";//future scheduled
                                                                                                                                  //planned appts that are already scheduled will also show because they are caught on the line above rather then on the next line
             if (!excludePlannedAppts)
             {

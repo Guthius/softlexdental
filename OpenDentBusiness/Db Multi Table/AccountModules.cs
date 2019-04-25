@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading;
 using System.Xml.Serialization;
 using CodeBase;
-using DataConnectionBase;
 
 namespace OpenDentBusiness
 {
@@ -266,7 +265,6 @@ namespace OpenDentBusiness
         private static DataTable GetPayPlanAmortTable(long payPlanNum)
         {
             //No need to check RemotingRole; private static.
-            DataConnection dcon = new DataConnection();
             DataTable table = new DataTable("payplanamort");
             DataRow row;
             SetTableColumns(table);
@@ -274,7 +272,7 @@ namespace OpenDentBusiness
             string command = "SELECT ChargeDate,Interest,Note,PayPlanChargeNum,Principal,ProvNum,PatNum,SecDateTEntry "
                 + "FROM payplancharge "
                 + "WHERE PayPlanNum=" + POut.Long(payPlanNum) + " AND ChargeType=" + POut.Int((int)PayPlanChargeType.Debit);//for v1, debits are the only ChargeType
-            DataTable rawCharge = dcon.GetTable(command);
+            DataTable rawCharge = DataConnection.GetTable(command);
             DateTime dateT;
             decimal principal;
             decimal interest;
@@ -354,7 +352,7 @@ namespace OpenDentBusiness
                     + "AND (Status=1 OR Status=4 OR Status=5) "//received or supplemental or capclaim
                     + "GROUP BY ClaimNum,DateCP,claimproc.ClaimPaymentNum";
             }
-            DataTable rawPay = dcon.GetTable(command);
+            DataTable rawPay = DataConnection.GetTable(command);
             decimal payamt;
             decimal amt;
             List<Def> listDefs = Defs.GetDefsForCategory(DefCat.AccountColors);
@@ -488,7 +486,6 @@ namespace OpenDentBusiness
 
         public static DataTable GetCommLog(Patient pat, Family fam)
         {
-            DataConnection dcon = new DataConnection();
             DataTable table = new DataTable("Commlog");
             DataRow row;
             //columns that start with lowercase are altered for display rather than being raw data.
@@ -526,7 +523,7 @@ namespace OpenDentBusiness
                 + "FROM commlog "
                 + "WHERE PatNum IN (" + familyPatNums + ")"
                 + (showPodiumCommlogs ? "" : andNotPodiumCommlog);//Rows are ordered at the end
-            DataTable rawComm = dcon.GetTable(command);
+            DataTable rawComm = DataConnection.GetTable(command);
             DateTime dateT;
             for (int i = 0; i < rawComm.Rows.Count; i++)
             {
@@ -626,7 +623,7 @@ namespace OpenDentBusiness
                 + "WHERE emailmessage.PatNum IN (" + familyPatNums + ") "
                 + "AND emailmessage.SentOrReceived NOT IN (" + POut.Int((int)EmailSentOrReceived.AckDirectProcessed) + ","
                     + POut.Int((int)EmailSentOrReceived.AckDirectNotSent) + ") ";//Do not show Direct message acknowledgements. Rows are ordered at the end
-            DataTable rawEmail = dcon.GetTable(command);
+            DataTable rawEmail = DataConnection.GetTable(command);
             string txt;
             for (int i = 0; i < rawEmail.Rows.Count; i++)
             {
@@ -665,7 +662,7 @@ namespace OpenDentBusiness
             #region formpat
             command = "SELECT FormDateTime,FormPatNum "
                 + "FROM formpat WHERE PatNum =" + POut.Long(pat.PatNum);//Rows are ordered at the end
-            DataTable rawForm = dcon.GetTable(command);
+            DataTable rawForm = DataConnection.GetTable(command);
             for (int i = 0; i < rawForm.Rows.Count; i++)
             {
                 DataRow rowCur = rawForm.Rows[i];
@@ -697,7 +694,7 @@ namespace OpenDentBusiness
                 + "WHERE IsDeleted=0 "//Don't show deleted sheets in the Account module Communications Log section.
                 + "AND SheetType!=" + POut.Long((int)SheetTypeEnum.Rx) + " "//rx are only accesssible from within Rx edit window.
                 + "AND PatNum IN (" + familyPatNums + ")";//Rows are ordered at the end
-            DataTable rawSheet = dcon.GetTable(command);
+            DataTable rawSheet = DataConnection.GetTable(command);
             for (int i = 0; i < rawSheet.Rows.Count; i++)
             {
                 DataRow rowCur = rawSheet.Rows[i];
@@ -933,7 +930,6 @@ namespace OpenDentBusiness
             {
                 isReseller = true;
             }
-            DataConnection dcon = new DataConnection();
             DataTable table = new DataTable("account");
             if (isComputeAging)
             {
@@ -1016,7 +1012,7 @@ namespace OpenDentBusiness
             DataTable rawClaimPay = new DataTable();
             if (!isInvoice && (stmt.StatementType != StmtType.LimitedStatement || procNumsForLimited != ""))
             {//don't run if IsInvoice or if LimitedStatement with no procs
-                rawClaimPay = dcon.GetTable(command);
+                rawClaimPay = DataConnection.GetTable(command);
             }
             DateTime procdate;
             decimal writeoff;
@@ -1150,7 +1146,7 @@ namespace OpenDentBusiness
             DataTable rawProc = new DataTable();
             if (stmt.StatementType != StmtType.LimitedStatement || procNumsForLimited != "")
             {//Don't run if this is a limited statement with no procs
-                rawProc = dcon.GetTable(command);
+                rawProc = DataConnection.GetTable(command);
             }
             List<long> listSignedProcNums = new List<long>();//filled with subset of procnums from the rawProc table where most recent ProcNote is signed
             if (!isForStatementPrinting //not for a statement
@@ -1367,7 +1363,7 @@ namespace OpenDentBusiness
             //don't run query if LimitedStatement and both lists are empty
             if (stmt.StatementType != StmtType.LimitedStatement || adjNumsForLimited != "" || procNumsForLimited != "")
             {
-                rawAdj = dcon.GetTable(command);
+                rawAdj = DataConnection.GetTable(command);
             }
             for (int i = 0; i < rawAdj.Rows.Count; i++)
             {
@@ -1478,7 +1474,7 @@ namespace OpenDentBusiness
             //don't run query if isInvoice or if it's a LimitedStatement and no paysplits or procs were selected
             if (!isInvoice && (stmt.StatementType != StmtType.LimitedStatement || paySplitNumsForLimited != "" || procNumsForLimited != ""))
             {
-                rawPay = dcon.GetTable(command);
+                rawPay = DataConnection.GetTable(command);
             }
             command = "SELECT * FROM paysplit " + whereClause;
             List<PaySplit> listPaysplits = new List<PaySplit>();
@@ -1676,7 +1672,7 @@ namespace OpenDentBusiness
             DataTable rawClaim = new DataTable();
             if (!isInvoice && stmt.StatementType != StmtType.LimitedStatement)
             {
-                rawClaim = dcon.GetTable(command);
+                rawClaim = DataConnection.GetTable(command);
                 rawClaim.Columns.Add(new DataColumn("procAmt_"));
             }
             //Select the claimprocs attached to claims for this patient using the same list of pats from family where the claim is not a preauth
@@ -1690,7 +1686,7 @@ namespace OpenDentBusiness
             DataTable rawProcNumsClaim = new DataTable();
             if (!isInvoice && stmt.StatementType != StmtType.LimitedStatement)
             {
-                rawProcNumsClaim = dcon.GetTable(command);
+                rawProcNumsClaim = DataConnection.GetTable(command);
             }
             foreach (DataRow rcRow in rawClaim.Rows)
             {//rawClaim will have 0 rows if isInvoice or StatementType is LimitedStatement
@@ -1913,7 +1909,7 @@ namespace OpenDentBusiness
             DataTable rawState = new DataTable();
             if (!isInvoice && stmt.StatementType != StmtType.LimitedStatement)
             {
-                rawState = dcon.GetTable(command);
+                rawState = DataConnection.GetTable(command);
             }
             StatementMode _mode;
             //if we are getting a DataSet for a super statement and this guar in the super family is not the super head, skip super statement rows
@@ -1983,8 +1979,8 @@ namespace OpenDentBusiness
             //get all payment plans for members of this family. For V1, this means that the payplan row in the ledger will correctly appear as a credit.
             //this also helps populate the payment plans grid in the account module by getting passed into GetPayPlans().
             command = "SELECT SUM(COALESCE(payplancharge.Principal,0)) principal_,SUM(COALESCE(payplancharge.Interest,0)) interest_,"
-                + "SUM(CASE WHEN payplancharge.ChargeDate<=" + DbHelper.Curdate() + " THEN payplancharge.Principal ELSE 0 END) principalDue_,"
-                + "SUM(CASE WHEN payplancharge.ChargeDate<=" + DbHelper.Curdate() + " THEN payplancharge.Interest ELSE 0 END) interestDue_,"
+                + "SUM(CASE WHEN payplancharge.ChargeDate<=CURDATE() THEN payplancharge.Principal ELSE 0 END) principalDue_,"
+                + "SUM(CASE WHEN payplancharge.ChargeDate<=CURDATE() THEN payplancharge.Interest ELSE 0 END) interestDue_,"
                 + "MAX(carrier.CarrierName) CarrierName,payplan.CompletedAmt,payplan.Guarantor,payplan.PatNum,payplan.PayPlanDate,payplan.PayPlanNum,"
                 + "payplan.PlanNum,payplan.IsClosed,payplan.PlanCategory,MAX(payplancharge.SecDateTEntry) SecDateTEntry, "
                 + "COALESCE(MAX(payplancharge.ClinicNum),0) ClinicNum "
@@ -1999,7 +1995,7 @@ namespace OpenDentBusiness
             DataTable rawPayPlan = new DataTable();
             if (!isInvoice && stmt.StatementType != StmtType.LimitedStatement)
             {
-                rawPayPlan = dcon.GetTable(command);
+                rawPayPlan = DataConnection.GetTable(command);
             }
             if (payPlanVersionCur == PayPlanVersions.DoNotAge)
             {
@@ -2089,17 +2085,17 @@ namespace OpenDentBusiness
                     + "WHERE (payplancharge.Guarantor IN (" + patnums + ") OR payplancharge.PatNum IN (" + patnums + ")) ";
                 if (isInvoice)
                 {
-                    command += "AND payplancharge.ChargeDate<=" + DbHelper.DateAddMonth(DbHelper.Curdate(), "3") + " "
+                    command += "AND payplancharge.ChargeDate<=" + DbHelper.DateAddMonth("CURDATE()", "3") + " "
                         + "AND payplancharge.StatementNum=" + POut.Long(statementNum) + " ";
                 }
                 else
                 {
-                    command += "AND payplancharge.ChargeDate<=" + DbHelper.Curdate() + " ";
+                    command += "AND payplancharge.ChargeDate<=CURDATE() ";
                 }
                 DataTable rawPayPlan2 = new DataTable();
                 if (stmt.StatementType != StmtType.LimitedStatement)
                 {
-                    rawPayPlan2 = dcon.GetTable(command);
+                    rawPayPlan2 = DataConnection.GetTable(command);
                 }
                 //0 rows if isInvoice or statement type is LimitedStatement.  In spite of this, the payment plans breakdown will still show at the top of invoices.
                 for (int i = 0; i < rawPayPlan2.Rows.Count; i++)
@@ -2202,11 +2198,11 @@ namespace OpenDentBusiness
                     + "LEFT JOIN carrier ON carrier.CarrierNum = insplan.CarrierNum "
                     + "WHERE (payplancharge.Guarantor IN (" + familyPatNums + ") OR payplancharge.PatNum IN (" + familyPatNums + ")) "
                     + "AND payplancharge.ChargeType = " + POut.Int((int)PayPlanChargeType.Credit) + " "
-                    + "AND payplancharge.ChargeDate<=" + DbHelper.Curdate();
+                    + "AND payplancharge.ChargeDate<=CURDATE()";
                 DataTable rawPayPlan3 = new DataTable();
                 if (!isInvoice && stmt.StatementType != StmtType.LimitedStatement)
                 {
-                    rawPayPlan3 = dcon.GetTable(command);
+                    rawPayPlan3 = DataConnection.GetTable(command);
                 }
                 //0 rows if isInvoice or statement type is LimitedStatement.  In spite of this, the payment plans breakdown will still show at the top of invoices.
                 for (int i = 0; i < rawPayPlan3.Rows.Count; i++)
@@ -2886,8 +2882,6 @@ namespace OpenDentBusiness
         ///<summary>Future appointments.</summary>
         private static DataTable GetApptTable(Family fam, bool singlePatient, long patNum)
         {
-            //No need to check RemotingRole; private static.
-            DataConnection dcon = new DataConnection();
             DataTable table = new DataTable("appts");
             DataRow row;
             table.Columns.Add("descript");
@@ -2916,7 +2910,7 @@ namespace OpenDentBusiness
                 }
             }
             command += ") ORDER BY PatNum,AptDateTime";
-            DataTable raw = dcon.GetTable(command);
+            DataTable raw = DataConnection.GetTable(command);
             DateTime dateT;
             long patNumm;
             for (int i = 0; i < raw.Rows.Count; i++)

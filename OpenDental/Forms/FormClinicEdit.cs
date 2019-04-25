@@ -1340,7 +1340,7 @@ namespace OpenDental {
 			}
 			if(checkHidden.Checked) {
 				//ensure that there are no users who have only this clinic assigned to them.
-				List<Userod> listUsersRestricted = Userods.GetUsersOnlyThisClinic(ClinicCur.ClinicNum);
+				List<User> listUsersRestricted = Userods.GetUsersOnlyThisClinic(ClinicCur.ClinicNum);
 				if(listUsersRestricted.Count > 0) {
 					MessageBox.Show(Lan.g(this,"You may not hide this clinic as the following users are restricted to only this clinic") + ": "
 						+ string.Join(", ",listUsersRestricted.Select(x => x.UserName)));

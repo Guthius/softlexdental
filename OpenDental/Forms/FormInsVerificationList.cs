@@ -21,8 +21,8 @@ namespace OpenDental {
 		private long _defNumVerifyStatusAssign;
 		///<summary>This will only have a selection if selecting from gridMain.</summary>
 		private InsVerifyGridObject _gridRowSelected;
-		private List<Userod> _listUsersInRegionWithAssignedIns=new List<Userod>();
-		private List<Userod> _listUsersInRegion=new List<Userod>();
+		private List<User> _listUsersInRegionWithAssignedIns=new List<User>();
+		private List<User> _listUsersInRegion=new List<User>();
 		private List<Def> _listVerifyStatuses=new List<Def>();
 		private long _userNumVerifyGrid=0;
 		private int _selectedRowVerifyGrid;
@@ -510,7 +510,7 @@ namespace OpenDental {
 			}
 			menuRightClick.MenuItems.Add(new MenuItem(verifyDescription,gridMainRight_click));
 			MenuItem assignUserToolItem=new MenuItem(Lan.g(this,"Assign to User"));
-			foreach(Userod user in _listUsersInRegion) {
+			foreach(User user in _listUsersInRegion) {
 				MenuItem assignUserDropDownCur=new MenuItem(user.UserName);
 				assignUserDropDownCur.Tag=user;
 				assignUserDropDownCur.Click+=new EventHandler(assignUserToolItemDropDown_Click);
@@ -702,7 +702,7 @@ namespace OpenDental {
 
 		private void gridAssign_Popup(object sender,EventArgs e) {
 			MenuItem assignUserToolItem=new MenuItem(Lan.g(this,"Assign to User"));
-			foreach(Userod user in _listUsersInRegion) {
+			foreach(User user in _listUsersInRegion) {
 				MenuItem assignUserDropDownCur=new MenuItem(user.UserName);
 				assignUserDropDownCur.Tag=user;
 				assignUserDropDownCur.Click+=new EventHandler(assignUserToolItemDropDown_Click);
@@ -911,7 +911,7 @@ namespace OpenDental {
 		}
 
 		private void assignUserToolItemDropDown_Click(object sender, EventArgs e) {
-			Userod user=(Userod)((MenuItem)sender).Tag;
+			User user=(User)((MenuItem)sender).Tag;
 			if(tabControl1.SelectedTab==tabVerify) {
 				if(_gridRowSelected.PatInsVerify!=null) {
 					_gridRowSelected.PatInsVerify.UserNum=user.UserNum;
@@ -986,7 +986,7 @@ namespace OpenDental {
 
 			///<summary>An updated dictionary of status defs should be passed in.  
 			///This is to avoid grabbing definitions cache from inside this nested class, which will be instanced in a loop.</summary>
-			public InsVerifyGridRow(InsVerifyGridObject gridObj,Dictionary<long,Def> dictStatusDefs,List<Userod> listUsers,bool isAssignGrid) {
+			public InsVerifyGridRow(InsVerifyGridObject gridObj,Dictionary<long,Def> dictStatusDefs,List<User> listUsers,bool isAssignGrid) {
 				if(gridObj==null) {
 					return;
 				}
@@ -1016,13 +1016,13 @@ namespace OpenDental {
 						gridObj.PatInsVerify.DateLastAssigned : 
 						gridObj.PlanInsVerify.DateLastAssigned);
 					if(isPatLastAssignedNewer) {
-						Userod userCur=listUsers.FirstOrDefault(x => x.UserNum==gridObj.PatInsVerify.UserNum);
+						User userCur=listUsers.FirstOrDefault(x => x.UserNum==gridObj.PatInsVerify.UserNum);
 						if(userCur!=null) {
 							AssignedTo=userCur.UserName;
 						}
 					}
 					else {
-						Userod userCur=listUsers.FirstOrDefault(x => x.UserNum==gridObj.PlanInsVerify.UserNum);
+						User userCur=listUsers.FirstOrDefault(x => x.UserNum==gridObj.PlanInsVerify.UserNum);
 						if(userCur!=null) {
 							AssignedTo=userCur.UserName;
 						}
@@ -1040,7 +1040,7 @@ namespace OpenDental {
 						VerifyStatus=dictStatusDefs[gridObj.PatInsVerify.DefNum].ItemName;
 					}
 					DateLastAssigned=gridObj.PatInsVerify.DateLastAssigned;
-					Userod userCur=listUsers.FirstOrDefault(x => x.UserNum==gridObj.PatInsVerify.UserNum);
+					User userCur=listUsers.FirstOrDefault(x => x.UserNum==gridObj.PatInsVerify.UserNum);
 					if(userCur!=null) {
 						AssignedTo=userCur.UserName;
 					}
@@ -1057,7 +1057,7 @@ namespace OpenDental {
 						VerifyStatus=dictStatusDefs[gridObj.PlanInsVerify.DefNum].ItemName;
 					}
 					DateLastAssigned=gridObj.PlanInsVerify.DateLastAssigned;
-					Userod userCur=listUsers.FirstOrDefault(x => x.UserNum==gridObj.PlanInsVerify.UserNum);
+					User userCur=listUsers.FirstOrDefault(x => x.UserNum==gridObj.PlanInsVerify.UserNum);
 					if(userCur!=null) {
 						AssignedTo=userCur.UserName;
 					}

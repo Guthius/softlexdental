@@ -14,10 +14,10 @@ namespace OpenDentBusiness
     public class Security
     {
         ///<summary>The current user.  Might be null when first starting the program.  Otherwise, must contain valid user.</summary>
-        private static Userod curUser;
+        private static User curUser;
         ///<summary>The current user.  Might be null when first starting the program.  Otherwise, must contain valid user.</summary>
         [ThreadStatic]
-        private static Userod _curUserT;
+        private static User _curUserT;
         ///<Summary>Contains the value of Environment.MachineName.  If middle tier, it will be the name of the last computer to send 
         ///a DataTransferObject to the server.</Summary>
         private static string curComputerName;
@@ -40,7 +40,7 @@ namespace OpenDentBusiness
         ///processing due to inactivity.  Must be public so that it can be accessed from multiple application level classes.</summary>
         public static DateTime DateTimeLastActivity;
 
-        public static Userod CurUser
+        public static User CurUser
         {
             get
             {
@@ -189,7 +189,7 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Will throw an error if not authorized and message not suppressed.</summary>
-        public static bool IsAuthorized(Permissions perm, DateTime date, bool suppressMessage, bool suppressLockDateMessage, Userod curUser,
+        public static bool IsAuthorized(Permissions perm, DateTime date, bool suppressMessage, bool suppressLockDateMessage, User curUser,
             long procCodeNum, double procFee, long sheetDefNum, long fKey)
         {
             //No need to check RemotingRole; no call to db.

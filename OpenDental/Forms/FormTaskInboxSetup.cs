@@ -10,8 +10,8 @@ using OpenDental.UI;
 
 namespace OpenDental {
 	public partial class FormTaskInboxSetup:ODForm {
-		private List<Userod> UserList;
-		private List<Userod> UserListOld;
+		private List<User> UserList;
+		private List<User> UserListOld;
 		private List<TaskList> TrunkList;
 
 		public FormTaskInboxSetup() {
@@ -82,7 +82,7 @@ namespace OpenDental {
 
 		private void butOK_Click(object sender,EventArgs e) {
 			bool changed=false;
-			Dictionary<string,List<Userod>> dictFailedUserUpdates=new Dictionary<string, List<Userod>>();
+			Dictionary<string,List<User>> dictFailedUserUpdates=new Dictionary<string, List<User>>();
 			for(int i=0;i<UserList.Count;i++){
 				if(UserList[i].TaskListInBox!=UserListOld[i].TaskListInBox){
 					try {
@@ -91,7 +91,7 @@ namespace OpenDental {
 					}
 					catch(Exception ex) {
 						if(!dictFailedUserUpdates.ContainsKey(ex.Message)){
-							dictFailedUserUpdates.Add(ex.Message,new List<Userod>());
+							dictFailedUserUpdates.Add(ex.Message,new List<User>());
 						}
 						dictFailedUserUpdates[ex.Message].Add(UserList[i]);
 					}
@@ -100,7 +100,7 @@ namespace OpenDental {
 			if(dictFailedUserUpdates.Count>0) {//Inform user that user inboxes could not be updated.
 				StringBuilder sb=new StringBuilder();
 				foreach(string exceptionMsgKey in dictFailedUserUpdates.Keys) {
-					foreach(Userod user in dictFailedUserUpdates[exceptionMsgKey]) {
+					foreach(User user in dictFailedUserUpdates[exceptionMsgKey]) {
 						sb.AppendLine("  "+user.UserName+" - "+exceptionMsgKey);
 					}
 				}

@@ -22,8 +22,8 @@ namespace OpenDental {
 			dateRangeWebChat.SetDateTimeFrom(DateTimeOD.Today.AddDays(-7));
 			dateRangeWebChat.SetDateTimeTo(DateTimeOD.Today.AddYears(1));
 			comboUsers.Items.Clear();
-			foreach(Userod user in Userods.GetUsers()) {
-				comboUsers.Items.Add(new ODBoxItem<Userod>(user.UserName,user));
+			foreach(User user in Userods.GetUsers()) {
+				comboUsers.Items.Add(new ODBoxItem<User>(user.UserName,user));
 				if(Security.CurUser.UserNum==user.UserNum) {//Select the current user by default.
 					comboUsers.SetSelected(comboUsers.Items.Count-1,true);
 				}
@@ -71,7 +71,7 @@ namespace OpenDental {
 				listChatMessages=WebChatMessages.GetAllForSessions(listChatSessions.Select(x => x.WebChatSessionNum).ToArray());
 			});
 			if(listChatSessions!=null) {//Will only be null if connection to webchat database failed.
-				List<Userod> listSelectedUsers=comboUsers.SelectedTags<Userod>();
+				List<User> listSelectedUsers=comboUsers.SelectedTags<User>();
 				List<string> listSelectedUsernames=listSelectedUsers.Select(x => x.UserName).ToList();
 				string searchText=textChatTextContains.Text.ToLower();
 				foreach(WebChatSession webChatSession in listChatSessions) {

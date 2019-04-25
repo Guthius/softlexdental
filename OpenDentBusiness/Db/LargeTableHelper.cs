@@ -8,7 +8,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using CodeBase;
-using DataConnectionBase;
 
 namespace OpenDentBusiness
 {
@@ -453,8 +452,8 @@ namespace OpenDentBusiness
                     {
                         if (!string.IsNullOrEmpty(_serverTo))
                         {//SetDbT here if server is specified
-                            DataConnection dcon = new DataConnection();
-                            dcon.SetDbT(_serverTo, _databaseTo, _userTo, _passwordTo, "", "");
+
+                            DataConnection.SetDb(_serverTo, _databaseTo, _userTo, _passwordTo);
                         }
                         bool isBatchQueued = false;
                         bool insertFailed = true;

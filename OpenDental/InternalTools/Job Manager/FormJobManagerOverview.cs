@@ -41,11 +41,11 @@ namespace OpenDental {
 				listCategories.Items.Add(new ODBoxItem<JobCategory>(category.ToString(),category));
 			}
 			listCategories.SelectedIndex=0;
-			comboEngineers.Items.Add(new ODBoxItem<Userod>("All",new Userod() { UserNum=-1 }));
-			comboEngineers.Items.Add(new ODBoxItem<Userod>("Unassigned",new Userod() { UserNum=0 }));
+			comboEngineers.Items.Add(new ODBoxItem<User>("All",new User() { UserNum=-1 }));
+			comboEngineers.Items.Add(new ODBoxItem<User>("Unassigned",new User() { UserNum=0 }));
 			foreach(long engNum in _listEngUserNums) {
-				Userod eng=Userods.GetUser(engNum);
-				comboEngineers.Items.Add(new ODBoxItem<Userod>(eng.UserName,eng));
+				User eng=Userods.GetUser(engNum);
+				comboEngineers.Items.Add(new ODBoxItem<User>(eng.UserName,eng));
 			}
 			comboEngineers.SelectedIndex=0;
 			dateRangeJobCompleted.SetDateTimeFrom(VersionReleases.GetBetaDevelopmentStartDate());
@@ -352,7 +352,7 @@ namespace OpenDental {
 
 		private List<Job> GetFilteredJobList() {
 			int weeksOld=PIn.Int(textWeeksStale.Text);
-			Userod selectedUser=comboEngineers.SelectedTag<Userod>();
+			User selectedUser=comboEngineers.SelectedTag<User>();
 			List<Job> listJobs=_listJobsAll;
 			if(checkRemoveNoQuote.Checked) {
 				listJobs=listJobs.Where(x => x.ListJobQuotes.Count()!=0).ToList();

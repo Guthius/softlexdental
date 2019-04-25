@@ -277,7 +277,7 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Used to check if user has permission to access the report. Pass in a list of DisplayReports to avoid a call to the db.</summary>
-        public static bool HasReportPermission(string reportName, Userod user, List<DisplayReport> listReports = null)
+        public static bool HasReportPermission(string reportName, User user, List<DisplayReport> listReports = null)
         {
             //No need to check RemotingRole; no call to db.
             DisplayReport report = (listReports ?? DisplayReports.GetAll(false)).FirstOrDefault(x => x.InternalName == reportName);
@@ -302,7 +302,7 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Determines whether an individual user has a specific permission.</summary>
-        public static bool HasPermission(Userod user, Permissions permType, long fKey)
+        public static bool HasPermission(User user, Permissions permType, long fKey)
         {
             //No need to check RemotingRole; no call to db.
             GroupPermission groupPermission = GetFirstOrDefault(x => x.PermType == permType && x.FKey == fKey && user.IsInUserGroup(x.UserGroupNum));

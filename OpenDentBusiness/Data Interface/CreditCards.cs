@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using CodeBase;
-using DataConnectionBase;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -103,17 +102,17 @@ namespace OpenDentBusiness{
 		///<summary>Returns list of active credit cards.</summary>
 		public static List<CreditCard> GetActiveCards(long patNum) {
 			string command="SELECT * FROM creditcard WHERE PatNum="+POut.Long(patNum)
-				+" AND ("+DbHelper.Year("DateStop")+"<1880 OR DateStop>="+DbHelper.Curdate()+") "
-				+" AND ("+DbHelper.Year("DateStart")+">1880 AND DateStart<="+DbHelper.Curdate()+") "//Recurring card is active.
-				+" AND CCSource NOT IN ("+(int)CreditCardSource.XWeb+","+(int)CreditCardSource.XWebPortalLogin+") ";//Not created from the Patient Portal
+				+" AND ("+DbHelper.Year("DateStop")+ "<1880 OR DateStop>=CURDATE()) "
+                + " AND ("+DbHelper.Year("DateStart")+ ">1880 AND DateStart<=CURDATE()) "//Recurring card is active.
+                + " AND CCSource NOT IN ("+(int)CreditCardSource.XWeb+","+(int)CreditCardSource.XWebPortalLogin+") ";//Not created from the Patient Portal
 			return Crud.CreditCardCrud.SelectMany(command);
 		}
 
 		///<summary>Updates the Procedures column on all cards that have not stopped that are not marked to exclude from sync.  Only used at HQ.</summary>
 		public static void SyncDefaultProcs(List<string> listProcCodes) {
 			string command="UPDATE creditcard SET Procedures='"+string.Join(",",listProcCodes.Select(x => POut.String(x)))+"'"
-				+" WHERE ("+DbHelper.Year("DateStop")+"<1880 OR DateStop>="+DbHelper.Curdate()+") "//Stop date has not past
-				+" AND ExcludeProcSync=0"
+				+" WHERE ("+DbHelper.Year("DateStop")+ "<1880 OR DateStop>=CURDATE()) "//Stop date has not past
+                + " AND ExcludeProcSync=0"
 				+" AND CCSource NOT IN ("+(int)CreditCardSource.XWeb+","+(int)CreditCardSource.XWebPortalLogin+") ";//Not created from the Patient Portal
 			Db.NonQ(command);
 		}
@@ -164,8 +163,8 @@ namespace OpenDentBusiness{
 				+"LEFT JOIN ("
 					+"SELECT PayPlanNum,MAX(ProvNum) maxProvNum,MAX(PatNum) maxPatNum,MAX(ClinicNum) maxClinicNum,"
 					+"SUM(CASE WHEN ChargeType="+POut.Int((int)PayPlanChargeType.Debit)+" "
-						+"AND ChargeDate <= "+DbHelper.Curdate()+" THEN Principal+Interest ELSE 0 END) pastCharges "
-					+"FROM payplancharge "
+						+ "AND ChargeDate <= CURDATE() THEN Principal+Interest ELSE 0 END) pastCharges "
+                    + "FROM payplancharge "
 					+"GROUP BY PayPlanNum"
 				+") ppc ON ppc.PayPlanNum=cc.PayPlanNum "
 				+"WHERE cc.PayPlanNum>0 "
@@ -180,8 +179,8 @@ namespace OpenDentBusiness{
 			#endregion
 			//Now we have all the results for payments and payment plans, so do an obvious filter. A more thorough filter happens later.
 			command+=") due "
-				+"WHERE DateStart<="+DbHelper.Curdate()+" AND "+DbHelper.Year("DateStart")+">1880 "
-				+"AND (DateStop>="+DbHelper.Curdate()+" OR "+DbHelper.Year("DateStop")+"<1880) "
+				+ "WHERE DateStart<=CURDATE() AND " + DbHelper.Year("DateStart")+">1880 "
+				+ "AND (DateStop>=CURDATE() OR " + DbHelper.Year("DateStop")+"<1880) "
 				//We want to exclude any cards that are currently being processed by Open Dental Service or a different human.
 				+"AND due.CreditCardNum NOT IN (SELECT recurringcharge.CreditCardNum FROM recurringcharge "
 					+"WHERE recurringcharge.ChargeStatus="+POut.Int((int)RecurringChargeStatus.NotYetCharged)+" "
@@ -277,7 +276,7 @@ namespace OpenDentBusiness{
 				+"WHERE pl.ProcStatus=2 "
 				+"AND pc.ProcCode IN ("+procStr+") "
 				+"AND pl.PatNum="+POut.Long(patNum)+" "
-				+"AND pl.ProcDate<="+DbHelper.Curdate()+" ";
+				+ "AND pl.ProcDate<=CURDATE() ";
 			//If today is the billingDay or today is the last day of the current month and the billingDay is greater than today
 			//i.e. billingDay=31 and today is the 30th which is the last day of the current month, only count procs with date after the 31st of last month
 			if(billingDay==DateTime.Today.Day
@@ -297,8 +296,8 @@ namespace OpenDentBusiness{
 			string command="SELECT CreditCardNum,Procedures "
 				+"FROM creditcard "
 				+"WHERE PatNum="+POut.Long(patNum)+" "
-				+"AND DateStart<="+DbHelper.Curdate()+" AND "+DbHelper.Year("DateStart")+">1880 "
-				+"AND (DateStop>="+DbHelper.Curdate()+" OR "+DbHelper.Year("DateStop")+"<1880) "
+				+ "AND DateStart<=CURDATE() AND " + DbHelper.Year("DateStart")+">1880 "
+				+ "AND (DateStop>=CURDATE() OR " + DbHelper.Year("DateStop")+"<1880) "
 				+"AND CreditCardNum!="+POut.Long(cardNum);
 			DataTable table=Db.GetTable(command);
 			return table.Rows.OfType<DataRow>().SelectMany(x => x["Procedures"].ToString().Split(',')).Any(x => x==procCode);

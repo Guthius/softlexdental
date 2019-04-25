@@ -57,14 +57,14 @@ namespace OpenDental {
 			EmailAddresses.RefreshCache();
 			_listEmailAddresses=EmailAddresses.GetDeepCopy();
 			//Add user specific email addresses to the list
-			List<Userod> listUsers=new List<Userod>();
+			List<User> listUsers=new List<User>();
 			if(Security.IsAuthorized(Permissions.SecurityAdmin,true) && !IsSelectionMode) {
 				listUsers.AddRange(Userods.GetUsers());//If authorized, get all non-hidden users.
 			}
 			else {
 				listUsers.Add(Security.CurUser);//Otherwise, just this user.
 			}
-			foreach(Userod user in listUsers) {
+			foreach(User user in listUsers) {
 				EmailAddress userAddress=EmailAddresses.GetForUser(user.UserNum);
 				if(userAddress!=null) {
 					_listEmailAddresses.Insert(0,userAddress);

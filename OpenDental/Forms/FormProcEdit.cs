@@ -58,7 +58,7 @@ namespace OpenDental {
 		private Snomed _snomedBodySite=null;
 		private bool _isQuickAdd=false;
 		///<summary>Users can temporarily log in on this form.  Defaults to Security.CurUser.</summary>
-		private Userod _curUser=Security.CurUser;
+		private User _curUser=Security.CurUser;
 		///<summary>True if the user clicked the Change User button.</summary>
 		private bool _hasUserChanged;
 		///<summary>Cached list of clinics available to user. Also includes a dummy Clinic at index 0 for "none".</summary>

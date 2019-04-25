@@ -70,9 +70,9 @@ namespace OpenDentBusiness
                     + "AND securitylog.PermType=" + POut.Int((int)Permissions.AppointmentEdit) + " AND securitylog.LogText LIKE '%Set Complete%' "
                 + "LEFT JOIN commlog ON commlog.PatNum=appointment.PatNum "
                     + "AND commlog.CommSource=" + POut.Int((int)CommItemSource.ProgramLink) + " "
-                    + "AND DATE(commlog.DateTimeEnd)=" + DbHelper.Curdate() + " "
+                    + "AND DATE(commlog.DateTimeEnd)=CURDATE() "
                     + "AND commlog.ProgramNum=" + POut.Long(programNum) + " "
-                + "WHERE ISNULL(commlog.PatNum) AND appointment.AptDateTime BETWEEN " + DbHelper.Curdate() + " AND " + DbHelper.Now() + " + INTERVAL 1 HOUR "//Hard code an hour to allow for appointments that have an early DateTimeArrived
+                + "WHERE ISNULL(commlog.PatNum) AND appointment.AptDateTime BETWEEN CURDATE() AND " + DbHelper.Now() + " + INTERVAL 1 HOUR "//Hard code an hour to allow for appointments that have an early DateTimeArrived
                 + "AND appointment.IsNewPatient=" + POut.Bool(isNewPatient) + " ";
             if (trigger == ReviewInvitationTrigger.AppointmentCompleted)
             {
@@ -84,13 +84,13 @@ namespace OpenDentBusiness
             {
                 command += "AND appointment.AptStatus IN (" + POut.Int((int)ApptStatus.Scheduled) + "," + POut.Int((int)ApptStatus.Complete) + ") "
                     + "AND ((appointment.AptStatus=" + POut.Int((int)ApptStatus.Complete) + " AND NOT ISNULL(securitylog.PatNum) AND securitylog.LogDateTime + INTERVAL " + minutesToWaitCompleted + " MINUTE <=" + DbHelper.Now() + ") "
-                    + "OR (appointment.DateTimeArrived>" + DbHelper.Curdate() + " AND appointment.DateTimeArrived + INTERVAL " + minutesToWaitTimeArrived + " MINUTE<=" + DbHelper.Now() + ")) ";
+                    + "OR (appointment.DateTimeArrived>CURDATE() AND appointment.DateTimeArrived + INTERVAL " + minutesToWaitTimeArrived + " MINUTE<=" + DbHelper.Now() + ")) ";
             }
             else if (trigger == ReviewInvitationTrigger.AppointmentTimeDismissed)
             {
                 command += "AND appointment.AptStatus IN (" + POut.Int((int)ApptStatus.Scheduled) + "," + POut.Int((int)ApptStatus.Complete) + ") "
                     + "AND ((appointment.AptStatus=" + POut.Int((int)ApptStatus.Complete) + " AND NOT ISNULL(securitylog.PatNum) AND securitylog.LogDateTime + INTERVAL 90 MINUTE <=" + DbHelper.Now() + ") "
-                    + "OR (appointment.DateTimeDismissed>" + DbHelper.Curdate() + " AND appointment.DateTimeDismissed + INTERVAL " + minutesToWaitTimeDismissed + " MINUTE<=" + DbHelper.Now() + ")) ";
+                    + "OR (appointment.DateTimeDismissed>CURDATE() AND appointment.DateTimeDismissed + INTERVAL " + minutesToWaitTimeDismissed + " MINUTE<=" + DbHelper.Now() + ")) ";
             }
             return Crud.AppointmentCrud.SelectMany(command);
         }

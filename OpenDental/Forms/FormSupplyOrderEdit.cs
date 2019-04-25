@@ -33,11 +33,11 @@ namespace OpenDental {
 			textShippingCharge.Text=Order.ShippingCharge.ToString("n");
 			textNote.Text=Order.Note;
 			comboUser.Items.Clear();
-			ODBoxItem<Userod> listBoxItemUser=new ODBoxItem<Userod>(Lan.g(this,"None"),new Userod { UserNum=0 });
+			ODBoxItem<User> listBoxItemUser=new ODBoxItem<User>(Lan.g(this,"None"),new User { UserNum=0 });
 			comboUser.Items.Add(listBoxItemUser);
-			List<Userod> listUsers=Userods.GetUsers().FindAll(x => !x.IsHidden);
-			foreach(Userod user in listUsers) {
-				ODBoxItem<Userod> listBoxItemUsers=new ODBoxItem<Userod>(user.UserName,user);
+			List<User> listUsers=Userods.GetUsers().FindAll(x => !x.IsHidden);
+			foreach(User user in listUsers) {
+				ODBoxItem<User> listBoxItemUsers=new ODBoxItem<User>(user.UserName,user);
 				comboUser.Items.Add(listBoxItemUsers);
 				if(Order.UserNum==user.UserNum) {
 					comboUser.SelectedItem=listBoxItemUsers;
@@ -82,7 +82,7 @@ namespace OpenDental {
 					//if there was a hidden user on the order, do not change, keep it as it was. 
 				}
 				else {
-					Order.UserNum=comboUser.SelectedTag<Userod>().UserNum;
+					Order.UserNum=comboUser.SelectedTag<User>().UserNum;
 				}
 			}
 			Order.AmountTotal=PIn.Double(textAmountTotal.Text);

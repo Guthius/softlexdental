@@ -12,10 +12,10 @@ namespace OpenDental {
 	public partial class FormUserPrefAdditional:ODForm {
 		/// <summary>This is a list of providerclinic rows that were given to this form, containing any modifications that were made while in FormProvAdditional.</summary>
 		public List<UserOdPref> ListUserPrefOut=new List<UserOdPref>();
-		private Userod _userCur;
+		private User _userCur;
 		private List<UserOdPref> _listUserPref;
 
-		public FormUserPrefAdditional(List<UserOdPref> listUserPref,Userod userCur) {
+		public FormUserPrefAdditional(List<UserOdPref> listUserPref,User userCur) {
 			InitializeComponent();
 			Lan.F(this);
 			_listUserPref=listUserPref.Select(x => x.Clone()).ToList();

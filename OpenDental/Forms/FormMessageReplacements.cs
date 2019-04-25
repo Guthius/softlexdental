@@ -218,7 +218,7 @@ namespace OpenDental {
 		///<summary>Replaces all user fields in the given message with the supplied userod's information.  Returns the resulting string.
 		///Only works if the current user has a linked provider or employee, otherwise the replacements will be blank.
 		///Replaces: [UserNameF], [UserNameL], [UserNameFL]. </summary>
-		public static string ReplaceUser(string message,Userod userod) {
+		public static string ReplaceUser(string message,User userod) {
 			string retVal=message;
 			string userNameF="";
 			string userNameL="";

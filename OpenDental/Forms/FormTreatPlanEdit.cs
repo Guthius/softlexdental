@@ -39,8 +39,8 @@ namespace OpenDental{
 		private TextBox textPresenter;
 		private Label label5;
 		private OpenDental.UI.Button butDelete;
-		private Userod _presenterCur;
-		private Userod _presenterOld;
+		private User _presenterCur;
+		private User _presenterOld;
 
 		///<summary></summary>
 		public FormTreatPlanEdit(TreatPlan planCur)
@@ -543,7 +543,7 @@ namespace OpenDental{
 
 		private void butPickPresenter_Click(object sender,EventArgs e) {
 			FormUserPick FormUP=new FormUserPick();
-			List<Userod> listUsers=Userods.GetWhere(x => x.ClinicIsRestricted == false || x.ClinicNum == Clinics.ClinicNum,true);
+			List<User> listUsers=Userods.GetWhere(x => x.ClinicIsRestricted == false || x.ClinicNum == Clinics.ClinicNum,true);
 			FormUP.ListUserodsFiltered=listUsers;
 			if(_presenterCur!=null) {
 				FormUP.SuggestedUserNum=_presenterCur.UserNum;

@@ -1,5 +1,4 @@
 using CodeBase;
-using DataConnectionBase;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -88,66 +87,66 @@ namespace OpenDentBusiness
         ///Does not work for Oracle, due to some MySQL specific commands inside.</summary>
         public static long MakeABackup()
         {
-            //This function should always make the backup on the server itself, and since no directories are
-            //referred to (all handled with MySQL), this function will always be referred to the server from
-            //client machines.
-
-            //UpdateStreamLinePassword is purposefully named poorly and used in an odd fashion to sort of obfuscate it from our users.
-            //GetStringNoCache() will return blank if pref does not exist.
-            if (PrefC.GetStringNoCache(PrefName.UpdateStreamLinePassword) == "abracadabra")
-            {
-                return 0;
-            }
-            //only used in two places: upgrading version, and upgrading mysql version.
-            //Both places check first to make sure user is using mysql.
-            //we have to be careful to throw an exception if the backup is failing.
-            DataConnection dcon = new DataConnection();
-            string command = "SELECT database()";
-            DataTable table = dcon.GetTable(command);
-            string oldDb = PIn.String(table.Rows[0][0].ToString());
-            string newDb = oldDb + "backup_" + DateTime.Today.ToString("MM_dd_yyyy");
-            command = "SHOW DATABASES";
-            table = dcon.GetTable(command);
-            string[] databases = new string[table.Rows.Count];
-            for (int i = 0; i < table.Rows.Count; i++)
-            {
-                databases[i] = table.Rows[i][0].ToString();
-            }
-            if (Contains(databases, newDb))
-            {//if the new database name already exists
-             //find a unique one
-                int uniqueID = 1;
-                string originalNewDb = newDb;
-                do
-                {
-                    newDb = originalNewDb + "_" + uniqueID.ToString();
-                    uniqueID++;
-                }
-                while (Contains(databases, newDb));
-            }
-            command = "CREATE DATABASE `" + newDb + "` CHARACTER SET utf8";
-            dcon.NonQ(command);
-            command = "SHOW FULL TABLES WHERE Table_type='BASE TABLE'";//Tables, not views.  Does not work in MySQL 4.1, however we test for MySQL version >= 5.0 in PrefL.
-            table = dcon.GetTable(command);
-            string[] tableName = new string[table.Rows.Count];
-            for (int i = 0; i < table.Rows.Count; i++)
-            {
-                tableName[i] = table.Rows[i][0].ToString();
-            }
-            //switch to using the new database
-            DataConnection newDcon = new DataConnection(newDb);
-            for (int i = 0; i < tableName.Length; i++)
-            {
-                //Alert anyone that cares that we are backing up this table.
-                MiscDataEvent.Fire(ODEventType.MiscData, Lans.g(nameof(MiscData), "Backing up table") + ": " + tableName[i]);
-                command = "SHOW CREATE TABLE `" + oldDb + "`.`" + tableName[i] + "`";//also works with views. Added backticks around table name for unusual characters.
-                table = newDcon.GetTable(command);
-                command = PIn.ByteArray(table.Rows[0][1]);
-                newDcon.NonQ(command);//this has to be run using connection with new database
-                command = "INSERT INTO `" + newDb + "`.`" + tableName[i] + "` "
-                    + "SELECT * FROM `" + oldDb + "`.`" + tableName[i] + "`";//Added backticks around table name for unusual characters.
-                newDcon.NonQ(command);
-            }
+            ////This function should always make the backup on the server itself, and since no directories are
+            ////referred to (all handled with MySQL), this function will always be referred to the server from
+            ////client machines.
+            //
+            ////UpdateStreamLinePassword is purposefully named poorly and used in an odd fashion to sort of obfuscate it from our users.
+            ////GetStringNoCache() will return blank if pref does not exist.
+            //if (PrefC.GetStringNoCache(PrefName.UpdateStreamLinePassword) == "abracadabra")
+            //{
+            //    return 0;
+            //}
+            ////only used in two places: upgrading version, and upgrading mysql version.
+            ////Both places check first to make sure user is using mysql.
+            ////we have to be careful to throw an exception if the backup is failing.
+            //DataConnection dcon = new DataConnection();
+            //string command = "SELECT database()";
+            //DataTable table = dcon.GetTable(command);
+            //string oldDb = PIn.String(table.Rows[0][0].ToString());
+            //string newDb = oldDb + "backup_" + DateTime.Today.ToString("MM_dd_yyyy");
+            //command = "SHOW DATABASES";
+            //table = dcon.GetTable(command);
+            //string[] databases = new string[table.Rows.Count];
+            //for (int i = 0; i < table.Rows.Count; i++)
+            //{
+            //    databases[i] = table.Rows[i][0].ToString();
+            //}
+            //if (Contains(databases, newDb))
+            //{//if the new database name already exists
+            // //find a unique one
+            //    int uniqueID = 1;
+            //    string originalNewDb = newDb;
+            //    do
+            //    {
+            //        newDb = originalNewDb + "_" + uniqueID.ToString();
+            //        uniqueID++;
+            //    }
+            //    while (Contains(databases, newDb));
+            //}
+            //command = "CREATE DATABASE `" + newDb + "` CHARACTER SET utf8";
+            //dcon.NonQ(command);
+            //command = "SHOW FULL TABLES WHERE Table_type='BASE TABLE'";//Tables, not views.  Does not work in MySQL 4.1, however we test for MySQL version >= 5.0 in PrefL.
+            //table = dcon.GetTable(command);
+            //string[] tableName = new string[table.Rows.Count];
+            //for (int i = 0; i < table.Rows.Count; i++)
+            //{
+            //    tableName[i] = table.Rows[i][0].ToString();
+            //}
+            ////switch to using the new database
+            //DataConnection newDcon = new DataConnection(newDb);
+            //for (int i = 0; i < tableName.Length; i++)
+            //{
+            //    //Alert anyone that cares that we are backing up this table.
+            //    MiscDataEvent.Fire(ODEventType.MiscData, Lans.g(nameof(MiscData), "Backing up table") + ": " + tableName[i]);
+            //    command = "SHOW CREATE TABLE `" + oldDb + "`.`" + tableName[i] + "`";//also works with views. Added backticks around table name for unusual characters.
+            //    table = newDcon.GetTable(command);
+            //    command = PIn.ByteArray(table.Rows[0][1]);
+            //    newDcon.NonQ(command);//this has to be run using connection with new database
+            //    command = "INSERT INTO `" + newDb + "`.`" + tableName[i] + "` "
+            //        + "SELECT * FROM `" + oldDb + "`.`" + tableName[i] + "`";//Added backticks around table name for unusual characters.
+            //    newDcon.NonQ(command);
+            //}
             return 0;
         }
 
@@ -204,7 +203,7 @@ namespace OpenDentBusiness
         ///Optionally pass in connection settings to override the archive preferences.  Throws exceptions.</summary>
         public static T RunFuncOnArchiveDatabase<T>(Func<T> f)
         {
-            string connectionStrOrig = DataConnection.GetCurrentConnectionString();
+            string connectionStrOrig = DataConnection.ConnectionString;
 
             DataConnection dcon = new DataConnection();
             try
@@ -216,7 +215,7 @@ namespace OpenDentBusiness
                 string decryptedPass;
                 CDT.Class1.Decrypt(PrefC.GetString(PrefName.ArchivePassHash), out decryptedPass);
                 //Connect to the archive database.  This can throw many exceptions.
-                dcon.SetDb(archiveServerName, MiscData.GetArchiveDatabaseName(), archiveUserName, decryptedPass, "", "");
+                DataConnection.SetDb(archiveServerName, MiscData.GetArchiveDatabaseName(), archiveUserName, decryptedPass);
                 #region Validate archive database version
                 //At this point there is an active connection to the archive database, validate the DataBaseVersion.
                 string version = PrefC.GetStringNoCache(PrefName.DataBaseVersion);
@@ -245,7 +244,7 @@ namespace OpenDentBusiness
             }
             finally
             {//Always put the connection back to the original no matter what happened above when trying to make an archive.
-                dcon.SetDb(connectionStrOrig, "");//It is acceptable to crash the program if this fails.
+                //dcon.SetDb(connectionStrOrig, "");//It is acceptable to crash the program if this fails.
             }
         }
 
@@ -265,7 +264,7 @@ namespace OpenDentBusiness
             //string rawHostName=DataConnection.GetServerName();//This could be a human readable name, or it might be "localhost" or "127.0.0.1" or another IP address.
             //return Dns.GetHostEntry(rawHostName).HostName;//Return the human readable name (full domain name) corresponding to the rawHostName.
             //Had to strip off the port, caused Dns.GetHostEntry to fail and is not needed to get the hostname
-            string rawHostName = DataConnection.GetServerName();
+            string rawHostName = DataConnection.Server;
             if (rawHostName != null)
             {//rawHostName will be null if the user used a custom ConnectionString when they chose their database.
                 rawHostName = rawHostName.Split(':')[0];//This could be a human readable name, or it might be "localhost" or "127.0.0.1" or another IP address.
@@ -311,16 +310,17 @@ namespace OpenDentBusiness
         public static List<string> GetAtoZforDb(string[] dbNames)
         {
             List<string> retval = new List<string>();
-            DataConnection dcon = null;
             string atozName;
             string atozThisDb = PrefC.GetString(PrefName.DocPath);
+
+            var currentDbName = DataConnection.Database;
             for (int i = 0; i < dbNames.Length; i++)
             {
                 try
                 {
-                    dcon = new DataConnection(dbNames[i]);
-                    string command = "SELECT ValueString FROM preference WHERE PrefName='DocPath'";
-                    atozName = dcon.GetScalar(command);
+                    DataConnection.Database = dbNames[i];
+
+                    atozName = DataConnection.GetScalar("SELECT ValueString FROM preference WHERE PrefName='DocPath'");
                     if (retval.Contains(atozName))
                     {
                         continue;
@@ -336,39 +336,38 @@ namespace OpenDentBusiness
                     //don't add it to the list
                 }
             }
+            DataConnection.Database = currentDbName;
             return retval;
         }
 
         public static void LockWorkstationsForDbs(string[] dbNames)
         {
-            DataConnection dcon = null;
+            var currentDbName = DataConnection.Database;
             for (int i = 0; i < dbNames.Length; i++)
             {
                 try
                 {
-                    dcon = new DataConnection(dbNames[i]);
-                    string command = "UPDATE preference SET ValueString ='" + POut.String(Environment.MachineName)
-                        + "' WHERE PrefName='UpdateInProgressOnComputerName'";
-                    dcon.NonQ(command);
+                    DataConnection.Database = dbNames[i];
+                    DataConnection.NonQ("UPDATE preference SET ValueString ='" + POut.String(Environment.MachineName) + "' WHERE PrefName='UpdateInProgressOnComputerName'");
                 }
                 catch { }
             }
+            DataConnection.Database = currentDbName;
         }
 
         public static void UnlockWorkstationsForDbs(string[] dbNames)
         {
-            DataConnection dcon = null;
+            var currentDbName = DataConnection.Database;
             for (int i = 0; i < dbNames.Length; i++)
             {
                 try
                 {
-                    dcon = new DataConnection(dbNames[i]);
-                    string command = "UPDATE preference SET ValueString =''"
-                        + " WHERE PrefName='UpdateInProgressOnComputerName'";
-                    dcon.NonQ(command);
+                    DataConnection.Database = dbNames[i];
+                    DataConnection.NonQ("UPDATE preference SET ValueString ='' WHERE PrefName='UpdateInProgressOnComputerName'");
                 }
                 catch { }
             }
+            DataConnection.Database = currentDbName;
         }
 
         public static void SetSqlMode()

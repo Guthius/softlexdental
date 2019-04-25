@@ -1,5 +1,4 @@
 ﻿using CodeBase;
-using DataConnectionBase;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -122,7 +121,7 @@ namespace OpenDentBusiness
                     }
                 },
                     PrefC.GetString(PrefName.ServicesHqServer), PrefC.GetString(PrefName.ServicesHqDatabase), PrefC.GetString(PrefName.ServicesHqMySqlUser),
-                    dbPassword, "", "");
+                    dbPassword);
             }
             catch (Exception ex)
             {

@@ -216,14 +216,14 @@ namespace CodeBase {
 
             return true;
 
-            if (OnUnhandledException!=null) {
-				OnUnhandledException(e,_thread);
-				return false;
-			}
-            //If we get here the entire program will shutdown without warning and only leave a vague reference to KERNELBASE.dll in the event viewer.
-            //throw e;
-
-            return true;
+            //if (OnUnhandledException!=null) {
+			//	OnUnhandledException(e,_thread);
+			//	return false;
+			//}
+            ////If we get here the entire program will shutdown without warning and only leave a vague reference to KERNELBASE.dll in the event viewer.
+            ////throw e;
+            //
+            //return true;
 		}
 
 		///<summary>Forces the calling thread to synchronously wait for the current thread to finish doing work.  Pass Timeout.Infinite into timeoutMS if you wish to wait as long as necessary for the thread to join.  The thread will be aborted if the timeout was reached and then will return false.</summary>

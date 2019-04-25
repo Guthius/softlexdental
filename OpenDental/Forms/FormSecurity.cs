@@ -25,7 +25,7 @@ namespace OpenDental {
 		}
 
 		private void userControlSecurityTabs_AddUserClick(object sender,SecurityEventArgs e) {
-			Userod user = new Userod();
+			User user = new User();
 			FormUserEdit FormU = new FormUserEdit(user);
 			FormU.IsNew=true;
 			FormU.ShowDialog();

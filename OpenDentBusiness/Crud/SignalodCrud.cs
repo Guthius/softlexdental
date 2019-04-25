@@ -58,7 +58,6 @@ namespace OpenDentBusiness.Crud{
 					signalod.FKeyType =(KeyType)0;
 				}
 				signalod.IType      = (OpenDentBusiness.InvalidType)PIn.Int(row["IType"].ToString());
-				signalod.RemoteRole = (OpenDentBusiness.RemotingRole)PIn.Int(row["RemoteRole"].ToString());
 				signalod.MsgValue   = PIn.String(row["MsgValue"].ToString());
 				retVal.Add(signalod);
 			}

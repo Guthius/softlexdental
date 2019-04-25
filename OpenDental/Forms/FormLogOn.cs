@@ -16,7 +16,7 @@ namespace OpenDental
         /// <summary>
         /// Gets set to the user that just successfully logged in when in Simple Switch mode.
         /// </summary>
-        public Userod CurUserSimpleSwitch;
+        public User CurUserSimpleSwitch;
         
         /// <summary>
         /// If set AND available, this will be the user automatically selected when the form opens.
@@ -136,7 +136,7 @@ namespace OpenDental
         {
             bool    isEcw       = Programs.UsingEcwTightOrFullMode();
             string  userName    = "";
-            Userod  userCur     = null;
+            User  userCur     = null;
 
             if (PrefC.GetBool(PrefName.UserNameManualEntry))
             {

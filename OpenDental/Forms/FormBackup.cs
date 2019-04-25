@@ -8,7 +8,6 @@ using System.ServiceProcess;
 using System.Threading;
 using System.Windows.Forms;
 using CodeBase;
-using DataConnectionBase;
 using OpenDental.Bridges;
 using OpenDentBusiness;
 
@@ -1229,191 +1228,194 @@ namespace OpenDental {
 		}
 
 		private void butArchive_Click(object sender,EventArgs e) {
-			#region Connection settings UI validation
-			if(string.IsNullOrWhiteSpace(textArchiveServerName.Text)) {
-				MsgBox.Show(this,"Please specify a Server Name.");
-				return;
-			}
-			if(string.IsNullOrWhiteSpace(textArchiveUser.Text)) {
-				MsgBox.Show(this,"Please enter a User.");
-				return;
-			}
-			if(string.IsNullOrWhiteSpace(PrefC.GetString(PrefName.ArchiveKey))) {//If archive key isn't set, generate a new one.
-				string archiveKey="";
-				Random rand=new Random();
-				string allowedChars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-				for(int i=0;i<10;i++) {
-					archiveKey+=allowedChars[rand.Next(allowedChars.Length)];
-				}
-				Prefs.UpdateString(PrefName.ArchiveKey,archiveKey);
-			}
-			DateTime dateArchived=PrefC.GetDateT(PrefName.ArchiveDate);
-			string dbKey=PrefC.GetString(PrefName.ArchiveKey);
-			#endregion
-			DataConnection dcon=new DataConnection();
-			//Keep track of the original connection settings so that we can revert back to them once finished archiving.
-			string connectionStrOrig=DataConnection.GetCurrentConnectionString();
-
-			//Keep track of what the current global exit code is (should always be zero) so that we can put it back to what it was after upgrading.
-			int exitCodeOld=FormOpenDental.ExitCode;
-			try {
-				Version versionDbOrig=new Version(PrefC.GetString(PrefName.DataBaseVersion));
-				string connectionStrArchive=DataConnection.BuildSimpleConnectionString(
-					textArchiveServerName.Text,
-					MiscData.GetArchiveDatabaseName(),
-					textArchiveUser.Text,
-					textArchivePass.Text);
-
-				#region Connect or create archive database
-				//Attempt to connect to the archive database.
-				try { 
-					dcon.SetDbT(connectionStrArchive,"",true);
-				}
-				catch(Exception ex) {
-					if(ex.Message=="Unable to connect to any of the specified MySQL hosts.") {
-						//Server name incorrect - Message box and Return
-						MsgBox.Show(this,"The specified server name is incorrect or the server is offline.\r\n"
-							+"Please check and try again.");
-						return;
-					}
-					else if(ex.Message.Contains("Access denied for user")) {
-						//User name or password incorrect - Message box and Return
-						MsgBox.Show(this,"The supplied User and/or Password are incorrect.\r\n"
-							+"Please check and try again.");
-						return;
-					}
-					else if(ex.Message.Contains("Unknown database")) {
-						//Archive DB doesn't exist - Create it, then try to connect again.
-						if(MsgBox.Show(this,MsgBoxButtons.YesNo,"The archive database doesn't exist at the specified server.\r\n"
-							+"Would you like to create it?\r\n\r\n"
-							+"WARNING: This can take a while, DO NOT CLOSE THE PROGRAM!"))
-						{
-							if(!CreateArchiveDB(dcon,connectionStrOrig,connectionStrArchive)) {
-								return;//Creating archive database failed.
-							}
-						}
-						else {
-							return;
-						}
-					}
-				}
-				#endregion
-				#region Validate archive database version
-				//At this point there is an active connection to the archive database, validate the DataBaseVersion.
-				string version=PrefC.GetStringNoCache(PrefName.DataBaseVersion);
-				if(string.IsNullOrEmpty(version)) {
-					//Preference table does not have version information.  Somehow they have a database with proper structure but no data.
-					//This archive database can't be trusted and we have no idea what version the schema is at.
-					//They need to call support so that we can take a look or they need to delete the invalid archive (or remove it from the data dir) 
-					//so that a new archive database can be made from scratch.
-					MsgBox.Show(this,"Invalid archive database detected.\r\n"
-						+"Please call support.");
-					return;
-				}
-				Version versionDbArchive=new Version(version);
-				if(versionDbOrig>versionDbArchive) {
-					//We need to update the archive version
-					if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Archive database needs to be backed up and updated."
-						+"Continue?\r\n\r\n"
-						+"WARNING: This can take a while, DO NOT CLOSE THE PROGRAM!"))
-					{
-						return;
-					}
-					//Back the archive database up and upgrade it to the version that we are currently connected with.
-					//if(!new ClassConvertDatabase().Convert(versionDbArchive.ToString(),versionDbOrig.ToString(),true,this,false)) {
-					//	MsgBox.Show(this,"Error backing up or upgrading archive database - error code: "+FormOpenDental.ExitCode+"\r\n"
-					//		+"Please call support.");
-					//	return;
-					//}
-				}
-				else if(versionDbArchive>versionDbOrig) {
-					MsgBox.Show(this,"Archive database version is higher than the current database.  Process cannot continue.");
-					return;
-				}
-				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Archival process is about to commence.\r\n"
-					+"Continue?\r\n\r\n"
-					+"WARNING: This can take a while, DO NOT CLOSE THE PROGRAM!"))
-				{
-					return;
-				}
-				#endregion
-				#region Commence archive process
-				if(Archive(dcon,connectionStrOrig,connectionStrArchive,dateArchived,dbKey)) {
-					//Successful archive was made.
-					MsgBox.Show(this,"Archive process completed successfully.");
-				}
-				#endregion
-			}
-			catch(Exception ex) {
-                FormFriendlyException.Show("Unexpected error.",ex);
-			}
-			finally {//Always put the connection back to the original no matter what happened above when trying to make an archive.
-				dcon.SetDbT(connectionStrOrig,"");//It is acceptable to crash the program if this fails.
-				//Always set the global exit code back to whatever it was before we tried messing around with the archive.
-				FormOpenDental.ExitCode=exitCodeOld;
-			}
+            // TODO: Fix this...
+			//#region Connection settings UI validation
+			//if(string.IsNullOrWhiteSpace(textArchiveServerName.Text)) {
+			//	MsgBox.Show(this,"Please specify a Server Name.");
+			//	return;
+			//}
+			//if(string.IsNullOrWhiteSpace(textArchiveUser.Text)) {
+			//	MsgBox.Show(this,"Please enter a User.");
+			//	return;
+			//}
+			//if(string.IsNullOrWhiteSpace(PrefC.GetString(PrefName.ArchiveKey))) {//If archive key isn't set, generate a new one.
+			//	string archiveKey="";
+			//	Random rand=new Random();
+			//	string allowedChars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+			//	for(int i=0;i<10;i++) {
+			//		archiveKey+=allowedChars[rand.Next(allowedChars.Length)];
+			//	}
+			//	Prefs.UpdateString(PrefName.ArchiveKey,archiveKey);
+			//}
+			//DateTime dateArchived=PrefC.GetDateT(PrefName.ArchiveDate);
+			//string dbKey=PrefC.GetString(PrefName.ArchiveKey);
+			//#endregion
+			//DataConnection dcon=new DataConnection();
+			////Keep track of the original connection settings so that we can revert back to them once finished archiving.
+			//string connectionStrOrig=DataConnection.GetCurrentConnectionString();
+            //
+			////Keep track of what the current global exit code is (should always be zero) so that we can put it back to what it was after upgrading.
+			//int exitCodeOld=FormOpenDental.ExitCode;
+			//try {
+			//	Version versionDbOrig=new Version(PrefC.GetString(PrefName.DataBaseVersion));
+			//	string connectionStrArchive=DataConnection.BuildSimpleConnectionString(
+			//		textArchiveServerName.Text,
+			//		MiscData.GetArchiveDatabaseName(),
+			//		textArchiveUser.Text,
+			//		textArchivePass.Text);
+            //
+			//	#region Connect or create archive database
+			//	//Attempt to connect to the archive database.
+			//	try { 
+			//		dcon.SetDbT(connectionStrArchive,"",true);
+			//	}
+			//	catch(Exception ex) {
+			//		if(ex.Message=="Unable to connect to any of the specified MySQL hosts.") {
+			//			//Server name incorrect - Message box and Return
+			//			MsgBox.Show(this,"The specified server name is incorrect or the server is offline.\r\n"
+			//				+"Please check and try again.");
+			//			return;
+			//		}
+			//		else if(ex.Message.Contains("Access denied for user")) {
+			//			//User name or password incorrect - Message box and Return
+			//			MsgBox.Show(this,"The supplied User and/or Password are incorrect.\r\n"
+			//				+"Please check and try again.");
+			//			return;
+			//		}
+			//		else if(ex.Message.Contains("Unknown database")) {
+			//			//Archive DB doesn't exist - Create it, then try to connect again.
+			//			if(MsgBox.Show(this,MsgBoxButtons.YesNo,"The archive database doesn't exist at the specified server.\r\n"
+			//				+"Would you like to create it?\r\n\r\n"
+			//				+"WARNING: This can take a while, DO NOT CLOSE THE PROGRAM!"))
+			//			{
+			//				if(!CreateArchiveDB(dcon,connectionStrOrig,connectionStrArchive)) {
+			//					return;//Creating archive database failed.
+			//				}
+			//			}
+			//			else {
+			//				return;
+			//			}
+			//		}
+			//	}
+			//	#endregion
+			//	#region Validate archive database version
+			//	//At this point there is an active connection to the archive database, validate the DataBaseVersion.
+			//	string version=PrefC.GetStringNoCache(PrefName.DataBaseVersion);
+			//	if(string.IsNullOrEmpty(version)) {
+			//		//Preference table does not have version information.  Somehow they have a database with proper structure but no data.
+			//		//This archive database can't be trusted and we have no idea what version the schema is at.
+			//		//They need to call support so that we can take a look or they need to delete the invalid archive (or remove it from the data dir) 
+			//		//so that a new archive database can be made from scratch.
+			//		MsgBox.Show(this,"Invalid archive database detected.\r\n"
+			//			+"Please call support.");
+			//		return;
+			//	}
+			//	Version versionDbArchive=new Version(version);
+			//	if(versionDbOrig>versionDbArchive) {
+			//		//We need to update the archive version
+			//		if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Archive database needs to be backed up and updated."
+			//			+"Continue?\r\n\r\n"
+			//			+"WARNING: This can take a while, DO NOT CLOSE THE PROGRAM!"))
+			//		{
+			//			return;
+			//		}
+			//		//Back the archive database up and upgrade it to the version that we are currently connected with.
+			//		//if(!new ClassConvertDatabase().Convert(versionDbArchive.ToString(),versionDbOrig.ToString(),true,this,false)) {
+			//		//	MsgBox.Show(this,"Error backing up or upgrading archive database - error code: "+FormOpenDental.ExitCode+"\r\n"
+			//		//		+"Please call support.");
+			//		//	return;
+			//		//}
+			//	}
+			//	else if(versionDbArchive>versionDbOrig) {
+			//		MsgBox.Show(this,"Archive database version is higher than the current database.  Process cannot continue.");
+			//		return;
+			//	}
+			//	if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Archival process is about to commence.\r\n"
+			//		+"Continue?\r\n\r\n"
+			//		+"WARNING: This can take a while, DO NOT CLOSE THE PROGRAM!"))
+			//	{
+			//		return;
+			//	}
+			//	#endregion
+			//	#region Commence archive process
+			//	if(Archive(dcon,connectionStrOrig,connectionStrArchive,dateArchived,dbKey)) {
+			//		//Successful archive was made.
+			//		MsgBox.Show(this,"Archive process completed successfully.");
+			//	}
+			//	#endregion
+			//}
+			//catch(Exception ex) {
+            //    FormFriendlyException.Show("Unexpected error.",ex);
+			//}
+			//finally {//Always put the connection back to the original no matter what happened above when trying to make an archive.
+			//	dcon.SetDbT(connectionStrOrig,"");//It is acceptable to crash the program if this fails.
+			//	//Always set the global exit code back to whatever it was before we tried messing around with the archive.
+			//	FormOpenDental.ExitCode=exitCodeOld;
+			//}
 		}
 
 		///<summary>Creates an archive database for the connection information passed in.  Shows error messages to the user.
 		///Returns true if the archive database was created; Overwise, false.</summary>
 		private bool CreateArchiveDB(DataConnection dcon,string connectionStrOrig,string connectionStrArchive) 
 		{
-			bool isSuccess=false;
-			ODProgress.ShowAction(
-				() => {
-					#region Create archive database
-					//Create the archive database with the current connection settings.
-					MiscData.CreateArchiveDatabase();
-					#endregion
-					#region Generate table queries
-					//Create the shell of an archive database from the original.
-					//The following section of code was donated by the Crud Generator - A very selfless act (Also Form1 when running the crud)
-					Type typeTableBase=typeof(ODTable);
-					List<string> listTableCommands=new List<string>();
-					Assembly assembly=Assembly.GetAssembly(typeTableBase);
-					foreach(Type typeClass in assembly.GetTypes()) {
-						if(typeClass.IsSubclassOf(typeTableBase)) {
-							try { 
-								//Some tables have a different name than the tabletype object from Assembly. (preference vs. pref for instance)
-								string tableName=typeClass.Name.ToLower();
-								object[] attributes=typeClass.GetCustomAttributes(typeof(ODTableAttribute),true);
-								for(int i=0;i<attributes.Length;i++) {
-									if(attributes[i].GetType()!=typeof(ODTableAttribute)) {
-										continue;
-									}
-									if(((ODTableAttribute)attributes[i]).TableName!="") {
-										tableName=((ODTableAttribute)attributes[i]).TableName;
-									}
-								}
-								listTableCommands.Add(MiscData.GenerateTableQuery(tableName));//Generate CREATE TABLE statements from current db.
-							}
-							catch (Exception ex2) {
-								if(ex2.Message.Contains("doesn't exist")) {//table doesn't exist.  Like phone table or other HQ specific tables.
-									continue;
-								}
-							}
-						}
-					}
-					#endregion
-					#region Execute table queries and copy preferences
-					DataTable preferences=Prefs.GetTableFromCache(true);//Copy preferences from current db.
-					//Switch connection to archive db so we can create tables and copy over preferences (keeps track of db version)
-					dcon.SetDbT(connectionStrArchive,"",true);
-					MiscDataEvent.Fire(ODEventType.MiscData,"Making new tables");
-					MiscData.MakeTables(listTableCommands);
-					MiscDataEvent.Fire(ODEventType.MiscData,"Inserting preferences");
-					MiscData.InsertPreferences(preferences);
-					#endregion
-					isSuccess=true;
-				},
-				startingMessage:"Creating archive database...",
-				actionException:e => FormFriendlyException.Show(Lan.g(this,"Error creating the archive database."),e),
-				eventType:typeof(MiscDataEvent),
-				odEventType:ODEventType.MiscData
-			);
-			//No matter what happened above, set the db context back to the original connection.
-			dcon.SetDbT(connectionStrOrig,"");
-			return isSuccess;
+            //bool isSuccess=false;
+            //ODProgress.ShowAction(
+            //	() => {
+            //		#region Create archive database
+            //		//Create the archive database with the current connection settings.
+            //		MiscData.CreateArchiveDatabase();
+            //		#endregion
+            //		#region Generate table queries
+            //		//Create the shell of an archive database from the original.
+            //		//The following section of code was donated by the Crud Generator - A very selfless act (Also Form1 when running the crud)
+            //		Type typeTableBase=typeof(ODTable);
+            //		List<string> listTableCommands=new List<string>();
+            //		Assembly assembly=Assembly.GetAssembly(typeTableBase);
+            //		foreach(Type typeClass in assembly.GetTypes()) {
+            //			if(typeClass.IsSubclassOf(typeTableBase)) {
+            //				try { 
+            //					//Some tables have a different name than the tabletype object from Assembly. (preference vs. pref for instance)
+            //					string tableName=typeClass.Name.ToLower();
+            //					object[] attributes=typeClass.GetCustomAttributes(typeof(ODTableAttribute),true);
+            //					for(int i=0;i<attributes.Length;i++) {
+            //						if(attributes[i].GetType()!=typeof(ODTableAttribute)) {
+            //							continue;
+            //						}
+            //						if(((ODTableAttribute)attributes[i]).TableName!="") {
+            //							tableName=((ODTableAttribute)attributes[i]).TableName;
+            //						}
+            //					}
+            //					listTableCommands.Add(MiscData.GenerateTableQuery(tableName));//Generate CREATE TABLE statements from current db.
+            //				}
+            //				catch (Exception ex2) {
+            //					if(ex2.Message.Contains("doesn't exist")) {//table doesn't exist.  Like phone table or other HQ specific tables.
+            //						continue;
+            //					}
+            //				}
+            //			}
+            //		}
+            //		#endregion
+            //		#region Execute table queries and copy preferences
+            //		DataTable preferences=Prefs.GetTableFromCache(true);//Copy preferences from current db.
+            //		//Switch connection to archive db so we can create tables and copy over preferences (keeps track of db version)
+            //		dcon.SetDbT(connectionStrArchive,"",true);
+            //		MiscDataEvent.Fire(ODEventType.MiscData,"Making new tables");
+            //		MiscData.MakeTables(listTableCommands);
+            //		MiscDataEvent.Fire(ODEventType.MiscData,"Inserting preferences");
+            //		MiscData.InsertPreferences(preferences);
+            //		#endregion
+            //		isSuccess=true;
+            //	},
+            //	startingMessage:"Creating archive database...",
+            //	actionException:e => FormFriendlyException.Show(Lan.g(this,"Error creating the archive database."),e),
+            //	eventType:typeof(MiscDataEvent),
+            //	odEventType:ODEventType.MiscData
+            //);
+            ////No matter what happened above, set the db context back to the original connection.
+            //dcon.SetDbT(connectionStrOrig,"");
+            //return isSuccess;
+
+            return false; // TODO: Fix this...
 		}
 
 		///<summary>Performs the actual archive process.  Shows error messages to the user.
@@ -1421,90 +1423,92 @@ namespace OpenDental {
 		private bool Archive(DataConnection dcon,string connectionStrOrig,string connectionStrArchive,
 			DateTime dateArchived,string dbKey) 
 		{
-			bool isSuccess=false;
-			ODProgress.ShowAction(
-				() => {
-					#region Check/Set archive key
-					string archiveKey=PrefC.GetStringNoCache(PrefName.ArchiveKey);
-					if(!string.IsNullOrWhiteSpace(archiveKey) && dbKey!=archiveKey) {
-						throw new ApplicationException("Archival process failed.  The archive key does not match the source database key.\r\n"
-							+"Please call support.");//This may occur if the name of the database is correct but for some reason the contents are different. (ie. Renaming)
-					}
-					#endregion
-					#region Check archive date matching
-					DateTime archiveDateArchived=PIn.DateT(PrefC.GetStringNoCache(PrefName.ArchiveDate));
-					if(archiveDateArchived!=DateTime.MinValue && dateArchived<archiveDateArchived) {
-						if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Archive date and source database date do not match.  Archived entries may be overwritten.  Continue?")) {
-							return;//returns false, meaning archive not successful
-						}
-					}
-					#endregion
-					#region Insert items from original to archive
-					//Reset to the original db once again.  Bulk insert securitylog entries and securityloghash entries that are prior to the selected date.
-					dcon.SetDbT(connectionStrOrig,"");
-					//Insert security logs and security log hashes using our large table helper logic.
-					//Uses insert batches, multiple threads, and makes sure inserts are under the max allowed packet size.
-					MiscDataEvent.Fire(ODEventType.MiscData,"Inserting security logs");
-					string errorMsg=LargeTableHelper.BulkInsertSecurityLogs(textArchiveServerName.Text,
-						textArchiveUser.Text,
-						textArchivePass.Text,
-						dateTimeArchive.Value);
-					//Grab security log max primary key for delete statements later.  
-					long maxPriKeySecurityLog=(LargeTableHelper.ListPriKeyMaxPerBatch.Count>0 ? LargeTableHelper.ListPriKeyMaxPerBatch.Max() : 0);
-					MiscDataEvent.Fire(ODEventType.MiscData,"Inserting security log hashes");
-					//BulkInsertSecurityLogHashes must be run after BulkInsertSecurityLogs.
-					errorMsg+=LargeTableHelper.BulkInsertSecurityLogHashes();
-					//Grab security log hash max primary key for delete statements later.
-					long maxPriKeySecurityLogHash=(LargeTableHelper.ListPriKeyMaxPerBatch.Count>0 ? LargeTableHelper.ListPriKeyMaxPerBatch.Max() : 0);
-					if(errorMsg!="") {
-						throw new ApplicationException(errorMsg);
-					}
-					#endregion
-					#region Verify archive integrity
-					dcon.SetDbT(connectionStrArchive,"",true);
-					if(maxPriKeySecurityLog!=0 && SecurityLogs.GetOne(maxPriKeySecurityLog)==null) {
-						throw new ApplicationException("Archival process failed.  The archive securitylog table does not have all of the archived rows.\r\n"
-							+"Please call support.");
-					}
-					if(maxPriKeySecurityLogHash!=0 && SecurityLogHashes.GetOne(maxPriKeySecurityLogHash)==null) {
-						throw new ApplicationException("Archival process failed.  The archive securityloghash table does not have all of the archived rows.\r\n"
-							+"Please call support.");
-					}
-					#endregion
-					#region Delete items from original database
-					dcon.SetDbT(connectionStrOrig,"");//Reset to the original db once again.
-					//Cleaning up - Delete SecurityLog and SecurityLogHash items in our original databasesecurity logs
-					MiscDataEvent.Fire(ODEventType.MiscData,"Deleting security logs");
-					SecurityLogs.DeleteWithMaxPriKey(maxPriKeySecurityLog);//Due to the nature of bulk inserts (and how the rows were selected for insert) we only know the maximum primary key.
-					MiscDataEvent.Fire(ODEventType.MiscData,"Deleting security log hashes");
-					SecurityLogHashes.DeleteWithMaxPriKey(maxPriKeySecurityLogHash);//Due to the nature of bulk inserts (and how the rows were selected for insert) we only know the maximum primary key.
-					#endregion
-					#region Save ArchiveDate and defaults
-					dcon.SetDbT(connectionStrArchive,"",true);
-					Prefs.UpdateStringNoCache(PrefName.ArchiveDate,POut.DateT(dateTimeArchive.Value,false));
-					if(string.IsNullOrEmpty(archiveKey)) {//Update archive db's archivekey, if it's not set.
-						Prefs.UpdateStringNoCache(PrefName.ArchiveKey,dbKey);
-					}
-					dcon.SetDbT(connectionStrOrig,"");
-					Prefs.UpdateDateT(PrefName.ArchiveDate,dateTimeArchive.Value);
-					Prefs.UpdateString(PrefName.ArchiveServerName,textArchiveServerName.Text);
-					Prefs.UpdateString(PrefName.ArchiveUserName,textArchiveUser.Text);
-					string encryptedPass;
-                    Encryption.TryEncrypt(textArchivePass.Text,out encryptedPass);
-					Prefs.UpdateString(PrefName.ArchivePassHash,encryptedPass);
-					#endregion
-					isSuccess=true;
-				},
-				startingMessage:"Archiving...",
-				actionException:ex => this.Invoke(() => {
-                    FormFriendlyException.Show(Lan.g(this,"Error during the archival process."),ex);
-				}),
-				eventType:typeof(MiscDataEvent),
-				odEventType:ODEventType.MiscData
-			);
-			//No matter what happened above, set the db context back to the original connection.
-			dcon.SetDbT(connectionStrOrig,"");
-			return isSuccess;
+            //bool isSuccess=false;
+            //ODProgress.ShowAction(
+            //	() => {
+            //		#region Check/Set archive key
+            //		string archiveKey=PrefC.GetStringNoCache(PrefName.ArchiveKey);
+            //		if(!string.IsNullOrWhiteSpace(archiveKey) && dbKey!=archiveKey) {
+            //			throw new ApplicationException("Archival process failed.  The archive key does not match the source database key.\r\n"
+            //				+"Please call support.");//This may occur if the name of the database is correct but for some reason the contents are different. (ie. Renaming)
+            //		}
+            //		#endregion
+            //		#region Check archive date matching
+            //		DateTime archiveDateArchived=PIn.DateT(PrefC.GetStringNoCache(PrefName.ArchiveDate));
+            //		if(archiveDateArchived!=DateTime.MinValue && dateArchived<archiveDateArchived) {
+            //			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Archive date and source database date do not match.  Archived entries may be overwritten.  Continue?")) {
+            //				return;//returns false, meaning archive not successful
+            //			}
+            //		}
+            //		#endregion
+            //		#region Insert items from original to archive
+            //		//Reset to the original db once again.  Bulk insert securitylog entries and securityloghash entries that are prior to the selected date.
+            //		dcon.SetDbT(connectionStrOrig,"");
+            //		//Insert security logs and security log hashes using our large table helper logic.
+            //		//Uses insert batches, multiple threads, and makes sure inserts are under the max allowed packet size.
+            //		MiscDataEvent.Fire(ODEventType.MiscData,"Inserting security logs");
+            //		string errorMsg=LargeTableHelper.BulkInsertSecurityLogs(textArchiveServerName.Text,
+            //			textArchiveUser.Text,
+            //			textArchivePass.Text,
+            //			dateTimeArchive.Value);
+            //		//Grab security log max primary key for delete statements later.  
+            //		long maxPriKeySecurityLog=(LargeTableHelper.ListPriKeyMaxPerBatch.Count>0 ? LargeTableHelper.ListPriKeyMaxPerBatch.Max() : 0);
+            //		MiscDataEvent.Fire(ODEventType.MiscData,"Inserting security log hashes");
+            //		//BulkInsertSecurityLogHashes must be run after BulkInsertSecurityLogs.
+            //		errorMsg+=LargeTableHelper.BulkInsertSecurityLogHashes();
+            //		//Grab security log hash max primary key for delete statements later.
+            //		long maxPriKeySecurityLogHash=(LargeTableHelper.ListPriKeyMaxPerBatch.Count>0 ? LargeTableHelper.ListPriKeyMaxPerBatch.Max() : 0);
+            //		if(errorMsg!="") {
+            //			throw new ApplicationException(errorMsg);
+            //		}
+            //		#endregion
+            //		#region Verify archive integrity
+            //		dcon.SetDbT(connectionStrArchive,"",true);
+            //		if(maxPriKeySecurityLog!=0 && SecurityLogs.GetOne(maxPriKeySecurityLog)==null) {
+            //			throw new ApplicationException("Archival process failed.  The archive securitylog table does not have all of the archived rows.\r\n"
+            //				+"Please call support.");
+            //		}
+            //		if(maxPriKeySecurityLogHash!=0 && SecurityLogHashes.GetOne(maxPriKeySecurityLogHash)==null) {
+            //			throw new ApplicationException("Archival process failed.  The archive securityloghash table does not have all of the archived rows.\r\n"
+            //				+"Please call support.");
+            //		}
+            //		#endregion
+            //		#region Delete items from original database
+            //		dcon.SetDbT(connectionStrOrig,"");//Reset to the original db once again.
+            //		//Cleaning up - Delete SecurityLog and SecurityLogHash items in our original databasesecurity logs
+            //		MiscDataEvent.Fire(ODEventType.MiscData,"Deleting security logs");
+            //		SecurityLogs.DeleteWithMaxPriKey(maxPriKeySecurityLog);//Due to the nature of bulk inserts (and how the rows were selected for insert) we only know the maximum primary key.
+            //		MiscDataEvent.Fire(ODEventType.MiscData,"Deleting security log hashes");
+            //		SecurityLogHashes.DeleteWithMaxPriKey(maxPriKeySecurityLogHash);//Due to the nature of bulk inserts (and how the rows were selected for insert) we only know the maximum primary key.
+            //		#endregion
+            //		#region Save ArchiveDate and defaults
+            //		dcon.SetDbT(connectionStrArchive,"",true);
+            //		Prefs.UpdateStringNoCache(PrefName.ArchiveDate,POut.DateT(dateTimeArchive.Value,false));
+            //		if(string.IsNullOrEmpty(archiveKey)) {//Update archive db's archivekey, if it's not set.
+            //			Prefs.UpdateStringNoCache(PrefName.ArchiveKey,dbKey);
+            //		}
+            //		dcon.SetDbT(connectionStrOrig,"");
+            //		Prefs.UpdateDateT(PrefName.ArchiveDate,dateTimeArchive.Value);
+            //		Prefs.UpdateString(PrefName.ArchiveServerName,textArchiveServerName.Text);
+            //		Prefs.UpdateString(PrefName.ArchiveUserName,textArchiveUser.Text);
+            //		string encryptedPass;
+            //        Encryption.TryEncrypt(textArchivePass.Text,out encryptedPass);
+            //		Prefs.UpdateString(PrefName.ArchivePassHash,encryptedPass);
+            //		#endregion
+            //		isSuccess=true;
+            //	},
+            //	startingMessage:"Archiving...",
+            //	actionException:ex => this.Invoke(() => {
+            //        FormFriendlyException.Show(Lan.g(this,"Error during the archival process."),ex);
+            //	}),
+            //	eventType:typeof(MiscDataEvent),
+            //	odEventType:ODEventType.MiscData
+            //);
+            ////No matter what happened above, set the db context back to the original connection.
+            //dcon.SetDbT(connectionStrOrig,"");
+            //return isSuccess;
+
+            return false; // TODO: Fix this.
 		}
 
 		private void butSaveArchive_Click(object sender,EventArgs e) {

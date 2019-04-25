@@ -15,7 +15,6 @@ using System.Windows.Forms;
 using System.Threading;
 using OpenDentBusiness;
 using CodeBase;
-using DataConnectionBase;
 
 namespace OpenDental{
 	public class FormQuery : ODForm {

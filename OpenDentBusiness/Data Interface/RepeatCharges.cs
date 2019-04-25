@@ -85,8 +85,8 @@ namespace OpenDentBusiness
         {
             //Counts the number of repeat charges that a patient has with a valid start date in the past and no stop date or a stop date in the future
             string command = "SELECT COUNT(*) FROM repeatcharge "
-                + "WHERE PatNum=" + POut.Long(patNum) + " AND DateStart BETWEEN '1880-01-01' AND " + DbHelper.Curdate() + " "
-                + "AND (DateStop='0001-01-01' OR DateStop>=" + DbHelper.Curdate() + ")";
+                + "WHERE PatNum=" + POut.Long(patNum) + " AND DateStart BETWEEN '1880-01-01' AND CURDATE() "
+                + "AND (DateStop='0001-01-01' OR DateStop>=CURDATE())";
             if (Db.GetCount(command) == "0")
             {
                 return false;

@@ -28,7 +28,7 @@ namespace OpenDental {
 			listTime.AddRange(_jobCur.ListJobTimeLogs);
 			listTime.AddRange(_jobCur.ListJobReviews);
 			listTime=listTime.OrderByDescending(x => x.DateTStamp).ToList();
-			List<Userod> listUsers=Userods.GetAll();
+			List<User> listUsers=Userods.GetAll();
 			gridJobs.Columns.Add(new ODGridColumn("Date",75) { TextAlign=HorizontalAlignment.Center });
 			gridJobs.Columns.Add(new ODGridColumn("User",75));
 			gridJobs.Columns.Add(new ODGridColumn("Type",125) { TextAlign=HorizontalAlignment.Center });

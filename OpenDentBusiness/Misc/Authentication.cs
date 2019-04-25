@@ -32,7 +32,7 @@ namespace OpenDentBusiness {
 		///<summary>Checks to see if the hash of inputPass matches for a Userod object.  If the user password is blank, inputPass must be 
 		///blank as well.  When isEcw is true then inputPass should already be hashed.
 		///If the inputPass is correct, the algorithm used was MD5, and updateIfNeeded is true then the password stored in the database will be updated to SHA3-512</summary>
-		public static bool CheckPassword(Userod userod,string inputPass,bool isEcw=false) {
+		public static bool CheckPassword(User userod,string inputPass,bool isEcw=false) {
 			//No need to check RemotingRole; no call to db.
 			PasswordContainer loginDetails=userod.LoginDetails;
 			if(loginDetails.HashType==HashTypes.None) {
@@ -153,7 +153,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Updates a password for a given Userod account and saves it to the database.  Suggested hash type is SHA3-512.
 		///Throws an exception if a passed in hash type is not implimented.</summary>
-		public static bool UpdatePasswordUserod(Userod user,string inputPass,HashTypes hashType=HashTypes.SHA3_512) {
+		public static bool UpdatePasswordUserod(User user,string inputPass,HashTypes hashType=HashTypes.SHA3_512) {
 			//No need to check RemotingRole; no call to db.
 			//Calculate the password strength.
 			bool passStrength=String.IsNullOrEmpty(Userods.IsPasswordStrong(inputPass));

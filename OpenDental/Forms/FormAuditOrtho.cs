@@ -61,7 +61,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			Userod user;
+			User user;
 			//First Selected Ortho Chart Logs
 			foreach(int iDate in gridHist.SelectedIndices) {
 				DateTime dateRow=(DateTime)gridHist.Rows[iDate].Tag;

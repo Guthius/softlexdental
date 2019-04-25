@@ -1,5 +1,4 @@
 ﻿using CodeBase;
-using DataConnectionBase;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -318,7 +317,7 @@ namespace OpenDentBusiness
             {
                 //Check to see if the table has its storage engine set to InnoDB.
                 command = "SELECT ENGINE FROM information_schema.TABLES "
-                    + "WHERE TABLE_SCHEMA='" + POut.String(DataConnection.GetDatabaseName()) + "' "
+                    + "WHERE TABLE_SCHEMA='" + DataConnection.Database + "' "
                     + "AND TABLE_NAME='" + POut.String(tableName) + "' ";
                 string storageEngine = Db.GetScalar(command);
                 if (storageEngine.ToLower() == "innodb")
@@ -354,7 +353,7 @@ namespace OpenDentBusiness
 				SELECT cols.TABLE_NAME, cols.COLUMN_NAME, cols.COLUMN_DEFAULT
 				FROM information_schema.COLUMNS cols
 				WHERE cols.DATA_TYPE IN ('datetime','date','timestamp')
-				AND TABLE_SCHEMA = '" + DataConnection.GetDatabaseName() + "'";
+				AND TABLE_SCHEMA = '" + DataConnection.Database + "'";
             DataTable table = Db.GetTable(command);
             int countTotal = 0;
             List<string> listInvalidColNames = new List<string>();
@@ -9479,86 +9478,86 @@ HAVING cnt>1";
             OptimizeTable("etrans", canOptimizeInnodb: true);
         }
 
-        ///<summary>Return values look like 'MyISAM' or 'InnoDB'. Will return empty string on error.</summary>
-        public static string GetStorageEngineDefaultName()
-        {
-            string retVal = "";
-            try
-            {
-                retVal = Db.GetScalar("SELECT @@default_storage_engine");//Mysql 5.5.3+
-            }
-            catch
-            {
-                //using SHOW GLOBAL VARIABLES will return an empty string if not supported.
-                DataTable dtEngine;
-                dtEngine = Db.GetTable("SHOW GLOBAL VARIABLES LIKE 'storage_engine'");//MySQL 5.5.2-
-                if (dtEngine.Rows.Count > 0)
-                {
-                    retVal = PIn.String(dtEngine.Rows[0]["Value"].ToString());
-                }
-            }
-            return retVal;
-        }
+        /////<summary>Return values look like 'MyISAM' or 'InnoDB'. Will return empty string on error.</summary>
+        //public static string GetStorageEngineDefaultName()
+        //{
+        //    string retVal = "";
+        //    try
+        //    {
+        //        retVal = Db.GetScalar("SELECT @@default_storage_engine");//Mysql 5.5.3+
+        //    }
+        //    catch
+        //    {
+        //        //using SHOW GLOBAL VARIABLES will return an empty string if not supported.
+        //        DataTable dtEngine;
+        //        dtEngine = Db.GetTable("SHOW GLOBAL VARIABLES LIKE 'storage_engine'");//MySQL 5.5.2-
+        //        if (dtEngine.Rows.Count > 0)
+        //        {
+        //            retVal = PIn.String(dtEngine.Rows[0]["Value"].ToString());
+        //        }
+        //    }
+        //    return retVal;
+        //}
 
-        ///<summary>Gets the number of tables in MyISAM format.</summary>
-        public static int GetMyisamTableCount()
-        {
-            string command = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.tables "
-                + "WHERE TABLE_SCHEMA='" + POut.String(DataConnection.GetDatabaseName()) + "' "
-                + "AND ENGINE LIKE 'MyISAM'";
-            return Db.GetTable(command).Rows.Count;
-        }
+        /////<summary>Gets the number of tables in MyISAM format.</summary>
+        //public static int GetMyisamTableCount()
+        //{
+        //    string command = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.tables "
+        //        + "WHERE TABLE_SCHEMA='" + DataConnection.Database + "' "
+        //        + "AND ENGINE LIKE 'MyISAM'";
+        //    return Db.GetTable(command).Rows.Count;
+        //}
 
-        ///<summary>Returns true if the conversion was successfull or no conversion was necessary. The goal is to convert InnoDB tables (excluding the 'phone' table) to MyISAM format when there are a mixture of InnoDB and MyISAM tables but no conversion will be performed when all of the tables are already in the same format.</summary>
-        public static bool ConvertTablesToMyisam()
-        {
-            string command = "SELECT TABLE_NAME,ENGINE FROM INFORMATION_SCHEMA.tables "
-                + "WHERE TABLE_SCHEMA='" + POut.String(DataConnection.GetDatabaseName()) + "' "
-                + "AND TABLE_NAME!='phone'";//this table is used internally at OD HQ, and is always innodb.
-            DataTable dtTableTypes = Db.GetTable(command);
-            int numInnodb = 0;//Or possibly some other format.
-            int numMyisam = 0;
-            for (int i = 0; i < dtTableTypes.Rows.Count; i++)
-            {
-                if (PIn.String(dtTableTypes.Rows[i]["ENGINE"].ToString()).ToUpper() == "MYISAM")
-                {
-                    numMyisam++;
-                }
-                else
-                {
-                    numInnodb++;
-                }
-            }
-            if (numInnodb > 0 && numMyisam > 0)
-            {//Fix tables by converting them to MyISAM when there is a mixture of different table types.
-                for (int i = 0; i < dtTableTypes.Rows.Count; i++)
-                {
-                    if (PIn.String(dtTableTypes.Rows[i]["ENGINE"].ToString()).ToUpper() == "MYISAM")
-                    {
-                        continue;
-                    }
-                    string tableName = PIn.String(dtTableTypes.Rows[i]["TABLE_NAME"].ToString());
-                    command = "ALTER TABLE `" + tableName + "` ENGINE='MyISAM'";
-                    try
-                    {
-                        Db.NonQ(command);
-                    }
-                    catch
-                    {
-                        return false;
-                    }
-                }
-                command = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.tables "
-                    + "WHERE TABLE_SCHEMA='" + POut.String(DataConnection.GetDatabaseName()) + "' "
-                    + "AND TABLE_NAME!='phone' "
-                    + "AND ENGINE NOT LIKE 'MyISAM'";
-                if (Db.GetTable(command).Rows.Count != 0)
-                { //If any tables are still InnoDB.
-                    return false;
-                }
-            }
-            return true;
-        }
+        /////<summary>Returns true if the conversion was successfull or no conversion was necessary. The goal is to convert InnoDB tables (excluding the 'phone' table) to MyISAM format when there are a mixture of InnoDB and MyISAM tables but no conversion will be performed when all of the tables are already in the same format.</summary>
+        //public static bool ConvertTablesToMyisam()
+        //{
+        //    string command = "SELECT TABLE_NAME,ENGINE FROM INFORMATION_SCHEMA.tables "
+        //        + "WHERE TABLE_SCHEMA='" + DataConnection.Database + "' "
+        //        + "AND TABLE_NAME!='phone'";//this table is used internally at OD HQ, and is always innodb.
+        //    DataTable dtTableTypes = Db.GetTable(command);
+        //    int numInnodb = 0;//Or possibly some other format.
+        //    int numMyisam = 0;
+        //    for (int i = 0; i < dtTableTypes.Rows.Count; i++)
+        //    {
+        //        if (PIn.String(dtTableTypes.Rows[i]["ENGINE"].ToString()).ToUpper() == "MYISAM")
+        //        {
+        //            numMyisam++;
+        //        }
+        //        else
+        //        {
+        //            numInnodb++;
+        //        }
+        //    }
+        //    if (numInnodb > 0 && numMyisam > 0)
+        //    {//Fix tables by converting them to MyISAM when there is a mixture of different table types.
+        //        for (int i = 0; i < dtTableTypes.Rows.Count; i++)
+        //        {
+        //            if (PIn.String(dtTableTypes.Rows[i]["ENGINE"].ToString()).ToUpper() == "MYISAM")
+        //            {
+        //                continue;
+        //            }
+        //            string tableName = PIn.String(dtTableTypes.Rows[i]["TABLE_NAME"].ToString());
+        //            command = "ALTER TABLE `" + tableName + "` ENGINE='MyISAM'";
+        //            try
+        //            {
+        //                Db.NonQ(command);
+        //            }
+        //            catch
+        //            {
+        //                return false;
+        //            }
+        //        }
+        //        command = "SELECT TABLE_NAME FROM INFORMATION_SCHEMA.tables "
+        //            + "WHERE TABLE_SCHEMA='" + POut.String(DataConnection.GetDatabaseName()) + "' "
+        //            + "AND TABLE_NAME!='phone' "
+        //            + "AND ENGINE NOT LIKE 'MyISAM'";
+        //        if (Db.GetTable(command).Rows.Count != 0)
+        //        { //If any tables are still InnoDB.
+        //            return false;
+        //        }
+        //    }
+        //    return true;
+        //}
 
         ///<summary>Returns the number of invalid FKey entries for specified tableName, permissions, and primary key column.
         ///You MUST check remoting role before calling this method.  It is purposefully private and must remain so.</summary>

@@ -89,9 +89,9 @@ namespace OpenDental {
 			gridSubscribers.Columns.Add(new ODGridColumn("User Name",-1));
 			gridSubscribers.Columns.Add(new ODGridColumn("Unlink",40,HorizontalAlignment.Center));
 			gridSubscribers.Rows.Clear();
-			List<Userod> listSubscribers=_listJobLinks.FindAll(x => x.LinkType==JobLinkType.Subscriber)
+			List<User> listSubscribers=_listJobLinks.FindAll(x => x.LinkType==JobLinkType.Subscriber)
 				.Select(x => Userods.GetFirstOrDefault(y => y.UserNum==x.FKey)).ToList();
-			foreach(Userod user in listSubscribers.FindAll(x => x!=null)){
+			foreach(User user in listSubscribers.FindAll(x => x!=null)){
 				ODGridRow row=new ODGridRow() { Tag =user };
 				row.Cells.Add(user.UserName);
 				row.Cells.Add("X");
@@ -336,7 +336,7 @@ namespace OpenDental {
 
 		private void gridSubscribers_CellClick(object sender,ODGridClickEventArgs e) {
 			if(e.Col==1) {//Remove
-				long FKey = ((Userod)gridSubscribers.Rows[e.Row].Tag).UserNum;
+				long FKey = ((User)gridSubscribers.Rows[e.Row].Tag).UserNum;
 				_listJobLinks.RemoveAll(x => x.LinkType==JobLinkType.Subscriber&&x.FKey==FKey);
 				FillGridSubscribers();
 			}

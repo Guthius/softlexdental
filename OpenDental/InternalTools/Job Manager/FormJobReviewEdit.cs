@@ -11,9 +11,9 @@ using CodeBase;
 namespace OpenDental {
 	public partial class FormJobReviewEdit:ODForm {
 		private JobReview _jobReviewCur;
-		private List<Userod> _listReviewers;
+		private List<User> _listReviewers;
 		private List<string> _listReviewStatusNames;
-		private Userod secUser;
+		private User secUser;
 
 		///<summary>Used for existing Reviews. Pass in the jobNum and the jobReviewNum.</summary>
 		public FormJobReviewEdit(JobReview jobReview) {

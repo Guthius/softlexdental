@@ -6,7 +6,6 @@ using System.IO;
 using System.Windows.Forms;
 using System.Security.Cryptography.X509Certificates;
 using CodeBase;
-using DataConnectionBase;
 using OpenDentBusiness;
 using System.Linq;
 using OpenDental.UI;

@@ -112,8 +112,8 @@ namespace OpenDental {
 			}
 			gridCalculatedJobs.EndUpdate();
 			foreach(long engNum in listUserNums) {
-				Userod eng=Userods.GetUser(engNum);
-				listEngNoJobs.Items.Add(new ODBoxItem<Userod>(eng.UserName,eng));
+				User eng=Userods.GetUser(engNum);
+				listEngNoJobs.Items.Add(new ODBoxItem<User>(eng.UserName,eng));
 			}
 			labelJobHours.Text=Math.Round(totalJobHours).ToString();
 			labelJobNumber.Text=listJobs.Count.ToString();

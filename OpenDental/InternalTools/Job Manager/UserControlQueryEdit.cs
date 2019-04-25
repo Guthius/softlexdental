@@ -850,7 +850,7 @@ namespace OpenDental.InternalTools.Job_Manager {
 		///<summary>If returns false if selection is cancelled. DefaultUserNum is usually the currently set usernum for a given role.</summary>
 		private bool PickUserByJobPermission(string prompt,JobPerm jobPerm,out long selectedNum, long suggestedUserNum = 0,bool AllowNone = true,bool AllowAll = true) {
 			selectedNum=0;
-			List<Userod> listUsersForPicker = Userods.GetUsersByJobRole(jobPerm,false);
+			List<User> listUsersForPicker = Userods.GetUsersByJobRole(jobPerm,false);
 			FormUserPick FormUP = new FormUserPick();
 			FormUP.Text=prompt;
 			FormUP.IsSelectionmode=true;

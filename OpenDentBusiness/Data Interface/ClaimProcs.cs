@@ -929,7 +929,7 @@ namespace OpenDentBusiness
             string command = "UPDATE claimproc SET "
                 + "DateInsFinalized='0001-01-01' "
                 + "WHERE ClaimPaymentNum=" + POut.Long(claimPaymentNum) + " "
-                + "AND (SELECT SecDateEntry FROM claimpayment WHERE ClaimPaymentNum=" + POut.Long(claimPaymentNum) + ")=" + DbHelper.Curdate() + " "
+                + "AND (SELECT SecDateEntry FROM claimpayment WHERE ClaimPaymentNum=" + POut.Long(claimPaymentNum) + ")=CURDATE() "
                 + "AND ClaimNum IN(" + string.Join(",", listClaimNums.Select(x => POut.Long(x))) + ")";
             Db.NonQ(command);
             command = "UPDATE claimproc SET ClaimPaymentNum=0, "

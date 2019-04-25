@@ -381,7 +381,7 @@ namespace OpenDental {
 			if(Security.CurUser.EmployeeNum==employeeNum) {
 				return true;
 			}
-			Userod selectedUser=Userods.GetUserByEmployeeNum(employeeNum);
+			User selectedUser=Userods.GetUserByEmployeeNum(employeeNum);
 			InputBox inputPass=new InputBox("Please enter password:");
 			inputPass.textResult.PasswordChar='*';
 			inputPass.ShowDialog();

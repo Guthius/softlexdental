@@ -10,7 +10,7 @@ namespace OpenDental {
 	public partial class FormProvStudentEdit:ODForm {
 		private long _autoUserName;
 		private bool _isGeneratingAbbr=true;
-		private Userod _existingUser;
+		private User _existingUser;
 		///<summary>Set this when selecting a pre-existing Student.</summary>
 		public Provider ProvStudent;
 		private List<SchoolClass> _listSchoolClasses;
@@ -28,7 +28,7 @@ namespace OpenDental {
 				},
 				(int)TimeSpan.FromSeconds(0.5).TotalMilliseconds,
 				textFirstName,textLastName);
-			_existingUser=new Userod();
+			_existingUser=new User();
 			//Load the Combo Box
 			_listSchoolClasses=SchoolClasses.GetDeepCopy();
 			for(int i=0;i<_listSchoolClasses.Count;i++) {
@@ -67,7 +67,7 @@ namespace OpenDental {
 				textAbbr.Text=ProvStudent.Abbr;
 				textFirstName.Text=ProvStudent.FName;
 				textLastName.Text=ProvStudent.LName;
-				List<Userod> userList=Providers.GetAttachedUsers(ProvStudent.ProvNum);
+				List<User> userList=Providers.GetAttachedUsers(ProvStudent.ProvNum);
 				if(userList.Count>0) {
 					textUserName.Text=userList[0].UserName;//Should always happen if they are a student.
 					_existingUser=userList[0];
@@ -118,7 +118,7 @@ namespace OpenDental {
 			ProvStudent.LName=textLastName.Text;
 			ProvStudent.Abbr=textAbbr.Text;
 			ProvStudent.SchoolClassNum=_listSchoolClasses[comboClass.SelectedIndex].SchoolClassNum;
-			Userod newUser=new Userod();
+			User newUser=new User();
 			bool isAutoUserName=true;
 			if(!ProvStudent.IsNew || _autoUserName.ToString()!=textUserName.Text) {
 				isAutoUserName=false;

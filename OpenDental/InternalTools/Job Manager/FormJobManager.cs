@@ -27,7 +27,7 @@ namespace OpenDental {
 		private ToolTip _toolTipHover=new ToolTip();
 		private List<Def> _listJobPriorities;
 		private List<TabPage> _listHiddenTabs;
-		private List<Userod> _listUsers;
+		private List<User> _listUsers;
 		private Stack<long> _stackBackJobNums=new Stack<long>();
 		private Stack<long> _stackForwardJobNums=new Stack<long>();
 		private static List<FormJobEdit> _listJobEditForms=new List<FormJobEdit>();
@@ -287,7 +287,7 @@ namespace OpenDental {
 		}
 
 		private void FillComboUser() {
-			Userod userCur=(Userod)comboUser.Tag;
+			User userCur=(User)comboUser.Tag;
 			comboUser.SelectedIndex=-1;
 			comboUser.Items.Clear();
 			comboUser.Items.Add("All");//All is first.
@@ -549,9 +549,9 @@ namespace OpenDental {
 				return;
 			}
 			_dicRowNotes.Clear();
-			Userod userFilter=Security.CurUser;
+			User userFilter=Security.CurUser;
 			if(comboUser.SelectedIndex==1) {
-				userFilter=new Userod() { UserName="Unassigned",UserNum=0 };
+				userFilter=new User() { UserName="Unassigned",UserNum=0 };
 			}
 			//If all user set userFilter to null in order to get all jobs
 			if(comboUser.SelectedIndex==0) {
@@ -684,9 +684,9 @@ namespace OpenDental {
 				return;
 			}
 			_dicRowNotes.Clear();
-			Userod userFilter=Security.CurUser;
+			User userFilter=Security.CurUser;
 			if(comboUser.SelectedIndex==1) {
-				userFilter=new Userod() { UserName="Unassigned",UserNum=0 };
+				userFilter=new User() { UserName="Unassigned",UserNum=0 };
 			}
 			//If all user set userFilter to null in order to get all jobs
 			if(comboUser.SelectedIndex==0) {
@@ -807,9 +807,9 @@ namespace OpenDental {
 				return;
 			}
 			_dicRowNotes.Clear();
-			Userod userFilter=Security.CurUser;
+			User userFilter=Security.CurUser;
 			if(comboUser.SelectedIndex==1) {
-				userFilter=new Userod() { UserName="Unassigned",UserNum=0 };
+				userFilter=new User() { UserName="Unassigned",UserNum=0 };
 			}
 			else if(comboUser.SelectedIndex>1) {
 				userFilter=_listUsers[comboUser.SelectedIndex-2];
@@ -851,7 +851,7 @@ namespace OpenDental {
 				if(!String.IsNullOrEmpty(textDocumentationVersion.Text) && !job.JobVersion.Contains(textDocumentationVersion.Text)) {
 					continue;
 				}
-				Userod user=new Userod() { UserName="Unassigned",UserNum=0 };
+				User user=new User() { UserName="Unassigned",UserNum=0 };
 				if(action==JobAction.Document) {
 					user=Userods.GetUser(job.UserNumDocumenter)??user;
 				}
@@ -909,9 +909,9 @@ namespace OpenDental {
 			if(!tabControlNav.TabPages.Contains(tabTesting)) {
 				return;
 			}
-			Userod userFilter=Security.CurUser;
+			User userFilter=Security.CurUser;
 			if(comboUser.SelectedIndex==1) {
-				userFilter=new Userod() { UserName="Unassigned",UserNum=0 };
+				userFilter=new User() { UserName="Unassigned",UserNum=0 };
 			}
 			//If all user set userFilter to null in order to get all jobs
 			if(comboUser.SelectedIndex==0) {
@@ -969,7 +969,7 @@ namespace OpenDental {
 					continue;
 				}
 				//Every user will have their own section.  Might hide other users later once we start getting busy with testing.
-				Userod user=Userods.GetUser(userNum)??new Userod() { UserName="Unassigned",UserNum=0 };
+				User user=Userods.GetUser(userNum)??new User() { UserName="Unassigned",UserNum=0 };
 				gridTesting.Rows.Add(new ODGridRow("","","",user.UserName) { ColorBackG=ODColorTheme.GridHeaderBackBrush.Color,Bold=true });
 				foreach(Job job in dictTestingJobsByUser[userNum]) {
 					if(job.DateTimeTested.Year>1880 && checkHideTested.Checked) {
@@ -1277,9 +1277,9 @@ namespace OpenDental {
 				return;
 			}
 			_dicRowNotes.Clear();
-			Userod userFilter=Security.CurUser;
+			User userFilter=Security.CurUser;
 			if(comboUser.SelectedIndex==1) {
-				userFilter=new Userod() { UserName="Unassigned",UserNum=0 };
+				userFilter=new User() { UserName="Unassigned",UserNum=0 };
 			}
 			else if(comboUser.SelectedIndex>1) {
 				userFilter=_listUsers[comboUser.SelectedIndex-2];
@@ -1383,9 +1383,9 @@ namespace OpenDental {
 			};
 			//Sort jobs into category dictionary
 			Dictionary<JobCategory,List<Job>> dictCategories=_listJobsAll.GroupBy(x => x.Category).ToDictionary(y => y.Key,y => y.ToList());
-			Userod userFilter=Security.CurUser;
+			User userFilter=Security.CurUser;
 			if(comboUser.SelectedIndex==1) {
-				userFilter=new Userod() { UserName="Unassigned",UserNum=0 };
+				userFilter=new User() { UserName="Unassigned",UserNum=0 };
 			}
 			else if(comboUser.SelectedIndex>1) {
 				userFilter=_listUsers[comboUser.SelectedIndex-2];
@@ -1605,7 +1605,7 @@ namespace OpenDental {
 					break;
 				//case GroupJobsBy.MyJobs:
 				case GroupJobsBy.User:
-					List<Userod> listUsers;
+					List<User> listUsers;
 					//if(UserFilter!=null) {
 					//	listUsers=new List<Userod>() {
 					//		UserFilter
@@ -1615,9 +1615,9 @@ namespace OpenDental {
 					List<long> userNums=_listJobPermissionsAll.Select(x=>x.UserNum).Distinct().ToList();//show users with job permissions
 					userNums=userNums.Union(_listJobsFiltered.SelectMany(x=>Jobs.GetUserNums(x,true))).ToList();//show users with jobs
 					listUsers=Userods.GetWhere(x=>userNums.Contains(x.UserNum)).OrderBy(x=>x.UserName).ToList();
-					listUsers.Add(new Userod() {UserName="Un-Assigned"});
+					listUsers.Add(new User() {UserName="Un-Assigned"});
 					//}
-					foreach(Userod user in listUsers){//Userods.ListShallow.FindAll(z=>_listJobsFiltered.SelectMany(x => new[] { x.Expert,x.Owner }.Union(_listJobLinksUsers.Select(y => y.FKey))).Distinct().Contains(z.UserNum)).OrderBy(x=>x.UserName)) {
+					foreach(User user in listUsers){//Userods.ListShallow.FindAll(z=>_listJobsFiltered.SelectMany(x => new[] { x.Expert,x.Owner }.Union(_listJobLinksUsers.Select(y => y.FKey))).Distinct().Contains(z.UserNum)).OrderBy(x=>x.UserName)) {
 						TreeNode node=new TreeNode(user.UserName) {Tag=user};
 						TreeNode nodeChild=null;
 						nodeChild=CreateNodeByStatus("Expert",_listJobsFiltered.FindAll(x=>x.UserNumExpert==user.UserNum));
@@ -1645,8 +1645,8 @@ namespace OpenDental {
 					List<long> expOwnNums;
 					expOwnNums=_listJobsFiltered.Select(x => x.OwnerNum).ToList();
 					listUsers=Userods.GetWhere(x => expOwnNums.Contains(x.UserNum)).OrderBy(x => x.UserName).ToList();
-					listUsers.Add(new Userod() {UserName="Unassigned"});
-					foreach(Userod user in listUsers) {//Add top level nodes.
+					listUsers.Add(new User() {UserName="Unassigned"});
+					foreach(User user in listUsers) {//Add top level nodes.
 						TreeNode node=new TreeNode(user.UserName) { Tag=user };//get child nodes for each top level node.
 						node=CreateNodeByStatus(user.UserName,_listJobsFiltered.Where(x=>user.UserNum==x.OwnerNum).ToList());
 						if(node!=null) {
@@ -2011,7 +2011,7 @@ namespace OpenDental {
 			if(jobOld==null) {
 				return;
 			}
-			List<Userod> listUsersForPicker=Userods.GetUsersByJobRole(JobPerm.TestingCoordinator,false);
+			List<User> listUsersForPicker=Userods.GetUsersByJobRole(JobPerm.TestingCoordinator,false);
 			FormUserPick FormUP=new FormUserPick();
 			FormUP.Text="Assign a Tester";
 			FormUP.IsSelectionmode=true;
@@ -2810,10 +2810,10 @@ namespace OpenDental {
 
 		private void comboUser_SelectionChangeCommitted(object sender,EventArgs e) {
 			if(comboUser.SelectedIndex==0) {//All
-				comboUser.Tag=new Userod() { UserNum=0 };
+				comboUser.Tag=new User() { UserNum=0 };
 			}
 			else if(comboUser.SelectedIndex==1) {//Unassigned
-				comboUser.Tag=new Userod() { UserNum=-1 };
+				comboUser.Tag=new User() { UserNum=-1 };
 			}
 			else {
 				comboUser.Tag=_listUsers[comboUser.SelectedIndex-2];

@@ -8,40 +8,17 @@ using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
 	public class UserodCrud {
-		///<summary>Gets one Userod object from the database using the primary key.  Returns null if not found.</summary>
-		public static Userod SelectOne(long userNum) {
-			string command="SELECT * FROM userod "
-				+"WHERE UserNum = "+POut.Long(userNum);
-			List<Userod> list=TableToList(Db.GetTable(command));
-			if(list.Count==0) {
-				return null;
-			}
-			return list[0];
-		}
 
-		///<summary>Gets one Userod object from the database using a query.</summary>
-		public static Userod SelectOne(string command) {
-			
-			List<Userod> list=TableToList(Db.GetTable(command));
-			if(list.Count==0) {
-				return null;
-			}
-			return list[0];
-		}
 
-		///<summary>Gets a list of Userod objects from the database using a query.</summary>
-		public static List<Userod> SelectMany(string command) {
-			
-			List<Userod> list=TableToList(Db.GetTable(command));
-			return list;
-		}
+
+
 
 		///<summary>Converts a DataTable to a list of objects.</summary>
-		public static List<Userod> TableToList(DataTable table) {
-			List<Userod> retVal=new List<Userod>();
-			Userod userod;
+		public static List<User> TableToList(DataTable table) {
+			List<User> retVal=new List<User>();
+			User userod;
 			foreach(DataRow row in table.Rows) {
-				userod=new Userod();
+				userod=new User();
 				userod.UserNum                = PIn.Long  (row["UserNum"].ToString());
 				userod.UserName               = PIn.String(row["UserName"].ToString());
 				userod.Password               = PIn.String(row["Password"].ToString());
@@ -67,7 +44,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Converts a list of Userod into a DataTable.</summary>
-		public static DataTable ListToTable(List<Userod> listUserods,string tableName="") {
+		public static DataTable ListToTable(List<User> listUserods,string tableName="") {
 			if(string.IsNullOrEmpty(tableName)) {
 				tableName="Userod";
 			}
@@ -91,7 +68,7 @@ namespace OpenDentBusiness.Crud{
 			table.Columns.Add("FailedAttempts");
 			table.Columns.Add("DomainUser");
 			table.Columns.Add("IsPasswordResetRequired");
-			foreach(Userod userod in listUserods) {
+			foreach(User userod in listUserods) {
 				table.Rows.Add(new object[] {
 					POut.Long  (userod.UserNum),
 					            userod.UserName,
@@ -118,12 +95,12 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Userod into the database.  Returns the new priKey.</summary>
-		public static long Insert(Userod userod) {
+		public static long Insert(User userod) {
 			return Insert(userod,false);
 		}
 
 		///<summary>Inserts one Userod into the database.  Provides option to use the existing priKey.</summary>
-		public static long Insert(Userod userod,bool useExistingPK) {
+		public static long Insert(User userod,bool useExistingPK) {
 			if(!useExistingPK && PrefC.RandomKeys) {
 				userod.UserNum=ReplicationServers.GetKey("userod","UserNum");
 			}
@@ -164,12 +141,12 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Inserts one Userod into the database.  Returns the new priKey.  Doesn't use the cache.</summary>
-		public static long InsertNoCache(Userod userod) {
+		public static long InsertNoCache(User userod) {
 			return InsertNoCache(userod,false);
 		}
 
 		///<summary>Inserts one Userod into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
-		public static long InsertNoCache(Userod userod,bool useExistingPK) {
+		public static long InsertNoCache(User userod,bool useExistingPK) {
 			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
 			string command="INSERT INTO userod (";
 			if(!useExistingPK && isRandomKeys) {
@@ -211,7 +188,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Userod in the database.</summary>
-		public static void Update(Userod userod) {
+		public static void Update(User userod) {
 			string command="UPDATE userod SET "
 				+"UserName               = '"+POut.String(userod.UserName)+"', "
 				+"Password               = '"+POut.String(userod.Password)+"', "
@@ -236,7 +213,7 @@ namespace OpenDentBusiness.Crud{
 		}
 
 		///<summary>Updates one Userod in the database.  Uses an old object to compare to, and only alters changed fields.  This prevents collisions and concurrency problems in heavily used tables.  Returns true if an update occurred.</summary>
-		public static bool Update(Userod userod,Userod oldUserod) {
+		public static bool Update(User userod,User oldUserod) {
 			string command="";
 			if(userod.UserName != oldUserod.UserName) {
 				if(command!="") { command+=",";}
@@ -321,7 +298,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Returns true if Update(Userod,Userod) would make changes to the database.
 		///Does not make any changes to the database and can be called before remoting role is checked.</summary>
-		public static bool UpdateComparison(Userod userod,Userod oldUserod) {
+		public static bool UpdateComparison(User userod,User oldUserod) {
 			if(userod.UserName != oldUserod.UserName) {
 				return true;
 			}

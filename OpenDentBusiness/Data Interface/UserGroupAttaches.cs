@@ -102,11 +102,11 @@ namespace OpenDentBusiness
         public static List<UserGroupAttach> TranslateCEMTToLocal(List<UserGroupAttach> listUserGroupAttachCEMT)
         {
             List<UserGroupAttach> retVal = new List<UserGroupAttach>();
-            List<Userod> listRemoteUsers = Userods.GetUsersNoCache();
+            List<User> listRemoteUsers = Userods.GetUsersNoCache();
             List<UserGroup> listRemoteGroups = UserGroups.GetCEMTGroupsNoCache();
             foreach (UserGroupAttach attachCur in listUserGroupAttachCEMT)
             {
-                Userod userCur = listRemoteUsers.FirstOrDefault(x => attachCur.UserNum == x.UserNumCEMT);
+                User userCur = listRemoteUsers.FirstOrDefault(x => attachCur.UserNum == x.UserNumCEMT);
                 UserGroup userGroupCur = listRemoteGroups.FirstOrDefault(x => attachCur.UserGroupNum == x.UserGroupNumCEMT);
                 if (userCur == null || userGroupCur == null)
                 {
@@ -161,13 +161,13 @@ namespace OpenDentBusiness
             //make sure that there is only one unique (UserGroup, UserGroupNum) row in the add list. (this is precautionary)
             listAdd = listAdd.GroupBy(x => new { x.UserNum, x.UserGroupNum }).Select(x => x.First()).ToList();
             //Get users and user groups from remote db to compare against for log entrys
-            List<Userod> listRemoteUsers = Userods.GetUsersNoCache();
+            List<User> listRemoteUsers = Userods.GetUsersNoCache();
             List<UserGroup> listRemoteGroups = UserGroups.GetCEMTGroupsNoCache();
             foreach (UserGroupAttach userGroupAdd in listAdd)
             {
                 rowsChanged++;
                 UserGroupAttaches.Insert(userGroupAdd);
-                Userod user = listRemoteUsers.FirstOrDefault(x => x.UserNum == userGroupAdd.UserNum);
+                User user = listRemoteUsers.FirstOrDefault(x => x.UserNum == userGroupAdd.UserNum);
                 UserGroup userGroup = listRemoteGroups.FirstOrDefault(x => x.UserGroupNum == userGroupAdd.UserGroupNum);
                 SecurityLogs.MakeLogEntryNoCache(Permissions.SecurityAdmin, 0, "User: " + user.UserName + " added to user group: "
                     + userGroup.Description + " by CEMT user: " + Security.CurUser.UserName);
@@ -176,7 +176,7 @@ namespace OpenDentBusiness
             {
                 rowsChanged++;
                 UserGroupAttaches.Delete(userGroupDel);
-                Userod user = listRemoteUsers.FirstOrDefault(x => x.UserNum == userGroupDel.UserNum);
+                User user = listRemoteUsers.FirstOrDefault(x => x.UserNum == userGroupDel.UserNum);
                 UserGroup userGroup = listRemoteGroups.FirstOrDefault(x => x.UserGroupNum == userGroupDel.UserGroupNum);
                 SecurityLogs.MakeLogEntryNoCache(Permissions.SecurityAdmin, 0, "User: " + user.UserName + " removed from user group: "
                     + userGroup.Description + " by CEMT user: " + Security.CurUser.UserName);
@@ -192,7 +192,7 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Does not add a new usergroupattach if the passed-in userCur is already attached to userGroup.</summary>
-        public static void AddForUser(Userod userCur, long userGroupNum)
+        public static void AddForUser(User userCur, long userGroupNum)
         {
             if (!userCur.IsInUserGroup(userGroupNum))
             {
@@ -206,7 +206,7 @@ namespace OpenDentBusiness
         ///<summary>Pass in the user and all of the userGroups that the user should be attached to.
         ///Detaches the userCur from any usergroups that are not in the given list.
         ///Returns a count of how many user group attaches were affected.</summary>
-        public static long SyncForUser(Userod userCur, List<long> listUserGroupNums)
+        public static long SyncForUser(User userCur, List<long> listUserGroupNums)
         {
             long rowsChanged = 0;
             foreach (long userGroupNum in listUserGroupNums)

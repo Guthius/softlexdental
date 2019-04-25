@@ -4,7 +4,6 @@ using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using DataConnectionBase;
 
 namespace OpenDentBusiness{
 	///<summary>Use ListLong or ListShort to get a cached list of clinics that you can then filter upon.</summary>
@@ -425,7 +424,7 @@ namespace OpenDentBusiness{
 				List<string> listUsers=new List<string>();
 				for(int i=0;i<table.Rows.Count;i++) {
 					long userNum=PIn.Long(table.Rows[i]["UserNum"].ToString());
-					Userod user=Userods.GetUser(userNum);
+					User user=Userods.GetUser(userNum);
 					if(user==null) {//Should not happen.
 						continue;
 					}
@@ -581,7 +580,7 @@ namespace OpenDentBusiness{
 		///<summary>Returns a list of clinics the curUser has permission to access.  
 		///If the user is not restricted, the list will contain all of the clinics. Does NOT include hidden clinics (and never should anyway).</summary>
 		///<param name="doIncludeHQ">If true and the user is not restricted, includes HQ as a clinic with a ClinicNum of 0, even if clinics are disabled.</param>
-		public static List<Clinic> GetForUserod(Userod curUser,bool doIncludeHQ=false, string hqClinicName = null) {
+		public static List<Clinic> GetForUserod(User curUser,bool doIncludeHQ=false, string hqClinicName = null) {
 			List<Clinic> listClinics=new List<Clinic>();
 			//Add HQ clinic if requested, even if clinics are disabled.  Counter-intuitive, but required for offices that had clinics enabled and then
 			//turned them off.  If clinics are enabled and the user is restricted this will be filtered out below.
@@ -599,7 +598,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns a list of clinics the curUser has permission to access.  
 		///If the user is not restricted, the list will contain all of the clinics.</summary>
-		public static List<Clinic> GetAllForUserod(Userod curUser) {
+		public static List<Clinic> GetAllForUserod(User curUser) {
 			List<Clinic> listClinics=GetDeepCopy();
 			if(!PrefC.HasClinicsEnabled) {
 				return listClinics;

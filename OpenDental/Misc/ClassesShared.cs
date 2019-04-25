@@ -16,7 +16,6 @@ using System.Xml.Serialization;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using CodeBase;
-using DataConnectionBase;
 
 namespace OpenDental {
 

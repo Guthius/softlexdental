@@ -122,7 +122,7 @@ namespace OpenDental{
 		private List<SchoolClass> _listSchoolClasses;
 		private long _selectedProvNum;
 		private List<FeeSched> _listFeeSchedShort;
-		private Userod _existingUser;
+		private User _existingUser;
 		private List<Provider> _listProvs;
 		public Provider ProvCur;
 		private ValidDouble textProdGoalHr;
@@ -1485,7 +1485,7 @@ namespace OpenDental{
 				if(!ProvCur.IsNew) {
 					labelPassDescription.Visible=true;
 					textProvNum.Text=ProvCur.ProvNum.ToString();
-					List<Userod> userList=Providers.GetAttachedUsers(ProvCur.ProvNum);
+					List<User> userList=Providers.GetAttachedUsers(ProvCur.ProvNum);
 					if(userList.Count>0) {
 						textUserName.Text=userList[0].UserName;//Should always happen if they are a student.
 						_existingUser=userList[0];
@@ -2007,7 +2007,7 @@ namespace OpenDental{
 				//Set the providerclinics to the new provider's ProvNum that was just retreived from the database.
 				_listProvClinicsNew.ForEach(x => x.ProvNum=provNum);
 				if(ProvCur.IsInstructor) {
-					Userod user=new Userod();
+					User user=new User();
 					user.UserName=textUserName.Text;
 					user.LoginDetails=Authentication.GenerateLoginDetailsSHA512(textPassword.Text);
 					user.ProvNum=provNum;

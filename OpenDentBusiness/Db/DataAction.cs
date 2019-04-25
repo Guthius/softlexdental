@@ -1,5 +1,4 @@
 ﻿using CodeBase;
-using DataConnectionBase;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -67,11 +66,7 @@ namespace OpenDentBusiness {
 				Run(a,ConnectionNames.BugsHQ);
 			}
 			else {
-			#if DEBUG
-				Run(a,"localhost","bugs","root","","","");
-			#else
-				Run(a,"server","bugs","root","","","");
-			#endif
+				Run(a,"localhost","bugs","root","");
 			}
 		}
 		#endregion
@@ -104,25 +99,15 @@ namespace OpenDentBusiness {
 		public static void Run(Action a,ConnectionNames connectionName) {
 			GetT(new Func<object>(() => { a(); return null; }),connectionName);
 		}
-
-		///<summary>Perform the given action in the context of the given connectionString db.</summary>
-		public static void Run(Action a,string connectionString) {
-			GetT(new Func<object>(() => { a(); return null; }),connectionString);
-		}
 		
 		///<summary>Perform the given action in the context of the given connectionString db.</summary>
-		public static void Run(Action a,string server,string db,string user,string password,string userLow,string passLow) {
-			GetT(new Func<object>(() => { a(); return null; }),server,db,user,password,userLow,passLow);
+		public static void Run(Action a,string server,string db,string user,string password) {
+			GetT(new Func<object>(() => { a(); return null; }),server,db,user,password);
 		}
 
 		///<summary>Perform the given function in the context of the given connectionString db and return a T.</summary>
-		public static T GetT<T>(Func<T> fn,string connectionString) {
-			return GetT(fn,new Action(() => { new DataConnection().SetDbT(connectionString,""); }));			
-		}
-
-		///<summary>Perform the given function in the context of the given connectionString db and return a T.</summary>
-		public static T GetT<T>(Func<T> fn,string server,string db,string user,string password,string userLow,string passLow) {
-			return GetT(fn,new Action(() => { new DataConnection().SetDbT(server,db,user,password,userLow,passLow,true); }));
+		public static T GetT<T>(Func<T> fn,string server,string db,string user,string password) {
+			return GetT(fn,new Action(() => { DataConnection.SetDb(server,db,user,password,true); }));
 		}
 
 		///<summary>Perform the given function in the context of the given connectionName db and return a T.</summary>

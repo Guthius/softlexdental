@@ -13,7 +13,6 @@ Any changes to this program must follow the guidelines of the GPL license if a m
 redistributed.
 ===============================================================================================================*/
 using CodeBase;
-using DataConnectionBase;
 using Microsoft.Win32;
 using OpenDental.Properties;
 using OpenDental.UI;
@@ -5486,7 +5485,7 @@ namespace OpenDental
                 }
                 return;
             }
-            FormUserEdit FormUE = new FormUserEdit(new Userod(), true);
+            FormUserEdit FormUE = new FormUserEdit(new User(), true);
             FormUE.IsNew = true;
             FormUE.ShowDialog();
         }
@@ -7381,13 +7380,13 @@ namespace OpenDental
                 myOutlookBar.Invalidate();
                 UnselectActive();
                 allNeutral();
-                Userod user = Userods.GetUserByName(userName, true);
+                User user = Userods.GetUserByName(userName, true);
                 if (user == null)
                 {
                     //if(Programs.UsingEcwTight() && userName!="") {
                     if (Programs.UsingEcwTightOrFullMode() && userName != "")
                     {
-                        user = new Userod();
+                        user = new User();
                         user.UserName = userName;
                         user.LoginDetails = Authentication.GenerateLoginDetailsMD5(passHash, true);
                         //This can fail if duplicate username because of capitalization differences.
@@ -8060,7 +8059,7 @@ namespace OpenDental
 
 
             Clinics.LogOff();
-            Userod oldUser = Security.CurUser;
+            User oldUser = Security.CurUser;
             Security.CurUser = null;
             _listReminderTasks = null;
             _listNormalTaskNums = null;

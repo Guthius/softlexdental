@@ -9,7 +9,7 @@ namespace OpenDentBusiness
 {
     public class AlertSubs
     {
-        public static void DeleteAndInsertForSuperUsers(List<Userod> listUsers, List<AlertSub> listAlertSubs)
+        public static void DeleteAndInsertForSuperUsers(List<User> listUsers, List<AlertSub> listAlertSubs)
         {
             if (listUsers == null || listUsers.Count < 1)
             {

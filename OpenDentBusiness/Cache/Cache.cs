@@ -36,7 +36,7 @@ namespace OpenDentBusiness
         ///<summary>If ClientWeb, then this method is instead run on the server, and the result passed back to the client.  And since it's ClientWeb, FillCache will be run on the client.</summary>
         public static DataSet GetCacheDs(bool doRefreshServerCache, params InvalidType[] arrayITypes)
         {
-            string suffix = Lans.g(nameof(Cache), "Refreshing Caches") + ": ";
+            string suffix =  "Refreshing Caches: ";
             List<InvalidType> listITypes = arrayITypes.ToList();
             //so this part below only happens if direct or server------------------------------------------------
             bool isAll = false;

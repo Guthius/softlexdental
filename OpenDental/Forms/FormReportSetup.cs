@@ -10,7 +10,6 @@ using OpenDental.UI;
 using System.Linq;
 using System.IO;
 using CodeBase;
-using DataConnectionBase;
 using System.Collections;
 using System.Diagnostics;
 using System.Threading;
@@ -173,17 +172,7 @@ namespace OpenDental {
 				return new string[0];
 			}
 			try {
-				DataConnection dcon;
-				//use the one table that we know exists
-				if(textMysqlUser.Text=="") {
-					dcon=new DataConnection(comboServerName.Text,"mysql","root",textMysqlPass.Text);
-				}
-				else {
-					dcon=new DataConnection(comboServerName.Text,"mysql",textMysqlUser.Text,textMysqlPass.Text);
-				}
-				string command = "SHOW DATABASES";
-				//if this next step fails, table will simply have 0 rows
-				DataTable table = dcon.GetTable(command,false);
+				DataTable table = DataConnection.GetTable("SHOW DATABASES", false);
 				string[] dbNames = new string[table.Rows.Count];
 				for(int i = 0;i<table.Rows.Count;i++) {
 					dbNames[i]=table.Rows[i][0].ToString();
@@ -256,6 +245,7 @@ namespace OpenDental {
 					}
 				}
 			}
+
 			return changed;
 		}
 

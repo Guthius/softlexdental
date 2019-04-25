@@ -1,5 +1,4 @@
 using CodeBase;
-using DataConnectionBase;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -278,19 +277,18 @@ namespace OpenDentBusiness
             }
             try
             {
-                DataConnection dcon;
                 //use the one table that we know exists
                 if (centralConnection.MySqlUser == "")
                 {
-                    dcon = new DataConnection(centralConnection.ServerName, "mysql", "root", centralConnection.MySqlPassword);
+                     DataConnection.SetDb(centralConnection.ServerName, "mysql", "root", centralConnection.MySqlPassword);
                 }
                 else
                 {
-                    dcon = new DataConnection(centralConnection.ServerName, "mysql", centralConnection.MySqlUser, centralConnection.MySqlPassword);
+                    DataConnection.SetDb(centralConnection.ServerName, "mysql", centralConnection.MySqlUser, centralConnection.MySqlPassword);
                 }
                 string command = "SHOW DATABASES";
                 //if this next step fails, table will simply have 0 rows
-                DataTable table = dcon.GetTable(command, false);
+                DataTable table = DataConnection.GetTable(command, false);
                 string[] dbNames = new string[table.Rows.Count];
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
@@ -311,14 +309,14 @@ namespace OpenDentBusiness
             DataConnection dcon = new DataConnection();
             if (connectionString.Length > 0)
             {
-                dcon.SetDb(connectionString, "");
+                // TODO: Fix this..
+                //DataConnection.SetDb(connectionString, "");
             }
             else
             {
                 //Password could be plain text password from the Password field of the config file, the decrypted password from the MySQLPassHash field
                 //of the config file, or password entered by the user and can be blank (empty string) in all cases
-                dcon.SetDb(centralConnection.ServerName, centralConnection.DatabaseName, centralConnection.MySqlUser
-                    , centralConnection.MySqlPassword, "", "");
+                DataConnection.SetDb(centralConnection.ServerName, centralConnection.DatabaseName, centralConnection.MySqlUser, centralConnection.MySqlPassword);
             }
 
             TrySaveConnectionSettings(centralConnection, connectionString, noShowOnStartup, listAdminCompNames, isCommandLineArgs, useDynamicMode);

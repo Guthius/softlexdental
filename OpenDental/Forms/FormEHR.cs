@@ -6,7 +6,6 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
 using CodeBase;
-using DataConnectionBase;
 using System.Reflection;
 #if EHRTEST
 using EHR;

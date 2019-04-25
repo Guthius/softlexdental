@@ -13,7 +13,7 @@ using CodeBase;
 
 namespace OpenDental {
 	public partial class JobManagerUserOverview:UserControl {
-		private Userod _user;
+		private User _user;
 		//public bool MouseIsOver {
 		//	get {
 		//		return gridJobs.MouseIsOver;
@@ -26,7 +26,7 @@ namespace OpenDental {
 			this.BackColor=color;
 		}
 
-		public Userod User {
+		public User User {
 			get {
 				return _user;
 			}

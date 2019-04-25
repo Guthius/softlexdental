@@ -59,7 +59,7 @@ namespace OpenDentBusiness
             List<ClaimProc> listClaimProcs = ReportsComplex.RunFuncOnReportServer(() => ClaimProcs.GetForProcsLimited(listProcsForTreatPlans.Select(x => x.ProcNum).ToList(),
                   ClaimProcStatus.CapComplete, ClaimProcStatus.NotReceived, ClaimProcStatus.Received, ClaimProcStatus.Supplemental, ClaimProcStatus.Estimate));
             List<Adjustment> listAdjustments = ReportsComplex.RunFuncOnReportServer(() => Adjustments.GetForProcs(listProcsForTreatPlans.Select(x => x.ProcNum).ToList()));
-            List<Userod> listUserods = ReportsComplex.RunFuncOnReportServer(() => Userods.GetAll());
+            List<User> listUserods = ReportsComplex.RunFuncOnReportServer(() => Userods.GetAll());
             List<TreatPlanPresenterEntry> listTreatPlanPresenterEntries = new List<TreatPlanPresenterEntry>();
             List<ProcedureCode> listProcCodes = ReportsComplex.RunFuncOnReportServer(() => ProcedureCodes.GetCodesForCodeNums(listProcsForTreatPlans.Select(x => x.CodeNum).ToList()));
             List<Appointment> listApts = ReportsComplex.RunFuncOnReportServer(() => Appointments.GetMultApts(listProcsForTreatPlans.Select(x => x.AptNum).ToList()));
@@ -100,7 +100,7 @@ namespace OpenDentBusiness
                 double adjustments = listAdjustments.Where(x => x.ProcNum == procCur.ProcNum).Sum(x => x.AdjAmt);
                 double netProd = grossProd - writeOffs + adjustments;
                 TreatPlan treatPlanCur = listProcTPTreatPlans.Where(x => x.ProcTPCur.ProcNumOrig == procCur.ProcNum).First().TreatPlanCur;
-                Userod userPresenter;
+                User userPresenter;
                 if (isPresenter)
                 {
                     userPresenter = listUserods.FirstOrDefault(x => x.UserNum == treatPlanCur.UserNumPresenter);

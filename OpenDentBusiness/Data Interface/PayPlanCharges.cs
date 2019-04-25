@@ -45,8 +45,8 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT payplancharge.* FROM payplan "
 				+"INNER JOIN payplancharge ON payplancharge.PayPlanNum = payplan.PayPlanNum "
-					+"AND payplancharge.ChargeDate <= "+DbHelper.Curdate()+" "
-				+"WHERE payplan.Guarantor="+POut.Long(patNum)+" "
+					+ "AND payplancharge.ChargeDate <= CURDATE() "
+                + "WHERE payplan.Guarantor="+POut.Long(patNum)+" "
 				+"AND payplan.PayPlanNum IN("+String.Join(", ",listPayPlans.Select(x => x.PayPlanNum).ToList())+") "
 				+"AND payplan.PlanNum = 0 "; //do not return insurance payment plan charges.
 			return Crud.PayPlanChargeCrud.SelectMany(command);
@@ -60,8 +60,8 @@ namespace OpenDentBusiness{
 			}
 			string command="SELECT payplancharge.* FROM payplan "
 				+"INNER JOIN payplancharge ON payplancharge.PayPlanNum = payplan.PayPlanNum "
-					+"AND payplancharge.ChargeDate <= "+DbHelper.Curdate()+" "
-				+"WHERE payplan.PatNum IN("+string.Join(",",listPatNums)+") OR payplan.Guarantor IN("+string.Join(",",listPatNums)+") "
+					+ "AND payplancharge.ChargeDate <= CURDATE() "
+                + "WHERE payplan.PatNum IN("+string.Join(",",listPatNums)+") OR payplan.Guarantor IN("+string.Join(",",listPatNums)+") "
 				+"AND payplan.PayPlanNum IN("+string.Join(", ",listPayPlans.Select(x => x.PayPlanNum).ToList())+") "
 				+"AND payplan.PlanNum = 0 "; //do not return insurance payment plan charges.
 			return Crud.PayPlanChargeCrud.SelectMany(command);

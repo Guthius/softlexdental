@@ -11,8 +11,8 @@ using System.Linq;
 namespace OpenDental {
 	public partial class FormUserPick:ODForm {
 		///<summary>The filtered list of Users to pick from.</summary>
-		public List<Userod> ListUserodsFiltered;
-		public List<Userod> ListUserodsShowing;
+		public List<User> ListUserodsFiltered;
+		public List<User> ListUserodsShowing;
 		///<summary>If this form closes with OK, then this value will be filled.</summary>
 		public long SelectedUserNum;
 		///<summary>When IsMultiSelect, this is the list of selected users after the OK click.</summary>
@@ -56,7 +56,7 @@ namespace OpenDental {
 			FillList(ListUserodsFiltered);
 		}
 
-		private void FillList(List<Userod> listUserods) {
+		private void FillList(List<User> listUserods) {
 			if(listUserods==null) {
 				listUserods=Userods.GetDeepCopy(true);
 			}

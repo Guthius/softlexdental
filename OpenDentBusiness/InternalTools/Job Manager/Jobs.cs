@@ -436,10 +436,10 @@ namespace OpenDentBusiness
             return Db.GetTable(command);
         }
 
-        public static List<Userod> GetAssociatedUsers(Job job)
+        public static List<User> GetAssociatedUsers(Job job)
         {
-            List<Userod> listUsers = new List<Userod>();
-            foreach (Userod user in Userods.GetDeepCopy())
+            List<User> listUsers = new List<User>();
+            foreach (User user in Userods.GetDeepCopy())
             {
                 JobAction action;
                 action = job.ActionForUser(user);

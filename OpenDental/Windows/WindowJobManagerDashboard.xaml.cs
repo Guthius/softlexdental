@@ -28,7 +28,7 @@ namespace WindowJobManagerDashboard {
 		private List<Job> _listJobsAll=Jobs.GetAll();
 		private DateTime startOfWeek=DateTime.Today.AddDays(-(int)(DateTime.Today.DayOfWeek));//gives us the sunday of the current week
 		private DateTime curWeek=DateTime.Today.AddDays(-(int)(DateTime.Today.DayOfWeek));
-		private Userod selectedEng=new Userod();
+		private User selectedEng=new User();
 		private List<JobPermission> _listJobPermissionsAll=new List<JobPermission>();
 		private List<Job> _listAllWriteJobsForEngineer=new List<Job>();
 		private List<Job> _listJobsFiltered=new List<Job>();
@@ -50,7 +50,7 @@ namespace WindowJobManagerDashboard {
 				});
 			//list of jobs in WriteCode status
 			List<Job> listWriteCodeJobs=_listJobsAll.Where(x => x.OwnerAction==JobAction.WriteCode && x.Priority!=Defs.GetDefsForCategory(DefCat.JobPriorities,true).FirstOrDefault(y => y.ItemValue.Contains("OnHold")).DefNum).ToList();
-			foreach(Userod user in Userods.GetUsersByJobRole(JobPerm.Engineer,false)) {
+			foreach(User user in Userods.GetUsersByJobRole(JobPerm.Engineer,false)) {
 				if(!_listActualEngineers.Contains(user.UserName)) {
 					continue;
 				}

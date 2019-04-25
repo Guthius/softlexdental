@@ -73,7 +73,7 @@ namespace OpenDental {
 		private int headingPrintH;
 		private decimal total;
 		///<summary>List of non-hidden users with ClaimSentEdit permission.</summary>
-		private List<Userod> _listClaimSentEditUsers=new List<Userod>();
+		private List<User> _listClaimSentEditUsers=new List<User>();
 		private List<ClaimTracking> _listNewClaimTrackings=new List<ClaimTracking>();
 		private TabControl tabControlDate;
 		private TabPage tabDaysOld;
@@ -113,8 +113,8 @@ namespace OpenDental {
 		private List<long> _listSelectedUserNums {
 			get {
 				List<long> listUserNums = new List<long>();
-				if(!comboUserAssigned.ListSelectedItems.Select(x => ((ODBoxItem<Userod>)x).Tag).Contains(null)) { //"All" is selected.
-					listUserNums = comboUserAssigned.ListSelectedItems.Select(x => ((ODBoxItem<Userod>)x).Tag.UserNum).ToList();
+				if(!comboUserAssigned.ListSelectedItems.Select(x => ((ODBoxItem<User>)x).Tag).Contains(null)) { //"All" is selected.
+					listUserNums = comboUserAssigned.ListSelectedItems.Select(x => ((ODBoxItem<User>)x).Tag.UserNum).ToList();
 				}
 				return listUserNums;
 			}
@@ -961,9 +961,9 @@ namespace OpenDental {
 		}
 
 		private void FillUsers() {
-			comboUserAssigned.Items.Add(new ODBoxItem<Userod>(Lans.g(this,"All"))); //tag=null
-			comboUserAssigned.Items.Add(new ODBoxItem<Userod>(Lans.g(this,"Unassigned"),new Userod() {UserNum=0}));
-			_listClaimSentEditUsers.ForEach(x => comboUserAssigned.Items.Add(new ODBoxItem<Userod>(x.UserName,x)));
+			comboUserAssigned.Items.Add(new ODBoxItem<User>(Lans.g(this,"All"))); //tag=null
+			comboUserAssigned.Items.Add(new ODBoxItem<User>(Lans.g(this,"Unassigned"),new User() {UserNum=0}));
+			_listClaimSentEditUsers.ForEach(x => comboUserAssigned.Items.Add(new ODBoxItem<User>(x.UserName,x)));
 			comboUserAssigned.SetSelected(0,true);//Default to all
 		}
 

@@ -30,18 +30,19 @@ namespace OpenDentBusiness
             return Crud.CDSPermissionCrud.SelectMany(command);
         }
 
-        ///<summary>Inserts one row per UserOD if they do not have one already.</summary>
+        /// <summary>
+        /// Inserts one row per UserOD if they do not have one already.
+        /// </summary>
         private static void InsertMissingValues()
         {
-            //No need to check RemotingRole; private static.
             string command = "SELECT * FROM userod WHERE IsHidden=0 AND UserNum NOT IN (SELECT UserNum from cdsPermission)";
-            List<Userod> uods = Crud.UserodCrud.SelectMany(command);
-            CDSPermission cdsp;
-            for (int i = 0; i < uods.Count; i++)
+
+            foreach (var user in User.SelectMany(command))
             {
-                cdsp = new CDSPermission();
-                cdsp.UserNum = uods[i].UserNum;
-                CDSPermissions.Insert(cdsp);
+                Insert(new CDSPermission
+                {
+                    UserNum = user.UserNum
+                });
             }
             return;
         }

@@ -327,6 +327,11 @@
     <Compile Include="Data Interface\ProviderClinicLinks.cs" />
     <Compile Include="Data Interface\Reactivations.cs" />
     <Compile Include="Db Multi Table\ApptSearch.cs" />
+    <Compile Include="Db\DataConnection.cs" />
+    <Compile Include="Db\DataConnectionEvent.cs" />
+    <Compile Include="Db\DbAdminMysql.cs" />
+    <Compile Include="Db\SIn.cs" />
+    <Compile Include="Db\SOut.cs" />
     <Compile Include="Email\BasicEmailAddress.cs" />
     <Compile Include="Email\BasicEmailMessage.cs" />
     <Compile Include="Email\EmailRequest.cs" />
@@ -1016,11 +1021,7 @@
     <Compile Include="Db Multi Table\EhrPatListElement.cs" />
     <Compile Include="Db Multi Table\QualityMeasure.cs" />
     <Compile Include="Db Multi Table\QualityMeasures.cs" />
-    <Compile Include="Db\DbSchemaCol.cs" />
     <Compile Include="Db\OdDbType.cs" />
-    <Compile Include="Db\PoIn.cs" />
-    <Compile Include="Db\SchemaCrudProposedTest.cs" />
-    <Compile Include="Db\SchemaCrudTest.cs" />
     <Compile Include="InternalTools\Phones\TableTypes\TriageMetric.cs" />
     <Compile Include="TableTypes\PatientPortalInvite.cs" />
     <Compile Include="Web References\DentalxchangePartnerService\Reference.cs">
@@ -1309,7 +1310,6 @@
     <Compile Include="Logic\ToothComparer.cs" />
     <Compile Include="Data Interface\Userods.cs" />
     <Compile Include="Db\DbHelper.cs" />
-    <Compile Include="Db\DbSchema.cs" />
     <Compile Include="Misc\HouseCallsQueries.cs" />
     <Compile Include="Misc\LetterMergesQueries.cs" />
     <Compile Include="Db\OdSqlParameter.cs" />
@@ -1819,7 +1819,7 @@
     <Compile Include="TableTypes\ToothInitial.cs" />
     <Compile Include="TableTypes\Transaction.cs" />
     <Compile Include="TableTypes\TreatPlan.cs" />
-    <Compile Include="TableTypes\Userod.cs" />
+    <Compile Include="TableTypes\User.cs" />
     <Compile Include="TableTypes\UserGroup.cs" />
     <Compile Include="TableTypes\UserQuery.cs" />
     <Compile Include="TableTypes\ZipCode.cs" />
@@ -1834,10 +1834,6 @@
     <ProjectReference Include="..\CodeBase\xCodeBase.csproj">
       <Project>{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}</Project>
       <Name>xCodeBase</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DataConnectionBase\xDataConnectionBase.csproj">
-      <Project>{29c41020-4411-41f2-9061-9b71b5b32b5d}</Project>
-      <Name>xDataConnectionBase</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpenDentalCloud\OpenDentalCloud.csproj">
       <Project>{f90d0481-3d97-4c72-af6e-dd81177e3de1}</Project>

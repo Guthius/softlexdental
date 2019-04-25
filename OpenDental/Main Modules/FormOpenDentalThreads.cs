@@ -12,7 +12,6 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using CodeBase;
-using DataConnectionBase;
 using OpenDentBusiness;
 
 namespace OpenDental {
@@ -125,7 +124,7 @@ namespace OpenDental {
 			});
 			odThread.GroupName=FormODThreadNames.CacheFillForFees.GetDescription();
 			odThread.Name=FormODThreadNames.CacheFillForFees.GetDescription();
-			odThread.AddSetupHandler(o => DataConnection.ConnectionRetryTimeoutSecondsT=(int)TimeSpan.FromMinutes(1).TotalSeconds);
+			odThread.AddSetupHandler(o => DataConnection.ConnectionRetryTimeoutSeconds=(int)TimeSpan.FromMinutes(1).TotalSeconds);
 			odThread.Start(true);
 			_listOdThreadsRunOnce.Add(odThread);
 		}
@@ -274,16 +273,18 @@ namespace OpenDental {
 				SetTimersAndThreads(false);
 				string errorMessage=(string)e.Tag;
 				Func<bool> funcTestConnection=() => {
-					using(DataConnection dconn=new DataConnection()) {
-						try {
-							dconn.SetDb(DataConnection.GetCurrentConnectionString(),"");
-							//Tell everyone that the data connection has been found.
-							DataConnectionEvent.Fire(new DataConnectionEventArgs(DataConnectionEventType.ConnectionRestored,true,e.ConnectionString));
-						}
-						catch {
-							return false;//Data connection is still lost so do not close the Connection Lost window.
-						}
-					}
+                    // TODO: Fix this...
+
+					//using(DataConnection dconn=new DataConnection()) {
+					//	try {
+					//		dconn.SetDb(DataConnection.ConnectionString,"");
+					//		//Tell everyone that the data connection has been found.
+					//		DataConnectionEvent.Fire(new DataConnectionEventArgs(DataConnectionEventType.ConnectionRestored,true,e.ConnectionString));
+					//	}
+					//	catch {
+					//		return false;//Data connection is still lost so do not close the Connection Lost window.
+					//	}
+					//}
 					return true;//Data connection has been found so close the Connection Lost window.
 				};
 				FormConnectionLost FormCL=new FormConnectionLost(funcTestConnection,ODEventType.DataConnection,errorMessage);
@@ -462,11 +463,9 @@ namespace OpenDental {
 			if(Security.CurUser==null) {
 				return;//Don't waste time processing phone metrics when no one is logged in and sitting at the log on screen.
 			}
-#if DEBUG
-			new DataConnection().SetDbT("localhost","customers","root","","","",true);
-#else
-			new DataConnection().SetDbT("server","customers","root","","","",true);
-#endif
+
+            DataConnection.SetDb("localhost", "customers", "root", "", true);
+
 			if(_listMaps.Count>0 
 				&& DateTime.Now.Subtract(_hqOfficeDownLastRefreshed).TotalSeconds>PrefC.GetInt(PrefName.ProcessSigsIntervalInSecs)) 
 			{
@@ -813,7 +812,7 @@ namespace OpenDental {
 				return;
 			}
 			string replicatedDbs=table.Rows[0]["Replicate_Do_Db"].ToString().ToLower();
-			string dbName=DataConnection.GetDatabaseName().ToLower();
+			string dbName=DataConnection.Database.ToLower();
 			//If multiple databases are being replicated, Replicate_Do_Db will contain the databases separated by a comma. Keep in mind that a database
 			//name can contain a comma.
 			bool isDbReplicated=(!dbName.Contains(',') && replicatedDbs.Split(',').Contains(dbName))

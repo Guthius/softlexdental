@@ -36,7 +36,7 @@ namespace OpenDentBusiness
         {
             //Get the last clockevent for the employee. Will include clockevent with "in" before NOW, and "out" anytime before 23:59:59 of TODAY.
             string command = @"SELECT * FROM clockevent 
-				WHERE TimeDisplayed2<=" + DbHelper.DateAddSecond(DbHelper.DateAddDay(DbHelper.Curdate(), "1"), "-1") + " AND TimeDisplayed1<=" + DbHelper.Now() + @"
+				WHERE TimeDisplayed2<=" + DbHelper.DateAddSecond(DbHelper.DateAddDay("CURDATE()", "1"), "-1") + " AND TimeDisplayed1<=" + DbHelper.Now() + @"
 				AND EmployeeNum=" + POut.Long(employeeNum) + @"
 				ORDER BY IF(YEAR(TimeDisplayed2) < 1880,TimeDisplayed1,TimeDisplayed2) DESC";
             command = DbHelper.LimitOrderBy(command, 1);
@@ -318,13 +318,13 @@ namespace OpenDentBusiness
             Dictionary<long, List<UserClinic>> dictUserClinics = new Dictionary<long, List<UserClinic>>();
             foreach (Employee empCur in listEmpsShort)
             {
-                List<Userod> listUsers = Userods.GetUsersByEmployeeNum(empCur.EmployeeNum);
+                List<User> listUsers = Userods.GetUsersByEmployeeNum(empCur.EmployeeNum);
                 if (listUsers.Count == 0)
                 {
                     listEmpsUnassigned.Add(empCur);
                     continue;
                 }
-                foreach (Userod userCur in listUsers)
+                foreach (User userCur in listUsers)
                 {//At this point we know there is at least one Userod associated to this employee.
                     if (userCur.ClinicNum == 0)
                     {//User's default clinic is HQ

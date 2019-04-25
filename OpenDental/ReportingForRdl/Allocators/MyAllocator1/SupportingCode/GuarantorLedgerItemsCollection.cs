@@ -22,27 +22,12 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1 {
 
 
 		#region Constructors
-		public GuarantorLedgerItemsCollection(Guarantors Guarantor) {
-			this.m_Guarantors = Guarantor;
-			this.m_GuarantorNumber = this.m_Guarantors.Number;
-		}
 		public GuarantorLedgerItemsCollection(long GuarantorNumber) {
 			this.m_GuarantorNumber = GuarantorNumber;
 		}
 		#endregion
 
 		#region Public Properties
-		/// <summary>
-		/// Throws exception if Guarantor_Object was not set. ie using uint Guarantor Numbers instead
-		/// </summary>
-		public Guarantors GUARANTOR_OBJECT {
-			get {
-				if(this.m_Guarantors == null)
-					throw new Exception("Gurarantor Object is null.\nObject was instantated with different contstructor.\n"
-						+ " Consider Calling Property GuarantorNumber instead.");
-				return this.m_Guarantors;
-			}
-		}
 		/// <summary>
 		/// Can be used if you don't want to use the whole DansTables.Guarantors class. To save memory.
 		/// </summary>

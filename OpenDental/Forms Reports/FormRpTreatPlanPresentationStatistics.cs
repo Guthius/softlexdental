@@ -11,7 +11,7 @@ using CodeBase;
 
 namespace OpenDental {
 	public partial class FormRpTreatPlanPresentationStatistics:ODForm {
-		private List<Userod> _listUsers;
+		private List<User> _listUsers;
 		private List<Clinic> _listClinics;
 		public FormRpTreatPlanPresentationStatistics() {
 			InitializeComponent();
@@ -48,7 +48,7 @@ namespace OpenDental {
 			report.AddTitle("Title",Lan.g(this,"Presented Procedure Totals"));
 			report.AddSubTitle("PracTitle",PrefC.GetString(PrefName.PracticeTitle));
 			report.AddSubTitle("Date",date1.SelectionStart.ToShortDateString()+" - "+date2.SelectionStart.ToShortDateString());
-			List<Userod> listSelectedUsers = new List<Userod>();
+			List<User> listSelectedUsers = new List<User>();
 			if(checkAllUsers.Checked) {
 				report.AddSubTitle("Users",Lan.g(this,"All Users"));
 				listSelectedUsers.AddRange(_listUsers); //add all users

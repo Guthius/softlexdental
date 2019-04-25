@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading;
 using System.Xml;
 using CodeBase;
-using DataConnectionBase;
 using OpenDentBusiness.WebTypes.WebSched.TimeSlot;
 
 namespace OpenDentBusiness
@@ -356,7 +355,7 @@ namespace OpenDentBusiness
                 {
                     command += "AND NOT EXISTS(SELECT * FROM appointment "
                         + "WHERE appointment.PatNum=recall.PatNum "
-                        + "AND appointment.AptDateTime>" + DbHelper.Curdate() + " "//early this morning
+                        + "AND appointment.AptDateTime>CURDATE() "//early this morning
                         + "AND appointment.AptStatus=" + POut.Int((int)ApptStatus.Scheduled) + ") ";
                 }
                 else
@@ -1170,7 +1169,7 @@ namespace OpenDentBusiness
                         + "INNER JOIN recalltrigger ON procedurelog.CodeNum=recalltrigger.CodeNum "
                         + "INNER JOIN appointment USE INDEX (StatusDate) ON appointment.AptNum=procedurelog.AptNum "
                             + "AND appointment.AptStatus=" + POut.Int((int)ApptStatus.Scheduled) + " "
-                            + "AND appointment.AptDateTime > " + DbHelper.Curdate() + " ";
+                            + "AND appointment.AptDateTime > CURDATE() ";
                     if (_listPatNumMaxPerGroup.Count > 1)
                     {//if only one group, just include all PatNums
                         command += "WHERE " + (i < _listPatNumMaxPerGroup.Count - 1 ? ("procedurelog.PatNum>" + _listPatNumMaxPerGroup[i + 1] + " " + (i > 0 ? "AND " : "")) : "")
@@ -1466,7 +1465,7 @@ namespace OpenDentBusiness
                 + "INNER JOIN appointment ON appointment.AptNum=procedurelog.AptNum "
                     + "AND appointment.PatNum=" + POut.Long(patNum) + " "
                     + "AND appointment.AptStatus=" + POut.Int((int)ApptStatus.Scheduled) + " "
-                    + "AND appointment.AptDateTime > " + DbHelper.Curdate() + " "//early this morning
+                    + "AND appointment.AptDateTime > CURDATE() "//early this morning
                 + "WHERE procedurelog.PatNum=" + POut.Long(patNum) + " "
                 + "GROUP BY recalltrigger.RecallTypeNum";
             DataTable table = Db.GetTable(command);

@@ -4,35 +4,14 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using DataConnectionBase;
 
 namespace OpenDentBusiness {
 	///<summary>This class contains methods used to generate database independent SQL.</summary>
 	public class DbHelper {
 
-		///<summary>Helper method that is only useful for Oracle.  This method is really just here for exposure for the lack of Oracle functionality.
-		///Oracle will cut up a section of the CLOB column using SUBSTR.  The portion is dictated by starting at startIndex for substringLength chars.
-		///When using MySQL you simply order by the column name because it is smart enough to allow users to ORDER BY 'text' data type.</summary>
-		public static string ClobOrderBy(string columnName,int startIndex=1,int substringLength=1000) {
-			return columnName;
-		}
-
-		///<summary>Returns a safe drop table string that does not need to be surrounded with a try catch.</summary>
-		public static string DropTableIfExist(string tableName) {
-
-				return "DROP TABLE IF EXISTS "+tableName;
-			
-		}
 
 		///<summary>Use when you already have a WHERE clause in the query. Uses AND RowNum... for Oracle.</summary>
 		public static string LimitAnd(int n) {
-
-				return "LIMIT " + n;
-			
-		}
-
-		///<summary>Use when you do not otherwise have a WHERE clause in the query. Uses WHERE RowNum... for Oracle.</summary>
-		public static string LimitWhere(int n) {
 
 				return "LIMIT " + n;
 			
@@ -277,20 +256,6 @@ namespace OpenDentBusiness {
 				return "DATE_FORMAT("+colName+",'%d/%m/%Y %H:%i:%s')";
 			}
 			throw new Exception("Unrecognized datetime format string.");
-		}
-
-		/* Not used
-		///<summary>Helper for Oracle that will return equivalent of MySql CURTIME().</summary>
-		public static string Curtime() {
-			if(DataConnection.DBtype==DatabaseType.Oracle) {
-				return "SYSDATE";
-			}
-			return "CURTIME()";
-		}*/
-
-		///<summary>Helper for Oracle that will return equivalent of MySql CURDATE()</summary>
-		public static string Curdate() {
-			return "CURDATE()";
 		}
 
 		///<summary>Helper for Oracle that will return equivalent of MySql NOW()</summary>
@@ -624,7 +589,7 @@ namespace OpenDentBusiness {
 			return Db.GetListString(@"
 				SELECT COLUMN_NAME 
 				FROM information_schema.COLUMNS
-				WHERE TABLE_SCHEMA = '"+DataConnection.GetDatabaseName()+"' AND TABLE_NAME='"+tableName+"'");
+				WHERE TABLE_SCHEMA = '"+ DataConnection.Database + "' AND TABLE_NAME='"+tableName+"'");
 		}
 
 		///<summary>Build a select statement with omitted columns.</summary>

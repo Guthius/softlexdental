@@ -8,7 +8,6 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using CodeBase;
-using DataConnectionBase;
 using Ionic.Zip;
 using MySql.Data.MySqlClient;
 using OpenDentBusiness;
@@ -1043,15 +1042,15 @@ namespace OpenDental
                 }
             }
             string mySqlPassHash;
-            Encryption.TryEncrypt(DataConnection.GetMysqlPass(), out mySqlPassHash);
+            Encryption.TryEncrypt(DataConnection.Password, out mySqlPassHash);
             return ServicesHelper.CreateServiceConfigFile(eConnectorConfigPath
-                , DataConnection.GetServerName()
-                , DataConnection.GetDatabaseName()
-                , DataConnection.GetMysqlUser()
-                , DataConnection.GetMysqlPass()
+                , DataConnection.Server
+                , DataConnection.Database
+                , DataConnection.UserID
+                , DataConnection.Password
                 , mySqlPassHash
-                , DataConnection.GetMysqlUserLow()
-                , DataConnection.GetMysqlPassLow());
+                , ""
+                , "");
         }
 
         ///<summary>Creates a default OpenDentalServiceConfig.xml file for Open Dental Service if one is not already present.
@@ -1067,85 +1066,15 @@ namespace OpenDental
             }
             //At this point we know that Open Dental Service does not have a config file present.
             string mySqlPassHash;
-            Encryption.TryEncrypt(DataConnection.GetMysqlPass(), out mySqlPassHash);
+            Encryption.TryEncrypt(DataConnection.Password, out mySqlPassHash);
             return ServicesHelper.CreateServiceConfigFile(odServiceConfigPath
-                , DataConnection.GetServerName()
-                , DataConnection.GetDatabaseName()
-                , DataConnection.GetMysqlUser()
-                , DataConnection.GetMysqlPass()
+                , DataConnection.Server
+                , DataConnection.Database
+                , DataConnection.UserID
+                , DataConnection.Password
                 , mySqlPassHash
-                , DataConnection.GetMysqlUserLow()
-                , DataConnection.GetMysqlPassLow());
-        }
-
-
-        ///<summary>Performs both upgrades and downgrades by recopying update files from DB to temp folder, then from temp folder to the path specified.
-        ///Returns whether the whole process from downloading the files to copying them was successful.</summary>
-        ///<param name="storedVersion">A version object that represents the ProgramVersion preference in the database.</param>
-        ///<param name="currentVersion">A version object that represents the currently running version (Application.ProductVersion).</param>
-        ///<param name="destDir">The directory that the server files will be copied to.</param>
-        ///<param name="doKillServices">Indicates whether the file copier should kill all services before copying the update files.</param>
-        ///<param name="useLocalUpdateFileCopier">If set, this will use the update file copier in the local installation directory rather than the 
-        ///one downloaded from the server.</param>
-        ///<param name="openCopiedFiles">Tells the file copier to open the copied files after completion.</param>
-        private static bool UpdateClientFromServerUpdateFiles(Version storedVersion, Version currentVersion, string destDir, bool doKillServices,
-            bool useLocalUpdateFileCopier, bool openCopiedFiles)
-        {
-            string folderUpdate = ODFileUtils.CombinePaths(PrefC.GetTempFolderPath(), "UpdateFiles");
-            if (!DownloadUpdateFilesFromDatabase(folderUpdate))
-            {
-                return false;//if something failed while downloading.
-            }
-            //look at the manifest to see if it's the version we need
-            string manifestVersion = "";
-            ODException.SwallowAnyException(() =>
-            {
-                manifestVersion = File.ReadAllText(ODFileUtils.CombinePaths(folderUpdate, "Manifest.txt"));
-            });
-            if (manifestVersion != storedVersion.ToString(3))
-            {//manifest version is wrong
-                string manpath = ODFileUtils.CombinePaths(folderUpdate, "Manifest.txt");
-                string message = Lan.g("Prefs", "The expected version information was not found in this file:") + " " + manpath + ".  "
-                    + Lan.g("Prefs", "There is probably a permission issue on that folder which should be fixed.\r\n\r\n"
-                    + "The suggested solution is to return to the computer where the update was just run.  Go to Help | "
-                    + "Update | Setup, and click the Recopy button.");
-                //If they were copying the files to a dynamic mode folder, do not install the exe. Give them the troubleshooting message with no option.
-                if (destDir != Application.StartupPath)
-                {
-                    MessageBox.Show(message);
-                    Environment.Exit(0);
-                    return false;
-                }
-                else
-                {
-                    //No point trying the Setup.exe because that's probably wrong too.
-                    //Just go straight to downloading and running the Setup.exe.
-                    if (MessageBox.Show(message + "\r\n\r\n" + Lan.g("Prefs", "If, instead, you click OK in this window, then a fresh Setup file will be "
-                        + "downloaded and run."), "", MessageBoxButtons.OKCancel) != DialogResult.OK)//they don't want to download again.
-                    {
-                        FormOpenDental.ExitCode = 312;//Stored version is higher that client version after an update was successful.
-                        Environment.Exit(FormOpenDental.ExitCode);
-                        return false;
-                    }
-                    DownloadAndRunSetup(storedVersion, currentVersion);
-                    Environment.Exit(0);
-                    return false;
-                }
-            }
-            //Manifest version matches. Show window if they are updating their main installation of Open Dental.
-            if (destDir == Application.StartupPath)
-            {//if this is copying the files to the installation folder
-                if (MessageBox.Show(Lan.g("Prefs", "Files will now be copied.") + "\r\n"
-                    + Lan.g("Prefs", "Workstation version will be updated from ") + currentVersion.ToString(3)
-                    + Lan.g("Prefs", " to ") + storedVersion.ToString(3),
-                    "", MessageBoxButtons.OKCancel)
-                    != DialogResult.OK)//they don't want to update for some reason.
-                {
-                    Environment.Exit(0);
-                    return false;
-                }
-            }
-            return OpenFileCopier(folderUpdate, destDir, doKillServices, useLocalUpdateFileCopier, openCopiedFiles);
+                , ""
+                , "");
         }
 
         ///<summary>Downloads the update files from the database and places them in the given folder. Returns false if anything went wrong.</summary>

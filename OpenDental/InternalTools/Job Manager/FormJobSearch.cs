@@ -22,7 +22,7 @@ namespace OpenDental {
 		private List<JobCategory> _listJobCategory;
 		private Job _selectedJob;
 		private List<Job> _listSelectedJobs;
-		private List<Userod> _listUsers;
+		private List<User> _listUsers;
 		private bool _isMultiSelect;
 		private List<Def> _listJobPriorities;
 		private List<long> _listOriginalJobNums=new List<long>();

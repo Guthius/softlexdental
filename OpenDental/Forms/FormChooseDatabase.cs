@@ -1,4 +1,3 @@
-using DataConnectionBase;
 using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
@@ -85,6 +84,8 @@ namespace OpenDental
                 out bool noShow,
                 out ListAdminCompNames,
                 out bool useDynamicMode);
+
+            NoShow = noShow;
         }
 
         /// <summary>
@@ -101,10 +102,10 @@ namespace OpenDental
             if (IsAccessedFromMainMenu)
             {
                 computerNameComboBox.Enabled = false;
-                CentralConnectionCur.ServerName = DataConnection.GetServerName();
+                CentralConnectionCur.ServerName = DataConnection.Server;
 
                 databaseComboBox.Enabled = false;
-                CentralConnectionCur.DatabaseName = DataConnection.GetDatabaseName();
+                CentralConnectionCur.DatabaseName = DataConnection.Database;
             }
 
             ComputerName    = CentralConnectionCur.ServerName;

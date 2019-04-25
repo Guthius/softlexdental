@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
-using DataConnectionBase;
 
 namespace OpenDentBusiness
 {
@@ -507,7 +506,7 @@ namespace OpenDentBusiness
                 + ")cp ON cp.PayPlanNum = payplan.PayPlanNum "
                 + "WHERE payplan.IsClosed = 0 "
                 + "GROUP BY payplan.PayPlanNum "
-                + "HAVING Princ+Interest <= (TotPay + InsPay) AND LastDate <=" + DbHelper.Curdate();
+                + "HAVING Princ+Interest <= (TotPay + InsPay) AND LastDate <= CURDATE()";
             table = Db.GetTable(command);
             string payPlanNums = "";
             for (int i = 0; i < table.Rows.Count; i++)

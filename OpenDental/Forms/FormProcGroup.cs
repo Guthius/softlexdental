@@ -84,7 +84,7 @@ namespace OpenDental{
 		private UI.Button butChangeUser;
 		private DataTable TablePlanned;
 		///<summary>Users can temporarily log in on this form.  Defaults to Security.CurUser.</summary>
-		private Userod _curUser=Security.CurUser;
+		private User _curUser=Security.CurUser;
 		///<summary>True if the user clicked the Change User button.</summary>
 		private bool _hasUserChanged;
 		private Label labelPermAlert;

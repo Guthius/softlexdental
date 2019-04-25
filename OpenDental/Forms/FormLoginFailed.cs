@@ -20,7 +20,7 @@ namespace OpenDental {
 		}
 
 		private void butLogin_Click(object sender,EventArgs e) {
-			Userod userEntered;
+			User userEntered;
 			string password;
 			try {
 				bool useEcwAlgorithm=Programs.UsingEcwTightOrFullMode();
@@ -30,7 +30,7 @@ namespace OpenDental {
 					//It doesn't matter what Security.CurUser is when it is null because we are technically trying to set it for the first time.
 					//It cannot be null before invoking HashPassword because middle needs it to NOT be null when creating the credentials for DtoGetString.
 					if(Security.CurUser==null) {
-						Security.CurUser=new Userod();
+						Security.CurUser=new User();
 					}
 					password=Authentication.HashPasswordMD5(password,true);
 				}

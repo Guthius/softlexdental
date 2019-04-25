@@ -1,4 +1,3 @@
-using DataConnectionBase;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections;
@@ -32,23 +31,7 @@ namespace OpenDentBusiness
         public static int GetServerThread(bool isReportServer)
         {
             MySqlConnection con = new MySqlConnection();
-            if (isReportServer)
-            {
-                con = new MySqlConnection(
-                    DataConnection.GetReportConnectionString(
-                        PrefC.ReportingServer.Server
-                        , PrefC.ReportingServer.Database
-                        , PrefC.ReportingServer.MySqlUser
-                        , PrefC.ReportingServer.MySqlPass)
-                    + ";pooling=false");
-            }
-            else
-            {
-                //Use the database user with lower permissions when in Middle Tier since this method is explicitly designed for the User Query window.
-                string connectStr = DataConnection.GetCurrentConnectionString();
-                //all connection details are the same, except pooling should be false.
-                con = new MySqlConnection(connectStr + ";pooling=false");
-            }
+            con = new MySqlConnection(DataConnection.ConnectionString);
             con.Open();
             int serverThread = con.ServerThread;
             //If the dictionary already contains the ServerThread key, then something went wrong. Just stop and throw.

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Data;
 using System.Windows.Forms;
-using DataConnectionBase;
 using OpenDental.Reporting.Allocators.MyAllocator1;
 using OpenDentBusiness;
 
@@ -259,21 +258,6 @@ namespace OpenDental.Reporting.Allocators {
 			bw.ReportProgress(iProgress,"Batch Processing Total Time is: " + String.Format("{0}h:{1}m.{2}",timeSpan1.Hours,timeSpan1.Minutes,timeSpan1.Seconds));
 			e.Result = "Completed Processing of all " + GuarantorsToAllocate.Length + " Guarantors.";
 
-		}
-		private bool CheckTableStatus() {
-			bool rValOK_TO_RUN = false;
-			if(!TableExists(TABLENAME)) {
-				DialogResult dr = MessageBox.Show(Lan.g(this,"The Table for holding provider split infomation generated\n"
-					+ "by MyAllocator1 does not exist."
-					+ "Creation of this table is required create set up allocation by provider\n"
-					+ "according to the rules in MyAllocator1.\n\n"
-					+ "Do you want to create this table?"),Lan.g(this,"Create Table"),MessageBoxButtons.YesNoCancel);
-				if(dr == DialogResult.Yes) {
-					Db.NonQOld(MyAllocator1_ProviderPayment.CreatTableString());
-				}
-			}
-			rValOK_TO_RUN = TableExists(TABLENAME);
-			return rValOK_TO_RUN;
 		}
 		/// <summary>
 		/// Simple utility method to tell you if a table exits or not.

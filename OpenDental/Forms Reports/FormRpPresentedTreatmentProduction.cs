@@ -11,7 +11,7 @@ using CodeBase;
 
 namespace OpenDental {
 	public partial class FormRpPresentedTreatmentProduction:ODForm {
-		private List<Userod> _listUsers;
+		private List<User> _listUsers;
 		private List<Clinic> _listClinics;
 		public FormRpPresentedTreatmentProduction() {
 			InitializeComponent();

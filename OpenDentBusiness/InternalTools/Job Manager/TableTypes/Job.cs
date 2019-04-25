@@ -402,7 +402,7 @@ namespace OpenDentBusiness {
 		}
 
 		///<summary>Similar To owner action, but allows you to specify a user.</summary>
-		public JobAction ActionForUser(Userod user) {
+		public JobAction ActionForUser(User user) {
 			if(user==null) {
 				return OwnerAction;//should not happen, just a precaution
 			}

@@ -119,7 +119,7 @@ namespace OpenDentBusiness {
 			}
 			//get a list of users that correspond to a non-hidden provider
 			List<Provider> listProviders=Providers.GetWhere(x => x.NationalProvID==providerErx.NationalProviderID,true);
-			List<Userod> listDoseUsers=Userods.GetWhere(x => listProviders.Exists(y => y.ProvNum==x.ProvNum),true);//Only consider non-hidden users.
+			List<User> listDoseUsers=Userods.GetWhere(x => listProviders.Exists(y => y.ProvNum==x.ProvNum),true);//Only consider non-hidden users.
 			if(listDoseUsers.Count==1) {//One provider matched so simply notify the office and set the DoseSpot User Id.
 				alert=new AlertItem {
 					Actions=ActionType.MarkAsRead | ActionType.Delete | ActionType.ShowItemValue,
@@ -352,7 +352,7 @@ namespace OpenDentBusiness {
 					if(userPref==null) {//The Dose Spot User ID from this medication is not present in Open Dental.
 						continue;//I don't know if we want to do anything with this.  Maybe we want to just get the ErxLog from before this medication was made.
 					}
-					Userod user=Userods.GetUser(userPref.UserNum);
+					User user=Userods.GetUser(userPref.UserNum);
 					Provider prov=new Provider();
 					isProv=!Erx.IsUserAnEmployee(user);
 					if(isProv) {//A user always be a provider if there is a ProvNum > 0
@@ -607,7 +607,7 @@ namespace OpenDentBusiness {
 		///<summary>Throws exceptions when validating clinic/practice info/provider.
 		///Will register the passed in userNum if that user is not already registered.
 		///Updates the passed in user's UserOdPref for DoseSpot User ID</summary>
-		public static string GetUserID(Userod userCur,long clinicNum) {
+		public static string GetUserID(User userCur,long clinicNum) {
 			//No need to check RemotingRole; no call to db.
 			string retVal="";
 			Clinic clinicCur=GetClinicOrPracticeInfo(clinicNum);

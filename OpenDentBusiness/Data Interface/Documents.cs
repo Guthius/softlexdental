@@ -10,7 +10,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using CodeBase;
-using DataConnectionBase;
 
 namespace OpenDentBusiness
 {
@@ -489,7 +488,6 @@ namespace OpenDentBusiness
 
         public static DataTable GetTreeListTableForPatient(string patNum)
         {
-            DataConnection dcon = new DataConnection();
             DataTable table = new DataTable("DocumentList");
             DataRow row;
             DataTable raw;
@@ -506,9 +504,8 @@ namespace OpenDentBusiness
             table.Columns.Add("description");
             table.Columns.Add("ImgType");
             //Move all documents which are invisible to the first document category.
-            command = "SELECT DocNum FROM document WHERE PatNum='" + patNum + "' AND "
-                + "DocCategory<0";
-            raw = dcon.GetTable(command);
+            command = "SELECT DocNum FROM document WHERE PatNum='" + patNum + "' AND DocCategory<0";
+            raw = DataConnection.GetTable(command);
             if (raw.Rows.Count > 0)
             {//Are there any invisible documents?
                 command = "UPDATE document SET DocCategory='" + Defs.GetFirstForCategory(DefCat.ImageCats, true).DefNum
@@ -522,11 +519,11 @@ namespace OpenDentBusiness
                     }
                 }
                 command += ")";
-                dcon.NonQ(command);
+                DataConnection.NonQ(command);
             }
             //Load all documents into the result table.
             command = "SELECT DocNum,DocCategory,DateCreated,Description,ImgType,MountItemNum FROM document WHERE PatNum='" + patNum + "'";
-            raw = dcon.GetTable(command);
+            raw = DataConnection.GetTable(command);
             for (int i = 0; i < raw.Rows.Count; i++)
             {
                 //Make sure hidden documents are never added (there is a small possibility that one is added after all are made visible).
@@ -551,9 +548,8 @@ namespace OpenDentBusiness
                 resultSet.Add(row);
             }
             //Move all mounts which are invisible to the first document category.
-            command = "SELECT MountNum FROM mount WHERE PatNum='" + patNum + "' AND "
-                + "DocCategory<0";
-            raw = dcon.GetTable(command);
+            command = "SELECT MountNum FROM mount WHERE PatNum='" + patNum + "' AND DocCategory<0";
+            raw = DataConnection.GetTable(command);
             if (raw.Rows.Count > 0)
             {//Are there any invisible mounts?
                 command = "UPDATE mount SET DocCategory='" + Defs.GetFirstForCategory(DefCat.ImageCats, true).DefNum
@@ -567,11 +563,11 @@ namespace OpenDentBusiness
                     }
                 }
                 command += ")";
-                dcon.NonQ(command);
+                DataConnection.NonQ(command);
             }
             //Load all mounts into the result table.
             command = "SELECT MountNum,DocCategory,DateCreated,Description,ImgType FROM mount WHERE PatNum='" + patNum + "'";
-            raw = dcon.GetTable(command);
+            raw = DataConnection.GetTable(command);
             for (int i = 0; i < raw.Rows.Count; i++)
             {
                 //Make sure hidden mounts are never added (there is a small possibility that one is added after all are made visible).

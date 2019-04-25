@@ -32,7 +32,6 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.Win32;
 using CodeBase;
-using DataConnectionBase;
 
 
 namespace OpenDental {

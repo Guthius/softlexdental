@@ -1183,7 +1183,7 @@ namespace OpenDental{
 			}
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				Provider prov=(Provider)gridMain.Rows[gridMain.SelectedIndices[0]].Tag;
-				Userod user=new Userod();
+				User user=new User();
 				user.ProvNum=prov.ProvNum;
 				user.UserName=GetUniqueUserName(prov.LName,prov.FName);
 				user.LoginDetails=Authentication.GenerateLoginDetailsSHA512(user.UserName);

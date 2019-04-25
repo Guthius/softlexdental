@@ -5,7 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
-using DataConnectionBase;
 
 namespace OpenDentBusiness.Crud{
 	public class BugCrud {

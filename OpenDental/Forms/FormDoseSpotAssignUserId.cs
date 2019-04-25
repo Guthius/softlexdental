@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace OpenDental {
 	public partial class FormDoseSpotAssignUserId:ODForm {
-		private List<Userod> _listUsersInComboBox;
+		private List<User> _listUsersInComboBox;
 		private long _selectedUserNum;
 		private ProviderErx _providerErxCur;
 		Program _programErx;
@@ -32,8 +32,8 @@ namespace OpenDental {
 			textUserId.Text=_providerErxCur.UserId;//UserID passed from Alert
 		}
 
-		private List<Userod> GetListDoseSpotUsers(bool includeProv,string provNpi="") {
-			List<Userod> retVal=new List<Userod>();
+		private List<User> GetListDoseSpotUsers(bool includeProv,string provNpi="") {
+			List<User> retVal=new List<User>();
 			List<Provider> listProviders=Providers.GetWhere(x => x.NationalProvID==provNpi,true);
 			List<UserOdPref> listUserPrefDoseSpotIds=UserOdPrefs.GetAllByFkeyAndFkeyType(_programErx.ProgramNum,UserOdFkeyType.Program);
 			listUserPrefDoseSpotIds=listUserPrefDoseSpotIds.FindAll(x => string.IsNullOrWhiteSpace(x.ValueString));
@@ -53,10 +53,10 @@ namespace OpenDental {
 
 		private void FillComboBox() {
 			comboDoseUsers.Items.Clear();
-			comboDoseUsers.Items.Add(new ODBoxItem<Userod>(Lan.g(this,"None")));
+			comboDoseUsers.Items.Add(new ODBoxItem<User>(Lan.g(this,"None")));
 			comboDoseUsers.SelectedIndex=0;
-			foreach(Userod userCur in _listUsersInComboBox) {
-				ODBoxItem<Userod> boxItemCur=new ODBoxItem<Userod>(userCur.UserName,userCur);
+			foreach(User userCur in _listUsersInComboBox) {
+				ODBoxItem<User> boxItemCur=new ODBoxItem<User>(userCur.UserName,userCur);
 				comboDoseUsers.Items.Add(boxItemCur);
 				if(userCur.UserNum==_selectedUserNum) {
 					comboDoseUsers.SelectedIndex=comboDoseUsers.Items.Count-1;//Select The item that was just added if it is the selected num.

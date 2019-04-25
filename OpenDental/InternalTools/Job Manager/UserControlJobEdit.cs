@@ -420,9 +420,9 @@ namespace OpenDental.InternalTools.Job_Manager {
 			gridSubscribers.Columns.Clear();
 			gridSubscribers.Columns.Add(new ODGridColumn("",50));
 			gridSubscribers.Rows.Clear();
-			List<Userod> listSubscribers=_jobCur.ListJobLinks.FindAll(x => x.LinkType==JobLinkType.Subscriber)
+			List<User> listSubscribers=_jobCur.ListJobLinks.FindAll(x => x.LinkType==JobLinkType.Subscriber)
 				.Select(x => Userods.GetFirstOrDefault(y => y.UserNum==x.FKey)).ToList();
-			foreach(Userod user in listSubscribers.FindAll(x => x!=null)){
+			foreach(User user in listSubscribers.FindAll(x => x!=null)){
 				ODGridRow row=new ODGridRow() { Tag =user };
 				row.Cells.Add(user.UserName);
 				gridSubscribers.Rows.Add(row);
@@ -1952,7 +1952,7 @@ namespace OpenDental.InternalTools.Job_Manager {
 		///<summary>If returns false if selection is cancelled. DefaultUserNum is usually the currently set usernum for a given role.</summary>
 		private bool PickUserByJobPermission(string prompt, JobPerm jobPerm,out long selectedNum, long suggestedUserNum = 0,bool AllowNone = true,bool AllowAll = true) {
 			selectedNum=0;
-			List<Userod> listUsersForPicker = Userods.GetUsersByJobRole(jobPerm,false);
+			List<User> listUsersForPicker = Userods.GetUsersByJobRole(jobPerm,false);
 			FormUserPick FormUP = new FormUserPick();
 			FormUP.Text=prompt;
 			FormUP.IsSelectionmode=true;
@@ -3173,11 +3173,11 @@ namespace OpenDental.InternalTools.Job_Manager {
 			if(_isLoading) {
 				return;
 			}
-			if(e.Button==MouseButtons.Right && (gridSubscribers.Rows[e.Row].Tag is Userod)) {
+			if(e.Button==MouseButtons.Right && (gridSubscribers.Rows[e.Row].Tag is User)) {
 				gridSubscribers.ContextMenu=new ContextMenu();
 				ContextMenu menu=gridSubscribers.ContextMenu;
-				long FKey = ((Userod)gridSubscribers.Rows[e.Row].Tag).UserNum;
-				menu.MenuItems.Add("Remove "+((Userod)gridSubscribers.Rows[e.Row].Tag).UserName,(o,arg) => {
+				long FKey = ((User)gridSubscribers.Rows[e.Row].Tag).UserNum;
+				menu.MenuItems.Add("Remove "+((User)gridSubscribers.Rows[e.Row].Tag).UserName,(o,arg) => {
 					List<JobLink> listLinks=_jobCur.ListJobLinks.FindAll(x => x.LinkType==JobLinkType.Subscriber&&x.FKey==FKey);//almost always only 1
 					_jobCur.ListJobLinks.RemoveAll(x => x.LinkType==JobLinkType.Subscriber&&x.FKey==FKey);
 					_jobOld.ListJobLinks.RemoveAll(x => x.LinkType==JobLinkType.Subscriber&&x.FKey==FKey);

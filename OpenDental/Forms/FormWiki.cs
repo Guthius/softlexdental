@@ -1,5 +1,4 @@
 using CodeBase;
-using DataConnectionBase;
 using OpenDental.Properties;
 using OpenDental.UI;
 using OpenDentBusiness;

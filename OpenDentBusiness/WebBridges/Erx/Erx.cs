@@ -236,7 +236,7 @@ namespace OpenDentBusiness {
 			}
 		}
 
-		public static bool IsUserAnEmployee(Userod user) {
+		public static bool IsUserAnEmployee(User user) {
 			bool isEmp=false;
 			if(user.EmployeeNum==0) {//The current user does not have an employee associated.
 				isEmp=false;

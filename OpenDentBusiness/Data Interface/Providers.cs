@@ -454,7 +454,7 @@ namespace OpenDentBusiness
         {
             //No need to check RemotingRole; no call to db.
             List<Provider> listProvsWithClinics = new List<Provider>();
-            List<Userod> listUsersShort = Userods.GetDeepCopy(true);
+            List<User> listUsersShort = Userods.GetDeepCopy(true);
             for (int i = 0; i < listUsersShort.Count; i++)
             {
                 Provider prov = Providers.GetProv(listUsersShort[i].ProvNum);
@@ -531,7 +531,7 @@ namespace OpenDentBusiness
         {
             if (Programs.UsingOrion)
             {
-                Userod user = Security.CurUser;
+                User user = Security.CurUser;
                 if (user != null)
                 {
                     Provider prov = Providers.GetProv(user.ProvNum);
@@ -555,12 +555,12 @@ namespace OpenDentBusiness
             return _providerCache.GetFindIndex(x => x.ProvNum == provNum, true);
         }
 
-        public static List<Userod> GetAttachedUsers(long provNum)
+        public static List<User> GetAttachedUsers(long provNum)
         {
             string command = "SELECT userod.* FROM userod,provider "
                     + "WHERE userod.ProvNum=provider.ProvNum "
                     + "AND provider.provNum=" + POut.Long(provNum);
-            return Crud.UserodCrud.SelectMany(command);
+            return User.SelectMany(command);
         }
 
         ///<summary>If useClinic, then clinicInsBillingProv will be used.  Otherwise, the pref for the practice.  Either way, there are three different choices for getting the billing provider.  One of the three is to use the treating provider, so supply that as an argument.  It will return a valid provNum unless the supplied treatProv was invalid.</summary>

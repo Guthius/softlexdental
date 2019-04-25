@@ -6,7 +6,6 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using CodeBase;
-using DataConnectionBase;
 
 namespace OpenDentBusiness
 {

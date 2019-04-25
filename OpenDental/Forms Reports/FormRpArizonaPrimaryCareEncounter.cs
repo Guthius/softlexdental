@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using System.IO;
 using OpenDentBusiness;
 using CodeBase;
-using DataConnectionBase;
 using System.Text.RegularExpressions;
 
 namespace OpenDental {

@@ -9,7 +9,6 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 using CodeBase;
-using DataConnectionBase;
 
 namespace OpenDentBusiness
 {
@@ -1047,7 +1046,7 @@ namespace OpenDentBusiness
                 + "AND procedurelog.ProcStatus=" + POut.Int((int)ProcStat.TP) + " "
                 + "AND procedurelog.IsCpoe=0 "
                 + "AND procedurelog.ProvNum=" + POut.Long(provNum) + " "
-                + "AND " + DbHelper.DtimeToDate("appointment.AptDateTime") + " >= " + DbHelper.Curdate() + " "
+                + "AND " + DbHelper.DtimeToDate("appointment.AptDateTime") + " >= CURDATE() "
                 + "ORDER BY appointment.AptDateTime";
             return Crud.ProcedureCrud.SelectMany(command);
         }
@@ -3424,7 +3423,7 @@ namespace OpenDentBusiness
         ///Does not add notes to a procedure that already has notes. Only called from ProcedureL.SetCompleteInAppt, security checked
         ///before calling this.  Also sets provider for each proc and claimproc.</summary>
         public static List<Procedure> SetCompleteInApptInList(Appointment apt, List<InsPlan> planList, List<PatPlan> patPlans, Patient patient,
-            List<Procedure> listProcsForAppt, List<InsSub> subList, Userod curUser)
+            List<Procedure> listProcsForAppt, List<InsSub> subList, User curUser)
         {
             if (listProcsForAppt.Count == 0)
             {

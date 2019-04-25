@@ -153,7 +153,7 @@ namespace OpenDental{
 			grid.Columns.Add(col);
 			grid.Rows.Clear();
 			ODGridRow row;
-			Userod user;
+			User user;
 			foreach(SecurityLog logCur in LogList) {
 				row=new ODGridRow();
 				row.Cells.Add(logCur.LogDateTime.ToShortDateString()+" "+logCur.LogDateTime.ToShortTimeString());

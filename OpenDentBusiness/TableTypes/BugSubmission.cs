@@ -1,5 +1,4 @@
 ﻿using CodeBase;
-using DataConnectionBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -219,7 +218,7 @@ namespace OpenDentBusiness {
 				_info.PreviousUpdateVersion=listHist.Count==2 ? listHist[1].ProgramVersion : "";//Show the previous version they updated from
 				_info.PreviousUpdateTime=listHist.Count>0 ? listHist[0].DateTimeUpdated : DateTime.MinValue;//Show when they updated to the current version.
 				_info.ModuleNameCur=moduleName;
-				_info.DatabaseName=DataConnection.GetDatabaseName();
+                _info.DatabaseName = DataConnection.Database;
 			}
 			catch {
 				

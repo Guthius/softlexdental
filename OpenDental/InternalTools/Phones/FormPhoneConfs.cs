@@ -29,7 +29,7 @@ namespace OpenDental {
 				listPhoneConfs.RemoveAll(x => x.Occupants==0);
 			}
 			List<Site> listSites=Sites.GetDeepCopy();
-			List<Userod> listUserods=Userods.GetDeepCopy();
+			List<User> listUserods=Userods.GetDeepCopy();
 			gridConfRoom.BeginUpdate();
 			gridConfRoom.Columns.Clear();
 			//No translations due to HQ only.
@@ -44,7 +44,7 @@ namespace OpenDental {
 			foreach(PhoneConf conf in listPhoneConfs) {
 				row=new ODGridRow();
 				Site site=listSites.FirstOrDefault(x => x.SiteNum==conf.SiteNum);
-				Userod user=listUserods.FirstOrDefault(x => x.UserNum==conf.UserNum);
+				User user=listUserods.FirstOrDefault(x => x.UserNum==conf.UserNum);
 				row.Cells.Add(conf.Extension.ToString());
 				row.Cells.Add((conf.ButtonIndex < 0) ? "" : conf.ButtonIndex.ToString());
 				row.Cells.Add((site==null) ? "" : site.Description);

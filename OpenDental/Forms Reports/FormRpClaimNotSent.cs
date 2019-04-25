@@ -25,7 +25,7 @@ namespace OpenDental{
 		DateTime _endDate=new DateTime();
 		private List<ClaimTracking> _listNewClaimTrackings=new List<ClaimTracking>();
 		private List<ClaimTracking> _listOldClaimTrackings=new List<ClaimTracking>();
-		private List<Userod> _listClaimSentEditUsers=new List<Userod>();
+		private List<User> _listClaimSentEditUsers=new List<User>();
 		private Label labelClaimFilter;
 		private ComboBox comboBoxInsFilter;
 		private ODDateRangePicker odDateRangePicker;

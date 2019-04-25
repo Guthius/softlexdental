@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using CodeBase;
-using DataConnectionBase;
 
 namespace OpenDentBusiness{
 	///<summary></summary>

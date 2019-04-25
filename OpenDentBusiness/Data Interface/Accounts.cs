@@ -20,17 +20,17 @@ namespace OpenDentBusiness
 
             protected override List<Account> GetCacheFromDb()
             {
-                return Crud.AccountCrud.SelectMany("SELECT * FROM account ORDER BY AcctType,Description");
+                return Account.SelectMany("SELECT * FROM account ORDER BY AcctType,Description");
             }
 
             protected override DataTable ListToTable(List<Account> listAccounts)
             {
-                return Crud.AccountCrud.ListToTable(listAccounts, "Account");
+                return Account.ListToTable(listAccounts, "Account");
             }
 
             protected override List<Account> TableToList(DataTable table)
             {
-                return Crud.AccountCrud.TableToList(table);
+                return Account.TableToList(table);
             }
 
             protected override bool IsInListShort(Account account) => !account.Inactive;
@@ -64,20 +64,19 @@ namespace OpenDentBusiness
             return _accountCache.GetTableFromCache(doRefreshCache);
         }
 
-        public static long Insert(Account acct) => Crud.AccountCrud.Insert(acct);
+        public static long Insert(Account acct) => Account.Insert(acct);
 
         /// <summary>
         /// Does not update existing journal splits. To that use the other overload for this method.
         /// </summary>
-        public static void Update(Account acct) => Crud.AccountCrud.Update(acct);
-        
+        public static void Update(Account acct) => Account.Update(acct);
 
         /// <summary>
         /// Also updates existing journal entry splits linked to this account that have not been locked.
         /// </summary>
         public static void Update(Account acct, Account acctOld)
         {
-            Crud.AccountCrud.Update(acct, acctOld);
+            Account.Update(acct, acctOld);
             if (acct.Description == acctOld.Description)
             {
                 return; // No need to update splits on attached journal entries.

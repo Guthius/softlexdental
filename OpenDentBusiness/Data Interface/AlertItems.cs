@@ -4,7 +4,6 @@ using System.Data;
 using System.Reflection;
 using System.Text;
 using System.Linq;
-using DataConnectionBase;
 using CodeBase;
 
 namespace OpenDentBusiness
@@ -126,7 +125,7 @@ namespace OpenDentBusiness
             // There will only be a value if they have atleast 1 unread webmail.
             foreach (KeyValuePair<long, long> kvp in dictRecievedCount)
             {
-                List<Userod> listUsers = Providers.GetAttachedUsers(kvp.Key);
+                List<User> listUsers = Providers.GetAttachedUsers(kvp.Key);
 
                 // Go through each usernum and create/update their alert item.
                 foreach (long usernum in listUsers.Select(x => x.UserNum))

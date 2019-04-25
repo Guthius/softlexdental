@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using CodeBase;
-using DataConnectionBase;
 using OpenDentBusiness.WebTypes.WebForms;
 
 namespace OpenDentBusiness

@@ -22,8 +22,8 @@ namespace OpenDental {
 			dateRangeWebChat.SetDateTimeFrom(DateTime.Now.AddDays(-7));
 			dateRangeWebChat.SetDateTimeTo(DateTime.Now);
 			comboUsers.Items.Clear();
-			foreach(Userod user in Userods.GetUsers()) {
-				comboUsers.Items.Add(new ODBoxItem<Userod>(user.UserName,user));
+			foreach(User user in Userods.GetUsers()) {
+				comboUsers.Items.Add(new ODBoxItem<User>(user.UserName,user));
 				if(Security.CurUser.UserNum==user.UserNum) {//Select the current user by default.
 					comboUsers.SetSelected(comboUsers.Items.Count-1,true);
 				}
@@ -56,7 +56,7 @@ namespace OpenDental {
 			int totalPositive=0;
 			int totalNeutral=0;
 			int totalNegative=0;
-			List<Userod> listSelectedUsers=comboUsers.SelectedTags<Userod>();
+			List<User> listSelectedUsers=comboUsers.SelectedTags<User>();
 			List<string> listSelectedUsernames=listSelectedUsers.Select(x => x.UserName).ToList();
 			foreach(WebChatSurvey webChatSurvey in listWebChatSurveys) {
 				if(!string.IsNullOrEmpty(textSessionNum.Text) && !webChatSurvey.WebChatSessionNum.ToString().Contains(textSessionNum.Text)) {

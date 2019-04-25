@@ -5,7 +5,6 @@ using System.Data;
 using System.Linq;
 using System.Reflection;
 using CodeBase;
-using DataConnectionBase;
 
 namespace OpenDentBusiness{
 	///<summary></summary>
@@ -448,7 +447,7 @@ namespace OpenDentBusiness{
 			}
 			command+=@"	GROUP BY procedurelog.PatNum
 				)banding ON banding.PatNum = patplan.PatNum
-				WHERE (patplan.OrthoAutoNextClaimDate > "+POut.Date(new DateTime(1880,1,1))+" AND patplan.OrthoAutoNextClaimDate <= " + DbHelper.Curdate()+@")
+				WHERE (patplan.OrthoAutoNextClaimDate > "+POut.Date(new DateTime(1880,1,1))+ " AND patplan.OrthoAutoNextClaimDate <= CURDATE() " + @")
 				AND patplan.Ordinal IN (1,2) ";
 			//TODO: Consider the edge case where an office falls behind and the patient really needs to create multiple claims.
 			//E.g. NextClaimDate = 11/01/2016, today is 12/16/2016, this query would only show the Nov. row, but needs to also show a row for 12/01/2016.

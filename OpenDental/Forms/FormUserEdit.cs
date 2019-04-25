@@ -21,7 +21,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public bool IsNew;
 		///<summary></summary>
-		public Userod UserCur;
+		public User UserCur;
 		private TabControl tabControl1;
 		private TabPage tabUser;
 		private TabPage tabClinics;
@@ -76,7 +76,7 @@ namespace OpenDental{
 		private List<UserOdPref> _listDoseSpotUserPrefNew;
 
 		///<summary></summary>
-		public FormUserEdit(Userod userCur,bool isFromAddUser=false)
+		public FormUserEdit(User userCur,bool isFromAddUser=false)
 		{
 			//
 			// Required for Windows Form Designer support

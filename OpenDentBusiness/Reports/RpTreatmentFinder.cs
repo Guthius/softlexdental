@@ -53,7 +53,7 @@ namespace OpenDentBusiness
             string subSelectPlanned = "";
             string cmdFutureApt = @" AND patient.PatNum NOT IN (
 					SELECT PatNum FROM appointment WHERE AptStatus=" + POut.Int((int)ApptStatus.Scheduled) + @"
-					AND AptDateTime>=" + DbHelper.Curdate() + ")";
+					AND AptDateTime>=CURDATE())";
             DateTime renewDate = BenefitLogic.ComputeRenewDate(DateTime.Now, monthStart);
             List<long> listPatNums = new List<long>();
             if ((!listProviders.Contains(0) || !listBilling.Contains(0) || listClinicNums.Count > 0))

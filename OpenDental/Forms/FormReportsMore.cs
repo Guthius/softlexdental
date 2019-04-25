@@ -6,7 +6,6 @@ using OpenDental.Bridges;
 using System.Data.Common;
 using System.Collections.Generic;
 using System.Linq;
-using DataConnectionBase;
 
 namespace OpenDental {
 	/// <summary>

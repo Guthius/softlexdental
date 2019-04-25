@@ -47,7 +47,7 @@ namespace OpenDental{
 		private Label label3;
 		private ODGrid grid;
 		private CheckBox checkIncludeArchived;
-		private List<Userod> _listUserods;
+		private List<User> _listUserods;
 
 		///<summary></summary>
 		public FormAudit()

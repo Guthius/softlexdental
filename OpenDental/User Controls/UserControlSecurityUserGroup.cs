@@ -51,9 +51,9 @@ namespace OpenDental {
 		#endregion
 		#region Private
 		///<summary>The user selected in the "Users" tab. Setting the SelectedUser to null or a user that does not exist in the listbox does nothing.</summary>
-		public Userod SelectedUser {
+		public User SelectedUser {
 			get {
-				return (gridUsers.SelectedTag<Userod>());//Returns null if no selections
+				return (gridUsers.SelectedTag<User>());//Returns null if no selections
 			}
 			set {
 				if(value == null) {
@@ -61,7 +61,7 @@ namespace OpenDental {
 				}
 				for(int i=0;i<gridUsers.Rows.Count;i++){
 					gridUsers.SetSelected(i,false);
-					if(((Userod)(gridUsers.Rows[i].Tag)).UserNum==value.UserNum) {
+					if(((User)(gridUsers.Rows[i].Tag)).UserNum==value.UserNum) {
 						gridUsers.SetSelected(i,true);
 						break;
 					}
@@ -161,8 +161,8 @@ namespace OpenDental {
 		}
 
 		///<summary>Returns a filtered list of userods that should be displayed. Returns all users when IsCEMT is true.</summary>
-		private List<Userod> GetFilteredUsersHelper() {
-			List<Userod> retVal = Userods.GetDeepCopy();
+		private List<User> GetFilteredUsersHelper() {
+			List<User> retVal = Userods.GetDeepCopy();
 			if(IsForCEMT) {
 				return retVal;
 			}
@@ -329,7 +329,7 @@ namespace OpenDental {
 		///<summary>Fills gridUsers. Public so that it can be called from the Form that implements this control.</summary>
 		public void FillGridUsers() {
 			_isFillingList=true;
-			Userod selectedUser=SelectedUser;//preserve user selection.
+			User selectedUser=SelectedUser;//preserve user selection.
 			gridUsers.BeginUpdate();
 			gridUsers.Columns.Clear();
 			string tableName="TableSecurity";
@@ -342,8 +342,8 @@ namespace OpenDental {
 			}
 			gridUsers.Columns.Add(new ODGridColumn(Lan.g(tableName,"Strong\r\nPwd"),45,HorizontalAlignment.Center));
 			gridUsers.Rows.Clear();
-			List<Userod> listFilteredUsers=GetFilteredUsersHelper();
-			foreach(Userod user in listFilteredUsers) {
+			List<User> listFilteredUsers=GetFilteredUsersHelper();
+			foreach(User user in listFilteredUsers) {
 				ODGridRow row=new ODGridRow();
 				row.Cells.Add(user.UserName);
 				row.Cells.Add(Employees.GetNameFL(user.EmployeeNum));
@@ -374,7 +374,7 @@ namespace OpenDental {
 				return;
 			}
 			//Call an event that bubbles back up to the calling Form.
-			AddUserClick?.Invoke(this,new SecurityEventArgs(new Userod()));
+			AddUserClick?.Invoke(this,new SecurityEventArgs(new User()));
 		}
 
 		private void gridUsers_CellClick(object sender,ODGridClickEventArgs e) {
@@ -418,12 +418,12 @@ namespace OpenDental {
 		///This also dynamically sets the height of the control.</summary>
 		private void FillAssociatedUsers() {
 			listAssociatedUsers.Items.Clear();
-			List<Userod> listUsers = Userods.GetForGroup(SelectedUserGroup.UserGroupNum);
-			foreach(Userod userCur in listUsers) {
-				listAssociatedUsers.Items.Add(new ODBoxItem<Userod>(userCur.UserName,userCur));
+			List<User> listUsers = Userods.GetForGroup(SelectedUserGroup.UserGroupNum);
+			foreach(User userCur in listUsers) {
+				listAssociatedUsers.Items.Add(new ODBoxItem<User>(userCur.UserName,userCur));
 			}
 			if(listAssociatedUsers.Items.Count == 0) {
-				listAssociatedUsers.Items.Add(new ODBoxItem<Userod>(Lan.g(this,"None")));
+				listAssociatedUsers.Items.Add(new ODBoxItem<User>(Lan.g(this,"None")));
 			}
 		}
 
@@ -491,7 +491,7 @@ namespace OpenDental {
 
 	///<summary>A rather generic EventArgs class that can contain specific Security Object types (Userod, UserGroup, or GroupPermission).</summary>
 	public class SecurityEventArgs {
-		public Userod User {
+		public User User {
 			get;
 		}
 		public UserGroup Group {
@@ -501,7 +501,7 @@ namespace OpenDental {
 			get;
 		}
 
-		public SecurityEventArgs(Userod user) {
+		public SecurityEventArgs(User user) {
 			User=user;
 		}
 

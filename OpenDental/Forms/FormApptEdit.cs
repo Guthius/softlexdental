@@ -2092,7 +2092,7 @@ namespace OpenDental{
 				Procedure proc=procsForDay[i];
 				ProcedureCode procCode=ProcedureCodes.GetProcCode(proc.CodeNum);
 				Provider prov=_listProvidersAll.First(x => x.ProvNum==proc.ProvNum);
-				Userod usr=Userods.GetUser(proc.UserNum);
+				User usr=Userods.GetUser(proc.UserNum);
 				ODGridRow row=new ODGridRow();
 				row.ColorLborder=System.Drawing.Color.Black;
 				for(int f=0;f<fields.Count;f++) {
