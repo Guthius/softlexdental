@@ -37,11 +37,18 @@ namespace OpenDental
                     isRemoteEdit = true;
                 }
 
-                MessageBox.Show(
-                    "Warning, editing another computers graphical settings should be done from that computer to ensure the selected settings work. We do not recommend editing this way. If you make changes for another computer you should still verifiy that they work on that machine.",
-                    "Graphics Preferences",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                var result = 
+                    MessageBox.Show(
+                        "Editing another computers graphical settings should be done from that computer to ensure the selected settings work. We do not recommend editing this way. If you make changes for another computer you should still verifiy that they work on that machine.",
+                        "Graphics Preferences",
+                        MessageBoxButtons.OKCancel,
+                        MessageBoxIcon.Warning);
+
+                if (result == DialogResult.Cancel)
+                {
+                    DialogResult = DialogResult.Cancel;
+                    return;
+                }
 
                 SecurityLogs.MakeLogEntry(Permissions.GraphicsRemoteEdit, 0, "Edited graphical settings for " + ComputerPrefCur.ComputerName);
             }

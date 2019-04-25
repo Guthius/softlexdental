@@ -434,6 +434,9 @@
     <Compile Include="Forms\FormClaimProc.designer.cs">
       <DependentUpon>FormClaimProc.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormComputers.Designer.cs">
+      <DependentUpon>FormComputers.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormGraphics.Designer.cs">
       <DependentUpon>FormGraphics.cs</DependentUpon>
     </Compile>
@@ -8640,6 +8643,7 @@
     <None Include="Web References\NewCrop\Update1.wsdl" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\IconComputer.png" />
     <None Include="Resources\IconTransformCrop.png" />
     <None Include="Resources\IconFlipHorizontal.png" />
     <None Include="Resources\IconDocumentInfo.png" />
