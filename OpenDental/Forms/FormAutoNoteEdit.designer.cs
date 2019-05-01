@@ -115,8 +115,6 @@ namespace OpenDental
             this.promptsGrid.HasAddButton = false;
             this.promptsGrid.HasDropDowns = false;
             this.promptsGrid.HasMultilineHeaders = false;
-            this.promptsGrid.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.promptsGrid.HeaderHeight = 15;
             this.promptsGrid.HScrollVisible = false;
             this.promptsGrid.Location = new System.Drawing.Point(671, 70);
             this.promptsGrid.Name = "promptsGrid";

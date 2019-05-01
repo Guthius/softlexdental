@@ -67,8 +67,6 @@ namespace OpenDental
             this.columnHeadersGrid.HasAddButton = false;
             this.columnHeadersGrid.HasDropDowns = false;
             this.columnHeadersGrid.HasMultilineHeaders = false;
-            this.columnHeadersGrid.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.columnHeadersGrid.HeaderHeight = 15;
             this.columnHeadersGrid.HScrollVisible = false;
             this.columnHeadersGrid.Location = new System.Drawing.Point(13, 19);
             this.columnHeadersGrid.Name = "columnHeadersGrid";
@@ -88,8 +86,6 @@ namespace OpenDental
             this.pickListGrid.HasAddButton = false;
             this.pickListGrid.HasDropDowns = false;
             this.pickListGrid.HasMultilineHeaders = false;
-            this.pickListGrid.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.pickListGrid.HeaderHeight = 15;
             this.pickListGrid.HScrollVisible = false;
             this.pickListGrid.Location = new System.Drawing.Point(379, 19);
             this.pickListGrid.Name = "pickListGrid";

@@ -401,8 +401,6 @@ namespace OpenDental{
 			this.gridTasks.HasAddButton = false;
 			this.gridTasks.HasDropDowns = false;
 			this.gridTasks.HasMultilineHeaders = false;
-			this.gridTasks.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridTasks.HeaderHeight = 15;
 			this.gridTasks.HScrollVisible = false;
 			this.gridTasks.Location = new System.Drawing.Point(12, 12);
 			this.gridTasks.Name = "gridTasks";

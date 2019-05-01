@@ -487,8 +487,6 @@ namespace OpenDental {
             this.gridMain.HasAddButton = false;
             this.gridMain.HasDropDowns = false;
             this.gridMain.HasMultilineHeaders = true;
-            this.gridMain.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridMain.HeaderHeight = 15;
             this.gridMain.HScrollVisible = false;
             this.gridMain.Location = new System.Drawing.Point(6, 52);
             this.gridMain.Name = "gridMain";
@@ -656,8 +654,6 @@ namespace OpenDental {
             this.gridHidden.HasAddButton = false;
             this.gridHidden.HasDropDowns = false;
             this.gridHidden.HasMultilineHeaders = true;
-            this.gridHidden.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridHidden.HeaderHeight = 15;
             this.gridHidden.HScrollVisible = false;
             this.gridHidden.Location = new System.Drawing.Point(6, 52);
             this.gridHidden.Name = "gridHidden";
@@ -799,8 +795,6 @@ namespace OpenDental {
             this.gridOld.HasAddButton = false;
             this.gridOld.HasDropDowns = false;
             this.gridOld.HasMultilineHeaders = true;
-            this.gridOld.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridOld.HeaderHeight = 15;
             this.gridOld.HScrollVisible = false;
             this.gridOld.Location = new System.Drawing.Point(6, 52);
             this.gridOld.Name = "gridOld";

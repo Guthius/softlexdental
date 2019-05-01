@@ -77,7 +77,6 @@ namespace OpenDental{
 			this.gridMain.CausesValidation = false;
 			this.gridMain.HasAddButton = false;
 			this.gridMain.HasMultilineHeaders = false;
-			this.gridMain.HeaderHeight = 15;
 			this.gridMain.HScrollVisible = false;
 			this.gridMain.Location = new System.Drawing.Point(13, 39);
 			this.gridMain.Name = "gridMain";

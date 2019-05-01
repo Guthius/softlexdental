@@ -1,5 +1,7 @@
 using OpenDentBusiness;
 using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -223,6 +225,24 @@ namespace OpenDental
             Plugin.Trigger(this, "FormLogOn_Cancel");
 
             DialogResult = DialogResult.Cancel;
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+
+            e.Graphics.FillRectangle(
+                Brushes.White, 
+                new Rectangle(0, 0, ClientSize.Width, 80));
+
+            using (var brush = new LinearGradientBrush(
+                new Point(0, 0),
+                new Point(ClientSize.Width - 1, 6),
+                Color.FromArgb(40, 110, 240),
+                Color.FromArgb(0, 70, 140)))
+            {
+                e.Graphics.FillRectangle(brush, new Rectangle(0, 74, ClientSize.Width, 6));
+            }
         }
     }
 }

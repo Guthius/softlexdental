@@ -238,8 +238,6 @@
 			this.gridEmployees.HasAddButton = false;
 			this.gridEmployees.HasDropDowns = false;
 			this.gridEmployees.HasMultilineHeaders = false;
-			this.gridEmployees.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridEmployees.HeaderHeight = 15;
 			this.gridEmployees.HScrollVisible = false;
 			this.gridEmployees.Location = new System.Drawing.Point(1392, 201);
 			this.gridEmployees.Name = "gridEmployees";

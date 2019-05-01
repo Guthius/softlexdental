@@ -468,8 +468,6 @@ namespace OpenDental{
 			this.gridDun.HasAddButton = false;
 			this.gridDun.HasDropDowns = false;
 			this.gridDun.HasMultilineHeaders = false;
-			this.gridDun.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridDun.HeaderHeight = 15;
 			this.gridDun.HScrollVisible = false;
 			this.gridDun.Location = new System.Drawing.Point(331, 31);
 			this.gridDun.Name = "gridDun";

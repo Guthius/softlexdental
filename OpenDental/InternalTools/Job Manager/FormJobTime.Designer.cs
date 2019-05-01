@@ -78,8 +78,6 @@ namespace OpenDental{
 			this.gridJobs.HasAddButton = false;
 			this.gridJobs.HasDropDowns = false;
 			this.gridJobs.HasMultilineHeaders = false;
-			this.gridJobs.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridJobs.HeaderHeight = 15;
 			this.gridJobs.HScrollVisible = false;
 			this.gridJobs.Location = new System.Drawing.Point(0, 0);
 			this.gridJobs.Name = "gridJobs";

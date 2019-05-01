@@ -102,8 +102,6 @@ namespace OpenDental{
 			this.gridCourses.HasAddButton = false;
 			this.gridCourses.HasDropDowns = false;
 			this.gridCourses.HasMultilineHeaders = false;
-			this.gridCourses.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridCourses.HeaderHeight = 15;
 			this.gridCourses.HScrollVisible = false;
 			this.gridCourses.Location = new System.Drawing.Point(12, 68);
 			this.gridCourses.Name = "gridCourses";
@@ -123,8 +121,6 @@ namespace OpenDental{
 			this.gridInstructors.HasAddButton = false;
 			this.gridInstructors.HasDropDowns = false;
 			this.gridInstructors.HasMultilineHeaders = false;
-			this.gridInstructors.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridInstructors.HeaderHeight = 15;
 			this.gridInstructors.HScrollVisible = false;
 			this.gridInstructors.Location = new System.Drawing.Point(333, 68);
 			this.gridInstructors.Name = "gridInstructors";
@@ -143,8 +139,6 @@ namespace OpenDental{
 			this.gridStudents.HasAddButton = false;
 			this.gridStudents.HasDropDowns = false;
 			this.gridStudents.HasMultilineHeaders = false;
-			this.gridStudents.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridStudents.HeaderHeight = 15;
 			this.gridStudents.HScrollVisible = false;
 			this.gridStudents.Location = new System.Drawing.Point(654, 68);
 			this.gridStudents.Name = "gridStudents";

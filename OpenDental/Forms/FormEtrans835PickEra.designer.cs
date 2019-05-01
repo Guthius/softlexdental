@@ -62,8 +62,6 @@ namespace OpenDental{
 			this.gridEras.HasAddButton = false;
 			this.gridEras.HasDropDowns = false;
 			this.gridEras.HasMultilineHeaders = false;
-			this.gridEras.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridEras.HeaderHeight = 15;
 			this.gridEras.HScrollVisible = false;
 			this.gridEras.Location = new System.Drawing.Point(15, 30);
 			this.gridEras.Name = "gridEras";

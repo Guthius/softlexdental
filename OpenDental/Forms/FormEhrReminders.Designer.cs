@@ -61,8 +61,6 @@
 			this.gridMain.HasAddButton = false;
 			this.gridMain.HasDropDowns = false;
 			this.gridMain.HasMultilineHeaders = false;
-			this.gridMain.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridMain.HeaderHeight = 15;
 			this.gridMain.HScrollVisible = false;
 			this.gridMain.Location = new System.Drawing.Point(15, 42);
 			this.gridMain.Name = "gridMain";
@@ -112,8 +110,6 @@
 			this.gridProvided.HasAddButton = false;
 			this.gridProvided.HasDropDowns = false;
 			this.gridProvided.HasMultilineHeaders = false;
-			this.gridProvided.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridProvided.HeaderHeight = 15;
 			this.gridProvided.HScrollVisible = false;
 			this.gridProvided.Location = new System.Drawing.Point(18, 321);
 			this.gridProvided.Name = "gridProvided";

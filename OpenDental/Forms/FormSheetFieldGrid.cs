@@ -59,7 +59,7 @@ namespace OpenDental {
 					if(new[] {"StatementPayPlan","StatementInvoicePayment","TreatPlanBenefitsFamily","TreatPlanBenefitsIndividual"}.Contains(SheetFieldDefCur.FieldName)) {
 						SheetFieldDefCur.Height+=odGrid.TitleHeight;
 					}
-					SheetFieldDefCur.Height+=odGrid.HeaderHeight+(int)g.MeasureString("Any",odGrid.Font,100,StringFormat.GenericTypographic).Height+3;
+					SheetFieldDefCur.Height+= ODGrid.HeaderHeight+(int)g.MeasureString("Any",odGrid.Font,100,StringFormat.GenericTypographic).Height+3;
 				}
 				textHeight.Text=SheetFieldDefCur.Height.ToString();
 			}

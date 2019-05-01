@@ -80,8 +80,6 @@
 			this.gridProdInc.HasAddButton = false;
 			this.gridProdInc.HasDropDowns = false;
 			this.gridProdInc.HasMultilineHeaders = true;
-			this.gridProdInc.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridProdInc.HeaderHeight = 15;
 			this.gridProdInc.HScrollVisible = false;
 			this.gridProdInc.Location = new System.Drawing.Point(3, 35);
 			this.gridProdInc.Name = "gridProdInc";
@@ -99,8 +97,6 @@
 			this.gridDaily.HasAddButton = false;
 			this.gridDaily.HasDropDowns = false;
 			this.gridDaily.HasMultilineHeaders = true;
-			this.gridDaily.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridDaily.HeaderHeight = 15;
 			this.gridDaily.HScrollVisible = false;
 			this.gridDaily.Location = new System.Drawing.Point(3, 192);
 			this.gridDaily.Name = "gridDaily";
@@ -118,8 +114,6 @@
 			this.gridMonthly.HasAddButton = false;
 			this.gridMonthly.HasDropDowns = false;
 			this.gridMonthly.HasMultilineHeaders = true;
-			this.gridMonthly.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridMonthly.HeaderHeight = 15;
 			this.gridMonthly.HScrollVisible = false;
 			this.gridMonthly.Location = new System.Drawing.Point(3, 346);
 			this.gridMonthly.Name = "gridMonthly";
@@ -137,8 +131,6 @@
 			this.gridLists.HasAddButton = false;
 			this.gridLists.HasDropDowns = false;
 			this.gridLists.HasMultilineHeaders = true;
-			this.gridLists.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridLists.HeaderHeight = 15;
 			this.gridLists.HScrollVisible = false;
 			this.gridLists.Location = new System.Drawing.Point(267, 35);
 			this.gridLists.Name = "gridLists";
@@ -172,8 +164,6 @@
 			this.gridPublicHealth.HasAddButton = false;
 			this.gridPublicHealth.HasDropDowns = false;
 			this.gridPublicHealth.HasMultilineHeaders = true;
-			this.gridPublicHealth.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridPublicHealth.HeaderHeight = 15;
 			this.gridPublicHealth.HScrollVisible = false;
 			this.gridPublicHealth.Location = new System.Drawing.Point(267, 346);
 			this.gridPublicHealth.Name = "gridPublicHealth";

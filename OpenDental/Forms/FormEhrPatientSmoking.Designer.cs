@@ -225,8 +225,6 @@
 			this.gridInterventions.HasAddButton = false;
 			this.gridInterventions.HasDropDowns = false;
 			this.gridInterventions.HasMultilineHeaders = false;
-			this.gridInterventions.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridInterventions.HeaderHeight = 15;
 			this.gridInterventions.HScrollVisible = false;
 			this.gridInterventions.Location = new System.Drawing.Point(366, 24);
 			this.gridInterventions.MinimumSize = new System.Drawing.Size(559, 160);
@@ -373,8 +371,6 @@
 			this.gridAssessments.HasAddButton = false;
 			this.gridAssessments.HasDropDowns = false;
 			this.gridAssessments.HasMultilineHeaders = false;
-			this.gridAssessments.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridAssessments.HeaderHeight = 15;
 			this.gridAssessments.HScrollVisible = false;
 			this.gridAssessments.Location = new System.Drawing.Point(366, 24);
 			this.gridAssessments.MinimumSize = new System.Drawing.Size(559, 160);

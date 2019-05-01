@@ -204,8 +204,6 @@ namespace OpenDental {
 			this.gridClaimAdjustments.HasAddButton = false;
 			this.gridClaimAdjustments.HasDropDowns = false;
 			this.gridClaimAdjustments.HasMultilineHeaders = false;
-			this.gridClaimAdjustments.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridClaimAdjustments.HeaderHeight = 15;
 			this.gridClaimAdjustments.HScrollVisible = false;
 			this.gridClaimAdjustments.Location = new System.Drawing.Point(9, 12);
 			this.gridClaimAdjustments.Name = "gridClaimAdjustments";
@@ -225,8 +223,6 @@ namespace OpenDental {
 			this.gridProcedureBreakdown.HasAddButton = false;
 			this.gridProcedureBreakdown.HasDropDowns = false;
 			this.gridProcedureBreakdown.HasMultilineHeaders = false;
-			this.gridProcedureBreakdown.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridProcedureBreakdown.HeaderHeight = 15;
 			this.gridProcedureBreakdown.HScrollVisible = false;
 			this.gridProcedureBreakdown.Location = new System.Drawing.Point(9, 118);
 			this.gridProcedureBreakdown.Name = "gridProcedureBreakdown";
@@ -246,8 +242,6 @@ namespace OpenDental {
 			this.gridPayments.HasAddButton = false;
 			this.gridPayments.HasDropDowns = false;
 			this.gridPayments.HasMultilineHeaders = false;
-			this.gridPayments.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridPayments.HeaderHeight = 15;
 			this.gridPayments.HScrollVisible = false;
 			this.gridPayments.Location = new System.Drawing.Point(9, 345);
 			this.gridPayments.Name = "gridPayments";

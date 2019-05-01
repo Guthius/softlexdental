@@ -699,8 +699,6 @@
             this.gridAcctPat.HasAddButton = false;
             this.gridAcctPat.HasDropDowns = false;
             this.gridAcctPat.HasMultilineHeaders = false;
-            this.gridAcctPat.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridAcctPat.HeaderHeight = 15;
             this.gridAcctPat.HScrollVisible = false;
             this.gridAcctPat.Location = new System.Drawing.Point(6, 136);
             this.gridAcctPat.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
@@ -1268,8 +1266,6 @@
             this.patientInfoGrid.HasAddButton = false;
             this.patientInfoGrid.HasDropDowns = false;
             this.patientInfoGrid.HasMultilineHeaders = false;
-            this.patientInfoGrid.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.patientInfoGrid.HeaderHeight = 15;
             this.patientInfoGrid.HScrollVisible = false;
             this.patientInfoGrid.Location = new System.Drawing.Point(857, 530);
             this.patientInfoGrid.Name = "patientInfoGrid";
@@ -1335,8 +1331,6 @@
             this.gridRepeat.HasAddButton = false;
             this.gridRepeat.HasDropDowns = false;
             this.gridRepeat.HasMultilineHeaders = false;
-            this.gridRepeat.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridRepeat.HeaderHeight = 15;
             this.gridRepeat.HScrollVisible = false;
             this.gridRepeat.Location = new System.Drawing.Point(0, 0);
             this.gridRepeat.Name = "gridRepeat";
@@ -1356,8 +1350,6 @@
             this.gridPayPlan.HasAddButton = false;
             this.gridPayPlan.HasDropDowns = false;
             this.gridPayPlan.HasMultilineHeaders = false;
-            this.gridPayPlan.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridPayPlan.HeaderHeight = 15;
             this.gridPayPlan.HScrollVisible = false;
             this.gridPayPlan.Location = new System.Drawing.Point(0, 0);
             this.gridPayPlan.Name = "gridPayPlan";
@@ -1428,8 +1420,6 @@
             this.gridAccount.HasAddButton = false;
             this.gridAccount.HasDropDowns = false;
             this.gridAccount.HasMultilineHeaders = false;
-            this.gridAccount.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridAccount.HeaderHeight = 15;
             this.gridAccount.HScrollVisible = true;
             this.gridAccount.Location = new System.Drawing.Point(0, 0);
             this.gridAccount.Margin = new System.Windows.Forms.Padding(0);
@@ -1481,8 +1471,6 @@
             this.gridOrtho.HasAddButton = false;
             this.gridOrtho.HasDropDowns = false;
             this.gridOrtho.HasMultilineHeaders = false;
-            this.gridOrtho.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridOrtho.HeaderHeight = 0;
             this.gridOrtho.HScrollVisible = false;
             this.gridOrtho.Location = new System.Drawing.Point(0, 0);
             this.gridOrtho.Margin = new System.Windows.Forms.Padding(0);
@@ -1797,8 +1785,6 @@
             this.gridProg.HasAddButton = false;
             this.gridProg.HasDropDowns = false;
             this.gridProg.HasMultilineHeaders = false;
-            this.gridProg.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridProg.HeaderHeight = 15;
             this.gridProg.HScrollVisible = true;
             this.gridProg.Location = new System.Drawing.Point(3, 0);
             this.gridProg.Name = "gridProg";
@@ -1819,8 +1805,6 @@
             this.gridComm.HasAddButton = false;
             this.gridComm.HasDropDowns = false;
             this.gridComm.HasMultilineHeaders = false;
-            this.gridComm.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridComm.HeaderHeight = 15;
             this.gridComm.HScrollVisible = false;
             this.gridComm.Location = new System.Drawing.Point(0, 0);
             this.gridComm.Name = "gridComm";

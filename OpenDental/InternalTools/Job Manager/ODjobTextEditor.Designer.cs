@@ -511,8 +511,6 @@
 			this.gridRequirements.HasAddButton = true;
 			this.gridRequirements.HasDropDowns = false;
 			this.gridRequirements.HasMultilineHeaders = false;
-			this.gridRequirements.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridRequirements.HeaderHeight = 15;
 			this.gridRequirements.HScrollVisible = false;
 			this.gridRequirements.Location = new System.Drawing.Point(0, 0);
 			this.gridRequirements.Name = "gridRequirements";

@@ -126,8 +126,6 @@
             this.formatsGrid.HasAddButton = false;
             this.formatsGrid.HasDropDowns = false;
             this.formatsGrid.HasMultilineHeaders = false;
-            this.formatsGrid.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.formatsGrid.HeaderHeight = 15;
             this.formatsGrid.HScrollVisible = false;
             this.formatsGrid.Location = new System.Drawing.Point(6, 58);
             this.formatsGrid.Name = "formatsGrid";

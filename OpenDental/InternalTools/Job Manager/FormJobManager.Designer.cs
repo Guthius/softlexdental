@@ -234,8 +234,6 @@
 			this.gridPatternReview.HasAddButton = false;
 			this.gridPatternReview.HasDropDowns = false;
 			this.gridPatternReview.HasMultilineHeaders = true;
-			this.gridPatternReview.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridPatternReview.HeaderHeight = 15;
 			this.gridPatternReview.HScrollVisible = false;
 			this.gridPatternReview.Location = new System.Drawing.Point(3, 3);
 			this.gridPatternReview.Name = "gridPatternReview";
@@ -281,8 +279,6 @@
 			this.gridAction.HasAddButton = false;
 			this.gridAction.HasDropDowns = false;
 			this.gridAction.HasMultilineHeaders = true;
-			this.gridAction.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridAction.HeaderHeight = 15;
 			this.gridAction.HScrollVisible = false;
 			this.gridAction.Location = new System.Drawing.Point(3, 31);
 			this.gridAction.Name = "gridAction";
@@ -330,8 +326,6 @@
 			this.gridSpecial.HasAddButton = false;
 			this.gridSpecial.HasDropDowns = false;
 			this.gridSpecial.HasMultilineHeaders = true;
-			this.gridSpecial.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridSpecial.HeaderHeight = 15;
 			this.gridSpecial.HScrollVisible = false;
 			this.gridSpecial.Location = new System.Drawing.Point(3, 31);
 			this.gridSpecial.Name = "gridSpecial";
@@ -385,8 +379,6 @@
 			this.gridDocumentation.HasAddButton = false;
 			this.gridDocumentation.HasDropDowns = false;
 			this.gridDocumentation.HasMultilineHeaders = true;
-			this.gridDocumentation.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridDocumentation.HeaderHeight = 15;
 			this.gridDocumentation.HScrollVisible = false;
 			this.gridDocumentation.Location = new System.Drawing.Point(3, 26);
 			this.gridDocumentation.Name = "gridDocumentation";
@@ -485,8 +477,6 @@
 			this.gridTesting.HasAddButton = false;
 			this.gridTesting.HasDropDowns = false;
 			this.gridTesting.HasMultilineHeaders = true;
-			this.gridTesting.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridTesting.HeaderHeight = 15;
 			this.gridTesting.HScrollVisible = false;
 			this.gridTesting.Location = new System.Drawing.Point(3, 62);
 			this.gridTesting.Name = "gridTesting";
@@ -607,8 +597,6 @@
 			this.gridQueries.HasAddButton = false;
 			this.gridQueries.HasDropDowns = false;
 			this.gridQueries.HasMultilineHeaders = true;
-			this.gridQueries.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridQueries.HeaderHeight = 15;
 			this.gridQueries.HScrollVisible = false;
 			this.gridQueries.Location = new System.Drawing.Point(2, 86);
 			this.gridQueries.Name = "gridQueries";
@@ -639,8 +627,6 @@
 			this.gridNotify.HasAddButton = false;
 			this.gridNotify.HasDropDowns = false;
 			this.gridNotify.HasMultilineHeaders = true;
-			this.gridNotify.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridNotify.HeaderHeight = 15;
 			this.gridNotify.HScrollVisible = false;
 			this.gridNotify.Location = new System.Drawing.Point(3, 4);
 			this.gridNotify.Name = "gridNotify";
@@ -686,8 +672,6 @@
 			this.gridSubscribedJobs.HasAddButton = false;
 			this.gridSubscribedJobs.HasDropDowns = false;
 			this.gridSubscribedJobs.HasMultilineHeaders = true;
-			this.gridSubscribedJobs.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridSubscribedJobs.HeaderHeight = 15;
 			this.gridSubscribedJobs.HScrollVisible = false;
 			this.gridSubscribedJobs.Location = new System.Drawing.Point(2, 30);
 			this.gridSubscribedJobs.Name = "gridSubscribedJobs";
@@ -720,8 +704,6 @@
 			this.gridAvailableJobs.HasAddButton = false;
 			this.gridAvailableJobs.HasDropDowns = false;
 			this.gridAvailableJobs.HasMultilineHeaders = true;
-			this.gridAvailableJobs.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridAvailableJobs.HeaderHeight = 15;
 			this.gridAvailableJobs.HScrollVisible = false;
 			this.gridAvailableJobs.Location = new System.Drawing.Point(0, 0);
 			this.gridAvailableJobs.Name = "gridAvailableJobs";
@@ -753,8 +735,6 @@
 			this.gridAvailableJobsExpert.HasAddButton = false;
 			this.gridAvailableJobsExpert.HasDropDowns = false;
 			this.gridAvailableJobsExpert.HasMultilineHeaders = true;
-			this.gridAvailableJobsExpert.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridAvailableJobsExpert.HeaderHeight = 15;
 			this.gridAvailableJobsExpert.HScrollVisible = false;
 			this.gridAvailableJobsExpert.Location = new System.Drawing.Point(0, 0);
 			this.gridAvailableJobsExpert.Name = "gridAvailableJobsExpert";
@@ -786,8 +766,6 @@
 			this.gridJobsOnHold.HasAddButton = false;
 			this.gridJobsOnHold.HasDropDowns = false;
 			this.gridJobsOnHold.HasMultilineHeaders = true;
-			this.gridJobsOnHold.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridJobsOnHold.HeaderHeight = 15;
 			this.gridJobsOnHold.HScrollVisible = false;
 			this.gridJobsOnHold.Location = new System.Drawing.Point(0, 0);
 			this.gridJobsOnHold.Name = "gridJobsOnHold";
@@ -913,8 +891,6 @@
 			this.gridSearch.HasAddButton = false;
 			this.gridSearch.HasDropDowns = false;
 			this.gridSearch.HasMultilineHeaders = true;
-			this.gridSearch.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridSearch.HeaderHeight = 15;
 			this.gridSearch.HScrollVisible = false;
 			this.gridSearch.Location = new System.Drawing.Point(3, 119);
 			this.gridSearch.Name = "gridSearch";

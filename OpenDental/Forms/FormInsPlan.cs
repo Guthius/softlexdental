@@ -2262,8 +2262,6 @@ namespace OpenDental{
 			this.gridBenefits.HasAddButton = false;
 			this.gridBenefits.HasDropDowns = false;
 			this.gridBenefits.HasMultilineHeaders = false;
-			this.gridBenefits.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridBenefits.HeaderHeight = 15;
 			this.gridBenefits.HScrollVisible = false;
 			this.gridBenefits.Location = new System.Drawing.Point(468, 334);
 			this.gridBenefits.Name = "gridBenefits";

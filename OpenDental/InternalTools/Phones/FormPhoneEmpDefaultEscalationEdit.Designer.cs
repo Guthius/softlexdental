@@ -49,8 +49,6 @@
 			this.gridEscalation.HasAddButton = false;
 			this.gridEscalation.HasDropDowns = false;
 			this.gridEscalation.HasMultilineHeaders = false;
-			this.gridEscalation.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridEscalation.HeaderHeight = 15;
 			this.gridEscalation.HScrollVisible = false;
 			this.gridEscalation.Location = new System.Drawing.Point(247, 37);
 			this.gridEscalation.Name = "gridEscalation";
@@ -68,8 +66,6 @@
 			this.gridEmployees.HasAddButton = false;
 			this.gridEmployees.HasDropDowns = false;
 			this.gridEmployees.HasMultilineHeaders = false;
-			this.gridEmployees.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridEmployees.HeaderHeight = 15;
 			this.gridEmployees.HScrollVisible = false;
 			this.gridEmployees.Location = new System.Drawing.Point(12, 37);
 			this.gridEmployees.Name = "gridEmployees";

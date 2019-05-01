@@ -41,8 +41,6 @@ namespace OpenDental {
             this.wikiPagesGrid.HasAddButton = false;
             this.wikiPagesGrid.HasDropDowns = false;
             this.wikiPagesGrid.HasMultilineHeaders = false;
-            this.wikiPagesGrid.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.wikiPagesGrid.HeaderHeight = 15;
             this.wikiPagesGrid.HScrollVisible = false;
             this.wikiPagesGrid.Location = new System.Drawing.Point(13, 19);
             this.wikiPagesGrid.Name = "wikiPagesGrid";

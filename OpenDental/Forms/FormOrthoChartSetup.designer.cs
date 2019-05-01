@@ -42,8 +42,6 @@ namespace OpenDental{
 			this.gridTabNames.HasAddButton = false;
 			this.gridTabNames.HasDropDowns = false;
 			this.gridTabNames.HasMultilineHeaders = false;
-			this.gridTabNames.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridTabNames.HeaderHeight = 15;
 			this.gridTabNames.HScrollVisible = false;
 			this.gridTabNames.Location = new System.Drawing.Point(12, 29);
 			this.gridTabNames.Name = "gridTabNames";

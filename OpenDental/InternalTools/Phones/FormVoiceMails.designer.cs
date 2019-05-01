@@ -131,8 +131,6 @@ namespace OpenDental{
 			this.gridVoiceMails.HasAddButton = false;
 			this.gridVoiceMails.HasDropDowns = false;
 			this.gridVoiceMails.HasMultilineHeaders = false;
-			this.gridVoiceMails.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridVoiceMails.HeaderHeight = 15;
 			this.gridVoiceMails.HScrollVisible = true;
 			this.gridVoiceMails.Location = new System.Drawing.Point(12, 12);
 			this.gridVoiceMails.Name = "gridVoiceMails";

@@ -372,8 +372,6 @@ namespace OpenDental{
 			this.gridGraph.HasAddButton = false;
 			this.gridGraph.HasDropDowns = false;
 			this.gridGraph.HasMultilineHeaders = false;
-			this.gridGraph.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridGraph.HeaderHeight = 15;
 			this.gridGraph.HScrollVisible = false;
 			this.gridGraph.Location = new System.Drawing.Point(745, 45);
 			this.gridGraph.Name = "gridGraph";

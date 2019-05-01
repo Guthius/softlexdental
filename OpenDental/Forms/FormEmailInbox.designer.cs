@@ -128,8 +128,6 @@ namespace OpenDental{
 			this.gridInbox.HasAddButton = false;
 			this.gridInbox.HasDropDowns = false;
 			this.gridInbox.HasMultilineHeaders = false;
-			this.gridInbox.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridInbox.HeaderHeight = 15;
 			this.gridInbox.HScrollVisible = false;
 			this.gridInbox.Location = new System.Drawing.Point(0, 0);
 			this.gridInbox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
@@ -569,8 +567,6 @@ namespace OpenDental{
 			this.gridSent.HasAddButton = false;
 			this.gridSent.HasDropDowns = false;
 			this.gridSent.HasMultilineHeaders = false;
-			this.gridSent.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridSent.HeaderHeight = 15;
 			this.gridSent.HScrollVisible = false;
 			this.gridSent.Location = new System.Drawing.Point(0, 0);
 			this.gridSent.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);

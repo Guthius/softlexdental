@@ -101,8 +101,6 @@ namespace OpenDental{
 			this.gridZipCode.HasAddButton = false;
 			this.gridZipCode.HasDropDowns = false;
 			this.gridZipCode.HasMultilineHeaders = false;
-			this.gridZipCode.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridZipCode.HeaderHeight = 15;
 			this.gridZipCode.HScrollVisible = false;
 			this.gridZipCode.Location = new System.Drawing.Point(12, 17);
 			this.gridZipCode.Name = "gridZipCode";

@@ -603,8 +603,6 @@ namespace OpenDental {
 			this.gridAppts.HasAddButton = false;
 			this.gridAppts.HasDropDowns = false;
 			this.gridAppts.HasMultilineHeaders = false;
-			this.gridAppts.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridAppts.HeaderHeight = 15;
 			this.gridAppts.HScrollVisible = true;
 			this.gridAppts.Location = new System.Drawing.Point(1, 33);
 			this.gridAppts.Name = "gridAppts";
@@ -645,8 +643,6 @@ namespace OpenDental {
 			this.gridRecalls.HasAddButton = false;
 			this.gridRecalls.HasDropDowns = false;
 			this.gridRecalls.HasMultilineHeaders = false;
-			this.gridRecalls.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridRecalls.HeaderHeight = 15;
 			this.gridRecalls.HScrollVisible = true;
 			this.gridRecalls.Location = new System.Drawing.Point(1, 55);
 			this.gridRecalls.Name = "gridRecalls";
@@ -728,8 +724,6 @@ namespace OpenDental {
 			this.gridWebSched.HasAddButton = false;
 			this.gridWebSched.HasDropDowns = false;
 			this.gridWebSched.HasMultilineHeaders = false;
-			this.gridWebSched.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridWebSched.HeaderHeight = 15;
 			this.gridWebSched.HScrollVisible = false;
 			this.gridWebSched.Location = new System.Drawing.Point(5, 3);
 			this.gridWebSched.Name = "gridWebSched";

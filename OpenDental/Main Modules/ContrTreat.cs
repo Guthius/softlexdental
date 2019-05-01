@@ -219,8 +219,6 @@ namespace OpenDental{
 			this.gridMain.HasAddButton = false;
 			this.gridMain.HasDropDowns = false;
 			this.gridMain.HasMultilineHeaders = false;
-			this.gridMain.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridMain.HeaderHeight = 15;
 			this.gridMain.HScrollVisible = true;
 			this.gridMain.Location = new System.Drawing.Point(0, 182);
 			this.gridMain.Name = "gridMain";
@@ -239,8 +237,6 @@ namespace OpenDental{
 			this.gridPrint.HasAddButton = false;
 			this.gridPrint.HasDropDowns = false;
 			this.gridPrint.HasMultilineHeaders = false;
-			this.gridPrint.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridPrint.HeaderHeight = 15;
 			this.gridPrint.HScrollVisible = false;
 			this.gridPrint.Location = new System.Drawing.Point(0, 0);
 			this.gridPrint.Name = "gridPrint";
@@ -256,8 +252,6 @@ namespace OpenDental{
 			this.gridPreAuth.HasAddButton = false;
 			this.gridPreAuth.HasDropDowns = false;
 			this.gridPreAuth.HasMultilineHeaders = false;
-			this.gridPreAuth.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridPreAuth.HeaderHeight = 15;
 			this.gridPreAuth.HScrollVisible = false;
 			this.gridPreAuth.Location = new System.Drawing.Point(684, 29);
 			this.gridPreAuth.Name = "gridPreAuth";
@@ -275,8 +269,6 @@ namespace OpenDental{
 			this.gridPlans.HasAddButton = false;
 			this.gridPlans.HasDropDowns = false;
 			this.gridPlans.HasMultilineHeaders = false;
-			this.gridPlans.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridPlans.HeaderHeight = 15;
 			this.gridPlans.HScrollVisible = false;
 			this.gridPlans.Location = new System.Drawing.Point(0, 29);
 			this.gridPlans.Name = "gridPlans";

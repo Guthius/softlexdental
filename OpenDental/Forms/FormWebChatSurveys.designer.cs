@@ -179,8 +179,6 @@ namespace OpenDental{
 			this.gridWebChatSurveys.HasAddButton = false;
 			this.gridWebChatSurveys.HasDropDowns = false;
 			this.gridWebChatSurveys.HasMultilineHeaders = false;
-			this.gridWebChatSurveys.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridWebChatSurveys.HeaderHeight = 15;
 			this.gridWebChatSurveys.HScrollVisible = false;
 			this.gridWebChatSurveys.Location = new System.Drawing.Point(12, 116);
 			this.gridWebChatSurveys.Name = "gridWebChatSurveys";

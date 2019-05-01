@@ -116,8 +116,6 @@ namespace OpenDental {
 			this.gridInsFilingCodeSubtypes.HasAddButton=false;
 			this.gridInsFilingCodeSubtypes.HasDropDowns=false;
 			this.gridInsFilingCodeSubtypes.HasMultilineHeaders=false;
-			this.gridInsFilingCodeSubtypes.HeaderFont=new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridInsFilingCodeSubtypes.HeaderHeight=15;
 			this.gridInsFilingCodeSubtypes.HScrollVisible=false;
 			this.gridInsFilingCodeSubtypes.Location=new System.Drawing.Point(160, 97);
 			this.gridInsFilingCodeSubtypes.Name="gridInsFilingCodeSubtypes";

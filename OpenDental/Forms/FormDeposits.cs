@@ -93,7 +93,6 @@ namespace OpenDental{
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.grid.HasAddButton = false;
 			this.grid.HasMultilineHeaders = false;
-			this.grid.HeaderHeight = 15;
 			this.grid.HScrollVisible = false;
 			this.grid.Location = new System.Drawing.Point(18, 34);
 			this.grid.Name = "grid";

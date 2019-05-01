@@ -435,8 +435,6 @@
 			this.gridMain.HasAddButton = false;
 			this.gridMain.HasDropDowns = false;
 			this.gridMain.HasMultilineHeaders = false;
-			this.gridMain.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridMain.HeaderHeight = 15;
 			this.gridMain.HScrollVisible = true;
 			this.gridMain.Location = new System.Drawing.Point(3, 93);
 			this.gridMain.Name = "gridMain";
@@ -732,8 +730,6 @@
 			this.gridRecentlyContacted.HasAddButton = false;
 			this.gridRecentlyContacted.HasDropDowns = false;
 			this.gridRecentlyContacted.HasMultilineHeaders = false;
-			this.gridRecentlyContacted.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridRecentlyContacted.HeaderHeight = 15;
 			this.gridRecentlyContacted.HScrollVisible = true;
 			this.gridRecentlyContacted.Location = new System.Drawing.Point(3, 86);
 			this.gridRecentlyContacted.Name = "gridRecentlyContacted";
@@ -1040,8 +1036,6 @@
 			this.gridReactivations.HasAddButton = false;
 			this.gridReactivations.HasDropDowns = false;
 			this.gridReactivations.HasMultilineHeaders = false;
-			this.gridReactivations.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridReactivations.HeaderHeight = 15;
 			this.gridReactivations.HScrollVisible = true;
 			this.gridReactivations.Location = new System.Drawing.Point(3, 93);
 			this.gridReactivations.Name = "gridReactivations";

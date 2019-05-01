@@ -68,8 +68,6 @@
 			this.gridEHRMeasureEvents.HasAddButton = false;
 			this.gridEHRMeasureEvents.HasDropDowns = false;
 			this.gridEHRMeasureEvents.HasMultilineHeaders = false;
-			this.gridEHRMeasureEvents.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridEHRMeasureEvents.HeaderHeight = 15;
 			this.gridEHRMeasureEvents.HScrollVisible = false;
 			this.gridEHRMeasureEvents.Location = new System.Drawing.Point(15, 166);
 			this.gridEHRMeasureEvents.Name = "gridEHRMeasureEvents";

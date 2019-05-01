@@ -555,8 +555,6 @@ namespace OpenDental{
 			this.gridListenerServiceStatusHistory.HasAddButton = false;
 			this.gridListenerServiceStatusHistory.HasDropDowns = false;
 			this.gridListenerServiceStatusHistory.HasMultilineHeaders = false;
-			this.gridListenerServiceStatusHistory.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridListenerServiceStatusHistory.HeaderHeight = 15;
 			this.gridListenerServiceStatusHistory.HScrollVisible = false;
 			this.gridListenerServiceStatusHistory.Location = new System.Drawing.Point(6, 141);
 			this.gridListenerServiceStatusHistory.Name = "gridListenerServiceStatusHistory";
@@ -1220,8 +1218,6 @@ namespace OpenDental{
 			this.gridPatPortalInviteRules.HasAddButton = false;
 			this.gridPatPortalInviteRules.HasDropDowns = false;
 			this.gridPatPortalInviteRules.HasMultilineHeaders = true;
-			this.gridPatPortalInviteRules.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridPatPortalInviteRules.HeaderHeight = 15;
 			this.gridPatPortalInviteRules.HScrollVisible = false;
 			this.gridPatPortalInviteRules.Location = new System.Drawing.Point(206, 12);
 			this.gridPatPortalInviteRules.Name = "gridPatPortalInviteRules";
@@ -1728,8 +1724,6 @@ namespace OpenDental{
 			this.gridWebSchedTimeSlots.HasAddButton = false;
 			this.gridWebSchedTimeSlots.HasDropDowns = false;
 			this.gridWebSchedTimeSlots.HasMultilineHeaders = false;
-			this.gridWebSchedTimeSlots.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridWebSchedTimeSlots.HeaderHeight = 15;
 			this.gridWebSchedTimeSlots.HScrollVisible = false;
 			this.gridWebSchedTimeSlots.Location = new System.Drawing.Point(18, 19);
 			this.gridWebSchedTimeSlots.Name = "gridWebSchedTimeSlots";
@@ -1798,8 +1792,6 @@ namespace OpenDental{
 			this.gridWebSchedOperatories.HasAddButton = false;
 			this.gridWebSchedOperatories.HasDropDowns = false;
 			this.gridWebSchedOperatories.HasMultilineHeaders = false;
-			this.gridWebSchedOperatories.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridWebSchedOperatories.HeaderHeight = 15;
 			this.gridWebSchedOperatories.HScrollVisible = false;
 			this.gridWebSchedOperatories.Location = new System.Drawing.Point(114, 18);
 			this.gridWebSchedOperatories.Name = "gridWebSchedOperatories";
@@ -1869,8 +1861,6 @@ namespace OpenDental{
 			this.gridWebSchedRecallTypes.HasAddButton = false;
 			this.gridWebSchedRecallTypes.HasDropDowns = false;
 			this.gridWebSchedRecallTypes.HasMultilineHeaders = false;
-			this.gridWebSchedRecallTypes.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridWebSchedRecallTypes.HeaderHeight = 15;
 			this.gridWebSchedRecallTypes.HScrollVisible = false;
 			this.gridWebSchedRecallTypes.Location = new System.Drawing.Point(669, 18);
 			this.gridWebSchedRecallTypes.Name = "gridWebSchedRecallTypes";
@@ -2078,8 +2068,6 @@ namespace OpenDental{
 			this.gridWebSchedNewPatApptOps.HasAddButton = false;
 			this.gridWebSchedNewPatApptOps.HasDropDowns = false;
 			this.gridWebSchedNewPatApptOps.HasMultilineHeaders = false;
-			this.gridWebSchedNewPatApptOps.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridWebSchedNewPatApptOps.HeaderHeight = 15;
 			this.gridWebSchedNewPatApptOps.HScrollVisible = false;
 			this.gridWebSchedNewPatApptOps.Location = new System.Drawing.Point(390, 78);
 			this.gridWebSchedNewPatApptOps.Name = "gridWebSchedNewPatApptOps";
@@ -2193,8 +2181,6 @@ namespace OpenDental{
 			this.gridWebSchedNewPatApptTimeSlots.HasAddButton = false;
 			this.gridWebSchedNewPatApptTimeSlots.HasDropDowns = false;
 			this.gridWebSchedNewPatApptTimeSlots.HasMultilineHeaders = false;
-			this.gridWebSchedNewPatApptTimeSlots.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridWebSchedNewPatApptTimeSlots.HeaderHeight = 15;
 			this.gridWebSchedNewPatApptTimeSlots.HScrollVisible = false;
 			this.gridWebSchedNewPatApptTimeSlots.Location = new System.Drawing.Point(15, 20);
 			this.gridWebSchedNewPatApptTimeSlots.Name = "gridWebSchedNewPatApptTimeSlots";
@@ -2223,8 +2209,6 @@ namespace OpenDental{
 			this.gridWSNPAReasons.HasAddButton = false;
 			this.gridWSNPAReasons.HasDropDowns = false;
 			this.gridWSNPAReasons.HasMultilineHeaders = false;
-			this.gridWSNPAReasons.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridWSNPAReasons.HeaderHeight = 15;
 			this.gridWSNPAReasons.HScrollVisible = false;
 			this.gridWSNPAReasons.Location = new System.Drawing.Point(61, 78);
 			this.gridWSNPAReasons.Name = "gridWSNPAReasons";
@@ -2863,8 +2847,6 @@ namespace OpenDental{
 			this.gridSmsSummary.HasAddButton = false;
 			this.gridSmsSummary.HasDropDowns = false;
 			this.gridSmsSummary.HasMultilineHeaders = true;
-			this.gridSmsSummary.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridSmsSummary.HeaderHeight = 15;
 			this.gridSmsSummary.HScrollVisible = false;
 			this.gridSmsSummary.Location = new System.Drawing.Point(0, 6);
 			this.gridSmsSummary.Name = "gridSmsSummary";
@@ -2953,8 +2935,6 @@ namespace OpenDental{
 			this.gridConfStatuses.HasAddButton = false;
 			this.gridConfStatuses.HasDropDowns = false;
 			this.gridConfStatuses.HasMultilineHeaders = true;
-			this.gridConfStatuses.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridConfStatuses.HeaderHeight = 15;
 			this.gridConfStatuses.HScrollVisible = false;
 			this.gridConfStatuses.Location = new System.Drawing.Point(18, 301);
 			this.gridConfStatuses.Name = "gridConfStatuses";
@@ -3231,8 +3211,6 @@ namespace OpenDental{
 			this.gridRemindersMain.HasAddButton = false;
 			this.gridRemindersMain.HasDropDowns = false;
 			this.gridRemindersMain.HasMultilineHeaders = true;
-			this.gridRemindersMain.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridRemindersMain.HeaderHeight = 15;
 			this.gridRemindersMain.HScrollVisible = false;
 			this.gridRemindersMain.Location = new System.Drawing.Point(296, 35);
 			this.gridRemindersMain.Name = "gridRemindersMain";

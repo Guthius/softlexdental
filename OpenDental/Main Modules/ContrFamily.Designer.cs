@@ -76,8 +76,6 @@
             this.gridSuperFam.HasAddButton = false;
             this.gridSuperFam.HasDropDowns = false;
             this.gridSuperFam.HasMultilineHeaders = false;
-            this.gridSuperFam.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridSuperFam.HeaderHeight = 15;
             this.gridSuperFam.HScrollVisible = false;
             this.gridSuperFam.Location = new System.Drawing.Point(0, 0);
             this.gridSuperFam.Name = "gridSuperFam";
@@ -95,8 +93,6 @@
             this.gridRecall.HasAddButton = false;
             this.gridRecall.HasDropDowns = false;
             this.gridRecall.HasMultilineHeaders = false;
-            this.gridRecall.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridRecall.HeaderHeight = 15;
             this.gridRecall.HScrollVisible = true;
             this.gridRecall.Location = new System.Drawing.Point(595, 36);
             this.gridRecall.Name = "gridRecall";
@@ -115,8 +111,6 @@
             this.gridFamily.HasAddButton = false;
             this.gridFamily.HasDropDowns = false;
             this.gridFamily.HasMultilineHeaders = false;
-            this.gridFamily.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridFamily.HeaderHeight = 15;
             this.gridFamily.HScrollVisible = false;
             this.gridFamily.Location = new System.Drawing.Point(109, 36);
             this.gridFamily.Name = "gridFamily";
@@ -137,8 +131,6 @@
             this.gridPat.HasAddButton = false;
             this.gridPat.HasDropDowns = false;
             this.gridPat.HasMultilineHeaders = false;
-            this.gridPat.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridPat.HeaderHeight = 15;
             this.gridPat.HScrollVisible = false;
             this.gridPat.Location = new System.Drawing.Point(3, 142);
             this.gridPat.Name = "gridPat";
@@ -159,8 +151,6 @@
             this.gridIns.HasAddButton = false;
             this.gridIns.HasDropDowns = false;
             this.gridIns.HasMultilineHeaders = false;
-            this.gridIns.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridIns.HeaderHeight = 15;
             this.gridIns.HScrollVisible = true;
             this.gridIns.Location = new System.Drawing.Point(259, 142);
             this.gridIns.Name = "gridIns";
@@ -197,8 +187,6 @@
             this.gridPatientClones.HasAddButton = false;
             this.gridPatientClones.HasDropDowns = false;
             this.gridPatientClones.HasMultilineHeaders = false;
-            this.gridPatientClones.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridPatientClones.HeaderHeight = 15;
             this.gridPatientClones.HScrollVisible = false;
             this.gridPatientClones.Location = new System.Drawing.Point(0, 0);
             this.gridPatientClones.Name = "gridPatientClones";

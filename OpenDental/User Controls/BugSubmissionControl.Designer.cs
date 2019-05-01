@@ -453,8 +453,6 @@
 			this.gridCustomerSubs.HasDropDowns = false;
 			this.gridCustomerSubs.HasLinkDetect = false;
 			this.gridCustomerSubs.HasMultilineHeaders = false;
-			this.gridCustomerSubs.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridCustomerSubs.HeaderHeight = 0;
 			this.gridCustomerSubs.HScrollVisible = false;
 			this.gridCustomerSubs.Location = new System.Drawing.Point(420, 411);
 			this.gridCustomerSubs.Name = "gridCustomerSubs";
@@ -473,8 +471,6 @@
 			this.gridOfficeInfo.HasAddButton = false;
 			this.gridOfficeInfo.HasDropDowns = false;
 			this.gridOfficeInfo.HasMultilineHeaders = false;
-			this.gridOfficeInfo.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridOfficeInfo.HeaderHeight = 15;
 			this.gridOfficeInfo.HScrollVisible = false;
 			this.gridOfficeInfo.Location = new System.Drawing.Point(420, 3);
 			this.gridOfficeInfo.Name = "gridOfficeInfo";

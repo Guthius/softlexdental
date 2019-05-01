@@ -121,8 +121,6 @@
 			this.gridFiles.HasAddButton = true;
 			this.gridFiles.HasDropDowns = false;
 			this.gridFiles.HasMultilineHeaders = false;
-			this.gridFiles.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridFiles.HeaderHeight = 15;
 			this.gridFiles.HScrollVisible = false;
 			this.gridFiles.Location = new System.Drawing.Point(3, 322);
 			this.gridFiles.Name = "gridFiles";
@@ -142,8 +140,6 @@
 			this.gridAppointments.HasAddButton = true;
 			this.gridAppointments.HasDropDowns = false;
 			this.gridAppointments.HasMultilineHeaders = false;
-			this.gridAppointments.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridAppointments.HeaderHeight = 15;
 			this.gridAppointments.HScrollVisible = false;
 			this.gridAppointments.Location = new System.Drawing.Point(3, 162);
 			this.gridAppointments.Name = "gridAppointments";
@@ -163,8 +159,6 @@
 			this.gridTasks.HasAddButton = true;
 			this.gridTasks.HasDropDowns = false;
 			this.gridTasks.HasMultilineHeaders = false;
-			this.gridTasks.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridTasks.HeaderHeight = 15;
 			this.gridTasks.HScrollVisible = false;
 			this.gridTasks.Location = new System.Drawing.Point(3, 3);
 			this.gridTasks.Name = "gridTasks";
@@ -273,8 +267,6 @@
 			this.gridRoles.HasAddButton = false;
 			this.gridRoles.HasDropDowns = false;
 			this.gridRoles.HasMultilineHeaders = false;
-			this.gridRoles.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridRoles.HeaderHeight = 15;
 			this.gridRoles.HScrollVisible = false;
 			this.gridRoles.Location = new System.Drawing.Point(5, 0);
 			this.gridRoles.Name = "gridRoles";
@@ -796,8 +788,6 @@
 			this.gridNotes.HasAddButton = true;
 			this.gridNotes.HasDropDowns = false;
 			this.gridNotes.HasMultilineHeaders = false;
-			this.gridNotes.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridNotes.HeaderHeight = 15;
 			this.gridNotes.HScrollVisible = false;
 			this.gridNotes.Location = new System.Drawing.Point(3, 3);
 			this.gridNotes.Name = "gridNotes";
@@ -827,8 +817,6 @@
 			this.gridReview.HasAddButton = true;
 			this.gridReview.HasDropDowns = false;
 			this.gridReview.HasMultilineHeaders = false;
-			this.gridReview.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridReview.HeaderHeight = 15;
 			this.gridReview.HScrollVisible = true;
 			this.gridReview.Location = new System.Drawing.Point(3, 3);
 			this.gridReview.Name = "gridReview";
@@ -870,8 +858,6 @@
 			this.gridHistory.HasAddButton = false;
 			this.gridHistory.HasDropDowns = false;
 			this.gridHistory.HasMultilineHeaders = false;
-			this.gridHistory.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridHistory.HeaderHeight = 15;
 			this.gridHistory.HScrollVisible = true;
 			this.gridHistory.Location = new System.Drawing.Point(0, 0);
 			this.gridHistory.Name = "gridHistory";

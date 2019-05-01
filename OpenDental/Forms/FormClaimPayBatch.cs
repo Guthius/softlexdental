@@ -433,8 +433,6 @@ namespace OpenDental{
 			this.gridOut.HasAddButton = false;
 			this.gridOut.HasDropDowns = false;
 			this.gridOut.HasMultilineHeaders = false;
-			this.gridOut.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridOut.HeaderHeight = 15;
 			this.gridOut.HScrollVisible = false;
 			this.gridOut.Location = new System.Drawing.Point(230, 418);
 			this.gridOut.Name = "gridOut";
@@ -678,8 +676,6 @@ namespace OpenDental{
 			this.gridAttached.HasAddButton = false;
 			this.gridAttached.HasDropDowns = false;
 			this.gridAttached.HasMultilineHeaders = false;
-			this.gridAttached.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridAttached.HeaderHeight = 15;
 			this.gridAttached.HScrollVisible = false;
 			this.gridAttached.Location = new System.Drawing.Point(230, 125);
 			this.gridAttached.Name = "gridAttached";

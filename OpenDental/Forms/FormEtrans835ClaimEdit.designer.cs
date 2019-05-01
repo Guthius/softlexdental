@@ -292,8 +292,6 @@ namespace OpenDental{
 			this.gridClaimAdjustments.HasAddButton = false;
 			this.gridClaimAdjustments.HasDropDowns = false;
 			this.gridClaimAdjustments.HasMultilineHeaders = false;
-			this.gridClaimAdjustments.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridClaimAdjustments.HeaderHeight = 15;
 			this.gridClaimAdjustments.HScrollVisible = false;
 			this.gridClaimAdjustments.Location = new System.Drawing.Point(9, 192);
 			this.gridClaimAdjustments.Name = "gridClaimAdjustments";
@@ -313,8 +311,6 @@ namespace OpenDental{
 			this.gridAdjudicationInfo.HasAddButton = false;
 			this.gridAdjudicationInfo.HasDropDowns = false;
 			this.gridAdjudicationInfo.HasMultilineHeaders = false;
-			this.gridAdjudicationInfo.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridAdjudicationInfo.HeaderHeight = 15;
 			this.gridAdjudicationInfo.HScrollVisible = false;
 			this.gridAdjudicationInfo.Location = new System.Drawing.Point(9, 472);
 			this.gridAdjudicationInfo.Name = "gridAdjudicationInfo";
@@ -335,8 +331,6 @@ namespace OpenDental{
 			this.gridProcedureBreakdown.HasAddButton = false;
 			this.gridProcedureBreakdown.HasDropDowns = false;
 			this.gridProcedureBreakdown.HasMultilineHeaders = false;
-			this.gridProcedureBreakdown.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridProcedureBreakdown.HeaderHeight = 15;
 			this.gridProcedureBreakdown.HScrollVisible = false;
 			this.gridProcedureBreakdown.Location = new System.Drawing.Point(9, 298);
 			this.gridProcedureBreakdown.Name = "gridProcedureBreakdown";
@@ -371,8 +365,6 @@ namespace OpenDental{
 			this.gridSupplementalInfo.HasAddButton = false;
 			this.gridSupplementalInfo.HasDropDowns = false;
 			this.gridSupplementalInfo.HasMultilineHeaders = false;
-			this.gridSupplementalInfo.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridSupplementalInfo.HeaderHeight = 15;
 			this.gridSupplementalInfo.HScrollVisible = false;
 			this.gridSupplementalInfo.Location = new System.Drawing.Point(9, 578);
 			this.gridSupplementalInfo.Name = "gridSupplementalInfo";

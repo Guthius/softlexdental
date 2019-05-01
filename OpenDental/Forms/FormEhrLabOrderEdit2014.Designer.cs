@@ -1243,8 +1243,6 @@
 			this.gridResultsCopyTo.HasAddButton = false;
 			this.gridResultsCopyTo.HasDropDowns = false;
 			this.gridResultsCopyTo.HasMultilineHeaders = false;
-			this.gridResultsCopyTo.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridResultsCopyTo.HeaderHeight = 15;
 			this.gridResultsCopyTo.HScrollVisible = false;
 			this.gridResultsCopyTo.Location = new System.Drawing.Point(446, 359);
 			this.gridResultsCopyTo.Name = "gridResultsCopyTo";
@@ -1275,8 +1273,6 @@
 			this.gridClinicalInformation.HasAddButton = false;
 			this.gridClinicalInformation.HasDropDowns = false;
 			this.gridClinicalInformation.HasMultilineHeaders = false;
-			this.gridClinicalInformation.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridClinicalInformation.HeaderHeight = 15;
 			this.gridClinicalInformation.HScrollVisible = false;
 			this.gridClinicalInformation.Location = new System.Drawing.Point(669, 359);
 			this.gridClinicalInformation.Name = "gridClinicalInformation";
@@ -1293,8 +1289,6 @@
 			this.gridNotes.HasAddButton = false;
 			this.gridNotes.HasDropDowns = false;
 			this.gridNotes.HasMultilineHeaders = false;
-			this.gridNotes.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridNotes.HeaderHeight = 15;
 			this.gridNotes.HScrollVisible = false;
 			this.gridNotes.Location = new System.Drawing.Point(12, 359);
 			this.gridNotes.Name = "gridNotes";
@@ -1312,8 +1306,6 @@
 			this.gridSpecimen.HasAddButton = false;
 			this.gridSpecimen.HasDropDowns = false;
 			this.gridSpecimen.HasMultilineHeaders = false;
-			this.gridSpecimen.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridSpecimen.HeaderHeight = 15;
 			this.gridSpecimen.HScrollVisible = false;
 			this.gridSpecimen.Location = new System.Drawing.Point(669, 466);
 			this.gridSpecimen.Name = "gridSpecimen";
@@ -1332,8 +1324,6 @@
 			this.gridMain.HasAddButton = false;
 			this.gridMain.HasDropDowns = false;
 			this.gridMain.HasMultilineHeaders = false;
-			this.gridMain.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridMain.HeaderHeight = 15;
 			this.gridMain.HScrollVisible = false;
 			this.gridMain.Location = new System.Drawing.Point(12, 466);
 			this.gridMain.Name = "gridMain";

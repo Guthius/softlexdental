@@ -93,8 +93,6 @@ namespace OpenDental.UI {
 			this.gridBugsInProgress.HasAddButton = false;
 			this.gridBugsInProgress.HasDropDowns = false;
 			this.gridBugsInProgress.HasMultilineHeaders = false;
-			this.gridBugsInProgress.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridBugsInProgress.HeaderHeight = 15;
 			this.gridBugsInProgress.HScrollVisible = false;
 			this.gridBugsInProgress.Location = new System.Drawing.Point(3, 6);
 			this.gridBugsInProgress.Name = "gridBugsInProgress";
@@ -124,8 +122,6 @@ namespace OpenDental.UI {
 			this.gridBugsFixed.HasAddButton = false;
 			this.gridBugsFixed.HasDropDowns = false;
 			this.gridBugsFixed.HasMultilineHeaders = false;
-			this.gridBugsFixed.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridBugsFixed.HeaderHeight = 15;
 			this.gridBugsFixed.HScrollVisible = false;
 			this.gridBugsFixed.Location = new System.Drawing.Point(3, 6);
 			this.gridBugsFixed.Name = "gridBugsFixed";
@@ -155,8 +151,6 @@ namespace OpenDental.UI {
 			this.gridBugSubmissions.HasAddButton = false;
 			this.gridBugSubmissions.HasDropDowns = false;
 			this.gridBugSubmissions.HasMultilineHeaders = false;
-			this.gridBugSubmissions.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridBugSubmissions.HeaderHeight = 15;
 			this.gridBugSubmissions.HScrollVisible = false;
 			this.gridBugSubmissions.Location = new System.Drawing.Point(3, 6);
 			this.gridBugSubmissions.Name = "gridBugSubmissions";

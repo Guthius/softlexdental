@@ -266,8 +266,6 @@
 			this.gridReject.HasAddButton = false;
 			this.gridReject.HasDropDowns = false;
 			this.gridReject.HasMultilineHeaders = false;
-			this.gridReject.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridReject.HeaderHeight = 15;
 			this.gridReject.HScrollVisible = false;
 			this.gridReject.Location = new System.Drawing.Point(292, 12);
 			this.gridReject.Name = "gridReject";
@@ -285,8 +283,6 @@
 			this.gridCondition.HasAddButton = false;
 			this.gridCondition.HasDropDowns = false;
 			this.gridCondition.HasMultilineHeaders = false;
-			this.gridCondition.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridCondition.HeaderHeight = 15;
 			this.gridCondition.HScrollVisible = false;
 			this.gridCondition.Location = new System.Drawing.Point(292, 185);
 			this.gridCondition.Name = "gridCondition";

@@ -120,6 +120,7 @@ namespace OpenDental.UI
         #endregion
 
         public int TitleHeight => TitleVisible ? titleHeight : 0;
+
         public bool TitleVisible { get; set; } = true; // TODO: Implement this...
 
         ///<summary>A function that defines how to create a gridrow row given an object for the row when paging is enabled.</summary>
@@ -338,8 +339,6 @@ namespace OpenDental.UI
                     _format = null;
                 }
                 QuitThread();
-                HeaderFont?.Dispose();
-                HeaderFont = null;
                 CellFont?.Dispose();
                 CellFont = null;
                 FontForSheets?.Dispose();
@@ -417,17 +416,10 @@ namespace OpenDental.UI
         #region Properties
 
         [Category("Appearance")]
-        [Description("Sets a font for Headers.")]
-        public Font HeaderFont { get; set; } = new Font(FontFamily.GenericSansSerif, 8.5f, FontStyle.Bold);
-
-        [Category("Appearance")]
         [Description("Sets a font for Cells")]
         public Font CellFont { get; set; } = new Font(FontFamily.GenericSansSerif, 8.5f);
 
-        /// <summary>
-        /// Gets or sets the height of the grid header.
-        /// </summary>
-        public int HeaderHeight { get; set; } = 15;
+        public const int HeaderHeight = 24;
 
         /// <summary>
         /// Height of field when printing.  Set using CalculateHeights() from EndUpdate()
@@ -1340,21 +1332,6 @@ namespace OpenDental.UI
         }
 
         /// <summary>
-        /// Measure the height of the header.
-        /// </summary>
-        void MeasureHeaderHeight()
-        {
-            if (!_hasMultilineHeaders || Width == 0 || Height == 0) return;
-
-            for (int i = 0; i < Columns.Count; i++)
-            {
-                var size = TextRenderer.MeasureText(Columns[i].Heading, HeaderFont, new Size(_listCurColumnWidths[i], 0));
-
-                HeaderHeight = Math.Max(HeaderHeight, size.Height);
-            }
-        }
-
-        /// <summary>
         /// Paints the background of the grid.
         /// </summary>
         void PaintBackGround(Graphics graphics)
@@ -1797,42 +1774,45 @@ namespace OpenDental.UI
             //Column Headers-----------------------------------------------------------------------------------------
             if (HeaderHeight != 0)
             {
-                g.FillRectangle(ODColorTheme.GridHeaderBackBrush, 0, titleHeight, Width, HeaderHeight);//background
-                g.DrawLine(ODColorTheme.GridInnerLinePen, 0, titleHeight, Width, titleHeight);//line between title and headers
+                g.FillRectangle(SystemBrushes.Control, 0, titleHeight, Width, HeaderHeight - 1);
+                g.DrawLine(SystemPens.ControlDark, 0, titleHeight, Width, titleHeight);
+
                 using (StringFormat format = new StringFormat())
                 {
                     for (int i = 0; i < Columns.Count; i++)
                     {
                         if (i != 0)
                         {
-                            //vertical lines separating column headers
-                            g.DrawLine(ODColorTheme.GridColumnSeparatorPen, -hScroll.Value + 1 + ColPos[i], titleHeight + 3,
-                                -hScroll.Value + 1 + ColPos[i], titleHeight + HeaderHeight - 2);
-                            g.DrawLine(new Pen(Color.White), -hScroll.Value + 1 + ColPos[i] + 1, titleHeight + 3,
-                                -hScroll.Value + 1 + ColPos[i] + 1, titleHeight + HeaderHeight - 2);
+                            g.DrawLine(SystemPens.ControlDark,
+                                new Point(-hScroll.Value + 1 + ColPos[i], titleHeight + 3),
+                                new Point(-hScroll.Value + 1 + ColPos[i], titleHeight + TitleHeight - 2));
+
+                            g.DrawLine(SystemPens.Window,
+                                new Point(-hScroll.Value + 1 + ColPos[i] + 1, titleHeight + 3),
+                                new Point(-hScroll.Value + 1 + ColPos[i] + 1, titleHeight + TitleHeight - 2));
+
                         }
+
                         format.Alignment = StringAlignment.Center;
-                        float verticalAdjust = 0;
-                        if (_hasMultilineHeaders)
-                        {
-                            verticalAdjust = (HeaderHeight - g.MeasureString(Columns[i].Heading, HeaderFont).Height) / 2;//usually 0
-                        }
-                        if (verticalAdjust > 2)
-                        {
-                            verticalAdjust -= 2;//text looked too low. This shifts the text up a little for any of the non-multiline headers.
-                        }
-                        if (_hasAutoWrappedHeaders)
-                        {
-                            RectangleF layoutRec = new RectangleF(ColPos[i] - hScroll.Value, titleHeight + 2, _listCurColumnWidths[i], HeaderHeight);
-                            g.DrawString(Columns[i].Heading, HeaderFont, ODColorTheme.GridHeaderTextBrush, layoutRec, format);
-                        }
-                        else
-                        {
-                            g.DrawString(Columns[i].Heading, HeaderFont, ODColorTheme.GridHeaderTextBrush,
-                                -hScroll.Value + ColPos[i] + _listCurColumnWidths[i] / 2,
-                                titleHeight + 2 + verticalAdjust,
-                                format);
-                        }
+                        format.LineAlignment = StringAlignment.Center;
+                        format.FormatFlags = StringFormatFlags.NoWrap;
+                        format.Trimming = StringTrimming.EllipsisCharacter;
+
+                        var titleTextRect = 
+                            new Rectangle(
+                                ColPos[i] - hScroll.Value,
+                                titleHeight + 2,
+                                _listCurColumnWidths[i],
+                                HeaderHeight);
+
+                        g.DrawString(
+                            Columns[i].Heading, 
+                            titleFont, 
+                            SystemBrushes.ControlText, 
+                            titleTextRect,
+                            format);
+
+
                         if (SortedByColumnIdx == i)
                         {
                             PointF p = new PointF(-hScroll.Value + 1 + ColPos[i] + 6, titleHeight + (float)HeaderHeight / 2f);
@@ -1852,26 +1832,23 @@ namespace OpenDental.UI
                             else
                             {//pointing down
                                 g.FillPolygon(Brushes.White, new PointF[] {//shaped like home plate
-								new PointF(p.X-4.9f,p.Y-2f),//ULstub
-								new PointF(p.X-4.9f,p.Y-2.7f),//ULtop
-								new PointF(p.X+4.9f,p.Y-2.7f),//URtop
-								new PointF(p.X+4.9f,p.Y-2f),//URstub
-								new PointF(p.X,p.Y+2.8f)});//Bottom
+								    new PointF(p.X-4.9f,p.Y-2f),//ULstub
+								    new PointF(p.X-4.9f,p.Y-2.7f),//ULtop
+								    new PointF(p.X+4.9f,p.Y-2.7f),//URtop
+								    new PointF(p.X+4.9f,p.Y-2f),//URstub
+								    new PointF(p.X,p.Y+2.8f)});//Bottom
+
                                 g.FillPolygon(Brushes.Black, new PointF[] {
-                                new PointF(p.X-4,p.Y-2),//UL
-								new PointF(p.X+4,p.Y-2),//UR
-								new PointF(p.X,p.Y+2)});//Bottom
+                                    new PointF(p.X-4,p.Y-2),//UL
+								    new PointF(p.X+4,p.Y-2),//UR
+								    new PointF(p.X,p.Y+2)});//Bottom
                             }
                         }
                     }
                 }
+
+                g.DrawLine(SystemPens.ControlDark, 0, titleHeight + HeaderHeight, Width, titleHeight + HeaderHeight);
             }
-            else
-            {
-                return;
-            }
-            //line below headers
-            g.DrawLine(ODColorTheme.GridColumnSeparatorPen, 0, titleHeight + HeaderHeight, Width, titleHeight + HeaderHeight);
         }
 
         /// <summary>
@@ -2679,8 +2656,8 @@ namespace OpenDental.UI
                     g.DrawLine(new Pen(cOutline), x + (-hScroll.Value + ColPos[i]), y,
                         x + (-hScroll.Value + ColPos[i]), y + HeaderHeight);
                 }
-                g.DrawString(Columns[i].Heading, HeaderFont, Brushes.Black,
-                    (float)x + (-hScroll.Value + ColPos[i] + _listCurColumnWidths[i] / 2 - g.MeasureString(Columns[i].Heading, HeaderFont).Width / 2),
+                g.DrawString(Columns[i].Heading, titleFont, Brushes.Black,
+                    (float)x + (-hScroll.Value + ColPos[i] + _listCurColumnWidths[i] / 2 - g.MeasureString(Columns[i].Heading, titleFont).Width / 2),
                     (float)y + 1);
                 if (SortedByColumnIdx == i)
                 {
@@ -2734,7 +2711,7 @@ namespace OpenDental.UI
             Color cTitleBackG = Color.LightGray;
             g.DrawRectangle(new XSolidBrush(cTitleBackG), p(x), p(y), p(Width), p(HeaderHeight));//background
             g.DrawLine(new XPen(Color.FromArgb(102, 102, 122)), p(x), p(y), p(x + Width), p(y));//line between title and headers
-            XFont xHeaderFont = new XFont(HeaderFont.FontFamily.Name.ToString(), HeaderFont.Size, XFontStyle.Bold);
+            XFont xHeaderFont = new XFont(titleFont.FontFamily.Name.ToString(), titleFont.Size, XFontStyle.Bold);
             for (int i = 0; i < Columns.Count; i++)
             {
                 if (i != 0)
@@ -2802,8 +2779,8 @@ namespace OpenDental.UI
                 }
                 for (int i = 0; i < Columns.Count; i++)
                 {
-                    g.DrawString(Columns[i].Heading, HeaderFont, Brushes.Black,
-                        xPos + (float)ColPos[i] + _listCurColumnWidths[i] / 2 - g.MeasureString(Columns[i].Heading, HeaderFont).Width / 2,
+                    g.DrawString(Columns[i].Heading, titleFont, Brushes.Black,
+                        xPos + (float)ColPos[i] + _listCurColumnWidths[i] / 2 - g.MeasureString(Columns[i].Heading, titleFont).Width / 2,
                         yPos);
                 }
                 yPos += HeaderHeight;
@@ -3455,7 +3432,6 @@ namespace OpenDental.UI
         #region Scrolling
         private void LayoutScrollBars()
         {
-            MeasureHeaderHeight();
             vScroll.Location = new Point(this.Width - vScroll.Width - 1, titleHeight + HeaderHeight + 1);
             if (this.hScrollVisible)
             {

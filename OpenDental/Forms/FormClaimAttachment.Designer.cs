@@ -98,8 +98,6 @@
 			this.gridAttachedImages.HasAddButton = false;
 			this.gridAttachedImages.HasDropDowns = false;
 			this.gridAttachedImages.HasMultilineHeaders = false;
-			this.gridAttachedImages.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridAttachedImages.HeaderHeight = 15;
 			this.gridAttachedImages.HScrollVisible = false;
 			this.gridAttachedImages.Location = new System.Drawing.Point(6, 21);
 			this.gridAttachedImages.Name = "gridAttachedImages";

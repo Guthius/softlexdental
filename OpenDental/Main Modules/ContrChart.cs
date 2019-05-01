@@ -2129,8 +2129,6 @@ namespace OpenDental {
 			this.gridPlanned.HasAddButton = false;
 			this.gridPlanned.HasDropDowns = false;
 			this.gridPlanned.HasMultilineHeaders = false;
-			this.gridPlanned.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridPlanned.HeaderHeight = 15;
 			this.gridPlanned.HScrollVisible = false;
 			this.gridPlanned.Location = new System.Drawing.Point(0, 25);
 			this.gridPlanned.Name = "gridPlanned";
@@ -2464,8 +2462,6 @@ namespace OpenDental {
 			this.gridChartViews.HasAddButton = false;
 			this.gridChartViews.HasDropDowns = false;
 			this.gridChartViews.HasMultilineHeaders = false;
-			this.gridChartViews.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridChartViews.HeaderHeight = 15;
 			this.gridChartViews.HScrollVisible = false;
 			this.gridChartViews.Location = new System.Drawing.Point(303, 8);
 			this.gridChartViews.Name = "gridChartViews";
@@ -2930,8 +2926,6 @@ namespace OpenDental {
 			this.gridCustomerViews.HasAddButton = false;
 			this.gridCustomerViews.HasDropDowns = false;
 			this.gridCustomerViews.HasMultilineHeaders = false;
-			this.gridCustomerViews.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridCustomerViews.HeaderHeight = 15;
 			this.gridCustomerViews.HScrollVisible = false;
 			this.gridCustomerViews.Location = new System.Drawing.Point(6, 30);
 			this.gridCustomerViews.Name = "gridCustomerViews";
@@ -3066,8 +3060,6 @@ namespace OpenDental {
 			this.gridTreatPlans.HasAddButton = false;
 			this.gridTreatPlans.HasDropDowns = false;
 			this.gridTreatPlans.HasMultilineHeaders = false;
-			this.gridTreatPlans.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridTreatPlans.HeaderHeight = 15;
 			this.gridTreatPlans.HScrollVisible = false;
 			this.gridTreatPlans.Location = new System.Drawing.Point(415, 434);
 			this.gridTreatPlans.MaximumSize = new System.Drawing.Size(430, 200);
@@ -3089,8 +3081,6 @@ namespace OpenDental {
 			this.gridTpProcs.HasAddButton = false;
 			this.gridTpProcs.HasDropDowns = false;
 			this.gridTpProcs.HasMultilineHeaders = false;
-			this.gridTpProcs.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridTpProcs.HeaderHeight = 15;
 			this.gridTpProcs.HScrollVisible = false;
 			this.gridTpProcs.Location = new System.Drawing.Point(415, 479);
 			this.gridTpProcs.Name = "gridTpProcs";
@@ -3260,8 +3250,6 @@ namespace OpenDental {
 			this.gridPtInfo.HasAddButton = false;
 			this.gridPtInfo.HasDropDowns = false;
 			this.gridPtInfo.HasMultilineHeaders = false;
-			this.gridPtInfo.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridPtInfo.HeaderHeight = 15;
 			this.gridPtInfo.HScrollVisible = false;
 			this.gridPtInfo.Location = new System.Drawing.Point(0, 434);
 			this.gridPtInfo.Name = "gridPtInfo";
@@ -3352,8 +3340,6 @@ namespace OpenDental {
 			this.gridProg.HasAddButton = false;
 			this.gridProg.HasDropDowns = false;
 			this.gridProg.HasMultilineHeaders = false;
-			this.gridProg.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridProg.HeaderHeight = 15;
 			this.gridProg.HScrollVisible = false;
 			this.gridProg.Location = new System.Drawing.Point(0, 0);
 			this.gridProg.MaxPageRows = 500;

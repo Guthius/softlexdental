@@ -195,8 +195,6 @@ namespace OpenDental{
 			this.gridAdjusts.HasAddButton = false;
 			this.gridAdjusts.HasDropDowns = false;
 			this.gridAdjusts.HasMultilineHeaders = false;
-			this.gridAdjusts.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridAdjusts.HeaderHeight = 15;
 			this.gridAdjusts.HScrollVisible = false;
 			this.gridAdjusts.Location = new System.Drawing.Point(16, 51);
 			this.gridAdjusts.Name = "gridAdjusts";

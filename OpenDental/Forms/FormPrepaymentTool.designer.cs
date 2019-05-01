@@ -87,8 +87,6 @@ namespace OpenDental {
 			this.GridPrepayment.HasAddButton = false;
 			this.GridPrepayment.HasDropDowns = false;
 			this.GridPrepayment.HasMultilineHeaders = false;
-			this.GridPrepayment.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.GridPrepayment.HeaderHeight = 15;
 			this.GridPrepayment.HScrollVisible = false;
 			this.GridPrepayment.Location = new System.Drawing.Point(22, 352);
 			this.GridPrepayment.Name = "GridPrepayment";
@@ -185,8 +183,6 @@ namespace OpenDental {
 			this.GridCodes.HasAddButton = false;
 			this.GridCodes.HasDropDowns = false;
 			this.GridCodes.HasMultilineHeaders = false;
-			this.GridCodes.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.GridCodes.HeaderHeight = 15;
 			this.GridCodes.HScrollVisible = false;
 			this.GridCodes.Location = new System.Drawing.Point(22, 21);
 			this.GridCodes.Name = "GridCodes";
@@ -328,8 +324,6 @@ namespace OpenDental {
 			this.GridCompletedProcs.HasAddButton = false;
 			this.GridCompletedProcs.HasDropDowns = false;
 			this.GridCompletedProcs.HasMultilineHeaders = false;
-			this.GridCompletedProcs.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.GridCompletedProcs.HeaderHeight = 15;
 			this.GridCompletedProcs.HScrollVisible = false;
 			this.GridCompletedProcs.Location = new System.Drawing.Point(22, 214);
 			this.GridCompletedProcs.Name = "GridCompletedProcs";

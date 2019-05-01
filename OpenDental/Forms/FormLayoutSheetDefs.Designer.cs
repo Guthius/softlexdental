@@ -87,8 +87,6 @@
 			this.gridOtherLayouts.HasAddButton = false;
 			this.gridOtherLayouts.HasDropDowns = false;
 			this.gridOtherLayouts.HasMultilineHeaders = false;
-			this.gridOtherLayouts.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridOtherLayouts.HeaderHeight = 15;
 			this.gridOtherLayouts.HScrollVisible = false;
 			this.gridOtherLayouts.Location = new System.Drawing.Point(12, 12);
 			this.gridOtherLayouts.Name = "gridOtherLayouts";
@@ -106,8 +104,6 @@
 			this.gridCustomLayouts.HasAddButton = false;
 			this.gridCustomLayouts.HasDropDowns = false;
 			this.gridCustomLayouts.HasMultilineHeaders = false;
-			this.gridCustomLayouts.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridCustomLayouts.HeaderHeight = 15;
 			this.gridCustomLayouts.HScrollVisible = false;
 			this.gridCustomLayouts.Location = new System.Drawing.Point(494, 12);
 			this.gridCustomLayouts.Name = "gridCustomLayouts";

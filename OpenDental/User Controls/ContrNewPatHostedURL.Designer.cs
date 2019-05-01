@@ -105,8 +105,6 @@
 			this.gridOptions.HasAddButton = false;
 			this.gridOptions.HasDropDowns = false;
 			this.gridOptions.HasMultilineHeaders = false;
-			this.gridOptions.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridOptions.HeaderHeight = 15;
 			this.gridOptions.HScrollVisible = false;
 			this.gridOptions.Location = new System.Drawing.Point(0, 0);
 			this.gridOptions.Name = "gridOptions";

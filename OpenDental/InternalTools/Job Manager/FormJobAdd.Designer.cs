@@ -164,8 +164,6 @@ namespace OpenDental{
 			this.gridCustomers.HasAddButton = true;
 			this.gridCustomers.HasDropDowns = false;
 			this.gridCustomers.HasMultilineHeaders = false;
-			this.gridCustomers.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridCustomers.HeaderHeight = 15;
 			this.gridCustomers.HScrollVisible = false;
 			this.gridCustomers.Location = new System.Drawing.Point(3, 3);
 			this.gridCustomers.Name = "gridCustomers";
@@ -194,8 +192,6 @@ namespace OpenDental{
 			this.gridSubscribers.HasAddButton = true;
 			this.gridSubscribers.HasDropDowns = false;
 			this.gridSubscribers.HasMultilineHeaders = false;
-			this.gridSubscribers.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridSubscribers.HeaderHeight = 15;
 			this.gridSubscribers.HScrollVisible = false;
 			this.gridSubscribers.Location = new System.Drawing.Point(3, 3);
 			this.gridSubscribers.Name = "gridSubscribers";
@@ -224,8 +220,6 @@ namespace OpenDental{
 			this.gridFeatureReq.HasAddButton = true;
 			this.gridFeatureReq.HasDropDowns = false;
 			this.gridFeatureReq.HasMultilineHeaders = false;
-			this.gridFeatureReq.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridFeatureReq.HeaderHeight = 15;
 			this.gridFeatureReq.HScrollVisible = false;
 			this.gridFeatureReq.Location = new System.Drawing.Point(3, 3);
 			this.gridFeatureReq.Name = "gridFeatureReq";
@@ -254,8 +248,6 @@ namespace OpenDental{
 			this.gridBugs.HasAddButton = true;
 			this.gridBugs.HasDropDowns = false;
 			this.gridBugs.HasMultilineHeaders = false;
-			this.gridBugs.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridBugs.HeaderHeight = 15;
 			this.gridBugs.HScrollVisible = false;
 			this.gridBugs.Location = new System.Drawing.Point(3, 3);
 			this.gridBugs.Name = "gridBugs";
@@ -285,8 +277,6 @@ namespace OpenDental{
 			this.gridTasks.HasAddButton = true;
 			this.gridTasks.HasDropDowns = false;
 			this.gridTasks.HasMultilineHeaders = false;
-			this.gridTasks.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridTasks.HeaderHeight = 15;
 			this.gridTasks.HScrollVisible = false;
 			this.gridTasks.Location = new System.Drawing.Point(3, 3);
 			this.gridTasks.Name = "gridTasks";
@@ -316,8 +306,6 @@ namespace OpenDental{
 			this.gridQuotes.HasAddButton = true;
 			this.gridQuotes.HasDropDowns = false;
 			this.gridQuotes.HasMultilineHeaders = false;
-			this.gridQuotes.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridQuotes.HeaderHeight = 15;
 			this.gridQuotes.HScrollVisible = false;
 			this.gridQuotes.Location = new System.Drawing.Point(3, 3);
 			this.gridQuotes.Name = "gridQuotes";

@@ -1,26 +1,7 @@
-﻿using System.Windows.Forms;
-
-namespace OpenDental
+﻿namespace OpenDental
 {
     partial class FormAbout
     {
-        private Label labelVersion;
-        private Button acceptButton;
-        private Label labelCopyright;
-        private Label labelMySQLCopyright;
-        private Label label4;
-        private Button licensesButton;
-        private Label label9;
-        private Label labelName;
-        private Label labelService;
-        private Label labelMySqlVersion;
-        private Label labelServComment;
-        private Label label2;
-        private GroupBox connectionGroupBox;
-        private PictureBox pictureOpenDental;
-        private Label labelMachineName;
-        private Button diagnosticsButton;
-
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -327,10 +308,26 @@ namespace OpenDental
         }
         #endregion
 
-        private Label label1;
-        private Label label3;
-        private Label label5;
-        private Label label6;
-        private Label label7;
+        private System.Windows.Forms.Label labelVersion;
+        private System.Windows.Forms.Button acceptButton;
+        private System.Windows.Forms.Label labelCopyright;
+        private System.Windows.Forms.Label labelMySQLCopyright;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button licensesButton;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label labelName;
+        private System.Windows.Forms.Label labelService;
+        private System.Windows.Forms.Label labelMySqlVersion;
+        private System.Windows.Forms.Label labelServComment;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.GroupBox connectionGroupBox;
+        private System.Windows.Forms.PictureBox pictureOpenDental;
+        private System.Windows.Forms.Label labelMachineName;
+        private System.Windows.Forms.Button diagnosticsButton;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
     }
 }

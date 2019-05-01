@@ -401,8 +401,6 @@ namespace OpenDental{
 			this.gridProviderAdjustments.HasAddButton = false;
 			this.gridProviderAdjustments.HasDropDowns = false;
 			this.gridProviderAdjustments.HasMultilineHeaders = false;
-			this.gridProviderAdjustments.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridProviderAdjustments.HeaderHeight = 15;
 			this.gridProviderAdjustments.HScrollVisible = false;
 			this.gridProviderAdjustments.Location = new System.Drawing.Point(9, 247);
 			this.gridProviderAdjustments.Name = "gridProviderAdjustments";
@@ -423,8 +421,6 @@ namespace OpenDental{
 			this.gridClaimDetails.HasAddButton = false;
 			this.gridClaimDetails.HasDropDowns = false;
 			this.gridClaimDetails.HasMultilineHeaders = true;
-			this.gridClaimDetails.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridClaimDetails.HeaderHeight = 15;
 			this.gridClaimDetails.HScrollVisible = false;
 			this.gridClaimDetails.Location = new System.Drawing.Point(9, 348);
 			this.gridClaimDetails.Name = "gridClaimDetails";

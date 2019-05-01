@@ -83,8 +83,6 @@ namespace OpenDental
             this.pagesGrid.HasAddButton = false;
             this.pagesGrid.HasDropDowns = false;
             this.pagesGrid.HasMultilineHeaders = false;
-            this.pagesGrid.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.pagesGrid.HeaderHeight = 15;
             this.pagesGrid.HScrollVisible = false;
             this.pagesGrid.Location = new System.Drawing.Point(13, 48);
             this.pagesGrid.Name = "pagesGrid";

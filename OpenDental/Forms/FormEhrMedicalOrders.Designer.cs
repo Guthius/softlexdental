@@ -71,8 +71,6 @@
 			this.gridMedOrders.HasAddButton = false;
 			this.gridMedOrders.HasDropDowns = false;
 			this.gridMedOrders.HasMultilineHeaders = false;
-			this.gridMedOrders.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridMedOrders.HeaderHeight = 15;
 			this.gridMedOrders.HScrollVisible = false;
 			this.gridMedOrders.Location = new System.Drawing.Point(12, 35);
 			this.gridMedOrders.Name = "gridMedOrders";

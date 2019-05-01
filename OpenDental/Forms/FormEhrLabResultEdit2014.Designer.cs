@@ -1474,8 +1474,6 @@
 			this.gridNotes.HasAddButton = false;
 			this.gridNotes.HasDropDowns = false;
 			this.gridNotes.HasMultilineHeaders = false;
-			this.gridNotes.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridNotes.HeaderHeight = 15;
 			this.gridNotes.HScrollVisible = false;
 			this.gridNotes.Location = new System.Drawing.Point(12, 465);
 			this.gridNotes.Name = "gridNotes";

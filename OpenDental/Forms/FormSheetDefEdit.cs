@@ -647,14 +647,14 @@ namespace OpenDental {
 					yPosGrid+=odGrid.TitleHeight;
 					/*---------------------------------------------------------------------------------------------*/
 					odGrid.PrintHeader(g,sheetFieldDef.XPos,yPosGrid);
-					yPosGrid+=odGrid.HeaderHeight;
+					yPosGrid+= ODGrid.HeaderHeight;
 					odGrid.PrintRow(0,g,sheetFieldDef.XPos,yPosGrid,false,true); //a single dummy row.
 					yPosGrid+=odGrid.Rows[0].RowHeight+2;
 					/*---------------------------------------------------------------------------------------------*/
 					List<DisplayField> remarkColumns=SheetUtil.GetGridColumnsAvailable("EraClaimsPaidProcRemarks");
 					ODGrid remarkGrid=CreateGridHelper(remarkColumns);
 					remarkGrid.PrintHeader(g,sheetFieldDef.XPos,yPosGrid+1);
-					yPosGrid+=remarkGrid.HeaderHeight;
+					yPosGrid+= ODGrid.HeaderHeight;
 					remarkGrid.PrintRow(0,g,sheetFieldDef.XPos,yPosGrid,false,true); //a single dummy row.
 					yPosGrid+=remarkGrid.Rows[0].RowHeight+2;
 					/*---------------------------------------------------------------------------------------------*/
@@ -687,8 +687,8 @@ namespace OpenDental {
 					yPosGrid+=odGrid.TitleHeight;
 					gridRemainingHeight-=odGrid.TitleHeight;
 					odGrid.PrintHeader(g,sheetFieldDef.XPos,yPosGrid);
-					yPosGrid+=odGrid.HeaderHeight;
-					gridRemainingHeight-=odGrid.HeaderHeight;
+					yPosGrid+= ODGrid.HeaderHeight;
+					gridRemainingHeight-= ODGrid.HeaderHeight;
 					int gridRowHeight=odGrid.Rows[0].RowHeight;//Zero until we calculate the height of the first row.
 					while(gridRemainingHeight>gridRowHeight) {
 						odGrid.PrintRow(0,g,sheetFieldDef.XPos,yPosGrid,(gridRemainingHeight-gridRowHeight <= gridRowHeight),true);//A single dummy row.
@@ -701,7 +701,7 @@ namespace OpenDental {
 			}
 			if(drawHeaders) {
 				odGrid.PrintHeader(g,sheetFieldDef.XPos,yPosGrid);
-				yPosGrid+=odGrid.HeaderHeight;
+				yPosGrid+= ODGrid.HeaderHeight;
 				odGrid.PrintRow(0,g,sheetFieldDef.XPos,yPosGrid,false,true); //a single dummy row.
 				yPosGrid+=odGrid.Rows[0].RowHeight+2;
 			}

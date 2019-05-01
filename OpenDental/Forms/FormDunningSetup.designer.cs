@@ -94,8 +94,6 @@ namespace OpenDental{
 			this.gridDunning.HasAddButton = false;
 			this.gridDunning.HasDropDowns = false;
 			this.gridDunning.HasMultilineHeaders = false;
-			this.gridDunning.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridDunning.HeaderHeight = 15;
 			this.gridDunning.HScrollVisible = false;
 			this.gridDunning.Location = new System.Drawing.Point(458, 12);
 			this.gridDunning.Name = "gridDunning";

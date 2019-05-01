@@ -55,8 +55,6 @@ namespace OpenDental{
 			this.gridInsPlanFiles.HasAddButton = false;
 			this.gridInsPlanFiles.HasDropDowns = false;
 			this.gridInsPlanFiles.HasMultilineHeaders = false;
-			this.gridInsPlanFiles.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridInsPlanFiles.HeaderHeight = 15;
 			this.gridInsPlanFiles.HScrollVisible = false;
 			this.gridInsPlanFiles.Location = new System.Drawing.Point(12, 142);
 			this.gridInsPlanFiles.Name = "gridInsPlanFiles";

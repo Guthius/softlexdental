@@ -198,8 +198,6 @@
 			this.gridMonday.HasAddButton = false;
 			this.gridMonday.HasDropDowns = false;
 			this.gridMonday.HasMultilineHeaders = false;
-			this.gridMonday.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridMonday.HeaderHeight = 15;
 			this.gridMonday.HScrollVisible = false;
 			this.gridMonday.Location = new System.Drawing.Point(7, 22);
 			this.gridMonday.Name = "gridMonday";
@@ -250,8 +248,6 @@
 			this.gridSunday.HasAddButton = false;
 			this.gridSunday.HasDropDowns = false;
 			this.gridSunday.HasMultilineHeaders = false;
-			this.gridSunday.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridSunday.HeaderHeight = 15;
 			this.gridSunday.HScrollVisible = false;
 			this.gridSunday.Location = new System.Drawing.Point(7, 22);
 			this.gridSunday.Name = "gridSunday";
@@ -292,8 +288,6 @@
 			this.gridSaturday.HasAddButton = false;
 			this.gridSaturday.HasDropDowns = false;
 			this.gridSaturday.HasMultilineHeaders = false;
-			this.gridSaturday.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridSaturday.HeaderHeight = 15;
 			this.gridSaturday.HScrollVisible = false;
 			this.gridSaturday.Location = new System.Drawing.Point(7, 22);
 			this.gridSaturday.Name = "gridSaturday";
@@ -334,8 +328,6 @@
 			this.gridFriday.HasAddButton = false;
 			this.gridFriday.HasDropDowns = false;
 			this.gridFriday.HasMultilineHeaders = false;
-			this.gridFriday.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridFriday.HeaderHeight = 15;
 			this.gridFriday.HScrollVisible = false;
 			this.gridFriday.Location = new System.Drawing.Point(7, 22);
 			this.gridFriday.Name = "gridFriday";
@@ -376,8 +368,6 @@
 			this.gridThursday.HasAddButton = false;
 			this.gridThursday.HasDropDowns = false;
 			this.gridThursday.HasMultilineHeaders = false;
-			this.gridThursday.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridThursday.HeaderHeight = 15;
 			this.gridThursday.HScrollVisible = false;
 			this.gridThursday.Location = new System.Drawing.Point(7, 22);
 			this.gridThursday.Name = "gridThursday";
@@ -418,8 +408,6 @@
 			this.gridWednesday.HasAddButton = false;
 			this.gridWednesday.HasDropDowns = false;
 			this.gridWednesday.HasMultilineHeaders = false;
-			this.gridWednesday.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridWednesday.HeaderHeight = 15;
 			this.gridWednesday.HScrollVisible = false;
 			this.gridWednesday.Location = new System.Drawing.Point(7, 22);
 			this.gridWednesday.Name = "gridWednesday";
@@ -460,8 +448,6 @@
 			this.gridTuesday.HasAddButton = false;
 			this.gridTuesday.HasDropDowns = false;
 			this.gridTuesday.HasMultilineHeaders = false;
-			this.gridTuesday.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridTuesday.HeaderHeight = 15;
 			this.gridTuesday.HScrollVisible = false;
 			this.gridTuesday.Location = new System.Drawing.Point(7, 22);
 			this.gridTuesday.Name = "gridTuesday";

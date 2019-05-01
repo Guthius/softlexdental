@@ -156,8 +156,6 @@
             this.employeeGrid.HasAddButton = false;
             this.employeeGrid.HasDropDowns = false;
             this.employeeGrid.HasMultilineHeaders = false;
-            this.employeeGrid.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.employeeGrid.HeaderHeight = 15;
             this.employeeGrid.HScrollVisible = false;
             this.employeeGrid.Location = new System.Drawing.Point(6, 22);
             this.employeeGrid.Name = "employeeGrid";
@@ -329,8 +327,6 @@
             this.gridMessages.HasAddButton = false;
             this.gridMessages.HasDropDowns = false;
             this.gridMessages.HasMultilineHeaders = false;
-            this.gridMessages.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridMessages.HeaderHeight = 15;
             this.gridMessages.HScrollVisible = false;
             this.gridMessages.Location = new System.Drawing.Point(355, 51);
             this.gridMessages.Name = "gridMessages";

@@ -54,8 +54,6 @@ namespace OpenDental
             this.gridMain.HasAddButton = false;
             this.gridMain.HasDropDowns = false;
             this.gridMain.HasMultilineHeaders = false;
-            this.gridMain.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridMain.HeaderHeight = 15;
             this.gridMain.HScrollVisible = false;
             this.gridMain.Location = new System.Drawing.Point(0, 0);
             this.gridMain.Name = "gridMain";
@@ -95,8 +93,6 @@ namespace OpenDental
             this.oldRevisionGrid.HasAddButton = false;
             this.oldRevisionGrid.HasDropDowns = false;
             this.oldRevisionGrid.HasMultilineHeaders = false;
-            this.oldRevisionGrid.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.oldRevisionGrid.HeaderHeight = 15;
             this.oldRevisionGrid.HScrollVisible = true;
             this.oldRevisionGrid.Location = new System.Drawing.Point(0, 0);
             this.oldRevisionGrid.Name = "oldRevisionGrid";
@@ -116,8 +112,6 @@ namespace OpenDental
             this.currentRevisionGrid.HasAddButton = false;
             this.currentRevisionGrid.HasDropDowns = false;
             this.currentRevisionGrid.HasMultilineHeaders = false;
-            this.currentRevisionGrid.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.currentRevisionGrid.HeaderHeight = 15;
             this.currentRevisionGrid.HScrollVisible = true;
             this.currentRevisionGrid.Location = new System.Drawing.Point(0, 0);
             this.currentRevisionGrid.Name = "currentRevisionGrid";

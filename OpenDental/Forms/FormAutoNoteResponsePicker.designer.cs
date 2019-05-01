@@ -85,8 +85,6 @@ namespace OpenDental
             this.autoNotesGrid.HasAddButton = false;
             this.autoNotesGrid.HasDropDowns = false;
             this.autoNotesGrid.HasMultilineHeaders = false;
-            this.autoNotesGrid.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.autoNotesGrid.HeaderHeight = 15;
             this.autoNotesGrid.HScrollVisible = false;
             this.autoNotesGrid.Location = new System.Drawing.Point(15, 48);
             this.autoNotesGrid.Name = "autoNotesGrid";

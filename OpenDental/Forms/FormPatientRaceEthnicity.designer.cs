@@ -100,7 +100,6 @@ namespace OpenDental{
 			// 
 			this.gridRace.HasAddButton = false;
 			this.gridRace.HasMultilineHeaders = false;
-			this.gridRace.HeaderHeight = 15;
 			this.gridRace.HScrollVisible = false;
 			this.gridRace.Location = new System.Drawing.Point(12, 45);
 			this.gridRace.Name = "gridRace";
@@ -114,7 +113,6 @@ namespace OpenDental{
 			// 
 			this.gridEthnicity.HasAddButton = false;
 			this.gridEthnicity.HasMultilineHeaders = false;
-			this.gridEthnicity.HeaderHeight = 15;
 			this.gridEthnicity.HScrollVisible = false;
 			this.gridEthnicity.Location = new System.Drawing.Point(12, 295);
 			this.gridEthnicity.Name = "gridEthnicity";

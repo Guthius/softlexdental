@@ -66,8 +66,6 @@ namespace OpenDental{
 			this.gridCustomSheet.HasAddButton = false;
 			this.gridCustomSheet.HasDropDowns = false;
 			this.gridCustomSheet.HasMultilineHeaders = false;
-			this.gridCustomSheet.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridCustomSheet.HeaderHeight = 15;
 			this.gridCustomSheet.HScrollVisible = false;
 			this.gridCustomSheet.Location = new System.Drawing.Point(12, 43);
 			this.gridCustomSheet.Name = "gridCustomSheet";

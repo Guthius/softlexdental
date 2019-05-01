@@ -37,8 +37,6 @@
 			this.gridResultHist.HasAddButton = false;
 			this.gridResultHist.HasDropDowns = false;
 			this.gridResultHist.HasMultilineHeaders = false;
-			this.gridResultHist.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridResultHist.HeaderHeight = 15;
 			this.gridResultHist.HScrollVisible = false;
 			this.gridResultHist.Location = new System.Drawing.Point(12, 12);
 			this.gridResultHist.Name = "gridResultHist";

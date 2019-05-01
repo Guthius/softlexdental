@@ -64,8 +64,6 @@ namespace OpenDental{
 			this.gridWebChatSessions.HasAddButton = false;
 			this.gridWebChatSessions.HasDropDowns = false;
 			this.gridWebChatSessions.HasMultilineHeaders = false;
-			this.gridWebChatSessions.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridWebChatSessions.HeaderHeight = 15;
 			this.gridWebChatSessions.HScrollVisible = false;
 			this.gridWebChatSessions.Location = new System.Drawing.Point(12, 88);
 			this.gridWebChatSessions.Name = "gridWebChatSessions";

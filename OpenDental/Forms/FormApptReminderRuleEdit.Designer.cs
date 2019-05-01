@@ -121,8 +121,6 @@
 			this.gridPriorities.HasAddButton = false;
 			this.gridPriorities.HasDropDowns = false;
 			this.gridPriorities.HasMultilineHeaders = false;
-			this.gridPriorities.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridPriorities.HeaderHeight = 15;
 			this.gridPriorities.HScrollVisible = false;
 			this.gridPriorities.Location = new System.Drawing.Point(42, 19);
 			this.gridPriorities.Name = "gridPriorities";

@@ -1309,8 +1309,6 @@
 			this.gridSent.HasAddButton = false;
 			this.gridSent.HasDropDowns = false;
 			this.gridSent.HasMultilineHeaders = false;
-			this.gridSent.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridSent.HeaderHeight = 15;
 			this.gridSent.HScrollVisible = false;
 			this.gridSent.Location = new System.Drawing.Point(200, 6);
 			this.gridSent.Name = "gridSent";
@@ -2885,8 +2883,6 @@
 			this.gridStatusHistory.HasAddButton = false;
 			this.gridStatusHistory.HasDropDowns = false;
 			this.gridStatusHistory.HasMultilineHeaders = false;
-			this.gridStatusHistory.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridStatusHistory.HeaderHeight = 15;
 			this.gridStatusHistory.HScrollVisible = false;
 			this.gridStatusHistory.Location = new System.Drawing.Point(6, 33);
 			this.gridStatusHistory.Name = "gridStatusHistory";
@@ -3065,8 +3061,6 @@
 			this.gridPay.HasAddButton = false;
 			this.gridPay.HasDropDowns = false;
 			this.gridPay.HasMultilineHeaders = false;
-			this.gridPay.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridPay.HeaderHeight = 15;
 			this.gridPay.HScrollVisible = false;
 			this.gridPay.Location = new System.Drawing.Point(2, 389);
 			this.gridPay.Name = "gridPay";
@@ -3168,8 +3162,6 @@
 			this.gridProc.HasAddButton = false;
 			this.gridProc.HasDropDowns = false;
 			this.gridProc.HasMultilineHeaders = false;
-			this.gridProc.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridProc.HeaderHeight = 15;
 			this.gridProc.HScrollVisible = false;
 			this.gridProc.Location = new System.Drawing.Point(2, 159);
 			this.gridProc.MinimumSize = new System.Drawing.Size(1087, 200);

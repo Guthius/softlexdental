@@ -992,8 +992,6 @@ namespace OpenDental {
 			this.gridCharges.HasAddButton = false;
 			this.gridCharges.HasDropDowns = false;
 			this.gridCharges.HasMultilineHeaders = false;
-			this.gridCharges.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridCharges.HeaderHeight = 15;
 			this.gridCharges.HScrollVisible = false;
 			this.gridCharges.Location = new System.Drawing.Point(494, 101);
 			this.gridCharges.Name = "gridCharges";
@@ -1056,8 +1054,6 @@ namespace OpenDental {
 			this.gridSplits.HasAddButton = false;
 			this.gridSplits.HasDropDowns = false;
 			this.gridSplits.HasMultilineHeaders = false;
-			this.gridSplits.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridSplits.HeaderHeight = 15;
 			this.gridSplits.HScrollVisible = false;
 			this.gridSplits.Location = new System.Drawing.Point(0, 0);
 			this.gridSplits.Name = "gridSplits";
@@ -1088,8 +1084,6 @@ namespace OpenDental {
 			this.gridAllocated.HasAddButton = false;
 			this.gridAllocated.HasDropDowns = false;
 			this.gridAllocated.HasMultilineHeaders = false;
-			this.gridAllocated.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridAllocated.HeaderHeight = 15;
 			this.gridAllocated.HScrollVisible = false;
 			this.gridAllocated.Location = new System.Drawing.Point(2, 2);
 			this.gridAllocated.Name = "gridAllocated";

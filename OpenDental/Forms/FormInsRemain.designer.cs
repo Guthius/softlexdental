@@ -381,8 +381,6 @@ namespace OpenDental{
 			this.gridRemainTimeUnits.HasAddButton = false;
 			this.gridRemainTimeUnits.HasDropDowns = false;
 			this.gridRemainTimeUnits.HasMultilineHeaders = false;
-			this.gridRemainTimeUnits.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridRemainTimeUnits.HeaderHeight = 15;
 			this.gridRemainTimeUnits.HScrollVisible = false;
 			this.gridRemainTimeUnits.Location = new System.Drawing.Point(12, 5);
 			this.gridRemainTimeUnits.Name = "gridRemainTimeUnits";

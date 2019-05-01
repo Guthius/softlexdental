@@ -728,8 +728,6 @@
 			this.gridFields.HasAddButton = false;
 			this.gridFields.HasDropDowns = false;
 			this.gridFields.HasMultilineHeaders = false;
-			this.gridFields.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridFields.HeaderHeight = 15;
 			this.gridFields.HScrollVisible = false;
 			this.gridFields.Location = new System.Drawing.Point(21, 578);
 			this.gridFields.Name = "gridFields";
@@ -747,8 +745,6 @@
 			this.gridPatient.HasAddButton = false;
 			this.gridPatient.HasDropDowns = false;
 			this.gridPatient.HasMultilineHeaders = false;
-			this.gridPatient.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridPatient.HeaderHeight = 15;
 			this.gridPatient.HScrollVisible = false;
 			this.gridPatient.Location = new System.Drawing.Point(282, 405);
 			this.gridPatient.Name = "gridPatient";
@@ -768,8 +764,6 @@
 			this.gridComm.HasAddButton = false;
 			this.gridComm.HasDropDowns = false;
 			this.gridComm.HasMultilineHeaders = false;
-			this.gridComm.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridComm.HeaderHeight = 15;
 			this.gridComm.HScrollVisible = false;
 			this.gridComm.Location = new System.Drawing.Point(542, 405);
 			this.gridComm.Name = "gridComm";
@@ -789,8 +783,6 @@
 			this.gridProc.HasAddButton = false;
 			this.gridProc.HasDropDowns = false;
 			this.gridProc.HasMultilineHeaders = false;
-			this.gridProc.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridProc.HeaderHeight = 15;
 			this.gridProc.HScrollVisible = false;
 			this.gridProc.Location = new System.Drawing.Point(434, 28);
 			this.gridProc.Name = "gridProc";

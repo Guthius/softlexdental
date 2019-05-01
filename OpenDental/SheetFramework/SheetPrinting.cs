@@ -1589,7 +1589,7 @@ namespace OpenDental {
 					else {
 						odGrid.PrintHeaderX(gx,field.XPos,printRowCur.YPos-_yPosPrint+_yAdjCurRow);
 					}
-					_yAdjCurRow+=odGrid.HeaderHeight;
+					_yAdjCurRow+= ODGrid.HeaderHeight;
 				}
 				#endregion
 				#region Draw Row

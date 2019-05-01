@@ -91,8 +91,6 @@ namespace OpenDental
             this.itemDataGrid.HasAddButton = false;
             this.itemDataGrid.HasDropDowns = false;
             this.itemDataGrid.HasMultilineHeaders = false;
-            this.itemDataGrid.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.itemDataGrid.HeaderHeight = 15;
             this.itemDataGrid.HScrollVisible = true;
             this.itemDataGrid.Location = new System.Drawing.Point(13, 19);
             this.itemDataGrid.Name = "itemDataGrid";

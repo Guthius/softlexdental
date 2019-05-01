@@ -967,8 +967,6 @@ namespace OpenDental
             this.gridWaiting.HasAddButton = false;
             this.gridWaiting.HasDropDowns = false;
             this.gridWaiting.HasMultilineHeaders = false;
-            this.gridWaiting.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridWaiting.HeaderHeight = 15;
             this.gridWaiting.HScrollVisible = false;
             this.gridWaiting.Location = new System.Drawing.Point(0, 0);
             this.gridWaiting.Margin = new System.Windows.Forms.Padding(0);
@@ -998,8 +996,6 @@ namespace OpenDental
             this.gridEmpSched.HasAddButton = false;
             this.gridEmpSched.HasDropDowns = false;
             this.gridEmpSched.HasMultilineHeaders = false;
-            this.gridEmpSched.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridEmpSched.HeaderHeight = 15;
             this.gridEmpSched.HScrollVisible = true;
             this.gridEmpSched.Location = new System.Drawing.Point(0, 0);
             this.gridEmpSched.Margin = new System.Windows.Forms.Padding(0);
@@ -1030,8 +1026,6 @@ namespace OpenDental
             this.gridProv.HasAddButton = false;
             this.gridProv.HasDropDowns = false;
             this.gridProv.HasMultilineHeaders = false;
-            this.gridProv.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridProv.HeaderHeight = 15;
             this.gridProv.HScrollVisible = true;
             this.gridProv.Location = new System.Drawing.Point(0, 0);
             this.gridProv.Margin = new System.Windows.Forms.Padding(0);
@@ -1062,8 +1056,6 @@ namespace OpenDental
             this.gridReminders.HasAddButton = false;
             this.gridReminders.HasDropDowns = false;
             this.gridReminders.HasMultilineHeaders = false;
-            this.gridReminders.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-            this.gridReminders.HeaderHeight = 15;
             this.gridReminders.HScrollVisible = false;
             this.gridReminders.Location = new System.Drawing.Point(0, 0);
             this.gridReminders.Name = "gridReminders";

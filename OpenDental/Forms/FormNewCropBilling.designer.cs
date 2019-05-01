@@ -46,8 +46,6 @@
 			this.gridBillingList.HasAddButton = false;
 			this.gridBillingList.HasDropDowns = false;
 			this.gridBillingList.HasMultilineHeaders = false;
-			this.gridBillingList.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridBillingList.HeaderHeight = 15;
 			this.gridBillingList.HScrollVisible = false;
 			this.gridBillingList.Location = new System.Drawing.Point(12, 100);
 			this.gridBillingList.Name = "gridBillingList";

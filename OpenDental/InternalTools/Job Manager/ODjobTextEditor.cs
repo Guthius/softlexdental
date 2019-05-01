@@ -467,7 +467,7 @@ namespace OpenDental {
 			//Remove all non-resizable controls
 			int usableHeight=Height-flowLayoutPanelMenu.Height-splitterConceptReq.Height-splitterReqWriteup.Height;
 			//Get gridRequirements max height
-			int heightRequirementsMax=gridRequirements.Rows.Sum(x => x.RowHeight)+gridRequirements.TitleHeight+gridRequirements.HeaderHeight;
+			int heightRequirementsMax=gridRequirements.Rows.Sum(x => x.RowHeight)+gridRequirements.TitleHeight+ ODGrid.HeaderHeight;
 			//Limit the requirements grid to 1/3 usable height
 			if(heightRequirementsMax*3>usableHeight) {
 				heightRequirementsMax=usableHeight/3;

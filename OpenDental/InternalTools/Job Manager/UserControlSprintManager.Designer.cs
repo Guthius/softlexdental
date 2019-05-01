@@ -109,8 +109,6 @@
 			this.gridSprintJobs.HasAddButton = true;
 			this.gridSprintJobs.HasDropDowns = false;
 			this.gridSprintJobs.HasMultilineHeaders = false;
-			this.gridSprintJobs.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridSprintJobs.HeaderHeight = 15;
 			this.gridSprintJobs.HScrollVisible = false;
 			this.gridSprintJobs.Location = new System.Drawing.Point(3, 253);
 			this.gridSprintJobs.Name = "gridSprintJobs";

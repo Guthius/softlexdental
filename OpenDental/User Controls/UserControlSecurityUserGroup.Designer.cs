@@ -156,8 +156,6 @@
 			this.gridUsers.HasAddButton = true;
 			this.gridUsers.HasDropDowns = false;
 			this.gridUsers.HasMultilineHeaders = true;
-			this.gridUsers.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridUsers.HeaderHeight = 15;
 			this.gridUsers.HScrollVisible = true;
 			this.gridUsers.Location = new System.Drawing.Point(0, 103);
 			this.gridUsers.Name = "gridUsers";

@@ -272,8 +272,6 @@
 			this.gridMu.HasAddButton = false;
 			this.gridMu.HasDropDowns = false;
 			this.gridMu.HasMultilineHeaders = false;
-			this.gridMu.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridMu.HeaderHeight = 15;
 			this.gridMu.HScrollVisible = false;
 			this.gridMu.Location = new System.Drawing.Point(6, 88);
 			this.gridMu.Name = "gridMu";

@@ -54,8 +54,6 @@
 			this.gridLabs.HasAddButton = false;
 			this.gridLabs.HasDropDowns = false;
 			this.gridLabs.HasMultilineHeaders = false;
-			this.gridLabs.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridLabs.HeaderHeight = 15;
 			this.gridLabs.HScrollVisible = false;
 			this.gridLabs.Location = new System.Drawing.Point(12, 163);
 			this.gridLabs.Name = "gridLabs";
@@ -128,8 +126,6 @@
 			this.gridPidInfo.HasAddButton = false;
 			this.gridPidInfo.HasDropDowns = false;
 			this.gridPidInfo.HasMultilineHeaders = false;
-			this.gridPidInfo.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridPidInfo.HeaderHeight = 15;
 			this.gridPidInfo.HScrollVisible = false;
 			this.gridPidInfo.Location = new System.Drawing.Point(12, 40);
 			this.gridPidInfo.Name = "gridPidInfo";

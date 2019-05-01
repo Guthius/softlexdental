@@ -55,7 +55,6 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.gridConflicts.HasAddButton = false;
 			this.gridConflicts.HasMultilineHeaders = false;
-			this.gridConflicts.HeaderHeight = 15;
 			this.gridConflicts.HScrollVisible = false;
 			this.gridConflicts.Location = new System.Drawing.Point(10, 12);
 			this.gridConflicts.Name = "gridConflicts";

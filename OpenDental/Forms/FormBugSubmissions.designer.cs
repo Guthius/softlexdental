@@ -98,8 +98,6 @@ namespace OpenDental{
 			this.gridSubs.HasAddButton = false;
 			this.gridSubs.HasDropDowns = false;
 			this.gridSubs.HasMultilineHeaders = false;
-			this.gridSubs.HeaderFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F, System.Drawing.FontStyle.Bold);
-			this.gridSubs.HeaderHeight = 15;
 			this.gridSubs.HScrollVisible = false;
 			this.gridSubs.Location = new System.Drawing.Point(12, 127);
 			this.gridSubs.Name = "gridSubs";
