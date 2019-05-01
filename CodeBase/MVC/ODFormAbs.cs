@@ -62,6 +62,7 @@ namespace CodeBase.MVC
             {
                 previousWindowState = WindowState;
             }
+            base.OnResize(e);
         }
 
         protected override void OnFormClosed(FormClosedEventArgs e)
