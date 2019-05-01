@@ -1,4 +1,3 @@
-//#define TRIALONLY //Do not set here because ContrChart.ProcButtonClicked and FormOpenDental also need to test this value.
 using CodeBase;
 using OpenDental.Bridges;
 using OpenDental.UI;
@@ -29,29 +28,22 @@ namespace OpenDental
         ///<summary>When closing the form, this will hold the value of the newly selected PatNum.</summary>
         public long SelectedPatNum;
 
-
         private List<DisplayField> _ListDisplayFields;
 
         ///<summary>List of all the clinics this userod has access to.  When comboClinic.SelectedIndex=0 it refers to all clinics in this list.  Otherwise their selected clinic will always be _listClinics[comboClinic.SelectedIndex-1].</summary>
         private List<Clinic> _listClinics;
+        
         ///<summary>Set to true if constructor passed in patient object to prefill text boxes.  Used to make sure fillGrid is not called 
         ///before FormSelectPatient_Load.</summary>
         private bool _isPreFillLoad = false;
+        
         ///<summary>If set, initial patient list will be set to these patients.</summary>
         public List<long> ExplicitPatNums;
+
         private ODThread _fillGridThread = null;
         private DateTime _dateTimeLastSearch;
         private DateTime _dateTimeLastRequest;
         private Process _processOnScreenKeyboard = null;
-
-        #region On Screen Keyboard Dll Imports
-        [System.Runtime.InteropServices.DllImport("kernel32.dll", SetLastError = true)]
-        static extern bool Wow64DisableWow64FsRedirection(ref IntPtr ptr);
-
-        [System.Runtime.InteropServices.DllImport("kernel32.dll", SetLastError = true)]
-        static extern bool Wow64RevertWow64FsRedirection(IntPtr ptr);
-        #endregion
-
 
         public FormPatientSelect() : this(null)
         {
