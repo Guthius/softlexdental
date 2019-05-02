@@ -309,7 +309,7 @@ namespace OpenDentBusiness
                 return retVal;
             }
             Medication generic = GetOne(med.GenericNum);
-            return retVal + "(" + generic.MedName + ")";
+            return retVal + " (" + generic.MedName + ")";
         }
 
         ///<summary>Gets the medication name. Copied from GetDescription.</summary>

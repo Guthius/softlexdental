@@ -19,7 +19,7 @@ namespace OpenDental.Translation {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Language {
@@ -57,6 +57,105 @@ namespace OpenDental.Translation {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allergy.
+        /// </summary>
+        public static string Allergy {
+            get {
+                return ResourceManager.GetString("Allergy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this allergy?.
+        /// </summary>
+        public static string AllergyConfirmDelete {
+            get {
+                return ResourceManager.GetString("AllergyConfirmDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allergy Definition.
+        /// </summary>
+        public static string AllergyDef {
+            get {
+                return ResourceManager.GetString("AllergyDef", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot delete allergies in use..
+        /// </summary>
+        public static string AllergyDefCannotDeleteInUse {
+            get {
+                return ResourceManager.GetString("AllergyDefCannotDeleteInUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this allergy definition?.
+        /// </summary>
+        public static string AllergyDefConfirmDelete {
+            get {
+                return ResourceManager.GetString("AllergyDefConfirmDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only one code is allowed per allergy def..
+        /// </summary>
+        public static string AllergyOnlyOneUniiCodePerAllergyAllowed {
+            get {
+                return ResourceManager.GetString("AllergyOnlyOneUniiCodePerAllergyAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select at least one allergy..
+        /// </summary>
+        public static string AllergySelectAtLeastOne {
+            get {
+                return ResourceManager.GetString("AllergySelectAtLeastOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allergy Setup.
+        /// </summary>
+        public static string AllergySetup {
+            get {
+                return ResourceManager.GetString("AllergySetup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UNII code contains invalid characters: {0}.
+        /// </summary>
+        public static string AllergyUniiCodeContainsInvalidCharacters {
+            get {
+                return ResourceManager.GetString("AllergyUniiCodeContainsInvalidCharacters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to UNII code must be 10 characters in length..
+        /// </summary>
+        public static string AllergyUniiCodeMustBe10Characters {
+            get {
+                return ResourceManager.GetString("AllergyUniiCodeMustBe10Characters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string ButtonCancel {
+            get {
+                return ResourceManager.GetString("ButtonCancel", resourceCulture);
             }
         }
         
@@ -169,11 +268,47 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Description cannot be blank..
+        /// </summary>
+        public static string DescriptionCannotBeBlank {
+            get {
+                return ResourceManager.GetString("DescriptionCannotBeBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do not show me this message again..
         /// </summary>
         public static string DoNotShowThisMessageAgain {
             get {
                 return ResourceManager.GetString("DoNotShowThisMessageAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please input a valid date..
+        /// </summary>
+        public static string EnterAValidDate {
+            get {
+                return ResourceManager.GetString("EnterAValidDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hidden.
+        /// </summary>
+        public static string Hidden {
+            get {
+                return ResourceManager.GetString("Hidden", resourceCulture);
             }
         }
         

@@ -1,53 +1,63 @@
+using OpenDental.UI;
+using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using OpenDentBusiness;
-using OpenDental.UI;
 
 namespace OpenDental
 {
     public partial class FormAllergySetup : FormBase
     {
-        private List<AllergyDef> listAllergyDefs;
-        public bool IsSelectionMode;
-        public long SelectedAllergyDefNum;
+        List<AllergyDef> allergiesList;
+        
+        /// <summary>
+        /// Gets or sets a value indicating whether the form is in selection mode.
+        /// </summary>
+        public bool IsSelectionMode { get; set; }
 
-        public FormAllergySetup()
-        {
-            InitializeComponent();
-            Lan.F(this);
-        }
+        /// <summary>
+        /// Gets or sets the number of the selected allergy.
+        /// </summary>
+        public long SelectedAllergyDefNum { get; private set; }
 
-        private void FormAllergySetup_Load(object sender, EventArgs e)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormAllergySetup"/> class.
+        /// </summary>
+        public FormAllergySetup() => InitializeComponent();
+        
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void FormAllergySetup_Load(object sender, EventArgs e)
         {
             if (IsSelectionMode)
             {
-                butOK.Visible = true;
-                butClose.Text = "Cancel";
+                acceptButton.Visible = true;
+                cancelButton.Text = Translation.Language.ButtonCancel;
             }
-            FillGrid();
+            LoadAllergies();
         }
 
-        private void FillGrid()
+        /// <summary>
+        /// Fills the allergies grid.
+        /// </summary>
+        void LoadAllergies()
         {
-            listAllergyDefs = AllergyDefs.GetAll(checkShowHidden.Checked);
-            gridMain.BeginUpdate();
-            gridMain.Columns.Clear();
-            ODGridColumn col = new ODGridColumn(Lan.g("FormAllergySetup", "Desciption"), 160);
-            gridMain.Columns.Add(col);
-            col = new ODGridColumn(Lan.g("FormAllergySetup", "Hidden"), 60);
-            gridMain.Columns.Add(col);
-            gridMain.Rows.Clear();
-            ODGridRow row;
-            for (int i = 0; i < listAllergyDefs.Count; i++)
+            allergiesList = AllergyDefs.GetAll(showHiddenCheckBox.Checked);
+
+            allergiesGrid.BeginUpdate();
+            allergiesGrid.Columns.Clear();
+            allergiesGrid.Columns.Add(new ODGridColumn(Translation.Language.Description, 160));
+            allergiesGrid.Columns.Add(new ODGridColumn(Translation.Language.Hidden, 60));
+
+            allergiesGrid.Rows.Clear();
+            for (int i = 0; i < allergiesList.Count; i++)
             {
-                row = new ODGridRow();
-                row.Cells.Add(listAllergyDefs[i].Description);
-                if (listAllergyDefs[i].IsHidden)
+                var row = new ODGridRow();
+                row.Cells.Add(allergiesList[i].Description);
+                if (allergiesList[i].IsHidden)
                 {
                     row.Cells.Add("X");
                 }
@@ -55,56 +65,76 @@ namespace OpenDental
                 {
                     row.Cells.Add("");
                 }
-                gridMain.Rows.Add(row);
+                allergiesGrid.Rows.Add(row);
             }
-            gridMain.EndUpdate();
+            allergiesGrid.EndUpdate();
         }
 
-        private void checkShowHidden_CheckedChanged(object sender, EventArgs e)
-        {
-            FillGrid();
-        }
-
-        private void gridMain_CellDoubleClick(object sender, ODGridClickEventArgs e)
+        /// <summary>
+        /// Reloads the list of allergies when visibility of hidden items is toggled.
+        /// </summary>
+        void showHiddenCheckBox_CheckedChanged(object sender, EventArgs e) => LoadAllergies();
+        
+        /// <summary>
+        /// Closes the form when in selection mode; otherwise, opens the form to edit the selected allergy.
+        /// </summary>
+        void allergiesGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
         {
             if (IsSelectionMode)
             {
-                SelectedAllergyDefNum = listAllergyDefs[e.Row].AllergyDefNum;
+                SelectedAllergyDefNum = allergiesList[e.Row].AllergyDefNum;
                 DialogResult = DialogResult.OK;
             }
             else
             {
-                FormAllergyDefEdit formA = new FormAllergyDefEdit();
-                formA.AllergyDefCur = listAllergyDefs[gridMain.GetSelectedIndex()];
-                formA.ShowDialog();
-                FillGrid();
+                using (var formAllergyDefEdit = new FormAllergyDefEdit())
+                {
+                    formAllergyDefEdit.AllergyDefCur = allergiesList[allergiesGrid.GetSelectedIndex()];
+                    if (formAllergyDefEdit.ShowDialog() == DialogResult.OK)
+                    {
+                        LoadAllergies();
+                    }
+                }
             }
         }
 
-        private void butAdd_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Opens the form to add a new allergy.
+        /// </summary>
+        void addButton_Click(object sender, EventArgs e)
         {
-            FormAllergyDefEdit formA = new FormAllergyDefEdit();
-            formA.AllergyDefCur = new AllergyDef();
-            formA.AllergyDefCur.IsNew = true;
-            formA.ShowDialog();
-            FillGrid();
+            using (var formAllergyDefEdit = new FormAllergyDefEdit())
+            {
+                formAllergyDefEdit.AllergyDefCur = new AllergyDef();
+                formAllergyDefEdit.AllergyDefCur.IsNew = true;
+
+                if (formAllergyDefEdit.ShowDialog() == DialogResult.OK)
+                {
+                    LoadAllergies();
+                }
+            }
         }
 
-        private void butOK_Click(object sender, EventArgs e)
+        /// <summary>
+        /// Closes the form.
+        /// </summary>
+        void acceptButton_Click(object sender, EventArgs e)
         {
             //Only visible in IsSelectionMode.
-            if (gridMain.GetSelectedIndex() == -1)
+            if (allergiesGrid.GetSelectedIndex() == -1)
             {
-                MsgBox.Show(this, "Select at least one allergy.");
+                MessageBox.Show(
+                    Translation.Language.AllergySelectAtLeastOne,
+                    Translation.Language.AllergySetup, 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Information);
+
                 return;
             }
-            SelectedAllergyDefNum = listAllergyDefs[gridMain.GetSelectedIndex()].AllergyDefNum;
-            DialogResult = DialogResult.OK;
-        }
 
-        private void butClose_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
+            SelectedAllergyDefNum = allergiesList[allergiesGrid.GetSelectedIndex()].AllergyDefNum;
+
+            DialogResult = DialogResult.OK;
         }
     }
 }

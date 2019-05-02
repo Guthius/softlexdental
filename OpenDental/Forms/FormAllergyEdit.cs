@@ -1,123 +1,185 @@
+using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental {
-	public partial class FormAllergyEdit:ODForm {
-		public Allergy AllergyCur;
-		private List<AllergyDef> allergyDefList;
-		private Snomed snomedReaction;
+namespace OpenDental
+{
+    public partial class FormAllergyEdit : FormBase
+    {
+        List<AllergyDef> allergiesList;
+        Snomed snomedReaction;
 
-		public FormAllergyEdit() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        public Allergy AllergyCur;
 
-		private void FormAllergyEdit_Load(object sender,EventArgs e) {
-			int allergyIndex=0;
-			allergyDefList=AllergyDefs.GetAll(false);
-			if(allergyDefList.Count<1) {
-				MsgBox.Show(this,"Need to set up at least one Allergy from EHR setup window.");
-				DialogResult=DialogResult.Cancel;
-				return;
-			}
-			for(int i=0;i<allergyDefList.Count;i++) {
-				comboAllergies.Items.Add(allergyDefList[i].Description);
-				if(!AllergyCur.IsNew && allergyDefList[i].AllergyDefNum==AllergyCur.AllergyDefNum) {
-					allergyIndex=i;
-				}
-			}
-			snomedReaction=Snomeds.GetByCode(AllergyCur.SnomedReaction);
-			if(snomedReaction!=null) {
-				textSnomedReaction.Text=snomedReaction.Description;
-			}
-			if(!AllergyCur.IsNew) {
-				if(AllergyCur.DateAdverseReaction<DateTime.Parse("01-01-1880")) {
-					textDate.Text="";
-				}
-				else {
-					textDate.Text=AllergyCur.DateAdverseReaction.ToShortDateString();
-				}
-				comboAllergies.SelectedIndex=allergyIndex;
-				textReaction.Text=AllergyCur.Reaction;
-				checkActive.Checked=AllergyCur.StatusIsActive;
-			}
-			else {
-				comboAllergies.SelectedIndex=0;
-			}
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormAllergyEdit"/> class.
+        /// </summary>
+        public FormAllergyEdit() => InitializeComponent();
+        
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        private void FormAllergyEdit_Load(object sender, EventArgs e)
+        {
+            int allergyIndex = 0;
+            allergiesList = AllergyDefs.GetAll(false);
 
-		private void butSnomedReactionSelect_Click(object sender,EventArgs e) {
-			FormSnomeds formS=new FormSnomeds();
-			formS.IsSelectionMode=true;
-			if(formS.ShowDialog()==DialogResult.OK) {
-				snomedReaction=formS.SelectedSnomed;
-				textSnomedReaction.Text=snomedReaction.Description;
-			}
-		}
+            if (allergiesList.Count < 1)
+            {
+                MessageBox.Show(
+                    "Need to set up at least one Allergy from EHR setup window.",
+                    Translation.Language.Allergy, 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Warning);
 
-		private void butNoneSnomedReaction_Click(object sender,EventArgs e) {
-			snomedReaction=null;
-			textSnomedReaction.Text="";
-		}
+                DialogResult = DialogResult.Cancel;
+                return;
+            }
 
-		private void butDelete_Click(object sender,EventArgs e) {
-			if(AllergyCur.IsNew) {
-				DialogResult=DialogResult.Cancel;
-				return;
-			}
-			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete?")){
-				return;
-			}
-			Allergies.Delete(AllergyCur.AllergyNum);
-			SecurityLogs.MakeLogEntry(Permissions.PatAllergyListEdit,AllergyCur.PatNum,AllergyDefs.GetDescription(AllergyCur.AllergyDefNum)+" deleted");
-			DialogResult=DialogResult.OK;
-		}
+            for (int i = 0; i < allergiesList.Count; i++)
+            {
+                allergyComboBox.Items.Add(allergiesList[i].Description);
+                if (!AllergyCur.IsNew && allergiesList[i].AllergyDefNum == AllergyCur.AllergyDefNum)
+                {
+                    allergyIndex = i;
+                }
+            }
 
-		private void butOK_Click(object sender,EventArgs e) {
-			//Validate
-			if(textDate.Text!="") {
-				try {
-					DateTime.Parse(textDate.Text);
-				}
-				catch {
-					MessageBox.Show("Please input a valid date.");
-					return;
-				}
-			}
-			//Save
-			if(textDate.Text!="") {
-				AllergyCur.DateAdverseReaction=DateTime.Parse(textDate.Text);
-			}
-			else {
-				AllergyCur.DateAdverseReaction=DateTime.MinValue;
-			}
-			AllergyCur.AllergyDefNum=allergyDefList[comboAllergies.SelectedIndex].AllergyDefNum;
-			AllergyCur.Reaction=textReaction.Text;
-			AllergyCur.SnomedReaction="";
-			if(snomedReaction!=null) {
-				AllergyCur.SnomedReaction=snomedReaction.SnomedCode;
-			}
-			AllergyCur.StatusIsActive=checkActive.Checked;
-			if(AllergyCur.IsNew) {
-				Allergies.Insert(AllergyCur);
-				SecurityLogs.MakeLogEntry(Permissions.PatAllergyListEdit,AllergyCur.PatNum,AllergyDefs.GetDescription(AllergyCur.AllergyDefNum)+" added");
-			}
-			else {
-				Allergies.Update(AllergyCur);
-				SecurityLogs.MakeLogEntry(Permissions.PatAllergyListEdit,AllergyCur.PatNum,AllergyDefs.GetDescription(AllergyCur.AllergyDefNum)+" edited");
-			}
-			DialogResult=DialogResult.OK;
-		}
+            // Get the SNOMED reaction assigned to the allergy.
+            snomedReaction = Snomeds.GetByCode(AllergyCur.SnomedReaction);
+            if (snomedReaction != null)
+            {
+                snomedTextBox.Text = snomedReaction.Description;
+            }
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+            if (!AllergyCur.IsNew)
+            {
+                if (AllergyCur.DateAdverseReaction < DateTime.Parse("01-01-1880"))
+                {
+                    dateTextBox.Text = "";
+                }
+                else
+                {
+                    dateTextBox.Text = AllergyCur.DateAdverseReaction.ToShortDateString();
+                }
+                allergyComboBox.SelectedIndex = allergyIndex;
+                reactionTextBox.Text = AllergyCur.Reaction;
+                activeCheckBox.Checked = AllergyCur.StatusIsActive;
+            }
+            else
+            {
+                allergyComboBox.SelectedIndex = 0;
+            }
+        }
 
-	}
+        /// <summary>
+        /// Opens the form to select a SNOMED reaction to assign to the allergy.
+        /// </summary>
+        void snomedBrowseButton_Click(object sender, EventArgs e)
+        {
+            using (var formSnomeds = new FormSnomeds())
+            {
+                formSnomeds.IsSelectionMode = true;
+                if (formSnomeds.ShowDialog() == DialogResult.OK)
+                {
+                    snomedReaction = formSnomeds.SelectedSnomed;
+                    snomedTextBox.Text = snomedReaction.Description;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Clears the selected SNOMED reaction.
+        /// </summary>
+        void snomedNoneButton_Click(object sender, EventArgs e)
+        {
+            snomedReaction = null;
+            snomedTextBox.Text = "";
+        }
+
+        /// <summary>
+        /// Deletes the allergy.
+        /// </summary>
+        void deleteButton_Click(object sender, EventArgs e)
+        {
+            if (AllergyCur.IsNew)
+            {
+                DialogResult = DialogResult.Cancel;
+                return;
+            }
+
+            var result =
+                MessageBox.Show(
+                    Translation.Language.AllergyConfirmDelete,
+                    Translation.Language.Allergy, 
+                    MessageBoxButtons.OKCancel, 
+                    MessageBoxIcon.Question);
+
+            if (result == DialogResult.Cancel) return;
+
+            Allergies.Delete(AllergyCur.AllergyNum);
+
+            SecurityLogs.MakeLogEntry(
+                Permissions.PatAllergyListEdit, 
+                AllergyCur.PatNum, 
+                string.Format(
+                    Translation.LanguageSecurity.GenericItemDeleted, 
+                    AllergyDefs.GetDescription(AllergyCur.AllergyDefNum)));
+
+            DialogResult = DialogResult.OK;
+        }
+
+        /// <summary>
+        /// Saves the allergy and closes the form.
+        /// </summary>
+        void acceptButton_Click(object sender, EventArgs e)
+        {
+            var dateTime = DateTime.MinValue;
+            if (dateTextBox.Text != "")
+            {
+                if (!DateTime.TryParse(dateTextBox.Text, out dateTime))
+                {
+                    MessageBox.Show(
+                        Translation.Language.EnterAValidDate,
+                        Translation.Language.Allergy,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+
+                    return;
+                }
+            }
+
+            AllergyCur.DateAdverseReaction = dateTime;
+            AllergyCur.AllergyDefNum = allergiesList[allergyComboBox.SelectedIndex].AllergyDefNum;
+            AllergyCur.Reaction = reactionTextBox.Text;
+            AllergyCur.SnomedReaction = snomedReaction?.SnomedCode ?? "";
+            AllergyCur.StatusIsActive = activeCheckBox.Checked;
+
+            if (AllergyCur.IsNew)
+            {
+                Allergies.Insert(AllergyCur);
+
+                SecurityLogs.MakeLogEntry(
+                    Permissions.PatAllergyListEdit, 
+                    AllergyCur.PatNum,
+                    string.Format(
+                        Translation.LanguageSecurity.GenericItemAdded,
+                        AllergyDefs.GetDescription(AllergyCur.AllergyDefNum)));
+            }
+            else
+            {
+                Allergies.Update(AllergyCur);
+
+                SecurityLogs.MakeLogEntry(
+                    Permissions.PatAllergyListEdit, 
+                    AllergyCur.PatNum,
+                    string.Format(
+                        Translation.LanguageSecurity.GenericItemModified,
+                        AllergyDefs.GetDescription(AllergyCur.AllergyDefNum)));
+            }
+
+            DialogResult = DialogResult.OK;
+        }
+    }
 }

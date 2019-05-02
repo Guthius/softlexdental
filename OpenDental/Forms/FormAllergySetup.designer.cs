@@ -1,129 +1,138 @@
-namespace OpenDental{
-	partial class FormAllergySetup {
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+namespace OpenDental
+{
+    partial class FormAllergySetup
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing) {
-			if(disposing && (components != null)) {
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent() {
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAllergySetup));
-            this.butOK = new System.Windows.Forms.Button();
-            this.checkShowHidden = new System.Windows.Forms.CheckBox();
-            this.gridMain = new OpenDental.UI.ODGrid();
-            this.butAdd = new System.Windows.Forms.Button();
-            this.butClose = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.acceptButton = new System.Windows.Forms.Button();
+            this.showHiddenCheckBox = new System.Windows.Forms.CheckBox();
+            this.allergiesGrid = new OpenDental.UI.ODGrid();
+            this.addButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // butOK
+            // cancelButton
             // 
-            this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.butOK.Location = new System.Drawing.Point(273, 282);
-            this.butOK.Name = "butOK";
-            this.butOK.Size = new System.Drawing.Size(110, 30);
-            this.butOK.TabIndex = 6;
-            this.butOK.Text = "&OK";
-            this.butOK.Visible = false;
-            this.butOK.Click += new System.EventHandler(this.butOK_Click);
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(311, 418);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(110, 30);
+            this.cancelButton.TabIndex = 1;
+            this.cancelButton.Text = "&Close";
             // 
-            // checkShowHidden
+            // acceptButton
             // 
-            this.checkShowHidden.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkShowHidden.Location = new System.Drawing.Point(273, 72);
-            this.checkShowHidden.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
-            this.checkShowHidden.Name = "checkShowHidden";
-            this.checkShowHidden.Size = new System.Drawing.Size(110, 24);
-            this.checkShowHidden.TabIndex = 5;
-            this.checkShowHidden.TabStop = false;
-            this.checkShowHidden.Text = "Show Hidden";
-            this.checkShowHidden.UseVisualStyleBackColor = true;
-            this.checkShowHidden.CheckedChanged += new System.EventHandler(this.checkShowHidden_CheckedChanged);
+            this.acceptButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.acceptButton.Location = new System.Drawing.Point(311, 382);
+            this.acceptButton.Name = "acceptButton";
+            this.acceptButton.Size = new System.Drawing.Size(110, 30);
+            this.acceptButton.TabIndex = 0;
+            this.acceptButton.Text = "&OK";
+            this.acceptButton.Visible = false;
+            this.acceptButton.Click += new System.EventHandler(this.acceptButton_Click);
             // 
-            // gridMain
+            // showHiddenCheckBox
             // 
-            this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.showHiddenCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.showHiddenCheckBox.AutoSize = true;
+            this.showHiddenCheckBox.Location = new System.Drawing.Point(311, 72);
+            this.showHiddenCheckBox.Margin = new System.Windows.Forms.Padding(3, 20, 3, 20);
+            this.showHiddenCheckBox.Name = "showHiddenCheckBox";
+            this.showHiddenCheckBox.Size = new System.Drawing.Size(97, 19);
+            this.showHiddenCheckBox.TabIndex = 4;
+            this.showHiddenCheckBox.TabStop = false;
+            this.showHiddenCheckBox.Text = "Show Hidden";
+            this.showHiddenCheckBox.UseVisualStyleBackColor = true;
+            this.showHiddenCheckBox.CheckedChanged += new System.EventHandler(this.showHiddenCheckBox_CheckedChanged);
+            // 
+            // allergiesGrid
+            // 
+            this.allergiesGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.gridMain.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
-            this.gridMain.EditableEnterMovesDown = false;
-            this.gridMain.HasAddButton = false;
-            this.gridMain.HasDropDowns = false;
-            this.gridMain.HasMultilineHeaders = false;
-            this.gridMain.HScrollVisible = false;
-            this.gridMain.Location = new System.Drawing.Point(13, 19);
-            this.gridMain.Name = "gridMain";
-            this.gridMain.ScrollValue = 0;
-            this.gridMain.Size = new System.Drawing.Size(254, 329);
-            this.gridMain.TabIndex = 4;
-            this.gridMain.Title = "Allergies";
-            this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
+            this.allergiesGrid.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
+            this.allergiesGrid.EditableEnterMovesDown = false;
+            this.allergiesGrid.HasAddButton = false;
+            this.allergiesGrid.HasDropDowns = false;
+            this.allergiesGrid.HasMultilineHeaders = false;
+            this.allergiesGrid.HScrollVisible = false;
+            this.allergiesGrid.Location = new System.Drawing.Point(13, 19);
+            this.allergiesGrid.Name = "allergiesGrid";
+            this.allergiesGrid.ScrollValue = 0;
+            this.allergiesGrid.Size = new System.Drawing.Size(292, 429);
+            this.allergiesGrid.TabIndex = 2;
+            this.allergiesGrid.Title = "Allergies";
+            this.allergiesGrid.TitleVisible = true;
+            this.allergiesGrid.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.allergiesGrid_CellDoubleClick);
             // 
-            // butAdd
+            // addButton
             // 
-            this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
-            this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.butAdd.Location = new System.Drawing.Point(273, 19);
-            this.butAdd.Name = "butAdd";
-            this.butAdd.Size = new System.Drawing.Size(110, 30);
-            this.butAdd.TabIndex = 3;
-            this.butAdd.Text = "&Add";
-            this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
-            // 
-            // butClose
-            // 
-            this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.butClose.Location = new System.Drawing.Point(273, 318);
-            this.butClose.Name = "butClose";
-            this.butClose.Size = new System.Drawing.Size(110, 30);
-            this.butClose.TabIndex = 2;
-            this.butClose.Text = "&Close";
-            this.butClose.Click += new System.EventHandler(this.butClose_Click);
+            this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.addButton.Image = global::OpenDental.Properties.Resources.IconAdd;
+            this.addButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.addButton.Location = new System.Drawing.Point(311, 19);
+            this.addButton.Name = "addButton";
+            this.addButton.Size = new System.Drawing.Size(110, 30);
+            this.addButton.TabIndex = 3;
+            this.addButton.Text = "&Add";
+            this.addButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.addButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.addButton.Click += new System.EventHandler(this.addButton_Click);
             // 
             // FormAllergySetup
             // 
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(396, 361);
-            this.Controls.Add(this.butOK);
-            this.Controls.Add(this.checkShowHidden);
-            this.Controls.Add(this.gridMain);
-            this.Controls.Add(this.butAdd);
-            this.Controls.Add(this.butClose);
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(434, 461);
+            this.Controls.Add(this.acceptButton);
+            this.Controls.Add(this.showHiddenCheckBox);
+            this.Controls.Add(this.allergiesGrid);
+            this.Controls.Add(this.addButton);
+            this.Controls.Add(this.cancelButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormAllergySetup";
-            this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.Text = "Allergy Setup";
             this.Load += new System.EventHandler(this.FormAllergySetup_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private System.Windows.Forms.Button butAdd;
-		private System.Windows.Forms.Button butClose;
-		private UI.ODGrid gridMain;
-		private System.Windows.Forms.CheckBox checkShowHidden;
-		private System.Windows.Forms.Button butOK;
-	}
+        private System.Windows.Forms.Button addButton;
+        private System.Windows.Forms.Button cancelButton;
+        private UI.ODGrid allergiesGrid;
+        private System.Windows.Forms.CheckBox showHiddenCheckBox;
+        private System.Windows.Forms.Button acceptButton;
+    }
 }

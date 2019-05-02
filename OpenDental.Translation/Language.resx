@@ -315,4 +315,49 @@
   <data name="UseTheCEMTToolToChangeYourPassword" xml:space="preserve">
     <value>Use the CEMT tool to change your password.</value>
   </data>
+  <data name="AllergyConfirmDelete" xml:space="preserve">
+    <value>Are you sure you want to delete this allergy?</value>
+  </data>
+  <data name="AllergyDefCannotDeleteInUse" xml:space="preserve">
+    <value>Cannot delete allergies in use.</value>
+  </data>
+  <data name="AllergyDefConfirmDelete" xml:space="preserve">
+    <value>Are you sure you want to delete this allergy definition?</value>
+  </data>
+  <data name="AllergyDef" xml:space="preserve">
+    <value>Allergy Definition</value>
+  </data>
+  <data name="Allergy" xml:space="preserve">
+    <value>Allergy</value>
+  </data>
+  <data name="AllergyOnlyOneUniiCodePerAllergyAllowed" xml:space="preserve">
+    <value>Only one code is allowed per allergy def.</value>
+  </data>
+  <data name="AllergyUniiCodeContainsInvalidCharacters" xml:space="preserve">
+    <value>UNII code contains invalid characters: {0}</value>
+  </data>
+  <data name="AllergyUniiCodeMustBe10Characters" xml:space="preserve">
+    <value>UNII code must be 10 characters in length.</value>
+  </data>
+  <data name="ButtonCancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="DescriptionCannotBeBlank" xml:space="preserve">
+    <value>Description cannot be blank.</value>
+  </data>
+  <data name="EnterAValidDate" xml:space="preserve">
+    <value>Please input a valid date.</value>
+  </data>
+  <data name="Hidden" xml:space="preserve">
+    <value>Hidden</value>
+  </data>
+  <data name="AllergySelectAtLeastOne" xml:space="preserve">
+    <value>Select at least one allergy.</value>
+  </data>
+  <data name="AllergySetup" xml:space="preserve">
+    <value>Allergy Setup</value>
+  </data>
 </root>
