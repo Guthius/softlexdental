@@ -1499,7 +1499,7 @@ namespace OpenDental.InternalTools.Job_Manager {
 			commlog.PatNum=_jobCur.ListJobQuotes.FirstOrDefault().PatNum;
 			commlog.CommDateTime=DateTime.Now;
 			commlog.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
-			if(PrefC.GetBool(PrefName.DistributorKey)) {//for OD HQ
+			if(Preferences.GetBool(PrefName.DistributorKey)) {//for OD HQ
 				commlog.Mode_=CommItemMode.None;
 				commlog.SentOrReceived=CommSentOrReceived.Neither;
 			}
@@ -1517,7 +1517,7 @@ namespace OpenDental.InternalTools.Job_Manager {
 			Patient pat=Patients.GetPat(_jobCur.ListJobQuotes.FirstOrDefault().PatNum);
 			message.PatNum=pat.PatNum;
 			message.ToAddress=pat.Email;
-			message.FromAddress=EmailAddresses.GetOne(PrefC.GetLong(PrefName.EmailDefaultAddressNum)).GetFrom();				
+			message.FromAddress=EmailAddresses.GetOne(Preferences.GetLong(PrefName.EmailDefaultAddressNum)).GetFrom();				
 			message.Subject="";
 			FormEmailMessageEdit FormEME = new FormEmailMessageEdit(message);
 			FormEME.IsNew=true;

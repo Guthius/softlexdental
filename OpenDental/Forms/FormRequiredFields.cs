@@ -28,7 +28,7 @@ namespace OpenDental {
 			}
 			comboFieldTypes.SelectedIndex=0;
 			FillAvailable();
-			checkMedicaidLength.Checked=PrefC.GetBool(PrefName.EnforceMedicaidIDLength);
+			checkMedicaidLength.Checked=Preferences.GetBool(PrefName.EnforceMedicaidIDLength);
 		}
 
 		private void FillAvailable() {
@@ -49,7 +49,7 @@ namespace OpenDental {
 			for(int i=0;i<arrayRequiredFieldNames.Length;i++) {
 				switch(arrayRequiredFieldNames[i]) {
 					case RequiredFieldName.AdmitDate:
-						if(PrefC.GetBool(PrefName.EasyHideHospitals)) {
+						if(Preferences.GetBool(PrefName.EasyHideHospitals)) {
 							continue;//Don't include AdmitDate in the list if hospitals is not enabled
 						}
 						break;
@@ -59,12 +59,12 @@ namespace OpenDental {
 						}
 						break;
 					case RequiredFieldName.Ward:
-						if(PrefC.GetBool(PrefName.EasyHideHospitals)) {
+						if(Preferences.GetBool(PrefName.EasyHideHospitals)) {
 							continue;//Don't include Ward in the list if hospitals is not enabled
 						}
 						break;
 					case RequiredFieldName.Clinic:
-						if(!PrefC.HasClinicsEnabled) {
+						if(!Preferences.HasClinicsEnabled) {
 							continue;//Don't include Clinic in the list if clinics is not enabled
 						}
 						break;
@@ -74,7 +74,7 @@ namespace OpenDental {
 					case RequiredFieldName.MothersMaidenFirstName:
 					case RequiredFieldName.MothersMaidenLastName:
 					case RequiredFieldName.DateTimeDeceased:
-						if(!PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+						if(!Preferences.GetBool(PrefName.ShowFeatureEhr)) {
 							continue;//EHR features
 						}
 						break;
@@ -90,7 +90,7 @@ namespace OpenDental {
 						break;
 					case RequiredFieldName.MedicaidID:
 					case RequiredFieldName.MedicaidState:
-						if(PrefC.GetBool(PrefName.EasyHideMedicaid)) {
+						if(Preferences.GetBool(PrefName.EasyHideMedicaid)) {
 							continue;//Don't show Medicaid fields
 						}
 						break;
@@ -100,13 +100,13 @@ namespace OpenDental {
 					case RequiredFieldName.GradeLevel:
 					case RequiredFieldName.TreatmentUrgency:
 					case RequiredFieldName.ResponsibleParty:
-						if(PrefC.GetBool(PrefName.EasyHidePublicHealth)) { 
+						if(Preferences.GetBool(PrefName.EasyHidePublicHealth)) { 
 							continue;//Don't show Public Health fields
 						}
 						break;
 					case RequiredFieldName.Ethnicity:
-						if(PrefC.GetBool(PrefName.EasyHidePublicHealth)
-							|| !PrefC.GetBool(PrefName.ShowFeatureEhr))
+						if(Preferences.GetBool(PrefName.EasyHidePublicHealth)
+							|| !Preferences.GetBool(PrefName.ShowFeatureEhr))
 						{
 							continue;//Don't show Ethnicity
 						}

@@ -89,7 +89,7 @@ namespace OpenDentBusiness
             protected override List<Provider> GetCacheFromDb()
             {
                 string command = "SELECT * FROM provider";
-                if (PrefC.GetBool(PrefName.EasyHideDentalSchools))
+                if (Preferences.GetBool(PrefName.EasyHideDentalSchools))
                 {
                     command += " ORDER BY ItemOrder";
                 }
@@ -578,7 +578,7 @@ namespace OpenDentBusiness
             {
                 if (clinicInsBillingProv == 0)
                 {//default=0
-                    return PrefC.GetLong(PrefName.PracticeDefaultProv);
+                    return Preferences.GetLong(PrefName.PracticeDefaultProv);
                 }
                 else if (clinicInsBillingProv == -1)
                 {//treat=-1
@@ -591,17 +591,17 @@ namespace OpenDentBusiness
             }
             else
             {
-                if (PrefC.GetLong(PrefName.InsBillingProv) == 0)
+                if (Preferences.GetLong(PrefName.InsBillingProv) == 0)
                 {//default=0
-                    return PrefC.GetLong(PrefName.PracticeDefaultProv);
+                    return Preferences.GetLong(PrefName.PracticeDefaultProv);
                 }
-                else if (PrefC.GetLong(PrefName.InsBillingProv) == -1)
+                else if (Preferences.GetLong(PrefName.InsBillingProv) == -1)
                 {//treat=-1
                     return treatProv;
                 }
                 else
                 {
-                    return PrefC.GetLong(PrefName.InsBillingProv);
+                    return Preferences.GetLong(PrefName.InsBillingProv);
                 }
             }
         }
@@ -626,7 +626,7 @@ namespace OpenDentBusiness
         public static List<Provider> GetProvsForClinic(long clinicNum)
         {
             //No need to check RemotingRole; no call to db.
-            if (!PrefC.HasClinicsEnabled)
+            if (!Preferences.HasClinicsEnabled)
             {
                 return Providers.GetDeepCopy(true);//if clinics not enabled, return all visible providers.
             }
@@ -671,7 +671,7 @@ namespace OpenDentBusiness
             }
             if (provider == null)
             {//If not using clinics or if the specified clinic does not have a valid default provider set.
-                provider = Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));//Try to get the practice default.
+                provider = Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv));//Try to get the practice default.
             }
             return provider;
         }
@@ -680,7 +680,7 @@ namespace OpenDentBusiness
         {
             string command = @"SELECT FName,LName,Suffix,StateLicense
 				FROM provider
-        WHERE provnum=" + PrefC.GetString(PrefName.PracticeDefaultProv);
+        WHERE provnum=" + Preferences.GetString(PrefName.PracticeDefaultProv);
             return Db.GetTable(command);
         }
 
@@ -691,7 +691,7 @@ namespace OpenDentBusiness
         {
             string command = @"SELECT FName,LName,Specialty " +
                 "FROM provider WHERE provnum=" +
-                POut.Long(PrefC.GetLong(PrefName.PracticeDefaultProv));
+                POut.Long(Preferences.GetLong(PrefName.PracticeDefaultProv));
             //Convert.ToInt32(((Pref)PrefC.HList["PracticeDefaultProv"]).ValueString);
             return Db.GetTable(command);
         }
@@ -703,7 +703,7 @@ namespace OpenDentBusiness
         {
             string command = @"SELECT NationalProvID " +
                 "FROM provider WHERE provnum=" +
-                POut.Long(PrefC.GetLong(PrefName.PracticeDefaultProv));
+                POut.Long(Preferences.GetLong(PrefName.PracticeDefaultProv));
             return Db.GetTable(command);
         }
 
@@ -738,7 +738,7 @@ namespace OpenDentBusiness
         {
             //No need to check RemotingRole; no call to db.
             List<Provider> listProviders = Providers.GetDeepCopy(true);
-            WebSchedProviderRules providerRule = (WebSchedProviderRules)PrefC.GetInt(PrefName.WebSchedProviderRule);
+            WebSchedProviderRules providerRule = (WebSchedProviderRules)Preferences.GetInt(PrefName.WebSchedProviderRule);
             switch (providerRule)
             {
                 case WebSchedProviderRules.PrimaryProvider:
@@ -824,7 +824,7 @@ namespace OpenDentBusiness
         {
             //No need to check RemotingRole; no call to db.
             List<Provider> listProvs = Providers.GetDeepCopy(true);
-            if (PrefC.GetBool(PrefName.EasyHideDentalSchools))
+            if (Preferences.GetBool(PrefName.EasyHideDentalSchools))
             {//This is here to save doing the logic below for users who have no way to filter the provider picker list.
                 return listProvs;
             }
@@ -951,7 +951,7 @@ namespace OpenDentBusiness
         public static List<Provider> GetProvsScheduledToday(long clinicNum = -1)
         {
             List<Schedule> listSchedulesForDate = Schedules.GetAllForDateAndType(DateTime.Today, ScheduleType.Provider);
-            if (PrefC.HasClinicsEnabled && clinicNum >= 0)
+            if (Preferences.HasClinicsEnabled && clinicNum >= 0)
             {
                 listSchedulesForDate.FindAll(x => x.ClinicNum == clinicNum);
             }

@@ -32,9 +32,9 @@ namespace OpenDental {
 			datePicker.SetDateTimeTo(DateTime.Today.AddDays(7));
 			//Add the appointment confirmation types
 			comboBoxMultiConfStatus.Items.Clear();
-			long defaultStatus=PrefC.GetLong(PrefName.WebSchedNewPatConfirmStatus);
+			long defaultStatus=Preferences.GetLong(PrefName.WebSchedNewPatConfirmStatus);
 			if(!checkWebSchedNewPat.Checked && checkWebSchedRecall.Checked) {
-				defaultStatus=PrefC.GetLong(PrefName.WebSchedRecallConfirmStatus);
+				defaultStatus=Preferences.GetLong(PrefName.WebSchedRecallConfirmStatus);
 			}
 			List<Def> listDefs=Defs.GetDefsForCategory(DefCat.ApptConfirmed,true);
 			foreach(Def defCur in listDefs) {
@@ -60,7 +60,7 @@ namespace OpenDental {
 			//Columns
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn(Lan.g(this,"Clinic"),100);
 				gridMain.Columns.Add(col);
 			}
@@ -82,7 +82,7 @@ namespace OpenDental {
 			foreach(DataRow row in table.Rows) {
 				ODGridCell[] cellsArray=new ODGridCell[gridMain.Columns.Count];
 				ODGridRow newRow=new ODGridRow();				
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					newRow.Cells.Add(row["ClinicDesc"].ToString());
 				}
 				newRow.Cells.Add(PIn.Date(row["DateTimeCreated"].ToString()).ToString("d"));
@@ -106,7 +106,7 @@ namespace OpenDental {
 				datePicker.GetDateTimeTo(),
 				listProvNums,
 				comboBoxClinicMulti.ListSelectedClinicNums,
-				PrefC.HasClinicsEnabled,
+				Preferences.HasClinicsEnabled,
 				checkWebSchedRecall.Checked,
 				checkWebSchedNewPat.Checked,
 				checkASAP.Checked,

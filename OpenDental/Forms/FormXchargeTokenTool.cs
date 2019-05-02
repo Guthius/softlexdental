@@ -111,7 +111,7 @@ namespace OpenDental {
 				Program prog=Programs.GetCur(ProgramName.Xcharge);
 				string path=Programs.GetProgramPath(prog);
 				ProcessStartInfo info=new ProcessStartInfo(path);
-				string resultfile=PrefC.GetRandomTempFile("txt");
+				string resultfile=Preferences.GetRandomTempFile("txt");
 				try {
 					File.Delete(resultfile);//delete the old result file.
 				}

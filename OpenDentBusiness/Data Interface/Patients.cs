@@ -366,7 +366,7 @@ namespace OpenDentBusiness
             //PriPro is intentionally not synched so the clone can be assigned to a different provider for tracking production.
             if (primaryProvNum == 0)
             {
-                primaryProvNum = PrefC.GetLong(PrefName.PracticeDefaultProv);
+                primaryProvNum = Preferences.GetLong(PrefName.PracticeDefaultProv);
             }
             patientSynch.PriProv = primaryProvNum;
             patientSynch.ClinicNum = clinicNum;
@@ -383,7 +383,7 @@ namespace OpenDentBusiness
             patientSynch = Patients.GetPat(patientSynch.PatNum);
             Patient patientSynchOld = patientSynch.Copy();
             //Now that the clone has been inserted and has a primary key we can consider what family and/or super family the clone should be part of.
-            if (PrefC.GetBool(PrefName.CloneCreateSuperFamily))
+            if (Preferences.GetBool(PrefName.CloneCreateSuperFamily))
             {
                 //Put the clone into their own family.
                 patientSynch.Guarantor = patientSynch.PatNum;
@@ -1191,7 +1191,7 @@ namespace OpenDentBusiness
             }
             patient.Birthdate = birthDate;
             patient.PatStatus = PatientStatus.Patient;
-            patient.BillingType = PrefC.GetLong(PrefName.PracticeDefaultBillType);
+            patient.BillingType = Preferences.GetLong(PrefName.PracticeDefaultBillType);
             patient.PriProv = priProv;
             patient.Gender = PatientGender.Unknown;
             patient.ClinicNum = clinicNum;
@@ -1528,7 +1528,7 @@ namespace OpenDentBusiness
                 command += "'' ";
             }
             command += "Specialty";
-            if (PrefC.GetBool(PrefName.DistributorKey))
+            if (Preferences.GetBool(PrefName.DistributorKey))
             {//if for OD HQ, so never going to be Oracle
                 command += ",GROUP_CONCAT(DISTINCT phonenumber.PhoneNumberVal) AS OtherPhone"//this customer might have multiple extra phone numbers that match the param.
                     + ",registrationkey.RegKey";
@@ -1543,7 +1543,7 @@ namespace OpenDentBusiness
                 command += ",'' StatementNum ";
             }
             command += "FROM patient ";
-            if (PrefC.GetBool(PrefName.DistributorKey))
+            if (Preferences.GetBool(PrefName.DistributorKey))
             {//if for OD HQ, so never going to be Oracle
                 command += "LEFT JOIN phonenumber ON phonenumber.PatNum=patient.PatNum ";
                 if (regexp != "")
@@ -1588,7 +1588,7 @@ namespace OpenDentBusiness
             {
                 if (limit)
                 {//normal behavior is fast
-                    if (PrefC.GetBool(PrefName.DistributorKey))
+                    if (Preferences.GetBool(PrefName.DistributorKey))
                     {
                         command += "AND (patient.LName LIKE '" + POut.String(lname) + "%' OR patient.Preferred LIKE '" + POut.String(lname) + "%') ";
                     }
@@ -1599,7 +1599,7 @@ namespace OpenDentBusiness
                 }
                 else
                 {//slower, but more inclusive.  User explicitly looking for all matches.
-                    if (PrefC.GetBool(PrefName.DistributorKey))
+                    if (Preferences.GetBool(PrefName.DistributorKey))
                     {
                         command += "AND (patient.LName LIKE '%" + POut.String(lname) + "%' OR patient.Preferred LIKE '%" + POut.String(lname) + "%') ";
                     }
@@ -1611,7 +1611,7 @@ namespace OpenDentBusiness
             }
             if (fname.Length > 0)
             {
-                if (PrefC.GetBool(PrefName.DistributorKey) || PrefC.GetBool(PrefName.PatientSelectUseFNameForPreferred))
+                if (Preferences.GetBool(PrefName.DistributorKey) || Preferences.GetBool(PrefName.PatientSelectUseFNameForPreferred))
                 {
                     //Nathan has approved the preferred name search for first name only. It is not intended to work with last name for our customers.
                     command += "AND (patient.FName LIKE '" + POut.String(fname) + "%' OR patient.Preferred LIKE '" + POut.String(fname) + "%') ";
@@ -1628,7 +1628,7 @@ namespace OpenDentBusiness
                 command += "AND (patient.HmPhone REGEXP '" + POut.String(regexp) + "' "
                     + "OR patient.WkPhone REGEXP '" + POut.String(regexp) + "' "
                     + "OR patient.WirelessPhone REGEXP '" + POut.String(regexp) + "' ";
-                if (PrefC.GetBool(PrefName.DistributorKey))
+                if (Preferences.GetBool(PrefName.DistributorKey))
                 {//if for OD HQ, so never going to be Oracle
                     command += "OR phonenumber.PhoneNumberVal REGEXP '" + POut.String(regexp) + "' ";
                 }
@@ -1645,7 +1645,7 @@ namespace OpenDentBusiness
             char[] arrayRegKeyChars = regKey.Where(x => char.IsLetterOrDigit(x)).ToArray();
             string strRegKey = new string(arrayRegKeyChars);
 
-            if (PrefC.IsODHQ)
+            if (Preferences.IsODHQ)
             {
                 //Search both Address and Address2 for HQ
                 command += (strAddress.Length > 0 ? "AND (patient.Address LIKE '%" + strAddress
@@ -1708,7 +1708,7 @@ namespace OpenDentBusiness
                 command += "AND FALSE ";//negate all filters above and select patients based solely on being in explicitPatNums
                 command += "OR patient.PatNum IN (" + string.Join(",", explicitPatNums) + ") ";
             }
-            if (PrefC.GetBool(PrefName.DistributorKey))
+            if (Preferences.GetBool(PrefName.DistributorKey))
             { //if for OD HQ
                 command += "GROUP BY patient.PatNum ";
             }
@@ -1809,7 +1809,7 @@ namespace OpenDentBusiness
                 r["Email"] = dRow["Email"].ToString();
                 r["Country"] = dRow["Country"].ToString();
                 r["clinic"] = Clinics.GetAbbr(PIn.Long(dRow["ClinicNum"].ToString()));
-                if (PrefC.GetBool(PrefName.DistributorKey))
+                if (Preferences.GetBool(PrefName.DistributorKey))
                 {//if for OD HQ
                     r["OtherPhone"] = dRow["OtherPhone"].ToString();
                     r["RegKey"] = dRow["RegKey"].ToString();
@@ -1853,7 +1853,7 @@ namespace OpenDentBusiness
             listClauses.Add(string.IsNullOrEmpty(args.fname) ? "" : "(FName='" + args.fname + "')");
             listClauses.Add(string.IsNullOrEmpty(args.phone) ? "" :
                 "(WirelessPhone='" + args.phone + "' OR HmPhone='" + args.phone + "' OR WkPhone='" + args.phone + "'"
-                + (!PrefC.GetBool(PrefName.DistributorKey) ? "" : " OR phonenumber.PhoneNumberVal='" + args.phone + "'") //Join
+                + (!Preferences.GetBool(PrefName.DistributorKey) ? "" : " OR phonenumber.PhoneNumberVal='" + args.phone + "'") //Join
                 + ")");
             listClauses.Add(string.IsNullOrEmpty(args.address) ? "" : "(Address='" + args.address + "')");
             listClauses.Add(string.IsNullOrEmpty(args.city) ? "" : "(City='" + args.city + "')");
@@ -1864,7 +1864,7 @@ namespace OpenDentBusiness
             listClauses.Add(string.IsNullOrEmpty(args.subscriberId) ? "" : "(SubscriberId='" + args.subscriberId + "')"); //Join
             listClauses.Add(string.IsNullOrEmpty(args.email) ? "" : "(Email='" + args.email + "')");
             listClauses.Add(string.IsNullOrEmpty(args.country) ? "" : "(Country='" + args.country + "')");
-            listClauses.Add((string.IsNullOrEmpty(args.regKey) || !PrefC.GetBool(PrefName.DistributorKey)) ? "" : "(RegKey='" + args.regKey + "')"); //Join
+            listClauses.Add((string.IsNullOrEmpty(args.regKey) || !Preferences.GetBool(PrefName.DistributorKey)) ? "" : "(RegKey='" + args.regKey + "')"); //Join
             listClauses.Add(args.birthdate.Year < 1880 ? "" : "(Birthdate=" + POut.Date(args.birthdate) + ")");
             listClauses.Add(string.IsNullOrEmpty(args.invoicenumber) ? "" : "(StatementNum='" + args.invoicenumber + "')");
             listClauses.RemoveAll(string.IsNullOrEmpty);
@@ -2089,7 +2089,7 @@ namespace OpenDentBusiness
 						WHERE patient.PatNum=paysplit.PatNum
 						AND paysplit.PayNum!=" + POut.Long(excludePayNum) + @"
 						AND patient.Guarantor=" + POut.Long(guarNum);
-            if (PrefC.GetInt(PrefName.PayPlansVersion) == 1)
+            if (Preferences.GetInt(PrefName.PayPlansVersion) == 1)
             { //for payplans v1, exclude paysplits attached to payplans
                 command += @"
 						AND paysplit.PayPlanNum=0 ";
@@ -2098,7 +2098,7 @@ namespace OpenDentBusiness
 						GROUP BY patient.PatNum,paysplit.ProvNum,paysplit.ClinicNum)
 					UNION ALL	
 						(SELECT patient.PatNum,payplancharge.ProvNum,payplancharge.ClinicNum,-payplan.CompletedAmt ";
-            if (PrefC.GetInt(PrefName.PayPlansVersion) == 2)
+            if (Preferences.GetInt(PrefName.PayPlansVersion) == 2)
             {
                 command += "+ SUM(CASE WHEN payplancharge.ChargeType=" + POut.Int((int)PayPlanChargeType.Debit) + @"
 						AND payplancharge.ChargeDate <= CURDATE() THEN payplancharge.Principal + payplancharge.Interest ELSE 0 END) ";
@@ -2539,7 +2539,7 @@ namespace OpenDentBusiness
             }
             List<string> listWhereAnds = new List<string>();
             string strMinusIns = "";
-            if (!PrefC.GetBool(PrefName.BalancesDontSubtractIns))
+            if (!Preferences.GetBool(PrefName.BalancesDontSubtractIns))
             {
                 strMinusIns = "-guar.InsEst";
             }
@@ -2924,7 +2924,7 @@ namespace OpenDentBusiness
             long retval = pat.PriProv;
             if (retval == 0)
             {
-                retval = PrefC.GetLong(PrefName.PracticeDefaultProv);
+                retval = Preferences.GetLong(PrefName.PracticeDefaultProv);
             }
             if (retval == 0)
             {
@@ -3389,7 +3389,7 @@ namespace OpenDentBusiness
                     PrefName.ApptEConfirmStatusDeclined,PrefName.ApptEConfirmStatusSendFailed,PrefName.ApptConfirmExcludeEConfirm,
                     PrefName.ApptConfirmExcludeERemind,PrefName.ApptConfirmExcludeESend,PrefName.BrokenAppointmentAdjustmentType,PrefName.ConfirmStatusEmailed,
                     PrefName.ConfirmStatusTextMessaged,PrefName.PrepaymentUnearnedType,PrefName.SalesTaxAdjustmentType }
-                .Select(x => PrefC.GetString(x))
+                .Select(x => Preferences.GetString(x))
                 .SelectMany(x => x.Split(',').Select(y => PIn.Long(y, false)).Where(y => y > 0))//some prefs are comma delimited lists of longs. SelectMany will return a single list of longs
                 .Any(x => x == defNum))
             {
@@ -3664,7 +3664,7 @@ namespace OpenDentBusiness
             //Move the patient documents if they are stored in the database.
             //We do not have to worry about documents having the same name when storing within the database, only physical documents need to be renamed.
             //Physical documents are handled on the client side (not here) due to middle tier issues.
-            if (PrefC.AtoZfolderUsed == DataStorageType.InDatabase)
+            if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
             {
                 //Storing documents in the database.  Simply update the PatNum column accordingly. 
                 //This query cannot be ran below where all the other tables are handled dyncamically because we do NOT want to update the PatNums in the case that documents are stored physically.
@@ -4236,7 +4236,7 @@ namespace OpenDentBusiness
                 + "WHERE payplancharge.PatNum IN (" + string.Join(",", listPatNums) + ") "
                 + "AND payplancharge.ChargeType=" + POut.Int((int)PayPlanChargeType.Debit) + " "
                 + "AND StatementNum=0 "
-                + "AND " + POut.Bool(PrefC.GetInt(PrefName.PayPlansVersion) == (int)PayPlanVersions.AgeCreditsAndDebits) + " "
+                + "AND " + POut.Bool(Preferences.GetInt(PrefName.PayPlansVersion) == (int)PayPlanVersions.AgeCreditsAndDebits) + " "
                 + "AND payplancharge.ChargeDate<" + DbHelper.DateAddMonth(DbHelper.Now(), "3") + " "//Only show payplan charges less than 3 mos into the future
             + ") procadj ORDER BY procadj.Date DESC";
             return Db.GetTable(command);
@@ -4359,7 +4359,7 @@ namespace OpenDentBusiness
             List<long> listPatNums = new List<long>();
             listPatNums.Add(patNum);
             string command = "";
-            if (PrefC.GetBool(PrefName.FamPhiAccess))
+            if (Preferences.GetBool(PrefName.FamPhiAccess))
             { //Include guarantor's family if pref is set.
               //Include any patient where this PatNum is the Guarantor.
                 command = "SELECT PatNum FROM patient WHERE Guarantor = " + POut.Long(patNum);
@@ -4529,7 +4529,7 @@ namespace OpenDentBusiness
                 command += clinic.ClinicNum;
             }
             command += " ClinicNum FROM patient WHERE PatNum IN (" + string.Join(",", patNumsSearch.Distinct()) + ") ";
-            bool isUnknownNo = PrefC.GetBool(PrefName.TextMsgOkStatusTreatAsNo);
+            bool isUnknownNo = Preferences.GetBool(PrefName.TextMsgOkStatusTreatAsNo);
             List<Clinic> listAllClinics;
             if (clinic == null)
             {
@@ -4575,7 +4575,7 @@ namespace OpenDentBusiness
         public static List<PatComm> GetPatComms(List<Patient> listPats)
         {
             //No need to check RemotingRole; no call to db.
-            bool isUnknownNo = PrefC.GetBool(PrefName.TextMsgOkStatusTreatAsNo);
+            bool isUnknownNo = Preferences.GetBool(PrefName.TextMsgOkStatusTreatAsNo);
             string curCulture = System.Globalization.CultureInfo.CurrentCulture.Name.Right(2);
             List<PatComm> listPatComms = new List<PatComm>();
             foreach (Patient pat in listPats)
@@ -4851,7 +4851,7 @@ namespace OpenDentBusiness
             {
                 return "Not sending text because texting is not enabled for this clinic.";
             }
-            if (TxtMsgOk == YN.No || (TxtMsgOk == YN.Unknown && PrefC.GetBool(PrefName.TextMsgOkStatusTreatAsNo)))
+            if (TxtMsgOk == YN.No || (TxtMsgOk == YN.Unknown && Preferences.GetBool(PrefName.TextMsgOkStatusTreatAsNo)))
             {
                 return "Not sending text because this patient is set to not receive texts.";
             }

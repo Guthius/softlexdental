@@ -26,7 +26,7 @@ namespace OpenDental {
 
 		private void FormSheetDefDefaults_Load(object sender,EventArgs e) {
 			List<long> listClinicNums=new List<long>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				labelClinic.Visible=true;
 				comboClinicDefault.Visible=true;
 				FillClinicsComboBox();
@@ -179,13 +179,13 @@ namespace OpenDental {
 			comboBox.Items.Clear();
 			comboBox.DisplayMember="Description";
 			comboBox.ValueMember="SheetDef";
-			if(PrefC.HasClinicsEnabled && ((ClinicWrapper)comboClinicDefault.SelectedItem).Clinic.ClinicNum!=0) {
+			if(Preferences.HasClinicsEnabled && ((ClinicWrapper)comboClinicDefault.SelectedItem).Clinic.ClinicNum!=0) {
 				comboBox.Items.Add(new SheetDefWrapper(Lan.g(this,"Default")));
 			}
 			foreach(SheetDef defCur in listSheetDefs) {
 				SheetDefWrapper defNew=new SheetDefWrapper(defCur);
 				comboBox.Items.Add(defNew);
-				if(defCur.SheetDefNum==PrefC.GetDefaultSheetDefNum(sheetType)) {
+				if(defCur.SheetDefNum==Preferences.GetDefaultSheetDefNum(sheetType)) {
 					comboBox.SelectedItem=defNew;
 				}
 			}

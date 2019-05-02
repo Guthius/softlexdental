@@ -100,15 +100,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EhrAmendment into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EhrAmendment ehrAmendment,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				ehrAmendment.EhrAmendmentNum=ReplicationServers.GetKey("ehramendment","EhrAmendmentNum");
 			}
 			string command="INSERT INTO ehramendment (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EhrAmendmentNum,";
 			}
 			command+="PatNum,IsAccepted,Description,Source,SourceName,FileName,RawBase64,DateTRequest,DateTAcceptDeny,DateTAppend) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(ehrAmendment.EhrAmendmentNum)+",";
 			}
 			command+=
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 				ehrAmendment.RawBase64="";
 			}
 			OdSqlParameter paramRawBase64=new OdSqlParameter("paramRawBase64",OdDbType.Text,POut.StringParam(ehrAmendment.RawBase64));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramDescription,paramSourceName,paramRawBase64);
 			}
 			else {

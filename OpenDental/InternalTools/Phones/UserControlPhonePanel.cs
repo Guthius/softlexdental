@@ -31,7 +31,7 @@ namespace OpenDental {
 		}
 
 		private void UserControlPhonePanel_Load(object sender,EventArgs e) {
-			if(!PrefC.GetBool(PrefName.ClockEventAllowBreak)) {//Breaks turned off, Lunch is now "Break", but maintains Lunch functionality.
+			if(!Preferences.GetBool(PrefName.ClockEventAllowBreak)) {//Breaks turned off, Lunch is now "Break", but maintains Lunch functionality.
 				menuStatus.Items.RemoveByKey(menuItemBreak.Name);
 			}
 			timer1.Enabled=true;
@@ -102,7 +102,7 @@ namespace OpenDental {
 				if(PhoneList[i].ClockStatus==ClockStatusEnum.None){
 					row.Cells.Add("");
 				}
-				else if(!PrefC.GetBool(PrefName.ClockEventAllowBreak) && PhoneList[i].ClockStatus==ClockStatusEnum.Lunch) {
+				else if(!Preferences.GetBool(PrefName.ClockEventAllowBreak) && PhoneList[i].ClockStatus==ClockStatusEnum.Lunch) {
 					row.Cells.Add(ClockStatusEnum.Break.GetDescription());//Breaks turned off, Lunch is now "Break", but maintains Lunch functionality.
 				}
 				else{
@@ -314,7 +314,7 @@ namespace OpenDental {
 			//verify that employee is logged in as user
 			int extension=PhoneList[rowI].Extension;
 			long employeeNum=PhoneList[rowI].EmployeeNum;
-			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)){
+			if(Preferences.GetBool(PrefName.TimecardSecurityEnabled)){
 				if(Security.CurUser.EmployeeNum!=employeeNum){
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
 						MsgBox.Show(this,"Not authorized.");
@@ -341,7 +341,7 @@ namespace OpenDental {
 			//verify that employee is logged in as user
 			int extension=PhoneList[rowI].Extension;
 			long employeeNum=PhoneList[rowI].EmployeeNum;
-			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)){
+			if(Preferences.GetBool(PrefName.TimecardSecurityEnabled)){
 				if(Security.CurUser.EmployeeNum!=employeeNum){
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
 						MsgBox.Show(this,"Not authorized.");
@@ -368,7 +368,7 @@ namespace OpenDental {
 			//verify that employee is logged in as user
 			int extension=PhoneList[rowI].Extension;
 			long employeeNum=PhoneList[rowI].EmployeeNum;
-			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)){
+			if(Preferences.GetBool(PrefName.TimecardSecurityEnabled)){
 				if(Security.CurUser.EmployeeNum!=employeeNum){
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
 						MsgBox.Show(this,"Not authorized.");
@@ -401,7 +401,7 @@ namespace OpenDental {
 			if(ClockEvents.IsClockedIn(employeeNum)) {
 				return true;
 			}
-			if(PrefC.GetBool(PrefName.TimecardSecurityEnabled)){
+			if(Preferences.GetBool(PrefName.TimecardSecurityEnabled)){
 				if(Security.CurUser.EmployeeNum!=employeeNum){
 					if(!Security.IsAuthorized(Permissions.TimecardsEditAll)){
 						MsgBox.Show(this,"Not authorized.");

@@ -87,7 +87,7 @@ namespace OpenDentBusiness
             stopWatch.Restart();
 #endif
             //insurance writeoffs
-            switch ((PPOWriteoffDateCalc)PrefC.GetInt(PrefName.ReportsPPOwriteoffDefaultToProcDate))
+            switch ((PPOWriteoffDateCalc)Preferences.GetInt(PrefName.ReportsPPOwriteoffDefaultToProcDate))
             {//use procdate
                 case PPOWriteoffDateCalc.ProcDate:
                     command = @"UPDATE tempdash" + rndStr + @" 
@@ -342,7 +342,7 @@ namespace OpenDentBusiness
                 dash.BalTotal = PIn.Double(table.Rows[0][0].ToString());
                 dash.InsEst = PIn.Double(table.Rows[0][1].ToString());
                 DashboardARs.Insert(dash);//save it to the db for later. 
-                if (!string.IsNullOrEmpty(PrefC.ReportingServer.Server))
+                if (!string.IsNullOrEmpty(Preferences.ReportingServer.Server))
                 { //only attempt to insert into the reporting server if the reporting server is set up.
                     ReportsComplex.RunFuncOnReportServer(() => (DashboardARs.Insert(dash)));//save it to the db for later.
                 }
@@ -397,7 +397,7 @@ namespace OpenDentBusiness
             _elapsedTimeProdInc += "tableAdj: " + stopWatch.Elapsed.ToString() + "\r\n";
             stopWatch.Restart();
 #endif
-            switch ((PPOWriteoffDateCalc)PrefC.GetInt(PrefName.ReportsPPOwriteoffDefaultToProcDate))
+            switch ((PPOWriteoffDateCalc)Preferences.GetInt(PrefName.ReportsPPOwriteoffDefaultToProcDate))
             {
                 case PPOWriteoffDateCalc.InsPayDate:
                     command = "SELECT "

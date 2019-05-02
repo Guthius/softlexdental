@@ -17,8 +17,8 @@ namespace OpenDental
         void FormWikiSetup_Load(object sender, EventArgs e)
         {
             textMaster.Text = WikiPages.MasterPage.PageContent;
-            detectLinksCheckBox.Checked = PrefC.GetBool(PrefName.WikiDetectLinks);
-            createPageFromLinksCheckBox.Checked = PrefC.GetBool(PrefName.WikiCreatePageFromLink);
+            detectLinksCheckBox.Checked = Preferences.GetBool(PrefName.WikiDetectLinks);
+            createPageFromLinksCheckBox.Checked = Preferences.GetBool(PrefName.WikiCreatePageFromLink);
         }
 
         /// <summary>

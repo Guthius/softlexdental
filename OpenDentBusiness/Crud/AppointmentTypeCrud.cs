@@ -88,15 +88,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one AppointmentType into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(AppointmentType appointmentType,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				appointmentType.AppointmentTypeNum=ReplicationServers.GetKey("appointmenttype","AppointmentTypeNum");
 			}
 			string command="INSERT INTO appointmenttype (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="AppointmentTypeNum,";
 			}
 			command+="AppointmentTypeName,AppointmentTypeColor,ItemOrder,IsHidden,Pattern,CodeStr) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(appointmentType.AppointmentTypeNum)+",";
 			}
 			command+=
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (appointmentType.IsHidden)+","
 				+"'"+POut.String(appointmentType.Pattern)+"',"
 				+"'"+POut.String(appointmentType.CodeStr)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

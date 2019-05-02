@@ -195,7 +195,7 @@ namespace OpenDental{
 				groupEnterPayment.Text=Lan.g(this,"Enter Estimate");
 				this.Text=Lan.g(this,"Edit Preauthorization");
 			}
-			if(!PrefC.HasClinicsEnabled){
+			if(!Preferences.HasClinicsEnabled){
 				labelClinic.Visible=false;
 				comboClinic.Visible=false;
 			}
@@ -331,14 +331,14 @@ namespace OpenDental{
 				}
 			}
 			FillCanadian();
-			if(PrefC.HasClinicsEnabled//Clinics enabled.
+			if(Preferences.HasClinicsEnabled//Clinics enabled.
 					&& Security.CurUser.ClinicIsRestricted//User is restricted.
 					&& !listUserClinics.Any(x => x.ClinicNum==ClaimCur.ClinicNum))//User does not have access to clinic associated to claim.
 			{
 				SetFormReadOnly(this);
 				this.Text+=" - "+Lan.g(this,"READ ONLY - USER RESTRICTED TO A DIFFERENT CLINIC");
 			}
-			if(!PrefC.GetBool(PrefName.AllowProcAdjFromClaim)) {
+			if(!Preferences.GetBool(PrefName.AllowProcAdjFromClaim)) {
 				contextAdjust.MenuItems.Remove(menuItemAddAdj);
 			}
 			//Show the claim attachment button if the office is using ClaimConnect
@@ -641,7 +641,7 @@ namespace OpenDental{
 			}
 			else{
 				textOrthoDate.Text=ClaimCur.OrthoDate.ToShortDateString();
-				if(PrefC.GetBool(PrefName.OrthoClaimUseDatePlacement) && ClaimCur.OrthoDate != null && ClaimCur.OrthoDate.Year > 1880) {
+				if(Preferences.GetBool(PrefName.OrthoClaimUseDatePlacement) && ClaimCur.OrthoDate != null && ClaimCur.OrthoDate.Year > 1880) {
 					textOrthoDate.Enabled=false;
 				}
 			}
@@ -1135,7 +1135,7 @@ namespace OpenDental{
 					state.DoCancel=true;
 					return;
 				}
-				string tempFile=PrefC.GetRandomTempFile(Path.GetExtension(pathAndFileName));
+				string tempFile=Preferences.GetRandomTempFile(Path.GetExtension(pathAndFileName));
 				File.WriteAllBytes(tempFile,state.FileContent);
 				Process.Start(tempFile);
 			}
@@ -1485,7 +1485,7 @@ namespace OpenDental{
 				if(MessageBox.Show(Lan.g(this,"If you enter by total, the insurance payment will affect the patient balance.  It is recommended to enter by procedure instead.  Continue anyway?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
 				return;
 			}
-			if(PrefC.GetBool(PrefName.OrthoInsPayConsolidated)) {
+			if(Preferences.GetBool(PrefName.OrthoInsPayConsolidated)) {
 				InsPlan planCur = InsPlans.GetPlan(ClaimCur.PlanNum,PlanList);
 				long orthoAutoCodeNum = InsPlans.GetOrthoAutoProc(planCur);
 				//if all the procedures on this claim are ortho auto procedures...
@@ -1634,7 +1634,7 @@ namespace OpenDental{
 				}
 			}
 			#region OrthoInsPayConsolidated
-			if(PrefC.GetBool(PrefName.OrthoInsPayConsolidated)) {
+			if(Preferences.GetBool(PrefName.OrthoInsPayConsolidated)) {
 				List<int> listOrthoAutoGridRows = new List<int>();
 				InsPlan planCur = InsPlans.GetPlan(ClaimCur.PlanNum,PlanList);
 				long orthoAutoCodeNum = InsPlans.GetOrthoAutoProc(planCur);
@@ -1966,7 +1966,7 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.InsPayCreate)) {//date not checked here, but it will be checked when saving the check to prevent backdating
 				return;
 			}
-			if(PrefC.GetBool(PrefName.ClaimPaymentBatchOnly)) {
+			if(Preferences.GetBool(PrefName.ClaimPaymentBatchOnly)) {
 				//Is there a permission in the manage module that would block this behavior? Are we sending the user into a TRAP?!
 				MsgBox.Show(this,"Please use Batch Insurance in Manage Module to Finalize Payments.");
 				return;
@@ -1997,7 +1997,7 @@ namespace OpenDental{
 			if(isThisClaimOnly) {
 				onlyOneClaimNum=ClaimCur.ClaimNum;
 			}
-			double amt=ClaimProcs.AttachAllOutstandingToPayment(claimPayment.ClaimPaymentNum,PrefC.DateClaimReceivedAfter,onlyOneClaimNum);
+			double amt=ClaimProcs.AttachAllOutstandingToPayment(claimPayment.ClaimPaymentNum,Preferences.DateClaimReceivedAfter,onlyOneClaimNum);
 			claimPayment.CheckAmt=amt;
 			try {
 				ClaimPayments.Update(claimPayment);
@@ -2045,7 +2045,7 @@ namespace OpenDental{
 				}
 				return;
 			}
-			ClaimProcs.DateInsFinalizedHelper(claimPayment.ClaimPaymentNum,PrefC.DateClaimReceivedAfter,onlyOneClaimNum);
+			ClaimProcs.DateInsFinalizedHelper(claimPayment.ClaimPaymentNum,Preferences.DateClaimReceivedAfter,onlyOneClaimNum);
 			//ClaimList=Claims.Refresh(PatCur.PatNum);
 			//ClaimProcList=ClaimProcs.Refresh(PatCur.PatNum);
 			//FillGrids();
@@ -2056,7 +2056,7 @@ namespace OpenDental{
 		///<summary>Helper method that shows the payment window if the user has the "Show provider income transfer window after entering insurance payment"
 		///preference enabled.  This method should always be called after an insurance payment has been made.</summary>
 		public static void ShowProviderTransferWindow(Claim claimCur,Patient patCur, Family famCur) {
-			if(!PrefC.GetBool(PrefName.ProviderIncomeTransferShows) || claimCur.ClaimType=="PreAuth") {
+			if(!Preferences.GetBool(PrefName.ProviderIncomeTransferShows) || claimCur.ClaimType=="PreAuth") {
 				return;
 			}
 			Payment PaymentCur=new Payment();
@@ -2065,7 +2065,7 @@ namespace OpenDental{
 			//Explicitly set ClinicNum=0, since a pat's ClinicNum will remain set if the user enabled clinics, assigned patients to clinics, and then
 			//disabled clinics because we use the ClinicNum to determine which PayConnect or XCharge/XWeb credentials to use for payments.
 			PaymentCur.ClinicNum=0;
-			if(PrefC.HasClinicsEnabled) {//if clinics aren't enabled default to 0
+			if(Preferences.HasClinicsEnabled) {//if clinics aren't enabled default to 0
 				PaymentCur.ClinicNum=patCur.ClinicNum;
 			}
 			PaymentCur.PayType=0;//txfr
@@ -2151,7 +2151,7 @@ namespace OpenDental{
 
 		private void butAttachPerio_Click(object sender,EventArgs e) {
 			//Patient PatCur=Patients.GetPat(PatNum);
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				MsgBox.Show(this,"Error. Not using AtoZ images folder.");
 				return;
 			}
@@ -2172,7 +2172,7 @@ namespace OpenDental{
 			string text=PatCur.GetNameFL();
 			Font font=new Font("Microsoft Sans Serif",12,FontStyle.Bold);
 			g.DrawString(text,font,Brushes.Black,595/2-g.MeasureString(text,font).Width/2,5);
-			text=PrefC.GetString(PrefName.PracticeTitle);
+			text=Preferences.GetString(PrefName.PracticeTitle);
 			font=new Font("Microsoft Sans Serif",9,FontStyle.Bold);
 			g.DrawString(text,font,Brushes.Black,595/2-g.MeasureString(text,font).Width/2,28);
 			g.DrawImage(bitmap,0,50);
@@ -2221,7 +2221,7 @@ namespace OpenDental{
 		}
 
 		private void butExport_Click(object sender,EventArgs e) {
-			string exportPath=PrefC.GetString(PrefName.ClaimAttachExportPath);
+			string exportPath=Preferences.GetString(PrefName.ClaimAttachExportPath);
 			if(!Directory.Exists(exportPath)){
 				if(MessageBox.Show(Lan.g(this,"The claim export path no longer exists at:")+" "+exportPath+"\r\n"
 					+Lan.g(this,"Would you like to create it?"),"", MessageBoxButtons.YesNo)==DialogResult.Yes) 
@@ -2469,7 +2469,7 @@ namespace OpenDental{
 				return;
 			}
 			long clinicNum=0;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				clinicNum=ClaimCur.ClinicNum;
 			}
 			Clearinghouse clearinghouseHq=ClearinghouseL.GetClearinghouseHq(listQueue[0].ClearinghouseNum);
@@ -3378,7 +3378,7 @@ namespace OpenDental{
 					SecurityLogs.MakeLogEntry(_claimEditPermission,PatCur.PatNum,"Claim saved for "+PatCur.LName+","+PatCur.FName);
 				}
 				if(comboClaimStatus.SelectedIndex==5) {//Received
-					if(_isPaymentEntered && PrefC.GetBool(PrefName.PromptForSecondaryClaim) && Security.IsAuthorized(Permissions.ClaimSend,true)) {
+					if(_isPaymentEntered && Preferences.GetBool(PrefName.PromptForSecondaryClaim) && Security.IsAuthorized(Permissions.ClaimSend,true)) {
 						//We currenlty require that payment be entered in this instance of the form.
 						//We might later decide that we want to check for secondary whenever the primary is recieved and there is financial values entered
 						//regardless of when they were entered.
@@ -3422,7 +3422,7 @@ namespace OpenDental{
 				}
 			}
 			//When the user "cancels" out of a new claim we want to delete any corresponding claim snapshots.
-			if(PrefC.GetBool(PrefName.ClaimSnapshotEnabled)) {
+			if(Preferences.GetBool(PrefName.ClaimSnapshotEnabled)) {
 				ClaimSnapshots.DeleteForClaimProcs(_listClaimProcsForClaim.Select(x => x.ClaimProcNum).ToList());
 			}
 			ClaimProcs.DeleteEstimatesForDroppedPatPlan(_listClaimProcsForClaim);

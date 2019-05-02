@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one UpdateHistory into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(UpdateHistory updateHistory,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				updateHistory.UpdateHistoryNum=ReplicationServers.GetKey("updatehistory","UpdateHistoryNum");
 			}
 			string command="INSERT INTO updatehistory (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="UpdateHistoryNum,";
 			}
 			command+="DateTimeUpdated,ProgramVersion) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(updateHistory.UpdateHistoryNum)+",";
 			}
 			command+=
 				     DbHelper.Now()+","
 				+"'"+POut.String(updateHistory.ProgramVersion)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

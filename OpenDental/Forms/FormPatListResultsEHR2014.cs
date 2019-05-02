@@ -22,8 +22,8 @@ namespace OpenDental {
 		}
 
 		private void FormPatListResults_Load(object sender,EventArgs e) {
-			if(PrefC.GetString(PrefName.SoftwareName)!="") {
-				this.Text+=" - "+PrefC.GetString(PrefName.SoftwareName);
+			if(Preferences.GetString(PrefName.SoftwareName)!="") {
+				this.Text+=" - "+Preferences.GetString(PrefName.SoftwareName);
 			}
 			EhrMeasureEvent measureEvent=new EhrMeasureEvent();
 			measureEvent.DateTEvent=DateTime.Now;
@@ -209,7 +209,7 @@ namespace OpenDental {
 				text=providerName;
 				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
 				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
-				text=PrefC.GetString(PrefName.SoftwareName);
+				text=Preferences.GetString(PrefName.SoftwareName);
 				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
 				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
 				text=DateTime.Now.ToShortDateString();

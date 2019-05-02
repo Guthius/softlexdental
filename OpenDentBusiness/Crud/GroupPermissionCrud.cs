@@ -85,15 +85,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one GroupPermission into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(GroupPermission groupPermission,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				groupPermission.GroupPermNum=ReplicationServers.GetKey("grouppermission","GroupPermNum");
 			}
 			string command="INSERT INTO grouppermission (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="GroupPermNum,";
 			}
 			command+="NewerDate,NewerDays,UserGroupNum,PermType,FKey) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(groupPermission.GroupPermNum)+",";
 			}
 			command+=
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (groupPermission.UserGroupNum)+","
 				+    POut.Int   ((int)groupPermission.PermType)+","
 				+    POut.Long  (groupPermission.FKey)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

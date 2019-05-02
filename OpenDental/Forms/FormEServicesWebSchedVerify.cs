@@ -81,7 +81,7 @@ namespace OpenDental {
 
 		///<summary>Fill in the ClinicComboBox if applicable.</summary>
 		private void WebSchedVerifyFillClinics() {
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				labelClinicVerify.Visible=true;
 				comboClinicVerify.Visible=true;
 				checkUseDefaultsVerify.Visible=true;

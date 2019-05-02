@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ClaimAttach into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ClaimAttach claimAttach,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				claimAttach.ClaimAttachNum=ReplicationServers.GetKey("claimattach","ClaimAttachNum");
 			}
 			string command="INSERT INTO claimattach (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ClaimAttachNum,";
 			}
 			command+="ClaimNum,DisplayedFileName,ActualFileName) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(claimAttach.ClaimAttachNum)+",";
 			}
 			command+=
 				     POut.Long  (claimAttach.ClaimNum)+","
 				+"'"+POut.String(claimAttach.DisplayedFileName)+"',"
 				+"'"+POut.String(claimAttach.ActualFileName)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

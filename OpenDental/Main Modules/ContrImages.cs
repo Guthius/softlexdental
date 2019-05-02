@@ -858,7 +858,7 @@ namespace OpenDental
                 _webBrowserDocument.Size = pictureBoxMain.Size;
                 _webBrowserDocument.Location = pictureBoxMain.Location;
                 string pdfFilePath = "";
-                if (PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+                if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
                 {
                     pdfFilePath = ODFileUtils.CombinePaths(atoZFolder, atoZFileName);
                 }
@@ -871,13 +871,13 @@ namespace OpenDental
                     else
                     {
                         //Download PDF into temp directory for displaying.
-                        pdfFilePath = ODFileUtils.CombinePaths(PrefC.GetTempFolderPath(), DocSelected.DocNum + (PatCur != null ? PatCur.PatNum.ToString() : "") + ".pdf");
+                        pdfFilePath = ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(), DocSelected.DocNum + (PatCur != null ? PatCur.PatNum.ToString() : "") + ".pdf");
                         FileAtoZ.Download(FileAtoZ.CombinePaths(atoZFolder, atoZFileName), pdfFilePath, downloadMessage);
                     }
                 }
                 else
                 {
-                    pdfFilePath = ODFileUtils.CombinePaths(PrefC.GetTempFolderPath(), DocSelected.DocNum + (PatCur != null ? PatCur.PatNum.ToString() : "") + ".pdf");
+                    pdfFilePath = ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(), DocSelected.DocNum + (PatCur != null ? PatCur.PatNum.ToString() : "") + ".pdf");
                     File.WriteAllBytes(pdfFilePath, Convert.FromBase64String(DocSelected.RawBase64));
                 }
                 if (!File.Exists(pdfFilePath))
@@ -911,7 +911,7 @@ namespace OpenDental
             Document doc = Documents.GetByNum(docNum, doReturnNullIfNotFound: true);//Get old document.
             if (doc != null && Path.GetExtension(doc.FileName).ToLower() == ".pdf")
             {//Adobe acrobat file.
-                string pdfFilePath = ODFileUtils.CombinePaths(PrefC.GetTempFolderPath(), doc.DocNum + (PatCur != null ? PatCur.PatNum.ToString() : "") + ".pdf");
+                string pdfFilePath = ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(), doc.DocNum + (PatCur != null ? PatCur.PatNum.ToString() : "") + ".pdf");
                 if (!xRayImageController.IsDisposed)
                 {
                     xRayImageController.Dispose();
@@ -1193,11 +1193,11 @@ namespace OpenDental
                     SelectTreeNode(node);
                 }
             }
-            if (PrefC.GetInt(PrefName.ImagesModuleTreeIsCollapsed) == 0)
+            if (Preferences.GetInt(PrefName.ImagesModuleTreeIsCollapsed) == 0)
             {//Expand the document tree each time the Images module is visited
                 treeDocuments.ExpandAll();//Invalidates tree too.
             }
-            else if (PrefC.GetInt(PrefName.ImagesModuleTreeIsCollapsed) == 1)
+            else if (Preferences.GetInt(PrefName.ImagesModuleTreeIsCollapsed) == 1)
             {//Document tree collapses when patient changes
                 TreeNode selectedNode = treeDocuments.SelectedNode;//Save the selection so we can reselect after collapsing.
                 treeDocuments.CollapseAll();//Invalidates tree and clears selection too.
@@ -2057,7 +2057,7 @@ namespace OpenDental
                     }
                 }
             }
-            string tempFile = PrefC.GetRandomTempFile(".pdf");
+            string tempFile = Preferences.GetRandomTempFile(".pdf");
             try
             {
                 xImageDeviceManager.Obfuscator.ActivateEZTwain();
@@ -3050,7 +3050,7 @@ namespace OpenDental
 
         private void UpdateUserOdPrefForImageCat(long defNum, bool isExpand)
         {
-            if (PrefC.GetInt(PrefName.ImagesModuleTreeIsCollapsed) != 2)
+            if (Preferences.GetInt(PrefName.ImagesModuleTreeIsCollapsed) != 2)
             {//Document tree folders persistent expand/collapse per user.
                 return;
             }
@@ -3376,7 +3376,7 @@ namespace OpenDental
             {
                 return;
             }
-            if (PrefC.AtoZfolderUsed == DataStorageType.InDatabase)
+            if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
             {
                 MsgBox.Show(this, "Images stored directly in database. Export file in order to open with external program.");
                 return;//Documents must be stored in the A to Z Folder to open them outside of Open Dental.  Users can use the export button for now.
@@ -3400,7 +3400,7 @@ namespace OpenDental
                 //Specifically, multi-page faxes can be viewed more easily by one of our customers using the fax
                 //viewer. On Unix systems, it is imagined that an equivalent viewer will launch to allow the image
                 //to be viewed.
-                if (PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+                if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
                 {
                     try
                     {
@@ -3430,7 +3430,7 @@ namespace OpenDental
                     }
                     else
                     {
-                        string tempFile = PrefC.GetRandomTempFile(Path.GetExtension(nodeDoc.FileName));
+                        string tempFile = Preferences.GetRandomTempFile(Path.GetExtension(nodeDoc.FileName));
                         File.WriteAllBytes(tempFile, state.FileContent);
                         Process.Start(tempFile);
                     }
@@ -3870,8 +3870,8 @@ namespace OpenDental
                     MountItems.Insert(mountItem);
                     FillDocList(false);
                     SelectTreeNode(GetNodeById(MakeIdMount(mount.MountNum)));
-                    sliderBrightnessContrast.MinVal = PrefC.GetInt(PrefName.ImageWindowingMin);
-                    sliderBrightnessContrast.MaxVal = PrefC.GetInt(PrefName.ImageWindowingMax);
+                    sliderBrightnessContrast.MinVal = Preferences.GetInt(PrefName.ImageWindowingMin);
+                    sliderBrightnessContrast.MaxVal = Preferences.GetInt(PrefName.ImageWindowingMax);
                 }
                 else if (nodeId.NodeType == ImageNodeType.Mount)
                 {//A mount is currently selected. We must allow the user to insert new images into partially complete mounts.

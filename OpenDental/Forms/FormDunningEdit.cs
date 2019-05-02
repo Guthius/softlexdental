@@ -507,7 +507,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormDunningEdit_Load(object sender, System.EventArgs e) {
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				labelClinic.Visible=true;
 				comboClinics.Visible=true;
 				butPickClinic.Visible=true;
@@ -525,7 +525,7 @@ namespace OpenDental{
 					comboClinics.SelectedIndex=0; //select 'Unassigned' by default
 				}
 			}
-			if(PrefC.GetBool(PrefName.ShowFeatureSuperfamilies)) {
+			if(Preferences.GetBool(PrefName.ShowFeatureSuperfamilies)) {
 				checkSuperFamily.Visible=true;
 				checkSuperFamily.Checked=_dunningCur.IsSuperFamily;
 			}
@@ -621,7 +621,7 @@ namespace OpenDental{
 			_dunningCur.EmailBody=textEmailBody.Text;
 			_dunningCur.EmailSubject=textEmailSubject.Text;
 			_dunningCur.IsSuperFamily=checkSuperFamily.Checked;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				_dunningCur.ClinicNum=_listClinics[comboClinics.SelectedIndex].ClinicNum;
 			}
 			if(IsNew){

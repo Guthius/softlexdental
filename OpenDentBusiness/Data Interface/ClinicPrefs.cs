@@ -111,7 +111,7 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			ClinicPref clinicPref=GetPrefAllClinics(pref).FirstOrDefault(x => x.ClinicNum==clinicNum);
 			if(clinicPref==null) {
-				return PrefC.GetString(pref);
+				return Preferences.GetString(pref);
 			}
 			return clinicPref.ValueString;
 		}
@@ -131,7 +131,7 @@ namespace OpenDentBusiness{
 		public static bool GetBool(PrefName prefName,long clinicNum) {
 			ClinicPref pref=GetPref(prefName,clinicNum);
 			if(pref==null) {
-				return PrefC.GetBool(prefName);
+				return Preferences.GetBool(prefName);
 			}
 			return PIn.Bool(pref.ValueString);
 		}

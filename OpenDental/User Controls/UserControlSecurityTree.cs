@@ -397,7 +397,7 @@ namespace OpenDental {
 				node.Nodes.Add(node2);
 			treePermissions.Nodes.Add(node);
 			#region HQ Only Permissions
-			if(PrefC.IsODHQ) {
+			if(Preferences.IsODHQ) {
 				node=SetNode("HQ Only");
 					node2=SetNode(Permissions.CommlogPersistent);
 					node.Nodes.Add(node2);
@@ -696,7 +696,7 @@ namespace OpenDental {
 				}
 			}
 			if((Permissions)_clickedPermNode.Tag==Permissions.AccountProcsQuickAdd) {
-				string programName = PrefC.GetString(PrefName.SoftwareName);
+				string programName = Preferences.GetString(PrefName.SoftwareName);
 				MsgBox.Show(this,programName+" needs to be restarted on workstations before the changes will take place.");
 			}
 			FillTreePerm();

@@ -275,15 +275,15 @@ namespace OpenDentBusiness.Crud {
 
 		///<summary>Inserts one EServiceBilling into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EServiceBilling eServiceBilling,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				eServiceBilling.EServiceBillingNum=ReplicationServers.GetKey("eservicebilling","EServiceBillingNum");
 			}
 			string command="INSERT INTO eservicebilling (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EServiceBillingNum,";
 			}
 			command+="RegistrationKeyNum,CustPatNum,BillingCycleDay,DateTimeEntry,DateTimeProceduresPosted,DateOfBill,MonthOfBill,BillCycleStart,BillCycleEnd,UsageCycleStart,UsageCycleEnd,ProceduresJson,ChargesJson,NexmoInfoJson,LogInfo,ItemizedCharges) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(eServiceBilling.EServiceBillingNum)+",";
 			}
 			command+=
@@ -323,7 +323,7 @@ namespace OpenDentBusiness.Crud {
 				eServiceBilling.ItemizedCharges="";
 			}
 			OdSqlParameter paramItemizedCharges=new OdSqlParameter("paramItemizedCharges",OdDbType.Text,POut.StringParam(eServiceBilling.ItemizedCharges));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramProceduresJson,paramChargesJson,paramNexmoInfoJson,paramLogInfo,paramItemizedCharges);
 			}
 			else {

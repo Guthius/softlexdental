@@ -80,7 +80,7 @@ namespace OpenDental {
 			gridClaims.Columns.Add(new UI.ODGridColumn("Date Service",100,HorizontalAlignment.Center) { SortingStrategy=UI.ODGridSortingStrategy.DateParse });
 			gridClaims.Columns.Add(new UI.ODGridColumn("Carrier",240,HorizontalAlignment.Center) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
 			gridClaims.Columns.Add(new UI.ODGridColumn("Status",120,HorizontalAlignment.Center) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });			
-			if(PrefC.HasClinicsEnabled) {//Using clinics
+			if(Preferences.HasClinicsEnabled) {//Using clinics
 				gridClaims.Columns.Add(new UI.ODGridColumn("Clinic",190,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
 			}
 			gridClaims.Columns.Add(new UI.ODGridColumn("ClaimFee",70,HorizontalAlignment.Right) { SortingStrategy=UI.ODGridSortingStrategy.AmountParse });
@@ -91,7 +91,7 @@ namespace OpenDental {
 				row.Cells.Add(listClaims[i].DateService.ToShortDateString());//DOS
 				row.Cells.Add(Carriers.GetName(InsPlans.RefreshOne(listClaims[i].PlanNum).CarrierNum));//Carrier
 				row.Cells.Add(Claims.GetClaimStatusString(listClaims[i].ClaimStatus));//Status
-				if(PrefC.HasClinicsEnabled) {//Using clinics
+				if(Preferences.HasClinicsEnabled) {//Using clinics
 					Clinic clinic=Clinics.GetClinic(listClaims[i].ClinicNum);
 					if(clinic==null) {
 						row.Cells.Add("");//Clinic
@@ -318,7 +318,7 @@ namespace OpenDental {
 				row.Cells.Add(claim.DateService.ToShortDateString());//DOS
 				row.Cells.Add(Carriers.GetName(InsPlans.RefreshOne(claim.PlanNum).CarrierNum));//Carrier
 				row.Cells.Add(Claims.GetClaimStatusString(claim.ClaimStatus));//Status
-				if(PrefC.HasClinicsEnabled) {//Using clinics
+				if(Preferences.HasClinicsEnabled) {//Using clinics
 					Clinic clinic=Clinics.GetClinic(claim.ClinicNum);
 					if(clinic==null) {
 						row.Cells.Add("");//Clinic

@@ -77,21 +77,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EhrLabImage into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EhrLabImage ehrLabImage,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				ehrLabImage.EhrLabImageNum=ReplicationServers.GetKey("ehrlabimage","EhrLabImageNum");
 			}
 			string command="INSERT INTO ehrlabimage (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EhrLabImageNum,";
 			}
 			command+="EhrLabNum,DocNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(ehrLabImage.EhrLabImageNum)+",";
 			}
 			command+=
 				     POut.Long  (ehrLabImage.EhrLabNum)+","
 				+    POut.Long  (ehrLabImage.DocNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

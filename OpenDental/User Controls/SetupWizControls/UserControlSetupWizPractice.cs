@@ -29,18 +29,18 @@ namespace OpenDental.User_Controls.SetupWizard {
 
 		private void FillControls() {
 			_listProviders=Providers.GetDeepCopy(true);
-			textPracticeTitle.Text=PrefC.GetString(PrefName.PracticeTitle);
-			textAddress.Text=PrefC.GetString(PrefName.PracticeAddress);
-			textAddress2.Text=PrefC.GetString(PrefName.PracticeAddress2);
-			textCity.Text=PrefC.GetString(PrefName.PracticeCity);
-			textST.Text=PrefC.GetString(PrefName.PracticeST);
-			textZip.Text=PrefC.GetString(PrefName.PracticeZip);
-			textPhone.Text=TelephoneNumbers.ReFormat(PrefC.GetString(PrefName.PracticePhone));
-			textFax.Text=TelephoneNumbers.ReFormat(PrefC.GetString(PrefName.PracticeFax));
+			textPracticeTitle.Text=Preferences.GetString(PrefName.PracticeTitle);
+			textAddress.Text=Preferences.GetString(PrefName.PracticeAddress);
+			textAddress2.Text=Preferences.GetString(PrefName.PracticeAddress2);
+			textCity.Text=Preferences.GetString(PrefName.PracticeCity);
+			textST.Text=Preferences.GetString(PrefName.PracticeST);
+			textZip.Text=Preferences.GetString(PrefName.PracticeZip);
+			textPhone.Text=TelephoneNumbers.ReFormat(Preferences.GetString(PrefName.PracticePhone));
+			textFax.Text=TelephoneNumbers.ReFormat(Preferences.GetString(PrefName.PracticeFax));
 			listProvider.Items.Clear();
 			for(int i = 0;i<_listProviders.Count;i++) {
 				listProvider.Items.Add(_listProviders[i].GetLongDesc());
-				if(_listProviders[i].ProvNum==PrefC.GetLong(PrefName.PracticeDefaultProv)) {
+				if(_listProviders[i].ProvNum==Preferences.GetLong(PrefName.PracticeDefaultProv)) {
 					listProvider.SelectedIndex=i;
 				}
 			}

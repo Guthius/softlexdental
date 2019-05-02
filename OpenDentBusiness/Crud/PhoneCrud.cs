@@ -130,15 +130,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Phone into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Phone phone,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				phone.PhoneNum=ReplicationServers.GetKey("phone","PhoneNum");
 			}
 			string command="INSERT INTO phone (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PhoneNum,";
 			}
 			command+="Extension,EmployeeName,ClockStatus,Description,ColorBar,ColorText,EmployeeNum,CustomerNumber,InOrOut,PatNum,DateTimeStart,CustomerNumberRaw,LastCallTimeStart,RingGroups,IsProximal,DateTimeNeedsHelpStart,DateTProximal) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(phone.PhoneNum)+",";
 			}
 			command+=
@@ -159,7 +159,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (phone.IsProximal)+","
 				+    POut.Date  (phone.DateTimeNeedsHelpStart)+","
 				+    POut.Date  (phone.DateTProximal)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

@@ -370,7 +370,7 @@ namespace OpenDental {
 			//if(listProv.SelectedIndex==-1){
 			//	listProv.SelectedIndex=0;//there should always be a provider
 			//}
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				labelClinic.Visible=false;
 				textClinic.Visible=false;
 			}
@@ -1136,7 +1136,7 @@ namespace OpenDental {
 			if(!IsProc) {
 				return true;
 			}
-			ClaimProcCreditsGreaterThanProcFee creditsGreaterPref=(ClaimProcCreditsGreaterThanProcFee)PrefC.GetInt(PrefName.ClaimProcAllowCreditsGreaterThanProcFee);
+			ClaimProcCreditsGreaterThanProcFee creditsGreaterPref=(ClaimProcCreditsGreaterThanProcFee)Preferences.GetInt(PrefName.ClaimProcAllowCreditsGreaterThanProcFee);
 			if(creditsGreaterPref==ClaimProcCreditsGreaterThanProcFee.Allow) {
 				return true;
 			}
@@ -1176,7 +1176,7 @@ namespace OpenDental {
 		///<summary>Returns true if InsPayNoWriteoffMoreThanProc preference is turned on and the sum of write off amount is greater than the proc fee.
 		///Otherwise returns false </summary>
 		private bool IsWriteOffGreaterThanProcFee() {
-			if(!IsProc || !PrefC.GetBool(PrefName.InsPayNoWriteoffMoreThanProc)) {
+			if(!IsProc || !Preferences.GetBool(PrefName.InsPayNoWriteoffMoreThanProc)) {
 				return false;
 			}
 			List<ClaimProc> listClaimProcsForPat=ClaimProcs.Refresh(PatCur.PatNum);
@@ -1240,8 +1240,8 @@ namespace OpenDental {
 				return;
 			}
 			if(PIn.Date(textDateCP.Text).Date > DateTime.Today.Date
-				&& !PrefC.GetBool(PrefName.FutureTransDatesAllowed) 
-				&& !PrefC.GetBool(PrefName.AllowFutureInsPayments)
+				&& !Preferences.GetBool(PrefName.FutureTransDatesAllowed) 
+				&& !Preferences.GetBool(PrefName.AllowFutureInsPayments)
 				&& ClaimProcCur.Status.In(ClaimProcStatus.Received,ClaimProcStatus.Supplemental,ClaimProcStatus.CapClaim,ClaimProcStatus.CapComplete)) 
 			{ 
 				MsgBox.Show(this,"Payment date cannot be for the future.");

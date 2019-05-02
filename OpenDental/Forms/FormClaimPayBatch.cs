@@ -942,7 +942,7 @@ namespace OpenDental{
 				}
 			}
 			else {
-				_listClaimsOutstanding=Claims.GetOutstandingClaims(textCarrier.Text,PrefC.DateClaimReceivedAfter);
+				_listClaimsOutstanding=Claims.GetOutstandingClaims(textCarrier.Text,Preferences.DateClaimReceivedAfter);
 				_listDetachedClaims.Clear();
 			}
 			gridOut.BeginUpdate();
@@ -1301,8 +1301,8 @@ namespace OpenDental{
 				MsgBox.Show(this,"At least one claim must be attached to this insurance payment.");
 				return;
 			}
-			if(!PrefC.GetBool(PrefName.AllowFutureInsPayments)
-				&& !PrefC.GetBool(PrefName.FutureTransDatesAllowed)
+			if(!Preferences.GetBool(PrefName.AllowFutureInsPayments)
+				&& !Preferences.GetBool(PrefName.FutureTransDatesAllowed)
 				&& ClaimPaymentCur.CheckDate.Date>MiscData.GetNowDateTime().Date)
 			{
 				MsgBox.Show(this,"Insurance Payment Date must not be a future date.");
@@ -1339,7 +1339,7 @@ namespace OpenDental{
 			if(ClaimPaymentCur.IsPartial) {
 				if(IsAmountAndTotalEqual(isSilent:true)) {
 					if(gridAttached.Rows.Count > 0
-						&& !PrefC.GetBool(PrefName.PromptForSecondaryClaim))
+						&& !Preferences.GetBool(PrefName.PromptForSecondaryClaim))
 					{
 						//If PromptForSecondaryClaim is enabled the user was prompted to make a decision when there are secondary claims for every claim they attached.
 						//No point in showing them a list of any secondary claims since they already decided how to handle them individually.

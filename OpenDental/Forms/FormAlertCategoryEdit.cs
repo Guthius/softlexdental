@@ -24,7 +24,7 @@ namespace OpenDental {
 		private void FormAlertCategoryEdit_Load(object sender,EventArgs e) {
 			textDesc.Text=_categoryCur.Description;
 			listShownAlertTypes=Enum.GetValues(typeof(AlertType)).OfType<AlertType>().ToList();
-			listShownAlertTypes.RemoveAll(x => !PrefC.IsODHQ && x.IsODHQ());
+			listShownAlertTypes.RemoveAll(x => !Preferences.IsODHQ && x.IsODHQ());
 			if(_categoryCur.IsHQCategory) {
 				textDesc.Enabled=false;
 				butDelete.Enabled=false;

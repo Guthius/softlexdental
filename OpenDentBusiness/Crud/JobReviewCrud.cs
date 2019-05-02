@@ -97,15 +97,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one JobReview into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(JobReview jobReview,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				jobReview.JobReviewNum=ReplicationServers.GetKey("jobreview","JobReviewNum");
 			}
 			string command="INSERT INTO jobreview (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="JobReviewNum,";
 			}
 			command+="JobNum,ReviewerNum,Description,ReviewStatus,TimeReview) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(jobReview.JobReviewNum)+",";
 			}
 			command+=
@@ -119,7 +119,7 @@ namespace OpenDentBusiness.Crud{
 				jobReview.Description="";
 			}
 			OdSqlParameter paramDescription=new OdSqlParameter("paramDescription",OdDbType.Text,POut.StringParam(jobReview.Description));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramDescription);
 			}
 			else {

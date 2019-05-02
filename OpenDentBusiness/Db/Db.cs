@@ -96,7 +96,7 @@ namespace OpenDentBusiness
         ///Otherwise true.</summary>
         private static bool IsSafeSqlForReplication(string command)
         {
-            if (!PrefC.RandomKeys && !Db.IsAutoIncrementOffsetSetForReplication())
+            if (!Preferences.RandomKeys && !Db.IsAutoIncrementOffsetSetForReplication())
             {//If replication is disabled, then any command is safe.
              //Previously users could set PrefName.RandomPrimaryKeys but there is no longer a UI for this.
              //PrefName.RandomPrimaryKeys use to be required for replication but this has since changed so we can not rely on this due to replication setup changes.
@@ -120,7 +120,7 @@ namespace OpenDentBusiness
                 return true;
             }
             //At this point we know that replication is enabled and the command is potentially unsafe.
-            if (PrefC.GetLong(PrefName.ReplicationUserQueryServer) == 0)
+            if (Preferences.GetLong(PrefName.ReplicationUserQueryServer) == 0)
             {//if no allowed ReplicationUserQueryServer set in replication setup
                 throw new ApplicationException("This query contains unsafe syntax that can crash replication.  There is currently no computer set that is allowed to run these types of queries.  This can be set in the replication setup window.");
             }

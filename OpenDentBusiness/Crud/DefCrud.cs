@@ -88,15 +88,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Def into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Def def,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				def.DefNum=ReplicationServers.GetKey("definition","DefNum");
 			}
 			string command="INSERT INTO definition (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="DefNum,";
 			}
 			command+="Category,ItemOrder,ItemName,ItemValue,ItemColor,IsHidden) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(def.DefNum)+",";
 			}
 			command+=
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(def.ItemValue)+"',"
 				+    POut.Int   (def.ItemColor.ToArgb())+","
 				+    POut.Bool  (def.IsHidden)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

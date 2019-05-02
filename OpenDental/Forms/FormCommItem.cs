@@ -179,7 +179,7 @@ namespace OpenDental
                 if (commlogTypeDefsList == null)
                 {
                     commlogTypeDefsList = Defs.GetDefsForCategory(DefCat.CommLogTypes, true);
-                    if (!PrefC.IsODHQ)
+                    if (!Preferences.IsODHQ)
                     {
                         commlogTypeDefsList.RemoveAll(x => x.ItemValue == CommItemTypeAuto.ODHQ.ToString());
                     }
@@ -201,7 +201,7 @@ namespace OpenDental
 
             _isStartingUp = true;
 
-            if (!PrefC.IsODHQ)
+            if (!Preferences.IsODHQ)
             {
                 endLabel.Visible = false;
                 endTextBox.Visible = false;
@@ -262,7 +262,7 @@ namespace OpenDental
                 deleteButton.Visible = false;
             }
 
-            if (IsNew && PrefC.GetBool(PrefName.CommLogAutoSave))
+            if (IsNew && Preferences.GetBool(PrefName.CommLogAutoSave))
             {
                 autoSaveTimer.Start();
             }

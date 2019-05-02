@@ -444,7 +444,7 @@ namespace OpenDental{
 			FillComboZip();
 			textZip.Text=SiteCur.Zip;
 			textNote.Text=SiteCur.Note;
-			butSiteLink.Visible=PrefC.IsODHQ;
+			butSiteLink.Visible=Preferences.IsODHQ;
 			butSiteLink.Enabled=(!SiteCur.IsNew);
 		}
 

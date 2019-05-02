@@ -48,7 +48,7 @@ namespace OpenDental {
 			textVotesAllotted.Text=RegKey.VotesAllotted.ToString();
 			textNote.Text=RegKey.Note;
 			//Make the practice title reset button visible for HQ.
-			if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+			if(Preferences.GetBool(PrefName.DockPhonePanelShow)) {
 				butPracticeTitleReset.Visible=true;
 			}
 			checkEarlyAccess.Checked=RegKey.HasEarlyAccess;
@@ -141,9 +141,9 @@ namespace OpenDental {
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
 				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
 			#endif
-			if(PrefC.GetString(PrefName.UpdateWebProxyAddress)!="") {
-				IWebProxy proxy=new WebProxy(PrefC.GetString(PrefName.UpdateWebProxyAddress));
-				ICredentials cred=new NetworkCredential(PrefC.GetString(PrefName.UpdateWebProxyUserName),PrefC.GetString(PrefName.UpdateWebProxyPassword));
+			if(Preferences.GetString(PrefName.UpdateWebProxyAddress)!="") {
+				IWebProxy proxy=new WebProxy(Preferences.GetString(PrefName.UpdateWebProxyAddress));
+				ICredentials cred=new NetworkCredential(Preferences.GetString(PrefName.UpdateWebProxyUserName),Preferences.GetString(PrefName.UpdateWebProxyPassword));
 				proxy.Credentials=cred;
 				updateService.Proxy=proxy;
 			}

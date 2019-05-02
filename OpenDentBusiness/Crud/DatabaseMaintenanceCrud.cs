@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one DatabaseMaintenance into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(DatabaseMaintenance databaseMaintenance,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				databaseMaintenance.DatabaseMaintenanceNum=ReplicationServers.GetKey("databasemaintenance","DatabaseMaintenanceNum");
 			}
 			string command="INSERT INTO databasemaintenance (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="DatabaseMaintenanceNum,";
 			}
 			command+="MethodName,IsHidden,IsOld,DateLastRun) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(databaseMaintenance.DatabaseMaintenanceNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (databaseMaintenance.IsHidden)+","
 				+    POut.Bool  (databaseMaintenance.IsOld)+","
 				+    POut.DateT (databaseMaintenance.DateLastRun)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

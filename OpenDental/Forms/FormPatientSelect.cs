@@ -80,7 +80,7 @@ namespace OpenDental
         ///<summary></summary>
         public void FormSelectPatient_Load(object sender, System.EventArgs e)
         {
-            if (!PrefC.GetBool(PrefName.DockPhonePanelShow))
+            if (!Preferences.GetBool(PrefName.DockPhonePanelShow))
             {
                 countryLabel.Visible = false;
                 countryTextBox.Visible = false;
@@ -116,7 +116,7 @@ namespace OpenDental
             {
                 billingTypeComboBox.Items.Add(_listBillingTypeDefs[i].ItemName);
             }
-            if (PrefC.GetBool(PrefName.EasyHidePublicHealth))
+            if (Preferences.GetBool(PrefName.EasyHidePublicHealth))
             {
                 siteComboBox.Visible = false;
                 siteLabel.Visible = false;
@@ -131,7 +131,7 @@ namespace OpenDental
                     siteComboBox.Items.Add(_listSites[i].Description);
                 }
             }
-            if (!PrefC.HasClinicsEnabled)
+            if (!Preferences.HasClinicsEnabled)
             {
                 clinicLabel.Visible = false;
                 clinicComboBox.Visible = false;
@@ -203,7 +203,7 @@ namespace OpenDental
             switch (ComputerPrefs.LocalComputer.PatSelectSearchMode)
             {
                 case SearchMode.Default:
-                    checkRefresh.Checked = !PrefC.GetBool(PrefName.PatientSelectUsesSearchButton);//Use global preference
+                    checkRefresh.Checked = !Preferences.GetBool(PrefName.PatientSelectUsesSearchButton);//Use global preference
                     break;
                 case SearchMode.RefreshWhileTyping:
                     checkRefresh.Checked = true;
@@ -418,13 +418,13 @@ namespace OpenDental
                 billingType = _listBillingTypeDefs[billingTypeComboBox.SelectedIndex - 1].DefNum;
             }
             long siteNum = 0;
-            if (!PrefC.GetBool(PrefName.EasyHidePublicHealth) && siteComboBox.SelectedIndex != 0)
+            if (!Preferences.GetBool(PrefName.EasyHidePublicHealth) && siteComboBox.SelectedIndex != 0)
             {
                 siteNum = _listSites[siteComboBox.SelectedIndex - 1].SiteNum;
             }
             DateTime birthdate = PIn.Date(birthdateTextBox.Text); //this will frequently be minval.
             string clinicNums = "";
-            if (PrefC.HasClinicsEnabled)
+            if (Preferences.HasClinicsEnabled)
             {
                 if (clinicComboBox.SelectedIndex == 0)
                 {//'All' is selected
@@ -683,9 +683,9 @@ namespace OpenDental
             }
 
             long primaryProviderNum = 0;
-            if (!PrefC.GetBool(PrefName.PriProvDefaultToSelectProv))
+            if (!Preferences.GetBool(PrefName.PriProvDefaultToSelectProv))
             {
-                if (PrefC.HasClinicsEnabled && clinicComboBox.SelectedIndex != 0)
+                if (Preferences.HasClinicsEnabled && clinicComboBox.SelectedIndex != 0)
                 {
                     var prov = Providers.GetDefaultProvider(((ODBoxItem<Clinic>)clinicComboBox.SelectedItem).Tag.ClinicNum);
                     if (prov != null)

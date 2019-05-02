@@ -695,7 +695,7 @@ namespace OpenDental{
 			}
 			textNote.Text=RepeatCur.Note;
 			_isErx=false;
-			if(PrefC.GetBool(PrefName.DistributorKey) && Regex.IsMatch(RepeatCur.ProcCode,"^Z[0-9]{3,}$")) {//Is eRx if HQ and a using an eRx Z code.
+			if(Preferences.GetBool(PrefName.DistributorKey) && Regex.IsMatch(RepeatCur.ProcCode,"^Z[0-9]{3,}$")) {//Is eRx if HQ and a using an eRx Z code.
 				_isErx=true;
 				labelPatNum.Visible=true;
 				textPatNum.Visible=true;
@@ -744,11 +744,11 @@ namespace OpenDental{
 			checkCopyNoteToProc.Checked=RepeatCur.CopyNoteToProc;
 			checkCreatesClaim.Checked=RepeatCur.CreatesClaim;
 			checkIsEnabled.Checked=RepeatCur.IsEnabled;
-			if(PrefC.GetBool(PrefName.DistributorKey)) {//OD HQ disable the IsEnabled and CreatesClaim checkboxes
+			if(Preferences.GetBool(PrefName.DistributorKey)) {//OD HQ disable the IsEnabled and CreatesClaim checkboxes
 				checkCreatesClaim.Enabled=false;
 				checkIsEnabled.Enabled=false;
 			}
-			if(PrefC.IsODHQ && EServiceCodeLink.IsProcCodeAnEService(RepeatCur.ProcCode,out _eService)) {
+			if(Preferences.IsODHQ && EServiceCodeLink.IsProcCodeAnEService(RepeatCur.ProcCode,out _eService)) {
 				if(IsNew) {
 					MsgBox.Show(this,"You cannot manually create any eService repeating charges.\r\n"
 						+"Use the Signup Portal instead.\r\n\r\n"
@@ -785,7 +785,7 @@ namespace OpenDental{
 			else {
 				textBillingDay.Text=pat.BillingCycleDay.ToString();
 			}
-			if(PrefC.GetBool(PrefName.BillingUseBillingCycleDay)) {
+			if(Preferences.GetBool(PrefName.BillingUseBillingCycleDay)) {
 				labelBillingCycleDay.Visible=true;
 				textBillingDay.Visible=true;
 			}
@@ -875,7 +875,7 @@ namespace OpenDental{
 
 		private void butManual_Click(object sender,EventArgs e) {
 			Prefs.RefreshCache();//Refresh the cache in case another machine has updated this pref
-			if(PrefC.GetString(PrefName.RepeatingChargesBeginDateTime)!="") {
+			if(Preferences.GetString(PrefName.RepeatingChargesBeginDateTime)!="") {
 				MsgBox.Show(this,"Repeating charges already running on another workstation, you must wait for them to finish before continuing.");
 				return;
 			}
@@ -997,7 +997,7 @@ namespace OpenDental{
 			if(!UpdateRepeatCharge(RepeatCur)) {
 				return;
 			}
-			if(PrefC.GetBool(PrefName.BillingUseBillingCycleDay) && textBillingDay.Text!="") {
+			if(Preferences.GetBool(PrefName.BillingUseBillingCycleDay) && textBillingDay.Text!="") {
 				Patient patOld=Patients.GetPat(RepeatCur.PatNum);
 				Patient patNew=patOld.Copy();
 				patNew.BillingCycleDay=PIn.Int(textBillingDay.Text);
@@ -1013,7 +1013,7 @@ namespace OpenDental{
 					Patients.Update(patNew,patOld);
 				}
 				RepeatCharges.Insert(RepeatCur);
-				if(PrefC.IsODHQ) {
+				if(Preferences.IsODHQ) {
 					AddProcedureToCC();
 				}
 			}

@@ -31,7 +31,7 @@ namespace OpenDental {
 				datePicker,checkShowPatNums);
 			#region Fill Clinics
 			_listClinics=new List<Clinic>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				_listClinics.AddRange(
 					Clinics.GetForUserod(Security.CurUser,true,Lan.g(this,"Unassigned")).OrderBy(x => x.ClinicNum!=0).ThenBy(x => x.ItemOrder)
 				);
@@ -110,8 +110,8 @@ namespace OpenDental {
 			#region Set Grid Columns
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
-			gridMain.Columns.Add(new ODGridColumn("Guarantor",PrefC.HasClinicsEnabled?-200:-300));
-			if(PrefC.HasClinicsEnabled) {
+			gridMain.Columns.Add(new ODGridColumn("Guarantor",Preferences.HasClinicsEnabled?-200:-300));
+			if(Preferences.HasClinicsEnabled) {
 				gridMain.Columns.Add(new ODGridColumn("Clinic",-100));
 			}
 			gridMain.Columns.Add(new ODGridColumn("User",-100));
@@ -141,7 +141,7 @@ namespace OpenDental {
 				string patName="";
 				row.Cells.Add((checkShowPatNums.Checked?(logCur.PatNum.ToString()+" - "):"")
 					+(dictPatNames.TryGetValue(logCur.PatNum,out patName)?patName:Patients.GetNameLF(logCur.PatNum)));
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					string clinicAbbr="";
 					row.Cells.Add((dictClinicAbbrs.TryGetValue(logCur.ClinicNum,out clinicAbbr) || dictPatClinicAbbrs.TryGetValue(logCur.PatNum,out clinicAbbr))?clinicAbbr:"");
 				}
@@ -206,7 +206,7 @@ namespace OpenDental {
 			List<long> listActiveCollGuarNums=Patients.GetListCollectionGuarNums(/*false*/);
 			List<long> listClinicNums=new List<long>();
 			Dictionary<long,long> dictLogClinic=new Dictionary<long,long>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(comboBoxMultiClinics.ListSelectedIndices.Contains(0)) {
 					listClinicNums=_listClinics.Select(x => x.ClinicNum).ToList();
 				}

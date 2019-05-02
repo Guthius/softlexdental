@@ -479,7 +479,7 @@ namespace OpenDentBusiness
                 //the split should always go to the payplancharge's guarantor.
                 interest.PatNum = payPlanChargeCur.Guarantor;
                 interest.ProvNum = payPlanChargeCur.ProvNum;
-                if (PrefC.HasClinicsEnabled)
+                if (Preferences.HasClinicsEnabled)
                 {//Clinics
                     interest.ClinicNum = payPlanChargeCur.ClinicNum;
                 }

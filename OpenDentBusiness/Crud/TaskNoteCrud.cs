@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one TaskNote into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(TaskNote taskNote,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				taskNote.TaskNoteNum=ReplicationServers.GetKey("tasknote","TaskNoteNum");
 			}
 			string command="INSERT INTO tasknote (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="TaskNoteNum,";
 			}
 			command+="TaskNum,UserNum,DateTimeNote,Note) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(taskNote.TaskNoteNum)+",";
 			}
 			command+=
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 				taskNote.Note="";
 			}
 			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,POut.StringParam(taskNote.Note));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNote);
 			}
 			else {

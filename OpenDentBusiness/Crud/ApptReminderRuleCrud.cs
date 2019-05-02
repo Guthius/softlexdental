@@ -112,15 +112,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ApptReminderRule into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ApptReminderRule apptReminderRule,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				apptReminderRule.ApptReminderRuleNum=ReplicationServers.GetKey("apptreminderrule","ApptReminderRuleNum");
 			}
 			string command="INSERT INTO apptreminderrule (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ApptReminderRuleNum,";
 			}
 			command+="TypeCur,TSPrior,SendOrder,IsSendAll,TemplateSMS,TemplateEmailSubject,TemplateEmail,ClinicNum,TemplateSMSAggShared,TemplateSMSAggPerAppt,TemplateEmailSubjAggShared,TemplateEmailAggShared,TemplateEmailAggPerAppt,DoNotSendWithin) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(apptReminderRule.ApptReminderRuleNum)+",";
 			}
 			command+=
@@ -170,7 +170,7 @@ namespace OpenDentBusiness.Crud{
 				apptReminderRule.TemplateEmailAggPerAppt="";
 			}
 			OdSqlParameter paramTemplateEmailAggPerAppt=new OdSqlParameter("paramTemplateEmailAggPerAppt",OdDbType.Text,POut.StringParam(apptReminderRule.TemplateEmailAggPerAppt));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramTemplateSMS,paramTemplateEmailSubject,paramTemplateEmail,paramTemplateSMSAggShared,paramTemplateSMSAggPerAppt,paramTemplateEmailSubjAggShared,paramTemplateEmailAggShared,paramTemplateEmailAggPerAppt);
 			}
 			else {

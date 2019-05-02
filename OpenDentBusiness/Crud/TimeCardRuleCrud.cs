@@ -89,15 +89,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one TimeCardRule into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(TimeCardRule timeCardRule,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				timeCardRule.TimeCardRuleNum=ReplicationServers.GetKey("timecardrule","TimeCardRuleNum");
 			}
 			string command="INSERT INTO timecardrule (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="TimeCardRuleNum,";
 			}
 			command+="EmployeeNum,OverHoursPerDay,AfterTimeOfDay,BeforeTimeOfDay,IsOvertimeExempt,MinClockInTime) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(timeCardRule.TimeCardRuleNum)+",";
 			}
 			command+=
@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Time  (timeCardRule.BeforeTimeOfDay)+","
 				+    POut.Bool  (timeCardRule.IsOvertimeExempt)+","
 				+    POut.Time  (timeCardRule.MinClockInTime)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
@@ -123,7 +123,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many TimeCardRules into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<TimeCardRule> listTimeCardRules,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(TimeCardRule timeCardRule in listTimeCardRules) {
 					Insert(timeCardRule);
 				}

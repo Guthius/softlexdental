@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PatRestriction into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(PatRestriction patRestriction,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				patRestriction.PatRestrictionNum=ReplicationServers.GetKey("patrestriction","PatRestrictionNum");
 			}
 			string command="INSERT INTO patrestriction (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PatRestrictionNum,";
 			}
 			command+="PatNum,PatRestrictType) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(patRestriction.PatRestrictionNum)+",";
 			}
 			command+=
 				     POut.Long  (patRestriction.PatNum)+","
 				+    POut.Int   ((int)patRestriction.PatRestrictType)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

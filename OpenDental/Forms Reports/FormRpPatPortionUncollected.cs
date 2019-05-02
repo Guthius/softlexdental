@@ -147,7 +147,7 @@ namespace OpenDental{
 		private void FormPaymentSheet_Load(object sender,System.EventArgs e) {
 			date1.SelectionStart=DateTime.Today;
 			date2.SelectionStart=DateTime.Today;
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				listClin.Visible=false;
 				labelClin.Visible=false;
 				checkAllClin.Visible=false;
@@ -190,13 +190,13 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender,System.EventArgs e) {
-			if(PrefC.HasClinicsEnabled && !checkAllClin.Checked && listClin.SelectedIndices.Count==0) {
+			if(Preferences.HasClinicsEnabled && !checkAllClin.Checked && listClin.SelectedIndices.Count==0) {
 				MsgBox.Show(this,"At least one clinic must be selected.");
 				return;
 			}
 			ReportComplex report=new ReportComplex(true,false);
 			List<long> listClinicNums=new List<long>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
 					if(Security.CurUser.ClinicIsRestricted) {
 						listClinicNums.Add(_listClinics[listClin.SelectedIndices[i]].ClinicNum);//we know that the list is a 1:1 to _listClinics
@@ -213,7 +213,7 @@ namespace OpenDental{
 			}
 			DataTable table=RpPatPortionUncollected.GetPatUncollected(date1.SelectionStart,date2.SelectionStart,listClinicNums);
 			string subtitleClinics="";
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(checkAllClin.Checked && !Security.CurUser.ClinicIsRestricted) {
 					subtitleClinics=Lan.g(this,"All Clinics");
 				}
@@ -242,9 +242,9 @@ namespace OpenDental{
 			Font fontSubTitle=new Font("Tahoma",10,FontStyle.Bold);
 			report.ReportName=Lan.g(this,"Patient Portion Uncollected");
 			report.AddTitle("Title",Lan.g(this,"Patient Portion Uncollected"),fontTitle);
-			report.AddSubTitle("Practice Title",PrefC.GetString(PrefName.PracticeTitle),fontSubTitle);
+			report.AddSubTitle("Practice Title",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
 			report.AddSubTitle("Dates of Report",date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d"),fontSubTitle);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				report.AddSubTitle("Clinics",subtitleClinics,fontSubTitle);
 			}
 			

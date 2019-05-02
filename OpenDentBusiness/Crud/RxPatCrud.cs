@@ -136,15 +136,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one RxPat into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(RxPat rxPat,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				rxPat.RxNum=ReplicationServers.GetKey("rxpat","RxNum");
 			}
 			string command="INSERT INTO rxpat (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="RxNum,";
 			}
 			command+="PatNum,RxDate,Drug,Sig,Disp,Refills,ProvNum,Notes,PharmacyNum,IsControlled,SendStatus,RxCui,DosageCode,ErxGuid,IsErxOld,ErxPharmacyInfo,IsProcRequired,ProcNum,DaysOfSupply,PatientInstruction,ClinicNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(rxPat.RxNum)+",";
 			}
 			command+=
@@ -174,7 +174,7 @@ namespace OpenDentBusiness.Crud{
 				rxPat.PatientInstruction="";
 			}
 			OdSqlParameter paramPatientInstruction=new OdSqlParameter("paramPatientInstruction",OdDbType.Text,POut.StringParam(rxPat.PatientInstruction));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramPatientInstruction);
 			}
 			else {

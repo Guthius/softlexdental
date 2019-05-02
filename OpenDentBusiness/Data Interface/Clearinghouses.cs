@@ -98,7 +98,7 @@ namespace OpenDentBusiness
         public static Clearinghouse GetDefaultEligibility()
         {
             //No need to check RemotingRole; no call to db.
-            return GetClearinghouse(PrefC.GetLong(PrefName.ClearinghouseDefaultEligibility));
+            return GetClearinghouse(Preferences.GetLong(PrefName.ClearinghouseDefaultEligibility));
         }
 
         ///<summary>Gets the last batch number from db for the HQ version of this clearinghouseClin and increments it by one.
@@ -149,15 +149,15 @@ namespace OpenDentBusiness
             Clearinghouse clearinghouseHq = null;
             if (medType == EnumClaimMedType.Dental)
             {
-                if (PrefC.GetLong(PrefName.ClearinghouseDefaultDent) == 0)
+                if (Preferences.GetLong(PrefName.ClearinghouseDefaultDent) == 0)
                 {
                     return 0;
                 }
-                clearinghouseHq = GetClearinghouse(PrefC.GetLong(PrefName.ClearinghouseDefaultDent));
+                clearinghouseHq = GetClearinghouse(Preferences.GetLong(PrefName.ClearinghouseDefaultDent));
             }
             if (medType == EnumClaimMedType.Medical || medType == EnumClaimMedType.Institutional)
             {
-                if (PrefC.GetLong(PrefName.ClearinghouseDefaultMed) == 0)
+                if (Preferences.GetLong(PrefName.ClearinghouseDefaultMed) == 0)
                 {
                     //No default set, substituting emdeon medical otherwise first medical clearinghouse.
                     List<Clearinghouse> listClearingHouses = GetDeepCopy(false);
@@ -173,7 +173,7 @@ namespace OpenDentBusiness
                     }
                     return clearinghouseHq.ClearinghouseNum;
                 }
-                clearinghouseHq = GetClearinghouse(PrefC.GetLong(PrefName.ClearinghouseDefaultMed));
+                clearinghouseHq = GetClearinghouse(Preferences.GetLong(PrefName.ClearinghouseDefaultMed));
             }
             if (clearinghouseHq == null)
             {//we couldn't find a default clearinghouse for that medType.  Needs to always be a default.
@@ -228,7 +228,7 @@ namespace OpenDentBusiness
         public static Clearinghouse GetDefaultDental()
         {
             //No need to check RemotingRole; no call to db.
-            return GetClearinghouse(PrefC.GetLong(PrefName.ClearinghouseDefaultDent));
+            return GetClearinghouse(Preferences.GetLong(PrefName.ClearinghouseDefaultDent));
         }
 
         ///<summary>Gets an HQ clearinghouse from cache.  Will return null if invalid.</summary>
@@ -440,7 +440,7 @@ namespace OpenDentBusiness
                 Prefs.UpdateDateT(PrefName.ClaimReportReceiveLastDateTime, DateTime.Now);
             }
             List<Clearinghouse> listClearinghousesHq = GetDeepCopy();
-            long defaultClearingHouseNum = PrefC.GetLong(PrefName.ClearinghouseDefaultDent);
+            long defaultClearingHouseNum = Preferences.GetLong(PrefName.ClearinghouseDefaultDent);
             for (int i = 0; i < listClearinghousesHq.Count; i++)
             {
                 Clearinghouse clearinghouseHq = listClearinghousesHq[i];
@@ -458,9 +458,9 @@ namespace OpenDentBusiness
         private static bool IsTimeToRetrieveReports(bool isAutomaticMode, out string errorMessage, IODProgressExtended progress = null)
         {
             progress = progress ?? new ODProgressExtendedNull();
-            DateTime timeLastReport = PIn.DateT(PrefC.GetStringNoCache(PrefName.ClaimReportReceiveLastDateTime));
-            double timeReceiveInternal = PIn.Double(PrefC.GetStringNoCache(PrefName.ClaimReportReceiveInterval));//Interval in minutes.
-            DateTime timeToRecieve = DateTime.Now.Date + PrefC.GetDateT(PrefName.ClaimReportReceiveTime).TimeOfDay;
+            DateTime timeLastReport = PIn.DateT(Preferences.GetStringNoCache(PrefName.ClaimReportReceiveLastDateTime));
+            double timeReceiveInternal = PIn.Double(Preferences.GetStringNoCache(PrefName.ClaimReportReceiveInterval));//Interval in minutes.
+            DateTime timeToRecieve = DateTime.Now.Date + Preferences.GetDateTime(PrefName.ClaimReportReceiveTime).TimeOfDay;
             double timeDiff = DateTime.Now.Subtract(timeLastReport).TotalMinutes;
             errorMessage = "";
             if (isAutomaticMode)
@@ -821,11 +821,11 @@ namespace OpenDentBusiness
         ///<summary>Returns and error message to display to the user if default clearinghouses are not set up; Otherwise, empty string.</summary>
         public static string CheckClearinghouseDefaults()
         {
-            if (PrefC.GetLong(PrefName.ClearinghouseDefaultDent) == 0)
+            if (Preferences.GetLong(PrefName.ClearinghouseDefaultDent) == 0)
             {
                 return Lans.g("ContrAccount", "No default dental clearinghouse defined.");
             }
-            if (PrefC.GetBool(PrefName.ShowFeatureMedicalInsurance) && PrefC.GetLong(PrefName.ClearinghouseDefaultMed) == 0)
+            if (Preferences.GetBool(PrefName.ShowFeatureMedicalInsurance) && Preferences.GetLong(PrefName.ClearinghouseDefaultMed) == 0)
             {
                 return Lans.g("ContrAccount", "No default medical clearinghouse defined.");
             }

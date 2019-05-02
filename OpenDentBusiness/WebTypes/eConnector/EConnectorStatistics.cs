@@ -39,8 +39,8 @@ namespace OpenDentBusiness.WebTypes {
 			eConnStats.EConnectorComputerName=Environment.MachineName;
 			eConnStats.EConnectorDomainUserName=Environment.UserName;
 			eConnStats.EConnectorIP=ODEnvironment.GetLocalIPAddress();
-			eConnStats.HasClinicsEnabled=PrefC.HasClinicsEnabled;
-			if(PrefC.HasClinicsEnabled) {
+			eConnStats.HasClinicsEnabled=Preferences.HasClinicsEnabled;
+			if(Preferences.HasClinicsEnabled) {
 				eConnStats.CountActiveClinics=OpenDentBusiness.Clinics.GetCount();
 				eConnStats.CountInactiveClinics=OpenDentBusiness.Clinics.GetCount()-eConnStats.CountActiveClinics;
 			}
@@ -80,7 +80,7 @@ namespace OpenDentBusiness.WebTypes {
 				}
 			}
 			List<EConnectorStatistics> listStatsToSend=new List<EConnectorStatistics> { eConnStats };
-			string dbStats=PrefC.GetString(PrefName.EConnectorStatistics);
+			string dbStats=Preferences.GetString(PrefName.EConnectorStatistics);
 			List<EConnectorStatistics> listDbStats=DeserializeListFromJson(dbStats)??new List<EConnectorStatistics>();
 			bool doCreateAlert=false;
 			foreach(EConnectorStatistics stats in listDbStats) {

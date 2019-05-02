@@ -18,7 +18,7 @@ namespace OpenDental {
 		}
 
 		private void FormDefaultCCProcs_Load(object sender,EventArgs e) {
-			_defaultCCProcs=PrefC.GetString(PrefName.DefaultCCProcs);
+			_defaultCCProcs=Preferences.GetString(PrefName.DefaultCCProcs);
 			_listCCProcs=_defaultCCProcs.Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries).ToList();
 			_listCCProcs.Sort();
 			FillProcs();

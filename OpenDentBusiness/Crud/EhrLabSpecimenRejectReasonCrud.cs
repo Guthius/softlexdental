@@ -95,15 +95,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EhrLabSpecimenRejectReason into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EhrLabSpecimenRejectReason ehrLabSpecimenRejectReason,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				ehrLabSpecimenRejectReason.EhrLabSpecimenRejectReasonNum=ReplicationServers.GetKey("ehrlabspecimenrejectreason","EhrLabSpecimenRejectReasonNum");
 			}
 			string command="INSERT INTO ehrlabspecimenrejectreason (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EhrLabSpecimenRejectReasonNum,";
 			}
 			command+="EhrLabSpecimenNum,SpecimenRejectReasonID,SpecimenRejectReasonText,SpecimenRejectReasonCodeSystemName,SpecimenRejectReasonIDAlt,SpecimenRejectReasonTextAlt,SpecimenRejectReasonCodeSystemNameAlt,SpecimenRejectReasonTextOriginal) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(ehrLabSpecimenRejectReason.EhrLabSpecimenRejectReasonNum)+",";
 			}
 			command+=
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(ehrLabSpecimenRejectReason.SpecimenRejectReasonTextAlt)+"',"
 				+"'"+POut.String(ehrLabSpecimenRejectReason.SpecimenRejectReasonCodeSystemNameAlt)+"',"
 				+"'"+POut.String(ehrLabSpecimenRejectReason.SpecimenRejectReasonTextOriginal)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

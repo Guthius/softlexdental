@@ -155,8 +155,8 @@ namespace OpenDental {
 			ProcCur.BaseUnits=procCodeCur.BaseUnits;
 			ProcCur.SiteNum=pat.SiteNum;
 			ProcCur.RevCode=procCodeCur.RevenueCodeDefault;
-			ProcCur.DiagnosticCode=PrefC.GetString(PrefName.ICD9DefaultForNewProcs);
-			ProcCur.PlaceService=(PlaceOfService)PrefC.GetInt(PrefName.DefaultProcedurePlaceService);//Default proc place of service for the Practice is used. 
+			ProcCur.DiagnosticCode=Preferences.GetString(PrefName.ICD9DefaultForNewProcs);
+			ProcCur.PlaceService=(PlaceOfService)Preferences.GetInt(PrefName.DefaultProcedurePlaceService);//Default proc place of service for the Practice is used. 
 			if(Userods.IsUserCpoe(Security.CurUser)) {
 				//This procedure is considered CPOE because the provider is the one that has added it.
 				ProcCur.IsCpoe=true;

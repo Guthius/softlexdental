@@ -308,11 +308,11 @@ namespace OpenDental{
 			for(int i=0;i<AllCultures.Length;i++) {
 				listAvailable.Items.Add(AllCultures[i].DisplayName);
 			}
-			if(PrefC.GetString(PrefName.LanguagesUsedByPatients)=="") {
+			if(Preferences.GetString(PrefName.LanguagesUsedByPatients)=="") {
 				LangsUsed=new List<string>();
 			}
 			else {
-				LangsUsed=new List<string>(PrefC.GetString(PrefName.LanguagesUsedByPatients).Split(','));
+				LangsUsed=new List<string>(Preferences.GetString(PrefName.LanguagesUsedByPatients).Split(','));
 			}
 			FillListUsed();
 		}
@@ -344,7 +344,7 @@ namespace OpenDental{
 				CultureInfo culture=CodeBase.MiscUtils.GetCultureFromThreeLetter(LangsUsed[i]);
 				if(culture==null) {//custom language
 					comboLanguagesIndicateNone.Items.Add(LangsUsed[i]);//Only add custom languages to this combobox.
-					if(LangsUsed[i]==PrefC.GetString(PrefName.LanguagesIndicateNone)) {
+					if(LangsUsed[i]==Preferences.GetString(PrefName.LanguagesIndicateNone)) {
 						comboLanguagesIndicateNone.SelectedIndex=comboLanguagesIndicateNone.Items.Count-1;//Select the item we just added.
 					}
 				}
@@ -442,7 +442,7 @@ namespace OpenDental{
 
 		private void FormLanguagesUsed_FormClosing(object sender,FormClosingEventArgs e) {
 			//if LanguagesUsedByPatients does not contain LanguagesIndicateNone clear LanguagesIndicateNone
-			if(!PrefC.GetString(PrefName.LanguagesUsedByPatients).Contains(PrefC.GetString(PrefName.LanguagesIndicateNone))) {
+			if(!Preferences.GetString(PrefName.LanguagesUsedByPatients).Contains(Preferences.GetString(PrefName.LanguagesIndicateNone))) {
 				Prefs.UpdateString(PrefName.LanguagesIndicateNone,"");
 			}
 		}

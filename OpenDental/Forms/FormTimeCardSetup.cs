@@ -329,13 +329,13 @@ namespace OpenDental{
 		#endregion
 
 		private void FormPayPeriods_Load(object sender,System.EventArgs e) {
-			checkUseDecimal.Checked=PrefC.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon);
-			checkAdjOverBreaks.Checked=PrefC.GetBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks);
-			checkShowSeconds.Checked=PrefC.GetBool(PrefName.TimeCardShowSeconds);
+			checkUseDecimal.Checked=Preferences.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon);
+			checkAdjOverBreaks.Checked=Preferences.GetBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks);
+			checkShowSeconds.Checked=Preferences.GetBool(PrefName.TimeCardShowSeconds);
 			Employees.RefreshCache();
 			FillGrid();
 			FillRules();
-			textADPCompanyCode.Text=PrefC.GetString(PrefName.ADPCompanyCode);
+			textADPCompanyCode.Text=Preferences.GetString(PrefName.ADPCompanyCode);
 		}
 
 		///<summary>Does not refresh the cached list.  Make sure any updates to _listPayPeriods are done before calling this method.</summary>

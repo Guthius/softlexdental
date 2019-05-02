@@ -98,7 +98,7 @@ namespace OpenDental {
 
 		///<summary>Puts the form into clinic mode when using the clinics feature.  Otherwise; does nothing.</summary>
 		private void FillClinics() {
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				return;
 			}
 			labelClinic.Visible=true;
@@ -114,7 +114,7 @@ namespace OpenDental {
 
 		///<summary>Only fill appt views when clinic is HQ. </summary>
 		private void FillApptViews() {
-			if(!PrefC.HasClinicsEnabled || comboBoxClinic.SelectedTag<Clinic>().ClinicNum!=0) {
+			if(!Preferences.HasClinicsEnabled || comboBoxClinic.SelectedTag<Clinic>().ClinicNum!=0) {
 				return;//Either clinics are enabled and we're on a sepecific clinic OR clinics are not enabled. In either case don't fill appt views. 
 			}
 			List<ApptView> listApptViews=ApptViews.GetForClinic(comboBoxClinic.SelectedClinicNum);
@@ -216,7 +216,7 @@ namespace OpenDental {
 					listProvNums.Add(provBoxItem.Tag.ProvNum);
 				}
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(comboBoxClinic.SelectedClinicNum!=0) {
 					listClinicNums.Add(comboBoxClinic.SelectedClinicNum);
 					listOpNums=Operatories.GetOpsForClinic(comboBoxClinic.SelectedClinicNum).Select(x => x.OperatoryNum).ToList();

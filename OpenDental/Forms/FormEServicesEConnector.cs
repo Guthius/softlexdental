@@ -46,14 +46,14 @@ namespace OpenDental {
 			//Users who want to install multiple on one computer can use the Service Manager instead.
 			//Do nothing on error.  The Install button will simply be visible.
 			ODException.SwallowAnyException(() => {
-				if(PrefC.IsCloudMode || ServicesHelper.GetServicesByExe("OpenDentalEConnector.exe").Count>0) {
+				if(Preferences.IsCloudMode || ServicesHelper.GetServicesByExe("OpenDentalEConnector.exe").Count>0) {
 					butInstallEConnector.Enabled=false;
 				}
 			});
 			FillTextListenerServiceStatus();
 			FillGridListenerService();
 			//Default to not checked if it is unknown.
-			checkEmailsWithDiffProcess.Checked=((YN)PrefC.GetInt(PrefName.SendEmailsInDiffProcess)==YN.Yes);
+			checkEmailsWithDiffProcess.Checked=((YN)Preferences.GetInt(PrefName.SendEmailsInDiffProcess)==YN.Yes);
 		}
 
 		private void SaveTabEConnector() {
@@ -62,7 +62,7 @@ namespace OpenDental {
 			}
 			else {
 				//Not checked.
-				if((YN)PrefC.GetInt(PrefName.SendEmailsInDiffProcess)==YN.Yes) {
+				if((YN)Preferences.GetInt(PrefName.SendEmailsInDiffProcess)==YN.Yes) {
 					//If it was yes before, switch it to no.
 					Prefs.UpdateInt(PrefName.SendEmailsInDiffProcess,(int)YN.No);
 				}
@@ -100,7 +100,7 @@ namespace OpenDental {
 			DialogResult result;
 			//Check to see if the update server preference is set.
 			//If set, make sure that this is set to the computer currently logged on.
-			string updateServerName=PrefC.GetString(PrefName.WebServiceServerName);
+			string updateServerName=Preferences.GetString(PrefName.WebServiceServerName);
 			if(!string.IsNullOrEmpty(updateServerName)&&!ODEnvironment.IdIsThisComputer(updateServerName.ToLower())) {
 				result=MessageBox.Show(Lan.g(this,"The eConnector service should be installed on the Update Server")+": "+updateServerName+"\r\n"
 					+Lan.g(this,"Are you trying to install the eConnector on a different computer by accident?"),"",MessageBoxButtons.YesNoCancel);

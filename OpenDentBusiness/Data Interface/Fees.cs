@@ -33,7 +33,7 @@ namespace OpenDentBusiness{
 		///otherwise fills the cache itself.</summary>
 		private static void FillCacheOrWait() {
 			//No need to check RemotingRole; no call to db.
-			if(!PrefC.GetBool(PrefName.FeesUseCache)){
+			if(!Preferences.GetBool(PrefName.FeesUseCache)){
 				return;
 			}
 			if(_cache!=null) {
@@ -60,7 +60,7 @@ namespace OpenDentBusiness{
 		///<summary>Initializes the Cache, with fees for the HQ Clinic, and for the current user's selected clinic.</summary>
 		public static void FillCache() {
 			//No need to check RemotingRole; no call to db.
-			if(!PrefC.GetBool(PrefName.FeesUseCache)){
+			if(!Preferences.GetBool(PrefName.FeesUseCache)){
 				return;
 			}
 			IFeeCache cache=new FeeCache();
@@ -70,7 +70,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Fills the cache with the passed in DataTable. Note that this might push out fees from other clinics from the cache.</summary>
 		public static void FillCacheFromTable(DataTable dataTable) {
-			if(!PrefC.GetBool(PrefName.FeesUseCache)){
+			if(!Preferences.GetBool(PrefName.FeesUseCache)){
 				return;
 			}
 			_Cache.FillCacheFromTable(dataTable);
@@ -131,7 +131,7 @@ namespace OpenDentBusiness{
 			if(listFees!=null) {
 				return GetFeeFromList(listFees,codeNum,feeSchedNum,clinicNum,provNum);
 			}
-			if(PrefC.GetBool(PrefName.FeesUseCache)){
+			if(Preferences.GetBool(PrefName.FeesUseCache)){
 				return _Cache.GetFee(codeNum,feeSchedNum,clinicNum,provNum);
 			}
 			return GetFeeNoCache(codeNum,feeSchedNum,clinicNum,provNum);
@@ -305,7 +305,7 @@ namespace OpenDentBusiness{
 				listFeeScheds.Add(provFirst.FeeSched);
 			}
 			//Add feesched for PracticeDefaultProv------------------------------------------------------------------------------------------------
-			Provider provPracticeDefault=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
+			Provider provPracticeDefault=Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv));
 			if(provPracticeDefault!=null && provPracticeDefault.FeeSched!=0 && !listFeeScheds.Contains(provPracticeDefault.FeeSched)){
 				listFeeScheds.Add(provPracticeDefault.FeeSched);
 			}
@@ -429,7 +429,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets a copy of the cache for local use.</summary>
 		public static FeeCache GetCache() {
-			if(!PrefC.GetBool(PrefName.FeesUseCache)){
+			if(!Preferences.GetBool(PrefName.FeesUseCache)){
 				throw new Exception("No fee cache.");
 			}
 			//We need to coalesce to a new FeeCache in case GetCopy() doesn't return a FeeCache.
@@ -442,7 +442,7 @@ namespace OpenDentBusiness{
 			if(listClinicNums!=null && listClinicNums.Count>0) {
 				command+="AND ClinicNum IN("+string.Join(",",listClinicNums.Select(x => POut.Long(x)))+")";
 			}
-			if(!PrefC.GetBool(PrefName.FeesUseCache)){
+			if(!Preferences.GetBool(PrefName.FeesUseCache)){
 				//ordering was being done in the form. Easier to do it here.
 				command+=" ORDER BY ClinicNum,ProvNum";
 			}
@@ -484,7 +484,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Always refreshes the ClientWeb's cache.</summary>
 		public static DataTable GetTableFromCache(bool doRefreshCache) {
-			if(!PrefC.GetBool(PrefName.FeesUseCache)){
+			if(!Preferences.GetBool(PrefName.FeesUseCache)){
 				throw new Exception("No fee cache.");
 			}
 			return _Cache.GetTableFromCache(doRefreshCache);
@@ -495,7 +495,7 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			long provNum=proc.ProvNum;
 			if(provNum==0) {//if no prov set, then use practice default.
-				provNum=PrefC.GetLong(PrefName.PracticeDefaultProv);
+				provNum=Preferences.GetLong(PrefName.PracticeDefaultProv);
 			}
 			Provider providerFirst=Providers.GetFirst();//Used in order to preserve old behavior...  If this fails, then old code would have failed.
 			Provider provider=Providers.GetFirstOrDefault(x => x.ProvNum==provNum)??providerFirst;
@@ -537,7 +537,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Commit changes logged during Cache.BeginTransaction.</summary>
 		public static List<long> UpdateFromCache(List<FeeUpdate> listFeeUpdates) {
-			if(!PrefC.GetBool(PrefName.FeesUseCache)){
+			if(!Preferences.GetBool(PrefName.FeesUseCache)){
 				throw new Exception("No fee cache.");
 			}
 			long feeNum=0;
@@ -640,13 +640,13 @@ namespace OpenDentBusiness{
             FillCacheOrWait();
             //Using _cache instead of _Cache because we are changing the internal dictionary.
             //if we add a preference to remove lazy loading, it would put a refreshcache call right here.
-            if (PrefC.GetBool(PrefName.FeesUseCache)){
+            if (Preferences.GetBool(PrefName.FeesUseCache)){
 				listFeeScheduleNums.ForEach(x => _cache.Invalidate(x));
 			}
 		}
 
 		public static void InvalidateFeeSchedule(long feeScheduleNum) {
-			if(PrefC.GetBool(PrefName.FeesUseCache)){
+			if(Preferences.GetBool(PrefName.FeesUseCache)){
 				InvalidateFeeSchedules(new List<long> { feeScheduleNum });
 			}
 		}

@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PhoneComp into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(PhoneComp phoneComp,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				phoneComp.PhoneCompNum=ReplicationServers.GetKey("phonecomp","PhoneCompNum");
 			}
 			string command="INSERT INTO phonecomp (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PhoneCompNum,";
 			}
 			command+="PhoneExt,ComputerName) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(phoneComp.PhoneCompNum)+",";
 			}
 			command+=
 				     POut.Int   (phoneComp.PhoneExt)+","
 				+"'"+POut.String(phoneComp.ComputerName)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

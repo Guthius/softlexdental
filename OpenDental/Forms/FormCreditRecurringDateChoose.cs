@@ -25,7 +25,7 @@ namespace OpenDental {
 		}
 
 		private void FormCreditRecurringDateChoose_Load(object sender,EventArgs e) {
-			if(PrefC.GetBool(PrefName.RecurringChargesUseTransDate)) {
+			if(Preferences.GetBool(PrefName.RecurringChargesUseTransDate)) {
 				labelLastMonth.Text=Lan.g(this,"Recurring charge date will be:")+" "+_lastMonth.ToShortDateString();
 				labelThisMonth.Text=Lan.g(this,"Recurring charge date will be:")+" "+_thisMonth.ToShortDateString();
 			}
@@ -43,7 +43,7 @@ namespace OpenDental {
 		///<summary>Returns a valid date based on the Month and Year taken from the date passed in and the Day that is set for the recurring charges.</summary>
 		private DateTime GetValidPayDate(DateTime date) {
 			int dayOfMonth;
-			if(PrefC.IsODHQ && PrefC.GetBool(PrefName.BillingUseBillingCycleDay)) {
+			if(Preferences.IsODHQ && Preferences.GetBool(PrefName.BillingUseBillingCycleDay)) {
 				dayOfMonth=_pat.BillingCycleDay;
 			}
 			else {

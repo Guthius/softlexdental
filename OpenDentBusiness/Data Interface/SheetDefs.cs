@@ -248,7 +248,7 @@ namespace OpenDentBusiness
         {
             //No need to check RemotingRole; no call to db.
             Dictionary<SheetTypeEnum, SheetDef> retVal = new Dictionary<SheetTypeEnum, SheetDef>();
-            SheetDef defaultRxDef = GetSheetDef(PrefC.GetDefaultSheetDefNum(SheetTypeEnum.Rx), false);
+            SheetDef defaultRxDef = GetSheetDef(Preferences.GetDefaultSheetDefNum(SheetTypeEnum.Rx), false);
             if (defaultRxDef == null)
             {
                 defaultRxDef = SheetsInternal.GetSheetDef(SheetTypeEnum.Rx);
@@ -282,7 +282,7 @@ namespace OpenDentBusiness
             SheetDef defaultSheetDef;
             if (clinicPrefCur == null)
             {//If there wasn't a row for the specific clinic, use the base default sheetdef
-                defaultSheetDef = GetSheetDef(PrefC.GetDefaultSheetDefNum(sheetType), false);
+                defaultSheetDef = GetSheetDef(Preferences.GetDefaultSheetDefNum(sheetType), false);
                 if (defaultSheetDef == null)
                 {
                     defaultSheetDef = SheetsInternal.GetSheetDef(sheetType);

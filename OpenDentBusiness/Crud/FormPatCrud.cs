@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one FormPat into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(FormPat formPat,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				formPat.FormPatNum=ReplicationServers.GetKey("formpat","FormPatNum");
 			}
 			string command="INSERT INTO formpat (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="FormPatNum,";
 			}
 			command+="PatNum,FormDateTime) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(formPat.FormPatNum)+",";
 			}
 			command+=
 				     POut.Long  (formPat.PatNum)+","
 				+    POut.DateT (formPat.FormDateTime)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

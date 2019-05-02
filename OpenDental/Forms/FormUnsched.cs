@@ -385,7 +385,7 @@ namespace OpenDental{
 			for(int i=0;i<_listProviders.Count;i++) {
 				comboProv.Items.Add(_listProviders[i].GetLongDesc());
 			}
-			if(PrefC.GetBool(PrefName.EasyHidePublicHealth)){
+			if(Preferences.GetBool(PrefName.EasyHidePublicHealth)){
 				comboSite.Visible=false;
 				labelSite.Visible=false;
 			}
@@ -397,7 +397,7 @@ namespace OpenDental{
 					comboSite.Items.Add(_listSites[i].Description);
 				}
 			}
-			labelClinic.Visible=PrefC.HasClinicsEnabled;
+			labelClinic.Visible=Preferences.HasClinicsEnabled;
 			_listAptSelected=new List<long>();
 			InitDateRange();
 			FillGrid();
@@ -412,7 +412,7 @@ namespace OpenDental{
 		}
 
 		private void InitDateRange() {
-			int dayCount=PrefC.GetInt(PrefName.UnschedDaysPast);
+			int dayCount=Preferences.GetInt(PrefName.UnschedDaysPast);
 			if(dayCount==-1) {
 				//Set the text to blank
 				dateRangePicker.SetDateTimeFrom(DateTime.MinValue);
@@ -420,7 +420,7 @@ namespace OpenDental{
 			else {
 				dateRangePicker.SetDateTimeFrom(DateTime.Today.AddDays(-dayCount));
 			}
-			dayCount=PrefC.GetInt(PrefName.UnschedDaysFuture);
+			dayCount=Preferences.GetInt(PrefName.UnschedDaysFuture);
 			if(dayCount==-1) {
 				//Set the text to blank. We check for DateTime.MinValue in Appointments.RefreshUnsched() and modify the query to not have an end date.
 				dateRangePicker.SetDateTimeTo(DateTime.MinValue);
@@ -577,7 +577,7 @@ namespace OpenDental{
 						provNum=_listProviders[comboProv.SelectedIndex-1].ProvNum;
 					}
 					long siteNum=0;
-					if(!PrefC.GetBool(PrefName.EasyHidePublicHealth) && comboSite.SelectedIndex!=0) {
+					if(!Preferences.GetBool(PrefName.EasyHidePublicHealth) && comboSite.SelectedIndex!=0) {
 						siteNum=_listSites[comboSite.SelectedIndex-1].SiteNum;
 					}
 					bool showBrokenAppts;

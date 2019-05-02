@@ -282,7 +282,7 @@ namespace OpenDental{
 			if(checkAllProv.Enabled==false && _listProviders.Count>0) {
 				listProv.SetSelected(0,true);
 			}
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				listClin.Visible=false;
 				labelClin.Visible=false;
 				checkAllClin.Visible=false;
@@ -345,7 +345,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"At least one provider must be selected.");
 				return;
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(!checkAllClin.Checked && listClin.SelectedIndices.Count==0) {
 					MsgBox.Show(this,"At least one clinic must be selected.");
 					return;
@@ -356,7 +356,7 @@ namespace OpenDental{
 			for(int i=0;i<listProv.SelectedIndices.Count;i++) {
 				_listProvNums.Add(_listProviders[listProv.SelectedIndices[i]].ProvNum);
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
 					if(Security.CurUser.ClinicIsRestricted) {
 						_listClinicNums.Add(_listClinics[listClin.SelectedIndices[i]].ClinicNum);//we know that the list is a 1:1 to _listClinics
@@ -388,7 +388,7 @@ namespace OpenDental{
 			DataTable table=new DataTable();
 			try { 
 				table=RpProcSheet.GetIndividualTable(date1.SelectionStart,date2.SelectionStart,_listProvNums,_listClinicNums,textCode.Text,
-					isAnyClinicMedical,checkAllProv.Checked,PrefC.HasClinicsEnabled);
+					isAnyClinicMedical,checkAllProv.Checked,Preferences.HasClinicsEnabled);
 			}
 			catch (Exception ex) {
 				report.CloseProgressBar();
@@ -410,10 +410,10 @@ namespace OpenDental{
 			Font fontSubTitle=new Font("Tahoma",10,FontStyle.Bold);
 			report.ReportName=Lan.g(this,"Daily Procedures");
 			report.AddTitle("Title",Lan.g(this,"Daily Procedures"),fontTitle);
-			report.AddSubTitle("Practice Title",PrefC.GetString(PrefName.PracticeTitle),fontSubTitle);
+			report.AddSubTitle("Practice Title",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
 			report.AddSubTitle("Dates of Report",date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d"),fontSubTitle);
 			report.AddSubTitle("Providers",subtitleProvs,fontSubTitle);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				report.AddSubTitle("Clinics",subtitleClinics,fontSubTitle);
 			}
 			QueryObject query=report.AddQuery(table,Lan.g(this,"Date")+": "+DateTimeOD.Today.ToString("d"));
@@ -429,7 +429,7 @@ namespace OpenDental{
 			}
 			query.AddColumn(Lan.g(this,"Description"),140,FieldValueType.String,font);
 			query.AddColumn(Lan.g(this,"Provider"),80,FieldValueType.String,font);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				query.AddColumn(Lan.g(this,"Clinic"),100,FieldValueType.String,font);
 			}
 			query.AddColumn(Lan.g(this,"Fee"),80,FieldValueType.Number,font);
@@ -453,10 +453,10 @@ namespace OpenDental{
 			Font fontSubTitle=new Font("Tahoma",10,FontStyle.Bold);
 			report.ReportName=Lan.g(this,"Procedures By Procedure Code");
 			report.AddTitle("Title",Lan.g(this,"Procedures By Procedure Code"),fontTitle);
-			report.AddSubTitle("Practice Title",PrefC.GetString(PrefName.PracticeTitle),fontSubTitle);
+			report.AddSubTitle("Practice Title",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
 			report.AddSubTitle("Dates of Report",date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d"),fontSubTitle);
 			report.AddSubTitle("Providers",subtitleProvs,fontSubTitle);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				report.AddSubTitle("Clinics",subtitleClinics,fontSubTitle);
 			}
 			QueryObject query=report.AddQuery(table,Lan.g(this,"Date")+": "+DateTimeOD.Today.ToString("d"));
@@ -495,7 +495,7 @@ namespace OpenDental{
 		///<summary>Returns 'All Clinics' or comma separated string of clinics selected.</summary>
 		private string ConstructClinicSubtitle() {
 			string subtitleClinics="";
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				return subtitleClinics;
 			}
 			if(checkAllClin.Checked) {
@@ -521,7 +521,7 @@ namespace OpenDental{
 		}
 
 		private bool AnyClinicSelectedIsMedical() {
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				return Clinics.IsMedicalPracticeOrClinic(0);//Check if the practice is medical
 			}
 			if(Security.CurUser.ClinicIsRestricted) {//User can only view one clinic

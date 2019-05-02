@@ -556,8 +556,8 @@ namespace OpenDental{
 			textScanDocResolution.Text=ComputerPrefs.LocalComputer.ScanDocResolution.ToString();
 			textScanDocQuality.Text=ComputerPrefs.LocalComputer.ScanDocQuality.ToString();
 			//textScanDocQuality.Text=PrefC.GetLong(PrefName.ScannerCompression).ToString();
-			slider.MinVal=PrefC.GetInt(PrefName.ImageWindowingMin);
-			slider.MaxVal=PrefC.GetInt(PrefName.ImageWindowingMax);
+			slider.MinVal=Preferences.GetInt(PrefName.ImageWindowingMin);
+			slider.MaxVal=Preferences.GetInt(PrefName.ImageWindowingMax);
 			upDownPort.Value=ComputerPrefs.LocalComputer.SensorPort;
 			comboType.Text=ComputerPrefs.LocalComputer.SensorType;
 			checkBinned.Checked=ComputerPrefs.LocalComputer.SensorBinned;

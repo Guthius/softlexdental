@@ -568,7 +568,7 @@ namespace OpenDentBusiness
             }
             #endregion commlog
             #region webchatnote - ODHQ Only
-            if (PrefC.IsODHQ)
+            if (Preferences.IsODHQ)
             {
                 //connect to the webchat db for this query
                 List<WebChatSession> listWebChatSessions = new List<WebChatSession>();
@@ -796,7 +796,7 @@ namespace OpenDentBusiness
             bool showProcBreakdown = false;
             if (!stmtCur.IsInvoice)
             {
-                showProcBreakdown = PrefC.GetBool(PrefName.StatementShowProcBreakdown);
+                showProcBreakdown = Preferences.GetBool(PrefName.StatementShowProcBreakdown);
             }
             List<long> listPayPlanNums = new List<long>();
             foreach (Patient guarantor in listSuperFamilyGuars)
@@ -810,7 +810,7 @@ namespace OpenDentBusiness
                 decimal payPlanDue = 0;
                 decimal balanceForward = 0;
                 DataSet account = GetAccount(guarantor.PatNum, stmtCur.DateRangeFrom, stmtCur.DateRangeTo, true, false, stmtCur.StatementNum, showProcBreakdown,
-                    PrefC.GetBool(PrefName.StatementShowNotes), stmtCur.IsInvoice, PrefC.GetBool(PrefName.StatementShowAdjNotes), true, guarantor, fam,
+                    Preferences.GetBool(PrefName.StatementShowNotes), stmtCur.IsInvoice, Preferences.GetBool(PrefName.StatementShowAdjNotes), true, guarantor, fam,
                     out payPlanDue, out balanceForward, stmtCur, isComputeAging, doIncludePatLName, listPayPlanNums);
                 //Setting the PatNum for all rows to the guarantor so that each family will be interminged in one grid. 
                 account.Tables["account"].Rows.Cast<DataRow>().ToList().ForEach(x => x["PatNum"] = guarantor.PatNum);
@@ -889,14 +889,14 @@ namespace OpenDentBusiness
             bool showProcBreakdown = false;
             if (!stmt.IsInvoice)
             {
-                showProcBreakdown = PrefC.GetBool(PrefName.StatementShowProcBreakdown);
+                showProcBreakdown = Preferences.GetBool(PrefName.StatementShowProcBreakdown);
             }
             Family fam = Patients.GetFamily(patNum);
             Patient pat = fam.GetPatient(patNum);
             decimal payPlanDue = 0;
             decimal balanceForward = 0;
             DataSet retVal = GetAccount(patNum, stmt.DateRangeFrom, stmt.DateRangeTo, stmt.Intermingled, stmt.SinglePatient, stmt.StatementNum, showProcBreakdown,
-                PrefC.GetBool(PrefName.StatementShowNotes), stmt.IsInvoice, PrefC.GetBool(PrefName.StatementShowAdjNotes), true, pat, fam, out payPlanDue,
+                Preferences.GetBool(PrefName.StatementShowNotes), stmt.IsInvoice, Preferences.GetBool(PrefName.StatementShowAdjNotes), true, pat, fam, out payPlanDue,
                 out balanceForward, stmt, isComputeAging, doIncludePatLName);
             retVal.Tables.Add(GetApptTable(fam, stmt.SinglePatient, patNum));
             retVal.Tables.Add(GetMisc(fam, patNum, payPlanDue, balanceForward, stmt.StatementType, retVal));//table=misc; Just holds some info we can't find anywhere else.
@@ -926,7 +926,7 @@ namespace OpenDentBusiness
             balanceForward = 0;
             bool isReseller = false;//Used to display data in the account module differently when patient is a reseller.
                                     //HQ only, find out if this patient is a reseller.
-            if (PrefC.IsODHQ && Resellers.IsResellerFamily(fam.ListPats[0]))
+            if (Preferences.IsODHQ && Resellers.IsResellerFamily(fam.ListPats[0]))
             {
                 isReseller = true;
             }
@@ -934,9 +934,9 @@ namespace OpenDentBusiness
             if (isComputeAging)
             {
                 //run aging.-------------------------------------------------------
-                if (PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily))
+                if (Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily))
                 {
-                    Ledgers.ComputeAging(pat.Guarantor, PrefC.GetDate(PrefName.DateLastAging));
+                    Ledgers.ComputeAging(pat.Guarantor, Preferences.GetDate(PrefName.DateLastAging));
                 }
                 else
                 {
@@ -1061,7 +1061,7 @@ namespace OpenDentBusiness
                 }
                 if (writeoff != 0)
                 {
-                    string writeoffDescript = PrefC.GetString(PrefName.InsWriteoffDescript);
+                    string writeoffDescript = Preferences.GetString(PrefName.InsWriteoffDescript);
                     if (writeoffDescript == "")
                     {
                         writeoffDescript = Lans.g("AccountModule", "Writeoff");
@@ -1265,7 +1265,7 @@ namespace OpenDentBusiness
                     extraDetail += Lans.g("AccountModule", "Ins Paid: ") + insPayAmt.ToString("c");
                     if (writeOff > 0)
                     {
-                        string writeoffDescript = PrefC.GetString(PrefName.InsWriteoffDescript);
+                        string writeoffDescript = Preferences.GetString(PrefName.InsWriteoffDescript);
                         if (writeoffDescript == "")
                         {
                             writeoffDescript = Lans.g("AccountModule", "Writeoff");
@@ -1530,7 +1530,7 @@ namespace OpenDentBusiness
                     rowRp["AdjNums_"] += string.Join(",", listPaySplitMatches.Select(x => x.AdjNum));
                 }
             }
-            PayPlanVersions payPlanVersionCur = (PayPlanVersions)PrefC.GetInt(PrefName.PayPlansVersion);
+            PayPlanVersions payPlanVersionCur = (PayPlanVersions)Preferences.GetInt(PrefName.PayPlansVersion);
             decimal payamt;
             //if isInvoice or if it's a LimitedStatement and no paysplits or procs were selected there will be 0 rows and this loop will be skipped
             for (int i = 0; i < rawPay.Rows.Count; i++)
@@ -1605,7 +1605,7 @@ namespace OpenDentBusiness
                     }
                     row["description"] += rawPay.Rows[i]["PayNote"].ToString();
                 }
-                if (PrefC.GetBool(PrefName.AccountShowPaymentNums))
+                if (Preferences.GetBool(PrefName.AccountShowPaymentNums))
                 {
                     row["description"] += "\r\n" + Lans.g("AccountModule", "Payment Number: ") + rawPay.Rows[i]["PayNum"].ToString();
                 }
@@ -1817,7 +1817,7 @@ namespace OpenDentBusiness
                 amtpaid = PIn.Decimal(rawClaim.Rows[i]["InsPayAmt"].ToString());
                 writeoff = PIn.Decimal(rawClaim.Rows[i]["WriteOff"].ToString());
                 deductible = PIn.Decimal(rawClaim.Rows[i]["DedApplied"].ToString());
-                if (!PrefC.GetBool(PrefName.BalancesDontSubtractIns)
+                if (!Preferences.GetBool(PrefName.BalancesDontSubtractIns)
                     && (claimStatus == "W" || claimStatus == "S")
                     && rawClaim.Rows[i]["ClaimType"].ToString() != "Cap")
                 {
@@ -1843,7 +1843,7 @@ namespace OpenDentBusiness
                 }
                 if (writeoff != 0)
                 {
-                    string writeoffDesctipt = PrefC.GetString(PrefName.InsWriteoffDescript);
+                    string writeoffDesctipt = Preferences.GetString(PrefName.InsWriteoffDescript);
                     if (writeoffDesctipt == "")
                     {
                         writeoffDesctipt = Lans.g("ContrAccount", "Writeoff");
@@ -1854,7 +1854,7 @@ namespace OpenDentBusiness
                 {
                     row["description"] += "\r\n" + Lans.g("ContrAccount", "Deductible Applied:") + " " + deductible.ToString("c");
                 }
-                if (!PrefC.GetBool(PrefName.BalancesDontSubtractIns)
+                if (!Preferences.GetBool(PrefName.BalancesDontSubtractIns)
                     && (claimStatus == "W" || claimStatus == "S")
                     && rawClaim.Rows[i]["ClaimType"].ToString() != "Cap")
                 {
@@ -2698,7 +2698,7 @@ namespace OpenDentBusiness
                     }
                 }
                 //If on version 1, don't show closed plans with nothing due. If on version 2, don't show closed payplans at all.
-                if (rawPayPlan.Rows[i]["IsClosed"].ToString() == "1" && (PrefC.GetInt(PrefName.PayPlansVersion) == 2 || bal == 0))
+                if (rawPayPlan.Rows[i]["IsClosed"].ToString() == "1" && (Preferences.GetInt(PrefName.PayPlansVersion) == 2 || bal == 0))
                 {
                     continue;
                 }
@@ -2758,7 +2758,7 @@ namespace OpenDentBusiness
                 //remove future entries, going backwards
                 for (int d = rawAmort.Rows.Count - 1; d >= 0; d--)
                 {
-                    if ((DateTime)rawAmort.Rows[d]["DateTime"] > toDate.AddDays(PrefC.GetLong(PrefName.PayPlansBillInAdvanceDays)))
+                    if ((DateTime)rawAmort.Rows[d]["DateTime"] > toDate.AddDays(Preferences.GetLong(PrefName.PayPlansBillInAdvanceDays)))
                     {
                         rawAmort.Rows.RemoveAt(d);
                     }
@@ -3054,7 +3054,7 @@ namespace OpenDentBusiness
             {
                 return 1;
             }
-            if (!PrefC.RandomKeys && x["AdjNum"].ToString() != "0" && y["AdjNum"].ToString() != "0")
+            if (!Preferences.RandomKeys && x["AdjNum"].ToString() != "0" && y["AdjNum"].ToString() != "0")
             {//if RandomKeys enabled, sorted by dateTimeSort below
                 return ((long)x["AdjNum"]).CompareTo((long)y["AdjNum"]);//if both adjustments on same date, order by primary key
             }
@@ -3068,7 +3068,7 @@ namespace OpenDentBusiness
             {
                 return 1;
             }
-            if (!PrefC.RandomKeys && x["PayNum"].ToString() != "0" && y["PayNum"].ToString() != "0")
+            if (!Preferences.RandomKeys && x["PayNum"].ToString() != "0" && y["PayNum"].ToString() != "0")
             {//if RandomKeys enabled, sorted by dateTimeSort below
                 return ((long)x["PayNum"]).CompareTo((long)y["PayNum"]);//if both payments on same date, order by primary key
             }
@@ -3092,7 +3092,7 @@ namespace OpenDentBusiness
                 {//claims before claimpayments
                     return -1;
                 }
-                if (!PrefC.RandomKeys && x["ClaimPaymentNum"].ToString() == "0" && y["ClaimPaymentNum"].ToString() == "0")
+                if (!Preferences.RandomKeys && x["ClaimPaymentNum"].ToString() == "0" && y["ClaimPaymentNum"].ToString() == "0")
                 {//if RandomKeys enabled, sorted by dateTimeSort below
                     return ((long)x["ClaimNum"]).CompareTo((long)y["ClaimNum"]);//if both claims on same date, order by primary key
                 }
@@ -3108,7 +3108,7 @@ namespace OpenDentBusiness
             {
                 return 1;
             }
-            if (!PrefC.RandomKeys && x["PayPlanNum"].ToString() != "0" && y["PayPlanNum"].ToString() != "0")
+            if (!Preferences.RandomKeys && x["PayPlanNum"].ToString() != "0" && y["PayPlanNum"].ToString() != "0")
             {//if RandomKeys enabled, sorted by dateTimeSort below
                 return ((long)x["PayPlanNum"]).CompareTo((long)y["PayPlanNum"]);//if both payplans (or payplancharges) on same date, order by primary key
             }
@@ -3122,13 +3122,13 @@ namespace OpenDentBusiness
             {
                 return 1;
             }
-            if (!PrefC.RandomKeys && x["StatementNum"].ToString() != "0" && y["StatementNum"].ToString() != "0")
+            if (!Preferences.RandomKeys && x["StatementNum"].ToString() != "0" && y["StatementNum"].ToString() != "0")
             {//if RandomKeys enabled, sorted by dateTimeSort below
                 return ((long)x["StatementNum"]).CompareTo((long)y["StatementNum"]);//if both statments on same date, order by primary key
             }
             #endregion Statements
             #endregion Sort By Type
-            if (PrefC.RandomKeys)
+            if (Preferences.RandomKeys)
             {//if RandomKeys enabled, sort by dateTimeSort (SecDateTEntry if exists, otherwise DateTStamp or SecDateTEdit if available)
                 return ((DateTime)x["dateTimeSort"]).CompareTo((DateTime)y["dateTimeSort"]);
             }
@@ -3158,7 +3158,7 @@ namespace OpenDentBusiness
                     + "FROM claimproc "
                     + "INNER JOIN claimpayment ON claimpayment.ClaimPaymentNum = claimproc.ClaimPaymentNum "
                     + "WHERE claimproc.PatNum IN (" + POut.String(string.Join(",", listPatNums)) + ") ";
-            if (PrefC.GetBool(PrefName.InvoicePaymentsGridShowNetProd))
+            if (Preferences.GetBool(PrefName.InvoicePaymentsGridShowNetProd))
             {
                 command += ""
                     //adjustments can already be manually selected to be included in invoices.
@@ -3301,12 +3301,12 @@ namespace OpenDentBusiness
             for (int i = 1; i < listProcs.Count; i++)
             {//skips 0
                 proc = listProcs[i];
-                if (PrefC.HasClinicsEnabled && clinicNum != proc.ClinicNum)
+                if (Preferences.HasClinicsEnabled && clinicNum != proc.ClinicNum)
                 {
                     claimError = claimError.AppendLine(Lans.g("ContrAccount", "All procedures do not have the same clinic."));
                     return new Tuple<bool, Claim, string>(false, new Claim(), claimError);
                 }
-                if (!PrefC.GetBool(PrefName.EasyHidePublicHealth) && proc.PlaceService != placeService)
+                if (!Preferences.GetBool(PrefName.EasyHidePublicHealth) && proc.PlaceService != placeService)
                 {
                     claimError = claimError.AppendLine(Lans.g("ContrAccount", "All procedures do not have the same place of service."));
                     return new Tuple<bool, Claim, string>(false, new Claim(), claimError);
@@ -3448,7 +3448,7 @@ namespace OpenDentBusiness
                 case "Med":
                     ClaimCur.PatRelat = PatPlans.GetFromList(PatPlanList, SubCur.InsSubNum).Relationship;
                     ClaimCur.ClaimType = "Other";
-                    if (PrefC.GetBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical))
+                    if (Preferences.GetBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical))
                     {
                         ClaimCur.MedType = EnumClaimMedType.Institutional;
                     }
@@ -3464,7 +3464,7 @@ namespace OpenDentBusiness
                     ClaimCur.ClaimForm = 0;
                     if (PlanCur.IsMedical)
                     {
-                        if (PrefC.GetBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical))
+                        if (Preferences.GetBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical))
                         {
                             ClaimCur.MedType = EnumClaimMedType.Institutional;
                         }
@@ -3597,7 +3597,7 @@ namespace OpenDentBusiness
                     ClaimCur.ClaimNote += procCodeCur.DefaultClaimNote;
                     listCodeNums.Add(procCodeCur.CodeNum);
                 }
-                if (!ClaimCur.IsOrtho && PrefC.GetBool(PrefName.OrthoClaimMarkAsOrtho))
+                if (!ClaimCur.IsOrtho && Preferences.GetBool(PrefName.OrthoClaimMarkAsOrtho))
                 {//if it's already marked as Ortho (from a previous procedure), just skip this logic.
                     CovCat orthoCategory = CovCats.GetFirstOrDefault(x => x.EbenefitCat == EbenefitCategory.Orthodontics, true);
                     if (orthoCategory != null)
@@ -3612,9 +3612,9 @@ namespace OpenDentBusiness
                             }
                             else if (!Byte.TryParse(patNote.OrthoMonthsTreatOverride.ToString(), out ClaimCur.OrthoTotalM))
                             {
-                                ClaimCur.OrthoTotalM = PrefC.GetByte(PrefName.OrthoDefaultMonthsTreat);
+                                ClaimCur.OrthoTotalM = Preferences.GetByte(PrefName.OrthoDefaultMonthsTreat);
                             }
-                            if (PrefC.GetBool(PrefName.OrthoClaimUseDatePlacement))
+                            if (Preferences.GetBool(PrefName.OrthoClaimUseDatePlacement))
                             {
                                 DateTime orthoProcDate = Procedures.GetFirstOrthoProcDate(patNote);
                                 if (orthoProcDate != DateTime.MinValue)
@@ -3645,8 +3645,8 @@ namespace OpenDentBusiness
             }
             Claims.CalculateAndUpdate(procsForPat, planList, ClaimCur, PatPlanList, Benefits.Refresh(PatPlanList, subList), pat, subList);
             //Insert claim snapshots for historical reporting purposes.
-            if (PrefC.GetBool(PrefName.ClaimSnapshotEnabled)
-                && PIn.Enum<ClaimSnapshotTrigger>(PrefC.GetString(PrefName.ClaimSnapshotTriggerType), true) == ClaimSnapshotTrigger.ClaimCreate
+            if (Preferences.GetBool(PrefName.ClaimSnapshotEnabled)
+                && PIn.Enum<ClaimSnapshotTrigger>(Preferences.GetString(PrefName.ClaimSnapshotTriggerType), true) == ClaimSnapshotTrigger.ClaimCreate
                 && claimType != "PreAuth")
             {
                 ClaimSnapshots.CreateClaimSnapshot(ClaimProcs.Refresh(pat.PatNum).FindAll(x => x.ClaimNum == ClaimCur.ClaimNum), ClaimSnapshotTrigger.ClaimCreate, claimType);
@@ -3707,7 +3707,7 @@ namespace OpenDentBusiness
             {
                 return 1;
             }
-            if (!PrefC.RandomKeys && x["AdjNum"].ToString() != "0" && y["AdjNum"].ToString() != "0")
+            if (!Preferences.RandomKeys && x["AdjNum"].ToString() != "0" && y["AdjNum"].ToString() != "0")
             {//if RandomKeys enabled, sorted by dateTimeSort below
                 return ((long)x["AdjNum"]).CompareTo((long)y["AdjNum"]);//if both adjustments on same date, order by primary key
             }
@@ -3721,7 +3721,7 @@ namespace OpenDentBusiness
             {
                 return 1;
             }
-            if (!PrefC.RandomKeys && x["PayNum"].ToString() != "0" && y["PayNum"].ToString() != "0")
+            if (!Preferences.RandomKeys && x["PayNum"].ToString() != "0" && y["PayNum"].ToString() != "0")
             {//if RandomKeys enabled, sorted by dateTimeSort below
                 return ((long)x["PayNum"]).CompareTo((long)y["PayNum"]);//if both payments on same date, order by primary key
             }
@@ -3745,7 +3745,7 @@ namespace OpenDentBusiness
                 {//claims before claimpayments
                     return -1;
                 }
-                if (!PrefC.RandomKeys && x["ClaimPaymentNum"].ToString() == "0" && y["ClaimPaymentNum"].ToString() == "0")
+                if (!Preferences.RandomKeys && x["ClaimPaymentNum"].ToString() == "0" && y["ClaimPaymentNum"].ToString() == "0")
                 {//if RandomKeys enabled, sorted by dateTimeSort below
                     return ((long)x["ClaimNum"]).CompareTo((long)y["ClaimNum"]);//if both claims on same date, order by primary key
                 }
@@ -3761,7 +3761,7 @@ namespace OpenDentBusiness
             {
                 return 1;
             }
-            if (!PrefC.RandomKeys && x["PayPlanNum"].ToString() != "0" && y["PayPlanNum"].ToString() != "0")
+            if (!Preferences.RandomKeys && x["PayPlanNum"].ToString() != "0" && y["PayPlanNum"].ToString() != "0")
             {//if RandomKeys enabled, sorted by dateTimeSort below
                 return ((long)x["PayPlanNum"]).CompareTo((long)y["PayPlanNum"]);//if both payplans (or payplancharges) on same date, order by primary key
             }
@@ -3775,13 +3775,13 @@ namespace OpenDentBusiness
             {
                 return 1;
             }
-            if (!PrefC.RandomKeys && x["StatementNum"].ToString() != "0" && y["StatementNum"].ToString() != "0")
+            if (!Preferences.RandomKeys && x["StatementNum"].ToString() != "0" && y["StatementNum"].ToString() != "0")
             {//if RandomKeys enabled, sorted by dateTimeSort below
                 return ((long)x["StatementNum"]).CompareTo((long)y["StatementNum"]);//if both statments on same date, order by primary key
             }
             #endregion Statements
             #endregion Sort By Type
-            if (PrefC.RandomKeys)
+            if (Preferences.RandomKeys)
             {//RandomKeys enabled, sort by dateTimeSort (SecDateTEntry if exists, otherwise DateTStamp or SecDateTEdit if available)
                 return ((DateTime)x["dateTimeSort"]).CompareTo((DateTime)y["dateTimeSort"]);
             }

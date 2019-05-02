@@ -30,7 +30,7 @@ namespace OpenDental {
 			}
 			textDateStart.Text=DateTime.Today.AddMonths(-3).ToShortDateString();//default list to start with showing the last three months
 			//One time reconcile may need to be run to create embedded PDFs for MedLabs that are not attached to a patient.
-			if(!PrefC.GetBool(PrefName.MedLabReconcileDone) && PrefC.AtoZfolderUsed!=DataStorageType.InDatabase) {
+			if(!Preferences.GetBool(PrefName.MedLabReconcileDone) && Preferences.AtoZfolderUsed!=DataStorageType.InDatabase) {
 				int countMedLabs=MedLabs.GetCountForPatient(0);
 				if(MessageBox.Show(this,Lan.g(this,"There are MedLabs in the database that have not been associated with a patient.\r\nA one time "
 					+"reconciliation must be performed that will reprocess the HL7 messages for these MedLabs.  This can take some time.\r\nDo you want to "
@@ -51,7 +51,7 @@ namespace OpenDental {
 			}
 			_dictLabAcctClinic=new Dictionary<string,string>();
 			_listUserClinics=new List<Clinic>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				_listUserClinics.Add(new Clinic() { ClinicNum=-1,Description=Lan.g(this,"All") });//ClinicNum will be -1 at index 0, "All" means all the user has access to
 				if(!Security.CurUser.ClinicIsRestricted) {
 					//ClinicNum 0 at index==1, "Headquarters" means any where MedLab.PatAccountNum does not match any clinic.MedLabAccountNum
@@ -102,7 +102,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(new ODGridColumn("Provider",70));
 			gridMain.Columns.Add(new ODGridColumn("Specimen ID",100));//should be the ID sent on the specimen container to lab
 			gridMain.Columns.Add(new ODGridColumn("Test(s) Description",235));//description of the test ordered
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				gridMain.Columns.Add(new ODGridColumn("Clinic",150));
 			}
 			gridMain.Rows.Clear();
@@ -113,7 +113,7 @@ namespace OpenDental {
 			}
 			Cursor=Cursors.WaitCursor;
 			Clinic clinCur=new Clinic();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				clinCur=_listUserClinics[comboClinic.SelectedIndex];
 			}
 			List<Clinic> listClinicsSelected=new List<Clinic>();
@@ -145,7 +145,7 @@ namespace OpenDental {
 				row.Cells.Add(Providers.GetAbbr(medLabCur.ProvNum));//will be blank if ProvNum=0
 				row.Cells.Add(medLabCur.SpecimenID);
 				row.Cells.Add(medLabCur.ObsTestDescript);
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					string clinicDesc="";
 					if(_dictLabAcctClinic.ContainsKey(medLabCur.PatAccountNum)) {
 						clinicDesc=_dictLabAcctClinic[medLabCur.PatAccountNum];

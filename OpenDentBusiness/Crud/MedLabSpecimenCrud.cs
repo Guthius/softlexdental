@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one MedLabSpecimen into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(MedLabSpecimen medLabSpecimen,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				medLabSpecimen.MedLabSpecimenNum=ReplicationServers.GetKey("medlabspecimen","MedLabSpecimenNum");
 			}
 			string command="INSERT INTO medlabspecimen (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="MedLabSpecimenNum,";
 			}
 			command+="MedLabNum,SpecimenID,SpecimenDescript,DateTimeCollected) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(medLabSpecimen.MedLabSpecimenNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(medLabSpecimen.SpecimenID)+"',"
 				+"'"+POut.String(medLabSpecimen.SpecimenDescript)+"',"
 				+    POut.DateT (medLabSpecimen.DateTimeCollected)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

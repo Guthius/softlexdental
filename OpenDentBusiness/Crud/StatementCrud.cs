@@ -161,15 +161,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Statement into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Statement statement,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				statement.StatementNum=ReplicationServers.GetKey("statement","StatementNum");
 			}
 			string command="INSERT INTO statement (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="StatementNum,";
 			}
 			command+="PatNum,SuperFamily,DateSent,DateRangeFrom,DateRangeTo,Note,NoteBold,Mode_,HidePayment,SinglePatient,Intermingled,IsSent,DocNum,IsReceipt,IsInvoice,IsInvoiceCopy,EmailSubject,EmailBody,IsBalValid,InsEst,BalTotal,StatementType,ShortGUID,StatementURL,StatementShortURL,SmsSendStatus) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(statement.StatementNum)+",";
 			}
 			command+=
@@ -212,7 +212,7 @@ namespace OpenDentBusiness.Crud{
 				statement.EmailBody="";
 			}
 			OdSqlParameter paramEmailBody=new OdSqlParameter("paramEmailBody",OdDbType.Text,POut.StringParam(statement.EmailBody));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNote,paramNoteBold,paramEmailBody);
 			}
 			else {
@@ -228,7 +228,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many Statements into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<Statement> listStatements,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(Statement statement in listStatements) {
 					Insert(statement);
 				}

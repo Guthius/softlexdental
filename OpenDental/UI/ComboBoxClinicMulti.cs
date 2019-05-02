@@ -121,7 +121,7 @@ namespace OpenDental.UI {
 				return;
 			}
 			try {
-				if(!PrefC.HasClinicsEnabled) {
+				if(!Preferences.HasClinicsEnabled) {
 					Visible=false;
 					return;
 				}

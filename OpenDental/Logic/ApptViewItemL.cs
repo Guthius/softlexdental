@@ -63,13 +63,13 @@ namespace OpenDental{
 			if(apptViewCur==null) {
 				//make visible ops exactly the same as the short ops list (all except hidden)
 				visOps.AddRange(
-					Operatories.GetWhere(x => !PrefC.HasClinicsEnabled //if clinics disabled
+					Operatories.GetWhere(x => !Preferences.HasClinicsEnabled //if clinics disabled
 							|| Clinics.ClinicNum==0 //or if program level ClinicNum set to Headquarters
 							|| x.ClinicNum==Clinics.ClinicNum //or this is the program level ClinicNum
 						,true)
 				);
 				if(isFillVisProvs) {
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						foreach(Operatory op in visOps) {
 							Provider provDent=Providers.GetProv(op.ProvDentist);
 							Provider provHyg=Providers.GetProv(op.ProvHygienist);

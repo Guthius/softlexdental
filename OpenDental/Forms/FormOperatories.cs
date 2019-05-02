@@ -249,7 +249,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormOperatories_Load(object sender,System.EventArgs e) {
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				labelClinic.Visible=false;
 				butPickClinic.Visible=false;
 			}
@@ -268,7 +268,7 @@ namespace OpenDental{
 			gridMain.Columns.Clear();
 			int opNameWidth=180;
 			int clinicWidth=85;
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				//Clinics are hidden so add the width of the clinic column to the Op Name column because the clinic column will not show.
 				opNameWidth+=clinicWidth;
 			}
@@ -278,7 +278,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableOperatories","IsHidden"),64,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn(Lan.g("TableOperatories","Clinic"),clinicWidth);
 				gridMain.Columns.Add(col);
 			}
@@ -295,7 +295,7 @@ namespace OpenDental{
 			gridMain.Rows.Clear();
 			UI.ODGridRow row;
 			for(int i=0;i<_listOps.Count;i++){
-				if(PrefC.HasClinicsEnabled 
+				if(Preferences.HasClinicsEnabled 
 					&& !comboClinic.IsAllSelected
 					&& _listOps[i].ClinicNum!=comboClinic.SelectedClinicNum) 
 				{
@@ -310,7 +310,7 @@ namespace OpenDental{
 				else{
 					row.Cells.Add("");
 				}
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add(Clinics.GetAbbr(_listOps[i].ClinicNum));
 				}
 				row.Cells.Add(Providers.GetAbbr(_listOps[i].ProvDentist));
@@ -354,7 +354,7 @@ namespace OpenDental{
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			Operatory opCur=new Operatory();
 			opCur.IsNew=true;
-			if(PrefC.HasClinicsEnabled && !comboClinic.IsAllSelected && !comboClinic.IsNothingSelected) {
+			if(Preferences.HasClinicsEnabled && !comboClinic.IsAllSelected && !comboClinic.IsNothingSelected) {
 				opCur.ClinicNum=comboClinic.SelectedClinicNum;
 			}
 			if(gridMain.SelectedIndices.Length>0){//a row is selected
@@ -520,7 +520,7 @@ namespace OpenDental{
 		///<summary>Returns true if the two operatories can be reordered. Returns false and fills in the error string if they cannot.</summary>
 		private bool CanReorderOps(Operatory op1,Operatory op2,out string strErrorMsg) {
 			strErrorMsg="";
-			if(!PrefC.HasClinicsEnabled || comboClinic.IsAllSelected) {
+			if(!Preferences.HasClinicsEnabled || comboClinic.IsAllSelected) {
 				return true;
 			}
 			if(!op1.IsInHQView && !op2.IsInHQView) {

@@ -12,8 +12,8 @@ namespace OpenDental {
 		}
 		
 		private void FormTrackNextSetup_Load(object sender,EventArgs e) {
-			textDaysPast.Text=PrefC.GetLong(PrefName.PlannedApptDaysPast).ToString();
-			textDaysFuture.Text=PrefC.GetLong(PrefName.PlannedApptDaysFuture).ToString();
+			textDaysPast.Text=Preferences.GetLong(PrefName.PlannedApptDaysPast).ToString();
+			textDaysFuture.Text=Preferences.GetLong(PrefName.PlannedApptDaysFuture).ToString();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

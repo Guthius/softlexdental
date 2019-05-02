@@ -934,7 +934,7 @@ namespace OpenDentBusiness.HL7 {
 			if(_defCur.LabResultImageCat>0) {//if category is set for the def, use that image category
 				doc.DocCategory=_defCur.LabResultImageCat;
 			}
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {//saving to db
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {//saving to db
 				doc.RawBase64=sb.ToString();
 				if(_patCur==null) {
 					//doc.PatNum will be 0 until the user manually attaches to a patient
@@ -949,11 +949,11 @@ namespace OpenDentBusiness.HL7 {
 				string embeddedFile="";
 				try {
 					string embeddedFilePath=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"MedLabEmbeddedFiles");
-					if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(embeddedFilePath)) {
+					if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(embeddedFilePath)) {
 						Directory.CreateDirectory(embeddedFilePath);
 					}
 					else {//Cloud, create random temp folder
-						embeddedFilePath=PrefC.GetTempFolderPath();
+						embeddedFilePath=Preferences.GetTempFolderPath();
 					}
 					embeddedFile=ODFileUtils.CreateRandomFile(embeddedFilePath,".pdf");
 					byte[] byteArray=Convert.FromBase64String(sb.ToString());

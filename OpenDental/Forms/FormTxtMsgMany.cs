@@ -75,7 +75,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please replace or remove the [Date] and [Time] tags.");
 				return;
 			}
-			if(PrefC.HasClinicsEnabled && !Clinics.IsTextingEnabled(_clinicNum)) { //Checking for specific clinic.
+			if(Preferences.HasClinicsEnabled && !Clinics.IsTextingEnabled(_clinicNum)) { //Checking for specific clinic.
 				if(_clinicNum!=0) {
 					MessageBox.Show(Lans.g(this,"Integrated Texting has not been enabled for the following clinic")+":\r\n"+Clinics.GetClinic(_clinicNum).Description+".");
 				}

@@ -22,7 +22,7 @@ namespace OpenDental {
 		}
 
 		private void FormXWebTransactions_Load(object sender,EventArgs e) {
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				FillClinics();
 			}
 			else {
@@ -53,7 +53,7 @@ namespace OpenDental {
 
 		private void FillGrid() {
 			List<long> listClinicNums=new List<long>();
-			if(PrefC.HasClinicsEnabled && comboClinic.SelectedIndex!=0) {//Not 'All' selected
+			if(Preferences.HasClinicsEnabled && comboClinic.SelectedIndex!=0) {//Not 'All' selected
 				if(Security.CurUser.ClinicIsRestricted) {
 					listClinicNums.Add(_listClinics[comboClinic.SelectedIndex-1].ClinicNum);//Minus 1 for 'All'
 				}
@@ -87,7 +87,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Expiration"),70);
 			gridMain.Columns.Add(col);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn(Lan.g(this,"Clinic"),100);
 				gridMain.Columns.Add(col);
 			}
@@ -125,7 +125,7 @@ namespace OpenDental {
 					expiration=expiration.Substring(0,2)+"/"+expiration.Substring(2);
 				}
 				row.Cells.Add(expiration);
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add(_tableTrans.Rows[i]["Clinic"].ToString());
 				}
 				row.Cells.Add(_tableTrans.Rows[i]["TransactionID"].ToString());

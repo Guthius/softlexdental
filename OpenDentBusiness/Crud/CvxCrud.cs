@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Cvx into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Cvx cvx,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				cvx.CvxNum=ReplicationServers.GetKey("cvx","CvxNum");
 			}
 			string command="INSERT INTO cvx (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="CvxNum,";
 			}
 			command+="CvxCode,Description,IsActive) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(cvx.CvxNum)+",";
 			}
 			command+=
 				 "'"+POut.String(cvx.CvxCode)+"',"
 				+"'"+POut.String(cvx.Description)+"',"
 				+"'"+POut.String(cvx.IsActive)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

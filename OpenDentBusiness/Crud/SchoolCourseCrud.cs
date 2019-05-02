@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SchoolCourse into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(SchoolCourse schoolCourse,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				schoolCourse.SchoolCourseNum=ReplicationServers.GetKey("schoolcourse","SchoolCourseNum");
 			}
 			string command="INSERT INTO schoolcourse (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="SchoolCourseNum,";
 			}
 			command+="CourseID,Descript) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(schoolCourse.SchoolCourseNum)+",";
 			}
 			command+=
 				 "'"+POut.String(schoolCourse.CourseID)+"',"
 				+"'"+POut.String(schoolCourse.Descript)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

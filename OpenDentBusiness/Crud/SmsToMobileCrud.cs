@@ -122,15 +122,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SmsToMobile into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(SmsToMobile smsToMobile,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				smsToMobile.SmsToMobileNum=ReplicationServers.GetKey("smstomobile","SmsToMobileNum");
 			}
 			string command="INSERT INTO smstomobile (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="SmsToMobileNum,";
 			}
 			command+="PatNum,GuidMessage,GuidBatch,SmsPhoneNumber,MobilePhoneNumber,IsTimeSensitive,MsgType,MsgText,SmsStatus,MsgParts,MsgChargeUSD,ClinicNum,CustErrorText,DateTimeSent,DateTimeTerminated,IsHidden,MsgDiscountUSD) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(smsToMobile.SmsToMobileNum)+",";
 			}
 			command+=
@@ -155,7 +155,7 @@ namespace OpenDentBusiness.Crud{
 				smsToMobile.MsgText="";
 			}
 			OdSqlParameter paramMsgText=new OdSqlParameter("paramMsgText",OdDbType.Text,POut.StringNote(smsToMobile.MsgText));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramMsgText);
 			}
 			else {
@@ -171,7 +171,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many SmsToMobiles into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<SmsToMobile> listSmsToMobiles,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(SmsToMobile smsToMobile in listSmsToMobiles) {
 					Insert(smsToMobile);
 				}

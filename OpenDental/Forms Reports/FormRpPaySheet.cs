@@ -362,7 +362,7 @@ namespace OpenDental{
 					listProv.SetSelected(i,true);
 				}
 			}
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				listClin.Visible=false;
 				labelClin.Visible=false;
 				checkAllClin.Visible=false;
@@ -464,7 +464,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"At least one provider must be selected.");
 				return;
 			}
-			if(PrefC.HasClinicsEnabled && !checkAllClin.Checked && listClin.SelectedIndices.Count==0) {
+			if(Preferences.HasClinicsEnabled && !checkAllClin.Checked && listClin.SelectedIndices.Count==0) {
 				MsgBox.Show(this,"At least one clinic must be selected.");
 				return;
 			}
@@ -490,7 +490,7 @@ namespace OpenDental{
 			else {
 				listProvNums=listProv.SelectedIndices.OfType<int>().ToList().Select(x => _listProviders[x].ProvNum).ToList();
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
 					if(Security.CurUser.ClinicIsRestricted) {
 						listClinicNums.Add(_listClinics[listClin.SelectedIndices[i]].ClinicNum);//we know that the list is a 1:1 to _listClinics
@@ -539,7 +539,7 @@ namespace OpenDental{
 			else {
 				subtitleProvs+=string.Join(", ",listProv.SelectedIndices.OfType<int>().ToList().Select(x => _listProviders[x].Abbr));
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(checkAllClin.Checked && !Security.CurUser.ClinicIsRestricted) {
 					subtitleClinics=Lan.g(this,"All Clinics");
 				}
@@ -568,9 +568,9 @@ namespace OpenDental{
 			Font fontSubTitle=new Font("Tahoma",10,FontStyle.Bold);
 			report.ReportName=Lan.g(this,"Daily Payments");
 			report.AddTitle("Title",Lan.g(this,"Daily Payments"),fontTitle);
-			report.AddSubTitle("PracTitle",PrefC.GetString(PrefName.PracticeTitle),fontSubTitle);
+			report.AddSubTitle("PracTitle",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
 			report.AddSubTitle("Providers",subtitleProvs,fontSubTitle);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				report.AddSubTitle("Clinics",subtitleClinics,fontSubTitle);
 			}
 			Dictionary<long,string> dictInsDefNames=new Dictionary<long,string>();
@@ -595,7 +595,7 @@ namespace OpenDental{
 			query.AddColumn("Carrier",150,FieldValueType.String,font);
 			query.AddColumn("Patient Name",150,FieldValueType.String,font);
 			query.AddColumn("Provider",90,FieldValueType.String,font);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				query.AddColumn("Clinic",120,FieldValueType.String,font);
 			}
 			query.AddColumn("Check#",75,FieldValueType.String,font);
@@ -608,7 +608,7 @@ namespace OpenDental{
 			query.GetColumnDetail("Date").StringFormat="d";
 			query.AddColumn("Paying Patient",270,FieldValueType.String,font);
 			query.AddColumn("Provider",90,FieldValueType.String,font);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				query.AddColumn("Clinic",120,FieldValueType.String,font);
 			}
 			query.AddColumn("Check#",75,FieldValueType.String,font);

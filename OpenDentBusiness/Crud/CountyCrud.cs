@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one County into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(County county,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				county.CountyNum=ReplicationServers.GetKey("county","CountyNum");
 			}
 			string command="INSERT INTO county (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="CountyNum,";
 			}
 			command+="CountyName,CountyCode) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(county.CountyNum)+",";
 			}
 			command+=
 				 "'"+POut.String(county.CountyName)+"',"
 				+"'"+POut.String(county.CountyCode)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

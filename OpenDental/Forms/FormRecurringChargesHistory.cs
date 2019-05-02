@@ -27,7 +27,7 @@ namespace OpenDental {
 		private void FormRecurringChargesHistory_Load(object sender,EventArgs e) {
 			datePicker.SetDateTimeFrom(DateTime.Today.AddMonths(-1));
 			datePicker.SetDateTimeTo(DateTime.Today);
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				labelClinics.Visible=false;
 				butPickClinic.Visible=false;
 			}
@@ -49,7 +49,7 @@ namespace OpenDental {
 			List<SQLWhere> listWheres=new List<SQLWhere> {
 				SQLWhere.CreateBetween(nameof(RecurringCharge.DateTimeCharge),datePicker.GetDateTimeFrom(),datePicker.GetDateTimeTo(),true)
 			};
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				listWheres.Add(SQLWhere.CreateIn(nameof(RecurringCharge.ClinicNum),comboClinics.ListSelectedClinicNums));
 			}
 			_listRecurringCharges=RecurringCharges.GetMany(listWheres);
@@ -73,22 +73,22 @@ namespace OpenDental {
 			gridMain.Columns.Clear();
 			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"PatNum"),55, sortingStrategy: ODGridSortingStrategy.AmountParse));
 			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Name"),185));
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Clinic"),65));
 			}
 			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Date Charge"),135,HorizontalAlignment.Center,
 				ODGridSortingStrategy.DateParse));
 			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Charge Status"),90));
 			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"User"),90));
-			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Family Bal"),PrefC.HasClinicsEnabled ? 70 : 85,HorizontalAlignment.Right,
+			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Family Bal"),Preferences.HasClinicsEnabled ? 70 : 85,HorizontalAlignment.Right,
 				ODGridSortingStrategy.AmountParse));
-			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"PayPlan Due"),PrefC.HasClinicsEnabled ? 80 : 90,HorizontalAlignment.Right,
+			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"PayPlan Due"),Preferences.HasClinicsEnabled ? 80 : 90,HorizontalAlignment.Right,
 				ODGridSortingStrategy.AmountParse));
-			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Total Due"),PrefC.HasClinicsEnabled ? 65 : 80,HorizontalAlignment.Right,
+			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Total Due"),Preferences.HasClinicsEnabled ? 65 : 80,HorizontalAlignment.Right,
 				ODGridSortingStrategy.AmountParse));
-			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Repeat Amt"),PrefC.HasClinicsEnabled ? 75 : 90,HorizontalAlignment.Right,
+			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Repeat Amt"),Preferences.HasClinicsEnabled ? 75 : 90,HorizontalAlignment.Right,
 				ODGridSortingStrategy.AmountParse));
-			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Charge Amt"),PrefC.HasClinicsEnabled ? 85 : 95,HorizontalAlignment.Right,
+			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Charge Amt"),Preferences.HasClinicsEnabled ? 85 : 95,HorizontalAlignment.Right,
 				ODGridSortingStrategy.AmountParse));
 			if(gridMain.WidthAllColumns > gridMain.Width) {
 				gridMain.HScrollVisible=true;
@@ -97,7 +97,7 @@ namespace OpenDental {
 			foreach(RecurringCharge charge in _listRecurringCharges.OrderBy(x => x.DateTimeCharge)) {
 				bool isAutomated=(charge.UserNum==0);
 				if(!datePicker.IsInDateRange(charge.DateTimeCharge) 
-					|| (PrefC.HasClinicsEnabled && !charge.ClinicNum.In(comboClinics.ListSelectedClinicNums))
+					|| (Preferences.HasClinicsEnabled && !charge.ClinicNum.In(comboClinics.ListSelectedClinicNums))
 					|| !charge.ChargeStatus.In(comboStatuses.SelectedTags<RecurringChargeStatus>())
 					|| (comboAutomated.SelectedIndex==1 && !isAutomated) || (comboAutomated.SelectedIndex==2 && isAutomated))
 				{
@@ -110,7 +110,7 @@ namespace OpenDental {
 					patName=Lans.g(this,"UNKNOWN");
 				}
 				row.Cells.Add(patName);
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add(Clinics.GetFirstOrDefault(x => x.ClinicNum==charge.ClinicNum)?.Description??"");
 				}
 				row.Cells.Add(charge.DateTimeCharge.ToString());

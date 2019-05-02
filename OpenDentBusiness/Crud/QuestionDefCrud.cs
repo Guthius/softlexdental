@@ -79,15 +79,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one QuestionDef into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(QuestionDef questionDef,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				questionDef.QuestionDefNum=ReplicationServers.GetKey("questiondef","QuestionDefNum");
 			}
 			string command="INSERT INTO questiondef (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="QuestionDefNum,";
 			}
 			command+="Description,ItemOrder,QuestType) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(questionDef.QuestionDefNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				questionDef.Description="";
 			}
 			OdSqlParameter paramDescription=new OdSqlParameter("paramDescription",OdDbType.Text,POut.StringParam(questionDef.Description));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramDescription);
 			}
 			else {

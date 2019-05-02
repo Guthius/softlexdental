@@ -94,15 +94,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one MapArea into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(MapArea mapArea,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				mapArea.MapAreaNum=ReplicationServers.GetKey("maparea","MapAreaNum");
 			}
 			string command="INSERT INTO maparea (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="MapAreaNum,";
 			}
 			command+="Extension,XPos,YPos,Width,Height,Description,ItemType,MapAreaContainerNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(mapArea.MapAreaNum)+",";
 			}
 			command+=
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(mapArea.Description)+"',"
 				+    POut.Int   ((int)mapArea.ItemType)+","
 				+    POut.Long  (mapArea.MapAreaContainerNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

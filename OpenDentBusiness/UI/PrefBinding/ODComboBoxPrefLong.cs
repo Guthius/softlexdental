@@ -73,7 +73,7 @@ namespace OpenDental {
 			}
 			else {
 				string overrideText=(SpecialOption==ComboBoxSpecialValues.NotApplicable?"":SpecialOption.GetDescription());
-				this.SetSelectedItem<long>(x => x==PrefC.GetLong(PrefNameBinding),overrideText);
+				this.SetSelectedItem<long>(x => x==Preferences.GetLong(PrefNameBinding),overrideText);
 			}
 		}
 

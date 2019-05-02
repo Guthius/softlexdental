@@ -22,7 +22,7 @@ namespace OpenDental {
 			List<string> allergiesMatches=new List<string>();
 			List<string> medicationsMatches=new List<string>();
 			List<string> customMessages=new List<string>();
-			bool showHighSigOnly=PrefC.GetBool(PrefName.EhrRxAlertHighSeverity);
+			bool showHighSigOnly=Preferences.GetBool(PrefName.EhrRxAlertHighSeverity);
 			for(int i=0;i<alertList.Count;i++){
 				for(int j=0;j<diseases.Count;j++){
 					//This does not look for matches with icd9s.

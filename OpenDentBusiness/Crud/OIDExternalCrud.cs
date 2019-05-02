@@ -91,15 +91,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one OIDExternal into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(OIDExternal oIDExternal,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				oIDExternal.OIDExternalNum=ReplicationServers.GetKey("oidexternal","OIDExternalNum");
 			}
 			string command="INSERT INTO oidexternal (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="OIDExternalNum,";
 			}
 			command+="IDType,IDInternal,IDExternal,rootExternal) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(oIDExternal.OIDExternalNum)+",";
 			}
 			command+=
@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (oIDExternal.IDInternal)+","
 				+"'"+POut.String(oIDExternal.IDExternal)+"',"
 				+"'"+POut.String(oIDExternal.rootExternal)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

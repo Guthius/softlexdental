@@ -24,10 +24,10 @@ namespace OpenDentBusiness {
 		///"No need to check RemotingRole; no call to db" and which also make sure PrefC.AtoZfolderUsed.
 		///Returns Cloud AtoZ path if CloudStorage.IsCloudStorage</summary>
 		public static string GetPreferredAtoZpath() {
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				return null;
 			}
-			else if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) { 
+			else if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) { 
 				if(LocalAtoZpath==null) {//on startup
 					try {
 						LocalAtoZpath=ComputerPrefs.LocalComputer.AtoZpath;
@@ -45,7 +45,7 @@ namespace OpenDentBusiness {
 					return replicationAtoZ;
 				}
 				//use this to handle possible multiple paths separated by semicolons.
-				return GetValidPathFromString(PrefC.GetString(PrefName.DocPath));
+				return GetValidPathFromString(Preferences.GetString(PrefName.DocPath));
 			}
 			//If you got here you are using a cloud storage method.
 			return CloudStorage.AtoZPath;
@@ -68,7 +68,7 @@ namespace OpenDentBusiness {
 		///It will set the pat.ImageFolder if pat.ImageFolder is blank.</summary>
 		public static string GetPatientFolder(Patient pat,string AtoZpath) {
 			string retVal="";
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				return retVal;
 			}
 			if(CloudStorage.IsCloudStorage) {
@@ -91,7 +91,7 @@ namespace OpenDentBusiness {
 					pat.ImageFolder.Substring(0,1).ToUpper(),
 					pat.ImageFolder,'/');//use '/' char instead of Path.DirectorySeparatorChar
 			}
-			else if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			else if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				retVal=ODFileUtils.CombinePaths(AtoZpath,
 					pat.ImageFolder.Substring(0,1).ToUpper(),
 					pat.ImageFolder);//use Path.DirectorySeparatorChar
@@ -119,7 +119,7 @@ namespace OpenDentBusiness {
 		///<summary>Will create folder if needed.  Will validate that folder exists.</summary>
 		public static string GetEobFolder() {
 			string retVal="";
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				return retVal;
 			}
 			string AtoZPath=GetPreferredAtoZpath();
@@ -127,7 +127,7 @@ namespace OpenDentBusiness {
 			if(CloudStorage.IsCloudStorage) {
 				retVal=retVal.Replace("\\","/");
 			}
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(retVal)) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(retVal)) {
 				if(string.IsNullOrEmpty(AtoZPath)) {
 					throw new ApplicationException(Lans.g("ContrDocs","Could not find the path for the AtoZ folder."));
 				}
@@ -139,7 +139,7 @@ namespace OpenDentBusiness {
 		///<summary>Will create folder if needed.  Will validate that folder exists.</summary>
 		public static string GetAmdFolder() {
 			string retVal="";
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				return retVal;
 			}
 			string AtoZPath=GetPreferredAtoZpath();
@@ -147,7 +147,7 @@ namespace OpenDentBusiness {
 			if(CloudStorage.IsCloudStorage) {
 				retVal=retVal.Replace("\\","/");
 			}
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(retVal)) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(retVal)) {
 				if(string.IsNullOrEmpty(AtoZPath)) {
 					throw new ApplicationException(Lans.g("ContrDocs","Could not find the path for the AtoZ folder."));
 				}
@@ -159,12 +159,12 @@ namespace OpenDentBusiness {
 		///<summary>Gets the folder name where provider images are stored. Will create folder if needed.</summary>
 		public static string GetProviderImagesFolder() {
 			string retVal="";
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				return retVal;
 			}
 			string AtoZPath=GetPreferredAtoZpath();
 			retVal=FileAtoZ.CombinePaths(AtoZPath,"ProviderImages");
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(retVal)) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(retVal)) {
 				if(string.IsNullOrEmpty(AtoZPath)) {
 					throw new ApplicationException(Lans.g("ContrDocs","Could not find the path for the AtoZ folder."));
 				}
@@ -180,11 +180,11 @@ namespace OpenDentBusiness {
 		public static string GetEmailImagePath() {
 			//No need to check RemotingRole; no call to db.
 			string emailPath;
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				throw new ApplicationException(Lans.g("WikiPages","Must be using AtoZ folders."));
 			}
 			emailPath=FileAtoZ.CombinePaths(GetPreferredAtoZpath(),"EmailImages");
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(emailPath)) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(emailPath)) {
 				Directory.CreateDirectory(emailPath);
 			}
 			return emailPath;
@@ -193,12 +193,12 @@ namespace OpenDentBusiness {
 		///<summary>When the Image module is opened, this loads newly added files.</summary>
 		public static void AddMissingFilesToDatabase(Patient pat) {
 			//There is no such thing as adding files from any directory when not using AtoZ
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				return;
 			}
 			string patFolder=GetPatientFolder(pat,GetPreferredAtoZpath());
 			List<string> fileList=new List<string>();
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				DirectoryInfo di = new DirectoryInfo(patFolder);
 				List<FileInfo> fiList = di.GetFiles().Where(x => !x.Attributes.HasFlag(FileAttributes.Hidden)).ToList();
 				fileList.AddRange(fiList.Select(x => x.FullName));
@@ -226,7 +226,7 @@ namespace OpenDentBusiness {
 			//the key data is the bytes of the file, concatenated with the bytes of the note.
 			byte[] textbytes;
 			byte[] filebytes=new byte[1];
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase){
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase){
 				patFolder=ODFileUtils.CombinePaths(Path.GetTempPath(),"opendental");
 				byte[] rawData=Convert.FromBase64String(doc.RawBase64);
 				using(FileStream file=new FileStream(ODFileUtils.CombinePaths(patFolder,doc.FileName),FileMode.Create,FileAccess.Write)) {
@@ -248,7 +248,7 @@ namespace OpenDentBusiness {
 			if(CloudStorage.IsCloudStorage) {
 				filebytes=GetBytes(doc,patFolder);
 			}
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				try {
 					File.Delete(ODFileUtils.CombinePaths(patFolder,doc.FileName));//Delete temp file
 				}
@@ -283,7 +283,7 @@ namespace OpenDentBusiness {
 		}
 
 		public static Bitmap OpenImage(Document doc,string patFolder,string localPath="") {
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				string srcFileName = ODFileUtils.CombinePaths(patFolder,doc.FileName);
 				if(HasImageExtension(srcFileName)) {
 					//if(File.Exists(srcFileName) && HasImageExtension(srcFileName)) {
@@ -334,7 +334,7 @@ namespace OpenDentBusiness {
 
 		public static Bitmap[] OpenImagesEob(EobAttach eob,string localPath="") {
 			Bitmap[] values = new Bitmap[1];
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				string eobFolder=GetEobFolder();
 				string srcFileName = ODFileUtils.CombinePaths(eobFolder,eob.FileName);
 				if(HasImageExtension(srcFileName)) {
@@ -391,7 +391,7 @@ namespace OpenDentBusiness {
 
 		public static Bitmap[] OpenImagesAmd(EhrAmendment amd) {
 			Bitmap[] values = new Bitmap[1];
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				string amdFolder=GetAmdFolder();
 				string srcFileName = ODFileUtils.CombinePaths(amdFolder,amd.FileName);
 				if(HasImageExtension(srcFileName)) {
@@ -485,7 +485,7 @@ namespace OpenDentBusiness {
 		/// <summary></summary>
 		public static Document Import(string pathImportFrom,long docCategory,Patient pat) {
 			string patFolder="";
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage)  {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage)  {
 				patFolder=GetPatientFolder(pat,GetPreferredAtoZpath());
 			}
 			Document doc = new Document();
@@ -515,7 +515,7 @@ namespace OpenDentBusiness {
 			doc=Documents.InsertAndGet(doc,pat);//this assigns a filename and saves to db
 			try {
 				SaveDocument(doc,pathImportFrom,patFolder);//Makes log entry
-				if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+				if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 					Documents.Update(doc);//Because SaveDocument() modified doc.RawBase64
 				}
 			}
@@ -529,7 +529,7 @@ namespace OpenDentBusiness {
 		/// <summary>Saves to AtoZ folder, Cloud, or to db.  Saves image as a jpg.  Compression will differ depending on imageType.</summary>
 		public static Document Import(Bitmap image,long docCategory,ImageType imageType,Patient pat,string fileName="") {
 			string patFolder="";
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage) {
 				patFolder=GetPatientFolder(pat,GetPreferredAtoZpath());
 			}
 			Document doc = new Document();
@@ -566,7 +566,7 @@ namespace OpenDentBusiness {
 			//AutoCrop()?
 			try {
 				SaveDocument(doc,image,myImageCodecInfo,myEncoderParameters,patFolder);//Makes log entry
-				if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+				if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 					Documents.Update(doc);//because SaveDocument stuck the image in doc.RawBase64.
 					//no thumbnail yet
 				}
@@ -624,8 +624,8 @@ namespace OpenDentBusiness {
 			doc.DateCreated = DateTime.Now;
 			doc.PatNum = pat.PatNum;
 			doc.DocCategory = docCategory;
-			doc.WindowingMin = PrefC.GetInt(PrefName.ImageWindowingMin);
-			doc.WindowingMax = PrefC.GetInt(PrefName.ImageWindowingMax);
+			doc.WindowingMin = Preferences.GetInt(PrefName.ImageWindowingMin);
+			doc.WindowingMax = Preferences.GetInt(PrefName.ImageWindowingMax);
 			Documents.Insert(doc,pat);//creates filename and saves to db
 			doc=Documents.GetByNum(doc.DocNum);
 			try {
@@ -641,7 +641,7 @@ namespace OpenDentBusiness {
 		/// <summary>Saves to either AtoZ folder or to db.  Saves image as a jpg.  Compression will be according to user setting.</summary>
 		public static EobAttach ImportEobAttach(Bitmap image,long claimPaymentNum) {
 			string eobFolder="";
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage) {
 				eobFolder=GetEobFolder();
 			}
 			EobAttach eob=new EobAttach();
@@ -665,7 +665,7 @@ namespace OpenDentBusiness {
 			myEncoderParameters.Param[0] = myEncoderParameter;
 			try {
 				SaveEobAttach(eob,image,myImageCodecInfo,myEncoderParameters,eobFolder);
-				if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+				if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 					EobAttaches.Update(eob);//because SaveEobAttach stuck the image in EobAttach.RawBase64.
 					//no thumbnail
 				}
@@ -681,7 +681,7 @@ namespace OpenDentBusiness {
 		/// <summary></summary>
 		public static EobAttach ImportEobAttach(string pathImportFrom,long claimPaymentNum) {
 			string eobFolder="";
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage) {
 				eobFolder=GetEobFolder();
 			}
 			EobAttach eob=new EobAttach();
@@ -698,7 +698,7 @@ namespace OpenDentBusiness {
 			try {
 				SaveEobAttach(eob,pathImportFrom,eobFolder);
 				//No security log for creation of EOB's because they don't show up in the images module.
-				if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+				if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 					EobAttaches.Update(eob);
 				}
 			}
@@ -711,7 +711,7 @@ namespace OpenDentBusiness {
 
 		public static EhrAmendment ImportAmdAttach(Bitmap image,EhrAmendment amd) {
 			string amdFolder="";
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage) {
 				amdFolder=GetAmdFolder();
 			}
 			amd.FileName=DateTime.Now.ToString("yyyyMMdd_HHmmss_")+amd.EhrAmendmentNum;
@@ -740,7 +740,7 @@ namespace OpenDentBusiness {
 				//EhrAmendments.Delete(amd.EhrAmendmentNum);
 				throw;
 			}
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				//EhrAmendments.Update(amd);
 				//no thumbnail
 			}
@@ -750,7 +750,7 @@ namespace OpenDentBusiness {
 		public static EhrAmendment ImportAmdAttach(string pathImportFrom,EhrAmendment amd) {
 			string amdFolder="";
 			string amdFilename="";
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage) {
 				amdFolder=GetAmdFolder();
 				amdFilename=amd.FileName;
 			}
@@ -768,7 +768,7 @@ namespace OpenDentBusiness {
 				//EhrAmendments.Delete(amd.EhrAmendmentNum);
 				throw;
 			}
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage) {
 				amd.DateTAppend=DateTime.Now;
 				EhrAmendments.Update(amd);
 				CleanAmdAttach(amdFilename);
@@ -778,7 +778,7 @@ namespace OpenDentBusiness {
 
 		///<summary> Save a Document to another location on the disk (outside of Open Dental). </summary>
 		public static void Export(string saveToPath,Document doc,Patient pat) {
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				byte[] rawData=Convert.FromBase64String(doc.RawBase64);
 				using(FileStream file=new FileStream(saveToPath,FileMode.Create,FileAccess.Write)) {
 					file.Write(rawData,0,rawData.Length);
@@ -793,7 +793,7 @@ namespace OpenDentBusiness {
 
 		///<summary> Save an Eob to another location on the disk (outside of Open Dental). </summary>
 		public static void ExportEobAttach(string saveToPath,EobAttach eob) {
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				byte[] rawData=Convert.FromBase64String(eob.RawBase64);
 				Image image=null;
 				using(MemoryStream stream=new MemoryStream()) {
@@ -810,7 +810,7 @@ namespace OpenDentBusiness {
 
 		///<summary> Save an EHR amendment to another location on the disk (outside of Open Dental). </summary>
 		public static void ExportAmdAttach(string saveToPath,EhrAmendment amd) {
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				byte[] rawData=Convert.FromBase64String(amd.RawBase64);
 				Image image=null;
 				using(MemoryStream stream=new MemoryStream()) {
@@ -829,7 +829,7 @@ namespace OpenDentBusiness {
 		///If not using AtoZ folder, this uploads to Cloud or fills the doc.RawBase64 which must then be updated to db.  
 		///The image format can be bmp, jpg, etc, but this overload does not allow specifying jpg compression quality.</summary>
 		public static void SaveDocument(Document doc,Bitmap image,ImageFormat format,string patFolder) {
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				string pathFileOut = ODFileUtils.CombinePaths(patFolder,doc.FileName);
 				image.Save(pathFileOut);
 			}
@@ -851,7 +851,7 @@ namespace OpenDentBusiness {
 
 		///<summary>If usingAtoZfoler, then patFolder must be fully qualified and valid.  If not usingAtoZ folder, this uploads to Cloud or fills the doc.RawBase64 which must then be updated to db.</summary>
 		public static void SaveDocument(Document doc,Bitmap image,ImageCodecInfo codec,EncoderParameters encoderParameters,string patFolder) {
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {//if saving to AtoZ folder
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {//if saving to AtoZ folder
 				image.Save(ODFileUtils.CombinePaths(patFolder,doc.FileName),codec,encoderParameters);
 			}
 			else if(CloudStorage.IsCloudStorage) {
@@ -872,7 +872,7 @@ namespace OpenDentBusiness {
 
 		///<summary>If using AtoZfolder, then patFolder must be fully qualified and valid.  If not using AtoZfolder, this uploads to Cloud or fills the eob.RawBase64 which must then be updated to db.</summary>
 		public static void SaveDocument(Document doc,string pathSourceFile,string patFolder) {
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				File.Copy(pathSourceFile,ODFileUtils.CombinePaths(patFolder,doc.FileName));
 			}
 			else if(CloudStorage.IsCloudStorage) {
@@ -887,7 +887,7 @@ namespace OpenDentBusiness {
 
 		///<summary>If using AtoZfolder, then patFolder must be fully qualified and valid.  If not using AtoZfolder, this fills the eob.RawBase64 which must then be updated to db.</summary>
 		public static void SaveEobAttach(EobAttach eob,Bitmap image,ImageCodecInfo codec,EncoderParameters encoderParameters,string eobFolder) {
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				image.Save(ODFileUtils.CombinePaths(eobFolder,eob.FileName),codec,encoderParameters);
 			}
 			else if(CloudStorage.IsCloudStorage) {
@@ -908,7 +908,7 @@ namespace OpenDentBusiness {
 
 		///<summary>If using AtoZfolder, then patFolder must be fully qualified and valid.  If not using AtoZfolder, this fills the eob.RawBase64 which must then be updated to db.</summary>
 		public static void SaveAmdAttach(EhrAmendment amd,Bitmap image,ImageCodecInfo codec,EncoderParameters encoderParameters,string amdFolder) {
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				image.Save(ODFileUtils.CombinePaths(amdFolder,amd.FileName),codec,encoderParameters);
 			}
 			else if(CloudStorage.IsCloudStorage) {
@@ -930,7 +930,7 @@ namespace OpenDentBusiness {
 
 		///<summary>If using AtoZfolder, then patFolder must be fully qualified and valid.  If not using AtoZfolder, this fills the eob.RawBase64 which must then be updated to db.</summary>
 		public static void SaveEobAttach(EobAttach eob,string pathSourceFile,string eobFolder) {
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				File.Copy(pathSourceFile,ODFileUtils.CombinePaths(eobFolder,eob.FileName));
 			}
 			else if(CloudStorage.IsCloudStorage) {
@@ -945,7 +945,7 @@ namespace OpenDentBusiness {
 
 		///<summary>If using AtoZfolder, then patFolder must be fully qualified and valid.  If not using AtoZfolder, this fills the eob.RawBase64 which must then be updated to db.</summary>
 		public static void SaveAmdAttach(EhrAmendment amd,string pathSourceFile,string amdFolder) {
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				File.Copy(pathSourceFile,ODFileUtils.CombinePaths(amdFolder,amd.FileName));
 			}
 			else if(CloudStorage.IsCloudStorage) {
@@ -976,7 +976,7 @@ namespace OpenDentBusiness {
 					throw new Exception(msgText);
 				}
 				//Attempt to delete the file.
-				if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+				if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 					try {
 						string filePath = ODFileUtils.CombinePaths(patFolder,documents[i].FileName);
 						if(File.Exists(filePath)) {
@@ -998,7 +998,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Also handles deletion of db object.</summary>
 		public static void DeleteEobAttach(EobAttach eob) {
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				string eobFolder=GetEobFolder();
 				string filePath=ODFileUtils.CombinePaths(eobFolder,eob.FileName);
 				if(File.Exists(filePath)) {
@@ -1018,7 +1018,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Also handles deletion of db object.</summary>
 		public static void DeleteAmdAttach(EhrAmendment amendment) {
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				string amdFolder=GetAmdFolder();
 				string filePath=ODFileUtils.CombinePaths(amdFolder,amendment.FileName);
 				if(File.Exists(filePath)) {
@@ -1044,7 +1044,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Cleans up unreferenced Amendments</summary>
 		public static void CleanAmdAttach(string amdFileName) {
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				string amdFolder=GetAmdFolder();
 				string filePath=ODFileUtils.CombinePaths(amdFolder,amdFileName);
 				if(File.Exists(filePath)) {
@@ -1083,7 +1083,7 @@ namespace OpenDentBusiness {
 			}
 			else {*/
 			//string patFolder=GetPatientFolder(pat);
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				string thumbnailFile=ODFileUtils.CombinePaths(patFolder,"Thumbnails",doc.FileName);
 				if(File.Exists(thumbnailFile)) {
 					try {

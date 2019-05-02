@@ -91,15 +91,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ReplicationServer into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ReplicationServer replicationServer,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				replicationServer.ReplicationServerNum=ReplicationServers.GetKey("replicationserver","ReplicationServerNum");
 			}
 			string command="INSERT INTO replicationserver (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ReplicationServerNum,";
 			}
 			command+="Descript,ServerId,RangeStart,RangeEnd,AtoZpath,UpdateBlocked,SlaveMonitor) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(replicationServer.ReplicationServerNum)+",";
 			}
 			command+=
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 				replicationServer.Descript="";
 			}
 			OdSqlParameter paramDescript=new OdSqlParameter("paramDescript",OdDbType.Text,POut.StringParam(replicationServer.Descript));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramDescript);
 			}
 			else {

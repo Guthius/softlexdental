@@ -32,7 +32,7 @@ namespace OpenDental {
 			textAmount.Text=_procCur.ProcFee.ToString("f");
 			_selectedProvNum=_procCur.ProvNum;
 			comboProv.SelectedIndex=-1;//initializes to 0; must be -1 for fillComboProv
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				_listClinics=new List<Clinic>() { new Clinic() { Abbr=Lan.g(this,"None") } }; //Seed with "None"
 				Clinics.GetForUserod(Security.CurUser).ForEach(x => _listClinics.Add(x));//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.
 				_listClinics.ForEach(x => comboClinic.Items.Add(x.Abbr));
@@ -112,7 +112,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please enter a date first.");
 				return;
 			}
-			if(_procCur.ProcStatus==ProcStat.C && PIn.Date(textProcDate.Text).Date > DateTime.Today.Date && !PrefC.GetBool(PrefName.FutureTransDatesAllowed)) {
+			if(_procCur.ProcStatus==ProcStat.C && PIn.Date(textProcDate.Text).Date > DateTime.Today.Date && !Preferences.GetBool(PrefName.FutureTransDatesAllowed)) {
 				MsgBox.Show(this,"Completed procedures cannot be set for future dates.");
 				return;
 			}
@@ -120,7 +120,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please enter an amount.");
 				return;
 			}
-			if(_selectedProvNum!=_procOld.ProvNum && PrefC.GetBool(PrefName.ProcProvChangesClaimProcWithClaim)) {
+			if(_selectedProvNum!=_procOld.ProvNum && Preferences.GetBool(PrefName.ProcProvChangesClaimProcWithClaim)) {
 				List<ClaimProc> listClaimProc=ClaimProcs.GetForProc(ClaimProcs.Refresh(_procOld.PatNum),_procOld.ProcNum);
 				if(listClaimProc.Any(x => x.Status==ClaimProcStatus.Received
 					|| x.Status==ClaimProcStatus.Supplemental

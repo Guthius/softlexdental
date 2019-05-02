@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one DrugManufacturer into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(DrugManufacturer drugManufacturer,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				drugManufacturer.DrugManufacturerNum=ReplicationServers.GetKey("drugmanufacturer","DrugManufacturerNum");
 			}
 			string command="INSERT INTO drugmanufacturer (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="DrugManufacturerNum,";
 			}
 			command+="ManufacturerName,ManufacturerCode) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(drugManufacturer.DrugManufacturerNum)+",";
 			}
 			command+=
 				 "'"+POut.String(drugManufacturer.ManufacturerName)+"',"
 				+"'"+POut.String(drugManufacturer.ManufacturerCode)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

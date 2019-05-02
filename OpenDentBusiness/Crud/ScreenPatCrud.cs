@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ScreenPat into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ScreenPat screenPat,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				screenPat.ScreenPatNum=ReplicationServers.GetKey("screenpat","ScreenPatNum");
 			}
 			string command="INSERT INTO screenpat (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ScreenPatNum,";
 			}
 			command+="PatNum,ScreenGroupNum,SheetNum,PatScreenPerm) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(screenPat.ScreenPatNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (screenPat.ScreenGroupNum)+","
 				+    POut.Long  (screenPat.SheetNum)+","
 				+    POut.Int   ((int)screenPat.PatScreenPerm)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

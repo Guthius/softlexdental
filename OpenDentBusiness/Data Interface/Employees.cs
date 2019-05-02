@@ -309,7 +309,7 @@ namespace OpenDentBusiness
         {
             //No need to check RemotingRole; no call to db.
             List<Employee> listEmpsShort = Employees.GetDeepCopy(true);
-            if (!PrefC.HasClinicsEnabled || (clinicNum == 0 && isAll))
+            if (!Preferences.HasClinicsEnabled || (clinicNum == 0 && isAll))
             {//Simply return all employees.
                 return listEmpsShort;
             }

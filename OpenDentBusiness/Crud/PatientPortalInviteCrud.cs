@@ -101,15 +101,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PatientPortalInvite into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(PatientPortalInvite patientPortalInvite,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				patientPortalInvite.PatientPortalInviteNum=ReplicationServers.GetKey("patientportalinvite","PatientPortalInviteNum");
 			}
 			string command="INSERT INTO patientportalinvite (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PatientPortalInviteNum,";
 			}
 			command+="PatNum,AptNum,ClinicNum,DateTimeEntry,TSPrior,EmailSendStatus,EmailMessageNum,TemplateEmail,TemplateEmailSubj,Note) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(patientPortalInvite.PatientPortalInviteNum)+",";
 			}
 			command+=
@@ -131,7 +131,7 @@ namespace OpenDentBusiness.Crud{
 				patientPortalInvite.Note="";
 			}
 			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,POut.StringParam(patientPortalInvite.Note));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramTemplateEmail,paramNote);
 			}
 			else {
@@ -147,7 +147,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many PatientPortalInvites into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<PatientPortalInvite> listPatientPortalInvites,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(PatientPortalInvite patientPortalInvite in listPatientPortalInvites) {
 					Insert(patientPortalInvite);
 				}

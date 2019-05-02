@@ -385,7 +385,7 @@ namespace OpenDental{
 			for(int i=0;i<_listProviders.Count;i++){
 				listProv.Items.Add(_listProviders[i].GetLongDesc());
 			}
-			if(PrefC.HasClinicsEnabled){
+			if(Preferences.HasClinicsEnabled){
 				_listClinics=Clinics.GetForUserod(Security.CurUser);
 				if(!Security.CurUser.ClinicIsRestricted) {
 					listClin.Items.Add(Lan.g(this,"Unassigned"));
@@ -529,7 +529,7 @@ namespace OpenDental{
 				listProvs.Add(_listProviders[listProv.SelectedIndices[i]]);
 			}
 			List<Clinic> listClinics=new List<Clinic>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
 					if(Security.CurUser.ClinicIsRestricted) {
 						listClinics.Add(_listClinics[listClin.SelectedIndices[i]]);//we know that the list is a 1:1 to _listClinics
@@ -553,7 +553,7 @@ namespace OpenDental{
 			}
 			report.ReportName=reportName;
 			report.AddTitle("Title",Lan.g(this,"Provider Payroll Transactional Report"));
-			report.AddSubTitle("PracName",PrefC.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("PracName",Preferences.GetString(PrefName.PracticeTitle));
 			if(radioTransactionalToday.Checked) {
 				report.AddSubTitle("Date",DateTime.Today.ToShortDateString());
 			}
@@ -573,7 +573,7 @@ namespace OpenDental{
 				}
 				report.AddSubTitle("Providers",str);
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(checkAllClin.Checked) {
 					report.AddSubTitle("Clinics",Lan.g(this,"All Clinics"));
 				}
@@ -601,7 +601,7 @@ namespace OpenDental{
 			//setup query
 			QueryObject query;
 			DataTable dt=RpProdInc.GetNetProductionDetailDataSet(dateFrom,dateTo,listProvs,listClinics
-				,checkAllProv.Checked,checkAllClin.Checked,PrefC.GetBool(PrefName.NetProdDetailUseSnapshotToday));
+				,checkAllProv.Checked,checkAllClin.Checked,Preferences.GetBool(PrefName.NetProdDetailUseSnapshotToday));
 			query=report.AddQuery(dt,"","",SplitByKind.None,1,true);
 			// add columns to report
 			Font font=new Font("Tahoma",8,FontStyle.Regular);
@@ -633,7 +633,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"At least one provider must be selected.");
 				return;
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(!checkAllClin.Checked && listClin.SelectedIndices.Count==0) {
 					MsgBox.Show(this,"At least one clinic must be selected.");
 					return;
@@ -645,7 +645,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"To date cannot be before From date.");
 				return;
 			}
-			if(dateFrom!=DateTime.Today && dateTo==DateTime.Today && !PrefC.GetBool(PrefName.NetProdDetailUseSnapshotToday)) {
+			if(dateFrom!=DateTime.Today && dateTo==DateTime.Today && !Preferences.GetBool(PrefName.NetProdDetailUseSnapshotToday)) {
 				MsgBox.Show(this,"Cannot run this report for a date range with today's date.  "
 					+"This is due to a preference in report setup for calculating writeoffs by snapshot.");
 				return;

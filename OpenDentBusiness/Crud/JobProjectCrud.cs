@@ -85,15 +85,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one JobProject into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(JobProject jobProject,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				jobProject.JobProjectNum=ReplicationServers.GetKey("jobproject","JobProjectNum");
 			}
 			string command="INSERT INTO jobproject (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="JobProjectNum,";
 			}
 			command+="RootProjectNum,ParentProjectNum,Title,Description,ProjectStatus) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(jobProject.JobProjectNum)+",";
 			}
 			command+=
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(jobProject.Title)+"',"
 				+"'"+POut.String(jobProject.Description)+"',"
 				+    POut.Int   ((int)jobProject.ProjectStatus)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

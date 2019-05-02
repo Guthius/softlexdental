@@ -431,14 +431,14 @@ namespace OpenDental {
 					listProv.SetSelected(i,true);
 				}
 			}
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				listClin.Visible=false;
 				labelClin.Visible=false;
 				checkAllClin.Visible=false;
 				checkClinicBreakdown.Visible=false;
 			}
 			else {
-				checkClinicBreakdown.Checked=PrefC.GetBool(PrefName.ReportPandIhasClinicBreakdown);
+				checkClinicBreakdown.Checked=Preferences.GetBool(PrefName.ReportPandIhasClinicBreakdown);
 				_listClinics=Clinics.GetForUserod(Security.CurUser);
 				if(!Security.CurUser.ClinicIsRestricted) {
 					listClin.Items.Add(Lan.g(this,"Unassigned"));
@@ -456,14 +456,14 @@ namespace OpenDental {
 					}
 				}
 			}
-			switch(PrefC.GetInt(PrefName.ReportsPPOwriteoffDefaultToProcDate)) {
+			switch(Preferences.GetInt(PrefName.ReportsPPOwriteoffDefaultToProcDate)) {
 				case 0:	radioWriteoffPay.Checked=true; break;
 				case 1:	radioWriteoffProc.Checked=true; break;
 				case 2:	radioWriteoffClaim.Checked=true; break;
 				default:
 					radioWriteoffClaim.Checked=true; break;
 			}
-			Text+=PrefC.ReportingServer.DisplayStr=="" ? "" : " - "+Lan.g(this,"Reporting Server:") +" "+ PrefC.ReportingServer.DisplayStr;
+			Text+=Preferences.ReportingServer.DisplayStr=="" ? "" : " - "+Lan.g(this,"Reporting Server:") +" "+ Preferences.ReportingServer.DisplayStr;
 		}
 
 		private PPOWriteoffDateCalc GetWriteoffType() {
@@ -581,7 +581,7 @@ namespace OpenDental {
 				}
 			}
 			List<Clinic> listClinics=new List<Clinic>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
 					if(Security.CurUser.ClinicIsRestricted) {
 						listClinics.Add(_listClinics[listClin.SelectedIndices[i]]);//we know that the list is a 1:1 to _listClinics
@@ -624,12 +624,12 @@ namespace OpenDental {
 			DataSet ds=RpProdGoal.GetData(_dateFrom,_dateTo,listProvs,listClinics,checkAllProv.Checked,hasAllClinics,GetWriteoffType());
 			DataTable dt=ds.Tables["Total"];
 			DataTable dtClinic=new DataTable();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				dtClinic=ds.Tables["Clinic"];
 			}
 			report.ReportName="MonthlyP&IGoals";
 			report.AddTitle("Title",Lan.g(this,"Monthly Production Goal"));
-			report.AddSubTitle("PracName",PrefC.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("PracName",Preferences.GetString(PrefName.PracticeTitle));
 			report.AddSubTitle("Date",_dateFrom.ToShortDateString()+" - "+_dateTo.ToShortDateString());
 			if(checkAllProv.Checked) {
 				report.AddSubTitle("Providers",Lan.g(this,"All Providers"));
@@ -644,7 +644,7 @@ namespace OpenDental {
 				}
 				report.AddSubTitle("Providers",str);
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(checkAllClin.Checked) {
 					report.AddSubTitle("Clinics",Lan.g(this,"All Clinics"));
 				}
@@ -671,7 +671,7 @@ namespace OpenDental {
 			}
 			//setup query
 			QueryObject query;
-			if(PrefC.HasClinicsEnabled && checkClinicBreakdown.Checked) {
+			if(Preferences.HasClinicsEnabled && checkClinicBreakdown.Checked) {
 				query=report.AddQuery(dtClinic,"","Clinic",SplitByKind.Value,1,true);
 			}
 			else {
@@ -695,7 +695,7 @@ namespace OpenDental {
 			query.AddColumn("Adjusts",adjWidth,FieldValueType.Number,font);
 			query.AddColumn("Writeoffs",writeoffWidth,FieldValueType.Number,font);
 			query.AddColumn("Tot Prod",totProdWidth,FieldValueType.Number,font);
-			if(PrefC.HasClinicsEnabled && listClin.SelectedIndices.Count>1 && checkClinicBreakdown.Checked) {
+			if(Preferences.HasClinicsEnabled && listClin.SelectedIndices.Count>1 && checkClinicBreakdown.Checked) {
 				//If more than one clinic selected, we want to add a table to the end of the report that totals all the clinics together.
 				query=report.AddQuery(dt,"Totals","",SplitByKind.None,2,true);
 				query.AddColumn("Date",dateWidth,FieldValueType.String,font);
@@ -735,7 +735,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"At least one provider must be selected.");
 				return;
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(!checkAllClin.Checked && listClin.SelectedIndices.Count==0) {
 					MsgBox.Show(this,"At least one clinic must be selected.");
 					return;

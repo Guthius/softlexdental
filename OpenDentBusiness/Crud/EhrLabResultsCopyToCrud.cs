@@ -125,15 +125,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EhrLabResultsCopyTo into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EhrLabResultsCopyTo ehrLabResultsCopyTo,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				ehrLabResultsCopyTo.EhrLabResultsCopyToNum=ReplicationServers.GetKey("ehrlabresultscopyto","EhrLabResultsCopyToNum");
 			}
 			string command="INSERT INTO ehrlabresultscopyto (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EhrLabResultsCopyToNum,";
 			}
 			command+="EhrLabNum,CopyToID,CopyToLName,CopyToFName,CopyToMiddleNames,CopyToSuffix,CopyToPrefix,CopyToAssigningAuthorityNamespaceID,CopyToAssigningAuthorityUniversalID,CopyToAssigningAuthorityIDType,CopyToNameTypeCode,CopyToIdentifierTypeCode) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(ehrLabResultsCopyTo.EhrLabResultsCopyToNum)+",";
 			}
 			command+=
@@ -149,7 +149,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(ehrLabResultsCopyTo.CopyToAssigningAuthorityIDType)+"',"
 				+"'"+POut.String(ehrLabResultsCopyTo.CopyToNameTypeCode.ToString())+"',"
 				+"'"+POut.String(ehrLabResultsCopyTo.CopyToIdentifierTypeCode.ToString())+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

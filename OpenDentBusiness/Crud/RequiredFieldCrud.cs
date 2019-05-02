@@ -85,21 +85,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one RequiredField into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(RequiredField requiredField,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				requiredField.RequiredFieldNum=ReplicationServers.GetKey("requiredfield","RequiredFieldNum");
 			}
 			string command="INSERT INTO requiredfield (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="RequiredFieldNum,";
 			}
 			command+="FieldType,FieldName) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(requiredField.RequiredFieldNum)+",";
 			}
 			command+=
 				     POut.Int   ((int)requiredField.FieldType)+","
 				+"'"+POut.String(requiredField.FieldName.ToString())+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

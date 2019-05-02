@@ -26,7 +26,7 @@ namespace OpenDental {
 		}
 
 		private void FormTimeCardRuleEdit_Load(object sender,EventArgs e) {
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				_listEmployees=Employees.GetForTimeCard();
 			}
 			else {

@@ -85,15 +85,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one UserQuery into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(UserQuery userQuery,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				userQuery.QueryNum=ReplicationServers.GetKey("userquery","QueryNum");
 			}
 			string command="INSERT INTO userquery (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="QueryNum,";
 			}
 			command+="Description,FileName,QueryText,IsReleased,IsPromptSetup) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(userQuery.QueryNum)+",";
 			}
 			command+=
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 				userQuery.QueryText="";
 			}
 			OdSqlParameter paramQueryText=new OdSqlParameter("paramQueryText",OdDbType.Text,POut.StringParam(userQuery.QueryText));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramQueryText);
 			}
 			else {

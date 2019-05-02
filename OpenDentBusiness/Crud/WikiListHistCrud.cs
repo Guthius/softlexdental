@@ -83,15 +83,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one WikiListHist into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(WikiListHist wikiListHist,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				wikiListHist.WikiListHistNum=ReplicationServers.GetKey("wikilisthist","WikiListHistNum");
 			}
 			string command="INSERT INTO wikilisthist (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="WikiListHistNum,";
 			}
 			command+="UserNum,ListName,ListHeaders,ListContent,DateTimeSaved) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(wikiListHist.WikiListHistNum)+",";
 			}
 			command+=
@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Crud{
 				wikiListHist.ListContent="";
 			}
 			OdSqlParameter paramListContent=new OdSqlParameter("paramListContent",OdDbType.Text,POut.StringParam(wikiListHist.ListContent));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramListHeaders,paramListContent);
 			}
 			else {

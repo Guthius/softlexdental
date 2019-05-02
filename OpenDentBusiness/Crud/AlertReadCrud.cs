@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one AlertRead into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(AlertRead alertRead,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				alertRead.AlertReadNum=ReplicationServers.GetKey("alertread","AlertReadNum");
 			}
 			string command="INSERT INTO alertread (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="AlertReadNum,";
 			}
 			command+="AlertItemNum,UserNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(alertRead.AlertReadNum)+",";
 			}
 			command+=
 				     POut.Long  (alertRead.AlertItemNum)+","
 				+    POut.Long  (alertRead.UserNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one GradingScale into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(GradingScale gradingScale,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				gradingScale.GradingScaleNum=ReplicationServers.GetKey("gradingscale","GradingScaleNum");
 			}
 			string command="INSERT INTO gradingscale (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="GradingScaleNum,";
 			}
 			command+="ScaleType,Description) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(gradingScale.GradingScaleNum)+",";
 			}
 			command+=
 				     POut.Int   ((int)gradingScale.ScaleType)+","
 				+"'"+POut.String(gradingScale.Description)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

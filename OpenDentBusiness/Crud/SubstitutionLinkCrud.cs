@@ -83,15 +83,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SubstitutionLink into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(SubstitutionLink substitutionLink,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				substitutionLink.SubstitutionLinkNum=ReplicationServers.GetKey("substitutionlink","SubstitutionLinkNum");
 			}
 			string command="INSERT INTO substitutionlink (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="SubstitutionLinkNum,";
 			}
 			command+="PlanNum,CodeNum,SubstitutionCode,SubstOnlyIf) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(substitutionLink.SubstitutionLinkNum)+",";
 			}
 			command+=
@@ -99,7 +99,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (substitutionLink.CodeNum)+","
 				+"'"+POut.String(substitutionLink.SubstitutionCode)+"',"
 				+    POut.Int   ((int)substitutionLink.SubstOnlyIf)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many SubstitutionLinks into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<SubstitutionLink> listSubstitutionLinks,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(SubstitutionLink substitutionLink in listSubstitutionLinks) {
 					Insert(substitutionLink);
 				}

@@ -244,7 +244,7 @@ namespace OpenDentBusiness
                 contmeth = (ContactMethod)PIn.Long(rawtable.Rows[i]["PreferRecallMethod"].ToString());
                 if (contmeth == ContactMethod.None)
                 {
-                    if (PrefC.GetBool(PrefName.RecallUseEmailIfHasEmailAddress))
+                    if (Preferences.GetBool(PrefName.RecallUseEmailIfHasEmailAddress))
                     {//if user only wants to use email if contact method is email
                         if (rawtable.Rows[i]["Email"].ToString() != "")
                         {

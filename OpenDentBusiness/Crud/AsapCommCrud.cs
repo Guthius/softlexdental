@@ -134,15 +134,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one AsapComm into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(AsapComm asapComm,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				asapComm.AsapCommNum=ReplicationServers.GetKey("asapcomm","AsapCommNum");
 			}
 			string command="INSERT INTO asapcomm (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="AsapCommNum,";
 			}
 			command+="FKey,FKeyType,ScheduleNum,PatNum,ClinicNum,ShortGUID,DateTimeEntry,DateTimeExpire,DateTimeSmsScheduled,SmsSendStatus,EmailSendStatus,DateTimeSmsSent,DateTimeEmailSent,EmailMessageNum,ResponseStatus,DateTimeOrig,TemplateText,TemplateEmail,TemplateEmailSubj,Note,GuidMessageToMobile) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(asapComm.AsapCommNum)+",";
 			}
 			command+=
@@ -183,7 +183,7 @@ namespace OpenDentBusiness.Crud{
 				asapComm.GuidMessageToMobile="";
 			}
 			OdSqlParameter paramGuidMessageToMobile=new OdSqlParameter("paramGuidMessageToMobile",OdDbType.Text,POut.StringParam(asapComm.GuidMessageToMobile));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramTemplateText,paramTemplateEmail,paramNote,paramGuidMessageToMobile);
 			}
 			else {
@@ -199,7 +199,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many AsapComms into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<AsapComm> listAsapComms,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(AsapComm asapComm in listAsapComms) {
 					Insert(asapComm);
 				}

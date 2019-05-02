@@ -118,15 +118,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one HL7DefMessage into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(HL7DefMessage hL7DefMessage,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				hL7DefMessage.HL7DefMessageNum=ReplicationServers.GetKey("hl7defmessage","HL7DefMessageNum");
 			}
 			string command="INSERT INTO hl7defmessage (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="HL7DefMessageNum,";
 			}
 			command+="HL7DefNum,MessageType,EventType,InOrOut,ItemOrder,Note,MessageStructure) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(hL7DefMessage.HL7DefMessageNum)+",";
 			}
 			command+=
@@ -141,7 +141,7 @@ namespace OpenDentBusiness.Crud{
 				hL7DefMessage.Note="";
 			}
 			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,POut.StringParam(hL7DefMessage.Note));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNote);
 			}
 			else {

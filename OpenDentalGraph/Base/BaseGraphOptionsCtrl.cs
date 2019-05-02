@@ -30,7 +30,7 @@ namespace OpenDentalGraph {
 		///<summary>If you override this and your override can return true, make sure you check to see if Clinics are enabled before showing the grouping options.</summary>
 		public virtual bool HasGroupOptions {
 			get {
-				if(OpenDentBusiness.PrefC.HasClinicsEnabled) { //reference to OpenDentBusiness
+				if(OpenDentBusiness.Preferences.HasClinicsEnabled) { //reference to OpenDentBusiness
 					return true;
 				}
 				else {

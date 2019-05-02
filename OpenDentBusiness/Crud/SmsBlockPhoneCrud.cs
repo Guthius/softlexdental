@@ -73,20 +73,20 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SmsBlockPhone into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(SmsBlockPhone smsBlockPhone,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				smsBlockPhone.SmsBlockPhoneNum=ReplicationServers.GetKey("smsblockphone","SmsBlockPhoneNum");
 			}
 			string command="INSERT INTO smsblockphone (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="SmsBlockPhoneNum,";
 			}
 			command+="BlockWirelessNumber) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(smsBlockPhone.SmsBlockPhoneNum)+",";
 			}
 			command+=
 				 "'"+POut.String(smsBlockPhone.BlockWirelessNumber)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

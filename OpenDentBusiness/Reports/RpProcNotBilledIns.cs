@@ -15,7 +15,7 @@ namespace OpenDentBusiness
             bool showProcsBeforeIns, bool hasMultiVisitProcs)
         {
             string query = "SELECT ";
-            if (PrefC.GetBool(PrefName.ReportsShowPatNum))
+            if (Preferences.GetBool(PrefName.ReportsShowPatNum))
             {
                 query += DbHelper.Concat("CAST(patient.PatNum AS CHAR)", "'-'", "patient.LName", "', '", "patient.FName", "' '", "patient.MiddleI");
             }

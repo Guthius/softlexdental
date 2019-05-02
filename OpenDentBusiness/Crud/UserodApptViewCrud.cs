@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one UserodApptView into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(UserodApptView userodApptView,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				userodApptView.UserodApptViewNum=ReplicationServers.GetKey("userodapptview","UserodApptViewNum");
 			}
 			string command="INSERT INTO userodapptview (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="UserodApptViewNum,";
 			}
 			command+="UserNum,ClinicNum,ApptViewNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(userodApptView.UserodApptViewNum)+",";
 			}
 			command+=
 				     POut.Long  (userodApptView.UserNum)+","
 				+    POut.Long  (userodApptView.ClinicNum)+","
 				+    POut.Long  (userodApptView.ApptViewNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

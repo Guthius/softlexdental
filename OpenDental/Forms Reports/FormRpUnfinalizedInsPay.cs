@@ -28,7 +28,7 @@ namespace OpenDental {
 
     private void FormRpInsPayPlansPastDue_Load(object sender,EventArgs e) {
       FillType();
-      if(PrefC.HasClinicsEnabled) {
+      if(Preferences.HasClinicsEnabled) {
         comboBoxMultiClinics.Visible=true;
         labelClinic.Visible=true;
         FillClinics();
@@ -84,7 +84,7 @@ namespace OpenDental {
 				}
 			}
 			List<long> listClinicNums=new List<long>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(comboBoxMultiClinics.ListSelectedIndices.Contains(0)) {//'All' is selected
 					listClinicNums.AddRange(_listClinics.Select(x => x.ClinicNum));//Add all clinics this person has access to.
 					if(!Security.CurUser.ClinicIsRestricted) {
@@ -115,7 +115,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableUnfinalizedInsPay","Carrier"),200);
 			gridMain.Columns.Add(col);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn(Lan.g("TableUnfinalizedInsPay","Clinic"),160);
 				gridMain.Columns.Add(col);
 			}
@@ -135,7 +135,7 @@ namespace OpenDental {
 				else {
 					//no filter.
 				}
-				if(PrefC.HasClinicsEnabled && (!listClinicNums.Contains(unfinalCur.ClinicCur.ClinicNum))) {
+				if(Preferences.HasClinicsEnabled && (!listClinicNums.Contains(unfinalCur.ClinicCur.ClinicNum))) {
 					continue;
 				}
 				row=new ODGridRow();
@@ -147,7 +147,7 @@ namespace OpenDental {
 				row.Cells.Add(Lan.g(this,unfinalCur.Type.GetDescription()));
 				row.Cells.Add(patName);
 				row.Cells.Add(carrierName);
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					string clinicAbbr=unfinalCur.ClinicCur.Abbr;
 					if(unfinalCur.ClinicCur.ClinicNum==0) {//Unassigned, see RpUnfinalizedInsPay.UnfinalizedInsPay(...)
 						clinicAbbr=Lan.g(this,clinicAbbr);
@@ -205,7 +205,7 @@ namespace OpenDental {
 			if(!Security.IsAuthorized(Permissions.InsPayCreate)) {//date not checked here, but it will be checked when saving the check to prevent backdating
 				return;
 			}
-			if(PrefC.GetBool(PrefName.ClaimPaymentBatchOnly)) {
+			if(Preferences.GetBool(PrefName.ClaimPaymentBatchOnly)) {
 				//Is there a permission in the manage module that would block this behavior? Are we sending the user into a TRAP?!
 				MsgBox.Show(this,"Please use Batch Insurance in Manage Module to Finalize Payments.");
 				return;
@@ -229,7 +229,7 @@ namespace OpenDental {
 			List<InsPlan> listInsPlan=InsPlans.RefreshForSubList(listInsSub);
 			claimPayment.CarrierName=Carriers.GetName(InsPlans.GetPlan(unfinalPay.ClaimCur.PlanNum,listInsPlan).CarrierNum);
 			ClaimPayments.Insert(claimPayment);
-			double amt=ClaimProcs.AttachAllOutstandingToPayment(claimPayment.ClaimPaymentNum,PrefC.DateClaimReceivedAfter);
+			double amt=ClaimProcs.AttachAllOutstandingToPayment(claimPayment.ClaimPaymentNum,Preferences.DateClaimReceivedAfter);
 			claimPayment.CheckAmt=amt;
 			try {
 				ClaimPayments.Update(claimPayment);
@@ -352,7 +352,7 @@ namespace OpenDental {
 				}
 				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
 				yPos+=(int)g.MeasureString(text,headingFont).Height;
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					if(comboBoxMultiClinics.SelectedIndices[0].ToString()=="0") {
 						text="For All Clinics";
 					}
@@ -393,17 +393,17 @@ namespace OpenDental {
 			SaveFileDialog saveFileDialog=new SaveFileDialog();
 			saveFileDialog.AddExtension=true;
 			saveFileDialog.FileName="Unfinalized Insurance Payments";
-			if(!Directory.Exists(PrefC.GetString(PrefName.ExportPath))) {
+			if(!Directory.Exists(Preferences.GetString(PrefName.ExportPath))) {
 				try {
-					Directory.CreateDirectory(PrefC.GetString(PrefName.ExportPath));
-					saveFileDialog.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+					Directory.CreateDirectory(Preferences.GetString(PrefName.ExportPath));
+					saveFileDialog.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
 				}
 				catch {
 					//initialDirectory will be blank
 				}
 			}
 			else {
-				saveFileDialog.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+				saveFileDialog.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
 			}
 			saveFileDialog.Filter="Text files(*.txt)|*.txt|Excel Files(*.xls)|*.xls|All files(*.*)|*.*";
 			saveFileDialog.FilterIndex=0;

@@ -209,16 +209,16 @@ namespace OpenDentBusiness
             try
             {
                 //Keep track of the original connection settings so that we can revert back to them once finished archiving.
-                Version versionDbOrig = new Version(PrefC.GetString(PrefName.DataBaseVersion));
-                string archiveServerName = PrefC.GetString(PrefName.ArchiveServerName);
-                string archiveUserName = PrefC.GetString(PrefName.ArchiveUserName);
+                Version versionDbOrig = new Version(Preferences.GetString(PrefName.DataBaseVersion));
+                string archiveServerName = Preferences.GetString(PrefName.ArchiveServerName);
+                string archiveUserName = Preferences.GetString(PrefName.ArchiveUserName);
                 string decryptedPass;
-                CDT.Class1.Decrypt(PrefC.GetString(PrefName.ArchivePassHash), out decryptedPass);
+                CDT.Class1.Decrypt(Preferences.GetString(PrefName.ArchivePassHash), out decryptedPass);
                 //Connect to the archive database.  This can throw many exceptions.
                 DataConnection.SetDb(archiveServerName, MiscData.GetArchiveDatabaseName(), archiveUserName, decryptedPass);
                 #region Validate archive database version
                 //At this point there is an active connection to the archive database, validate the DataBaseVersion.
-                string version = PrefC.GetStringNoCache(PrefName.DataBaseVersion);
+                string version = Preferences.GetStringNoCache(PrefName.DataBaseVersion);
                 if (string.IsNullOrEmpty(version))
                 {
                     //Preference table does not have version information.  Somehow they have a database with proper structure but no data.
@@ -311,7 +311,7 @@ namespace OpenDentBusiness
         {
             List<string> retval = new List<string>();
             string atozName;
-            string atozThisDb = PrefC.GetString(PrefName.DocPath);
+            string atozThisDb = Preferences.GetString(PrefName.DocPath);
 
             var currentDbName = DataConnection.Database;
             for (int i = 0; i < dbNames.Length; i++)
@@ -374,7 +374,7 @@ namespace OpenDentBusiness
         {
             try
             {
-                if (PrefC.IsCloudMode)
+                if (Preferences.IsCloudMode)
                 {
                     return;
                 }

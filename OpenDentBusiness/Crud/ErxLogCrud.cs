@@ -85,15 +85,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ErxLog into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ErxLog erxLog,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				erxLog.ErxLogNum=ReplicationServers.GetKey("erxlog","ErxLogNum");
 			}
 			string command="INSERT INTO erxlog (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ErxLogNum,";
 			}
 			command+="PatNum,MsgText,ProvNum,UserNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(erxLog.ErxLogNum)+",";
 			}
 			command+=
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 				erxLog.MsgText="";
 			}
 			OdSqlParameter paramMsgText=new OdSqlParameter("paramMsgText",OdDbType.Text,POut.StringParam(erxLog.MsgText));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramMsgText);
 			}
 			else {

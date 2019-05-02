@@ -73,20 +73,20 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one DictCustom into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(DictCustom dictCustom,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				dictCustom.DictCustomNum=ReplicationServers.GetKey("dictcustom","DictCustomNum");
 			}
 			string command="INSERT INTO dictcustom (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="DictCustomNum,";
 			}
 			command+="WordText) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(dictCustom.DictCustomNum)+",";
 			}
 			command+=
 				 "'"+POut.String(dictCustom.WordText)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

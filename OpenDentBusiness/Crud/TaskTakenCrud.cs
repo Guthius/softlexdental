@@ -73,20 +73,20 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one TaskTaken into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(TaskTaken taskTaken,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				taskTaken.TaskTakenNum=ReplicationServers.GetKey("tasktaken","TaskTakenNum");
 			}
 			string command="INSERT INTO tasktaken (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="TaskTakenNum,";
 			}
 			command+="TaskNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(taskTaken.TaskTakenNum)+",";
 			}
 			command+=
 				     POut.Long  (taskTaken.TaskNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

@@ -70,7 +70,7 @@ Double-click tab header to rename tab.";
 			//Performing the layout here speeds this process by up considerably (I have seen as fast as 8x faster). -samo 1/25/16
 			//https://social.msdn.microsoft.com/Forums/windows/en-US/12cc5748-21c8-4494-b975-8b05c7513979/tabcontrol-very-slow-with-lots-of-tabs
 			RefreshData(false);
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				addClinicDefaultToolStripMenuItem.Visible=false;
 			}
 			AddDefaultTabs();
@@ -128,7 +128,7 @@ Double-click tab header to rename tab.";
 		private void AddDefaultTabs() {
 			if(dashboardTabControl.TabPageCount==0) {
 				dashboardTabControl.AddDefaultsTabPractice(false);
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					dashboardTabControl.AddDefaultsTabByGrouping(false,GroupingOptionsCtrl.Grouping.clinic);
 				}
 				dashboardTabControl.AddDefaultsTabByGrouping(false,GroupingOptionsCtrl.Grouping.provider);

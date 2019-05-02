@@ -713,7 +713,7 @@ namespace OpenDentBusiness {
 			using(XmlWriter writer=XmlWriter.Create(strbuild,settings)) {
 				writer.WriteStartElement("ErxClinicAccessRequest");
 				writer.WriteStartElement("RegistrationKey");
-				writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
+				writer.WriteString(Preferences.GetString(PrefName.RegistrationKey));
 				writer.WriteEndElement();//End reg key
 				writer.WriteStartElement("RegKeyDisabledOverride");
 				//Allow disabled regkeys to use eRx.  This functionality matches how we handle a disabled regkey for providererx
@@ -849,14 +849,14 @@ namespace OpenDentBusiness {
 			bool isPractice=false;
 			if(clinicCur==null) {//Make a fake ClinicNum 0 clinic containing practice info for validation/registering a new clinician if needed.
 				clinicCur=new Clinic();
-				clinicCur.Abbr=PrefC.GetString(PrefName.PracticeTitle);
-				clinicCur.Address=PrefC.GetString(PrefName.PracticeAddress);
-				clinicCur.Address2=PrefC.GetString(PrefName.PracticeAddress2);
-				clinicCur.City=PrefC.GetString(PrefName.PracticeCity);
-				clinicCur.State=PrefC.GetString(PrefName.PracticeST);
-				clinicCur.Zip=PrefC.GetString(PrefName.PracticeZip);
-				clinicCur.Phone=PrefC.GetString(PrefName.PracticePhone);
-				clinicCur.Fax=PrefC.GetString(PrefName.PracticeFax);
+				clinicCur.Abbr=Preferences.GetString(PrefName.PracticeTitle);
+				clinicCur.Address=Preferences.GetString(PrefName.PracticeAddress);
+				clinicCur.Address2=Preferences.GetString(PrefName.PracticeAddress2);
+				clinicCur.City=Preferences.GetString(PrefName.PracticeCity);
+				clinicCur.State=Preferences.GetString(PrefName.PracticeST);
+				clinicCur.Zip=Preferences.GetString(PrefName.PracticeZip);
+				clinicCur.Phone=Preferences.GetString(PrefName.PracticePhone);
+				clinicCur.Fax=Preferences.GetString(PrefName.PracticeFax);
 				isPractice=true;
 			}
 			ValidateClinic(clinicCur,isPractice);
@@ -1020,7 +1020,7 @@ namespace OpenDentBusiness {
 			}
 			if(sbErrors.ToString().Length>0) {
 				string clinicText="";
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					clinicText=" "+Lans.g("DoseSpot","in clinic")+" "+(clinicNum==0?Lans.g("DoseSpot","Headquarters"):Clinics.GetAbbr(clinicNum));
 				}
 				throw new ODException(Lans.g("DoseSpot","Issues found for provider")+" "+prov.Abbr+clinicText+":\r\n"+sbErrors.ToString());

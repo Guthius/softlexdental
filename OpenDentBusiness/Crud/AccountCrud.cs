@@ -104,17 +104,17 @@ namespace OpenDentBusiness
         /// </summary>
         public static long Insert(Account account, bool useExistingPK)
         {
-            if (!useExistingPK && PrefC.RandomKeys)
+            if (!useExistingPK && Preferences.RandomKeys)
             {
                 account.AccountNum = ReplicationServers.GetKey("account", "AccountNum");
             }
             string command = "INSERT INTO account (";
-            if (useExistingPK || PrefC.RandomKeys)
+            if (useExistingPK || Preferences.RandomKeys)
             {
                 command += "AccountNum,";
             }
             command += "Description,AcctType,BankNumber,Inactive,AccountColor) VALUES(";
-            if (useExistingPK || PrefC.RandomKeys)
+            if (useExistingPK || Preferences.RandomKeys)
             {
                 command += POut.Long(account.AccountNum) + ",";
             }
@@ -124,7 +124,7 @@ namespace OpenDentBusiness
                 + "'" + POut.String(account.BankNumber) + "',"
                 + POut.Bool(account.Inactive) + ","
                 + POut.Int(account.AccountColor.ToArgb()) + ")";
-            if (useExistingPK || PrefC.RandomKeys)
+            if (useExistingPK || Preferences.RandomKeys)
             {
                 Db.NonQ(command);
             }

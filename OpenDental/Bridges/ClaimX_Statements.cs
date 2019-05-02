@@ -27,7 +27,7 @@ namespace OpenDental.Bridges {
 			//sender address----------------------------------------------------------
 			writer.WriteStartElement("SenderAddress");
 			if(clinic==null) {
-				writer.WriteElementString("Name",PrefC.GetString(PrefName.PracticeTitle));
+				writer.WriteElementString("Name",Preferences.GetString(PrefName.PracticeTitle));
 			}
 			else {
 				writer.WriteElementString("Name",clinic.Description);
@@ -40,28 +40,28 @@ namespace OpenDental.Bridges {
 		private static void WriteAddress(XmlWriter writer,EbillAddress eBillAddress,Clinic clinic) {
 			//If using practice information or using the default (no clinic) Ebill and a clinic enum is specified, use the practice level information.
 			if(eBillAddress==EbillAddress.PracticePhysical || (clinic==null && eBillAddress==EbillAddress.ClinicPhysical)) {
-				writer.WriteElementString("Address1",PrefC.GetString(PrefName.PracticeAddress));
-				writer.WriteElementString("Address2",PrefC.GetString(PrefName.PracticeAddress2));
-				writer.WriteElementString("City",PrefC.GetString(PrefName.PracticeCity));
-				writer.WriteElementString("State",PrefC.GetString(PrefName.PracticeST));
-				writer.WriteElementString("Zip",PrefC.GetString(PrefName.PracticeZip));
-				writer.WriteElementString("Phone",PrefC.GetString(PrefName.PracticePhone));//enforced to be 10 digit fairly rigidly by the UI
+				writer.WriteElementString("Address1",Preferences.GetString(PrefName.PracticeAddress));
+				writer.WriteElementString("Address2",Preferences.GetString(PrefName.PracticeAddress2));
+				writer.WriteElementString("City",Preferences.GetString(PrefName.PracticeCity));
+				writer.WriteElementString("State",Preferences.GetString(PrefName.PracticeST));
+				writer.WriteElementString("Zip",Preferences.GetString(PrefName.PracticeZip));
+				writer.WriteElementString("Phone",Preferences.GetString(PrefName.PracticePhone));//enforced to be 10 digit fairly rigidly by the UI
 			}
 			else if(eBillAddress==EbillAddress.PracticePayTo || (clinic==null && eBillAddress==EbillAddress.ClinicPayTo)) {
-				writer.WriteElementString("Address1",PrefC.GetString(PrefName.PracticePayToAddress));
-				writer.WriteElementString("Address2",PrefC.GetString(PrefName.PracticePayToAddress2));
-				writer.WriteElementString("City",PrefC.GetString(PrefName.PracticePayToCity));
-				writer.WriteElementString("State",PrefC.GetString(PrefName.PracticePayToST));
-				writer.WriteElementString("Zip",PrefC.GetString(PrefName.PracticePayToZip));
-				writer.WriteElementString("Phone",PrefC.GetString(PrefName.PracticePhone));//enforced to be 10 digit fairly rigidly by the UI
+				writer.WriteElementString("Address1",Preferences.GetString(PrefName.PracticePayToAddress));
+				writer.WriteElementString("Address2",Preferences.GetString(PrefName.PracticePayToAddress2));
+				writer.WriteElementString("City",Preferences.GetString(PrefName.PracticePayToCity));
+				writer.WriteElementString("State",Preferences.GetString(PrefName.PracticePayToST));
+				writer.WriteElementString("Zip",Preferences.GetString(PrefName.PracticePayToZip));
+				writer.WriteElementString("Phone",Preferences.GetString(PrefName.PracticePhone));//enforced to be 10 digit fairly rigidly by the UI
 			}
 			else if(eBillAddress==EbillAddress.PracticeBilling || (clinic==null && eBillAddress==EbillAddress.ClinicBilling)) {
-				writer.WriteElementString("Address1",PrefC.GetString(PrefName.PracticeBillingAddress));
-				writer.WriteElementString("Address2",PrefC.GetString(PrefName.PracticeBillingAddress2));
-				writer.WriteElementString("City",PrefC.GetString(PrefName.PracticeBillingCity));
-				writer.WriteElementString("State",PrefC.GetString(PrefName.PracticeBillingST));
-				writer.WriteElementString("Zip",PrefC.GetString(PrefName.PracticeBillingZip));
-				writer.WriteElementString("Phone",PrefC.GetString(PrefName.PracticePhone));//enforced to be 10 digit fairly rigidly by the UI
+				writer.WriteElementString("Address1",Preferences.GetString(PrefName.PracticeBillingAddress));
+				writer.WriteElementString("Address2",Preferences.GetString(PrefName.PracticeBillingAddress2));
+				writer.WriteElementString("City",Preferences.GetString(PrefName.PracticeBillingCity));
+				writer.WriteElementString("State",Preferences.GetString(PrefName.PracticeBillingST));
+				writer.WriteElementString("Zip",Preferences.GetString(PrefName.PracticeBillingZip));
+				writer.WriteElementString("Phone",Preferences.GetString(PrefName.PracticePhone));//enforced to be 10 digit fairly rigidly by the UI
 			}
 			else if(eBillAddress==EbillAddress.ClinicPhysical) {
 				writer.WriteElementString("Address1",clinic.Address);
@@ -95,7 +95,7 @@ namespace OpenDental.Bridges {
 			writer.WriteStartElement("RecipientAddress");
 			Patient guar=fam.ListPats[0];
 			writer.WriteElementString("Name",guar.GetNameFLFormal());
-			if(PrefC.GetBool(PrefName.StatementAccountsUseChartNumber)) {
+			if(Preferences.GetBool(PrefName.StatementAccountsUseChartNumber)) {
 				writer.WriteElementString("Account",guar.ChartNumber);
 			}
 			else {
@@ -121,11 +121,11 @@ namespace OpenDental.Bridges {
 				writer.WriteElementString("PriorStatementDate",stmt.DateRangeFrom.AddDays(-1).ToString("MM/dd/yyyy"));
 			}
 			DateTime dueDate;
-			if(PrefC.GetLong(PrefName.StatementsCalcDueDate)==-1) {
+			if(Preferences.GetLong(PrefName.StatementsCalcDueDate)==-1) {
 				dueDate=DateTime.Today.AddDays(10);
 			}
 			else {
-				dueDate=DateTime.Today.AddDays(PrefC.GetLong(PrefName.StatementsCalcDueDate));
+				dueDate=DateTime.Today.AddDays(Preferences.GetLong(PrefName.StatementsCalcDueDate));
 			}
 			writer.WriteElementString("DueDate",dueDate.ToString("MM/dd/yyyy"));
 			writer.WriteElementString("StatementDate",stmt.DateSent.ToString("MM/dd/yyyy"));
@@ -155,7 +155,7 @@ namespace OpenDental.Bridges {
 				}
 			}
 			writer.WriteElementString("PayPlanDue",payPlanDue.ToString("F2"));
-			if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
+			if(Preferences.GetBool(PrefName.BalancesDontSubtractIns)) {
 				writer.WriteElementString("EstInsPayments","");//optional.
 			}
 			else {//this is typical

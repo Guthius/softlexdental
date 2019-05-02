@@ -88,7 +88,7 @@ namespace OpenDentBusiness
 					INNER JOIN journalentry je2 ON je2.TransactionNum=journalentry.TransactionNum
 					INNER JOIN account ON account.AccountNum=je2.AccountNum
 					WHERE journalentry.AccountNum=" + POut.Long(acct.AccountNum) + @"
-					AND journalentry.DateDisplayed > " + POut.Date(PrefC.GetDate(PrefName.AccountingLockDate)) + @"
+					AND journalentry.DateDisplayed > " + POut.Date(Preferences.GetDate(PrefName.AccountingLockDate)) + @"
 					ORDER BY je2.TransactionNum";
             DataTable table = Db.GetTable(command);
             if (table.Rows.Count == 0)
@@ -273,24 +273,24 @@ namespace OpenDentBusiness
         public static bool DepositsLinked()
         {
             // No need to check RemotingRole; no call to db.
-            if (PrefC.GetInt(PrefName.AccountingSoftware) == (int)AccountingSoftware.QuickBooks)
+            if (Preferences.GetInt(PrefName.AccountingSoftware) == (int)AccountingSoftware.QuickBooks)
             {
-                if (PrefC.GetString(PrefName.QuickBooksDepositAccounts) == "")
+                if (Preferences.GetString(PrefName.QuickBooksDepositAccounts) == "")
                 {
                     return false;
                 }
-                if (PrefC.GetString(PrefName.QuickBooksIncomeAccount) == "")
+                if (Preferences.GetString(PrefName.QuickBooksIncomeAccount) == "")
                 {
                     return false;
                 }
             }
             else
             {
-                if (PrefC.GetString(PrefName.AccountingDepositAccounts) == "")
+                if (Preferences.GetString(PrefName.AccountingDepositAccounts) == "")
                 {
                     return false;
                 }
-                if (PrefC.GetLong(PrefName.AccountingIncomeAccount) == 0)
+                if (Preferences.GetLong(PrefName.AccountingIncomeAccount) == 0)
                 {
                     return false;
                 }
@@ -310,7 +310,7 @@ namespace OpenDentBusiness
             {
                 return false;
             }
-            if (PrefC.GetLong(PrefName.AccountingCashIncomeAccount) == 0)
+            if (Preferences.GetLong(PrefName.AccountingCashIncomeAccount) == 0)
             {
                 return false;
             }
@@ -319,7 +319,7 @@ namespace OpenDentBusiness
 
         public static long[] GetDepositAccounts()
         {
-            string depStr = PrefC.GetString(PrefName.AccountingDepositAccounts);
+            string depStr = Preferences.GetString(PrefName.AccountingDepositAccounts);
             string[] depStrArray = depStr.Split(new char[] { ',' });
             List<long> depAL = new List<long>();
             for (int i = 0; i < depStrArray.Length; i++)
@@ -335,7 +335,7 @@ namespace OpenDentBusiness
 
         public static List<string> GetDepositAccountsQB()
         {
-            string depStr = PrefC.GetString(PrefName.QuickBooksDepositAccounts);
+            string depStr = Preferences.GetString(PrefName.QuickBooksDepositAccounts);
             string[] depStrArray = depStr.Split(new char[] { ',' });
             List<string> retVal = new List<string>();
             for (int i = 0; i < depStrArray.Length; i++)
@@ -351,7 +351,7 @@ namespace OpenDentBusiness
 
         public static List<string> GetIncomeAccountsQB()
         {
-            string incomeStr = PrefC.GetString(PrefName.QuickBooksIncomeAccount);
+            string incomeStr = Preferences.GetString(PrefName.QuickBooksIncomeAccount);
             string[] incomeStrArray = incomeStr.Split(new char[] { ',' });
             List<string> retVal = new List<string>();
             for (int i = 0; i < incomeStrArray.Length; i++)

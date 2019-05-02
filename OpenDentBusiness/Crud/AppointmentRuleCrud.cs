@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one AppointmentRule into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(AppointmentRule appointmentRule,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				appointmentRule.AppointmentRuleNum=ReplicationServers.GetKey("appointmentrule","AppointmentRuleNum");
 			}
 			string command="INSERT INTO appointmentrule (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="AppointmentRuleNum,";
 			}
 			command+="RuleDesc,CodeStart,CodeEnd,IsEnabled) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(appointmentRule.AppointmentRuleNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(appointmentRule.CodeStart)+"',"
 				+"'"+POut.String(appointmentRule.CodeEnd)+"',"
 				+    POut.Bool  (appointmentRule.IsEnabled)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

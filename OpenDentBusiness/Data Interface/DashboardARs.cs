@@ -27,7 +27,7 @@ namespace OpenDentBusiness
         {
             string command = "TRUNCATE dashboardar";
             Db.NonQ(command);
-            if (!string.IsNullOrEmpty(PrefC.ReportingServer.Server))
+            if (!string.IsNullOrEmpty(Preferences.ReportingServer.Server))
             { //only attempt to insert into the reporting server if the reporting server is set up.
                 ReportsComplex.RunFuncOnReportServer(() => Db.NonQ(command));
             }

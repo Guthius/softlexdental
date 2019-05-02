@@ -94,15 +94,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one RequiredFieldCondition into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(RequiredFieldCondition requiredFieldCondition,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				requiredFieldCondition.RequiredFieldConditionNum=ReplicationServers.GetKey("requiredfieldcondition","RequiredFieldConditionNum");
 			}
 			string command="INSERT INTO requiredfieldcondition (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="RequiredFieldConditionNum,";
 			}
 			command+="RequiredFieldNum,ConditionType,Operator,ConditionValue,ConditionRelationship) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(requiredFieldCondition.RequiredFieldConditionNum)+",";
 			}
 			command+=
@@ -111,7 +111,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   ((int)requiredFieldCondition.Operator)+","
 				+"'"+POut.String(requiredFieldCondition.ConditionValue)+"',"
 				+    POut.Int   ((int)requiredFieldCondition.ConditionRelationship)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

@@ -464,7 +464,7 @@ namespace OpenDental{
 			textOpName.Text=OpCur.OpName;
 			textAbbrev.Text=OpCur.Abbrev;
 			checkIsHidden.Checked=OpCur.IsHidden;
-			if(!PrefC.HasClinicsEnabled){
+			if(!Preferences.HasClinicsEnabled){
 				labelClinic.Visible=false;
 				comboClinic.Visible=false;
 				butPickClin.Visible=false;

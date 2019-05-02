@@ -85,15 +85,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ElectID into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ElectID electID,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				electID.ElectIDNum=ReplicationServers.GetKey("electid","ElectIDNum");
 			}
 			string command="INSERT INTO electid (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ElectIDNum,";
 			}
 			command+="PayorID,CarrierName,IsMedicaid,ProviderTypes,Comments) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(electID.ElectIDNum)+",";
 			}
 			command+=
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 				electID.Comments="";
 			}
 			OdSqlParameter paramComments=new OdSqlParameter("paramComments",OdDbType.Text,POut.StringParam(electID.Comments));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramComments);
 			}
 			else {

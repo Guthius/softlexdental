@@ -310,15 +310,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Patient into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Patient patient,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				patient.PatNum=ReplicationServers.GetKey("patient","PatNum");
 			}
 			string command="INSERT INTO patient (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PatNum,";
 			}
 			command+="LName,FName,MiddleI,Preferred,PatStatus,Gender,Position,Birthdate,SSN,Address,Address2,City,State,Zip,HmPhone,WkPhone,WirelessPhone,Guarantor,CreditType,Email,Salutation,EstBalance,PriProv,SecProv,FeeSched,BillingType,ImageFolder,AddrNote,FamFinUrgNote,MedUrgNote,ApptModNote,StudentStatus,SchoolName,ChartNumber,MedicaidID,Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,InsEst,BalTotal,EmployerNum,EmploymentNote,County,GradeLevel,Urgency,DateFirstVisit,ClinicNum,HasIns,TrophyFolder,PlannedIsDone,Premed,Ward,PreferConfirmMethod,PreferContactMethod,PreferRecallMethod,SchedBeforeTime,SchedAfterTime,SchedDayOfWeek,Language,AdmitDate,Title,PayPlanDue,SiteNum,ResponsParty,CanadianEligibilityCode,AskToArriveEarly,PreferContactConfidential,SuperFamily,TxtMsgOk,SmokingSnoMed,Country,DateTimeDeceased,BillingCycleDay,SecUserNumEntry,SecDateEntry,HasSuperBilling,PatNumCloneFrom,DiscountPlanNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(patient.PatNum)+",";
 			}
 			command+=
@@ -410,7 +410,7 @@ namespace OpenDentBusiness.Crud{
 				patient.FamFinUrgNote="";
 			}
 			OdSqlParameter paramFamFinUrgNote=new OdSqlParameter("paramFamFinUrgNote",OdDbType.Text,POut.StringNote(patient.FamFinUrgNote));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramAddrNote,paramFamFinUrgNote);
 			}
 			else {

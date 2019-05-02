@@ -155,7 +155,7 @@ namespace OpenDentBusiness
         {
             long clockEventNum = 0;
             clockEventNum = Crud.ClockEventCrud.Insert(clockEvent);
-            if (PrefC.GetBool(PrefName.LocalTimeOverridesServerTime))
+            if (Preferences.GetBool(PrefName.LocalTimeOverridesServerTime))
             {
                 //Cannot call update since we manually have to update the TimeEntered1 because it is a DateEntry column
                 string command = "UPDATE clockevent SET TimeEntered1=" + POut.DateT(DateTime.Now) + ", TimeDisplayed1=" + POut.DateT(DateTime.Now) + " WHERE clockEventNum=" + POut.Long(clockEventNum);
@@ -254,7 +254,7 @@ namespace OpenDentBusiness
             else if (clockEvent.ClockStatus == TimeClockStatus.Break)
             {//only incomplete breaks will have been returned.
              //clocking back in from break
-                if (PrefC.GetBool(PrefName.LocalTimeOverridesServerTime))
+                if (Preferences.GetBool(PrefName.LocalTimeOverridesServerTime))
                 {
                     clockEvent.TimeEntered2 = DateTime.Now;
                 }
@@ -315,7 +315,7 @@ namespace OpenDentBusiness
             }
             else
             {//finish the existing event
-                if (PrefC.GetBool(PrefName.LocalTimeOverridesServerTime))
+                if (Preferences.GetBool(PrefName.LocalTimeOverridesServerTime))
                 {
                     clockEvent.TimeEntered2 = DateTime.Now;
                 }
@@ -326,7 +326,7 @@ namespace OpenDentBusiness
                 clockEvent.TimeDisplayed2 = clockEvent.TimeEntered2;
                 clockEvent.ClockStatus = clockStatus;//whatever the user selected
                 ClockEvents.Update(clockEvent);
-                if (PrefC.GetBool(PrefName.DockPhonePanelShow) && clockEvent.ClockStatus == TimeClockStatus.Home)
+                if (Preferences.GetBool(PrefName.DockPhonePanelShow) && clockEvent.ClockStatus == TimeClockStatus.Home)
                 { //only applies to HQ
                     ClockOutForHQ(employeeNum);
                 }
@@ -400,7 +400,7 @@ namespace OpenDentBusiness
             //No need to check RemotingRole; no call to db.
             TimeSpan retVal = new TimeSpan(0);
             //If the first day of the pay period is the starting date for the overtime, then there is no need to retrieve any times from the previous pay period.
-            if (date.DayOfWeek == (DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))
+            if (date.DayOfWeek == (DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))
             {
                 return retVal;
             }
@@ -417,7 +417,7 @@ namespace OpenDentBusiness
                                                          //Loop backwards through the week days until the TimeCardOvertimeFirstDayOfWeek is hit.
             for (int i = 1; i < 7; i++)
             {//1 based because we already know that TimeCardOvertimeFirstDayOfWeek is not set to today so no need to check it.
-                if (mostRecentFirstDayOfWeekDate.AddDays(-i).DayOfWeek == (DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))
+                if (mostRecentFirstDayOfWeekDate.AddDays(-i).DayOfWeek == (DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))
                 {
                     mostRecentFirstDayOfWeekDate = mostRecentFirstDayOfWeekDate.AddDays(-i);
                     break;
@@ -478,7 +478,7 @@ namespace OpenDentBusiness
         ///<summary>-hh:mm or -hh.mm.ss or -hh.mm, depending on the pref.TimeCardsUseDecimalInsteadOfColon and pref.TimeCardShowSeconds.  Blank if zero.</summary>
         public static string Format(TimeSpan span)
         {
-            if (PrefC.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon))
+            if (Preferences.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon))
             {
                 if (span == TimeSpan.Zero)
                 {
@@ -486,7 +486,7 @@ namespace OpenDentBusiness
                 }
                 return span.TotalHours.ToString("n");
             }
-            else if (PrefC.GetBool(PrefName.TimeCardShowSeconds))
+            else if (Preferences.GetBool(PrefName.TimeCardShowSeconds))
             {//Colon format with seconds
                 return span.ToStringHmmss();
             }
@@ -838,7 +838,7 @@ namespace OpenDentBusiness
         private static List<DateTime> weekStartHelper(DateTime startDate, DateTime stopDate)
         {
             List<DateTime> retVal = new List<DateTime>();
-            DayOfWeek fdow = (DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek);
+            DayOfWeek fdow = (DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek);
             for (int i = 0; i < 7; i++)
             {//start date of first week.
                 if (startDate.AddDays(-i).DayOfWeek == fdow)
@@ -858,7 +858,7 @@ namespace OpenDentBusiness
         public static string GetTimeCardManageCommand(DateTime startDate, DateTime stopDate, bool isPrintReport)
         {
             string command = @"SELECT clockevent.EmployeeNum,";
-            if (PrefC.GetBool(PrefName.DistributorKey) && isPrintReport)
+            if (Preferences.GetBool(PrefName.DistributorKey) && isPrintReport)
             {//OD HQ
                 command += "COALESCE(wikilist_employees.ADPNum,'NotInList') AS ADPNum,";
             }
@@ -915,7 +915,7 @@ namespace OpenDentBusiness
 					AND ceb.ClockStatus = '2'
 					GROUP BY ceb.EmployeeNum) tempbreak ON clockevent.EmployeeNum=tempbreak.EmployeeNum
 				INNER JOIN employee ON clockevent.EmployeeNum=employee.EmployeeNum AND IsHidden=0 ";
-            if (PrefC.GetBool(PrefName.DistributorKey) && isPrintReport)
+            if (Preferences.GetBool(PrefName.DistributorKey) && isPrintReport)
             {//OD HQ
                 command += "LEFT JOIN wikilist_employees ON wikilist_employees.EmployeeNum=employee.EmployeeNum ";
             }

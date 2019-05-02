@@ -31,8 +31,8 @@ namespace OpenDental.User_Controls {
 
 		private bool IsTextingEnabled {
 			get {
-			return (!PrefC.HasClinicsEnabled && SmsPhones.IsIntegratedTextingEnabled()) ||  
-				(PrefC.HasClinicsEnabled && Clinics.IsTextingEnabled(Signup.ClinicNum));
+			return (!Preferences.HasClinicsEnabled && SmsPhones.IsIntegratedTextingEnabled()) ||  
+				(Preferences.HasClinicsEnabled && Clinics.IsTextingEnabled(Signup.ClinicNum));
 			}
 		}
 
@@ -100,7 +100,7 @@ namespace OpenDental.User_Controls {
 			row.Cells.Add(IsTextingEnabled?ToGridStr(ClinicPrefs.GetBool(PrefName.WebSchedNewPatDoAuthText,Signup.ClinicNum)):"");
 			string url="";
 			if(Signup.ClinicNum==0) { //HQ always uses pref.
-				url=PrefC.GetString(PrefName.WebSchedNewPatWebFormsURL);
+				url=Preferences.GetString(PrefName.WebSchedNewPatWebFormsURL);
 			}
 			else { //Clinic should not default back to HQ version of URL. This is unlike typical ClinicPref behavior.
 				ClinicPref pref=ClinicPrefs.GetPref(PrefName.WebSchedNewPatWebFormsURL,Signup.ClinicNum);			
@@ -181,7 +181,7 @@ namespace OpenDental.User_Controls {
 					return;
 				case VERIFYTXT_COL:
 					if(!IsTextingEnabled) {
-						MsgBox.Show(this,"Texting not enabled"+(PrefC.HasClinicsEnabled?" for this clinic":""));
+						MsgBox.Show(this,"Texting not enabled"+(Preferences.HasClinicsEnabled?" for this clinic":""));
 						return;
 					}
 					break;

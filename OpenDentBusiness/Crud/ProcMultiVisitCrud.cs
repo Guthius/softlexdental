@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ProcMultiVisit into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ProcMultiVisit procMultiVisit,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				procMultiVisit.ProcMultiVisitNum=ReplicationServers.GetKey("procmultivisit","ProcMultiVisitNum");
 			}
 			string command="INSERT INTO procmultivisit (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ProcMultiVisitNum,";
 			}
 			command+="GroupProcMultiVisitNum,ProcNum,ProcStatus,IsInProcess) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(procMultiVisit.ProcMultiVisitNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (procMultiVisit.ProcNum)+","
 				+    POut.Int   ((int)procMultiVisit.ProcStatus)+","
 				+    POut.Bool  (procMultiVisit.IsInProcess)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

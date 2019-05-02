@@ -100,15 +100,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Signalod into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Signalod signalod,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				signalod.SignalNum=ReplicationServers.GetKey("signalod","SignalNum");
 			}
 			string command="INSERT INTO signalod (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="SignalNum,";
 			}
 			command+="DateViewing,SigDateTime,FKey,FKeyType,IType,RemoteRole,MsgValue) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(signalod.SignalNum)+",";
 			}
 			command+=
@@ -123,7 +123,7 @@ namespace OpenDentBusiness.Crud{
 				signalod.MsgValue="";
 			}
 			OdSqlParameter paramMsgValue=new OdSqlParameter("paramMsgValue",OdDbType.Text,POut.StringParam(signalod.MsgValue));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramMsgValue);
 			}
 			else {
@@ -139,7 +139,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many Signalods into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<Signalod> listSignalods,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(Signalod signalod in listSignalods) {
 					Insert(signalod);
 				}

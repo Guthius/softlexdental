@@ -238,7 +238,7 @@ namespace OpenDental {
 				//If clinics are not enabled, it will get all entries, regardless of ClinicNum.
 				//This is to guard against people who disable clinics after using.
 				listMatchingEntries=listNegCharges.FindAll(x => x.ProvNum==posCharge.ProvNum && x.PatNum==posCharge.PatNum
-					&& (PrefC.HasClinicsEnabled ? x.ClinicNum==posCharge.ClinicNum : true) && x.AmountEnd<0);
+					&& (Preferences.HasClinicsEnabled ? x.ClinicNum==posCharge.ClinicNum : true) && x.AmountEnd<0);
 				foreach(AccountEntry negCharge in listMatchingEntries) {
 					summaryText+=CreateTransferHelper(posCharge,negCharge,listAccountEntriesForPat,payCur,famAccount);
 					if(posCharge.AmountEnd==0) {
@@ -346,7 +346,7 @@ namespace OpenDental {
 				posSplit.ProvNum=posCharge.ProvNum;
 				posSplit.SplitAmt=(double)amt;
 				//Unearned type will likely be 0, but if we make a positive split to ProvNum=0, use default unearned type.
-				posSplit.UnearnedType=posSplit.ProvNum==0 ? PrefC.GetLong(PrefName.PrepaymentUnearnedType) : 0;
+				posSplit.UnearnedType=posSplit.ProvNum==0 ? Preferences.GetLong(PrefName.PrepaymentUnearnedType) : 0;
 				long posAdjNum=0;
 				//Only associate an adjustment if the charge is an adjustment and there isn't an associated procedure to it.
 				if(posCharge.GetType()==typeof(Adjustment) && ((Adjustment)posCharge.Tag).ProcNum==0) {
@@ -382,7 +382,7 @@ namespace OpenDental {
 				negSplit.SplitAmt=0-(double)amt;
 				//If money is coming from paysplit, use its unearned type (if any).
 				negSplit.UnearnedType=negCharge.GetType()==typeof(PaySplit) ? ((PaySplit)negCharge.Tag).UnearnedType : 0;
-				if(PrefC.GetInt(PrefName.RigorousAccounting)==0) {
+				if(Preferences.GetInt(PrefName.RigorousAccounting)==0) {
 					if(Math.Sign(posSplit.ProcNum)!=Math.Sign(posSplit.ProvNum)
 						|| Math.Sign(negSplit.ProcNum)!=Math.Sign(negSplit.ProvNum)
 						|| Math.Sign(posSplit.UnearnedType)==Math.Sign(posSplit.ProvNum)
@@ -408,10 +408,10 @@ namespace OpenDental {
 		private Payment CreatePaymentTransferHelper(Patient pat) {
 			Payment payCur=new Payment();
 			payCur.ClinicNum=0;
-			if(PrefC.HasClinicsEnabled) {//if clinics aren't enabled default to 0
+			if(Preferences.HasClinicsEnabled) {//if clinics aren't enabled default to 0
 				payCur.ClinicNum=Clinics.ClinicNum;
-				if((PayClinicSetting)PrefC.GetInt(PrefName.PaymentClinicSetting)==PayClinicSetting.PatientDefaultClinic
-					|| (Clinics.ClinicNum==0 && (PayClinicSetting)PrefC.GetInt(PrefName.PaymentClinicSetting)==PayClinicSetting.SelectedExceptHQ))
+				if((PayClinicSetting)Preferences.GetInt(PrefName.PaymentClinicSetting)==PayClinicSetting.PatientDefaultClinic
+					|| (Clinics.ClinicNum==0 && (PayClinicSetting)Preferences.GetInt(PrefName.PaymentClinicSetting)==PayClinicSetting.SelectedExceptHQ))
 				{
 					payCur.ClinicNum=pat.ClinicNum;
 				}

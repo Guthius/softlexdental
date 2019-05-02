@@ -103,15 +103,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one CDSPermission into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(CDSPermission cDSPermission,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				cDSPermission.CDSPermissionNum=ReplicationServers.GetKey("cdspermission","CDSPermissionNum");
 			}
 			string command="INSERT INTO cdspermission (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="CDSPermissionNum,";
 			}
 			command+="UserNum,SetupCDS,ShowCDS,ShowInfobutton,EditBibliography,ProblemCDS,MedicationCDS,AllergyCDS,DemographicCDS,LabTestCDS,VitalCDS) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(cDSPermission.CDSPermissionNum)+",";
 			}
 			command+=
@@ -126,7 +126,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (cDSPermission.DemographicCDS)+","
 				+    POut.Bool  (cDSPermission.LabTestCDS)+","
 				+    POut.Bool  (cDSPermission.VitalCDS)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

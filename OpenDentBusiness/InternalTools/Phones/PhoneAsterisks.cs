@@ -15,7 +15,7 @@ namespace OpenDentBusiness
         {
             get
             {
-                return PrefC.GetString(PrefName.AsteriskServerIp);
+                return Preferences.GetString(PrefName.AsteriskServerIp);
             }
         }
 

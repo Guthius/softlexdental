@@ -30,14 +30,14 @@ namespace OpenDental {
 		}
 
 		private void FormBillingDefaults_Load(object sender,EventArgs e) {
-			textDays.Text=PrefC.GetLong(PrefName.BillingDefaultsLastDays).ToString();
-			checkIntermingled.Checked=PrefC.GetBool(PrefName.BillingDefaultsIntermingle);
-			checkSinglePatient.Checked=PrefC.GetBool(PrefName.BillingDefaultsSinglePatient);
-			textNote.Text=PrefC.GetString(PrefName.BillingDefaultsNote);
-			checkCreatePDF.Checked=PrefC.GetBool(PrefName.BillingElectCreatePDF);
-			checkBoxBillShowTransSinceZero.Checked=PrefC.GetBool(PrefName.BillingShowTransSinceBalZero);
+			textDays.Text=Preferences.GetLong(PrefName.BillingDefaultsLastDays).ToString();
+			checkIntermingled.Checked=Preferences.GetBool(PrefName.BillingDefaultsIntermingle);
+			checkSinglePatient.Checked=Preferences.GetBool(PrefName.BillingDefaultsSinglePatient);
+			textNote.Text=Preferences.GetString(PrefName.BillingDefaultsNote);
+			checkCreatePDF.Checked=Preferences.GetBool(PrefName.BillingElectCreatePDF);
+			checkBoxBillShowTransSinceZero.Checked=Preferences.GetBool(PrefName.BillingShowTransSinceBalZero);
 			listElectBilling.SelectedIndex=0;
-			int billingUseElectronicIdx=PrefC.GetInt(PrefName.BillingUseElectronic);
+			int billingUseElectronicIdx=Preferences.GetInt(PrefName.BillingUseElectronic);
 			if(billingUseElectronicIdx==1) {
 				listElectBilling.SelectedIndex=1;
 				checkCreatePDF.Enabled=true;
@@ -54,14 +54,14 @@ namespace OpenDental {
 				listElectBilling.SelectedIndex=4;
 			}
 			arrayOutputPaths[0]="";//Will never be used, but is helpful to keep the indexes of arrayOutputPaths aligned with the options listed in listElectBilling.
-			arrayOutputPaths[1]=PrefC.GetString(PrefName.BillingElectStmtUploadURL);
-			arrayOutputPaths[2]=PrefC.GetString(PrefName.BillingElectStmtOutputPathPos);
-			arrayOutputPaths[3]=PrefC.GetString(PrefName.BillingElectStmtOutputPathClaimX);
-			arrayOutputPaths[4]=PrefC.GetString(PrefName.BillingElectStmtOutputPathEds);
+			arrayOutputPaths[1]=Preferences.GetString(PrefName.BillingElectStmtUploadURL);
+			arrayOutputPaths[2]=Preferences.GetString(PrefName.BillingElectStmtOutputPathPos);
+			arrayOutputPaths[3]=Preferences.GetString(PrefName.BillingElectStmtOutputPathClaimX);
+			arrayOutputPaths[4]=Preferences.GetString(PrefName.BillingElectStmtOutputPathEds);
 			textStatementURL.Text=arrayOutputPaths[billingUseElectronicIdx];
-			textVendorId.Text=PrefC.GetString(PrefName.BillingElectVendorId);
-			textVendorPMScode.Text=PrefC.GetString(PrefName.BillingElectVendorPMSCode);
-			string cc=PrefC.GetString(PrefName.BillingElectCreditCardChoices);
+			textVendorId.Text=Preferences.GetString(PrefName.BillingElectVendorId);
+			textVendorPMScode.Text=Preferences.GetString(PrefName.BillingElectVendorPMSCode);
+			string cc=Preferences.GetString(PrefName.BillingElectCreditCardChoices);
 			if(cc.Contains("MC")) {
 				checkMC.Checked=true;
 			}
@@ -74,9 +74,9 @@ namespace OpenDental {
 			if(cc.Contains("A")) {
 				checkAmEx.Checked=true;
 			}
-			textBillingEmailSubject.Text=PrefC.GetString(PrefName.BillingEmailSubject);
-			textBillingEmailBody.Text=PrefC.GetString(PrefName.BillingEmailBodyText);
-			textInvoiceNote.Text=PrefC.GetString(PrefName.BillingDefaultsInvoiceNote);
+			textBillingEmailSubject.Text=Preferences.GetString(PrefName.BillingEmailSubject);
+			textBillingEmailBody.Text=Preferences.GetString(PrefName.BillingEmailBodyText);
+			textInvoiceNote.Text=Preferences.GetString(PrefName.BillingDefaultsInvoiceNote);
 			_listEbills=Ebills.GetDeepCopy();
 			_listEbillsOld=_listEbills.Select(x => x.Copy()).ToList();
 			//Find the default Ebill
@@ -101,11 +101,11 @@ namespace OpenDental {
 				comboPracticeAddr.Items.Add(arrayEbillAddressEnums[i]);
 				comboRemitAddr.Items.Add(arrayEbillAddressEnums[i]);
 				//If clinics are off don't add the Clinic specific EbillAddress enums
-				if(!PrefC.HasClinicsEnabled && i==2) {
+				if(!Preferences.HasClinicsEnabled && i==2) {
 					break;
 				}
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				comboClinic.Visible=true;
 				labelClinic.Visible=true;
 				//Bold clinic specific fields.
@@ -147,12 +147,12 @@ namespace OpenDental {
 			foreach(StatementMode stateMode in Enum.GetValues(typeof(StatementMode))) {
 				listModesToText.Items.Add(new ODBoxItem<StatementMode>(Lan.g("enumStatementMode",stateMode.GetDescription()),stateMode));
 			}
-			foreach(string modeIdx in PrefC.GetString(PrefName.BillingDefaultsModesToText)
+			foreach(string modeIdx in Preferences.GetString(PrefName.BillingDefaultsModesToText)
 				.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries)) 
 			{ 
 				listModesToText.SetSelected(PIn.Int(modeIdx),true);
 			}
-			textSmsTemplate.Text=PrefC.GetString(PrefName.BillingDefaultsSmsTemplate);
+			textSmsTemplate.Text=Preferences.GetString(PrefName.BillingDefaultsSmsTemplate);
 			//Load _eBillCur's fields into the UI.
 			LoadEbill(_eBillCur);
 		}
@@ -182,7 +182,7 @@ namespace OpenDental {
 				textPassword.Text=eBill.ElectPassword;
 			}
 			//If clinics are disabled and the eBill had a clinic specific enum, set it to default value.  May happen if clinics were previously enabled.
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				comboPracticeAddr.SelectedIndex=(int)eBill.PracticeAddress;
 				comboRemitAddr.SelectedIndex=(int)eBill.RemitAddress;
 			}

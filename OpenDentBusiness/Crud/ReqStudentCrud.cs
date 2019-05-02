@@ -94,15 +94,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ReqStudent into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ReqStudent reqStudent,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				reqStudent.ReqStudentNum=ReplicationServers.GetKey("reqstudent","ReqStudentNum");
 			}
 			string command="INSERT INTO reqstudent (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ReqStudentNum,";
 			}
 			command+="ReqNeededNum,Descript,SchoolCourseNum,ProvNum,AptNum,PatNum,InstructorNum,DateCompleted) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(reqStudent.ReqStudentNum)+",";
 			}
 			command+=
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (reqStudent.PatNum)+","
 				+    POut.Long  (reqStudent.InstructorNum)+","
 				+    POut.Date  (reqStudent.DateCompleted)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

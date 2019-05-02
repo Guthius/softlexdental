@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Language into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Language language,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				language.LanguageNum=ReplicationServers.GetKey("language","LanguageNum");
 			}
 			string command="INSERT INTO language (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="LanguageNum,";
 			}
 			command+="EnglishComments,ClassType,English,IsObsolete) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(language.LanguageNum)+",";
 			}
 			command+=
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 				language.English="";
 			}
 			OdSqlParameter paramEnglish=new OdSqlParameter("paramEnglish",OdDbType.Text,POut.StringParam(language.English));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramEnglishComments,paramClassType,paramEnglish);
 			}
 			else {

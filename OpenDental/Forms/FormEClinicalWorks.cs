@@ -682,8 +682,8 @@ namespace OpenDental{
 			else {
 				textHL7Server.Text=GetProp("HL7Server");//this property will not exist if using Oracle, eCW will never use Oracle
 				textHL7ServiceName.Text=GetProp("HL7ServiceName");//this property will not exist if using Oracle, eCW will never use Oracle
-				textHL7FolderIn.Text=PrefC.GetString(PrefName.HL7FolderIn);
-				textHL7FolderOut.Text=PrefC.GetString(PrefName.HL7FolderOut);
+				textHL7FolderIn.Text=Preferences.GetString(PrefName.HL7FolderIn);
+				textHL7FolderOut.Text=Preferences.GetString(PrefName.HL7FolderOut);
 				//if a def is enabled, the value associated with the def will override this setting
 				checkQuadAsToothNum.Checked=GetProp("IsQuadAsToothNum")=="1";//this property will not exist if using Oracle, eCW will never use Oracle
 			}

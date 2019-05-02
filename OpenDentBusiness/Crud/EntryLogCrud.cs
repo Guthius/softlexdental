@@ -86,15 +86,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EntryLog into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EntryLog entryLog,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				entryLog.EntryLogNum=ReplicationServers.GetKey("entrylog","EntryLogNum");
 			}
 			string command="INSERT INTO entrylog (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EntryLogNum,";
 			}
 			command+="UserNum,FKeyType,FKey,LogSource,EntryDateTime) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(entryLog.EntryLogNum)+",";
 			}
 			command+=
@@ -103,7 +103,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (entryLog.FKey)+","
 				+    POut.Int   ((int)entryLog.LogSource)+","
 				+    DbHelper.Now()+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
@@ -119,7 +119,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many EntryLogs into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<EntryLog> listEntryLogs,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(EntryLog entryLog in listEntryLogs) {
 					Insert(entryLog);
 				}

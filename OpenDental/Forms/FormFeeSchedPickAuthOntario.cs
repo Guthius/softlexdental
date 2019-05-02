@@ -28,8 +28,8 @@ namespace OpenDental {
 		}
 
 		private void FormFeeSchedPickAuthOntario_Load(object sender,EventArgs e) {
-			textODAMemberNumber.Text=PrefC.GetString(PrefName.CanadaODAMemberNumber);
-			textODAMemberPassword.Text=PrefC.GetString(PrefName.CanadaODAMemberPass);
+			textODAMemberNumber.Text=Preferences.GetString(PrefName.CanadaODAMemberNumber);
+			textODAMemberPassword.Text=Preferences.GetString(PrefName.CanadaODAMemberPass);
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

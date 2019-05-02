@@ -103,15 +103,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one MedicationPat into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(MedicationPat medicationPat,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				medicationPat.MedicationPatNum=ReplicationServers.GetKey("medicationpat","MedicationPatNum");
 			}
 			string command="INSERT INTO medicationpat (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="MedicationPatNum,";
 			}
 			command+="PatNum,MedicationNum,PatNote,DateStart,DateStop,ProvNum,MedDescript,RxCui,ErxGuid,IsCpoe) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(medicationPat.MedicationPatNum)+",";
 			}
 			command+=
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 				medicationPat.PatNote="";
 			}
 			OdSqlParameter paramPatNote=new OdSqlParameter("paramPatNote",OdDbType.Text,POut.StringParam(medicationPat.PatNote));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramPatNote);
 			}
 			else {

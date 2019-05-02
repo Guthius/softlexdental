@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ResellerService into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ResellerService resellerService,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				resellerService.ResellerServiceNum=ReplicationServers.GetKey("resellerservice","ResellerServiceNum");
 			}
 			string command="INSERT INTO resellerservice (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ResellerServiceNum,";
 			}
 			command+="ResellerNum,CodeNum,Fee) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(resellerService.ResellerServiceNum)+",";
 			}
 			command+=
 				     POut.Long  (resellerService.ResellerNum)+","
 				+    POut.Long  (resellerService.CodeNum)+","
 				+"'"+POut.Double(resellerService.Fee)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

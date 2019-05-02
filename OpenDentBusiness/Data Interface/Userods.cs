@@ -924,7 +924,7 @@ namespace OpenDentBusiness
             {
                 return Lans.g("FormUserPassword", "Password must contain at least one lower case letter when the strong password feature is turned on.");
             }
-            if (PrefC.GetBool(PrefName.PasswordsStrongIncludeSpecial))
+            if (Preferences.GetBool(PrefName.PasswordsStrongIncludeSpecial))
             {
                 bool hasSpecial = false;
                 for (int i = 0; i < pass.Length; i++)

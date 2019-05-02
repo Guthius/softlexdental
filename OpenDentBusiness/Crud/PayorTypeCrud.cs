@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PayorType into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(PayorType payorType,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				payorType.PayorTypeNum=ReplicationServers.GetKey("payortype","PayorTypeNum");
 			}
 			string command="INSERT INTO payortype (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PayorTypeNum,";
 			}
 			command+="PatNum,DateStart,SopCode,Note) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(payorType.PayorTypeNum)+",";
 			}
 			command+=
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 				payorType.Note="";
 			}
 			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,POut.StringParam(payorType.Note));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNote);
 			}
 			else {

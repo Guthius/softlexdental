@@ -85,15 +85,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one JobLink into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(JobLink jobLink,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				jobLink.JobLinkNum=ReplicationServers.GetKey("joblink","JobLinkNum");
 			}
 			string command="INSERT INTO joblink (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="JobLinkNum,";
 			}
 			command+="JobNum,FKey,LinkType,Tag,DisplayOverride) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(jobLink.JobLinkNum)+",";
 			}
 			command+=
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   ((int)jobLink.LinkType)+","
 				+"'"+POut.String(jobLink.Tag)+"',"
 				+"'"+POut.String(jobLink.DisplayOverride)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

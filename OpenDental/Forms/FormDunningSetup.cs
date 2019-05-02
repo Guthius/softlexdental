@@ -29,7 +29,7 @@ namespace OpenDental {
 		}
 
 		private void FillClinics() {
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				_listClinics=new List<Clinic>();//Just in case.
 				return;
 			}
@@ -70,7 +70,7 @@ namespace OpenDental {
 				_listAllDunnings=Dunnings.Refresh(_listClinics.Select(x => x.ClinicNum).ToList());
 			}
 			List<Dunning> listSubDunnings=_listAllDunnings.FindAll(x => ValidateDunningFilters(x));
-			if(!PrefC.GetBool(PrefName.ShowFeatureSuperfamilies)) {
+			if(!Preferences.GetBool(PrefName.ShowFeatureSuperfamilies)) {
 				listSubDunnings.RemoveAll(x => x.IsSuperFamily);
 			}
 			gridDunning.BeginUpdate();
@@ -81,10 +81,10 @@ namespace OpenDental {
 			gridDunning.Columns.Add(new ODGridColumn("Message",150));
 			gridDunning.Columns.Add(new ODGridColumn("Bold Message",150));
 			gridDunning.Columns.Add(new ODGridColumn("Email",35,HorizontalAlignment.Center));
-			if(PrefC.GetBool(PrefName.ShowFeatureSuperfamilies)) {
+			if(Preferences.GetBool(PrefName.ShowFeatureSuperfamilies)) {
 				gridDunning.Columns.Add(new ODGridColumn("SF",30,HorizontalAlignment.Center));
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				gridDunning.Columns.Add(new ODGridColumn("Clinic",50));
 			}
 			gridDunning.Rows.Clear();
@@ -115,10 +115,10 @@ namespace OpenDental {
 				row.Cells.Add(dunnCur.DunMessage);
 				row.Cells.Add(new ODGridCell(dunnCur.MessageBold) { Bold=true,ColorText=Color.DarkRed });
 				row.Cells.Add((!string.IsNullOrEmpty(dunnCur.EmailBody) || !string.IsNullOrEmpty(dunnCur.EmailSubject))?"X":"");
-				if(PrefC.GetBool(PrefName.ShowFeatureSuperfamilies)) {
+				if(Preferences.GetBool(PrefName.ShowFeatureSuperfamilies)) {
 					row.Cells.Add(dunnCur.IsSuperFamily?"X":"");
 				}
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add(_listClinics.Find(x => x.ClinicNum==dunnCur.ClinicNum)?.Abbr??"");
 				}
 				row.Tag=dunnCur;
@@ -142,7 +142,7 @@ namespace OpenDental {
 
 		///<summary>Returns -1 if clinics are not enabled or for 'All'. Otherwise 0 for 'Unassigned' or a valid ClinicNum </summary>
 		private long GetSelectedClinicNum() {
-			if(!PrefC.HasClinicsEnabled || comboClinics.SelectedIndex==0) {
+			if(!Preferences.HasClinicsEnabled || comboClinics.SelectedIndex==0) {
 				return -1;
 			}
 			return _listClinics[comboClinics.SelectedIndex-1].ClinicNum;//-1 for All

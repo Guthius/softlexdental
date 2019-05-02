@@ -23,7 +23,7 @@ namespace OpenDental {
 		}
 
 		private void FormEmailAddresses_Load(object sender,EventArgs e) {
-			checkEmailDisclaimer.Checked=PrefC.GetBool(PrefName.EmailDisclaimerIsOn);
+			checkEmailDisclaimer.Checked=Preferences.GetBool(PrefName.EmailDisclaimerIsOn);
 			if(IsSelectionMode) {
 				labelInboxCheckInterval.Visible=false;
 				textInboxCheckInterval.Visible=false;
@@ -33,7 +33,7 @@ namespace OpenDental {
 				checkEmailDisclaimer.Visible=false;
 			}
 			else {
-				textInboxCheckInterval.Text=PrefC.GetInt(PrefName.EmailInboxCheckInterval).ToString();//Calls PIn() internally.
+				textInboxCheckInterval.Text=Preferences.GetInt(PrefName.EmailInboxCheckInterval).ToString();//Calls PIn() internally.
 			}
 			FillGrid();
 		}
@@ -90,8 +90,8 @@ namespace OpenDental {
 				row.Cells.Add(emailAddress.EmailUsername);
 				row.Cells.Add(emailAddress.SenderAddress);
 				row.Cells.Add(Userods.GetName(emailAddress.UserNum));
-				row.Cells.Add((emailAddress.EmailAddressNum==PrefC.GetLong(PrefName.EmailDefaultAddressNum))?"X":"");
-				row.Cells.Add((emailAddress.EmailAddressNum==PrefC.GetLong(PrefName.EmailNotifyAddressNum))?"X":"");
+				row.Cells.Add((emailAddress.EmailAddressNum==Preferences.GetLong(PrefName.EmailDefaultAddressNum))?"X":"");
+				row.Cells.Add((emailAddress.EmailAddressNum==Preferences.GetLong(PrefName.EmailNotifyAddressNum))?"X":"");
 				row.Tag=emailAddress;
 				gridMain.Rows.Add(row);
 			}

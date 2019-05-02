@@ -125,7 +125,7 @@ namespace OpenDentBusiness
                 PrefName.WebSchedMessageText3,
             })
             {
-                if (HasURLTag(PrefC.GetString(pref)))
+                if (HasURLTag(Preferences.GetString(pref)))
                 {
                     return true;
                 }

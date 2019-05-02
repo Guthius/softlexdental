@@ -35,7 +35,7 @@ namespace OpenDental {
 
 		public FormEHR() {
 			InitializeComponent();
-			if(PrefC.GetBoolSilent(PrefName.ShowFeatureEhr,false)) {
+			if(Preferences.GetBoolSilent(PrefName.ShowFeatureEhr,false)) {
 				constructObjFormEhrMeasuresHelper();
 			}
 		}
@@ -131,11 +131,11 @@ namespace OpenDental {
 			//Always fill the grid regardless if the patient's provider has a valid ehr key.
 			//TODO: ProvPat may not be the primary provider in the future.
 			if(ProvPat.EhrMuStage==0) {//Use the global preference
-				if(PrefC.GetInt(PrefName.MeaningfulUseTwo)==2) {/*Modified Stage 2*/
+				if(Preferences.GetInt(PrefName.MeaningfulUseTwo)==2) {/*Modified Stage 2*/
 					gridMu.Title="Modified Stage 2 Meaningful Use for this patient";
 					listMu=EhrMeasures.GetMu2Mod(PatCur);
 				}
-				else if(PrefC.GetInt(PrefName.MeaningfulUseTwo)==1) {/*Stage 2*/
+				else if(Preferences.GetInt(PrefName.MeaningfulUseTwo)==1) {/*Stage 2*/
 					gridMu.Title="Stage 2 Meaningful Use for this patient";
 					listMu=EhrMeasures.GetMu2(PatCur);
 				}
@@ -318,7 +318,7 @@ namespace OpenDental {
 						FillGridMu();
 						break;
 					case EhrMeasureType.SecureMessaging:
-						if(PrefC.GetInt(PrefName.MeaningfulUseTwo)==2) {/*Modified Stage 2*/
+						if(Preferences.GetInt(PrefName.MeaningfulUseTwo)==2) {/*Modified Stage 2*/
 							FormWebMailMessageEdit FormWMME=new FormWebMailMessageEdit(PatCur.PatNum);
 							FormWMME.ShowDialog();
 							FillGridMu();

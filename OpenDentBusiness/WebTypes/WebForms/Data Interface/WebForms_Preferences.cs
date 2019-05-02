@@ -13,7 +13,7 @@ namespace OpenDentBusiness.WebTypes.WebForms {
 		public static bool SetPreferences(WebForms_Preference pref,string regKey=null,string urlOverride=null) {
 			bool retVal=false;
 			if(string.IsNullOrEmpty(regKey)) {
-				regKey=PrefC.GetString(PrefName.RegistrationKey);
+				regKey=Preferences.GetString(PrefName.RegistrationKey);
 			}
 			try {
 				List<PayloadItem> listPayloadItems=new List<PayloadItem> {
@@ -36,7 +36,7 @@ namespace OpenDentBusiness.WebTypes.WebForms {
 		public static bool TryGetPreference(out WebForms_Preference pref,string regKey=null) {
 			pref=new WebForms_Preference();
 			if(string.IsNullOrEmpty(regKey)) {
-				regKey=PrefC.GetString(PrefName.RegistrationKey);
+				regKey=Preferences.GetString(PrefName.RegistrationKey);
 			}
 			try {
 				string payload=PayloadHelper.CreatePayloadWebHostSynch(regKey,new PayloadItem(regKey,"RegKey"));

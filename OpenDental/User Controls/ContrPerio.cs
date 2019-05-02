@@ -667,22 +667,22 @@ namespace OpenDental
 				//test for red
 				switch(RowTypes[GetSection(row)][GetSectionRow(row)]){
 					case PerioSequenceType.Probing:
-						redThresh=PrefC.GetInt(PrefName.PerioRedProb);
+						redThresh=Preferences.GetInt(PrefName.PerioRedProb);
 						break;
 					case PerioSequenceType.MGJ:
-						redThresh=PrefC.GetInt(PrefName.PerioRedMGJ);
+						redThresh=Preferences.GetInt(PrefName.PerioRedMGJ);
 						break;
 					case PerioSequenceType.GingMargin:
-						redThresh=PrefC.GetInt(PrefName.PerioRedGing);
+						redThresh=Preferences.GetInt(PrefName.PerioRedGing);
 						break;
 					case PerioSequenceType.CAL:
-						redThresh=PrefC.GetInt(PrefName.PerioRedCAL);
+						redThresh=Preferences.GetInt(PrefName.PerioRedCAL);
 						break;
 					case PerioSequenceType.Furcation:
-						redThresh=PrefC.GetInt(PrefName.PerioRedFurc);
+						redThresh=Preferences.GetInt(PrefName.PerioRedFurc);
 						break;
 					case PerioSequenceType.Mobility:
-						redThresh=PrefC.GetInt(PrefName.PerioRedMob);
+						redThresh=Preferences.GetInt(PrefName.PerioRedMob);
 						break;
 				}
 				if((RowTypes[GetSection(row)][GetSectionRow(row)]
@@ -953,7 +953,7 @@ namespace OpenDental
 			if(doSelectCell) {
 				CurCell=new Point(1,GetTableRow(selectedExam,0,PerioSequenceType.Probing));
 				OnDirectionChangedLeft();//Always start looping to the left.
-				if(!PrefC.GetBool(PrefName.PerioTreatImplantsAsNotMissing) && skippedTeeth.Count==32) {
+				if(!Preferences.GetBool(PrefName.PerioTreatImplantsAsNotMissing) && skippedTeeth.Count==32) {
 					return;
 				}
 				int curTooth = GetToothNumCur(GetSection(CurCell.Y));
@@ -2077,22 +2077,22 @@ namespace OpenDental
 			int prefVal=0;
 			switch(seqType){
 				case PerioSequenceType.Probing:
-					prefVal=PrefC.GetInt(PrefName.PerioRedProb);
+					prefVal=Preferences.GetInt(PrefName.PerioRedProb);
 					break;
 				case PerioSequenceType.MGJ:
-					prefVal=PrefC.GetInt(PrefName.PerioRedMGJ);
+					prefVal=Preferences.GetInt(PrefName.PerioRedMGJ);
 					break;
 				case PerioSequenceType.GingMargin:
-					prefVal=PrefC.GetInt(PrefName.PerioRedGing);
+					prefVal=Preferences.GetInt(PrefName.PerioRedGing);
 					break;
 				case PerioSequenceType.CAL:
-					prefVal=PrefC.GetInt(PrefName.PerioRedCAL);
+					prefVal=Preferences.GetInt(PrefName.PerioRedCAL);
 					break;
 				case PerioSequenceType.Furcation:
-					prefVal=PrefC.GetInt(PrefName.PerioRedFurc);
+					prefVal=Preferences.GetInt(PrefName.PerioRedFurc);
 					break;
 				case PerioSequenceType.Mobility:
-					prefVal=PrefC.GetInt(PrefName.PerioRedMob);
+					prefVal=Preferences.GetInt(PrefName.PerioRedMob);
 					break;
 			}
 			ArrayList retList=new ArrayList();

@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one AutoNoteControl into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(AutoNoteControl autoNoteControl,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				autoNoteControl.AutoNoteControlNum=ReplicationServers.GetKey("autonotecontrol","AutoNoteControlNum");
 			}
 			string command="INSERT INTO autonotecontrol (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="AutoNoteControlNum,";
 			}
 			command+="Descript,ControlType,ControlLabel,ControlOptions) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(autoNoteControl.AutoNoteControlNum)+",";
 			}
 			command+=
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 				autoNoteControl.ControlOptions="";
 			}
 			OdSqlParameter paramControlOptions=new OdSqlParameter("paramControlOptions",OdDbType.Text,POut.StringParam(autoNoteControl.ControlOptions));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramControlOptions);
 			}
 			else {

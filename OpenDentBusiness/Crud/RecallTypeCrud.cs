@@ -85,15 +85,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one RecallType into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(RecallType recallType,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				recallType.RecallTypeNum=ReplicationServers.GetKey("recalltype","RecallTypeNum");
 			}
 			string command="INSERT INTO recalltype (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="RecallTypeNum,";
 			}
 			command+="Description,DefaultInterval,TimePattern,Procedures,AppendToSpecial) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(recallType.RecallTypeNum)+",";
 			}
 			command+=
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(recallType.TimePattern)+"',"
 				+"'"+POut.String(recallType.Procedures)+"',"
 				+    POut.Bool  (recallType.AppendToSpecial)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

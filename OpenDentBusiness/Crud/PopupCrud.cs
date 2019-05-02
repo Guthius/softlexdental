@@ -94,15 +94,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Popup into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Popup popup,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				popup.PopupNum=ReplicationServers.GetKey("popup","PopupNum");
 			}
 			string command="INSERT INTO popup (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PopupNum,";
 			}
 			command+="PatNum,Description,IsDisabled,PopupLevel,UserNum,DateTimeEntry,IsArchived,PopupNumArchive) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(popup.PopupNum)+",";
 			}
 			command+=
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 				popup.Description="";
 			}
 			OdSqlParameter paramDescription=new OdSqlParameter("paramDescription",OdDbType.Text,POut.StringParam(popup.Description));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramDescription);
 			}
 			else {

@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Sop into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Sop sop,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				sop.SopNum=ReplicationServers.GetKey("sop","SopNum");
 			}
 			string command="INSERT INTO sop (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="SopNum,";
 			}
 			command+="SopCode,Description) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(sop.SopNum)+",";
 			}
 			command+=
 				 "'"+POut.String(sop.SopCode)+"',"
 				+"'"+POut.String(sop.Description)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

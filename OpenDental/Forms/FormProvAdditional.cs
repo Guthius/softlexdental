@@ -66,7 +66,7 @@ namespace OpenDental {
 			row.Cells.Add(provClinicDefault.StateWhereLicensed);
 			row.Tag=provClinicDefault;
 			gridProvProperties.Rows.Add(row);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				foreach(Clinic clinicCur in Clinics.GetForUserod(Security.CurUser)) {
 					row=new ODGridRow();
 					ProviderClinic provClinic=_listProvClinic.Find(x => x.ClinicNum == clinicCur.ClinicNum);

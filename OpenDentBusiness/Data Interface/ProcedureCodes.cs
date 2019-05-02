@@ -504,7 +504,7 @@ namespace OpenDentBusiness{
 		
 		///<summary>Gets the proc codes as a comma separated list from the preference and finds the corresponding code nums.</summary>
 		public static List<long> GetCodeNumsForPref(PrefName pref) {
-			List<string> listCodes=PrefC.GetString(pref).Split(',').Select(x => x.Trim()).ToList();
+			List<string> listCodes=Preferences.GetString(pref).Split(',').Select(x => x.Trim()).ToList();
 			return GetWhereFromList(x => x.ProcCode.In(listCodes)).Select(x => x.CodeNum).ToList();
 		}
 
@@ -934,7 +934,7 @@ namespace OpenDentBusiness{
 		///Otherwise gets all procedure codes that start with D8</summary>
 		public static List<long> GetOrthoBandingCodeNums() {
 			//No need to check RemotingRole; no call to db.
-			string strListOrthoNums = PrefC.GetString(PrefName.OrthoPlacementProcsList);
+			string strListOrthoNums = Preferences.GetString(PrefName.OrthoPlacementProcsList);
 			List<long> listCodeNums = new List<long>();
 			if(strListOrthoNums!="") {
 				return strListOrthoNums.Split(new char[] { ',' }).ToList().Select(x => PIn.Long(x)).ToList();

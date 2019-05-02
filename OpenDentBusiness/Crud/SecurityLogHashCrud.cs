@@ -77,21 +77,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SecurityLogHash into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(SecurityLogHash securityLogHash,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				securityLogHash.SecurityLogHashNum=ReplicationServers.GetKey("securityloghash","SecurityLogHashNum");
 			}
 			string command="INSERT INTO securityloghash (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="SecurityLogHashNum,";
 			}
 			command+="SecurityLogNum,LogHash) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(securityLogHash.SecurityLogHashNum)+",";
 			}
 			command+=
 				     POut.Long  (securityLogHash.SecurityLogNum)+","
 				+"'"+POut.String(securityLogHash.LogHash)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many SecurityLogHashs into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<SecurityLogHash> listSecurityLogHashs,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(SecurityLogHash securityLogHash in listSecurityLogHashs) {
 					Insert(securityLogHash);
 				}

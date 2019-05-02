@@ -103,15 +103,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Benefit into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Benefit benefit,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				benefit.BenefitNum=ReplicationServers.GetKey("benefit","BenefitNum");
 			}
 			string command="INSERT INTO benefit (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="BenefitNum,";
 			}
 			command+="PlanNum,PatPlanNum,CovCatNum,BenefitType,Percent,MonetaryAmt,TimePeriod,QuantityQualifier,Quantity,CodeNum,CoverageLevel) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(benefit.BenefitNum)+",";
 			}
 			command+=
@@ -126,7 +126,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Byte  (benefit.Quantity)+","
 				+    POut.Long  (benefit.CodeNum)+","
 				+    POut.Int   ((int)benefit.CoverageLevel)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

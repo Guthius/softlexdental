@@ -24,7 +24,7 @@ namespace OpenDental {
 			_listUsers=Userods.GetDeepCopy(true);
 			listUser.Items.AddRange(_listUsers.Select(x => x.UserName).ToArray());
 			checkAllUsers.Checked=true;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(!Security.CurUser.ClinicIsRestricted) {
 					listClin.Items.Add(Lan.g(this,"Unassigned"));
 				}
@@ -47,7 +47,7 @@ namespace OpenDental {
 			ReportComplex report=new ReportComplex(true,false);
 			report.AddTitle("Title",Lan.g(this,"Presented Treatment Production"));
 			report.AddSubTitle("SubTitle","Totals Report");
-			report.AddSubTitle("PracTitle",PrefC.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("PracTitle",Preferences.GetString(PrefName.PracticeTitle));
 			report.AddSubTitle("Date",date1.SelectionStart.ToShortDateString()+" - "+date2.SelectionStart.ToShortDateString());
 			if(checkAllUsers.Checked) {
 				report.AddSubTitle("Users",Lan.g(this,"All Users"));
@@ -64,7 +64,7 @@ namespace OpenDental {
 				}
 				report.AddSubTitle("Users",strUsers);
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(checkAllClinics.Checked) {
 					report.AddSubTitle("Clinics",Lan.g(this,"All Clinics"));
 				}
@@ -90,7 +90,7 @@ namespace OpenDental {
 				}
 			}
 			DataTable table=RpPresentedTreatmentProduction.GetPresentedTreatmentProductionTable(date1.SelectionStart,date2.SelectionStart,listClinicsNums,checkAllClinics.Checked
-				,PrefC.HasClinicsEnabled,radioPresenter.Checked,radioFirstPresented.Checked,listUserNums,false);
+				,Preferences.HasClinicsEnabled,radioPresenter.Checked,radioFirstPresented.Checked,listUserNums,false);
 			QueryObject query=report.AddQuery(table,"","",SplitByKind.None,1,true);
 			query.AddColumn(Lan.g(this,"Presenter"),100,FieldValueType.String);
 			query.AddColumn(Lan.g(this,"# of Procs"),70,FieldValueType.Integer);
@@ -111,7 +111,7 @@ namespace OpenDental {
 			ReportComplex report=new ReportComplex(true,false);
 			report.AddTitle("Title",Lan.g(this,"Presented Treatment Production"));
 			report.AddSubTitle("SubTitle", "Detailed Report");
-			report.AddSubTitle("PracTitle",PrefC.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("PracTitle",Preferences.GetString(PrefName.PracticeTitle));
 			report.AddSubTitle("Date",date1.SelectionStart.ToShortDateString()+" - "+date2.SelectionStart.ToShortDateString());
 			if(checkAllUsers.Checked) {
 				report.AddSubTitle("Users",Lan.g(this,"All Users"));
@@ -128,7 +128,7 @@ namespace OpenDental {
 				}
 				report.AddSubTitle("Users",strUsers);
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(checkAllClinics.Checked) {
 					report.AddSubTitle("Clinics",Lan.g(this,"All Clinics"));
 				}
@@ -154,7 +154,7 @@ namespace OpenDental {
 				}
 			}
 			DataTable tableReport=RpPresentedTreatmentProduction.GetPresentedTreatmentProductionTable(date1.SelectionStart,date2.SelectionStart,listClinicsNums,checkAllClinics.Checked
-				,PrefC.HasClinicsEnabled,radioPresenter.Checked,radioFirstPresented.Checked,listUserNums,true);
+				,Preferences.HasClinicsEnabled,radioPresenter.Checked,radioFirstPresented.Checked,listUserNums,true);
 			QueryObject query=report.AddQuery(tableReport,"","",SplitByKind.None,1,true);
 			query.AddColumn("\r\n"+Lan.g(this,"Presenter"),90,FieldValueType.String);
 			query.AddColumn(Lan.g(this,"Date")+"\r\n"+Lan.g(this,"Presented"),75,FieldValueType.Date);
@@ -206,7 +206,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select at least one user.");
 				return;
 			}
-			if(PrefC.HasClinicsEnabled && !checkAllClinics.Checked && listClin.SelectedIndices.Count==0) {
+			if(Preferences.HasClinicsEnabled && !checkAllClinics.Checked && listClin.SelectedIndices.Count==0) {
 				MsgBox.Show(this,"Please select at least one clinic.");
 				return;
 			}
@@ -218,7 +218,7 @@ namespace OpenDental {
 			else {
 				listUserNums=listUser.SelectedIndices.OfType<int>().ToList().Select(x => _listUsers[x].UserNum).ToList();
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(checkAllClinics.Checked) {
 					listClinicNums=_listClinics.Select(x => x.ClinicNum).ToList();
 				}

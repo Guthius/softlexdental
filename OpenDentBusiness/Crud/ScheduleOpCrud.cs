@@ -77,21 +77,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ScheduleOp into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ScheduleOp scheduleOp,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				scheduleOp.ScheduleOpNum=ReplicationServers.GetKey("scheduleop","ScheduleOpNum");
 			}
 			string command="INSERT INTO scheduleop (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ScheduleOpNum,";
 			}
 			command+="ScheduleNum,OperatoryNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(scheduleOp.ScheduleOpNum)+",";
 			}
 			command+=
 				     POut.Long  (scheduleOp.ScheduleNum)+","
 				+    POut.Long  (scheduleOp.OperatoryNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many ScheduleOps into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<ScheduleOp> listScheduleOps,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(ScheduleOp scheduleOp in listScheduleOps) {
 					Insert(scheduleOp);
 				}

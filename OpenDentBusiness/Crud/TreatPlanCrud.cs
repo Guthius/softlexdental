@@ -127,15 +127,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one TreatPlan into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(TreatPlan treatPlan,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				treatPlan.TreatPlanNum=ReplicationServers.GetKey("treatplan","TreatPlanNum");
 			}
 			string command="INSERT INTO treatplan (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="TreatPlanNum,";
 			}
 			command+="PatNum,DateTP,Heading,Note,Signature,SigIsTopaz,ResponsParty,DocNum,TPStatus,SecUserNumEntry,SecDateEntry,UserNumPresenter,TPType,SignaturePractice,DateTSigned,DateTPracticeSigned,SignatureText,SignaturePracticeText) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(treatPlan.TreatPlanNum)+",";
 			}
 			command+=
@@ -170,7 +170,7 @@ namespace OpenDentBusiness.Crud{
 				treatPlan.SignaturePractice="";
 			}
 			OdSqlParameter paramSignaturePractice=new OdSqlParameter("paramSignaturePractice",OdDbType.Text,POut.StringParam(treatPlan.SignaturePractice));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNote,paramSignature,paramSignaturePractice);
 			}
 			else {

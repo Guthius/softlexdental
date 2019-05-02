@@ -20,7 +20,7 @@ namespace OpenDental {
 		private void FormReplicationEdit_Load(object sender,EventArgs e) {
 			textDescript.Text=RepServ.Descript;
 			textServerId.Text=RepServ.ServerId.ToString();
-			if(PrefC.GetBool(PrefName.RandomPrimaryKeys)) {
+			if(Preferences.GetBool(PrefName.RandomPrimaryKeys)) {
 				if(RepServ.RangeStart!=0) {
 					textRangeStart.Text=RepServ.RangeStart.ToString();
 				}
@@ -38,7 +38,7 @@ namespace OpenDental {
 			textAtoZpath.Text=RepServ.AtoZpath;
 			checkUpdateBlocked.Checked=RepServ.UpdateBlocked;
 			textSlaveMonitor.Text=RepServ.SlaveMonitor;
-			if(RepServ.ReplicationServerNum==PrefC.GetLong(PrefName.ReplicationUserQueryServer)) {
+			if(RepServ.ReplicationServerNum==Preferences.GetLong(PrefName.ReplicationUserQueryServer)) {
 				checkReportServer.Checked=true;
 			}
 		}
@@ -59,7 +59,7 @@ namespace OpenDental {
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete?")) {
 				return;
 			}
-			if(RepServ.ReplicationServerNum==PrefC.GetLong(PrefName.ReplicationUserQueryServer)) {//Current report server.
+			if(RepServ.ReplicationServerNum==Preferences.GetLong(PrefName.ReplicationUserQueryServer)) {//Current report server.
 				if(Prefs.UpdateLong(PrefName.ReplicationUserQueryServer,0)) {
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
@@ -134,7 +134,7 @@ namespace OpenDental {
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 			}
-			else if(RepServ.ReplicationServerNum==PrefC.GetLong(PrefName.ReplicationUserQueryServer)) {//If this replication server was the original report server, set the current server to 0.
+			else if(RepServ.ReplicationServerNum==Preferences.GetLong(PrefName.ReplicationUserQueryServer)) {//If this replication server was the original report server, set the current server to 0.
 				if(Prefs.UpdateLong(PrefName.ReplicationUserQueryServer,0)) {
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}

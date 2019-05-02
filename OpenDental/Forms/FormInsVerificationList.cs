@@ -34,7 +34,7 @@ namespace OpenDental {
 		///<summary>Indicates whether the "All" option is enabled for the listbox for clinics.</summary>
 		private bool _isAllClinicsEnabled {
 			get{
-				return PrefC.HasClinicsEnabled && !Security.CurUser.ClinicIsRestricted && !PrefC.GetBool(PrefName.EnterpriseApptList);
+				return Preferences.HasClinicsEnabled && !Security.CurUser.ClinicIsRestricted && !Preferences.GetBool(PrefName.EnterpriseApptList);
 			}
 		}
 
@@ -57,10 +57,10 @@ namespace OpenDental {
 		private void FormInsVerificationList_Load(object sender,EventArgs e) {
 			SetFilterControlsAndAction(() => FillGrids(),
 				textPatientEnrollmentDays,textInsBenefitEligibilityDays,textAppointmentScheduledDays,textVerifyCarrier);
-			if(PrefC.GetBool(PrefName.InsVerifyDefaultToCurrentUser)) {
+			if(Preferences.GetBool(PrefName.InsVerifyDefaultToCurrentUser)) {
 				_verifyUserNum=Security.CurUser.UserNum;
 			}
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				labelClinic.Visible=false;
 				listBoxVerifyClinics.Visible=false;
 				labelRegion.Visible=false;
@@ -72,9 +72,9 @@ namespace OpenDental {
 					_dictStatusDefs.Add(defCur.DefNum,defCur);
 				}
 			}
-			textAppointmentScheduledDays.Text=POut.Int(PrefC.GetInt(PrefName.InsVerifyAppointmentScheduledDays));
-			textInsBenefitEligibilityDays.Text=POut.Int(PrefC.GetInt(PrefName.InsVerifyBenefitEligibilityDays));
-			textPatientEnrollmentDays.Text=POut.Int(PrefC.GetInt(PrefName.InsVerifyPatientEnrollmentDays));
+			textAppointmentScheduledDays.Text=POut.Int(Preferences.GetInt(PrefName.InsVerifyAppointmentScheduledDays));
+			textInsBenefitEligibilityDays.Text=POut.Int(Preferences.GetInt(PrefName.InsVerifyBenefitEligibilityDays));
+			textPatientEnrollmentDays.Text=POut.Int(Preferences.GetInt(PrefName.InsVerifyPatientEnrollmentDays));
 			InsVerifies.CleanupInsVerifyRows(DateTime.Today,DateTime.Today.AddDays(PIn.Int(textAppointmentScheduledDays.Text)));
 			FillGrids();
 		}
@@ -174,7 +174,7 @@ namespace OpenDental {
 				comboSetVerifyStatus.SelectedIndex=0;
 			}
 			listBoxVerifyRegions.Items.Clear();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				_listRegionDefs=Defs.GetDefsForCategory(DefCat.Regions,true);
 				List<Clinic> listClinicsForUser=Clinics.GetForUserod(Security.CurUser);
 				if(_listRegionDefs.Count!=0) {
@@ -304,12 +304,12 @@ namespace OpenDental {
 			{
 				return listGridRows;
 			}
-			bool excludePatVerifyWhenNoIns=PrefC.GetBool(PrefName.InsVerifyExcludePatVerify);
-			bool excludePatClones=(PrefC.GetBool(PrefName.ShowFeaturePatientClone)==true) && PrefC.GetBool(PrefName.InsVerifyExcludePatientClones);
+			bool excludePatVerifyWhenNoIns=Preferences.GetBool(PrefName.InsVerifyExcludePatVerify);
+			bool excludePatClones=(Preferences.GetBool(PrefName.ShowFeaturePatientClone)==true) && Preferences.GetBool(PrefName.InsVerifyExcludePatientClones);
 			DateTime dateTimeStart=DateTime.Today;
 			DateTime dateTimeEnd=DateTime.Today.AddDays(PIn.Int(textAppointmentScheduledDays.Text));//Don't need to add 1 because we will be getting only the date portion of this datetime.
 			if(!isAssignGrid && tabControlVerificationList.SelectedTab==tabPastDue) {
-				dateTimeStart=DateTime.Today.AddDays(-PrefC.GetInt(PrefName.InsVerifyDaysFromPastDueAppt));
+				dateTimeStart=DateTime.Today.AddDays(-Preferences.GetInt(PrefName.InsVerifyDaysFromPastDueAppt));
 				dateTimeEnd=DateTime.Today.AddDays(-1);
 			}
 			DateTime dateTimeLastPatEligibility=DateTime.Today.AddDays(-PIn.Int(textPatientEnrollmentDays.Text));
@@ -337,7 +337,7 @@ namespace OpenDental {
 		private ODGridRow VerifyRowToODGridRow(InsVerifyGridRow vrow,bool isAssignGrid) {
 			ODGridRow row=new ODGridRow();
 			row.Cells.Add(vrow.Type);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				row.Cells.Add(vrow.Clinic);
 			}
 			row.Cells.Add(vrow.PatientName);
@@ -374,7 +374,7 @@ namespace OpenDental {
 					ODGridColumn col;
 					col=new ODGridColumn(Lans.g(this,"Type"),45);
 					grid.Columns.Add(col);
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						col=new ODGridColumn(Lans.g(this,"Clinic"),90);
 						grid.Columns.Add(col);
 					}
@@ -629,7 +629,7 @@ namespace OpenDental {
 					ODGridColumn col;
 					col=new ODGridColumn(Lans.g(this,"Type"),45);
 					gridAssign.Columns.Add(col);
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						col=new ODGridColumn(Lans.g(this,"Clinic"),90);
 						gridAssign.Columns.Add(col);
 					}

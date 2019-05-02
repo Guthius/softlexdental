@@ -112,15 +112,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Adjustment into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Adjustment adjustment,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				adjustment.AdjNum=ReplicationServers.GetKey("adjustment","AdjNum");
 			}
 			string command="INSERT INTO adjustment (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="AdjNum,";
 			}
 			command+="AdjDate,AdjAmt,PatNum,AdjType,ProvNum,AdjNote,ProcDate,ProcNum,DateEntry,ClinicNum,StatementNum,SecUserNumEntry,TaxTransID) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(adjustment.AdjNum)+",";
 			}
 			command+=
@@ -142,7 +142,7 @@ namespace OpenDentBusiness.Crud{
 				adjustment.AdjNote="";
 			}
 			OdSqlParameter paramAdjNote=new OdSqlParameter("paramAdjNote",OdDbType.Text,POut.StringNote(adjustment.AdjNote));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramAdjNote);
 			}
 			else {

@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one LetterMergeField into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(LetterMergeField letterMergeField,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				letterMergeField.FieldNum=ReplicationServers.GetKey("lettermergefield","FieldNum");
 			}
 			string command="INSERT INTO lettermergefield (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="FieldNum,";
 			}
 			command+="LetterMergeNum,FieldName) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(letterMergeField.FieldNum)+",";
 			}
 			command+=
 				     POut.Long  (letterMergeField.LetterMergeNum)+","
 				+"'"+POut.String(letterMergeField.FieldName)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

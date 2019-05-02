@@ -94,15 +94,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Mount into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Mount mount,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				mount.MountNum=ReplicationServers.GetKey("mount","MountNum");
 			}
 			string command="INSERT INTO mount (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="MountNum,";
 			}
 			command+="PatNum,DocCategory,DateCreated,Description,Note,ImgType,Width,Height) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(mount.MountNum)+",";
 			}
 			command+=
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 				mount.Note="";
 			}
 			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,POut.StringParam(mount.Note));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNote);
 			}
 			else {

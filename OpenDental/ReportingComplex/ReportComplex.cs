@@ -129,7 +129,7 @@ namespace OpenDental.ReportingComplex {
 				_actionCloseReportProgress=ODProgress.Show(ODEventType.ReportComplex
 					,typeof(ReportComplexEvent)
 					,startingMessage: Lan.g("ReportComplex","Running Report Query...")
-					,hasHistory:PrefC.GetBool(PrefName.ReportsShowHistory));
+					,hasHistory:Preferences.GetBool(PrefName.ReportsShowHistory));
 			}
 			_grfx=Graphics.FromImage(new Bitmap(1,1));
 			_isLandscape=isLandscape;
@@ -424,7 +424,7 @@ namespace OpenDental.ReportingComplex {
 		///<summary>Submits the queries to the database and makes query objects for each query with the results.  Returns false if one of the queries failed.</summary>
 		public bool SubmitQueries(bool isShowMessage=false){
 			bool hasRows=false;
-			bool hasReportServer=!string.IsNullOrEmpty(PrefC.ReportingServer.DisplayStr);
+			bool hasReportServer=!string.IsNullOrEmpty(Preferences.ReportingServer.DisplayStr);
 			Graphics grfx=Graphics.FromImage(new Bitmap(1,1));
 			string displayText;
 			ReportObjectCollection newReportObjects=new ReportObjectCollection();

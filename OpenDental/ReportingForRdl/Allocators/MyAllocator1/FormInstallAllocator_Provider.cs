@@ -24,8 +24,8 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1 {
 		}
 		private void RefreshForm() {
 			Cache.Refresh(InvalidType.Prefs);
-			bool toolRan = PrefC.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun);
-			bool isUsing = PrefC.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use);
+			bool toolRan = Preferences.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun);
+			bool isUsing = Preferences.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use);
 			this.lblAllocatorStatus.Text = "Current Tool Status: "
 				+ (toolRan ? "Tool has been run and " + (isUsing ? "\nsettings indicate that allocation is occuring." : "\nsettings indicate that allocation is not occuring.")
 						: "Tool has not been run yet.");
@@ -70,11 +70,11 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1 {
 					SecurityLogs.MakeLogEntry(OpenDentBusiness.Permissions.Setup,0,"Finished Batch Allocation For Provider Allocation Tool");
 
 					List<string> commands = new List<string>();
-					if(!PrefC.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun)) {
+					if(!Preferences.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun)) {
 						commands.Add("INSERT INTO preference VALUES ('"
 							+ MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun + "','0')");
 					}
-					if(!PrefC.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use)) {
+					if(!Preferences.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use)) {
 						commands.Add("INSERT INTO preference VALUES ('"
 							+ MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use + "','0')");
 					}

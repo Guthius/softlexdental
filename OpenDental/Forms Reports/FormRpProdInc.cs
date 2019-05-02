@@ -529,7 +529,7 @@ namespace OpenDental {
 					listProv.SetSelected(i,true);
 				}
 			}
-			if(!PrefC.HasClinicsEnabled){
+			if(!Preferences.HasClinicsEnabled){
 				listClin.Visible=false;
 				labelClin.Visible=false;
 				checkAllClin.Visible=false;
@@ -537,8 +537,8 @@ namespace OpenDental {
 				checkClinicBreakdown.Visible=false;
 			}
 			else {
-				checkClinicInfo.Checked=PrefC.GetBool(PrefName.ReportPandIhasClinicInfo);
-				checkClinicBreakdown.Checked=PrefC.GetBool(PrefName.ReportPandIhasClinicBreakdown);
+				checkClinicInfo.Checked=Preferences.GetBool(PrefName.ReportPandIhasClinicInfo);
+				checkClinicBreakdown.Checked=Preferences.GetBool(PrefName.ReportPandIhasClinicBreakdown);
 				_listClinics=Clinics.GetForUserod(Security.CurUser);
 				if(!Security.CurUser.ClinicIsRestricted) {
 					listClin.Items.Add(Lan.g(this,"Unassigned"));
@@ -568,7 +568,7 @@ namespace OpenDental {
 					break;
 			}
 			SetDates();
-			switch(PrefC.GetInt(PrefName.ReportsPPOwriteoffDefaultToProcDate)) {
+			switch(Preferences.GetInt(PrefName.ReportsPPOwriteoffDefaultToProcDate)) {
 				case 0: radioWriteoffPay.Checked=true; break;
 				case 1: radioWriteoffProc.Checked=true; break;
 				case 2: radioWriteoffBoth.Checked=true; break;
@@ -590,7 +590,7 @@ namespace OpenDental {
 				}
 				Close();
 			}
-			Text+=PrefC.ReportingServer.DisplayStr=="" ? "" : " - "+Lan.g(this,"Reporting Server:") +" "+ PrefC.ReportingServer.DisplayStr;
+			Text+=Preferences.ReportingServer.DisplayStr=="" ? "" : " - "+Lan.g(this,"Reporting Server:") +" "+ Preferences.ReportingServer.DisplayStr;
             Plugin.Trigger(this, "FormProduction_Loaded");
 		}
 
@@ -645,7 +645,7 @@ namespace OpenDental {
 
 		private void SetDates(){
 			if(radioDaily.Checked) {
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					checkClinicInfo.Visible=true;
 					if(checkClinicInfo.Checked) {
 						checkClinicBreakdown.Visible=true;
@@ -661,7 +661,7 @@ namespace OpenDental {
 				butThis.Text=Lan.g(this,"Today");
 			}
 			else if(radioProvider.Checked) {
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					checkClinicInfo.Visible=false;
 					checkClinicBreakdown.Visible=true;
 				}
@@ -670,7 +670,7 @@ namespace OpenDental {
 				butThis.Text=Lan.g(this,"Today");
 			}
 			else if(radioMonthly.Checked) {
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					checkClinicInfo.Visible=false;
 					checkClinicBreakdown.Visible=true;
 				}
@@ -680,7 +680,7 @@ namespace OpenDental {
 				butThis.Text=Lan.g(this,"This Month");
 			}
 			else{//annual
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					checkClinicInfo.Visible=false;
 					checkClinicBreakdown.Visible=true;
 				}
@@ -761,7 +761,7 @@ namespace OpenDental {
 		}
     
 		private void checkClinicInfo_CheckedChanged(object sender,EventArgs e) {
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(checkClinicInfo.Checked) {
 					checkClinicBreakdown.Visible=true;
 				}
@@ -777,7 +777,7 @@ namespace OpenDental {
 
 			//The old daily prod and inc report (prior to report complex) had portait mode for non-clinic users and landscape for clinic users.
 			bool isLandscape=false;
-			if((PrefC.HasClinicsEnabled && checkClinicInfo.Checked) || radioWriteoffBoth.Checked) {
+			if((Preferences.HasClinicsEnabled && checkClinicInfo.Checked) || radioWriteoffBoth.Checked) {
 				isLandscape=true;
 			}
 			ReportComplex report=new ReportComplex(true,isLandscape);
@@ -803,7 +803,7 @@ namespace OpenDental {
 				}
 			}
 			List<Clinic> listClinics=new List<Clinic>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
 					if(Security.CurUser.ClinicIsRestricted) {
 						listClinics.Add(_listClinics[listClin.SelectedIndices[i]]);//we know that the list is a 1:1 to _listClinics
@@ -826,7 +826,7 @@ namespace OpenDental {
 				,checkClinicBreakdown.Checked,checkClinicInfo.Checked,checkUnearned.Checked,GetWriteoffType());
 			DataTable tableDailyProd=dataSetDailyProd.Tables["DailyProd"];//Includes multiple clinics that will get separated out later.
 			DataSet dataSetDailyProdSplitByClinic=new DataSet();
-			if(PrefC.HasClinicsEnabled && checkClinicInfo.Checked) {
+			if(Preferences.HasClinicsEnabled && checkClinicInfo.Checked) {
 				//Split up each clinic into its own table and add that to the data set split up by clinics.
 				string lastClinic="";
 				DataTable dtClinic=tableDailyProd.Clone();//Clones the structure, not the data.
@@ -858,7 +858,7 @@ namespace OpenDental {
 			}
 			report.ReportName="DailyP&I";
 			report.AddTitle("Title",Lan.g(this,"Daily Production and Income"));
-			report.AddSubTitle("PracName",PrefC.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("PracName",Preferences.GetString(PrefName.PracticeTitle));
 			string dateRangeStr=dateFrom.ToShortDateString()+" - "+dateTo.ToShortDateString();
 			if(dateFrom.Date==dateTo.Date) {
 				dateRangeStr=dateFrom.ToShortDateString();//Do not show a date range for the same day...
@@ -877,7 +877,7 @@ namespace OpenDental {
 				}
 				report.AddSubTitle("Providers",str);
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(checkAllClin.Checked) {
 					report.AddSubTitle("Clinics",Lan.g(this,"All Clinics"));
 				}
@@ -946,7 +946,7 @@ namespace OpenDental {
 			query.AddColumn("Patient Name",patientNameWidth,FieldValueType.String,font);
 			query.AddColumn("Description",descriptionWidth,FieldValueType.String,font);
 			query.AddColumn("Prov",provWidth,FieldValueType.String,font);
-			if(PrefC.HasClinicsEnabled && checkClinicInfo.Checked) {//Not no clinics
+			if(Preferences.HasClinicsEnabled && checkClinicInfo.Checked) {//Not no clinics
 				query.AddColumn("Clinic",clinicWidth,FieldValueType.String,font);
 			}
 			query.AddColumn("Production",prodWidth,FieldValueType.Number,font);
@@ -962,7 +962,7 @@ namespace OpenDental {
 			query.AddColumn("Ins Income",insIncWidth,FieldValueType.Number,font);
 			//If more than one clinic selected, we want to add a table to the end of the report that totals all the clinics together.
 			//When only one clinic is showing , the "Summary" at the end of every daily report will suffice. (total prod and total income lines).
-			if(PrefC.HasClinicsEnabled && listClinics.Count > 1 && checkClinicInfo.Checked) {
+			if(Preferences.HasClinicsEnabled && listClinics.Count > 1 && checkClinicInfo.Checked) {
 				DataTable tableClinicTotals=GetClinicTotals(dataSetDailyProdSplitByClinic);
 				query=report.AddQuery(tableClinicTotals,"Clinic Totals","",SplitByKind.None,2,true);
 				query.AddColumn("Clinic",410,FieldValueType.String,font);
@@ -1119,7 +1119,7 @@ namespace OpenDental {
 				}
 			}
 			List<Clinic> listClinics=new List<Clinic>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
 					if(Security.CurUser.ClinicIsRestricted) {
 						listClinics.Add(_listClinics[listClin.SelectedIndices[i]]);//we know that the list is a 1:1 to _listClinics
@@ -1142,12 +1142,12 @@ namespace OpenDental {
 				,radioWriteoffBoth.Checked,checkUnearned.Checked);
 			DataTable dt=ds.Tables["Total"];
 			DataTable dtClinic=new DataTable();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				dtClinic=ds.Tables["Clinic"];
 			}
 			report.ReportName="MonthlyP&I";
 			report.AddTitle("Title",Lan.g(this,"Monthly Production and Income"));
-			report.AddSubTitle("PracName",PrefC.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("PracName",Preferences.GetString(PrefName.PracticeTitle));
 			report.AddSubTitle("Date",dateFrom.ToShortDateString()+" - "+dateTo.ToShortDateString());
 			if(checkAllProv.Checked) {
 				report.AddSubTitle("Providers",Lan.g(this,"All Providers"));
@@ -1162,7 +1162,7 @@ namespace OpenDental {
 				}
 				report.AddSubTitle("Providers",str);
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(checkAllClin.Checked) {
 					report.AddSubTitle("Clinics",Lan.g(this,"All Clinics"));
 				}
@@ -1189,7 +1189,7 @@ namespace OpenDental {
 			}
 			//setup query
 			QueryObject query;
-			if(PrefC.HasClinicsEnabled && checkClinicBreakdown.Checked) {
+			if(Preferences.HasClinicsEnabled && checkClinicBreakdown.Checked) {
 				query=report.AddQuery(dtClinic,"","Clinic",SplitByKind.Value,1,true);
 			}
 			else {
@@ -1229,7 +1229,7 @@ namespace OpenDental {
 			}
 			query.AddColumn("Ins Income",insincomewidth,FieldValueType.Number,font);
 			query.AddColumn("Tot Income",totincomewidth,FieldValueType.Number,font);
-			if(PrefC.HasClinicsEnabled && listClin.SelectedIndices.Count>1 && checkClinicBreakdown.Checked) {
+			if(Preferences.HasClinicsEnabled && listClin.SelectedIndices.Count>1 && checkClinicBreakdown.Checked) {
 				//If more than one clinic selected, we want to add a table to the end of the report that totals all the clinics together.
 				query=report.AddQuery(dt,"Totals","",SplitByKind.None,2,true);
 				query.AddColumn("Date",datewidth,FieldValueType.String,font);
@@ -1325,7 +1325,7 @@ namespace OpenDental {
 				}
 			}
 			List<Clinic> listClinics=new List<Clinic>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
 					if(Security.CurUser.ClinicIsRestricted) {
 						listClinics.Add(_listClinics[listClin.SelectedIndices[i]]);//we know that the list is a 1:1 to _listClinics
@@ -1348,12 +1348,12 @@ namespace OpenDental {
 				,radioWriteoffBoth.Checked,checkUnearned.Checked);
 			DataTable dt=ds.Tables["Total"];
 			DataTable dtClinic=new DataTable();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				dtClinic=ds.Tables["Clinic"];
 			}
 			report.ReportName="AnnualP&I";
 			report.AddTitle("Title",Lan.g(this,"Annual Production and Income"));
-			report.AddSubTitle("PracName",PrefC.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("PracName",Preferences.GetString(PrefName.PracticeTitle));
 			report.AddSubTitle("Date",dateFrom.ToShortDateString()+" - "+dateTo.ToShortDateString());
 			if(checkAllProv.Checked) {
 				report.AddSubTitle("Providers",Lan.g(this,"All Providers"));
@@ -1368,7 +1368,7 @@ namespace OpenDental {
 				}
 				report.AddSubTitle("Providers",str);
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(checkAllClin.Checked) {
 					report.AddSubTitle("Clinics",Lan.g(this,"All Clinics"));
 				}
@@ -1395,7 +1395,7 @@ namespace OpenDental {
 			}
 			//setup query
 			QueryObject query;
-			if(PrefC.HasClinicsEnabled && checkClinicBreakdown.Checked) {
+			if(Preferences.HasClinicsEnabled && checkClinicBreakdown.Checked) {
 				query=report.AddQuery(dtClinic,"","Clinic",SplitByKind.Value,1,true);
 			}
 			else {
@@ -1430,7 +1430,7 @@ namespace OpenDental {
 			}
 			query.AddColumn("Ins Income",insincomewidth,FieldValueType.Number);
 			query.AddColumn("Total Income",totincomewidth,FieldValueType.Number);
-			if(PrefC.HasClinicsEnabled && listClin.SelectedIndices.Count>1 && checkClinicBreakdown.Checked) {
+			if(Preferences.HasClinicsEnabled && listClin.SelectedIndices.Count>1 && checkClinicBreakdown.Checked) {
 				//If more than one clinic selected, we want to add a table to the end of the report that totals all the clinics together.
 				query=report.AddQuery(dt,"Totals","",SplitByKind.None,2,true);
 				query.AddColumn("Month",datewidth,FieldValueType.String);
@@ -1517,7 +1517,7 @@ namespace OpenDental {
 				}
 			}
 			List<Clinic> listClinics=new List<Clinic>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
 					if(Security.CurUser.ClinicIsRestricted) {
 						listClinics.Add(_listClinics[listClin.SelectedIndices[i]]);//we know that the list is a 1:1 to _listClinics
@@ -1540,7 +1540,7 @@ namespace OpenDental {
 				,checkUnearned.Checked,GetWriteoffType());
 			report.ReportName="Provider P&I";
 			report.AddTitle("Title",Lan.g(this,"Provider Production and Income"));
-			report.AddSubTitle("PracName",PrefC.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("PracName",Preferences.GetString(PrefName.PracticeTitle));
 			report.AddSubTitle("Date",dateFrom.ToShortDateString()+" - "+dateTo.ToShortDateString());
 			if(checkAllProv.Checked) {
 				report.AddSubTitle("Providers",Lan.g(this,"All Providers"));
@@ -1555,7 +1555,7 @@ namespace OpenDental {
 				}
 				report.AddSubTitle("Providers",str);
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(checkAllClin.Checked) {
 					report.AddSubTitle("Clinics",Lan.g(this,"All Clinics"));
 				}
@@ -1583,11 +1583,11 @@ namespace OpenDental {
 			//setup query
 			QueryObject query;
 			DataTable dtClinic=new DataTable();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				dtClinic=ds.Tables["Clinic"].Copy();
 			}
 			DataTable dt=ds.Tables["Total"].Copy();
-			if(PrefC.HasClinicsEnabled && checkClinicBreakdown.Checked) {
+			if(Preferences.HasClinicsEnabled && checkClinicBreakdown.Checked) {
 				query=report.AddQuery(dtClinic,"","Clinic",SplitByKind.Value,1,true);
 			}
 			else {
@@ -1622,7 +1622,7 @@ namespace OpenDental {
 			}
 			query.AddColumn("Ins Income",insincomewidth,FieldValueType.Number);
 			query.AddColumn("Total Income",totincomewidth,FieldValueType.Number);
-			if(PrefC.HasClinicsEnabled && listClin.SelectedIndices.Count>1 && checkClinicBreakdown.Checked) {
+			if(Preferences.HasClinicsEnabled && listClin.SelectedIndices.Count>1 && checkClinicBreakdown.Checked) {
 				//If more than one clinic selected, we want to add a table to the end of the report that totals all the clinics together.
 				query=report.AddQuery(dt,"Totals","",SplitByKind.None,2,true);
 				query.AddColumn("Provider",provwidth,FieldValueType.String);
@@ -1665,7 +1665,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"At least one provider must be selected.");
 				return;
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(!checkAllClin.Checked && listClin.SelectedIndices.Count==0) {
 					MsgBox.Show(this,"At least one clinic must be selected.");
 					return;

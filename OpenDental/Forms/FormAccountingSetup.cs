@@ -709,7 +709,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormAccountingSetup_Load(object sender,EventArgs e) {
-			AcctSoftware=(AccountingSoftware)PrefC.GetInt(PrefName.AccountingSoftware);
+			AcctSoftware=(AccountingSoftware)Preferences.GetInt(PrefName.AccountingSoftware);
 			if(AcctSoftware==AccountingSoftware.QuickBooks) {
 				PanelLayoutQB();
 			}
@@ -943,7 +943,7 @@ namespace OpenDental{
 			panelOD.Size=new Size(519,222);
 			groupAutomaticPayment.Visible=true;
 			//Update the grids for this layout.
-			string depStr=PrefC.GetString(PrefName.AccountingDepositAccounts);
+			string depStr=Preferences.GetString(PrefName.AccountingDepositAccounts);
 			string[] depStrArray=depStr.Split(new char[] { ',' });
 			depAL=new ArrayList();
 			for(int i=0;i<depStrArray.Length;i++) {
@@ -953,12 +953,12 @@ namespace OpenDental{
 				depAL.Add(PIn.Long(depStrArray[i]));
 			}
 			FillDepList();
-			PickedDepAccountNum=PrefC.GetLong(PrefName.AccountingIncomeAccount);
+			PickedDepAccountNum=Preferences.GetLong(PrefName.AccountingIncomeAccount);
 			textAccountInc.Text=Accounts.GetDescript(PickedDepAccountNum);
 			//pay----------------------------------------------------------
 			payList=AccountingAutoPays.GetDeepCopy();
 			FillPayGrid();
-			PickedPayAccountNum=PrefC.GetLong(PrefName.AccountingCashIncomeAccount);
+			PickedPayAccountNum=Preferences.GetLong(PrefName.AccountingCashIncomeAccount);
 			textAccountCashInc.Text=Accounts.GetDescript(PickedPayAccountNum);
 		}
 
@@ -970,9 +970,9 @@ namespace OpenDental{
 			panelQB.Location=new Point(27,27);
 			panelQB.Size=new Size(519,606);
 			groupAutomaticPayment.Visible=false;
-			textCompanyFileQB.Text=PrefC.GetString(PrefName.QuickBooksCompanyFile);
-			checkQuickBooksClassRefsEnabled.Checked=PrefC.GetBool(PrefName.QuickBooksClassRefsEnabled);
-			string acctStr=PrefC.GetString(PrefName.QuickBooksIncomeAccount);
+			textCompanyFileQB.Text=Preferences.GetString(PrefName.QuickBooksCompanyFile);
+			checkQuickBooksClassRefsEnabled.Checked=Preferences.GetBool(PrefName.QuickBooksClassRefsEnabled);
+			string acctStr=Preferences.GetString(PrefName.QuickBooksIncomeAccount);
 			string[] acctStrArray=acctStr.Split(new char[] { ',' });
 			listIncomeAccountsQB=new List<string>();
 			for(int i=0;i<acctStrArray.Length;i++) {
@@ -981,7 +981,7 @@ namespace OpenDental{
 				}
 				listIncomeAccountsQB.Add(acctStrArray[i]);
 			}
-			string depStr=PrefC.GetString(PrefName.QuickBooksDepositAccounts);
+			string depStr=Preferences.GetString(PrefName.QuickBooksDepositAccounts);
 			string[] depStrArray=depStr.Split(new char[] { ',' });
 			listDepositAccountsQB=new List<string>();
 			for(int i=0;i<depStrArray.Length;i++) {
@@ -990,7 +990,7 @@ namespace OpenDental{
 				}
 				listDepositAccountsQB.Add(depStrArray[i]);
 			}
-			string classStr=PrefC.GetString(PrefName.QuickBooksClassRefs);
+			string classStr=Preferences.GetString(PrefName.QuickBooksClassRefs);
 			string[] classStrArray=classStr.Split(new char[] { ',' });
 			_listClassRefsQB=new List<string>();
 			for(int i = 0;i<classStrArray.Length;i++) {

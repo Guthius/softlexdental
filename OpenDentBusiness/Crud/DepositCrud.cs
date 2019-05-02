@@ -88,15 +88,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Deposit into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Deposit deposit,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				deposit.DepositNum=ReplicationServers.GetKey("deposit","DepositNum");
 			}
 			string command="INSERT INTO deposit (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="DepositNum,";
 			}
 			command+="DateDeposit,BankAccountInfo,Amount,Memo,Batch,DepositAccountNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(deposit.DepositNum)+",";
 			}
 			command+=
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 				deposit.BankAccountInfo="";
 			}
 			OdSqlParameter paramBankAccountInfo=new OdSqlParameter("paramBankAccountInfo",OdDbType.Text,POut.StringParam(deposit.BankAccountInfo));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramBankAccountInfo);
 			}
 			else {

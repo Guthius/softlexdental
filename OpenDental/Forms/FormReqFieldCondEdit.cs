@@ -37,8 +37,8 @@ namespace OpenDental {
 
 		private void FormReqFieldCondEdit_Load(object sender,EventArgs e) {
 			_listLanguages=new List<string>();
-			if(PrefC.GetString(PrefName.LanguagesUsedByPatients)!="") {
-				_listLanguages=PrefC.GetString(PrefName.LanguagesUsedByPatients).Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries).ToList();
+			if(Preferences.GetString(PrefName.LanguagesUsedByPatients)!="") {
+				_listLanguages=Preferences.GetString(PrefName.LanguagesUsedByPatients).Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries).ToList();
 			}
 			_listBillingTypeDefs=Defs.GetDefsForCategory(DefCat.BillingTypes,true);
 			_listClinics=Clinics.GetDeepCopy();
@@ -52,22 +52,22 @@ namespace OpenDental {
 			comboOperator2.Items.Add("\u2265");//Greater than or equal to
 			comboOperator2.Items.Add("\u2264");//Less than or equal to
 			_listIndexFieldNames=new List<RequiredFieldName>();
-			if(!PrefC.GetBool(PrefName.EasyHideHospitals)) {
+			if(!Preferences.GetBool(PrefName.EasyHideHospitals)) {
 				AddListConditionType(RequiredFieldName.AdmitDate);
 			}
 			AddListConditionType(RequiredFieldName.Birthdate);
 			AddListConditionType(RequiredFieldName.BillingType);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				AddListConditionType(RequiredFieldName.Clinic);
 			}
-			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+			if(Preferences.GetBool(PrefName.ShowFeatureEhr)) {
 				AddListConditionType(RequiredFieldName.DateTimeDeceased);
 			}
 			AddListConditionType(RequiredFieldName.Gender);
-			if(PrefC.GetString(PrefName.LanguagesUsedByPatients)!="") {
+			if(Preferences.GetString(PrefName.LanguagesUsedByPatients)!="") {
 				AddListConditionType(RequiredFieldName.Language);
 			}
-			if(!PrefC.GetBool(PrefName.EasyHideMedicaid)) {
+			if(!Preferences.GetBool(PrefName.EasyHideMedicaid)) {
 				AddListConditionType(RequiredFieldName.MedicaidID);
 				AddListConditionType(RequiredFieldName.MedicaidState);
 			}

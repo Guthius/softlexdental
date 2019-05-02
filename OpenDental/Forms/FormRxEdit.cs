@@ -678,7 +678,7 @@ namespace OpenDental{
 				butView.Visible=false;
 				labelView.Visible=false;
 				sheet=null;
-				if(PrefC.GetBool(PrefName.ShowFeatureEhr) && Security.CurUser.ProvNum!=0) {//Is CPOE
+				if(Preferences.GetBool(PrefName.ShowFeatureEhr) && Security.CurUser.ProvNum!=0) {//Is CPOE
 					labelCPOE.Visible=true;
 					comboProvNum.Enabled=false;
 					butPickProv.Enabled=false;
@@ -734,7 +734,7 @@ namespace OpenDental{
 			textDate.Text=RxPatCur.RxDate.ToString("d");
 			checkControlled.Checked=RxPatCur.IsControlled;
 			comboProcCode.Items.Clear();
-			if(PrefC.GetBool(PrefName.RxHasProc)) {
+			if(Preferences.GetBool(PrefName.RxHasProc)) {
 				checkProcRequired.Checked=RxPatCur.IsProcRequired;
 				comboProcCode.Items.Add(Lan.g(this,"none"));
 				comboProcCode.SelectedIndex=0;
@@ -788,7 +788,7 @@ namespace OpenDental{
 			textDisp.Text=RxPatCur.Disp;
 			textRefills.Text=RxPatCur.Refills;
 			textPatInstructions.Text=RxPatCur.PatientInstruction;
-			if(PrefC.GetBool(PrefName.ShowFeatureEhr)){
+			if(Preferences.GetBool(PrefName.ShowFeatureEhr)){
 				textDosageCode.Text=RxPatCur.DosageCode;
 			}
 			else{
@@ -798,7 +798,7 @@ namespace OpenDental{
 			textNotes.Text=RxPatCur.Notes;
 			textPharmInfo.Text=RxPatCur.ErxPharmacyInfo;
 			textPharmacy.Text=Pharmacies.GetDescription(RxPatCur.PharmacyNum);
-			labelClinic.Visible=PrefC.HasClinicsEnabled;
+			labelClinic.Visible=Preferences.HasClinicsEnabled;
 			comboClinic.SelectedClinicNum=RxPatCur.ClinicNum;
 		}
 
@@ -862,7 +862,7 @@ namespace OpenDental{
 			RxPatCur.RxDate=PIn.Date(textDate.Text);
 			RxPatCur.Drug=textDrug.Text;
 			RxPatCur.IsControlled=checkControlled.Checked;
-			if(PrefC.GetBool(PrefName.RxHasProc)) {
+			if(Preferences.GetBool(PrefName.RxHasProc)) {
 				RxPatCur.IsProcRequired=checkProcRequired.Checked;
 				if(comboProcCode.SelectedIndex==0) {//none
 					RxPatCur.ProcNum=0;

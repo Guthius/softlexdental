@@ -113,15 +113,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Recall into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Recall recall,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				recall.RecallNum=ReplicationServers.GetKey("recall","RecallNum");
 			}
 			string command="INSERT INTO recall (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="RecallNum,";
 			}
 			command+="PatNum,DateDueCalc,DateDue,DatePrevious,RecallInterval,RecallStatus,Note,IsDisabled,RecallTypeNum,DisableUntilBalance,DisableUntilDate,DateScheduled,Priority) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(recall.RecallNum)+",";
 			}
 			command+=
@@ -143,7 +143,7 @@ namespace OpenDentBusiness.Crud{
 				recall.Note="";
 			}
 			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,POut.StringParam(recall.Note));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNote);
 			}
 			else {
@@ -159,7 +159,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many Recalls into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<Recall> listRecalls,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(Recall recall in listRecalls) {
 					Insert(recall);
 				}

@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ToolButItem into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ToolButItem toolButItem,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				toolButItem.ToolButItemNum=ReplicationServers.GetKey("toolbutitem","ToolButItemNum");
 			}
 			string command="INSERT INTO toolbutitem (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ToolButItemNum,";
 			}
 			command+="ProgramNum,ToolBar,ButtonText) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(toolButItem.ToolButItemNum)+",";
 			}
 			command+=
 				     POut.Long  (toolButItem.ProgramNum)+","
 				+    POut.Int   ((int)toolButItem.ToolBar)+","
 				+"'"+POut.String(toolButItem.ButtonText)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

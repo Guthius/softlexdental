@@ -103,15 +103,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Pharmacy into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Pharmacy pharmacy,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				pharmacy.PharmacyNum=ReplicationServers.GetKey("pharmacy","PharmacyNum");
 			}
 			string command="INSERT INTO pharmacy (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PharmacyNum,";
 			}
 			command+="PharmID,StoreName,Phone,Fax,Address,Address2,City,State,Zip,Note) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(pharmacy.PharmacyNum)+",";
 			}
 			command+=
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 				pharmacy.Note="";
 			}
 			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,POut.StringParam(pharmacy.Note));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNote);
 			}
 			else {

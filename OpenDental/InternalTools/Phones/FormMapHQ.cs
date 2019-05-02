@@ -144,13 +144,13 @@ namespace OpenDental {
 
 		/// <summary>Gets the preferences from the database that determine when the map alert colors change.</summary>
 		private void FillTriagePreferences() {
-			_triageRedCalls=PrefC.GetInt(PrefName.TriageRedCalls);
-			_triageCalls=PrefC.GetInt(PrefName.TriageCalls);
-			_triageRedTime=PrefC.GetInt(PrefName.TriageRedTime);
-			_triageTime=PrefC.GetInt(PrefName.TriageTime);
-			_triageTimeWarning=PrefC.GetInt(PrefName.TriageTimeWarning);
-			_voicemailCalls=PrefC.GetInt(PrefName.VoicemailCalls);
-			_voicemailTime=PrefC.GetInt(PrefName.VoicemailTime);
+			_triageRedCalls=Preferences.GetInt(PrefName.TriageRedCalls);
+			_triageCalls=Preferences.GetInt(PrefName.TriageCalls);
+			_triageRedTime=Preferences.GetInt(PrefName.TriageRedTime);
+			_triageTime=Preferences.GetInt(PrefName.TriageTime);
+			_triageTimeWarning=Preferences.GetInt(PrefName.TriageTimeWarning);
+			_voicemailCalls=Preferences.GetInt(PrefName.VoicemailCalls);
+			_voicemailTime=Preferences.GetInt(PrefName.VoicemailTime);
 		}
 
 		#endregion

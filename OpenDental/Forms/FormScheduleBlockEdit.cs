@@ -270,7 +270,7 @@ namespace OpenDental{
 			List<Operatory> listOpsShort=Operatories.GetDeepCopy(true);
 			_listOps=new List<Operatory>();
 			for(int i=0;i<listOpsShort.Count;i++) {
-				if(PrefC.HasClinicsEnabled && _clinicNum!=0) {//Using clinics and a clinic filter was passed in.
+				if(Preferences.HasClinicsEnabled && _clinicNum!=0) {//Using clinics and a clinic filter was passed in.
 					if(listOpsShort[i].ClinicNum!=_clinicNum) {
 						continue;
 					}
@@ -328,7 +328,7 @@ namespace OpenDental{
 			}
 			List<Schedule> listOverlapSchedules;
 			if(Schedules.Overlaps(_schedCur,out listOverlapSchedules)) {
-				if(!PrefC.GetBool(PrefName.ReplaceExistingBlockout) || !Schedules.IsAppointmentBlocking(_schedCur.BlockoutType)) {
+				if(!Preferences.GetBool(PrefName.ReplaceExistingBlockout) || !Schedules.IsAppointmentBlocking(_schedCur.BlockoutType)) {
 					MsgBox.Show(this,"Blockouts not allowed to overlap.");
 					return;
 				}

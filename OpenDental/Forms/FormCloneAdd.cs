@@ -52,7 +52,7 @@ namespace OpenDental {
 			textBirthDate.Text=(_patientMaster.Birthdate.Year < 1880) ? "" : _patientMaster.Birthdate.ToShortDateString();
 			textAge.Text=PatientLogic.DateToAgeString(_patientMaster.Birthdate,_patientMaster.DateTimeDeceased);
 			//We intentionally don't synch the patient's provider since the clone feature is so the clone can be assigned to a different provider for tracking production.
-			_provNumSelected=PrefC.GetLong(PrefName.PracticeDefaultProv);
+			_provNumSelected=Preferences.GetLong(PrefName.PracticeDefaultProv);
 			_listProviders=Providers.GetDeepCopy(true);
 			comboPriProv.Items.Clear();
 			for(int i = 0;i<_listProviders.Count;i++) {
@@ -70,7 +70,7 @@ namespace OpenDental {
 			}
 			labelSpecialty.Visible=true;
 			comboSpecialty.Visible=true;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				labelClinic.Visible=true;
 				comboClinic.Visible=true;
 				FillClinicComboBoxes();
@@ -135,7 +135,7 @@ namespace OpenDental {
 		}
 
 		private void FillComboClinic() {
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				return;
 			}
 			comboClinic.Items.Clear();
@@ -202,7 +202,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Invalid Primary Provider selected.");
 				return false;
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				#region Clinic Specific Validation
 				if(comboSpecialty.SelectedItem!=null && comboSpecialty.SelectedItem.GetType()!=typeof(ODBoxItem<Def>)) {
 					MsgBox.Show(this,"Invalid Specialty selected.");
@@ -231,7 +231,7 @@ namespace OpenDental {
 			}
 			long clinicNum=0;
 			long defNum=0;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				clinicNum=((ODBoxItem<Clinic>)comboClinic.SelectedItem).Tag.ClinicNum;
 			}
 			defNum=((ODBoxItem<Def>)comboSpecialty.SelectedItem).Tag.DefNum;

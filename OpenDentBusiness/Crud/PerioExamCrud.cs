@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PerioExam into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(PerioExam perioExam,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				perioExam.PerioExamNum=ReplicationServers.GetKey("perioexam","PerioExamNum");
 			}
 			string command="INSERT INTO perioexam (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PerioExamNum,";
 			}
 			command+="PatNum,ExamDate,ProvNum,DateTMeasureEdit) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(perioExam.PerioExamNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Date  (perioExam.ExamDate)+","
 				+    POut.Long  (perioExam.ProvNum)+","
 				+    DbHelper.Now()+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

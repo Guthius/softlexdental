@@ -134,7 +134,7 @@ namespace OpenDental {
 		}
 
 		private void butPickRxListImage_Click(object sender,EventArgs e) {	
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				MsgBox.Show(this,"This option is not supported with images stored in the database.");
 				return;
 			}
@@ -154,7 +154,7 @@ namespace OpenDental {
 			if(BitmapOriginal!=null) {
 				BitmapOriginal.Dispose();
 			}
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				BitmapOriginal=ImageStore.OpenImage(doc,patFolder);
 			}
 			else {

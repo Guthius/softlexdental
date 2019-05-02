@@ -224,7 +224,7 @@ namespace OpenDental{
 			}		
 			listBoxFeeSched.SelectedIndex=0;	
 			listBoxClinics.Items.Add(Lan.g(this,"Default"));
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				for(int i=0;i<_listClinics.Count;i++) {
 					listBoxClinics.Items.Add(_listClinics[i].Abbr);
 				}

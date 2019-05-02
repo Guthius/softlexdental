@@ -41,15 +41,15 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		private void InitializeVariables() {
-			Provider provFacility=Providers.GetProv(PrefC.GetInt(PrefName.PracticeDefaultProv));
+			Provider provFacility=Providers.GetProv(Preferences.GetInt(PrefName.PracticeDefaultProv));
 			_sendingFacilityNpi=provFacility.NationalProvID;
-			_sendingFacilityName=PrefC.GetString(PrefName.PracticeTitle);
-			_sendingFacilityAddress1=PrefC.GetString(PrefName.PracticeAddress);
-			_sendingFacilityAddress2=PrefC.GetString(PrefName.PracticeAddress2);
-			_sendingFacilityCity=PrefC.GetString(PrefName.PracticeCity);
-			_sendingFacilityState=PrefC.GetString(PrefName.PracticeST);
-			_sendingFacilityZip=PrefC.GetString(PrefName.PracticeZip);
-			if(PrefC.HasClinicsEnabled && _appt.ClinicNum!=0) {//Using clinics and a clinic is assigned.
+			_sendingFacilityName=Preferences.GetString(PrefName.PracticeTitle);
+			_sendingFacilityAddress1=Preferences.GetString(PrefName.PracticeAddress);
+			_sendingFacilityAddress2=Preferences.GetString(PrefName.PracticeAddress2);
+			_sendingFacilityCity=Preferences.GetString(PrefName.PracticeCity);
+			_sendingFacilityState=Preferences.GetString(PrefName.PracticeST);
+			_sendingFacilityZip=Preferences.GetString(PrefName.PracticeZip);
+			if(Preferences.HasClinicsEnabled && _appt.ClinicNum!=0) {//Using clinics and a clinic is assigned.
 				Clinic clinic=Clinics.GetClinic(_appt.ClinicNum);
 				_sendingFacilityName=clinic.Description;
 				_sendingFacilityAddress1=clinic.Address;
@@ -541,18 +541,18 @@ namespace OpenDentBusiness.HL7 {
 
 		public static string Validate(Appointment appt) {
 			StringBuilder sb=new StringBuilder();
-			Provider provFacility=Providers.GetProv(PrefC.GetInt(PrefName.PracticeDefaultProv));
+			Provider provFacility=Providers.GetProv(Preferences.GetInt(PrefName.PracticeDefaultProv));
 			if(!Regex.IsMatch(provFacility.NationalProvID,"^(80840)?[0-9]{10}$")) {
 				WriteError(sb,"Invalid NPI for provider '"+provFacility.Abbr+"'");
 			}
-			if(PrefC.HasClinicsEnabled && appt.ClinicNum!=0) {//Using clinics and a clinic is assigned.
+			if(Preferences.HasClinicsEnabled && appt.ClinicNum!=0) {//Using clinics and a clinic is assigned.
 				Clinic clinic=Clinics.GetClinic(appt.ClinicNum);
 				if(clinic.Description=="") {
 					WriteError(sb,"Missing clinic description for clinic attached to appointment.");
 				}
 			}
 			else {//Not using clinics for this patient
-				if(PrefC.GetString(PrefName.PracticeTitle)=="") {
+				if(Preferences.GetString(PrefName.PracticeTitle)=="") {
 					WriteError(sb,"Missing practice title.");
 				}
 			}

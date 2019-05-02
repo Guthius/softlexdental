@@ -372,7 +372,7 @@ namespace OpenDental
 			for(int i=0;i<_listProviders.Count;i++) {
 				listProvs.Items.Add(_listProviders[i].GetLongDesc());
 			}
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				labelClinics.Visible=false;
 				checkAllClinics.Visible=false;
 				listClinics.Visible=false;
@@ -527,7 +527,7 @@ namespace OpenDental
 			Font fontSubTitle=new Font("Tahoma",10,FontStyle.Bold);
 			report.ReportName=Lan.g(this,"Appointments");
 			report.AddTitle("Title",Lan.g(this,"Appointments"),fontTitle);
-			report.AddSubTitle("PracName",PrefC.GetString(PrefName.PracticeTitle),fontSubTitle);
+			report.AddSubTitle("PracName",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
 			report.AddSubTitle("Date",dateFrom.ToShortDateString()+" - "+dateTo.ToShortDateString(),fontSubTitle);
 			if(checkAllProvs.Checked) {
 				report.AddSubTitle("Providers",Lan.g(this,"All Providers"));

@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Reactivation into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Reactivation reactivation,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				reactivation.ReactivationNum=ReplicationServers.GetKey("reactivation","ReactivationNum");
 			}
 			string command="INSERT INTO reactivation (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ReactivationNum,";
 			}
 			command+="PatNum,ReactivationStatus,ReactivationNote,DoNotContact) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(reactivation.ReactivationNum)+",";
 			}
 			command+=
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 				reactivation.ReactivationNote="";
 			}
 			OdSqlParameter paramReactivationNote=new OdSqlParameter("paramReactivationNote",OdDbType.Text,POut.StringParam(reactivation.ReactivationNote));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramReactivationNote);
 			}
 			else {

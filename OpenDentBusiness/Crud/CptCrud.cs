@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Cpt into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Cpt cpt,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				cpt.CptNum=ReplicationServers.GetKey("cpt","CptNum");
 			}
 			string command="INSERT INTO cpt (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="CptNum,";
 			}
 			command+="CptCode,Description,VersionIDs) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(cpt.CptNum)+",";
 			}
 			command+=
 				 "'"+POut.String(cpt.CptCode)+"',"
 				+"'"+POut.String(cpt.Description)+"',"
 				+"'"+POut.String(cpt.VersionIDs)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

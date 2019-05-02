@@ -46,7 +46,7 @@ namespace OpenDentBusiness
         public static void InsertDefaultEncounter(long patNum, long provNum, DateTime date)
         {
             //Validate prefs. If they are not set, we have nothing to insert so no reason to check.
-            if (PrefC.GetString(PrefName.CQMDefaultEncounterCodeSystem) == "" || PrefC.GetString(PrefName.CQMDefaultEncounterCodeValue) == "none")
+            if (Preferences.GetString(PrefName.CQMDefaultEncounterCodeSystem) == "" || Preferences.GetString(PrefName.CQMDefaultEncounterCodeValue) == "none")
             {
                 return;
             }
@@ -64,8 +64,8 @@ namespace OpenDentBusiness
             encounter.PatNum = patNum;
             encounter.ProvNum = provNum;
             encounter.DateEncounter = date;
-            encounter.CodeSystem = PrefC.GetString(PrefName.CQMDefaultEncounterCodeSystem);
-            encounter.CodeValue = PrefC.GetString(PrefName.CQMDefaultEncounterCodeValue);
+            encounter.CodeSystem = Preferences.GetString(PrefName.CQMDefaultEncounterCodeSystem);
+            encounter.CodeValue = Preferences.GetString(PrefName.CQMDefaultEncounterCodeValue);
             Insert(encounter);
         }
 

@@ -262,7 +262,7 @@ namespace OpenDental {
 
 		private void FormTerminalManager_Load(object sender,EventArgs e) {
 			PatientChangedEvent.Fired+=PatientChangedEvent_Fired;
-			textPassword.Text=PrefC.GetString(PrefName.TerminalClosePassword);
+			textPassword.Text=Preferences.GetString(PrefName.TerminalClosePassword);
 			FillGrid();
 			FillPat();
 		}
@@ -276,7 +276,7 @@ namespace OpenDental {
 
 		public override void OnProcessSignals(List<Signalod> listSignals) {
 			if(listSignals.Any(x => x.IType==InvalidType.Prefs)) {
-				textPassword.Text=PrefC.GetString(PrefName.TerminalClosePassword);
+				textPassword.Text=Preferences.GetString(PrefName.TerminalClosePassword);
 			}
 			int processIdCur=Process.GetCurrentProcess().Id;
 			if(listSignals.All(x => x.IType!=InvalidType.Kiosk || (x.FKeyType==KeyType.ProcessId && x.FKey==processIdCur))) {

@@ -241,7 +241,7 @@ namespace OpenDentBusiness.Eclaims {
 		///<summary>Might be able to use newer Dentalxchange2016 web reference instead of using com.dentalexchange.webservices.</summary>
 		public static string Benefits270(Clearinghouse clearinghouseClin,string x12message) {
 			com.dentalxchange.webservices.Credentials cred = new com.dentalxchange.webservices.Credentials();
-			if(PrefC.GetBool(PrefName.CustomizedForPracticeWeb)) {//even though they currently use code from a different part of the program.
+			if(Preferences.GetBool(PrefName.CustomizedForPracticeWeb)) {//even though they currently use code from a different part of the program.
 				cred.client="Practice-Web";
 				cred.serviceID="DCI Web Service ID: 001513";
 			}
@@ -451,7 +451,7 @@ namespace OpenDentBusiness.Eclaims {
 			DentalxchangePartnerService.Attachment attachment=new DentalxchangePartnerService.Attachment();
 			//Clinic on claim
 			Clinic clinic=Clinics.GetClinic(claim.ClinicNum);
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				clinic=null;//If the practice isn't using clinics, but the claim is associated to a real clinic, pretend it isn't.
 			}
 			//Billing provider
@@ -504,19 +504,19 @@ namespace OpenDentBusiness.Eclaims {
 			string billingState="";
 			string billingZip="";
 			if(clinic==null) {
-				if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
-					billingAddress1=PrefC.GetString(PrefName.PracticeBillingAddress);
-					billingAddress2=PrefC.GetString(PrefName.PracticeBillingAddress2);
-					billingCity=PrefC.GetString(PrefName.PracticeBillingCity);
-					billingState=PrefC.GetString(PrefName.PracticeBillingST);
-					billingZip=PrefC.GetString(PrefName.PracticeBillingZip);
+				if(Preferences.GetBool(PrefName.UseBillingAddressOnClaims)) {
+					billingAddress1=Preferences.GetString(PrefName.PracticeBillingAddress);
+					billingAddress2=Preferences.GetString(PrefName.PracticeBillingAddress2);
+					billingCity=Preferences.GetString(PrefName.PracticeBillingCity);
+					billingState=Preferences.GetString(PrefName.PracticeBillingST);
+					billingZip=Preferences.GetString(PrefName.PracticeBillingZip);
 				}
 				else {
-					billingAddress1=PrefC.GetString(PrefName.PracticeAddress);
-					billingAddress2=PrefC.GetString(PrefName.PracticeAddress2);
-					billingCity=PrefC.GetString(PrefName.PracticeCity);
-					billingState=PrefC.GetString(PrefName.PracticeST);
-					billingZip=PrefC.GetString(PrefName.PracticeZip);
+					billingAddress1=Preferences.GetString(PrefName.PracticeAddress);
+					billingAddress2=Preferences.GetString(PrefName.PracticeAddress2);
+					billingCity=Preferences.GetString(PrefName.PracticeCity);
+					billingState=Preferences.GetString(PrefName.PracticeST);
+					billingZip=Preferences.GetString(PrefName.PracticeZip);
 				}
 			}
 			else {
@@ -554,11 +554,11 @@ namespace OpenDentBusiness.Eclaims {
 			}
 			attachment.Narrative=narrative;
 			if(clinic==null) {//Clinics disabled or Headquarters
-				attachment.RenderingProviderAdd1=PrefC.GetString(PrefName.PracticeAddress);
-				attachment.RenderingProviderAdd2=PrefC.GetString(PrefName.PracticeAddress2);
-				attachment.RenderingProviderCity=PrefC.GetString(PrefName.PracticeCity);
-				attachment.RenderingProviderState=PrefC.GetString(PrefName.PracticeST);
-				attachment.RenderingProviderZip=PrefC.GetString(PrefName.PracticeZip);
+				attachment.RenderingProviderAdd1=Preferences.GetString(PrefName.PracticeAddress);
+				attachment.RenderingProviderAdd2=Preferences.GetString(PrefName.PracticeAddress2);
+				attachment.RenderingProviderCity=Preferences.GetString(PrefName.PracticeCity);
+				attachment.RenderingProviderState=Preferences.GetString(PrefName.PracticeST);
+				attachment.RenderingProviderZip=Preferences.GetString(PrefName.PracticeZip);
 			}
 			else {//Clinic enabled
 				attachment.RenderingProviderAdd1=clinic.Address;
@@ -621,7 +621,7 @@ namespace OpenDentBusiness.Eclaims {
 					return false;
 			}
 			Dentalxchange2016.Credentials cred=new Dentalxchange2016.Credentials();
-			if(PrefC.GetBool(PrefName.CustomizedForPracticeWeb)) {//even though they currently use code from a different part of the program.
+			if(Preferences.GetBool(PrefName.CustomizedForPracticeWeb)) {//even though they currently use code from a different part of the program.
 				cred.Client="Practice-Web";
 				cred.ServiceID="DCI Web Service ID: 001513";
 			}
@@ -860,7 +860,7 @@ namespace OpenDentBusiness.Eclaims {
 					clearingHouse=GetClearingHouseForClaim(claim);
 				}
 				DxcCredentials cred=new DxcCredentials();
-				if(PrefC.GetBool(PrefName.CustomizedForPracticeWeb)) {//even though they currently use code from a different part of the program.
+				if(Preferences.GetBool(PrefName.CustomizedForPracticeWeb)) {//even though they currently use code from a different part of the program.
 					cred.Client="Practice-Web";
 					cred.ServiceID="DCI Web Service ID: 001513";
 				}

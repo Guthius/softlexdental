@@ -120,7 +120,7 @@ namespace OpenDental{
 							//This logic mimics SheetPrinting.drawFieldGrid(...)
 							SheetParameter param=SheetParameter.GetParamByName(sheet.Parameters,"IsSingleClaimPaid");
 							bool isSingleClaim=(param.ParamValue==null)?false:true;//param is only set when true
-							bool isOneClaimPerPage=PrefC.GetBool(PrefName.EraPrintOneClaimPerPage);
+							bool isOneClaimPerPage=Preferences.GetBool(PrefName.EraPrintOneClaimPerPage);
 							X835 era=(X835)SheetParameter.GetParamByName(sheet.Parameters,"ERA").ParamValue;//Required field.
 							DataTable tableClaimsPaid=GetDataTableForGridType(sheet,dataSet,field.FieldName,stmt,medLab);
 							DataTable tableRemarks=GetDataTableForGridType(sheet,dataSet,"EraClaimsPaidProcRemarks",stmt,medLab);
@@ -618,14 +618,14 @@ namespace OpenDental{
 		///<summary>Typically returns something similar to \\SERVER\OpenDentImages\SheetImages</summary>
 		public static string GetImagePath(){
 			string imagePath;
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				throw new ApplicationException("Must be using AtoZ folders.");
 			}
 			imagePath=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"SheetImages");
 			if(CloudStorage.IsCloudStorage) {
 				imagePath=imagePath.Replace("\\","/");
 			}
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(imagePath)) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(imagePath)) {
 				Directory.CreateDirectory(imagePath);
 			}
 			return imagePath;
@@ -634,11 +634,11 @@ namespace OpenDental{
 		///<summary>Typically returns something similar to \\SERVER\OpenDentImages\SheetImages</summary>
 		public static string GetPatImagePath() {
 			string imagePath;
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				throw new ApplicationException("Must be using AtoZ folders.");
 			}
 			imagePath=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"SheetPatImages");
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(imagePath)) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(imagePath)) {
 				Directory.CreateDirectory(imagePath);
 			}
 			if(CloudStorage.IsCloudStorage) {
@@ -743,7 +743,7 @@ namespace OpenDental{
 				case DashApptGrid.SheetFieldName:
 					retVal.Add(new DisplayField { Category=DisplayFieldCategory.None,InternalName="ApptStatus",Description="ApptStatus",ColumnWidth=70,ItemOrder=++i });
 					retVal.Add(new DisplayField { Category=DisplayFieldCategory.None,InternalName="Prov",Description="Prov",ColumnWidth=40,ItemOrder=++i });
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						retVal.Add(new DisplayField { Category=DisplayFieldCategory.None,InternalName="Clinic",Description="Clinic",ColumnWidth=60,ItemOrder=++i });
 					}
 					retVal.Add(new DisplayField { Category=DisplayFieldCategory.None,InternalName="Date",Description="Date",ColumnWidth=65,ItemOrder=++i });
@@ -1209,7 +1209,7 @@ namespace OpenDental{
 				//If any plan allows substitution, show X
 				dRow["Sub"]=SubstitutionLinks.HasSubstCodeForProcCode(procCode,tpRow.Tth,listSubLinks,listInsPlans) ? "X" : "";
 				dRow["Description"]            =tpRow.Description;
-				if(PrefC.GetBool(PrefName.TreatPlanItemized) 
+				if(Preferences.GetBool(PrefName.TreatPlanItemized) 
 					|| tpRow.Description==Lan.g("TableTP","Subtotal") || tpRow.Description==Lan.g("TableTP","Total")) 
 				{
 					dRow["Fee"]                  =tpRow.Fee.ToString("F");
@@ -1573,7 +1573,7 @@ namespace OpenDental{
 
 		///<Summary>DataSet should be prefilled with AccountModules.GetAccount() before calling this method.</Summary>
 		private static DataTable GetTable_StatementEnclosed(DataSet dataSet,Statement stmt,Patient patGuar=null) {
-			int payPlanVersionCur=PrefC.GetInt(PrefName.PayPlansVersion);
+			int payPlanVersionCur=Preferences.GetInt(PrefName.PayPlansVersion);
 			DataTable tableMisc=dataSet.Tables["misc"];
 			string text="";
 			DataTable table=new DataTable();
@@ -1596,7 +1596,7 @@ namespace OpenDental{
 					double balCur;
 					foreach(Patient guarantor in listSuperFamGuars) {
 						balCur=guarantor.BalTotal;
-						if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
+						if(!Preferences.GetBool(PrefName.BalancesDontSubtractIns)) {
 							balCur-=guarantor.InsEst;
 						}
 						if(balCur<=0) {//if this guarantor has a negative balance, don't subtract from the super statement amount due (Ryan says so)
@@ -1607,7 +1607,7 @@ namespace OpenDental{
 				}
 				else {
 					balTotal=patGuar.BalTotal;
-					if(!PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
+					if(!Preferences.GetBool(PrefName.BalancesDontSubtractIns)) {
 						balTotal-=patGuar.InsEst;
 					}
 				}
@@ -1668,7 +1668,7 @@ namespace OpenDental{
 						|| x["PayNum"].ToString()!="0"//patient payments, will be credits with charges==0
 						|| x["ClaimPaymentNum"].ToString()!="0").ToList()//claimproc payments+writeoffs, will be credits with charges==0
 					.Sum(x => PIn.Double(x["chargesDouble"].ToString())-PIn.Double(x["creditsDouble"].ToString()));//add charges-credits
-				if(PrefC.GetBool(PrefName.BalancesDontSubtractIns)) {
+				if(Preferences.GetBool(PrefName.BalancesDontSubtractIns)) {
 					text=statementTotal.ToString("c");
 				}
 				else {
@@ -1680,11 +1680,11 @@ namespace OpenDental{
 			}
 			#endregion Statement Type LimitedStatement
 			row[0]=text;
-			if(PrefC.GetLong(PrefName.StatementsCalcDueDate)==-1) {
+			if(Preferences.GetLong(PrefName.StatementsCalcDueDate)==-1) {
 				text=Lans.g("Statements","Upon Receipt");
 			}
 			else {
-				text=DateTime.Today.AddDays(PrefC.GetLong(PrefName.StatementsCalcDueDate)).ToShortDateString();
+				text=DateTime.Today.AddDays(Preferences.GetLong(PrefName.StatementsCalcDueDate)).ToShortDateString();
 			}
 			row[1]=text;
 			row[2]="";
@@ -1694,7 +1694,7 @@ namespace OpenDental{
 
 		///<summary>DataSet should be prefilled with AccountModules.GetAccount() before calling this method.  Only returns results for invoices.</summary>
 		private static DataTable GetTable_StatementInvoicePayment(Statement stmt) {
-			int payPlanVersionCur=PrefC.GetInt(PrefName.PayPlansVersion);
+			int payPlanVersionCur=Preferences.GetInt(PrefName.PayPlansVersion);
 			DataTable table=new DataTable(); //not sure what other codes we should add.
 			table.Columns.Add(new DataColumn("date"));
 			table.Columns.Add(new DataColumn("prov"));

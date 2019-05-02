@@ -222,7 +222,7 @@ namespace OpenDental{
 		public bool PrintImmediate(string auditDescription,PrintSituation printSit,long auditPatNum) {
 			if(PrintBlank) {
 				//Get the default claim form for the practice.
-				ClaimFormCur=ClaimForms.GetClaimForm(PrefC.GetLong(PrefName.DefaultClaimForm));
+				ClaimFormCur=ClaimForms.GetClaimForm(Preferences.GetLong(PrefName.DefaultClaimForm));
 				if(ClaimFormCur==null) {//Could happen if printing a blank form and no default claim form is set.
 					MsgBox.Show(this,"No default claim form set.  Set a default in Setup | Family / Insurance | Claim Forms.");
 					return false;
@@ -499,7 +499,7 @@ namespace OpenDental{
 			//then get the main plan
 			subCur=InsSubs.GetSub(ClaimCur.InsSubNum,ListInsSub2);
 			planCur=InsPlans.GetPlan(ClaimCur.PlanNum,ListInsPlan);
-			Clinic clinic=PrefC.HasClinicsEnabled ? Clinics.GetClinic(ClaimCur.ClinicNum) : null;//null if clinics are not enabled.
+			Clinic clinic=Preferences.HasClinicsEnabled ? Clinics.GetClinic(ClaimCur.ClinicNum) : null;//null if clinics are not enabled.
 			carrier=Carriers.GetCarrier(planCur.CarrierNum);
 			//Employers.GetEmployer(InsPlans.Cur.EmployerNum);
 			Patient subsc;
@@ -1779,8 +1779,8 @@ namespace OpenDental{
 						break;
 					case "BillingDentistPh123":
 						if(clinic==null){
-							if(PrefC.GetString(PrefName.PracticePhone).Length==10){
-								displayStrings[i]=PrefC.GetString(PrefName.PracticePhone).Substring(0,3);
+							if(Preferences.GetString(PrefName.PracticePhone).Length==10){
+								displayStrings[i]=Preferences.GetString(PrefName.PracticePhone).Substring(0,3);
 							}
 						}
 						else{
@@ -1791,8 +1791,8 @@ namespace OpenDental{
 						break;
 					case "BillingDentistPh456":
 						if(clinic==null){
-							if(PrefC.GetString(PrefName.PracticePhone).Length==10){
-								displayStrings[i]=PrefC.GetString(PrefName.PracticePhone).Substring(3,3);
+							if(Preferences.GetString(PrefName.PracticePhone).Length==10){
+								displayStrings[i]=Preferences.GetString(PrefName.PracticePhone).Substring(3,3);
 							}
 						}
 						else{
@@ -1803,8 +1803,8 @@ namespace OpenDental{
 						break;
 					case "BillingDentistPh78910":
 						if(clinic==null){
-							if(PrefC.GetString(PrefName.PracticePhone).Length==10){
-								displayStrings[i]=PrefC.GetString(PrefName.PracticePhone).Substring(6);
+							if(Preferences.GetString(PrefName.PracticePhone).Length==10){
+								displayStrings[i]=Preferences.GetString(PrefName.PracticePhone).Substring(6);
 							}
 						}
 						else{
@@ -1815,10 +1815,10 @@ namespace OpenDental{
 						break;
 					case "BillingDentistPhoneFormatted":
 						if(clinic==null){
-							if(PrefC.GetString(PrefName.PracticePhone).Length==10){
-								displayStrings[i]="("+PrefC.GetString(PrefName.PracticePhone).Substring(0,3)
-									+")"+PrefC.GetString(PrefName.PracticePhone).Substring(3,3)
-									+"-"+PrefC.GetString(PrefName.PracticePhone).Substring(6);
+							if(Preferences.GetString(PrefName.PracticePhone).Length==10){
+								displayStrings[i]="("+Preferences.GetString(PrefName.PracticePhone).Substring(0,3)
+									+")"+Preferences.GetString(PrefName.PracticePhone).Substring(3,3)
+									+"-"+Preferences.GetString(PrefName.PracticePhone).Substring(6);
 							}
 						}
 						else{
@@ -1831,7 +1831,7 @@ namespace OpenDental{
 						break;
 					case "BillingDentistPhoneRaw":
 						if(clinic==null) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticePhone);
+							displayStrings[i]=Preferences.GetString(PrefName.PracticePhone);
 						}
 						else {
 							displayStrings[i]=clinic.Phone;
@@ -1841,17 +1841,17 @@ namespace OpenDental{
 						if(clinic!=null && clinic.PayToAddress!="") {
 							displayStrings[i]=clinic.PayToAddress;
 						}
-						else if(PrefC.GetString(PrefName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
-						  displayStrings[i]=PrefC.GetString(PrefName.PracticePayToAddress);
+						else if(Preferences.GetString(PrefName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
+						  displayStrings[i]=Preferences.GetString(PrefName.PracticePayToAddress);
 						}
 						else if(clinic!=null && clinic.UseBillAddrOnClaims) {
 							displayStrings[i]=clinic.BillingAddress;
 						}
-						else if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)){
-						  displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingAddress);
+						else if(Preferences.GetBool(PrefName.UseBillingAddressOnClaims)){
+						  displayStrings[i]=Preferences.GetString(PrefName.PracticeBillingAddress);
 						}
 						else if(clinic==null) {
-						  displayStrings[i]=PrefC.GetString(PrefName.PracticeAddress);
+						  displayStrings[i]=Preferences.GetString(PrefName.PracticeAddress);
 						}
 						else {
 							displayStrings[i]=clinic.Address;
@@ -1861,17 +1861,17 @@ namespace OpenDental{
 						if(clinic!=null && clinic.PayToAddress!="") {
 							displayStrings[i]=clinic.PayToAddress2;
 						}
-						else if(PrefC.GetString(PrefName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
-						  displayStrings[i]=PrefC.GetString(PrefName.PracticePayToAddress2);
+						else if(Preferences.GetString(PrefName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
+						  displayStrings[i]=Preferences.GetString(PrefName.PracticePayToAddress2);
 						}
 						else if(clinic!=null && clinic.UseBillAddrOnClaims) {
 							displayStrings[i]=clinic.BillingAddress2;
 						}
-						else if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)){
-						  displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingAddress2);
+						else if(Preferences.GetBool(PrefName.UseBillingAddressOnClaims)){
+						  displayStrings[i]=Preferences.GetString(PrefName.PracticeBillingAddress2);
 						}
 						else if(clinic==null) {
-						  displayStrings[i]=PrefC.GetString(PrefName.PracticeAddress2);
+						  displayStrings[i]=Preferences.GetString(PrefName.PracticeAddress2);
 						}
 						else {
 							displayStrings[i]=clinic.Address2;
@@ -1881,17 +1881,17 @@ namespace OpenDental{
 						if(clinic!=null && clinic.PayToAddress!="") {
 							displayStrings[i]=clinic.PayToCity;
 						}
-						else if(PrefC.GetString(PrefName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
-							displayStrings[i]=PrefC.GetString(PrefName.PracticePayToCity);
+						else if(Preferences.GetString(PrefName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
+							displayStrings[i]=Preferences.GetString(PrefName.PracticePayToCity);
 						}
 						else if(clinic!=null && clinic.UseBillAddrOnClaims) {
 							displayStrings[i]=clinic.BillingCity;
 						}
-						else if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingCity);
+						else if(Preferences.GetBool(PrefName.UseBillingAddressOnClaims)) {
+							displayStrings[i]=Preferences.GetString(PrefName.PracticeBillingCity);
 						}
 						else if(clinic==null) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeCity);
+							displayStrings[i]=Preferences.GetString(PrefName.PracticeCity);
 						}
 						else {
 							displayStrings[i]=clinic.City;
@@ -1901,17 +1901,17 @@ namespace OpenDental{
 						if(clinic!=null && clinic.PayToAddress!="") {
 							displayStrings[i]=clinic.PayToState;
 						}
-						else if(PrefC.GetString(PrefName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
-							displayStrings[i]=PrefC.GetString(PrefName.PracticePayToST);
+						else if(Preferences.GetString(PrefName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
+							displayStrings[i]=Preferences.GetString(PrefName.PracticePayToST);
 						}
 						else if(clinic!=null && clinic.UseBillAddrOnClaims) {
 							displayStrings[i]=clinic.BillingState;
 						}
-						else if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingST);
+						else if(Preferences.GetBool(PrefName.UseBillingAddressOnClaims)) {
+							displayStrings[i]=Preferences.GetString(PrefName.PracticeBillingST);
 						}
 						else if(clinic==null) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeST);
+							displayStrings[i]=Preferences.GetString(PrefName.PracticeST);
 						}
 						else {
 							displayStrings[i]=clinic.State;
@@ -1921,17 +1921,17 @@ namespace OpenDental{
 						if(clinic!=null && clinic.PayToAddress!="") {
 							displayStrings[i]=clinic.PayToZip;
 						}
-						else if(PrefC.GetString(PrefName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
-							displayStrings[i]=PrefC.GetString(PrefName.PracticePayToZip);
+						else if(Preferences.GetString(PrefName.PracticePayToAddress)!="") { //All Pay-To address fields are used in 5010 eclaims when Pay-To address line 1 is not blank.
+							displayStrings[i]=Preferences.GetString(PrefName.PracticePayToZip);
 						}
 						else if(clinic!=null && clinic.UseBillAddrOnClaims) {
 							displayStrings[i]=clinic.BillingZip;
 						}
-						else if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeBillingZip);
+						else if(Preferences.GetBool(PrefName.UseBillingAddressOnClaims)) {
+							displayStrings[i]=Preferences.GetString(PrefName.PracticeBillingZip);
 						}
 						else if(clinic==null) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeZip);
+							displayStrings[i]=Preferences.GetString(PrefName.PracticeZip);
 						}
 						else {
 							displayStrings[i]=clinic.Zip;
@@ -1945,7 +1945,7 @@ namespace OpenDental{
 						break;
 					case "TreatingDentistSignature":
 						if(providerClaimTreat.SigOnFile){
-							if(PrefC.GetBool(PrefName.ClaimFormTreatDentSaysSigOnFile)){
+							if(Preferences.GetBool(PrefName.ClaimFormTreatDentSaysSigOnFile)){
 								displayStrings[i]="Signature on File";
 							}
 							else{
@@ -1980,7 +1980,7 @@ namespace OpenDental{
 						break;
 					case "TreatingDentistAddress":
 						if(clinic==null) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeAddress);
+							displayStrings[i]=Preferences.GetString(PrefName.PracticeAddress);
 						}
 						else {
 							displayStrings[i]=clinic.Address;
@@ -1988,7 +1988,7 @@ namespace OpenDental{
 						break;
 					case "TreatingDentistCity":
 						if(clinic==null) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeCity);
+							displayStrings[i]=Preferences.GetString(PrefName.PracticeCity);
 						}
 						else {
 							displayStrings[i]=clinic.City;
@@ -1996,7 +1996,7 @@ namespace OpenDental{
 						break;
 					case "TreatingDentistST":
 						if(clinic==null) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeST);
+							displayStrings[i]=Preferences.GetString(PrefName.PracticeST);
 						}
 						else {
 							displayStrings[i]=clinic.State;
@@ -2004,7 +2004,7 @@ namespace OpenDental{
 						break;
 					case "TreatingDentistZip":
 						if(clinic==null) {
-							displayStrings[i]=PrefC.GetString(PrefName.PracticeZip);
+							displayStrings[i]=Preferences.GetString(PrefName.PracticeZip);
 						}
 						else {
 							displayStrings[i]=clinic.Zip;
@@ -2012,8 +2012,8 @@ namespace OpenDental{
 						break;
 					case "TreatingDentistPh123":
 						if(clinic==null){
-							if(PrefC.GetString(PrefName.PracticePhone).Length==10){
-								displayStrings[i]=PrefC.GetString(PrefName.PracticePhone).Substring(0,3);
+							if(Preferences.GetString(PrefName.PracticePhone).Length==10){
+								displayStrings[i]=Preferences.GetString(PrefName.PracticePhone).Substring(0,3);
 							}
 						}
 						else{
@@ -2024,8 +2024,8 @@ namespace OpenDental{
 						break;
 					case "TreatingDentistPh456":
 						if(clinic==null){
-							if(PrefC.GetString(PrefName.PracticePhone).Length==10){
-								displayStrings[i]=PrefC.GetString(PrefName.PracticePhone).Substring(3,3);
+							if(Preferences.GetString(PrefName.PracticePhone).Length==10){
+								displayStrings[i]=Preferences.GetString(PrefName.PracticePhone).Substring(3,3);
 							}
 						}
 						else{
@@ -2036,8 +2036,8 @@ namespace OpenDental{
 						break;
 					case "TreatingDentistPh78910":
 						if(clinic==null){
-							if(PrefC.GetString(PrefName.PracticePhone).Length==10){
-								displayStrings[i]=PrefC.GetString(PrefName.PracticePhone).Substring(6);
+							if(Preferences.GetString(PrefName.PracticePhone).Length==10){
+								displayStrings[i]=Preferences.GetString(PrefName.PracticePhone).Substring(6);
 							}
 						}
 						else{

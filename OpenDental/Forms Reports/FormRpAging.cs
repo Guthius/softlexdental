@@ -561,11 +561,11 @@ namespace OpenDental{
 
 		private void FormAging_Load(object sender, System.EventArgs e) {
 			_listProviders=Providers.GetListReports();
-			DateTime lastAgingDate=PrefC.GetDate(PrefName.DateLastAging);
+			DateTime lastAgingDate=Preferences.GetDate(PrefName.DateLastAging);
 			if(lastAgingDate.Year<1880) {
 				textDate.Text="";
 			}
-			else if(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)){
+			else if(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)){
 				textDate.Text=lastAgingDate.ToShortDateString();
 			}
 			else{
@@ -588,7 +588,7 @@ namespace OpenDental{
 			}
 			checkProvAll.Checked=true;
 			listProv.Visible=false;
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				listClin.Visible=false;
 				labelClin.Visible=false;
 				checkAllClin.Visible=false;
@@ -605,13 +605,13 @@ namespace OpenDental{
 					listClin.Visible=false;
 				}
 			}
-			checkAgeNegAdjs.Checked=PrefC.GetBool(PrefName.AgingNegativeAdjsByAdjDate);
-			if(PrefC.GetBool(PrefName.AgingReportShowAgePatPayplanPayments)) {
+			checkAgeNegAdjs.Checked=Preferences.GetBool(PrefName.AgingNegativeAdjsByAdjDate);
+			if(Preferences.GetBool(PrefName.AgingReportShowAgePatPayplanPayments)) {
 				//Visibility set to false in designer, only set to visible here.  No UI for pref, only set true via query for specific customer.
 				checkAgePatPayPlanPayments.Visible=true;
 			}
-			if(PrefC.GetBool(PrefName.FutureTransDatesAllowed) || PrefC.GetBool(PrefName.AccountAllowFutureDebits) 
-				|| PrefC.GetBool(PrefName.AllowFutureInsPayments)) 
+			if(Preferences.GetBool(PrefName.FutureTransDatesAllowed) || Preferences.GetBool(PrefName.AccountAllowFutureDebits) 
+				|| Preferences.GetBool(PrefName.AllowFutureInsPayments)) 
 			{
 				labelFutureTrans.Visible=true;//Set to false in designer
 			}
@@ -681,7 +681,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"At least one provider must be selected.");
 				return false;
 			}
-			if(PrefC.HasClinicsEnabled && !checkAllClin.Checked && listClin.SelectedIndices.Count==0) {
+			if(Preferences.HasClinicsEnabled && !checkAllClin.Checked && listClin.SelectedIndices.Count==0) {
 				MsgBox.Show(this,"At least one clinic must be selected.");
 				return false;
 			}
@@ -719,7 +719,7 @@ namespace OpenDental{
 			if(!checkProvAll.Checked) {
 				rpo.ListProvNums=listProv.SelectedIndices.OfType<int>().Select(x => _listProviders[x].ProvNum).ToList();
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				//if "All" is selected and the user is not restricted, show ALL clinics, including the 0 clinic.
 				if(checkAllClin.Checked && !Security.CurUser.ClinicIsRestricted){
 					rpo.ListClinicNums.Clear();
@@ -761,7 +761,7 @@ namespace OpenDental{
 			report.IsLandscape=checkHasDateLastPay.Checked;
 			report.ReportName=Lan.g(this,"AGING OF ACCOUNTS RECEIVABLE REPORT");
 			report.AddTitle("Aging Report",Lan.g(this,"AGING OF ACCOUNTS RECEIVABLE"));
-			report.AddSubTitle("PracTitle",PrefC.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("PracTitle",Preferences.GetString(PrefName.PracticeTitle));
 			report.AddSubTitle("AsOf",Lan.g(this,"As of ")+textDate.Text);
 			if(radioAny.Checked){
 				report.AddSubTitle("Balance",Lan.g(this,"Any Balance"));

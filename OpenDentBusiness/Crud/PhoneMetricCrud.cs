@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PhoneMetric into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(PhoneMetric phoneMetric,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				phoneMetric.PhoneMetricNum=ReplicationServers.GetKey("phonemetric","PhoneMetricNum");
 			}
 			string command="INSERT INTO phonemetric (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PhoneMetricNum,";
 			}
 			command+="DateTimeEntry,VoiceMails,Triages,MinutesBehind) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(phoneMetric.PhoneMetricNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (phoneMetric.VoiceMails)+","
 				+    POut.Int   (phoneMetric.Triages)+","
 				+    POut.Int   (phoneMetric.MinutesBehind)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

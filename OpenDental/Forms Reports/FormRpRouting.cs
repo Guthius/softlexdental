@@ -265,7 +265,7 @@ namespace OpenDental {
 				//Creates routing slips for the defined DateSelected, currently selected clinic (if Clinics is enabled), not filtered by providers.
 				List<long> emptyProvNumList=new List<long>();
 				List<long> listClinicNums=new List<long>();
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					listClinicNums.Add(Clinics.ClinicNum);
 				}
 				//Run for all providers and the currently selected day
@@ -292,7 +292,7 @@ namespace OpenDental {
 			}
 			checkProvAll.Checked=true;
 			textDate.Text=DateTime.Today.ToShortDateString();
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				listClin.Visible=false;
 				listClin.Visible=false;
 				checkClinAll.Visible=false;
@@ -392,7 +392,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"You must select at least one provider.");
 				return;
 			}
-			if(PrefC.HasClinicsEnabled 
+			if(Preferences.HasClinicsEnabled 
 				&& listClin.SelectedIndices.Count==0 
 				&& !checkClinAll.Checked) 
 			{
@@ -404,7 +404,7 @@ namespace OpenDental {
 				listProvNums=listProv.SelectedIndices.OfType<int>().Select(x => _listProviders[x].ProvNum).ToList();
 			}
 			List<long> listClinicNums=new List<long>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(checkClinAll.Checked) {
 					listClinicNums=_listClinics.Select(x => x.ClinicNum).Distinct().ToList();
 				}

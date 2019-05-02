@@ -199,15 +199,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Job into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Job job,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				job.JobNum=ReplicationServers.GetKey("job","JobNum");
 			}
 			string command="INSERT INTO job (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="JobNum,";
 			}
 			command+="UserNumConcept,UserNumExpert,UserNumEngineer,UserNumApproverConcept,UserNumApproverJob,UserNumApproverChange,UserNumDocumenter,UserNumCustContact,UserNumCheckout,UserNumInfo,ParentNum,DateTimeCustContact,Priority,Category,JobVersion,TimeEstimateDevelopment,TimeActual,DateTimeEntry,Implementation,Documentation,Title,PhaseCur,IsApprovalNeeded,AckDateTime,UserNumQuoter,UserNumApproverQuote,UserNumCustQuote,Requirements,UserNumTester,PriorityTesting,DateTimeTested,TimeEstimateConcept,TimeEstimateWriteup,TimeEstimateReview,RequirementsJSON,PatternReviewProject,PatternReviewStatus) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(job.JobNum)+",";
 			}
 			command+=
@@ -264,7 +264,7 @@ namespace OpenDentBusiness.Crud{
 				job.RequirementsJSON="";
 			}
 			OdSqlParameter paramRequirementsJSON=new OdSqlParameter("paramRequirementsJSON",OdDbType.Text,POut.StringParam(job.RequirementsJSON));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramImplementation,paramDocumentation,paramRequirements,paramRequirementsJSON);
 			}
 			else {

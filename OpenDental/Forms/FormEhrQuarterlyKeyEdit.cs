@@ -39,7 +39,7 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(!PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+			if(!Preferences.GetBool(PrefName.ShowFeatureEhr)) {
 				MsgBox.Show(this,"You must go to Setup, Show Features, and activate EHR before entering keys.");
 				return;
 			}
@@ -57,14 +57,14 @@ namespace OpenDental {
 				MessageBox.Show("Please fix errors first.");
 				return;
 			}
-			if(!FormEHR.QuarterlyKeyIsValid(textYear.Text,textQuarter.Text,PrefC.GetString(PrefName.PracticeTitle),textKey.Text)) {
+			if(!FormEHR.QuarterlyKeyIsValid(textYear.Text,textQuarter.Text,Preferences.GetString(PrefName.PracticeTitle),textKey.Text)) {
 				MsgBox.Show(this,"Invalid quarterly key");
 				return;
 			}
 			KeyCur.YearValue=PIn.Int(textYear.Text);
 			KeyCur.QuarterValue=PIn.Int(textQuarter.Text);
 			KeyCur.KeyValue=textKey.Text;
-			KeyCur.PracticeName=PrefC.GetString(PrefName.PracticeTitle);
+			KeyCur.PracticeName=Preferences.GetString(PrefName.PracticeTitle);
 			if(KeyCur.IsNew) {
 				EhrQuarterlyKeys.Insert(KeyCur);
 			}

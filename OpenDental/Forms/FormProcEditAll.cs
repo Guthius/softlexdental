@@ -79,7 +79,7 @@ namespace OpenDental {
 			if(dateLoadedWithValue){
 				textDate.Text=ProcList[0].ProcDate.ToShortDateString();
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				labelClinic.Visible=true;
 				comboClinic.Visible=true;
 				butMoreClinics.Visible=true;
@@ -120,7 +120,7 @@ namespace OpenDental {
 			comboClinic.Items.Add(new ODBoxItem<Clinic>(Lan.g(this,""),null));
 			comboClinic.SelectedIndex=0;//Selection is not changed if isAllProcsForSameClinic is false.
 			bool isAllProcsForSameClinic=ProcList.Select(x => x.ClinicNum).Distinct().ToList().Count==1;
-			bool isListAlpha = PrefC.GetBool(PrefName.ClinicListIsAlphabetical);
+			bool isListAlpha = Preferences.GetBool(PrefName.ClinicListIsAlphabetical);
 			_listClinics=Clinics.GetForUserod(Security.CurUser);
 			if(isListAlpha) {
 				_listClinics=_listClinics.OrderBy(x => x.Abbr).ToList();
@@ -225,7 +225,7 @@ namespace OpenDental {
 				Appointment apt;
 				foreach(Procedure proc in ProcList){//first validate for all dates. 
 					#region Future dating completed procedures validation.
-					if(!PrefC.GetBool(PrefName.FutureTransDatesAllowed) && proc.ProcStatus==ProcStat.C && procDate>DateTime.Today) {
+					if(!Preferences.GetBool(PrefName.FutureTransDatesAllowed) && proc.ProcStatus==ProcStat.C && procDate>DateTime.Today) {
 						MsgBox.Show(this,"Completed procedures cannot have future dates.");
 						return false;
 					}

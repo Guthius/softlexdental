@@ -150,14 +150,14 @@ namespace OpenDental{
 		#endregion
 
 		private void FormAging_Load(object sender, System.EventArgs e) {
-			DateTime dateLastAging=PrefC.GetDate(PrefName.DateLastAging);
+			DateTime dateLastAging=Preferences.GetDate(PrefName.DateLastAging);
 			if(dateLastAging.Year<1880){
 				textDateLast.Text="";
 			}
 			else{
 				textDateLast.Text=dateLastAging.ToShortDateString();
 			}
-			if(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)){
+			if(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)){
 				if(dateLastAging < DateTime.Today.AddDays(-15)) {
 					textDateCalc.Text=dateLastAging.AddMonths(1).ToShortDateString();
 				}
@@ -167,7 +167,7 @@ namespace OpenDental{
 			}
 			else{
 				textDateCalc.Text=DateTime.Today.ToShortDateString();
-				if(PrefC.GetBool(PrefName.AgingIsEnterprise)) {//enterprise aging requires daily not monthly calc
+				if(Preferences.GetBool(PrefName.AgingIsEnterprise)) {//enterprise aging requires daily not monthly calc
 					textDateCalc.ReadOnly=true;
 					textDateCalc.BackColor=SystemColors.Control;
 				}
@@ -175,7 +175,7 @@ namespace OpenDental{
 		}
 
 		private bool RunAgingEnterprise(DateTime dateCalc) {
-			DateTime dateLastAging=PrefC.GetDate(PrefName.DateLastAging);
+			DateTime dateLastAging=Preferences.GetDate(PrefName.DateLastAging);
 			if(dateLastAging.Date==dateCalc.Date) {
 				if(MessageBox.Show(this,Lan.g(this,"Aging has already been calculated for")+" "+dateCalc.ToShortDateString()+" "
 					+Lan.g(this,"and does not normally need to run more than once per day.\r\n\r\nRun anyway?"),"",MessageBoxButtons.YesNo)!=DialogResult.Yes)
@@ -185,7 +185,7 @@ namespace OpenDental{
 			}
 			//Refresh prefs because AgingBeginDateTime is very time sensitive
 			Prefs.RefreshCache();
-			DateTime dateTAgingBeganPref=PrefC.GetDateT(PrefName.AgingBeginDateTime);
+			DateTime dateTAgingBeganPref=Preferences.GetDateTime(PrefName.AgingBeginDateTime);
 			if(dateTAgingBeganPref>DateTime.MinValue) {
 				MessageBox.Show(this,Lan.g(this,"You cannot run aging until it has finished the current calculations which began on")+" "
 					+dateTAgingBeganPref.ToString()+".\r\n"+Lans.g(this,"If you believe the current aging process has finished, a user with SecurityAdmin permission "
@@ -220,7 +220,7 @@ namespace OpenDental{
 				return;
 			}
 			DateTime dateCalc=PIn.Date(textDateCalc.Text);
-			if(PrefC.GetBool(PrefName.AgingIsEnterprise)) {
+			if(Preferences.GetBool(PrefName.AgingIsEnterprise)) {
 				//if this is true, dateCalc has to be DateTime.Today and aging calculated daily not monthly.
 				if(!RunAgingEnterprise(dateCalc)) {
 					//Errors displayed from RunAgingEnterprise

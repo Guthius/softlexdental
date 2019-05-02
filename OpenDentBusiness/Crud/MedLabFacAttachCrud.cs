@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one MedLabFacAttach into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(MedLabFacAttach medLabFacAttach,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				medLabFacAttach.MedLabFacAttachNum=ReplicationServers.GetKey("medlabfacattach","MedLabFacAttachNum");
 			}
 			string command="INSERT INTO medlabfacattach (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="MedLabFacAttachNum,";
 			}
 			command+="MedLabNum,MedLabResultNum,MedLabFacilityNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(medLabFacAttach.MedLabFacAttachNum)+",";
 			}
 			command+=
 				     POut.Long  (medLabFacAttach.MedLabNum)+","
 				+    POut.Long  (medLabFacAttach.MedLabResultNum)+","
 				+    POut.Long  (medLabFacAttach.MedLabFacilityNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

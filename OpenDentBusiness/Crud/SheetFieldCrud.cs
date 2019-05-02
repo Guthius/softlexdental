@@ -143,15 +143,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SheetField into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(SheetField sheetField,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				sheetField.SheetFieldNum=ReplicationServers.GetKey("sheetfield","SheetFieldNum");
 			}
 			string command="INSERT INTO sheetfield (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="SheetFieldNum,";
 			}
 			command+="SheetNum,FieldType,FieldName,FieldValue,FontSize,FontName,FontIsBold,XPos,YPos,Width,Height,GrowthBehavior,RadioButtonValue,RadioButtonGroup,IsRequired,TabOrder,ReportableName,TextAlign,IsLocked,ItemColor,DateTimeSig,TabOrderMobile,UiLabelMobile,UiLabelMobileRadioButton) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(sheetField.SheetFieldNum)+",";
 			}
 			command+=
@@ -183,7 +183,7 @@ namespace OpenDentBusiness.Crud{
 				sheetField.FieldValue="";
 			}
 			OdSqlParameter paramFieldValue=new OdSqlParameter("paramFieldValue",OdDbType.Text,POut.StringParam(sheetField.FieldValue));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramFieldValue);
 			}
 			else {
@@ -199,7 +199,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many SheetFields into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<SheetField> listSheetFields,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(SheetField sheetField in listSheetFields) {
 					Insert(sheetField);
 				}

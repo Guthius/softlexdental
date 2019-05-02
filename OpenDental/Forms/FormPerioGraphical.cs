@@ -28,7 +28,7 @@ namespace OpenDental {
 			//ComputerPref localComputerPrefs=ComputerPrefs.GetForLocalComputer();
 			toothChart.DeviceFormat=new ToothChartDirectX.DirectXDeviceFormat(ComputerPrefs.LocalComputer.DirectXFormat);//Must be set before draw mode
 			toothChart.DrawMode=DrawingMode.DirectX;
-			toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers));
+			toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)Preferences.GetInt(PrefName.UseInternationalToothNumbers));
 			toothChart.ColorBackground=Color.White;
 			toothChart.ColorText=Color.Black;
 			try {
@@ -43,15 +43,15 @@ namespace OpenDental {
 			List<Def> listDefs=Defs.GetDefsForCategory(DefCat.MiscColors,true);
 			toothChart.ColorBleeding=listDefs[1].ItemColor;
 			toothChart.ColorSuppuration=listDefs[2].ItemColor;
-			toothChart.ColorProbing=PrefC.GetColor(PrefName.PerioColorProbing);
-			toothChart.ColorProbingRed=PrefC.GetColor(PrefName.PerioColorProbingRed);
-			toothChart.ColorGingivalMargin=PrefC.GetColor(PrefName.PerioColorGM);
-			toothChart.ColorCAL=PrefC.GetColor(PrefName.PerioColorCAL);
-			toothChart.ColorMGJ=PrefC.GetColor(PrefName.PerioColorMGJ);
-			toothChart.ColorFurcations=PrefC.GetColor(PrefName.PerioColorFurcations);
-			toothChart.ColorFurcationsRed=PrefC.GetColor(PrefName.PerioColorFurcationsRed);
-			toothChart.RedLimitProbing=PrefC.GetInt(PrefName.PerioRedProb);
-			toothChart.RedLimitFurcations=PrefC.GetInt(PrefName.PerioRedFurc);
+			toothChart.ColorProbing=Preferences.GetColor(PrefName.PerioColorProbing);
+			toothChart.ColorProbingRed=Preferences.GetColor(PrefName.PerioColorProbingRed);
+			toothChart.ColorGingivalMargin=Preferences.GetColor(PrefName.PerioColorGM);
+			toothChart.ColorCAL=Preferences.GetColor(PrefName.PerioColorCAL);
+			toothChart.ColorMGJ=Preferences.GetColor(PrefName.PerioColorMGJ);
+			toothChart.ColorFurcations=Preferences.GetColor(PrefName.PerioColorFurcations);
+			toothChart.ColorFurcationsRed=Preferences.GetColor(PrefName.PerioColorFurcationsRed);
+			toothChart.RedLimitProbing=Preferences.GetInt(PrefName.PerioRedProb);
+			toothChart.RedLimitFurcations=Preferences.GetInt(PrefName.PerioRedFurc);
 			List<PerioMeasure> listMeas=PerioMeasures.GetAllForExam(_perioExamCur.PerioExamNum);
 			//compute CAL's for each site.  If a CAL is valid, pass it in.
 			PerioMeasure measureProbe;
@@ -170,7 +170,7 @@ namespace OpenDental {
 				else if(listMeas[i].SequenceType==PerioSequenceType.Mobility) {
 					int mob=listMeas[i].ToothValue;
 					Color color=Color.Black;
-					if(mob>=PrefC.GetInt(PrefName.PerioRedMob)) {
+					if(mob>=Preferences.GetInt(PrefName.PerioRedMob)) {
 						color=Color.Red;
 					}
 					if(mob!=-1) {//-1 represents no measurement taken.
@@ -256,7 +256,7 @@ namespace OpenDental {
 				clinicName=clinic.Description;
 			} 
 			else {
-				clinicName=PrefC.GetString(PrefName.PracticeTitle);
+				clinicName=Preferences.GetString(PrefName.PracticeTitle);
 			}
 			float y=70;
 			SizeF sizeFPage=new SizeF(marginBounds.Width,marginBounds.Height);
@@ -288,13 +288,13 @@ namespace OpenDental {
 		private void butSetup_Click(object sender,EventArgs e) {
 			FormPerioGraphicalSetup fpgs=new FormPerioGraphicalSetup();
 			if(fpgs.ShowDialog()==DialogResult.OK){
-				toothChart.ColorCAL=PrefC.GetColor(PrefName.PerioColorCAL);
-				toothChart.ColorFurcations=PrefC.GetColor(PrefName.PerioColorFurcations);
-				toothChart.ColorFurcationsRed=PrefC.GetColor(PrefName.PerioColorFurcationsRed);
-				toothChart.ColorGingivalMargin=PrefC.GetColor(PrefName.PerioColorGM);
-				toothChart.ColorMGJ=PrefC.GetColor(PrefName.PerioColorMGJ);	
-				toothChart.ColorProbing=PrefC.GetColor(PrefName.PerioColorProbing);
-				toothChart.ColorProbingRed=PrefC.GetColor(PrefName.PerioColorProbingRed);
+				toothChart.ColorCAL=Preferences.GetColor(PrefName.PerioColorCAL);
+				toothChart.ColorFurcations=Preferences.GetColor(PrefName.PerioColorFurcations);
+				toothChart.ColorFurcationsRed=Preferences.GetColor(PrefName.PerioColorFurcationsRed);
+				toothChart.ColorGingivalMargin=Preferences.GetColor(PrefName.PerioColorGM);
+				toothChart.ColorMGJ=Preferences.GetColor(PrefName.PerioColorMGJ);	
+				toothChart.ColorProbing=Preferences.GetColor(PrefName.PerioColorProbing);
+				toothChart.ColorProbingRed=Preferences.GetColor(PrefName.PerioColorProbingRed);
 				this.toothChart.Invalidate();
 			}
 		}

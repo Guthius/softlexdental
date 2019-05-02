@@ -30,7 +30,7 @@ namespace OpenDental {
 				(int)TimeSpan.FromSeconds(0.3).TotalMilliseconds,
 				textDaysPastDue);
 			FillProvs();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				comboBoxMultiClinics.Visible=true;
 				labelClinic.Visible=true;
 				FillClinics();
@@ -119,7 +119,7 @@ namespace OpenDental {
 				}
 			}
 			List<long> listClinicNums=new List<long>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(comboBoxMultiClinics.ListSelectedIndices.Contains(0)) {
 					for(int j = 0;j<_listClinics.Count;j++) {
 						listClinicNums.Add(_listClinics[j].ClinicNum);//Add all clinics this person has access to.
@@ -168,7 +168,7 @@ namespace OpenDental {
 				if(!listProvNums.Contains(payPlanCur.ListPayPlanCharges[0].ProvNum)) {
 					continue;
 				}
-				if(PrefC.HasClinicsEnabled && (!listClinicNums.Contains(payPlanCur.ListPayPlanCharges[0].ClinicNum))) {
+				if(Preferences.HasClinicsEnabled && (!listClinicNums.Contains(payPlanCur.ListPayPlanCharges[0].ClinicNum))) {
 					continue;
 				}
 				row = new ODGridRow();
@@ -266,17 +266,17 @@ namespace OpenDental {
 			SaveFileDialog saveFileDialog=new SaveFileDialog();
 			saveFileDialog.AddExtension=true;
 			saveFileDialog.FileName="Outstanding Insurance Payment Plans";
-			if(!Directory.Exists(PrefC.GetString(PrefName.ExportPath))) {
+			if(!Directory.Exists(Preferences.GetString(PrefName.ExportPath))) {
 				try {
-					Directory.CreateDirectory(PrefC.GetString(PrefName.ExportPath));
-					saveFileDialog.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+					Directory.CreateDirectory(Preferences.GetString(PrefName.ExportPath));
+					saveFileDialog.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
 				}
 				catch {
 					//initialDirectory will be blank
 				}
 			}
 			else {
-				saveFileDialog.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+				saveFileDialog.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
 			}
 			saveFileDialog.Filter="Text files(*.txt)|*.txt|Excel Files(*.xls)|*.xls|All files(*.*)|*.*";
 			saveFileDialog.FilterIndex=0;

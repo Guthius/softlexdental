@@ -186,7 +186,7 @@ namespace OpenDental {
 									continue;
 								}
 								meduFileName=ze.FileName;
-								ze.Extract(PrefC.GetTempFolderPath(),ExtractExistingFileAction.OverwriteSilently);
+								ze.Extract(Preferences.GetTempFolderPath(),ExtractExistingFileAction.OverwriteSilently);
 								foundFile=true;
 							}
 						}
@@ -206,7 +206,7 @@ namespace OpenDental {
 							versionID=input.textResult.Text;
 						}
 						//Add a new thread. We will run these all in parallel once we have them all queued.
-						UpdateCodeSystemThread.Add(ODFileUtils.CombinePaths(PrefC.GetTempFolderPath(),meduFileName),
+						UpdateCodeSystemThread.Add(ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),meduFileName),
 							_listCodeSystems[gridMain.SelectedIndices[i]],new UpdateCodeSystemThread.UpdateCodeSystemArgs(UpdateCodeSystemThread_UpdateSafe),
 							versionID,!checkKeepDescriptions.Checked);
 						//We got this far so the local file was retreived successfully. No initial status to report.
@@ -225,9 +225,9 @@ namespace OpenDental {
 								OpenDental.customerUpdates.Service1 regService=new OpenDental.customerUpdates.Service1();
 								regService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
 							#endif
-							if(PrefC.GetString(PrefName.UpdateWebProxyAddress) !="") {
-								IWebProxy proxy = new WebProxy(PrefC.GetString(PrefName.UpdateWebProxyAddress));
-								ICredentials cred=new NetworkCredential(PrefC.GetString(PrefName.UpdateWebProxyUserName),PrefC.GetString(PrefName.UpdateWebProxyPassword));
+							if(Preferences.GetString(PrefName.UpdateWebProxyAddress) !="") {
+								IWebProxy proxy = new WebProxy(Preferences.GetString(PrefName.UpdateWebProxyAddress));
+								ICredentials cred=new NetworkCredential(Preferences.GetString(PrefName.UpdateWebProxyUserName),Preferences.GetString(PrefName.UpdateWebProxyPassword));
 								proxy.Credentials=cred;
 								regService.Proxy=proxy;
 							}
@@ -238,7 +238,7 @@ namespace OpenDental {
 							using(XmlWriter writer=XmlWriter.Create(strbuild,settings)) {
 								writer.WriteStartElement("IsForeignRegKeyRequest");
 								writer.WriteStartElement("RegistrationKey");
-								writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
+								writer.WriteString(Preferences.GetString(PrefName.RegistrationKey));
 								writer.WriteEndElement();
 								writer.WriteEndElement();
 							}
@@ -286,10 +286,10 @@ namespace OpenDental {
 		///<summary>Returns a list of available code systems.  Throws exceptions, put in try catch block.</summary>
 		private static string RequestCodeSystemsXml() {
 			OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-			updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
-			if(PrefC.GetString(PrefName.UpdateWebProxyAddress) !="") {
-				IWebProxy proxy=new WebProxy(PrefC.GetString(PrefName.UpdateWebProxyAddress));
-				ICredentials cred=new NetworkCredential(PrefC.GetString(PrefName.UpdateWebProxyUserName),PrefC.GetString(PrefName.UpdateWebProxyPassword));
+			updateService.Url=Preferences.GetString(PrefName.UpdateServerAddress);
+			if(Preferences.GetString(PrefName.UpdateWebProxyAddress) !="") {
+				IWebProxy proxy=new WebProxy(Preferences.GetString(PrefName.UpdateWebProxyAddress));
+				ICredentials cred=new NetworkCredential(Preferences.GetString(PrefName.UpdateWebProxyUserName),Preferences.GetString(PrefName.UpdateWebProxyPassword));
 				proxy.Credentials=cred;
 				updateService.Proxy=proxy;
 			}
@@ -298,7 +298,7 @@ namespace OpenDental {
 
 		///<summary>Used to show EULA or other pre-download actions.  Displays message boxes. Returns false if pre-download checks not satisfied.</summary>
 		private bool PreDownloadHelper(string codeSystemName) {
-			string programVersion=PrefC.GetString(PrefName.ProgramVersion);
+			string programVersion=Preferences.GetString(PrefName.ProgramVersion);
 			switch(codeSystemName) {
 				//Code system specific pre-download actions.
 				case "SNOMEDCT":
@@ -830,7 +830,7 @@ If the master term dictionary or software program containing the UCUM table, UCU
 
 			///<summary>Returns temp file name used to download file.  Can throw exception.</summary>
 			private string DownloadFileHelper(string codeSystemURL) {
-				string zipFileDestination=PrefC.GetRandomTempFile(".tmp");
+				string zipFileDestination=Preferences.GetRandomTempFile(".tmp");
 				//Cleanup existing.
 				File.Delete(zipFileDestination);
 				try {
@@ -841,8 +841,8 @@ If the master term dictionary or software program containing the UCUM table, UCU
 					using(MemoryStream ms=new MemoryStream())
 					using(ZipFile unzipped=ZipFile.Read(zipFileDestination)) {
 						ZipEntry ze=unzipped[0];
-						ze.Extract(PrefC.GetTempFolderPath(),ExtractExistingFileAction.OverwriteSilently);
-						return ODFileUtils.CombinePaths(PrefC.GetTempFolderPath(),unzipped[0].FileName);
+						ze.Extract(Preferences.GetTempFolderPath(),ExtractExistingFileAction.OverwriteSilently);
+						return ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),unzipped[0].FileName);
 					}
 				}
 				finally{
@@ -894,19 +894,19 @@ If the master term dictionary or software program containing the UCUM table, UCU
 					//TODO: include more user information
 					writer.WriteStartElement("UpdateRequest");
 					writer.WriteStartElement("RegistrationKey");
-					writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
+					writer.WriteString(Preferences.GetString(PrefName.RegistrationKey));
 					writer.WriteEndElement();
 					writer.WriteStartElement("PracticeTitle");
-					writer.WriteString(PrefC.GetString(PrefName.PracticeTitle));
+					writer.WriteString(Preferences.GetString(PrefName.PracticeTitle));
 					writer.WriteEndElement();
 					writer.WriteStartElement("PracticeAddress");
-					writer.WriteString(PrefC.GetString(PrefName.PracticeAddress));
+					writer.WriteString(Preferences.GetString(PrefName.PracticeAddress));
 					writer.WriteEndElement();
 					writer.WriteStartElement("PracticePhone");
-					writer.WriteString(PrefC.GetString(PrefName.PracticePhone));
+					writer.WriteString(Preferences.GetString(PrefName.PracticePhone));
 					writer.WriteEndElement();
 					writer.WriteStartElement("ProgramVersion");
-					writer.WriteString(PrefC.GetString(PrefName.ProgramVersion));
+					writer.WriteString(Preferences.GetString(PrefName.ProgramVersion));
 					writer.WriteEndElement();
 					writer.WriteStartElement("CodeSystemRequested");
 					writer.WriteString(codeSystemName);
@@ -919,9 +919,9 @@ If the master term dictionary or software program containing the UCUM table, UCU
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
 				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
 #endif
-				if(PrefC.GetString(PrefName.UpdateWebProxyAddress) !="") {
-					IWebProxy proxy = new WebProxy(PrefC.GetString(PrefName.UpdateWebProxyAddress));
-					ICredentials cred=new NetworkCredential(PrefC.GetString(PrefName.UpdateWebProxyUserName),PrefC.GetString(PrefName.UpdateWebProxyPassword));
+				if(Preferences.GetString(PrefName.UpdateWebProxyAddress) !="") {
+					IWebProxy proxy = new WebProxy(Preferences.GetString(PrefName.UpdateWebProxyAddress));
+					ICredentials cred=new NetworkCredential(Preferences.GetString(PrefName.UpdateWebProxyUserName),Preferences.GetString(PrefName.UpdateWebProxyPassword));
 					proxy.Credentials=cred;
 					updateService.Proxy=proxy;
 				}

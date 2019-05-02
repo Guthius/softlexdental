@@ -151,15 +151,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Document into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Document document,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				document.DocNum=ReplicationServers.GetKey("document","DocNum");
 			}
 			string command="INSERT INTO document (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="DocNum,";
 			}
 			command+="Description,DateCreated,DocCategory,PatNum,FileName,ImgType,IsFlipped,DegreesRotated,ToothNumbers,Note,SigIsTopaz,Signature,CropX,CropY,CropW,CropH,WindowingMin,WindowingMax,MountItemNum,RawBase64,Thumbnail,ExternalGUID,ExternalSource) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(document.DocNum)+",";
 			}
 			command+=
@@ -203,7 +203,7 @@ namespace OpenDentBusiness.Crud{
 				document.Thumbnail="";
 			}
 			OdSqlParameter paramThumbnail=new OdSqlParameter("paramThumbnail",OdDbType.Text,POut.StringParam(document.Thumbnail));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNote,paramSignature,paramRawBase64,paramThumbnail);
 			}
 			else {

@@ -80,22 +80,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one DeletedObject into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(DeletedObject deletedObject,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				deletedObject.DeletedObjectNum=ReplicationServers.GetKey("deletedobject","DeletedObjectNum");
 			}
 			string command="INSERT INTO deletedobject (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="DeletedObjectNum,";
 			}
 			command+="ObjectNum,ObjectType) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(deletedObject.DeletedObjectNum)+",";
 			}
 			command+=
 				     POut.Long  (deletedObject.ObjectNum)+","
 				+    POut.Int   ((int)deletedObject.ObjectType)+")";
 				//DateTStamp can only be set by MySQL
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
@@ -111,7 +111,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many DeletedObjects into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<DeletedObject> listDeletedObjects,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(DeletedObject deletedObject in listDeletedObjects) {
 					Insert(deletedObject);
 				}

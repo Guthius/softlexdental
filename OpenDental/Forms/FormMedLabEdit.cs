@@ -30,7 +30,7 @@ namespace OpenDental {
 
 		private void FormMedLabEdit_Load(object sender,EventArgs e) {
 			_medLabCur=ListMedLabs[0];
-			if(PrefC.AtoZfolderUsed!=DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed!=DataStorageType.LocalAtoZ) {
 				butShowHL7.Visible=false;//messages are not archived if storing images in the database
 				labelShowHL7.Visible=false;
 			}
@@ -335,7 +335,7 @@ namespace OpenDental {
 			Sheet sheet=SheetUtil.CreateSheet(sheetDef,_medLabCur.PatNum);
 			SheetFiller.FillFields(sheet,null,null,_medLabCur);
 			//create the file in the temp folder location, then import so it works when storing images in the db
-			string tempPath=ODFileUtils.CombinePaths(PrefC.GetTempFolderPath(),_medLabCur.PatNum.ToString()+".pdf");
+			string tempPath=ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),_medLabCur.PatNum.ToString()+".pdf");
 			SheetPrinting.CreatePdf(sheet,tempPath,null,_medLabCur);
 			HL7Def defCur=HL7Defs.GetOneDeepEnabled(true);
 			long category=defCur.LabResultImageCat;
@@ -366,7 +366,7 @@ namespace OpenDental {
 			docc.DateCreated=DateTime.Now;
 			Documents.Update(docc);
 			string filePathAndName="";
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				string patFolder=ImageStore.GetPatientFolder(Patients.GetPat(_medLabCur.PatNum),ImageStore.GetPreferredAtoZpath());
 				filePathAndName=ODFileUtils.CombinePaths(patFolder,docc.FileName);
 			}
@@ -385,7 +385,7 @@ namespace OpenDental {
 					state.DoCancel=true;
 					return;
 				}
-				filePathAndName=PrefC.GetRandomTempFile(Path.GetExtension(docc.FileName));
+				filePathAndName=Preferences.GetRandomTempFile(Path.GetExtension(docc.FileName));
 				File.WriteAllBytes(filePathAndName,state.FileContent);
 			}
 			Cursor=Cursors.Default;
@@ -441,7 +441,7 @@ namespace OpenDental {
 			MedLabs.UpdateAllPatNums(ListMedLabs.Select(x => x.MedLabNum).ToList(),PatCur.PatNum);
 			string atozFrom="";
 			string atozTo="";
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				string atozPath=ImageStore.GetPreferredAtoZpath();
 				//if patOld is null, the file was placed into the image folder in a directory named MedLabEmbeddedFiles, not a patient's image folder
 				if(patOld==null) {
@@ -468,7 +468,7 @@ namespace OpenDental {
 			for(int i=0;i<listDocs.Count;i++) {
 				Document doc=listDocs[i];
 				string destFileName=Documents.GetUniqueFileNameForPatient(PatCur,doc.DocNum,Path.GetExtension(doc.FileName));
-				if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+				if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 					string fromFilePath=ODFileUtils.CombinePaths(atozFrom,doc.FileName);
 					if(!File.Exists(fromFilePath)) {
 						//the DocNum in the MedLabResults table is pointing to a file that either doesn't exist or is not accessible, can't move/copy it

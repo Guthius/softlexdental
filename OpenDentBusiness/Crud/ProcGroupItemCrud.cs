@@ -77,21 +77,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ProcGroupItem into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ProcGroupItem procGroupItem,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				procGroupItem.ProcGroupItemNum=ReplicationServers.GetKey("procgroupitem","ProcGroupItemNum");
 			}
 			string command="INSERT INTO procgroupitem (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ProcGroupItemNum,";
 			}
 			command+="ProcNum,GroupNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(procGroupItem.ProcGroupItemNum)+",";
 			}
 			command+=
 				     POut.Long  (procGroupItem.ProcNum)+","
 				+    POut.Long  (procGroupItem.GroupNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many ProcGroupItems into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<ProcGroupItem> listProcGroupItems,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(ProcGroupItem procGroupItem in listProcGroupItems) {
 					Insert(procGroupItem);
 				}

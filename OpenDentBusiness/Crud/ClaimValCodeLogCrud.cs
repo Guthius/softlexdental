@@ -85,15 +85,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ClaimValCodeLog into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ClaimValCodeLog claimValCodeLog,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				claimValCodeLog.ClaimValCodeLogNum=ReplicationServers.GetKey("claimvalcodelog","ClaimValCodeLogNum");
 			}
 			string command="INSERT INTO claimvalcodelog (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ClaimValCodeLogNum,";
 			}
 			command+="ClaimNum,ClaimField,ValCode,ValAmount,Ordinal) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(claimValCodeLog.ClaimValCodeLogNum)+",";
 			}
 			command+=
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(claimValCodeLog.ValCode)+"',"
 				+"'"+POut.Double(claimValCodeLog.ValAmount)+"',"
 				+    POut.Int   (claimValCodeLog.Ordinal)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

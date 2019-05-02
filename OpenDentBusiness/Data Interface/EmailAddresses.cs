@@ -86,13 +86,13 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			EmailAddress emailAddress=null;
 			Clinic clinic=Clinics.GetClinic(clinicNum);
-			if(!PrefC.HasClinicsEnabled || clinic==null) {//No clinic, get practice default
-				emailAddress=GetOne(PrefC.GetLong(PrefName.EmailDefaultAddressNum));
+			if(!Preferences.HasClinicsEnabled || clinic==null) {//No clinic, get practice default
+				emailAddress=GetOne(Preferences.GetLong(PrefName.EmailDefaultAddressNum));
 			}
 			else {
 				emailAddress=GetOne(clinic.EmailAddressNum);
 				if(emailAddress==null) {//clinic.EmailAddressNum 0. Use default.
-					emailAddress=GetOne(PrefC.GetLong(PrefName.EmailDefaultAddressNum));
+					emailAddress=GetOne(Preferences.GetLong(PrefName.EmailDefaultAddressNum));
 				}
 			}
 			if(emailAddress==null) {

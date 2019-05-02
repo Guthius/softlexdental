@@ -187,7 +187,7 @@ namespace OpenDental{
 		private void FormRpInsOverpaid_Load(object sender, System.EventArgs e) {
 			dateStart.SelectionStart=DateTime.Today.AddMonths(-1);
 			dateEnd.SelectionStart=DateTime.Today;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				_listClinics=Clinics.GetForUserod(Security.CurUser);
 				if(!Security.CurUser.ClinicIsRestricted) {
 					listClin.Items.Add(Lan.g(this,"Unassigned"));
@@ -232,7 +232,7 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(!checkAllClin.Checked && listClin.SelectedIndices.Count==0) {
 					MsgBox.Show(this,"At least one clinic must be selected.");
 					return;
@@ -241,7 +241,7 @@ namespace OpenDental{
 			ReportComplex report=new ReportComplex(true,false);
 			Cursor=Cursors.WaitCursor;
 			List<long> listClinicNums=new List<long>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
 					if(Security.CurUser.ClinicIsRestricted) {
 						listClinicNums.Add(_listClinics[listClin.SelectedIndices[i]].ClinicNum);//we know that the list is a 1:1 to _listClinics
@@ -260,7 +260,7 @@ namespace OpenDental{
 				radioGroupByProc.Checked);
 			Cursor=Cursors.Default;
 			string subtitleClinics="";
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(checkAllClin.Checked) {
 					subtitleClinics=Lan.g(this,"All Clinics");
 				}
@@ -285,8 +285,8 @@ namespace OpenDental{
 			}
 			report.ReportName=Lan.g(this,"Insurance Overpaid");
 			report.AddTitle("Title",Lan.g(this,"Insurance Overpaid"));
-			report.AddSubTitle("Practice Name",PrefC.GetString(PrefName.PracticeTitle));
-			if(PrefC.HasClinicsEnabled) {
+			report.AddSubTitle("Practice Name",Preferences.GetString(PrefName.PracticeTitle));
+			if(Preferences.HasClinicsEnabled) {
 				report.AddSubTitle("Clinics",subtitleClinics);
 			}
 			QueryObject query=report.AddQuery(tableOverpaid,DateTimeOD.Today.ToShortDateString());

@@ -85,15 +85,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one CodeSystem into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(CodeSystem codeSystem,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				codeSystem.CodeSystemNum=ReplicationServers.GetKey("codesystem","CodeSystemNum");
 			}
 			string command="INSERT INTO codesystem (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="CodeSystemNum,";
 			}
 			command+="CodeSystemName,VersionCur,VersionAvail,HL7OID,Note) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(codeSystem.CodeSystemNum)+",";
 			}
 			command+=
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(codeSystem.VersionAvail)+"',"
 				+"'"+POut.String(codeSystem.HL7OID)+"',"
 				+"'"+POut.String(codeSystem.Note)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

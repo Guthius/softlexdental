@@ -170,7 +170,7 @@ namespace OpenDentBusiness
         public static List<InvalidType> RefreshForWeb()
         {
             int defaultProcessSigsIntervalInSecs = 7;
-            ODException.SwallowAnyException(() => defaultProcessSigsIntervalInSecs = PrefC.GetInt(PrefName.ProcessSigsIntervalInSecs));
+            ODException.SwallowAnyException(() => defaultProcessSigsIntervalInSecs = Preferences.GetInt(PrefName.ProcessSigsIntervalInSecs));
             if (DateTime.Now.Subtract(_signalLastRefreshedWeb) <= TimeSpan.FromSeconds(defaultProcessSigsIntervalInSecs))
             {
                 return new List<InvalidType>();
@@ -361,7 +361,7 @@ namespace OpenDentBusiness
             {
                 return false;
             }
-            int days = PrefC.GetInt(PrefName.ApptAutoRefreshRange);
+            int days = Preferences.GetInt(PrefName.ApptAutoRefreshRange);
             if (days == -1)
             {
                 //ApptAutoRefreshRange preference is -1, so all appointments are in range
@@ -599,7 +599,7 @@ namespace OpenDentBusiness
             try
             {
                 if (Prefs.GetContainsKey(PrefName.SignalLastClearedDate.ToString())
-                    && PrefC.GetDateT(PrefName.SignalLastClearedDate) > MiscData.GetNowDateTime().AddDays(-7)) //Has already been run in the past week. This is all server based time.
+                    && Preferences.GetDateTime(PrefName.SignalLastClearedDate) > MiscData.GetNowDateTime().AddDays(-7)) //Has already been run in the past week. This is all server based time.
                 {
                     return;//Do not run this process again.
                 }

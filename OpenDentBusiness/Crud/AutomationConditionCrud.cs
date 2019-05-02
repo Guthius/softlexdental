@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one AutomationCondition into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(AutomationCondition automationCondition,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				automationCondition.AutomationConditionNum=ReplicationServers.GetKey("automationcondition","AutomationConditionNum");
 			}
 			string command="INSERT INTO automationcondition (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="AutomationConditionNum,";
 			}
 			command+="AutomationNum,CompareField,Comparison,CompareString) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(automationCondition.AutomationConditionNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   ((int)automationCondition.CompareField)+","
 				+    POut.Int   ((int)automationCondition.Comparison)+","
 				+"'"+POut.String(automationCondition.CompareString)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

@@ -22,13 +22,13 @@ namespace OpenDental {
 
 		private void FormRpCustomAging_Load(object sender,EventArgs e) {
 			textDate.Text=DateTimeOD.Today.ToShortDateString();
-			switch(PrefC.GetInt(PrefName.ReportsPPOwriteoffDefaultToProcDate)) {
+			switch(Preferences.GetInt(PrefName.ReportsPPOwriteoffDefaultToProcDate)) {
 				case 0:	radioWriteoffInsPayDate.Checked=true; break;
 				case 1:	radioWriteoffProcDate.Checked=true; break;
 				case 2:	radioWriteoffClaimDate.Checked=true; break;
 				default: radioWriteoffClaimDate.Checked=true; break;
 			}
-			if(PrefC.GetInt(PrefName.PayPlansVersion) == (int)PayPlanVersions.AgeCreditsAndDebits) {
+			if(Preferences.GetInt(PrefName.PayPlansVersion) == (int)PayPlanVersions.AgeCreditsAndDebits) {
 				checkAgePayPlanCharges.Checked=true;
 				checkAgePayPlanCredits.Checked=true;
 			}
@@ -60,7 +60,7 @@ namespace OpenDental {
 		}
 
 		private void FillClinics() {
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				listBoxClins.Visible=false;
 				labelClinic.Visible=false;
 				checkAllClin.Visible=false;
@@ -284,7 +284,7 @@ namespace OpenDental {
 			ReportComplex report=new ReportComplex(true,false);
 			report.ReportName=Lan.g(this,"Custom Aging of Accounts Receivable");
 			report.AddTitle("Custom Aging Report",Lan.g(this,"Custom Aging of Accounts Receivable"));
-			report.AddSubTitle("PracTitle",PrefC.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("PracTitle",Preferences.GetString(PrefName.PracticeTitle));
 			report.AddSubTitle("AsOf",Lan.g(this,"As of ")+_agingOptions.DateAsOf.ToShortDateString());
 			List<string> listAgingInc=new List<string>();
 			//Go through every aging option and for every one that is selected, add the descriptions as a subtitle

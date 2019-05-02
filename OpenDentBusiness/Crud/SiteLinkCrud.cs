@@ -91,15 +91,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SiteLink into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(SiteLink siteLink,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				siteLink.SiteLinkNum=ReplicationServers.GetKey("sitelink","SiteLinkNum");
 			}
 			string command="INSERT INTO sitelink (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="SiteLinkNum,";
 			}
 			command+="SiteNum,OctetStart,EmployeeNum,SiteColor,ForeColor,InnerColor,OuterColor) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(siteLink.SiteLinkNum)+",";
 			}
 			command+=
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (siteLink.ForeColor.ToArgb())+","
 				+    POut.Int   (siteLink.InnerColor.ToArgb())+","
 				+    POut.Int   (siteLink.OuterColor.ToArgb())+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

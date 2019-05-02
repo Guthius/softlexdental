@@ -22,7 +22,7 @@ namespace OpenDental {
 		}
 		
 		private void FormCreditCardManage_Load(object sender,EventArgs e) {
-			if(PrefC.GetBool(PrefName.StoreCCnumbers)
+			if(Preferences.GetBool(PrefName.StoreCCnumbers)
 				&& (Programs.IsEnabled(ProgramName.Xcharge) 
 					|| Programs.IsEnabled(ProgramName.PayConnect) 
 					|| Programs.IsEnabled(ProgramName.PaySimple)))//tokens supported by Xcharge and PayConnect
@@ -46,7 +46,7 @@ namespace OpenDental {
 				gridMain.Columns.Add(new ODGridColumn("PaySimple",80,HorizontalAlignment.Center));
 				gridMain.Columns.Add(new ODGridColumn("ACH",40,HorizontalAlignment.Center));
 			}
-			if(PrefC.HasOnlinePaymentEnabled()) {
+			if(Preferences.HasOnlinePaymentEnabled()) {
 				gridMain.Columns.Add(new ODGridColumn("XWeb",45,HorizontalAlignment.Center));
 			}
 			if(gridMain.Columns.Sum(x => x.Width) > gridMain.Width) {
@@ -73,7 +73,7 @@ namespace OpenDental {
 					row.Cells.Add(!string.IsNullOrEmpty(cc.PaySimpleToken) ? "X" : "");
 					row.Cells.Add(cc.CCSource==CreditCardSource.PaySimpleACH ? "X" : "");
 				}
-				if(PrefC.HasOnlinePaymentEnabled()) {
+				if(Preferences.HasOnlinePaymentEnabled()) {
 					row.Cells.Add(!string.IsNullOrEmpty(cc.XChargeToken) && cc.IsXWeb()?"X":"");
 				}
 				row.Tag=cc;
@@ -94,7 +94,7 @@ namespace OpenDental {
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
-			if(!PrefC.GetBool(PrefName.StoreCCnumbers)) {
+			if(!Preferences.GetBool(PrefName.StoreCCnumbers)) {
 				bool hasXCharge=false;
 				bool hasPayConnect=false;
 				bool hasPaySimple=false;
@@ -163,7 +163,7 @@ namespace OpenDental {
 					}
 					xPassword=CodeBase.MiscUtils.Decrypt(xPassword);
 					ProcessStartInfo info=new ProcessStartInfo(path);
-					string resultfile=PrefC.GetRandomTempFile("txt");
+					string resultfile=Preferences.GetRandomTempFile("txt");
 					try {
 						File.Delete(resultfile);//delete the old result file.
 					}
@@ -233,7 +233,7 @@ namespace OpenDental {
 								creditCardCur.CCNumberMasked=accountMasked;
 								creditCardCur.XChargeToken=xChargeToken;
 								creditCardCur.CCExpiration=new DateTime(Convert.ToInt32("20"+PIn.String(exp.Substring(2,2))),Convert.ToInt32(PIn.String(exp.Substring(0,2))),1);
-								creditCardCur.Procedures=PrefC.GetString(PrefName.DefaultCCProcs);
+								creditCardCur.Procedures=Preferences.GetString(PrefName.DefaultCCProcs);
 								creditCardCur.CCSource=CreditCardSource.XServer;
 								creditCardCur.ClinicNum=Clinics.ClinicNum;
 								CreditCards.Insert(creditCardCur);
@@ -262,7 +262,7 @@ namespace OpenDental {
 			FormCreditCardEdit FormCCE=new FormCreditCardEdit(PatCur);
 			FormCCE.CreditCardCur=new CreditCard();
 			FormCCE.CreditCardCur.IsNew=true;
-			FormCCE.CreditCardCur.Procedures=PrefC.GetString(PrefName.DefaultCCProcs);
+			FormCCE.CreditCardCur.Procedures=Preferences.GetString(PrefName.DefaultCCProcs);
 			FormCCE.ShowDialog();
 			if(FormCCE.DialogResult==DialogResult.OK) {
 				FillGrid();

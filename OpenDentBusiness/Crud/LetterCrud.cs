@@ -76,15 +76,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Letter into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Letter letter,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				letter.LetterNum=ReplicationServers.GetKey("letter","LetterNum");
 			}
 			string command="INSERT INTO letter (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="LetterNum,";
 			}
 			command+="Description,BodyText) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(letter.LetterNum)+",";
 			}
 			command+=
@@ -94,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 				letter.BodyText="";
 			}
 			OdSqlParameter paramBodyText=new OdSqlParameter("paramBodyText",OdDbType.Text,POut.StringParam(letter.BodyText));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramBodyText);
 			}
 			else {

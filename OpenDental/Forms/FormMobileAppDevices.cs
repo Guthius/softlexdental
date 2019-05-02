@@ -24,7 +24,7 @@ namespace OpenDental {
 		///<summary>Returns the index in the main grid of the "Enabled" column.</summary>
 		private int _indexOfEnabledColumn {
 			get {
-				return (PrefC.HasClinicsEnabled ? 4 : 3);
+				return (Preferences.HasClinicsEnabled ? 4 : 3);
 			}
 		}
 
@@ -48,7 +48,7 @@ namespace OpenDental {
 			//Make a deep copy of the database list.
 			_listAllMobileDevicesNew=_listAllMobileDevicesDb.Select(x => x.Copy()).ToList();
 			FillGrid();
-			labelClinic.Visible=PrefC.HasClinicsEnabled;
+			labelClinic.Visible=Preferences.HasClinicsEnabled;
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -104,7 +104,7 @@ namespace OpenDental {
 				gridMain.Columns.Add(col);
 				col=new ODGridColumn(Lan.g(this,"Last Login"),135);
 				gridMain.Columns.Add(col);
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					col=new ODGridColumn(Lan.g(this,"Clinic"),150);
 					gridMain.Columns.Add(col);
 				}
@@ -113,7 +113,7 @@ namespace OpenDental {
 			}
 			gridMain.Rows.Clear();
 			List<MobileAppDevice> listDevicesToShow;
-			if(!PrefC.HasClinicsEnabled || (PrefC.HasClinicsEnabled && comboClinic.IsAllSelected)) {
+			if(!Preferences.HasClinicsEnabled || (Preferences.HasClinicsEnabled && comboClinic.IsAllSelected)) {
 				//No clinics are enabled or all is selected. Show all.
 				listDevicesToShow=_listAllMobileDevicesNew;
 			}
@@ -126,7 +126,7 @@ namespace OpenDental {
 				row.Cells.Add(device.DeviceName);
 				row.Cells.Add((device.LastAttempt.Year > 1880 ? device.LastAttempt.ToString() : ""));
 				row.Cells.Add((device.LastLogin.Year > 1880 ? device.LastLogin.ToString() : ""));
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add((device.ClinicNum==0 ? Clinics.GetPracticeAsClinicZero() : Clinics.GetClinic(device.ClinicNum)).Abbr);
 				}
 				row.Cells.Add((device.IsAllowed ? "X" : ""));

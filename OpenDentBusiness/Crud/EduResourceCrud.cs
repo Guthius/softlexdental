@@ -91,15 +91,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EduResource into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EduResource eduResource,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				eduResource.EduResourceNum=ReplicationServers.GetKey("eduresource","EduResourceNum");
 			}
 			string command="INSERT INTO eduresource (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EduResourceNum,";
 			}
 			command+="DiseaseDefNum,MedicationNum,LabResultID,LabResultName,LabResultCompare,ResourceUrl,SmokingSnoMed) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(eduResource.EduResourceNum)+",";
 			}
 			command+=
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(eduResource.LabResultCompare)+"',"
 				+"'"+POut.String(eduResource.ResourceUrl)+"',"
 				+"'"+POut.String(eduResource.SmokingSnoMed)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

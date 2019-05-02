@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one HL7ProcAttach into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(HL7ProcAttach hL7ProcAttach,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				hL7ProcAttach.HL7ProcAttachNum=ReplicationServers.GetKey("hl7procattach","HL7ProcAttachNum");
 			}
 			string command="INSERT INTO hl7procattach (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="HL7ProcAttachNum,";
 			}
 			command+="HL7MsgNum,ProcNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(hL7ProcAttach.HL7ProcAttachNum)+",";
 			}
 			command+=
 				     POut.Long  (hL7ProcAttach.HL7MsgNum)+","
 				+    POut.Long  (hL7ProcAttach.ProcNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

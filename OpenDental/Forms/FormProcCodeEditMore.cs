@@ -31,7 +31,7 @@ namespace OpenDental {
 		private void FillAndSortListFees() {
 			List<long> listClinicNums=Clinics.GetForUserod(Security.CurUser,true).Select(x => x.ClinicNum).ToList();
 			_listFees=Fees.GetFeesForCode(_procCode.CodeNum,listClinicNums);//already sorted
-			if(PrefC.GetBool(PrefName.FeesUseCache)){
+			if(Preferences.GetBool(PrefName.FeesUseCache)){
 				//Create a temporary list that will be used to keep track of the Fees after they've been sorted within each fee schedule.
 				List<Fee> listFees=new List<Fee>();
 				for(int i=0;i<_listFeeScheds.Count;i++) {
@@ -47,7 +47,7 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn(Lan.g("TableProcCodeEditMore","Schedule"),200);
 				gridMain.Columns.Add(col);
 				col=new ODGridColumn(Lan.g("TableProcCodeEditMore","Provider"),135);
@@ -74,7 +74,7 @@ namespace OpenDental {
 					lastFeeSched=_listFees[i].FeeSched;
 					row.ColorBackG=Color.LightBlue;
 					if(_listFees[i].ClinicNum!=0 || _listFees[i].ProvNum!=0) { //FeeSched change, but not with a default fee. Insert placeholder row.
-						if(PrefC.HasClinicsEnabled) {
+						if(Preferences.HasClinicsEnabled) {
 							row.Cells.Add("");
 						}
 						row.Cells.Add("");
@@ -92,7 +92,7 @@ namespace OpenDental {
 					row.Cells.Add("");
 				}
 				row.Tag=_listFees[i];
-				if(PrefC.HasClinicsEnabled) { //Using clinics
+				if(Preferences.HasClinicsEnabled) { //Using clinics
 					row.Cells.Add(Clinics.GetAbbr(_listFees[i].ClinicNum)); //Returns "" if invalid clinicnum (ie. 0)
 				}
 				row.Cells.Add(Providers.GetAbbr(_listFees[i].ProvNum)); //Returns "" if invalid provnum (ie. 0)

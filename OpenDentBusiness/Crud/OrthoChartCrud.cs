@@ -85,15 +85,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one OrthoChart into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(OrthoChart orthoChart,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				orthoChart.OrthoChartNum=ReplicationServers.GetKey("orthochart","OrthoChartNum");
 			}
 			string command="INSERT INTO orthochart (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="OrthoChartNum,";
 			}
 			command+="PatNum,DateService,FieldName,FieldValue,UserNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(orthoChart.OrthoChartNum)+",";
 			}
 			command+=
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 				orthoChart.FieldValue="";
 			}
 			OdSqlParameter paramFieldValue=new OdSqlParameter("paramFieldValue",OdDbType.Text,POut.StringParam(orthoChart.FieldValue));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramFieldValue);
 			}
 			else {

@@ -496,7 +496,7 @@ namespace OpenDental{
 			if(_progCur==null) {
 				return;//should never happen
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				groupPaySettings.Text=Lan.g(this,"Clinic Payment Settings");
 				_listUserClinicNums=new List<long>();
 				comboClinic.Items.Clear();
@@ -541,7 +541,7 @@ namespace OpenDental{
 		///<summary>Fills all but comboClinic, checkEnabled, textPath, and textOverride which are filled on load.</summary>
 		private void FillFields() {
 			long clinicNum=0;
-			if(PrefC.HasClinicsEnabled && comboClinic.SelectedIndex>-1) {
+			if(Preferences.HasClinicsEnabled && comboClinic.SelectedIndex>-1) {
 				clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
 			}
 			//Password
@@ -670,7 +670,7 @@ namespace OpenDental{
 				return;
 			}
 			long clinicNum=0;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
 			}
 			PayConnect.WebPaymentProperties payConnectProps=new PayConnect.WebPaymentProperties();
@@ -751,12 +751,12 @@ namespace OpenDental{
 			bool isXWebEnabled=checkWebPayEnabled.Checked 
 				&& (textXWebID.Text.Trim().Length>0 || textAuthKey.Text.Trim().Length>0  || textTerminalID.Text.Trim().Length>0);
 			//X-Charge will be enabled if the enabled checkbox is checked and either clinics are disabled OR both Username and Password are set
-			bool isClientEnabled=!PrefC.HasClinicsEnabled || (textUsername.Text.Trim().Length>0 && textPassword.Text.Trim().Length>0);
+			bool isClientEnabled=!Preferences.HasClinicsEnabled || (textUsername.Text.Trim().Length>0 && textPassword.Text.Trim().Length>0);
 			if((isClientEnabled || isXWebEnabled) && comboPaymentType.SelectedIndex<0) {
 				MsgBox.Show(this,"Please select a payment type first.");
 				return false;
 			}
-			if(!isAllClinics || !PrefC.HasClinicsEnabled || Security.CurUser.ClinicIsRestricted) {
+			if(!isAllClinics || !Preferences.HasClinicsEnabled || Security.CurUser.ClinicIsRestricted) {
 				return true;
 			}
 			//only validate payment types for all clinics if isAllClinics==true and clinics are enabled and the current user is not restricted to a clinic
@@ -789,7 +789,7 @@ namespace OpenDental{
 		///If both the X-Charge client values and the XWeb values are the same as HQ, the payment type will be updated.
 		///The values in the local list for HQ, or for the clinic modified if it was not HQ, have to be updated after calling this method.</summary>
 		private void SyncWithHQ() {
-			if(!PrefC.HasClinicsEnabled || _listUserClinicNums[_indexClinicRevert]>0) {
+			if(!Preferences.HasClinicsEnabled || _listUserClinicNums[_indexClinicRevert]>0) {
 				return;
 			}
 			string hqUsername=ProgramProperties.GetPropValFromList(_listProgProps,"Username",0);//HQ Username before updating to value in textbox
@@ -873,7 +873,7 @@ namespace OpenDental{
 			//If clinics are not enabled and the X-Charge program link is enabled, make sure there is a username and password set.
 			//If clinics are enabled, the program link can be enabled with blank username and/or password fields for some clinics.
 			//X-Charge will be disabled for any clinic with a blank username or password.
-			if(checkEnabled.Checked && !PrefC.HasClinicsEnabled && (textUsername.Text.Trim().Length==0 || textPassword.Text.Trim().Length==0)) {
+			if(checkEnabled.Checked && !Preferences.HasClinicsEnabled && (textUsername.Text.Trim().Length==0 || textPassword.Text.Trim().Length==0)) {
 				MsgBox.Show(this,"Please enter a username and password first.");
 				return;
 			}
@@ -894,7 +894,7 @@ namespace OpenDental{
 			SyncWithHQ();
 			//get selected ClinicNum (if enabled), PaymentType, encrypted Password, and encrypted AuthKey
 			long clinicNum=0;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
 			}
 			string passwordEncrypted="";

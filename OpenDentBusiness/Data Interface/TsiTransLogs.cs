@@ -108,7 +108,7 @@ namespace OpenDentBusiness
                     FKey = adjNum,
                     RawMsgText = msgText,
                     //TransJson=""//only valid for placement msgs
-                    ClinicNum = (PrefC.HasClinicsEnabled ? patAgingCur.ClinicNum : 0)
+                    ClinicNum = (Preferences.HasClinicsEnabled ? patAgingCur.ClinicNum : 0)
                 };
                 TsiTransLogs.InsertMany(new List<TsiTransLog>() { logCur });
             }
@@ -198,7 +198,7 @@ namespace OpenDentBusiness
                 return false;
             }
             List<long> listDisabledClinicNums = new List<long>();
-            if (PrefC.HasClinicsEnabled)
+            if (Preferences.HasClinicsEnabled)
             {
                 List<Clinic> listAllClinics = Clinics.GetDeepCopy();
                 listDisabledClinicNums.AddRange(dictAllProps.Where(x => !TsiTransLogs.ValidateClinicSftpDetails(x.Value, false)).Select(x => x.Key));
@@ -226,7 +226,7 @@ namespace OpenDentBusiness
             {//this would only happen if the patient was not in the db??, just in case
                 return Lans.g("TsiTransLogs", "An error occurred when trying to send a suspend message to TSI.");
             }
-            long clinicNum = (PrefC.HasClinicsEnabled ? guar.ClinicNum : 0);
+            long clinicNum = (Preferences.HasClinicsEnabled ? guar.ClinicNum : 0);
             Program prog = Programs.GetCur(ProgramName.Transworld);
             if (prog == null)
             {//shouldn't be possible, the program link should always exist, just in case
@@ -239,7 +239,7 @@ namespace OpenDentBusiness
             {//shouldn't be possible, there should always be a set of props for ClinicNum 0 even if disabled, just in case
                 return Lans.g("TsiTransLogs", "The Transworld program link is not setup properly.");
             }
-            if (PrefC.HasClinicsEnabled && !dictAllProps.ContainsKey(clinicNum) && dictAllProps.ContainsKey(0))
+            if (Preferences.HasClinicsEnabled && !dictAllProps.ContainsKey(clinicNum) && dictAllProps.ContainsKey(0))
             {
                 clinicNum = 0;
             }
@@ -248,16 +248,16 @@ namespace OpenDentBusiness
                 || !ValidateClinicSftpDetails(dictAllProps[clinicNum], true)) //the props should be valid, but this will test the connection using the props
             {
                 return Lans.g("TsiTransLogs", "The Transworld program link is not enabled") + " "
-                    + (PrefC.HasClinicsEnabled ? (Lans.g("TsiTransLogs", "for the guarantor's clinic") + ", " + clinicDesc + ", ") : "")
+                    + (Preferences.HasClinicsEnabled ? (Lans.g("TsiTransLogs", "for the guarantor's clinic") + ", " + clinicDesc + ", ") : "")
                     + Lans.g("TsiTransLogs", "or is not setup properly.");
             }
             List<ProgramProperty> listProps = dictAllProps[clinicNum];
-            long newBillType = PrefC.GetLong(PrefName.TransworldPaidInFullBillingType);
+            long newBillType = Preferences.GetLong(PrefName.TransworldPaidInFullBillingType);
             if (newBillType == 0 || Defs.GetDef(DefCat.BillingTypes, newBillType) == null)
             {
                 return Lans.g("TsiTransLogs", "The default paid in full billing type is not set.  An automated suspend message cannot be sent until the "
                     + "default paid in full billing type is set in the Transworld program link")
-                    + (PrefC.HasClinicsEnabled ? (" " + Lans.g("TsiTransLogs", "for the guarantor's clinic") + ", " + clinicDesc) : "") + ".";
+                    + (Preferences.HasClinicsEnabled ? (" " + Lans.g("TsiTransLogs", "for the guarantor's clinic") + ", " + clinicDesc) : "") + ".";
             }
             string clientId = "";
             if (patAging.ListTsiLogs.Count > 0)
@@ -275,7 +275,7 @@ namespace OpenDentBusiness
             if (string.IsNullOrEmpty(clientId))
             {
                 return Lans.g("TsiTransLogs", "There is no client ID in the Transworld program link")
-                    + (PrefC.HasClinicsEnabled ? (" " + Lans.g("TsiTransLogs", "for the guarantor's clinic") + ", " + clinicDesc) : "") + ".";
+                    + (Preferences.HasClinicsEnabled ? (" " + Lans.g("TsiTransLogs", "for the guarantor's clinic") + ", " + clinicDesc) : "") + ".";
             }
             string sftpAddress = listProps.Find(x => x.PropertyDesc == "SftpServerAddress")?.PropertyValue ?? "";
             int sftpPort;
@@ -288,7 +288,7 @@ namespace OpenDentBusiness
             if (new[] { sftpAddress, userName, userPassword }.Any(x => string.IsNullOrEmpty(x)))
             {
                 return Lans.g("TsiTransLogs", "The SFTP address, username, or password for the Transworld program link") + " "
-                    + (PrefC.HasClinicsEnabled ? (Lans.g("TsiTransLogs", "for the guarantor's clinic") + ", " + clinicDesc + ", ") : "") + Lans.g("TsiTransLogs", "is blank.");
+                    + (Preferences.HasClinicsEnabled ? (Lans.g("TsiTransLogs", "for the guarantor's clinic") + ", " + clinicDesc + ", ") : "") + Lans.g("TsiTransLogs", "is blank.");
             }
             string msg = TsiMsgConstructor.GenerateUpdate(patAging.PatNum, clientId, TsiTransType.SS, 0.00, patAging.AmountDue);
             try
@@ -306,7 +306,7 @@ namespace OpenDentBusiness
             catch (Exception ex)
             {
                 return Lans.g("TsiTransLogs", "There was an error sending the update message to Transworld")
-                    + (PrefC.HasClinicsEnabled ? (" " + Lans.g("TsiTransLogs", "using the program properties for the guarantor's clinic") + ", " + clinicDesc) : "") + ".\r\n"
+                    + (Preferences.HasClinicsEnabled ? (" " + Lans.g("TsiTransLogs", "using the program properties for the guarantor's clinic") + ", " + clinicDesc) : "") + ".\r\n"
                     + ex.Message;
             }
             //Upload was successful

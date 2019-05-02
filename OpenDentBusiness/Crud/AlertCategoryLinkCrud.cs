@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one AlertCategoryLink into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(AlertCategoryLink alertCategoryLink,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				alertCategoryLink.AlertCategoryLinkNum=ReplicationServers.GetKey("alertcategorylink","AlertCategoryLinkNum");
 			}
 			string command="INSERT INTO alertcategorylink (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="AlertCategoryLinkNum,";
 			}
 			command+="AlertCategoryNum,AlertType) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(alertCategoryLink.AlertCategoryLinkNum)+",";
 			}
 			command+=
 				     POut.Long  (alertCategoryLink.AlertCategoryNum)+","
 				+    POut.Int   ((int)alertCategoryLink.AlertType)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

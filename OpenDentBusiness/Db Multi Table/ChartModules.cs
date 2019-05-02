@@ -569,7 +569,7 @@ namespace OpenDentBusiness
                     else if (procCode.TreatArea == TreatmentArea.Sextant)
                     {
                         row["surf"] = Tooth.GetSextant(rowProc["Surf"].ToString(),
-                            (ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers));
+                            (ToothNumberingNomenclature)Preferences.GetInt(PrefName.UseInternationalToothNumbers));
                     }
                     else
                     {
@@ -577,7 +577,7 @@ namespace OpenDentBusiness
                     }
                     row["TaskNum"] = 0;
                     row["toothNum"] = Tooth.GetToothLabel(rowProc["ToothNum"].ToString()
-                        , (ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers));
+                        , (ToothNumberingNomenclature)Preferences.GetInt(PrefName.UseInternationalToothNumbers));
                     row["ToothNum"] = rowProc["ToothNum"].ToString();
                     row["ToothRange"] = rowProc["ToothRange"].ToString();
                     if (rowProc["ProcNumLab"].ToString() == "0")
@@ -719,7 +719,7 @@ namespace OpenDentBusiness
                 }
                 #endregion Commlog
                 #region WebChatNote - HQ only
-                if (PrefC.IsODHQ)
+                if (Preferences.IsODHQ)
                 {
                     //connect to the webchat db for this query
                     List<WebChatSession> listWebChatSessions = new List<WebChatSession>();
@@ -1509,7 +1509,7 @@ namespace OpenDentBusiness
                     + "AND sheetfield.FieldType=" + POut.Long((int)SheetFieldType.SigBox) + " "
                     + "WHERE (sheet.PatNum=" + POut.Long(patNum);
                 List<Patient> listPatientClonesAll = new List<Patient>();
-                if (PrefC.GetBool(PrefName.ShowFeaturePatientClone))
+                if (Preferences.GetBool(PrefName.ShowFeaturePatientClone))
                 {
                     List<long> listPatientClonePatNums = Patients.GetClonePatNumsAll(patNum);
                     //Always include every single sheet for ANY clone or master of said clones.
@@ -1551,7 +1551,7 @@ namespace OpenDentBusiness
                         row["dateTP"] = dateT.ToString(Lans.GetShortDateTimeFormat());
                     }
                     //Add patient name if using clone feature and the sheet belongs to the clone.
-                    if (PrefC.GetBool(PrefName.ShowFeaturePatientClone) && rawSheet.Rows[i]["PatNum"].ToString() != patNum.ToString())
+                    if (Preferences.GetBool(PrefName.ShowFeaturePatientClone) && rawSheet.Rows[i]["PatNum"].ToString() != patNum.ToString())
                     {
                         Patient patientClone = listPatientClonesAll.FirstOrDefault(x => x.PatNum == PIn.Long(rawSheet.Rows[i]["PatNum"].ToString()));
                         if (patientClone != null && !string.IsNullOrWhiteSpace(patientClone.FName))

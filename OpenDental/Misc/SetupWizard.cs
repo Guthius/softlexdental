@@ -143,7 +143,7 @@ namespace OpenDental {
 
 			public override ODSetupStatus GetStatus {
 				get {
-					if(string.IsNullOrEmpty(PrefC.GetString(PrefName.RegistrationKey))) {
+					if(string.IsNullOrEmpty(Preferences.GetString(PrefName.RegistrationKey))) {
 						return ODSetupStatus.NotStarted;
 					}
 						return ODSetupStatus.Complete;

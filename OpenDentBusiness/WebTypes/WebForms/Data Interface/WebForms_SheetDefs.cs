@@ -14,7 +14,7 @@ namespace OpenDentBusiness.WebTypes.WebForms {
 		/// <returns></returns>
 		public static bool TryDownloadSheetDefs(out List<WebForms_SheetDef> listWebFormSheetDefs,string regKey=null) {
 			if(string.IsNullOrEmpty(regKey)) {
-				regKey=PrefC.GetString(PrefName.RegistrationKey);
+				regKey=Preferences.GetString(PrefName.RegistrationKey);
 			}
 			listWebFormSheetDefs=new List<WebForms_SheetDef>();
 			try {
@@ -32,7 +32,7 @@ namespace OpenDentBusiness.WebTypes.WebForms {
 		///<summary>This method can throw an exception. Tries to upload a sheet def to HQ.</summary>
 		///<param name="sheetDef">The SheetDef object to be uploaded.</param>
 		public static void TryUploadSheetDef(SheetDef sheetDef) {
-			string regKey=PrefC.GetString(PrefName.RegistrationKey);
+			string regKey=Preferences.GetString(PrefName.RegistrationKey);
 			List<PayloadItem> listPayloadItems=new List<PayloadItem> {
 				new PayloadItem(regKey,"RegKey"),
 				new PayloadItem(sheetDef,"SheetDef")
@@ -46,7 +46,7 @@ namespace OpenDentBusiness.WebTypes.WebForms {
 		/// <param name="webSheetDefId"></param>
 		public static bool DeleteSheetDef(long webSheetDefId,string regKey=null) {
 			if(string.IsNullOrEmpty(regKey)) {
-				regKey=PrefC.GetString(PrefName.RegistrationKey);
+				regKey=Preferences.GetString(PrefName.RegistrationKey);
 			}
 			try {
 				List<PayloadItem> listPayloadItems=new List<PayloadItem> {
@@ -68,7 +68,7 @@ namespace OpenDentBusiness.WebTypes.WebForms {
 		/// <param name="sheetDef"></param>
 		public static bool UpdateSheetDef(long webSheetDefId,SheetDef sheetDef,string regKey=null,bool doCatchExceptions=true) {
 			if(string.IsNullOrEmpty(regKey)) {
-				regKey=PrefC.GetString(PrefName.RegistrationKey);
+				regKey=Preferences.GetString(PrefName.RegistrationKey);
 			}
 			try {
 				List<PayloadItem> listPayloadItems=new List<PayloadItem> {

@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PayPeriod into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(PayPeriod payPeriod,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				payPeriod.PayPeriodNum=ReplicationServers.GetKey("payperiod","PayPeriodNum");
 			}
 			string command="INSERT INTO payperiod (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PayPeriodNum,";
 			}
 			command+="DateStart,DateStop,DatePaycheck) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(payPeriod.PayPeriodNum)+",";
 			}
 			command+=
 				     POut.Date  (payPeriod.DateStart)+","
 				+    POut.Date  (payPeriod.DateStop)+","
 				+    POut.Date  (payPeriod.DatePaycheck)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

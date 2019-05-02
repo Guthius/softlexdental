@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PhoneEmpSubGroup into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(PhoneEmpSubGroup phoneEmpSubGroup,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				phoneEmpSubGroup.PhoneEmpSubGroupNum=ReplicationServers.GetKey("phoneempsubgroup","PhoneEmpSubGroupNum");
 			}
 			string command="INSERT INTO phoneempsubgroup (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PhoneEmpSubGroupNum,";
 			}
 			command+="EmployeeNum,SubGroupType,EscalationOrder) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(phoneEmpSubGroup.PhoneEmpSubGroupNum)+",";
 			}
 			command+=
 				     POut.Long  (phoneEmpSubGroup.EmployeeNum)+","
 				+    POut.Int   ((int)phoneEmpSubGroup.SubGroupType)+","
 				+    POut.Int   (phoneEmpSubGroup.EscalationOrder)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

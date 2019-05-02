@@ -1475,11 +1475,11 @@ namespace OpenDental{
 			comboEhrMu.Items.Add("Stage 2");
 			comboEhrMu.Items.Add("Modified Stage 2");
 			comboEhrMu.SelectedIndex=ProvCur.EhrMuStage;
-			if(!PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+			if(!Preferences.GetBool(PrefName.ShowFeatureEhr)) {
 				comboEhrMu.Visible=false;
 				labelEhrMU.Visible=false;
 			}
-			if(!PrefC.GetBool(PrefName.EasyHideDentalSchools) //Dental Schools is turned on
+			if(!Preferences.GetBool(PrefName.EasyHideDentalSchools) //Dental Schools is turned on
 				&& (ProvCur.SchoolClassNum!=0 || ProvCur.IsInstructor))//Adding/Editing Students or Instructors
 			{
 				if(!ProvCur.IsNew) {
@@ -1651,7 +1651,7 @@ namespace OpenDental{
 				//Make the cancel button the only thing the user can click on.
 				butCancel.Enabled=true;
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				_listProvClinicLinks=ProviderClinicLinks.GetForProvider(ProvCur.ProvNum);
 				_listClinicsForUser=Clinics.GetForUserod(Security.CurUser);
 				//If there are no ProviderClinicLinks, then the provider is associated to all clinics.
@@ -1862,7 +1862,7 @@ namespace OpenDental{
 				return;
 			}
 			if(checkIsHidden.Checked) {
-				if(PrefC.GetLong(PrefName.PracticeDefaultProv)==ProvCur.ProvNum) {
+				if(Preferences.GetLong(PrefName.PracticeDefaultProv)==ProvCur.ProvNum) {
 					MsgBox.Show(this,"Not allowed to hide practice default provider.");
 					return;
 				}
@@ -1870,7 +1870,7 @@ namespace OpenDental{
 					MsgBox.Show(this,"Not allowed to hide a clinic default provider.");
 					return;
 				}
-				if(PrefC.GetLong(PrefName.InsBillingProv)==ProvCur.ProvNum) {
+				if(Preferences.GetLong(PrefName.InsBillingProv)==ProvCur.ProvNum) {
 					if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"You are about to hide the default ins billing provider. Continue?")) {
 						return;
 					}
@@ -1881,7 +1881,7 @@ namespace OpenDental{
 					}
 				}
 			}
-			if(Providers.GetExists(x => x.ProvNum!=ProvCur.ProvNum && x.Abbr==textAbbr.Text && PrefC.GetBool(PrefName.EasyHideDentalSchools))) {
+			if(Providers.GetExists(x => x.ProvNum!=ProvCur.ProvNum && x.Abbr==textAbbr.Text && Preferences.GetBool(PrefName.EasyHideDentalSchools))) {
 				if(!MsgBox.Show(this,true,"This abbreviation is already in use by another provider.  Continue anyway?")) {
 					return;
 				}
@@ -1910,7 +1910,7 @@ namespace OpenDental{
 				}
 				Providers.RemoveProvFromFutureSchedule(ProvCur.ProvNum);
 			}
-			if(!PrefC.GetBool(PrefName.EasyHideDentalSchools) && (ProvCur.IsInstructor || ProvCur.SchoolClassNum!=0)) {//Is an Instructor or a Student
+			if(!Preferences.GetBool(PrefName.EasyHideDentalSchools) && (ProvCur.IsInstructor || ProvCur.SchoolClassNum!=0)) {//Is an Instructor or a Student
 				if(textUserName.Text=="") {
 					MsgBox.Show(this,"User Name is not allowed to be blank.");
 					return;
@@ -1980,7 +1980,7 @@ namespace OpenDental{
 			ProvCur.WebSchedDescript=textWebSchedDescript.Text;
 			ProvCur.HourlyProdGoalAmt=PIn.Double(textProdGoalHr.Text);
 			ProvCur.DateTerm=dateTerm.GetDateTime();
-			if(!PrefC.GetBool(PrefName.EasyHideDentalSchools)) {
+			if(!Preferences.GetBool(PrefName.EasyHideDentalSchools)) {
 				if(ProvCur.SchoolClassNum!=0) {
 					ProvCur.SchoolClassNum=_listSchoolClasses[comboSchoolClass.SelectedIndex].SchoolClassNum;
 				}
@@ -2012,7 +2012,7 @@ namespace OpenDental{
 					user.LoginDetails=Authentication.GenerateLoginDetailsSHA512(textPassword.Text);
 					user.ProvNum=provNum;
 					try {
-						Userods.Insert(user,new List<long> { PrefC.GetLong(PrefName.SecurityGroupForInstructors) });
+						Userods.Insert(user,new List<long> { Preferences.GetLong(PrefName.SecurityGroupForInstructors) });
 					}
 					catch(Exception ex) {
 						Providers.Delete(ProvCur);
@@ -2070,7 +2070,7 @@ namespace OpenDental{
 				#endregion Date Term Check
 			}
 			ProviderClinics.Sync(_listProvClinicsNew,_listProvClinicsOld);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				List<long> listSelectedClinicNumLinks=listBoxClinics.SelectedTags<Clinic>().Select(x => x.ClinicNum).ToList();
 				List<Clinic> listClinicsAll=Clinics.GetDeepCopy(true);
 				List<long> listClinicNumsForUser=_listClinicsForUser.Select(x => x.ClinicNum).ToList();

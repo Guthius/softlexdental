@@ -91,15 +91,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one DashboardLayout into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(DashboardLayout dashboardLayout,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				dashboardLayout.DashboardLayoutNum=ReplicationServers.GetKey("dashboardlayout","DashboardLayoutNum");
 			}
 			string command="INSERT INTO dashboardlayout (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="DashboardLayoutNum,";
 			}
 			command+="UserNum,UserGroupNum,DashboardTabName,DashboardTabOrder,DashboardRows,DashboardColumns,DashboardGroupName) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(dashboardLayout.DashboardLayoutNum)+",";
 			}
 			command+=
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (dashboardLayout.DashboardRows)+","
 				+    POut.Int   (dashboardLayout.DashboardColumns)+","
 				+"'"+POut.String(dashboardLayout.DashboardGroupName)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

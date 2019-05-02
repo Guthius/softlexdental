@@ -60,10 +60,10 @@ namespace OpenDental {
 			try {
 				string tempFile;
 				if(displayedFileName=="") {
-					tempFile=ODFileUtils.CombinePaths(PrefC.GetTempFolderPath(),Path.GetFileName(actualFilePath));
+					tempFile=ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),Path.GetFileName(actualFilePath));
 				}
 				else {
-					tempFile=ODFileUtils.CombinePaths(PrefC.GetTempFolderPath(),displayedFileName);
+					tempFile=ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),displayedFileName);
 				}
 				if(CloudStorage.IsCloudStorage) {
 					FormProgress FormP=CreateFormProgress("Downloading...");
@@ -142,7 +142,7 @@ namespace OpenDental {
 					state.DoCancel=true;
 					return;
 				}
-				filePathToOpen=PrefC.GetRandomTempFile(Path.GetExtension(fileName));
+				filePathToOpen=Preferences.GetRandomTempFile(Path.GetExtension(fileName));
 				File.WriteAllBytes(filePathToOpen,state.FileContent);
 			}
 			else {

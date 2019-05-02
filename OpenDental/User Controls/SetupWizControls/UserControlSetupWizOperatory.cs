@@ -27,7 +27,7 @@ namespace OpenDental.User_Controls.SetupWizard {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				col = new ODGridColumn(Lan.g("FormSetupWizard","OpName"),110);
 				gridMain.Columns.Add(col);
 				col = new ODGridColumn(Lan.g("FormSetupWizard","Abbrev"),110);
@@ -77,7 +77,7 @@ namespace OpenDental.User_Controls.SetupWizard {
 					row.Cells[row.Cells.Count-1].CellColor=needsAttnCol;
 					IsAllComplete=false;
 				}
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add(Clinics.GetAbbr(opCur.ClinicNum));
 				}
 				//not a required field

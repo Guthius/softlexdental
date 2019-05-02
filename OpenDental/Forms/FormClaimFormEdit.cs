@@ -781,7 +781,7 @@ namespace OpenDental{
 			}
 			else {
 				string fileName=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),claimFormItem.ImageFileName);
-				if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+				if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 					if(!File.Exists(fileName)) {
 						return null;
 					}

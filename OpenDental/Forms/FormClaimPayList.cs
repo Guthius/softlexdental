@@ -31,7 +31,7 @@ namespace OpenDental {
 		private void FormClaimPayList_Load(object sender,EventArgs e) {
 			textDateFrom.Text=DateTime.Now.AddDays(-10).ToShortDateString();
 			textDateTo.Text=DateTime.Now.ToShortDateString();
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}
@@ -75,7 +75,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"PayGroup"),80);
 			gridMain.Columns.Add(col);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn(Lan.g(this,"Clinic"),80);
 				gridMain.Columns.Add(col);
 			}
@@ -98,7 +98,7 @@ namespace OpenDental {
 				row.Cells.Add(ListClaimPay[i].IsPartial?"X":"");
 				row.Cells.Add(ListClaimPay[i].CarrierName);
 				row.Cells.Add(Defs.GetName(DefCat.ClaimPaymentGroups,ListClaimPay[i].PayGroup));
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add(Clinics.GetAbbr(ListClaimPay[i].ClinicNum));
 				}
 				row.Cells.Add(ListClaimPay[i].Note);

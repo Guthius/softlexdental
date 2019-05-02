@@ -25,7 +25,7 @@ namespace OpenDental {
 		}
 
 		private void FormEtrans834Import_Load(object sender,EventArgs e) {
-			textImportPath.Text=PrefC.GetString(PrefName.Ins834ImportPath);
+			textImportPath.Text=Preferences.GetString(PrefName.Ins834ImportPath);
 			FillGridInsPlanFiles();
 		}
 

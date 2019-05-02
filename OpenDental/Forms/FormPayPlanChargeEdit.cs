@@ -330,7 +330,7 @@ namespace OpenDental{
 			textProv.Text=Providers.GetAbbr(PayPlanChargeCur.ProvNum);
 			textDateEntry.Text=POut.DateT(PayPlanChargeCur.SecDateTEntry,false);
 			textDateEdit.Text=POut.DateT(PayPlanChargeCur.SecDateTEdit,false);
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				labelClinic.Visible=false;
 				textClinic.Visible=false;
 			}

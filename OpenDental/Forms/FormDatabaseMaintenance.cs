@@ -1052,17 +1052,17 @@ namespace OpenDental {
 				butApptProcs.Visible=false;
 				labelApptProcs.Visible=false;
 			}
-			if(PrefC.GetBool(PrefName.DatabaseMaintenanceDisableOptimize)) {
+			if(Preferences.GetBool(PrefName.DatabaseMaintenanceDisableOptimize)) {
 				butOptimize.Enabled=false;
 			}
-			if(PrefC.GetBool(PrefName.DatabaseMaintenanceSkipCheckTable)) {
+			if(Preferences.GetBool(PrefName.DatabaseMaintenanceSkipCheckTable)) {
 				labelSkipCheckTable.Visible=true;
 			}
 			FillGrid();
 			FillGridHidden();
 			FillGridOld();
 
-			textBoxUpdateInProg.Text=PrefC.GetString(PrefName.UpdateInProgressOnComputerName);
+			textBoxUpdateInProg.Text=Preferences.GetString(PrefName.UpdateInProgressOnComputerName);
 			if(string.IsNullOrWhiteSpace(textBoxUpdateInProg.Text)) {
 				butClearUpdateInProgress.Enabled=false;
 			}

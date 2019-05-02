@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EvaluationDef into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EvaluationDef evaluationDef,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				evaluationDef.EvaluationDefNum=ReplicationServers.GetKey("evaluationdef","EvaluationDefNum");
 			}
 			string command="INSERT INTO evaluationdef (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EvaluationDefNum,";
 			}
 			command+="SchoolCourseNum,EvalTitle,GradingScaleNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(evaluationDef.EvaluationDefNum)+",";
 			}
 			command+=
 				     POut.Long  (evaluationDef.SchoolCourseNum)+","
 				+"'"+POut.String(evaluationDef.EvalTitle)+"',"
 				+    POut.Long  (evaluationDef.GradingScaleNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

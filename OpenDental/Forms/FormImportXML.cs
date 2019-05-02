@@ -151,14 +151,14 @@ namespace OpenDental{
 				return;
 			}
 			pat=new Patient();
-			pat.PriProv=PrefC.GetLong(PrefName.PracticeDefaultProv);
-			pat.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
+			pat.PriProv=Preferences.GetLong(PrefName.PracticeDefaultProv);
+			pat.BillingType=Preferences.GetLong(PrefName.PracticeDefaultBillType);
 			guar=new Patient();
-			guar.PriProv=PrefC.GetLong(PrefName.PracticeDefaultProv);
-			guar.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
+			guar.PriProv=Preferences.GetLong(PrefName.PracticeDefaultProv);
+			guar.BillingType=Preferences.GetLong(PrefName.PracticeDefaultBillType);
 			subsc=new Patient();
-			subsc.PriProv=PrefC.GetLong(PrefName.PracticeDefaultProv);
-			subsc.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
+			subsc.PriProv=Preferences.GetLong(PrefName.PracticeDefaultProv);
+			subsc.BillingType=Preferences.GetLong(PrefName.PracticeDefaultBillType);
 			sub=new InsSub();
 			sub.ReleaseInfo=true;
 			sub.AssignBen=true;

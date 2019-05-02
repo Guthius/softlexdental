@@ -136,15 +136,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Carrier into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Carrier carrier,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				carrier.CarrierNum=ReplicationServers.GetKey("carrier","CarrierNum");
 			}
 			string command="INSERT INTO carrier (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="CarrierNum,";
 			}
 			command+="CarrierName,Address,Address2,City,State,Zip,Phone,ElectID,NoSendElect,IsCDA,CDAnetVersion,CanadianNetworkNum,IsHidden,CanadianEncryptionMethod,CanadianSupportedTypes,SecUserNumEntry,SecDateEntry,TIN,CarrierGroupName,ApptTextBackColor,IsCoinsuranceInverted) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(carrier.CarrierNum)+",";
 			}
 			command+=
@@ -170,7 +170,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (carrier.CarrierGroupName)+","
 				+    POut.Int   (carrier.ApptTextBackColor.ToArgb())+","
 				+    POut.Bool  (carrier.IsCoinsuranceInverted)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

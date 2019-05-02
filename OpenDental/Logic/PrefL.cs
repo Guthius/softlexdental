@@ -29,7 +29,7 @@ namespace OpenDental
         public static bool CopyFromHereToUpdateFiles(Version versionCurrent, bool isSilent, bool hasAtoZ, bool hasConcatFiles, Form currentForm)
         {
             #region Get Valid AtoZ path
-            if (hasAtoZ && PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+            if (hasAtoZ && Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
             {
                 string prefImagePath = ImageStore.GetPreferredAtoZpath();
                 if (prefImagePath == null || !Directory.Exists(prefImagePath))
@@ -71,9 +71,9 @@ namespace OpenDental
         public static bool CopyFilesToDatabase(bool hasAtoZ, bool isSilent, Version versionCurrent, bool hasConcatFiles, Form currentForm)
         {
             #region Delete Old UpdateFiles Folders
-            string folderTempUpdateFiles = ODFileUtils.CombinePaths(PrefC.GetTempFolderPath(), "UpdateFiles");
+            string folderTempUpdateFiles = ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(), "UpdateFiles");
             string folderAtoZUpdateFiles = "";
-            if (PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ && hasAtoZ)
+            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && hasAtoZ)
             {
                 folderAtoZUpdateFiles = ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(), "UpdateFiles");
             }
@@ -421,8 +421,8 @@ namespace OpenDental
         private static void DownloadAndRunSetup(Version storedVersion, Version currentVersion)
         {
             string patchName = "Setup.exe";
-            string updateUri = PrefC.GetString(PrefName.UpdateWebsitePath);
-            string updateCode = PrefC.GetString(PrefName.UpdateCode);
+            string updateUri = Preferences.GetString(PrefName.UpdateWebsitePath);
+            string updateCode = Preferences.GetString(PrefName.UpdateCode);
             string updateInfoMajor = "";
             string updateInfoMinor = "";
             if (!ShouldDownloadUpdate(updateUri, updateCode, out updateInfoMajor, out updateInfoMinor))
@@ -550,7 +550,7 @@ namespace OpenDental
         /// <summary>destinationPath includes filename (Setup.exe).  destinationPath2 will create a second copy at the specified path/filename, or it will be skipped if null or empty.</summary>
         public static void DownloadInstallPatchFromURI(string downloadUri, string destinationPath, bool runSetupAfterDownload, bool showShutdownWindow, string destinationPath2)
         {
-            string[] dblist = PrefC.GetString(PrefName.UpdateMultipleDatabases).Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+            string[] dblist = Preferences.GetString(PrefName.UpdateMultipleDatabases).Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
             bool isShutdownWindowNeeded = showShutdownWindow;
             while (isShutdownWindowNeeded)
             {
@@ -724,7 +724,7 @@ namespace OpenDental
             #region Stop OpenDent Services
             //If the update has been initiated from the designated update server then try and stop all "OpenDent..." services.
             //They will be automatically restarted once Open Dental has successfully upgraded.
-            if (PrefC.GetString(PrefName.WebServiceServerName) != "" && ODEnvironment.IdIsThisComputer(PrefC.GetString(PrefName.WebServiceServerName)))
+            if (Preferences.GetString(PrefName.WebServiceServerName) != "" && ODEnvironment.IdIsThisComputer(Preferences.GetString(PrefName.WebServiceServerName)))
             {
                 Action actionCloseStopServicesProgress = ODProgress.Show(ODEventType.MiscData, typeof(MiscDataEvent), "Stopping services...");
                 List<ServiceController> listOpenDentServices = ServicesHelper.GetAllOpenDentServices();
@@ -807,7 +807,7 @@ namespace OpenDental
         ///<summary></summary>
         private static bool CheckProgramVersionClassic()
         {
-            Version storedVersion = new Version(PrefC.GetString(PrefName.ProgramVersion));
+            Version storedVersion = new Version(Preferences.GetString(PrefName.ProgramVersion));
             Version currentVersion = new Version(Application.ProductVersion);
             string database = MiscData.GetCurrentDatabase();
             if (storedVersion < currentVersion)
@@ -819,7 +819,7 @@ namespace OpenDental
             }
             if (storedVersion > currentVersion)
             {
-                if (PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+                if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
                 {
                     string setupBinPath = ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(), "Setup.exe");
                     if (File.Exists(setupBinPath))
@@ -862,8 +862,8 @@ namespace OpenDental
                 {//Not using image path.
                  //perform program update automatically.
                     string patchName = "Setup.exe";
-                    string updateUri = PrefC.GetString(PrefName.UpdateWebsitePath);
-                    string updateCode = PrefC.GetString(PrefName.UpdateCode);
+                    string updateUri = Preferences.GetString(PrefName.UpdateWebsitePath);
+                    string updateCode = Preferences.GetString(PrefName.UpdateCode);
                     string updateInfoMajor = "";
                     string updateInfoMinor = "";
                     if (ShouldDownloadUpdate(updateUri, updateCode, out updateInfoMajor, out updateInfoMinor))
@@ -871,7 +871,7 @@ namespace OpenDental
                         if (MessageBox.Show(updateInfoMajor + Lan.g("Prefs", "Perform program update now?"), "",
                             MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
-                            string tempFile = ODFileUtils.CombinePaths(PrefC.GetTempFolderPath(), patchName);//Resort to a more common temp file name.
+                            string tempFile = ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(), patchName);//Resort to a more common temp file name.
                             DownloadInstallPatchFromURI(updateUri + updateCode + "/" + patchName,//Source URI
                                 tempFile, true, true, null);//Local destination file.
                             if (File.Exists(tempFile))
@@ -1128,7 +1128,7 @@ namespace OpenDental
         ///<param name="openCopiedFiles">Tells the file copier to open the copied files after completion.</param>
         public static bool OpenFileCopier(string folderUpdate, string destDir, bool doKillServices, bool useLocalUpdateFileCopier, bool openCopiedFiles)
         {
-            string tempDir = PrefC.GetTempFolderPath();
+            string tempDir = Preferences.GetTempFolderPath();
             //copy UpdateFileCopier.exe to the temp directory
             //In the case of using dynamic mode, because we have modified the update file copier when we released this feature, we need to be 
             //guarenteed we are using the correct version. We know that the version in our installation directory has the updates we need as otherwise
@@ -1200,7 +1200,7 @@ namespace OpenDental
             using (XmlWriter writer = XmlWriter.Create(strbuild, settings))
             {
                 writer.WriteStartElement("RegistrationKey");
-                writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
+                writer.WriteString(Preferences.GetString(PrefName.RegistrationKey));
                 writer.WriteEndElement();
             }
             try

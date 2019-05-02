@@ -96,7 +96,7 @@ namespace OpenDental {
 					+_asapListSender.DtStartSendText.ToString()+".\r\n";
 			}
 			int countTextToSendAtEndTime=_asapListSender.ListAsapComms.Count(x => x.DateTimeSmsScheduled==_asapListSender.DtTextSendEnd);
-			if(PrefC.DoRestrictAutoSendWindow && countTextToSendAtEndTime > 1) {
+			if(Preferences.DoRestrictAutoSendWindow && countTextToSendAtEndTime > 1) {
 				labelAnticipated.Text+=Lan.g(this,"In order to not send texts outside the automatic send window,")+" "+countTextToSendAtEndTime
 					+" "+Lan.g(this,"texts will be sent at")+" "+_asapListSender.DtTextSendEnd.ToString()+".\r\n";
 			}

@@ -24,7 +24,7 @@ namespace OpenDental {
 		private void FormWebSchedASAPHistory_Load(object sender,EventArgs e) {
 			datePicker.SetDateTimeFrom(DateTime.Today.AddDays(-7));
 			datePicker.SetDateTimeTo(DateTime.Today);
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				labelClinic.Visible=false;
 			}
 			FillGrid();
@@ -33,7 +33,7 @@ namespace OpenDental {
 		private void GetData() {
 			Cursor=Cursors.WaitCursor;
 			List<long> listClinicNums=null;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				listClinicNums=comboClinic.ListSelectedClinicNums;
 			}
 			_listAsapCommHists=AsapComms.GetHist(datePicker.GetDateTimeFrom(),datePicker.GetDateTimeTo(),listClinicNums:listClinicNums);
@@ -50,7 +50,7 @@ namespace OpenDental {
 				//The user is asking for data that we have not fetched yet.
 				GetData();
 			}
-			bool isClinicsEnabled=PrefC.HasClinicsEnabled;
+			bool isClinicsEnabled=Preferences.HasClinicsEnabled;
 			List<AsapComms.AsapCommHist> listHist=_listAsapCommHists.Where(x => x.AsapComm.DateTimeEntry
 				.Between(datePicker.GetDateTimeFrom(),datePicker.GetDateTimeTo()))
 				.Where(x => !isClinicsEnabled || x.AsapComm.ClinicNum.In(comboClinic.ListSelectedClinicNums)).ToList();
@@ -65,7 +65,7 @@ namespace OpenDental {
 			gridHistory.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Email Send Time"),140);
 			gridHistory.Columns.Add(col);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn(Lan.g(this,"Clinic"),120);
 				gridHistory.Columns.Add(col);
 			}
@@ -107,7 +107,7 @@ namespace OpenDental {
 					emailSent="";
 				}
 				row.Cells.Add(emailSent);
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add(ODMethodsT.Coalesce(Clinics.GetClinic(asapHist.AsapComm.ClinicNum)).Abbr);
 				}
 				row.Cells.Add(asapHist.AsapComm.DateTimeOrig.Year > 1880 ? asapHist.AsapComm.DateTimeOrig.ToString() : "");

@@ -331,7 +331,7 @@ namespace OpenDental {
 
 		/// <summary>Returns true if ClaimProcAllowCreditsGreaterThanProcFee preference allows the user to add credits greater than the proc fee. Otherwise returns false </summary>
 		private bool isClaimProcGreaterThanProcFee() {
-			ClaimProcCreditsGreaterThanProcFee creditsGreaterPref=(ClaimProcCreditsGreaterThanProcFee)PrefC.GetInt(PrefName.ClaimProcAllowCreditsGreaterThanProcFee);
+			ClaimProcCreditsGreaterThanProcFee creditsGreaterPref=(ClaimProcCreditsGreaterThanProcFee)Preferences.GetInt(PrefName.ClaimProcAllowCreditsGreaterThanProcFee);
 			if(creditsGreaterPref==ClaimProcCreditsGreaterThanProcFee.Allow) {
 				return true;
 			}
@@ -385,7 +385,7 @@ namespace OpenDental {
 		///<summary>Returns true if InsPayNoWriteoffMoreThanProc preference is turned on and the sum of write off amount is greater than the proc fee.
 		///Otherwise returns false </summary>
 		private bool IsWriteOffGreaterThanProcFee() {
-			if(!PrefC.GetBool(PrefName.InsPayNoWriteoffMoreThanProc)) {
+			if(!Preferences.GetBool(PrefName.InsPayNoWriteoffMoreThanProc)) {
 				return false;//InsPayNoWriteoffMoreThanProc preference is off. No need to check.
 			}
 			List<ClaimProc> listClaimProcsForPat=ClaimProcs.Refresh(PatCur.PatNum);
@@ -609,7 +609,7 @@ namespace OpenDental {
 				return;
 			}
 			SaveAllowedFees();
-			if(PrefC.GetBool(PrefName.ClaimSnapshotEnabled)) {
+			if(Preferences.GetBool(PrefName.ClaimSnapshotEnabled)) {
 				Claim claimCur=Claims.GetClaim(_listClaimProcsOld[0].ClaimNum);
 				if(claimCur.ClaimType!="PreAuth") {
 					ClaimSnapshots.CreateClaimSnapshot(_listClaimProcsOld,ClaimSnapshotTrigger.InsPayment,claimCur.ClaimType);

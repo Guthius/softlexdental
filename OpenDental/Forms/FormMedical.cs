@@ -1227,7 +1227,7 @@ namespace OpenDental{
 			FillProblems();
 			FillAllergies();
 			FillVitalSigns();
-			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+			if(Preferences.GetBool(PrefName.ShowFeatureEhr)) {
 				FillFamilyHealth();
 				TobaccoUseTabLoad();
 			}

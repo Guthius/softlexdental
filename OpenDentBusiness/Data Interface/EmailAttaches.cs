@@ -126,7 +126,7 @@ namespace OpenDentBusiness{
 		public static string GetAttachPath() {
 			//No need to check RemotingRole; no call to db.
 			string attachPath;
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				attachPath=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"EmailAttachments");
 				if(!Directory.Exists(attachPath)) {
 					Directory.CreateDirectory(attachPath);

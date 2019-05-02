@@ -15,10 +15,10 @@ namespace OpenDental {
 		}
 
 		private void FormLanguageAndRegion_Load(object sender,EventArgs e) {
-			CultureInfo cultureCur=PrefC.GetLanguageAndRegion();
+			CultureInfo cultureCur=Preferences.GetLanguageAndRegion();
 			_listAllCultures=CultureInfo.GetCultures(CultureTypes.AllCultures).Where(x => !x.IsNeutralCulture).OrderBy(x => x.DisplayName).ToList();
 			textLARLocal.Text=CultureInfo.CurrentCulture.DisplayName;
-			if(PrefC.GetString(PrefName.LanguageAndRegion)=="") {
+			if(Preferences.GetString(PrefName.LanguageAndRegion)=="") {
 				textLARDB.Text="None";
 			}
 			else {

@@ -121,15 +121,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Screen into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Screen screen,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				screen.ScreenNum=ReplicationServers.GetKey("screen","ScreenNum");
 			}
 			string command="INSERT INTO screen (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ScreenNum,";
 			}
 			command+="Gender,RaceOld,GradeLevel,Age,Urgency,HasCaries,NeedsSealants,CariesExperience,EarlyChildCaries,ExistingSealants,MissingAllTeeth,Birthdate,ScreenGroupNum,ScreenGroupOrder,Comments,ScreenPatNum,SheetNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(screen.ScreenNum)+",";
 			}
 			command+=
@@ -150,7 +150,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(screen.Comments)+"',"
 				+    POut.Long  (screen.ScreenPatNum)+","
 				+    POut.Long  (screen.SheetNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

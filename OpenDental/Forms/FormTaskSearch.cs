@@ -47,7 +47,7 @@ namespace OpenDental {
 			}
 			comboPriority.SelectedIndex=0;
 			checkLimit.Checked=true;
-			if(PrefC.HasReportServer) {
+			if(Preferences.HasReportServer) {
 				checkReportServer.Checked=true;
 			}
 			else {

@@ -303,7 +303,7 @@ namespace OpenDental {
 				return;
 			}
 			if(listSelectedEntries.Count==0 ) {
-				if(PrefC.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) { //if they have none selected
+				if(Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) { //if they have none selected
 					MsgBox.Show(this,"All treatment credits (excluding adjustments) must have a procedure.");
 					return;
 				}
@@ -314,7 +314,7 @@ namespace OpenDental {
 			}
 			else if(listSelectedEntries.Count==1) { //if they have one selected
 				PayPlanEdit.PayPlanEntry selectedEntry=listSelectedEntries[0];
-				if(PrefC.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
+				if(Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
 					if((selectedEntry.Proc==null || selectedEntry.Proc.ProcNum==0)
 						&& !(selectedEntry.Charge!=null && selectedEntry.Charge.IsCreditAdjustment)) 
 					{
@@ -426,7 +426,7 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			if(PrefC.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
+			if(Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
 				//If no procs attached and not an adjustment with a negative amount
 				if(ListPayPlanCreditsCur.Any(x => x.ProcNum==0 && !x.IsCreditAdjustment)) {
 					MsgBox.Show(this,"All treatment credits (excluding adjustments) must have a procedure.");

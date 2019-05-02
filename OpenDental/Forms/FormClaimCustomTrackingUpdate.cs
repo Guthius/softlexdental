@@ -40,7 +40,7 @@ namespace OpenDental {
 		private void FormClaimCustomTrackingUpdate_Load(object sender,EventArgs e) {
 			comboCustomTracking.Items.Clear();
 			int hasNone=0; //used to offset the index in the loop when none is an option for the combo box.
-			if(!PrefC.GetBool(PrefName.ClaimTrackingStatusExcludesNone)) {
+			if(!Preferences.GetBool(PrefName.ClaimTrackingStatusExcludesNone)) {
 				//None is allowed as an option
 				comboCustomTracking.Items.Add(new ODBoxItem<Def>(Lan.g(this,"None"),new Def() {ItemValue="",DefNum=0}));
 				comboCustomTracking.SelectedIndex=0;
@@ -106,7 +106,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"You must specify a Custom Track Status.");
 				return;
 			}
-			if(PrefC.GetBool(PrefName.ClaimTrackingRequiresError) 
+			if(Preferences.GetBool(PrefName.ClaimTrackingRequiresError) 
 				&& ((ODBoxItem<Def>)comboErrorCode.SelectedItem).Tag == null 
 				&& comboErrorCode.Enabled )
 			{

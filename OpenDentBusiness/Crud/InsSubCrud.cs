@@ -106,15 +106,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one InsSub into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(InsSub insSub,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				insSub.InsSubNum=ReplicationServers.GetKey("inssub","InsSubNum");
 			}
 			string command="INSERT INTO inssub (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="InsSubNum,";
 			}
 			command+="PlanNum,Subscriber,DateEffective,DateTerm,ReleaseInfo,AssignBen,SubscriberID,BenefitNotes,SubscNote,SecUserNumEntry,SecDateEntry) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(insSub.InsSubNum)+",";
 			}
 			command+=
@@ -138,7 +138,7 @@ namespace OpenDentBusiness.Crud{
 				insSub.SubscNote="";
 			}
 			OdSqlParameter paramSubscNote=new OdSqlParameter("paramSubscNote",OdDbType.Text,POut.StringParam(insSub.SubscNote));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramBenefitNotes,paramSubscNote);
 			}
 			else {

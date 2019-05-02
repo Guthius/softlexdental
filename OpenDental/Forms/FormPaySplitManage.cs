@@ -87,7 +87,7 @@ namespace OpenDental {
 			gridSplits.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Prov"),40);
 			gridSplits.Columns.Add(col);
-			if(PrefC.HasClinicsEnabled) {//Clinics
+			if(Preferences.HasClinicsEnabled) {//Clinics
 				col=new ODGridColumn(Lan.g(this,"Clinic"),40);
 				gridSplits.Columns.Add(col);
 			}
@@ -108,7 +108,7 @@ namespace OpenDental {
 				row.Tag=ListSplitsCur[i];
 				row.Cells.Add(ListSplitsCur[i].DatePay.ToShortDateString());//Date
 				row.Cells.Add(Providers.GetAbbr(ListSplitsCur[i].ProvNum));//Prov
-				if(PrefC.HasClinicsEnabled) {//Clinics
+				if(Preferences.HasClinicsEnabled) {//Clinics
 					if(ListSplitsCur[i].ClinicNum!=0) {
 						row.Cells.Add(Clinics.GetClinic(ListSplitsCur[i].ClinicNum).Description);//Clinic
 					}
@@ -161,7 +161,7 @@ namespace OpenDental {
 			gridCharges.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Prov"),40);
 			gridCharges.Columns.Add(col);
-			if(PrefC.HasClinicsEnabled) {//Clinics
+			if(Preferences.HasClinicsEnabled) {//Clinics
 				col=new ODGridColumn(Lan.g(this,"Clinic"),40);
 				gridCharges.Columns.Add(col);
 			}
@@ -213,7 +213,7 @@ namespace OpenDental {
 				row.Tag=_listAccountCharges[i];
 				row.Cells.Add(entryCharge.Date.ToShortDateString());//Date
 				row.Cells.Add(Providers.GetAbbr(entryCharge.ProvNum));//Provider
-				if(PrefC.HasClinicsEnabled) {//Clinics
+				if(Preferences.HasClinicsEnabled) {//Clinics
 					row.Cells.Add(Clinics.GetAbbr(entryCharge.ClinicNum));
 				}
 				string patName=dictPatients[entryCharge.PatNum].LName + ", " + dictPatients[entryCharge.PatNum].FName;
@@ -290,7 +290,7 @@ namespace OpenDental {
 			List<PayPlanCharge> listChargesToRemove=new List<PayPlanCharge>();
 			foreach(PayPlanCharge ppc in listPayPlanCharges) {
 				PayPlan pp=listPayPlans.Find(x => x.PayPlanNum==ppc.PayPlanNum);
-				if(pp.IsClosed && PrefC.GetInt(PrefName.PayPlansVersion)==(int)PayPlanVersions.AgeCreditsAndDebits) {
+				if(pp.IsClosed && Preferences.GetInt(PrefName.PayPlansVersion)==(int)PayPlanVersions.AgeCreditsAndDebits) {
 					listChargesToRemove.Add(ppc);
 					continue;
 				}
@@ -450,7 +450,7 @@ namespace OpenDental {
 				split=new PaySplit();
 				if(charge.GetType()==typeof(PayPlanCharge)) { //payments are allocated differently for payment plan charges
 					//it's an autosplit, so pass in 0 for payAmt (the method uses the classwide PaymentAmt variable instead)
-					PayPlanVersions payPlanVer=(PayPlanVersions)PrefC.GetInt(PrefName.PayPlansVersion);
+					PayPlanVersions payPlanVer=(PayPlanVersions)Preferences.GetInt(PrefName.PayPlansVersion);
 					if(payPlanVer!=PayPlanVersions.AgeCreditsAndDebits 
 						|| (payPlanVer==PayPlanVersions.AgeCreditsAndDebits && !PayPlans.GetOne(((PayPlanCharge)charge.Tag).PayPlanNum).IsClosed)) 
 					{ 
@@ -476,7 +476,7 @@ namespace OpenDental {
 				split.DatePay=date;
 				split.PatNum=charge.PatNum;
 				split.ProvNum=charge.ProvNum;
-				if(PrefC.HasClinicsEnabled) {//Clinics
+				if(Preferences.HasClinicsEnabled) {//Clinics
 					split.ClinicNum=charge.ClinicNum;
 				}
 				if(charge.GetType()==typeof(Procedure)) {
@@ -496,8 +496,8 @@ namespace OpenDental {
 				split.DatePay=date;
 				split.PatNum=PaymentCur.PatNum;
 				split.ProvNum=0;
-				split.UnearnedType=PrefC.GetLong(PrefName.PrepaymentUnearnedType);//Use default unallocated type
-				if(PrefC.HasClinicsEnabled) {//Clinics
+				split.UnearnedType=Preferences.GetLong(PrefName.PrepaymentUnearnedType);//Use default unallocated type
+				if(Preferences.HasClinicsEnabled) {//Clinics
 					split.ClinicNum=PaymentCur.ClinicNum;
 				}
 				split.PayNum=payNum;
@@ -510,8 +510,8 @@ namespace OpenDental {
 				split.DatePay=date;
 				split.PatNum=PaymentCur.PatNum;
 				split.ProvNum=0;
-				split.UnearnedType=PrefC.GetLong(PrefName.PrepaymentUnearnedType);//Use default unallocated type
-				if(PrefC.HasClinicsEnabled) {//Clinics
+				split.UnearnedType=Preferences.GetLong(PrefName.PrepaymentUnearnedType);//Use default unallocated type
+				if(Preferences.HasClinicsEnabled) {//Clinics
 					split.ClinicNum=PaymentCur.ClinicNum;
 				}
 				split.PayNum=payNum;
@@ -574,7 +574,7 @@ namespace OpenDental {
 					split.SplitAmt=(double)payAmt;
 				}
 			}
-			if(PrefC.HasClinicsEnabled) {//Clinics
+			if(Preferences.HasClinicsEnabled) {//Clinics
 				split.ClinicNum=charge.ClinicNum;
 			}
 			PaymentAmt=PaymentAmt-(decimal)split.SplitAmt;
@@ -781,7 +781,7 @@ namespace OpenDental {
 		private void butAddPartial_Click(object sender,EventArgs e) {
 			for(int i=0;i<gridCharges.SelectedIndices.Length;i++) {
 				string chargeDescript="";
-				if(PrefC.HasClinicsEnabled) {//Clinics
+				if(Preferences.HasClinicsEnabled) {//Clinics
 					chargeDescript=gridCharges.Rows[gridCharges.SelectedIndices[i]].Cells[4].Text;
 				}
 				else {
@@ -839,8 +839,8 @@ namespace OpenDental {
 				split.DatePay=PaymentCur.DateEntry;
 				split.PatNum=PaymentCur.PatNum;
 				split.ProvNum=0; //unallocated. This will make the text appear red so that the user knows to check it. If saved, will default to being a prepayment.
-				split.UnearnedType=PrefC.GetLong(PrefName.PrepaymentUnearnedType);//Use default unallocated type
-				if(PrefC.HasClinicsEnabled) {//Clinics
+				split.UnearnedType=Preferences.GetLong(PrefName.PrepaymentUnearnedType);//Use default unallocated type
+				if(Preferences.HasClinicsEnabled) {//Clinics
 					split.ClinicNum=PaymentCur.ClinicNum;
 				}
 				split.PayNum=PaymentCur.PayNum;

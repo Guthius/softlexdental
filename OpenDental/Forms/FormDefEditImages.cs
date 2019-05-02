@@ -312,7 +312,7 @@ namespace OpenDental{
 			if(DefCur.ItemValue.Contains("R")) {
 				checkR.Checked=true;
 			}
-			if(DefCur.ItemValue.Contains("E") || (IsNew && PrefC.GetInt(PrefName.ImagesModuleTreeIsCollapsed)!=1)) {
+			if(DefCur.ItemValue.Contains("E") || (IsNew && Preferences.GetInt(PrefName.ImagesModuleTreeIsCollapsed)!=1)) {
 					checkE.Checked=true;
 			}
 			if(DefCur.ItemValue.Contains("A")) {

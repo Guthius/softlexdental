@@ -94,15 +94,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PatPlan into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(PatPlan patPlan,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				patPlan.PatPlanNum=ReplicationServers.GetKey("patplan","PatPlanNum");
 			}
 			string command="INSERT INTO patplan (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PatPlanNum,";
 			}
 			command+="PatNum,Ordinal,IsPending,Relationship,PatID,InsSubNum,OrthoAutoFeeBilledOverride,OrthoAutoNextClaimDate) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(patPlan.PatPlanNum)+",";
 			}
 			command+=
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (patPlan.InsSubNum)+","
 				+"'"+POut.Double(patPlan.OrthoAutoFeeBilledOverride)+"',"
 				+    POut.Date  (patPlan.OrthoAutoNextClaimDate)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

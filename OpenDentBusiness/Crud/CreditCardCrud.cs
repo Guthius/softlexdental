@@ -130,15 +130,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one CreditCard into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(CreditCard creditCard,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				creditCard.CreditCardNum=ReplicationServers.GetKey("creditcard","CreditCardNum");
 			}
 			string command="INSERT INTO creditcard (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="CreditCardNum,";
 			}
 			command+="PatNum,Address,Zip,XChargeToken,CCNumberMasked,CCExpiration,ItemOrder,ChargeAmt,DateStart,DateStop,Note,PayPlanNum,PayConnectToken,PayConnectTokenExp,Procedures,CCSource,ClinicNum,ExcludeProcSync,PaySimpleToken,ChargeFrequency) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(creditCard.CreditCardNum)+",";
 			}
 			command+=
@@ -166,7 +166,7 @@ namespace OpenDentBusiness.Crud{
 				creditCard.Procedures="";
 			}
 			OdSqlParameter paramProcedures=new OdSqlParameter("paramProcedures",OdDbType.Text,POut.StringParam(creditCard.Procedures));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramProcedures);
 			}
 			else {

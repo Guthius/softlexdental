@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one AutoCodeCond into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(AutoCodeCond autoCodeCond,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				autoCodeCond.AutoCodeCondNum=ReplicationServers.GetKey("autocodecond","AutoCodeCondNum");
 			}
 			string command="INSERT INTO autocodecond (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="AutoCodeCondNum,";
 			}
 			command+="AutoCodeItemNum,Cond) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(autoCodeCond.AutoCodeCondNum)+",";
 			}
 			command+=
 				     POut.Long  (autoCodeCond.AutoCodeItemNum)+","
 				+    POut.Int   ((int)autoCodeCond.Cond)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

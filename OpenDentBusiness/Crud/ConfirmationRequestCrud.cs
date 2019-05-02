@@ -158,15 +158,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ConfirmationRequest into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ConfirmationRequest confirmationRequest,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				confirmationRequest.ConfirmationRequestNum=ReplicationServers.GetKey("confirmationrequest","ConfirmationRequestNum");
 			}
 			string command="INSERT INTO confirmationrequest (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ConfirmationRequestNum,";
 			}
 			command+="ClinicNum,IsForSms,IsForEmail,PatNum,ApptNum,PhonePat,DateTimeConfirmExpire,SecondsFromEntryToExpire,ShortGUID,ConfirmCode,MsgTextToMobileTemplate,MsgTextToMobile,EmailSubjTemplate,EmailSubj,EmailTextTemplate,EmailText,DateTimeEntry,DateTimeConfirmTransmit,DateTimeRSVP,RSVPStatus,ResponseDescript,GuidMessageToMobile,GuidMessageFromMobile,ShortGuidEmail,AptDateTimeOrig,TSPrior,SmsSentOk,EmailSentOk,DoNotResend) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(confirmationRequest.ConfirmationRequestNum)+",";
 			}
 			command+=
@@ -235,7 +235,7 @@ namespace OpenDentBusiness.Crud{
 				confirmationRequest.GuidMessageFromMobile="";
 			}
 			OdSqlParameter paramGuidMessageFromMobile=new OdSqlParameter("paramGuidMessageFromMobile",OdDbType.Text,POut.StringParam(confirmationRequest.GuidMessageFromMobile));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramMsgTextToMobileTemplate,paramMsgTextToMobile,paramEmailSubjTemplate,paramEmailSubj,paramEmailTextTemplate,paramEmailText,paramResponseDescript,paramGuidMessageToMobile,paramGuidMessageFromMobile);
 			}
 			else {
@@ -251,7 +251,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many ConfirmationRequests into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<ConfirmationRequest> listConfirmationRequests,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(ConfirmationRequest confirmationRequest in listConfirmationRequests) {
 					Insert(confirmationRequest);
 				}

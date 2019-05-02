@@ -897,7 +897,7 @@ namespace OpenDental {
 				textDaysOldMin,textDaysOldMax);
 			_hasFormLoaded=false;
 			SetDates(DateTime.MinValue,DateTime.Today.Date.AddDays(-30));
-			if(PrefC.GetInt(PrefName.OutstandingInsReportDateFilterTab)==(int)RpOutstandingIns.DateFilterTab.DaysOld) {
+			if(Preferences.GetInt(PrefName.OutstandingInsReportDateFilterTab)==(int)RpOutstandingIns.DateFilterTab.DaysOld) {
 				tabControlDate.SelectTab(tabDaysOld);
 			}
 			else {
@@ -909,7 +909,7 @@ namespace OpenDental {
 			FillUsers();
 			_listOldClaimTrackings=ClaimTrackings.RefreshForUsers(ClaimTrackingType.ClaimUser,_listClaimSentEditUsers.Select(x => x.UserNum).ToList());
 			_listNewClaimTrackings=_listOldClaimTrackings.Select(x => x.Copy()).ToList();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				comboBoxMultiClinics.Visible=true;
 				labelClinic.Visible=true;
 				FillClinics();
@@ -1145,7 +1145,7 @@ namespace OpenDental {
 							break;
 						case "PatName":
 							string patName=claimCur.PatLName+", "+claimCur.PatFName+" "+claimCur.PatMiddleI;
-							if(PrefC.GetBool(PrefName.ReportsShowPatNum)) {
+							if(Preferences.GetBool(PrefName.ReportsShowPatNum)) {
 								row.Cells.Add(claimCur.PatNum+"-"+patName);
 							}
 							else {
@@ -1569,17 +1569,17 @@ namespace OpenDental {
 			SaveFileDialog saveFileDialog=new SaveFileDialog();
 			saveFileDialog.AddExtension=true;
 			saveFileDialog.FileName="Outstanding Insurance Claims";
-			if(!Directory.Exists(PrefC.GetString(PrefName.ExportPath))) {
+			if(!Directory.Exists(Preferences.GetString(PrefName.ExportPath))) {
 				try {
-					Directory.CreateDirectory(PrefC.GetString(PrefName.ExportPath));
-					saveFileDialog.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+					Directory.CreateDirectory(Preferences.GetString(PrefName.ExportPath));
+					saveFileDialog.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
 				}
 				catch {
 					//initialDirectory will be blank
 				}
 			}
 			else {
-				saveFileDialog.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+				saveFileDialog.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
 			}
 			saveFileDialog.Filter="Text files(*.txt)|*.txt|Excel Files(*.xls)|*.xls|All files(*.*)|*.*";
 			saveFileDialog.FilterIndex=0;

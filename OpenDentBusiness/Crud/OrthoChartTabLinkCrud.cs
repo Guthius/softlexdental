@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one OrthoChartTabLink into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(OrthoChartTabLink orthoChartTabLink,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				orthoChartTabLink.OrthoChartTabLinkNum=ReplicationServers.GetKey("orthocharttablink","OrthoChartTabLinkNum");
 			}
 			string command="INSERT INTO orthocharttablink (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="OrthoChartTabLinkNum,";
 			}
 			command+="ItemOrder,OrthoChartTabNum,DisplayFieldNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(orthoChartTabLink.OrthoChartTabLinkNum)+",";
 			}
 			command+=
 				     POut.Int   (orthoChartTabLink.ItemOrder)+","
 				+    POut.Long  (orthoChartTabLink.OrthoChartTabNum)+","
 				+    POut.Long  (orthoChartTabLink.DisplayFieldNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

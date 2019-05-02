@@ -104,15 +104,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EhrLabSpecimen into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EhrLabSpecimen ehrLabSpecimen,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				ehrLabSpecimen.EhrLabSpecimenNum=ReplicationServers.GetKey("ehrlabspecimen","EhrLabSpecimenNum");
 			}
 			string command="INSERT INTO ehrlabspecimen (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EhrLabSpecimenNum,";
 			}
 			command+="EhrLabNum,SetIdSPM,SpecimenTypeID,SpecimenTypeText,SpecimenTypeCodeSystemName,SpecimenTypeIDAlt,SpecimenTypeTextAlt,SpecimenTypeCodeSystemNameAlt,SpecimenTypeTextOriginal,CollectionDateTimeStart,CollectionDateTimeEnd) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(ehrLabSpecimen.EhrLabSpecimenNum)+",";
 			}
 			command+=
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(ehrLabSpecimen.SpecimenTypeTextOriginal)+"',"
 				+"'"+POut.String(ehrLabSpecimen.CollectionDateTimeStart)+"',"
 				+"'"+POut.String(ehrLabSpecimen.CollectionDateTimeEnd)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

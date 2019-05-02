@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Icd10 into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Icd10 icd10,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				icd10.Icd10Num=ReplicationServers.GetKey("icd10","Icd10Num");
 			}
 			string command="INSERT INTO icd10 (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="Icd10Num,";
 			}
 			command+="Icd10Code,Description,IsCode) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(icd10.Icd10Num)+",";
 			}
 			command+=
 				 "'"+POut.String(icd10.Icd10Code)+"',"
 				+"'"+POut.String(icd10.Description)+"',"
 				+"'"+POut.String(icd10.IsCode)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

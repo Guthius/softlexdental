@@ -21,7 +21,7 @@ namespace OpenDental {
 		}
 
 		private void FormReplicationSetup_Load(object sender,EventArgs e) {
-			checkRandomPrimaryKeys.Checked=PrefC.GetBool(PrefName.RandomPrimaryKeys);
+			checkRandomPrimaryKeys.Checked=Preferences.GetBool(PrefName.RandomPrimaryKeys);
 			if(checkRandomPrimaryKeys.Checked) {
 				//not allowed to uncheck it
 				checkRandomPrimaryKeys.Enabled=false;
@@ -34,9 +34,9 @@ namespace OpenDental {
 				butTest.Visible=false;
 				label2.Visible=false;
 			}
-			if(PrefC.GetInt(PrefName.ReplicationFailureAtServer_id)>0) {
+			if(Preferences.GetInt(PrefName.ReplicationFailureAtServer_id)>0) {
 				groupBoxReplicationFailure.Visible=true;
-				textReplicaitonFailureAtServer_id.Text=PrefC.GetInt(PrefName.ReplicationFailureAtServer_id).ToString();
+				textReplicaitonFailureAtServer_id.Text=Preferences.GetInt(PrefName.ReplicationFailureAtServer_id).ToString();
 			}
 			FillGrid();
 		}
@@ -50,7 +50,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("FormReplicationSetup","server_id"),65);
 			gridMain.Columns.Add(col);
-			if(PrefC.GetBool(PrefName.RandomPrimaryKeys)) {	
+			if(Preferences.GetBool(PrefName.RandomPrimaryKeys)) {	
 				col=new ODGridColumn(Lan.g("FormReplicationSetup","Key Range Start"),160);
 				gridMain.Columns.Add(col);
 				col=new ODGridColumn(Lan.g("FormReplicationSetup","Key Range End"),160);
@@ -70,14 +70,14 @@ namespace OpenDental {
 				row=new ODGridRow();
 				row.Cells.Add(_listReplicationServers[i].Descript);
 				row.Cells.Add(_listReplicationServers[i].ServerId.ToString());
-				if(PrefC.GetBool(PrefName.RandomPrimaryKeys)) {
+				if(Preferences.GetBool(PrefName.RandomPrimaryKeys)) {
 					row.Cells.Add(_listReplicationServers[i].RangeStart.ToString("n0"));
 					row.Cells.Add(_listReplicationServers[i].RangeEnd.ToString("n0"));
 				}
 				row.Cells.Add(_listReplicationServers[i].AtoZpath);
 				row.Cells.Add(_listReplicationServers[i].UpdateBlocked ? "X" : "");
 				row.Cells.Add(_listReplicationServers[i].SlaveMonitor.ToString());
-				row.Cells.Add(_listReplicationServers[i].ReplicationServerNum==PrefC.GetLong(PrefName.ReplicationUserQueryServer) ? "X" : "");
+				row.Cells.Add(_listReplicationServers[i].ReplicationServerNum==Preferences.GetLong(PrefName.ReplicationUserQueryServer) ? "X" : "");
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();

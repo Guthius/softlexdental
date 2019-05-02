@@ -186,7 +186,7 @@ namespace OpenDental{
 			else{
 				butOK.Visible=false;
 			}
-			if(PrefC.HasClinicsEnabled) {//clinics
+			if(Preferences.HasClinicsEnabled) {//clinics
 				List <int> listSelectedItems=new List<int>();
 				_listClinics=Clinics.GetForUserod(Security.CurUser);
 				if(!Security.CurUser.ClinicIsRestricted) {
@@ -213,7 +213,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				if(IsSelectionMode) {
 					DList=Deposits.GetUnattached();
 				}
@@ -238,7 +238,7 @@ namespace OpenDental{
 			grid.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableDepositSlips","Amount"),90,HorizontalAlignment.Right);
 			grid.Columns.Add(col);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn(Lan.g("TableDepositSlips","Clinic"),150);
 				grid.Columns.Add(col);
 			}
@@ -248,7 +248,7 @@ namespace OpenDental{
 				row=new OpenDental.UI.ODGridRow();
 				row.Cells.Add(DList[i].DateDeposit.ToShortDateString());
 				row.Cells.Add(DList[i].Amount.ToString("F"));
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add(" "+DList[i].ClinicAbbr);//padding left with space to add separation between amount and clinic abbr
 				}
 				grid.Rows.Add(row);
@@ -287,7 +287,7 @@ namespace OpenDental{
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			Deposit deposit=new Deposit();
 			deposit.DateDeposit=DateTime.Today;
-			deposit.BankAccountInfo=PrefC.GetString(PrefName.PracticeBankNumber);
+			deposit.BankAccountInfo=Preferences.GetString(PrefName.PracticeBankNumber);
 			FormDepositEdit FormD=new FormDepositEdit(deposit);
 			FormD.IsNew=true;
 			FormD.ShowDialog();

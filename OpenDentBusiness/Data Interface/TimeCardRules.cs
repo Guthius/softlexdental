@@ -303,7 +303,7 @@ namespace OpenDentBusiness
             DateTime previousDate;
             List<ClockEvent> ClockEventList = ClockEvents.Refresh(EmployeeCur.EmployeeNum, StartDate, StopDate, false);//PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text),IsBreaks);
                                                                                                                        //Over breaks-------------------------------------------------------------------------------------------------
-            if (PrefC.GetBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks))
+            if (Preferences.GetBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks))
             {
                 //set adj auto to zero for all.
                 for (int i = 0; i < ClockEventList.Count; i++)
@@ -731,7 +731,7 @@ namespace OpenDentBusiness
                 {
                     //Either the last clock event in the list or last clock event for the day.
                     //OVERBREAKS--------------------------------------------------------------------------------------------------------
-                    if (PrefC.GetBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks))
+                    if (Preferences.GetBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks))
                     {//Apply overbreaks to this clockEvent.
                         tsDailyBreaksAdjustTotal = new TimeSpan();//used to adjust the clock event
                         tsDailyBreaksTotal = new TimeSpan();//used in calculating breaks over 30 minutes per day.
@@ -822,7 +822,7 @@ namespace OpenDentBusiness
                 //listClockEvent[i].AdjustAuto+=-listClockEvent[i].OTimeAuto;
                 //}
                 //AdjustAuto due to break overages-------------------------------------------------------------------------
-                if (PrefC.GetBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks))
+                if (Preferences.GetBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks))
                 {
                     if (i == listClockEvent.Count - 1 || listClockEvent[i].TimeDisplayed1.Date != listClockEvent[i + 1].TimeDisplayed1.Date)
                     {//last item or last item for a given day.
@@ -872,7 +872,7 @@ namespace OpenDentBusiness
         ///<summary>Deprecated.  This function is aesthetic and has no bearing on actual OT calculations. It adds adjustments to breaks so that when viewing them you can see if they went over 30 minutes.</summary>
         private static void AdjustBreaksHelper(Employee EmployeeCur, DateTime StartDate, DateTime StopDate)
         {
-            if (!PrefC.GetBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks))
+            if (!Preferences.GetBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks))
             {
                 //Only adjust breaks if preference is set.
                 return;
@@ -952,8 +952,8 @@ namespace OpenDentBusiness
                 //ignore rows that aren't weekly totals
                 if (i < mergedAL.Count - 1//if not the last row
                                           //if the next row has the same week as this row
-                    && cal.GetWeekOfYear(GetDateForRowHelper(mergedAL[i + 1]), rule, (DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//Default is 0-Sunday
-                    == cal.GetWeekOfYear(GetDateForRowHelper(mergedAL[i]), rule, (DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))
+                    && cal.GetWeekOfYear(GetDateForRowHelper(mergedAL[i + 1]), rule, (DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//Default is 0-Sunday
+                    == cal.GetWeekOfYear(GetDateForRowHelper(mergedAL[i]), rule, (DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))
                 {
                     continue;
                 }
@@ -1019,8 +1019,8 @@ namespace OpenDentBusiness
                 //ignore rows that aren't weekly totals
                 if (i < mergedAL.Count - 1//if not the last row
                                           //if the next row has the same week as this row
-                    && cal.GetWeekOfYear(GetDateForRowHelper(mergedAL[i + 1]), rule, (DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//Default is 0-Sunday
-                    == cal.GetWeekOfYear(GetDateForRowHelper(mergedAL[i]), rule, (DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))
+                    && cal.GetWeekOfYear(GetDateForRowHelper(mergedAL[i + 1]), rule, (DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//Default is 0-Sunday
+                    == cal.GetWeekOfYear(GetDateForRowHelper(mergedAL[i]), rule, (DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))
                 {
                     continue;//continue within a single week
                 }
@@ -1263,8 +1263,8 @@ namespace OpenDentBusiness
                     WeeklyTotals[i] = weekSpan;
                     //if this is the last entry for a given week
                     if (i == mergedAL.Count - 1//if this is the last row 
-                || cal.GetWeekOfYear(GetDateForRowHelper(mergedAL[i + 1]), rule, (DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
-                != cal.GetWeekOfYear(clock.TimeDisplayed1.Date, rule, (DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
+                || cal.GetWeekOfYear(GetDateForRowHelper(mergedAL[i + 1]), rule, (DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
+                != cal.GetWeekOfYear(clock.TimeDisplayed1.Date, rule, (DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
                     {
                         _listEvents.Add(listWeek);
                         listWeek = new List<Tuple<long, TimeSpan>>();//start over for the next week.
@@ -1303,8 +1303,8 @@ namespace OpenDentBusiness
                     WeeklyTotals[i] = weekSpan;
                     //if this is the last entry for a given week
                     if (i == mergedAL.Count - 1//if this is the last row 
-                || cal.GetWeekOfYear(GetDateForRowHelper(mergedAL[i + 1]), rule, (DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
-                != cal.GetWeekOfYear(adjust.TimeEntry.Date, rule, (DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
+                || cal.GetWeekOfYear(GetDateForRowHelper(mergedAL[i + 1]), rule, (DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
+                != cal.GetWeekOfYear(adjust.TimeEntry.Date, rule, (DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
                     {
                         _listEvents.Add(listWeek);
                         listWeek = new List<Tuple<long, TimeSpan>>();//start over for the next week.

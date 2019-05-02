@@ -85,15 +85,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one MountDef into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(MountDef mountDef,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				mountDef.MountDefNum=ReplicationServers.GetKey("mountdef","MountDefNum");
 			}
 			string command="INSERT INTO mountdef (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="MountDefNum,";
 			}
 			command+="Description,ItemOrder,IsRadiograph,Width,Height) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(mountDef.MountDefNum)+",";
 			}
 			command+=
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (mountDef.IsRadiograph)+","
 				+    POut.Int   (mountDef.Width)+","
 				+    POut.Int   (mountDef.Height)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

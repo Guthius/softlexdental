@@ -15,7 +15,7 @@ namespace OpenDentBusiness.WebTypes.WebForms {
 		public static bool TryGetSheets(out List<WebForms_Sheet> listWebFormsSheets,string regKey=null) {
 			listWebFormsSheets=new List<WebForms_Sheet>();
 			if(string.IsNullOrEmpty(regKey)) {
-				regKey=PrefC.GetString(PrefName.RegistrationKey);
+				regKey=Preferences.GetString(PrefName.RegistrationKey);
 			}
 			try {
 				string payload=PayloadHelper.CreatePayloadWebHostSynch(regKey,new PayloadItem(regKey,"RegKey"));
@@ -34,7 +34,7 @@ namespace OpenDentBusiness.WebTypes.WebForms {
 		/// <param name="listSheetNums"></param>
 		public static void DeleteSheetData(List<long> listSheetNums,string regKey=null) {
 			if(string.IsNullOrEmpty(regKey)) {
-				regKey=PrefC.GetString(PrefName.RegistrationKey);
+				regKey=Preferences.GetString(PrefName.RegistrationKey);
 			}
 			try {
 				List<PayloadItem> listPayloadItems=new List<PayloadItem> {

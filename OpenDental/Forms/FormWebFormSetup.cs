@@ -50,7 +50,7 @@ namespace OpenDental {
 
 
 		private void FormWebFormSetup_Load(object sender,EventArgs e) {
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 				butPickClinic.Visible=false;
@@ -68,7 +68,7 @@ namespace OpenDental {
 				}
 			}
 			butSave.Enabled=false;
-			checkAutoFillNameAndBirthdate.Checked=PrefC.GetBool(PrefName.WebFormsAutoFillNameAndBirthdate);
+			checkAutoFillNameAndBirthdate.Checked=Preferences.GetBool(PrefName.WebFormsAutoFillNameAndBirthdate);
 		}
 
 		private void FormWebFormSetup_Shown(object sender,EventArgs e) {
@@ -77,7 +77,7 @@ namespace OpenDental {
 
 		private void FetchValuesFromWebServer() {
 			try {
-				String WebHostSynchServerURL=PrefC.GetString(PrefName.WebHostSynchServerURL);
+				String WebHostSynchServerURL=Preferences.GetString(PrefName.WebHostSynchServerURL);
 				textboxWebHostAddress.Text=WebHostSynchServerURL;
 				butSave.Enabled=false;
 				if((WebHostSynchServerURL==WebFormL.SynchUrlStaging) || (WebHostSynchServerURL==WebFormL.SynchUrlDev)) {
@@ -161,8 +161,8 @@ namespace OpenDental {
 			if(_webFormPrefOld.ColorBorder.ToArgb()!=_webFormPref.ColorBorder.ToArgb()
 				|| _webFormPrefOld.CultureName!=_webFormPref.CultureName
 				|| _webFormPrefOld.DisableSignatures!=_webFormPref.DisableSignatures
-				|| textboxWebHostAddress.Text.Trim()!=PrefC.GetString(PrefName.WebHostSynchServerURL) 
-				|| checkAutoFillNameAndBirthdate.Checked!=PrefC.GetBool(PrefName.WebFormsAutoFillNameAndBirthdate))
+				|| textboxWebHostAddress.Text.Trim()!=Preferences.GetString(PrefName.WebHostSynchServerURL) 
+				|| checkAutoFillNameAndBirthdate.Checked!=Preferences.GetBool(PrefName.WebFormsAutoFillNameAndBirthdate))
 			{
 				butSave.Enabled=true;
 			}

@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Hcpcs into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Hcpcs hcpcs,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				hcpcs.HcpcsNum=ReplicationServers.GetKey("hcpcs","HcpcsNum");
 			}
 			string command="INSERT INTO hcpcs (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="HcpcsNum,";
 			}
 			command+="HcpcsCode,DescriptionShort) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(hcpcs.HcpcsNum)+",";
 			}
 			command+=
 				 "'"+POut.String(hcpcs.HcpcsCode)+"',"
 				+"'"+POut.String(hcpcs.DescriptionShort)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

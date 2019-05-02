@@ -104,15 +104,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Schedule into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Schedule schedule,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				schedule.ScheduleNum=ReplicationServers.GetKey("schedule","ScheduleNum");
 			}
 			string command="INSERT INTO schedule (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ScheduleNum,";
 			}
 			command+="SchedDate,StartTime,StopTime,SchedType,ProvNum,BlockoutType,Note,Status,EmployeeNum,ClinicNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(schedule.ScheduleNum)+",";
 			}
 			command+=
@@ -131,7 +131,7 @@ namespace OpenDentBusiness.Crud{
 				schedule.Note="";
 			}
 			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,POut.StringParam(schedule.Note));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNote);
 			}
 			else {
@@ -147,7 +147,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many Schedules into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<Schedule> listSchedules,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(Schedule schedule in listSchedules) {
 					Insert(schedule);
 				}

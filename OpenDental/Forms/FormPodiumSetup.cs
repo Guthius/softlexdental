@@ -38,7 +38,7 @@ namespace OpenDental {
 		}
 
 		private void FormPodiumSetup_Load(object sender,EventArgs e) {
-			if(PrefC.HasClinicsEnabled) {//Using clinics
+			if(Preferences.HasClinicsEnabled) {//Using clinics
 				_listUserClinicNums=new List<long>();
 				comboClinic.Items.Clear();
 				if(Security.CurUser.ClinicIsRestricted) {

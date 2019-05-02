@@ -432,7 +432,7 @@ namespace OpenDental{
 			}
 			RefAttaches.Insert(refattach);
 			SecurityLogs.MakeLogEntry(Permissions.RefAttachAdd,PatNum,"Referred To "+Referrals.GetNameFL(refattach.ReferralNum));
-			if(PrefC.GetBool(PrefName.AutomaticSummaryOfCareWebmail)) {
+			if(Preferences.GetBool(PrefName.AutomaticSummaryOfCareWebmail)) {
 				FormRefAttachEdit FormRAE=new FormRefAttachEdit();
 				FormRAE.RefAttachCur=refattach;
 				FormRAE.ShowDialog();
@@ -624,7 +624,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a referral first");
 				return;
 			}
-			if(IsSelectionMode && PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+			if(IsSelectionMode && Preferences.GetBool(PrefName.ShowFeatureEhr)) {
 				string warning="";
 				if(RefAttachList[gridMain.GetSelectedIndex()].ProvNum==0) {
 					warning+=Lans.g(this,"Selected patient referral does not have a referring provider set.");

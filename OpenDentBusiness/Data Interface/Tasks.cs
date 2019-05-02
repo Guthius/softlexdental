@@ -46,7 +46,7 @@ namespace OpenDentBusiness
         public static bool IsReminderTask(Task task)
         {
             //No remoting role check; no call to db
-            if (!PrefC.GetBool(PrefName.TasksUseRepeating) && !String.IsNullOrEmpty(task.ReminderGroupId)
+            if (!Preferences.GetBool(PrefName.TasksUseRepeating) && !String.IsNullOrEmpty(task.ReminderGroupId)
                 && task.ReminderType != TaskReminderType.NoReminder)
             {
                 return true;
@@ -384,7 +384,7 @@ namespace OpenDentBusiness
             "INNER JOIN tasklist ON tasklist.TaskListNum=taskancestor.TaskListNum "
             + "INNER JOIN tasksubscription ON tasksubscription.TaskListNum=tasklist.TaskListNum AND tasksubscription.UserNum=" + POut.Long(userNum) + " "
             + "LEFT JOIN taskunread ON taskunread.TaskNum=task.TaskNum AND taskunread.UserNum=" + POut.Long(userNum);
-            if (Clinics.ClinicNum != 0 || !PrefC.HasClinicsEnabled)
+            if (Clinics.ClinicNum != 0 || !Preferences.HasClinicsEnabled)
             {
                 command += TaskLists.BuildFilterJoins(clinicNum);
                 command += " WHERE TRUE " + TaskLists.BuildFilterWhereClause(userNum, clinicNum, Clinics.GetClinic(clinicNum)?.Region ?? 0);
@@ -501,7 +501,7 @@ namespace OpenDentBusiness
                 listRows.Add(table.Rows[i]);
             }
             #region Set Sort Variables. This greatly increases sort speed.
-            _isHQ = PrefC.GetBool(PrefName.DockPhonePanelShow);//increases speed of the sort function performed below.
+            _isHQ = Preferences.GetBool(PrefName.DockPhonePanelShow);//increases speed of the sort function performed below.
             List<Def> listTaskPriorities = Defs.GetDefsForCategory(DefCat.TaskPriorities, true);
             for (int i = 0; i < listTaskPriorities.Count; i++)
             {
@@ -673,7 +673,7 @@ namespace OpenDentBusiness
                 listRows.Add(table.Rows[i]);
             }
             #region Set Sort Variables. This greatly increases sort speed.
-            _isHQ = PrefC.GetBool(PrefName.DockPhonePanelShow);//increases speed of the sort function performed below.
+            _isHQ = Preferences.GetBool(PrefName.DockPhonePanelShow);//increases speed of the sort function performed below.
             List<Def> listTaskPriorities = Defs.GetDefsForCategory(DefCat.TaskPriorities, true);
             for (int i = 0; i < listTaskPriorities.Count; i++)
             {
@@ -802,8 +802,8 @@ namespace OpenDentBusiness
         {
             string command = string.Empty;
             //Only add JOINs if filtering.  Filtering will never happen if clinics are turned off, because regions link via clinics.
-            if ((GlobalTaskFilterType)PrefC.GetInt(PrefName.TasksGlobalFilterType) == GlobalTaskFilterType.Disabled
-                || globalFilterType == GlobalTaskFilterType.None || !PrefC.HasClinicsEnabled)
+            if ((GlobalTaskFilterType)Preferences.GetInt(PrefName.TasksGlobalFilterType) == GlobalTaskFilterType.Disabled
+                || globalFilterType == GlobalTaskFilterType.None || !Preferences.HasClinicsEnabled)
             {
                 return command;
             }
@@ -819,8 +819,8 @@ namespace OpenDentBusiness
         private static string BuildFilterWhereClause(long currentUserNum, GlobalTaskFilterType globalFilterType, long filterFkey)
         {
             //Only add WHERE clauses if filtering.  Filtering will never happen if clinics are turned off, because regions link via clinics.
-            if ((GlobalTaskFilterType)PrefC.GetInt(PrefName.TasksGlobalFilterType) == GlobalTaskFilterType.Disabled
-                || globalFilterType == GlobalTaskFilterType.None || !PrefC.HasClinicsEnabled)
+            if ((GlobalTaskFilterType)Preferences.GetInt(PrefName.TasksGlobalFilterType) == GlobalTaskFilterType.Disabled
+                || globalFilterType == GlobalTaskFilterType.None || !Preferences.HasClinicsEnabled)
             {
                 return "";
             }
@@ -873,7 +873,7 @@ namespace OpenDentBusiness
             if (task.TaskListNum != oldTask.TaskListNum)
             {
                 TaskAncestors.Synch(task);
-                if (PrefC.IsODHQ && task.TaskListNum == TriageTaskListNum)
+                if (Preferences.IsODHQ && task.TaskListNum == TriageTaskListNum)
                 {//Sending the task TO triage
                     TaskTakens.DeleteForTask(task.TaskNum);
                 }
@@ -1010,7 +1010,7 @@ namespace OpenDentBusiness
             {
                 throw new Exception(Lans.g("Tasks", "Not allowed to save changes because the task has been altered by someone else."));
             }
-            if (PrefC.IsODHQ && oldTask.TaskListNum == TriageTaskListNum && task.TaskListNum != TriageTaskListNum //Trying to claim a Triage task
+            if (Preferences.IsODHQ && oldTask.TaskListNum == TriageTaskListNum && task.TaskListNum != TriageTaskListNum //Trying to claim a Triage task
                 && !TaskTakens.TryInsert(task.TaskNum))
             {
                 throw new Exception(Lans.g("Tasks", "Not allowed to save changes because the task has been claimed by someone else."));
@@ -1293,7 +1293,7 @@ namespace OpenDentBusiness
                 }
             }
             //1)Sort by IsUnread status
-            if (PrefC.GetBool(PrefName.TasksNewTrackedByUser))
+            if (Preferences.GetBool(PrefName.TasksNewTrackedByUser))
             {
                 if (x.RowTask["IsUnread"].ToString() != y.RowTask["IsUnread"].ToString())
                 {

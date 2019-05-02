@@ -19,7 +19,7 @@ namespace OpenDental {
 			dlg.Multiselect=true;
 			bool isLocalFileSelected=false;
 			List<string> listFileNames;
-			if(pat != null && PrefC.AtoZfolderUsed != DataStorageType.InDatabase) {
+			if(pat != null && Preferences.AtoZfolderUsed != DataStorageType.InDatabase) {
 				string patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
 				if(CloudStorage.IsCloudStorage) {
 					FormFilePicker FormFP=new FormFilePicker(patFolder);

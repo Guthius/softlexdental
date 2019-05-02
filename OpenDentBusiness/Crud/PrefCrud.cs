@@ -79,15 +79,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Pref into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Pref pref,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				pref.PrefNum=ReplicationServers.GetKey("preference","PrefNum");
 			}
 			string command="INSERT INTO preference (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PrefNum,";
 			}
 			command+="PrefName,ValueString,Comments) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(pref.PrefNum)+",";
 			}
 			command+=
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 				pref.Comments="";
 			}
 			OdSqlParameter paramComments=new OdSqlParameter("paramComments",OdDbType.Text,POut.StringParam(pref.Comments));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramValueString,paramComments);
 			}
 			else {

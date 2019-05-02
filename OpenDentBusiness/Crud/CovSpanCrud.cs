@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one CovSpan into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(CovSpan covSpan,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				covSpan.CovSpanNum=ReplicationServers.GetKey("covspan","CovSpanNum");
 			}
 			string command="INSERT INTO covspan (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="CovSpanNum,";
 			}
 			command+="CovCatNum,FromCode,ToCode) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(covSpan.CovSpanNum)+",";
 			}
 			command+=
 				     POut.Long  (covSpan.CovCatNum)+","
 				+"'"+POut.String(covSpan.FromCode)+"',"
 				+"'"+POut.String(covSpan.ToCode)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

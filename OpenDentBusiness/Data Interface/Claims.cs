@@ -90,7 +90,7 @@ namespace OpenDentBusiness
             //Per Nathan, it is OK to return the DateService in the query result to display in the batch insurance window,
             //because that is the date which will be displayed in the Account module when you use the GoTo feature from batch insurance window.
             string command = "SELECT outstanding.*,CONCAT(patient.LName,', ',patient.FName) AS patName_,";
-            if (PrefC.HasClinicsEnabled && Clinics.GetCount() > 0)
+            if (Preferences.HasClinicsEnabled && Clinics.GetCount() > 0)
             {
                 command += "IFNULL(clinic.Description,'') ";
             }
@@ -130,7 +130,7 @@ namespace OpenDentBusiness
                 + "OR (AttachedCount=0" + ((claimPayDate.Year > 1880) ? "" : " AND ClaimStatus='S'") + ")"
                 + ") outstanding "//End outstanding
                 + "INNER JOIN patient ON patient.PatNum = outstanding.PatNum ";
-            if (PrefC.HasClinicsEnabled && Clinics.GetCount() > 0)
+            if (Preferences.HasClinicsEnabled && Clinics.GetCount() > 0)
             {
                 command += "LEFT JOIN clinic ON clinic.ClinicNum = outstanding.ClinicNum ";
             }
@@ -1069,7 +1069,7 @@ namespace OpenDentBusiness
                     long provNum = ProcCur.ProvNum;
                     if (provNum == 0)
                     {//if no prov set, then use practice default.
-                        provNum = PrefC.GetLong(PrefName.PracticeDefaultProv);
+                        provNum = Preferences.GetLong(PrefName.PracticeDefaultProv);
                     }
                     Provider providerFirst = Providers.GetFirst();//Used in order to preserve old behavior...  If this fails, then old code would have failed.
                     Provider provider = Providers.GetFirstOrDefault(x => x.ProvNum == provNum) ?? providerFirst;
@@ -1209,7 +1209,7 @@ namespace OpenDentBusiness
                 case "Med":
                     claimCur.PatRelat = PatPlans.GetFromList(patPlanList, subCur.InsSubNum).Relationship;
                     claimCur.ClaimType = "Other";
-                    if (PrefC.GetBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical))
+                    if (Preferences.GetBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical))
                     {
                         claimCur.MedType = EnumClaimMedType.Institutional;
                     }
@@ -1225,7 +1225,7 @@ namespace OpenDentBusiness
                     claimCur.ClaimForm = claimFormNum;
                     if (planCur.IsMedical)
                     {
-                        if (PrefC.GetBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical))
+                        if (Preferences.GetBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical))
                         {
                             claimCur.MedType = EnumClaimMedType.Institutional;
                         }
@@ -1315,11 +1315,11 @@ namespace OpenDentBusiness
             claimCur.PlanNum = insPlanCur.PlanNum;
             claimCur.InsSubNum = inssubCur.InsSubNum;
             claimCur.ClaimFee = feeBilled;
-            if (PrefC.GetBool(PrefName.OrthoClaimMarkAsOrtho))
+            if (Preferences.GetBool(PrefName.OrthoClaimMarkAsOrtho))
             {
                 claimCur.IsOrtho = true;
             }
-            if (PrefC.GetBool(PrefName.OrthoClaimUseDatePlacement))
+            if (Preferences.GetBool(PrefName.OrthoClaimUseDatePlacement))
             {
                 claimCur.OrthoDate = dateBanding;
                 claimCur.OrthoTotalM = PIn.Byte(totalMonths.ToString(), false);
@@ -1445,7 +1445,7 @@ namespace OpenDentBusiness
 
         public static DateTime GetDateLastOrthoClaim(PatPlan patPlanCur, OrthoClaimType claimType)
         {
-            long orthoDefaultAutoCodeNum = PrefC.GetLong(PrefName.OrthoAutoProcCodeNum);
+            long orthoDefaultAutoCodeNum = Preferences.GetLong(PrefName.OrthoAutoProcCodeNum);
             string command = "";
             if (claimType == OrthoClaimType.InitialPlusPeriodic)
             {
@@ -1521,7 +1521,7 @@ namespace OpenDentBusiness
             {
                 pat = Patients.GetPat(claim.PatNum);
             }
-            return Patients.ReplacePatient(PrefC.GetString(PrefName.ClaimIdPrefix), pat) + claim.ClaimNum;
+            return Patients.ReplacePatient(Preferences.GetString(PrefName.ClaimIdPrefix), pat) + claim.ClaimNum;
         }
 
         ///<summary>Caller should validate claim and listClaimProcsToSplit prior to calling.

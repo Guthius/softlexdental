@@ -16,7 +16,7 @@ namespace OpenDentBusiness {
 			try {
 				WebServiceMainHQProxy.EServiceSetup.SignupOut signupOut=new WebServiceMainHQProxy.EServiceSetup.SignupOut() {
 					EServices=GetEServicesForAll(),
-					HasClinics=PrefC.HasClinicsEnabled,
+					HasClinics=Preferences.HasClinicsEnabled,
 					ListenerTypeInt=(int)ListenerServiceType.ListenerServiceProxy,
 					MethodNameInt=(int)WebServiceMainHQProxy.EServiceSetup.SetupMethod.GetSignupOutFull,
 					Phones=GetPhonesForAll(),
@@ -42,7 +42,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Returns all possible eServices for every clinic in the database.</summary>
 		private List<WebServiceMainHQProxy.EServiceSetup.SignupOut.SignupOutEService> GetEServicesForAll() {
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				List<WebServiceMainHQProxy.EServiceSetup.SignupOut.SignupOutEService> listEServices
 					=new List<WebServiceMainHQProxy.EServiceSetup.SignupOut.SignupOutEService>();
 				foreach(Clinic clinic in Clinics.GetDeepCopy(true)) {

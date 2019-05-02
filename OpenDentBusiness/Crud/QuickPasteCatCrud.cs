@@ -79,15 +79,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one QuickPasteCat into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(QuickPasteCat quickPasteCat,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				quickPasteCat.QuickPasteCatNum=ReplicationServers.GetKey("quickpastecat","QuickPasteCatNum");
 			}
 			string command="INSERT INTO quickpastecat (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="QuickPasteCatNum,";
 			}
 			command+="Description,ItemOrder,DefaultForTypes) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(quickPasteCat.QuickPasteCatNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				quickPasteCat.DefaultForTypes="";
 			}
 			OdSqlParameter paramDefaultForTypes=new OdSqlParameter("paramDefaultForTypes",OdDbType.Text,POut.StringParam(quickPasteCat.DefaultForTypes));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramDefaultForTypes);
 			}
 			else {

@@ -92,15 +92,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one DisplayField into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(DisplayField displayField,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				displayField.DisplayFieldNum=ReplicationServers.GetKey("displayfield","DisplayFieldNum");
 			}
 			string command="INSERT INTO displayfield (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="DisplayFieldNum,";
 			}
 			command+="InternalName,ItemOrder,Description,ColumnWidth,Category,ChartViewNum,PickList,DescriptionOverride) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(displayField.DisplayFieldNum)+",";
 			}
 			command+=
@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 				displayField.PickList="";
 			}
 			OdSqlParameter paramPickList=new OdSqlParameter("paramPickList",OdDbType.Text,POut.StringParam(displayField.PickList));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramPickList);
 			}
 			else {

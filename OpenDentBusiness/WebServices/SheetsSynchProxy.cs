@@ -52,7 +52,7 @@ namespace OpenDentBusiness {
 				TimeoutOverride=100000;
 			}
 			if(string.IsNullOrEmpty(UrlOverride)) {
-				service.Url=PrefC.GetString(PrefName.WebHostSynchServerURL);
+				service.Url=Preferences.GetString(PrefName.WebHostSynchServerURL);
 			}
 			else { 
 				service.Url=UrlOverride;

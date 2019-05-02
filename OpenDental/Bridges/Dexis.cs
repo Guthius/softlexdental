@@ -23,7 +23,7 @@ namespace OpenDental.Bridges{
 			ProgramProperty PPCur=ProgramProperties.GetCur(ForProgram,"InfoFile path");
 			string infoFile=PPCur.PropertyValue;
 			if(infoFile.Trim()=="") {
-				infoFile=CodeBase.ODFileUtils.CombinePaths(PrefC.GetTempFolderPath(),"infofile.txt");
+				infoFile=CodeBase.ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),"infofile.txt");
 			}
 			Process process=new Process();
 			if(pat!=null) {

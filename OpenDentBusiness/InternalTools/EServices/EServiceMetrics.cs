@@ -87,13 +87,13 @@ namespace OpenDentBusiness
         public static EServiceMetrics GetEServiceMetricsFromSignalHQ()
         {
             EServiceMetrics eServiceMetric = new EServiceMetrics();
-            if (PrefC.GetBool(PrefName.ServicesHqDoNotConnect))
+            if (Preferences.GetBool(PrefName.ServicesHqDoNotConnect))
             {
                 eServiceMetric.ErrorMessage = "Not allowed to connect to the serviceshq database.";
                 return eServiceMetric;
             }
             string dbPassword;
-            if (!CDT.Class1.Decrypt(PrefC.GetString(PrefName.ServicesHqMySqpPasswordObf), out dbPassword))
+            if (!CDT.Class1.Decrypt(Preferences.GetString(PrefName.ServicesHqMySqpPasswordObf), out dbPassword))
             {
                 eServiceMetric.ErrorMessage = "Unable to decrypt serviceshq password";
                 return eServiceMetric;
@@ -120,7 +120,7 @@ namespace OpenDentBusiness
                         eServiceMetric.IsValid = true;
                     }
                 },
-                    PrefC.GetString(PrefName.ServicesHqServer), PrefC.GetString(PrefName.ServicesHqDatabase), PrefC.GetString(PrefName.ServicesHqMySqlUser),
+                    Preferences.GetString(PrefName.ServicesHqServer), Preferences.GetString(PrefName.ServicesHqDatabase), Preferences.GetString(PrefName.ServicesHqMySqlUser),
                     dbPassword);
             }
             catch (Exception ex)
@@ -138,7 +138,7 @@ namespace OpenDentBusiness
             //No remoting role check, No call to database.
             DateTime dateTimeStart = DateTime.Today;
             DateTime dateTimeEnd = dateTimeStart.AddDays(1);
-            List<string> websitesDown = PrefC.GetRaw("BroadcasterWebsitesToMonitor").Split(',')
+            List<string> websitesDown = Preferences.GetRaw("BroadcasterWebsitesToMonitor").Split(',')
                 .Select(x => WebSiteIsAvailable(x)).ToList();
             websitesDown.Add(nexmoStatus);
             websitesDown.RemoveAll(x => string.IsNullOrEmpty(x.Trim()));

@@ -84,7 +84,7 @@ namespace OpenDentBusiness
             }
             #endregion insurance verification
             #region Benifit Renewal
-            if (PrefC.GetBool(PrefName.InsVerifyFutureDateBenefitYear))
+            if (Preferences.GetBool(PrefName.InsVerifyFutureDateBenefitYear))
             {
                 InsPlan insPlan = InsPlans.GetPlan(insVer.PlanNum, null);
                 //Setup the month renew dates.  Need all 3 years in case the appointment verify window crosses over a year
@@ -260,7 +260,7 @@ namespace OpenDentBusiness
                     whereClinic += " AND clinic.Region IN(" + string.Join(",", listRegionDefNums.Select(x => POut.Long(x))) + ") ";
                 }
             }
-            bool checkBenefitYear = PrefC.GetBool(PrefName.InsVerifyFutureDateBenefitYear);
+            bool checkBenefitYear = Preferences.GetBool(PrefName.InsVerifyFutureDateBenefitYear);
             string mainQuery = @"
 				SELECT insverify.*,
 				patient.LName,patient.FName,patient.Preferred,appointment.PatNum,appointment.AptNum,appointment.AptDateTime,patplan.PatPlanNum,insplan.PlanNum,carrier.CarrierName,

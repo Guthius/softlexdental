@@ -103,15 +103,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SecurityLog into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(SecurityLog securityLog,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				securityLog.SecurityLogNum=ReplicationServers.GetKey("securitylog","SecurityLogNum");
 			}
 			string command="INSERT INTO securitylog (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="SecurityLogNum,";
 			}
 			command+="PermType,UserNum,LogDateTime,LogText,PatNum,CompName,FKey,LogSource,DefNum,DefNumError,DateTPrevious) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(securityLog.SecurityLogNum)+",";
 			}
 			command+=
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 				securityLog.LogText="";
 			}
 			OdSqlParameter paramLogText=new OdSqlParameter("paramLogText",OdDbType.Text,POut.StringParam(securityLog.LogText));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramLogText);
 			}
 			else {

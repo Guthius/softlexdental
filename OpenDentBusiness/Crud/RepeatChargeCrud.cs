@@ -115,15 +115,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one RepeatCharge into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(RepeatCharge repeatCharge,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				repeatCharge.RepeatChargeNum=ReplicationServers.GetKey("repeatcharge","RepeatChargeNum");
 			}
 			string command="INSERT INTO repeatcharge (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="RepeatChargeNum,";
 			}
 			command+="PatNum,ProcCode,ChargeAmt,DateStart,DateStop,Note,CopyNoteToProc,CreatesClaim,IsEnabled,UsePrepay,Npi,ErxAccountId,ProviderName,ChargeAmtAlt,UnearnedTypes) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(repeatCharge.RepeatChargeNum)+",";
 			}
 			command+=
@@ -158,7 +158,7 @@ namespace OpenDentBusiness.Crud{
 				repeatCharge.ProviderName="";
 			}
 			OdSqlParameter paramProviderName=new OdSqlParameter("paramProviderName",OdDbType.Text,POut.StringParam(repeatCharge.ProviderName));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNote,paramNpi,paramErxAccountId,paramProviderName);
 			}
 			else {

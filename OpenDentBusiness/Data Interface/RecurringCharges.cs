@@ -156,13 +156,13 @@ namespace OpenDentBusiness
         {
             DeleteNotYetCharged();
             List<long> listClinicNums = new List<long>();
-            if (PrefC.HasClinicsEnabled && Security.CurUser.ClinicIsRestricted)
+            if (Preferences.HasClinicsEnabled && Security.CurUser.ClinicIsRestricted)
             {
                 listClinicNums = listUserClinics.Select(x => x.ClinicNum).ToList();
             }
             //if no clinics are selected but clinics are enabled and the user is restricted, the results will be empty so no need to run the report
             //if clinics are enabled and the user is not restricted and selects no clinics, there will not be a clinic filter in the query, so all clinics
-            if (PrefC.HasClinicsEnabled && Security.CurUser.ClinicIsRestricted && listClinicNums.Count == 0)
+            if (Preferences.HasClinicsEnabled && Security.CurUser.ClinicIsRestricted && listClinicNums.Count == 0)
             {
                 ListRecurringChargeData = new List<RecurringChargeData>();
             }
@@ -184,9 +184,9 @@ namespace OpenDentBusiness
                 //This is a very ineffecient way to get the total of the recurring charges for a card.  Example:  For the customers db, to generate a list of
                 //161 cards with recurring charges due, TotalRecurringCharges is called ~2500 times.  We could modify this to get the ProcFee sum for each
                 //card in the list with a single query and return the DataTable.  But since this is for HQ only, we will leave it for now.
-                if (PrefC.IsODHQ)
+                if (Preferences.IsODHQ)
                 {//HQ calculates repeating charges based on the presence of procedures on the patient's account that are linked to the CC
-                    if (PrefC.GetBool(PrefName.BillingUseBillingCycleDay))
+                    if (Preferences.GetBool(PrefName.BillingUseBillingCycleDay))
                     {
                         rptChargeAmt = (decimal)CreditCards.TotalRecurringCharges(patNum, chargeCur.Procedures, chargeCur.BillingCycleDay);
                     }
@@ -208,7 +208,7 @@ namespace OpenDentBusiness
                 {//if there is a payplan attached to this repeatcharge and a positive amount due
                  //negative family balance does not subtract from payplan amount due and negative payplan amount due does not subtract from family balance due
                     famBalTotal = Math.Max(famBalTotal, 0);
-                    if (PrefC.GetInt(PrefName.PayPlansVersion) == 1)
+                    if (Preferences.GetInt(PrefName.PayPlansVersion) == 1)
                     {//in PP v2, the PP amt due is included in the pat balance
                         famBalTotal += payPlanDue;
                     }
@@ -216,7 +216,7 @@ namespace OpenDentBusiness
                 long guarNum = chargeCur.Guarantor;
                 //if guarantor is already in the dict and this is a payplan charge row, add the payPlanDue to fambal so the patient is charged
                 if (dictFamBals.ContainsKey(guarNum) && payPlanDue > 0
-                    && PrefC.GetInt(PrefName.PayPlansVersion) == 1) //in PP v2, the PP amt due is included in the pat balance
+                    && Preferences.GetInt(PrefName.PayPlansVersion) == 1) //in PP v2, the PP amt due is included in the pat balance
                 {
                     dictFamBals[guarNum] = Math.Max(dictFamBals[guarNum], 0) + payPlanDue;//this way the payplan charge will be charged even if the fam bal is < 0
                 }
@@ -321,7 +321,7 @@ namespace OpenDentBusiness
                 string payConnectResultFile = _fileAtoZ.CombinePaths(payConnectResultDir, "RecurringChargeResult.txt");
                 try
                 {
-                    if (PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(payConnectResultDir))
+                    if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(payConnectResultDir))
                     {
                         Directory.CreateDirectory(payConnectResultDir);
                     }
@@ -337,7 +337,7 @@ namespace OpenDentBusiness
                 string paySimpleResultFile = _fileAtoZ.CombinePaths(paySimpleResultDir, "RecurringChargeResult.txt");
                 try
                 {
-                    if (PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(paySimpleResultDir))
+                    if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(paySimpleResultDir))
                     {
                         Directory.CreateDirectory(paySimpleResultDir);
                     }
@@ -399,7 +399,7 @@ namespace OpenDentBusiness
             amount = 0;
             receipt = new StringBuilder();
             long clinicNumCur = 0;
-            if (PrefC.HasClinicsEnabled)
+            if (Preferences.HasClinicsEnabled)
             {
                 //this is patient.ClinicNum or if it's a payplan row it's the ClinicNum from one of the payplancharges on the payplan
                 clinicNumCur = chargeData.RecurringCharge.ClinicNum;//If clinics were enabled but no longer are, use credentials for headquarters.
@@ -424,7 +424,7 @@ namespace OpenDentBusiness
                 return false;
             }
             password = MiscUtils.Decrypt(password);
-            string resultfile = PrefC.GetRandomTempFile("txt");
+            string resultfile = Preferences.GetRandomTempFile("txt");
             try
             {
                 File.Delete(resultfile);//delete the old result file.
@@ -472,7 +472,7 @@ namespace OpenDentBusiness
             }
             //If ODHQ, do not add the zip code if the customer has an active foreign registration key
             bool hasForeignKey = false;
-            if (PrefC.IsODHQ)
+            if (Preferences.IsODHQ)
             {
                 hasForeignKey = RegistrationKeys.GetForPatient(chargeData.RecurringCharge.PatNum)
                     .Where(x => x.IsForeign)
@@ -643,11 +643,11 @@ namespace OpenDentBusiness
         public void SendPayConnect(RecurringChargeData chargeData, bool forceDuplicates, StringBuilder strBuilderResultFile)
         {
             Dictionary<long, string> dictClinicNumDesc = new Dictionary<long, string>();
-            if (PrefC.HasClinicsEnabled)
+            if (Preferences.HasClinicsEnabled)
             {
                 dictClinicNumDesc = Clinics.GetClinicsNoCache().ToDictionary(x => x.ClinicNum, x => x.Description);
             }
-            dictClinicNumDesc[0] = PrefC.GetString(PrefName.PracticeTitle);
+            dictClinicNumDesc[0] = Preferences.GetString(PrefName.PracticeTitle);
             strBuilderResultFile.AppendLine("Recurring charge results for " + DateTime.Now.ToShortDateString() + " ran at " + DateTime.Now.ToShortTimeString());
             strBuilderResultFile.AppendLine();
             bool isPayConnectToken = true;
@@ -692,7 +692,7 @@ namespace OpenDentBusiness
             if (payConnectResponse == null || payConnectResponse.Status == null)
             {
                 MarkFailed(chargeData, Lans.g(_lanThis, "Transaction Failed, unknown error") + " " + chargeData.RecurringCharge.PatNum, LogLevel.Info);
-                if (PrefC.HasClinicsEnabled && dictClinicNumDesc.ContainsKey(clinicNumCur))
+                if (Preferences.HasClinicsEnabled && dictClinicNumDesc.ContainsKey(clinicNumCur))
                 {
                     strBuilderResultText.AppendLine("CLINIC=" + dictClinicNumDesc[clinicNumCur]);
                 }
@@ -702,7 +702,7 @@ namespace OpenDentBusiness
             else if (payConnectResponse.Status.code != 0)
             {//error in transaction
                 MarkFailed(chargeData, Lans.g(_lanThis, "Transaction Failed, error status") + " " + payConnectResponse.Status.description, LogLevel.Info);
-                if (PrefC.HasClinicsEnabled && dictClinicNumDesc.ContainsKey(clinicNumCur))
+                if (Preferences.HasClinicsEnabled && dictClinicNumDesc.ContainsKey(clinicNumCur))
                 {
                     strBuilderResultText.AppendLine("CLINIC=" + dictClinicNumDesc[clinicNumCur]);
                 }
@@ -717,7 +717,7 @@ namespace OpenDentBusiness
                 CreditCard ccCur = CreditCards.GetOne(chargeData.RecurringCharge.CreditCardNum);
                 UpdateCreditCardPayConnect(ccCur, payConnectResponse);
                 //add to strbuilder that will be written to txt file and to the payment note
-                if (PrefC.HasClinicsEnabled && dictClinicNumDesc.ContainsKey(clinicNumCur))
+                if (Preferences.HasClinicsEnabled && dictClinicNumDesc.ContainsKey(clinicNumCur))
                 {
                     strBuilderResultText.AppendLine("CLINIC=" + dictClinicNumDesc[clinicNumCur]);
                 }
@@ -756,11 +756,11 @@ namespace OpenDentBusiness
         public void SendPaySimple(RecurringChargeData chargeData, StringBuilder strBuilderResultFile)
         {
             Dictionary<long, string> dictClinicNumDesc = new Dictionary<long, string>();
-            if (PrefC.HasClinicsEnabled)
+            if (Preferences.HasClinicsEnabled)
             {
                 dictClinicNumDesc = Clinics.GetClinicsNoCache().ToDictionary(x => x.ClinicNum, x => x.Description);
             }
-            dictClinicNumDesc[0] = PrefC.GetString(PrefName.PracticeTitle);
+            dictClinicNumDesc[0] = Preferences.GetString(PrefName.PracticeTitle);
             strBuilderResultFile.AppendLine("Recurring charge results for " + DateTime.Now.ToShortDateString() + " ran at " + DateTime.Now.ToShortTimeString());
             strBuilderResultFile.AppendLine();
             string paySimpleAccountId = chargeData.PaySimpleToken;
@@ -811,7 +811,7 @@ namespace OpenDentBusiness
                 }
                 //add to strbuilder that will be written to txt file and to the payment note
                 string clinicDesc = "";
-                if (PrefC.HasClinicsEnabled && dictClinicNumDesc.ContainsKey(clinicNumCur))
+                if (Preferences.HasClinicsEnabled && dictClinicNumDesc.ContainsKey(clinicNumCur))
                 {
                     clinicDesc = dictClinicNumDesc[clinicNumCur];
                 }
@@ -834,7 +834,7 @@ namespace OpenDentBusiness
             {
                 MarkFailed(chargeData, Lans.g(_lanThis, "Error processing card:") + " " + ex.Message, LogLevel.Info);
                 string clinicDesc = "";
-                if (PrefC.HasClinicsEnabled && dictClinicNumDesc.ContainsKey(clinicNumCur))
+                if (Preferences.HasClinicsEnabled && dictClinicNumDesc.ContainsKey(clinicNumCur))
                 {
                     clinicDesc = dictClinicNumDesc[clinicNumCur];
                 }
@@ -951,7 +951,7 @@ namespace OpenDentBusiness
         {
             Payment paymentCur = new Payment();
             paymentCur.DateEntry = _nowDateTime.Date;
-            if (PrefC.IsODHQ && PrefC.GetBool(PrefName.BillingUseBillingCycleDay))
+            if (Preferences.IsODHQ && Preferences.GetBool(PrefName.BillingUseBillingCycleDay))
             {
                 int dayOfMonth = Math.Min(DateTime.DaysInMonth(recCharge.DateStart.Year, recCharge.DateStart.Month), recCharge.BillingCycleDay);
                 recCharge.DateStart = new DateTime(recCharge.DateStart.Year, recCharge.DateStart.Month, dayOfMonth);
@@ -962,7 +962,7 @@ namespace OpenDentBusiness
             //Explicitly set ClinicNum=0, since a pat's ClinicNum will remain set if the user enabled clinics, assigned patients to clinics, and then
             //disabled clinics because we use the ClinicNum to determine which PayConnect or XCharge/XWeb credentials to use for payments.
             paymentCur.ClinicNum = 0;
-            if (PrefC.HasClinicsEnabled)
+            if (Preferences.HasClinicsEnabled)
             {
                 paymentCur.ClinicNum = recCharge.RecurringCharge.ClinicNum;
             }
@@ -979,7 +979,7 @@ namespace OpenDentBusiness
             }
             if (ccSource != CreditCardSource.PaySimpleACH)
             {
-                paymentCur.PayType = PrefC.GetLong(PrefName.RecurringChargesPayTypeCC);
+                paymentCur.PayType = Preferences.GetLong(PrefName.RecurringChargesPayTypeCC);
             }
             if (paymentCur.PayType == 0)
             {//Pref default not set or this is ACH
@@ -1012,7 +1012,7 @@ namespace OpenDentBusiness
                         continue;
                     }
                     highestAmt = afterIns;
-                    if (PrefC.GetBool(PrefName.RecurringChargesUsePriProv))
+                    if (Preferences.GetBool(PrefName.RecurringChargesUsePriProv))
                     {
                         provNumRegPmts = patCur.PriProv;
                     }
@@ -1063,14 +1063,14 @@ namespace OpenDentBusiness
                 PaySplits.Insert(split);
             }
             //consider moving the aging calls up in the Send methods and building a list of actions to feed into RunParallel to thread them.
-            if (PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily))
+            if (Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily))
             {
-                Ledgers.ComputeAging(patCur.Guarantor, PrefC.GetDate(PrefName.DateLastAging));
+                Ledgers.ComputeAging(patCur.Guarantor, Preferences.GetDate(PrefName.DateLastAging));
             }
             else
             {
                 Ledgers.ComputeAging(patCur.Guarantor, _nowDateTime.Date);
-                if (PrefC.GetDate(PrefName.DateLastAging) != _nowDateTime.Date)
+                if (Preferences.GetDate(PrefName.DateLastAging) != _nowDateTime.Date)
                 {
                     Prefs.UpdateString(PrefName.DateLastAging, POut.Date(_nowDateTime.Date, false));
                     //Since this is always called from UI, the above line works fine to keep the prefs cache current.
@@ -1081,7 +1081,7 @@ namespace OpenDentBusiness
         ///<summary>Returns a valid DateTime for the payment's PayDate.  Contains logic if payment should be for the previous or the current month.</summary>
         private DateTime GetPayDate(RecurringChargeData recCharge)
         {
-            if (PrefC.GetBool(PrefName.RecurringChargesUseTransDate))
+            if (Preferences.GetBool(PrefName.RecurringChargesUseTransDate))
             {
                 return _nowDateTime;
             }

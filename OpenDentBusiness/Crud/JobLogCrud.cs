@@ -100,15 +100,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one JobLog into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(JobLog jobLog,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				jobLog.JobLogNum=ReplicationServers.GetKey("joblog","JobLogNum");
 			}
 			string command="INSERT INTO joblog (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="JobLogNum,";
 			}
 			command+="JobNum,UserNumChanged,UserNumExpert,UserNumEngineer,DateTimeEntry,Description,MainRTF,Title,RequirementsRTF,TimeEstimate) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(jobLog.JobLogNum)+",";
 			}
 			command+=
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 				jobLog.RequirementsRTF="";
 			}
 			OdSqlParameter paramRequirementsRTF=new OdSqlParameter("paramRequirementsRTF",OdDbType.Text,POut.StringParam(jobLog.RequirementsRTF));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramMainRTF,paramRequirementsRTF);
 			}
 			else {

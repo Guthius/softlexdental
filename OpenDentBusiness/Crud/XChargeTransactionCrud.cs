@@ -110,15 +110,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one XChargeTransaction into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(XChargeTransaction xChargeTransaction,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				xChargeTransaction.XChargeTransactionNum=ReplicationServers.GetKey("xchargetransaction","XChargeTransactionNum");
 			}
 			string command="INSERT INTO xchargetransaction (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="XChargeTransactionNum,";
 			}
 			command+="TransType,Amount,CCEntry,PatNum,Result,ClerkID,ResultCode,Expiration,CCType,CreditCardNum,BatchNum,ItemNum,ApprCode,TransactionDateTime) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(xChargeTransaction.XChargeTransactionNum)+",";
 			}
 			command+=
@@ -136,7 +136,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(xChargeTransaction.ItemNum)+"',"
 				+"'"+POut.String(xChargeTransaction.ApprCode)+"',"
 				+    POut.DateT (xChargeTransaction.TransactionDateTime)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

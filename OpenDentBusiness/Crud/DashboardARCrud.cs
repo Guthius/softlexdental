@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one DashboardAR into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(DashboardAR dashboardAR,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				dashboardAR.DashboardARNum=ReplicationServers.GetKey("dashboardar","DashboardARNum");
 			}
 			string command="INSERT INTO dashboardar (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="DashboardARNum,";
 			}
 			command+="DateCalc,BalTotal,InsEst) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(dashboardAR.DashboardARNum)+",";
 			}
 			command+=
 				     POut.Date  (dashboardAR.DateCalc)+","
 				+"'"+POut.Double(dashboardAR.BalTotal)+"',"
 				+"'"+POut.Double(dashboardAR.InsEst)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

@@ -122,15 +122,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PaySplit into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(PaySplit paySplit,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				paySplit.SplitNum=ReplicationServers.GetKey("paysplit","SplitNum");
 			}
 			string command="INSERT INTO paysplit (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="SplitNum,";
 			}
 			command+="SplitAmt,PatNum,ProcDate,PayNum,IsDiscount,DiscountType,ProvNum,PayPlanNum,DatePay,ProcNum,DateEntry,UnearnedType,ClinicNum,SecUserNumEntry,FSplitNum,AdjNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(paySplit.SplitNum)+",";
 			}
 			command+=
@@ -151,7 +151,7 @@ namespace OpenDentBusiness.Crud{
 				//SecDateTEdit can only be set by MySQL
 				+    POut.Long  (paySplit.FSplitNum)+","
 				+    POut.Long  (paySplit.AdjNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
@@ -167,7 +167,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many PaySplits into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<PaySplit> listPaySplits,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(PaySplit paySplit in listPaySplits) {
 					Insert(paySplit);
 				}

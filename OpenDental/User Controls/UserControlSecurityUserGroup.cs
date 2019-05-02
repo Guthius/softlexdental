@@ -120,7 +120,7 @@ namespace OpenDental {
 		///<summary>Fills the filter comboboxes on the "Users" tab.</summary>
 		private void FillFilters() {
 			foreach(UserFilters filterCur in Enum.GetValues(typeof(UserFilters))) {
-				if(PrefC.GetBool(PrefName.EasyHideDentalSchools) && (filterCur == UserFilters.Students || filterCur == UserFilters.Instructors)) {
+				if(Preferences.GetBool(PrefName.EasyHideDentalSchools) && (filterCur == UserFilters.Students || filterCur == UserFilters.Instructors)) {
 					continue;
 				}
 				comboShowOnly.Items.Add(new ODBoxItem<UserFilters>(Lan.g(this,filterCur.GetDescription()),filterCur));
@@ -131,7 +131,7 @@ namespace OpenDental {
 			foreach(SchoolClass schoolClassCur in SchoolClasses.GetDeepCopy()) {
 				comboSchoolClass.Items.Add(new ODBoxItem<SchoolClass>(SchoolClasses.GetDescript(schoolClassCur),schoolClassCur));
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				comboClinic.Visible=true;
 				labelClinic.Visible=true;
 				comboClinic.Items.Clear();
@@ -336,7 +336,7 @@ namespace OpenDental {
 			gridUsers.Columns.Add(new ODGridColumn(Lan.g(tableName,"Username"),90));
 			gridUsers.Columns.Add(new ODGridColumn(Lan.g(tableName,"Employee"),90));
 			gridUsers.Columns.Add(new ODGridColumn(Lan.g(tableName,"Provider"),90));
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				gridUsers.Columns.Add(new ODGridColumn(Lan.g(tableName,"Clinic"),80));
 				gridUsers.Columns.Add(new ODGridColumn(Lan.g(tableName,"Clinic\r\nRestr"),38,HorizontalAlignment.Center));
 			}
@@ -348,7 +348,7 @@ namespace OpenDental {
 				row.Cells.Add(user.UserName);
 				row.Cells.Add(Employees.GetNameFL(user.EmployeeNum));
 				row.Cells.Add(Providers.GetLongDesc(user.ProvNum));
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add(Clinics.GetAbbr(user.ClinicNum));
 					row.Cells.Add(user.ClinicIsRestricted?"X":"");
 				}

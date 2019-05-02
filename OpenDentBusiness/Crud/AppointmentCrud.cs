@@ -160,15 +160,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Appointment into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Appointment appointment,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				appointment.AptNum=ReplicationServers.GetKey("appointment","AptNum");
 			}
 			string command="INSERT INTO appointment (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="AptNum,";
 			}
 			command+="PatNum,AptStatus,Pattern,Confirmed,TimeLocked,Op,Note,ProvNum,ProvHyg,AptDateTime,NextAptNum,UnschedStatus,IsNewPatient,ProcDescript,Assistant,ClinicNum,IsHygiene,DateTimeArrived,DateTimeSeated,DateTimeDismissed,InsPlan1,InsPlan2,DateTimeAskedToArrive,ProcsColored,ColorOverride,AppointmentTypeNum,SecUserNumEntry,SecDateEntry,Priority) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(appointment.AptNum)+",";
 			}
 			command+=
@@ -210,7 +210,7 @@ namespace OpenDentBusiness.Crud{
 				appointment.ProcsColored="";
 			}
 			OdSqlParameter paramProcsColored=new OdSqlParameter("paramProcsColored",OdDbType.Text,POut.StringParam(appointment.ProcsColored));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNote,paramProcsColored);
 			}
 			else {

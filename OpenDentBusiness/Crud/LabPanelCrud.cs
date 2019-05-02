@@ -97,15 +97,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one LabPanel into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(LabPanel labPanel,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				labPanel.LabPanelNum=ReplicationServers.GetKey("labpanel","LabPanelNum");
 			}
 			string command="INSERT INTO labpanel (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="LabPanelNum,";
 			}
 			command+="PatNum,RawMessage,LabNameAddress,SpecimenCondition,SpecimenSource,ServiceId,ServiceName,MedicalOrderNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(labPanel.LabPanelNum)+",";
 			}
 			command+=
@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 				labPanel.RawMessage="";
 			}
 			OdSqlParameter paramRawMessage=new OdSqlParameter("paramRawMessage",OdDbType.Text,POut.StringParam(labPanel.RawMessage));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramRawMessage);
 			}
 			else {

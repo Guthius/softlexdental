@@ -101,7 +101,7 @@ namespace OpenDental.UI {
 			}
 			set {
 				//If EnterpriseApptList is on, never allow All to show.
-				_doIncludeAll=PrefC.GetBoolSilent(PrefName.EnterpriseApptList,false) ? false : value;
+				_doIncludeAll=Preferences.GetBoolSilent(PrefName.EnterpriseApptList,false) ? false : value;
 				FillClinics();
 			}
 		}
@@ -193,7 +193,7 @@ namespace OpenDental.UI {
 				return;
 			}
 			try {
-				if(!PrefC.HasClinicsEnabled) {
+				if(!Preferences.HasClinicsEnabled) {
 					Visible=false;
 					return;
 				}

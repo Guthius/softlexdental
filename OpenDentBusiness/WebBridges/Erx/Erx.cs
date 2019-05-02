@@ -89,7 +89,7 @@ namespace OpenDentBusiness {
 		///<summary>Throws exception if anything about the practice information is not valid.
 		///All intended exceptions are ODExceptions and should be translated by the caller.</summary>
 		public static void ValidatePracticeInfo() {
-			string practicePhone=PrefC.GetString(PrefName.PracticePhone);
+			string practicePhone=Preferences.GetString(PrefName.PracticePhone);
 			if(!Regex.IsMatch(practicePhone,"^[0-9]{10}$")) {//"^[0-9]{10}(x[0-9]+)?$")) {
 				throw new ODException(Lans.g("Erx","Practice phone must be exactly 10 digits."));
 			}
@@ -99,7 +99,7 @@ namespace OpenDentBusiness {
 			if(Regex.IsMatch(practicePhone,"^[0-9]{3}555[0-9]{4}$")) {
 				throw new ODException(Lans.g("Erx","Practice phone cannot contain 555 in the middle 3 digits."));
 			}
-			string practiceFax=PrefC.GetString(PrefName.PracticeFax);
+			string practiceFax=Preferences.GetString(PrefName.PracticeFax);
 			if(!Regex.IsMatch(practiceFax,"^[0-9]{10}(x[0-9]+)?$")) {
 				throw new ODException(Lans.g("Erx","Practice fax must be exactly 10 digits."));
 			}
@@ -109,19 +109,19 @@ namespace OpenDentBusiness {
 			if(Regex.IsMatch(practiceFax,"^[0-9]{3}555[0-9]{4}$")) {
 				throw new ODException(Lans.g("Erx","Practice fax cannot contain 555 in the middle 3 digits."));
 			}
-			if(PrefC.GetString(PrefName.PracticeAddress)=="") {
+			if(Preferences.GetString(PrefName.PracticeAddress)=="") {
 				throw new ODException(Lans.g("Erx","Practice address blank."));
 			}
-			if(Regex.IsMatch(PrefC.GetString(PrefName.PracticeAddress),".*P\\.?O\\.? .*",RegexOptions.IgnoreCase)) {
+			if(Regex.IsMatch(Preferences.GetString(PrefName.PracticeAddress),".*P\\.?O\\.? .*",RegexOptions.IgnoreCase)) {
 				throw new ODException(Lans.g("Erx","Practice address cannot be a PO BOX."));
 			}
-			if(PrefC.GetString(PrefName.PracticeCity)=="") {
+			if(Preferences.GetString(PrefName.PracticeCity)=="") {
 				throw new ODException(Lans.g("Erx","Practice city blank."));
 			}
-			if(!USlocales.IsValidAbbr(PrefC.GetString(PrefName.PracticeST))) {
+			if(!USlocales.IsValidAbbr(Preferences.GetString(PrefName.PracticeST))) {
 				throw new ODException(Lans.g("Erx","Practice state abbreviation invalid."));
 			}
-			string practiceZip=Regex.Replace(PrefC.GetString(PrefName.PracticeZip),"[^0-9]*","");//Zip with all non-numeric characters removed.
+			string practiceZip=Regex.Replace(Preferences.GetString(PrefName.PracticeZip),"[^0-9]*","");//Zip with all non-numeric characters removed.
 			if(practiceZip.Length!=9) {
 				throw new ODException(Lans.g("Erx","Practice zip must be 9 digits."));
 			}

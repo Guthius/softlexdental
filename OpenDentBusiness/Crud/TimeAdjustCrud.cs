@@ -91,15 +91,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one TimeAdjust into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(TimeAdjust timeAdjust,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				timeAdjust.TimeAdjustNum=ReplicationServers.GetKey("timeadjust","TimeAdjustNum");
 			}
 			string command="INSERT INTO timeadjust (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="TimeAdjustNum,";
 			}
 			command+="EmployeeNum,TimeEntry,RegHours,OTimeHours,Note,IsAuto,ClinicNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(timeAdjust.TimeAdjustNum)+",";
 			}
 			command+=
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 				timeAdjust.Note="";
 			}
 			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,POut.StringParam(timeAdjust.Note));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNote);
 			}
 			else {

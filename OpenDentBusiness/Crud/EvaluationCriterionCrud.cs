@@ -97,15 +97,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EvaluationCriterion into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EvaluationCriterion evaluationCriterion,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				evaluationCriterion.EvaluationCriterionNum=ReplicationServers.GetKey("evaluationcriterion","EvaluationCriterionNum");
 			}
 			string command="INSERT INTO evaluationcriterion (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EvaluationCriterionNum,";
 			}
 			command+="EvaluationNum,CriterionDescript,IsCategoryName,GradingScaleNum,GradeShowing,GradeNumber,Notes,ItemOrder,MaxPointsPoss) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(evaluationCriterion.EvaluationCriterionNum)+",";
 			}
 			command+=
@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 				evaluationCriterion.Notes="";
 			}
 			OdSqlParameter paramNotes=new OdSqlParameter("paramNotes",OdDbType.Text,POut.StringParam(evaluationCriterion.Notes));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNotes);
 			}
 			else {

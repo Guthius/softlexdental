@@ -45,8 +45,8 @@ namespace OpenDental {
 
 		private void FillTabECR() {
 			FillECRActivationButtons();
-			checkEnableNoClinic.Checked=PrefC.GetBool(PrefName.ApptConfirmEnableForClinicZero);
-			if(PrefC.HasClinicsEnabled) {//CLINICS
+			checkEnableNoClinic.Checked=Preferences.GetBool(PrefName.ApptConfirmEnableForClinicZero);
+			if(Preferences.HasClinicsEnabled) {//CLINICS
 				checkUseDefaultsEC.Visible=true;
 				checkUseDefaultsEC.Enabled=false;//when loading form we will be viewing defaults.
 				checkIsConfirmEnabled.Visible=true;
@@ -71,10 +71,10 @@ namespace OpenDental {
 			_listDefsApptStatus.ForEach(x => comboStatusEAccepted.Items.Add(x.ItemName));
 			_listDefsApptStatus.ForEach(x => comboStatusEDeclined.Items.Add(x.ItemName));
 			_listDefsApptStatus.ForEach(x => comboStatusEFailed.Items.Add(x.ItemName));
-			long prefApptEConfirmStatusSent=PrefC.GetLong(PrefName.ApptEConfirmStatusSent);
-			long prefApptEConfirmStatusAccepted=PrefC.GetLong(PrefName.ApptEConfirmStatusAccepted);
-			long prefApptEConfirmStatusDeclined=PrefC.GetLong(PrefName.ApptEConfirmStatusDeclined);
-			long prefApptEConfirmStatusSendFailed=PrefC.GetLong(PrefName.ApptEConfirmStatusSendFailed);
+			long prefApptEConfirmStatusSent=Preferences.GetLong(PrefName.ApptEConfirmStatusSent);
+			long prefApptEConfirmStatusAccepted=Preferences.GetLong(PrefName.ApptEConfirmStatusAccepted);
+			long prefApptEConfirmStatusDeclined=Preferences.GetLong(PrefName.ApptEConfirmStatusDeclined);
+			long prefApptEConfirmStatusSendFailed=Preferences.GetLong(PrefName.ApptEConfirmStatusSendFailed);
 			//SENT
 			if(prefApptEConfirmStatusSent>0) {
 				//Selects combo box option if it exists, if it doesn't it sets the text of the combo box to the hidden one.
@@ -115,7 +115,7 @@ namespace OpenDental {
 			else {
 				comboStatusEFailed.SelectedIndex=0;
 			}
-			if(PrefC.GetBool(PrefName.ApptEConfirm2ClickConfirmation)) {
+			if(Preferences.GetBool(PrefName.ApptEConfirm2ClickConfirmation)) {
 				radio2ClickConfirm.Checked=true;
 			}
 			else {
@@ -158,7 +158,7 @@ namespace OpenDental {
 
 		///<summary>Fills in memory Rules dictionary and clinics list based. This is very different from AppointmentReminderRules.GetRuleAndClinics.</summary>
 		private void setListClinicsAndDictRulesHelper() {
-			if(PrefC.HasClinicsEnabled) {//CLINICS
+			if(Preferences.HasClinicsEnabled) {//CLINICS
 				_ecListClinics=new List<Clinic>() { new Clinic() { Description="Defaults",Abbr="Defaults" } };
 				_ecListClinics.AddRange(Clinics.GetForUserod(Security.CurUser));
 			}
@@ -178,9 +178,9 @@ namespace OpenDental {
 		}
 
 		private void FillConfStatusesGrid() {
-			List<long> listDontSendConf=PrefC.GetString(PrefName.ApptConfirmExcludeESend).Split(',').Select(x => PIn.Long(x)).ToList();
-			List<long> listDontChange=PrefC.GetString(PrefName.ApptConfirmExcludeEConfirm).Split(',').Select(x => PIn.Long(x)).ToList();
-			List<long> listDontSendRem=PrefC.GetString(PrefName.ApptConfirmExcludeERemind).Split(',').Select(x => PIn.Long(x)).ToList();
+			List<long> listDontSendConf=Preferences.GetString(PrefName.ApptConfirmExcludeESend).Split(',').Select(x => PIn.Long(x)).ToList();
+			List<long> listDontChange=Preferences.GetString(PrefName.ApptConfirmExcludeEConfirm).Split(',').Select(x => PIn.Long(x)).ToList();
+			List<long> listDontSendRem=Preferences.GetString(PrefName.ApptConfirmExcludeERemind).Split(',').Select(x => PIn.Long(x)).ToList();
 			gridConfStatuses.BeginUpdate();
 			gridConfStatuses.Columns.Clear();
 			gridConfStatuses.Columns.Add(new ODGridColumn(Lan.g(this,"Status"),100));
@@ -263,7 +263,7 @@ namespace OpenDental {
 
 		private void FillECRActivationButtons() {
 			//Reminder Activation Status
-			if(PrefC.GetBool(PrefName.ApptRemindAutoEnabled)) {
+			if(Preferences.GetBool(PrefName.ApptRemindAutoEnabled)) {
 				textStatusReminders.Text=Lan.g(this,"eReminders")+" : "+Lan.g(this,"Active");
 				textStatusReminders.BackColor=Color.FromArgb(236,255,236);//light green
 				textStatusReminders.ForeColor=Color.Black;//instead of disabled grey
@@ -276,7 +276,7 @@ namespace OpenDental {
 				butActivateReminder.Text=Lan.g(this,"Activate eReminders");
 			}
 			//Confirmation Activation Status
-			if(PrefC.GetBool(PrefName.ApptConfirmAutoEnabled)) {
+			if(Preferences.GetBool(PrefName.ApptConfirmAutoEnabled)) {
 				textStatusConfirmations.Text=Lan.g(this,"eConfirmations")+" : "+Lan.g(this,"Active");
 				textStatusConfirmations.BackColor=Color.FromArgb(236,255,236);//light green
 				textStatusConfirmations.ForeColor=Color.Black;//instead of disabled grey
@@ -465,7 +465,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"You must first signup for eConfirmations via the Signup tab before activating eConfirmations.");
 				return;
 			}
-			bool isApptConfirmAutoEnabled = PrefC.GetBool(PrefName.ApptConfirmAutoEnabled);
+			bool isApptConfirmAutoEnabled = Preferences.GetBool(PrefName.ApptConfirmAutoEnabled);
 			isApptConfirmAutoEnabled=!isApptConfirmAutoEnabled;
 			Prefs.UpdateBool(PrefName.ApptConfirmAutoEnabled,isApptConfirmAutoEnabled);
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Automated appointment eConfirmations "+(isApptConfirmAutoEnabled ? "activated" : "deactivated")+".");
@@ -481,7 +481,7 @@ namespace OpenDental {
 		}
 
 		private void butActivateReminder_Click(object sender,EventArgs e) {
-			bool isApptRemindAutoEnabled = PrefC.GetBool(PrefName.ApptRemindAutoEnabled);
+			bool isApptRemindAutoEnabled = Preferences.GetBool(PrefName.ApptRemindAutoEnabled);
 			isApptRemindAutoEnabled=!isApptRemindAutoEnabled;
 			Prefs.UpdateBool(PrefName.ApptRemindAutoEnabled,isApptRemindAutoEnabled);
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Automated appointment eReminders "+(isApptRemindAutoEnabled ? "activated" : "deactivated")+".");

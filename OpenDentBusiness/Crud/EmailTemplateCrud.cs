@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EmailTemplate into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EmailTemplate emailTemplate,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				emailTemplate.EmailTemplateNum=ReplicationServers.GetKey("emailtemplate","EmailTemplateNum");
 			}
 			string command="INSERT INTO emailtemplate (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EmailTemplateNum,";
 			}
 			command+="Subject,BodyText,Description,IsHtml) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(emailTemplate.EmailTemplateNum)+",";
 			}
 			command+=
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 				emailTemplate.Description="";
 			}
 			OdSqlParameter paramDescription=new OdSqlParameter("paramDescription",OdDbType.Text,POut.StringParam(emailTemplate.Description));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramSubject,paramBodyText,paramDescription);
 			}
 			else {

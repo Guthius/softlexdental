@@ -97,15 +97,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one VaccineObs into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(VaccineObs vaccineObs,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				vaccineObs.VaccineObsNum=ReplicationServers.GetKey("vaccineobs","VaccineObsNum");
 			}
 			string command="INSERT INTO vaccineobs (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="VaccineObsNum,";
 			}
 			command+="VaccinePatNum,ValType,IdentifyingCode,ValReported,ValCodeSystem,VaccineObsNumGroup,UcumCode,DateObs,MethodCode) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(vaccineObs.VaccineObsNum)+",";
 			}
 			command+=
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(vaccineObs.UcumCode)+"',"
 				+    POut.Date  (vaccineObs.DateObs)+","
 				+"'"+POut.String(vaccineObs.MethodCode)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

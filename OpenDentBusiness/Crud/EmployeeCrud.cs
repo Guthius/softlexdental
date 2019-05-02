@@ -91,15 +91,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Employee into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Employee employee,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				employee.EmployeeNum=ReplicationServers.GetKey("employee","EmployeeNum");
 			}
 			string command="INSERT INTO employee (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EmployeeNum,";
 			}
 			command+="LName,FName,MiddleI,IsHidden,ClockStatus,PhoneExt,PayrollID) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(employee.EmployeeNum)+",";
 			}
 			command+=
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(employee.ClockStatus)+"',"
 				+    POut.Int   (employee.PhoneExt)+","
 				+"'"+POut.String(employee.PayrollID)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

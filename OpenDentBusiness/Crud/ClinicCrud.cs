@@ -187,15 +187,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Clinic into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Clinic clinic,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				clinic.ClinicNum=ReplicationServers.GetKey("clinic","ClinicNum");
 			}
 			string command="INSERT INTO clinic (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ClinicNum,";
 			}
 			command+="Description,Address,Address2,City,State,Zip,BillingAddress,BillingAddress2,BillingCity,BillingState,BillingZip,PayToAddress,PayToAddress2,PayToCity,PayToState,PayToZip,Phone,BankNumber,DefaultPlaceService,InsBillingProv,Fax,EmailAddressNum,DefaultProv,SmsContractDate,SmsMonthlyLimit,IsMedicalOnly,UseBillAddrOnClaims,Region,ItemOrder,IsInsVerifyExcluded,Abbr,MedLabAccountNum,IsConfirmEnabled,IsConfirmDefault,IsNewPatApptExcluded,IsHidden,ExternalID,SchedNote,HasProcOnRx) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(clinic.ClinicNum)+",";
 			}
 			command+=
@@ -238,7 +238,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (clinic.ExternalID)+","
 				+"'"+POut.String(clinic.SchedNote)+"',"
 				+    POut.Bool  (clinic.HasProcOnRx)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

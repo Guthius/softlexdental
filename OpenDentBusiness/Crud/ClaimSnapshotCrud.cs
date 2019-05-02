@@ -94,15 +94,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ClaimSnapshot into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ClaimSnapshot claimSnapshot,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				claimSnapshot.ClaimSnapshotNum=ReplicationServers.GetKey("claimsnapshot","ClaimSnapshotNum");
 			}
 			string command="INSERT INTO claimsnapshot (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ClaimSnapshotNum,";
 			}
 			command+="ProcNum,ClaimType,Writeoff,InsPayEst,Fee,DateTEntry,ClaimProcNum,SnapshotTrigger) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(claimSnapshot.ClaimSnapshotNum)+",";
 			}
 			command+=
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 				+    DbHelper.Now()+","
 				+    POut.Long  (claimSnapshot.ClaimProcNum)+","
 				+    POut.Int   ((int)claimSnapshot.SnapshotTrigger)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

@@ -15,11 +15,11 @@ namespace OpenDental {
 		}
 		
 		private void FormUnschedListSetup_Load(object sender,EventArgs e) {
-			int daysPast=PrefC.GetInt(PrefName.UnschedDaysPast);
+			int daysPast=Preferences.GetInt(PrefName.UnschedDaysPast);
 			if(daysPast!=-1) {
 				textDaysPast.Text=daysPast.ToString();
 			}
-			int daysFuture=PrefC.GetInt(PrefName.UnschedDaysFuture);
+			int daysFuture=Preferences.GetInt(PrefName.UnschedDaysFuture);
 			if(daysFuture!=-1) {
 				textDaysFuture.Text=daysFuture.ToString();
 			}

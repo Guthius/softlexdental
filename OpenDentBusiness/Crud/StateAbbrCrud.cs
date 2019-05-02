@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one StateAbbr into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(StateAbbr stateAbbr,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				stateAbbr.StateAbbrNum=ReplicationServers.GetKey("stateabbr","StateAbbrNum");
 			}
 			string command="INSERT INTO stateabbr (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="StateAbbrNum,";
 			}
 			command+="Description,Abbr,MedicaidIDLength) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(stateAbbr.StateAbbrNum)+",";
 			}
 			command+=
 				 "'"+POut.String(stateAbbr.Description)+"',"
 				+"'"+POut.String(stateAbbr.Abbr)+"',"
 				+    POut.Int   (stateAbbr.MedicaidIDLength)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

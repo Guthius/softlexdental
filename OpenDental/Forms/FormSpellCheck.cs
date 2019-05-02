@@ -19,7 +19,7 @@ namespace OpenDental {
 		}
 
 		private void FormSpellCheck_Load(object sender,EventArgs e) {
-			checkBox1.Checked=PrefC.GetBool(PrefName.SpellCheckIsEnabled);
+			checkBox1.Checked=Preferences.GetBool(PrefName.SpellCheckIsEnabled);
 			FillGrid();
 		}
 

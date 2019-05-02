@@ -46,7 +46,7 @@ namespace OpenDentBusiness
             }
             DataSet ds = new DataSet();
             //All Internal OD Tables that are cached go here
-            if (PrefC.IsODHQ)
+            if (Preferences.IsODHQ)
             {
                 if (listITypes.Contains(InvalidType.JobPermission) || isAll)
                 {
@@ -201,7 +201,7 @@ namespace OpenDentBusiness
             }
             if (listITypes.Contains(InvalidType.Fees) || isAll)
             {
-                if (PrefC.GetBool(PrefName.FeesUseCache))
+                if (Preferences.GetBool(PrefName.FeesUseCache))
                 {
                     ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Fees.ToString());
                     //Fee Cache follows an unusual pattern. This fills the cache with the HQ fees, and whatever clinics happen to be currently cached.
@@ -387,7 +387,7 @@ namespace OpenDentBusiness
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Sites.ToString());
                 ds.Tables.Add(Sites.GetTableFromCache(doRefreshServerCache));
-                if (PrefC.IsODHQ)
+                if (Preferences.IsODHQ)
                 {
                     ds.Tables.Add(SiteLinks.GetTableFromCache(doRefreshServerCache));
                 }
@@ -473,7 +473,7 @@ namespace OpenDentBusiness
                 isAll = true;
             }
             //All Internal OD Tables that are cached go here
-            if (PrefC.IsODHQ)
+            if (Preferences.IsODHQ)
             {
                 if (listITypes.Contains(InvalidType.JobPermission) || isAll)
                 {
@@ -620,7 +620,7 @@ namespace OpenDentBusiness
             }
             if (listITypes.Contains(InvalidType.Fees) || isAll)
             {
-                if (PrefC.GetBool(PrefName.FeesUseCache))
+                if (Preferences.GetBool(PrefName.FeesUseCache))
                 {
                     ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Fees.ToString());
                     Fees.FillCacheFromTable(ds.Tables["Fee"]);
@@ -800,7 +800,7 @@ namespace OpenDentBusiness
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Sites.ToString());
                 Sites.FillCacheFromTable(ds.Tables["Site"]);
-                if (PrefC.IsODHQ)
+                if (Preferences.IsODHQ)
                 {
                     SiteLinks.FillCacheFromTable(ds.Tables["SiteLink"]);
                 }

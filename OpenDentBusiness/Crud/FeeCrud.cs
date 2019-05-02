@@ -104,15 +104,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Fee into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Fee fee,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				fee.FeeNum=ReplicationServers.GetKey("fee","FeeNum");
 			}
 			string command="INSERT INTO fee (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="FeeNum,";
 			}
 			command+="Amount,OldCode,FeeSched,UseDefaultFee,UseDefaultCov,CodeNum,ClinicNum,ProvNum,SecUserNumEntry,SecDateEntry) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(fee.FeeNum)+",";
 			}
 			command+=
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (fee.SecUserNumEntry)+","
 				+    DbHelper.Now()+")";
 				//SecDateTEdit can only be set by MySQL
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
@@ -143,7 +143,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many Fees into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<Fee> listFees,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(Fee fee in listFees) {
 					Insert(fee);
 				}

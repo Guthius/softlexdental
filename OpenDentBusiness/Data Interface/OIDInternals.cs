@@ -27,7 +27,7 @@ namespace OpenDentBusiness{
 					using(XmlWriter writer = XmlWriter.Create(strbuild,settings)) {
 						writer.WriteStartElement("CustomerIdRequest");
 						writer.WriteStartElement("RegistrationKey");
-						writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
+						writer.WriteString(Preferences.GetString(PrefName.RegistrationKey));
 						writer.WriteEndElement();
 						writer.WriteStartElement("RegKeyDisabledOverride");
 						writer.WriteString("true");

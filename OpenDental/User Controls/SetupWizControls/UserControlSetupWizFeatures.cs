@@ -16,13 +16,13 @@ namespace OpenDental.User_Controls.SetupWizard {
 		}
 
 		private void RefreshControls() {
-			checkCapitation.Checked=!PrefC.GetBool(PrefName.EasyHideCapitation);
-			checkMedicaid.Checked=!PrefC.GetBool(PrefName.EasyHideMedicaid);
-			checkInsurance.Checked=!PrefC.GetBool(PrefName.EasyHideInsurance);
-			checkClinical.Checked=!PrefC.GetBool(PrefName.EasyHideClinical);
-			checkNoClinics.Checked=PrefC.HasClinicsEnabled;
-			checkMedicalIns.Checked=PrefC.GetBool(PrefName.ShowFeatureMedicalInsurance);
-			checkEhr.Checked=PrefC.GetBool(PrefName.ShowFeatureEhr);
+			checkCapitation.Checked=!Preferences.GetBool(PrefName.EasyHideCapitation);
+			checkMedicaid.Checked=!Preferences.GetBool(PrefName.EasyHideMedicaid);
+			checkInsurance.Checked=!Preferences.GetBool(PrefName.EasyHideInsurance);
+			checkClinical.Checked=!Preferences.GetBool(PrefName.EasyHideClinical);
+			checkNoClinics.Checked=Preferences.HasClinicsEnabled;
+			checkMedicalIns.Checked=Preferences.GetBool(PrefName.ShowFeatureMedicalInsurance);
+			checkEhr.Checked=Preferences.GetBool(PrefName.ShowFeatureEhr);
 			IsDone=true;
 		}
 

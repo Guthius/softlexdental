@@ -32,7 +32,7 @@ namespace OpenDentBusiness
             {
                 return new List<Statement>();
             }
-            bool sortByPatientName = (PrefC.HasClinicsEnabled && PrefC.GetBool(PrefName.PrintStatementsAlphabetically));
+            bool sortByPatientName = (Preferences.HasClinicsEnabled && Preferences.GetBool(PrefName.PrintStatementsAlphabetically));
             string command = "SELECT * FROM statement ";
             if (sortByPatientName)
             {
@@ -73,7 +73,7 @@ namespace OpenDentBusiness
                 + "LEFT JOIN patient ON statement.PatNum=patient.PatNum "
                 + "LEFT JOIN statement s2 ON s2.PatNum=patient.PatNum "
                 + "AND s2.IsSent=1 ";
-            if (PrefC.GetBool(PrefName.BillingIgnoreInPerson))
+            if (Preferences.GetBool(PrefName.BillingIgnoreInPerson))
             {
                 command += "AND s2.Mode_ !=1 ";
             }
@@ -122,7 +122,7 @@ namespace OpenDentBusiness
                 {//super statement, add all guar positive balances to get bal total for super family
                     listFamilyGuarantors = Patients.GetSuperFamilyGuarantors(PIn.Long(rawRow["SuperFamily"].ToString())).FindAll(x => x.HasSuperBilling);
                     //exclude fams with neg balances in the total for super family stmts (per Nathan 5/25/2016)
-                    if (PrefC.GetBool(PrefName.BalancesDontSubtractIns))
+                    if (Preferences.GetBool(PrefName.BalancesDontSubtractIns))
                     {
                         listFamilyGuarantors = listFamilyGuarantors.FindAll(x => x.BalTotal > 0);
                         insEst = 0;
@@ -266,7 +266,7 @@ namespace OpenDentBusiness
             }
             else
             {//Subject was not set.  Set str to the default billing email subject.
-                str = PrefC.GetString(PrefName.BillingEmailSubject);
+                str = Preferences.GetString(PrefName.BillingEmailSubject);
             }
             message.Subject = Statements.ReplaceVarsForEmail(str, pat, stmt);
             if (stmt.EmailBody != null && stmt.EmailBody != "")
@@ -275,7 +275,7 @@ namespace OpenDentBusiness
             }
             else
             {//Body was not set.  Set str to the default billing email body text.
-                str = PrefC.GetString(PrefName.BillingEmailBodyText);
+                str = Preferences.GetString(PrefName.BillingEmailBodyText);
             }
             message.BodyText = Statements.ReplaceVarsForEmail(str, pat, stmt);
             return message;
@@ -313,7 +313,7 @@ namespace OpenDentBusiness
                 emailBody = Lans.g("Statements", "Dear") + " [nameFLnoPref],\r\n\r\n"
                     + Lans.g("Statements", "A new account statement is available.") + "\r\n\r\n"
                     + Lans.g("Statements", "To view your account statement, log on to our portal by following these steps:") + "\r\n\r\n"
-                    + Lans.g("Statements", "1. Visit the following URL in a web browser:") + " " + PrefC.GetString(PrefName.PatientPortalURL) + ".\r\n"
+                    + Lans.g("Statements", "1. Visit the following URL in a web browser:") + " " + Preferences.GetString(PrefName.PatientPortalURL) + ".\r\n"
                     + Lans.g("Statements", "2. Enter your credentials to gain access to your account.") + "\r\n"
                     + Lans.g("Statements", "3. Click the Account icon on the left and select the Statements tab.");
             }
@@ -499,13 +499,13 @@ namespace OpenDentBusiness
             string officePhone = clinic.Phone;
             if (string.IsNullOrEmpty(officePhone))
             {
-                officePhone = PrefC.GetString(PrefName.PracticePhone);
+                officePhone = Preferences.GetString(PrefName.PracticePhone);
             }
             retVal.RegReplace("\\[OfficePhone]", TelephoneNumbers.ReFormat(officePhone));
             string officeName = clinic.Description;
             if (string.IsNullOrEmpty(officeName))
             {
-                officeName = PrefC.GetString(PrefName.PracticeTitle);
+                officeName = Preferences.GetString(PrefName.PracticeTitle);
             }
             retVal.RegReplace("\\[OfficeName]", officeName);
             if (smsTemplate.ToLower().Contains("[statementurl]") || smsTemplate.ToLower().Contains("[statementshorturl]"))
@@ -550,7 +550,7 @@ namespace OpenDentBusiness
             stmt.Mode_ = StatementMode.InPerson;
             stmt.HidePayment = false;
             stmt.SinglePatient = listPatNumsSelected.Count == 1;//SinglePatient determined by the selected transactions
-            stmt.Intermingled = listPatNumsSelected.Count > 1 && PrefC.GetBool(PrefName.IntermingleFamilyDefault);
+            stmt.Intermingled = listPatNumsSelected.Count > 1 && Preferences.GetBool(PrefName.IntermingleFamilyDefault);
             stmt.IsReceipt = false;
             stmt.IsInvoice = false;
             stmt.StatementType = StmtType.LimitedStatement;

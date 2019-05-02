@@ -31,8 +31,8 @@ namespace OpenDental {
 		private void SetTimersAndThreads(bool doStart) {
 			if(doStart) {
 				//Timers
-				if(PrefC.GetInt(PrefName.ProcessSigsIntervalInSecs)!=0) {
-					timerSignals.Interval=PrefC.GetInt(PrefName.ProcessSigsIntervalInSecs)*1000;
+				if(Preferences.GetInt(PrefName.ProcessSigsIntervalInSecs)!=0) {
+					timerSignals.Interval=Preferences.GetInt(PrefName.ProcessSigsIntervalInSecs)*1000;
 					timerSignals.Start();
 				}
 				timerTimeIndic.Start();
@@ -196,12 +196,12 @@ namespace OpenDental {
 			if(IsThreadAlreadyRunning(FormODThreadNames.ClaimReport)) {
 				return;
 			}
-			if(PrefC.GetBool(PrefName.ClaimReportReceivedByService)) {
+			if(Preferences.GetBool(PrefName.ClaimReportReceivedByService)) {
 				return;
 			}
-			int claimReportRetrieveIntervalMS=(int)TimeSpan.FromMinutes(PrefC.GetInt(PrefName.ClaimReportReceiveInterval)).TotalMilliseconds;
+			int claimReportRetrieveIntervalMS=(int)TimeSpan.FromMinutes(Preferences.GetInt(PrefName.ClaimReportReceiveInterval)).TotalMilliseconds;
 			ODThread odThread=new ODThread(claimReportRetrieveIntervalMS,(o) => {
-				string claimReportComputer=PrefC.GetString(PrefName.ClaimReportComputerName);
+				string claimReportComputer=Preferences.GetString(PrefName.ClaimReportComputerName);
 				if(claimReportComputer=="" || claimReportComputer!=Dns.GetHostName()) {
 					return;
 				}
@@ -312,7 +312,7 @@ namespace OpenDental {
 				return;
 			}
 			//For EHR users we want to load up the EHR code list from the obfuscated dll in a background thread because it takes roughly 11 seconds to load up.
-			if(!PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+			if(!Preferences.GetBool(PrefName.ShowFeatureEhr)) {
 				return;
 			}
 			ODThread odThread=new ODThread(o => {
@@ -345,7 +345,7 @@ namespace OpenDental {
 
 		private void EnableFeaturesWorker() {
 			Pref featurePref=Prefs.GetPref(PrefName.ProgramAdditionalFeatures.ToString());
-			if(featurePref==null || PrefC.GetDateT(PrefName.ProgramAdditionalFeatures) > MiscData.GetNowDateTime()) {
+			if(featurePref==null || Preferences.GetDateTime(PrefName.ProgramAdditionalFeatures) > MiscData.GetNowDateTime()) {
 				return;
 			}
 			DateTime dateOriginal=MiscData.GetNowDateTime().AddMinutes(-30);
@@ -393,7 +393,7 @@ namespace OpenDental {
 				return;//Do not start the listener service monitor for users without permission.
 			}
 			//Process any Error signals that happened due to an update:
-			EServiceSignals.ProcessErrorSignalsAroundTime(PrefC.GetDateT(PrefName.ProgramVersionLastUpdated));
+			EServiceSignals.ProcessErrorSignalsAroundTime(Preferences.GetDateTime(PrefName.ProgramVersionLastUpdated));
 			//Create a separate thread that will run every 60 seconds to monitor eService signals.
 			ODThread odThread=new ODThread(60000,EServiceMonitorWorker);
 			//Currently we don't want to do anything if the eService signal processing fails.  Simply try again in a minute.  
@@ -444,7 +444,7 @@ namespace OpenDental {
 			if(IsThreadAlreadyRunning(FormODThreadNames.HqMetrics)) {
 				return;
 			}
-			if(!PrefC.IsODHQ) {
+			if(!Preferences.IsODHQ) {
 				return;
 			}
 			//Only run this thread every 1.6 seconds.
@@ -467,7 +467,7 @@ namespace OpenDental {
             DataConnection.SetDb("localhost", "customers", "root", "", true);
 
 			if(_listMaps.Count>0 
-				&& DateTime.Now.Subtract(_hqOfficeDownLastRefreshed).TotalSeconds>PrefC.GetInt(PrefName.ProcessSigsIntervalInSecs)) 
+				&& DateTime.Now.Subtract(_hqOfficeDownLastRefreshed).TotalSeconds>Preferences.GetInt(PrefName.ProcessSigsIntervalInSecs)) 
 			{
 				List<OpenDentBusiness.Task> listOfficesDowns=Tasks.GetOfficeDowns();
 				if(!IsDisposed) {
@@ -478,7 +478,7 @@ namespace OpenDental {
 			if( //Fill the triage labels at the fastest interval if the HQ map is open. This is only typically for the project PC in the HQ call center.
 				_listMaps.Count>0 //Always run if the HQ map is open. 
 				||  //For everyone else, Only fill triage labels at given interval. Too taxing on the server to perform every 1.6 seconds.
-					DateTime.Now.Subtract(_hqTriageMetricsLastRefreshed).TotalSeconds>PrefC.GetInt(PrefName.ProcessSigsIntervalInSecs)) 
+					DateTime.Now.Subtract(_hqTriageMetricsLastRefreshed).TotalSeconds>Preferences.GetInt(PrefName.ProcessSigsIntervalInSecs)) 
 			{
 				TriageMetric triageMetrics=Phones.GetTriageMetrics();
 				Invoke(new FillTriageLabelsResultsArgs(OnFillTriageLabelsResults),triageMetrics);
@@ -543,7 +543,7 @@ namespace OpenDental {
 		///<summary>Thread set to run every 15 seconds. This interval must be longer than the interval of the timer in FormLogoffWarning (10s), 
 		///or it will go into a loop.</summary>
 		private void LogOffWorker() {
-			if(PrefC.GetInt(PrefName.SecurityLogOffAfterMinutes)==0) {
+			if(Preferences.GetInt(PrefName.SecurityLogOffAfterMinutes)==0) {
 				return;
 			}
 			if(this.InvokeRequired) {
@@ -598,7 +598,7 @@ namespace OpenDental {
 					return;
 				}
 			}
-			DateTime dtDeadline=Security.DateTimeLastActivity+TimeSpan.FromMinutes((double)PrefC.GetInt(PrefName.SecurityLogOffAfterMinutes));
+			DateTime dtDeadline=Security.DateTimeLastActivity+TimeSpan.FromMinutes((double)Preferences.GetInt(PrefName.SecurityLogOffAfterMinutes));
 			//Debug.WriteLine("Now:"+DateTime.Now.ToLongTimeString()+", Deadline:"+dtDeadline.ToLongTimeString());
 			if(DateTime.Now<dtDeadline) {
 				return;
@@ -654,7 +654,7 @@ namespace OpenDental {
 				return;
 			}
 			ODThread odThread=new ODThread((o) => {
-				if(PrefC.GetString(PrefName.WebServiceServerName)!="" && ODEnvironment.IdIsThisComputer(PrefC.GetString(PrefName.WebServiceServerName))) {
+				if(Preferences.GetString(PrefName.WebServiceServerName)!="" && ODEnvironment.IdIsThisComputer(Preferences.GetString(PrefName.WebServiceServerName))) {
 					//An InvalidOperationException can get thrown if services could not start.  E.g. current user is not running Open Dental as an 
 					//administrator.	We do not want to halt the startup sequence here.  If we want to notify customers of a downed service, there needs to 
 					//be an additional monitoring service installed.
@@ -872,7 +872,7 @@ namespace OpenDental {
 				return;
 			}
 			ODThread odThread=new ODThread((o) => {
-				if(PrefC.IsODHQ) {
+				if(Preferences.IsODHQ) {
 					ODThread webCamKillThread = new ODThread(((o2) => { Process.GetProcessesByName("WebCamOD").ToList().ForEach(x => x.Kill()); }));
 					webCamKillThread.Start();
 					ODThread proximityKillThread = new ODThread(((o2) => { Process.GetProcessesByName("ProximityOD").ToList().ForEach(x => x.Kill()); }));
@@ -924,7 +924,7 @@ namespace OpenDental {
 			if(IsThreadAlreadyRunning(FormODThreadNames.TimeSync)) {
 				return;
 			}
-			if(!(ODEnvironment.IsRunningOnDbServer(MiscData.GetODServer()) && PrefC.GetBool(PrefName.ShowFeatureEhr))) {
+			if(!(ODEnvironment.IsRunningOnDbServer(MiscData.GetODServer()) && Preferences.GetBool(PrefName.ShowFeatureEhr))) {
 				return;
 			}
 			//OpenDental has EHR enabled and is running on the same machine as the mysql server it is connected to.
@@ -939,7 +939,7 @@ namespace OpenDental {
 			NTPv4 ntp=new NTPv4();
 			double nistOffset=double.MaxValue;
 			ODException.SwallowAnyException(() => {//Invalid NIST Server URL if fails
-				nistOffset=ntp.getTime(PrefC.GetString(PrefName.NistTimeServerUrl));
+				nistOffset=ntp.getTime(Preferences.GetString(PrefName.NistTimeServerUrl));
 			});
 			if(nistOffset!=double.MaxValue) {
 				//Did not timeout, or have invalid NIST server URL
@@ -978,7 +978,7 @@ namespace OpenDental {
 			if(IsThreadAlreadyRunning(FormODThreadNames.VoicemailHQ)) {
 				return;
 			}
-			if(!PrefC.IsODHQ) {
+			if(!Preferences.IsODHQ) {
 				return;
 			}
 			ODThread odThread=new ODThread((int)TimeSpan.FromSeconds(3).TotalMilliseconds,VoicemailWorker);
@@ -1043,15 +1043,15 @@ namespace OpenDental {
 			if(IsThreadAlreadyRunning(FormODThreadNames.WebSync)) {
 				return;
 			}
-			string interval=PrefC.GetStringSilent(PrefName.MobileSyncIntervalMinutes);
+			string interval=Preferences.GetStringSilent(PrefName.MobileSyncIntervalMinutes);
 			if(interval=="" || interval=="0") {//not a paid customer or chooses not to synch
 				return;
 			}
-			if(System.Environment.MachineName.ToUpper()!=PrefC.GetStringSilent(PrefName.MobileSyncWorkstationName).ToUpper()) {
+			if(System.Environment.MachineName.ToUpper()!=Preferences.GetStringSilent(PrefName.MobileSyncWorkstationName).ToUpper()) {
 				//Since GetStringSilent returns "" before OD is connected to db, this gracefully loops out
 				return;
 			}
-			if(PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate).Year<1880) {
+			if(Preferences.GetDate(PrefName.MobileExcludeApptsBeforeDate).Year<1880) {
 				//full synch never run
 				return;
 			}
@@ -1076,7 +1076,7 @@ namespace OpenDental {
 			ODThread threadRegistrationKeyIsDisabled=new ODThread(
 				(int)TimeSpan.FromMinutes(10).TotalMilliseconds,
 				(o) => {
-					if(PrefC.GetBoolSilent(PrefName.RegistrationKeyIsDisabled,false)) {
+					if(Preferences.GetBoolSilent(PrefName.RegistrationKeyIsDisabled,false)) {
 						this.Invoke(() => {
 							MessageBox.Show(
 								"Registration key has been disabled.  You are using an unauthorized version of this program.",

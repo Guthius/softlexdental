@@ -546,7 +546,7 @@ namespace OpenDentBusiness
             foreach (PayPlanCharge ppc in listPayPlanCharges)
             {
                 PayPlan pp = listPayPlans.Find(x => x.PayPlanNum == ppc.PayPlanNum);
-                if (pp.IsClosed && PrefC.IsPayPlanVersion2)
+                if (pp.IsClosed && Preferences.IsPayPlanVersion2)
                 {
                     listChargesToRemove.Add(ppc);//payment plan is no longer active, we will pay any remaining balance to the procedure directly. 
                     continue;
@@ -648,7 +648,7 @@ namespace OpenDentBusiness
                         break;
                     }
                     //We want to explicitly pay the procedure if the payment plan is closed and on version 2, but don't if it is open or on version 1,3.
-                    bool doAttachSplitForPayPlan = listPayPlans.Any(x => x.PayPlanNum == splitCur.PayPlanNum && x.IsClosed) && PrefC.IsPayPlanVersion2;
+                    bool doAttachSplitForPayPlan = listPayPlans.Any(x => x.PayPlanNum == splitCur.PayPlanNum && x.IsClosed) && Preferences.IsPayPlanVersion2;
                     //======== NOTE: Any explicitly linked paysplit needs to be used on what it's attached to in its entirety (even if it's overpaid). =========  
                     //Overpayments are taken care of later.
                     //if the account entry is a procedure and the split is attached to it, then explicitly apply the payment to the procedure.
@@ -837,7 +837,7 @@ namespace OpenDentBusiness
                 //Sort current pat charges so they are more likely to be "unpaid" by implicit linking which leads to them being paid by this payment.
                 listAccountCharges = listAccountCharges.OrderByDescending(x => x.PatNum != patNum).ThenBy(x => x.Date).ToList();
             }
-            else if (PrefC.GetInt(PrefName.AutoSplitLogic) == (int)AutoSplitPreference.Adjustments)
+            else if (Preferences.GetInt(PrefName.AutoSplitLogic) == (int)AutoSplitPreference.Adjustments)
             {
                 //Sort by Adjustments, followed by Procedures. Need to sort by type, then sort by date so get earliest adjs followed by earliest procs
                 listAccountCharges = listAccountCharges.OrderBy(x => x.GetType() != typeof(Adjustment)).ThenBy(x => x.Date).ToList();
@@ -882,7 +882,7 @@ namespace OpenDentBusiness
                         //should already be verified to have no procedure and positive amount
                         split.AdjNum = charge.PriKey;
                     }
-                    if (PrefC.HasClinicsEnabled)
+                    if (Preferences.HasClinicsEnabled)
                     {//Clinics
                         split.ClinicNum = charge.ClinicNum;
                     }
@@ -1306,7 +1306,7 @@ namespace OpenDentBusiness
                                 PaySplit split = (PaySplit)entry.Tag;
                                 if (split.UnearnedType != paySplit.UnearnedType)
                                 {
-                                    paySplit.UnearnedType = Defs.GetDef(DefCat.PaySplitUnearnedType, PrefC.GetLong(PrefName.PrepaymentUnearnedType)).DefNum;
+                                    paySplit.UnearnedType = Defs.GetDef(DefCat.PaySplitUnearnedType, Preferences.GetLong(PrefName.PrepaymentUnearnedType)).DefNum;
                                     break;
                                 }
                             }
@@ -1411,7 +1411,7 @@ namespace OpenDentBusiness
                     split.SplitAmt = (double)payAmt;
                 }
             }
-            if (PrefC.HasClinicsEnabled)
+            if (Preferences.HasClinicsEnabled)
             {
                 split.ClinicNum = charge.ClinicNum;
             }
@@ -1503,7 +1503,7 @@ namespace OpenDentBusiness
             autoSplitData.ListSplitsCur = constructResults.ListSplitsCur;
             autoSplitData.Payment = constructResults.Payment;
             //Create Auto-splits for the current payment to any remaining non-zero charges FIFO by date.
-            if (PrefC.GetInt(PrefName.RigorousAccounting) == (int)RigorousAccounting.DontEnforce)
+            if (Preferences.GetInt(PrefName.RigorousAccounting) == (int)RigorousAccounting.DontEnforce)
             {
                 return autoSplitData;
             }
@@ -1539,7 +1539,7 @@ namespace OpenDentBusiness
                 if (charge.GetType() == typeof(PayPlanCharge))
                 { //payments are allocated differently for payment plan charges
                   //it's an autosplit, so pass in 0 for payAmt
-                    PayPlanVersions payPlanVer = (PayPlanVersions)PrefC.GetInt(PrefName.PayPlansVersion);
+                    PayPlanVersions payPlanVer = (PayPlanVersions)Preferences.GetInt(PrefName.PayPlansVersion);
                     if (payPlanVer != PayPlanVersions.AgeCreditsAndDebits
                         || (payPlanVer == PayPlanVersions.AgeCreditsAndDebits && !PayPlans.GetOne(((PayPlanCharge)charge.Tag).PayPlanNum).IsClosed))
                     {
@@ -1568,7 +1568,7 @@ namespace OpenDentBusiness
                 split.DatePay = autoSplitData.Payment.PayDate;
                 split.PatNum = charge.PatNum;
                 split.ProvNum = charge.ProvNum;
-                if (PrefC.HasClinicsEnabled)
+                if (Preferences.HasClinicsEnabled)
                 {
                     split.ClinicNum = charge.ClinicNum;
                 }
@@ -1595,7 +1595,7 @@ namespace OpenDentBusiness
                 payAmt = 0;
                 split.DatePay = autoSplitData.Payment.PayDate;
                 split.PatNum = autoSplitData.Payment.PatNum;
-                if (PrefC.IsODHQ)
+                if (Preferences.IsODHQ)
                 {
                     split.ProvNum = 7;//Jordan's ProvNum
                 }
@@ -1603,8 +1603,8 @@ namespace OpenDentBusiness
                 {
                     split.ProvNum = 0;
                 }
-                split.UnearnedType = PrefC.GetLong(PrefName.PrepaymentUnearnedType);//Use default unallocated type
-                if (PrefC.HasClinicsEnabled)
+                split.UnearnedType = Preferences.GetLong(PrefName.PrepaymentUnearnedType);//Use default unallocated type
+                if (Preferences.HasClinicsEnabled)
                 {
                     split.ClinicNum = autoSplitData.Payment.ClinicNum;
                 }
@@ -1618,7 +1618,7 @@ namespace OpenDentBusiness
                 payAmt = 0;
                 split.DatePay = autoSplitData.Payment.PayDate;
                 split.PatNum = autoSplitData.Payment.PatNum;
-                if (PrefC.IsODHQ)
+                if (Preferences.IsODHQ)
                 {
                     split.ProvNum = 7;//Jordan's ProvNum
                 }
@@ -1626,8 +1626,8 @@ namespace OpenDentBusiness
                 {
                     split.ProvNum = 0;
                 }
-                split.UnearnedType = PrefC.GetLong(PrefName.PrepaymentUnearnedType);//Use default unallocated type
-                if (PrefC.HasClinicsEnabled)
+                split.UnearnedType = Preferences.GetLong(PrefName.PrepaymentUnearnedType);//Use default unallocated type
+                if (Preferences.HasClinicsEnabled)
                 {
                     split.ClinicNum = autoSplitData.Payment.ClinicNum;
                 }

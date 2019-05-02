@@ -82,7 +82,7 @@ namespace OpenDentBusiness
                 return true;
             }
 
-            if (allergyDefNum == PrefC.GetLong(PrefName.AllergiesIndicateNone))
+            if (allergyDefNum == Preferences.GetLong(PrefName.AllergiesIndicateNone))
             {
                 return true;
             }

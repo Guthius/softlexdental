@@ -1671,15 +1671,15 @@ namespace OpenDentBusiness
                 case PrefValueType.NONE:
                     return ""; //nothing to get
                 case PrefValueType.STRING:
-                    return PrefC.GetString(prefName);
+                    return Preferences.GetString(prefName);
                 case PrefValueType.LONG:
-                    return POut.Long(PrefC.GetLong(prefName));
+                    return POut.Long(Preferences.GetLong(prefName));
                 case PrefValueType.LONG_NEG_ONE_AS_ZERO:
-                    return PrefC.GetLongHideNegOne(prefName, true);
+                    return Preferences.GetLongHideNegOne(prefName, true);
                 case PrefValueType.LONG_NEG_ONE_AS_BLANK:
-                    return PrefC.GetLongHideNegOne(prefName);
+                    return Preferences.GetLongHideNegOne(prefName);
             }
-            return PrefC.GetString(prefName);
+            return Preferences.GetString(prefName);
         }
 
         public static bool Update(this PrefName prefName, object value)

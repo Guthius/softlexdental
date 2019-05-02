@@ -145,7 +145,7 @@ namespace OpenDental {
 		///<summary>Validates one Rx.  Returns a string of error messages.  Blank string indicates no errors.
 		///Some Rx require certain data to be present when printing.</summary>
 		public static string ValidateRxForSheet(RxPat rx) {
-			if(!PrefC.GetBool(PrefName.RxHasProc)) {
+			if(!Preferences.GetBool(PrefName.RxHasProc)) {
 				return "";//The global preference allows the user to completely disable Rx ProcCode validation, even if some Rx are flagged as required.
 			}
 			if(Clinics.ClinicNum!=0) {//Not HQ
@@ -954,7 +954,7 @@ namespace OpenDental {
 			toothChart.ColorText=listDefs[15].ItemColor;
 			toothChart.Size=new Size(500,370);
 			toothChart.UseHardware=ComputerPrefs.LocalComputer.GraphicsUseHardware;
-			toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers));
+			toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)Preferences.GetInt(PrefName.UseInternationalToothNumbers));
 			toothChart.PreferredPixelFormatNumber=ComputerPrefs.LocalComputer.PreferredPixelFormatNum;
 			toothChart.DeviceFormat=new SparksToothChart.ToothChartDirectX.DirectXDeviceFormat(ComputerPrefs.LocalComputer.DirectXFormat);
 			toothChart.DrawMode=ComputerPrefs.LocalComputer.GraphicsSimple;
@@ -1252,7 +1252,7 @@ namespace OpenDental {
 			SheetParameter param=SheetParameter.GetParamByName(sheet.Parameters,"IsSingleClaimPaid");
 			bool isSingleClaim=(param.ParamValue==null)?false:true;//param is only set when true
 			//This logic mimics SheetUtil.CalculateHeights(...)
-			bool isOneClaimPerPage=PrefC.GetBool(PrefName.EraPrintOneClaimPerPage);
+			bool isOneClaimPerPage=Preferences.GetBool(PrefName.EraPrintOneClaimPerPage);
 			if(isSingleClaim) {
 				//When printing a single claim we do not want to print the claim on the next page like we would when printing every claim.
 				isOneClaimPerPage=false;
@@ -1637,7 +1637,7 @@ namespace OpenDental {
 								g.FillRectangle(Brushes.White,rf);
 								StringFormat sf=new StringFormat();
 								sf.Alignment=StringAlignment.Far;
-								if(PrefC.GetBool(PrefName.InvoicePaymentsGridShowNetProd)) {
+								if(Preferences.GetBool(PrefName.InvoicePaymentsGridShowNetProd)) {
 									g.DrawString("Total Payments & WriteOffs: "+totalPayments.ToString("c"),new Font("Arial",9,FontStyle.Bold),new SolidBrush(Color.Black),rf,sf);
 								}
 								else {
@@ -1647,7 +1647,7 @@ namespace OpenDental {
 							else {
 								gx.DrawRectangle(Brushes.White,p(sheet.Width-field.Width-60),p(printRowCur.YPos-_yPosPrint+_yAdjCurRow),p(field.Width),p(odGrid.TitleHeight));
 								using(Font _font = new Font("Arial",9,FontStyle.Bold)) {
-									if(PrefC.GetBool(PrefName.InvoicePaymentsGridShowNetProd)) {
+									if(Preferences.GetBool(PrefName.InvoicePaymentsGridShowNetProd)) {
 										GraphicsHelper.DrawStringX(gx,"Total Payments & WriteOffs: "+totalPayments.ToString("c"),new XFont(_font.FontFamily.ToString(),_font.Size,XFontStyle.Bold),XBrushes.Black,new RectangleF(sheet.Width-field.Width-60,printRowCur.YPos-_yPosPrint+_yAdjCurRow,field.Width,odGrid.TitleHeight),HorizontalAlignment.Right);
 									}
 									else {

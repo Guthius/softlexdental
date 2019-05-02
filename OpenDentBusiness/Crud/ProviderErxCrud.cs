@@ -100,15 +100,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ProviderErx into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ProviderErx providerErx,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				providerErx.ProviderErxNum=ReplicationServers.GetKey("providererx","ProviderErxNum");
 			}
 			string command="INSERT INTO providererx (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ProviderErxNum,";
 			}
 			command+="PatNum,NationalProviderID,IsEnabled,IsIdentifyProofed,IsSentToHq,IsEpcs,ErxType,UserId,AccountId,RegistrationKeyNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(providerErx.ProviderErxNum)+",";
 			}
 			command+=
@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(providerErx.UserId)+"',"
 				+"'"+POut.String(providerErx.AccountId)+"',"
 				+    POut.Long  (providerErx.RegistrationKeyNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

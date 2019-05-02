@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EobAttach into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EobAttach eobAttach,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				eobAttach.EobAttachNum=ReplicationServers.GetKey("eobattach","EobAttachNum");
 			}
 			string command="INSERT INTO eobattach (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EobAttachNum,";
 			}
 			command+="ClaimPaymentNum,DateTCreated,FileName,RawBase64) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(eobAttach.EobAttachNum)+",";
 			}
 			command+=
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 				eobAttach.RawBase64="";
 			}
 			OdSqlParameter paramRawBase64=new OdSqlParameter("paramRawBase64",OdDbType.Text,POut.StringParam(eobAttach.RawBase64));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramRawBase64);
 			}
 			else {

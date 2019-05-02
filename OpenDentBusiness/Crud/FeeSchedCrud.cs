@@ -94,15 +94,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one FeeSched into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(FeeSched feeSched,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				feeSched.FeeSchedNum=ReplicationServers.GetKey("feesched","FeeSchedNum");
 			}
 			string command="INSERT INTO feesched (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="FeeSchedNum,";
 			}
 			command+="Description,FeeSchedType,ItemOrder,IsHidden,IsGlobal,SecUserNumEntry,SecDateEntry) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(feeSched.FeeSchedNum)+",";
 			}
 			command+=
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (feeSched.SecUserNumEntry)+","
 				+    DbHelper.Now()+")";
 				//SecDateTEdit can only be set by MySQL
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

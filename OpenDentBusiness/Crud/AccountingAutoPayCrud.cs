@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one AccountingAutoPay into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(AccountingAutoPay accountingAutoPay,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				accountingAutoPay.AccountingAutoPayNum=ReplicationServers.GetKey("accountingautopay","AccountingAutoPayNum");
 			}
 			string command="INSERT INTO accountingautopay (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="AccountingAutoPayNum,";
 			}
 			command+="PayType,PickList) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(accountingAutoPay.AccountingAutoPayNum)+",";
 			}
 			command+=
 				     POut.Long  (accountingAutoPay.PayType)+","
 				+"'"+POut.String(accountingAutoPay.PickList)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

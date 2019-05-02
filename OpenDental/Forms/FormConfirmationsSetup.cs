@@ -30,13 +30,13 @@ namespace OpenDental {
 			_listApptConfirmedDefs=Defs.GetDefsForCategory(DefCat.ApptConfirmed,true);
 			for(int i=0;i<_listApptConfirmedDefs.Count;i++) {
 				comboStatusEmailedConfirm.Items.Add(_listApptConfirmedDefs[i].ItemName);
-				if(_listApptConfirmedDefs[i].DefNum==PrefC.GetLong(PrefName.ConfirmStatusEmailed)) {
+				if(_listApptConfirmedDefs[i].DefNum==Preferences.GetLong(PrefName.ConfirmStatusEmailed)) {
 					comboStatusEmailedConfirm.SelectedIndex=i;
 				}
 			}
 			for(int i=0;i<_listApptConfirmedDefs.Count;i++) {
 				comboStatusTextMessagedConfirm.Items.Add(_listApptConfirmedDefs[i].ItemName);
-				if(_listApptConfirmedDefs[i].DefNum==PrefC.GetLong(PrefName.ConfirmStatusTextMessaged)) {
+				if(_listApptConfirmedDefs[i].DefNum==Preferences.GetLong(PrefName.ConfirmStatusTextMessaged)) {
 					comboStatusTextMessagedConfirm.SelectedIndex=i;
 				}
 			}
@@ -60,21 +60,21 @@ namespace OpenDental {
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g(this,"Postcard"));
 			row.Cells.Add(Lan.g(this,"Confirmation message.  Use [date]  and [time] where you want those values to be inserted"));
-			row.Cells.Add(PrefC.GetString(PrefName.ConfirmPostcardMessage));
+			row.Cells.Add(Preferences.GetString(PrefName.ConfirmPostcardMessage));
 			row.Tag=PrefName.ConfirmPostcardMessage;
 			gridMain.Rows.Add(row);
 			//
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g(this,"E-mail"));
 			row.Cells.Add(Lan.g(this,"Confirmation subject line."));
-			row.Cells.Add(PrefC.GetString(PrefName.ConfirmEmailSubject));
+			row.Cells.Add(Preferences.GetString(PrefName.ConfirmEmailSubject));
 			row.Tag=PrefName.ConfirmEmailSubject;
 			gridMain.Rows.Add(row);
 			//
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g(this,"E-mail"));
 			row.Cells.Add(Lan.g(this,"Confirmation message. Available variables: [NameF], [NameFL], [date], [time]."));
-			row.Cells.Add(PrefC.GetString(PrefName.ConfirmEmailMessage));
+			row.Cells.Add(Preferences.GetString(PrefName.ConfirmEmailMessage));
 			row.Tag=PrefName.ConfirmEmailMessage;
 			gridMain.Rows.Add(row);
 			#endregion
@@ -83,7 +83,7 @@ namespace OpenDental {
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g(this,"Text"));
 			row.Cells.Add(Lan.g(this,"Confirmation message. Available variables: [NameF], [NameFL], [date], [time]."));
-			row.Cells.Add(PrefC.GetString(PrefName.ConfirmTextMessage));
+			row.Cells.Add(Preferences.GetString(PrefName.ConfirmTextMessage));
 			row.Tag=PrefName.ConfirmTextMessage;
 			gridMain.Rows.Add(row);
 			#endregion
@@ -93,7 +93,7 @@ namespace OpenDental {
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			PrefName prefName=(PrefName)gridMain.Rows[e.Row].Tag;
 			FormRecallMessageEdit FormR=new FormRecallMessageEdit(prefName);
-			FormR.MessageVal=PrefC.GetString(prefName);
+			FormR.MessageVal=Preferences.GetString(prefName);
 			FormR.ShowDialog();
 			if(FormR.DialogResult!=DialogResult.OK) {
 				return;

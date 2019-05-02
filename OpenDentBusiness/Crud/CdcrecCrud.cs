@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Cdcrec into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Cdcrec cdcrec,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				cdcrec.CdcrecNum=ReplicationServers.GetKey("cdcrec","CdcrecNum");
 			}
 			string command="INSERT INTO cdcrec (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="CdcrecNum,";
 			}
 			command+="CdcrecCode,HeirarchicalCode,Description) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(cdcrec.CdcrecNum)+",";
 			}
 			command+=
 				 "'"+POut.String(cdcrec.CdcrecCode)+"',"
 				+"'"+POut.String(cdcrec.HeirarchicalCode)+"',"
 				+"'"+POut.String(cdcrec.Description)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

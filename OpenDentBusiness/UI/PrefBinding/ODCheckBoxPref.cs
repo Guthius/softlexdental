@@ -23,7 +23,7 @@ namespace OpenDental {
 			set {
 				_reverseValue=value;
 				if(!DesignMode) { //VisualStudio designer will break if we try to make a db call here
-					Checked=_reverseValue?!PrefC.GetBool(PrefNameBinding):PrefC.GetBool(PrefNameBinding);
+					Checked=_reverseValue?!Preferences.GetBool(PrefNameBinding):Preferences.GetBool(PrefNameBinding);
 				}
 			}
 		}
@@ -36,7 +36,7 @@ namespace OpenDental {
 			set {
 				_prefNameBinding=value;
 				if(!DesignMode) { //VisualStudio designer will break if we try to make a db call here
-					Checked=ReverseValue?!PrefC.GetBool(value):PrefC.GetBool(value);
+					Checked=ReverseValue?!Preferences.GetBool(value):Preferences.GetBool(value);
 				}
 			}
 		}

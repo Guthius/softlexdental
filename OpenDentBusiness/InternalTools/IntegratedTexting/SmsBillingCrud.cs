@@ -134,15 +134,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SmsBilling into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(SmsBilling smsBilling,bool useExistingPK){
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				smsBilling.SmsBillingNum=ReplicationServers.GetKey("smsbilling","SmsBillingNum");
 			}
 			string command="INSERT INTO smsbilling (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="SmsBillingNum,";
 			}
 			command+="RegistrationKeyNum,CustPatNum,DateUsage,MsgChargeTotalUSD,AccessChargeTotalUSD,ClinicsTotalCount,ClinicsActiveCount,ClinicsUsedCount,PhonesTotalCount,PhonesActiveCount,PhonesUsedCount,MsgSentOkCount,MsgRcvOkCount,MsgSentFailCount,MsgRcvFailCount,ConfirmationClinics,ConfirmationsTotal,ConfirmationsEmail,ConfirmationsSms,ConfirmationChargeTotalUSD,BillingDescSms,BillingDescConfirmation) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(smsBilling.SmsBillingNum)+",";
 			}
 			command+=
@@ -176,7 +176,7 @@ namespace OpenDentBusiness.Crud{
 				smsBilling.BillingDescConfirmation="";
 			}
 			OdSqlParameter paramBillingDescConfirmation=new OdSqlParameter("paramBillingDescConfirmation",OdDbType.Text,smsBilling.BillingDescConfirmation);
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramBillingDescSms,paramBillingDescConfirmation);
 			}
 			else {

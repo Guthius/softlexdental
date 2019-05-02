@@ -67,7 +67,7 @@ namespace OpenDental
         {
             var textSelectOnLoad = passwordTextBox;
 
-            if (PrefC.GetBool(PrefName.UserNameManualEntry))
+            if (Preferences.GetBool(PrefName.UserNameManualEntry))
             {
                 userListBox.Visible = false;
                 userTextBox.Visible = true;
@@ -141,7 +141,7 @@ namespace OpenDental
             string  userName    = "";
             User  userCur     = null;
 
-            if (PrefC.GetBool(PrefName.UserNameManualEntry))
+            if (Preferences.GetBool(PrefName.UserNameManualEntry))
             {
                 // Check the user name using ToLower and Trim because Open Dental is case insensitive and does not allow white-space in regards to user names.
                 userName = userListBox.Items.Cast<string>().FirstOrDefault(x => x.Trim().ToLower() == userTextBox.Text.Trim().ToLower());
@@ -163,7 +163,7 @@ namespace OpenDental
             if (isEcw) passwordTyped = Authentication.HashPasswordMD5(passwordTyped, true);
 
             // No need to check password when changing task users at HQ to user "Stay Open".
-            if (userName == "Stay Open" && isSimpleSwitch && PrefC.IsODHQ)
+            if (userName == "Stay Open" && isSimpleSwitch && Preferences.IsODHQ)
             {
                 userCur = Userods.GetUserByNameNoCache(userName);
             }
@@ -189,7 +189,7 @@ namespace OpenDental
             {
                 // Not a temporary login.
                 Security.CurUser = userCur; // Need to set for SecurityL.ChangePassword and calls.
-                if (PrefC.GetBool(PrefName.PasswordsMustBeStrong) && PrefC.GetBool(PrefName.PasswordsWeakChangeToStrong))
+                if (Preferences.GetBool(PrefName.PasswordsMustBeStrong) && Preferences.GetBool(PrefName.PasswordsWeakChangeToStrong))
                 {
                     // Check whether the password is strong enough.
                     if (Userods.IsPasswordStrong(passwordTyped) != "")

@@ -38,12 +38,12 @@ namespace OpenDentBusiness{
 		///processes could update the family bals incorrectly.</para></summary>
 		public static void RunAging() {
 			//No need to check RemotingRole; no call to db.
-			if(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {
-				ComputeAging(0,PrefC.GetDate(PrefName.DateLastAging));
+			if(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {
+				ComputeAging(0,Preferences.GetDate(PrefName.DateLastAging));
 			}
 			else {
 				ComputeAging(0,DateTime.Today);
-				if(PrefC.GetDate(PrefName.DateLastAging) != DateTime.Today) {
+				if(Preferences.GetDate(PrefName.DateLastAging) != DateTime.Today) {
 					Prefs.UpdateString(PrefName.DateLastAging,POut.Date(DateTime.Today,false));
 					//Since this is always called from UI, the above line works fine to keep the prefs cache current.
 				}
@@ -79,7 +79,7 @@ namespace OpenDentBusiness{
 		///<para>4) PayPlanDue includes all payplan charges minus credits. If historical, PayPlanDue excludes charges and credits after AsOfDate.</para></summary>
 		public static void ComputeAging(List<long> listGuarantorNums,DateTime asOfDate) {
 			string command="";
-			if(PrefC.GetBool(PrefName.AgingIsEnterprise)) {
+			if(Preferences.GetBool(PrefName.AgingIsEnterprise)) {
 				#region Using FamAging Table
 				if(listGuarantorNums.Count==1) {
 					FamAging famAgingCur=Crud.FamAgingCrud.SelectOne(GetAgingQueryString(asOfDate,listGuarantorNums));
@@ -178,13 +178,13 @@ namespace OpenDentBusiness{
 			DateTime dateAsOf=DateTime.Today.Date;
 			DateTime dateTAgingBeganPref=DateTime.MinValue;
 			DateTime dtNow=MiscData.GetNowDateTime();
-			if(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {
-				dateAsOf=PrefC.GetDate(PrefName.DateLastAging);
+			if(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {
+				dateAsOf=Preferences.GetDate(PrefName.DateLastAging);
 			}
-			bool isFamaging=(PrefC.GetBool(PrefName.AgingIsEnterprise) && listGuarantorNums.Count>1);//will only use the famaging table if more than 1 guar
+			bool isFamaging=(Preferences.GetBool(PrefName.AgingIsEnterprise) && listGuarantorNums.Count>1);//will only use the famaging table if more than 1 guar
 			if(isFamaging) {//if this will utilize the famaging table we need to check and set the pref to block others from starting aging
 				Prefs.RefreshCache();
-				dateTAgingBeganPref=PrefC.GetDateT(PrefName.AgingBeginDateTime);
+				dateTAgingBeganPref=Preferences.GetDateTime(PrefName.AgingBeginDateTime);
 				if(dateTAgingBeganPref>DateTime.MinValue) {//pref has been set by another process, don't run aging and notify user
 					strErrorMsg=Lans.g("Ledgers","Aging failed to run for patients who had paysplits created outside of the current family. This is due to "
 						+"the currently running aging calculations which began on")+" "+dateTAgingBeganPref.ToString()+".  "+Lans.g("Ledgers","If you "
@@ -273,7 +273,7 @@ namespace OpenDentBusiness{
 			command="";
 			bool isAllPats=string.IsNullOrWhiteSpace(familyPatNums);//true if guarantor==0 or invalid, meaning for all patients not just one family
 			//Negative adjustments can optionally be overridden in order to ignore the global preference.
-			bool isNegAdjAged=(isForceAgeNegAdj??PrefC.GetBool(PrefName.AgingNegativeAdjsByAdjDate));//if isForceAgeNegAdj==null, use the pref
+			bool isNegAdjAged=(isForceAgeNegAdj??Preferences.GetBool(PrefName.AgingNegativeAdjsByAdjDate));//if isForceAgeNegAdj==null, use the pref
 			if(isWoAged || isNegAdjAged) {
 				//WriteoffOrig and/or negative Adjs are included in the charges buckets.  Since that could reduce a bucket to less than 0 we need to move any
 				//excess to the TotalCredits bucket to be applied to the oldest charge first
@@ -316,7 +316,7 @@ namespace OpenDentBusiness{
 			if(isGroupByGuar) {
 				command+="INNER JOIN patient p ON p.PatNum=trans.PatNum "
 					+"GROUP BY p.Guarantor";
-				if(!isAllPats || !PrefC.GetBool(PrefName.AgingIsEnterprise)) {//only if for one fam or if not using famaging table
+				if(!isAllPats || !Preferences.GetBool(PrefName.AgingIsEnterprise)) {//only if for one fam or if not using famaging table
 					command+=" ORDER BY NULL";
 				}
 			}
@@ -341,13 +341,13 @@ namespace OpenDentBusiness{
 				//This if statement never really does anything.  The only places that call this function with historic=true don't look at the
 				//patient.payplandue amount, and patient aging gets reset after the reports are generated.  In the future if we start looking at payment plan
 				//due amounts when historic=true we may need to revaluate this if statement.
-				billInAdvanceDate=POut.Date(DateTime.Today.AddDays(PrefC.GetLong(PrefName.PayPlansBillInAdvanceDays)));
+				billInAdvanceDate=POut.Date(DateTime.Today.AddDays(Preferences.GetLong(PrefName.PayPlansBillInAdvanceDays)));
 			}
 			else {
-				billInAdvanceDate=POut.Date(asOfDate.AddDays(PrefC.GetLong(PrefName.PayPlansBillInAdvanceDays)));
+				billInAdvanceDate=POut.Date(asOfDate.AddDays(Preferences.GetLong(PrefName.PayPlansBillInAdvanceDays)));
 			}
 			string asOfDateStr=POut.Date(asOfDate);
-			PayPlanVersions payPlanVersionCur=(PayPlanVersions)PrefC.GetInt(PrefName.PayPlansVersion);
+			PayPlanVersions payPlanVersionCur=(PayPlanVersions)Preferences.GetInt(PrefName.PayPlansVersion);
 			bool isAllPats=string.IsNullOrWhiteSpace(familyPatNums);
 			string command="";
 			#region Completed Procs

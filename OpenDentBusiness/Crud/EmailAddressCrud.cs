@@ -97,15 +97,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EmailAddress into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EmailAddress emailAddress,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				emailAddress.EmailAddressNum=ReplicationServers.GetKey("emailaddress","EmailAddressNum");
 			}
 			string command="INSERT INTO emailaddress (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EmailAddressNum,";
 			}
 			command+="SMTPserver,EmailUsername,EmailPassword,ServerPort,UseSSL,SenderAddress,Pop3ServerIncoming,ServerPortIncoming,UserNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(emailAddress.EmailAddressNum)+",";
 			}
 			command+=
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(emailAddress.Pop3ServerIncoming)+"',"
 				+    POut.Int   (emailAddress.ServerPortIncoming)+","
 				+    POut.Long  (emailAddress.UserNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

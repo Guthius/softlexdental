@@ -13,16 +13,16 @@ namespace OpenDental {
 		}
 
 		private void FormTaskPreferences_Load(object sender,EventArgs e) {
-			checkShowLegacyRepeatingTasks.Checked=PrefC.GetBool(PrefName.TasksUseRepeating);
-			checkTaskListAlwaysShow.Checked=PrefC.GetBool(PrefName.TaskListAlwaysShowsAtBottom);
+			checkShowLegacyRepeatingTasks.Checked=Preferences.GetBool(PrefName.TasksUseRepeating);
+			checkTaskListAlwaysShow.Checked=Preferences.GetBool(PrefName.TaskListAlwaysShowsAtBottom);
 			if(checkTaskListAlwaysShow.Checked) {
 				groupBoxComputerDefaults.Enabled=true;
 			}
 			else {
 				groupBoxComputerDefaults.Enabled=false;
 			}
-			checkTasksNewTrackedByUser.Checked=PrefC.GetBool(PrefName.TasksNewTrackedByUser);
-			checkShowOpenTickets.Checked=PrefC.GetBool(PrefName.TasksShowOpenTickets);
+			checkTasksNewTrackedByUser.Checked=Preferences.GetBool(PrefName.TasksNewTrackedByUser);
+			checkShowOpenTickets.Checked=Preferences.GetBool(PrefName.TasksShowOpenTickets);
 			checkBoxTaskKeepListHidden.Checked=ComputerPrefs.LocalComputer.TaskKeepListHidden;
 			if(ComputerPrefs.LocalComputer.TaskDock==0) {
 				radioBottom.Checked=true;
@@ -32,17 +32,17 @@ namespace OpenDental {
 			}
 			validNumX.Text=ComputerPrefs.LocalComputer.TaskX.ToString();
 			validNumY.Text=ComputerPrefs.LocalComputer.TaskY.ToString();
-			checkTaskSortApptDateTime.Checked=PrefC.GetBool(PrefName.TaskSortApptDateTime);
+			checkTaskSortApptDateTime.Checked=Preferences.GetBool(PrefName.TaskSortApptDateTime);
 			FillComboGlobalFilter();
 		}
 
 		///<summary>Fills the Global Task filter combobox with options.  Only visible if Clinics are enabled, or if previous selection no is longer 
 		///available, example: Clinics have been turned off, Clinic filter no longer available.</summary>
 		private void FillComboGlobalFilter() {
-			GlobalTaskFilterType globalPref=(GlobalTaskFilterType)PrefC.GetInt(PrefName.TasksGlobalFilterType);
+			GlobalTaskFilterType globalPref=(GlobalTaskFilterType)Preferences.GetInt(PrefName.TasksGlobalFilterType);
 			comboGlobalFilter.Items.Add(new ODBoxItem<GlobalTaskFilterType>(Lan.g(this,GlobalTaskFilterType.Disabled.GetDescription()),GlobalTaskFilterType.Disabled));
 			comboGlobalFilter.Items.Add(new ODBoxItem<GlobalTaskFilterType>(Lan.g(this,GlobalTaskFilterType.None.GetDescription()),GlobalTaskFilterType.None));
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				SetControlsVisible(true,labelGlobalFilter,comboGlobalFilter);
 				comboGlobalFilter.Items.Add(new ODBoxItem<GlobalTaskFilterType>(Lan.g(this,GlobalTaskFilterType.Clinic.GetDescription()),GlobalTaskFilterType.Clinic));
 				if(Defs.GetDefsForCategory(DefCat.Regions).Count>0) {

@@ -35,13 +35,13 @@ namespace OpenDental {
 			if(updateHistory!=null) {
 				labelVersion.Text+="  "+Lan.g(this,"Since")+": "+updateHistory.DateTimeUpdated.ToShortDateString();
 			}
-			if(PrefC.GetBool(PrefName.UpdateWindowShowsClassicView)) {
+			if(Preferences.GetBool(PrefName.UpdateWindowShowsClassicView)) {
 				//Default location is (74,9).  We move it 5 pixels up since butShowPrev is 5 pixels bigger then labelVersion
 				butShowPrev.Location=new Point(74+labelVersion.Width+2,9-5);
 				panelClassic.Visible=true;
 				panelClassic.Location=new Point(67,29);
-				textUpdateCode.Text=PrefC.GetString(PrefName.UpdateCode);
-				textWebsitePath.Text=PrefC.GetString(PrefName.UpdateWebsitePath);//should include trailing /
+				textUpdateCode.Text=Preferences.GetString(PrefName.UpdateCode);
+				textWebsitePath.Text=Preferences.GetString(PrefName.UpdateWebsitePath);//should include trailing /
 				butDownload.Enabled=false;
 				if(!Security.IsAuthorized(Permissions.Setup)) {//gives a message box if no permission
 					butCheck.Enabled=false;
@@ -58,7 +58,7 @@ namespace OpenDental {
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {
-			if(PrefC.GetBool(PrefName.UpdateWindowShowsClassicView)) {
+			if(Preferences.GetBool(PrefName.UpdateWindowShowsClassicView)) {
 				return;
 			}
 			if(!Security.IsAuthorized(Permissions.Setup)) {
@@ -70,8 +70,8 @@ namespace OpenDental {
 		}
 
 		private void SetButtonVisibility() {
-			DateTime updateTime=PrefC.GetDateT(PrefName.UpdateDateTime);
-			bool showMsi=PrefC.GetBool(PrefName.UpdateShowMsiButtons);
+			DateTime updateTime=Preferences.GetDateTime(PrefName.UpdateDateTime);
+			bool showMsi=Preferences.GetBool(PrefName.UpdateShowMsiButtons);
 			bool showDownloadAndInstall=(updateTime < DateTime.Now);
 			butDownloadMsiBuild.Visible=showMsi;
 			butDownloadMsiStable.Visible=showMsi;
@@ -88,10 +88,10 @@ namespace OpenDental {
 		}
 
 		private void butCheckForUpdates_Click(object sender,EventArgs e) {
-			if(PrefC.GetString(PrefName.WebServiceServerName)!="" //using web service
-				&&!ODEnvironment.IdIsThisComputer(PrefC.GetString(PrefName.WebServiceServerName).ToLower()))//and not on web server 
+			if(Preferences.GetString(PrefName.WebServiceServerName)!="" //using web service
+				&&!ODEnvironment.IdIsThisComputer(Preferences.GetString(PrefName.WebServiceServerName).ToLower()))//and not on web server 
 			{
-				MessageBox.Show(Lan.g(this,"Updates are only allowed from the web server")+": "+PrefC.GetString(PrefName.WebServiceServerName));
+				MessageBox.Show(Lan.g(this,"Updates are only allowed from the web server")+": "+Preferences.GetString(PrefName.WebServiceServerName));
 				return;
 			}
 			if(ReplicationServers.ServerIsBlocked()) {
@@ -299,19 +299,19 @@ namespace OpenDental {
 			string destDir=ImageStore.GetPreferredAtoZpath();
 			string destPath2=null;
 			if(destDir==null) {//Not using A to Z folders?
-				destDir=PrefC.GetTempFolderPath();
+				destDir=Preferences.GetTempFolderPath();
 			}
 			else {//using A to Z folders.
 				destPath2=ODFileUtils.CombinePaths(destDir,"SetupFiles");
-				if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(destPath2)) {
+				if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(destPath2)) {
 					Directory.CreateDirectory(destPath2);
 				}
 				else if(CloudStorage.IsCloudStorage) {
-					destDir=PrefC.GetTempFolderPath();//Cloud needs it to be downloaded to a local temp folder
+					destDir=Preferences.GetTempFolderPath();//Cloud needs it to be downloaded to a local temp folder
 				}
 				destPath2=ODFileUtils.CombinePaths(destPath2,fileNameWithVers);
 			}
-			PrefL.DownloadInstallPatchFromURI(PrefC.GetString(PrefName.UpdateWebsitePath)+updateCode+"/"+patchName,//Source URI
+			PrefL.DownloadInstallPatchFromURI(Preferences.GetString(PrefName.UpdateWebsitePath)+updateCode+"/"+patchName,//Source URI
 				ODFileUtils.CombinePaths(destDir,patchName),//Local destination file.
 				true,true,
 				destPath2);//second destination file.  Might be null.
@@ -352,7 +352,7 @@ namespace OpenDental {
 			if(IsDynamicMode()) {
 				return;
 			}
-			string fileName=PrefC.GetString(PrefName.UpdateWebsitePath)+updateCode+"/OpenDental.msi";
+			string fileName=Preferences.GetString(PrefName.UpdateWebsitePath)+updateCode+"/OpenDental.msi";
 			try {
 				Process.Start(fileName);
 			}
@@ -416,7 +416,7 @@ namespace OpenDental {
 			string patchName="Setup.exe";
 			string destDir=ImageStore.GetPreferredAtoZpath();
 			if(destDir==null || CloudStorage.IsCloudStorage) {
-				destDir=PrefC.GetTempFolderPath();
+				destDir=Preferences.GetTempFolderPath();
 			}
 			PrefL.DownloadInstallPatchFromURI(textWebsitePath.Text+textUpdateCode.Text+"/"+patchName,//Source URI
 				ODFileUtils.CombinePaths(destDir,patchName),true,false,null);//Local destination file.
@@ -448,7 +448,7 @@ namespace OpenDental {
 		}
 
 		private void FormUpdate_FormClosing(object sender,FormClosingEventArgs e) {
-			if(Security.IsAuthorized(Permissions.Setup,DateTime.Now,true)	&& PrefC.GetBool(PrefName.UpdateWindowShowsClassicView)) {
+			if(Security.IsAuthorized(Permissions.Setup,DateTime.Now,true)	&& Preferences.GetBool(PrefName.UpdateWindowShowsClassicView)) {
 				SavePrefs();
 			}
 		}

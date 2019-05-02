@@ -371,7 +371,7 @@ namespace OpenDental{
 			Clearinghouse ch=Clearinghouses.GetDefaultDental();
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && ch.Eformat==ElectronicClaimFormat.Canadian) {
 				groupItrans.Visible=true;
-				ItransImportFields fieldsToImport=(ItransImportFields)PrefC.GetInt(PrefName.ItransImportFields);
+				ItransImportFields fieldsToImport=(ItransImportFields)Preferences.GetInt(PrefName.ItransImportFields);
 				checkITransPhone.Checked=(fieldsToImport.HasFlag(ItransImportFields.Phone));
 				checkItransAddress.Checked=(fieldsToImport.HasFlag(ItransImportFields.Address));
 				checkItransName.Checked=(fieldsToImport.HasFlag(ItransImportFields.Name));

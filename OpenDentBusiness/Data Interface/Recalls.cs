@@ -268,7 +268,7 @@ namespace OpenDentBusiness
         ///E.g. if pt's 12th birthday falls after recall date.</summary>
         public static bool IsChildRecall(Patient patCur, DateTime recallDue)
         {
-            return (patCur.Birthdate.AddYears(PrefC.GetInt(PrefName.RecallAgeAdult)) > ((recallDue > DateTime.Today) ? recallDue : DateTime.Today));
+            return (patCur.Birthdate.AddYears(Preferences.GetInt(PrefName.RecallAgeAdult)) > ((recallDue > DateTime.Today) ? recallDue : DateTime.Today));
         }
 
         public static List<Recall> GetChangedSince(DateTime changedSince)
@@ -347,11 +347,11 @@ namespace OpenDentBusiness
                     + "INNER JOIN recalltype ON recall.RecallTypeNum=recalltype.RecallTypeNum "
                     + "WHERE recall.DateDue BETWEEN " + POut.Date(fromDate) + " AND " + POut.Date(toDate) + " "
                     + "AND recall.IsDisabled=0 ";
-                if (PrefC.GetString(PrefName.RecallTypesShowingInList) != "")
+                if (Preferences.GetString(PrefName.RecallTypesShowingInList) != "")
                 {
-                    command += "AND recall.RecallTypeNum IN(" + PrefC.GetString(PrefName.RecallTypesShowingInList) + ") ";
+                    command += "AND recall.RecallTypeNum IN(" + Preferences.GetString(PrefName.RecallTypesShowingInList) + ") ";
                 }
-                if (PrefC.GetBool(PrefName.RecallExcludeIfAnyFutureAppt))
+                if (Preferences.GetBool(PrefName.RecallExcludeIfAnyFutureAppt))
                 {
                     command += "AND NOT EXISTS(SELECT * FROM appointment "
                         + "WHERE appointment.PatNum=recall.PatNum "
@@ -501,7 +501,7 @@ namespace OpenDentBusiness
             long guarNum;
             double familyBalance;
             DataRow row;
-            long recallMaxNumberReminders = PrefC.GetLong(PrefName.RecallMaxNumberReminders);
+            long recallMaxNumberReminders = Preferences.GetLong(PrefName.RecallMaxNumberReminders);
             #region Create List of Rows for Return Table
             //loop through the patients in the recall dictionary
             sw.Restart();
@@ -519,7 +519,7 @@ namespace OpenDentBusiness
                     listDatesRemindersSent = new List<DateTime>();
                 }
                 familyBalance = PIn.Double(rowPat["BalTotal"].ToString());//from the guarantor's patient table
-                if (!PrefC.GetBool(PrefName.BalancesDontSubtractIns))
+                if (!Preferences.GetBool(PrefName.BalancesDontSubtractIns))
                 {//typical
                     familyBalance -= PIn.Double(rowPat["InsEst"].ToString());
                 }
@@ -547,7 +547,7 @@ namespace OpenDentBusiness
                     switch (contmeth)
                     {
                         case ContactMethod.None:
-                            if (PrefC.GetBool(PrefName.RecallUseEmailIfHasEmailAddress))
+                            if (Preferences.GetBool(PrefName.RecallUseEmailIfHasEmailAddress))
                             {//if user wants to use email if there is an email address
                                 if (groupByFamilies && rowPat["guarEmail"].ToString() != "")
                                 {
@@ -725,22 +725,22 @@ namespace OpenDentBusiness
             //filter by number of reminders, if numberOfReminders==0, always show
             if (numberOfReminders == 1)
             {
-                if (PrefC.GetInt(PrefName.RecallShowIfDaysFirstReminder) == -1)
+                if (Preferences.GetInt(PrefName.RecallShowIfDaysFirstReminder) == -1)
                 {
                     return false;
                 }
-                if (dateRemind.AddDays(PrefC.GetInt(PrefName.RecallShowIfDaysFirstReminder)).Date > DateTime.Today)
+                if (dateRemind.AddDays(Preferences.GetInt(PrefName.RecallShowIfDaysFirstReminder)).Date > DateTime.Today)
                 {
                     return false;
                 }
             }
             else if (numberOfReminders > 1)
             {
-                if (PrefC.GetInt(PrefName.RecallShowIfDaysSecondReminder) == -1)
+                if (Preferences.GetInt(PrefName.RecallShowIfDaysSecondReminder) == -1)
                 {
                     return false;
                 }
-                if (dateRemind.AddDays(PrefC.GetInt(PrefName.RecallShowIfDaysSecondReminder)).Date > DateTime.Today)
+                if (dateRemind.AddDays(Preferences.GetInt(PrefName.RecallShowIfDaysSecondReminder)).Date > DateTime.Today)
                 {
                     return false;
                 }
@@ -768,7 +768,7 @@ namespace OpenDentBusiness
                 retVal = retVal.Replace("[DueDate]", listRecalls.Max(x => x.DateDue).ToShortDateString());
             }
             //The link where a patient can go to schedule a recall from the web.
-            retVal = retVal.Replace("[URL]", PrefC.GetString(PrefName.PatientPortalURL));
+            retVal = retVal.Replace("[URL]", Preferences.GetString(PrefName.PatientPortalURL));
             return retVal;
         }
 
@@ -837,8 +837,8 @@ namespace OpenDentBusiness
             //last group of pats could be partial group, that count will be added to total in QueueDataBatches once we gather data for that partial group.
             //Setting this now prevents a possible divide by zero error in the progress bar and will be updated later to include the partial group count.
             _totalPatCount = (_listPatNumMaxPerGroup.Count - 1) * BATCH_SIZE;
-            long prophyTypeNum = PrefC.GetLong(PrefName.RecallTypeSpecialProphy);
-            long perioTypeNum = PrefC.GetLong(PrefName.RecallTypeSpecialPerio);
+            long prophyTypeNum = Preferences.GetLong(PrefName.RecallTypeSpecialProphy);
+            long perioTypeNum = Preferences.GetLong(PrefName.RecallTypeSpecialPerio);
             string command = "SELECT recalltype.RecallTypeNum,recalltype.DefaultInterval,recalltrigger.CodeNum "
                 + "FROM recalltype "
                 + "INNER JOIN recalltrigger ON recalltype.RecallTypeNum=recalltrigger.RecallTypeNum";
@@ -1223,7 +1223,7 @@ namespace OpenDentBusiness
             bool isPerio = false;
             for (int i = 0; i < recallList.Count; i++)
             {
-                if (PrefC.GetLong(PrefName.RecallTypeSpecialPerio) == recallList[i].RecallTypeNum)
+                if (Preferences.GetLong(PrefName.RecallTypeSpecialPerio) == recallList[i].RecallTypeNum)
                 {
                     isPerio = true;
                     break;
@@ -1234,7 +1234,7 @@ namespace OpenDentBusiness
             {//it's ok to not go backwards because we immediately break.
                 if (isPerio)
                 {
-                    if (PrefC.GetLong(PrefName.RecallTypeSpecialProphy) == typeList[i].RecallTypeNum)
+                    if (Preferences.GetLong(PrefName.RecallTypeSpecialProphy) == typeList[i].RecallTypeNum)
                     {
                         typeList.RemoveAt(i);
                         break;
@@ -1242,7 +1242,7 @@ namespace OpenDentBusiness
                 }
                 else
                 {
-                    if (PrefC.GetLong(PrefName.RecallTypeSpecialPerio) == typeList[i].RecallTypeNum)
+                    if (Preferences.GetLong(PrefName.RecallTypeSpecialPerio) == typeList[i].RecallTypeNum)
                     {
                         typeList.RemoveAt(i);
                         break;
@@ -1286,8 +1286,8 @@ namespace OpenDentBusiness
             DateTime dateProphyTesting;
             for (int i = 0; i < typeListActive.Count; i++)
             {
-                if (PrefC.GetLong(PrefName.RecallTypeSpecialProphy) != typeListActive[i].RecallTypeNum
-                    && PrefC.GetLong(PrefName.RecallTypeSpecialPerio) != typeListActive[i].RecallTypeNum)
+                if (Preferences.GetLong(PrefName.RecallTypeSpecialProphy) != typeListActive[i].RecallTypeNum
+                    && Preferences.GetLong(PrefName.RecallTypeSpecialPerio) != typeListActive[i].RecallTypeNum)
                 {
                     //we are only working with prophy and perio in this loop.
                     continue;
@@ -1315,8 +1315,8 @@ namespace OpenDentBusiness
                     continue;
                 }
                 //set prevDate:
-                if (PrefC.GetLong(PrefName.RecallTypeSpecialProphy) == typeList[i].RecallTypeNum
-                    || PrefC.GetLong(PrefName.RecallTypeSpecialPerio) == typeList[i].RecallTypeNum)
+                if (Preferences.GetLong(PrefName.RecallTypeSpecialProphy) == typeList[i].RecallTypeNum
+                    || Preferences.GetLong(PrefName.RecallTypeSpecialPerio) == typeList[i].RecallTypeNum)
                 {
                     prevDate = prevDateProphy;
                 }
@@ -1343,8 +1343,8 @@ namespace OpenDentBusiness
                 }
                 if (matchingRecall == null)
                 {//if there is no existing recall,
-                    if (PrefC.GetLong(PrefName.RecallTypeSpecialProphy) == typeList[i].RecallTypeNum
-                        || PrefC.GetLong(PrefName.RecallTypeSpecialPerio) == typeList[i].RecallTypeNum
+                    if (Preferences.GetLong(PrefName.RecallTypeSpecialProphy) == typeList[i].RecallTypeNum
+                        || Preferences.GetLong(PrefName.RecallTypeSpecialPerio) == typeList[i].RecallTypeNum
                         || prevDate.Year > 1880)//for other types, if date is not minVal, then add a recall
                     {
                         //add a recall
@@ -2053,7 +2053,7 @@ namespace OpenDentBusiness
                 aptCur.AptDateTime = dateStart;
                 aptCur.Op = opCur.OperatoryNum;
                 aptCur.Priority = isASAP ? ApptPriority.ASAP : ApptPriority.Normal;
-                aptCur.Confirmed = PrefC.GetLong(PrefName.WebSchedRecallConfirmStatus);
+                aptCur.Confirmed = Preferences.GetLong(PrefName.WebSchedRecallConfirmStatus);
                 //Make sure that operatory specific settings are applied to the appointment.
                 List<Schedule> listSchedules = Schedules.RefreshDayEdit(aptCur.AptDateTime);
                 long assignedDent = Schedules.GetAssignedProvNumForSpot(listSchedules, opCur, false, aptCur.AptDateTime);

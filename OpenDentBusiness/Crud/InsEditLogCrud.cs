@@ -97,15 +97,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one InsEditLog into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(InsEditLog insEditLog,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				insEditLog.InsEditLogNum=ReplicationServers.GetKey("inseditlog","InsEditLogNum");
 			}
 			string command="INSERT INTO inseditlog (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="InsEditLogNum,";
 			}
 			command+="FKey,LogType,FieldName,OldValue,NewValue,UserNum,ParentKey,Description) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(insEditLog.InsEditLogNum)+",";
 			}
 			command+=
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+    POut.Long  (insEditLog.ParentKey)+","
 				+"'"+POut.String(insEditLog.Description)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

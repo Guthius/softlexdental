@@ -29,7 +29,7 @@ namespace OpenDental {
 			for(int i=0;i<_listProviders.Count;i++) {
 				listProv.Items.Add(_listProviders[i].GetLongDesc());
 			}
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				listClin.Visible=false;
 				labelClin.Visible=false;
 				checkAllClin.Visible=false;
@@ -98,7 +98,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"At least one Provider must be selected.");
 				return;
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(!checkAllClin.Checked && listClin.SelectedIndices.Count==0) {
 					MsgBox.Show(this,"At least one Clinic must be selected.");
 					return;
@@ -118,7 +118,7 @@ namespace OpenDental {
 					listProvNums.Add(_listProviders[listProv.SelectedIndices[i]].ProvNum);
 				}
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(checkAllClin.Checked) {
 					if(!Security.CurUser.ClinicIsRestricted) {
 						listClinicNums.Add(0);
@@ -169,7 +169,7 @@ namespace OpenDental {
 					subtitleProvs+=_listProviders[listProv.SelectedIndices[i]].Abbr;
 				}
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(checkAllClin.Checked) {
 					subtitleClinics=Lan.g(this,"All Clinics");
 				}
@@ -207,12 +207,12 @@ namespace OpenDental {
 			report.AddTitle("Title",Lan.g(this,"Active Patients"));
 			report.AddSubTitle("Date",dateStart.SelectionStart.ToShortDateString()+" - "+dateEnd.SelectionStart.ToShortDateString());
 			report.AddSubTitle("Providers",subtitleProvs);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				report.AddSubTitle("Clinics",subtitleClinics);
 			}
 			report.AddSubTitle("Billing",subtitleBilling);
 			QueryObject query;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				query=report.AddQuery(tablePats,"","clinic",SplitByKind.Value,0);
 			}
 			else {

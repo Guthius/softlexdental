@@ -3013,7 +3013,7 @@ namespace OpenDental.InternalTools.Job_Manager {
 			//TODO: fix this to get rid of orphaned links when FRs are deleted.
 			FormRequestEdit FormFR=new FormRequestEdit();
 			FormFR.RequestId=(long)gridFeatureReq.Rows[e.Row].Tag;
-			FormFR.IsAdminMode=PrefC.IsODHQ;
+			FormFR.IsAdminMode=Preferences.IsODHQ;
 			FormFR.Show();
 		}
 

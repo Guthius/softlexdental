@@ -95,17 +95,17 @@ namespace OpenDental {
 
 		private void FillTabPatientPortal() {
 			//Office may have set a customer URL
-			textPatientFacingUrlPortal.Text=PrefC.GetString(PrefName.PatientPortalURL);
+			textPatientFacingUrlPortal.Text=Preferences.GetString(PrefName.PatientPortalURL);
 			//HQ provides this URL for this customer.
 			_urlsFromHQ=WebServiceMainHQProxy.GetSignups<WebServiceMainHQProxy.EServiceSetup.SignupOut.SignupOutEService>(_signupOut,eServiceCode.PatientPortal).FirstOrDefault()??new WebServiceMainHQProxy.EServiceSetup.SignupOut.SignupOutEService() { HostedUrl="", HostedUrlPayment="" };
 			textHostedUrlPortal.Text=_urlsFromHQ.HostedUrl;
 			if(textPatientFacingUrlPortal.Text=="") { //Customer has not set their own URL so use the URL provided by OD.
 				textPatientFacingUrlPortal.Text=_urlsFromHQ.HostedUrl;
 			}
-			textBoxNotificationSubject.Text=PrefC.GetString(PrefName.PatientPortalNotifySubject);
-			textBoxNotificationBody.Text=PrefC.GetString(PrefName.PatientPortalNotifyBody);
+			textBoxNotificationSubject.Text=Preferences.GetString(PrefName.PatientPortalNotifySubject);
+			textBoxNotificationBody.Text=Preferences.GetString(PrefName.PatientPortalNotifyBody);
 			_listPatPortalInviteRules=ApptReminderRules.GetForTypes(ApptReminderType.PatientPortalInvite);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				_clinicCurPPInvite=comboClinicsPPInvites.SelectedTag<Clinic>();
 
 			}
@@ -186,7 +186,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"You must first signup for Patient Portal via the Signup tab before activating Patient Portal Invites.");
 				return;
 			}
-			bool isPatPortalInvitesEnabled=PrefC.GetBool(PrefName.PatientPortalInviteEnabled);
+			bool isPatPortalInvitesEnabled=Preferences.GetBool(PrefName.PatientPortalInviteEnabled);
 			isPatPortalInvitesEnabled=!isPatPortalInvitesEnabled;
 			Prefs.UpdateBool(PrefName.PatientPortalInviteEnabled,isPatPortalInvitesEnabled);
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Patient Portal Invites "+(isPatPortalInvitesEnabled ? "activated" : "deactivated")+".");
@@ -201,7 +201,7 @@ namespace OpenDental {
 		}
 
 		private void FillPPInviteActivationButton() {
-			if(PrefC.GetBool(PrefName.PatientPortalInviteEnabled)) {
+			if(Preferences.GetBool(PrefName.PatientPortalInviteEnabled)) {
 				textStatusInvites.Text=Lan.g(this,"Invites")+" : "+Lan.g(this,"Active");
 				textStatusInvites.BackColor=Color.FromArgb(236,255,236);//light green
 				textStatusInvites.ForeColor=Color.Black;//instead of disabled grey

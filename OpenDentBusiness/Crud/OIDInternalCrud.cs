@@ -85,21 +85,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one OIDInternal into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(OIDInternal oIDInternal,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				oIDInternal.OIDInternalNum=ReplicationServers.GetKey("oidinternal","OIDInternalNum");
 			}
 			string command="INSERT INTO oidinternal (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="OIDInternalNum,";
 			}
 			command+="IDType,IDRoot) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(oIDInternal.OIDInternalNum)+",";
 			}
 			command+=
 				 "'"+POut.String(oIDInternal.IDType.ToString())+"',"
 				+"'"+POut.String(oIDInternal.IDRoot)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

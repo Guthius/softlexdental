@@ -15,8 +15,8 @@ namespace OpenDental {
 		}
 
 		private void FormEmailJobTemplateEdit_Load(object sender,EventArgs e) {
-			textBodyTextTemplate.Text=PrefC.GetString(PrefName.JobManagerDefaultEmail);
-			textPledgeTemplate.Text=PrefC.GetString(PrefName.JobManagerDefaultBillingMsg);
+			textBodyTextTemplate.Text=Preferences.GetString(PrefName.JobManagerDefaultEmail);
+			textPledgeTemplate.Text=Preferences.GetString(PrefName.JobManagerDefaultBillingMsg);
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

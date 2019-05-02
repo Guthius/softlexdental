@@ -94,15 +94,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EServiceSignal into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EServiceSignal eServiceSignal,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				eServiceSignal.EServiceSignalNum=ReplicationServers.GetKey("eservicesignal","EServiceSignalNum");
 			}
 			string command="INSERT INTO eservicesignal (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EServiceSignalNum,";
 			}
 			command+="ServiceCode,ReasonCategory,ReasonCode,Severity,Description,SigDateTime,Tag,IsProcessed) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(eServiceSignal.EServiceSignalNum)+",";
 			}
 			command+=
@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 				eServiceSignal.Tag="";
 			}
 			OdSqlParameter paramTag=new OdSqlParameter("paramTag",OdDbType.Text,POut.StringParam(eServiceSignal.Tag));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramDescription,paramTag);
 			}
 			else {

@@ -125,7 +125,7 @@ namespace OpenDental {
 		//Leaving this blank will cause the clinic filter to be ignored in SmsFromMobiles.GetMessages().
 		private List<long> _listClinicNumsSelected {
 			get {
-				if(!PrefC.HasClinicsEnabled) {
+				if(!Preferences.HasClinicsEnabled) {
 					return new List<long>();
 				}
 				List<long> ret=new List<long>();
@@ -188,14 +188,14 @@ namespace OpenDental {
 
 		private void FormSmsTextMessaging_Load(object sender,EventArgs e) {
 			gridMessages.ContextMenu=contextMenuMessages;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				labelClinic.Visible=true;
 				comboClinic.Visible=true;
 				comboClinic.Items.Clear();
 				_listClinics=Clinics.GetForUserod(Security.CurUser);
 				if(!Security.CurUser.ClinicIsRestricted || Security.CurUser.ClinicNum==0) {
 					Clinic hqClinic=Clinics.GetPracticeAsClinicZero();
-					hqClinic.Abbr=(PrefC.GetString(PrefName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")");
+					hqClinic.Abbr=(Preferences.GetString(PrefName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")");
 					_listClinics.Insert(0,hqClinic);//Add HQ
 				}
 				for(int i=0;i<_listClinics.Count;i++) {
@@ -209,7 +209,7 @@ namespace OpenDental {
 					comboClinic.SetSelected(0,true);
 				}
 				//HQ clinic is selected so select all clinics in the filter unless EnterpriseApptList is set.
-				if(Clinics.ClinicNum==0 && !PrefC.GetBool(PrefName.EnterpriseApptList)) {
+				if(Clinics.ClinicNum==0 && !Preferences.GetBool(PrefName.EnterpriseApptList)) {
 					comboClinic.SetSelected(true);
 				}
 			}
@@ -255,7 +255,7 @@ namespace OpenDental {
 				menuItemBlockNumber
 			}
 			.ForEach(x => x.Visible=!_isGrouped);
-			if(PrefC.HasClinicsEnabled && comboClinic.SelectedIndices.Count==0) {
+			if(Preferences.HasClinicsEnabled && comboClinic.SelectedIndices.Count==0) {
 				gridMessages.BeginUpdate();
 				gridMessages.Rows.Clear();
 				gridMessages.EndUpdate();
@@ -298,7 +298,7 @@ namespace OpenDental {
 			gridMessages.Columns.Add(new UI.ODGridColumn("Patient\r\nPhone",100,HorizontalAlignment.Center) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
 			gridMessages.Columns.Add(new UI.ODGridColumn("Patient",150,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
 			gridMessages.Columns.Add(new UI.ODGridColumn("Cost",32,HorizontalAlignment.Right) { SortingStrategy=UI.ODGridSortingStrategy.AmountParse });
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				gridMessages.Columns.Add(new UI.ODGridColumn("Clinic",130,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
 			}
 			if(checkHidden.Checked) {
@@ -320,9 +320,9 @@ namespace OpenDental {
 				row.Cells.Add(smsFromMobile.MobilePhoneNumber);//Patient Phone
 				row.Cells.Add(smsFromMobile.PatNum==0 ? Lan.g(this,"Unassigned") : GetPatientName(smsFromMobile.PatNum));//Patient
 				row.Cells.Add("0.00");//Cost
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					if(smsFromMobile.ClinicNum==0) {
-						row.Cells.Add(PrefC.GetString(PrefName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")");
+						row.Cells.Add(Preferences.GetString(PrefName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")");
 					}
 					else { 
 						Clinic clinic=Clinics.GetClinic(smsFromMobile.ClinicNum);
@@ -364,9 +364,9 @@ namespace OpenDental {
 					row.Cells.Add(smsToMobile.MobilePhoneNumber);//Patient Phone
 					row.Cells.Add(smsToMobile.PatNum==0 ? "" : GetPatientName(smsToMobile.PatNum));//Patient
 					row.Cells.Add(smsToMobile.MsgChargeUSD.ToString("f"));//Cost
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						if(smsToMobile.ClinicNum==0) {
-							row.Cells.Add(PrefC.GetString(PrefName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")");
+							row.Cells.Add(Preferences.GetString(PrefName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")");
 						}
 						else { 
 							Clinic clinic=Clinics.GetClinic(smsToMobile.ClinicNum);
@@ -427,7 +427,7 @@ namespace OpenDental {
 			_columnStatusIdx=gridMessages.Columns.Count-1;
 			gridMessages.Columns.Add(new UI.ODGridColumn("Patient\r\nPhone",100,HorizontalAlignment.Center) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
 			gridMessages.Columns.Add(new UI.ODGridColumn("Patient",150,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				gridMessages.Columns.Add(new UI.ODGridColumn("Clinic",130,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });
 			}
 			gridMessages.Columns.Add(new UI.ODGridColumn("Latest Message",150,HorizontalAlignment.Left) { SortingStrategy=UI.ODGridSortingStrategy.StringCompare });			
@@ -442,7 +442,7 @@ namespace OpenDental {
 				row.Cells.Add(sms.Status);
 				row.Cells.Add(sms.PatPhone);//Patient Phone
 				row.Cells.Add(sms.PatName);
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add(sms.ClinicAbbr);
 				}
 				row.Cells.Add(sms.TextMsg);
@@ -478,7 +478,7 @@ namespace OpenDental {
 					PatPhone=x.First().MobilePhoneNumber,
 					PatNum=x.First().PatNum,
 					ClinicNum=x.First().ClinicNum,
-					ClinicAbbr=PrefC.HasClinicsEnabled ? (x.First().ClinicNum==0 ? PrefC.GetString(PrefName.PracticeTitle)+
+					ClinicAbbr=Preferences.HasClinicsEnabled ? (x.First().ClinicNum==0 ? Preferences.GetString(PrefName.PracticeTitle)+
 						" ("+Lan.g(this,"Practice")+")" : Clinics.GetClinic(x.First().ClinicNum).Abbr) : "",
 					PatName=x.First().PatNum==0 ? Lan.g(this,"Unassigned") : GetPatientName(x.First().PatNum),
 					TextMsg=x.First().MsgText,
@@ -498,7 +498,7 @@ namespace OpenDental {
 						PatPhone=x.First().MobilePhoneNumber,
 						PatNum=x.First().PatNum,
 						ClinicNum=x.First().ClinicNum,
-						ClinicAbbr=PrefC.HasClinicsEnabled ? (x.First().ClinicNum==0 ? PrefC.GetString(PrefName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")"
+						ClinicAbbr=Preferences.HasClinicsEnabled ? (x.First().ClinicNum==0 ? Preferences.GetString(PrefName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")"
 							: Clinics.GetClinic(x.First().ClinicNum).Abbr) : "",
 						PatName=x.First().PatNum==0 ? Lan.g(this,"Unassigned") : GetPatientName(x.First().PatNum),
 						TextMsg=x.First().MsgText,
@@ -880,8 +880,8 @@ namespace OpenDental {
 				MsgBox.Show(this,"Selected message does not have a valid phone number to send to.");
 				return;
 			}
-			if(PrefC.HasClinicsEnabled && clinicNum==0) {
-				clinicNum=PrefC.GetLong(PrefName.TextingDefaultClinicNum);
+			if(Preferences.HasClinicsEnabled && clinicNum==0) {
+				clinicNum=Preferences.GetLong(PrefName.TextingDefaultClinicNum);
 				if(clinicNum==0) {
 					MsgBox.Show(this,"No default clinic setup for texting.");
 					return;

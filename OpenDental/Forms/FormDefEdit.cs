@@ -344,9 +344,9 @@ namespace OpenDental {
 
 		private void FormDefEdit_Load(object sender, System.EventArgs e) {
 			if(DefCur.Category==DefCat.ApptConfirmed) {
-				_listExcludeSendNums=PrefC.GetString(PrefName.ApptConfirmExcludeESend).Split(',').ToList().Select(x => PIn.Long(x)).ToList();
-				_listExcludeConfirmNums=PrefC.GetString(PrefName.ApptConfirmExcludeEConfirm).Split(',').ToList().Select(x => PIn.Long(x)).ToList();
-				_listExcludeRemindNums=PrefC.GetString(PrefName.ApptConfirmExcludeERemind).Split(',').ToList().Select(x => PIn.Long(x)).ToList();
+				_listExcludeSendNums=Preferences.GetString(PrefName.ApptConfirmExcludeESend).Split(',').ToList().Select(x => PIn.Long(x)).ToList();
+				_listExcludeConfirmNums=Preferences.GetString(PrefName.ApptConfirmExcludeEConfirm).Split(',').ToList().Select(x => PIn.Long(x)).ToList();
+				_listExcludeRemindNums=Preferences.GetString(PrefName.ApptConfirmExcludeERemind).Split(',').ToList().Select(x => PIn.Long(x)).ToList();
 				//0 will get automatically added to the list when this is the first of its kind.  We never want 0 inserted.
 				_listExcludeSendNums.Remove(0);
 				_listExcludeConfirmNums.Remove(0);
@@ -359,8 +359,8 @@ namespace OpenDental {
 				groupEConfirm.Visible=false;
 				groupBoxEReminders.Visible=false;
 			}
-			if(DefCur.DefNum.In(PrefC.GetLong(PrefName.AppointmentTimeArrivedTrigger),PrefC.GetLong(PrefName.AppointmentTimeDismissedTrigger),
-				PrefC.GetLong(PrefName.AppointmentTimeSeatedTrigger))) 
+			if(DefCur.DefNum.In(Preferences.GetLong(PrefName.AppointmentTimeArrivedTrigger),Preferences.GetLong(PrefName.AppointmentTimeDismissedTrigger),
+				Preferences.GetLong(PrefName.AppointmentTimeSeatedTrigger))) 
 			{
 				//We never want to send confirmation or reminders to an appointment when it is in a triggered confirm status.
 				checkExcludeConfirm.Enabled=false;
@@ -517,35 +517,35 @@ namespace OpenDental {
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(Defs.IsHidable(DefCur.Category) && checkHidden.Checked) {
 				if(Defs.IsDefinitionInUse(DefCur)) {
-					if(DefCur.DefNum==PrefC.GetLong(PrefName.BrokenAppointmentAdjustmentType)
-						|| DefCur.DefNum==PrefC.GetLong(PrefName.AppointmentTimeArrivedTrigger)
-						|| DefCur.DefNum==PrefC.GetLong(PrefName.AppointmentTimeSeatedTrigger)
-						|| DefCur.DefNum==PrefC.GetLong(PrefName.AppointmentTimeDismissedTrigger)
-						|| DefCur.DefNum==PrefC.GetLong(PrefName.TreatPlanDiscountAdjustmentType)
-						|| DefCur.DefNum==PrefC.GetLong(PrefName.BillingChargeAdjustmentType)
-						|| DefCur.DefNum==PrefC.GetLong(PrefName.FinanceChargeAdjustmentType)
-						|| DefCur.DefNum==PrefC.GetLong(PrefName.PrepaymentUnearnedType)
-						|| DefCur.DefNum==PrefC.GetLong(PrefName.PracticeDefaultBillType)
-						|| DefCur.DefNum==PrefC.GetLong(PrefName.SalesTaxAdjustmentType)
-						|| DefCur.DefNum==PrefC.GetLong(PrefName.RecurringChargesPayTypeCC))
+					if(DefCur.DefNum==Preferences.GetLong(PrefName.BrokenAppointmentAdjustmentType)
+						|| DefCur.DefNum==Preferences.GetLong(PrefName.AppointmentTimeArrivedTrigger)
+						|| DefCur.DefNum==Preferences.GetLong(PrefName.AppointmentTimeSeatedTrigger)
+						|| DefCur.DefNum==Preferences.GetLong(PrefName.AppointmentTimeDismissedTrigger)
+						|| DefCur.DefNum==Preferences.GetLong(PrefName.TreatPlanDiscountAdjustmentType)
+						|| DefCur.DefNum==Preferences.GetLong(PrefName.BillingChargeAdjustmentType)
+						|| DefCur.DefNum==Preferences.GetLong(PrefName.FinanceChargeAdjustmentType)
+						|| DefCur.DefNum==Preferences.GetLong(PrefName.PrepaymentUnearnedType)
+						|| DefCur.DefNum==Preferences.GetLong(PrefName.PracticeDefaultBillType)
+						|| DefCur.DefNum==Preferences.GetLong(PrefName.SalesTaxAdjustmentType)
+						|| DefCur.DefNum==Preferences.GetLong(PrefName.RecurringChargesPayTypeCC))
 					{
 						MsgBox.Show(this,"You cannot hide a definition if it is in use within Module Preferences.");
 						return;
 					}
 					else if(DefCur.DefNum.In(
-						PrefC.GetLong(PrefName.RecallStatusMailed),
-						PrefC.GetLong(PrefName.RecallStatusTexted),
-						PrefC.GetLong(PrefName.RecallStatusEmailed),
-						PrefC.GetLong(PrefName.RecallStatusEmailedTexted))) 
+						Preferences.GetLong(PrefName.RecallStatusMailed),
+						Preferences.GetLong(PrefName.RecallStatusTexted),
+						Preferences.GetLong(PrefName.RecallStatusEmailed),
+						Preferences.GetLong(PrefName.RecallStatusEmailedTexted))) 
 					{
 						MsgBox.Show(this,"You cannot hide a definition that is used as a status in the Setup Recall window.");
 						return;
 					}
-					else if(DefCur.DefNum==PrefC.GetLong(PrefName.WebSchedNewPatConfirmStatus)) {
+					else if(DefCur.DefNum==Preferences.GetLong(PrefName.WebSchedNewPatConfirmStatus)) {
 						MsgBox.Show(this,"You cannot hide a definition that is used as an appointment confirmation status in Web Sched New Pat Appt.");
 						return;
 					}
-					else if(DefCur.DefNum==PrefC.GetLong(PrefName.WebSchedRecallConfirmStatus)) {
+					else if(DefCur.DefNum==Preferences.GetLong(PrefName.WebSchedRecallConfirmStatus)) {
 						MsgBox.Show(this,"You cannot hide a definition that is used as an appointment confirmation status in Web Sched Recall Appt.");
 						return;
 					}

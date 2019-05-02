@@ -99,7 +99,7 @@ namespace OpenDentBusiness {
 					if(CloudStorage.IsCloudStorage) {				
 						//WebBrowser needs to have a local file to open, so we download the images to temp files.	
 						OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.Download(Path.GetDirectoryName(fullPath),Path.GetFileName(fullPath));
-						string tempFile=PrefC.GetRandomTempFile(Path.GetExtension(fullPath));
+						string tempFile=Preferences.GetRandomTempFile(Path.GetExtension(fullPath));
 						File.WriteAllBytes(tempFile,state.FileContent);
 						fullPath=tempFile;
 					}
@@ -149,7 +149,7 @@ namespace OpenDentBusiness {
 					if(CloudStorage.IsCloudStorage) {				
 						//WebBrowser needs to have a local file to open, so we download the images to temp files.	
 						OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.Download(Path.GetDirectoryName(fullPath),Path.GetFileName(fullPath));
-						string tempFile=PrefC.GetRandomTempFile(Path.GetExtension(fullPath));
+						string tempFile=Preferences.GetRandomTempFile(Path.GetExtension(fullPath));
 						File.WriteAllBytes(tempFile,state.FileContent);
 						fullPath=tempFile;
 					}
@@ -476,7 +476,7 @@ namespace OpenDentBusiness {
 			//aggregate with master
 			if(isEmail) {
 				if(canAggregate) {
-					s=PrefC.GetString(PrefName.EmailMasterTemplate).Replace("@@@body@@@",strbOut.ToString());
+					s=Preferences.GetString(PrefName.EmailMasterTemplate).Replace("@@@body@@@",strbOut.ToString());
 					return s;
 				}
 				return strbOut.ToString();

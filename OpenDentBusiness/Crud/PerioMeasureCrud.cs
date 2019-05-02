@@ -100,15 +100,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PerioMeasure into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(PerioMeasure perioMeasure,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				perioMeasure.PerioMeasureNum=ReplicationServers.GetKey("periomeasure","PerioMeasureNum");
 			}
 			string command="INSERT INTO periomeasure (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PerioMeasureNum,";
 			}
 			command+="PerioExamNum,SequenceType,IntTooth,ToothValue,MBvalue,Bvalue,DBvalue,MLvalue,Lvalue,DLvalue) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(perioMeasure.PerioMeasureNum)+",";
 			}
 			command+=
@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (perioMeasure.MLvalue)+","
 				+    POut.Int   (perioMeasure.Lvalue)+","
 				+    POut.Int   (perioMeasure.DLvalue)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

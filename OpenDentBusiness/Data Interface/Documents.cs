@@ -297,7 +297,7 @@ namespace OpenDentBusiness
             }
             string fullName = ODFileUtils.CombinePaths(patFolder, shortFileName);
             //If the document no longer exists, then there is no corresponding thumbnail image.
-            if (PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ && !File.Exists(fullName))
+            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !File.Exists(fullName))
             {
                 return NoAvailablePhoto(size);
             }
@@ -308,7 +308,7 @@ namespace OpenDentBusiness
             }
             //Create Thumbnails folder if it does not already exist for this patient folder.
             string thumbPath = ODFileUtils.CombinePaths(patFolder, "Thumbnails");
-            if (PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(thumbPath))
+            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(thumbPath))
             {
                 try
                 {
@@ -324,7 +324,7 @@ namespace OpenDentBusiness
             string thumbFileName = ODFileUtils.CombinePaths(new string[] { patFolder,"Thumbnails",
                 thumbCoreFileName+"_"+size+thumbFileExt});
             //Use the existing thumbnail if it already exists and it was created after the last document modification.
-            if (PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ && File.Exists(thumbFileName))
+            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && File.Exists(thumbFileName))
             {
                 try
                 {
@@ -362,7 +362,7 @@ namespace OpenDentBusiness
             #endregion Full Image
             Bitmap thumbBitmap = ImageHelper.GetThumbnail(fullImage, size);
             fullImage.Dispose();
-            if (PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
             {//Only save thumbnail to local directory if using local AtoZ
                 try
                 {
@@ -447,7 +447,7 @@ namespace OpenDentBusiness
                 if (!inList)
                 {//OD found new images in the patient's folder that aren't part of the DB.
                     Document doc = new Document();
-                    if (PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+                    if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
                     {
                         doc.DateCreated = File.GetLastWriteTime(fileList[j]);
                     }
@@ -759,14 +759,14 @@ namespace OpenDentBusiness
                 return;
             }
             string docPath;
-            if (PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
             {
                 docPath = ImageStore.GetFilePath(docCur, ImageStore.GetPatientFolder(patCur, ImageStore.GetPreferredAtoZpath()));
             }
-            else if (PrefC.AtoZfolderUsed == DataStorageType.InDatabase)
+            else if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
             {
                 //Some programs require a file on disk and cannot open in memory files. Save to temp file from DB.
-                docPath = PrefC.GetRandomTempFile(ImageStore.GetExtension(docCur));
+                docPath = Preferences.GetRandomTempFile(ImageStore.GetExtension(docCur));
                 File.WriteAllBytes(docPath, Convert.FromBase64String(docCur.RawBase64));
             }
             else
@@ -774,7 +774,7 @@ namespace OpenDentBusiness
              //Download file to temp directory
                 OpenDentalCloud.Core.TaskStateDownload state = CloudStorage.Download(ImageStore.GetPatientFolder(patCur, ImageStore.GetPreferredAtoZpath())
                     , docCur.FileName);
-                docPath = PrefC.GetRandomTempFile(ImageStore.GetExtension(docCur));
+                docPath = Preferences.GetRandomTempFile(ImageStore.GetExtension(docCur));
                 File.WriteAllBytes(docPath, state.FileContent);
             }
             Process.Start(docPath);
@@ -793,7 +793,7 @@ namespace OpenDentBusiness
             {
                 return false;
             }
-            if (PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
             {
                 return File.Exists(ImageStore.GetFilePath(docCur, ImageStore.GetPatientFolder(patCur, ImageStore.GetPreferredAtoZpath())));
             }
@@ -832,14 +832,14 @@ namespace OpenDentBusiness
                 return "";
             }
             string docPath;
-            if (PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
             {
                 docPath = ImageStore.GetFilePath(docCur, ImageStore.GetPatientFolder(patCur, ImageStore.GetPreferredAtoZpath()));
             }
-            else if (PrefC.AtoZfolderUsed == DataStorageType.InDatabase)
+            else if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
             {
                 //Some programs require a file on disk and cannot open in memory files. Save to temp file from DB.
-                docPath = PrefC.GetRandomTempFile(ImageStore.GetExtension(docCur));
+                docPath = Preferences.GetRandomTempFile(ImageStore.GetExtension(docCur));
                 File.WriteAllBytes(docPath, Convert.FromBase64String(docCur.RawBase64));
             }
             else
@@ -847,7 +847,7 @@ namespace OpenDentBusiness
              //Download file to temp directory
                 OpenDentalCloud.Core.TaskStateDownload state = CloudStorage.Download(ImageStore.GetPatientFolder(patCur, ImageStore.GetPreferredAtoZpath())
                     , docCur.FileName);
-                docPath = PrefC.GetRandomTempFile(ImageStore.GetExtension(docCur));
+                docPath = Preferences.GetRandomTempFile(ImageStore.GetExtension(docCur));
                 File.WriteAllBytes(docPath, state.FileContent);
             }
             return docPath;

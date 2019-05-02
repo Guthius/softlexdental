@@ -97,15 +97,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one LabResult into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(LabResult labResult,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				labResult.LabResultNum=ReplicationServers.GetKey("labresult","LabResultNum");
 			}
 			string command="INSERT INTO labresult (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="LabResultNum,";
 			}
 			command+="LabPanelNum,DateTimeTest,TestName,TestID,ObsValue,ObsUnits,ObsRange,AbnormalFlag) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(labResult.LabResultNum)+",";
 			}
 			command+=
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(labResult.ObsUnits)+"',"
 				+"'"+POut.String(labResult.ObsRange)+"',"
 				+    POut.Int   ((int)labResult.AbnormalFlag)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

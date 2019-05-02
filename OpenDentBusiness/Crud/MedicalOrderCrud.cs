@@ -88,15 +88,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one MedicalOrder into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(MedicalOrder medicalOrder,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				medicalOrder.MedicalOrderNum=ReplicationServers.GetKey("medicalorder","MedicalOrderNum");
 			}
 			string command="INSERT INTO medicalorder (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="MedicalOrderNum,";
 			}
 			command+="MedOrderType,PatNum,DateTimeOrder,Description,IsDiscontinued,ProvNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(medicalOrder.MedicalOrderNum)+",";
 			}
 			command+=
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(medicalOrder.Description)+"',"
 				+    POut.Bool  (medicalOrder.IsDiscontinued)+","
 				+    POut.Long  (medicalOrder.ProvNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

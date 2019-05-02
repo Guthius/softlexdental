@@ -563,7 +563,7 @@ namespace OpenDental{
 					butDelete.Visible=false;
 					groupCopy.Visible=false;
 					groupPaste.Visible=false;
-					if(PrefC.GetBool(PrefName.DistributorKey)) {//if this is OD HQ
+					if(Preferences.GetBool(PrefName.DistributorKey)) {//if this is OD HQ
 						checkPracticeNotes.Checked=false;
 						checkPracticeNotes.Enabled=false;
 					}
@@ -578,7 +578,7 @@ namespace OpenDental{
 		}
 
 		private void RefreshClinicData() {
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				labelClinic.Visible=false;
 				comboClinic.Visible=false;
 				checkShowClinicSchedules.Visible=false;
@@ -608,7 +608,7 @@ namespace OpenDental{
 			//That way we don't have to add/subtract one in order when selecting from the list based on selected indexes.
 			_listEmps=new List<Employee>() { new Employee() { EmployeeNum=0,FName="none" } };
 			_listProviders=new List<Provider>() { new Provider() { ProvNum=0,Abbr="none" } };
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				Clinic selectedClinic=comboClinic.SelectedTag<Clinic>();
 				if(selectedClinic!=null) {
 					//clinicNum will be 0 for unrestricted users with HQ selected in which case this will get only emps/provs not assigned to a clinic
@@ -652,7 +652,7 @@ namespace OpenDental{
 					listBoxProvs.SelectedIndex=0;//select the 'none' entry; 
 				}
 			}
-			else if(PrefC.GetBool(PrefName.ScheduleProvEmpSelectAll)) {
+			else if(Preferences.GetBool(PrefName.ScheduleProvEmpSelectAll)) {
 				//Employee Listbox
 				for(int i=1;i<listBoxEmps.Items.Count;i++) {
 					listBoxEmps.SetSelected(i,true);
@@ -745,7 +745,7 @@ namespace OpenDental{
 			provNums.RemoveAll(x => x==0);
 			empNums.RemoveAll(x => x==0);
 			long clinicNum=0;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(comboClinic.SelectedTag<Clinic>()==null) {//Attemped bug fix, comboClinic and _listClinics out of sync.
 					RefreshClinicData();
 				}
@@ -753,7 +753,7 @@ namespace OpenDental{
 			}
 			if(isFromDb || this._tableScheds==null) {
 				bool canViewNotes=true;
-				if(PrefC.IsODHQ) {
+				if(Preferences.IsODHQ) {
 					canViewNotes=Security.IsAuthorized(Permissions.Schedules,true);
 				}
 
@@ -882,7 +882,7 @@ namespace OpenDental{
 				listEmployeeNums=listBoxEmps.SelectedTags<Employee>().Select(x => x.EmployeeNum).ToList();
 			}
 			clinicNum=0;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				clinicNum=comboClinic.SelectedTag<Clinic>().ClinicNum;
 			}
 		}
@@ -979,7 +979,7 @@ namespace OpenDental{
 			}
 			//MessageBox.Show(selectedDate.ToShortDateString());
 			long clinicNum=0;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				Clinic selectedClinic=comboClinic.SelectedTag<Clinic>();
 				if(selectedClinic==null) {
 					MsgBox.Show(this,"Please select a clinic.");

@@ -85,15 +85,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PatFieldDef into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(PatFieldDef patFieldDef,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				patFieldDef.PatFieldDefNum=ReplicationServers.GetKey("patfielddef","PatFieldDefNum");
 			}
 			string command="INSERT INTO patfielddef (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PatFieldDefNum,";
 			}
 			command+="FieldName,FieldType,PickList,ItemOrder,IsHidden) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(patFieldDef.PatFieldDefNum)+",";
 			}
 			command+=
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 				patFieldDef.PickList="";
 			}
 			OdSqlParameter paramPickList=new OdSqlParameter("paramPickList",OdDbType.Text,POut.StringParam(patFieldDef.PickList));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramPickList);
 			}
 			else {

@@ -100,15 +100,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one BugSubmission into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(BugSubmission bugSubmission,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				bugSubmission.BugSubmissionNum=ReplicationServers.GetKey("bugsubmission","BugSubmissionNum");
 			}
 			string command="INSERT INTO bugsubmission (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="BugSubmissionNum,";
 			}
 			command+="SubmissionDateTime,BugId,RegKey,DbVersion,ExceptionMessageText,ExceptionStackTrace,DbInfoJson,DevNote,IsHidden,CategoryTags) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(bugSubmission.BugSubmissionNum)+",";
 			}
 			command+=
@@ -138,7 +138,7 @@ namespace OpenDentBusiness.Crud{
 				bugSubmission.CategoryTags="";
 			}
 			OdSqlParameter paramCategoryTags=new OdSqlParameter("paramCategoryTags",OdDbType.Text,POut.StringParam(bugSubmission.CategoryTags));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramExceptionStackTrace,paramDbInfoJson,paramDevNote,paramCategoryTags);
 			}
 			else {

@@ -109,15 +109,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one RegistrationKey into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(RegistrationKey registrationKey,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				registrationKey.RegistrationKeyNum=ReplicationServers.GetKey("registrationkey","RegistrationKeyNum");
 			}
 			string command="INSERT INTO registrationkey (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="RegistrationKeyNum,";
 			}
 			command+="PatNum,RegKey,Note,DateStarted,DateDisabled,DateEnded,IsForeign,UsesServerVersion,IsFreeVersion,IsOnlyForTesting,VotesAllotted,IsResellerCustomer,HasEarlyAccess) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(registrationKey.RegistrationKeyNum)+",";
 			}
 			command+=
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (registrationKey.VotesAllotted)+","
 				+    POut.Bool  (registrationKey.IsResellerCustomer)+","
 				+    POut.Bool  (registrationKey.HasEarlyAccess)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

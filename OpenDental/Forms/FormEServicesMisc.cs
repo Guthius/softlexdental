@@ -63,15 +63,15 @@ namespace OpenDental {
 			//Now that the DateTimePicker controls are ready to display the DateTime we set, go ahead and set them.
 			//If loading the picker controls with the DateTime fields from the database failed, the date picker controls default to 7 AM and 10 PM.
 			ODException.SwallowAnyException(() => {
-				dateRunStart.Value=PrefC.GetDateT(PrefName.AutomaticCommunicationTimeStart);
-				dateRunEnd.Value=PrefC.GetDateT(PrefName.AutomaticCommunicationTimeEnd);
+				dateRunStart.Value=Preferences.GetDateTime(PrefName.AutomaticCommunicationTimeStart);
+				dateRunEnd.Value=Preferences.GetDateTime(PrefName.AutomaticCommunicationTimeEnd);
 			});
 			labelDateCustom.Text="";
 			radioDateShortDate.Text=DateTime.Today.ToString(_shortDateFormat);//Formats as '3/15/2018'
 			radioDateLongDate.Text=DateTime.Today.ToString(_longDateFormat);//Formats as 'Thursday, March 15, 2018'
 			radioDateMMMMdyyyy.Text=DateTime.Today.ToString(_dateFormatMMMMdyyyy);//Formats as 'March 15, 2018'
 			radioDatem.Text=DateTime.Today.ToString(_dateFormatm);//Formats as 'March 15'
-			string curFormat=PrefC.GetString(PrefName.PatientCommunicationDateFormat);
+			string curFormat=Preferences.GetString(PrefName.PatientCommunicationDateFormat);
 			if(curFormat==CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern) {
 				curFormat=_shortDateFormat;
 			}
@@ -93,7 +93,7 @@ namespace OpenDental {
 					break;
 				default:
 					radioDateCustom.Checked=true;
-					textDateCustom.Text=PrefC.GetString(PrefName.PatientCommunicationDateFormat);
+					textDateCustom.Text=Preferences.GetString(PrefName.PatientCommunicationDateFormat);
 					break;
 			}
 		}
@@ -101,7 +101,7 @@ namespace OpenDental {
 		private void SaveTabMisc() {
 			Prefs.UpdateDateT(PrefName.AutomaticCommunicationTimeStart,dateRunStart.Value);
 			Prefs.UpdateDateT(PrefName.AutomaticCommunicationTimeEnd,dateRunEnd.Value);
-			string curFormat=PrefC.GetString(PrefName.PatientCommunicationDateFormat);
+			string curFormat=Preferences.GetString(PrefName.PatientCommunicationDateFormat);
 			string dateFormat;
 			if(radioDateShortDate.Checked) {
 				if(_wasShortOrLongDateClicked) {

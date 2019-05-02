@@ -20,7 +20,7 @@ namespace OpenDental
         /// </summary>
         void FormRegistrationKey_Load(object sender, EventArgs e)
         {
-            string key = PrefC.GetString(PrefName.RegistrationKey);
+            string key = Preferences.GetString(PrefName.RegistrationKey);
             if (key != null && key.Length == 16)
             {
                 key = key.Substring(0, 4) + "-" + key.Substring(4, 4) + "-" + key.Substring(8, 4) + "-" + key.Substring(12, 4);

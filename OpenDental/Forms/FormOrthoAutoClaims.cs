@@ -22,7 +22,7 @@ namespace OpenDental {
 
 		private void FormAutoOrtho_Load(object sender,EventArgs e) {
 			_tableOutstandingAutoClaims=PatPlans.GetOutstandingOrtho();
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				labelClinic.Visible=false;
 				comboClinics.Visible=false;
 			}
@@ -57,7 +57,7 @@ namespace OpenDental {
 			int clinicWidth=80;
 			int patientWidth=180;
 			int carrierWidth=220;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				patientWidth=140;
 				carrierWidth=200;
 			}
@@ -79,7 +79,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableAutoOrthoClaims","NextClaim"),80,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
-			if(PrefC.HasClinicsEnabled) { //clinics is turned on
+			if(Preferences.HasClinicsEnabled) { //clinics is turned on
 				col=new ODGridColumn(Lan.g("TableAutoOrthoClaims","Clinic"),clinicWidth,HorizontalAlignment.Center);
 				gridMain.Columns.Add(col);
 			}
@@ -87,7 +87,7 @@ namespace OpenDental {
 			ODGridRow row;
 			foreach(DataRow rowCur in _tableOutstandingAutoClaims.Rows) {
 				//need a check for if clinics is on here
-				if(PrefC.HasClinicsEnabled //Clinics are enabled
+				if(Preferences.HasClinicsEnabled //Clinics are enabled
 					&& (Security.CurUser.ClinicIsRestricted || comboClinics.SelectedIndex!=0) //"All" is not selected
 					&& clinicNum!=PIn.Long(rowCur["ClinicNum"].ToString()))   //currently selected clinic doesn't match the row's clinic
 				{
@@ -112,7 +112,7 @@ namespace OpenDental {
 				row.Cells.Add(PIn.String(rowCur["NumSent"].ToString()));
 				row.Cells.Add(dateLastSeen.Year < 1880 ? "" : dateLastSeen.ToShortDateString());
 				row.Cells.Add(dateNextClaim.Year < 1880 ? "" : dateNextClaim.ToShortDateString());
-				if(PrefC.HasClinicsEnabled) { //clinics is turned on
+				if(Preferences.HasClinicsEnabled) { //clinics is turned on
 					//Use the long list of clinics so that hidden clinics can be shown for unrestricted users.
 					row.Cells.Add(Clinics.GetAbbr(PIn.Long(rowCur["ClinicNum"].ToString())));
 				}

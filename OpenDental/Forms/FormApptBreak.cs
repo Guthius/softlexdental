@@ -22,7 +22,7 @@ namespace OpenDental {
 		}
 
 		private void FormApptBreak_Load(object sender,EventArgs e) {
-			BrokenApptProcedure brokenApptProcs=(BrokenApptProcedure)PrefC.GetInt(PrefName.BrokenApptProcedure);
+			BrokenApptProcedure brokenApptProcs=(BrokenApptProcedure)Preferences.GetInt(PrefName.BrokenApptProcedure);
 			radioMissed.Enabled=brokenApptProcs.In(BrokenApptProcedure.Missed,BrokenApptProcedure.Both);
 			radioCancelled.Enabled=brokenApptProcs.In(BrokenApptProcedure.Cancelled,BrokenApptProcedure.Both);
 			if(radioMissed.Enabled && !radioCancelled.Enabled) {
@@ -42,7 +42,7 @@ namespace OpenDental {
 		}
 
 		private void PromptTextASAPList() {
-			if(!PrefC.GetBool(PrefName.WebSchedAsapEnabled) || Appointments.RefreshASAP(0,0,_appt.ClinicNum,new List<ApptStatus>()).Count==0
+			if(!Preferences.GetBool(PrefName.WebSchedAsapEnabled) || Appointments.RefreshASAP(0,0,_appt.ClinicNum,new List<ApptStatus>()).Count==0
 				|| !MsgBox.Show("Appointment",MsgBoxButtons.YesNo,"Text patients on the ASAP List and offer them this opening?")) 
 			{
 				return;

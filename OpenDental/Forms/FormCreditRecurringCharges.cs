@@ -38,7 +38,7 @@ namespace OpenDental {
 			if(Programs.HasMultipleCreditCardProgramsEnabled()) {
 				gridMain.HScrollVisible=true;
 			}
-			if(!PrefC.IsODHQ) {
+			if(!Preferences.IsODHQ) {
 				checkHideBold.Checked=true;
 				checkHideBold.Visible=false;
 			}
@@ -91,7 +91,7 @@ namespace OpenDental {
 			}
 			_isSelecting=true;
 			_listUserClinics=new List<Clinic>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(!Security.CurUser.ClinicIsRestricted) {
 					_listUserClinics.Add(new Clinic() { Description=Lan.g(this,"Unassigned") });
 				}
@@ -130,7 +130,7 @@ namespace OpenDental {
 			}
 			List<long> listSelectedClinicNums=listClinics.SelectedIndices.OfType<int>().Select(x => _listUserClinics[x].ClinicNum).ToList();
 			List<RecurringChargeData> listChargesCur;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				listChargesCur=_charger.ListRecurringChargeData.Where(x => listSelectedClinicNums.Contains(x.RecurringCharge.ClinicNum)).ToList();
 			}
 			else {
@@ -139,25 +139,25 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","PatNum"),55));
-			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Name"),PrefC.HasClinicsEnabled?190:220));
-			if(PrefC.HasClinicsEnabled) {
+			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Name"),Preferences.HasClinicsEnabled?190:220));
+			if(Preferences.HasClinicsEnabled) {
 				gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Clinic"),65));
 			}
-			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Date"),PrefC.HasClinicsEnabled?80:80, textAlignment: HorizontalAlignment.Right));
-			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Family Bal"),PrefC.HasClinicsEnabled?70:85, textAlignment: HorizontalAlignment.Right));
-			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","PayPlan Due"),PrefC.HasClinicsEnabled?75:85, textAlignment: HorizontalAlignment.Right));
-			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Total Due"),PrefC.HasClinicsEnabled?65:80, textAlignment: HorizontalAlignment.Right));
-			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Repeat Amt"),PrefC.HasClinicsEnabled?75:90, textAlignment: HorizontalAlignment.Right));//RptChrgAmt
-			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Charge Amt"),PrefC.HasClinicsEnabled?85:100, textAlignment: HorizontalAlignment.Right));
+			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Date"),Preferences.HasClinicsEnabled?80:80, textAlignment: HorizontalAlignment.Right));
+			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Family Bal"),Preferences.HasClinicsEnabled?70:85, textAlignment: HorizontalAlignment.Right));
+			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","PayPlan Due"),Preferences.HasClinicsEnabled?75:85, textAlignment: HorizontalAlignment.Right));
+			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Total Due"),Preferences.HasClinicsEnabled?65:80, textAlignment: HorizontalAlignment.Right));
+			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Repeat Amt"),Preferences.HasClinicsEnabled?75:90, textAlignment: HorizontalAlignment.Right));//RptChrgAmt
+			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableRecurring","Charge Amt"),Preferences.HasClinicsEnabled?85:100, textAlignment: HorizontalAlignment.Right));
 			if(Programs.HasMultipleCreditCardProgramsEnabled()) {
 				if(Programs.IsEnabled(ProgramName.Xcharge)) {
-					gridMain.Columns.Add(new ODGridColumn("X-Charge",PrefC.HasClinicsEnabled ? 70 : 80, textAlignment: HorizontalAlignment.Center));
+					gridMain.Columns.Add(new ODGridColumn("X-Charge",Preferences.HasClinicsEnabled ? 70 : 80, textAlignment: HorizontalAlignment.Center));
 				}
 				if(Programs.IsEnabled(ProgramName.PayConnect)) {
-					gridMain.Columns.Add(new ODGridColumn("PayConnect",PrefC.HasClinicsEnabled ? 85 : 95,textAlignment: HorizontalAlignment.Center));
+					gridMain.Columns.Add(new ODGridColumn("PayConnect",Preferences.HasClinicsEnabled ? 85 : 95,textAlignment: HorizontalAlignment.Center));
 				}
 				if(Programs.IsEnabled(ProgramName.PaySimple)) {
-					gridMain.Columns.Add(new ODGridColumn("PaySimple",PrefC.HasClinicsEnabled ? 80 : 90, textAlignment: HorizontalAlignment.Center));
+					gridMain.Columns.Add(new ODGridColumn("PaySimple",Preferences.HasClinicsEnabled ? 80 : 90, textAlignment: HorizontalAlignment.Center));
 				}
 			}
 			gridMain.Rows.Clear();
@@ -170,12 +170,12 @@ namespace OpenDental {
 				double rptChargeAmt=chargeCur.RecurringCharge.RepeatAmt;//includes repeat charge (from procs if ODHQ) and attached payplan
 				row.Cells.Add(chargeCur.RecurringCharge.PatNum.ToString());
 				row.Cells.Add(chargeCur.PatName);
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					Clinic clinicCur=_listUserClinics.FirstOrDefault(x => x.ClinicNum==chargeCur.RecurringCharge.ClinicNum);
 					row.Cells.Add(clinicCur!=null?clinicCur.Description:"");//get description from cache if clinics are enabled
 				}
 				int billingDay=0;
-				if(PrefC.GetBool(PrefName.BillingUseBillingCycleDay)) {
+				if(Preferences.GetBool(PrefName.BillingUseBillingCycleDay)) {
 					billingDay=chargeCur.BillingCycleDay;
 				}
 				else {
@@ -195,10 +195,10 @@ namespace OpenDental {
 					row.Cells.Add(payPlanDue.ToString("c"));
 					//negative family balance does not subtract from payplan amount due and negative payplan amount due does not subtract from family balance due
 					double totalBal=(Math.Max(famBalTotal,0));
-					if(PrefC.GetInt(PrefName.PayPlansVersion) == 1) {//in PP v2, the PP amt due is included in the pat balance
+					if(Preferences.GetInt(PrefName.PayPlansVersion) == 1) {//in PP v2, the PP amt due is included in the pat balance
 						totalBal+=Math.Max(payPlanDue,0);
 					}
-					else if(PrefC.GetInt(PrefName.PayPlansVersion)==2) {
+					else if(Preferences.GetInt(PrefName.PayPlansVersion)==2) {
 						totalBal=Math.Max(totalBal,payPlanDue);//At minimum, the Total Due should be the Pay Plan Due amount.
 					}
 					row.Cells.Add(totalBal.ToString("c"));

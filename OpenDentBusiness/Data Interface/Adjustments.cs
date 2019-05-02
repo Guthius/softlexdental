@@ -168,7 +168,7 @@ namespace OpenDentBusiness
             AdjustmentCur.ProcDate = procedure.ProcDate;
             AdjustmentCur.ProvNum = procedure.ProvNum;
             AdjustmentCur.PatNum = procedure.PatNum;
-            AdjustmentCur.AdjType = PrefC.GetLong(PrefName.TreatPlanDiscountAdjustmentType);
+            AdjustmentCur.AdjType = Preferences.GetLong(PrefName.TreatPlanDiscountAdjustmentType);
             AdjustmentCur.ClinicNum = procedure.ClinicNum;
             AdjustmentCur.AdjAmt = -procedure.Discount; // Discount must be negative here.
             AdjustmentCur.ProcNum = procedure.ProcNum;
@@ -420,11 +420,11 @@ namespace OpenDentBusiness
         public static long UndoFinanceOrBillingCharges(DateTime dateUndo, bool isBillingCharges)
         {
             string adjTypeStr = "Finance";
-            long adjTypeDefNum = PrefC.GetLong(PrefName.FinanceChargeAdjustmentType);
+            long adjTypeDefNum = Preferences.GetLong(PrefName.FinanceChargeAdjustmentType);
             if (isBillingCharges)
             {
                 adjTypeStr = "Billing";
-                adjTypeDefNum = PrefC.GetLong(PrefName.BillingChargeAdjustmentType);
+                adjTypeDefNum = Preferences.GetLong(PrefName.BillingChargeAdjustmentType);
             }
 
             string command = 
@@ -474,7 +474,7 @@ namespace OpenDentBusiness
             {
                 command += "AND adjustment.ProvNum IN(" + string.Join(",", listProvNums.Select(x => POut.Long(x))) + ") ";
             }
-            if (clinicNum > 0 && PrefC.HasClinicsEnabled)
+            if (clinicNum > 0 && Preferences.HasClinicsEnabled)
             {
                 command += "AND adjustment.ClinicNum=" + POut.Long(clinicNum);
             }

@@ -106,15 +106,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ApptView into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ApptView apptView,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				apptView.ApptViewNum=ReplicationServers.GetKey("apptview","ApptViewNum");
 			}
 			string command="INSERT INTO apptview (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ApptViewNum,";
 			}
 			command+="Description,ItemOrder,RowsPerIncr,OnlyScheduledProvs,OnlySchedBeforeTime,OnlySchedAfterTime,StackBehavUR,StackBehavLR,ClinicNum,ApptTimeScrollStart,IsScrollStartDynamic,IsApptBubblesDisabled) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(apptView.ApptViewNum)+",";
 			}
 			command+=
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Time  (apptView.ApptTimeScrollStart)+","
 				+    POut.Bool  (apptView.IsScrollStartDynamic)+","
 				+    POut.Bool  (apptView.IsApptBubblesDisabled)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

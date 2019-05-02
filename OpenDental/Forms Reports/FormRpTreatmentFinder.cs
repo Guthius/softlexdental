@@ -558,12 +558,12 @@ namespace OpenDental{
 			}
 			comboBoxMultiBilling.SetSelected(0,true);
 			comboMonthStart.SelectedIndex=0;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				comboBoxMultiClinics.Visible=true;
 				labelClinic.Visible=true;
 				FillClinics();
 			}
-			checkBenefitAssumeGeneral.Checked=PrefC.GetBool(PrefName.TreatFinderProcsAllGeneral);
+			checkBenefitAssumeGeneral.Checked=Preferences.GetBool(PrefName.TreatFinderProcsAllGeneral);
 			FillGrid();
 		}
 
@@ -590,7 +590,7 @@ namespace OpenDental{
 				aboveAmount=0;
 			}
 			List<long> listClinicNums=new List<long>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(comboBoxMultiClinics.ListSelectedIndices.Contains(0)) {//'All' is selected.
 					listClinicNums=_listClinics.Select(x => x.ClinicNum).ToList();//Add all clinics this person has access to.
 					if(!Security.CurUser.ClinicIsRestricted) {
@@ -638,7 +638,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableTreatmentFinder","Insurance Carrier"),225);
 			gridMain.Columns.Add(col);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn(Lan.g("TableTreatmentFinder","Clinic"),120);
 				gridMain.Columns.Add(col);
 			}
@@ -732,7 +732,7 @@ namespace OpenDental{
 						row.Cells.Add(cellData);
 						continue;
 					}
-					if(j==18 && !PrefC.HasClinicsEnabled) {//Clinics
+					if(j==18 && !Preferences.HasClinicsEnabled) {//Clinics
 						continue;
 					}
 					row.Cells.Add(table.Rows[i][j].ToString());
@@ -833,7 +833,7 @@ namespace OpenDental{
 					}
 					listSheets.Add(sheet);
 				}
-				filePathAndName=PrefC.GetRandomTempFile(".pdf");
+				filePathAndName=Preferences.GetRandomTempFile(".pdf");
 				document.Save(filePathAndName);
 				Process.Start(filePathAndName);
 				DialogResult=DialogResult.OK;
@@ -967,16 +967,16 @@ namespace OpenDental{
       saveFileDialog2.AddExtension=true;
 			saveFileDialog2.Title=Lan.g(this,"Treatment Finder");
 			saveFileDialog2.FileName=Lan.g(this,"Treatment Finder");
-			if(!Directory.Exists(PrefC.GetString(PrefName.ExportPath) )){
+			if(!Directory.Exists(Preferences.GetString(PrefName.ExportPath) )){
 				try{
-					Directory.CreateDirectory(PrefC.GetString(PrefName.ExportPath) );
-					saveFileDialog2.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+					Directory.CreateDirectory(Preferences.GetString(PrefName.ExportPath) );
+					saveFileDialog2.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
 				}
 				catch{
 					//initialDirectory will be blank
 				}
 			}
-			else saveFileDialog2.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+			else saveFileDialog2.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
 			saveFileDialog2.Filter="Text files(*.txt)|*.txt|Excel Files(*.xls)|*.xls|All files(*.*)|*.*";
       saveFileDialog2.FilterIndex=0;
 		  if(saveFileDialog2.ShowDialog()!=DialogResult.OK){

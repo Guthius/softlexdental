@@ -836,7 +836,7 @@ namespace OpenDental {
 			if(comboFeeSchedTo.SelectedIndex==-1) {
 				comboFeeSchedTo.SelectedIndex=0;
 			}
-			if(!PrefC.HasClinicsEnabled) {//No clinics
+			if(!Preferences.HasClinicsEnabled) {//No clinics
 				//Add none even though clinics is turned off so that 0 is a valid index to select.
 				comboClinic.Items.Add(Lan.g(this,"None"));
 				comboClinicTo.Items.Add(new ODBoxItem<Clinic>(Lan.g(this,"None"),new Clinic() { ClinicNum=0 }));
@@ -904,7 +904,7 @@ namespace OpenDental {
 				comboProvider.SelectedIndex=0;
 			}
 			else {
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					comboClinic.Enabled=true;
 					butPickClinic.Enabled=true;
 				}
@@ -921,7 +921,7 @@ namespace OpenDental {
 				comboProviderTo.SelectedIndex=0;
 			}
 			else {
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					comboClinicTo.Enabled=true;
 					butPickClinicTo.Enabled=true;
 				}
@@ -931,7 +931,7 @@ namespace OpenDental {
 		}
 
 		private void butClear_Click(object sender, System.EventArgs e) {
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(!MsgBox.Show(this,true,"This will clear all values from the selected fee schedule for the currently selected clinic and provider.  Are you sure you want to continue?")) {
 					return;
 				}
@@ -940,7 +940,7 @@ namespace OpenDental {
 				return;
 			}
 			long clinicNum=0;
-			if(PrefC.HasClinicsEnabled && comboClinic.SelectedIndex!=0){
+			if(Preferences.HasClinicsEnabled && comboClinic.SelectedIndex!=0){
 				clinicNum=_listClinics[comboClinic.SelectedIndex-1].ClinicNum;
 			}
 			long provNum=0;
@@ -952,7 +952,7 @@ namespace OpenDental {
 					_feeCache.BeginTransaction();
 					_feeCache.RemoveFees(feeSchedNum,clinicNum,provNum);
 					string logText=Lan.g(this,"Procedures for Fee Schedule")+" "+FeeScheds.GetDescription(feeSchedNum)+" ";
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						if(Clinics.GetAbbr(Clinics.ClinicNum)=="") {
 							logText+=Lan.g(this,"at Headquarters");
 						}
@@ -968,7 +968,7 @@ namespace OpenDental {
 		}
 
 		private void butCopy_Click(object sender, System.EventArgs e) {
-			if(PrefC.HasClinicsEnabled && _listSelectedClinicNumsTo.Count==0) {
+			if(Preferences.HasClinicsEnabled && _listSelectedClinicNumsTo.Count==0) {
 				MsgBox.Show(this,"At least one \"Clinic To\" clinic must be selected.");
 				return;
 			}
@@ -978,7 +978,7 @@ namespace OpenDental {
 			}
 			FeeSched toFeeSched=_listFeeScheds[comboFeeSchedTo.SelectedIndex];
 			long fromClinicNum=0;
-			if(PrefC.HasClinicsEnabled && comboClinic.SelectedIndex!=0){
+			if(Preferences.HasClinicsEnabled && comboClinic.SelectedIndex!=0){
 				fromClinicNum=_listClinics[comboClinic.SelectedIndex-1].ClinicNum;
 			}
 			long fromProvNum=0;
@@ -1036,7 +1036,7 @@ namespace OpenDental {
 				return;
 			}
 			long clinicNum=0;
-			if(PrefC.HasClinicsEnabled && comboClinic.SelectedIndex>0){
+			if(Preferences.HasClinicsEnabled && comboClinic.SelectedIndex>0){
 				clinicNum=_listClinics[comboClinic.SelectedIndex-1].ClinicNum;
 			}
 			long provNum=0;
@@ -1076,7 +1076,7 @@ namespace OpenDental {
 						string logText=Lan.g(this,"Procedure")+": "+procCode+", "
 							+Lan.g(this,"Fee")+": "+listFees[i].Amount.ToString("c")+", "
 							+Lan.g(this,"Fee Schedule")+": "+FeeScheds.GetDescription(listFees[i].FeeSched);
-						if(PrefC.HasClinicsEnabled) {
+						if(Preferences.HasClinicsEnabled) {
 							if(Clinics.GetAbbr(clinicNum)=="") {
 								logText+=Lan.g(this,"at Headquarters");
 							}
@@ -1167,8 +1167,8 @@ namespace OpenDental {
 		private void butExport_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			SaveFileDialog Dlg=new SaveFileDialog();
-			if(Directory.Exists(PrefC.GetString(PrefName.ExportPath))){
-				Dlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+			if(Directory.Exists(Preferences.GetString(PrefName.ExportPath))){
+				Dlg.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
 			}
 			else if(Directory.Exists("C:\\")) {
 				Dlg.InitialDirectory="C:\\";
@@ -1211,8 +1211,8 @@ namespace OpenDental {
 			}
 			Cursor=Cursors.WaitCursor;
 			OpenFileDialog Dlg=new OpenFileDialog();
-			if(Directory.Exists(PrefC.GetString(PrefName.ExportPath))) {
-				Dlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+			if(Directory.Exists(Preferences.GetString(PrefName.ExportPath))) {
+				Dlg.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
 			}
 			else if(Directory.Exists("C:\\")) {
 				Dlg.InitialDirectory="C:\\";
@@ -1277,7 +1277,7 @@ namespace OpenDental {
 				using(XmlWriter writer=XmlWriter.Create(strbuild,settings)) {
 					writer.WriteStartElement("RequestFeeSched");
 					writer.WriteStartElement("RegistrationKey");
-					writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
+					writer.WriteString(Preferences.GetString(PrefName.RegistrationKey));
 					writer.WriteEndElement();//RegistrationKey
 					writer.WriteStartElement("FeeSchedFileName");
 					writer.WriteString(formPick.FileChosenName);
@@ -1343,7 +1343,7 @@ namespace OpenDental {
 			}
 			else {
 				FeeSchedEvent.Fire(ODEventType.FeeSched,Lan.g(this,"Downloading fee schedule")+"...");
-				string tempFile=PrefC.GetRandomTempFile(".tmp");
+				string tempFile=Preferences.GetRandomTempFile(".tmp");
 				WebClient myWebClient=new WebClient();
 				try {
 					myWebClient.DownloadFile(formPick.FileChosenUrl,tempFile);
@@ -1396,7 +1396,7 @@ namespace OpenDental {
 				cancelButtonText:Lan.g(this,"Close"));
 			Cursor=Cursors.WaitCursor;
 			try {
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					List<Clinic> listFeeClinics=new List<Clinic>();
 					if(_listSelectedClinicsGlobalUpdates.Any(x => x.ClinicNum==-1)) {//user selected 'All'
 						listFeeClinics=_listClinics.Select(x => x.Copy()).ToList();
@@ -1476,25 +1476,25 @@ namespace OpenDental {
 			bool doUpdatePrevClinicPref=false;
 			if(_listSelectedClinicsGlobalUpdates.Any(x => x.ClinicNum==-1)) {//user selected 'All'
 				listWriteoffClinics=_listClinics.Select(x => x.Copy()).ToList();
-				listWriteoffClinics.Insert(0,new Clinic { Abbr=(PrefC.HasClinicsEnabled?"Unassigned":"Updating Write-offs..."),ClinicNum=0 });
+				listWriteoffClinics.Insert(0,new Clinic { Abbr=(Preferences.HasClinicsEnabled?"Unassigned":"Updating Write-offs..."),ClinicNum=0 });
 				doUpdatePrevClinicPref=true;
 			}
 			else {
 				listWriteoffClinics=_listSelectedClinicsGlobalUpdates;
 			}
 			if(listWriteoffClinics.Count==0) {				
-				listWriteoffClinics.Insert(0,new Clinic { Abbr=(PrefC.HasClinicsEnabled?"Unassigned":"Updating Write-offs..."),ClinicNum=0 });
+				listWriteoffClinics.Insert(0,new Clinic { Abbr=(Preferences.HasClinicsEnabled?"Unassigned":"Updating Write-offs..."),ClinicNum=0 });
 			}
 			//MUST be in primary key order so that we will resume on the correct clinic and update the remaining clinics in the list
 			listWriteoffClinics=listWriteoffClinics.OrderBy(x => x.ClinicNum).ToList();
 			int indexPrevClinic=-1;
-			if(PrefC.HasClinicsEnabled
+			if(Preferences.HasClinicsEnabled
 				&& !Security.CurUser.ClinicIsRestricted
 				&& _listSelectedClinicsGlobalUpdates.Any(x => x.ClinicNum==-1) //user selected 'All'
-				&& !string.IsNullOrEmpty(PrefC.GetString(PrefName.GlobalUpdateWriteOffLastClinicCompleted)))//previous 'All' run was interrupted, resume
+				&& !string.IsNullOrEmpty(Preferences.GetString(PrefName.GlobalUpdateWriteOffLastClinicCompleted)))//previous 'All' run was interrupted, resume
 			{
 				try {
-					long prevClinic=PrefC.GetLong(PrefName.GlobalUpdateWriteOffLastClinicCompleted);
+					long prevClinic=Preferences.GetLong(PrefName.GlobalUpdateWriteOffLastClinicCompleted);
 					indexPrevClinic=listWriteoffClinics.FindIndex(x => x.ClinicNum==prevClinic);
 				}
 				catch {

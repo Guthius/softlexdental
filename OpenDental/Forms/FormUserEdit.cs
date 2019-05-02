@@ -583,7 +583,7 @@ namespace OpenDental{
 			}
 			textUserName.Text=UserCur.UserName;
 			textDomainUser.Text=UserCur.DomainUser;
-			if(!PrefC.GetBool(PrefName.DomainLoginEnabled)) {
+			if(!Preferences.GetBool(PrefName.DomainLoginEnabled)) {
 				labelDomainUser.Visible=false;
 				textDomainUser.Visible=false;
 				butPickDomainUser.Visible=false;
@@ -595,7 +595,7 @@ namespace OpenDental{
 				if(!_isFromAddUser && UserCur.IsInUserGroup(_listUserGroups[i].UserGroupNum)) {
 					listUserGroup.SetSelected(i,true);
 				}
-				if(_isFromAddUser && _listUserGroups[i].UserGroupNum==PrefC.GetLong(PrefName.DefaultUserGroup)) {
+				if(_isFromAddUser && _listUserGroups[i].UserGroupNum==Preferences.GetLong(PrefName.DefaultUserGroup)) {
 					listUserGroup.SetSelected(i,true);
 				}
 			}
@@ -634,7 +634,7 @@ namespace OpenDental{
 				int index=listAlertSubMulti.Items.Add(Lan.g(this,cat.Description));
 				listAlertSubMulti.SetSelected(index,listUserAlertCatNums.Contains(cat.AlertCategoryNum));
 			}
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				tabClinics.Enabled=false;//Disables all controls in the clinics tab.  Tab is still selectable.
 				listAlertSubsClinicsMulti.Visible=false;
 				labelAlertClinic.Visible=false;
@@ -674,7 +674,7 @@ namespace OpenDental{
 			if(string.IsNullOrEmpty(UserCur.PasswordHash)){
 				butPassword.Text=Lan.g(this,"Create Password");
 			}
-			if(!PrefC.IsODHQ) {
+			if(!Preferences.IsODHQ) {
 				butJobRoles.Visible=false;
 			}
 			if(IsNew) {
@@ -700,7 +700,7 @@ namespace OpenDental{
 				butUnlock.Visible=false;
 				butJobRoles.Visible=false;
 			}
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				butDoseSpotAdditional.Visible=false;
 			}
 		}
@@ -708,13 +708,13 @@ namespace OpenDental{
 		private void butPickDomainUser_Click(object sender,EventArgs e) {
 			//DirectoryEntry does recognize an empty string as a valid LDAP entry and will just return all logins from all available domains
 			//But all logins should be on the same domain, so this field is required
-			if(string.IsNullOrWhiteSpace(PrefC.GetString(PrefName.DomainLoginPath))) {
+			if(string.IsNullOrWhiteSpace(Preferences.GetString(PrefName.DomainLoginPath))) {
 				MsgBox.Show(this,"DomainLoginPath is missing in security settings. DomainLoginPath is required before assigning domain logins to user accounts.");
 				return;
 			}
 			//Try to access the specified DomainLoginPath
 			try {
-				DirectoryEntry.Exists(PrefC.GetString(PrefName.DomainLoginPath));
+				DirectoryEntry.Exists(Preferences.GetString(PrefName.DomainLoginPath));
 			}
 			catch(Exception ex) {
 				MessageBox.Show(Lan.g(this,"An error occurred while attempting to access the provided DomainLoginPath:")+" "+ex.Message);
@@ -799,11 +799,11 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter a username.");
 				return;
 			}
-			if(IsNew && PrefC.GetBool(PrefName.PasswordsMustBeStrong) && string.IsNullOrWhiteSpace(_passwordTyped)) {
+			if(IsNew && Preferences.GetBool(PrefName.PasswordsMustBeStrong) && string.IsNullOrWhiteSpace(_passwordTyped)) {
 				MsgBox.Show(this,"Password may not be blank when the strong password feature is turned on.");
 				return;
 			}
-			if(PrefC.HasClinicsEnabled && listClinic.SelectedIndex==-1) {
+			if(Preferences.HasClinicsEnabled && listClinic.SelectedIndex==-1) {
 				MsgBox.Show(this,"This user does not have a User Default Clinic set.  Please choose one to continue.");
 				return;
 			}
@@ -812,11 +812,11 @@ namespace OpenDental{
 				return;
 			}
 			if(_isFromAddUser && !Security.IsAuthorized(Permissions.SecurityAdmin,true)
-				&& (listUserGroup.SelectedItems.Count!=1 || listUserGroup.SelectedTag<UserGroup>().UserGroupNum!=PrefC.GetLong(PrefName.DefaultUserGroup)))
+				&& (listUserGroup.SelectedItems.Count!=1 || listUserGroup.SelectedTag<UserGroup>().UserGroupNum!=Preferences.GetLong(PrefName.DefaultUserGroup)))
 			{
 				MsgBox.Show(this,"This user must be assigned to the default user group.");
 				for(int i=0;i<listUserGroup.Items.Count;i++) {
-					if(((ODBoxItem<UserGroup>)listUserGroup.Items[i]).Tag.UserGroupNum==PrefC.GetLong(PrefName.DefaultUserGroup)) {
+					if(((ODBoxItem<UserGroup>)listUserGroup.Items[i]).Tag.UserGroupNum==Preferences.GetLong(PrefName.DefaultUserGroup)) {
 						listUserGroup.SetSelected(i,true);
 					}
 					else {
@@ -826,7 +826,7 @@ namespace OpenDental{
 				return;
 			}
 			List<UserClinic> listUserClinics=new List<UserClinic>();
-			if(PrefC.HasClinicsEnabled && checkClinicIsRestricted.Checked) {//They want to restrict the user to certain clinics or clinics are enabled.  
+			if(Preferences.HasClinicsEnabled && checkClinicIsRestricted.Checked) {//They want to restrict the user to certain clinics or clinics are enabled.  
 				for(int i=0;i<listClinicMulti.SelectedIndices.Count;i++) {
 					listUserClinics.Add(new UserClinic(_listClinics[listClinicMulti.SelectedIndices[i]].ClinicNum,UserCur.UserNum));
 				}
@@ -839,7 +839,7 @@ namespace OpenDental{
 			if(UserClinics.Sync(listUserClinics,UserCur.UserNum)) {//Either syncs new list, or clears old list if no longer restricted.
 				DataValid.SetInvalid(InvalidType.UserClinics);
 			}
-			if(!PrefC.HasClinicsEnabled || listClinic.SelectedIndex==0) {
+			if(!Preferences.HasClinicsEnabled || listClinic.SelectedIndex==0) {
 				UserCur.ClinicNum=0;
 			}
 			else {
@@ -953,11 +953,11 @@ namespace OpenDental{
 			List<AlertSub> _listUserAlertTypesNew=_listUserAlertTypesOld.Select(x => x.Copy()).ToList();
 			//Remove AlertTypes that have been deselected through either deslecting the type or clinic.
 			_listUserAlertTypesNew.RemoveAll(x => !listUserAlertCats.Contains(x.AlertCategoryNum));
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				_listUserAlertTypesNew.RemoveAll(x => !listClinics.Contains(x.ClinicNum));
 			}
 			foreach(long alertCatNum in listUserAlertCats) {
-				if(!PrefC.HasClinicsEnabled) {
+				if(!Preferences.HasClinicsEnabled) {
 					if(!_listUserAlertTypesOld.Exists(x => x.AlertCategoryNum==alertCatNum)) {//Was not subscribed to type.
 						_listUserAlertTypesNew.Add(new AlertSub(UserCur.UserNum,0,alertCatNum));
 					}

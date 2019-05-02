@@ -150,7 +150,7 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("SSN",65,category));
 					list.Add(new DisplayField("Hm Phone",90,category));
 					list.Add(new DisplayField("Wk Phone",90,category));
-					if(PrefC.GetBool(PrefName.DistributorKey)) {//if for OD HQ
+					if(Preferences.GetBool(PrefName.DistributorKey)) {//if for OD HQ
 						//list.Add(new DisplayField("OtherPhone",90,category));
 						//list.Add(new DisplayField("Country",90,category));
 						//list.Add(new DisplayField("RegKey",150,category));
@@ -193,7 +193,7 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Address2",0,category));
 					list.Add(new DisplayField("City",0,category));
 					list.Add(new DisplayField("State",0,category));
-					if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+					if(Preferences.GetBool(PrefName.DockPhonePanelShow)) {
 						list.Add(new DisplayField("Country",0,category));
 					}
 					list.Add(new DisplayField("Zip",0,category));
@@ -219,7 +219,7 @@ namespace OpenDentBusiness {
 					//list.Add(new DisplayField("Guardians",0,category));
 					//list.Add(new DisplayField("Arrive Early",0,category));
 					//list.Add(new DisplayField("Super Head",0,category));
-					if(PrefC.GetBool(PrefName.DistributorKey)) {
+					if(Preferences.GetBool(PrefName.DistributorKey)) {
 						list.Add(new DisplayField("References",0,category));
 					}
 					list.Add(new DisplayField("Pat Restrictions",0,category));
@@ -270,7 +270,7 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Pri Ins",0,category));
 					list.Add(new DisplayField("Sec Ins",0,category));
 					list.Add(new DisplayField("Payor Types",0,category));
-					if(PrefC.GetBool(PrefName.DistributorKey)) {
+					if(Preferences.GetBool(PrefName.DistributorKey)) {
 						list.Add(new DisplayField("Registration Keys",0,category));
 						list.Add(new DisplayField("Ehr Provider Keys",0,category));
 						list.Add(new DisplayField("References",0,category));
@@ -449,7 +449,7 @@ namespace OpenDentBusiness {
 				#endregion PlannedAppointmentEdit
 				#region OutstandingInsClaimsReport
 				case DisplayFieldCategory.OutstandingInsReport:
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						list.Add(new DisplayField("Carrier",145,category));
 						list.Add(new DisplayField("Phone",95,category));
 					}
@@ -459,7 +459,7 @@ namespace OpenDentBusiness {
 					}
 					list.Add(new DisplayField("Type",55,category));
 					list.Add(new DisplayField("User",60,category));
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						list.Add(new DisplayField("PatName",115,category));
 						list.Add(new DisplayField("Clinic",65,category));
 					}
@@ -513,8 +513,8 @@ namespace OpenDentBusiness {
 				#endregion CEMTSearchPatients
 				#region A/R Manager Unsent Grid
 				case DisplayFieldCategory.ArManagerUnsentGrid:
-					list.Add(new DisplayField("Guarantor",PrefC.HasClinicsEnabled?140:240,category));
-					if(PrefC.HasClinicsEnabled) {
+					list.Add(new DisplayField("Guarantor",Preferences.HasClinicsEnabled?140:240,category));
+					if(Preferences.HasClinicsEnabled) {
 						list.Add(new DisplayField("Clinic",100,category));
 					}
 					list.Add(new DisplayField("Prov",70,category));
@@ -534,8 +534,8 @@ namespace OpenDentBusiness {
 				#endregion A/R Manager Unsent Grid
 				#region A/R Manager Sent Grid
 				case DisplayFieldCategory.ArManagerSentGrid:
-					list.Add(new DisplayField("Guarantor",PrefC.HasClinicsEnabled?150:250,category));
-					if(PrefC.HasClinicsEnabled) {
+					list.Add(new DisplayField("Guarantor",Preferences.HasClinicsEnabled?150:250,category));
+					if(Preferences.HasClinicsEnabled) {
 						list.Add(new DisplayField("Clinic",100,category));
 					}
 					list.Add(new DisplayField("Prov",75,category));
@@ -585,7 +585,7 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Abbr",50,category));
 					list.Add(new DisplayField("Locked",50,category));
 					list.Add(new DisplayField("HL7 Sent",60,category));
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						list.Add(new DisplayField("ClinicDesc",100,category));
 						list.Add(new DisplayField("Clinic",90,category));
 					}
@@ -612,7 +612,7 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("SSN",65,category));
 					list.Add(new DisplayField("Hm Phone",90,category));
 					list.Add(new DisplayField("Wk Phone",90,category));
-					if(PrefC.GetBool(PrefName.DistributorKey)) {//if for OD HQ
+					if(Preferences.GetBool(PrefName.DistributorKey)) {//if for OD HQ
 						list.Add(new DisplayField("OtherPhone",90,category));
 						list.Add(new DisplayField("Country",90,category));
 						list.Add(new DisplayField("RegKey",150,category));
@@ -655,7 +655,7 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Address2",0,category));
 					list.Add(new DisplayField("City",0,category));
 					list.Add(new DisplayField("State",0,category));
-					if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+					if(Preferences.GetBool(PrefName.DockPhonePanelShow)) {
 						list.Add(new DisplayField("Country",0,category));
 					}
 					list.Add(new DisplayField("Zip",0,category));
@@ -681,7 +681,7 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Guardians",0,category));
 					list.Add(new DisplayField("Arrive Early",0,category));
 					list.Add(new DisplayField("Super Head",0,category));
-					if(PrefC.GetBool(PrefName.DistributorKey)) {
+					if(Preferences.GetBool(PrefName.DistributorKey)) {
 						list.Add(new DisplayField("References",0,category));
 					}
 					list.Add(new DisplayField("Pat Restrictions",0,category));
@@ -702,7 +702,7 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Balance",60,category));
 					list.Add(new DisplayField("Signed",60,category));
 					list.Add(new DisplayField("Abbr",110,category));
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						list.Add(new DisplayField("Clinic",50,category));
 						list.Add(new DisplayField("ClinicDesc",110,category));
 					}
@@ -735,7 +735,7 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Pri Ins",0,category));
 					list.Add(new DisplayField("Sec Ins",0,category));
 					list.Add(new DisplayField("Payor Types",0,category));
-					if(PrefC.GetBool(PrefName.DistributorKey)) {
+					if(Preferences.GetBool(PrefName.DistributorKey)) {
 						list.Add(new DisplayField("Registration Keys",0,category));
 						list.Add(new DisplayField("Ehr Provider Keys",0,category));
 						list.Add(new DisplayField("References",0,category));
@@ -754,7 +754,7 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Super Head",0,category));
 					list.Add(new DisplayField("Patient Portal",0,category));
 					list.Add(new DisplayField("Broken Appts",0,category));
-					if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+					if(Preferences.GetBool(PrefName.ShowFeatureEhr)) {
 						list.Add(new DisplayField("Tobacco Use",0,category));
 					}
 					list.Add(new DisplayField("Pat Restrictions",0,category));
@@ -799,7 +799,7 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Prognosis",60,category));
 					list.Add(new DisplayField("Dx",28,category));
 					list.Add(new DisplayField("Abbr",110,category));
-					if(PrefC.IsODHQ) { //We should only give this option when the user is in HQ for now so as not to mislead customers
+					if(Preferences.IsODHQ) { //We should only give this option when the user is in HQ for now so as not to mislead customers
 						list.Add(new DisplayField("Tax Est",60,category));
 					}
 					break;
@@ -924,7 +924,7 @@ namespace OpenDentBusiness {
 				#endregion PlannedAppointmentEdit
 				#region OutstandingInsClaimsReport
 				case DisplayFieldCategory.OutstandingInsReport:
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						list.Add(new DisplayField("Carrier",145,category));
 						list.Add(new DisplayField("Phone",95,category));
 					}
@@ -934,7 +934,7 @@ namespace OpenDentBusiness {
 					}
 					list.Add(new DisplayField("Type",55,category));
 					list.Add(new DisplayField("User",60,category));
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						list.Add(new DisplayField("PatName",115,category));
 						list.Add(new DisplayField("Clinic",65,category));
 					}
@@ -988,8 +988,8 @@ namespace OpenDentBusiness {
 				#endregion CEMTSearchPatients
 				#region A/R Manager Unsent Grid
 				case DisplayFieldCategory.ArManagerUnsentGrid:
-					list.Add(new DisplayField("Guarantor",PrefC.HasClinicsEnabled?140:240,category));
-					if(PrefC.HasClinicsEnabled) {
+					list.Add(new DisplayField("Guarantor",Preferences.HasClinicsEnabled?140:240,category));
+					if(Preferences.HasClinicsEnabled) {
 						list.Add(new DisplayField("Clinic",100,category));
 					}
 					list.Add(new DisplayField("Prov",70,category));
@@ -1011,8 +1011,8 @@ namespace OpenDentBusiness {
 				#endregion A/R Manager Unsent Grid
 				#region A/R Manager Sent Grid
 				case DisplayFieldCategory.ArManagerSentGrid:
-					list.Add(new DisplayField("Guarantor",PrefC.HasClinicsEnabled?150:250,category));
-					if(PrefC.HasClinicsEnabled) {
+					list.Add(new DisplayField("Guarantor",Preferences.HasClinicsEnabled?150:250,category));
+					if(Preferences.HasClinicsEnabled) {
 						list.Add(new DisplayField("Clinic",100,category));
 					}
 					list.Add(new DisplayField("Prov",75,category));

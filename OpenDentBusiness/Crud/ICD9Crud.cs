@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ICD9 into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ICD9 iCD9,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				iCD9.ICD9Num=ReplicationServers.GetKey("icd9","ICD9Num");
 			}
 			string command="INSERT INTO icd9 (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ICD9Num,";
 			}
 			command+="ICD9Code,Description) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(iCD9.ICD9Num)+",";
 			}
 			command+=
 				 "'"+POut.String(iCD9.ICD9Code)+"',"
 				+"'"+POut.String(iCD9.Description)+"')";
 				//DateTStamp can only be set by MySQL
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

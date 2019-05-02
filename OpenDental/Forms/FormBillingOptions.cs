@@ -767,7 +767,7 @@ namespace OpenDental{
 		private void FormBillingOptions_Load(object sender, System.EventArgs e) {
 			textLastStatement.Text=DateTime.Today.AddMonths(-1).ToShortDateString();
 			checkUseClinicDefaults.Visible=false;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				RefreshClinicPrefs();
 				labelSaveDefaults.Text="("+Lan.g(this,"except the date at the top and clinic at the bottom")+")";
 				labelClinic.Visible=true;
@@ -806,7 +806,7 @@ namespace OpenDental{
 				labelModesToText.Visible=false;
 			}
 			SetFiltersForClinicNums(GetSelectedClinicNums());
-			if(!PrefC.GetBool(PrefName.ShowFeatureSuperfamilies)) {
+			if(!Preferences.GetBool(PrefName.ShowFeatureSuperfamilies)) {
 				checkSuperFam.Visible=false;
 			}
 			//blank is allowed
@@ -843,14 +843,14 @@ namespace OpenDental{
 				foreach(PrefName prefName in listMissingClincPrefs) {
 					switch(prefName.GetAttributeOrDefault<PrefNameAttribute>().ValueType) {
 						case PrefValueType.BOOL:
-							bool defaultBool=PrefC.GetBool(prefName);
+							bool defaultBool=Preferences.GetBool(prefName);
 							_dictClinicPrefsNew[clincNum].Add(new ClinicPref(clincNum,prefName,defaultBool));
 						break;
 						case PrefValueType.ENUM:
 							//Currently not used.
 						break;
 						case PrefValueType.STRING:
-							string defaultStr=PrefC.GetString(prefName);
+							string defaultStr=Preferences.GetString(prefName);
 							_dictClinicPrefsNew[clincNum].Add(new ClinicPref(clincNum,prefName,defaultStr));
 						break;
 					}
@@ -866,10 +866,10 @@ namespace OpenDental{
 			if(listClinicNums.Count != 1 || listClinicNums.Contains(-1) || listClinicNums.Contains(0) 
 				|| !_dictClinicPrefsNew.ContainsKey(listClinicNums[0]))//They have not saved their default filter options for the selected clinic. Use default prefs.
 			{
-				checkIncludeChanged.Checked=PrefC.GetBool(PrefName.BillingIncludeChanged);
+				checkIncludeChanged.Checked=Preferences.GetBool(PrefName.BillingIncludeChanged);
 				#region BillTypes
 				listBillType.ClearSelected();
-				string[] selectedBillTypes=PrefC.GetString(PrefName.BillingSelectBillingTypes).Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries);
+				string[] selectedBillTypes=Preferences.GetString(PrefName.BillingSelectBillingTypes).Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries);
 				foreach(string billTypeDefNum in selectedBillTypes) {
 					try{
 						int order=Defs.GetOrder(DefCat.BillingTypes,Convert.ToInt64(billTypeDefNum));
@@ -887,7 +887,7 @@ namespace OpenDental{
 				}
 				#endregion
 				#region Age
-				switch(PrefC.GetString(PrefName.BillingAgeOfAccount)){
+				switch(Preferences.GetString(PrefName.BillingAgeOfAccount)){
 					default:
 						comboAge.SelectedIndex=0;
 						break;
@@ -902,16 +902,16 @@ namespace OpenDental{
 						break;
 				}
 				#endregion
-				checkBadAddress.Checked=PrefC.GetBool(PrefName.BillingExcludeBadAddresses);
-				checkExcludeInactive.Checked=PrefC.GetBool(PrefName.BillingExcludeInactive);
-				checkShowNegative.Checked=!PrefC.GetBool(PrefName.BillingExcludeNegative);
-				checkExcludeInsPending.Checked=PrefC.GetBool(PrefName.BillingExcludeInsPending);
-				checkExcludeIfProcs.Checked=PrefC.GetBool(PrefName.BillingExcludeIfUnsentProcs);
-				textExcludeLessThan.Text=PrefC.GetString(PrefName.BillingExcludeLessThan);
-				checkIgnoreInPerson.Checked=PrefC.GetBool(PrefName.BillingIgnoreInPerson);
-				checkBoxBillShowTransSinceZero.Checked=PrefC.GetBool(PrefName.BillingShowTransSinceBalZero);
+				checkBadAddress.Checked=Preferences.GetBool(PrefName.BillingExcludeBadAddresses);
+				checkExcludeInactive.Checked=Preferences.GetBool(PrefName.BillingExcludeInactive);
+				checkShowNegative.Checked=!Preferences.GetBool(PrefName.BillingExcludeNegative);
+				checkExcludeInsPending.Checked=Preferences.GetBool(PrefName.BillingExcludeInsPending);
+				checkExcludeIfProcs.Checked=Preferences.GetBool(PrefName.BillingExcludeIfUnsentProcs);
+				textExcludeLessThan.Text=Preferences.GetString(PrefName.BillingExcludeLessThan);
+				checkIgnoreInPerson.Checked=Preferences.GetBool(PrefName.BillingIgnoreInPerson);
+				checkBoxBillShowTransSinceZero.Checked=Preferences.GetBool(PrefName.BillingShowTransSinceBalZero);
 				if(!isTextNoteExcluded) {
-					textNote.Text=PrefC.GetString(PrefName.BillingDefaultsNote);
+					textNote.Text=Preferences.GetString(PrefName.BillingDefaultsNote);
 				}
 				return;
 			}
@@ -972,7 +972,7 @@ namespace OpenDental{
 		///If All is selected, returns -1.
 		///If Unassigned is selected, returns 0.</summary>
 		private List<long> GetSelectedClinicNums() {
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				return new List<long>();
 			}
 			return comboClinic.SelectedTags<Clinic>().Select(x => x.ClinicNum).ToList();
@@ -1197,12 +1197,12 @@ namespace OpenDental{
 		}
 
 		private void SetDefaults(){
-			textDateStart.Text=DateTime.Today.AddDays(-PrefC.GetLong(PrefName.BillingDefaultsLastDays)).ToShortDateString();
+			textDateStart.Text=DateTime.Today.AddDays(-Preferences.GetLong(PrefName.BillingDefaultsLastDays)).ToShortDateString();
 			textDateEnd.Text=DateTime.Today.ToShortDateString();
-			checkIntermingled.Checked=PrefC.GetBool(PrefName.BillingDefaultsIntermingle);
-			checkSinglePatient.Checked=PrefC.GetBool(PrefName.BillingDefaultsSinglePatient);
+			checkIntermingled.Checked=Preferences.GetBool(PrefName.BillingDefaultsIntermingle);
+			checkSinglePatient.Checked=Preferences.GetBool(PrefName.BillingDefaultsSinglePatient);
 			if(SmsPhones.IsIntegratedTextingEnabled()) {
-				foreach(string modeIdx in PrefC.GetString(PrefName.BillingDefaultsModesToText)
+				foreach(string modeIdx in Preferences.GetString(PrefName.BillingDefaultsModesToText)
 					.Split(new string[] { "," },StringSplitOptions.RemoveEmptyEntries)) {
 					listModeToText.SetSelected(PIn.Int(modeIdx),true);
 				}
@@ -1269,12 +1269,12 @@ namespace OpenDental{
 		private bool RunAgingEnterprise() {
 			DateTime dtNow=MiscData.GetNowDateTime();
 			DateTime dtToday=dtNow.Date;
-			DateTime dateLastAging=PrefC.GetDate(PrefName.DateLastAging);
+			DateTime dateLastAging=Preferences.GetDate(PrefName.DateLastAging);
 			if(dateLastAging.Date==dtToday) {
 				return true;//already ran aging for this date, just move on
 			}
 			Prefs.RefreshCache();
-			DateTime dateTAgingBeganPref=PrefC.GetDateT(PrefName.AgingBeginDateTime);
+			DateTime dateTAgingBeganPref=Preferences.GetDateTime(PrefName.AgingBeginDateTime);
 			if(dateTAgingBeganPref>DateTime.MinValue) {
 				MessageBox.Show(this,Lan.g(this,"In order to create statments, aging must be calculated, but you cannot run aging until it has finished the "
 					+"current calculations which began on")+" "+dateTAgingBeganPref.ToString()+".\r\n"+Lans.g(this,"If you believe the current aging process "
@@ -1307,7 +1307,7 @@ namespace OpenDental{
 		///<summary>Returns the mode for the statement.</summary>
 		private StatementMode GetStatementMode(PatAging patAge) {
 			StatementMode mode;
-			if(PrefC.GetInt(PrefName.BillingUseElectronic).In(1,2,3,4)) {
+			if(Preferences.GetInt(PrefName.BillingUseElectronic).In(1,2,3,4)) {
 				mode=StatementMode.Electronic;
 			}
 			else {
@@ -1343,14 +1343,14 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			if(PrefC.GetBool(PrefName.AgingIsEnterprise)) {
+			if(Preferences.GetBool(PrefName.AgingIsEnterprise)) {
 				if(!RunAgingEnterprise()) {
 					return;
 				}
 			}
-			else if(!PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {
+			else if(!Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {
 				SecurityLogs.MakeLogEntry(Permissions.AgingRan,0,"Aging Ran Automatically - Billing Options Form, Create List");
-				DateTime asOfDate=(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)?PrefC.GetDate(PrefName.DateLastAging):DateTime.Today);
+				DateTime asOfDate=(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)?Preferences.GetDate(PrefName.DateLastAging):DateTime.Today);
 				ODProgress.ShowAction(() => Ledgers.RunAging(),
 					startingMessage:Lan.g(this,"Calculating aging for all patients as of")+" "+asOfDate.ToShortDateString()+"...",
 					actionException:ex => {
@@ -1359,9 +1359,9 @@ namespace OpenDental{
 			}
 			Cursor=Cursors.WaitCursor;
 			//All places in the program that have the ability to run aging against the entire database require the Setup permission because it can take a long time.
-			if(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily) 
+			if(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily) 
 				&& Security.IsAuthorized(Permissions.Setup,true)
-				&& PrefC.GetDate(PrefName.DateLastAging) < DateTime.Today.AddDays(-15)) 
+				&& Preferences.GetDate(PrefName.DateLastAging) < DateTime.Today.AddDays(-15)) 
 			{
 				MsgBox.Show(this,"Last aging date seems old, so you will now be given a chance to update it.  The billing process will continue whether or not aging gets updated.");
 				FormAging FormA=new FormAging();
@@ -1432,7 +1432,7 @@ namespace OpenDental{
 			}
 			//If clinics are not enabled, the following list will be empty. Otherwise, it will be filled with the passed in clinicNum.
 			List<long> listClinicNums=new List<long>();
-			if(PrefC.HasClinicsEnabled && clinicNum >= 0) {
+			if(Preferences.HasClinicsEnabled && clinicNum >= 0) {
 				listClinicNums.Add(clinicNum);
 			}
 			DateTime lastStatement=PIn.Date(textLastStatement.Text);
@@ -1465,7 +1465,7 @@ namespace OpenDental{
                 Dictionary<long,DateTime> dictPatNumMaxDate=new Dictionary<long,DateTime>();
 				if(checkExcludeInsPending.Checked || checkExcludeIfProcs.Checked || checkIncludeChanged.Checked) {
 					foreach(KeyValuePair<long,PatAgingData> kvp in dictPatAgingData) {
-						if(PrefC.HasClinicsEnabled && !listClinicNums.IsNullOrEmpty() && !listClinicNums.Contains(kvp.Value.ClinicNum)) {
+						if(Preferences.HasClinicsEnabled && !listClinicNums.IsNullOrEmpty() && !listClinicNums.Contains(kvp.Value.ClinicNum)) {
 							continue;
 						}
 						if(checkExcludeInsPending.Checked && kvp.Value.HasPendingIns) {//don't fill list if not excluding if pending ins
@@ -1550,7 +1550,7 @@ namespace OpenDental{
 				listPatAging.AddRange(listSuperAgings);
 			}
 			#region Message Construction
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				string clinicAbbr;
 				switch(clinicNum) {
 					case -1://All
@@ -1586,16 +1586,16 @@ namespace OpenDental{
 			}
 			Statement stmt;
 			DateTime dateAsOf=DateTime.Today;//used to determine when the balance on this date began
-			if(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {//if aging calculated monthly, use the last aging date instead of today
-				dateAsOf=PrefC.GetDate(PrefName.DateLastAging);
+			if(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {//if aging calculated monthly, use the last aging date instead of today
+				dateAsOf=Preferences.GetDate(PrefName.DateLastAging);
 			}
 			List<WebServiceMainHQProxy.ShortGuidResult> listShortGuidUrls=new List<WebServiceMainHQProxy.ShortGuidResult>();
 			SheetDef stmtSheet=SheetUtil.GetStatementSheetDef();
 			if(//They are going to send texts
 				listModeToText.SelectedIndices.Count > 0 
 				//Or the email body has a statement URL
-				|| PrefC.GetString(PrefName.BillingEmailBodyText).ToLower().Contains("[statementurl]")
-				|| PrefC.GetString(PrefName.BillingEmailBodyText).ToLower().Contains("[statementshorturl]")
+				|| Preferences.GetString(PrefName.BillingEmailBodyText).ToLower().Contains("[statementurl]")
+				|| Preferences.GetString(PrefName.BillingEmailBodyText).ToLower().Contains("[statementshorturl]")
 				//Or the statement sheet has a URL field
 				|| (stmtSheet!=null && stmtSheet.SheetFieldDefs.Any(x => x.FieldType==SheetFieldType.OutputText 
 							&& (x.FieldValue.ToLower().Contains("[statementurl]") || x.FieldValue.ToLower().Contains("[statementshorturl]"))))) 
@@ -1608,8 +1608,8 @@ namespace OpenDental{
 				catch(Exception ex) {
                     FormFriendlyException.Show(Lans.g(this,"Unable to create a unique URL for each statement. The Patient Portal URL will be used instead."),ex);
 					listShortGuidUrls=listPatAging.Select(x => new WebServiceMainHQProxy.ShortGuidResult {
-						MediumURL=PrefC.GetString(PrefName.PatientPortalURL),
-						ShortURL=PrefC.GetString(PrefName.PatientPortalURL),
+						MediumURL=Preferences.GetString(PrefName.PatientPortalURL),
+						ShortURL=Preferences.GetString(PrefName.PatientPortalURL),
 						ShortGuid=""
 					}).ToList();
 				}
@@ -1627,7 +1627,7 @@ namespace OpenDental{
 				stmt.Intermingled=checkIntermingled.Checked;
 				stmt.IsSent=false;
 				stmt.Mode_=GetStatementMode(patAgeCur);
-				if(PrefC.GetInt(PrefName.BillingUseElectronic).In(1,2,3,4)) {
+				if(Preferences.GetInt(PrefName.BillingUseElectronic).In(1,2,3,4)) {
 					stmt.Intermingled=true;
 				}
 				bool doSendSms=DoSendSms(patAgeCur,dictPatAgingData);

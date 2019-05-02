@@ -31,24 +31,24 @@ namespace OpenDental {
 		}
 
 		private void FormReportSetup_Load(object sender,EventArgs e) {
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				checkReportPIClinic.Visible=false;
 				checkReportPIClinicInfo.Visible=false;
 			}
 			FillComboReportWriteoff();
-			comboReportWriteoff.SelectedIndex=PrefC.GetInt(PrefName.ReportsPPOwriteoffDefaultToProcDate);
-			checkProviderPayrollAllowToday.Checked=PrefC.GetBool(PrefName.ProviderPayrollAllowToday);
-			checkNetProdDetailUseSnapshotToday.Checked=PrefC.GetBool(PrefName.NetProdDetailUseSnapshotToday);
-			checkReportsShowPatNum.Checked=PrefC.GetBool(PrefName.ReportsShowPatNum);
-			checkReportProdWO.Checked=PrefC.GetBool(PrefName.ReportPandIschedProdSubtractsWO);
-			checkReportPIClinicInfo.Checked=PrefC.GetBool(PrefName.ReportPandIhasClinicInfo);
-			checkReportPIClinic.Checked=PrefC.GetBool(PrefName.ReportPandIhasClinicBreakdown);
-			checkReportPrintWrapColumns.Checked=PrefC.GetBool(PrefName.ReportsWrapColumns);
-			checkReportsShowHistory.Checked=PrefC.GetBool(PrefName.ReportsShowHistory);
-			checkReportsIncompleteProcsNoNotes.Checked=PrefC.GetBool(PrefName.ReportsIncompleteProcsNoNotes);
-			checkReportsIncompleteProcsUnsigned.Checked=PrefC.GetBool(PrefName.ReportsIncompleteProcsUnsigned);
-			checkBenefitAssumeGeneral.Checked=PrefC.GetBool(PrefName.TreatFinderProcsAllGeneral);
-			checkOutstandingRpDateTab.Checked=PrefC.GetBool(PrefName.OutstandingInsReportDateFilterTab);
+			comboReportWriteoff.SelectedIndex=Preferences.GetInt(PrefName.ReportsPPOwriteoffDefaultToProcDate);
+			checkProviderPayrollAllowToday.Checked=Preferences.GetBool(PrefName.ProviderPayrollAllowToday);
+			checkNetProdDetailUseSnapshotToday.Checked=Preferences.GetBool(PrefName.NetProdDetailUseSnapshotToday);
+			checkReportsShowPatNum.Checked=Preferences.GetBool(PrefName.ReportsShowPatNum);
+			checkReportProdWO.Checked=Preferences.GetBool(PrefName.ReportPandIschedProdSubtractsWO);
+			checkReportPIClinicInfo.Checked=Preferences.GetBool(PrefName.ReportPandIhasClinicInfo);
+			checkReportPIClinic.Checked=Preferences.GetBool(PrefName.ReportPandIhasClinicBreakdown);
+			checkReportPrintWrapColumns.Checked=Preferences.GetBool(PrefName.ReportsWrapColumns);
+			checkReportsShowHistory.Checked=Preferences.GetBool(PrefName.ReportsShowHistory);
+			checkReportsIncompleteProcsNoNotes.Checked=Preferences.GetBool(PrefName.ReportsIncompleteProcsNoNotes);
+			checkReportsIncompleteProcsUnsigned.Checked=Preferences.GetBool(PrefName.ReportsIncompleteProcsUnsigned);
+			checkBenefitAssumeGeneral.Checked=Preferences.GetBool(PrefName.TreatFinderProcsAllGeneral);
+			checkOutstandingRpDateTab.Checked=Preferences.GetBool(PrefName.OutstandingInsReportDateFilterTab);
       FillReportServer();
 			userControlReportSetup.InitializeOnStartup(true,_userGroupNum,_isPermissionMode);
 			if(_isPermissionMode) {
@@ -57,17 +57,17 @@ namespace OpenDental {
 		}
 
 		private void FillReportServer() {
-			checkUseReportServer.Checked=PrefC.GetString(PrefName.ReportingServerCompName)!="" || PrefC.GetString(PrefName.ReportingServerURI)!="";
-			radioReportServerDirect.Checked=PrefC.GetString(PrefName.ReportingServerURI)=="";
-			radioReportServerMiddleTier.Checked=PrefC.GetString(PrefName.ReportingServerURI)!="";
-			comboServerName.Text=PrefC.GetString(PrefName.ReportingServerCompName);
-			comboDatabase.Text=PrefC.GetString(PrefName.ReportingServerDbName);
-			textMysqlUser.Text=PrefC.GetString(PrefName.ReportingServerMySqlUser);
+			checkUseReportServer.Checked=Preferences.GetString(PrefName.ReportingServerCompName)!="" || Preferences.GetString(PrefName.ReportingServerURI)!="";
+			radioReportServerDirect.Checked=Preferences.GetString(PrefName.ReportingServerURI)=="";
+			radioReportServerMiddleTier.Checked=Preferences.GetString(PrefName.ReportingServerURI)!="";
+			comboServerName.Text=Preferences.GetString(PrefName.ReportingServerCompName);
+			comboDatabase.Text=Preferences.GetString(PrefName.ReportingServerDbName);
+			textMysqlUser.Text=Preferences.GetString(PrefName.ReportingServerMySqlUser);
 			string decryptedPass;
-            Encryption.TryDecrypt(PrefC.GetString(PrefName.ReportingServerMySqlPassHash),out decryptedPass);
+            Encryption.TryDecrypt(Preferences.GetString(PrefName.ReportingServerMySqlPassHash),out decryptedPass);
 			textMysqlPass.Text=decryptedPass;
 			textMysqlPass.PasswordChar='*';
-			textMiddleTierURI.Text=PrefC.GetString(PrefName.ReportingServerURI);
+			textMiddleTierURI.Text=Preferences.GetString(PrefName.ReportingServerURI);
 			FillComboComputers();
 			FillComboDatabases();
 			SetReportServerUIEnabled();

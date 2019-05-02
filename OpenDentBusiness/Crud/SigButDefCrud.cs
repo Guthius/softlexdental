@@ -91,15 +91,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SigButDef into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(SigButDef sigButDef,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				sigButDef.SigButDefNum=ReplicationServers.GetKey("sigbutdef","SigButDefNum");
 			}
 			string command="INSERT INTO sigbutdef (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="SigButDefNum,";
 			}
 			command+="ButtonText,ButtonIndex,SynchIcon,ComputerName,SigElementDefNumUser,SigElementDefNumExtra,SigElementDefNumMsg) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(sigButDef.SigButDefNum)+",";
 			}
 			command+=
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (sigButDef.SigElementDefNumUser)+","
 				+    POut.Long  (sigButDef.SigElementDefNumExtra)+","
 				+    POut.Long  (sigButDef.SigElementDefNumMsg)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

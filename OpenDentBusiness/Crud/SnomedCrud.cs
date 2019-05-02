@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Snomed into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Snomed snomed,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				snomed.SnomedNum=ReplicationServers.GetKey("snomed","SnomedNum");
 			}
 			string command="INSERT INTO snomed (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="SnomedNum,";
 			}
 			command+="SnomedCode,Description) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(snomed.SnomedNum)+",";
 			}
 			command+=
 				 "'"+POut.String(snomed.SnomedCode)+"',"
 				+"'"+POut.String(snomed.Description)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

@@ -11,11 +11,11 @@ namespace OpenDentBusiness {
 
 		public static string NewCropPartnerName {
 			get {
-				string newCropName=PrefC.GetString(PrefName.NewCropName);
+				string newCropName=Preferences.GetString(PrefName.NewCropName);
 				if(newCropName!="") { //Distributors use this field to send different credentials. Thus, if blank, then send OD credentials.
-					return PrefC.GetString(PrefName.NewCropPartnerName);//Distributor
+					return Preferences.GetString(PrefName.NewCropPartnerName);//Distributor
 				}
-				if(PrefC.GetBool(PrefName.NewCropIsLexiData)) {
+				if(Preferences.GetBool(PrefName.NewCropIsLexiData)) {
 					return "OpenDentalLexi";
 				}
 				else {//First Data Bank (FDB) customers.
@@ -26,7 +26,7 @@ namespace OpenDentBusiness {
 
 		public static string NewCropAccountName {
 			get {
-				string newCropName=PrefC.GetString(PrefName.NewCropName);
+				string newCropName=Preferences.GetString(PrefName.NewCropName);
 				if(newCropName!="") { //Distributors use this field to send different credentials. Thus, if blank, then send OD credentials.
 					return newCropName;//Distributor
 				}
@@ -46,9 +46,9 @@ namespace OpenDentBusiness {
 
 		public static string NewCropAccountPasssword {
 			get {
-				string newCropName=PrefC.GetString(PrefName.NewCropName);
+				string newCropName=Preferences.GetString(PrefName.NewCropName);
 				if(newCropName!="") { //Distributors use this field to send different credentials. Thus, if blank, then send OD credentials.
-					return PrefC.GetString(PrefName.NewCropPassword);//Distributor
+					return Preferences.GetString(PrefName.NewCropPassword);//Distributor
 				}
 #if DEBUG
 				return CodeBase.MiscUtils.Decrypt("Xv40GArhEXYjEZxAE3Fw9g==");//Assigned by NewCrop. Used globally for all customers.

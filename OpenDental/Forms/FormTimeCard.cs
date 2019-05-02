@@ -77,8 +77,8 @@ namespace OpenDental{
 			get {
 				return Security.CurUser!=null &&
 					Security.CurUser.EmployeeNum==EmployeeCur.EmployeeNum &&
-					PrefC.GetBool(PrefName.TimecardSecurityEnabled) &&
-					PrefC.GetBool(PrefName.TimecardUsersDontEditOwnCard);
+					Preferences.GetBool(PrefName.TimecardSecurityEnabled) &&
+					Preferences.GetBool(PrefName.TimecardUsersDontEditOwnCard);
 			}
 		}
 
@@ -605,7 +605,7 @@ namespace OpenDental{
 			if(SelectedPayPeriod==0) {
 				SelectedPayPeriod=PayPeriods.GetForDate(dateInitial);
 			}
-			if(!PrefC.GetBool(PrefName.ClockEventAllowBreak)) {//Breaks turned off, Lunch is now "Break", but maintains Lunch functionality.
+			if(!Preferences.GetBool(PrefName.ClockEventAllowBreak)) {//Breaks turned off, Lunch is now "Break", but maintains Lunch functionality.
 				IsBreaks=false;
 				groupBox2.Visible=false;
 			}
@@ -767,7 +767,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Weekly"),50,HorizontalAlignment.Right);
 			gridMain.Columns.Add(col);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn(Lan.g(this,"Clinic"),100);
 				gridMain.Columns.Add(col);
 			}
@@ -843,7 +843,7 @@ namespace OpenDental{
 					//status--------------------------------------
 					//row.Cells.Add(clock.ClockStatus.ToString());
 					//in------------------------------------------
-					if(PrefC.GetBool(PrefName.TimeCardShowSeconds)) {
+					if(Preferences.GetBool(PrefName.TimeCardShowSeconds)) {
 						row.Cells.Add(clock.TimeDisplayed1.ToLongTimeString());
 					}
 					else {
@@ -857,7 +857,7 @@ namespace OpenDental{
 						row.Cells.Add("");//not clocked out yet
 					}
 					else{
-						if(PrefC.GetBool(PrefName.TimeCardShowSeconds)) {
+						if(Preferences.GetBool(PrefName.TimeCardShowSeconds)) {
 							row.Cells.Add(clock.TimeDisplayed2.ToLongTimeString());
 						}
 						else {
@@ -963,8 +963,8 @@ namespace OpenDental{
 					}
 					//if this is the last entry for a given week
 					else if(i==mergedAL.Count-1//if this is the last row 
-						|| cal.GetWeekOfYear(GetDateForRow(i+1),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
-						!= cal.GetWeekOfYear(clock.TimeDisplayed1.Date,rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
+						|| cal.GetWeekOfYear(GetDateForRow(i+1),rule,(DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
+						!= cal.GetWeekOfYear(clock.TimeDisplayed1.Date,rule,(DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
 					{
 						row.Cells.Add(ClockEvents.Format(weekSpan));
 						weekSpan=new TimeSpan(0);
@@ -974,7 +974,7 @@ namespace OpenDental{
 						row.Cells.Add("");
 					}
 					//Clinic-----------------------------------------
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						row.Cells.Add(Clinics.GetAbbr(clock.ClinicNum));
 					}
 					//Note-----------------------------------------
@@ -1032,8 +1032,8 @@ namespace OpenDental{
 					}
 					//if this is the last entry for a given week
 					else if(i==mergedAL.Count-1//if this is the last row 
-						|| cal.GetWeekOfYear(GetDateForRow(i+1),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
-						!= cal.GetWeekOfYear(adjust.TimeEntry.Date,rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
+						|| cal.GetWeekOfYear(GetDateForRow(i+1),rule,(DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
+						!= cal.GetWeekOfYear(adjust.TimeEntry.Date,rule,(DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
 					{
 						ODGridCell cell=new ODGridCell(ClockEvents.Format(weekSpan));
 						cell.ColorText=Color.Black;
@@ -1044,7 +1044,7 @@ namespace OpenDental{
 						row.Cells.Add("");
 					}
 					//Clinic-----------------------------------------
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						row.Cells.Add(Clinics.GetAbbr(adjust.ClinicNum));
 					}
 					//Note-----------------------------------------
@@ -1112,7 +1112,7 @@ namespace OpenDental{
 			}
 			TimeAdjust adjust=new TimeAdjust();
 			adjust.EmployeeNum=EmployeeCur.EmployeeNum;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				adjust.ClinicNum=Clinics.ClinicNum;
 			}
 			DateTime dateStop=PIn.Date(textDateStop.Text);
@@ -1202,7 +1202,7 @@ namespace OpenDental{
 			yPos+=42;
 			//define columns
 			int[] colW=new int[11];
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				colW=new int[12];
 			}
 			colW[0]=70;//date
@@ -1217,7 +1217,7 @@ namespace OpenDental{
 			colW[8]=50;//daily
 			colW[9]=50;//weekly
 			colW[10]=160;//note
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				colW[10]=50;//clinic
 				colW[11]=160;//note
 			}
@@ -1227,7 +1227,7 @@ namespace OpenDental{
 				colPos[i]=colPos[i-1]+colW[i-1];
 			}
 			string[] ColCaption=new string[11];
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				ColCaption=new string[12];
 			}
 			ColCaption[0]=Lan.g(this,"Date");
@@ -1248,7 +1248,7 @@ namespace OpenDental{
 			ColCaption[8]=Lan.g(this,"Daily");
 			ColCaption[9]=Lan.g(this,"Weekly");
 			ColCaption[10]=Lan.g(this,"Note");
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				ColCaption[10]=Lan.g(this,"Clinic");
 				ColCaption[11]=Lan.g(this,"Note");
 			}

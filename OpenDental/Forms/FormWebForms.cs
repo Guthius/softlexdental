@@ -37,7 +37,7 @@ namespace OpenDental {
 		private void FormWebForms_Load(object sender,EventArgs e) {
 			textDateStart.Text=DateTime.Today.ToShortDateString();
 			textDateEnd.Text=DateTime.Today.ToShortDateString();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				labelClinic.Visible=true;
 				comboClinic.Visible=true;
 				butPickClinic.Visible=true;

@@ -85,15 +85,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ProgramProperty into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ProgramProperty programProperty,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				programProperty.ProgramPropertyNum=ReplicationServers.GetKey("programproperty","ProgramPropertyNum");
 			}
 			string command="INSERT INTO programproperty (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ProgramPropertyNum,";
 			}
 			command+="ProgramNum,PropertyDesc,PropertyValue,ComputerName,ClinicNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(programProperty.ProgramPropertyNum)+",";
 			}
 			command+=
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(programProperty.PropertyValue)+"',"
 				+"'"+POut.String(programProperty.ComputerName)+"',"
 				+    POut.Long  (programProperty.ClinicNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

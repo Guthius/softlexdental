@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one FieldDefLink into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(FieldDefLink fieldDefLink,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				fieldDefLink.FieldDefLinkNum=ReplicationServers.GetKey("fielddeflink","FieldDefLinkNum");
 			}
 			string command="INSERT INTO fielddeflink (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="FieldDefLinkNum,";
 			}
 			command+="FieldDefNum,FieldDefType,FieldLocation) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(fieldDefLink.FieldDefLinkNum)+",";
 			}
 			command+=
 				     POut.Long  (fieldDefLink.FieldDefNum)+","
 				+    POut.Int   ((int)fieldDefLink.FieldDefType)+","
 				+    POut.Int   ((int)fieldDefLink.FieldLocation)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

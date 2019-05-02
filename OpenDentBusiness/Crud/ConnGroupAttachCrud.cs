@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ConnGroupAttach into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ConnGroupAttach connGroupAttach,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				connGroupAttach.ConnGroupAttachNum=ReplicationServers.GetKey("conngroupattach","ConnGroupAttachNum");
 			}
 			string command="INSERT INTO conngroupattach (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ConnGroupAttachNum,";
 			}
 			command+="ConnectionGroupNum,CentralConnectionNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(connGroupAttach.ConnGroupAttachNum)+",";
 			}
 			command+=
 				     POut.Long  (connGroupAttach.ConnectionGroupNum)+","
 				+    POut.Long  (connGroupAttach.CentralConnectionNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

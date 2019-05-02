@@ -276,7 +276,7 @@ namespace OpenDental {
 		}
 
 		private void butClearDay_Click(object sender,EventArgs e) {
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				string clincAbbr=(Clinics.ClinicNum==0?Lan.g(this,"Headquarters"):Clinics.GetAbbr(Clinics.ClinicNum));
 				if(MessageBox.Show(Lan.g(this,"Clear all blockouts for day for clinic: ")+clincAbbr+Lan.g(this,"?")+"\r\n"
 					+Lan.g(this,"(This may include blockouts not shown in the current appointment view)")

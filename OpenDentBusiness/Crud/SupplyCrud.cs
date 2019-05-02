@@ -109,15 +109,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Supply into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Supply supply,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				supply.SupplyNum=ReplicationServers.GetKey("supply","SupplyNum");
 			}
 			string command="INSERT INTO supply (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="SupplyNum,";
 			}
 			command+="SupplierNum,CatalogNumber,Descript,Category,ItemOrder,LevelDesired,IsHidden,Price,BarCodeOrID,DispDefaultQuant,DispUnitsCount,DispUnitDesc,LevelOnHand) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(supply.SupplyNum)+",";
 			}
 			command+=
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (supply.DispUnitsCount)+","
 				+"'"+POut.String(supply.DispUnitDesc)+"',"
 				+    POut.Float (supply.LevelOnHand)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

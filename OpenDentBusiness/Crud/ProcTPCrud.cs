@@ -136,15 +136,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ProcTP into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ProcTP procTP,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				procTP.ProcTPNum=ReplicationServers.GetKey("proctp","ProcTPNum");
 			}
 			string command="INSERT INTO proctp (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ProcTPNum,";
 			}
 			command+="TreatPlanNum,PatNum,ProcNumOrig,ItemOrder,Priority,ToothNumTP,Surf,ProcCode,Descript,FeeAmt,PriInsAmt,SecInsAmt,PatAmt,Discount,Prognosis,Dx,ProcAbbr,SecUserNumEntry,SecDateEntry,FeeAllowed,TaxAmt) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(procTP.ProcTPNum)+",";
 			}
 			command+=
@@ -170,7 +170,7 @@ namespace OpenDentBusiness.Crud{
 				//SecDateTEdit can only be set by MySQL
 				+"'"+POut.Double(procTP.FeeAllowed)+"',"
 				+"'"+POut.Double(procTP.TaxAmt)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

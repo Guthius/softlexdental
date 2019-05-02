@@ -131,7 +131,7 @@ namespace OpenDental {
 			}
 			tabUser.Text=Lan.g(this,"for ")+Security.CurUser.UserName;
 			tabNew.Text=Lan.g(this,"New for ")+Security.CurUser.UserName;
-			if(PrefC.GetBool(PrefName.TasksShowOpenTickets)) {
+			if(Preferences.GetBool(PrefName.TasksShowOpenTickets)) {
 				if(!tabContr.TabPages.Contains(tabOpenTickets)) {
 					tabContr.TabPages.Insert(2,tabOpenTickets);
 				}
@@ -142,7 +142,7 @@ namespace OpenDental {
 				}
 			}
 			LayoutToolBar();
-			if(PrefC.GetBool(PrefName.TasksUseRepeating)) {
+			if(Preferences.GetBool(PrefName.TasksUseRepeating)) {
 				if(!tabContr.TabPages.Contains(tabRepeating)) {
 					tabContr.TabPages.Add(tabRepeating);
 					tabContr.TabPages.Add(tabDate);
@@ -174,14 +174,14 @@ namespace OpenDental {
 				//}
 				cal.SelectionStart=Tasks.LastOpenDate;
 			}
-			if(PrefC.IsODHQ) {
+			if(Preferences.IsODHQ) {
 				menuNavJob.Visible=true;
 				menuNavJob.Enabled=false;
 				if(Security.IsAuthorized(Permissions.TaskEdit,true)) {
 					menuDeleteTaken.Visible=true;
 				}
 			}
-			_isTaskSortApptDateTime=PrefC.GetBool(PrefName.TaskSortApptDateTime);//This sets it for use and also for the task options default value.
+			_isTaskSortApptDateTime=Preferences.GetBool(PrefName.TaskSortApptDateTime);//This sets it for use and also for the task options default value.
 			List<UserOdPref> listPrefsForCollapsing=UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum,UserOdFkeyType.TaskCollapse);
 			_isCollapsedByDefault=listPrefsForCollapsing.Count==0 ? false : PIn.Bool(listPrefsForCollapsing[0].ValueString);
 			_hasListSwitched=true;
@@ -236,7 +236,7 @@ namespace OpenDental {
 				else if(value==UserControlTasksTab.UserNew) {
 					tabContr.SelectedTab=tabNew;
 				}
-				else if(value==UserControlTasksTab.OpenTickets && PrefC.GetBool(PrefName.TasksShowOpenTickets)) {
+				else if(value==UserControlTasksTab.OpenTickets && Preferences.GetBool(PrefName.TasksShowOpenTickets)) {
 					tabContr.SelectedTab=tabOpenTickets;
 				}
 				else if(value==UserControlTasksTab.Main) {
@@ -245,16 +245,16 @@ namespace OpenDental {
 				else if(value==UserControlTasksTab.Reminders) {
 					tabContr.SelectedTab=tabReminders;
 				}
-				else if(value==UserControlTasksTab.RepeatingSetup && PrefC.GetBool(PrefName.TasksUseRepeating)) {
+				else if(value==UserControlTasksTab.RepeatingSetup && Preferences.GetBool(PrefName.TasksUseRepeating)) {
 					tabContr.SelectedTab=tabRepeating;
 				}
-				else if(value==UserControlTasksTab.RepeatingByDate && PrefC.GetBool(PrefName.TasksUseRepeating)) {
+				else if(value==UserControlTasksTab.RepeatingByDate && Preferences.GetBool(PrefName.TasksUseRepeating)) {
 					tabContr.SelectedTab=tabDate;
 				}
-				else if(value==UserControlTasksTab.RepeatingByWeek && PrefC.GetBool(PrefName.TasksUseRepeating)) {
+				else if(value==UserControlTasksTab.RepeatingByWeek && Preferences.GetBool(PrefName.TasksUseRepeating)) {
 					tabContr.SelectedTab=tabWeek;
 				}
-				else if(value==UserControlTasksTab.RepeatingByMonth && PrefC.GetBool(PrefName.TasksUseRepeating)) {
+				else if(value==UserControlTasksTab.RepeatingByMonth && Preferences.GetBool(PrefName.TasksUseRepeating)) {
 					tabContr.SelectedTab=tabMonth;
 				}
 				else if(value==UserControlTasksTab.PatientTickets) {
@@ -330,7 +330,7 @@ namespace OpenDental {
 			if(this.DesignMode){
 				return;
 			}
-			if(!PrefC.GetBool(PrefName.TaskAncestorsAllSetInVersion55)) {
+			if(!Preferences.GetBool(PrefName.TaskAncestorsAllSetInVersion55)) {
 				if(!MsgBox.Show(this,true,"A one-time routine needs to be run.  It will take a few minutes.  Do you have time right now?")){
 					return;
 				}
@@ -363,7 +363,7 @@ namespace OpenDental {
 			button.Pushed=Security.CurUser.DefaultHidePopups;
 			ToolBarMain.Buttons.Add(button);
 			//Filtering only works if Clinics are enabled and preference turned on.
-			if(PrefC.HasClinicsEnabled && (GlobalTaskFilterType)PrefC.GetInt(PrefName.TasksGlobalFilterType)!=GlobalTaskFilterType.Disabled) {
+			if(Preferences.HasClinicsEnabled && (GlobalTaskFilterType)Preferences.GetInt(PrefName.TasksGlobalFilterType)!=GlobalTaskFilterType.Disabled) {
 				string textBut=string.Empty;
 				if(_globalFilterType==GlobalTaskFilterType.None) {
 					textBut="Unfiltered";
@@ -453,7 +453,7 @@ namespace OpenDental {
 				globalFilterType=GlobalTaskFilterType.None;
 			}
 			if(globalFilterType==GlobalTaskFilterType.Default) {//Get the default filter setting.
-				globalFilterType=(GlobalTaskFilterType)PrefC.GetInt(PrefName.TasksGlobalFilterType);
+				globalFilterType=(GlobalTaskFilterType)Preferences.GetInt(PrefName.TasksGlobalFilterType);
 			}
 			//At this point, we have the GlobalFilterType to use.  Make sure it's a valid choice.
 			globalFilterType=DowngradeFilterTypeIfNeeded(globalFilterType);
@@ -477,7 +477,7 @@ namespace OpenDental {
 
 		///<summary>Determines if globalFilterType should be downgraded based on Clinics being enabled/disabled and Region definitions.</summary>
 		private GlobalTaskFilterType DowngradeFilterTypeIfNeeded(GlobalTaskFilterType globalFilterType) {
-			if(!PrefC.HasClinicsEnabled) {//Downgrade to None if Clinics are disabled.
+			if(!Preferences.HasClinicsEnabled) {//Downgrade to None if Clinics are disabled.
 				globalFilterType=GlobalTaskFilterType.None;
 			}
 			else if(globalFilterType==GlobalTaskFilterType.Region && Defs.GetDefsForCategory(DefCat.Regions).Count==0) {
@@ -703,13 +703,13 @@ namespace OpenDental {
 		///<summary>Determines if Task should display in the 'New for' tab.  If using TasksNewTrackedByUser preference, Task.IsUnread must be correctly 
 		///set prior to calling this method.</summary>
 		private bool IsInNewTab(Task task) {
-			if(PrefC.GetBool(PrefName.TasksNewTrackedByUser) && task.IsUnread) {//The new way
+			if(Preferences.GetBool(PrefName.TasksNewTrackedByUser) && task.IsUnread) {//The new way
 				if(!ListSubscribedTaskListNums.Contains(task.TaskListNum)) {
 					return false;
 				}
 				return true;
 			}
-			else if(!PrefC.GetBool(PrefName.TasksNewTrackedByUser) && task.TaskStatus==TaskStatusEnum.New) {//Tasks are shared by everyone.
+			else if(!Preferences.GetBool(PrefName.TasksNewTrackedByUser) && task.TaskStatus==TaskStatusEnum.New) {//Tasks are shared by everyone.
 				return true;
 			}
 			return false;
@@ -881,7 +881,7 @@ namespace OpenDental {
 			ODGridColumn col=new ODGridColumn("",17);
 			col.ImageList=imageListTree;
 			gridMain.Columns.Add(col);//Checkbox column
-			if(tabContr.SelectedTab==tabNew && !PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {//The old way
+			if(tabContr.SelectedTab==tabNew && !Preferences.GetBool(PrefName.TasksNewTrackedByUser)) {//The old way
 				col=new ODGridColumn(Lan.g("TableTasks","Read"),35,HorizontalAlignment.Center);
 				//col.ImageList=imageListTree;
 				gridMain.Columns.Add(col);
@@ -893,7 +893,7 @@ namespace OpenDental {
 			col=new ODGridColumn(Lan.g(this,"+/-"),17,HorizontalAlignment.Center);
 			col.CustomClickEvent+=GridHeaderClickEvent;
 			gridMain.Columns.Add(col);
-			if(PrefC.GetBool(PrefName.DockPhonePanelShow)){//HQ
+			if(Preferences.GetBool(PrefName.DockPhonePanelShow)){//HQ
 				col=new ODGridColumn(Lan.g("TableTasks","ST"),30,HorizontalAlignment.Center);//ST
 				gridMain.Columns.Add(col);
 				List<long> listPatsNotInDict=_listTasks.Where(x => x.ObjectType==TaskObjectType.Patient && x.KeyNum!=0 && !_dictPatStates.ContainsKey(x.KeyNum))
@@ -948,7 +948,7 @@ namespace OpenDental {
 				row=new ODGridRow();
 				row.Cells.Add(imageindex.ToString());
 				row.Cells.Add("");
-				if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {//HQ.  Add if job manager is available
+				if(Preferences.GetBool(PrefName.DockPhonePanelShow)) {//HQ.  Add if job manager is available
 					row.Cells.Add("");//ST
 					if(parent!=_TriageListNum) {//Everything that's not triage
 						row.Cells.Add("");//Job
@@ -965,7 +965,7 @@ namespace OpenDental {
 				dateStr="";
 				jobNumString="";
 				string stateString="";
-				if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {//HQ
+				if(Preferences.GetBool(PrefName.DockPhonePanelShow)) {//HQ
 					stateString=HQStateColumn(_listTasks[i]);//ST
 					if(parent!=_TriageListNum) {//Everything that's not triage
 						//get list of jobs attached to task then insert info about those jobs.
@@ -1002,7 +1002,7 @@ namespace OpenDental {
 				if(_listTasks[i].ObjectType==TaskObjectType.Patient) {
 					if(_listTasks[i].KeyNum!=0) {
 						objDesc+=_listTasks[i].PatientName+" - ";
-						if(PrefC.IsODHQ) {
+						if(Preferences.IsODHQ) {
 							objDesc+=_listTasks[i].KeyNum+" - ";
 						}
 					}
@@ -1035,7 +1035,7 @@ namespace OpenDental {
 					}
 				}
 				row=new ODGridRow();
-				if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {//The new way
+				if(Preferences.GetBool(PrefName.TasksNewTrackedByUser)) {//The new way
 					if(_listTasks[i].TaskStatus==TaskStatusEnum.Done) {
 						row.Cells.Add("1");
 					}
@@ -1074,7 +1074,7 @@ namespace OpenDental {
 					else {
 						row.Cells.Add("");
 					}
-					if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {//HQ
+					if(Preferences.GetBool(PrefName.DockPhonePanelShow)) {//HQ
 						row.Cells.Add(stateString);//ST
 						if(parent!=_TriageListNum) {//Everything that's not triage
 							row.Cells.Add(jobNumString);//Job
@@ -1086,7 +1086,7 @@ namespace OpenDental {
 					//Conditions for giving collapse option: Descript is long, there is more than one note, or there is one note and it's long.
 					if(_listTasks[i].Descript.Length>250 || listNotesForTask.Count>1 || (listNotesForTask.Count==1 && notes.Length>250)) {
 						row.Cells.Add("+");
-						if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {//HQ
+						if(Preferences.GetBool(PrefName.DockPhonePanelShow)) {//HQ
 							row.Cells.Add(stateString);//ST
 							if(parent!=_TriageListNum) {//Everything that's not triage
 								row.Cells.Add(jobNumString);//Job
@@ -1109,7 +1109,7 @@ namespace OpenDental {
 					}
 					else {//Descript length <= 250 and notes <=1 and note length is <= 250.  No collapse option.
 						row.Cells.Add("");
-						if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {//HQ
+						if(Preferences.GetBool(PrefName.DockPhonePanelShow)) {//HQ
 							row.Cells.Add(stateString);//ST
 							if(parent!=_TriageListNum) {//Everything that's not triage
 								row.Cells.Add(jobNumString);//Job
@@ -1698,7 +1698,7 @@ namespace OpenDental {
 				}
 				else {
 					//If the user has task filters on this TaskList or one of its children, prompt the user they may be moving tasks that are filtered.
-					if((GlobalTaskFilterType)PrefC.GetInt(PrefName.TasksGlobalFilterType)!=GlobalTaskFilterType.Disabled &&
+					if((GlobalTaskFilterType)Preferences.GetInt(PrefName.TasksGlobalFilterType)!=GlobalTaskFilterType.Disabled &&
 						(_globalFilterType!=GlobalTaskFilterType.None || TaskLists.HasGlobalFilterTypeInTree(newTL)) && !ODInitialize.IsRunningInUnitTest)
 					{
 						if(!MsgBox.Show(this,MsgBoxButtons.OKCancel
@@ -1906,7 +1906,7 @@ namespace OpenDental {
 				return;
 			}
 			markedTask.IsUnread=TaskUnreads.IsUnread(Security.CurUser.UserNum,markedTask);
-			if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
+			if(Preferences.GetBool(PrefName.TasksNewTrackedByUser)) {
 				if(tabContr.SelectedTab==tabNew){
 					//these are never in someone else's inbox, so don't block.
 				}
@@ -2187,13 +2187,13 @@ namespace OpenDental {
 				//no longer allow double click on checkbox, because it's annoying.
 				return;
 			}
-			if(tabContr.SelectedTab==tabNew && e.Col==2 && PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {//+/- column (an index varaible would help)
+			if(tabContr.SelectedTab==tabNew && e.Col==2 && Preferences.GetBool(PrefName.TasksNewTrackedByUser)) {//+/- column (an index varaible would help)
 				return;//Don't double click on expand column, because it already has a single click functionality.
 			}
-			else if(tabContr.SelectedTab==tabNew && e.Col==3 && !PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {//ST column (an index varaible would help)
+			else if(tabContr.SelectedTab==tabNew && e.Col==3 && !Preferences.GetBool(PrefName.TasksNewTrackedByUser)) {//ST column (an index varaible would help)
 				return;//Don't double click on ST column.
 			}
-			else if(tabContr.SelectedTab==tabNew && e.Col==4 && !PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {//Job column (an index varaible would help)
+			else if(tabContr.SelectedTab==tabNew && e.Col==4 && !Preferences.GetBool(PrefName.TasksNewTrackedByUser)) {//Job column (an index varaible would help)
 				return;//Don't double click on Job column.
 			}
 			else if(e.Col==1) {//Task List column (an index varaible would help)
@@ -2231,7 +2231,7 @@ namespace OpenDental {
 				return;
 			}
 			_taskCollapsedState=-1;
-			if(tabContr.SelectedTab==tabNew && !PrefC.GetBool(PrefName.TasksNewTrackedByUser)){//There's an extra column
+			if(tabContr.SelectedTab==tabNew && !Preferences.GetBool(PrefName.TasksNewTrackedByUser)){//There's an extra column
 				if(clickedCol==1) {
 					TaskUnreads.SetRead(Security.CurUser.UserNum,_listTasks[_clickedI-_listTaskLists.Count]);
 					FillGrid();
@@ -2370,7 +2370,7 @@ namespace OpenDental {
 				else {
 					menuItemGoto.Enabled=true;
 				}
-				if(PrefC.IsODHQ && Security.IsAuthorized(Permissions.TaskEdit,true)) {
+				if(Preferences.IsODHQ && Security.IsAuthorized(Permissions.TaskEdit,true)) {
 					menuDeleteTaken.Enabled=true;
 				}
 				else {
@@ -2406,7 +2406,7 @@ namespace OpenDental {
 				menuDeleteTaken.Enabled=false;
 			}
 			//Navigate to Job-------------------------------------------------------------
-			if(gridMain.SelectedIndices.Length>0 && _clickedI >= _listTaskLists.Count && PrefC.IsODHQ) {
+			if(gridMain.SelectedIndices.Length>0 && _clickedI >= _listTaskLists.Count && Preferences.IsODHQ) {
 				//The clicked task was removed from _listTasks, could happen between FillGrid(), mouse click, and now
 				if(IsInvalidTaskRow(_clickedI)) {
 					IgnoreTaskClick();
@@ -2589,7 +2589,7 @@ namespace OpenDental {
 			taskNew.PriorityDefNum=priorityDef.DefNum;
 			try {
 				Tasks.Update(taskNew,task);
-				if(PrefC.IsODHQ && priorityDef.DefNum==502) {//They chose Blue as their priority
+				if(Preferences.IsODHQ && priorityDef.DefNum==502) {//They chose Blue as their priority
 					TaskNote taskNote=new TaskNote();
 					taskNote.UserNum=Security.CurUser.UserNum;
 					taskNote.TaskNum=task.TaskNum;

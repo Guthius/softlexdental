@@ -18,7 +18,7 @@ namespace OpenDental {
 				if(defCatCur.GetDescription() == "NotUsed") {
 					continue;
 				}
-				if(defCatCur.GetDescription().Contains("HqOnly") && !PrefC.IsODHQ) {
+				if(defCatCur.GetDescription().Contains("HqOnly") && !Preferences.IsODHQ) {
 					continue;
 				}
 				DefCatOptions defCOption=new DefCatOptions(defCatCur);
@@ -301,7 +301,7 @@ namespace OpenDental {
 			gridDefs.Rows.Clear();
 			ODGridRow row;
 			foreach(Def defCur in listDefsCur) {
-				if(!PrefC.IsODHQ && defCur.ItemValue==CommItemTypeAuto.ODHQ.ToString()) {
+				if(!Preferences.IsODHQ && defCur.ItemValue==CommItemTypeAuto.ODHQ.ToString()) {
 					continue;
 				}
 				if(Defs.IsDefDeprecated(defCur)) {
@@ -471,15 +471,15 @@ namespace OpenDental {
 				return false;
 			}
 			if(Defs.IsDefinitionInUse(selectedDef)) {
-				if(selectedDef.DefNum==PrefC.GetLong(PrefName.BrokenAppointmentAdjustmentType)
-					|| selectedDef.DefNum==PrefC.GetLong(PrefName.AppointmentTimeArrivedTrigger)
-					|| selectedDef.DefNum==PrefC.GetLong(PrefName.AppointmentTimeSeatedTrigger)
-					|| selectedDef.DefNum==PrefC.GetLong(PrefName.AppointmentTimeDismissedTrigger)
-					|| selectedDef.DefNum==PrefC.GetLong(PrefName.TreatPlanDiscountAdjustmentType)
-					|| selectedDef.DefNum==PrefC.GetLong(PrefName.BillingChargeAdjustmentType)
-					|| selectedDef.DefNum==PrefC.GetLong(PrefName.PracticeDefaultBillType)
-					|| selectedDef.DefNum==PrefC.GetLong(PrefName.FinanceChargeAdjustmentType)
-					|| selectedDef.DefNum==PrefC.GetLong(PrefName.RecurringChargesPayTypeCC)) 
+				if(selectedDef.DefNum==Preferences.GetLong(PrefName.BrokenAppointmentAdjustmentType)
+					|| selectedDef.DefNum==Preferences.GetLong(PrefName.AppointmentTimeArrivedTrigger)
+					|| selectedDef.DefNum==Preferences.GetLong(PrefName.AppointmentTimeSeatedTrigger)
+					|| selectedDef.DefNum==Preferences.GetLong(PrefName.AppointmentTimeDismissedTrigger)
+					|| selectedDef.DefNum==Preferences.GetLong(PrefName.TreatPlanDiscountAdjustmentType)
+					|| selectedDef.DefNum==Preferences.GetLong(PrefName.BillingChargeAdjustmentType)
+					|| selectedDef.DefNum==Preferences.GetLong(PrefName.PracticeDefaultBillType)
+					|| selectedDef.DefNum==Preferences.GetLong(PrefName.FinanceChargeAdjustmentType)
+					|| selectedDef.DefNum==Preferences.GetLong(PrefName.RecurringChargesPayTypeCC)) 
 				{
 					MsgBox.Show(_lanThis,"You cannot hide a definition if it is in use within Module Preferences.");
 					return false;

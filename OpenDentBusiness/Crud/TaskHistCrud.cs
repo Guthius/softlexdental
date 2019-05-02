@@ -133,15 +133,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one TaskHist into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(TaskHist taskHist,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				taskHist.TaskHistNum=ReplicationServers.GetKey("taskhist","TaskHistNum");
 			}
 			string command="INSERT INTO taskhist (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="TaskHistNum,";
 			}
 			command+="UserNumHist,DateTStamp,IsNoteChange,TaskNum,TaskListNum,DateTask,KeyNum,Descript,TaskStatus,IsRepeating,DateType,FromNum,ObjectType,DateTimeEntry,UserNum,DateTimeFinished,PriorityDefNum,ReminderGroupId,ReminderType,ReminderFrequency,DateTimeOriginal) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(taskHist.TaskHistNum)+",";
 			}
 			command+=
@@ -170,7 +170,7 @@ namespace OpenDentBusiness.Crud{
 				taskHist.Descript="";
 			}
 			OdSqlParameter paramDescript=new OdSqlParameter("paramDescript",OdDbType.Text,POut.StringParam(taskHist.Descript));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramDescript);
 			}
 			else {

@@ -39,20 +39,20 @@ namespace OpenDental {
 		}
 
 		private void FillTabWebSchedNewPat() {
-			int newPatApptDays=PrefC.GetInt(PrefName.WebSchedNewPatApptSearchAfterDays);
-			textWebSchedNewPatApptMessage.Text=PrefC.GetString(PrefName.WebSchedNewPatApptMessage);
+			int newPatApptDays=Preferences.GetInt(PrefName.WebSchedNewPatApptSearchAfterDays);
+			textWebSchedNewPatApptMessage.Text=Preferences.GetString(PrefName.WebSchedNewPatApptMessage);
 			textWebSchedNewPatApptSearchDays.Text=newPatApptDays>0 ? newPatApptDays.ToString() : "";
-			checkWebSchedNewPatForcePhoneFormatting.Checked=PrefC.GetBool(PrefName.WebSchedNewPatApptForcePhoneFormatting);
+			checkWebSchedNewPatForcePhoneFormatting.Checked=Preferences.GetBool(PrefName.WebSchedNewPatApptForcePhoneFormatting);
 			DateTime dateWebSchedNewPatSearch=DateTime.Now;
 			dateWebSchedNewPatSearch=dateWebSchedNewPatSearch.AddDays(newPatApptDays);
 			textWebSchedNewPatApptsDateStart.Text=dateWebSchedNewPatSearch.ToShortDateString();
-			FillListBoxWebSchedBlockoutTypes(PrefC.GetString(PrefName.WebSchedNewPatApptIgnoreBlockoutTypes).Split(new char[] { ',' }),listboxWebSchedNewPatIgnoreBlockoutTypes);
+			FillListBoxWebSchedBlockoutTypes(Preferences.GetString(PrefName.WebSchedNewPatApptIgnoreBlockoutTypes).Split(new char[] { ',' }),listboxWebSchedNewPatIgnoreBlockoutTypes);
 			FillGridWebSchedNewPatApptHostedURLs();
 			FillGridWSNPAReasons();
 			FillGridWebSchedNewPatApptOps();
 			//This needs to happen after all of the previous fills because it's asynchronous.
 			FillGridWebSchedNewPatApptTimeSlotsThreaded();
-			long defaultStatus=PrefC.GetLong(PrefName.WebSchedNewPatConfirmStatus);
+			long defaultStatus=Preferences.GetLong(PrefName.WebSchedNewPatConfirmStatus);
 			List<Def> listDefs=Defs.GetDefsForCategory(DefCat.ApptConfirmed,true);
 			for(int i=0;i<listDefs.Count;i++) {
 				int idx=comboWSNPConfirmStatuses.Items.Add(listDefs[i].ItemName);
@@ -62,13 +62,13 @@ namespace OpenDental {
 			}
 			comboWSNPConfirmStatuses.IndexSelectOrSetText(listDefs.ToList().FindIndex(x => x.DefNum==defaultStatus),
 			   () => { return defaultStatus==0 ? "" : Defs.GetName(DefCat.ApptConfirmed,defaultStatus)+" ("+Lan.g(this,"hidden")+")"; });
-			checkNewPatAllowProvSelection.Checked=PrefC.GetBool(PrefName.WebSchedNewPatAllowProvSelection);
-			if(!PrefC.HasClinicsEnabled) {
+			checkNewPatAllowProvSelection.Checked=Preferences.GetBool(PrefName.WebSchedNewPatAllowProvSelection);
+			if(!Preferences.HasClinicsEnabled) {
 				labelWSNPClinic.Visible=false;
 				comboWSNPClinics.Visible=false;
 				labelWSNPTimeSlots.Visible=false;
 			}
-			checkWSNPDoubleBooking.Checked=PrefC.GetInt(PrefName.WebSchedNewPatApptDoubleBooking)>0;//0 = Allow double booking, 1 = prevent
+			checkWSNPDoubleBooking.Checked=Preferences.GetInt(PrefName.WebSchedNewPatApptDoubleBooking)>0;//0 = Allow double booking, 1 = prevent
 		}
 
 		private void SaveTabWebSchedNewPat() {
@@ -181,9 +181,9 @@ namespace OpenDental {
 				})
 				.Where(x => 
 					//When clinics off, only show headquarters
-					(!PrefC.HasClinicsEnabled && x.Signup.ClinicNum==0) || 
+					(!Preferences.HasClinicsEnabled && x.Signup.ClinicNum==0) || 
 					//When clinics are on, only show if not hidden.
-					(PrefC.HasClinicsEnabled && clinicsAll.Any(y => y.ClinicNum==x.Signup.ClinicNum && !y.IsHidden))
+					(Preferences.HasClinicsEnabled && clinicsAll.Any(y => y.ClinicNum==x.Signup.ClinicNum && !y.IsHidden))
 				)
 				//Alpha sorted
 				.OrderBy(x => x.ClinicName);				
@@ -225,14 +225,14 @@ namespace OpenDental {
 		private void FillGridWebSchedNewPatApptOps() {
 			int opNameWidth=150;
 			int clinicWidth=150;
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				opNameWidth+=clinicWidth;
 			}
 			gridWebSchedNewPatApptOps.BeginUpdate();
 			gridWebSchedNewPatApptOps.Columns.Clear();
 			gridWebSchedNewPatApptOps.Columns.Add(new ODGridColumn(Lan.g("FormEServicesSetup","Op Name"),opNameWidth));
 			gridWebSchedNewPatApptOps.Columns.Add(new ODGridColumn(Lan.g("FormEServicesSetup","Abbrev"),60));
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				gridWebSchedNewPatApptOps.Columns.Add(new ODGridColumn(Lan.g("FormEServicesSetup","Clinic"),clinicWidth));
 			}
 			gridWebSchedNewPatApptOps.Columns.Add(new ODGridColumn(Lan.g("FormEServicesSetup","Provider"),60));
@@ -248,7 +248,7 @@ namespace OpenDental {
 				row=new ODGridRow();
 				row.Cells.Add(op.OpName);
 				row.Cells.Add(op.Abbrev);
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add(Clinics.GetAbbr(op.ClinicNum));
 				}
 				row.Cells.Add(Providers.GetAbbr(op.ProvDentist));
@@ -283,7 +283,7 @@ namespace OpenDental {
 				//Don't bother warning the user.  It will just be annoying.  The red indicator should be sufficient.
 				return;
 			}
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				comboWSNPClinics.SelectedIndex=0;//Not visible but this will set the combo box the "N/A" which is the non-clinic signup
 			}
 			if(comboWSNPClinics.SelectedIndex<0) {
@@ -402,7 +402,7 @@ namespace OpenDental {
 		}
 
 		private void butWebSchedNewPatBlockouts_Click(object sender,EventArgs e) {
-			string[] arrayDefNums=PrefC.GetString(PrefName.WebSchedNewPatApptIgnoreBlockoutTypes).Split(new char[] {','}); //comma-delimited list.
+			string[] arrayDefNums=Preferences.GetString(PrefName.WebSchedNewPatApptIgnoreBlockoutTypes).Split(new char[] {','}); //comma-delimited list.
 			List<long> listBlockoutTypes=new List<long>();
 			foreach(string strDefNum in arrayDefNums) {
 				listBlockoutTypes.Add(PIn.Long(strDefNum));

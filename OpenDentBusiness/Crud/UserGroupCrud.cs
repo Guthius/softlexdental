@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one UserGroup into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(UserGroup userGroup,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				userGroup.UserGroupNum=ReplicationServers.GetKey("usergroup","UserGroupNum");
 			}
 			string command="INSERT INTO usergroup (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="UserGroupNum,";
 			}
 			command+="Description,UserGroupNumCEMT) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(userGroup.UserGroupNum)+",";
 			}
 			command+=
 				 "'"+POut.String(userGroup.Description)+"',"
 				+    POut.Long  (userGroup.UserGroupNumCEMT)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

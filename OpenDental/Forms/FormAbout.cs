@@ -21,7 +21,7 @@ namespace OpenDental
         /// </summary>
         void FormAbout_Load(object sender, EventArgs e)
         {
-            string softwareName = PrefC.GetString(PrefName.SoftwareName);
+            string softwareName = Preferences.GetString(PrefName.SoftwareName);
 
             labelVersion.Text = "Version: " + Application.ProductVersion;
 

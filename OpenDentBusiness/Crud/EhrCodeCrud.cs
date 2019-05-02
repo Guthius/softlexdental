@@ -97,15 +97,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EhrCode into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EhrCode ehrCode,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				ehrCode.EhrCodeNum=ReplicationServers.GetKey("ehrcode","EhrCodeNum");
 			}
 			string command="INSERT INTO ehrcode (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EhrCodeNum,";
 			}
 			command+="MeasureIds,ValueSetName,ValueSetOID,QDMCategory,CodeValue,Description,CodeSystem,CodeSystemOID,IsInDb) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(ehrCode.EhrCodeNum)+",";
 			}
 			command+=
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(ehrCode.CodeSystem)+"',"
 				+"'"+POut.String(ehrCode.CodeSystemOID)+"',"
 				+    POut.Bool  (ehrCode.IsInDb)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

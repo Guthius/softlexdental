@@ -31,7 +31,7 @@ namespace OpenDental {
 			_listSetupWizItems.Add(new SetupWizard.ProvSetup());
 			_listSetupWizItems.Add(new SetupWizard.EmployeeSetup());
 			_listSetupWizItems.Add(new SetupWizard.FeeSchedSetup());
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				_listSetupWizItems.Add(new SetupWizard.ClinicSetup());
 			}
 			_listSetupWizItems.Add(new SetupWizard.OperatorySetup());

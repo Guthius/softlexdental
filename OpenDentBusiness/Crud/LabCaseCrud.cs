@@ -109,15 +109,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one LabCase into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(LabCase labCase,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				labCase.LabCaseNum=ReplicationServers.GetKey("labcase","LabCaseNum");
 			}
 			string command="INSERT INTO labcase (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="LabCaseNum,";
 			}
 			command+="PatNum,LaboratoryNum,AptNum,PlannedAptNum,DateTimeDue,DateTimeCreated,DateTimeSent,DateTimeRecd,DateTimeChecked,ProvNum,Instructions,LabFee) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(labCase.LabCaseNum)+",";
 			}
 			command+=
@@ -138,7 +138,7 @@ namespace OpenDentBusiness.Crud{
 				labCase.Instructions="";
 			}
 			OdSqlParameter paramInstructions=new OdSqlParameter("paramInstructions",OdDbType.Text,POut.StringParam(labCase.Instructions));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramInstructions);
 			}
 			else {

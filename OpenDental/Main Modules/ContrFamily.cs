@@ -87,7 +87,7 @@ namespace OpenDental
             SuperFamilyGuarantors = _loadData.SuperFamilyGuarantors;
             _dictCloneSpecialty = _loadData.DictCloneSpecialities;
             //Takes the preference string and converts it to an enum object
-            _superFamSortStrat = (SortStrategy)PrefC.GetInt(PrefName.SuperFamSortStrategy);
+            _superFamSortStrat = (SortStrategy)Preferences.GetInt(PrefName.SuperFamSortStrategy);
         }
 
         private void RefreshModuleScreen()
@@ -99,7 +99,7 @@ namespace OpenDental
                 ToolBarMain.Buttons["Delete"].Enabled = true;
                 ToolBarMain.Buttons["Guarantor"].Enabled = true;
                 ToolBarMain.Buttons["Move"].Enabled = true;
-                if (ToolBarMain.Buttons["Ins"] != null && !PrefC.GetBool(PrefName.EasyHideInsurance))
+                if (ToolBarMain.Buttons["Ins"] != null && !Preferences.GetBool(PrefName.EasyHideInsurance))
                 {
                     ToolBarMain.Buttons["Ins"].Enabled = true;
                     ToolBarMain.Buttons["Discount"].Enabled = true;
@@ -116,7 +116,7 @@ namespace OpenDental
                     gridIns.Location = superClonesSplitContainer.Location;
                     gridIns.Width = this.Width - gridIns.Left;
                 }
-                if (PrefC.GetBool(PrefName.ShowFeatureSuperfamilies) && ToolBarMain.Buttons["AddSuper"] != null)
+                if (Preferences.GetBool(PrefName.ShowFeatureSuperfamilies) && ToolBarMain.Buttons["AddSuper"] != null)
                 {
                     ToolBarMain.Buttons["AddSuper"].Enabled = true;
                 }
@@ -133,7 +133,7 @@ namespace OpenDental
                     ToolBarMain.Buttons["RemoveSuper"].Enabled = true;
                     ToolBarMain.Buttons["DisbandSuper"].Enabled = true;
                 }
-                if (PrefC.GetBool(PrefName.ShowFeaturePatientClone)
+                if (Preferences.GetBool(PrefName.ShowFeaturePatientClone)
                     && ToolBarMain.Buttons["AddClone"] != null)
                 {
                     ToolBarMain.Buttons["AddClone"].Enabled = true;
@@ -176,12 +176,12 @@ namespace OpenDental
                     ToolBarMain.Buttons["RemoveSuper"].Enabled = false;
                     ToolBarMain.Buttons["DisbandSuper"].Enabled = false;
                 }
-                if (ToolBarMain.Buttons["Ins"] != null && !PrefC.GetBool(PrefName.EasyHideInsurance))
+                if (ToolBarMain.Buttons["Ins"] != null && !Preferences.GetBool(PrefName.EasyHideInsurance))
                 {
                     ToolBarMain.Buttons["Ins"].Enabled = false;
                     ToolBarMain.Buttons["Discount"].Enabled = false;
                 }
-                if (PrefC.GetBool(PrefName.ShowFeaturePatientClone)
+                if (Preferences.GetBool(PrefName.ShowFeaturePatientClone)
                     && ToolBarMain.Buttons["AddClone"] != null
                     && ToolBarMain.Buttons["SynchClone"] != null
                     && ToolBarMain.Buttons["BreakClone"] != null)
@@ -192,7 +192,7 @@ namespace OpenDental
                 }
                 ToolBarMain.Invalidate();
             }
-            if (PrefC.GetBool(PrefName.EasyHideInsurance))
+            if (Preferences.GetBool(PrefName.EasyHideInsurance))
             {
                 gridIns.Visible = false;
             }
@@ -208,7 +208,7 @@ namespace OpenDental
                 {
                     ToolBarMain.Buttons["Add"].Enabled = false;
                     ToolBarMain.Buttons["Delete"].Enabled = false;
-                    if (PrefC.GetBool(PrefName.ShowFeaturePatientClone)
+                    if (Preferences.GetBool(PrefName.ShowFeaturePatientClone)
                         && ToolBarMain.Buttons["AddClone"] != null
                         && ToolBarMain.Buttons["SynchClone"] != null
                         && ToolBarMain.Buttons["BreakClone"] != null)
@@ -225,7 +225,7 @@ namespace OpenDental
                 {
                     ToolBarMain.Buttons["Add"].Enabled = false;
                     ToolBarMain.Buttons["Delete"].Enabled = false;
-                    if (PrefC.GetBool(PrefName.ShowFeaturePatientClone)
+                    if (Preferences.GetBool(PrefName.ShowFeaturePatientClone)
                         && ToolBarMain.Buttons["AddClone"] != null
                         && ToolBarMain.Buttons["SynchClone"] != null
                         && ToolBarMain.Buttons["BreakClone"] != null)
@@ -251,7 +251,7 @@ namespace OpenDental
             patientPictureBox.Image = null;
             patientPictureBox.TextNullImage = Lan.g(this, "Patient Picture Unavailable");
             if (PatCur == null ||
-                PrefC.AtoZfolderUsed == DataStorageType.InDatabase)
+                Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
             {//Do not use patient image when A to Z folders are disabled.
                 return;
             }
@@ -314,7 +314,7 @@ namespace OpenDental
             ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Delete"), Resources.IconDelete, Lan.g(this, "Delete Family Member"), "Delete"));
             ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Set Guarantor"), Resources.IconStar, Lan.g(this, "Set as Guarantor"), "Guarantor"));
             ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Move"), Resources.IconUserGo, Lan.g(this, "Move to Another Family"), "Move"));
-            if (PrefC.GetBool(PrefName.ShowFeaturePatientClone))
+            if (Preferences.GetBool(PrefName.ShowFeaturePatientClone))
             {
                 ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
                 button = new ODToolBarButton(Lan.g(this, "Clones:"), null, "", "");
@@ -324,7 +324,7 @@ namespace OpenDental
                 ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Synch"), null, Lan.g(this, "Synch information to the clone patient or create a clone of the currently selected patient if one does not exist"), "SynchClone"));
                 ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Break"), null, Lan.g(this, "Remove selected patient from the clone group."), "BreakClone"));
             }
-            if (PrefC.GetBool(PrefName.ShowFeatureSuperfamilies))
+            if (Preferences.GetBool(PrefName.ShowFeatureSuperfamilies))
             {
                 ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
                 button = new ODToolBarButton(Lan.g(this, "Super Family:"), null, "", "");
@@ -334,7 +334,7 @@ namespace OpenDental
                 ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Remove"), null, Lan.g(this, "Remove selected patient, and their family, from super family"), "RemoveSuper"));
                 ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Disband"), null, Lan.g(this, "Disband the current super family by removing all members of the super family."), "DisbandSuper"));
             }
-            if (!PrefC.GetBool(PrefName.EasyHideInsurance))
+            if (!Preferences.GetBool(PrefName.EasyHideInsurance))
             {
                 ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
                 button = new ODToolBarButton(Lan.g(this, "Add Insurance"), Resources.IconInsurance, "", "Ins");
@@ -1136,8 +1136,8 @@ namespace OpenDental
                 for (int j = 0; j < RecallList.Count; j++)
                 {
                     if (RecallList[j].PatNum == FamCur.ListPats[i].PatNum
-                        && (RecallList[j].RecallTypeNum == PrefC.GetLong(PrefName.RecallTypeSpecialProphy)
-                        || RecallList[j].RecallTypeNum == PrefC.GetLong(PrefName.RecallTypeSpecialPerio)))
+                        && (RecallList[j].RecallTypeNum == Preferences.GetLong(PrefName.RecallTypeSpecialProphy)
+                        || RecallList[j].RecallTypeNum == Preferences.GetLong(PrefName.RecallTypeSpecialPerio)))
                     {
                         recallDate = RecallList[j].DateDue;
                     }
@@ -1206,7 +1206,7 @@ namespace OpenDental
             tempPat.HmPhone = PatCur.HmPhone;
             tempPat.Guarantor = PatCur.Guarantor;
             tempPat.CreditType = PatCur.CreditType;
-            if (!PrefC.GetBool(PrefName.PriProvDefaultToSelectProv))
+            if (!Preferences.GetBool(PrefName.PriProvDefaultToSelectProv))
             {
                 tempPat.PriProv = PatCur.PriProv;
             }
@@ -1255,7 +1255,7 @@ namespace OpenDental
         private void ToolButDelete_Click()
         {
             //At HQ, we cannot allow users to merge patients related to reseller families.
-            if (PrefC.IsODHQ && Resellers.IsResellerFamily(PatCur))
+            if (Preferences.IsODHQ && Resellers.IsResellerFamily(PatCur))
             {
                 MsgBox.Show(this, "Cannot delete a patient related to a reseller family.");
                 return;
@@ -1459,7 +1459,7 @@ namespace OpenDental
                 return;
             }
             //At HQ, we cannot allow users to change the guarantor of reseller families.
-            if (PrefC.IsODHQ && Resellers.IsResellerFamily(PatCur))
+            if (Preferences.IsODHQ && Resellers.IsResellerFamily(PatCur))
             {
                 MsgBox.Show(this, "Cannot change the guarantor of a reseller family.");
                 return;
@@ -1480,7 +1480,7 @@ namespace OpenDental
         private void ToolButMove_Click()
         {
             //At HQ, we cannot allow users to move patients of reseller families.
-            if (PrefC.IsODHQ && Resellers.IsResellerFamily(PatCur))
+            if (Preferences.IsODHQ && Resellers.IsResellerFamily(PatCur))
             {
                 MsgBox.Show(this, "Cannot move patients of a reseller family.");
                 return;
@@ -1539,7 +1539,7 @@ namespace OpenDental
                         //keep current superfamily
                         Patients.Update(PatCur, PatOld);
                         //if moving a superfamily non-guar family member out as guar of their own family within the sf, and pref is set, add ins to family members if necessary
-                        if (PatCur.SuperFamily > 0 && PrefC.GetBool(PrefName.SuperFamNewPatAddIns))
+                        if (PatCur.SuperFamily > 0 && Preferences.GetBool(PrefName.SuperFamNewPatAddIns))
                         {
                             AddSuperGuarPriInsToFam(PatCur.Guarantor);
                         }
@@ -1935,7 +1935,7 @@ namespace OpenDental
                     return;
                 }
                 Patients.AssignToSuperfamily(patSelected.Guarantor, PatCur.SuperFamily);
-                if (PrefC.GetBool(PrefName.SuperFamNewPatAddIns))
+                if (Preferences.GetBool(PrefName.SuperFamNewPatAddIns))
                 {
                     AddSuperGuarPriInsToFam(patSelected.Guarantor);
                 }
@@ -2060,7 +2060,7 @@ namespace OpenDental
                 return;
             }
             //At HQ, we cannot allow users to manipulate super family informaiton when the patient is related to a reseller family.
-            if (PrefC.IsODHQ && Resellers.IsResellerFamily(PatCur))
+            if (Preferences.IsODHQ && Resellers.IsResellerFamily(PatCur))
             {
                 MsgBox.Show(this, "Cannot manipulate super family for a patient related to a reseller family.");
                 return;
@@ -2082,7 +2082,7 @@ namespace OpenDental
                 return;
             }
             //At HQ, we cannot allow users to manipulate super family informaiton when the patient is related to a reseller family.
-            if (PrefC.IsODHQ && Resellers.IsResellerFamily(PatCur))
+            if (Preferences.IsODHQ && Resellers.IsResellerFamily(PatCur))
             {
                 MsgBox.Show(this, "Cannot manipulate super family for a patient related to a reseller family.");
                 return;
@@ -2105,7 +2105,7 @@ namespace OpenDental
             gridPatientClones.BeginUpdate();
             gridPatientClones.Columns.Clear();
             gridPatientClones.Columns.Add(new ODGridColumn("Name", 150));
-            if (PrefC.HasClinicsEnabled)
+            if (Preferences.HasClinicsEnabled)
             {
                 gridPatientClones.Columns.Add(new ODGridColumn("Clinic", 80));
             }
@@ -2127,7 +2127,7 @@ namespace OpenDental
                 }
                 row = new ODGridRow();
                 row.Cells.Add(cloneAndSpecialty.Key.GetNameLF());
-                if (PrefC.HasClinicsEnabled)
+                if (Preferences.HasClinicsEnabled)
                 {
                     row.Cells.Add(Clinics.GetAbbr(cloneAndSpecialty.Key.ClinicNum));
                 }

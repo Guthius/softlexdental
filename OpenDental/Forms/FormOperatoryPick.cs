@@ -40,7 +40,7 @@ namespace OpenDental {
 			gridMain.Columns.Clear();
 			int opNameWidth=180;
 			int clinicWidth=85;
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				//Clinics are hidden so add the width of the clinic column to the Op Name column because the clinic column will not show.
 				opNameWidth+=clinicWidth;
 			}
@@ -50,7 +50,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableOperatories","IsHidden"),64,HorizontalAlignment.Center);
 			gridMain.Columns.Add(col);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn(Lan.g("TableOperatories","Clinic"),clinicWidth);
 				gridMain.Columns.Add(col);
 			}
@@ -77,7 +77,7 @@ namespace OpenDental {
 				else{
 					row.Cells.Add("");
 				}
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add(Clinics.GetAbbr(opCur.ClinicNum));
 				}
 				row.Cells.Add(Providers.GetAbbr(opCur.ProvDentist));

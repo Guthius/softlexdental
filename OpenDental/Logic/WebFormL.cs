@@ -42,7 +42,7 @@ namespace OpenDental {
 							img=OpenDentBusiness.Properties.Resources.Patient_Info;
 							imgFormat=img.RawFormat;
 						}
-						else if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ && File.Exists(filePathAndName)) {
+						else if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ && File.Exists(filePathAndName)) {
 							img=Image.FromFile(filePathAndName);
 							imgFormat=img.RawFormat;
 						}
@@ -395,7 +395,7 @@ namespace OpenDental {
 				//Sheet is ready to get updated with the patient.
 				sheet.PatNum=patNum;
 				sheet.DateTimeSheet=MiscData.GetNowDateTime();
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					sheet.ClinicNum=pat.ClinicNum;
 				}
 				sheet.IsWebForm=true;//This is so the sheet shows up in gridmain in this form. 
@@ -417,7 +417,7 @@ namespace OpenDental {
 			else {
 				newPat.ClinicNum=sheet.ClinicNum;
 			}
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				//Set the patients primary provider to the practice default provider.
 				newPat.PriProv=Providers.GetDefaultProvider().ProvNum;
 			}

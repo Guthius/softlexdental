@@ -331,8 +331,8 @@ namespace OpenDentBusiness.HL7 {
 					pat.PatNum=patNumFromExtIds;
 					pat.Guarantor=patNumFromExtIds;
 				}
-				pat.PriProv=PrefC.GetLong(PrefName.PracticeDefaultProv);
-				pat.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
+				pat.PriProv=Preferences.GetLong(PrefName.PracticeDefaultProv);
+				pat.BillingType=Preferences.GetLong(PrefName.PracticeDefaultBillType);
 			}
 			else {
 				patOld=pat.Copy();
@@ -1107,8 +1107,8 @@ namespace OpenDentBusiness.HL7 {
 					guar.PatNum=guarExtPatNum;
 					guar.Guarantor=guarExtPatNum;
 				}
-				guar.PriProv=PrefC.GetLong(PrefName.PracticeDefaultProv);
-				guar.BillingType=PrefC.GetLong(PrefName.PracticeDefaultBillType);
+				guar.PriProv=Preferences.GetLong(PrefName.PracticeDefaultProv);
+				guar.BillingType=Preferences.GetLong(PrefName.PracticeDefaultBillType);
 			}
 			else {
 				guarOld=guar.Copy();
@@ -1817,7 +1817,7 @@ namespace OpenDentBusiness.HL7 {
 				default:
 					break;
 			}
-			if(procCur.ProcStatus==ProcStat.C && dateProc.Date > DateTime.Today.Date && !PrefC.GetBool(PrefName.FutureTransDatesAllowed)) {
+			if(procCur.ProcStatus==ProcStat.C && dateProc.Date > DateTime.Today.Date && !Preferences.GetBool(PrefName.FutureTransDatesAllowed)) {
 				EventLog.WriteEntry("OpenDentalHL7", "A procedure was not added for patient "+pat.GetNameFLnoPref()+". Procedures are not allowed for future dates.",EventLogEntryType.Information);
 				return;
 			}
@@ -1843,8 +1843,8 @@ namespace OpenDentBusiness.HL7 {
 			procCur.BaseUnits=procCode.BaseUnits;
 			procCur.SiteNum=pat.SiteNum;
 			procCur.RevCode=procCode.RevenueCodeDefault;
-			procCur.DiagnosticCode=PrefC.GetString(PrefName.ICD9DefaultForNewProcs);
-			procCur.PlaceService=(PlaceOfService)PrefC.GetInt(PrefName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used.
+			procCur.DiagnosticCode=Preferences.GetString(PrefName.ICD9DefaultForNewProcs);
+			procCur.PlaceService=(PlaceOfService)Preferences.GetInt(PrefName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used.
 			List<PatPlan> listPatPlan=PatPlans.Refresh(pat.PatNum);
 			List<InsSub> listSubs=InsSubs.RefreshForFam(Patients.GetFamily(pat.PatNum));
 			List<InsPlan> insPlanList=InsPlans.RefreshForSubList(listSubs);

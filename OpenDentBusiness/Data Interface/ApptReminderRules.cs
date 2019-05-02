@@ -44,7 +44,7 @@ namespace OpenDentBusiness
         /// </summary>
         public static bool UsesApptReminders()
         {
-            bool isEnabled = PrefC.GetBool(PrefName.ApptRemindAutoEnabled);
+            bool isEnabled = Preferences.GetBool(PrefName.ApptRemindAutoEnabled);
             if (!isEnabled)
             {
                 return false;
@@ -277,7 +277,7 @@ Password: [Password]
                         break;
                     }
             }
-            if (PrefC.GetBool(PrefName.EmailDisclaimerIsOn))
+            if (Preferences.GetBool(PrefName.EmailDisclaimerIsOn))
             {
                 rule.TemplateEmail += "\r\n\r\n\r\n[EmailDisclaimer]";
                 rule.TemplateEmailAggShared += "\r\n\r\n\r\n[EmailDisclaimer]";

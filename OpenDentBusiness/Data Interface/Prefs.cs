@@ -254,7 +254,7 @@ namespace OpenDentBusiness
         public static bool UpdateLong(PrefName prefName, long newValue)
         {
             //Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
-            long curValue = PrefC.GetLong(prefName);
+            long curValue = Preferences.GetLong(prefName);
             if (curValue == newValue)
             {
                 return false;//no change needed
@@ -288,7 +288,7 @@ namespace OpenDentBusiness
         public static bool UpdateDouble(PrefName prefName, double newValue, bool doRounding = true)
         {
             //Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
-            double curValue = PrefC.GetDouble(prefName);
+            double curValue = Preferences.GetDouble(prefName);
             if (curValue == newValue)
             {
                 return false;//no change needed
@@ -316,7 +316,7 @@ namespace OpenDentBusiness
         public static bool UpdateBool(PrefName prefName, bool newValue, bool isForced)
         {
             //Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
-            bool curValue = PrefC.GetBool(prefName);
+            bool curValue = Preferences.GetBool(prefName);
             if (!isForced && curValue == newValue)
             {
                 return false;//no change needed
@@ -344,7 +344,7 @@ namespace OpenDentBusiness
         public static bool UpdateString(PrefName prefName, string newValue)
         {
             //Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
-            string curValue = PrefC.GetString(prefName);
+            string curValue = Preferences.GetString(prefName);
             if (curValue == newValue)
             {
                 return false;//no change needed
@@ -372,7 +372,7 @@ namespace OpenDentBusiness
         public static bool UpdateRaw(string prefName, string newValue)
         {
             //Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
-            string curValue = PrefC.GetRaw(prefName);
+            string curValue = Preferences.GetRaw(prefName);
             if (curValue == newValue)
             {
                 return false;//no change needed
@@ -393,7 +393,7 @@ namespace OpenDentBusiness
         public static bool UpdateDateT(PrefName prefName, DateTime newValue)
         {
             //Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
-            DateTime curValue = PrefC.GetDateT(prefName);
+            DateTime curValue = Preferences.GetDateTime(prefName);
             if (curValue == newValue)
             {
                 return false;//no change needed
@@ -553,7 +553,7 @@ namespace OpenDentBusiness
                 PrefName.InsHistPerioMaintCodes,PrefName.InsHistDebridementCodes };
         }
 
-        ///<summary>Same as <see cref="PrefC.HasClinicsEnabled"/> but doesn't use the cache.</summary>
+        ///<summary>Same as <see cref="Preferences.HasClinicsEnabled"/> but doesn't use the cache.</summary>
         public static bool HasClinicsEnabledNoCache
         {
             get

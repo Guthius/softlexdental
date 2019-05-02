@@ -100,15 +100,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ClaimTracking into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ClaimTracking claimTracking,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				claimTracking.ClaimTrackingNum=ReplicationServers.GetKey("claimtracking","ClaimTrackingNum");
 			}
 			string command="INSERT INTO claimtracking (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ClaimTrackingNum,";
 			}
 			command+="ClaimNum,TrackingType,UserNum,Note,TrackingDefNum,TrackingErrorDefNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(claimTracking.ClaimTrackingNum)+",";
 			}
 			command+=
@@ -123,7 +123,7 @@ namespace OpenDentBusiness.Crud{
 				claimTracking.Note="";
 			}
 			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,POut.StringParam(claimTracking.Note));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNote);
 			}
 			else {

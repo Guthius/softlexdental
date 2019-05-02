@@ -429,23 +429,23 @@ namespace OpenDental{
 				butChangeRegKey.Enabled=false;
 				butOK.Enabled=false;
 			}
-			textUpdateServerAddress.Text=PrefC.GetString(PrefName.UpdateServerAddress);
-			textWebsitePath.Text=PrefC.GetString(PrefName.UpdateWebsitePath);
-			textWebProxyAddress.Text=PrefC.GetString(PrefName.UpdateWebProxyAddress);
-			textWebProxyUserName.Text=PrefC.GetString(PrefName.UpdateWebProxyUserName);
-			textWebProxyPassword.Text=PrefC.GetString(PrefName.UpdateWebProxyPassword);
-			string regkey=PrefC.GetString(PrefName.RegistrationKey);
+			textUpdateServerAddress.Text=Preferences.GetString(PrefName.UpdateServerAddress);
+			textWebsitePath.Text=Preferences.GetString(PrefName.UpdateWebsitePath);
+			textWebProxyAddress.Text=Preferences.GetString(PrefName.UpdateWebProxyAddress);
+			textWebProxyUserName.Text=Preferences.GetString(PrefName.UpdateWebProxyUserName);
+			textWebProxyPassword.Text=Preferences.GetString(PrefName.UpdateWebProxyPassword);
+			string regkey=Preferences.GetString(PrefName.RegistrationKey);
 			if(regkey.Length==16){
 				textRegKey.Text=regkey.Substring(0,4)+"-"+regkey.Substring(4,4)+"-"+regkey.Substring(8,4)+"-"+regkey.Substring(12,4);
 			}
 			else{
 				textRegKey.Text=regkey;
 			}
-			textMultiple.Text=PrefC.GetString(PrefName.UpdateMultipleDatabases);
-			checkShowMsi.Checked=PrefC.GetBool(PrefName.UpdateShowMsiButtons);
-			_updateTime=PrefC.GetDateT(PrefName.UpdateDateTime);
+			textMultiple.Text=Preferences.GetString(PrefName.UpdateMultipleDatabases);
+			checkShowMsi.Checked=Preferences.GetBool(PrefName.UpdateShowMsiButtons);
+			_updateTime=Preferences.GetDateTime(PrefName.UpdateDateTime);
 			textUpdateTime.Text=_updateTime.ToString();
-			if(PrefC.AtoZfolderUsed!=DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed!=DataStorageType.LocalAtoZ) {
 				labelRecopy.Text=@"Recopy all of the files from C:\Program Files\Open Dental\ into a special place in the database for future use in updating other computers.";
 			}
 		}
@@ -479,7 +479,7 @@ namespace OpenDental{
 			FormRegistrationKey formR=new FormRegistrationKey();
 			formR.ShowDialog();
 			DataValid.SetInvalid(InvalidType.Prefs);
-			string regkey=PrefC.GetString(PrefName.RegistrationKey);
+			string regkey=Preferences.GetString(PrefName.RegistrationKey);
 			if(regkey.Length==16){
 				textRegKey.Text=regkey.Substring(0,4)+"-"+regkey.Substring(4,4)+"-"+regkey.Substring(8,4)+"-"+regkey.Substring(12,4);
 			}
@@ -490,7 +490,7 @@ namespace OpenDental{
 
 		private void butRecopy_Click(object sender,EventArgs e) {
 			Version versionCurrent=new Version(Application.ProductVersion);
-			string folderUpdate=ODFileUtils.CombinePaths(PrefC.GetTempFolderPath(),"UpdateFiles");
+			string folderUpdate=ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),"UpdateFiles");
 			if(Directory.Exists(folderUpdate)) {
 				try {
 					Directory.Delete(folderUpdate,true);

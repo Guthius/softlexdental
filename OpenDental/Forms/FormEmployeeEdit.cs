@@ -247,7 +247,7 @@ namespace OpenDental{
 			textFName.Text=EmployeeCur.FName;
 			textMI.Text=EmployeeCur.MiddleI;
 			textPayrollID.Text=EmployeeCur.PayrollID;
-			if(!PrefC.GetBool(PrefName.DockPhonePanelShow)){
+			if(!Preferences.GetBool(PrefName.DockPhonePanelShow)){
 				labelPhoneExt.Visible=false;
 				textPhoneExt.Visible=false;
 			}

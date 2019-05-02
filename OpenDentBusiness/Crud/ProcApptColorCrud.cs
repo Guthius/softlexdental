@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ProcApptColor into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ProcApptColor procApptColor,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				procApptColor.ProcApptColorNum=ReplicationServers.GetKey("procapptcolor","ProcApptColorNum");
 			}
 			string command="INSERT INTO procapptcolor (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ProcApptColorNum,";
 			}
 			command+="CodeRange,ShowPreviousDate,ColorText) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(procApptColor.ProcApptColorNum)+",";
 			}
 			command+=
 				 "'"+POut.String(procApptColor.CodeRange)+"',"
 				+    POut.Bool  (procApptColor.ShowPreviousDate)+","
 				+    POut.Int   (procApptColor.ColorText.ToArgb())+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

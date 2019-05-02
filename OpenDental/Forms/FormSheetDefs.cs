@@ -294,7 +294,7 @@ namespace OpenDental{
 			}
 			for(int i=0;i<LabelList.Count;i++){
 				comboLabel.Items.Add(LabelList[i].Description);
-				if(PrefC.GetLong(PrefName.LabelPatientDefaultSheetDefNum)==LabelList[i].SheetDefNum){
+				if(Preferences.GetLong(PrefName.LabelPatientDefaultSheetDefNum)==LabelList[i].SheetDefNum){
 					comboLabel.SelectedIndex=i+1;
 				}
 			}
@@ -463,7 +463,7 @@ namespace OpenDental{
 			}
 			for(int i=0;i<LabelList.Count;i++){
 				comboLabel.Items.Add(LabelList[i].Description);
-				if(PrefC.GetLong(PrefName.LabelPatientDefaultSheetDefNum)==LabelList[i].SheetDefNum){
+				if(Preferences.GetLong(PrefName.LabelPatientDefaultSheetDefNum)==LabelList[i].SheetDefNum){
 					comboLabel.SelectedIndex=i+1;
 				}
 			}

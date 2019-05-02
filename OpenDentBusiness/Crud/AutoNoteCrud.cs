@@ -79,15 +79,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one AutoNote into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(AutoNote autoNote,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				autoNote.AutoNoteNum=ReplicationServers.GetKey("autonote","AutoNoteNum");
 			}
 			string command="INSERT INTO autonote (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="AutoNoteNum,";
 			}
 			command+="AutoNoteName,MainText,Category) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(autoNote.AutoNoteNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				autoNote.MainText="";
 			}
 			OdSqlParameter paramMainText=new OdSqlParameter("paramMainText",OdDbType.Text,POut.StringParam(autoNote.MainText));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramMainText);
 			}
 			else {

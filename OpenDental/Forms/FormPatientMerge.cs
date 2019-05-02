@@ -55,7 +55,7 @@ namespace OpenDental {
 				return;
 			}
 			//At HQ, we cannot allow users to merge patients related to reseller families.
-			if(PrefC.IsODHQ && (Resellers.IsResellerFamily(_patTo) || Resellers.IsResellerFamily(_patFrom))) {
+			if(Preferences.IsODHQ && (Resellers.IsResellerFamily(_patTo) || Resellers.IsResellerFamily(_patFrom))) {
 				MsgBox.Show(this,"Cannot merge patients related to reseller families.");
 				return;
 			}
@@ -130,7 +130,7 @@ namespace OpenDental {
 				//This has to happen in the UI because the middle tier server might not have access to the image share.
 				//If the users are storing images within the database, those images have already been taken care of in the merge method above.
 				int fileCopyFailures=0;
-				if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+				if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 					#region Copy AtoZ Documents
 					//Move the patient documents within the 'patFrom' A to Z folder to the 'patTo' A to Z folder.
 					//We have to be careful here of documents with the same name. We have to rename such documents

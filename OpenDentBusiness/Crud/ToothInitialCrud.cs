@@ -88,15 +88,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ToothInitial into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ToothInitial toothInitial,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				toothInitial.ToothInitialNum=ReplicationServers.GetKey("toothinitial","ToothInitialNum");
 			}
 			string command="INSERT INTO toothinitial (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ToothInitialNum,";
 			}
 			command+="PatNum,ToothNum,InitialType,Movement,DrawingSegment,ColorDraw) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(toothInitial.ToothInitialNum)+",";
 			}
 			command+=
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 				toothInitial.DrawingSegment="";
 			}
 			OdSqlParameter paramDrawingSegment=new OdSqlParameter("paramDrawingSegment",OdDbType.Text,POut.StringParam(toothInitial.DrawingSegment));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramDrawingSegment);
 			}
 			else {

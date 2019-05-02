@@ -95,15 +95,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EhrLabSpecimenCondition into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EhrLabSpecimenCondition ehrLabSpecimenCondition,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				ehrLabSpecimenCondition.EhrLabSpecimenConditionNum=ReplicationServers.GetKey("ehrlabspecimencondition","EhrLabSpecimenConditionNum");
 			}
 			string command="INSERT INTO ehrlabspecimencondition (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EhrLabSpecimenConditionNum,";
 			}
 			command+="EhrLabSpecimenNum,SpecimenConditionID,SpecimenConditionText,SpecimenConditionCodeSystemName,SpecimenConditionIDAlt,SpecimenConditionTextAlt,SpecimenConditionCodeSystemNameAlt,SpecimenConditionTextOriginal) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(ehrLabSpecimenCondition.EhrLabSpecimenConditionNum)+",";
 			}
 			command+=
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(ehrLabSpecimenCondition.SpecimenConditionTextAlt)+"',"
 				+"'"+POut.String(ehrLabSpecimenCondition.SpecimenConditionCodeSystemNameAlt)+"',"
 				+"'"+POut.String(ehrLabSpecimenCondition.SpecimenConditionTextOriginal)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

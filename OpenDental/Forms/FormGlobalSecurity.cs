@@ -18,34 +18,34 @@ namespace OpenDental {
 		}
 
 		private void FormGlobalSecurity_Load(object sender,EventArgs e) {
-			textLogOffAfterMinutes.Text=PrefC.GetInt(PrefName.SecurityLogOffAfterMinutes).ToString();
-			checkPasswordsMustBeStrong.Checked=PrefC.GetBool(PrefName.PasswordsMustBeStrong);
-			checkPasswordsStrongIncludeSpecial.Checked=PrefC.GetBool(PrefName.PasswordsStrongIncludeSpecial);
-			checkPasswordForceWeakToStrong.Checked=PrefC.GetBool(PrefName.PasswordsWeakChangeToStrong);
-			checkTimecardSecurityEnabled.Checked=PrefC.GetBool(PrefName.TimecardSecurityEnabled);
-			checkCannotEditOwn.Checked=PrefC.GetBool(PrefName.TimecardUsersDontEditOwnCard);
+			textLogOffAfterMinutes.Text=Preferences.GetInt(PrefName.SecurityLogOffAfterMinutes).ToString();
+			checkPasswordsMustBeStrong.Checked=Preferences.GetBool(PrefName.PasswordsMustBeStrong);
+			checkPasswordsStrongIncludeSpecial.Checked=Preferences.GetBool(PrefName.PasswordsStrongIncludeSpecial);
+			checkPasswordForceWeakToStrong.Checked=Preferences.GetBool(PrefName.PasswordsWeakChangeToStrong);
+			checkTimecardSecurityEnabled.Checked=Preferences.GetBool(PrefName.TimecardSecurityEnabled);
+			checkCannotEditOwn.Checked=Preferences.GetBool(PrefName.TimecardUsersDontEditOwnCard);
 			checkCannotEditOwn.Enabled=checkTimecardSecurityEnabled.Checked;
-			checkDomainLoginEnabled.Checked=PrefC.GetBool(PrefName.DomainLoginEnabled);
+			checkDomainLoginEnabled.Checked=Preferences.GetBool(PrefName.DomainLoginEnabled);
 			textDomainLoginPath.ReadOnly=!checkDomainLoginEnabled.Checked;
-			textDomainLoginPath.Text=PrefC.GetString(PrefName.DomainLoginPath);
-			checkLogOffWindows.Checked=PrefC.GetBool(PrefName.SecurityLogOffWithWindows);
-			checkUserNameManualEntry.Checked=PrefC.GetBool(PrefName.UserNameManualEntry);
-			if(PrefC.GetDate(PrefName.BackupReminderLastDateRun).ToShortDateString()==DateTime.MaxValue.AddMonths(-1).ToShortDateString()) {
+			textDomainLoginPath.Text=Preferences.GetString(PrefName.DomainLoginPath);
+			checkLogOffWindows.Checked=Preferences.GetBool(PrefName.SecurityLogOffWithWindows);
+			checkUserNameManualEntry.Checked=Preferences.GetBool(PrefName.UserNameManualEntry);
+			if(Preferences.GetDate(PrefName.BackupReminderLastDateRun).ToShortDateString()==DateTime.MaxValue.AddMonths(-1).ToShortDateString()) {
 				checkDisableBackupReminder.Checked=true;
 			}
-			if(PrefC.GetInt(PrefName.SecurityLockDays)>0) {
-				textDaysLock.Text=PrefC.GetInt(PrefName.SecurityLockDays).ToString();
+			if(Preferences.GetInt(PrefName.SecurityLockDays)>0) {
+				textDaysLock.Text=Preferences.GetInt(PrefName.SecurityLockDays).ToString();
 			}
-			if(PrefC.GetDate(PrefName.SecurityLockDate).Year>1880) {
-				textDateLock.Text=PrefC.GetDate(PrefName.SecurityLockDate).ToShortDateString();
+			if(Preferences.GetDate(PrefName.SecurityLockDate).Year>1880) {
+				textDateLock.Text=Preferences.GetDate(PrefName.SecurityLockDate).ToShortDateString();
 			}
-			if(PrefC.GetBool(PrefName.CentralManagerSecurityLock)) {
+			if(Preferences.GetBool(PrefName.CentralManagerSecurityLock)) {
 				butChange.Enabled=false;
 				labelGlobalDateLockDisabled.Visible=true;			}
 			List<UserGroup> listGroupsNotAdmin=UserGroups.GetList().FindAll(x => !GroupPermissions.HasPermission(x.UserGroupNum,Permissions.SecurityAdmin,0));
 			foreach(UserGroup group in listGroupsNotAdmin) {
 				int idx=comboGroups.Items.Add(new ODBoxItem<UserGroup>(group.Description,group));
-				if(PrefC.GetLong(PrefName.DefaultUserGroup)==group.UserGroupNum) {
+				if(Preferences.GetLong(PrefName.DefaultUserGroup)==group.UserGroupNum) {
 					comboGroups.SelectedIndex=idx;
 				}
 			}
@@ -125,14 +125,14 @@ namespace OpenDental {
 		private void butChange_Click(object sender,EventArgs e) {
 			FormSecurityLock FormS = new FormSecurityLock();
 			FormS.ShowDialog();//prefs are set invalid within that form if needed.
-			if(PrefC.GetInt(PrefName.SecurityLockDays)>0) {
-				textDaysLock.Text=PrefC.GetInt(PrefName.SecurityLockDays).ToString();
+			if(Preferences.GetInt(PrefName.SecurityLockDays)>0) {
+				textDaysLock.Text=Preferences.GetInt(PrefName.SecurityLockDays).ToString();
 			}
 			else {
 				textDaysLock.Text="";
 			}
-			if(PrefC.GetDate(PrefName.SecurityLockDate).Year>1880) {
-				textDateLock.Text=PrefC.GetDate(PrefName.SecurityLockDate).ToShortDateString();
+			if(Preferences.GetDate(PrefName.SecurityLockDate).Year>1880) {
+				textDateLock.Text=Preferences.GetDate(PrefName.SecurityLockDate).ToShortDateString();
 			}
 			else {
 				textDateLock.Text="";

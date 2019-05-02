@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Etrans835Attach into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Etrans835Attach etrans835Attach,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				etrans835Attach.Etrans835AttachNum=ReplicationServers.GetKey("etrans835attach","Etrans835AttachNum");
 			}
 			string command="INSERT INTO etrans835attach (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="Etrans835AttachNum,";
 			}
 			command+="EtransNum,ClaimNum,ClpSegmentIndex,DateTimeEntry) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(etrans835Attach.Etrans835AttachNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (etrans835Attach.ClaimNum)+","
 				+    POut.Int   (etrans835Attach.ClpSegmentIndex)+","
 				+    DbHelper.Now()+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

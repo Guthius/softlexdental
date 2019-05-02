@@ -236,11 +236,11 @@ namespace OpenDental {
 				e.Graphics.DrawString(str,Font,Brushes.Black,x1,y1);
 			}
 			//find the biggest bar
-			float peak=PIn.Int(PrefC.GetRaw("GraphEmployeeTimesPeak"));//The ideal peak.  Each day should look the same, except Friday.
+			float peak=PIn.Int(Preferences.GetRaw("GraphEmployeeTimesPeak"));//The ideal peak.  Each day should look the same, except Friday.
 			if(DateShowing.DayOfWeek==DayOfWeek.Friday) {
 				peak=peak*0.95f;//The Friday graph is actually smaller than the other graphs.
 			}
-			float superPeak=PIn.Int(PrefC.GetRaw("GraphEmployeeTimesSuperPeak"));//the most staff possible to schedule
+			float superPeak=PIn.Int(Preferences.GetRaw("GraphEmployeeTimesSuperPeak"));//the most staff possible to schedule
 			/*for(int i=0;i<buckets.Length;i++){
 				if(buckets[i]>biggest){
 					biggest=buckets[i];

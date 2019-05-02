@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one TreatPlanAttach into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(TreatPlanAttach treatPlanAttach,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				treatPlanAttach.TreatPlanAttachNum=ReplicationServers.GetKey("treatplanattach","TreatPlanAttachNum");
 			}
 			string command="INSERT INTO treatplanattach (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="TreatPlanAttachNum,";
 			}
 			command+="TreatPlanNum,ProcNum,Priority) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(treatPlanAttach.TreatPlanAttachNum)+",";
 			}
 			command+=
 				     POut.Long  (treatPlanAttach.TreatPlanNum)+","
 				+    POut.Long  (treatPlanAttach.ProcNum)+","
 				+    POut.Long  (treatPlanAttach.Priority)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

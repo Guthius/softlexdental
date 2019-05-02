@@ -172,7 +172,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("FormApptsOther","Prov"),50);
 			gridMain.Columns.Add(col);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn(Lan.g("FormApptsOther","Clinic"),80);
 				gridMain.Columns.Add(col);
 			}
@@ -189,14 +189,14 @@ namespace OpenDental {
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			int dateIndex=3;
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				dateIndex=2;
 			}
 			for(int i=0;i<_listApptOthers.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(_listApptOthers[i].AptStatus.ToString());
 				row.Cells.Add(Providers.GetAbbr(_listApptOthers[i].ProvNum));
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add(Clinics.GetAbbr(_listApptOthers[i].ClinicNum));
 				}
 				row.Cells.Add("");//Date

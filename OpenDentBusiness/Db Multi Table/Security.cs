@@ -210,7 +210,7 @@ namespace OpenDentBusiness
             }
             if (perm == Permissions.AccountingCreate || perm == Permissions.AccountingEdit)
             {
-                if (date <= PrefC.GetDate(PrefName.AccountingLockDate))
+                if (date <= Preferences.GetDate(PrefName.AccountingLockDate))
                 {
                     if (!suppressMessage && !suppressLockDateMessage)
                     {
@@ -295,7 +295,7 @@ namespace OpenDentBusiness
             {
                 return false;//Invalid or MinDate passed in.
             }
-            if (!PrefC.GetBool(PrefName.SecurityLockIncludesAdmin) && GroupPermissions.HasPermission(Security.CurUser, Permissions.SecurityAdmin, 0))
+            if (!Preferences.GetBool(PrefName.SecurityLockIncludesAdmin) && GroupPermissions.HasPermission(Security.CurUser, Permissions.SecurityAdmin, 0))
             {
                 return false;//admins are never affected by global date limitation when preference is false.
             }
@@ -309,16 +309,16 @@ namespace OpenDentBusiness
                 return false;
             }
             //If global lock is Date based.
-            if (date <= PrefC.GetDate(PrefName.SecurityLockDate))
+            if (date <= Preferences.GetDate(PrefName.SecurityLockDate))
             {
                 if (!isSilent)
                 {
-                    MessageBox.Show(Lans.g("Security", "Locked by Administrator before ") + PrefC.GetDate(PrefName.SecurityLockDate).ToShortDateString());
+                    MessageBox.Show(Lans.g("Security", "Locked by Administrator before ") + Preferences.GetDate(PrefName.SecurityLockDate).ToShortDateString());
                 }
                 return true;
             }
             //If global lock is days based.
-            int lockDays = PrefC.GetInt(PrefName.SecurityLockDays);
+            int lockDays = Preferences.GetInt(PrefName.SecurityLockDays);
             if (lockDays > 0 && date <= DateTime.Today.AddDays(-lockDays))
             {
                 if (!isSilent)

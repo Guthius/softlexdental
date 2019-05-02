@@ -39,7 +39,7 @@ namespace OpenDental {
 			textDateFrom.Text=DateTimeOD.Today.AddDays(-7).ToShortDateString();
 			textDateTo.Text=DateTimeOD.Today.ToShortDateString();
 			#region User Clinics
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				comboClinics.Visible=true;
 				labelClinic.Visible=true;
 				comboClinics.Items.Clear();
@@ -94,7 +94,7 @@ namespace OpenDental {
 		private bool ValidateFields() {
 			_reportDateFrom=GetDateFrom();
 			_reportDateTo=GetDateTo();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				bool isAllClinics=comboClinics.ListSelectedIndices.Contains(0);
 				if(!isAllClinics && comboClinics.SelectedIndices.Count==0) {
 					comboClinics.SetSelected(0,true);//All clinics.
@@ -203,7 +203,7 @@ namespace OpenDental {
 				gridMain.Columns.Add(col);
 				col=new ODGridColumn(Lan.g("TableEtrans835s","Amount"),80);
 				gridMain.Columns.Add(col);
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					col=new ODGridColumn(Lan.g("TableEtrans835s","Clinic"),70);
 					gridMain.Columns.Add(col);
 				}
@@ -230,7 +230,7 @@ namespace OpenDental {
 				//List of ClinicNums for the current etrans.ListClaimsPaid from the DB.
 				List<long> listClinicNums=_dictEtransClaims[etrans.EtransNum].Select(x => x==null? 0 :x.ClinicNum).Distinct().ToList();
 				#region Filter: Clinics
-				if(PrefC.HasClinicsEnabled && !listClinicNums.Exists(x => listSelectedClinicNums.Contains(x))) {
+				if(Preferences.HasClinicsEnabled && !listClinicNums.Exists(x => listSelectedClinicNums.Contains(x))) {
 					continue;//The ClinicNums associated to the 835 do not match any of the selected ClinicNums, so nothing to show in this 835.
 				}
 				#endregion
@@ -258,7 +258,7 @@ namespace OpenDental {
 				row.Cells.Add(POut.Date(etrans.DateTimeTrans));
 				row.Cells.Add(POut.Decimal(x835.InsPaid));
 				#region Column: Clinic
-				if(PrefC.HasClinicsEnabled) {	
+				if(Preferences.HasClinicsEnabled) {	
 					string clinicAbbr="";
 					if(listClinicNums.Count==1) {
 						if(listClinicNums[0]==0) {
@@ -432,7 +432,7 @@ namespace OpenDental {
 				listSelectedStatuses.Add(listStatus.Items[index].ToString());
 			}
 			List<long> listClinicNums=null;//A null signifies that clinics are disabled.
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(comboClinics.SelectedIndices.Contains(0)) {//'All' is selected
 					listClinicNums=_listUserClinics.Select(x => x.ClinicNum).ToList();
 					listClinicNums.Add(0);//'Unassigned'

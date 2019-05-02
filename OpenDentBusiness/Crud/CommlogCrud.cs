@@ -109,15 +109,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Commlog into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Commlog commlog,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				commlog.CommlogNum=ReplicationServers.GetKey("commlog","CommlogNum");
 			}
 			string command="INSERT INTO commlog (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="CommlogNum,";
 			}
 			command+="PatNum,CommDateTime,CommType,Note,Mode_,SentOrReceived,UserNum,Signature,SigIsTopaz,DateTimeEnd,CommSource,ProgramNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(commlog.CommlogNum)+",";
 			}
 			command+=
@@ -142,7 +142,7 @@ namespace OpenDentBusiness.Crud{
 				commlog.Signature="";
 			}
 			OdSqlParameter paramSignature=new OdSqlParameter("paramSignature",OdDbType.Text,POut.StringParam(commlog.Signature));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNote,paramSignature);
 			}
 			else {

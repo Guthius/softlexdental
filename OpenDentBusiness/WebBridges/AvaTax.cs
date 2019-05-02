@@ -123,7 +123,7 @@ namespace OpenDentBusiness {
 
 		///<summary>True if we are in HQ and AvaTax is enabled.</summary>
 		public static bool IsEnabled() {
-			return PrefC.IsODHQ && Programs.IsEnabled(ProgramName.AvaTax);
+			return Preferences.IsODHQ && Programs.IsEnabled(ProgramName.AvaTax);
 		}
 
 		///<summary>True if we are in HQ, AvaTax is enabled, we tax the customer's state, and either the customer's tax exempt field is not defined or 
@@ -374,12 +374,12 @@ namespace OpenDentBusiness {
 			//Add main office address.  In the future, if we make this available to customers, then we might need to implement clinics here.
 			builder.WithAddress(
 				TransactionAddressType.ShipFrom,
-				PrefC.GetString(PrefName.PracticeAddress),
-				PrefC.GetString(PrefName.PracticeAddress2),
+				Preferences.GetString(PrefName.PracticeAddress),
+				Preferences.GetString(PrefName.PracticeAddress2),
 				"",
-				PrefC.GetString(PrefName.PracticeCity),
-				PrefC.GetString(PrefName.PracticeST),
-				PrefC.GetString(PrefName.PracticeZip),
+				Preferences.GetString(PrefName.PracticeCity),
+				Preferences.GetString(PrefName.PracticeST),
+				Preferences.GetString(PrefName.PracticeZip),
 				"US"//US only.  Otherwise, in future we might use System.Globalization.RegionInfo.CurrentRegion.TwoLetterISORegionName
 			);
 			//Add customer address

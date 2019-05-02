@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one JobNotification into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(JobNotification jobNotification,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				jobNotification.JobNotificationNum=ReplicationServers.GetKey("jobnotification","JobNotificationNum");
 			}
 			string command="INSERT INTO jobnotification (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="JobNotificationNum,";
 			}
 			command+="JobNum,UserNum,Changes) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(jobNotification.JobNotificationNum)+",";
 			}
 			command+=
 				     POut.Long  (jobNotification.JobNum)+","
 				+    POut.Long  (jobNotification.UserNum)+","
 				+    POut.Int   ((int)jobNotification.Changes)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

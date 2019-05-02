@@ -343,7 +343,7 @@ namespace OpenDental{
 			if(IsNew){
 				checkShowUn.Checked=true;
 			}
-			if(!PrefC.HasClinicsEnabled){
+			if(!Preferences.HasClinicsEnabled){
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}
@@ -464,8 +464,8 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter a date first.");
 				return;
 			}
-			if(PIn.Date(textDate.Text).Date > DateTime.Today.Date && !PrefC.GetBool(PrefName.FutureTransDatesAllowed) 
-				&& !PrefC.GetBool(PrefName.AllowFutureInsPayments)) 
+			if(PIn.Date(textDate.Text).Date > DateTime.Today.Date && !Preferences.GetBool(PrefName.FutureTransDatesAllowed) 
+				&& !Preferences.GetBool(PrefName.AllowFutureInsPayments)) 
 			{
 				MsgBox.Show(this,"Payments cannot be for a date in the future.");
 				return; //probably not necesasary since this is an old form, but just in case we use it again

@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one LabTurnaround into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(LabTurnaround labTurnaround,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				labTurnaround.LabTurnaroundNum=ReplicationServers.GetKey("labturnaround","LabTurnaroundNum");
 			}
 			string command="INSERT INTO labturnaround (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="LabTurnaroundNum,";
 			}
 			command+="LaboratoryNum,Description,DaysPublished,DaysActual) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(labTurnaround.LabTurnaroundNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(labTurnaround.Description)+"',"
 				+    POut.Int   (labTurnaround.DaysPublished)+","
 				+    POut.Int   (labTurnaround.DaysActual)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

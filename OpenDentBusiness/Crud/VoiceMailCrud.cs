@@ -95,15 +95,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one VoiceMail into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(VoiceMail voiceMail,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				voiceMail.VoiceMailNum=ReplicationServers.GetKey("voicemail","VoiceMailNum");
 			}
 			string command="INSERT INTO voicemail (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="VoiceMailNum,";
 			}
 			command+="UserNum,PatNum,DateCreated,Duration,FileName,PhoneNumber,StatusVM,Note,DateClaimed) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(voiceMail.VoiceMailNum)+",";
 			}
 			command+=
@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   ((int)voiceMail.StatusVM)+","
 				+"'"+POut.String(voiceMail.Note)+"',"
 				+    POut.DateT (voiceMail.DateClaimed)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

@@ -88,7 +88,7 @@ namespace OpenDental {
 					//do nothing, the wikiImagePath is only important if the user adds an image to the wiki page and is checked below
 				}
 				matches=Regex.Matches(textContent.Text,@"\[\[(img:).*?\]\]");// [[img:myimage.jpg]]
-				if(matches.Count>0 && PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+				if(matches.Count>0 && Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 					if(showMsgBox) {
 						MessageBox.Show(Lans.g(_lanThis,"Error at line:")+" "+textContent.GetLineFromCharIndex(matches[0].Index)+" - "
 							+Lans.g(_lanThis,"Cannot use images in wiki if storing images in database."));

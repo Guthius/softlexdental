@@ -15,10 +15,10 @@ namespace OpenDental {
 		}
 
 		private void FormEmailSetupEHR_Load(object sender,EventArgs e) {
-			textPOPserver.Text=PrefC.GetString(PrefName.EHREmailPOPserver);
-			textUsername.Text=PrefC.GetString(PrefName.EHREmailFromAddress);
-			textPassword.Text=PrefC.GetString(PrefName.EHREmailPassword);
-			textPort.Text=PrefC.GetString(PrefName.EHREmailPort);
+			textPOPserver.Text=Preferences.GetString(PrefName.EHREmailPOPserver);
+			textUsername.Text=Preferences.GetString(PrefName.EHREmailFromAddress);
+			textPassword.Text=Preferences.GetString(PrefName.EHREmailPassword);
+			textPort.Text=Preferences.GetString(PrefName.EHREmailPort);
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

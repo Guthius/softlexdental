@@ -19,7 +19,7 @@ namespace OpenDental {
 		}
 
 		private void FormEhrSetup_Load(object sender,EventArgs e) {
-			if(PrefC.GetBool(PrefName.EhrEmergencyNow)) {
+			if(Preferences.GetBool(PrefName.EhrEmergencyNow)) {
 				panelEmergencyNow.BackColor=Color.Red;
 			}
 			else {
@@ -85,7 +85,7 @@ namespace OpenDental {
 		}
 
 		private void butEmergencyNow_Click(object sender,EventArgs e) {
-			if(PrefC.GetBool(PrefName.EhrEmergencyNow)) {
+			if(Preferences.GetBool(PrefName.EhrEmergencyNow)) {
 				panelEmergencyNow.BackColor=SystemColors.Control;
 				Prefs.UpdateBool(PrefName.EhrEmergencyNow,false);
 			}
@@ -141,7 +141,7 @@ namespace OpenDental {
 		}
 
 		private static string downloadFileHelper(string codeSystemURL,string codeSystemName) {
-			string zipFileDestination=PrefC.GetRandomTempFile(".tmp");//@"c:\users\ryan\desktop\"+codeSystemName+".tmp";
+			string zipFileDestination=Preferences.GetRandomTempFile(".tmp");//@"c:\users\ryan\desktop\"+codeSystemName+".tmp";
 			File.Delete(zipFileDestination);
 			WebRequest wr=WebRequest.Create(codeSystemURL);
 			WebResponse webResp=null;
@@ -158,8 +158,8 @@ namespace OpenDental {
 			MemoryStream ms=new MemoryStream();
 			using(ZipFile unzipped=ZipFile.Read(zipFileDestination)) {
 				ZipEntry ze=unzipped[0];
-				ze.Extract(PrefC.GetTempFolderPath(),ExtractExistingFileAction.OverwriteSilently);
-				return ODFileUtils.CombinePaths(PrefC.GetTempFolderPath(),unzipped[0].FileName);
+				ze.Extract(Preferences.GetTempFolderPath(),ExtractExistingFileAction.OverwriteSilently);
+				return ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),unzipped[0].FileName);
 			}
 		}
 
@@ -205,19 +205,19 @@ namespace OpenDental {
 				//TODO: include more user information
 				writer.WriteStartElement("UpdateRequest");
 				writer.WriteStartElement("RegistrationKey");
-				writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
+				writer.WriteString(Preferences.GetString(PrefName.RegistrationKey));
 				writer.WriteEndElement();
 				writer.WriteStartElement("PracticeTitle");
-				writer.WriteString(PrefC.GetString(PrefName.PracticeTitle));
+				writer.WriteString(Preferences.GetString(PrefName.PracticeTitle));
 				writer.WriteEndElement();
 				writer.WriteStartElement("PracticeAddress");
-				writer.WriteString(PrefC.GetString(PrefName.PracticeAddress));
+				writer.WriteString(Preferences.GetString(PrefName.PracticeAddress));
 				writer.WriteEndElement();
 				writer.WriteStartElement("PracticePhone");
-				writer.WriteString(PrefC.GetString(PrefName.PracticePhone));
+				writer.WriteString(Preferences.GetString(PrefName.PracticePhone));
 				writer.WriteEndElement();
 				writer.WriteStartElement("ProgramVersion");
-				writer.WriteString(PrefC.GetString(PrefName.ProgramVersion));
+				writer.WriteString(Preferences.GetString(PrefName.ProgramVersion));
 				writer.WriteEndElement();
 				writer.WriteStartElement("CodeSystemRequested");
 				writer.WriteString(codeSystemName);
@@ -230,9 +230,9 @@ namespace OpenDental {
 			OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
 			updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
 #endif
-			if(PrefC.GetString(PrefName.UpdateWebProxyAddress) !="") {
-				IWebProxy proxy = new WebProxy(PrefC.GetString(PrefName.UpdateWebProxyAddress));
-				ICredentials cred=new NetworkCredential(PrefC.GetString(PrefName.UpdateWebProxyUserName),PrefC.GetString(PrefName.UpdateWebProxyPassword));
+			if(Preferences.GetString(PrefName.UpdateWebProxyAddress) !="") {
+				IWebProxy proxy = new WebProxy(Preferences.GetString(PrefName.UpdateWebProxyAddress));
+				ICredentials cred=new NetworkCredential(Preferences.GetString(PrefName.UpdateWebProxyUserName),Preferences.GetString(PrefName.UpdateWebProxyPassword));
 				proxy.Credentials=cred;
 				updateService.Proxy=proxy;
 			}

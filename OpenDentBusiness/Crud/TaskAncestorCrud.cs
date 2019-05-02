@@ -77,21 +77,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one TaskAncestor into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(TaskAncestor taskAncestor,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				taskAncestor.TaskAncestorNum=ReplicationServers.GetKey("taskancestor","TaskAncestorNum");
 			}
 			string command="INSERT INTO taskancestor (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="TaskAncestorNum,";
 			}
 			command+="TaskNum,TaskListNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(taskAncestor.TaskAncestorNum)+",";
 			}
 			command+=
 				     POut.Long  (taskAncestor.TaskNum)+","
 				+    POut.Long  (taskAncestor.TaskListNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many TaskAncestors into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<TaskAncestor> listTaskAncestors,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(TaskAncestor taskAncestor in listTaskAncestors) {
 					Insert(taskAncestor);
 				}

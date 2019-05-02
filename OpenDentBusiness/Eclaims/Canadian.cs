@@ -1689,7 +1689,7 @@ namespace OpenDentBusiness.Eclaims
                         StringBuilder strbuild = new StringBuilder();
                         using (XmlWriter writer = XmlWriter.Create(strbuild, settings))
                         {
-                            writer.WriteElementString("RegistrationKey", PrefC.GetString(PrefName.RegistrationKey));
+                            writer.WriteElementString("RegistrationKey", Preferences.GetString(PrefName.RegistrationKey));
                         }
                         string response = null;
                         if (network.Abbrev == "ABC")
@@ -2183,7 +2183,7 @@ namespace OpenDentBusiness.Eclaims
                 }
             }
             //Return the default dental clearinghouse if it is a Canadian clearinghouse.
-            Clearinghouse clearinghouse = Clearinghouses.GetFirstOrDefault(x => PrefC.GetLong(PrefName.ClearinghouseDefaultDent) == x.ClearinghouseNum
+            Clearinghouse clearinghouse = Clearinghouses.GetFirstOrDefault(x => Preferences.GetLong(PrefName.ClearinghouseDefaultDent) == x.ClearinghouseNum
                   && x.Eformat == ElectronicClaimFormat.Canadian);
             if (clearinghouse == null)
             {
@@ -2553,7 +2553,7 @@ namespace OpenDentBusiness.Eclaims
         ///Be sure to also check that the region is set to Canada.</summary>
         public static bool IsQuebec()
         {
-            string state = PrefC.GetString(PrefName.PracticeST).ToLower();
+            string state = Preferences.GetString(PrefName.PracticeST).ToLower();
             if (state == "qc" || state == "quebec" || state == "québec")
             {//Alt code 0233 for the é
                 return true;

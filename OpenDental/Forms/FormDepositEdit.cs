@@ -707,7 +707,7 @@ namespace OpenDental{
 
 		private void FormDepositEdit_Load(object sender,System.EventArgs e) {
 			butSendQB.Visible=false;
-			IsQuickBooks=PrefC.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks;
+			IsQuickBooks=Preferences.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks;
 			if(IsNew) {
 				if(!Security.IsAuthorized(Permissions.DepositSlips,DateTime.Today)) {
 					//we will check the date again when saving
@@ -722,7 +722,7 @@ namespace OpenDental{
 					butDelete.Enabled=false;
 				}
 			}
-			if(PrefC.GetBool(PrefName.ShowAutoDeposit)) {
+			if(Preferences.GetBool(PrefName.ShowAutoDeposit)) {
 				labelDepositAccountNum.Visible=true;
 				comboDepositAccountNum.Visible=true;
 				List<Def> listAutoDepositDefsAll=Defs.GetDefsForCategory(DefCat.AutoDeposit);
@@ -736,8 +736,8 @@ namespace OpenDental{
 					,() => { return (defAutoDeposit!=null ? defAutoDeposit.ItemName+" "+Lan.g(this,"(hidden)") : ""); });
 			}
 			if(IsNew) {
-				textDateStart.Text=PIn.Date(PrefC.GetString(PrefName.DateDepositsStarted)).ToShortDateString();
-				if(!PrefC.HasClinicsEnabled) {
+				textDateStart.Text=PIn.Date(Preferences.GetString(PrefName.DateDepositsStarted)).ToShortDateString();
+				if(!Preferences.HasClinicsEnabled) {
 					comboClinic.Visible=false;
 					labelClinic.Visible=false;
 				}
@@ -822,7 +822,7 @@ namespace OpenDental{
 					butSendQB.Visible=true;
 				}
 			}
-			if(PrefC.GetBool(PrefName.QuickBooksClassRefsEnabled)) {
+			if(Preferences.GetBool(PrefName.QuickBooksClassRefsEnabled)) {
 				if(!IsNew) {
 					//Show groupbox and hide all the controls except for labelClassRef and comboClassRefs
 					groupSelect.Visible=true;
@@ -838,7 +838,7 @@ namespace OpenDental{
 				}
 				labelClassRef.Visible=true;
 				comboClassRefs.Visible=true;
-				string classStr=PrefC.GetString(PrefName.QuickBooksClassRefs);
+				string classStr=Preferences.GetString(PrefName.QuickBooksClassRefs);
 				_arrayClassesQB=classStr.Split(new char[] { ',' });
 				for(int i = 0;i<_arrayClassesQB.Length;i++) {
 					if(_arrayClassesQB[i]=="") {
@@ -1036,7 +1036,7 @@ namespace OpenDental{
 				}
 				Cursor.Current=Cursors.WaitCursor;
 				string classRef="";
-				if(PrefC.GetBool(PrefName.QuickBooksClassRefsEnabled)) {
+				if(Preferences.GetBool(PrefName.QuickBooksClassRefsEnabled)) {
 					classRef=comboClassRefs.SelectedItem.ToString();
 				}
 				QuickBooks.CreateDeposit(_depositCur.DateDeposit
@@ -1296,7 +1296,7 @@ namespace OpenDental{
 			SheetParameter.SetParameter(sheet,"DepositNum",_depositCur.DepositNum);
 			SheetFiller.FillFields(sheet);
 			SheetUtil.CalculateHeights(sheet);
-			string filePathAndName=PrefC.GetRandomTempFile(".pdf");
+			string filePathAndName=Preferences.GetRandomTempFile(".pdf");
 			SheetPrinting.CreatePdf(sheet,filePathAndName,null);
 			Process.Start(filePathAndName);
 		}
@@ -1338,7 +1338,7 @@ namespace OpenDental{
 			SheetFiller.FillFields(sheet);
 			SheetUtil.CalculateHeights(sheet);
 			string sheetName=sheet.Description+"_"+DateTime.Now.ToString("yyyyMMdd_hhmmssfff")+".pdf";
-			string tempFile=ODFileUtils.CombinePaths(PrefC.GetTempFolderPath(),sheetName);
+			string tempFile=ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),sheetName);
 			string filePathAndName=FileAtoZ.CombinePaths(EmailAttaches.GetAttachPath(),sheetName);
 			SheetPrinting.CreatePdf(sheet,tempFile,null);
 			FileAtoZ.Copy(tempFile,filePathAndName,FileAtoZSourceDestination.LocalToAtoZ);
@@ -1374,7 +1374,7 @@ namespace OpenDental{
 			gridIns.SetSelected(true);
 			ComputeAmt();
 			if(comboClinic.SelectedIndex==0){
-				textBankAccountInfo.Text=PrefC.GetString(PrefName.PracticeBankNumber);
+				textBankAccountInfo.Text=Preferences.GetString(PrefName.PracticeBankNumber);
 			}
 			else{
 				textBankAccountInfo.Text=_listClinics[comboClinic.SelectedIndex-1].BankNumber;
@@ -1442,12 +1442,12 @@ namespace OpenDental{
 					je.DateDisplayed=_depositCur.DateDeposit;//it would be nice to add security here.
 					je.DebitAmt=_depositCur.Amount;
 					je.Memo=Lan.g(this,"Deposit");
-					je.Splits=Accounts.GetDescript(PrefC.GetLong(PrefName.AccountingIncomeAccount));
+					je.Splits=Accounts.GetDescript(Preferences.GetLong(PrefName.AccountingIncomeAccount));
 					je.TransactionNum=trans.TransactionNum;
 					JournalEntries.Insert(je);
 					//then, the income entry
 					je=new JournalEntry();
-					je.AccountNum=PrefC.GetLong(PrefName.AccountingIncomeAccount);
+					je.AccountNum=Preferences.GetLong(PrefName.AccountingIncomeAccount);
 					//je.CheckNumber=;
 					je.DateDisplayed=_depositCur.DateDeposit;//it would be nice to add security here.
 					je.CreditAmt=_depositCur.Amount;

@@ -88,15 +88,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one DisplayReport into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(DisplayReport displayReport,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				displayReport.DisplayReportNum=ReplicationServers.GetKey("displayreport","DisplayReportNum");
 			}
 			string command="INSERT INTO displayreport (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="DisplayReportNum,";
 			}
 			command+="InternalName,ItemOrder,Description,Category,IsHidden,IsVisibleInSubMenu) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(displayReport.DisplayReportNum)+",";
 			}
 			command+=
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   ((int)displayReport.Category)+","
 				+    POut.Bool  (displayReport.IsHidden)+","
 				+    POut.Bool  (displayReport.IsVisibleInSubMenu)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

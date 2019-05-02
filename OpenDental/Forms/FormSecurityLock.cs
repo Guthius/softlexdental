@@ -197,13 +197,13 @@ namespace OpenDental{
 		#endregion
 
 		private void FormSecurityLock_Load(object sender,EventArgs e) {
-			if(PrefC.GetDate(PrefName.SecurityLockDate).Year>1880){
-				textDate.Text=PrefC.GetDate(PrefName.SecurityLockDate).ToShortDateString();
+			if(Preferences.GetDate(PrefName.SecurityLockDate).Year>1880){
+				textDate.Text=Preferences.GetDate(PrefName.SecurityLockDate).ToShortDateString();
 			}
-			if(PrefC.GetInt(PrefName.SecurityLockDays)>0) {
-				textDays.Text=PrefC.GetInt(PrefName.SecurityLockDays).ToString();
+			if(Preferences.GetInt(PrefName.SecurityLockDays)>0) {
+				textDays.Text=Preferences.GetInt(PrefName.SecurityLockDays).ToString();
 			}
-			checkAdmin.Checked=PrefC.GetBool(PrefName.SecurityLockIncludesAdmin);
+			checkAdmin.Checked=Preferences.GetBool(PrefName.SecurityLockIncludesAdmin);
 		}
 
 		private void textDate_KeyDown(object sender,System.Windows.Forms.KeyEventArgs e) {

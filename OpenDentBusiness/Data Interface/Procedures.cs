@@ -755,7 +755,7 @@ namespace OpenDentBusiness
             proc.SiteNum = pat.SiteNum;
             proc.RevCode = procCodeCur.RevenueCodeDefault;
             proc.DateEntryC = DateTime.Now;
-            proc.PlaceService = (PlaceOfService)PrefC.GetInt(PrefName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used.
+            proc.PlaceService = (PlaceOfService)Preferences.GetInt(PrefName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used.
             proc.ProcNum = Procedures.Insert(proc);
             Procedures.ComputeEstimates(proc, pat.PatNum, new List<ClaimProc>(), true, insPlanList, patPlanList, benefitList, pat.Age, subList);
             return proc;
@@ -802,7 +802,7 @@ namespace OpenDentBusiness
                 DateEntryC = DateTime.Today,
                 SecDateEntry = DateTime.Today,
                 ProcFee = 0,
-                PlaceService = (PlaceOfService)PrefC.GetInt(PrefName.DefaultProcedurePlaceService)//Default Proc Place of Service for the Practice is used. 
+                PlaceService = (PlaceOfService)Preferences.GetInt(PrefName.DefaultProcedurePlaceService)//Default Proc Place of Service for the Practice is used. 
             };
             proc.ProcNum = Procedures.Insert(proc);
             return proc;
@@ -1340,7 +1340,7 @@ namespace OpenDentBusiness
                 insPlanPrimary = InsPlans.GetPlan(insSubPrimary.PlanNum, listInsPlans);
             }
             //Get fee schedule and fee amount for medical or dental.
-            if (PrefC.GetBool(PrefName.MedicalFeeUsedForNewProcs) && !string.IsNullOrEmpty(procMedicalCode))
+            if (Preferences.GetBool(PrefName.MedicalFeeUsedForNewProcs) && !string.IsNullOrEmpty(procMedicalCode))
             {
                 long feeSch = FeeScheds.GetMedFeeSched(pat, listInsPlans, listPatPlans, listInsSubs, procProvNum);
                 procFeeRet = Fees.GetAmount0(ProcedureCodes.GetProcCode(procMedicalCode).CodeNum, feeSch, procClinicNum, procProvNum, listFees);
@@ -1353,7 +1353,7 @@ namespace OpenDentBusiness
             if (insPlanPrimary != null && insPlanPrimary.PlanType == "p")
             {//PPO
                 double ucrFee = Fees.GetAmount0(procCodeNum, Providers.GetProv(Patients.GetProvNum(pat)).FeeSched, procClinicNum, procProvNum, listFees);
-                if (procFeeRet < ucrFee || PrefC.GetBool(PrefName.InsPpoAlwaysUseUcrFee))
+                if (procFeeRet < ucrFee || Preferences.GetBool(PrefName.InsPpoAlwaysUseUcrFee))
                 {
                     procFeeRet = ucrFee;
                 }
@@ -1904,7 +1904,7 @@ namespace OpenDentBusiness
             {
                 return false;
             }
-            switch (PrefC.GetInt(PrefName.ProcFeeUpdatePrompt))
+            switch (Preferences.GetInt(PrefName.ProcFeeUpdatePrompt))
             {
                 case 0:
                     return false;
@@ -2083,7 +2083,7 @@ namespace OpenDentBusiness
             //This may fail (and always did fail) above a certain number (thousands?) of fee schedules because local machine will run out of memory, etc.
             //We will need a copy of such a database to determine new strategy.
             //3. On multiple threads, update the fees on procedures in blocks of 1000 identical fees.
-            if (!PrefC.GetBool(PrefName.FeesUseCache))
+            if (!Preferences.GetBool(PrefName.FeesUseCache))
             {
                 if (clinicNumGlobal == -1)
                 {
@@ -2118,7 +2118,7 @@ namespace OpenDentBusiness
             _odThreadQueueData.Start(true);
             #endregion Create Queue Batch Data Thread
             #region Get Medical Fee Sched Dict
-            bool isMedFeeUsedForNewProcs = PrefC.GetBool(PrefName.MedicalFeeUsedForNewProcs);
+            bool isMedFeeUsedForNewProcs = Preferences.GetBool(PrefName.MedicalFeeUsedForNewProcs);
             Dictionary<long, long> dictPatNumMedFeeSchedNum = new Dictionary<long, long>();
             if (isMedFeeUsedForNewProcs)
             {
@@ -2147,10 +2147,10 @@ namespace OpenDentBusiness
             #region Get Variables Used By All Batches
             int rowSkippedCount = 0;//used to update progress bar
             int procFeesUpdatedCount = 0;//used to report number of fees updated to calling form
-            bool isInsPpoAlwaysUseUcrFee = PrefC.GetBool(PrefName.InsPpoAlwaysUseUcrFee);
+            bool isInsPpoAlwaysUseUcrFee = Preferences.GetBool(PrefName.InsPpoAlwaysUseUcrFee);
             FeeCache feeCache = null;
             Lookup<FeeKey2, Fee> lookupFeesByCodeAndSched = null;
-            if (PrefC.GetBool(PrefName.FeesUseCache))
+            if (Preferences.GetBool(PrefName.FeesUseCache))
             {
                 feeCache = new FeeCache(listFeesHQ);//cache already has code to add clinic fees
             }
@@ -2161,7 +2161,7 @@ namespace OpenDentBusiness
                 lookupFeesByCodeAndSched = (Lookup<FeeKey2, Fee>)listFeesHQandClinic.ToLookup(x => new FeeKey2(x.CodeNum, x.FeeSched));
                 //lookup will make it very fast to look up the fees we need.
             }
-            long practDefaultProvNum = PrefC.GetLong(PrefName.PracticeDefaultProv);
+            long practDefaultProvNum = Preferences.GetLong(PrefName.PracticeDefaultProv);
             long practDefaultProvFeeSched = Providers.GetFirstOrDefault(x => x.ProvNum == practDefaultProvNum)?.FeeSched ?? 0;//default to 0 if prov is not found
             long firstNonHiddenProvFeeSched = Providers.GetFirstOrDefault(x => !x.IsHidden)?.FeeSched ?? 0;//default to 0 if all provs hidden (not likely to happen)
             Dictionary<long, long> dictProvFeeSched = Providers.GetDeepCopy().ToDictionary(x => x.ProvNum, x => x.FeeSched);
@@ -2264,7 +2264,7 @@ namespace OpenDentBusiness
                         #endregion Dental Fee Sched
                         if (isMedFeeUsedForNewProcs && medCodeNum > 0)
                         {
-                            if (PrefC.GetBool(PrefName.FeesUseCache))
+                            if (Preferences.GetBool(PrefName.FeesUseCache))
                             {
                                 newFee = feeCache.GetAmount0(medCodeNum, feeSchedCur, clinicNum, procProvNum);
                             }
@@ -2276,7 +2276,7 @@ namespace OpenDentBusiness
                         }
                         else
                         {
-                            if (PrefC.GetBool(PrefName.FeesUseCache))
+                            if (Preferences.GetBool(PrefName.FeesUseCache))
                             {
                                 newFee = feeCache.GetAmount0(codeNum, feeSchedCur, clinicNum, procProvNum);
                             }
@@ -2303,7 +2303,7 @@ namespace OpenDentBusiness
                                 feeSchedCur = firstNonHiddenProvFeeSched;
                             }
                             double ucrFee = 0;
-                            if (PrefC.GetBool(PrefName.FeesUseCache))
+                            if (Preferences.GetBool(PrefName.FeesUseCache))
                             {
                                 ucrFee = feeCache.GetAmount0(codeNum, feeSchedCur, clinicNum, procProvNum);
                             }
@@ -2410,7 +2410,7 @@ namespace OpenDentBusiness
 #endif
             try
             {
-                bool isMedFeeUsedForNewProcs = PrefC.GetBool(PrefName.MedicalFeeUsedForNewProcs);
+                bool isMedFeeUsedForNewProcs = Preferences.GetBool(PrefName.MedicalFeeUsedForNewProcs);
                 long clinicNumGlobal = (long)odThread.Parameters[0];
                 List<string> listQueries = new List<string>();
                 for (int i = 0; i < _listProcNumsMaxForGroups.Count; i++)
@@ -2566,7 +2566,7 @@ namespace OpenDentBusiness
         ///This is to prevent recurring bugs due to different sort methodology.</summary>
         public static Procedure[] SortListByTreatPlanPriority(List<Procedure> listProcs, List<TreatPlanAttach> listTreatPlanAttaches = null)
         {
-            return SortListByTreatPlanPriority(listProcs, PrefC.GetBool(PrefName.TreatPlanSortByTooth), listTreatPlanAttaches);
+            return SortListByTreatPlanPriority(listProcs, Preferences.GetBool(PrefName.TreatPlanSortByTooth), listTreatPlanAttaches);
         }
 
         ///<summary>Sorts the given list based on the procedure's priority, tooth, date, and procnum.
@@ -2797,7 +2797,7 @@ namespace OpenDentBusiness
             {//typically, loop will only have length of 1 or 2
              //Don't automatically create an estimate for completed procedures, especially if they are older than today.
              //However, we have an optional preference for users that knowingly accept this danger and have a workflow that requires this.
-                if (isHistorical && !PrefC.GetBool(PrefName.ClaimProcsAllowedToBackdate) && !isForOrtho)
+                if (isHistorical && !Preferences.GetBool(PrefName.ClaimProcsAllowedToBackdate) && !isForOrtho)
                 {
                     break;
                 }
@@ -2910,7 +2910,7 @@ namespace OpenDentBusiness
                         {
                             continue;
                         }
-                        if (claimProcs[i].Status == ClaimProcStatus.Received && !PrefC.GetBool(PrefName.InsEstRecalcReceived))
+                        if (claimProcs[i].Status == ClaimProcStatus.Received && !Preferences.GetBool(PrefName.InsEstRecalcReceived))
                         {
                             continue;
                         }
@@ -2981,7 +2981,7 @@ namespace OpenDentBusiness
             for (int i = 0; i < claimProcs.Count; i++)
             {
                 bool hasEstimateCalculation = true;
-                if (claimProcs[i].Status == ClaimProcStatus.Received && !PrefC.GetBool(PrefName.InsEstRecalcReceived))
+                if (claimProcs[i].Status == ClaimProcStatus.Received && !Preferences.GetBool(PrefName.InsEstRecalcReceived))
                 {
                     //Do not recalculate insurance estimates on received claimprocs.  However, we still need to include the insurance payments in the 
                     //calculation of any secondary, tertiary, etc insurance plans for each procedure.  In this case, we want to make sure writeOffEstOtherIns,
@@ -3203,7 +3203,7 @@ namespace OpenDentBusiness
             ProcedureCode procCode, InsPlan planCur, List<InsPlan> listInsPlans)
         {
             //No need to check RemotingRole; no call to db.
-            if (histList == null || benefitList == null || !PrefC.GetBool(PrefName.InsChecksFrequency) || proc.ProcDate.Year < 1880)
+            if (histList == null || benefitList == null || !Preferences.GetBool(PrefName.InsChecksFrequency) || proc.ProcDate.Year < 1880)
             {
                 return false;
             }
@@ -3485,10 +3485,10 @@ namespace OpenDentBusiness
                     procCur.DateEntryC = DateTime.Now;//this triggers it to set to server time NOW().
                     if (procCur.DiagnosticCode == "")
                     {
-                        procCur.DiagnosticCode = PrefC.GetString(PrefName.ICD9DefaultForNewProcs);
+                        procCur.DiagnosticCode = Preferences.GetString(PrefName.ICD9DefaultForNewProcs);
                     }
                 }
-                procCur.PlaceService = (PlaceOfService)PrefC.GetLong(PrefName.DefaultProcedurePlaceService);
+                procCur.PlaceService = (PlaceOfService)Preferences.GetLong(PrefName.DefaultProcedurePlaceService);
                 procCur.ClinicNum = apt.ClinicNum;
                 procCur.SiteNum = patient.SiteNum;
                 procCur.PlaceService = Clinics.GetPlaceService(apt.ClinicNum);
@@ -3835,7 +3835,7 @@ namespace OpenDentBusiness
                 PatientNote patNoteCur = PatientNotes.Refresh(patCur.PatNum, patCur.Guarantor);//Inserts PatientNote rows if one does not exists for PatNum AND Guarantor.
                                                                                                //First time completing an Ortho placement procedure, so we don't have an override in place yet. Any subsequent Ortho procs will use the same
                                                                                                //override as the first Ortho proc.
-                Byte defaultMonths = PrefC.GetByte(PrefName.OrthoDefaultMonthsTreat);
+                Byte defaultMonths = Preferences.GetByte(PrefName.OrthoDefaultMonthsTreat);
                 //Only set the override if one has not already been set.
                 if (patNoteCur.OrthoMonthsTreatOverride == -1)
                 {
@@ -3853,7 +3853,7 @@ namespace OpenDentBusiness
         {
             //No need to check RemotingRole; no call to db.
             string descript = procCodeSent.Descript;
-            if (PrefC.GetBool(PrefName.ClaimPrintProcChartedDesc))
+            if (Preferences.GetBool(PrefName.ClaimPrintProcChartedDesc))
             {
                 if (planCur == null)
                 {
@@ -4164,8 +4164,8 @@ namespace OpenDentBusiness
             proc.BaseUnits = procCodeCur.BaseUnits;
             proc.SiteNum = pat.SiteNum;
             proc.RevCode = procCodeCur.RevenueCodeDefault;
-            proc.DiagnosticCode = PrefC.GetString(PrefName.ICD9DefaultForNewProcs);
-            proc.PlaceService = (PlaceOfService)PrefC.GetInt(PrefName.DefaultProcedurePlaceService);//Default proc place of service for the Practice is used. 
+            proc.DiagnosticCode = Preferences.GetString(PrefName.ICD9DefaultForNewProcs);
+            proc.PlaceService = (PlaceOfService)Preferences.GetInt(PrefName.DefaultProcedurePlaceService);//Default proc place of service for the Practice is used. 
             if (Userods.IsUserCpoe(Security.CurUser))
             {
                 //This procedure is considered CPOE because the provider is the one that has added it.
@@ -4203,12 +4203,12 @@ namespace OpenDentBusiness
             }
             if (retVal.ProvNum == 0)
             {
-                retVal.ProvNum = PrefC.GetLong(PrefName.PracticeDefaultProv);
+                retVal.ProvNum = Preferences.GetLong(PrefName.PracticeDefaultProv);
             }
             retVal.ClinicNum = patCur.ClinicNum;
             retVal.SiteNum = patCur.SiteNum;
-            retVal.DiagnosticCode = PrefC.GetString(PrefName.ICD9DefaultForNewProcs);
-            retVal.PlaceService = (PlaceOfService)PrefC.GetInt(PrefName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used.
+            retVal.DiagnosticCode = Preferences.GetString(PrefName.ICD9DefaultForNewProcs);
+            retVal.PlaceService = (PlaceOfService)Preferences.GetInt(PrefName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used.
             retVal.Surf = "";
             if (prefName == PrefName.InsHistPerioLLCodes)
             {

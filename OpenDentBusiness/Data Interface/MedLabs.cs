@@ -56,7 +56,7 @@ namespace OpenDentBusiness
                 patNumClause = "medlab.PatNum=0";
             }
             List<string> listWhereClauseStrs = new List<string>();
-            if (PrefC.HasClinicsEnabled)
+            if (Preferences.HasClinicsEnabled)
             {
                 List<string> listAllClinicAcctNums = Clinics.GetWhere(x => !string.IsNullOrWhiteSpace(x.MedLabAccountNum)).Select(x => x.MedLabAccountNum).ToList();
                 if (listSelectedClinics.Any(x => x.ClinicNum == 0) && listAllClinicAcctNums.Count > 0)
@@ -85,7 +85,7 @@ namespace OpenDentBusiness
                     + "GROUP BY PatNum,ProvNum,SpecimenID "
                     + "HAVING " + DbHelper.DtimeToDate("MAX(DateTimeReported)") + " BETWEEN " + POut.Date(dateReportedStart) + " AND " + POut.Date(dateReportedEnd)
                 + ") maxDate ON maxDate.PatNum=medlab.PatNum AND maxDate.ProvNum=medlab.ProvNum AND maxDate.SpecimenID=medlab.SpecimenID ";
-            if (PrefC.HasClinicsEnabled && listWhereClauseStrs.Count > 0)
+            if (Preferences.HasClinicsEnabled && listWhereClauseStrs.Count > 0)
             {
                 command += "WHERE (" + string.Join(" OR ", listWhereClauseStrs) + ") ";
             }
@@ -167,7 +167,7 @@ namespace OpenDentBusiness
                 string fileTextCur = "";
                 try
                 {
-                    if (PrefC.AtoZfolderUsed != DataStorageType.InDatabase)
+                    if (Preferences.AtoZfolderUsed != DataStorageType.InDatabase)
                     {
                         fileTextCur = FileAtoZ.ReadAllText(FileAtoZ.CombinePaths(ImageStore.GetPreferredAtoZpath(), relativePath));
                     }

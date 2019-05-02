@@ -97,15 +97,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one RxDef into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(RxDef rxDef,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				rxDef.RxDefNum=ReplicationServers.GetKey("rxdef","RxDefNum");
 			}
 			string command="INSERT INTO rxdef (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="RxDefNum,";
 			}
 			command+="Drug,Sig,Disp,Refills,Notes,IsControlled,RxCui,IsProcRequired,PatientInstruction) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(rxDef.RxDefNum)+",";
 			}
 			command+=
@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 				rxDef.PatientInstruction="";
 			}
 			OdSqlParameter paramPatientInstruction=new OdSqlParameter("paramPatientInstruction",OdDbType.Text,POut.StringParam(rxDef.PatientInstruction));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramPatientInstruction);
 			}
 			else {

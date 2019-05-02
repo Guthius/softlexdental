@@ -136,15 +136,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Etrans into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Etrans etrans,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				etrans.EtransNum=ReplicationServers.GetKey("etrans","EtransNum");
 			}
 			string command="INSERT INTO etrans (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EtransNum,";
 			}
 			command+="DateTimeTrans,ClearingHouseNum,Etype,ClaimNum,OfficeSequenceNumber,CarrierTransCounter,CarrierTransCounter2,CarrierNum,CarrierNum2,PatNum,BatchNumber,AckCode,TransSetNum,Note,EtransMessageTextNum,AckEtransNum,PlanNum,InsSubNum,TranSetId835,CarrierNameRaw,PatientNameRaw,UserNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(etrans.EtransNum)+",";
 			}
 			command+=
@@ -174,7 +174,7 @@ namespace OpenDentBusiness.Crud{
 				etrans.Note="";
 			}
 			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,POut.StringParam(etrans.Note));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNote);
 			}
 			else {

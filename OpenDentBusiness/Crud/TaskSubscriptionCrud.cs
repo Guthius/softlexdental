@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one TaskSubscription into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(TaskSubscription taskSubscription,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				taskSubscription.TaskSubscriptionNum=ReplicationServers.GetKey("tasksubscription","TaskSubscriptionNum");
 			}
 			string command="INSERT INTO tasksubscription (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="TaskSubscriptionNum,";
 			}
 			command+="UserNum,TaskListNum,TaskNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(taskSubscription.TaskSubscriptionNum)+",";
 			}
 			command+=
 				     POut.Long  (taskSubscription.UserNum)+","
 				+    POut.Long  (taskSubscription.TaskListNum)+","
 				+    POut.Long  (taskSubscription.TaskNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

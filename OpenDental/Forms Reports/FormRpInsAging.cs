@@ -485,11 +485,11 @@ namespace OpenDental{
 
 		private void FormRpInsAging_Load(object sender, System.EventArgs e) {
 			_listProviders=Providers.GetListReports();
-			DateTime lastAgingDate=PrefC.GetDate(PrefName.DateLastAging);
+			DateTime lastAgingDate=Preferences.GetDate(PrefName.DateLastAging);
 			if(lastAgingDate.Year<1880) {
 				textDate.Text="";
 			}
-			else if(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)){
+			else if(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)){
 				textDate.Text=lastAgingDate.ToShortDateString();
 			}
 			else{
@@ -502,7 +502,7 @@ namespace OpenDental{
 			listProv.Items.AddRange(_listProviders.Select(x => x.GetLongDesc()).ToArray());
 			listProv.SelectedIndex=(listProv.Items.Count>0?0:-1);
 			checkProvAll.Checked=true; //all provs by default, event handler will set visibility
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				checkAllClin.Visible=false;//event handler may set listClin to visible, so hide explicitly after setting unchecked just in case
 				listClin.Visible=false;
 				labelClin.Visible=false;
@@ -516,8 +516,8 @@ namespace OpenDental{
 				listClin.SelectedIndex=listClinics.FindIndex(x => x.ClinicNum==Clinics.ClinicNum);//FindIndex could return -1, which is fine
 				checkAllClin.Checked=(Clinics.ClinicNum==0);//event handler will set visibility
 			}
-			if(PrefC.GetBool(PrefName.FutureTransDatesAllowed) || PrefC.GetBool(PrefName.AccountAllowFutureDebits) 
-				|| PrefC.GetBool(PrefName.AllowFutureInsPayments)) 
+			if(Preferences.GetBool(PrefName.FutureTransDatesAllowed) || Preferences.GetBool(PrefName.AccountAllowFutureDebits) 
+				|| Preferences.GetBool(PrefName.AllowFutureInsPayments)) 
 			{
 				labelFutureTrans.Visible=true;//Set to false in designer
 			}
@@ -558,7 +558,7 @@ namespace OpenDental{
 			if(!checkProvAll.Checked) {
 				rpo.ListProvNums=listProv.SelectedIndices.OfType<int>().Select(x => _listProviders[x].ProvNum).ToList();
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				//if "All" is selected and the user is not restricted, show ALL clinics, including the 0 clinic.
 				if(checkAllClin.Checked && !Security.CurUser.ClinicIsRestricted){
 					rpo.ListClinicNums.Clear();
@@ -607,7 +607,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"At least one provider must be selected.");
 				return;
 			}
-			if(PrefC.HasClinicsEnabled && !checkAllClin.Checked && listClin.SelectedIndices.Count==0) {
+			if(Preferences.HasClinicsEnabled && !checkAllClin.Checked && listClin.SelectedIndices.Count==0) {
 				MsgBox.Show(this,"At least one clinic must be selected.");
 				return;
 			}
@@ -621,7 +621,7 @@ namespace OpenDental{
 			tableAging=RpInsAging.GetInsAgingTable(rpo);
 			report.ReportName=Lan.g(this,"Insurance Aging Report");
 			report.AddTitle("InsAging",Lan.g(this, "Insurance Aging Report"));
-			report.AddSubTitle("PracTitle",PrefC.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("PracTitle",Preferences.GetString(PrefName.PracticeTitle));
 			report.AddSubTitle("AsOf",Lan.g(this,"As of")+" "+rpo.AsOfDate.ToShortDateString());
 			if(radioAny.Checked){
 				report.AddSubTitle("Balance",Lan.g(this,"Any Balance"));

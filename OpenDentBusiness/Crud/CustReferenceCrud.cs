@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one CustReference into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(CustReference custReference,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				custReference.CustReferenceNum=ReplicationServers.GetKey("custreference","CustReferenceNum");
 			}
 			string command="INSERT INTO custreference (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="CustReferenceNum,";
 			}
 			command+="PatNum,DateMostRecent,Note,IsBadRef) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(custReference.CustReferenceNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Date  (custReference.DateMostRecent)+","
 				+"'"+POut.String(custReference.Note)+"',"
 				+    POut.Bool  (custReference.IsBadRef)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

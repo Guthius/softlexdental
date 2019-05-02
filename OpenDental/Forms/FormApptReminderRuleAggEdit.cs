@@ -85,7 +85,7 @@ namespace OpenDental {
 					errors.Add(Lan.g(this,"Confirmation emails must contain the \"[ConfirmURL]\" tag."));
 				}
 			}
-			if(PrefC.GetBool(PrefName.EmailDisclaimerIsOn) && !_emailPlainTextShared.ToLower().Contains("[emaildisclaimer]")) {
+			if(Preferences.GetBool(PrefName.EmailDisclaimerIsOn) && !_emailPlainTextShared.ToLower().Contains("[emaildisclaimer]")) {
 				errors.Add(Lan.g(this,"Email must contain the \"[EmailDisclaimer]\" tag."));
 			}
 			if(errors.Count>0) {

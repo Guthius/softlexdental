@@ -57,13 +57,13 @@ namespace OpenDental {
 		}
 
 		private void FormMobileSetup_Load(object sender,EventArgs e) {
-			textMobileSyncServerURL.Text=PrefC.GetString(PrefName.MobileSyncServerURL);
-			textSynchMinutes.Text=PrefC.GetInt(PrefName.MobileSyncIntervalMinutes).ToString();
-			textDateBefore.Text=PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate).ToShortDateString();
-			textMobileSynchWorkStation.Text=PrefC.GetString(PrefName.MobileSyncWorkstationName);
-			textMobileUserName.Text=PrefC.GetString(PrefName.MobileUserName);
+			textMobileSyncServerURL.Text=Preferences.GetString(PrefName.MobileSyncServerURL);
+			textSynchMinutes.Text=Preferences.GetInt(PrefName.MobileSyncIntervalMinutes).ToString();
+			textDateBefore.Text=Preferences.GetDate(PrefName.MobileExcludeApptsBeforeDate).ToShortDateString();
+			textMobileSynchWorkStation.Text=Preferences.GetString(PrefName.MobileSyncWorkstationName);
+			textMobileUserName.Text=Preferences.GetString(PrefName.MobileUserName);
 			textMobilePassword.Text="";//not stored locally, and not pulled from web server
-			DateTime lastRun=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
+			DateTime lastRun=Preferences.GetDateTime(PrefName.MobileSyncDateTimeLastRun);
 			if(lastRun.Year>1880) {
 				textDateTimeLastRun.Text=lastRun.ToShortDateString()+" "+lastRun.ToShortTimeString();
 			}
@@ -110,7 +110,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Web service not found.");
 				return false;
 			}
-			if(mb.GetCustomerNum(PrefC.GetString(PrefName.RegistrationKey))==0) {
+			if(mb.GetCustomerNum(Preferences.GetString(PrefName.RegistrationKey))==0) {
 				MsgBox.Show(this,"Registration key is incorrect.");
 				return false;
 			}
@@ -157,19 +157,19 @@ namespace OpenDental {
 				Prefs.RefreshCache();
 			}
 			//Username and password-----------------------------------------------------------------------------
-			mb.SetMobileWebUserPassword(PrefC.GetString(PrefName.RegistrationKey),textMobileUserName.Text.Trim(),textMobilePassword.Text.Trim());
+			mb.SetMobileWebUserPassword(Preferences.GetString(PrefName.RegistrationKey),textMobileUserName.Text.Trim(),textMobilePassword.Text.Trim());
 			return true;
 		}
 
 		///<summary>Uploads Preferences to the Patient Portal /Mobile Web.</summary>
 		public static void UploadPreference(PrefName prefname) {
-			if(PrefC.GetString(PrefName.RegistrationKey)=="") {
+			if(Preferences.GetString(PrefName.RegistrationKey)=="") {
 				return;//Prevents a bug when using the trial version with no registration key.  Practice edit, OK, was giving error.
 			}
 			try {
 				if(TestWebServiceExists()) {
 					Prefm prefm = Prefms.GetPrefm(prefname.ToString());
-					mb.SetPreference(PrefC.GetString(PrefName.RegistrationKey),prefm);
+					mb.SetPreference(Preferences.GetString(PrefName.RegistrationKey),prefm);
 				}
 			}
 			catch(Exception ex) {
@@ -184,7 +184,7 @@ namespace OpenDental {
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete all your data from our server?  This happens automatically before a full synch.")) {
 				return;
 			}
-			mb.DeleteAllRecords(PrefC.GetString(PrefName.RegistrationKey));
+			mb.DeleteAllRecords(Preferences.GetString(PrefName.RegistrationKey));
 			MsgBox.Show(this,"Done");
 		}
 		
@@ -200,7 +200,7 @@ namespace OpenDental {
 				return;
 			}
 			//for full synch, delete all records then repopulate.
-			mb.DeleteAllRecords(PrefC.GetString(PrefName.RegistrationKey));
+			mb.DeleteAllRecords(Preferences.GetString(PrefName.RegistrationKey));
 			ShowProgressForm(DateTime.MinValue);
 		}
 
@@ -212,11 +212,11 @@ namespace OpenDental {
 				MsgBox.Show(this,"A Synch is in progress at the moment. Please try again later.");
 				return;
 			}
-			if(PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate).Year<1880) {
+			if(Preferences.GetDate(PrefName.MobileExcludeApptsBeforeDate).Year<1880) {
 				MsgBox.Show(this,"Full synch has never been run before.");
 				return;
 			}
-			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);
+			DateTime changedSince=Preferences.GetDateTime(PrefName.MobileSyncDateTimeLastRun);
 			ShowProgressForm(changedSince);
 		}
 		
@@ -243,7 +243,7 @@ namespace OpenDental {
 				workerThread.Abort();
 			}
 			changed=true;
-			textDateTimeLastRun.Text=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).ToShortDateString()+" "+PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).ToShortTimeString();
+			textDateTimeLastRun.Text=Preferences.GetDateTime(PrefName.MobileSyncDateTimeLastRun).ToShortDateString()+" "+Preferences.GetDateTime(PrefName.MobileSyncDateTimeLastRun).ToShortTimeString();
 		}
 
 
@@ -258,26 +258,26 @@ namespace OpenDental {
 				DateTime changedStatement=changedSince;
 				DateTime changedDocument=changedSince;
 				DateTime changedRecall=changedSince;
-				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,false)) {
+				if(!Preferences.GetBoolSilent(PrefName.MobileSynchNewTables79Done,false)) {
 					changedProv=DateTime.MinValue;
 					changedDeleted=DateTime.MinValue;
 				}
-				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables112Done,false)) {
+				if(!Preferences.GetBoolSilent(PrefName.MobileSynchNewTables112Done,false)) {
 				    changedPat=DateTime.MinValue;
 					changedStatement=DateTime.MinValue;
 					changedDocument=DateTime.MinValue;
 				}
-				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables121Done,false)) {
+				if(!Preferences.GetBoolSilent(PrefName.MobileSynchNewTables121Done,false)) {
 					changedRecall=DateTime.MinValue;
 					UploadPreference(PrefName.PracticeTitle); //done again because the previous upload did not include the prefnum
 				}
 				bool synchDelPat=true;
-				if(PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).Hour==timeSynchStarted.Hour) {
+				if(Preferences.GetDateTime(PrefName.MobileSyncDateTimeLastRun).Hour==timeSynchStarted.Hour) {
 					synchDelPat=false;// synching delPatNumList is timeconsuming (15 seconds) for a dental office with around 5000 patients and it's mostly the same records that have to be deleted every time a synch happens. So it's done only once hourly.
 				}
 				//MobileWeb
 				List<long> patNumList=Patientms.GetChangedSincePatNums(changedPat);
-				List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,PrefC.GetDate(PrefName.MobileExcludeApptsBeforeDate));
+				List<long> aptNumList=Appointmentms.GetChangedSinceAptNums(changedSince,Preferences.GetDate(PrefName.MobileExcludeApptsBeforeDate));
 				List<long> rxNumList=RxPatms.GetChangedSinceRxNums(changedSince);
 				List<long> provNumList=Providerms.GetChangedSinceProvNums(changedProv);
 				List<long> pharNumList=Pharmacyms.GetChangedSincePharmacyNums(changedSince);
@@ -337,13 +337,13 @@ namespace OpenDental {
 				}
 				//DeleteObjects(dO,totalCount,ref currentVal);// this has to be done at this end because objects may have been created and deleted between synchs. If this function is place above then the such a deleted object will not be deleted from the server.
 				SynchGeneric(deletedObjectNumList,SynchEntity.deletedobject,totalCount,ref currentVal);// this has to be done at this end because objects may have been created and deleted between synchs. If this function is place above then the such a deleted object will not be deleted from the server.
-				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables79Done,true)) {
+				if(!Preferences.GetBoolSilent(PrefName.MobileSynchNewTables79Done,true)) {
 				    Prefs.UpdateBool(PrefName.MobileSynchNewTables79Done,true);
 				}
-				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables112Done,true)) {
+				if(!Preferences.GetBoolSilent(PrefName.MobileSynchNewTables112Done,true)) {
 				    Prefs.UpdateBool(PrefName.MobileSynchNewTables112Done,true);
 				}
-				if(!PrefC.GetBoolSilent(PrefName.MobileSynchNewTables121Done,true)) {
+				if(!Preferences.GetBoolSilent(PrefName.MobileSynchNewTables121Done,true)) {
 					Prefs.UpdateBool(PrefName.MobileSynchNewTables121Done,true);
 				}
 				Prefs.UpdateDateT(PrefName.MobileSyncDateTimeLastRun,timeSynchStarted);
@@ -376,78 +376,78 @@ namespace OpenDental {
 					switch(entity) {
 						case SynchEntity.patient:
 							List<Patientm> changedPatientmList=Patientms.GetMultPats(BlockPKNumList);
-							mb.SynchPatients(PrefC.GetString(PrefName.RegistrationKey),changedPatientmList.ToArray());
+							mb.SynchPatients(Preferences.GetString(PrefName.RegistrationKey),changedPatientmList.ToArray());
 						break;
 						case SynchEntity.appointment:
 							List<Appointmentm> changedAppointmentmList=Appointmentms.GetMultApts(BlockPKNumList);
-							mb.SynchAppointments(PrefC.GetString(PrefName.RegistrationKey),changedAppointmentmList.ToArray());
+							mb.SynchAppointments(Preferences.GetString(PrefName.RegistrationKey),changedAppointmentmList.ToArray());
 						break;
 						case SynchEntity.prescription:
 							List<RxPatm> changedRxList=RxPatms.GetMultRxPats(BlockPKNumList);
-							mb.SynchPrescriptions(PrefC.GetString(PrefName.RegistrationKey),changedRxList.ToArray());
+							mb.SynchPrescriptions(Preferences.GetString(PrefName.RegistrationKey),changedRxList.ToArray());
 						break;
 						case SynchEntity.provider:
 							List<Providerm> changedProvList=Providerms.GetMultProviderms(BlockPKNumList);
-							mb.SynchProviders(PrefC.GetString(PrefName.RegistrationKey),changedProvList.ToArray());
+							mb.SynchProviders(Preferences.GetString(PrefName.RegistrationKey),changedProvList.ToArray());
 						break;
 						case SynchEntity.pharmacy:
 						List<Pharmacym> changedPharmacyList=Pharmacyms.GetMultPharmacyms(BlockPKNumList);
-						mb.SynchPharmacies(PrefC.GetString(PrefName.RegistrationKey),changedPharmacyList.ToArray());
+						mb.SynchPharmacies(Preferences.GetString(PrefName.RegistrationKey),changedPharmacyList.ToArray());
 						break;
 						case SynchEntity.labpanel:
 							List<LabPanelm> ChangedLabPanelList=LabPanelms.GetMultLabPanelms(BlockPKNumList);
-							mb.SynchLabPanels(PrefC.GetString(PrefName.RegistrationKey),ChangedLabPanelList.ToArray());
+							mb.SynchLabPanels(Preferences.GetString(PrefName.RegistrationKey),ChangedLabPanelList.ToArray());
 						break;
 						case SynchEntity.labresult:
 							List<LabResultm> ChangedLabResultList=LabResultms.GetMultLabResultms(BlockPKNumList);
-							mb.SynchLabResults(PrefC.GetString(PrefName.RegistrationKey),ChangedLabResultList.ToArray());
+							mb.SynchLabResults(Preferences.GetString(PrefName.RegistrationKey),ChangedLabResultList.ToArray());
 						break;
 						case SynchEntity.medication:
 							List<Medicationm> ChangedMedicationList=Medicationms.GetMultMedicationms(BlockPKNumList);
-							mb.SynchMedications(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationList.ToArray());
+							mb.SynchMedications(Preferences.GetString(PrefName.RegistrationKey),ChangedMedicationList.ToArray());
 						break;
 						case SynchEntity.medicationpat:
 							List<MedicationPatm> ChangedMedicationPatList=MedicationPatms.GetMultMedicationPatms(BlockPKNumList);
-							mb.SynchMedicationPats(PrefC.GetString(PrefName.RegistrationKey),ChangedMedicationPatList.ToArray());
+							mb.SynchMedicationPats(Preferences.GetString(PrefName.RegistrationKey),ChangedMedicationPatList.ToArray());
 						break;
 						case SynchEntity.allergy:
 							List<Allergym> ChangedAllergyList=Allergyms.GetMultAllergyms(BlockPKNumList);
-							mb.SynchAllergies(PrefC.GetString(PrefName.RegistrationKey),ChangedAllergyList.ToArray());
+							mb.SynchAllergies(Preferences.GetString(PrefName.RegistrationKey),ChangedAllergyList.ToArray());
 						break;
 						case SynchEntity.allergydef:
 							List<AllergyDefm> ChangedAllergyDefList=AllergyDefms.GetMultAllergyDefms(BlockPKNumList);
-							mb.SynchAllergyDefs(PrefC.GetString(PrefName.RegistrationKey),ChangedAllergyDefList.ToArray());
+							mb.SynchAllergyDefs(Preferences.GetString(PrefName.RegistrationKey),ChangedAllergyDefList.ToArray());
 						break;
 						case SynchEntity.disease:
 							List<Diseasem> ChangedDiseaseList=Diseasems.GetMultDiseasems(BlockPKNumList);
-							mb.SynchDiseases(PrefC.GetString(PrefName.RegistrationKey),ChangedDiseaseList.ToArray());
+							mb.SynchDiseases(Preferences.GetString(PrefName.RegistrationKey),ChangedDiseaseList.ToArray());
 						break;
 						case SynchEntity.diseasedef:
 							List<DiseaseDefm> ChangedDiseaseDefList=DiseaseDefms.GetMultDiseaseDefms(BlockPKNumList);
-							mb.SynchDiseaseDefs(PrefC.GetString(PrefName.RegistrationKey),ChangedDiseaseDefList.ToArray());
+							mb.SynchDiseaseDefs(Preferences.GetString(PrefName.RegistrationKey),ChangedDiseaseDefList.ToArray());
 						break;
 						case SynchEntity.icd9:
 							List<ICD9m> ChangedICD9List=ICD9ms.GetMultICD9ms(BlockPKNumList);
-							mb.SynchICD9s(PrefC.GetString(PrefName.RegistrationKey),ChangedICD9List.ToArray());
+							mb.SynchICD9s(Preferences.GetString(PrefName.RegistrationKey),ChangedICD9List.ToArray());
 						break;
 						case SynchEntity.statement:
 						List<Statementm> ChangedStatementList=Statementms.GetMultStatementms(BlockPKNumList);
-						mb.SynchStatements(PrefC.GetString(PrefName.RegistrationKey),ChangedStatementList.ToArray());
+						mb.SynchStatements(Preferences.GetString(PrefName.RegistrationKey),ChangedStatementList.ToArray());
 						break;
 						case SynchEntity.document:
 						List<Documentm> ChangedDocumentList=Documentms.GetMultDocumentms(BlockPKNumList,AtoZpath);
-						mb.SynchDocuments(PrefC.GetString(PrefName.RegistrationKey),ChangedDocumentList.ToArray());
+						mb.SynchDocuments(Preferences.GetString(PrefName.RegistrationKey),ChangedDocumentList.ToArray());
 						break;
 						case SynchEntity.recall:
 						List<Recallm> ChangedRecallList=Recallms.GetMultRecallms(BlockPKNumList);
-						mb.SynchRecalls(PrefC.GetString(PrefName.RegistrationKey),ChangedRecallList.ToArray());
+						mb.SynchRecalls(Preferences.GetString(PrefName.RegistrationKey),ChangedRecallList.ToArray());
 						break;
 						case SynchEntity.deletedobject:
 						List<DeletedObject> ChangedDeleteObjectList=DeletedObjects.GetMultDeletedObjects(BlockPKNumList);
-						mb.DeleteObjects(PrefC.GetString(PrefName.RegistrationKey),ChangedDeleteObjectList.ToArray());
+						mb.DeleteObjects(Preferences.GetString(PrefName.RegistrationKey),ChangedDeleteObjectList.ToArray());
 						break;
 						case SynchEntity.patientdel:
-						mb.DeletePatientsRecords(PrefC.GetString(PrefName.RegistrationKey),BlockPKNumList.ToArray());
+						mb.DeletePatientsRecords(Preferences.GetString(PrefName.RegistrationKey),BlockPKNumList.ToArray());
 						break;
 					}
 					//progressIndicator.CurrentVal+=LocalBatchSize;//not allowed
@@ -511,7 +511,7 @@ namespace OpenDental {
 		/// <summary>An empty method to test if the webservice is up and running. This was made with the intention of testing the correctness of the webservice URL. If an incorrect webservice URL is used in a background thread the exception cannot be handled easily to a point where even a correct URL cannot be keyed in by the user. Because an exception in a background thread closes the Form which spawned it.</summary>
 		private static bool TestWebServiceExists() {
 			try {
-				mb.Url=PrefC.GetString(PrefName.MobileSyncServerURL);
+				mb.Url=Preferences.GetString(PrefName.MobileSyncServerURL);
 				if(mb.ServiceExists()) {
 					return true;
 				}
@@ -527,7 +527,7 @@ namespace OpenDental {
 			if(textMobileSyncServerURL.Text.Contains("10.10.1.196") || textMobileSyncServerURL.Text.Contains("localhost")) {
 				IgnoreCertificateErrors();
 			}
-			bool isPaidCustomer=mb.IsPaidCustomer(PrefC.GetString(PrefName.RegistrationKey));
+			bool isPaidCustomer=mb.IsPaidCustomer(Preferences.GetString(PrefName.RegistrationKey));
 			if(!isPaidCustomer) {
 				textSynchMinutes.Text="0";
 				Prefs.UpdateInt(PrefName.MobileSyncIntervalMinutes,0);
@@ -548,12 +548,12 @@ namespace OpenDental {
 			}
 			DateTime timeSynchStarted=MiscData.GetNowDateTime();
 			if(!doForce) {//if doForce, we skip checking the interval
-				if(timeSynchStarted < PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun).AddMinutes(PrefC.GetInt(PrefName.MobileSyncIntervalMinutes))) {
+				if(timeSynchStarted < Preferences.GetDateTime(PrefName.MobileSyncDateTimeLastRun).AddMinutes(Preferences.GetInt(PrefName.MobileSyncIntervalMinutes))) {
 					return;
 				}
 			}
 			//if(PrefC.GetString(PrefName.MobileSyncServerURL).Contains("192.168.0.196") || PrefC.GetString(PrefName.MobileSyncServerURL).Contains("localhost")) {
-			if(PrefC.GetString(PrefName.MobileSyncServerURL).Contains("10.10.1.196") || PrefC.GetString(PrefName.MobileSyncServerURL).Contains("localhost")) {
+			if(Preferences.GetString(PrefName.MobileSyncServerURL).Contains("10.10.1.196") || Preferences.GetString(PrefName.MobileSyncServerURL).Contains("localhost")) {
 				IgnoreCertificateErrors();
 			}
 			if(!TestWebServiceExists()) {
@@ -571,7 +571,7 @@ namespace OpenDental {
 			else {
 				IsServerAvail=true;
 			}
-			DateTime changedSince=PrefC.GetDateT(PrefName.MobileSyncDateTimeLastRun);			
+			DateTime changedSince=Preferences.GetDateTime(PrefName.MobileSyncDateTimeLastRun);			
 			//FormProgress FormP=new FormProgress();//but we won't display it.
 			//FormP.NumberFormat="";
 			//FormP.DisplayText="";

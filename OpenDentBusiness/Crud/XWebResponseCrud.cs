@@ -176,15 +176,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one XWebResponse into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(XWebResponse xWebResponse,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				xWebResponse.XWebResponseNum=ReplicationServers.GetKey("xwebresponse","XWebResponseNum");
 			}
 			string command="INSERT INTO xwebresponse (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="XWebResponseNum,";
 			}
 			command+="PatNum,ProvNum,ClinicNum,PaymentNum,DateTEntry,DateTUpdate,TransactionStatus,ResponseCode,XWebResponseCode,ResponseDescription,OTK,HpfUrl,HpfExpiration,TransactionID,TransactionType,Alias,CardType,CardBrand,CardBrandShort,MaskedAcctNum,Amount,ApprovalCode,CardCodeResponse,ReceiptID,ExpDate,EntryMethod,ProcessorResponse,BatchNum,BatchAmount,AccountExpirationDate,DebugError,PayNote,CCSource) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(xWebResponse.XWebResponseNum)+",";
 			}
 			command+=
@@ -233,7 +233,7 @@ namespace OpenDentBusiness.Crud{
 				xWebResponse.PayNote="";
 			}
 			OdSqlParameter paramPayNote=new OdSqlParameter("paramPayNote",OdDbType.Text,POut.StringParam(xWebResponse.PayNote));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramHpfUrl,paramDebugError,paramPayNote);
 			}
 			else {

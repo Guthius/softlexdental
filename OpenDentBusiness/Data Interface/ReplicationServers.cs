@@ -268,12 +268,12 @@ namespace OpenDentBusiness
         public static bool IsConnectedReportServer()
         {
             //No need to check RemotingRole; no call to db.
-            if (PrefC.GetLong(PrefName.ReplicationUserQueryServer) == 0)
+            if (Preferences.GetLong(PrefName.ReplicationUserQueryServer) == 0)
             {//Report server not set up.
                 return false;
             }
             ReplicationServer repServer = GetForLocalComputer();
-            if (repServer == null || repServer.ReplicationServerNum != PrefC.GetLong(PrefName.ReplicationUserQueryServer))
+            if (repServer == null || repServer.ReplicationServerNum != Preferences.GetLong(PrefName.ReplicationUserQueryServer))
             {
                 return false;
             }

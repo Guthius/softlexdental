@@ -25,7 +25,7 @@ namespace OpenDentBusiness {
 				}
 				//The dictionary of overrides has not been filled before or the preference does not exist in the database.
 				try {
-					string introspectionItems=PrefC.GetString(PrefName.IntrospectionItems);//Cache call so it is fine to do this a lot.  Purposefully throws exceptions.
+					string introspectionItems=Preferences.GetString(PrefName.IntrospectionItems);//Cache call so it is fine to do this a lot.  Purposefully throws exceptions.
 					//At this point we know the database has the IntrospectionItems preference so we need to instantiate _dictOverrides.
 					_dictOverrides=new Dictionary<IntrospectionEntity, string>();
 					//Try an deserialize the preference value into the dictionary.

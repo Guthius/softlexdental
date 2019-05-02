@@ -142,15 +142,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one WebSchedRecall into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(WebSchedRecall webSchedRecall,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				webSchedRecall.WebSchedRecallNum=ReplicationServers.GetKey("webschedrecall","WebSchedRecallNum");
 			}
 			string command="INSERT INTO webschedrecall (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="WebSchedRecallNum,";
 			}
 			command+="ClinicNum,PatNum,RecallNum,DateTimeEntry,DateDue,ReminderCount,PreferRecallMethod,DateTimeReminderSent,DateTimeSendFailed,EmailSendStatus,SmsSendStatus,PhonePat,EmailPat,MsgTextToMobileTemplate,MsgTextToMobile,EmailSubjTemplate,EmailSubj,EmailTextTemplate,EmailText,GuidMessageToMobile,ShortGUIDSms,ShortGUIDEmail,ResponseDescript,Source) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(webSchedRecall.WebSchedRecallNum)+",";
 			}
 			command+=
@@ -210,7 +210,7 @@ namespace OpenDentBusiness.Crud{
 				webSchedRecall.ResponseDescript="";
 			}
 			OdSqlParameter paramResponseDescript=new OdSqlParameter("paramResponseDescript",OdDbType.Text,POut.StringParam(webSchedRecall.ResponseDescript));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramMsgTextToMobileTemplate,paramMsgTextToMobile,paramEmailSubjTemplate,paramEmailSubj,paramEmailTextTemplate,paramEmailText,paramGuidMessageToMobile,paramResponseDescript);
 			}
 			else {

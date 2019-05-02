@@ -194,10 +194,10 @@ namespace OpenDentBusiness.WebTypes.Shared.XWeb {
 				//Explicitly set ClinicNum=0, since a pat's ClinicNum will remain set if the user enabled clinics, assigned patients to clinics, and then
 				//disabled clinics because we use the ClinicNum to determine which PayConnect or XCharge/XWeb credentials to use for payments.
 				_clinicNum=0;
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					_clinicNum=pat.ClinicNum;
 				}
-				if(!OpenDentBusiness.PrefC.HasClinicsEnabled) { //Patient.ClinicNum is unreliable if clinics have been turned off.
+				if(!OpenDentBusiness.Preferences.HasClinicsEnabled) { //Patient.ClinicNum is unreliable if clinics have been turned off.
 					_clinicNum=0;
 				}
 				OpenDentBusiness.WebTypes.Shared.XWeb.WebPaymentProperties xwebProperties;

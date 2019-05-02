@@ -88,15 +88,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PhoneConf into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(PhoneConf phoneConf,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				phoneConf.PhoneConfNum=ReplicationServers.GetKey("phoneconf","PhoneConfNum");
 			}
 			string command="INSERT INTO phoneconf (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PhoneConfNum,";
 			}
 			command+="ButtonIndex,Occupants,Extension,DateTimeReserved,UserNum,SiteNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(phoneConf.PhoneConfNum)+",";
 			}
 			command+=
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.DateT (phoneConf.DateTimeReserved)+","
 				+    POut.Long  (phoneConf.UserNum)+","
 				+    POut.Long  (phoneConf.SiteNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

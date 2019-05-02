@@ -387,7 +387,7 @@ namespace OpenDental {
 		#endregion
 
 		private void FormClinics_Load(object sender, System.EventArgs e) {
-			checkOrderAlphabetical.Checked=PrefC.GetBool(PrefName.ClinicListIsAlphabetical);
+			checkOrderAlphabetical.Checked=Preferences.GetBool(PrefName.ClinicListIsAlphabetical);
 			if(ListClinics==null) {
 				ListClinics=Clinics.GetAllForUserod(Security.CurUser);
 				if(IncludeHQInList) {
@@ -487,7 +487,7 @@ namespace OpenDental {
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			Clinic clinicCur=new Clinic();
 			clinicCur.IsNew=true;
-			if(PrefC.GetBool(PrefName.PracticeIsMedicalOnly)) {
+			if(Preferences.GetBool(PrefName.PracticeIsMedicalOnly)) {
 				clinicCur.IsMedicalOnly=true;
 			}
 			clinicCur.ItemOrder=gridMain.Rows.Count-(IncludeHQInList?1:0);//Set it last in the last position (minus 1 for HQ)

@@ -366,7 +366,7 @@ namespace OpenDental{
 				contextMenuEclaims.MenuItems.Add(_listClearinghouses[i].Description,new EventHandler(menuItemClearinghouse_Click));
 			}
 			LayoutToolBars();
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 				butNextUnsent.Visible=false;
@@ -386,7 +386,7 @@ namespace OpenDental{
 					comboCustomTracking.Items.Add(_listClaimCustomTrackingDefs[i].ItemName);
 				}
 			}
-			if(PrefC.RandomKeys && PrefC.HasClinicsEnabled){//using random keys and clinics
+			if(Preferences.RandomKeys && Preferences.HasClinicsEnabled){//using random keys and clinics
 				//Does not pull in reports automatically, because they could easily get assigned to the wrong clearinghouse
 			}
 			else{
@@ -396,7 +396,7 @@ namespace OpenDental{
 			}
 			FillGrid();
 			//Validate all claims if the preference is enabled.
-			if(PrefC.GetBool(PrefName.ClaimsSendWindowValidatesOnLoad)) {
+			if(Preferences.GetBool(PrefName.ClaimsSendWindowValidatesOnLoad)) {
 				//This can be very slow if there are lots of claims to validate.
 				ValidateClaims(_arrayQueueAll.ToList());
 			}
@@ -546,7 +546,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(bool rememberSelection){
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				long claimCustomTracking=0;
 				if(comboCustomTracking.SelectedIndex!=0) {
 					claimCustomTracking=Defs.GetDefsForCategory(DefCat.ClaimCustomTracking,true)[comboCustomTracking.SelectedIndex-1].DefNum;
@@ -585,7 +585,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableQueue","Carrier Name"),220);//was 100
 			gridMain.Columns.Add(col);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn(Lan.g("TableQueue","Clinic"),80);
 				gridMain.Columns.Add(col);
 			}
@@ -605,7 +605,7 @@ namespace OpenDental{
 				row.Cells.Add(queueItem.DateService.ToShortDateString());
 				row.Cells.Add(queueItem.PatName);
 				row.Cells.Add(queueItem.Carrier);
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add(Clinics.GetAbbr(queueItem.ClinicNum));
 				}
 				switch(queueItem.MedType){
@@ -651,7 +651,7 @@ namespace OpenDental{
 		private ClaimSendQueueItem[] GetListQueueFiltered() {
 			long clinicNum=0;
 			long customTracking=0;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(Security.CurUser.ClinicIsRestricted) {//If the user is restricted to specific clinics (has no Unassigned/Default option)
 					clinicNum=_listClinics[comboClinic.SelectedIndex].ClinicNum;
 				}
@@ -666,7 +666,7 @@ namespace OpenDental{
 			listClaimSend.AddRange(_arrayQueueAll);
 			//Remove any non-matches
 			//Creating a subset of listClaimSend with all entries c such that c.ClinicNum==clinicNum
-			if(PrefC.HasClinicsEnabled) {//Filter by clinic only when clinics are enabled.
+			if(Preferences.HasClinicsEnabled) {//Filter by clinic only when clinics are enabled.
 				listClaimSend=listClaimSend.FindAll(c => c.ClinicNum==clinicNum);
 			}
 			if(customTracking>0) {
@@ -877,7 +877,7 @@ namespace OpenDental{
 
 		///<Summary>Use clearinghouseNum of 0 to indicate automatic calculation of clearinghouses.</Summary>
 		private void SendEclaimsToClearinghouse(long hqClearinghouseNum) {
-			if(PrefC.HasClinicsEnabled) {//Clinics is in use
+			if(Preferences.HasClinicsEnabled) {//Clinics is in use
 				if(hqClearinghouseNum==0){
 					MsgBox.Show(this,"When the Clinics option is enabled, you must use the dropdown list to select the clearinghouse to send to.");
 					return;

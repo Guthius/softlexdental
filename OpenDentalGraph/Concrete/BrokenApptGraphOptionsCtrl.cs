@@ -26,7 +26,7 @@ namespace OpenDentalGraph {
 				#region Init based on PrefName.BrokenApptProcedure
 				if(_listBrokenApptProcs==null) {
 					_listBrokenApptProcs=new List<BrokenApptProcedure>();
-					switch((BrokenApptProcedure)PrefC.GetInt(PrefName.BrokenApptProcedure)) {
+					switch((BrokenApptProcedure)Preferences.GetInt(PrefName.BrokenApptProcedure)) {
 						case BrokenApptProcedure.None:
 						case BrokenApptProcedure.Missed:
 							_listBrokenApptProcs.Add(BrokenApptProcedure.Missed);
@@ -101,7 +101,7 @@ namespace OpenDentalGraph {
 		public BrokenApptProcedure BrokenApptCodeCur {
 			get {
 				if(comboBrokenProcType.SelectedIndex==-1) {
-					return (BrokenApptProcedure)PrefC.GetInt(PrefName.BrokenApptProcedure);
+					return (BrokenApptProcedure)Preferences.GetInt(PrefName.BrokenApptProcedure);
 				}
 				return ListBrokenProcOptions[comboBrokenProcType.SelectedIndex];
 			}
@@ -151,7 +151,7 @@ namespace OpenDentalGraph {
 		private void FillComboBrokenProc() {
 			//Mimics FormRpBrokenAppointments.cs
 			int index=0;
-			BrokenApptProcedure brokenApptCodeDB=(BrokenApptProcedure)PrefC.GetInt(PrefName.BrokenApptProcedure);
+			BrokenApptProcedure brokenApptCodeDB=(BrokenApptProcedure)Preferences.GetInt(PrefName.BrokenApptProcedure);
 			switch(brokenApptCodeDB) {
 				case BrokenApptProcedure.None:
 				case BrokenApptProcedure.Missed:

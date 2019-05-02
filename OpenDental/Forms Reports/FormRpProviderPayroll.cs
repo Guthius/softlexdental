@@ -413,9 +413,9 @@ namespace OpenDental{
 			for(int i=0;i<_listProviders.Count;i++){
 				listProv.Items.Add(_listProviders[i].GetLongDesc());
 			}
-			if(PrefC.HasClinicsEnabled){
-        checkClinicInfo.Checked=PrefC.GetBool(PrefName.ReportPandIhasClinicInfo);
-				checkClinicBreakdown.Checked=PrefC.GetBool(PrefName.ReportPandIhasClinicBreakdown);
+			if(Preferences.HasClinicsEnabled){
+        checkClinicInfo.Checked=Preferences.GetBool(PrefName.ReportPandIhasClinicInfo);
+				checkClinicBreakdown.Checked=Preferences.GetBool(PrefName.ReportPandIhasClinicBreakdown);
 				_listClinics=Clinics.GetForUserod(Security.CurUser);
 				if(!Security.CurUser.ClinicIsRestricted) {
 					listClin.Items.Add(Lan.g(this,"Unassigned"));
@@ -440,7 +440,7 @@ namespace OpenDental{
         checkClinicInfo.Visible=false;
 				checkClinicBreakdown.Visible=false;
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				checkClinicInfo.Visible=false;
 				checkClinicBreakdown.Visible=false;
 			}
@@ -492,7 +492,7 @@ namespace OpenDental{
 			if(radioSimpleReport.Checked) {
 			}
 			else if(radioDetailedReport.Checked) {
-				if(!PrefC.GetBool(PrefName.ProviderPayrollAllowToday)) {
+				if(!Preferences.GetBool(PrefName.ProviderPayrollAllowToday)) {
 					if(dtPickerTo.Value>=DateTime.Today) {
 						dtPickerTo.Value=DateTime.Today.AddDays(-1);
 					}
@@ -505,7 +505,7 @@ namespace OpenDental{
 
 		private void dtPickerFrom_ValueChanged(object sender,EventArgs e) {
 			if(radioDetailedReport.Checked 
-				&& !PrefC.GetBool(PrefName.ProviderPayrollAllowToday) 
+				&& !Preferences.GetBool(PrefName.ProviderPayrollAllowToday) 
 				&& dtPickerFrom.Value>=DateTime.Today) 
 			{
 				dtPickerFrom.Value=DateTime.Today.AddDays(-1);
@@ -514,7 +514,7 @@ namespace OpenDental{
 
 		private void dtPickerTo_ValueChanged(object sender,EventArgs e) {
 			if(radioDetailedReport.Checked 
-				&& !PrefC.GetBool(PrefName.ProviderPayrollAllowToday) 
+				&& !Preferences.GetBool(PrefName.ProviderPayrollAllowToday) 
 				&& dtPickerTo.Value>=DateTime.Today) 
 			{
 				dtPickerTo.Value=DateTime.Today.AddDays(-1);
@@ -562,7 +562,7 @@ namespace OpenDental{
 		}
     
     private void checkClinicInfo_CheckedChanged(object sender,EventArgs e) {
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(checkClinicInfo.Checked) {
 					checkClinicBreakdown.Visible=true;
 				}
@@ -592,7 +592,7 @@ namespace OpenDental{
 				listProvs.Add(_listProviders[listProv.SelectedIndices[i]]);
 			}
 			List<Clinic> listClinics=new List<Clinic>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
 					if(Security.CurUser.ClinicIsRestricted) {
 						listClinics.Add(_listClinics[listClin.SelectedIndices[i]]);//we know that the list is a 1:1 to _listClinics
@@ -614,7 +614,7 @@ namespace OpenDental{
 				,checkAllProv.Checked,checkAllClin.Checked,radioDetailedReport.Checked);
 			report.ReportName="Provider Payroll P&I";
 			report.AddTitle("Title",Lan.g(this,"Provider Payroll Production and Income"));
-			report.AddSubTitle("PracName",PrefC.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("PracName",Preferences.GetString(PrefName.PracticeTitle));
 			report.AddSubTitle("Date",dateFrom.ToShortDateString()+" - "+dateTo.ToShortDateString());
 			if(checkAllProv.Checked) {
 				report.AddSubTitle("Providers",Lan.g(this,"All Providers"));
@@ -629,7 +629,7 @@ namespace OpenDental{
 				}
 				report.AddSubTitle("Providers",str);
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(checkAllClin.Checked) {
 					report.AddSubTitle("Clinics",Lan.g(this,"All Clinics"));
 				}
@@ -693,7 +693,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"At least one provider must be selected.");
 				return;
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(!checkAllClin.Checked && listClin.SelectedIndices.Count==0) {
 					MsgBox.Show(this,"At least one clinic must be selected.");
 					return;

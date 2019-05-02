@@ -140,7 +140,7 @@ namespace OpenDental{
 			_listHqClearinghouses=Clearinghouses.GetDeepCopy();
 			for(int i=0;i<_listHqClearinghouses.Count;i++){
 				comboClearhouse.Items.Add(_listHqClearinghouses[i].Description);
-				if(PrefC.GetLong(PrefName.ClearinghouseDefaultDent)==_listHqClearinghouses[i].ClearinghouseNum){
+				if(Preferences.GetLong(PrefName.ClearinghouseDefaultDent)==_listHqClearinghouses[i].ClearinghouseNum){
 					comboClearhouse.SelectedIndex=i;
 				}
 			}
@@ -182,8 +182,8 @@ namespace OpenDental{
 				,new ProgressBarHelper((Lans.g(this,"Clearinghouse Progress")),progressBarEventType:ProgBarEventType.Header),lanThis: this.Name);
 			//For Tesia, user wouldn't normally manually retrieve.
 			if(clearhouseHq.ISA08=="113504607") {
-				if((PrefC.RandomKeys && PrefC.HasClinicsEnabled)//See FormClaimsSend_Load
-					|| PrefC.GetLong(PrefName.ClearinghouseDefaultDent)!=clearhouseHq.ClearinghouseNum) //default
+				if((Preferences.RandomKeys && Preferences.HasClinicsEnabled)//See FormClaimsSend_Load
+					|| Preferences.GetLong(PrefName.ClearinghouseDefaultDent)!=clearhouseHq.ClearinghouseNum) //default
 				{
 					//But they might need to in these situations.
 					string errorMessage=Clearinghouses.RetrieveAndImport(clearinghouseClin,false,progressbar);

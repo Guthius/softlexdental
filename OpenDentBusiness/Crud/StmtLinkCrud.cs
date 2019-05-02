@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one StmtLink into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(StmtLink stmtLink,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				stmtLink.StmtLinkNum=ReplicationServers.GetKey("stmtlink","StmtLinkNum");
 			}
 			string command="INSERT INTO stmtlink (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="StmtLinkNum,";
 			}
 			command+="StatementNum,StmtLinkType,FKey) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(stmtLink.StmtLinkNum)+",";
 			}
 			command+=
 				     POut.Long  (stmtLink.StatementNum)+","
 				+    POut.Int   ((int)stmtLink.StmtLinkType)+","
 				+    POut.Long  (stmtLink.FKey)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

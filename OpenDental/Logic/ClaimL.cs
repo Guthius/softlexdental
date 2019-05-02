@@ -239,7 +239,7 @@ namespace OpenDental {
 
 		public static void AllocateUnearnedPayment(Patient patcur,Family famcur,double unearnedAmt,Claim ClaimCur) {
 			//do not try to allocate payment if preference is disabled or if there isn't a payment to allocate
-			if(!PrefC.GetBool(PrefName.ShowAllocateUnearnedPaymentPrompt) || ClaimProcs.GetPatPortionForClaim(ClaimCur)<=0) { 
+			if(!Preferences.GetBool(PrefName.ShowAllocateUnearnedPaymentPrompt) || ClaimProcs.GetPatPortionForClaim(ClaimCur)<=0) { 
 				return;
 			}
 			FormProcSelect FormPS=new FormProcSelect(patcur.PatNum,false,true,true);
@@ -253,11 +253,11 @@ namespace OpenDental {
 			//Explicitly set ClinicNum=0, since a pat's ClinicNum will remain set if the user enabled clinics, assigned patients to clinics, and then
 			//disabled clinics because we use the ClinicNum to determine which PayConnect or XCharge/XWeb credentials to use for payments.
 			paymentCur.ClinicNum=0;
-			if(PrefC.HasClinicsEnabled) {//if clinics aren't enabled default to 0
-				if((PayClinicSetting)PrefC.GetInt(PrefName.PaymentClinicSetting)==PayClinicSetting.PatientDefaultClinic) {
+			if(Preferences.HasClinicsEnabled) {//if clinics aren't enabled default to 0
+				if((PayClinicSetting)Preferences.GetInt(PrefName.PaymentClinicSetting)==PayClinicSetting.PatientDefaultClinic) {
 					paymentCur.ClinicNum=patcur.ClinicNum;
 				}
-				else if((PayClinicSetting)PrefC.GetInt(PrefName.PaymentClinicSetting)==PayClinicSetting.SelectedExceptHQ) {
+				else if((PayClinicSetting)Preferences.GetInt(PrefName.PaymentClinicSetting)==PayClinicSetting.SelectedExceptHQ) {
 					paymentCur.ClinicNum=(Clinics.ClinicNum==0)?patcur.ClinicNum:Clinics.ClinicNum;
 				}
 				else {
@@ -354,7 +354,7 @@ namespace OpenDental {
 			List<Procedure> listSelectedProcs=createClaimDataWrapper.ClaimData.ListProcs.FindAll(x => x.ProcNum.In(listSelectedProcNums));
 			//If we are going to block based on a preference, do that before figuring out other claim validation.
 			//Ignore "No Bill Ins" here, because we want "No Bill Ins" to be the more important block for backwards compatability.
-			switch(PIn.Enum<ClaimZeroDollarProcBehavior>(PrefC.GetInt(PrefName.ClaimZeroDollarProcBehavior))) {
+			switch(PIn.Enum<ClaimZeroDollarProcBehavior>(Preferences.GetInt(PrefName.ClaimZeroDollarProcBehavior))) {
 				case ClaimZeroDollarProcBehavior.Warn:
 					if(listSelectedProcs.FirstOrDefault(x => x.ProcFee.IsZero() && !Procedures.NoBillIns(x,createClaimDataWrapper.ClaimData.ListClaimProcs
 							,PlanCur.PlanNum))!=null
@@ -487,7 +487,7 @@ namespace OpenDental {
 			}
 			Claims.Update(claim);
 			//JM - If we ever decide to enable ERA automation this will need to be considered.
-			if(PrefC.GetBool(PrefName.PromptForSecondaryClaim) && Security.IsAuthorized(Permissions.ClaimSend,true)) {
+			if(Preferences.GetBool(PrefName.PromptForSecondaryClaim) && Security.IsAuthorized(Permissions.ClaimSend,true)) {
 				ClaimL.PromptForSecondaryClaim(listClaimProcsForClaim);
 			}
 		}
@@ -498,7 +498,7 @@ namespace OpenDental {
 			if(listClaimSendQueueItems.Count==0) {
 				return retVal;
 			}
-			if(PrefC.HasClinicsEnabled) {//Clinics is in use
+			if(Preferences.HasClinicsEnabled) {//Clinics is in use
 				long clinicNum0=Claims.GetClaim(listClaimSendQueueItems[0].ClaimNum).ClinicNum;
 				for(int i=1;i<listClaimSendQueueItems.Count;i++) {
 					long clinicNum=Claims.GetClaim(listClaimSendQueueItems[i].ClaimNum).ClinicNum;
@@ -567,7 +567,7 @@ namespace OpenDental {
 			}
 			Claim claim0=Claims.GetClaim(listClaimSendQueueItems[0].ClaimNum);
 			long claimClinicNum=0;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				claimClinicNum=claim0.ClinicNum;//All claims for the queueItems have same clinic, due to validation above.
 			}
 			Clearinghouse clearinghouseHq=ClearinghouseL.GetClearinghouseHq(retVal[0].ClearinghouseNum);
@@ -627,7 +627,7 @@ namespace OpenDental {
 					return ClaimIsValidState.FalseClaimProcsChanged;
 				}
 			}
-			if(PrefC.GetBool(PrefName.ClaimsValidateACN)) {
+			if(Preferences.GetBool(PrefName.ClaimsValidateACN)) {
 				InsPlan plan=InsPlans.GetPlan(claimPlanNum,listInsPlans);//Does a query if listInsPlans is null or if claimPlanNum is not in list.
 				if(plan!=null && plan.GroupName.Contains("ADDP")) {
 					if(!Regex.IsMatch(claimNote,"ACN[0-9]{5,}")) {//ACN with at least 5 digits following

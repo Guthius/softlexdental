@@ -403,7 +403,7 @@ namespace OpenDental {
 				if(_emailMessage.Attachments[i].DisplayedFileName.ToLower()=="smime.p7s") {
 					if(!_isComposing) {
 						string smimeP7sFilePath=FileAtoZ.CombinePaths(EmailAttaches.GetAttachPath(),_emailMessage.Attachments[i].ActualFileName);
-						string localFile=PrefC.GetRandomTempFile(".p7s");
+						string localFile=Preferences.GetRandomTempFile(".p7s");
 						FileAtoZ.Copy(smimeP7sFilePath,localFile,FileAtoZSourceDestination.AtoZToLocal,doOverwrite:true);
 						SetSig(EmailMessages.GetEmailSignatureFromSmimeP7sFile(localFile));
 					}
@@ -610,7 +610,7 @@ namespace OpenDental {
 		private void butShowImages_Click(object sender,EventArgs e) {
 			try {
 				//We need a folder in order to place the images beside the html file in order for the relative image paths to work correctly.
-				string htmlFolderPath=ODFileUtils.CreateRandomFolder(PrefC.GetTempFolderPath());//Throws exceptions.
+				string htmlFolderPath=ODFileUtils.CreateRandomFolder(Preferences.GetTempFolderPath());//Throws exceptions.
 				string filePathHtml=ODFileUtils.CreateRandomFile(htmlFolderPath,".html");
 				string html=webBrowser.DocumentText;
 				for(int i=0;i<_listImageParts.Count;i++) {

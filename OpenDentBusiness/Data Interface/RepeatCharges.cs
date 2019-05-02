@@ -116,7 +116,7 @@ namespace OpenDentBusiness
             {
                 RepeatChargeResult result = new RepeatChargeResult();
                 List<RepeatCharge> listRepeatingCharges = RepeatCharges.Refresh(0).ToList();
-                if (PrefC.IsODHQ)
+                if (Preferences.IsODHQ)
                 {
                     //Remove all eService repeating charges.
                     //EService charges have already been calculated and stored in EServiceBilling table. Add those here.
@@ -139,7 +139,7 @@ namespace OpenDentBusiness
                     }
                     Patient pat = null;
                     List<DateTime> listBillingDates;//This list will have 1 or 2 dates where a repeating charge might be added
-                    if (PrefC.GetBool(PrefName.BillingUseBillingCycleDay))
+                    if (Preferences.GetBool(PrefName.BillingUseBillingCycleDay))
                     {
                         pat = Patients.GetPat(repeatCharge.PatNum);
                         listBillingDates = GetBillingDatesHelper(repeatCharge.DateStart, repeatCharge.DateStop, dateRun, pat.BillingCycleDay);
@@ -205,15 +205,15 @@ namespace OpenDentBusiness
                     DateTime dateTAgingBeganPref = DateTime.MinValue;
                     DateTime dtNow = MiscData.GetNowDateTime();
                     DateTime asOfDate = dateRun;
-                    if (PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily))
+                    if (Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily))
                     {
-                        asOfDate = PrefC.GetDate(PrefName.DateLastAging);
+                        asOfDate = Preferences.GetDate(PrefName.DateLastAging);
                     }
-                    bool isFamaging = (PrefC.GetBool(PrefName.AgingIsEnterprise) && listGuarantors.Count > 1);//will only use the famaging table if more than 1 guar
+                    bool isFamaging = (Preferences.GetBool(PrefName.AgingIsEnterprise) && listGuarantors.Count > 1);//will only use the famaging table if more than 1 guar
                     if (isFamaging)
                     {//if this will utilize the famaging table we need to check and set the pref to block others from starting aging
                         Prefs.RefreshCache();
-                        dateTAgingBeganPref = PrefC.GetDateT(PrefName.AgingBeginDateTime);
+                        dateTAgingBeganPref = Preferences.GetDateTime(PrefName.AgingBeginDateTime);
                         if (dateTAgingBeganPref > DateTime.MinValue)
                         {//pref has been set by another process, don't run aging and notify user
                             result.ErrorMsg += Lans.g("RepeatCharges", "Aging failed to run for patients who had repeat charges added to their account. This is due to "
@@ -300,7 +300,7 @@ namespace OpenDentBusiness
         {
             //No remoting role check; no call to db
             List<DateTime> retVal = new List<DateTime>();
-            if (!PrefC.GetBool(PrefName.BillingUseBillingCycleDay))
+            if (!Preferences.GetBool(PrefName.BillingUseBillingCycleDay))
             {
                 billingCycleDay = dateStart.Day;
             }
@@ -330,7 +330,7 @@ namespace OpenDentBusiness
             //--Scenario #4: The start day is the same as the stop day but after the billing day. Ex: Start: 10/13, Stop 11/13
             //--Scenario #5: The start day is the same as the stop day but before the billing day. Ex: Start: 11/10, Stop 12/10
             //Each of these repeat charges will post a charge on 12/11 even though it is after the stop date.
-            if (PrefC.GetBool(PrefName.BillingUseBillingCycleDay))
+            if (Preferences.GetBool(PrefName.BillingUseBillingCycleDay))
             {
                 if (dateStart.Day < billingCycleDay)
                 {
@@ -382,9 +382,9 @@ namespace OpenDentBusiness
             }
             procedure.MedicalCode = ProcedureCodes.GetProcCode(procedure.CodeNum).MedicalCode;
             procedure.BaseUnits = ProcedureCodes.GetProcCode(procedure.CodeNum).BaseUnits;
-            procedure.DiagnosticCode = PrefC.GetString(PrefName.ICD9DefaultForNewProcs);
+            procedure.DiagnosticCode = Preferences.GetString(PrefName.ICD9DefaultForNewProcs);
             procedure.RepeatChargeNum = repeatCharge.RepeatChargeNum;
-            procedure.PlaceService = (PlaceOfService)PrefC.GetInt(PrefName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used.  
+            procedure.PlaceService = (PlaceOfService)Preferences.GetInt(PrefName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used.  
                                                                                                          //Check if the repeating charge has been flagged to copy it's note into the billing note of the procedure.
             if (repeatCharge.CopyNoteToProc)
             {
@@ -403,7 +403,7 @@ namespace OpenDentBusiness
                     }
                 }
             }
-            if (!PrefC.GetBool(PrefName.EasyHidePublicHealth))
+            if (!Preferences.GetBool(PrefName.EasyHidePublicHealth))
             {
                 procedure.SiteNum = pat.SiteNum;
             }
@@ -571,7 +571,7 @@ namespace OpenDentBusiness
                 }
                 //Only post confirmation charge if valid.
                 if (smsBilling.ConfirmationChargeTotalUSD > 0
-                    && (billingDate.Date <= DateTime.Today.Date || PrefC.GetBool(PrefName.FutureTransDatesAllowed)
+                    && (billingDate.Date <= DateTime.Today.Date || Preferences.GetBool(PrefName.FutureTransDatesAllowed)
                     && !listProcsConfirm.Exists(x => x.PatNum == pat.PatNum && x.ProcDate.Year == billingDate.Year && x.ProcDate.Month == billingDate.Month)))
                 {
                     //The calculated access charge was greater than 0 and there is not an existing "038" procedure on the account for that month.
@@ -583,19 +583,19 @@ namespace OpenDentBusiness
                     procConfirm.DateTP = billingDate;
                     procConfirm.ProcFee = smsBilling.ConfirmationChargeTotalUSD;
                     procConfirm.ProcStatus = ProcStat.C;
-                    procConfirm.ProvNum = PrefC.GetLong(PrefName.PracticeDefaultProv);
+                    procConfirm.ProvNum = Preferences.GetLong(PrefName.PracticeDefaultProv);
                     procConfirm.MedicalCode = procCodeConfirm.MedicalCode;
                     procConfirm.BaseUnits = procCodeConfirm.BaseUnits;
-                    procConfirm.DiagnosticCode = PrefC.GetString(PrefName.ICD9DefaultForNewProcs);
+                    procConfirm.DiagnosticCode = Preferences.GetString(PrefName.ICD9DefaultForNewProcs);
                     procConfirm.BillingNote = smsBilling.BillingDescConfirmation;
-                    procConfirm.PlaceService = (PlaceOfService)PrefC.GetInt(PrefName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used.
+                    procConfirm.PlaceService = (PlaceOfService)Preferences.GetInt(PrefName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used.
                     Procedures.Insert(procConfirm);
                     listProcsConfirm.Add(procConfirm);
                     retVal.Add(procConfirm);
                 }
                 //Confirmation charges may wipe out access charges. We still want to see the $0 charge in this case so post this charge if either of the 2 are valid.
                 if ((smsBilling.AccessChargeTotalUSD > 0 || smsBilling.ConfirmationChargeTotalUSD > 0)
-                    && (billingDate.Date <= DateTime.Today.Date || PrefC.GetBool(PrefName.FutureTransDatesAllowed))
+                    && (billingDate.Date <= DateTime.Today.Date || Preferences.GetBool(PrefName.FutureTransDatesAllowed))
                     && !listProcsAccess.Exists(x => x.PatNum == pat.PatNum && x.ProcDate.Year == billingDate.Year && x.ProcDate.Month == billingDate.Month))
                 {
                     //The calculated access charge was greater than 0 and there is not an existing "038" procedure on the account for that month.
@@ -607,19 +607,19 @@ namespace OpenDentBusiness
                     procAccess.DateTP = billingDate;
                     procAccess.ProcFee = smsBilling.AccessChargeTotalUSD;
                     procAccess.ProcStatus = ProcStat.C;
-                    procAccess.ProvNum = PrefC.GetLong(PrefName.PracticeDefaultProv);
+                    procAccess.ProvNum = Preferences.GetLong(PrefName.PracticeDefaultProv);
                     procAccess.MedicalCode = procCodeAccess.MedicalCode;
                     procAccess.BaseUnits = procCodeAccess.BaseUnits;
-                    procAccess.DiagnosticCode = PrefC.GetString(PrefName.ICD9DefaultForNewProcs);
+                    procAccess.DiagnosticCode = Preferences.GetString(PrefName.ICD9DefaultForNewProcs);
                     procAccess.BillingNote = smsBilling.BillingDescSms;
-                    procAccess.PlaceService = (PlaceOfService)PrefC.GetInt(PrefName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used. 
+                    procAccess.PlaceService = (PlaceOfService)Preferences.GetInt(PrefName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used. 
                     Procedures.Insert(procAccess);
                     listProcsAccess.Add(procAccess);
                     retVal.Add(procAccess);
                 }
                 //Only post usage charge if valid.
                 if (smsBilling.MsgChargeTotalUSD > 0
-                    && (billingDate.Date <= DateTime.Today.Date || PrefC.GetBool(PrefName.FutureTransDatesAllowed))
+                    && (billingDate.Date <= DateTime.Today.Date || Preferences.GetBool(PrefName.FutureTransDatesAllowed))
                     && !listProcsUsage.Exists(x => x.PatNum == pat.PatNum && x.ProcDate.Year == billingDate.Year && x.ProcDate.Month == billingDate.Month))
                 {
                     //Calculated Usage charge > 0 and not already billed, may exist without access charge
@@ -631,11 +631,11 @@ namespace OpenDentBusiness
                     procUsage.DateTP = billingDate;
                     procUsage.ProcFee = smsBilling.MsgChargeTotalUSD;
                     procUsage.ProcStatus = ProcStat.C;
-                    procUsage.ProvNum = PrefC.GetLong(PrefName.PracticeDefaultProv);
+                    procUsage.ProvNum = Preferences.GetLong(PrefName.PracticeDefaultProv);
                     procUsage.MedicalCode = procCodeUsage.MedicalCode;
                     procUsage.BaseUnits = procCodeUsage.BaseUnits;
-                    procUsage.DiagnosticCode = PrefC.GetString(PrefName.ICD9DefaultForNewProcs);
-                    procUsage.PlaceService = (PlaceOfService)PrefC.GetInt(PrefName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used. 
+                    procUsage.DiagnosticCode = Preferences.GetString(PrefName.ICD9DefaultForNewProcs);
+                    procUsage.PlaceService = (PlaceOfService)Preferences.GetInt(PrefName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used. 
                     procUsage.BillingNote = "Texting Usage charge for " + smsBilling.DateUsage.ToString("MMMM yyyy") + ".";
                     Procedures.Insert(procUsage);
                     listProcsUsage.Add(procUsage);
@@ -649,7 +649,7 @@ namespace OpenDentBusiness
         private static bool IsRepeatDateHelper(RepeatCharge repeatCharge, DateTime possibleBillingDate, DateTime existingProcedureDate, Patient pat)
         {
             //No remoting role check; no call to db
-            if (PrefC.GetBool(PrefName.BillingUseBillingCycleDay))
+            if (Preferences.GetBool(PrefName.BillingUseBillingCycleDay))
             {
                 pat = pat ?? Patients.GetPat(repeatCharge.PatNum);
                 if (pat.BillingCycleDay != existingProcedureDate.Day

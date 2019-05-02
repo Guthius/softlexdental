@@ -88,15 +88,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Ebill into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Ebill ebill,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				ebill.EbillNum=ReplicationServers.GetKey("ebill","EbillNum");
 			}
 			string command="INSERT INTO ebill (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EbillNum,";
 			}
 			command+="ClinicNum,ClientAcctNumber,ElectUserName,ElectPassword,PracticeAddress,RemitAddress) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(ebill.EbillNum)+",";
 			}
 			command+=
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(ebill.ElectPassword)+"',"
 				+    POut.Int   ((int)ebill.PracticeAddress)+","
 				+    POut.Int   ((int)ebill.RemitAddress)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

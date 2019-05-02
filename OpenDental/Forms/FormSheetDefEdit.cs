@@ -301,7 +301,7 @@ namespace OpenDental {
 		///<summary>Fills _listWebSheetIds with any webforms_sheetdefs that have the same SheetDefNum of the current SheetDef.</summary>
 		private void GetWebSheetDefs(ODThread odThread) {
 			//Ignore the certificate errors for the staging machine and development machine
-			if(PrefC.GetString(PrefName.WebHostSynchServerURL).In(WebFormL.SynchUrlStaging,WebFormL.SynchUrlDev)) {
+			if(Preferences.GetString(PrefName.WebHostSynchServerURL).In(WebFormL.SynchUrlStaging,WebFormL.SynchUrlDev)) {
 				WebFormL.IgnoreCertificateErrors();
 			}
 			List<WebForms_SheetDef> listWebFormSheetDefs;
@@ -718,7 +718,7 @@ namespace OpenDental {
 				g.FillRectangle(Brushes.White,rf);
 				StringFormat sf=new StringFormat();
 				sf.Alignment=StringAlignment.Far;
-				if(PrefC.GetBool(PrefName.InvoicePaymentsGridShowNetProd)) {
+				if(Preferences.GetBool(PrefName.InvoicePaymentsGridShowNetProd)) {
 					g.DrawString("Total Payments & WriteOffs:  0.00",new Font(FontFamily.GenericSansSerif,10,FontStyle.Bold),new SolidBrush(Color.Black),rf,sf);
 				}
 				else {
@@ -809,7 +809,7 @@ namespace OpenDental {
 			else if(sheetFieldDef.FieldName=="Patient Info.gif") {
 				img=OpenDentBusiness.Properties.Resources.Patient_Info;
 			}
-			else if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ && File.Exists(filePathAndName)) {
+			else if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ && File.Exists(filePathAndName)) {
 				img=Image.FromFile(filePathAndName);
 			}
 			else if(CloudStorage.IsCloudStorage) {
@@ -1120,7 +1120,7 @@ namespace OpenDental {
 			//toothChart.SendToBack();
 			//ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
 			toothChart.UseHardware=ComputerPrefs.LocalComputer.GraphicsUseHardware;
-			toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers));
+			toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)Preferences.GetInt(PrefName.UseInternationalToothNumbers));
 			//Must be last preference set, last so that all settings are caried through in the reinitialization this line triggers.
 			if(ComputerPrefs.LocalComputer.GraphicsSimple==DrawingMode.Simple2D) {
 				toothChart.DrawMode=DrawingMode.Simple2D;
@@ -1286,7 +1286,7 @@ namespace OpenDental {
 				HashRtfStringCache[index.ToString()]=data;
 			}
 			Point[] charPositions=(Point[])data[0];
-			if(PrefC.GetBool(PrefName.ImeCompositionCompatibility) && !IsWesternChars(str)) {
+			if(Preferences.GetBool(PrefName.ImeCompositionCompatibility) && !IsWesternChars(str)) {
 				//Only draw word by word if the user defined preference is set, and there is at least one character in the string that isn't a "Western" 
 				//alphabet character.  Only use right-to-left formatting if the user's computer is set to a right-to-left culture.  This will preserve
 				//desired formatting and spacing in as many scenarios as we can unless we later add a textbox specific setting for this type of formatting.
@@ -1468,7 +1468,7 @@ namespace OpenDental {
 		}
 
 		private void butAddImage_Click(object sender,EventArgs e) {
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				MsgBox.Show(this,"Not allowed because not using AtoZ folder");
 				return;
 			}
@@ -1611,7 +1611,7 @@ namespace OpenDental {
 		}
 
 		private void butAddPatImage_Click(object sender,EventArgs e) {
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				MsgBox.Show(this,"Not allowed because not using AtoZ folder");
 				return;
 			}
@@ -2389,7 +2389,7 @@ namespace OpenDental {
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			if(GetIsDynamicSheetType() && _sheetDefCur.SheetDefNum==PrefC.GetLong(PrefName.ChartDefaultLayoutSheetDefNum)) {
+			if(GetIsDynamicSheetType() && _sheetDefCur.SheetDefNum==Preferences.GetLong(PrefName.ChartDefaultLayoutSheetDefNum)) {
 				MsgBox.Show(this,"This is the current Chart module default layout.\r\nPlease select a new default in Chart Module Preferences first.");
 				return;
 			}

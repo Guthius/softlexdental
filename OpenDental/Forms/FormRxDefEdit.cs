@@ -430,7 +430,7 @@ namespace OpenDental{
 			textNotes.Text=RxDefCur.Notes;
 			textPatInstruction.Text=RxDefCur.PatientInstruction;
 			checkControlled.Checked=RxDefCur.IsControlled;
-			if(PrefC.GetBool(PrefName.RxHasProc)) {
+			if(Preferences.GetBool(PrefName.RxHasProc)) {
 				checkProcRequired.Enabled=true;
 				checkProcRequired.Checked=RxDefCur.IsProcRequired;
 			}

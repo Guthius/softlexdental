@@ -88,15 +88,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one MobileAppDevice into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(MobileAppDevice mobileAppDevice,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				mobileAppDevice.MobileAppDeviceNum=ReplicationServers.GetKey("mobileappdevice","MobileAppDeviceNum");
 			}
 			string command="INSERT INTO mobileappdevice (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="MobileAppDeviceNum,";
 			}
 			command+="ClinicNum,DeviceName,UniqueID,IsAllowed,LastAttempt,LastLogin) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(mobileAppDevice.MobileAppDeviceNum)+",";
 			}
 			command+=
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (mobileAppDevice.IsAllowed)+","
 				+    POut.DateT (mobileAppDevice.LastAttempt)+","
 				+    POut.DateT (mobileAppDevice.LastLogin)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

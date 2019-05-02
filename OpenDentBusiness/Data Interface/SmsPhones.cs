@@ -325,11 +325,11 @@ namespace OpenDentBusiness
         public static double GetClinicBalance(long clinicNum)
         {
             double limit = 0;
-            if (!PrefC.HasClinicsEnabled)
+            if (!Preferences.HasClinicsEnabled)
             {
-                if (PrefC.GetDate(PrefName.SmsContractDate).Year > 1880)
+                if (Preferences.GetDate(PrefName.SmsContractDate).Year > 1880)
                 {
-                    limit = PrefC.GetDouble(PrefName.SmsMonthlyLimit);
+                    limit = Preferences.GetDouble(PrefName.SmsMonthlyLimit);
                 }
             }
             else
@@ -359,9 +359,9 @@ namespace OpenDentBusiness
             {
                 return true;
             }
-            if (!PrefC.HasClinicsEnabled)
+            if (!Preferences.HasClinicsEnabled)
             {
-                return PrefC.GetDateT(PrefName.SmsContractDate).Year > 1880;
+                return Preferences.GetDateTime(PrefName.SmsContractDate).Year > 1880;
             }
             return (Clinics.GetFirstOrDefault(x => x.SmsContractDate.Year > 1880) != null);
         }
@@ -370,7 +370,7 @@ namespace OpenDentBusiness
         public static long GetClinicNumForTexting(long patNum)
         {
             //No need to check RemotingRole; no call to db.
-            if (!PrefC.HasClinicsEnabled || Clinics.GetCount() == 0)
+            if (!Preferences.HasClinicsEnabled || Clinics.GetCount() == 0)
             {
                 return 0;//0 used for no clinics
             }
@@ -379,7 +379,7 @@ namespace OpenDentBusiness
             {//if pat assigned to invalid clinic or clinic num 0
                 return clinic.ClinicNum;
             }
-            return PrefC.GetLong(PrefName.TextingDefaultClinicNum);
+            return Preferences.GetLong(PrefName.TextingDefaultClinicNum);
         }
 
         ///<summary>Returns true if there is an active phone for the country code.</summary>

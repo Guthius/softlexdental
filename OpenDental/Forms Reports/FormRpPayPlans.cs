@@ -323,7 +323,7 @@ namespace OpenDental
 				listProv.SelectedIndices.Add(i);
 			}
 			checkAllProv.Checked=true;
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				listClin.Visible=false;
 				labelClin.Visible=false;
 				checkAllClin.Visible=false;
@@ -398,7 +398,7 @@ namespace OpenDental
 				MsgBox.Show(this,"Please select at least one provider.");
 				return;
 			}
-			if(PrefC.HasClinicsEnabled) {//Using clinics
+			if(Preferences.HasClinicsEnabled) {//Using clinics
 				if(listClin.SelectedIndices.Count==0) {
 					MsgBox.Show(this,"Please select at least one clinic.");
 					return;
@@ -419,7 +419,7 @@ namespace OpenDental
 					listProvNums.Add(_listProviders[i].ProvNum);
 				}
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				for(int i=0;i<listClin.SelectedIndices.Count;i++) {
 					if(Security.CurUser.ClinicIsRestricted) {
 						listClinicNums.Add(_listClinics[listClin.SelectedIndices[i]].ClinicNum);//we know that the list is a 1:1 to _listClinics
@@ -444,7 +444,7 @@ namespace OpenDental
 			else {
 				displayPayPlanType=DisplayPayPlanType.Both;
 			}
-			bool isPayPlanV2=(PrefC.GetInt(PrefName.PayPlansVersion)==2);
+			bool isPayPlanV2=(Preferences.GetInt(PrefName.PayPlansVersion)==2);
 			DataSet ds=RpPayPlan.GetPayPlanTable(dateStart.Value,dateEnd.Value,listProvNums,listClinicNums,checkAllProv.Checked
 					,displayPayPlanType,checkHideCompletePlans.Checked,checkShowFamilyBalance.Checked,checkHasDateRange.Checked,isPayPlanV2);
 			DataTable table=ds.Tables["Clinic"];
@@ -454,7 +454,7 @@ namespace OpenDental
 			Font fontSubTitle=new Font("Tahoma",10,FontStyle.Bold);
 			report.ReportName=Lan.g(this,"PaymentPlans");
 			report.AddTitle("Title",Lan.g(this,"Payment Plans"),fontTitle);
-			report.AddSubTitle("PracticeTitle",PrefC.GetString(PrefName.PracticeTitle),fontSubTitle);
+			report.AddSubTitle("PracticeTitle",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
 			if(checkHasDateRange.Checked) {
 				report.AddSubTitle("Date SubTitle",dateStart.Value.ToShortDateString()+" - "+dateEnd.Value.ToShortDateString(),fontSubTitle);
 			}
@@ -462,7 +462,7 @@ namespace OpenDental
 				report.AddSubTitle("Date SubTitle",DateTimeOD.Today.ToShortDateString(),fontSubTitle);
 			}
 			QueryObject query;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				query=report.AddQuery(table,"","clinicName",SplitByKind.Value,1,true);
 			}
 			else {
@@ -499,7 +499,7 @@ namespace OpenDental
 				query.GetColumnDetail("Fam Balance").ContentAlignment=ContentAlignment.MiddleRight;
 				query.GetColumnDetail("Fam Balance").SuppressIfDuplicate=true;
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				QueryObject queryTotals=report.AddQuery(tableTotal,"Totals");
 				queryTotals.AddColumn("Clinic",360,FieldValueType.String,font);
 				queryTotals.AddColumn("Princ",100,FieldValueType.Number,font);

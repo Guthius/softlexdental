@@ -184,7 +184,7 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetToothLabel(string tooth_id) {
-			return GetToothLabel(tooth_id,(ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers));
+			return GetToothLabel(tooth_id,(ToothNumberingNomenclature)Preferences.GetInt(PrefName.UseInternationalToothNumbers));
 		}
 
 		///<summary>Identical to GetToothLabel, but just used in the 3D tooth chart because with Palmer, we don't want the UR, UL, etc.</summary>
@@ -213,13 +213,13 @@ namespace OpenDentBusiness{
 		}
 
 		public static string GetToothLabelGraphic(string tooth_id) {
-			return GetToothLabelGraphic(tooth_id,(ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers));
+			return GetToothLabelGraphic(tooth_id,(ToothNumberingNomenclature)Preferences.GetInt(PrefName.UseInternationalToothNumbers));
 		}
 
 		///<summary>MUST be validated by IsValidEntry before coming here. All user entered toothnumbers are run through this method which 
 		///automatically checks to see if using international toothnumbers. So the procedurelog class will always contain the american toothnum.</summary>
 		public static string GetToothId(string tooth_label) {
-			ToothNumberingNomenclature nomenclature=(ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers);
+			ToothNumberingNomenclature nomenclature=(ToothNumberingNomenclature)Preferences.GetInt(PrefName.UseInternationalToothNumbers);
 			return GetToothId(tooth_label,nomenclature);
 		}
 
@@ -328,7 +328,7 @@ namespace OpenDentBusiness{
 		///the very last moment.  Just before display, the string is converted using this method. Checks the preference cache for proper nomenclature.
 		///</summary>
 		public static string ToInternat(string toothNum) { // CWI: Left for compatibility
-			return ToInternat(toothNum,(ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers));
+			return ToInternat(toothNum,(ToothNumberingNomenclature)Preferences.GetInt(PrefName.UseInternationalToothNumbers));
 		}
 
 		///<summary>Sometimes validated by IsValidDB before coming here, otherwise an invalid toothnum.  This should be run on all displayed tooth 
@@ -450,7 +450,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Used every time user enters toothNum in procedure box. Must be followed with FromInternat. These are the *ONLY* methods that are designed to accept user input.  Can also handle international toothnum</summary>
 		public static bool IsValidEntry(string toothNum){
-			int nomenclature = PrefC.GetInt(PrefName.UseInternationalToothNumbers);
+			int nomenclature = Preferences.GetInt(PrefName.UseInternationalToothNumbers);
 			if(nomenclature==0){//Universal,american
 				//tooth numbers validated the same as they are in db.
 				return IsValidDB(toothNum);

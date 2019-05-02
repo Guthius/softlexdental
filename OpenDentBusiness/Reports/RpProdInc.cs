@@ -1319,7 +1319,7 @@ namespace OpenDentBusiness
             {
                 whereClin = "AND adjustment.ClinicNum IN (" + String.Join(",", listClinicNums) + ") ";
             }
-            string listBadDebtAdj = ReportsComplex.RunFuncOnReportServer(() => PrefC.GetStringNoCache(PrefName.BadDebtAdjustmentTypes));
+            string listBadDebtAdj = ReportsComplex.RunFuncOnReportServer(() => Preferences.GetStringNoCache(PrefName.BadDebtAdjustmentTypes));
             if (String.IsNullOrEmpty(listBadDebtAdj))
             {
                 listBadDebtAdj = "0";
@@ -1562,7 +1562,7 @@ namespace OpenDentBusiness
             {
                 whereClin = "AND adjustment.ClinicNum IN (" + String.Join(",", listClinicNums) + ") ";
             }
-            string listBadDebtAdj = ReportsComplex.RunFuncOnReportServer(() => PrefC.GetStringNoCache(PrefName.BadDebtAdjustmentTypes));
+            string listBadDebtAdj = ReportsComplex.RunFuncOnReportServer(() => Preferences.GetStringNoCache(PrefName.BadDebtAdjustmentTypes));
             if (String.IsNullOrEmpty(listBadDebtAdj))
             {
                 listBadDebtAdj = "0";

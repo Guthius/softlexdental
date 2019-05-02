@@ -228,8 +228,8 @@ namespace OpenDental {
 		#endregion
 
 		private void FormRpFinanceCharge_Load(object sender, System.EventArgs e) {
-			textDateFrom.Text=PrefC.GetDate(PrefName.FinanceChargeLastRun).ToShortDateString();
-			textDateTo.Text=PrefC.GetDate(PrefName.FinanceChargeLastRun).ToShortDateString();
+			textDateFrom.Text=Preferences.GetDate(PrefName.FinanceChargeLastRun).ToShortDateString();
+			textDateTo.Text=Preferences.GetDate(PrefName.FinanceChargeLastRun).ToShortDateString();
 			_listProviders=Providers.GetListReports();
 			_listBillingTypeDefs=Defs.GetDefsForCategory(DefCat.BillingTypes,true);
 			foreach(Def billingType in _listBillingTypeDefs) {
@@ -280,13 +280,13 @@ namespace OpenDental {
 			if(!checkAllBilling.Checked) {
 				listBillingDefNums.AddRange(listBillingType.SelectedIndices.OfType<int>().Select(x => _listBillingTypeDefs[x].DefNum).ToList());
 			}
-			DataTable table=RpFinanceCharge.GetFinanceChargeTable(dateFrom,dateTo,PrefC.GetLong(PrefName.FinanceChargeAdjustmentType),listProvNums,listBillingDefNums);
+			DataTable table=RpFinanceCharge.GetFinanceChargeTable(dateFrom,dateTo,Preferences.GetLong(PrefName.FinanceChargeAdjustmentType),listProvNums,listBillingDefNums);
 			Font font=new Font("Tahoma",9);
 			Font fontTitle=new Font("Tahoma",17,FontStyle.Bold);
 			Font fontSubTitle=new Font("Tahoma",10,FontStyle.Bold);
 			report.ReportName=Lan.g(this,"Finance Charge Report");
 			report.AddTitle("Title",Lan.g(this,"Finance Charge Report"),fontTitle);
-			report.AddSubTitle("PracticeTitle",PrefC.GetString(PrefName.PracticeTitle),fontSubTitle);
+			report.AddSubTitle("PracticeTitle",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
 			report.AddSubTitle("Date SubTitle",dateFrom.ToString("d")+" - "+dateTo.ToString("d"),fontSubTitle);
 			string subtitleProvs="";
 			if(listProvNums.Count>0) {

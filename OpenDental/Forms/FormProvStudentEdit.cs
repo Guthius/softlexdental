@@ -123,7 +123,7 @@ namespace OpenDental {
 			if(!ProvStudent.IsNew || _autoUserName.ToString()!=textUserName.Text) {
 				isAutoUserName=false;
 			}
-			if(isAutoUserName && !PrefC.GetBool(PrefName.RandomPrimaryKeys)) {//Is a new student using the default user name given
+			if(isAutoUserName && !Preferences.GetBool(PrefName.RandomPrimaryKeys)) {//Is a new student using the default user name given
 				long provNum=Providers.GetNextAvailableProvNum();
 				if(_autoUserName!=provNum) {
 					MsgBox.Show(this,"The default user name was already taken.  The next available user name was used.");
@@ -138,7 +138,7 @@ namespace OpenDental {
 				newUser.UserName=_autoUserName.ToString();
 				newUser.LoginDetails=Authentication.GenerateLoginDetailsSHA512(textPassword.Text);
 				newUser.ProvNum=provNum;
-				Userods.Insert(newUser,new List<long> { PrefC.GetLong(PrefName.SecurityGroupForStudents) });
+				Userods.Insert(newUser,new List<long> { Preferences.GetLong(PrefName.SecurityGroupForStudents) });
 			}
 			else {//Has changed the user name from the default or is editing a pre-existing student
 				try {
@@ -147,7 +147,7 @@ namespace OpenDental {
 						newUser.UserName=textUserName.Text;
 						newUser.LoginDetails=Authentication.GenerateLoginDetailsSHA512(textPassword.Text);
 						newUser.ProvNum=provNum;
-						Userods.Insert(newUser,new List<long> { PrefC.GetLong(PrefName.SecurityGroupForStudents) });//Performs validation
+						Userods.Insert(newUser,new List<long> { Preferences.GetLong(PrefName.SecurityGroupForStudents) });//Performs validation
 					}
 					else {
 						Providers.Update(ProvStudent);

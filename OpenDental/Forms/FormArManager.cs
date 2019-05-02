@@ -42,7 +42,7 @@ namespace OpenDental {
 			_collectionBillType=billTypeDefs.FirstOrDefault(x => x.ItemValue.ToLower()=="c")?.Copy();
 			_listBillTypesNoColl=billTypeDefs.Where(x => x.ItemValue.ToLower()!="c").Select(x => x.Copy()).ToList();
 			_listClinics=new List<Clinic>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				_listClinics.AddRange(Clinics.GetForUserod(Security.CurUser,true,Lan.g(this,"Unassigned")).OrderBy(x => x.ClinicNum!=0).ThenBy(x => x.ItemOrder));
 			}
 			else {//clinics disabled
@@ -61,7 +61,7 @@ namespace OpenDental {
 			#endregion Get Variables for Both Tabs
 			#region Fill Unsent Tab Filter ComboBoxes, CheckBoxes, and Fields
 			#region Unsent Tab Clinic Combo
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				comboBoxMultiUnsentClinics.Visible=true;
 				labelUnsentClinics.Visible=true;
 				comboBoxMultiSentClinics.Visible=true;
@@ -92,7 +92,7 @@ namespace OpenDental {
 			_listProviders.ForEach(x => comboBoxMultiUnsentProvs.Items.Add(x.GetLongDesc()));
 			#endregion Unsent Tab Prov Combo
 			#region Unsent Tab Bill Type Combo
-			List<long> listDefaultBillTypes=PrefC.GetString(PrefName.ArManagerBillingTypes)
+			List<long> listDefaultBillTypes=Preferences.GetString(PrefName.ArManagerBillingTypes)
 				.Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries)
 				.Select(x => PIn.Long(x)).ToList();
 			comboBoxMultiBillTypes.Items.Add("All");
@@ -110,31 +110,31 @@ namespace OpenDental {
 			comboUnsentAccountAge.Items.Add(Lan.g(this,"Over 60 Days"));
 			comboUnsentAccountAge.Items.Add(Lan.g(this,"Over 90 Days"));
 			comboUnsentAccountAge.SelectedIndexChanged-=comboUnsentAccountAge_SelectedIndexChanged;
-			comboUnsentAccountAge.SelectedIndex=new List<string>() { "30","60","90" }.IndexOf(PrefC.GetString(PrefName.ArManagerUnsentAgeOfAccount))+1;//+1 for any bal
+			comboUnsentAccountAge.SelectedIndex=new List<string>() { "30","60","90" }.IndexOf(Preferences.GetString(PrefName.ArManagerUnsentAgeOfAccount))+1;//+1 for any bal
 			comboUnsentAccountAge.SelectedIndexChanged+=comboUnsentAccountAge_SelectedIndexChanged;
 			#endregion Unsent Tab Account Age Combo
 			#region Unsent Tab Textbox Filters
 			//text min bal
 			textUnsentMinBal.TextChanged-=textUnsentMinBal_TextChanged;
-			textUnsentMinBal.Text=PrefC.GetDouble(PrefName.ArManagerUnsentMinBal).ToString();
+			textUnsentMinBal.Text=Preferences.GetDouble(PrefName.ArManagerUnsentMinBal).ToString();
 			textUnsentMinBal.TextChanged+=textUnsentMinBal_TextChanged;
 			//text days since last payment
 			textUnsentDaysLastPay.TextChanged-=textUnsentDaysLastPay_TextChanged;
-			textUnsentDaysLastPay.Text=PrefC.GetInt(PrefName.ArManagerUnsentDaysSinceLastPay).ToString();
+			textUnsentDaysLastPay.Text=Preferences.GetInt(PrefName.ArManagerUnsentDaysSinceLastPay).ToString();
 			textUnsentDaysLastPay.TextChanged+=textUnsentDaysLastPay_TextChanged;
 			#endregion Unsent Tab Textbox Filters
 			#region Unsent Tab Checkbox Filters
 			//exclude if ins pending
 			checkExcludeInsPending.CheckedChanged-=checkExcludeInsPending_CheckedChanged;
-			checkExcludeInsPending.Checked=PrefC.GetBool(PrefName.ArManagerExcludeInsPending);
+			checkExcludeInsPending.Checked=Preferences.GetBool(PrefName.ArManagerExcludeInsPending);
 			checkExcludeInsPending.CheckedChanged+=checkExcludeInsPending_CheckedChanged;
 			//exclude if unsent procs
 			checkExcludeIfProcs.CheckedChanged-=checkExcludeIfProcs_CheckedChanged;
-			checkExcludeIfProcs.Checked=PrefC.GetBool(PrefName.ArManagerExcludeIfUnsentProcs);
+			checkExcludeIfProcs.Checked=Preferences.GetBool(PrefName.ArManagerExcludeIfUnsentProcs);
 			checkExcludeIfProcs.CheckedChanged+=checkExcludeIfProcs_CheckedChanged;
 			//exclude if bad address (no zipcode)
 			checkExcludeBadAddress.CheckedChanged-=checkExcludeBadAddress_CheckedChanged;
-			checkExcludeBadAddress.Checked=PrefC.GetBool(PrefName.ArManagerExcludeBadAddresses);
+			checkExcludeBadAddress.Checked=Preferences.GetBool(PrefName.ArManagerExcludeBadAddresses);
 			checkExcludeBadAddress.CheckedChanged+=checkExcludeBadAddress_CheckedChanged;
 			#endregion Unsent Tab Checkbox Filters
 			#region Unsent Tab Demand Type Combo
@@ -142,7 +142,7 @@ namespace OpenDental {
 			#endregion Unsent Tab Demand Type Combo
 			#region Unsent Tab Show PatNums
 			checkUnsentShowPatNums.CheckedChanged-=checkUnsentShowPatNums_CheckedChanged;
-			checkUnsentShowPatNums.Checked=PrefC.GetBool(PrefName.ReportsShowPatNum);
+			checkUnsentShowPatNums.Checked=Preferences.GetBool(PrefName.ReportsShowPatNum);
 			checkUnsentShowPatNums.CheckedChanged+=checkUnsentShowPatNums_CheckedChanged;
 			#endregion Unsent Tab Show PatNums
 			#endregion Fill Unsent Tab Filter ComboBoxes, CheckBoxes, and Fields
@@ -155,7 +155,7 @@ namespace OpenDental {
 			#region Sent Tab Trans Type Combo
 			_listSentTabTransTypes=Enum.GetValues(typeof(TsiTransType)).OfType<TsiTransType>()
 				.Where(x => !x.In(TsiTransType.PF,TsiTransType.PT,TsiTransType.SS,TsiTransType.CN,TsiTransType.Agg)).ToList();
-			List<TsiTransType> listDefaultLastTransTypes=PrefC.GetString(PrefName.ArManagerLastTransTypes)
+			List<TsiTransType> listDefaultLastTransTypes=Preferences.GetString(PrefName.ArManagerLastTransTypes)
 				.Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries)
 				.Select(x => PIn.Enum<TsiTransType>(x,true))
 				.Where(x => !x.In(TsiTransType.PF,TsiTransType.PT,TsiTransType.SS,TsiTransType.CN,TsiTransType.Agg)).ToList();
@@ -174,17 +174,17 @@ namespace OpenDental {
 			comboSentAccountAge.Items.Add(Lan.g(this,"Over 60 Days"));
 			comboSentAccountAge.Items.Add(Lan.g(this,"Over 90 Days"));
 			comboSentAccountAge.SelectedIndexChanged-=comboSentAccountAge_SelectedIndexChanged;
-			comboSentAccountAge.SelectedIndex=new List<string>() { "30","60","90" }.IndexOf(PrefC.GetString(PrefName.ArManagerSentAgeOfAccount))+1;//+1 for any bal
+			comboSentAccountAge.SelectedIndex=new List<string>() { "30","60","90" }.IndexOf(Preferences.GetString(PrefName.ArManagerSentAgeOfAccount))+1;//+1 for any bal
 			comboSentAccountAge.SelectedIndexChanged+=comboSentAccountAge_SelectedIndexChanged;
 			#endregion Sent Tab Account Age Combo
 			#region Sent Tab Textbox Filters
 			//text min bal
 			textSentMinBal.TextChanged-=textSentMinBal_TextChanged;
-			textSentMinBal.Text=PrefC.GetDouble(PrefName.ArManagerSentMinBal).ToString();
+			textSentMinBal.Text=Preferences.GetDouble(PrefName.ArManagerSentMinBal).ToString();
 			textSentMinBal.TextChanged+=textSentMinBal_TextChanged;
 			//text days since last payment
 			textSentDaysLastPay.TextChanged-=textSentDaysLastPay_TextChanged;
-			textSentDaysLastPay.Text=PrefC.GetInt(PrefName.ArManagerSentDaysSinceLastPay).ToString();
+			textSentDaysLastPay.Text=Preferences.GetInt(PrefName.ArManagerSentDaysSinceLastPay).ToString();
 			textSentDaysLastPay.TextChanged+=textSentDaysLastPay_TextChanged;
 			#endregion Sent Tab Textbox Filters
 			#region Sent Tab New Statuses Combo
@@ -197,7 +197,7 @@ namespace OpenDental {
 			#endregion Sent Tab New Bill Types Combo
 			#region Sent Tab Show PatNums
 			checkSentShowPatNums.CheckedChanged-=checkSentShowPatNums_CheckedChanged;
-			checkSentShowPatNums.Checked=PrefC.GetBool(PrefName.ReportsShowPatNum);
+			checkSentShowPatNums.Checked=Preferences.GetBool(PrefName.ReportsShowPatNum);
 			checkSentShowPatNums.CheckedChanged+=checkSentShowPatNums_CheckedChanged;
 			#endregion Sent Tab Show PatNums
 			#endregion Fill Sent Tab Filter ComboBoxes, CheckBoxes, and Fields
@@ -231,10 +231,10 @@ namespace OpenDental {
 
 		private bool RunAgingIfNecessary() {
 			string msgText="";
-			if(PrefC.GetBool(PrefName.AgingIsEnterprise)) {
+			if(Preferences.GetBool(PrefName.AgingIsEnterprise)) {
 				return RunAgingEnterprise();
 			}
-			else if(!PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {
+			else if(!Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {
 				Cursor=Cursors.WaitCursor;
 				msgText=Lan.g(this,"Calculating aging for all patients as of")+" "+DateTime.Today.ToShortDateString()+"...";
 				bool result=true;
@@ -251,9 +251,9 @@ namespace OpenDental {
 			}
 			msgText="Last aging date seems old.  Would you like to run aging now?  The account list will load whether or not aging gets updated.";
 			//All places in the program where aging can be run for all patients, the Setup permission is required because it can take a long time.
-			if(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily) 
+			if(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily) 
 				&& Security.IsAuthorized(Permissions.Setup,true)
-				&& PrefC.GetDate(PrefName.DateLastAging)<DateTime.Today.AddDays(-15)
+				&& Preferences.GetDate(PrefName.DateLastAging)<DateTime.Today.AddDays(-15)
 				&& MsgBox.Show(this,MsgBoxButtons.YesNo,msgText))
 			{
 				FormAging FormA=new FormAging();
@@ -266,14 +266,14 @@ namespace OpenDental {
 		private bool RunAgingEnterprise() {
 			DateTime dtNow=MiscData.GetNowDateTime();
 			DateTime dtToday=dtNow.Date;
-			DateTime dateLastAging=PrefC.GetDate(PrefName.DateLastAging);
+			DateTime dateLastAging=Preferences.GetDate(PrefName.DateLastAging);
 			string msgText=Lan.g(this,"Aging has already been calculated for")+" "+dtToday.ToShortDateString()+" "
 				+Lan.g(this,"and does not normally need to run more than once per day.")+"\r\n\r\n"+Lan.g(this,"Run anway?");
 			if(dateLastAging.Date==dtToday.Date && MessageBox.Show(this,msgText,"",MessageBoxButtons.YesNo)!=DialogResult.Yes) {
 				return true;
 			}
 			Prefs.RefreshCache();
-			DateTime dateTAgingBeganPref=PrefC.GetDateT(PrefName.AgingBeginDateTime);
+			DateTime dateTAgingBeganPref=Preferences.GetDateTime(PrefName.AgingBeginDateTime);
 			if(dateTAgingBeganPref>DateTime.MinValue) {
 				msgText=Lan.g(this,"In order to manage accounts receivable, aging must be calculated, but you cannot run aging until it has finished the current "
 					+"calculations which began on")+" "+dateTAgingBeganPref.ToString()+".\r\n"+Lans.g(this,"If you believe the current aging process has finished, "
@@ -556,12 +556,12 @@ namespace OpenDental {
 			Cursor=Cursors.WaitCursor;
 			List<long> listClinicsValidated=new List<long>();
 			foreach(long clinicNum in listClinicNums.Distinct()) {
-				if(!PrefC.HasClinicsEnabled && clinicNum>0) {
+				if(!Preferences.HasClinicsEnabled && clinicNum>0) {
 					continue;//Only test the HQ clinic (ClinicNum=0) if clinics are not enabled
 				}
 				List<ProgramProperty> listProgProps;
 				if(!_dictClinicProgProps.TryGetValue(clinicNum,out listProgProps) //if the clinic doesn't have prog props, try to use the HQ prog props
-					&& (clinicNum==0 || !PrefC.HasClinicsEnabled || Security.CurUser.ClinicIsRestricted || !_dictClinicProgProps.TryGetValue(0,out listProgProps)))
+					&& (clinicNum==0 || !Preferences.HasClinicsEnabled || Security.CurUser.ClinicIsRestricted || !_dictClinicProgProps.TryGetValue(0,out listProgProps)))
 				{
 					listClinicsSkipped.Add(clinicNum);
 					continue;
@@ -572,7 +572,7 @@ namespace OpenDental {
 				}
 				listClinicsValidated.Add(listProgProps[0].ClinicNum);
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(listClinicsSkipped.Contains(0)) {
 					listClinicsSkipped.AddRange(_listClinics.FindAll(x => !_dictClinicProgProps.ContainsKey(x.ClinicNum)).Select(x => x.ClinicNum));
 				}
@@ -648,7 +648,7 @@ namespace OpenDental {
 			gridUnsent.Columns.Clear();
 			List<DisplayField> listDisplayFields=DisplayFields.GetForCategory(DisplayFieldCategory.ArManagerUnsentGrid);
 			foreach(DisplayField fieldCur in listDisplayFields) {
-				if(fieldCur.InternalName=="Clinic" && !PrefC.HasClinicsEnabled) {
+				if(fieldCur.InternalName=="Clinic" && !Preferences.HasClinicsEnabled) {
 					continue;//skip the clinic column if clinics are not enabled
 				}
 				ODGridSortingStrategy sortingStrat=ODGridSortingStrategy.StringCompare;
@@ -720,7 +720,7 @@ namespace OpenDental {
 							row.Cells.Add((checkUnsentShowPatNums.Checked?(patAgeCur.PatNum.ToString()+" - "):"")+patAgeCur.PatName);
 							continue;
 						case "Clinic":
-							if(!PrefC.HasClinicsEnabled) {
+							if(!Preferences.HasClinicsEnabled) {
 								continue;//skip the clinic column if clinics are not enabled
 							}
 							string clinicAbbr;
@@ -831,7 +831,7 @@ namespace OpenDental {
 				listProvNums=comboBoxMultiUnsentProvs.ListSelectedIndices.Select(x => _listProviders[x-1].ProvNum).ToList();
 			}
 			List<long> listClinicNums=new List<long>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(comboBoxMultiUnsentClinics.ListSelectedIndices.Contains(0)) {
 					listClinicNums=_listClinics.Select(x => x.ClinicNum).ToList();
 				}
@@ -960,7 +960,7 @@ namespace OpenDental {
 		private void FillDemandTypes() {
 			TsiDemandType selectedType=comboDemandType.SelectedTag<TsiDemandType>();//If they have nothing selected, this will default to 'Accelerator'.
 			List<long> listClinicNums=new List<long>();
-			if(!PrefC.HasClinicsEnabled || comboBoxMultiUnsentClinics.ListSelectedIndices.Contains(0)) {
+			if(!Preferences.HasClinicsEnabled || comboBoxMultiUnsentClinics.ListSelectedIndices.Contains(0)) {
 				listClinicNums=_listClinics.Select(x => x.ClinicNum).ToList();//if clinics are disabled, this will only contain the HQ "clinic"
 			}
 			else {
@@ -1089,7 +1089,7 @@ namespace OpenDental {
 				return;
 			}
 			if(_dictClinicProgProps.All(x => listClinicsSkipped.Contains(x.Key))) {
-				MsgBox.Show(this,"An SFTP connection could not be made using the connection details "+(PrefC.HasClinicsEnabled ? "for any clinic " : "")
+				MsgBox.Show(this,"An SFTP connection could not be made using the connection details "+(Preferences.HasClinicsEnabled ? "for any clinic " : "")
 					+"in the enabled Transworld (TSI) program link.  Accounts cannot be sent to collection until the program link is setup.");
 				return;
 			}
@@ -1097,8 +1097,8 @@ namespace OpenDental {
 			//TSI connection details validated, at least one clinic the user has access to is setup with valid connection details
 			#region Get Age of Accounts Dictionary
 			DateTime dateAsOf=DateTime.Today;//used to determine when the balance on this date began
-			if(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {//if aging calculated monthly, use the last aging date instead of today
-				dateAsOf=PrefC.GetDate(PrefName.DateLastAging);
+			if(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {//if aging calculated monthly, use the last aging date instead of today
+				dateAsOf=Preferences.GetDate(PrefName.DateLastAging);
 			}
 			#endregion Get PatAgings and Age of Accounts Dictionary
 			#region Validate Selected Pats and Demand Type
@@ -1106,8 +1106,8 @@ namespace OpenDental {
 				.Where(x => x.Value.Any(y => y.PropertyDesc=="SelectedServices" && !string.IsNullOrEmpty(y.PropertyValue)))
 				.ToDictionary(x => x.Key,x => x.Value.Find(y => y.PropertyDesc=="SelectedServices").PropertyValue.Split(','));
 			TsiDemandType demandType=comboDemandType.SelectedTag<TsiDemandType>();
-			List<long> listPatNumsToReselect=listPatAging.FindAll(x => !dictClinicSelectedServices.ContainsKey(PrefC.HasClinicsEnabled?x.ClinicNum:0)
-						|| !dictClinicSelectedServices[PrefC.HasClinicsEnabled?x.ClinicNum:0].Contains(((int)demandType).ToString())).Select(x => x.PatNum).ToList();
+			List<long> listPatNumsToReselect=listPatAging.FindAll(x => !dictClinicSelectedServices.ContainsKey(Preferences.HasClinicsEnabled?x.ClinicNum:0)
+						|| !dictClinicSelectedServices[Preferences.HasClinicsEnabled?x.ClinicNum:0].Contains(((int)demandType).ToString())).Select(x => x.PatNum).ToList();
 			string msgTxt="";
 			if(listPatNumsToReselect.Count > 0)	{
 				Cursor=Cursors.Default;
@@ -1211,7 +1211,7 @@ namespace OpenDental {
 			Dictionary<long,List<TsiTransLog>> dictClinicNumListTransLogs=new Dictionary<long,List<TsiTransLog>>();
 			List<long> listFailedPatNums=new List<long>();
 			foreach(PatAging pAgingCur in listPatAging) {
-				long clinicNum=PrefC.HasClinicsEnabled?pAgingCur.ClinicNum:0;
+				long clinicNum=Preferences.HasClinicsEnabled?pAgingCur.ClinicNum:0;
 				if(listClinicsSkipped.Contains(clinicNum)) {
 					listFailedPatNums.Add(pAgingCur.PatNum);
 					continue;
@@ -1432,7 +1432,7 @@ namespace OpenDental {
 			gridSent.Columns.Clear();
 			List<DisplayField> listDisplayFields=DisplayFields.GetForCategory(DisplayFieldCategory.ArManagerSentGrid);
 			foreach(DisplayField fieldCur in listDisplayFields) {
-				if(fieldCur.InternalName=="Clinic" && !PrefC.HasClinicsEnabled) {
+				if(fieldCur.InternalName=="Clinic" && !Preferences.HasClinicsEnabled) {
 					continue;//skip the clinic column if clinics are not enabled
 				}
 				ODGridSortingStrategy sortingStrat=ODGridSortingStrategy.StringCompare;
@@ -1494,7 +1494,7 @@ namespace OpenDental {
 							row.Cells.Add((checkSentShowPatNums.Checked?(patAgeCur.PatNum.ToString()+" - "):"")+patAgeCur.PatName);
 							continue;
 						case "Clinic":
-							if(!PrefC.HasClinicsEnabled) {
+							if(!Preferences.HasClinicsEnabled) {
 								continue;//skip the clinic column if clinics are not enabled
 							}
 							string clinicAbbr;
@@ -1601,7 +1601,7 @@ namespace OpenDental {
 				listProvNums=comboBoxMultiSentProvs.ListSelectedIndices.Select(x => _listProviders[x-1].ProvNum).ToList();
 			}
 			List<long> listClinicNums=new List<long>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(comboBoxMultiSentClinics.ListSelectedIndices.Contains(0)) {
 					listClinicNums=_listClinics.Select(x => x.ClinicNum).ToList();
 				}
@@ -1758,7 +1758,7 @@ namespace OpenDental {
 				return;
 			}
 			if(_dictClinicProgProps.All(x => listClinicsSkipped.Contains(x.Key))) {
-				MsgBox.Show(this,"An SFTP connection could not be made using the connection details "+(PrefC.HasClinicsEnabled ? "for any clinic " : "")
+				MsgBox.Show(this,"An SFTP connection could not be made using the connection details "+(Preferences.HasClinicsEnabled ? "for any clinic " : "")
 					+"in the enabled Transworld (TSI) program link.  Account statuses cannot be updated with TSI until the program link is setup.");
 				return;
 			}
@@ -1785,7 +1785,7 @@ namespace OpenDental {
 			Dictionary<long,List<TsiTransLog>> dictClinicNumListTransLogs=new Dictionary<long,List<TsiTransLog>>();
 			List<long> listFailedPatNums=new List<long>();
 			foreach(PatAging pAgingCur in listPatAging) {
-				long clinicNum=PrefC.HasClinicsEnabled?pAgingCur.ClinicNum:0;
+				long clinicNum=Preferences.HasClinicsEnabled?pAgingCur.ClinicNum:0;
 				if(listClinicsSkipped.Contains(clinicNum)) {
 					listFailedPatNums.Add(pAgingCur.PatNum);
 					continue;

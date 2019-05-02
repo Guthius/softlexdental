@@ -20,7 +20,7 @@ namespace OpenDental {
 		}
 
 		private void FormPendingOnlinePayments_Load(object sender,EventArgs e) {
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				FillClinics();
 			}
 			else {
@@ -35,7 +35,7 @@ namespace OpenDental {
 		}
 
 		private void RefreshPayments() {			
-			if(PrefC.HasClinicsEnabled && Security.CurUser.ClinicIsRestricted) {				
+			if(Preferences.HasClinicsEnabled && Security.CurUser.ClinicIsRestricted) {				
 				_listPayments=Payments.GetNeedingProcessed(_listClinics.Select(x => x.ClinicNum).ToList());
 			}
 			else {
@@ -47,7 +47,7 @@ namespace OpenDental {
 
 		private void FillGrid() {
 			List<Payment> listPaymentsClinic=new List<Payment>();
-			if(PrefC.HasClinicsEnabled && comboClinic.SelectedIndex!=0) {//Not 'All' selected
+			if(Preferences.HasClinicsEnabled && comboClinic.SelectedIndex!=0) {//Not 'All' selected
 				if(Security.CurUser.ClinicIsRestricted) {
 					long clinicNum=_listClinics[comboClinic.SelectedIndex-1].ClinicNum;//Minus 1 for 'All'
 					listPaymentsClinic=_listPayments.FindAll(x => x.ClinicNum==clinicNum);
@@ -71,7 +71,7 @@ namespace OpenDental {
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn(Lan.g(this,"Clinic"),100);
 				gridMain.Columns.Add(col);
 			}			
@@ -87,7 +87,7 @@ namespace OpenDental {
 			ODGridRow row;
 			foreach(Payment pay in listPaymentsClinic) {
 				row=new ODGridRow();
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					string clinicAbbr=Clinics.GetAbbr(pay.ClinicNum);
 					row.Cells.Add(clinicAbbr=="" ? Lan.g(this,"Unassigned") : clinicAbbr );
 				}

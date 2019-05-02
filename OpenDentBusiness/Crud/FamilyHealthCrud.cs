@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one FamilyHealth into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(FamilyHealth familyHealth,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				familyHealth.FamilyHealthNum=ReplicationServers.GetKey("familyhealth","FamilyHealthNum");
 			}
 			string command="INSERT INTO familyhealth (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="FamilyHealthNum,";
 			}
 			command+="PatNum,Relationship,DiseaseDefNum,PersonName) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(familyHealth.FamilyHealthNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   ((int)familyHealth.Relationship)+","
 				+    POut.Long  (familyHealth.DiseaseDefNum)+","
 				+"'"+POut.String(familyHealth.PersonName)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

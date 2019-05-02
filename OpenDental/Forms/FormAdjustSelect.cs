@@ -44,7 +44,7 @@ namespace OpenDental {
 			gridAdjusts.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableAdjustSelect","Prov"),55);
 			gridAdjusts.Columns.Add(col);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn(Lan.g("TableAdjustSelect","Clinic"),55);
 				gridAdjusts.Columns.Add(col);
 			}
@@ -57,7 +57,7 @@ namespace OpenDental {
 				row=new ODGridRow();
 				row.Cells.Add(((Adjustment)entry.Tag).AdjDate.ToShortDateString());
 				row.Cells.Add(Providers.GetAbbr(((Adjustment)entry.Tag).ProvNum));
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add(Clinics.GetAbbr(((Adjustment)entry.Tag).ClinicNum));
 				}
 				row.Cells.Add(entry.AmountOriginal.ToString("F"));//Amt Orig

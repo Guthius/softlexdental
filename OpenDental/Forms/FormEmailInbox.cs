@@ -148,18 +148,18 @@ namespace OpenDental {
 			long previousSelectedEmailAddressNum=(AddressCur==null)?0:AddressCur.EmailAddressNum;
 			List<EmailAddress> listAddresses=EmailAddresses.GetDeepCopy();//Does not include user specific email addresses.
 			//Exclude any email addresses which are associated to clinics.
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				List<Clinic> listClinicsAll=Clinics.GetDeepCopy();
 				for(int i=0;i<listClinicsAll.Count;i++) {
 					listAddresses.RemoveAll(x => x.EmailAddressNum==listClinicsAll[i].EmailAddressNum);
 				}
 			}
 			//Exclude default practice email address, since it is added on another line below.
-			listAddresses.RemoveAll(x => x.EmailAddressNum==PrefC.GetLong(PrefName.EmailDefaultAddressNum));
+			listAddresses.RemoveAll(x => x.EmailAddressNum==Preferences.GetLong(PrefName.EmailDefaultAddressNum));
 			//Exclude web mail notification email address.
-			listAddresses.RemoveAll(x => x.EmailAddressNum==PrefC.GetLong(PrefName.EmailNotifyAddressNum));
+			listAddresses.RemoveAll(x => x.EmailAddressNum==Preferences.GetLong(PrefName.EmailNotifyAddressNum));
 			//Add clinic defaults that the user has access to.  Do not add duplicates.
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				List<Clinic> listClinicForUser=Clinics.GetForUserod(Security.CurUser);
 				for(int i=0;i < listClinicForUser.Count;i++) {
 					EmailAddress emailClinic=EmailAddresses.GetByClinic(listClinicForUser[i].ClinicNum);
@@ -169,7 +169,7 @@ namespace OpenDental {
 				listAddresses.Insert(0,emailClinic);
 				}
 			}
-			EmailAddress emailAddressPractice=EmailAddresses.GetOne(PrefC.GetLong(PrefName.EmailDefaultAddressNum));
+			EmailAddress emailAddressPractice=EmailAddresses.GetOne(Preferences.GetLong(PrefName.EmailDefaultAddressNum));
 			EmailAddress emailAddressMe=EmailAddresses.GetForUser(Security.CurUser.UserNum);
 			//Add addresses which are: not associated to anything, or not default, or unique per clinic.			
 			_listEmailAddresses=new List<EmailAddress>();
@@ -659,7 +659,7 @@ namespace OpenDental {
           continue;
         }
         string smimeP7sFilePath=FileAtoZ.CombinePaths(EmailAttaches.GetAttachPath(),emailMessage.Attachments[i].ActualFileName);
-				string localFile=PrefC.GetRandomTempFile(".p7s");
+				string localFile=Preferences.GetRandomTempFile(".p7s");
 				FileAtoZ.Copy(smimeP7sFilePath,localFile,FileAtoZSourceDestination.AtoZToLocal);
         X509Certificate2 certSig=EmailMessages.GetEmailSignatureFromSmimeP7sFile(localFile);
         FormEmailDigitalSignature form=new FormEmailDigitalSignature(certSig);

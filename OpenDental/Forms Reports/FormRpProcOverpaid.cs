@@ -349,7 +349,7 @@ namespace OpenDental {
 			gridMain.ContextMenu=contextMenuGrid;
 			dateRangePicker.SetDateTimeTo(DateTime.Today);
 			dateRangePicker.SetDateTimeFrom(DateTime.Today.AddMonths(-1));
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				labelClinic.Visible=false;
 			}
 			_patNum=FormOpenDental.CurPatNum;
@@ -447,7 +447,7 @@ namespace OpenDental {
 			_myReport=new ReportComplex(true,false,false);
 			_myReport.ReportName=Lan.g(this,"Overpaid Procedures");
 			_myReport.AddTitle("Title",Lan.g(this,"Overpaid Procedures"));
-			_myReport.AddSubTitle("Practice Name",PrefC.GetString(PrefName.PracticeTitle));
+			_myReport.AddSubTitle("Practice Name",Preferences.GetString(PrefName.PracticeTitle));
 			if(_myReportDateFrom==_myReportDateTo) {
 				_myReport.AddSubTitle("Report Dates",_myReportDateFrom.ToShortDateString());
 			}
@@ -458,7 +458,7 @@ namespace OpenDental {
 				_myReport.AddSubTitle("Patient",Patients.GetLim(_patNum).GetNameFL());
 			}
 			_myReport.AddSubTitle("Providers",subTitleProviders);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				_myReport.AddSubTitle("Clinics",subtitleClinics);
 			}
 			QueryObject query=_myReport.AddQuery(tableOverpaidProcs,DateTimeOD.Today.ToShortDateString());

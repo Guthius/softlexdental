@@ -77,21 +77,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one TaskUnread into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(TaskUnread taskUnread,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				taskUnread.TaskUnreadNum=ReplicationServers.GetKey("taskunread","TaskUnreadNum");
 			}
 			string command="INSERT INTO taskunread (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="TaskUnreadNum,";
 			}
 			command+="TaskNum,UserNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(taskUnread.TaskUnreadNum)+",";
 			}
 			command+=
 				     POut.Long  (taskUnread.TaskNum)+","
 				+    POut.Long  (taskUnread.UserNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many TaskUnreads into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<TaskUnread> listTaskUnreads,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(TaskUnread taskUnread in listTaskUnreads) {
 					Insert(taskUnread);
 				}

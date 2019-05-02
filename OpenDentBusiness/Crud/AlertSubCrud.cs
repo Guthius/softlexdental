@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one AlertSub into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(AlertSub alertSub,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				alertSub.AlertSubNum=ReplicationServers.GetKey("alertsub","AlertSubNum");
 			}
 			string command="INSERT INTO alertsub (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="AlertSubNum,";
 			}
 			command+="UserNum,ClinicNum,Type,AlertCategoryNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(alertSub.AlertSubNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (alertSub.ClinicNum)+","
 				+    POut.Int   ((int)alertSub.Type)+","
 				+    POut.Long  (alertSub.AlertCategoryNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

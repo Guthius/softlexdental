@@ -14,8 +14,8 @@ namespace OpenDental {
 			if(!Security.IsAuthorized(Permissions.Setup)) {
 				return;
 			}
-			UserGroup studentGroup=UserGroups.GetGroup(PrefC.GetLong(PrefName.SecurityGroupForStudents));
-			UserGroup instructorGroup=UserGroups.GetGroup(PrefC.GetLong(PrefName.SecurityGroupForInstructors));
+			UserGroup studentGroup=UserGroups.GetGroup(Preferences.GetLong(PrefName.SecurityGroupForStudents));
+			UserGroup instructorGroup=UserGroups.GetGroup(Preferences.GetLong(PrefName.SecurityGroupForInstructors));
 			if(studentGroup!=null) {
 				textStudents.Text=studentGroup.Description;
 			}

@@ -105,7 +105,7 @@ namespace OpenDental{
 		///<summary>Returns a string representation of the current state of the application designed for display in the main title.
 		///Accepts null for pat and 0 for clinicNum.</summary>
 		public static string GetMainTitle(Patient pat,long clinicNum) {
-			string retVal=PrefC.GetString(PrefName.MainWindowTitle);
+			string retVal=Preferences.GetString(PrefName.MainWindowTitle);
 
             retVal = Plugin.Filter(null, "Patient_FilterMainTitle", retVal);
 
@@ -116,11 +116,11 @@ namespace OpenDental{
 			);
 			_patSelectedCur=pat;
 			_clinSelectedCur=clinicNum;
-			if(PrefC.HasClinicsEnabled && clinicNum>0) {
+			if(Preferences.HasClinicsEnabled && clinicNum>0) {
 				if(retVal!="") {
 					retVal+=" - "+Lan.g("FormOpenDental","Clinic")+": ";
 				}
-				if(PrefC.GetBool(PrefName.TitleBarClinicUseAbbr)) {
+				if(Preferences.GetBool(PrefName.TitleBarClinicUseAbbr)) {
 					retVal+=Clinics.GetAbbr(clinicNum);
 				}
 				else {
@@ -139,17 +139,17 @@ namespace OpenDental{
 			}
 			retVal+=" - "+pat.GetNameLF();
 			//A query is required to get the Specialty for the selected patient so only run this code if the patient has changed.
-			if(PrefC.GetBool(PrefName.TitleBarShowSpecialty) && hasPatChanged) {
+			if(Preferences.GetBool(PrefName.TitleBarShowSpecialty) && hasPatChanged) {
 				string specialty=Patients.GetPatientSpecialtyDef(pat.PatNum)?.ItemName??"";
 				retVal+=string.IsNullOrWhiteSpace(specialty)?"":" ("+specialty+")";
 			}
-			if(PrefC.GetLong(PrefName.ShowIDinTitleBar)==1) {
+			if(Preferences.GetLong(PrefName.ShowIDinTitleBar)==1) {
 				retVal+=" - "+pat.PatNum.ToString();
 			}
-			else if(PrefC.GetLong(PrefName.ShowIDinTitleBar)==2) {
+			else if(Preferences.GetLong(PrefName.ShowIDinTitleBar)==2) {
 				retVal+=" - "+pat.ChartNumber;
 			}
-			else if(PrefC.GetLong(PrefName.ShowIDinTitleBar)==3) {
+			else if(Preferences.GetLong(PrefName.ShowIDinTitleBar)==3) {
 				if(pat.Birthdate.Year>1880) {
 					retVal+=" - "+pat.Birthdate.ToShortDateString();
 				}
@@ -167,12 +167,12 @@ namespace OpenDental{
 		///<summary>Used to update the main title bar when neither the patient nor the clinic need to change. 
 		///Currently only used to refresh the title bar when the timer ticks for the update time countdown.</summary>
 		public static string GetMainTitleSamePat() {
-			string retVal=PrefC.GetString(PrefName.MainWindowTitle);
-			if(PrefC.HasClinicsEnabled && _clinSelectedCur>0) {
+			string retVal=Preferences.GetString(PrefName.MainWindowTitle);
+			if(Preferences.HasClinicsEnabled && _clinSelectedCur>0) {
 				if(retVal!="") {
 					retVal+=" - "+Lan.g("FormOpenDental","Clinic")+": ";
 				}
-				if(PrefC.GetBool(PrefName.TitleBarClinicUseAbbr)) {
+				if(Preferences.GetBool(PrefName.TitleBarClinicUseAbbr)) {
 					retVal+=Clinics.GetAbbr(_clinSelectedCur);
 				}
 				else {
@@ -194,17 +194,17 @@ namespace OpenDental{
 				return retVal;
 			}
 			retVal+=" - "+_patSelectedCur.GetNameLF();
-			if(PrefC.GetBool(PrefName.TitleBarShowSpecialty)) {
+			if(Preferences.GetBool(PrefName.TitleBarShowSpecialty)) {
 				string specialty=Patients.GetPatientSpecialtyDef(_patSelectedCur.PatNum)?.ItemName??"";
 				retVal+=string.IsNullOrWhiteSpace(specialty)?"":" ("+specialty+")";
 			}
-			if(PrefC.GetLong(PrefName.ShowIDinTitleBar)==1) {
+			if(Preferences.GetLong(PrefName.ShowIDinTitleBar)==1) {
 				retVal+=" - "+_patSelectedCur.PatNum.ToString();
 			}
-			else if(PrefC.GetLong(PrefName.ShowIDinTitleBar)==2) {
+			else if(Preferences.GetLong(PrefName.ShowIDinTitleBar)==2) {
 				retVal+=" - "+_patSelectedCur.ChartNumber;
 			}
-			else if(PrefC.GetLong(PrefName.ShowIDinTitleBar)==3) {
+			else if(Preferences.GetLong(PrefName.ShowIDinTitleBar)==3) {
 				if(_patSelectedCur.Birthdate.Year>1880) {
 					retVal+=" - "+_patSelectedCur.Birthdate.ToShortDateString();
 				}
@@ -225,7 +225,7 @@ namespace OpenDental{
 
 		public static string MainTitleUpdateCountdown(string titleText = "") {
 			string retVal;
-			TimeSpan timeLeft=PrefC.GetDateT(PrefName.UpdateDateTime) - DateTime.Now;
+			TimeSpan timeLeft=Preferences.GetDateTime(PrefName.UpdateDateTime) - DateTime.Now;
 			string strTimeLeft="";
 			if(timeLeft.TotalSeconds>=0) {
 				if(timeLeft.Days>=1) {

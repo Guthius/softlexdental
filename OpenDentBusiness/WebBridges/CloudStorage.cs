@@ -16,7 +16,7 @@ namespace OpenDentBusiness {
 
 		public static bool IsCloudStorage {
 			get {
-				switch(PrefC.AtoZfolderUsed) {
+				switch(Preferences.AtoZfolderUsed) {
 					case DataStorageType.SftpAtoZ:
 					case DataStorageType.DropboxAtoZ:
 						return true;
@@ -31,7 +31,7 @@ namespace OpenDentBusiness {
 		public static string AtoZPath {
 			get {
 				string retVal="";
-				switch(PrefC.AtoZfolderUsed) {
+				switch(Preferences.AtoZfolderUsed) {
 					case DataStorageType.DropboxAtoZ:
 						retVal=Dropbox.AtoZPath;
 						break;
@@ -42,9 +42,9 @@ namespace OpenDentBusiness {
 					case DataStorageType.LocalAtoZ:
 						//Local storage methods should never be calling this method, throw an exception so it's more obvious that this was the issue,
 						//rather than returning null and having the method throw a null exception later.
-						throw new Exception("Unknown cloud storage type: "+PrefC.AtoZfolderUsed.ToString());
+						throw new Exception("Unknown cloud storage type: "+Preferences.AtoZfolderUsed.ToString());
 					default:
-						throw new Exception("DataStorageType: "+PrefC.AtoZfolderUsed.ToString()+" not implemented.");
+						throw new Exception("DataStorageType: "+Preferences.AtoZfolderUsed.ToString()+" not implemented.");
 				}
 				return retVal;
 			}
@@ -68,7 +68,7 @@ namespace OpenDentBusiness {
 		///Will be Asynchronous or Synchronous depending on if progressHandler is null</summary>
 		private static TaskStateUpload UploadExecute(string folder,string fileName,byte[] fileContent,ProgressHandler progressHandler,bool hasExceptions) {
 			TaskStateUpload state=null;
-			switch(PrefC.AtoZfolderUsed) {					
+			switch(Preferences.AtoZfolderUsed) {					
 				case DataStorageType.DropboxAtoZ:
 					//Dropbox will always overwrite conflicting files.  This can be changed in the future by implementing an optional "Dropbox.WriteMode" param.
 					state=new OpenDentalCloud.Dropbox.Upload(Dropbox.AccessToken) {
@@ -92,9 +92,9 @@ namespace OpenDentBusiness {
 				case DataStorageType.LocalAtoZ:
 					//Local storage methods should never be calling this method, throw an exception so it's more obvious that this was the issue,
 					//rather than returning null and having the method throw a null exception later.
-					throw new Exception("Unknown cloud storage type: "+PrefC.AtoZfolderUsed.ToString());
+					throw new Exception("Unknown cloud storage type: "+Preferences.AtoZfolderUsed.ToString());
 				default:
-					throw new Exception("DataStorageType: "+PrefC.AtoZfolderUsed.ToString()+" not implemented.");
+					throw new Exception("DataStorageType: "+Preferences.AtoZfolderUsed.ToString()+" not implemented.");
 			}
 			state.Execute(progressHandler!=null);
 			return state;
@@ -119,7 +119,7 @@ namespace OpenDentBusiness {
 		///Will be Asynchronous or Synchronous depending on if progressHandler is null</summary>
 		private static TaskStateDownload DownloadExecute(string folder,string fileName,ProgressHandler progressHandler,bool hasExceptions) {
 			TaskStateDownload state=null;
-			switch(PrefC.AtoZfolderUsed) {
+			switch(Preferences.AtoZfolderUsed) {
 				case DataStorageType.DropboxAtoZ:
 					state=new OpenDentalCloud.Dropbox.Download(Dropbox.AccessToken) {
 						Folder=PathTidy(folder),
@@ -140,9 +140,9 @@ namespace OpenDentBusiness {
 				case DataStorageType.LocalAtoZ:
 					//Local storage methods should never be calling this method, throw an exception so it's more obvious that this was the issue,
 					//rather than returning null and having the method throw a null exception later.
-					throw new Exception("Unknown cloud storage type: "+PrefC.AtoZfolderUsed.ToString());
+					throw new Exception("Unknown cloud storage type: "+Preferences.AtoZfolderUsed.ToString());
 				default:
-					throw new Exception("DataStorageType: "+PrefC.AtoZfolderUsed.ToString()+" not implemented.");
+					throw new Exception("DataStorageType: "+Preferences.AtoZfolderUsed.ToString()+" not implemented.");
 			}
 			state.Execute(progressHandler!=null);
 			return state;
@@ -166,7 +166,7 @@ namespace OpenDentBusiness {
 		///Will be Asynchronous or Synchronous depending on if progressHandler is null</summary>
 		private static TaskStateDelete DeleteExecute(string path,ProgressHandler progressHandler,bool hasExceptions) {
 			TaskStateDelete state=null;
-			switch(PrefC.AtoZfolderUsed) {
+			switch(Preferences.AtoZfolderUsed) {
 				case DataStorageType.DropboxAtoZ:
 					state=new OpenDentalCloud.Dropbox.Delete(Dropbox.AccessToken) {
 						Path=PathTidy(path),
@@ -188,9 +188,9 @@ namespace OpenDentBusiness {
 				case DataStorageType.LocalAtoZ:
 					//Local storage methods should never be calling this method, throw an exception so it's more obvious that this was the issue,
 					//rather than returning null and having the method throw a null exception later.
-					throw new Exception("Unknown cloud storage type: "+PrefC.AtoZfolderUsed.ToString());
+					throw new Exception("Unknown cloud storage type: "+Preferences.AtoZfolderUsed.ToString());
 				default:
-					throw new Exception("DataStorageType: "+PrefC.AtoZfolderUsed.ToString()+" not implemented.");
+					throw new Exception("DataStorageType: "+Preferences.AtoZfolderUsed.ToString()+" not implemented.");
 			}
 			state.Execute(progressHandler!=null);
 			return state;
@@ -214,7 +214,7 @@ namespace OpenDentBusiness {
 		///Will be Asynchronous or Synchronous depending on if progressHandler is null</summary>
 		private static TaskStateThumbnail GetThumbnailExecute(string folder,string fileName,ProgressHandler progressHandler,bool hasExceptions) {
 			TaskStateThumbnail state=null;
-			switch(PrefC.AtoZfolderUsed) {
+			switch(Preferences.AtoZfolderUsed) {
 				case DataStorageType.DropboxAtoZ:
 					state=new OpenDentalCloud.Dropbox.Thumbnail(Dropbox.AccessToken) {
 						Folder=PathTidy(folder),
@@ -235,9 +235,9 @@ namespace OpenDentBusiness {
 				case DataStorageType.LocalAtoZ:
 					//Local storage methods should never be calling this method, throw an exception so it's more obvious that this was the issue,
 					//rather than returning null and having the method throw a null exception later.
-					throw new Exception("Unknown cloud storage type: "+PrefC.AtoZfolderUsed.ToString());
+					throw new Exception("Unknown cloud storage type: "+Preferences.AtoZfolderUsed.ToString());
 				default:
-					throw new Exception("DataStorageType: "+PrefC.AtoZfolderUsed.ToString()+" not implemented.");
+					throw new Exception("DataStorageType: "+Preferences.AtoZfolderUsed.ToString()+" not implemented.");
 			}
 			state.Execute(progressHandler!=null);
 			return state;
@@ -259,7 +259,7 @@ namespace OpenDentBusiness {
 
 		private static TaskStateMove MoveExecute(string fromPath,string toPath,ProgressHandler progressHandler,bool hasExceptions) {
 			TaskStateMove state=null;
-			switch(PrefC.AtoZfolderUsed) {
+			switch(Preferences.AtoZfolderUsed) {
 				case DataStorageType.DropboxAtoZ:
 					state=new OpenDentalCloud.Dropbox.Move(Dropbox.AccessToken) {
 						FromPath=PathTidy(fromPath),
@@ -280,9 +280,9 @@ namespace OpenDentBusiness {
 				case DataStorageType.LocalAtoZ:
 					//Local storage methods should never be calling this method, throw an exception so it's more obvious that this was the issue,
 					//rather than returning null and having the method throw a null exception later.
-					throw new Exception("Unknown cloud storage type: "+PrefC.AtoZfolderUsed.ToString());
+					throw new Exception("Unknown cloud storage type: "+Preferences.AtoZfolderUsed.ToString());
 				default:
-					throw new Exception("DataStorageType: "+PrefC.AtoZfolderUsed.ToString()+" not implemented.");
+					throw new Exception("DataStorageType: "+Preferences.AtoZfolderUsed.ToString()+" not implemented.");
 			}
 			state.Execute(progressHandler!=null);
 			return state;
@@ -304,7 +304,7 @@ namespace OpenDentBusiness {
 
 		private static TaskStateMove CopyExecute(string fromPath,string toPath,ProgressHandler progressHandler,bool hasExceptions) {
 			TaskStateMove state=null;
-			switch(PrefC.AtoZfolderUsed) {
+			switch(Preferences.AtoZfolderUsed) {
 				case DataStorageType.DropboxAtoZ:
 					state=new OpenDentalCloud.Dropbox.Copy(Dropbox.AccessToken) {
 						FromPath=PathTidy(fromPath),
@@ -325,9 +325,9 @@ namespace OpenDentBusiness {
 				case DataStorageType.LocalAtoZ:
 					//Local storage methods should never be calling this method, throw an exception so it's more obvious that this was the issue,
 					//rather than returning null and having the method throw a null exception later.
-					throw new Exception("Unknown cloud storage type: "+PrefC.AtoZfolderUsed.ToString());
+					throw new Exception("Unknown cloud storage type: "+Preferences.AtoZfolderUsed.ToString());
 				default:
-					throw new Exception("DataStorageType: "+PrefC.AtoZfolderUsed.ToString()+" not implemented.");
+					throw new Exception("DataStorageType: "+Preferences.AtoZfolderUsed.ToString()+" not implemented.");
 			}
 			state.Execute(progressHandler!=null);
 			return state;
@@ -349,7 +349,7 @@ namespace OpenDentBusiness {
 
 		private static TaskStateListFolders ListFolderContentsExecute(string folderPath,ProgressHandler progressHandler,bool hasExceptions) {
 			TaskStateListFolders state=null;
-			switch(PrefC.AtoZfolderUsed) {
+			switch(Preferences.AtoZfolderUsed) {
 				case DataStorageType.DropboxAtoZ:
 					state=new OpenDentalCloud.Dropbox.ListFolders(Dropbox.AccessToken) {
 						FolderPath=PathTidy(folderPath),
@@ -373,9 +373,9 @@ namespace OpenDentBusiness {
 				case DataStorageType.LocalAtoZ:
 					//Local storage methods should never be calling this method, throw an exception so it's more obvious that this was the issue,
 					//rather than returning null and having the method throw a null exception later.
-					throw new Exception("Unknown cloud storage type: "+PrefC.AtoZfolderUsed.ToString());
+					throw new Exception("Unknown cloud storage type: "+Preferences.AtoZfolderUsed.ToString());
 				default:
-					throw new Exception("DataStorageType: "+PrefC.AtoZfolderUsed.ToString()+" not implemented.");
+					throw new Exception("DataStorageType: "+Preferences.AtoZfolderUsed.ToString()+" not implemented.");
 			}
 			state.Execute(progressHandler!=null);
 			return state;
@@ -385,7 +385,7 @@ namespace OpenDentBusiness {
 		///<summary>Synchronous.  Returns true if the file for the given path exists.</summary>
 		public static bool FileExists(string path) {
 			bool retVal=false;
-			switch(PrefC.AtoZfolderUsed) {
+			switch(Preferences.AtoZfolderUsed) {
 				case DataStorageType.DropboxAtoZ:
 					retVal=OpenDentalCloud.Dropbox.FileExists(Dropbox.AccessToken,PathTidy(path));
 					break;
@@ -396,9 +396,9 @@ namespace OpenDentBusiness {
 				case DataStorageType.LocalAtoZ:
 					//Local storage methods should never be calling this method, throw an exception so it's more obvious that this was the issue,
 					//rather than returning null and having the method throw a null exception later.
-					throw new Exception("Unknown cloud storage type: "+PrefC.AtoZfolderUsed.ToString());
+					throw new Exception("Unknown cloud storage type: "+Preferences.AtoZfolderUsed.ToString());
 				default:
-					throw new Exception("DataStorageType: "+PrefC.AtoZfolderUsed.ToString()+" not implemented.");
+					throw new Exception("DataStorageType: "+Preferences.AtoZfolderUsed.ToString()+" not implemented.");
 			}
 			return retVal;
 		}
@@ -410,7 +410,7 @@ namespace OpenDentBusiness {
 		
 		public static string PathTidy(string path) {
 			string retVal=path;
-			switch(PrefC.AtoZfolderUsed) {
+			switch(Preferences.AtoZfolderUsed) {
 				case DataStorageType.DropboxAtoZ:
 				case DataStorageType.SftpAtoZ:
 					retVal=retVal.Replace(@"\","/");

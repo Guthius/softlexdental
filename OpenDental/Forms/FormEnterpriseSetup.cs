@@ -34,82 +34,82 @@ namespace OpenDental {
 
 		/// <summary>Sets UI for preferences that we know for sure will exist.</summary>
 		private void FillStandardPrefs() {
-			checkAgingMonthly.Checked=PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily);
-			checkUseOpHygProv.Checked=PrefC.GetBool(PrefName.ApptSecondaryProviderConsiderOpOnly);
-			checkApptsRequireProcs.Checked=PrefC.GetBool(PrefName.ApptsRequireProc);
-			checkBillingShowProgress.Checked=PrefC.GetBool(PrefName.BillingShowSendProgress);
-			checkBillShowTransSinceZero.Checked=PrefC.GetBool(PrefName.BillingShowTransSinceBalZero);
-			checkReceiveReportsService.Checked=PrefC.GetBool(PrefName.ClaimReportReceivedByService);
-			checkSuperFamCloneCreate.Checked=PrefC.GetBool(PrefName.CloneCreateSuperFamily);
-			checkEnterpriseApptList.Checked=PrefC.GetBool(PrefName.EnterpriseApptList);
-			checkPasswordsMustBeStrong.Checked=PrefC.GetBool(PrefName.PasswordsMustBeStrong);
-			checkPasswordsStrongIncludeSpecial.Checked=PrefC.GetBool(PrefName.PasswordsStrongIncludeSpecial);
-			checkPasswordForceWeakToStrong.Checked=PrefC.GetBool(PrefName.PasswordsWeakChangeToStrong);
-			checkHidePaysplits.Checked=PrefC.GetBool(PrefName.PaymentWindowDefaultHideSplits);
-			checkPaymentsPromptForPayType.Checked=PrefC.GetBool(PrefName.PaymentsPromptForPayType);
-			checkLockIncludesAdmin.Checked=PrefC.GetBool(PrefName.SecurityLockIncludesAdmin);
-			checkPatClone.Checked=PrefC.GetBool(PrefName.ShowFeaturePatientClone);
-			checkSuperFam.Checked=PrefC.GetBool(PrefName.ShowFeatureSuperfamilies);
-			checkUserNameManualEntry.Checked=PrefC.GetBool(PrefName.UserNameManualEntry);
-			textBillingElectBatchMax.Text=PrefC.GetInt(PrefName.BillingElectBatchMax).ToString();
-			textClaimIdentifier.Text=PrefC.GetString(PrefName.ClaimIdPrefix);
+			checkAgingMonthly.Checked=Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily);
+			checkUseOpHygProv.Checked=Preferences.GetBool(PrefName.ApptSecondaryProviderConsiderOpOnly);
+			checkApptsRequireProcs.Checked=Preferences.GetBool(PrefName.ApptsRequireProc);
+			checkBillingShowProgress.Checked=Preferences.GetBool(PrefName.BillingShowSendProgress);
+			checkBillShowTransSinceZero.Checked=Preferences.GetBool(PrefName.BillingShowTransSinceBalZero);
+			checkReceiveReportsService.Checked=Preferences.GetBool(PrefName.ClaimReportReceivedByService);
+			checkSuperFamCloneCreate.Checked=Preferences.GetBool(PrefName.CloneCreateSuperFamily);
+			checkEnterpriseApptList.Checked=Preferences.GetBool(PrefName.EnterpriseApptList);
+			checkPasswordsMustBeStrong.Checked=Preferences.GetBool(PrefName.PasswordsMustBeStrong);
+			checkPasswordsStrongIncludeSpecial.Checked=Preferences.GetBool(PrefName.PasswordsStrongIncludeSpecial);
+			checkPasswordForceWeakToStrong.Checked=Preferences.GetBool(PrefName.PasswordsWeakChangeToStrong);
+			checkHidePaysplits.Checked=Preferences.GetBool(PrefName.PaymentWindowDefaultHideSplits);
+			checkPaymentsPromptForPayType.Checked=Preferences.GetBool(PrefName.PaymentsPromptForPayType);
+			checkLockIncludesAdmin.Checked=Preferences.GetBool(PrefName.SecurityLockIncludesAdmin);
+			checkPatClone.Checked=Preferences.GetBool(PrefName.ShowFeaturePatientClone);
+			checkSuperFam.Checked=Preferences.GetBool(PrefName.ShowFeatureSuperfamilies);
+			checkUserNameManualEntry.Checked=Preferences.GetBool(PrefName.UserNameManualEntry);
+			textBillingElectBatchMax.Text=Preferences.GetInt(PrefName.BillingElectBatchMax).ToString();
+			textClaimIdentifier.Text=Preferences.GetString(PrefName.ClaimIdPrefix);
 			//Reports, copied from FormReportSetup.
-			checkUseReportServer.Checked=(PrefC.GetString(PrefName.ReportingServerCompName)!="" || PrefC.GetString(PrefName.ReportingServerURI)!="");
-			textServerName.Text=PrefC.GetString(PrefName.ReportingServerCompName);
-			comboDatabase.Text=PrefC.GetString(PrefName.ReportingServerDbName);
-			textMysqlUser.Text=PrefC.GetString(PrefName.ReportingServerMySqlUser);
+			checkUseReportServer.Checked=(Preferences.GetString(PrefName.ReportingServerCompName)!="" || Preferences.GetString(PrefName.ReportingServerURI)!="");
+			textServerName.Text=Preferences.GetString(PrefName.ReportingServerCompName);
+			comboDatabase.Text=Preferences.GetString(PrefName.ReportingServerDbName);
+			textMysqlUser.Text=Preferences.GetString(PrefName.ReportingServerMySqlUser);
 			string decryptedPass;
-            Encryption.TryDecrypt(PrefC.GetString(PrefName.ReportingServerMySqlPassHash),out decryptedPass);
+            Encryption.TryDecrypt(Preferences.GetString(PrefName.ReportingServerMySqlPassHash),out decryptedPass);
 			textMysqlPass.Text=decryptedPass;
 			textMysqlPass.PasswordChar='*';
-			textMiddleTierURI.Text=PrefC.GetString(PrefName.ReportingServerURI);
+			textMiddleTierURI.Text=Preferences.GetString(PrefName.ReportingServerURI);
 			FillComboDatabases();
 			SetReportServerUIEnabled();
 			//Claim report receive interval.
-			_claimReportReceiveInterval=PrefC.GetInt(PrefName.ClaimReportReceiveInterval);
+			_claimReportReceiveInterval=Preferences.GetInt(PrefName.ClaimReportReceiveInterval);
 			if(_claimReportReceiveInterval==0) {
 				radioTime.Checked=true;
-				DateTime fullDateTime=PrefC.GetDateT(PrefName.ClaimReportReceiveTime);
+				DateTime fullDateTime=Preferences.GetDateTime(PrefName.ClaimReportReceiveTime);
 				textReportCheckTime.Text=fullDateTime.ToShortTimeString();
 			}
 			else {
 				textReportCheckInterval.Text=POut.Int(_claimReportReceiveInterval);
 				radioInterval.Checked=true;
 			}
-			long sigInterval=PrefC.GetLong(PrefName.ProcessSigsIntervalInSecs);
+			long sigInterval=Preferences.GetLong(PrefName.ProcessSigsIntervalInSecs);
 			textSigInterval.Text=(sigInterval==0 ? "" : sigInterval.ToString());
-			textDaysLock.Text=PrefC.GetInt(PrefName.SecurityLockDays).ToString();
-			textDateLock.Text=PrefC.GetDate(PrefName.SecurityLockDate).ToShortDateString();
-			textLogOffAfterMinutes.Text=PrefC.GetInt(PrefName.SecurityLogOffAfterMinutes).ToString();
-			long signalInactive=PrefC.GetLong(PrefName.SignalInactiveMinutes);
+			textDaysLock.Text=Preferences.GetInt(PrefName.SecurityLockDays).ToString();
+			textDateLock.Text=Preferences.GetDate(PrefName.SecurityLockDate).ToShortDateString();
+			textLogOffAfterMinutes.Text=Preferences.GetInt(PrefName.SecurityLogOffAfterMinutes).ToString();
+			long signalInactive=Preferences.GetLong(PrefName.SignalInactiveMinutes);
 			textInactiveSignal.Text=(signalInactive==0 ? "" : signalInactive.ToString());
-			textClaimSnapshotRunTime.Text=PrefC.GetDateT(PrefName.ClaimSnapshotRunTime).ToShortTimeString();
+			textClaimSnapshotRunTime.Text=Preferences.GetDateTime(PrefName.ClaimSnapshotRunTime).ToShortTimeString();
 			for(int i=0;i<Enum.GetNames(typeof(AutoSplitPreference)).Length;i++) {
 				comboAutoSplitPref.Items.Add(Lans.g(this,Enum.GetNames(typeof(AutoSplitPreference))[i]));
 			}
-			comboAutoSplitPref.SelectedIndex=PrefC.GetInt(PrefName.AutoSplitLogic);
+			comboAutoSplitPref.SelectedIndex=Preferences.GetInt(PrefName.AutoSplitLogic);
 			foreach(ClaimSnapshotTrigger trigger in Enum.GetValues(typeof(ClaimSnapshotTrigger))) {
 				comboClaimSnapshotTrigger.Items.Add(trigger.GetDescription());
 			}
-			comboClaimSnapshotTrigger.SelectedIndex=(int)PIn.Enum<ClaimSnapshotTrigger>(PrefC.GetString(PrefName.ClaimSnapshotTriggerType),true);
+			comboClaimSnapshotTrigger.SelectedIndex=(int)PIn.Enum<ClaimSnapshotTrigger>(Preferences.GetString(PrefName.ClaimSnapshotTriggerType),true);
 			foreach(PayPlanVersions version in Enum.GetValues(typeof(PayPlanVersions))) {
 				comboPayPlansVersion.Items.Add(Lan.g("enumPayPlanVersions",version.GetDescription()));
 			}
-			comboPayPlansVersion.SelectedIndex=PrefC.GetInt(PrefName.PayPlansVersion)-1;
+			comboPayPlansVersion.SelectedIndex=Preferences.GetInt(PrefName.PayPlansVersion)-1;
 			foreach(PayClinicSetting prompt in Enum.GetValues(typeof(PayClinicSetting))) {
 				comboPaymentClinicSetting.Items.Add(Lan.g(this,prompt.GetDescription()));
 			}
-			comboPaymentClinicSetting.SelectedIndex=PrefC.GetInt(PrefName.PaymentClinicSetting);
+			comboPaymentClinicSetting.SelectedIndex=Preferences.GetInt(PrefName.PaymentClinicSetting);
 			List<RigorousAccounting> listEnums=Enum.GetValues(typeof(RigorousAccounting)).OfType<RigorousAccounting>().ToList();
 			for(int i=0;i<listEnums.Count;i++) {
 				comboRigorousAccounting.Items.Add(listEnums[i].GetDescription());
 			}
-			comboRigorousAccounting.SelectedIndex=PrefC.GetInt(PrefName.RigorousAccounting);
+			comboRigorousAccounting.SelectedIndex=Preferences.GetInt(PrefName.RigorousAccounting);
 			List<RigorousAdjustments> listAdjEnums=Enum.GetValues(typeof(RigorousAdjustments)).OfType<RigorousAdjustments>().ToList();
 			for(int i=0;i<listAdjEnums.Count;i++) {
 				comboRigorousAdjustments.Items.Add(listAdjEnums[i].GetDescription());
 			}
-			comboRigorousAdjustments.SelectedIndex=PrefC.GetInt(PrefName.RigorousAdjustments);
+			comboRigorousAdjustments.SelectedIndex=Preferences.GetInt(PrefName.RigorousAdjustments);
 		}
 
 		///<summary>Load values from database for hidden preferences if they exist.  If a pref doesn't exist then the corresponding UI is hidden.</summary>
@@ -119,8 +119,8 @@ namespace OpenDental {
 			FillOptionalPrefBool(checkClaimSnapshotEnabled,PrefName.ClaimSnapshotEnabled);
 			FillOptionalPrefBool(checkDBMDisableOptimize,PrefName.DatabaseMaintenanceDisableOptimize);
 			FillOptionalPrefBool(checkDBMSkipCheckTable,PrefName.DatabaseMaintenanceSkipCheckTable);
-			validDateAgingServiceTimeDue.Text=PrefC.GetDateT(PrefName.AgingServiceTimeDue).ToShortTimeString();
-			checkEnableClinics.Checked=PrefC.HasClinicsEnabled;
+			validDateAgingServiceTimeDue.Text=Preferences.GetDateTime(PrefName.AgingServiceTimeDue).ToShortTimeString();
+			checkEnableClinics.Checked=Preferences.HasClinicsEnabled;
 			string updateStreamline=GetHiddenPrefString(PrefName.UpdateStreamLinePassword);
 			if(updateStreamline!=null) {
 				checkUpdateStreamlinePassword.Checked=(updateStreamline=="abracadabra");
@@ -246,7 +246,7 @@ namespace OpenDental {
 			{
 				hasChanges=true;
 			}
-			int prefRigorousAccounting=PrefC.GetInt(PrefName.RigorousAccounting);
+			int prefRigorousAccounting=Preferences.GetInt(PrefName.RigorousAccounting);
 			//Copied logging for RigorousAccounting and RigorousAdjustments from FormModuleSetup.
 			if(Prefs.UpdateInt(PrefName.RigorousAccounting,comboRigorousAccounting.SelectedIndex)) {
 				hasChanges=true;
@@ -254,7 +254,7 @@ namespace OpenDental {
 					((RigorousAccounting)prefRigorousAccounting).GetDescription()+" to "
 					+((RigorousAccounting)comboRigorousAccounting.SelectedIndex).GetDescription()+".");
 			}
-			int prefRigorousAdjustments=PrefC.GetInt(PrefName.RigorousAdjustments);
+			int prefRigorousAdjustments=Preferences.GetInt(PrefName.RigorousAdjustments);
 			if(Prefs.UpdateInt(PrefName.RigorousAdjustments,comboRigorousAdjustments.SelectedIndex)) {
 				hasChanges=true;
 				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Rigorous adjustments changed from "+
@@ -416,19 +416,19 @@ namespace OpenDental {
 			//Copied from FormGlobalSecurity.
 			FormSecurityLock FormS=new FormSecurityLock();
 			FormS.ShowDialog();//prefs are set invalid within that form if needed.
-			if(PrefC.GetInt(PrefName.SecurityLockDays)>0) {
-				textDaysLock.Text=PrefC.GetInt(PrefName.SecurityLockDays).ToString();
+			if(Preferences.GetInt(PrefName.SecurityLockDays)>0) {
+				textDaysLock.Text=Preferences.GetInt(PrefName.SecurityLockDays).ToString();
 			}
 			else {
 				textDaysLock.Text="";
 			}
-			if(PrefC.GetDate(PrefName.SecurityLockDate).Year>1880) {
-				textDateLock.Text=PrefC.GetDate(PrefName.SecurityLockDate).ToShortDateString();
+			if(Preferences.GetDate(PrefName.SecurityLockDate).Year>1880) {
+				textDateLock.Text=Preferences.GetDate(PrefName.SecurityLockDate).ToShortDateString();
 			}
 			else {
 				textDateLock.Text="";
 			}
-			checkLockIncludesAdmin.Checked=PrefC.GetBool(PrefName.SecurityLockIncludesAdmin);
+			checkLockIncludesAdmin.Checked=Preferences.GetBool(PrefName.SecurityLockIncludesAdmin);
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

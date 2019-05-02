@@ -13,7 +13,7 @@ namespace OpenDental {
 
 		///<summary>Throws Exception. Downloads default medications list from OpenDental.com; returns filename of temp file.</summary>
 		public static string DownloadDefaultMedicationsFile() {
-			string tempFile=PrefC.GetRandomTempFile(".tmp");
+			string tempFile=Preferences.GetRandomTempFile(".tmp");
 			using(WebClient client=new WebClient()) {
 				client.DownloadFile("http://www.opendental.com/medications/DefaultMedications.txt",tempFile);
 			}

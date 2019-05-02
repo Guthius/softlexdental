@@ -92,15 +92,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one FamAging into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(FamAging famAging,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				famAging.PatNum=ReplicationServers.GetKey("famaging","PatNum");
 			}
 			string command="INSERT INTO famaging (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PatNum,";
 			}
 			command+="Bal_0_30,Bal_31_60,Bal_61_90,BalOver90,InsEst,BalTotal,PayPlanDue) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(famAging.PatNum)+",";
 			}
 			command+=
@@ -111,7 +111,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.Double(famAging.InsEst)+"',"
 				+"'"+POut.Double(famAging.BalTotal)+"',"
 				+"'"+POut.Double(famAging.PayPlanDue)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many FamAgings into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<FamAging> listFamAgings,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(FamAging famAging in listFamAgings) {
 					Insert(famAging);
 				}

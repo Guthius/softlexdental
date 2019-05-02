@@ -21,7 +21,7 @@ namespace OpenDentBusiness
         {
             get
             {
-                string retVal = @"\\" + PrefC.GetString(PrefName.AsteriskServerIp);
+                string retVal = @"\\" + Preferences.GetString(PrefName.AsteriskServerIp);
 #if DEBUG
                 retVal = @"C:\Users\chris\Documents\VoiceMails";//Change as needed.
 #else

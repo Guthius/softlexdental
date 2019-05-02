@@ -73,15 +73,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EtransMessageText into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EtransMessageText etransMessageText,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				etransMessageText.EtransMessageTextNum=ReplicationServers.GetKey("etransmessagetext","EtransMessageTextNum");
 			}
 			string command="INSERT INTO etransmessagetext (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EtransMessageTextNum,";
 			}
 			command+="MessageText) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(etransMessageText.EtransMessageTextNum)+",";
 			}
 			command+=
@@ -90,7 +90,7 @@ namespace OpenDentBusiness.Crud{
 				etransMessageText.MessageText="";
 			}
 			OdSqlParameter paramMessageText=new OdSqlParameter("paramMessageText",OdDbType.Text,POut.StringParam(etransMessageText.MessageText));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramMessageText);
 			}
 			else {

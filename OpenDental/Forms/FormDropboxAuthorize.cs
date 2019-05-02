@@ -21,7 +21,7 @@ namespace OpenDental {
 			browserOAuth.Dock=DockStyle.Fill;
 			try {
 				string url=WebSerializer.DeserializePrimitiveOrThrow<string>(
-						WebServiceMainHQProxy.GetWebServiceMainHQInstance().BuildOAuthUrl(PrefC.GetString(PrefName.RegistrationKey),OAuthApplicationNames.Dropbox.ToString()));
+						WebServiceMainHQProxy.GetWebServiceMainHQInstance().BuildOAuthUrl(Preferences.GetString(PrefName.RegistrationKey),OAuthApplicationNames.Dropbox.ToString()));
 				browserOAuth.Navigate(new Uri(url));
 			}
 			catch(Exception ex) {

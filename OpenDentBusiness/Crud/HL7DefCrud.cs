@@ -163,15 +163,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one HL7Def into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(HL7Def hL7Def,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				hL7Def.HL7DefNum=ReplicationServers.GetKey("hl7def","HL7DefNum");
 			}
 			string command="INSERT INTO hl7def (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="HL7DefNum,";
 			}
 			command+="Description,ModeTx,IncomingFolder,OutgoingFolder,IncomingPort,OutgoingIpPort,FieldSeparator,ComponentSeparator,SubcomponentSeparator,RepetitionSeparator,EscapeCharacter,IsInternal,InternalType,InternalTypeVersion,IsEnabled,Note,HL7Server,HL7ServiceName,ShowDemographics,ShowAppts,ShowAccount,IsQuadAsToothNum,LabResultImageCat,SftpUsername,SftpPassword,SftpInSocket,HasLongDCodes,IsProcApptEnforced) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(hL7Def.HL7DefNum)+",";
 			}
 			command+=
@@ -207,7 +207,7 @@ namespace OpenDentBusiness.Crud{
 				hL7Def.Note="";
 			}
 			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,POut.StringParam(hL7Def.Note));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNote);
 			}
 			else {

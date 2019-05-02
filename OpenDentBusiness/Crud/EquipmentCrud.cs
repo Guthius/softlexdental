@@ -112,15 +112,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Equipment into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Equipment equipment,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				equipment.EquipmentNum=ReplicationServers.GetKey("equipment","EquipmentNum");
 			}
 			string command="INSERT INTO equipment (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EquipmentNum,";
 			}
 			command+="Description,SerialNumber,ModelYear,DatePurchased,DateSold,PurchaseCost,MarketValue,Location,DateEntry,ProvNumCheckedOut,DateCheckedOut,DateExpectedBack,DispenseNote,Status) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(equipment.EquipmentNum)+",";
 			}
 			command+=
@@ -154,7 +154,7 @@ namespace OpenDentBusiness.Crud{
 				equipment.Status="";
 			}
 			OdSqlParameter paramStatus=new OdSqlParameter("paramStatus",OdDbType.Text,POut.StringParam(equipment.Status));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramDescription,paramLocation,paramDispenseNote,paramStatus);
 			}
 			else {

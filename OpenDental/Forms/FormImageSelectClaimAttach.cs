@@ -159,7 +159,7 @@ namespace OpenDental{
 			//	MsgBox.Show(this,"Invalid patient image folder.");
 			//	return;
 			//}
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				MsgBox.Show(this,"Error. Not using AtoZ images folder.");
 				return;
 			}
@@ -199,7 +199,7 @@ namespace OpenDental{
 					{
 						//this does result in a significantly larger images size if jpg.  A later optimization would recompress it.
 						Bitmap bitmapold=null;
-						if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+						if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 							bitmapold=(Bitmap)Bitmap.FromFile(oldPath);
 							Bitmap bitmapnew=ImageHelper.ApplyDocumentSettingsToImage(doc,bitmapold,ImageSettingFlags.ALL);
 							bitmapnew.Save(newPath);

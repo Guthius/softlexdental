@@ -73,20 +73,20 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ConnectionGroup into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ConnectionGroup connectionGroup,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				connectionGroup.ConnectionGroupNum=ReplicationServers.GetKey("connectiongroup","ConnectionGroupNum");
 			}
 			string command="INSERT INTO connectiongroup (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ConnectionGroupNum,";
 			}
 			command+="Description) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(connectionGroup.ConnectionGroupNum)+",";
 			}
 			command+=
 				 "'"+POut.String(connectionGroup.Description)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

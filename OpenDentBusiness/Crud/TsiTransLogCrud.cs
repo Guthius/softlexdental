@@ -116,15 +116,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one TsiTransLog into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(TsiTransLog tsiTransLog,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				tsiTransLog.TsiTransLogNum=ReplicationServers.GetKey("tsitranslog","TsiTransLogNum");
 			}
 			string command="INSERT INTO tsitranslog (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="TsiTransLogNum,";
 			}
 			command+="PatNum,UserNum,TransType,TransDateTime,DemandType,ServiceCode,ClientId,TransAmt,AccountBalance,FKeyType,FKey,RawMsgText,TransJson,ClinicNum,AggTransLogNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(tsiTransLog.TsiTransLogNum)+",";
 			}
 			command+=
@@ -147,7 +147,7 @@ namespace OpenDentBusiness.Crud{
 				tsiTransLog.TransJson="";
 			}
 			OdSqlParameter paramTransJson=new OdSqlParameter("paramTransJson",OdDbType.Text,POut.StringParam(tsiTransLog.TransJson));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramTransJson);
 			}
 			else {
@@ -163,7 +163,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many TsiTransLogs into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<TsiTransLog> listTsiTransLogs,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(TsiTransLog tsiTransLog in listTsiTransLogs) {
 					Insert(tsiTransLog);
 				}

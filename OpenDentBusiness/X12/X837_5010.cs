@@ -238,7 +238,7 @@ namespace OpenDentBusiness
 				#region Billing Provider
 				//Billing address is based on clinic, not provider.  All claims in a batch are guaranteed to be from a single clinic.  That validation is done in FormClaimSend.
 				//Although, now that we have a separate loop for each claim, we might be able to allow a batch with mixed clinics.
-				if(PrefC.HasClinicsEnabled) {//if using clinics
+				if(Preferences.HasClinicsEnabled) {//if using clinics
 					clinic=Clinics.GetClinic(claim.ClinicNum);//might be null
 				}
 				provClinicBill=ProviderClinics.GetFromList(claim.ProvBill,(clinic==null ? 0 : clinic.ClinicNum),listProvClinics,true);
@@ -284,19 +284,19 @@ namespace OpenDentBusiness
 					billingState=clinic.BillingState;
 					billingZip=clinic.BillingZip;
 				}
-				else if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
-					billingAddress1=PrefC.GetString(PrefName.PracticeBillingAddress);
-					billingAddress2=PrefC.GetString(PrefName.PracticeBillingAddress2);
-					billingCity=PrefC.GetString(PrefName.PracticeBillingCity);
-					billingState=PrefC.GetString(PrefName.PracticeBillingST);
-					billingZip=PrefC.GetString(PrefName.PracticeBillingZip);
+				else if(Preferences.GetBool(PrefName.UseBillingAddressOnClaims)) {
+					billingAddress1=Preferences.GetString(PrefName.PracticeBillingAddress);
+					billingAddress2=Preferences.GetString(PrefName.PracticeBillingAddress2);
+					billingCity=Preferences.GetString(PrefName.PracticeBillingCity);
+					billingState=Preferences.GetString(PrefName.PracticeBillingST);
+					billingZip=Preferences.GetString(PrefName.PracticeBillingZip);
 				}
 				else if(clinic==null) {
-					billingAddress1=PrefC.GetString(PrefName.PracticeAddress);
-					billingAddress2=PrefC.GetString(PrefName.PracticeAddress2);
-					billingCity=PrefC.GetString(PrefName.PracticeCity);
-					billingState=PrefC.GetString(PrefName.PracticeST);
-					billingZip=PrefC.GetString(PrefName.PracticeZip);
+					billingAddress1=Preferences.GetString(PrefName.PracticeAddress);
+					billingAddress2=Preferences.GetString(PrefName.PracticeAddress2);
+					billingCity=Preferences.GetString(PrefName.PracticeCity);
+					billingState=Preferences.GetString(PrefName.PracticeST);
+					billingZip=Preferences.GetString(PrefName.PracticeZip);
 				}
 				else {
 					billingAddress1=clinic.Address;
@@ -350,13 +350,13 @@ namespace OpenDentBusiness
 				//2010AA PER: IC (medical,institutional,dental) Billing Provider Contact Information: Probably required by a number of carriers and by Emdeon.
 				sw.Write("PER"+s
 					+"IC"+s//PER01 2/2 Contact Function Code: IC=Information Contact.
-					+Sout(PrefC.GetString(PrefName.PracticeTitle),60)+s//PER02 1/60 Name: Practice Title.
+					+Sout(Preferences.GetString(PrefName.PracticeTitle),60)+s//PER02 1/60 Name: Practice Title.
 					+"TE"+s);//PER03 2/2 Communication Number Qualifier: TE=Telephone.
-				if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
-					sw.Write(Sout(PrefC.GetString(PrefName.PracticePhone),256));//PER04  1/256 Communication Number: Telephone number.
+				if(Preferences.GetBool(PrefName.UseBillingAddressOnClaims)) {
+					sw.Write(Sout(Preferences.GetString(PrefName.PracticePhone),256));//PER04  1/256 Communication Number: Telephone number.
 				}
 				else if(clinic==null){
-					sw.Write(Sout(PrefC.GetString(PrefName.PracticePhone),256));//PER04  1/256 Communication Number: Telephone number.
+					sw.Write(Sout(Preferences.GetString(PrefName.PracticePhone),256));//PER04  1/256 Communication Number: Telephone number.
 				}
 				else{
 					sw.Write(Sout(clinic.Phone,256));//PER04  1/256 Communication Number: Telephone number.
@@ -386,7 +386,7 @@ namespace OpenDentBusiness
 					EndSegment(sw);//NM404 through NM407 are either situational with United States as default, or not used, so we don't specify any of them.
 				}
 				else { //Use the practice PayToAddress if clinic is null or the clinic's PayToAddress is blank.
-					if(PrefC.GetString(PrefName.PracticePayToAddress)!="") {
+					if(Preferences.GetString(PrefName.PracticePayToAddress)!="") {
 						//2010AB NM1: 87 (medical,institutional,dental) Pay-To Address Name.
 						sw.Write("NM1"+
 						s+"87"+s);//NM101 2/3 Entity Identifier Code: 87=Pay-to Provider.
@@ -398,15 +398,15 @@ namespace OpenDentBusiness
 						}
 						EndSegment(sw);//NM103 through NM112 are not used.
 						//2010AB N3: (medical,institutional,dental) Pay-To Address.
-						sw.Write("N3"+s+Sout(PrefC.GetString(PrefName.PracticePayToAddress),55));//N301 1/55 Address Information:
-						if(PrefC.GetString(PrefName.PracticePayToAddress2)!="") {
-							sw.Write(s+Sout(PrefC.GetString(PrefName.PracticePayToAddress2),55));//N302 1/55 Address Information:
+						sw.Write("N3"+s+Sout(Preferences.GetString(PrefName.PracticePayToAddress),55));//N301 1/55 Address Information:
+						if(Preferences.GetString(PrefName.PracticePayToAddress2)!="") {
+							sw.Write(s+Sout(Preferences.GetString(PrefName.PracticePayToAddress2),55));//N302 1/55 Address Information:
 						}
 						EndSegment(sw);
 						//2010AB N4: (medical,institutional,dental) Pay-To Address City, State, Zip Code.
-						sw.Write("N4"+s+Sout(PrefC.GetString(PrefName.PracticePayToCity),30)+s//N401 2/30 City Name: 
-						+Sout(PrefC.GetString(PrefName.PracticePayToST),2,2)+s//N402 2/2 State or Province Code: 
-						+Sout(PrefC.GetString(PrefName.PracticePayToZip).Replace("-",""),15));//N403 3/15 Postal Code: 
+						sw.Write("N4"+s+Sout(Preferences.GetString(PrefName.PracticePayToCity),30)+s//N401 2/30 City Name: 
+						+Sout(Preferences.GetString(PrefName.PracticePayToST),2,2)+s//N402 2/2 State or Province Code: 
+						+Sout(Preferences.GetString(PrefName.PracticePayToZip).Replace("-",""),15));//N403 3/15 Postal Code: 
 						EndSegment(sw);//NM404 through NM407 are either situational with United States as default, or not used, so we don't specify any of them.
 					}
 				}
@@ -1884,7 +1884,7 @@ namespace OpenDentBusiness
 					#region 2420 Service Providers (medical)
 					if(medType==EnumClaimMedType.Medical) {
 						if(claim.ProvTreat!=proc.ProvNum
-							&& PrefC.GetBool(PrefName.EclaimsSeparateTreatProv)) {
+							&& Preferences.GetBool(PrefName.EclaimsSeparateTreatProv)) {
 							//2420A NM1: 82 (medical) Rendering Provider Name. Only if different from the claim.
 							provTreatProc=Providers.GetProv(proc.ProvNum);
 							provClinicProc=ProviderClinics.GetOneOrDefault(proc.ProvNum,(clinic==null ? 0 : clinic.ClinicNum));
@@ -1930,10 +1930,10 @@ namespace OpenDentBusiness
 							//2420E PER: (medical) Ordering Provider Contact Information. Situational.
 							sw.Write("PER"+s
 								+"IC"+s//PER01 2/2 Contact Function Code: IC=Information Contact.
-								+Sout(PrefC.GetString(PrefName.PracticeTitle),60)+s//PER02 1/60 Name: Practice Title.
+								+Sout(Preferences.GetString(PrefName.PracticeTitle),60)+s//PER02 1/60 Name: Practice Title.
 								+"TE"+s);//PER03 2/2 Communication Number Qualifier: TE=Telephone.
 							if(clinic==null) {
-								sw.Write(Sout(PrefC.GetString(PrefName.PracticePhone),256));//PER04 1/256 Communication Number: Telephone number.
+								sw.Write(Sout(Preferences.GetString(PrefName.PracticePhone),256));//PER04 1/256 Communication Number: Telephone number.
 							}
 							else {
 								sw.Write(Sout(clinic.Phone,256));//PER04 1/256 Communication Number: Telephone number.
@@ -1957,7 +1957,7 @@ namespace OpenDentBusiness
 						//2420B NM1: ZZ (institutional) Other Operating Physician Name. Situational. We don't support.
 						//2420B REF: (institutional) Other Operating Physician Secondary Identification. Situational. We don't support.
 						if(claim.ProvTreat!=proc.ProvNum
-							&& PrefC.GetBool(PrefName.EclaimsSeparateTreatProv)) 
+							&& Preferences.GetBool(PrefName.EclaimsSeparateTreatProv)) 
 						{
 							provTreatProc=Providers.GetProv(proc.ProvNum);
 							provClinicProc=ProviderClinics.GetOneOrDefault(proc.ProvNum,(clinic==null ? 0 : clinic.ClinicNum));
@@ -1976,7 +1976,7 @@ namespace OpenDentBusiness
 					#region 2420 Service Providers (dental)
 					if(medType==EnumClaimMedType.Dental) {
 						if(claim.ProvTreat!=proc.ProvNum
-							&& PrefC.GetBool(PrefName.EclaimsSeparateTreatProv)) 
+							&& Preferences.GetBool(PrefName.EclaimsSeparateTreatProv)) 
 						{
 							//2420A NM1: 82 (dental) Rendering Provider Name. Only if different from the claim.
 							provTreatProc=Providers.GetProv(proc.ProvNum);
@@ -2560,7 +2560,7 @@ namespace OpenDentBusiness
 					provOrderProc.NationalProvID=referralOrdering.NationalProvID;
 				}
 			}
-			else if(PrefC.GetBool(PrefName.ClaimMedProvTreatmentAsOrdering)) {
+			else if(Preferences.GetBool(PrefName.ClaimMedProvTreatmentAsOrdering)) {
 				provOrderProc=provTreatProc;//Even though using the treating provider is against the standard.  This is the old solution.
 			}
 			else if(Carriers.IsMedicaid(carrier)) {//Emdeon Medical requires loop 2420E when the claim is sent to DMERC (Medicaid) carriers.
@@ -2692,26 +2692,26 @@ namespace OpenDentBusiness
 					strb.Append("Clinic billing address cannot be a P.O. BOX when used for e-claims.");
 				}
 			}
-			else if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)) {
+			else if(Preferences.GetBool(PrefName.UseBillingAddressOnClaims)) {
 				X12Validate.BillingAddress(strb);//Tests for 5 or 9 digit zip.
-				string zip=PrefC.GetString(PrefName.PracticeBillingZip);
+				string zip=Preferences.GetString(PrefName.PracticeBillingZip);
 				if(Regex.IsMatch(zip,"^[0-9]{5}\\-?$")) {//If the zip is 5 digits in format ##### or #####-, then it passed the first test, but 9 digits zips are required.
 					Comma(strb);
 					strb.Append("Practice billing zip must contain nine digits");//this is more restrictive than in the check above.
 				}
-				if(HasPOBox(PrefC.GetString(PrefName.PracticeBillingAddress))) {
+				if(HasPOBox(Preferences.GetString(PrefName.PracticeBillingAddress))) {
 					Comma(strb);
 					strb.Append("Practice billing address cannot be a P.O. BOX when used for e-claims.");
 				}
 			}
 			else if(clinic==null) {
 				X12Validate.PracticeAddress(strb);//Tests for 5 or 9 digit zip.
-				string zip=PrefC.GetString(PrefName.PracticeZip);
+				string zip=Preferences.GetString(PrefName.PracticeZip);
 				if(Regex.IsMatch(zip,"^[0-9]{5}\\-?$")) {//If the zip is 5 digits in format ##### or #####-, then it passed the first test, but 9 digits zips are required.
 					Comma(strb);
 					strb.Append("Practice zip must contain nine digits");
 				}
-				if(HasPOBox(PrefC.GetString(PrefName.PracticeAddress))) {
+				if(HasPOBox(Preferences.GetString(PrefName.PracticeAddress))) {
 					Comma(strb);
 					strb.Append("Practice address cannot be a P.O. BOX when used for e-claims.");
 				}
@@ -2731,16 +2731,16 @@ namespace OpenDentBusiness
 			if(clinic==null || (clinic!=null && clinic.PayToAddress=="")) {//No clinic Pay To address.
 				//If PayTo options exist, we're using them always for PayTo information, so always check them for validity.
 				//We don't check the PayToAddress for validation because simply not being blank is good enough.
-				if(PrefC.GetString(PrefName.PracticePayToAddress).Trim()!="") {
-					if(PrefC.GetString(PrefName.PracticePayToCity).Trim().Length<2) {
+				if(Preferences.GetString(PrefName.PracticePayToAddress).Trim()!="") {
+					if(Preferences.GetString(PrefName.PracticePayToCity).Trim().Length<2) {
 						Comma(strb);
 						strb.Append("Practice Pay To City");
 					}
-					if(PrefC.GetString(PrefName.PracticePayToST).Trim().Length!=2) {
+					if(Preferences.GetString(PrefName.PracticePayToST).Trim().Length!=2) {
 						Comma(strb);
 						strb.Append("Practice Pay To State");
 					}
-					if(Regex.IsMatch(PrefC.GetString(PrefName.PracticePayToZip),"^[0-9]{5}\\-?$")) {
+					if(Regex.IsMatch(Preferences.GetString(PrefName.PracticePayToZip),"^[0-9]{5}\\-?$")) {
 						//If the zip is 5 digits in format ##### or #####-, then it passed the first test, but 9 digits zips are required.
 						Comma(strb);
 						strb.Append("Practice Pay To zip must contain nine digits");
@@ -2799,7 +2799,7 @@ namespace OpenDentBusiness
 				}
 			}
 			//Addresses
-			if(PrefC.GetString(PrefName.PracticeTitle)=="") {
+			if(Preferences.GetString(PrefName.PracticeTitle)=="") {
 				Comma(strb);
 				strb.Append("Practice Title");
 			}
@@ -3156,7 +3156,7 @@ namespace OpenDentBusiness
 				//}
 				//Providers
 				Provider provTreatProc=treatProv;
-				if(claim.ProvTreat!=proc.ProvNum && PrefC.GetBool(PrefName.EclaimsSeparateTreatProv)) {
+				if(claim.ProvTreat!=proc.ProvNum && Preferences.GetBool(PrefName.EclaimsSeparateTreatProv)) {
 					provTreatProc=Providers.GetFirstOrDefault(x => x.ProvNum==proc.ProvNum)??providerFirst;
 					if(provTreatProc.LName=="") {
 						Comma(strb);

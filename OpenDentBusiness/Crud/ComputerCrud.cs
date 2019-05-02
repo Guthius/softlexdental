@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Computer into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Computer computer,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				computer.ComputerNum=ReplicationServers.GetKey("computer","ComputerNum");
 			}
 			string command="INSERT INTO computer (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ComputerNum,";
 			}
 			command+="CompName,LastHeartBeat) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(computer.ComputerNum)+",";
 			}
 			command+=
 				 "'"+POut.String(computer.CompName)+"',"
 				+    POut.DateT (computer.LastHeartBeat)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

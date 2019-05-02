@@ -100,15 +100,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ChartView into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ChartView chartView,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				chartView.ChartViewNum=ReplicationServers.GetKey("chartview","ChartViewNum");
 			}
 			string command="INSERT INTO chartview (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ChartViewNum,";
 			}
 			command+="Description,ItemOrder,ProcStatuses,ObjectTypes,ShowProcNotes,IsAudit,SelectedTeethOnly,OrionStatusFlags,DatesShowing,IsTpCharting) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(chartView.ChartViewNum)+",";
 			}
 			command+=
@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   ((int)chartView.OrionStatusFlags)+","
 				+    POut.Int   ((int)chartView.DatesShowing)+","
 				+    POut.Bool  (chartView.IsTpCharting)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

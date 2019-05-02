@@ -22,21 +22,21 @@ namespace OpenDental {
 		}
 
 		private void FormEhrSettings_Load(object sender,EventArgs e) {
-			if(PrefC.GetString(PrefName.SoftwareName)!="") {
-				this.Text+=" - "+PrefC.GetString(PrefName.SoftwareName);
+			if(Preferences.GetString(PrefName.SoftwareName)!="") {
+				this.Text+=" - "+Preferences.GetString(PrefName.SoftwareName);
 			}
-			checkAlertHighSeverity.Checked=PrefC.GetBool(PrefName.EhrRxAlertHighSeverity);
+			checkAlertHighSeverity.Checked=Preferences.GetBool(PrefName.EhrRxAlertHighSeverity);
 			comboMU2.Items.Add("Stage 1");
 			comboMU2.Items.Add("Stage 2");
 			comboMU2.Items.Add("Modified Stage 2");
-			comboMU2.SelectedIndex=PrefC.GetInt(PrefName.MeaningfulUseTwo);
-			checkAutoWebmails.Checked=PrefC.GetBool(PrefName.AutomaticSummaryOfCareWebmail);
+			comboMU2.SelectedIndex=Preferences.GetInt(PrefName.MeaningfulUseTwo);
+			checkAutoWebmails.Checked=Preferences.GetBool(PrefName.AutomaticSummaryOfCareWebmail);
 			FillRecEncCodesList();
 			FillDefaultEncCode();
 			#region DefaultPregnancyGroup
 			FillRecPregCodesList();
-			string defaultPregCode=PrefC.GetString(PrefName.PregnancyDefaultCodeValue);
-			string defaultPregCodeSystem=PrefC.GetString(PrefName.PregnancyDefaultCodeSystem);
+			string defaultPregCode=Preferences.GetString(PrefName.PregnancyDefaultCodeValue);
+			string defaultPregCodeSystem=Preferences.GetString(PrefName.PregnancyDefaultCodeSystem);
 			NewPregCodeSystem=defaultPregCodeSystem;
 			OldPregListSelectedIdx=-1;
 			int countNotInSnomedTable=0;
@@ -97,7 +97,7 @@ namespace OpenDental {
 
 		private void checkAlertHighSeverity_Click(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.SecurityAdmin,false)) {
-				checkAlertHighSeverity.Checked=PrefC.GetBool(PrefName.EhrRxAlertHighSeverity);
+				checkAlertHighSeverity.Checked=Preferences.GetBool(PrefName.EhrRxAlertHighSeverity);
 			}
 		}
 
@@ -132,8 +132,8 @@ namespace OpenDental {
 		}
 
 		private void FillDefaultEncCode() {
-			string defaultEncCode=PrefC.GetString(PrefName.CQMDefaultEncounterCodeValue);
-			string defaultEncCodeSystem=PrefC.GetString(PrefName.CQMDefaultEncounterCodeSystem);
+			string defaultEncCode=Preferences.GetString(PrefName.CQMDefaultEncounterCodeValue);
+			string defaultEncCodeSystem=Preferences.GetString(PrefName.CQMDefaultEncounterCodeSystem);
 			NewEncCodeSystem=defaultEncCodeSystem;
 			OldEncListSelectedIdx=-1;
 			int countNotInSnomedTable=0;
@@ -195,7 +195,7 @@ namespace OpenDental {
 		
 		private void checkMU2_SelectionChangeCommitted(object sender,EventArgs e) {
 			if(!Security.IsAuthorized(Permissions.SecurityAdmin,false)) {
-				comboMU2.SelectedIndex=PrefC.GetInt(PrefName.MeaningfulUseTwo);
+				comboMU2.SelectedIndex=Preferences.GetInt(PrefName.MeaningfulUseTwo);
 			}
 		}
 

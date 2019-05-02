@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EhrMeasure into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EhrMeasure ehrMeasure,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				ehrMeasure.EhrMeasureNum=ReplicationServers.GetKey("ehrmeasure","EhrMeasureNum");
 			}
 			string command="INSERT INTO ehrmeasure (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EhrMeasureNum,";
 			}
 			command+="MeasureType,Numerator,Denominator) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(ehrMeasure.EhrMeasureNum)+",";
 			}
 			command+=
 				     POut.Int   ((int)ehrMeasure.MeasureType)+","
 				+    POut.Int   (ehrMeasure.Numerator)+","
 				+    POut.Int   (ehrMeasure.Denominator)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

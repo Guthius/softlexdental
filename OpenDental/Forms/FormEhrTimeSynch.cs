@@ -27,14 +27,14 @@ namespace OpenDental {
 				refreshDisplays();
 				return;
 			}
-			textNistUrl.Text=PrefC.GetString(PrefName.NistTimeServerUrl);
+			textNistUrl.Text=Preferences.GetString(PrefName.NistTimeServerUrl);
 			SynchTimes();			
 		}
 
 		///<summary>Called from FormOpenDental.Load.  Updates local time and checks to see if server time is in synch, with a fast db call (only acurate to seconds, not miliseconds).</summary>
 		public bool TimesInSynchFast() {
 			this.Cursor=Cursors.WaitCursor;
-			textNistUrl.Text=PrefC.GetString(PrefName.NistTimeServerUrl);
+			textNistUrl.Text=Preferences.GetString(PrefName.NistTimeServerUrl);
 			double nistOffset=GetNistOffset();
 			if(nistOffset==double.MaxValue) { //Timed out
 				MsgBox.Show(this,"No response received from NIST time server.  Click synch time after four seconds.");

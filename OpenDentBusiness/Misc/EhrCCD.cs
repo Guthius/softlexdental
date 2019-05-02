@@ -260,8 +260,8 @@ namespace OpenDentBusiness {
 				Start("assignedAuthor");
 				StartAndEnd("id","extension",provAuthor.NationalProvID,"root","2.16.840.1.113883.4.6");//Validated NPI. TODO: We might need to assign a global GUID for each office so that the provider can be uniquely identified anywhere in the world.
 				StartAndEnd("code","code",GetTaxonomy(provAuthor),"codeSystem",strCodeSystemNucc,"codeSystemName",strCodeSystemNameNucc);
-				AddressUnitedStates(PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),PrefC.GetString(PrefName.PracticeCity),PrefC.GetString(PrefName.PracticeST));//Validated
-				string strPracticePhone=PrefC.GetString(PrefName.PracticePhone);//Validated
+				AddressUnitedStates(Preferences.GetString(PrefName.PracticeAddress),Preferences.GetString(PrefName.PracticeAddress2),Preferences.GetString(PrefName.PracticeCity),Preferences.GetString(PrefName.PracticeST));//Validated
+				string strPracticePhone=Preferences.GetString(PrefName.PracticePhone);//Validated
 				strPracticePhone=strPracticePhone.Substring(0,3)+"-"+strPracticePhone.Substring(3,3)+"-"+strPracticePhone.Substring(6);
 				StartAndEnd("telecom","use","WP","value","tel:"+strPracticePhone);//Validated
 				Start("assignedPerson");
@@ -276,18 +276,18 @@ namespace OpenDentBusiness {
 				#region custodian-----------------------------------------------------------------------------------------------------------------------------
 				//"Represents the organization in charge of maintaining the document." Section 2.1.5, page 72
 				//The custodian is the steward that is entrusted with the care of the document. Every CDA document has exactly one custodian.
-				Provider provCustodian=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
+				Provider provCustodian=Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv));
 				Start("custodian");
 				Start("assignedCustodian");
 				Start("representedCustodianOrganization");
 				StartAndEnd("id","extension",provCustodian.NationalProvID,"root","2.16.840.1.113883.4.6");//Validated NPI. We might need to assign a global GUID for each office so that the provider can be uniquely identified anywhere in the world.
-				string custodianTitle=PrefC.GetString(PrefName.PracticeTitle);
-				string custodianAddress=PrefC.GetString(PrefName.PracticeAddress);//Validated
-				string custodianAddress2=PrefC.GetString(PrefName.PracticeAddress2);//Validated
-				string custodianCity=PrefC.GetString(PrefName.PracticeCity);//Validated
-				string custodianState=PrefC.GetString(PrefName.PracticeST);//Validated
+				string custodianTitle=Preferences.GetString(PrefName.PracticeTitle);
+				string custodianAddress=Preferences.GetString(PrefName.PracticeAddress);//Validated
+				string custodianAddress2=Preferences.GetString(PrefName.PracticeAddress2);//Validated
+				string custodianCity=Preferences.GetString(PrefName.PracticeCity);//Validated
+				string custodianState=Preferences.GetString(PrefName.PracticeST);//Validated
 				string custodianPhone=strPracticePhone;
-				if(PrefC.HasClinicsEnabled && _patOutCcd.ClinicNum!=0) {
+				if(Preferences.HasClinicsEnabled && _patOutCcd.ClinicNum!=0) {
 					Clinic clinicCustodian=Clinics.GetClinic(_patOutCcd.ClinicNum);
 					custodianTitle=clinicCustodian.Description;
 					custodianAddress=clinicCustodian.Address;//Validated
@@ -305,7 +305,7 @@ namespace OpenDentBusiness {
 				#endregion custodian
 				#region legalAuthenticator--------------------------------------------------------------------------------------------------------------------
 				//This element identifies the single person legally responsible for the document and must be present if the document has been legally authenticated.
-				Provider provLegal=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
+				Provider provLegal=Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv));
 				if(!provLegal.IsNotPerson) {
 					Start("legalAuthenticator");
 					TimeElement("time",DateTime.Now);
@@ -315,12 +315,12 @@ namespace OpenDentBusiness {
 						provLegal=Providers.GetProv(pat.PriProv);
 					}
 					StartAndEnd("id","root","2.16.840.1.113883.4.6","extension",provLegal.NationalProvID);//Validated NPI. We might need to assign a global GUID for each office so that the provider can be uniquely identified anywhere in the world.
-					string legalAuthAddress=PrefC.GetString(PrefName.PracticeAddress);//Validated
-					string legalAuthAddress2=PrefC.GetString(PrefName.PracticeAddress2);//Validated
-					string legalAuthCity=PrefC.GetString(PrefName.PracticeCity);//Validated
-					string legalAuthState=PrefC.GetString(PrefName.PracticeST);//Validated
+					string legalAuthAddress=Preferences.GetString(PrefName.PracticeAddress);//Validated
+					string legalAuthAddress2=Preferences.GetString(PrefName.PracticeAddress2);//Validated
+					string legalAuthCity=Preferences.GetString(PrefName.PracticeCity);//Validated
+					string legalAuthState=Preferences.GetString(PrefName.PracticeST);//Validated
 					string legalAuthPhone=strPracticePhone;
-					if(PrefC.HasClinicsEnabled && _patOutCcd.ClinicNum!=0) {
+					if(Preferences.HasClinicsEnabled && _patOutCcd.ClinicNum!=0) {
 						Clinic clinicAuth=Clinics.GetClinic(_patOutCcd.ClinicNum);
 						legalAuthAddress=clinicAuth.Address;//Validated
 						legalAuthAddress2=clinicAuth.Address2;//Validated
@@ -352,10 +352,10 @@ namespace OpenDentBusiness {
 					Start("performer","typeCode","PRF");
 					Start("assignedEntity");
 					if(provPri==null) {
-						provPri=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
+						provPri=Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv));
 					}
 					StartAndEnd("id","root","2.16.840.1.113883.4.6","extension",provPri.NationalProvID);//Validated NPI. We might need to assign a global GUID for each office so that the provider can be uniquely identified anywhere in the world.
-					AddressUnitedStates(PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),PrefC.GetString(PrefName.PracticeCity),PrefC.GetString(PrefName.PracticeST));//Validated
+					AddressUnitedStates(Preferences.GetString(PrefName.PracticeAddress),Preferences.GetString(PrefName.PracticeAddress2),Preferences.GetString(PrefName.PracticeCity),Preferences.GetString(PrefName.PracticeST));//Validated
 					StartAndEnd("telecom","use","WP","value","tel:"+strPracticePhone);//Validated
 					Start("assignedPerson");
 					Start("name");
@@ -2419,37 +2419,37 @@ Vital Signs
 		///Returns empty string if no errors, otherwise returns a string containing error messages.</summary>
 		public static string ValidateSettings() {
 			string strErrors="";
-			if(PrefC.GetString(PrefName.PracticeTitle).Trim()=="") {
+			if(Preferences.GetString(PrefName.PracticeTitle).Trim()=="") {
 				if(strErrors!="") {
 					strErrors+="\r\n";
 				}
 				strErrors+="Missing practice title.";
 			}
-			if(PrefC.GetString(PrefName.PracticePhone).Trim()=="") {
+			if(Preferences.GetString(PrefName.PracticePhone).Trim()=="") {
 				if(strErrors!="") {
 					strErrors+="\r\n";
 				}
 				strErrors+="Missing practice phone.";
 			}
-			if(PrefC.GetString(PrefName.PracticeAddress).Trim()=="") {
+			if(Preferences.GetString(PrefName.PracticeAddress).Trim()=="") {
 				if(strErrors!="") {
 					strErrors+="\r\n";
 				}
 				strErrors+="Missing practice address line 1.";
 			}
-			if(PrefC.GetString(PrefName.PracticeCity).Trim()=="") {
+			if(Preferences.GetString(PrefName.PracticeCity).Trim()=="") {
 				if(strErrors!="") {
 					strErrors+="\r\n";
 				}
 				strErrors+="Missing practice city.";
 			}
-			if(PrefC.GetString(PrefName.PracticeST).Trim().Length!=2) {
+			if(Preferences.GetString(PrefName.PracticeST).Trim().Length!=2) {
 				if(strErrors!="") {
 					strErrors+="\r\n";
 				}
 				strErrors+="Invalid practice state.  Must be two letters.";
 			}
-			Provider provDefault=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
+			Provider provDefault=Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv));
 			if(provDefault.FName.Trim()=="" && !provDefault.IsNotPerson) {//Have a first name and is a person.
 				if(strErrors!="") {
 					strErrors+="\r\n";
@@ -2541,7 +2541,7 @@ Vital Signs
 				}
 				strErrors+="Missing patient phone. Must have home, wireless, or work phone.";
 			}
-			if(PrefC.HasClinicsEnabled && pat.ClinicNum!=0) {
+			if(Preferences.HasClinicsEnabled && pat.ClinicNum!=0) {
 				Clinic clinic=Clinics.GetClinic(pat.ClinicNum);
 				if(clinic.Description.Trim()=="") {
 					if(strErrors!="") {
@@ -2574,7 +2574,7 @@ Vital Signs
 					strErrors+="Invalid clinic '"+clinic.Description+"' state.  Must be two letters.";
 				}
 			}
-			Provider provPractice=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
+			Provider provPractice=Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv));
 			if(provPractice.FName.Trim()=="" && !provPractice.IsNotPerson) {
 				if(strErrors!="") {
 					strErrors+="\r\n";
@@ -2593,7 +2593,7 @@ Vital Signs
 				}
 				strErrors+="Missing provider "+provPractice.Abbr+" NPI.";
 			}
-			if(pat.PriProv>0 && pat.PriProv!=PrefC.GetLong(PrefName.PracticeDefaultProv)) {
+			if(pat.PriProv>0 && pat.PriProv!=Preferences.GetLong(PrefName.PracticeDefaultProv)) {
 				Provider provPri=Providers.GetProv(pat.PriProv);
 				if(provPri.FName.Trim()=="" && !provPri.IsNotPerson) {
 					if(strErrors!="") {

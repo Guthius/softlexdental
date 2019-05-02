@@ -11,7 +11,7 @@ namespace OpenDental {
 		}
 
 		private void FormEmailSetupMasterTemplate_Load(object sender,EventArgs e) {
-			textMaster.Text=PrefC.GetString(PrefName.EmailMasterTemplate);
+			textMaster.Text=Preferences.GetString(PrefName.EmailMasterTemplate);
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

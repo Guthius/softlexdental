@@ -78,7 +78,7 @@ namespace OpenDental {
 
 		private SearchResultCollection GetUsers() {
 			try {
-				DirectoryEntry myLdapConnection=new DirectoryEntry(PrefC.GetString(PrefName.DomainLoginPath));
+				DirectoryEntry myLdapConnection=new DirectoryEntry(Preferences.GetString(PrefName.DomainLoginPath));
 				DirectorySearcher search=new DirectorySearcher(myLdapConnection);
 				search.Filter="(&(objectClass=user)(objectCategory=person))";
 				search.Sort.PropertyName=_fields[0];//by default sort results by the first field

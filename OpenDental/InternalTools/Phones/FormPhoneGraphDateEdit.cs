@@ -23,8 +23,8 @@ namespace OpenDental {
 		}
 
 		private void FormPhoneGraphDateEdit_Load(object sender,EventArgs e) {
-			textPeak.Text=PrefC.GetRaw("GraphEmployeeTimesPeak");
-			textSuperPeak.Text=PrefC.GetRaw("GraphEmployeeTimesSuperPeak");
+			textPeak.Text=Preferences.GetRaw("GraphEmployeeTimesPeak");
+			textSuperPeak.Text=Preferences.GetRaw("GraphEmployeeTimesSuperPeak");
 			if(!Security.IsAuthorized(Permissions.SecurityAdmin,true)) {
 				groupGraphPrefs.Visible=false;
 			}

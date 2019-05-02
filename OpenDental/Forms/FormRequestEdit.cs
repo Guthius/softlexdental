@@ -112,7 +112,7 @@ namespace OpenDental {
 			using(XmlWriter writer=XmlWriter.Create(strbuild,settings)){
 				writer.WriteStartElement("FeatureRequestGetOne");
 				writer.WriteStartElement("RegistrationKey");
-				writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
+				writer.WriteString(Preferences.GetString(PrefName.RegistrationKey));
 				writer.WriteEndElement();
 				writer.WriteStartElement("RequestId");
 				writer.WriteString(RequestId.ToString());
@@ -316,7 +316,7 @@ namespace OpenDental {
 			using(XmlWriter writer=XmlWriter.Create(strbuild,settings)){
 				writer.WriteStartElement("FeatureRequestDiscussGetList");
 				writer.WriteStartElement("RegistrationKey");
-				writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
+				writer.WriteString(Preferences.GetString(PrefName.RegistrationKey));
 				writer.WriteEndElement();
 				writer.WriteStartElement("RequestId");
 				writer.WriteString(RequestId.ToString());
@@ -383,7 +383,7 @@ namespace OpenDental {
 				writer.WriteStartElement("FeatureRequestDiscussSubmit");
 				//regkey
 				writer.WriteStartElement("RegistrationKey");
-				writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
+				writer.WriteString(Preferences.GetString(PrefName.RegistrationKey));
 				writer.WriteEndElement();
 				//DiscussId
 				//writer.WriteStartElement("DiscussId");
@@ -574,7 +574,7 @@ namespace OpenDental {
 				writer.WriteStartElement("FeatureRequestSubmitChanges");
 				//regkey
 				writer.WriteStartElement("RegistrationKey");
-				writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
+				writer.WriteString(Preferences.GetString(PrefName.RegistrationKey));
 				writer.WriteEndElement();
 				//requestId
 				writer.WriteStartElement("RequestId");

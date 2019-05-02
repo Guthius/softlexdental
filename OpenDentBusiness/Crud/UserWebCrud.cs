@@ -95,15 +95,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one UserWeb into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(UserWeb userWeb,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				userWeb.UserWebNum=ReplicationServers.GetKey("userweb","UserWebNum");
 			}
 			string command="INSERT INTO userweb (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="UserWebNum,";
 			}
 			command+="FKey,FKeyType,UserName,Password,PasswordResetCode,RequireUserNameChange,DateTimeLastLogin,RequirePasswordChange) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(userWeb.UserWebNum)+",";
 			}
 			command+=
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (userWeb.RequireUserNameChange)+","
 				+    POut.DateT (userWeb.DateTimeLastLogin)+","
 				+    POut.Bool  (userWeb.RequirePasswordChange)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
@@ -131,7 +131,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many UserWebs into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<UserWeb> listUserWebs,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(UserWeb userWeb in listUserWebs) {
 					Insert(userWeb);
 				}

@@ -1042,7 +1042,7 @@ namespace OpenDental{
 		
 		private void FormProcCodes_Load(object sender,System.EventArgs e) {
 			//To toggle back and forth for testing, use the checkbox in Chart Module Prefs.
-			if(!PrefC.GetBool(PrefName.FeesUseCache)){
+			if(!Preferences.GetBool(PrefName.FeesUseCache)){
 				FormProcCodes2 formProcCodes2=new FormProcCodes2();
 				formProcCodes2.IsSelectionMode=this.IsSelectionMode;
 				formProcCodes2.AllowMultipleSelections=this.AllowMultipleSelections;
@@ -1074,7 +1074,7 @@ namespace OpenDental{
 				gridMain.SelectionMode=GridSelectionMode.MultiExtended;
 			}
 			if(_canShowHidden) {
-				checkShowHidden.Checked=PrefC.GetBool(PrefName.ProcCodeListShowHidden);
+				checkShowHidden.Checked=Preferences.GetBool(PrefName.ProcCodeListShowHidden);
 			}
 			else {//checkShowHidden will always be unchecked.
 				checkShowHidden.Visible=false;
@@ -1186,7 +1186,7 @@ namespace OpenDental{
 			comboFeeSched2.SelectedIndex=0;
 			comboFeeSched3.SelectedIndex=0;
 			//Fill clinic combo boxes
-			if(!PrefC.HasClinicsEnabled) {//No clinics
+			if(!Preferences.HasClinicsEnabled) {//No clinics
 				//Add none even though clinics is turned off so that 0 is a valid index to select.
 				comboClinic1.Items.Add(Lan.g(this,"None"));
 				comboClinic2.Items.Add(Lan.g(this,"None"));
@@ -1246,7 +1246,7 @@ namespace OpenDental{
 				comboProvider1.SelectedIndex=0;
 			}
 			else {//Newly selected FeeSched is NOT global
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					if(feeSchedNum1Selected==0 || comboClinic1.Enabled==false) {
 						//Previously selected FeeSched WAS global or there was none selected previously, select OD's selected Clinic
 						comboClinic1.SelectedIndex=Clinics.ClinicNum==0 ? 0 : _listClinics.ToList().FindIndex(x => x.ClinicNum==Clinics.ClinicNum)+1;
@@ -1266,7 +1266,7 @@ namespace OpenDental{
 				comboProvider2.SelectedIndex=0;
 			}
 			else {//Newly selected FeeSched is NOT global
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					if(comboClinic2.Enabled==false) {
 						//Previously selected FeeSched WAS global, select OD's selected Clinic
 						comboClinic2.SelectedIndex=Clinics.ClinicNum==0 ? 0 : _listClinics.ToList().FindIndex(x => x.ClinicNum==Clinics.ClinicNum)+1;
@@ -1286,7 +1286,7 @@ namespace OpenDental{
 				comboProvider3.SelectedIndex=0;
 			}
 			else {//Newly selected FeeSched is NOT global
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					if(comboClinic3.Enabled==false) {//Previously selected FeeSched WAS global
 						//Select OD's selected Clinic
 						comboClinic3.SelectedIndex=Clinics.ClinicNum==0 ? 0 : _listClinics.ToList().FindIndex(x => x.ClinicNum==Clinics.ClinicNum)+1;
@@ -1358,7 +1358,7 @@ namespace OpenDental{
 			long clinic1Num=0;
 			long clinic2Num=0;
 			long clinic3Num=0;
-			if(PrefC.HasClinicsEnabled) { //Clinics is on
+			if(Preferences.HasClinicsEnabled) { //Clinics is on
 				if(comboClinic1.SelectedIndex>0) {
 					clinic1Num=_listClinics[comboClinic1.SelectedIndex-1].ClinicNum;
 				}
@@ -1525,7 +1525,7 @@ namespace OpenDental{
 				if(comboProvider1.SelectedIndex>0) {
 					provNum=_listProviders[comboProvider1.SelectedIndex-1].ProvNum;
 				}
-				if(PrefC.HasClinicsEnabled && comboClinic1.SelectedIndex>0) {
+				if(Preferences.HasClinicsEnabled && comboClinic1.SelectedIndex>0) {
 					clinicNum=_listClinics[comboClinic1.SelectedIndex-1].ClinicNum;
 				}
 			}
@@ -1538,7 +1538,7 @@ namespace OpenDental{
 				if(comboProvider2.SelectedIndex>0) {
 					provNum=_listProviders[comboProvider2.SelectedIndex-1].ProvNum;
 				}
-				if(PrefC.HasClinicsEnabled && comboClinic2.SelectedIndex>0) {
+				if(Preferences.HasClinicsEnabled && comboClinic2.SelectedIndex>0) {
 					clinicNum=_listClinics[comboClinic2.SelectedIndex-1].ClinicNum;
 				}
 			}
@@ -1551,7 +1551,7 @@ namespace OpenDental{
 				if(comboProvider3.SelectedIndex>0) {
 					provNum=_listProviders[comboProvider3.SelectedIndex-1].ProvNum;
 				}
-				if(PrefC.HasClinicsEnabled && comboClinic3.SelectedIndex>0) {
+				if(Preferences.HasClinicsEnabled && comboClinic3.SelectedIndex>0) {
 					clinicNum=_listClinics[comboClinic3.SelectedIndex-1].ClinicNum;
 				}
 			}
@@ -1778,7 +1778,7 @@ namespace OpenDental{
 			//ClaimForm ClaimFormCur=ClaimForms.ListLong[listClaimForms.SelectedIndex];
 			SaveFileDialog saveDlg=new SaveFileDialog();
 			string filename="ProcCodes.xml";
-			saveDlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+			saveDlg.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
 			saveDlg.FileName=filename;
 			if(saveDlg.ShowDialog()!=DialogResult.OK) {
 				return;
@@ -1793,7 +1793,7 @@ namespace OpenDental{
 
 		private void butImport_Click(object sender,EventArgs e) {
 			OpenFileDialog openDlg=new OpenFileDialog();
-			openDlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+			openDlg.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
 			if(openDlg.ShowDialog()!=DialogResult.OK) {
 				return;
 			}

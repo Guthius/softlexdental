@@ -365,7 +365,7 @@ namespace OpenDental {
 			textState.Text=PharmCur.State;
 			textZip.Text=PharmCur.Zip;
 			textNote.Text=PharmCur.Note;
-			labelClinics.Visible=PrefC.HasClinicsEnabled;
+			labelClinics.Visible=Preferences.HasClinicsEnabled;
 			//Selects all clinics that have a link to this pharmacy. This will only display and select the clinics the user has access to.
 			List<PharmClinic> listPharmClinics=PharmClinics.GetPharmClinicsForPharmacy(PharmCur.PharmacyNum);
 			comboClinic.ListSelectedClinicNums=listPharmClinics.Select(x => x.ClinicNum).ToList();

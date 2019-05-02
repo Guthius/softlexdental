@@ -405,7 +405,7 @@ namespace OpenDental
             set
             {
                 _isTreatPlanSortByTooth = value;
-                PrefC.IsTreatPlanSortByTooth = value;
+                Preferences.IsTreatPlanSortByTooth = value;
             }
         }
 
@@ -679,7 +679,7 @@ namespace OpenDental
                     }
 
                     if (ReplicationServers.Server_id != 0 && 
-                        ReplicationServers.Server_id == PrefC.GetLong(PrefName.ReplicationFailureAtServer_id))
+                        ReplicationServers.Server_id == Preferences.GetLong(PrefName.ReplicationFailureAtServer_id))
                     {
                         MessageBox.Show( 
                             "This database is temporarily unavailable. Please connect instead to your alternate database at the other location.", 
@@ -751,11 +751,11 @@ namespace OpenDental
             {//Create A to Z unsupported on Unix for now.
                 menuItemCreateAtoZFolders.Visible = false;
             }
-            if (!PrefC.GetBool(PrefName.ProcLockingIsAllowed))
+            if (!Preferences.GetBool(PrefName.ProcLockingIsAllowed))
             {
                 menuItemProcLockTool.Visible = false;
             }
-            if (Security.IsAuthorized(Permissions.ProcCodeEdit, true) && !PrefC.GetBool(PrefName.ADAdescriptionsReset))
+            if (Security.IsAuthorized(Permissions.ProcCodeEdit, true) && !Preferences.GetBool(PrefName.ADAdescriptionsReset))
             {
                 ProcedureCodes.ResetADAdescriptions();
                 Prefs.UpdateBool(PrefName.ADAdescriptionsReset, true);
@@ -771,7 +771,7 @@ namespace OpenDental
             //If the user is restricted to a clinic(s), and the computerpref clinic is not one of the user's restricted clinics, the user's clinic will be selected
             //If the user is not restricted, or if the user is restricted but has access to the computerpref clinic, the computerpref clinic will be selected
             //The ClinicNum will determine which view is loaded, either from the computerpref table or from the userodapptview table
-            if (PrefC.HasClinicsEnabled && Security.CurUser != null)
+            if (Preferences.HasClinicsEnabled && Security.CurUser != null)
             {//If block must be run before StartCacheFillForFees() so correct clinic filtration occurs.
                 Clinics.LoadClinicNumForUser();
                 RefreshMenuClinics();
@@ -780,7 +780,7 @@ namespace OpenDental
             FillSignalButtons();
 
 
-            if (PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
             {
                 string prefImagePath = ImageStore.GetPreferredAtoZpath();
                 if (prefImagePath == null || !Directory.Exists(prefImagePath))
@@ -802,7 +802,7 @@ namespace OpenDental
                 }
             }
 
-            IsTreatPlanSortByTooth = PrefC.GetBool(PrefName.TreatPlanSortByTooth); //not a great place for this, but we don't have a better alternative.
+            IsTreatPlanSortByTooth = Preferences.GetBool(PrefName.TreatPlanSortByTooth); //not a great place for this, but we don't have a better alternative.
             if (userControlTasks1.Visible)
             {
                 userControlTasks1.InitializeOnStartup();
@@ -837,7 +837,7 @@ namespace OpenDental
             FormUAppoint.StartThreadIfEnabled();
             Bridges.ICat.StartFileWatcher();
             Bridges.TigerView.StartFileWatcher();
-            if (PrefC.IsODHQ)
+            if (Preferences.IsODHQ)
             {
                 menuItemJobManager.Visible = true;
                 menuItemWebChat.Visible = true;
@@ -854,7 +854,7 @@ namespace OpenDental
                 FillComboTriageCoordinator();
             }
 #if !TRIALONLY
-            if (PrefC.GetDate(PrefName.BackupReminderLastDateRun).AddMonths(1) < DateTime.Today)
+            if (Preferences.GetDate(PrefName.BackupReminderLastDateRun).AddMonths(1) < DateTime.Today)
             {
                 FormBackupReminder FormBR = new FormBackupReminder();
                 FormBR.ShowDialog();
@@ -918,12 +918,12 @@ namespace OpenDental
                     FillPatientButton(pat);
                 }
             }
-            if (!PrefC.IsODHQ)
+            if (!Preferences.IsODHQ)
             {
                 //Remove the menu items that are only needed for HQ like Default CC Procedures
                 menuItemAccount.MenuItems.Clear();
             }
-            if (PrefC.GetString(PrefName.LanguageAndRegion) != CultureInfo.CurrentCulture.Name && !ComputerPrefs.LocalComputer.NoShowLanguage)
+            if (Preferences.GetString(PrefName.LanguageAndRegion) != CultureInfo.CurrentCulture.Name && !ComputerPrefs.LocalComputer.NoShowLanguage)
             {
                 if (MsgBox.Show(this, MsgBoxButtons.YesNo, "Warning, having mismatched language setting between the workstation and server may cause the program "
                     + "to behave in unexpected ways. Would you like to view the setup window?"))
@@ -959,8 +959,8 @@ namespace OpenDental
                 }
             }
             //Only show enterprise setup if it is enabled
-            menuItemEnterprise.Visible = PrefC.GetBool(PrefName.ShowFeatureEnterprise);
-            menuItemReactivation.Visible = PrefC.GetBool(PrefName.ShowFeatureReactivations);
+            menuItemEnterprise.Visible = Preferences.GetBool(PrefName.ShowFeatureEnterprise);
+            menuItemReactivation.Visible = Preferences.GetBool(PrefName.ShowFeatureReactivations);
             ComputerPrefs.UpdateLocalComputerOS();
             WikiPages.NavPageDelegate = S_WikiLoadPage;
             BeginCheckAlertsThread();
@@ -1256,7 +1256,7 @@ namespace OpenDental
 
             // TODO: 
 
-            string updateComputerName = PrefC.GetStringSilent(PrefName.UpdateInProgressOnComputerName);
+            string updateComputerName = Preferences.GetStringSilent(PrefName.UpdateInProgressOnComputerName);
             if (updateComputerName != "" && Environment.MachineName.ToUpper() != updateComputerName.ToUpper())
             {
                 using (var formUpdateInProgress = new FormUpdateInProgress(updateComputerName))
@@ -1270,7 +1270,7 @@ namespace OpenDental
             }
 
             // Check whether there is a valid registration key.
-            if (!License.ValidateKey(PrefC.GetString(PrefName.RegistrationKey)))
+            if (!License.ValidateKey(Preferences.GetString(PrefName.RegistrationKey)))
             {
                 using (var formRegistrationKey = new FormRegistrationKey())
                 {
@@ -1286,9 +1286,9 @@ namespace OpenDental
 
             //This must be done at startup in case the user does not perform any action to save something to temp file.
             //This will cause slowdown, but only for the first week.
-            if (DateTime.Today < PrefC.GetDate(PrefName.TempFolderDateFirstCleaned).AddDays(7))
+            if (DateTime.Today < Preferences.GetDate(PrefName.TempFolderDateFirstCleaned).AddDays(7))
             {
-                PrefC.GetTempFolderPath(); //We don't care about the return value. Just trying to trigger the one-time cleanup and create the temp/opendental directory.
+                Preferences.GetTempFolderPath(); //We don't care about the return value. Just trying to trigger the one-time cleanup and create the temp/opendental directory.
             }
 
             return true;
@@ -1324,7 +1324,7 @@ namespace OpenDental
             #region IvalidType.Prefs
             if (arrayITypes.Contains(InvalidType.Prefs) || isAll)
             {
-                if (PrefC.GetBool(PrefName.EasyHidePublicHealth))
+                if (Preferences.GetBool(PrefName.EasyHidePublicHealth))
                 {
                     menuItemSchools.Visible = false;
                     menuItemCounties.Visible = false;
@@ -1336,7 +1336,7 @@ namespace OpenDental
                     menuItemCounties.Visible = true;
                     menuItemScreening.Visible = true;
                 }
-                if (PrefC.GetBool(PrefName.EasyNoClinics))
+                if (Preferences.GetBool(PrefName.EasyNoClinics))
                 {
                     menuItemClinics.Visible = false;
                     menuClinics.Visible = false;
@@ -1348,7 +1348,7 @@ namespace OpenDental
                 }
                 //See other solution @3401 for past commented out code.
                 // TODO: myOutlookBar.RefreshButtons();
-                if (PrefC.GetBool(PrefName.EasyHideDentalSchools))
+                if (Preferences.GetBool(PrefName.EasyHideDentalSchools))
                 {
                     menuItemSchoolClass.Visible = false;
                     menuItemSchoolCourses.Visible = false;
@@ -1364,7 +1364,7 @@ namespace OpenDental
                     menuItemRequirementsNeeded.Visible = true;
                     menuItemReqStudents.Visible = true;
                 }
-                if (PrefC.GetBool(PrefName.EasyHideRepeatCharges))
+                if (Preferences.GetBool(PrefName.EasyHideRepeatCharges))
                 {
                     menuItemRepeatingCharges.Visible = false;
                 }
@@ -1372,7 +1372,7 @@ namespace OpenDental
                 {
                     menuItemRepeatingCharges.Visible = true;
                 }
-                if (PrefC.HasOnlinePaymentEnabled())
+                if (Preferences.HasOnlinePaymentEnabled())
                 {
                     menuItemPendingPayments.Visible = true;
                     menuItemXWebTrans.Visible = true;
@@ -1382,7 +1382,7 @@ namespace OpenDental
                     menuItemPendingPayments.Visible = false;
                     menuItemXWebTrans.Visible = false;
                 }
-                if (PrefC.GetString(PrefName.DistributorKey) == "")
+                if (Preferences.GetString(PrefName.DistributorKey) == "")
                 {
                     menuItemCustomerManage.Visible = false;
                     menuItemNewCropBilling.Visible = false;
@@ -1399,7 +1399,7 @@ namespace OpenDental
                 }
                 if (NeedsRedraw("TaskLists"))
                 {
-                    if (PrefC.GetBool(PrefName.TaskListAlwaysShowsAtBottom))
+                    if (Preferences.GetBool(PrefName.TaskListAlwaysShowsAtBottom))
                     {//Refreshing task list here may not be the best course of action.
                      //separate if statement to prevent database call if not showing task list at bottom to begin with
                      //ComputerPref computerPref = ComputerPrefs.GetForLocalComputer();
@@ -1581,7 +1581,7 @@ namespace OpenDental
             }
             #endregion
             #region HQ Only
-            if (PrefC.GetBool(PrefName.DockPhonePanelShow))
+            if (Preferences.GetBool(PrefName.DockPhonePanelShow))
             {
                 if (arrayITypes.Contains(InvalidType.Employees) || arrayITypes.Contains(InvalidType.Sites) || isAll)
                 {
@@ -1594,21 +1594,21 @@ namespace OpenDental
             dictChartPrefsCache.Clear();
             dictTaskListPrefsCache.Clear();
             //Chart Drawing Prefs
-            dictChartPrefsCache.Add(PrefName.DistributorKey.ToString(), PrefC.GetBool(PrefName.DistributorKey));
-            dictChartPrefsCache.Add(PrefName.UseInternationalToothNumbers.ToString(), PrefC.GetInt(PrefName.UseInternationalToothNumbers));
+            dictChartPrefsCache.Add(PrefName.DistributorKey.ToString(), Preferences.GetBool(PrefName.DistributorKey));
+            dictChartPrefsCache.Add(PrefName.UseInternationalToothNumbers.ToString(), Preferences.GetInt(PrefName.UseInternationalToothNumbers));
             dictChartPrefsCache.Add("GraphicsUseHardware", ComputerPrefs.LocalComputer.GraphicsUseHardware);
             dictChartPrefsCache.Add("PreferredPixelFormatNum", ComputerPrefs.LocalComputer.PreferredPixelFormatNum);
             dictChartPrefsCache.Add("GraphicsSimple", ComputerPrefs.LocalComputer.GraphicsSimple);
-            dictChartPrefsCache.Add(PrefName.ShowFeatureEhr.ToString(), PrefC.GetBool(PrefName.ShowFeatureEhr));
+            dictChartPrefsCache.Add(PrefName.ShowFeatureEhr.ToString(), Preferences.GetBool(PrefName.ShowFeatureEhr));
             dictChartPrefsCache.Add("DirectXFormat", ComputerPrefs.LocalComputer.DirectXFormat);
             //Task list drawing prefs
             dictTaskListPrefsCache.Add("TaskDock", ComputerPrefs.LocalComputer.TaskDock);
             dictTaskListPrefsCache.Add("TaskY", ComputerPrefs.LocalComputer.TaskY);
             dictTaskListPrefsCache.Add("TaskX", ComputerPrefs.LocalComputer.TaskX);
-            dictTaskListPrefsCache.Add(PrefName.TaskListAlwaysShowsAtBottom.ToString(), PrefC.GetBool(PrefName.TaskListAlwaysShowsAtBottom));
-            dictTaskListPrefsCache.Add(PrefName.TasksUseRepeating.ToString(), PrefC.GetBool(PrefName.TasksUseRepeating));
-            dictTaskListPrefsCache.Add(PrefName.TasksNewTrackedByUser.ToString(), PrefC.GetBool(PrefName.TasksNewTrackedByUser));
-            dictTaskListPrefsCache.Add(PrefName.TasksShowOpenTickets.ToString(), PrefC.GetBool(PrefName.TasksShowOpenTickets));
+            dictTaskListPrefsCache.Add(PrefName.TaskListAlwaysShowsAtBottom.ToString(), Preferences.GetBool(PrefName.TaskListAlwaysShowsAtBottom));
+            dictTaskListPrefsCache.Add(PrefName.TasksUseRepeating.ToString(), Preferences.GetBool(PrefName.TasksUseRepeating));
+            dictTaskListPrefsCache.Add(PrefName.TasksNewTrackedByUser.ToString(), Preferences.GetBool(PrefName.TasksNewTrackedByUser));
+            dictTaskListPrefsCache.Add(PrefName.TasksShowOpenTickets.ToString(), Preferences.GetBool(PrefName.TasksShowOpenTickets));
             dictTaskListPrefsCache.Add("TaskKeepListHidden", ComputerPrefs.LocalComputer.TaskKeepListHidden);
             if (Security.IsAuthorized(Permissions.UserQueryAdmin, true))
             {
@@ -1653,12 +1653,12 @@ namespace OpenDental
                 {
                     case "ChartModule":
                         if (dictChartPrefsCache.Count == 0
-                            || PrefC.GetBool(PrefName.DistributorKey) != (bool)dictChartPrefsCache["DistributorKey"]
-                            || PrefC.GetInt(PrefName.UseInternationalToothNumbers) != (int)dictChartPrefsCache["UseInternationalToothNumbers"]
+                            || Preferences.GetBool(PrefName.DistributorKey) != (bool)dictChartPrefsCache["DistributorKey"]
+                            || Preferences.GetInt(PrefName.UseInternationalToothNumbers) != (int)dictChartPrefsCache["UseInternationalToothNumbers"]
                             || ComputerPrefs.LocalComputer.GraphicsUseHardware != (bool)dictChartPrefsCache["GraphicsUseHardware"]
                             || ComputerPrefs.LocalComputer.PreferredPixelFormatNum != (int)dictChartPrefsCache["PreferredPixelFormatNum"]
                             || ComputerPrefs.LocalComputer.GraphicsSimple != (DrawingMode)dictChartPrefsCache["GraphicsSimple"]
-                            || PrefC.GetBool(PrefName.ShowFeatureEhr) != (bool)dictChartPrefsCache["ShowFeatureEhr"]
+                            || Preferences.GetBool(PrefName.ShowFeatureEhr) != (bool)dictChartPrefsCache["ShowFeatureEhr"]
                             || ComputerPrefs.LocalComputer.DirectXFormat != (string)dictChartPrefsCache["DirectXFormat"])
                         {
                             return true;
@@ -1669,10 +1669,10 @@ namespace OpenDental
                             || ComputerPrefs.LocalComputer.TaskDock != (int)dictTaskListPrefsCache["TaskDock"] //Checking for task list redrawing
                             || ComputerPrefs.LocalComputer.TaskY != (int)dictTaskListPrefsCache["TaskY"]
                             || ComputerPrefs.LocalComputer.TaskX != (int)dictTaskListPrefsCache["TaskX"]
-                            || PrefC.GetBool(PrefName.TaskListAlwaysShowsAtBottom) != (bool)dictTaskListPrefsCache["TaskListAlwaysShowsAtBottom"]
-                            || PrefC.GetBool(PrefName.TasksUseRepeating) != (bool)dictTaskListPrefsCache["TasksUseRepeating"]
-                            || PrefC.GetBool(PrefName.TasksNewTrackedByUser) != (bool)dictTaskListPrefsCache["TasksNewTrackedByUser"]
-                            || PrefC.GetBool(PrefName.TasksShowOpenTickets) != (bool)dictTaskListPrefsCache["TasksShowOpenTickets"]
+                            || Preferences.GetBool(PrefName.TaskListAlwaysShowsAtBottom) != (bool)dictTaskListPrefsCache["TaskListAlwaysShowsAtBottom"]
+                            || Preferences.GetBool(PrefName.TasksUseRepeating) != (bool)dictTaskListPrefsCache["TasksUseRepeating"]
+                            || Preferences.GetBool(PrefName.TasksNewTrackedByUser) != (bool)dictTaskListPrefsCache["TasksNewTrackedByUser"]
+                            || Preferences.GetBool(PrefName.TasksShowOpenTickets) != (bool)dictTaskListPrefsCache["TasksShowOpenTickets"]
                             || ComputerPrefs.LocalComputer.TaskKeepListHidden != (bool)dictTaskListPrefsCache["TaskKeepListHidden"])
                         {
                             return true;
@@ -1695,10 +1695,10 @@ namespace OpenDental
         {
             menuItemCustomReports.MenuItems.Clear();
             //Try to load custom reports, but only if using the A to Z folders.
-            if (PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
             {
                 string imagePath = ImageStore.GetPreferredAtoZpath();
-                string reportFolderName = PrefC.GetString(PrefName.ReportFolderName);
+                string reportFolderName = Preferences.GetString(PrefName.ReportFolderName);
                 string reportDir = ODFileUtils.CombinePaths(imagePath, reportFolderName);
                 try
                 {
@@ -1740,7 +1740,7 @@ namespace OpenDental
             if (!Programs.UsingEcwTightMode())
             {//eCW tight only gets Patient Select and Popups toolbar buttons
                 button = new ODToolBarButton(Lan.g(this, "Commlog"), Resources.IconLog, Lan.g(this, "New Commlog Entry"), "Commlog");
-                if (PrefC.IsODHQ)
+                if (Preferences.IsODHQ)
                 {
                     button.Style = ODToolBarButtonStyle.DropDownButton;
                     button.DropDownMenu = menuCommlog;
@@ -2192,7 +2192,7 @@ namespace OpenDental
             commlog.PatNum = CurPatNum;
             commlog.CommDateTime = DateTime.Now;
             commlog.CommType = Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
-            if (PrefC.GetBool(PrefName.DistributorKey))
+            if (Preferences.GetBool(PrefName.DistributorKey))
             {//for OD HQ
                 commlog.Mode_ = CommItemMode.None;
                 commlog.SentOrReceived = CommSentOrReceived.Neither;
@@ -2422,7 +2422,7 @@ namespace OpenDental
                 return 0;
             }
             //Mimics how checkNew is set in FormTaskEdit.
-            if (PrefC.GetBool(PrefName.TasksNewTrackedByUser))
+            if (Preferences.GetBool(PrefName.TasksNewTrackedByUser))
             {//Per definition of task.IsUnread.
                 return _listReminderTasks.FindAll(x => x.IsUnread && x.DateTimeEntry <= DateTime.Now).Count;
             }
@@ -2653,7 +2653,7 @@ namespace OpenDental
                     return false;
                 }
             }
-            if (pat.TxtMsgOk == YN.Unknown && PrefC.GetBool(PrefName.TextMsgOkStatusTreatAsNo))
+            if (pat.TxtMsgOk == YN.Unknown && Preferences.GetBool(PrefName.TextMsgOkStatusTreatAsNo))
             {
                 if (MsgBox.Show(this, MsgBoxButtons.YesNo, "This patient might not want to receive text messages. "
                     + "Would you like to mark this patient as okay to receive text messages?"))
@@ -2735,7 +2735,7 @@ namespace OpenDental
                     listNotifications = SmsFromMobiles.UpdateSmsNotification();
                 }
                 int smsUnreadCount = 0;
-                if (!PrefC.HasClinicsEnabled || Clinics.ClinicNum == 0)
+                if (!Preferences.HasClinicsEnabled || Clinics.ClinicNum == 0)
                 {
                     //No clinics or HQ clinic is active so sum them all.
                     smsUnreadCount = listNotifications.Sum(x => x.Count);
@@ -2864,7 +2864,7 @@ namespace OpenDental
             Clinics.ClinicNum = clinicCur.ClinicNum;
             Text = PatientL.GetMainTitle(Patients.GetPat(CurPatNum), Clinics.ClinicNum);
             SetSmsNotificationText();
-            if (PrefC.GetBool(PrefName.AppointmentClinicTimeReset))
+            if (Preferences.GetBool(PrefName.AppointmentClinicTimeReset))
             {
                 AppointmentL.DateSelected = DateTimeOD.Today;
                 if (AppointmentL.DateSelected.DayOfWeek == DayOfWeek.Sunday)
@@ -2921,7 +2921,7 @@ namespace OpenDental
                     panelSplitter.Location = new Point(position.X, panelSplitter.Location.Y);
                     panelSplitter.Width = width;
                     panelSplitter.Visible = true;
-                    if (PrefC.GetBool(PrefName.DockPhonePanelShow))
+                    if (Preferences.GetBool(PrefName.DockPhonePanelShow))
                     {
                         //phoneSmall.Visible=true;
                         //phoneSmall.Location=new Point(position.X,panelSplitter.Bottom+butBigPhones.Height);
@@ -3193,7 +3193,7 @@ namespace OpenDental
                 { //Currently selected patient changed.
                     CurPatNum = e.PatNum;
                     //Going to Chart Module, to specifically handle the SendToMeCreateTask_Click in FormVoiceMails to make sure Patient tab refreshes.
-                    if (PrefC.IsODHQ && e.IModule == 4)
+                    if (Preferences.IsODHQ && e.IModule == 4)
                     {
                         UserControlTasks.RefreshTasksForAllInstances(null, UserControlTasksTab.PatientTickets);//Force a refresh on Task area or Triage.
                     }
@@ -3418,8 +3418,8 @@ namespace OpenDental
                 //This checks if any forms are open that make us want to continue processing signals even if inactive. Currently only FormTerminal.
                 if (Application.OpenForms.OfType<Form>().All(x => x.Name != "FormTerminal"))
                 {
-                    DateTime dtInactive = Security.DateTimeLastActivity + TimeSpan.FromMinutes((double)PrefC.GetInt(PrefName.SignalInactiveMinutes));
-                    if ((double)PrefC.GetInt(PrefName.SignalInactiveMinutes) != 0 && DateTime.Now > dtInactive)
+                    DateTime dtInactive = Security.DateTimeLastActivity + TimeSpan.FromMinutes((double)Preferences.GetInt(PrefName.SignalInactiveMinutes));
+                    if ((double)Preferences.GetInt(PrefName.SignalInactiveMinutes) != 0 && DateTime.Now > dtInactive)
                     {
                         return;
                     }
@@ -3447,7 +3447,7 @@ namespace OpenDental
                 List<UserOdPref> listBlockedTaskLists = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum, UserOdFkeyType.TaskListBlock);
                 foreach (Task taskForUser in listRefreshedTasks)
                 {//Construct the initial task meta data for the current user's tasks.
-                    bool isTrackedByUser = PrefC.GetBool(PrefName.TasksNewTrackedByUser);
+                    bool isTrackedByUser = Preferences.GetBool(PrefName.TasksNewTrackedByUser);
                     if (String.IsNullOrEmpty(taskForUser.ReminderGroupId))
                     {//A normal task.
                      //Mimics how checkNew is set in FormTaskEdit.
@@ -3456,7 +3456,7 @@ namespace OpenDental
                             _listNormalTaskNums.Add(taskForUser.TaskNum);
                         }
                     }
-                    else if (!PrefC.GetBool(PrefName.TasksUseRepeating))
+                    else if (!Preferences.GetBool(PrefName.TasksUseRepeating))
                     {//A reminder task (new or viewed).  Reminders not allowed if repeating tasks enabled.
                         _listReminderTasks.Add(taskForUser);
                         if (taskForUser.DateTimeEntry <= DateTime.Now)
@@ -3477,10 +3477,10 @@ namespace OpenDental
             }
             //Check to see if a reminder task became due between the last signal interval and the current signal interval.
             else if (_listReminderTasks.FindAll(x => x.DateTimeEntry <= DateTime.Now
-                 && x.DateTimeEntry >= DateTime.Now.AddSeconds(-PrefC.GetInt(PrefName.ProcessSigsIntervalInSecs))).Count > 0)
+                 && x.DateTimeEntry >= DateTime.Now.AddSeconds(-Preferences.GetInt(PrefName.ProcessSigsIntervalInSecs))).Count > 0)
             {
                 List<Task> listDueReminderTasks = _listReminderTasks.FindAll(x => x.DateTimeEntry <= DateTime.Now
-                      && x.DateTimeEntry >= DateTime.Now.AddSeconds(-PrefC.GetInt(PrefName.ProcessSigsIntervalInSecs)));
+                      && x.DateTimeEntry >= DateTime.Now.AddSeconds(-Preferences.GetInt(PrefName.ProcessSigsIntervalInSecs)));
 
                 List<Signalod> listSignals = new List<Signalod>();
                 foreach (Task task in listDueReminderTasks)
@@ -3540,7 +3540,7 @@ namespace OpenDental
             //Be careful about doing anything that takes a long amount of computation time after the SignalsTick.
             //The UI will appear invalid for the time it takes any methods to process.
             //Post Signal Processing
-            if (PrefC.IsODHQ)
+            if (Preferences.IsODHQ)
             {//No actual signals are sent, so this must happen independantly from SignalsTick.
                 BeginPhoneConferenceThread();
             }
@@ -3641,7 +3641,7 @@ namespace OpenDental
             {
                 InvalidateAlertsMenuItem();//Forces menuItemAlerts_DrawItem(...) logic to run again.
             }
-            if (PrefC.IsODHQ)
+            if (Preferences.IsODHQ)
             {
                 //Disable the Get Conf Room button when the PhoneTrackingServer goes down.
                 phoneSmall.SetEnabledStateForControls(!_listAlertItems.Any(x => x.Type == AlertType.AsteriskServerMonitor));
@@ -3844,7 +3844,7 @@ namespace OpenDental
             }
             if (listSignals.Exists(x => x.IType == InvalidType.Prefs))
             {
-                PrefC.InvalidateVerboseLogging();
+                Preferences.InvalidateVerboseLogging();
             }
             #region SMS Notifications
             Signalod signalSmsCount = listSignals.OrderByDescending(x => x.SigDateTime)
@@ -3942,7 +3942,7 @@ namespace OpenDental
                 Task taskNewForUser = null;
                 if (taskForUser != null)
                 {
-                    bool isTrackedByUser = PrefC.GetBool(PrefName.TasksNewTrackedByUser);
+                    bool isTrackedByUser = Preferences.GetBool(PrefName.TasksNewTrackedByUser);
                     //Mimics how checkNew is set in FormTaskEdit.
                     if (((isTrackedByUser && taskForUser.IsUnread) || (!isTrackedByUser && taskForUser.TaskStatus == TaskStatusEnum.New))//See def of task.IsUnread
                                                                                                                                          //Reminders not due yet are excluded from Tasks.RefreshUserNew().
@@ -4058,7 +4058,7 @@ namespace OpenDental
                     }
                     break;
                 case 1:
-                    if (PrefC.GetBool(PrefName.EhrEmergencyNow))
+                    if (Preferences.GetBool(PrefName.EhrEmergencyNow))
                     {//if red emergency button is on
                         if (Security.IsAuthorized(Permissions.EhrEmergencyAccess, true))
                         {
@@ -4841,7 +4841,7 @@ namespace OpenDental
 
         private void menuItemClaimForms_Click(object sender, System.EventArgs e)
         {
-            if (PrefC.AtoZfolderUsed == DataStorageType.InDatabase)
+            if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
             {
                 MsgBox.Show(this, "Claim Forms feature is unavailable when data path A to Z folder is disabled.");
                 return;
@@ -5097,13 +5097,13 @@ namespace OpenDental
             {
                 return;
             }
-            if (PrefC.GetInt(PrefName.ProcessSigsIntervalInSecs) == 0)
+            if (Preferences.GetInt(PrefName.ProcessSigsIntervalInSecs) == 0)
             {
                 timerSignals.Enabled = false;
             }
             else
             {
-                timerSignals.Interval = PrefC.GetInt(PrefName.ProcessSigsIntervalInSecs) * 1000;
+                timerSignals.Interval = Preferences.GetInt(PrefName.ProcessSigsIntervalInSecs) * 1000;
                 timerSignals.Enabled = true;
             }
 
@@ -5456,7 +5456,7 @@ namespace OpenDental
             FormSecurity FormS = new FormSecurity();
             FormS.ShowDialog();
             SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin, 0, "Security Window");
-            if (!PrefC.HasClinicsEnabled)
+            if (!Preferences.HasClinicsEnabled)
             {//clinics not enabled, refresh current module and return
                 RefreshCurrentModule();
                 return;
@@ -5481,7 +5481,7 @@ namespace OpenDental
                 MsgBox.Show(this, "Not authorized to add a new user.");
                 return;
             }
-            if (PrefC.GetLong(PrefName.DefaultUserGroup) == 0)
+            if (Preferences.GetLong(PrefName.DefaultUserGroup) == 0)
             {
                 if (isAuthorizedSecurityAdmin)
                 {
@@ -5530,7 +5530,7 @@ namespace OpenDental
             ContrAccount2.LayoutToolBar();//for repeating charges
             RefreshCurrentModule(true);
             //Show enterprise setup if it was enabled
-            menuItemEnterprise.Visible = PrefC.GetBool(PrefName.ShowFeatureEnterprise);
+            menuItemEnterprise.Visible = Preferences.GetBool(PrefName.ShowFeatureEnterprise);
             SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Show Features");
         }
 
@@ -5596,7 +5596,7 @@ namespace OpenDental
         {
             //security handled within form
             FormProcCodes FormP = new FormProcCodes(true);
-            FormP.ProcCodeSort = (ProcCodeListSort)PrefC.GetInt(PrefName.ProcCodeListSortOrder);
+            FormP.ProcCodeSort = (ProcCodeListSort)Preferences.GetInt(PrefName.ProcCodeListSortOrder);
             FormP.ShowDialog();
         }
 
@@ -5978,7 +5978,7 @@ namespace OpenDental
             //the image path should exist.
             FormReportCustom FormR = new FormReportCustom();
             FormR.SourceFilePath =
-                ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(), PrefC.GetString(PrefName.ReportFolderName), ((MenuItem)sender).Text + ".rdl");
+                ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(), Preferences.GetString(PrefName.ReportFolderName), ((MenuItem)sender).Text + ".rdl");
             FormR.ShowDialog();
         }
 
@@ -6285,7 +6285,7 @@ namespace OpenDental
 
         private void menuItemTerminal_Click(object sender, EventArgs e)
         {
-            if (PrefC.GetLong(PrefName.ProcessSigsIntervalInSecs) == 0)
+            if (Preferences.GetLong(PrefName.ProcessSigsIntervalInSecs) == 0)
             {
                 MsgBox.Show(this, "Cannot open terminal unless process signal interval is set. To set it, go to Setup > Miscellaneous.");
                 return;
@@ -6414,7 +6414,7 @@ namespace OpenDental
 
         public static void S_WikiLoadPage(string pageTitle)
         {
-            if (!PrefC.GetBool(PrefName.WikiCreatePageFromLink) && !WikiPages.CheckPageNamesExist(new List<string> { pageTitle })[0])
+            if (!Preferences.GetBool(PrefName.WikiCreatePageFromLink) && !WikiPages.CheckPageNamesExist(new List<string> { pageTitle })[0])
             {
                 MsgBox.Show("FormOpenDental", "Wiki page does not exist.");
                 return;
@@ -7696,7 +7696,7 @@ namespace OpenDental
                 _datePopupDelay = DateTime.Now;
                 _previousPatNum = CurPatNum;
             }
-            if (!PrefC.GetBool(PrefName.ChartNonPatientWarn))
+            if (!Preferences.GetBool(PrefName.ChartNonPatientWarn))
             {
                 return;
             }
@@ -7767,9 +7767,9 @@ namespace OpenDental
                 }
                 #endregion
                 #region Domain Longin
-                else if (PrefC.GetBool(PrefName.DomainLoginEnabled) && !string.IsNullOrWhiteSpace(PrefC.GetString(PrefName.DomainLoginPath)))
+                else if (Preferences.GetBool(PrefName.DomainLoginEnabled) && !string.IsNullOrWhiteSpace(Preferences.GetString(PrefName.DomainLoginPath)))
                 {
-                    string loginPath = PrefC.GetString(PrefName.DomainLoginPath);
+                    string loginPath = Preferences.GetString(PrefName.DomainLoginPath);
                     try
                     {
                         DirectoryEntry loginEntry = new DirectoryEntry(loginPath);
@@ -8033,7 +8033,7 @@ namespace OpenDental
 
         private void LogOffNow()
         {
-            bool isForceClose = PrefC.GetLong(PrefName.SecurityLogOffAfterMinutes) > 0;
+            bool isForceClose = Preferences.GetLong(PrefName.SecurityLogOffAfterMinutes) > 0;
             LogOffNow(isForceClose);
         }
 
@@ -8089,14 +8089,14 @@ namespace OpenDental
             ShowLogOn();
             //If a different user logs on and they have clinics enabled, then clear the patient drop down history
             //since the current user may not have permission to access patients from the same clinic(s) as the old user
-            if (oldUser.UserNum != Security.CurUser.UserNum && PrefC.HasClinicsEnabled)
+            if (oldUser.UserNum != Security.CurUser.UserNum && Preferences.HasClinicsEnabled)
             {
                 CurPatNum = 0;
                 PatientL.RemoveAllFromMenu(menuPatient);
             }
             myOutlookBar.SelectedIndex = Security.GetModule(LastModule);
             myOutlookBar.Invalidate();
-            if (PrefC.HasClinicsEnabled)
+            if (Preferences.HasClinicsEnabled)
             {
                 Clinics.LoadClinicNumForUser();
                 RefreshMenuClinics();
@@ -8135,7 +8135,7 @@ namespace OpenDental
             {
                 return;
             }
-            if (!PrefC.GetBool(PrefName.SecurityLogOffWithWindows))
+            if (!Preferences.GetBool(PrefName.SecurityLogOffWithWindows))
             {
                 return;
             }
@@ -8238,7 +8238,7 @@ namespace OpenDental
             List<string> listDirectories;
             try
             {
-                tempPath = PrefC.GetTempFolderPath();
+                tempPath = Preferences.GetTempFolderPath();
                 arrayFileNames = Directory.GetFiles(tempPath, "*.*", SearchOption.AllDirectories);//All files in the current directory plus all files in all subdirectories.
                 listDirectories = new List<string>(Directory.GetDirectories(tempPath, "*", SearchOption.AllDirectories));//All subdirectories.
             }

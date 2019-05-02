@@ -176,9 +176,9 @@ namespace OpenDental {
 				labelDuration.Text+=" "+voiceMailCur.Duration%60+" "+Lan.g(this,"sec");
 			}
 			try {
-				if(PrefC.GetBool(PrefName.VoiceMailSMB2Enabled)) {
+				if(Preferences.GetBool(PrefName.VoiceMailSMB2Enabled)) {
 					string remoteName=Path.GetDirectoryName(voiceMailCur.FileName);
-					using(new ODNetworkConnection(remoteName,PrefC.VoiceMailNetworkCredentialsSMB2)) {
+					using(new ODNetworkConnection(remoteName,Preferences.VoiceMailNetworkCredentialsSMB2)) {
 						PlayVM(voiceMailCur.FileName);
 					}
 				}

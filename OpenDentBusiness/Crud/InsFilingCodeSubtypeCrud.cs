@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one InsFilingCodeSubtype into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(InsFilingCodeSubtype insFilingCodeSubtype,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				insFilingCodeSubtype.InsFilingCodeSubtypeNum=ReplicationServers.GetKey("insfilingcodesubtype","InsFilingCodeSubtypeNum");
 			}
 			string command="INSERT INTO insfilingcodesubtype (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="InsFilingCodeSubtypeNum,";
 			}
 			command+="InsFilingCodeNum,Descript) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(insFilingCodeSubtype.InsFilingCodeSubtypeNum)+",";
 			}
 			command+=
 				     POut.Long  (insFilingCodeSubtype.InsFilingCodeNum)+","
 				+"'"+POut.String(insFilingCodeSubtype.Descript)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

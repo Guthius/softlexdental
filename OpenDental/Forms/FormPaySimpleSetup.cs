@@ -37,7 +37,7 @@ namespace OpenDental {
 				return;
 			}
 			checkEnabled.Checked=_progCur.Enabled;
-			if(!PrefC.HasClinicsEnabled) {//clinics are not enabled, use ClinicNum 0 to indicate 'Headquarters' or practice level program properties
+			if(!Preferences.HasClinicsEnabled) {//clinics are not enabled, use ClinicNum 0 to indicate 'Headquarters' or practice level program properties
 				checkEnabled.Text=Lan.g(this,"Enabled");
 				groupPaySettings.Text=Lan.g(this,"Payment Settings");
 				comboClinic.Visible=false;
@@ -75,7 +75,7 @@ namespace OpenDental {
 				_indexClinicRevert=comboClinic.SelectedIndex;
 			}
 			_listProgProps=ProgramProperties.GetForProgram(_progCur.ProgramNum);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				foreach(Clinic clinicCur in Clinics.GetForUserod(Security.CurUser)) {
 					AddNeededProgramProperties(clinicCur.ClinicNum);
 				}
@@ -128,7 +128,7 @@ namespace OpenDental {
 
 		private void FillFields() {
 			long clinicNum=0;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
 			}
 			textUsername.Text=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimpleApiUserName,clinicNum);
@@ -191,7 +191,7 @@ namespace OpenDental {
 		///<summary>For each clinic, if the Username and Key are the same as the HQ (ClinicNum=0) Username and Key, update the clinic with the
 		///values in the text boxes.  Only modifies other clinics if _indexClinicRevert=0, meaning user just modified the HQ clinic credentials.</summary>
 		private void SynchWithHQ() {
-			if(!PrefC.HasClinicsEnabled || _listUserClinicNums[_indexClinicRevert]>0) {//using clinics, and modifying the HQ clinic. otherwise return.
+			if(!Preferences.HasClinicsEnabled || _listUserClinicNums[_indexClinicRevert]>0) {//using clinics, and modifying the HQ clinic. otherwise return.
 				return;
 			}
 			string hqUsername=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimpleApiUserName,0);//HQ Username before updating to value in textbox
@@ -248,7 +248,7 @@ namespace OpenDental {
 			}
 			SynchWithHQ();//if the user changes the HQ credentials, any clinic that had the same credentials will be kept in synch with HQ
 			long clinicNum=0;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
 			}
 			string payTypeCCSelected="";

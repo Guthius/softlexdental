@@ -73,7 +73,7 @@ namespace OpenDental{
 		///<summary>Because adding the new feature where patients can choose their race from hundreds of options would cause us to need to recertify EHR, 
 		///we committed all the code for the new feature while keeping the old behavior for EHR users. When we are ready to switch to the new feature, 
 		///all we need to do is set this boolean to true (hopefully).</summary>
-		private bool _isUsingNewRaceFeature=!PrefC.GetBool(PrefName.ShowFeatureEhr);
+		private bool _isUsingNewRaceFeature=!Preferences.GetBool(PrefName.ShowFeatureEhr);
 		private DefLink _defLinkPatCur;
 		private List<Def> _listBillingTypeDefs;
 		private List<CommOptOut> _listCommOptOuts;
@@ -118,7 +118,7 @@ namespace OpenDental{
 			Controls.Add(listSites);
 			listSites.BringToFront();
 			Lan.F(this);
-			if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+			if(Preferences.GetBool(PrefName.DockPhonePanelShow)) {
 				labelST.Text=Lan.g(this,"ST, Country");
 				textCountry.Visible=true;
 			}
@@ -216,8 +216,8 @@ namespace OpenDental{
 				}
 			}			
 			//SuperFamilies is enabled, Syncing SuperFam Info is enabled, and this is the superfamily head.  Show the sync checkbox.
-			if(PrefC.GetBool(PrefName.ShowFeatureSuperfamilies)
-				&& PrefC.GetBool(PrefName.PatientAllSuperFamilySync)
+			if(Preferences.GetBool(PrefName.ShowFeatureSuperfamilies)
+				&& Preferences.GetBool(PrefName.PatientAllSuperFamilySync)
 				&& PatCur.SuperFamily!=0
 				&& PatCur.PatNum==PatCur.SuperFamily) //Has to be the Super Head.
 			{
@@ -236,7 +236,7 @@ namespace OpenDental{
 			textIceName.Text=PatCurNote.ICEName;
 			textIcePhone.Text=PatCurNote.ICEPhone;
 			_ehrPatientCur=EhrPatients.Refresh(PatCur.PatNum);
-			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {//Show mother's maiden name UI if using EHR.
+			if(Preferences.GetBool(PrefName.ShowFeatureEhr)) {//Show mother's maiden name UI if using EHR.
 				labelMotherMaidenFname.Visible=true;
 				textMotherMaidenFname.Visible=true;
 				textMotherMaidenFname.Text=_ehrPatientCur.MotherMaidenFname;
@@ -325,8 +325,8 @@ namespace OpenDental{
 			textEmployer.Text=Employers.GetName(PatCur.EmployerNum);
 			//textEmploymentNote.Text=PatCur.EmploymentNote;
 			languageList=new List<string>();
-			if(PrefC.GetString(PrefName.LanguagesUsedByPatients)!="") {
-				string[] lanstring=PrefC.GetString(PrefName.LanguagesUsedByPatients).Split(',');
+			if(Preferences.GetString(PrefName.LanguagesUsedByPatients)!="") {
+				string[] lanstring=Preferences.GetString(PrefName.LanguagesUsedByPatients).Split(',');
 				for(int i=0;i<lanstring.Length;i++) {
 					if(lanstring[i]=="") {
 						continue;
@@ -444,16 +444,16 @@ namespace OpenDental{
 				comboCanadianEligibilityCode.SelectedIndex=PatCur.CanadianEligibilityCode;
 			}
 			textAddrNotes.Text=PatCur.AddrNote;
-			if(PrefC.GetBool(PrefName.EasyHidePublicHealth)){
+			if(Preferences.GetBool(PrefName.EasyHidePublicHealth)){
 				tabControlPatInfo.TabPages.Remove(tabPublicHealth);
 			}
-			if(PrefC.GetBool(PrefName.EasyHideMedicaid)){
+			if(Preferences.GetBool(PrefName.EasyHideMedicaid)){
 				labelMedicaidID.Visible=false;
 				labelPutInInsPlan.Visible=false;
 				textMedicaidID.Visible=false;
 				textMedicaidState.Visible=false;
 			}
-			if(!PrefC.HasClinicsEnabled){
+			if(!Preferences.HasClinicsEnabled){
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}
@@ -550,7 +550,7 @@ namespace OpenDental{
 				labelTrophyFolder.Visible=false;
 				textTrophyFolder.Visible=false;
 			}
-			if(PrefC.GetBool(PrefName.EasyHideHospitals)){
+			if(Preferences.GetBool(PrefName.EasyHideHospitals)){
 				tabControlPatInfo.TabPages.Remove(tabHospitals);
 				//textWard.Visible=false;
 				//labelWard.Visible=false;
@@ -582,11 +582,11 @@ namespace OpenDental{
 					butOK.Enabled=false;
 				}
 			}
-			if(PrefC.GetBool(PrefName.ShowFeatureGoogleMaps)) {
+			if(Preferences.GetBool(PrefName.ShowFeatureGoogleMaps)) {
 				butShowMap.Visible=true;
 			}
 			_errorProv.BlinkStyle=ErrorBlinkStyle.NeverBlink;
-			if(PrefC.GetBool(PrefName.ShowFeatureSuperfamilies)
+			if(Preferences.GetBool(PrefName.ShowFeatureSuperfamilies)
 				&& PatCur.SuperFamily!=0 
 				&& PatCur.Guarantor==PatCur.PatNum) 
 			{
@@ -672,7 +672,7 @@ namespace OpenDental{
 			}
 			_selectedProvNum=formp.SelectedProvNum;
 			comboPriProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_selectedProvNum),
-				() => { return PrefC.GetBool(PrefName.EasyHideDentalSchools) ? Providers.GetAbbr(_selectedProvNum) : Providers.GetLongDesc(_selectedProvNum); });
+				() => { return Preferences.GetBool(PrefName.EasyHideDentalSchools) ? Providers.GetAbbr(_selectedProvNum) : Providers.GetLongDesc(_selectedProvNum); });
 		}
 
 		private void butPickSecondary_Click(object sender,EventArgs e) {
@@ -684,7 +684,7 @@ namespace OpenDental{
 			}
 			_selectedProvHygNum=formp.SelectedProvNum;
 			comboSecProv.IndexSelectOrSetText(_listProvHygs.FindIndex(x => x.ProvNum==_selectedProvHygNum),
-				() => { return PrefC.GetBool(PrefName.EasyHideDentalSchools) ? Providers.GetAbbr(_selectedProvHygNum) : Providers.GetLongDesc(_selectedProvHygNum); });
+				() => { return Preferences.GetBool(PrefName.EasyHideDentalSchools) ? Providers.GetAbbr(_selectedProvHygNum) : Providers.GetLongDesc(_selectedProvHygNum); });
 		}
 
 		///<summary>Fills combo provider based on which clinic is selected and attempts to preserve provider selection if any.</summary>
@@ -701,7 +701,7 @@ namespace OpenDental{
 				//remove all except pat's current PriProv, list may be empty after this but user not authorized to edit anyway
 				_listProviders.RemoveAll(x => x.ProvNum!=PatCur.PriProv);
 			}
-			else if(PrefC.GetBool(PrefName.PriProvDefaultToSelectProv)) {
+			else if(Preferences.GetBool(PrefName.PriProvDefaultToSelectProv)) {
 				_listProviders.Add(new Provider() { Abbr=Lan.g(this,"Select Provider") });
 			}
 			//Fill List Hyg
@@ -711,24 +711,24 @@ namespace OpenDental{
 			_listProvHygs=_listProvHygs.OrderBy(x => x.ProvNum>0).ThenBy(x => x.ItemOrder).ToList();
 			//Fill ComboProv
 			comboPriProv.Items.Clear();
-			if(!PrefC.GetBool(PrefName.EasyHideDentalSchools)) {
+			if(!Preferences.GetBool(PrefName.EasyHideDentalSchools)) {
 				_listProviders.ForEach(x => comboPriProv.Items.Add(x.GetLongDesc()));
 			}
 			else {
 				_listProviders.ForEach(x => comboPriProv.Items.Add(x.Abbr));
 			}
 			comboPriProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_selectedProvNum), 
-				()=> { return PrefC.GetBool(PrefName.EasyHideDentalSchools) ? Providers.GetAbbr(_selectedProvNum) : Providers.GetLongDesc(_selectedProvNum); });
+				()=> { return Preferences.GetBool(PrefName.EasyHideDentalSchools) ? Providers.GetAbbr(_selectedProvNum) : Providers.GetLongDesc(_selectedProvNum); });
 			//Fill ComboSecProv
 			comboSecProv.Items.Clear();
-			if(!PrefC.GetBool(PrefName.EasyHideDentalSchools)) {
+			if(!Preferences.GetBool(PrefName.EasyHideDentalSchools)) {
 				_listProvHygs.ForEach(x => comboSecProv.Items.Add(x.GetLongDesc()));
 			}
 			else {
 				_listProvHygs.ForEach(x => comboSecProv.Items.Add(x.Abbr));
 			}
 			comboSecProv.IndexSelectOrSetText(_listProvHygs.FindIndex(x => x.ProvNum==_selectedProvHygNum),
-				() => { return PrefC.GetBool(PrefName.EasyHideDentalSchools) ? Providers.GetAbbr(_selectedProvHygNum) : Providers.GetLongDesc(_selectedProvHygNum); });
+				() => { return Preferences.GetBool(PrefName.EasyHideDentalSchools) ? Providers.GetAbbr(_selectedProvHygNum) : Providers.GetLongDesc(_selectedProvHygNum); });
 		}
 
 		private void checkBillProvSame_Click(object sender,EventArgs e) {
@@ -771,7 +771,7 @@ namespace OpenDental{
 			_listRequiredFields.RemoveAll(x => x.FieldName==RequiredFieldName.GroupName);
 			_listRequiredFields.RemoveAll(x => x.FieldName==RequiredFieldName.GroupNum);
 			//Remove RequiredFields where the text field is invisible.
-			if(!PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+			if(!Preferences.GetBool(PrefName.ShowFeatureEhr)) {
 				_listRequiredFields.RemoveAll(x => x.FieldName==RequiredFieldName.MothersMaidenFirstName);
 				_listRequiredFields.RemoveAll(x => x.FieldName==RequiredFieldName.MothersMaidenLastName);
 				_listRequiredFields.RemoveAll(x => x.FieldName==RequiredFieldName.DateTimeDeceased);
@@ -779,7 +779,7 @@ namespace OpenDental{
 			if(!Programs.IsEnabled(Programs.GetProgramNum(ProgramName.TrophyEnhanced))) {
 				_listRequiredFields.RemoveAll(x => x.FieldName==RequiredFieldName.TrophyFolder);
 			}
-			if(PrefC.GetBool(PrefName.EasyHideHospitals)) {
+			if(Preferences.GetBool(PrefName.EasyHideHospitals)) {
 				_listRequiredFields.RemoveAll(x => x.FieldName==RequiredFieldName.Ward);
 				_listRequiredFields.RemoveAll(x => x.FieldName==RequiredFieldName.AdmitDate);
 			}
@@ -790,7 +790,7 @@ namespace OpenDental{
 				_listRequiredFields.RemoveAll(x => x.FieldName==RequiredFieldName.EligibilityExceptCode);
 			}
 			//Remove Required Fields if the Public Health Tab(tabPublicHealth) is hidden
-			if(PrefC.GetBool(PrefName.EasyHidePublicHealth)) {
+			if(Preferences.GetBool(PrefName.EasyHidePublicHealth)) {
 				_listRequiredFields.RemoveAll(x => x.FieldName.In(
 						RequiredFieldName.Race,RequiredFieldName.Ethnicity,RequiredFieldName.County,
 						RequiredFieldName.Site,RequiredFieldName.GradeLevel,RequiredFieldName.TreatmentUrgency,
@@ -977,12 +977,12 @@ namespace OpenDental{
 						SetRequiredTextBox(labelPreferredAndMiddleI,textPreferred,areConditionsMet);
 						break;
 					case RequiredFieldName.PrimaryProvider:
-						if(PrefC.GetBool(PrefName.PriProvDefaultToSelectProv)) {
+						if(Preferences.GetBool(PrefName.PriProvDefaultToSelectProv)) {
 							SetRequiredComboBox(labelPriProv,comboPriProv,areConditionsMet,0,"Selection cannot be 'Select Provider'.");
 						}
 						break;
 					case RequiredFieldName.Race:
-						if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+						if(Preferences.GetBool(PrefName.ShowFeatureEhr)) {
 							SetRequiredComboBoxMulti(labelRace,comboBoxMultiRace,areConditionsMet,new List<int> {0},"Race is required");
 						}
 						else {
@@ -1104,7 +1104,7 @@ namespace OpenDental{
 				areConditionsMet=false;
 				switch(listConditions[i].ConditionType) {
 					case RequiredFieldName.AdmitDate:
-						if(PrefC.GetBool(PrefName.EasyHideHospitals)) {
+						if(Preferences.GetBool(PrefName.EasyHideHospitals)) {
 							areConditionsMet=true;
 							break;
 						}
@@ -1141,14 +1141,14 @@ namespace OpenDental{
 						areConditionsMet=listAreCondsMet.Contains(true);
 						break;
 					case RequiredFieldName.Clinic:
-						if(!PrefC.HasClinicsEnabled) {
+						if(!Preferences.HasClinicsEnabled) {
 							areConditionsMet=true;
 							break;
 						}
 						areConditionsMet=ConditionComparerHelper(_selectedClinicNum.ToString(),i,listConditions);//includes none clinic
 						break;								
 					case RequiredFieldName.DateTimeDeceased:
-						if(!PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+						if(!Preferences.GetBool(PrefName.ShowFeatureEhr)) {
 							areConditionsMet=true;
 							break;
 						}
@@ -1161,7 +1161,7 @@ namespace OpenDental{
 						areConditionsMet=ConditionComparerHelper(comboLanguage.Items[comboLanguage.SelectedIndex].ToString(),i,listConditions);
 						break;
 					case RequiredFieldName.MedicaidID:
-						if(PrefC.GetBool(PrefName.EasyHideMedicaid)) {
+						if(Preferences.GetBool(PrefName.EasyHideMedicaid)) {
 							areConditionsMet=true;
 							break;
 						}
@@ -1172,7 +1172,7 @@ namespace OpenDental{
 						}
 						break;
 					case RequiredFieldName.MedicaidState:
-						if(PrefC.GetBool(PrefName.EasyHideMedicaid)) {
+						if(Preferences.GetBool(PrefName.EasyHideMedicaid)) {
 							areConditionsMet=true;
 							break;
 						}
@@ -2395,7 +2395,7 @@ namespace OpenDental{
 			}
 			int declinedIdx;
 			int otherIdx;
-			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+			if(Preferences.GetBool(PrefName.ShowFeatureEhr)) {
 				declinedIdx=4;
 				otherIdx=6;
 			}
@@ -2442,7 +2442,7 @@ namespace OpenDental{
 				comboBoxMultiRace.SetSelected(otherIdx,true);
 				return;
 			}
-			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {
+			if(Preferences.GetBool(PrefName.ShowFeatureEhr)) {
 				return;
 			}
 			//Guaranteed to be at least 2 selected indices if we get here
@@ -2685,7 +2685,7 @@ namespace OpenDental{
 				}
 			}
 			//If HQ and this is a patient in a reseller family, do not allow the changing of the patient status.
-			if(PrefC.IsODHQ
+			if(Preferences.IsODHQ
 				&& Resellers.IsResellerFamily(PatCur)
 				&& PatOld.PatStatus!=_listPatStatuses[listStatus.SelectedIndex])//1:1
 			{
@@ -2693,7 +2693,7 @@ namespace OpenDental{
 				return;
 			}
 			//If public health is enabled and the combo box is in an invalid state, warn the user.
-			if(!PrefC.GetBool(PrefName.EasyHidePublicHealth) && comboGradeLevel.SelectedIndex < 0) {
+			if(!Preferences.GetBool(PrefName.EasyHidePublicHealth) && comboGradeLevel.SelectedIndex < 0) {
 				//This isn't really here to get valid data from the user but to prevent the value of -1 getting entered into the database.
 				MsgBox.Show(this,"Grade Level is invalid.");
 				return;
@@ -2711,7 +2711,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Invalid Specialty selected.");
 				return;
 			}
-			if(IsNew && PrefC.HasClinicsEnabled && !PrefC.GetBool(PrefName.ClinicAllowPatientsAtHeadquarters) && _selectedClinicNum==0) {
+			if(IsNew && Preferences.HasClinicsEnabled && !Preferences.GetBool(PrefName.ClinicAllowPatientsAtHeadquarters) && _selectedClinicNum==0) {
 				MsgBox.Show(this,"Current settings for clinics do not allow patients to be added to the 'Unassigned' clinic. Please select a clinic.");
 				return;
 			}
@@ -2730,7 +2730,7 @@ namespace OpenDental{
 			PatCur.Preferred=textPreferred.Text;
 			PatCur.Title=textTitle.Text;
 			PatCur.Salutation=textSalutation.Text;
-			if(PrefC.GetBool(PrefName.ShowFeatureEhr)) {//Mother's maiden name UI is only used when EHR is enabled.
+			if(Preferences.GetBool(PrefName.ShowFeatureEhr)) {//Mother's maiden name UI is only used when EHR is enabled.
 				_ehrPatientCur.MotherMaidenFname=textMotherMaidenFname.Text;
 				_ehrPatientCur.MotherMaidenLname=textMotherMaidenLname.Text;
 			}

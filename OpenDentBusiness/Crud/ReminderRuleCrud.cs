@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ReminderRule into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ReminderRule reminderRule,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				reminderRule.ReminderRuleNum=ReplicationServers.GetKey("reminderrule","ReminderRuleNum");
 			}
 			string command="INSERT INTO reminderrule (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ReminderRuleNum,";
 			}
 			command+="ReminderCriterion,CriterionFK,CriterionValue,Message) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(reminderRule.ReminderRuleNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (reminderRule.CriterionFK)+","
 				+"'"+POut.String(reminderRule.CriterionValue)+"',"
 				+"'"+POut.String(reminderRule.Message)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

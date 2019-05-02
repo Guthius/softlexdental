@@ -103,15 +103,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one DashboardCell into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(DashboardCell dashboardCell,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				dashboardCell.DashboardCellNum=ReplicationServers.GetKey("dashboardcell","DashboardCellNum");
 			}
 			string command="INSERT INTO dashboardcell (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="DashboardCellNum,";
 			}
 			command+="DashboardLayoutNum,CellRow,CellColumn,CellType,CellSettings,LastQueryTime,LastQueryData,RefreshRateSeconds) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(dashboardCell.DashboardCellNum)+",";
 			}
 			command+=
@@ -131,7 +131,7 @@ namespace OpenDentBusiness.Crud{
 				dashboardCell.LastQueryData="";
 			}
 			OdSqlParameter paramLastQueryData=new OdSqlParameter("paramLastQueryData",OdDbType.Text,POut.StringParam(dashboardCell.LastQueryData));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramCellSettings,paramLastQueryData);
 			}
 			else {

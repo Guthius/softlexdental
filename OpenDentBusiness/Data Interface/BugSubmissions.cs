@@ -234,7 +234,7 @@ namespace OpenDentBusiness
             {
                 return MockBugSubmissions.SubmitException(ex, threadName, patNumCur, moduleName);
             }
-            if (!PrefC.GetBool(PrefName.SendUnhandledExceptionsToHQ))
+            if (!Preferences.GetBool(PrefName.SendUnhandledExceptionsToHQ))
             {
                 return BugSubmissionResult.None;
             }

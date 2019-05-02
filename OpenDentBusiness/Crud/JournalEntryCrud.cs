@@ -109,15 +109,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one JournalEntry into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(JournalEntry journalEntry,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				journalEntry.JournalEntryNum=ReplicationServers.GetKey("journalentry","JournalEntryNum");
 			}
 			string command="INSERT INTO journalentry (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="JournalEntryNum,";
 			}
 			command+="TransactionNum,AccountNum,DateDisplayed,DebitAmt,CreditAmt,Memo,Splits,CheckNumber,ReconcileNum,SecUserNumEntry,SecDateTEntry,SecUserNumEdit) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(journalEntry.JournalEntryNum)+",";
 			}
 			command+=
@@ -142,7 +142,7 @@ namespace OpenDentBusiness.Crud{
 				journalEntry.Splits="";
 			}
 			OdSqlParameter paramSplits=new OdSqlParameter("paramSplits",OdDbType.Text,POut.StringParam(journalEntry.Splits));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramMemo,paramSplits);
 			}
 			else {

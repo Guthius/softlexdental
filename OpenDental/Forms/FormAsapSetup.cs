@@ -9,7 +9,7 @@ namespace OpenDental {
 		///<summary>Returns the ClinicNum of the selected clinic. Returns 0 if 'Default' is selected or if clinics are not enabled.</summary>
 		private long _selectedClinicNum {
 			get {
-				if(!PrefC.HasClinicsEnabled) {
+				if(!Preferences.HasClinicsEnabled) {
 					return 0;
 				}
 				return ((ComboClinicItem)comboClinic.SelectedItem)?.ClinicNum??-1;
@@ -22,7 +22,7 @@ namespace OpenDental {
 		}
 
 		private void FormAsapSetup_Load(object sender,EventArgs e) {
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				FillClinics();
 			}
 			else {
@@ -72,13 +72,13 @@ namespace OpenDental {
 			gridMain.Rows.Add(row);
 			gridMain.EndUpdate();
 			if(_selectedClinicNum==0) {
-				textWebSchedPerDay.Text=PrefC.GetString(PrefName.WebSchedAsapTextLimit);
+				textWebSchedPerDay.Text=Preferences.GetString(PrefName.WebSchedAsapTextLimit);
 				checkUseDefaults.Checked=false;
 			}
 			else {
 				ClinicPref clinicPref=ClinicPrefs.GetPref(PrefName.WebSchedAsapTextLimit,_selectedClinicNum);
 				if(clinicPref==null || clinicPref.ValueString==null) {
-					textWebSchedPerDay.Text=PrefC.GetString(PrefName.WebSchedAsapTextLimit);
+					textWebSchedPerDay.Text=Preferences.GetString(PrefName.WebSchedAsapTextLimit);
 				}
 				else {
 					textWebSchedPerDay.Text=clinicPref.ValueString;
@@ -92,13 +92,13 @@ namespace OpenDental {
 			string templateText;
 			bool doShowDefault=false;
 			if(_selectedClinicNum==0) {
-				templateText=PrefC.GetString(prefName);
+				templateText=Preferences.GetString(prefName);
 				checkUseDefaults.Checked=false;
 			}
 			else {
 				ClinicPref clinicPref=ClinicPrefs.GetPref(prefName,_selectedClinicNum);
 				if(clinicPref==null || clinicPref.ValueString==null) {
-					templateText=PrefC.GetString(prefName);
+					templateText=Preferences.GetString(prefName);
 					doShowDefault=true;
 				}
 				else {
@@ -145,7 +145,7 @@ namespace OpenDental {
 			else {//Was checked, now user is unchecking it.
 				bool wasChanged=false;
 				foreach(PrefName pref in listPrefs) {
-					if(ClinicPrefs.Upsert(pref,_selectedClinicNum,PrefC.GetString(pref))) {
+					if(ClinicPrefs.Upsert(pref,_selectedClinicNum,Preferences.GetString(pref))) {
 						wasChanged=true;
 					}
 				}
@@ -160,12 +160,12 @@ namespace OpenDental {
 			PrefName prefName=(PrefName)gridMain.Rows[e.Row].Tag;
 			FormRecallMessageEdit FormR=new FormRecallMessageEdit(prefName);
 			if(_selectedClinicNum==0) {
-				FormR.MessageVal=PrefC.GetString(prefName);
+				FormR.MessageVal=Preferences.GetString(prefName);
 			}
 			else {
 				ClinicPref clinicPref=ClinicPrefs.GetPref(prefName,_selectedClinicNum);
 				if(clinicPref==null || string.IsNullOrEmpty(clinicPref.ValueString)) {
-					FormR.MessageVal=PrefC.GetString(prefName);
+					FormR.MessageVal=Preferences.GetString(prefName);
 				}
 				else {
 					FormR.MessageVal=clinicPref.ValueString;

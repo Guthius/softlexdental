@@ -385,7 +385,7 @@ namespace OpenDentBusiness
                             PrefName.BillingChargeAdjustmentType,
                             PrefName.FinanceChargeAdjustmentType,
                             PrefName.SalesTaxAdjustmentType
-                        }.Any(x => PrefC.GetLong(x) == def.DefNum))
+                        }.Any(x => Preferences.GetLong(x) == def.DefNum))
                     {
                         return true;
                     }
@@ -398,12 +398,12 @@ namespace OpenDentBusiness
                             PrefName.AppointmentTimeDismissedTrigger,
                             PrefName.WebSchedNewPatConfirmStatus,
                             PrefName.WebSchedRecallConfirmStatus,
-                        }.Any(x => PrefC.GetLong(x) == def.DefNum))
+                        }.Any(x => Preferences.GetLong(x) == def.DefNum))
                     {
                         return true;
                     }
                     if (new[] { PrefName.ApptEConfirmStatusSent, PrefName.ApptEConfirmStatusAccepted, PrefName.ApptEConfirmStatusDeclined, PrefName.ApptEConfirmStatusSendFailed }
-                        .Any(x => PrefC.GetLong(x) == def.DefNum))
+                        .Any(x => Preferences.GetLong(x) == def.DefNum))
                     {
                         return true;
                     }
@@ -415,7 +415,7 @@ namespace OpenDentBusiness
                 case DefCat.BillingTypes:
                     if (new[] {
                             PrefName.PracticeDefaultBillType
-                        }.Any(x => PrefC.GetLong(x) == def.DefNum))
+                        }.Any(x => Preferences.GetLong(x) == def.DefNum))
                     {
                         return true;
                     }
@@ -431,7 +431,7 @@ namespace OpenDentBusiness
                     listStrCommands.Add("SELECT COUNT(*) FROM sheetfielddef WHERE FieldType=" + POut.Int((int)SheetFieldType.PatImage) + " AND FieldName=" + POut.Long(def.DefNum));
                     break;
                 case DefCat.PaymentTypes:
-                    if (PrefC.GetLong(PrefName.RecurringChargesPayTypeCC) == def.DefNum)
+                    if (Preferences.GetLong(PrefName.RecurringChargesPayTypeCC) == def.DefNum)
                     {
                         return true;
                     }
@@ -445,10 +445,10 @@ namespace OpenDentBusiness
                     break;
                 case DefCat.RecallUnschedStatus:
                     if (def.DefNum.In(
-                        PrefC.GetLong(PrefName.RecallStatusMailed),
-                        PrefC.GetLong(PrefName.RecallStatusTexted),
-                        PrefC.GetLong(PrefName.RecallStatusEmailed),
-                        PrefC.GetLong(PrefName.RecallStatusEmailedTexted)))
+                        Preferences.GetLong(PrefName.RecallStatusMailed),
+                        Preferences.GetLong(PrefName.RecallStatusTexted),
+                        Preferences.GetLong(PrefName.RecallStatusEmailed),
+                        Preferences.GetLong(PrefName.RecallStatusEmailedTexted)))
                     {
                         return true;
                     }

@@ -432,7 +432,7 @@ namespace OpenDental{
 				return;
 			}
 			checkEnabled.Checked=_progCur.Enabled;
-			if(!PrefC.HasClinicsEnabled) {//clinics are not enabled, use ClinicNum 0 to indicate 'Headquarters' or practice level program properties
+			if(!Preferences.HasClinicsEnabled) {//clinics are not enabled, use ClinicNum 0 to indicate 'Headquarters' or practice level program properties
 				checkEnabled.Text=Lan.g(this,"Enabled");
 				groupPaySettings.Text=Lan.g(this,"Payment Settings");
 				comboClinic.Visible=false;
@@ -475,7 +475,7 @@ namespace OpenDental{
 
 		private void FillFields() {
 			long clinicNum=0;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
 			}
 			textUsername.Text=ProgramProperties.GetPropValFromList(_listProgProps,"Username",clinicNum);
@@ -525,7 +525,7 @@ namespace OpenDental{
 		///<summary>For each clinic, if the Username and Password are the same as the HQ (ClinicNum=0) Username and Password, update the clinic with the
 		///values in the text boxes.  Only modifies other clinics if _indexClinicRevert=0, meaning user just modified the HQ clinic credentials.</summary>
 		private void SynchWithHQ() {
-			if(!PrefC.HasClinicsEnabled || _listUserClinicNums[_indexClinicRevert]>0) {//using clinics, and modifying the HQ clinic. otherwise return.
+			if(!Preferences.HasClinicsEnabled || _listUserClinicNums[_indexClinicRevert]>0) {//using clinics, and modifying the HQ clinic. otherwise return.
 				return;
 			}
 			string hqUsername=ProgramProperties.GetPropValFromList(_listProgProps,"Username",0);//HQ Username before updating to value in textbox
@@ -589,7 +589,7 @@ namespace OpenDental{
 		private void checkPatientPortalPayEnabled_Click(object sender,EventArgs e) {
 			if(checkPatientPortalPayEnabled.Checked) {
 				long clinicNum=0;
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
 				}
 				OpenDentBusiness.WebTypes.Shared.XWeb.WebPaymentProperties xwebProperties=new OpenDentBusiness.WebTypes.Shared.XWeb.WebPaymentProperties();
@@ -653,7 +653,7 @@ namespace OpenDental{
 			Cursor=Cursors.WaitCursor;
 			WebClient client=new WebClient();
 			//The VeriFone driver is necessary for PayConnect users to process payments on the VeriFone terminal.
-			string zipFileName=ODFileUtils.CombinePaths(PrefC.GetTempFolderPath(),"VeriFoneUSBUARTDriver_Vx_1.0.0.52_B5.zip");
+			string zipFileName=ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),"VeriFoneUSBUARTDriver_Vx_1.0.0.52_B5.zip");
 			try {
 				client.DownloadFile(@"http://www.opendental.com/download/drivers/VeriFoneUSBUARTDriver_Vx_1.0.0.52_B5.zip",zipFileName);
 			}
@@ -670,7 +670,7 @@ namespace OpenDental{
 					if(ze.FileName.ToLower()=="setup.exe") {
 						setupFileName=ze.FileName;
 					}
-					ze.Extract(PrefC.GetTempFolderPath(),ExtractExistingFileAction.OverwriteSilently);
+					ze.Extract(Preferences.GetTempFolderPath(),ExtractExistingFileAction.OverwriteSilently);
 				}
 			}
 			Cursor=Cursors.Default;
@@ -679,8 +679,8 @@ namespace OpenDental{
 				return;
 			}
 			//Run the setup.exe file
-			Process.Start(ODFileUtils.CombinePaths(PrefC.GetTempFolderPath(),setupFileName));
-			MessageBox.Show(Lans.g(this,"Download complete. Run the Setup.exe file in")+" "+PrefC.GetTempFolderPath()+" "
+			Process.Start(ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),setupFileName));
+			MessageBox.Show(Lans.g(this,"Download complete. Run the Setup.exe file in")+" "+Preferences.GetTempFolderPath()+" "
 				+Lans.g(this,"if it does not start automatically."));
 		}
 
@@ -690,7 +690,7 @@ namespace OpenDental{
 			//if clinics are enabled, the program link can be enabled with blank username and/or password fields for some clinics
 			//clinics with blank username and/or password will essentially not have PayConnect enabled
 			//if 'Enable terminal processing' is checked then the practice/clinic will not need a username and password.
-			if(checkEnabled.Checked && !checkTerminal.Checked && !PrefC.HasClinicsEnabled && 
+			if(checkEnabled.Checked && !checkTerminal.Checked && !Preferences.HasClinicsEnabled && 
 				(textUsername.Text=="" || textPassword.Text=="")) 
 			{
 				MsgBox.Show(this,"Please enter a username and password first.");
@@ -698,7 +698,7 @@ namespace OpenDental{
 			}
 			if(checkEnabled.Checked //if PayConnect is enabled
 				&& comboPaymentType.SelectedIndex<0 //and the payment type is not set
-				&& (!PrefC.HasClinicsEnabled  //and either clinics are not enabled (meaning this is the only set of username, password, payment type values)
+				&& (!Preferences.HasClinicsEnabled  //and either clinics are not enabled (meaning this is the only set of username, password, payment type values)
 				|| (textUsername.Text!="" && textPassword.Text!=""))) //or clinics are enabled and this clinic's link has a username and password set
 			{
 				MsgBox.Show(this,"Please select a payment type first.");
@@ -712,7 +712,7 @@ namespace OpenDental{
 			}
 			SynchWithHQ();//if the user changes the HQ credentials, any clinic that had the same credentials will be kept in synch with HQ
 			long clinicNum=0;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
 			}
 			UpdateListProgramPropertiesForClinic(clinicNum);

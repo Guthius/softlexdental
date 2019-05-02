@@ -211,20 +211,20 @@ namespace OpenDental {
 		///<summary>Removes 'Do not send eConfirmations' from the confirmed status for 'eConfirm Sent' if multiple eConfirmations are set up.</summary>
 		private void CheckMultipleEConfirms() {
 			int countEConfirm=_listRulesClinic?.Count(x => x.TypeCur==ApptReminderType.ConfirmationFutureDay)??0;
-			string confStatusEConfirmSent=Defs.GetDef(DefCat.ApptConfirmed,PrefC.GetLong(PrefName.ApptEConfirmStatusSent)).ItemName;
-			List<string> listExclude=PrefC.GetString(PrefName.ApptConfirmExcludeESend)
+			string confStatusEConfirmSent=Defs.GetDef(DefCat.ApptConfirmed,Preferences.GetLong(PrefName.ApptEConfirmStatusSent)).ItemName;
+			List<string> listExclude=Preferences.GetString(PrefName.ApptConfirmExcludeESend)
 				.Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries).ToList();
 			if(ApptReminderRuleCur.TypeCur==ApptReminderType.ConfirmationFutureDay
 				//And there is more than 1 eConfirmation rule.
 				&& (countEConfirm > 1 || (countEConfirm==1 && ApptReminderRuleCur.ApptReminderRuleNum==0))
 				//And the confirmed status for 'eConfirm Sent' is marked 'Do not send eConfirmations'
-				&& listExclude.Contains(PrefC.GetString(PrefName.ApptEConfirmStatusSent))
+				&& listExclude.Contains(Preferences.GetString(PrefName.ApptEConfirmStatusSent))
 				//Ask them to fix their exclude send statuses
 				&& MessageBox.Show(Lans.g(this,"Appointments will not receive multiple eConfirmations if the '")+confStatusEConfirmSent+"' "+
 						Lans.g(this,"status is set as 'Don't Send'. Would you like to remove 'Don't Send' from that status?"),
 					"",MessageBoxButtons.YesNo)==DialogResult.Yes) 
 			{
-				listExclude.RemoveAll(x => x==PrefC.GetString(PrefName.ApptEConfirmStatusSent));
+				listExclude.RemoveAll(x => x==Preferences.GetString(PrefName.ApptEConfirmStatusSent));
 				IsPrefsChanged|=Prefs.UpdateString(PrefName.ApptConfirmExcludeESend,string.Join(",",listExclude));
 			}
 		}
@@ -311,7 +311,7 @@ namespace OpenDental {
 					errors.Add(Lan.g(this,"'Send Time' must be greater than 'Do Not Send Within' time."));
 				}
 			}
-			if(PrefC.GetBool(PrefName.EmailDisclaimerIsOn) && !_emailPlainText.ToLower().Contains("[emaildisclaimer]")) {
+			if(Preferences.GetBool(PrefName.EmailDisclaimerIsOn) && !_emailPlainText.ToLower().Contains("[emaildisclaimer]")) {
 				errors.Add(Lan.g(this,"Email must contain the \"[EmailDisclaimer]\" tag."));
 			}
 			if(errors.Count>0) {

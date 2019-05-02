@@ -109,7 +109,7 @@ namespace OpenDentBusiness
             return Db.GetListLong(
                 "SELECT DISTINCT PatNum FROM allergy " +
                 "WHERE PatNum IN (" + string.Join(",", listPatNums) + ") " +
-                "AND allergy.AllergyDefNum != " + POut.Long(PrefC.GetLong(PrefName.AllergiesIndicateNone)));
+                "AND allergy.AllergyDefNum != " + POut.Long(Preferences.GetLong(PrefName.AllergiesIndicateNone)));
         }
 
         /// <summary>

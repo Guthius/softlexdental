@@ -101,15 +101,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Bug into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Bug bug,bool useExistingPK){
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				bug.BugId=ReplicationServers.GetKey("bug","BugId");
 			}
 			string command="INSERT INTO bug (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="BugId,";
 			}
 			command+="CreationDate,Status_,Type_,PriorityLevel,VersionsFound,VersionsFixed,Description,LongDesc,PrivateDesc,Discussion,Submitter) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(bug.BugId)+",";
 			}
 			command+=
@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(bug.PrivateDesc)+"',"
 				+"'"+POut.String(bug.Discussion)+"',"
 				+    POut.Long  (bug.Submitter)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

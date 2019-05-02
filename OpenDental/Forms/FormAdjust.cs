@@ -106,7 +106,7 @@ namespace OpenDental {
 			else if(Defs.GetValue(DefCat.AdjTypes,_adjustmentCur.AdjType)=="dp") {//Discount Plan (neg)
 				textAmount.Text=(-_adjustmentCur.AdjAmt).ToString("F");//shows without the neg sign
 			}
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				labelClinic.Visible=false;
 				comboClinic.Visible=false;
 				_listClinics=new List<Clinic>();
@@ -122,7 +122,7 @@ namespace OpenDental {
 			_selectedProvNum=_adjustmentCur.ProvNum;
 			comboProv.SelectedIndex=-1;
 			FillComboProvHyg();
-			if(_adjustmentCur.ProcNum!=0 && PrefC.GetInt(PrefName.RigorousAdjustments)==(int)RigorousAdjustments.EnforceFully) {
+			if(_adjustmentCur.ProcNum!=0 && Preferences.GetInt(PrefName.RigorousAdjustments)==(int)RigorousAdjustments.EnforceFully) {
 				comboProv.Enabled=false;
 				butPickProv.Enabled=false;
 				comboClinic.Enabled=false;
@@ -263,12 +263,12 @@ namespace OpenDental {
 			if(FormPS.DialogResult!=DialogResult.OK){
 				return;
 			}
-			if(PrefC.GetInt(PrefName.RigorousAdjustments)<2) {//Enforce Linking
+			if(Preferences.GetInt(PrefName.RigorousAdjustments)<2) {//Enforce Linking
 				_selectedProvNum=FormPS.ListSelectedProcs[0].ProvNum;
 				_selectedClinicNum=FormPS.ListSelectedProcs[0].ClinicNum;
 				comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_selectedProvNum),() => { return Providers.GetAbbr(_selectedProvNum); });
 				comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum==_selectedClinicNum),() => { return Clinics.GetAbbr(_selectedClinicNum); });
-				if(PrefC.GetInt(PrefName.RigorousAdjustments)==(int)RigorousAdjustments.EnforceFully && !_isEditAnyway) {
+				if(Preferences.GetInt(PrefName.RigorousAdjustments)==(int)RigorousAdjustments.EnforceFully && !_isEditAnyway) {
 					if(Security.IsAuthorized(Permissions.Setup,true)) {
 						labelEditAnyway.Visible=true;
 						butEditAnyway.Visible=true;
@@ -311,7 +311,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			if(PIn.Date(textAdjDate.Text).Date > DateTime.Today.Date && !PrefC.GetBool(PrefName.FutureTransDatesAllowed)) {
+			if(PIn.Date(textAdjDate.Text).Date > DateTime.Today.Date && !Preferences.GetBool(PrefName.FutureTransDatesAllowed)) {
 				MsgBox.Show(this,"Adjustment date can not be in the future.");
 				return;
 			}
@@ -329,7 +329,7 @@ namespace OpenDental {
 			{
 				return;
 			}
-			if(PrefC.GetInt(PrefName.RigorousAdjustments)==0 && _adjustmentCur.ProcNum==0) {
+			if(Preferences.GetInt(PrefName.RigorousAdjustments)==0 && _adjustmentCur.ProcNum==0) {
 				MsgBox.Show(this,"You must attach a procedure to the adjustment.");
 				return;
 			}
@@ -361,7 +361,7 @@ namespace OpenDental {
 						if(!Security.IsAuthorized(Permissions.PaymentEdit,Payments.GetPayment(paySplit.PayNum).PayDate)) {
 							return;
 						}
-						if(_selectedProvNum!=paySplit.ProvNum && PrefC.GetInt(PrefName.RigorousAccounting)==(int)RigorousAdjustments.EnforceFully) {
+						if(_selectedProvNum!=paySplit.ProvNum && Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAdjustments.EnforceFully) {
 							changeAdjSplit=true;
 							break;
 						}

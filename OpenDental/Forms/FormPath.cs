@@ -715,7 +715,7 @@ namespace OpenDental{
 			if(!IsStartingUp && !Security.IsAuthorized(Permissions.Setup)) {//Verify user has Setup permission to change paths, after user has logged in.
 				butOK.Enabled=false;
 			}
-			textDocPath.Text=PrefC.GetString(PrefName.DocPath);
+			textDocPath.Text=Preferences.GetString(PrefName.DocPath);
 			//ComputerPref compPref=ComputerPrefs.GetForLocalComputer();
 			if(ReplicationServers.Server_id==0) {
 				labelServerPath.Visible=false;
@@ -727,9 +727,9 @@ namespace OpenDental{
 				textServerPath.Text=ReplicationServers.GetAtoZpath();
 			}
 			textLocalPath.Text=ImageStore.LocalAtoZpath;//This was set on startup.  //compPref.AtoZpath;
-			textExportPath.Text=PrefC.GetString(PrefName.ExportPath);
-			textLetterMergePath.Text=PrefC.GetString(PrefName.LetterMergePath);
-			SetRadioButtonChecked(PrefC.AtoZfolderUsed);
+			textExportPath.Text=Preferences.GetString(PrefName.ExportPath);
+			textLetterMergePath.Text=Preferences.GetString(PrefName.LetterMergePath);
+			SetRadioButtonChecked(Preferences.AtoZfolderUsed);
 			// The opt***_checked event will enable/disable the appropriate UI elements.
 			checkMultiplePaths.Checked=(textDocPath.Text.LastIndexOf(';')!=-1);	
 			//Also set the "multiple paths" checkbox at startup based on the current image folder list format. No need to store this info in the db.
@@ -745,7 +745,7 @@ namespace OpenDental{
 					ActiveControl=textLocalPath;//Focus on textLocalPath, since this is the only textbox the user can edit in this case.
 				}
 			}
-			if(PrefC.IsCloudMode) {
+			if(Preferences.IsCloudMode) {
 				butOK.Enabled=false;
 				DisableMostControls();
 			}
@@ -1058,7 +1058,7 @@ namespace OpenDental{
 					}
 				}				
     		}
-			if(radioDropboxStorage.Checked && PrefC.AtoZfolderUsed!=DataStorageType.DropboxAtoZ
+			if(radioDropboxStorage.Checked && Preferences.AtoZfolderUsed!=DataStorageType.DropboxAtoZ
 				&& !MsgBox.Show(this,true,"Warning: Updating workstations older than 16.3 while using Dropbox may cause issues."
 					+"\r\nIf experienced, use Setup.exe located in AtoZ folder on DropBox to reinstall."))
 			{
@@ -1096,7 +1096,7 @@ namespace OpenDental{
 			Cursor=Cursors.Default;
 			string sftpWarningMsg=Lan.g(this,"Warning: Updating workstations older than 16.3 while using SFTP may cause issues."
 				+"\r\nIf experienced, use the Setup.exe located in the AtoZ folder on your SFTP server to reinstall.");
-			if(radioSftp.Checked && PrefC.AtoZfolderUsed!=DataStorageType.SftpAtoZ
+			if(radioSftp.Checked && Preferences.AtoZfolderUsed!=DataStorageType.SftpAtoZ
 				&& !MsgBox.Show(this,true,sftpWarningMsg))
 			{
 				return;

@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Guardian into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Guardian guardian,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				guardian.GuardianNum=ReplicationServers.GetKey("guardian","GuardianNum");
 			}
 			string command="INSERT INTO guardian (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="GuardianNum,";
 			}
 			command+="PatNumChild,PatNumGuardian,Relationship,IsGuardian) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(guardian.GuardianNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (guardian.PatNumGuardian)+","
 				+    POut.Int   ((int)guardian.Relationship)+","
 				+    POut.Bool  (guardian.IsGuardian)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

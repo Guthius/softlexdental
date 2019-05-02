@@ -157,7 +157,7 @@ namespace OpenDental {
 					if(clinicNum!=0) {
 						clinic=Clinics.GetClinic(clinicNum);
 					}
-					else if(PrefC.HasClinicsEnabled && Clinics.GetCount() > 0) {
+					else if(Preferences.HasClinicsEnabled && Clinics.GetCount() > 0) {
 						clinic=Clinics.GetFirst();
 					}
 				}
@@ -2335,7 +2335,7 @@ namespace OpenDental {
 		}
 
 		private SizeF PrintDentistPhone(Graphics g,float X,float Y){
-			text=PrefC.GetString(PrefName.PracticePhone);
+			text=Preferences.GetString(PrefName.PracticePhone);
 			if(text.Length==10) {//May need to format for nice appearance.
 				text=text.Substring(0,3)+"-"+text.Substring(3,3)+"-"+text.Substring(6,4);
 			}
@@ -2345,8 +2345,8 @@ namespace OpenDental {
 		///<summary>The output will be no wider than maxWidthInPixels, unless maxWidthInPixels<=0, in which case there is no maximum width.</summary>
 		private SizeF PrintDentistAddress(Graphics g,float X,float Y,float maxWidthInPixels){
 			SizeF size1=doc.DrawString(g,isFrench?"ADRESSE: ":"ADDRESS: ",X,Y);
-			SizeF size2=PrintAddress(g,X+size1.Width,Y,PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),
-				PrefC.GetString(PrefName.PracticeCity)+", "+PrefC.GetString(PrefName.PracticeST)+" "+PrefC.GetString(PrefName.PracticeZip),150f,maxWidthInPixels);
+			SizeF size2=PrintAddress(g,X+size1.Width,Y,Preferences.GetString(PrefName.PracticeAddress),Preferences.GetString(PrefName.PracticeAddress2),
+				Preferences.GetString(PrefName.PracticeCity)+", "+Preferences.GetString(PrefName.PracticeST)+" "+Preferences.GetString(PrefName.PracticeZip),150f,maxWidthInPixels);
 			return new SizeF(size1.Width+size2.Width,Math.Max(size1.Height,size2.Height));
 		}
 
@@ -2803,12 +2803,12 @@ namespace OpenDental {
 
 		private void PrintPracticeAddress(Graphics g,float xPos){
 			if(clinic==null){
-				if(PrefC.GetBool(PrefName.UseBillingAddressOnClaims)){
-					text=Patients.GetAddressFull(PrefC.GetString(PrefName.PracticeBillingAddress),PrefC.GetString(PrefName.PracticeBillingAddress2),
-						PrefC.GetString(PrefName.PracticeBillingCity),PrefC.GetString(PrefName.PracticeBillingST),PrefC.GetString(PrefName.PracticeBillingZip));
+				if(Preferences.GetBool(PrefName.UseBillingAddressOnClaims)){
+					text=Patients.GetAddressFull(Preferences.GetString(PrefName.PracticeBillingAddress),Preferences.GetString(PrefName.PracticeBillingAddress2),
+						Preferences.GetString(PrefName.PracticeBillingCity),Preferences.GetString(PrefName.PracticeBillingST),Preferences.GetString(PrefName.PracticeBillingZip));
 				}else{
-					text=Patients.GetAddressFull(PrefC.GetString(PrefName.PracticeAddress),PrefC.GetString(PrefName.PracticeAddress2),
-						PrefC.GetString(PrefName.PracticeCity),PrefC.GetString(PrefName.PracticeST),PrefC.GetString(PrefName.PracticeZip));
+					text=Patients.GetAddressFull(Preferences.GetString(PrefName.PracticeAddress),Preferences.GetString(PrefName.PracticeAddress2),
+						Preferences.GetString(PrefName.PracticeCity),Preferences.GetString(PrefName.PracticeST),Preferences.GetString(PrefName.PracticeZip));
 				}
 			}else{
 				text=Patients.GetAddressFull(clinic.Address,clinic.Address2,clinic.City,clinic.State,clinic.Zip);

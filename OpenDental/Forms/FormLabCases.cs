@@ -267,7 +267,7 @@ namespace OpenDental{
 		private void FormLabCases_Load(object sender,EventArgs e) {
 			//ListClinics can be called even when Clinics is not turned on, therefore it needs to be set to something to avoid a null reference.
 			_listClinics=new List<Clinic>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				labelClinic.Visible=true;
 				comboClinic.Visible=true;
 				comboClinic.Items.Add(Lan.g(this,"All"));//"All", or "All" of the clinics the user can access if user is clinic restricted.
@@ -319,7 +319,7 @@ namespace OpenDental{
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			List<long> operatoryNums = new List<long>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(comboClinic.SelectedIndex==0 && !Security.CurUser.ClinicIsRestricted) {//"All"
 					operatoryNums=null;
 				}
@@ -333,7 +333,7 @@ namespace OpenDental{
 				}
 			}
 			for(int i=0;i<table.Rows.Count;i++){
-				if(PrefC.HasClinicsEnabled //no filtering for non clinics.
+				if(Preferences.HasClinicsEnabled //no filtering for non clinics.
 					&& operatoryNums!=null //we don't have "All" selected for an unrestricted user.
 					&& table.Rows[i]["AptNum"].ToString()!="0" //show unattached for any clinic 
 					&& !operatoryNums.Contains(PIn.Long(table.Rows[i]["OpNum"].ToString()))) //Attached appointment is scheduled in an Op for the clinic

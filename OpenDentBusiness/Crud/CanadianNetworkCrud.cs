@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one CanadianNetwork into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(CanadianNetwork canadianNetwork,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				canadianNetwork.CanadianNetworkNum=ReplicationServers.GetKey("canadiannetwork","CanadianNetworkNum");
 			}
 			string command="INSERT INTO canadiannetwork (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="CanadianNetworkNum,";
 			}
 			command+="Abbrev,Descript,CanadianTransactionPrefix,CanadianIsRprHandler) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(canadianNetwork.CanadianNetworkNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(canadianNetwork.Descript)+"',"
 				+"'"+POut.String(canadianNetwork.CanadianTransactionPrefix)+"',"
 				+    POut.Bool  (canadianNetwork.CanadianIsRprHandler)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

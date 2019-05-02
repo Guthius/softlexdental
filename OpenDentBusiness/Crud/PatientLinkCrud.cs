@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PatientLink into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(PatientLink patientLink,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				patientLink.PatientLinkNum=ReplicationServers.GetKey("patientlink","PatientLinkNum");
 			}
 			string command="INSERT INTO patientlink (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PatientLinkNum,";
 			}
 			command+="PatNumFrom,PatNumTo,LinkType,DateTimeLink) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(patientLink.PatientLinkNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (patientLink.PatNumTo)+","
 				+    POut.Int   ((int)patientLink.LinkType)+","
 				+    DbHelper.Now()+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

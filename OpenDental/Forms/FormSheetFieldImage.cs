@@ -39,10 +39,10 @@ namespace OpenDental {
 		}
 
 		private void FillCombo(){
-			if(PrefC.AtoZfolderUsed!=DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed!=DataStorageType.InDatabase) {
 				comboFieldName.Items.Clear();
 				string[] files=null;
-				if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+				if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 					files=Directory.GetFiles(SheetUtil.GetImagePath());
 				}
 				else {//Cloud
@@ -80,7 +80,7 @@ namespace OpenDental {
 				return;
 			}
 			string newName=dlg.FileName;
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				newName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),Path.GetFileName(dlg.FileName));
 				if(File.Exists(newName)) {
 					MsgBox.Show(this,"A file of that name already exists in SheetImages.  Please rename the file before importing.");
@@ -141,7 +141,7 @@ namespace OpenDental {
 			else {
 				textFullPath.Text=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),comboFieldName.Text);
 			}
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ && File.Exists(textFullPath.Text)){
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ && File.Exists(textFullPath.Text)){
 				GC.Collect();
 				try {
 					pictureBox.Image=Image.FromFile(textFullPath.Text);

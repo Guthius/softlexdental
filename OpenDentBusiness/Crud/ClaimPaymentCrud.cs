@@ -115,15 +115,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ClaimPayment into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ClaimPayment claimPayment,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				claimPayment.ClaimPaymentNum=ReplicationServers.GetKey("claimpayment","ClaimPaymentNum");
 			}
 			string command="INSERT INTO claimpayment (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ClaimPaymentNum,";
 			}
 			command+="CheckDate,CheckAmt,CheckNum,BankBranch,Note,ClinicNum,DepositNum,CarrierName,DateIssued,IsPartial,PayType,SecUserNumEntry,SecDateEntry,PayGroup) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(claimPayment.ClaimPaymentNum)+",";
 			}
 			command+=
@@ -142,7 +142,7 @@ namespace OpenDentBusiness.Crud{
 				+    DbHelper.Now()+","
 				//SecDateTEdit can only be set by MySQL
 				+    POut.Long  (claimPayment.PayGroup)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

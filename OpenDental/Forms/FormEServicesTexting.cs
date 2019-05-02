@@ -39,8 +39,8 @@ namespace OpenDental {
 
 		private void FillTabTexting() {
 			#region Update UI
-			butDefaultClinic.Visible=PrefC.HasClinicsEnabled;
-			butDefaultClinicClear.Visible=PrefC.HasClinicsEnabled;
+			butDefaultClinic.Visible=Preferences.HasClinicsEnabled;
+			butDefaultClinicClear.Visible=Preferences.HasClinicsEnabled;
 			FillGridSmsUsage();
 			#endregion			
 		}
@@ -72,7 +72,7 @@ namespace OpenDental {
 
 		private void FillGridSmsUsage() {
 			List<Clinic> listClinics=Clinics.GetForUserod(Security.CurUser);
-			if(!PrefC.HasClinicsEnabled) { //No clinics so just get the practice as a clinic.
+			if(!Preferences.HasClinicsEnabled) { //No clinics so just get the practice as a clinic.
 				listClinics.Clear();
 				listClinics.Add(Clinics.GetPracticeAsClinicZero());
 			}
@@ -92,7 +92,7 @@ namespace OpenDental {
 			bool doShowDiscount=items.Any(x => x.SentDiscount.IsGreaterThan(0));
 			gridSmsSummary.BeginUpdate();
 			gridSmsSummary.Columns.Clear();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				gridSmsSummary.Columns.Add(new ODGridColumn(Lan.g(this,"Default"),80) { TextAlign=HorizontalAlignment.Center });
 			}
 			gridSmsSummary.Columns.Add(new ODGridColumn(Lan.g(this,"Location"),170,HorizontalAlignment.Left));
@@ -111,8 +111,8 @@ namespace OpenDental {
 			gridSmsSummary.Rows.Clear();
 			foreach(Clinic clinic in listClinics) {
 				ODGridRow row=new ODGridRow();
-				if(PrefC.HasClinicsEnabled) { //Default texting clinic?
-					row.Cells.Add(clinic.ClinicNum==PrefC.GetLong(PrefName.TextingDefaultClinicNum) ? "X" : "");
+				if(Preferences.HasClinicsEnabled) { //Default texting clinic?
+					row.Cells.Add(clinic.ClinicNum==Preferences.GetLong(PrefName.TextingDefaultClinicNum) ? "X" : "");
 				}
 				row.Cells.Add(clinic.Abbr); //Location.				
 				var dataRow=items.FirstOrDefault(x => x.ClinicNum==clinic.ClinicNum);				

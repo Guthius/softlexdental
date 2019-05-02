@@ -1269,7 +1269,7 @@ namespace OpenDental {
 				textTaskNum.Visible=true;
 				textTaskNum.Text=_taskCur.TaskNum.ToString();
 			#endif
-			if(PrefC.IsODHQ) {//If HQ
+			if(Preferences.IsODHQ) {//If HQ
 				labelTaskNum.Visible=true;
 				textTaskNum.Visible=true;
 				textTaskNum.Text=_taskCur.TaskNum.ToString();
@@ -1348,7 +1348,7 @@ namespace OpenDental {
 				comboTaskPriorities.SelectedIndex=comboTaskPriorities.Items.Count-1;
 				_pritoryDefNumSelected=_listTaskPriorities[_listTaskPriorities.Count-1].DefNum;
 			}
-			if(_taskListCur!=null && IsNew && _taskListCur.TaskListNum==1697 && PrefC.GetBool(PrefName.DockPhonePanelShow)) {//Set to triage blue if HQ, triage list, and is new.
+			if(_taskListCur!=null && IsNew && _taskListCur.TaskListNum==1697 && Preferences.GetBool(PrefName.DockPhonePanelShow)) {//Set to triage blue if HQ, triage list, and is new.
 				for(int i=0;i<_listTaskPriorities.Count;i++) {
 					if(_listTaskPriorities[i].DefNum==_triageBlueNum) {//Finding the option that is triageBlue to select it in the combobox (Combobox mirrors _listTaskPriorityDefs)
 						comboTaskPriorities.SelectedIndex=i;
@@ -1397,7 +1397,7 @@ namespace OpenDental {
 				textDescript.Select(_taskCur.Descript.Length,0);//Place the cursor at the end of the description box.
 			}
 			long mailboxUserNum=0;
-			if(PrefC.GetBool(PrefName.TasksNewTrackedByUser) && _taskCur.TaskListNum !=0) {
+			if(Preferences.GetBool(PrefName.TasksNewTrackedByUser) && _taskCur.TaskListNum !=0) {
 				mailboxUserNum=TaskLists.GetMailboxUserNum(_taskCur.TaskListNum);
 				if(mailboxUserNum != 0 && mailboxUserNum != Security.CurUser.UserNum) {
 					_startedInOthersInbox=true;
@@ -1414,7 +1414,7 @@ namespace OpenDental {
 					checkNew.Checked=false;
 					_statusChanged=true;
 				}
-				else if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
+				else if(Preferences.GetBool(PrefName.TasksNewTrackedByUser)) {
 					if(_startedInOthersInbox) {
 						_taskCur.IsUnread=TaskUnreads.IsUnread(mailboxUserNum,_taskCur);
 					}
@@ -1433,8 +1433,8 @@ namespace OpenDental {
 					}
 				}
 			}
-			groupReminder.Visible=(!PrefC.GetBool(PrefName.TasksUseRepeating));
-			panelRepeating.Visible=PrefC.GetBool(PrefName.TasksUseRepeating);
+			groupReminder.Visible=(!Preferences.GetBool(PrefName.TasksUseRepeating));
+			panelRepeating.Visible=Preferences.GetBool(PrefName.TasksUseRepeating);
 			textReminderRepeatFrequency.Text=(IsNew?"1":_taskCur.ReminderFrequency.ToString());
 			//Fill comboReminderRepeat with repeating options.
 			_listTaskReminderTypeNames=new List<TaskReminderType>() {
@@ -1539,7 +1539,7 @@ namespace OpenDental {
 				}
 				labelReply.Text=Lan.g(this,"(Send to ")+Userods.GetName(_replyToUserNum)+")";
 			}
-			if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {//Show red and blue buttons for HQ always
+			if(Preferences.GetBool(PrefName.DockPhonePanelShow)) {//Show red and blue buttons for HQ always
 				butRed.Visible=true;
 				butBlue.Visible=true;
 			}
@@ -1594,7 +1594,7 @@ namespace OpenDental {
 		}
 
 		private void FillComboJobs() {
-			if(_isTaskDeleted || !PrefC.IsODHQ) {
+			if(_isTaskDeleted || !Preferences.IsODHQ) {
 				return;
 			}
 			_isLoading=true;
@@ -1665,7 +1665,7 @@ namespace OpenDental {
 			ODGridRow row;
 			_listTaskNotes=TaskNotes.GetForTask(_taskCur.TaskNum);
 			//Only do weird logic when editing a task associated with the triage task list.
-			if(PrefC.GetBool(PrefName.DockPhonePanelShow)) {
+			if(Preferences.GetBool(PrefName.DockPhonePanelShow)) {
 				if(_numNotes==-1) {//Only fill _numNotes here the first time FillGrid is called.  This is used for coloring triage tasks.
 					_numNotes=_listTaskNotes.Count;
 				}
@@ -1950,7 +1950,7 @@ namespace OpenDental {
 		}
 
 		private void comboTaskPriorities_SelectionChangeCommitted(object sender,EventArgs e) {
-			if(PrefC.IsODHQ 
+			if(Preferences.IsODHQ 
 				//Changing the priority to 'Red' from another priority for a Triage task
 				&& _listTaskPriorities[comboTaskPriorities.SelectedIndex].DefNum==_triageRedNum 
 				&& _taskCur.PriorityDefNum!=_triageRedNum
@@ -2210,7 +2210,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please enter a description.");
 				return false;
 			}
-			if(taskReminderType!=TaskReminderType.NoReminder && !PrefC.GetBool(PrefName.TasksUseRepeating)) {//Is a reminder and not using legacy task system
+			if(taskReminderType!=TaskReminderType.NoReminder && !Preferences.GetBool(PrefName.TasksUseRepeating)) {//Is a reminder and not using legacy task system
 				if(taskReminderType!=TaskReminderType.Once &&
 					(textReminderRepeatFrequency.errorProvider1.GetError(textReminderRepeatFrequency)!="" || PIn.Int(textReminderRepeatFrequency.Text) < 1))
 				{
@@ -2277,7 +2277,7 @@ namespace OpenDental {
 				TaskUnreads.DeleteForTask(_taskCur);//clear out taskunreads. We have too many tasks to read the done ones.
 			}
 			else {//because it can't be both new and done.
-				if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
+				if(Preferences.GetBool(PrefName.TasksNewTrackedByUser)) {
 					if(_taskCur.TaskStatus==TaskStatusEnum.Done) {
 						_taskCur.TaskStatus=TaskStatusEnum.Viewed;
 					}
@@ -2536,7 +2536,7 @@ namespace OpenDental {
 				taskCopy.TaskListNum=taskListNum;
 				taskCopy.IsUnread=true;
 				taskCopy.ReminderGroupId="";
-				if(taskCopy.ReminderType!=TaskReminderType.NoReminder && !PrefC.GetBool(PrefName.TasksUseRepeating)) {//Make a new ID if it's blank no matter what.  Could be an old task being changed.
+				if(taskCopy.ReminderType!=TaskReminderType.NoReminder && !Preferences.GetBool(PrefName.TasksUseRepeating)) {//Make a new ID if it's blank no matter what.  Could be an old task being changed.
 					Tasks.SetReminderGroupId(taskCopy);
 				}
 				try {
@@ -2660,7 +2660,7 @@ namespace OpenDental {
 				e.Cancel=true;
 				return;
 			}
-			if(PrefC.GetBool(PrefName.TasksNewTrackedByUser)) {
+			if(Preferences.GetBool(PrefName.TasksNewTrackedByUser)) {
 				//No more automation here
 			}
 			else {

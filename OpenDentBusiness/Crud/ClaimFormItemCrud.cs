@@ -94,15 +94,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ClaimFormItem into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ClaimFormItem claimFormItem,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				claimFormItem.ClaimFormItemNum=ReplicationServers.GetKey("claimformitem","ClaimFormItemNum");
 			}
 			string command="INSERT INTO claimformitem (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ClaimFormItemNum,";
 			}
 			command+="ClaimFormNum,ImageFileName,FieldName,FormatString,XPos,YPos,Width,Height) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(claimFormItem.ClaimFormItemNum)+",";
 			}
 			command+=
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Float (claimFormItem.YPos)+","
 				+    POut.Float (claimFormItem.Width)+","
 				+    POut.Float (claimFormItem.Height)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

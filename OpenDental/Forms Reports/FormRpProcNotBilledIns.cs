@@ -39,15 +39,15 @@ namespace OpenDental{
 			gridMain.ContextMenu=contextMenuGrid;
 			dateRangePicker.SetDateTimeTo(DateTime.Today);
 			dateRangePicker.SetDateTimeFrom(DateTime.Today);
-			if(PrefC.GetBool(PrefName.ShowFeatureMedicalInsurance)) {
+			if(Preferences.GetBool(PrefName.ShowFeatureMedicalInsurance)) {
 				checkMedical.Visible=true;
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				comboBoxMultiClinics.Visible=true;
 				labelClinic.Visible=true;
 				FillClinics();
 			}
-			if(PrefC.GetBool(PrefName.ClaimProcsNotBilledToInsAutoGroup)) {
+			if(Preferences.GetBool(PrefName.ClaimProcsNotBilledToInsAutoGroup)) {
 				checkAutoGroupProcs.Checked=true;
 			}
 			FillGrid();
@@ -66,7 +66,7 @@ namespace OpenDental{
 				gridMain.Columns.Add(col);
 				col=new ODGridColumn(Lan.g(this,"Procedure Descipion"),0);//Dynaimc width
 				gridMain.Columns.Add(col);
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					col=new ODGridColumn(Lan.g(this,"Clinic"),_colWidthClinic);
 					gridMain.Columns.Add(col);
 				}
@@ -86,7 +86,7 @@ namespace OpenDental{
 					row.Cells.Add(Lan.g("enumProcStat",PIn.String(queryObj.ReportTable.Rows[j][1].ToString())));//Stat
 					row.Cells.Add(PIn.Date(queryObj.ReportTable.Rows[j][2].ToString()).ToShortDateString());//Procedure Date
 					row.Cells.Add(queryObj.ReportTable.Rows[j][3].ToString());//Procedure Description
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						long clinicNum=PIn.Long(queryObj.ReportTable.Rows[j][6].ToString());
 						if(clinicNum==0) {
 							row.Cells.Add("Unassigned");
@@ -131,7 +131,7 @@ namespace OpenDental{
 		private void RefreshReport() {
 			bool hasValidationPassed=ValidateFields();
 			List<long> listClinicNums=new List<long>();
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(comboBoxMultiClinics.ListSelectedIndices.Contains(0)) {//All option selected
 					for(int j=0;j<_listClinics.Count;j++) {
 						listClinicNums.Add(_listClinics[j].ClinicNum);//Add all clinics this person has access to.
@@ -160,7 +160,7 @@ namespace OpenDental{
 					checkShowProcsNoIns.Checked,checkShowProcsInProcess.Checked);
 			}
 			string subtitleClinics="";
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(comboBoxMultiClinics.ListSelectedIndices.Contains(0)) {//All option selected
 					subtitleClinics=Lan.g(this,"All Clinics");
 				}
@@ -187,14 +187,14 @@ namespace OpenDental{
 			_myReport=new ReportComplex(true,false,false);
 			_myReport.ReportName=Lan.g(this,"Procedures Not Billed to Insurance");
 			_myReport.AddTitle("Title",Lan.g(this,"Procedures Not Billed to Insurance"));
-			_myReport.AddSubTitle("Practice Name",PrefC.GetString(PrefName.PracticeTitle));
+			_myReport.AddSubTitle("Practice Name",Preferences.GetString(PrefName.PracticeTitle));
 			if(_myReportDateFrom==_myReportDateTo) {
 				_myReport.AddSubTitle("Report Dates",_myReportDateFrom.ToShortDateString());
 			}
 			else {
 				_myReport.AddSubTitle("Report Dates",_myReportDateFrom.ToShortDateString()+" - "+_myReportDateTo.ToShortDateString());
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				_myReport.AddSubTitle("Clinics",subtitleClinics);
 			}
 			QueryObject query=_myReport.AddQuery(tableNotBilled,DateTimeOD.Today.ToShortDateString());
@@ -218,7 +218,7 @@ namespace OpenDental{
 				_myReportDateFrom=DateTime.MinValue;
 				_myReportDateTo=DateTime.MaxValue;
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				bool isAllClinics=comboBoxMultiClinics.ListSelectedIndices.Contains(0);
 				if(!isAllClinics && comboBoxMultiClinics.SelectedIndices.Count==0) {
 					comboBoxMultiClinics.SetSelected(0,true);//All clinics.
@@ -356,10 +356,10 @@ namespace OpenDental{
 					procNotBilled=listProcs[0];
 					//Update listProcs to reflect those that match the procNotBilled values.
 					listProcs=listProcs.FindAll(x => x.HasPriClaim==procNotBilled.HasPriClaim && x.HasSecClaim==procNotBilled.HasSecClaim);
-					if(PrefC.HasClinicsEnabled) {//Group by clinic only if clinics enabled.
+					if(Preferences.HasClinicsEnabled) {//Group by clinic only if clinics enabled.
 						listProcs=listProcs.FindAll(x => x.ClinicNum==procNotBilled.ClinicNum);
 					}
-					else if(!PrefC.GetBool(PrefName.EasyHidePublicHealth)) {//Group by Place of Service only if Public Health feature is enabled.
+					else if(!Preferences.GetBool(PrefName.EasyHidePublicHealth)) {//Group by Place of Service only if Public Health feature is enabled.
 						listProcs=listProcs.FindAll(x => x.PlaceService==procNotBilled.PlaceService);
 					}
 				}

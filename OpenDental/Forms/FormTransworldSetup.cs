@@ -32,7 +32,7 @@ namespace OpenDental {
 				return;
 			}
 			checkEnabled.Checked=_progCur.Enabled;
-			if(!PrefC.HasClinicsEnabled) {//clinics are not enabled, use ClinicNum 0 to indicate 'Headquarters' or practice level program properties
+			if(!Preferences.HasClinicsEnabled) {//clinics are not enabled, use ClinicNum 0 to indicate 'Headquarters' or practice level program properties
 				checkEnabled.Text=Lan.g(this,"Enabled");
 				groupClinicSettings.Text=Lan.g(this,"Transworld Settings");
 				comboClinic.Visible=false;
@@ -70,12 +70,12 @@ namespace OpenDental {
 			_dictClinicListProgProps=ProgramProperties.GetForProgram(_progCur.ProgramNum)//get list of all props for the program
 				.GroupBy(x => x.ClinicNum)//group each clinic
 				.ToDictionary(x => x.Key,x => x.ToList());//turn list into a dictionary of key=ClinicNum, value=List<ProgramProperty> for the clinic
-			DateTime dateTSend=PrefC.GetDateT(PrefName.TransworldServiceTimeDue);
+			DateTime dateTSend=Preferences.GetDateTime(PrefName.TransworldServiceTimeDue);
 			if(dateTSend!=DateTime.MinValue) {
 				textUpdatesTimeOfDay.Text=dateTSend.ToShortTimeString();
 			}
 			comboSendFrequencyUnits.Items.AddRange(Enum.GetNames(typeof(FrequencyUnit)));
-			string[] sendFreqStrs=PrefC.GetString(PrefName.TransworldServiceSendFrequency).Split(new char[] { ' ' },StringSplitOptions.RemoveEmptyEntries);
+			string[] sendFreqStrs=Preferences.GetString(PrefName.TransworldServiceSendFrequency).Split(new char[] { ' ' },StringSplitOptions.RemoveEmptyEntries);
 			if(sendFreqStrs.Length==2) {
 				int sendFreq=PIn.Int(sendFreqStrs[0],false);
 				FrequencyUnit sendFreqUnit;
@@ -96,7 +96,7 @@ namespace OpenDental {
 		private void FillComboBoxes() {
 			foreach(Def defCur in Defs.GetDefsForCategory(DefCat.BillingTypes,true).Where(x => x.ItemValue.ToLower()!="c")) {
 				comboPaidInFullBillType.Items.Add(new ODBoxItem<Def>(defCur.ItemName,defCur.Copy()));
-				if(defCur.DefNum==PrefC.GetLong(PrefName.TransworldPaidInFullBillingType)) {
+				if(defCur.DefNum==Preferences.GetLong(PrefName.TransworldPaidInFullBillingType)) {
 					comboPaidInFullBillType.SelectedIndex=comboPaidInFullBillType.Items.Count-1;
 				}
 			}
@@ -118,7 +118,7 @@ namespace OpenDental {
 		///remain unchanged and the currently selected clinic will no longer be synced with HQ and will have a set of props added to the dict.</summary>
 		private void FillFields() {
 			long clinicNum=0;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
 			}
 			List<ProgramProperty> listPropsCurClinic;

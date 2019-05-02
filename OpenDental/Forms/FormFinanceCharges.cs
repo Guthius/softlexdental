@@ -486,12 +486,12 @@ namespace OpenDental{
 		#endregion
 
 		private void FormFinanceCharges_Load(object sender, System.EventArgs e) {
-			if(PrefC.GetLong(PrefName.FinanceChargeAdjustmentType)==0){
+			if(Preferences.GetLong(PrefName.FinanceChargeAdjustmentType)==0){
 				MsgBox.Show(this,"No finance charge adjustment type has been set.  Please go to Setup | Account to fix this.");
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			if(PrefC.GetLong(PrefName.BillingChargeAdjustmentType)==0){
+			if(Preferences.GetLong(PrefName.BillingChargeAdjustmentType)==0){
 				MsgBox.Show(this,"No billing charge adjustment type has been set.  Please go to Setup | Account to fix this.");
 				DialogResult=DialogResult.Cancel;
 				return;
@@ -502,7 +502,7 @@ namespace OpenDental{
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			if(PrefC.GetBool(PrefName.AgingIsEnterprise)) {
+			if(Preferences.GetBool(PrefName.AgingIsEnterprise)) {
 				if(!RunAgingEnterprise(true)) {
 					DialogResult=DialogResult.Cancel;
 					return;
@@ -510,7 +510,7 @@ namespace OpenDental{
 			}
 			else {
 				SecurityLogs.MakeLogEntry(Permissions.AgingRan,0,"Aging Ran Automatically - Finance Charges Form");
-				DateTime asOfDate=(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)?PrefC.GetDate(PrefName.DateLastAging):DateTime.Today);
+				DateTime asOfDate=(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)?Preferences.GetDate(PrefName.DateLastAging):DateTime.Today);
 				bool result=true;
 				Cursor=Cursors.WaitCursor;
 				ODProgress.ShowAction(() => {
@@ -529,27 +529,27 @@ namespace OpenDental{
 			textDate.Text=DateTime.Today.ToShortDateString();		
 			textAPR.MaxVal=100;
 			textAPR.MinVal=0;
-			textAPR.Text=PrefC.GetString(PrefName.FinanceChargeAPR);
-			textBillingCharge.Text=PrefC.GetString(PrefName.BillingChargeAmount);
+			textAPR.Text=Preferences.GetString(PrefName.FinanceChargeAPR);
+			textBillingCharge.Text=Preferences.GetString(PrefName.BillingChargeAmount);
 			for(int i=0;i<_listBillingTypeDefs.Count;i++) {
 				listBillType.Items.Add(_listBillingTypeDefs[i].ItemName);
 				listBillType.SetSelected(i,true);
 			}
-			string defaultChargeMethod = PrefC.GetString(PrefName.BillingChargeOrFinanceIsDefault);
+			string defaultChargeMethod = Preferences.GetString(PrefName.BillingChargeOrFinanceIsDefault);
 			if (defaultChargeMethod == "Finance") {
 				radioFinanceCharge.Checked = true;
-				textDateLastRun.Text = PrefC.GetDate(PrefName.FinanceChargeLastRun).ToShortDateString();
-				textDateUndo.Text = PrefC.GetDate(PrefName.FinanceChargeLastRun).ToShortDateString();
+				textDateLastRun.Text = Preferences.GetDate(PrefName.FinanceChargeLastRun).ToShortDateString();
+				textDateUndo.Text = Preferences.GetDate(PrefName.FinanceChargeLastRun).ToShortDateString();
 				textBillingCharge.ReadOnly=true;
 				textBillingCharge.BackColor=System.Drawing.SystemColors.Control;
 			}
 			else if (defaultChargeMethod == "Billing") {
 				radioBillingCharge.Checked = true;
-				textDateLastRun.Text = PrefC.GetDate(PrefName.BillingChargeLastRun).ToShortDateString();
-				textDateUndo.Text = PrefC.GetDate(PrefName.BillingChargeLastRun).ToShortDateString();
+				textDateLastRun.Text = Preferences.GetDate(PrefName.BillingChargeLastRun).ToShortDateString();
+				textDateUndo.Text = Preferences.GetDate(PrefName.BillingChargeLastRun).ToShortDateString();
 			}
-			textAtLeast.Text=PrefC.GetString(PrefName.FinanceChargeAtLeast);
-			textOver.Text=PrefC.GetString(PrefName.FinanceChargeOnlyIfOver);
+			textAtLeast.Text=Preferences.GetString(PrefName.FinanceChargeAtLeast);
+			textOver.Text=Preferences.GetString(PrefName.FinanceChargeOnlyIfOver);
 		}
 
 		///<summary>If !isPreCharges, a message box will display for any errors instructing users to try again.  If the failed aging attempt is after
@@ -559,12 +559,12 @@ namespace OpenDental{
 		private bool RunAgingEnterprise(bool isOnLoad=false) {
 			DateTime dtNow=MiscData.GetNowDateTime();
 			DateTime dtToday=dtNow.Date;
-			DateTime dateLastAging=PrefC.GetDate(PrefName.DateLastAging);
+			DateTime dateLastAging=Preferences.GetDate(PrefName.DateLastAging);
 			if(isOnLoad && dateLastAging.Date==dtToday) {
 				return true;//this is prior to inserting/deleting charges and aging has already been run for this date
 			}
 			Prefs.RefreshCache();
-			DateTime dateTAgingBeganPref=PrefC.GetDateT(PrefName.AgingBeginDateTime);
+			DateTime dateTAgingBeganPref=Preferences.GetDateTime(PrefName.AgingBeginDateTime);
 			if(dateTAgingBeganPref>DateTime.MinValue) {
 				if(isOnLoad) {
 					MessageBox.Show(this,Lan.g(this,"In order to add finance charges, aging must be calculated, but you cannot run aging until it has finished "
@@ -603,8 +603,8 @@ namespace OpenDental{
 			labelOver.Enabled=true;
 			textBillingCharge.ReadOnly = true;
 			textBillingCharge.BackColor = System.Drawing.SystemColors.Control;
-			textDateLastRun.Text = PrefC.GetDate(PrefName.FinanceChargeLastRun).ToShortDateString();
-			textDateUndo.Text = PrefC.GetDate(PrefName.FinanceChargeLastRun).ToShortDateString();
+			textDateLastRun.Text = Preferences.GetDate(PrefName.FinanceChargeLastRun).ToShortDateString();
+			textDateUndo.Text = Preferences.GetDate(PrefName.FinanceChargeLastRun).ToShortDateString();
 		}
 
 		private void radioBillingCharge_CheckedChanged(object sender, EventArgs e) {
@@ -618,8 +618,8 @@ namespace OpenDental{
 			labelOver.Enabled=false;
 			textBillingCharge.ReadOnly = false;
 			textBillingCharge.BackColor = System.Drawing.SystemColors.Window;
-			textDateLastRun.Text = PrefC.GetDate(PrefName.BillingChargeLastRun).ToShortDateString();
-			textDateUndo.Text = PrefC.GetDate(PrefName.BillingChargeLastRun).ToShortDateString();
+			textDateLastRun.Text = Preferences.GetDate(PrefName.BillingChargeLastRun).ToShortDateString();
+			textDateUndo.Text = Preferences.GetDate(PrefName.BillingChargeLastRun).ToShortDateString();
 		}
 
 		private void butUndo_Click(object sender,EventArgs e) {
@@ -643,7 +643,7 @@ namespace OpenDental{
 				DialogResult=DialogResult.OK;
 				return;
 			}
-			if(PrefC.GetBool(PrefName.AgingIsEnterprise)) {
+			if(Preferences.GetBool(PrefName.AgingIsEnterprise)) {
 				if(!RunAgingEnterprise()) {
 					MsgBox.Show(this,"There was an error calculating aging after the "+chargeType.ToLower()+" charge adjustments were deleted.\r\n"
 						+"You should run aging later to update affected accounts.");
@@ -651,7 +651,7 @@ namespace OpenDental{
 			}
 			else {
 				SecurityLogs.MakeLogEntry(Permissions.AgingRan,0,"Aging Ran - Finance Charges Form");
-				DateTime asOfDate=(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)?PrefC.GetDate(PrefName.DateLastAging):DateTime.Today);
+				DateTime asOfDate=(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)?Preferences.GetDate(PrefName.DateLastAging):DateTime.Today);
 				Cursor=Cursors.WaitCursor;
 				ODProgress.ShowAction(
 					() => {
@@ -675,12 +675,12 @@ namespace OpenDental{
 				return;
 			}
 			DateTime date=PIn.Date(textDate.Text);
-			if(PrefC.GetDate(PrefName.FinanceChargeLastRun).AddDays(25)>date) {
+			if(Preferences.GetDate(PrefName.FinanceChargeLastRun).AddDays(25)>date) {
 				if(!MsgBox.Show(this,true,"Warning.  Finance charges should not be run more than once per month.  Continue?")) {
 					return;
 				}
 			} 
-			else if(PrefC.GetDate(PrefName.BillingChargeLastRun).AddDays(25)>date) {
+			else if(Preferences.GetDate(PrefName.BillingChargeLastRun).AddDays(25)>date) {
 				if(!MsgBox.Show(this,true,"Warning.  Billing charges should not be run more than once per month.  Continue?")) {
 					return;
 				}
@@ -694,7 +694,7 @@ namespace OpenDental{
 					return;
 				}
 			}
-			if(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily) && PrefC.GetDate(PrefName.DateLastAging).AddMonths(1)<=DateTime.Today) {
+			if(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily) && Preferences.GetDate(PrefName.DateLastAging).AddMonths(1)<=DateTime.Today) {
 				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"It has been more than a month since aging has been run.  It is recommended that you update the "
 					+"aging date and run aging before continuing."))
 				{
@@ -709,7 +709,7 @@ namespace OpenDental{
 			try {
 				actionCloseProgress=ODProgress.Show(ODEventType.Billing,typeof(BillingEvent),Lan.g(this,"Gathering patients with aged balances")+"...");
 				List<PatAging> listPatAgings=Patients.GetAgingListSimple(listSelectedBillTypes,new List<long> { });//Ordered by PatNum, for thread concurrency
-				long adjType=PrefC.GetLong(PrefName.FinanceChargeAdjustmentType);
+				long adjType=Preferences.GetLong(PrefName.FinanceChargeAdjustmentType);
 				Dictionary<long,List<Adjustment>> dictPatAdjustments=new Dictionary<long, List<Adjustment>>();
 				if(!checkCompound.Checked) {
 					int daysOver=(radio30.Checked ? 30
@@ -769,7 +769,7 @@ namespace OpenDental{
 				actionCloseProgress?.Invoke();//terminates progress bar
 			}
 			MessageBox.Show(Lan.g(this,chargeType+" charges added")+": "+chargesAdded);
-			if(PrefC.GetBool(PrefName.AgingIsEnterprise)) {
+			if(Preferences.GetBool(PrefName.AgingIsEnterprise)) {
 				if(!RunAgingEnterprise()) {
 					MsgBox.Show(this,"There was an error calculating aging after the "+chargeType.ToLower()+" charge adjustments were added.\r\n"
 						+"You should run aging later to update affected accounts.");
@@ -777,7 +777,7 @@ namespace OpenDental{
 			}
 			else {
 				SecurityLogs.MakeLogEntry(Permissions.AgingRan,0,"Aging Ran - Finance Charges Form");
-				DateTime asOfDate=(PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)?PrefC.GetDate(PrefName.DateLastAging):DateTime.Today);
+				DateTime asOfDate=(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)?Preferences.GetDate(PrefName.DateLastAging):DateTime.Today);
 				Cursor=Cursors.WaitCursor;
 				ODProgress.ShowAction(() => Ledgers.RunAging(),
 					startingMessage:Lan.g(this,"Calculating aging for all patients as of")+" "+asOfDate.ToShortDateString()+"...",
@@ -789,7 +789,7 @@ namespace OpenDental{
 
 		/// <summary>Returns true if a finance charge is added, false if one is not added</summary>
 		private bool AddFinanceCharge(long PatNum,DateTime date,string APR,string atLeast,string ifOver,double OverallBalance,long PriProv,long adjType) {
-			if(date.Date > DateTime.Today.Date && !PrefC.GetBool(PrefName.FutureTransDatesAllowed)) {
+			if(date.Date > DateTime.Today.Date && !Preferences.GetBool(PrefName.FutureTransDatesAllowed)) {
 				MsgBox.Show(this,"Adjustments cannot be made for future dates. Finance charge was not added.");
 				return false;
 			}
@@ -821,7 +821,7 @@ namespace OpenDental{
 		}
 
 		private void AddBillingCharge(long PatNum,DateTime date,string BillingChargeAmount,long PriProv) {
-			if(date.Date > DateTime.Today.Date && !PrefC.GetBool(PrefName.FutureTransDatesAllowed)) {
+			if(date.Date > DateTime.Today.Date && !Preferences.GetBool(PrefName.FutureTransDatesAllowed)) {
 				MsgBox.Show(this,"Adjustments cannot be made for future dates");
 				return;
 			}
@@ -830,7 +830,7 @@ namespace OpenDental{
 			//AdjustmentCur.DateEntry=PIn.PDate(textDate.Text);//automatically handled
 			AdjustmentCur.AdjDate = date;
 			AdjustmentCur.ProcDate = date;
-			AdjustmentCur.AdjType = PrefC.GetLong(PrefName.BillingChargeAdjustmentType);
+			AdjustmentCur.AdjType = Preferences.GetLong(PrefName.BillingChargeAdjustmentType);
 			AdjustmentCur.AdjNote = "";//"Billing Charge";
 			AdjustmentCur.AdjAmt = PIn.Double(BillingChargeAmount);
 			AdjustmentCur.ProvNum = PriProv;

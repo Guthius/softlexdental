@@ -376,8 +376,8 @@ namespace OpenDental{
 				.ThenBy(x => x.Pat.PatNum).ToList();
 			FillComboEmail();
 			FillGridRecipients();
-			textBodyTextTemplate.Text=PrefC.GetString(PrefName.JobManagerDefaultEmail);
-			textPledgeTemplate.Text=PrefC.GetString(PrefName.JobManagerDefaultBillingMsg);
+			textBodyTextTemplate.Text=Preferences.GetString(PrefName.JobManagerDefaultEmail);
+			textPledgeTemplate.Text=Preferences.GetString(PrefName.JobManagerDefaultBillingMsg);
 			textVersions.Text=JobCur.JobVersion;
 			textDescriptions.Text=JobCur.Title;
 			_listFeatureReqs.ForEach(x => textDescriptions.Text+="\r\n\r\nFeature Request #"+x.FeatReqNum+"\r\n"+x.Description);
@@ -388,9 +388,9 @@ namespace OpenDental{
 			List<Clinic> listClinicsAll = Clinics.GetDeepCopy();
 			_listEmailAddresses.RemoveAll(x => listClinicsAll.Any(y => x.EmailAddressNum==y.EmailAddressNum));//Exclude any email addresses that are associated to a clinic.
 			//Exclude default practice email address.
-			_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==PrefC.GetLong(PrefName.EmailDefaultAddressNum));
+			_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==Preferences.GetLong(PrefName.EmailDefaultAddressNum));
 			//Exclude web mail notification email address.
-			_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==PrefC.GetLong(PrefName.EmailNotifyAddressNum));
+			_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==Preferences.GetLong(PrefName.EmailNotifyAddressNum));
 			comboEmailFrom.Items.Add(Lan.g(this,"Practice/Clinic"));//default
 			comboEmailFrom.SelectedIndex=0;
 			textFromAddress.Text=EmailAddresses.GetByClinic(Clinics.ClinicNum).EmailUsername;
@@ -507,7 +507,7 @@ namespace OpenDental{
 			}
 			StringBuilder sb = new StringBuilder();
 			Cursor=Cursors.WaitCursor;
-			string template = PrefC.GetString(PrefName.JobManagerDefaultEmail);
+			string template = Preferences.GetString(PrefName.JobManagerDefaultEmail);
 			foreach(Jobs.JobEmail je in _listJobEmails) {
 				if(!je.IsSend) {
 					continue;
@@ -547,8 +547,8 @@ namespace OpenDental{
 			retVal.RecipientAddress=je.EmailAddress;
 			retVal.Subject=textSubject.Text.Replace("[Versions]",textVersions.Text);
 			retVal.ToAddress=je.EmailAddress;
-			retVal.BodyText=PrefC.GetString(PrefName.JobManagerDefaultEmail);
-			retVal.BodyText=retVal.BodyText.Replace("[PledgePara]",je.PledgeAmount==0?"":PrefC.GetString(PrefName.JobManagerDefaultBillingMsg));
+			retVal.BodyText=Preferences.GetString(PrefName.JobManagerDefaultEmail);
+			retVal.BodyText=retVal.BodyText.Replace("[PledgePara]",je.PledgeAmount==0?"":Preferences.GetString(PrefName.JobManagerDefaultBillingMsg));
 			retVal.BodyText=retVal.BodyText.Replace("[PledgeAmount]",je.PledgeAmount.ToString("C"));
 			retVal.BodyText=retVal.BodyText.Replace("[Descriptions]",textDescriptions.Text);
 			retVal.BodyText=retVal.BodyText.Replace("[Versions]",textVersions.Text);
@@ -562,8 +562,8 @@ namespace OpenDental{
 			if(FormEJTE.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			textBodyTextTemplate.Text=PrefC.GetString(PrefName.JobManagerDefaultEmail);
-			textPledgeTemplate.Text=PrefC.GetString(PrefName.JobManagerDefaultBillingMsg);
+			textBodyTextTemplate.Text=Preferences.GetString(PrefName.JobManagerDefaultEmail);
+			textPledgeTemplate.Text=Preferences.GetString(PrefName.JobManagerDefaultBillingMsg);
 		}
 
 		private void butCancel_Click(object sender, System.EventArgs e) {
@@ -576,8 +576,8 @@ namespace OpenDental{
 			}
 			Cursor=Cursors.WaitCursor;
 			SaveFileDialog Dlg=new SaveFileDialog();
-			if(Directory.Exists(PrefC.GetString(PrefName.ExportPath))) {
-				Dlg.InitialDirectory=PrefC.GetString(PrefName.ExportPath);
+			if(Directory.Exists(Preferences.GetString(PrefName.ExportPath))) {
+				Dlg.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
 			}
 			else if(Directory.Exists("C:\\")) {
 				Dlg.InitialDirectory="C:\\";

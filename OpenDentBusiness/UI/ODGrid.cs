@@ -3129,12 +3129,12 @@ namespace OpenDental.UI
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.AddExtension = true;
             saveFileDialog.FileName = fileName;
-            if (!Directory.Exists(PrefC.GetString(PrefName.ExportPath)))
+            if (!Directory.Exists(Preferences.GetString(PrefName.ExportPath)))
             {
                 try
                 {
-                    Directory.CreateDirectory(PrefC.GetString(PrefName.ExportPath));
-                    saveFileDialog.InitialDirectory = PrefC.GetString(PrefName.ExportPath);
+                    Directory.CreateDirectory(Preferences.GetString(PrefName.ExportPath));
+                    saveFileDialog.InitialDirectory = Preferences.GetString(PrefName.ExportPath);
                 }
                 catch
                 {
@@ -3143,7 +3143,7 @@ namespace OpenDental.UI
             }
             else
             {
-                saveFileDialog.InitialDirectory = PrefC.GetString(PrefName.ExportPath);
+                saveFileDialog.InitialDirectory = Preferences.GetString(PrefName.ExportPath);
             }
             saveFileDialog.Filter = "Text files(*.txt)|*.txt|Excel Files(*.xls)|*.xls|All files(*.*)|*.*";
             saveFileDialog.FilterIndex = 0;
@@ -3199,12 +3199,12 @@ namespace OpenDental.UI
                 saveFileDialog.DefaultExt = "txt";
                 saveFileDialog.FileName = (fileName ?? Title);
                 saveFileDialog.Filter = "Text files(*.txt)|*.txt|Excel Files(*.xls)|*.xls|All files(*.*)|*.*";
-                saveFileDialog.InitialDirectory = PrefC.GetString(PrefName.ExportPath);
-                if (!Directory.Exists(PrefC.GetString(PrefName.ExportPath)))
+                saveFileDialog.InitialDirectory = Preferences.GetString(PrefName.ExportPath);
+                if (!Directory.Exists(Preferences.GetString(PrefName.ExportPath)))
                 {
                     try
                     {
-                        Directory.CreateDirectory(PrefC.GetString(PrefName.ExportPath));
+                        Directory.CreateDirectory(Preferences.GetString(PrefName.ExportPath));
                     }
                     catch 
                     {
@@ -3803,7 +3803,7 @@ namespace OpenDental.UI
             {
                 //NOTE: if this preference is changed while the program is open there MAY be some lingering wiki links in the context menu. 
                 //It is not worth it to force users to log off and back on again, or to run the link removal code below EVERY time, even if the pref is disabled.
-                doWikiLogic = PrefC.GetBool(PrefName.WikiDetectLinks);//if this fails then we do not have a pref table or a wiki, so don't bother going with this part.
+                doWikiLogic = Preferences.GetBool(PrefName.WikiDetectLinks);//if this fails then we do not have a pref table or a wiki, so don't bother going with this part.
             }
             catch 
             {

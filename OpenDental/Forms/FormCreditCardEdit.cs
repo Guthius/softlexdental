@@ -51,7 +51,7 @@ namespace OpenDental {
 						comboPaymentPlans.SelectedIndex=i+1;
 					}
 				}
-				if(PrefC.IsODHQ) {
+				if(Preferences.IsODHQ) {
 					groupProcedures.Visible=true;
 					FillProcs();
 				}
@@ -300,7 +300,7 @@ namespace OpenDental {
 
 		private void butToday_Click(object sender,EventArgs e) {
 			if(textDayOfMonth.Text=="" && radioDayOfMonth.Checked) {
-				textDayOfMonth.Text=PrefC.IsODHQ ? PatCur.BillingCycleDay.ToString() : DateTime.Today.Day.ToString();
+				textDayOfMonth.Text=Preferences.IsODHQ ? PatCur.BillingCycleDay.ToString() : DateTime.Today.Day.ToString();
 			}
 			textDateStart.Text=DateTime.Today.ToShortDateString();
 		}
@@ -309,7 +309,7 @@ namespace OpenDental {
 			if(radioWeekDay.Checked) {
 				return;
 			}
-			if(PrefC.IsODHQ) {
+			if(Preferences.IsODHQ) {
 				textDayOfMonth.Text=PatCur.BillingCycleDay.ToString();
 			}
 			else {
@@ -416,7 +416,7 @@ namespace OpenDental {
 				return;
 			}
 			ProcessStartInfo info=new ProcessStartInfo(path);
-			string resultfile=PrefC.GetRandomTempFile("txt");
+			string resultfile=Preferences.GetRandomTempFile("txt");
 			try {
 				File.Delete(resultfile);//delete the old result file.
 			}
@@ -481,7 +481,7 @@ namespace OpenDental {
 				}
 				catch(Exception ex) {
 					if(MessageBox.Show(Lans.g(this,"Error when deleting from PaySimple:")+"\r\n"+ex.Message+"\r\n\r\n"
-						+Lans.g(this,"Do you still want to delete the card from ")+PrefC.GetString(PrefName.SoftwareName)+"?",
+						+Lans.g(this,"Do you still want to delete the card from ")+Preferences.GetString(PrefName.SoftwareName)+"?",
 						"",MessageBoxButtons.YesNo)==DialogResult.No) 
 					{
 						return false;
@@ -552,7 +552,7 @@ namespace OpenDental {
 					}
 					//Either update the exp date or update credit card number by deleting archive so new token can be created next time it's used.
 					ProcessStartInfo info=new ProcessStartInfo(path);
-					string resultfile=PrefC.GetRandomTempFile("txt");
+					string resultfile=Preferences.GetRandomTempFile("txt");
 					try {
 						File.Delete(resultfile);//delete the old result file.
 					}

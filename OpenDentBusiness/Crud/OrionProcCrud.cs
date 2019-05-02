@@ -97,15 +97,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one OrionProc into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(OrionProc orionProc,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				orionProc.OrionProcNum=ReplicationServers.GetKey("orionproc","OrionProcNum");
 			}
 			string command="INSERT INTO orionproc (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="OrionProcNum,";
 			}
 			command+="ProcNum,DPC,DPCpost,DateScheduleBy,DateStopClock,Status2,IsOnCall,IsEffectiveComm,IsRepair) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(orionProc.OrionProcNum)+",";
 			}
 			command+=
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (orionProc.IsOnCall)+","
 				+    POut.Bool  (orionProc.IsEffectiveComm)+","
 				+    POut.Bool  (orionProc.IsRepair)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

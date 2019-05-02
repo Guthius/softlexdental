@@ -53,8 +53,8 @@ namespace OpenDental {
 			Security.CurUser=userEntered;
 			Security.IsUserLoggedIn=true;
 
-			if(PrefC.GetBool(PrefName.PasswordsMustBeStrong)
-				&& PrefC.GetBool(PrefName.PasswordsWeakChangeToStrong)
+			if(Preferences.GetBool(PrefName.PasswordsMustBeStrong)
+				&& Preferences.GetBool(PrefName.PasswordsWeakChangeToStrong)
 				&& Userods.IsPasswordStrong(textPassword.Text)!="") //Password is not strong
 			{
 				MsgBox.Show(this,"You must change your password to a strong password due to the current Security settings.");

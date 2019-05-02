@@ -85,15 +85,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one LetterMerge into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(LetterMerge letterMerge,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				letterMerge.LetterMergeNum=ReplicationServers.GetKey("lettermerge","LetterMergeNum");
 			}
 			string command="INSERT INTO lettermerge (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="LetterMergeNum,";
 			}
 			command+="Description,TemplateName,DataFileName,Category,ImageFolder) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(letterMerge.LetterMergeNum)+",";
 			}
 			command+=
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(letterMerge.DataFileName)+"',"
 				+    POut.Long  (letterMerge.Category)+","
 				+    POut.Long  (letterMerge.ImageFolder)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

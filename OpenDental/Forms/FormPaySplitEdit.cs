@@ -76,7 +76,7 @@ namespace OpenDental {
 					comboUnearnedTypes.SelectedIndex=i+1;
 				}
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				_listClinics=new List<Clinic>() { new Clinic() { Abbr=Lan.g(this,"None") } }; //Seed with "None"
 				Clinics.GetForUserod(Security.CurUser).ForEach(x => _listClinics.Add(x));//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.
 				_listClinics.ForEach(x => comboClinic.Items.Add(x.Abbr));
@@ -127,11 +127,11 @@ namespace OpenDental {
 		///<summary>Sets the patient GroupBox, provider combobox & picker button, 
 		///and clinic combobox enabled/disabled depending on whether a proc is attached.</summary>
 		private void SetEnabledProc() {
-			if((ProcCur!=null || _adjCur!=null) && !_isEditAnyway && PrefC.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
+			if((ProcCur!=null || _adjCur!=null) && !_isEditAnyway && Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
 				groupPatient.Enabled=false;
 				comboProvider.Enabled=false;
 				butPickProv.Enabled=false;
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					comboClinic.Enabled=false;
 				}
 				if(Security.IsAuthorized(Permissions.Setup,true)) {
@@ -143,7 +143,7 @@ namespace OpenDental {
 				groupPatient.Enabled=true;
 				comboProvider.Enabled=true;
 				butPickProv.Enabled=true;
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					comboClinic.Enabled=true;
 				}
 				comboUnearnedTypes.Enabled=true;
@@ -170,8 +170,8 @@ namespace OpenDental {
 			else {
 				PaySplitCur.ProvNum=0;
 			}
-			if(_isEditAnyway || PrefC.GetInt(PrefName.RigorousAccounting)!=(int)RigorousAccounting.EnforceFully 
-				|| PrefC.GetBool(PrefName.AllowPrepayProvider)) 
+			if(_isEditAnyway || Preferences.GetInt(PrefName.RigorousAccounting)!=(int)RigorousAccounting.EnforceFully 
+				|| Preferences.GetBool(PrefName.AllowPrepayProvider)) 
 			{
 				return;
 			}
@@ -192,8 +192,8 @@ namespace OpenDental {
 			else {
 				PaySplitCur.UnearnedType=0;
 			}
-			if(_isEditAnyway || PrefC.GetInt(PrefName.RigorousAccounting)!=(int)RigorousAccounting.EnforceFully 
-				|| PrefC.GetBool(PrefName.AllowPrepayProvider)) 
+			if(_isEditAnyway || Preferences.GetInt(PrefName.RigorousAccounting)!=(int)RigorousAccounting.EnforceFully 
+				|| Preferences.GetBool(PrefName.AllowPrepayProvider)) 
 			{
 				return;
 			}
@@ -377,7 +377,7 @@ namespace OpenDental {
 				comboClinic.SelectedIndex=_listClinics.FindIndex(x => x.ClinicNum==PaySplitCur.ClinicNum);
 			}
 			butAttachProc.Enabled=false;
-			if(!_isEditAnyway && PrefC.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
+			if(!_isEditAnyway && Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
 				comboProvider.Enabled=false;
 				comboClinic.Enabled=false;
 				butPickProv.Enabled=false;
@@ -389,7 +389,7 @@ namespace OpenDental {
 			checkPatOtherFam.Enabled=false;
 			//Find the combo option for the procedure's clinic and provider.  If they don't exist in the list (are hidden) then it will set the text of the combo box instead.
 			comboProvider.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==PaySplitCur.ProvNum),() => { return Providers.GetAbbr(PaySplitCur.ProvNum); });
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum==PaySplitCur.ClinicNum),() => { return Clinics.GetAbbr(PaySplitCur.ClinicNum); });
 			}
 			//Proc selected will always be for the pat this paysplit was made for
@@ -441,7 +441,7 @@ namespace OpenDental {
 			butAttachAdjust.Enabled=false;
 			checkPayPlan.Checked=false;
 			checkPayPlan.Enabled=false;
-			if(!_isEditAnyway && PrefC.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
+			if(!_isEditAnyway && Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
 				comboProvider.Enabled=false;
 				comboClinic.Enabled=false;
 				butPickProv.Enabled=false;
@@ -453,7 +453,7 @@ namespace OpenDental {
 			checkPatOtherFam.Enabled=false;
 			//Find the combo option for the adjustment's clinic and provider.  If they don't exist in the list (are hidden) then it will set the text of the combo box instead.
 			comboProvider.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum==_adjCur.ProvNum),() => { return Providers.GetAbbr(_adjCur.ProvNum); });
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum==_adjCur.ClinicNum),() => { return Clinics.GetAbbr(_adjCur.ClinicNum); });
 			}
 			//Proc selected will always be for the pat this paysplit was made for
@@ -655,7 +655,7 @@ namespace OpenDental {
 			if(isNegSplit) {//if negative then we're allocating money from the original prepayment.
 				butAttachProc.Enabled=false;
 				butDetachProc.Enabled=false;
-				if(PrefC.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully && !PrefC.GetBool(PrefName.AllowPrepayProvider)) {
+				if(Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully && !Preferences.GetBool(PrefName.AllowPrepayProvider)) {
 					comboProvider.Enabled=false;
 					butPickProv.Enabled=false;  
 				}
@@ -774,7 +774,7 @@ namespace OpenDental {
 				return false;
 			}
 			double amount=PIn.Double(textAmount.Text);
-			if(PrefC.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully && PaySplitCur.UnearnedType!=0 && ProcCur!=null 
+			if(Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully && PaySplitCur.UnearnedType!=0 && ProcCur!=null 
 				&& !_isEditAnyway) 
 			{
 				MsgBox.Show(this,"Cannot have an unallocated split that also has an attached procedure.");
@@ -789,7 +789,7 @@ namespace OpenDental {
 					return false;
 				}
 			}
-      if(PrefC.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully && ProcCur==null && PaySplitCur.UnearnedType==0 
+      if(Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully && ProcCur==null && PaySplitCur.UnearnedType==0 
 					&& _adjCur==null) 
 			{
 				MsgBox.Show(this,"You must attach a procedure or adjustment to this payment.");
@@ -814,13 +814,13 @@ namespace OpenDental {
 			}
 			//Provider and Unearned combos will be correct at this point, based on ProvNum or UnearnedType.
 			//Unearned type and provider are set in SelectionChangeCommitted events for the respective combo boxes, when rigorous and provs not allowed
-			if(!_isEditAnyway && PrefC.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
+			if(!_isEditAnyway && Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
 				PaySplit split=SplitAssociated?.PaySplitOrig??new PaySplit();
 				if(split.ProvNum!=0 && ProcCur!=null && split.ProvNum!=ProcCur.ProvNum) {
 					MsgBox.Show(this,"Procedure provider and original paysplit provider do not match.");
 					return false;
 				}
-				if(PaySplitCur.ProvNum>0 && !PrefC.GetBool(PrefName.AllowPrepayProvider)) {
+				if(PaySplitCur.ProvNum>0 && !Preferences.GetBool(PrefName.AllowPrepayProvider)) {
 					PaySplitCur.UnearnedType=0;
 				}
 				else if(PaySplitCur.ProvNum<=0){
@@ -831,7 +831,7 @@ namespace OpenDental {
 					}
 					PaySplitCur.ProvNum=0;//This means it's unallocated.
 					if(comboUnearnedTypes.SelectedIndex==0) {
-						PaySplitCur.UnearnedType=PrefC.GetLong(PrefName.PrepaymentUnearnedType);
+						PaySplitCur.UnearnedType=Preferences.GetLong(PrefName.PrepaymentUnearnedType);
 					}
 					else {
 						PaySplitCur.UnearnedType=_listPaySplitUnearnedTypeDefs[comboUnearnedTypes.SelectedIndex-1].DefNum;

@@ -104,15 +104,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EhrMeasureEvent into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EhrMeasureEvent ehrMeasureEvent,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				ehrMeasureEvent.EhrMeasureEventNum=ReplicationServers.GetKey("ehrmeasureevent","EhrMeasureEventNum");
 			}
 			string command="INSERT INTO ehrmeasureevent (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EhrMeasureEventNum,";
 			}
 			command+="DateTEvent,EventType,PatNum,MoreInfo,CodeValueEvent,CodeSystemEvent,CodeValueResult,CodeSystemResult,FKey,DateStartTobacco,TobaccoCessationDesire) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(ehrMeasureEvent.EhrMeasureEventNum)+",";
 			}
 			command+=
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (ehrMeasureEvent.FKey)+","
 				+    POut.Date  (ehrMeasureEvent.DateStartTobacco)+","
 				+    POut.Byte  (ehrMeasureEvent.TobaccoCessationDesire)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
@@ -143,7 +143,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many EhrMeasureEvents into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<EhrMeasureEvent> listEhrMeasureEvents,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(EhrMeasureEvent ehrMeasureEvent in listEhrMeasureEvents) {
 					Insert(ehrMeasureEvent);
 				}

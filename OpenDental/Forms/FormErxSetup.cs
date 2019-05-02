@@ -58,7 +58,7 @@ namespace OpenDental {
 					radioDoseSpotLegacy.Checked=true;
 					//HideLegacy();
 				}
-				textNewCropAccountID.Text=PrefC.GetString(PrefName.NewCropAccountId);
+				textNewCropAccountID.Text=Preferences.GetString(PrefName.NewCropAccountId);
 				List<ProgramProperty> listClinicIDs=_listProgramProperties.FindAll(x => x.PropertyDesc==Erx.PropertyDescs.ClinicID);
 				List<ProgramProperty> listClinicKeys=_listProgramProperties.FindAll(x => x.PropertyDesc==Erx.PropertyDescs.ClinicKey);
 				//Always make sure clinicnum 0 (HQ) exists, regardless of if clinics are enabled
@@ -78,7 +78,7 @@ namespace OpenDental {
 					ppClinicKey.PropertyValue="";
 					_listProgramProperties.Add(ppClinicKey);
 				}
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					foreach(Clinic clinicCur in Clinics.GetAllForUserod(Security.CurUser)) {
 						if(!listClinicIDs.Exists(x => x.ClinicNum==clinicCur.ClinicNum)) {//Only add a program property if it doesn't already exist.
 							ProgramProperty ppClinicID=new ProgramProperty();
@@ -128,7 +128,7 @@ namespace OpenDental {
 			clinicHqModel.ClinicIDProperty=GetPropertyForClinic(0,Erx.PropertyDescs.ClinicID);
 			clinicHqModel.ClinicKeyProperty=GetPropertyForClinic(0,Erx.PropertyDescs.ClinicKey);
 			gridProperties.Rows.Add(CreateDoseSpotGridRow(clinicHqModel));//If clinics isn't enabled, this will be the only row in the grid.
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				foreach(Clinic clinicCur in Clinics.GetAllForUserod(Security.CurUser)) {
 					if(!checkShowHiddenClinics.Checked && clinicCur.IsHidden) {
 						continue;

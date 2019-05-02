@@ -76,15 +76,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SupplyNeeded into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(SupplyNeeded supplyNeeded,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				supplyNeeded.SupplyNeededNum=ReplicationServers.GetKey("supplyneeded","SupplyNeededNum");
 			}
 			string command="INSERT INTO supplyneeded (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="SupplyNeededNum,";
 			}
 			command+="Description,DateAdded) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(supplyNeeded.SupplyNeededNum)+",";
 			}
 			command+=
@@ -94,7 +94,7 @@ namespace OpenDentBusiness.Crud{
 				supplyNeeded.Description="";
 			}
 			OdSqlParameter paramDescription=new OdSqlParameter("paramDescription",OdDbType.Text,POut.StringParam(supplyNeeded.Description));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramDescription);
 			}
 			else {

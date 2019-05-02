@@ -30,7 +30,7 @@ namespace OpenDentBusiness {
 			return service;
 #endif
 			if(string.IsNullOrEmpty(webServiceHqUrl)) { //Default to the production URL.				
-				service.Url=PrefC.GetString(PrefName.WebServiceHQServerURL);
+				service.Url=Preferences.GetString(PrefName.WebServiceHQServerURL);
 			}
 			else { //URL was provided so use that.
 				service.Url=webServiceHqUrl;
@@ -51,14 +51,14 @@ namespace OpenDentBusiness {
 		///As of 17.4 installing gives implied conset to also enable the servcie for communicating.</summary>
 		public static ListenerServiceType SetEConnectorOn() {
 			return WebSerializer.DeserializePrimitiveOrThrow<ListenerServiceType>(
-					GetWebServiceMainHQInstance().SetEConnectorType(WebSerializer.SerializePrimitive<string>(PrefC.GetString(PrefName.RegistrationKey)),true));
+					GetWebServiceMainHQInstance().SetEConnectorType(WebSerializer.SerializePrimitive<string>(Preferences.GetString(PrefName.RegistrationKey)),true));
 		}
 
 		///<summary>Throws exceptions.</summary>
 		public static void BuildWebSchedNewPatApptURLs(List<long> listClinicNums,Action<XmlNode> aNodeParsed) {
 			//Make a web call to HQ to get the URLs for all the clinics.
 			string response=GetWebServiceMainHQInstance()
-					.BuildWebSchedNewPatApptURLs(PrefC.GetString(PrefName.RegistrationKey),String.Join("|",listClinicNums));
+					.BuildWebSchedNewPatApptURLs(Preferences.GetString(PrefName.RegistrationKey),String.Join("|",listClinicNums));
 			//Parse Response
 			XmlDocument doc=new XmlDocument();
 			XmlNode nodeError=null;
@@ -113,7 +113,7 @@ namespace OpenDentBusiness {
 		public static EServiceSetup.SignupOut GetEServiceSetupFull(SignupPortalPermission permission,bool isSwitchClinicPref=false) {
 			//Clinics will be stored in this order at HQ to allow signup portal to display them in proper order.
 			List<Clinic> clinics=Clinics.GetDeepCopy().OrderBy(x => x.ItemOrder).ToList();
-			if(PrefC.GetBool(PrefName.ClinicListIsAlphabetical)) {
+			if(Preferences.GetBool(PrefName.ClinicListIsAlphabetical)) {
 				clinics=clinics.OrderBy(x => x.Abbr).ToList();
 			}
 #if DEBUG
@@ -133,10 +133,10 @@ namespace OpenDentBusiness {
 							(
 								WebSerializer.WriteXml(new EServiceSetup.SignupIn() {
 									MethodNameInt=(int)EServiceSetup.SetupMethod.GetSignupOutFull,
-									HasClinics=PrefC.HasClinicsEnabled,
+									HasClinics=Preferences.HasClinicsEnabled,
 									//ClinicNum is not currently used as input.
 									ClinicNum=0,
-									ProgramVersionStr=PrefC.GetString(PrefName.ProgramVersion),
+									ProgramVersionStr=Preferences.GetString(PrefName.ProgramVersion),
 									SignupPortalPermissionInt=(int)permission,
 									Clinics=clinics
 										.Select(x => new EServiceSetup.SignupIn.ClinicLiteIn() {
@@ -164,7 +164,7 @@ namespace OpenDentBusiness {
 			#region Reconcile practice and clinics
 			List<EServiceSetup.SignupOut.SignupOutSms> smsSignups=GetSignups<EServiceSetup.SignupOut.SignupOutSms>(signupOut,eServiceCode.IntegratedTexting);
 			bool isSmsEnabled=false;
-			if(PrefC.HasClinicsEnabled) { //Clinics are ON so loop through all clinics and reconcile with HQ.
+			if(Preferences.HasClinicsEnabled) { //Clinics are ON so loop through all clinics and reconcile with HQ.
 				List<Clinic> listClinicsAll=Clinics.GetDeepCopy();
 				foreach(Clinic clinicDb in listClinicsAll) {
 					WebServiceMainHQProxy.EServiceSetup.SignupOut.SignupOutSms clinicSignup=
@@ -277,7 +277,7 @@ namespace OpenDentBusiness {
 						(
 							WebSerializer.WriteXml(new EServiceSetup.SignupIn() {
 								MethodNameInt=(int)EServiceSetup.SetupMethod.ValidateClinics,
-								HasClinics=PrefC.HasClinicsEnabled,
+								HasClinics=Preferences.HasClinicsEnabled,
 								SignupPortalPermissionInt=(int)SignupPortalPermission.ReadOnly,
 								Clinics=listClinicNums.Select(x => new EServiceSetup.SignupIn.ClinicLiteIn() { ClinicNum=x }).ToList(),
 							}),

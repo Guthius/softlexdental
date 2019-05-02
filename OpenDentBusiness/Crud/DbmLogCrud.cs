@@ -92,15 +92,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one DbmLog into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(DbmLog dbmLog,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				dbmLog.DbmLogNum=ReplicationServers.GetKey("dbmlog","DbmLogNum");
 			}
 			string command="INSERT INTO dbmlog (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="DbmLogNum,";
 			}
 			command+="UserNum,FKey,FKeyType,ActionType,DateTimeEntry,MethodName,LogText) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(dbmLog.DbmLogNum)+",";
 			}
 			command+=
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 				dbmLog.LogText="";
 			}
 			OdSqlParameter paramLogText=new OdSqlParameter("paramLogText",OdDbType.Text,POut.StringParam(dbmLog.LogText));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramLogText);
 			}
 			else {
@@ -131,7 +131,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many DbmLogs into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<DbmLog> listDbmLogs,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(DbmLog dbmLog in listDbmLogs) {
 					Insert(dbmLog);
 				}

@@ -26,7 +26,7 @@ namespace OpenDental {
 		}
 
 		private void FormRpBrokenAppointments_Load(object sender,EventArgs e) {
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				_hasClinicsEnabled=true;
 			}
 			else {
@@ -61,14 +61,14 @@ namespace OpenDental {
 					}
 				}
 			}
-			int value=PrefC.GetInt(PrefName.BrokenApptProcedure);
+			int value=Preferences.GetInt(PrefName.BrokenApptProcedure);
 			if(value==(int)BrokenApptProcedure.None) {//
 				radioProcs.Visible=false;
 			}
 			if(value>0){
 				radioProcs.Checked=true;
 			}
-			else if(PrefC.GetBool(PrefName.BrokenApptAdjustment)) {
+			else if(Preferences.GetBool(PrefName.BrokenApptAdjustment)) {
 				radioAdj.Checked=true;
 			}
 			else {
@@ -111,7 +111,7 @@ namespace OpenDental {
 				listOptions.SelectionMode=SelectionMode.One;
 				int index=0;
 				_listBrokenProcOptions.Clear();
-				BrokenApptProcedure brokenApptCodeDB=(BrokenApptProcedure)PrefC.GetInt(PrefName.BrokenApptProcedure);
+				BrokenApptProcedure brokenApptCodeDB=(BrokenApptProcedure)Preferences.GetInt(PrefName.BrokenApptProcedure);
 				switch(brokenApptCodeDB) {
 					case BrokenApptProcedure.None:
 					case BrokenApptProcedure.Missed:
@@ -146,7 +146,7 @@ namespace OpenDental {
 				_listPosAdjTypes.Clear();
 				listOptions.SelectionMode=SelectionMode.MultiSimple;
 				_listPosAdjTypes=Defs.GetPositiveAdjTypes();
-				long brokenApptAdjDefNum=PrefC.GetLong(PrefName.BrokenAppointmentAdjustmentType);
+				long brokenApptAdjDefNum=Preferences.GetLong(PrefName.BrokenAppointmentAdjustmentType);
 				for(int i=0; i<_listPosAdjTypes.Count;i++) {
 					listOptions.Items.Add(_listPosAdjTypes[i].ItemName);
 					if(_listPosAdjTypes[i].DefNum==brokenApptAdjDefNum) {
@@ -291,7 +291,7 @@ namespace OpenDental {
 			report.AddSubTitle("Providers",subtitleProvs,fontSubTitle);
 			report.AddSubTitle("Clinics",subtitleClinics,fontSubTitle);
 			QueryObject query;
-			if(PrefC.HasClinicsEnabled) {//Split the query up by clinics.
+			if(Preferences.HasClinicsEnabled) {//Split the query up by clinics.
 				query=report.AddQuery(table,Lan.g(this,"Date")+": "+DateTimeOD.Today.ToString("d"),"ClinicDesc",SplitByKind.Value,0,true);
 			}
 			else {

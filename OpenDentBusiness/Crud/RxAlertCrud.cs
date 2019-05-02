@@ -88,15 +88,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one RxAlert into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(RxAlert rxAlert,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				rxAlert.RxAlertNum=ReplicationServers.GetKey("rxalert","RxAlertNum");
 			}
 			string command="INSERT INTO rxalert (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="RxAlertNum,";
 			}
 			command+="RxDefNum,DiseaseDefNum,AllergyDefNum,MedicationNum,NotificationMsg,IsHighSignificance) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(rxAlert.RxAlertNum)+",";
 			}
 			command+=
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (rxAlert.MedicationNum)+","
 				+"'"+POut.String(rxAlert.NotificationMsg)+"',"
 				+    POut.Bool  (rxAlert.IsHighSignificance)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

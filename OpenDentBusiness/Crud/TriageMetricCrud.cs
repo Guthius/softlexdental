@@ -88,15 +88,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one TriageMetric into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(TriageMetric triageMetric,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				triageMetric.TriageMetricNum=ReplicationServers.GetKey("triagemetric","TriageMetricNum");
 			}
 			string command="INSERT INTO triagemetric (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="TriageMetricNum,";
 			}
 			command+="CountBlueTasks,CountWhiteTasks,CountRedTasks,DateTimeOldestTriageTaskOrTaskNote,DateTimeOldestUrgentTaskOrTaskNote) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(triageMetric.TriageMetricNum)+",";
 			}
 			command+=
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.DateT (triageMetric.DateTimeOldestTriageTaskOrTaskNote)+","
 				+    POut.DateT (triageMetric.DateTimeOldestUrgentTaskOrTaskNote)+")";
 				//DateTStamp can only be set by MySQL
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

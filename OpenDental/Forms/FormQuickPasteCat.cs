@@ -162,7 +162,7 @@ namespace OpenDental{
 			}
 			for(int i=0;i<Enum.GetNames(typeof(QuickPasteType)).Length;i++){
 				ODBoxItem<int> item=new ODBoxItem<int>(Enum.GetNames(typeof(QuickPasteType))[i],i);
-				if(i==(int)QuickPasteType.WebChat && !PrefC.IsODHQ) {
+				if(i==(int)QuickPasteType.WebChat && !Preferences.IsODHQ) {
 					continue;
 				}
 				listType.Items.Add(item);

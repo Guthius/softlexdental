@@ -20,9 +20,9 @@ namespace OpenDentBusiness {
 			ws.Url=PrefC.GetString(PrefName.UpdateServerAddress);
 			ws.Timeout=(int)TimeSpan.FromMinutes(20).TotalMilliseconds;
 #endif
-			if(PrefC.GetString(PrefName.UpdateWebProxyAddress) !="") {
-				IWebProxy proxy = new WebProxy(PrefC.GetString(PrefName.UpdateWebProxyAddress));
-				ICredentials cred=new NetworkCredential(PrefC.GetString(PrefName.UpdateWebProxyUserName),PrefC.GetString(PrefName.UpdateWebProxyPassword));
+			if(Preferences.GetString(PrefName.UpdateWebProxyAddress) !="") {
+				IWebProxy proxy = new WebProxy(Preferences.GetString(PrefName.UpdateWebProxyAddress));
+				ICredentials cred=new NetworkCredential(Preferences.GetString(PrefName.UpdateWebProxyUserName),Preferences.GetString(PrefName.UpdateWebProxyPassword));
 				proxy.Credentials=cred;
 				ws.Proxy=proxy;
 			}
@@ -41,19 +41,19 @@ namespace OpenDentBusiness {
 			using(XmlWriter writer = XmlWriter.Create(strbuild,settings)) {
 				writer.WriteStartElement("UpdateRequest");
 				writer.WriteStartElement("RegistrationKey");
-				writer.WriteString(PrefC.GetString(PrefName.RegistrationKey));
+				writer.WriteString(Preferences.GetString(PrefName.RegistrationKey));
 				writer.WriteEndElement();
 				writer.WriteStartElement("PracticeTitle");
-				writer.WriteString(PrefC.GetString(PrefName.PracticeTitle));
+				writer.WriteString(Preferences.GetString(PrefName.PracticeTitle));
 				writer.WriteEndElement();
 				writer.WriteStartElement("PracticePhone");
-				writer.WriteString(PrefC.GetString(PrefName.PracticePhone));
+				writer.WriteString(Preferences.GetString(PrefName.PracticePhone));
 				writer.WriteEndElement();
 				writer.WriteStartElement("ProgramVersion");
-				writer.WriteString(PrefC.GetString(PrefName.ProgramVersion));
+				writer.WriteString(Preferences.GetString(PrefName.ProgramVersion));
 				writer.WriteEndElement();
 				writer.WriteStartElement("ClinicCount");
-				writer.WriteString(PrefC.HasClinicsEnabled ? Clinics.GetCount(true).ToString() : "0");
+				writer.WriteString(Preferences.HasClinicsEnabled ? Clinics.GetCount(true).ToString() : "0");
 				writer.WriteEndElement();
 				writer.WriteStartElement("ListProgramsEnabled");
 				new XmlSerializer(typeof(List<string>)).Serialize(writer,listProgramsEnabled);

@@ -105,7 +105,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormAuditOneType_Load(object sender, System.EventArgs e) {
-			if(string.IsNullOrEmpty(PrefC.GetString(PrefName.ArchiveServerName))) {//Archive db not setup.
+			if(string.IsNullOrEmpty(Preferences.GetString(PrefName.ArchiveServerName))) {//Archive db not setup.
 				checkIncludeArchived.Enabled=false;
 			}
 			//Default is "Changes made to this appointment before the update to 12.3 will not be reflected below, but can be found in the regular audit trail."

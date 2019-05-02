@@ -94,15 +94,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EhrPatient into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EhrPatient ehrPatient,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				ehrPatient.PatNum=ReplicationServers.GetKey("ehrpatient","PatNum");
 			}
 			string command="INSERT INTO ehrpatient (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PatNum,";
 			}
 			command+="MotherMaidenFname,MotherMaidenLname,VacShareOk,MedicaidState,SexualOrientation,GenderIdentity,SexualOrientationNote,GenderIdentityNote) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(ehrPatient.PatNum)+",";
 			}
 			command+=
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(ehrPatient.GenderIdentity)+"',"
 				+"'"+POut.String(ehrPatient.SexualOrientationNote)+"',"
 				+"'"+POut.String(ehrPatient.GenderIdentityNote)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

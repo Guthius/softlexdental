@@ -413,7 +413,7 @@ namespace OpenDental{
 
 		private void FormLetterMergeEdit_Load(object sender, System.EventArgs e) {
 			textDescription.Text=LetterMergeCur.Description;
-			mergePath=PrefC.GetString(PrefName.LetterMergePath);
+			mergePath=Preferences.GetString(PrefName.LetterMergePath);
 			textPath.Text=mergePath;
 			textTemplateName.Text=LetterMergeCur.TemplateName;
 			textDataFileName.Text=LetterMergeCur.DataFileName;
@@ -560,16 +560,16 @@ namespace OpenDental{
 		private void butEditPaths_Click(object sender, System.EventArgs e) {
 			FormPath FormP=new FormPath();
 			FormP.ShowDialog();
-			mergePath=PrefC.GetString(PrefName.LetterMergePath);
+			mergePath=Preferences.GetString(PrefName.LetterMergePath);
 			textPath.Text=mergePath;
 		}
 
 		private void butBrowse_Click(object sender, System.EventArgs e) {
-			if(!Directory.Exists(PrefC.GetString(PrefName.LetterMergePath))){
+			if(!Directory.Exists(Preferences.GetString(PrefName.LetterMergePath))){
 				MsgBox.Show(this,"Letter merge path invalid");
 				return;
 			}
-			openFileDlg.InitialDirectory=PrefC.GetString(PrefName.LetterMergePath);
+			openFileDlg.InitialDirectory=Preferences.GetString(PrefName.LetterMergePath);
 			if(openFileDlg.ShowDialog() !=DialogResult.OK){
 				return;
 			}
@@ -581,7 +581,7 @@ namespace OpenDental{
 				MessageBox.Show(this, "This version of Open Dental does not support Microsoft Word.");
 				return;
 			#endif
-			if(!Directory.Exists(PrefC.GetString(PrefName.LetterMergePath))){
+			if(!Directory.Exists(Preferences.GetString(PrefName.LetterMergePath))){
 				MsgBox.Show(this,"Letter merge path invalid");
 				return;
 			}
@@ -589,7 +589,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter a template file name first.");
 				return;
 			}
-			string templateFile=ODFileUtils.CombinePaths(PrefC.GetString(PrefName.LetterMergePath),textTemplateName.Text);
+			string templateFile=ODFileUtils.CombinePaths(Preferences.GetString(PrefName.LetterMergePath),textTemplateName.Text);
 			if(File.Exists(templateFile)){
 				MsgBox.Show(this,"A file with that name already exists.  Choose a different name, or close this window to edit the template.");
 				return;

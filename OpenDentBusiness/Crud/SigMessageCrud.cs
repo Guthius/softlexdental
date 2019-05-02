@@ -103,15 +103,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SigMessage into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(SigMessage sigMessage,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				sigMessage.SigMessageNum=ReplicationServers.GetKey("sigmessage","SigMessageNum");
 			}
 			string command="INSERT INTO sigmessage (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="SigMessageNum,";
 			}
 			command+="ButtonText,ButtonIndex,SynchIcon,FromUser,ToUser,MessageDateTime,AckDateTime,SigText,SigElementDefNumUser,SigElementDefNumExtra,SigElementDefNumMsg) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(sigMessage.SigMessageNum)+",";
 			}
 			command+=
@@ -126,7 +126,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (sigMessage.SigElementDefNumUser)+","
 				+    POut.Long  (sigMessage.SigElementDefNumExtra)+","
 				+    POut.Long  (sigMessage.SigElementDefNumMsg)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

@@ -146,7 +146,7 @@ namespace OpenDental{
 		private void FillList(){
 			Programs.RefreshCache();
 			_listPrograms=Programs.GetListDeep();
-			if(!PrefC.IsODHQ) {
+			if(!Preferences.IsODHQ) {
 				_listPrograms.RemoveAll(x => x.ProgName==ProgramName.AvaTax.ToString());
 			}
 			gridProgram.BeginUpdate();

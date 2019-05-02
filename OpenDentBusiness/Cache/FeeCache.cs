@@ -48,7 +48,7 @@ namespace OpenDentBusiness {
 		///<summary>Fill a new FeeCache with the provided list of fees. The size limit of _queueClinicNums will equal the number of distinct clinic nums 
 		///represented in the list of fees.  The size limit of _queueClinicNums will default to 5 if an empty list of fees is passed in.</summary>
 		public FeeCache(List<Fee> listFees) {
-			if(!PrefC.GetBool(PrefName.FeesUseCache)){
+			if(!Preferences.GetBool(PrefName.FeesUseCache)){
 				return;
 			}
 			_queueClinicNums=new FeeCacheQueue(listFees.Select(x => x.ClinicNum).Distinct().Count());
@@ -58,7 +58,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Load the dictionary with the non-hidden fee schedule fees for each of the clinics currently in the queue.</summary>
 		public void Initialize() {
-			if(!PrefC.GetBool(PrefName.FeesUseCache)){
+			if(!Preferences.GetBool(PrefName.FeesUseCache)){
 				return;
 			}
 			List<long> listFeeScheds=FeeScheds.GetDeepCopy(true).Select(x => x.FeeSchedNum).ToList();
@@ -68,7 +68,7 @@ namespace OpenDentBusiness {
 		///<summary>Returns a deep copy of fee cache including _queueFeeUdpates and the current transaction status. If the current cache contains no fees
 		///we fill with the HQ and current clinic fees before making the copy.</summary>
 		public IFeeCache GetCopy() {
-			if(!PrefC.GetBool(PrefName.FeesUseCache)){
+			if(!Preferences.GetBool(PrefName.FeesUseCache)){
 				throw new Exception("No fee cache.");
 			}
 			FeeCache retVal=new FeeCache(doInitialize:false);
@@ -131,7 +131,7 @@ namespace OpenDentBusiness {
 		///3 - The fee with the same codeNum, feeSchedNum, and both a clinicNum and providerNum of 0
 		///If no partial match can be found, return null.</summary>
 		public Fee GetFee(long codeNum,long feeSchedNum,long clinicNum=0,long provNum=0,bool doGetExactMatch=false) {
-			if(!PrefC.GetBool(PrefName.FeesUseCache)){
+			if(!Preferences.GetBool(PrefName.FeesUseCache)){
 				throw new Exception("No cache");
 			}
 			AddClinicNum(clinicNum);
@@ -187,7 +187,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Return the list of fees for the feeSchedNum. Pass in clinic num to ensure the clinic we want to use is loaded into the cache.</summary>
 		public List<Fee> GetFeesForFeeSchedNum(long feeSchedNum,long clinicNum) {
-			if(!PrefC.GetBool(PrefName.FeesUseCache)){
+			if(!Preferences.GetBool(PrefName.FeesUseCache)){
 				throw new Exception("No fee cache.");
 			}
 			AddClinicNum(clinicNum);
@@ -221,7 +221,7 @@ namespace OpenDentBusiness {
 		///is false. Returns 0 if the fee can't be found.</summary>
 		public double GetAmount0(long codeNum,long feeSchedNum,long clinicNum = 0,long provNum = 0) {
 			//No need to check RemotingRole; no call to db.
-			if(!PrefC.GetBool(PrefName.FeesUseCache)){
+			if(!Preferences.GetBool(PrefName.FeesUseCache)){
 				throw new Exception("No fee cache.");
 			}
 			AddClinicNum(clinicNum);
@@ -268,7 +268,7 @@ namespace OpenDentBusiness {
 		///clinics is more than x + 2 (HQ and current Clinic). If we add the clinic to the queue, we also get the fees for that clinic and add them to 
 		///the cache. If we remove a clinic from the queue, we also remove the fees for that clinic from the cache.</summary>
 		private void AddClinicNum(long clinicNum) {
-			if(!PrefC.GetBool(PrefName.FeesUseCache)){
+			if(!Preferences.GetBool(PrefName.FeesUseCache)){
 				throw new Exception("No fee cache.");
 			}
 			long removedClinic;
@@ -296,7 +296,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Get all non-hidden fee sched fees for a clinic and add to the cache. Cannot be used as part of a transaction.</summary>
 		private void AddClinicFees(long clinicNum) {
-			if(!PrefC.GetBool(PrefName.FeesUseCache)){
+			if(!Preferences.GetBool(PrefName.FeesUseCache)){
 				throw new Exception("No fee cache.");
 			}
 			List<long> listFeeScheds=FeeScheds.GetDeepCopy(true).Select(x => x.FeeSchedNum).ToList();
@@ -390,7 +390,7 @@ namespace OpenDentBusiness {
 		///Set signalods invalid for each distinct fee schedule represented in _queueFeeUpdates and re-initialize the static cache used by the Fees class.
 		///Finally, set _hasTransStarted back to false and clear _queueFeeUpdates.</summary>
 		public void SaveToDb() {
-			if(!PrefC.GetBool(PrefName.FeesUseCache)){
+			if(!Preferences.GetBool(PrefName.FeesUseCache)){
 				throw new Exception("No fee cache.");
 			}
 			if(_queueFeeUpdates==null || _queueFeeUpdates.Count==0) {

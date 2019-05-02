@@ -26,7 +26,7 @@ namespace OpenDental {
 			for(int i=0;i<_listProviders.Count;i++) {
 				comboProv.Items.Add(_listProviders[i].GetLongDesc());
 			}
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}
@@ -38,7 +38,7 @@ namespace OpenDental {
 					comboClinic.Items.Add(clin.Abbr);
 				}
 			}
-			if(PrefC.GetBool(PrefName.EasyHidePublicHealth)) {
+			if(Preferences.GetBool(PrefName.EasyHidePublicHealth)) {
 				comboSite.Visible=false;
 				labelSite.Visible=false;
 			}
@@ -82,11 +82,11 @@ namespace OpenDental {
 				provNum=_listProviders[comboProv.SelectedIndex-1].ProvNum;
 			}
 			long clinicNum=0;
-			if(PrefC.HasClinicsEnabled && comboClinic.SelectedIndex!=0) {
+			if(Preferences.HasClinicsEnabled && comboClinic.SelectedIndex!=0) {
 				clinicNum=_listClinics[comboClinic.SelectedIndex-1].ClinicNum;
 			}
 			long siteNum=0;
-			if(!PrefC.GetBool(PrefName.EasyHidePublicHealth) && comboSite.SelectedIndex!=0) {
+			if(!Preferences.GetBool(PrefName.EasyHidePublicHealth) && comboSite.SelectedIndex!=0) {
 				siteNum=_listSites[comboSite.SelectedIndex-1].SiteNum;
 			}
 			//Get table
@@ -102,11 +102,11 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn("Primary Provider",110);
 			gridMain.Columns.Add(col);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn("Clinic",110);
 				gridMain.Columns.Add(col);
 			}
-			if(!PrefC.GetBool(PrefName.EasyHidePublicHealth)) {
+			if(!Preferences.GetBool(PrefName.EasyHidePublicHealth)) {
 				col=new ODGridColumn("Site",110);
 				gridMain.Columns.Add(col);
 			}
@@ -118,10 +118,10 @@ namespace OpenDental {
 				row.Cells.Add(_table.Rows[i]["PatNum"].ToString());
 				row.Cells.Add(_table.Rows[i]["LName"].ToString()+", "+_table.Rows[i]["FName"].ToString());
 				row.Cells.Add(_table.Rows[i]["Provider"].ToString());
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add(_table.Rows[i]["Clinic"].ToString());
 				}
-				if(!PrefC.GetBool(PrefName.EasyHidePublicHealth)) {
+				if(!Preferences.GetBool(PrefName.EasyHidePublicHealth)) {
 					row.Cells.Add(_table.Rows[i]["Site"].ToString());
 				}
 				row.Tag=PIn.Long(_table.Rows[i]["PatNum"].ToString());

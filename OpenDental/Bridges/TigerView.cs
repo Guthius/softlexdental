@@ -227,7 +227,7 @@ namespace OpenDental.Bridges {
 		}
 
 		private static void ProcessFile(string fullPath) {
-			if(PrefC.AtoZfolderUsed==DataStorageType.InDatabase) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				MsgBox.Show("TigerView","TigerView is not currently supported when storing images in the database.");
 				return;
 			}

@@ -161,7 +161,7 @@ namespace OpenDental {
 					isImeComposition=false;
 				}
 				else {
-					isImeComposition=PrefC.GetBool(PrefName.ImeCompositionCompatibility);
+					isImeComposition=Preferences.GetBool(PrefName.ImeCompositionCompatibility);
 				}
 			}
 			catch{
@@ -359,7 +359,7 @@ namespace OpenDental {
 				contextMenu.MenuItems[13].Enabled=true;
 			}
 			if(!this._spellCheckIsEnabled
-			  || !PrefC.GetBool(PrefName.SpellCheckIsEnabled)
+			  || !Preferences.GetBool(PrefName.SpellCheckIsEnabled)
 			  || !IsOnMisspelled(PositionOfClick)) {//did not click on a misspelled word OR spell check is disabled
 				contextMenu.MenuItems[0].Visible=false;//suggestion 1
 				contextMenu.MenuItems[1].Visible=false;//suggestion 2
@@ -372,7 +372,7 @@ namespace OpenDental {
 				contextMenu.MenuItems[8].Visible=false;//separator
 			}
 			else if(this._spellCheckIsEnabled
-			  && PrefC.GetBool(PrefName.SpellCheckIsEnabled)
+			  && Preferences.GetBool(PrefName.SpellCheckIsEnabled)
 			  && IsOnMisspelled(PositionOfClick)) {//clicked on or near a misspelled word AND spell check is enabled
 				List<string> suggestions=SpellSuggest();
 				if(suggestions.Count==0) {//no suggestions
@@ -417,7 +417,7 @@ namespace OpenDental {
 				contextMenu.MenuItems[16].Visible=false;
 				contextMenu.MenuItems[16].Enabled=false;
 			}
-			if(!PrefC.GetBool(PrefName.WikiDetectLinks)) {//NOTE: if this preference is changed while the program is open there MAY be some lingering wiki links in the context menu. 
+			if(!Preferences.GetBool(PrefName.WikiDetectLinks)) {//NOTE: if this preference is changed while the program is open there MAY be some lingering wiki links in the context menu. 
 				//It is not worth it to force users to log off and back on again, or to run the link removal code below EVERY time, even if the pref is disabled.
 				return;
 			}
@@ -493,7 +493,7 @@ namespace OpenDental {
 				case 2:
 				case 3:
 				case 4:
-					if(!this._spellCheckIsEnabled || !PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//if spell check disabled, break.  Should never happen since the suggested words won't show if spell check disabled
+					if(!this._spellCheckIsEnabled || !Preferences.GetBool(PrefName.SpellCheckIsEnabled)) {//if spell check disabled, break.  Should never happen since the suggested words won't show if spell check disabled
 						break;
 					}
 					int originalCaret=this.SelectionStart;
@@ -510,7 +510,7 @@ namespace OpenDental {
 					break;
 				//case 5 is separator
 				case 6://Add to dict
-					if(!this._spellCheckIsEnabled || !PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//if spell check disabled, break.  Should never happen since Add to Dict won't show if spell check disabled
+					if(!this._spellCheckIsEnabled || !Preferences.GetBool(PrefName.SpellCheckIsEnabled)) {//if spell check disabled, break.  Should never happen since Add to Dict won't show if spell check disabled
 						break;
 					}
 					string newWord=ReplWord.Value;
@@ -593,7 +593,7 @@ namespace OpenDental {
 		}
 
 		private void timerSpellCheck_Tick(object sender,EventArgs e) {
-			if(!this._spellCheckIsEnabled || !PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//if spell check disabled, return
+			if(!this._spellCheckIsEnabled || !Preferences.GetBool(PrefName.SpellCheckIsEnabled)) {//if spell check disabled, return
 				return;
 			}
 			timerSpellCheck.Stop();
@@ -601,7 +601,7 @@ namespace OpenDental {
 		}
 
 		private void ODtextBox_VScroll(object sender,EventArgs e) {
-			if(!this._spellCheckIsEnabled || !PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//if spell check disabled, return
+			if(!this._spellCheckIsEnabled || !Preferences.GetBool(PrefName.SpellCheckIsEnabled)) {//if spell check disabled, return
 				return;
 			}
 			timerSpellCheck.Stop();
@@ -610,7 +610,7 @@ namespace OpenDental {
 
 		protected override void OnKeyDown(KeyEventArgs e) {
 			base.OnKeyDown(e);
-			if(!this._spellCheckIsEnabled || !PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//if spell check disabled, return
+			if(!this._spellCheckIsEnabled || !Preferences.GetBool(PrefName.SpellCheckIsEnabled)) {//if spell check disabled, return
 				return;
 			}
 			//The lines were shifted due to new input. This causes the location of the red wavy underline to shift down as well, so clear them.
@@ -622,7 +622,7 @@ namespace OpenDental {
 		///<summary>When the contents of the text box is resized, e.g. when word wrap creates a new line, clear red wavy lines so they don't shift down.</summary>
 		private void ODtextBox_ContentsResized(object sender,ContentsResizedEventArgs e) {
 			try {
-				if(DesignMode || !this._spellCheckIsEnabled || !PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//if spell check disabled, return
+				if(DesignMode || !this._spellCheckIsEnabled || !Preferences.GetBool(PrefName.SpellCheckIsEnabled)) {//if spell check disabled, return
 					return;
 				}
 			}
@@ -645,7 +645,7 @@ namespace OpenDental {
 		///<summary></summary>
 		protected override void OnKeyUp(KeyEventArgs e) {
 			base.OnKeyUp(e);
-			if(this._spellCheckIsEnabled && PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//Only spell check if enabled
+			if(this._spellCheckIsEnabled && Preferences.GetBool(PrefName.SpellCheckIsEnabled)) {//Only spell check if enabled
 				timerSpellCheck.Stop();
 			}
 			int originalLength=Text.Length;
@@ -659,7 +659,7 @@ namespace OpenDental {
 			if(e.KeyCode==Keys.Q && e.Modifiers==Keys.Control) {
 				ShowFullDialog();
 			}
-			if(this._spellCheckIsEnabled && PrefC.GetBool(PrefName.SpellCheckIsEnabled)) {//Only spell check if enabled
+			if(this._spellCheckIsEnabled && Preferences.GetBool(PrefName.SpellCheckIsEnabled)) {//Only spell check if enabled
 				timerSpellCheck.Start();
 			}
 		}
@@ -737,8 +737,8 @@ namespace OpenDental {
 #endif
 			//Only spell check if enabled
 			if(!this._spellCheckIsEnabled 
-				|| !PrefC.GetBool(PrefName.SpellCheckIsEnabled)
-				|| PrefC.GetBool(PrefName.ImeCompositionCompatibility))
+				|| !Preferences.GetBool(PrefName.SpellCheckIsEnabled)
+				|| Preferences.GetBool(PrefName.ImeCompositionCompatibility))
 			{
 				//Do not spell check languages that use composition.  If needed in the future, fix the bug where the first char disapears in the box.
 				//E.g. go into an ODTextBox, set language input to Korean, and simply type the letter 'ㅇ' (d) and wait.  It will disapear.

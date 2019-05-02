@@ -92,15 +92,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ApptReminderSent into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ApptReminderSent apptReminderSent,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				apptReminderSent.ApptReminderSentNum=ReplicationServers.GetKey("apptremindersent","ApptReminderSentNum");
 			}
 			string command="INSERT INTO apptremindersent (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ApptReminderSentNum,";
 			}
 			command+="ApptNum,ApptDateTime,DateTimeSent,TSPrior,ApptReminderRuleNum,IsSmsSent,IsEmailSent) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(apptReminderSent.ApptReminderSentNum)+",";
 			}
 			command+=
@@ -111,7 +111,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (apptReminderSent.ApptReminderRuleNum)+","
 				+    POut.Bool  (apptReminderSent.IsSmsSent)+","
 				+    POut.Bool  (apptReminderSent.IsEmailSent)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
@@ -127,7 +127,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many ApptReminderSents into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<ApptReminderSent> listApptReminderSents,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(ApptReminderSent apptReminderSent in listApptReminderSents) {
 					Insert(apptReminderSent);
 				}

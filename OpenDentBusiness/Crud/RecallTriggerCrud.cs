@@ -76,21 +76,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one RecallTrigger into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(RecallTrigger recallTrigger,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				recallTrigger.RecallTriggerNum=ReplicationServers.GetKey("recalltrigger","RecallTriggerNum");
 			}
 			string command="INSERT INTO recalltrigger (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="RecallTriggerNum,";
 			}
 			command+="RecallTypeNum,CodeNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(recallTrigger.RecallTriggerNum)+",";
 			}
 			command+=
 				     POut.Long  (recallTrigger.RecallTypeNum)+","
 				+    POut.Long  (recallTrigger.CodeNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

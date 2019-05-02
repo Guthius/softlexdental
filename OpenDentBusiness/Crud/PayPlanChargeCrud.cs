@@ -112,15 +112,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PayPlanCharge into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(PayPlanCharge payPlanCharge,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				payPlanCharge.PayPlanChargeNum=ReplicationServers.GetKey("payplancharge","PayPlanChargeNum");
 			}
 			string command="INSERT INTO payplancharge (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PayPlanChargeNum,";
 			}
 			command+="PayPlanNum,Guarantor,PatNum,ChargeDate,Principal,Interest,Note,ProvNum,ClinicNum,ChargeType,ProcNum,SecDateTEntry,StatementNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(payPlanCharge.PayPlanChargeNum)+",";
 			}
 			command+=
@@ -142,7 +142,7 @@ namespace OpenDentBusiness.Crud{
 				payPlanCharge.Note="";
 			}
 			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,POut.StringParam(payPlanCharge.Note));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNote);
 			}
 			else {

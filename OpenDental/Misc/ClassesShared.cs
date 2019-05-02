@@ -122,7 +122,7 @@ namespace OpenDental {
 				}
 				return false;
 			}
-			if(isSecurityLogged && PrefC.GetStringNoCache(PrefName.UpdateStreamLinePassword)!="abracadabra") {
+			if(isSecurityLogged && Preferences.GetStringNoCache(PrefName.UpdateStreamLinePassword)!="abracadabra") {
 				SecurityLogs.MakeLogEntryNoCache(Permissions.Backup,0,Lan.g("Backups","A backup was created when running the")+" "+backupLocation.ToString());
 			}
 			return true;

@@ -156,7 +156,7 @@ namespace OpenDentBusiness.UI {
 					//or the holiday applies to all ops for the clinic), color all of the op columns in the view for this day with the holiday brush
 					if(SchedListPeriod.FindAll(x => x.SchedType==ScheduleType.Practice && x.Status==SchedStatus.Holiday) //find all holidays
 						.Any(x => (int)x.SchedDate.DayOfWeek==d+1 //for this day of the week
-							&& (x.ClinicNum==0 || (PrefC.HasClinicsEnabled && x.ClinicNum==Clinics.ClinicNum)))) //and either practice or for this clinic
+							&& (x.ClinicNum==0 || (Preferences.HasClinicsEnabled && x.ClinicNum==Clinics.ClinicNum)))) //and either practice or for this clinic
 					{
 						g.FillRectangle(holidayBrush,TimeWidth+1+d*WeekDayWidth,0,WeekDayWidth,ApptSheetHeight);
 					}
@@ -180,7 +180,7 @@ namespace OpenDentBusiness.UI {
 				//are enabled and the schedule.ClinicNum is the currently selected clinic
 				//SchedListPeriod contains scheds for only one day, not for a week
 				if(SchedListPeriod.FindAll(x => x.SchedType==ScheduleType.Practice && x.Status==SchedStatus.Holiday) //find all holidays
-					.Any(x => x.ClinicNum==0 || (PrefC.HasClinicsEnabled && x.ClinicNum==Clinics.ClinicNum)))//for the practice or clinic
+					.Any(x => x.ClinicNum==0 || (Preferences.HasClinicsEnabled && x.ClinicNum==Clinics.ClinicNum)))//for the practice or clinic
 				{
 					g.FillRectangle(holidayBrush,TimeWidth+1,0,ColWidth*ColCount+ProvWidth*ProvCount,ApptSheetHeight);
 				}
@@ -293,7 +293,7 @@ namespace OpenDentBusiness.UI {
 							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*LineH/MinPerRow);
 					}
 					//paint either solid block or outline
-					if(PrefC.GetBool(PrefName.SolidBlockouts)) {
+					if(Preferences.GetBool(PrefName.SolidBlockouts)) {
 						g.FillRectangle(blockBrush,rect);
 						g.DrawLine(Pens.Black,rect.X,rect.Y+1,rect.Right-1,rect.Y+1);
 					}
@@ -564,7 +564,7 @@ namespace OpenDentBusiness.UI {
 		///<summary></summary>
 		public static void DrawTimeIndicatorLine(Graphics g) {
 			int curTimeY=(int)(DateTime.Now.Hour*LineH*RowsPerHr+DateTime.Now.Minute/60f*(float)LineH*RowsPerHr);
-			using(Pen penAppointmentTimeLineColor=new Pen(PrefC.GetColor(PrefName.AppointmentTimeLineColor))) {
+			using(Pen penAppointmentTimeLineColor=new Pen(Preferences.GetColor(PrefName.AppointmentTimeLineColor))) {
 				g.DrawLine(penAppointmentTimeLineColor,0,curTimeY
 					,TimeWidth*2+ProvWidth*ProvCount+ColWidth*ColCount,curTimeY);
 				g.DrawLine(penAppointmentTimeLineColor,0,curTimeY+1
@@ -794,7 +794,7 @@ namespace OpenDentBusiness.UI {
 						ColWidth=(ApptSheetWidth-TimeWidth*2-ProvWidth*ProvCount)/ColCount;
 					}
 				}
-				MinPerIncr=PrefC.GetInt(PrefName.AppointmentTimeIncrement);
+				MinPerIncr=Preferences.GetInt(PrefName.AppointmentTimeIncrement);
 				MinPerRow=(float)MinPerIncr/RowsPerIncr;
 				RowsPerHr=60/MinPerIncr*RowsPerIncr;
 			}

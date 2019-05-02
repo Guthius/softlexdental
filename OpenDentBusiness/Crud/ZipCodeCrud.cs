@@ -80,15 +80,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ZipCode into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ZipCode zipCode,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				zipCode.ZipCodeNum=ReplicationServers.GetKey("zipcode","ZipCodeNum");
 			}
 			string command="INSERT INTO zipcode (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ZipCodeNum,";
 			}
 			command+="ZipCodeDigits,City,State,IsFrequent) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(zipCode.ZipCodeNum)+",";
 			}
 			command+=
@@ -96,7 +96,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(zipCode.City)+"',"
 				+"'"+POut.String(zipCode.State)+"',"
 				+    POut.Bool  (zipCode.IsFrequent)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

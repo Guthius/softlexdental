@@ -45,25 +45,25 @@ namespace OpenDental {
 			#region 1st Reminder
 			//ReactivationEmailSubject
 			gridMain.AddRow(PrefName.ReactivationEmailSubject,Lan.g(this,"E-mail"), Lan.g(this,"Subject line")
-				,PrefC.GetString(PrefName.ReactivationEmailSubject)
+				,Preferences.GetString(PrefName.ReactivationEmailSubject)
 			);
 			//ReactivationEmailMessage
 			gridMain.AddRow(PrefName.ReactivationEmailMessage,Lan.g(this,"E-mail"),Lan.g(this,"Available variables")+": "+availableFields
-				,PrefC.GetString(PrefName.ReactivationEmailMessage)
+				,Preferences.GetString(PrefName.ReactivationEmailMessage)
 			);
 			//ReactivationEmailFamMsg
 			gridMain.AddRow(PrefName.ReactivationEmailFamMsg,Lan.g(this,"E-mail")
 				,Lan.g(this,"For multiple patients in one family.  Use [FamilyList] where the list of family members should show.")
-				,PrefC.GetString(PrefName.ReactivationEmailFamMsg)
+				,Preferences.GetString(PrefName.ReactivationEmailFamMsg)
 			);
 			//ReactivationPostcardMessage
 			gridMain.AddRow(PrefName.ReactivationPostcardMessage,Lan.g(this,"Postcard"),Lan.g(this,"Available variables")+": "+availableFields
-				,PrefC.GetString(PrefName.ReactivationPostcardMessage)
+				,Preferences.GetString(PrefName.ReactivationPostcardMessage)
 			);
 			//ReactivationPostcardFamMsg
 			gridMain.AddRow(PrefName.ReactivationPostcardFamMsg,Lan.g(this,"Postcard")
 				,Lan.g(this,"For multiple patients in one family.  Use [FamilyList] where the list of family members should show.")
-				,PrefC.GetString(PrefName.ReactivationPostcardFamMsg)
+				,Preferences.GetString(PrefName.ReactivationPostcardFamMsg)
 			);
 			#endregion
 			gridMain.EndUpdate();
@@ -80,7 +80,7 @@ namespace OpenDental {
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			PrefName prefName=gridMain.SelectedTag<PrefName>();
 			FormRecallMessageEdit FormR = new FormRecallMessageEdit(prefName);
-			FormR.MessageVal=PrefC.GetString(prefName);
+			FormR.MessageVal=Preferences.GetString(prefName);
 			FormR.ShowDialog();
 			if(FormR.DialogResult!=DialogResult.OK) {
 				return;

@@ -358,7 +358,7 @@ namespace OpenDental{
 			textDate.Text=DocCur.DateCreated.ToShortDateString();
 			textTime.Text=DocCur.DateCreated.ToLongTimeString();
 			textDescript.Text=DocCur.Description;
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				string patFolder=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());
 				textFileName.Text=ODFileUtils.CombinePaths(patFolder,DocCur.FileName);
 				if(File.Exists(textFileName.Text)) {
@@ -385,7 +385,7 @@ namespace OpenDental{
 		}
 
 		private void butOpen_Click(object sender,EventArgs e) {
-			if(PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
+			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				System.Diagnostics.Process.Start("Explorer",Path.GetDirectoryName(textFileName.Text));
 			}
 			else if(CloudStorage.IsCloudStorage) {//First download, then open
@@ -404,7 +404,7 @@ namespace OpenDental{
 					return;
 				}
 				//Create temp file here or create the file with the actual name?  Changes made when opening the file won't be saved, so I think temp file is best.
-				string tempFile=PrefC.GetRandomTempFile(Path.GetExtension(DocCur.FileName));
+				string tempFile=Preferences.GetRandomTempFile(Path.GetExtension(DocCur.FileName));
 				File.WriteAllBytes(tempFile,state.FileContent);
 				System.Diagnostics.Process.Start(tempFile);
 			}

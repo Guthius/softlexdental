@@ -320,7 +320,7 @@ namespace OpenDental
         ///Also disables pretty much every control available in the appointment module if it is going to return true, otherwise re-enables them.</summary>
         private bool IsHqNoneView()
         {
-            if (PrefC.HasClinicsEnabled && Clinics.ClinicNum == 0 && comboView.SelectedIndex == 0)
+            if (Preferences.HasClinicsEnabled && Clinics.ClinicNum == 0 && comboView.SelectedIndex == 0)
             {
                 ContrApptSheet2.Visible = false;
                 panelOps.Visible = false;
@@ -528,7 +528,7 @@ namespace OpenDental
                                 listVisScheds.Add(sched);
                             }
                         }
-                        long schedProvUnassinged = PrefC.GetLong(PrefName.ScheduleProvUnassigned);
+                        long schedProvUnassinged = Preferences.GetLong(PrefName.ScheduleProvUnassigned);
                         bool opShowsDefaultProv = false;
                         foreach (Operatory op in ApptDrawing.VisOps)
                         {
@@ -833,7 +833,7 @@ namespace OpenDental
             pinBoard.Invalidate();
             ApptDrawing.SchedListPeriod = SchedListPeriod;
             List<long> opNums = null;
-            if (PrefC.HasClinicsEnabled && Clinics.ClinicNum > 0)
+            if (Preferences.HasClinicsEnabled && Clinics.ClinicNum > 0)
             {
                 opNums = Operatories.GetOpsForClinic(Clinics.ClinicNum).Select(x => x.OperatoryNum).ToList();
             }
@@ -842,7 +842,7 @@ namespace OpenDental
             FillProduction(startDate, endDate);
             FillProductionGoal(startDate, endDate);
             bool hasNotes = true;
-            if (PrefC.IsODHQ)
+            if (Preferences.IsODHQ)
             {//HQ
                 hasNotes = Security.IsAuthorized(Permissions.Schedules, true);
             }
@@ -942,7 +942,7 @@ namespace OpenDental
             {
                 objDesc += Userods.GetName(reminderTask.UserNum) + " - ";
             }
-            if (PrefC.GetBool(PrefName.TasksNewTrackedByUser))
+            if (Preferences.GetBool(PrefName.TasksNewTrackedByUser))
             {//The new way
                 if (reminderTask.TaskStatus == TaskStatusEnum.Done)
                 {
@@ -998,7 +998,7 @@ namespace OpenDental
             Task reminderTask = ((Task)row.Tag).Copy();
             if (clickedCol == 0)
             {//check tasks off
-                if (PrefC.GetBool(PrefName.TasksNewTrackedByUser))
+                if (Preferences.GetBool(PrefName.TasksNewTrackedByUser))
                 {
                     long userNumInbox = TaskLists.GetMailboxUserNum(reminderTask.TaskListNum);
                     if (userNumInbox != 0 && userNumInbox != Security.CurUser.UserNum)
@@ -1214,7 +1214,7 @@ namespace OpenDental
                 ToolStripMenuItem scheduledStrip = new ToolStripMenuItem(stripText);
                 _menuOp.Items.Add(scheduledStrip);
             }
-            if (PrefC.HasClinicsEnabled && Clinics.ClinicNum != 0)
+            if (Preferences.HasClinicsEnabled && Clinics.ClinicNum != 0)
             {//HQ can not have clinic specialties.
                 Clinic clinicCur = Clinics.GetClinic(Clinics.ClinicNum);
                 string clinSchedText = clinicCur.SchedNote;
@@ -1359,7 +1359,7 @@ namespace OpenDental
             menuApt.MenuItems.Clear();
             menuItem = menuApt.MenuItems.Add(Lan.g(this, "Copy to Pinboard"), new EventHandler(menuApt_Click));
             menuItem.Name = MenuItemNames.CopyToPinboard;
-            if (PrefC.IsODHQ)
+            if (Preferences.IsODHQ)
             {
                 menuItem = menuApt.MenuItems.Add(Lan.g(this, "Copy Appointment Structure"), new EventHandler(menuApt_Click));
                 menuItem.Name = MenuItemNames.CopyAppointmentStructure;
@@ -1401,14 +1401,14 @@ namespace OpenDental
             menuItem.Name = MenuItemNames.RoutingSlip;
             menuItem = menuBlockout.MenuItems.Add(Lan.g(this, "Blockout Cut-Copy-Paste"), OnBlockCutCopyPaste_Click);
             menuItem.Name = MenuItemNames.RoutingSlip;
-            if (!PrefC.HasClinicsEnabled)
+            if (!Preferences.HasClinicsEnabled)
             {//Clear All Blockouts for Day is too aggressive when Clinics are enabled.
                 menuItem = menuBlockout.MenuItems.Add(Lan.g(this, "Clear All Blockouts for Day"), OnClearBlockouts_Click);
                 menuItem.Name = MenuItemNames.ClearAllBlockoutsForDay;
             }
             menuItem = menuBlockout.MenuItems.Add(Lan.g(this, "Clear All Blockouts for Day, Op only"), OnClearBlockoutsOp_Click);
             menuItem.Name = MenuItemNames.ClearAllBlockoutsForDayOpOnly;
-            if (PrefC.HasClinicsEnabled)
+            if (Preferences.HasClinicsEnabled)
             {
                 menuItem = menuBlockout.MenuItems.Add(Lan.g(this, "Clear All Blockouts for Day, Clinic only"), OnClearBlockoutsClinic_Click);
                 menuItem.Name = MenuItemNames.ClearAllBlockoutsForDayClinicOnly;
@@ -1460,11 +1460,11 @@ namespace OpenDental
             toolTip1.SetToolTip(butComplete, Lan.g(this, "Set Complete"));
             toolTip1.SetToolTip(butDelete, Lan.g(this, "Delete"));
             //toolTip1.SetToolTip(butOther,Lan.g(this,"Other Appointments"));
-            if (PrefC.IsODHQ)
+            if (Preferences.IsODHQ)
             {
                 butGraph.Visible = true;
             }
-            SetWeeklyView(PrefC.GetBool(PrefName.ApptModuleDefaultToWeek));
+            SetWeeklyView(Preferences.GetBool(PrefName.ApptModuleDefaultToWeek));
             SendToPinboardEvent.Fired += HandlePinClicked;
             InitializedOnStartup = true;//moved this down to prevent view setting from triggering ModuleSelected().
         }
@@ -1553,7 +1553,7 @@ namespace OpenDental
             string f = "";
             foreach (ApptView apptView in ApptViews.GetDeepCopy())
             {
-                if (PrefC.HasClinicsEnabled && Clinics.ClinicNum != apptView.ClinicNum)
+                if (Preferences.HasClinicsEnabled && Clinics.ClinicNum != apptView.ClinicNum)
                 {
                     //This is intentional, we do NOT want 'Headquarters' to have access to clinic specific apptviews.  
                     //Likewise, we do not want clinic specific views to be accessible from specific clinic filters.
@@ -1794,7 +1794,7 @@ namespace OpenDental
             foreach (ContrApptSingle ctrl in ContrApptSheet2.ListContrApptSingles)
             {
                 indexProv = -1;
-                if (PrefC.GetBool(PrefName.ApptModuleProductionUsesOps))
+                if (Preferences.GetBool(PrefName.ApptModuleProductionUsesOps))
                 {
                     if (ctrl.IsHygiene)
                     {
@@ -1840,7 +1840,7 @@ namespace OpenDental
                     && ctrl.AptStatus != ApptStatus.PtNoteCompleted)
                 {
                     //When the program is restricted to a specific clinic, only count up production for the corresponding clinic.
-                    if (PrefC.HasClinicsEnabled
+                    if (Preferences.HasClinicsEnabled
                         && Clinics.ClinicNum != 0
                         && Clinics.ClinicNum != ctrl.ClinicNum)
                     {
@@ -1853,13 +1853,13 @@ namespace OpenDental
                     netproduction += ctrl.GrossProduction - ctrl.WriteoffPPO;
                 }
             }
-            if (PrefC.GetBool(PrefName.ApptModuleAdjustmentsInProd) && ContrApptSheet2.Controls.Count > 0)
+            if (Preferences.GetBool(PrefName.ApptModuleAdjustmentsInProd) && ContrApptSheet2.Controls.Count > 0)
             {
                 List<long> listProvNumsForApptView = new List<long>();
                 //If the PrefName.ApptModuleProductionUsesOps is true, the list will be filled with OpNums for the appointment view. Otherwise, the list will be empty.
                 List<long> listOpsForApptView = new List<long>();
                 long apptViewNum = GetApptViewNumForUser();
-                if (PrefC.GetBool(PrefName.ApptModuleProductionUsesOps))
+                if (Preferences.GetBool(PrefName.ApptModuleProductionUsesOps))
                 {
                     listOpsForApptView = ApptViewItems.GetOpsForView(apptViewNum);
                 }
@@ -1889,7 +1889,7 @@ namespace OpenDental
             List<long> listProvNumsForApptView = new List<long>();
             //If the PrefName.ApptModuleProductionUsesOps is true, the list will be filled with OpNums for the appointment view. Otherwise, the list will be empty.
             List<long> listOpsForApptView = new List<long>();
-            if (PrefC.GetBool(PrefName.ApptModuleProductionUsesOps))
+            if (Preferences.GetBool(PrefName.ApptModuleProductionUsesOps))
             {
                 listOpsForApptView = ApptViewItems.GetOpsForView(apptViewNum);
             }
@@ -1980,7 +1980,7 @@ namespace OpenDental
             DataTable table = _dtWaitingRoom;
             List<Operatory> listOpsForClinic = new List<Operatory>();
             List<Operatory> listOpsForApptView = new List<Operatory>();
-            if (PrefC.GetBool(PrefName.WaitingRoomFilterByView))
+            if (Preferences.GetBool(PrefName.WaitingRoomFilterByView))
             {
                 //In order to filter the waiting room by appointment view, we need to always grab the operatories visible for TODAY.
                 //This way, regardless of what day the customer is looking at, the waiting room will only change when they change appointment views.
@@ -1993,7 +1993,7 @@ namespace OpenDental
                 List<Schedule> listSchedulesForToday = SchedListPeriod.FindAll(x => x.SchedDate == DateTime.Today);
                 listOpsForApptView = ApptViewItemL.GetOpsForApptView(viewCur, ApptDrawing.IsWeeklyView, listSchedulesForToday);
             }
-            if (PrefC.HasClinicsEnabled)
+            if (Preferences.HasClinicsEnabled)
             {//Using clinics
                 listOpsForClinic = Operatories.GetOpsForClinic(Clinics.ClinicNum);
             }
@@ -2006,12 +2006,12 @@ namespace OpenDental
             gridWaiting.Rows.Clear();
             DateTime waitTime;
             ODGridRow row;
-            int waitingRoomAlertTime = PrefC.GetInt(PrefName.WaitingRoomAlertTime);
-            Color waitingRoomAlertColor = PrefC.GetColor(PrefName.WaitingRoomAlertColor);
+            int waitingRoomAlertTime = Preferences.GetInt(PrefName.WaitingRoomAlertTime);
+            Color waitingRoomAlertColor = Preferences.GetColor(PrefName.WaitingRoomAlertColor);
             for (int i = 0; i < table.Rows.Count; i++)
             {
                 //Always filter the waiting room by appointment view first, regardless of using clinics or not.
-                if (PrefC.GetBool(PrefName.WaitingRoomFilterByView))
+                if (Preferences.GetBool(PrefName.WaitingRoomFilterByView))
                 {
                     bool isInView = false;
                     for (int j = 0; j < listOpsForApptView.Count; j++)
@@ -2028,7 +2028,7 @@ namespace OpenDental
                     }
                 }
                 //We only want to filter the waiting room by the clinic's operatories when clinics are enabled and they are not using 'Headquarters' mode.
-                if (PrefC.HasClinicsEnabled && Clinics.ClinicNum != 0)
+                if (Preferences.HasClinicsEnabled && Clinics.ClinicNum != 0)
                 {
                     bool isInView = false;
                     for (int j = 0; j < listOpsForClinic.Count; j++)
@@ -2403,7 +2403,7 @@ namespace OpenDental
                             {//the dentist will only be changed if the spot has a dentist.
                                 aptCur.ProvNum = assignedDent;
                             }
-                            if (assignedHyg != 0 || PrefC.GetBool(PrefName.ApptSecondaryProviderConsiderOpOnly))
+                            if (assignedHyg != 0 || Preferences.GetBool(PrefName.ApptSecondaryProviderConsiderOpOnly))
                             {//the hygienist will only be changed if the spot has a hygienist.
                                 aptCur.ProvHyg = assignedHyg;
                             }
@@ -2442,7 +2442,7 @@ namespace OpenDental
                                 codeNums.Add(procsForSingleApt[p].CodeNum);
                             }
                             string calcPattern = Appointments.CalculatePattern(aptCur.ProvNum, aptCur.ProvHyg, codeNums, true);
-                            if (aptCur.Pattern != calcPattern && !PrefC.GetBool(PrefName.AppointmentTimeIsLocked))
+                            if (aptCur.Pattern != calcPattern && !Preferences.GetBool(PrefName.AppointmentTimeIsLocked))
                             {
                                 if (aptCur.TimeLocked)
                                 {
@@ -2481,7 +2481,7 @@ namespace OpenDental
                 #endregion Prevent overlap
                 #region Detect Frequency Conflicts
                 //Detect frequency conflicts with procedures in the appointment
-                if (PrefC.GetBool(PrefName.InsChecksFrequency))
+                if (Preferences.GetBool(PrefName.InsChecksFrequency))
                 {
                     procsForSingleApt = Procedures.GetProcsForSingle(aptCur.AptNum, false);
                     string frequencyConflicts = "";
@@ -2943,7 +2943,7 @@ namespace OpenDental
             RefreshModuleDataPatient(thisApptCtrl.PatNum);
             if (e.Button == MouseButtons.Right)
             {
-                if (PrefC.IsODHQ)
+                if (Preferences.IsODHQ)
                 {
                     menuApt.MenuItems.RemoveByKey(MenuItemNames.Jobs);
                     menuApt.MenuItems.RemoveByKey(MenuItemNames.JobsSpacer);
@@ -2979,7 +2979,7 @@ namespace OpenDental
                     menuSwitch.Name = MenuItemNames.BringOverlapToFront;
                     menuApt.MenuItems.Add(menuSwitch);
                 }
-                if (PrefC.GetBool(PrefName.ApptModuleShowOrthoChartItem))
+                if (Preferences.GetBool(PrefName.ApptModuleShowOrthoChartItem))
                 {
                     menuItem = menuApt.MenuItems.Add(Lan.g(this, "Go To") + " " + OrthoChartTabs.GetFirst(true).TabName, new EventHandler(menuApt_Click));
                     menuItem.Name = MenuItemNames.OrthoChart;
@@ -3066,7 +3066,7 @@ namespace OpenDental
                 MenuItem menuClearForDay = new MenuItem();
                 MenuItem menuClearForDayOp = new MenuItem();
                 MenuItem menuClearForDayClinics = new MenuItem();
-                if (PrefC.HasClinicsEnabled)
+                if (Preferences.HasClinicsEnabled)
                 {//No clear for day if clinics enabled
                     menuClearForDayOp = menuBlockout.MenuItems[7];
                     menuClearForDayClinics = menuBlockout.MenuItems[8];
@@ -3162,7 +3162,7 @@ namespace OpenDental
                     menuDelete.Enabled = false;
                 }
                 bool isTextingEnabled = SmsPhones.IsIntegratedTextingEnabled();
-                if (PrefC.GetBool(PrefName.WebSchedAsapEnabled))
+                if (Preferences.GetBool(PrefName.WebSchedAsapEnabled))
                 {
                     if (!SmsPhones.IsIntegratedTextingEnabled())
                     {//Some customers have the Bundle without texting
@@ -3194,7 +3194,7 @@ namespace OpenDental
                 SetMenuItemProperty(menuBlockout, MenuItemNames.TextApptsForDay, x =>
                 {
                     x.Visible = isTextingEnabled;
-                    x.Text = MenuItemNames.TextApptsForDay + (PrefC.HasClinicsEnabled ? ", Clinic only" : "");
+                    x.Text = MenuItemNames.TextApptsForDay + (Preferences.HasClinicsEnabled ? ", Clinic only" : "");
                 });
                 //Fun, but not needed----
                 menuBlockout.MenuItems[menuBlockout.MenuItems.Count - 1].Text = "Update Provs on Future Appts (" + Operatories.GetOperatory(SheetClickedonOp).Abbrev + ")";
@@ -3565,7 +3565,7 @@ namespace OpenDental
         private void InfoBubbleDraw(Point p)
         {
             //remember where to draw for hover effect
-            if ((comboView.SelectedIndex == 0 && PrefC.GetBool(PrefName.AppointmentBubblesDisabled))
+            if ((comboView.SelectedIndex == 0 && Preferences.GetBool(PrefName.AppointmentBubblesDisabled))
                     || (comboView.SelectedIndex > 0 && _listApptViews[comboView.SelectedIndex - 1].IsApptBubblesDisabled))
             {
                 infoBubble.Visible = false;
@@ -3587,7 +3587,7 @@ namespace OpenDental
             int xval = p.X + ContrApptSheet2.Left + panelSheet.Left + 10;
             if (aptNum == bubbleAptNum)
             {
-                if (DateTime.Now.AddMilliseconds(-280) > bubbleTime | !PrefC.GetBool(PrefName.ApptBubbleDelay))
+                if (DateTime.Now.AddMilliseconds(-280) > bubbleTime | !Preferences.GetBool(PrefName.ApptBubbleDelay))
                 {
                     if (yval > panelSheet.Bottom - infoBubble.Height)
                     {
@@ -3663,7 +3663,7 @@ namespace OpenDental
                         infoBubble.Controls.Add(PicturePat);
                     }
                     if (row.ImageFolder != ""
-                        && (PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage))//Do not use patient image when A to Z folders are disabled.
+                        && (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage))//Do not use patient image when A to Z folders are disabled.
                     {
                         try
                         {
@@ -3800,7 +3800,7 @@ namespace OpenDental
                             continue;
                         case "Note":
                             string noteStr = row.Note;
-                            int maxNoteLength = PrefC.GetInt(PrefName.AppointmentBubblesNoteLength);
+                            int maxNoteLength = Preferences.GetInt(PrefName.AppointmentBubblesNoteLength);
                             if (noteStr.Trim() != "" && maxNoteLength > 0 && noteStr.Length > maxNoteLength)
                             {//Trim text
                                 noteStr = noteStr.Substring(0, maxNoteLength) + "...";
@@ -3983,7 +3983,7 @@ namespace OpenDental
 			until mouse had hovered for at least 0.28 seconds(arbitrary #)
 			the timer fires at 0.30 seconds, so the difference was introduced because
 			of what seemed to be inconsistencies in the timer function */
-            if (!PrefC.GetBool(PrefName.ApptBubbleDelay))
+            if (!Preferences.GetBool(PrefName.ApptBubbleDelay))
             {
                 infoBubble.Visible = true;
             }
@@ -5050,15 +5050,15 @@ namespace OpenDental
                     appt = Appointments.GetOneApt(ContrApptSingle.ClickedAptNum);
                     if (ApptIsNull(appt)) { return; }
                     Patient pat = Patients.GetPat(appt.PatNum);
-                    string message = PrefC.GetString(PrefName.ConfirmTextMessage);
+                    string message = Preferences.GetString(PrefName.ConfirmTextMessage);
                     message = message.Replace("[NameF]", pat.GetNameFirst());
                     message = message.Replace("[NameFL]", pat.GetNameFL());
-                    message = message.Replace("[date]", appt.AptDateTime.ToString(PrefC.PatientCommunicationDateFormat));
+                    message = message.Replace("[date]", appt.AptDateTime.ToString(Preferences.PatientCommunicationDateFormat));
                     message = message.Replace("[time]", appt.AptDateTime.ToShortTimeString());
                     bool wasTextSent = FormOpenDental.S_OnTxtMsg_Click(pat.PatNum, message);
                     if (wasTextSent)
                     {
-                        Appointments.SetConfirmed(appt, PrefC.GetLong(PrefName.ConfirmStatusTextMessaged));
+                        Appointments.SetConfirmed(appt, Preferences.GetLong(PrefName.ConfirmStatusTextMessaged));
                     }
                     break;
                 case MenuItemNames.BringOverlapToFront:
@@ -5078,9 +5078,9 @@ namespace OpenDental
             menuItemBreakAppt.MenuItems.Clear();
             menuItemBreakAppt.Tag = ContrApptSingle.SelectedAptNum;//Refresh later, just in case.
             MenuItem item = null;
-            bool dontAllowUnscheduled = PrefC.GetBool(PrefName.UnscheduledListNoRecalls)
+            bool dontAllowUnscheduled = Preferences.GetBool(PrefName.UnscheduledListNoRecalls)
                 && Appointments.IsRecallAppointment(Appointments.GetOneApt(ContrApptSingle.SelectedAptNum));
-            BrokenApptProcedure brokenApptProcs = (BrokenApptProcedure)PrefC.GetInt(PrefName.BrokenApptProcedure);
+            BrokenApptProcedure brokenApptProcs = (BrokenApptProcedure)Preferences.GetInt(PrefName.BrokenApptProcedure);
             if (brokenApptProcs.In(BrokenApptProcedure.Missed, BrokenApptProcedure.Both))
             {
                 if (dontAllowUnscheduled)
@@ -5198,7 +5198,7 @@ namespace OpenDental
 
         private void PromptTextASAPList(Appointment appt)
         {
-            if (!PrefC.GetBool(PrefName.WebSchedAsapEnabled) || Appointments.RefreshASAP(0, 0, appt.ClinicNum, new List<ApptStatus>()).Count == 0
+            if (!Preferences.GetBool(PrefName.WebSchedAsapEnabled) || Appointments.RefreshASAP(0, 0, appt.ClinicNum, new List<ApptStatus>()).Count == 0
                 || !MsgBox.Show("Appointment", MsgBoxButtons.YesNo, "Text patients on the ASAP List and offer them this opening?"))
             {
                 return;
@@ -5446,7 +5446,7 @@ namespace OpenDental
             {
                 return;
             }
-            if (PrefC.GetBool(PrefName.UnscheduledListNoRecalls) && Appointments.IsRecallAppointment(apt))
+            if (Preferences.GetBool(PrefName.UnscheduledListNoRecalls) && Appointments.IsRecallAppointment(apt))
             {
                 if (MsgBox.Show(this, MsgBoxButtons.YesNo, "Recall appointments cannot be sent to the Unscheduled List.\r\nDelete appointment instead?"))
                 {
@@ -5473,8 +5473,8 @@ namespace OpenDental
 
         private void OnBreak_Click()
         {
-            if (PrefC.GetBool(PrefName.BrokenApptAdjustment)
-                && PrefC.GetLong(PrefName.BrokenAppointmentAdjustmentType) == 0)
+            if (Preferences.GetBool(PrefName.BrokenApptAdjustment)
+                && Preferences.GetLong(PrefName.BrokenAppointmentAdjustmentType) == 0)
             {
                 //They want broken appointment adjustments but don't have it set up.
                 MsgBox.Show(this, "Broken appointment adjustment type is not setup yet.  Please go to Setup | Appointment | Appts Preferences to fix this.");
@@ -5582,7 +5582,7 @@ namespace OpenDental
             if (ApptIsNull(apt)) { return; }
             if (apt.AptDateTime.Date > DateTime.Today)
             {
-                if (!PrefC.GetBool(PrefName.ApptAllowFutureComplete))
+                if (!Preferences.GetBool(PrefName.ApptAllowFutureComplete))
                 {
                     MsgBox.Show(this, "Not allowed to set future appointments complete.");
                     return;
@@ -5590,7 +5590,7 @@ namespace OpenDental
             }
             List<Procedure> listProcs = Procedures.GetProcsForSingle(apt.AptNum, false);
             if (apt.AptStatus != ApptStatus.PtNote && apt.AptStatus != ApptStatus.PtNoteCompleted  //Ptnote cannot have procs attached
-                && !PrefC.GetBool(PrefName.ApptAllowEmptyComplete)//Appointments must have at least 1 proc
+                && !Preferences.GetBool(PrefName.ApptAllowEmptyComplete)//Appointments must have at least 1 proc
                 && listProcs.Count == 0)
             {
                 MsgBox.Show(this, "Appointments without procedures attached can not be set complete.");
@@ -5614,7 +5614,7 @@ namespace OpenDental
             {
                 return;
             }
-            if (listProcs.Count > 0 && apt.AptDateTime.Date > DateTime.Today.Date && !PrefC.GetBool(PrefName.FutureTransDatesAllowed))
+            if (listProcs.Count > 0 && apt.AptDateTime.Date > DateTime.Today.Date && !Preferences.GetBool(PrefName.FutureTransDatesAllowed))
             {
                 MsgBox.Show(this, "Not allowed to set procedures complete with future dates.");
                 return;
@@ -5835,7 +5835,7 @@ namespace OpenDental
             List<Schedule> listOverlapSchedules;
             if (Schedules.Overlaps(sched, out listOverlapSchedules))
             {
-                if (!PrefC.GetBool(PrefName.ReplaceExistingBlockout) || !Schedules.IsAppointmentBlocking(sched.BlockoutType))
+                if (!Preferences.GetBool(PrefName.ReplaceExistingBlockout) || !Schedules.IsAppointmentBlocking(sched.BlockoutType))
                 {
                     MsgBox.Show(this, "Blockouts not allowed to overlap.");
                     return;
@@ -6090,7 +6090,7 @@ namespace OpenDental
 
         private void OnTextASAPList_Click(object sender, EventArgs e)
         {
-            if (PrefC.GetBool(PrefName.WebSchedAsapEnabled))
+            if (Preferences.GetBool(PrefName.WebSchedAsapEnabled))
             {
                 //Get the closest time selected.
                 int minutes = (SheetClickedonMin / ApptDrawing.MinPerIncr) * ApptDrawing.MinPerIncr;
@@ -6137,7 +6137,7 @@ namespace OpenDental
         {
             List<Appointment> listAppts = Appointments.GetForPeriodList(GetDateTimeClicked(), GetDateTimeClicked(), Clinics.ClinicNum)
                 .Where(x => !x.AptStatus.In(ApptStatus.PtNote, ApptStatus.PtNoteCompleted)).ToList();
-            if (PrefC.HasClinicsEnabled && Clinics.ClinicNum == 0)
+            if (Preferences.HasClinicsEnabled && Clinics.ClinicNum == 0)
             {
                 //The above query would have gotten appointments for all clinics. We need to filter to just ClinicNums of 0.
                 listAppts = listAppts.Where(x => x.ClinicNum == 0).ToList();
@@ -6236,7 +6236,7 @@ namespace OpenDental
             Patient patCur = null;
             List<Schedule> listSchedsForOp = Schedules.GetSchedsForOp(curOp, listAppts.Select(x => x.AptDateTime).ToList());
             List<Operatory> listOpsForClinic = ApptDrawing.VisOps.Select(x => x.Copy()).ToList();
-            if (((ApptSchedEnforceSpecialty)PrefC.GetInt(PrefName.ApptSchedEnforceSpecialty)).In(ApptSchedEnforceSpecialty.Block, ApptSchedEnforceSpecialty.Warn))
+            if (((ApptSchedEnforceSpecialty)Preferences.GetInt(PrefName.ApptSchedEnforceSpecialty)).In(ApptSchedEnforceSpecialty.Block, ApptSchedEnforceSpecialty.Warn))
             {
                 //if specialties are enforced, don't auto-move appt into an op assigned to a different clinic than the curOp's clinic
                 listOpsForClinic.RemoveAll(x => x.ClinicNum != curOp.ClinicNum);
@@ -6312,7 +6312,7 @@ namespace OpenDental
                                 apt.ProvNum = assignedDent;
                                 provChanged = true;
                             }
-                            if (assignedHyg != 0 || PrefC.GetBool(PrefName.ApptSecondaryProviderConsiderOpOnly))
+                            if (assignedHyg != 0 || Preferences.GetBool(PrefName.ApptSecondaryProviderConsiderOpOnly))
                             {//the hygienist will only be changed if the spot has a hygienist.
                                 apt.ProvHyg = assignedHyg;
                                 hygChanged = true;
@@ -6353,7 +6353,7 @@ namespace OpenDental
                             if (!isOpUpdate)
                             {
                                 string calcPattern = Appointments.CalculatePattern(apt.ProvNum, apt.ProvHyg, codeNums, true);
-                                if (apt.Pattern != calcPattern && !PrefC.GetBool(PrefName.AppointmentTimeIsLocked))
+                                if (apt.Pattern != calcPattern && !Preferences.GetBool(PrefName.AppointmentTimeIsLocked))
                                 {//Updating op provs will not change apt lengths.
                                     if (apt.TimeLocked)
                                     {
@@ -6394,7 +6394,7 @@ namespace OpenDental
                 #endregion Prevent overlap
                 #region Detect Frequency Conflicts
                 //Detect frequency conflicts with procedures in the appointment
-                if (!isOpUpdate && PrefC.GetBool(PrefName.InsChecksFrequency))
+                if (!isOpUpdate && Preferences.GetBool(PrefName.InsChecksFrequency))
                 {
                     procsForSingleApt = Procedures.GetProcsForSingle(apt.AptNum, false);
                     string frequencyConflicts = "";
@@ -6473,14 +6473,14 @@ namespace OpenDental
                     && apt.Confirmed != Defs.GetFirstForCategory(DefCat.ApptConfirmed, true).DefNum
                     && apt.AptDateTime.Date != DateTime.Today)
                 {
-                    string prompt = (PrefC.GetBool(PrefName.ApptConfirmAutoEnabled) ? "Do you want to resend the eConfirmation?"
+                    string prompt = (Preferences.GetBool(PrefName.ApptConfirmAutoEnabled) ? "Do you want to resend the eConfirmation?"
                         : "Reset Confirmation Status?");
                     bool doResetConf = MsgBox.Show(this, MsgBoxButtons.YesNo, prompt);
                     if (doResetConf)
                     {
                         apt.Confirmed = Defs.GetFirstForCategory(DefCat.ApptConfirmed, true).DefNum;//Causes the confirmation status to be reset.
                     }
-                    if (PrefC.GetBool(PrefName.ApptConfirmAutoEnabled))
+                    if (Preferences.GetBool(PrefName.ApptConfirmAutoEnabled))
                     {
                         List<ConfirmationRequest> listConfirmations = ConfirmationRequests.GetAllForAppts(new List<long> { apt.AptNum });
                         foreach (ConfirmationRequest request in listConfirmations)
@@ -6726,7 +6726,7 @@ namespace OpenDental
             }
             List<long> listOpNums = new List<long>();
             List<long> listClinicNums = new List<long>();
-            if (PrefC.HasClinicsEnabled)
+            if (Preferences.HasClinicsEnabled)
             {
                 if (Clinics.ClinicNum != 0)
                 {//not HQ
@@ -6867,9 +6867,9 @@ namespace OpenDental
                     startDate = AppointmentL.DateSelected;
                     endDate = AppointmentL.DateSelected;
                 }
-                if (PrefC.GetBool(PrefName.ApptModuleRefreshesEveryMinute))
+                if (Preferences.GetBool(PrefName.ApptModuleRefreshesEveryMinute))
                 {
-                    if (PrefC.GetLong(PrefName.ProcessSigsIntervalInSecs) == 0)
+                    if (Preferences.GetLong(PrefName.ProcessSigsIntervalInSecs) == 0)
                     {//Signal processing is disabled.
                         RefreshPeriod(false);
                     }
@@ -6923,7 +6923,7 @@ namespace OpenDental
             //Return Address--------------------------------------------------------------------------
             string str = "";
             string phone = "";
-            if (PrefC.HasClinicsEnabled && clinic != null)
+            if (Preferences.HasClinicsEnabled && clinic != null)
             {//Use clinic on appointment if clinic exists and has clinics enabled
                 str = clinic.Description + "\r\n";
                 g.DrawString(str, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold), Brushes.Black, 60, 60);
@@ -6937,17 +6937,17 @@ namespace OpenDental
             }
             else
             {//Otherwise use practice information
-                str = PrefC.GetString(PrefName.PracticeTitle) + "\r\n";
+                str = Preferences.GetString(PrefName.PracticeTitle) + "\r\n";
                 g.DrawString(str, new Font(FontFamily.GenericSansSerif, 9, FontStyle.Bold), Brushes.Black, 60, 60);
-                str = PrefC.GetString(PrefName.PracticeAddress) + "\r\n";
-                if (PrefC.GetString(PrefName.PracticeAddress2) != "")
+                str = Preferences.GetString(PrefName.PracticeAddress) + "\r\n";
+                if (Preferences.GetString(PrefName.PracticeAddress2) != "")
                 {
-                    str += PrefC.GetString(PrefName.PracticeAddress2) + "\r\n";
+                    str += Preferences.GetString(PrefName.PracticeAddress2) + "\r\n";
                 }
-                str += PrefC.GetString(PrefName.PracticeCity) + "  "
-                    + PrefC.GetString(PrefName.PracticeST) + "  "
-                    + PrefC.GetString(PrefName.PracticeZip) + "\r\n";
-                phone = PrefC.GetString(PrefName.PracticePhone);
+                str += Preferences.GetString(PrefName.PracticeCity) + "  "
+                    + Preferences.GetString(PrefName.PracticeST) + "  "
+                    + Preferences.GetString(PrefName.PracticeZip) + "\r\n";
+                phone = Preferences.GetString(PrefName.PracticePhone);
             }
             if (CultureInfo.CurrentCulture.Name == "en-US" && phone.Length == 10)
             {

@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Ucum into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Ucum ucum,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				ucum.UcumNum=ReplicationServers.GetKey("ucum","UcumNum");
 			}
 			string command="INSERT INTO ucum (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="UcumNum,";
 			}
 			command+="UcumCode,Description,IsInUse) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(ucum.UcumNum)+",";
 			}
 			command+=
 				 "'"+POut.String(ucum.UcumCode)+"',"
 				+"'"+POut.String(ucum.Description)+"',"
 				+    POut.Bool  (ucum.IsInUse)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

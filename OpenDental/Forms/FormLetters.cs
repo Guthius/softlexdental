@@ -239,13 +239,13 @@ namespace OpenDental{
 			StringBuilder str = new StringBuilder();
 			//return address
 			//if (checkIncludeRet.Checked) {
-				str.Append(PrefC.GetString(PrefName.PracticeTitle) + "\r\n");
-				str.Append(PrefC.GetString(PrefName.PracticeAddress) + "\r\n");
-				if (PrefC.GetString(PrefName.PracticeAddress2) != "")
-					str.Append(PrefC.GetString(PrefName.PracticeAddress2) + "\r\n");
-				str.Append(PrefC.GetString(PrefName.PracticeCity) + ", ");
-				str.Append(PrefC.GetString(PrefName.PracticeST) + "  ");
-				str.Append(PrefC.GetString(PrefName.PracticeZip) + "\r\n");
+				str.Append(Preferences.GetString(PrefName.PracticeTitle) + "\r\n");
+				str.Append(Preferences.GetString(PrefName.PracticeAddress) + "\r\n");
+				if (Preferences.GetString(PrefName.PracticeAddress2) != "")
+					str.Append(Preferences.GetString(PrefName.PracticeAddress2) + "\r\n");
+				str.Append(Preferences.GetString(PrefName.PracticeCity) + ", ");
+				str.Append(Preferences.GetString(PrefName.PracticeST) + "  ");
+				str.Append(Preferences.GetString(PrefName.PracticeZip) + "\r\n");
 			//}
 			//else {
 			//	str.Append("\r\n\r\n\r\n\r\n");
@@ -311,11 +311,11 @@ namespace OpenDental{
 			else {
 				str.Append("\r\n\r\n" + Lan.g(this, "Sincerely,") + "\r\n\r\n\r\n\r\n");
 			}
-			if (PrefC.GetBool(PrefName.FuchsOptionsOn)) {
+			if (Preferences.GetBool(PrefName.FuchsOptionsOn)) {
 				str.Append("Dr. Fuchs");
 			}
 			else {
-				str.Append(PrefC.GetString(PrefName.PracticeTitle));
+				str.Append(Preferences.GetString(PrefName.PracticeTitle));
 			}
 			textBody.Text = str.ToString();
 			//bodyChanged = false;

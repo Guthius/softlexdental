@@ -510,7 +510,7 @@ namespace OpenDentBusiness
                     //case Permissions.PatientPortalLogin:
                     return false;//Does not have audit Trail if uncommented.
             }
-            if (!PrefC.IsODHQ && permType.In(
+            if (!Preferences.IsODHQ && permType.In(
                     //These permissions are only used at OD HQ
                     Permissions.VerifyPhoneOwnership,
                     Permissions.HeadmasterSetup

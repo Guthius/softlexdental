@@ -103,15 +103,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SheetDef into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(SheetDef sheetDef,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				sheetDef.SheetDefNum=ReplicationServers.GetKey("sheetdef","SheetDefNum");
 			}
 			string command="INSERT INTO sheetdef (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="SheetDefNum,";
 			}
 			command+="Description,SheetType,FontSize,FontName,Width,Height,IsLandscape,PageCount,IsMultiPage,BypassGlobalLock,HasMobileLayout) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(sheetDef.SheetDefNum)+",";
 			}
 			command+=
@@ -126,7 +126,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Bool  (sheetDef.IsMultiPage)+","
 				+    POut.Int   ((int)sheetDef.BypassGlobalLock)+","
 				+    POut.Bool  (sheetDef.HasMobileLayout)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

@@ -80,22 +80,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one CommOptOut into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(CommOptOut commOptOut,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				commOptOut.CommOptOutNum=ReplicationServers.GetKey("commoptout","CommOptOutNum");
 			}
 			string command="INSERT INTO commoptout (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="CommOptOutNum,";
 			}
 			command+="PatNum,CommType,CommMode) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(commOptOut.CommOptOutNum)+",";
 			}
 			command+=
 				     POut.Long  (commOptOut.PatNum)+","
 				+    POut.Int   ((int)commOptOut.CommType)+","
 				+    POut.Int   ((int)commOptOut.CommMode)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {
@@ -111,7 +111,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts many CommOptOuts into the database.  Provides option to use the existing priKey.</summary>
 		public static void InsertMany(List<CommOptOut> listCommOptOuts,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				foreach(CommOptOut commOptOut in listCommOptOuts) {
 					Insert(commOptOut);
 				}

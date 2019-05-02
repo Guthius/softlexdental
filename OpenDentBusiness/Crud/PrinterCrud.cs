@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Printer into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Printer printer,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				printer.PrinterNum=ReplicationServers.GetKey("printer","PrinterNum");
 			}
 			string command="INSERT INTO printer (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PrinterNum,";
 			}
 			command+="ComputerNum,PrintSit,PrinterName,DisplayPrompt) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(printer.PrinterNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   ((int)printer.PrintSit)+","
 				+"'"+POut.String(printer.PrinterName)+"',"
 				+    POut.Bool  (printer.DisplayPrompt)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

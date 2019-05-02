@@ -702,7 +702,7 @@ namespace OpenDentBusiness
                     else
                     {
                         //The attachment needs to be a local file, so we download the images to temp files.	
-                        string tempFile = PrefC.GetRandomTempFile(Path.GetExtension(imagePathLocal));
+                        string tempFile = Preferences.GetRandomTempFile(Path.GetExtension(imagePathLocal));
                         FileAtoZ.Copy(FileAtoZ.CombinePaths(imageDir, imagePath), tempFile, FileAtoZSourceDestination.AtoZToLocal);
                         imagePathLocal = tempFile;
                     }
@@ -729,22 +729,22 @@ namespace OpenDentBusiness
         ///off.</summary>
         public static string GetEmailDisclaimer(long clinicNum)
         {
-            if (!PrefC.GetBool(PrefName.EmailDisclaimerIsOn))
+            if (!Preferences.GetBool(PrefName.EmailDisclaimerIsOn))
             {
                 return "";
             }
-            string disclaimer = PrefC.GetString(PrefName.EmailDisclaimerTemplate);
+            string disclaimer = Preferences.GetString(PrefName.EmailDisclaimerTemplate);
             if (string.IsNullOrEmpty(disclaimer))
             {
                 return "";
             }
-            string postalAddress = PrefC.GetString(PrefName.PracticeTitle) + "\r\n" + Patients.GetAddressFull(
-                PrefC.GetString(PrefName.PracticeAddress),
-                PrefC.GetString(PrefName.PracticeAddress2),
-                PrefC.GetString(PrefName.PracticeCity),
-                PrefC.GetString(PrefName.PracticeST),
-                PrefC.GetString(PrefName.PracticeZip));
-            if (PrefC.HasClinicsEnabled)
+            string postalAddress = Preferences.GetString(PrefName.PracticeTitle) + "\r\n" + Patients.GetAddressFull(
+                Preferences.GetString(PrefName.PracticeAddress),
+                Preferences.GetString(PrefName.PracticeAddress2),
+                Preferences.GetString(PrefName.PracticeCity),
+                Preferences.GetString(PrefName.PracticeST),
+                Preferences.GetString(PrefName.PracticeZip));
+            if (Preferences.HasClinicsEnabled)
             {
                 Clinic clinic = Clinics.GetClinic(clinicNum);
                 if (clinic != null)
@@ -1513,7 +1513,7 @@ namespace OpenDentBusiness
                 if (CloudStorage.IsCloudStorage)
                 {
                     OpenDentalCloud.Core.TaskStateDownload state = CloudStorage.Download(attachPath, attach.ActualFileName);
-                    attachFullPath = PrefC.GetRandomTempFile(Path.GetExtension(attach.ActualFileName));
+                    attachFullPath = Preferences.GetRandomTempFile(Path.GetExtension(attach.ActualFileName));
                     File.WriteAllBytes(attachFullPath, state.FileContent);
                 }
                 else
@@ -2529,7 +2529,7 @@ namespace OpenDentBusiness
         public static void SendTestUnsecure(string subjectAndBody, string attachName1, string attachContents1, string attachName2, string attachContents2)
         {
             //No need to check RemotingRole; no call to db.
-            string strTo = PrefC.GetString(PrefName.EHREmailToAddress);
+            string strTo = Preferences.GetString(PrefName.EHREmailToAddress);
             if (strTo == "")
             {
                 throw new ApplicationException("This feature cannot be used except in a test environment because email is not secure.");
@@ -2558,19 +2558,19 @@ namespace OpenDentBusiness
         public static string ReceiveOneForEhrTest()
         {
             //No need to check RemotingRole; no call to db.
-            if (PrefC.GetString(PrefName.EHREmailToAddress) == "")
+            if (Preferences.GetString(PrefName.EHREmailToAddress) == "")
             {//this pref is hidden, so no practical way for user to turn this on.
                 throw new ApplicationException("This feature cannot be used except in a test environment because email is not secure.");
             }
-            if (PrefC.GetString(PrefName.EHREmailPOPserver) == "")
+            if (Preferences.GetString(PrefName.EHREmailPOPserver) == "")
             {
                 throw new ApplicationException("No POP server set up.");
             }
             EmailAddress emailAddress = new EmailAddress();
-            emailAddress.Pop3ServerIncoming = PrefC.GetString(PrefName.EHREmailPOPserver);
-            emailAddress.ServerPortIncoming = PrefC.GetInt(PrefName.EHREmailPort);
-            emailAddress.EmailUsername = PrefC.GetString(PrefName.EHREmailFromAddress);
-            emailAddress.EmailPassword = PrefC.GetString(PrefName.EHREmailPassword);
+            emailAddress.Pop3ServerIncoming = Preferences.GetString(PrefName.EHREmailPOPserver);
+            emailAddress.ServerPortIncoming = Preferences.GetInt(PrefName.EHREmailPort);
+            emailAddress.EmailUsername = Preferences.GetString(PrefName.EHREmailFromAddress);
+            emailAddress.EmailPassword = Preferences.GetString(PrefName.EHREmailPassword);
             List<EmailMessage> emailMessages = ReceiveFromInbox(1, emailAddress);
             if (emailMessages.Count == 0)
             {

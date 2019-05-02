@@ -101,15 +101,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Userod into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(User userod,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				userod.UserNum=ReplicationServers.GetKey("userod","UserNum");
 			}
 			string command="INSERT INTO userod (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="UserNum,";
 			}
 			command+="UserName,Password,UserGroupNum,EmployeeNum,ClinicNum,ProvNum,IsHidden,TaskListInBox,AnesthProvType,DefaultHidePopups,PasswordIsStrong,ClinicIsRestricted,InboxHidePopups,UserNumCEMT,DateTFail,FailedAttempts,DomainUser,IsPasswordResetRequired) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(userod.UserNum)+",";
 			}
 			command+=
@@ -131,7 +131,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Byte  (userod.FailedAttempts)+","
 				+"'"+POut.String(userod.DomainUser)+"',"
 				+    POut.Bool  (userod.IsPasswordResetRequired)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

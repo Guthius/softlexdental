@@ -160,7 +160,7 @@ namespace OpenDental{
 			Font fontSubTitle=new Font("Tahoma",10,FontStyle.Bold);
 			report.ReportName=Lan.g(this,"Prescriptions");
 			report.AddTitle("Title",Lan.g(this,"Prescriptions"),fontTitle);
-			report.AddSubTitle("PracticeTitle",PrefC.GetString(PrefName.PracticeTitle),fontSubTitle);
+			report.AddSubTitle("PracticeTitle",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
 			if(radioPatient.Checked){
 				report.AddSubTitle("By Patient","By Patient");
 			}

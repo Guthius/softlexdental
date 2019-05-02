@@ -410,12 +410,12 @@ namespace OpenDental {
 
 		private void panelClose_Click(object sender,EventArgs e) {
 			//It's fairly safe to not have a password, because the program will exit in remote mode, and in simple mode, the patient is usually supervised.
-			if(PrefC.GetString(PrefName.TerminalClosePassword)!="") {
+			if(Preferences.GetString(PrefName.TerminalClosePassword)!="") {
 				InputBox iBox=new InputBox("Enter password to exit kiosk.");
 				iBox.textResult.PasswordChar='*';
 				iBox.setTitle(Lan.g(this,"Kiosk Password"));
 				iBox.ShowDialog();
-				while(iBox.DialogResult==DialogResult.OK && iBox.textResult.Text!=PrefC.GetString(PrefName.TerminalClosePassword)) {
+				while(iBox.DialogResult==DialogResult.OK && iBox.textResult.Text!=Preferences.GetString(PrefName.TerminalClosePassword)) {
 					MsgBox.Show(this,"Invalid Password");
 					iBox.textResult.Text="";
 					iBox.ShowDialog();

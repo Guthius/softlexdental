@@ -109,15 +109,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one RecurringCharge into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(RecurringCharge recurringCharge,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				recurringCharge.RecurringChargeNum=ReplicationServers.GetKey("recurringcharge","RecurringChargeNum");
 			}
 			string command="INSERT INTO recurringcharge (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="RecurringChargeNum,";
 			}
 			command+="PatNum,ClinicNum,DateTimeCharge,ChargeStatus,FamBal,PayPlanDue,TotalDue,RepeatAmt,ChargeAmt,UserNum,PayNum,CreditCardNum,ErrorMsg) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(recurringCharge.RecurringChargeNum)+",";
 			}
 			command+=
@@ -138,7 +138,7 @@ namespace OpenDentBusiness.Crud{
 				recurringCharge.ErrorMsg="";
 			}
 			OdSqlParameter paramErrorMsg=new OdSqlParameter("paramErrorMsg",OdDbType.Text,POut.StringParam(recurringCharge.ErrorMsg));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramErrorMsg);
 			}
 			else {

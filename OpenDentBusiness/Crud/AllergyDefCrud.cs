@@ -88,15 +88,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one AllergyDef into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(AllergyDef allergyDef,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				allergyDef.AllergyDefNum=ReplicationServers.GetKey("allergydef","AllergyDefNum");
 			}
 			string command="INSERT INTO allergydef (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="AllergyDefNum,";
 			}
 			command+="Description,IsHidden,SnomedType,MedicationNum,UniiCode) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(allergyDef.AllergyDefNum)+",";
 			}
 			command+=
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   ((int)allergyDef.SnomedType)+","
 				+    POut.Long  (allergyDef.MedicationNum)+","
 				+"'"+POut.String(allergyDef.UniiCode)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

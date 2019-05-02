@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one InsFilingCode into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(InsFilingCode insFilingCode,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				insFilingCode.InsFilingCodeNum=ReplicationServers.GetKey("insfilingcode","InsFilingCodeNum");
 			}
 			string command="INSERT INTO insfilingcode (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="InsFilingCodeNum,";
 			}
 			command+="Descript,EclaimCode,ItemOrder,GroupType) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(insFilingCode.InsFilingCodeNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(insFilingCode.EclaimCode)+"',"
 				+    POut.Int   (insFilingCode.ItemOrder)+","
 				+    POut.Long  (insFilingCode.GroupType)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

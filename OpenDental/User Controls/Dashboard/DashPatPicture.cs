@@ -22,7 +22,7 @@ namespace OpenDental {
 
 		public void RefreshData(Patient pat,SheetField sheetField) {
 			if(pat==null || 
-				PrefC.AtoZfolderUsed==DataStorageType.InDatabase)//Do not use patient image when A to Z folders are disabled.
+				Preferences.AtoZfolderUsed==DataStorageType.InDatabase)//Do not use patient image when A to Z folders are disabled.
 			{
 				return;
 			}

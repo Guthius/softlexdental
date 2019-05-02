@@ -80,15 +80,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EhrLabNote into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EhrLabNote ehrLabNote,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				ehrLabNote.EhrLabNoteNum=ReplicationServers.GetKey("ehrlabnote","EhrLabNoteNum");
 			}
 			string command="INSERT INTO ehrlabnote (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EhrLabNoteNum,";
 			}
 			command+="EhrLabNum,EhrLabResultNum,Comments) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(ehrLabNote.EhrLabNoteNum)+",";
 			}
 			command+=
@@ -99,7 +99,7 @@ namespace OpenDentBusiness.Crud{
 				ehrLabNote.Comments="";
 			}
 			OdSqlParameter paramComments=new OdSqlParameter("paramComments",OdDbType.Text,POut.StringParam(ehrLabNote.Comments));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramComments);
 			}
 			else {

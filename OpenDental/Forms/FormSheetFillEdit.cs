@@ -1078,7 +1078,7 @@ namespace OpenDental {
 			filePathAndName=FileAtoZ.CombinePaths(attachPath,fileName);
 			string pdfFile;
 			if(CloudStorage.IsCloudStorage) {
-				pdfFile=PrefC.GetRandomTempFile("pdf");
+				pdfFile=Preferences.GetRandomTempFile("pdf");
 			}
 			else {
 				pdfFile=filePathAndName;
@@ -1193,7 +1193,7 @@ namespace OpenDental {
 				filePathAndName=_tempPdfFile;
 			}
 			else {
-				filePathAndName=PrefC.GetRandomTempFile(".pdf");
+				filePathAndName=Preferences.GetRandomTempFile(".pdf");
 				//Graphics g=this.CreateGraphics();
 				SheetPrinting.CreatePdf(SheetCur,filePathAndName,Stmt,MedLabCur);
 			}
@@ -1288,7 +1288,7 @@ namespace OpenDental {
 
 				}
 				//Get a temporary location for the file
-				_tempPdfFile=PrefC.GetRandomTempFile(".pdf");
+				_tempPdfFile=Preferences.GetRandomTempFile(".pdf");
 				SheetPrinting.CreatePdf(SheetCur,_tempPdfFile,Stmt,MedLabCur);
 				//Import pdf, this will move the pdf into the correct location for the patient.
 				long defNum=Defs.GetByExactName(DefCat.ImageCats,"Letters");
@@ -1624,7 +1624,7 @@ namespace OpenDental {
 						return;
 					}
 				}
-				string filePathAndName=PrefC.GetRandomTempFile(".pdf");
+				string filePathAndName=Preferences.GetRandomTempFile(".pdf");
 				SheetPrinting.CreatePdf(SheetCur,filePathAndName,null);
 				//create doc--------------------------------------------------------------------------------------
 				OpenDentBusiness.Document docc=null;

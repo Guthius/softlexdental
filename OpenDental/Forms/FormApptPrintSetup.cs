@@ -26,8 +26,8 @@ namespace OpenDental {
 
 		private void FormApptPrintSetup_Load(object sender,EventArgs e) {
 			TimeSpan time;
-			string timeStart=PrefC.GetDateT(PrefName.ApptPrintTimeStart).ToShortTimeString();
-			string timeStop=PrefC.GetDateT(PrefName.ApptPrintTimeStop).ToShortTimeString();
+			string timeStart=Preferences.GetDateTime(PrefName.ApptPrintTimeStart).ToShortTimeString();
+			string timeStop=Preferences.GetDateTime(PrefName.ApptPrintTimeStop).ToShortTimeString();
 			for(int i=0;i<=24;i++) {
 				time=new TimeSpan(i,0,0);
 				comboStart.Items.Add(time.ToShortTimeString());
@@ -39,9 +39,9 @@ namespace OpenDental {
 					comboStop.SelectedIndex=i;
 				}
 			}
-			textFontSize.Text=PrefC.GetString(PrefName.ApptPrintFontSize);
-			textColumnsPerPage.Text=PrefC.GetInt(PrefName.ApptPrintColumnsPerPage).ToString();
-			if(PrefC.HasClinicsEnabled && Clinics.ClinicNum==0) {//Hide if clinics is enabled and headquarters is selected
+			textFontSize.Text=Preferences.GetString(PrefName.ApptPrintFontSize);
+			textColumnsPerPage.Text=Preferences.GetInt(PrefName.ApptPrintColumnsPerPage).ToString();
+			if(Preferences.HasClinicsEnabled && Clinics.ClinicNum==0) {//Hide if clinics is enabled and headquarters is selected
 				groupBoxPrintRouting.Enabled=false;
 			}
 			if(ApptDrawing.IsWeeklyView) { //Disable if the user has the weekly view selected in the appt module
@@ -110,10 +110,10 @@ namespace OpenDental {
 			if(!ValidEntries()) {
 				return false;
 			}
-			if(PIn.DateT(comboStart.SelectedItem.ToString()).Hour!=PrefC.GetDateT(PrefName.ApptPrintTimeStart).Hour
-				|| PIn.DateT(comboStop.SelectedItem.ToString()).Hour!=PrefC.GetDateT(PrefName.ApptPrintTimeStop).Hour
-				|| textFontSize.Text!=PrefC.GetString(PrefName.ApptPrintFontSize)
-				|| textColumnsPerPage.Text!=PrefC.GetInt(PrefName.ApptPrintColumnsPerPage).ToString())
+			if(PIn.DateT(comboStart.SelectedItem.ToString()).Hour!=Preferences.GetDateTime(PrefName.ApptPrintTimeStart).Hour
+				|| PIn.DateT(comboStop.SelectedItem.ToString()).Hour!=Preferences.GetDateTime(PrefName.ApptPrintTimeStop).Hour
+				|| textFontSize.Text!=Preferences.GetString(PrefName.ApptPrintFontSize)
+				|| textColumnsPerPage.Text!=Preferences.GetInt(PrefName.ApptPrintColumnsPerPage).ToString())
 			{
 				changed=true;
 			}

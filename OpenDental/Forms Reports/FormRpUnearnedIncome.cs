@@ -25,7 +25,7 @@ namespace OpenDental {
 
 		#region Fill Methods
 		private void FillClinics() {
-			if(PrefC.HasClinicsEnabled) {//fill clinic list
+			if(Preferences.HasClinicsEnabled) {//fill clinic list
 				List<Clinic> listClinics=Clinics.GetForUserod(Security.CurUser,true,Lan.g(this,"Unassigned"));
 				foreach(Clinic clinCur in listClinics) {
 					ODBoxItem<Clinic> boxItemCur = new ODBoxItem<Clinic>(clinCur.Abbr,clinCur);
@@ -131,7 +131,7 @@ namespace OpenDental {
 		}
 
 		private void butUnearnedAllocationOK_Click(object sender,EventArgs e) {
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(!checkUnearnedAllocationAllClins.Checked && listUnearnedAllocationClins.SelectedIndices.Count==0) {
 					MsgBox.Show(this,"At least one clinic must be selected.");
 					return;
@@ -166,7 +166,7 @@ namespace OpenDental {
 			query.AddColumn("Fee",100,FieldValueType.String);
 			query.AddColumn("RemAmt",100,FieldValueType.String);
 			report.AddTitle("Title","Unearned Allocation Report");
-			report.AddSubTitle("Practice Title",PrefC.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("Practice Title",Preferences.GetString(PrefName.PracticeTitle));
 			if(checkUnearnedAllocationAllTypes.Checked) {
 				report.AddSubTitle("UnearnedTypes","All Unearned Types");
 			}
@@ -181,7 +181,7 @@ namespace OpenDental {
 				string provNames = string.Join(", ",listUnearnedAllocationProvs.SelectedItems.OfType<ODBoxItem<Provider>>().Select(x => x.Tag.Abbr));
 				report.AddSubTitle("ProvNames",provNames);
 			}
-			if(PrefC.HasClinicsEnabled) {//show sub titles if clinics are enabled. 
+			if(Preferences.HasClinicsEnabled) {//show sub titles if clinics are enabled. 
 				if(checkUnearnedAllocationAllClins.Checked) {
 					report.AddSubTitle("Clinics",Lan.g(this,"All Clinics"));
 				}
@@ -241,7 +241,7 @@ namespace OpenDental {
 		}
 
 		private void butNetUnearnedOK_Click(object sender,EventArgs e) {
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(!checkNetUnearnedAllClins.Checked && listNetUnearnedClins.SelectedIndices.Count==0) {
 					MsgBox.Show(this,"At least one clinic must be selected.");
 					return;
@@ -267,7 +267,7 @@ namespace OpenDental {
 			query.AddColumn("Unearned Amt",100,FieldValueType.Number);
 			query.AddColumn("Fam Bal",100,FieldValueType.String);
 			report.AddTitle("Title","Net Unearned Income");
-			report.AddSubTitle("Practice Title",PrefC.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("Practice Title",Preferences.GetString(PrefName.PracticeTitle));
 			if(checkNetUnearnedAllTypes.Checked) {
 				report.AddSubTitle("UnearnedTypes","All Unearned Types");
 			}
@@ -282,7 +282,7 @@ namespace OpenDental {
 				string provNames = string.Join(", ",listNetUnearnedProvs.SelectedItems.OfType<ODBoxItem<Provider>>().Select(x => x.Tag.Abbr));
 				report.AddSubTitle("ProvNames",provNames);
 			}
-			if(PrefC.HasClinicsEnabled) {//show sub titles if clinics are enabled. 
+			if(Preferences.HasClinicsEnabled) {//show sub titles if clinics are enabled. 
 				if(checkNetUnearnedAllClins.Checked) {
 					report.AddSubTitle("Clinics",Lan.g(this,"All Clinics"));
 				}
@@ -321,7 +321,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"End date cannot be before start date.");
 				return;
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(!checkLineItemAllClins.Checked && listLineItemClins.SelectedIndices.Count==0) {
 					MsgBox.Show(this,"At least one clinic must be selected.");
 					return;
@@ -333,10 +333,10 @@ namespace OpenDental {
 			DataTable table = RpUnearnedIncome.GetLineItemUnearnedData(listClinicNums,dateLineItemFrom.SelectionStart,dateLineItemTo.SelectionStart);
 			report.ReportName="Line Item Unearned Income Report";
 			report.AddTitle("Title","Line Item Unearned Income Activity");
-			report.AddSubTitle("Practice Title",PrefC.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("Practice Title",Preferences.GetString(PrefName.PracticeTitle));
 			string dateRange = dateLineItemFrom.SelectionStart.ToShortDateString()+" - "+dateLineItemTo.SelectionStart.ToShortDateString();
 			report.AddSubTitle("Date",dateRange);			
-			if(PrefC.HasClinicsEnabled) {//show sub titles if clinics are enabled. 
+			if(Preferences.HasClinicsEnabled) {//show sub titles if clinics are enabled. 
 				if(checkLineItemAllClins.Checked) {
 					report.AddSubTitle("Clinics",Lan.g(this,"All Clinics"));
 				}
@@ -346,7 +346,7 @@ namespace OpenDental {
 				}
 			}
 			QueryObject query;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				query=report.AddQuery(table,"","",SplitByKind.None,1,true);
 				query.AddColumn("Date",100,FieldValueType.Date);
 				query.AddColumn("Patient",180,FieldValueType.String);
@@ -387,7 +387,7 @@ namespace OpenDental {
 		}
 
 		private void butUnearnedAcctOk_Click(object sender,EventArgs e) {
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(!checkUnearnedAcctAllClins.Checked && listUnearnedAcctClins.SelectedIndices.Count==0) {
 					MsgBox.Show(this,"At least one clinic must be selected.");
 					return;
@@ -399,8 +399,8 @@ namespace OpenDental {
 			DataTable table = RpUnearnedIncome.GetUnearnedAccountData(listClinicNums);
 			report.ReportName="Unearned Accounts Report";
 			report.AddTitle("Title","Unearned Accounts");
-			report.AddSubTitle("Practice Title",PrefC.GetString(PrefName.PracticeTitle));
-			if(PrefC.HasClinicsEnabled) {//show sub titles if clinics are enabled. 
+			report.AddSubTitle("Practice Title",Preferences.GetString(PrefName.PracticeTitle));
+			if(Preferences.HasClinicsEnabled) {//show sub titles if clinics are enabled. 
 				if(checkUnearnedAcctAllClins.Checked) {
 					report.AddSubTitle("Clinics",Lan.g(this,"All Clinics"));
 				}
@@ -410,7 +410,7 @@ namespace OpenDental {
 				}
 			}
 			QueryObject query;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				query=report.AddQuery(table,"","",SplitByKind.None,1,true);
 				query.AddColumn("Guarantor",280,FieldValueType.String);
 				query.AddColumn("Type",120,FieldValueType.String);

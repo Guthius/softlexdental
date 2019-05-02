@@ -71,7 +71,7 @@ namespace OpenDental
 
         void RefreshModuleData(long patNum)
         {
-            if (PrefC.GetBool(PrefName.LocalTimeOverridesServerTime))
+            if (Preferences.GetBool(PrefName.LocalTimeOverridesServerTime))
             {
                 TimeDelta = new TimeSpan(0);
             }
@@ -84,7 +84,7 @@ namespace OpenDental
 
         void RefreshModuleScreen()
         {
-            if (PrefC.GetBool(PrefName.LocalTimeOverridesServerTime))
+            if (Preferences.GetBool(PrefName.LocalTimeOverridesServerTime))
             {
                 labelCurrentTime.Text = "Local Time";
             }
@@ -98,10 +98,10 @@ namespace OpenDental
             FillMessageDefs();
 
             butManage.Enabled = Security.IsAuthorized(Permissions.TimecardsEditAll, true);
-            butBreaks.Visible = PrefC.GetBool(PrefName.ClockEventAllowBreak);
+            butBreaks.Visible = Preferences.GetBool(PrefName.ClockEventAllowBreak);
 
             importInsPlansButton.Visible = true;
-            if (PrefC.GetBool(PrefName.EasyHidePublicHealth))
+            if (Preferences.GetBool(PrefName.EasyHidePublicHealth))
             {
                 importInsPlansButton.Visible = false; // Import Ins Plans button is only visible when Public Health feature is enabled.
             }
@@ -162,7 +162,7 @@ namespace OpenDental
         {
             if (!Security.IsAuthorized(Permissions.Billing)) return;
 
-            if (PrefC.HasClinicsEnabled)
+            if (Preferences.HasClinicsEnabled)
             {
                 if (Statements.UnsentClinicStatementsExist(Clinics.ClinicNum))
                 {
@@ -239,7 +239,7 @@ namespace OpenDental
                 while (!ValidateConnectionDetails()) // Only validate connection details if the ArManager form does not exist yet
                 {
                     var message =
-                        PrefC.HasClinicsEnabled ?
+                        Preferences.HasClinicsEnabled ?
                             "An SFTP connection could not be made using the connection details in the enabled Transworld (TSI) program link. Would you like to edit the Transworld program link now?" :
                             "An SFTP connection could not be made using the connection details for any clinic in the enabled Transworld (TSI) program link. Would you like to edit the Transworld program link now?";
 
@@ -429,7 +429,7 @@ namespace OpenDental
             Program progCur = Programs.GetCur(ProgramName.Transworld);
             List<long> listClinicNums = new List<long>();
 
-            if (PrefC.HasClinicsEnabled)
+            if (Preferences.HasClinicsEnabled)
             {
                 listClinicNums = Clinics.GetAllForUserod(Security.CurUser).Select(x => x.ClinicNum).ToList();
                 if (!Security.CurUser.ClinicIsRestricted)
@@ -528,7 +528,7 @@ namespace OpenDental
             employeeGrid.Columns.Add(new ODGridColumn("Status", 100));
             employeeGrid.Rows.Clear();
 
-            if (PrefC.HasClinicsEnabled)
+            if (Preferences.HasClinicsEnabled)
             {
                 _listEmployees = Employees.GetEmpsForClinic(Clinics.ClinicNum, false, true);
             }
@@ -553,7 +553,7 @@ namespace OpenDental
             foreach (TimeClockStatus timeClockStatus in Enum.GetValues(typeof(TimeClockStatus)))
             {
                 string statusDescript = timeClockStatus.GetDescription();
-                if (!PrefC.GetBool(PrefName.ClockEventAllowBreak))
+                if (!Preferences.GetBool(PrefName.ClockEventAllowBreak))
                 {
                     if (timeClockStatus == TimeClockStatus.Break)
                     {
@@ -586,7 +586,7 @@ namespace OpenDental
         /// </summary>
         string ConvertClockStatus(string status)
         {
-            if (!PrefC.GetBool(PrefName.ClockEventAllowBreak) && status == TimeClockStatus.Lunch.GetDescription())
+            if (!Preferences.GetBool(PrefName.ClockEventAllowBreak) && status == TimeClockStatus.Lunch.GetDescription())
             {
                 status = TimeClockStatus.Break.GetDescription();
             }
@@ -631,7 +631,7 @@ namespace OpenDental
                 butClockOut.Enabled = false;
                 butTimeCard.Enabled = true;
                 butBreaks.Enabled = true;
-                if (PrefC.GetBool(PrefName.ClockEventAllowBreak))
+                if (Preferences.GetBool(PrefName.ClockEventAllowBreak))
                 {
                     listStatus.SelectedIndex = _listShownTimeClockStatuses.IndexOf(TimeClockStatus.Break);
                 }
@@ -675,7 +675,7 @@ namespace OpenDental
                 return;
             }
 
-            if (PrefC.GetBool(PrefName.TimecardSecurityEnabled))
+            if (Preferences.GetBool(PrefName.TimecardSecurityEnabled))
             {
                 if (Security.CurUser.EmployeeNum != _listEmployees[e.Row].EmployeeNum)
                 {
@@ -698,7 +698,7 @@ namespace OpenDental
                 SelectEmployee(-1);
                 return;
             }
-            if (PrefC.GetBool(PrefName.DockPhonePanelShow) && !Security.IsAuthorized(Permissions.TimecardsEditAll, true))
+            if (Preferences.GetBool(PrefName.DockPhonePanelShow) && !Security.IsAuthorized(Permissions.TimecardsEditAll, true))
             {
                 //Check if the employee set their ext to 0 in the phoneempdefault table.
                 if (PhoneEmpDefaults.GetByExtAndEmp(0, EmployeeCur.EmployeeNum) == null)
@@ -724,7 +724,7 @@ namespace OpenDental
 
             EmployeeCur.ClockStatus = Lan.g(this, "Working");
             Employees.Update(EmployeeCur);
-            if (PrefC.GetBool(PrefName.DockPhonePanelShow))
+            if (Preferences.GetBool(PrefName.DockPhonePanelShow))
             {
                 Phones.SetPhoneStatus(ClockStatusEnum.Available, Phones.GetExtensionForEmp(EmployeeCur.EmployeeNum), EmployeeCur.EmployeeNum);
             }
@@ -742,7 +742,7 @@ namespace OpenDental
                 SelectEmployee(-1);
                 return;
             }
-            if (PrefC.GetBool(PrefName.DockPhonePanelShow) && !Security.IsAuthorized(Permissions.TimecardsEditAll, true))
+            if (Preferences.GetBool(PrefName.DockPhonePanelShow) && !Security.IsAuthorized(Permissions.TimecardsEditAll, true))
             {
                 //Check if the employee set their ext to 0 in the phoneempdefault table.
                 if (PhoneEmpDefaults.GetByExtAndEmp(0, EmployeeCur.EmployeeNum) == null)
@@ -774,7 +774,7 @@ namespace OpenDental
             EmployeeCur.ClockStatus = Lan.g("enumTimeClockStatus", (_listShownTimeClockStatuses[listStatus.SelectedIndex]).GetDescription());
             Employees.Update(EmployeeCur);
             ModuleSelected(PatCurNum);
-            if (PrefC.GetBool(PrefName.DockPhonePanelShow))
+            if (Preferences.GetBool(PrefName.DockPhonePanelShow))
             {
                 Phones.SetPhoneStatus(Phones.GetClockStatusFromEmp(EmployeeCur.ClockStatus), Phones.GetExtensionForEmp(EmployeeCur.EmployeeNum), EmployeeCur.EmployeeNum);
             }

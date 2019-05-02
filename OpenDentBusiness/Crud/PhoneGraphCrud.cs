@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PhoneGraph into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(PhoneGraph phoneGraph,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				phoneGraph.PhoneGraphNum=ReplicationServers.GetKey("phonegraph","PhoneGraphNum");
 			}
 			string command="INSERT INTO phonegraph (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PhoneGraphNum,";
 			}
 			command+="EmployeeNum,IsGraphed,DateEntry) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(phoneGraph.PhoneGraphNum)+",";
 			}
 			command+=
 				     POut.Long  (phoneGraph.EmployeeNum)+","
 				+    POut.Bool  (phoneGraph.IsGraphed)+","
 				+    POut.Date  (phoneGraph.DateEntry)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

@@ -94,15 +94,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ToothGridDef into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ToothGridDef toothGridDef,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				toothGridDef.ToothGridDefNum=ReplicationServers.GetKey("toothgriddef","ToothGridDefNum");
 			}
 			string command="INSERT INTO toothgriddef (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ToothGridDefNum,";
 			}
 			command+="SheetFieldDefNum,NameInternal,NameShowing,CellType,ItemOrder,ColumnWidth,CodeNum,ProcStatus) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(toothGridDef.ToothGridDefNum)+",";
 			}
 			command+=
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (toothGridDef.ColumnWidth)+","
 				+    POut.Long  (toothGridDef.CodeNum)+","
 				+    POut.Int   ((int)toothGridDef.ProcStatus)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

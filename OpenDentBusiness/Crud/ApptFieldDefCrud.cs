@@ -79,15 +79,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ApptFieldDef into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ApptFieldDef apptFieldDef,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				apptFieldDef.ApptFieldDefNum=ReplicationServers.GetKey("apptfielddef","ApptFieldDefNum");
 			}
 			string command="INSERT INTO apptfielddef (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ApptFieldDefNum,";
 			}
 			command+="FieldName,FieldType,PickList) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(apptFieldDef.ApptFieldDefNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				apptFieldDef.PickList="";
 			}
 			OdSqlParameter paramPickList=new OdSqlParameter("paramPickList",OdDbType.Text,POut.StringParam(apptFieldDef.PickList));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramPickList);
 			}
 			else {

@@ -44,14 +44,14 @@ namespace OpenDentBusiness {
 			}
 			ncScript.Destination=new DestinationType();
 			ncScript.Destination.requestedPage=RequestedPageType.compose;//This is the tab that the user will want 90% of the time.
-			string practiceTitle=Tidy(PrefC.GetString(PrefName.PracticeTitle),50);//May be blank.
-			string practicePhone=PrefC.GetString(PrefName.PracticePhone);//Validated to be 10 digits within the chart.
-			string practiceFax=PrefC.GetString(PrefName.PracticeFax);//Validated to be 10 digits within the chart.
-			string practiceAddress=PrefC.GetString(PrefName.PracticeAddress);//Validated to exist in chart.
-			string practiceAddress2=PrefC.GetString(PrefName.PracticeAddress2);//May be blank.
-			string practiceCity=PrefC.GetString(PrefName.PracticeCity);//Validated to exist in chart.
-			string practiceState=PrefC.GetString(PrefName.PracticeST).ToUpper();//Validated to be a US state code in chart.
-			string practiceZip=Regex.Replace(PrefC.GetString(PrefName.PracticeZip),"[^0-9]*","");//Zip with all non-numeric characters removed. Validated to be 9 digits in chart.
+			string practiceTitle=Tidy(Preferences.GetString(PrefName.PracticeTitle),50);//May be blank.
+			string practicePhone=Preferences.GetString(PrefName.PracticePhone);//Validated to be 10 digits within the chart.
+			string practiceFax=Preferences.GetString(PrefName.PracticeFax);//Validated to be 10 digits within the chart.
+			string practiceAddress=Preferences.GetString(PrefName.PracticeAddress);//Validated to exist in chart.
+			string practiceAddress2=Preferences.GetString(PrefName.PracticeAddress2);//May be blank.
+			string practiceCity=Preferences.GetString(PrefName.PracticeCity);//Validated to exist in chart.
+			string practiceState=Preferences.GetString(PrefName.PracticeST).ToUpper();//Validated to be a US state code in chart.
+			string practiceZip=Regex.Replace(Preferences.GetString(PrefName.PracticeZip),"[^0-9]*","");//Zip with all non-numeric characters removed. Validated to be 9 digits in chart.
 			string practiceZip4=practiceZip.Substring(5);//Last 4 digits of zip.
 			practiceZip=practiceZip.Substring(0,5);//First 5 digits of zip.
 			string country="US";//Always United States for now.
@@ -60,7 +60,7 @@ namespace OpenDentBusiness {
 			//}
 			ncScript.Account=new AccountTypeRx();
 			//Each LicensedPrescriberID must be unique within an account. Since we send ProvNum for LicensedPrescriberID, each OD database must have a unique AccountID.
-			ncScript.Account.ID=PrefC.GetString(PrefName.NewCropAccountId);//Customer account number then a dash then a random alpha-numeric string of 3 characters, followed by 2 digits.
+			ncScript.Account.ID=Preferences.GetString(PrefName.NewCropAccountId);//Customer account number then a dash then a random alpha-numeric string of 3 characters, followed by 2 digits.
 			ncScript.Account.accountName=practiceTitle;//May be blank.
 			ncScript.Account.siteID="1";//Always send 1.  For each AccountID/SiteID pair, a separate database will be created in NewCrop.
 			ncScript.Account.AccountAddress=new AddressType();
@@ -75,9 +75,9 @@ namespace OpenDentBusiness {
 			ncScript.Account.accountPrimaryFaxNumber=practiceFax;//Validated to be 10 digits within the chart.
 			ncScript.Location=new LocationType();
 			ProviderClinic provClinic=null;
-			if(!PrefC.HasClinicsEnabled
-				|| (!PrefC.GetBool(PrefName.ElectronicRxClinicUseSelected) && pat.ClinicNum==0)
-				|| (PrefC.GetBool(PrefName.ElectronicRxClinicUseSelected) && Clinics.ClinicNum==0 && pat.ClinicNum==0))
+			if(!Preferences.HasClinicsEnabled
+				|| (!Preferences.GetBool(PrefName.ElectronicRxClinicUseSelected) && pat.ClinicNum==0)
+				|| (Preferences.GetBool(PrefName.ElectronicRxClinicUseSelected) && Clinics.ClinicNum==0 && pat.ClinicNum==0))
 			{ //No clinic.
 				ncScript.Location.ID="0";//Always 0, since clinicnums must be >= 1, will never overlap with a clinic if the office turns clinics on after first use.
 				ncScript.Location.locationName=practiceTitle;//May be blank.
@@ -95,7 +95,7 @@ namespace OpenDentBusiness {
 			}
 			else { //Using clinics.
 				Clinic clinic=null;
-				if(PrefC.GetBool(PrefName.ElectronicRxClinicUseSelected) && Clinics.ClinicNum!=0) {
+				if(Preferences.GetBool(PrefName.ElectronicRxClinicUseSelected) && Clinics.ClinicNum!=0) {
 					clinic=Clinics.GetClinic(Clinics.ClinicNum);
 				}
 				else {

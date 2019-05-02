@@ -676,7 +676,7 @@ namespace OpenDental{
 				groupTimeSpans.Visible=false;
 				groupRate2.Visible=false;
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				_listClinics=Clinics.GetForUserod(Security.CurUser);
 				if(!Security.CurUser.ClinicIsRestricted || Security.CurUser.ClinicNum==0) {
 					//If they are not restricted or are assigned to HQ, add it as the top option.
@@ -719,7 +719,7 @@ namespace OpenDental{
 			_listShownTimeClockStatuses.Clear();
 			foreach(TimeClockStatus timeClockStatus in Enum.GetValues(typeof(TimeClockStatus))){
 				string statusDescript=timeClockStatus.GetDescription();
-				if(!PrefC.GetBool(PrefName.ClockEventAllowBreak)) {
+				if(!Preferences.GetBool(PrefName.ClockEventAllowBreak)) {
 					if(timeClockStatus==TimeClockStatus.Break) {
 						continue;//Skip Break option.
 					}
@@ -1100,7 +1100,7 @@ namespace OpenDental{
 			}
 			//The two auto fields are only set externally.
 			ClockEventCur.Note=textNote.Text;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				ClockEventCur.ClinicNum=_selectedClinicNum;
 			}
 			ClockEvents.Update(ClockEventCur);

@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one DiscountPlan into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(DiscountPlan discountPlan,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				discountPlan.DiscountPlanNum=ReplicationServers.GetKey("discountplan","DiscountPlanNum");
 			}
 			string command="INSERT INTO discountplan (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="DiscountPlanNum,";
 			}
 			command+="Description,FeeSchedNum,DefNum,IsHidden) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(discountPlan.DiscountPlanNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Long  (discountPlan.FeeSchedNum)+","
 				+    POut.Long  (discountPlan.DefNum)+","
 				+    POut.Bool  (discountPlan.IsHidden)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

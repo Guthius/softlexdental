@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ChatUser into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ChatUser chatUser,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				chatUser.ChatUserNum=ReplicationServers.GetKey("chatuser","ChatUserNum");
 			}
 			string command="INSERT INTO chatuser (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ChatUserNum,";
 			}
 			command+="Extension,CurrentSessions,SessionTime) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(chatUser.ChatUserNum)+",";
 			}
 			command+=
 				     POut.Int   (chatUser.Extension)+","
 				+    POut.Int   (chatUser.CurrentSessions)+","
 				+    POut.Long  (chatUser.SessionTime)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

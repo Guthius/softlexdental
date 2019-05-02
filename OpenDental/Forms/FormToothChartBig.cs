@@ -103,7 +103,7 @@ namespace OpenDental{
 			//ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
 			toothChart.UseHardware=ComputerPrefs.LocalComputer.GraphicsUseHardware;
 			toothChart.PreferredPixelFormatNumber=ComputerPrefs.LocalComputer.PreferredPixelFormatNum;
-			toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)PrefC.GetInt(PrefName.UseInternationalToothNumbers));
+			toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)Preferences.GetInt(PrefName.UseInternationalToothNumbers));
 			//Must be last preference set, last so that all settings are caried through in the reinitialization this line triggers.
 			if(ComputerPrefs.LocalComputer.GraphicsSimple==DrawingMode.Simple2D) {
 				toothChart.DrawMode=DrawingMode.Simple2D;

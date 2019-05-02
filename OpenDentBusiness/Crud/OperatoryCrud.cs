@@ -106,15 +106,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Operatory into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Operatory operatory,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				operatory.OperatoryNum=ReplicationServers.GetKey("operatory","OperatoryNum");
 			}
 			string command="INSERT INTO operatory (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="OperatoryNum,";
 			}
 			command+="OpName,Abbrev,ItemOrder,IsHidden,ProvDentist,ProvHygienist,IsHygiene,ClinicNum,SetProspective,IsWebSched,IsNewPatAppt) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(operatory.OperatoryNum)+",";
 			}
 			command+=
@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 				//DateTStamp can only be set by MySQL
 				+    POut.Bool  (operatory.IsWebSched)+","
 				+    POut.Bool  (operatory.IsNewPatAppt)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

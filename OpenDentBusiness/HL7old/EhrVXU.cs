@@ -38,10 +38,10 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		private void InitializeVariables() {
-			_sendingFacilityName=PrefC.GetString(PrefName.PracticeTitle);
-			cityWhereEntered=PrefC.GetString(PrefName.PracticeCity);
-			stateWhereEntered=PrefC.GetString(PrefName.PracticeST);
-			if(PrefC.HasClinicsEnabled && _pat.ClinicNum!=0) {//Using clinics and a clinic is assigned.
+			_sendingFacilityName=Preferences.GetString(PrefName.PracticeTitle);
+			cityWhereEntered=Preferences.GetString(PrefName.PracticeCity);
+			stateWhereEntered=Preferences.GetString(PrefName.PracticeST);
+			if(Preferences.HasClinicsEnabled && _pat.ClinicNum!=0) {//Using clinics and a clinic is assigned.
 				Clinic clinic=Clinics.GetClinic(_pat.ClinicNum);
 				_sendingFacilityName=clinic.Description;
 				cityWhereEntered=clinic.City;
@@ -1233,7 +1233,7 @@ namespace OpenDentBusiness.HL7 {
 				if(vaccine.CompletionStatus!=VaccineCompletionStatus.Refused && vaccine.RefusalReason!=VaccineRefusalReason.None) {
 					WriteError(sb,"Since a refusal reason was specified, completion status must be Refused.");
 				}
-				if(PrefC.HasClinicsEnabled && pat.ClinicNum!=0) {//Using clinics and a clinic is assigned.
+				if(Preferences.HasClinicsEnabled && pat.ClinicNum!=0) {//Using clinics and a clinic is assigned.
 					Clinic clinic=Clinics.GetClinic(pat.ClinicNum);
 					if(stateCodes.IndexOf(clinic.State.ToUpper())==-1) {
 						WriteError(sb,"Clinic '"+clinic.Description+"' state must be 2 letter state or territory code for the United States.");
@@ -1243,10 +1243,10 @@ namespace OpenDentBusiness.HL7 {
 					}
 				}
 				else {
-					if(stateCodes.IndexOf(PrefC.GetString(PrefName.PracticeST).ToUpper())==-1) {
+					if(stateCodes.IndexOf(Preferences.GetString(PrefName.PracticeST).ToUpper())==-1) {
 						WriteError(sb,"Practice state must be 2 letter state or territory code for the United States.");
 					}
-					if(PrefC.GetString(PrefName.PracticeCity).Trim()=="") {
+					if(Preferences.GetString(PrefName.PracticeCity).Trim()=="") {
 						WriteError(sb,"Missing practice city.");
 					}
 				}

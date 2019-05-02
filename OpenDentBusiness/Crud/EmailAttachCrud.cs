@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EmailAttach into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EmailAttach emailAttach,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				emailAttach.EmailAttachNum=ReplicationServers.GetKey("emailattach","EmailAttachNum");
 			}
 			string command="INSERT INTO emailattach (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EmailAttachNum,";
 			}
 			command+="EmailMessageNum,DisplayedFileName,ActualFileName,EmailTemplateNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(emailAttach.EmailAttachNum)+",";
 			}
 			command+=
@@ -98,7 +98,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(emailAttach.DisplayedFileName)+"',"
 				+"'"+POut.String(emailAttach.ActualFileName)+"',"
 				+    POut.Long  (emailAttach.EmailTemplateNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

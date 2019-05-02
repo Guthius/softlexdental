@@ -434,7 +434,7 @@ namespace OpenDental{
 			textDateTP.Text=PlanCur.DateTP.ToShortDateString();
 			textHeading.Text=PlanCur.Heading;
 			textNote.Text=PlanCur.Note;
-			if(PrefC.GetBool(PrefName.EasyHidePublicHealth)){
+			if(Preferences.GetBool(PrefName.EasyHidePublicHealth)){
 				labelResponsParty.Visible=false;
 				textResponsParty.Visible=false;
 				butPickResponsParty.Visible=false;

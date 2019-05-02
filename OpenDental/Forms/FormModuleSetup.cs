@@ -4569,7 +4569,7 @@ namespace OpenDental{
 			}
 			//Now that all the tabs are filled, use _selectedTab to open a specific tab that the user is trying to view.
 			tabControlMain.SelectedTab=tabControlMain.TabPages[_selectedTab];//Garunteed to be a valid tab.  Validated in constructor.
-			if(PrefC.RandomKeys) {
+			if(Preferences.RandomKeys) {
 				groupTreatPlanSort.Visible=false;
 			}
             Plugin.Trigger(this, "FormModuleSetup_Loaded");
@@ -4579,7 +4579,7 @@ namespace OpenDental{
 			_changed=false;
 			#region Appointment Module
 			//Appointment module---------------------------------------------------------------
-			BrokenApptProcedure brokenApptCodeDB=(BrokenApptProcedure)PrefC.GetInt(PrefName.BrokenApptProcedure);
+			BrokenApptProcedure brokenApptCodeDB=(BrokenApptProcedure)Preferences.GetInt(PrefName.BrokenApptProcedure);
 			foreach(BrokenApptProcedure option in Enum.GetValues(typeof(BrokenApptProcedure))) {
 				if(option==BrokenApptProcedure.Missed && !ProcedureCodes.HasMissedCode()) {
 					continue;
@@ -4600,39 +4600,39 @@ namespace OpenDental{
 				comboBrokenApptProc.SelectedIndex=0;
 				comboBrokenApptProc.Enabled=false;
 			}
-			checkSolidBlockouts.Checked=PrefC.GetBool(PrefName.SolidBlockouts);
-			checkBrokenApptAdjustment.Checked=PrefC.GetBool(PrefName.BrokenApptAdjustment);
-			checkBrokenApptCommLog.Checked=PrefC.GetBool(PrefName.BrokenApptCommLog);
+			checkSolidBlockouts.Checked=Preferences.GetBool(PrefName.SolidBlockouts);
+			checkBrokenApptAdjustment.Checked=Preferences.GetBool(PrefName.BrokenApptAdjustment);
+			checkBrokenApptCommLog.Checked=Preferences.GetBool(PrefName.BrokenApptCommLog);
 			//checkBrokenApptNote.Checked=PrefC.GetBool(PrefName.BrokenApptCommLogNotAdjustment);
-			checkApptBubbleDelay.Checked = PrefC.GetBool(PrefName.ApptBubbleDelay);
-			checkAppointmentBubblesDisabled.Checked=PrefC.GetBool(PrefName.AppointmentBubblesDisabled);
+			checkApptBubbleDelay.Checked = Preferences.GetBool(PrefName.ApptBubbleDelay);
+			checkAppointmentBubblesDisabled.Checked=Preferences.GetBool(PrefName.AppointmentBubblesDisabled);
 			listPosAdjTypes=Defs.GetPositiveAdjTypes();
 			listNegAdjTypes=Defs.GetNegativeAdjTypes();
-			long financeChargeAdjDefNum=PrefC.GetLong(PrefName.FinanceChargeAdjustmentType);
-			long billingChargeAdjDefNum=PrefC.GetLong(PrefName.BillingChargeAdjustmentType);
-			long brokenApptAdjDefNum=PrefC.GetLong(PrefName.BrokenAppointmentAdjustmentType);
-			long payPlanAdjDefNum=PrefC.GetLong(PrefName.PayPlanAdjType);
-			long salesTaxAdjDefNum=PrefC.GetLong(PrefName.SalesTaxAdjustmentType);
+			long financeChargeAdjDefNum=Preferences.GetLong(PrefName.FinanceChargeAdjustmentType);
+			long billingChargeAdjDefNum=Preferences.GetLong(PrefName.BillingChargeAdjustmentType);
+			long brokenApptAdjDefNum=Preferences.GetLong(PrefName.BrokenAppointmentAdjustmentType);
+			long payPlanAdjDefNum=Preferences.GetLong(PrefName.PayPlanAdjType);
+			long salesTaxAdjDefNum=Preferences.GetLong(PrefName.SalesTaxAdjustmentType);
 			for(int i=0;i<listPosAdjTypes.Count;i++) {
 				comboBrokenApptAdjType.Items.Add(listPosAdjTypes[i].ItemName);
 			}
 			comboBrokenApptAdjType.IndexSelectOrSetText(listPosAdjTypes.FindIndex(x => x.DefNum==brokenApptAdjDefNum),
 				() => { return brokenApptAdjDefNum==0 ? "" : Defs.GetName(DefCat.AdjTypes,brokenApptAdjDefNum)+" ("+Lan.g(this,"hidden")+")"; });
-			long treatPlanDiscountAdjDefNum=PrefC.GetLong(PrefName.TreatPlanDiscountAdjustmentType);
+			long treatPlanDiscountAdjDefNum=Preferences.GetLong(PrefName.TreatPlanDiscountAdjustmentType);
 			for(int i=0;i<listNegAdjTypes.Count;i++) {
 				comboProcDiscountType.Items.Add(listNegAdjTypes[i].ItemName);
 			}
 			comboProcDiscountType.IndexSelectOrSetText(listNegAdjTypes.FindIndex(x => x.DefNum==treatPlanDiscountAdjDefNum),
 				() => { return treatPlanDiscountAdjDefNum==0 ? "" : Defs.GetName(DefCat.AdjTypes,treatPlanDiscountAdjDefNum)+" ("+Lan.g(this,"hidden")+")"; });
-			textDiscountPercentage.Text=PrefC.GetDouble(PrefName.TreatPlanDiscountPercent).ToString();
-			checkApptExclamation.Checked=PrefC.GetBool(PrefName.ApptExclamationShowForUnsentIns);
-			long timeArrivedPrefNum=PrefC.GetLong(PrefName.AppointmentTimeArrivedTrigger);
+			textDiscountPercentage.Text=Preferences.GetDouble(PrefName.TreatPlanDiscountPercent).ToString();
+			checkApptExclamation.Checked=Preferences.GetBool(PrefName.ApptExclamationShowForUnsentIns);
+			long timeArrivedPrefNum=Preferences.GetLong(PrefName.AppointmentTimeArrivedTrigger);
 			comboTimeArrived.Items.Add(Lan.g(this,"None"));
 			comboTimeArrived.SelectedIndex=0;
-			long timeSeatedPrefNum=PrefC.GetLong(PrefName.AppointmentTimeSeatedTrigger);
+			long timeSeatedPrefNum=Preferences.GetLong(PrefName.AppointmentTimeSeatedTrigger);
 			comboTimeSeated.Items.Add(Lan.g(this,"None"));
 			comboTimeSeated.SelectedIndex=0;
-			long timeDismissedDefNum=PrefC.GetLong(PrefName.AppointmentTimeDismissedTrigger);
+			long timeDismissedDefNum=Preferences.GetLong(PrefName.AppointmentTimeDismissedTrigger);
 			comboTimeDismissed.Items.Add(Lan.g(this,"None"));
 			comboTimeDismissed.SelectedIndex=0;
 			_listApptConfirmedDefs=Defs.GetDefsForCategory(DefCat.ApptConfirmed,true);
@@ -4647,7 +4647,7 @@ namespace OpenDental{
 				() => { return timeSeatedPrefNum==0 ? "" : Defs.GetName(DefCat.ApptConfirmed,timeSeatedPrefNum)+" ("+Lan.g(this,"hidden")+")"; });
 			comboTimeDismissed.IndexSelectOrSetText(_listApptConfirmedDefs.FindIndex(x => x.DefNum==timeDismissedDefNum)+1,
 				() => { return timeDismissedDefNum==0 ? "" : Defs.GetName(DefCat.ApptConfirmed,timeDismissedDefNum)+" ("+Lan.g(this,"hidden")+")"; });
-			checkApptRefreshEveryMinute.Checked=PrefC.GetBool(PrefName.ApptModuleRefreshesEveryMinute);
+			checkApptRefreshEveryMinute.Checked=Preferences.GetBool(PrefName.ApptModuleRefreshesEveryMinute);
 			for(int i=0;i<Enum.GetNames(typeof(SearchBehaviorCriteria)).Length;i++) {
 				comboSearchBehavior.Items.Add(Enum.GetNames(typeof(SearchBehaviorCriteria))[i]);
 			}
@@ -4661,103 +4661,103 @@ namespace OpenDental{
 					comboItem = new ODBoxItem<double>(seconds.ToString("f1") + " "+Lan.g(this,"seconds"),seconds);
 				}
 				comboDelay.Items.Add(comboItem);
-				if(PrefC.GetDouble(PrefName.FormClickDelay)==seconds) {
+				if(Preferences.GetDouble(PrefName.FormClickDelay)==seconds) {
 					comboDelay.SelectedIndex = i;
 				}
 			}
-			comboSearchBehavior.SelectedIndex=PrefC.GetInt(PrefName.AppointmentSearchBehavior);
-			checkAppointmentTimeIsLocked.Checked=PrefC.GetBool(PrefName.AppointmentTimeIsLocked);
-			textApptBubNoteLength.Text=PrefC.GetInt(PrefName.AppointmentBubblesNoteLength).ToString();
-			checkWaitingRoomFilterByView.Checked=PrefC.GetBool(PrefName.WaitingRoomFilterByView);
-			textWaitRoomWarn.Text=PrefC.GetInt(PrefName.WaitingRoomAlertTime).ToString();
-			butColor.BackColor=PrefC.GetColor(PrefName.WaitingRoomAlertColor);
-			butApptLineColor.BackColor=PrefC.GetColor(PrefName.AppointmentTimeLineColor);
-			checkApptModuleDefaultToWeek.Checked=PrefC.GetBool(PrefName.ApptModuleDefaultToWeek);
-			checkApptTimeReset.Checked=PrefC.GetBool(PrefName.AppointmentClinicTimeReset);
-			if(!PrefC.HasClinicsEnabled) {
+			comboSearchBehavior.SelectedIndex=Preferences.GetInt(PrefName.AppointmentSearchBehavior);
+			checkAppointmentTimeIsLocked.Checked=Preferences.GetBool(PrefName.AppointmentTimeIsLocked);
+			textApptBubNoteLength.Text=Preferences.GetInt(PrefName.AppointmentBubblesNoteLength).ToString();
+			checkWaitingRoomFilterByView.Checked=Preferences.GetBool(PrefName.WaitingRoomFilterByView);
+			textWaitRoomWarn.Text=Preferences.GetInt(PrefName.WaitingRoomAlertTime).ToString();
+			butColor.BackColor=Preferences.GetColor(PrefName.WaitingRoomAlertColor);
+			butApptLineColor.BackColor=Preferences.GetColor(PrefName.AppointmentTimeLineColor);
+			checkApptModuleDefaultToWeek.Checked=Preferences.GetBool(PrefName.ApptModuleDefaultToWeek);
+			checkApptTimeReset.Checked=Preferences.GetBool(PrefName.AppointmentClinicTimeReset);
+			if(!Preferences.HasClinicsEnabled) {
 				checkApptTimeReset.Visible=false;
 			}
-			checkApptModuleAdjInProd.Checked=PrefC.GetBool(PrefName.ApptModuleAdjustmentsInProd);
-			checkUseOpHygProv.Checked=PrefC.GetBool(PrefName.ApptSecondaryProviderConsiderOpOnly);
-			checkApptModuleProductionUsesOps.Checked=PrefC.GetBool(PrefName.ApptModuleProductionUsesOps);
-			checkApptsRequireProcs.Checked=PrefC.GetBool(PrefName.ApptsRequireProc);
-			checkApptAllowFutureComplete.Checked=PrefC.GetBool(PrefName.ApptAllowFutureComplete);
-			checkApptAllowEmptyComplete.Checked=PrefC.GetBool(PrefName.ApptAllowEmptyComplete);
+			checkApptModuleAdjInProd.Checked=Preferences.GetBool(PrefName.ApptModuleAdjustmentsInProd);
+			checkUseOpHygProv.Checked=Preferences.GetBool(PrefName.ApptSecondaryProviderConsiderOpOnly);
+			checkApptModuleProductionUsesOps.Checked=Preferences.GetBool(PrefName.ApptModuleProductionUsesOps);
+			checkApptsRequireProcs.Checked=Preferences.GetBool(PrefName.ApptsRequireProc);
+			checkApptAllowFutureComplete.Checked=Preferences.GetBool(PrefName.ApptAllowFutureComplete);
+			checkApptAllowEmptyComplete.Checked=Preferences.GetBool(PrefName.ApptAllowEmptyComplete);
 			comboApptSchedEnforceSpecialty.Items.AddRange(Enum.GetValues(typeof(ApptSchedEnforceSpecialty)).OfType<ApptSchedEnforceSpecialty>()
 				.Select(x => x.GetDescription()).ToArray());
-			comboApptSchedEnforceSpecialty.SelectedIndex=PrefC.GetInt(PrefName.ApptSchedEnforceSpecialty);
-			if(!PrefC.HasClinicsEnabled) {
+			comboApptSchedEnforceSpecialty.SelectedIndex=Preferences.GetInt(PrefName.ApptSchedEnforceSpecialty);
+			if(!Preferences.HasClinicsEnabled) {
 				comboApptSchedEnforceSpecialty.Visible=false;
 				labelApptSchedEnforceSpecialty.Visible=false;
 			}
-			textApptWithoutProcsDefaultLength.Text=PrefC.GetString(PrefName.AppointmentWithoutProcsDefaultLength);
-			checkReplaceBlockouts.Checked=PrefC.GetBool(PrefName.ReplaceExistingBlockout);
-			checkUnscheduledListNoRecalls.Checked=PrefC.GetBool(PrefName.UnscheduledListNoRecalls);
-			textApptAutoRefreshRange.Text=PrefC.GetString(PrefName.ApptAutoRefreshRange);
+			textApptWithoutProcsDefaultLength.Text=Preferences.GetString(PrefName.AppointmentWithoutProcsDefaultLength);
+			checkReplaceBlockouts.Checked=Preferences.GetBool(PrefName.ReplaceExistingBlockout);
+			checkUnscheduledListNoRecalls.Checked=Preferences.GetBool(PrefName.UnscheduledListNoRecalls);
+			textApptAutoRefreshRange.Text=Preferences.GetString(PrefName.ApptAutoRefreshRange);
 			#endregion
 			#region Family Module
 			//Family module-----------------------------------------------------------------------
-			checkInsurancePlansShared.Checked=PrefC.GetBool(PrefName.InsurancePlansShared);
-			checkPPOpercentage.Checked=PrefC.GetBool(PrefName.InsDefaultPPOpercent);
-			checkAllowedFeeSchedsAutomate.Checked=PrefC.GetBool(PrefName.AllowedFeeSchedsAutomate);
-			checkCoPayFeeScheduleBlankLikeZero.Checked=PrefC.GetBool(PrefName.CoPay_FeeSchedule_BlankLikeZero);
-			checkFixedBenefitBlankLikeZero.Checked=PrefC.GetBool(PrefName.FixedBenefitBlankLikeZero);
-			checkInsDefaultShowUCRonClaims.Checked=PrefC.GetBool(PrefName.InsDefaultShowUCRonClaims);
-			checkInsDefaultAssignmentOfBenefits.Checked=PrefC.GetBool(PrefName.InsDefaultAssignBen);
-			checkInsPPOsecWriteoffs.Checked=PrefC.GetBool(PrefName.InsPPOsecWriteoffs);
+			checkInsurancePlansShared.Checked=Preferences.GetBool(PrefName.InsurancePlansShared);
+			checkPPOpercentage.Checked=Preferences.GetBool(PrefName.InsDefaultPPOpercent);
+			checkAllowedFeeSchedsAutomate.Checked=Preferences.GetBool(PrefName.AllowedFeeSchedsAutomate);
+			checkCoPayFeeScheduleBlankLikeZero.Checked=Preferences.GetBool(PrefName.CoPay_FeeSchedule_BlankLikeZero);
+			checkFixedBenefitBlankLikeZero.Checked=Preferences.GetBool(PrefName.FixedBenefitBlankLikeZero);
+			checkInsDefaultShowUCRonClaims.Checked=Preferences.GetBool(PrefName.InsDefaultShowUCRonClaims);
+			checkInsDefaultAssignmentOfBenefits.Checked=Preferences.GetBool(PrefName.InsDefaultAssignBen);
+			checkInsPPOsecWriteoffs.Checked=Preferences.GetBool(PrefName.InsPPOsecWriteoffs);
 			for(int i=0;i<Enum.GetNames(typeof(EnumCobRule)).Length;i++) {
 				comboCobRule.Items.Add(Lan.g("enumEnumCobRule",Enum.GetNames(typeof(EnumCobRule))[i]));
 			}
-			comboCobRule.SelectedIndex=PrefC.GetInt(PrefName.InsDefaultCobRule);
-			checkTextMsgOkStatusTreatAsNo.Checked=PrefC.GetBool(PrefName.TextMsgOkStatusTreatAsNo);
-			checkFamPhiAccess.Checked=PrefC.GetBool(PrefName.FamPhiAccess);
-			checkGoogleAddress.Checked=PrefC.GetBool(PrefName.ShowFeatureGoogleMaps);
-			checkSelectProv.Checked=PrefC.GetBool(PrefName.PriProvDefaultToSelectProv);
-			if(!PrefC.GetBool(PrefName.ShowFeatureSuperfamilies)) {
+			comboCobRule.SelectedIndex=Preferences.GetInt(PrefName.InsDefaultCobRule);
+			checkTextMsgOkStatusTreatAsNo.Checked=Preferences.GetBool(PrefName.TextMsgOkStatusTreatAsNo);
+			checkFamPhiAccess.Checked=Preferences.GetBool(PrefName.FamPhiAccess);
+			checkGoogleAddress.Checked=Preferences.GetBool(PrefName.ShowFeatureGoogleMaps);
+			checkSelectProv.Checked=Preferences.GetBool(PrefName.PriProvDefaultToSelectProv);
+			if(!Preferences.GetBool(PrefName.ShowFeatureSuperfamilies)) {
 				tabControlFamily.TabPages.Remove(tabPageSuperFam);
 			}
 			else {
 				foreach(string option in Enum.GetNames(typeof(SortStrategy))) {
 					comboSuperFamSort.Items.Add(option);
 				}
-				comboSuperFamSort.SelectedIndex=PrefC.GetInt(PrefName.SuperFamSortStrategy);
-				checkSuperFamSync.Checked=PrefC.GetBool(PrefName.PatientAllSuperFamilySync);
-				checkSuperFamAddIns.Checked=PrefC.GetBool(PrefName.SuperFamNewPatAddIns);
-				checkSuperFamCloneCreate.Checked=PrefC.GetBool(PrefName.CloneCreateSuperFamily);
+				comboSuperFamSort.SelectedIndex=Preferences.GetInt(PrefName.SuperFamSortStrategy);
+				checkSuperFamSync.Checked=Preferences.GetBool(PrefName.PatientAllSuperFamilySync);
+				checkSuperFamAddIns.Checked=Preferences.GetBool(PrefName.SuperFamNewPatAddIns);
+				checkSuperFamCloneCreate.Checked=Preferences.GetBool(PrefName.CloneCreateSuperFamily);
 			}
 			//users should only see the claimsnapshot tab page if they have it set to something other than ClaimCreate.
 			//if a user wants to be able to change claimsnapshot settings, the following MySQL statement should be run:
 			//UPDATE preference SET ValueString = 'Service'	 WHERE PrefName = 'ClaimSnapshotTriggerType'
-			if(PIn.Enum<ClaimSnapshotTrigger>(PrefC.GetString(PrefName.ClaimSnapshotTriggerType),true) == ClaimSnapshotTrigger.ClaimCreate) {
+			if(PIn.Enum<ClaimSnapshotTrigger>(Preferences.GetString(PrefName.ClaimSnapshotTriggerType),true) == ClaimSnapshotTrigger.ClaimCreate) {
 				tabControlFamily.TabPages.Remove(tabPageClaimSnapShot);
 			}
 			foreach(ClaimSnapshotTrigger trigger in Enum.GetValues(typeof(ClaimSnapshotTrigger))) {
 				comboClaimSnapshotTrigger.Items.Add(trigger.GetDescription());
 			}
-			comboClaimSnapshotTrigger.SelectedIndex=(int)PIn.Enum<ClaimSnapshotTrigger>(PrefC.GetString(PrefName.ClaimSnapshotTriggerType),true);
-			textClaimSnapshotRunTime.Text=PrefC.GetDateT(PrefName.ClaimSnapshotRunTime).ToShortTimeString();
-			checkClaimUseOverrideProcDescript.Checked=PrefC.GetBool(PrefName.ClaimPrintProcChartedDesc);
-			checkClaimTrackingRequireError.Checked=PrefC.GetBool(PrefName.ClaimTrackingRequiresError);
-			checkPatInitBillingTypeFromPriInsPlan.Checked=PrefC.GetBool(PrefName.PatInitBillingTypeFromPriInsPlan);
-			checkPreferredReferrals.Checked=PrefC.GetBool(PrefName.ShowPreferedReferrals);
-			checkAutoFillPatEmail.Checked=PrefC.GetBool(PrefName.AddFamilyInheritsEmail);
-			if(!PrefC.HasClinicsEnabled) {
+			comboClaimSnapshotTrigger.SelectedIndex=(int)PIn.Enum<ClaimSnapshotTrigger>(Preferences.GetString(PrefName.ClaimSnapshotTriggerType),true);
+			textClaimSnapshotRunTime.Text=Preferences.GetDateTime(PrefName.ClaimSnapshotRunTime).ToShortTimeString();
+			checkClaimUseOverrideProcDescript.Checked=Preferences.GetBool(PrefName.ClaimPrintProcChartedDesc);
+			checkClaimTrackingRequireError.Checked=Preferences.GetBool(PrefName.ClaimTrackingRequiresError);
+			checkPatInitBillingTypeFromPriInsPlan.Checked=Preferences.GetBool(PrefName.PatInitBillingTypeFromPriInsPlan);
+			checkPreferredReferrals.Checked=Preferences.GetBool(PrefName.ShowPreferedReferrals);
+			checkAutoFillPatEmail.Checked=Preferences.GetBool(PrefName.AddFamilyInheritsEmail);
+			if(!Preferences.HasClinicsEnabled) {
 				checkAllowPatsAtHQ.Visible=false;
 			}
-			checkAllowPatsAtHQ.Checked=PrefC.GetBool(PrefName.ClinicAllowPatientsAtHeadquarters);
-			checkInsPlanExclusionsUseUCR.Checked=PrefC.GetBool(PrefName.InsPlanUseUcrFeeForExclusions);
-			checkInsPlanExclusionsMarkDoNotBill.Checked=PrefC.GetBool(PrefName.InsPlanExclusionsMarkDoNotBillIns);
+			checkAllowPatsAtHQ.Checked=Preferences.GetBool(PrefName.ClinicAllowPatientsAtHeadquarters);
+			checkInsPlanExclusionsUseUCR.Checked=Preferences.GetBool(PrefName.InsPlanUseUcrFeeForExclusions);
+			checkInsPlanExclusionsMarkDoNotBill.Checked=Preferences.GetBool(PrefName.InsPlanExclusionsMarkDoNotBillIns);
 			#endregion
 			#region Account Module
 			#region Pay/Adj Tab
-			checkStoreCCTokens.Checked=PrefC.GetBool(PrefName.StoreCCtokens);
+			checkStoreCCTokens.Checked=Preferences.GetBool(PrefName.StoreCCtokens);
 			foreach(PayClinicSetting prompt in Enum.GetValues(typeof(PayClinicSetting))) {
 				comboPaymentClinicSetting.Items.Add(Lan.g(this,prompt.GetDescription()));
 			}
-			comboPaymentClinicSetting.SelectedIndex=PrefC.GetInt(PrefName.PaymentClinicSetting);
-			checkPaymentsPromptForPayType.Checked=PrefC.GetBool(PrefName.PaymentsPromptForPayType);
+			comboPaymentClinicSetting.SelectedIndex=Preferences.GetInt(PrefName.PaymentClinicSetting);
+			checkPaymentsPromptForPayType.Checked=Preferences.GetBool(PrefName.PaymentsPromptForPayType);
 			_listPaySplitUnearnedType=Defs.GetDefsForCategory(DefCat.PaySplitUnearnedType,true);
-			long defNum=PrefC.GetLong(PrefName.PrepaymentUnearnedType);
+			long defNum=Preferences.GetLong(PrefName.PrepaymentUnearnedType);
 			for(int i=0;i<_listPaySplitUnearnedType.Count;i++) {
 				comboUnallocatedSplits.Items.Add(_listPaySplitUnearnedType[i].ItemName);//fill combo
 			}
@@ -4779,126 +4779,126 @@ namespace OpenDental{
 				() => { return billingChargeAdjDefNum==0 ? "" : Defs.GetName(DefCat.AdjTypes,billingChargeAdjDefNum)+" ("+Lan.g(this,"hidden")+")"; });
 			comboSalesTaxAdjType.IndexSelectOrSetText(listPosAdjTypes.FindIndex(x => x.DefNum==salesTaxAdjDefNum),
 				() => { return salesTaxAdjDefNum==0 ? "" : Defs.GetName(DefCat.AdjTypes,salesTaxAdjDefNum)+" ("+Lan.g(this,"hidden")+")"; });
-			textTaxPercent.Text=PrefC.GetDouble(PrefName.SalesTaxPercentage).ToString();
-			string[] arrayDefNums=PrefC.GetString(PrefName.BadDebtAdjustmentTypes).Split(new char[] {','}); //comma-delimited list.
+			textTaxPercent.Text=Preferences.GetDouble(PrefName.SalesTaxPercentage).ToString();
+			string[] arrayDefNums=Preferences.GetString(PrefName.BadDebtAdjustmentTypes).Split(new char[] {','}); //comma-delimited list.
 			List<long> listBadAdjDefNums = new List<long>();
 			foreach(string strDefNum in arrayDefNums) {
 				listBadAdjDefNums.Add(PIn.Long(strDefNum));
 			}
 			FillListboxBadDebt(Defs.GetDefs(DefCat.AdjTypes,listBadAdjDefNums));
-			checkAllowFutureDebits.Checked=PrefC.GetBool(PrefName.AccountAllowFutureDebits);
-			checkAllowEmailCCReceipt.Checked=PrefC.GetBool(PrefName.AllowEmailCCReceipt);
+			checkAllowFutureDebits.Checked=Preferences.GetBool(PrefName.AccountAllowFutureDebits);
+			checkAllowEmailCCReceipt.Checked=Preferences.GetBool(PrefName.AllowEmailCCReceipt);
 			List<RigorousAccounting> listEnums=Enum.GetValues(typeof(RigorousAccounting)).OfType<RigorousAccounting>().ToList();
 			for(int i=0;i<listEnums.Count;i++) {
 				comboRigorousAccounting.Items.Add(listEnums[i].GetDescription());
 			}
-			comboRigorousAccounting.SelectedIndex=PrefC.GetInt(PrefName.RigorousAccounting);
+			comboRigorousAccounting.SelectedIndex=Preferences.GetInt(PrefName.RigorousAccounting);
 			List<RigorousAdjustments> listAdjEnums=Enum.GetValues(typeof(RigorousAdjustments)).OfType<RigorousAdjustments>().ToList();
 			for(int i=0;i<listAdjEnums.Count;i++) {
 				comboRigorousAdjustments.Items.Add(listAdjEnums[i].GetDescription());
 			}
-			comboRigorousAdjustments.SelectedIndex=PrefC.GetInt(PrefName.RigorousAdjustments);
+			comboRigorousAdjustments.SelectedIndex=Preferences.GetInt(PrefName.RigorousAdjustments);
 			for(int i = 0;i<Enum.GetNames(typeof(AutoSplitPreference)).Length;i++) {
 				comboAutoSplitPref.Items.Add(Lans.g(this,Enum.GetNames(typeof(AutoSplitPreference))[i]));
 			}
-			comboAutoSplitPref.SelectedIndex=PrefC.GetInt(PrefName.AutoSplitLogic);
-			checkHidePaysplits.Checked=PrefC.GetBool(PrefName.PaymentWindowDefaultHideSplits);
-			checkAllowPrepayProvider.Checked=PrefC.GetBool(PrefName.AllowPrepayProvider);
+			comboAutoSplitPref.SelectedIndex=Preferences.GetInt(PrefName.AutoSplitLogic);
+			checkHidePaysplits.Checked=Preferences.GetBool(PrefName.PaymentWindowDefaultHideSplits);
+			checkAllowPrepayProvider.Checked=Preferences.GetBool(PrefName.AllowPrepayProvider);
 			List<Def> listDefs=Defs.GetDefsForCategory(DefCat.PaymentTypes,true);
 			comboRecurringChargePayType.Items.Add(new ODBoxItem<long>("("+Lan.g(this,"default")+")",0));
 			foreach(Def chargeType in listDefs) {
 				comboRecurringChargePayType.Items.Add(new ODBoxItem<long>(chargeType.ItemName,chargeType.DefNum));
 			}
-			long recurringPayTypeDefNum=PrefC.GetLong(PrefName.RecurringChargesPayTypeCC);
+			long recurringPayTypeDefNum=Preferences.GetLong(PrefName.RecurringChargesPayTypeCC);
 			string payTypeNotFound=Defs.GetName(DefCat.PaymentTypes,recurringPayTypeDefNum)+ " ("+Lan.g(this,"hidden")+")";
 			comboRecurringChargePayType.SetSelectedItem<long>(x => x==recurringPayTypeDefNum,payTypeNotFound);
 			#endregion Pay/Adj Tab
 			#region Insurance Tab
-			checkProviderIncomeShows.Checked=PrefC.GetBool(PrefName.ProviderIncomeTransferShows);
-			checkClaimMedTypeIsInstWhenInsPlanIsMedical.Checked=PrefC.GetBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical);
-			checkClaimFormTreatDentSaysSigOnFile.Checked=PrefC.GetBool(PrefName.ClaimFormTreatDentSaysSigOnFile);
-			textInsWriteoffDescript.Text=PrefC.GetString(PrefName.InsWriteoffDescript);
-			textClaimAttachPath.Text=PrefC.GetString(PrefName.ClaimAttachExportPath);
-			checkEclaimsMedicalProvTreatmentAsOrdering.Checked=PrefC.GetBool(PrefName.ClaimMedProvTreatmentAsOrdering);
-			checkEclaimsSeparateTreatProv.Checked=PrefC.GetBool(PrefName.EclaimsSeparateTreatProv);
-			checkClaimsValidateACN.Checked=PrefC.GetBool(PrefName.ClaimsValidateACN);
-			checkAllowProcAdjFromClaim.Checked=PrefC.GetBool(PrefName.AllowProcAdjFromClaim);
+			checkProviderIncomeShows.Checked=Preferences.GetBool(PrefName.ProviderIncomeTransferShows);
+			checkClaimMedTypeIsInstWhenInsPlanIsMedical.Checked=Preferences.GetBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical);
+			checkClaimFormTreatDentSaysSigOnFile.Checked=Preferences.GetBool(PrefName.ClaimFormTreatDentSaysSigOnFile);
+			textInsWriteoffDescript.Text=Preferences.GetString(PrefName.InsWriteoffDescript);
+			textClaimAttachPath.Text=Preferences.GetString(PrefName.ClaimAttachExportPath);
+			checkEclaimsMedicalProvTreatmentAsOrdering.Checked=Preferences.GetBool(PrefName.ClaimMedProvTreatmentAsOrdering);
+			checkEclaimsSeparateTreatProv.Checked=Preferences.GetBool(PrefName.EclaimsSeparateTreatProv);
+			checkClaimsValidateACN.Checked=Preferences.GetBool(PrefName.ClaimsValidateACN);
+			checkAllowProcAdjFromClaim.Checked=Preferences.GetBool(PrefName.AllowProcAdjFromClaim);
 			comboClaimCredit.Items.AddRange(Enum.GetNames(typeof(ClaimProcCreditsGreaterThanProcFee)));
-			comboClaimCredit.SelectedIndex=PrefC.GetInt(PrefName.ClaimProcAllowCreditsGreaterThanProcFee);
-			checkAllowFuturePayments.Checked=PrefC.GetBool(PrefName.AllowFutureInsPayments);
-			textClaimIdentifier.Text=PrefC.GetString(PrefName.ClaimIdPrefix);
+			comboClaimCredit.SelectedIndex=Preferences.GetInt(PrefName.ClaimProcAllowCreditsGreaterThanProcFee);
+			checkAllowFuturePayments.Checked=Preferences.GetBool(PrefName.AllowFutureInsPayments);
+			textClaimIdentifier.Text=Preferences.GetString(PrefName.ClaimIdPrefix);
 			foreach(ClaimZeroDollarProcBehavior procBehavior in Enum.GetValues(typeof(ClaimZeroDollarProcBehavior))) {
 				comboZeroDollarProcClaimBehavior.Items.Add(Lan.g(this,procBehavior.ToString()));
 			}
-			comboZeroDollarProcClaimBehavior.SelectedIndex=PrefC.GetInt(PrefName.ClaimZeroDollarProcBehavior);
-			checkClaimTrackingExcludeNone.Checked=PrefC.GetBool(PrefName.ClaimTrackingStatusExcludesNone);
-			checkInsPayNoWriteoffMoreThanProc.Checked=PrefC.GetBool(PrefName.InsPayNoWriteoffMoreThanProc);
-			checkPromptForSecondaryClaim.Checked=PrefC.GetBool(PrefName.PromptForSecondaryClaim);
-			checkInsEstRecalcReceived.Checked=PrefC.GetBool(PrefName.InsEstRecalcReceived);
+			comboZeroDollarProcClaimBehavior.SelectedIndex=Preferences.GetInt(PrefName.ClaimZeroDollarProcBehavior);
+			checkClaimTrackingExcludeNone.Checked=Preferences.GetBool(PrefName.ClaimTrackingStatusExcludesNone);
+			checkInsPayNoWriteoffMoreThanProc.Checked=Preferences.GetBool(PrefName.InsPayNoWriteoffMoreThanProc);
+			checkPromptForSecondaryClaim.Checked=Preferences.GetBool(PrefName.PromptForSecondaryClaim);
+			checkInsEstRecalcReceived.Checked=Preferences.GetBool(PrefName.InsEstRecalcReceived);
 			#endregion Insurance Tab
 			#region Misc Account Tab
-			checkBalancesDontSubtractIns.Checked=PrefC.GetBool(PrefName.BalancesDontSubtractIns);
-			checkAgingMonthly.Checked=PrefC.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily);
-			if(PrefC.GetBool(PrefName.AgingIsEnterprise)) {//AgingIsEnterprise requires aging to be daily
+			checkBalancesDontSubtractIns.Checked=Preferences.GetBool(PrefName.BalancesDontSubtractIns);
+			checkAgingMonthly.Checked=Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily);
+			if(Preferences.GetBool(PrefName.AgingIsEnterprise)) {//AgingIsEnterprise requires aging to be daily
 				checkAgingMonthly.Text+="("+Lan.g(this,"not available with enterprise aging")+")";
 				checkAgingMonthly.Enabled=false;
 			}
-			checkAccountShowPaymentNums.Checked=PrefC.GetBool(PrefName.AccountShowPaymentNums);
-			checkShowFamilyCommByDefault.Checked=PrefC.GetBool(PrefName.ShowAccountFamilyCommEntries);
-			checkRecurChargPriProv.Checked=PrefC.GetBool(PrefName.RecurringChargesUsePriProv);
-			checkPpoUseUcr.Checked=PrefC.GetBool(PrefName.InsPpoAlwaysUseUcrFee);
-			checkRecurringChargesUseTransDate.Checked=PrefC.GetBool(PrefName.RecurringChargesUseTransDate);
-			checkStatementInvoiceGridShowWriteoffs.Checked=PrefC.GetBool(PrefName.InvoicePaymentsGridShowNetProd);
-			checkAgeNegAdjsByAdjDate.Checked=PrefC.GetBool(PrefName.AgingNegativeAdjsByAdjDate);
-			checkShowAllocateUnearnedPaymentPrompt.Checked=PrefC.GetBool(PrefName.ShowAllocateUnearnedPaymentPrompt);
-			checkPayPlansExcludePastActivity.Checked=PrefC.GetBool(PrefName.PayPlansExcludePastActivity);
-			checkPayPlansUseSheets.Checked=PrefC.GetBool(PrefName.PayPlansUseSheets);
-			checkAllowFutureTrans.Checked=PrefC.GetBool(PrefName.FutureTransDatesAllowed);
+			checkAccountShowPaymentNums.Checked=Preferences.GetBool(PrefName.AccountShowPaymentNums);
+			checkShowFamilyCommByDefault.Checked=Preferences.GetBool(PrefName.ShowAccountFamilyCommEntries);
+			checkRecurChargPriProv.Checked=Preferences.GetBool(PrefName.RecurringChargesUsePriProv);
+			checkPpoUseUcr.Checked=Preferences.GetBool(PrefName.InsPpoAlwaysUseUcrFee);
+			checkRecurringChargesUseTransDate.Checked=Preferences.GetBool(PrefName.RecurringChargesUseTransDate);
+			checkStatementInvoiceGridShowWriteoffs.Checked=Preferences.GetBool(PrefName.InvoicePaymentsGridShowNetProd);
+			checkAgeNegAdjsByAdjDate.Checked=Preferences.GetBool(PrefName.AgingNegativeAdjsByAdjDate);
+			checkShowAllocateUnearnedPaymentPrompt.Checked=Preferences.GetBool(PrefName.ShowAllocateUnearnedPaymentPrompt);
+			checkPayPlansExcludePastActivity.Checked=Preferences.GetBool(PrefName.PayPlansExcludePastActivity);
+			checkPayPlansUseSheets.Checked=Preferences.GetBool(PrefName.PayPlansUseSheets);
+			checkAllowFutureTrans.Checked=Preferences.GetBool(PrefName.FutureTransDatesAllowed);
 			foreach(PayPlanVersions version in Enum.GetValues(typeof(PayPlanVersions))) {
 				comboPayPlansVersion.Items.Add(Lan.g("enumPayPlanVersions",version.GetDescription()));
 			}
-			comboPayPlansVersion.SelectedIndex=PrefC.GetInt(PrefName.PayPlansVersion) - 1;
+			comboPayPlansVersion.SelectedIndex=Preferences.GetInt(PrefName.PayPlansVersion) - 1;
 			if(comboPayPlansVersion.SelectedIndex==(int)PayPlanVersions.AgeCreditsAndDebits-1) {//Minus 1 because the enum starts at 1.
 				checkHideDueNow.Visible=true;
-				checkHideDueNow.Checked=PrefC.GetBool(PrefName.PayPlanHideDueNow);
+				checkHideDueNow.Checked=Preferences.GetBool(PrefName.PayPlanHideDueNow);
 			}
 			else {
 				checkHideDueNow.Visible=false;
 				checkHideDueNow.Checked=false;
 			}
-			checkRecurringChargesAutomated.Checked=PrefC.GetBool(PrefName.RecurringChargesAutomatedEnabled);
-			textRecurringChargesTime.Text=PrefC.GetDateT(PrefName.RecurringChargesAutomatedTime).TimeOfDay.ToShortTimeString();
-			checkRepeatingChargesRunAging.Checked=PrefC.GetBool(PrefName.RepeatingChargesRunAging);
-			checkRepeatingChargesAutomated.Checked=PrefC.GetBool(PrefName.RepeatingChargesAutomated);
-			textRepeatingChargesAutomatedTime.Text=PrefC.GetDateT(PrefName.RepeatingChargesAutomatedTime).TimeOfDay.ToShortTimeString();
+			checkRecurringChargesAutomated.Checked=Preferences.GetBool(PrefName.RecurringChargesAutomatedEnabled);
+			textRecurringChargesTime.Text=Preferences.GetDateTime(PrefName.RecurringChargesAutomatedTime).TimeOfDay.ToShortTimeString();
+			checkRepeatingChargesRunAging.Checked=Preferences.GetBool(PrefName.RepeatingChargesRunAging);
+			checkRepeatingChargesAutomated.Checked=Preferences.GetBool(PrefName.RepeatingChargesAutomated);
+			textRepeatingChargesAutomatedTime.Text=Preferences.GetDateTime(PrefName.RepeatingChargesAutomatedTime).TimeOfDay.ToShortTimeString();
 			#endregion Misc Account Tab
 			#endregion
 			#region TP Module
 			//TP module-----------------------------------------------------------------------
-			textTreatNote.Text=PrefC.GetString(PrefName.TreatmentPlanNote);
-			checkTreatPlanShowCompleted.Checked=PrefC.GetBool(PrefName.TreatPlanShowCompleted);
+			textTreatNote.Text=Preferences.GetString(PrefName.TreatmentPlanNote);
+			checkTreatPlanShowCompleted.Checked=Preferences.GetBool(PrefName.TreatPlanShowCompleted);
 			if(Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
 				checkTreatPlanShowCompleted.Visible=false;
 			}
 			else {
-				checkTreatPlanShowCompleted.Checked=PrefC.GetBool(PrefName.TreatPlanShowCompleted);
+				checkTreatPlanShowCompleted.Checked=Preferences.GetBool(PrefName.TreatPlanShowCompleted);
 			}
-			checkTreatPlanItemized.Checked=PrefC.GetBool(PrefName.TreatPlanItemized);
-			checkTPSaveSigned.Checked=PrefC.GetBool(PrefName.TreatPlanSaveSignedToPdf);
-			checkFrequency.Checked=PrefC.GetBool(PrefName.InsChecksFrequency);
-			textInsBW.Text=PrefC.GetString(PrefName.InsBenBWCodes);
-			textInsPano.Text=PrefC.GetString(PrefName.InsBenPanoCodes);
-			textInsExam.Text=PrefC.GetString(PrefName.InsBenExamCodes);
-			textInsCancerScreen.Text=PrefC.GetString(PrefName.InsBenCancerScreeningCodes);
-			textInsProphy.Text=PrefC.GetString(PrefName.InsBenProphyCodes);
-			textInsFlouride.Text=PrefC.GetString(PrefName.InsBenFlourideCodes);
-			textInsSealant.Text=PrefC.GetString(PrefName.InsBenSealantCodes);
-			textInsCrown.Text=PrefC.GetString(PrefName.InsBenCrownCodes);
-			textInsSRP.Text=PrefC.GetString(PrefName.InsBenSRPCodes);
-			textInsDebridement.Text=PrefC.GetString(PrefName.InsBenFullDebridementCodes);
-			textInsPerioMaint.Text=PrefC.GetString(PrefName.InsBenPerioMaintCodes);
-			textInsDentures.Text=PrefC.GetString(PrefName.InsBenDenturesCodes);
-			textInsImplant.Text=PrefC.GetString(PrefName.InsBenImplantCodes);
+			checkTreatPlanItemized.Checked=Preferences.GetBool(PrefName.TreatPlanItemized);
+			checkTPSaveSigned.Checked=Preferences.GetBool(PrefName.TreatPlanSaveSignedToPdf);
+			checkFrequency.Checked=Preferences.GetBool(PrefName.InsChecksFrequency);
+			textInsBW.Text=Preferences.GetString(PrefName.InsBenBWCodes);
+			textInsPano.Text=Preferences.GetString(PrefName.InsBenPanoCodes);
+			textInsExam.Text=Preferences.GetString(PrefName.InsBenExamCodes);
+			textInsCancerScreen.Text=Preferences.GetString(PrefName.InsBenCancerScreeningCodes);
+			textInsProphy.Text=Preferences.GetString(PrefName.InsBenProphyCodes);
+			textInsFlouride.Text=Preferences.GetString(PrefName.InsBenFlourideCodes);
+			textInsSealant.Text=Preferences.GetString(PrefName.InsBenSealantCodes);
+			textInsCrown.Text=Preferences.GetString(PrefName.InsBenCrownCodes);
+			textInsSRP.Text=Preferences.GetString(PrefName.InsBenSRPCodes);
+			textInsDebridement.Text=Preferences.GetString(PrefName.InsBenFullDebridementCodes);
+			textInsPerioMaint.Text=Preferences.GetString(PrefName.InsBenPerioMaintCodes);
+			textInsDentures.Text=Preferences.GetString(PrefName.InsBenDenturesCodes);
+			textInsImplant.Text=Preferences.GetString(PrefName.InsBenImplantCodes);
 			if(!checkFrequency.Checked) {
 				textInsBW.Enabled=false;
 				textInsPano.Enabled=false;
@@ -4914,20 +4914,20 @@ namespace OpenDental{
 				textInsDentures.Enabled=false;
 				textInsImplant.Enabled=false;
 			}
-			radioTreatPlanSortTooth.Checked=PrefC.GetBool(PrefName.TreatPlanSortByTooth) || PrefC.RandomKeys;
+			radioTreatPlanSortTooth.Checked=Preferences.GetBool(PrefName.TreatPlanSortByTooth) || Preferences.RandomKeys;
 			//Currently, the TreatPlanSortByTooth preference gets overridden by 
 			//the RandomPrimaryKeys preferece due to "Order Entered" being based on the ProcNum
-			groupTreatPlanSort.Enabled=!PrefC.RandomKeys;
-			textInsHistBW.Text=PrefC.GetString(PrefName.InsHistBWCodes);
-			textInsHistDebridement.Text=PrefC.GetString(PrefName.InsHistDebridementCodes);
-			textInsHistExam.Text=PrefC.GetString(PrefName.InsHistExamCodes);
-			textInsHistFMX.Text=PrefC.GetString(PrefName.InsHistPanoCodes);
-			textInsHistPerioMaint.Text=PrefC.GetString(PrefName.InsHistPerioMaintCodes);
-			textInsHistPerioLL.Text=PrefC.GetString(PrefName.InsHistPerioLLCodes);
-			textInsHistPerioLR.Text=PrefC.GetString(PrefName.InsHistPerioLRCodes);
-			textInsHistPerioUL.Text=PrefC.GetString(PrefName.InsHistPerioULCodes);
-			textInsHistPerioUR.Text=PrefC.GetString(PrefName.InsHistPerioURCodes);
-			textInsHistProphy.Text=PrefC.GetString(PrefName.InsHistProphyCodes);
+			groupTreatPlanSort.Enabled=!Preferences.RandomKeys;
+			textInsHistBW.Text=Preferences.GetString(PrefName.InsHistBWCodes);
+			textInsHistDebridement.Text=Preferences.GetString(PrefName.InsHistDebridementCodes);
+			textInsHistExam.Text=Preferences.GetString(PrefName.InsHistExamCodes);
+			textInsHistFMX.Text=Preferences.GetString(PrefName.InsHistPanoCodes);
+			textInsHistPerioMaint.Text=Preferences.GetString(PrefName.InsHistPerioMaintCodes);
+			textInsHistPerioLL.Text=Preferences.GetString(PrefName.InsHistPerioLLCodes);
+			textInsHistPerioLR.Text=Preferences.GetString(PrefName.InsHistPerioLRCodes);
+			textInsHistPerioUL.Text=Preferences.GetString(PrefName.InsHistPerioULCodes);
+			textInsHistPerioUR.Text=Preferences.GetString(PrefName.InsHistPerioURCodes);
+			textInsHistProphy.Text=Preferences.GetString(PrefName.InsHistProphyCodes);
 			#endregion
 			#region Chart Module
 			//Chart module-----------------------------------------------------------------------
@@ -4935,59 +4935,59 @@ namespace OpenDental{
 			comboToothNomenclature.Items.Add(Lan.g(this,"FDI Notation (International, 11-48)"));
 			comboToothNomenclature.Items.Add(Lan.g(this,"Haderup (Danish)"));
 			comboToothNomenclature.Items.Add(Lan.g(this,"Palmer (Ortho)"));
-			comboToothNomenclature.SelectedIndex = PrefC.GetInt(PrefName.UseInternationalToothNumbers);
+			comboToothNomenclature.SelectedIndex = Preferences.GetInt(PrefName.UseInternationalToothNumbers);
 			if(Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
 				labelToothNomenclature.Visible=false;
 				comboToothNomenclature.Visible=false;
 			}
-			checkAutoClearEntryStatus.Checked=PrefC.GetBool(PrefName.AutoResetTPEntryStatus);
-			checkAllowSettingProcsComplete.Checked=PrefC.GetBool(PrefName.AllowSettingProcsComplete);
+			checkAutoClearEntryStatus.Checked=Preferences.GetBool(PrefName.AutoResetTPEntryStatus);
+			checkAllowSettingProcsComplete.Checked=Preferences.GetBool(PrefName.AllowSettingProcsComplete);
 			//checkChartQuickAddHideAmalgam.Checked=PrefC.GetBool(PrefName.ChartQuickAddHideAmalgam); //Deprecated.
 			//checkToothChartMoveMenuToRight.Checked=PrefC.GetBool(PrefName.ToothChartMoveMenuToRight);
-			textProblemsIndicateNone.Text		=DiseaseDefs.GetName(PrefC.GetLong(PrefName.ProblemsIndicateNone)); //DB maint to fix corruption
-			textMedicationsIndicateNone.Text=Medications.GetDescription(PrefC.GetLong(PrefName.MedicationsIndicateNone)); //DB maint to fix corruption
-			textAllergiesIndicateNone.Text	=AllergyDefs.GetDescription(PrefC.GetLong(PrefName.AllergiesIndicateNone)); //DB maint to fix corruption
-			checkProcGroupNoteDoesAggregate.Checked=PrefC.GetBool(PrefName.ProcGroupNoteDoesAggregate);
-			checkChartNonPatientWarn.Checked=PrefC.GetBool(PrefName.ChartNonPatientWarn);
+			textProblemsIndicateNone.Text		=DiseaseDefs.GetName(Preferences.GetLong(PrefName.ProblemsIndicateNone)); //DB maint to fix corruption
+			textMedicationsIndicateNone.Text=Medications.GetDescription(Preferences.GetLong(PrefName.MedicationsIndicateNone)); //DB maint to fix corruption
+			textAllergiesIndicateNone.Text	=AllergyDefs.GetDescription(Preferences.GetLong(PrefName.AllergiesIndicateNone)); //DB maint to fix corruption
+			checkProcGroupNoteDoesAggregate.Checked=Preferences.GetBool(PrefName.ProcGroupNoteDoesAggregate);
+			checkChartNonPatientWarn.Checked=Preferences.GetBool(PrefName.ChartNonPatientWarn);
 			//checkChartAddProcNoRefreshGrid.Checked=PrefC.GetBool(PrefName.ChartAddProcNoRefreshGrid);//Not implemented.  May revisit some day.
-			checkMedicalFeeUsedForNewProcs.Checked=PrefC.GetBool(PrefName.MedicalFeeUsedForNewProcs);
-			checkProvColorChart.Checked=PrefC.GetBool(PrefName.UseProviderColorsInChart);
-			checkPerioSkipMissingTeeth.Checked=PrefC.GetBool(PrefName.PerioSkipMissingTeeth);
-			checkPerioTreatImplantsAsNotMissing.Checked=PrefC.GetBool(PrefName.PerioTreatImplantsAsNotMissing);
-			if(PrefC.GetByte(PrefName.DxIcdVersion)==9) {
+			checkMedicalFeeUsedForNewProcs.Checked=Preferences.GetBool(PrefName.MedicalFeeUsedForNewProcs);
+			checkProvColorChart.Checked=Preferences.GetBool(PrefName.UseProviderColorsInChart);
+			checkPerioSkipMissingTeeth.Checked=Preferences.GetBool(PrefName.PerioSkipMissingTeeth);
+			checkPerioTreatImplantsAsNotMissing.Checked=Preferences.GetBool(PrefName.PerioTreatImplantsAsNotMissing);
+			if(Preferences.GetByte(PrefName.DxIcdVersion)==9) {
 				checkDxIcdVersion.Checked=false;
 			}
 			else {//ICD-10
 				checkDxIcdVersion.Checked=true;
 			}
 			SetIcdLabels();
-			textICD9DefaultForNewProcs.Text=PrefC.GetString(PrefName.ICD9DefaultForNewProcs);
-			checkProcLockingIsAllowed.Checked=PrefC.GetBool(PrefName.ProcLockingIsAllowed);
-			textMedDefaultStopDays.Text=PrefC.GetString(PrefName.MedDefaultStopDays);
-			checkScreeningsUseSheets.Checked=PrefC.GetBool(PrefName.ScreeningsUseSheets);
-			checkProcsPromptForAutoNote.Checked=PrefC.GetBool(PrefName.ProcPromptForAutoNote);
+			textICD9DefaultForNewProcs.Text=Preferences.GetString(PrefName.ICD9DefaultForNewProcs);
+			checkProcLockingIsAllowed.Checked=Preferences.GetBool(PrefName.ProcLockingIsAllowed);
+			textMedDefaultStopDays.Text=Preferences.GetString(PrefName.MedDefaultStopDays);
+			checkScreeningsUseSheets.Checked=Preferences.GetBool(PrefName.ScreeningsUseSheets);
+			checkProcsPromptForAutoNote.Checked=Preferences.GetBool(PrefName.ProcPromptForAutoNote);
 			for(int i=0;i<Enum.GetNames(typeof(ProcCodeListSort)).Length;i++) {
 				comboProcCodeListSort.Items.Add(Enum.GetNames(typeof(ProcCodeListSort))[i]);
 			}
-			comboProcCodeListSort.SelectedIndex=PrefC.GetInt(PrefName.ProcCodeListSortOrder);
-			checkProcEditRequireAutoCode.Checked=PrefC.GetBool(PrefName.ProcEditRequireAutoCodes);
-			checkClaimProcsAllowEstimatesOnCompl.Checked=PrefC.GetBool(PrefName.ClaimProcsAllowedToBackdate);
-			checkSignatureAllowDigital.Checked=PrefC.GetBool(PrefName.SignatureAllowDigital);
-			checkCommLogAutoSave.Checked=PrefC.GetBool(PrefName.CommLogAutoSave);
+			comboProcCodeListSort.SelectedIndex=Preferences.GetInt(PrefName.ProcCodeListSortOrder);
+			checkProcEditRequireAutoCode.Checked=Preferences.GetBool(PrefName.ProcEditRequireAutoCodes);
+			checkClaimProcsAllowEstimatesOnCompl.Checked=Preferences.GetBool(PrefName.ClaimProcsAllowedToBackdate);
+			checkSignatureAllowDigital.Checked=Preferences.GetBool(PrefName.SignatureAllowDigital);
+			checkCommLogAutoSave.Checked=Preferences.GetBool(PrefName.CommLogAutoSave);
 			comboProcFeeUpdatePrompt.Items.Add(Lan.g(this,"No prompt, don't change fee"));
 			comboProcFeeUpdatePrompt.Items.Add(Lan.g(this,"No prompt, always change fee"));
 			comboProcFeeUpdatePrompt.Items.Add(Lan.g(this,"Prompt - When patient portion changes"));
 			comboProcFeeUpdatePrompt.Items.Add(Lan.g(this,"Prompt - Always"));
-			comboProcFeeUpdatePrompt.SelectedIndex=PrefC.GetInt(PrefName.ProcFeeUpdatePrompt);
-			checkProcProvChangesCp.Checked=PrefC.GetBool(PrefName.ProcProvChangesClaimProcWithClaim);
-			checkBoxRxClinicUseSelected.Checked=PrefC.GetBool(PrefName.ElectronicRxClinicUseSelected);
-			if(!PrefC.HasClinicsEnabled) {
+			comboProcFeeUpdatePrompt.SelectedIndex=Preferences.GetInt(PrefName.ProcFeeUpdatePrompt);
+			checkProcProvChangesCp.Checked=Preferences.GetBool(PrefName.ProcProvChangesClaimProcWithClaim);
+			checkBoxRxClinicUseSelected.Checked=Preferences.GetBool(PrefName.ElectronicRxClinicUseSelected);
+			if(!Preferences.HasClinicsEnabled) {
 				checkBoxRxClinicUseSelected.Visible=false;
 			}
-			checkProcNoteConcurrencyMerge.Checked=PrefC.GetBool(PrefName.ProcNoteConcurrencyMerge);
-			checkIsAlertRadiologyProcsEnabled.Checked=PrefC.GetBool(PrefName.IsAlertRadiologyProcsEnabled);
-			checkShowPlannedApptPrompt.Checked=PrefC.GetBool(PrefName.ShowPlannedAppointmentPrompt);
-			checkFeesUseCache.Checked=PrefC.GetBool(PrefName.FeesUseCache);
+			checkProcNoteConcurrencyMerge.Checked=Preferences.GetBool(PrefName.ProcNoteConcurrencyMerge);
+			checkIsAlertRadiologyProcsEnabled.Checked=Preferences.GetBool(PrefName.IsAlertRadiologyProcsEnabled);
+			checkShowPlannedApptPrompt.Checked=Preferences.GetBool(PrefName.ShowPlannedAppointmentPrompt);
+			checkFeesUseCache.Checked=Preferences.GetBool(PrefName.FeesUseCache);
 			comboChartLayoutDefault.Items.AddRange(
 				SheetDefs.GetCustomForType(SheetTypeEnum.ChartModule)
 					.OrderBy(x => x.Description)
@@ -4995,11 +4995,11 @@ namespace OpenDental{
 					.Concat(new[] { SheetsInternal.GetSheetDef(SheetInternalType.ChartModule) })//Internal always at bottom of list.
 					.Select(x => new ODBoxItem<long>(x.Description,x.SheetDefNum)).ToArray()
 			);
-			comboChartLayoutDefault.SetSelectedItem<long>(x => x==PrefC.GetLong(PrefName.ChartDefaultLayoutSheetDefNum),"");
+			comboChartLayoutDefault.SetSelectedItem<long>(x => x==Preferences.GetLong(PrefName.ChartDefaultLayoutSheetDefNum),"");
 			#endregion
 			#region Image Module
 			//Image module-----------------------------------------------------------------------
-			switch(PrefC.GetInt(PrefName.ImagesModuleTreeIsCollapsed)) {
+			switch(Preferences.GetInt(PrefName.ImagesModuleTreeIsCollapsed)) {
 				case 0:
 					radioImagesModuleTreeIsExpanded.Checked=true;
 					break;
@@ -5013,46 +5013,46 @@ namespace OpenDental{
 			#endregion
 			#region Manage Module
 			//Manage module----------------------------------------------------------------------
-			checkRxSendNewToQueue.Checked=PrefC.GetBool(PrefName.RxSendNewToQueue);
-			int claimZeroPayRollingDays=PrefC.GetInt(PrefName.ClaimPaymentNoShowZeroDate);
+			checkRxSendNewToQueue.Checked=Preferences.GetBool(PrefName.RxSendNewToQueue);
+			int claimZeroPayRollingDays=Preferences.GetInt(PrefName.ClaimPaymentNoShowZeroDate);
 			if(claimZeroPayRollingDays>=0) {
 				textClaimsReceivedDays.Text=(claimZeroPayRollingDays+1).ToString();//The minimum value is now 1 ("today"), to match other areas of OD.
 			}
 			for(int i=0;i<7;i++) {
 				comboTimeCardOvertimeFirstDayOfWeek.Items.Add(Lan.g("enumDayOfWeek",Enum.GetNames(typeof(DayOfWeek))[i]));
 			}
-			comboTimeCardOvertimeFirstDayOfWeek.SelectedIndex=PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek);
-			checkTimeCardADP.Checked=PrefC.GetBool(PrefName.TimeCardADPExportIncludesName);
-			checkClaimsSendWindowValidateOnLoad.Checked=PrefC.GetBool(PrefName.ClaimsSendWindowValidatesOnLoad);
-			checkScheduleProvEmpSelectAll.Checked=PrefC.GetBool(PrefName.ScheduleProvEmpSelectAll);
-			checkClockEventAllowBreak.Checked=PrefC.GetBool(PrefName.ClockEventAllowBreak);
+			comboTimeCardOvertimeFirstDayOfWeek.SelectedIndex=Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek);
+			checkTimeCardADP.Checked=Preferences.GetBool(PrefName.TimeCardADPExportIncludesName);
+			checkClaimsSendWindowValidateOnLoad.Checked=Preferences.GetBool(PrefName.ClaimsSendWindowValidatesOnLoad);
+			checkScheduleProvEmpSelectAll.Checked=Preferences.GetBool(PrefName.ScheduleProvEmpSelectAll);
+			checkClockEventAllowBreak.Checked=Preferences.GetBool(PrefName.ClockEventAllowBreak);
 			//Statements
-			checkStatementShowReturnAddress.Checked=PrefC.GetBool(PrefName.StatementShowReturnAddress);
-			checkShowCC.Checked=PrefC.GetBool(PrefName.StatementShowCreditCard);
-			checkStatementShowNotes.Checked=PrefC.GetBool(PrefName.StatementShowNotes);
-			checkStatementShowAdjNotes.Checked=PrefC.GetBool(PrefName.StatementShowAdjNotes);
-			checkStatementShowProcBreakdown.Checked=PrefC.GetBool(PrefName.StatementShowProcBreakdown);
+			checkStatementShowReturnAddress.Checked=Preferences.GetBool(PrefName.StatementShowReturnAddress);
+			checkShowCC.Checked=Preferences.GetBool(PrefName.StatementShowCreditCard);
+			checkStatementShowNotes.Checked=Preferences.GetBool(PrefName.StatementShowNotes);
+			checkStatementShowAdjNotes.Checked=Preferences.GetBool(PrefName.StatementShowAdjNotes);
+			checkStatementShowProcBreakdown.Checked=Preferences.GetBool(PrefName.StatementShowProcBreakdown);
 			comboUseChartNum.Items.Add(Lan.g(this,"PatNum"));
 			comboUseChartNum.Items.Add(Lan.g(this,"ChartNumber"));
-			if(PrefC.GetBool(PrefName.StatementAccountsUseChartNumber)) {
+			if(Preferences.GetBool(PrefName.StatementAccountsUseChartNumber)) {
 				comboUseChartNum.SelectedIndex=1;
 			}
 			else {
 				comboUseChartNum.SelectedIndex=0;
 			}
-			checkStatementsAlphabetically.Checked=PrefC.GetBool(PrefName.PrintStatementsAlphabetically);
-			checkStatementsAlphabetically.Visible=PrefC.HasClinicsEnabled;
-			if(PrefC.GetLong(PrefName.StatementsCalcDueDate)!=-1) {
-				textStatementsCalcDueDate.Text=PrefC.GetLong(PrefName.StatementsCalcDueDate).ToString();
+			checkStatementsAlphabetically.Checked=Preferences.GetBool(PrefName.PrintStatementsAlphabetically);
+			checkStatementsAlphabetically.Visible=Preferences.HasClinicsEnabled;
+			if(Preferences.GetLong(PrefName.StatementsCalcDueDate)!=-1) {
+				textStatementsCalcDueDate.Text=Preferences.GetLong(PrefName.StatementsCalcDueDate).ToString();
 			}
-			textPayPlansBillInAdvanceDays.Text=PrefC.GetLong(PrefName.PayPlansBillInAdvanceDays).ToString();
-			textBillingElectBatchMax.Text=PrefC.GetInt(PrefName.BillingElectBatchMax).ToString();
-			checkIntermingleDefault.Checked=PrefC.GetBool(PrefName.IntermingleFamilyDefault);
-			checkBillingShowProgress.Checked=PrefC.GetBool(PrefName.BillingShowSendProgress);
-			checkClaimPaymentBatchOnly.Checked=PrefC.GetBool(PrefName.ClaimPaymentBatchOnly);
-			checkEraOneClaimPerPage.Checked=PrefC.GetBool(PrefName.EraPrintOneClaimPerPage);
-			checkIncludeEraWOPercCoPay.Checked=PrefC.GetBool(PrefName.EraIncludeWOPercCoPay);
-			checkShowAutoDeposit.Checked=PrefC.GetBool(PrefName.ShowAutoDeposit);
+			textPayPlansBillInAdvanceDays.Text=Preferences.GetLong(PrefName.PayPlansBillInAdvanceDays).ToString();
+			textBillingElectBatchMax.Text=Preferences.GetInt(PrefName.BillingElectBatchMax).ToString();
+			checkIntermingleDefault.Checked=Preferences.GetBool(PrefName.IntermingleFamilyDefault);
+			checkBillingShowProgress.Checked=Preferences.GetBool(PrefName.BillingShowSendProgress);
+			checkClaimPaymentBatchOnly.Checked=Preferences.GetBool(PrefName.ClaimPaymentBatchOnly);
+			checkEraOneClaimPerPage.Checked=Preferences.GetBool(PrefName.EraPrintOneClaimPerPage);
+			checkIncludeEraWOPercCoPay.Checked=Preferences.GetBool(PrefName.EraIncludeWOPercCoPay);
+			checkShowAutoDeposit.Checked=Preferences.GetBool(PrefName.ShowAutoDeposit);
 			#endregion
 		}
 
@@ -5192,7 +5192,7 @@ namespace OpenDental{
 		private void comboRigorousAccounting_SelectedIndexChanged(object sender,EventArgs e) {
 			if(comboRigorousAccounting.SelectedIndex==(int)RigorousAccounting.EnforceFully) {
 				checkAllowPrepayProvider.Visible=true;
-				checkAllowPrepayProvider.Checked=PrefC.GetBool(PrefName.AllowPrepayProvider);
+				checkAllowPrepayProvider.Checked=Preferences.GetBool(PrefName.AllowPrepayProvider);
 			}
 			else {
 				checkAllowPrepayProvider.Visible=false;
@@ -5214,7 +5214,7 @@ namespace OpenDental{
 		private void comboPayPlansVersion_SelectionChangeCommitted(object sender,EventArgs e) {
 			if(comboPayPlansVersion.SelectedIndex==(int)PayPlanVersions.AgeCreditsAndDebits-1) {//Minus 1 because the enum starts at 1.
 				checkHideDueNow.Visible=true;
-				checkHideDueNow.Checked=PrefC.GetBool(PrefName.PayPlanHideDueNow);
+				checkHideDueNow.Checked=Preferences.GetBool(PrefName.PayPlanHideDueNow);
 			}
 			else {
 				checkHideDueNow.Visible=false;
@@ -5223,14 +5223,14 @@ namespace OpenDental{
 		}
 
 		private void radioTreatPlanSortTooth_Click(object sender,EventArgs e) {
-			if(PrefC.GetBool(PrefName.TreatPlanSortByTooth)!=radioTreatPlanSortTooth.Checked) {
+			if(Preferences.GetBool(PrefName.TreatPlanSortByTooth)!=radioTreatPlanSortTooth.Checked) {
 				MsgBox.Show(this,"You will need to restart the program for the change to take effect.");
 			}
 		}
 
 		private void radioTreatPlanSortOrder_Click(object sender,EventArgs e) {
 			//Sort by order is a false 
-			if(PrefC.GetBool(PrefName.TreatPlanSortByTooth)==radioTreatPlanSortOrder.Checked) {
+			if(Preferences.GetBool(PrefName.TreatPlanSortByTooth)==radioTreatPlanSortOrder.Checked) {
 				MsgBox.Show(this,"You will need to restart the program for the change to take effect.");
 			}
 		}
@@ -5301,7 +5301,7 @@ namespace OpenDental{
 		}
 
 		private void butBadDebt_Click(object sender,EventArgs e) {
-			string[] arrayDefNums=PrefC.GetString(PrefName.BadDebtAdjustmentTypes).Split(new char[] {','}); //comma-delimited list.
+			string[] arrayDefNums=Preferences.GetString(PrefName.BadDebtAdjustmentTypes).Split(new char[] {','}); //comma-delimited list.
 			List<long> listBadAdjDefNums = new List<long>();
 			foreach(string strDefNum in arrayDefNums) {
 				listBadAdjDefNums.Add(PIn.Long(strDefNum));
@@ -5431,8 +5431,8 @@ namespace OpenDental{
 			else if(radioImagesModuleTreeIsPersistentPerUser.Checked) {
 				imageModuleIsCollapsedVal=2;
 			}
-			if(PrefC.GetString(PrefName.TreatmentPlanNote)!=textTreatNote.Text) {
-				List<long> listTreatPlanNums=TreatPlans.GetNumsByNote(PrefC.GetString(PrefName.TreatmentPlanNote));//Find active/inactive TP's that match exactly.
+			if(Preferences.GetString(PrefName.TreatmentPlanNote)!=textTreatNote.Text) {
+				List<long> listTreatPlanNums=TreatPlans.GetNumsByNote(Preferences.GetString(PrefName.TreatmentPlanNote));//Find active/inactive TP's that match exactly.
 				if(listTreatPlanNums.Count>0) {
 					DialogResult dr=MessageBox.Show(Lan.g(this,"Unsaved treatment plans found with default notes")+": "+listTreatPlanNums.Count+"\r\n"
 						+Lan.g(this,"Would you like to change them now?"),"",MessageBoxButtons.YesNoCancel);
@@ -5585,7 +5585,7 @@ namespace OpenDental{
 				| Prefs.UpdateString(PrefName.InsBenPerioMaintCodes,textInsPerioMaint.Text)
 				| Prefs.UpdateString(PrefName.InsBenDenturesCodes,textInsDentures.Text)
 				| Prefs.UpdateString(PrefName.InsBenImplantCodes,textInsImplant.Text)
-				| Prefs.UpdateBool(PrefName.TreatPlanSortByTooth,radioTreatPlanSortTooth.Checked || PrefC.RandomKeys)
+				| Prefs.UpdateBool(PrefName.TreatPlanSortByTooth,radioTreatPlanSortTooth.Checked || Preferences.RandomKeys)
 				| Prefs.UpdateString(PrefName.InsHistBWCodes,textInsHistBW.Text)
 				| Prefs.UpdateString(PrefName.InsHistDebridementCodes,textInsHistDebridement.Text)
 				| Prefs.UpdateString(PrefName.InsHistExamCodes,textInsHistExam.Text)
@@ -5680,14 +5680,14 @@ namespace OpenDental{
 			if(comboUnallocatedSplits.SelectedIndex!=-1) {
 				_changed|=Prefs.UpdateLong(PrefName.PrepaymentUnearnedType,_listPaySplitUnearnedType[comboUnallocatedSplits.SelectedIndex].DefNum);
 			}
-			int prefRigorousAccounting=PrefC.GetInt(PrefName.RigorousAccounting);
+			int prefRigorousAccounting=Preferences.GetInt(PrefName.RigorousAccounting);
 			if(Prefs.UpdateInt(PrefName.RigorousAccounting,comboRigorousAccounting.SelectedIndex)) {
 				_changed=true;
 				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Rigorous accounting changed from "+
 					((RigorousAccounting)prefRigorousAccounting).GetDescription()+" to "
 					+((RigorousAccounting)comboRigorousAccounting.SelectedIndex).GetDescription()+".");
 			}
-			int prefRigorousAdjustments=PrefC.GetInt(PrefName.RigorousAdjustments);
+			int prefRigorousAdjustments=Preferences.GetInt(PrefName.RigorousAdjustments);
 			if(Prefs.UpdateInt(PrefName.RigorousAdjustments,comboRigorousAdjustments.SelectedIndex)) {
 				_changed=true;
 				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Rigorous adjustments changed from "+
@@ -5739,13 +5739,13 @@ namespace OpenDental{
 			}
 			if(listTriggerNewNums.Count>0) {
 				//Adds the appointment triggers to the list of confirmation statuses excluded from sending eConfirms and eReminders.
-				List<string> listEConfirm=PrefC.GetString(PrefName.ApptConfirmExcludeEConfirm).Split(',')
+				List<string> listEConfirm=Preferences.GetString(PrefName.ApptConfirmExcludeEConfirm).Split(',')
 					.Where(x => !string.IsNullOrWhiteSpace(x))
 					.Union(listTriggerNewNums).ToList();
-				List<string> listESend=PrefC.GetString(PrefName.ApptConfirmExcludeESend).Split(',')
+				List<string> listESend=Preferences.GetString(PrefName.ApptConfirmExcludeESend).Split(',')
 					.Where(x => !string.IsNullOrWhiteSpace(x))
 					.Union(listTriggerNewNums).ToList();
-				List<string> listERemind=PrefC.GetString(PrefName.ApptConfirmExcludeERemind).Split(',')
+				List<string> listERemind=Preferences.GetString(PrefName.ApptConfirmExcludeERemind).Split(',')
 					.Where(x => !string.IsNullOrWhiteSpace(x))
 					.Union(listTriggerNewNums).ToList();
 				//Update new Value strings in database.  We don't remove the old ones.

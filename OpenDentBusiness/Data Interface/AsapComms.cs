@@ -169,7 +169,7 @@ namespace OpenDentBusiness
             //Note: RegReplace is case insensitive by default.
             if (dateTime.Year > 1880)
             {
-                newTemplate.RegReplace("\\[Date]", dateTime.ToString(PrefC.PatientCommunicationDateFormat));
+                newTemplate.RegReplace("\\[Date]", dateTime.ToString(Preferences.PatientCommunicationDateFormat));
                 newTemplate.RegReplace("\\[Time]", dateTime.ToShortTimeString());
             }
             if (clinicNum > -1)
@@ -404,11 +404,11 @@ namespace OpenDentBusiness
                 _dictPatComms = listPatComms.GroupBy(x => x.PatNum).ToDictionary(x => x.Key, x => x.First());
                 _dictPatDetails = listPatComms.GroupBy(x => x.PatNum).ToDictionary(x => x.Key, x => new PatientDetail(x.First()));
                 _dictPatAsapComms = GetForPats(listPatComms.Select(x => x.PatNum).ToList()).GroupBy(x => x.PatNum).ToDictionary(x => x.Key, x => x.ToList());
-                TimeSpan timeAutoCommStart = PrefC.GetDateT(PrefName.AutomaticCommunicationTimeStart).TimeOfDay;
-                TimeSpan timeAutoCommEnd = PrefC.GetDateT(PrefName.AutomaticCommunicationTimeEnd).TimeOfDay;
+                TimeSpan timeAutoCommStart = Preferences.GetDateTime(PrefName.AutomaticCommunicationTimeStart).TimeOfDay;
+                TimeSpan timeAutoCommEnd = Preferences.GetDateTime(PrefName.AutomaticCommunicationTimeEnd).TimeOfDay;
                 DtSendEmail = dtStartSend;//All emails will be sent immediately.
                 DtStartSendText = dtStartSend;
-                if (PrefC.DoRestrictAutoSendWindow)
+                if (Preferences.DoRestrictAutoSendWindow)
                 {
                     //If the time to start sending is before the automatic send window, set the time to start to the beginning of the send window.
                     if (DtStartSendText.TimeOfDay < timeAutoCommStart)
@@ -612,7 +612,7 @@ namespace OpenDentBusiness
             internal DateTime GetNextTextSendTime()
             {
                 DateTime sendTime = DtStartSendText.AddMinutes(MinutesBetweenTexts * CountTextsToSend);
-                if (PrefC.DoRestrictAutoSendWindow && sendTime > DtTextSendEnd)
+                if (Preferences.DoRestrictAutoSendWindow && sendTime > DtTextSendEnd)
                 {
                     sendTime = DtTextSendEnd;
                 }
@@ -693,7 +693,7 @@ namespace OpenDentBusiness
             ///<summary>Returns true if the recall will fit in the time slot and there are no other appointments in the slot.</summary>
             public bool IsApptSlotAvailable(Recall recall, long opNum, DateTime slotStart, DateTime slotEnd)
             {
-                int minutes = RecallTypes.GetTimePattern(recall.RecallTypeNum).Length * PrefC.GetInt(PrefName.AppointmentTimeIncrement);
+                int minutes = RecallTypes.GetTimePattern(recall.RecallTypeNum).Length * Preferences.GetInt(PrefName.AppointmentTimeIncrement);
                 return IsApptSlotAvailable(minutes, opNum, slotStart, slotEnd);
             }
 

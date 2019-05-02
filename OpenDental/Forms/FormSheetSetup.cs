@@ -17,7 +17,7 @@ namespace OpenDental {
 		}
 
 		private void FormReportSetup_Load(object sender,EventArgs e) {
-			checkPatientFormsShowConsent.Checked=PrefC.GetBool(PrefName.PatientFormsShowConsent);
+			checkPatientFormsShowConsent.Checked=Preferences.GetBool(PrefName.PatientFormsShowConsent);
 		}
 		
 		private void butOK_Click(object sender,EventArgs e) {

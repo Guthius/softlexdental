@@ -94,18 +94,18 @@ namespace OpenDentBusiness
                     {
                         //give regular server credentials if the report server is not set up.
                         cn = new CentralConnection();
-                        cn.ServerName = PrefC.ReportingServer.Server == "" ? DataConnection.Server : PrefC.ReportingServer.Server;
-                        cn.DatabaseName = PrefC.ReportingServer.Server == "" ? DataConnection.Database : PrefC.ReportingServer.Database;
-                        cn.MySqlUser = PrefC.ReportingServer.Server == "" ? DataConnection.UserID : PrefC.ReportingServer.MySqlUser;
-                        cn.MySqlPassword = PrefC.ReportingServer.Server == "" ? DataConnection.Password : PrefC.ReportingServer.MySqlPass;
+                        cn.ServerName = Preferences.ReportingServer.Server == "" ? DataConnection.Server : Preferences.ReportingServer.Server;
+                        cn.DatabaseName = Preferences.ReportingServer.Server == "" ? DataConnection.Database : Preferences.ReportingServer.Database;
+                        cn.MySqlUser = Preferences.ReportingServer.Server == "" ? DataConnection.UserID : Preferences.ReportingServer.MySqlUser;
+                        cn.MySqlPassword = Preferences.ReportingServer.Server == "" ? DataConnection.Password : Preferences.ReportingServer.MySqlPass;
                         //no ternary operator because URI will be blank if they're not using a middle tier reporting server.
-                        cn.ServiceURI = PrefC.ReportingServer.URI;
+                        cn.ServiceURI = Preferences.ReportingServer.URI;
                         //Connection string is not currently supported for report servers.
                         //If ServerName is null or empty, then the current instance of Open Dental is utilizing a connection string.
                         //The connection string should be preserved in order for reports to continue to work for non-report server queries.
                         if (string.IsNullOrEmpty(cn.ServerName))
                         {
-                            cn.ConnectionString = PrefC.ReportingServer.ConnectionString == "" ? DataConnection.ConnectionString : PrefC.ReportingServer.ConnectionString;
+                            cn.ConnectionString = Preferences.ReportingServer.ConnectionString == "" ? DataConnection.ConnectionString : Preferences.ReportingServer.ConnectionString;
                         }
                     });
                     //Not already there so add it once.
@@ -121,7 +121,7 @@ namespace OpenDentBusiness
                     CentralConnection cn = null;
                     ODException.SwallowAnyException(() =>
                     {
-                        if (!PrefC.IsODHQ)
+                        if (!Preferences.IsODHQ)
                         {
                             return;
                         }
@@ -132,10 +132,10 @@ namespace OpenDentBusiness
 #else
 							ServerName=PrefC.GetString(PrefName.CustomersHQServer),
 #endif
-                            DatabaseName = PrefC.GetString(PrefName.CustomersHQDatabase),
-                            MySqlUser = PrefC.GetString(PrefName.CustomersHQMySqlUser),
+                            DatabaseName = Preferences.GetString(PrefName.CustomersHQDatabase),
+                            MySqlUser = Preferences.GetString(PrefName.CustomersHQMySqlUser),
                         };
-                        CDT.Class1.Decrypt(PrefC.GetString(PrefName.CustomersHQMySqlPassHash), out cn.MySqlPassword);
+                        CDT.Class1.Decrypt(Preferences.GetString(PrefName.CustomersHQMySqlPassHash), out cn.MySqlPassword);
                     });
                     //Not already there so add it once.
                     return new Dictionary<ConnectionNames, CentralConnection>() { { ConnectionNames.CustomersHQ, cn ?? new CentralConnection() } };

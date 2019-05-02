@@ -145,15 +145,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one MedLabResult into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(MedLabResult medLabResult,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				medLabResult.MedLabResultNum=ReplicationServers.GetKey("medlabresult","MedLabResultNum");
 			}
 			string command="INSERT INTO medlabresult (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="MedLabResultNum,";
 			}
 			command+="MedLabNum,ObsID,ObsText,ObsLoinc,ObsLoincText,ObsIDSub,ObsValue,ObsSubType,ObsUnits,ReferenceRange,AbnormalFlag,ResultStatus,DateTimeObs,FacilityID,DocNum,Note) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(medLabResult.MedLabResultNum)+",";
 			}
 			command+=
@@ -181,7 +181,7 @@ namespace OpenDentBusiness.Crud{
 				medLabResult.Note="";
 			}
 			OdSqlParameter paramNote=new OdSqlParameter("paramNote",OdDbType.Text,POut.StringParam(medLabResult.Note));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramObsValue,paramNote);
 			}
 			else {

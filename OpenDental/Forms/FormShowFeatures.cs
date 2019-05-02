@@ -30,7 +30,7 @@ namespace OpenDental{
 		}
 
 		private void FormShowFeatures_Load(object sender, System.EventArgs e) {
-			_isClinicsEnabledInDb=PrefC.HasClinicsEnabled;
+			_isClinicsEnabledInDb=Preferences.HasClinicsEnabled;
 			RestoreClinicCheckBox();
 		}
 
@@ -52,7 +52,7 @@ namespace OpenDental{
 
 		private void checkRestart_Click(object sender,EventArgs e) {
 			ODCheckBoxPref checkBox=(ODCheckBoxPref)sender;
-			if(checkBox.Checked!=(checkBox.ReverseValue?!PrefC.GetBool(checkBox.PrefNameBinding):PrefC.GetBool(checkBox.PrefNameBinding))) {
+			if(checkBox.Checked!=(checkBox.ReverseValue?!Preferences.GetBool(checkBox.PrefNameBinding):Preferences.GetBool(checkBox.PrefNameBinding))) {
 				MsgBox.Show(this,"You will need to restart the program for the change to take effect.");
 			}
 		}

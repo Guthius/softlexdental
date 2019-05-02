@@ -262,15 +262,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Procedure into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Procedure procedure,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				procedure.ProcNum=ReplicationServers.GetKey("procedurelog","ProcNum");
 			}
 			string command="INSERT INTO procedurelog (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ProcNum,";
 			}
 			command+="PatNum,AptNum,OldCode,ProcDate,ProcFee,Surf,ToothNum,ToothRange,Priority,ProcStatus,ProvNum,Dx,PlannedAptNum,PlaceService,Prosthesis,DateOriginalProsth,ClaimNote,DateEntryC,ClinicNum,MedicalCode,DiagnosticCode,IsPrincDiag,ProcNumLab,BillingTypeOne,BillingTypeTwo,CodeNum,CodeMod1,CodeMod2,CodeMod3,CodeMod4,RevCode,UnitQty,BaseUnits,StartTime,StopTime,DateTP,SiteNum,HideGraphics,CanadianTypeCodes,ProcTime,ProcTimeEnd,Prognosis,DrugUnit,DrugQty,UnitQtyType,StatementNum,IsLocked,BillingNote,RepeatChargeNum,DiagnosticCode2,DiagnosticCode3,DiagnosticCode4,Discount,SnomedBodySite,ProvOrderOverride,IsDateProsthEst,IcdVersion,IsCpoe,SecUserNumEntry,SecDateEntry,DateComplete,OrderingReferralNum,TaxAmt) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(procedure.ProcNum)+",";
 			}
 			command+=
@@ -338,7 +338,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Date  (procedure.DateComplete)+","
 				+    POut.Long  (procedure.OrderingReferralNum)+","
 				+"'"+POut.Double(procedure.TaxAmt)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

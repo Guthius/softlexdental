@@ -71,7 +71,7 @@ namespace OpenDental {
 			if(_listSetupClasses[_indexSetupClasses].GetType() != typeof(SetupWizard.FeatureSetup)) {
 				SetupWizard.ClinicSetup clinSetup = new SetupWizard.ClinicSetup();
 				//if Clinics got enabled but there is no clinic setup item, add it.
-				if(PrefC.HasClinicsEnabled && _listSetupClasses.Where(x => x.Name == clinSetup.Name).Count() ==0) {
+				if(Preferences.HasClinicsEnabled && _listSetupClasses.Where(x => x.Name == clinSetup.Name).Count() ==0) {
 					int endCat = _indexSetupClasses;
 					for(int i = _indexSetupClasses;i < _listSetupClasses.Count;i++) {
 						if(_listSetupClasses[i].GetType()==typeof(SetupWizard.ProvSetup)) {
@@ -85,7 +85,7 @@ namespace OpenDental {
 					_listSetupClasses.Insert(endCat,new SetupWizard.SetupComplete(clinSetup.Name));
 				}
 				//otherwise, if clinics got disabled and there is a clinic setup item, remove it.
-				else if(!PrefC.HasClinicsEnabled && _listSetupClasses.Where(x => x.Name == clinSetup.Name).Count()!=0) {
+				else if(!Preferences.HasClinicsEnabled && _listSetupClasses.Where(x => x.Name == clinSetup.Name).Count()!=0) {
 					_listSetupClasses.RemoveAll(x => x.Name == clinSetup.Name);
 				}
 			}

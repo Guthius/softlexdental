@@ -82,15 +82,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one DocumentMisc into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(DocumentMisc documentMisc,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				documentMisc.DocMiscNum=ReplicationServers.GetKey("documentmisc","DocMiscNum");
 			}
 			string command="INSERT INTO documentmisc (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="DocMiscNum,";
 			}
 			command+="DateCreated,FileName,DocMiscType,RawBase64) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(documentMisc.DocMiscNum)+",";
 			}
 			command+=
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 				documentMisc.RawBase64="";
 			}
 			OdSqlParameter paramRawBase64=new OdSqlParameter("paramRawBase64",OdDbType.Text,POut.StringParam(documentMisc.RawBase64));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramRawBase64);
 			}
 			else {

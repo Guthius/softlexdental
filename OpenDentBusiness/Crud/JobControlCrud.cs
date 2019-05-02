@@ -91,15 +91,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one JobControl into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(JobControl jobControl,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				jobControl.JobControlNum=ReplicationServers.GetKey("jobcontrol","JobControlNum");
 			}
 			string command="INSERT INTO jobcontrol (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="JobControlNum,";
 			}
 			command+="UserNum,JobControlType,ControlData,XPos,YPos,Width,Height) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(jobControl.JobControlNum)+",";
 			}
 			command+=
@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (jobControl.YPos)+","
 				+    POut.Int   (jobControl.Width)+","
 				+    POut.Int   (jobControl.Height)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

@@ -56,8 +56,8 @@ namespace OpenDental {
 				gridMain.Location=new Point(8,6);
 				gridMain.Size=new Size(292,447);
 			}
-			checkPrompt.Checked=PrefC.GetBool(PrefName.AppointmentTypeShowPrompt);
-			checkWarn.Checked=PrefC.GetBool(PrefName.AppointmentTypeShowWarning);
+			checkPrompt.Checked=Preferences.GetBool(PrefName.AppointmentTypeShowPrompt);
+			checkWarn.Checked=Preferences.GetBool(PrefName.AppointmentTypeShowWarning);
 			//don't show hidden appointment types in selection mode
 			_listApptTypes=AppointmentTypes.GetDeepCopy(IsSelectionMode);
 			_listApptTypesOld=AppointmentTypes.GetDeepCopy();

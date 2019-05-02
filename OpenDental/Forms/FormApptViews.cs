@@ -277,7 +277,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormApptViews_Load(object sender, System.EventArgs e) {
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}
@@ -297,10 +297,10 @@ namespace OpenDental{
 				}
 			}
 			FillViewList();
-			if(PrefC.GetInt(PrefName.AppointmentTimeIncrement)==5){
+			if(Preferences.GetInt(PrefName.AppointmentTimeIncrement)==5){
 				radioFive.Checked=true;
 			}
-			else if(PrefC.GetInt(PrefName.AppointmentTimeIncrement)==10) {
+			else if(Preferences.GetInt(PrefName.AppointmentTimeIncrement)==10) {
 				radioTen.Checked=true;
 			}
 			else{
@@ -315,7 +315,7 @@ namespace OpenDental{
 			List<ApptView> listApptViewsTemp=ApptViews.GetDeepCopy();
 			string F;
 			for(int i=0;i<listApptViewsTemp.Count;i++){
-				if(PrefC.HasClinicsEnabled && _clinicNum!=listApptViewsTemp[i].ClinicNum) {
+				if(Preferences.HasClinicsEnabled && _clinicNum!=listApptViewsTemp[i].ClinicNum) {
 					continue;//only add views assigned to the clinic selected
 				}
 				if(listViews.Items.Count<12)

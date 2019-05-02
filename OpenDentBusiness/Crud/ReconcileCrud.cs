@@ -85,15 +85,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Reconcile into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Reconcile reconcile,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				reconcile.ReconcileNum=ReplicationServers.GetKey("reconcile","ReconcileNum");
 			}
 			string command="INSERT INTO reconcile (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ReconcileNum,";
 			}
 			command+="AccountNum,StartingBal,EndingBal,DateReconcile,IsLocked) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(reconcile.ReconcileNum)+",";
 			}
 			command+=
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.Double(reconcile.EndingBal)+"',"
 				+    POut.Date  (reconcile.DateReconcile)+","
 				+    POut.Bool  (reconcile.IsLocked)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

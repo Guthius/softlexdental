@@ -175,15 +175,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one HistAppointment into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(HistAppointment histAppointment,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				histAppointment.HistApptNum=ReplicationServers.GetKey("histappointment","HistApptNum");
 			}
 			string command="INSERT INTO histappointment (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="HistApptNum,";
 			}
 			command+="HistUserNum,HistDateTStamp,HistApptAction,ApptSource,AptNum,PatNum,AptStatus,Pattern,Confirmed,TimeLocked,Op,Note,ProvNum,ProvHyg,AptDateTime,NextAptNum,UnschedStatus,IsNewPatient,ProcDescript,Assistant,ClinicNum,IsHygiene,DateTStamp,DateTimeArrived,DateTimeSeated,DateTimeDismissed,InsPlan1,InsPlan2,DateTimeAskedToArrive,ProcsColored,ColorOverride,AppointmentTypeNum,SecUserNumEntry,SecDateEntry,Priority) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(histAppointment.HistApptNum)+",";
 			}
 			command+=
@@ -230,7 +230,7 @@ namespace OpenDentBusiness.Crud{
 				histAppointment.ProcsColored="";
 			}
 			OdSqlParameter paramProcsColored=new OdSqlParameter("paramProcsColored",OdDbType.Text,POut.StringParam(histAppointment.ProcsColored));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramNote,paramProcsColored);
 			}
 			else {

@@ -79,22 +79,22 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one VaccineDef into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(VaccineDef vaccineDef,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				vaccineDef.VaccineDefNum=ReplicationServers.GetKey("vaccinedef","VaccineDefNum");
 			}
 			string command="INSERT INTO vaccinedef (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="VaccineDefNum,";
 			}
 			command+="CVXCode,VaccineName,DrugManufacturerNum) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(vaccineDef.VaccineDefNum)+",";
 			}
 			command+=
 				 "'"+POut.String(vaccineDef.CVXCode)+"',"
 				+"'"+POut.String(vaccineDef.VaccineName)+"',"
 				+    POut.Long  (vaccineDef.DrugManufacturerNum)+")";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

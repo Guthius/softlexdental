@@ -45,7 +45,7 @@ namespace OpenDental {
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				labelClinic.Visible=false;
 				comboClinic.Visible=false;
 			}
@@ -66,7 +66,7 @@ namespace OpenDental {
 			}
 			_listPayPeriods=PayPeriods.GetDeepCopy();
 			FillPayPeriod();
-			butTimeCardBenefits.Visible=PrefC.IsODHQ && Security.IsAuthorized(Permissions.TimecardsEditAll,true);
+			butTimeCardBenefits.Visible=Preferences.IsODHQ && Security.IsAuthorized(Permissions.TimecardsEditAll,true);
 		}
 
 		private void FormTimeCardManage_Shown(object sender,EventArgs e) {
@@ -77,7 +77,7 @@ namespace OpenDental {
 		private void FillMain() {
 			long clinicNum=0;
 			bool isAll=false;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(Security.CurUser.ClinicIsRestricted) {
 					clinicNum=_listClinics[comboClinic.SelectedIndex].ClinicNum;
 				}
@@ -142,7 +142,7 @@ namespace OpenDental {
 				row=new ODGridRow();
 				//row.Cells.Add(Employees.GetNameFL(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())));
 				row.Cells.Add(MainTable.Rows[i]["lastName"]+", "+MainTable.Rows[i]["firstName"]);
-				if(PrefC.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon)) {
+				if(Preferences.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon)) {
 					row.Cells.Add(PIn.Time(MainTable.Rows[i]["totalHours"].ToString()).TotalHours.ToString("n"));
 					row.Cells.Add(PIn.Time(MainTable.Rows[i]["rate1Hours"].ToString()).TotalHours.ToString("n"));
 					row.Cells.Add(PIn.Time(MainTable.Rows[i]["rate1OTHours"].ToString()).TotalHours.ToString("n"));
@@ -153,7 +153,7 @@ namespace OpenDental {
 					//row.Cells.Add(PIn.Time(MainTable.Rows[i]["TimeAdjustRegAdj"].ToString()).TotalHours.ToString("n"));
 					//row.Cells.Add(PIn.Time(MainTable.Rows[i]["TimeAdjustOTAdj"].ToString()).TotalHours.ToString("n"));
 				}
-				else if(PrefC.GetBool(PrefName.TimeCardShowSeconds)) {//Colon format with seconds
+				else if(Preferences.GetBool(PrefName.TimeCardShowSeconds)) {//Colon format with seconds
 					row.Cells.Add(PIn.Time(MainTable.Rows[i]["totalHours"].ToString()).ToStringHmmss());
 					row.Cells.Add(PIn.Time(MainTable.Rows[i]["rate1Hours"].ToString()).ToStringHmmss());
 					row.Cells.Add(PIn.Time(MainTable.Rows[i]["rate1OTHours"].ToString()).ToStringHmmss());
@@ -242,7 +242,7 @@ namespace OpenDental {
 			gridTimeCard.Columns.Add(col);
 			col=new ODGridColumn(Lan.g(this,"Weekly"),50,HorizontalAlignment.Right);
 			gridTimeCard.Columns.Add(col);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn(Lan.g(this,"Clinic"),50,HorizontalAlignment.Left);
 				gridTimeCard.Columns.Add(col);
 			}
@@ -374,8 +374,8 @@ namespace OpenDental {
 					weeklyTotals[i]=weekSpan;
 					//if this is the last entry for a given week
 					if(i==mergedAL.Count-1//if this is the last row 
-						|| cal.GetWeekOfYear(GetDateForRow(i+1,mergedAL),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
-						!= cal.GetWeekOfYear(clock.TimeDisplayed1.Date,rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
+						|| cal.GetWeekOfYear(GetDateForRow(i+1,mergedAL),rule,(DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
+						!= cal.GetWeekOfYear(clock.TimeDisplayed1.Date,rule,(DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
 					{
 						row.Cells.Add(ClockEvents.Format(weekSpan));
 						weekSpan=new TimeSpan(0);
@@ -385,7 +385,7 @@ namespace OpenDental {
 						row.Cells.Add("");
 					}
 					//Clinic---------------------------------------
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						row.Cells.Add(Clinics.GetAbbr(clock.ClinicNum));
 					}
 					//Note-----------------------------------------
@@ -438,8 +438,8 @@ namespace OpenDental {
 					weeklyTotals[i]=weekSpan;
 					//if this is the last entry for a given week
 					if(i==mergedAL.Count-1//if this is the last row 
-						|| cal.GetWeekOfYear(GetDateForRow(i+1,mergedAL),rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
-						!= cal.GetWeekOfYear(adjust.TimeEntry.Date,rule,(DayOfWeek)PrefC.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
+						|| cal.GetWeekOfYear(GetDateForRow(i+1,mergedAL),rule,(DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
+						!= cal.GetWeekOfYear(adjust.TimeEntry.Date,rule,(DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
 					{
 						ODGridCell cell=new ODGridCell(ClockEvents.Format(weekSpan));
 						cell.ColorText=Color.Black;
@@ -450,7 +450,7 @@ namespace OpenDental {
 						row.Cells.Add("");
 					}
 					//Clinic---------------------------------------
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						row.Cells.Add(Clinics.GetAbbr(adjust.ClinicNum));
 					}
 					//Note-----------------------------------------
@@ -514,7 +514,7 @@ namespace OpenDental {
 			yPos+=42;
 			//define columns
 			int[] colW=new int[11];
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				colW=new int[12];
 			}
 			colW[0]=70;//date
@@ -529,7 +529,7 @@ namespace OpenDental {
 			colW[8]=50;//daily
 			colW[9]=50;//weekly
 			colW[10]=160;//note
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				colW[10]=50;//clinic
 				colW[11]=160;//note
 			}
@@ -539,7 +539,7 @@ namespace OpenDental {
 				colPos[i]=colPos[i-1]+colW[i-1];
 			}
 			string[] ColCaption=new string[11];
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				ColCaption=new string[12];
 			}
 			ColCaption[0]=Lan.g(this,"Date");
@@ -554,7 +554,7 @@ namespace OpenDental {
 			ColCaption[8]=Lan.g(this,"Daily");
 			ColCaption[9]=Lan.g(this,"Weekly");
 			ColCaption[10]=Lan.g(this,"Note");
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				ColCaption[10]=Lan.g(this,"Clinic");
 				ColCaption[11]=Lan.g(this,"Note");
 			}
@@ -645,7 +645,7 @@ namespace OpenDental {
 			yPos+=42;
 			//define columns
 			int[] colW=new int[11];
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				colW=new int[12];
 			}
 			colW[0]=70;//date
@@ -660,7 +660,7 @@ namespace OpenDental {
 			colW[8]=50;//daily
 			colW[9]=50;//weekly
 			colW[10]=160;//note
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				colW[10]=50;//clinic
 				colW[11]=160;//note
 			}
@@ -670,7 +670,7 @@ namespace OpenDental {
 				colPos[i]=colPos[i-1]+colW[i-1];
 			}
 			string[] ColCaption=new string[11];
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				ColCaption=new string[12];
 			}
 			ColCaption[0]=Lan.g(this,"Date");
@@ -685,7 +685,7 @@ namespace OpenDental {
 			ColCaption[8]=Lan.g(this,"Daily");
 			ColCaption[9]=Lan.g(this,"Weekly");
 			ColCaption[10]=Lan.g(this,"Note");
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				ColCaption[10]=Lan.g(this,"Clinic");
 				ColCaption[11]=Lan.g(this,"Note");
 			}
@@ -918,7 +918,7 @@ namespace OpenDental {
 			if(!HeadingPrinted) {
 				text=Lan.g(this,"Pay Period")+": "+textDateStart.Text+" - "+textDateStop.Text+"\r\n"
 					+Lan.g(this,"Paycheck Date")+": "+textDatePaycheck.Text;
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					text+="\r\n"+Lan.g(this,"Clinic")+": ";
 					if(Security.CurUser.ClinicIsRestricted) {
 						text+=Clinics.GetAbbr(_listClinics[comboClinic.SelectedIndex].ClinicNum);
@@ -936,7 +936,7 @@ namespace OpenDental {
 					}
 				}
 				g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,headingFont).Width/2,y);
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					y+=75;//To move the grid down three lines to make room for the header text
 				}
 				else {
@@ -993,10 +993,10 @@ namespace OpenDental {
 						case "rate2Hours":
 						case "rate2OTHours":
 							//Time must me formatted differently.
-							if(PrefC.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon)) {
+							if(Preferences.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon)) {
 								row+=PIn.Time(MainTable.Rows[i][c].ToString()).TotalHours.ToString("n");
 							}
-							else if(PrefC.GetBool(PrefName.TimeCardShowSeconds)) {//Colon format with seconds
+							else if(Preferences.GetBool(PrefName.TimeCardShowSeconds)) {//Colon format with seconds
 								row+=PIn.Time(MainTable.Rows[i][c].ToString()).ToStringHmmss();
 							}
 							else {//Colon format without seconds
@@ -1026,8 +1026,8 @@ namespace OpenDental {
 			string errors="";
 			string warnings="";
 			string errorIndent="  ";
-			strb.AppendLine("Co Code,Batch ID,File #"+(PrefC.GetBool(PrefName.TimeCardADPExportIncludesName)?",Employee Name":"")+",Rate Code,Reg Hours,O/T Hours");
-			string coCode=PrefC.GetString(PrefName.ADPCompanyCode);
+			strb.AppendLine("Co Code,Batch ID,File #"+(Preferences.GetBool(PrefName.TimeCardADPExportIncludesName)?",Employee Name":"")+",Rate Code,Reg Hours,O/T Hours");
+			string coCode=Preferences.GetString(PrefName.ADPCompanyCode);
 			string batchID=DateStop.ToString("yyyyMMdd");//max 8 characters
 			if(coCode.Length<2 || coCode.Length>3){
 				errors+=errorIndent+"Company code must be two to three alpha numeric characters long.  Go to Setup>TimeCards to edit.\r\n";
@@ -1078,10 +1078,10 @@ namespace OpenDental {
 				}
 				string textToAdd="";
 				if(r1hours!="" || r1OThours!="") {//no entry should be made unless there are actually hours for this employee.
-					textToAdd+=coCode+","+batchID+","+fileNum+(PrefC.GetBool(PrefName.TimeCardADPExportIncludesName)?","+employeeName:"")+",,"+r1hours+","+r1OThours+"\r\n";
+					textToAdd+=coCode+","+batchID+","+fileNum+(Preferences.GetBool(PrefName.TimeCardADPExportIncludesName)?","+employeeName:"")+",,"+r1hours+","+r1OThours+"\r\n";
 				}
 				if(r2hours!="" || r2OThours!="") {//no entry should be made unless there are actually hours for this employee.
-					textToAdd+=coCode+","+batchID+","+fileNum+(PrefC.GetBool(PrefName.TimeCardADPExportIncludesName)?","+employeeName:"")+",2,"+r2hours+","+r2OThours+"\r\n";
+					textToAdd+=coCode+","+batchID+","+fileNum+(Preferences.GetBool(PrefName.TimeCardADPExportIncludesName)?","+employeeName:"")+",2,"+r2hours+","+r2OThours+"\r\n";
 				}
 				if(textToAdd=="") {
 					warningsForEmployee+=errorIndent+"No clocked hours.\r\n";// for "+Employees.GetNameFL(Employees.GetEmp(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())))+"\r\n";

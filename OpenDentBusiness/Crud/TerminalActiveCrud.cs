@@ -88,15 +88,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one TerminalActive into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(TerminalActive terminalActive,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				terminalActive.TerminalActiveNum=ReplicationServers.GetKey("terminalactive","TerminalActiveNum");
 			}
 			string command="INSERT INTO terminalactive (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="TerminalActiveNum,";
 			}
 			command+="ComputerName,TerminalStatus,PatNum,SessionId,ProcessId,SessionName) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(terminalActive.TerminalActiveNum)+",";
 			}
 			command+=
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Int   (terminalActive.SessionId)+","
 				+    POut.Int   (terminalActive.ProcessId)+","
 				+"'"+POut.String(terminalActive.SessionName)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

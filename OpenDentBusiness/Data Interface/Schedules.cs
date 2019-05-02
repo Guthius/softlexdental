@@ -877,7 +877,7 @@ namespace OpenDentBusiness
                 }
                 else
                 {//op is either a hygiene op with no hygienist set or not a hygiene op with no provider set
-                    if (schedCur.ProvNum == PrefC.GetLong(PrefName.ScheduleProvUnassigned))
+                    if (schedCur.ProvNum == Preferences.GetLong(PrefName.ScheduleProvUnassigned))
                     {//use the provider for unassigned ops
                         retVal.Add(schedCur.Copy());
                     }
@@ -1273,7 +1273,7 @@ namespace OpenDentBusiness
                     if (startTime.TimeOfDay == PIn.DateT("12 AM").TimeOfDay && stopTime.TimeOfDay == PIn.DateT("12 AM").TimeOfDay)
                     {
                         #region Note or Holiday
-                        if ((PrefC.HasClinicsEnabled && raw.Rows[i - 1]["ClinicNum"].ToString() != raw.Rows[i]["ClinicNum"].ToString())//different clinic than previous line
+                        if ((Preferences.HasClinicsEnabled && raw.Rows[i - 1]["ClinicNum"].ToString() != raw.Rows[i]["ClinicNum"].ToString())//different clinic than previous line
                             || raw.Rows[i - 1]["Status"].ToString() != raw.Rows[i]["Status"].ToString())//start notes and holidays on different lines
                         {
                             table.Rows[rowI][(int)dateSched.DayOfWeek] += "\r\n";
@@ -1285,7 +1285,7 @@ namespace OpenDentBusiness
                             {
                                 table.Rows[rowI][(int)dateSched.DayOfWeek] += Lans.g("Schedules", "Note");
                             }
-                            if (PrefC.HasClinicsEnabled && raw.Rows[i]["SchedType"].ToString() == "0")
+                            if (Preferences.HasClinicsEnabled && raw.Rows[i]["SchedType"].ToString() == "0")
                             {//a practice sched type, prov/emp notes do not have a clinic associated
                                 string clinicAbbr = Clinics.GetAbbr(PIn.Long(raw.Rows[i]["ClinicNum"].ToString()));
                                 if (string.IsNullOrEmpty(clinicAbbr))
@@ -1332,7 +1332,7 @@ namespace OpenDentBusiness
                             }
                             table.Rows[rowI][(int)dateSched.DayOfWeek] += Lans.g("Schedules", "Note");
                         }
-                        if (PrefC.HasClinicsEnabled && raw.Rows[i]["SchedType"].ToString() == "0")
+                        if (Preferences.HasClinicsEnabled && raw.Rows[i]["SchedType"].ToString() == "0")
                         {//a practice sched type, prov/emp notes do not have a clinic associated
                             string clinicAbbr = Clinics.GetAbbr(PIn.Long(raw.Rows[i]["ClinicNum"].ToString()));
                             table.Rows[rowI][(int)dateSched.DayOfWeek] += " (" + (string.IsNullOrEmpty(clinicAbbr) ? "Headquarters" : clinicAbbr) + ")";
@@ -1382,14 +1382,14 @@ namespace OpenDentBusiness
             List<Operatory> listOperatories = new List<Operatory>();
             if (isRecall)
             {
-                listBlockoutTypesToIgnore = PrefC.GetString(PrefName.WebSchedRecallIgnoreBlockoutTypes)
+                listBlockoutTypesToIgnore = Preferences.GetString(PrefName.WebSchedRecallIgnoreBlockoutTypes)
                     .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(x => PIn.Long(x)).ToList();
                 listOperatories = Operatories.GetOpsForWebSched();
             }
             else
             {
-                listBlockoutTypesToIgnore = PrefC.GetString(PrefName.WebSchedNewPatApptIgnoreBlockoutTypes)
+                listBlockoutTypesToIgnore = Preferences.GetString(PrefName.WebSchedNewPatApptIgnoreBlockoutTypes)
                     .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(x => PIn.Long(x)).ToList();
                 //Get all of the operatory nums for operatories that are New Pat ready.
@@ -1409,7 +1409,7 @@ namespace OpenDentBusiness
             }
             listOperatoryNums.AddRange(listOperatories.Select(x => x.OperatoryNum));
             List<long> listClinicNums = new List<long>();
-            if (PrefC.HasClinicsEnabled)
+            if (Preferences.HasClinicsEnabled)
             {
                 listClinicNums.Add(clinicNum);
             }
@@ -1742,7 +1742,7 @@ namespace OpenDentBusiness
                 + "AND SchedDate=" + POut.Date(dateStart) + " "
                 + "AND StopTime>'00:00:00' "//We want to ignore invalid schedules, such as Provider/Employee notes.
                 + "AND employee.IsHidden=0 ";
-            if (PrefC.HasClinicsEnabled)
+            if (Preferences.HasClinicsEnabled)
             {//Using clinics.
                 List<Employee> listEmps = Employees.GetEmpsForClinic(clinicNum);
                 if (listEmps.Count == 0)
@@ -1791,7 +1791,7 @@ namespace OpenDentBusiness
                 return table;
             }
             List<long> listProvNums;
-            if (PrefC.HasClinicsEnabled)
+            if (Preferences.HasClinicsEnabled)
             {//Using clinics.
                 listProvNums = Providers.GetProvsForClinic(clinicNum).Select(x => x.ProvNum).ToList();
                 if (listProvNums.Count == 0)
@@ -1803,7 +1803,7 @@ namespace OpenDentBusiness
             {
                 listProvNums = Providers.GetDeepCopy(true).OrderBy(x => x.ItemOrder).Select(y => y.ProvNum).ToList();
             }
-            bool isODHQ = PrefC.IsODHQ;//Saves making deep copy of Pref cache for every schedule in ListSchedulesForDate.
+            bool isODHQ = Preferences.IsODHQ;//Saves making deep copy of Pref cache for every schedule in ListSchedulesForDate.
             List<Schedule> ListSchedulesForDate = Schedules.GetAllForDateAndType(dateStart, ScheduleType.Provider);
             List<Schedule> listScheds = ListSchedulesForDate.FindAll(x => listProvNums.Contains(x.ProvNum) && (isODHQ ? (x.StartTime != x.StopTime) : true));
             listScheds = listScheds.OrderBy(x => listProvNums.IndexOf(x.ProvNum)).ToList();//Make list alphabetical.

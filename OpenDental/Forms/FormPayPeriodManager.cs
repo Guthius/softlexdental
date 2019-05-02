@@ -397,7 +397,7 @@ namespace OpenDental {
 			else {
 				dateTimeStart.Value=payPeriod.DateStop.AddDays(1);
 			}
-			PayPeriodInterval payPeriodInterval=(PayPeriodInterval)PrefC.GetInt(PrefName.PayPeriodIntervalSetting);
+			PayPeriodInterval payPeriodInterval=(PayPeriodInterval)Preferences.GetInt(PrefName.PayPeriodIntervalSetting);
 			if(payPeriodInterval==PayPeriodInterval.Weekly) {
 				radioWeekly.Checked=true;
 				numPayPeriods.Text="52";
@@ -410,7 +410,7 @@ namespace OpenDental {
 				radioMonthly.Checked=true;
 				numPayPeriods.Text="12";
 			}
-			int dayOfWeek=PrefC.GetInt(PrefName.PayPeriodPayDay);
+			int dayOfWeek=Preferences.GetInt(PrefName.PayPeriodPayDay);
 			if(dayOfWeek!=0) {//They have a day of the week selected
 				comboDay.SelectedIndex=dayOfWeek;
 				numDaysAfterPayPeriod.Enabled=false;
@@ -420,10 +420,10 @@ namespace OpenDental {
 			}
 			else {
 				comboDay.SelectedIndex=0;
-				numDaysAfterPayPeriod.Text=PrefC.GetString(PrefName.PayPeriodPayAfterNumberOfDays);
-				checkExcludeWeekends.Checked=PrefC.GetBool(PrefName.PayPeriodPayDateExcludesWeekends);
+				numDaysAfterPayPeriod.Text=Preferences.GetString(PrefName.PayPeriodPayAfterNumberOfDays);
+				checkExcludeWeekends.Checked=Preferences.GetBool(PrefName.PayPeriodPayDateExcludesWeekends);
 				if(checkExcludeWeekends.Checked) {
-					if(PrefC.GetBool(PrefName.PayPeriodPayDateBeforeWeekend)) {
+					if(Preferences.GetBool(PrefName.PayPeriodPayDateBeforeWeekend)) {
 						radioPayBefore.Checked=true;
 					}
 					else {

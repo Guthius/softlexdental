@@ -451,7 +451,7 @@ namespace OpenDentBusiness
                 + "FROM sheet WHERE IsDeleted=0 "
                 + "AND PatNum =" + POut.Long(patNum) + " "
                 + "AND (SheetType=" + POut.Long((int)SheetTypeEnum.PatientForm) + " OR SheetType=" + POut.Long((int)SheetTypeEnum.MedicalHistory);
-            if (PrefC.GetBool(PrefName.PatientFormsShowConsent))
+            if (Preferences.GetBool(PrefName.PatientFormsShowConsent))
             {
                 command += " OR SheetType=" + POut.Long((int)SheetTypeEnum.Consent);//Show consent forms if pref is true.
             }
@@ -574,7 +574,7 @@ namespace OpenDentBusiness
                 + "DateTimeSheet >= " + POut.Date(dateFrom) + " AND DateTimeSheet <= " + POut.Date(dateTo.AddDays(1)) + " "
                 + "AND IsWebForm = " + POut.Bool(true) + " "
                 + "AND (SheetType=" + POut.Long((int)SheetTypeEnum.PatientForm) + " OR SheetType=" + POut.Long((int)SheetTypeEnum.MedicalHistory) + ") "
-                + (PrefC.HasClinicsEnabled ? "AND ClinicNum IN (" + string.Join(",", listClinicNums) + ") " : "");
+                + (Preferences.HasClinicsEnabled ? "AND ClinicNum IN (" + string.Join(",", listClinicNums) + ") " : "");
             DataTable rawSheet = Db.GetTable(command);
             DateTime dateT;
             for (int i = 0; i < rawSheet.Rows.Count; i++)

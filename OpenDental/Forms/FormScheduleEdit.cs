@@ -231,7 +231,7 @@ namespace OpenDental{
 
 		private void FormScheduleEdit_Load(object sender, System.EventArgs e) {
 			_isHolidayOrNote=(SchedCur.StartTime==TimeSpan.Zero && SchedCur.StopTime==TimeSpan.Zero);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(ClinicNum==0) {
 					Text+=" - "+Lan.g(this,"Headquarters");
 				}
@@ -286,7 +286,7 @@ namespace OpenDental{
 			listOps.Items.Add(Lan.g(this,"not specified"));
 			//filter list if using clinics and if a clinic filter was passed in to only ops assigned to the specified clinic, otherwise all non-hidden ops
 			_listOps=Operatories.GetDeepCopy(true);
-			if(PrefC.HasClinicsEnabled && ClinicNum>0) {
+			if(Preferences.HasClinicsEnabled && ClinicNum>0) {
 				_listOps.RemoveAll(x => x.ClinicNum!=ClinicNum);
 			}
 			foreach(Operatory opCur in _listOps) {
@@ -350,7 +350,7 @@ namespace OpenDental{
 				return;
 			}
 			long clinicNum=0;
-			if(_isHolidayOrNote && SchedCur.SchedType==ScheduleType.Practice && PrefC.HasClinicsEnabled) {//prov notes do not have a clinic
+			if(_isHolidayOrNote && SchedCur.SchedType==ScheduleType.Practice && Preferences.HasClinicsEnabled) {//prov notes do not have a clinic
 				int indexCur=comboClinic.SelectedIndex;
 				if(!Security.CurUser.ClinicIsRestricted) {//user isn't restricted, -1 for HQ
 					indexCur--;

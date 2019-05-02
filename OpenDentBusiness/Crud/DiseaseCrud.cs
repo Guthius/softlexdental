@@ -97,15 +97,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Disease into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Disease disease,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				disease.DiseaseNum=ReplicationServers.GetKey("disease","DiseaseNum");
 			}
 			string command="INSERT INTO disease (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="DiseaseNum,";
 			}
 			command+="PatNum,DiseaseDefNum,PatNote,ProbStatus,DateStart,DateStop,SnomedProblemType,FunctionStatus) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(disease.DiseaseNum)+",";
 			}
 			command+=
@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 				disease.PatNote="";
 			}
 			OdSqlParameter paramPatNote=new OdSqlParameter("paramPatNote",OdDbType.Text,POut.StringParam(disease.PatNote));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramPatNote);
 			}
 			else {

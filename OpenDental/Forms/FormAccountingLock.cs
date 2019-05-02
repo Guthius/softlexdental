@@ -11,9 +11,9 @@ namespace OpenDental
         /// </summary>
         void FormAccountingLock_Load(object sender, EventArgs e)
         {
-            if (PrefC.GetDate(PrefName.AccountingLockDate).Year > 1880)
+            if (Preferences.GetDate(PrefName.AccountingLockDate).Year > 1880)
             {
-                textDate.Text = PrefC.GetDate(PrefName.AccountingLockDate).ToShortDateString();
+                textDate.Text = Preferences.GetDate(PrefName.AccountingLockDate).ToShortDateString();
             }
         }
 

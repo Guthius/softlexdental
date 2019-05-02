@@ -85,21 +85,21 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one JobPermission into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(JobPermission jobPermission,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				jobPermission.JobPermissionNum=ReplicationServers.GetKey("jobpermission","JobPermissionNum");
 			}
 			string command="INSERT INTO jobpermission (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="JobPermissionNum,";
 			}
 			command+="UserNum,JobPermType) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(jobPermission.JobPermissionNum)+",";
 			}
 			command+=
 				     POut.Long  (jobPermission.UserNum)+","
 				+"'"+POut.String(jobPermission.JobPermType.ToString())+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

@@ -664,7 +664,7 @@ namespace OpenDental{
 			if(ApptViewCur.OnlySchedAfterTime > new TimeSpan(0,0,0)) {
 				textAfterTime.Text=(DateTime.Today+ApptViewCur.OnlySchedAfterTime).ToShortTimeString();
 			}
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 				_listUserClinicNums=new List<long>() { 0 };//if clinics are disabled, apptview.ClinicNum will be set to 0
@@ -755,7 +755,7 @@ namespace OpenDental{
 			textScrollTime.Text=ApptViewCur.ApptTimeScrollStart.ToStringHmm();
 			checkApptBubblesDisabled.Checked=ApptViewCur.IsApptBubblesDisabled;
 			if(IsNew) {
-				checkApptBubblesDisabled.Checked=PrefC.GetBool(PrefName.AppointmentBubblesDisabled);
+				checkApptBubblesDisabled.Checked=Preferences.GetBool(PrefName.AppointmentBubblesDisabled);
 			}
 			FillElements();
 		}
@@ -926,7 +926,7 @@ namespace OpenDental{
 			_listOpNums=new List<long>();
 			List<Operatory> listOperatories=Operatories.GetDeepCopy(true);
 			for(int i=0;i<listOperatories.Count;i++) {
-				if(!PrefC.HasClinicsEnabled //add op to list of ops available for the view if the clinics show feature is turned off
+				if(!Preferences.HasClinicsEnabled //add op to list of ops available for the view if the clinics show feature is turned off
 					|| ClinicNum==0 //or this view is not assigned to a clinic
 					|| listOperatories[i].ClinicNum==ClinicNum) //or the operatory is assigned to same clinic as this view
 				{
@@ -1375,7 +1375,7 @@ namespace OpenDental{
 			ApptViewCur.ApptTimeScrollStart=timeScroll.TimeOfDay;
 			ApptViewCur.IsApptBubblesDisabled=checkApptBubblesDisabled.Checked;
 			ApptViewCur.ClinicNum=0;//Default is all clinics
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				//_listUserClinicNums will contain only a 0 if the clinics show feature is disabled.
 				//If the user is not restricted to a clinic, the list will contain 0 in the first position since comboClinic will contain 'All' as the first option.
 				//Restricted users (Security.CurUser.ClinicsIsRestricted=true && Security.CurUser.ClinicNum>0) won't have access to the unassigned views (AssignedClinic=0)

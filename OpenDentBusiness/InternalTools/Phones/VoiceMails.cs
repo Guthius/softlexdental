@@ -117,7 +117,7 @@ namespace OpenDentBusiness
                 //is the path. When JSON-serialized it looks like this:
                 //[{"Key":"SERVER153","Value":"\\\\110.10.6.249\\Voicemail\\default\\998\\INBOX"},{"Key":"CHRISM","Value":"C:\\development"}]
                 List<KeyValuePair<string, string>> listPaths = JsonConvert.DeserializeObject<List<KeyValuePair<string, string>>>
-                    (PrefC.GetString(PrefName.VoiceMailOriginationPath));
+                    (Preferences.GetString(PrefName.VoiceMailOriginationPath));
                 foreach (KeyValuePair<string, string> kvp in listPaths)
                 {
                     if (kvp.Key == Environment.MachineName)
@@ -145,7 +145,7 @@ namespace OpenDentBusiness
                 //is the path. When JSON-serialized it looks like this:
                 //[{"Key":"SERVER153","Value":"\\\\110.10.6.249\\Voicemail\\default\\998\\INBOX"},{"Key":"CHRISM","Value":"C:\\development"}]
                 listPaths = JsonConvert.DeserializeObject<List<KeyValuePair<string, string>>>
-                    (PrefC.GetString(PrefName.VoiceMailOriginationPath));
+                    (Preferences.GetString(PrefName.VoiceMailOriginationPath));
             }
             catch 
             {//If the preference value was not a well formed JSON list, start over with a new list.
@@ -223,14 +223,14 @@ namespace OpenDentBusiness
             Update(voiceMail);//Updating now in case the file I/O stuff fails.
             Signalods.Insert(new Signalod { IType = InvalidType.VoiceMails });
             //Move the .wav file to the Archived folder.
-            string archivePath = PrefC.GetString(PrefName.VoiceMailArchivePath);
+            string archivePath = Preferences.GetString(PrefName.VoiceMailArchivePath);
             string newFileName;
-            if (PrefC.GetBool(PrefName.VoiceMailSMB2Enabled))
+            if (Preferences.GetBool(PrefName.VoiceMailSMB2Enabled))
             {
                 //This is brutal because we need to create a network connection to the archive path but the path might not exist.
                 //We cannot check if the directory exists and we cannot create the directory without first making a network connection to it (or parent dir).
                 //Therefore, instead of coding some sort of directory waterfall loop, I'm simply going to let the exception throw and we'll manually create it.
-                using (new ODNetworkConnection(archivePath, PrefC.VoiceMailNetworkCredentialsSMB2))
+                using (new ODNetworkConnection(archivePath, Preferences.VoiceMailNetworkCredentialsSMB2))
                 {
                     //Now that we have a network connection to the "parent" archive path we can do file IO like usual (assuming we have permission to).
                     newFileName = ArchiveFile(oldFileName);
@@ -247,7 +247,7 @@ namespace OpenDentBusiness
         ///<summary>Moves the file to the archive location.</summary>
         private static string ArchiveFile(string oldFileName)
         {
-            string archivePath = PrefC.GetString(PrefName.VoiceMailArchivePath);
+            string archivePath = Preferences.GetString(PrefName.VoiceMailArchivePath);
             string archivePathToday = Path.Combine(archivePath, DateTime.Now.ToString("MM-dd-yy"));
             if (!Directory.Exists(archivePathToday))
             {
@@ -266,9 +266,9 @@ namespace OpenDentBusiness
         ///<summary>Also deletes the voice mail file. Throws exceptions.</summary>
         public static void Delete(VoiceMail voiceMail)
         {
-            if (PrefC.GetBool(PrefName.VoiceMailSMB2Enabled))
+            if (Preferences.GetBool(PrefName.VoiceMailSMB2Enabled))
             {
-                string remoteName = PrefC.GetString(PrefName.VoiceMailArchivePath);
+                string remoteName = Preferences.GetString(PrefName.VoiceMailArchivePath);
                 if (!voiceMail.FileName.StartsWith(remoteName) && voiceMail.FileName != "")
                 {
                     remoteName = Path.GetDirectoryName(voiceMail.FileName);
@@ -276,7 +276,7 @@ namespace OpenDentBusiness
                 //This is brutal because we need to create a network connection to the archive path but the path might not exist.
                 //We cannot check if the directory exists without first making a network connection to it (or a parent dir).
                 //Therefore, instead of coding some sort of directory waterfall loop, I'm simply going to let the exception throw and we'll manually create it.
-                using (new ODNetworkConnection(remoteName, PrefC.VoiceMailNetworkCredentialsSMB2))
+                using (new ODNetworkConnection(remoteName, Preferences.VoiceMailNetworkCredentialsSMB2))
                 {
                     //Now that we have a network connection to the directory that the file supposedly resides we can check to see if the file in fact exists.
                     if (File.Exists(voiceMail.FileName))

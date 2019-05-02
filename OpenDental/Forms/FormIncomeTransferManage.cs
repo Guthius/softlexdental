@@ -52,7 +52,7 @@ namespace OpenDental {
 			gridSplits.Columns.Clear();
 			gridSplits.Columns.Add(new ODGridColumn(Lan.g(this,"Date"),65,HorizontalAlignment.Center));
 			gridSplits.Columns.Add(new ODGridColumn(Lan.g(this,"Prov"),40));
-			if(PrefC.HasClinicsEnabled) {//Clinics
+			if(Preferences.HasClinicsEnabled) {//Clinics
 				gridSplits.Columns.Add(new ODGridColumn(Lan.g(this,"Clinic"),40));
 			}
 			gridSplits.Columns.Add(new ODGridColumn(Lan.g(this,"Patient"),100));
@@ -69,7 +69,7 @@ namespace OpenDental {
 				row.Tag=_listSplitsCur[i];
 				row.Cells.Add(_listSplitsCur[i].DatePay.ToShortDateString());//Date
 				row.Cells.Add(Providers.GetAbbr(_listSplitsCur[i].ProvNum));//Prov
-				if(PrefC.HasClinicsEnabled) {//Clinics
+				if(Preferences.HasClinicsEnabled) {//Clinics
 					if(_listSplitsCur[i].ClinicNum!=0) {
 						row.Cells.Add(Clinics.GetClinic(_listSplitsCur[i].ClinicNum).Description);//Clinic
 					}
@@ -132,7 +132,7 @@ namespace OpenDental {
 			gridCharges.Columns.Clear();
 			gridCharges.Columns.Add(new ODGridColumn(Lan.g(this,"Prov"),100));
 			gridCharges.Columns.Add(new ODGridColumn(Lan.g(this,"Patient"),100));
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				gridCharges.Columns.Add(new ODGridColumn(Lan.g(this,"Clinic"),60));
 			}
 			gridCharges.Columns.Add(new ODGridColumn(Lan.g(this,"Codes"),-200));//negative so it will dynamically grow when no clinic column is present
@@ -184,7 +184,7 @@ namespace OpenDental {
 				_dictPatients[pat.PatNum]=pat;
 			}
 			row.Cells.Add(pat.LName+", "+pat.FName);//Patient
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				row.Cells.Add(Clinics.GetAbbr(listEntries[0].ClinicNum));
 			}
 			string procCodes="";
@@ -247,7 +247,7 @@ namespace OpenDental {
 				childRow.Tag=entryCharge; 
 				childRow.Cells.Add("     "+Providers.GetAbbr(entryCharge.ProvNum));//Provider
 				childRow.Cells.Add(pat.LName+", "+pat.FName);//Patient
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					childRow.Cells.Add(Clinics.GetAbbr(entryCharge.ClinicNum));
 				}
 				procCodes="";
@@ -411,7 +411,7 @@ namespace OpenDental {
 				posSplit.ProcNum=posCharge.GetType()==typeof(Procedure) ? posCharge.PriKey : 0;//PosCharge may or may not be a proc.  If it is proc, use ProcNum
 				posSplit.ProvNum=posCharge.ProvNum;
 				posSplit.SplitAmt=(double)amt;
-				posSplit.UnearnedType=posSplit.ProvNum==0 ? PrefC.GetLong(PrefName.PrepaymentUnearnedType) : 0;//Unearned type will likely be 0, but if we make a positive split to ProvNum=0, use default unearned type.
+				posSplit.UnearnedType=posSplit.ProvNum==0 ? Preferences.GetLong(PrefName.PrepaymentUnearnedType) : 0;//Unearned type will likely be 0, but if we make a positive split to ProvNum=0, use default unearned type.
 				posSplit.AdjNum=posCharge.GetType()==typeof(Adjustment) ? (((Adjustment)posCharge.Tag).ProcNum==0 ? ((Adjustment)posCharge.Tag).AdjNum : 0) : 0;
 				PaySplit negSplit=new PaySplit();
 				negSplit.DatePay=DateTimeOD.Today;
@@ -425,7 +425,7 @@ namespace OpenDental {
 				negSplit.AdjNum=negCharge.GetType()==typeof(Adjustment) ? (((Adjustment)negCharge.Tag).ProcNum==0 ? ((Adjustment)negCharge.Tag).AdjNum : 0) : 0;
 				negSplit.SplitAmt=0-(double)amt;
 				negSplit.UnearnedType=negCharge.GetType()==typeof(PaySplit) ? ((PaySplit)negCharge.Tag).UnearnedType : 0;//If money is coming from paysplit, use its unearned type (if any)
-				if(PrefC.GetInt(PrefName.RigorousAccounting)==0) {
+				if(Preferences.GetInt(PrefName.RigorousAccounting)==0) {
 					if(Math.Sign(posSplit.ProcNum)!=Math.Sign(posSplit.ProvNum)
 						|| Math.Sign(negSplit.ProcNum)!=Math.Sign(negSplit.ProvNum)
 						|| Math.Sign(posSplit.UnearnedType)==Math.Sign(posSplit.ProvNum)

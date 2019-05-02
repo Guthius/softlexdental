@@ -1078,7 +1078,7 @@ namespace OpenDental{
 				string translatedCommBridgeName=Lan.g("enumEclaimsCommBridge",Enum.GetNames(typeof(EclaimsCommBridge))[i]);
 				comboCommBridge.Items.Add(new ODBoxItem<EclaimsCommBridge>(translatedCommBridgeName,(EclaimsCommBridge)i));
 			}
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				FillClinics();
 			}
 			FillFields();
@@ -1127,7 +1127,7 @@ namespace OpenDental{
 			textClientProgram.Text=ClearinghouseCur.ClientProgram;
 			//checkIsDefault.Checked=ClearinghouseCur.IsDefault;
 			textPayors.Text=ClearinghouseCur.Payors;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				labelInfo.Visible=true;
 				labelTIN.Font=new System.Drawing.Font(labelTIN.Font,FontStyle.Bold);
 				labelSenderName.Font=new System.Drawing.Font(labelSenderName.Font,FontStyle.Bold);
@@ -1185,7 +1185,7 @@ namespace OpenDental{
 				checkIsClaimExportAllowed.Checked=ClearinghouseCur.IsClaimExportAllowed;
 			}
 			//Uncheck and disable if not ClaimConnect as this checkbox only applies to ClaimConnect.
-			checkSaveDXC.Checked=PrefC.GetBool(PrefName.SaveDXCAttachments);
+			checkSaveDXC.Checked=Preferences.GetBool(PrefName.SaveDXCAttachments);
 			if(ClearinghouseCur.CommBridge!=EclaimsCommBridge.ClaimConnect) {
 				checkAllowAttachSend.Enabled=false;
 				checkAllowAttachSend.Checked=false;
@@ -1363,7 +1363,7 @@ namespace OpenDental{
 			}
 			if(ClearinghouseCur.CommBridge==EclaimsCommBridge.ClaimConnect && (ClearinghouseCur.LoginID!=textLoginID.Text || ClearinghouseCur.Password!=textPassword.Text)){
 				Program progPayConnect=Programs.GetCur(ProgramName.PayConnect);
-				int billingUseDentalExchangeIdx=PrefC.GetInt(PrefName.BillingUseElectronic);//idx of 1= DentalXChange.
+				int billingUseDentalExchangeIdx=Preferences.GetInt(PrefName.BillingUseElectronic);//idx of 1= DentalXChange.
 				if(progPayConnect.Enabled || billingUseDentalExchangeIdx==1) {
 					MsgBox.Show(this,"ClaimConnect, PayConnect, and Electronic Billing credentials are usually all changed at the same time when using DentalXChange.");
 				}
@@ -1569,11 +1569,11 @@ namespace OpenDental{
 				return;
 			}
 			Clearinghouses.Delete(ClearinghouseHq);
-			if(PrefC.GetLong(PrefName.ClearinghouseDefaultDent)==ClearinghouseHq.ClearinghouseNum) {
+			if(Preferences.GetLong(PrefName.ClearinghouseDefaultDent)==ClearinghouseHq.ClearinghouseNum) {
 				Prefs.UpdateLong(PrefName.ClearinghouseDefaultDent,0);
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
-			if(PrefC.GetLong(PrefName.ClearinghouseDefaultMed)==ClearinghouseHq.ClearinghouseNum) {
+			if(Preferences.GetLong(PrefName.ClearinghouseDefaultMed)==ClearinghouseHq.ClearinghouseNum) {
 				Prefs.UpdateLong(PrefName.ClearinghouseDefaultMed,0);
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}

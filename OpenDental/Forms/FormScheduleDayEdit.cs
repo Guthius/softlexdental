@@ -617,8 +617,8 @@ namespace OpenDental{
 
 		private void FormScheduleDay_Load(object sender,System.EventArgs e) {
 			SetFilterControlsAndAction(() => FillGrid(),textSearch);
-			butGraphEdit.Visible=PrefC.IsODHQ;
-			butViewGraph.Visible=PrefC.IsODHQ;
+			butGraphEdit.Visible=Preferences.IsODHQ;
+			butViewGraph.Visible=Preferences.IsODHQ;
 			butOkSchedule.Visible=ShowOkSchedule;
 			_listClinics=new List<Clinic>();
 			if(!Security.CurUser.ClinicIsRestricted) {
@@ -632,7 +632,7 @@ namespace OpenDental{
 			//filled here instead of FillGrid since the list of clinics doesn't change when the grid is filtered and refilled.
 			_dictClinicNumClinic=_listClinics.ToDictionary(x => x.ClinicNum);//speed up sorting of schedules.
 			_dictClinicNumClinic[0]=new Clinic() { Abbr="" };//so HQ always comes before other clinics in the sort order; only for notes and holidays
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				comboClinic.Visible=false;
 				labelClinic.Visible=false;
 			}
@@ -640,7 +640,7 @@ namespace OpenDental{
 			//Fill Provider Override
 			_listProviders=Providers.GetDeepCopy(true);
 			_listProviders.ForEach(x => comboProv.Items.Add(x.Abbr));
-			comboProv.SelectedIndex=_listProviders.FindIndex(x => x.ProvNum==PrefC.GetLong(PrefName.ScheduleProvUnassigned));
+			comboProv.SelectedIndex=_listProviders.FindIndex(x => x.ProvNum==Preferences.GetLong(PrefName.ScheduleProvUnassigned));
 			labelDate.Text=_dateSched.ToString("dddd")+"\r\n"+_dateSched.ToShortDateString();
 			_listScheds=Schedules.RefreshDayEditForPracticeProvsEmps(_dateSched,_listProvs.Select(x => x.ProvNum).Where(x => x>0).ToList(),
 				_listEmps.Select(x => x.EmployeeNum).Where(x => x>0).ToList(),_selectedClinicNum);
@@ -695,7 +695,7 @@ namespace OpenDental{
 			//That way we don't have to add/subtract one in order when selecting from the list based on selected indexes.
 			_listEmps=new List<Employee>() { new Employee() { EmployeeNum=0,FName="none" } };
 			_listProvs=new List<Provider>() { new Provider() { ProvNum=0,Abbr="none" } };
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				_listProvs.AddRange(Providers.GetProvsForClinic(_selectedClinicNum));
 				_listEmps.AddRange(Employees.GetEmpsForClinic(_selectedClinicNum));
 			}
@@ -733,7 +733,7 @@ namespace OpenDental{
 				.Where(x => x!=null).ToDictionary(x => x.EmployeeNum);//speed up sort.
 			_dictProvNumProvider=_listScheds.Select(x => x.ProvNum).Distinct().Select(x => Providers.GetProv(x))//returns null if ProvNum==0 or invalid
 				.Where(x => x!=null).ToDictionary(x => x.ProvNum);//speed up sort.
-			if(PrefC.IsODHQ) {
+			if(Preferences.IsODHQ) {
 				//HQ wants their own sort, so instead of complicating the comparer we will just do the comparer on four seperate lists.
 				List<Schedule> listPracticeNotes=_listScheds.Where(x => x.EmployeeNum==0 && x.ProvNum==0).ToList();
 				listPracticeNotes.Sort(CompareSchedule);
@@ -814,7 +814,7 @@ namespace OpenDental{
 				note="";
 				if(schedCur.SchedType==ScheduleType.Practice) {//note or holiday
 					string clinicAbbr="";
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						clinicAbbr=Clinics.GetAbbr(schedCur.ClinicNum);
 						if(string.IsNullOrEmpty(clinicAbbr)) {
 							clinicAbbr="Headquarters";

@@ -79,15 +79,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EmailAutograph into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(EmailAutograph emailAutograph,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				emailAutograph.EmailAutographNum=ReplicationServers.GetKey("emailautograph","EmailAutographNum");
 			}
 			string command="INSERT INTO emailautograph (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="EmailAutographNum,";
 			}
 			command+="Description,EmailAddress,AutographText) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(emailAutograph.EmailAutographNum)+",";
 			}
 			command+=
@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 				emailAutograph.AutographText="";
 			}
 			OdSqlParameter paramAutographText=new OdSqlParameter("paramAutographText",OdDbType.Text,POut.StringParam(emailAutograph.AutographText));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramDescription,paramAutographText);
 			}
 			else {

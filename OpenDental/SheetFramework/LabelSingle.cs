@@ -21,9 +21,9 @@ namespace OpenDental{
 		///<summary></summary>
 		public static void PrintPat(long patNum) {
 			SheetDef sheetDef=SheetsInternal.GetSheetDef(SheetInternalType.LabelPatientMail);
-			if(PrefC.GetLong(PrefName.LabelPatientDefaultSheetDefNum)!=0) {//Try to use custom label sheet.
+			if(Preferences.GetLong(PrefName.LabelPatientDefaultSheetDefNum)!=0) {//Try to use custom label sheet.
 				try {
-					sheetDef=SheetDefs.GetSheetDef(PrefC.GetLong(PrefName.LabelPatientDefaultSheetDefNum));
+					sheetDef=SheetDefs.GetSheetDef(Preferences.GetLong(PrefName.LabelPatientDefaultSheetDefNum));
 				}
 				catch {//The default label could not be retrieved so just use the internal sheet.
 				}

@@ -42,7 +42,7 @@ namespace OpenDental {
 		
 		private void FormMultiAdj_Load(object sender,EventArgs e) {
 			dateAdjustment.Text=DateTime.Today.ToShortDateString();
-			_rigorousAdjustments=PrefC.GetInt(PrefName.RigorousAdjustments);
+			_rigorousAdjustments=Preferences.GetInt(PrefName.RigorousAdjustments);
 			FillListBoxAdjTypes();
 			FillComboProv();
 			FillComboClinics();
@@ -131,7 +131,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableMultiAdjs","Provider"),90);
 			gridMain.Columns.Add(col);
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				col=new ODGridColumn(Lan.g("TableMultiAdjs","Clinic"),90);
 				gridMain.Columns.Add(col);		
 			}		 	 
@@ -178,7 +178,7 @@ namespace OpenDental {
 		}
 
 		private void FillComboClinics() {
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				comboClinic.Items.Clear();
 				comboClinic.Items.Add(new ODBoxItem<Clinic>("Inherit"));//Inherit was carefully approved by Nathan (and reluctantly Allen)
 				_listClinics=Clinics.GetDeepCopy(true);
@@ -286,7 +286,7 @@ namespace OpenDental {
 			}
 			//set clinic
 			long selectedClinicNum=0;
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				if(((ODBoxItem<Clinic>)comboClinic.SelectedItem).Text=="Inherit") {
 					if(row.Proc!=null) {
 						selectedClinicNum=row.Proc.ClinicNum; 
@@ -335,7 +335,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please pick a provider.");
 				return false;
 			}
-			if(PrefC.HasClinicsEnabled && comboClinic.SelectedIndex==-1){
+			if(Preferences.HasClinicsEnabled && comboClinic.SelectedIndex==-1){
 				MsgBox.Show(this,"Please pick a clinic.");
 				return false;
 			}
@@ -343,7 +343,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please enter a valid date.");
 				return false;
 			}
-			if(PIn.Date(dateAdjustment.Text).Date > DateTime.Today.Date && !PrefC.GetBool(PrefName.FutureTransDatesAllowed)) {
+			if(PIn.Date(dateAdjustment.Text).Date > DateTime.Today.Date && !Preferences.GetBool(PrefName.FutureTransDatesAllowed)) {
 				MsgBox.Show(this,"Adjustments cannot be made for future dates");
 				return false;
 			}
@@ -695,7 +695,7 @@ namespace OpenDental {
 					cell=new ODGridCell(Providers.GetAbbr(Proc.ProvNum));
 					row.Cells.Add(cell);
 					//Clinic
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						cell=new ODGridCell(Clinics.GetAbbr(Proc.ClinicNum));
 						row.Cells.Add(cell);
 					}
@@ -728,7 +728,7 @@ namespace OpenDental {
 					cell=new ODGridCell("");
 					row.Cells.Add(cell);
 					//Clinic
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						cell=new ODGridCell("");
 						row.Cells.Add(cell);
 					}
@@ -756,7 +756,7 @@ namespace OpenDental {
 					cell=new ODGridCell(Providers.GetAbbr(Adj.ProvNum));
 					row.Cells.Add(cell);
 					//Clinic
-					if(PrefC.HasClinicsEnabled) {
+					if(Preferences.HasClinicsEnabled) {
 						cell=new ODGridCell(Clinics.GetAbbr(Adj.ClinicNum));
 						row.Cells.Add(cell);
 					}

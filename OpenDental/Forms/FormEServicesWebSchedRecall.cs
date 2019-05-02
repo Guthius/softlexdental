@@ -58,7 +58,7 @@ namespace OpenDental {
 			else if(radioSendToEmailNoPreferred.Checked) {
 				sendType=WebSchedAutomaticSend.SendToEmailNoPreferred;
 			}
-			WebSchedAutomaticSend beforeEnum=(WebSchedAutomaticSend)PrefC.GetInt(PrefName.WebSchedAutomaticSendSetting);
+			WebSchedAutomaticSend beforeEnum=(WebSchedAutomaticSend)Preferences.GetInt(PrefName.WebSchedAutomaticSendSetting);
 			if(Prefs.UpdateInt(PrefName.WebSchedAutomaticSendSetting,(int)sendType)) {
 				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"WebSched automated email preference changed from "+beforeEnum.ToString()+" to "+sendType.ToString()+".");
 			}
@@ -66,11 +66,11 @@ namespace OpenDental {
 			if(radioDoNotSendText.Checked) {
 				sendTypeText=WebSchedAutomaticSend.DoNotSend;
 			}
-			beforeEnum=(WebSchedAutomaticSend)PrefC.GetInt(PrefName.WebSchedAutomaticSendTextSetting);
+			beforeEnum=(WebSchedAutomaticSend)Preferences.GetInt(PrefName.WebSchedAutomaticSendTextSetting);
 			if(Prefs.UpdateInt(PrefName.WebSchedAutomaticSendTextSetting,(int)sendTypeText)) {
 				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"WebSched automated text preference changed from "+beforeEnum.ToString()+" to "+sendTypeText.ToString()+".");
 			}
-			int beforeInt=PrefC.GetInt(PrefName.WebSchedTextsPerBatch);
+			int beforeInt=Preferences.GetInt(PrefName.WebSchedTextsPerBatch);
 			int afterInt=PIn.Int(textWebSchedPerBatch.Text);
 			if(Prefs.UpdateInt(PrefName.WebSchedTextsPerBatch,afterInt)) {
 				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"WebSched batch size preference changed from "+beforeInt.ToString()+" to "+afterInt.ToString()+".");
@@ -84,7 +84,7 @@ namespace OpenDental {
 		}
 
 		private void FillTabWebSchedRecall() {
-			switch(PrefC.GetInt(PrefName.WebSchedAutomaticSendSetting)) {
+			switch(Preferences.GetInt(PrefName.WebSchedAutomaticSendSetting)) {
 				case (int)WebSchedAutomaticSend.DoNotSend:
 					radioDoNotSend.Checked=true;
 					break;
@@ -98,7 +98,7 @@ namespace OpenDental {
 					radioSendToEmailOnlyPreferred.Checked=true;
 					break;
 			}
-			switch(PrefC.GetInt(PrefName.WebSchedAutomaticSendTextSetting)) {
+			switch(Preferences.GetInt(PrefName.WebSchedAutomaticSendTextSetting)) {
 				case (int)WebSchedAutomaticSend.DoNotSend:
 					radioDoNotSendText.Checked=true;
 					break;
@@ -106,7 +106,7 @@ namespace OpenDental {
 					radioSendText.Checked=true;
 					break;
 			}
-			textWebSchedPerBatch.Text=PrefC.GetString(PrefName.WebSchedTextsPerBatch);
+			textWebSchedPerBatch.Text=Preferences.GetString(PrefName.WebSchedTextsPerBatch);
 			textWebSchedDateStart.Text=DateTime.Today.ToShortDateString();
 			comboWebSchedClinic.Items.Clear();
 			comboWebSchedClinic.Items.Add(Lan.g(this,"Unassigned"));
@@ -122,18 +122,18 @@ namespace OpenDental {
 				comboWebSchedProviders.Items.Add(_listWebSchedProviders[i].GetLongDesc());
 			}
 			comboWebSchedProviders.SelectedIndex=0;
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				labelWebSchedClinic.Visible=false;
 				comboWebSchedClinic.Visible=false;
 				butWebSchedPickClinic.Visible=false;
 			}
-			FillListBoxWebSchedBlockoutTypes(PrefC.GetString(PrefName.WebSchedRecallIgnoreBlockoutTypes).Split(new char[] { ',' }),listboxWebSchedRecallIgnoreBlockoutTypes);
+			FillListBoxWebSchedBlockoutTypes(Preferences.GetString(PrefName.WebSchedRecallIgnoreBlockoutTypes).Split(new char[] { ',' }),listboxWebSchedRecallIgnoreBlockoutTypes);
 			FillGridWebSchedRecallTypes();
 			FillGridWebSchedOperatories();
 			FillGridWebSchedTimeSlotsThreaded();
-			listBoxWebSchedProviderPref.SelectedIndex=PrefC.GetInt(PrefName.WebSchedProviderRule);
-			checkRecallAllowProvSelection.Checked=PrefC.GetBool(PrefName.WebSchedRecallAllowProvSelection);
-			long defaultStatus=PrefC.GetLong(PrefName.WebSchedRecallConfirmStatus);
+			listBoxWebSchedProviderPref.SelectedIndex=Preferences.GetInt(PrefName.WebSchedProviderRule);
+			checkRecallAllowProvSelection.Checked=Preferences.GetBool(PrefName.WebSchedRecallAllowProvSelection);
+			long defaultStatus=Preferences.GetLong(PrefName.WebSchedRecallConfirmStatus);
 			List<Def> listDefs=Defs.GetDefsForCategory(DefCat.ApptConfirmed,true);
 			for(int i=0;i<listDefs.Count;i++) {
 				int idx=comboWSRConfirmStatus.Items.Add(listDefs[i].ItemName);
@@ -143,7 +143,7 @@ namespace OpenDental {
 			}
 			comboWSRConfirmStatus.IndexSelectOrSetText(listDefs.ToList().FindIndex(x => x.DefNum==defaultStatus),
 			   () => { return defaultStatus==0 ? "" : Defs.GetName(DefCat.ApptConfirmed,defaultStatus)+" ("+Lan.g(this,"hidden")+")"; });
-			checkWSRDoubleBooking.Checked=PrefC.GetInt(PrefName.WebSchedRecallDoubleBooking)>0;//0 = Allow double booking, 1 = prevent
+			checkWSRDoubleBooking.Checked=Preferences.GetInt(PrefName.WebSchedRecallDoubleBooking)>0;//0 = Allow double booking, 1 = prevent
 		}
 
 		private void AuthorizeTabWebSchedRecall(bool allowEdit) {
@@ -176,7 +176,7 @@ namespace OpenDental {
 		}
 
 		private void butWebSchedRecallBlockouts_Click(object sender,EventArgs e) {
-			string[] arrayDefNums=PrefC.GetString(PrefName.WebSchedRecallIgnoreBlockoutTypes).Split(new char[] {','}); //comma-delimited list.
+			string[] arrayDefNums=Preferences.GetString(PrefName.WebSchedRecallIgnoreBlockoutTypes).Split(new char[] {','}); //comma-delimited list.
 			List<long> listBlockoutTypes=new List<long>();
 			foreach(string strDefNum in arrayDefNums) {
 				listBlockoutTypes.Add(PIn.Long(strDefNum));
@@ -267,14 +267,14 @@ namespace OpenDental {
 			_listWebSchedRecallOps=Operatories.GetOpsForWebSched();
 			int opNameWidth=170;
 			int clinicWidth=80;
-			if(!PrefC.HasClinicsEnabled) {
+			if(!Preferences.HasClinicsEnabled) {
 				opNameWidth+=clinicWidth;
 			}
 			gridWebSchedOperatories.BeginUpdate();
 			gridWebSchedOperatories.Columns.Clear();
 			gridWebSchedOperatories.Columns.Add(new ODGridColumn(Lan.g("TableOperatories","Op Name"),opNameWidth));
 			gridWebSchedOperatories.Columns.Add(new ODGridColumn(Lan.g("TableOperatories","Abbrev"),70));
-			if(PrefC.HasClinicsEnabled) {
+			if(Preferences.HasClinicsEnabled) {
 				gridWebSchedOperatories.Columns.Add(new ODGridColumn(Lan.g("TableOperatories","Clinic"),clinicWidth));
 			}
 			gridWebSchedOperatories.Columns.Add(new ODGridColumn(Lan.g("TableOperatories","Provider"),90));
@@ -285,7 +285,7 @@ namespace OpenDental {
 				row=new ODGridRow();
 				row.Cells.Add(_listWebSchedRecallOps[i].OpName);
 				row.Cells.Add(_listWebSchedRecallOps[i].Abbrev);
-				if(PrefC.HasClinicsEnabled) {
+				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add(Clinics.GetAbbr(_listWebSchedRecallOps[i].ClinicNum));
 				}
 				row.Cells.Add(Providers.GetAbbr(_listWebSchedRecallOps[i].ProvDentist));
@@ -458,17 +458,17 @@ namespace OpenDental {
 			List<string> listSetupErrors=new List<string>();
 			bool isEmailSendInvalid=false;
 			bool isTextSendInvalid=false;
-			if(PrefC.GetLong(PrefName.RecallDaysPast)==-1) {//Days Past field
+			if(Preferences.GetLong(PrefName.RecallDaysPast)==-1) {//Days Past field
 				listSetupErrors.Add("- "+Lan.g(this,"Days Past (e.g. 1095, blank, etc) field cannot be blank."));
 				isEmailSendInvalid=true;
 				isTextSendInvalid=true;
 			}
-			if(PrefC.GetLong(PrefName.RecallShowIfDaysFirstReminder)<1) {//Initial Reminder field
+			if(Preferences.GetLong(PrefName.RecallShowIfDaysFirstReminder)<1) {//Initial Reminder field
 				listSetupErrors.Add("- "+Lan.g(this,"Initial Reminder field has to be greater than 0."));
 				isEmailSendInvalid=true;
 				isTextSendInvalid=true;
 			}
-			if(PrefC.GetLong(PrefName.RecallShowIfDaysSecondReminder)<1) {//Second(or more) Reminder field
+			if(Preferences.GetLong(PrefName.RecallShowIfDaysSecondReminder)<1) {//Second(or more) Reminder field
 				listSetupErrors.Add("- "+Lan.g(this,"Second (or more) Reminder field has to be greater than 0."));
 				isEmailSendInvalid=true;
 				isTextSendInvalid=true;

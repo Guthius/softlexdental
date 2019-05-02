@@ -157,15 +157,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Clearinghouse into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Clearinghouse clearinghouse,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				clearinghouse.ClearinghouseNum=ReplicationServers.GetKey("clearinghouse","ClearinghouseNum");
 			}
 			string command="INSERT INTO clearinghouse (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="ClearinghouseNum,";
 			}
 			command+="Description,ExportPath,Payors,Eformat,ISA05,SenderTIN,ISA07,ISA08,ISA15,Password,ResponsePath,CommBridge,ClientProgram,LastBatchNumber,ModemPort,LoginID,SenderName,SenderTelephone,GS03,ISA02,ISA04,ISA16,SeparatorData,SeparatorSegment,ClinicNum,HqClearinghouseNum,IsEraDownloadAllowed,IsClaimExportAllowed,IsAttachmentSendAllowed) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(clearinghouse.ClearinghouseNum)+",";
 			}
 			command+=
@@ -206,7 +206,7 @@ namespace OpenDentBusiness.Crud{
 				clearinghouse.Payors="";
 			}
 			OdSqlParameter paramPayors=new OdSqlParameter("paramPayors",OdDbType.Text,POut.StringParam(clearinghouse.Payors));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramExportPath,paramPayors);
 			}
 			else {

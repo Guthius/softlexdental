@@ -121,15 +121,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PayConnectResponseWeb into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(PayConnectResponseWeb payConnectResponseWeb,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				payConnectResponseWeb.PayConnectResponseWebNum=ReplicationServers.GetKey("payconnectresponseweb","PayConnectResponseWebNum");
 			}
 			string command="INSERT INTO payconnectresponseweb (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PayConnectResponseWebNum,";
 			}
 			command+="PatNum,PayNum,CCSource,Amount,PayNote,AccountToken,PaymentToken,ProcessingStatus,DateTimeEntry,DateTimePending,DateTimeCompleted,DateTimeExpired,DateTimeLastError,LastResponseStr) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(payConnectResponseWeb.PayConnectResponseWebNum)+",";
 			}
 			command+=
@@ -151,7 +151,7 @@ namespace OpenDentBusiness.Crud{
 				payConnectResponseWeb.LastResponseStr="";
 			}
 			OdSqlParameter paramLastResponseStr=new OdSqlParameter("paramLastResponseStr",OdDbType.Text,POut.StringParam(payConnectResponseWeb.LastResponseStr));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramLastResponseStr);
 			}
 			else {

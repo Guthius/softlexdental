@@ -85,15 +85,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one LanguageForeign into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(LanguageForeign languageForeign,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				languageForeign.LanguageForeignNum=ReplicationServers.GetKey("languageforeign","LanguageForeignNum");
 			}
 			string command="INSERT INTO languageforeign (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="LanguageForeignNum,";
 			}
 			command+="ClassType,English,Culture,Translation,Comments) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(languageForeign.LanguageForeignNum)+",";
 			}
 			command+=
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 				languageForeign.Comments="";
 			}
 			OdSqlParameter paramComments=new OdSqlParameter("paramComments",OdDbType.Text,POut.StringParam(languageForeign.Comments));
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command,paramClassType,paramEnglish,paramTranslation,paramComments);
 			}
 			else {

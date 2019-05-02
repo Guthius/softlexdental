@@ -345,12 +345,12 @@ namespace OpenDentBusiness
         {
             //No need to check RemotingRole; no call to db.
             string wikiPath;
-            if (PrefC.AtoZfolderUsed == DataStorageType.InDatabase)
+            if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
             {
                 throw new ApplicationException(Lans.g("WikiPages", "Must be using AtoZ folders."));
             }
             wikiPath = CloudStorage.PathTidy(Path.Combine(ImageStore.GetPreferredAtoZpath(), "Wiki"));
-            if (PrefC.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(wikiPath))
+            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(wikiPath))
             {
                 Directory.CreateDirectory(wikiPath);
             }

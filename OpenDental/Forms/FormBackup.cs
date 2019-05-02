@@ -661,12 +661,12 @@ namespace OpenDental {
 		private void FormBackup_Load(object sender, System.EventArgs e) {
 			#region Backup Tab
 			//already include the \
-			checkExcludeImages.Checked=PrefC.GetBool(PrefName.BackupExcludeImageFolder);
-			textBackupFromPath.Text=PrefC.GetString(PrefName.BackupFromPath);
-			textBackupToPath.Text=PrefC.GetString(PrefName.BackupToPath);
-			textBackupRestoreFromPath.Text=PrefC.GetString(PrefName.BackupRestoreFromPath);
-			textBackupRestoreToPath.Text=PrefC.GetString(PrefName.BackupRestoreToPath);
-			textBackupRestoreAtoZToPath.Text=PrefC.GetString(PrefName.BackupRestoreAtoZToPath);
+			checkExcludeImages.Checked=Preferences.GetBool(PrefName.BackupExcludeImageFolder);
+			textBackupFromPath.Text=Preferences.GetString(PrefName.BackupFromPath);
+			textBackupToPath.Text=Preferences.GetString(PrefName.BackupToPath);
+			textBackupRestoreFromPath.Text=Preferences.GetString(PrefName.BackupRestoreFromPath);
+			textBackupRestoreToPath.Text=Preferences.GetString(PrefName.BackupRestoreToPath);
+			textBackupRestoreAtoZToPath.Text=Preferences.GetString(PrefName.BackupRestoreAtoZToPath);
 			//usesInternalImages=(PrefC.GetString(PrefName.ImageStore)=="OpenDental.Imaging.SqlStore");
 			textBackupRestoreAtoZToPath.Enabled=ShouldUseAtoZFolder();
 			butBrowseRestoreAtoZTo.Enabled=ShouldUseAtoZFolder();
@@ -676,14 +676,14 @@ namespace OpenDental {
 			#endregion
 			#region Archive Tab
 			string decryptedPass;
-            Encryption.TryDecrypt(PrefC.GetString(PrefName.ArchivePassHash),out decryptedPass);
+            Encryption.TryDecrypt(Preferences.GetString(PrefName.ArchivePassHash),out decryptedPass);
 			textArchivePass.Text=decryptedPass;
 			textArchivePass.PasswordChar=(textArchivePass.Text=="" ? default(char) : '*');
-			textArchiveServerName.Text=PrefC.GetString(PrefName.ArchiveServerName);
-			textArchiveUser.Text=PrefC.GetString(PrefName.ArchiveUserName);
+			textArchiveServerName.Text=Preferences.GetString(PrefName.ArchiveServerName);
+			textArchiveUser.Text=Preferences.GetString(PrefName.ArchiveUserName);
 			//If pref is set, use it.  Otherwise, 3 years ago.
-			dateTimeArchive.Value=PrefC.GetDate(PrefName.ArchiveDate)==DateTime.MinValue?DateTime.Today.AddYears(-3):PrefC.GetDate(PrefName.ArchiveDate);
-			if(PrefC.GetBool(PrefName.RandomPrimaryKeys) || ReplicationServers.Server_id!=0) {//show warning if replication is enabled
+			dateTimeArchive.Value=Preferences.GetDate(PrefName.ArchiveDate)==DateTime.MinValue?DateTime.Today.AddYears(-3):Preferences.GetDate(PrefName.ArchiveDate);
+			if(Preferences.GetBool(PrefName.RandomPrimaryKeys) || ReplicationServers.Server_id!=0) {//show warning if replication is enabled
 				butArchive.Enabled=false;
 				labelWarning.Visible=true;
 			}
@@ -695,7 +695,7 @@ namespace OpenDental {
 		#region Backup Tab
 
 		private bool ShouldUseAtoZFolder() {
-			return (PrefC.AtoZfolderUsed==DataStorageType.LocalAtoZ //&& !usesInternalImages 
+			return (Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ //&& !usesInternalImages 
 				&& !checkExcludeImages.Checked);
 		}
 
@@ -773,11 +773,11 @@ namespace OpenDental {
 				return;
 			}
 			//test saving defaults
-			if(textBackupFromPath.Text!=PrefC.GetString(PrefName.BackupFromPath)
-				|| textBackupToPath.Text!=PrefC.GetString(PrefName.BackupToPath)
-				|| textBackupRestoreFromPath.Text!=PrefC.GetString(PrefName.BackupRestoreFromPath)
-				|| textBackupRestoreToPath.Text!=PrefC.GetString(PrefName.BackupRestoreToPath)
-				|| textBackupRestoreAtoZToPath.Text!=PrefC.GetString(PrefName.BackupRestoreAtoZToPath))
+			if(textBackupFromPath.Text!=Preferences.GetString(PrefName.BackupFromPath)
+				|| textBackupToPath.Text!=Preferences.GetString(PrefName.BackupToPath)
+				|| textBackupRestoreFromPath.Text!=Preferences.GetString(PrefName.BackupRestoreFromPath)
+				|| textBackupRestoreToPath.Text!=Preferences.GetString(PrefName.BackupRestoreToPath)
+				|| textBackupRestoreAtoZToPath.Text!=Preferences.GetString(PrefName.BackupRestoreAtoZToPath))
 			{
 				if(MsgBox.Show(this,true,"Set as default?")){
 					Prefs.UpdateString(PrefName.BackupFromPath,textBackupFromPath.Text);
@@ -1145,7 +1145,7 @@ namespace OpenDental {
 					return;
 				}
 			}
-			Version programVersionDb=new Version(PrefC.GetStringNoCache(PrefName.ProgramVersion));
+			Version programVersionDb=new Version(Preferences.GetStringNoCache(PrefName.ProgramVersion));
 			Version programVersionCur=new Version(Application.ProductVersion);
 			if(programVersionDb!=programVersionCur) {
 				MsgBox.Show(this,"The restored database version is different than the version installed and requires a restart.  The program will now close.");
@@ -1182,12 +1182,12 @@ namespace OpenDental {
 				MessageBox.Show(Lan.g(this,"Paths must end with ")+Path.DirectorySeparatorChar+".");
 				return;
 			}
-			if(textBackupFromPath.Text!=PrefC.GetString(PrefName.BackupFromPath)
-				|| textBackupToPath.Text!=PrefC.GetString(PrefName.BackupToPath)
-				|| textBackupRestoreFromPath.Text!=PrefC.GetString(PrefName.BackupRestoreFromPath)
-				|| textBackupRestoreToPath.Text!=PrefC.GetString(PrefName.BackupRestoreToPath)
-				|| textBackupRestoreAtoZToPath.Text!=PrefC.GetString(PrefName.BackupRestoreAtoZToPath)
-				|| checkExcludeImages.Checked!=PrefC.GetBool(PrefName.BackupExcludeImageFolder))
+			if(textBackupFromPath.Text!=Preferences.GetString(PrefName.BackupFromPath)
+				|| textBackupToPath.Text!=Preferences.GetString(PrefName.BackupToPath)
+				|| textBackupRestoreFromPath.Text!=Preferences.GetString(PrefName.BackupRestoreFromPath)
+				|| textBackupRestoreToPath.Text!=Preferences.GetString(PrefName.BackupRestoreToPath)
+				|| textBackupRestoreAtoZToPath.Text!=Preferences.GetString(PrefName.BackupRestoreAtoZToPath)
+				|| checkExcludeImages.Checked!=Preferences.GetBool(PrefName.BackupExcludeImageFolder))
 			{
 				Prefs.UpdateString(PrefName.BackupFromPath,textBackupFromPath.Text);
 				Prefs.UpdateString(PrefName.BackupToPath,textBackupToPath.Text);

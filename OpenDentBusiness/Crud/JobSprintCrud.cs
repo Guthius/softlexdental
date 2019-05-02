@@ -94,15 +94,15 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one JobSprint into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(JobSprint jobSprint,bool useExistingPK) {
-			if(!useExistingPK && PrefC.RandomKeys) {
+			if(!useExistingPK && Preferences.RandomKeys) {
 				jobSprint.JobSprintNum=ReplicationServers.GetKey("jobsprint","JobSprintNum");
 			}
 			string command="INSERT INTO jobsprint (";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+="JobSprintNum,";
 			}
 			command+="Title,Note,DateStart,DateEndTarget,DateEndActual,JobPercent,HoursAverageDevelopment,HoursAverageBreak) VALUES(";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				command+=POut.Long(jobSprint.JobSprintNum)+",";
 			}
 			command+=
@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.Double(jobSprint.JobPercent)+"',"
 				+"'"+POut.Double(jobSprint.HoursAverageDevelopment)+"',"
 				+"'"+POut.Double(jobSprint.HoursAverageBreak)+"')";
-			if(useExistingPK || PrefC.RandomKeys) {
+			if(useExistingPK || Preferences.RandomKeys) {
 				Db.NonQ(command);
 			}
 			else {

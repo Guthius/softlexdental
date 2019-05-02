@@ -622,7 +622,7 @@ namespace OpenDental{
 			_listInsPayAsTotal=ClaimProcs.GetByTotForPats(new List<long> { _patNumCur });
 			_listClaimProcs=ClaimProcs.GetForProcs(_listProcedures.Select(x => x.ProcNum).ToList());
 			labelUnallocated.Visible=_doShowUnallocatedLabel;
-			if(PrefC.GetInt(PrefName.RigorousAdjustments)==(int)RigorousAdjustments.DontEnforce) {
+			if(Preferences.GetInt(PrefName.RigorousAdjustments)==(int)RigorousAdjustments.DontEnforce) {
 				radioIncludeAllCredits.Checked=true;
 			}
 			else {
