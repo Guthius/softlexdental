@@ -419,6 +419,9 @@
     <Compile Include="Forms Reports\FormRpProcOverpaid.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\FormAccountingLock.Designer.cs">
+      <DependentUpon>FormAccountingLock.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormAdjust.designer.cs">
       <DependentUpon>FormAdjust.cs</DependentUpon>
     </Compile>
