@@ -1296,7 +1296,6 @@
     <Compile Include="Db Multi Table\MiscData.cs" />
     <Compile Include="Db\Enumerations.cs" />
     <Compile Include="Data Interface\Lans.cs" />
-    <Compile Include="Logic\aaLogic.cs" />
     <Compile Include="Db Multi Table\AccountModules.cs" />
     <Compile Include="Data Interface\Appointments.cs" />
     <Compile Include="Logic\BenefitLogic.cs" />
