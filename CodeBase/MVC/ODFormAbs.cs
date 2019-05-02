@@ -44,15 +44,14 @@ namespace CodeBase.MVC
 
         protected override void OnShown(EventArgs e)
         {
-            HasShown = true;//Occurs after Load(...)
-                             //This form has just invoked the "Shown" event which probably means it is important and needs to actually show to the user.
-                             //There are times in the application that a progress window (e.g. splash screen) will be showing to the user and a new form is trying to show.
-                             //Therefore, forcefully invoke "Activate" if there is a progress window currently on the screen.
-                             //Invoking Activate will cause the new form to show above the progress window (if TopMost=false) even though it is in another thread.
+            HasShown = true;
+
+            // If a progress form is active, use Activate to place this form on top of it.
             if (ODProgress.FormProgressActive != null)
             {
-                this.Activate();
+                Activate();
             }
+
             base.OnShown(e);
         }
 
