@@ -5510,8 +5510,8 @@ namespace OpenDental
                 {
                     return;
                 }
-                procCodeBroke = formAB.SelectedProcCode;
-                postBreakSelection = formAB.FormApptBreakSelection;
+                procCodeBroke = formAB.ProcedureCode;
+                postBreakSelection = formAB.Selection;
             }
             else if (!MsgBox.Show(this, true, "Break appointment?"))
             {

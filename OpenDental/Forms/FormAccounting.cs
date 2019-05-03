@@ -204,6 +204,7 @@ namespace OpenDental
             this.gridMain.Size = new System.Drawing.Size(492, 450);
             this.gridMain.TabIndex = 1;
             this.gridMain.Title = "Chart of Accounts";
+            this.gridMain.TitleVisible = true;
             this.gridMain.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
             // 
             // ToolBarMain
@@ -211,7 +212,7 @@ namespace OpenDental
             this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
             this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
             this.ToolBarMain.Name = "ToolBarMain";
-            this.ToolBarMain.Size = new System.Drawing.Size(492, 27);
+            this.ToolBarMain.Size = new System.Drawing.Size(492, 30);
             this.ToolBarMain.TabIndex = 0;
             this.ToolBarMain.ButtonClick += new System.EventHandler<OpenDental.UI.ODToolBarButtonClickEventArgs>(this.ToolBarMain_ButtonClick);
             // 

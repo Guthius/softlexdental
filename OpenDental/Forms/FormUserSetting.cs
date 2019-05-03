@@ -2,43 +2,48 @@ using OpenDentBusiness;
 using System;
 using System.Linq;
 using System.Windows.Forms;
-using CodeBase;
 
-namespace OpenDental {
-	/// <summary>
-	/// This form (per Nathan) should be used for any future features that could be categorized as a user setting. The intent of this class was to
-	/// create a place for specific user settings.
-	/// </summary>
-	public partial class FormUserSetting:ODForm {
-		private UserOdPref _suppressLogOffMessage;
+namespace OpenDental
+{
+    public partial class FormUserSetting : FormBase
+    {
+        UserOdPref suppressLogOffMessage;
 
-		public FormUserSetting() {
-			InitializeComponent();
-			Lan.F(this);
-		}
-		private void FormUserSetting_Load(object sender,EventArgs e) {
-			_suppressLogOffMessage=UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum,UserOdFkeyType.SuppressLogOffMessage).FirstOrDefault();
-			if(_suppressLogOffMessage!=null) {//Does exist in the database
-				checkSuppressMessage.Checked=true;
-			}
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormUserSetting"/> class.
+        /// </summary>
+        public FormUserSetting() => InitializeComponent();
 
-		private void butOK_Click(object sender,EventArgs e) {
-			if(checkSuppressMessage.Checked && _suppressLogOffMessage==null) {
-				UserOdPrefs.Insert(new UserOdPref() {
-					UserNum=Security.CurUser.UserNum,
-					FkeyType=UserOdFkeyType.SuppressLogOffMessage
-				});
-			}
-			else if(!checkSuppressMessage.Checked && _suppressLogOffMessage!=null) {
-				UserOdPrefs.Delete(_suppressLogOffMessage.UserOdPrefNum);
-			}
-			DialogResult=DialogResult.OK;
-		}
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormUserSetting_Load(object sender, EventArgs e)
+        {
+            suppressLogOffMessage = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum, UserOdFkeyType.SuppressLogOffMessage).FirstOrDefault();
+            if (suppressLogOffMessage != null)
+            {
+                suppressMessageCheckBox.Checked = true;
+            }
+        }
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
-
-	}
+        /// <summary>
+        /// Saves the preferences and closes the form.
+        /// </summary>
+        void acceptButton_Click(object sender, EventArgs e)
+        {
+            if (suppressMessageCheckBox.Checked && suppressLogOffMessage == null)
+            {
+                UserOdPrefs.Insert(new UserOdPref()
+                {
+                    UserNum = Security.CurUser.UserNum,
+                    FkeyType = UserOdFkeyType.SuppressLogOffMessage
+                });
+            }
+            else if (!suppressMessageCheckBox.Checked && suppressLogOffMessage != null)
+            {
+                UserOdPrefs.Delete(suppressLogOffMessage.UserOdPrefNum);
+            }
+            DialogResult = DialogResult.OK;
+        }
+    }
 }

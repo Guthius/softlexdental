@@ -259,7 +259,7 @@
     <value>Revert page to currently selected revision?</value>
   </data>
   <data name="ColumnColumnName" xml:space="preserve">
-    <value>ColumnName</value>
+    <value>Column Name</value>
   </data>
   <data name="ColumnInputText" xml:space="preserve">
     <value>Input Text</value>
@@ -359,5 +359,20 @@
   </data>
   <data name="AllergySetup" xml:space="preserve">
     <value>Allergy Setup</value>
+  </data>
+  <data name="ColumnDateTime" xml:space="preserve">
+    <value>Date Time</value>
+  </data>
+  <data name="ColumnLogText" xml:space="preserve">
+    <value>Log Text</value>
+  </data>
+  <data name="ColumnPermission" xml:space="preserve">
+    <value>Permission</value>
+  </data>
+  <data name="ProblemRefreshingAuditTrail" xml:space="preserve">
+    <value>There was a problem refreshing the Audit Trail with the current filters.</value>
+  </data>
+  <data name="UserUnknown" xml:space="preserve">
+    <value>&lt;Unknown&gt;</value>
   </data>
 </root>

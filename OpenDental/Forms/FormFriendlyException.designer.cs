@@ -124,7 +124,7 @@ namespace OpenDental
             // printButton
             // 
             this.printButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.printButton.Image = global::OpenDental.Properties.Resources.IconPrint;
+            this.printButton.Image = global::OpenDental.Properties.Resources.IconPrinter;
             this.printButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.printButton.Location = new System.Drawing.Point(263, 320);
             this.printButton.Name = "printButton";

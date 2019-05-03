@@ -7,6 +7,12 @@ namespace OpenDental
     public partial class FormAccountingLock : FormBase
     {
         /// <summary>
+        /// Initializes a new instance of the <see cref="FormAccountingLock"/> class.
+        /// </summary>
+        public FormAccountingLock() => InitializeComponent();
+        
+
+        /// <summary>
         /// Loads the form.
         /// </summary>
         void FormAccountingLock_Load(object sender, EventArgs e)

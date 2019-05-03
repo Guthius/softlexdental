@@ -1,165 +1,156 @@
-namespace OpenDental{
-	partial class FormApptBreak {
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+namespace OpenDental
+{
+    partial class FormApptBreak
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing) {
-			if(disposing && (components != null)) {
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormApptBreak));
-			this.butCancel = new OpenDental.UI.Button();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.radioCancelled = new System.Windows.Forms.RadioButton();
-			this.radioMissed = new System.Windows.Forms.RadioButton();
-			this.butUnsched = new OpenDental.UI.Button();
-			this.butPinboard = new OpenDental.UI.Button();
-			this.butApptBook = new OpenDental.UI.Button();
-			this.groupBox1.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(123, 149);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// groupBox1
-			// 
-			this.groupBox1.Controls.Add(this.radioMissed);
-			this.groupBox1.Controls.Add(this.radioCancelled);
-			this.groupBox1.Location = new System.Drawing.Point(7, 2);
-			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(191, 47);
-			this.groupBox1.TabIndex = 3;
-			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Broken Procedure Type";
-			// 
-			// radioCancelled
-			// 
-			this.radioCancelled.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioCancelled.Location = new System.Drawing.Point(87, 19);
-			this.radioCancelled.Name = "radioCancelled";
-			this.radioCancelled.Size = new System.Drawing.Size(93, 17);
-			this.radioCancelled.TabIndex = 1;
-			this.radioCancelled.TabStop = true;
-			this.radioCancelled.Text = "Cancelled";
-			this.radioCancelled.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioCancelled.UseVisualStyleBackColor = true;
-			// 
-			// radioMissed
-			// 
-			this.radioMissed.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioMissed.Location = new System.Drawing.Point(6, 19);
-			this.radioMissed.Name = "radioMissed";
-			this.radioMissed.Size = new System.Drawing.Size(75, 17);
-			this.radioMissed.TabIndex = 0;
-			this.radioMissed.TabStop = true;
-			this.radioMissed.Text = "Missed";
-			this.radioMissed.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.radioMissed.UseVisualStyleBackColor = true;
-			// 
-			// butUnsched
-			// 
-			this.butUnsched.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butUnsched.Autosize = true;
-			this.butUnsched.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butUnsched.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butUnsched.CornerRadius = 4F;
-			this.butUnsched.Location = new System.Drawing.Point(7, 55);
-			this.butUnsched.Name = "butUnsched";
-			this.butUnsched.Size = new System.Drawing.Size(191, 23);
-			this.butUnsched.TabIndex = 4;
-			this.butUnsched.Text = "Send to Unscheduled List";
-			this.butUnsched.UseVisualStyleBackColor = true;
-			this.butUnsched.Click += new System.EventHandler(this.butUnsched_Click);
-			// 
-			// butPinboard
-			// 
-			this.butPinboard.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butPinboard.Autosize = true;
-			this.butPinboard.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPinboard.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPinboard.CornerRadius = 4F;
-			this.butPinboard.Location = new System.Drawing.Point(7, 84);
-			this.butPinboard.Name = "butPinboard";
-			this.butPinboard.Size = new System.Drawing.Size(191, 23);
-			this.butPinboard.TabIndex = 5;
-			this.butPinboard.Text = "Copy to Pinboard";
-			this.butPinboard.UseVisualStyleBackColor = true;
-			this.butPinboard.Click += new System.EventHandler(this.butPinboard_Click);
-			// 
-			// butApptBook
-			// 
-			this.butApptBook.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butApptBook.Autosize = true;
-			this.butApptBook.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butApptBook.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butApptBook.CornerRadius = 4F;
-			this.butApptBook.Location = new System.Drawing.Point(7, 113);
-			this.butApptBook.Name = "butApptBook";
-			this.butApptBook.Size = new System.Drawing.Size(191, 23);
-			this.butApptBook.TabIndex = 6;
-			this.butApptBook.Text = "Leave on Appt Book";
-			this.butApptBook.UseVisualStyleBackColor = true;
-			this.butApptBook.Click += new System.EventHandler(this.butApptBook_Click);
-			// 
-			// FormApptBreak
-			// 
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(206, 185);
-			this.ControlBox = false;
-			this.Controls.Add(this.butApptBook);
-			this.Controls.Add(this.butPinboard);
-			this.Controls.Add(this.butUnsched);
-			this.Controls.Add(this.groupBox1);
-			this.Controls.Add(this.butCancel);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MinimumSize = new System.Drawing.Size(0, 0);
-			this.Name = "FormApptBreak";
-			this.Text = "Broken Appt Options";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormApptBreak_FormClosing);
-			this.Load += new System.EventHandler(this.FormApptBreak_Load);
-			this.groupBox1.ResumeLayout(false);
-			this.ResumeLayout(false);
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormApptBreak));
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.typeGroupBox = new System.Windows.Forms.GroupBox();
+            this.radioMissed = new System.Windows.Forms.RadioButton();
+            this.radioCancelled = new System.Windows.Forms.RadioButton();
+            this.unscheduledListButton = new System.Windows.Forms.Button();
+            this.pinboardButton = new System.Windows.Forms.Button();
+            this.appointmentBookButton = new System.Windows.Forms.Button();
+            this.typeGroupBox.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(131, 218);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(110, 30);
+            this.cancelButton.TabIndex = 4;
+            this.cancelButton.Text = "&Cancel";
+            // 
+            // typeGroupBox
+            // 
+            this.typeGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.typeGroupBox.Controls.Add(this.radioMissed);
+            this.typeGroupBox.Controls.Add(this.radioCancelled);
+            this.typeGroupBox.Location = new System.Drawing.Point(13, 19);
+            this.typeGroupBox.Name = "typeGroupBox";
+            this.typeGroupBox.Padding = new System.Windows.Forms.Padding(5);
+            this.typeGroupBox.Size = new System.Drawing.Size(228, 60);
+            this.typeGroupBox.TabIndex = 0;
+            this.typeGroupBox.TabStop = false;
+            this.typeGroupBox.Text = "Broken Procedure Type";
+            // 
+            // radioMissed
+            // 
+            this.radioMissed.AutoSize = true;
+            this.radioMissed.Location = new System.Drawing.Point(8, 24);
+            this.radioMissed.Name = "radioMissed";
+            this.radioMissed.Size = new System.Drawing.Size(62, 19);
+            this.radioMissed.TabIndex = 0;
+            this.radioMissed.TabStop = true;
+            this.radioMissed.Text = "Missed";
+            this.radioMissed.UseVisualStyleBackColor = true;
+            // 
+            // radioCancelled
+            // 
+            this.radioCancelled.AutoSize = true;
+            this.radioCancelled.Location = new System.Drawing.Point(76, 24);
+            this.radioCancelled.Name = "radioCancelled";
+            this.radioCancelled.Size = new System.Drawing.Size(77, 19);
+            this.radioCancelled.TabIndex = 1;
+            this.radioCancelled.TabStop = true;
+            this.radioCancelled.Text = "Cancelled";
+            this.radioCancelled.UseVisualStyleBackColor = true;
+            // 
+            // unscheduledListButton
+            // 
+            this.unscheduledListButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.unscheduledListButton.Location = new System.Drawing.Point(13, 85);
+            this.unscheduledListButton.Name = "unscheduledListButton";
+            this.unscheduledListButton.Size = new System.Drawing.Size(228, 30);
+            this.unscheduledListButton.TabIndex = 1;
+            this.unscheduledListButton.Text = "Send to Unscheduled List";
+            this.unscheduledListButton.UseVisualStyleBackColor = true;
+            this.unscheduledListButton.Click += new System.EventHandler(this.unscheduledListButton_Click);
+            // 
+            // pinboardButton
+            // 
+            this.pinboardButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pinboardButton.Location = new System.Drawing.Point(13, 121);
+            this.pinboardButton.Name = "pinboardButton";
+            this.pinboardButton.Size = new System.Drawing.Size(228, 30);
+            this.pinboardButton.TabIndex = 2;
+            this.pinboardButton.Text = "Copy to Pinboard";
+            this.pinboardButton.UseVisualStyleBackColor = true;
+            this.pinboardButton.Click += new System.EventHandler(this.pinboardButton_Click);
+            // 
+            // appointmentBookButton
+            // 
+            this.appointmentBookButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.appointmentBookButton.Location = new System.Drawing.Point(13, 157);
+            this.appointmentBookButton.Name = "appointmentBookButton";
+            this.appointmentBookButton.Size = new System.Drawing.Size(228, 30);
+            this.appointmentBookButton.TabIndex = 3;
+            this.appointmentBookButton.Text = "Leave on Appt Book";
+            this.appointmentBookButton.UseVisualStyleBackColor = true;
+            this.appointmentBookButton.Click += new System.EventHandler(this.appointmentBookButton_Click);
+            // 
+            // FormApptBreak
+            // 
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(254, 261);
+            this.ControlBox = false;
+            this.Controls.Add(this.appointmentBookButton);
+            this.Controls.Add(this.pinboardButton);
+            this.Controls.Add(this.unscheduledListButton);
+            this.Controls.Add(this.typeGroupBox);
+            this.Controls.Add(this.cancelButton);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "FormApptBreak";
+            this.ShowInTaskbar = false;
+            this.Text = "Broken Appointment";
+            this.Load += new System.EventHandler(this.FormApptBreak_Load);
+            this.typeGroupBox.ResumeLayout(false);
+            this.typeGroupBox.PerformLayout();
+            this.ResumeLayout(false);
 
-		}
+        }
 
-		#endregion
-		private OpenDental.UI.Button butCancel;
-		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.RadioButton radioCancelled;
-		private System.Windows.Forms.RadioButton radioMissed;
-		private UI.Button butUnsched;
-		private UI.Button butPinboard;
-		private UI.Button butApptBook;
-	}
+        #endregion
+
+        private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.GroupBox typeGroupBox;
+        private System.Windows.Forms.RadioButton radioCancelled;
+        private System.Windows.Forms.RadioButton radioMissed;
+        private System.Windows.Forms.Button unscheduledListButton;
+        private System.Windows.Forms.Button pinboardButton;
+        private System.Windows.Forms.Button appointmentBookButton;
+    }
 }

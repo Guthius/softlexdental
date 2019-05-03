@@ -419,14 +419,29 @@
     <Compile Include="Forms Reports\FormRpProcOverpaid.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\FormAccountEdit.Designer.cs">
+      <DependentUpon>FormAccountEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormAccountingLock.Designer.cs">
       <DependentUpon>FormAccountingLock.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormAdjust.designer.cs">
       <DependentUpon>FormAdjust.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormAging.Designer.cs">
+      <DependentUpon>FormAging.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormApptEdit.designer.cs">
       <DependentUpon>FormApptEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormApptLists.Designer.cs">
+      <DependentUpon>FormApptLists.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormApptViews.Designer.cs">
+      <DependentUpon>FormApptViews.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormAuditOneType.Designer.cs">
+      <DependentUpon>FormAuditOneType.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormClaimEdit.designer.cs">
       <DependentUpon>FormClaimEdit.cs</DependentUpon>
@@ -579,6 +594,9 @@
     <Compile Include="Forms\FormTsiHistory.designer.cs">
       <DependentUpon>FormTsiHistory.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormZipSelect.Designer.cs">
+      <DependentUpon>FormZipSelect.cs</DependentUpon>
+    </Compile>
     <Compile Include="InternalTools\Job Manager\FormJobEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -622,6 +640,9 @@
     </Compile>
     <Compile Include="Misc\WebServiceRequest.cs" />
     <Compile Include="Module.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ODTimeBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Tables Old Grids\TableAutoItem.cs">

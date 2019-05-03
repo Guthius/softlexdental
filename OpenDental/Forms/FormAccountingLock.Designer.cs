@@ -7,16 +7,6 @@
         /// </summary>
         private System.ComponentModel.Container components = null;
 
-        ///<summary></summary>
-        public FormAccountingLock()
-        {
-            //
-            // Required for Windows Form Designer support
-            //
-            InitializeComponent();
-            Lan.F(this);
-        }
-
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
@@ -78,7 +68,7 @@
             // 
             // textDate
             // 
-            this.textDate.Location = new System.Drawing.Point(13, 149);
+            this.textDate.Location = new System.Drawing.Point(120, 149);
             this.textDate.Name = "textDate";
             this.textDate.Size = new System.Drawing.Size(100, 23);
             this.textDate.TabIndex = 3;

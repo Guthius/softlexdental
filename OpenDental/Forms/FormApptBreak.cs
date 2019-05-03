@@ -1,119 +1,173 @@
+using CodeBase;
+using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using OpenDentBusiness;
-using CodeBase;
 using System.Linq;
+using System.Windows.Forms;
 
-namespace OpenDental {
-	public partial class FormApptBreak:ODForm {
-		
-		public ApptBreakSelection FormApptBreakSelection;
-		public ProcedureCode SelectedProcCode;
-		private readonly Appointment _appt;
+namespace OpenDental
+{
+    public partial class FormApptBreak : FormBase
+    {
+        readonly Appointment appointment;
 
-		public FormApptBreak(Appointment appt) {
-			InitializeComponent();
-			Lan.F(this);
-			_appt=appt;
-		}
+        /// <summary>
+        /// Gets the selected break type.
+        /// </summary>
+        public ApptBreakSelection Selection { get; private set; } = ApptBreakSelection.None;
 
-		private void FormApptBreak_Load(object sender,EventArgs e) {
-			BrokenApptProcedure brokenApptProcs=(BrokenApptProcedure)Preferences.GetInt(PrefName.BrokenApptProcedure);
-			radioMissed.Enabled=brokenApptProcs.In(BrokenApptProcedure.Missed,BrokenApptProcedure.Both);
-			radioCancelled.Enabled=brokenApptProcs.In(BrokenApptProcedure.Cancelled,BrokenApptProcedure.Both);
-			if(radioMissed.Enabled && !radioCancelled.Enabled) {
-				radioMissed.Checked=true;
-			}
-			else if(!radioMissed.Enabled && radioCancelled.Enabled) {
-				radioMissed.Checked=true;
-			}
-		}
+        /// <summary>
+        /// Gets the selected procedure code.
+        /// </summary>
+        public ProcedureCode ProcedureCode => 
+            radioMissed.Checked ?
+                    ProcedureCodes.GetProcCode("D9986") :
+                    ProcedureCodes.GetProcCode("D9987");
 
-		private bool ValidateSelection() {
-			if(!radioMissed.Checked && !radioCancelled.Checked) {
-				MsgBox.Show(this,"Please select a broken procedure type.");
-				return false;
-			}
-			return true;
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormApptBreak"/> class.
+        /// </summary>
+        /// <param name="appointment">The appointment that was broken.</param>
+        public FormApptBreak(Appointment appointment)
+        {
+            InitializeComponent();
 
-		private void PromptTextASAPList() {
-			if(!Preferences.GetBool(PrefName.WebSchedAsapEnabled) || Appointments.RefreshASAP(0,0,_appt.ClinicNum,new List<ApptStatus>()).Count==0
-				|| !MsgBox.Show("Appointment",MsgBoxButtons.YesNo,"Text patients on the ASAP List and offer them this opening?")) 
-			{
-				return;
-			}
-			DateTime slotStart=AppointmentL.DateSelected.Date;//Midnight
-			DateTime slotEnd=AppointmentL.DateSelected.Date.AddDays(1);//Midnight tomorrow
-			//Loop through all other appts in the op to find a slot that will not overlap.
-			List<Appointment> listApptsInOp=Appointments.GetAppointmentsForOpsByPeriod(new List<long> { _appt.Op },_appt.AptDateTime);
-			foreach(Appointment otherAppt in listApptsInOp.Where(x => x.AptNum!=_appt.AptNum)) {
-				DateTime dateEndApt=otherAppt.AptDateTime.AddMinutes(otherAppt.Pattern.Length*5);
-				if(dateEndApt.Between(slotStart,_appt.AptDateTime)) {
-					slotStart=dateEndApt;
-				}
-				if(otherAppt.AptDateTime.Between(_appt.AptDateTime,slotEnd)) {
-					slotEnd=otherAppt.AptDateTime;
-				}
-			}
-			slotStart=ODMathLib.Max(slotStart,_appt.AptDateTime.AddHours(-1));
-			slotEnd=ODMathLib.Min(slotEnd,_appt.AptDateTime.AddHours(3));
-			FormASAP formASAP=new FormASAP(_appt.AptDateTime,slotStart,slotEnd,_appt.Op);
-			formASAP.ShowDialog();
-		}
+            this.appointment = appointment;
+        }
 
-		private void butUnsched_Click(object sender,EventArgs e) {;
-			if(!ValidateSelection()) {
-				return;
-			}
-			PromptTextASAPList();
-			FormApptBreakSelection=ApptBreakSelection.Unsched;
-			DialogResult=DialogResult.OK;
-		}
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormApptBreak_Load(object sender, EventArgs e)
+        {
+            var brokenApptProcs = (BrokenApptProcedure)Preferences.GetInt(PrefName.BrokenApptProcedure);
 
-		private void butPinboard_Click(object sender,EventArgs e) {
-			if(!ValidateSelection()) {
-				return;
-			}
-			PromptTextASAPList();
-			FormApptBreakSelection=ApptBreakSelection.Pinboard;
-			DialogResult=DialogResult.OK;
-		}
+            radioMissed.Enabled     = brokenApptProcs.In(BrokenApptProcedure.Missed, BrokenApptProcedure.Both);
+            radioCancelled.Enabled  = brokenApptProcs.In(BrokenApptProcedure.Cancelled, BrokenApptProcedure.Both);
 
-		private void butApptBook_Click(object sender,EventArgs e) {
-			if(!ValidateSelection()) {
-				return;
-			}
-			FormApptBreakSelection=ApptBreakSelection.ApptBook;
-			DialogResult=DialogResult.OK;
-		}
+            if (radioMissed.Enabled && !radioCancelled.Enabled)
+            {
+                radioMissed.Checked = true;
+            }
+            else if (!radioMissed.Enabled && radioCancelled.Enabled)
+            {
+                radioMissed.Checked = true;
+            }
+        }
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			FormApptBreakSelection=ApptBreakSelection.None;
-			DialogResult=DialogResult.Cancel;
-		}
+        /// <summary>
+        /// Checks whether a valid selection was mode.
+        /// </summary>
+        /// <returns>True if the selection is valid; otherwise, false.</returns>
+        bool ValidateSelection()
+        {
+            if (!radioMissed.Checked && !radioCancelled.Checked)
+            {
+                MessageBox.Show(
+                    "Please select a broken procedure type.",
+                    "Broken Appointment", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
 
-		private void FormApptBreak_FormClosing(object sender,FormClosingEventArgs e) {
-			if(this.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			SelectedProcCode=radioMissed.Checked?ProcedureCodes.GetProcCode("D9986"):ProcedureCodes.GetProcCode("D9987");
-		}
-	}
+                return false;
+            }
+            return true;
+        }
 
-	public enum ApptBreakSelection {
-		///<summary>0 - Default.</summary>
-		None,
-		///<summary>1</summary>
-		Unsched,
-		///<summary>2</summary>
-		Pinboard,
-		///<summary>3</summary>
-		ApptBook
-	}
+        /// <summary>
+        /// Asks the user if they want to offer this opening to patients on the ASAP list.
+        /// </summary>
+        void PromptTextASAPList()
+        {
+            // Check whether the webscheduler ASAP function is enabled and whether there are appointments on the ASAP list.
+            if (!Preferences.GetBool(PrefName.WebSchedAsapEnabled) ||  Appointments.RefreshASAP(0, 0, appointment.ClinicNum, new List<ApptStatus>()).Count == 0)
+            {
+                return;
+            }
 
+            var result =
+                MessageBox.Show(
+                    "Text patients on the ASAP List and offer them this opening?",
+                    "Broken Appointment", 
+                    MessageBoxButtons.YesNo, 
+                    MessageBoxIcon.Question);
+
+            if (result == DialogResult.No) return;
+
+            DateTime slotStart = AppointmentL.DateSelected.Date; // Midnight
+            DateTime slotEnd = AppointmentL.DateSelected.Date.AddDays(1); // Midnight tomorrow
+
+            // Loop through all other appts in the op to find a slot that will not overlap.
+            var appointmentsList = Appointments.GetAppointmentsForOpsByPeriod(new List<long> { appointment.Op }, appointment.AptDateTime);
+            foreach (var otherAppt in appointmentsList.Where(x => x.AptNum != appointment.AptNum))
+            {
+                var dateEndApt = otherAppt.AptDateTime.AddMinutes(otherAppt.Pattern.Length * 5);
+                if (dateEndApt.Between(slotStart, appointment.AptDateTime))
+                {
+                    slotStart = dateEndApt;
+                }
+                if (otherAppt.AptDateTime.Between(appointment.AptDateTime, slotEnd))
+                {
+                    slotEnd = otherAppt.AptDateTime;
+                }
+            }
+
+            slotStart = ODMathLib.Max(slotStart, appointment.AptDateTime.AddHours(-1));
+            slotEnd = ODMathLib.Min(slotEnd, appointment.AptDateTime.AddHours(3));
+
+            using (var formAsap = new FormASAP(appointment.AptDateTime, slotStart, slotEnd, appointment.Op))
+            {
+                formAsap.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// Move the appointment to the unscheduled list.
+        /// </summary>
+        void unscheduledListButton_Click(object sender, EventArgs e)
+        {
+            if (ValidateSelection())
+            {
+                PromptTextASAPList();
+
+                Selection = ApptBreakSelection.Unsched;
+                DialogResult = DialogResult.OK;
+            }
+        }
+
+        /// <summary>
+        /// Move the appointment to the pinboard.
+        /// </summary>
+        void pinboardButton_Click(object sender, EventArgs e)
+        {
+            if (ValidateSelection())
+            {
+                PromptTextASAPList();
+
+                Selection = ApptBreakSelection.Pinboard;
+                DialogResult = DialogResult.OK;
+            }
+        }
+
+        /// <summary>
+        /// Leave the appointment in the appointment book.
+        /// </summary>
+        void appointmentBookButton_Click(object sender, EventArgs e)
+        {
+            if (ValidateSelection())
+            {
+                Selection = ApptBreakSelection.ApptBook;
+                DialogResult = DialogResult.OK;
+            }
+        }
+    }
+
+    public enum ApptBreakSelection
+    {
+        None,
+        Unsched,
+        Pinboard,
+        ApptBook
+    }
 }

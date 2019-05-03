@@ -178,11 +178,20 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ColumnName.
+        ///   Looks up a localized string similar to Column Name.
         /// </summary>
         public static string ColumnColumnName {
             get {
                 return ResourceManager.GetString("ColumnColumnName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date Time.
+        /// </summary>
+        public static string ColumnDateTime {
+            get {
+                return ResourceManager.GetString("ColumnDateTime", resourceCulture);
             }
         }
         
@@ -205,11 +214,29 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Log Text.
+        /// </summary>
+        public static string ColumnLogText {
+            get {
+                return ResourceManager.GetString("ColumnLogText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Page Title.
         /// </summary>
         public static string ColumnPageTitle {
             get {
                 return ResourceManager.GetString("ColumnPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Permission.
+        /// </summary>
+        public static string ColumnPermission {
+            get {
+                return ResourceManager.GetString("ColumnPermission", resourceCulture);
             }
         }
         
@@ -408,6 +435,24 @@ namespace OpenDental.Translation {
         public static string PasswordsMustMatchAndNotBeEmpty {
             get {
                 return ResourceManager.GetString("PasswordsMustMatchAndNotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was a problem refreshing the Audit Trail with the current filters..
+        /// </summary>
+        public static string ProblemRefreshingAuditTrail {
+            get {
+                return ResourceManager.GetString("ProblemRefreshingAuditTrail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;Unknown&gt;.
+        /// </summary>
+        public static string UserUnknown {
+            get {
+                return ResourceManager.GetString("UserUnknown", resourceCulture);
             }
         }
         

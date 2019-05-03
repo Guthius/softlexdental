@@ -1,120 +1,94 @@
-namespace OpenDental{
-	partial class FormUserSetting {
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+namespace OpenDental
+{
+    partial class FormUserSetting
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing) {
-			if(disposing && (components != null)) {
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormUserSetting));
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.checkSuppressMessage = new System.Windows.Forms.CheckBox();
-			this.comboTheme = new System.Windows.Forms.ComboBox();
-			this.labelTheme = new System.Windows.Forms.Label();
-			this.SuspendLayout();
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(176, 228);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 24);
-			this.butOK.TabIndex = 3;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.butCancel.Location = new System.Drawing.Point(257, 228);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// checkSuppressMessage
-			// 
-			this.checkSuppressMessage.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkSuppressMessage.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkSuppressMessage.Location = new System.Drawing.Point(5, 25);
-			this.checkSuppressMessage.Name = "checkSuppressMessage";
-			this.checkSuppressMessage.Size = new System.Drawing.Size(327, 17);
-			this.checkSuppressMessage.TabIndex = 4;
-			this.checkSuppressMessage.Text = "Log off message is suppressed";
-			this.checkSuppressMessage.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboTheme
-			// 
-			this.comboTheme.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboTheme.FormattingEnabled = true;
-			this.comboTheme.Location = new System.Drawing.Point(202, 48);
-			this.comboTheme.Name = "comboTheme";
-			this.comboTheme.Size = new System.Drawing.Size(130, 21);
-			this.comboTheme.TabIndex = 232;
-			// 
-			// labelTheme
-			// 
-			this.labelTheme.Location = new System.Drawing.Point(118, 48);
-			this.labelTheme.Name = "labelTheme";
-			this.labelTheme.Size = new System.Drawing.Size(81, 18);
-			this.labelTheme.TabIndex = 233;
-			this.labelTheme.Text = "Theme";
-			this.labelTheme.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// FormUserSetting
-			// 
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.CancelButton = this.butCancel;
-			this.ClientSize = new System.Drawing.Size(344, 264);
-			this.Controls.Add(this.comboTheme);
-			this.Controls.Add(this.labelTheme);
-			this.Controls.Add(this.checkSuppressMessage);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butCancel);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "FormUserSetting";
-			this.Text = "User Settings";
-			this.Load += new System.EventHandler(this.FormUserSetting_Load);
-			this.ResumeLayout(false);
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormUserSetting));
+            this.acceptButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.suppressMessageCheckBox = new System.Windows.Forms.CheckBox();
+            this.SuspendLayout();
+            // 
+            // acceptButton
+            // 
+            this.acceptButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.acceptButton.Location = new System.Drawing.Point(105, 118);
+            this.acceptButton.Name = "acceptButton";
+            this.acceptButton.Size = new System.Drawing.Size(110, 30);
+            this.acceptButton.TabIndex = 3;
+            this.acceptButton.Text = "&OK";
+            this.acceptButton.Click += new System.EventHandler(this.acceptButton_Click);
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(221, 118);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(110, 30);
+            this.cancelButton.TabIndex = 2;
+            this.cancelButton.Text = "&Cancel";
+            // 
+            // suppressMessageCheckBox
+            // 
+            this.suppressMessageCheckBox.AutoSize = true;
+            this.suppressMessageCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.suppressMessageCheckBox.Location = new System.Drawing.Point(13, 19);
+            this.suppressMessageCheckBox.Name = "suppressMessageCheckBox";
+            this.suppressMessageCheckBox.Size = new System.Drawing.Size(192, 20);
+            this.suppressMessageCheckBox.TabIndex = 4;
+            this.suppressMessageCheckBox.Text = "Log off message is suppressed";
+            // 
+            // FormUserSetting
+            // 
+            this.AcceptButton = this.acceptButton;
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(344, 161);
+            this.Controls.Add(this.suppressMessageCheckBox);
+            this.Controls.Add(this.acceptButton);
+            this.Controls.Add(this.cancelButton);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FormUserSetting";
+            this.ShowInTaskbar = false;
+            this.Text = "User Settings";
+            this.Load += new System.EventHandler(this.FormUserSetting_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private OpenDental.UI.Button butOK;
-		private OpenDental.UI.Button butCancel;
-		private System.Windows.Forms.CheckBox checkSuppressMessage;
-		private System.Windows.Forms.ComboBox comboTheme;
-		private System.Windows.Forms.Label labelTheme;
-	}
+        private System.Windows.Forms.Button acceptButton;
+        private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.CheckBox suppressMessageCheckBox;
+    }
 }
