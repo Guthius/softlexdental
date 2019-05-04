@@ -1,479 +1,291 @@
-using CodeBase;
 using OpenDentBusiness;
 using System;
-using System.Diagnostics;
-using System.Drawing;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Windows.Forms;
-using System.Xml;
 
-namespace OpenDental {
-	public partial class FormUpdate : ODForm {
-		private string _buildAvailable;
-		private string _buildAvailableCode;
-		private string _buildAvailableDisplay;
-		private string _stableAvailable;
-		private string _stableAvailableCode;
-		private string _stableAvailableDisplay;
-		private string _betaAvailable;
-		private string _betaAvailableCode;
-		private string _betaAvailableDisplay;
-		private string _alphaAvailable;
-		private string _alphaAvailableCode;
-		private string _alphaAvailableDisplay;
+namespace OpenDental
+{
+    public partial class FormUpdate : FormBase
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormUpdate"/> class.
+        /// </summary>
+        public FormUpdate() => InitializeComponent();
 
-		///<summary></summary>
-		public FormUpdate() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormUpdate_Load(object sender, EventArgs e)
+        {
+            // TODO: Make sure update history is updated correctly. Where does this happen??
 
-		private void FormUpdate_Load(object sender, System.EventArgs e) {
-			SetButtonVisibility();
-			labelVersion.Text=Lan.g(this,"Using Version:")+" "+Application.ProductVersion;
-			UpdateHistory updateHistory=UpdateHistories.GetForVersion(Application.ProductVersion);
-			if(updateHistory!=null) {
-				labelVersion.Text+="  "+Lan.g(this,"Since")+": "+updateHistory.DateTimeUpdated.ToShortDateString();
-			}
-			if(Preferences.GetBool(PrefName.UpdateWindowShowsClassicView)) {
-				//Default location is (74,9).  We move it 5 pixels up since butShowPrev is 5 pixels bigger then labelVersion
-				butShowPrev.Location=new Point(74+labelVersion.Width+2,9-5);
-				panelClassic.Visible=true;
-				panelClassic.Location=new Point(67,29);
-				textUpdateCode.Text=Preferences.GetString(PrefName.UpdateCode);
-				textWebsitePath.Text=Preferences.GetString(PrefName.UpdateWebsitePath);//should include trailing /
-				butDownload.Enabled=false;
-				if(!Security.IsAuthorized(Permissions.Setup)) {//gives a message box if no permission
-					butCheck.Enabled=false;
-				}
-			}
-			else{
-				if(Security.IsAuthorized(Permissions.Setup,true)) {
-					butCheck2.Visible=true;
-				}
-				else {
-					textConnectionMessage.Text=Lan.g(this,"Not authorized for")+" "+GroupPermissions.GetDesc(Permissions.Setup);
-				}
-			}
-		}
+            var updateHistory = UpdateHistories.GetForVersion(Application.ProductVersion);
 
-		private void menuItemSetup_Click(object sender,EventArgs e) {
-			if(Preferences.GetBool(PrefName.UpdateWindowShowsClassicView)) {
-				return;
-			}
-			if(!Security.IsAuthorized(Permissions.Setup)) {
-				return;
-			}
-			FormUpdateSetup FormU=new FormUpdateSetup();
-			FormU.ShowDialog();
-			SetButtonVisibility();
-		}
+            versionLabel.Text =
+                updateHistory == null ?
+                    string.Format(Translation.Language.UsingVersion, Application.ProductVersion) :
+                    string.Format(Translation.Language.UsingVersionSince, Application.ProductVersion, updateHistory.DateTimeUpdated);
 
-		private void SetButtonVisibility() {
-			DateTime updateTime=Preferences.GetDateTime(PrefName.UpdateDateTime);
-			bool showMsi=Preferences.GetBool(PrefName.UpdateShowMsiButtons);
-			bool showDownloadAndInstall=(updateTime < DateTime.Now);
-			butDownloadMsiBuild.Visible=showMsi;
-			butDownloadMsiStable.Visible=showMsi;
-			butDownloadMsiBeta.Visible=showMsi;
-			butDownloadMsiAlpha.Visible=showMsi;
-			butDownloadMsiBuild.Enabled=showDownloadAndInstall;
-			butDownloadMsiStable.Enabled=showDownloadAndInstall;
-			butDownloadMsiBeta.Enabled=showDownloadAndInstall;
-			butDownloadMsiAlpha.Enabled=showDownloadAndInstall;
-			butInstallBuild.Enabled=showDownloadAndInstall;
-			butInstallStable.Enabled=showDownloadAndInstall;
-			butInstallBeta.Enabled=showDownloadAndInstall;
-			butInstallAlpha.Enabled=showDownloadAndInstall;
-		}
+            if (Security.IsAuthorized(Permissions.Setup, true))
+            {
+                checkButton.Enabled = true;
+                setupButton.Visible = true;
+            }
+            else
+            {
+                logTextBox.Text = Translation.Language.UpdateNotAuthorized;
+            }
+        }
 
-		private void butCheckForUpdates_Click(object sender,EventArgs e) {
-			if(Preferences.GetString(PrefName.WebServiceServerName)!="" //using web service
-				&&!ODEnvironment.IdIsThisComputer(Preferences.GetString(PrefName.WebServiceServerName).ToLower()))//and not on web server 
-			{
-				MessageBox.Show(Lan.g(this,"Updates are only allowed from the web server")+": "+Preferences.GetString(PrefName.WebServiceServerName));
-				return;
-			}
-			if(ReplicationServers.ServerIsBlocked()) {
-				MsgBox.Show(this,"Updates are not allowed on this replication server");
-				return;
-			}
-			Cursor=Cursors.WaitCursor;
-			groupBuild.Visible=false;
-			groupStable.Visible=false;
-			groupBeta.Visible=false;
-			groupAlpha.Visible=false;
-			textConnectionMessage.Text=Lan.g(this,"Attempting to connect to web service......");
-			Application.DoEvents();
-			string result="";
-			try {
-				result=CustomerUpdatesProxy.SendAndReceiveUpdateRequestXml();
-			}
-			catch(Exception ex) {
-				Cursor=Cursors.Default;
-				string friendlyMessage=Lan.g(this,"Error checking for updates.");
-                FormFriendlyException.Show(friendlyMessage,ex);
-				textConnectionMessage.Text=friendlyMessage;
-				return;
-			}
-			textConnectionMessage.Text=Lan.g(this,"Connection successful.");
-			Cursor=Cursors.Default;
-			try {
-				ParseXml(result);
-			}
-			catch(Exception ex) {
-				string friendlyMessage=Lan.g(this,"Error checking for updates.");
-                FormFriendlyException.Show(friendlyMessage,ex);
-				textConnectionMessage.Text=friendlyMessage;
-				return;
-			}
-			if(!string.IsNullOrEmpty(_buildAvailableDisplay)) {
-				groupBuild.Visible=true;
-				textBuild.Text=_buildAvailableDisplay;
-			}
-			if(!string.IsNullOrEmpty(_stableAvailableDisplay)) {
-				groupStable.Visible=true;
-				textStable.Text=_stableAvailableDisplay;
-			}
-			if(!string.IsNullOrEmpty(_betaAvailableDisplay)) {
-				groupBeta.Visible=true;
-				textBeta.Text=_betaAvailableDisplay;
-			}
-			if(!string.IsNullOrEmpty(_alphaAvailableDisplay)) {
-				groupAlpha.Visible=true;
-				textAlpha.Text=_alphaAvailableDisplay;
-			}
-			if(string.IsNullOrEmpty(_betaAvailable)
-				&& string.IsNullOrEmpty(_stableAvailable)
-				&& string.IsNullOrEmpty(_buildAvailable) 
-				&& string.IsNullOrEmpty(_alphaAvailable))
-			{
-				textConnectionMessage.Text+=Lan.g(this,"  There are no downloads available.");
-			}
-			else {
-				textConnectionMessage.Text+=Lan.g(this,"  The following downloads are available.\r\n"
-					+"Be sure to stop the program on all other computers in the office before installing.");
-			}
-		}
+        /// <summary>
+        /// Opens the form to configure the update preferences.
+        /// </summary>
+        void SetupButton_Click(object sender, EventArgs e)
+        {
+            if (!Security.IsAuthorized(Permissions.Setup)) return;
 
-		///<summary>Parses the xml result from the server and uses it to fill class wide variables.  Throws exceptions.</summary>
-		private void ParseXml(string result) {
-			XmlDocument doc=new XmlDocument();
-			doc.LoadXml(result);
-			XmlNode node=doc.SelectSingleNode("//Error");
-			if(node!=null) {
-				throw new Exception(node.InnerText);
-			}
-			node=doc.SelectSingleNode("//KeyDisabled");
-			if(node==null) {
-				//no error, and no disabled message
-				if(Prefs.UpdateBool(PrefName.RegistrationKeyIsDisabled,false)) {//this is one of two places in the program where this happens.
-					DataValid.SetInvalid(InvalidType.Prefs);
-				}
-			}
-			else {
-				if(Prefs.UpdateBool(PrefName.RegistrationKeyIsDisabled,true)) {//this is one of two places in the program where this happens.
-					DataValid.SetInvalid(InvalidType.Prefs);
-				}
-				throw new Exception(node.InnerText);
-			}
-			#region Build
-			node=doc.SelectSingleNode("//BuildAvailable");
-			_buildAvailable="";
-			_buildAvailableCode="";
-			_buildAvailableDisplay="";
-			if(node!=null) {
-				node=doc.SelectSingleNode("//BuildAvailable/Display");
-				if(node!=null) {
-					_buildAvailableDisplay=node.InnerText;
-				}
-				node=doc.SelectSingleNode("//BuildAvailable/MajMinBuildF");
-				if(node!=null) {
-					_buildAvailable=node.InnerText;
-				}
-				node=doc.SelectSingleNode("//BuildAvailable/UpdateCode");
-				if(node!=null) {
-					_buildAvailableCode=node.InnerText;
-				}
-			}
-			#endregion
-			#region Stable
-			node=doc.SelectSingleNode("//StableAvailable");
-			_stableAvailable="";
-			_stableAvailableCode="";
-			_stableAvailableDisplay="";
-			if(node!=null) {
-				node=doc.SelectSingleNode("//StableAvailable/Display");
-				if(node!=null) {
-					_stableAvailableDisplay=node.InnerText;
-				}
-				node=doc.SelectSingleNode("//StableAvailable/MajMinBuildF");
-				if(node!=null) {
-					_stableAvailable=node.InnerText;
-				}
-				node=doc.SelectSingleNode("//StableAvailable/UpdateCode");
-				if(node!=null) {
-					_stableAvailableCode=node.InnerText;
-				}
-			}
-			#endregion
-			#region Beta
-			node=doc.SelectSingleNode("//BetaAvailable");
-			_betaAvailable="";
-			_betaAvailableCode="";
-			_betaAvailableDisplay="";
-			if(node!=null) {
-				node=doc.SelectSingleNode("//BetaAvailable/Display");
-				if(node!=null) {
-					_betaAvailableDisplay=node.InnerText;
-				}
-				node=doc.SelectSingleNode("//BetaAvailable/MajMinBuildF");
-				if(node!=null) {
-					_betaAvailable=node.InnerText;
-				}
-				node=doc.SelectSingleNode("//BetaAvailable/UpdateCode");
-				if(node!=null) {
-					_betaAvailableCode=node.InnerText;
-				}
-			}
-			#endregion
-			#region Alpha
-			_alphaAvailable="";
-			_alphaAvailableCode="";
-			_alphaAvailableDisplay="";
-			//Never let the program crash for alpha version related code.  It is never THAT important.
-			ODException.SwallowAnyException(()=> {
-				node=doc.SelectSingleNode("//AlphaAvailable");
-				if(node!=null) {
-					groupAlpha.Visible=true;
-					node=doc.SelectSingleNode("//AlphaAvailable/Display");
-					if(node!=null) {
-						_alphaAvailableDisplay=node.InnerText;
-					}
-					node=doc.SelectSingleNode("//AlphaAvailable/MajMinBuildF");
-					if(node!=null) {
-						_alphaAvailable=node.InnerText;
-					}
-					node=doc.SelectSingleNode("//AlphaAvailable/UpdateCode");
-					if(node!=null) {
-						_alphaAvailableCode=node.InnerText;
-					}
-				}
-			});
-			#endregion
-		}
+            using (var formUpdateSetup = new FormUpdateSetup())
+            {
+                formUpdateSetup.ShowDialog();
+            }
+        }
 
-		private void butShowPrev_Click(object sender,EventArgs e) {
-			FormPreviousVersions FormSPV=new FormPreviousVersions();
-			FormSPV.ShowDialog();
-		}
+        /// <summary>
+        /// Checks for updates.
+        /// </summary>
+        async void CheckButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                checkButton.Enabled = false;
 
-		///<summary>Determines if the current application is ran within the dynamic folder (startup path contains "DynamicMode").
-		///If so, shows a message to the user and then returns true so that the calling method can stop the user from updating.</summary>
-		private bool IsDynamicMode() {
-			if(Application.StartupPath.Contains("DynamicMode")) {
-				MsgBox.Show(this,"Cannot perform update when using Dynamic Mode.");
-				return true;
-			}
-			return false;
-		}
+                if (ReplicationServers.ServerIsBlocked())
+                {
+                    MessageBox.Show(
+                        Translation.Language.UpdatesNotAllowedOnReplicationServer,
+                        Translation.Language.Update,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
 
-		#region Installs
+                    return;
+                }
 
-		private void DownloadInstallPatchForVersion(string version,string updateCode,bool showFormUpdateInstallMsg) {
-			if(IsDynamicMode()) {
-				return;
-			}
-			if(showFormUpdateInstallMsg) {
-				FormUpdateInstallMsg FormUIM=new FormUpdateInstallMsg();
-				FormUIM.ShowDialog();
-				if(FormUIM.DialogResult!=DialogResult.OK) {
-					return;
-				}
-			}
-			string patchName="Setup.exe";
-			string fileNameWithVers=version;//6.9.23F
-			fileNameWithVers=fileNameWithVers.Replace("F","");//6.9.23
-			fileNameWithVers=fileNameWithVers.Replace(".","_");//6_9_23
-			fileNameWithVers="Setup_"+fileNameWithVers+".exe";//Setup_6_9_23.exe
-			string destDir=ImageStore.GetPreferredAtoZpath();
-			string destPath2=null;
-			if(destDir==null) {//Not using A to Z folders?
-				destDir=Preferences.GetTempFolderPath();
-			}
-			else {//using A to Z folders.
-				destPath2=ODFileUtils.CombinePaths(destDir,"SetupFiles");
-				if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(destPath2)) {
-					Directory.CreateDirectory(destPath2);
-				}
-				else if(CloudStorage.IsCloudStorage) {
-					destDir=Preferences.GetTempFolderPath();//Cloud needs it to be downloaded to a local temp folder
-				}
-				destPath2=ODFileUtils.CombinePaths(destPath2,fileNameWithVers);
-			}
-			PrefL.DownloadInstallPatchFromURI(Preferences.GetString(PrefName.UpdateWebsitePath)+updateCode+"/"+patchName,//Source URI
-				ODFileUtils.CombinePaths(destDir,patchName),//Local destination file.
-				true,true,
-				destPath2);//second destination file.  Might be null.
-		}
+                await CheckForUpdates();
+            }
+            finally
+            {
+                checkButton.Enabled = true;
+            }
+        }
 
-		private void butInstallBuild_Click(object sender,EventArgs e) {
-			DownloadInstallPatchForVersion(_buildAvailable,_buildAvailableCode,false);
-		}
+        /// <summary>
+        /// Builds a dictionary of date to submit using a POST request when checking for
+        /// updates. The update server can use this information to determine whether the clinic is
+        /// eligible for updates.
+        /// </summary>
+        /// <returns></returns>
+        static FormUrlEncodedContent GetPostContent()
+        {
+            var programList = Programs.GetWhere(x => x.Enabled && !string.IsNullOrWhiteSpace(x.ProgName)).Select(x => x.ProgName).ToList();
 
-		private void butInstallStable_Click(object sender,EventArgs e) {
-			DownloadInstallPatchForVersion(_stableAvailable,_stableAvailableCode,true);
-		}
+            var postContent = new Dictionary<string, string>
+            {
+                { "product",            "OpenDental" },
+                { "productVersion",     Application.ProductVersion },
+                { "registrationKey",    Preferences.GetString(PrefName.RegistrationKey) }
+            };
 
-		private void butInstallBeta_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Are you sure you really want to install a beta version?"
-				+"  Do NOT do this unless you are OK with some bugs.  Continue?"))
-			{
-				return;
-			}
-			DownloadInstallPatchForVersion(_betaAvailable,_betaAvailableCode,true);
-		}
+            // Add the list of all enables programs.
+            int programId = 0;
+            foreach (var program in programList)
+            {
+                postContent.Add($"program[{programId}]", program);
+                programId++;
+            }
 
-		private void butInstallAlpha_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Are you sure you really want to install a alpha version?\r\n"
-				+"Do NOT do this unless you enjoy bugs.\r\n\r\n"
-				+"Continue?"))
-			{
-				return;
-			}
-			DownloadInstallPatchForVersion(_alphaAvailable,_alphaAvailableCode,true);
-		}
+            return new FormUrlEncodedContent(postContent);
+        }
 
-		#endregion
+        /// <summary>
+        /// Clears the log textbox.
+        /// </summary>
+        void LogClear() => logTextBox.Text = "";
 
-		#region Download MSIs
+        /// <summary>
+        /// Appends the specified message to the log textbox.
+        /// </summary>
+        /// <param name="logMessage">The message to append to the log.</param>
+        void Log(string logMessage)
+        {
+            logTextBox.Text = logTextBox.Text + logMessage + "\r\n";
+            logTextBox.SelectionStart = logTextBox.Text.Length;
+        }
 
-		private void DownloadAndStartMSI(string updateCode) {
-			if(IsDynamicMode()) {
-				return;
-			}
-			string fileName=Preferences.GetString(PrefName.UpdateWebsitePath)+updateCode+"/OpenDental.msi";
-			try {
-				Process.Start(fileName);
-			}
-			catch(Exception ex) {
-                FormFriendlyException.Show(Lan.g(this,"There was a problem launching")+" "+fileName,ex);
-			}
-		}
+        /// <summary>
+        /// Checks whether there are updates available.
+        /// </summary>
+        /// <returns></returns>
+        async System.Threading.Tasks.Task CheckForUpdates()
+        {
+            Cursor = Cursors.WaitCursor;
 
-		///<summary>Downloads the build update MSI file and starts the install, closing OpenDental.</summary>
-		private void butDownMsiBuild_Click(object sender,EventArgs e) {
-			DownloadAndStartMSI(_buildAvailableCode);
-		}
+            Application.DoEvents();
 
-		///<summary>Downloads the stable update MSI file and starts the install, closing OpenDental.</summary>
-		private void butDownloadMsiStable_Click(object sender,EventArgs e) {
-			DownloadAndStartMSI(_stableAvailableCode);
-		}
+            try
+            {
+                LogClear();
+                Log(Translation.Language.UpdateAttemptingToConnectWebService);
 
-		///<summary>Downloads the beta update MSI file and starts the install, closing OpenDental.</summary>
-		private void butDownloadMsiBeta_Click(object sender,EventArgs e) {
-			DownloadAndStartMSI(_betaAvailableCode);
-		}
+                WebProxy webProxy = null;
+                var webProxyAddress = Preferences.GetString(PrefName.UpdateWebProxyAddress);
+                if (!string.IsNullOrEmpty(webProxyAddress))
+                {
+                    webProxy = new WebProxy(webProxyAddress);
+                    var webProxyUserName = Preferences.GetString(PrefName.UpdateWebProxyUserName);
+                    if (!string.IsNullOrEmpty(webProxyUserName))
+                    {
+                        webProxy.Credentials =
+                            new NetworkCredential(
+                                webProxyUserName,
+                                Preferences.GetString(PrefName.UpdateWebProxyPassword));
+                    }
+                }
 
-		private void butDownloadMsiAlpha_Click(object sender,EventArgs e) {
-			DownloadAndStartMSI(_alphaAvailableCode);
-		}
+                var httpClientHandler = new HttpClientHandler
+                {
+                    Proxy = webProxy
+                };
 
-		#endregion
+                var httpClient = new HttpClient(httpClientHandler)
+                {
+                    BaseAddress = new Uri(Preferences.GetString(PrefName.UpdateServerAddress))
+                };
 
-		#region Classic View
+                var result = await httpClient.PostAsync("/check", GetPostContent());
 
-		private void butCheck_Click(object sender, System.EventArgs e) {
-			if(IsDynamicMode()) {
-				return;
-			}
-			Cursor=Cursors.WaitCursor;
-			SavePrefs();
-			CheckMain();
-			Cursor=Cursors.Default;
-		}
+                Log(Translation.Language.ConnectionSuccessful);
 
-		private void CheckMain() {
-			butDownload.Enabled=false;
-			textResult.Text="";
-			textResult2.Text="";
-			if(textUpdateCode.Text.Length==0) {
-				textResult.Text+=Lan.g(this,"Registration number not valid.");
-				return;
-			}
-			string updateInfoMajor="";
-			string updateInfoMinor="";
-			butDownload.Enabled=PrefL.ShouldDownloadUpdate(textWebsitePath.Text,textUpdateCode.Text,out updateInfoMajor,out updateInfoMinor);
-			textResult.Text=updateInfoMajor;
-			textResult2.Text=updateInfoMinor;
-		}
+                Cursor = Cursors.Default;
 
-		private void butDownload_Click(object sender, System.EventArgs e) {
-			if(IsDynamicMode()) {
-				return;
-			}
-			string patchName="Setup.exe";
-			string destDir=ImageStore.GetPreferredAtoZpath();
-			if(destDir==null || CloudStorage.IsCloudStorage) {
-				destDir=Preferences.GetTempFolderPath();
-			}
-			PrefL.DownloadInstallPatchFromURI(textWebsitePath.Text+textUpdateCode.Text+"/"+patchName,//Source URI
-				ODFileUtils.CombinePaths(destDir,patchName),true,false,null);//Local destination file.
-		}
+                await ParseResponse(result);
+            }
+            catch (Exception ex)
+            {
+                ErrorCheckingForUpdates(ex);
+            }
+        }
 
-		private void SavePrefs() {
-			bool changed=false;
-			if(Prefs.UpdateString(PrefName.UpdateCode,textUpdateCode.Text)) {
-				changed=true;
-			}
-			if(Prefs.UpdateString(PrefName.UpdateWebsitePath,textWebsitePath.Text)) {
-				changed=true;
-			}
-			if(changed) {
-				DataValid.SetInvalid(InvalidType.Prefs);
-			}
-		}
+        /// <summary>
+        /// Reports a error that occurred while checking for updates.
+        /// </summary>
+        /// <param name="exception"></param>
+        void ErrorCheckingForUpdates(Exception exception)
+        {
+            Cursor = Cursors.Default;
 
-		///<summary>No longer used here. Moved to FormAbout.</summary>
-		private void butLicense_Click(object sender,EventArgs e) {
-			FormLicense FormL=new FormLicense();
-			FormL.ShowDialog();
-		}
+            string friendlyMessage = Translation.Language.ErrorCheckingForUpdates;
 
-		#endregion
+            FormFriendlyException.Show(friendlyMessage, exception);
 
-		private void butClose_Click(object sender, System.EventArgs e) {
-			Close();
-		}
+            Log(friendlyMessage);
+        }
 
-		private void FormUpdate_FormClosing(object sender,FormClosingEventArgs e) {
-			if(Security.IsAuthorized(Permissions.Setup,DateTime.Now,true)	&& Preferences.GetBool(PrefName.UpdateWindowShowsClassicView)) {
-				SavePrefs();
-			}
-		}
-	}
+        /// <summary>
+        /// Parse the response from the update server.
+        /// </summary>
+        /// <param name="responseMessage">The response.</param>
+        async System.Threading.Tasks.Task ParseResponse(HttpResponseMessage responseMessage)
+        {
+            if (responseMessage.StatusCode == HttpStatusCode.OK)
+            {
+                try
+                {
+                    var updateFileUri = await responseMessage.Content.ReadAsStringAsync();
+                    if (!string.IsNullOrEmpty(updateFileUri))
+                    {
+                        Log(Translation.Language.UpdateAvailable);
 
-	
+                        var result = 
+                            MessageBox.Show(
+                                Translation.Language.UpdateAvailableInstallNow,
+                                Translation.Language.Update, 
+                                MessageBoxButtons.YesNo, 
+                                MessageBoxIcon.Question);
+
+                        if (result == DialogResult.No) return;
+
+                        result = 
+                            MessageBox.Show(
+                                Translation.Language.StopProgramOnAllComputersBeforeUpdating,
+                                Translation.Language.Update, 
+                                MessageBoxButtons.OKCancel, 
+                                MessageBoxIcon.Warning);
+
+                        if (result == DialogResult.Cancel) return;
+
+                        DownloadAndInstallUpdate(updateFileUri);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    ErrorCheckingForUpdates(ex);
+                }
+            }
+            if (responseMessage.StatusCode == HttpStatusCode.NotFound)
+            {
+                Log(Translation.Language.ThereAreNoUpdatesAvailable);
+
+                MessageBox.Show(
+                    Translation.Language.ThereAreNoUpdatesAvailable,
+                    Translation.Language.Update,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+            }
+            else
+            {
+                Log(Translation.Language.ErrorCheckingForUpdates);
+            }
+        }
+
+        /// <summary>
+        /// Downloads and installs a update.
+        /// </summary>
+        /// <param name="updateFileUri">The uri of the update file.</param>
+        void DownloadAndInstallUpdate(string updateFileUri)
+        {
+            var updateFileName = Path.GetTempFileName();
+
+            var p = updateFileUri.LastIndexOf('.');
+            if (p != -1)
+            {
+                updateFileName = updateFileName + updateFileUri.Substring(p);
+            }
+            else
+            {
+                updateFileName = updateFileName + ".exe";
+            }
+
+            PrefL.DownloadInstallPatchFromURI(updateFileUri, updateFileName, true, false, "");
+        }
+
+        /// <summary>
+        /// Opens the version history form.
+        /// </summary>
+        void PreviousVersionsButton_Click(object sender, EventArgs e)
+        {
+            using (var formPreviousVersions = new FormPreviousVersions())
+            {
+                formPreviousVersions.ShowDialog();
+            }
+        }
+
+        /// <summary>
+        /// Closes the form.
+        /// </summary>
+        void CloseButton_Click(object sender, EventArgs e) => Close();
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

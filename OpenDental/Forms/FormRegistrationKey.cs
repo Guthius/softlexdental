@@ -1,15 +1,15 @@
 using OpenDentBusiness;
 using System;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace OpenDental
 {
-    /// <summary>
-    /// Summary description for FormBasicTemplate.
-    /// </summary>
     public partial class FormRegistrationKey : FormBaseDialog
     {
+        string key;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="FormRegistrationKey"/> class.
         /// </summary>
@@ -20,13 +20,9 @@ namespace OpenDental
         /// </summary>
         void FormRegistrationKey_Load(object sender, EventArgs e)
         {
-            string key = Preferences.GetString(PrefName.RegistrationKey);
-            if (key != null && key.Length == 16)
-            {
-                key = key.Substring(0, 4) + "-" + key.Substring(4, 4) + "-" + key.Substring(8, 4) + "-" + key.Substring(12, 4);
-            }
+            key = Preferences.GetString(PrefName.RegistrationKey);
+            keyTextBox.Text = License.FormatKey(key);
 
-            keyTextBox.Text = key;
             agreementRichTextBox.Rtf = Properties.Resources.CDT_Content_End_User_License;
             agreeCheckBox.Checked = false;
         }
@@ -34,7 +30,7 @@ namespace OpenDental
         /// <summary>
         /// Only allow characters that are accepted to be entered into the key textbox.
         /// </summary>
-        void keyTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        void KeyTextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsLetterOrDigit(e.KeyChar) && !char.IsControl(e.KeyChar) && e.KeyChar != '-')
             {
@@ -52,7 +48,7 @@ namespace OpenDental
         /// <summary>
         /// Auto inserts dashes whenever needed.
         /// </summary>
-        void keyTextBox_KeyUp(object sender, KeyEventArgs e)
+        void KeyTextBox_KeyUp(object sender, KeyEventArgs e)
         {
             var cursorPos = keyTextBox.SelectionStart;
             if (Regex.IsMatch(keyTextBox.Text, @"^[A-Z0-9]{5}$"))
@@ -75,12 +71,12 @@ namespace OpenDental
         /// <summary>
         /// Check whether the accept button should be enabled.
         /// </summary>
-        void keyTextBox_TextChanged(object sender, EventArgs e) => acceptButton.Enabled = agreeCheckBox.Checked || keyTextBox.Text.Length > 0;
+        void KeyTextBox_TextChanged(object sender, EventArgs e) => acceptButton.Enabled = agreeCheckBox.Checked || keyTextBox.Text.Length > 0;
         
         /// <summary>
         /// Check whether the accept button should be enabled.
         /// </summary>
-        void agreeCheckBox_CheckedChanged(object sender, EventArgs e) => acceptButton.Enabled = agreeCheckBox.Checked || keyTextBox.Text.Length > 0;
+        void AgreeCheckBox_CheckedChanged(object sender, EventArgs e) => acceptButton.Enabled = agreeCheckBox.Checked || keyTextBox.Text.Length > 0;
 
         /// <summary>
         /// Checks whether the specified registration key is valid.
@@ -89,9 +85,7 @@ namespace OpenDental
         /// <returns>True if the key is correctly formatted; otherwise, false.</returns>
         static bool IsKeyFormatCorrect(string registrationKey)
         {
-            if (registrationKey != null &&
-                !Regex.IsMatch(registrationKey, @"^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$") &&
-                !Regex.IsMatch(registrationKey, @"^[A-Z0-9]{16}$"))
+            if (registrationKey != null && !Regex.IsMatch(registrationKey, @"^[A-Z0-9]{16}$"))
             {
                 return false;
             }
@@ -100,17 +94,35 @@ namespace OpenDental
         }
 
         /// <summary>
+        /// Cleans up the specified registration key by stripping out all special characters.
+        /// </summary>
+        /// <param name="registrationKey">The registration key to clean.</param>
+        /// <returns></returns>
+        static string CleanupKey(string registrationKey)
+        {
+            StringBuilder keyBuilder = new StringBuilder();
+            for (int i = 0; i < registrationKey.Length; i++)
+            {
+                if (char.IsLetterOrDigit(registrationKey[i]))
+                {
+                    keyBuilder.Append(registrationKey[i]);
+                }
+            }
+            return keyBuilder.ToString();
+        }
+
+        /// <summary>
         /// Validates the specified registration key and closes the form.
         /// </summary>
-        void acceptButton_Click(object sender, EventArgs e)
+        void AcceptButton_Click(object sender, EventArgs e)
         {
             // Check whether the specified registration key is in the correct format.
-            var registrationKey = keyTextBox.Text.Trim();
+            var registrationKey = CleanupKey(keyTextBox.Text);
             if (registrationKey.Length == 0 || !IsKeyFormatCorrect(registrationKey))
             {
                 MessageBox.Show(
-                    "Invalid registration key format.",
-                    "Registration Key",
+                    Translation.Language.InvalidRegistrationKeyFormat,
+                    Translation.Language.RegistrationKey,
                     MessageBoxButtons.OK, 
                     MessageBoxIcon.Error);
 
@@ -121,8 +133,8 @@ namespace OpenDental
             if (!License.ValidateKey(registrationKey))
             {
                 MessageBox.Show(
-                    "Invalid registration key.",
-                    "Registration Key",
+                    Translation.Language.InvalidRegistrationKey,
+                    Translation.Language.RegistrationKey,
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 

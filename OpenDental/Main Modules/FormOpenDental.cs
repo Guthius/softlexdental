@@ -1254,8 +1254,6 @@ namespace OpenDental
                 return false;
             }
 
-            // TODO: 
-
             string updateComputerName = Preferences.GetStringSilent(PrefName.UpdateInProgressOnComputerName);
             if (updateComputerName != "" && Environment.MachineName.ToUpper() != updateComputerName.ToUpper())
             {
@@ -1263,7 +1261,6 @@ namespace OpenDental
                 {
                     if (formUpdateInProgress.ShowDialog() != DialogResult.OK)
                     {
-                        // Either the user canceled out of the window or clicked the override button which
                         return false;
                     }
                 }
@@ -1281,14 +1278,6 @@ namespace OpenDental
                     }
                     Cache.Refresh(InvalidType.Prefs);
                 }
-            }
-
-
-            //This must be done at startup in case the user does not perform any action to save something to temp file.
-            //This will cause slowdown, but only for the first week.
-            if (DateTime.Today < Preferences.GetDate(PrefName.TempFolderDateFirstCleaned).AddDays(7))
-            {
-                Preferences.GetTempFolderPath(); //We don't care about the return value. Just trying to trigger the one-time cleanup and create the temp/opendental directory.
             }
 
             return true;

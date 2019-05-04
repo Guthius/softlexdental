@@ -151,6 +151,18 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An update is in progress on workstation &apos;{0}&apos;.
+        ///
+        ///Not allowed to start Softlex while an update is in progress.
+        ///Please wait and click &apos;Try Again&apos;..
+        /// </summary>
+        public static string AnUpdateIsInProgressOnWorkstation {
+            get {
+                return ResourceManager.GetString("AnUpdateIsInProgressOnWorkstation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string ButtonCancel {
@@ -165,6 +177,15 @@ namespace OpenDental.Translation {
         public static string ChangePassword {
             get {
                 return ResourceManager.GetString("ChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you are the person who started the update and you wish to override this message because an update is not in progress, click &apos;Override&apos;..
+        /// </summary>
+        public static string ClickOverrideToOverrideUpdateMessage {
+            get {
+                return ResourceManager.GetString("ClickOverrideToOverrideUpdateMessage", resourceCulture);
             }
         }
         
@@ -286,6 +307,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connection successful..
+        /// </summary>
+        public static string ConnectionSuccessful {
+            get {
+                return ResourceManager.GetString("ConnectionSuccessful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current password incorrect..
         /// </summary>
         public static string CurrentPasswordIncorrect {
@@ -331,11 +361,47 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter or select a valid time..
+        /// </summary>
+        public static string EnterOrSelectAValidDate {
+            get {
+                return ResourceManager.GetString("EnterOrSelectAValidDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error checking for updates..
+        /// </summary>
+        public static string ErrorCheckingForUpdates {
+            get {
+                return ResourceManager.GetString("ErrorCheckingForUpdates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hidden.
         /// </summary>
         public static string Hidden {
             get {
                 return ResourceManager.GetString("Hidden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid registration key..
+        /// </summary>
+        public static string InvalidRegistrationKey {
+            get {
+                return ResourceManager.GetString("InvalidRegistrationKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid registration key format..
+        /// </summary>
+        public static string InvalidRegistrationKeyFormat {
+            get {
+                return ResourceManager.GetString("InvalidRegistrationKeyFormat", resourceCulture);
             }
         }
         
@@ -439,11 +505,119 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pick Time.
+        /// </summary>
+        public static string PickTime {
+            get {
+                return ResourceManager.GetString("PickTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There was a problem refreshing the Audit Trail with the current filters..
         /// </summary>
         public static string ProblemRefreshingAuditTrail {
             get {
                 return ResourceManager.GetString("ProblemRefreshingAuditTrail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Registration Key.
+        /// </summary>
+        public static string RegistrationKey {
+            get {
+                return ResourceManager.GetString("RegistrationKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Be sure to stop the program on all other computers in the office before installing..
+        /// </summary>
+        public static string StopProgramOnAllComputersBeforeUpdating {
+            get {
+                return ResourceManager.GetString("StopProgramOnAllComputersBeforeUpdating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no updates available. You are using the most current version..
+        /// </summary>
+        public static string ThereAreNoUpdatesAvailable {
+            get {
+                return ResourceManager.GetString("ThereAreNoUpdatesAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There was a problem launching {0}.
+        /// </summary>
+        public static string ThereWasAProblemLaunchingFile {
+            get {
+                return ResourceManager.GetString("ThereWasAProblemLaunchingFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update.
+        /// </summary>
+        public static string Update {
+            get {
+                return ResourceManager.GetString("Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attempting to connect to web service.......
+        /// </summary>
+        public static string UpdateAttemptingToConnectWebService {
+            get {
+                return ResourceManager.GetString("UpdateAttemptingToConnectWebService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is a update is available..
+        /// </summary>
+        public static string UpdateAvailable {
+            get {
+                return ResourceManager.GetString("UpdateAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A new update is available for download. Would you like to update now?.
+        /// </summary>
+        public static string UpdateAvailableInstallNow {
+            get {
+                return ResourceManager.GetString("UpdateAvailableInstallNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are not authorized to install updates..
+        /// </summary>
+        public static string UpdateNotAuthorized {
+            get {
+                return ResourceManager.GetString("UpdateNotAuthorized", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Setup.
+        /// </summary>
+        public static string UpdateSetup {
+            get {
+                return ResourceManager.GetString("UpdateSetup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updates are not allowed on this replication server..
+        /// </summary>
+        public static string UpdatesNotAllowedOnReplicationServer {
+            get {
+                return ResourceManager.GetString("UpdatesNotAllowedOnReplicationServer", resourceCulture);
             }
         }
         
@@ -462,6 +636,24 @@ namespace OpenDental.Translation {
         public static string UseTheCEMTToolToChangeYourPassword {
             get {
                 return ResourceManager.GetString("UseTheCEMTToolToChangeYourPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using version {0}.
+        /// </summary>
+        public static string UsingVersion {
+            get {
+                return ResourceManager.GetString("UsingVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Using version {0} since {1}.
+        /// </summary>
+        public static string UsingVersionSince {
+            get {
+                return ResourceManager.GetString("UsingVersionSince", resourceCulture);
             }
         }
         
@@ -831,6 +1023,24 @@ namespace OpenDental.Translation {
         public static string WikiSelectedPageAlreadyRestored {
             get {
                 return ResourceManager.GetString("WikiSelectedPageAlreadyRestored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Workstation &apos;{0}&apos; is still updating.  Please wait and &apos;Try Again&apos;.
+        /// </summary>
+        public static string WorkstationIsStillUpdating {
+            get {
+                return ResourceManager.GetString("WorkstationIsStillUpdating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You will be allowed access when you restart..
+        /// </summary>
+        public static string YouWillBeAllowedAccessWhenYouRestart {
+            get {
+                return ResourceManager.GetString("YouWillBeAllowedAccessWhenYouRestart", resourceCulture);
             }
         }
     }

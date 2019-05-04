@@ -56,9 +56,9 @@
             this.keyTextBox.Size = new System.Drawing.Size(243, 23);
             this.keyTextBox.TabIndex = 0;
             this.keyTextBox.WordWrap = false;
-            this.keyTextBox.TextChanged += new System.EventHandler(this.keyTextBox_TextChanged);
-            this.keyTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.keyTextBox_KeyPress);
-            this.keyTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.keyTextBox_KeyUp);
+            this.keyTextBox.TextChanged += new System.EventHandler(this.KeyTextBox_TextChanged);
+            this.keyTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.KeyTextBox_KeyPress);
+            this.keyTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.KeyTextBox_KeyUp);
             // 
             // agreementLabel
             // 
@@ -79,7 +79,7 @@
             this.agreeCheckBox.TabIndex = 7;
             this.agreeCheckBox.Text = "I agree to the terms of the above license agreement in its entirety.";
             this.agreeCheckBox.UseVisualStyleBackColor = true;
-            this.agreeCheckBox.CheckedChanged += new System.EventHandler(this.agreeCheckBox_CheckedChanged);
+            this.agreeCheckBox.CheckedChanged += new System.EventHandler(this.AgreeCheckBox_CheckedChanged);
             // 
             // agreementRichTextBox
             // 
@@ -101,7 +101,7 @@
             this.acceptButton.Size = new System.Drawing.Size(110, 30);
             this.acceptButton.TabIndex = 4;
             this.acceptButton.Text = "&OK";
-            this.acceptButton.Click += new System.EventHandler(this.acceptButton_Click);
+            this.acceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
             // 
             // cancelButton
             // 

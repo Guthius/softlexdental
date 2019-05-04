@@ -21,6 +21,7 @@ namespace OpenDental
         bool draggingSlider;
         bool mouseDown;
         ODTimeBarCell mouseDownCell;
+        ODTimeBarCellType mouseDownCellType;
 
         /// <summary>
         /// Represents a single cell on the <see cref="ODTimeBar"/>.
@@ -451,17 +452,30 @@ namespace OpenDental
                 }
                 else
                 {
-                    mouseDownCell = null;
-                    foreach (var cell in cells)
-                    {
-                        if (cell != null && cell.Bounds.Contains(e.Location))
-                        {
-                            mouseDownCell = cell;
-                            break;
-                        }
-                    }
+                    mouseDownCell = HitTest(e.Location);
+                    mouseDownCellType =
+                        mouseDownCell.Type == ODTimeBarCellType.Provider ?
+                            ODTimeBarCellType.Hygienist : 
+                            ODTimeBarCellType.Provider;
                 }
             }
+        }
+
+        /// <summary>
+        /// Finds the cell at the specified point.
+        /// </summary>
+        /// <param name="pt"></param>
+        /// <returns></returns>
+        ODTimeBarCell HitTest(Point pt)
+        {
+            foreach (var cell in cells)
+            {
+                if (cell.Bounds.Contains(pt))
+                {
+                    return cell;
+                }
+            }
+            return null;
         }
 
         /// <summary>
@@ -482,9 +496,10 @@ namespace OpenDental
                     if (mouseDownCell != null && mouseDownCell.Bounds.Contains(e.Location))
                     {
                         ClickCell(mouseDownCell);
-                        mouseDownCell = null;
                     }
+                    mouseDownCell = null;
                 }
+                mouseDown = false;
             }
         }
 
@@ -533,18 +548,28 @@ namespace OpenDental
                         break;
                     }
                 }
+                return;
+            }
+
+            if (mouseDown && mouseDownCell != null)
+            {
+                var cell = HitTest(new Point(5, e.Location.Y));
+                if (cell != null && cell.Type != mouseDownCellType)
+                {
+                    cell.Type = mouseDownCellType;
+
+                    Invalidate(cell.Bounds);
+                }
+            }
+
+            mouseOverSlider = sliderBounds.Contains(e.Location);
+            if (mouseOverSlider)
+            {
+                Cursor = Cursors.HSplit;
             }
             else
             {
-                mouseOverSlider = sliderBounds.Contains(e.Location);
-                if (mouseOverSlider)
-                {
-                    Cursor = Cursors.HSplit;
-                }
-                else
-                {
-                    Cursor = Cursors.Default;
-                }
+                Cursor = Cursors.Default;
             }
         }
 
@@ -555,6 +580,7 @@ namespace OpenDental
         protected override void OnMouseLeave(EventArgs e)
         {
             base.OnMouseLeave(e);
+
             if (mouseOverSlider)
             {
                 mouseOverSlider = false;

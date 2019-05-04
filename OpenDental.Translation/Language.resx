@@ -375,4 +375,76 @@
   <data name="UserUnknown" xml:space="preserve">
     <value>&lt;Unknown&gt;</value>
   </data>
+  <data name="AnUpdateIsInProgressOnWorkstation" xml:space="preserve">
+    <value>An update is in progress on workstation '{0}'.
+
+Not allowed to start Softlex while an update is in progress.
+Please wait and click 'Try Again'.</value>
+  </data>
+  <data name="ClickOverrideToOverrideUpdateMessage" xml:space="preserve">
+    <value>If you are the person who started the update and you wish to override this message because an update is not in progress, click 'Override'.</value>
+  </data>
+  <data name="ConnectionSuccessful" xml:space="preserve">
+    <value>Connection successful.</value>
+  </data>
+  <data name="EnterOrSelectAValidDate" xml:space="preserve">
+    <value>Please enter or select a valid time.</value>
+  </data>
+  <data name="ErrorCheckingForUpdates" xml:space="preserve">
+    <value>Error checking for updates.</value>
+  </data>
+  <data name="InvalidRegistrationKey" xml:space="preserve">
+    <value>Invalid registration key.</value>
+  </data>
+  <data name="InvalidRegistrationKeyFormat" xml:space="preserve">
+    <value>Invalid registration key format.</value>
+  </data>
+  <data name="PickTime" xml:space="preserve">
+    <value>Pick Time</value>
+  </data>
+  <data name="RegistrationKey" xml:space="preserve">
+    <value>Registration Key</value>
+  </data>
+  <data name="StopProgramOnAllComputersBeforeUpdating" xml:space="preserve">
+    <value>Be sure to stop the program on all other computers in the office before installing.</value>
+  </data>
+  <data name="ThereAreNoUpdatesAvailable" xml:space="preserve">
+    <value>There are no updates available. You are using the most current version.</value>
+  </data>
+  <data name="ThereWasAProblemLaunchingFile" xml:space="preserve">
+    <value>There was a problem launching {0}</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="UpdateAttemptingToConnectWebService" xml:space="preserve">
+    <value>Attempting to connect to web service......</value>
+  </data>
+  <data name="UpdateAvailable" xml:space="preserve">
+    <value>There is a update is available.</value>
+  </data>
+  <data name="UpdateAvailableInstallNow" xml:space="preserve">
+    <value>A new update is available for download. Would you like to update now?</value>
+  </data>
+  <data name="UpdateNotAuthorized" xml:space="preserve">
+    <value>You are not authorized to install updates.</value>
+  </data>
+  <data name="UpdateSetup" xml:space="preserve">
+    <value>Update Setup</value>
+  </data>
+  <data name="UpdatesNotAllowedOnReplicationServer" xml:space="preserve">
+    <value>Updates are not allowed on this replication server.</value>
+  </data>
+  <data name="UsingVersion" xml:space="preserve">
+    <value>Using version {0}</value>
+  </data>
+  <data name="UsingVersionSince" xml:space="preserve">
+    <value>Using version {0} since {1}</value>
+  </data>
+  <data name="WorkstationIsStillUpdating" xml:space="preserve">
+    <value>Workstation '{0}' is still updating.  Please wait and 'Try Again'</value>
+  </data>
+  <data name="YouWillBeAllowedAccessWhenYouRestart" xml:space="preserve">
+    <value>You will be allowed access when you restart.</value>
+  </data>
 </root>

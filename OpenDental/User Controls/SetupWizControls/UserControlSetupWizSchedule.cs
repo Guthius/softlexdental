@@ -108,17 +108,17 @@ namespace OpenDental.User_Controls.SetupWizard {
 		private void AddSched(ODGrid grid,List<Schedule> addList) {
 			Schedule sched = new Schedule();
 			FormTimePick FormTP = new FormTimePick(false);
-			FormTP.SelectedDTime=new DateTime(1,1,1,8,0,0);
+			FormTP.SelectedDateTime=new DateTime(1,1,1,8,0,0);
 			MsgBox.Show("FormSetupWizard","Enter a Start Time.");
 			FormTP.ShowDialog();
 			if(FormTP.DialogResult == DialogResult.OK) {
-				sched.StartTime = FormTP.SelectedDTime.TimeOfDay;
+				sched.StartTime = FormTP.SelectedDateTime.TimeOfDay;
 				MsgBox.Show("FormSetupWizard","Enter an End Time.");
 				FormTP = new FormTimePick(false);
-				FormTP.SelectedDTime=new DateTime(1,1,1,17,0,0);
+				FormTP.SelectedDateTime=new DateTime(1,1,1,17,0,0);
 				FormTP.ShowDialog();
 				if(FormTP.DialogResult == DialogResult.OK) {
-					sched.StopTime = FormTP.SelectedDTime.TimeOfDay;
+					sched.StopTime = FormTP.SelectedDateTime.TimeOfDay;
 				}
 			}
 			addList.Add(sched);

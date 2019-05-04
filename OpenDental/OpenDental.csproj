@@ -558,6 +558,9 @@
     <Compile Include="Forms\FormRecallList.designer.cs">
       <DependentUpon>FormRecallList.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormUpdateSetup.Designer.cs">
+      <DependentUpon>FormUpdateSetup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormUserPassword.Designer.cs">
       <DependentUpon>FormUserPassword.cs</DependentUpon>
     </Compile>
@@ -2957,12 +2960,6 @@
     </Compile>
     <Compile Include="Forms\FormReferenceSelect.designer.cs">
       <DependentUpon>FormReferenceSelect.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormUpdateInstallMsg.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormUpdateInstallMsg.designer.cs">
-      <DependentUpon>FormUpdateInstallMsg.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormCreditRecurringDateChoose.cs">
       <SubType>Form</SubType>
@@ -6582,10 +6579,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormReferenceSelect.resx">
       <DependentUpon>FormReferenceSelect.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormUpdateInstallMsg.resx">
-      <DependentUpon>FormUpdateInstallMsg.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormCreditRecurringDateChoose.resx">

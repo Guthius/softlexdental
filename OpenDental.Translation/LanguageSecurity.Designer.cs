@@ -86,5 +86,14 @@ namespace OpenDental.Translation {
                 return ResourceManager.GetString("GenericItemModified", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Setup window accesssed.
+        /// </summary>
+        public static string UpdateSetupWindowAccessed {
+            get {
+                return ResourceManager.GetString("UpdateSetupWindowAccessed", resourceCulture);
+            }
+        }
     }
 }

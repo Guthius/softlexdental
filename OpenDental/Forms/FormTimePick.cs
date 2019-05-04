@@ -1,84 +1,191 @@
 using System;
-using System.Collections.Generic;
-using System.Data;
+using System.ComponentModel;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using OpenDentBusiness;
-using System.Linq;
 
-namespace OpenDental {
-	///<summary>Can also be used to pick Date.</summary>
-	public partial class FormTimePick:ODForm {
-		///<summary>The selected time. Used to set the initial value of the date and time displayed in this form. Defaults to today.
-		///Also stores the resulting DateTime that the user specifies upon clicking OK to this form.
-		///The date portion of this will be MinValue if the date picker is not enabled.</summary>
-		public DateTime SelectedDTime;
-		private bool _pickDate;
-		
-		///<summary>If the user clicks OK on this form, the selected time can be accessed through the SelectedTime public variable.
-		///Pass in true to enable the Date picker as well.</summary>
-		public FormTimePick(bool enableDatePicker) {
-			InitializeComponent();
-			Lan.F(this);
-			_pickDate=enableDatePicker;
-			SelectedDTime=DateTime.Now;
-		}
+namespace OpenDental
+{
+    public partial class FormTimePick : FormBase
+    {
+        int hour = 0, minute = 0;
+        readonly bool enableDatePicker;
+        readonly bool useAmPm = false; // TODO: This is hardcoded for now, but we should make this toggleable in future...
 
-		private void FormTimePick_Load(object sender,EventArgs e) {
-			if(!_pickDate) {
-				groupDate.Visible=false;
-			}
-			if(SelectedDTime.Hour>=12) {
-				radioPM.Checked=true;
-			}
-			else {
-				radioAM.Checked=true;
-			}
-			if(SelectedDTime.Hour>12) {
-				comboHour.SelectedText=(SelectedDTime.Hour-12).ToString();
-			}
-			else {
-				if(SelectedDTime.Hour==0) {
-					comboHour.SelectedText="12";
-				}
-				else {
-					comboHour.SelectedText=SelectedDTime.Hour.ToString();
-				}
-			}
-			comboMinute.SelectedIndex=SelectedDTime.Minute;
-			dateTimePicker.Value=SelectedDTime.Date;
-		}
-		
+        public DateTime SelectedDateTime
+        {
+            get => 
+                new DateTime(
+                    dateTimePicker.Value.Year, 
+                    dateTimePicker.Value.Month, 
+                    dateTimePicker.Value.Day, 
+                    hour, minute, 0);
+            set
+            {
+                dateTimePicker.Value = value.Date;
 
-		private void butOK_Click(object sender,EventArgs e) {
-			try {
-				int hour=PIn.Int(comboHour.Text.ToString().Trim());
-				int minute=PIn.Int(comboMinute.Text.ToString().Trim());
-				if(radioPM.Checked) {
-					if(hour<12) {
-						hour+=12;
-					}
-				}
-				else if(radioAM.Checked && hour==12) {
-					hour=0;
-				}
-				if(_pickDate) {
-					SelectedDTime=new DateTime(dateTimePicker.Value.Year,dateTimePicker.Value.Month,dateTimePicker.Value.Day,hour,minute,0);
-				}
-				else {
-					SelectedDTime=new DateTime(1,1,1,hour,minute,0);
-				}
-				DialogResult=DialogResult.OK;
-			}
-			catch {
-				MsgBox.Show(this,"Please enter or select a valid time.");
-			}
-		}
+                hour = value.Hour;
+                minute = value.Hour;
+            }
+        }
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormTimePick"/> class.
+        /// </summary>
+        /// <param name="enableDatePicker">A value indicating whether to enable date selection.</param>
+        public FormTimePick(bool enableDatePicker)
+        {
+            InitializeComponent();
 
-	}
+            this.enableDatePicker = enableDatePicker;
+
+            SelectedDateTime = DateTime.Now;
+        }
+
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormTimePick_Load(object sender, EventArgs e)
+        {
+            // If the date picker is not enabled, we hide it and move the time picker to its location.
+            if (!enableDatePicker)
+            {
+                dateGroupBox.Visible = false;
+                timeGroupBox.Location = dateGroupBox.Location;
+
+                Size = new Size(
+                    Width, 
+                    Height - dateGroupBox.Height);
+            }
+
+            if (useAmPm)
+            {
+                amRadioButton.Visible = 
+                    pmRadioButton.Visible = true;
+
+                if (hour >= 12)
+                {
+                    pmRadioButton.Checked = true;
+                }
+                else
+                {
+                    amRadioButton.Checked = true;
+                }
+            }
+
+            hourComboBox.Text = (useAmPm && hour > 12 ? hour - 12 : hour).ToString();
+            minuteComboBox.Text = minute.ToString();
+        }
+
+        /// <summary>
+        /// Only allows digits to be entered in the time comboboxes.
+        /// </summary>
+        void HourComboBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
+
+        /// <summary>
+        /// Validates the hour to ensure it remains within the acceptable range (0-23 or 1-12).
+        /// </summary>
+        void HourComboBox_Validating(object sender, CancelEventArgs e)
+        {
+            if (int.TryParse(hourComboBox.Text, out int hour))
+            {
+                if (useAmPm)
+                {
+                    if (hour < 1) hour = 1;
+                    else if (hour > 12)
+                    {
+                        hour = 12;
+                    }
+                }
+                else 
+                {
+                    if (hour < 0) hour = 0;
+                    else if (hour > 23)
+                    {
+                        hour = 23;
+                    }
+                }
+
+                hourComboBox.Text = hour.ToString();
+            }
+            else
+            {
+                hourComboBox.Text = this.hour.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Validates the minute to ensure it remains within the acceptable range (0-59).
+        /// </summary>
+        private void MinuteComboBox_Validating(object sender, CancelEventArgs e)
+        {
+            if (int.TryParse(minuteComboBox.Text, out int minute))
+            {
+                if (minute < 0) minute = 0;
+                else if (minute > 59)
+                {
+                    minute = 59;
+                }
+                minuteComboBox.Text = minute.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Validates the entered date and time and closes the form.
+        /// </summary>
+        void AcceptButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int hour = int.Parse(hourComboBox.Text);
+                if (useAmPm)
+                {
+                    if (hour < 1 || hour > 12)
+                    {
+                        throw new Exception("Hour must be between 1-12");
+                    }
+
+                    if (amRadioButton.Checked && hour == 12) hour = 0;
+                    if (pmRadioButton.Checked)
+                    {
+                        if (hour < 12)
+                        {
+                            hour += 12;
+                        }
+                    }
+                }
+                else
+                {
+                    if (hour < 0 || hour > 23)
+                    {
+                        throw new Exception("Hour must be between 0-23");
+                    }
+                }
+
+                int minute = int.Parse(minuteComboBox.Text);
+                if (minute < 0 || minute > 59)
+                {
+                    throw new Exception("Minute must be between 0-59");
+                }
+
+                this.hour = hour;
+                this.minute = minute;
+
+                DialogResult = DialogResult.OK;
+            }
+            catch
+            {
+                MessageBox.Show(
+                    Translation.Language.EnterOrSelectAValidDate,
+                    Translation.Language.PickTime, 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+            }
+        }
+    }
 }

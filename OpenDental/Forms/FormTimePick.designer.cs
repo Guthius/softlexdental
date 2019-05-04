@@ -1,83 +1,95 @@
-namespace OpenDental{
-	partial class FormTimePick {
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+namespace OpenDental
+{
+    partial class FormTimePick
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing) {
-			if(disposing && (components != null)) {
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormTimePick));
-			this.dateTimePicker = new System.Windows.Forms.DateTimePicker();
-			this.radioPM = new System.Windows.Forms.RadioButton();
-			this.radioAM = new System.Windows.Forms.RadioButton();
-			this.label1 = new System.Windows.Forms.Label();
-			this.comboMinute = new System.Windows.Forms.ComboBox();
-			this.comboHour = new System.Windows.Forms.ComboBox();
-			this.groupDate = new System.Windows.Forms.GroupBox();
-			this.groupTime = new System.Windows.Forms.GroupBox();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.groupDate.SuspendLayout();
-			this.groupTime.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// dateTimePicker
-			// 
-			this.dateTimePicker.Location = new System.Drawing.Point(8, 19);
-			this.dateTimePicker.Name = "dateTimePicker";
-			this.dateTimePicker.Size = new System.Drawing.Size(200, 20);
-			this.dateTimePicker.TabIndex = 65;
-			// 
-			// radioPM
-			// 
-			this.radioPM.Location = new System.Drawing.Point(147, 34);
-			this.radioPM.Name = "radioPM";
-			this.radioPM.Size = new System.Drawing.Size(70, 17);
-			this.radioPM.TabIndex = 63;
-			this.radioPM.Text = "PM";
-			this.radioPM.UseVisualStyleBackColor = true;
-			// 
-			// radioAM
-			// 
-			this.radioAM.Checked = true;
-			this.radioAM.Location = new System.Drawing.Point(147, 13);
-			this.radioAM.Name = "radioAM";
-			this.radioAM.Size = new System.Drawing.Size(70, 17);
-			this.radioAM.TabIndex = 62;
-			this.radioAM.TabStop = true;
-			this.radioAM.Text = "AM";
-			this.radioAM.UseVisualStyleBackColor = true;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(62, 22);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(17, 21);
-			this.label1.TabIndex = 61;
-			this.label1.Text = ":";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// comboMinute
-			// 
-			this.comboMinute.FormattingEnabled = true;
-			this.comboMinute.Items.AddRange(new object[] {
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormTimePick));
+            this.dateTimePicker = new System.Windows.Forms.DateTimePicker();
+            this.pmRadioButton = new System.Windows.Forms.RadioButton();
+            this.amRadioButton = new System.Windows.Forms.RadioButton();
+            this.splitLabel = new System.Windows.Forms.Label();
+            this.minuteComboBox = new System.Windows.Forms.ComboBox();
+            this.hourComboBox = new System.Windows.Forms.ComboBox();
+            this.dateGroupBox = new System.Windows.Forms.GroupBox();
+            this.timeGroupBox = new System.Windows.Forms.GroupBox();
+            this.acceptButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.dateGroupBox.SuspendLayout();
+            this.timeGroupBox.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // dateTimePicker
+            // 
+            this.dateTimePicker.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dateTimePicker.Location = new System.Drawing.Point(6, 19);
+            this.dateTimePicker.Name = "dateTimePicker";
+            this.dateTimePicker.Size = new System.Drawing.Size(246, 23);
+            this.dateTimePicker.TabIndex = 0;
+            // 
+            // pmRadioButton
+            // 
+            this.pmRadioButton.AutoSize = true;
+            this.pmRadioButton.Location = new System.Drawing.Point(197, 21);
+            this.pmRadioButton.Name = "pmRadioButton";
+            this.pmRadioButton.Size = new System.Drawing.Size(43, 19);
+            this.pmRadioButton.TabIndex = 4;
+            this.pmRadioButton.Text = "PM";
+            this.pmRadioButton.UseVisualStyleBackColor = true;
+            this.pmRadioButton.Visible = false;
+            // 
+            // amRadioButton
+            // 
+            this.amRadioButton.AutoSize = true;
+            this.amRadioButton.Checked = true;
+            this.amRadioButton.Location = new System.Drawing.Point(147, 21);
+            this.amRadioButton.Name = "amRadioButton";
+            this.amRadioButton.Size = new System.Drawing.Size(44, 19);
+            this.amRadioButton.TabIndex = 3;
+            this.amRadioButton.TabStop = true;
+            this.amRadioButton.Text = "AM";
+            this.amRadioButton.UseVisualStyleBackColor = true;
+            this.amRadioButton.Visible = false;
+            // 
+            // splitLabel
+            // 
+            this.splitLabel.AutoSize = true;
+            this.splitLabel.Location = new System.Drawing.Point(65, 22);
+            this.splitLabel.Name = "splitLabel";
+            this.splitLabel.Size = new System.Drawing.Size(10, 15);
+            this.splitLabel.TabIndex = 1;
+            this.splitLabel.Text = ":";
+            this.splitLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // minuteComboBox
+            // 
+            this.minuteComboBox.FormattingEnabled = true;
+            this.minuteComboBox.Items.AddRange(new object[] {
             "00",
             "01",
             "02",
@@ -138,16 +150,18 @@ namespace OpenDental{
             "57",
             "58",
             "59"});
-			this.comboMinute.Location = new System.Drawing.Point(79, 22);
-			this.comboMinute.MaxDropDownItems = 48;
-			this.comboMinute.Name = "comboMinute";
-			this.comboMinute.Size = new System.Drawing.Size(54, 21);
-			this.comboMinute.TabIndex = 60;
-			// 
-			// comboHour
-			// 
-			this.comboHour.FormattingEnabled = true;
-			this.comboHour.Items.AddRange(new object[] {
+            this.minuteComboBox.Location = new System.Drawing.Point(80, 19);
+            this.minuteComboBox.MaxDropDownItems = 48;
+            this.minuteComboBox.Name = "minuteComboBox";
+            this.minuteComboBox.Size = new System.Drawing.Size(54, 23);
+            this.minuteComboBox.TabIndex = 2;
+            this.minuteComboBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.HourComboBox_KeyPress);
+            this.minuteComboBox.Validating += new System.ComponentModel.CancelEventHandler(this.MinuteComboBox_Validating);
+            // 
+            // hourComboBox
+            // 
+            this.hourComboBox.FormattingEnabled = true;
+            this.hourComboBox.Items.AddRange(new object[] {
             "1",
             "2",
             "3",
@@ -160,97 +174,95 @@ namespace OpenDental{
             "10",
             "11",
             "12"});
-			this.comboHour.Location = new System.Drawing.Point(7, 22);
-			this.comboHour.MaxDropDownItems = 48;
-			this.comboHour.Name = "comboHour";
-			this.comboHour.Size = new System.Drawing.Size(54, 21);
-			this.comboHour.TabIndex = 59;
-			// 
-			// groupDate
-			// 
-			this.groupDate.Controls.Add(this.dateTimePicker);
-			this.groupDate.Location = new System.Drawing.Point(16, 10);
-			this.groupDate.Name = "groupDate";
-			this.groupDate.Size = new System.Drawing.Size(222, 46);
-			this.groupDate.TabIndex = 66;
-			this.groupDate.TabStop = false;
-			this.groupDate.Text = "Pick Date";
-			// 
-			// groupTime
-			// 
-			this.groupTime.Controls.Add(this.comboHour);
-			this.groupTime.Controls.Add(this.radioPM);
-			this.groupTime.Controls.Add(this.comboMinute);
-			this.groupTime.Controls.Add(this.radioAM);
-			this.groupTime.Controls.Add(this.label1);
-			this.groupTime.Location = new System.Drawing.Point(16, 65);
-			this.groupTime.Name = "groupTime";
-			this.groupTime.Size = new System.Drawing.Size(222, 55);
-			this.groupTime.TabIndex = 67;
-			this.groupTime.TabStop = false;
-			this.groupTime.Text = "Pick Time";
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(81, 135);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 24);
-			this.butOK.TabIndex = 3;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(166, 135);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// FormTimePick
-			// 
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(253, 171);
-			this.Controls.Add(this.groupTime);
-			this.Controls.Add(this.groupDate);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butCancel);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximumSize = new System.Drawing.Size(269, 210);
-			this.MinimumSize = new System.Drawing.Size(269, 210);
-			this.Name = "FormTimePick";
-			this.Text = "Pick Time";
-			this.Load += new System.EventHandler(this.FormTimePick_Load);
-			this.groupDate.ResumeLayout(false);
-			this.groupTime.ResumeLayout(false);
-			this.ResumeLayout(false);
+            this.hourComboBox.Location = new System.Drawing.Point(6, 19);
+            this.hourComboBox.MaxDropDownItems = 48;
+            this.hourComboBox.Name = "hourComboBox";
+            this.hourComboBox.Size = new System.Drawing.Size(54, 23);
+            this.hourComboBox.TabIndex = 0;
+            this.hourComboBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.HourComboBox_KeyPress);
+            this.hourComboBox.Validating += new System.ComponentModel.CancelEventHandler(this.HourComboBox_Validating);
+            // 
+            // dateGroupBox
+            // 
+            this.dateGroupBox.Controls.Add(this.dateTimePicker);
+            this.dateGroupBox.Location = new System.Drawing.Point(13, 19);
+            this.dateGroupBox.Name = "dateGroupBox";
+            this.dateGroupBox.Size = new System.Drawing.Size(258, 50);
+            this.dateGroupBox.TabIndex = 0;
+            this.dateGroupBox.TabStop = false;
+            this.dateGroupBox.Text = "Pick Date";
+            // 
+            // timeGroupBox
+            // 
+            this.timeGroupBox.Controls.Add(this.hourComboBox);
+            this.timeGroupBox.Controls.Add(this.pmRadioButton);
+            this.timeGroupBox.Controls.Add(this.minuteComboBox);
+            this.timeGroupBox.Controls.Add(this.amRadioButton);
+            this.timeGroupBox.Controls.Add(this.splitLabel);
+            this.timeGroupBox.Location = new System.Drawing.Point(13, 75);
+            this.timeGroupBox.Name = "timeGroupBox";
+            this.timeGroupBox.Size = new System.Drawing.Size(258, 50);
+            this.timeGroupBox.TabIndex = 1;
+            this.timeGroupBox.TabStop = false;
+            this.timeGroupBox.Text = "Pick Time";
+            // 
+            // acceptButton
+            // 
+            this.acceptButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.acceptButton.Location = new System.Drawing.Point(45, 148);
+            this.acceptButton.Name = "acceptButton";
+            this.acceptButton.Size = new System.Drawing.Size(110, 30);
+            this.acceptButton.TabIndex = 2;
+            this.acceptButton.Text = "&OK";
+            this.acceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(161, 148);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(110, 30);
+            this.cancelButton.TabIndex = 3;
+            this.cancelButton.Text = "&Cancel";
+            // 
+            // FormTimePick
+            // 
+            this.AcceptButton = this.acceptButton;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(284, 191);
+            this.ControlBox = false;
+            this.Controls.Add(this.timeGroupBox);
+            this.Controls.Add(this.dateGroupBox);
+            this.Controls.Add(this.acceptButton);
+            this.Controls.Add(this.cancelButton);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FormTimePick";
+            this.ShowInTaskbar = false;
+            this.Text = "Pick Time";
+            this.Load += new System.EventHandler(this.FormTimePick_Load);
+            this.dateGroupBox.ResumeLayout(false);
+            this.timeGroupBox.ResumeLayout(false);
+            this.timeGroupBox.PerformLayout();
+            this.ResumeLayout(false);
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private OpenDental.UI.Button butOK;
-		private OpenDental.UI.Button butCancel;
-		private System.Windows.Forms.ComboBox comboHour;
-		private System.Windows.Forms.ComboBox comboMinute;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.RadioButton radioAM;
-		private System.Windows.Forms.RadioButton radioPM;
-		private System.Windows.Forms.DateTimePicker dateTimePicker;
-		private System.Windows.Forms.GroupBox groupDate;
-		private System.Windows.Forms.GroupBox groupTime;
-	}
+        private System.Windows.Forms.Button acceptButton;
+        private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.ComboBox hourComboBox;
+        private System.Windows.Forms.ComboBox minuteComboBox;
+        private System.Windows.Forms.Label splitLabel;
+        private System.Windows.Forms.RadioButton amRadioButton;
+        private System.Windows.Forms.RadioButton pmRadioButton;
+        private System.Windows.Forms.DateTimePicker dateTimePicker;
+        private System.Windows.Forms.GroupBox dateGroupBox;
+        private System.Windows.Forms.GroupBox timeGroupBox;
+    }
 }

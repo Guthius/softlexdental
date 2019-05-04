@@ -455,7 +455,11 @@ namespace OpenDental
             }
         }
 
-        ///<summary>Returns true if the download at the specified remoteUri with the given registration code should be downloaded and installed as an update, and false is returned otherwise. Also, information about the decision making process is stored in the updateInfoMajor and updateInfoMinor strings, but only holds significance to a human user.</summary>
+        /// <summary>
+        /// Returns true if the download at the specified remoteUri with the given registration code should be downloaded and installed as an update, 
+        /// and false is returned otherwise. Also, information about the decision making process is stored in the updateInfoMajor and updateInfoMinor 
+        /// strings, but only holds significance to a human user.
+        /// </summary>
         public static bool ShouldDownloadUpdate(string remoteUri, string updateCode, out string updateInfoMajor, out string updateInfoMinor)
         {
             updateInfoMajor = "";
@@ -1075,147 +1079,6 @@ namespace OpenDental
                 , mySqlPassHash
                 , ""
                 , "");
-        }
-
-        ///<summary>Downloads the update files from the database and places them in the given folder. Returns false if anything went wrong.</summary>
-        ///<param name="tempFolderUpdate">The temporary folder used to store the update files before being copied.</param>
-        private static bool DownloadUpdateFilesFromDatabase(string tempFolderUpdate)
-        {
-            if (Directory.Exists(tempFolderUpdate))
-            {
-                try
-                {
-                    Directory.Delete(tempFolderUpdate, true);
-                }
-                catch (Exception ex)
-                {
-                    FormFriendlyException.Show(Lan.g("Prefs", "Unable to delete update files from local temp folder. Try closing and reopening the program."), ex);
-                    FormOpenDental.ExitCode = 301;//UpdateFiles folder cannot be deleted
-                    Environment.Exit(FormOpenDental.ExitCode);
-                    return false;
-                }
-            }
-            StringBuilder strBuilder = new StringBuilder();
-            DocumentMisc docUpdateFilesPart = null;
-            int count = 1;
-            string fileName = count.ToString().PadLeft(4, '0');
-            while ((docUpdateFilesPart = DocumentMiscs.GetByTypeAndFileName(fileName, DocumentMiscType.UpdateFilesSegment)) != null)
-            {
-                strBuilder.Append(docUpdateFilesPart.RawBase64);
-                count++;
-                fileName = count.ToString().PadLeft(4, '0');
-            }
-            ODException.SwallowAnyException(() =>
-            {
-                //strBuilder.ToString() has a tendency to fail when the string contains roughly 170MB of data.
-                //If that becomes a typical size for our Update Files folder we should consider not storing the data as Base64.
-                byte[] rawBytes = Convert.FromBase64String(strBuilder.ToString());
-                using (ZipFile unzipped = ZipFile.Read(rawBytes))
-                {
-                    unzipped.ExtractAll(tempFolderUpdate);
-                }
-            });//fail silently
-            return true;
-        }
-
-        ///<summary>Sets up the executable file and opens the UpdateFileCopier with the correct command line arguments passed in. Returns whether
-        ///the file copier was successfully started.</summary>
-        ///<param name="folderUpdate">Where the update files are stored.</param>
-        ///<param name="destDir">Where the update files will be copied to.</param>
-        ///<param name="doKillServices">Will tell the file copier whether to kill all Open Dental services or not.</param>
-        ///<param name="useLocalUpdateFileCopier">Will use the update file copier in the local installation directory rather than the one downloaded from
-        ///the server.</param>
-        ///<param name="openCopiedFiles">Tells the file copier to open the copied files after completion.</param>
-        public static bool OpenFileCopier(string folderUpdate, string destDir, bool doKillServices, bool useLocalUpdateFileCopier, bool openCopiedFiles)
-        {
-            string tempDir = Preferences.GetTempFolderPath();
-            //copy UpdateFileCopier.exe to the temp directory
-            //In the case of using dynamic mode, because we have modified the update file copier when we released this feature, we need to be 
-            //guarenteed we are using the correct version. We know that the version in our installation directory has the updates we need as otherwise
-            //they would never be able to reach these lines of code.
-            string updateFileCopierLocation = "";
-            if (useLocalUpdateFileCopier)
-            {
-                if (Application.StartupPath.Contains("DynamicMode"))
-                {
-                    //If they are within a different dynamic mode folder, the installation directory will be two directories up.
-                    updateFileCopierLocation = Directory.GetParent(Directory.GetParent(Application.StartupPath).FullName).FullName;
-                }
-                else
-                {
-                    //Otherwise, this is the installation directory.
-                    updateFileCopierLocation = Application.StartupPath;
-                }
-            }
-            else
-            {//Otherwise use the update file copier from the server.
-                updateFileCopierLocation = folderUpdate;
-            }
-            try
-            {
-                File.Copy(ODFileUtils.CombinePaths(updateFileCopierLocation, "UpdateFileCopier.exe"),//source
-                    ODFileUtils.CombinePaths(tempDir, "UpdateFileCopier.exe"),//dest
-                    true);//overwrite
-            }
-            catch (Exception ex)
-            {
-                FormFriendlyException.Show(Lans.g("Prefs", "Unable to copy ") + "UpdateFileCopier.exe " + Lans.g("Prefs", "from ") + updateFileCopierLocation + ".", ex);
-                return false;
-            }
-            //wait a moment to make sure the file was copied
-            Thread.Sleep(500);
-            //launch UpdateFileCopier to copy all files to here.
-            int processId = Process.GetCurrentProcess().Id;
-            string startFileName = ODFileUtils.CombinePaths(tempDir, "UpdateFileCopier.exe");
-            string arguments = "\"" + folderUpdate + "\""//pass the source directory to the file copier.
-                + " " + processId.ToString()//and the processId of Open Dental.
-                + " \"" + destDir + "\""//and the destination directory
-                + " " + doKillServices.ToString()//and whether to kill all processes or not
-                + " " + openCopiedFiles.ToString();//and whether to open the copied files or not.
-            try
-            {
-                Process proc = new Process();
-                proc.StartInfo.FileName = startFileName;
-                proc.StartInfo.Arguments = arguments;
-                proc.Start();
-                proc.WaitForExit();//Waits for the file copier to be complete.
-            }
-            catch (Exception ex)
-            {
-                FormFriendlyException.Show(Lan.g("Prefs", "Unable to start the update file copier. Try closing and reopening the program."), ex);
-                FormOpenDental.ExitCode = 305;//Unable to start the UpdateFileCopier.exe process.
-                Environment.Exit(FormOpenDental.ExitCode);
-                return false;
-            }
-            return true;
-        }
-
-        /// <summary>Check for a developer only license</summary>
-        public static bool IsRegKeyForTesting()
-        {
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
-            settings.IndentChars = ("    ");
-            StringBuilder strbuild = new StringBuilder();
-            using (XmlWriter writer = XmlWriter.Create(strbuild, settings))
-            {
-                writer.WriteStartElement("RegistrationKey");
-                writer.WriteString(Preferences.GetString(PrefName.RegistrationKey));
-                writer.WriteEndElement();
-            }
-            try
-            {
-                string response = CustomerUpdatesProxy.GetWebServiceInstance().RequestIsDevKey(strbuild.ToString());
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(response);
-                XmlNode node = doc.SelectSingleNode("//IsDevKey");
-                return PIn.Bool(node.InnerText);
-            }
-            catch 
-            {
-                //They don't have an external internet connection.
-                return false;
-            }
         }
     }
 }

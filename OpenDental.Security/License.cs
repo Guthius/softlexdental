@@ -5,7 +5,7 @@ namespace OpenDental
     public static class License
     {
         /// <summary>
-        /// Checks whehter the specified licenregistrationse key is valid.
+        /// Checks whether the specified registration key is valid.
         /// </summary>
         /// <param name="registrationKey">The registration key.</param>
         /// <returns>True if the key is valid; otherwise, false.</returns>
@@ -13,5 +13,12 @@ namespace OpenDental
         {
             return true;
         }
+
+        /// <summary>
+        /// Formats the specified registration key for display.
+        /// </summary>
+        /// <param name="registrationKey">The registration key.</param>
+        /// <returns>The formatted registration key.</returns>
+        public static string FormatKey(string registrationKey) => registrationKey;
     }
 }

@@ -1498,21 +1498,44 @@ namespace OpenDentBusiness
         UnschedDaysPast,
         ///<summary>Bool, true by default, prevents recall appointments from being sent to the Unscheduled List.</summary>
         UnscheduledListNoRecalls,
+
+        [Obsolete]
         UpdateCode,
+
         UpdateInProgressOnComputerName,
-        ///<summary>Described in the Update Setup window and in the manual.  Can contain multiple db names separated by commas.  Should not include current db name.</summary>
+        
+        /// <summary>
+        /// Described in the Update Setup window and in the manual. Can contain multiple db names separated by commas. Should not include current db name.
+        /// </summary>
+        [Obsolete]
         UpdateMultipleDatabases,
+
         UpdateServerAddress,
+
+        [Obsolete]
         UpdateShowMsiButtons,
-        ///<summary>The next update date and time, set in FormUpdateSetup.  When this is set in the future, the main form's title bar will count down to the set time.</summary>
+
+        /// <summary>
+        /// The next update date and time, set in FormUpdateSetup.  When this is set in the future, the main form's title bar will count down to the set time.
+        /// </summary>
+        [Obsolete]
         UpdateDateTime,
-        ///<summary>Use GetStringNoCache() to get the value of this preference.</summary>
+
+
+        /// <summary>
+        /// Use GetStringNoCache() to get the value of this preference.
+        /// </summary>
         UpdateStreamLinePassword,
         UpdateWebProxyAddress,
         UpdateWebProxyPassword,
         UpdateWebProxyUserName,
+
+        [Obsolete("Use UpdateServerAddress instead.")]
         UpdateWebsitePath,
+
+        [Obsolete]
         UpdateWindowShowsClassicView,
+
         UseBillingAddressOnClaims,
         ///<summary>Enum:ToothNumberingNomenclature 0=Universal(American), 1=FDI, 2=Haderup, 3=Palmer</summary>
         UseInternationalToothNumbers,

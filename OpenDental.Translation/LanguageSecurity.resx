@@ -126,4 +126,7 @@
   <data name="GenericItemModified" xml:space="preserve">
     <value>{0} edited</value>
   </data>
+  <data name="UpdateSetupWindowAccessed" xml:space="preserve">
+    <value>Update Setup window accesssed</value>
+  </data>
 </root>
