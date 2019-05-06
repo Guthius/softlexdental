@@ -323,14 +323,6 @@ namespace OpenDentBusiness
             return listUserods;
         }
 
-        ///<summary>Returns all users that are associated to the permission passed in.  Returns empty list if no matches found.</summary>
-        public static List<User> GetUsersByJobRole(JobPerm jobPerm, bool showHidden)
-        {
-            //No need to check RemotingRole; no call to db.
-            List<JobPermission> listJobRoles = JobPermissions.GetList().FindAll(x => x.JobPermType == jobPerm);
-            return Userods.GetWhere(x => listJobRoles.Any(y => x.UserNum == y.UserNum), !showHidden);
-        }
-
         ///<summary>Gets all non-hidden users that have an associated provider.</summary>
         public static List<User> GetUsersWithProviders()
         {

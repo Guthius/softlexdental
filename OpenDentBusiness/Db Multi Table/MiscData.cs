@@ -8,6 +8,7 @@ using System.Reflection;
 using Microsoft.VisualBasic.Devices;
 using System.Management;
 using System.Linq;
+using OpenDental;
 
 namespace OpenDentBusiness
 {
@@ -213,7 +214,7 @@ namespace OpenDentBusiness
                 string archiveServerName = Preferences.GetString(PrefName.ArchiveServerName);
                 string archiveUserName = Preferences.GetString(PrefName.ArchiveUserName);
                 string decryptedPass;
-                CDT.Class1.Decrypt(Preferences.GetString(PrefName.ArchivePassHash), out decryptedPass);
+                Encryption.TryDecrypt(Preferences.GetString(PrefName.ArchivePassHash), out decryptedPass);
                 //Connect to the archive database.  This can throw many exceptions.
                 DataConnection.SetDb(archiveServerName, MiscData.GetArchiveDatabaseName(), archiveUserName, decryptedPass);
                 #region Validate archive database version

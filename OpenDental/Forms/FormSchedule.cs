@@ -753,9 +753,6 @@ namespace OpenDental{
 			}
 			if(isFromDb || this._tableScheds==null) {
 				bool canViewNotes=true;
-				if(Preferences.IsODHQ) {
-					canViewNotes=Security.IsAuthorized(Permissions.Schedules,true);
-				}
 
 				_tableScheds=Schedules.GetPeriod(PIn.Date(textDateFrom.Text),PIn.Date(textDateTo.Text),provNums,empNums,checkPracticeNotes.Checked,
 					checkClinicNotes.Checked,clinicNum,checkShowClinicSchedules.Checked,canViewNotes);

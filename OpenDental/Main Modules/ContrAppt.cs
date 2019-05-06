@@ -842,10 +842,6 @@ namespace OpenDental
             FillProduction(startDate, endDate);
             FillProductionGoal(startDate, endDate);
             bool hasNotes = true;
-            if (Preferences.IsODHQ)
-            {//HQ
-                hasNotes = Security.IsAuthorized(Permissions.Schedules, true);
-            }
             FillProvSched(hasNotes);
             FillEmpSched(hasNotes);
             FillWaitingRoom();
@@ -1359,11 +1355,6 @@ namespace OpenDental
             menuApt.MenuItems.Clear();
             menuItem = menuApt.MenuItems.Add(Lan.g(this, "Copy to Pinboard"), new EventHandler(menuApt_Click));
             menuItem.Name = MenuItemNames.CopyToPinboard;
-            if (Preferences.IsODHQ)
-            {
-                menuItem = menuApt.MenuItems.Add(Lan.g(this, "Copy Appointment Structure"), new EventHandler(menuApt_Click));
-                menuItem.Name = MenuItemNames.CopyAppointmentStructure;
-            }
             menuApt.MenuItems.Add("-");
             menuItem = menuApt.MenuItems.Add(Lan.g(this, "Send to Unscheduled List"), new EventHandler(menuApt_Click));
             menuItem.Name = MenuItemNames.SendToUnscheduledList;
@@ -1460,10 +1451,6 @@ namespace OpenDental
             toolTip1.SetToolTip(butComplete, Lan.g(this, "Set Complete"));
             toolTip1.SetToolTip(butDelete, Lan.g(this, "Delete"));
             //toolTip1.SetToolTip(butOther,Lan.g(this,"Other Appointments"));
-            if (Preferences.IsODHQ)
-            {
-                butGraph.Visible = true;
-            }
             SetWeeklyView(Preferences.GetBool(PrefName.ApptModuleDefaultToWeek));
             SendToPinboardEvent.Fired += HandlePinClicked;
             InitializedOnStartup = true;//moved this down to prevent view setting from triggering ModuleSelected().
@@ -2943,26 +2930,6 @@ namespace OpenDental
             RefreshModuleDataPatient(thisApptCtrl.PatNum);
             if (e.Button == MouseButtons.Right)
             {
-                if (Preferences.IsODHQ)
-                {
-                    menuApt.MenuItems.RemoveByKey(MenuItemNames.Jobs);
-                    menuApt.MenuItems.RemoveByKey(MenuItemNames.JobsSpacer);
-                    MenuItem menuSpacer = new MenuItem("-");
-                    menuSpacer.Name = MenuItemNames.JobsSpacer;
-                    menuApt.MenuItems.Add(menuSpacer);
-                    MenuItem menuJobs = new MenuItem(Lan.g(this, "Jobs"));
-                    menuJobs.Name = MenuItemNames.Jobs;
-                    menuJobs.MenuItems.Add(Lan.g(this, "Attach Job"), new EventHandler(menuJobs_Attach));
-                    List<JobLink> jobLinks = JobLinks.GetForApptNum(ContrApptSingle.SelectedAptNum);
-                    List<Job> listJobs = Jobs.GetMany(jobLinks.Select(x => x.JobNum).ToList());
-                    foreach (Job job in listJobs)
-                    {
-                        MenuItem menuItemJob = new MenuItem(job.ToString(), new EventHandler(menuJobs_GoToJob));
-                        menuItemJob.Tag = job.JobNum;
-                        menuJobs.MenuItems.Add(menuItemJob);
-                    }
-                    menuApt.MenuItems.Add(menuJobs);
-                }
                 menuApt.MenuItems.RemoveByKey(MenuItemNames.PhoneDiv);
                 menuApt.MenuItems.RemoveByKey(MenuItemNames.HomePhone);
                 menuApt.MenuItems.RemoveByKey(MenuItemNames.WorkPhone);
@@ -6548,33 +6515,6 @@ namespace OpenDental
             RefreshPeriod();
         }
 
-        private void menuJobs_Attach(object sender, System.EventArgs e)
-        {
-            if (ContrApptSingle.SelectedAptNum <= 0)
-            {
-                return;
-            }
-            //Atach new job
-            FormJobSearch FormJS = new FormJobSearch();
-            FormJS.ShowDialog();
-            if (FormJS.DialogResult != DialogResult.OK || FormJS.SelectedJobNum == 0)
-            {
-                return;
-            }
-            JobLink jobLink = new JobLink();
-            jobLink.JobNum = FormJS.SelectedJobNum;
-            jobLink.FKey = ContrApptSingle.SelectedAptNum;
-            jobLink.LinkType = JobLinkType.Appointment;
-            JobLinks.Insert(jobLink);
-            Signalods.SetInvalid(InvalidType.Jobs, KeyType.Job, jobLink.JobNum);
-            return;
-        }
-
-        private void menuJobs_GoToJob(object sender, System.EventArgs e)
-        {
-            FormOpenDental.S_GoToJob(((long)((MenuItem)sender).Tag));
-        }
-
         private void butSearch_Click(object sender, System.EventArgs e)
         {
             if (pinBoard.ApptList.Count == 0)
@@ -7035,13 +6975,6 @@ namespace OpenDental
         private void timerWaitingRoom_Tick(object sender, EventArgs e)
         {
             FillWaitingRoom();
-        }
-
-        private void butGraph_Click(object sender, EventArgs e)
-        {
-            //only visible on computers at OD corporate.
-            FormGraphEmployeeTime form = new FormGraphEmployeeTime();
-            form.ShowDialog();
         }
 
         private void butProvPick_Click(object sender, EventArgs e)

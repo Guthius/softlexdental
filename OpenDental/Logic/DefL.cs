@@ -18,7 +18,7 @@ namespace OpenDental {
 				if(defCatCur.GetDescription() == "NotUsed") {
 					continue;
 				}
-				if(defCatCur.GetDescription().Contains("HqOnly") && !Preferences.IsODHQ) {
+				if(defCatCur.GetDescription().Contains("HqOnly")) {
 					continue;
 				}
 				DefCatOptions defCOption=new DefCatOptions(defCatCur);
@@ -301,9 +301,6 @@ namespace OpenDental {
 			gridDefs.Rows.Clear();
 			ODGridRow row;
 			foreach(Def defCur in listDefsCur) {
-				if(!Preferences.IsODHQ && defCur.ItemValue==CommItemTypeAuto.ODHQ.ToString()) {
-					continue;
-				}
 				if(Defs.IsDefDeprecated(defCur)) {
 					defCur.IsHidden=true;
 				}

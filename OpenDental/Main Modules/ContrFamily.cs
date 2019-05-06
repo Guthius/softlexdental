@@ -1254,12 +1254,6 @@ namespace OpenDental
 
         private void ToolButDelete_Click()
         {
-            //At HQ, we cannot allow users to merge patients related to reseller families.
-            if (Preferences.IsODHQ && Resellers.IsResellerFamily(PatCur))
-            {
-                MsgBox.Show(this, "Cannot delete a patient related to a reseller family.");
-                return;
-            }
             //this doesn't actually delete the patient, just changes their status
             //and they will never show again in the patient selection list.
             //check for plans, appointments, procedures, etc.
@@ -1280,7 +1274,6 @@ namespace OpenDental
             List<Sheet> sheetList = Sheets.GetForPatient(PatCur.PatNum);
             RepeatCharge[] repeatChargeList = RepeatCharges.Refresh(PatCur.PatNum);
             List<CreditCard> listCreditCards = CreditCards.Refresh(PatCur.PatNum);
-            RegistrationKey[] arrayRegistrationKeys = RegistrationKeys.GetForPatient(PatCur.PatNum);
             List<long> listPatNumClones = Patients.GetClonePatNumsAll(PatCur.PatNum);
             bool hasProcs = procList.Count > 0;
             bool hasAppt = apptList.Count > 0;
@@ -1304,11 +1297,10 @@ namespace OpenDental
             bool hasSheets = sheetList.Count > 0;
             bool hasRepeat = repeatChargeList.Length > 0;
             bool hasCC = listCreditCards.Count > 0;
-            bool hasRegKey = arrayRegistrationKeys.Length > 0;
             bool hasPerio = PerioExams.GetExamsTable(PatCur.PatNum).Rows.Count > 0;
             bool hasClones = (listPatNumClones.Count > 1);//The list of "clones for all" will always include the current patient.
             if (hasProcs || hasAppt || hasClaims || hasAdj || hasPay || hasClaimProcs || hasComm || hasPayPlans
-                || hasInsPlans || hasRef || hasMeds || isSuperFamilyHead || hasSheets || hasRepeat || hasCC || hasRegKey || hasPerio || hasClones)
+                || hasInsPlans || hasRef || hasMeds || isSuperFamilyHead || hasSheets || hasRepeat || hasCC || hasPerio || hasClones)
             {
                 string message = Lan.g(this, "You cannot delete this patient without first deleting the following data:") + "\r";
                 if (hasProcs)
@@ -1370,10 +1362,6 @@ namespace OpenDental
                 if (hasCC)
                 {
                     message += Lan.g(this, "Credit Cards") + "\r";
-                }
-                if (hasRegKey)
-                {
-                    message += Lan.g(this, "Registration Keys") + "\r";
                 }
                 if (hasPerio)
                 {
@@ -1458,12 +1446,7 @@ namespace OpenDental
                 MessageBox.Show(Lan.g(this, "Patient is already the guarantor.  Please select a different family member."));
                 return;
             }
-            //At HQ, we cannot allow users to change the guarantor of reseller families.
-            if (Preferences.IsODHQ && Resellers.IsResellerFamily(PatCur))
-            {
-                MsgBox.Show(this, "Cannot change the guarantor of a reseller family.");
-                return;
-            }
+
             if (MessageBox.Show(Lan.g(this, "Make the selected patient the guarantor?")
                 , "", MessageBoxButtons.OKCancel) != DialogResult.OK)
             {
@@ -1479,12 +1462,6 @@ namespace OpenDental
 
         private void ToolButMove_Click()
         {
-            //At HQ, we cannot allow users to move patients of reseller families.
-            if (Preferences.IsODHQ && Resellers.IsResellerFamily(PatCur))
-            {
-                MsgBox.Show(this, "Cannot move patients of a reseller family.");
-                return;
-            }
             Patient PatOld = PatCur.Copy();
             //Patient PatCur;
             if (PatCur.PatNum == PatCur.Guarantor)
@@ -2059,12 +2036,6 @@ namespace OpenDental
             {
                 return;
             }
-            //At HQ, we cannot allow users to manipulate super family informaiton when the patient is related to a reseller family.
-            if (Preferences.IsODHQ && Resellers.IsResellerFamily(PatCur))
-            {
-                MsgBox.Show(this, "Cannot manipulate super family for a patient related to a reseller family.");
-                return;
-            }
             for (int i = 0; i < FamCur.ListPats.Length; i++)
             {//remove whole family
                 Patient tempPat = FamCur.ListPats[i].Copy();
@@ -2079,12 +2050,6 @@ namespace OpenDental
         {
             if (PatCur.SuperFamily == 0)
             {
-                return;
-            }
-            //At HQ, we cannot allow users to manipulate super family informaiton when the patient is related to a reseller family.
-            if (Preferences.IsODHQ && Resellers.IsResellerFamily(PatCur))
-            {
-                MsgBox.Show(this, "Cannot manipulate super family for a patient related to a reseller family.");
                 return;
             }
             Patient superHead = Patients.GetPat(PatCur.SuperFamily);

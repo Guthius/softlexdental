@@ -9,6 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 using CodeBase;
 using OpenDentalCloud.Core;
 using OpenPop.Pop3;
+using OpenDental;
 
 namespace OpenDentBusiness {
 	public static class ODSftp {
@@ -38,9 +39,8 @@ namespace OpenDentBusiness {
 		public static string Password {
 			get {
 				string passEncrypted=ProgramProperties.GetPropVal(ProgramNum,PropertyDescs.Password);
-				string passDecrypted="";
-				CDT.Class1.DecryptSftp(passEncrypted,out passDecrypted);
-				return passDecrypted;
+                Encryption.TryDecrypt(passEncrypted, out string passDecrypted);
+                return passDecrypted;
 			}
 		}
 

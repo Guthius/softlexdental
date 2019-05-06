@@ -179,10 +179,6 @@ namespace OpenDental
                 if (commlogTypeDefsList == null)
                 {
                     commlogTypeDefsList = Defs.GetDefsForCategory(DefCat.CommLogTypes, true);
-                    if (!Preferences.IsODHQ)
-                    {
-                        commlogTypeDefsList.RemoveAll(x => x.ItemValue == CommItemTypeAuto.ODHQ.ToString());
-                    }
                 }
                 return commlogTypeDefsList;
             }
@@ -201,13 +197,11 @@ namespace OpenDental
 
             _isStartingUp = true;
 
-            if (!Preferences.IsODHQ)
-            {
-                endLabel.Visible = false;
-                endTextBox.Visible = false;
-                startNowButton.Visible = false;
-                endNowButton.Visible = false;
-            }
+            endLabel.Visible = false;
+            endTextBox.Visible = false;
+            startNowButton.Visible = false;
+            endNowButton.Visible = false;
+
 
             // Check whether the user is allowed to edit commlog items.
             if (!Security.IsAuthorized(Permissions.CommlogEdit, CommlogCur.CommDateTime))

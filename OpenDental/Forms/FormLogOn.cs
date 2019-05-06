@@ -162,23 +162,16 @@ namespace OpenDental
             // ECW requires hash, but non-ecw requires actual password
             if (isEcw) passwordTyped = Authentication.HashPasswordMD5(passwordTyped, true);
 
-            // No need to check password when changing task users at HQ to user "Stay Open".
-            if (userName == "Stay Open" && isSimpleSwitch && Preferences.IsODHQ)
+            try
             {
-                userCur = Userods.GetUserByNameNoCache(userName);
+                userCur = Userods.CheckUserAndPassword(userName, passwordTyped, isEcw);
             }
-            else
+            catch (Exception ex)
             {
-                try
-                {
-                    userCur = Userods.CheckUserAndPassword(userName, passwordTyped, isEcw);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(this, ex.Message);
-                    return;
-                }
+                MessageBox.Show(this, ex.Message);
+                return;
             }
+            
 
             // successful login.
             if (isSimpleSwitch)

@@ -123,7 +123,8 @@ namespace OpenDentBusiness {
 
 		///<summary>True if we are in HQ and AvaTax is enabled.</summary>
 		public static bool IsEnabled() {
-			return Preferences.IsODHQ && Programs.IsEnabled(ProgramName.AvaTax);
+            // TODO: Update this to work for anyone that wants to use it...
+			return Programs.IsEnabled(ProgramName.AvaTax);
 		}
 
 		///<summary>True if we are in HQ, AvaTax is enabled, we tax the customer's state, and either the customer's tax exempt field is not defined or 

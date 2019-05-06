@@ -144,14 +144,15 @@ namespace OpenDental {
 		}
 
 		private void FormProcInfo_Load(object sender,System.EventArgs e) {
-			if(Preferences.IsODHQ) {
-				labelTaxEst.Visible=true;
-				textTaxAmt.Visible=true;
-				textTaxAmt.Text=POut.Double(_procCur.TaxAmt);
-				if(_procCur.ProcStatus==ProcStat.C) {
-					labelTaxEst.Text="Tax Amt";
-				}
-			}
+			//if(Preferences.IsODHQ) {
+			//	labelTaxEst.Visible=true;
+			//	textTaxAmt.Visible=true;
+			//	textTaxAmt.Text=POut.Double(_procCur.TaxAmt);
+			//	if(_procCur.ProcStatus==ProcStat.C) {
+			//		labelTaxEst.Text="Tax Amt";
+			//	}
+			//}
+
 			_loadData=ProcEdit.GetLoadData(_procCur,_patCur,_famCur);
 			_listInsSubs=_loadData.ListInsSubs;
 			_listInsPlans=_loadData.ListInsPlans;

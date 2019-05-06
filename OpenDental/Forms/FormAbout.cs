@@ -48,52 +48,54 @@ namespace OpenDental
         /// </summary>
         void diagnosticsButton_Click(object sender, EventArgs e)
         {
-            BugSubmission.SubmissionInfo subInfo = new BugSubmission(new Exception()).Info;
-            StringBuilder strBuilder = new StringBuilder();
+            // TODO: Fix me...
 
-            foreach (FieldInfo field in subInfo.GetType().GetFields())
-            {
-                object value = field.GetValue(subInfo);
-                if (value.In(null, ""))
-                {
-                    continue;
-                }
-
-                if (value is Dictionary<PrefName, string>)
-                {
-                    Dictionary<PrefName, string> dictPrefValues = value as Dictionary<PrefName, string>;
-                    if (dictPrefValues.Keys.Count > 0)
-                    {
-                        strBuilder.AppendLine(field.Name + ":");
-                        dictPrefValues.ToList().ForEach(x => strBuilder.AppendLine("  " + x.Key.ToString() + ": " + x.Value));
-                        strBuilder.AppendLine("-------------");
-                    }
-                }
-                else if (value is List<string>)
-                {
-                    List<string> enabledPlugins = value as List<string>;
-                    if (enabledPlugins.Count > 0)
-                    {
-                        strBuilder.AppendLine(field.Name + ":");
-                        enabledPlugins.ForEach(x => strBuilder.AppendLine("  " + x));
-                        strBuilder.AppendLine("-------------");
-                    }
-                }
-                else if (value is bool)
-                {
-                    strBuilder.AppendLine(field.Name + ": " + (((bool)value) == true ? "true" : "false"));
-                }
-                else
-                {
-                    strBuilder.AppendLine(field.Name + ": " + value);
-                }
-            }
-
-            using (var msgBoxCopyPaste = new MsgBoxCopyPaste(strBuilder.ToString()))
-            {
-                msgBoxCopyPaste.Text = "Diagnostics";
-                msgBoxCopyPaste.ShowDialog();
-            }
+            //BugSubmission.SubmissionInfo subInfo = new BugSubmission(new Exception()).Info;
+            //StringBuilder strBuilder = new StringBuilder();
+            //
+            //foreach (FieldInfo field in subInfo.GetType().GetFields())
+            //{
+            //    object value = field.GetValue(subInfo);
+            //    if (value.In(null, ""))
+            //    {
+            //        continue;
+            //    }
+            //
+            //    if (value is Dictionary<PrefName, string>)
+            //    {
+            //        Dictionary<PrefName, string> dictPrefValues = value as Dictionary<PrefName, string>;
+            //        if (dictPrefValues.Keys.Count > 0)
+            //        {
+            //            strBuilder.AppendLine(field.Name + ":");
+            //            dictPrefValues.ToList().ForEach(x => strBuilder.AppendLine("  " + x.Key.ToString() + ": " + x.Value));
+            //            strBuilder.AppendLine("-------------");
+            //        }
+            //    }
+            //    else if (value is List<string>)
+            //    {
+            //        List<string> enabledPlugins = value as List<string>;
+            //        if (enabledPlugins.Count > 0)
+            //        {
+            //            strBuilder.AppendLine(field.Name + ":");
+            //            enabledPlugins.ForEach(x => strBuilder.AppendLine("  " + x));
+            //            strBuilder.AppendLine("-------------");
+            //        }
+            //    }
+            //    else if (value is bool)
+            //    {
+            //        strBuilder.AppendLine(field.Name + ": " + (((bool)value) == true ? "true" : "false"));
+            //    }
+            //    else
+            //    {
+            //        strBuilder.AppendLine(field.Name + ": " + value);
+            //    }
+            //}
+            //
+            //using (var msgBoxCopyPaste = new MsgBoxCopyPaste(strBuilder.ToString()))
+            //{
+            //    msgBoxCopyPaste.Text = "Diagnostics";
+            //    msgBoxCopyPaste.ShowDialog();
+            //}
         }
 
         /// <summary>

@@ -16,7 +16,6 @@ namespace OpenDentBusiness
         public static List<CommItemTypeAuto> GetCommItemTypes()
         {
             List<CommItemTypeAuto> listRet = Enum.GetValues(typeof(CommItemTypeAuto)).Cast<CommItemTypeAuto>().ToList();
-            listRet.RemoveAll(x => !Preferences.IsODHQ && x.IsODHQ()); //only remove the HQ commlog type(s) if we are not in HQ
             return listRet;
         }
 
@@ -262,7 +261,7 @@ namespace OpenDentBusiness
         TEXT,
         ///<summary>5</summary>
         [ShortDescription("ODHQ"), Description("Open Dental HQ-Generated"), IsODHQ]
-        ODHQ,
+        [Obsolete("OD HQ BS")] ODHQ,
         ///<summary>6</summary>
         [ShortDescription("REACT"), Description("Reactivation")]
         REACT

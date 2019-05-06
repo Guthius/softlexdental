@@ -68,7 +68,6 @@ namespace OpenDental
         private System.Windows.Forms.Button butRefresh;
         private System.Windows.Forms.RadioButton radioDay;
         private System.Windows.Forms.RadioButton radioWeek;
-        private System.Windows.Forms.Button butGraph;
         private System.Windows.Forms.Button butProvPick;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button butProvHygenist;
@@ -136,7 +135,6 @@ namespace OpenDental
             this.labelProdGoal = new System.Windows.Forms.Label();
             this.radioWeek = new System.Windows.Forms.RadioButton();
             this.radioDay = new System.Windows.Forms.RadioButton();
-            this.butGraph = new System.Windows.Forms.Button();
             this.butMonth = new System.Windows.Forms.Button();
             this.pinBoard = new OpenDental.UI.PinBoard();
             this.butLab = new System.Windows.Forms.Button();
@@ -466,7 +464,6 @@ namespace OpenDental
             this.panelCalendar.Controls.Add(this.radioWeek);
             this.panelCalendar.Controls.Add(this.panelArrows);
             this.panelCalendar.Controls.Add(this.radioDay);
-            this.panelCalendar.Controls.Add(this.butGraph);
             this.panelCalendar.Controls.Add(this.butMonth);
             this.panelCalendar.Controls.Add(this.pinBoard);
             this.panelCalendar.Controls.Add(this.butLab);
@@ -535,18 +532,6 @@ namespace OpenDental
             this.radioDay.TabIndex = 91;
             this.radioDay.Text = "Day";
             this.radioDay.Click += new System.EventHandler(this.radioDay_Click);
-            // 
-            // butGraph
-            // 
-            this.butGraph.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.butGraph.Location = new System.Drawing.Point(3, 309);
-            this.butGraph.Name = "butGraph";
-            this.butGraph.Size = new System.Drawing.Size(42, 24);
-            this.butGraph.TabIndex = 78;
-            this.butGraph.TabStop = false;
-            this.butGraph.Text = "Emp";
-            this.butGraph.Visible = false;
-            this.butGraph.Click += new System.EventHandler(this.butGraph_Click);
             // 
             // butMonth
             // 
@@ -975,6 +960,7 @@ namespace OpenDental
             this.gridWaiting.Size = new System.Drawing.Size(211, 140);
             this.gridWaiting.TabIndex = 78;
             this.gridWaiting.Title = "Waiting Room";
+            this.gridWaiting.TitleVisible = true;
             // 
             // tabSched
             // 
@@ -1004,6 +990,7 @@ namespace OpenDental
             this.gridEmpSched.Size = new System.Drawing.Size(211, 140);
             this.gridEmpSched.TabIndex = 77;
             this.gridEmpSched.Title = "Employee Schedules";
+            this.gridEmpSched.TitleVisible = true;
             this.gridEmpSched.DoubleClick += new System.EventHandler(this.gridEmpSched_DoubleClick);
             // 
             // tabProv
@@ -1034,6 +1021,7 @@ namespace OpenDental
             this.gridProv.Size = new System.Drawing.Size(211, 140);
             this.gridProv.TabIndex = 79;
             this.gridProv.Title = "Provider Schedules";
+            this.gridProv.TitleVisible = true;
             this.gridProv.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridProv_CellDoubleClick);
             // 
             // tabReminders
@@ -1063,6 +1051,7 @@ namespace OpenDental
             this.gridReminders.Size = new System.Drawing.Size(211, 140);
             this.gridReminders.TabIndex = 0;
             this.gridReminders.Title = "Reminders";
+            this.gridReminders.TitleVisible = true;
             this.gridReminders.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridReminders_CellDoubleClick);
             this.gridReminders.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridReminders_MouseDown);
             // 
@@ -1141,7 +1130,7 @@ namespace OpenDental
             // 
             this.ToolBarMain.Location = new System.Drawing.Point(680, 2);
             this.ToolBarMain.Name = "ToolBarMain";
-            this.ToolBarMain.Size = new System.Drawing.Size(203, 27);
+            this.ToolBarMain.Size = new System.Drawing.Size(203, 30);
             this.ToolBarMain.TabIndex = 73;
             this.ToolBarMain.ButtonClick += new System.EventHandler<OpenDental.UI.ODToolBarButtonClickEventArgs>(this.ToolBarMain_ButtonClick);
             // 

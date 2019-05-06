@@ -1595,14 +1595,7 @@ namespace OpenDentBusiness
                 payAmt = 0;
                 split.DatePay = autoSplitData.Payment.PayDate;
                 split.PatNum = autoSplitData.Payment.PatNum;
-                if (Preferences.IsODHQ)
-                {
-                    split.ProvNum = 7;//Jordan's ProvNum
-                }
-                else
-                {
-                    split.ProvNum = 0;
-                }
+                split.ProvNum = 0;
                 split.UnearnedType = Preferences.GetLong(PrefName.PrepaymentUnearnedType);//Use default unallocated type
                 if (Preferences.HasClinicsEnabled)
                 {
@@ -1618,14 +1611,8 @@ namespace OpenDentBusiness
                 payAmt = 0;
                 split.DatePay = autoSplitData.Payment.PayDate;
                 split.PatNum = autoSplitData.Payment.PatNum;
-                if (Preferences.IsODHQ)
-                {
-                    split.ProvNum = 7;//Jordan's ProvNum
-                }
-                else
-                {
-                    split.ProvNum = 0;
-                }
+                split.ProvNum = 0;
+                
                 split.UnearnedType = Preferences.GetLong(PrefName.PrepaymentUnearnedType);//Use default unallocated type
                 if (Preferences.HasClinicsEnabled)
                 {

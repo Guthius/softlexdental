@@ -1645,16 +1645,17 @@ namespace OpenDentBusiness
             char[] arrayRegKeyChars = regKey.Where(x => char.IsLetterOrDigit(x)).ToArray();
             string strRegKey = new string(arrayRegKeyChars);
 
-            if (Preferences.IsODHQ)
-            {
+            //if (Preferences.IsODHQ)
+            //{
                 //Search both Address and Address2 for HQ
-                command += (strAddress.Length > 0 ? "AND (patient.Address LIKE '%" + strAddress
-                    + "%' OR patient.Address2 LIKE '%" + strAddress + "%') " : "");//LIKE is case insensitive in mysql.
-            }
-            else
-            {
+                // TODO: Why not for clinics???
+                //command += (strAddress.Length > 0 ? "AND (patient.Address LIKE '%" + strAddress
+                //    + "%' OR patient.Address2 LIKE '%" + strAddress + "%') " : "");//LIKE is case insensitive in mysql.
+            //}
+            //else
+            //{
                 command += (strAddress.Length > 0 ? "AND patient.Address LIKE '%" + strAddress + "%' " : "");//LIKE is case insensitive in mysql
-            }
+            //}
             command += (city.Length > 0 ? "AND patient.City LIKE '" + POut.String(city) + "%' " : "")//LIKE is case insensitive in mysql.
                 + (state.Length > 0 ? "AND patient.State LIKE '" + POut.String(state) + "%' " : "")//LIKE is case insensitive in mysql.
                 + (ssn.Length > 0 ? "AND patient.SSN LIKE '" + POut.String(ssn) + "%' " : "")//LIKE is case insensitive in mysql.

@@ -527,8 +527,11 @@ namespace OpenDentBusiness
         ///of the patient fields with gray text.</summary>
         DisplayRenamedPatFields,
         ///<summary>Boolean.  Set to 1 to indicate that this database holds customers instead of patients.  Used by OD HQ.  Used for showing extra phone numbers, showing some extra buttons for tools that only we use, behavior of checkboxes in repeating charge window, etc.  But phone panel visibility is based on DockPhonePanelShow.</summary>
-        DistributorKey,
+        [Obsolete("OD HQ BS")] DistributorKey,
+
+        [Obsolete("OD HQ BS")]
         DockPhonePanelShow,
+
         ///<summary>The AtoZ folder path.</summary>
         DocPath,
         ///<summary>There is no UI for user to change this.  Used by OD HQ. Determines if Task refreshes only update locally.  True is local only, false is every workstation.</summary>

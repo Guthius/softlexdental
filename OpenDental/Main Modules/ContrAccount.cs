@@ -119,11 +119,9 @@ namespace OpenDental
         private void ContrAccount_Load(object sender, System.EventArgs e)
         {
             Parent.MouseWheel += new MouseEventHandler(Parent_MouseWheel);
-            if (!Preferences.IsODHQ)
-            {
-                menuPrepayment.Visible = false;
-                menuPrepayment.Enabled = false;
-            }
+
+            menuPrepayment.Visible = false;
+            menuPrepayment.Enabled = false;
         }
 
         ///<summary>Causes the toolbar to be laid out again.</summary>
@@ -163,11 +161,6 @@ namespace OpenDental
             {
                 button = new ODToolBarButton(Lan.g(this, "Repeating Charge"), null, "", "RepeatCharge");
                 button.Style = ODToolBarButtonStyle.PushButton;
-                if (Preferences.GetBool(PrefName.DockPhonePanelShow))
-                {//contextMenuRepeat items only get initialized when at HQ.
-                    button.Style = ODToolBarButtonStyle.DropDownButton;
-                    button.DropDownMenu = contextMenuRepeat;
-                }
                 ToolBarMain.Buttons.Add(button);
             }
             ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
@@ -2731,94 +2724,6 @@ namespace OpenDental
             ModuleSelected(PatCur.PatNum);
         }
 
-        private void MenuItemRepeatEmail_Click(object sender, System.EventArgs e)
-        {
-            if (!ProcedureCodes.GetContainsKey("008"))
-            {
-                return;
-            }
-            UpdatePatientBillingDay(PatCur.PatNum);
-            RepeatCharge repeat = new RepeatCharge();
-            repeat.PatNum = PatCur.PatNum;
-            repeat.ProcCode = "008";
-            repeat.ChargeAmt = 89;
-            repeat.DateStart = DateTimeOD.Today;
-            repeat.IsEnabled = true;
-            RepeatCharges.Insert(repeat);
-            ModuleSelected(PatCur.PatNum);
-        }
-
-        private void menuItemRepeatCanada_Click(object sender, EventArgs e)
-        {
-            if (!ProcedureCodes.GetContainsKey("001"))
-            {
-                return;
-            }
-            UpdatePatientBillingDay(PatCur.PatNum);
-            RepeatCharge repeat = new RepeatCharge();
-            repeat.PatNum = PatCur.PatNum;
-            repeat.ProcCode = "001";
-            repeat.ChargeAmt = 135;
-            repeat.DateStart = DateTimeOD.Today;
-            repeat.DateStop = DateTimeOD.Today.AddMonths(11);
-            repeat.IsEnabled = true;
-            RepeatCharges.Insert(repeat);
-            repeat = new RepeatCharge();
-            repeat.PatNum = PatCur.PatNum;
-            repeat.ProcCode = "001";
-            repeat.ChargeAmt = 109;
-            repeat.DateStart = DateTimeOD.Today.AddYears(1);
-            repeat.IsEnabled = true;
-            RepeatCharges.Insert(repeat);
-            ModuleSelected(PatCur.PatNum);
-        }
-
-        private void menuItemRepeatSignupPortal_Click(object sender, EventArgs e)
-        {
-            if (PatCur == null)
-            {
-                MsgBox.Show(this, "A customer must be selected first.");
-                return;
-            }
-            List<RegistrationKey> listRegKeys = RegistrationKeys.GetForPatient(PatCur.PatNum)
-                //.Where(x => RegistrationKeys.KeyIsEnabled(x)) //We no longer want to only show enabled keys, sometimes we need to manage disabled.
-                .OrderBy(x => x.RegKey)
-                .ToList();
-            if (listRegKeys.Count < 1)
-            {
-                MsgBox.Show(this, "No registration keys found for this customer's family.");
-                return;
-            }
-            RegistrationKey regKey;
-            if (listRegKeys.Count == 1)
-            {
-                regKey = listRegKeys[0];
-            }
-            else
-            {
-                InputBox inputBox = new InputBox("Select a registration key to load into the Signup Portal"
-                    , listRegKeys.Select(x => "PatNum: " + x.PatNum + "   RegKey: " + x.RegKey).ToList());
-                if (inputBox.ShowDialog() != DialogResult.OK)
-                {
-                    return;
-                }
-                regKey = listRegKeys[inputBox.SelectedIndex];
-            }
-            try
-            {
-                //Get the URL for the selected registration key.
-                WebServiceMainHQProxy.EServiceSetup.SignupOut signupOut = WebServiceMainHQProxy.GetEServiceSetupLite(SignupPortalPermission.FromHQ
-                    , regKey.RegKey, "", "", "");
-                FormWebBrowser FormWB = new FormWebBrowser(signupOut.SignupPortalUrl);
-                FormWB.ShowDialog();
-                ModuleSelected(PatCur.PatNum);//Refresh the module.
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-
         private void toolBarButStatement_Click()
         {
             Statement stmt = new Statement();
@@ -3877,13 +3782,6 @@ namespace OpenDental
                         ModuleSelected(PatCur.PatNum);
                     }
                 }
-            }
-            else if (DataSetMain.Tables["Commlog"].Rows[row]["WebChatSessionNum"].ToString() != "0")
-            {
-                long webChatSessionNum = PIn.Long(DataSetMain.Tables["Commlog"].Rows[row]["WebChatSessionNum"].ToString());
-                WebChatSession webChatSession = WebChatSessions.GetOne(webChatSessionNum);
-                FormWebChatSession formWebChatSession = new FormWebChatSession(webChatSession, () => { ModuleSelected(PatCur.PatNum); });
-                formWebChatSession.ShowDialog();
             }
             else if (DataSetMain.Tables["Commlog"].Rows[row]["EmailMessageNum"].ToString() != "0")
             {

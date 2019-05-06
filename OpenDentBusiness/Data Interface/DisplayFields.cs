@@ -150,11 +150,6 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("SSN",65,category));
 					list.Add(new DisplayField("Hm Phone",90,category));
 					list.Add(new DisplayField("Wk Phone",90,category));
-					if(Preferences.GetBool(PrefName.DistributorKey)) {//if for OD HQ
-						//list.Add(new DisplayField("OtherPhone",90,category));
-						//list.Add(new DisplayField("Country",90,category));
-						//list.Add(new DisplayField("RegKey",150,category));
-					}
 					list.Add(new DisplayField("PatNum",80,category));
 					//list.Add(new DisplayField("ChartNum",60,category));
 					list.Add(new DisplayField("Address",100,category));
@@ -193,9 +188,9 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Address2",0,category));
 					list.Add(new DisplayField("City",0,category));
 					list.Add(new DisplayField("State",0,category));
-					if(Preferences.GetBool(PrefName.DockPhonePanelShow)) {
-						list.Add(new DisplayField("Country",0,category));
-					}
+					//if(Preferences.GetBool(PrefName.DockPhonePanelShow)) {
+					//	list.Add(new DisplayField("Country",0,category));
+					//}
 					list.Add(new DisplayField("Zip",0,category));
 					list.Add(new DisplayField("Hm Phone",0,category));
 					list.Add(new DisplayField("Wk Phone",0,category));
@@ -615,7 +610,6 @@ namespace OpenDentBusiness {
 					if(Preferences.GetBool(PrefName.DistributorKey)) {//if for OD HQ
 						list.Add(new DisplayField("OtherPhone",90,category));
 						list.Add(new DisplayField("Country",90,category));
-						list.Add(new DisplayField("RegKey",150,category));
 					}
 					list.Add(new DisplayField("PatNum",80,category));
 					list.Add(new DisplayField("ChartNum",60,category));
@@ -655,9 +649,9 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Address2",0,category));
 					list.Add(new DisplayField("City",0,category));
 					list.Add(new DisplayField("State",0,category));
-					if(Preferences.GetBool(PrefName.DockPhonePanelShow)) {
-						list.Add(new DisplayField("Country",0,category));
-					}
+					//if(Preferences.GetBool(PrefName.DockPhonePanelShow)) {
+					//	list.Add(new DisplayField("Country",0,category));
+					//}
 					list.Add(new DisplayField("Zip",0,category));
 					list.Add(new DisplayField("Hm Phone",0,category));
 					list.Add(new DisplayField("Wk Phone",0,category));
@@ -799,9 +793,9 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Prognosis",60,category));
 					list.Add(new DisplayField("Dx",28,category));
 					list.Add(new DisplayField("Abbr",110,category));
-					if(Preferences.IsODHQ) { //We should only give this option when the user is in HQ for now so as not to mislead customers
-						list.Add(new DisplayField("Tax Est",60,category));
-					}
+					//if(Preferences.IsODHQ) { //We should only give this option when the user is in HQ for now so as not to mislead customers
+					//	list.Add(new DisplayField("Tax Est",60,category));
+					//}
 					break;
 				#endregion TreatmentPlanModule
 				#region OrthoChart

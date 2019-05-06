@@ -43,12 +43,7 @@ namespace OpenDental {
 		///<summary>Returns a valid date based on the Month and Year taken from the date passed in and the Day that is set for the recurring charges.</summary>
 		private DateTime GetValidPayDate(DateTime date) {
 			int dayOfMonth;
-			if(Preferences.IsODHQ && Preferences.GetBool(PrefName.BillingUseBillingCycleDay)) {
-				dayOfMonth=_pat.BillingCycleDay;
-			}
-			else {
-				dayOfMonth=_creditCardCur.DateStart.Day;
-			}
+			dayOfMonth=_creditCardCur.DateStart.Day;
 			DateTime newDate;
 			try {
 				newDate=new DateTime(date.Year,date.Month,dayOfMonth);

@@ -55,15 +55,6 @@ namespace OpenDentBusiness
         }
         #endregion
 
-        ///<summary>Internal HQ only, FK to tasklist.TaskListNum for the Triage task list.</summary>
-        public const long TriageTaskListNum = 1697;
-        ///<summary>Internal HQ only, FK to the definition.DefNum for the task priority color for blue.</summary>
-        public const long TriageBlueNum = 502;
-        ///<summary>Internal HQ only, FK to the definition.DefNum for the task priority color for red.</summary>
-        public const long RedTaskDefNum = 501;
-        ///<summary>Internal HQ only, FK to tasklist.TaskListNum for the Office Down task list.</summary>
-        public const long OfficeDownTaskListNum = 2576;
-        private static bool _isHQ;
         private static long _defaultTaskPriorityDefNum;
         private static bool _isSortApptDateTime = false;
         ///<summary>Key=AptNum, Value=AptDateTime</summary>
@@ -501,7 +492,6 @@ namespace OpenDentBusiness
                 listRows.Add(table.Rows[i]);
             }
             #region Set Sort Variables. This greatly increases sort speed.
-            _isHQ = Preferences.GetBool(PrefName.DockPhonePanelShow);//increases speed of the sort function performed below.
             List<Def> listTaskPriorities = Defs.GetDefsForCategory(DefCat.TaskPriorities, true);
             for (int i = 0; i < listTaskPriorities.Count; i++)
             {
@@ -673,7 +663,6 @@ namespace OpenDentBusiness
                 listRows.Add(table.Rows[i]);
             }
             #region Set Sort Variables. This greatly increases sort speed.
-            _isHQ = Preferences.GetBool(PrefName.DockPhonePanelShow);//increases speed of the sort function performed below.
             List<Def> listTaskPriorities = Defs.GetDefsForCategory(DefCat.TaskPriorities, true);
             for (int i = 0; i < listTaskPriorities.Count; i++)
             {
@@ -873,10 +862,6 @@ namespace OpenDentBusiness
             if (task.TaskListNum != oldTask.TaskListNum)
             {
                 TaskAncestors.Synch(task);
-                if (Preferences.IsODHQ && task.TaskListNum == TriageTaskListNum)
-                {//Sending the task TO triage
-                    TaskTakens.DeleteForTask(task.TaskNum);
-                }
             }
         }
 
@@ -1009,11 +994,6 @@ namespace OpenDentBusiness
             if (WasTaskAltered(oldTask))
             {
                 throw new Exception(Lans.g("Tasks", "Not allowed to save changes because the task has been altered by someone else."));
-            }
-            if (Preferences.IsODHQ && oldTask.TaskListNum == TriageTaskListNum && task.TaskListNum != TriageTaskListNum //Trying to claim a Triage task
-                && !TaskTakens.TryInsert(task.TaskNum))
-            {
-                throw new Exception(Lans.g("Tasks", "Not allowed to save changes because the task has been claimed by someone else."));
             }
             if (task.IsNew)
             {
@@ -1184,14 +1164,6 @@ namespace OpenDentBusiness
             Db.NonQ(command);
             command = "DELETE FROM taskunread WHERE TaskNum = " + POut.Long(taskNum);
             Db.NonQ(command);
-            //Remove all references from the joblink table for HQ only.
-            if (Prefs.GetBoolNoCache(PrefName.DockPhonePanelShow))
-            {
-                command = "DELETE FROM joblink "
-                    + "WHERE FKey = " + POut.Long(taskNum) + " "
-                    + "AND LinkType = " + POut.Int((int)JobLinkType.Task);
-                Db.NonQ(command);
-            }
         }
 
         public static int GetCountOpenTickets(long userNum)
@@ -1220,18 +1192,6 @@ namespace OpenDentBusiness
                 + "AND task.KeyNum=" + POut.Long(patNum) + " "
                 + "AND TaskStatus != " + POut.Int((int)TaskStatusEnum.Done);
             return PIn.Int(Db.GetCount(command));
-        }
-
-        ///<summary>Only called for ODHQ. Gets the tasks that are in the Office Down task list. This method only returns the Task table row, not the
-        ///extra non-DB columns.</summary>
-        public static List<Task> GetOfficeDowns()
-        {
-            string command = "SELECT * "
-                + "FROM task "
-                + "WHERE TaskListNum=" + OfficeDownTaskListNum + " "
-                + "AND TaskStatus!=" + POut.Int((int)TaskStatusEnum.Done) + " "
-                + "ORDER BY DateTimeEntry";
-            return Crud.TaskCrud.SelectMany(command);
         }
 
         public static void TaskEditCreateLog(string logText, Task task)
@@ -1325,20 +1285,10 @@ namespace OpenDentBusiness
         ///<summary>Compares the most recent times of the task or task notes associated to the tasks passed in.  Most recently updated tasks will be farther down in the list.</summary>
         public static int CompareTimes(DataRow x, DataRow y)
         {
-            if (_isHQ
-                && PIn.Long(x["TaskListNum"].ToString()) == TriageTaskListNum
-                && PIn.Long(x["PriorityDefNum"].ToString()) == RedTaskDefNum)//Red tasks in triage only, sort by lastUpdated
-            {
-                DateTime xMaxDateTime = PIn.DateT(x["LastUpdated"].ToString());
-                DateTime yMaxDateTime = PIn.DateT(y["LastUpdated"].ToString());
-                return xMaxDateTime.CompareTo(yMaxDateTime);
-            }
-            else
-            {//Sort everything else based on task creation date
-                DateTime xMaxDateTime = PIn.DateT(x["DateTimeEntry"].ToString());
-                DateTime yMaxDateTime = PIn.DateT(y["DateTimeEntry"].ToString());
-                return xMaxDateTime.CompareTo(yMaxDateTime);
-            }
+            //Sort everything else based on task creation date
+            DateTime xMaxDateTime = PIn.DateT(x["DateTimeEntry"].ToString());
+            DateTime yMaxDateTime = PIn.DateT(y["DateTimeEntry"].ToString());
+            return xMaxDateTime.CompareTo(yMaxDateTime);
         }
 
         ///<summary>Compares the AptDateTime of appointments attached to tasks.  Most recently updated tasks will be farther down in the list.

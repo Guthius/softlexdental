@@ -58,8 +58,6 @@ namespace OpenDental{
 		public bool GotoScheduleOnClose = false;
 		///<summary>Used to keep track of the current clinic selected. This is because it may be a clinic that is not in _listClinics.</summary>
 		private long _selectedClinicNum;
-		private UI.Button butGraphEdit;
-		private UI.Button butViewGraph;
 		private List<long> _listSelectedProvNums;
 		private TextBox textSearch;
 		private Label labelSearch;
@@ -103,522 +101,482 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormScheduleDayEdit));
-			this.butForward = new OpenDental.UI.Button();
-			this.butBack = new OpenDental.UI.Button();
-			this.comboClinic = new System.Windows.Forms.ComboBox();
-			this.labelClinic = new System.Windows.Forms.Label();
-			this.tabControl1 = new System.Windows.Forms.TabControl();
-			this.tabPage1 = new System.Windows.Forms.TabPage();
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.tabPage2 = new System.Windows.Forms.TabPage();
-			this.graphScheduleDay = new OpenDental.GraphScheduleDay();
-			this.groupPractice = new System.Windows.Forms.GroupBox();
-			this.butHoliday = new OpenDental.UI.Button();
-			this.butNote = new OpenDental.UI.Button();
-			this.label2 = new System.Windows.Forms.Label();
-			this.butOK = new OpenDental.UI.Button();
-			this.groupBox3 = new System.Windows.Forms.GroupBox();
-			this.tabControl2 = new System.Windows.Forms.TabControl();
-			this.tabPageProv = new System.Windows.Forms.TabPage();
-			this.label3 = new System.Windows.Forms.Label();
-			this.listProv = new System.Windows.Forms.ListBox();
-			this.comboProv = new System.Windows.Forms.ComboBox();
-			this.tabPageEmp = new System.Windows.Forms.TabPage();
-			this.listEmp = new System.Windows.Forms.ListBox();
-			this.butProvNote = new OpenDental.UI.Button();
-			this.label1 = new System.Windows.Forms.Label();
-			this.butAddTime = new OpenDental.UI.Button();
-			this.labelDate = new System.Windows.Forms.Label();
-			this.butCloseOffice = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.butOkSchedule = new OpenDental.UI.Button();
-			this.butGraphEdit = new OpenDental.UI.Button();
-			this.butViewGraph = new OpenDental.UI.Button();
-			this.textSearch = new System.Windows.Forms.TextBox();
-			this.labelSearch = new System.Windows.Forms.Label();
-			this.tabControl1.SuspendLayout();
-			this.tabPage1.SuspendLayout();
-			this.tabPage2.SuspendLayout();
-			this.groupPractice.SuspendLayout();
-			this.groupBox3.SuspendLayout();
-			this.tabControl2.SuspendLayout();
-			this.tabPageProv.SuspendLayout();
-			this.tabPageEmp.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// butForward
-			// 
-			this.butForward.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butForward.Autosize = true;
-			this.butForward.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butForward.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butForward.CornerRadius = 4F;
-			this.butForward.Image = global::OpenDental.Properties.Resources.Right;
-			this.butForward.Location = new System.Drawing.Point(199, 7);
-			this.butForward.Name = "butForward";
-			this.butForward.Size = new System.Drawing.Size(39, 24);
-			this.butForward.TabIndex = 39;
-			this.butForward.Click += new System.EventHandler(this.butForward_Click);
-			// 
-			// butBack
-			// 
-			this.butBack.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butBack.Autosize = true;
-			this.butBack.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBack.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butBack.CornerRadius = 4F;
-			this.butBack.Image = global::OpenDental.Properties.Resources.Left;
-			this.butBack.Location = new System.Drawing.Point(12, 6);
-			this.butBack.Name = "butBack";
-			this.butBack.Size = new System.Drawing.Size(39, 24);
-			this.butBack.TabIndex = 38;
-			this.butBack.Click += new System.EventHandler(this.butBack_Click);
-			// 
-			// comboClinic
-			// 
-			this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboClinic.Location = new System.Drawing.Point(819, 9);
-			this.comboClinic.MaxDropDownItems = 30;
-			this.comboClinic.Name = "comboClinic";
-			this.comboClinic.Size = new System.Drawing.Size(179, 21);
-			this.comboClinic.TabIndex = 37;
-			this.comboClinic.SelectedIndexChanged += new System.EventHandler(this.comboClinic_SelectedIndexChanged);
-			// 
-			// labelClinic
-			// 
-			this.labelClinic.Location = new System.Drawing.Point(774, 12);
-			this.labelClinic.Name = "labelClinic";
-			this.labelClinic.Size = new System.Drawing.Size(43, 13);
-			this.labelClinic.TabIndex = 36;
-			this.labelClinic.Text = "Clinic";
-			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// tabControl1
-			// 
-			this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormScheduleDayEdit));
+            this.butForward = new OpenDental.UI.Button();
+            this.butBack = new OpenDental.UI.Button();
+            this.comboClinic = new System.Windows.Forms.ComboBox();
+            this.labelClinic = new System.Windows.Forms.Label();
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.gridMain = new OpenDental.UI.ODGrid();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.graphScheduleDay = new OpenDental.GraphScheduleDay();
+            this.groupPractice = new System.Windows.Forms.GroupBox();
+            this.butHoliday = new OpenDental.UI.Button();
+            this.butNote = new OpenDental.UI.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.butOK = new OpenDental.UI.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.tabControl2 = new System.Windows.Forms.TabControl();
+            this.tabPageProv = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
+            this.listProv = new System.Windows.Forms.ListBox();
+            this.comboProv = new System.Windows.Forms.ComboBox();
+            this.tabPageEmp = new System.Windows.Forms.TabPage();
+            this.listEmp = new System.Windows.Forms.ListBox();
+            this.butProvNote = new OpenDental.UI.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.butAddTime = new OpenDental.UI.Button();
+            this.labelDate = new System.Windows.Forms.Label();
+            this.butCloseOffice = new OpenDental.UI.Button();
+            this.butCancel = new OpenDental.UI.Button();
+            this.butOkSchedule = new OpenDental.UI.Button();
+            this.textSearch = new System.Windows.Forms.TextBox();
+            this.labelSearch = new System.Windows.Forms.Label();
+            this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.groupPractice.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.tabControl2.SuspendLayout();
+            this.tabPageProv.SuspendLayout();
+            this.tabPageEmp.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // butForward
+            // 
+            this.butForward.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butForward.Autosize = true;
+            this.butForward.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butForward.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butForward.CornerRadius = 4F;
+            this.butForward.Image = global::OpenDental.Properties.Resources.Right;
+            this.butForward.Location = new System.Drawing.Point(199, 7);
+            this.butForward.Name = "butForward";
+            this.butForward.Size = new System.Drawing.Size(39, 24);
+            this.butForward.TabIndex = 39;
+            this.butForward.Click += new System.EventHandler(this.butForward_Click);
+            // 
+            // butBack
+            // 
+            this.butBack.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butBack.Autosize = true;
+            this.butBack.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butBack.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butBack.CornerRadius = 4F;
+            this.butBack.Image = global::OpenDental.Properties.Resources.Left;
+            this.butBack.Location = new System.Drawing.Point(12, 6);
+            this.butBack.Name = "butBack";
+            this.butBack.Size = new System.Drawing.Size(39, 24);
+            this.butBack.TabIndex = 38;
+            this.butBack.Click += new System.EventHandler(this.butBack_Click);
+            // 
+            // comboClinic
+            // 
+            this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboClinic.Location = new System.Drawing.Point(819, 9);
+            this.comboClinic.MaxDropDownItems = 30;
+            this.comboClinic.Name = "comboClinic";
+            this.comboClinic.Size = new System.Drawing.Size(179, 21);
+            this.comboClinic.TabIndex = 37;
+            this.comboClinic.SelectedIndexChanged += new System.EventHandler(this.comboClinic_SelectedIndexChanged);
+            // 
+            // labelClinic
+            // 
+            this.labelClinic.Location = new System.Drawing.Point(774, 12);
+            this.labelClinic.Name = "labelClinic";
+            this.labelClinic.Size = new System.Drawing.Size(43, 13);
+            this.labelClinic.TabIndex = 36;
+            this.labelClinic.Text = "Clinic";
+            this.labelClinic.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.tabControl1.Controls.Add(this.tabPage1);
-			this.tabControl1.Controls.Add(this.tabPage2);
-			this.tabControl1.Location = new System.Drawing.Point(12, 32);
-			this.tabControl1.Name = "tabControl1";
-			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(801, 607);
-			this.tabControl1.TabIndex = 17;
-			// 
-			// tabPage1
-			// 
-			this.tabPage1.Controls.Add(this.gridMain);
-			this.tabPage1.Location = new System.Drawing.Point(4, 22);
-			this.tabPage1.Name = "tabPage1";
-			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(793, 581);
-			this.tabPage1.TabIndex = 0;
-			this.tabPage1.Text = "List";
-			this.tabPage1.UseVisualStyleBackColor = true;
-			// 
-			// gridMain
-			// 
-			this.gridMain.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
-			this.gridMain.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.gridMain.EditableEnterMovesDown = false;
-			this.gridMain.HasAddButton = false;
-			this.gridMain.HasDropDowns = false;
-			this.gridMain.HasMultilineHeaders = false;
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(3, 3);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(787, 575);
-			this.gridMain.TabIndex = 8;
-			this.gridMain.Title = "Edit Day";
-			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
-			// 
-			// tabPage2
-			// 
-			this.tabPage2.Controls.Add(this.graphScheduleDay);
-			this.tabPage2.Location = new System.Drawing.Point(4, 22);
-			this.tabPage2.Name = "tabPage2";
-			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(793, 581);
-			this.tabPage2.TabIndex = 1;
-			this.tabPage2.Text = "Graph";
-			this.tabPage2.UseVisualStyleBackColor = true;
-			// 
-			// graphScheduleDay
-			// 
-			this.graphScheduleDay.BarHeightPixels = 17;
-			this.graphScheduleDay.BarSpacingPixels = 3;
-			this.graphScheduleDay.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.graphScheduleDay.EmployeeBarColor = System.Drawing.Color.LightSkyBlue;
-			this.graphScheduleDay.EmployeeTextColor = System.Drawing.Color.Black;
-			this.graphScheduleDay.EndHour = 19;
-			this.graphScheduleDay.ExteriorPaddingPixels = 11;
-			this.graphScheduleDay.GraphBackColor = System.Drawing.Color.White;
-			this.graphScheduleDay.LineWidthPixels = 1;
-			this.graphScheduleDay.Location = new System.Drawing.Point(3, 3);
-			this.graphScheduleDay.Name = "graphScheduleDay";
-			this.graphScheduleDay.PracticeBarColor = System.Drawing.Color.Salmon;
-			this.graphScheduleDay.PracticeTextColor = System.Drawing.Color.Black;
-			this.graphScheduleDay.ProviderBarColor = System.Drawing.Color.LightGreen;
-			this.graphScheduleDay.ProviderTextColor = System.Drawing.Color.Black;
-			this.graphScheduleDay.Size = new System.Drawing.Size(787, 575);
-			this.graphScheduleDay.StartHour = 4;
-			this.graphScheduleDay.TabIndex = 0;
-			this.graphScheduleDay.TickHeightPixels = 5;
-			this.graphScheduleDay.XAxisBackColor = System.Drawing.Color.White;
-			// 
-			// groupPractice
-			// 
-			this.groupPractice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupPractice.Controls.Add(this.butHoliday);
-			this.groupPractice.Controls.Add(this.butNote);
-			this.groupPractice.Location = new System.Drawing.Point(854, 551);
-			this.groupPractice.Name = "groupPractice";
-			this.groupPractice.Size = new System.Drawing.Size(110, 89);
-			this.groupPractice.TabIndex = 15;
-			this.groupPractice.TabStop = false;
-			this.groupPractice.Text = "Practice";
-			// 
-			// butHoliday
-			// 
-			this.butHoliday.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butHoliday.Autosize = true;
-			this.butHoliday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butHoliday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butHoliday.CornerRadius = 4F;
-			this.butHoliday.Location = new System.Drawing.Point(14, 53);
-			this.butHoliday.Name = "butHoliday";
-			this.butHoliday.Size = new System.Drawing.Size(80, 24);
-			this.butHoliday.TabIndex = 15;
-			this.butHoliday.Text = "Holiday";
-			this.butHoliday.Click += new System.EventHandler(this.butHoliday_Click);
-			// 
-			// butNote
-			// 
-			this.butNote.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butNote.Autosize = true;
-			this.butNote.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butNote.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butNote.CornerRadius = 4F;
-			this.butNote.Location = new System.Drawing.Point(14, 20);
-			this.butNote.Name = "butNote";
-			this.butNote.Size = new System.Drawing.Size(80, 24);
-			this.butNote.TabIndex = 14;
-			this.butNote.Text = "Note";
-			this.butNote.Click += new System.EventHandler(this.butNote_Click);
-			// 
-			// label2
-			// 
-			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.label2.Location = new System.Drawing.Point(12, 642);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(518, 44);
-			this.label2.TabIndex = 14;
-			this.label2.Text = resources.GetString("label2.Text");
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(819, 680);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 24);
-			this.butOK.TabIndex = 13;
-			this.butOK.Text = "OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// groupBox3
-			// 
-			this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.tabControl1.Controls.Add(this.tabPage1);
+            this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Location = new System.Drawing.Point(12, 32);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(801, 607);
+            this.tabControl1.TabIndex = 17;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.gridMain);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(793, 581);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "List";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // gridMain
+            // 
+            this.gridMain.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
+            this.gridMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridMain.EditableEnterMovesDown = false;
+            this.gridMain.HasAddButton = false;
+            this.gridMain.HasDropDowns = false;
+            this.gridMain.HasMultilineHeaders = false;
+            this.gridMain.HScrollVisible = false;
+            this.gridMain.Location = new System.Drawing.Point(3, 3);
+            this.gridMain.Name = "gridMain";
+            this.gridMain.ScrollValue = 0;
+            this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.gridMain.Size = new System.Drawing.Size(787, 575);
+            this.gridMain.TabIndex = 8;
+            this.gridMain.Title = "Edit Day";
+            this.gridMain.TitleVisible = true;
+            this.gridMain.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.graphScheduleDay);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(793, 581);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Graph";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // graphScheduleDay
+            // 
+            this.graphScheduleDay.BarHeightPixels = 17;
+            this.graphScheduleDay.BarSpacingPixels = 3;
+            this.graphScheduleDay.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.graphScheduleDay.EmployeeBarColor = System.Drawing.Color.LightSkyBlue;
+            this.graphScheduleDay.EmployeeTextColor = System.Drawing.Color.Black;
+            this.graphScheduleDay.EndHour = 19;
+            this.graphScheduleDay.ExteriorPaddingPixels = 11;
+            this.graphScheduleDay.GraphBackColor = System.Drawing.Color.White;
+            this.graphScheduleDay.LineWidthPixels = 1;
+            this.graphScheduleDay.Location = new System.Drawing.Point(3, 3);
+            this.graphScheduleDay.Name = "graphScheduleDay";
+            this.graphScheduleDay.PracticeBarColor = System.Drawing.Color.Salmon;
+            this.graphScheduleDay.PracticeTextColor = System.Drawing.Color.Black;
+            this.graphScheduleDay.ProviderBarColor = System.Drawing.Color.LightGreen;
+            this.graphScheduleDay.ProviderTextColor = System.Drawing.Color.Black;
+            this.graphScheduleDay.Size = new System.Drawing.Size(787, 575);
+            this.graphScheduleDay.StartHour = 4;
+            this.graphScheduleDay.TabIndex = 0;
+            this.graphScheduleDay.TickHeightPixels = 5;
+            this.graphScheduleDay.XAxisBackColor = System.Drawing.Color.White;
+            // 
+            // groupPractice
+            // 
+            this.groupPractice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupPractice.Controls.Add(this.butHoliday);
+            this.groupPractice.Controls.Add(this.butNote);
+            this.groupPractice.Location = new System.Drawing.Point(854, 551);
+            this.groupPractice.Name = "groupPractice";
+            this.groupPractice.Size = new System.Drawing.Size(110, 89);
+            this.groupPractice.TabIndex = 15;
+            this.groupPractice.TabStop = false;
+            this.groupPractice.Text = "Practice";
+            // 
+            // butHoliday
+            // 
+            this.butHoliday.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butHoliday.Autosize = true;
+            this.butHoliday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butHoliday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butHoliday.CornerRadius = 4F;
+            this.butHoliday.Location = new System.Drawing.Point(14, 53);
+            this.butHoliday.Name = "butHoliday";
+            this.butHoliday.Size = new System.Drawing.Size(80, 24);
+            this.butHoliday.TabIndex = 15;
+            this.butHoliday.Text = "Holiday";
+            this.butHoliday.Click += new System.EventHandler(this.butHoliday_Click);
+            // 
+            // butNote
+            // 
+            this.butNote.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butNote.Autosize = true;
+            this.butNote.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butNote.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butNote.CornerRadius = 4F;
+            this.butNote.Location = new System.Drawing.Point(14, 20);
+            this.butNote.Name = "butNote";
+            this.butNote.Size = new System.Drawing.Size(80, 24);
+            this.butNote.TabIndex = 14;
+            this.butNote.Text = "Note";
+            this.butNote.Click += new System.EventHandler(this.butNote_Click);
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label2.Location = new System.Drawing.Point(12, 642);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(518, 44);
+            this.label2.TabIndex = 14;
+            this.label2.Text = resources.GetString("label2.Text");
+            // 
+            // butOK
+            // 
+            this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.butOK.Autosize = true;
+            this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butOK.CornerRadius = 4F;
+            this.butOK.Location = new System.Drawing.Point(819, 680);
+            this.butOK.Name = "butOK";
+            this.butOK.Size = new System.Drawing.Size(75, 24);
+            this.butOK.TabIndex = 13;
+            this.butOK.Text = "OK";
+            this.butOK.Click += new System.EventHandler(this.butOK_Click);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupBox3.Controls.Add(this.tabControl2);
-			this.groupBox3.Controls.Add(this.butProvNote);
-			this.groupBox3.Controls.Add(this.label1);
-			this.groupBox3.Controls.Add(this.butAddTime);
-			this.groupBox3.Location = new System.Drawing.Point(819, 36);
-			this.groupBox3.Name = "groupBox3";
-			this.groupBox3.Size = new System.Drawing.Size(179, 472);
-			this.groupBox3.TabIndex = 12;
-			this.groupBox3.TabStop = false;
-			this.groupBox3.Text = "Add Time Block";
-			// 
-			// tabControl2
-			// 
-			this.tabControl2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.groupBox3.Controls.Add(this.tabControl2);
+            this.groupBox3.Controls.Add(this.butProvNote);
+            this.groupBox3.Controls.Add(this.label1);
+            this.groupBox3.Controls.Add(this.butAddTime);
+            this.groupBox3.Location = new System.Drawing.Point(819, 36);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(179, 472);
+            this.groupBox3.TabIndex = 12;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Add Time Block";
+            // 
+            // tabControl2
+            // 
+            this.tabControl2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-			this.tabControl2.Controls.Add(this.tabPageProv);
-			this.tabControl2.Controls.Add(this.tabPageEmp);
-			this.tabControl2.Location = new System.Drawing.Point(5, 45);
-			this.tabControl2.Name = "tabControl2";
-			this.tabControl2.SelectedIndex = 0;
-			this.tabControl2.Size = new System.Drawing.Size(168, 391);
-			this.tabControl2.TabIndex = 16;
-			// 
-			// tabPageProv
-			// 
-			this.tabPageProv.BackColor = System.Drawing.SystemColors.Control;
-			this.tabPageProv.Controls.Add(this.label3);
-			this.tabPageProv.Controls.Add(this.listProv);
-			this.tabPageProv.Controls.Add(this.comboProv);
-			this.tabPageProv.Location = new System.Drawing.Point(4, 22);
-			this.tabPageProv.Name = "tabPageProv";
-			this.tabPageProv.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPageProv.Size = new System.Drawing.Size(160, 365);
-			this.tabPageProv.TabIndex = 0;
-			this.tabPageProv.Text = "Providers (0)";
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(3, 319);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(147, 21);
-			this.label3.TabIndex = 17;
-			this.label3.Text = "Default Prov for Unassigned*";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// listProv
-			// 
-			this.listProv.FormattingEnabled = true;
-			this.listProv.Location = new System.Drawing.Point(0, 0);
-			this.listProv.Name = "listProv";
-			this.listProv.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listProv.Size = new System.Drawing.Size(160, 316);
-			this.listProv.TabIndex = 6;
-			this.listProv.SelectedIndexChanged += new System.EventHandler(this.listProv_SelectedIndexChanged);
-			// 
-			// comboProv
-			// 
-			this.comboProv.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboProv.Location = new System.Drawing.Point(3, 342);
-			this.comboProv.Name = "comboProv";
-			this.comboProv.Size = new System.Drawing.Size(155, 21);
-			this.comboProv.TabIndex = 16;
-			// 
-			// tabPageEmp
-			// 
-			this.tabPageEmp.Controls.Add(this.listEmp);
-			this.tabPageEmp.Location = new System.Drawing.Point(4, 22);
-			this.tabPageEmp.Name = "tabPageEmp";
-			this.tabPageEmp.Size = new System.Drawing.Size(160, 365);
-			this.tabPageEmp.TabIndex = 1;
-			this.tabPageEmp.Text = "Employees (0)";
-			this.tabPageEmp.UseVisualStyleBackColor = true;
-			// 
-			// listEmp
-			// 
-			this.listEmp.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.listEmp.FormattingEnabled = true;
-			this.listEmp.Location = new System.Drawing.Point(0, 0);
-			this.listEmp.Name = "listEmp";
-			this.listEmp.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listEmp.Size = new System.Drawing.Size(160, 365);
-			this.listEmp.TabIndex = 6;
-			this.listEmp.SelectedIndexChanged += new System.EventHandler(this.listEmp_SelectedIndexChanged);
-			// 
-			// butProvNote
-			// 
-			this.butProvNote.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butProvNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butProvNote.Autosize = true;
-			this.butProvNote.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butProvNote.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butProvNote.CornerRadius = 4F;
-			this.butProvNote.Location = new System.Drawing.Point(93, 442);
-			this.butProvNote.Name = "butProvNote";
-			this.butProvNote.Size = new System.Drawing.Size(80, 24);
-			this.butProvNote.TabIndex = 15;
-			this.butProvNote.Text = "Note";
-			this.butProvNote.Click += new System.EventHandler(this.butProvNote_Click);
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(2, 17);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(170, 30);
-			this.label1.TabIndex = 7;
-			this.label1.Text = "Select One or More Providers or Employees";
-			// 
-			// butAddTime
-			// 
-			this.butAddTime.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAddTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butAddTime.Autosize = true;
-			this.butAddTime.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddTime.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAddTime.CornerRadius = 4F;
-			this.butAddTime.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAddTime.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAddTime.Location = new System.Drawing.Point(9, 442);
-			this.butAddTime.Name = "butAddTime";
-			this.butAddTime.Size = new System.Drawing.Size(80, 24);
-			this.butAddTime.TabIndex = 4;
-			this.butAddTime.Text = "&Add";
-			this.butAddTime.Click += new System.EventHandler(this.butAddTime_Click);
-			// 
-			// labelDate
-			// 
-			this.labelDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.labelDate.Location = new System.Drawing.Point(57, 2);
-			this.labelDate.Name = "labelDate";
-			this.labelDate.Size = new System.Drawing.Size(136, 29);
-			this.labelDate.TabIndex = 9;
-			this.labelDate.Text = "labelDate";
-			this.labelDate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// butCloseOffice
-			// 
-			this.butCloseOffice.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCloseOffice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCloseOffice.Autosize = true;
-			this.butCloseOffice.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCloseOffice.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCloseOffice.CornerRadius = 4F;
-			this.butCloseOffice.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butCloseOffice.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butCloseOffice.Location = new System.Drawing.Point(866, 521);
-			this.butCloseOffice.Name = "butCloseOffice";
-			this.butCloseOffice.Size = new System.Drawing.Size(80, 24);
-			this.butCloseOffice.TabIndex = 5;
-			this.butCloseOffice.Text = "Delete";
-			this.butCloseOffice.Click += new System.EventHandler(this.butDelete_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(906, 680);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butOkSchedule
-			// 
-			this.butOkSchedule.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOkSchedule.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOkSchedule.Autosize = true;
-			this.butOkSchedule.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOkSchedule.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOkSchedule.CornerRadius = 4F;
-			this.butOkSchedule.Location = new System.Drawing.Point(687, 680);
-			this.butOkSchedule.Name = "butOkSchedule";
-			this.butOkSchedule.Size = new System.Drawing.Size(119, 24);
-			this.butOkSchedule.TabIndex = 40;
-			this.butOkSchedule.Text = "OK + Goto Schedules";
-			this.butOkSchedule.Click += new System.EventHandler(this.butOkSchedule_Click);
-			// 
-			// butGraphEdit
-			// 
-			this.butGraphEdit.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butGraphEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butGraphEdit.Autosize = true;
-			this.butGraphEdit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butGraphEdit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butGraphEdit.CornerRadius = 4F;
-			this.butGraphEdit.Image = global::OpenDental.Properties.Resources.editPencil;
-			this.butGraphEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butGraphEdit.Location = new System.Drawing.Point(590, 680);
-			this.butGraphEdit.Name = "butGraphEdit";
-			this.butGraphEdit.Size = new System.Drawing.Size(91, 24);
-			this.butGraphEdit.TabIndex = 12;
-			this.butGraphEdit.Text = "Edit Graph";
-			this.butGraphEdit.Visible = false;
-			this.butGraphEdit.Click += new System.EventHandler(this.butGraphEdit_Click);
-			// 
-			// butViewGraph
-			// 
-			this.butViewGraph.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butViewGraph.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butViewGraph.Autosize = true;
-			this.butViewGraph.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butViewGraph.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butViewGraph.CornerRadius = 4F;
-			this.butViewGraph.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butViewGraph.Location = new System.Drawing.Point(493, 680);
-			this.butViewGraph.Name = "butViewGraph";
-			this.butViewGraph.Size = new System.Drawing.Size(91, 24);
-			this.butViewGraph.TabIndex = 41;
-			this.butViewGraph.Text = "View Graph";
-			this.butViewGraph.Visible = false;
-			this.butViewGraph.Click += new System.EventHandler(this.butViewGraph_Click);
-			// 
-			// textSearch
-			// 
-			this.textSearch.Location = new System.Drawing.Point(564, 10);
-			this.textSearch.Name = "textSearch";
-			this.textSearch.Size = new System.Drawing.Size(181, 20);
-			this.textSearch.TabIndex = 42;
-			// 
-			// labelSearch
-			// 
-			this.labelSearch.Location = new System.Drawing.Point(508, 12);
-			this.labelSearch.Name = "labelSearch";
-			this.labelSearch.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-			this.labelSearch.Size = new System.Drawing.Size(55, 13);
-			this.labelSearch.TabIndex = 43;
-			this.labelSearch.Text = "Search";
-			this.labelSearch.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// FormScheduleDayEdit
-			// 
-			this.ClientSize = new System.Drawing.Size(1003, 720);
-			this.Controls.Add(this.labelSearch);
-			this.Controls.Add(this.textSearch);
-			this.Controls.Add(this.butViewGraph);
-			this.Controls.Add(this.butGraphEdit);
-			this.Controls.Add(this.butOkSchedule);
-			this.Controls.Add(this.butForward);
-			this.Controls.Add(this.butBack);
-			this.Controls.Add(this.comboClinic);
-			this.Controls.Add(this.labelClinic);
-			this.Controls.Add(this.tabControl1);
-			this.Controls.Add(this.groupPractice);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.groupBox3);
-			this.Controls.Add(this.labelDate);
-			this.Controls.Add(this.butCloseOffice);
-			this.Controls.Add(this.butCancel);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.MinimumSize = new System.Drawing.Size(966, 408);
-			this.Name = "FormScheduleDayEdit";
-			this.ShowInTaskbar = false;
-			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-			this.Text = "Edit Day";
-			this.Load += new System.EventHandler(this.FormScheduleDay_Load);
-			this.tabControl1.ResumeLayout(false);
-			this.tabPage1.ResumeLayout(false);
-			this.tabPage2.ResumeLayout(false);
-			this.groupPractice.ResumeLayout(false);
-			this.groupBox3.ResumeLayout(false);
-			this.tabControl2.ResumeLayout(false);
-			this.tabPageProv.ResumeLayout(false);
-			this.tabPageEmp.ResumeLayout(false);
-			this.ResumeLayout(false);
-			this.PerformLayout();
+            this.tabControl2.Controls.Add(this.tabPageProv);
+            this.tabControl2.Controls.Add(this.tabPageEmp);
+            this.tabControl2.Location = new System.Drawing.Point(5, 45);
+            this.tabControl2.Name = "tabControl2";
+            this.tabControl2.SelectedIndex = 0;
+            this.tabControl2.Size = new System.Drawing.Size(168, 391);
+            this.tabControl2.TabIndex = 16;
+            // 
+            // tabPageProv
+            // 
+            this.tabPageProv.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPageProv.Controls.Add(this.label3);
+            this.tabPageProv.Controls.Add(this.listProv);
+            this.tabPageProv.Controls.Add(this.comboProv);
+            this.tabPageProv.Location = new System.Drawing.Point(4, 22);
+            this.tabPageProv.Name = "tabPageProv";
+            this.tabPageProv.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageProv.Size = new System.Drawing.Size(160, 365);
+            this.tabPageProv.TabIndex = 0;
+            this.tabPageProv.Text = "Providers (0)";
+            // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(3, 319);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(147, 21);
+            this.label3.TabIndex = 17;
+            this.label3.Text = "Default Prov for Unassigned*";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // listProv
+            // 
+            this.listProv.FormattingEnabled = true;
+            this.listProv.Location = new System.Drawing.Point(0, 0);
+            this.listProv.Name = "listProv";
+            this.listProv.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listProv.Size = new System.Drawing.Size(160, 316);
+            this.listProv.TabIndex = 6;
+            this.listProv.SelectedIndexChanged += new System.EventHandler(this.listProv_SelectedIndexChanged);
+            // 
+            // comboProv
+            // 
+            this.comboProv.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboProv.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboProv.Location = new System.Drawing.Point(-40, 342);
+            this.comboProv.Name = "comboProv";
+            this.comboProv.Size = new System.Drawing.Size(155, 21);
+            this.comboProv.TabIndex = 16;
+            // 
+            // tabPageEmp
+            // 
+            this.tabPageEmp.Controls.Add(this.listEmp);
+            this.tabPageEmp.Location = new System.Drawing.Point(4, 22);
+            this.tabPageEmp.Name = "tabPageEmp";
+            this.tabPageEmp.Size = new System.Drawing.Size(160, 365);
+            this.tabPageEmp.TabIndex = 1;
+            this.tabPageEmp.Text = "Employees (0)";
+            this.tabPageEmp.UseVisualStyleBackColor = true;
+            // 
+            // listEmp
+            // 
+            this.listEmp.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listEmp.FormattingEnabled = true;
+            this.listEmp.Location = new System.Drawing.Point(0, 0);
+            this.listEmp.Name = "listEmp";
+            this.listEmp.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listEmp.Size = new System.Drawing.Size(160, 365);
+            this.listEmp.TabIndex = 6;
+            this.listEmp.SelectedIndexChanged += new System.EventHandler(this.listEmp_SelectedIndexChanged);
+            // 
+            // butProvNote
+            // 
+            this.butProvNote.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butProvNote.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.butProvNote.Autosize = true;
+            this.butProvNote.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butProvNote.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butProvNote.CornerRadius = 4F;
+            this.butProvNote.Location = new System.Drawing.Point(93, 442);
+            this.butProvNote.Name = "butProvNote";
+            this.butProvNote.Size = new System.Drawing.Size(80, 24);
+            this.butProvNote.TabIndex = 15;
+            this.butProvNote.Text = "Note";
+            this.butProvNote.Click += new System.EventHandler(this.butProvNote_Click);
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(2, 17);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(170, 30);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Select One or More Providers or Employees";
+            // 
+            // butAddTime
+            // 
+            this.butAddTime.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butAddTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.butAddTime.Autosize = true;
+            this.butAddTime.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butAddTime.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butAddTime.CornerRadius = 4F;
+            this.butAddTime.Image = global::OpenDental.Properties.Resources.Add;
+            this.butAddTime.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.butAddTime.Location = new System.Drawing.Point(9, 442);
+            this.butAddTime.Name = "butAddTime";
+            this.butAddTime.Size = new System.Drawing.Size(80, 24);
+            this.butAddTime.TabIndex = 4;
+            this.butAddTime.Text = "&Add";
+            this.butAddTime.Click += new System.EventHandler(this.butAddTime_Click);
+            // 
+            // labelDate
+            // 
+            this.labelDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelDate.Location = new System.Drawing.Point(57, 2);
+            this.labelDate.Name = "labelDate";
+            this.labelDate.Size = new System.Drawing.Size(136, 29);
+            this.labelDate.TabIndex = 9;
+            this.labelDate.Text = "labelDate";
+            this.labelDate.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // butCloseOffice
+            // 
+            this.butCloseOffice.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butCloseOffice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.butCloseOffice.Autosize = true;
+            this.butCloseOffice.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butCloseOffice.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butCloseOffice.CornerRadius = 4F;
+            this.butCloseOffice.Image = global::OpenDental.Properties.Resources.deleteX;
+            this.butCloseOffice.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.butCloseOffice.Location = new System.Drawing.Point(866, 521);
+            this.butCloseOffice.Name = "butCloseOffice";
+            this.butCloseOffice.Size = new System.Drawing.Size(80, 24);
+            this.butCloseOffice.TabIndex = 5;
+            this.butCloseOffice.Text = "Delete";
+            this.butCloseOffice.Click += new System.EventHandler(this.butDelete_Click);
+            // 
+            // butCancel
+            // 
+            this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.butCancel.Autosize = true;
+            this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butCancel.CornerRadius = 4F;
+            this.butCancel.Location = new System.Drawing.Point(906, 680);
+            this.butCancel.Name = "butCancel";
+            this.butCancel.Size = new System.Drawing.Size(75, 24);
+            this.butCancel.TabIndex = 2;
+            this.butCancel.Text = "&Cancel";
+            this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+            // 
+            // butOkSchedule
+            // 
+            this.butOkSchedule.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butOkSchedule.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.butOkSchedule.Autosize = true;
+            this.butOkSchedule.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butOkSchedule.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butOkSchedule.CornerRadius = 4F;
+            this.butOkSchedule.Location = new System.Drawing.Point(687, 680);
+            this.butOkSchedule.Name = "butOkSchedule";
+            this.butOkSchedule.Size = new System.Drawing.Size(119, 24);
+            this.butOkSchedule.TabIndex = 40;
+            this.butOkSchedule.Text = "OK + Goto Schedules";
+            this.butOkSchedule.Click += new System.EventHandler(this.butOkSchedule_Click);
+            // 
+            // textSearch
+            // 
+            this.textSearch.Location = new System.Drawing.Point(564, 10);
+            this.textSearch.Name = "textSearch";
+            this.textSearch.Size = new System.Drawing.Size(181, 20);
+            this.textSearch.TabIndex = 42;
+            // 
+            // labelSearch
+            // 
+            this.labelSearch.Location = new System.Drawing.Point(508, 12);
+            this.labelSearch.Name = "labelSearch";
+            this.labelSearch.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.labelSearch.Size = new System.Drawing.Size(55, 13);
+            this.labelSearch.TabIndex = 43;
+            this.labelSearch.Text = "Search";
+            this.labelSearch.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // FormScheduleDayEdit
+            // 
+            this.ClientSize = new System.Drawing.Size(1003, 720);
+            this.Controls.Add(this.labelSearch);
+            this.Controls.Add(this.textSearch);
+            this.Controls.Add(this.butOkSchedule);
+            this.Controls.Add(this.butForward);
+            this.Controls.Add(this.butBack);
+            this.Controls.Add(this.comboClinic);
+            this.Controls.Add(this.labelClinic);
+            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.groupPractice);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.butOK);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.labelDate);
+            this.Controls.Add(this.butCloseOffice);
+            this.Controls.Add(this.butCancel);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(966, 408);
+            this.Name = "FormScheduleDayEdit";
+            this.ShowInTaskbar = false;
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+            this.Text = "Edit Day";
+            this.Load += new System.EventHandler(this.FormScheduleDay_Load);
+            this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
+            this.groupPractice.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.tabControl2.ResumeLayout(false);
+            this.tabPageProv.ResumeLayout(false);
+            this.tabPageEmp.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 		#endregion
 
 		private void FormScheduleDay_Load(object sender,System.EventArgs e) {
 			SetFilterControlsAndAction(() => FillGrid(),textSearch);
-			butGraphEdit.Visible=Preferences.IsODHQ;
-			butViewGraph.Visible=Preferences.IsODHQ;
 			butOkSchedule.Visible=ShowOkSchedule;
 			_listClinics=new List<Clinic>();
 			if(!Security.CurUser.ClinicIsRestricted) {
@@ -733,26 +691,9 @@ namespace OpenDental{
 				.Where(x => x!=null).ToDictionary(x => x.EmployeeNum);//speed up sort.
 			_dictProvNumProvider=_listScheds.Select(x => x.ProvNum).Distinct().Select(x => Providers.GetProv(x))//returns null if ProvNum==0 or invalid
 				.Where(x => x!=null).ToDictionary(x => x.ProvNum);//speed up sort.
-			if(Preferences.IsODHQ) {
-				//HQ wants their own sort, so instead of complicating the comparer we will just do the comparer on four seperate lists.
-				List<Schedule> listPracticeNotes=_listScheds.Where(x => x.EmployeeNum==0 && x.ProvNum==0).ToList();
-				listPracticeNotes.Sort(CompareSchedule);
-				List<Schedule> listEmpNotes=_listScheds.Where(x => x.EmployeeNum!=0 && x.ProvNum==0 && x.StartTime==TimeSpan.Zero).ToList();
-				listEmpNotes.Sort(CompareSchedule);
-				List<Schedule> listProvSched=_listScheds.Where(x => x.EmployeeNum==0 && x.ProvNum!=0).ToList();
-				listProvSched.Sort(CompareSchedule);
-				List<Schedule> listEmpSched=_listScheds.Where(x => x.EmployeeNum!=0 && x.ProvNum==0 && x.StartTime!=TimeSpan.Zero).ToList();
-				listEmpSched.Sort(CompareSchedule);
-				_listScheds=new List<Schedule>();
-				_listScheds.AddRange(listPracticeNotes);
-				_listScheds.AddRange(listEmpNotes);
-				_listScheds.AddRange(listProvSched);
-				_listScheds.AddRange(listEmpSched);
-				_listScheds.Distinct();
-			}
-			else {
+
 				_listScheds.Sort(CompareSchedule);
-			}
+			
 			graphScheduleDay.SetSchedules(_listScheds);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
@@ -1139,16 +1080,6 @@ namespace OpenDental{
 		private void butOkSchedule_Click(object sender,EventArgs e) {
 			GotoScheduleOnClose=true;
 			butOK_Click(sender,e);
-		}
-
-		private void butViewGraph_Click(object sender,EventArgs e) {
-			FormGraphEmployeeTime FormGET=new FormGraphEmployeeTime();
-			FormGET.ShowDialog();
-		}
-
-		private void butGraphEdit_Click(object sender,EventArgs e) {
-			FormPhoneGraphDateEdit FormPGDE=new FormPhoneGraphDateEdit(_dateSched,false);
-			FormPGDE.ShowDialog();
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

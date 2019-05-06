@@ -58,14 +58,6 @@ namespace OpenDentBusiness{
 					if(layoutMode.In(SheetFieldLayoutMode.Ecw,SheetFieldLayoutMode.EcwTreatPlan)) {
 						retVal.Add(new SheetFieldDef( SheetFieldType.Special,0,0,411,50) { FieldName="PanelEcw"});//Has growthBehavior logic in FormSheetFieldSpecial.cs
 					}
-					if(Preferences.IsODHQ) {//Mimics ContrChart.InitializeLocalData(...)
-						retVal.AddRange(new[] { 
-							new SheetFieldDef( SheetFieldType.Special,0,0,75,14) { FieldName="ButtonErxAccess",FieldValue="Erx Access"},
-							new SheetFieldDef( SheetFieldType.Special,0,0,75,14) { FieldName="ButtonPhoneNums",FieldValue="Phone Nums"},
-							new SheetFieldDef( SheetFieldType.Special,0,0,75,14) { FieldName="ButtonForeignKey",FieldValue="Foreign Key"},
-							new SheetFieldDef( SheetFieldType.Special,0,0,75,14) { FieldName="ButtonUSAKey",FieldValue="USA Key"}
-						});
-					}
 					break;
 			}
 			return retVal;

@@ -118,10 +118,10 @@ namespace OpenDental{
 			Controls.Add(listSites);
 			listSites.BringToFront();
 			Lan.F(this);
-			if(Preferences.GetBool(PrefName.DockPhonePanelShow)) {
-				labelST.Text=Lan.g(this,"ST, Country");
-				textCountry.Visible=true;
-			}
+			//if(Preferences.GetBool(PrefName.DockPhonePanelShow)) {
+			//	labelST.Text=Lan.g(this,"ST, Country");
+			//	textCountry.Visible=true;
+			//}
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				labelSSN.Text=Lan.g(this,"SIN");
 				labelZip.Text=Lan.g(this,"Postal Code");
@@ -2683,14 +2683,6 @@ namespace OpenDental{
 					MsgBox.Show(this,"School should be entered if full-time student and patient is 18 or older.");
 					return;
 				}
-			}
-			//If HQ and this is a patient in a reseller family, do not allow the changing of the patient status.
-			if(Preferences.IsODHQ
-				&& Resellers.IsResellerFamily(PatCur)
-				&& PatOld.PatStatus!=_listPatStatuses[listStatus.SelectedIndex])//1:1
-			{
-				MsgBox.Show(this,"Cannot change the status of a patient in a reseller family.");
-				return;
 			}
 			//If public health is enabled and the combo box is in an invalid state, warn the user.
 			if(!Preferences.GetBool(PrefName.EasyHidePublicHealth) && comboGradeLevel.SelectedIndex < 0) {

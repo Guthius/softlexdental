@@ -1,4 +1,5 @@
 ﻿using CodeBase;
+using OpenDental;
 using OpenDentBusiness;
 using System;
 using System.Collections;
@@ -15,8 +16,6 @@ namespace OpenDentBusiness
 {
     public class Preferences
     {
-        private static YN _isVerboseLoggingSession;
-
         /// <summary>
         /// This property is just a shortcut to this pref to make typing faster.  This pref is used a lot.
         /// </summary>
@@ -63,11 +62,6 @@ namespace OpenDentBusiness
         }
 
         /// <summary>
-        /// Returns true if DockPhonePanelShow is enabled. Convenience function that should be used if for ODHQ only, and not resellers.
-        /// </summary>
-        public static bool IsODHQ => GetBool(PrefName.DockPhonePanelShow);
-
-        /// <summary>
         /// Returns the credentials (user name and password) used to access the voicemail share via SMB2.
         /// Used by HQ only.  These preference will not be present in typical databases and this property will then throw an exception.
         /// </summary>
@@ -81,12 +75,6 @@ namespace OpenDentBusiness
                         GetString(PrefName.VoiceMailSMB2Password));
             }
         }
-
-        /// <summary>
-        /// Call this when we have a new Pref cache in order to re-establish logging preference from this computer.
-        /// </summary>
-        public static void InvalidateVerboseLogging() => _isVerboseLoggingSession = YN.Unknown;
-        
 
         /// <summary>
         /// True if the practice has set a window to restrict the times that automatic communications will be sent out.
@@ -477,7 +465,7 @@ namespace OpenDentBusiness
                 get
                 {
                     string pass;
-                    CDT.Class1.Decrypt(Preferences.GetString(PrefName.ReportingServerMySqlPassHash), out pass);
+                    Encryption.TryDecrypt(Preferences.GetString(PrefName.ReportingServerMySqlPassHash), out pass);
                     return pass;
                 }
             }

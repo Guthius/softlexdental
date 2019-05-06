@@ -8,9 +8,6 @@ using System.Windows.Forms;
 
 namespace OpenDentBusiness.Eclaims
 {
-    /// <summary>
-    /// Summary description for Eclaims.
-    /// </summary>
     public class Eclaims
     {
         /// <summary></summary>

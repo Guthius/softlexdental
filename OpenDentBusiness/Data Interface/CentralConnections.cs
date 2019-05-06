@@ -1,4 +1,5 @@
 using CodeBase;
+using OpenDental;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -114,7 +115,7 @@ namespace OpenDentBusiness
                     if (centralConnection.MySqlPassword == ""
                         && encryptedPwdNode != null
                         && encryptedPwdNode.Value != ""
-                        && CDT.Class1.Decrypt(encryptedPwdNode.Value, out _decryptedPwd))
+                        && Encryption.TryDecrypt(encryptedPwdNode.Value, out _decryptedPwd))
                     {
                         //decrypted value could be an empty string, which means they don't have a password set, so textPassword will be an empty string
                         centralConnection.MySqlPassword = _decryptedPwd;
@@ -390,7 +391,7 @@ namespace OpenDentBusiness
                         writer.WriteString(centralConnection.MySqlUser);
                         writer.WriteEndElement();
                         string encryptedPwd;
-                        CDT.Class1.Encrypt(centralConnection.MySqlPassword, out encryptedPwd);//sets encryptedPwd ot value or null
+                        Encryption.TryEncrypt(centralConnection.MySqlPassword, out encryptedPwd);//sets encryptedPwd ot value or null
                         writer.WriteStartElement("Password");
                         //If encryption fails, write plain text password to xml file; maintains old behavior.
                         writer.WriteString(string.IsNullOrEmpty(encryptedPwd) ? centralConnection.MySqlPassword : "");

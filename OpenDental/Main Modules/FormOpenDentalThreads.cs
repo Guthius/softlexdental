@@ -51,8 +51,6 @@ namespace OpenDental {
 				BeginEnableFeaturesThread();
 				BeginEhrCodeListThread();
 				BeginTimeSyncThread();
-				BeginVoicemailThread();
-				BeginHqMetricsThread();
 				BeginRegistrationKeyIsDisabledThread();
 			}
 			else {
@@ -437,94 +435,6 @@ namespace OpenDental {
 		}
 		
 		#endregion
-		#region HqMetricsThread
-
-		private void BeginHqMetricsThread() {
-			if(IsThreadAlreadyRunning(FormODThreadNames.HqMetrics)) {
-				return;
-			}
-			if(!Preferences.IsODHQ) {
-				return;
-			}
-			//Only run this thread every 1.6 seconds.
-			ODThread odThread=new ODThread(1600,(o) => {
-				ProcessHqMetricsPhones();
-				ProcessHqMetricsEServices();
-			});
-			odThread.GroupName=FormODThreadNames.HqMetrics.GetDescription();
-			odThread.Name=FormODThreadNames.HqMetrics.GetDescription();
-			odThread.Start();
-		}
-
-		///<summary>HQ only. Called from HqMetricsThread(). Deals with HQ phone panel. This method runs in a thread so any access to form controls 
-		///must be invoked.</summary>
-		private void ProcessHqMetricsPhones() {
-			if(Security.CurUser==null) {
-				return;//Don't waste time processing phone metrics when no one is logged in and sitting at the log on screen.
-			}
-
-            DataConnection.SetDb("localhost", "customers", "root", "", true);
-
-			if(_listMaps.Count>0 
-				&& DateTime.Now.Subtract(_hqOfficeDownLastRefreshed).TotalSeconds>Preferences.GetInt(PrefName.ProcessSigsIntervalInSecs)) 
-			{
-				List<OpenDentBusiness.Task> listOfficesDowns=Tasks.GetOfficeDowns();
-				if(!IsDisposed) {
-					Invoke(new ProcessOfficeDownArgs(ProcessOfficeDowns),new object[] { listOfficesDowns });
-				}
-				_hqOfficeDownLastRefreshed=DateTime.Now;
-			}
-			if( //Fill the triage labels at the fastest interval if the HQ map is open. This is only typically for the project PC in the HQ call center.
-				_listMaps.Count>0 //Always run if the HQ map is open. 
-				||  //For everyone else, Only fill triage labels at given interval. Too taxing on the server to perform every 1.6 seconds.
-					DateTime.Now.Subtract(_hqTriageMetricsLastRefreshed).TotalSeconds>Preferences.GetInt(PrefName.ProcessSigsIntervalInSecs)) 
-			{
-				TriageMetric triageMetrics=Phones.GetTriageMetrics();
-				Invoke(new FillTriageLabelsResultsArgs(OnFillTriageLabelsResults),triageMetrics);
-				//Reset the interval timer.
-				_hqTriageMetricsLastRefreshed=DateTime.Now;
-			}
-			List<PhoneEmpDefault> listPED=PhoneEmpDefaults.Refresh();
-			List<PhoneEmpSubGroup> listSubGroups=PhoneEmpSubGroups.GetAll();
-			//Get the extension linked to this machine.
-			PhoneComp phoneComp=PhoneComps.GetFirstOrDefault(x => x.ComputerName.ToUpper()==Environment.MachineName.ToUpper());
-			int extension=phoneComp?.PhoneExt??0;
-			//Get the phoneempdefault row that is currently associated to the corresponding extension.
-			PhoneEmpDefault pedCur=listPED.FirstOrDefault(x => x.PhoneExt==extension);
-			bool isTriageOperator=pedCur?.IsTriageOperator??false;
-			//Now get the Phone object for this extension. Phone table matches PhoneEmpDefault table more or less 1:1. 
-			//Phone fields represent current state of the PhoneEmpDefault table and will be modified by the phone tracking server anytime a phone state changes for a given extension 
-			//(EG... incoming call, outgoing call, hangup, etc).
-			List<Phone> listPhones=Phones.GetPhoneList();
-			Phone phone=listPhones.FirstOrDefault(x => x.Extension==extension);
-			List<ChatUser> listChatUsers=ChatUsers.GetAll();
-			List<WebChatSession> listWebChatSessions=WebChatSessions.GetActiveSessions();
-			//send the results back to the UI layer for action.
-			if(!this.IsDisposed) {
-				this.Invoke(() => OnProcessHqMetricsResults(listPED,listPhones,listSubGroups,listChatUsers,phone,isTriageOperator,listWebChatSessions));
-			}
-		}
-
-		///<summary>HQ only. Called from ProcessHqMetrics(). Deals with HQ EServices. This method runs in a thread so any access to form controls must be invoked.</summary>
-		private void ProcessHqMetricsEServices() {
-			if(DateTime.Now.Subtract(_hqEServiceMetricsLastRefreshed).TotalSeconds<10) {
-				return;
-			}
-			if(_listMaps.Count==0) { //Do not run if the HQ map is not open.
-				return;
-			}
-			_hqEServiceMetricsLastRefreshed=DateTime.Now;
-			//Get important metrics from serviceshq db.
-			EServiceMetrics metricsToday=EServiceMetrics.GetEServiceMetricsFromSignalHQ();
-			if(metricsToday==null) {
-				return;
-			}
-			foreach(FormMapHQ formMapHQ in _listMaps) {
-				formMapHQ.Invoke(new MethodInvoker(delegate { formMapHQ.SetEServiceMetrics(metricsToday); }));
-			}
-		}
-
-		#endregion
 		#region LogOffThread
 
 		///<summary>Begins the thread that checks for a forced log off.</summary>
@@ -682,24 +592,6 @@ namespace OpenDental {
 		}
 
 		#endregion
-		#region PhoneConferenceThread
-
-		///<summary>Begins a thread that updates the phone conference rooms. This is for HQ only.</summary>
-		void BeginPhoneConferenceThread() {
-			if(IsThreadAlreadyRunning(FormODThreadNames.PhoneConference)) {
-				return;
-			}
-			ODThread odThread=new ODThread((o) => {
-				List<PhoneConf> listPhoneConfs=PhoneConfs.GetAll();
-				this.Invoke((() => lightSignalGrid1.SetConfs(listPhoneConfs)));
-			});
-			odThread.AddExceptionHandler(ex => SignalsTickExceptionHandler(ex));
-			odThread.GroupName=FormODThreadNames.PhoneConference.GetDescription();
-			odThread.Name=FormODThreadNames.PhoneConference.GetDescription();
-			odThread.Start();
-		}
-
-		#endregion
 		#region PlaySoundsThread
 
 		///<summary>Begins a thread that will play sounds based on the given signals.</summary>
@@ -854,12 +746,6 @@ namespace OpenDental {
 				return;
 			}
 			ODThread odThread=new ODThread((o) => {
-				if(Preferences.IsODHQ) {
-					ODThread webCamKillThread = new ODThread(((o2) => { Process.GetProcessesByName("WebCamOD").ToList().ForEach(x => x.Kill()); }));
-					webCamKillThread.Start();
-					ODThread proximityKillThread = new ODThread(((o2) => { Process.GetProcessesByName("ProximityOD").ToList().ForEach(x => x.Kill()); }));
-					proximityKillThread.Start();
-				}
 				Thread.Sleep(15000);//15 seconds
 				CloseOpenForms(true);
 				this.Invoke(Application.Exit);
@@ -954,70 +840,6 @@ namespace OpenDental {
 		}
 
 		#endregion
-		#region VoicemailThread
-
-		private void BeginVoicemailThread() {
-			if(IsThreadAlreadyRunning(FormODThreadNames.VoicemailHQ)) {
-				return;
-			}
-			if(!Preferences.IsODHQ) {
-				return;
-			}
-			ODThread odThread=new ODThread((int)TimeSpan.FromSeconds(3).TotalMilliseconds,VoicemailWorker);
-			odThread.GroupName=FormODThreadNames.VoicemailHQ.GetDescription();
-			odThread.Name=FormODThreadNames.VoicemailHQ.GetDescription();
-			odThread.Start(true);
-		}
-
-		///<summary>Called on the voicemail thread for HQ only.</summary>
-		private void VoicemailWorker(ODThread odThread) {
-			try {
-				List<VoiceMail> listVoiceMails=VoiceMails.GetAll(false,false).FindAll(x => x.UserNum==0);//Only include unclaimed VMs in the count and timer
-				DateTime oldestVoicemail=DateTime.MaxValue;
-				foreach(VoiceMail voiceMail in listVoiceMails) {
-					if(voiceMail.DateCreated.AddSeconds(voiceMail.Duration)<oldestVoicemail) {
-						oldestVoicemail=voiceMail.DateCreated.AddSeconds(voiceMail.Duration);//Adding Duration so the timer starts at the end of the VM
-					}
-				}
-				TimeSpan ageOfOldestVoicemail=new TimeSpan(0);
-				if(oldestVoicemail!=DateTime.MaxValue) {
-					ageOfOldestVoicemail=DateTime.Now-oldestVoicemail;
-				}
-				this.Invoke(() => { SetVoicemailMetrics(false,listVoiceMails.Count,ageOfOldestVoicemail); });
-			}
-			catch {
-				//Something went wrong with determining how many voicemails there are.  Sleep for 4 minutes then try again.
-				ODException.SwallowAnyException(() => this.Invoke(() => { SetVoicemailMetrics(true,0,new TimeSpan(0)); }));
-				odThread.Wait((int)TimeSpan.FromMinutes(4).TotalMilliseconds);
-			}
-		}
-
-		///<summary>Called from worker thread for HQ voicemails. Sets all UI changes for the voicemail counter.</summary>
-		private void SetVoicemailMetrics(bool hasError,int voiceMailCount,TimeSpan ageOfOldestVoicemail) {
-			if(hasError) {
-				labelMsg.Font=new Font(FontFamily.GenericSansSerif,8.25f,FontStyle.Bold);
-				labelMsg.Text="error";
-				labelMsg.ForeColor=Color.Firebrick;
-				return;
-			}
-			labelMsg.Text=voiceMailCount.ToString();
-			if(voiceMailCount==0) {
-				labelMsg.Font=new Font(FontFamily.GenericSansSerif,7.75f,FontStyle.Regular);
-				labelMsg.ForeColor=Color.Black;
-			}
-			else {
-				labelMsg.Font=new Font(FontFamily.GenericSansSerif,7.75f,FontStyle.Bold);
-				labelMsg.ForeColor=Color.Firebrick;
-			}
-			foreach(FormMapHQ formMapHQ in _listMaps) {
-				formMapHQ.SetVoicemailRed(voiceMailCount,ageOfOldestVoicemail);
-			}
-			if(formPhoneTiles!=null && !formPhoneTiles.IsDisposed) {
-				formPhoneTiles.SetVoicemailCount(voiceMailCount);
-			}
-		}
-
-		#endregion
 		#region WebSyncThread
 
 		///<summary>Begins the thread that checks for mobile sync. This will sync parts of a users database to HQ if certain preferences are set.</summary>
@@ -1087,12 +909,12 @@ namespace OpenDental {
 			EhrCodeList,
 			EnableAdditionalFeatures,
 			EServiceMonitoring,
-			HqMetrics,
+            [Obsolete] HqMetrics,
 			LogOff,
-			MiddleTierConnectionLost,
+            [Obsolete] MiddleTierConnectionLost,
 			ODServiceMonitor,
 			ODServiceStarter,
-			PhoneConference,
+            [Obsolete] PhoneConference,
 			PlaySounds,
 			Podium,
 			RegKeyIsForTesting,
@@ -1101,7 +923,7 @@ namespace OpenDental {
 			Tasks,
 			TimeSync,
 			UpdateFormText,
-			VoicemailHQ,
+			[Obsolete] VoicemailHQ,
 			WebSync,
 			Dashboard,
 			RegistrationKeyIsDisabled,

@@ -66,7 +66,6 @@ namespace OpenDental {
 			}
 			_listPayPeriods=PayPeriods.GetDeepCopy();
 			FillPayPeriod();
-			butTimeCardBenefits.Visible=Preferences.IsODHQ && Security.IsAuthorized(Permissions.TimecardsEditAll,true);
 		}
 
 		private void FormTimeCardManage_Shown(object sender,EventArgs e) {

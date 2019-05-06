@@ -28,7 +28,6 @@ namespace OpenDental{
 		private UI.Button butCancel;
 		private UI.Button butOK;
 		private UI.Button butPassword;
-		private UI.Button butJobRoles;
 		private Label labelClinic;
 		private ListBox listClinic;
 		private Label label1;
@@ -109,469 +108,452 @@ namespace OpenDental{
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormUserEdit));
-			this.tabControl1 = new System.Windows.Forms.TabControl();
-			this.tabUser = new System.Windows.Forms.TabPage();
-			this.textDoseSpotUserID = new System.Windows.Forms.TextBox();
-			this.label8 = new System.Windows.Forms.Label();
-			this.checkRequireReset = new System.Windows.Forms.CheckBox();
-			this.butPickDomainUser = new OpenDental.UI.Button();
-			this.textDomainUser = new System.Windows.Forms.TextBox();
-			this.labelDomainUser = new System.Windows.Forms.Label();
-			this.textUserNum = new System.Windows.Forms.TextBox();
-			this.label27 = new System.Windows.Forms.Label();
-			this.checkIsHidden = new System.Windows.Forms.CheckBox();
-			this.listProv = new System.Windows.Forms.ListBox();
-			this.label5 = new System.Windows.Forms.Label();
-			this.label4 = new System.Windows.Forms.Label();
-			this.listEmployee = new System.Windows.Forms.ListBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.textUserName = new System.Windows.Forms.TextBox();
-			this.listUserGroup = new System.Windows.Forms.ListBox();
-			this.label3 = new System.Windows.Forms.Label();
-			this.label1 = new System.Windows.Forms.Label();
-			this.tabClinics = new System.Windows.Forms.TabPage();
-			this.label6 = new System.Windows.Forms.Label();
-			this.listClinicMulti = new System.Windows.Forms.ListBox();
-			this.checkClinicIsRestricted = new System.Windows.Forms.CheckBox();
-			this.listClinic = new System.Windows.Forms.ListBox();
-			this.labelClinic = new System.Windows.Forms.Label();
-			this.tabAlertSubs = new System.Windows.Forms.TabPage();
-			this.labelAlertClinic = new System.Windows.Forms.Label();
-			this.listAlertSubsClinicsMulti = new System.Windows.Forms.ListBox();
-			this.listAlertSubMulti = new System.Windows.Forms.ListBox();
-			this.label7 = new System.Windows.Forms.Label();
-			this.butJobRoles = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.butPassword = new OpenDental.UI.Button();
-			this.butUnlock = new OpenDental.UI.Button();
-			this.butDoseSpotAdditional = new OpenDental.UI.Button();
-			this.tabControl1.SuspendLayout();
-			this.tabUser.SuspendLayout();
-			this.tabClinics.SuspendLayout();
-			this.tabAlertSubs.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// tabControl1
-			// 
-			this.tabControl1.Controls.Add(this.tabUser);
-			this.tabControl1.Controls.Add(this.tabClinics);
-			this.tabControl1.Controls.Add(this.tabAlertSubs);
-			this.tabControl1.Location = new System.Drawing.Point(12, 13);
-			this.tabControl1.Name = "tabControl1";
-			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(614, 399);
-			this.tabControl1.TabIndex = 0;
-			// 
-			// tabUser
-			// 
-			this.tabUser.BackColor = System.Drawing.SystemColors.Control;
-			this.tabUser.Controls.Add(this.butDoseSpotAdditional);
-			this.tabUser.Controls.Add(this.textDoseSpotUserID);
-			this.tabUser.Controls.Add(this.label8);
-			this.tabUser.Controls.Add(this.checkRequireReset);
-			this.tabUser.Controls.Add(this.butPickDomainUser);
-			this.tabUser.Controls.Add(this.textDomainUser);
-			this.tabUser.Controls.Add(this.labelDomainUser);
-			this.tabUser.Controls.Add(this.textUserNum);
-			this.tabUser.Controls.Add(this.label27);
-			this.tabUser.Controls.Add(this.checkIsHidden);
-			this.tabUser.Controls.Add(this.listProv);
-			this.tabUser.Controls.Add(this.label5);
-			this.tabUser.Controls.Add(this.label4);
-			this.tabUser.Controls.Add(this.listEmployee);
-			this.tabUser.Controls.Add(this.label2);
-			this.tabUser.Controls.Add(this.textUserName);
-			this.tabUser.Controls.Add(this.listUserGroup);
-			this.tabUser.Controls.Add(this.label3);
-			this.tabUser.Controls.Add(this.label1);
-			this.tabUser.Location = new System.Drawing.Point(4, 22);
-			this.tabUser.Name = "tabUser";
-			this.tabUser.Padding = new System.Windows.Forms.Padding(3);
-			this.tabUser.Size = new System.Drawing.Size(606, 373);
-			this.tabUser.TabIndex = 0;
-			this.tabUser.Text = "User";
-			// 
-			// textDoseSpotUserID
-			// 
-			this.textDoseSpotUserID.Location = new System.Drawing.Point(224, 68);
-			this.textDoseSpotUserID.Name = "textDoseSpotUserID";
-			this.textDoseSpotUserID.Size = new System.Drawing.Size(180, 20);
-			this.textDoseSpotUserID.TabIndex = 172;
-			// 
-			// label8
-			// 
-			this.label8.Location = new System.Drawing.Point(224, 47);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(177, 20);
-			this.label8.TabIndex = 171;
-			this.label8.Text = "DoseSpot User ID";
-			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// checkRequireReset
-			// 
-			this.checkRequireReset.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkRequireReset.Location = new System.Drawing.Point(407, 48);
-			this.checkRequireReset.Name = "checkRequireReset";
-			this.checkRequireReset.Size = new System.Drawing.Size(192, 20);
-			this.checkRequireReset.TabIndex = 170;
-			this.checkRequireReset.Text = "Require Password Reset";
-			this.checkRequireReset.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkRequireReset.UseVisualStyleBackColor = true;
-			// 
-			// butPickDomainUser
-			// 
-			this.butPickDomainUser.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butPickDomainUser.Autosize = false;
-			this.butPickDomainUser.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPickDomainUser.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPickDomainUser.CornerRadius = 2F;
-			this.butPickDomainUser.Location = new System.Drawing.Point(407, 25);
-			this.butPickDomainUser.Name = "butPickDomainUser";
-			this.butPickDomainUser.Size = new System.Drawing.Size(23, 21);
-			this.butPickDomainUser.TabIndex = 169;
-			this.butPickDomainUser.Text = "...";
-			this.butPickDomainUser.Click += new System.EventHandler(this.butPickDomainUser_Click);
-			// 
-			// textDomainUser
-			// 
-			this.textDomainUser.Location = new System.Drawing.Point(224, 26);
-			this.textDomainUser.Name = "textDomainUser";
-			this.textDomainUser.ReadOnly = true;
-			this.textDomainUser.Size = new System.Drawing.Size(180, 20);
-			this.textDomainUser.TabIndex = 168;
-			// 
-			// labelDomainUser
-			// 
-			this.labelDomainUser.Location = new System.Drawing.Point(224, 6);
-			this.labelDomainUser.Name = "labelDomainUser";
-			this.labelDomainUser.Size = new System.Drawing.Size(177, 20);
-			this.labelDomainUser.TabIndex = 167;
-			this.labelDomainUser.Text = "Domain User";
-			this.labelDomainUser.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// textUserNum
-			// 
-			this.textUserNum.BackColor = System.Drawing.SystemColors.Control;
-			this.textUserNum.Location = new System.Drawing.Point(31, 27);
-			this.textUserNum.Name = "textUserNum";
-			this.textUserNum.ReadOnly = true;
-			this.textUserNum.Size = new System.Drawing.Size(182, 20);
-			this.textUserNum.TabIndex = 165;
-			// 
-			// label27
-			// 
-			this.label27.Location = new System.Drawing.Point(31, 9);
-			this.label27.Name = "label27";
-			this.label27.Size = new System.Drawing.Size(72, 17);
-			this.label27.TabIndex = 166;
-			this.label27.Text = "User ID";
-			this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// checkIsHidden
-			// 
-			this.checkIsHidden.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsHidden.Location = new System.Drawing.Point(495, 72);
-			this.checkIsHidden.Name = "checkIsHidden";
-			this.checkIsHidden.Size = new System.Drawing.Size(104, 16);
-			this.checkIsHidden.TabIndex = 163;
-			this.checkIsHidden.Text = "Is Hidden";
-			this.checkIsHidden.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsHidden.UseVisualStyleBackColor = true;
-			// 
-			// listProv
-			// 
-			this.listProv.Location = new System.Drawing.Point(414, 110);
-			this.listProv.Name = "listProv";
-			this.listProv.Size = new System.Drawing.Size(185, 225);
-			this.listProv.TabIndex = 160;
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(414, 91);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(124, 20);
-			this.label5.TabIndex = 159;
-			this.label5.Text = "Provider";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(232, 340);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(344, 23);
-			this.label4.TabIndex = 158;
-			this.label4.Text = "Setting employee or provider is entirely optional";
-			this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			// 
-			// listEmployee
-			// 
-			this.listEmployee.Location = new System.Drawing.Point(221, 110);
-			this.listEmployee.Name = "listEmployee";
-			this.listEmployee.Size = new System.Drawing.Size(185, 225);
-			this.listEmployee.TabIndex = 157;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(221, 91);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(124, 20);
-			this.label2.TabIndex = 156;
-			this.label2.Text = "Employee (for timecards)";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// textUserName
-			// 
-			this.textUserName.Location = new System.Drawing.Point(31, 68);
-			this.textUserName.Name = "textUserName";
-			this.textUserName.Size = new System.Drawing.Size(182, 20);
-			this.textUserName.TabIndex = 152;
-			// 
-			// listUserGroup
-			// 
-			this.listUserGroup.Location = new System.Drawing.Point(28, 110);
-			this.listUserGroup.Name = "listUserGroup";
-			this.listUserGroup.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listUserGroup.Size = new System.Drawing.Size(185, 225);
-			this.listUserGroup.TabIndex = 154;
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(28, 91);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(197, 20);
-			this.label3.TabIndex = 153;
-			this.label3.Text = "User Group";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(31, 47);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(72, 20);
-			this.label1.TabIndex = 151;
-			this.label1.Text = "Name";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// tabClinics
-			// 
-			this.tabClinics.BackColor = System.Drawing.SystemColors.Control;
-			this.tabClinics.Controls.Add(this.label6);
-			this.tabClinics.Controls.Add(this.listClinicMulti);
-			this.tabClinics.Controls.Add(this.checkClinicIsRestricted);
-			this.tabClinics.Controls.Add(this.listClinic);
-			this.tabClinics.Controls.Add(this.labelClinic);
-			this.tabClinics.Location = new System.Drawing.Point(4, 22);
-			this.tabClinics.Name = "tabClinics";
-			this.tabClinics.Padding = new System.Windows.Forms.Padding(3);
-			this.tabClinics.Size = new System.Drawing.Size(606, 373);
-			this.tabClinics.TabIndex = 1;
-			this.tabClinics.Text = "Clinics";
-			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(329, 43);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(150, 20);
-			this.label6.TabIndex = 169;
-			this.label6.Text = "User Restricted Clinics";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// listClinicMulti
-			// 
-			this.listClinicMulti.Location = new System.Drawing.Point(329, 66);
-			this.listClinicMulti.Name = "listClinicMulti";
-			this.listClinicMulti.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listClinicMulti.Size = new System.Drawing.Size(250, 225);
-			this.listClinicMulti.TabIndex = 168;
-			// 
-			// checkClinicIsRestricted
-			// 
-			this.checkClinicIsRestricted.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.checkClinicIsRestricted.Location = new System.Drawing.Point(329, 297);
-			this.checkClinicIsRestricted.Name = "checkClinicIsRestricted";
-			this.checkClinicIsRestricted.Size = new System.Drawing.Size(250, 52);
-			this.checkClinicIsRestricted.TabIndex = 167;
-			this.checkClinicIsRestricted.Text = "Restrict user to only see these clinics";
-			this.checkClinicIsRestricted.TextAlign = System.Drawing.ContentAlignment.TopLeft;
-			this.checkClinicIsRestricted.UseVisualStyleBackColor = true;
-			// 
-			// listClinic
-			// 
-			this.listClinic.Location = new System.Drawing.Point(28, 66);
-			this.listClinic.Name = "listClinic";
-			this.listClinic.Size = new System.Drawing.Size(250, 225);
-			this.listClinic.TabIndex = 166;
-			this.listClinic.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listClinic_MouseClick);
-			// 
-			// labelClinic
-			// 
-			this.labelClinic.Location = new System.Drawing.Point(28, 43);
-			this.labelClinic.Name = "labelClinic";
-			this.labelClinic.Size = new System.Drawing.Size(150, 20);
-			this.labelClinic.TabIndex = 165;
-			this.labelClinic.Text = "User Default Clinic";
-			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// tabAlertSubs
-			// 
-			this.tabAlertSubs.BackColor = System.Drawing.SystemColors.Control;
-			this.tabAlertSubs.Controls.Add(this.labelAlertClinic);
-			this.tabAlertSubs.Controls.Add(this.listAlertSubsClinicsMulti);
-			this.tabAlertSubs.Controls.Add(this.listAlertSubMulti);
-			this.tabAlertSubs.Controls.Add(this.label7);
-			this.tabAlertSubs.Location = new System.Drawing.Point(4, 22);
-			this.tabAlertSubs.Name = "tabAlertSubs";
-			this.tabAlertSubs.Size = new System.Drawing.Size(606, 373);
-			this.tabAlertSubs.TabIndex = 2;
-			this.tabAlertSubs.Text = "Alert Subs";
-			// 
-			// labelAlertClinic
-			// 
-			this.labelAlertClinic.Location = new System.Drawing.Point(329, 43);
-			this.labelAlertClinic.Name = "labelAlertClinic";
-			this.labelAlertClinic.Size = new System.Drawing.Size(150, 20);
-			this.labelAlertClinic.TabIndex = 171;
-			this.labelAlertClinic.Text = "Clinics Subscribed";
-			this.labelAlertClinic.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// listAlertSubsClinicsMulti
-			// 
-			this.listAlertSubsClinicsMulti.Location = new System.Drawing.Point(329, 66);
-			this.listAlertSubsClinicsMulti.Name = "listAlertSubsClinicsMulti";
-			this.listAlertSubsClinicsMulti.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listAlertSubsClinicsMulti.Size = new System.Drawing.Size(250, 225);
-			this.listAlertSubsClinicsMulti.TabIndex = 170;
-			// 
-			// listAlertSubMulti
-			// 
-			this.listAlertSubMulti.Location = new System.Drawing.Point(28, 66);
-			this.listAlertSubMulti.Name = "listAlertSubMulti";
-			this.listAlertSubMulti.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listAlertSubMulti.Size = new System.Drawing.Size(250, 225);
-			this.listAlertSubMulti.TabIndex = 168;
-			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(28, 43);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(167, 20);
-			this.label7.TabIndex = 167;
-			this.label7.Text = "User Alert Subscriptions";
-			this.label7.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// butJobRoles
-			// 
-			this.butJobRoles.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butJobRoles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butJobRoles.Autosize = true;
-			this.butJobRoles.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butJobRoles.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butJobRoles.CornerRadius = 4F;
-			this.butJobRoles.Location = new System.Drawing.Point(268, 421);
-			this.butJobRoles.Name = "butJobRoles";
-			this.butJobRoles.Size = new System.Drawing.Size(103, 26);
-			this.butJobRoles.TabIndex = 167;
-			this.butJobRoles.Text = "Set Job Roles";
-			this.butJobRoles.Click += new System.EventHandler(this.butJobRoles_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(470, 421);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 26);
-			this.butOK.TabIndex = 150;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(551, 421);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 26);
-			this.butCancel.TabIndex = 149;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butPassword
-			// 
-			this.butPassword.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butPassword.Autosize = true;
-			this.butPassword.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPassword.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPassword.CornerRadius = 4F;
-			this.butPassword.Location = new System.Drawing.Point(16, 421);
-			this.butPassword.Name = "butPassword";
-			this.butPassword.Size = new System.Drawing.Size(103, 26);
-			this.butPassword.TabIndex = 155;
-			this.butPassword.Text = "Change Password";
-			this.butPassword.Click += new System.EventHandler(this.butPassword_Click);
-			// 
-			// butUnlock
-			// 
-			this.butUnlock.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butUnlock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butUnlock.Autosize = true;
-			this.butUnlock.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butUnlock.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butUnlock.CornerRadius = 4F;
-			this.butUnlock.Location = new System.Drawing.Point(142, 421);
-			this.butUnlock.Name = "butUnlock";
-			this.butUnlock.Size = new System.Drawing.Size(103, 26);
-			this.butUnlock.TabIndex = 168;
-			this.butUnlock.Text = "Unlock Account";
-			this.butUnlock.Click += new System.EventHandler(this.butUnlock_Click);
-			// 
-			// butDoseSpotAdditional
-			// 
-			this.butDoseSpotAdditional.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDoseSpotAdditional.Autosize = false;
-			this.butDoseSpotAdditional.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDoseSpotAdditional.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDoseSpotAdditional.CornerRadius = 2F;
-			this.butDoseSpotAdditional.Location = new System.Drawing.Point(407, 67);
-			this.butDoseSpotAdditional.Name = "butDoseSpotAdditional";
-			this.butDoseSpotAdditional.Size = new System.Drawing.Size(23, 21);
-			this.butDoseSpotAdditional.TabIndex = 173;
-			this.butDoseSpotAdditional.Text = "...";
-			this.butDoseSpotAdditional.Click += new System.EventHandler(this.butDoseSpotAdditional_Click);
-			// 
-			// FormUserEdit
-			// 
-			this.ClientSize = new System.Drawing.Size(638, 452);
-			this.Controls.Add(this.butUnlock);
-			this.Controls.Add(this.butJobRoles);
-			this.Controls.Add(this.tabControl1);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butCancel);
-			this.Controls.Add(this.butPassword);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "FormUserEdit";
-			this.ShowInTaskbar = false;
-			this.Text = "User Edit";
-			this.Load += new System.EventHandler(this.FormUserEdit_Load);
-			this.tabControl1.ResumeLayout(false);
-			this.tabUser.ResumeLayout(false);
-			this.tabUser.PerformLayout();
-			this.tabClinics.ResumeLayout(false);
-			this.tabAlertSubs.ResumeLayout(false);
-			this.ResumeLayout(false);
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormUserEdit));
+            this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabUser = new System.Windows.Forms.TabPage();
+            this.butDoseSpotAdditional = new OpenDental.UI.Button();
+            this.textDoseSpotUserID = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.checkRequireReset = new System.Windows.Forms.CheckBox();
+            this.butPickDomainUser = new OpenDental.UI.Button();
+            this.textDomainUser = new System.Windows.Forms.TextBox();
+            this.labelDomainUser = new System.Windows.Forms.Label();
+            this.textUserNum = new System.Windows.Forms.TextBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.checkIsHidden = new System.Windows.Forms.CheckBox();
+            this.listProv = new System.Windows.Forms.ListBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.listEmployee = new System.Windows.Forms.ListBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textUserName = new System.Windows.Forms.TextBox();
+            this.listUserGroup = new System.Windows.Forms.ListBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.tabClinics = new System.Windows.Forms.TabPage();
+            this.label6 = new System.Windows.Forms.Label();
+            this.listClinicMulti = new System.Windows.Forms.ListBox();
+            this.checkClinicIsRestricted = new System.Windows.Forms.CheckBox();
+            this.listClinic = new System.Windows.Forms.ListBox();
+            this.labelClinic = new System.Windows.Forms.Label();
+            this.tabAlertSubs = new System.Windows.Forms.TabPage();
+            this.labelAlertClinic = new System.Windows.Forms.Label();
+            this.listAlertSubsClinicsMulti = new System.Windows.Forms.ListBox();
+            this.listAlertSubMulti = new System.Windows.Forms.ListBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.butOK = new OpenDental.UI.Button();
+            this.butCancel = new OpenDental.UI.Button();
+            this.butPassword = new OpenDental.UI.Button();
+            this.butUnlock = new OpenDental.UI.Button();
+            this.tabControl1.SuspendLayout();
+            this.tabUser.SuspendLayout();
+            this.tabClinics.SuspendLayout();
+            this.tabAlertSubs.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Controls.Add(this.tabUser);
+            this.tabControl1.Controls.Add(this.tabClinics);
+            this.tabControl1.Controls.Add(this.tabAlertSubs);
+            this.tabControl1.Location = new System.Drawing.Point(12, 13);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(614, 399);
+            this.tabControl1.TabIndex = 0;
+            // 
+            // tabUser
+            // 
+            this.tabUser.BackColor = System.Drawing.SystemColors.Control;
+            this.tabUser.Controls.Add(this.butDoseSpotAdditional);
+            this.tabUser.Controls.Add(this.textDoseSpotUserID);
+            this.tabUser.Controls.Add(this.label8);
+            this.tabUser.Controls.Add(this.checkRequireReset);
+            this.tabUser.Controls.Add(this.butPickDomainUser);
+            this.tabUser.Controls.Add(this.textDomainUser);
+            this.tabUser.Controls.Add(this.labelDomainUser);
+            this.tabUser.Controls.Add(this.textUserNum);
+            this.tabUser.Controls.Add(this.label27);
+            this.tabUser.Controls.Add(this.checkIsHidden);
+            this.tabUser.Controls.Add(this.listProv);
+            this.tabUser.Controls.Add(this.label5);
+            this.tabUser.Controls.Add(this.label4);
+            this.tabUser.Controls.Add(this.listEmployee);
+            this.tabUser.Controls.Add(this.label2);
+            this.tabUser.Controls.Add(this.textUserName);
+            this.tabUser.Controls.Add(this.listUserGroup);
+            this.tabUser.Controls.Add(this.label3);
+            this.tabUser.Controls.Add(this.label1);
+            this.tabUser.Location = new System.Drawing.Point(4, 22);
+            this.tabUser.Name = "tabUser";
+            this.tabUser.Padding = new System.Windows.Forms.Padding(3);
+            this.tabUser.Size = new System.Drawing.Size(606, 373);
+            this.tabUser.TabIndex = 0;
+            this.tabUser.Text = "User";
+            // 
+            // butDoseSpotAdditional
+            // 
+            this.butDoseSpotAdditional.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butDoseSpotAdditional.Autosize = false;
+            this.butDoseSpotAdditional.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butDoseSpotAdditional.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butDoseSpotAdditional.CornerRadius = 4F;
+            this.butDoseSpotAdditional.Location = new System.Drawing.Point(407, 67);
+            this.butDoseSpotAdditional.Name = "butDoseSpotAdditional";
+            this.butDoseSpotAdditional.Size = new System.Drawing.Size(23, 21);
+            this.butDoseSpotAdditional.TabIndex = 173;
+            this.butDoseSpotAdditional.Text = "...";
+            this.butDoseSpotAdditional.Click += new System.EventHandler(this.butDoseSpotAdditional_Click);
+            // 
+            // textDoseSpotUserID
+            // 
+            this.textDoseSpotUserID.Location = new System.Drawing.Point(224, 68);
+            this.textDoseSpotUserID.Name = "textDoseSpotUserID";
+            this.textDoseSpotUserID.Size = new System.Drawing.Size(180, 20);
+            this.textDoseSpotUserID.TabIndex = 172;
+            // 
+            // label8
+            // 
+            this.label8.Location = new System.Drawing.Point(224, 47);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(177, 20);
+            this.label8.TabIndex = 171;
+            this.label8.Text = "DoseSpot User ID";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // checkRequireReset
+            // 
+            this.checkRequireReset.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkRequireReset.Location = new System.Drawing.Point(407, 48);
+            this.checkRequireReset.Name = "checkRequireReset";
+            this.checkRequireReset.Size = new System.Drawing.Size(192, 20);
+            this.checkRequireReset.TabIndex = 170;
+            this.checkRequireReset.Text = "Require Password Reset";
+            this.checkRequireReset.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkRequireReset.UseVisualStyleBackColor = true;
+            // 
+            // butPickDomainUser
+            // 
+            this.butPickDomainUser.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butPickDomainUser.Autosize = false;
+            this.butPickDomainUser.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butPickDomainUser.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butPickDomainUser.CornerRadius = 4F;
+            this.butPickDomainUser.Location = new System.Drawing.Point(407, 25);
+            this.butPickDomainUser.Name = "butPickDomainUser";
+            this.butPickDomainUser.Size = new System.Drawing.Size(23, 21);
+            this.butPickDomainUser.TabIndex = 169;
+            this.butPickDomainUser.Text = "...";
+            this.butPickDomainUser.Click += new System.EventHandler(this.butPickDomainUser_Click);
+            // 
+            // textDomainUser
+            // 
+            this.textDomainUser.Location = new System.Drawing.Point(224, 26);
+            this.textDomainUser.Name = "textDomainUser";
+            this.textDomainUser.ReadOnly = true;
+            this.textDomainUser.Size = new System.Drawing.Size(180, 20);
+            this.textDomainUser.TabIndex = 168;
+            // 
+            // labelDomainUser
+            // 
+            this.labelDomainUser.Location = new System.Drawing.Point(224, 6);
+            this.labelDomainUser.Name = "labelDomainUser";
+            this.labelDomainUser.Size = new System.Drawing.Size(177, 20);
+            this.labelDomainUser.TabIndex = 167;
+            this.labelDomainUser.Text = "Domain User";
+            this.labelDomainUser.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // textUserNum
+            // 
+            this.textUserNum.BackColor = System.Drawing.SystemColors.Control;
+            this.textUserNum.Location = new System.Drawing.Point(31, 27);
+            this.textUserNum.Name = "textUserNum";
+            this.textUserNum.ReadOnly = true;
+            this.textUserNum.Size = new System.Drawing.Size(182, 20);
+            this.textUserNum.TabIndex = 165;
+            // 
+            // label27
+            // 
+            this.label27.Location = new System.Drawing.Point(31, 9);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(72, 17);
+            this.label27.TabIndex = 166;
+            this.label27.Text = "User ID";
+            this.label27.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // checkIsHidden
+            // 
+            this.checkIsHidden.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkIsHidden.Location = new System.Drawing.Point(495, 72);
+            this.checkIsHidden.Name = "checkIsHidden";
+            this.checkIsHidden.Size = new System.Drawing.Size(104, 16);
+            this.checkIsHidden.TabIndex = 163;
+            this.checkIsHidden.Text = "Is Hidden";
+            this.checkIsHidden.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.checkIsHidden.UseVisualStyleBackColor = true;
+            // 
+            // listProv
+            // 
+            this.listProv.Location = new System.Drawing.Point(414, 110);
+            this.listProv.Name = "listProv";
+            this.listProv.Size = new System.Drawing.Size(185, 225);
+            this.listProv.TabIndex = 160;
+            // 
+            // label5
+            // 
+            this.label5.Location = new System.Drawing.Point(414, 91);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(124, 20);
+            this.label5.TabIndex = 159;
+            this.label5.Text = "Provider";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label4
+            // 
+            this.label4.Location = new System.Drawing.Point(232, 340);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(344, 23);
+            this.label4.TabIndex = 158;
+            this.label4.Text = "Setting employee or provider is entirely optional";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // listEmployee
+            // 
+            this.listEmployee.Location = new System.Drawing.Point(221, 110);
+            this.listEmployee.Name = "listEmployee";
+            this.listEmployee.Size = new System.Drawing.Size(185, 225);
+            this.listEmployee.TabIndex = 157;
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(221, 91);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(124, 20);
+            this.label2.TabIndex = 156;
+            this.label2.Text = "Employee (for timecards)";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // textUserName
+            // 
+            this.textUserName.Location = new System.Drawing.Point(31, 68);
+            this.textUserName.Name = "textUserName";
+            this.textUserName.Size = new System.Drawing.Size(182, 20);
+            this.textUserName.TabIndex = 152;
+            // 
+            // listUserGroup
+            // 
+            this.listUserGroup.Location = new System.Drawing.Point(28, 110);
+            this.listUserGroup.Name = "listUserGroup";
+            this.listUserGroup.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listUserGroup.Size = new System.Drawing.Size(185, 225);
+            this.listUserGroup.TabIndex = 154;
+            // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(28, 91);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(197, 20);
+            this.label3.TabIndex = 153;
+            this.label3.Text = "User Group";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label1
+            // 
+            this.label1.Location = new System.Drawing.Point(31, 47);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(72, 20);
+            this.label1.TabIndex = 151;
+            this.label1.Text = "Name";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // tabClinics
+            // 
+            this.tabClinics.BackColor = System.Drawing.SystemColors.Control;
+            this.tabClinics.Controls.Add(this.label6);
+            this.tabClinics.Controls.Add(this.listClinicMulti);
+            this.tabClinics.Controls.Add(this.checkClinicIsRestricted);
+            this.tabClinics.Controls.Add(this.listClinic);
+            this.tabClinics.Controls.Add(this.labelClinic);
+            this.tabClinics.Location = new System.Drawing.Point(4, 22);
+            this.tabClinics.Name = "tabClinics";
+            this.tabClinics.Padding = new System.Windows.Forms.Padding(3);
+            this.tabClinics.Size = new System.Drawing.Size(606, 373);
+            this.tabClinics.TabIndex = 1;
+            this.tabClinics.Text = "Clinics";
+            // 
+            // label6
+            // 
+            this.label6.Location = new System.Drawing.Point(329, 43);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(150, 20);
+            this.label6.TabIndex = 169;
+            this.label6.Text = "User Restricted Clinics";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // listClinicMulti
+            // 
+            this.listClinicMulti.Location = new System.Drawing.Point(329, 66);
+            this.listClinicMulti.Name = "listClinicMulti";
+            this.listClinicMulti.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listClinicMulti.Size = new System.Drawing.Size(250, 225);
+            this.listClinicMulti.TabIndex = 168;
+            // 
+            // checkClinicIsRestricted
+            // 
+            this.checkClinicIsRestricted.CheckAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.checkClinicIsRestricted.Location = new System.Drawing.Point(329, 297);
+            this.checkClinicIsRestricted.Name = "checkClinicIsRestricted";
+            this.checkClinicIsRestricted.Size = new System.Drawing.Size(250, 52);
+            this.checkClinicIsRestricted.TabIndex = 167;
+            this.checkClinicIsRestricted.Text = "Restrict user to only see these clinics";
+            this.checkClinicIsRestricted.TextAlign = System.Drawing.ContentAlignment.TopLeft;
+            this.checkClinicIsRestricted.UseVisualStyleBackColor = true;
+            // 
+            // listClinic
+            // 
+            this.listClinic.Location = new System.Drawing.Point(28, 66);
+            this.listClinic.Name = "listClinic";
+            this.listClinic.Size = new System.Drawing.Size(250, 225);
+            this.listClinic.TabIndex = 166;
+            this.listClinic.MouseClick += new System.Windows.Forms.MouseEventHandler(this.listClinic_MouseClick);
+            // 
+            // labelClinic
+            // 
+            this.labelClinic.Location = new System.Drawing.Point(28, 43);
+            this.labelClinic.Name = "labelClinic";
+            this.labelClinic.Size = new System.Drawing.Size(150, 20);
+            this.labelClinic.TabIndex = 165;
+            this.labelClinic.Text = "User Default Clinic";
+            this.labelClinic.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // tabAlertSubs
+            // 
+            this.tabAlertSubs.BackColor = System.Drawing.SystemColors.Control;
+            this.tabAlertSubs.Controls.Add(this.labelAlertClinic);
+            this.tabAlertSubs.Controls.Add(this.listAlertSubsClinicsMulti);
+            this.tabAlertSubs.Controls.Add(this.listAlertSubMulti);
+            this.tabAlertSubs.Controls.Add(this.label7);
+            this.tabAlertSubs.Location = new System.Drawing.Point(4, 22);
+            this.tabAlertSubs.Name = "tabAlertSubs";
+            this.tabAlertSubs.Size = new System.Drawing.Size(606, 373);
+            this.tabAlertSubs.TabIndex = 2;
+            this.tabAlertSubs.Text = "Alert Subs";
+            // 
+            // labelAlertClinic
+            // 
+            this.labelAlertClinic.Location = new System.Drawing.Point(329, 43);
+            this.labelAlertClinic.Name = "labelAlertClinic";
+            this.labelAlertClinic.Size = new System.Drawing.Size(150, 20);
+            this.labelAlertClinic.TabIndex = 171;
+            this.labelAlertClinic.Text = "Clinics Subscribed";
+            this.labelAlertClinic.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // listAlertSubsClinicsMulti
+            // 
+            this.listAlertSubsClinicsMulti.Location = new System.Drawing.Point(329, 66);
+            this.listAlertSubsClinicsMulti.Name = "listAlertSubsClinicsMulti";
+            this.listAlertSubsClinicsMulti.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listAlertSubsClinicsMulti.Size = new System.Drawing.Size(250, 225);
+            this.listAlertSubsClinicsMulti.TabIndex = 170;
+            // 
+            // listAlertSubMulti
+            // 
+            this.listAlertSubMulti.Location = new System.Drawing.Point(28, 66);
+            this.listAlertSubMulti.Name = "listAlertSubMulti";
+            this.listAlertSubMulti.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
+            this.listAlertSubMulti.Size = new System.Drawing.Size(250, 225);
+            this.listAlertSubMulti.TabIndex = 168;
+            // 
+            // label7
+            // 
+            this.label7.Location = new System.Drawing.Point(28, 43);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(167, 20);
+            this.label7.TabIndex = 167;
+            this.label7.Text = "User Alert Subscriptions";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // butOK
+            // 
+            this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.butOK.Autosize = true;
+            this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butOK.CornerRadius = 4F;
+            this.butOK.Location = new System.Drawing.Point(470, 421);
+            this.butOK.Name = "butOK";
+            this.butOK.Size = new System.Drawing.Size(75, 26);
+            this.butOK.TabIndex = 150;
+            this.butOK.Text = "&OK";
+            this.butOK.Click += new System.EventHandler(this.butOK_Click);
+            // 
+            // butCancel
+            // 
+            this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.butCancel.Autosize = true;
+            this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butCancel.CornerRadius = 4F;
+            this.butCancel.Location = new System.Drawing.Point(551, 421);
+            this.butCancel.Name = "butCancel";
+            this.butCancel.Size = new System.Drawing.Size(75, 26);
+            this.butCancel.TabIndex = 149;
+            this.butCancel.Text = "&Cancel";
+            this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
+            // 
+            // butPassword
+            // 
+            this.butPassword.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.butPassword.Autosize = true;
+            this.butPassword.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butPassword.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butPassword.CornerRadius = 4F;
+            this.butPassword.Location = new System.Drawing.Point(16, 421);
+            this.butPassword.Name = "butPassword";
+            this.butPassword.Size = new System.Drawing.Size(103, 26);
+            this.butPassword.TabIndex = 155;
+            this.butPassword.Text = "Change Password";
+            this.butPassword.Click += new System.EventHandler(this.butPassword_Click);
+            // 
+            // butUnlock
+            // 
+            this.butUnlock.AdjustImageLocation = new System.Drawing.Point(0, 0);
+            this.butUnlock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.butUnlock.Autosize = true;
+            this.butUnlock.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
+            this.butUnlock.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butUnlock.CornerRadius = 4F;
+            this.butUnlock.Location = new System.Drawing.Point(142, 421);
+            this.butUnlock.Name = "butUnlock";
+            this.butUnlock.Size = new System.Drawing.Size(103, 26);
+            this.butUnlock.TabIndex = 168;
+            this.butUnlock.Text = "Unlock Account";
+            this.butUnlock.Click += new System.EventHandler(this.butUnlock_Click);
+            // 
+            // FormUserEdit
+            // 
+            this.ClientSize = new System.Drawing.Size(638, 452);
+            this.Controls.Add(this.butUnlock);
+            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.butOK);
+            this.Controls.Add(this.butCancel);
+            this.Controls.Add(this.butPassword);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FormUserEdit";
+            this.ShowInTaskbar = false;
+            this.Text = "User Edit";
+            this.Load += new System.EventHandler(this.FormUserEdit_Load);
+            this.tabControl1.ResumeLayout(false);
+            this.tabUser.ResumeLayout(false);
+            this.tabUser.PerformLayout();
+            this.tabClinics.ResumeLayout(false);
+            this.tabAlertSubs.ResumeLayout(false);
+            this.ResumeLayout(false);
 
 		}
 		#endregion
@@ -674,9 +656,6 @@ namespace OpenDental{
 			if(string.IsNullOrEmpty(UserCur.PasswordHash)){
 				butPassword.Text=Lan.g(this,"Create Password");
 			}
-			if(!Preferences.IsODHQ) {
-				butJobRoles.Visible=false;
-			}
 			if(IsNew) {
 				butUnlock.Visible=false;
 			}
@@ -698,7 +677,6 @@ namespace OpenDental{
 				checkRequireReset.Checked=true;
 				checkRequireReset.Enabled=false;
 				butUnlock.Visible=false;
-				butJobRoles.Visible=false;
 			}
 			if(!Preferences.HasClinicsEnabled) {
 				butDoseSpotAdditional.Visible=false;
@@ -776,11 +754,6 @@ namespace OpenDental{
 			catch(Exception) {
 				MsgBox.Show(this,"There was a problem unlocking this user.  Please call support or wait the allotted lock time.");
 			}
-		}
-
-		private void butJobRoles_Click(object sender,EventArgs e) {
-			FormJobPermissions FormJR=new FormJobPermissions(UserCur.UserNum);
-			FormJR.ShowDialog();
 		}
 
 		private void butDoseSpotAdditional_Click(object sender,EventArgs e) {

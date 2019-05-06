@@ -41,11 +41,6 @@
             this.menuItemInvoice = new System.Windows.Forms.MenuItem();
             this.menuItemLimited = new System.Windows.Forms.MenuItem();
             this.menuItemStatementMore = new System.Windows.Forms.MenuItem();
-            this.contextMenuRepeat = new System.Windows.Forms.ContextMenu();
-            this.menuItemRepeatStand = new System.Windows.Forms.MenuItem();
-            this.menuItemRepeatEmail = new System.Windows.Forms.MenuItem();
-            this.menuItemRepeatCanada = new System.Windows.Forms.MenuItem();
-            this.menuItemRepeatSignupPortal = new System.Windows.Forms.MenuItem();
             this.panelAging = new System.Windows.Forms.Panel();
             this.labelInsRem = new System.Windows.Forms.Label();
             this.labelUnearnedAmt = new System.Windows.Forms.Label();
@@ -318,38 +313,6 @@
             this.menuItemStatementMore.Index = 5;
             this.menuItemStatementMore.Text = "More Options";
             this.menuItemStatementMore.Click += new System.EventHandler(this.menuItemStatementMore_Click);
-            // 
-            // contextMenuRepeat
-            // 
-            this.contextMenuRepeat.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItemRepeatStand,
-            this.menuItemRepeatEmail,
-            this.menuItemRepeatCanada,
-            this.menuItemRepeatSignupPortal});
-            // 
-            // menuItemRepeatStand
-            // 
-            this.menuItemRepeatStand.Index = 0;
-            this.menuItemRepeatStand.Text = "Standard Monthly";
-            this.menuItemRepeatStand.Click += new System.EventHandler(this.MenuItemRepeatStand_Click);
-            // 
-            // menuItemRepeatEmail
-            // 
-            this.menuItemRepeatEmail.Index = 1;
-            this.menuItemRepeatEmail.Text = "Email Monthly";
-            this.menuItemRepeatEmail.Click += new System.EventHandler(this.MenuItemRepeatEmail_Click);
-            // 
-            // menuItemRepeatCanada
-            // 
-            this.menuItemRepeatCanada.Index = 2;
-            this.menuItemRepeatCanada.Text = "Canada Monthly";
-            this.menuItemRepeatCanada.Click += new System.EventHandler(this.menuItemRepeatCanada_Click);
-            // 
-            // menuItemRepeatSignupPortal
-            // 
-            this.menuItemRepeatSignupPortal.Index = 3;
-            this.menuItemRepeatSignupPortal.Text = "Signup Portal";
-            this.menuItemRepeatSignupPortal.Click += new System.EventHandler(this.menuItemRepeatSignupPortal_Click);
             // 
             // panelAging
             // 
@@ -708,6 +671,7 @@
             this.gridAcctPat.Size = new System.Drawing.Size(180, 176);
             this.gridAcctPat.TabIndex = 72;
             this.gridAcctPat.Title = "Select Patient";
+            this.gridAcctPat.TitleVisible = true;
             this.gridAcctPat.CellClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridAcctPat_CellClick);
             // 
             // textFinNote
@@ -1274,6 +1238,7 @@
             this.patientInfoGrid.Size = new System.Drawing.Size(200, 150);
             this.patientInfoGrid.TabIndex = 217;
             this.patientInfoGrid.Title = "Patient Information";
+            this.patientInfoGrid.TitleVisible = true;
             this.patientInfoGrid.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridPatInfo_CellDoubleClick);
             // 
             // splitContainerParent
@@ -1318,7 +1283,7 @@
             this.splitContainerRepChargesPP.Panel2MinSize = 20;
             this.splitContainerRepChargesPP.Size = new System.Drawing.Size(749, 216);
             this.splitContainerRepChargesPP.SplitterDistance = 85;
-            this.splitContainerRepChargesPP.SplitterWidth = 10;
+            this.splitContainerRepChargesPP.SplitterWidth = 14;
             this.splitContainerRepChargesPP.TabIndex = 0;
             // 
             // gridRepeat
@@ -1338,6 +1303,7 @@
             this.gridRepeat.Size = new System.Drawing.Size(749, 85);
             this.gridRepeat.TabIndex = 74;
             this.gridRepeat.Title = "Repeating Charges";
+            this.gridRepeat.TitleVisible = true;
             this.gridRepeat.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridRepeat_CellDoubleClick);
             // 
             // gridPayPlan
@@ -1354,9 +1320,10 @@
             this.gridPayPlan.Location = new System.Drawing.Point(0, 0);
             this.gridPayPlan.Name = "gridPayPlan";
             this.gridPayPlan.ScrollValue = 0;
-            this.gridPayPlan.Size = new System.Drawing.Size(749, 107);
+            this.gridPayPlan.Size = new System.Drawing.Size(749, 94);
             this.gridPayPlan.TabIndex = 217;
             this.gridPayPlan.Title = "Payment Plans";
+            this.gridPayPlan.TitleVisible = true;
             this.gridPayPlan.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridPayPlan_CellDoubleClick);
             // 
             // splitContainerAccountCommLog
@@ -1378,7 +1345,7 @@
             this.splitContainerAccountCommLog.Panel2MinSize = 20;
             this.splitContainerAccountCommLog.Size = new System.Drawing.Size(749, 530);
             this.splitContainerAccountCommLog.SplitterDistance = 224;
-            this.splitContainerAccountCommLog.SplitterWidth = 10;
+            this.splitContainerAccountCommLog.SplitterWidth = 14;
             this.splitContainerAccountCommLog.TabIndex = 0;
             // 
             // tabControlAccount
@@ -1395,7 +1362,7 @@
             this.tabControlAccount.Name = "tabControlAccount";
             this.tabControlAccount.Padding = new System.Drawing.Point(0, 0);
             this.tabControlAccount.SelectedIndex = 0;
-            this.tabControlAccount.Size = new System.Drawing.Size(757, 224);
+            this.tabControlAccount.Size = new System.Drawing.Size(758, 224);
             this.tabControlAccount.TabIndex = 221;
             // 
             // tabPagePatAccount
@@ -1404,7 +1371,7 @@
             this.tabPagePatAccount.Location = new System.Drawing.Point(4, 22);
             this.tabPagePatAccount.Margin = new System.Windows.Forms.Padding(0);
             this.tabPagePatAccount.Name = "tabPagePatAccount";
-            this.tabPagePatAccount.Size = new System.Drawing.Size(749, 198);
+            this.tabPagePatAccount.Size = new System.Drawing.Size(750, 198);
             this.tabPagePatAccount.TabIndex = 0;
             this.tabPagePatAccount.Text = "Patient Account";
             this.tabPagePatAccount.UseVisualStyleBackColor = true;
@@ -1426,9 +1393,10 @@
             this.gridAccount.Name = "gridAccount";
             this.gridAccount.ScrollValue = 0;
             this.gridAccount.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-            this.gridAccount.Size = new System.Drawing.Size(743, 181);
+            this.gridAccount.Size = new System.Drawing.Size(742, 175);
             this.gridAccount.TabIndex = 73;
             this.gridAccount.Title = "Patient Account";
+            this.gridAccount.TitleVisible = true;
             this.gridAccount.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridAccount_CellDoubleClick);
             this.gridAccount.CellClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridAccount_CellClick);
             // 
@@ -1439,7 +1407,7 @@
             this.tabPageOrtho.Location = new System.Drawing.Point(4, 22);
             this.tabPageOrtho.Name = "tabPageOrtho";
             this.tabPageOrtho.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageOrtho.Size = new System.Drawing.Size(874, 232);
+            this.tabPageOrtho.Size = new System.Drawing.Size(875, 232);
             this.tabPageOrtho.TabIndex = 1;
             this.tabPageOrtho.Text = "Ortho Case";
             // 
@@ -1458,9 +1426,9 @@
             // 
             this.splitContainerOrtho.Panel2.Controls.Add(this.groupBox2);
             this.splitContainerOrtho.Panel2.Controls.Add(this.groupBox1);
-            this.splitContainerOrtho.Size = new System.Drawing.Size(868, 226);
+            this.splitContainerOrtho.Size = new System.Drawing.Size(869, 226);
             this.splitContainerOrtho.SplitterDistance = 398;
-            this.splitContainerOrtho.SplitterWidth = 7;
+            this.splitContainerOrtho.SplitterWidth = 8;
             this.splitContainerOrtho.TabIndex = 1;
             // 
             // gridOrtho
@@ -1480,6 +1448,7 @@
             this.gridOrtho.Size = new System.Drawing.Size(398, 226);
             this.gridOrtho.TabIndex = 1;
             this.gridOrtho.Title = "Ortho Info";
+            this.gridOrtho.TitleVisible = true;
             this.gridOrtho.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridOrtho_CellDoubleClick);
             // 
             // groupBox2
@@ -1489,34 +1458,34 @@
             this.groupBox2.Controls.Add(this.butEditOrthoPlacement);
             this.groupBox2.Location = new System.Drawing.Point(3, 3);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(317, 103);
+            this.groupBox2.Size = new System.Drawing.Size(370, 119);
             this.groupBox2.TabIndex = 123;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Ortho Placement Date";
             // 
             // butOrthoDefaultPlacement
             // 
-            this.butOrthoDefaultPlacement.Location = new System.Drawing.Point(142, 62);
+            this.butOrthoDefaultPlacement.Location = new System.Drawing.Point(166, 72);
             this.butOrthoDefaultPlacement.Name = "butOrthoDefaultPlacement";
-            this.butOrthoDefaultPlacement.Size = new System.Drawing.Size(80, 33);
+            this.butOrthoDefaultPlacement.Size = new System.Drawing.Size(93, 38);
             this.butOrthoDefaultPlacement.TabIndex = 122;
             this.butOrthoDefaultPlacement.Text = "Default";
             this.butOrthoDefaultPlacement.Click += new System.EventHandler(this.butOrthoDefaultPlacement_Click);
             // 
             // textDateOrthoPlacement
             // 
-            this.textDateOrthoPlacement.Location = new System.Drawing.Point(9, 24);
+            this.textDateOrthoPlacement.Location = new System.Drawing.Point(10, 28);
             this.textDateOrthoPlacement.Name = "textDateOrthoPlacement";
-            this.textDateOrthoPlacement.Size = new System.Drawing.Size(121, 23);
+            this.textDateOrthoPlacement.Size = new System.Drawing.Size(140, 23);
             this.textDateOrthoPlacement.TabIndex = 119;
             // 
             // butEditOrthoPlacement
             // 
             this.butEditOrthoPlacement.Image = global::OpenDental.Properties.Resources.Left;
             this.butEditOrthoPlacement.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.butEditOrthoPlacement.Location = new System.Drawing.Point(9, 62);
+            this.butEditOrthoPlacement.Location = new System.Drawing.Point(10, 72);
             this.butEditOrthoPlacement.Name = "butEditOrthoPlacement";
-            this.butEditOrthoPlacement.Size = new System.Drawing.Size(124, 33);
+            this.butEditOrthoPlacement.Size = new System.Drawing.Size(145, 38);
             this.butEditOrthoPlacement.TabIndex = 118;
             this.butEditOrthoPlacement.Text = "Override";
             this.butEditOrthoPlacement.Click += new System.EventHandler(this.butEditOrthoPlacement_Click);
@@ -1526,9 +1495,9 @@
             this.groupBox1.Controls.Add(this.textOrthoMonthsTreat);
             this.groupBox1.Controls.Add(this.butOrthoDefaultMonthsTreat);
             this.groupBox1.Controls.Add(this.butOrthoEditMonthsTreat);
-            this.groupBox1.Location = new System.Drawing.Point(3, 115);
+            this.groupBox1.Location = new System.Drawing.Point(3, 133);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(317, 104);
+            this.groupBox1.Size = new System.Drawing.Size(370, 120);
             this.groupBox1.TabIndex = 122;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Patient Ortho Months Treat";
@@ -1536,19 +1505,19 @@
             // textOrthoMonthsTreat
             // 
             this.textOrthoMonthsTreat.DoAutoSave = false;
-            this.textOrthoMonthsTreat.Location = new System.Drawing.Point(9, 29);
+            this.textOrthoMonthsTreat.Location = new System.Drawing.Point(10, 33);
             this.textOrthoMonthsTreat.MaxVal = 255;
             this.textOrthoMonthsTreat.MinVal = 0;
             this.textOrthoMonthsTreat.Name = "textOrthoMonthsTreat";
             this.textOrthoMonthsTreat.PrefNameBinding = OpenDentBusiness.PrefName.NotApplicable;
-            this.textOrthoMonthsTreat.Size = new System.Drawing.Size(121, 23);
+            this.textOrthoMonthsTreat.Size = new System.Drawing.Size(140, 23);
             this.textOrthoMonthsTreat.TabIndex = 119;
             // 
             // butOrthoDefaultMonthsTreat
             // 
-            this.butOrthoDefaultMonthsTreat.Location = new System.Drawing.Point(142, 62);
+            this.butOrthoDefaultMonthsTreat.Location = new System.Drawing.Point(166, 72);
             this.butOrthoDefaultMonthsTreat.Name = "butOrthoDefaultMonthsTreat";
-            this.butOrthoDefaultMonthsTreat.Size = new System.Drawing.Size(80, 33);
+            this.butOrthoDefaultMonthsTreat.Size = new System.Drawing.Size(93, 38);
             this.butOrthoDefaultMonthsTreat.TabIndex = 121;
             this.butOrthoDefaultMonthsTreat.Text = "Default";
             this.butOrthoDefaultMonthsTreat.Click += new System.EventHandler(this.butOrthoDefaultMonthsTreat_Click);
@@ -1557,9 +1526,9 @@
             // 
             this.butOrthoEditMonthsTreat.Image = global::OpenDental.Properties.Resources.Left;
             this.butOrthoEditMonthsTreat.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.butOrthoEditMonthsTreat.Location = new System.Drawing.Point(9, 62);
+            this.butOrthoEditMonthsTreat.Location = new System.Drawing.Point(10, 72);
             this.butOrthoEditMonthsTreat.Name = "butOrthoEditMonthsTreat";
-            this.butOrthoEditMonthsTreat.Size = new System.Drawing.Size(124, 33);
+            this.butOrthoEditMonthsTreat.Size = new System.Drawing.Size(145, 38);
             this.butOrthoEditMonthsTreat.TabIndex = 118;
             this.butOrthoEditMonthsTreat.Text = "Override";
             this.butOrthoEditMonthsTreat.Click += new System.EventHandler(this.butOrthoEditMonthsTreat_Click);
@@ -1575,16 +1544,16 @@
             this.panelProgNotes.Controls.Add(this.groupBox7);
             this.panelProgNotes.Controls.Add(this.groupBox6);
             this.panelProgNotes.Controls.Add(this.gridProg);
-            this.panelProgNotes.Location = new System.Drawing.Point(0, 32);
+            this.panelProgNotes.Location = new System.Drawing.Point(0, 37);
             this.panelProgNotes.Name = "panelProgNotes";
-            this.panelProgNotes.Size = new System.Drawing.Size(807, 291);
+            this.panelProgNotes.Size = new System.Drawing.Size(816, 279);
             this.panelProgNotes.TabIndex = 211;
             // 
             // showNoneButton
             // 
-            this.showNoneButton.Location = new System.Drawing.Point(933, 288);
+            this.showNoneButton.Location = new System.Drawing.Point(1088, 332);
             this.showNoneButton.Name = "showNoneButton";
-            this.showNoneButton.Size = new System.Drawing.Size(82, 33);
+            this.showNoneButton.Size = new System.Drawing.Size(96, 38);
             this.showNoneButton.TabIndex = 216;
             this.showNoneButton.Text = "None";
             this.showNoneButton.Visible = false;
@@ -1592,9 +1561,9 @@
             // 
             // showAllButton
             // 
-            this.showAllButton.Location = new System.Drawing.Point(843, 288);
+            this.showAllButton.Location = new System.Drawing.Point(983, 332);
             this.showAllButton.Name = "showAllButton";
-            this.showAllButton.Size = new System.Drawing.Size(82, 33);
+            this.showAllButton.Size = new System.Drawing.Size(96, 38);
             this.showAllButton.TabIndex = 215;
             this.showAllButton.Text = "All";
             this.showAllButton.Visible = false;
@@ -1606,9 +1575,9 @@
             this.checkNotes.Checked = true;
             this.checkNotes.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.checkNotes.Location = new System.Drawing.Point(849, 254);
+            this.checkNotes.Location = new System.Drawing.Point(990, 293);
             this.checkNotes.Name = "checkNotes";
-            this.checkNotes.Size = new System.Drawing.Size(139, 17);
+            this.checkNotes.Size = new System.Drawing.Size(162, 20);
             this.checkNotes.TabIndex = 214;
             this.checkNotes.Text = "Proc Notes";
             this.checkNotes.Visible = false;
@@ -1623,9 +1592,9 @@
             this.groupBox7.Controls.Add(this.checkLabCase);
             this.groupBox7.Controls.Add(this.checkRx);
             this.groupBox7.Controls.Add(this.checkComm);
-            this.groupBox7.Location = new System.Drawing.Point(835, 118);
+            this.groupBox7.Location = new System.Drawing.Point(974, 136);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(164, 135);
+            this.groupBox7.Size = new System.Drawing.Size(191, 156);
             this.groupBox7.TabIndex = 213;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Object Types";
@@ -1634,9 +1603,9 @@
             // checkShowTeeth
             // 
             this.checkShowTeeth.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.checkShowTeeth.Location = new System.Drawing.Point(59, 84);
+            this.checkShowTeeth.Location = new System.Drawing.Point(69, 97);
             this.checkShowTeeth.Name = "checkShowTeeth";
-            this.checkShowTeeth.Size = new System.Drawing.Size(141, 17);
+            this.checkShowTeeth.Size = new System.Drawing.Size(164, 20);
             this.checkShowTeeth.TabIndex = 217;
             this.checkShowTeeth.Text = "Selected Teeth";
             this.checkShowTeeth.Visible = false;
@@ -1644,9 +1613,9 @@
             // checkAudit
             // 
             this.checkAudit.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.checkAudit.Location = new System.Drawing.Point(59, 105);
+            this.checkAudit.Location = new System.Drawing.Point(69, 121);
             this.checkAudit.Name = "checkAudit";
-            this.checkAudit.Size = new System.Drawing.Size(99, 17);
+            this.checkAudit.Size = new System.Drawing.Size(115, 20);
             this.checkAudit.TabIndex = 218;
             this.checkAudit.Text = "Audit";
             this.checkAudit.Visible = false;
@@ -1657,9 +1626,9 @@
             this.checkExtraNotes.Checked = true;
             this.checkExtraNotes.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkExtraNotes.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.checkExtraNotes.Location = new System.Drawing.Point(12, 110);
+            this.checkExtraNotes.Location = new System.Drawing.Point(14, 127);
             this.checkExtraNotes.Name = "checkExtraNotes";
-            this.checkExtraNotes.Size = new System.Drawing.Size(139, 17);
+            this.checkExtraNotes.Size = new System.Drawing.Size(162, 20);
             this.checkExtraNotes.TabIndex = 215;
             this.checkExtraNotes.Text = "Extra Notes";
             this.checkExtraNotes.Visible = false;
@@ -1670,9 +1639,9 @@
             this.checkAppt.Checked = true;
             this.checkAppt.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkAppt.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.checkAppt.Location = new System.Drawing.Point(14, 23);
+            this.checkAppt.Location = new System.Drawing.Point(16, 27);
             this.checkAppt.Name = "checkAppt";
-            this.checkAppt.Size = new System.Drawing.Size(139, 17);
+            this.checkAppt.Size = new System.Drawing.Size(162, 20);
             this.checkAppt.TabIndex = 20;
             this.checkAppt.Text = "Appointments";
             this.checkAppt.Click += new System.EventHandler(this.checkAppt_Click);
@@ -1682,9 +1651,9 @@
             this.checkLabCase.Checked = true;
             this.checkLabCase.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkLabCase.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.checkLabCase.Location = new System.Drawing.Point(14, 66);
+            this.checkLabCase.Location = new System.Drawing.Point(16, 76);
             this.checkLabCase.Name = "checkLabCase";
-            this.checkLabCase.Size = new System.Drawing.Size(139, 17);
+            this.checkLabCase.Size = new System.Drawing.Size(162, 20);
             this.checkLabCase.TabIndex = 17;
             this.checkLabCase.Text = "Lab Cases";
             this.checkLabCase.Click += new System.EventHandler(this.checkLabCase_Click);
@@ -1694,9 +1663,9 @@
             this.checkRx.Checked = true;
             this.checkRx.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkRx.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.checkRx.Location = new System.Drawing.Point(14, 87);
+            this.checkRx.Location = new System.Drawing.Point(16, 100);
             this.checkRx.Name = "checkRx";
-            this.checkRx.Size = new System.Drawing.Size(139, 17);
+            this.checkRx.Size = new System.Drawing.Size(162, 20);
             this.checkRx.TabIndex = 8;
             this.checkRx.Text = "Rx";
             this.checkRx.Click += new System.EventHandler(this.checkRx_Click);
@@ -1706,9 +1675,9 @@
             this.checkComm.Checked = true;
             this.checkComm.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkComm.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.checkComm.Location = new System.Drawing.Point(14, 44);
+            this.checkComm.Location = new System.Drawing.Point(16, 51);
             this.checkComm.Name = "checkComm";
-            this.checkComm.Size = new System.Drawing.Size(139, 17);
+            this.checkComm.Size = new System.Drawing.Size(162, 20);
             this.checkComm.TabIndex = 16;
             this.checkComm.Text = "Comm Log";
             this.checkComm.Click += new System.EventHandler(this.checkComm_Click);
@@ -1719,9 +1688,9 @@
             this.groupBox6.Controls.Add(this.checkShowR);
             this.groupBox6.Controls.Add(this.checkShowC);
             this.groupBox6.Controls.Add(this.checkShowTP);
-            this.groupBox6.Location = new System.Drawing.Point(709, 21);
+            this.groupBox6.Location = new System.Drawing.Point(827, 24);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(164, 113);
+            this.groupBox6.Size = new System.Drawing.Size(191, 130);
             this.groupBox6.TabIndex = 212;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Procedures";
@@ -1732,9 +1701,9 @@
             this.checkShowE.Checked = true;
             this.checkShowE.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkShowE.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.checkShowE.Location = new System.Drawing.Point(12, 66);
+            this.checkShowE.Location = new System.Drawing.Point(14, 76);
             this.checkShowE.Name = "checkShowE";
-            this.checkShowE.Size = new System.Drawing.Size(138, 17);
+            this.checkShowE.Size = new System.Drawing.Size(161, 20);
             this.checkShowE.TabIndex = 10;
             this.checkShowE.Text = "Existing";
             this.checkShowE.Click += new System.EventHandler(this.checkShowE_Click);
@@ -1744,9 +1713,9 @@
             this.checkShowR.Checked = true;
             this.checkShowR.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkShowR.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.checkShowR.Location = new System.Drawing.Point(12, 87);
+            this.checkShowR.Location = new System.Drawing.Point(14, 100);
             this.checkShowR.Name = "checkShowR";
-            this.checkShowR.Size = new System.Drawing.Size(138, 17);
+            this.checkShowR.Size = new System.Drawing.Size(161, 20);
             this.checkShowR.TabIndex = 14;
             this.checkShowR.Text = "Referred";
             this.checkShowR.Click += new System.EventHandler(this.checkShowR_Click);
@@ -1756,9 +1725,9 @@
             this.checkShowC.Checked = true;
             this.checkShowC.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkShowC.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.checkShowC.Location = new System.Drawing.Point(12, 44);
+            this.checkShowC.Location = new System.Drawing.Point(14, 51);
             this.checkShowC.Name = "checkShowC";
-            this.checkShowC.Size = new System.Drawing.Size(138, 17);
+            this.checkShowC.Size = new System.Drawing.Size(161, 20);
             this.checkShowC.TabIndex = 9;
             this.checkShowC.Text = "Completed";
             this.checkShowC.Click += new System.EventHandler(this.checkShowC_Click);
@@ -1768,9 +1737,9 @@
             this.checkShowTP.Checked = true;
             this.checkShowTP.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkShowTP.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.checkShowTP.Location = new System.Drawing.Point(12, 23);
+            this.checkShowTP.Location = new System.Drawing.Point(14, 27);
             this.checkShowTP.Name = "checkShowTP";
-            this.checkShowTP.Size = new System.Drawing.Size(138, 17);
+            this.checkShowTP.Size = new System.Drawing.Size(161, 20);
             this.checkShowTP.TabIndex = 8;
             this.checkShowTP.Text = "Treat Plan";
             this.checkShowTP.Click += new System.EventHandler(this.checkShowTP_Click);
@@ -1790,9 +1759,10 @@
             this.gridProg.Name = "gridProg";
             this.gridProg.ScrollValue = 0;
             this.gridProg.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-            this.gridProg.Size = new System.Drawing.Size(574, 289);
+            this.gridProg.Size = new System.Drawing.Size(545, 277);
             this.gridProg.TabIndex = 211;
             this.gridProg.Title = "Progress Notes";
+            this.gridProg.TitleVisible = true;
             this.gridProg.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridProg_CellDoubleClick);
             // 
             // gridComm
@@ -1809,9 +1779,10 @@
             this.gridComm.Location = new System.Drawing.Point(0, 0);
             this.gridComm.Name = "gridComm";
             this.gridComm.ScrollValue = 0;
-            this.gridComm.Size = new System.Drawing.Size(666, 280);
+            this.gridComm.Size = new System.Drawing.Size(652, 266);
             this.gridComm.TabIndex = 71;
             this.gridComm.Title = "Communications Log";
+            this.gridComm.TitleVisible = true;
             this.gridComm.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.gridComm_CellDoubleClick);
             // 
             // ToolBarMain
@@ -1819,7 +1790,7 @@
             this.ToolBarMain.Dock = System.Windows.Forms.DockStyle.Top;
             this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
             this.ToolBarMain.Name = "ToolBarMain";
-            this.ToolBarMain.Size = new System.Drawing.Size(1060, 27);
+            this.ToolBarMain.Size = new System.Drawing.Size(1060, 30);
             this.ToolBarMain.TabIndex = 47;
             this.ToolBarMain.ButtonClick += new System.EventHandler<OpenDental.UI.ODToolBarButtonClickEventArgs>(this.ToolBarMain_ButtonClick);
             // 
@@ -1898,9 +1869,6 @@
         private OpenDental.UI.ODGrid gridAccount;
         private OpenDental.UI.ODGrid gridRepeat;
         private System.Windows.Forms.MenuItem menuInsMedical;
-        private System.Windows.Forms.ContextMenu contextMenuRepeat;
-        private System.Windows.Forms.MenuItem menuItemRepeatStand;
-        private System.Windows.Forms.MenuItem menuItemRepeatEmail;
         private System.Windows.Forms.Panel panelProgNotes;
         private OpenDental.UI.ODGrid gridProg;
         private System.Windows.Forms.GroupBox groupBox6;
@@ -2000,7 +1968,6 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Button creditCardButton;
         private System.Windows.Forms.MenuItem menuItemReceipt;
-        private System.Windows.Forms.MenuItem menuItemRepeatCanada;
         private System.Windows.Forms.MenuItem menuItemInvoice;
         private OpenDental.UI.ODGrid patientInfoGrid;
         private System.Windows.Forms.ContextMenu contextMenuQuickProcs;
@@ -2024,7 +1991,6 @@
         private ValidNum textOrthoMonthsTreat;
         private System.Windows.Forms.Button butOrthoDefaultMonthsTreat;
         private System.Windows.Forms.Button butOrthoEditMonthsTreat;
-        private System.Windows.Forms.MenuItem menuItemRepeatSignupPortal;
         private System.Windows.Forms.GroupBox groupBox2;
         private ValidDate textDateOrthoPlacement;
         private System.Windows.Forms.Button butEditOrthoPlacement;

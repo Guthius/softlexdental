@@ -70,7 +70,7 @@ namespace OpenDental
                     if (submittedException == null)
                     {
                         submittedException = e;
-                        BugSubmissions.SubmitException(e, threadName, FormOpenDental.CurPatNum, formOD.GetSelectedModuleName());
+                        // TODO: Fix me... BugSubmissions.SubmitException(e, threadName, FormOpenDental.CurPatNum, formOD.GetSelectedModuleName());
                     }
                 }
                 catch

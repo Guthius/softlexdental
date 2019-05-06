@@ -80,11 +80,9 @@ namespace OpenDental
         ///<summary></summary>
         public void FormSelectPatient_Load(object sender, System.EventArgs e)
         {
-            if (!Preferences.GetBool(PrefName.DockPhonePanelShow))
-            {
-                countryLabel.Visible = false;
-                countryTextBox.Visible = false;
-            }
+            countryLabel.Visible = false;
+            countryTextBox.Visible = false;
+
 
             if (SelectionModeOnly)
             {

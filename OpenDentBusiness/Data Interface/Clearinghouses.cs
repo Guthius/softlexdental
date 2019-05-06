@@ -24,7 +24,6 @@ namespace OpenDentBusiness
             {
                 string command = "SELECT * FROM clearinghouse WHERE ClinicNum=0 ORDER BY Description";
                 List<Clearinghouse> listClearinghouses = Crud.ClearinghouseCrud.SelectMany(command);
-                listClearinghouses.ForEach(x => x.Password = GetRevealPassword(x.Password));
                 return listClearinghouses;
             }
             protected override List<Clearinghouse> TableToList(DataTable table)
@@ -90,7 +89,6 @@ namespace OpenDentBusiness
         {
             string command = "SELECT * FROM clearinghouse WHERE ClinicNum!=0 ORDER BY Description";
             List<Clearinghouse> clearinghouseRetVal = Crud.ClearinghouseCrud.SelectMany(command);
-            clearinghouseRetVal.ForEach(x => x.Password = GetRevealPassword(x.Password));
             return clearinghouseRetVal;
         }
 
@@ -238,14 +236,6 @@ namespace OpenDentBusiness
             return GetFirstOrDefault(x => x.ClearinghouseNum == clearinghouseNum);
         }
 
-        ///<summary>Gets revealed password for a clearinghouse password.</summary>
-        public static string GetRevealPassword(string concealPassword)
-        {
-            string revealPassword = "";
-            CDT.Class1.RevealClearinghouse(concealPassword, out revealPassword);
-            return revealPassword;
-        }
-
         ///<summary>Returns the clinic-level clearinghouse for the passed in Clearinghouse.  Usually used in conjunction with ReplaceFields().
         ///Can return null.</summary>
         public static Clearinghouse GetForClinic(Clearinghouse clearinghouseHq, long clinicNum)
@@ -256,10 +246,6 @@ namespace OpenDentBusiness
             }
             string command = "SELECT * FROM clearinghouse WHERE HqClearinghouseNum=" + clearinghouseHq.ClearinghouseNum + " AND ClinicNum=" + clinicNum;
             Clearinghouse clearinghouseRetVal = Crud.ClearinghouseCrud.SelectOne(command);
-            if (clearinghouseRetVal != null)
-            {
-                clearinghouseRetVal.Password = GetRevealPassword(clearinghouseRetVal.Password);
-            }
             return clearinghouseRetVal;
         }
         #endregion

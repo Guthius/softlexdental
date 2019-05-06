@@ -6,6 +6,7 @@ using System.Web.Hosting;
 using System.Xml.Serialization;
 using CodeBase;
 using System.Xml;
+using OpenDental;
 
 namespace OpenDentBusiness
 {
@@ -111,35 +112,7 @@ namespace OpenDentBusiness
                     //Not already there so add it once.
                     return new Dictionary<ConnectionNames, CentralConnection>() { { ConnectionNames.DentalOfficeReportServer, cn ?? new CentralConnection() } };
                 }));
-                aTryInit(new Func<Dictionary<ConnectionNames, CentralConnection>>(() =>
-                { //CustomersHQ (via prefs).
-                    if (HasSingleEntry(ConnectionNames.CustomersHQ))
-                    { //Only try to add this value if it doesn't already exist.
-                        return null;
-                    }
-                    //If PrefC cache is not already filled and/or DataConnection.SetDb() has not already been called, this will fail.
-                    CentralConnection cn = null;
-                    ODException.SwallowAnyException(() =>
-                    {
-                        if (!Preferences.IsODHQ)
-                        {
-                            return;
-                        }
-                        cn = new CentralConnection
-                        {
-#if DEBUG
-                            ServerName = "localhost",
-#else
-							ServerName=PrefC.GetString(PrefName.CustomersHQServer),
-#endif
-                            DatabaseName = Preferences.GetString(PrefName.CustomersHQDatabase),
-                            MySqlUser = Preferences.GetString(PrefName.CustomersHQMySqlUser),
-                        };
-                        CDT.Class1.Decrypt(Preferences.GetString(PrefName.CustomersHQMySqlPassHash), out cn.MySqlPassword);
-                    });
-                    //Not already there so add it once.
-                    return new Dictionary<ConnectionNames, CentralConnection>() { { ConnectionNames.CustomersHQ, cn ?? new CentralConnection() } };
-                }));
+
                 Dictionary<ConnectionNames, OpenDentBusiness.CentralConnection> dictRet = null;
                 lock (_lock)
                 {
@@ -196,7 +169,7 @@ namespace OpenDentBusiness
             {
                 if (!string.IsNullOrEmpty(conn.MySqlPassword))
                 {
-                    if (!CDT.Class1.Decrypt(conn.MySqlPassword, out conn.MySqlPassword))
+                    if (!Encryption.TryDecrypt(conn.MySqlPassword, out conn.MySqlPassword))
                     {
                         throw new Exception("Unable to decrypt MySQL password: " + fullPath);
                     }
@@ -212,7 +185,7 @@ namespace OpenDentBusiness
             {
                 if (!string.IsNullOrEmpty(conn.Password))
                 {
-                    if (!CDT.Class1.Decrypt(conn.Password, out conn.Password))
+                    if (!Encryption.TryDecrypt(conn.Password, out conn.Password))
                     {
                         throw new Exception("Unable to decrypt MySQL password: " + fullPath);
                     }

@@ -748,35 +748,6 @@ namespace OpenDental{
 				checkCreatesClaim.Enabled=false;
 				checkIsEnabled.Enabled=false;
 			}
-			if(Preferences.IsODHQ && EServiceCodeLink.IsProcCodeAnEService(RepeatCur.ProcCode,out _eService)) {
-				if(IsNew) {
-					MsgBox.Show(this,"You cannot manually create any eService repeating charges.\r\n"
-						+"Use the Signup Portal instead.\r\n\r\n"
-						+"The Charge Amount can be manually edited after the Signup Portal has created the desired eService repeating charge.");
-					DialogResult=DialogResult.Abort;
-					return;
-				}
-				if(_isForZipwhip) {
-					textZipwhipChargeAmount.Visible=true;
-					labelZipwhipAmt.Visible=true;
-					if(RepeatCur.ChargeAmtAlt.IsGreaterThan(-1)) {
-						textZipwhipChargeAmount.Text=RepeatCur.ChargeAmtAlt.ToString("F");
-					}
-				}
-				//The only things that users should be able to do for eServices are:
-				//1. Change the repeating charge amount(s).
-				//2. Manipulate the Start Date.
-				//3. Manipulate the Note.
-				//4. Manipulate Billing Day because not all customers will have a non-eService repeating charge in order to manipulate.
-				//This is because legacy users (versions prior to 17.1) need the ability to manually set their monthly charge amount, etc.
-				SetFormReadOnly(this,butOK,butCancel
-					,textChargeAmt,labelChargeAmount
-					,textDateStart,labelDateStart
-					,textNote,labelNote
-					,textBillingDay,labelBillingCycleDay
-					,textZipwhipChargeAmount,labelZipwhipAmt
-					,checkUseUnearned,comboUnearnedTypes);
-			}
 			Patient pat=Patients.GetPat(RepeatCur.PatNum);//pat should never be null. If it is, this will fail.
 			//If this is a new repeat charge and no other active repeat charges exist, set the billing cycle day to today
 			if(IsNew && !RepeatCharges.ActiveRepeatChargeExists(RepeatCur.PatNum)) {
@@ -1013,9 +984,6 @@ namespace OpenDental{
 					Patients.Update(patNew,patOld);
 				}
 				RepeatCharges.Insert(RepeatCur);
-				if(Preferences.IsODHQ) {
-					AddProcedureToCC();
-				}
 			}
 			else{ //not a new repeat charge
 				RepeatCharges.Update(RepeatCur);

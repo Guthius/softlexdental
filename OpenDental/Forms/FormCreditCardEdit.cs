@@ -36,7 +36,7 @@ namespace OpenDental {
 			_creditCardOld=CreditCardCur.Clone();
 			FillFrequencyCombos();
 			FillData();
-			checkExcludeProcSync.Checked=CreditCardCur.ExcludeProcSync;
+			//checkExcludeProcSync.Checked=CreditCardCur.ExcludeProcSync;
 			if((_isXChargeEnabled || _isPayConnectEnabled || _isPaySimpleEnabled) 
 				&& !CreditCardCur.IsXWeb()) 
 			{//Get recurring payment plan information if using X-Charge or PayConnect and the card is not from XWeb.
@@ -50,13 +50,6 @@ namespace OpenDental {
 					if(PayPlanList[i].PayPlanNum==CreditCardCur.PayPlanNum) {
 						comboPaymentPlans.SelectedIndex=i+1;
 					}
-				}
-				if(Preferences.IsODHQ) {
-					groupProcedures.Visible=true;
-					FillProcs();
-				}
-				else {
-					this.ClientSize=new System.Drawing.Size(this.ClientSize.Width,this.ClientSize.Height-144);
 				}
 				UpdateFrequencyText();
 				EnableFrequencyControls();
@@ -125,17 +118,6 @@ namespace OpenDental {
 				if(_isPaySimpleEnabled) {
 					textAccountType.Text=(CreditCardCur.CCSource==CreditCardSource.PaySimpleACH ? Lans.g(this,"ACH") : Lans.g(this,"Credit Card"));
 				}
-			}
-		}
-
-		private void FillProcs() {
-			listProcs.Items.Clear();
-			if(String.IsNullOrEmpty(CreditCardCur.Procedures)) {
-				return;
-			}
-			string[] arrayProcCodes=CreditCardCur.Procedures.Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries);
-			for(int i=0;i<arrayProcCodes.Length;i++) {
-				listProcs.Items.Add(arrayProcCodes[i]+"- "+ProcedureCodes.GetLaymanTerm(ProcedureCodes.GetProcCode(arrayProcCodes[i]).CodeNum));
 			}
 		}
 
@@ -300,26 +282,25 @@ namespace OpenDental {
 
 		private void butToday_Click(object sender,EventArgs e) {
 			if(textDayOfMonth.Text=="" && radioDayOfMonth.Checked) {
-				textDayOfMonth.Text=Preferences.IsODHQ ? PatCur.BillingCycleDay.ToString() : DateTime.Today.Day.ToString();
+                textDayOfMonth.Text = DateTime.Today.Day.ToString();
 			}
 			textDateStart.Text=DateTime.Today.ToShortDateString();
 		}
 
-		private void textDateStart_Leave(object sender,EventArgs e) {
-			if(radioWeekDay.Checked) {
-				return;
-			}
-			if(Preferences.IsODHQ) {
-				textDayOfMonth.Text=PatCur.BillingCycleDay.ToString();
-			}
-			else {
-				DateTime dateStart=PIn.Date(textDateStart.Text);
-				if(dateStart.Year < 1880 || textDayOfMonth.Text!="") {//if invalid date or if they already have something in the day of the month text
-					return;
-				}
-				textDayOfMonth.Text=dateStart.Date.Day.ToString();
-			}
-		}
+        private void textDateStart_Leave(object sender, EventArgs e)
+        {
+            if (radioWeekDay.Checked)
+            {
+                return;
+            }
+
+            DateTime dateStart = PIn.Date(textDateStart.Text);
+            if (dateStart.Year < 1880 || textDayOfMonth.Text != "")
+            {//if invalid date or if they already have something in the day of the month text
+                return;
+            }
+            textDayOfMonth.Text = dateStart.Date.Day.ToString();
+        }
 
 		private void butAddProc_Click(object sender,EventArgs e) {
 			FormProcCodes FormP=new FormProcCodes();
@@ -345,18 +326,6 @@ namespace OpenDental {
 				CreditCardCur.Procedures+=",";
 			}
 			CreditCardCur.Procedures+=procCode;
-			FillProcs();
-		}
-
-		private void butRemoveProc_Click(object sender,EventArgs e) {
-			if(listProcs.SelectedIndex==-1) {
-				MsgBox.Show(this,"Please select a procedure first.");
-				return;
-			}
-			List<string> strList=new List<string>(CreditCardCur.Procedures.Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries));
-			strList.RemoveAt(listProcs.SelectedIndex);
-			CreditCardCur.Procedures=string.Join(",",strList);
-			FillProcs();
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
@@ -498,7 +467,7 @@ namespace OpenDental {
 			if(!VerifyData()) {
 				return;
 			}
-			CreditCardCur.ExcludeProcSync=checkExcludeProcSync.Checked;
+			//CreditCardCur.ExcludeProcSync=checkExcludeProcSync.Checked;
 			CreditCardCur.Address=textAddress.Text;
 			CreditCardCur.CCNumberMasked=textCardNumber.Text;
 			CreditCardCur.PatNum=PatCur.PatNum;
