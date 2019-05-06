@@ -10,7 +10,6 @@ namespace OpenDental
     {
         Supply supply;
         int quantity;
-        double price;
 
         public SupplyOrderItem ItemCur;
         public List<Supplier> ListSupplier;
@@ -32,7 +31,7 @@ namespace OpenDental
             catalogNumberTextBox.Text = supply.CatalogNumber;
             descriptionTextBox.Text = supply.Descript;
             quantityTextBox.Text = (quantity = ItemCur.Qty).ToString();
-            priceTextBox.Text = (price = ItemCur.Price).ToString("n");
+            priceTextBox.Value = ItemCur.Price;
         }
 
         /// <summary>
@@ -91,32 +90,6 @@ namespace OpenDental
         }
 
         /// <summary>
-        /// Updates the price textbox when the price changes.
-        /// </summary>
-        void PriceTextBox_TextChanged(object sender, EventArgs e) => UpdateSubTotal();
-
-        /// <summary>
-        /// Validates  the value entered in the price textbox.
-        /// </summary>
-        void PriceTextBox_Validating(object sender, CancelEventArgs e)
-        {
-            if (double.TryParse(priceTextBox.Text, out double result))
-            {
-                price = result;
-                if (price < 0)
-                {
-                    price = 0;
-                }
-
-                priceTextBox.Text = price.ToString("n");
-            }
-            else
-            {
-                e.Cancel = true;
-            }
-        }
-
-        /// <summary>
         /// Deletes the supply order item.
         /// </summary>
         void DeleteButton_Click(object sender, EventArgs e)
@@ -140,7 +113,7 @@ namespace OpenDental
         /// </summary>
         void AcceptButton_Click(object sender, EventArgs e)
         {
-            if (quantityTextBox.errorProvider1.GetError(quantityTextBox) != "" || priceTextBox.errorProvider1.GetError(priceTextBox) != "")
+            if (quantityTextBox.errorProvider1.GetError(quantityTextBox) != "")
             {
                 MessageBox.Show(
                     Translation.Language.PleaseFixDataEntryErrors,
@@ -152,7 +125,7 @@ namespace OpenDental
             }
 
             ItemCur.Qty = quantity;
-            ItemCur.Price = price;
+            ItemCur.Price = priceTextBox.Value;
 
             SupplyOrderItems.Update(ItemCur);
 

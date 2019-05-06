@@ -53,7 +53,7 @@ namespace OpenDental
 
             if (Supp.Price != 0)
             {
-                priceTextBox.Text = Supp.Price.ToString("n");
+                priceTextBox.Value = Supp.Price;
             }
 
             hiddenCheckBox.Checked = Supp.IsHidden;

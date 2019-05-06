@@ -146,8 +146,6 @@ namespace OpenDental
             this.priceTextBox.Name = "priceTextBox";
             this.priceTextBox.Size = new System.Drawing.Size(80, 23);
             this.priceTextBox.TabIndex = 11;
-            this.priceTextBox.TextChanged += new System.EventHandler(this.PriceTextBox_TextChanged);
-            this.priceTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.PriceTextBox_Validating);
             // 
             // deleteButton
             // 

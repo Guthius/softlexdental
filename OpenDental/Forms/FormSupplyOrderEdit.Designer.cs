@@ -42,7 +42,7 @@ namespace OpenDental
             this.totalTextBox = new OpenDental.UI.ODCurrencyTextBox();
             this.totalLabel = new System.Windows.Forms.Label();
             this.totalInfoLabel = new System.Windows.Forms.Label();
-            this.shippinhChargeTextBox = new OpenDental.UI.ODCurrencyTextBox();
+            this.shippingChargeTextBox = new OpenDental.UI.ODCurrencyTextBox();
             this.shippingChargeLabel = new System.Windows.Forms.Label();
             this.userComboBox = new System.Windows.Forms.ComboBox();
             this.userLabel = new System.Windows.Forms.Label();
@@ -157,6 +157,7 @@ namespace OpenDental
             this.totalTextBox.Name = "totalTextBox";
             this.totalTextBox.Size = new System.Drawing.Size(80, 23);
             this.totalTextBox.TabIndex = 2;
+            this.totalTextBox.Value = 0D;
             // 
             // totalLabel
             // 
@@ -178,14 +179,15 @@ namespace OpenDental
             this.totalInfoLabel.Text = "Auto calculates unless some items have zero amount.";
             this.totalInfoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // shippinhChargeTextBox
+            // shippingChargeTextBox
             // 
-            this.shippinhChargeTextBox.BackColor = System.Drawing.SystemColors.Window;
-            this.shippinhChargeTextBox.ForeColor = System.Drawing.SystemColors.WindowText;
-            this.shippinhChargeTextBox.Location = new System.Drawing.Point(160, 135);
-            this.shippinhChargeTextBox.Name = "shippinhChargeTextBox";
-            this.shippinhChargeTextBox.Size = new System.Drawing.Size(80, 23);
-            this.shippinhChargeTextBox.TabIndex = 3;
+            this.shippingChargeTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.shippingChargeTextBox.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.shippingChargeTextBox.Location = new System.Drawing.Point(160, 135);
+            this.shippingChargeTextBox.Name = "shippingChargeTextBox";
+            this.shippingChargeTextBox.Size = new System.Drawing.Size(80, 23);
+            this.shippingChargeTextBox.TabIndex = 3;
+            this.shippingChargeTextBox.Value = 0D;
             // 
             // shippingChargeLabel
             // 
@@ -223,7 +225,7 @@ namespace OpenDental
             this.ClientSize = new System.Drawing.Size(724, 371);
             this.Controls.Add(this.userLabel);
             this.Controls.Add(this.userComboBox);
-            this.Controls.Add(this.shippinhChargeTextBox);
+            this.Controls.Add(this.shippingChargeTextBox);
             this.Controls.Add(this.shippingChargeLabel);
             this.Controls.Add(this.totalInfoLabel);
             this.Controls.Add(this.totalTextBox);
@@ -266,7 +268,7 @@ namespace OpenDental
         private OpenDental.UI.ODCurrencyTextBox totalTextBox;
         private System.Windows.Forms.Label totalLabel;
         private System.Windows.Forms.Label totalInfoLabel;
-        private OpenDental.UI.ODCurrencyTextBox shippinhChargeTextBox;
+        private OpenDental.UI.ODCurrencyTextBox shippingChargeTextBox;
         private System.Windows.Forms.Label shippingChargeLabel;
         private System.Windows.Forms.ComboBox userComboBox;
         private System.Windows.Forms.Label userLabel;

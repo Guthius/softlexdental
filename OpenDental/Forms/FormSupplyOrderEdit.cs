@@ -35,8 +35,8 @@ namespace OpenDental
                 datePlacedTextBox.Text = Order.DatePlaced.ToShortDateString();
             }
 
-            totalTextBox.Text = Order.AmountTotal.ToString("n");
-            shippinhChargeTextBox.Text = Order.ShippingCharge.ToString("n");
+            totalTextBox.Value = Order.AmountTotal;
+            shippingChargeTextBox.Value = Order.ShippingCharge;
             noteTextBox.Text = Order.Note;
 
             userComboBox.Items.Clear();
@@ -98,9 +98,7 @@ namespace OpenDental
         /// </summary>
         void AcceptButton_Click(object sender, EventArgs e)
         {
-            if (datePlacedTextBox.errorProvider1.GetError(datePlacedTextBox) != "" || 
-                totalTextBox.errorProvider1.GetError(totalTextBox) != "" || 
-                shippinhChargeTextBox.errorProvider1.GetError(shippinhChargeTextBox) != "")
+            if (datePlacedTextBox.errorProvider1.GetError(datePlacedTextBox) != "")
             {
                 MessageBox.Show(
                     Translation.Language.PleaseFixDataEntryErrors,
@@ -125,9 +123,9 @@ namespace OpenDental
                 }
             }
 
-            Order.AmountTotal = PIn.Double(totalTextBox.Text);
+            Order.AmountTotal = totalTextBox.Value;
             Order.Note = noteTextBox.Text;
-            Order.ShippingCharge = PIn.Double(shippinhChargeTextBox.Text);
+            Order.ShippingCharge = shippingChargeTextBox.Value;
 
             SupplyOrders.Update(Order);
 
