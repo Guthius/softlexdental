@@ -1,358 +1,462 @@
+using OpenDental.UI;
+using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using OpenDentBusiness;
-using OpenDental.UI;
 using System.Drawing.Printing;
 using System.Linq;
-using CodeBase;
+using System.Windows.Forms;
 
-namespace OpenDental {
-	public partial class FormSupplyOrders:ODForm {
-		private List<Supplier> _listSuppliers;
-		private List<SupplyOrder> _listOrdersAll;
-		private List<SupplyOrder> _listOrders;
-		private DataTable _tableOrderItems;
-		private int _pagesPrinted;
-		private bool _headingPrinted;
-		private int _headingPrintH;
+namespace OpenDental
+{
+    public partial class FormSupplyOrders : FormBase
+    {
+        List<Supplier> suppliersList;
+        List<SupplyOrder> allOrdersList;
+        List<SupplyOrder> ordersList;
+        DataTable orderItemsTable;
+        int pagesPrinted;
+        bool headingPrinted;
+        int headingPrintHeight;
 
-		public FormSupplyOrders() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormSupplyOrders"/> class.
+        /// </summary>
+        public FormSupplyOrders() => InitializeComponent();
 
-		private void FormSupplyOrders_Load(object sender,EventArgs e) {
-			Height=SystemInformation.WorkingArea.Height;//max height
-			Location=new Point(Location.X,0);//move to top of screen
-			_listSuppliers = Suppliers.GetAll();
-			_listOrdersAll = SupplyOrders.GetAll();
-			_listOrders = new List<SupplyOrder>();
-			FillComboSupplier();
-			FillGridOrders();
-			gridOrders.ScrollToEnd();
-		}
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormSupplyOrders_Load(object sender, EventArgs e)
+        {
+            allOrdersList = SupplyOrders.GetAll();
+            ordersList = new List<SupplyOrder>();
 
-		private void FillComboSupplier() {
-			_listSuppliers=Suppliers.GetAll();
-			comboSupplier.Items.Clear();
-			comboSupplier.Items.Add(Lan.g(this,"All"));//add all to begining of list for composite listings.
-			comboSupplier.SelectedIndex=0;
-			for(int i=0;i<_listSuppliers.Count;i++) {
-				comboSupplier.Items.Add(_listSuppliers[i].Name);
-			}
-		}
+            LoadSuppliers();
+            LoadOrders();
 
-		private void comboSupplier_SelectedIndexChanged(object sender,EventArgs e) {
-			FillGridOrders();
-			gridOrders.ScrollToEnd();
-			FillGridOrderItem();
-		}
+            ordersGrid.ScrollToEnd();
+        }
 
-		private void gridOrder_CellClick(object sender,ODGridClickEventArgs e) {
-			FillGridOrderItem();
-		}
+        /// <summary>
+        /// Loads the list of the suppliers and populates the combobox.
+        /// </summary>
+        void LoadSuppliers()
+        {
+            suppliersList = Suppliers.GetAll();
 
-		private void gridOrder_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormSupplyOrderEdit FormSOE = new FormSupplyOrderEdit();
-			FormSOE.ListSupplier = _listSuppliers;
-			FormSOE.Order = _listOrders[e.Row];
-			FormSOE.ShowDialog();
-			if(FormSOE.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			_listOrdersAll = SupplyOrders.GetAll();
-			FillGridOrders();
-			FillGridOrderItem();
-		}
+            supplierComboBox.Items.Clear();
+            supplierComboBox.Items.Add(Translation.Language.All);
+            supplierComboBox.SelectedIndex = 0;
 
-		private void butAddSupply_Click(object sender,EventArgs e) {
-			if(gridOrders.GetSelectedIndex()==-1) {
-				MsgBox.Show(this,"Please select a supply order to add items to first.");
-				return;
-			}
-			FormSupplies FormSup = new FormSupplies();
-			FormSup.IsSelectMode = true;
-			FormSup.SelectedSupplierNum = _listOrders[gridOrders.GetSelectedIndex()].SupplierNum;
-			FormSup.ShowDialog();
-			if(FormSup.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			
-			for(int i=0;i<FormSup.ListSelectedSupplies.Count;i++) {
-				//check for existing----			
-				if(_tableOrderItems.Rows.OfType<DataRow>().Any(x => PIn.Long(x["SupplyNum"].ToString())==FormSup.ListSelectedSupplies[i].SupplyNum)) {
-					//MsgBox.Show(this,"Selected item already exists in currently selected order. Please edit quantity instead.");
-					continue;
-				}
-				SupplyOrderItem orderitem = new SupplyOrderItem();
-				orderitem.SupplyNum = FormSup.ListSelectedSupplies[i].SupplyNum;
-				orderitem.Qty=1;
-				orderitem.Price = FormSup.ListSelectedSupplies[i].Price;
-				orderitem.SupplyOrderNum = _listOrders[gridOrders.GetSelectedIndex()].SupplyOrderNum;
-				//soi.SupplyOrderItemNum
-				SupplyOrderItems.Insert(orderitem);
-			}
-			UpdatePriceAndRefresh();
-		}
+            for (int i = 0; i < suppliersList.Count; i++)
+            {
+                supplierComboBox.Items.Add(suppliersList[i].Name);
+            }
+        }
 
-		private void FillGridOrders() {
-			FilterListOrder();
-			gridOrders.BeginUpdate();
-			gridOrders.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Date Placed"),80);
-			gridOrders.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Amount"),70,HorizontalAlignment.Right);
-			gridOrders.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Shipping"),70,HorizontalAlignment.Right);
-			gridOrders.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Supplier"),120);
-			gridOrders.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Note"),200);
-			gridOrders.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Placed By"),100);
-			gridOrders.Columns.Add(col);
-			gridOrders.Rows.Clear();
-			ODGridRow row;
-			for(int i=0;i<_listOrders.Count;i++) {
-				row=new ODGridRow();
-				bool isPending=false;
-				if(_listOrders[i].DatePlaced.Year>2200) {
-					isPending=true;
-				}
-				if(isPending) {
-					row.Cells.Add(Lan.g(this,"pending"));
-				}
-				else {
-					row.Cells.Add(_listOrders[i].DatePlaced.ToShortDateString());
-				}
-				row.Cells.Add(_listOrders[i].AmountTotal.ToString("c"));
-				row.Cells.Add(_listOrders[i].ShippingCharge.ToString("c"));
-				row.Cells.Add(Suppliers.GetName(_listSuppliers,_listOrders[i].SupplierNum));
-				row.Cells.Add(_listOrders[i].Note);
-				if(isPending || _listOrders[i].UserNum==0) {
-					row.Cells.Add("");
-				}
-				else {
-					row.Cells.Add(Userods.GetName(_listOrders[i].UserNum));
-				}
-				row.Tag=_listOrders[i];
-				gridOrders.Rows.Add(row);
-			}
-			gridOrders.EndUpdate();
-		}
+        /// <summary>
+        /// Loads the list of orders and populates the orders grid.
+        /// </summary>
+        void LoadOrders()
+        {
+            FilterListOrder();
 
-		private void FilterListOrder() {
-			_listOrders.Clear();
-			long supplier=0;
-			if(comboSupplier.SelectedIndex < 1) {//this includes selecting All or not having anything selected.
-				supplier = 0;
-			}
-			else {
-				supplier=_listSuppliers[comboSupplier.SelectedIndex-1].SupplierNum;//SelectedIndex-1 because All is added before all the other items in the list.
-			}
-			foreach(SupplyOrder order in _listOrdersAll) {
-				if(supplier==0) {//Either the ALL supplier is selected or no supplier is selected.
-					_listOrders.Add(order);
-				}
-				else if(order.SupplierNum == supplier) {
-					_listOrders.Add(order);
-					continue;
-				}
-			}
-		}
+            ordersGrid.BeginUpdate();
+            ordersGrid.Columns.Clear();
+            ordersGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnDatePlaced, 80));
+            ordersGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnAmount, 70, HorizontalAlignment.Right));
+            ordersGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnShipping, 70, HorizontalAlignment.Right));
+            ordersGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnSupplier, 120));
+            ordersGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnNote, 200));
+            ordersGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnPlacedBy, 100));
+            ordersGrid.Rows.Clear();
 
-		private void FillGridOrderItem() {
-			long orderNum=0;
-			if(gridOrders.GetSelectedIndex()!=-1) {//an order is selected
-				orderNum=_listOrders[gridOrders.GetSelectedIndex()].SupplyOrderNum;
-			}
-			_tableOrderItems=SupplyOrderItems.GetItemsForOrder(orderNum);
-			gridItems.BeginUpdate();
-			gridItems.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Catalog #"),80);
-			gridItems.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Description"),320);
-			gridItems.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Qty"),60,HorizontalAlignment.Center);
-			col.IsEditable=true;
-			gridItems.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Price/Unit"),70,HorizontalAlignment.Right);
-			col.IsEditable=true;
-			gridItems.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Subtotal"),70,HorizontalAlignment.Right);
-			gridItems.Columns.Add(col);
-			gridItems.Rows.Clear();
-			ODGridRow row;
-			double price;
-			int qty;
-			double subtotal;
-			for(int i=0;i<_tableOrderItems.Rows.Count;i++) {
-				row=new ODGridRow();
-				row.Cells.Add(_tableOrderItems.Rows[i]["CatalogNumber"].ToString());
-				row.Cells.Add(_tableOrderItems.Rows[i]["Descript"].ToString());
-				qty=PIn.Int(_tableOrderItems.Rows[i]["Qty"].ToString());
-				row.Cells.Add(qty.ToString());
-				price=PIn.Double(_tableOrderItems.Rows[i]["Price"].ToString());
-				row.Cells.Add(price.ToString("n"));
-				subtotal=((double)qty)*price;
-				row.Cells.Add(subtotal.ToString("n"));
-				gridItems.Rows.Add(row);
-			}
-			gridItems.EndUpdate();
-		}
+            for (int i = 0; i < ordersList.Count; i++)
+            {
+                var row = new ODGridRow();
 
-		private void gridOrderItem_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormSupplyOrderItemEdit FormSOIE = new FormSupplyOrderItemEdit();
-			FormSOIE.ItemCur = SupplyOrderItems.CreateObject(PIn.Long(_tableOrderItems.Rows[e.Row]["SupplyOrderItemNum"].ToString()));
-			FormSOIE.ListSupplier = Suppliers.GetAll();
-			FormSOIE.ShowDialog();
-			if(FormSOIE.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			SupplyOrderItems.Update(FormSOIE.ItemCur);
-			UpdatePriceAndRefresh();
-		}
+                bool isPending = ordersList[i].DatePlaced.Year > 2200;
 
-		private void butNewOrder_Click(object sender,EventArgs e) {
-			if(comboSupplier.SelectedIndex < 1) {//Includes no items or the ALL supplier being selected.
-				MsgBox.Show(this,"Please select a supplier first.");
-				return;
-			}
-			for(int i=0;i<_listOrders.Count;i++) {
-				if(_listOrders[i].DatePlaced.Year>2200) {
-					MsgBox.Show(this,"Not allowed to add a new order when there is already one pending.  Please finish the other order instead.");
-					return;
-				}
-			}
-			SupplyOrder order=new SupplyOrder();
-			if(comboSupplier.SelectedIndex==0) {//Supplier "All".
-				order.SupplierNum=0;
-			}
-			else {//Specific supplier selected.
-				order.SupplierNum=_listSuppliers[comboSupplier.SelectedIndex-1].SupplierNum;//SelectedIndex-1 because "All" is first option.
-			}
-			order.IsNew=true;
-			order.DatePlaced=new DateTime(2500,1,1);
-			order.Note="";
-			order.UserNum=0;//This will get set when the order is placed.
-			SupplyOrders.Insert(order);
-			_listOrdersAll=SupplyOrders.GetAll();//Refresh the list all.
-			FillGridOrders();
-			gridOrders.SetSelected(_listOrders.Count-1,true);
-			gridOrders.ScrollToEnd();
-			FillGridOrderItem();
-		}
+                if (isPending)
+                {
+                    row.Cells.Add(Translation.Language.Pending.ToLower());
+                }
+                else
+                {
+                    row.Cells.Add(ordersList[i].DatePlaced.ToShortDateString());
+                }
 
-		private void butPrint_Click(object sender,EventArgs e) {
-			if(_tableOrderItems.Rows.Count<1) {
-				MsgBox.Show(this,"Supply list is Empty.");
-				return;
-			}
-			_pagesPrinted=0;
-			_headingPrinted=false;
-			PrinterL.TryPrintOrDebugRpPreview(
-				pd2_PrintPage,
-				Lan.g(this,"Supplies order from")+" "+_listOrders[gridOrders.GetSelectedIndex()].DatePlaced.ToShortDateString()+" "+Lan.g(this,"printed"),
-				margins:new Margins(50,50,40,30)
-			);
-		}
+                row.Cells.Add(ordersList[i].AmountTotal.ToString("c"));
+                row.Cells.Add(ordersList[i].ShippingCharge.ToString("c"));
+                row.Cells.Add(Suppliers.GetName(suppliersList, ordersList[i].SupplierNum));
+                row.Cells.Add(ordersList[i].Note);
 
-		private void pd2_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
-			Rectangle bounds=e.MarginBounds;
-			Graphics g=e.Graphics;
-			string text;
-			Font headingFont=new Font("Arial",13,FontStyle.Bold);
-			Font subHeadingFont=new Font("Arial",10,FontStyle.Bold);
-			Font mainFont=new Font("Arial",9);
-			int yPos=bounds.Top;
-			#region printHeading
-			//TODO: Decide what information goes in the heading.
-			if(!_headingPrinted) {
-				text=Lan.g(this,"Supply List");
-				g.DrawString(text,headingFont,Brushes.Black,425-g.MeasureString(text,headingFont).Width/2,yPos);
-				yPos+=(int)g.MeasureString(text,headingFont).Height;
-				text=Lan.g(this,"Order Number")+": "+_listOrders[gridOrders.SelectedIndices[0]].SupplyOrderNum;
-				g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
-				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
-				text=Lan.g(this,"Date")+": "+_listOrders[gridOrders.SelectedIndices[0]].DatePlaced.ToShortDateString();
-				g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
-				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
-				Supplier supCur=Suppliers.GetOne(_listOrders[gridOrders.SelectedIndices[0]].SupplierNum);
-				text=supCur.Name;
-				g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
-				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
-				text=supCur.Phone;
-				g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
-				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
-				text=supCur.Note;
-				g.DrawString(text,subHeadingFont,Brushes.Black,425-g.MeasureString(text,subHeadingFont).Width/2,yPos);
-				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
-				yPos+=15;
-				_headingPrinted=true;
-				_headingPrintH=yPos;
-			}
-			#endregion
-			yPos=gridItems.PrintPage(g,_pagesPrinted,bounds,_headingPrintH);
-			_pagesPrinted++;
-			if(yPos==-1) {
-				e.HasMorePages=true;
-			}
-			else {
-				e.HasMorePages=false;
-			}
-			g.Dispose();
-		}
+                if (isPending || ordersList[i].UserNum == 0)
+                {
+                    row.Cells.Add("");
+                }
+                else
+                {
+                    row.Cells.Add(Userods.GetName(ordersList[i].UserNum));
+                }
 
-		private void gridItems_CellLeave(object sender,ODGridClickEventArgs e) {
-			//no need to check which cell was edited, just reprocess both cells
-			int qtyNew=0;//default value.
-			try {
-				qtyNew=PIn.Int(gridItems.Rows[e.Row].Cells[2].Text);//0 if not valid input
-			}
-			catch { }
-			double priceNew=PIn.Double(gridItems.Rows[e.Row].Cells[3].Text);//0 if not valid input
-			SupplyOrderItem suppOI=SupplyOrderItems.CreateObject(PIn.Long(_tableOrderItems.Rows[e.Row]["SupplyOrderItemNum"].ToString()));
-			suppOI.Qty=qtyNew;
-			suppOI.Price=priceNew;
-			SupplyOrderItems.Update(suppOI);
-			SupplyOrders.UpdateOrderPrice(suppOI.SupplyOrderNum);
-			gridItems.Rows[e.Row].Cells[2].Text=qtyNew.ToString();//to standardize formatting.  They probably didn't type .00
-			gridItems.Rows[e.Row].Cells[3].Text=priceNew.ToString("n");//to standardize formatting.  They probably didn't type .00
-			gridItems.Rows[e.Row].Cells[4].Text=(qtyNew*priceNew).ToString("n");//to standardize formatting.  They probably didn't type .00
-			gridItems.Invalidate();
-			int si=gridOrders.GetSelectedIndex();
-			_listOrdersAll=SupplyOrders.GetAll();
-			FillGridOrders();
-			gridOrders.SetSelected(si,true);
-		}
+                row.Tag = ordersList[i];
 
-		private void UpdatePriceAndRefresh() {
-			SupplyOrder gridSelect=gridOrders.SelectedTag<SupplyOrder>();
-			SupplyOrders.UpdateOrderPrice(_listOrders[gridOrders.GetSelectedIndex()].SupplyOrderNum);
-			_listOrdersAll=SupplyOrders.GetAll();
-			FillGridOrders();
-			for(int i=0;i<gridOrders.Rows.Count;i++) {
-				if(gridSelect!=null && ((SupplyOrder)gridOrders.Rows[i].Tag).SupplyOrderNum==gridSelect.SupplyOrderNum) {
-					gridOrders.SetSelected(i,true);
-				}
-			}
-			FillGridOrderItem();
-		}
+                ordersGrid.Rows.Add(row);
+            }
+            ordersGrid.EndUpdate();
+        }
 
-		private void butOK_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.OK;
-		}
+        /// <summary>
+        /// Loads the list of order items and populates the order items grid.
+        /// </summary>
+        void LoadOrderItems()
+        {
+            long orderNum = 0;
+            if (ordersGrid.GetSelectedIndex() != -1)
+            {
+                orderNum = ordersList[ordersGrid.GetSelectedIndex()].SupplyOrderNum;
+            }
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			//maybe rename to close, since most saving happens automatically.
-			DialogResult=DialogResult.Cancel;
-		}
+            orderItemsTable = SupplyOrderItems.GetItemsForOrder(orderNum);
 
+            orderItemsGrid.BeginUpdate();
+            orderItemsGrid.Columns.Clear();
+            orderItemsGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnCatalogNumber, 80));
+            orderItemsGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnDescription, 320));
+            orderItemsGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnQty, 60, textAlignment: HorizontalAlignment.Center, isEditable: true));
+            orderItemsGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnPricePerUnit, 70, textAlignment: HorizontalAlignment.Right, isEditable: true));
+            orderItemsGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnSubtotal, 70, HorizontalAlignment.Right));
+            orderItemsGrid.Rows.Clear();
 
-	}
+            for (int i = 0; i < orderItemsTable.Rows.Count; i++)
+            {
+                int.TryParse(orderItemsTable.Rows[i]["Qty"].ToString(), out int qty);
+                double.TryParse(orderItemsTable.Rows[i]["Price"].ToString(), out double price);
+
+                var row = new ODGridRow();
+                row.Cells.Add(orderItemsTable.Rows[i]["CatalogNumber"].ToString());
+                row.Cells.Add(orderItemsTable.Rows[i]["Descript"].ToString());
+                row.Cells.Add(qty.ToString());
+                row.Cells.Add(price.ToString("n"));
+                row.Cells.Add((qty * price).ToString("n"));
+
+                orderItemsGrid.Rows.Add(row);
+            }
+
+            orderItemsGrid.EndUpdate();
+        }
+
+        /// <summary>
+        /// Filters the list of orders using the current filters.
+        /// </summary>
+        void FilterListOrder()
+        {
+            ordersList.Clear();
+
+            long supplierNum = (supplierComboBox.SelectedIndex > 0) ? suppliersList[supplierComboBox.SelectedIndex - 1].SupplierNum : 0;
+
+            foreach (var supplyOrder in allOrdersList)
+            {
+                if (supplierNum == 0)
+                {
+                    ordersList.Add(supplyOrder);
+                }
+                else if (supplyOrder.SupplierNum == supplierNum)
+                {
+                    ordersList.Add(supplyOrder);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates a new order.
+        /// </summary>
+        void NewOrderButton_Click(object sender, EventArgs e)
+        {
+            if (supplierComboBox.SelectedIndex < 1)
+            {
+                MessageBox.Show(
+                    Translation.Language.PleaseSelectASupplierFirst,
+                    Translation.Language.SupplyOrders,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                return;
+            }
+
+            for (int i = 0; i < ordersList.Count; i++)
+            {
+                if (ordersList[i].DatePlaced.Year > 2200)
+                {
+                    MessageBox.Show(
+                        Translation.Language.NotAllowedToAddNewOrderWhenOneIsPending,
+                        Translation.Language.SupplyOrders,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                    return;
+                }
+            }
+
+            var supplyOrder = new SupplyOrder();
+            if (supplierComboBox.SelectedIndex == 0)
+            {
+                supplyOrder.SupplierNum = 0;
+            }
+            else
+            {
+                supplyOrder.SupplierNum = suppliersList[supplierComboBox.SelectedIndex - 1].SupplierNum;//SelectedIndex-1 because "All" is first option.
+            }
+            supplyOrder.IsNew = true;
+            supplyOrder.DatePlaced = new DateTime(2500, 1, 1);
+            supplyOrder.Note = "";
+            supplyOrder.UserNum = 0;
+
+            SupplyOrders.Insert(supplyOrder);
+
+            allOrdersList = SupplyOrders.GetAll();
+
+            LoadOrders();
+
+            ordersGrid.SetSelected(ordersList.Count - 1, true);
+            ordersGrid.ScrollToEnd();
+
+            LoadOrderItems();
+        }
+
+        /// <summary>
+        /// Reload the orders and order items when the selected supplier is changed.
+        /// </summary>
+        void SupplierComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadOrders();
+
+            ordersGrid.ScrollToEnd();
+
+            LoadOrderItems();
+        }
+
+        /// <summary>
+        /// Load the items of a order when a order is selected from the orders grid.
+        /// </summary>
+        void OrdersGrid_CellClick(object sender, ODGridClickEventArgs e) => LoadOrderItems();
+
+        /// <summary>
+        /// Opens the form to edit a order.
+        /// </summary>
+        void OrdersGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
+        {
+            using (var formSupplyOrderEdit = new FormSupplyOrderEdit())
+            {
+                formSupplyOrderEdit.ListSupplier = suppliersList;
+                formSupplyOrderEdit.Order = ordersList[e.Row];
+                if (formSupplyOrderEdit.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+
+                allOrdersList = SupplyOrders.GetAll();
+
+                LoadOrders();
+                LoadOrderItems();
+            }
+        }
+
+        /// <summary>
+        /// Opens the form to add a new item to the selected order.
+        /// </summary>
+        void AddOrderItemButton_Click(object sender, EventArgs e)
+        {
+            if (ordersGrid.GetSelectedIndex() == -1)
+            {
+                MessageBox.Show(
+                    Translation.Language.PleaseSelectASupplyOrderToAddItemsTo,
+                    Translation.Language.SupplyOrders, 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Information);
+
+                return;
+            }
+
+            using (var formSupplies = new FormSupplies())
+            {
+                formSupplies.IsSelectMode = true;
+                formSupplies.SelectedSupplierNum = ordersList[ordersGrid.GetSelectedIndex()].SupplierNum;
+                if (formSupplies.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+
+                for (int i = 0; i < formSupplies.ListSelectedSupplies.Count; i++)
+                {	
+                    if (orderItemsTable.Rows.OfType<DataRow>().Any(x => PIn.Long(x["SupplyNum"].ToString()) == formSupplies.ListSelectedSupplies[i].SupplyNum))
+                    {
+                        continue;
+                    }
+
+                    var supplyOrderItem = new SupplyOrderItem
+                    {
+                        SupplyNum       = formSupplies.ListSelectedSupplies[i].SupplyNum,
+                        Qty             = 1,
+                        Price           = formSupplies.ListSelectedSupplies[i].Price,
+                        SupplyOrderNum  = ordersList[ordersGrid.GetSelectedIndex()].SupplyOrderNum
+                    };
+
+                    SupplyOrderItems.Insert(supplyOrderItem);
+                }
+
+                UpdatePriceAndRefresh();
+            }
+        }
+
+        /// <summary>
+        /// Opens the form to edit a order item.
+        /// </summary>
+        void OrderItemsGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
+        {
+            using (var formSupplyOrderItemEdit = new FormSupplyOrderItemEdit())
+            {
+                formSupplyOrderItemEdit.ItemCur = SupplyOrderItems.CreateObject(PIn.Long(orderItemsTable.Rows[e.Row]["SupplyOrderItemNum"].ToString()));
+                formSupplyOrderItemEdit.ListSupplier = Suppliers.GetAll();
+
+                if (formSupplyOrderItemEdit.ShowDialog(this) != DialogResult.OK)
+                {
+                    return;
+                }
+
+                SupplyOrderItems.Update(formSupplyOrderItemEdit.ItemCur);
+
+                UpdatePriceAndRefresh();
+            }
+        }
+
+        /// <summary>
+        /// Update the quantity, price and total columns of the order items grid when the quantity
+        /// or price is modified and reload the orders list.
+        /// </summary>
+        void OrderItemsGrid_CellLeave(object sender, ODGridClickEventArgs e)
+        {
+            int.TryParse(orderItemsGrid.Rows[e.Row].Cells[2].Text, out int qtyNew);
+            double.TryParse(orderItemsGrid.Rows[e.Row].Cells[3].Text, out double priceNew);
+
+            var supplyOrderItem = SupplyOrderItems.CreateObject(PIn.Long(orderItemsTable.Rows[e.Row]["SupplyOrderItemNum"].ToString()));
+            supplyOrderItem.Qty = qtyNew;
+            supplyOrderItem.Price = priceNew;
+
+            SupplyOrderItems.Update(supplyOrderItem);
+            SupplyOrders.UpdateOrderPrice(supplyOrderItem.SupplyOrderNum);
+
+            orderItemsGrid.Rows[e.Row].Cells[2].Text = qtyNew.ToString();
+            orderItemsGrid.Rows[e.Row].Cells[3].Text = priceNew.ToString("n");
+            orderItemsGrid.Rows[e.Row].Cells[4].Text = (qtyNew * priceNew).ToString("n");
+            orderItemsGrid.Invalidate();
+
+            int selectedIndex = ordersGrid.GetSelectedIndex();
+            allOrdersList = SupplyOrders.GetAll();
+
+            LoadOrders();
+
+            ordersGrid.SetSelected(selectedIndex, true);
+        }
+
+        /// <summary>
+        /// Prints the list of items in the selected order.
+        /// </summary>
+        void PrintButton_Click(object sender, EventArgs e)
+        {
+            if (orderItemsTable.Rows.Count < 1)
+            {
+                MessageBox.Show(
+                    Translation.Language.SupplyListEmpty,
+                    Translation.Language.SupplyOrders,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                return;
+            }
+
+            pagesPrinted = 0;
+            headingPrinted = false;
+
+            PrinterL.TryPrintOrDebugRpPreview(
+                PrintPage,
+                string.Format(
+                    Translation.LanguageSecurity.SuppliesOrderFromDatePrinted, 
+                    ordersList[ordersGrid.GetSelectedIndex()].DatePlaced.ToShortDateString()),
+                margins: new Margins(50, 50, 40, 30)
+            );
+        }
+
+        void PrintPage(object sender, PrintPageEventArgs e)
+        {
+            Rectangle bounds = e.MarginBounds;
+            Graphics g = e.Graphics;
+            string text;
+            Font headingFont = new Font("Arial", 13, FontStyle.Bold);
+            Font subHeadingFont = new Font("Arial", 10, FontStyle.Bold);
+            int yPos = bounds.Top;
+            if (!headingPrinted)
+            {
+                text = Translation.Language.SupplyList;
+                g.DrawString(text, headingFont, Brushes.Black, 425 - g.MeasureString(text, headingFont).Width / 2, yPos);
+                yPos += (int)g.MeasureString(text, headingFont).Height;
+                text = Translation.Language.OrderNumber + ": " + ordersList[ordersGrid.SelectedIndices[0]].SupplyOrderNum;
+                g.DrawString(text, subHeadingFont, Brushes.Black, 425 - g.MeasureString(text, subHeadingFont).Width / 2, yPos);
+                yPos += (int)g.MeasureString(text, subHeadingFont).Height;
+                text = Translation.Language.Date + ": " + ordersList[ordersGrid.SelectedIndices[0]].DatePlaced.ToShortDateString();
+                g.DrawString(text, subHeadingFont, Brushes.Black, 425 - g.MeasureString(text, subHeadingFont).Width / 2, yPos);
+                yPos += (int)g.MeasureString(text, subHeadingFont).Height;
+                Supplier supCur = Suppliers.GetOne(ordersList[ordersGrid.SelectedIndices[0]].SupplierNum);
+                text = supCur.Name;
+                g.DrawString(text, subHeadingFont, Brushes.Black, 425 - g.MeasureString(text, subHeadingFont).Width / 2, yPos);
+                yPos += (int)g.MeasureString(text, subHeadingFont).Height;
+                text = supCur.Phone;
+                g.DrawString(text, subHeadingFont, Brushes.Black, 425 - g.MeasureString(text, subHeadingFont).Width / 2, yPos);
+                yPos += (int)g.MeasureString(text, subHeadingFont).Height;
+                text = supCur.Note;
+                g.DrawString(text, subHeadingFont, Brushes.Black, 425 - g.MeasureString(text, subHeadingFont).Width / 2, yPos);
+                yPos += (int)g.MeasureString(text, subHeadingFont).Height;
+                yPos += 15;
+                headingPrinted = true;
+                headingPrintHeight = yPos;
+            }
+
+            yPos = orderItemsGrid.PrintPage(g, pagesPrinted, bounds, headingPrintHeight);
+            pagesPrinted++;
+            if (yPos == -1)
+            {
+                e.HasMorePages = true;
+            }
+            else
+            {
+                e.HasMorePages = false;
+            }
+        }
+
+        /// <summary>
+        /// Updates the price of the selected order and reload the data.
+        /// </summary>
+        void UpdatePriceAndRefresh()
+        {
+            var supplyOrder = ordersGrid.SelectedTag<SupplyOrder>();
+            SupplyOrders.UpdateOrderPrice(ordersList[ordersGrid.GetSelectedIndex()].SupplyOrderNum);
+
+            allOrdersList = SupplyOrders.GetAll();
+
+            LoadOrders();
+
+            for (int i = 0; i < ordersGrid.Rows.Count; i++)
+            {
+                if (supplyOrder != null && ((SupplyOrder)ordersGrid.Rows[i].Tag).SupplyOrderNum == supplyOrder.SupplyOrderNum)
+                {
+                    ordersGrid.SetSelected(i, true);
+                }
+            }
+
+            LoadOrderItems();
+        }
+    }
 }

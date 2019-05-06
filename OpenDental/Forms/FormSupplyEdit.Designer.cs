@@ -1,309 +1,290 @@
-namespace OpenDental{
-	partial class FormSupplyEdit {
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+namespace OpenDental
+{
+    partial class FormSupplyEdit
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing) {
-			if(disposing && (components != null)) {
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSupplyEdit));
-			this.label1 = new System.Windows.Forms.Label();
-			this.textSupplier = new System.Windows.Forms.TextBox();
-			this.textCatalogNumber = new System.Windows.Forms.TextBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.textDescript = new System.Windows.Forms.TextBox();
-			this.label3 = new System.Windows.Forms.Label();
-			this.label5 = new System.Windows.Forms.Label();
-			this.label6 = new System.Windows.Forms.Label();
-			this.checkIsHidden = new System.Windows.Forms.CheckBox();
-			this.label8 = new System.Windows.Forms.Label();
-			this.label12 = new System.Windows.Forms.Label();
-			this.comboCategory = new System.Windows.Forms.ComboBox();
-			this.textLevelDesired = new OpenDental.ValidDouble();
-			this.textPrice = new OpenDental.ValidDouble();
-			this.butDelete = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.textLevelOnHand = new OpenDental.ValidDouble();
-			this.label4 = new System.Windows.Forms.Label();
-			this.label7 = new System.Windows.Forms.Label();
-			this.SuspendLayout();
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(31, 9);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(132, 18);
-			this.label1.TabIndex = 4;
-			this.label1.Text = "Supplier";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textSupplier
-			// 
-			this.textSupplier.Location = new System.Drawing.Point(166, 8);
-			this.textSupplier.Name = "textSupplier";
-			this.textSupplier.ReadOnly = true;
-			this.textSupplier.Size = new System.Drawing.Size(295, 20);
-			this.textSupplier.TabIndex = 10;
-			// 
-			// textCatalogNumber
-			// 
-			this.textCatalogNumber.Location = new System.Drawing.Point(166, 61);
-			this.textCatalogNumber.Name = "textCatalogNumber";
-			this.textCatalogNumber.Size = new System.Drawing.Size(144, 20);
-			this.textCatalogNumber.TabIndex = 0;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(7, 62);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(156, 18);
-			this.label2.TabIndex = 8;
-			this.label2.Text = "Catalog Item Number";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textDescript
-			// 
-			this.textDescript.Location = new System.Drawing.Point(166, 87);
-			this.textDescript.MaxLength = 255;
-			this.textDescript.Name = "textDescript";
-			this.textDescript.Size = new System.Drawing.Size(401, 20);
-			this.textDescript.TabIndex = 1;
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(6, 88);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(157, 18);
-			this.label3.TabIndex = 10;
-			this.label3.Text = "Description";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label5
-			// 
-			this.label5.Location = new System.Drawing.Point(31, 35);
-			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(132, 18);
-			this.label5.TabIndex = 14;
-			this.label5.Text = "Category";
-			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label6
-			// 
-			this.label6.Location = new System.Drawing.Point(32, 113);
-			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(132, 18);
-			this.label6.TabIndex = 16;
-			this.label6.Text = "Level Desired";
-			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// checkIsHidden
-			// 
-			this.checkIsHidden.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsHidden.Location = new System.Drawing.Point(76, 190);
-			this.checkIsHidden.Name = "checkIsHidden";
-			this.checkIsHidden.Size = new System.Drawing.Size(104, 18);
-			this.checkIsHidden.TabIndex = 5;
-			this.checkIsHidden.Text = "Hidden";
-			this.checkIsHidden.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsHidden.UseVisualStyleBackColor = true;
-			// 
-			// label8
-			// 
-			this.label8.Location = new System.Drawing.Point(32, 165);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(132, 18);
-			this.label8.TabIndex = 20;
-			this.label8.Text = "Price";
-			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label12
-			// 
-			this.label12.Location = new System.Drawing.Point(228, 116);
-			this.label12.Name = "label12";
-			this.label12.Size = new System.Drawing.Size(173, 19);
-			this.label12.TabIndex = 24;
-			this.label12.Text = "Decimals allowed.";
-			// 
-			// comboCategory
-			// 
-			this.comboCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboCategory.FormattingEnabled = true;
-			this.comboCategory.ItemHeight = 13;
-			this.comboCategory.Location = new System.Drawing.Point(166, 34);
-			this.comboCategory.Name = "comboCategory";
-			this.comboCategory.Size = new System.Drawing.Size(228, 21);
-			this.comboCategory.TabIndex = 9;
-			// 
-			// textLevelDesired
-			// 
-			this.textLevelDesired.BackColor = System.Drawing.SystemColors.Window;
-			this.textLevelDesired.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.textLevelDesired.Location = new System.Drawing.Point(166, 113);
-			this.textLevelDesired.MaxVal = 100000000D;
-			this.textLevelDesired.MinVal = -100000000D;
-			this.textLevelDesired.Name = "textLevelDesired";
-			this.textLevelDesired.Size = new System.Drawing.Size(62, 20);
-			this.textLevelDesired.TabIndex = 2;
-			// 
-			// textPrice
-			// 
-			this.textPrice.BackColor = System.Drawing.SystemColors.Window;
-			this.textPrice.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.textPrice.Location = new System.Drawing.Point(166, 165);
-			this.textPrice.MaxVal = 100000000D;
-			this.textPrice.MinVal = -100000000D;
-			this.textPrice.Name = "textPrice";
-			this.textPrice.Size = new System.Drawing.Size(80, 20);
-			this.textPrice.TabIndex = 4;
-			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(27, 214);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(81, 26);
-			this.butDelete.TabIndex = 8;
-			this.butDelete.Text = "Delete";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(499, 173);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 26);
-			this.butOK.TabIndex = 6;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(499, 214);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 26);
-			this.butCancel.TabIndex = 7;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// textLevelOnHand
-			// 
-			this.textLevelOnHand.BackColor = System.Drawing.SystemColors.Window;
-			this.textLevelOnHand.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.textLevelOnHand.Location = new System.Drawing.Point(166, 141);
-			this.textLevelOnHand.MaxVal = 100000000D;
-			this.textLevelOnHand.MinVal = -100000000D;
-			this.textLevelOnHand.Name = "textLevelOnHand";
-			this.textLevelOnHand.Size = new System.Drawing.Size(62, 20);
-			this.textLevelOnHand.TabIndex = 3;
-			// 
-			// label4
-			// 
-			this.label4.Location = new System.Drawing.Point(228, 141);
-			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(173, 19);
-			this.label4.TabIndex = 27;
-			this.label4.Text = "Decimals allowed.";
-			// 
-			// label7
-			// 
-			this.label7.Location = new System.Drawing.Point(32, 138);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(132, 18);
-			this.label7.TabIndex = 26;
-			this.label7.Text = "Level On Hand";
-			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// FormSupplyEdit
-			// 
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(599, 265);
-			this.Controls.Add(this.textLevelOnHand);
-			this.Controls.Add(this.label4);
-			this.Controls.Add(this.label7);
-			this.Controls.Add(this.textLevelDesired);
-			this.Controls.Add(this.comboCategory);
-			this.Controls.Add(this.textPrice);
-			this.Controls.Add(this.label12);
-			this.Controls.Add(this.label8);
-			this.Controls.Add(this.checkIsHidden);
-			this.Controls.Add(this.label6);
-			this.Controls.Add(this.label5);
-			this.Controls.Add(this.textDescript);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.textCatalogNumber);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.butDelete);
-			this.Controls.Add(this.textSupplier);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butCancel);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "FormSupplyEdit";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Supply";
-			this.Load += new System.EventHandler(this.FormSupplyEdit_Load);
-			this.ResumeLayout(false);
-			this.PerformLayout();
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSupplyEdit));
+            this.supplierLabel = new System.Windows.Forms.Label();
+            this.supplierTextBox = new System.Windows.Forms.TextBox();
+            this.catalogNumberTextBox = new System.Windows.Forms.TextBox();
+            this.catalogNumberLabel = new System.Windows.Forms.Label();
+            this.descriptionTextBox = new System.Windows.Forms.TextBox();
+            this.descriptionLabel = new System.Windows.Forms.Label();
+            this.categoryLabel = new System.Windows.Forms.Label();
+            this.levelDesiredLabel = new System.Windows.Forms.Label();
+            this.hiddenCheckBox = new System.Windows.Forms.CheckBox();
+            this.priceLabel = new System.Windows.Forms.Label();
+            this.categoryComboBox = new System.Windows.Forms.ComboBox();
+            this.levelDesiredTextBox = new OpenDental.ValidDouble();
+            this.priceTextBox = new OpenDental.UI.ODCurrencyTextBox();
+            this.deleteButton = new System.Windows.Forms.Button();
+            this.acceptButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.levelOnHandTextBox = new OpenDental.ValidDouble();
+            this.levelOnHandLabel = new System.Windows.Forms.Label();
+            this.SuspendLayout();
+            // 
+            // supplierLabel
+            // 
+            this.supplierLabel.AutoSize = true;
+            this.supplierLabel.Location = new System.Drawing.Point(104, 22);
+            this.supplierLabel.Name = "supplierLabel";
+            this.supplierLabel.Size = new System.Drawing.Size(50, 15);
+            this.supplierLabel.TabIndex = 0;
+            this.supplierLabel.Text = "Supplier";
+            this.supplierLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // supplierTextBox
+            // 
+            this.supplierTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.supplierTextBox.Location = new System.Drawing.Point(160, 19);
+            this.supplierTextBox.Name = "supplierTextBox";
+            this.supplierTextBox.ReadOnly = true;
+            this.supplierTextBox.Size = new System.Drawing.Size(331, 23);
+            this.supplierTextBox.TabIndex = 1;
+            // 
+            // catalogNumberTextBox
+            // 
+            this.catalogNumberTextBox.Location = new System.Drawing.Point(160, 77);
+            this.catalogNumberTextBox.Name = "catalogNumberTextBox";
+            this.catalogNumberTextBox.Size = new System.Drawing.Size(140, 23);
+            this.catalogNumberTextBox.TabIndex = 5;
+            // 
+            // catalogNumberLabel
+            // 
+            this.catalogNumberLabel.AutoSize = true;
+            this.catalogNumberLabel.Location = new System.Drawing.Point(32, 80);
+            this.catalogNumberLabel.Name = "catalogNumberLabel";
+            this.catalogNumberLabel.Size = new System.Drawing.Size(122, 15);
+            this.catalogNumberLabel.TabIndex = 4;
+            this.catalogNumberLabel.Text = "Catalog Item Number";
+            this.catalogNumberLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // descriptionTextBox
+            // 
+            this.descriptionTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.descriptionTextBox.Location = new System.Drawing.Point(160, 106);
+            this.descriptionTextBox.MaxLength = 255;
+            this.descriptionTextBox.Name = "descriptionTextBox";
+            this.descriptionTextBox.Size = new System.Drawing.Size(331, 23);
+            this.descriptionTextBox.TabIndex = 7;
+            // 
+            // descriptionLabel
+            // 
+            this.descriptionLabel.AutoSize = true;
+            this.descriptionLabel.Location = new System.Drawing.Point(87, 109);
+            this.descriptionLabel.Name = "descriptionLabel";
+            this.descriptionLabel.Size = new System.Drawing.Size(67, 15);
+            this.descriptionLabel.TabIndex = 6;
+            this.descriptionLabel.Text = "Description";
+            this.descriptionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // categoryLabel
+            // 
+            this.categoryLabel.AutoSize = true;
+            this.categoryLabel.Location = new System.Drawing.Point(99, 51);
+            this.categoryLabel.Name = "categoryLabel";
+            this.categoryLabel.Size = new System.Drawing.Size(55, 15);
+            this.categoryLabel.TabIndex = 2;
+            this.categoryLabel.Text = "Category";
+            this.categoryLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // levelDesiredLabel
+            // 
+            this.levelDesiredLabel.AutoSize = true;
+            this.levelDesiredLabel.Location = new System.Drawing.Point(78, 138);
+            this.levelDesiredLabel.Name = "levelDesiredLabel";
+            this.levelDesiredLabel.Size = new System.Drawing.Size(76, 15);
+            this.levelDesiredLabel.TabIndex = 8;
+            this.levelDesiredLabel.Text = "Level Desired";
+            this.levelDesiredLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // hiddenCheckBox
+            // 
+            this.hiddenCheckBox.AutoSize = true;
+            this.hiddenCheckBox.Location = new System.Drawing.Point(160, 222);
+            this.hiddenCheckBox.Name = "hiddenCheckBox";
+            this.hiddenCheckBox.Size = new System.Drawing.Size(65, 19);
+            this.hiddenCheckBox.TabIndex = 14;
+            this.hiddenCheckBox.Text = "Hidden";
+            this.hiddenCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // priceLabel
+            // 
+            this.priceLabel.AutoSize = true;
+            this.priceLabel.Location = new System.Drawing.Point(121, 196);
+            this.priceLabel.Name = "priceLabel";
+            this.priceLabel.Size = new System.Drawing.Size(33, 15);
+            this.priceLabel.TabIndex = 12;
+            this.priceLabel.Text = "Price";
+            this.priceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // categoryComboBox
+            // 
+            this.categoryComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.categoryComboBox.FormattingEnabled = true;
+            this.categoryComboBox.ItemHeight = 15;
+            this.categoryComboBox.Location = new System.Drawing.Point(160, 48);
+            this.categoryComboBox.Name = "categoryComboBox";
+            this.categoryComboBox.Size = new System.Drawing.Size(220, 23);
+            this.categoryComboBox.TabIndex = 3;
+            // 
+            // levelDesiredTextBox
+            // 
+            this.levelDesiredTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.levelDesiredTextBox.Location = new System.Drawing.Point(160, 135);
+            this.levelDesiredTextBox.MaxVal = 100000000D;
+            this.levelDesiredTextBox.MinVal = -100000000D;
+            this.levelDesiredTextBox.Name = "levelDesiredTextBox";
+            this.levelDesiredTextBox.Size = new System.Drawing.Size(60, 23);
+            this.levelDesiredTextBox.TabIndex = 9;
+            // 
+            // priceTextBox
+            // 
+            this.priceTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.priceTextBox.Location = new System.Drawing.Point(160, 193);
+            this.priceTextBox.Name = "priceTextBox";
+            this.priceTextBox.Size = new System.Drawing.Size(80, 23);
+            this.priceTextBox.TabIndex = 13;
+            // 
+            // deleteButton
+            // 
+            this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.deleteButton.Image = global::OpenDental.Properties.Resources.IconDelete;
+            this.deleteButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.deleteButton.Location = new System.Drawing.Point(13, 278);
+            this.deleteButton.Name = "deleteButton";
+            this.deleteButton.Size = new System.Drawing.Size(110, 30);
+            this.deleteButton.TabIndex = 15;
+            this.deleteButton.Text = "Delete";
+            this.deleteButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.deleteButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.deleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
+            // 
+            // acceptButton
+            // 
+            this.acceptButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.acceptButton.Location = new System.Drawing.Point(265, 278);
+            this.acceptButton.Name = "acceptButton";
+            this.acceptButton.Size = new System.Drawing.Size(110, 30);
+            this.acceptButton.TabIndex = 16;
+            this.acceptButton.Text = "&OK";
+            this.acceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(381, 278);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(110, 30);
+            this.cancelButton.TabIndex = 17;
+            this.cancelButton.Text = "&Cancel";
+            // 
+            // levelOnHandTextBox
+            // 
+            this.levelOnHandTextBox.BackColor = System.Drawing.SystemColors.Window;
+            this.levelOnHandTextBox.Location = new System.Drawing.Point(160, 164);
+            this.levelOnHandTextBox.MaxVal = 100000000D;
+            this.levelOnHandTextBox.MinVal = -100000000D;
+            this.levelOnHandTextBox.Name = "levelOnHandTextBox";
+            this.levelOnHandTextBox.Size = new System.Drawing.Size(60, 23);
+            this.levelOnHandTextBox.TabIndex = 11;
+            // 
+            // levelOnHandLabel
+            // 
+            this.levelOnHandLabel.AutoSize = true;
+            this.levelOnHandLabel.Location = new System.Drawing.Point(69, 167);
+            this.levelOnHandLabel.Name = "levelOnHandLabel";
+            this.levelOnHandLabel.Size = new System.Drawing.Size(85, 15);
+            this.levelOnHandLabel.TabIndex = 10;
+            this.levelOnHandLabel.Text = "Level On Hand";
+            this.levelOnHandLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // FormSupplyEdit
+            // 
+            this.AcceptButton = this.acceptButton;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(504, 321);
+            this.Controls.Add(this.levelOnHandTextBox);
+            this.Controls.Add(this.levelOnHandLabel);
+            this.Controls.Add(this.levelDesiredTextBox);
+            this.Controls.Add(this.categoryComboBox);
+            this.Controls.Add(this.priceTextBox);
+            this.Controls.Add(this.priceLabel);
+            this.Controls.Add(this.hiddenCheckBox);
+            this.Controls.Add(this.levelDesiredLabel);
+            this.Controls.Add(this.categoryLabel);
+            this.Controls.Add(this.descriptionTextBox);
+            this.Controls.Add(this.descriptionLabel);
+            this.Controls.Add(this.catalogNumberTextBox);
+            this.Controls.Add(this.catalogNumberLabel);
+            this.Controls.Add(this.deleteButton);
+            this.Controls.Add(this.supplierTextBox);
+            this.Controls.Add(this.supplierLabel);
+            this.Controls.Add(this.acceptButton);
+            this.Controls.Add(this.cancelButton);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FormSupplyEdit";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Supply";
+            this.Load += new System.EventHandler(this.FormSupplyEdit_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private OpenDental.UI.Button butOK;
-		private OpenDental.UI.Button butCancel;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox textSupplier;
-		private OpenDental.UI.Button butDelete;
-		private System.Windows.Forms.TextBox textCatalogNumber;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.TextBox textDescript;
-		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.Label label6;
-		private System.Windows.Forms.CheckBox checkIsHidden;
-		private System.Windows.Forms.Label label8;
-		private System.Windows.Forms.Label label12;
-		private ValidDouble textPrice;
-		private System.Windows.Forms.ComboBox comboCategory;
-		private ValidDouble textLevelDesired;
-		private ValidDouble textLevelOnHand;
-		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.Label label7;
-	}
+        private System.Windows.Forms.Button acceptButton;
+        private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.Label supplierLabel;
+        private System.Windows.Forms.TextBox supplierTextBox;
+        private System.Windows.Forms.Button deleteButton;
+        private System.Windows.Forms.TextBox catalogNumberTextBox;
+        private System.Windows.Forms.Label catalogNumberLabel;
+        private System.Windows.Forms.TextBox descriptionTextBox;
+        private System.Windows.Forms.Label descriptionLabel;
+        private System.Windows.Forms.Label categoryLabel;
+        private System.Windows.Forms.Label levelDesiredLabel;
+        private System.Windows.Forms.CheckBox hiddenCheckBox;
+        private System.Windows.Forms.Label priceLabel;
+        private OpenDental.UI.ODCurrencyTextBox priceTextBox;
+        private System.Windows.Forms.ComboBox categoryComboBox;
+        private ValidDouble levelDesiredTextBox;
+        private ValidDouble levelOnHandTextBox;
+        private System.Windows.Forms.Label levelOnHandLabel;
+    }
 }

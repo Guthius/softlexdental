@@ -1,104 +1,144 @@
+using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental {
-	public partial class FormSupplyEdit:ODForm {
-		public Supply Supp;
-		public List<Supplier> ListSupplier;
-		private bool isHiddenInitialVal;
-		private long categoryInitialVal;
-		private Supply SuppOriginal;
-		private List<Def> _listSupplyCatDefs;
+namespace OpenDental
+{
+    public partial class FormSupplyEdit : FormBase
+    {
+        List<Def> supplyCategoriesList;
+        long categoryInitialVal;
 
-		public FormSupplyEdit() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        public Supply Supp;
+        public List<Supplier> ListSupplier;
 
-		private void FormSupplyEdit_Load(object sender,EventArgs e) {
-			textSupplier.Text=Suppliers.GetName(ListSupplier,Supp.SupplierNum);
-			SuppOriginal=Supp.Copy();
-			_listSupplyCatDefs=Defs.GetDefsForCategory(DefCat.SupplyCats,true);
-			for(int i=0;i<_listSupplyCatDefs.Count;i++){
-				comboCategory.Items.Add(_listSupplyCatDefs[i].ItemName);
-				if(Supp.Category==_listSupplyCatDefs[i].DefNum){
-					comboCategory.SelectedIndex=i;
-				}
-			}
-			if(comboCategory.SelectedIndex==-1){
-				comboCategory.SelectedIndex=0;//There are no hidden cats, and presence of cats is checked before allowing user to add new.
-			}
-			categoryInitialVal=Supp.Category;
-			textCatalogNumber.Text=Supp.CatalogNumber;
-			textDescript.Text=Supp.Descript;
-			if(Supp.LevelDesired!=0){
-				textLevelDesired.Text=Supp.LevelDesired.ToString();
-			}
-			if(Supp.LevelOnHand!=0) {
-				textLevelOnHand.Text=Supp.LevelOnHand.ToString();
-			}
-			if(Supp.Price!=0){
-				textPrice.Text=Supp.Price.ToString("n");
-			}
-			checkIsHidden.Checked=Supp.IsHidden;
-			isHiddenInitialVal=Supp.IsHidden;
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormSupplyEdit"/> class.
+        /// </summary>
+        public FormSupplyEdit() => InitializeComponent();
 
-		private void butDelete_Click(object sender,EventArgs e) {
-			if(Supp.IsNew){
-				DialogResult=DialogResult.Cancel;
-			}
-			if(!MsgBox.Show(this,true,"Delete?")){
-				return;
-			}
-			try{
-				Supplies.DeleteObject(Supp);
-			}
-			catch(ApplicationException ex){
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			Supp=null;
-			DialogResult=DialogResult.OK;
-		}
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormSupplyEdit_Load(object sender, EventArgs e)
+        {
+            supplierTextBox.Text = Suppliers.GetName(ListSupplier, Supp.SupplierNum);
 
-		private void butOK_Click(object sender,EventArgs e) {
-			if(textLevelDesired.errorProvider1.GetError(textLevelDesired)!=""
-				|| textPrice.errorProvider1.GetError(textPrice)!="")
-			{
-				MsgBox.Show(this,"Please fix data entry errors first.");
-				return;
-			}
-			if(textDescript.Text==""){
-				MsgBox.Show(this,"Please enter a description.");
-				return;
-			}
-			Supp.Category=_listSupplyCatDefs[comboCategory.SelectedIndex].DefNum;
-			Supp.CatalogNumber=textCatalogNumber.Text;
-			Supp.Descript=textDescript.Text;
-			Supp.LevelDesired=PIn.Float(textLevelDesired.Text);
-			Supp.LevelOnHand=PIn.Float(textLevelOnHand.Text);
-			Supp.Price=PIn.Double(textPrice.Text);
-			Supp.IsHidden=checkIsHidden.Checked;
-			if(Supp.Category!=categoryInitialVal) {
-				Supp.ItemOrder=int.MaxValue;//changed categories, new or existing, move to bottom of new category.
-			}
-			//No longer saving changes from this form.
-			DialogResult=DialogResult.OK;
-		}
+            supplyCategoriesList = Defs.GetDefsForCategory(DefCat.SupplyCats, true);
+            for (int i = 0; i < supplyCategoriesList.Count; i++)
+            {
+                categoryComboBox.Items.Add(supplyCategoriesList[i].ItemName);
+                if (Supp.Category == supplyCategoriesList[i].DefNum)
+                {
+                    categoryComboBox.SelectedIndex = i;
+                }
+            }
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+            if (categoryComboBox.SelectedIndex == -1) categoryComboBox.SelectedIndex = 0;
 
-		
+            categoryInitialVal = Supp.Category;
+            catalogNumberTextBox.Text = Supp.CatalogNumber;
+            descriptionTextBox.Text = Supp.Descript;
 
-		
-	}
+            if (Supp.LevelDesired != 0)
+            {
+                levelDesiredTextBox.Text = Supp.LevelDesired.ToString();
+            }
+
+            if (Supp.LevelOnHand != 0)
+            {
+                levelOnHandTextBox.Text = Supp.LevelOnHand.ToString();
+            }
+
+            if (Supp.Price != 0)
+            {
+                priceTextBox.Text = Supp.Price.ToString("n");
+            }
+
+            hiddenCheckBox.Checked = Supp.IsHidden;
+        }
+
+        /// <summary>
+        /// Deletes the supply.
+        /// </summary>
+        void DeleteButton_Click(object sender, EventArgs e)
+        {
+            if (Supp.IsNew)
+            {
+                DialogResult = DialogResult.Cancel;
+                return;
+            }
+
+            var result =
+                MessageBox.Show(
+                    Translation.Language.ConfirmDelete,
+                    Translation.Language.Supply, 
+                    MessageBoxButtons.OKCancel, 
+                    MessageBoxIcon.Question);
+
+            if (result == DialogResult.Cancel) ;
+
+            try
+            {
+                Supplies.DeleteObject(Supp);
+            }
+            catch (ApplicationException ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    Translation.Language.Supply, 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            Supp = null;
+            DialogResult = DialogResult.OK;
+        }
+
+        /// <summary>
+        /// Saves the supply and closes the form.
+        /// </summary>
+        void AcceptButton_Click(object sender, EventArgs e)
+        {
+            if (levelDesiredTextBox.errorProvider1.GetError(levelDesiredTextBox) != "")
+            {
+                MessageBox.Show(
+                    Translation.Language.PleaseFixDataEntryErrors,
+                    Translation.Language.Supply,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            if (descriptionTextBox.Text == "")
+            {
+                MessageBox.Show(
+                    Translation.Language.PleaseEnterADescription,
+                    Translation.Language.Supply,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            Supp.Category = supplyCategoriesList[categoryComboBox.SelectedIndex].DefNum;
+            Supp.CatalogNumber = catalogNumberTextBox.Text;
+            Supp.Descript = descriptionTextBox.Text;
+            Supp.LevelDesired = PIn.Float(levelDesiredTextBox.Text);
+            Supp.LevelOnHand = PIn.Float(levelOnHandTextBox.Text);
+            Supp.Price = priceTextBox.Value;
+            Supp.IsHidden = hiddenCheckBox.Checked;
+
+            if (Supp.Category != categoryInitialVal)
+            {
+                Supp.ItemOrder = int.MaxValue;
+            }
+
+            DialogResult = DialogResult.OK;
+        }
+    }
 }

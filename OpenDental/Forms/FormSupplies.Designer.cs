@@ -1,286 +1,277 @@
-namespace OpenDental{
-	partial class FormSupplies {
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+namespace OpenDental
+{
+    partial class FormSupplies
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing) {
-			if(disposing && (components != null)) {
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSupplies));
-			this.butAddtoOrder = new OpenDental.UI.Button();
-			this.label2 = new System.Windows.Forms.Label();
-			this.checkShowShoppingList = new System.Windows.Forms.CheckBox();
-			this.textFind = new System.Windows.Forms.TextBox();
-			this.butUp = new OpenDental.UI.Button();
-			this.butDown = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.butPrint = new OpenDental.UI.Button();
-			this.label1 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
-			this.comboSupplier = new System.Windows.Forms.ComboBox();
-			this.checkShowHidden = new System.Windows.Forms.CheckBox();
-			this.butAdd = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.SuspendLayout();
-			// 
-			// butAddtoOrder
-			// 
-			this.butAddtoOrder.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAddtoOrder.Autosize = true;
-			this.butAddtoOrder.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddtoOrder.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAddtoOrder.CornerRadius = 4F;
-			this.butAddtoOrder.Location = new System.Drawing.Point(231, 7);
-			this.butAddtoOrder.Name = "butAddtoOrder";
-			this.butAddtoOrder.Size = new System.Drawing.Size(94, 24);
-			this.butAddtoOrder.TabIndex = 32;
-			this.butAddtoOrder.Text = "Add to Order";
-			this.butAddtoOrder.Click += new System.EventHandler(this.butAddtoOrder_Click);
-			// 
-			// label2
-			// 
-			this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.label2.Location = new System.Drawing.Point(198, 623);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(447, 23);
-			this.label2.TabIndex = 31;
-			this.label2.Text = "Make sure to press OK to save all desired changes to the supply inventory.";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-			// 
-			// checkShowShoppingList
-			// 
-			this.checkShowShoppingList.Location = new System.Drawing.Point(98, 5);
-			this.checkShowShoppingList.Name = "checkShowShoppingList";
-			this.checkShowShoppingList.Size = new System.Drawing.Size(122, 18);
-			this.checkShowShoppingList.TabIndex = 30;
-			this.checkShowShoppingList.Text = "Show Shopping List";
-			this.checkShowShoppingList.UseVisualStyleBackColor = true;
-			this.checkShowShoppingList.Click += new System.EventHandler(this.checkShowShoppingList_Click);
-			// 
-			// textFind
-			// 
-			this.textFind.Location = new System.Drawing.Point(393, 11);
-			this.textFind.Name = "textFind";
-			this.textFind.Size = new System.Drawing.Size(168, 20);
-			this.textFind.TabIndex = 1;
-			this.textFind.TextChanged += new System.EventHandler(this.textFind_TextChanged);
-			// 
-			// butUp
-			// 
-			this.butUp.AdjustImageLocation = new System.Drawing.Point(0, 1);
-			this.butUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butUp.Autosize = true;
-			this.butUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butUp.CornerRadius = 4F;
-			this.butUp.Image = global::OpenDental.Properties.Resources.up;
-			this.butUp.Location = new System.Drawing.Point(12, 622);
-			this.butUp.Name = "butUp";
-			this.butUp.Size = new System.Drawing.Size(24, 24);
-			this.butUp.TabIndex = 28;
-			this.butUp.Click += new System.EventHandler(this.butUp_Click);
-			// 
-			// butDown
-			// 
-			this.butDown.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDown.Autosize = true;
-			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDown.CornerRadius = 4F;
-			this.butDown.Image = global::OpenDental.Properties.Resources.down;
-			this.butDown.Location = new System.Drawing.Point(42, 622);
-			this.butDown.Name = "butDown";
-			this.butDown.Size = new System.Drawing.Size(24, 24);
-			this.butDown.TabIndex = 29;
-			this.butDown.Click += new System.EventHandler(this.butDown_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(652, 622);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 24);
-			this.butOK.TabIndex = 27;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(733, 622);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 26;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// butPrint
-			// 
-			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butPrint.Autosize = true;
-			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butPrint.CornerRadius = 4F;
-			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
-			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butPrint.Location = new System.Drawing.Point(110, 622);
-			this.butPrint.Name = "butPrint";
-			this.butPrint.Size = new System.Drawing.Size(80, 24);
-			this.butPrint.TabIndex = 25;
-			this.butPrint.Text = "Print";
-			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(343, 11);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(49, 18);
-			this.label1.TabIndex = 18;
-			this.label1.Text = "Search";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label3
-			// 
-			this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.label3.Location = new System.Drawing.Point(569, 11);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(67, 18);
-			this.label3.TabIndex = 14;
-			this.label3.Text = "Supplier";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// comboSupplier
-			// 
-			this.comboSupplier.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.comboSupplier.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboSupplier.FormattingEnabled = true;
-			this.comboSupplier.Location = new System.Drawing.Point(638, 10);
-			this.comboSupplier.Name = "comboSupplier";
-			this.comboSupplier.Size = new System.Drawing.Size(170, 21);
-			this.comboSupplier.TabIndex = 13;
-			this.comboSupplier.SelectionChangeCommitted += new System.EventHandler(this.comboSupplier_SelectionChangeCommitted);
-			// 
-			// checkShowHidden
-			// 
-			this.checkShowHidden.Location = new System.Drawing.Point(98, 23);
-			this.checkShowHidden.Name = "checkShowHidden";
-			this.checkShowHidden.Size = new System.Drawing.Size(99, 18);
-			this.checkShowHidden.TabIndex = 12;
-			this.checkShowHidden.Text = "Show Hidden";
-			this.checkShowHidden.UseVisualStyleBackColor = true;
-			this.checkShowHidden.Click += new System.EventHandler(this.checkShowHidden_Click);
-			// 
-			// butAdd
-			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(12, 7);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(69, 24);
-			this.butAdd.TabIndex = 11;
-			this.butAdd.Text = "Add";
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
-			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSupplies));
+            this.addToOrderButton = new System.Windows.Forms.Button();
+            this.infoLabel = new System.Windows.Forms.Label();
+            this.showShoppingListCheckBox = new System.Windows.Forms.CheckBox();
+            this.searchTextBox = new System.Windows.Forms.TextBox();
+            this.upButton = new System.Windows.Forms.Button();
+            this.downButton = new System.Windows.Forms.Button();
+            this.acceptButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.printButton = new System.Windows.Forms.Button();
+            this.searchLabel = new System.Windows.Forms.Label();
+            this.supplierLabel = new System.Windows.Forms.Label();
+            this.supplierComboBox = new System.Windows.Forms.ComboBox();
+            this.showHiddenCheckBox = new System.Windows.Forms.CheckBox();
+            this.addButton = new System.Windows.Forms.Button();
+            this.suppliesGrid = new OpenDental.UI.ODGrid();
+            this.SuspendLayout();
+            // 
+            // addToOrderButton
+            // 
+            this.addToOrderButton.Enabled = false;
+            this.addToOrderButton.Location = new System.Drawing.Point(279, 19);
+            this.addToOrderButton.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+            this.addToOrderButton.Name = "addToOrderButton";
+            this.addToOrderButton.Size = new System.Drawing.Size(110, 30);
+            this.addToOrderButton.TabIndex = 14;
+            this.addToOrderButton.Text = "Add to Order";
+            this.addToOrderButton.Click += new System.EventHandler(this.AddToOrderButton_Click);
+            // 
+            // infoLabel
+            // 
+            this.infoLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.infoLabel.AutoSize = true;
+            this.infoLabel.Location = new System.Drawing.Point(304, 606);
+            this.infoLabel.Name = "infoLabel";
+            this.infoLabel.Size = new System.Drawing.Size(395, 15);
+            this.infoLabel.TabIndex = 8;
+            this.infoLabel.Text = "Make sure to press OK to save all desired changes to the supply inventory.";
+            this.infoLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // showShoppingListCheckBox
+            // 
+            this.showShoppingListCheckBox.AutoSize = true;
+            this.showShoppingListCheckBox.Location = new System.Drawing.Point(136, 19);
+            this.showShoppingListCheckBox.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+            this.showShoppingListCheckBox.Name = "showShoppingListCheckBox";
+            this.showShoppingListCheckBox.Size = new System.Drawing.Size(130, 19);
+            this.showShoppingListCheckBox.TabIndex = 12;
+            this.showShoppingListCheckBox.Text = "Show Shopping List";
+            this.showShoppingListCheckBox.UseVisualStyleBackColor = true;
+            this.showShoppingListCheckBox.Click += new System.EventHandler(this.ShowShoppingListCheckBox_Click);
+            // 
+            // searchTextBox
+            // 
+            this.searchTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.searchTextBox.Location = new System.Drawing.Point(500, 24);
+            this.searchTextBox.Name = "searchTextBox";
+            this.searchTextBox.Size = new System.Drawing.Size(168, 23);
+            this.searchTextBox.TabIndex = 1;
+            this.searchTextBox.TextChanged += new System.EventHandler(this.SearchTextBox_TextChanged);
+            // 
+            // upButton
+            // 
+            this.upButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.upButton.Image = global::OpenDental.Properties.Resources.IconBulletArrowUp;
+            this.upButton.Location = new System.Drawing.Point(13, 598);
+            this.upButton.Name = "upButton";
+            this.upButton.Size = new System.Drawing.Size(40, 30);
+            this.upButton.TabIndex = 5;
+            this.upButton.Click += new System.EventHandler(this.UpButton_Click);
+            // 
+            // downButton
+            // 
+            this.downButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.downButton.Image = global::OpenDental.Properties.Resources.IconBulletArrowDown;
+            this.downButton.Location = new System.Drawing.Point(59, 598);
+            this.downButton.Name = "downButton";
+            this.downButton.Size = new System.Drawing.Size(40, 30);
+            this.downButton.TabIndex = 6;
+            this.downButton.Click += new System.EventHandler(this.DownButton_Click);
+            // 
+            // acceptButton
+            // 
+            this.acceptButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.acceptButton.Location = new System.Drawing.Point(705, 598);
+            this.acceptButton.Name = "acceptButton";
+            this.acceptButton.Size = new System.Drawing.Size(110, 30);
+            this.acceptButton.TabIndex = 9;
+            this.acceptButton.Text = "&OK";
+            this.acceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(821, 598);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(110, 30);
+            this.cancelButton.TabIndex = 10;
+            this.cancelButton.Text = "&Cancel";
+            // 
+            // printButton
+            // 
+            this.printButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.printButton.Image = global::OpenDental.Properties.Resources.IconPrinter;
+            this.printButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.printButton.Location = new System.Drawing.Point(112, 598);
+            this.printButton.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+            this.printButton.Name = "printButton";
+            this.printButton.Size = new System.Drawing.Size(110, 30);
+            this.printButton.TabIndex = 7;
+            this.printButton.Text = "Print";
+            this.printButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.printButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.printButton.Click += new System.EventHandler(this.PrintButton_Click);
+            // 
+            // searchLabel
+            // 
+            this.searchLabel.AutoSize = true;
+            this.searchLabel.Location = new System.Drawing.Point(452, 27);
+            this.searchLabel.Name = "searchLabel";
+            this.searchLabel.Size = new System.Drawing.Size(42, 15);
+            this.searchLabel.TabIndex = 0;
+            this.searchLabel.Text = "Search";
+            this.searchLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // supplierLabel
+            // 
+            this.supplierLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.supplierLabel.AutoSize = true;
+            this.supplierLabel.Location = new System.Drawing.Point(705, 27);
+            this.supplierLabel.Name = "supplierLabel";
+            this.supplierLabel.Size = new System.Drawing.Size(50, 15);
+            this.supplierLabel.TabIndex = 2;
+            this.supplierLabel.Text = "Supplier";
+            this.supplierLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // supplierComboBox
+            // 
+            this.supplierComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.supplierComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.supplierComboBox.FormattingEnabled = true;
+            this.supplierComboBox.Location = new System.Drawing.Point(761, 24);
+            this.supplierComboBox.Name = "supplierComboBox";
+            this.supplierComboBox.Size = new System.Drawing.Size(170, 23);
+            this.supplierComboBox.TabIndex = 3;
+            this.supplierComboBox.SelectionChangeCommitted += new System.EventHandler(this.SupplierComboBox_SelectionChangeCommitted);
+            // 
+            // showHiddenCheckBox
+            // 
+            this.showHiddenCheckBox.AutoSize = true;
+            this.showHiddenCheckBox.Location = new System.Drawing.Point(136, 41);
+            this.showHiddenCheckBox.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
+            this.showHiddenCheckBox.Name = "showHiddenCheckBox";
+            this.showHiddenCheckBox.Size = new System.Drawing.Size(97, 19);
+            this.showHiddenCheckBox.TabIndex = 13;
+            this.showHiddenCheckBox.Text = "Show Hidden";
+            this.showHiddenCheckBox.UseVisualStyleBackColor = true;
+            this.showHiddenCheckBox.Click += new System.EventHandler(this.ShowHiddenCheckBox_Click);
+            // 
+            // addButton
+            // 
+            this.addButton.Image = global::OpenDental.Properties.Resources.IconAdd;
+            this.addButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.addButton.Location = new System.Drawing.Point(13, 19);
+            this.addButton.Name = "addButton";
+            this.addButton.Size = new System.Drawing.Size(110, 30);
+            this.addButton.TabIndex = 11;
+            this.addButton.Text = "Add";
+            this.addButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.addButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.addButton.Click += new System.EventHandler(this.AddButton_Click);
+            // 
+            // suppliesGrid
+            // 
+            this.suppliesGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
-			this.gridMain.HasAddButton = false;
-			this.gridMain.HasDropDowns = false;
-			this.gridMain.HasMultilineHeaders = false;
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12, 46);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(796, 567);
-			this.gridMain.TabIndex = 5;
-			this.gridMain.Title = "Supplies";
-			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
-			// 
-			// FormSupplies
-			// 
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(820, 657);
-			this.Controls.Add(this.butAddtoOrder);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.checkShowShoppingList);
-			this.Controls.Add(this.textFind);
-			this.Controls.Add(this.butUp);
-			this.Controls.Add(this.butDown);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butCancel);
-			this.Controls.Add(this.butPrint);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.comboSupplier);
-			this.Controls.Add(this.checkShowHidden);
-			this.Controls.Add(this.butAdd);
-			this.Controls.Add(this.gridMain);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "FormSupplies";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "Supplies";
-			this.Load += new System.EventHandler(this.FormSupplies_Load);
-			this.ResumeLayout(false);
-			this.PerformLayout();
+            this.suppliesGrid.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
+            this.suppliesGrid.EditableEnterMovesDown = false;
+            this.suppliesGrid.HasAddButton = false;
+            this.suppliesGrid.HasDropDowns = false;
+            this.suppliesGrid.HasMultilineHeaders = false;
+            this.suppliesGrid.HScrollVisible = false;
+            this.suppliesGrid.Location = new System.Drawing.Point(13, 66);
+            this.suppliesGrid.Name = "suppliesGrid";
+            this.suppliesGrid.ScrollValue = 0;
+            this.suppliesGrid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.suppliesGrid.Size = new System.Drawing.Size(918, 511);
+            this.suppliesGrid.TabIndex = 4;
+            this.suppliesGrid.Title = "Supplies";
+            this.suppliesGrid.TitleVisible = true;
+            this.suppliesGrid.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.SuppliesGrid_CellDoubleClick);
+            // 
+            // FormSupplies
+            // 
+            this.AcceptButton = this.acceptButton;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(944, 641);
+            this.Controls.Add(this.addToOrderButton);
+            this.Controls.Add(this.infoLabel);
+            this.Controls.Add(this.showShoppingListCheckBox);
+            this.Controls.Add(this.searchTextBox);
+            this.Controls.Add(this.upButton);
+            this.Controls.Add(this.downButton);
+            this.Controls.Add(this.acceptButton);
+            this.Controls.Add(this.cancelButton);
+            this.Controls.Add(this.printButton);
+            this.Controls.Add(this.searchLabel);
+            this.Controls.Add(this.supplierLabel);
+            this.Controls.Add(this.supplierComboBox);
+            this.Controls.Add(this.showHiddenCheckBox);
+            this.Controls.Add(this.addButton);
+            this.Controls.Add(this.suppliesGrid);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(960, 680);
+            this.Name = "FormSupplies";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Supplies";
+            this.Load += new System.EventHandler(this.FormSupplies_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private OpenDental.UI.ODGrid gridMain;
-		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.ComboBox comboSupplier;
-		private System.Windows.Forms.CheckBox checkShowHidden;
-		private OpenDental.UI.Button butAdd;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.TextBox textFind;
-		private UI.Button butPrint;
-		private UI.Button butOK;
-		private UI.Button butCancel;
-		private UI.Button butUp;
-		private UI.Button butDown;
-		private System.Windows.Forms.CheckBox checkShowShoppingList;
-		private System.Windows.Forms.Label label2;
-		private UI.Button butAddtoOrder;
-	}
+        private OpenDental.UI.ODGrid suppliesGrid;
+        private System.Windows.Forms.Label supplierLabel;
+        private System.Windows.Forms.ComboBox supplierComboBox;
+        private System.Windows.Forms.CheckBox showHiddenCheckBox;
+        private System.Windows.Forms.Button addButton;
+        private System.Windows.Forms.Label searchLabel;
+        private System.Windows.Forms.TextBox searchTextBox;
+        private System.Windows.Forms.Button printButton;
+        private System.Windows.Forms.Button acceptButton;
+        private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.Button upButton;
+        private System.Windows.Forms.Button downButton;
+        private System.Windows.Forms.CheckBox showShoppingListCheckBox;
+        private System.Windows.Forms.Label infoLabel;
+        private System.Windows.Forms.Button addToOrderButton;
+    }
 }

@@ -1,90 +1,162 @@
+using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental {
-	public partial class FormSupplyOrderItemEdit:ODForm {
-		private Supply Supp;
-		public SupplyOrderItem ItemCur;
-		public List<Supplier> ListSupplier;
+namespace OpenDental
+{
+    public partial class FormSupplyOrderItemEdit : FormBase
+    {
+        Supply supply;
+        int quantity;
+        double price;
 
-		public FormSupplyOrderItemEdit() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        public SupplyOrderItem ItemCur;
+        public List<Supplier> ListSupplier;
 
-		private void FormSupplyOrderItemEdit_Load(object sender,EventArgs e) {
-			Supp=Supplies.GetSupply(ItemCur.SupplyNum);
-			textSupplier.Text=Suppliers.GetName(ListSupplier,Supp.SupplierNum);
-			textCategory.Text=Defs.GetName(DefCat.SupplyCats,Supp.Category);
-			textCatalogNumber.Text=Supp.CatalogNumber;
-			textDescript.Text=Supp.Descript;
-			textQty.Text=ItemCur.Qty.ToString();
-			textPrice.Text=ItemCur.Price.ToString("n");
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormSupplyOrderItemEdit"/> class.
+        /// </summary>
+        public FormSupplyOrderItemEdit() => InitializeComponent();
+        
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormSupplyOrderItemEdit_Load(object sender, EventArgs e)
+        {
+            supply = Supplies.GetSupply(ItemCur.SupplyNum);
 
-		private void butDelete_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,true,"Delete?")){
-				return;
-			}
-			//try{
-			SupplyOrderItems.DeleteObject(ItemCur);
-			//}
-			//catch(ApplicationException ex){
-			//	MessageBox.Show(ex.Message);
-			//	return;
-			//}
-			DialogResult=DialogResult.OK;
-		}
+            supplierTextBox.Text = Suppliers.GetName(ListSupplier, supply.SupplierNum);
+            categoryTextBox.Text = Defs.GetName(DefCat.SupplyCats, supply.Category);
+            catalogNumberTextBox.Text = supply.CatalogNumber;
+            descriptionTextBox.Text = supply.Descript;
+            quantityTextBox.Text = (quantity = ItemCur.Qty).ToString();
+            priceTextBox.Text = (price = ItemCur.Price).ToString("n");
+        }
 
-		private void textPrice_TextChanged(object sender,EventArgs e) {
-			FillSubtotal();
-		}
+        /// <summary>
+        /// Recalculates the value of the subtotal textbox.
+        /// </summary>
+        void UpdateSubTotal()
+        {
+            if (int.TryParse(quantityTextBox.Text, out int quantity) && double.TryParse(priceTextBox.Text, out double price))
+            {
+                subtotalTextBox.Text = (quantity * price).ToString("n");
+            }
+        }
 
-		private void textQty_TextChanged(object sender,EventArgs e) {
-			FillSubtotal();
-		}
+        /// <summary>
+        /// Only allow digits to be entered in the quantity textbox.
+        /// </summary>
+        void QuantityTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            {
+                e.Handled = true;
+            }
+        }
 
-		private void FillSubtotal() {
-			ValidateChildren();//allows errorProvider1 to populate error message text.
-			if(textQty.errorProvider1.GetError(textQty)!=""
-				|| textPrice.errorProvider1.GetError(textPrice)!="") 
-			{	
-				return;
-			}
-			if(textQty.Text=="" || textPrice.Text==""){
-				return;
-			}
-			int qty=PIn.Int(textQty.Text);
-			double price=PIn.Double(textPrice.Text);
-			double subtotal=qty*price;
-			textSubtotal.Text=subtotal.ToString("n");
-		}
+        /// <summary>
+        /// Updates the subtotal textbox when the quantity changes.
+        /// </summary>
+        void QuantityTextBox_TextChanged(object sender, EventArgs e) => UpdateSubTotal();
 
-		private void butOK_Click(object sender,EventArgs e) {
-			if(textQty.errorProvider1.GetError(textQty)!=""
-				|| textPrice.errorProvider1.GetError(textPrice)!="")
-			{
-				MsgBox.Show(this,"Please fix data entry errors first.");
-				return;
-			}
-			ItemCur.Qty=PIn.Int(textQty.Text);
-			ItemCur.Price=PIn.Double(textPrice.Text);
-			SupplyOrderItems.Update(ItemCur);//never new
-			DialogResult=DialogResult.OK;
-		}
+        /// <summary>
+        /// Validates the value entered in the quantity textbox.
+        /// </summary>
+        void QuantityTextBox_Validating(object sender, CancelEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(quantityTextBox.Text))
+            {
+                if (int.TryParse(quantityTextBox.Text, out int result))
+                {
+                    quantity = result;
+                    if (quantity == 0)
+                    {
+                        quantity = 1;
+                    }
+                }
+                else
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+            else
+            {
+                quantity = 0;
+            }
+            quantityTextBox.Text = quantity.ToString();
+        }
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+        /// <summary>
+        /// Updates the price textbox when the price changes.
+        /// </summary>
+        void PriceTextBox_TextChanged(object sender, EventArgs e) => UpdateSubTotal();
 
-		
+        /// <summary>
+        /// Validates  the value entered in the price textbox.
+        /// </summary>
+        void PriceTextBox_Validating(object sender, CancelEventArgs e)
+        {
+            if (double.TryParse(priceTextBox.Text, out double result))
+            {
+                price = result;
+                if (price < 0)
+                {
+                    price = 0;
+                }
 
-		
-	}
+                priceTextBox.Text = price.ToString("n");
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+        }
+
+        /// <summary>
+        /// Deletes the supply order item.
+        /// </summary>
+        void DeleteButton_Click(object sender, EventArgs e)
+        {
+            var result =
+                MessageBox.Show(
+                    Translation.Language.ConfirmDelete,
+                    Translation.Language.SupplyOrderItem, 
+                    MessageBoxButtons.OKCancel, 
+                    MessageBoxIcon.Question);
+
+            if (result == DialogResult.Cancel) return;
+
+            SupplyOrderItems.DeleteObject(ItemCur);
+
+            DialogResult = DialogResult.OK;
+        }
+
+        /// <summary>
+        /// Saves the supply order item and closes the form.
+        /// </summary>
+        void AcceptButton_Click(object sender, EventArgs e)
+        {
+            if (quantityTextBox.errorProvider1.GetError(quantityTextBox) != "" || priceTextBox.errorProvider1.GetError(priceTextBox) != "")
+            {
+                MessageBox.Show(
+                    Translation.Language.PleaseFixDataEntryErrors,
+                    Translation.Language.SupplyOrderItem, 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            ItemCur.Qty = quantity;
+            ItemCur.Price = price;
+
+            SupplyOrderItems.Update(ItemCur);
+
+            DialogResult = DialogResult.OK;
+        }
+    }
 }

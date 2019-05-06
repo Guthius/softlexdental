@@ -61,6 +61,24 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Definitions accessed.
+        /// </summary>
+        public static string DefinitionsAccessed {
+            get {
+                return ResourceManager.GetString("DefinitionsAccessed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Equipment list printed.
+        /// </summary>
+        public static string EquipmentListPrinted {
+            get {
+                return ResourceManager.GetString("EquipmentListPrinted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} added.
         /// </summary>
         public static string GenericItemAdded {
@@ -84,6 +102,24 @@ namespace OpenDental.Translation {
         public static string GenericItemModified {
             get {
                 return ResourceManager.GetString("GenericItemModified", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supplies needed list printed.
+        /// </summary>
+        public static string SuppliesNeededListPrinted {
+            get {
+                return ResourceManager.GetString("SuppliesNeededListPrinted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supplies order from {0} printed.
+        /// </summary>
+        public static string SuppliesOrderFromDatePrinted {
+            get {
+                return ResourceManager.GetString("SuppliesOrderFromDatePrinted", resourceCulture);
             }
         }
         

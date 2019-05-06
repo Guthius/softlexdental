@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DefinitionsAccessed" xml:space="preserve">
+    <value>Definitions accessed</value>
+  </data>
+  <data name="EquipmentListPrinted" xml:space="preserve">
+    <value>Equipment list printed</value>
+  </data>
   <data name="GenericItemAdded" xml:space="preserve">
     <value>{0} added</value>
   </data>
@@ -125,6 +131,12 @@
   </data>
   <data name="GenericItemModified" xml:space="preserve">
     <value>{0} edited</value>
+  </data>
+  <data name="SuppliesNeededListPrinted" xml:space="preserve">
+    <value>Supplies needed list printed</value>
+  </data>
+  <data name="SuppliesOrderFromDatePrinted" xml:space="preserve">
+    <value>Supplies order from {0} printed</value>
   </data>
   <data name="UpdateSetupWindowAccessed" xml:space="preserve">
     <value>Update Setup window accesssed</value>

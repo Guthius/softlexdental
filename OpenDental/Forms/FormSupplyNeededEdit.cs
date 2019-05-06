@@ -1,57 +1,71 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using OpenDentBusiness;
+using System;
+using System.Windows.Forms;
 
-namespace OpenDental {
-	public partial class FormSupplyNeededEdit:ODForm {
-		public SupplyNeeded Supp;
+namespace OpenDental
+{
+    public partial class FormSupplyNeededEdit : FormBase
+    {
+        public SupplyNeeded Supp;
 
-		public FormSupplyNeededEdit() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormSupplyNeededEdit"/> class.
+        /// </summary>
+        public FormSupplyNeededEdit() => InitializeComponent();
 
-		private void FormSupplyNeededEdit_Load(object sender,EventArgs e) {
-			textDate.Text=Supp.DateAdded.ToShortDateString();
-			textDescription.Text=Supp.Description;
-		}
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormSupplyNeededEdit_Load(object sender, EventArgs e)
+        {
+            dateTextBox.Text = Supp.DateAdded.ToShortDateString();
+            descriptionTextBox.Text = Supp.Description;
+        }
 
-		private void butDelete_Click(object sender,EventArgs e) {
-			if(Supp.IsNew){
-				DialogResult=DialogResult.Cancel;
-			}
-			//if(!MsgBox.){
-			
-			//}
-			SupplyNeededs.DeleteObject(Supp);
-			DialogResult=DialogResult.OK;
-		}
+        /// <summary>
+        /// Deletes the needed supply.
+        /// </summary>
+        void DeleteButton_Click(object sender, EventArgs e)
+        {
+            if (Supp.IsNew)
+            {
+                DialogResult = DialogResult.Cancel;
+            }
 
-		private void butOK_Click(object sender,EventArgs e) {
-			if(textDate.errorProvider1.GetError(textDate)!=""){
-				MsgBox.Show(this,"Please fix data entry errors first.");
-				return;
-			}
-			Supp.DateAdded=PIn.Date(textDate.Text);
-			Supp.Description=textDescription.Text;
-			if(Supp.IsNew) {
-				SupplyNeededs.Insert(Supp);
-			}
-			else {
-				SupplyNeededs.Update(Supp);
-			}
-			DialogResult=DialogResult.OK;
-		}
+            SupplyNeededs.DeleteObject(Supp);
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+            DialogResult = DialogResult.OK;
+        }
 
-		
-	}
+        /// <summary>
+        /// Saves the needed supply and closes the form.
+        /// </summary>
+        void AcceptButton_Click(object sender, EventArgs e)
+        {
+            if (dateTextBox.errorProvider1.GetError(dateTextBox) != "")
+            {
+                MessageBox.Show(
+                    Translation.Language.PleaseFixDataEntryErrors,
+                    Translation.Language.SupplyNeeded,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            Supp.DateAdded = PIn.Date(dateTextBox.Text);
+            Supp.Description = descriptionTextBox.Text;
+
+            if (Supp.IsNew)
+            {
+                SupplyNeededs.Insert(Supp);
+            }
+            else
+            {
+                SupplyNeededs.Update(Supp);
+            }
+
+            DialogResult = DialogResult.OK;
+        }
+    }
 }

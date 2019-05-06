@@ -1,88 +1,96 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
-namespace OpenDental {
-	public partial class FormSuppliers:ODForm {
-		private List<Supplier> _listSuppliers;
+namespace OpenDental
+{
+    public partial class FormSuppliers : FormBase
+    {
+        List<Supplier> suppliersList;
 
-		public FormSuppliers() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormSuppliers"/> class.
+        /// </summary>
+        public FormSuppliers() => InitializeComponent();
 
-		private void FormSuppliers_Load(object sender,EventArgs e) {
-			FillGrid();
-		}
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormSuppliers_Load(object sender, EventArgs e) => LoadSuppliers();
 
-		private void FillGrid(){
-			_listSuppliers=Suppliers.GetAll();
-			gridMain.BeginUpdate();
-			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Name"),110);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Phone"),90);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"CustomerID"),80);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Website"),180);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"UserName"),80);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Password"),80);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Note"),150);
-			gridMain.Columns.Add(col);
-			gridMain.Rows.Clear();
-			ODGridRow row;
-			for(int i=0;i<_listSuppliers.Count;i++){
-				row=new ODGridRow();
-				row.Cells.Add(_listSuppliers[i].Name);
-				row.Cells.Add(_listSuppliers[i].Phone);
-				row.Cells.Add(_listSuppliers[i].CustomerId);
-				row.Cells.Add(_listSuppliers[i].Website);
-				row.Cells.Add(_listSuppliers[i].UserName);
-				row.Cells.Add(_listSuppliers[i].Password);
-				row.Cells.Add(_listSuppliers[i].Note);
-				gridMain.Rows.Add(row);
-			}
-			gridMain.EndUpdate();
-		}
+        /// <summary>
+        /// Loads the list of suppliers and populates the grid.
+        /// </summary>
+        void LoadSuppliers()
+        {
+            suppliersList = Suppliers.GetAll();
 
-		private void butAdd_Click(object sender,EventArgs e) {
-			Supplier supp=new Supplier();
-			supp.IsNew=true;
-			FormSupplierEdit FormS=new FormSupplierEdit();
-			FormS.Supp=supp;
-			FormS.ShowDialog();
-			if(FormS.DialogResult==DialogResult.OK) {
-				FillGrid();
-			}
-		}
+            suppliersGrid.BeginUpdate();
+            suppliersGrid.Columns.Clear();
+            suppliersGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnName, 110));
+            suppliersGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnPhone, 90));
+            suppliersGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnCustomerID, 80));
+            suppliersGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnWebsite, 180));
+            suppliersGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnUserName, 80));
+            suppliersGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnPassword, 80));
+            suppliersGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnNote, 150));
+            suppliersGrid.Rows.Clear();
 
-		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormSupplierEdit FormS=new FormSupplierEdit();
-			FormS.Supp=_listSuppliers[e.Row];
-			FormS.ShowDialog();
-			if(FormS.DialogResult==DialogResult.OK) {
-				FillGrid();
-			}
-		}
+            for (int i = 0; i < suppliersList.Count; i++)
+            {
+                var row = new ODGridRow();
+                row.Cells.Add(suppliersList[i].Name);
+                row.Cells.Add(suppliersList[i].Phone);
+                row.Cells.Add(suppliersList[i].CustomerId);
+                row.Cells.Add(suppliersList[i].Website);
+                row.Cells.Add(suppliersList[i].UserName);
+                row.Cells.Add(suppliersList[i].Password);
+                row.Cells.Add(suppliersList[i].Note);
+                suppliersGrid.Rows.Add(row);
+            }
+            suppliersGrid.EndUpdate();
+        }
 
-		private void butClose_Click(object sender,EventArgs e) {
-			Close();
-		}
+        /// <summary>
+        /// Opens the form to add a new supplier.
+        /// </summary>
+        void AddButton_Click(object sender, EventArgs e)
+        {
+            var supplier = new Supplier
+            {
+                IsNew = true
+            };
 
-		
+            using (var formSupplierEdit = new FormSupplierEdit())
+            {
+                formSupplierEdit.Supp = supplier;
+                if (formSupplierEdit.ShowDialog(this) == DialogResult.OK)
+                {
+                    LoadSuppliers();
+                }
+            }
+        }
 
-		
+        /// <summary>
+        /// Opens the form to edit a supplier when the user double clicks on a supplier in the list.
+        /// </summary>
+        void SuppliersGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
+        {
+            using (var formSupplierEdit = new FormSupplierEdit())
+            {
+                formSupplierEdit.Supp = suppliersList[e.Row];
+                if (formSupplierEdit.ShowDialog(this) == DialogResult.OK)
+                {
+                    LoadSuppliers();
+                }
+            }
+        }
 
-		
-	}
+        /// <summary>
+        /// Closes the form.
+        /// </summary>
+        void CloseButton_Click(object sender, EventArgs e) => Close();
+    }
 }

@@ -645,6 +645,9 @@
     <Compile Include="Module.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="ODCurrencyTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ODTimeBar.cs">
       <SubType>UserControl</SubType>
     </Compile>

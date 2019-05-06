@@ -1,230 +1,275 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Drawing.Printing;
-using System.Text;
-using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Printing;
+using System.Windows.Forms;
 
-namespace OpenDental {
-	public partial class FormEquipment:ODForm {
-		private List<Equipment> listEquip;
-		private int pagesPrinted;
-		private bool headingPrinted;
-		private int headingPrintH;
+namespace OpenDental
+{
+    public partial class FormEquipment : FormBase
+    {
+        List<Equipment> equipmentList;
+        int pagesPrinted;
+        bool headingPrinted;
+        int headingPrintHeight;
 
-		public FormEquipment() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormEquipment"/> class.
+        /// </summary>
+        public FormEquipment() => InitializeComponent();
+        
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormEquipment_Load(object sender, EventArgs e) => LoadEquipment();
+        
+        /// <summary>
+        /// Reloads the equipment list using the current filter criteria.
+        /// </summary>
+        void SearchTextBox_TextChanged(object sender, EventArgs e) => LoadEquipment();
 
-		private void FormEquipment_Load(object sender,EventArgs e) {
-			FillGrid();
-		}
+        /// <summary>
+        /// Refreshes the equipment list.
+        /// </summary>
+        void RefreshButton_Click(object sender, EventArgs e)
+        {
+            if (dateStartTextBox.errorProvider1.GetError(dateStartTextBox) != "" ||
+                dateEndTextBox.errorProvider1.GetError(dateEndTextBox) != "")
+            {
+                MessageBox.Show(
+                    Translation.Language.InvalidDate,
+                    Translation.Language.Equipment, 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
 
-		private void radioPurchased_Click(object sender,EventArgs e) {
-			FillGrid();
-		}
+                return;
+            }
+            LoadEquipment();
+        }
 
-		private void radioSold_Click(object sender,EventArgs e) {
-			FillGrid();
-		}
+        /// <summary>
+        /// Reloads the equipment list using the current filter criteria.
+        /// </summary>
+        void radioPurchased_Click(object sender, EventArgs e) => LoadEquipment();
 
-		private void radioAll_Click(object sender,EventArgs e) {
-			FillGrid();
-		}
+        /// <summary>
+        /// Reloads the equipment list using the current filter criteria.
+        /// </summary>
+        void radioSold_Click(object sender, EventArgs e) => LoadEquipment();
 
-		private void textSn_TextChanged(object sender,EventArgs e) {
-			FillGrid();
-		}
+        /// <summary>
+        /// Reloads the equipment list using the current filter criteria.
+        /// </summary>
+        void radioAll_Click(object sender, EventArgs e) => LoadEquipment();
 
-		private void butRefresh_Click(object sender,EventArgs e) {
-			if(textDateStart.errorProvider1.GetError(textDateStart)!=""
-				|| textDateEnd.errorProvider1.GetError(textDateEnd)!="") 
-			{
-				MsgBox.Show(this,"Invalid date.");
-				return;
-			}
-			FillGrid();
-		}
+        /// <summary>
+        /// Loads the list of equipment and populates the grid.
+        /// </summary>
+        void LoadEquipment()
+        {
+            if (dateStartTextBox.errorProvider1.GetError(dateStartTextBox) != "" || 
+                dateEndTextBox.errorProvider1.GetError(dateEndTextBox) != "")
+            {
+                return;
+            }
 
-		private void FillGrid(){
-			if(textDateStart.errorProvider1.GetError(textDateStart)!=""
-				|| textDateEnd.errorProvider1.GetError(textDateEnd)!="") 
-			{
-				return;
-			}
-			DateTime fromDate;
-			DateTime toDate;
-			if(textDateStart.Text=="") {
-				fromDate=DateTime.MinValue.AddDays(1);//because we don't want to include 010101
-			}
-			else {
-				fromDate=PIn.Date(textDateStart.Text);
-			}
-			if(textDateEnd.Text=="") {
-				toDate=DateTime.MaxValue;
-			}
-			else {
-				toDate=PIn.Date(textDateEnd.Text);
-			}
-			EnumEquipmentDisplayMode display=EnumEquipmentDisplayMode.All;
-			if(radioPurchased.Checked){
-				display=EnumEquipmentDisplayMode.Purchased;
-			}
-			if(radioSold.Checked){
-				display=EnumEquipmentDisplayMode.Sold;
-			}
-			listEquip=Equipments.GetList(fromDate,toDate,display,textSnDesc.Text);
-			gridMain.BeginUpdate();
-			if(radioPurchased.Checked) {
-				gridMain.HScrollVisible=true;
-			}
-			else {
-				gridMain.HScrollVisible=false;
-			}
-			gridMain.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g(this,"Description"),150);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"SerialNumber"),90);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Yr"),40);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"DatePurchased"),90);
-			gridMain.Columns.Add(col);
-			if(display!=EnumEquipmentDisplayMode.Purchased) {//Purchased mode is designed for submission to tax authority, only certain columns
-				col=new ODGridColumn(Lan.g(this,"DateSold"),90);
-				gridMain.Columns.Add(col);
-			}
-			col=new ODGridColumn(Lan.g(this,"Cost"),80,HorizontalAlignment.Right);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Est Value"),80,HorizontalAlignment.Right);
-			gridMain.Columns.Add(col);
-			if(display!=EnumEquipmentDisplayMode.Purchased) {
-				col=new ODGridColumn(Lan.g(this,"Location"),80);
-				gridMain.Columns.Add(col);
-			}
-			col=new ODGridColumn(Lan.g(this,"Status"),160);
-			gridMain.Columns.Add(col);
-			gridMain.Rows.Clear();
-			ODGridRow row;
-			for(int i=0;i<listEquip.Count;i++){
-				row=new ODGridRow();
-				row.Cells.Add(listEquip[i].Description);
-				row.Cells.Add(listEquip[i].SerialNumber);
-				row.Cells.Add(listEquip[i].ModelYear);
-				row.Cells.Add(listEquip[i].DatePurchased.ToShortDateString());
-				if(display!=EnumEquipmentDisplayMode.Purchased) {
-					if(listEquip[i].DateSold.Year<1880) {
-						row.Cells.Add("");
-					}
-					else {
-						row.Cells.Add(listEquip[i].DateSold.ToShortDateString());
-					}
-				}
-				row.Cells.Add(listEquip[i].PurchaseCost.ToString("f"));
-				row.Cells.Add(listEquip[i].MarketValue.ToString("f"));
-				if(display!=EnumEquipmentDisplayMode.Purchased) {
-					row.Cells.Add(listEquip[i].Location);
-				}
-				row.Cells.Add(listEquip[i].Status.ToString());
-				gridMain.Rows.Add(row);
-			}
-			gridMain.EndUpdate();
-		}
+            DateTime fromDate;
+            DateTime toDate;
+            if (dateStartTextBox.Text == "")
+            {
+                fromDate = DateTime.MinValue.AddDays(1);
+            }
+            else
+            {
+                fromDate = PIn.Date(dateStartTextBox.Text);
+            }
 
-		private void butAdd_Click(object sender,EventArgs e) {
-			Equipment equip=new Equipment();
-			equip.SerialNumber=Equipments.GenerateSerialNum();
-			equip.DateEntry=DateTime.Today;
-			equip.DatePurchased=DateTime.Today;
-			FormEquipmentEdit form=new FormEquipmentEdit();
-			form.IsNew=true;
-			form.Equip=equip;
-			form.ShowDialog();
-			if(form.DialogResult==DialogResult.OK) {
-				FillGrid();
-			}
-		}
+            if (dateEndTextBox.Text == "")
+            {
+                toDate = DateTime.MaxValue;
+            }
+            else
+            {
+                toDate = PIn.Date(dateEndTextBox.Text);
+            }
 
-		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormEquipmentEdit form=new FormEquipmentEdit();
-			form.Equip=listEquip[e.Row];
-			form.ShowDialog();
-			if(form.DialogResult==DialogResult.OK) {
-				FillGrid();
-			}
-		}
+            var displayMode = EnumEquipmentDisplayMode.All;
+            if (purchasedRadioButton.Checked)
+            {
+                displayMode = EnumEquipmentDisplayMode.Purchased;
+            }
+            if (soldRadioButton.Checked)
+            {
+                displayMode = EnumEquipmentDisplayMode.Sold;
+            }
 
-		private void butPrint_Click(object sender,EventArgs e) {
-			pagesPrinted=0;
-			headingPrinted=false;
-			PrinterL.TryPrintOrDebugRpPreview(pd_PrintPage,Lan.g(this,"Equipment list printed"));
-		}
+            equipmentList = Equipments.GetList(fromDate, toDate, displayMode, searchTextBox.Text);
 
-		private void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
-			Rectangle bounds=e.MarginBounds;
-			//new Rectangle(50,40,800,1035);//Some printers can handle up to 1042
-			Graphics g=e.Graphics;
-			string text;
-			Font headingFont=new Font("Arial",13,FontStyle.Bold);
-			Font subHeadingFont=new Font("Arial",10,FontStyle.Bold);
-			int yPos=bounds.Top;
-			int center=bounds.X+bounds.Width/2;
-			#region printHeading
-			if(!headingPrinted) {
-				text=Lan.g(this,"Equipment List");
-				if(radioPurchased.Checked) {
-					text+=" - "+Lan.g(this,"Purchased");
-				}
-				if(radioSold.Checked) {
-					text+=" - "+Lan.g(this,"Sold");
-				}
-				if(radioAll.Checked) {
-					text+=" - "+Lan.g(this,"All");
-				}
-				g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,headingFont).Width/2,yPos);
-				yPos+=(int)g.MeasureString(text,headingFont).Height;
-				text=textDateStart.Text+" "+Lan.g(this,"to")+" "+textDateEnd.Text;
-				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
-				yPos+=20;
-				headingPrinted=true;
-				headingPrintH=yPos;
-			}
-			#endregion
-			yPos=gridMain.PrintPage(g,pagesPrinted,bounds,headingPrintH);
-			pagesPrinted++;
-			if(yPos==-1) {
-				e.HasMorePages=true;
-			}
-			else {
-				e.HasMorePages=false;
-				double total=0;
-				for(int i=0;i<listEquip.Count;i++){
-					total+=listEquip[i].MarketValue;
-				}
-				g.DrawString(Lan.g(this,"Total Est Value:")+" "+total.ToString("c"),Font,Brushes.Black,550,yPos);
-			}
-			g.Dispose();
-		}
+            equipmentGrid.BeginUpdate();
+            if (purchasedRadioButton.Checked)
+            {
+                equipmentGrid.HScrollVisible = true;
+            }
+            else
+            {
+                equipmentGrid.HScrollVisible = false;
+            }
 
-		private void butClose_Click(object sender,EventArgs e) {
-			Close();
-		}
+            equipmentGrid.Columns.Clear();
+            equipmentGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnDescription, 150));
+            equipmentGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnSerialNumber, 90));
+            equipmentGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnYr, 40));
+            equipmentGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnDatePurchased, 90));
+            if (displayMode != EnumEquipmentDisplayMode.Purchased) // Purchased mode is designed for submission to tax authority, only certain columns
+            {
+                equipmentGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnDateSold, 90));
+            }
+            equipmentGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnCost, 80, HorizontalAlignment.Right));
+            equipmentGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnEstValue, 80, HorizontalAlignment.Right));
+            if (displayMode != EnumEquipmentDisplayMode.Purchased)
+            {
+                equipmentGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnLocation, 80));
+            }
+            equipmentGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnStatus, 160));
+            equipmentGrid.Rows.Clear();
 
-		
+            for (int i = 0; i < equipmentList.Count; i++)
+            {
+                var row = new ODGridRow();
+                row.Cells.Add(equipmentList[i].Description);
+                row.Cells.Add(equipmentList[i].SerialNumber);
+                row.Cells.Add(equipmentList[i].ModelYear);
+                row.Cells.Add(equipmentList[i].DatePurchased.ToShortDateString());
+                if (displayMode != EnumEquipmentDisplayMode.Purchased)
+                {
+                    if (equipmentList[i].DateSold.Year < 1880)
+                    {
+                        row.Cells.Add("");
+                    }
+                    else
+                    {
+                        row.Cells.Add(equipmentList[i].DateSold.ToShortDateString());
+                    }
+                }
+                row.Cells.Add(equipmentList[i].PurchaseCost.ToString("F"));
+                row.Cells.Add(equipmentList[i].MarketValue.ToString("F"));
+                if (displayMode != EnumEquipmentDisplayMode.Purchased)
+                {
+                    row.Cells.Add(equipmentList[i].Location);
+                }
+                row.Cells.Add(equipmentList[i].Status.ToString());
+                equipmentGrid.Rows.Add(row);
+            }
+            equipmentGrid.EndUpdate();
+        }
 
-		
+        /// <summary>
+        /// Opens the form to add new equipment.
+        /// </summary>
+        void AddButton_Click(object sender, EventArgs e)
+        {
+            var equipment = new Equipment
+            {
+                SerialNumber    = Equipments.GenerateSerialNum(),
+                DateEntry       = DateTime.Today,
+                DatePurchased   = DateTime.Today
+            };
 
-	
+            using (var formEquipmentEdit = new FormEquipmentEdit())
+            {
+                formEquipmentEdit.IsNew = true;
+                formEquipmentEdit.Equip = equipment;
 
-		
+                if (formEquipmentEdit.ShowDialog(this) == DialogResult.OK)
+                {
+                    LoadEquipment();
+                }
+            }
+        }
 
-		
+        /// <summary>
+        /// Opens the form to edit equipment when the user double clicks on equipment in the grid.
+        /// </summary>
+        void EquipmentGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
+        {
+            using (var formEquipmentEdit = new FormEquipmentEdit())
+            {
+                formEquipmentEdit.Equip = equipmentList[e.Row];
+                if (formEquipmentEdit.ShowDialog(this) == DialogResult.OK)
+                {
+                    LoadEquipment();
+                }
+            }
+        }
 
-		
-	}
+        /// <summary>
+        /// Prints the equipment list.
+        /// </summary>
+        void PrintButton_Click(object sender, EventArgs e)
+        {
+            pagesPrinted = 0;
+            headingPrinted = false;
+
+            PrinterL.TryPrintOrDebugRpPreview(
+                PrintPage,
+                Translation.LanguageSecurity.EquipmentListPrinted);
+        }
+
+        void PrintPage(object sender, PrintPageEventArgs e)
+        {
+            Rectangle bounds = e.MarginBounds;
+            Graphics g = e.Graphics;
+            string text;
+            Font headingFont = new Font("Arial", 13, FontStyle.Bold);
+            Font subHeadingFont = new Font("Arial", 10, FontStyle.Bold);
+            int yPos = bounds.Top;
+            int center = bounds.X + bounds.Width / 2;
+            if (!headingPrinted)
+            {
+                text = Translation.Language.EquipmentList;
+                if (purchasedRadioButton.Checked)
+                {
+                    text += " - " + Translation.Language.Purchased;
+                }
+                if (soldRadioButton.Checked)
+                {
+                    text += " - " + Translation.Language.Sold;
+                }
+                if (allRadioButton.Checked)
+                {
+                    text += " - " + Translation.Language.All;
+                }
+                g.DrawString(text, headingFont, Brushes.Black, center - g.MeasureString(text, headingFont).Width / 2, yPos);
+                yPos += (int)g.MeasureString(text, headingFont).Height;
+                text = string.Format(Translation.Language.DateRangeFromTo, dateStartTextBox.Text, dateEndTextBox.Text);
+                g.DrawString(text, subHeadingFont, Brushes.Black, center - g.MeasureString(text, subHeadingFont).Width / 2, yPos);
+                yPos += 20;
+                headingPrinted = true;
+                headingPrintHeight = yPos;
+            }
+            yPos = equipmentGrid.PrintPage(g, pagesPrinted, bounds, headingPrintHeight);
+            pagesPrinted++;
+            if (yPos == -1)
+            {
+                e.HasMorePages = true;
+            }
+            else
+            {
+                e.HasMorePages = false;
+                double total = 0;
+                for (int i = 0; i < equipmentList.Count; i++)
+                {
+                    total += equipmentList[i].MarketValue;
+                }
+                g.DrawString(Translation.Language.TotalEstValue + ": " + total.ToString("N2"), Font, Brushes.Black, 550, yPos);
+            }
+        }
+
+        /// <summary>
+        /// Closes the form.
+        /// </summary>
+        void CloseButton_Click(object sender, EventArgs e) => Close();
+    }
 }

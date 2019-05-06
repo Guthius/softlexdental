@@ -1,77 +1,105 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using OpenDentBusiness;
+using System;
+using System.Windows.Forms;
 
-namespace OpenDental {
-	public partial class FormSupplierEdit:ODForm {
-		public Supplier Supp;
+namespace OpenDental
+{
+    public partial class FormSupplierEdit : FormBase
+    {
+        public Supplier Supp;
 
-		public FormSupplierEdit() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormSupplierEdit"/> class.
+        /// </summary>
+        public FormSupplierEdit() => InitializeComponent();
+        
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormSupplierEdit_Load(object sender, EventArgs e)
+        {
+            nameTextBox.Text = Supp.Name;
+            phoneTextBox.Text = Supp.Phone;
+            customerIdTextBox.Text = Supp.CustomerId;
+            textWebsite.Text = Supp.Website;
+            userNameTextBox.Text = Supp.UserName;
+            passwordTextBox.Text = Supp.Password;
+            noteTextBox.Text = Supp.Note;
+        }
 
-		private void FormSupplierEdit_Load(object sender,EventArgs e) {
-			textName.Text=Supp.Name;
-			textPhone.Text=Supp.Phone;
-			textCustomerId.Text=Supp.CustomerId;
-			textWebsite.Text=Supp.Website;
-			textUserName.Text=Supp.UserName;
-			textPassword.Text=Supp.Password;
-			textNote.Text=Supp.Note;
-		}
+        /// <summary>
+        /// Deletes the supplier.
+        /// </summary>
+        void DeleteButton_Click(object sender, EventArgs e)
+        {
+            if (Supp.IsNew)
+            {
+                DialogResult = DialogResult.Cancel;
+                return;
+            }
 
-		private void butDelete_Click(object sender,EventArgs e) {
-			if(Supp.IsNew){
-				DialogResult=DialogResult.Cancel;
-			}
-			if(!MsgBox.Show(this,true,"Delete?")){
-				return;
-			}
-			try{
-				Suppliers.DeleteObject(Supp);
-			}
-			catch(ApplicationException ex){
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			DialogResult=DialogResult.OK;
-		}
+            var result =
+                MessageBox.Show(
+                    Translation.Language.ConfirmDelete,
+                    Translation.Language.Supplier, 
+                    MessageBoxButtons.OKCancel, 
+                    MessageBoxIcon.Question);
 
-		private void butOK_Click(object sender,EventArgs e) {
-			//if(textDate.errorProvider1.GetError(textDate)!=""){
-			//	MsgBox.Show(this,"Please fix data entry errors first.");
-			//	return;
-			//}
-			if(textName.Text==""){
-				MsgBox.Show(this,"Please enter a name.");
-				return;
-			}
-			Supp.Name=textName.Text;
-			Supp.Phone=textPhone.Text;
-			Supp.CustomerId=textCustomerId.Text;
-			Supp.Website=textWebsite.Text;
-			Supp.UserName=textUserName.Text;
-			Supp.Password=textPassword.Text;
-			Supp.Note=textNote.Text;
-			if(Supp.IsNew) {
-				Suppliers.Insert(Supp);
-			}
-			else {
-				Suppliers.Update(Supp);
-			}
-			DialogResult=DialogResult.OK;
-		}
+            if (result == DialogResult.Cancel) return;
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+            try
+            {
+                Suppliers.DeleteObject(Supp);
+            }
+            catch (ApplicationException ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    Translation.Language.Supplier, 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
 
-		
-	}
+                return;
+            }
+
+            DialogResult = DialogResult.OK;
+        }
+
+        /// <summary>
+        /// Saves the supplier and closes the form.
+        /// </summary>
+        void AcceptButton_Click(object sender, EventArgs e)
+        {
+            var name = nameTextBox.Text.Trim();
+            if (name.Length == 0)
+            {
+                MessageBox.Show(
+                    Translation.Language.EnterAName,
+                    Translation.Language.Supplier, 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            Supp.Name = name;
+            Supp.Phone = phoneTextBox.Text;
+            Supp.CustomerId = customerIdTextBox.Text;
+            Supp.Website = textWebsite.Text;
+            Supp.UserName = userNameTextBox.Text;
+            Supp.Password = passwordTextBox.Text;
+            Supp.Note = noteTextBox.Text;
+
+            if (Supp.IsNew)
+            {
+                Suppliers.Insert(Supp);
+            }
+            else
+            {
+                Suppliers.Update(Supp);
+            }
+
+            DialogResult = DialogResult.OK;
+        }
+    }
 }

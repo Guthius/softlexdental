@@ -61,6 +61,24 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        public static string _4 {
+            get {
+                return ResourceManager.GetString("4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All.
+        /// </summary>
+        public static string All {
+            get {
+                return ResourceManager.GetString("All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allergy.
         /// </summary>
         public static string Allergy {
@@ -151,6 +169,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All Suppliers.
+        /// </summary>
+        public static string AllSuppliers {
+            get {
+                return ResourceManager.GetString("AllSuppliers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An update is in progress on workstation &apos;{0}&apos;.
         ///
         ///Not allowed to start Softlex while an update is in progress.
@@ -190,6 +217,33 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Amount.
+        /// </summary>
+        public static string ColumnAmount {
+            get {
+                return ResourceManager.GetString("ColumnAmount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Catalog #.
+        /// </summary>
+        public static string ColumnCatalogNumber {
+            get {
+                return ResourceManager.GetString("ColumnCatalogNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Category.
+        /// </summary>
+        public static string ColumnCategory {
+            get {
+                return ResourceManager.GetString("ColumnCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Column.
         /// </summary>
         public static string ColumnColumn {
@@ -204,6 +258,60 @@ namespace OpenDental.Translation {
         public static string ColumnColumnName {
             get {
                 return ResourceManager.GetString("ColumnColumnName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cost.
+        /// </summary>
+        public static string ColumnCost {
+            get {
+                return ResourceManager.GetString("ColumnCost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Customer ID.
+        /// </summary>
+        public static string ColumnCustomerID {
+            get {
+                return ResourceManager.GetString("ColumnCustomerID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date Added.
+        /// </summary>
+        public static string ColumnDateAdded {
+            get {
+                return ResourceManager.GetString("ColumnDateAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date Placed.
+        /// </summary>
+        public static string ColumnDatePlaced {
+            get {
+                return ResourceManager.GetString("ColumnDatePlaced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date Purchased.
+        /// </summary>
+        public static string ColumnDatePurchased {
+            get {
+                return ResourceManager.GetString("ColumnDatePurchased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date Sold.
+        /// </summary>
+        public static string ColumnDateSold {
+            get {
+                return ResourceManager.GetString("ColumnDateSold", resourceCulture);
             }
         }
         
@@ -226,11 +334,47 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Description.
+        /// </summary>
+        public static string ColumnDescription {
+            get {
+                return ResourceManager.GetString("ColumnDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Est Value.
+        /// </summary>
+        public static string ColumnEstValue {
+            get {
+                return ResourceManager.GetString("ColumnEstValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hidden.
+        /// </summary>
+        public static string ColumnHidden {
+            get {
+                return ResourceManager.GetString("ColumnHidden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Input Text.
         /// </summary>
         public static string ColumnInputText {
             get {
                 return ResourceManager.GetString("ColumnInputText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Location.
+        /// </summary>
+        public static string ColumnLocation {
+            get {
+                return ResourceManager.GetString("ColumnLocation", resourceCulture);
             }
         }
         
@@ -244,11 +388,47 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string ColumnName {
+            get {
+                return ResourceManager.GetString("ColumnName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note.
+        /// </summary>
+        public static string ColumnNote {
+            get {
+                return ResourceManager.GetString("ColumnNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On Hand Qty.
+        /// </summary>
+        public static string ColumnOnHandQty {
+            get {
+                return ResourceManager.GetString("ColumnOnHandQty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Page Title.
         /// </summary>
         public static string ColumnPageTitle {
             get {
                 return ResourceManager.GetString("ColumnPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string ColumnPassword {
+            get {
+                return ResourceManager.GetString("ColumnPassword", resourceCulture);
             }
         }
         
@@ -262,11 +442,110 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Phone.
+        /// </summary>
+        public static string ColumnPhone {
+            get {
+                return ResourceManager.GetString("ColumnPhone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Placed By.
+        /// </summary>
+        public static string ColumnPlacedBy {
+            get {
+                return ResourceManager.GetString("ColumnPlacedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Price.
+        /// </summary>
+        public static string ColumnPrice {
+            get {
+                return ResourceManager.GetString("ColumnPrice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Price/Unit.
+        /// </summary>
+        public static string ColumnPricePerUnit {
+            get {
+                return ResourceManager.GetString("ColumnPricePerUnit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Qty.
+        /// </summary>
+        public static string ColumnQty {
+            get {
+                return ResourceManager.GetString("ColumnQty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Saved.
         /// </summary>
         public static string ColumnSaved {
             get {
                 return ResourceManager.GetString("ColumnSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Serial Number.
+        /// </summary>
+        public static string ColumnSerialNumber {
+            get {
+                return ResourceManager.GetString("ColumnSerialNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shipping.
+        /// </summary>
+        public static string ColumnShipping {
+            get {
+                return ResourceManager.GetString("ColumnShipping", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string ColumnStatus {
+            get {
+                return ResourceManager.GetString("ColumnStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stock Qty.
+        /// </summary>
+        public static string ColumnStockQty {
+            get {
+                return ResourceManager.GetString("ColumnStockQty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subtotal.
+        /// </summary>
+        public static string ColumnSubtotal {
+            get {
+                return ResourceManager.GetString("ColumnSubtotal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supplier.
+        /// </summary>
+        public static string ColumnSupplier {
+            get {
+                return ResourceManager.GetString("ColumnSupplier", resourceCulture);
             }
         }
         
@@ -289,6 +568,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Username.
+        /// </summary>
+        public static string ColumnUserName {
+            get {
+                return ResourceManager.GetString("ColumnUserName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Value.
         /// </summary>
         public static string ColumnValue {
@@ -298,11 +586,38 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Website.
+        /// </summary>
+        public static string ColumnWebsite {
+            get {
+                return ResourceManager.GetString("ColumnWebsite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Width.
         /// </summary>
         public static string ColumnWidth {
             get {
                 return ResourceManager.GetString("ColumnWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yr.
+        /// </summary>
+        public static string ColumnYr {
+            get {
+                return ResourceManager.GetString("ColumnYr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete?.
+        /// </summary>
+        public static string ConfirmDelete {
+            get {
+                return ResourceManager.GetString("ConfirmDelete", resourceCulture);
             }
         }
         
@@ -321,6 +636,33 @@ namespace OpenDental.Translation {
         public static string CurrentPasswordIncorrect {
             get {
                 return ResourceManager.GetString("CurrentPasswordIncorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date.
+        /// </summary>
+        public static string Date {
+            get {
+                return ResourceManager.GetString("Date", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Date is in the future. Continue anyway?.
+        /// </summary>
+        public static string DateIsInFutureContinueAnyway {
+            get {
+                return ResourceManager.GetString("DateIsInFutureContinueAnyway", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} to {1}.
+        /// </summary>
+        public static string DateRangeFromTo {
+            get {
+                return ResourceManager.GetString("DateRangeFromTo", resourceCulture);
             }
         }
         
@@ -352,6 +694,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter a name..
+        /// </summary>
+        public static string EnterAName {
+            get {
+                return ResourceManager.GetString("EnterAName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please input a valid date..
         /// </summary>
         public static string EnterAValidDate {
@@ -366,6 +717,33 @@ namespace OpenDental.Translation {
         public static string EnterOrSelectAValidDate {
             get {
                 return ResourceManager.GetString("EnterOrSelectAValidDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Equipment.
+        /// </summary>
+        public static string Equipment {
+            get {
+                return ResourceManager.GetString("Equipment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Equipment List.
+        /// </summary>
+        public static string EquipmentList {
+            get {
+                return ResourceManager.GetString("EquipmentList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Serial number already in use. Please enter another..
+        /// </summary>
+        public static string EquipmentSerialNumberIsAlreadInUse {
+            get {
+                return ResourceManager.GetString("EquipmentSerialNumberIsAlreadInUse", resourceCulture);
             }
         }
         
@@ -388,6 +766,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid date..
+        /// </summary>
+        public static string InvalidDate {
+            get {
+                return ResourceManager.GetString("InvalidDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid registration key..
         /// </summary>
         public static string InvalidRegistrationKey {
@@ -402,6 +789,15 @@ namespace OpenDental.Translation {
         public static string InvalidRegistrationKeyFormat {
             get {
                 return ResourceManager.GetString("InvalidRegistrationKeyFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Items added to order successfully.
+        /// </summary>
+        public static string ItemsAddedToOrderSuccessfully {
+            get {
+                return ResourceManager.GetString("ItemsAddedToOrderSuccessfully", resourceCulture);
             }
         }
         
@@ -487,11 +883,83 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to None.
+        /// </summary>
+        public static string None {
+            get {
+                return ResourceManager.GetString("None", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Search Filter.
+        /// </summary>
+        public static string NoSearchFilter {
+            get {
+                return ResourceManager.GetString("NoSearchFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No supply categories have been created. Go to the supply inventory window, select categories, and enter at least one supply category first..
+        /// </summary>
+        public static string NoSupplyCategoriesHaveBeenCreated {
+            get {
+                return ResourceManager.GetString("NoSupplyCategoriesHaveBeenCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not allowed to add a new order when there is already one pending. Please finish the other order instead..
+        /// </summary>
+        public static string NotAllowedToAddNewOrderWhenOneIsPending {
+            get {
+                return ResourceManager.GetString("NotAllowedToAddNewOrderWhenOneIsPending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not allowed to delete unless date is blank..
+        /// </summary>
+        public static string NotAllowedToDeleteUnlessDateIsBlank {
+            get {
+                return ResourceManager.GetString("NotAllowedToDeleteUnlessDateIsBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note.
+        /// </summary>
+        public static string Note {
+            get {
+                return ResourceManager.GetString("Note", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not Showing Hidden Items.
+        /// </summary>
+        public static string NotShowingHiddenItems {
+            get {
+                return ResourceManager.GetString("NotShowingHiddenItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open Dental.
         /// </summary>
         public static string OpenDental {
             get {
                 return ResourceManager.GetString("OpenDental", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Order Number.
+        /// </summary>
+        public static string OrderNumber {
+            get {
+                return ResourceManager.GetString("OrderNumber", resourceCulture);
             }
         }
         
@@ -505,11 +973,92 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pending.
+        /// </summary>
+        public static string Pending {
+            get {
+                return ResourceManager.GetString("Pending", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone.
+        /// </summary>
+        public static string Phone {
+            get {
+                return ResourceManager.GetString("Phone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pick Time.
         /// </summary>
         public static string PickTime {
             get {
                 return ResourceManager.GetString("PickTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a description..
+        /// </summary>
+        public static string PleaseEnterADescription {
+            get {
+                return ResourceManager.GetString("PleaseEnterADescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter date purchased..
+        /// </summary>
+        public static string PleaseEnterDatePurchased {
+            get {
+                return ResourceManager.GetString("PleaseEnterDatePurchased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please fix data entry errors first..
+        /// </summary>
+        public static string PleaseFixDataEntryErrors {
+            get {
+                return ResourceManager.GetString("PleaseFixDataEntryErrors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a supplier first..
+        /// </summary>
+        public static string PleaseSelectASupplierFirst {
+            get {
+                return ResourceManager.GetString("PleaseSelectASupplierFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a supplier from the list first..
+        /// </summary>
+        public static string PleaseSelectASupplierFromTheList {
+            get {
+                return ResourceManager.GetString("PleaseSelectASupplierFromTheList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a supply from the list first..
+        /// </summary>
+        public static string PleaseSelectASupplyFromTheList {
+            get {
+                return ResourceManager.GetString("PleaseSelectASupplyFromTheList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a supply order to add items to first..
+        /// </summary>
+        public static string PleaseSelectASupplyOrderToAddItemsTo {
+            get {
+                return ResourceManager.GetString("PleaseSelectASupplyOrderToAddItemsTo", resourceCulture);
             }
         }
         
@@ -523,11 +1072,56 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Purchased.
+        /// </summary>
+        public static string Purchased {
+            get {
+                return ResourceManager.GetString("Purchased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Registration Key.
         /// </summary>
         public static string RegistrationKey {
             get {
                 return ResourceManager.GetString("RegistrationKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search Filter.
+        /// </summary>
+        public static string SearchFilter {
+            get {
+                return ResourceManager.GetString("SearchFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shopping List.
+        /// </summary>
+        public static string ShoppingList {
+            get {
+                return ResourceManager.GetString("ShoppingList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Showing Hidden Items.
+        /// </summary>
+        public static string ShowingHiddenItems {
+            get {
+                return ResourceManager.GetString("ShowingHiddenItems", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sold.
+        /// </summary>
+        public static string Sold {
+            get {
+                return ResourceManager.GetString("Sold", resourceCulture);
             }
         }
         
@@ -541,6 +1135,96 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Supplier.
+        /// </summary>
+        public static string Supplier {
+            get {
+                return ResourceManager.GetString("Supplier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supplies.
+        /// </summary>
+        public static string Supplies {
+            get {
+                return ResourceManager.GetString("Supplies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supplies Needed.
+        /// </summary>
+        public static string SuppliesNeeded {
+            get {
+                return ResourceManager.GetString("SuppliesNeeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supply.
+        /// </summary>
+        public static string Supply {
+            get {
+                return ResourceManager.GetString("Supply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supply List.
+        /// </summary>
+        public static string SupplyList {
+            get {
+                return ResourceManager.GetString("SupplyList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supply list is empty..
+        /// </summary>
+        public static string SupplyListEmpty {
+            get {
+                return ResourceManager.GetString("SupplyListEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supply Needed.
+        /// </summary>
+        public static string SupplyNeeded {
+            get {
+                return ResourceManager.GetString("SupplyNeeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supply Order.
+        /// </summary>
+        public static string SupplyOrder {
+            get {
+                return ResourceManager.GetString("SupplyOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supply Order Item.
+        /// </summary>
+        public static string SupplyOrderItem {
+            get {
+                return ResourceManager.GetString("SupplyOrderItem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supply Orders.
+        /// </summary>
+        public static string SupplyOrders {
+            get {
+                return ResourceManager.GetString("SupplyOrders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are no updates available. You are using the most current version..
         /// </summary>
         public static string ThereAreNoUpdatesAvailable {
@@ -550,11 +1234,29 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is already a pending order for this supplier. Please finish this order in the orders window..
+        /// </summary>
+        public static string ThereIsAPendingOrderForThisSupplier {
+            get {
+                return ResourceManager.GetString("ThereIsAPendingOrderForThisSupplier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There was a problem launching {0}.
         /// </summary>
         public static string ThereWasAProblemLaunchingFile {
             get {
                 return ResourceManager.GetString("ThereWasAProblemLaunchingFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Est Value.
+        /// </summary>
+        public static string TotalEstValue {
+            get {
+                return ResourceManager.GetString("TotalEstValue", resourceCulture);
             }
         }
         

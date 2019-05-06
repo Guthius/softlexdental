@@ -1,99 +1,137 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using CodeBase;
 using OpenDentBusiness;
+using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Windows.Forms;
 
-namespace OpenDental {
-	public partial class FormSupplyOrderEdit:ODForm {
-		public SupplyOrder Order;
-		public List<Supplier> ListSupplier;
+namespace OpenDental
+{
+    public partial class FormSupplyOrderEdit : FormBase
+    {
+        public SupplyOrder Order;
+        public List<Supplier> ListSupplier;
 
-		///<Summary>This form is only going to be used to edit existing supplyOrders, not to add new ones.</Summary>
-		public FormSupplyOrderEdit() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormSupplyOrderEdit"/> class.
+        /// </summary>
+        public FormSupplyOrderEdit() => InitializeComponent();
+        
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormSupplyOrderEdit_Load(object sender, EventArgs e)
+        {
+            supplierTextBox.Text = Suppliers.GetName(ListSupplier, Order.SupplierNum);
 
-		private void FormSupplyOrderEdit_Load(object sender,EventArgs e) {
-			textSupplier.Text=Suppliers.GetName(ListSupplier,Order.SupplierNum);
-			if(Order.DatePlaced.Year>2200){
-				textDatePlaced.Text=DateTime.Today.ToShortDateString();
-				Order.UserNum=Security.CurUser.UserNum;
-			}
-			else{
-				textDatePlaced.Text=Order.DatePlaced.ToShortDateString();
-			}
-			textAmountTotal.Text=Order.AmountTotal.ToString("n");
-			textShippingCharge.Text=Order.ShippingCharge.ToString("n");
-			textNote.Text=Order.Note;
-			comboUser.Items.Clear();
-			ODBoxItem<User> listBoxItemUser=new ODBoxItem<User>(Lan.g(this,"None"),new User { UserNum=0 });
-			comboUser.Items.Add(listBoxItemUser);
-			List<User> listUsers=Userods.GetUsers().FindAll(x => !x.IsHidden);
-			foreach(User user in listUsers) {
-				ODBoxItem<User> listBoxItemUsers=new ODBoxItem<User>(user.UserName,user);
-				comboUser.Items.Add(listBoxItemUsers);
-				if(Order.UserNum==user.UserNum) {
-					comboUser.SelectedItem=listBoxItemUsers;
-				}
-			}
-			if(!listUsers.Select(x => x.UserNum).Contains(Order.UserNum)) {
-				//Order was placed by a hidden user.
-				comboUser.IndexSelectOrSetText(-1,() => { return Userods.GetName(Order.UserNum); });
-			}
-		}
+            if (Order.DatePlaced.Year > 2200)
+            {
+                datePlacedTextBox.Text = DateTime.Today.ToShortDateString();
+                Order.UserNum = Security.CurUser.UserNum;
+            }
+            else
+            {
+                datePlacedTextBox.Text = Order.DatePlaced.ToShortDateString();
+            }
 
-		private void butDelete_Click(object sender,EventArgs e) {
-			//if(Order.IsNew){//never
-			//	DialogResult=DialogResult.Cancel;
-			//}
-			if(textDatePlaced.Text!=""){
-				MsgBox.Show(this,"Not allowed to delete unless date is blank.");
-				return;
-			}
-			if(!MsgBox.Show(this,true,"Delete entire order?")){
-				return;
-			}
-			SupplyOrders.DeleteObject(Order);
-			DialogResult=DialogResult.OK;
-		}
+            totalTextBox.Text = Order.AmountTotal.ToString("n");
+            shippinhChargeTextBox.Text = Order.ShippingCharge.ToString("n");
+            noteTextBox.Text = Order.Note;
 
-		private void butOK_Click(object sender,EventArgs e) {
-			if(textDatePlaced.errorProvider1.GetError(textDatePlaced)!=""
-				|| textAmountTotal.errorProvider1.GetError(textAmountTotal)!=""
-				|| textShippingCharge.errorProvider1.GetError(textShippingCharge)!="")
-			{
-				MsgBox.Show(this,"Please fix data entry errors first.");
-				return;
-			}
-			if(textDatePlaced.Text==""){
-				Order.DatePlaced=new DateTime(2500,1,1);
-				Order.UserNum=0;//even if they had set a user, set it back because the order hasn't been placed. 
-			}
-			else{
-				Order.DatePlaced=PIn.Date(textDatePlaced.Text);
-				if(comboUser.SelectedIndex<=-1) {
-					//if there was a hidden user on the order, do not change, keep it as it was. 
-				}
-				else {
-					Order.UserNum=comboUser.SelectedTag<User>().UserNum;
-				}
-			}
-			Order.AmountTotal=PIn.Double(textAmountTotal.Text);
-			Order.Note=textNote.Text;
-			Order.ShippingCharge=PIn.Double(textShippingCharge.Text);
-			SupplyOrders.Update(Order);//never new
-			DialogResult=DialogResult.OK;
-		}
+            userComboBox.Items.Clear();
+            userComboBox.Items.Add(new ODBoxItem<User>(Translation.Language.None, new User { UserNum = 0 }));
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
-	}
+            var usersList = Userods.GetUsers().FindAll(x => !x.IsHidden);
+            foreach (var user in usersList)
+            {
+                var userBoxItem = new ODBoxItem<User>(user.UserName, user);
+
+                userComboBox.Items.Add(userBoxItem);
+                if (Order.UserNum == user.UserNum)
+                {
+                    userComboBox.SelectedItem = userBoxItem;
+                }
+            }
+
+            if (!usersList.Select(x => x.UserNum).Contains(Order.UserNum))
+            {
+                userComboBox.IndexSelectOrSetText(-1, () =>
+                {
+                    return Userods.GetName(Order.UserNum);
+                });
+            }
+        }
+
+        /// <summary>
+        /// Deletes the order.
+        /// </summary>
+        void DeleteButton_Click(object sender, EventArgs e)
+        {
+            if (datePlacedTextBox.Text != "")
+            {
+                MessageBox.Show(
+                    Translation.Language.NotAllowedToDeleteUnlessDateIsBlank,
+                    Translation.Language.SupplyOrder, 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            var result =
+                MessageBox.Show(
+                    Translation.Language.ConfirmDelete,
+                    Translation.Language.SupplyOrder, 
+                    MessageBoxButtons.OKCancel, 
+                    MessageBoxIcon.Question);
+
+            if (result == DialogResult.Cancel) return;
+
+            SupplyOrders.DeleteObject(Order);
+
+            DialogResult = DialogResult.OK;
+        }
+
+        /// <summary>
+        /// Saves the order and closes the form.
+        /// </summary>
+        void AcceptButton_Click(object sender, EventArgs e)
+        {
+            if (datePlacedTextBox.errorProvider1.GetError(datePlacedTextBox) != "" || 
+                totalTextBox.errorProvider1.GetError(totalTextBox) != "" || 
+                shippinhChargeTextBox.errorProvider1.GetError(shippinhChargeTextBox) != "")
+            {
+                MessageBox.Show(
+                    Translation.Language.PleaseFixDataEntryErrors,
+                    Translation.Language.SupplyOrder,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            if (datePlacedTextBox.Text == "")
+            {
+                Order.DatePlaced = new DateTime(2500, 1, 1);
+                Order.UserNum = 0; // Even if they had set a user, set it back because the order hasn't been placed. 
+            }
+            else
+            {
+                Order.DatePlaced = DateTime.Parse(datePlacedTextBox.Text);
+                if (userComboBox.SelectedIndex > -1)
+                {
+                    Order.UserNum = userComboBox.SelectedTag<User>().UserNum;
+                }
+            }
+
+            Order.AmountTotal = PIn.Double(totalTextBox.Text);
+            Order.Note = noteTextBox.Text;
+            Order.ShippingCharge = PIn.Double(shippinhChargeTextBox.Text);
+
+            SupplyOrders.Update(Order);
+
+            DialogResult = DialogResult.OK;
+        }
+    }
 }

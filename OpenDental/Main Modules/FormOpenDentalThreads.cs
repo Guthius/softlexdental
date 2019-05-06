@@ -53,7 +53,6 @@ namespace OpenDental {
 				BeginTimeSyncThread();
 				BeginVoicemailThread();
 				BeginHqMetricsThread();
-				BeginRegKeyThread();
 				BeginRegistrationKeyIsDisabledThread();
 			}
 			else {
@@ -765,23 +764,6 @@ namespace OpenDental {
 			odThread.GroupName=FormODThreadNames.Podium.GetDescription();
 			odThread.Name=FormODThreadNames.Podium.GetDescription();
 			odThread.Start();
-		}
-
-		#endregion
-		#region RegKeyThread
-
-		///<summary>Begins a thread that checks if the thread key is for testing. This thread is ran only once.</summary>
-		private void BeginRegKeyThread() {
-			if(IsThreadAlreadyRunning(FormODThreadNames.RegKeyIsForTesting)) {
-				return;
-			}
-			ODThread odThread=new ODThread(o => {
-				RegKeyIsForTesting=PrefL.IsRegKeyForTesting();
-			});
-			odThread.GroupName=FormODThreadNames.RegKeyIsForTesting.GetDescription();
-			odThread.Name=FormODThreadNames.RegKeyIsForTesting.GetDescription();
-			odThread.Start(true);
-			_listOdThreadsRunOnce.Add(odThread);
 		}
 
 		#endregion
