@@ -1,226 +1,231 @@
-namespace OpenDental{
-	partial class FormXWebTransactions {
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+namespace OpenDental
+{
+    partial class FormXWebTransactions
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing) {
-			if(disposing && (components != null)) {
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent() {
-			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormXWebTransactions));
-			this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.menuItemGoTo = new System.Windows.Forms.ToolStripMenuItem();
-			this.openPaymentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.voidPaymentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.processReturnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.label2 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butRefresh = new OpenDental.UI.Button();
-			this.textDateFrom = new OpenDental.ValidDate();
-			this.textDateTo = new OpenDental.ValidDate();
-			this.butClose = new OpenDental.UI.Button();
-			this.comboClinic = new System.Windows.Forms.ComboBox();
-			this.labelClinic = new System.Windows.Forms.Label();
-			this.contextMenu.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// contextMenu
-			// 
-			this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuItemGoTo,
-            this.openPaymentToolStripMenuItem,
-            this.voidPaymentToolStripMenuItem,
-            this.processReturnToolStripMenuItem});
-			this.contextMenu.Name = "contextMenu";
-			this.contextMenu.Size = new System.Drawing.Size(154, 92);
-			// 
-			// menuItemGoTo
-			// 
-			this.menuItemGoTo.Name = "menuItemGoTo";
-			this.menuItemGoTo.Size = new System.Drawing.Size(153, 22);
-			this.menuItemGoTo.Text = "Go To Account";
-			this.menuItemGoTo.Click += new System.EventHandler(this.menuItemGoTo_Click);
-			// 
-			// openPaymentToolStripMenuItem
-			// 
-			this.openPaymentToolStripMenuItem.Name = "openPaymentToolStripMenuItem";
-			this.openPaymentToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-			this.openPaymentToolStripMenuItem.Text = "Open Payment";
-			this.openPaymentToolStripMenuItem.Click += new System.EventHandler(this.openPaymentToolStripMenuItem_Click);
-			// 
-			// voidPaymentToolStripMenuItem
-			// 
-			this.voidPaymentToolStripMenuItem.Name = "voidPaymentToolStripMenuItem";
-			this.voidPaymentToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-			this.voidPaymentToolStripMenuItem.Text = "Void Payment";
-			this.voidPaymentToolStripMenuItem.Click += new System.EventHandler(this.voidPaymentToolStripMenuItem_Click);
-			// 
-			// processReturnToolStripMenuItem
-			// 
-			this.processReturnToolStripMenuItem.Name = "processReturnToolStripMenuItem";
-			this.processReturnToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-			this.processReturnToolStripMenuItem.Text = "Process Return";
-			this.processReturnToolStripMenuItem.Click += new System.EventHandler(this.processReturnToolStripMenuItem_Click);
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(6, 15);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(75, 14);
-			this.label2.TabIndex = 141;
-			this.label2.Text = "From Date";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(184, 16);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(64, 13);
-			this.label3.TabIndex = 142;
-			this.label3.Text = "To Date";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormXWebTransactions));
+            this.contextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.goToMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openPaymentMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.voidPaymentMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.processReturnMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dateFromLabel = new System.Windows.Forms.Label();
+            this.dateToLabel = new System.Windows.Forms.Label();
+            this.transactionsGrid = new OpenDental.UI.ODGrid();
+            this.butRefresh = new System.Windows.Forms.Button();
+            this.dateFromTextBox = new OpenDental.ValidDate();
+            this.dateToTextBox = new OpenDental.ValidDate();
+            this.closeButton = new System.Windows.Forms.Button();
+            this.clinicComboBox = new System.Windows.Forms.ComboBox();
+            this.clinicLabel = new System.Windows.Forms.Label();
+            this.contextMenu.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // contextMenu
+            // 
+            this.contextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.goToMenuItem,
+            this.openPaymentMenuItem,
+            this.voidPaymentMenuItem,
+            this.processReturnMenuItem});
+            this.contextMenu.Name = "contextMenu";
+            this.contextMenu.Size = new System.Drawing.Size(154, 92);
+            // 
+            // goToMenuItem
+            // 
+            this.goToMenuItem.Name = "goToMenuItem";
+            this.goToMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.goToMenuItem.Text = "Go To Account";
+            this.goToMenuItem.Click += new System.EventHandler(this.GoToMenuItem_Click);
+            // 
+            // openPaymentMenuItem
+            // 
+            this.openPaymentMenuItem.Name = "openPaymentMenuItem";
+            this.openPaymentMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.openPaymentMenuItem.Text = "Open Payment";
+            this.openPaymentMenuItem.Click += new System.EventHandler(this.OpenPaymentMenuItem_Click);
+            // 
+            // voidPaymentMenuItem
+            // 
+            this.voidPaymentMenuItem.Name = "voidPaymentMenuItem";
+            this.voidPaymentMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.voidPaymentMenuItem.Text = "Void Payment";
+            this.voidPaymentMenuItem.Click += new System.EventHandler(this.VoidPaymentMenuItem_Click);
+            // 
+            // processReturnMenuItem
+            // 
+            this.processReturnMenuItem.Name = "processReturnMenuItem";
+            this.processReturnMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.processReturnMenuItem.Text = "Process Return";
+            this.processReturnMenuItem.Click += new System.EventHandler(this.ProcessReturnMenuItem_Click);
+            // 
+            // dateFromLabel
+            // 
+            this.dateFromLabel.AutoSize = true;
+            this.dateFromLabel.Location = new System.Drawing.Point(32, 23);
+            this.dateFromLabel.Name = "dateFromLabel";
+            this.dateFromLabel.Size = new System.Drawing.Size(62, 15);
+            this.dateFromLabel.TabIndex = 2;
+            this.dateFromLabel.Text = "From Date";
+            this.dateFromLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // dateToLabel
+            // 
+            this.dateToLabel.AutoSize = true;
+            this.dateToLabel.Location = new System.Drawing.Point(207, 23);
+            this.dateToLabel.Name = "dateToLabel";
+            this.dateToLabel.Size = new System.Drawing.Size(47, 15);
+            this.dateToLabel.TabIndex = 4;
+            this.dateToLabel.Text = "To Date";
+            this.dateToLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // transactionsGrid
+            // 
+            this.transactionsGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
-			this.gridMain.ContextMenuStrip = this.contextMenu;
-			this.gridMain.HasAddButton = false;
-			this.gridMain.HasDropDowns = false;
-			this.gridMain.HasMultilineHeaders = false;
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12, 40);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(789, 454);
-			this.gridMain.TabIndex = 140;
-			this.gridMain.Title = "XWeb Transactions";
-			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
-			this.gridMain.MouseClick += new System.Windows.Forms.MouseEventHandler(this.gridMain_MouseClick);
-			this.gridMain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.gridMain_MouseDown);
-			// 
-			// butRefresh
-			// 
-			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butRefresh.Autosize = true;
-			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butRefresh.CornerRadius = 4F;
-			this.butRefresh.Location = new System.Drawing.Point(719, 10);
-			this.butRefresh.Name = "butRefresh";
-			this.butRefresh.Size = new System.Drawing.Size(82, 24);
-			this.butRefresh.TabIndex = 145;
-			this.butRefresh.Text = "Refresh";
-			this.butRefresh.Click += new System.EventHandler(this.butRefresh_Click);
-			// 
-			// textDateFrom
-			// 
-			this.textDateFrom.Location = new System.Drawing.Point(85, 12);
-			this.textDateFrom.Name = "textDateFrom";
-			this.textDateFrom.Size = new System.Drawing.Size(90, 20);
-			this.textDateFrom.TabIndex = 143;
-			// 
-			// textDateTo
-			// 
-			this.textDateTo.Location = new System.Drawing.Point(254, 12);
-			this.textDateTo.Name = "textDateTo";
-			this.textDateTo.Size = new System.Drawing.Size(90, 20);
-			this.textDateTo.TabIndex = 144;
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(726, 521);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75, 24);
-			this.butClose.TabIndex = 3;
-			this.butClose.Text = "&Close";
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// comboClinic
-			// 
-			this.comboClinic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.comboClinic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboClinic.Location = new System.Drawing.Point(543, 11);
-			this.comboClinic.MaxDropDownItems = 40;
-			this.comboClinic.Name = "comboClinic";
-			this.comboClinic.Size = new System.Drawing.Size(159, 21);
-			this.comboClinic.TabIndex = 147;
-			// 
-			// labelClinic
-			// 
-			this.labelClinic.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.labelClinic.Location = new System.Drawing.Point(476, 14);
-			this.labelClinic.Name = "labelClinic";
-			this.labelClinic.Size = new System.Drawing.Size(65, 14);
-			this.labelClinic.TabIndex = 146;
-			this.labelClinic.Text = "Clinic";
-			this.labelClinic.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-			// 
-			// FormXWebTransactions
-			// 
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(827, 557);
-			this.Controls.Add(this.comboClinic);
-			this.Controls.Add(this.labelClinic);
-			this.Controls.Add(this.butRefresh);
-			this.Controls.Add(this.textDateFrom);
-			this.Controls.Add(this.textDateTo);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.gridMain);
-			this.Controls.Add(this.butClose);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "FormXWebTransactions";
-			this.Text = "XWeb Transactions";
-			this.Load += new System.EventHandler(this.FormXWebTransactions_Load);
-			this.contextMenu.ResumeLayout(false);
-			this.ResumeLayout(false);
-			this.PerformLayout();
+            this.transactionsGrid.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
+            this.transactionsGrid.ContextMenuStrip = this.contextMenu;
+            this.transactionsGrid.EditableEnterMovesDown = false;
+            this.transactionsGrid.HasAddButton = false;
+            this.transactionsGrid.HasDropDowns = false;
+            this.transactionsGrid.HasMultilineHeaders = false;
+            this.transactionsGrid.HScrollVisible = false;
+            this.transactionsGrid.Location = new System.Drawing.Point(13, 48);
+            this.transactionsGrid.Name = "transactionsGrid";
+            this.transactionsGrid.ScrollValue = 0;
+            this.transactionsGrid.Size = new System.Drawing.Size(818, 484);
+            this.transactionsGrid.TabIndex = 0;
+            this.transactionsGrid.Title = "XWeb Transactions";
+            this.transactionsGrid.TitleVisible = true;
+            this.transactionsGrid.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.TransactionsGrid_CellDoubleClick);
+            this.transactionsGrid.MouseClick += new System.Windows.Forms.MouseEventHandler(this.TransactionsGrid_MouseClick);
+            this.transactionsGrid.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TransactionsGrid_MouseDown);
+            // 
+            // butRefresh
+            // 
+            this.butRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.butRefresh.Location = new System.Drawing.Point(761, 18);
+            this.butRefresh.Name = "butRefresh";
+            this.butRefresh.Size = new System.Drawing.Size(70, 25);
+            this.butRefresh.TabIndex = 8;
+            this.butRefresh.Text = "Refresh";
+            this.butRefresh.Click += new System.EventHandler(this.RefreshButton_Click);
+            // 
+            // dateFromTextBox
+            // 
+            this.dateFromTextBox.Location = new System.Drawing.Point(100, 19);
+            this.dateFromTextBox.Name = "dateFromTextBox";
+            this.dateFromTextBox.Size = new System.Drawing.Size(90, 23);
+            this.dateFromTextBox.TabIndex = 3;
+            // 
+            // dateToTextBox
+            // 
+            this.dateToTextBox.Location = new System.Drawing.Point(260, 19);
+            this.dateToTextBox.Name = "dateToTextBox";
+            this.dateToTextBox.Size = new System.Drawing.Size(90, 23);
+            this.dateToTextBox.TabIndex = 5;
+            // 
+            // closeButton
+            // 
+            this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.closeButton.Location = new System.Drawing.Point(721, 538);
+            this.closeButton.Name = "closeButton";
+            this.closeButton.Size = new System.Drawing.Size(110, 30);
+            this.closeButton.TabIndex = 1;
+            this.closeButton.Text = "&Close";
+            this.closeButton.Click += new System.EventHandler(this.CloseButton_Click);
+            // 
+            // clinicComboBox
+            // 
+            this.clinicComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.clinicComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.clinicComboBox.Location = new System.Drawing.Point(575, 19);
+            this.clinicComboBox.MaxDropDownItems = 40;
+            this.clinicComboBox.Name = "clinicComboBox";
+            this.clinicComboBox.Size = new System.Drawing.Size(180, 23);
+            this.clinicComboBox.TabIndex = 7;
+            // 
+            // clinicLabel
+            // 
+            this.clinicLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.clinicLabel.AutoSize = true;
+            this.clinicLabel.Location = new System.Drawing.Point(532, 22);
+            this.clinicLabel.Name = "clinicLabel";
+            this.clinicLabel.Size = new System.Drawing.Size(37, 15);
+            this.clinicLabel.TabIndex = 6;
+            this.clinicLabel.Text = "Clinic";
+            this.clinicLabel.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+            // 
+            // FormXWebTransactions
+            // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.AutoSize = true;
+            this.CancelButton = this.closeButton;
+            this.ClientSize = new System.Drawing.Size(844, 581);
+            this.Controls.Add(this.clinicComboBox);
+            this.Controls.Add(this.clinicLabel);
+            this.Controls.Add(this.butRefresh);
+            this.Controls.Add(this.dateFromTextBox);
+            this.Controls.Add(this.dateToTextBox);
+            this.Controls.Add(this.dateFromLabel);
+            this.Controls.Add(this.dateToLabel);
+            this.Controls.Add(this.transactionsGrid);
+            this.Controls.Add(this.closeButton);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(700, 400);
+            this.Name = "FormXWebTransactions";
+            this.ShowInTaskbar = false;
+            this.Text = "XWeb Transactions";
+            this.Load += new System.EventHandler(this.FormXWebTransactions_Load);
+            this.contextMenu.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private OpenDental.UI.Button butClose;
-		private UI.ODGrid gridMain;
-		private ValidDate textDateFrom;
-		private ValidDate textDateTo;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Label label3;
-		private UI.Button butRefresh;
-		private System.Windows.Forms.ContextMenuStrip contextMenu;
-		private System.Windows.Forms.ToolStripMenuItem menuItemGoTo;
-		private System.Windows.Forms.ToolStripMenuItem openPaymentToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem voidPaymentToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem processReturnToolStripMenuItem;
-		private System.Windows.Forms.ComboBox comboClinic;
-		private System.Windows.Forms.Label labelClinic;
-	}
+        private System.Windows.Forms.Button closeButton;
+        private UI.ODGrid transactionsGrid;
+        private ValidDate dateFromTextBox;
+        private ValidDate dateToTextBox;
+        private System.Windows.Forms.Label dateFromLabel;
+        private System.Windows.Forms.Label dateToLabel;
+        private System.Windows.Forms.Button butRefresh;
+        private System.Windows.Forms.ContextMenuStrip contextMenu;
+        private System.Windows.Forms.ToolStripMenuItem goToMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openPaymentMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem voidPaymentMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem processReturnMenuItem;
+        private System.Windows.Forms.ComboBox clinicComboBox;
+        private System.Windows.Forms.Label clinicLabel;
+    }
 }

@@ -682,4 +682,21 @@ Please wait and click 'Try Again'.</value>
   <data name="TotalEstValue" xml:space="preserve">
     <value>Total Est Value</value>
   </data>
+  <data name="Setup" xml:space="preserve">
+    <value>Setup</value>
+  </data>
+  <data name="SetupComplete" xml:space="preserve">
+    <value>You have finished setup.</value>
+  </data>
+  <data name="SetupStepIncomplete" xml:space="preserve">
+    <value>You have not finished setting this section up yet.
+{0}
+Click 'Skip' if you do not wish to finish setting this section up at this time.</value>
+  </data>
+  <data name="SetupTitle" xml:space="preserve">
+    <value>{0} Setup</value>
+  </data>
+  <data name="PleaseFillInTheMissingFieldsFirst" xml:space="preserve">
+    <value>Please fill in the missing fields first.</value>
+  </data>
 </root>

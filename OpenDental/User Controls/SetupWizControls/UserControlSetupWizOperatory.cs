@@ -7,7 +7,7 @@ using OpenDentBusiness;
 
 
 namespace OpenDental.User_Controls.SetupWizard {
-	public partial class UserControlSetupWizOperatory:SetupWizControl {
+	public partial class UserControlSetupWizOperatory:SetupWizardControl {
 		private List<Operatory> _listOps = Operatories.GetDeepCopy();
 		private int _blink;
 		public UserControlSetupWizOperatory() {

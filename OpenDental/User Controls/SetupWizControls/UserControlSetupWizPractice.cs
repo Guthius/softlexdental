@@ -14,13 +14,12 @@ using OpenDentBusiness;
 using System.Globalization;
 
 namespace OpenDental.User_Controls.SetupWizard {
-	public partial class UserControlSetupWizPractice:SetupWizControl {
+	public partial class UserControlSetupWizPractice:SetupWizardControl {
 		///<summary>Deep copy of the short providers cache.  Refilled every time FillControls() is invoked.</summary>
 		private List<Provider> _listProviders;
 
 		public UserControlSetupWizPractice() {
 			InitializeComponent();
-			this.OnControlDone += ControlDone;
 		}
 
 		private void UserControlSetupWizPractice_Load(object sender,EventArgs e) {
@@ -54,16 +53,16 @@ namespace OpenDental.User_Controls.SetupWizard {
 
 		private void CheckIsDone() {
 			IsDone=true;
-			StrIncomplete = Lan.g("FormSetupWizard","The following fields need to be corrected: ");
+			Error = Lan.g("FormSetupWizard","The following fields need to be corrected: ");
 			string phone = textPhone.Text;//Auto formatting turned off on purpose.
 			if(!TelephoneNumbers.IsNumberValidTenDigit(ref phone)) {
 				IsDone=false;
-				StrIncomplete+="\r\n "+Lan.g("FormSetupWizard","-Practice Phone is invalid.  Must contain exactly ten digits.");
+				Error+="\r\n "+Lan.g("FormSetupWizard","-Practice Phone is invalid.  Must contain exactly ten digits.");
 			}
 			string fax = textFax.Text;//Auto formatting turned off on purpose.
 			if(!TelephoneNumbers.IsNumberValidTenDigit(ref fax)) {
 				IsDone=false;
-				StrIncomplete+="\r\n "+Lan.g("FormSetupWizard","-Practice Fax is invalid.  Must contain exactly ten digits.");
+				Error+="\r\n "+Lan.g("FormSetupWizard","-Practice Fax is invalid.  Must contain exactly ten digits.");
 			}
 			if(listProvider.SelectedIndex==-1//practice really needs a default prov
 				&& _listProviders.Count > 0) 
@@ -75,7 +74,7 @@ namespace OpenDental.User_Controls.SetupWizard {
 			{
 				//listProvider.BackColor = OpenDental.SetupWizard.GetColor(ODSetupStatus.NeedsAttention);
 				IsDone=false;
-				StrIncomplete+="\r\n "+Lan.g("FormSetupWizard","-Practice Provider must have a default fee schedule.");
+				Error+="\r\n "+Lan.g("FormSetupWizard","-Practice Provider must have a default fee schedule.");
 			}
 		}
 
@@ -83,50 +82,56 @@ namespace OpenDental.User_Controls.SetupWizard {
 			CheckIsDone();
 		}
 
+        protected override void OnControlDone(EventArgs e)
+        {
+            base.OnControlDone(e);
 
-		private void ControlDone(object sender,EventArgs e) {
-			string phone = textPhone.Text;
-			if(Application.CurrentCulture.Name=="en-US"
-				|| CultureInfo.CurrentCulture.Name.EndsWith("CA")) //Canadian. en-CA or fr-CA)
-			{
-				phone=phone.Replace("(","");
-				phone=phone.Replace(")","");
-				phone=phone.Replace(" ","");
-				phone=phone.Replace("-","");
-			}
-			string fax = textFax.Text;
-			if(Application.CurrentCulture.Name=="en-US"
-				|| CultureInfo.CurrentCulture.Name.EndsWith("CA")) //Canadian. en-CA or fr-CA)
-			{
-				fax=fax.Replace("(","");
-				fax=fax.Replace(")","");
-				fax=fax.Replace("-","");
-				if(fax.Length!=0 && fax.Length!=10) {
-					textFax.BackColor = OpenDental.SetupWizard.GetColor(ODSetupStatus.NeedsAttention);
-					IsDone=false;
-				}
-			}
-			bool changed = false;
-			if(Prefs.UpdateString(PrefName.PracticeTitle,textPracticeTitle.Text)
-				| Prefs.UpdateString(PrefName.PracticeAddress,textAddress.Text)
-				| Prefs.UpdateString(PrefName.PracticeAddress2,textAddress2.Text)
-				| Prefs.UpdateString(PrefName.PracticeCity,textCity.Text)
-				| Prefs.UpdateString(PrefName.PracticeST,textST.Text)
-				| Prefs.UpdateString(PrefName.PracticeZip,textZip.Text)
-				| Prefs.UpdateString(PrefName.PracticePhone,phone)
-				| Prefs.UpdateString(PrefName.PracticeFax,fax))
-			{
-				changed=true;
-			}
-			if(listProvider.SelectedIndex!=-1) {
-				if(Prefs.UpdateLong(PrefName.PracticeDefaultProv,_listProviders[listProvider.SelectedIndex].ProvNum)) {
-					changed=true;
-				}
-			}
-			if(changed) {
-				DataValid.SetInvalid(InvalidType.Prefs);
-			}
-			FormEServicesSetup.UploadPreference(PrefName.PracticeTitle);
-		}
+            string phone = textPhone.Text;
+            if (Application.CurrentCulture.Name == "en-US"
+                || CultureInfo.CurrentCulture.Name.EndsWith("CA")) //Canadian. en-CA or fr-CA)
+            {
+                phone = phone.Replace("(", "");
+                phone = phone.Replace(")", "");
+                phone = phone.Replace(" ", "");
+                phone = phone.Replace("-", "");
+            }
+            string fax = textFax.Text;
+            if (Application.CurrentCulture.Name == "en-US"
+                || CultureInfo.CurrentCulture.Name.EndsWith("CA")) //Canadian. en-CA or fr-CA)
+            {
+                fax = fax.Replace("(", "");
+                fax = fax.Replace(")", "");
+                fax = fax.Replace("-", "");
+                if (fax.Length != 0 && fax.Length != 10)
+                {
+                    textFax.BackColor = OpenDental.SetupWizard.GetColor(ODSetupStatus.NeedsAttention);
+                    IsDone = false;
+                }
+            }
+            bool changed = false;
+            if (Prefs.UpdateString(PrefName.PracticeTitle, textPracticeTitle.Text)
+                | Prefs.UpdateString(PrefName.PracticeAddress, textAddress.Text)
+                | Prefs.UpdateString(PrefName.PracticeAddress2, textAddress2.Text)
+                | Prefs.UpdateString(PrefName.PracticeCity, textCity.Text)
+                | Prefs.UpdateString(PrefName.PracticeST, textST.Text)
+                | Prefs.UpdateString(PrefName.PracticeZip, textZip.Text)
+                | Prefs.UpdateString(PrefName.PracticePhone, phone)
+                | Prefs.UpdateString(PrefName.PracticeFax, fax))
+            {
+                changed = true;
+            }
+            if (listProvider.SelectedIndex != -1)
+            {
+                if (Prefs.UpdateLong(PrefName.PracticeDefaultProv, _listProviders[listProvider.SelectedIndex].ProvNum))
+                {
+                    changed = true;
+                }
+            }
+            if (changed)
+            {
+                DataValid.SetInvalid(InvalidType.Prefs);
+            }
+            FormEServicesSetup.UploadPreference(PrefName.PracticeTitle);
+        }
 	}
 }

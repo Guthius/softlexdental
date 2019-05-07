@@ -173,8 +173,6 @@
 			// 
 			// UserControlSetupWizDefinitions
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.label13);
 			this.Controls.Add(this.gridDefs);
 			this.Controls.Add(this.label14);

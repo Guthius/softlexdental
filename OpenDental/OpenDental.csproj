@@ -4776,17 +4776,17 @@
     <Compile Include="User Controls\SetupWizControls\UserControlSetupWizPrinter.Designer.cs">
       <DependentUpon>UserControlSetupWizPrinter.cs</DependentUpon>
     </Compile>
-    <Compile Include="User Controls\SetupWizControls\UserControlSetupWizRegKey.cs">
+    <Compile Include="User Controls\SetupWizControls\SetupWizardControlRegistrationKey.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="User Controls\SetupWizControls\UserControlSetupWizRegKey.Designer.cs">
-      <DependentUpon>UserControlSetupWizRegKey.cs</DependentUpon>
+    <Compile Include="User Controls\SetupWizControls\SetupWizardControlRegistrationKey.Designer.cs">
+      <DependentUpon>SetupWizardControlRegistrationKey.cs</DependentUpon>
     </Compile>
-    <Compile Include="User Controls\SetupWizControls\UserControlSetupWizClinic.cs">
+    <Compile Include="User Controls\SetupWizControls\SetupWizardControlClinics.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="User Controls\SetupWizControls\UserControlSetupWizClinic.Designer.cs">
-      <DependentUpon>UserControlSetupWizClinic.cs</DependentUpon>
+    <Compile Include="User Controls\SetupWizControls\SetupWizardControlClinics.Designer.cs">
+      <DependentUpon>SetupWizardControlClinics.cs</DependentUpon>
     </Compile>
     <Compile Include="User Controls\SetupWizControls\UserControlSetupWizPractice.cs">
       <SubType>UserControl</SubType>
@@ -4812,23 +4812,23 @@
     <Compile Include="User Controls\SetupWizControls\UserControlSetupWizProvider.Designer.cs">
       <DependentUpon>UserControlSetupWizProvider.cs</DependentUpon>
     </Compile>
-    <Compile Include="User Controls\SetupWizControls\UserControlSetupWizComplete.cs">
+    <Compile Include="User Controls\SetupWizControls\SetupWizardControlComplete.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="User Controls\SetupWizControls\UserControlSetupWizComplete.Designer.cs">
-      <DependentUpon>UserControlSetupWizComplete.cs</DependentUpon>
+    <Compile Include="User Controls\SetupWizControls\SetupWizardControlComplete.Designer.cs">
+      <DependentUpon>SetupWizardControlComplete.cs</DependentUpon>
     </Compile>
-    <Compile Include="User Controls\SetupWizControls\SetupWizControl.cs">
+    <Compile Include="User Controls\SetupWizControls\SetupWizardControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="User Controls\SetupWizControls\SetupWizControl.Designer.cs">
-      <DependentUpon>SetupWizControl.cs</DependentUpon>
+    <Compile Include="User Controls\SetupWizControls\SetupWizardControl.Designer.cs">
+      <DependentUpon>SetupWizardControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="User Controls\SetupWizControls\UserControlSetupWizIntro.cs">
+    <Compile Include="User Controls\SetupWizControls\SetupWizardControlIntro.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="User Controls\SetupWizControls\UserControlSetupWizIntro.Designer.cs">
-      <DependentUpon>UserControlSetupWizIntro.cs</DependentUpon>
+    <Compile Include="User Controls\SetupWizControls\SetupWizardControlIntro.Designer.cs">
+      <DependentUpon>SetupWizardControlIntro.cs</DependentUpon>
     </Compile>
     <Compile Include="User Controls\SetupWizControls\UserControlSetupWizSchedule.cs">
       <SubType>UserControl</SubType>
@@ -7659,11 +7659,11 @@
     <EmbeddedResource Include="User Controls\SetupWizControls\UserControlSetupWizPrinter.resx">
       <DependentUpon>UserControlSetupWizPrinter.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="User Controls\SetupWizControls\UserControlSetupWizRegKey.resx">
-      <DependentUpon>UserControlSetupWizRegKey.cs</DependentUpon>
+    <EmbeddedResource Include="User Controls\SetupWizControls\SetupWizardControlRegistrationKey.resx">
+      <DependentUpon>SetupWizardControlRegistrationKey.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="User Controls\SetupWizControls\UserControlSetupWizClinic.resx">
-      <DependentUpon>UserControlSetupWizClinic.cs</DependentUpon>
+    <EmbeddedResource Include="User Controls\SetupWizControls\SetupWizardControlClinics.resx">
+      <DependentUpon>SetupWizardControlClinics.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="User Controls\SetupWizControls\UserControlSetupWizPractice.resx">
       <DependentUpon>UserControlSetupWizPractice.cs</DependentUpon>
@@ -7677,14 +7677,14 @@
     <EmbeddedResource Include="User Controls\SetupWizControls\UserControlSetupWizProvider.resx">
       <DependentUpon>UserControlSetupWizProvider.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="User Controls\SetupWizControls\UserControlSetupWizComplete.resx">
-      <DependentUpon>UserControlSetupWizComplete.cs</DependentUpon>
+    <EmbeddedResource Include="User Controls\SetupWizControls\SetupWizardControlComplete.resx">
+      <DependentUpon>SetupWizardControlComplete.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="User Controls\SetupWizControls\SetupWizControl.resx">
-      <DependentUpon>SetupWizControl.cs</DependentUpon>
+    <EmbeddedResource Include="User Controls\SetupWizControls\SetupWizardControl.resx">
+      <DependentUpon>SetupWizardControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="User Controls\SetupWizControls\UserControlSetupWizIntro.resx">
-      <DependentUpon>UserControlSetupWizIntro.cs</DependentUpon>
+    <EmbeddedResource Include="User Controls\SetupWizControls\SetupWizardControlIntro.resx">
+      <DependentUpon>SetupWizardControlIntro.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="User Controls\SetupWizControls\UserControlSetupWizSchedule.resx">
       <DependentUpon>UserControlSetupWizSchedule.cs</DependentUpon>

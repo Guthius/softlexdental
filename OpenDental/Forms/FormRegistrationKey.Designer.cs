@@ -106,6 +106,7 @@
             // cancelButton
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.cancelButton.Location = new System.Drawing.Point(611, 518);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(110, 30);
@@ -114,6 +115,8 @@
             // 
             // FormRegistrationKey
             // 
+            this.AcceptButton = this.acceptButton;
+            this.CancelButton = this.cancelButton;
             this.ClientSize = new System.Drawing.Size(734, 561);
             this.Controls.Add(this.agreementRichTextBox);
             this.Controls.Add(this.agreeCheckBox);
@@ -129,6 +132,7 @@
             this.MinimizeBox = false;
             this.Name = "FormRegistrationKey";
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Registration Key";
             this.Load += new System.EventHandler(this.FormRegistrationKey_Load);
             this.ResumeLayout(false);

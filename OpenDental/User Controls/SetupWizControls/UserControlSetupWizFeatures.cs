@@ -5,10 +5,9 @@ using OpenDentBusiness;
 
 
 namespace OpenDental.User_Controls.SetupWizard {
-	public partial class UserControlSetupWizFeatures:SetupWizControl {
+	public partial class UserControlSetupWizFeatures:SetupWizardControl {
 		public UserControlSetupWizFeatures() {
 			InitializeComponent();
-			this.OnControlDone += ControlDone;
 		}
 
 		private void UserControlSetupWizFeatures_Load(object sender,EventArgs e) {
@@ -42,18 +41,20 @@ namespace OpenDental.User_Controls.SetupWizard {
 			RefreshControls();
 		}
 
-		private void ControlDone(object sender, EventArgs e) {
-			if(
-				Prefs.UpdateBool(PrefName.EasyHideCapitation,!checkCapitation.Checked)
-				| Prefs.UpdateBool(PrefName.EasyHideMedicaid,!checkMedicaid.Checked)
-				| Prefs.UpdateBool(PrefName.EasyHideInsurance,!checkInsurance.Checked)
-				| Prefs.UpdateBool(PrefName.EasyHideClinical,!checkClinical.Checked)
-				| Prefs.UpdateBool(PrefName.EasyNoClinics,!checkNoClinics.Checked)
-				| Prefs.UpdateBool(PrefName.ShowFeatureMedicalInsurance,checkMedicalIns.Checked)
-				| Prefs.UpdateBool(PrefName.ShowFeatureEhr,checkEhr.Checked)
-			) {
-				DataValid.SetInvalid(InvalidType.Prefs);
-			}
-		}
+        protected override void OnControlDone(EventArgs e)
+        {
+            if (
+                Prefs.UpdateBool(PrefName.EasyHideCapitation, !checkCapitation.Checked)
+                | Prefs.UpdateBool(PrefName.EasyHideMedicaid, !checkMedicaid.Checked)
+                | Prefs.UpdateBool(PrefName.EasyHideInsurance, !checkInsurance.Checked)
+                | Prefs.UpdateBool(PrefName.EasyHideClinical, !checkClinical.Checked)
+                | Prefs.UpdateBool(PrefName.EasyNoClinics, !checkNoClinics.Checked)
+                | Prefs.UpdateBool(PrefName.ShowFeatureMedicalInsurance, checkMedicalIns.Checked)
+                | Prefs.UpdateBool(PrefName.ShowFeatureEhr, checkEhr.Checked)
+            )
+            {
+                DataValid.SetInvalid(InvalidType.Prefs);
+            }
+        }
 	}
 }

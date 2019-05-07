@@ -738,8 +738,6 @@
 			// 
 			// UserControlSetupWizPrinter
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.groupBox5);
 			this.Controls.Add(this.groupPrinter);

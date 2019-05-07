@@ -14,7 +14,7 @@ using OpenDentBusiness;
 
 
 namespace OpenDental.User_Controls.SetupWizard {
-	public partial class UserControlSetupWizProvider:SetupWizControl {
+	public partial class UserControlSetupWizProvider:SetupWizardControl {
 		private int _blink;
 		public UserControlSetupWizProvider() {
 			InitializeComponent();

@@ -1018,6 +1018,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please fill in the missing fields first..
+        /// </summary>
+        public static string PleaseFillInTheMissingFieldsFirst {
+            get {
+                return ResourceManager.GetString("PleaseFillInTheMissingFieldsFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please fix data entry errors first..
         /// </summary>
         public static string PleaseFixDataEntryErrors {
@@ -1095,6 +1104,44 @@ namespace OpenDental.Translation {
         public static string SearchFilter {
             get {
                 return ResourceManager.GetString("SearchFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Setup.
+        /// </summary>
+        public static string Setup {
+            get {
+                return ResourceManager.GetString("Setup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have finished setup..
+        /// </summary>
+        public static string SetupComplete {
+            get {
+                return ResourceManager.GetString("SetupComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have not finished setting this section up yet.
+        ///{0}
+        ///Click &apos;Skip&apos; if you do not wish to finish setting this section up at this time..
+        /// </summary>
+        public static string SetupStepIncomplete {
+            get {
+                return ResourceManager.GetString("SetupStepIncomplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} Setup.
+        /// </summary>
+        public static string SetupTitle {
+            get {
+                return ResourceManager.GetString("SetupTitle", resourceCulture);
             }
         }
         

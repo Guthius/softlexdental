@@ -1,129 +1,129 @@
-namespace OpenDental{
-	partial class FormSetupWizard {
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+namespace OpenDental
+{
+    partial class FormSetupWizard
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing) {
-			if(disposing && (components != null)) {
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent() {
-			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSetupWizard));
-			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-			this.label1 = new System.Windows.Forms.Label();
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butAll = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.SuspendLayout();
-			// 
-			// imageList1
-			// 
-			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-			this.imageList1.Images.SetKeyName(0, "iButton_Blue.png");
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(9, 5);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(391, 52);
-			this.label1.TabIndex = 5;
-			this.label1.Text = "Double click a row to set it up individually. \r\nDouble click a category to set up" +
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSetupWizard));
+            this.gridImageList = new System.Windows.Forms.ImageList(this.components);
+            this.infoLabel = new System.Windows.Forms.Label();
+            this.wizardsGrid = new OpenDental.UI.ODGrid();
+            this.allButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // gridImageList
+            // 
+            this.gridImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("gridImageList.ImageStream")));
+            this.gridImageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.gridImageList.Images.SetKeyName(0, "iButton_Blue.png");
+            // 
+            // infoLabel
+            // 
+            this.infoLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.infoLabel.Location = new System.Drawing.Point(13, 16);
+            this.infoLabel.Name = "infoLabel";
+            this.infoLabel.Size = new System.Drawing.Size(438, 60);
+            this.infoLabel.TabIndex = 0;
+            this.infoLabel.Text = "Double click a row to set it up individually. \r\nDouble click a category to set up" +
     " all for that category.\r\nClick \"Set Up All\" to go through the entire setup seque" +
     "nce.";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            // 
+            // wizardsGrid
+            // 
+            this.wizardsGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
-			this.gridMain.HasAddButton = false;
-			this.gridMain.HasDropDowns = true;
-			this.gridMain.HasMultilineHeaders = false;
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12, 60);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridMain.Size = new System.Drawing.Size(388, 289);
-			this.gridMain.TabIndex = 4;
-			this.gridMain.Title = "Setup";
-			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
-			this.gridMain.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellClick);
-			// 
-			// butAll
-			// 
-			this.butAll.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butAll.Autosize = true;
-			this.butAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAll.CornerRadius = 4F;
-			this.butAll.Location = new System.Drawing.Point(12, 364);
-			this.butAll.Name = "butAll";
-			this.butAll.Size = new System.Drawing.Size(75, 24);
-			this.butAll.TabIndex = 6;
-			this.butAll.Text = "Set Up All";
-			this.butAll.Click += new System.EventHandler(this.butAll_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(325, 364);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Close";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// FormSetupWizard
-			// 
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(411, 400);
-			this.Controls.Add(this.butAll);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.gridMain);
-			this.Controls.Add(this.butCancel);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MaximumSize = new System.Drawing.Size(427, 439);
-			this.MinimumSize = new System.Drawing.Size(427, 439);
-			this.Name = "FormSetupWizard";
-			this.Text = "Setup Wizard";
-			this.Load += new System.EventHandler(this.FormSetupWizard_Load);
-			this.ResumeLayout(false);
+            this.wizardsGrid.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
+            this.wizardsGrid.EditableEnterMovesDown = false;
+            this.wizardsGrid.HasAddButton = false;
+            this.wizardsGrid.HasDropDowns = true;
+            this.wizardsGrid.HasMultilineHeaders = false;
+            this.wizardsGrid.HScrollVisible = false;
+            this.wizardsGrid.Location = new System.Drawing.Point(13, 79);
+            this.wizardsGrid.Name = "wizardsGrid";
+            this.wizardsGrid.ScrollValue = 0;
+            this.wizardsGrid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.wizardsGrid.Size = new System.Drawing.Size(438, 413);
+            this.wizardsGrid.TabIndex = 1;
+            this.wizardsGrid.Title = "Setup";
+            this.wizardsGrid.TitleVisible = true;
+            this.wizardsGrid.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.WizardsGrid_CellDoubleClick);
+            this.wizardsGrid.CellClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.WizardsGrid_CellClick);
+            // 
+            // allButton
+            // 
+            this.allButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.allButton.Location = new System.Drawing.Point(13, 498);
+            this.allButton.Name = "allButton";
+            this.allButton.Size = new System.Drawing.Size(110, 30);
+            this.allButton.TabIndex = 2;
+            this.allButton.Text = "Set Up All";
+            this.allButton.Click += new System.EventHandler(this.AllButton_Click);
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(341, 498);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(110, 30);
+            this.cancelButton.TabIndex = 3;
+            this.cancelButton.Text = "&Close";
+            // 
+            // FormSetupWizard
+            // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(464, 541);
+            this.Controls.Add(this.allButton);
+            this.Controls.Add(this.infoLabel);
+            this.Controls.Add(this.wizardsGrid);
+            this.Controls.Add(this.cancelButton);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FormSetupWizard";
+            this.ShowInTaskbar = false;
+            this.Text = "Setup";
+            this.Load += new System.EventHandler(this.FormSetupWizard_Load);
+            this.ResumeLayout(false);
 
-		}
+        }
 
-		#endregion
-		private OpenDental.UI.Button butCancel;
-		private UI.ODGrid gridMain;
-		private System.Windows.Forms.ImageList imageList1;
-		private System.Windows.Forms.ToolTip toolTip1;
-		private System.Windows.Forms.Label label1;
-		private UI.Button butAll;
-	}
+        #endregion
+
+        private System.Windows.Forms.Button cancelButton;
+        private UI.ODGrid wizardsGrid;
+        private System.Windows.Forms.ImageList gridImageList;
+        private System.Windows.Forms.Label infoLabel;
+        private System.Windows.Forms.Button allButton;
+    }
 }
