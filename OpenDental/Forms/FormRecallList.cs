@@ -561,8 +561,8 @@ namespace OpenDental{
 		///<summary>Automatically open the eService Setup window so that they can easily click the Enable button. 
 		///Calls CheckClinicsSignedUpForWebSched() before exiting.</summary>
 		private void OpenSignupPortal() {
-			FormEServicesSetup FormESS=new FormEServicesSetup(FormEServicesSetup.EService.SignupPortal);
-			FormESS.ShowDialog();
+			//FormEServicesSetup FormESS=new FormEServicesSetup(FormEServicesSetup.EService.SignupPortal);
+			//FormESS.ShowDialog();
 			//User may have made changes to signups. Reload the valid clinics from HQ.
 			CheckClinicsSignedUpForWebSched();
 		}

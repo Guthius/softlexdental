@@ -108,8 +108,8 @@ namespace OpenDental {
 
 
 		private void butSetup_Click(object sender,EventArgs e) {
-			FormEServicesSetup FormESS=new FormEServicesSetup(FormEServicesSetup.EService.eConfirmRemind);
-			FormESS.Show();
+			//FormEServicesSetup FormESS=new FormEServicesSetup(FormEServicesSetup.EService.eConfirmRemind);
+			//FormESS.Show();
 		}
 
 		private void butOK_Click(object sender,System.EventArgs e) {

@@ -20,7 +20,6 @@ namespace OpenDental
         private IContainer components = null;
         /////<summary>After closing, if this is not zero, then it will jump to the specified patient.</summary>
         //public long GotoKeyNum;
-        private bool IsTriage;
         private SplitContainer splitter;
         private FormWindowState windowStateOld;
 
@@ -141,14 +140,7 @@ namespace OpenDental
                 {
                     Patient pat = Patients.GetPat(gotoKeyNum);
                     //OnPatientSelected(pat);
-                    if (IsTriage)
-                    {
-                        GotoModule.GotoChart(pat.PatNum);
-                    }
-                    else
-                    {
-                        GotoModule.GotoAccount(pat.PatNum);
-                    }
+                    GotoModule.GotoAccount(pat.PatNum);
                 }
             }
             if (gotoType == TaskObjectType.Appointment)

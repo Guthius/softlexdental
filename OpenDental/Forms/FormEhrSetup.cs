@@ -127,7 +127,7 @@ namespace OpenDental {
 		}
 
 		private void butPortalSetup_Click(object sender,EventArgs e) {
-			new FormEServicesSetup(FormEServicesSetup.EService.PatientPortal).ShowDialog();			
+			//new FormEServicesSetup(FormEServicesSetup.EService.PatientPortal).ShowDialog();			
 		}
 
 		private void butCodeImport_Click(object sender,EventArgs e) {

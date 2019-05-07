@@ -1101,7 +1101,6 @@ namespace OpenDental{
 			{
 				return;
 			}
-			string sftpPass="";
 			if(radioSftp.Checked && (ProgramProperties.UpdateProgramPropertyWithValue(_ppSftpPathAtoZ,textSftpAtoZ.Text)
 					| ProgramProperties.UpdateProgramPropertyWithValue(_ppSftpHostname,textSftpHostname.Text)
 					| ProgramProperties.UpdateProgramPropertyWithValue(_ppSftpUsername,textSftpUsername.Text)

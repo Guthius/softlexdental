@@ -909,7 +909,7 @@ namespace OpenDental{
 			if(changed){
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
-			FormEServicesSetup.UploadPreference(PrefName.PracticeTitle);
+			//FormEServicesSetup.UploadPreference(PrefName.PracticeTitle);
 			DialogResult=DialogResult.OK;
 		}
 

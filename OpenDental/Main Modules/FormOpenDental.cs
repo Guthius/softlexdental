@@ -59,7 +59,6 @@ namespace OpenDental
         private MenuItem menuItemMessaging;
         
         private MenuItem menuItemMessagingButs;
-        private Bitmap bitmapIcon;
         private MenuItem menuItemCreateAtoZFolders;
         private MenuItem menuItemLaboratories;
         ///<summary>A list of button definitions for this computer.  These button defs display in the lightSignalGrid1 control.</summary>
@@ -71,14 +70,12 @@ namespace OpenDental
         private MenuItem menuItemAutoNotes;
         private MenuItem menuItemDisplayFields;
         //private string dconnStr;
-        private bool MouseIsDownOnSplitter;
-        private Point SplitterOriginalLocation;
         private ImageList imageListMain;
         private ContextMenu menuPatient;
         private ContextMenu menuLabel;
         private ContextMenu menuEmail;
         private ContextMenu menuLetter;
-        private Point OriginalMousePos;
+
         ///<summary>This list will only contain events for this computer where the users clicked to disable a popup for a specified period of time.  So it won't typically have many items in it.</summary>
         private List<PopupEvent> PopupEventList;
         private MenuItem menuItemPharmacies;
@@ -180,16 +177,6 @@ namespace OpenDental
         ///This flag is used to display a warning to the user, but will not ever block the user from using OD.</summary>
         private bool _isReplicationSlaveStopped = false;
         private MenuItem menuClinics;
-        private MenuItem menuItemEServices;
-        private MenuItem menuItemPatientPortal;
-        private MenuItem menuMobileWeb;
-        private MenuItem menuItemIntegratedTexting;
-        private MenuItem menuItemWebSched;
-        private MenuItem menuItemERemind;
-        private MenuItem menuItemEConfirm;
-        private MenuItem menuItemEMisc;
-        private MenuItem menuItem14;
-        private MenuItem menuItemListenerService;
         ///<summary>HQ only. Keep track of last time triage task labels were filled. Too taxing on the server to perform every 1.6 seconds with the rest of the HQ thread metrics. Triage labels will be refreshed on ProcessSigsIntervalInSecs interval.</summary>
         DateTime _hqTriageMetricsLastRefreshed = DateTime.MinValue;
         ///<summary>HQ only. Keep track of last time EServiceMetrics were filled. Server is only updating every 30 seconds so no need to go any faster than that.</summary>
@@ -310,7 +297,6 @@ namespace OpenDental
         private MenuItem menuItemCommlogPersistent;
         private MenuItem menuItemConfirmations;
         private MenuItem menuItemSetupWizard;
-        private MenuItem menuItemSignup;
         private MenuItem menuItemMergeDPs;
         private MenuItem menuItemAsapList;
         private MenuItem menuItemReports;
@@ -323,7 +309,7 @@ namespace OpenDental
         private MenuItem menuItemAddUser;
         private MenuItem menuItemSecuritySettings;
         private MenuItem menuItemWebinar;
-        private FormLoginFailed _formLoginFailed = null;
+        //private FormLoginFailed _formLoginFailed = null;
         private MenuItem menuPatientStatusSetter;
         ///<summary>We will send a maximum of 1 exception to HQ that occurs when processing signals.</summary>
         private Exception _signalsTickException;
@@ -5789,7 +5775,6 @@ namespace OpenDental
             {
                 return;
             }
-            ShowEServicesSetup(FormEServicesSetup.EService.MobileOld);
         }
 
         private void menuItemNewCropBilling_Click(object sender, EventArgs e)
@@ -6084,60 +6069,6 @@ namespace OpenDental
         }
         #endregion
 
-        #region eServices
-
-        private void ShowEServicesSetup(FormEServicesSetup.EService eService)
-        {
-            FormEServicesSetup FormESS = new FormEServicesSetup(eService);
-            FormESS.ShowDialog();
-            if (_butText != null)
-            { //User may just have signed up for texting.
-                _butText.Enabled = Programs.IsEnabled(ProgramName.CallFire) || SmsPhones.IsIntegratedTextingEnabled();
-            }
-        }
-
-        private void menuItemSignup_Click(object sender, EventArgs e)
-        {
-            ShowEServicesSetup(FormEServicesSetup.EService.SignupPortal);
-        }
-
-        private void menuMobileWeb_Click(object sender, EventArgs e)
-        {
-            ShowEServicesSetup(FormEServicesSetup.EService.MobileNew);
-        }
-
-        private void menuItemPatientPortal_Click(object sender, EventArgs e)
-        {
-            ShowEServicesSetup(FormEServicesSetup.EService.PatientPortal);
-        }
-
-        private void menuItemIntegratedTexting_Click(object sender, EventArgs e)
-        {
-            ShowEServicesSetup(FormEServicesSetup.EService.SmsService);
-        }
-
-        private void menuItemWebSched_Click(object sender, EventArgs e)
-        {
-            ShowEServicesSetup(FormEServicesSetup.EService.WebSched);
-        }
-
-        private void menuItemEConfirmRemind_Click(object sender, EventArgs e)
-        {
-            ShowEServicesSetup(FormEServicesSetup.EService.eConfirmRemind);
-        }
-
-        private void menuItemEMisc_Click(object sender, EventArgs e)
-        {
-            ShowEServicesSetup(FormEServicesSetup.EService.eMisc);
-        }
-
-        private void menuItemListenerService_Click(object sender, EventArgs e)
-        {
-            ShowEServicesSetup(FormEServicesSetup.EService.ListenerService);
-        }
-
-        #endregion
-
         #region Alerts
 
         private void menuItemAlerts_Popup(object sender, EventArgs e)
@@ -6309,7 +6240,7 @@ namespace OpenDental
                         FormPP.FormClosed += this.alertFormClosingHelper;
                         break;
                     case FormType.FormEServicesWebSchedRecall:
-                        ShowEServicesSetup(FormEServicesSetup.EService.WebSched);
+                        //ShowEServicesSetup(FormEServicesSetup.EService.WebSched);
                         break;
                     case FormType.FormRadOrderList:
                         List<FormRadOrderList> listFormROLs = Application.OpenForms.OfType<FormRadOrderList>().ToList();
@@ -6326,13 +6257,13 @@ namespace OpenDental
                         }
                         break;
                     case FormType.FormEServicesSignupPortal:
-                        ShowEServicesSetup(FormEServicesSetup.EService.SignupPortal);
+                        //ShowEServicesSetup(FormEServicesSetup.EService.SignupPortal);
                         break;
                     case FormType.FormEServicesWebSchedNewPat:
-                        ShowEServicesSetup(FormEServicesSetup.EService.WebSchedNewPat);
+                        //ShowEServicesSetup(FormEServicesSetup.EService.WebSchedNewPat);
                         break;
                     case FormType.FormEServicesEConnector:
-                        ShowEServicesSetup(FormEServicesSetup.EService.ListenerService);
+                        //ShowEServicesSetup(FormEServicesSetup.EService.ListenerService);
                         break;
                     case FormType.FormApptEdit:
                         Appointment appt = Appointments.GetOneApt(alertItem.FKey);

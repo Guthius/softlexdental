@@ -198,17 +198,6 @@
             this.menuItemXWebTrans = new System.Windows.Forms.MenuItem();
             this.menuClinics = new System.Windows.Forms.MenuItem();
             this.menuItemDashboard = new System.Windows.Forms.MenuItem();
-            this.menuItemEServices = new System.Windows.Forms.MenuItem();
-            this.menuItemSignup = new System.Windows.Forms.MenuItem();
-            this.menuMobileWeb = new System.Windows.Forms.MenuItem();
-            this.menuItemPatientPortal = new System.Windows.Forms.MenuItem();
-            this.menuItemWebSched = new System.Windows.Forms.MenuItem();
-            this.menuItemIntegratedTexting = new System.Windows.Forms.MenuItem();
-            this.menuItemERemind = new System.Windows.Forms.MenuItem();
-            this.menuItemEConfirm = new System.Windows.Forms.MenuItem();
-            this.menuItemEMisc = new System.Windows.Forms.MenuItem();
-            this.menuItem14 = new System.Windows.Forms.MenuItem();
-            this.menuItemListenerService = new System.Windows.Forms.MenuItem();
             this.menuItemAlerts = new System.Windows.Forms.MenuItem();
             this.menuItemNoAlerts = new System.Windows.Forms.MenuItem();
             this.menuItemHelp = new System.Windows.Forms.MenuItem();
@@ -273,7 +262,6 @@
             this.menuItemTools,
             this.menuClinics,
             this.menuItemDashboard,
-            this.menuItemEServices,
             this.menuItemAlerts,
             this.menuItemHelp});
             // 
@@ -1442,84 +1430,9 @@
             this.menuItemDashboard.Index = 8;
             this.menuItemDashboard.Text = "Dashboard";
             // 
-            // menuItemEServices
-            // 
-            this.menuItemEServices.Index = 9;
-            this.menuItemEServices.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItemSignup,
-            this.menuMobileWeb,
-            this.menuItemPatientPortal,
-            this.menuItemWebSched,
-            this.menuItemIntegratedTexting,
-            this.menuItemERemind,
-            this.menuItemEConfirm,
-            this.menuItemEMisc,
-            this.menuItem14,
-            this.menuItemListenerService});
-            this.menuItemEServices.Text = "eServices";
-            // 
-            // menuItemSignup
-            // 
-            this.menuItemSignup.Index = 0;
-            this.menuItemSignup.Text = "Signup";
-            this.menuItemSignup.Click += new System.EventHandler(this.menuItemSignup_Click);
-            // 
-            // menuMobileWeb
-            // 
-            this.menuMobileWeb.Index = 1;
-            this.menuMobileWeb.Text = "Mobile Web";
-            this.menuMobileWeb.Click += new System.EventHandler(this.menuMobileWeb_Click);
-            // 
-            // menuItemPatientPortal
-            // 
-            this.menuItemPatientPortal.Index = 2;
-            this.menuItemPatientPortal.Text = "Patient Portal";
-            this.menuItemPatientPortal.Click += new System.EventHandler(this.menuItemPatientPortal_Click);
-            // 
-            // menuItemWebSched
-            // 
-            this.menuItemWebSched.Index = 3;
-            this.menuItemWebSched.Text = "Web Sched";
-            this.menuItemWebSched.Click += new System.EventHandler(this.menuItemWebSched_Click);
-            // 
-            // menuItemIntegratedTexting
-            // 
-            this.menuItemIntegratedTexting.Index = 4;
-            this.menuItemIntegratedTexting.Text = "Texting";
-            this.menuItemIntegratedTexting.Click += new System.EventHandler(this.menuItemIntegratedTexting_Click);
-            // 
-            // menuItemERemind
-            // 
-            this.menuItemERemind.Index = 5;
-            this.menuItemERemind.Text = "eReminder";
-            this.menuItemERemind.Click += new System.EventHandler(this.menuItemEConfirmRemind_Click);
-            // 
-            // menuItemEConfirm
-            // 
-            this.menuItemEConfirm.Index = 6;
-            this.menuItemEConfirm.Text = "eConfirmation";
-            this.menuItemEConfirm.Click += new System.EventHandler(this.menuItemEConfirmRemind_Click);
-            // 
-            // menuItemEMisc
-            // 
-            this.menuItemEMisc.Index = 7;
-            this.menuItemEMisc.Text = "Misc";
-            this.menuItemEMisc.Click += new System.EventHandler(this.menuItemEMisc_Click);
-            // 
-            // menuItem14
-            // 
-            this.menuItem14.Index = 8;
-            this.menuItem14.Text = "-";
-            // 
-            // menuItemListenerService
-            // 
-            this.menuItemListenerService.Index = 9;
-            this.menuItemListenerService.Text = "eConnector Service";
-            this.menuItemListenerService.Click += new System.EventHandler(this.menuItemListenerService_Click);
-            // 
             // menuItemAlerts
             // 
-            this.menuItemAlerts.Index = 10;
+            this.menuItemAlerts.Index = 9;
             this.menuItemAlerts.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemNoAlerts});
             this.menuItemAlerts.OwnerDraw = true;
@@ -1535,7 +1448,7 @@
             // 
             // menuItemHelp
             // 
-            this.menuItemHelp.Index = 11;
+            this.menuItemHelp.Index = 10;
             this.menuItemHelp.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemRemote,
             this.menuItemHelpWindows,
@@ -1721,12 +1634,12 @@
             this.splitContainerNoFlickerDashboard.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.splitContainerNoFlickerDashboard.BackColor = System.Drawing.SystemColors.Control;
-            this.splitContainerNoFlickerDashboard.Location = new System.Drawing.Point(68, 26);
+            this.splitContainerNoFlickerDashboard.Location = new System.Drawing.Point(20, 100);
             this.splitContainerNoFlickerDashboard.Name = "splitContainerNoFlickerDashboard";
             this.splitContainerNoFlickerDashboard.Panel1MinSize = 300;
             this.splitContainerNoFlickerDashboard.Panel2Collapsed = true;
             this.splitContainerNoFlickerDashboard.Panel2MinSize = 50;
-            this.splitContainerNoFlickerDashboard.Size = new System.Drawing.Size(915, 284);
+            this.splitContainerNoFlickerDashboard.Size = new System.Drawing.Size(350, 200);
             this.splitContainerNoFlickerDashboard.SplitterDistance = 300;
             this.splitContainerNoFlickerDashboard.TabIndex = 57;
             this.splitContainerNoFlickerDashboard.TabStop = false;

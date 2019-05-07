@@ -699,4 +699,22 @@ Click 'Skip' if you do not wish to finish setting this section up at this time.<
   <data name="PleaseFillInTheMissingFieldsFirst" xml:space="preserve">
     <value>Please fill in the missing fields first.</value>
   </data>
+  <data name="PickUser" xml:space="preserve">
+    <value>Pick User</value>
+  </data>
+  <data name="PickUsers" xml:space="preserve">
+    <value>Pick Users</value>
+  </data>
+  <data name="PleasePickAUserFirst" xml:space="preserve">
+    <value>Please pick a user first.</value>
+  </data>
+  <data name="PleaseSelectAUserThatDoesNotHaveAnInbox" xml:space="preserve">
+    <value>Please select a user that does not have an inbox.</value>
+  </data>
+  <data name="ShowAll" xml:space="preserve">
+    <value>Show All</value>
+  </data>
+  <data name="ShowFiltered" xml:space="preserve">
+    <value>Show Filtered</value>
+  </data>
 </root>

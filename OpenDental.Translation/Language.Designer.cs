@@ -1000,6 +1000,24 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pick User.
+        /// </summary>
+        public static string PickUser {
+            get {
+                return ResourceManager.GetString("PickUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pick Users.
+        /// </summary>
+        public static string PickUsers {
+            get {
+                return ResourceManager.GetString("PickUsers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please enter a description..
         /// </summary>
         public static string PleaseEnterADescription {
@@ -1036,6 +1054,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please pick a user first..
+        /// </summary>
+        public static string PleasePickAUserFirst {
+            get {
+                return ResourceManager.GetString("PleasePickAUserFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please select a supplier first..
         /// </summary>
         public static string PleaseSelectASupplierFirst {
@@ -1068,6 +1095,15 @@ namespace OpenDental.Translation {
         public static string PleaseSelectASupplyOrderToAddItemsTo {
             get {
                 return ResourceManager.GetString("PleaseSelectASupplyOrderToAddItemsTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a user that does not have an inbox..
+        /// </summary>
+        public static string PleaseSelectAUserThatDoesNotHaveAnInbox {
+            get {
+                return ResourceManager.GetString("PleaseSelectAUserThatDoesNotHaveAnInbox", resourceCulture);
             }
         }
         
@@ -1151,6 +1187,24 @@ namespace OpenDental.Translation {
         public static string ShoppingList {
             get {
                 return ResourceManager.GetString("ShoppingList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show All.
+        /// </summary>
+        public static string ShowAll {
+            get {
+                return ResourceManager.GetString("ShowAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Filtered.
+        /// </summary>
+        public static string ShowFiltered {
+            get {
+                return ResourceManager.GetString("ShowFiltered", resourceCulture);
             }
         }
         

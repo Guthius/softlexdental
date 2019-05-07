@@ -906,11 +906,6 @@ namespace OpenDental{
 			gridMain.Rows.Add(row);
 		}
 
-		private void butSetup_Click(object sender,EventArgs e) {
-			FormEServicesSetup FormESS = new FormEServicesSetup(FormEServicesSetup.EService.WebSched);
-			FormESS.Show();
-		}
-
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(textRight.errorProvider1.GetError(textRight)!=""
 				|| textDown.errorProvider1.GetError(textDown)!=""

@@ -77,7 +77,7 @@ namespace OpenDental
                     MessageBoxButtons.OKCancel, 
                     MessageBoxIcon.Question);
 
-            if (result == DialogResult.Cancel) ;
+            if (result == DialogResult.Cancel) return;
 
             try
             {

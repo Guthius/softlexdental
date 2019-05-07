@@ -867,9 +867,6 @@
     <Compile Include="Forms\FormDatabaseMaintenancePat.designer.cs">
       <DependentUpon>FormDatabaseMaintenancePat.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormEServicesWebSchedVerify.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\FormGlobalSecurity.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1142,36 +1139,6 @@
     </Compile>
     <Compile Include="Forms\FormWebBrowser.designer.cs">
       <DependentUpon>FormWebBrowser.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormEServicesSignup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormEServicesMobileSynch.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormEServicesMobileWeb.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormEServicesPatientPortal.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormEServicesWebSchedRecall.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormEServicesWebSchedNewPat.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormEServicesTexting.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormEServicesECR.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormEServicesMisc.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormEServicesEConnector.cs">
-      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormEtrans835s.cs">
       <SubType>Form</SubType>
@@ -2438,12 +2405,6 @@
     </Compile>
     <Compile Include="Forms\FormXChargeReconcile.designer.cs">
       <DependentUpon>FormXChargeReconcile.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormEServicesSetup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormEServicesSetup.designer.cs">
-      <DependentUpon>FormEServicesSetup.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormPatientPortal.cs">
       <SubType>Form</SubType>
@@ -5915,10 +5876,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormXChargeReconcile.resx">
       <DependentUpon>FormXChargeReconcile.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormEServicesSetup.resx">
-      <DependentUpon>FormEServicesSetup.cs</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPatientPortal.resx">
       <DependentUpon>FormPatientPortal.cs</DependentUpon>

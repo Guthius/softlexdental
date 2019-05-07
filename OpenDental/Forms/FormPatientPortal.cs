@@ -53,8 +53,8 @@ namespace OpenDental {
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {
-			FormEServicesSetup formPPS=new FormEServicesSetup(FormEServicesSetup.EService.PatientPortal);
-			formPPS.ShowDialog();
+			//FormEServicesSetup formPPS=new FormEServicesSetup(FormEServicesSetup.EService.PatientPortal);
+			//formPPS.ShowDialog();
 			textPatientPortalURL.Text=Preferences.GetString(PrefName.PatientPortalURL);
 		}
 

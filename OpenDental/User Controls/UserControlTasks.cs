@@ -869,8 +869,6 @@ namespace OpenDental {
 			string objDesc="";
 			string tasklistdescript="";
 			string notes="";
-			//These strings are always inserted into cells, so they are always set to "" if there no job
-			string jobNumString="";
 			int imageindex;
 			for(int i=0;i<_listTaskLists.Count;i++) {
 				dateStr="";
@@ -909,9 +907,7 @@ namespace OpenDental {
 			int selectedTaskIndex=-1;
 			for(int i=0;i<_listTasks.Count;i++) {
 				dateStr="";
-				jobNumString="";
-				string stateString="";
-				if(tabContr.SelectedTab==tabUser || tabContr.SelectedTab==tabNew
+                if (tabContr.SelectedTab==tabUser || tabContr.SelectedTab==tabNew
 					|| tabContr.SelectedTab==tabOpenTickets || tabContr.SelectedTab==tabMain 
 					|| tabContr.SelectedTab==tabReminders	|| tabContr.SelectedTab==tabPatientTickets) 
 				{

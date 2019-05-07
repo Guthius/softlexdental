@@ -1,135 +1,173 @@
+using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using OpenDentBusiness;
 using System.Linq;
+using System.Windows.Forms;
 
-namespace OpenDental {
-	public partial class FormUserPick:ODForm {
-		///<summary>The filtered list of Users to pick from.</summary>
-		public List<User> ListUserodsFiltered;
-		public List<User> ListUserodsShowing;
-		///<summary>If this form closes with OK, then this value will be filled.</summary>
-		public long SelectedUserNum;
-		///<summary>When IsMultiSelect, this is the list of selected users after the OK click.</summary>
-		public List<long> ListSelectedUserNums=new List<long>();
-		///<summary>If provided, this usernum will be preselected if it is also in the list of available usernums.</summary>
-		public long SuggestedUserNum=0;
-		///<summary>When IsMultiSelect, these usernums will be preselected if it is also in the list of available usernums.</summary>
-		public List<long> ListSuggestedUserNums=new List<long>();
-		public bool IsSelectionmode;
-		public bool IsShowAllAllowed;
-		///<summary>Will return 0 for SelectedUserNum if the None 
-		public bool IsPickNoneAllowed;
-		///<summary>Will return -1 for SelectedUserNum if the All 
-		public bool IsPickAllAllowed;
-		///<summary>Set true when we want to allow multiple user selections.  When true uses ListSelectedUsers</summary>
-		private bool _isMultiSelect;
+namespace OpenDental
+{
+    public partial class FormUserPick : FormBase
+    {
+        List<User> usersList;
 
-		public FormUserPick(bool isMultiSelect=false) {
-			InitializeComponent();
-			Lan.F(this);
-			_isMultiSelect=isMultiSelect;
-		}
+        public List<User> ListUserodsFiltered;
+        public long SelectedUserNum;
+        public List<long> SelectedUserNumsList = new List<long>();
+        public long SuggestedUserNum = 0;
+        public List<long> SuggestedUserNumsList = new List<long>();
+        public bool IsSelectionmode;
+        public bool IsShowAllAllowed;
+        public bool IsPickNoneAllowed;
+        public bool IsPickAllAllowed;
 
-		private void FormUserPick_Load(object sender,EventArgs e) {
-			if(IsShowAllAllowed && ListUserodsFiltered!=null && ListUserodsFiltered.Count>0) {
-				butShow.Visible=true;
-			}
-			if(IsPickAllAllowed) {
-				butAll.Visible=true;
-			}
-			if(IsPickNoneAllowed) {
-				butNone.Visible=true;
-			}
-			if(!butNone.Visible && !butAll.Visible) {
-				groupSelect.Visible=false;
-			}
-			if(_isMultiSelect) {
-				listUser.SelectionMode=SelectionMode.MultiExtended;
-				Text=Lans.g(this,"Pick Users");
-			}
-			FillList(ListUserodsFiltered);
-		}
+        bool isMultiSelect;
 
-		private void FillList(List<User> listUserods) {
-			if(listUserods==null) {
-				listUserods=Userods.GetDeepCopy(true);
-			}
-			ListUserodsShowing=listUserods.Select(x => x.Copy()).ToList();
-			listUserods.ForEach(x => listUser.Items.Add(x));
-			if(_isMultiSelect) {
-				foreach(long userNum in ListSuggestedUserNums) {
-					int index=listUserods.FindIndex(x => x.UserNum==userNum);
-					listUser.SetSelected(index,true);
-				}
-			}
-			else { 
-				listUser.SelectedIndex=listUserods.FindIndex(x => x.UserNum==SuggestedUserNum);
-			}
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormUserPick"/> class.
+        /// </summary>
+        /// <param name="isMultiSelect"></param>
+        public FormUserPick(bool isMultiSelect = false)
+        {
+            InitializeComponent();
 
-		private void listUser_DoubleClick(object sender,EventArgs e) {
-			if(listUser.SelectedIndex==-1) {
-				return;
-			}
-			if(!Security.IsAuthorized(Permissions.TaskEdit,true) && Userods.GetInbox(ListUserodsShowing[listUser.SelectedIndex].UserNum)!=0 && !IsSelectionmode) {
-				MsgBox.Show(this,"Please select a user that does not have an inbox.");
-				return;
-			}
-			SelectedUserNum=ListUserodsShowing[listUser.SelectedIndex].UserNum;
-			foreach(int index in listUser.SelectedIndices) {
-				ListSelectedUserNums.Add(ListUserodsShowing[index].UserNum);
-			}
-			DialogResult=DialogResult.OK;
-		}
+            this.isMultiSelect = isMultiSelect;
+        }
 
-		private void butOK_Click(object sender,EventArgs e) {
-			if(listUser.SelectedIndex==-1) {
-				MsgBox.Show(this,"Please pick a user first.");
-				return;
-			}
-			if(!IsSelectionmode && !Security.IsAuthorized(Permissions.TaskEdit,true) && Userods.GetInbox(ListUserodsShowing[listUser.SelectedIndex].UserNum)!=0) {
-				MsgBox.Show(this,"Please select a user that does not have an inbox.");
-				return;
-			}
-			SelectedUserNum=ListUserodsShowing[listUser.SelectedIndex].UserNum;
-			foreach(int index in listUser.SelectedIndices) {
-				ListSelectedUserNums.Add(ListUserodsShowing[index].UserNum);
-			}
-			DialogResult=DialogResult.OK;
-		}
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormUserPick_Load(object sender, EventArgs e)
+        {
+            showButton.Text = Translation.Language.ShowAll;
+            if (IsShowAllAllowed && ListUserodsFiltered != null && ListUserodsFiltered.Count > 0)
+            {
+                showButton.Visible = true;
+            }
 
-		private void butAll_Click(object sender,EventArgs e) {
-			SelectedUserNum=-1;
-			ListSelectedUserNums=ListUserodsShowing.Select(x => x.UserNum).ToList();
-			DialogResult=DialogResult.OK;
-		}
+            allButton.Visible = IsPickAllAllowed;
+            noneButton.Visible = IsPickNoneAllowed;
 
-		private void butNone_Click(object sender,EventArgs e) {
-			SelectedUserNum=0;
-			ListSelectedUserNums=new List<long>() { };
-			DialogResult=DialogResult.OK;
-		}
+            if (isMultiSelect)
+            {
+                userListBox.SelectionMode = SelectionMode.MultiExtended;
+                Text = Translation.Language.PickUsers;
+            }
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+            ShowUsers(ListUserodsFiltered);
+        }
 
-		private void butShow_Click(object sender,EventArgs e) {
-			SelectedUserNum=0;
-			if(Text=="Show All") {
-				Text="Show Filtered";
-				FillList(null);
-			}
-			else {
-				Text="Show All";
-				FillList(ListUserodsFiltered);
-			}
-		}
-	}
+        /// <summary>
+        /// Populates the users listbox with the specified users.
+        /// </summary>
+        /// <param name="usersList">The list of users.</param>
+        void ShowUsers(List<User> usersList)
+        {
+            this.usersList = usersList.Select(x => x.Copy()).ToList();
+            this.usersList.ForEach(x => userListBox.Items.Add(x));
+
+            if (isMultiSelect)
+            {
+                foreach (long userNum in SuggestedUserNumsList)
+                {
+                    int index = usersList.FindIndex(x => x.UserNum == userNum);
+
+                    userListBox.SetSelected(index, true);
+                }
+            }
+            else
+            {
+                userListBox.SelectedIndex = usersList.FindIndex(x => x.UserNum == SuggestedUserNum);
+            }
+        }
+
+        /// <summary>
+        /// Selects a user when the user double clicks on a user in the list.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        void UserListBox_DoubleClick(object sender, EventArgs e)
+        {
+            if (userListBox.SelectedIndex == -1)  return;
+
+            AcceptButton_Click(sender, e);
+        }
+
+        /// <summary>
+        /// Toggles between showing all users and filtered users.
+        /// </summary>
+        void Showbutton_Click(object sender, EventArgs e)
+        {
+            SelectedUserNum = 0;
+
+            if (Text == Translation.Language.ShowAll)
+            {
+                Text = Translation.Language.ShowFiltered;
+                ShowUsers(Userods.GetDeepCopy());
+            }
+            else
+            {
+                Text = Translation.Language.ShowAll;
+                ShowUsers(ListUserodsFiltered);
+            }
+        }
+
+        /// <summary>
+        /// Select all users and close the form.
+        /// </summary>
+        void AllButton_Click(object sender, EventArgs e)
+        {
+            SelectedUserNum = -1;
+            SelectedUserNumsList = usersList.Select(x => x.UserNum).ToList();
+
+            DialogResult = DialogResult.OK;
+        }
+
+        /// <summary>
+        /// Closes the form without selecting a user.
+        /// </summary>
+        void NoneButton_Click(object sender, EventArgs e)
+        {
+            SelectedUserNum = 0;
+            SelectedUserNumsList = new List<long>() { };
+
+            DialogResult = DialogResult.OK;
+        }
+
+        /// <summary>
+        /// Closes the form.
+        /// </summary>
+        void AcceptButton_Click(object sender, EventArgs e)
+        {
+            if (userListBox.SelectedIndex == -1)
+            {
+                MessageBox.Show(
+                    Translation.Language.PleasePickAUserFirst,
+                    Text, 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            if (!IsSelectionmode && !Security.IsAuthorized(Permissions.TaskEdit, true) && Userods.GetInbox(usersList[userListBox.SelectedIndex].UserNum) != 0)
+            {
+                MessageBox.Show(
+                    Translation.Language.PleaseSelectAUserThatDoesNotHaveAnInbox,
+                    Text, 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            SelectedUserNum = usersList[userListBox.SelectedIndex].UserNum;
+            foreach (int index in userListBox.SelectedIndices)
+            {
+                SelectedUserNumsList.Add(usersList[index].UserNum);
+            }
+
+            DialogResult = DialogResult.OK;
+        }
+    }
 }

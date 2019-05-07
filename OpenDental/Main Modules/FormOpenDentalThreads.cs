@@ -22,7 +22,6 @@ namespace OpenDental {
 		private List<ODThread> _listOdThreadsRunOnce=new List<ODThread>();
 		private ODThread _odThreadDataConnectionLost;
 		private ODThread _odThreadCrashedTableMonitor;
-		private ODThread _odThreadMiddleTierConnectionLost;
 		#endregion
 
 		///<summary>Starts or stops all local timers and threads that should be started and stopped. This method is called when a connection is lost
@@ -68,13 +67,11 @@ namespace OpenDental {
 						case FormODThreadNames.RegistrationKeyIsDisabled:
 						case FormODThreadNames.CrashedTableMonitor:
 						case FormODThreadNames.DataConnectionLost:
-						case FormODThreadNames.MiddleTierConnectionLost:
 							break;
 						//Kill these.
 						case FormODThreadNames.CanadianItransCarrier:
 						case FormODThreadNames.ClaimReport:
 						case FormODThreadNames.EServiceMonitoring:
-						case FormODThreadNames.HqMetrics:
 						case FormODThreadNames.LogOff:
 						case FormODThreadNames.ODServiceMonitor:
 						case FormODThreadNames.Podium:
@@ -82,7 +79,6 @@ namespace OpenDental {
 						case FormODThreadNames.UpdateFormText:
 						case FormODThreadNames.WebSync:
 						case FormODThreadNames.TimeSync:
-						case FormODThreadNames.VoicemailHQ:
 						default:
 							ODThread.QuitAsyncThreadsByGroupName(threadName.GetDescription());
 							break;
@@ -844,29 +840,29 @@ namespace OpenDental {
 
 		///<summary>Begins the thread that checks for mobile sync. This will sync parts of a users database to HQ if certain preferences are set.</summary>
 		private void BeginWebSyncThread() {
-			if(IsThreadAlreadyRunning(FormODThreadNames.WebSync)) {
-				return;
-			}
-			string interval=Preferences.GetStringSilent(PrefName.MobileSyncIntervalMinutes);
-			if(interval=="" || interval=="0") {//not a paid customer or chooses not to synch
-				return;
-			}
-			if(System.Environment.MachineName.ToUpper()!=Preferences.GetStringSilent(PrefName.MobileSyncWorkstationName).ToUpper()) {
-				//Since GetStringSilent returns "" before OD is connected to db, this gracefully loops out
-				return;
-			}
-			if(Preferences.GetDate(PrefName.MobileExcludeApptsBeforeDate).Year<1880) {
-				//full synch never run
-				return;
-			}
-			ODThread odThread=new ODThread((int)TimeSpan.FromSeconds(30).TotalMilliseconds,(o) => {
-				ODException.SwallowAnyException(() => {
-					FormEServicesSetup.SynchFromMain(false);
-				});
-			});
-			odThread.GroupName=FormODThreadNames.WebSync.GetDescription();
-			odThread.Name=FormODThreadNames.WebSync.GetDescription();
-			odThread.Start();
+			//if(IsThreadAlreadyRunning(FormODThreadNames.WebSync)) {
+			//	return;
+			//}
+			//string interval=Preferences.GetStringSilent(PrefName.MobileSyncIntervalMinutes);
+			//if(interval=="" || interval=="0") {//not a paid customer or chooses not to synch
+			//	return;
+			//}
+			//if(System.Environment.MachineName.ToUpper()!=Preferences.GetStringSilent(PrefName.MobileSyncWorkstationName).ToUpper()) {
+			//	//Since GetStringSilent returns "" before OD is connected to db, this gracefully loops out
+			//	return;
+			//}
+			//if(Preferences.GetDate(PrefName.MobileExcludeApptsBeforeDate).Year<1880) {
+			//	//full synch never run
+			//	return;
+			//}
+			//ODThread odThread=new ODThread((int)TimeSpan.FromSeconds(30).TotalMilliseconds,(o) => {
+			//	ODException.SwallowAnyException(() => {
+			//		FormEServicesSetup.SynchFromMain(false);
+			//	});
+			//});
+			//odThread.GroupName=FormODThreadNames.WebSync.GetDescription();
+			//odThread.Name=FormODThreadNames.WebSync.GetDescription();
+			//odThread.Start();
 		}
 
 		#endregion

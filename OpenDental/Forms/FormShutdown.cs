@@ -1,51 +1,58 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using OpenDentBusiness;
+using System;
+using System.Data;
+using System.Linq;
+using System.Windows.Forms;
 
-namespace OpenDental {
-	public partial class FormShutdown:ODForm {
-		///<summary>Set to true if part of the update process.  Makes it behave more discretely to avoid worrying people.</summary>
-		public bool IsUpdate;
+namespace OpenDental
+{
+    public partial class FormShutdown : FormBase
+    {
+        /// <summary>
+        /// Gets or sets a value indicating whether a update triggered this form.
+        /// </summary>
+        public bool IsUpdate { get; set; } = false;
 
-		public FormShutdown() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormShutdown"/> class.
+        /// </summary>
+        public FormShutdown() => InitializeComponent();
 
-		private void FormShutdown_Load(object sender,EventArgs e) {
-			List<string> runningComps=Computers.GetRunningComputers().Select(x => x.CompName).ToList();
-			for(int i=0;i<runningComps.Count;i++) {
-				listMain.Items.Add(runningComps[i]);
-			}
-			if(IsUpdate) {
-				butShutdown.Text=Lan.g(this,"Continue");
-			}
-		}
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormShutdown_Load(object sender, EventArgs e)
+        {
+            var computersList = Computers.GetRunningComputers().Select(x => x.CompName).ToList();
+            for (int i = 0; i < computersList.Count; i++)
+            {
+                workstationList.Items.Add(computersList[i]);
+            }
 
-		private void butShutdown_Click(object sender,EventArgs e) {
-			if(IsUpdate) {
-				DialogResult=DialogResult.OK;
-				return;
-			}
-			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Shutdown this program on all workstations except this one?  Users will be given a 15 second warning to save data.")) {
-				return;
-			}
-			//happens outside this form
-			DialogResult=DialogResult.OK;
-		}
+            if (IsUpdate) shutdownButton.Text = "Continue";
+        }
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+        /// <summary>
+        /// Closes the form.
+        /// </summary>
+        void ShutdownButton_Click(object sender, EventArgs e)
+        {
+            if (IsUpdate)
+            {
+                DialogResult = DialogResult.OK;
+                return;
+            }
 
-		
+            var result =
+                MessageBox.Show(
+                    "Shutdown this program on all workstations except this one?  Users will be given a 15 second warning to save data.", 
+                    "Shutdown", 
+                    MessageBoxButtons.OKCancel, 
+                    MessageBoxIcon.Question);
 
-		
-	}
+            if (result == DialogResult.Cancel) return;
+
+            DialogResult = DialogResult.OK;
+        }
+    }
 }

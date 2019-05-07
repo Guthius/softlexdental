@@ -91,7 +91,7 @@ namespace OpenDental {
 				}
 				catch(Exception ex) {
 					//ProcessSendSmsException handles the spending limit has been reached error, or returns false if the exception is different.
-					if(!canIncreaseLimit || !FormEServicesSetup.ProcessSendSmsException(ex)) { 
+					if(!canIncreaseLimit) { 
 						MsgBox.Show(this,ex.Message);
 					}
 					return false;

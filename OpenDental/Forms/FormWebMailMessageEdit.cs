@@ -361,11 +361,11 @@ namespace OpenDental {
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {
-			FormEServicesSetup formPPS=new FormEServicesSetup(FormEServicesSetup.EService.PatientPortal);
-			formPPS.ShowDialog();
-			if(formPPS.DialogResult==DialogResult.OK) {
-				VerifyInputs();//Validates preferences that are necessary to sending notification emails.
-			}
+			//FormEServicesSetup formPPS=new FormEServicesSetup(FormEServicesSetup.EService.PatientPortal);
+			//formPPS.ShowDialog();
+			//if(formPPS.DialogResult==DialogResult.OK) {
+			//	VerifyInputs();//Validates preferences that are necessary to sending notification emails.
+			//}
 		}
 
 		private void butProvPick_Click(object sender,EventArgs e) {
