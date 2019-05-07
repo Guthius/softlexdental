@@ -37,7 +37,7 @@ namespace OpenDental
             }
         }
 
-        void colorButton_Click(object sender, EventArgs e)
+        void ColorButton_Click(object sender, EventArgs e)
         {
             using (var colorDialog = new ColorDialog())
             {
@@ -49,7 +49,7 @@ namespace OpenDental
             }
         }
 
-        void deleteButton_Click(object sender, EventArgs e)
+        void DeleteButton_Click(object sender, EventArgs e)
         {
             if (IsNew)
             {
@@ -59,7 +59,7 @@ namespace OpenDental
 
             try
             {
-                Accounts.Delete(account);
+                Account.Delete(account);
             }
             catch (ApplicationException ex)
             {
@@ -75,7 +75,7 @@ namespace OpenDental
             DialogResult = DialogResult.OK;
         }
 
-        void acceptButton_Click(object sender, EventArgs e)
+        void AcceptButton_Click(object sender, EventArgs e)
         {
             if (descriptionTextBox.Text == "")
             {
@@ -111,11 +111,11 @@ namespace OpenDental
 
             if (IsNew)
             {
-                Accounts.Insert(account);
+                Account.Insert(account);
             }
             else
             {
-                Accounts.Update(account, accountOld);
+                Account.Update(account, accountOld);
             }
 
             DialogResult = DialogResult.OK;

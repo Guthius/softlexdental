@@ -390,7 +390,7 @@ namespace OpenDental{
 					continue;//for income and expense accounts, previous balances are not included. Only the current timespan.
 				}
 				//DebitIsPos=true for checking acct, bal+=DebitAmt-CreditAmt
-				bal+=(Accounts.DebitIsPos(_acctCur.AcctType)?1:-1)*((decimal)jeCur.DebitAmt-(decimal)jeCur.CreditAmt);
+				bal+=(Account.DebitIsPos(_acctCur.AcctType)?1:-1)*((decimal)jeCur.DebitAmt-(decimal)jeCur.CreditAmt);
 				if(new[] { AccountType.Asset,AccountType.Liability,AccountType.Equity }.Contains(_acctCur.AcctType) && jeCur.DateDisplayed<dateFrom) {
 					continue;//for asset, liability, and equity accounts, older entries do affect the current balance.
 				}
@@ -436,8 +436,8 @@ namespace OpenDental{
 		private void FillColumns(bool isPrinting,bool isResizing) {
 			ODGrid gridToFill=isPrinting?gridMainPrint:gridMain;
 			List<string> listColHeadings=new List<string>(new[] { "Chk #","Date","Memo","Splits",
-				"Debit"+(Accounts.DebitIsPos(_acctCur.AcctType)?"(+)":"(-)"),
-				"Credit"+(Accounts.DebitIsPos(_acctCur.AcctType)?"(-)":"(+)"),
+				"Debit"+(Account.DebitIsPos(_acctCur.AcctType)?"(+)":"(-)"),
+				"Credit"+(Account.DebitIsPos(_acctCur.AcctType)?"(-)":"(+)"),
 				"Balance","Created By","Last Edited By","Clear" });
 			Dictionary<string,Tuple<int,HorizontalAlignment>> dictColWidths=new Dictionary<string,Tuple<int,HorizontalAlignment>>();
 			dictColWidths["Chk #"]=Tuple.Create(60,HorizontalAlignment.Center);
@@ -450,8 +450,8 @@ namespace OpenDental{
 			//grid width minus scroll bar width if not printing minus width of all cols except Debit, Credit, and Balance and divide by 3
 			//distribute the remaining grid width between the three cols: Debit, Credit, and Balance
 			int colW=(gridToFill.Width-(isPrinting?0:19)-dictColWidths.Values.Sum(x => x.Item1))/3;
-			dictColWidths["Debit"+(Accounts.DebitIsPos(_acctCur.AcctType)?"(+)":"(-)")]=Tuple.Create(colW,HorizontalAlignment.Right);
-			dictColWidths["Credit"+(Accounts.DebitIsPos(_acctCur.AcctType)?"(-)":"(+)")]=Tuple.Create(colW,HorizontalAlignment.Right);
+			dictColWidths["Debit"+(Account.DebitIsPos(_acctCur.AcctType)?"(+)":"(-)")]=Tuple.Create(colW,HorizontalAlignment.Right);
+			dictColWidths["Credit"+(Account.DebitIsPos(_acctCur.AcctType)?"(-)":"(+)")]=Tuple.Create(colW,HorizontalAlignment.Right);
 			dictColWidths["Balance"]=Tuple.Create(colW,HorizontalAlignment.Right);
 			if((isPrinting || isResizing) && gridToFill.Columns!=null && gridToFill.Columns.Count>0) {//printing/resizing and cols already filled, adjust widths
 				Tuple<int,HorizontalAlignment> colCurTuple;

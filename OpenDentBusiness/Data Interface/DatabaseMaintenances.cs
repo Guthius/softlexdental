@@ -5086,7 +5086,7 @@ namespace OpenDentBusiness
                             account.Description = "UNKNOWN";
                             account.Inactive = false;//Just in case.
                             account.AcctType = AccountType.Asset;//Default account type.  This DBM check was added to fix orphaned automatic payment journal entries, which should have been associated to an income account.
-                            accountNum = Accounts.Insert(account);
+                            accountNum = Account.Insert(account);
                         }
                         //Update the journalentry table.
                         command = "UPDATE journalentry SET AccountNum=" + POut.Long(accountNum) + " WHERE AccountNum NOT IN(SELECT AccountNum FROM account)";

@@ -77,7 +77,7 @@ namespace OpenDental{
 			InitializeComponent();
 			Lan.F(this);
 			TransCur=Transactions.GetTrans(transNum);
-			AccountOfOrigin=Accounts.GetAccount(accountNum);
+			AccountOfOrigin=Account.GetAccount(accountNum);
 			//AccountNumOrigin=accountNumOrigin;
 		}
 
@@ -718,7 +718,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			string str=Lan.g("TableTransSplits","Debit");
 			if(AccountOfOrigin!=null){
-				if(Accounts.DebitIsPos(AccountOfOrigin.AcctType)) {
+				if(Account.DebitIsPos(AccountOfOrigin.AcctType)) {
 					str+=Lan.g(this,"(+)");
 				}
 				else {
@@ -729,7 +729,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			str=Lan.g("TableTransSplits","Credit");
 			if(AccountOfOrigin!=null){
-				if(Accounts.DebitIsPos(AccountOfOrigin.AcctType)) {
+				if(Account.DebitIsPos(AccountOfOrigin.AcctType)) {
 					str+=Lan.g(this,"(-)");
 				}
 				else {
@@ -744,7 +744,7 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<JournalList.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(Accounts.GetDescript(((JournalEntry)JournalList[i]).AccountNum));
+				row.Cells.Add(Account.GetDescript(((JournalEntry)JournalList[i]).AccountNum));
 				if(((JournalEntry)JournalList[i]).DebitAmt==0){
 					row.Cells.Add("");
 				}
@@ -790,7 +790,7 @@ namespace OpenDental{
 			else if(JournalList.Count==1){
 				double amt=0;
 				//first we assume that the sole entry is for the current account
-				if(Accounts.DebitIsPos(AccountOfOrigin.AcctType)) {//this is used for checking account
+				if(Account.DebitIsPos(AccountOfOrigin.AcctType)) {//this is used for checking account
 					if(((JournalEntry)JournalList[0]).DebitAmt>0) {
 						amt=((JournalEntry)JournalList[0]).DebitAmt;
 					}
@@ -822,7 +822,7 @@ namespace OpenDental{
 					butChange.Text=Lan.g(this,"Pick");
 				}
 				else{//the sole entry is not for the current account
-					AccountPicked=Accounts.GetAccount(((JournalEntry)JournalList[0]).AccountNum);
+					AccountPicked=Account.GetAccount(((JournalEntry)JournalList[0]).AccountNum);
 					textAccount.Text=AccountPicked.Description;
 					butChange.Text=Lan.g(this,"Change");
 				}
@@ -841,7 +841,7 @@ namespace OpenDental{
 					journalCur=(JournalEntry)JournalList[1];
 					journalOther=(JournalEntry)JournalList[0];
 				}
-				if(Accounts.DebitIsPos(AccountOfOrigin.AcctType)){//this is used for checking account
+				if(Account.DebitIsPos(AccountOfOrigin.AcctType)){//this is used for checking account
 					if(journalCur.DebitAmt>0){
 						textAmount.Text=journalCur.DebitAmt.ToString("n");
 					}
@@ -863,7 +863,7 @@ namespace OpenDental{
 					butChange.Text=Lan.g(this,"Pick");
 				}
 				else{
-					AccountPicked=Accounts.GetAccount(journalOther.AccountNum);
+					AccountPicked=Account.GetAccount(journalOther.AccountNum);
 					textAccount.Text=AccountPicked.Description;
 					butChange.Text=Lan.g(this,"Change");
 				}
@@ -1064,7 +1064,7 @@ namespace OpenDental{
 			}
 			//if amt==0, then both credit and debit remain 0
 			if(amt>0){
-				if(Accounts.DebitIsPos(AccountOfOrigin.AcctType)) {//used for checking
+				if(Account.DebitIsPos(AccountOfOrigin.AcctType)) {//used for checking
 					entry.DebitAmt=amt;
 				}
 				else {
@@ -1072,7 +1072,7 @@ namespace OpenDental{
 				}
 			}
 			else if(amt<0){
-				if(Accounts.DebitIsPos(AccountOfOrigin.AcctType)) {//used for checking
+				if(Account.DebitIsPos(AccountOfOrigin.AcctType)) {//used for checking
 					entry.CreditAmt=-amt;
 				}
 				else {
@@ -1115,7 +1115,7 @@ namespace OpenDental{
 					if(i>0){
 						securityentry+=", ";
 					}
-					securityentry+=Accounts.GetDescript(((JournalEntry)JournalList[i]).AccountNum);
+					securityentry+=Account.GetDescript(((JournalEntry)JournalList[i]).AccountNum);
 				}
 				securityentry+=". "+tot.ToString("c");
 				JournalList=new List<JournalEntry>();//in case it fails, we don't want to leave this list around.
@@ -1188,7 +1188,7 @@ namespace OpenDental{
 					if(splits !="") {
 						splits+="\r\n";
 					}
-					splits+=Accounts.GetDescript(((JournalEntry)JournalList[j]).AccountNum);
+					splits+=Account.GetDescript(((JournalEntry)JournalList[j]).AccountNum);
 					if(JournalList.Count<3){
 						continue;//don't show the amount if there is only two splits, because the amount is the same.
 					}

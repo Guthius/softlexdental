@@ -722,7 +722,7 @@ namespace OpenDental{
 		private void FillDepList(){
 			listAccountsDep.Items.Clear();
 			for(int i=0;i<depAL.Count;i++){
-				listAccountsDep.Items.Add(Accounts.GetDescript((long)depAL[i]));
+				listAccountsDep.Items.Add(Account.GetDescript((long)depAL[i]));
 			}
 		}
 
@@ -785,7 +785,7 @@ namespace OpenDental{
 				return;
 			}
 			PickedDepAccountNum=FormA.SelectedAccount.AccountNum;
-			textAccountInc.Text=Accounts.GetDescript(PickedDepAccountNum);
+			textAccountInc.Text=Account.GetDescript(PickedDepAccountNum);
 		}
 
 		private void butBrowseQB_Click(object sender,EventArgs e) {
@@ -954,12 +954,12 @@ namespace OpenDental{
 			}
 			FillDepList();
 			PickedDepAccountNum=Preferences.GetLong(PrefName.AccountingIncomeAccount);
-			textAccountInc.Text=Accounts.GetDescript(PickedDepAccountNum);
+			textAccountInc.Text=Account.GetDescript(PickedDepAccountNum);
 			//pay----------------------------------------------------------
 			payList=AccountingAutoPays.GetDeepCopy();
 			FillPayGrid();
 			PickedPayAccountNum=Preferences.GetLong(PrefName.AccountingCashIncomeAccount);
-			textAccountCashInc.Text=Accounts.GetDescript(PickedPayAccountNum);
+			textAccountCashInc.Text=Account.GetDescript(PickedPayAccountNum);
 		}
 
 		///<summary>Changes the window visually for QuickBooks users.</summary>
@@ -1036,7 +1036,7 @@ namespace OpenDental{
 				return;
 			}
 			PickedPayAccountNum=FormA.SelectedAccount.AccountNum;
-			textAccountCashInc.Text=Accounts.GetDescript(PickedPayAccountNum);
+			textAccountCashInc.Text=Account.GetDescript(PickedPayAccountNum);
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {

@@ -20,12 +20,12 @@ namespace OpenDental {
 		}
 
 		private void FormQBAccountSelect_Load(object sender,EventArgs e) {
-			_listDepositAccountsQB=Accounts.GetDepositAccountsQB();
+			_listDepositAccountsQB=Account.GetDepositAccountsQB();
 			for(int i=0;i<_listDepositAccountsQB.Count;i++) {
 				comboDepositAccount.Items.Add(_listDepositAccountsQB[i]);
 			}
 			comboDepositAccount.SelectedIndex=0;
-			_listIncomeAccountsQB=Accounts.GetIncomeAccountsQB();
+			_listIncomeAccountsQB=Account.GetIncomeAccountsQB();
 			for(int i=0;i<_listIncomeAccountsQB.Count;i++) {
 				comboIncomeAccountQB.Items.Add(_listIncomeAccountsQB[i]);
 			}

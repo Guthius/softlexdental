@@ -240,7 +240,7 @@ namespace OpenDental{
 		private void FillList() {
 			listAccounts.Items.Clear();
 			for(int i=0;i<accountAL.Count;i++) {
-				listAccounts.Items.Add(Accounts.GetDescript((long)accountAL[i]));
+				listAccounts.Items.Add(Account.GetDescript((long)accountAL[i]));
 			}
 		}
 

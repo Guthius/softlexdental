@@ -114,7 +114,7 @@
             this.deleteButton.Text = "Delete";
             this.deleteButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.deleteButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
+            this.deleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
             // acceptButton
             // 
@@ -124,7 +124,7 @@
             this.acceptButton.Size = new System.Drawing.Size(110, 30);
             this.acceptButton.TabIndex = 10;
             this.acceptButton.Text = "&OK";
-            this.acceptButton.Click += new System.EventHandler(this.acceptButton_Click);
+            this.acceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
             // 
             // cancelButton
             // 
@@ -154,7 +154,7 @@
             this.colorButton.Name = "colorButton";
             this.colorButton.Size = new System.Drawing.Size(30, 25);
             this.colorButton.TabIndex = 8;
-            this.colorButton.Click += new System.EventHandler(this.colorButton_Click);
+            this.colorButton.Click += new System.EventHandler(this.ColorButton_Click);
             // 
             // colorLabel
             // 

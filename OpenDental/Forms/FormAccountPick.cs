@@ -173,7 +173,7 @@ namespace OpenDental{
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			List<Account> listAccounts=Accounts.GetDeepCopy(false);
+			List<Account> listAccounts=Account.GetDeepCopy(false);
 			for(int i=0;i<listAccounts.Count;i++){
 				if(!checkInactive.Checked && listAccounts[i].Inactive){
 					continue;
@@ -182,7 +182,7 @@ namespace OpenDental{
 				row.Cells.Add(Lan.g("enumAccountType",listAccounts[i].AcctType.ToString()));
 				row.Cells.Add(listAccounts[i].Description);
 				if(listAccounts[i].AcctType==AccountType.Asset){
-					row.Cells.Add(Accounts.GetBalance(listAccounts[i].AccountNum,listAccounts[i].AcctType).ToString("n"));
+					row.Cells.Add(Account.GetBalance(listAccounts[i].AccountNum,listAccounts[i].AcctType).ToString("n"));
 				}
 				else{
 					row.Cells.Add("");

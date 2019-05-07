@@ -310,7 +310,7 @@ namespace OpenDental
 		}
 
 		private void FillGrid(){
-			Accounts.RefreshCache();
+			Account.RefreshCache();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableChartOfAccounts","Type"),70);
@@ -326,10 +326,10 @@ namespace OpenDental
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			if(textDate.errorProvider1.GetError(textDate) != ""){//error
-				table=Accounts.GetFullList(DateTimeOD.Today,checkInactive.Checked);
+				table=Account.GetFullList(DateTimeOD.Today,checkInactive.Checked);
 			}
 			else{
-				table=Accounts.GetFullList(PIn.Date(textDate.Text),checkInactive.Checked);
+				table=Account.GetFullList(PIn.Date(textDate.Text),checkInactive.Checked);
 			}
 			for(int i=0;i<table.Rows.Count;i++){
 				row=new ODGridRow();
@@ -397,7 +397,7 @@ namespace OpenDental
 				MsgBox.Show(this,"This account is generated automatically, and cannot be edited.");
 				return;
 			}
-			Account acct=Accounts.GetAccount(acctNum);
+			Account acct=Account.GetAccount(acctNum);
 			FormAccountEdit FormA=new FormAccountEdit(acct);
 			FormA.ShowDialog();
 			FillGrid();
@@ -428,7 +428,7 @@ namespace OpenDental
 			else{
 				asofDate=PIn.Date(textDate.Text);
 			}
-			Account acct=Accounts.GetAccount(acctNum);
+			Account acct=Account.GetAccount(acctNum);
 			FormJournal FormJ=new FormJournal(acct);
 			FormJ.InitialAsOfDate=asofDate;
 			FormJ.ShowDialog();

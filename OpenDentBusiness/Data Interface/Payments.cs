@@ -429,7 +429,7 @@ namespace OpenDentBusiness
         public static bool ValidateLinkedEntries(double oldAmt, double newAmt, bool isNew, long payNum, long newAcct)
         {
             //No need to check RemotingRole; no call to db.
-            if (!Accounts.PaymentsLinked())
+            if (!Account.PaymentsLinked())
             {
                 return false;//user has not even set up accounting links, so no need to check any of this.
             }
@@ -468,7 +468,7 @@ namespace OpenDentBusiness
             }
             for (int i = 0; i < jeL.Count; i++)
             {//we make sure down below that this count is exactly 2.
-                if (Accounts.GetAccount(jeL[i].AccountNum).AcctType == AccountType.Asset)
+                if (Account.GetAccount(jeL[i].AccountNum).AcctType == AccountType.Asset)
                 {
                     oldAcct = jeL[i].AccountNum;
                 }
@@ -517,7 +517,7 @@ namespace OpenDentBusiness
             string patName)
         {
             //No need to check RemotingRole; no call to db.
-            if (!Accounts.PaymentsLinked())
+            if (!Account.PaymentsLinked())
             {
                 return;//user has not even set up accounting links.
             }
@@ -554,7 +554,7 @@ namespace OpenDentBusiness
                     je.CreditAmt = absNew;
                 }
                 je.Memo = Lans.g("Payments", "Payment -") + " " + patName;
-                je.Splits = Accounts.GetDescript(Preferences.GetLong(PrefName.AccountingCashIncomeAccount));
+                je.Splits = Account.GetDescript(Preferences.GetLong(PrefName.AccountingCashIncomeAccount));
                 je.TransactionNum = trans.TransactionNum;
                 JournalEntries.Insert(je);
                 //then, the income entry
@@ -571,7 +571,7 @@ namespace OpenDentBusiness
                     je.DebitAmt = absNew;
                 }
                 je.Memo = Lans.g("Payments", "Payment -") + " " + patName;
-                je.Splits = Accounts.GetDescript(newAcct);
+                je.Splits = Account.GetDescript(newAcct);
                 je.TransactionNum = trans.TransactionNum;
                 JournalEntries.Insert(je);
                 return;
@@ -597,7 +597,7 @@ namespace OpenDentBusiness
             }
             for (int i = 0; i < 2; i++)
             {
-                if (Accounts.GetAccount(jeL[i].AccountNum).AcctType == AccountType.Asset)
+                if (Account.GetAccount(jeL[i].AccountNum).AcctType == AccountType.Asset)
                 {
                     oldAcct = jeL[i].AccountNum;
                 }

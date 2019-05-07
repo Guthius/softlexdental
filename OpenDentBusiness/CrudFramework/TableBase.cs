@@ -7,6 +7,11 @@ using System.Xml.Serialization;
 
 namespace OpenDentBusiness
 {
+    abstract public class ODTable<T> : ODTable
+    {
+        public T Clone() => (T)MemberwiseClone();
+    }
+
     /// <summary>
     /// The base class for classes that correspond to a table in the database.  Make sure to mark each derived class [Serializable].
     /// </summary>

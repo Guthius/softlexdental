@@ -627,7 +627,7 @@ namespace OpenDental{
 			par.Format.Alignment=ParagraphAlignment.Center;
 			par.AddFormattedText(Lan.g(this,"RECONCILE"),totalFontx);
 			par.AddLineBreak();
-			text=Accounts.GetAccount(ReconcileCur.AccountNum).Description.ToUpper();
+			text=Account.GetAccount(ReconcileCur.AccountNum).Description.ToUpper();
 			par.AddFormattedText(text,totalFontx);
 			par.AddLineBreak();
 			text=Preferences.GetString(PrefName.PracticeTitle);

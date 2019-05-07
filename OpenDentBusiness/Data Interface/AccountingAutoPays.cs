@@ -73,7 +73,7 @@ namespace OpenDentBusiness
                 {
                     retVal += "\r\n";
                 }
-                retVal += Accounts.GetDescript(PIn.Long(numArray[i]));
+                retVal += Account.GetDescript(PIn.Long(numArray[i]));
             }
             return retVal;
         }

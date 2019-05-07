@@ -274,7 +274,7 @@ namespace OpenDental{
 			if(EntryCur==null){
 				MessageBox.Show("Entry cannot be null.");
 			}
-			AccountPicked=Accounts.GetAccount(EntryCur.AccountNum);//might be null
+			AccountPicked=Account.GetAccount(EntryCur.AccountNum);//might be null
 			/*
 			for(int i=0;i<Accounts.ListShort.Length;i++) {
 				comboAccount.Items.Add(Accounts.ListShort[i].Description);
@@ -319,7 +319,7 @@ namespace OpenDental{
 			//AccountCur=Accounts.ListShort[comboAccount.SelectedIndex];
 			textAccount.Text=AccountPicked.Description;
 			butChange.Text=Lan.g(this,"Change");
-			if(Accounts.DebitIsPos(AccountPicked.AcctType)) {
+			if(Account.DebitIsPos(AccountPicked.AcctType)) {
 				labelDebit.Text=Lan.g(this,"Debit")+Lan.g(this,"(+)");
 				labelCredit.Text=Lan.g(this,"Credit")+Lan.g(this,"(-)");
 			}

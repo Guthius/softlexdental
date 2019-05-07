@@ -446,7 +446,6 @@
     <Compile Include="Eclaims\x837Controller.cs" />
     <Compile Include="CrudFramework\CrudTableAttribute.cs" />
     <Compile Include="CrudFramework\CrudColumnAttribute.cs" />
-    <Compile Include="Crud\AccountCrud.cs" />
     <Compile Include="Crud\AccountingAutoPayCrud.cs" />
     <Compile Include="Crud\AdjustmentCrud.cs" />
     <Compile Include="Crud\AlertItemCrud.cs" />
@@ -1026,7 +1025,6 @@
     <Compile Include="Mobile\TableTypes\Userm.cs" />
     <Compile Include="Mobile\TableTypes\RxPatm.cs" />
     <Compile Include="Data Interface\AccountingAutoPays.cs" />
-    <Compile Include="Data Interface\Accounts.cs" />
     <Compile Include="Data Interface\Adjustments.cs" />
     <Compile Include="Data Interface\AppointmentRules.cs" />
     <Compile Include="Data Interface\ApptViewItems.cs" />
@@ -1563,7 +1561,7 @@
     <Compile Include="SheetFramework\SheetFieldsAvailable.cs" />
     <Compile Include="SheetFramework\SheetParameter.cs" />
     <Compile Include="SheetFramework\SheetsInternal.cs" />
-    <Compile Include="TableTypes\Account.cs" />
+    <Compile Include="Data\Account.cs" />
     <Compile Include="TableTypes\AccountingAutoPay.cs" />
     <Compile Include="TableTypes\Adjustment.cs" />
     <Compile Include="TableTypes\Appointment.cs" />

@@ -772,10 +772,10 @@ namespace OpenDental{
 					listInsPayType.SetSelected(listInsPayType.Items.Count-1,true);
 				}
 				textDepositAccount.Visible=false;//this is never visible for new. It's a description if already attached.
-				if(Accounts.DepositsLinked() && !IsQuickBooks) {
-					DepositAccounts=Accounts.GetDepositAccounts();
+				if(Account.DepositsLinked() && !IsQuickBooks) {
+					DepositAccounts=Account.GetDepositAccounts();
 					for(int i=0;i<DepositAccounts.Length;i++) {
-						comboDepositAccount.Items.Add(Accounts.GetDescript(DepositAccounts[i]));
+						comboDepositAccount.Items.Add(Account.GetDescript(DepositAccounts[i]));
 					}
 					comboDepositAccount.SelectedIndex=0;
 				}
@@ -802,8 +802,8 @@ namespace OpenDental{
 					labelDepositAccount.Text=Lan.g(this,"Deposited into Account");
 					List<JournalEntry> jeL=JournalEntries.GetForTrans(trans.TransactionNum);
 					for(int i=0;i<jeL.Count;i++) {
-						if(Accounts.GetAccount(jeL[i].AccountNum).AcctType==AccountType.Asset) {
-							comboDepositAccount.Items.Add(Accounts.GetDescript(jeL[i].AccountNum));
+						if(Account.GetAccount(jeL[i].AccountNum).AcctType==AccountType.Asset) {
+							comboDepositAccount.Items.Add(Account.GetDescript(jeL[i].AccountNum));
 							comboDepositAccount.SelectedIndex=0;
 							textDepositAccount.Text=jeL[i].DateDisplayed.ToShortDateString()
 								+" "+jeL[i].DebitAmt.ToString("c");
@@ -817,7 +817,7 @@ namespace OpenDental{
 				labelDepositAccount.Visible=false;
 				comboDepositAccount.Visible=false;
 				comboDepositAccount.Enabled=false;
-				if(Accounts.DepositsLinked() && !IsNew) {
+				if(Account.DepositsLinked() && !IsNew) {
 					//Show SendQB button so that users can send old deposits into QB.
 					butSendQB.Visible=true;
 				}
@@ -1127,7 +1127,7 @@ namespace OpenDental{
 				}
 			}
 			if(IsNew && !_hasBeenSavedToDB){
-				if(Accounts.DepositsLinked() && _depositCur.Amount>0
+				if(Account.DepositsLinked() && _depositCur.Amount>0
 					&& IsQuickBooks && !CreateDepositQB(true)) //Create a deposit in QuickBooks
 				{
 					return false;
@@ -1429,7 +1429,7 @@ namespace OpenDental{
 				return;
 			}
 			if(IsNew) {
-				if(Accounts.DepositsLinked() && _depositCur.Amount>0 && !IsQuickBooks) {
+				if(Account.DepositsLinked() && _depositCur.Amount>0 && !IsQuickBooks) {
 					//create a transaction here
 					Transaction trans=new Transaction();
 					trans.DepositNum=_depositCur.DepositNum;
@@ -1442,7 +1442,7 @@ namespace OpenDental{
 					je.DateDisplayed=_depositCur.DateDeposit;//it would be nice to add security here.
 					je.DebitAmt=_depositCur.Amount;
 					je.Memo=Lan.g(this,"Deposit");
-					je.Splits=Accounts.GetDescript(Preferences.GetLong(PrefName.AccountingIncomeAccount));
+					je.Splits=Account.GetDescript(Preferences.GetLong(PrefName.AccountingIncomeAccount));
 					je.TransactionNum=trans.TransactionNum;
 					JournalEntries.Insert(je);
 					//then, the income entry
@@ -1452,7 +1452,7 @@ namespace OpenDental{
 					je.DateDisplayed=_depositCur.DateDeposit;//it would be nice to add security here.
 					je.CreditAmt=_depositCur.Amount;
 					je.Memo=Lan.g(this,"Deposit");
-					je.Splits=Accounts.GetDescript(DepositAccounts[comboDepositAccount.SelectedIndex]);
+					je.Splits=Account.GetDescript(DepositAccounts[comboDepositAccount.SelectedIndex]);
 					je.TransactionNum=trans.TransactionNum;
 					JournalEntries.Insert(je);
 				}

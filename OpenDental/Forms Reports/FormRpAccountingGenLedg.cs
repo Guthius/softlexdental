@@ -139,7 +139,7 @@ namespace OpenDental{
 		private void butOK_Click(object sender, System.EventArgs e) {
 			//create the report
 			ReportComplex report=new ReportComplex(true,false);
-			DataTable data=Accounts.GetGeneralLedger(date1.SelectionStart,date2.SelectionStart);
+			DataTable data=Account.GetGeneralLedger(date1.SelectionStart,date2.SelectionStart);
 			for(int i=0;i<data.Rows.Count;i++) {
 				data.Rows[i]["Balance"]=ODR.Aggregate.RunningSumForAccounts(data.Rows[i]["AccountNum"],data.Rows[i]["DebitAmt"],data.Rows[i]["CreditAmt"],data.Rows[i]["AcctType"]);
 			}

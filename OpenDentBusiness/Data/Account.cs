@@ -3,24 +3,206 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
-using System.Diagnostics;
-using System.Reflection;
-using System.Windows.Forms;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace OpenDentBusiness
 {
-    public class Accounts
+    public partial class Account : ODTable<Account>
     {
-        private class AccountCache : CacheListAbs<Account>
+        public long AccountNum;
+        public string Description;
+        public AccountType AcctType;
+        public string BankNumber;
+        public bool Inactive;
+        public Color AccountColor;
+
+        //public Account Clone() => (Account)MemberwiseClone();
+
+        /// <summary>
+        /// Gets one Account object from the database using the primary key. Returns null if not found.
+        /// </summary>
+        public static Account SelectOne(long accountNum)
+        {
+            var list = TableToList(Db.GetTable("SELECT * FROM account WHERE AccountNum = " + accountNum));
+            if (list.Count == 0)
+            {
+                return null;
+            }
+            return list[0];
+        }
+
+        /// <summary>
+        /// Gets one Account object from the database using a query.
+        /// </summary>
+        public static Account SelectOne(string command)
+        {
+            var list = TableToList(Db.GetTable(command));
+            if (list.Count == 0)
+            {
+                return null;
+            }
+            return list[0];
+        }
+
+        /// <summary>
+        /// Gets a list of Account objects from the database using a query.
+        /// </summary>
+        public static List<Account> SelectMany(string command) => TableToList(Db.GetTable(command));
+
+        /// <summary>
+        /// Converts a DataTable to a list of objects.
+        /// </summary>
+        public static List<Account> TableToList(DataTable table)
+        {
+            var accounts = new List<Account>();
+
+            foreach (DataRow row in table.Rows)
+            {
+                var account = new Account
+                {
+                    AccountNum = Convert.ToInt64(row["AccountNum"]),
+                    Description = Convert.ToString(row["Description"]),
+                    AcctType = (AccountType)Convert.ToInt32(row["AcctType"]),
+                    BankNumber = Convert.ToString(row["BankNumber"]),
+                    Inactive = Convert.ToBoolean(row["Inactive"]),
+                    AccountColor = Color.FromArgb(Convert.ToInt32(row["AccountColor"]))
+                };
+                accounts.Add(account);
+            }
+
+            return accounts;
+        }
+
+        /// <summary>
+        /// Converts a list of Account into a DataTable.
+        /// </summary>
+        public static DataTable ListToTable(List<Account> listAccounts, string tableName = "")
+        {
+            if (string.IsNullOrEmpty(tableName))
+            {
+                tableName = "Account";
+            }
+            DataTable table = new DataTable(tableName);
+            table.Columns.Add("AccountNum");
+            table.Columns.Add("Description");
+            table.Columns.Add("AcctType");
+            table.Columns.Add("BankNumber");
+            table.Columns.Add("Inactive");
+            table.Columns.Add("AccountColor");
+            foreach (Account account in listAccounts)
+            {
+                table.Rows.Add(new object[] {
+                    POut.Long  (account.AccountNum),
+                                account.Description,
+                    POut.Int   ((int)account.AcctType),
+                                account.BankNumber,
+                    POut.Bool  (account.Inactive),
+                    POut.Int   (account.AccountColor.ToArgb()),
+                });
+            }
+            return table;
+        }
+
+        /// <summary>
+        /// Inserts one Account into the database.  Returns the new priKey.
+        /// </summary>
+        public static long Insert(Account account) => Insert(account, false);
+
+        /// <summary>
+        /// Inserts one Account into the database.  Provides option to use the existing priKey.
+        /// </summary>
+        public static long Insert(Account account, bool useExistingPK)
+        {
+            if (!useExistingPK && Preferences.RandomKeys)
+            {
+                account.AccountNum = ReplicationServers.GetKey("account", "AccountNum");
+            }
+            string command = "INSERT INTO account (";
+            if (useExistingPK || Preferences.RandomKeys)
+            {
+                command += "AccountNum,";
+            }
+            command += "Description,AcctType,BankNumber,Inactive,AccountColor) VALUES(";
+            if (useExistingPK || Preferences.RandomKeys)
+            {
+                command += POut.Long(account.AccountNum) + ",";
+            }
+            command +=
+                 "'" + POut.String(account.Description) + "',"
+                + POut.Int((int)account.AcctType) + ","
+                + "'" + POut.String(account.BankNumber) + "',"
+                + POut.Bool(account.Inactive) + ","
+                + POut.Int(account.AccountColor.ToArgb()) + ")";
+            if (useExistingPK || Preferences.RandomKeys)
+            {
+                Db.NonQ(command);
+            }
+            else
+            {
+                account.AccountNum = Db.NonQ(command, true, "AccountNum", "account");
+            }
+            return account.AccountNum;
+        }
+
+        /// <summary>
+        /// Updates one Account in the database.
+        /// </summary>
+        public static void Update(Account account)
+        {
+            string command = "UPDATE account SET "
+                + "Description = '" + POut.String(account.Description) + "', "
+                + "AcctType    =  " + POut.Int((int)account.AcctType) + ", "
+                + "BankNumber  = '" + POut.String(account.BankNumber) + "', "
+                + "Inactive    =  " + POut.Bool(account.Inactive) + ", "
+                + "AccountColor=  " + POut.Int(account.AccountColor.ToArgb()) + " "
+                + "WHERE AccountNum = " + POut.Long(account.AccountNum);
+            Db.NonQ(command);
+        }
+
+        /// <summary>
+        /// Returns true if Update(Account,Account) would make changes to the database.
+        /// Does not make any changes to the database and can be called before remoting role is checked.
+        /// </summary>
+        public static bool UpdateComparison(Account account, Account oldAccount)
+        {
+            if (account.Description != oldAccount.Description)
+            {
+                return true;
+            }
+            if (account.AcctType != oldAccount.AcctType)
+            {
+                return true;
+            }
+            if (account.BankNumber != oldAccount.BankNumber)
+            {
+                return true;
+            }
+            if (account.Inactive != oldAccount.Inactive)
+            {
+                return true;
+            }
+            if (account.AccountColor != oldAccount.AccountColor)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Deletes one Account from the database.
+        /// </summary>
+        public static void Delete(long accountNum) => Db.NonQ("DELETE FROM `account` WHERE `AccountNum` = " + POut.Long(accountNum));
+
+        class AccountCache : CacheListAbs<Account>
         {
             protected override Account Copy(Account account) => account.Clone();
 
-            protected override void FillCacheIfNeeded() => Accounts.GetTableFromCache(false);
+            protected override void FillCacheIfNeeded() => Account.GetTableFromCache(false);
 
             protected override List<Account> GetCacheFromDb()
             {
-                return Account.SelectMany("SELECT * FROM account ORDER BY AcctType,Description");
+                return SelectMany("SELECT * FROM account ORDER BY AcctType,Description");
             }
 
             protected override DataTable ListToTable(List<Account> listAccounts)
@@ -64,26 +246,49 @@ namespace OpenDentBusiness
             return _accountCache.GetTableFromCache(doRefreshCache);
         }
 
-        public static long Insert(Account acct) => Account.Insert(acct);
-
-        /// <summary>
-        /// Does not update existing journal splits. To that use the other overload for this method.
-        /// </summary>
-        public static void Update(Account acct) => Account.Update(acct);
-
         /// <summary>
         /// Also updates existing journal entry splits linked to this account that have not been locked.
         /// </summary>
         public static void Update(Account acct, Account acctOld)
         {
-            Account.Update(acct, acctOld);
+            string command = "";
+            if (acct.Description != acctOld.Description)
+            {
+                if (command != "") { command += ","; }
+                command += "Description = '" + POut.String(acct.Description) + "'";
+            }
+            if (acct.AcctType != acctOld.AcctType)
+            {
+                if (command != "") { command += ","; }
+                command += "AcctType = " + POut.Int((int)acct.AcctType) + "";
+            }
+            if (acct.BankNumber != acctOld.BankNumber)
+            {
+                if (command != "") { command += ","; }
+                command += "BankNumber = '" + POut.String(acct.BankNumber) + "'";
+            }
+            if (acct.Inactive != acctOld.Inactive)
+            {
+                if (command != "") { command += ","; }
+                command += "Inactive = " + POut.Bool(acct.Inactive) + "";
+            }
+            if (acct.AccountColor != acctOld.AccountColor)
+            {
+                if (command != "") { command += ","; }
+                command += "AccountColor = " + POut.Int(acct.AccountColor.ToArgb()) + "";
+            }
+
+            if (command == "") return;
+
+            Db.NonQ("UPDATE account SET " + command + " WHERE AccountNum = " + POut.Long(acct.AccountNum));
+
             if (acct.Description == acctOld.Description)
             {
                 return; // No need to update splits on attached journal entries.
             }
 
             // The account was renamed, so update journalentry.Splits.
-            string command = @"SELECT je2.*,account.Description
+            command = @"SELECT je2.*,account.Description
 					FROM journalentry 
 					INNER JOIN journalentry je2 ON je2.TransactionNum=journalentry.TransactionNum
 					INNER JOIN account ON account.AccountNum=je2.AccountNum
@@ -96,12 +301,12 @@ namespace OpenDentBusiness
                 return;
             }
             List<JournalEntry> listJournalEntries = Crud.JournalEntryCrud.TableToList(table);
-            
+
             // Construct a dictionary that has the description for each JournalEntryNum.
             Dictionary<long, string> dictJournalEntryDescriptions = table.Rows.Cast<DataRow>()
                 .GroupBy(x => PIn.Long(x["JournalEntryNum"].ToString()))
                 .ToDictionary(x => x.Key, x => PIn.String(x.First()["Description"].ToString()));
-            
+
             // Now we will loop through all the journal entries and find the other journal entries that are attached to the same transaction and update those splits.
             List<int> listIndexesForTrans = new List<int>();
             long curTransactionNum = listJournalEntries[0].TransactionNum;
@@ -176,7 +381,7 @@ namespace OpenDentBusiness
             // Check to see if account has any journal entries
             if (Db.GetCount("SELECT COUNT(*) FROM journalentry WHERE AccountNum=" + POut.Long(acct.AccountNum)) != "0")
             {
-                throw new ApplicationException( "Not allowed to delete an account with existing journal entries.");
+                throw new ApplicationException("Not allowed to delete an account with existing journal entries.");
             }
 
             // Check various preference entries

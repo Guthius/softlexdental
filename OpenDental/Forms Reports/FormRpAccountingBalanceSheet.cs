@@ -132,12 +132,12 @@ namespace OpenDental{
 			Font fontBold=new Font("Tahoma",9,FontStyle.Bold);
 			Font fontTitle=new Font("Tahoma",17,FontStyle.Bold);
 			Font fontSubTitle=new Font("Tahoma",10,FontStyle.Bold);
-			DataTable tableAssets=Accounts.GetAssetTable(date1.SelectionStart);
-			DataTable tableLiabilities=Accounts.GetLiabilityTable(date1.SelectionStart);
-			DataTable tableEquity=Accounts.GetEquityTable(date1.SelectionStart);
+			DataTable tableAssets=Account.GetAssetTable(date1.SelectionStart);
+			DataTable tableLiabilities=Account.GetLiabilityTable(date1.SelectionStart);
+			DataTable tableEquity=Account.GetEquityTable(date1.SelectionStart);
 			//Add two new rows to the equity data table to show Retained Earnings (Auto) and NetIncomeThisYear
-			tableEquity.LoadDataRow(new object[] { "Retained Earnings (Auto)",Accounts.RetainedEarningsAuto(date1.SelectionStart) },LoadOption.OverwriteChanges);
-			tableEquity.LoadDataRow(new object[] { "NetIncomeThisYear",Accounts.NetIncomeThisYear(date1.SelectionStart) },LoadOption.OverwriteChanges);
+			tableEquity.LoadDataRow(new object[] { "Retained Earnings (Auto)",Account.RetainedEarningsAuto(date1.SelectionStart) },LoadOption.OverwriteChanges);
+			tableEquity.LoadDataRow(new object[] { "NetIncomeThisYear",Account.NetIncomeThisYear(date1.SelectionStart) },LoadOption.OverwriteChanges);
 			report.ReportName="Balance Sheet";
 			report.AddTitle("Title",Lan.g(this,"Balance Sheet"),fontTitle);
 			report.AddSubTitle("PracName",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
