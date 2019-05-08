@@ -222,8 +222,6 @@
 			// panelWebSched
 			// 
 			this.panelWebSched.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.panelWebSched.BackgroundImage = global::OpenDental.Properties.Resources.webSched_PV_Button;
-			this.panelWebSched.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this.panelWebSched.Location = new System.Drawing.Point(759, 668);
 			this.panelWebSched.Name = "panelWebSched";
 			this.panelWebSched.Size = new System.Drawing.Size(120, 24);

@@ -413,8 +413,6 @@ namespace OpenDental {
             this.butText.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
             this.butText.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
             this.butText.CornerRadius = 4F;
-            this.butText.Image = global::OpenDental.Properties.Resources.Text;
-            this.butText.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.butText.Location = new System.Drawing.Point(967, 181);
             this.butText.Name = "butText";
             this.butText.Size = new System.Drawing.Size(87, 24);

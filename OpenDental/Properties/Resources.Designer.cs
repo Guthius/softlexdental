@@ -1868,16 +1868,6 @@ namespace OpenDental.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Med_History {
-            get {
-                object obj = ResourceManager.GetObject("Med_History", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Source Code License
         ///
         ///Copyright © 2002-2007, The Mentalis.org Team
@@ -2116,26 +2106,6 @@ namespace OpenDental.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap padlock_closed {
-            get {
-                object obj = ResourceManager.GetObject("padlock_closed", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap padlock_open {
-            get {
-                object obj = ResourceManager.GetObject("padlock_open", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap Paste_24x24 {
             get {
                 object obj = ResourceManager.GetObject("Paste_24x24", resourceCulture);
@@ -2167,16 +2137,6 @@ namespace OpenDental.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap PaySimple_Button {
-            get {
-                object obj = ResourceManager.GetObject("PaySimple_Button", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to PDFsharp is published under the MIT License.
         ///
         ///Copyright (c) 2005-2014 empira Software GmbH, Troisdorf (Germany)
@@ -2201,26 +2161,6 @@ namespace OpenDental.Properties {
         public static System.Drawing.Bitmap phoneInUse {
             get {
                 object obj = ResourceManager.GetObject("phoneInUse", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Podium_Button_100x24 {
-            get {
-                object obj = ResourceManager.GetObject("Podium_Button_100x24", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap PracticeByNumbers_100x24 {
-            get {
-                object obj = ResourceManager.GetObject("PracticeByNumbers_100x24", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -2380,16 +2320,6 @@ namespace OpenDental.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap splashCanada {
-            get {
-                object obj = ResourceManager.GetObject("splashCanada", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The MIT License (MIT)
         ///
         ///Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -2404,16 +2334,6 @@ namespace OpenDental.Properties {
         public static string SshNet {
             get {
                 return ResourceManager.GetString("SshNet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap stationary_sample1 {
-            get {
-                object obj = ResourceManager.GetObject("stationary sample1", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -2500,16 +2420,6 @@ namespace OpenDental.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap Text {
-            get {
-                object obj = ResourceManager.GetObject("Text", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         public static System.Drawing.Bitmap topazPen10 {
             get {
                 object obj = ResourceManager.GetObject("topazPen10", resourceCulture);
@@ -2539,36 +2449,6 @@ namespace OpenDental.Properties {
         public static string Twain {
             get {
                 return ResourceManager.GetString("Twain", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap UDS3a {
-            get {
-                object obj = ResourceManager.GetObject("UDS3a", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap UDS3b {
-            get {
-                object obj = ResourceManager.GetObject("UDS3b", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap Undo_24x24 {
-            get {
-                object obj = ResourceManager.GetObject("Undo_24x24", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -2607,26 +2487,6 @@ namespace OpenDental.Properties {
         public static System.Drawing.Bitmap up {
             get {
                 object obj = ResourceManager.GetObject("up", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap WebChatIcon {
-            get {
-                object obj = ResourceManager.GetObject("WebChatIcon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        public static System.Drawing.Bitmap webSched_PV_Button {
-            get {
-                object obj = ResourceManager.GetObject("webSched_PV_Button", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

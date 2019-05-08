@@ -717,4 +717,22 @@ Click 'Skip' if you do not wish to finish setting this section up at this time.<
   <data name="ShowFiltered" xml:space="preserve">
     <value>Show Filtered</value>
   </data>
+  <data name="ColumnBalance" xml:space="preserve">
+    <value>Balance</value>
+  </data>
+  <data name="ColumnBankNumber" xml:space="preserve">
+    <value>Bank Number</value>
+  </data>
+  <data name="ColumnInactive" xml:space="preserve">
+    <value>Inactive</value>
+  </data>
+  <data name="ColumnType" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="PickAccount" xml:space="preserve">
+    <value>Pick Account</value>
+  </data>
+  <data name="PleaseSelectAnAccountFirst" xml:space="preserve">
+    <value>Please select an account first.</value>
+  </data>
 </root>

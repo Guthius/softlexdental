@@ -237,6 +237,8 @@
     <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
@@ -305,8 +307,6 @@
     <Compile Include="Bridges\PandaPeriodAdvanced.cs" />
     <Compile Include="Bridges\PayConnectTerminal.cs" />
     <Compile Include="Bridges\XCharge.cs" />
-    <Compile Include="Bridges\PracticeByNumbers.cs" />
-    <Compile Include="Bridges\DentalIntel.cs" />
     <Compile Include="Bridges\EDS_Statements.cs" />
     <Compile Include="Bridges\OrthoCad.cs" />
     <Compile Include="Bridges\RapidCall.cs" />
@@ -425,6 +425,9 @@
     <Compile Include="Forms\FormAccountingLock.Designer.cs">
       <DependentUpon>FormAccountingLock.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormAccountPick.Designer.cs">
+      <DependentUpon>FormAccountPick.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormAdjust.designer.cs">
       <DependentUpon>FormAdjust.cs</DependentUpon>
     </Compile>
@@ -509,6 +512,9 @@
     <Compile Include="Forms\FormPatientSelect.Designer.cs">
       <DependentUpon>FormPatientSelect.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormPayConnectSetup.Designer.cs">
+      <DependentUpon>FormPayConnectSetup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormPaySplitEdit.designer.cs">
       <DependentUpon>FormPaySplitEdit.cs</DependentUpon>
     </Compile>
@@ -539,6 +545,9 @@
     </Compile>
     <Compile Include="Forms\FormRegistrationKey.Designer.cs">
       <DependentUpon>FormRegistrationKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormReportsMore.Designer.cs">
+      <DependentUpon>FormReportsMore.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormShowFeatures.designer.cs">
       <DependentUpon>FormShowFeatures.cs</DependentUpon>
@@ -1478,12 +1487,6 @@
     </Compile>
     <Compile Include="Forms\FormRadOrderList.designer.cs">
       <DependentUpon>FormRadOrderList.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormActionNeeded.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormActionNeeded.designer.cs">
-      <DependentUpon>FormActionNeeded.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormProviderMerge.cs">
       <SubType>Form</SubType>
@@ -5387,9 +5390,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormRadOrderList.resx">
       <DependentUpon>FormRadOrderList.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormActionNeeded.resx">
-      <DependentUpon>FormActionNeeded.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormProviderMerge.resx">
       <DependentUpon>FormProviderMerge.cs</DependentUpon>

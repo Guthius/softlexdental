@@ -251,10 +251,6 @@ namespace OpenDental{
 				PerioPal.SendData(prog,pat);
 				return;
 			}
-			else if(prog.ProgName==ProgramName.PracticeByNumbers.ToString()) {
-				PracticeByNumbers.ShowPage();
-				return;
-			}
 			else if(prog.ProgName==ProgramName.Progeny.ToString()) {
 				Progeny.SendData(prog,pat);
 				return;

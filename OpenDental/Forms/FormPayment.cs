@@ -610,7 +610,6 @@ namespace OpenDental {
 			// 
 			// butPaySimple
 			// 
-			this.butPaySimple.BackgroundImage = global::OpenDental.Properties.Resources.PaySimple_Button;
 			this.butPaySimple.Location = new System.Drawing.Point(979, 24);
 			this.butPaySimple.Name = "butPaySimple";
 			this.butPaySimple.Size = new System.Drawing.Size(76, 26);

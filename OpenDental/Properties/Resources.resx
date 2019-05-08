@@ -142,17 +142,11 @@
   <data name="Copy_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Copy_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Undo_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Undo_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="SshNet" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SshNet.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="phoneInUse" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\phoneInUse.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="UDS3a" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\UDS3a.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="butQView" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\butQView.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -196,9 +190,6 @@
   <data name="Twain" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Twain.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="PracticeByNumbers_100x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PracticeByNumbers_100x24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="up" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\up.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -208,26 +199,17 @@
   <data name="canadiancarriers" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\canadiancarriers.txt;System.Byte[], mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="UDS3b" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\UDS3b.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="butPrint" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\butPrint.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="arrowRightTriangle" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\arrowRightTriangle.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="padlock_closed" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\padlock_closed.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="AForge" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\AForge.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="butExport" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\butExport.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Med_History" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Med History.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="DI_Button_100x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\DI_Button_100x24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -249,9 +231,6 @@
   </data>
   <data name="close_door" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\close_door.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="splashCanada" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\splashCanada.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="setupGears" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\setupGears.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -331,26 +310,17 @@
   <data name="gtaicon3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\gtaicon3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Podium_Button_100x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Podium_Button_100x24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Save_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Save_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="CDT_Content_End_User_License" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CDT Content End User License.rtf;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="webSched_PV_Button" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\webSched_PV_Button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Microphone_22px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Microphone_22px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Bullets_24x24" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Bullets_24x24.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="stationary sample1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\stationary sample1.jpg;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="deleteX10" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\deleteX10.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -360,9 +330,6 @@
   </data>
   <data name="Microphone_30px" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Microphone_30px.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="padlock_open" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\padlock_open.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="editPencil" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\editPencil.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -406,9 +373,6 @@
   <data name="Tamir" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Tamir.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="Text" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Text.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="butPrintSmall" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\butPrintsmall.gif;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -420,9 +384,6 @@
   </data>
   <data name="raisehanddisabled" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\raisehanddisabled.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="PaySimple_Button" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\PaySimple_Button.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="eSig" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\eSig.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -444,9 +405,6 @@
   </data>
   <data name="opendentallicense" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\opendentallicense.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="WebChatIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\webChatIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="IconBulletArrowDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IconBulletArrowDown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

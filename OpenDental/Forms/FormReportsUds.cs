@@ -88,23 +88,24 @@ namespace OpenDental {
 			table3A[37,1]=Patients.GetAgeGenderCount(85,200,PatientGender.Female,DateFrom,DateTo);
 			table3A[38,0]=Patients.GetAgeGenderCount(0,200,PatientGender.Male,DateFrom,DateTo);
 			table3A[38,1]=Patients.GetAgeGenderCount(0,200,PatientGender.Female,DateFrom,DateTo);
-			Bitmap bmp=Properties.Resources.UDS3a;
-			int xPos=(width - bmp.Width)/2;
-			int yPos=(height - bmp.Height)/2;
-			g.DrawImage(bmp,xPos,yPos,bmp.Width,bmp.Height);
-			xPos=540;
-			string qty;
-			Font font=new Font(FontFamily.GenericSansSerif,9);
-			for(int i=0;i<table3A.GetLength(0);i++){
-				if(i==table3A.GetLength(0)-1) {
-					font=new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold);
-				}
-				yPos=245+(int)(17.72*i);
-				qty=table3A[i,0].ToString();
-				g.DrawString(qty,font,Brushes.Black,xPos-g.MeasureString(qty,font).Width,yPos);//Aligns right
-				qty=table3A[i,1].ToString();
-				g.DrawString(qty,font,Brushes.Black,xPos-g.MeasureString(qty,font).Width+125,yPos);//Aligns right
-			}
+			//Bitmap bmp=Properties.Resources.UDS3a;
+            // TODO: Fix me..
+			//int xPos=(width - bmp.Width)/2;
+			//int yPos=(height - bmp.Height)/2;
+			//g.DrawImage(bmp,xPos,yPos,bmp.Width,bmp.Height);
+			//xPos=540;
+			//string qty;
+			//Font font=new Font(FontFamily.GenericSansSerif,9);
+			//for(int i=0;i<table3A.GetLength(0);i++){
+			//	if(i==table3A.GetLength(0)-1) {
+			//		font=new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold);
+			//	}
+			//	yPos=245+(int)(17.72*i);
+			//	qty=table3A[i,0].ToString();
+			//	g.DrawString(qty,font,Brushes.Black,xPos-g.MeasureString(qty,font).Width,yPos);//Aligns right
+			//	qty=table3A[i,1].ToString();
+			//	g.DrawString(qty,font,Brushes.Black,xPos-g.MeasureString(qty,font).Width+125,yPos);//Aligns right
+			//}
 		}
 
 		private bool DateIsValid() {
@@ -121,11 +122,9 @@ namespace OpenDental {
 			DialogResult=DialogResult.OK;
 		}
 
+        private void But3B_Click(object sender, EventArgs e)
+        {
 
-
-
-
-
-
-	}
+        }
+    }
 }

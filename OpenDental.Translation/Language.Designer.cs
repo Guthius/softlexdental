@@ -226,6 +226,24 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Balance.
+        /// </summary>
+        public static string ColumnBalance {
+            get {
+                return ResourceManager.GetString("ColumnBalance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bank Number.
+        /// </summary>
+        public static string ColumnBankNumber {
+            get {
+                return ResourceManager.GetString("ColumnBankNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Catalog #.
         /// </summary>
         public static string ColumnCatalogNumber {
@@ -357,6 +375,15 @@ namespace OpenDental.Translation {
         public static string ColumnHidden {
             get {
                 return ResourceManager.GetString("ColumnHidden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inactive.
+        /// </summary>
+        public static string ColumnInactive {
+            get {
+                return ResourceManager.GetString("ColumnInactive", resourceCulture);
             }
         }
         
@@ -555,6 +582,15 @@ namespace OpenDental.Translation {
         public static string ColumnTitle {
             get {
                 return ResourceManager.GetString("ColumnTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string ColumnType {
+            get {
+                return ResourceManager.GetString("ColumnType", resourceCulture);
             }
         }
         
@@ -991,6 +1027,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Pick Account.
+        /// </summary>
+        public static string PickAccount {
+            get {
+                return ResourceManager.GetString("PickAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pick Time.
         /// </summary>
         public static string PickTime {
@@ -1059,6 +1104,15 @@ namespace OpenDental.Translation {
         public static string PleasePickAUserFirst {
             get {
                 return ResourceManager.GetString("PleasePickAUserFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select an account first..
+        /// </summary>
+        public static string PleaseSelectAnAccountFirst {
+            get {
+                return ResourceManager.GetString("PleaseSelectAnAccountFirst", resourceCulture);
             }
         }
         
