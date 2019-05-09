@@ -1,79 +1,103 @@
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using OpenDentBusiness;
+using System;
+using System.Windows.Forms;
 
-namespace OpenDental {
-	public partial class FormProcButtonQuickEdit:ODForm {
-		public ProcButtonQuick pbqCur;
-		public bool IsNew;
+namespace OpenDental
+{
+    public partial class FormProcButtonQuickEdit : FormBase
+    {
+        public ProcButtonQuick pbqCur;
+        public bool IsNew;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FormProcButtonQuickEdit"/> class.
+        /// </summary>
+        public FormProcButtonQuickEdit() => InitializeComponent();
 
-		public FormProcButtonQuickEdit() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        /// <summary>
+        /// Loads the form.
+        /// </summary>
+        void FormProcButtonQuickEdit_Load(object sender, EventArgs e)
+        {
+            descriptionTextBox.Text = pbqCur.Description;
+            procedureCodeTextBox.Text = pbqCur.CodeValue;
+            surfacesTextBox.Text = pbqCur.Surf;
+            labelCheckBox.Checked = pbqCur.IsLabel;
 
-		private void FormProcButtonQuickEdit_Load(object sender,EventArgs e) {
-			textDescript.Text=pbqCur.Description;
-			textProcedureCode.Text=pbqCur.CodeValue;
-			textSurfaces.Text=pbqCur.Surf;
-			checkIsLabel.Checked=pbqCur.IsLabel;
-			if(Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum)) {
-				labelSurfaces.Visible=false;
-				textSurfaces.Visible=false;
-			}
-		}
+            if (Clinics.IsMedicalPracticeOrClinic(Clinics.ClinicNum))
+            {
+                surfacesLabel.Visible = false;
+                surfacesTextBox.Visible = false;
+            }
+        }
 
-		private void checkIsLabel_CheckedChanged(object sender,EventArgs e) {
-			textProcedureCode.Enabled=!checkIsLabel.Checked;
-			textSurfaces.Enabled=!checkIsLabel.Checked;
-			butPickProc.Enabled=!checkIsLabel.Checked;
-		}
+        /// <summary>
+        /// Toggles label mode on and off. When the button is a label the procedure code and surfaces fields will
+        /// be disabled since they are irrelevant for labels.
+        /// </summary>
+        void LabelCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            procedureCodeTextBox.Enabled = !labelCheckBox.Checked;
+            surfacesTextBox.Enabled = !labelCheckBox.Checked;
+            pickProcedureButton.Enabled = !labelCheckBox.Checked;
+        }
 
-		private void butPickProc_Click(object sender,EventArgs e) {
-			FormProcCodes FormPC=new FormProcCodes();
-			FormPC.IsSelectionMode=true;
-			FormPC.ShowDialog();
-			if(FormPC.DialogResult!=DialogResult.OK) {
-				return;
-			}
-			textProcedureCode.Text=ProcedureCodes.GetProcCode(FormPC.SelectedCodeNum).ProcCode;
-		}
+        /// <summary>
+        /// Opens the form to select a procedure.
+        /// </summary>
+        void PickProcedureButton_Click(object sender, EventArgs e)
+        {
+            using (var formProcCodes = new FormProcCodes())
+            {
+                formProcCodes.IsSelectionMode = true;
+                if (formProcCodes.ShowDialog() == DialogResult.OK)
+                {
+                    procedureCodeTextBox.Text = ProcedureCodes.GetProcCode(formProcCodes.SelectedCodeNum).ProcCode;
+                }
+            }
+        }
 
-		private void butDelete_Click(object sender,EventArgs e) {
-			if(IsNew) {
-				pbqCur=null;
-				DialogResult=DialogResult.Cancel;
-			}
-			else {
-				ProcButtonQuicks.Delete(pbqCur.ProcButtonQuickNum);
-				pbqCur=null;
-				DialogResult=DialogResult.OK;
-			}
-		}
+        /// <summary>
+        /// Deletes the button.
+        /// </summary>
+        void DeleteButton_Click(object sender, EventArgs e)
+        {
+            if (IsNew)
+            {
+                pbqCur = null;
 
-		private void butOK_Click(object sender,EventArgs e) {
-			pbqCur.Description=textDescript.Text;
-			pbqCur.CodeValue=textProcedureCode.Text;
-			pbqCur.Surf=textSurfaces.Text;
-			pbqCur.IsLabel=checkIsLabel.Checked;
-			//TODO: Validation, if we need any.
-			if(IsNew) {
-				ProcButtonQuicks.Insert(pbqCur);
-			}
-			else {
-				ProcButtonQuicks.Update(pbqCur);
-			}
-			DialogResult=DialogResult.OK;
-		}
+                DialogResult = DialogResult.Cancel;
+            }
+            else
+            {
+                ProcButtonQuicks.Delete(pbqCur.ProcButtonQuickNum);
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+                pbqCur = null;
 
-	}
+                DialogResult = DialogResult.OK;
+            }
+        }
+
+        /// <summary>
+        /// Saves the button and closes the form.
+        /// </summary>
+        void AcceptButton_Click(object sender, EventArgs e)
+        {
+            pbqCur.Description = descriptionTextBox.Text;
+            pbqCur.CodeValue = procedureCodeTextBox.Text;
+            pbqCur.Surf = surfacesTextBox.Text;
+            pbqCur.IsLabel = labelCheckBox.Checked;
+
+            if (IsNew)
+            {
+                ProcButtonQuicks.Insert(pbqCur);
+            }
+            else
+            {
+                ProcButtonQuicks.Update(pbqCur);
+            }
+
+            DialogResult = DialogResult.OK;
+        }
+    }
 }

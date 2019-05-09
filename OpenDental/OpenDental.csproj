@@ -525,6 +525,9 @@
     <Compile Include="Forms\FormPrinterSetup.Designer.cs">
       <DependentUpon>FormPrinterSetup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormProcButtons.Designer.cs">
+      <DependentUpon>FormProcButtons.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormProcCodes2.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -637,6 +640,11 @@
     <Compile Include="Tables Old Grids\TableTimeBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UI\ODButtonPanelItemCollection.cs" />
+    <Compile Include="UI\ODButtonPanelItemEventArgs.cs" />
+    <Compile Include="UI\ODButtonPanelItemMouseEventArgs.cs" />
+    <Compile Include="UI\ODButtonPanelItemType.cs" />
+    <Compile Include="UI\ODButtonPanelRowMouseEventArgs.cs" />
     <Compile Include="UI\ODToolBarButtonClickEventArgs.cs" />
     <Compile Include="UI\ODToolBarButtonPageNavEventArgs.cs" />
     <Compile Include="UI\SheetUserControl.cs">
@@ -4637,7 +4645,7 @@
     <Compile Include="UI\ODButtonPanel.Designer.cs">
       <DependentUpon>ODButtonPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\ODPanelItem.cs" />
+    <Compile Include="UI\ODButtonPanelItem.cs" />
     <Compile Include="UI\ODPictureBox.cs">
       <SubType>Component</SubType>
     </Compile>

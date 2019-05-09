@@ -1,197 +1,194 @@
-namespace OpenDental{
-	partial class FormProcButtonQuickEdit {
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+namespace OpenDental
+{
+    partial class FormProcButtonQuickEdit
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing) {
-			if(disposing && (components != null)) {
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormProcButtonQuickEdit));
-			this.checkIsLabel = new System.Windows.Forms.CheckBox();
-			this.textProcedureCode = new System.Windows.Forms.TextBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.textDescript = new System.Windows.Forms.TextBox();
-			this.label3 = new System.Windows.Forms.Label();
-			this.butPickProc = new System.Windows.Forms.Button();
-			this.butDelete = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.labelSurfaces = new System.Windows.Forms.Label();
-			this.textSurfaces = new System.Windows.Forms.TextBox();
-			this.SuspendLayout();
-			// 
-			// checkIsLabel
-			// 
-			this.checkIsLabel.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsLabel.Location = new System.Drawing.Point(84, 91);
-			this.checkIsLabel.Name = "checkIsLabel";
-			this.checkIsLabel.Size = new System.Drawing.Size(111, 16);
-			this.checkIsLabel.TabIndex = 3;
-			this.checkIsLabel.Text = "Display as Label";
-			this.checkIsLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkIsLabel.UseVisualStyleBackColor = true;
-			this.checkIsLabel.CheckedChanged += new System.EventHandler(this.checkIsLabel_CheckedChanged);
-			// 
-			// textProcedureCode
-			// 
-			this.textProcedureCode.Location = new System.Drawing.Point(181, 38);
-			this.textProcedureCode.Name = "textProcedureCode";
-			this.textProcedureCode.Size = new System.Drawing.Size(167, 20);
-			this.textProcedureCode.TabIndex = 1;
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(82, 41);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(98, 14);
-			this.label2.TabIndex = 58;
-			this.label2.Text = "Procedure Code";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textDescript
-			// 
-			this.textDescript.Location = new System.Drawing.Point(181, 12);
-			this.textDescript.Name = "textDescript";
-			this.textDescript.Size = new System.Drawing.Size(167, 20);
-			this.textDescript.TabIndex = 0;
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(82, 15);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(98, 14);
-			this.label3.TabIndex = 60;
-			this.label3.Text = "Display Text";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// butPickProc
-			// 
-			this.butPickProc.Location = new System.Drawing.Point(354, 38);
-			this.butPickProc.Name = "butPickProc";
-			this.butPickProc.Size = new System.Drawing.Size(24, 21);
-			this.butPickProc.TabIndex = 62;
-			this.butPickProc.Text = "...";
-			this.butPickProc.UseVisualStyleBackColor = true;
-			this.butPickProc.Click += new System.EventHandler(this.butPickProc_Click);
-			// 
-			// butDelete
-			// 
-			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDelete.CornerRadius = 4F;
-			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
-			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDelete.Location = new System.Drawing.Point(12, 139);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(81, 26);
-			this.butDelete.TabIndex = 6;
-			this.butDelete.Text = "Delete";
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(273, 141);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 24);
-			this.butOK.TabIndex = 4;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(354, 141);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 5;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// labelSurfaces
-			// 
-			this.labelSurfaces.Location = new System.Drawing.Point(82, 67);
-			this.labelSurfaces.Name = "labelSurfaces";
-			this.labelSurfaces.Size = new System.Drawing.Size(98, 14);
-			this.labelSurfaces.TabIndex = 55;
-			this.labelSurfaces.Text = "Surfaces";
-			this.labelSurfaces.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// textSurfaces
-			// 
-			this.textSurfaces.Location = new System.Drawing.Point(181, 64);
-			this.textSurfaces.Name = "textSurfaces";
-			this.textSurfaces.Size = new System.Drawing.Size(167, 20);
-			this.textSurfaces.TabIndex = 2;
-			// 
-			// FormProcButtonQuickEdit
-			// 
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(441, 175);
-			this.Controls.Add(this.butPickProc);
-			this.Controls.Add(this.butDelete);
-			this.Controls.Add(this.textDescript);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.textProcedureCode);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.checkIsLabel);
-			this.Controls.Add(this.textSurfaces);
-			this.Controls.Add(this.labelSurfaces);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butCancel);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MinimumSize = new System.Drawing.Size(100, 100);
-			this.Name = "FormProcButtonQuickEdit";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Edit Quick Procedure Button";
-			this.Load += new System.EventHandler(this.FormProcButtonQuickEdit_Load);
-			this.ResumeLayout(false);
-			this.PerformLayout();
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormProcButtonQuickEdit));
+            this.labelCheckBox = new System.Windows.Forms.CheckBox();
+            this.procedureCodeTextBox = new System.Windows.Forms.TextBox();
+            this.procedureCodeLabel = new System.Windows.Forms.Label();
+            this.descriptionTextBox = new System.Windows.Forms.TextBox();
+            this.descriptionLabel = new System.Windows.Forms.Label();
+            this.pickProcedureButton = new System.Windows.Forms.Button();
+            this.deleteButton = new System.Windows.Forms.Button();
+            this.acceptButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.surfacesLabel = new System.Windows.Forms.Label();
+            this.surfacesTextBox = new System.Windows.Forms.TextBox();
+            this.SuspendLayout();
+            // 
+            // labelCheckBox
+            // 
+            this.labelCheckBox.AutoSize = true;
+            this.labelCheckBox.Location = new System.Drawing.Point(160, 106);
+            this.labelCheckBox.Name = "labelCheckBox";
+            this.labelCheckBox.Size = new System.Drawing.Size(109, 19);
+            this.labelCheckBox.TabIndex = 7;
+            this.labelCheckBox.Text = "Display as Label";
+            this.labelCheckBox.UseVisualStyleBackColor = true;
+            this.labelCheckBox.CheckedChanged += new System.EventHandler(this.LabelCheckBox_CheckedChanged);
+            // 
+            // procedureCodeTextBox
+            // 
+            this.procedureCodeTextBox.Location = new System.Drawing.Point(160, 48);
+            this.procedureCodeTextBox.Name = "procedureCodeTextBox";
+            this.procedureCodeTextBox.Size = new System.Drawing.Size(255, 23);
+            this.procedureCodeTextBox.TabIndex = 3;
+            // 
+            // procedureCodeLabel
+            // 
+            this.procedureCodeLabel.AutoSize = true;
+            this.procedureCodeLabel.Location = new System.Drawing.Point(62, 51);
+            this.procedureCodeLabel.Name = "procedureCodeLabel";
+            this.procedureCodeLabel.Size = new System.Drawing.Size(92, 15);
+            this.procedureCodeLabel.TabIndex = 2;
+            this.procedureCodeLabel.Text = "Procedure Code";
+            this.procedureCodeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // descriptionTextBox
+            // 
+            this.descriptionTextBox.Location = new System.Drawing.Point(160, 19);
+            this.descriptionTextBox.Name = "descriptionTextBox";
+            this.descriptionTextBox.Size = new System.Drawing.Size(255, 23);
+            this.descriptionTextBox.TabIndex = 1;
+            // 
+            // descriptionLabel
+            // 
+            this.descriptionLabel.AutoSize = true;
+            this.descriptionLabel.Location = new System.Drawing.Point(85, 22);
+            this.descriptionLabel.Name = "descriptionLabel";
+            this.descriptionLabel.Size = new System.Drawing.Size(69, 15);
+            this.descriptionLabel.TabIndex = 0;
+            this.descriptionLabel.Text = "Display Text";
+            this.descriptionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // pickProcedureButton
+            // 
+            this.pickProcedureButton.Location = new System.Drawing.Point(421, 47);
+            this.pickProcedureButton.Name = "pickProcedureButton";
+            this.pickProcedureButton.Size = new System.Drawing.Size(30, 25);
+            this.pickProcedureButton.TabIndex = 4;
+            this.pickProcedureButton.Text = "...";
+            this.pickProcedureButton.UseVisualStyleBackColor = true;
+            this.pickProcedureButton.Click += new System.EventHandler(this.PickProcedureButton_Click);
+            // 
+            // deleteButton
+            // 
+            this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.deleteButton.Image = global::OpenDental.Properties.Resources.IconDelete;
+            this.deleteButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.deleteButton.Location = new System.Drawing.Point(13, 158);
+            this.deleteButton.Name = "deleteButton";
+            this.deleteButton.Size = new System.Drawing.Size(110, 30);
+            this.deleteButton.TabIndex = 8;
+            this.deleteButton.Text = "Delete";
+            this.deleteButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.deleteButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.deleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
+            // 
+            // acceptButton
+            // 
+            this.acceptButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.acceptButton.Location = new System.Drawing.Point(225, 158);
+            this.acceptButton.Name = "acceptButton";
+            this.acceptButton.Size = new System.Drawing.Size(110, 30);
+            this.acceptButton.TabIndex = 9;
+            this.acceptButton.Text = "&OK";
+            this.acceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(341, 158);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(110, 30);
+            this.cancelButton.TabIndex = 10;
+            this.cancelButton.Text = "&Cancel";
+            // 
+            // surfacesLabel
+            // 
+            this.surfacesLabel.AutoSize = true;
+            this.surfacesLabel.Location = new System.Drawing.Point(103, 80);
+            this.surfacesLabel.Name = "surfacesLabel";
+            this.surfacesLabel.Size = new System.Drawing.Size(51, 15);
+            this.surfacesLabel.TabIndex = 5;
+            this.surfacesLabel.Text = "Surfaces";
+            this.surfacesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // surfacesTextBox
+            // 
+            this.surfacesTextBox.Location = new System.Drawing.Point(160, 77);
+            this.surfacesTextBox.Name = "surfacesTextBox";
+            this.surfacesTextBox.Size = new System.Drawing.Size(255, 23);
+            this.surfacesTextBox.TabIndex = 6;
+            // 
+            // FormProcButtonQuickEdit
+            // 
+            this.AcceptButton = this.acceptButton;
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(464, 201);
+            this.Controls.Add(this.pickProcedureButton);
+            this.Controls.Add(this.deleteButton);
+            this.Controls.Add(this.descriptionTextBox);
+            this.Controls.Add(this.descriptionLabel);
+            this.Controls.Add(this.procedureCodeTextBox);
+            this.Controls.Add(this.procedureCodeLabel);
+            this.Controls.Add(this.labelCheckBox);
+            this.Controls.Add(this.surfacesTextBox);
+            this.Controls.Add(this.surfacesLabel);
+            this.Controls.Add(this.acceptButton);
+            this.Controls.Add(this.cancelButton);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FormProcButtonQuickEdit";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Edit Quick Procedure Button";
+            this.Load += new System.EventHandler(this.FormProcButtonQuickEdit_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private OpenDental.UI.Button butOK;
-		private OpenDental.UI.Button butCancel;
-		private System.Windows.Forms.CheckBox checkIsLabel;
-		private System.Windows.Forms.TextBox textProcedureCode;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.TextBox textDescript;
-		private System.Windows.Forms.Label label3;
-		private UI.Button butDelete;
-		private System.Windows.Forms.Button butPickProc;
-		private System.Windows.Forms.Label labelSurfaces;
-		private System.Windows.Forms.TextBox textSurfaces;
-	}
+        private System.Windows.Forms.Button acceptButton;
+        private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.CheckBox labelCheckBox;
+        private System.Windows.Forms.TextBox procedureCodeTextBox;
+        private System.Windows.Forms.Label procedureCodeLabel;
+        private System.Windows.Forms.TextBox descriptionTextBox;
+        private System.Windows.Forms.Label descriptionLabel;
+        private System.Windows.Forms.Button deleteButton;
+        private System.Windows.Forms.Button pickProcedureButton;
+        private System.Windows.Forms.Label surfacesLabel;
+        private System.Windows.Forms.TextBox surfacesTextBox;
+    }
 }

@@ -1283,7 +1283,7 @@ namespace OpenDental
             this.panelQuickButtons.Name = "panelQuickButtons";
             this.panelQuickButtons.Size = new System.Drawing.Size(195, 182);
             this.panelQuickButtons.TabIndex = 202;
-            this.panelQuickButtons.ItemClickBut += new OpenDental.UI.ODButtonPanelEventHandler(this.panelQuickButtons_ItemClickBut);
+            this.panelQuickButtons.ButtonClick += new System.EventHandler<ODButtonPanelItemEventArgs>(this.panelQuickButtons_ItemClickBut);
             // 
             // comboPrognosis
             // 
@@ -8627,25 +8627,23 @@ namespace OpenDental
 
         private void fillPanelQuickButtons(bool doRefreshData = true)
         {
-            panelQuickButtons.BeginUpdate();
             panelQuickButtons.Items.Clear();
             if (doRefreshData || listProcButtonQuicks == null)
             {
                 listProcButtonQuicks = ProcButtonQuicks.GetAll();
             }
             listProcButtonQuicks.Sort(ProcButtonQuicks.sortYX);
-            ODPanelItem pItem;
+            ODButtonPanelItem pItem;
             for (int i = 0; i < listProcButtonQuicks.Count; i++)
             {
-                pItem = new ODPanelItem();
+                pItem = new ODButtonPanelItem();
                 pItem.Text = listProcButtonQuicks[i].Description;
-                pItem.YPos = listProcButtonQuicks[i].YPos;
-                pItem.ItemOrder = i;
-                pItem.ItemType = (listProcButtonQuicks[i].IsLabel ? ODPanelItemType.Label : ODPanelItemType.Button);
+                pItem.Row = listProcButtonQuicks[i].YPos;
+                pItem.Order = i;
+                pItem.Type = (listProcButtonQuicks[i].IsLabel ? ODButtonPanelItemType.Label : ODButtonPanelItemType.Button);
                 pItem.Tags.Add(listProcButtonQuicks[i]);
                 panelQuickButtons.Items.Add(pItem);
             }
-            panelQuickButtons.EndUpdate();
         }
 
         ///<summary>Gets run on ModuleSelected and each time a different images tab is selected. It first creates any missing thumbnails, then displays them. So it will be faster after the first time.</summary>
@@ -14471,7 +14469,7 @@ namespace OpenDental
         }
 
         ///<summary>Handles single clicks that occur on button items. Not double clicks, not labels, and not empty space.</summary>
-        private void panelQuickButtons_ItemClickBut(object sender, ODButtonPanelEventArgs e)
+        private void panelQuickButtons_ItemClickBut(object sender, ODButtonPanelItemEventArgs e)
         {
             ProcButtonQuick pbq = null;
             for (int i = 0; i < e.Item.Tags.Count; i++)
