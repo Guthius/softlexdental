@@ -6339,7 +6339,7 @@ namespace OpenDental
                                 }
                             }
                         }
-                    PluginApptProvChangeQuestionEnd: { }
+                    //PluginApptProvChangeQuestionEnd: { }
                     }
                     #region Provider Term Date Check
                     //Prevents appointments with providers that are past their term end date from being scheduled
@@ -6426,7 +6426,7 @@ namespace OpenDental
                 {
                     apt.AptStatus = ApptStatus.Scheduled;
                 }
-            PluginApptDoNotUnbreakApptSameDay: { }
+            //PluginApptDoNotUnbreakApptSameDay: { }
                 //original location of provider code
                 if (curOp.ClinicNum == 0)
                 {

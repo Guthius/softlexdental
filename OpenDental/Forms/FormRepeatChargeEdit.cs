@@ -695,59 +695,9 @@ namespace OpenDental{
 			}
 			textNote.Text=RepeatCur.Note;
 			_isErx=false;
-			if(Preferences.GetBool(PrefName.DistributorKey) && Regex.IsMatch(RepeatCur.ProcCode,"^Z[0-9]{3,}$")) {//Is eRx if HQ and a using an eRx Z code.
-				_isErx=true;
-				labelPatNum.Visible=true;
-				textPatNum.Visible=true;
-				butMoveTo.Visible=true;
-				labelNpi.Visible=true;
-				textNpi.Visible=true;
-				labelProviderName.Visible=true;
-				textProvName.Visible=true;
-				labelErxAccountId.Visible=true;
-				textErxAccountId.Visible=true;
-				if(IsNew && RepeatCur.ProcCode=="Z100") {//DoseSpot Procedure Code
-					List<string> listDoseSpotAccountIds=ClinicErxs.GetAccountIdsForPatNum(RepeatCur.PatNum)
-					.Union(ProviderErxs.GetAccountIdsForPatNum(RepeatCur.PatNum))
-					.Union(
-						RepeatCharges.GetForErx()
-						.FindAll(x => x.PatNum==RepeatCur.PatNum && x.ProcCode=="Z100")
-						.Select(x => x.ErxAccountId)
-						.ToList()
-					)
-					.Distinct()
-					.ToList()
-					.FindAll(x => DoseSpot.IsDoseSpotAccountId(x));
-					if(listDoseSpotAccountIds.Count==0) {
-						listDoseSpotAccountIds.Add(DoseSpot.GenerateAccountId(RepeatCur.PatNum));
-					}
-					if(listDoseSpotAccountIds.Count==1) {
-						textErxAccountId.Text=listDoseSpotAccountIds[0];
-					}
-					else if(listDoseSpotAccountIds.Count>1) {
-						InputBox inputAccountIds=new InputBox(Lans.g(this,"Multiple Account IDs found.  Select one to assign to this repeat charge."),listDoseSpotAccountIds,0);
-						inputAccountIds.ShowDialog();
-						if(inputAccountIds.DialogResult==DialogResult.OK) {
-							textErxAccountId.Text=listDoseSpotAccountIds[inputAccountIds.SelectedIndex];
-						}
-					}
-				}
-				else {//Existing eRx repeating charge.
-					textNpi.Text=RepeatCur.Npi;
-					textErxAccountId.Text=RepeatCur.ErxAccountId;
-					textProvName.Text=RepeatCur.ProviderName;
-					textNpi.ReadOnly=true;
-					textErxAccountId.ReadOnly=true;
-					textProvName.ReadOnly=true;
-				}
-			}
 			checkCopyNoteToProc.Checked=RepeatCur.CopyNoteToProc;
 			checkCreatesClaim.Checked=RepeatCur.CreatesClaim;
 			checkIsEnabled.Checked=RepeatCur.IsEnabled;
-			if(Preferences.GetBool(PrefName.DistributorKey)) {//OD HQ disable the IsEnabled and CreatesClaim checkboxes
-				checkCreatesClaim.Enabled=false;
-				checkIsEnabled.Enabled=false;
-			}
 			Patient pat=Patients.GetPat(RepeatCur.PatNum);//pat should never be null. If it is, this will fail.
 			//If this is a new repeat charge and no other active repeat charges exist, set the billing cycle day to today
 			if(IsNew && !RepeatCharges.ActiveRepeatChargeExists(RepeatCur.PatNum)) {

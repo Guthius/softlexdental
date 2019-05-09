@@ -1428,7 +1428,6 @@ namespace OpenDental
             dictChartPrefsCache.Clear();
             dictTaskListPrefsCache.Clear();
             //Chart Drawing Prefs
-            dictChartPrefsCache.Add(PrefName.DistributorKey.ToString(), Preferences.GetBool(PrefName.DistributorKey));
             dictChartPrefsCache.Add(PrefName.UseInternationalToothNumbers.ToString(), Preferences.GetInt(PrefName.UseInternationalToothNumbers));
             dictChartPrefsCache.Add("GraphicsUseHardware", ComputerPrefs.LocalComputer.GraphicsUseHardware);
             dictChartPrefsCache.Add("PreferredPixelFormatNum", ComputerPrefs.LocalComputer.PreferredPixelFormatNum);
@@ -1463,7 +1462,6 @@ namespace OpenDental
                 {
                     case "ChartModule":
                         if (dictChartPrefsCache.Count == 0
-                            || Preferences.GetBool(PrefName.DistributorKey) != (bool)dictChartPrefsCache["DistributorKey"]
                             || Preferences.GetInt(PrefName.UseInternationalToothNumbers) != (int)dictChartPrefsCache["UseInternationalToothNumbers"]
                             || ComputerPrefs.LocalComputer.GraphicsUseHardware != (bool)dictChartPrefsCache["GraphicsUseHardware"]
                             || ComputerPrefs.LocalComputer.PreferredPixelFormatNum != (int)dictChartPrefsCache["PreferredPixelFormatNum"]
@@ -1995,25 +1993,20 @@ namespace OpenDental
             FormCI.BringToFront();
         }
 
-        ///<summary>This is a helper method to get a new commlog object for the commlog tool bar buttons.</summary>
-        private Commlog GetNewCommlog()
+        /// <summary>
+        /// This is a helper method to get a new commlog object for the commlog tool bar buttons.
+        /// </summary>
+        Commlog GetNewCommlog()
         {
-            Commlog commlog = new Commlog();
-            commlog.PatNum = CurPatNum;
-            commlog.CommDateTime = DateTime.Now;
-            commlog.CommType = Commlogs.GetTypeAuto(CommItemTypeAuto.MISC);
-            if (Preferences.GetBool(PrefName.DistributorKey))
-            {//for OD HQ
-                commlog.Mode_ = CommItemMode.None;
-                commlog.SentOrReceived = CommSentOrReceived.Neither;
-            }
-            else
+            return new Commlog
             {
-                commlog.Mode_ = CommItemMode.Phone;
-                commlog.SentOrReceived = CommSentOrReceived.Received;
-            }
-            commlog.UserNum = Security.CurUser.UserNum;
-            return commlog;
+                PatNum = CurPatNum,
+                CommDateTime = DateTime.Now,
+                CommType = Commlogs.GetTypeAuto(CommItemTypeAuto.MISC),
+                Mode_ = CommItemMode.Phone,
+                SentOrReceived = CommSentOrReceived.Received,
+                UserNum = Security.CurUser.UserNum
+            };
         }
 
         private void OnLetter_Click()

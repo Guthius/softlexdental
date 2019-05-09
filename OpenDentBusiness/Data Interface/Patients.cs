@@ -1528,11 +1528,6 @@ namespace OpenDentBusiness
                 command += "'' ";
             }
             command += "Specialty";
-            if (Preferences.GetBool(PrefName.DistributorKey))
-            {//if for OD HQ, so never going to be Oracle
-                command += ",GROUP_CONCAT(DISTINCT phonenumber.PhoneNumberVal) AS OtherPhone"//this customer might have multiple extra phone numbers that match the param.
-                    + ",registrationkey.RegKey";
-            }
             if (invoiceNumber != "")
             {
                 command += ",statement.StatementNum ";
@@ -1543,15 +1538,6 @@ namespace OpenDentBusiness
                 command += ",'' StatementNum ";
             }
             command += "FROM patient ";
-            if (Preferences.GetBool(PrefName.DistributorKey))
-            {//if for OD HQ, so never going to be Oracle
-                command += "LEFT JOIN phonenumber ON phonenumber.PatNum=patient.PatNum ";
-                if (regexp != "")
-                {
-                    command += "AND phonenumber.PhoneNumberVal REGEXP '" + POut.String(regexp) + "' ";
-                }
-                command += "LEFT JOIN registrationkey ON patient.PatNum=registrationkey.PatNum ";
-            }
             if (subscriberId != "")
             {
                 command += "LEFT JOIN patplan ON patplan.PatNum=patient.PatNum "
@@ -1587,31 +1573,17 @@ namespace OpenDentBusiness
             if (lname.Length > 0)
             {
                 if (limit)
-                {//normal behavior is fast
-                    if (Preferences.GetBool(PrefName.DistributorKey))
-                    {
-                        command += "AND (patient.LName LIKE '" + POut.String(lname) + "%' OR patient.Preferred LIKE '" + POut.String(lname) + "%') ";
-                    }
-                    else
-                    {
-                        command += "AND patient.LName LIKE '" + POut.String(lname) + "%' ";
-                    }
+                {
+                    command += "AND patient.LName LIKE '" + POut.String(lname) + "%' ";
                 }
                 else
-                {//slower, but more inclusive.  User explicitly looking for all matches.
-                    if (Preferences.GetBool(PrefName.DistributorKey))
-                    {
-                        command += "AND (patient.LName LIKE '%" + POut.String(lname) + "%' OR patient.Preferred LIKE '%" + POut.String(lname) + "%') ";
-                    }
-                    else
-                    {
-                        command += "AND patient.LName LIKE '%" + POut.String(lname) + "%' ";
-                    }
+                {
+                    command += "AND patient.LName LIKE '%" + POut.String(lname) + "%' ";
                 }
             }
             if (fname.Length > 0)
             {
-                if (Preferences.GetBool(PrefName.DistributorKey) || Preferences.GetBool(PrefName.PatientSelectUseFNameForPreferred))
+                if (Preferences.GetBool(PrefName.PatientSelectUseFNameForPreferred))
                 {
                     //Nathan has approved the preferred name search for first name only. It is not intended to work with last name for our customers.
                     command += "AND (patient.FName LIKE '" + POut.String(fname) + "%' OR patient.Preferred LIKE '" + POut.String(fname) + "%') ";
@@ -1624,17 +1596,12 @@ namespace OpenDentBusiness
 
             if (regexp != "")
             {
-
-                command += "AND (patient.HmPhone REGEXP '" + POut.String(regexp) + "' "
-                    + "OR patient.WkPhone REGEXP '" + POut.String(regexp) + "' "
-                    + "OR patient.WirelessPhone REGEXP '" + POut.String(regexp) + "' ";
-                if (Preferences.GetBool(PrefName.DistributorKey))
-                {//if for OD HQ, so never going to be Oracle
-                    command += "OR phonenumber.PhoneNumberVal REGEXP '" + POut.String(regexp) + "' ";
-                }
-                command += ") ";
-
+                command +=
+                    "AND (patient.HmPhone REGEXP '" + POut.String(regexp) + "' " +
+                    "OR patient.WkPhone REGEXP '" + POut.String(regexp) + "' " +
+                    "OR patient.WirelessPhone REGEXP '" + POut.String(regexp) + "') ";
             }
+
             //Do a mathematical comparison for the patNumStr.
             command += DbHelper.LongBetween("patient.PatNum", patNumStr);
             //Do a mathematical comparison for the invoiceNumber.
@@ -1708,10 +1675,6 @@ namespace OpenDentBusiness
             {
                 command += "AND FALSE ";//negate all filters above and select patients based solely on being in explicitPatNums
                 command += "OR patient.PatNum IN (" + string.Join(",", explicitPatNums) + ") ";
-            }
-            if (Preferences.GetBool(PrefName.DistributorKey))
-            { //if for OD HQ
-                command += "GROUP BY patient.PatNum ";
             }
             if (initialPatNum != 0 && limit)
             {
@@ -1810,11 +1773,6 @@ namespace OpenDentBusiness
                 r["Email"] = dRow["Email"].ToString();
                 r["Country"] = dRow["Country"].ToString();
                 r["clinic"] = Clinics.GetAbbr(PIn.Long(dRow["ClinicNum"].ToString()));
-                if (Preferences.GetBool(PrefName.DistributorKey))
-                {//if for OD HQ
-                    r["OtherPhone"] = dRow["OtherPhone"].ToString();
-                    r["RegKey"] = dRow["RegKey"].ToString();
-                }
                 r["StatementNum"] = dRow["StatementNum"].ToString();
                 r["WirelessPhone"] = dRow["WirelessPhone"].ToString();
                 r["SecProv"] = Providers.GetAbbr(PIn.Long(dRow["SecProv"].ToString()));
@@ -1852,10 +1810,7 @@ namespace OpenDentBusiness
             List<string> listClauses = new List<string>();
             listClauses.Add(string.IsNullOrEmpty(args.lname) ? "" : "(LName='" + args.lname + "')");
             listClauses.Add(string.IsNullOrEmpty(args.fname) ? "" : "(FName='" + args.fname + "')");
-            listClauses.Add(string.IsNullOrEmpty(args.phone) ? "" :
-                "(WirelessPhone='" + args.phone + "' OR HmPhone='" + args.phone + "' OR WkPhone='" + args.phone + "'"
-                + (!Preferences.GetBool(PrefName.DistributorKey) ? "" : " OR phonenumber.PhoneNumberVal='" + args.phone + "'") //Join
-                + ")");
+            listClauses.Add(string.IsNullOrEmpty(args.phone) ? "" : "(WirelessPhone='" + args.phone + "' OR HmPhone='" + args.phone + "' OR WkPhone='" + args.phone + "')");
             listClauses.Add(string.IsNullOrEmpty(args.address) ? "" : "(Address='" + args.address + "')");
             listClauses.Add(string.IsNullOrEmpty(args.city) ? "" : "(City='" + args.city + "')");
             listClauses.Add(string.IsNullOrEmpty(args.state) ? "" : "(State='" + args.state + "')");
@@ -1865,7 +1820,6 @@ namespace OpenDentBusiness
             listClauses.Add(string.IsNullOrEmpty(args.subscriberId) ? "" : "(SubscriberId='" + args.subscriberId + "')"); //Join
             listClauses.Add(string.IsNullOrEmpty(args.email) ? "" : "(Email='" + args.email + "')");
             listClauses.Add(string.IsNullOrEmpty(args.country) ? "" : "(Country='" + args.country + "')");
-            listClauses.Add((string.IsNullOrEmpty(args.regKey) || !Preferences.GetBool(PrefName.DistributorKey)) ? "" : "(RegKey='" + args.regKey + "')"); //Join
             listClauses.Add(args.birthdate.Year < 1880 ? "" : "(Birthdate=" + POut.Date(args.birthdate) + ")");
             listClauses.Add(string.IsNullOrEmpty(args.invoicenumber) ? "" : "(StatementNum='" + args.invoicenumber + "')");
             listClauses.RemoveAll(string.IsNullOrEmpty);

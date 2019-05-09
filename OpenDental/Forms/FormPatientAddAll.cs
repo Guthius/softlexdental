@@ -227,10 +227,10 @@ namespace OpenDental {
 				butClearReferralSource.Enabled=false;
 				butReferredFrom.Enabled=false;
 			}
-			if(!Preferences.GetBool(PrefName.DockPhonePanelShow)) {
-				labelST.Text="ST";
-				textCountry.Visible=false;
-			}
+
+            labelST.Text = "ST";
+            textCountry.Visible = false;
+			
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				labelSSN.Text=Lan.g(this,"SIN");
 				labelZip.Text=Lan.g(this,"Postal Code");

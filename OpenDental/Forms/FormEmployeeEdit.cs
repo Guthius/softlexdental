@@ -240,20 +240,21 @@ namespace OpenDental{
 			this.PerformLayout();
 
 		}
-		#endregion
+        #endregion
 
-		private void FormEmployeeEdit_Load(object sender, System.EventArgs e) {
-			textLName.Text=EmployeeCur.LName;
-			textFName.Text=EmployeeCur.FName;
-			textMI.Text=EmployeeCur.MiddleI;
-			textPayrollID.Text=EmployeeCur.PayrollID;
-			if(!Preferences.GetBool(PrefName.DockPhonePanelShow)){
-				labelPhoneExt.Visible=false;
-				textPhoneExt.Visible=false;
-			}
-			textPhoneExt.Text=EmployeeCur.PhoneExt.ToString();
-			checkIsHidden.Checked=EmployeeCur.IsHidden;
-		}
+        private void FormEmployeeEdit_Load(object sender, System.EventArgs e)
+        {
+            textLName.Text = EmployeeCur.LName;
+            textFName.Text = EmployeeCur.FName;
+            textMI.Text = EmployeeCur.MiddleI;
+            textPayrollID.Text = EmployeeCur.PayrollID;
+
+            labelPhoneExt.Visible = false;
+            textPhoneExt.Visible = false;
+
+            textPhoneExt.Text = EmployeeCur.PhoneExt.ToString();
+            checkIsHidden.Checked = EmployeeCur.IsHidden;
+        }
 
 		private void butDelete_Click(object sender,EventArgs e) {
 			if(IsNew){

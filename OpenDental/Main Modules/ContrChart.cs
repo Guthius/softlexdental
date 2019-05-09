@@ -317,7 +317,7 @@ namespace OpenDental
         private ODGridPageNav gridProgNav;
         private ODGrid gridProg;
         private Panel panelGridProg;
-        private bool IsDistributorKey;
+
         [DllImport("wininet.dll", CharSet = CharSet.Auto, SetLastError = true)]
         static extern bool InternetSetCookie(string lpszUrlName, string lbszCookieName, string lpszCookieData);
         private List<ProcButtonQuick> listProcButtonQuicks;
@@ -3441,54 +3441,6 @@ namespace OpenDental
             }
             ToggleCheckTreatPlans();//Mimics old ChartLayoutHelper logic
                                     //can't use Lan.F
-            Lan.C(this, new Control[]{
-                checkDone,
-                butNew,
-                butClear,
-                checkShowTP,
-                checkShowC,
-                checkShowE,
-                checkShowR,
-                checkRx,
-                checkNotes,
-                checkTreatPlans,
-                labelDx,
-                butM,
-                butOI,
-                butD,
-                butL,
-                butBF,
-                butV,
-                groupBox2,
-                radioEntryTP,
-                radioEntryC,
-                radioEntryEC,
-                radioEntryEO,
-                radioEntryR,
-                checkToday,
-                labelDx,
-                label6,
-                butAddProc,
-                label14,
-				//textProcCode is handled in ClearButtons()
-				butOK,
-                label13,
-                tabEnterTx,
-                tabMissing,
-                tabMovements,
-                tabPrimary,
-                tabPlanned,
-                tabShow,
-                tabDraw,
-                gridChartViews,
-                gridCustomerViews,
-                gridPlanned,
-                gridProg,
-                gridPtInfo,
-                gridTpProcs,
-                gridTreatPlans,
-            }, true);
-            Lan.C(this, menuProgRight, menuErx, menuToothChart);
             LayoutToolBar();
             //ComputerPref localComputerPrefs=ComputerPrefs.GetForLocalComputer();
             this.toothChart.DeviceFormat = new ToothChartDirectX.DirectXDeviceFormat(ComputerPrefs.LocalComputer.DirectXFormat);
@@ -3516,15 +3468,12 @@ namespace OpenDental
         ///<summary>Called every time prefs are changed from any workstation.</summary>
         public void InitializeLocalData()
         {
-            IsDistributorKey = Preferences.GetBool(PrefName.DistributorKey);
-            if (!IsDistributorKey)
-            {
                 butAddKey.Visible = false;
                 butForeignKey.Visible = false;
                 butPhoneNums.Visible = false;
                 butErxAccess.Visible = false;
                 tabProc.TabPages.Remove(tabCustomer);
-            }
+            
             //ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
             toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)Preferences.GetInt(PrefName.UseInternationalToothNumbers));
             toothChart.UseHardware = ComputerPrefs.LocalComputer.GraphicsUseHardware;
@@ -4209,10 +4158,6 @@ namespace OpenDental
             ToolBarMain.Invalidate();
             ClearButtons();
             FillChartViewsGrid(false);
-            if (IsDistributorKey)
-            {
-                FillCustomerTab();
-            }
             if (textSearch.Text != "")
             {
                 _listSearchResults?.Clear();
@@ -7167,18 +7112,10 @@ namespace OpenDental
                     SetDateRange();
                     FillDateRange();
                     gridChartViews.SetSelected(ChartViewCurDisplay.ItemOrder, true);
-                    if (IsDistributorKey)
-                    {
-                        gridCustomerViews.SetSelected(ChartViewCurDisplay.ItemOrder, true);
-                    }
                 }
                 else
                 {
                     gridChartViews.SetSelected(false);
-                    if (IsDistributorKey)
-                    {
-                        gridCustomerViews.SetSelected(false);
-                    }
                 }
             }
             bool showSelectedTeeth = checkShowTeeth.Checked;
@@ -13856,10 +13793,6 @@ namespace OpenDental
         {
             SetChartView(_listChartViews[e.Row]);
             gridChartViews.SetSelected(e.Row, true);
-            if (IsDistributorKey)
-            {
-                gridCustomerViews.SetSelected(e.Row, true);
-            }
             RefreshSheetLayout();//This changes the sheet layout.
             RefreshModuleScreen(false);//Update UI to reflect any changed dynamic SheetDefs.
         }
@@ -13875,10 +13808,6 @@ namespace OpenDental
             FormC.ChartViewCur = _listChartViews[e.Row];
             FormC.ShowDialog();
             FillChartViewsGrid();
-            if (IsDistributorKey)
-            {
-                FillCustomerViewsGrid();
-            }
             if (gridChartViews.Rows.Count == 0)
             {
                 FillProgNotes();
@@ -13904,16 +13833,8 @@ namespace OpenDental
                 else
                 {
                     gridChartViews.SetSelected(0, true);
-                    if (IsDistributorKey)
-                    {
-
-                    }
                     SetChartView(_listChartViews[0]);
                 }
-            }
-            if (IsDistributorKey)
-            {
-                gridCustomerViews.SetSelected(gridChartViews.GetSelectedIndex(), true);
             }
             RefreshSheetLayout();//This changes the sheet layout.
             RefreshModuleScreen(false);//Update UI to reflect any changed dynamic SheetDefs.
@@ -13992,10 +13913,6 @@ namespace OpenDental
             FormChartAdd.ChartViewCur.IsAudit = checkAudit.Checked;
             FormChartAdd.ShowDialog();
             FillChartViewsGrid();
-            if (IsDistributorKey)
-            {
-                FillCustomerViewsGrid();
-            }
             int count2 = gridChartViews.Rows.Count;
             if (count2 == 0)
             {
@@ -14006,10 +13923,6 @@ namespace OpenDental
                 if (selectedIndex != -1)
                 {
                     gridChartViews.SetSelected(selectedIndex, true);
-                    if (IsDistributorKey)
-                    {
-                        gridCustomerViews.SetSelected(selectedIndex, true);
-                    }
                     SetChartView(_listChartViews[selectedIndex]);
                 }
             }
@@ -14018,16 +13931,9 @@ namespace OpenDental
                 FormChartAdd.ChartViewCur.ItemOrder = count;
                 ChartViews.Update(FormChartAdd.ChartViewCur);
                 FillChartViewsGrid();
-                if (IsDistributorKey)
-                {
-                    FillCustomerViewsGrid();
-                }
+
                 SetChartView(_listChartViews[count]);
                 gridChartViews.SetSelected(count, true);
-                if (IsDistributorKey)
-                {
-                    gridCustomerViews.SetSelected(selectedIndex, true);
-                }
             }
         }
 
@@ -14068,11 +13974,6 @@ namespace OpenDental
                 }
                 FillChartViewsGrid();
                 gridChartViews.SetSelected(newIdx, true);
-                if (IsDistributorKey)
-                {
-                    FillCustomerViewsGrid();
-                    gridCustomerViews.SetSelected(newIdx, true);
-                }
                 SetChartView(_listChartViews[newIdx]);
             }
         }
@@ -14114,11 +14015,6 @@ namespace OpenDental
                 }
                 FillChartViewsGrid();
                 gridChartViews.SetSelected(newIdx, true);
-                if (IsDistributorKey)
-                {
-                    FillCustomerViewsGrid();
-                    gridCustomerViews.SetSelected(newIdx, true);
-                }
                 SetChartView(_listChartViews[newIdx]);
             }
         }
@@ -14134,20 +14030,12 @@ namespace OpenDental
                         gridChartViews.SetSelected(0, true);
                         SetChartView(listChartViews[0]);
                     }
-                    if (IsDistributorKey && gridCustomerViews.Rows.Count > 0)
-                    {
-                        gridCustomerViews.SetSelected(0, true);
-                    }
                     break;
                 case Keys.F2:
                     if (gridChartViews.Rows.Count > 1)
                     {
                         gridChartViews.SetSelected(1, true);
                         SetChartView(listChartViews[1]);
-                    }
-                    if (IsDistributorKey && gridCustomerViews.Rows.Count > 1)
-                    {
-                        gridCustomerViews.SetSelected(1, true);
                     }
                     break;
                 case Keys.F3:
@@ -14156,20 +14044,12 @@ namespace OpenDental
                         gridChartViews.SetSelected(2, true);
                         SetChartView(listChartViews[2]);
                     }
-                    if (IsDistributorKey && gridCustomerViews.Rows.Count > 2)
-                    {
-                        gridCustomerViews.SetSelected(2, true);
-                    }
                     break;
                 case Keys.F4:
                     if (gridChartViews.Rows.Count > 3)
                     {
                         gridChartViews.SetSelected(3, true);
                         SetChartView(listChartViews[3]);
-                    }
-                    if (IsDistributorKey && gridCustomerViews.Rows.Count > 3)
-                    {
-                        gridCustomerViews.SetSelected(3, true);
                     }
                     break;
                 case Keys.F5:
@@ -14178,20 +14058,12 @@ namespace OpenDental
                         gridChartViews.SetSelected(4, true);
                         SetChartView(listChartViews[4]);
                     }
-                    if (IsDistributorKey && gridCustomerViews.Rows.Count > 4)
-                    {
-                        gridCustomerViews.SetSelected(4, true);
-                    }
                     break;
                 case Keys.F6:
                     if (gridChartViews.Rows.Count > 5)
                     {
                         gridChartViews.SetSelected(5, true);
                         SetChartView(listChartViews[5]);
-                    }
-                    if (IsDistributorKey && gridCustomerViews.Rows.Count > 5)
-                    {
-                        gridCustomerViews.SetSelected(5, true);
                     }
                     break;
                 case Keys.F7:
@@ -14200,20 +14072,12 @@ namespace OpenDental
                         gridChartViews.SetSelected(6, true);
                         SetChartView(listChartViews[6]);
                     }
-                    if (IsDistributorKey && gridCustomerViews.Rows.Count > 6)
-                    {
-                        gridCustomerViews.SetSelected(6, true);
-                    }
                     break;
                 case Keys.F8:
                     if (gridChartViews.Rows.Count > 7)
                     {
                         gridChartViews.SetSelected(7, true);
                         SetChartView(listChartViews[7]);
-                    }
-                    if (IsDistributorKey && gridCustomerViews.Rows.Count > 7)
-                    {
-                        gridCustomerViews.SetSelected(7, true);
                     }
                     break;
                 case Keys.F9:
@@ -14222,20 +14086,12 @@ namespace OpenDental
                         gridChartViews.SetSelected(8, true);
                         SetChartView(listChartViews[8]);
                     }
-                    if (IsDistributorKey && gridCustomerViews.Rows.Count > 8)
-                    {
-                        gridCustomerViews.SetSelected(8, true);
-                    }
                     break;
                 case Keys.F10:
                     if (gridChartViews.Rows.Count > 9)
                     {
                         gridChartViews.SetSelected(9, true);
                         SetChartView(listChartViews[9]);
-                    }
-                    if (IsDistributorKey && gridCustomerViews.Rows.Count > 9)
-                    {
-                        gridCustomerViews.SetSelected(9, true);
                     }
                     break;
                 case Keys.F11:
@@ -14244,20 +14100,12 @@ namespace OpenDental
                         gridChartViews.SetSelected(10, true);
                         SetChartView(listChartViews[10]);
                     }
-                    if (IsDistributorKey && gridCustomerViews.Rows.Count > 10)
-                    {
-                        gridCustomerViews.SetSelected(10, true);
-                    }
                     break;
                 case Keys.F12:
                     if (gridChartViews.Rows.Count > 11)
                     {
                         gridChartViews.SetSelected(11, true);
                         SetChartView(listChartViews[11]);
-                    }
-                    if (IsDistributorKey && gridCustomerViews.Rows.Count > 11)
-                    {
-                        gridCustomerViews.SetSelected(11, true);
                     }
                     break;
             }

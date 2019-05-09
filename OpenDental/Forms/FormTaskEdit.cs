@@ -91,8 +91,6 @@ namespace OpenDental {
 		///<summary>Filled on load with all non-hidden task priority definitions.</summary>
 		private List<Def> _listTaskPriorities;
 		private long _pritoryDefNumSelected;
-		///<summary>Keeps track of the number of notes that were associated to this task on load and after refilling the task note grid.  Only used for HQ in order to keep track of task note manipulation.</summary>
-		private int _numNotes=-1;
 		///<summary>FK to the definition.DefNum at HQ for the triage priority color for red.</summary>
 		private const long _triageRedNum=501;
 		///<summary>FK to the definition.DefNum at HQ for the triage priority color for blue.</summary>
@@ -100,7 +98,6 @@ namespace OpenDental {
 		///<summary>FK to the definition.DefNum at HQ for the triage priority color for white.</summary>
 		private const long _triageWhiteNum=503;
 		private UI.Button butAudit;
-		private bool _isLoading;
 		private ComboBox comboReminderRepeat;
 		private Label labelReminderRepeat;
 		private ValidNumber textReminderRepeatFrequency;
@@ -1291,15 +1288,6 @@ namespace OpenDental {
 				comboTaskPriorities.SelectedIndex=comboTaskPriorities.Items.Count-1;
 				_pritoryDefNumSelected=_listTaskPriorities[_listTaskPriorities.Count-1].DefNum;
 			}
-			if(_taskListCur!=null && IsNew && _taskListCur.TaskListNum==1697 && Preferences.GetBool(PrefName.DockPhonePanelShow)) {//Set to triage blue if HQ, triage list, and is new.
-				for(int i=0;i<_listTaskPriorities.Count;i++) {
-					if(_listTaskPriorities[i].DefNum==_triageBlueNum) {//Finding the option that is triageBlue to select it in the combobox (Combobox mirrors _listTaskPriorityDefs)
-						comboTaskPriorities.SelectedIndex=i;
-						break;
-					}
-				}
-				_pritoryDefNumSelected=_triageBlueNum;
-			}
 			if(comboTaskPriorities.SelectedIndex==-1) {//Priority for task wasn't found in the non-hidden priorities list (and isn't triageBlue), so it must be a hidden priority.
 				List<Def> listTaskDefsLong=Defs.GetDefsForCategory(DefCat.TaskPriorities);//Get all priorities
 				for(int i=0;i<listTaskDefsLong.Count;i++) {
@@ -1480,11 +1468,7 @@ namespace OpenDental {
 						butReply.Visible=false;
 					}
 				}
-				labelReply.Text=Lan.g(this,"(Send to ")+Userods.GetName(_replyToUserNum)+")";
-			}
-			if(Preferences.GetBool(PrefName.DockPhonePanelShow)) {//Show red and blue buttons for HQ always
-				butRed.Visible=true;
-				butBlue.Visible=true;
+                labelReply.Text = "(Send to " + Userods.GetName(_replyToUserNum) + ")";
 			}
 			if(!Security.IsAuthorized(Permissions.TaskEdit,true)){
 				butAudit.Visible=false;

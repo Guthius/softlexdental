@@ -29,11 +29,10 @@ namespace OpenDental {
 		private List<Provider> _listProviders=new List<Provider>();
 		private List<Def> _listBillingTypeDefs=new List<Def>();
 
-		///<summary></summary>
-		public FormRpFinanceCharge(){
-			InitializeComponent();
-			Lan.F(this);
-		}
+        public FormRpFinanceCharge()
+        {
+            InitializeComponent();
+        }
 
 
 		///<summary></summary>

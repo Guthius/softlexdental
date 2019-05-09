@@ -563,10 +563,6 @@ namespace OpenDental{
 					butDelete.Visible=false;
 					groupCopy.Visible=false;
 					groupPaste.Visible=false;
-					if(Preferences.GetBool(PrefName.DistributorKey)) {//if this is OD HQ
-						checkPracticeNotes.Checked=false;
-						checkPracticeNotes.Enabled=false;
-					}
 					dateFrom=DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek);//Sunday of current week.
 					textDateFrom.Text=dateFrom.ToShortDateString();
 					textDateTo.Text=dateFrom.AddMonths(1).AddDays(-1).ToShortDateString();
