@@ -29,7 +29,6 @@ namespace OpenDental
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormChooseDatabase));
-            this.computerNameInfoLabel = new System.Windows.Forms.Label();
             this.userTextBox = new System.Windows.Forms.TextBox();
             this.databaseComboBox = new System.Windows.Forms.ComboBox();
             this.computerNameComboBox = new System.Windows.Forms.ComboBox();
@@ -43,24 +42,11 @@ namespace OpenDental
             this.acceptButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // computerNameInfoLabel
-            // 
-            this.computerNameInfoLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.computerNameInfoLabel.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.computerNameInfoLabel.Location = new System.Drawing.Point(13, 100);
-            this.computerNameInfoLabel.Name = "computerNameInfoLabel";
-            this.computerNameInfoLabel.Size = new System.Drawing.Size(338, 70);
-            this.computerNameInfoLabel.TabIndex = 2;
-            this.computerNameInfoLabel.Text = "The name of the computer where the MySQL server and database are located.  If you" +
-    " are running this program on a single computer only, then the computer name may " +
-    "be localhost.";
-            // 
             // userTextBox
             // 
             this.userTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.userTextBox.Location = new System.Drawing.Point(13, 188);
+            this.userTextBox.Location = new System.Drawing.Point(13, 125);
             this.userTextBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
             this.userTextBox.Name = "userTextBox";
             this.userTextBox.Size = new System.Drawing.Size(338, 23);
@@ -72,7 +58,7 @@ namespace OpenDental
             | System.Windows.Forms.AnchorStyles.Right)));
             this.databaseComboBox.DropDownHeight = 390;
             this.databaseComboBox.IntegralHeight = false;
-            this.databaseComboBox.Location = new System.Drawing.Point(13, 290);
+            this.databaseComboBox.Location = new System.Drawing.Point(13, 228);
             this.databaseComboBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
             this.databaseComboBox.MaxDropDownItems = 100;
             this.databaseComboBox.Name = "databaseComboBox";
@@ -87,6 +73,7 @@ namespace OpenDental
             this.computerNameComboBox.DropDownHeight = 390;
             this.computerNameComboBox.IntegralHeight = false;
             this.computerNameComboBox.Location = new System.Drawing.Point(13, 74);
+            this.computerNameComboBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
             this.computerNameComboBox.MaxDropDownItems = 100;
             this.computerNameComboBox.Name = "computerNameComboBox";
             this.computerNameComboBox.Size = new System.Drawing.Size(338, 23);
@@ -95,7 +82,7 @@ namespace OpenDental
             // computerNameLabel
             // 
             this.computerNameLabel.AutoSize = true;
-            this.computerNameLabel.Location = new System.Drawing.Point(10, 56);
+            this.computerNameLabel.Location = new System.Drawing.Point(13, 56);
             this.computerNameLabel.Name = "computerNameLabel";
             this.computerNameLabel.Size = new System.Drawing.Size(74, 15);
             this.computerNameLabel.TabIndex = 0;
@@ -106,7 +93,7 @@ namespace OpenDental
             // 
             this.passwordTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.passwordTextBox.Location = new System.Drawing.Point(13, 239);
+            this.passwordTextBox.Location = new System.Drawing.Point(13, 176);
             this.passwordTextBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
             this.passwordTextBox.Name = "passwordTextBox";
             this.passwordTextBox.PasswordChar = '*';
@@ -117,7 +104,7 @@ namespace OpenDental
             // passwordLabel
             // 
             this.passwordLabel.AutoSize = true;
-            this.passwordLabel.Location = new System.Drawing.Point(10, 221);
+            this.passwordLabel.Location = new System.Drawing.Point(13, 158);
             this.passwordLabel.Name = "passwordLabel";
             this.passwordLabel.Size = new System.Drawing.Size(98, 15);
             this.passwordLabel.TabIndex = 5;
@@ -127,7 +114,7 @@ namespace OpenDental
             // userLabel
             // 
             this.userLabel.AutoSize = true;
-            this.userLabel.Location = new System.Drawing.Point(10, 170);
+            this.userLabel.Location = new System.Drawing.Point(13, 107);
             this.userLabel.Name = "userLabel";
             this.userLabel.Size = new System.Drawing.Size(71, 15);
             this.userLabel.TabIndex = 3;
@@ -137,11 +124,11 @@ namespace OpenDental
             // databaseLabel
             // 
             this.databaseLabel.AutoSize = true;
-            this.databaseLabel.Location = new System.Drawing.Point(10, 272);
+            this.databaseLabel.Location = new System.Drawing.Point(13, 210);
             this.databaseLabel.Name = "databaseLabel";
-            this.databaseLabel.Size = new System.Drawing.Size(327, 15);
+            this.databaseLabel.Size = new System.Drawing.Size(55, 15);
             this.databaseLabel.TabIndex = 7;
-            this.databaseLabel.Text = "Database (usually opendental unless you changed the name)";
+            this.databaseLabel.Text = "Database";
             this.databaseLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // checkNoShow
@@ -149,7 +136,7 @@ namespace OpenDental
             this.checkNoShow.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.checkNoShow.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.checkNoShow.Location = new System.Drawing.Point(13, 388);
+            this.checkNoShow.Location = new System.Drawing.Point(13, 328);
             this.checkNoShow.Margin = new System.Windows.Forms.Padding(3, 15, 3, 3);
             this.checkNoShow.Name = "checkNoShow";
             this.checkNoShow.Size = new System.Drawing.Size(338, 20);
@@ -161,7 +148,7 @@ namespace OpenDental
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(241, 340);
+            this.cancelButton.Location = new System.Drawing.Point(241, 280);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(110, 30);
             this.cancelButton.TabIndex = 10;
@@ -170,7 +157,7 @@ namespace OpenDental
             // acceptButton
             // 
             this.acceptButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.acceptButton.Location = new System.Drawing.Point(125, 340);
+            this.acceptButton.Location = new System.Drawing.Point(125, 280);
             this.acceptButton.Name = "acceptButton";
             this.acceptButton.Size = new System.Drawing.Size(110, 30);
             this.acceptButton.TabIndex = 9;
@@ -182,8 +169,7 @@ namespace OpenDental
             this.AcceptButton = this.acceptButton;
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(364, 421);
-            this.Controls.Add(this.computerNameInfoLabel);
+            this.ClientSize = new System.Drawing.Size(364, 361);
             this.Controls.Add(this.userTextBox);
             this.Controls.Add(this.cancelButton);
             this.Controls.Add(this.databaseComboBox);
@@ -222,6 +208,5 @@ namespace OpenDental
         private System.Windows.Forms.Label databaseLabel;
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button acceptButton;
-        private System.Windows.Forms.Label computerNameInfoLabel;
     }
 }

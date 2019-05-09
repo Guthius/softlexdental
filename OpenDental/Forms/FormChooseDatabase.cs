@@ -8,7 +8,6 @@ namespace OpenDental
     public partial class FormChooseDatabase : FormBaseDialog
     {
         public CentralConnection CentralConnectionCur = new CentralConnection();
-        public bool IsAccessedFromMainMenu;
         public List<string> ListAdminCompNames = new List<string>();
 
         /// <summary>
@@ -80,10 +79,10 @@ namespace OpenDental
 
             CentralConnections.GetChooseDatabaseConnectionSettings(
                 out CentralConnectionCur,
-                out string connectionString,
+                out _,
                 out bool noShow,
                 out ListAdminCompNames,
-                out bool useDynamicMode);
+                out _);
 
             NoShow = noShow;
         }
@@ -99,19 +98,10 @@ namespace OpenDental
                 computerNameComboBox.Items.Add(computerName);
             }
 
-            if (IsAccessedFromMainMenu)
-            {
-                computerNameComboBox.Enabled = false;
-                CentralConnectionCur.ServerName = DataConnection.Server;
-
-                databaseComboBox.Enabled = false;
-                CentralConnectionCur.DatabaseName = DataConnection.Database;
-            }
-
-            ComputerName    = CentralConnectionCur.ServerName;
-            Database        = CentralConnectionCur.DatabaseName;
-            User            = CentralConnectionCur.MySqlUser;
-            Password        = CentralConnectionCur.MySqlPassword;
+            ComputerName = CentralConnectionCur.ServerName;
+            Database = CentralConnectionCur.DatabaseName;
+            User = CentralConnectionCur.MySqlUser;
+            Password = CentralConnectionCur.MySqlPassword;
         }
 
         /// <summary>
@@ -119,10 +109,10 @@ namespace OpenDental
         /// </summary>
         void UpdateConnection()
         {
-            CentralConnectionCur.ServerName     = ComputerName;
-            CentralConnectionCur.DatabaseName   = Database;
-            CentralConnectionCur.MySqlUser      = User;
-            CentralConnectionCur.MySqlPassword  = Password;
+            CentralConnectionCur.ServerName = ComputerName;
+            CentralConnectionCur.DatabaseName = Database;
+            CentralConnectionCur.MySqlUser = User;
+            CentralConnectionCur.MySqlPassword = Password;
         }
 
         /// <summary>
@@ -131,7 +121,7 @@ namespace OpenDental
         void databaseComboBox_DropDown(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
- 
+
             UpdateConnection();
 
             databaseComboBox.Items.Clear();
@@ -154,9 +144,9 @@ namespace OpenDental
             try
             {
                 CentralConnections.TryToConnect(
-                    CentralConnectionCur, 
+                    CentralConnectionCur,
                     "",
-                    NoShow, 
+                    NoShow,
                     ListAdminCompNames);
             }
             catch (Exception ex)

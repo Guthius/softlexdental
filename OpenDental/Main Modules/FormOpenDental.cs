@@ -4203,7 +4203,6 @@ namespace OpenDental
 
             using (var formChooseDatabase = new FormChooseDatabase())
             {
-                formChooseDatabase.IsAccessedFromMainMenu = true;
                 if (formChooseDatabase.ShowDialog(this) == DialogResult.Cancel)
                 {
                     return;
