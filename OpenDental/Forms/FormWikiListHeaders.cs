@@ -10,8 +10,6 @@ namespace OpenDental
 {
     public partial class FormWikiListHeaders : FormBase
     {
-        int _gridOldIndex = -1;
-
         string                      wikiListName;
         List<WikiListHeaderWidth>   columnHeadersList;
         int                         columnHeaderIndex   = -1;

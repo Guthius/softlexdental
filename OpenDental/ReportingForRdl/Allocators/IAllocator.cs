@@ -18,9 +18,5 @@ namespace OpenDental.Reporting.Allocators
 	{
 		bool Allocate(int iGuarantor);
 		bool DeAllocate(int iGuarantor);
-	//	void SetDbaseTable_and_Columns(string tableName, string[] Columns);
-	//	bool AllocationRequired(); // to check to see if an allocation needs to be done.
-	//	public event AllocationEvent(AllocationEventArgs arg); // future implementation
-
 	}
 }

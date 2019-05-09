@@ -622,6 +622,9 @@
     <Compile Include="ODTimeBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="ReportingComplex\FormReportComplex.Designer.cs">
+      <DependentUpon>FormReportComplex.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tables Old Grids\TableAutoItem.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -667,9 +670,6 @@
     <Compile Include="Logic\SecurityL.cs" />
     <Compile Include="Logic\WebFormL.cs" />
     <Compile Include="Main Modules\FormOpenDentalThreads.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ReportingComplex\FormParameterInput.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ReportingComplex\FormReportComplex.cs">
@@ -4961,7 +4961,6 @@
     <EmbeddedResource Include="Forms\FormTsiHistory.resx">
       <DependentUpon>FormTsiHistory.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ReportingComplex\FormParameterInput.resx" />
     <EmbeddedResource Include="ReportingComplex\FormReportComplex.resx" />
     <EmbeddedResource Include="Forms Reports\FormRpCustomAging.resx">
       <DependentUpon>FormRpCustomAging.cs</DependentUpon>
@@ -8702,7 +8701,6 @@
     <None Include="Resources\AForge.txt" />
     <Content Include="Resources\Anesth.gif" />
     <Content Include="Resources\arrowRightTriangle.gif" />
-    <None Include="ReportingForRdl\Allocators\ClassDiagram_Allocators.cd" />
     <None Include="Resources\arrowDownTriangle.gif" />
     <None Include="Resources\arrowUpTriangle.gif" />
     <None Include="Resources\topazPen10.gif" />

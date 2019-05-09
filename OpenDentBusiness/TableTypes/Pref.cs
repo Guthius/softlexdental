@@ -1525,10 +1525,9 @@ namespace OpenDentBusiness
         UpdateDateTime,
 
 
-        /// <summary>
-        /// Use GetStringNoCache() to get the value of this preference.
-        /// </summary>
+        [Obsolete("What is even the point?")]
         UpdateStreamLinePassword,
+
         UpdateWebProxyAddress,
         UpdateWebProxyPassword,
         UpdateWebProxyUserName,

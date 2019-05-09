@@ -62,7 +62,7 @@ namespace OpenDental.UI {
 		///<summary>Only used for printing, but could be expanded.  Was originally passed in as part of drawing command. 0 means not in use.</summary>
 		private TimeSpan _timeStop=TimeSpan.Zero;	
 		///<summary>This was being passed in.  Not sure where it's calculated.</summary>
-		private float _fontSize=9;
+		//private float _fontSize=9;
 		///<summary>This was being passed in.  Not sure where it's set.</summary>
 		private bool _isPrinting=false;
 		///<summary>This was being passed in when printing as pageColumn.  Otherwise zero.</summary>
