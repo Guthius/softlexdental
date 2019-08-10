@@ -6966,12 +6966,6 @@ namespace OpenDental
             timerInfoBubble.Enabled = false;
         }
 
-        private void butMonth_Click(object sender, EventArgs e)
-        {
-            FormMonthView FormM = new FormMonthView();
-            FormM.ShowDialog();
-        }
-
         private void timerWaitingRoom_Tick(object sender, EventArgs e)
         {
             FillWaitingRoom();
@@ -7257,6 +7251,11 @@ namespace OpenDental
             public const string TextApptsForDayOp = "Text Appointments for Day, Op only";
             public const string TextApptsForDayView = "Text Appointments for Day, Current View only";
             public const string TextApptsForDay = "Text Appointments for Day";
+        }
+
+        private void RadioWeek_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using DataConnectionBase;
-using ServiceManager.Properties;
+﻿using ServiceManager.Properties;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -124,26 +123,28 @@ namespace ServiceManager
         /// <returns>True if the connection was succesful; otherwise, false.</returns>
         bool TestConnection()
         {
-            var dataConnection = new DataConnection();
+            //var dataConnection = new DataConnection();
+            //
+            //try
+            //{
+            //    dataConnection.SetDb(
+            //        serverTextBox.Text, 
+            //        databaseTextBox.Text, 
+            //        userTextBox.Text, 
+            //        passwordTextBox.Text, 
+            //        userLowTextBox.Text, 
+            //        passwordLowTextBox.Text);
+            //
+            //    return true;
+            //}
+            //catch (Exception ex)
+            //{
+            //    ShowError(Resources.LangErrorConnectingToDatabase + " " + ex.Message);
+            //
+            //    return false;
+            //}
 
-            try
-            {
-                dataConnection.SetDb(
-                    serverTextBox.Text, 
-                    databaseTextBox.Text, 
-                    userTextBox.Text, 
-                    passwordTextBox.Text, 
-                    userLowTextBox.Text, 
-                    passwordLowTextBox.Text);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                ShowError(Resources.LangErrorConnectingToDatabase + " " + ex.Message);
-
-                return false;
-            }
+            return true;
         }
 
         /// <summary>

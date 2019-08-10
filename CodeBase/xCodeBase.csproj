@@ -225,7 +225,6 @@
     </Compile>
     <Compile Include="Utilities\DateRange.cs" />
     <Compile Include="Utilities\DateTimeOD.cs" />
-    <Compile Include="Utilities\EmailUtils.cs" />
     <Compile Include="Progress\IODProgress.cs" />
     <Compile Include="Themes\ODColorTheme.cs" />
     <Compile Include="Utilities\MsgBoxCopyPaste.Designer.cs">

@@ -18,7 +18,6 @@ using OpenDental.Properties;
 using OpenDental.UI;
 using OpenDentBusiness;
 using OpenDentBusiness.UI;
-using ServiceManager;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -30,7 +29,6 @@ using System.IO;
 using System.Linq;
 using System.Media;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
@@ -5586,16 +5584,6 @@ namespace OpenDental
             }
             FormSetupWizard FormSW = new FormSetupWizard();
             FormSW.ShowDialog();
-        }
-
-        private void menuItemServiceManager_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormMain FormM = new FormMain();
-            FormM.ShowDialog();
         }
 
         private void menuItemShutdown_Click(object sender, EventArgs e)

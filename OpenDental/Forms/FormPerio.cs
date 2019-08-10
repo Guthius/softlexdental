@@ -913,7 +913,7 @@ namespace OpenDental
             this.gridP.Location = new System.Drawing.Point(157, 11);
             this.gridP.Name = "gridP";
             this.gridP.SelectedExam = 0;
-            this.gridP.Size = new System.Drawing.Size(595, 665);
+            this.gridP.Size = new System.Drawing.Size(599, 665);
             this.gridP.TabIndex = 75;
             this.gridP.Text = "contrPerio2";
             this.gridP.DirectionChangedRight += new System.EventHandler(this.gridP_DirectionChangedRight);
@@ -1157,7 +1157,7 @@ namespace OpenDental
             this.butListen.Autosize = true;
             this.butListen.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
             this.butListen.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-            this.butListen.CornerRadius = 6F;
+            this.butListen.CornerRadius = 4F;
             this.butListen.Image = global::OpenDental.Properties.Resources.Microphone_22px;
             this.butListen.Location = new System.Drawing.Point(7, 286);
             this.butListen.Name = "butListen";

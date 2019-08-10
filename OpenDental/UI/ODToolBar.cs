@@ -183,22 +183,26 @@ namespace OpenDental.UI
 
             var button = HitTest(e.X, e.Y);
 
-            if (hotButton != null)
+            var hotButtonTemp = hotButton;
+            if (hotButtonTemp != null)
             {
-                hotButton.State = ToolBarButtonState.Normal;
-                Invalidate(hotButton.Bounds);
-
-                if (button == hotButton && button.Enabled)
+                if (button == hotButtonTemp && button.Enabled)
                 {
-                    if (button.Style == ODToolBarButtonStyle.DropDownButton && 
+                    if (button.Style == ODToolBarButtonStyle.DropDownButton &&
                         button.DropDownMenu != null && 
                         HitTestDrop(button, e.X, e.Y))
                     {
-                        button.State = ToolBarButtonState.Normal;
-                        Invalidate(button.Bounds);
+                        var contextMenu = button.DropDownMenu.GetContextMenu();
 
-                        button.DropDownMenu.GetContextMenu().Show(
-                            this, new Point(button.Bounds.X, button.Bounds.Y + button.Bounds.Height));
+                        button.State = ToolBarButtonState.Normal;
+
+                        contextMenu.Show(
+                            this,
+                            new Point(
+                                button.Bounds.X,
+                                button.Bounds.Y + button.Bounds.Height));
+
+                        Invalidate(button.Bounds);
                     }
                     else if (button.Style == ODToolBarButtonStyle.ToggleButton)
                     {
@@ -210,6 +214,9 @@ namespace OpenDental.UI
                         OnButtonClicked(new ODToolBarButtonClickEventArgs(button));
                     }
                 }
+
+                hotButtonTemp.State = ToolBarButtonState.Normal;
+                Invalidate(hotButtonTemp.Bounds);
 
                 hotButton = null;
             }
@@ -248,7 +255,7 @@ namespace OpenDental.UI
             base.OnLayout(e);
 
             int width;
-            int x = 0;
+            int x = 1;
 
             foreach (ODToolBarButton button in Buttons)
             {
@@ -275,7 +282,7 @@ namespace OpenDental.UI
                         break;
                 }
 
-                button.Bounds = new Rectangle(x, 0, width, ToolBarHeight);
+                button.Bounds = new Rectangle(x, 1, width, ToolBarHeight - 1);
 
                 x += width;
             }
@@ -330,25 +337,26 @@ namespace OpenDental.UI
 
         void PaintButton(Graphics g, ODToolBarButton button)
         {
+            var borderRect = new Rectangle(button.Bounds.Left, button.Bounds.Top, button.Bounds.Width - 1, button.Bounds.Height - 1);
+
             if (button.Enabled)
             {
                 switch (button.State)
                 {
                     case ToolBarButtonState.Hover:
                         g.FillRectangle(SystemBrushes.Highlight, button.Bounds);
+                        if (button.Style == ODToolBarButtonStyle.DropDownButton)
+                        {
+                            g.DrawLine(SystemPens.Control,
+                                new Point(borderRect.Right - DropDownButtonWidth, borderRect.Top),
+                                new Point(borderRect.Right - DropDownButtonWidth, borderRect.Bottom));
+                        }
                         break;
 
                     case ToolBarButtonState.Pressed:
-                        g.FillRectangle(SystemBrushes.Highlight, button.Bounds);
-                        break;
-
                     case ToolBarButtonState.DropPressed:
-                        g.FillRectangle(SystemBrushes.Highlight, 
-                            new Rectangle(
-                                button.Bounds.Right - DropDownButtonWidth, 
-                                button.Bounds.Top, 
-                                DropDownButtonWidth, 
-                                button.Bounds.Height));
+                        g.FillRectangle(SystemBrushes.Window, button.Bounds);
+                        g.DrawRectangle(SystemPens.ControlDark, borderRect);
                         break;
                 }
             }
@@ -367,12 +375,6 @@ namespace OpenDental.UI
                 {
                     var x = button.Bounds.Left + 5;
                     var y = button.Bounds.Top + ((textBounds.Height - button.Image.Height) / 2);
-
-                    if (button.State == ToolBarButtonState.Pressed)
-                    {
-                        x++;
-                        y++;
-                    }
 
                     if (button.Enabled) g.DrawImage(button.Image, new Point(x, y));
                     else
@@ -393,19 +395,8 @@ namespace OpenDental.UI
             // Draw the button text.
             if (!string.IsNullOrEmpty(button.Text))
             {
-                // If the button is pressed we slightly shift the text down and right by 1 pixel.
-                if (button.State == ToolBarButtonState.Pressed)
-                {
-                    textBounds =
-                        Rectangle.FromLTRB(
-                            textBounds.Left + 1,
-                            textBounds.Top + 2,
-                            textBounds.Right,
-                            textBounds.Bottom);
-                }
-
                 var textColor =
-                    button.State == ToolBarButtonState.Hover || button.State == ToolBarButtonState.Pressed ?
+                    button.State == ToolBarButtonState.Hover ?
                         SystemBrushes.HighlightText :
                         SystemBrushes.ControlText;
 
@@ -426,7 +417,7 @@ namespace OpenDental.UI
 
                 var triangleBrush =
                     button.Enabled ?
-                        (button.State == ToolBarButtonState.Hover || button.State == ToolBarButtonState.Pressed || button.State == ToolBarButtonState.DropPressed ?
+                        (button.State == ToolBarButtonState.Hover ?
                             SystemBrushes.HighlightText :
                             SystemBrushes.ControlText) :
                         SystemBrushes.ControlDark;

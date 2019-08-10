@@ -164,47 +164,6 @@ namespace OpenDentBusiness
             return listSignals;
         }
 
-        ///<summary>Process all Signals and Acks Since a given DateTime.  Only to be used by OpenDentalWebService.
-        ///Returns latest valid signal Date/Time and the list of InvalidTypes that were refreshed.
-        ///Can throw exception.</summary>
-        public static List<InvalidType> RefreshForWeb()
-        {
-            int defaultProcessSigsIntervalInSecs = 7;
-            ODException.SwallowAnyException(() => defaultProcessSigsIntervalInSecs = Preferences.GetInt(PrefName.ProcessSigsIntervalInSecs));
-            if (DateTime.Now.Subtract(_signalLastRefreshedWeb) <= TimeSpan.FromSeconds(defaultProcessSigsIntervalInSecs))
-            {
-                return new List<InvalidType>();
-            }
-            InvalidType[] arrayInvalidTypes = new InvalidType[0];
-            //No need to check RemotingRole; no call to db.
-            try
-            {
-                if (_signalLastRefreshedWeb.Year < 1880)
-                { //First signals for this session so go back in time a bit.
-                    _signalLastRefreshedWeb = MiscData.GetNowDateTime().AddSeconds(-1);
-                }
-                List<Signalod> listSignals = Signalods.RefreshTimed(_signalLastRefreshedWeb);
-                if (listSignals.Count > 0)
-                { //Next lower bound is current upper bound.
-                    _signalLastRefreshedWeb = listSignals.Max(x => x.SigDateTime);
-                }
-                arrayInvalidTypes = Signalods.GetInvalidTypesForWeb(listSignals);
-                //Get all invalid types since given time and refresh the cache for those given invalid types.
-                Cache.Refresh(arrayInvalidTypes);
-            }
-            catch (Exception e)
-            {
-                //Most likely cause for an exception here would be a thread collision between 2 consumers trying to refresh the cache at the exact same instant.
-                //There is a chance that performing as subsequent refresh here would cause yet another collision but it's the best we can do without redesigning the entire cache pattern.
-                Cache.Refresh(InvalidType.AllLocal);
-                //Reset the last signal process time.
-                DateTime dateTimeNow = DateTime.Now;
-                ODException.SwallowAnyException(() => dateTimeNow = OpenDentBusiness.MiscData.GetNowDateTime());
-                _signalLastRefreshedWeb = dateTimeNow;
-                throw new Exception("Server cache may be invalid. Please try again. Error: " + e.Message);
-            }
-            return arrayInvalidTypes.ToList();
-        }
 
         ///<summary>Returns the PK of the signal inserted if only one signal was passed in; Otherwise, returns 0.</summary>
         public static long Insert(params Signalod[] arraySignals)

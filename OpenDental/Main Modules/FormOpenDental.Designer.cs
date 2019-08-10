@@ -1638,7 +1638,6 @@
             this.splitContainerNoFlickerDashboard.Name = "splitContainerNoFlickerDashboard";
             this.splitContainerNoFlickerDashboard.Panel1MinSize = 300;
             this.splitContainerNoFlickerDashboard.Panel2Collapsed = true;
-            this.splitContainerNoFlickerDashboard.Panel2MinSize = 50;
             this.splitContainerNoFlickerDashboard.Size = new System.Drawing.Size(350, 200);
             this.splitContainerNoFlickerDashboard.SplitterDistance = 300;
             this.splitContainerNoFlickerDashboard.TabIndex = 57;

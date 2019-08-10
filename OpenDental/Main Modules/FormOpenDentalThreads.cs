@@ -785,17 +785,17 @@ namespace OpenDental {
 		///<summary>This begins the time sync thread. If OpenDental is running on the same machine as the mysql server, then a thread is runs in the 
 		///background to update the local machine's time using NTPv4 from the NIST time server set in the NistTimeServerUrl pref.</summary>
 		private void BeginTimeSyncThread() {
-			if(IsThreadAlreadyRunning(FormODThreadNames.TimeSync)) {
-				return;
-			}
-			if(!(ODEnvironment.IsRunningOnDbServer(MiscData.GetODServer()) && Preferences.GetBool(PrefName.ShowFeatureEhr))) {
-				return;
-			}
-			//OpenDental has EHR enabled and is running on the same machine as the mysql server it is connected to.
-			ODThread odThread=new ODThread((int)TimeSpan.FromHours(4).TotalMilliseconds,TimeSyncWorker);
-			odThread.GroupName=FormODThreadNames.TimeSync.GetDescription();
-			odThread.Name=FormODThreadNames.TimeSync.GetDescription();
-			odThread.Start();
+			//if(IsThreadAlreadyRunning(FormODThreadNames.TimeSync)) {
+			//	return;
+			//}
+			//if(!(ODEnvironment.IsRunningOnDbServer(MiscData.GetODServer()) && Preferences.GetBool(PrefName.ShowFeatureEhr))) {
+			//	return;
+			//}
+			////OpenDental has EHR enabled and is running on the same machine as the mysql server it is connected to.
+			//ODThread odThread=new ODThread((int)TimeSpan.FromHours(4).TotalMilliseconds,TimeSyncWorker);
+			//odThread.GroupName=FormODThreadNames.TimeSync.GetDescription();
+			//odThread.Name=FormODThreadNames.TimeSync.GetDescription();
+			//odThread.Start();
 		}
 
 		///<summary>Worker thread for the time sync thread. Every 6 hours gets the time from an NTPv4 server and sets the local time to that.</summary>

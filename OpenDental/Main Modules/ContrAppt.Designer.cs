@@ -76,7 +76,6 @@ namespace OpenDental
         private System.Windows.Forms.Button butViewAppts;
         private System.Windows.Forms.Button butMakeRecall;
         private System.Windows.Forms.Button butLab;
-        private System.Windows.Forms.Button butMonth;
         private OpenDental.UI.ODGrid gridEmpSched;
         private System.Windows.Forms.Timer timerInfoBubble;
         private System.Windows.Forms.TabControl tabControl;
@@ -135,7 +134,6 @@ namespace OpenDental
             this.labelProdGoal = new System.Windows.Forms.Label();
             this.radioWeek = new System.Windows.Forms.RadioButton();
             this.radioDay = new System.Windows.Forms.RadioButton();
-            this.butMonth = new System.Windows.Forms.Button();
             this.pinBoard = new OpenDental.UI.PinBoard();
             this.butLab = new System.Windows.Forms.Button();
             this.butSearch = new System.Windows.Forms.Button();
@@ -223,7 +221,7 @@ namespace OpenDental
             // 
             // Calendar2
             // 
-            this.Calendar2.Location = new System.Drawing.Point(0, 24);
+            this.Calendar2.Location = new System.Drawing.Point(-12, 29);
             this.Calendar2.Name = "Calendar2";
             this.Calendar2.ScrollChange = 1;
             this.Calendar2.TabIndex = 23;
@@ -464,7 +462,6 @@ namespace OpenDental
             this.panelCalendar.Controls.Add(this.radioWeek);
             this.panelCalendar.Controls.Add(this.panelArrows);
             this.panelCalendar.Controls.Add(this.radioDay);
-            this.panelCalendar.Controls.Add(this.butMonth);
             this.panelCalendar.Controls.Add(this.pinBoard);
             this.panelCalendar.Controls.Add(this.butLab);
             this.panelCalendar.Controls.Add(this.butSearch);
@@ -477,7 +474,7 @@ namespace OpenDental
             this.panelCalendar.Controls.Add(this.Calendar2);
             this.panelCalendar.Controls.Add(this.labelDate);
             this.panelCalendar.Controls.Add(this.labelDate2);
-            this.panelCalendar.Location = new System.Drawing.Point(665, 28);
+            this.panelCalendar.Location = new System.Drawing.Point(705, 28);
             this.panelCalendar.Name = "panelCalendar";
             this.panelCalendar.Size = new System.Drawing.Size(219, 394);
             this.panelCalendar.TabIndex = 46;
@@ -521,6 +518,7 @@ namespace OpenDental
             this.radioWeek.Size = new System.Drawing.Size(68, 16);
             this.radioWeek.TabIndex = 92;
             this.radioWeek.Text = "Week";
+            this.radioWeek.CheckedChanged += new System.EventHandler(this.RadioWeek_CheckedChanged);
             this.radioWeek.Click += new System.EventHandler(this.radioWeek_Click);
             // 
             // radioDay
@@ -532,17 +530,6 @@ namespace OpenDental
             this.radioDay.TabIndex = 91;
             this.radioDay.Text = "Day";
             this.radioDay.Click += new System.EventHandler(this.radioDay_Click);
-            // 
-            // butMonth
-            // 
-            this.butMonth.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.butMonth.Location = new System.Drawing.Point(152, 1);
-            this.butMonth.Name = "butMonth";
-            this.butMonth.Size = new System.Drawing.Size(65, 22);
-            this.butMonth.TabIndex = 79;
-            this.butMonth.Text = "Month";
-            this.butMonth.Visible = false;
-            this.butMonth.Click += new System.EventHandler(this.butMonth_Click);
             // 
             // pinBoard
             // 
