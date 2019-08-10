@@ -61,7 +61,7 @@ namespace UpdateFileCopier
         /// <summary>
         /// Start the copy process once the form is shown for the first time.
         /// </summary>
-        void FormMain_Shown(object sender, EventArgs e) => retryButton_Click(this, EventArgs.Empty);
+        void FormMain_Shown(object sender, EventArgs e) => RetryButton_Click(this, EventArgs.Empty);
 
         /// <summary>
         /// Kills the process with the specified name.
@@ -289,7 +289,7 @@ namespace UpdateFileCopier
                     File.Copy(sourceFileName, destFileName, overwrite);
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
             }
@@ -299,7 +299,7 @@ namespace UpdateFileCopier
         /// <summary>
         /// Starts the fily copy action.
         /// </summary>
-        void retryButton_Click(object sender, EventArgs e)
+        void RetryButton_Click(object sender, EventArgs e)
         {
             retryButton.Visible = false;
 

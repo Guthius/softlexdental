@@ -80,7 +80,7 @@ namespace UnitTests {
 			claim.ClaimStatus="W";
 			//Dates of service are calculated inside AccountModules.CreateClaim().
 			//The procDelivery cannot be attached to the claim in the UI, because $0 procs are blocked by UI.  Therefore, we only attach the procBilled to the claim here.
-			ODTuple<bool,Claim,string> clmResult=AccountModules.CreateClaim(claim,"P",insInfo.ListPatPlans,insInfo.ListInsPlans,listClaimProcs,listProcs,
+			Tuple<bool,Claim,string> clmResult=AccountModules.CreateClaim(claim,"P",insInfo.ListPatPlans,insInfo.ListInsPlans,listClaimProcs,listProcs,
 				insInfo.ListInsSubs,pat,null,new List<Procedure> { procBillable },"",insInfo.PrimaryInsPlan,insInfo.PrimaryInsSub,Relat.Self);
 			Assert.AreEqual(clmResult.Item3,"");//Ensure no validation errors creating the claim.  This is to verify the integrity of the unit test design.
 			Assert.AreEqual(clmResult.Item2.DateService,procDelivery.ProcDate);//Claim date of service must always be the greatest date in the multi visit group.

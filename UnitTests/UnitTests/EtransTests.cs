@@ -62,10 +62,10 @@ namespace UnitTests.UnitTests {
 			#endregion
 			//Create and insert etrans entry
 			_etrans835=EtransT.Insert835Etrans(Properties.Resources.JustinSmithERA,new DateTime(2017,09,30));//Spoof etrans imported 4 days after claim sent.
-			List<ODTuple<Patient,long>> listPats=new List<ODTuple<Patient,long>>() { 
-				new ODTuple<Patient, long>(patJustinSmith,_claimPrimaryJustinSmith.ClaimNum),
-				new ODTuple<Patient, long>(patJacobJones,_claimPrimaryJacobJones.ClaimNum),
-				new ODTuple<Patient, long>(patStephanieMayer,_claimPrimaryStephanieMayer.ClaimNum) 
+			List<Tuple<Patient,long>> listPats=new List<Tuple<Patient,long>>() { 
+				new Tuple<Patient, long>(patJustinSmith,_claimPrimaryJustinSmith.ClaimNum),
+				new Tuple<Patient, long>(patJacobJones,_claimPrimaryJacobJones.ClaimNum),
+				new Tuple<Patient, long>(patStephanieMayer,_claimPrimaryStephanieMayer.ClaimNum) 
 			};
 			_x835=EtransT.Construct835(_etrans835,Properties.Resources.JustinSmithERA,listPats,out _listEtrans835Attaches);
 			foreach(Hx835_Claim eraClaim in _x835.ListClaimsPaid) {

@@ -102,24 +102,25 @@ namespace UnitTests {
 			List<Fee> listCachedFees=cacheCopy.Where(x => !(x.ClinicNum==0 && x.FeeSched!=_standardFeeSchedNum)).OrderBy(x => x.FeeNum).ToList();
 			Assert.IsTrue(AreListsSimilar(listExpectedFees,listCachedFees));
 		}
-		
-		///<summary>Gets fees for a bunch of fee schedules over Middle Tier.</summary>
-		[TestMethod]
-		public void Fees_GetByFeeSchedNumsClinicNums_MiddleTier() {
-			List<long> listFeeSchedNums=new List<long>();
-			long codeNum1=ProcedureCodes.GetCodeNum("D1110");
-			long codeNum2=ProcedureCodes.GetCodeNum("D1206");
-			for(int i=0;i<300;i++) {
-				FeeSched feeSched=FeeSchedT.GetNewFeeSched(FeeScheduleType.Normal,"FS"+i);
-				FeeT.GetNewFee(feeSched.FeeSchedNum,codeNum1,11,hasCacheRefresh: false);
-				FeeT.GetNewFee(feeSched.FeeSchedNum,codeNum2,13,hasCacheRefresh: false);
-				listFeeSchedNums.Add(feeSched.FeeSchedNum);
-			}
-			DataAction.RunMiddleTierMock(() => {
-				List<FeeLim> listFees=Fees.GetByFeeSchedNumsClinicNums(listFeeSchedNums,new List<long> { 0 });
-				Assert.AreEqual(600,listFees.Count);
-			});
-		}
+
+        ///<summary>Gets fees for a bunch of fee schedules over Middle Tier.</summary>
+        [TestMethod]
+        public void Fees_GetByFeeSchedNumsClinicNums_MiddleTier()
+        {
+            List<long> listFeeSchedNums = new List<long>();
+            long codeNum1 = ProcedureCodes.GetCodeNum("D1110");
+            long codeNum2 = ProcedureCodes.GetCodeNum("D1206");
+            for (int i = 0; i < 300; i++)
+            {
+                FeeSched feeSched = FeeSchedT.GetNewFeeSched(FeeScheduleType.Normal, "FS" + i);
+                FeeT.GetNewFee(feeSched.FeeSchedNum, codeNum1, 11, hasCacheRefresh: false);
+                FeeT.GetNewFee(feeSched.FeeSchedNum, codeNum2, 13, hasCacheRefresh: false);
+                listFeeSchedNums.Add(feeSched.FeeSchedNum);
+            }
+
+            List<FeeLim> listFees = Fees.GetByFeeSchedNumsClinicNums(listFeeSchedNums, new List<long> { 0 });
+            Assert.AreEqual(600, listFees.Count);
+        }
 
 		#endregion S-Class Tests
 

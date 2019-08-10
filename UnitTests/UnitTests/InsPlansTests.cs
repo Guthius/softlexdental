@@ -184,12 +184,12 @@ namespace UnitTests {
 			procCode.SubstitutionCode=_listProcCodes[14].ProcCode;
 			ProcedureCodes.Update(procCode);
 			ProcedureCodes.RefreshCache();
-			Provider prov=Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv));
+			Provider prov=Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv));
 			long provFeeSched=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,MethodBase.GetCurrentMethod().Name);
 			prov.FeeSched=provFeeSched;
 			Providers.Update(prov);
 			Providers.RefreshCache();
-			Fee defaultFee=FeeT.GetNewFee(Providers.GetProv(PrefC.GetLong(PrefName.PracticeDefaultProv)).FeeSched,
+			Fee defaultFee=FeeT.GetNewFee(Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv)).FeeSched,
 				ProcedureCodes.GetSubstituteCodeNum(procCode.ProcCode,"",plan.PlanNum),80);
 			double amt=InsPlans.GetAllowed(procCode.ProcCode,plan.FeeSched,plan.AllowedFeeSched,plan.CodeSubstNone,plan.PlanType,"",0,0,plan.PlanNum);
 			Assert.AreEqual(defaultFee.Amount,amt);

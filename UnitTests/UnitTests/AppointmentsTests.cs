@@ -1010,7 +1010,7 @@ namespace UnitTests.UnitTests {
 			double procFee=100d;
 			string strDesc="RecallType_"+MethodBase.GetCurrentMethod().Name;
 			RecallType recallType=RecallTypeT.CreateRecallType(description:strDesc,procedures:strRecallProcCode);
-			PrefT.UpdateString(PrefName.RecallTypesShowingInList,string.Join(",",PrefC.GetString(PrefName.RecallTypesShowingInList),recallType.RecallTypeNum));
+			PrefT.UpdateString(PrefName.RecallTypesShowingInList,string.Join(",", Preferences.GetString(PrefName.RecallTypesShowingInList),recallType.RecallTypeNum));
 			Patient pat=PatientT.CreatePatient(priProvNum:provNum,lName:MethodBase.GetCurrentMethod().Name);
 			Recall recall=RecallT.CreateRecall(pat.PatNum,recallType.RecallTypeNum,dateTimeRecall,intervalRecall,dateScheduled:dateTimeRecall);
 			Appointment appt=AppointmentT.CreateAppointment(pat.PatNum,dateTimeAppt,opNum,provNum,aptStatus:apptStatus,aptNote:note);
@@ -1034,7 +1034,7 @@ namespace UnitTests.UnitTests {
 			double procFee=100d;
 			string strDesc="RecallType_"+MethodBase.GetCurrentMethod().Name;
 			RecallType recallType=RecallTypeT.CreateRecallType(description:strDesc,procedures:strRecallProcCode);
-			PrefT.UpdateString(PrefName.RecallTypesShowingInList,string.Join(",",PrefC.GetString(PrefName.RecallTypesShowingInList),recallType.RecallTypeNum));
+			PrefT.UpdateString(PrefName.RecallTypesShowingInList,string.Join(",", Preferences.GetString(PrefName.RecallTypesShowingInList),recallType.RecallTypeNum));
 			Patient pat=PatientT.CreatePatient(priProvNum:provNum,lName:MethodBase.GetCurrentMethod().Name);
 			Recall recall=RecallT.CreateRecall(pat.PatNum,recallType.RecallTypeNum,dateTimeRecall,intervalRecall,dateScheduled:dateTimeRecall);
 			Appointment appt=AppointmentT.CreateAppointment(pat.PatNum,dateTimeAppt,opNum,provNum,aptStatus:apptStatus,aptNote:note);
@@ -1059,7 +1059,7 @@ namespace UnitTests.UnitTests {
 			string strDesc="RecallType_"+MethodBase.GetCurrentMethod().Name;
 			RecallType recallType=RecallTypeT.CreateRecallType(description:strDesc,procedures:strRecallProcCode);
 			Patient pat=PatientT.CreatePatient(priProvNum:provNum,lName:MethodBase.GetCurrentMethod().Name);
-			PrefT.UpdateString(PrefName.RecallTypesShowingInList,string.Join(",",PrefC.GetString(PrefName.RecallTypesShowingInList),recallType.RecallTypeNum));
+			PrefT.UpdateString(PrefName.RecallTypesShowingInList,string.Join(",", Preferences.GetString(PrefName.RecallTypesShowingInList),recallType.RecallTypeNum));
 			Recall recall=RecallT.CreateRecall(pat.PatNum,recallType.RecallTypeNum,dateTimeRecall,intervalRecall,dateScheduled:dateTimeRecall);
 			Appointment appt=AppointmentT.CreateAppointment(pat.PatNum,dateTimeAppt,opNum,provNum,aptStatus:apptStatus,aptNote:note);
 			ProcedureT.CreateProcedure(pat,strApptProcCode,procStatus,toothNum,procFee,dateTimeAppt,provNum:provNum,aptNum:appt.AptNum);

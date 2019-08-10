@@ -121,7 +121,6 @@ namespace UnitTests {
 			this.butWebService.TabIndex = 10;
 			this.butWebService.Text = "Run";
 			this.butWebService.UseVisualStyleBackColor = true;
-			this.butWebService.Click += new System.EventHandler(this.butWebService_Click);
 			// 
 			// label4
 			// 
@@ -178,7 +177,6 @@ namespace UnitTests {
 			this.butSchema.TabIndex = 23;
 			this.butSchema.Text = "Schema";
 			this.butSchema.UseVisualStyleBackColor = true;
-			this.butSchema.Click += new System.EventHandler(this.butSchema_Click);
 			// 
 			// radioSchema1
 			// 

@@ -1263,12 +1263,6 @@
             this.menuItemProcLockTool.Text = "Procedure Lock Tool";
             this.menuItemProcLockTool.Click += new System.EventHandler(this.menuItemProcLockTool_Click);
             // 
-            // menuItemServiceManager
-            // 
-            this.menuItemServiceManager.Index = 12;
-            this.menuItemServiceManager.Text = "Service Manager";
-            this.menuItemServiceManager.Click += new System.EventHandler(this.menuItemServiceManager_Click);
-            // 
             // menuItemShutdown
             // 
             this.menuItemShutdown.Index = 13;

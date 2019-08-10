@@ -304,12 +304,25 @@ namespace OpenDentBusiness{
 			}
 			return strb.ToString();
 		}
-		
-		///<summary>Gets the hashstring from the provided string that is typically generated from GetStringForSignatureHash().
-		///This is done seperate of building the string so that new line replacements can be done when validating signatures before hashing.</summary>
-		public static string GetHashStringForSignature(string str) {
-			return Encoding.ASCII.GetString(ODCrypt.MD5.Hash(Encoding.UTF8.GetBytes(str)));
-		}
+
+        ///<summary>Gets the hashstring from the provided string that is typically generated from GetStringForSignatureHash().
+        ///This is done seperate of building the string so that new line replacements can be done when validating signatures before hashing.</summary>
+        public static string GetHashStringForSignature(string str)
+        {
+            using (MD5 sha1 = MD5.Create())
+            {
+                var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(str));
+                var sb = new StringBuilder(hash.Length * 2);
+
+                foreach (byte b in hash)
+                {
+                    // can be "x2" if you want lowercase
+                    sb.Append(b.ToString("X2"));
+                }
+
+                return sb.ToString();
+            }
+        }
 
 		/*
 		Only pull out the methods below as you need them.  Otherwise, leave them commented out.

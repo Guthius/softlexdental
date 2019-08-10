@@ -6,7 +6,7 @@ namespace UnitTestsCore {
 	public class UserodT {
 
 		///<summary>Inserts the new user, refreshes the cache and then returns UserNum</summary>
-		public static Userod CreateUser(string userName="",string password="",List<long> userGroupNumbers=null,long clinicNum=0,bool isClinicIsRestricted=false) {
+		public static User CreateUser(string userName="",string password="",List<long> userGroupNumbers=null,long clinicNum=0,bool isClinicIsRestricted=false) {
 			if(userName=="") {
 				userName="Username"+MiscUtils.CreateRandomAlphaNumericString(8);
 			}
@@ -16,7 +16,7 @@ namespace UnitTestsCore {
 			if(userGroupNumbers==null) {
 				userGroupNumbers=new List<long> { 1 };
 			}
-			Userod newUser=new Userod();
+            User newUser =new User();
 			newUser.UserName=userName;
 			newUser.LoginDetails=Authentication.GenerateLoginDetails(password,HashTypes.SHA3_512);
 			newUser.ClinicNum=clinicNum;

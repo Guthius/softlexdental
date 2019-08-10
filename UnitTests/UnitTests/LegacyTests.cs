@@ -3368,7 +3368,7 @@ namespace UnitTests.UnitTests {
 			FormCreditRecurringCharges FormCRC=new FormCreditRecurringCharges();
 			OpenFormInvisibly(FormCRC);			
 			ODGrid gridCharges=(ODGrid)FormCRC.Controls.Find("gridMain",true)[0];
-			int clinicOffset=Convert.ToInt32(PrefC.HasClinicsEnabled);
+			int clinicOffset=Convert.ToInt32(Preferences.HasClinicsEnabled);
 			int famBalIdx=3+clinicOffset;
 			int payPlanDueIdx=4+clinicOffset;
 			int totalDueIdx=5+clinicOffset;

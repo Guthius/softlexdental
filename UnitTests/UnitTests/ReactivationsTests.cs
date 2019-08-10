@@ -81,7 +81,7 @@ namespace UnitTests {
 				DoNotContact=false,
 			});
 			//Confirm that the patient appears in the Reactivation List
-			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-PrefC.GetInt(PrefName.ReactivationDaysPast)),false,false,provNum,
+			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-Preferences.GetInt(PrefName.ReactivationDaysPast)),false,false,provNum,
 				clinic.ClinicNum,0,0,ReactivationListSort.LastContacted,RecallListShowNumberReminders.One);
 			//Only one patient should be in the list
 			Assert.AreEqual(1,tbl.Rows.Count);
@@ -116,7 +116,7 @@ namespace UnitTests {
 			//Patient has a future appointment scheduled.
 			AppointmentT.CreateAppointment(pat.PatNum,DateTime.Today.AddDays(1),op.OperatoryNum,provNum);
 			//Confirm that the patient does not in the Reactivation List
-			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-PrefC.GetInt(PrefName.ReactivationDaysPast)),false,false,provNum,
+			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-Preferences.GetInt(PrefName.ReactivationDaysPast)),false,false,provNum,
 				clinic.ClinicNum,0,0,ReactivationListSort.LastContacted,RecallListShowNumberReminders.One);
 			//No patients in the list
 			Assert.AreEqual(0,tbl.Rows.Count);
@@ -147,7 +147,7 @@ namespace UnitTests {
 				DoNotContact=false,
 			});
 			//Confirm that the patient does not in the Reactivation List
-			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-PrefC.GetInt(PrefName.ReactivationDaysPast)),false,false,provNum,
+			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-Preferences.GetInt(PrefName.ReactivationDaysPast)),false,false,provNum,
 				clinic.ClinicNum,0,0,ReactivationListSort.LastContacted,RecallListShowNumberReminders.One);
 			//No patients in the list
 			Assert.AreEqual(0,tbl.Rows.Count);
@@ -162,7 +162,7 @@ namespace UnitTests {
 			//Patient has not been seen since further in the past than the ReactivationDaysPast preference.
 			Procedure proc=ProcedureT.CreateProcedure(pat,"D0120",ProcStat.C,"",50,procDate:DateTime.Now.AddYears(-3),provNum:provNum); //3 year old proc
 			//Patient has been contacted the max amount of times
-			for(int i=0;i<PrefC.GetInt(PrefName.ReactivationCountContactMax);i++) {
+			for(int i=0;i< Preferences.GetInt(PrefName.ReactivationCountContactMax);i++) {
 				//Patient has been contacted, and the ReactivationContactInterval has elapsed.
 				Commlog comm=new Commlog()
 				{
@@ -181,7 +181,7 @@ namespace UnitTests {
 				DoNotContact=false,
 			});
 			//Confirm that the patient does not show in the Reactivation List
-			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-PrefC.GetInt(PrefName.ReactivationDaysPast)),false,false,provNum,
+			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-Preferences.GetInt(PrefName.ReactivationDaysPast)),false,false,provNum,
 				clinic.ClinicNum,0,0,ReactivationListSort.LastContacted,RecallListShowNumberReminders.All);
 			//No patients in the list
 			Assert.AreEqual(0,tbl.Rows.Count);
@@ -212,7 +212,7 @@ namespace UnitTests {
 				DoNotContact=true,
 			});
 			//Confirm that the patient does not in the Reactivation List
-			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-PrefC.GetInt(PrefName.ReactivationDaysPast)),false,false,provNum,
+			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-Preferences.GetInt(PrefName.ReactivationDaysPast)),false,false,provNum,
 				clinic.ClinicNum,0,0,ReactivationListSort.LastContacted,RecallListShowNumberReminders.One);
 			//No patients in the list
 			Assert.AreEqual(0,tbl.Rows.Count);

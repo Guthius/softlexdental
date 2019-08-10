@@ -1,12 +1,8 @@
+using CodeBase;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Globalization;
-using System.Linq;
-using System.Reflection;
 using System.Text;
-using CodeBase;
-using ODCrypt;
 
 namespace OpenDentBusiness
 {
@@ -146,6 +142,8 @@ namespace OpenDentBusiness
         ///<summary>Generates a random password 8 char long containing at least one uppercase, one lowercase, and one number.</summary>
         public static string PassGen(int len)
         {
+            Random r = new Random();
+
             if (len < 0)
             {
                 len = 0;
@@ -159,12 +157,12 @@ namespace OpenDentBusiness
             //Grab a letter from each so know we have one of each.
             foreach (string s in new string[] { lowerCase, upperCase, numbers })
             {
-                passChars += s[CryptUtil.Random<int>() % s.Length];
+                passChars += s[r.Next() % s.Length];
             }
             //Start at 3 because we already added 3 characters
             for (int i = 3; i < len; i++)
             {
-                passChars += allChars[ODCrypt.CryptUtil.Random<int>() % allChars.Length];
+                passChars += allChars[r.Next() % allChars.Length];
             }
             //Now that we have our character set, now we do a Fisher-Yates shuffle.
             char[] chars = passChars.ToCharArray();
@@ -173,7 +171,7 @@ namespace OpenDentBusiness
             char temp;
             for (int i = 0; i < arraysize; i++)
             {
-                random = i + (int)(CryptUtil.Random<int>() % (arraysize - i));
+                random = i + (int)(r.Next() % (arraysize - i));
                 temp = chars[random];
                 chars[random] = chars[i];
                 chars[i] = temp;

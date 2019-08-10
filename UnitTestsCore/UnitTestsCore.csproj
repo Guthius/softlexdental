@@ -101,7 +101,6 @@
     <Compile Include="TableTypes\ClaimSnapshotT.cs" />
     <Compile Include="TableTypes\ClaimT.cs" />
     <Compile Include="TableTypes\ClearinghouseT.cs" />
-    <Compile Include="TableTypes\EServiceBillingT.cs" />
     <Compile Include="TableTypes\MedicationPatT.cs" />
     <Compile Include="TableTypes\MedicationT.cs" />
     <Compile Include="TableTypes\Icd10T.cs" />
@@ -129,7 +128,6 @@
     <Compile Include="TableTypes\PatientPortalInviteT.cs" />
     <Compile Include="TableTypes\ReactivationT.cs" />
     <Compile Include="TableTypes\ReferralT.cs" />
-    <Compile Include="TableTypes\RepeatChargeT.cs" />
     <Compile Include="TableTypes\UserGroupT.cs" />
     <Compile Include="TableTypes\UserodT.cs" />
     <Compile Include="TableTypes\SignalodT.cs" />
@@ -166,10 +164,6 @@
     <ProjectReference Include="..\CodeBase\xCodeBase.csproj">
       <Project>{18f7bc78-4b99-48d3-a1f1-0d13a63e3cf9}</Project>
       <Name>xCodeBase</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DataConnectionBase\xDataConnectionBase.csproj">
-      <Project>{29c41020-4411-41f2-9061-9b71b5b32b5d}</Project>
-      <Name>xDataConnectionBase</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpenDentBusiness\OpenDentBusiness.csproj">
       <Project>{3d0fc76e-803c-4de2-bdb1-47d63a4e2357}</Project>

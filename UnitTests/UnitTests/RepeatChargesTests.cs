@@ -649,8 +649,8 @@ namespace UnitTests.UnitTests {
 			string strBeginDateTimeExpected="";//Will be empty after a successfully run Repeating Charges.
 			RepeatCharges.RunRepeatingCharges(dateTimeLastRunExpected);
 			Prefs.RefreshCache();
-			Assert.AreEqual(strBeginDateTimeExpected,PrefC.GetString(PrefName.RepeatingChargesBeginDateTime));
-			Assert.AreEqual(dateTimeLastRunExpected,PrefC.GetDateT(PrefName.RepeatingChargesLastDateTime));
+			Assert.AreEqual(strBeginDateTimeExpected, Preferences.GetString(PrefName.RepeatingChargesBeginDateTime));
+			Assert.AreEqual(dateTimeLastRunExpected, Preferences.GetDateTime(PrefName.RepeatingChargesLastDateTime));
 		}
 	}
 }

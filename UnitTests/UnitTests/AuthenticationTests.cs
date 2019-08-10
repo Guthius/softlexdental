@@ -18,7 +18,7 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void Authentication_CheckUserodPassword() {
-			Userod user=Security.CurUser;
+			User user=Security.CurUser;
 			user.LoginDetails=Authentication.GenerateLoginDetails("awesomePassword",HashTypes.SHA3_512);
 			bool result=Authentication.CheckPassword(user,"awesomePassword");
 			Assert.IsTrue(result);
@@ -72,7 +72,7 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void Authentication_UpdatePasswordSchema() {
-			Userod user=Security.CurUser;
+            User user =Security.CurUser;
 			bool result=Authentication.UpdatePasswordUserod(user,"brandSpankinNewPassword",HashTypes.SHA3_512);
 			//If this is middletier, we need the password to match in our current user object to refill the cache
 			Security.PasswordTyped="brandSpankinNewPassword";
@@ -230,9 +230,8 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void Authentication_TestAuthentication_eCW() {
-			//Run this test against a direct connection. eCW uses MD5 hash. If middle tier is enabled, the default User will have a wrong password. 
-			//Once we enable eCW, all requests will fail.
-			RunTestsAgainstDirectConnection();
+
+
 			//Turn eCW on for this test.
 			OpenDentBusiness.Program p=Programs.GetCur(ProgramName.eClinicalWorks);
 			p.Enabled=true;
@@ -257,7 +256,6 @@ namespace UnitTests {
 			p.Enabled=false;
 			Programs.Update(p);
 			Programs.RefreshCache();
-			RevertMiddleTierSettingsIfNeeded();
 		}
 	}
 }

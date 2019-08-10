@@ -66,7 +66,7 @@ namespace UpdateFileCopier
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain(sourcePath, destPath, true, true));
+            Application.Run(new FormMain(sourcePath, destPath, killServices, launchOpenDental));
         }
     }
 }

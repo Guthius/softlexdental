@@ -56,7 +56,7 @@
             this.retryButton.Text = "Retry";
             this.retryButton.UseVisualStyleBackColor = true;
             this.retryButton.Visible = false;
-            this.retryButton.Click += new System.EventHandler(this.retryButton_Click);
+            this.retryButton.Click += new System.EventHandler(this.RetryButton_Click);
             // 
             // FormMain
             // 

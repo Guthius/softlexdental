@@ -258,8 +258,20 @@ namespace OpenDentBusiness {
 			byte[] buffer = new byte[textbytes.Length + filebytes.Length];
 			Array.Copy(filebytes,0,buffer,0,fileLength);
 			Array.Copy(textbytes,0,buffer,fileLength,textbytes.Length);
-			return Encoding.ASCII.GetString(ODCrypt.MD5.Hash(buffer));
-		}
+
+            using (MD5 sha1 = MD5.Create())
+            {
+                var hash = sha1.ComputeHash(buffer);
+                var sb = new StringBuilder(hash.Length * 2);
+
+                foreach (byte b in hash)
+                {
+                    sb.Append(b.ToString("X2"));
+                }
+
+                return sb.ToString();
+            }
+        }
 
 		public static Collection<Bitmap> OpenImages(IList<Document> documents,string patFolder,string localPath="") {
 			//string patFolder=GetPatientFolder(pat);

@@ -90,13 +90,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CDT">
-      <HintPath>..\Required dlls\CDT.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="ODCrypt">
-      <HintPath>..\Required dlls\ODCrypt.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -117,9 +111,7 @@
     <Compile Include="UnitTests\EtransTests.cs" />
     <Compile Include="IntegrationTests\FormTaskEditTests.cs" />
     <Compile Include="IntegrationTests\UserControlTasksTests.cs" />
-    <Compile Include="MiddleTier\MiddleTierTests.cs" />
     <Compile Include="Misc\FeeTestBase.cs" />
-    <Compile Include="Misc\SchemaT.cs" />
     <Compile Include="UnitTests\ODInstallerTests.cs" />
     <Compile Include="UnitTests\FriendlyExceptionTests.cs" />
     <Compile Include="UnitTests\DataConnectionTests.cs" />
@@ -132,7 +124,6 @@
     <Compile Include="UnitTests\ProcMultiVisitTests.cs" />
     <Compile Include="UnitTests\UserodsTests.cs" />
     <Compile Include="UnitTests\WebForms_SheetsTests.cs" />
-    <Compile Include="UnitTests\XmlConverterTests.cs" />
     <Compile Include="UnitTests\ProvidersTests.cs" />
     <Compile Include="UnitTests\ClaimProcsTests.cs" />
     <Compile Include="UnitTests\ODtextBoxTests.cs" />
@@ -154,9 +145,7 @@
     <Compile Include="UnitTests\PatientsTests.cs" />
     <Compile Include="UnitTests\PaymentsTest.cs" />
     <Compile Include="UnitTests\ProceduresTests.cs" />
-    <Compile Include="MiddleTier\ParamCheck.cs" />
     <Compile Include="Misc\TestBase.cs" />
-    <Compile Include="HL7Tests.cs" />
     <Compile Include="CoreTypesT.cs" />
     <Compile Include="DatabaseTools.cs" />
     <Compile Include="FormUnitTests.cs">
@@ -197,16 +186,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="MiddleTier\WebServiceT.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CodeBase\xCodeBase.csproj">
       <Project>{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}</Project>
       <Name>xCodeBase</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DataConnectionBase\xDataConnectionBase.csproj">
-      <Project>{29c41020-4411-41f2-9061-9b71b5b32b5d}</Project>
-      <Name>xDataConnectionBase</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpenDental\OpenDental.csproj">
       <Project>{8136317D-C936-49B6-9E31-D90F02D2F207}</Project>
@@ -219,10 +203,6 @@
     <ProjectReference Include="..\UnitTestsCore\UnitTestsCore.csproj">
       <Project>{7bbddedf-c015-43c0-a532-fed224993281}</Project>
       <Name>UnitTestsCore</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\xCrudGenerator\xCrudGenerator.csproj">
-      <Project>{76227E95-B261-4B6A-A97C-3764E7EDDF97}</Project>
-      <Name>xCrudGenerator</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

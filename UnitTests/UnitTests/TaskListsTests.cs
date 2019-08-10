@@ -16,8 +16,8 @@ namespace UnitTests {
 		private static Patient _patS;
 		private static Def _defRegionN;
 		private static Def _defRegionS;
-		private static Userod _userA;
-		private static Userod _userNW;
+		private static User _userA;
+		private static User _userNW;
 		private static TaskList _taskListMainNoFilter;
 		private static TaskList _taskListClinic;
 		private static TaskList _taskListRegion;
@@ -381,7 +381,7 @@ namespace UnitTests {
 
 		#region HelperMethods
 		///<summary>Creates an Appointment Task and a Patient Task using pat and clinic, and adds them to _listTasks.</summary>
-		private void CreateTasks(string suffix,Patient pat,Userod user,long taskListNum,bool isRepeating = false) {
+		private void CreateTasks(string suffix,Patient pat, User user,long taskListNum,bool isRepeating = false) {
 			Appointment appt = AppointmentT.CreateAppointment(pat.PatNum,DateTime.Today,0,0,clinicNum: pat.ClinicNum);
 			Task taskAppt = TaskT.CreateTask(taskListNum,appt.AptNum,suffix,isRepeating: isRepeating,dateType: TaskDateType.None,objectType: TaskObjectType.Appointment,userNum: user.UserNum);
 			Task taskPat = TaskT.CreateTask(taskListNum,pat.PatNum,suffix,isRepeating: isRepeating,dateType: TaskDateType.None,objectType: TaskObjectType.Patient,userNum: user.UserNum);
@@ -425,7 +425,7 @@ namespace UnitTests {
 		}
 
 		///<summary>Determines if the Task is in the Clinic's region.</summary>
-		private bool IsTaskInRegionAndUnrestricted(Task task,Userod user) {
+		private bool IsTaskInRegionAndUnrestricted(Task task, User user) {
 			bool retVal = false;
 			Clinic clinic = Clinics.GetClinic(user.ClinicNum);
 			List<long> listUserClinicNums = Clinics.GetAllForUserod(user).Select(x => x.ClinicNum).ToList();

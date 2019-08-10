@@ -622,10 +622,9 @@ namespace OpenDentBusiness {
 			/// <summary>Attempts to get the value associated with the specified key from the dictionary. Returns true if the key was found in dictionary; 
 			/// otherwise, false. Returns the requested fee as an out parameter. Casts the FeeLim to a fee, so it will always return a deep copy. Hides
 			/// ConcurrentDictionary.TryGetValue().</summary>
-			public new bool TryGetValue(FeeKey key, out Fee fee) {
-				FeeLim feeLim;
-				bool result=base.TryGetValue(key,out feeLim);
-				fee=feeLim!=null ? (Fee)feeLim : null;
+			public bool TryGetValue(FeeKey key, out Fee fee) {
+                bool result = base.TryGetValue(key, out FeeLim feeLim);
+                fee =feeLim!=null ? (Fee)feeLim : null;
 				return result;
 			}
 

@@ -31,12 +31,12 @@ namespace UnitTestsCore {
 
 		///<summary>Builds the X835 for given etrans835 and etransMessageText.
 		///Also attempts to create attaches for patients in listPatients using their first/last name and the claim num in their tuple entry.</summary>
-		public static X835 Construct835(Etrans etrans835,string etransMessageText,List<ODTuple<Patient,long>> listPatients,out List<Etrans835Attach>listEtrans835Attaches)
+		public static X835 Construct835(Etrans etrans835,string etransMessageText,List<Tuple<Patient,long>> listPatients,out List<Etrans835Attach>listEtrans835Attaches)
 		{
 			listEtrans835Attaches=new List<Etrans835Attach>();
 			//Construct the inital X835 so that we can find the ERA claim we are testing against, needed for attach information.
 			X835 x835=new X835(etrans835,etransMessageText,etrans835.TranSetId835);
-			foreach(ODTuple<Patient,long> data in listPatients) {
+			foreach(Tuple<Patient,long> data in listPatients) {
 				Patient pat=data.Item1;
 				long claimNum=data.Item2;
 				//Then using that ERA claim we will spoof the Etrans835Attach logic that would run when associating an OD claim to the ERA claim.

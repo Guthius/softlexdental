@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using CodeBase;
@@ -214,24 +215,25 @@ namespace OpenDentBusiness {
 		///<summary>If useEcwAlgorithm is true, input is ASCII encoded and the result converted to a hex string.
 		///If useEcwAlgorithm is false, input is Unicode encoded and the result is base-64 encoded.</summary>
 		public static string HashPasswordMD5(string inputPass,bool useEcwAlgorithm) {
-			//No need to check RemotingRole; no call to db.
-			if(string.IsNullOrEmpty(inputPass)) {
-				return "";
-			}
-			if(useEcwAlgorithm) {
-				byte[] asciiBytes=Encoding.ASCII.GetBytes(inputPass);
-				byte[] hashbytes=ODCrypt.MD5.Hash(asciiBytes);
-				return BitConverter.ToString(hashbytes).Replace("-","").ToLower();
-			}
-			else {//typical, only difference is encoding and how the result is encoded.
-				byte[] unicodeBytes=Encoding.Unicode.GetBytes(inputPass);
-				byte[] hashbytes2=ODCrypt.MD5.Hash(unicodeBytes);
-				return Convert.ToBase64String(hashbytes2);
-			}
+
+            using (SHA1Managed sha1 = new SHA1Managed())
+            {
+                var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(inputPass));
+                var sb = new StringBuilder(hash.Length * 2);
+
+                foreach (byte b in hash)
+                {
+                    // can be "x2" if you want lowercase
+                    sb.Append(b.ToString("X2"));
+                }
+
+                return sb.ToString();
+            }
 		}
 		#endregion MD5
 
-		#region SHA3512
+		#region SHA512
+
 		///<summary>Returns a PasswordContainer for the password passed in.
 		///Automatically generates a new salt that will be prepended to inputPass and then hashed using SHA3-512.</summary>
 		public static PasswordContainer GenerateLoginDetailsSHA512(string inputPass) {
@@ -243,25 +245,41 @@ namespace OpenDentBusiness {
 			return new PasswordContainer(HashTypes.SHA3_512,salt,passNew);
 		}
 
-		///<summary>Returns the hashed version of the password passed in.  Returns an empty string if the password passed in is empty.
-		///Salt will be prepended to inputPass and hashed using SHA3-512.</summary>
-		public static string HashPasswordSHA512(string inputPass,string salt="") {
-			//No need to check RemotingRole; no call to db.
-			if(string.IsNullOrEmpty(inputPass)) {
-				return "";
-			}
-			byte[] unicodeBytes=Encoding.Unicode.GetBytes(salt+inputPass);
-			byte[] hashBytes=ODCrypt.Sha3.Hash(unicodeBytes);
-			return Convert.ToBase64String(hashBytes);
-		}
-		#endregion SHA3512
+        ///<summary>Returns the hashed version of the password passed in.  Returns an empty string if the password passed in is empty.
+        ///Salt will be prepended to inputPass and hashed using SHA3-512.</summary>
+        public static string HashPasswordSHA512(string inputPass, string salt = "")
+        {
+            if (string.IsNullOrEmpty(inputPass))
+            {
+                return "";
+            }
+            byte[] unicodeBytes = Encoding.Unicode.GetBytes(salt + inputPass);
 
-		#region Utitlities
-		///<summary>Check if two strings are equal in constant time.  Used to compare hashes and prevent a timing attack</summary>
-		public static bool ConstantEquals(string lhs,string rhs) {
-			//No need to check RemotingRole; no call to db.
-			return ODCrypt.CryptUtil.ConstantEquals(lhs,rhs);
-		}
+            using (var sha512 = new SHA512Managed())
+            {
+                var hash = sha512.ComputeHash(unicodeBytes);
+                var sb = new StringBuilder(hash.Length * 2);
+
+                foreach (byte b in hash)
+                {
+                    // can be "x2" if you want lowercase
+                    sb.Append(b.ToString("X2"));
+                }
+
+                return sb.ToString();
+            }
+        }
+        #endregion SHA512
+
+        #region Utitlities
+        ///<summary>Check if two strings are equal in constant time.  Used to compare hashes and prevent a timing attack</summary>
+        public static bool ConstantEquals(string lhs, string rhs)
+        {
+            int num = lhs.Length ^ rhs.Length;
+            for (int index = 0; index < lhs.Length && index < rhs.Length; ++index)
+                num |= (int)lhs[index] ^ (int)rhs[index];
+            return num == 0;
+        }
 
 		///<summary>Generates a random, base-64 encoded salt for a given hashtype.</summary>
 		public static string GenerateSalt(HashTypes hashType) {
@@ -282,14 +300,26 @@ namespace OpenDentBusiness {
 			return GenerateSalt(hashLen);
 		}
 
-		///<summary>Generates a random, base-64 encoded salt.</summary>
-		public static string GenerateSalt(int byteLength) {
-			//No need to check RemotingRole; no call to db.
-			return ODCrypt.CryptUtil.GenerateSalt(byteLength);
-		}
+        ///<summary>Generates a random, base-64 encoded salt.</summary>
+        public static string GenerateSalt(int byteLength)
+        {
+            var salt = new byte[byteLength];
+            using (var random = new RNGCryptoServiceProvider())
+            {
+                random.GetNonZeroBytes(salt);
+            }
 
-		///<summary>Creates an encoded password string for storing in the database.  For use independent from the PasswordContainer struct.</summary>
-		private static string EncodePass(HashTypes hashType, string passHash, string salt) {
+            var sb = new StringBuilder(salt.Length * 2);
+            foreach (byte b in salt)
+            {
+                sb.Append(b.ToString("X2"));
+            }
+
+            return sb.ToString();
+        }
+
+        ///<summary>Creates an encoded password string for storing in the database.  For use independent from the PasswordContainer struct.</summary>
+        private static string EncodePass(HashTypes hashType, string passHash, string salt) {
 			//No need to check RemotingRole; no call to db.
 			return string.Join("$",new string[] { hashType.ToString(),salt,passHash });
 		}

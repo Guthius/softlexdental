@@ -1,20 +1,8 @@
+using CodeBase;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Security;
-using System.Security.Cryptography;
-using System.Text;
-using System.Web;
-using System.Web.Hosting;
-using System.Web.Services;
-using System.Windows.Forms;
-using System.Xml;
-using System.Xml.XPath;
-using CodeBase;
-using ODCrypt;
 
 namespace OpenDentBusiness
 {

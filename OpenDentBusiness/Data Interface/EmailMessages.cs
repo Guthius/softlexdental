@@ -1,7 +1,11 @@
+using CodeBase;
+using Health.Direct.Common.Certificates;
+using OpenDentBusiness.Email;
+using OpenDentBusiness.FileIO;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -14,14 +18,8 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Xml;
-using Health.Direct.Common.Certificates;
-using CodeBase;
-using OpenDentBusiness.FileIO;
-using System.Data;
-using CDO;
 using System.Web;
-using OpenDentBusiness.Email;
+using System.Xml;
 
 namespace OpenDentBusiness
 {

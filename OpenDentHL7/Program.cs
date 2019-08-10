@@ -7,24 +7,29 @@ using System.Windows.Forms;
 using System.IO;
 using Microsoft.Win32;
 
-namespace OpenDentHL7 {
-	static class Program {
-		/// <summary>
-		/// The main entry point for the application.
-		/// </summary>
-		static void Main(string[] args) {
-#if DEBUG
-			string serviceName="OpenDentHL7";
-			ServiceController[] serviceControllersAll=ServiceController.GetServices();
-			for(int i=0;i<serviceControllersAll.Length;i++) {
-				if(serviceControllersAll[i].ServiceName.StartsWith("OpenDent")) {
-					serviceName=serviceControllersAll[i].ServiceName;
-					break;
-				}
-			}
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new FormDebug(serviceName));
+namespace OpenDentHL7
+{
+    static class Program
+    {
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        static void Main(string[] args)
+        {
+#if DEBUG2
+            string serviceName = "OpenDentHL7";
+            ServiceController[] serviceControllersAll = ServiceController.GetServices();
+            for (int i = 0; i < serviceControllersAll.Length; i++)
+            {
+                if (serviceControllersAll[i].ServiceName.StartsWith("OpenDent"))
+                {
+                    serviceName = serviceControllersAll[i].ServiceName;
+                    break;
+                }
+            }
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new FormDebug(serviceName));
 #else
 			EventLog.WriteEntry("OpenDentHL7.Main", DateTime.Now.ToLongTimeString() +" - Service main method starting...");
 			ServiceHL7 serviceHL7=new ServiceHL7();
@@ -57,6 +62,6 @@ namespace OpenDentHL7 {
 			ServiceBase.Run(serviceHL7);
 			EventLog.WriteEntry("OpenDentHL7.Main",DateTime.Now.ToLongTimeString() +" - Service main method exiting...");
 #endif
-		}
-	}
+        }
+    }
 }

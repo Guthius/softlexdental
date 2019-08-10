@@ -67,35 +67,14 @@ namespace UnitTests {
 
 		private void butWebServiceParamCheck_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
-			if(!WebServiceT.ConnectToMiddleTier(textMiddleTierURI.Text,textMiddleTierUser.Text,textMiddleTierPassword.Text,Application.ProductVersion,_isOracle)) {
-				Cursor=Cursors.Default;
-				textResults.Text="Error connecting to Middle Tier.";
-				return;
-			}
+
 			textResults.Text="";
 			Application.DoEvents();
 			textResults.Text="This unit test has been deprecated.  Use Microsoft.VisualStudio.TestTools.UnitTesting instead.";
 			Cursor=Cursors.Default;
 		}
 
-		private void butWebService_Click(object sender,EventArgs e) {
-			textResults.Text="These unit tests have been deprecated.  Use Microsoft.VisualStudio.TestTools.UnitTesting instead.";
-		}
-
 		#endregion
-
-		private void butSchema_Click(object sender,EventArgs e) {
-			Cursor=Cursors.WaitCursor;
-			textResults.Text="";
-			Application.DoEvents();
-			if(radioSchema1.Checked) {
-				textResults.Text+=SchemaT.TestProposedCrud(textAddr.Text,textPort.Text,textUserName.Text,textPassword.Text,_isOracle);
-			}
-			else {
-				textResults.Text+=SchemaT.CompareProposedToGenerated(_isOracle);
-			}
-			Cursor=Cursors.Default;
-		}
 
 		private void butCore_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;

@@ -209,10 +209,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="ODCrypt, Version=18.2.7.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Required dlls\ODCrypt.dll</HintPath>
-    </Reference>
     <Reference Include="OpenPop">
       <HintPath>..\Required dlls\OpenPop.dll</HintPath>
     </Reference>
@@ -2199,15 +2195,6 @@
     <COMReference Include="ADODB">
       <Guid>{B691E011-1797-432E-907A-4D8C69339129}</Guid>
       <VersionMajor>6</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="CDO">
-      <Guid>{CD000000-8B95-11D1-82DB-00C04FB1625D}</Guid>
-      <VersionMajor>1</VersionMajor>
       <VersionMinor>0</VersionMinor>
       <Lcid>0</Lcid>
       <WrapperTool>tlbimp</WrapperTool>

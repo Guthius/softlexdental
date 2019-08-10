@@ -21,8 +21,8 @@ namespace UnitTests {
 		///<summary>Subset of _listTasks, containing all tasks _userA is subscribed to.  Must be properly managed by test cases.</summary>
 		private static List<Task> _listTasksForUserA;
 		private static List<Task> _listTasksForUserNW;
-		private static Userod _userA;
-		private static Userod _userNW;
+		private static User _userA;
+		private static User _userNW;
 		private static TaskList _taskListMain;
 		private static TaskList _taskListUserA;
 		private static TaskList _taskListUserNW;
@@ -643,7 +643,7 @@ namespace UnitTests {
 			return (task.TaskListNum==0 && task.TaskStatus!=TaskStatusEnum.Done);
 		}
 
-		private List<Task> GetNewTasksForUser(Userod user) {
+		private List<Task> GetNewTasksForUser(User user) {
 			List<Task> listTasksNew=new List<Task>();
 			if(user.UserNum==_userA.UserNum) {
 				listTasksNew=_listTasksForUserA.FindAll(x => x.TaskStatus!=TaskStatusEnum.Done);
@@ -679,7 +679,7 @@ namespace UnitTests {
 		}
 
 		///<summary>Creates an Appointment Task and a Patient Task using pat and clinic, and adds them to _listTasks.</summary>
-		private void CreateTasks(string suffix,Patient pat,Userod user,long taskListNum=0,bool isRepeating=false) {
+		private void CreateTasks(string suffix,Patient pat, User user,long taskListNum=0,bool isRepeating=false) {
 			Appointment appt=AppointmentT.CreateAppointment(pat.PatNum,DateTime.Today,0,0,clinicNum:pat.ClinicNum);
 			Task taskAppt=TaskT.CreateTask(taskListNum,appt.AptNum,suffix,isRepeating:isRepeating,dateType:TaskDateType.None,objectType:TaskObjectType.Appointment,userNum:user.UserNum);
 			_listTasks.Add(taskAppt);
@@ -732,7 +732,7 @@ namespace UnitTests {
 		}
 
 		///<summary>Determines if the Task is in the Clinic's region.</summary>
-		private bool IsTaskInRegionAndUnrestricted(Task task,Userod user) {
+		private bool IsTaskInRegionAndUnrestricted(Task task,User user) {
 			bool retVal=false;
 			Clinic clinic=Clinics.GetClinic(user.ClinicNum);
 			List<long> listUserClinicNums=Clinics.GetAllForUserod(user).Select(x => x.ClinicNum).ToList();

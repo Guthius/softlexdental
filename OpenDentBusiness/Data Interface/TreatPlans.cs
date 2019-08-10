@@ -143,12 +143,21 @@ namespace OpenDentBusiness
             return strb.ToString();
         }
 
-        ///<summary>Gets the hashstring from the provided string that is typically generated from GetStringForSignatureHash().
-        ///This is done seperate of building the string so that new line replacements can be done when validating signatures before hashing.</summary>
-        public static string GetHashStringForSignature(string str)
+        public static string GetHashStringForSignature(string input)
         {
-            //No need to check RemotingRole; no call to db.
-            return Encoding.ASCII.GetString(ODCrypt.MD5.Hash(Encoding.UTF8.GetBytes(str)));
+            using (SHA1Managed sha1 = new SHA1Managed())
+            {
+                var hash = sha1.ComputeHash(Encoding.UTF8.GetBytes(input));
+                var sb = new StringBuilder(hash.Length * 2);
+
+                foreach (byte b in hash)
+                {
+                    // can be "x2" if you want lowercase
+                    sb.Append(b.ToString("X2"));
+                }
+
+                return sb.ToString();
+            }
         }
 
         ///<summary>This is the automation behind keeping treatplans correct.  Many calls to DB, consider optimizing or calling sparingly.

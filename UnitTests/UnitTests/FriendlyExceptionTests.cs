@@ -39,7 +39,7 @@ namespace UnitTests {
 			//Call FriendlyException in a thread so we don't hang in this test if it fails.
 			ODThread odThread=new ODThread((o) => {
 				try {
-					FriendlyException.Show("FriendlyException",new Exception(strMessageExpected));
+					//FriendlyException.Show("FriendlyException",new Exception(strMessageExpected));
 				}
 				catch(Exception ex) {
 					strMessageCaught=ex.InnerException.Message;
