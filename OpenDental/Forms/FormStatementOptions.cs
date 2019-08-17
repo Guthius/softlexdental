@@ -66,7 +66,7 @@ namespace OpenDental{
 		private int electIndex;
 		private CheckBox checkShowLName;
 		private CheckBox checkSendSms;
-		private List<Def> _listImageCatDefs;
+		private List<Definition> _listImageCatDefs;
 		private bool _isFromBilling=false;
 
 		///<summary></summary>
@@ -754,7 +754,7 @@ namespace OpenDental{
 					SetEnabled(false);
 				}
 				textDate.Text=StmtCur.DateSent.ToShortDateString();
-				checkBoxBillShowTransSinceZero.Checked=Preferences.GetBool(PrefName.BillingShowTransSinceBalZero);
+				checkBoxBillShowTransSinceZero.Checked=Preference.GetBool(PreferenceName.BillingShowTransSinceBalZero);
 				listMode.Items.Clear();
 				for(int i=0;i<Enum.GetNames(typeof(StatementMode)).Length;i++){
 					listMode.Items.Add(Lan.g("enumStatementMode",Enum.GetNames(typeof(StatementMode))[i]));
@@ -809,7 +809,7 @@ namespace OpenDental{
 				if(StmtCur.DateRangeTo.Year<2100){
 					textDateEnd.Text=StmtCur.DateRangeTo.ToShortDateString();
 				}
-				if(Preferences.GetBool(PrefName.FuchsOptionsOn)) {
+				if(Preference.GetBool(PreferenceName.FuchsOptionsOn)) {
 					textDateStart.Text=DateTime.Today.AddDays(-90).ToShortDateString();
 					textDateEnd.Text=DateTime.Today.ToShortDateString();
 					listMode.SelectedIndex=0;
@@ -821,7 +821,7 @@ namespace OpenDental{
 				}
 				textNote.Text=StmtCur.Note;
 				textNoteBold.Text=StmtCur.NoteBold;
-				if(StmtCur.StatementType!=StmtType.LimitedStatement && Preferences.GetBool(PrefName.ShowFeatureSuperfamilies)) {
+				if(StmtCur.StatementType!=StmtType.LimitedStatement && Preference.GetBool(PreferenceName.ShowFeatureSuperfamilies)) {
 					Patient guarantor=Patients.GetFamily(StmtCur.PatNum).ListPats[0];
 					_superHead=Patients.GetPat(guarantor.SuperFamily);
 					if(StmtCur.IsNew && !StmtCur.IsSent && guarantor.HasSuperBilling && guarantor.SuperFamily>0 && _superHead!=null && _superHead.HasSuperBilling) {
@@ -1007,7 +1007,7 @@ namespace OpenDental{
 				}
 			}
 			#endregion Bulk Edit
-			_listImageCatDefs=Defs.GetDefsForCategory(DefCat.ImageCats,true);
+			_listImageCatDefs=Definition.GetByCategory(DefinitionCategory.ImageCats);
             Plugin.Trigger(this, "FormStatementOptions_Loaded");
 		}
 
@@ -1165,7 +1165,7 @@ namespace OpenDental{
 				if(checkSuperStatement.Checked && guarantor!=null && guarantor.SuperFamily!=0) {
 					List<Patient> listFamilyGuarantors=Patients.GetSuperFamilyGuarantors(guarantor.SuperFamily).FindAll(x => x.HasSuperBilling);
 					//exclude fams with neg balances in the total for super family stmts (per Nathan 5/25/2016)
-					if(Preferences.GetBool(PrefName.BalancesDontSubtractIns)) {
+					if(Preference.GetBool(PreferenceName.BalancesDontSubtractIns)) {
 						listFamilyGuarantors=listFamilyGuarantors.FindAll(x => x.BalTotal>0);
 					}
 					else {
@@ -1223,13 +1223,13 @@ namespace OpenDental{
 			}
 			long category=0;
 			for(int i=0;i<_listImageCatDefs.Count;i++) {
-				if(Regex.IsMatch(_listImageCatDefs[i].ItemValue,@"S")) {
-					category=_listImageCatDefs[i].DefNum;
+				if(Regex.IsMatch(_listImageCatDefs[i].Value,@"S")) {
+					category=_listImageCatDefs[i].Id;
 					break;
 				}
 			}
 			if(category==0) {
-				category=_listImageCatDefs[0].DefNum;//put it in the first category.
+				category=_listImageCatDefs[0].Id;//put it in the first category.
 			}
 			//create doc--------------------------------------------------------------------------------------
 			Document docc=null;
@@ -1330,7 +1330,7 @@ namespace OpenDental{
 			if(checkSuperStatement.Checked && guarantor!=null && guarantor.SuperFamily!=0) {
 				List<Patient> listFamilyGuarantors=Patients.GetSuperFamilyGuarantors(guarantor.SuperFamily).FindAll(x => x.HasSuperBilling);
 				//exclude fams with neg balances in the total for super family stmts (per Nathan 5/25/2016)
-				if(Preferences.GetBool(PrefName.BalancesDontSubtractIns)) {
+				if(Preference.GetBool(PreferenceName.BalancesDontSubtractIns)) {
 					listFamilyGuarantors=listFamilyGuarantors.FindAll(x => x.BalTotal>0);
 				}
 				else {
@@ -1367,13 +1367,13 @@ namespace OpenDental{
 			SheetPrinting.CreatePdf(sheet,tempPath,StmtCur,dataSet,null);
 			long category=0;
 			for(int i=0;i<_listImageCatDefs.Count;i++) {
-				if(Regex.IsMatch(_listImageCatDefs[i].ItemValue,@"S")) {
-					category=_listImageCatDefs[i].DefNum;
+				if(Regex.IsMatch(_listImageCatDefs[i].Value,@"S")) {
+					category=_listImageCatDefs[i].Id;
 					break;
 				}
 			}
 			if(category==0) {
-				category=_listImageCatDefs[0].DefNum;//put it in the first category.
+				category=_listImageCatDefs[0].Id;//put it in the first category.
 			}
 			//create doc--------------------------------------------------------------------------------------
 			Document docc=null;
@@ -1419,42 +1419,45 @@ namespace OpenDental{
 				File.Copy(oldPath,filePathAndName);
 			}
 			else {//Cloud
-				FormProgress FormP=new FormProgress();
-				FormP.DisplayText="Downloading patient statement...";
-				FormP.NumberFormat="F";
-				FormP.NumberMultiplication=1;
-				FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-				FormP.TickMS=1000;
-				OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath())
-					,Documents.GetByNum(StmtCur.DocNum).FileName
-					,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-				if(FormP.ShowDialog()==DialogResult.Cancel) {
-					state.DoCancel=true;
-					return false;
-				}
-				else {
-					//Do stuff with state.FileContent
-					FormP=new FormProgress();
-					FormP.DisplayText="Uploading patient email...";
-					FormP.NumberFormat="F";
-					FormP.NumberMultiplication=1;
-					FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-					FormP.TickMS=1000;
-					OpenDentalCloud.Core.TaskStateUpload state2=CloudStorage.UploadAsync(attachPath
-						,fileName
-						,state.FileContent
-						,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-					if(FormP.ShowDialog()==DialogResult.Cancel) {
-						state2.DoCancel=true;
-						return false;
-					}
-					else {
-						//Upload was successful
-					}
-				}
-			}
-			//Process.Start(filePathAndName);
-			EmailMessage message=Statements.GetEmailMessageForStatement(StmtCur,pat);
+
+                // TODO: Fix me
+
+                // FormProgress FormP=new FormProgress();
+                // FormP.DisplayText="Downloading patient statement...";
+                // FormP.NumberFormat="F";
+                // FormP.NumberMultiplication=1;
+                // FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
+                // FormP.TickMS=1000;
+                // OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath())
+                // 	,Documents.GetByNum(StmtCur.DocNum).FileName
+                // 	,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
+                // if(FormP.ShowDialog()==DialogResult.Cancel) {
+                // 	state.DoCancel=true;
+                // 	return false;
+                // }
+                // else {
+                // 	//Do stuff with state.FileContent
+                // 	FormP=new FormProgress();
+                // 	FormP.DisplayText="Uploading patient email...";
+                // 	FormP.NumberFormat="F";
+                // 	FormP.NumberMultiplication=1;
+                // 	FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
+                // 	FormP.TickMS=1000;
+                // 	OpenDentalCloud.Core.TaskStateUpload state2=CloudStorage.UploadAsync(attachPath
+                // 		,fileName
+                // 		,state.FileContent
+                // 		,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
+                // 	if(FormP.ShowDialog()==DialogResult.Cancel) {
+                // 		state2.DoCancel=true;
+                // 		return false;
+                // 	}
+                // 	else {
+                // 		//Upload was successful
+                // 	}
+                // }
+            }
+            //Process.Start(filePathAndName);
+            EmailMessage message=Statements.GetEmailMessageForStatement(StmtCur,pat);
 			EmailAttach attach=new EmailAttach();
 			attach.DisplayedFileName="Statement.pdf";
 			attach.ActualFileName=fileName;
@@ -1475,8 +1478,8 @@ namespace OpenDental{
 		private void butPreviewSheets() {
 			Patient patCur = Patients.GetPat(StmtCur.PatNum);
 			if(StmtCur.DocNum!=0 && checkIsSent.Checked) {//initiallySent && checkIsSent.Checked){
-				string billingType=Preferences.GetString(PrefName.BillingUseElectronic);
-				if(StmtCur.Mode_==StatementMode.Electronic && (billingType=="1" || billingType=="3") && !Preferences.GetBool(PrefName.BillingElectCreatePDF)) {
+				string billingType=Preference.GetString(PreferenceName.BillingUseElectronic);
+				if(StmtCur.Mode_==StatementMode.Electronic && (billingType=="1" || billingType=="3") && !Preference.GetBool(PreferenceName.BillingElectCreatePDF)) {
 					MsgBox.Show(this,"PDF's are not saved for electronic billing.  Unable to view.");
 					return;
 				}
@@ -1493,7 +1496,7 @@ namespace OpenDental{
 				if(checkSuperStatement.Checked && guarantor!=null && guarantor.SuperFamily!=0) {
 					List<Patient> listFamilyGuarantors=Patients.GetSuperFamilyGuarantors(guarantor.SuperFamily).FindAll(x => x.HasSuperBilling);
 					//exclude fams with neg balances in the total for super family stmts (per Nathan 5/25/2016)
-					if(Preferences.GetBool(PrefName.BalancesDontSubtractIns)) {
+					if(Preference.GetBool(PreferenceName.BalancesDontSubtractIns)) {
 						listFamilyGuarantors=listFamilyGuarantors.FindAll(x => x.BalTotal>0);
 					}
 					else {
@@ -1563,8 +1566,8 @@ namespace OpenDental{
 		}
 
 		private void butPatPortal_Click(object sender,EventArgs e) {
-			if(!Defs.GetDefsForCategory(DefCat.ImageCats,true).Any(x => x.ItemValue.Contains(ImageCategorySpecial.L.ToString())
-				&& x.ItemValue.Contains(ImageCategorySpecial.S.ToString()))) {
+			if(!Definition.GetByCategory(DefinitionCategory.ImageCats).Any(x => x.Value.Contains(ImageCategorySpecial.L.ToString())
+				&& x.Value.Contains(ImageCategorySpecial.S.ToString()))) {
 				MsgBox.Show(this,"There is no image category for Patient Portal and Statements in Setup | Definitions | Image Categories. "
 					+"There must be at least one to send portal statements.");
 				return;
@@ -2001,8 +2004,8 @@ namespace OpenDental{
 				StmtCur.DateRangeFrom=PIn.Date(textDateStart.Text);//handles blank
 				if(checkBoxBillShowTransSinceZero.Checked) {
 					DateTime dateAsOf=DateTime.Today;//used to determine when the balance on this date began
-					if(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {//if aging calculated monthly, use the last aging date instead of today
-						dateAsOf=Preferences.GetDate(PrefName.DateLastAging);
+					if(Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily)) {//if aging calculated monthly, use the last aging date instead of today
+						dateAsOf=Preference.GetDate(PreferenceName.DateLastAging);
 					}
 					Patient patCur=Patients.GetPat(StmtCur.PatNum);
 					List<PatAging> patAges=Patients.GetAgingListSimple(new List<long> {}, new List<long> { patCur.Guarantor },true);
@@ -2049,8 +2052,8 @@ namespace OpenDental{
 				if(checkBoxBillShowTransSinceZero.Checked) {
 					//make lookup dict of key=PatNum, value=DateBalBegan
 					DateTime dateAsOf=DateTime.Today;//used to determine when the balance on this date began
-					if(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {//if aging calculated monthly, use the last aging date instead of today
-						dateAsOf=Preferences.GetDate(PrefName.DateLastAging);
+					if(Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily)) {//if aging calculated monthly, use the last aging date instead of today
+						dateAsOf=Preference.GetDate(PreferenceName.DateLastAging);
 					}
 					List<Patient> listPatients=Patients.GetMultPats(StmtList.Select(x=>x.PatNum).ToList()).ToList();
 					List<PatAging> listPatAges=Patients.GetAgingListSimple(listPatients.Select(x=>x.BillingType).Distinct().ToList(),new List<long> { });

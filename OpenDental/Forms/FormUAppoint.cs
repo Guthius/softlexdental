@@ -919,7 +919,7 @@ namespace OpenDental{
 					}
 					code=codesToSynch[i];
 					writer.WriteStartElement("procedure-code");
-					if(Defs.GetHidden(DefCat.ProcCodeCats,code.ProcCat)){
+					if(Defs.IsHidden(code.ProcCat)){
 						writer.WriteAttributeString("action","delete");
 					}
 					else{

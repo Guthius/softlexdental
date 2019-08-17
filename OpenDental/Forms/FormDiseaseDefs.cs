@@ -413,7 +413,7 @@ namespace OpenDental{
 			SetFilterControlsAndAction(() => FillGrid(),
 				(int)TimeSpan.FromSeconds(0.5).TotalMilliseconds,
 				textICD9,textICD10,textDescript,textSnoMed);
-			if(DiseaseDefs.FixItemOrders()) {
+			if(DiseaseDef.FixSortOrders()) {
 				DataValid.SetInvalid(InvalidType.Diseases);
 			}
 			_listSecurityLogMsgs=new List<string>();
@@ -429,21 +429,21 @@ namespace OpenDental{
 					gridMain.SelectionMode=GridSelectionMode.MultiExtended;
 				}
 				//show only non-hidden items.
-				_listDiseaseDefs=DiseaseDefs.GetDeepCopy(true);
+				_listDiseaseDefs=DiseaseDef.All(true);
 			}
 			else{
 				//change UI
 				butOK.Visible=false;
 				//show all items, including hidden.
-				_listDiseaseDefs=DiseaseDefs.GetDeepCopy();
+				_listDiseaseDefs= DiseaseDef.All(false);
 			}
 			//If the user has passed in DiseaseDefs, those should be highlighted. Otherwise, initialize a new List<DiseaseDef>.
 			if(ListSelectedDiseaseDefs==null) {
 				ListSelectedDiseaseDefs=new List<DiseaseDef>();
 			}
-			_listDiseaseDefsOld=_listDiseaseDefs.Select(x => x.Copy()).ToList();
+			_listDiseaseDefsOld=_listDiseaseDefs.Select(x => x).ToList();
 			_listDiseaseDefsShowing=new List<DiseaseDef>();//fillGrid takes care of filling this.
-			_listDiseaseDefsNumsNotDeletable=DiseaseDefs.ValidateDeleteList(_listDiseaseDefs.Select(x => x.DiseaseDefNum).ToList());
+			_listDiseaseDefsNumsNotDeletable=DiseaseDef.ValidateDeleteList(_listDiseaseDefs.Select(x => x.Id).ToList());
 			FillGrid();
 		}
 
@@ -481,14 +481,14 @@ namespace OpenDental{
 			foreach(DiseaseDef defCur in _listDiseaseDefsShowing) {
 				row=new ODGridRow();
 				row.Cells.Add(defCur.ICD9Code);
-				row.Cells.Add(defCur.Icd10Code);
+				row.Cells.Add(defCur.ICD10Code);
 				row.Cells.Add(defCur.SnomedCode);
-				row.Cells.Add(defCur.DiseaseName);
+				row.Cells.Add(defCur.Name);
 				if(!IsSelectionMode) {
-					row.Cells.Add(defCur.IsHidden ? "X" : "");
+					row.Cells.Add(defCur.Hidden ? "X" : "");
 				}
 				row.Tag=defCur;
-				if(_listDiseaseDefNumsColored.Contains(defCur.DiseaseDefNum)) {
+				if(_listDiseaseDefNumsColored.Contains(defCur.Id)) {
 					row.ColorBackG=Color.LightCyan;
 				}
 				gridMain.Rows.Add(row);
@@ -520,7 +520,7 @@ namespace OpenDental{
 			listTerms=textICD10.Text.Split(new char[] { ' ' });
 			if(listTerms.Length!=0) {
 				foreach(DiseaseDef defCur in listICD9) { //use the result list from above and further filter it based on the text entered into this search box.
-					if(listTerms.All(x => defCur.Icd10Code.ToLower().Contains(x.ToLower()))) {
+					if(listTerms.All(x => defCur.ICD10Code.ToLower().Contains(x.ToLower()))) {
 						if(!listICD10.Contains(defCur)) {
 							listICD10.Add(defCur);
 						}
@@ -550,7 +550,7 @@ namespace OpenDental{
 			listTerms=textDescript.Text.Split(new char[] { ' ' });
 			if(listTerms.Length!=0) {
 				foreach(DiseaseDef defCur in listSnoMed) {//use the result list from above and further filter it based on the text entered into this search box.
-					if(listTerms.All(x => defCur.DiseaseName.ToLower().Contains(x.ToLower()))) {
+					if(listTerms.All(x => defCur.Name.ToLower().Contains(x.ToLower()))) {
 						if(!listDesc.Contains(defCur)) {
 							listDesc.Add(defCur);
 						}
@@ -562,7 +562,7 @@ namespace OpenDental{
 			}
 			//HIDDEN
 			if(!checkShowHidden.Checked) {//use the result list from above and further filter it based on the whether it's hidden or not.
-				listDesc=listDesc.Where(x => !x.IsHidden).ToList();
+				listDesc=listDesc.Where(x => !x.Hidden).ToList();
 			}
 			return listDesc; //return the completely filtered list.
 		}
@@ -594,7 +594,7 @@ namespace OpenDental{
 			#region Not Selection Mode. Open FormDiseaseDefEdit
 			//not selection mode. double-click to edit.
 			bool hasDelete=true;
-			if(_listDiseaseDefsNumsNotDeletable.Contains(selectedDiseaseDef.DiseaseDefNum)) {
+			if(_listDiseaseDefsNumsNotDeletable.Contains(selectedDiseaseDef.Id)) {
 				hasDelete=false;
 			}
 			//everything below this point is _not_ selection mode.  User guaranteed to have permission for ProblemEdit.
@@ -622,9 +622,9 @@ namespace OpenDental{
 			//initialise the new DiseaseDef with blank fields instead of null so we can filter on them.
 			DiseaseDef def=new DiseaseDef() {
 				ICD9Code="",
-				Icd10Code="",
+				ICD10Code="",
 				SnomedCode="",
-				ItemOrder=DiseaseDefs.GetCount()
+				SortOrder=(int)DiseaseDef.GetCount()
 			};
 			FormDiseaseDefEdit FormD=new FormDiseaseDefEdit(def,true);//also sets ItemOrder correctly if using alphabetical during the insert diseaseDef call.
 			FormD.IsNew=true;
@@ -638,7 +638,7 @@ namespace OpenDental{
 				//In Middle Tier, the Sync in FormClosing() was not updating the PKs for the objects in each row tag for gridMain.  
 				//This was the assumption of what would happen to retain selection when going back to the calling form (ex. FormMedical).
 				//As a result, any new defs added here did not have a PK when being sent to the calling form via grid.SelectedTags and threw a UE.
-				DiseaseDefs.Insert(FormD.DiseaseDefCur);
+				DiseaseDef.Insert(FormD.DiseaseDefCur);
 				DataValid.SetInvalid(InvalidType.Diseases);
 				//No need to re-order as the ItemOrder given is already at the end of the list, and you can't change item order in selection mode.
 				_listDiseaseDefsOld.Add(FormD.DiseaseDefCur);
@@ -647,23 +647,35 @@ namespace OpenDental{
 			}
 			else {
 				//Items are already in the right order in the DB, re-order in memory list to match
-				_listDiseaseDefs.FindAll(x => x.ItemOrder>=def.ItemOrder).ForEach(x => x.ItemOrder++);
+				_listDiseaseDefs.FindAll(x => x.SortOrder>=def.SortOrder).ForEach(x => x.SortOrder++);
 				_listDiseaseDefs.Add(def);
-				_listDiseaseDefs.Sort(DiseaseDefs.SortItemOrder);
+				_listDiseaseDefs.Sort(DiseaseDef.SortItemOrder);
 				_isChanged=true;
 			}
 			FillGrid();
 		}
 
-		///<summary>Only visible when !IsSelectionMode, and disabled if any filtering has been done via the search boxes. 
-		///Resets ALL the DiseaseDefs' ItemOrders to be in alphabetical order. Not reversible once done.</summary>
-		private void butAlphabetize_Click(object sender,EventArgs e) {
+
+
+        ///<summary>Only visible when !IsSelectionMode, and disabled if any filtering has been done via the search boxes. 
+        ///Resets ALL the DiseaseDefs' ItemOrders to be in alphabetical order. Not reversible once done.</summary>
+        private void butAlphabetize_Click(object sender,EventArgs e) {
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Problems will be ordered alphabetically by description.  This cannot be undone.  Continue?")) {
 				return;
 			}
-			_listDiseaseDefs.Sort(DiseaseDefs.SortAlphabetically);
+
+			_listDiseaseDefs.Sort((lhs, rhs) =>
+            {
+                if (lhs.Name != rhs.Name)
+                {
+                    return lhs.Name.CompareTo(rhs.Name);
+                }
+                return lhs.Id.CompareTo(rhs.Id);
+            });
+
+
 			for(int i=0;i<_listDiseaseDefs.Count;i++) {
-				_listDiseaseDefs[i].ItemOrder=i;
+				_listDiseaseDefs[i].SortOrder=i;
 			}
 			_isChanged=true;
 			FillGrid();
@@ -681,7 +693,7 @@ namespace OpenDental{
 			}
 			listSelectedIndexes.ForEach(x => _listDiseaseDefs.Reverse(x-1,2));
 			for(int i=0;i<_listDiseaseDefs.Count;i++) {
-				_listDiseaseDefs[i].ItemOrder=i;//change itemOrder to reflect order changes.
+				_listDiseaseDefs[i].SortOrder=i;//change itemOrder to reflect order changes.
 			}
 			FillGrid();
 			listSelectedIndexes.ForEach(x => gridMain.SetSelected(x-1,true));
@@ -700,7 +712,7 @@ namespace OpenDental{
 			}
 			listSelectedIndexes.Reverse<int>().ToList().ForEach(x => _listDiseaseDefs.Reverse(x,2));
 			for(int i=0;i<_listDiseaseDefs.Count;i++) {
-				_listDiseaseDefs[i].ItemOrder=i;//change itemOrder to reflect order changes.
+				_listDiseaseDefs[i].SortOrder=i;//change itemOrder to reflect order changes.
 			}
 			FillGrid();
 			listSelectedIndexes.ForEach(x => gridMain.SetSelected(x+1,true));
@@ -733,7 +745,7 @@ namespace OpenDental{
 
 		private void FormDiseaseDefs_FormClosing(object sender,FormClosingEventArgs e) {
 			if(_isChanged) {
-				DiseaseDefs.Sync(_listDiseaseDefs,_listDiseaseDefsOld);//Update if anything has changed, even in selection mode.
+				// TODO: DiseaseDef.Sync(_listDiseaseDefs,_listDiseaseDefsOld);//Update if anything has changed, even in selection mode.
 				//old securitylog pattern pasted from FormDiseaseDefEdit
 				_listSecurityLogMsgs.FindAll(x => !string.IsNullOrEmpty(x)).ForEach(x => SecurityLogs.MakeLogEntry(Permissions.ProblemEdit,0,x));
 				DataValid.SetInvalid(InvalidType.Diseases);//refreshes cache

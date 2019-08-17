@@ -20,7 +20,6 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using xImageDeviceManager;
 
 namespace OpenDental
 {
@@ -56,7 +55,7 @@ namespace OpenDental
         private Bitmap ImageRenderingNow = null;
         private Rectangle RectCrop = new Rectangle(0, 0, -1, -1);
         ///<summary>Used for performing an xRay image capture on an imaging device.</summary>
-        private SuniDeviceControl xRayImageController = null;
+        //private SuniDeviceControl xRayImageController = null;
         ///<summary>Thread to handle updating the graphical image to the screen when the current document is an image.</summary>
         private Thread ThreadImageUpdate = null;
         private ImageSettingFlags ImageSettingFlagsInvalidated;
@@ -170,10 +169,10 @@ namespace OpenDental
             //We always capture with a Suni device for now.
             //TODO: In the future use a device locator in the xImagingDeviceManager
             //project to return the appropriate general device control.
-            xRayImageController = new SuniDeviceControl();
-            this.xRayImageController.OnCaptureReady += new System.EventHandler(this.OnCaptureReady);
-            this.xRayImageController.OnCaptureComplete += new System.EventHandler(this.OnCaptureComplete);
-            this.xRayImageController.OnCaptureFinalize += new System.EventHandler(this.OnCaptureFinalize);
+            //xRayImageController = new SuniDeviceControl();
+            //this.xRayImageController.OnCaptureReady += new System.EventHandler(this.OnCaptureReady);
+            //this.xRayImageController.OnCaptureComplete += new System.EventHandler(this.OnCaptureComplete);
+            //this.xRayImageController.OnCaptureFinalize += new System.EventHandler(this.OnCaptureFinalize);
             Logger.Write(LogLevel.Info, "Document Module initialization complete.");
         }
 
@@ -276,24 +275,26 @@ namespace OpenDental
                 string formDir = FileAtoZ.CombinePaths(ImageStore.GetPreferredAtoZpath(), "Forms");
                 if (CloudStorage.IsCloudStorage)
                 {
-                    //Running this asynchronously to not slowdown start up time.
-                    ODThread odThreadTemplate = new ODThread((o) =>
-                    {
-                        OpenDentalCloud.Core.TaskStateListFolders state = CloudStorage.ListFolderContents(formDir);
-                        foreach (string fileName in state.ListFolderPathsDisplay)
-                        {
-                            if (InvokeRequired)
-                            {
-                                Invoke((Action)delegate ()
-                                {
-                                    menuForms.MenuItems.Add(Path.GetFileName(fileName), new EventHandler(menuForms_Click));
-                                });
-                            }
-                        }
-                    });
-                    //Swallow all exceptions and allow thread to exit gracefully.
-                    odThreadTemplate.AddExceptionHandler(new ODThread.ExceptionDelegate((Exception ex) => { }));
-                    odThreadTemplate.Start(true);
+                    // TODO: Fix me
+
+                    // //Running this asynchronously to not slowdown start up time.
+                    // ODThread odThreadTemplate = new ODThread((o) =>
+                    // {
+                    //     OpenDentalCloud.Core.TaskStateListFolders state = CloudStorage.ListFolderContents(formDir);
+                    //     foreach (string fileName in state.ListFolderPathsDisplay)
+                    //     {
+                    //         if (InvokeRequired)
+                    //         {
+                    //             Invoke((Action)delegate ()
+                    //             {
+                    //                 menuForms.MenuItems.Add(Path.GetFileName(fileName), new EventHandler(menuForms_Click));
+                    //             });
+                    //         }
+                    //     }
+                    // });
+                    // //Swallow all exceptions and allow thread to exit gracefully.
+                    // odThreadTemplate.AddExceptionHandler(new ODThread.ExceptionDelegate((Exception ex) => { }));
+                    // odThreadTemplate.Start(true);
                 }
                 else
                 {//Not cloud
@@ -480,7 +481,7 @@ namespace OpenDental
                 }
             }
             //Cancel current image capture.
-            xRayImageController.KillXRayThread();
+            //xRayImageController.KillXRayThread();
             _patNumLast = 0;//Clear out the last pat num so that a security log gets entered that the module was "visited" or "refreshed".
             Plugin.Trigger(this, "ContrImages_ModuleUnselected");
         }
@@ -912,10 +913,10 @@ namespace OpenDental
             if (doc != null && Path.GetExtension(doc.FileName).ToLower() == ".pdf")
             {//Adobe acrobat file.
                 string pdfFilePath = ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(), doc.DocNum + (PatCur != null ? PatCur.PatNum.ToString() : "") + ".pdf");
-                if (!xRayImageController.IsDisposed)
-                {
-                    xRayImageController.Dispose();
-                }
+                //if (!xRayImageController.IsDisposed)
+                //{
+                //    xRayImageController.Dispose();
+                //}
                 if (File.Exists(pdfFilePath))
                 {
                     try
@@ -1020,7 +1021,7 @@ namespace OpenDental
             }
             else
             {
-                return Defs.GetByExactName(DefCat.ImageCats, GetCurrentFolderName(treeDocuments.SelectedNode));
+                return Defs.GetByExactName(DefinitionCategory.ImageCats, GetCurrentFolderName(treeDocuments.SelectedNode));
             }
         }
 
@@ -1153,13 +1154,13 @@ namespace OpenDental
             {
                 return;
             }
-            List<Def> listImageCatDefs = Defs.GetDefsForCategory(DefCat.ImageCats, true);
+            List<Definition> listImageCatDefs = Definition.GetByCategory(DefinitionCategory.ImageCats);
             //Add all predefined folder names to the tree.
             for (int i = 0; i < listImageCatDefs.Count; i++)
             {
-                treeDocuments.Nodes.Add(new TreeNode(listImageCatDefs[i].ItemName));
-                treeDocuments.Nodes[i].Tag = MakeIdDef(listImageCatDefs[i].DefNum);
-                if (listImageCatDefs[i].ItemValue.Contains("L"))
+                treeDocuments.Nodes.Add(new TreeNode(listImageCatDefs[i].Description));
+                treeDocuments.Nodes[i].Tag = MakeIdDef(listImageCatDefs[i].Id);
+                if (listImageCatDefs[i].Value.Contains("L"))
                 { //Patient Portal Folder
                     treeDocuments.Nodes[i].SelectedImageIndex = 7;
                     treeDocuments.Nodes[i].ImageIndex = 7;
@@ -1193,11 +1194,11 @@ namespace OpenDental
                     SelectTreeNode(node);
                 }
             }
-            if (Preferences.GetInt(PrefName.ImagesModuleTreeIsCollapsed) == 0)
+            if (Preference.GetInt(PreferenceName.ImagesModuleTreeIsCollapsed) == 0)
             {//Expand the document tree each time the Images module is visited
                 treeDocuments.ExpandAll();//Invalidates tree too.
             }
-            else if (Preferences.GetInt(PrefName.ImagesModuleTreeIsCollapsed) == 1)
+            else if (Preference.GetInt(PreferenceName.ImagesModuleTreeIsCollapsed) == 1)
             {//Document tree collapses when patient changes
                 TreeNode selectedNode = treeDocuments.SelectedNode;//Save the selection so we can reselect after collapsing.
                 treeDocuments.CollapseAll();//Invalidates tree and clears selection too.
@@ -1247,10 +1248,10 @@ namespace OpenDental
                 {//User has changed.  Expand image categories based on user preference.
                     _listExpandedCats.Clear();
                     listUserOdPrefImageCats = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum, UserOdFkeyType.Definition);//Update override list.
-                    foreach (Def curDef in listImageCatDefs)
+                    foreach (Definition curDef in listImageCatDefs)
                     {
                         //Should only be one value with associated Fkey.
-                        UserOdPref userOdPrefTemp = listUserOdPrefImageCats.FirstOrDefault(x => x.Fkey == curDef.DefNum);
+                        UserOdPref userOdPrefTemp = listUserOdPrefImageCats.FirstOrDefault(x => x.Fkey == curDef.Id);
                         if (userOdPrefTemp != null)
                         {//User has a preference for this image category.
                             if (!userOdPrefTemp.ValueString.Contains("E"))
@@ -1269,14 +1270,14 @@ namespace OpenDental
                         }
                         else
                         {//User doesn't have a preference for this image category.
-                            if (!curDef.ItemValue.Contains("E"))
+                            if (!curDef.Value.Contains("E"))
                             {//The default preference is to collapse this category.
                                 continue;
                             }
                             for (int j = 0; j < treeDocuments.Nodes.Count; j++)
                             {//Enumerate the image categories.
                                 ImageNodeTag nodeIdCategory = (ImageNodeTag)treeDocuments.Nodes[j].Tag;//Get current tree document node.
-                                if (nodeIdCategory.PriKey == curDef.DefNum)
+                                if (nodeIdCategory.PriKey == curDef.Id)
                                 {
                                     treeDocuments.Nodes[j].Expand();
                                     break;
@@ -1311,7 +1312,7 @@ namespace OpenDental
             {
                 return;
             }
-            TreeNode apteryxFolderNode = treeDocuments.Nodes[Defs.GetOrder(DefCat.ImageCats, Defs.GetDef(DefCat.ImageCats, PIn.Long(imageCat)).DefNum)];
+            TreeNode apteryxFolderNode = treeDocuments.Nodes[Defs.GetOrder(DefinitionCategory.ImageCats, Defs.GetDef(DefinitionCategory.ImageCats, PIn.Long(imageCat)).Id)];
             List<TreeNode> listApteryxNodes = new List<TreeNode>();
             foreach (TreeNode node in apteryxFolderNode.Nodes)
             {
@@ -1831,7 +1832,7 @@ namespace OpenDental
             IntPtr hdib = IntPtr.Zero;
             try
             {
-                xImageDeviceManager.Obfuscator.ActivateEZTwain();
+               // xImageDeviceManager.Obfuscator.ActivateEZTwain();
             }
             catch
             {
@@ -2060,7 +2061,7 @@ namespace OpenDental
             string tempFile = Preferences.GetRandomTempFile(".pdf");
             try
             {
-                xImageDeviceManager.Obfuscator.ActivateEZTwain();
+               // xImageDeviceManager.Obfuscator.ActivateEZTwain();
             }
             catch
             {
@@ -2383,7 +2384,7 @@ namespace OpenDental
             {
                 string imageCat = ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWeb.ProgramProps.ImageCategory);
                 //save copy to db for temp storage
-                apteryxDoc = ImageStore.Import(ImageRenderingNow, (Defs.GetDef(DefCat.ImageCats, PIn.Long(imageCat)).DefNum), ImageType.Photo, PatCur);
+                apteryxDoc = ImageStore.Import(ImageRenderingNow, (Defs.GetDef(DefinitionCategory.ImageCats, PIn.Long(imageCat)).Id), ImageType.Photo, PatCur);
             }
             if (nodeId.NodeType == ImageNodeType.Category || nodeId.NodeType == ImageNodeType.Mount || nodeId.NodeType == ImageNodeType.None)
             {
@@ -2968,24 +2969,24 @@ namespace OpenDental
             }
             ImageNodeTag nodeOverId = (ImageNodeTag)nodeOver.Tag;
             long nodeOverCategoryDefNum = 0;
-            List<Def> listDefs = Defs.GetDefsForCategory(DefCat.ImageCats, true);
+            List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.ImageCats);;
             if (nodeOverId.NodeType == ImageNodeType.Category)
             {
-                nodeOverCategoryDefNum = listDefs[nodeOver.Index].DefNum;
+                nodeOverCategoryDefNum = listDefs[nodeOver.Index].Id;
             }
             else
             {
-                nodeOverCategoryDefNum = listDefs[nodeOver.Parent.Index].DefNum;
+                nodeOverCategoryDefNum = listDefs[nodeOver.Parent.Index].Id;
             }
             TreeNode nodeOriginal = GetNodeById(NodeIdentifierDown);
             long nodeOriginalCategoryDefNum = 0;
             if (NodeIdentifierDown.NodeType == ImageNodeType.Category)
             {
-                nodeOriginalCategoryDefNum = listDefs[nodeOriginal.Index].DefNum;
+                nodeOriginalCategoryDefNum = listDefs[nodeOriginal.Index].Id;
             }
             else
             {
-                nodeOriginalCategoryDefNum = listDefs[nodeOriginal.Parent.Index].DefNum;
+                nodeOriginalCategoryDefNum = listDefs[nodeOriginal.Parent.Index].Id;
             }
             if (nodeOverCategoryDefNum == nodeOriginalCategoryDefNum)
             {
@@ -2994,8 +2995,8 @@ namespace OpenDental
             if (NodeIdentifierDown.NodeType == ImageNodeType.Mount)
             {
                 Mount mount = Mounts.GetByNum(NodeIdentifierDown.PriKey);
-                string mountSourceCat = Defs.GetDef(DefCat.ImageCats, mount.DocCategory).ItemName;
-                string mountDestCat = Defs.GetDef(DefCat.ImageCats, nodeOverCategoryDefNum).ItemName;
+                string mountSourceCat = Defs.GetDef(DefinitionCategory.ImageCats, mount.DocCategory).Description;
+                string mountDestCat = Defs.GetDef(DefinitionCategory.ImageCats, nodeOverCategoryDefNum).Description;
                 mount.DocCategory = nodeOverCategoryDefNum;
                 SecurityLogs.MakeLogEntry(Permissions.ImageEdit, mount.PatNum, Lan.g(this, "Mount moved from") + " " + mountSourceCat + " "
                     + Lan.g(this, "to") + " " + mountDestCat);
@@ -3004,8 +3005,8 @@ namespace OpenDental
             else if (NodeIdentifierDown.NodeType == ImageNodeType.Doc)
             {
                 Document doc = Documents.GetByNum(NodeIdentifierDown.PriKey);
-                string docSourceCat = Defs.GetDef(DefCat.ImageCats, doc.DocCategory).ItemName;
-                string docDestCat = Defs.GetDef(DefCat.ImageCats, nodeOverCategoryDefNum).ItemName;
+                string docSourceCat = Defs.GetDef(DefinitionCategory.ImageCats, doc.DocCategory).Description;
+                string docDestCat = Defs.GetDef(DefinitionCategory.ImageCats, nodeOverCategoryDefNum).Description;
                 doc.DocCategory = nodeOverCategoryDefNum;
                 string logText = Lan.g(this, "Document moved") + ": " + doc.FileName;
                 if (doc.Description != "")
@@ -3050,7 +3051,7 @@ namespace OpenDental
 
         private void UpdateUserOdPrefForImageCat(long defNum, bool isExpand)
         {
-            if (Preferences.GetInt(PrefName.ImagesModuleTreeIsCollapsed) != 2)
+            if (Preference.GetInt(PreferenceName.ImagesModuleTreeIsCollapsed) != 2)
             {//Document tree folders persistent expand/collapse per user.
                 return;
             }
@@ -3060,12 +3061,12 @@ namespace OpenDental
             {
                 return;
             }
-            Def defImageCatCur = Defs.GetDefsForCategory(DefCat.ImageCats, true).FirstOrDefault(x => x.DefNum == defNum);
+            Definition defImageCatCur = Definition.GetByCategory(DefinitionCategory.ImageCats).FirstOrDefault(x => x.Id == defNum);
             if (defImageCatCur == null)
             {
                 return;//Should never happen, but if it does, there was something wrong with the treeDocument list, and thus nothing should be changed.
             }
-            string defaultValue = defImageCatCur.ItemValue;//Stores the default ItemValue of the definition from the catList.
+            string defaultValue = defImageCatCur.Value;//Stores the default ItemValue of the definition from the catList.
             string curValue = defaultValue;//Stores the current edited ImageCats to compare to the default.
             if (isExpand && !curValue.Contains("E"))
             {//Since we are expanding we would like to see if the expand flag is present.
@@ -3076,12 +3077,12 @@ namespace OpenDental
                 curValue = curValue.Replace("E", "");//If it is, remove expanded flag.
             }
             //Always delete to remove previous value (prevents duplicates).
-            UserOdPrefs.DeleteForFkey(Security.CurUser.UserNum, UserOdFkeyType.Definition, defImageCatCur.DefNum);
+            UserOdPrefs.DeleteForFkey(Security.CurUser.UserNum, UserOdFkeyType.Definition, defImageCatCur.Id);
             if (defaultValue != curValue)
             {//Insert an override in the UserOdPref table, only if the chosen value is different than the default.
                 UserOdPref userPrefCur = new UserOdPref();//Preference to be inserted to override.
                 userPrefCur.UserNum = Security.CurUser.UserNum;
-                userPrefCur.Fkey = defImageCatCur.DefNum;
+                userPrefCur.Fkey = defImageCatCur.Id;
                 userPrefCur.FkeyType = UserOdFkeyType.Definition;
                 userPrefCur.ValueString = curValue;
                 UserOdPrefs.Insert(userPrefCur);
@@ -3291,7 +3292,7 @@ namespace OpenDental
         ///<summary>Kills the image processing thread if it is currently running.</summary>
         private void KillThreadImageUpdate()
         {
-            xRayImageController.KillXRayThread();//Stop the current xRay image thread if it is running.
+            //xRayImageController.KillXRayThread();//Stop the current xRay image thread if it is running.
             if (ThreadImageUpdate != null)
             {//Clear any previous image processing.
                 if (ThreadImageUpdate.IsAlive)
@@ -3412,28 +3413,28 @@ namespace OpenDental
                     }
                 }
                 else
-                {//Cloud
-                 //Download document into temp directory for displaying.
-                    FormProgress FormP = new FormProgress();
-                    FormP.DisplayText = "Downloading Document...";
-                    FormP.NumberFormat = "F";
-                    FormP.NumberMultiplication = 1;
-                    FormP.MaxVal = 100;//Doesn't matter what this value is as long as it is greater than 0
-                    FormP.TickMS = 1000;
-                    OpenDentalCloud.Core.TaskStateDownload state = CloudStorage.DownloadAsync(PatFolder.Replace("\\", "/")
-                        , nodeDoc.FileName
-                        , new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-                    FormP.ShowDialog();
-                    if (FormP.DialogResult == DialogResult.Cancel)
-                    {
-                        state.DoCancel = true;
-                    }
-                    else
-                    {
-                        string tempFile = Preferences.GetRandomTempFile(Path.GetExtension(nodeDoc.FileName));
-                        File.WriteAllBytes(tempFile, state.FileContent);
-                        Process.Start(tempFile);
-                    }
+                {//Cloud // TODO: Fix me
+                 // //Download document into temp directory for displaying.
+                 //    FormProgress FormP = new FormProgress();
+                 //    FormP.DisplayText = "Downloading Document...";
+                 //    FormP.NumberFormat = "F";
+                 //    FormP.NumberMultiplication = 1;
+                 //    FormP.MaxVal = 100;//Doesn't matter what this value is as long as it is greater than 0
+                 //    FormP.TickMS = 1000;
+                 //    OpenDentalCloud.Core.TaskStateDownload state = CloudStorage.DownloadAsync(PatFolder.Replace("\\", "/")
+                 //        , nodeDoc.FileName
+                 //        , new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
+                 //    FormP.ShowDialog();
+                 //    if (FormP.DialogResult == DialogResult.Cancel)
+                 //    {
+                 //        state.DoCancel = true;
+                 //    }
+                 //    else
+                 //    {
+                 //        string tempFile = Preferences.GetRandomTempFile(Path.GetExtension(nodeDoc.FileName));
+                 //        File.WriteAllBytes(tempFile, state.FileContent);
+                 //        Process.Start(tempFile);
+                 //    }
                 }
             }
         }
@@ -3700,7 +3701,7 @@ namespace OpenDental
                     ToolBarPaint.Invalidate();
                     if (IdxSelectedInMount < 0)
                     {//The current selection was unselected.
-                        xRayImageController.KillXRayThread();//Stop xray capture, because it relies on the current selection to place images.
+                      //  xRayImageController.KillXRayThread();//Stop xray capture, because it relies on the current selection to place images.
                     }
                     InvalidateSettings(ImageSettingFlags.ALL, false);
                 }
@@ -3834,44 +3835,44 @@ namespace OpenDental
                     return;
                 }
                 //ComputerPref computerPrefs=ComputerPrefs.GetForLocalComputer();
-                xRayImageController.SensorType = ComputerPrefs.LocalComputer.SensorType;
-                xRayImageController.PortNumber = ComputerPrefs.LocalComputer.SensorPort;
-                xRayImageController.Binned = ComputerPrefs.LocalComputer.SensorBinned;
-                xRayImageController.ExposureLevel = ComputerPrefs.LocalComputer.SensorExposure;
+                //xRayImageController.SensorType = ComputerPrefs.LocalComputer.SensorType;
+                //xRayImageController.PortNumber = ComputerPrefs.LocalComputer.SensorPort;
+                //xRayImageController.Binned = ComputerPrefs.LocalComputer.SensorBinned;
+                //xRayImageController.ExposureLevel = ComputerPrefs.LocalComputer.SensorExposure;
                 if (nodeId.NodeType != ImageNodeType.Mount)
                 {//No mount is currently selected.
                  //Show the user that they are performing an image capture by generating a new mount.
-                    Mount mount = new Mount();
-                    mount.DateCreated = DateTimeOD.Today;
-                    mount.Description = "unnamed capture";
-                    mount.DocCategory = GetCurrentCategory();
-                    mount.ImgType = ImageType.Mount;
-                    mount.PatNum = PatCur.PatNum;
-                    int border = Math.Max(xRayImageController.SensorSize.Width, xRayImageController.SensorSize.Height) / 24;
-                    mount.Width = 4 * xRayImageController.SensorSize.Width + 5 * border;
-                    mount.Height = xRayImageController.SensorSize.Height + 2 * border;
-                    mount.MountNum = Mounts.Insert(mount);
-                    MountItem mountItem = new MountItem();
-                    mountItem.MountNum = mount.MountNum;
-                    mountItem.Width = xRayImageController.SensorSize.Width;
-                    mountItem.Height = xRayImageController.SensorSize.Height;
-                    mountItem.Ypos = border;
-                    mountItem.OrdinalPos = 1;
-                    mountItem.Xpos = border;
-                    MountItems.Insert(mountItem);
-                    mountItem.OrdinalPos = 0;
-                    mountItem.Xpos = mountItem.Width + 2 * border;
-                    MountItems.Insert(mountItem);
-                    mountItem.OrdinalPos = 2;
-                    mountItem.Xpos = 2 * mountItem.Width + 3 * border;
-                    MountItems.Insert(mountItem);
-                    mountItem.OrdinalPos = 3;
-                    mountItem.Xpos = 3 * mountItem.Width + 4 * border;
-                    MountItems.Insert(mountItem);
-                    FillDocList(false);
-                    SelectTreeNode(GetNodeById(MakeIdMount(mount.MountNum)));
-                    sliderBrightnessContrast.MinVal = Preferences.GetInt(PrefName.ImageWindowingMin);
-                    sliderBrightnessContrast.MaxVal = Preferences.GetInt(PrefName.ImageWindowingMax);
+                  // Mount mount = new Mount();
+                  // mount.DateCreated = DateTimeOD.Today;
+                  // mount.Description = "unnamed capture";
+                  // mount.DocCategory = GetCurrentCategory();
+                  // mount.ImgType = ImageType.Mount;
+                  // mount.PatNum = PatCur.PatNum;
+                  // //int border = Math.Max(xRayImageController.SensorSize.Width, xRayImageController.SensorSize.Height) / 24;
+                  //// mount.Width = 4 * xRayImageController.SensorSize.Width + 5 * border;
+                  //// mount.Height = xRayImageController.SensorSize.Height + 2 * border;
+                  //// mount.MountNum = Mounts.Insert(mount);
+                  // MountItem mountItem = new MountItem();
+                  // mountItem.MountNum = mount.MountNum;
+                  // //mountItem.Width = xRayImageController.SensorSize.Width;
+                  // //mountItem.Height = xRayImageController.SensorSize.Height;
+                  // mountItem.Ypos = border;
+                  // mountItem.OrdinalPos = 1;
+                  // mountItem.Xpos = border;
+                  // MountItems.Insert(mountItem);
+                  // mountItem.OrdinalPos = 0;
+                  // mountItem.Xpos = mountItem.Width + 2 * border;
+                  // MountItems.Insert(mountItem);
+                  // mountItem.OrdinalPos = 2;
+                  // mountItem.Xpos = 2 * mountItem.Width + 3 * border;
+                  // MountItems.Insert(mountItem);
+                  // mountItem.OrdinalPos = 3;
+                  // mountItem.Xpos = 3 * mountItem.Width + 4 * border;
+                  // MountItems.Insert(mountItem);
+                  // FillDocList(false);
+                  // SelectTreeNode(GetNodeById(MakeIdMount(mount.MountNum)));
+                  // sliderBrightnessContrast.MinVal = Preference.GetInt(PreferenceName.ImageWindowingMin);
+                  // sliderBrightnessContrast.MaxVal = Preference.GetInt(PreferenceName.ImageWindowingMax);
                 }
                 else if (nodeId.NodeType == ImageNodeType.Mount)
                 {//A mount is currently selected. We must allow the user to insert new images into partially complete mounts.
@@ -3884,11 +3885,11 @@ namespace OpenDental
                 EnableAllTools(false);
                 ToolBarMain.Buttons["Capture"].Enabled = true;
                 ToolBarMain.Invalidate();
-                xRayImageController.CaptureXRay();
+                //xRayImageController.CaptureXRay();
             }
             else
             {//The user unselected the image capture button, so cancel the current image capture.
-                xRayImageController.KillXRayThread();//Stop current xRay capture and call OnCaptureFinalize() when done.
+                //xRayImageController.KillXRayThread();//Stop current xRay capture and call OnCaptureFinalize() when done.
             }
         }
 
@@ -3910,7 +3911,7 @@ namespace OpenDental
             }
             if (IdxSelectedInMount < 0 || DocsInMount[IdxSelectedInMount] != null)
             {//Mount is full.
-                xRayImageController.KillXRayThread();
+              //  xRayImageController.KillXRayThread();
                 return;
             }
             //Depending on the device being captured from, we need to rotate the images returned from the device by a certain
@@ -3933,19 +3934,19 @@ namespace OpenDental
                     break;
             }
             //Create the document object in the database for this mount image.
-            Bitmap capturedImage = xRayImageController.capturedImage;
-            Document doc = ImageStore.ImportImageToMount(capturedImage, rotationAngle, MountItemsForSelected[IdxSelectedInMount].MountItemNum, GetCurrentCategory(), PatCur);
-            ImagesCur[IdxSelectedInMount] = capturedImage;
-            WidthsImagesCur[IdxSelectedInMount] = capturedImage.Width;
-            HeightsImagesCur[IdxSelectedInMount] = capturedImage.Height;
-            DocsInMount[IdxSelectedInMount] = doc;
-            DocSelected = doc;
+            //Bitmap capturedImage = xRayImageController.capturedImage;
+           // Document doc = ImageStore.ImportImageToMount(capturedImage, rotationAngle, MountItemsForSelected[IdxSelectedInMount].MountItemNum, GetCurrentCategory(), PatCur);
+            //ImagesCur[IdxSelectedInMount] = capturedImage;
+           // WidthsImagesCur[IdxSelectedInMount] = capturedImage.Width;
+          //  HeightsImagesCur[IdxSelectedInMount] = capturedImage.Height;
+           // DocsInMount[IdxSelectedInMount] = doc;
+           // DocSelected = doc;
             SetBrightnessAndContrast();
             //Refresh image in in picture box.
             InvalidateSettings(ImageSettingFlags.ALL, false);
             //This capture was successful. Keep capturing more images until the capture is manually aborted.
             //This will cause calls to OnCaptureBegin(), then OnCaptureFinalize().
-            xRayImageController.CaptureXRay();
+            //xRayImageController.CaptureXRay();
         }
 
         ///<summary>Called when the entire sequence of image captures is complete (possibly because of failure, or a full mount among other things).</summary>
@@ -4283,11 +4284,11 @@ namespace OpenDental
             long nodeOverCategoryDefNum = 0;
             if (nodeOverId.NodeType == ImageNodeType.Category)
             {
-                nodeOverCategoryDefNum = Defs.GetDefsForCategory(DefCat.ImageCats, true)[nodeOver.Index].DefNum;
+                nodeOverCategoryDefNum = Definition.GetByCategory(DefinitionCategory.ImageCats)[nodeOver.Index].Id;
             }
             else
             {
-                nodeOverCategoryDefNum = Defs.GetDefsForCategory(DefCat.ImageCats, true)[nodeOver.Parent.Index].DefNum;
+                nodeOverCategoryDefNum = Definition.GetByCategory(DefinitionCategory.ImageCats)[nodeOver.Parent.Index].Id;
             }
             Document docSave = new Document();
             ImageNodeTag nodeId = new ImageNodeTag();

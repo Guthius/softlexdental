@@ -168,7 +168,7 @@ namespace OpenDental{
 			this.textHeight.MaxVal = 2000;
 			this.textHeight.MinVal = -100;
 			this.textHeight.Name = "textHeight";
-			this.textHeight.PrefNameBinding = OpenDentBusiness.PrefName.NotApplicable;
+			this.textHeight.PrefNameBinding = OpenDentBusiness.PreferenceName.NotApplicable;
 			this.textHeight.Size = new System.Drawing.Size(69, 20);
 			this.textHeight.TabIndex = 97;
 			// 
@@ -180,7 +180,7 @@ namespace OpenDental{
 			this.textWidth.MaxVal = 2000;
 			this.textWidth.MinVal = -100;
 			this.textWidth.Name = "textWidth";
-			this.textWidth.PrefNameBinding = OpenDentBusiness.PrefName.NotApplicable;
+			this.textWidth.PrefNameBinding = OpenDentBusiness.PreferenceName.NotApplicable;
 			this.textWidth.Size = new System.Drawing.Size(69, 20);
 			this.textWidth.TabIndex = 95;
 			// 

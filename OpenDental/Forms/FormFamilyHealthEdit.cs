@@ -26,9 +26,9 @@ namespace OpenDental {
 			if(FamilyHealthCur.IsNew) {
 				return; //Don't need to set any of the info below.  All null.
 			}
-			DisDefCur=DiseaseDefs.GetItem(FamilyHealthCur.DiseaseDefNum);
+			DisDefCur=DiseaseDef.GetById(FamilyHealthCur.DiseaseDefNum);
 			//Validation is done when deleting diseaseDefs to make sure they are not in use by FamilyHealths.
-			textProblem.Text=DisDefCur.DiseaseName;
+			textProblem.Text=DisDefCur.Name;
 			textSnomed.Text=DisDefCur.SnomedCode;
 			textName.Text=FamilyHealthCur.PersonName;
 		}
@@ -46,7 +46,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Selection must have a SNOMED CT code associated");
 				return;
 			}
-			textProblem.Text=disDef.DiseaseName;
+			textProblem.Text=disDef.Name;
 			textSnomed.Text=disDef.SnomedCode;
 			DisDefCur=disDef;
 		}
@@ -77,7 +77,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Problem required.");
 				return;
 			}
-			FamilyHealthCur.DiseaseDefNum=DisDefCur.DiseaseDefNum;
+			FamilyHealthCur.DiseaseDefNum=DisDefCur.Id;
 			FamilyHealthCur.Relationship=(FamilyRelationship)listRelationship.SelectedIndex;
 			FamilyHealthCur.PersonName=textName.Text;
 			if(FamilyHealthCur.IsNew) {

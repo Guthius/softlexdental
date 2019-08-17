@@ -22,7 +22,7 @@ namespace OpenDental {
 		}
 		
 		private void FormCreditCardManage_Load(object sender,EventArgs e) {
-			if(Preferences.GetBool(PrefName.StoreCCnumbers)
+			if(Preference.GetBool(PreferenceName.StoreCCnumbers)
 				&& (Programs.IsEnabled(ProgramName.Xcharge) 
 					|| Programs.IsEnabled(ProgramName.PayConnect) 
 					|| Programs.IsEnabled(ProgramName.PaySimple)))//tokens supported by Xcharge and PayConnect
@@ -94,7 +94,7 @@ namespace OpenDental {
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
-			if(!Preferences.GetBool(PrefName.StoreCCnumbers)) {
+			if(!Preference.GetBool(PreferenceName.StoreCCnumbers)) {
 				bool hasXCharge=false;
 				bool hasPayConnect=false;
 				bool hasPaySimple=false;
@@ -233,7 +233,7 @@ namespace OpenDental {
 								creditCardCur.CCNumberMasked=accountMasked;
 								creditCardCur.XChargeToken=xChargeToken;
 								creditCardCur.CCExpiration=new DateTime(Convert.ToInt32("20"+PIn.String(exp.Substring(2,2))),Convert.ToInt32(PIn.String(exp.Substring(0,2))),1);
-								creditCardCur.Procedures=Preferences.GetString(PrefName.DefaultCCProcs);
+								creditCardCur.Procedures=Preference.GetString(PreferenceName.DefaultCCProcs);
 								creditCardCur.CCSource=CreditCardSource.XServer;
 								creditCardCur.ClinicNum=Clinics.ClinicNum;
 								CreditCards.Insert(creditCardCur);
@@ -262,7 +262,7 @@ namespace OpenDental {
 			FormCreditCardEdit FormCCE=new FormCreditCardEdit(PatCur);
 			FormCCE.CreditCardCur=new CreditCard();
 			FormCCE.CreditCardCur.IsNew=true;
-			FormCCE.CreditCardCur.Procedures=Preferences.GetString(PrefName.DefaultCCProcs);
+			FormCCE.CreditCardCur.Procedures=Preference.GetString(PreferenceName.DefaultCCProcs);
 			FormCCE.ShowDialog();
 			if(FormCCE.DialogResult==DialogResult.OK) {
 				FillGrid();

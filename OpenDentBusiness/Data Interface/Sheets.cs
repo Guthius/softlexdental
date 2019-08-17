@@ -451,7 +451,7 @@ namespace OpenDentBusiness
                 + "FROM sheet WHERE IsDeleted=0 "
                 + "AND PatNum =" + POut.Long(patNum) + " "
                 + "AND (SheetType=" + POut.Long((int)SheetTypeEnum.PatientForm) + " OR SheetType=" + POut.Long((int)SheetTypeEnum.MedicalHistory);
-            if (Preferences.GetBool(PrefName.PatientFormsShowConsent))
+            if (Preference.GetBool(PreferenceName.PatientFormsShowConsent))
             {
                 command += " OR SheetType=" + POut.Long((int)SheetTypeEnum.Consent);//Show consent forms if pref is true.
             }
@@ -504,7 +504,7 @@ namespace OpenDentBusiness
                 row["description"] = rawDoc.Rows[i]["Description"].ToString();
                 row["DocNum"] = rawDoc.Rows[i]["DocNum"].ToString();
                 docCat = PIn.Long(rawDoc.Rows[i]["DocCategory"].ToString());
-                row["imageCat"] = Defs.GetName(DefCat.ImageCats, docCat);
+                row["imageCat"] = Defs.GetName(DefinitionCategory.ImageCats, docCat);
                 row["SheetNum"] = "0";
                 row["showInTerminal"] = "";
                 if (dateT.TimeOfDay != TimeSpan.Zero)

@@ -94,7 +94,7 @@ namespace OpenDental
         ///<summary>Returns true if PrefName.BrokenApptMissedProc or PrefName.BrokenApptCancelledProc are true.</summary>
         public static bool HasBrokenApptProcs()
         {
-            return Preferences.GetLong(PrefName.BrokenApptProcedure) > 0;
+            return Preference.GetLong(PreferenceName.BrokenApptProcedure) > 0;
         }
 
         ///<summary>Sets given appt.AptStatus to broken.
@@ -166,7 +166,7 @@ namespace OpenDental
                 procedureCur.ClinicNum = appt.ClinicNum;
                 procedureCur.UserNum = Security.CurUser.UserNum;
                 procedureCur.Note = Lans.g("AppointmentEdit", "Appt BROKEN for") + " " + appt.ProcDescript + "  " + appt.AptDateTime.ToString();
-                procedureCur.PlaceService = (PlaceOfService)Preferences.GetInt(PrefName.DefaultProcedurePlaceService);//Default proc place of service for the Practice is used. 
+                procedureCur.PlaceService = (PlaceOfService)Preference.GetInt(PreferenceName.DefaultProcedurePlaceService);//Default proc place of service for the Practice is used. 
                 List<InsSub> listInsSubs = InsSubs.RefreshForFam(Patients.GetFamily(pat.PatNum));
                 List<InsPlan> listInsPlans = InsPlans.RefreshForSubList(listInsSubs);
                 List<PatPlan> listPatPlans = PatPlans.Refresh(pat.PatNum);
@@ -198,7 +198,7 @@ namespace OpenDental
                 {
                     procedureCur.ProcFee = procFee;
                 }
-                if (!Preferences.GetBool(PrefName.EasyHidePublicHealth))
+                if (!Preference.GetBool(PreferenceName.EasyHidePublicHealth))
                 {
                     procedureCur.SiteNum = pat.SiteNum;
                 }
@@ -213,7 +213,7 @@ namespace OpenDental
             }
             #endregion
             #region BrokenApptAdjustment
-            if (Preferences.GetBool(PrefName.BrokenApptAdjustment))
+            if (Preference.GetBool(PreferenceName.BrokenApptAdjustment))
             {
                 Adjustment AdjustmentCur = new Adjustment();
                 AdjustmentCur.DateEntry = DateTime.Today;
@@ -221,7 +221,7 @@ namespace OpenDental
                 AdjustmentCur.ProcDate = DateTime.Today;
                 AdjustmentCur.ProvNum = appt.ProvNum;
                 AdjustmentCur.PatNum = pat.PatNum;
-                AdjustmentCur.AdjType = Preferences.GetLong(PrefName.BrokenAppointmentAdjustmentType);
+                AdjustmentCur.AdjType = Preference.GetLong(PreferenceName.BrokenAppointmentAdjustmentType);
                 AdjustmentCur.ClinicNum = appt.ClinicNum;
                 FormAdjust FormA = new FormAdjust(pat, AdjustmentCur);
                 FormA.IsNew = true;
@@ -229,7 +229,7 @@ namespace OpenDental
             }
             #endregion
             #region BrokenApptCommLog
-            if (Preferences.GetBool(PrefName.BrokenApptCommLog))
+            if (Preference.GetBool(PreferenceName.BrokenApptCommLog))
             {
                 Commlog CommlogCur = new Commlog();
                 CommlogCur.PatNum = pat.PatNum;
@@ -446,7 +446,7 @@ namespace OpenDental
                                                                                                //If listProcs is empty then AptCur.Pattern defaults to PrefName.AppointmentWithoutProcsDefaultLength value.
                                                                                                //See Appointments.GetApptTimePatternForNoProcs().
             AptCur.Pattern = Appointments.CalculatePattern(pat, AptCur.ProvNum, AptCur.ProvHyg, listProcs);
-            AptCur.TimeLocked = Preferences.GetBool(PrefName.AppointmentTimeIsLocked);
+            AptCur.TimeLocked = Preference.GetBool(PreferenceName.AppointmentTimeIsLocked);
             Appointments.Insert(AptCur);
             PlannedAppt plannedAppt = new PlannedAppt();
             plannedAppt.AptNum = AptCur.AptNum;

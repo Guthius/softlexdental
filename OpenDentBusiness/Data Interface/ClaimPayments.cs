@@ -56,7 +56,7 @@ namespace OpenDentBusiness
             {
                 row = table.NewRow();
                 row["amount"] = PIn.Double(rawT.Rows[i]["amount"].ToString()).ToString("F");
-                row["payType"] = Defs.GetName(DefCat.InsurancePaymentType, PIn.Long(rawT.Rows[i]["PayType"].ToString()));
+                row["payType"] = Defs.GetName(DefinitionCategory.InsurancePaymentType, PIn.Long(rawT.Rows[i]["PayType"].ToString()));
                 row["BankBranch"] = rawT.Rows[i]["BankBranch"].ToString();
                 row["ClaimPaymentNum"] = rawT.Rows[i]["ClaimPaymentNum"].ToString();
                 date = PIn.Date(rawT.Rows[i]["CheckDate"].ToString());
@@ -240,7 +240,7 @@ namespace OpenDentBusiness
         ///<summary>If trying to change the amount and attached to a deposit, it will throw an error, so surround with try catch.</summary>
         public static void Update(ClaimPayment cp, bool isDepNew = false)
         {
-            if (!isDepNew && cp.DepositNum != 0 && Preferences.GetBool(PrefName.ShowAutoDeposit))
+            if (!isDepNew && cp.DepositNum != 0 && Preference.GetBool(PreferenceName.ShowAutoDeposit))
             {
                 string cmd = "SELECT deposit.Amount,SUM(COALESCE(claimpayment.CheckAmt,0))+SUM(COALESCE(payment.PayAmt,0)) depAmtOthers "
                     + "FROM deposit "
@@ -340,7 +340,7 @@ namespace OpenDentBusiness
 
         public static bool HasAutoDeposit(ClaimPayment cp)
         {
-            if (cp == null || cp.DepositNum == 0 || !Preferences.GetBool(PrefName.ShowAutoDeposit))
+            if (cp == null || cp.DepositNum == 0 || !Preference.GetBool(PreferenceName.ShowAutoDeposit))
             {
                 return false;
             }

@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SupplyOrderItem into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(SupplyOrderItem supplyOrderItem,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO supplyorderitem (";
 			if(!useExistingPK && isRandomKeys) {
 				supplyOrderItem.SupplyOrderItemNum=ReplicationServers.GetKeyNoCache("supplyorderitem","SupplyOrderItemNum");

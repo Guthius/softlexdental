@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EobAttach into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(EobAttach eobAttach,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO eobattach (";
 			if(!useExistingPK && isRandomKeys) {
 				eobAttach.EobAttachNum=ReplicationServers.GetKeyNoCache("eobattach","EobAttachNum");

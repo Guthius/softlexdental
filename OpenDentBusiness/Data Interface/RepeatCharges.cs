@@ -111,7 +111,7 @@ namespace OpenDentBusiness
         /// When doComputeAging=true, aging calculations will run for the families that had a repeating charge procedure added to the account.</summary>
         public static RepeatChargeResult RunRepeatingCharges(DateTime dateRun, bool doComputeAging = true)
         {
-            Prefs.UpdateDateT(PrefName.RepeatingChargesBeginDateTime, dateRun);
+            Preference.Update(PreferenceName.RepeatingChargesBeginDateTime, dateRun);
             try
             {
                 RepeatChargeResult result = new RepeatChargeResult();
@@ -131,7 +131,7 @@ namespace OpenDentBusiness
                     }
                     Patient pat = null;
                     List<DateTime> listBillingDates;//This list will have 1 or 2 dates where a repeating charge might be added
-                    if (Preferences.GetBool(PrefName.BillingUseBillingCycleDay))
+                    if (Preference.GetBool(PreferenceName.BillingUseBillingCycleDay))
                     {
                         pat = Patients.GetPat(repeatCharge.PatNum);
                         listBillingDates = GetBillingDatesHelper(repeatCharge.DateStart, repeatCharge.DateStop, dateRun, pat.BillingCycleDay);
@@ -197,15 +197,15 @@ namespace OpenDentBusiness
                     DateTime dateTAgingBeganPref = DateTime.MinValue;
                     DateTime dtNow = MiscData.GetNowDateTime();
                     DateTime asOfDate = dateRun;
-                    if (Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily))
+                    if (Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily))
                     {
-                        asOfDate = Preferences.GetDate(PrefName.DateLastAging);
+                        asOfDate = Preference.GetDate(PreferenceName.DateLastAging);
                     }
-                    bool isFamaging = (Preferences.GetBool(PrefName.AgingIsEnterprise) && listGuarantors.Count > 1);//will only use the famaging table if more than 1 guar
+                    bool isFamaging = (Preference.GetBool(PreferenceName.AgingIsEnterprise) && listGuarantors.Count > 1);//will only use the famaging table if more than 1 guar
                     if (isFamaging)
                     {//if this will utilize the famaging table we need to check and set the pref to block others from starting aging
-                        Prefs.RefreshCache();
-                        dateTAgingBeganPref = Preferences.GetDateTime(PrefName.AgingBeginDateTime);
+                        Preference.Refresh();
+                        dateTAgingBeganPref = Preference.GetDateTime(PreferenceName.AgingBeginDateTime);
                         if (dateTAgingBeganPref > DateTime.MinValue)
                         {//pref has been set by another process, don't run aging and notify user
                             result.ErrorMsg += Lans.g("RepeatCharges", "Aging failed to run for patients who had repeat charges added to their account. This is due to "
@@ -216,10 +216,10 @@ namespace OpenDentBusiness
                         }
                         else
                         {
-                            Prefs.UpdateString(PrefName.AgingBeginDateTime, POut.DateT(dtNow, false));//get lock on pref to block others
+                            Preference.Update(PreferenceName.AgingBeginDateTime, dtNow);//get lock on pref to block others
                             Signalods.SetInvalid(InvalidType.Prefs);//signal a cache refresh so other computers will have the updated pref as quickly as possible
                             Ledgers.ComputeAging(listGuarantors, asOfDate);
-                            Prefs.UpdateString(PrefName.AgingBeginDateTime, "");//clear lock on pref whether aging was successful or not
+                            Preference.Update(PreferenceName.AgingBeginDateTime, "");//clear lock on pref whether aging was successful or not
                             Signalods.SetInvalid(InvalidType.Prefs);
                         }
                     }
@@ -232,9 +232,9 @@ namespace OpenDentBusiness
             }
             finally
             {
-                Prefs.UpdateString(PrefName.RepeatingChargesBeginDateTime, "");
+                Preference.Update(PreferenceName.RepeatingChargesBeginDateTime, "");
                 //Even if failure, we want to update so OpenDentalService doesn't launch Repeating Charges again today.
-                Prefs.UpdateDateT(PrefName.RepeatingChargesLastDateTime, dateRun);
+                Preference.Update(PreferenceName.RepeatingChargesLastDateTime, dateRun);
             }
         }
 
@@ -292,7 +292,7 @@ namespace OpenDentBusiness
         {
             //No remoting role check; no call to db
             List<DateTime> retVal = new List<DateTime>();
-            if (!Preferences.GetBool(PrefName.BillingUseBillingCycleDay))
+            if (!Preference.GetBool(PreferenceName.BillingUseBillingCycleDay))
             {
                 billingCycleDay = dateStart.Day;
             }
@@ -322,7 +322,7 @@ namespace OpenDentBusiness
             //--Scenario #4: The start day is the same as the stop day but after the billing day. Ex: Start: 10/13, Stop 11/13
             //--Scenario #5: The start day is the same as the stop day but before the billing day. Ex: Start: 11/10, Stop 12/10
             //Each of these repeat charges will post a charge on 12/11 even though it is after the stop date.
-            if (Preferences.GetBool(PrefName.BillingUseBillingCycleDay))
+            if (Preference.GetBool(PreferenceName.BillingUseBillingCycleDay))
             {
                 if (dateStart.Day < billingCycleDay)
                 {
@@ -374,9 +374,9 @@ namespace OpenDentBusiness
             }
             procedure.MedicalCode = ProcedureCodes.GetProcCode(procedure.CodeNum).MedicalCode;
             procedure.BaseUnits = ProcedureCodes.GetProcCode(procedure.CodeNum).BaseUnits;
-            procedure.DiagnosticCode = Preferences.GetString(PrefName.ICD9DefaultForNewProcs);
+            procedure.DiagnosticCode = Preference.GetString(PreferenceName.ICD9DefaultForNewProcs);
             procedure.RepeatChargeNum = repeatCharge.RepeatChargeNum;
-            procedure.PlaceService = (PlaceOfService)Preferences.GetInt(PrefName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used.  
+            procedure.PlaceService = (PlaceOfService)Preference.GetInt(PreferenceName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used.  
                                                                                                          //Check if the repeating charge has been flagged to copy it's note into the billing note of the procedure.
             if (repeatCharge.CopyNoteToProc)
             {
@@ -395,7 +395,7 @@ namespace OpenDentBusiness
                     }
                 }
             }
-            if (!Preferences.GetBool(PrefName.EasyHidePublicHealth))
+            if (!Preference.GetBool(PreferenceName.EasyHidePublicHealth))
             {
                 procedure.SiteNum = pat.SiteNum;
             }
@@ -518,7 +518,7 @@ namespace OpenDentBusiness
         private static bool IsRepeatDateHelper(RepeatCharge repeatCharge, DateTime possibleBillingDate, DateTime existingProcedureDate, Patient pat)
         {
             //No remoting role check; no call to db
-            if (Preferences.GetBool(PrefName.BillingUseBillingCycleDay))
+            if (Preference.GetBool(PreferenceName.BillingUseBillingCycleDay))
             {
                 pat = pat ?? Patients.GetPat(repeatCharge.PatNum);
                 if (pat.BillingCycleDay != existingProcedureDate.Day

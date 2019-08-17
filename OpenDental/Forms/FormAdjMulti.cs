@@ -21,8 +21,8 @@ namespace OpenDental {
 		private List<Provider> _listProviders;
 		private List<Clinic> _listClinics;
 		private bool _isSelectionMode;
-		private List<Def> _listAdjPosCats;
-		private List<Def> _listAdjNegCats;
+		private List<Definition> _listAdjPosCats;
+		private List<Definition> _listAdjNegCats;
 		private int _rigorousAdjustments;
 		#endregion
 		
@@ -42,7 +42,7 @@ namespace OpenDental {
 		
 		private void FormMultiAdj_Load(object sender,EventArgs e) {
 			dateAdjustment.Text=DateTime.Today.ToShortDateString();
-			_rigorousAdjustments=Preferences.GetInt(PrefName.RigorousAdjustments);
+			_rigorousAdjustments=Preference.GetInt(PreferenceName.RigorousAdjustments);
 			FillListBoxAdjTypes();
 			FillComboProv();
 			FillComboClinics();
@@ -158,13 +158,13 @@ namespace OpenDental {
 
 		private void FillListBoxAdjTypes() {
 			//Remove hidden adjustment types
-			List<Def> adjCat=Defs.GetCatList((int)DefCat.AdjTypes).ToList().FindAll(x => !x.IsHidden);
+			List<Definition> adjCat= Definition.GetByCategory(DefinitionCategory.AdjTypes);
 			//Positive adjustment types
-			_listAdjPosCats=adjCat.FindAll(x => x.ItemValue=="+");
-			_listAdjPosCats.ForEach(x => listTypePos.Items.Add(x.ItemName));
+			_listAdjPosCats=adjCat.FindAll(x => x.Value=="+");
+			_listAdjPosCats.ForEach(x => listTypePos.Items.Add(x.Description));
 			//Negativate adjustment types
-			_listAdjNegCats=adjCat.FindAll(x => x.ItemValue=="-");
-			_listAdjNegCats.ForEach(x => listTypeNeg.Items.Add(x.ItemName));
+			_listAdjNegCats=adjCat.FindAll(x => x.Value=="-");
+			_listAdjNegCats.ForEach(x => listTypeNeg.Items.Add(x.Description));
 		}
 
 		private void FillComboProv() {
@@ -268,7 +268,7 @@ namespace OpenDental {
 
 		///<summary>Updates a selected row with the user selected values. Returns the new RemAfter value for the passed in procedure.</summary>
 		private MultiAdjEntry UpdateAdjValues(MultiAdjEntry row) {
-			Def selectedAdjType;
+			Definition selectedAdjType;
 			if(listTypePos.SelectedIndex!=-1) {
 				selectedAdjType=_listAdjPosCats[listTypePos.SelectedIndex];
 			}
@@ -296,7 +296,7 @@ namespace OpenDental {
 					selectedClinicNum=((ODBoxItem<Clinic>)comboClinic.SelectedItem).Tag.ClinicNum;
 				}
 			}
-			row.Adj.AdjType=selectedAdjType.DefNum;
+			row.Adj.AdjType=selectedAdjType.Id;
 			row.Adj.ClinicNum=selectedClinicNum;
 			row.Adj.AdjDate=PIn.Date(dateAdjustment.Text);
 			row.Adj.AdjNote=PIn.String(textNote.Text);
@@ -343,7 +343,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please enter a valid date.");
 				return false;
 			}
-			if(PIn.Date(dateAdjustment.Text).Date > DateTime.Today.Date && !Preferences.GetBool(PrefName.FutureTransDatesAllowed)) {
+			if(PIn.Date(dateAdjustment.Text).Date > DateTime.Today.Date && !Preference.GetBool(PreferenceName.FutureTransDatesAllowed)) {
 				MsgBox.Show(this,"Adjustments cannot be made for future dates");
 				return false;
 			}
@@ -360,7 +360,7 @@ namespace OpenDental {
 			foreach(MultiAdjEntry adjRow in listSelectedEntries.FindAll(x => x.Adj!=null)) {
 				UpdateAdjValues(adjRow);
 			}
-			Def selectedAdjType;
+			Definition selectedAdjType;
 			if(listTypePos.SelectedIndex!=-1) {
 				selectedAdjType=_listAdjPosCats[listTypePos.SelectedIndex];
 			}
@@ -369,7 +369,7 @@ namespace OpenDental {
 			}
 			//Create new adjustment
 			Adjustment adjCur=new Adjustment();
-			adjCur.AdjType=selectedAdjType.DefNum;
+			adjCur.AdjType=selectedAdjType.Id;
 			adjCur.AdjDate=PIn.Date(dateAdjustment.Text);
 			adjCur.AdjNote=PIn.String(textNote.Text);
 			adjCur.PatNum=_patCur.PatNum;
@@ -620,7 +620,7 @@ namespace OpenDental {
 			//No matter which constructor is used, the AdjustmentEntryNum will be unique and automatically assigned. 
 			//This is only used for adjustment rows, and is necessary for line item accounting.
 			public long AdjustmentEntryNum=(_adjustmentEntryAutoIncrementValue++);
-			private List<Def> _listAdjDefs=Defs.GetCatList((int)DefCat.AdjTypes).ToList();
+			private List<Definition> _listAdjDefs= Definition.GetByCategory(DefinitionCategory.AdjTypes);
 			///<summary>Stores an adjustment (not in the db yet). If this field is null then this entry is a procedure row, 
 			///otherwise this entry is an adjustment row.</summary>
 			public Adjustment Adj;
@@ -675,13 +675,13 @@ namespace OpenDental {
 				else if(AdjAmtType==AdjAmtType.PercentOfFee) {
 					Adj.AdjAmt=Math.Round((AdjAmtOrPerc/100)*Proc.ProcFee,2);
 				}
-				if((Defs.GetDef(DefCat.AdjTypes,Adj.AdjType)).ItemValue=="-") {//uses the cache
+				if((Defs.GetDef(DefinitionCategory.AdjTypes,Adj.AdjType)).Value=="-") {//uses the cache
 					Adj.AdjAmt=Adj.AdjAmt*-1;
 				}
 			}
 
 			public string GetAdjustmentType(Adjustment adj) {
-				return _listAdjDefs.Find(x => x.DefNum==adj.AdjType)?.ItemName??"";
+				return _listAdjDefs.Find(x => x.Id==adj.AdjType)?.Description??"";
 			}
 
 			public ODGridRow ToGridRow() {

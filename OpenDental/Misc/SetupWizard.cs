@@ -175,7 +175,7 @@ namespace OpenDental
             {
                 get
                 {
-                    if (string.IsNullOrEmpty(Preferences.GetString(PrefName.RegistrationKey)))
+                    if (string.IsNullOrEmpty(Preference.GetString(PreferenceName.RegistrationKey)))
                     {
                         return ODSetupStatus.NotStarted;
                     }
@@ -425,12 +425,12 @@ namespace OpenDental
                 {
                     return false;
                 }
-                if (Defs.GetName(DefCat.ProviderSpecialties, prov.Specialty).ToLower() == "hygienist"
-                    || Defs.GetName(DefCat.ProviderSpecialties, prov.Specialty).ToLower() == "assistant"
-                    || Defs.GetName(DefCat.ProviderSpecialties, prov.Specialty).ToLower() == "labtech"
-                    || Defs.GetName(DefCat.ProviderSpecialties, prov.Specialty).ToLower() == "other"
-                    || Defs.GetName(DefCat.ProviderSpecialties, prov.Specialty).ToLower() == "notes"
-                    || Defs.GetName(DefCat.ProviderSpecialties, prov.Specialty).ToLower() == "none"
+                if (Defs.GetName(DefinitionCategory.ProviderSpecialties, prov.Specialty).ToLower() == "hygienist"
+                    || Defs.GetName(DefinitionCategory.ProviderSpecialties, prov.Specialty).ToLower() == "assistant"
+                    || Defs.GetName(DefinitionCategory.ProviderSpecialties, prov.Specialty).ToLower() == "labtech"
+                    || Defs.GetName(DefinitionCategory.ProviderSpecialties, prov.Specialty).ToLower() == "other"
+                    || Defs.GetName(DefinitionCategory.ProviderSpecialties, prov.Specialty).ToLower() == "notes"
+                    || Defs.GetName(DefinitionCategory.ProviderSpecialties, prov.Specialty).ToLower() == "none"
                     )
                 {
                     return false;
@@ -569,15 +569,15 @@ namespace OpenDental
             {
                 get
                 {
-                    List<Employee> listEmployees = Employees.GetDeepCopy(true);
+                    List<Employee> listEmployees = Employee.All();
                     if (listEmployees.Count == 0)
                     {
                         return ODSetupStatus.NotStarted;
                     }
                     foreach (Employee employee in listEmployees)
                     {
-                        if ((string.IsNullOrEmpty(employee.FName))
-                            || (string.IsNullOrEmpty(employee.LName))
+                        if ((string.IsNullOrEmpty(employee.FirstName))
+                            || (string.IsNullOrEmpty(employee.LastName))
                             )
                         {
                             return ODSetupStatus.NeedsAttention;

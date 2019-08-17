@@ -27,16 +27,16 @@ namespace OpenDental {
 
 		private void FormTimeCardRuleEdit_Load(object sender,EventArgs e) {
 			if(!Preferences.HasClinicsEnabled) {
-				_listEmployees=Employees.GetForTimeCard();
+				_listEmployees=Employee.GetForTimeCard();
 			}
 			else {
-				_listEmployees=Employees.GetEmpsForClinic(Clinics.ClinicNum);
+				_listEmployees=Employee.GetEmpsForClinic(Clinics.ClinicNum);
 			}
 			listEmp.Items.Add(Lan.g(this,"All Employees"));
 			listEmp.SelectedIndex=0;
 			foreach(Employee emp in _listEmployees) {
-				int index=listEmp.Items.Add(emp.FName+" "+emp.LName);
-				if(emp.EmployeeNum==_timeCardRule.EmployeeNum) {
+				int index=listEmp.Items.Add(emp.FirstName+" "+emp.LastName);
+				if(emp.Id==_timeCardRule.EmployeeNum) {
 					listEmp.SelectedIndex=index;
 				}
 			}
@@ -178,7 +178,7 @@ namespace OpenDental {
 				foreach(int index in listEmp.SelectedIndices) {
 					_timeCardRule.EmployeeNum=0;
 					if(index!=0) {//Not 'All'
-						_timeCardRule.EmployeeNum=_listEmployees[index-1].EmployeeNum;//-1 for All
+						_timeCardRule.EmployeeNum=_listEmployees[index-1].Id;//-1 for All
 					}
 					_timeCardRule.OverHoursPerDay=overHoursPerDay;
 					_timeCardRule.AfterTimeOfDay=afterTimeOfDay;
@@ -193,7 +193,7 @@ namespace OpenDental {
 				_timeCardRule.EmployeeNum=0;
 				int index=listEmp.SelectedIndex;
 				if(index!=0) {//Not 'All'
-					_timeCardRule.EmployeeNum=_listEmployees[index-1].EmployeeNum;//-1 for All
+					_timeCardRule.EmployeeNum=_listEmployees[index-1].Id;//-1 for All
 				}
 				_timeCardRule.OverHoursPerDay=overHoursPerDay;
 				_timeCardRule.AfterTimeOfDay=afterTimeOfDay;

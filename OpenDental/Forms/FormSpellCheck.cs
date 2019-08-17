@@ -19,7 +19,7 @@ namespace OpenDental {
 		}
 
 		private void FormSpellCheck_Load(object sender,EventArgs e) {
-			checkBox1.Checked=Preferences.GetBool(PrefName.SpellCheckIsEnabled);
+			checkBox1.Checked=Preference.GetBool(PreferenceName.SpellCheckIsEnabled);
 			FillGrid();
 		}
 
@@ -105,7 +105,7 @@ namespace OpenDental {
 		}
 
 		private void FormSpellCheck_FormClosing(object sender,FormClosingEventArgs e) {
-			if(Prefs.UpdateBool(PrefName.SpellCheckIsEnabled,checkBox1.Checked)) {
+			if(Preference.Update(PreferenceName.SpellCheckIsEnabled,checkBox1.Checked)) {
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 		}

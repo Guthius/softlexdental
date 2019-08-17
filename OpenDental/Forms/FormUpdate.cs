@@ -96,7 +96,7 @@ namespace OpenDental
             {
                 { "product",            "OpenDental" },
                 { "productVersion",     Application.ProductVersion },
-                { "registrationKey",    Preferences.GetString(PrefName.RegistrationKey) }
+                { "registrationKey",    Preference.GetString(PreferenceName.RegistrationKey) }
             };
 
             // Add the list of all enables programs.
@@ -141,17 +141,17 @@ namespace OpenDental
                 Log(Translation.Language.UpdateAttemptingToConnectWebService);
 
                 WebProxy webProxy = null;
-                var webProxyAddress = Preferences.GetString(PrefName.UpdateWebProxyAddress);
+                var webProxyAddress = Preference.GetString(PreferenceName.UpdateWebProxyAddress);
                 if (!string.IsNullOrEmpty(webProxyAddress))
                 {
                     webProxy = new WebProxy(webProxyAddress);
-                    var webProxyUserName = Preferences.GetString(PrefName.UpdateWebProxyUserName);
+                    var webProxyUserName = Preference.GetString(PreferenceName.UpdateWebProxyUserName);
                     if (!string.IsNullOrEmpty(webProxyUserName))
                     {
                         webProxy.Credentials =
                             new NetworkCredential(
                                 webProxyUserName,
-                                Preferences.GetString(PrefName.UpdateWebProxyPassword));
+                                Preference.GetString(PreferenceName.UpdateWebProxyPassword));
                     }
                 }
 
@@ -162,7 +162,7 @@ namespace OpenDental
 
                 var httpClient = new HttpClient(httpClientHandler)
                 {
-                    BaseAddress = new Uri(Preferences.GetString(PrefName.UpdateServerAddress))
+                    BaseAddress = new Uri(Preference.GetString(PreferenceName.UpdateServerAddress))
                 };
 
                 var result = await httpClient.PostAsync("/check", GetPostContent());

@@ -40,11 +40,11 @@ namespace OpenDental {
 			ODGridRow row;
 			int selectedIdx=-1;
 			for(int i=0;i<listDiscountPlans.Count;i++) {
-				Def adjType=Defs.GetDef(DefCat.AdjTypes,listDiscountPlans[i].DefNum);
+				Definition adjType=Defs.GetDef(DefinitionCategory.AdjTypes,listDiscountPlans[i].DefNum);
 				row=new ODGridRow();
 				row.Cells.Add(listDiscountPlans[i].Description);
 				row.Cells.Add(FeeScheds.GetDescription(listDiscountPlans[i].FeeSchedNum));
-				row.Cells.Add((adjType==null) ? "" : adjType.ItemName);
+				row.Cells.Add((adjType==null) ? "" : adjType.Description);
 				row.Cells.Add(listPatientsOnPlan.FindAll(x => x.DiscountPlanNum==listDiscountPlans[i].DiscountPlanNum).Count.ToString());
 				if(checkShowHidden.Checked) {
 					row.Cells.Add(listDiscountPlans[i].IsHidden ? "X" : "");

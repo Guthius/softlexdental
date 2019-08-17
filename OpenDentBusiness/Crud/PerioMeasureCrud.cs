@@ -138,7 +138,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PerioMeasure into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(PerioMeasure perioMeasure,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO periomeasure (";
 			if(!useExistingPK && isRandomKeys) {
 				perioMeasure.PerioMeasureNum=ReplicationServers.GetKeyNoCache("periomeasure","PerioMeasureNum");

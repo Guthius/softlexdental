@@ -18,7 +18,7 @@ namespace OpenDental.User_Controls.SetupWizard
 
         private void FillControls()
         {
-            checkSimple.Checked = Preferences.GetBool(PrefName.EasyHidePrinters);
+            checkSimple.Checked = Preference.GetBool(PreferenceName.EasyHidePrinters);
             IsDone = true;
             SetSimple();
             SetControls(groupPrinter);
@@ -203,7 +203,7 @@ namespace OpenDental.User_Controls.SetupWizard
 
         private void butSetScanner_Click(object sender, EventArgs e)
         {
-            xImageDeviceManager.Obfuscator.ActivateEZTwain();
+            //xImageDeviceManager.Obfuscator.ActivateEZTwain();
             EZTwain.SelectImageSource(this.Handle);
         }
 
@@ -252,7 +252,7 @@ namespace OpenDental.User_Controls.SetupWizard
                 }
             }
 
-            if (checkSimple.Checked && !Preferences.GetBool(PrefName.EasyHidePrinters))
+            if (checkSimple.Checked && !Preference.GetBool(PreferenceName.EasyHidePrinters))
             {
                 //if user clicked the simple option
                 if (!MsgBox.Show("FormSetupWizard", true, "Warning! You have selected the easy view option for printers.  This will clear all printing preferences for all computers.  Are you sure you wish to continue?"))
@@ -268,7 +268,7 @@ namespace OpenDental.User_Controls.SetupWizard
             base.OnControlDone(e);
 
             string compName = SystemInformation.ComputerName;
-            if (checkSimple.Checked && !Preferences.GetBool(PrefName.EasyHidePrinters))
+            if (checkSimple.Checked && !Preference.GetBool(PreferenceName.EasyHidePrinters))
             {
                 Printers.ClearAll();
                 Printers.RefreshCache();
@@ -332,9 +332,9 @@ namespace OpenDental.User_Controls.SetupWizard
                     Printers.PutForSit((PrintSituation)i, compName, printerName, isChecked);
                 }
             DataValid.SetInvalid(InvalidType.Computers);
-            if (checkSimple.Checked != Preferences.GetBool(PrefName.EasyHidePrinters))
+            if (checkSimple.Checked != Preference.GetBool(PreferenceName.EasyHidePrinters))
             {
-                Prefs.UpdateBool(PrefName.EasyHidePrinters, checkSimple.Checked);
+                Preference.Update(PreferenceName.EasyHidePrinters, checkSimple.Checked);
                 DataValid.SetInvalid(InvalidType.Prefs);
             }
             Printers.RefreshCache();//the other computers don't care

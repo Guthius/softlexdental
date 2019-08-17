@@ -35,8 +35,8 @@ namespace OpenDentBusiness
         public static void CreateClaimSnapshot(List<ClaimProc> listClaimProcs, ClaimSnapshotTrigger triggerType, string claimType)
         {
             //No need to check RemotingRole; no call to db.
-            if (!Preferences.GetBool(PrefName.ClaimSnapshotEnabled)
-                || PIn.Enum<ClaimSnapshotTrigger>(Preferences.GetString(PrefName.ClaimSnapshotTriggerType), true) != triggerType)
+            if (!Preference.GetBool(PreferenceName.ClaimSnapshotEnabled)
+                || PIn.Enum<ClaimSnapshotTrigger>(Preference.GetString(PreferenceName.ClaimSnapshotTriggerType), true) != triggerType)
             {
                 return;
             }

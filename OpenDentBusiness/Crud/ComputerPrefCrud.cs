@@ -45,7 +45,7 @@ namespace OpenDentBusiness.Crud{
 				computerPref.ComputerPrefNum        = PIn.Long  (row["ComputerPrefNum"].ToString());
 				computerPref.ComputerName           = PIn.String(row["ComputerName"].ToString());
 				computerPref.GraphicsUseHardware    = PIn.Bool  (row["GraphicsUseHardware"].ToString());
-				computerPref.GraphicsSimple         = (OpenDentBusiness.DrawingMode)PIn.Int(row["GraphicsSimple"].ToString());
+				computerPref.GraphicsSimple         = (OpenDentBusiness.DrawingMode)Convert.ToInt32(row["GraphicsSimple"]);
 				computerPref.SensorType             = PIn.String(row["SensorType"].ToString());
 				computerPref.SensorBinned           = PIn.Bool  (row["SensorBinned"].ToString());
 				computerPref.SensorPort             = PIn.Int   (row["SensorPort"].ToString());
@@ -219,7 +219,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ComputerPref into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(ComputerPref computerPref,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO computerpref (";
 			if(!useExistingPK && isRandomKeys) {
 				computerPref.ComputerPrefNum=ReplicationServers.GetKeyNoCache("computerpref","ComputerPrefNum");

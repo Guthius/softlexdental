@@ -14,7 +14,7 @@ namespace OpenDental {
 	public partial class FormRpBrokenAppointments:ODForm {
 
 		private List<Clinic> _listClinics;
-		private List<Def> _listPosAdjTypes=new List<Def>();
+		private List<Definition> _listPosAdjTypes=new List<Definition>();
 		private List<BrokenApptProcedure> _listBrokenProcOptions=new List<BrokenApptProcedure>();
 		private List<Provider> _listProviders;
 		private bool _hasClinicsEnabled;
@@ -61,14 +61,14 @@ namespace OpenDental {
 					}
 				}
 			}
-			int value=Preferences.GetInt(PrefName.BrokenApptProcedure);
+			int value=Preference.GetInt(PreferenceName.BrokenApptProcedure);
 			if(value==(int)BrokenApptProcedure.None) {//
 				radioProcs.Visible=false;
 			}
 			if(value>0){
 				radioProcs.Checked=true;
 			}
-			else if(Preferences.GetBool(PrefName.BrokenApptAdjustment)) {
+			else if(Preference.GetBool(PreferenceName.BrokenApptAdjustment)) {
 				radioAdj.Checked=true;
 			}
 			else {
@@ -111,7 +111,7 @@ namespace OpenDental {
 				listOptions.SelectionMode=SelectionMode.One;
 				int index=0;
 				_listBrokenProcOptions.Clear();
-				BrokenApptProcedure brokenApptCodeDB=(BrokenApptProcedure)Preferences.GetInt(PrefName.BrokenApptProcedure);
+				BrokenApptProcedure brokenApptCodeDB=(BrokenApptProcedure)Preference.GetInt(PreferenceName.BrokenApptProcedure);
 				switch(brokenApptCodeDB) {
 					case BrokenApptProcedure.None:
 					case BrokenApptProcedure.Missed:
@@ -146,10 +146,10 @@ namespace OpenDental {
 				_listPosAdjTypes.Clear();
 				listOptions.SelectionMode=SelectionMode.MultiSimple;
 				_listPosAdjTypes=Defs.GetPositiveAdjTypes();
-				long brokenApptAdjDefNum=Preferences.GetLong(PrefName.BrokenAppointmentAdjustmentType);
+				long brokenApptAdjDefNum=Preference.GetLong(PreferenceName.BrokenAppointmentAdjustmentType);
 				for(int i=0; i<_listPosAdjTypes.Count;i++) {
-					listOptions.Items.Add(_listPosAdjTypes[i].ItemName);
-					if(_listPosAdjTypes[i].DefNum==brokenApptAdjDefNum) {
+					listOptions.Items.Add(_listPosAdjTypes[i].Description);
+					if(_listPosAdjTypes[i].Id==brokenApptAdjDefNum) {
 						listOptions.SelectedIndices.Add(i);
 					}
 				}
@@ -213,7 +213,7 @@ namespace OpenDental {
 			List<long> listAdjDefNums=new List<long>();
 			if(radioAdj.Checked) {
 				for(int i=0;i<listOptions.SelectedIndices.Count;i++) {
-					listAdjDefNums.Add(_listPosAdjTypes[listOptions.SelectedIndices[i]].DefNum);
+					listAdjDefNums.Add(_listPosAdjTypes[listOptions.SelectedIndices[i]].Id);
 				}
 			}
 			BrokenApptProcedure brokenApptSelection=BrokenApptProcedure.None;

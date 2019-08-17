@@ -609,7 +609,7 @@ namespace OpenDental {
 					try {
 						GroupPermissions.Insert(perm);
 						SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Permission '"+perm.PermType+"' granted to '"
-							+UserGroups.GetGroup(perm.UserGroupNum).Description+"'");
+							+UserGroup.GetById(perm.UserGroupNum).Description+"'");
 					}
 					catch(Exception ex) {
 						MessageBox.Show(ex.Message);
@@ -631,7 +631,7 @@ namespace OpenDental {
 						try {
 							GroupPermissions.Insert(permLimited);
 							SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Permission '"+perm.PermType+"' granted to '"
-								+UserGroups.GetGroup(perm.UserGroupNum).Description+"'");
+								+UserGroup.GetById(perm.UserGroupNum).Description+"'");
 						}
 						catch(Exception ex) {
 							MessageBox.Show(ex.Message);
@@ -644,7 +644,7 @@ namespace OpenDental {
 				try {
 					GroupPermissions.RemovePermission(_listUserGroupNums.First(),(Permissions)_clickedPermNode.Tag);
 					SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Permission '"+_clickedPermNode.Tag+"' revoked from '"
-						+UserGroups.GetGroup(_listUserGroupNums.First()).Description+"'");
+						+UserGroup.GetById(_listUserGroupNums.First()).Description+"'");
 				}
 				catch(Exception ex) {
 					MessageBox.Show(ex.Message);
@@ -663,7 +663,7 @@ namespace OpenDental {
 						try {
 							GroupPermissions.RemovePermission(_listUserGroupNums.First(),x);
 							SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Permission '"+_clickedPermNode.Tag+"' revoked from '"
-								+UserGroups.GetGroup(_listUserGroupNums.First()).Description+"'");
+								+UserGroup.GetById(_listUserGroupNums.First()).Description+"'");
 						}
 						catch(Exception ex) {
 							MessageBox.Show(ex.Message);
@@ -676,7 +676,7 @@ namespace OpenDental {
 				try {
 					GroupPermissions.RemovePermission(_listUserGroupNums.First(),(Permissions)_clickedPermNode.Tag);
 					SecurityLogs.MakeLogEntry(Permissions.SecurityAdmin,0,"Permission '"+_clickedPermNode.Tag+"' revoked from '"
-						+UserGroups.GetGroup(_listUserGroupNums.First()).Description+"'");
+						+UserGroup.GetById(_listUserGroupNums.First()).Description+"'");
 				}
 				catch(Exception ex) {
 					MessageBox.Show(ex.Message);
@@ -684,7 +684,7 @@ namespace OpenDental {
 				}
 			}
 			if((Permissions)_clickedPermNode.Tag==Permissions.AccountProcsQuickAdd) {
-				string programName = Preferences.GetString(PrefName.SoftwareName);
+				string programName = Preference.GetString(PreferenceName.SoftwareName);
 				MsgBox.Show(this,programName+" needs to be restarted on workstations before the changes will take place.");
 			}
 			FillTreePerm();

@@ -21,7 +21,7 @@ namespace OpenDental
         /// </summary>
         void FormAbout_Load(object sender, EventArgs e)
         {
-            string softwareName = Preferences.GetString(PrefName.SoftwareName);
+            string softwareName = Preference.GetString(PreferenceName.SoftwareName);
 
             labelVersion.Text = "Version: " + Application.ProductVersion;
 
@@ -35,7 +35,7 @@ namespace OpenDental
             labelCopyright.Text = softwareName + " Copyright 2003-" + DateTime.Now.ToString("yyyy") + ", Jordan S. Sparks, D.M.D.";
             labelMySQLCopyright.Text = "MySQL - Copyright 1995-" + DateTime.Now.ToString("yyyy") + ", www.mysql.com";
 
-            List<string> serviceList = Computers.GetServiceInfo();
+            List<string> serviceList = Computer.GetServiceInfo();
             labelName.Text = serviceList[2].ToString();
             labelService.Text = serviceList[0].ToString();
             labelMySqlVersion.Text = serviceList[3].ToString();

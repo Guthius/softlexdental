@@ -23,7 +23,7 @@ namespace UnitTests {
 		///in both fee schedules.</summary>
 		[TestMethod]
 		public void FeeSchedTools_CopyFeeSched() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			//Create two fee schedules; from and to
 			long fromSched=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,MethodBase.GetCurrentMethod().Name+"_FROM");
 			long toSched=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,MethodBase.GetCurrentMethod().Name+"_TO");
@@ -43,7 +43,7 @@ namespace UnitTests {
 		///No matter how many instances of Open Dental invoke the same fee schedule action they should never create duplicate fees.</summary>
 		[TestMethod]
 		public void FeeSchedTools_CopyFeeSched_Concurrency() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			//Make sure there are no duplicate fees already present within the database.
 			string dbmResult=DatabaseMaintenances.FeeDeleteDuplicates(true,DbmMode.Check);
 			if(!dbmResult.Trim().EndsWith(": 0")) {
@@ -83,7 +83,7 @@ namespace UnitTests {
 		///the copy fee schedule logic synchronously is preserved OR if parallel threads are reintroduced that they have fixed the bug.</summary>
 		[TestMethod]
 		public void FeeSchedTools_CopyFeeSched_Clinics() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			//Make sure there are no duplicate fees already present within the database.
 			string dbmResult=DatabaseMaintenances.FeeDeleteDuplicates(true,DbmMode.Check);
 			if(!dbmResult.Trim().EndsWith(": 0")) {
@@ -120,7 +120,7 @@ namespace UnitTests {
 		///<summary>Test importing FeeSchedule by copying from one list to another.</summary>
 		[TestMethod]
 		public void FeeSchedTools_Import() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			FeeTestArgs args=CreateManyFees(1,1,1,MethodBase.GetCurrentMethod().Name);
 			FeeCache cache=new FeeCache();
 			List<Fee> listImportedFees = cache.GetListFees(args.EmptyFeeSchedNum,0,0);
@@ -137,7 +137,7 @@ namespace UnitTests {
 		///the correct code nums during the import (intended behavior). </summary>
 		[TestMethod]
 		public void FeeSchedTools_ImportExport() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			FeeTestArgs feeArgs=CreateManyFees(1,1,1,MethodBase.GetCurrentMethod().Name);
 			long exportedSched=feeArgs.ListFeeSchedNums[0];
 			long importedSched=feeArgs.EmptyFeeSchedNum;
@@ -156,7 +156,7 @@ namespace UnitTests {
 		///<summary>Import canada fees from a file.</summary>
 		[TestMethod]
 		public void FeeSchedTools_ImportCanada() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			string canadianCodes=Properties.Resources.canadianprocedurecodes;
 			//If we need to import these procedures codes, do so
 			foreach(string line in canadianCodes.Split(new[] { "\r\n", "\r", "\n" },StringSplitOptions.None)) {
@@ -195,7 +195,7 @@ namespace UnitTests {
 		///<summary>Create a fill a fee schedule, then clear the fee schedule and make sure it is empty.</summary>
 		[TestMethod]
 		public void FeeSchedTools_ClearFeeSchedule() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			FeeTestArgs feeArgs=CreateManyFees(1,1,1,MethodBase.GetCurrentMethod().Name);
 			long feeSchedNum=feeArgs.ListFeeSchedNums[0];
 			Assert.IsTrue(Fees.GetCountByFeeSchedNum(feeSchedNum) > 0);
@@ -210,7 +210,7 @@ namespace UnitTests {
 		///<summary>Create the standard fee schedule and increase by 5% to the nearest penny.</summary>
 		[TestMethod]
 		public void FeeSchedTools_Increase() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			FeeTestArgs args = CreateManyFees(0,0,0,MethodBase.GetCurrentMethod().Name);
 			int percent = 5;
 			FeeCache cache = new FeeCache();
@@ -234,7 +234,7 @@ namespace UnitTests {
 		///from a different clinic and provider combination.</summary>
 		[TestMethod]
 		public void FeeSchedTools_Increase_NonPerfectMatch() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			//Make sure that there are more than six clinics
 			ClinicT.ClearClinicTable();
 			int clinicCount=2;
@@ -285,8 +285,8 @@ namespace UnitTests {
 		///<summary>Attach some fees to procedures, change half the fees and call Global Update Fees.</summary>
 		[TestMethod]
 		public void FeeSchedTools_GlobalUpdateFees() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
-			Prefs.UpdateBool(PrefName.MedicalFeeUsedForNewProcs,false);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
+			Prefs.UpdateBool(PreferenceName.MedicalFeeUsedForNewProcs,false);
 			Prefs.RefreshCache();
 			string suffix=MethodBase.GetCurrentMethod().Name;
 			string procStr="D0120";
@@ -320,7 +320,7 @@ namespace UnitTests {
 		///<summary>Create a single procedure, and call GlobalUpdateWriteoffs.</summary>
 		[TestMethod]
 		public void FeeSchedTools_GlobalUpdateWriteoffEstimates() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			string suffix=MethodBase.GetCurrentMethod().Name;
 			string procStr="D0145";
 			double procFee=100;

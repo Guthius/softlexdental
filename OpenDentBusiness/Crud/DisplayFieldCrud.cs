@@ -132,7 +132,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one DisplayField into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(DisplayField displayField,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO displayfield (";
 			if(!useExistingPK && isRandomKeys) {
 				displayField.DisplayFieldNum=ReplicationServers.GetKeyNoCache("displayfield","DisplayFieldNum");

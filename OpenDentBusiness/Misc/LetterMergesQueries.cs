@@ -139,8 +139,8 @@ namespace OpenDentBusiness
                 + "LEFT JOIN treatplan ON patient.PatNum=treatplan.PatNum AND DateTP=@maxTpDate "
                 + "LEFT JOIN patient patResp ON treatplan.ResponsParty=patResp.PatNum "
                 + "LEFT JOIN recall ON recall.PatNum=patient.PatNum "
-                    + "AND (recall.RecallTypeNum=" + POut.Long(Preferences.GetLong(PrefName.RecallTypeSpecialProphy))
-                    + " OR recall.RecallTypeNum=" + POut.Long(Preferences.GetLong(PrefName.RecallTypeSpecialPerio)) + ") "
+                    + "AND (recall.RecallTypeNum=" + POut.Long(Preference.GetLong(PreferenceName.RecallTypeSpecialProphy))
+                    + " OR recall.RecallTypeNum=" + POut.Long(Preference.GetLong(PreferenceName.RecallTypeSpecialPerio)) + ") "
                 + "LEFT JOIN patplan ON patplan.PatNum=patient.PatNum AND Ordinal=1 "
                 + "LEFT JOIN inssub ON patplan.InsSubNum=inssub.InsSubNum "
                 + "LEFT JOIN insplan ON inssub.PlanNum=insplan.PlanNum "

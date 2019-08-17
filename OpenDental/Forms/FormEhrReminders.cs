@@ -40,16 +40,16 @@ namespace OpenDental {
 				row=new ODGridRow();
 				switch(listReminders[i].ReminderCriterion) {
 					case EhrCriterion.Problem:
-						DiseaseDef def=DiseaseDefs.GetItem(listReminders[i].CriterionFK);
-						row.Cells.Add("Problem ="+def.ICD9Code+" "+def.DiseaseName);
+						DiseaseDef def=DiseaseDef.GetById(listReminders[i].CriterionFK);
+						row.Cells.Add("Problem ="+def.ICD9Code+" "+def.Name);
 						break;
 					case EhrCriterion.Medication:
-						Medication tempMed = Medications.GetMedication(listReminders[i].CriterionFK);
-						if(tempMed.MedicationNum==tempMed.GenericNum) {//handle generic medication names.
-							row.Cells.Add("Medication = "+tempMed.MedName);
+						Medication tempMed = Medication.GetById(listReminders[i].CriterionFK);
+						if(!tempMed.GenericId.HasValue) {//handle generic medication names.
+							row.Cells.Add("Medication = "+tempMed.Description);
 						}
 						else {
-							row.Cells.Add("Medication = "+tempMed.MedName+" ("+Medications.GetGenericName(tempMed.GenericNum)+")");
+							row.Cells.Add("Medication = "+tempMed.Description+" ("+ Medication.GetGenericName(tempMed.GenericId.Value)+")");
 						}
 						break;
 					case EhrCriterion.Allergy:

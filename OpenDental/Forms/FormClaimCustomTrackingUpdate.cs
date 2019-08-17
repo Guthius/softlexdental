@@ -40,18 +40,18 @@ namespace OpenDental {
 		private void FormClaimCustomTrackingUpdate_Load(object sender,EventArgs e) {
 			comboCustomTracking.Items.Clear();
 			int hasNone=0; //used to offset the index in the loop when none is an option for the combo box.
-			if(!Preferences.GetBool(PrefName.ClaimTrackingStatusExcludesNone)) {
+			if(!Preference.GetBool(PreferenceName.ClaimTrackingStatusExcludesNone)) {
 				//None is allowed as an option
-				comboCustomTracking.Items.Add(new ODBoxItem<Def>(Lan.g(this,"None"),new Def() {ItemValue="",DefNum=0}));
+				comboCustomTracking.Items.Add(new ODBoxItem<Definition>(Lan.g(this,"None"),new Definition() {Value=""}));
 				comboCustomTracking.SelectedIndex=0;
 				hasNone=1;
 			}
-			Def[] arrayCustomTrackingDefs=Defs.GetDefsForCategory(DefCat.ClaimCustomTracking,true).ToArray();
+			Definition[] arrayCustomTrackingDefs=Definition.GetByCategory(DefinitionCategory.ClaimCustomTracking).ToArray();
 			//When creating a new ClaimTracking this is null, otherwise list contains 1 given ClaimTracking to edit.
 			ClaimTracking claimTrack=ListNewClaimTracks.FirstOrDefault();
 			for(int i=0;i<arrayCustomTrackingDefs.Length;i++) { 
-				comboCustomTracking.Items.Add(new ODBoxItem<Def>(arrayCustomTrackingDefs[i].ItemName,arrayCustomTrackingDefs[i]));
-				if(claimTrack?.TrackingDefNum==arrayCustomTrackingDefs[i].DefNum) {
+				comboCustomTracking.Items.Add(new ODBoxItem<Definition>(arrayCustomTrackingDefs[i].Description,arrayCustomTrackingDefs[i]));
+				if(claimTrack?.TrackingDefNum==arrayCustomTrackingDefs[i].Id) {
 					comboCustomTracking.SelectedIndex=i+hasNone;//adding 1 to the index because we have added a 'none' option above
 				}
 			}
@@ -70,10 +70,10 @@ namespace OpenDental {
 		}
 
 		private void FillComboErrorCode() {
-			Def[] arrayErrorCodeDefs = Defs.GetDefsForCategory(DefCat.ClaimErrorCode,true).ToArray();
+			Definition[] arrayErrorCodeDefs = Definition.GetByCategory(DefinitionCategory.ClaimErrorCode).ToArray();
 			comboErrorCode.Items.Clear();
 			//Add "none" option.
-			comboErrorCode.Items.Add(new ODBoxItem<Def>(Lan.g(this,"None"),new Def() {ItemValue="",DefNum=0}));
+			comboErrorCode.Items.Add(new ODBoxItem<Definition>(Lan.g(this,"None"),new Definition() {Value=""}));
 			comboErrorCode.SelectedIndex=0;
 			if(arrayErrorCodeDefs.Length==0) {
 				//if the list is empty, then disable the comboBox.
@@ -84,19 +84,19 @@ namespace OpenDental {
 			ClaimTracking claimTrack=ListNewClaimTracks.FirstOrDefault();
 			for(int i=0;i<arrayErrorCodeDefs.Length;i++) {
 				//hooray for using new ODBoxItems!
-				comboErrorCode.Items.Add(new ODBoxItem<Def>(arrayErrorCodeDefs[i].ItemName,arrayErrorCodeDefs[i]));
-				if(claimTrack?.TrackingErrorDefNum==arrayErrorCodeDefs[i].DefNum) {
+				comboErrorCode.Items.Add(new ODBoxItem<Definition>(arrayErrorCodeDefs[i].Description,arrayErrorCodeDefs[i]));
+				if(claimTrack?.TrackingErrorDefNum==arrayErrorCodeDefs[i].Id) {
 					comboErrorCode.SelectedIndex=i+1;//adding 1 to the index because we have added a 'none' option above
 				}
 			}
 		}
 
 		private void comboErrorCode_SelectionChangeCommitted(object sender,EventArgs e) {
-			if((!comboErrorCode.Enabled) || ((ODBoxItem<Def>)comboErrorCode.SelectedItem).Tag==null) {
+			if((!comboErrorCode.Enabled) || ((ODBoxItem<Definition>)comboErrorCode.SelectedItem).Tag==null) {
 				textErrorDesc.Text="";
 			}
 			else {
-				textErrorDesc.Text=((ODBoxItem<Def>)comboErrorCode.SelectedItem).Tag.ItemValue.ToString();
+				textErrorDesc.Text=((ODBoxItem<Definition>)comboErrorCode.SelectedItem).Tag.Value.ToString();
 			}	
 		}
 
@@ -106,23 +106,23 @@ namespace OpenDental {
 				MsgBox.Show(this,"You must specify a Custom Track Status.");
 				return;
 			}
-			if(Preferences.GetBool(PrefName.ClaimTrackingRequiresError) 
-				&& ((ODBoxItem<Def>)comboErrorCode.SelectedItem).Tag == null 
+			if(Preference.GetBool(PreferenceName.ClaimTrackingRequiresError) 
+				&& ((ODBoxItem<Definition>)comboErrorCode.SelectedItem).Tag == null 
 				&& comboErrorCode.Enabled )
 			{
 				MsgBox.Show(this,"You must specify an error code."); //Do they have to specify an error code even if they set the status to None?
 				return;
 			}
-			Def customTrackingDef=((ODBoxItem<Def>)comboCustomTracking.SelectedItem).Tag;
-			if(customTrackingDef.DefNum==0) {
+			Definition customTrackingDef=((ODBoxItem<Definition>)comboCustomTracking.SelectedItem).Tag;
+			if(customTrackingDef.Id==0) {
 				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Setting the status to none will disable filtering in the Outstanding Claims Report."
 						+"  Do you wish to set the status of this claim to none?")) {
 					return;
 				}
 			}
-			Def errorCodeDef=((ODBoxItem<Def>)comboErrorCode.SelectedItem).Tag;
+			Definition errorCodeDef=((ODBoxItem<Definition>)comboErrorCode.SelectedItem).Tag;
 			for(int i=0;i<_listClaims.Count;i++) { //when not called from FormRpOutstandingIns, this should only have one claim.
-				_listClaims[i].CustomTracking=customTrackingDef.DefNum;
+				_listClaims[i].CustomTracking=customTrackingDef.Id;
 				Claims.Update(_listClaims[i]);
 				ClaimTracking trackCur=ListNewClaimTracks[i];
 				if(trackCur==null) {
@@ -130,8 +130,8 @@ namespace OpenDental {
 					trackCur.ClaimNum=_listClaims[i].ClaimNum;
 				}
 				trackCur.Note=textNotes.Text;
-				trackCur.TrackingDefNum=customTrackingDef.DefNum;
-				trackCur.TrackingErrorDefNum=errorCodeDef.DefNum;
+				trackCur.TrackingDefNum=customTrackingDef.Id;
+				trackCur.TrackingErrorDefNum=errorCodeDef.Id;
 				trackCur.UserNum=Security.CurUser.UserNum;
 				if(trackCur.ClaimTrackingNum==0) { //new claim tracking status.
 					ClaimTrackings.Insert(trackCur);

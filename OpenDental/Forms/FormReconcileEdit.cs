@@ -31,7 +31,7 @@ namespace OpenDental{
 		private Label labelSum;
 		private TextBox textSum;
 		private CheckBox checkLocked;
-		private Reconcile ReconcileCur;
+		private Reconciliation ReconcileCur;
 		private List <JournalEntry> JournalList;
 		private OpenDental.UI.Button butDelete;
 		private TextBox textFindAmount;
@@ -43,7 +43,7 @@ namespace OpenDental{
 		public bool IsNew;
 
 		///<summary></summary>
-		public FormReconcileEdit(Reconcile reconcileCur)
+		public FormReconcileEdit(Reconciliation reconcileCur)
 		{
 			//
 			// Required for Windows Form Designer support
@@ -371,13 +371,13 @@ namespace OpenDental{
 		#endregion
 
 		private void FormReconcileEdit_Load(object sender,EventArgs e) {
-			textDate.Text=ReconcileCur.DateReconcile.ToShortDateString();
-			checkLocked.Checked=ReconcileCur.IsLocked;
-			textStart.Text=ReconcileCur.StartingBal.ToString("n");
-			textEnd.Text=ReconcileCur.EndingBal.ToString("n");
-			textTarget.Text=(ReconcileCur.EndingBal-ReconcileCur.StartingBal).ToString("n");
-			bool includeUncleared=!ReconcileCur.IsLocked;
-			JournalList=JournalEntries.GetForReconcile(ReconcileCur.AccountNum,includeUncleared,ReconcileCur.ReconcileNum);
+			textDate.Text=ReconcileCur.ReconciliationDate.Value.ToShortDateString();
+			checkLocked.Checked=ReconcileCur.Locked;
+			textStart.Text=ReconcileCur.StartBalance.ToString("n");
+			textEnd.Text=ReconcileCur.EndBalance.ToString("n");
+			textTarget.Text=(ReconcileCur.EndBalance-ReconcileCur.StartBalance).ToString("n");
+			bool includeUncleared=!ReconcileCur.Locked;
+			JournalList=JournalEntries.GetForReconcile(ReconcileCur.AccountId,includeUncleared,ReconcileCur.Id);
 			FillGrid();
 		}
 
@@ -454,7 +454,7 @@ namespace OpenDental{
 				return;
 			}
 			if(JournalList[e.Row].ReconcileNum==0){
-				JournalList[e.Row].ReconcileNum=ReconcileCur.ReconcileNum;
+				JournalList[e.Row].ReconcileNum=ReconcileCur.Id;
 			}
 			else{
 				JournalList[e.Row].ReconcileNum=0;
@@ -495,18 +495,18 @@ namespace OpenDental{
 			}
 			SaveList();
 			bool includeUncleared=!checkLocked.Checked;
-			JournalList=JournalEntries.GetForReconcile(ReconcileCur.AccountNum,includeUncleared,ReconcileCur.ReconcileNum);
+			JournalList=JournalEntries.GetForReconcile(ReconcileCur.AccountId,includeUncleared,ReconcileCur.Id);
 			FillGrid();
 		}
 
 		///<summary>Saves all changes to JournalList to database.  Can only be called once when closing form.</summary>
 		private void SaveList(){
-			JournalEntries.SaveList(JournalList,ReconcileCur.ReconcileNum);
+			JournalEntries.SaveList(JournalList,ReconcileCur.Id);
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
 			try{
-				Reconciles.Delete(ReconcileCur);
+				Reconciliation.Delete(ReconcileCur);
 				DialogResult=DialogResult.OK;
 			}
 			catch(ApplicationException ex){
@@ -522,11 +522,11 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			ReconcileCur.DateReconcile=PIn.Date(textDate.Text);
-			ReconcileCur.StartingBal=PIn.Double(textStart.Text);
-			ReconcileCur.EndingBal=PIn.Double(textEnd.Text);
-			ReconcileCur.IsLocked=checkLocked.Checked;
-			Reconciles.Update(ReconcileCur);
+			ReconcileCur.ReconciliationDate=PIn.Date(textDate.Text);
+			ReconcileCur.StartBalance=PIn.Double(textStart.Text);
+			ReconcileCur.EndBalance=PIn.Double(textEnd.Text);
+			ReconcileCur.Locked=checkLocked.Checked;
+            Reconciliation.Update(ReconcileCur);
 			SaveList();
 			DialogResult=DialogResult.OK;
 		}
@@ -544,7 +544,7 @@ namespace OpenDental{
 					JournalList[i].ReconcileNum=0;
 				}
 				SaveList();//detaches all journal entries.
-				Reconciles.Delete(ReconcileCur);
+                Reconciliation.Delete(ReconcileCur);
 			}
 		}
 
@@ -627,13 +627,13 @@ namespace OpenDental{
 			par.Format.Alignment=ParagraphAlignment.Center;
 			par.AddFormattedText(Lan.g(this,"RECONCILE"),totalFontx);
 			par.AddLineBreak();
-			text=Account.GetAccount(ReconcileCur.AccountNum).Description.ToUpper();
+			text=Account.GetById(ReconcileCur.AccountId).Description.ToUpper();
 			par.AddFormattedText(text,totalFontx);
 			par.AddLineBreak();
-			text=Preferences.GetString(PrefName.PracticeTitle);
+			text=Preference.GetString(PreferenceName.PracticeTitle);
 			par.AddText(text);
 			par.AddLineBreak();
-			text=Preferences.GetString(PrefName.PracticePhone);
+			text=Preference.GetString(PreferenceName.PracticePhone);
 			if(text.Length==10&&Application.CurrentCulture.Name=="en-US") {
 				text="("+text.Substring(0,3)+")"+text.Substring(3,3)+"-"+text.Substring(6);
 			}

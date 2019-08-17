@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Reactivation into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(Reactivation reactivation,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO reactivation (";
 			if(!useExistingPK && isRandomKeys) {
 				reactivation.ReactivationNum=ReplicationServers.GetKeyNoCache("reactivation","ReactivationNum");

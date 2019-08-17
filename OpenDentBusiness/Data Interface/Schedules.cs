@@ -185,10 +185,10 @@ namespace OpenDentBusiness
             List<long> listOpNums = ApptViewItems.GetOpsForView(apptViewNum);
             List<Schedule> listSchedulesToCopy = Schedules.RefreshPeriodBlockouts(dateCopyStart, dateCopyEnd, listOpNums);
             //Build a list of blockouts that can't be Cut/Copy/Pasted
-            List<Def> listUserBlockoutDefs = Defs.GetDefsForCategory(DefCat.BlockoutTypes, true)
-                .FindAll(x => x.ItemValue.Contains(BlockoutType.DontCopy.GetDescription()));
+            List<Definition> listUserBlockoutDefs = Definition.GetByCategory(DefinitionCategory.BlockoutTypes)
+                .FindAll(x => x.Value.Contains(BlockoutType.DontCopy.GetDescription()));
             //No SchedList only contains blockouts that are NOT marked "Do not Cut/Copy/Paste"
-            listSchedulesToCopy.RemoveAll(x => listUserBlockoutDefs.Any(y => y.DefNum == x.BlockoutType));
+            listSchedulesToCopy.RemoveAll(x => listUserBlockoutDefs.Any(y => y.Id == x.BlockoutType));
             int weekDelta = 0;
             if (isWeek)
             {
@@ -293,7 +293,7 @@ namespace OpenDentBusiness
             }
             else
             {
-                logText += Lans.g("Schedule", "Blockout of type") + " " + Defs.GetName(DefCat.BlockoutTypes, blockout.BlockoutType) + " ";
+                logText += Lans.g("Schedule", "Blockout of type") + " " + Defs.GetName(DefinitionCategory.BlockoutTypes, blockout.BlockoutType) + " ";
             }
             switch (action)
             {
@@ -573,9 +573,9 @@ namespace OpenDentBusiness
             List<long> listBlockoutTypeDefNums = new List<long>();
             //get a list of blockout types that are set to Do Not Schedule so we can filter them out later. 
             //(The list of blockouts we don't want to show)
-            listBlockoutTypeDefNums = Defs.GetDefsForCategory(DefCat.BlockoutTypes, true)
-                .FindAll(x => x.ItemValue.Contains(BlockoutType.NoSchedule.GetDescription()))
-                .Select(x => x.DefNum).ToList();
+            listBlockoutTypeDefNums = Definition.GetByCategory(DefinitionCategory.BlockoutTypes)
+                .FindAll(x => x.Value.Contains(BlockoutType.NoSchedule.GetDescription()))
+                .Select(x => x.Id).ToList();
             //add the blockoutTypes that we specifically want to search for to the list so they will also be returned, will be 0 if not searching blockouts. 
             //(The list of blockout scheds we want to show)
             listBlockoutTypeDefNums.Add(blockoutType);
@@ -767,9 +767,9 @@ namespace OpenDentBusiness
         public static bool IsAppointmentBlocking(long defNum)
         {
             //No need to check RemotingRole; no call to db.
-            return Defs.GetDefsForCategory(DefCat.BlockoutTypes, true)
-                .FindAll(x => x.ItemValue.Contains(BlockoutType.NoSchedule.GetDescription()))
-                .Select(x => x.DefNum).ToList().Contains(defNum);
+            return Definition.GetByCategory(DefinitionCategory.BlockoutTypes)
+                .FindAll(x => x.Value.Contains(BlockoutType.NoSchedule.GetDescription()))
+                .Select(x => x.Id).ToList().Contains(defNum);
         }
 
         ///<summary>Delete an invalid schedule.  Insert an invalid schedule signalod when hasSignal=true.</summary>
@@ -877,7 +877,7 @@ namespace OpenDentBusiness
                 }
                 else
                 {//op is either a hygiene op with no hygienist set or not a hygiene op with no provider set
-                    if (schedCur.ProvNum == Preferences.GetLong(PrefName.ScheduleProvUnassigned))
+                    if (schedCur.ProvNum == Preference.GetLong(PreferenceName.ScheduleProvUnassigned))
                     {//use the provider for unassigned ops
                         retVal.Add(schedCur.Copy());
                     }
@@ -1382,14 +1382,14 @@ namespace OpenDentBusiness
             List<Operatory> listOperatories = new List<Operatory>();
             if (isRecall)
             {
-                listBlockoutTypesToIgnore = Preferences.GetString(PrefName.WebSchedRecallIgnoreBlockoutTypes)
+                listBlockoutTypesToIgnore = Preference.GetString(PreferenceName.WebSchedRecallIgnoreBlockoutTypes)
                     .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(x => PIn.Long(x)).ToList();
                 listOperatories = Operatories.GetOpsForWebSched();
             }
             else
             {
-                listBlockoutTypesToIgnore = Preferences.GetString(PrefName.WebSchedNewPatApptIgnoreBlockoutTypes)
+                listBlockoutTypesToIgnore = Preference.GetString(PreferenceName.WebSchedNewPatApptIgnoreBlockoutTypes)
                     .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(x => PIn.Long(x)).ToList();
                 //Get all of the operatory nums for operatories that are New Pat ready.
@@ -1400,9 +1400,9 @@ namespace OpenDentBusiness
                 }
             }
             //Get all blockout types that are not ignored in order to tell GetSchedulesHelper() which blockouts we need to know about.
-            listBlockoutTypeDefNums = Defs.GetDefsForCategory(DefCat.BlockoutTypes)
-                    .FindAll(x => !x.DefNum.In(listBlockoutTypesToIgnore))//listBlockoutTypesToIgnore contains a list of blockouts that can be scheduled on.
-                    .Select(x => x.DefNum).ToList();
+            listBlockoutTypeDefNums = Definition.GetByCategory(DefinitionCategory.BlockoutTypes)
+                    .FindAll(x => !x.Id.In(listBlockoutTypesToIgnore))//listBlockoutTypesToIgnore contains a list of blockouts that can be scheduled on.
+                    .Select(x => x.Id).ToList();
             if (!listBlockoutTypeDefNums.Contains(0))
             {
                 listBlockoutTypeDefNums.Add(0);//Non-blockouts must always be considered.
@@ -1735,26 +1735,26 @@ namespace OpenDentBusiness
                 return table;
             }
             //Consider re-writing to use employee cache
-            string command = "SELECT employee.EmployeeNum,StartTime,StopTime,FName,Note,schedule.ScheduleNum,LName "
-                + "FROM employee "
-                + "INNER JOIN schedule ON schedule.EmployeeNum=employee.EmployeeNum "
+            string command = "SELECT employees.id,StartTime,StopTime,firstname,Note,schedule.ScheduleNum,lastname "
+                + "FROM employees "
+                + "INNER JOIN schedule ON schedule.EmployeeNum=employees.id "
                 + "WHERE SchedType=" + POut.Int((int)ScheduleType.Employee) + " "
                 + "AND SchedDate=" + POut.Date(dateStart) + " "
                 + "AND StopTime>'00:00:00' "//We want to ignore invalid schedules, such as Provider/Employee notes.
-                + "AND employee.IsHidden=0 ";
+                + "AND employees.hidden=0 ";
             if (Preferences.HasClinicsEnabled)
             {//Using clinics.
-                List<Employee> listEmps = Employees.GetEmpsForClinic(clinicNum);
+                List<Employee> listEmps = Employee.GetEmpsForClinic(clinicNum);
                 if (listEmps.Count == 0)
                 {
                     return table;
                 }
-                command += "AND employee.EmployeeNum IN (" + string.Join(",", listEmps.Select(x => x.EmployeeNum)) + ") ";
+                command += "AND employees.id IN (" + string.Join(",", listEmps.Select(x => x.Id)) + ") ";
             }
             command += "GROUP BY schedule.ScheduleNum ";
 
             //Sort by Emp num so that sort is deterministic
-            command += "ORDER BY FName,LName,employee.EmployeeNum,StartTime";//order by FName for display, LName and EmployeeNum for emps with same FName
+            command += "ORDER BY firstname,lastname,employees.id,StartTime";//order by FName for display, LName and EmployeeNum for emps with same FName
             DataTable raw = Db.GetTable(command);
             DataRow row;
             DateTime startTime;
@@ -1763,9 +1763,9 @@ namespace OpenDentBusiness
             {
                 row = table.NewRow();
                 row["EmployeeNum"] = rawRow["EmployeeNum"].ToString();
-                if (table.Rows.Count == 0 || rawRow["EmployeeNum"].ToString() != table.Rows[table.Rows.Count - 1]["EmployeeNum"].ToString())
+                if (table.Rows.Count == 0 || rawRow["id"].ToString() != table.Rows[table.Rows.Count - 1]["id"].ToString())
                 {
-                    row["empName"] = rawRow["FName"].ToString();
+                    row["empName"] = rawRow["firstname"].ToString();
                 }
                 startTime = PIn.DateT(rawRow["StartTime"].ToString());
                 stopTime = PIn.DateT(rawRow["StopTime"].ToString());
@@ -1896,10 +1896,10 @@ namespace OpenDentBusiness
         }
 
         ///<summary>True if this blockout is not marked 'Do not schedule'.</summary>
-        public static bool CanScheduleInBlockout(long blockoutType, List<Def> listDefs = null)
+        public static bool CanScheduleInBlockout(long blockoutType, List<Definition> listDefs = null)
         {
-            Def defBlockoutType = Defs.GetDef(DefCat.BlockoutTypes, blockoutType, listDefs);
-            if (defBlockoutType.ItemValue.Contains(BlockoutType.NoSchedule.GetDescription()))
+            Definition defBlockoutType = Defs.GetDef(DefinitionCategory.BlockoutTypes, blockoutType, listDefs);
+            if (defBlockoutType.Value.Contains(BlockoutType.NoSchedule.GetDescription()))
             {
                 return false;
             }

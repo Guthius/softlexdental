@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one AutomationCondition into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(AutomationCondition automationCondition,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO automationcondition (";
 			if(!useExistingPK && isRandomKeys) {
 				automationCondition.AutomationConditionNum=ReplicationServers.GetKeyNoCache("automationcondition","AutomationConditionNum");

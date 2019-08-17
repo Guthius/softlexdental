@@ -26,7 +26,7 @@ namespace OpenDental {
 			foreach(Adjustment adjust in listAdjusts) {
 				_listAdjusts.Add(new AccountEntry(adjust));
 			}
-			_listSplitsForAdjusts=PaySplits.GetForAdjustments(listAdjusts.Select(x => x.AdjNum).ToList());
+			_listSplitsForAdjusts=PaySplits.GetForAdjustments(listAdjusts.Select(x => x.Id).ToList());
 			foreach(AccountEntry entry in _listAdjusts) {
 				//Figure out how much each adjustment has left, not counting this payment.
 				entry.AmountStart-=(decimal)Adjustments.GetAmtAllocated(entry.PriKey,PayNumCur,_listSplitsForAdjusts.FindAll(x => x.AdjNum==entry.PriKey));

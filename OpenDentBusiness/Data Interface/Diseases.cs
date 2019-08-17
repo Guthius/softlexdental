@@ -57,7 +57,7 @@ namespace OpenDentBusiness
                 return new List<long>();
             }
             string command = "SELECT DISTINCT PatNum FROM disease WHERE PatNum IN (" + string.Join(",", listPatNums) + ") "
-                + "AND disease.DiseaseDefNum != " + POut.Long(Preferences.GetLong(PrefName.ProblemsIndicateNone));
+                + "AND disease.DiseaseDefNum != " + POut.Long(Preference.GetLong(PreferenceName.ProblemsIndicateNone));
             return Db.GetListLong(command);
         }
 

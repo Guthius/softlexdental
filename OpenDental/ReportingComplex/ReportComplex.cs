@@ -87,7 +87,7 @@ namespace OpenDental.ReportingComplex
                         ODEventType.ReportComplex, 
                         typeof(ReportComplexEvent), 
                         startingMessage: "Running Report Query...", 
-                        hasHistory: Preferences.GetBool(PrefName.ReportsShowHistory));
+                        hasHistory: Preference.GetBool(PreferenceName.ReportsShowHistory));
             }
 
             graphics = Graphics.FromImage(new Bitmap(1, 1));
@@ -438,7 +438,7 @@ namespace OpenDental.ReportingComplex
         /// <summary>
         /// Overload for ValueKind defCat.
         /// </summary>
-        public void AddParameter(string myName, FieldValueType myValueType, ArrayList myDefaultValues, string myPromptingText, string mySnippet, DefCat myDefCategory)
+        public void AddParameter(string myName, FieldValueType myValueType, ArrayList myDefaultValues, string myPromptingText, string mySnippet, DefinitionCategory myDefCategory)
         {
             ParameterFields.Add(new ParameterField(myName, myValueType, myDefaultValues, myPromptingText, mySnippet, myDefCategory));
         }

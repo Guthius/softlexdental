@@ -126,7 +126,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ToothInitial into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(ToothInitial toothInitial,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO toothinitial (";
 			if(!useExistingPK && isRandomKeys) {
 				toothInitial.ToothInitialNum=ReplicationServers.GetKeyNoCache("toothinitial","ToothInitialNum");

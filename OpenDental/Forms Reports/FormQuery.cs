@@ -620,7 +620,7 @@ namespace OpenDental{
 				panelZoom.Visible=true;
 				PrintReport(true);
 				labelTotPages.Text="/ "+_totalPages.ToString();
-				if(Preferences.GetBool(PrefName.FuchsOptionsOn)) {
+				if(Preference.GetBool(PreferenceName.FuchsOptionsOn)) {
 					butFullPage.Visible = true;
 					butZoomIn.Visible = false;
 					printPreviewControl2.Zoom = 1;
@@ -645,8 +645,8 @@ namespace OpenDental{
 				//considered safe to run.
 				SubmitQueryThreaded(true);
 			}
-			if(string.IsNullOrWhiteSpace(Preferences.GetString(PrefName.ReportingServerDbName)) 
-				|| string.IsNullOrWhiteSpace(Preferences.GetString(PrefName.ReportingServerCompName))) {
+			if(string.IsNullOrWhiteSpace(Preference.GetString(PreferenceName.ReportingServerDbName)) 
+				|| string.IsNullOrWhiteSpace(Preference.GetString(PreferenceName.ReportingServerCompName))) {
 				checkReportServer.Visible=false;
 			}
 			else {//default to report server when one is set up.
@@ -757,7 +757,7 @@ namespace OpenDental{
 			}
 			_reportSimpleGrid.Title=textTitle.Text;
 			_reportSimpleGrid.SubTitle.Clear();
-			_reportSimpleGrid.SubTitle.Add(Preferences.GetString(PrefName.PracticeTitle));
+			_reportSimpleGrid.SubTitle.Add(Preference.GetString(PreferenceName.PracticeTitle));
 			for(int iCol = 0;iCol<_reportSimpleGrid.TableQ.Columns.Count;iCol++) {
 				_reportSimpleGrid.ColCaption[iCol]=_reportSimpleGrid.TableQ.Columns[iCol].Caption;
 				//again, I don't know why this would fail, so here's a check:
@@ -1003,10 +1003,10 @@ namespace OpenDental{
 						case "temptotaltime":
 						case "tempreghrs":
 						case "tempovertime":
-							if(Preferences.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon)) {
+							if(Preference.GetBool(PreferenceName.TimeCardsUseDecimalInsteadOfColon)) {
 								tableOut.Rows[i][j]=PIn.Time(tableOut.Rows[i][j].ToString()).TotalHours.ToString("n");
 							}
-							else if(Preferences.GetBool(PrefName.TimeCardShowSeconds)) {//Colon format with seconds
+							else if(Preference.GetBool(PreferenceName.TimeCardShowSeconds)) {//Colon format with seconds
 								tableOut.Rows[i][j]=PIn.Time(tableOut.Rows[i][j].ToString()).ToStringHmmss();
 							}
 							else {//Colon format without seconds
@@ -1052,23 +1052,23 @@ namespace OpenDental{
 						//definitions:
 						case "adjtype":
 							tableOut.Rows[i][j]
-								=Defs.GetName(DefCat.AdjTypes,PIn.Long(tableOut.Rows[i][j].ToString()));
+								=Defs.GetName(DefinitionCategory.AdjTypes,PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						case "confirmed":
 							tableOut.Rows[i][j]
-								=Defs.GetValue(DefCat.ApptConfirmed,PIn.Long(tableOut.Rows[i][j].ToString()));
+								=Defs.GetValue(DefinitionCategory.ApptConfirmed,PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						case "dx":
 							tableOut.Rows[i][j]
-								=Defs.GetName(DefCat.Diagnosis,PIn.Long(tableOut.Rows[i][j].ToString()));
+								=Defs.GetName(DefinitionCategory.Diagnosis,PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						case "discounttype":
 							tableOut.Rows[i][j]
-								=Defs.GetName(DefCat.DiscountTypes,PIn.Long(tableOut.Rows[i][j].ToString()));
+								=Defs.GetName(DefinitionCategory.DiscountTypes,PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						case "doccategory":
 							tableOut.Rows[i][j]
-								=Defs.GetName(DefCat.ImageCats,PIn.Long(tableOut.Rows[i][j].ToString()));
+								=Defs.GetName(DefinitionCategory.ImageCats,PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						case "op":
 							tableOut.Rows[i][j]
@@ -1076,20 +1076,20 @@ namespace OpenDental{
 							break;
 						case "paytype":
 							tableOut.Rows[i][j]
-								=Defs.GetName(DefCat.PaymentTypes,PIn.Long(tableOut.Rows[i][j].ToString()));
+								=Defs.GetName(DefinitionCategory.PaymentTypes,PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						case "proccat":
 							tableOut.Rows[i][j]
-								=Defs.GetName(DefCat.ProcCodeCats,PIn.Long(tableOut.Rows[i][j].ToString()));
+								=Defs.GetName(DefinitionCategory.ProcCodeCats,PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						case "unschedstatus":
 						case "recallstatus":
 							tableOut.Rows[i][j]
-								=Defs.GetName(DefCat.RecallUnschedStatus,PIn.Long(tableOut.Rows[i][j].ToString()));
+								=Defs.GetName(DefinitionCategory.RecallUnschedStatus,PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						case "billingtype":
 							tableOut.Rows[i][j]
-								=Defs.GetName(DefCat.BillingTypes,PIn.Long(tableOut.Rows[i][j].ToString()));
+								=Defs.GetName(DefinitionCategory.BillingTypes,PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						//patnums:
 						case "patnum":
@@ -1143,7 +1143,7 @@ namespace OpenDental{
 								tableOut.Rows[i][j]=((DisplayFieldCategory)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							}
 							else {
-								tableOut.Rows[i][j]=((DefCat)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
+								tableOut.Rows[i][j]=((DefinitionCategory)PIn.Long(tableOut.Rows[i][j].ToString())).ToString();
 							}			
 							break;
 						case "renewmonth":
@@ -1190,7 +1190,7 @@ namespace OpenDental{
 							break;
 						case "specialty":
 							tableOut.Rows[i][j]
-								=Defs.GetName(DefCat.ProviderSpecialties,PIn.Long(tableOut.Rows[i][j].ToString()));
+								=Defs.GetName(DefinitionCategory.ProviderSpecialties,PIn.Long(tableOut.Rows[i][j].ToString()));
 							break;
 						case "placeservice":
 							tableOut.Rows[i][j]
@@ -1472,7 +1472,7 @@ namespace OpenDental{
 			while(yPos<bounds.Top+bounds.Height-18//The 18 is minimum allowance for the line about to print. 
 				&& _linesPrinted < _reportSimpleGrid.TableQ.Rows.Count)//Page might finish early on the last page.
 			{
-				bool isColWrap=Preferences.GetBool(PrefName.ReportsWrapColumns);
+				bool isColWrap=Preference.GetBool(PreferenceName.ReportsWrapColumns);
 				if(isColWrap && yPos > yPosTableTop) {//First row always prints.  Otherwise the row might be pushed to next page if too tall.
 					int cellWidth;//Width to be adjusted and used to calculate row height.
 					bool isRowTooTall=false;//Bool to indicate if a row we are about to print is too tall for the avaible space on page.
@@ -1690,16 +1690,16 @@ namespace OpenDental{
 				else
 					saveFileDialog2.FileName=_userQueryCur.FileName;
 			}
-			if(!Directory.Exists(Preferences.GetString(PrefName.ExportPath) )){
+			if(!Directory.Exists(Preference.GetString(PreferenceName.ExportPath) )){
 				try{
-					Directory.CreateDirectory(Preferences.GetString(PrefName.ExportPath) );
-					saveFileDialog2.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
+					Directory.CreateDirectory(Preference.GetString(PreferenceName.ExportPath) );
+					saveFileDialog2.InitialDirectory=Preference.GetString(PreferenceName.ExportPath);
 				}
 				catch{
 					//initialDirectory will be blank
 				}
 			}
-			else saveFileDialog2.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
+			else saveFileDialog2.InitialDirectory=Preference.GetString(PreferenceName.ExportPath);
 			//saveFileDialog2.DefaultExt="txt";
 			saveFileDialog2.Filter="Text files(*.txt)|*.txt|Excel Files(*.xls)|*.xls|All files(*.*)|*.*";
       saveFileDialog2.FilterIndex=0;

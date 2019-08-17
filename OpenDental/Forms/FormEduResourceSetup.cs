@@ -34,11 +34,11 @@ namespace OpenDental {
 			foreach(EduResource eduResCur in eduResourceList) {
 				row=new ODGridRow();
 				if(eduResCur.DiseaseDefNum!=0) {
-					row.Cells.Add("Problem: "+DiseaseDefs.GetItem(eduResCur.DiseaseDefNum).DiseaseName);
+					row.Cells.Add("Problem: "+DiseaseDef.GetById(eduResCur.DiseaseDefNum).Name);
 					//row.Cells.Add("ICD9: "+DiseaseDefs.GetItem(eduResCur.DiseaseDefNum).ICD9Code);
 				}
 				else if(eduResCur.MedicationNum!=0) {
-					row.Cells.Add("Medication: "+Medications.GetDescription(eduResCur.MedicationNum));
+					row.Cells.Add("Medication: "+ Medication.GetDescription(eduResCur.MedicationNum));
 				}
 				else if(eduResCur.SmokingSnoMed!="") {
 					Snomed sCur=Snomeds.GetByCode(eduResCur.SmokingSnoMed);

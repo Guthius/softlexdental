@@ -32,9 +32,9 @@ namespace OpenDental {
 			Clinic curClinic=Clinics.GetClinic(_clinicNum)??Clinics.GetDefaultForTexting()??Clinics.GetPracticeAsClinicZero();
 			List<long> listPatNums=(_listAppts.Select(x => x.PatNum).Union(_listRecalls.Select(x => x.PatNum))).Distinct().ToList();
 			_listPatComms=Patients.GetPatComms(listPatNums,curClinic,isGetFamily: false);
-			string textTemplate=ClinicPrefs.GetPrefValue(PrefName.WebSchedAsapTextTemplate,_clinicNum);
-			string emailTemplate=ClinicPrefs.GetPrefValue(PrefName.WebSchedAsapEmailTemplate,_clinicNum);
-			string emailSubject=ClinicPrefs.GetPrefValue(PrefName.WebSchedAsapEmailSubj,_clinicNum);
+			string textTemplate=ClinicPrefs.GetPrefValue(PreferenceName.WebSchedAsapTextTemplate,_clinicNum);
+			string emailTemplate=ClinicPrefs.GetPrefValue(PreferenceName.WebSchedAsapEmailTemplate,_clinicNum);
+			string emailSubject=ClinicPrefs.GetPrefValue(PreferenceName.WebSchedAsapEmailSubj,_clinicNum);
 			textTextTemplate.Text=AsapComms.ReplacesTemplateTags(textTemplate,_clinicNum,_dtSlotStart);
 			textEmailTemplate.Text=AsapComms.ReplacesTemplateTags(emailTemplate,_clinicNum,_dtSlotStart);
 			textEmailSubject.Text=AsapComms.ReplacesTemplateTags(emailSubject,_clinicNum,_dtSlotStart);

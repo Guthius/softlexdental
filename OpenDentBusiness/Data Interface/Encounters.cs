@@ -46,7 +46,7 @@ namespace OpenDentBusiness
         public static void InsertDefaultEncounter(long patNum, long provNum, DateTime date)
         {
             //Validate prefs. If they are not set, we have nothing to insert so no reason to check.
-            if (Preferences.GetString(PrefName.CQMDefaultEncounterCodeSystem) == "" || Preferences.GetString(PrefName.CQMDefaultEncounterCodeValue) == "none")
+            if (Preference.GetString(PreferenceName.CQMDefaultEncounterCodeSystem) == "" || Preference.GetString(PreferenceName.CQMDefaultEncounterCodeValue) == "none")
             {
                 return;
             }
@@ -64,8 +64,8 @@ namespace OpenDentBusiness
             encounter.PatNum = patNum;
             encounter.ProvNum = provNum;
             encounter.DateEncounter = date;
-            encounter.CodeSystem = Preferences.GetString(PrefName.CQMDefaultEncounterCodeSystem);
-            encounter.CodeValue = Preferences.GetString(PrefName.CQMDefaultEncounterCodeValue);
+            encounter.CodeSystem = Preference.GetString(PreferenceName.CQMDefaultEncounterCodeSystem);
+            encounter.CodeValue = Preference.GetString(PreferenceName.CQMDefaultEncounterCodeValue);
             Insert(encounter);
         }
 
@@ -108,7 +108,5 @@ namespace OpenDentBusiness
             string command = "DELETE FROM encounter WHERE EncounterNum = " + POut.Long(encounterNum);
             Db.NonQ(command);
         }
-
-
     }
 }

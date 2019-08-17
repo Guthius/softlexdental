@@ -181,7 +181,7 @@ namespace OpenDentBusiness.WebTypes.WebForms.Crud{
 				Db.NonQ(command,paramFieldValue,paramImageData);
 			}
 			else {
-				webForms_SheetFieldDef.WebSheetFieldDefID=Db.NonQ(command,true,"WebSheetFieldDefID","webForms_SheetFieldDef",paramFieldValue,paramImageData);
+				webForms_SheetFieldDef.WebSheetFieldDefID=Db.NonQ(command,paramFieldValue,paramImageData);
 			}
 			return webForms_SheetFieldDef.WebSheetFieldDefID;
 		}
@@ -237,7 +237,7 @@ namespace OpenDentBusiness.WebTypes.WebForms.Crud{
 				Db.NonQ(command,paramFieldValue,paramImageData);
 			}
 			else {
-				webForms_SheetFieldDef.WebSheetFieldDefID=Db.NonQ(command,true,"WebSheetFieldDefID","webForms_SheetFieldDef",paramFieldValue,paramImageData);
+				webForms_SheetFieldDef.WebSheetFieldDefID=Db.NonQ(command,paramFieldValue,paramImageData);
 			}
 			return webForms_SheetFieldDef.WebSheetFieldDefID;
 		}

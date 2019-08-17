@@ -9,7 +9,7 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormConfirmationSetup:ODForm {
-		private List<Def> _listApptConfirmedDefs;
+		private List<Definition> _listApptConfirmedDefs;
 
 		public FormConfirmationSetup() {
 			InitializeComponent();
@@ -27,16 +27,16 @@ namespace OpenDental {
 
 		///<summary>Called on load to initially load confirmation with values from the database.  Calls FillGrid at the end.</summary>
 		private void FillTabManualConfirmation() {
-			_listApptConfirmedDefs=Defs.GetDefsForCategory(DefCat.ApptConfirmed,true);
+			_listApptConfirmedDefs=Definition.GetByCategory(DefinitionCategory.ApptConfirmed);
 			for(int i=0;i<_listApptConfirmedDefs.Count;i++) {
-				comboStatusEmailedConfirm.Items.Add(_listApptConfirmedDefs[i].ItemName);
-				if(_listApptConfirmedDefs[i].DefNum==Preferences.GetLong(PrefName.ConfirmStatusEmailed)) {
+				comboStatusEmailedConfirm.Items.Add(_listApptConfirmedDefs[i].Description);
+				if(_listApptConfirmedDefs[i].Id==Preference.GetLong(PreferenceName.ConfirmStatusEmailed)) {
 					comboStatusEmailedConfirm.SelectedIndex=i;
 				}
 			}
 			for(int i=0;i<_listApptConfirmedDefs.Count;i++) {
-				comboStatusTextMessagedConfirm.Items.Add(_listApptConfirmedDefs[i].ItemName);
-				if(_listApptConfirmedDefs[i].DefNum==Preferences.GetLong(PrefName.ConfirmStatusTextMessaged)) {
+				comboStatusTextMessagedConfirm.Items.Add(_listApptConfirmedDefs[i].Description);
+				if(_listApptConfirmedDefs[i].Id==Preference.GetLong(PreferenceName.ConfirmStatusTextMessaged)) {
 					comboStatusTextMessagedConfirm.SelectedIndex=i;
 				}
 			}
@@ -60,22 +60,22 @@ namespace OpenDental {
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g(this,"Postcard"));
 			row.Cells.Add(Lan.g(this,"Confirmation message.  Use [date]  and [time] where you want those values to be inserted"));
-			row.Cells.Add(Preferences.GetString(PrefName.ConfirmPostcardMessage));
-			row.Tag=PrefName.ConfirmPostcardMessage;
+			row.Cells.Add(Preference.GetString(PreferenceName.ConfirmPostcardMessage));
+			row.Tag=PreferenceName.ConfirmPostcardMessage;
 			gridMain.Rows.Add(row);
 			//
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g(this,"E-mail"));
 			row.Cells.Add(Lan.g(this,"Confirmation subject line."));
-			row.Cells.Add(Preferences.GetString(PrefName.ConfirmEmailSubject));
-			row.Tag=PrefName.ConfirmEmailSubject;
+			row.Cells.Add(Preference.GetString(PreferenceName.ConfirmEmailSubject));
+			row.Tag=PreferenceName.ConfirmEmailSubject;
 			gridMain.Rows.Add(row);
 			//
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g(this,"E-mail"));
 			row.Cells.Add(Lan.g(this,"Confirmation message. Available variables: [NameF], [NameFL], [date], [time]."));
-			row.Cells.Add(Preferences.GetString(PrefName.ConfirmEmailMessage));
-			row.Tag=PrefName.ConfirmEmailMessage;
+			row.Cells.Add(Preference.GetString(PreferenceName.ConfirmEmailMessage));
+			row.Tag=PreferenceName.ConfirmEmailMessage;
 			gridMain.Rows.Add(row);
 			#endregion
 			#region Text Messaging
@@ -83,23 +83,23 @@ namespace OpenDental {
 			row=new ODGridRow();
 			row.Cells.Add(Lan.g(this,"Text"));
 			row.Cells.Add(Lan.g(this,"Confirmation message. Available variables: [NameF], [NameFL], [date], [time]."));
-			row.Cells.Add(Preferences.GetString(PrefName.ConfirmTextMessage));
-			row.Tag=PrefName.ConfirmTextMessage;
+			row.Cells.Add(Preference.GetString(PreferenceName.ConfirmTextMessage));
+			row.Tag=PreferenceName.ConfirmTextMessage;
 			gridMain.Rows.Add(row);
 			#endregion
 			gridMain.EndUpdate();
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			PrefName prefName=(PrefName)gridMain.Rows[e.Row].Tag;
+			PreferenceName prefName=(PreferenceName)gridMain.Rows[e.Row].Tag;
 			FormRecallMessageEdit FormR=new FormRecallMessageEdit(prefName);
-			FormR.MessageVal=Preferences.GetString(prefName);
+			FormR.MessageVal=Preference.GetString(prefName);
 			FormR.ShowDialog();
 			if(FormR.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			Prefs.UpdateString(prefName,FormR.MessageVal);
-			//Prefs.RefreshCache();//above line handles it.
+			Preference.Update(prefName,FormR.MessageVal);
+			//Preference.Refresh();//above line handles it.
 			FillGrid();
 		}
 
@@ -114,16 +114,16 @@ namespace OpenDental {
 
 		private void butOK_Click(object sender,System.EventArgs e) {
 			if(comboStatusEmailedConfirm.SelectedIndex==-1) {
-				Prefs.UpdateLong(PrefName.ConfirmStatusEmailed,0);
+				Preference.Update(PreferenceName.ConfirmStatusEmailed,0);
 			}
 			else {
-				Prefs.UpdateLong(PrefName.ConfirmStatusEmailed,_listApptConfirmedDefs[comboStatusEmailedConfirm.SelectedIndex].DefNum);
+				Preference.Update(PreferenceName.ConfirmStatusEmailed,_listApptConfirmedDefs[comboStatusEmailedConfirm.SelectedIndex].Id);
 			}
 			if(comboStatusTextMessagedConfirm.SelectedIndex==-1) {
-				Prefs.UpdateLong(PrefName.ConfirmStatusTextMessaged,0);
+				Preference.Update(PreferenceName.ConfirmStatusTextMessaged,0);
 			}
 			else {
-				Prefs.UpdateLong(PrefName.ConfirmStatusTextMessaged,_listApptConfirmedDefs[comboStatusTextMessagedConfirm.SelectedIndex].DefNum);
+				Preference.Update(PreferenceName.ConfirmStatusTextMessaged,_listApptConfirmedDefs[comboStatusTextMessagedConfirm.SelectedIndex].Id);
 			}
 			//If we want to take the time to check every Update and see if something changed 
 			//then we could move this to a FormClosing event later.

@@ -46,7 +46,7 @@ namespace OpenDental{
 		private ComboBox comboPayGroup;
 		private Label labelClaimPaymentGroup;
 		///<summary>List of defs of type ClaimPaymentGroup</summary>
-		private List<Def> _listCPGroups;
+		private List<Definition> _listCPGroups;
 		///<summary>Used to tell if a InsPayCreate log is necessary instead of a InsPayEdit log when IsNew is set to false.</summary>
 		public bool IsCreateLogEntry;
 		private Panel panelXcharge;
@@ -63,7 +63,7 @@ namespace OpenDental{
 		private TextBox textBoxBatchNum;
 		private Label labelDepositAccountNum;
 		private ComboBox comboDepositAccountNum;
-		private List<Def> _listInsurancePaymentTypeDefs;
+		private List<Definition> _listInsurancePaymentTypeDefs;
 		///<summary>This is the deposit that was originally associated to the claimpayment OR is set to a deposit that came back from the Deposit Edit window via the Edit button.
 		///Can be null if no deposit was associated to the claimpayment passed in or if the user deletes the deposit via the Edit window.</summary>
 		private Deposit _depositOld;
@@ -662,10 +662,10 @@ namespace OpenDental{
 					}
 				}
 			}
-			_listInsurancePaymentTypeDefs=Defs.GetDefsForCategory(DefCat.InsurancePaymentType,true);
+			_listInsurancePaymentTypeDefs=Definition.GetByCategory(DefinitionCategory.InsurancePaymentType);
 			for(int i=0;i<_listInsurancePaymentTypeDefs.Count;i++) {
-				comboPayType.Items.Add(_listInsurancePaymentTypeDefs[i].ItemName);
-				if(_listInsurancePaymentTypeDefs[i].DefNum==ClaimPaymentCur.PayType) {
+				comboPayType.Items.Add(_listInsurancePaymentTypeDefs[i].Description);
+				if(_listInsurancePaymentTypeDefs[i].Id==ClaimPaymentCur.PayType) {
 					comboPayType.SelectedIndex=i;
 				}
 			}
@@ -686,10 +686,10 @@ namespace OpenDental{
 			textAmount.Text=ClaimPaymentCur.CheckAmt.ToString("F");
 			textCarrierName.Text=ClaimPaymentCur.CarrierName;
 			textNote.Text=ClaimPaymentCur.Note;
-			_listCPGroups=Defs.GetDefsForCategory(DefCat.ClaimPaymentGroups,true);
+			_listCPGroups=Definition.GetByCategory(DefinitionCategory.ClaimPaymentGroups);
 			FillComboPaymentGroup(ClaimPaymentCur.PayGroup);
 			CheckUIState();
-			_hasAutoDeposit=Preferences.GetBool(PrefName.ShowAutoDeposit);
+			_hasAutoDeposit=Preference.GetBool(PreferenceName.ShowAutoDeposit);
 			FillAutoDepositDetails();
 		}
 
@@ -707,9 +707,9 @@ namespace OpenDental{
 			}
 			//Fill deposit account num drop down
 			comboDepositAccountNum.Items.Clear();
-			List<Def> listAutoDepositDefsAll=Defs.GetDefsForCategory(DefCat.AutoDeposit);
-			foreach(Def defDepositAccount in listAutoDepositDefsAll.Where(x => !x.IsHidden)) {
-				comboDepositAccountNum.Items.Add(new ODBoxItem<Def>(defDepositAccount.ItemName,defDepositAccount));
+			List<Definition> listAutoDepositDefsAll=Definition.GetByCategory(DefinitionCategory.AutoDeposit);;
+			foreach(Definition defDepositAccount in listAutoDepositDefsAll.Where(x => !x.Hidden)) {
+				comboDepositAccountNum.Items.Add(new ODBoxItem<Definition>(defDepositAccount.Description,defDepositAccount));
 			}
 			//Auto deposit pref enabled and the Claim Payment IsNew or had its Auto Deposit deleted.
 			if(_hasAutoDeposit && _depositOld==null) {
@@ -737,9 +737,9 @@ namespace OpenDental{
 				validDepositDate.Text=_depositOld.DateDeposit.ToShortDateString();
 				validDoubleDepositAmt.Text=_depositOld.Amount.ToString();
 				textBoxBatchNum.Text=_depositOld.Batch;
-				Def defAutoDeposit=listAutoDepositDefsAll.FirstOrDefault(x => x.DefNum==_depositOld.DepositAccountNum);
-				comboDepositAccountNum.IndexSelectOrSetText(listAutoDepositDefsAll.FindIndex(x => x.DefNum==_depositOld.DepositAccountNum)
-					,() => { return (defAutoDeposit!=null ? defAutoDeposit.ItemName+" "+Lan.g(this,"(hidden)") : ""); });
+				Definition defAutoDeposit=listAutoDepositDefsAll.FirstOrDefault(x => x.Id==_depositOld.DepositAccountNum);
+				comboDepositAccountNum.IndexSelectOrSetText(listAutoDepositDefsAll.FindIndex(x => x.Id==_depositOld.DepositAccountNum)
+					,() => { return (defAutoDeposit!=null ? defAutoDeposit.Description+" "+Lan.g(this,"(hidden)") : ""); });
 			}
 		}
 
@@ -755,7 +755,7 @@ namespace OpenDental{
 			depositCur.DateDeposit=PIn.Date(validDepositDate.Text);
 			depositCur.Batch=PIn.String(textBoxBatchNum.Text);
 			if(comboDepositAccountNum.SelectedIndex > -1) {
-				depositCur.DepositAccountNum=((ODBoxItem<Def>)comboDepositAccountNum.SelectedItem).Tag.DefNum;
+				depositCur.DepositAccountNum=((ODBoxItem<Definition>)comboDepositAccountNum.SelectedItem).Tag.Id;
 			}
 			return depositCur;
 		}
@@ -784,7 +784,7 @@ namespace OpenDental{
 				return;
 			}
 			long clinicNum=GetClinicNumSelected();
-			List<Def> listDefs=Defs.GetDefsForCategory(DefCat.PaymentTypes,true);
+			List<Definition> listDefs=Definition.GetByCategory(DefinitionCategory.PaymentTypes);
 			//Show if enabled.  User could have all enabled.
 			if(progPayConnect.Enabled 
 				&& !PIn.Bool(ProgramProperties.GetPropVal(progPayConnect.ProgramNum,PayConnect.ProgramProperties.PayConnectPreventSavingNewCC,clinicNum))) 
@@ -797,7 +797,7 @@ namespace OpenDental{
 					string paymentType=ProgramProperties.GetPropVal(progPayConnect.ProgramNum,"PaymentType",clinicNum);
 					if(!string.IsNullOrEmpty(ProgramProperties.GetPropVal(progPayConnect.ProgramNum,"Username",clinicNum))
 						&& !string.IsNullOrEmpty(ProgramProperties.GetPropVal(progPayConnect.ProgramNum,"Password",clinicNum))
-						&& listDefs.Any(x => x.DefNum.ToString()==paymentType))
+						&& listDefs.Any(x => x.Id.ToString()==paymentType))
 					{
 						butPayConnect.Visible=true;
 					}
@@ -815,7 +815,7 @@ namespace OpenDental{
 					string paymentType=ProgramProperties.GetPropVal(progXcharge.ProgramNum,"PaymentType",clinicNum);
 					if(!string.IsNullOrEmpty(ProgramProperties.GetPropVal(progXcharge.ProgramNum,"Username",clinicNum))
 						&& !string.IsNullOrEmpty(ProgramProperties.GetPropVal(progXcharge.ProgramNum,"Password",clinicNum))
-						&& listDefs.Any(x => x.DefNum.ToString()==paymentType))
+						&& listDefs.Any(x => x.Id.ToString()==paymentType))
 					{
 						panelXcharge.Visible=true;
 					}
@@ -832,7 +832,7 @@ namespace OpenDental{
 					string paymentType=ProgramProperties.GetPropValForClinicOrDefault(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimplePayTypeCC,clinicNum);
 					if(!string.IsNullOrEmpty(ProgramProperties.GetPropValForClinicOrDefault(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiUserName,clinicNum))
 						&& !string.IsNullOrEmpty(ProgramProperties.GetPropValForClinicOrDefault(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiKey,clinicNum))
-						&& listDefs.Any(x => x.DefNum.ToString()==paymentType))
+						&& listDefs.Any(x => x.Id.ToString()==paymentType))
 					{
 						butPaySimple.Visible=true;
 					}
@@ -883,9 +883,9 @@ namespace OpenDental{
 				return;
 			}
 			for(int i = 0;i<_listCPGroups.Count;i++) {
-				Def defCur=_listCPGroups[i];
-				comboPayGroup.Items.Add(defCur.ItemName);
-				if(selectedDefNum==defCur.DefNum) {
+				Definition defCur=_listCPGroups[i];
+				comboPayGroup.Items.Add(defCur.Description);
+				if(selectedDefNum==defCur.Id) {
 					comboPayGroup.SelectedIndex=i;
 				}
 			}
@@ -916,10 +916,10 @@ namespace OpenDental{
 		}
 
 		private void butPickPaymentGroup_Click(object sender,EventArgs e) {
-			FormDefinitionPicker FormDP=new FormDefinitionPicker(DefCat.ClaimPaymentGroups);
+			FormDefinitionPicker FormDP=new FormDefinitionPicker(DefinitionCategory.ClaimPaymentGroups);
 			FormDP.ShowDialog();
 			if(FormDP.DialogResult==DialogResult.OK) {
-				FillComboPaymentGroup(FormDP.ListSelectedDefs[0].DefNum);
+				FillComboPaymentGroup(FormDP.ListSelectedDefs[0].Id);
 			}
 		}
 
@@ -1147,8 +1147,8 @@ namespace OpenDental{
 				return;
 			}
 			if(PIn.Date(textDate.Text).Date > DateTime.Today.Date
-				&& !Preferences.GetBool(PrefName.FutureTransDatesAllowed) 
-				&& !Preferences.GetBool(PrefName.AllowFutureInsPayments)) 
+				&& !Preference.GetBool(PreferenceName.FutureTransDatesAllowed) 
+				&& !Preference.GetBool(PreferenceName.AllowFutureInsPayments)) 
 			{
 				MsgBox.Show(this,"Payment date cannot be in the future.");
 				return;
@@ -1166,7 +1166,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please fix data entry errors first.");
 				return;
 			}
-			if(!Preferences.GetBool(PrefName.AllowFutureInsPayments) && PIn.Date(textDate.Text).Date>MiscData.GetNowDateTime().Date) {
+			if(!Preference.GetBool(PreferenceName.AllowFutureInsPayments) && PIn.Date(textDate.Text).Date>MiscData.GetNowDateTime().Date) {
 				MsgBox.Show(this,"Insurance Payment Date must not be a future date.");
 				return;
 			}
@@ -1184,10 +1184,10 @@ namespace OpenDental{
 				SecurityLogs.MakeLogEntry(Permissions.RequiredFields,ClaimPaymentCur.ClaimPaymentNum,"Saved claim payment with required fields missing.");
 			}
 			#region Automatic Deposit
-			Def paymentType=Defs.GetDefsForCategory(DefCat.InsurancePaymentType,true)[comboPayType.SelectedIndex];
+			Definition paymentType=Definition.GetByCategory(DefinitionCategory.InsurancePaymentType)[comboPayType.SelectedIndex];
 			//Create an Auto Deposit if the claim payment is new or does not have an attached Auto Deposit. 
 			//Auto deposits will NOT be made for Payment Types marked 'N' (not selected for deposit).
-			if(_hasAutoDeposit && !_isAutoDepositDeleted && _depositOld==null && paymentType.ItemValue.ToLower()!="n") {
+			if(_hasAutoDeposit && !_isAutoDepositDeleted && _depositOld==null && paymentType.Value.ToLower()!="n") {
 				//Insert the deposit, this must happen first as the claimpayment FK's to deposit.
 				//The deposit cannot be updated in this form, that is handled by the edit button.
 				Deposit depositCur=GetDepositCur();
@@ -1252,9 +1252,9 @@ namespace OpenDental{
 					ClaimPaymentCur.ClinicNum=_listClinics[comboClinic.SelectedIndex-1].ClinicNum;
 				}
 			}
-			ClaimPaymentCur.PayType=paymentType.DefNum;
+			ClaimPaymentCur.PayType=paymentType.Id;
 			if(comboPayGroup.SelectedIndex!=-1) {//If they didn't select anything, leave what was originally there
-				ClaimPaymentCur.PayGroup=_listCPGroups[comboPayGroup.SelectedIndex].DefNum;
+				ClaimPaymentCur.PayGroup=_listCPGroups[comboPayGroup.SelectedIndex].Id;
 			}
 			ClaimPaymentCur.CheckDate=PIn.Date(textDate.Text);
 			ClaimPaymentCur.DateIssued=PIn.Date(textDateIssued.Text);

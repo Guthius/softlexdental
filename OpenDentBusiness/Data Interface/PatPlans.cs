@@ -326,7 +326,7 @@ namespace OpenDentBusiness{
 					InsVerifies.DeleteByFKey(patPlanNum,VerifyTypes.PatientEnrollment);
 				}
 			}
-			Family fam=Patients.GetFamily(patNum);
+			Family fam=Patients.GetFamily((int)patNum);
 			Patient pat=fam.GetPatient(patNum);
 			List<ClaimProc> claimProcs=ClaimProcs.Refresh(patNum);
 			List<ClaimProc> listClaimProcsEsts=claimProcs.Where(x => x.Status.In(ClaimProcStatus.Estimate,ClaimProcStatus.CapEstimate)).ToList();
@@ -391,8 +391,8 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets all patplans with DateNextClaims that are today or in the past.</summary>
 		public static DataTable GetOutstandingOrtho() {
-			byte orthoMonthsTreat=Preferences.GetByte(PrefName.OrthoDefaultMonthsTreat);
-			long orthoDefaultAutoCodeNum=Preferences.GetLong(PrefName.OrthoAutoProcCodeNum);
+			byte orthoMonthsTreat= Preference.GetByte(PreferenceName.OrthoDefaultMonthsTreat);
+			long orthoDefaultAutoCodeNum= Preference.GetLong(PreferenceName.OrthoAutoProcCodeNum);
 			List<long> listOrthoBandingCodeNums = ProcedureCodes.GetOrthoBandingCodeNums();
 			string command=@"
 				SELECT CONCAT(patient.LName,', ', patient.FName) Patient, 

@@ -24,13 +24,13 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		///<summary></summary>
-		public AccountingAutoPay AutoPayCur;
+		public AccountAutoPay AutoPayCur;
 		///<summary></summary>
 		public bool IsNew;
 		private OpenDental.UI.Button butDelete;
 		///<summary>Array List of AccountNums.</summary>
 		private ArrayList accountAL;
-		private List<Def> _listPaymentTypeDefs;
+		private List<Definition> _listPaymentTypeDefs;
 
 		///<summary></summary>
 		public FormAccountingAutoPayEdit()
@@ -216,17 +216,17 @@ namespace OpenDental{
 			if(AutoPayCur==null) {
 				MessageBox.Show("Autopay cannot be null.");//just for debugging
 			}
-			_listPaymentTypeDefs=Defs.GetDefsForCategory(DefCat.PaymentTypes,true);
+			_listPaymentTypeDefs=Definition.GetByCategory(DefinitionCategory.PaymentTypes);
 			for(int i=0;i<_listPaymentTypeDefs.Count;i++){
-				comboPayType.Items.Add(_listPaymentTypeDefs[i].ItemName);
-				if(_listPaymentTypeDefs[i].DefNum==AutoPayCur.PayType){
+				comboPayType.Items.Add(_listPaymentTypeDefs[i].Description);
+				if(_listPaymentTypeDefs[i].Id==AutoPayCur.PayType){
 					comboPayType.SelectedIndex=i;
 				}
 			}
-			if(AutoPayCur.PickList==null){
-				AutoPayCur.PickList="";
+			if(AutoPayCur.AccountIds==null){
+				AutoPayCur.AccountIds="";
 			}
-			string[] strArray=AutoPayCur.PickList.Split(new char[] { ',' });
+			string[] strArray=AutoPayCur.AccountIds.Split(new char[] { ',' });
 			accountAL=new ArrayList();
 			for(int i=0;i<strArray.Length;i++) {
 				if(strArray[i]=="") {
@@ -240,7 +240,7 @@ namespace OpenDental{
 		private void FillList() {
 			listAccounts.Items.Clear();
 			for(int i=0;i<accountAL.Count;i++) {
-				listAccounts.Items.Add(Account.GetDescript((long)accountAL[i]));
+				listAccounts.Items.Add(Account.GetDescription((long)accountAL[i]));
 			}
 		}
 
@@ -250,7 +250,7 @@ namespace OpenDental{
 			if(FormA.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			accountAL.Add(FormA.SelectedAccount.AccountNum);
+			accountAL.Add(FormA.SelectedAccount.Id);
 			FillList();
 		}
 
@@ -281,13 +281,13 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please add at least one account to the pick list first.");
 				return;
 			}
-			AutoPayCur.PayType=_listPaymentTypeDefs[comboPayType.SelectedIndex].DefNum;
-			AutoPayCur.PickList="";
+			AutoPayCur.PayType=_listPaymentTypeDefs[comboPayType.SelectedIndex].Id;
+			AutoPayCur.AccountIds="";
 			for(int i=0;i<accountAL.Count;i++){
 				if(i>0){
-					AutoPayCur.PickList+=",";
+					AutoPayCur.AccountIds+=",";
 				}
-				AutoPayCur.PickList+=accountAL[i].ToString();
+				AutoPayCur.AccountIds+=accountAL[i].ToString();
 			}
 			DialogResult=DialogResult.OK;
 		}

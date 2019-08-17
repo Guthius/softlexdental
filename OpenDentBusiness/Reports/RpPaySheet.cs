@@ -31,7 +31,7 @@ namespace OpenDentBusiness
             }
             string whereClin = "";
             //reports should no longer use the cache
-            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Prefs.HasClinicsEnabledNoCache);
+            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Preference.HasClinicsEnabledNoCache);
             if (hasClinicsEnabled)
             {
                 whereClin += " AND claimproc.ClinicNum IN(";
@@ -115,7 +115,7 @@ namespace OpenDentBusiness
             bool hasAllProvs, bool hasAllClinics, bool hasPatientTypes, bool isGroupedByPatient, bool isUnearnedIncluded, bool doShowProvSeparate)
         {
             //reports should no longer use the cache
-            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Prefs.HasClinicsEnabledNoCache);
+            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Preference.HasClinicsEnabledNoCache);
             //patient payments-----------------------------------------------------------------------------------------
             //the selected columns have to remain in this order due to the way the report complex populates the returned sheet
             string queryPat = "SELECT payment.PayDate DatePay,"

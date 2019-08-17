@@ -107,9 +107,9 @@ namespace OpenDental.User_Controls.SetupWizard
             long clinicNum = 0;
             Cursor = Cursors.WaitCursor;
             OpenFileDialog Dlg = new OpenFileDialog();
-            if (Directory.Exists(Preferences.GetString(PrefName.ExportPath)))
+            if (Directory.Exists(Preference.GetString(PreferenceName.ExportPath)))
             {
-                Dlg.InitialDirectory = Preferences.GetString(PrefName.ExportPath);
+                Dlg.InitialDirectory = Preference.GetString(PreferenceName.ExportPath);
             }
             else if (Directory.Exists("C:\\"))
             {

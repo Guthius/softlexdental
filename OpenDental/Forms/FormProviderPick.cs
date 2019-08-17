@@ -274,7 +274,7 @@ namespace OpenDental{
 				(int)TimeSpan.FromSeconds(0.5).TotalMilliseconds,
 				textFName,textLName,textProvNum);
 			checkShowAll.Visible=IsShowAllAvailable;
-			if(Preferences.GetBool(PrefName.EasyHideDentalSchools)) {
+			if(Preference.GetBool(PreferenceName.EasyHideDentalSchools)) {
 				groupDentalSchools.Visible=false;
 			}
 			else if(IsStudentPicker) {
@@ -330,7 +330,7 @@ namespace OpenDental{
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col;
-			if(!Preferences.GetBool(PrefName.EasyHideDentalSchools)) {
+			if(!Preference.GetBool(PreferenceName.EasyHideDentalSchools)) {
 				col=new ODGridColumn(Lan.g("TableProviders","ProvNum"),60);
 				gridMain.Columns.Add(col);
 			}
@@ -347,7 +347,7 @@ namespace OpenDental{
 					continue;
 				}
 				row=new ODGridRow();
-				if(!Preferences.GetBool(PrefName.EasyHideDentalSchools)) {
+				if(!Preference.GetBool(PreferenceName.EasyHideDentalSchools)) {
 					row.Cells.Add(listProvs[i].ProvNum.ToString());
 				}
 				row.Cells.Add(listProvs[i].Abbr);

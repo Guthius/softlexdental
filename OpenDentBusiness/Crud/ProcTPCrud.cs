@@ -186,7 +186,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ProcTP into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(ProcTP procTP,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO proctp (";
 			if(!useExistingPK && isRandomKeys) {
 				procTP.ProcTPNum=ReplicationServers.GetKeyNoCache("proctp","ProcTPNum");

@@ -20,12 +20,12 @@ namespace OpenDentBusiness {
 		///If the preference is present in the database but is malformed JSON, _dictOverrides will be an empty dictionary which will throw exceptions later on in the program.</summary>
 		private static Dictionary<IntrospectionEntity,string> DictOverrides {
 			get {
-				if(_dictOverrides!=null || !Prefs.GetContainsKey(nameof(PrefName.IntrospectionItems))) {
+				if(_dictOverrides!=null || !Preference.Exists(PreferenceName.IntrospectionItems)) {
 					return _dictOverrides;
 				}
 				//The dictionary of overrides has not been filled before or the preference does not exist in the database.
 				try {
-					string introspectionItems=Preferences.GetString(PrefName.IntrospectionItems);//Cache call so it is fine to do this a lot.  Purposefully throws exceptions.
+					string introspectionItems=Preference.GetString(PreferenceName.IntrospectionItems);//Cache call so it is fine to do this a lot.  Purposefully throws exceptions.
 					//At this point we know the database has the IntrospectionItems preference so we need to instantiate _dictOverrides.
 					_dictOverrides=new Dictionary<IntrospectionEntity, string>();
 					//Try an deserialize the preference value into the dictionary.

@@ -58,7 +58,7 @@ namespace OpenDental{
 		private long _selectedProvHygNum;
 		private TextBox textWSNPAApptTypes;
 		///<summary>All of the Web Sched New Pat Appt appointment type defs that this operatory is associated to.</summary>
-		private List<Def> _listWSNPAOperatoryDefs=new List<Def>();
+		private List<Definition> _listWSNPAOperatoryDefs=new List<Definition>();
 
 		///<summary></summary>
 		public FormOperatoryEdit(Operatory opCur)
@@ -483,7 +483,7 @@ namespace OpenDental{
 				,() => { return Clinics.GetAbbr(_selectedClinicNum); });
 			if(OpCur.ListWSNPAOperatoryDefNums!=null) {
 				//This is an existing operatory with WSNPA appointment types associated.  Go get them in order to display to the user.
-				_listWSNPAOperatoryDefs=Defs.GetDefs(DefCat.WebSchedNewPatApptTypes,OpCur.ListWSNPAOperatoryDefNums);
+				_listWSNPAOperatoryDefs=Defs.GetDefs(DefinitionCategory.WebSchedNewPatApptTypes,OpCur.ListWSNPAOperatoryDefNums);
 			}
 			FillWSNPAApptTypes();
 			FillComboProvHyg();
@@ -497,7 +497,7 @@ namespace OpenDental{
 			if(_listWSNPAOperatoryDefs.Count < 1) {
 				return;
 			}
-			textWSNPAApptTypes.Text=string.Join(", ",_listWSNPAOperatoryDefs.Select(x => x.ItemName));
+			textWSNPAApptTypes.Text=string.Join(", ",_listWSNPAOperatoryDefs.Select(x => x.Description));
 		}
 
 		private void butPickClin_Click(object sender,EventArgs e) {
@@ -553,7 +553,7 @@ namespace OpenDental{
 		}
 
 		private void butWSNPAPickApptTypes_Click(object sender,EventArgs e) {
-			FormDefinitionPicker FormDP=new FormDefinitionPicker(DefCat.WebSchedNewPatApptTypes,_listWSNPAOperatoryDefs);
+			FormDefinitionPicker FormDP=new FormDefinitionPicker(DefinitionCategory.WebSchedNewPatApptTypes,_listWSNPAOperatoryDefs);
 			FormDP.IsMultiSelectionMode=true;
 			if(FormDP.ShowDialog()==DialogResult.OK) {
 				_listWSNPAOperatoryDefs=FormDP.ListSelectedDefs.Select(x => x.Copy()).ToList();
@@ -601,7 +601,7 @@ namespace OpenDental{
 			OpCur.IsHygiene=checkIsHygiene.Checked;
 			OpCur.SetProspective=checkSetProspective.Checked;
 			OpCur.IsWebSched=checkIsWebSched.Checked;
-			OpCur.ListWSNPAOperatoryDefNums=_listWSNPAOperatoryDefs.Select(x => x.DefNum).ToList();
+			OpCur.ListWSNPAOperatoryDefNums=_listWSNPAOperatoryDefs.Select(x => x.Id).ToList();
 			if(IsNew) {
 				ListOps.Insert(OpCur.ItemOrder,OpCur);//Insert into list at appropriate spot
 				for(int i=0;i<ListOps.Count;i++) {

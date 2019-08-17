@@ -145,7 +145,7 @@ namespace OpenDental {
 		///<summary>Validates one Rx.  Returns a string of error messages.  Blank string indicates no errors.
 		///Some Rx require certain data to be present when printing.</summary>
 		public static string ValidateRxForSheet(RxPat rx) {
-			if(!Preferences.GetBool(PrefName.RxHasProc)) {
+			if(!Preference.GetBool(PreferenceName.RxHasProc)) {
 				return "";//The global preference allows the user to completely disable Rx ProcCode validation, even if some Rx are flagged as required.
 			}
 			if(Clinics.ClinicNum!=0) {//Not HQ
@@ -632,34 +632,35 @@ namespace OpenDental {
 					bmpOriginal=OpenDentBusiness.Properties.Resources.Patient_Info;
 					bmpOriginalFormat=ImageFormat.Gif;
 				}
-				else if(CloudStorage.IsCloudStorage) {
-					FormProgress FormP=new FormProgress();
-					FormP.DisplayText=Lan.g(CloudStorage.LanThis,"Downloading...");
-					FormP.NumberFormat="F";
-					FormP.NumberMultiplication=1;
-					FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-					FormP.TickMS=1000;
-					OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(SheetUtil.GetImagePath(),field.FieldName,
-					new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-					if(FormP.ShowDialog()==DialogResult.Cancel) {
-						state.DoCancel=true;
-						return;
-					}
-					if(state==null || state.FileContent==null) {
-						return;//Unable to download the image
-					}
-					else {
-						using(MemoryStream stream=new MemoryStream(state.FileContent)) {
-							try {
-								bmpOriginal=new Bitmap(Image.FromStream(stream));
-								bmpOriginalFormat=ImageFormat.Bmp;
-							}
-							catch {
-								return;//If the image is not an actual image file, leave the image field blank.
-							}
-						}
-					}
-				}
+				else if(CloudStorage.IsCloudStorage)
+                { // TODO: Fix me
+                  //	FormProgress FormP=new FormProgress();
+                  //	FormP.DisplayText=Lan.g(CloudStorage.LanThis,"Downloading...");
+                  //	FormP.NumberFormat="F";
+                  //	FormP.NumberMultiplication=1;
+                  //	FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
+                  //	FormP.TickMS=1000;
+                  //	OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(SheetUtil.GetImagePath(),field.FieldName,
+                  //	new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
+                  //	if(FormP.ShowDialog()==DialogResult.Cancel) {
+                  //		state.DoCancel=true;
+                  //		return;
+                  //	}
+                  //	if(state==null || state.FileContent==null) {
+                  //		return;//Unable to download the image
+                  //	}
+                  //	else {
+                  //		using(MemoryStream stream=new MemoryStream(state.FileContent)) {
+                  //			try {
+                  //				bmpOriginal=new Bitmap(Image.FromStream(stream));
+                  //				bmpOriginalFormat=ImageFormat.Bmp;
+                  //			}
+                  //			catch {
+                  //				return;//If the image is not an actual image file, leave the image field blank.
+                  //			}
+                  //		}
+                  //	}
+                }
 				else if(File.Exists(filePathAndName)) {//Local AtoZ
 					try {
 						bmpOriginal=new Bitmap(filePathAndName);
@@ -820,7 +821,7 @@ namespace OpenDental {
 					DrawScaledImage(field.XPos,field.YPos,field.Width,field.Height,g,gx,toothChart);
 					break;
 				case "toothChartLegend":
-					List<Def> listDefs=Defs.GetDefsForCategory(DefCat.ChartGraphicColors,true);
+					List<Definition> listDefs=Definition.GetByCategory(DefinitionCategory.ChartGraphicColors);
 					DrawToothChartLegend(field.XPos,field.YPos,field.Width,_yPosPrint,listDefs,g,gx);
 					break;
 				default:
@@ -843,12 +844,12 @@ namespace OpenDental {
 		}
 
 		///<summary>Draws the legend for the toothchart using the supplied dimesions, definitions, and graphics.</summary>
-		public static void DrawToothChartLegend(int x,int y,int width,int yPosPrint,List<Def> listDefs,Graphics g,XGraphics gx) {
-			using(Brush brushEx=new SolidBrush(listDefs[3].ItemColor))
-			using(Brush brushEc=new SolidBrush(listDefs[2].ItemColor))
-			using(Brush brushCo=new SolidBrush(listDefs[1].ItemColor))
-			using(Brush brushRo=new SolidBrush(listDefs[4].ItemColor))
-			using(Brush brushTp=new SolidBrush(listDefs[0].ItemColor))
+		public static void DrawToothChartLegend(int x,int y,int width,int yPosPrint,List<Definition> listDefs,Graphics g,XGraphics gx) {
+			using(Brush brushEx=new SolidBrush(listDefs[3].Color))
+			using(Brush brushEc=new SolidBrush(listDefs[2].Color))
+			using(Brush brushCo=new SolidBrush(listDefs[1].Color))
+			using(Brush brushRo=new SolidBrush(listDefs[4].Color))
+			using(Brush brushTp=new SolidBrush(listDefs[0].Color))
 			using(Font bodyFont=new Font("Arial",9f,FontStyle.Regular,GraphicsUnit.Point))
 			if(gx==null) {
 				float yPos=y-yPosPrint;
@@ -948,13 +949,13 @@ namespace OpenDental {
 		}
 
 		public static Image GetToothChartHelper(long patNum,bool showCompleted,TreatPlan treatPlan=null,List<Procedure> listProceduresFilteredOverride=null) {
-			List<Def> listDefs=Defs.GetDefsForCategory(DefCat.ChartGraphicColors);
+			List<Definition> listDefs=Definition.GetByCategory(DefinitionCategory.ChartGraphicColors);;
 			SparksToothChart.ToothChartWrapper toothChart=new SparksToothChart.ToothChartWrapper();
-			toothChart.ColorBackground=listDefs[14].ItemColor;
-			toothChart.ColorText=listDefs[15].ItemColor;
+			toothChart.ColorBackground=listDefs[14].Color;
+			toothChart.ColorText=listDefs[15].Color;
 			toothChart.Size=new Size(500,370);
 			toothChart.UseHardware=ComputerPrefs.LocalComputer.GraphicsUseHardware;
-			toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)Preferences.GetInt(PrefName.UseInternationalToothNumbers));
+			toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)Preference.GetInt(PreferenceName.UseInternationalToothNumbers));
 			toothChart.PreferredPixelFormatNumber=ComputerPrefs.LocalComputer.PreferredPixelFormatNum;
 			toothChart.DeviceFormat=new SparksToothChart.ToothChartDirectX.DirectXDeviceFormat(ComputerPrefs.LocalComputer.DirectXFormat);
 			toothChart.DrawMode=ComputerPrefs.LocalComputer.GraphicsSimple;
@@ -1075,7 +1076,7 @@ namespace OpenDental {
 			string[] teeth;
 			System.Drawing.Color cLight=System.Drawing.Color.White;
 			System.Drawing.Color cDark=System.Drawing.Color.White;
-			List<Def> listDefs=Defs.GetDefsForCategory(DefCat.ChartGraphicColors,true);
+			List<Definition> listDefs=Definition.GetByCategory(DefinitionCategory.ChartGraphicColors);
 			for(int i=0;i<procList.Count;i++) {
 				proc=procList[i];
 				//if(proc.ProcStatus!=procStat) {
@@ -1094,28 +1095,28 @@ namespace OpenDental {
 				if(ProcedureCodes.GetProcCode(proc.CodeNum).GraphicColor==System.Drawing.Color.FromArgb(0)) {
 					switch(proc.ProcStatus) {
 						case ProcStat.C:
-							cDark=listDefs[1].ItemColor;
-							cLight=listDefs[6].ItemColor;
+							cDark=listDefs[1].Color;
+							cLight=listDefs[6].Color;
 							break;
 						case ProcStat.TP:
-							cDark=listDefs[0].ItemColor;
-							cLight=listDefs[5].ItemColor;
+							cDark=listDefs[0].Color;
+							cLight=listDefs[5].Color;
 							break;
 						case ProcStat.EC:
-							cDark=listDefs[2].ItemColor;
-							cLight=listDefs[7].ItemColor;
+							cDark=listDefs[2].Color;
+							cLight=listDefs[7].Color;
 							break;
 						case ProcStat.EO:
-							cDark=listDefs[3].ItemColor;
-							cLight=listDefs[8].ItemColor;
+							cDark=listDefs[3].Color;
+							cLight=listDefs[8].Color;
 							break;
 						case ProcStat.R:
-							cDark=listDefs[4].ItemColor;
-							cLight=listDefs[9].ItemColor;
+							cDark=listDefs[4].Color;
+							cLight=listDefs[9].Color;
 							break;
 						case ProcStat.Cn:
-							cDark=listDefs[16].ItemColor;
-							cLight=listDefs[17].ItemColor;
+							cDark=listDefs[16].Color;
+							cLight=listDefs[17].Color;
 							break;
 					}
 				}
@@ -1252,7 +1253,7 @@ namespace OpenDental {
 			SheetParameter param=SheetParameter.GetParamByName(sheet.Parameters,"IsSingleClaimPaid");
 			bool isSingleClaim=(param.ParamValue==null)?false:true;//param is only set when true
 			//This logic mimics SheetUtil.CalculateHeights(...)
-			bool isOneClaimPerPage=Preferences.GetBool(PrefName.EraPrintOneClaimPerPage);
+			bool isOneClaimPerPage=Preference.GetBool(PreferenceName.EraPrintOneClaimPerPage);
 			if(isSingleClaim) {
 				//When printing a single claim we do not want to print the claim on the next page like we would when printing every claim.
 				isOneClaimPerPage=false;
@@ -1637,7 +1638,7 @@ namespace OpenDental {
 								g.FillRectangle(Brushes.White,rf);
 								StringFormat sf=new StringFormat();
 								sf.Alignment=StringAlignment.Far;
-								if(Preferences.GetBool(PrefName.InvoicePaymentsGridShowNetProd)) {
+								if(Preference.GetBool(PreferenceName.InvoicePaymentsGridShowNetProd)) {
 									g.DrawString("Total Payments & WriteOffs: "+totalPayments.ToString("c"),new Font("Arial",9,FontStyle.Bold),new SolidBrush(Color.Black),rf,sf);
 								}
 								else {
@@ -1647,7 +1648,7 @@ namespace OpenDental {
 							else {
 								gx.DrawRectangle(Brushes.White,p(sheet.Width-field.Width-60),p(printRowCur.YPos-_yPosPrint+_yAdjCurRow),p(field.Width),p(odGrid.TitleHeight));
 								using(Font _font = new Font("Arial",9,FontStyle.Bold)) {
-									if(Preferences.GetBool(PrefName.InvoicePaymentsGridShowNetProd)) {
+									if(Preference.GetBool(PreferenceName.InvoicePaymentsGridShowNetProd)) {
 										GraphicsHelper.DrawStringX(gx,"Total Payments & WriteOffs: "+totalPayments.ToString("c"),new XFont(_font.FontFamily.ToString(),_font.Size,XFontStyle.Bold),XBrushes.Black,new RectangleF(sheet.Width-field.Width-60,printRowCur.YPos-_yPosPrint+_yAdjCurRow,field.Width,odGrid.TitleHeight),HorizontalAlignment.Right);
 									}
 									else {

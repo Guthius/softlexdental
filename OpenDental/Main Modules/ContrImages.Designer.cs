@@ -11,7 +11,7 @@
                 {
                     components.Dispose();
                 }
-                xRayImageController.KillXRayThread();
+                //xRayImageController.KillXRayThread();
             }
             base.Dispose(disposing);
         }

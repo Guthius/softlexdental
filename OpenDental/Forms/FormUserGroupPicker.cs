@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OpenDental{
 	public class FormUserGroupPicker:ODForm {
@@ -122,9 +123,9 @@ namespace OpenDental{
 		}
 
 		private void FillList(){
-			UserGroups.RefreshCache();
+            CacheManager.Invalidate<UserGroup>();
 			listGroups.Items.Clear();
-			_listUserGroups=UserGroups.GetWhere(x => IsAdminMode || !GroupPermissions.HasPermission(x.UserGroupNum,Permissions.SecurityAdmin,0));
+			_listUserGroups=UserGroup.All().Where(x => IsAdminMode || !GroupPermissions.HasPermission(x.Id,Permissions.SecurityAdmin,0)).ToList();
 			for(int i=0;i<_listUserGroups.Count;i++) {
 				listGroups.Items.Add(_listUserGroups[i].Description);
 			}

@@ -27,14 +27,14 @@ namespace OpenDental {
 				refreshDisplays();
 				return;
 			}
-			textNistUrl.Text=Preferences.GetString(PrefName.NistTimeServerUrl);
+			textNistUrl.Text=Preference.GetString(PreferenceName.NistTimeServerUrl);
 			SynchTimes();			
 		}
 
 		///<summary>Called from FormOpenDental.Load.  Updates local time and checks to see if server time is in synch, with a fast db call (only acurate to seconds, not miliseconds).</summary>
 		public bool TimesInSynchFast() {
 			this.Cursor=Cursors.WaitCursor;
-			textNistUrl.Text=Preferences.GetString(PrefName.NistTimeServerUrl);
+			textNistUrl.Text=Preference.GetString(PreferenceName.NistTimeServerUrl);
 			double nistOffset=GetNistOffset();
 			if(nistOffset==double.MaxValue) { //Timed out
 				MsgBox.Show(this,"No response received from NIST time server.  Click synch time after four seconds.");
@@ -168,7 +168,7 @@ namespace OpenDental {
 			textServerTime.Text=_timeServer.ToString("hh:mm:ss.fff tt");
 			textLocalTime.Text=_timeLocal.ToString("hh:mm:ss.fff tt");
 			//Update NistURL preference
-			Prefs.UpdateString(PrefName.NistTimeServerUrl,textNistUrl.Text);
+			Preference.Update(PreferenceName.NistTimeServerUrl,textNistUrl.Text);
 			//Update message textbox
 			if(!LocalInSynch()) { //This should not happen, time is updated automatically. If you get to this point, you should have already had a message box pop up saying there was an error updating your local time.
 				textMessage.Text="Your local machine time is out of synch.  Please ensure Open Dental is running with Administrator Windows privileges.  If you have done this and you still see this message, please call Open Dental support.";

@@ -56,8 +56,8 @@ namespace OpenDental {
 				tabControl.TabPages.Remove(tabACH);
 			}
 			else {
-				checkOneTimePayment.Checked=!Preferences.GetBool(PrefName.StoreCCtokens);
-				checkOneTimePaymentACH.Checked=!Preferences.GetBool(PrefName.StoreCCtokens);
+				checkOneTimePayment.Checked=!Preference.GetBool(PreferenceName.StoreCCtokens);
+				checkOneTimePaymentACH.Checked=!Preference.GetBool(PreferenceName.StoreCCtokens);
 				textZipCode.Text=_patCur.Zip;
 				textNameOnCard.Text=_patCur.GetNameFL();
 				if(_creditCardCur!=null) {
@@ -404,7 +404,7 @@ namespace OpenDental {
 			_creditCardCur.CCSource=ccSource;
 			if(_creditCardCur.IsNew) {
 				_creditCardCur.ClinicNum=_clinicNum;
-				_creditCardCur.Procedures=Preferences.GetString(PrefName.DefaultCCProcs);
+				_creditCardCur.Procedures=Preference.GetString(PreferenceName.DefaultCCProcs);
 				CreditCards.Insert(_creditCardCur);
 			}
 			else {
@@ -464,7 +464,7 @@ namespace OpenDental {
 				return false;
 			}
 			string paytype=ProgramProperties.GetPropValForClinicOrDefault(_progCur.ProgramNum,PaySimple.PropertyDescs.PaySimplePayTypeCC,_clinicNum);
-			if(!Defs.GetDefsForCategory(DefCat.PaymentTypes,true).Any(x => x.DefNum.ToString()==paytype)) { //paytype is not a valid DefNum
+			if(!Definition.GetByCategory(DefinitionCategory.PaymentTypes).Any(x => x.Id.ToString()==paytype)) { //paytype is not a valid DefNum
 				MsgBox.Show(this,"The PaySimple payment type has not been set.");
 				return false;
 			}

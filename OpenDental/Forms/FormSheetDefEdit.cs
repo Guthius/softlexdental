@@ -301,7 +301,7 @@ namespace OpenDental {
 		///<summary>Fills _listWebSheetIds with any webforms_sheetdefs that have the same SheetDefNum of the current SheetDef.</summary>
 		private void GetWebSheetDefs(ODThread odThread) {
 			//Ignore the certificate errors for the staging machine and development machine
-			if(Preferences.GetString(PrefName.WebHostSynchServerURL).In(WebFormL.SynchUrlStaging,WebFormL.SynchUrlDev)) {
+			if(Preference.GetString(PreferenceName.WebHostSynchServerURL).In(WebFormL.SynchUrlStaging,WebFormL.SynchUrlDev)) {
 				WebFormL.IgnoreCertificateErrors();
 			}
 			List<WebForms_SheetDef> listWebFormSheetDefs;
@@ -335,7 +335,7 @@ namespace OpenDental {
 						txt=Lan.g(this,"Image:")+fieldDef.FieldName;
 						break;
 					case SheetFieldType.PatImage:
-						txt=Lan.g(this,"PatImg:")+Defs.GetName(DefCat.ImageCats,PIn.Long(fieldDef.FieldName));
+						txt=Lan.g(this,"PatImg:")+Defs.GetName(DefinitionCategory.ImageCats,PIn.Long(fieldDef.FieldName));
 						break;
 					case SheetFieldType.Line:
 						txt=Lan.g(this,"Line:")+fieldDef.XPos.ToString()+","+fieldDef.YPos.ToString()+","+"W:"+fieldDef.Width.ToString()+","+"H:"+fieldDef.Height.ToString();
@@ -718,7 +718,7 @@ namespace OpenDental {
 				g.FillRectangle(Brushes.White,rf);
 				StringFormat sf=new StringFormat();
 				sf.Alignment=StringAlignment.Far;
-				if(Preferences.GetBool(PrefName.InvoicePaymentsGridShowNetProd)) {
+				if(Preference.GetBool(PreferenceName.InvoicePaymentsGridShowNetProd)) {
 					g.DrawString("Total Payments & WriteOffs:  0.00",new Font(FontFamily.GenericSansSerif,10,FontStyle.Bold),new SolidBrush(Color.Black),rf,sf);
 				}
 				else {
@@ -812,29 +812,30 @@ namespace OpenDental {
 			else if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ && File.Exists(filePathAndName)) {
 				img=Image.FromFile(filePathAndName);
 			}
-			else if(CloudStorage.IsCloudStorage) {
-				FormProgress FormP=new FormProgress();
-				FormP.DisplayText=Lan.g(CloudStorage.LanThis,"Downloading...");
-				FormP.NumberFormat="F";
-				FormP.NumberMultiplication=1;
-				FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-				FormP.TickMS=1000;
-				OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(SheetUtil.GetImagePath(),sheetFieldDef.FieldName,
-					new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-				if(FormP.ShowDialog()==DialogResult.Cancel) {
-					state.DoCancel=true;
-					return;
-				}
-				if(state==null || state.FileContent==null) {
-					img=null;
-				}
-				else {
-					using(MemoryStream stream=new MemoryStream(state.FileContent)) {
-						img=new Bitmap(Image.FromStream(stream));
-						sheetFieldDef.ImageField=new Bitmap(Image.FromStream(stream));//So it doesn't have to be downloaded again the next time.
-					}
-				}
-			}
+			else if(CloudStorage.IsCloudStorage)
+            { // TODO: Fix me
+              //	FormProgress FormP=new FormProgress();
+              //	FormP.DisplayText=Lan.g(CloudStorage.LanThis,"Downloading...");
+              //	FormP.NumberFormat="F";
+              //	FormP.NumberMultiplication=1;
+              //	FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
+              //	FormP.TickMS=1000;
+              //	OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(SheetUtil.GetImagePath(),sheetFieldDef.FieldName,
+              //		new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
+              //	if(FormP.ShowDialog()==DialogResult.Cancel) {
+              //		state.DoCancel=true;
+              //		return;
+              //	}
+              //	if(state==null || state.FileContent==null) {
+              //		img=null;
+              //	}
+              //	else {
+              //		using(MemoryStream stream=new MemoryStream(state.FileContent)) {
+              //			img=new Bitmap(Image.FromStream(stream));
+              //			sheetFieldDef.ImageField=new Bitmap(Image.FromStream(stream));//So it doesn't have to be downloaded again the next time.
+              //		}
+              //	}
+            }
 			else {
 #if DEBUG
 				g.DrawRectangle(new Pen(Brushes.IndianRed),sheetFieldDef.XPos,sheetFieldDef.YPos,sheetFieldDef.Width,sheetFieldDef.Height);
@@ -872,7 +873,7 @@ namespace OpenDental {
 				_argsDF.brush=_argsDF.brushBlue;
 			}
 			g.DrawRectangle(_argsDF.pen,sheetFieldDef.XPos,sheetFieldDef.YPos,sheetFieldDef.Width,sheetFieldDef.Height);
-			g.DrawString("PatImage: "+Defs.GetName(DefCat.ImageCats,PIn.Long(sheetFieldDef.FieldName)),Font /*NOT _argsDF.font*/,_argsDF.brush,sheetFieldDef.XPos+1,sheetFieldDef.YPos+1);
+			g.DrawString("PatImage: "+Defs.GetName(DefinitionCategory.ImageCats,PIn.Long(sheetFieldDef.FieldName)),Font /*NOT _argsDF.font*/,_argsDF.brush,sheetFieldDef.XPos+1,sheetFieldDef.YPos+1);
 		}
 
 		private void DrawRectangleHelper(SheetFieldDef sheetFieldDef,Graphics g,bool isSelected) {
@@ -930,7 +931,7 @@ namespace OpenDental {
 				#endregion
 				#region toothChartLegend
 				case "toothChartLegend":
-					List<Def> listDefs=Defs.GetDefsForCategory(DefCat.ChartGraphicColors,true);
+					List<Definition> listDefs=Definition.GetByCategory(DefinitionCategory.ChartGraphicColors);;
 					SheetPrinting.DrawToothChartLegend(sheetFieldDef.XPos,sheetFieldDef.YPos,sheetDefWidth,0,listDefs,g,null);
 					break;
 				case "familyInsurance":
@@ -1036,7 +1037,7 @@ namespace OpenDental {
 					label.Location=new Point(0,0);
 					ListBox listBox=new ListBox();
 					listBox.Items.Add(Lan.g("ContrChart","No Priority"));
-					Defs.GetDefsForCategory(DefCat.TxPriorities,true).ForEach(def => listBox.Items.Add(def.ItemName));
+					Definition.GetByCategory(DefinitionCategory.TxPriorities).ForEach(def => listBox.Items.Add(def.Description));
 					listBox.Width=sheetFieldDef.Width;
 					listBox.Top=label.Bottom;
 					panel=new Panel();
@@ -1109,10 +1110,10 @@ namespace OpenDental {
 			//panelHide.BackColor=this.BackColor;
 			//panelHide.SendToBack();
 			//this.Controls.Add(panelHide);
-			List<Def> listDefs=Defs.GetDefsForCategory(DefCat.ChartGraphicColors);
+			List<Definition> listDefs=Definition.GetByCategory(DefinitionCategory.ChartGraphicColors);;
 			SparksToothChart.ToothChartWrapper toothChart=new SparksToothChart.ToothChartWrapper();
-			toothChart.ColorBackground=listDefs[14].ItemColor;
-			toothChart.ColorText=listDefs[15].ItemColor;
+			toothChart.ColorBackground=listDefs[14].Color;
+			toothChart.ColorText=listDefs[15].Color;
 			//toothChart.TaoRenderEnabled=true;
 			//toothChart.TaoInitializeContexts();
 			toothChart.Size=new Size(500,370);
@@ -1120,7 +1121,7 @@ namespace OpenDental {
 			//toothChart.SendToBack();
 			//ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
 			toothChart.UseHardware=ComputerPrefs.LocalComputer.GraphicsUseHardware;
-			toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)Preferences.GetInt(PrefName.UseInternationalToothNumbers));
+			toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)Preference.GetInt(PreferenceName.UseInternationalToothNumbers));
 			//Must be last preference set, last so that all settings are caried through in the reinitialization this line triggers.
 			if(ComputerPrefs.LocalComputer.GraphicsSimple==DrawingMode.Simple2D) {
 				toothChart.DrawMode=DrawingMode.Simple2D;
@@ -1286,7 +1287,7 @@ namespace OpenDental {
 				HashRtfStringCache[index.ToString()]=data;
 			}
 			Point[] charPositions=(Point[])data[0];
-			if(Preferences.GetBool(PrefName.ImeCompositionCompatibility) && !IsWesternChars(str)) {
+			if(Preference.GetBool(PreferenceName.ImeCompositionCompatibility) && !IsWesternChars(str)) {
 				//Only draw word by word if the user defined preference is set, and there is at least one character in the string that isn't a "Western" 
 				//alphabet character.  Only use right-to-left formatting if the user's computer is set to a right-to-left culture.  This will preserve
 				//desired formatting and spacing in as many scenarios as we can unless we later add a textbox specific setting for this type of formatting.
@@ -2389,7 +2390,7 @@ namespace OpenDental {
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			if(GetIsDynamicSheetType() && _sheetDefCur.SheetDefNum==Preferences.GetLong(PrefName.ChartDefaultLayoutSheetDefNum)) {
+			if(GetIsDynamicSheetType() && _sheetDefCur.SheetDefNum==Preference.GetLong(PreferenceName.ChartDefaultLayoutSheetDefNum)) {
 				MsgBox.Show(this,"This is the current Chart module default layout.\r\nPlease select a new default in Chart Module Preferences first.");
 				return;
 			}

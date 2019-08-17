@@ -68,7 +68,7 @@ namespace OpenDentBusiness {
 		public AccountEntry(Adjustment adjustment) {
 			Tag=adjustment;
 			Date=adjustment.AdjDate;
-			PriKey=adjustment.AdjNum;
+			PriKey=adjustment.Id;
 			AmountOriginal=(decimal)adjustment.AdjAmt;
 			AmountStart=AmountOriginal;
 			AmountEnd=AmountOriginal;

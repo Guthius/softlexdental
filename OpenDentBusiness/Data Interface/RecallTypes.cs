@@ -91,7 +91,7 @@ namespace OpenDentBusiness
             List<RecallType> listRecallTypes = new List<RecallType>();
             for (int i = 0; i < list.Count; i++)
             {
-                if (list[i].RecallTypeNum == Preferences.GetLong(PrefName.RecallTypeSpecialProphy))
+                if (list[i].RecallTypeNum == Preference.GetLong(PreferenceName.RecallTypeSpecialProphy))
                 {
                     listRecallTypes.Add(list[i]);
                     break;
@@ -99,7 +99,7 @@ namespace OpenDentBusiness
             }
             for (int i = 0; i < list.Count; i++)
             {
-                if (list[i].RecallTypeNum == Preferences.GetLong(PrefName.RecallTypeSpecialChildProphy))
+                if (list[i].RecallTypeNum == Preference.GetLong(PreferenceName.RecallTypeSpecialChildProphy))
                 {
                     listRecallTypes.Add(list[i]);
                     break;
@@ -107,7 +107,7 @@ namespace OpenDentBusiness
             }
             for (int i = 0; i < list.Count; i++)
             {
-                if (list[i].RecallTypeNum == Preferences.GetLong(PrefName.RecallTypeSpecialPerio))
+                if (list[i].RecallTypeNum == Preference.GetLong(PreferenceName.RecallTypeSpecialPerio))
                 {
                     listRecallTypes.Add(list[i]);
                     break;
@@ -203,11 +203,11 @@ namespace OpenDentBusiness
             for (int i = 0; i < timePattern.Length; i++)
             {
                 patternConverted.Append(timePattern.Substring(i, 1));
-                if (Preferences.GetLong(PrefName.AppointmentTimeIncrement) == 10)
+                if (Preference.GetLong(PreferenceName.AppointmentTimeIncrement) == 10)
                 {
                     patternConverted.Append(timePattern.Substring(i, 1));
                 }
-                if (Preferences.GetLong(PrefName.AppointmentTimeIncrement) == 15)
+                if (Preference.GetLong(PreferenceName.AppointmentTimeIncrement) == 15)
                 {
                     patternConverted.Append(timePattern.Substring(i, 1));
                     patternConverted.Append(timePattern.Substring(i, 1));
@@ -215,7 +215,7 @@ namespace OpenDentBusiness
             }
             if (patternConverted.ToString() == "")
             {
-                if (Preferences.GetLong(PrefName.AppointmentTimeIncrement) == 15)
+                if (Preference.GetLong(PreferenceName.AppointmentTimeIncrement) == 15)
                 {
                     patternConverted.Append("///XXX///");
                 }
@@ -230,15 +230,15 @@ namespace OpenDentBusiness
         public static string GetSpecialTypeStr(long recallTypeNum)
         {
             //No need to check RemotingRole; no call to db.
-            if (recallTypeNum == Preferences.GetLong(PrefName.RecallTypeSpecialProphy))
+            if (recallTypeNum == Preference.GetLong(PreferenceName.RecallTypeSpecialProphy))
             {
                 return Lans.g("FormRecallTypeEdit", "Prophy");
             }
-            if (recallTypeNum == Preferences.GetLong(PrefName.RecallTypeSpecialChildProphy))
+            if (recallTypeNum == Preference.GetLong(PreferenceName.RecallTypeSpecialChildProphy))
             {
                 return Lans.g("FormRecallTypeEdit", "ChildProphy");
             }
-            if (recallTypeNum == Preferences.GetLong(PrefName.RecallTypeSpecialPerio))
+            if (recallTypeNum == Preference.GetLong(PreferenceName.RecallTypeSpecialPerio))
             {
                 return Lans.g("FormRecallTypeEdit", "Perio");
             }
@@ -248,15 +248,15 @@ namespace OpenDentBusiness
         public static bool IsSpecialRecallType(long recallTypeNum)
         {
             //No need to check RemotingRole; no call to db.
-            if (recallTypeNum == Preferences.GetLong(PrefName.RecallTypeSpecialProphy))
+            if (recallTypeNum == Preference.GetLong(PreferenceName.RecallTypeSpecialProphy))
             {
                 return true;
             }
-            if (recallTypeNum == Preferences.GetLong(PrefName.RecallTypeSpecialChildProphy))
+            if (recallTypeNum == Preference.GetLong(PreferenceName.RecallTypeSpecialChildProphy))
             {
                 return true;
             }
-            if (recallTypeNum == Preferences.GetLong(PrefName.RecallTypeSpecialPerio))
+            if (recallTypeNum == Preference.GetLong(PreferenceName.RecallTypeSpecialPerio))
             {
                 return true;
             }
@@ -302,7 +302,7 @@ namespace OpenDentBusiness
             //No need to check RemotingRole; no call to db.
             get
             {
-                return Preferences.GetLong(PrefName.RecallTypeSpecialProphy);
+                return Preference.GetLong(PreferenceName.RecallTypeSpecialProphy);
             }
         }
 
@@ -312,7 +312,7 @@ namespace OpenDentBusiness
             //No need to check RemotingRole; no call to db.
             get
             {
-                return Preferences.GetLong(PrefName.RecallTypeSpecialPerio);
+                return Preference.GetLong(PreferenceName.RecallTypeSpecialPerio);
             }
         }
 
@@ -322,7 +322,7 @@ namespace OpenDentBusiness
             //No need to check RemotingRole; no call to db.
             get
             {
-                return Preferences.GetLong(PrefName.RecallTypeSpecialChildProphy);
+                return Preference.GetLong(PreferenceName.RecallTypeSpecialChildProphy);
             }
         }
 

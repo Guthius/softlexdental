@@ -175,7 +175,7 @@ namespace OpenDental {
 					row.Cells.Add(clinicCur!=null?clinicCur.Description:"");//get description from cache if clinics are enabled
 				}
 				int billingDay=0;
-				if(Preferences.GetBool(PrefName.BillingUseBillingCycleDay)) {
+				if(Preference.GetBool(PreferenceName.BillingUseBillingCycleDay)) {
 					billingDay=chargeCur.BillingCycleDay;
 				}
 				else {
@@ -195,10 +195,10 @@ namespace OpenDental {
 					row.Cells.Add(payPlanDue.ToString("c"));
 					//negative family balance does not subtract from payplan amount due and negative payplan amount due does not subtract from family balance due
 					double totalBal=(Math.Max(famBalTotal,0));
-					if(Preferences.GetInt(PrefName.PayPlansVersion) == 1) {//in PP v2, the PP amt due is included in the pat balance
+					if(Preference.GetInt(PreferenceName.PayPlansVersion) == 1) {//in PP v2, the PP amt due is included in the pat balance
 						totalBal+=Math.Max(payPlanDue,0);
 					}
-					else if(Preferences.GetInt(PrefName.PayPlansVersion)==2) {
+					else if(Preference.GetInt(PreferenceName.PayPlansVersion)==2) {
 						totalBal=Math.Max(totalBal,payPlanDue);//At minimum, the Total Due should be the Pay Plan Due amount.
 					}
 					row.Cells.Add(totalBal.ToString("c"));

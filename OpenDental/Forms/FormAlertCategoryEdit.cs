@@ -24,12 +24,12 @@ namespace OpenDental {
 		private void FormAlertCategoryEdit_Load(object sender,EventArgs e) {
 			textDesc.Text=_categoryCur.Description;
 			listShownAlertTypes=Enum.GetValues(typeof(AlertType)).OfType<AlertType>().ToList();
-			if(_categoryCur.IsHQCategory) {
+			if(_categoryCur.Locked) {
 				textDesc.Enabled=false;
 				butDelete.Enabled=false;
 				butOK.Enabled=false;
 			}
-			listOldAlertCategoryLinks=AlertCategoryLinks.GetForCategory(_categoryCur.AlertCategoryNum);
+			listOldAlertCategoryLinks=AlertCategoryLinks.GetForCategory(_categoryCur.Id);
 			InitAlertTypeSelections();
 		}
 
@@ -43,7 +43,7 @@ namespace OpenDental {
 		}
 
 		private void listBoxAlertTypes_MouseClick(object sender,MouseEventArgs e) {
-			if(_categoryCur.IsHQCategory) {
+			if(_categoryCur.Locked) {
 				InitAlertTypeSelections();
 				MsgBox.Show(this,"You can only edit custom alert categories.");
 			}
@@ -55,15 +55,15 @@ namespace OpenDental {
 				.OfType<int>()
 				.Select(x => (AlertType)listShownAlertTypes[x])
 				.ToList();
-			List<AlertCategoryLink> listNewAlertCategoryType=listOldAlertCategoryLinks.Select(x => x.Copy()).ToList();
+            List<AlertCategoryLink> listNewAlertCategoryType = new List<AlertCategoryLink>(listOldAlertCategoryLinks);
 			listNewAlertCategoryType.RemoveAll(x => !listSelectedTypes.Contains(x.AlertType));//Remove unselected AlertTypes
 			foreach(AlertType type in listSelectedTypes) {
 				if(!listOldAlertCategoryLinks.Exists(x => x.AlertType==type)) {//Add newly selected AlertTypes.
-					listNewAlertCategoryType.Add(new AlertCategoryLink(_categoryCur.AlertCategoryNum,type));
+					listNewAlertCategoryType.Add(new AlertCategoryLink(_categoryCur.Id,type));
 				}
 			}
 			AlertCategoryLinks.Sync(listNewAlertCategoryType,listOldAlertCategoryLinks);
-			AlertCategories.Update(_categoryCur);
+            AlertCategory.Update(_categoryCur);
 			DataValid.SetInvalid(InvalidType.AlertCategoryLinks,InvalidType.AlertCategories);
 			DialogResult=DialogResult.OK;
 		}
@@ -76,8 +76,8 @@ namespace OpenDental {
 			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Are you sure you would like to delete this?")) {
 				return;
 			}
-			AlertCategoryLinks.DeleteForCategory(_categoryCur.AlertCategoryNum);
-			AlertCategories.Delete(_categoryCur.AlertCategoryNum);
+			AlertCategoryLinks.DeleteForCategory(_categoryCur.Id);
+			AlertCategory.Delete(_categoryCur.Id);
 			DataValid.SetInvalid(InvalidType.AlertCategories,InvalidType.AlertCategories);
 			DialogResult=DialogResult.OK;
 		}

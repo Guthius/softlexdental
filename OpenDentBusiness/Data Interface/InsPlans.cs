@@ -789,7 +789,7 @@ namespace OpenDentBusiness
             double retVal = Fees.GetAmount(substCodeNum, copayFeeSched, clinicNum, provNum, listFees);
             if (retVal == -1)
             {//blank co-pay
-                if (Preferences.GetBool(PrefName.CoPay_FeeSchedule_BlankLikeZero))
+                if (Preference.GetBool(PreferenceName.CoPay_FeeSchedule_BlankLikeZero))
                 {
                     return -1;//will act like zero.  No patient co-pay.
                 }
@@ -874,9 +874,9 @@ namespace OpenDentBusiness
                 {//slight corruption
                     if (lookupFees != null)
                     {
-                        listFees = lookupFees[new FeeKey2(substCodeNum, Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv)).FeeSched)].ToList();
+                        listFees = lookupFees[new FeeKey2(substCodeNum, Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv)).FeeSched)].ToList();
                     }
-                    return Fees.GetAmount(substCodeNum, Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv)).FeeSched, clinicNum, provNum, listFees);
+                    return Fees.GetAmount(substCodeNum, Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv)).FeeSched, clinicNum, provNum, listFees);
                 }
                 else
                 {
@@ -1167,7 +1167,7 @@ namespace OpenDentBusiness
         public static bool UsesUcrFeeForExclusions(InsPlan insPlan)
         {
             if (insPlan.ExclusionFeeRule == ExclusionRule.UseUcrFee
-                || (insPlan.ExclusionFeeRule == ExclusionRule.PracticeDefault && Preferences.GetBool(PrefName.InsPlanUseUcrFeeForExclusions)))
+                || (insPlan.ExclusionFeeRule == ExclusionRule.PracticeDefault && Preference.GetBool(PreferenceName.InsPlanUseUcrFeeForExclusions)))
             {
                 return true;
             }
@@ -1198,7 +1198,7 @@ namespace OpenDentBusiness
             }
             else
             {
-                return Preferences.GetLong(PrefName.OrthoAutoProcCodeNum);
+                return Preference.GetLong(PreferenceName.OrthoAutoProcCodeNum);
             }
         }
 

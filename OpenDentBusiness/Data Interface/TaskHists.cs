@@ -88,9 +88,9 @@ namespace OpenDentBusiness
             if (taskNext.PriorityDefNum != taskCur.PriorityDefNum)
             {
                 strb.Append(Lans.g("TaskHists", "Task priority changed from") + " "
-                    + Defs.GetDef(DefCat.TaskPriorities, taskCur.PriorityDefNum).ItemName
+                    + Defs.GetDef(DefinitionCategory.TaskPriorities, taskCur.PriorityDefNum).Description
                     + " " + Lans.g("TaskHists", "to") + " "
-                    + Defs.GetDef(DefCat.TaskPriorities, taskNext.PriorityDefNum).ItemName + ".\r\n");
+                    + Defs.GetDef(DefinitionCategory.TaskPriorities, taskNext.PriorityDefNum).Description + ".\r\n");
             }
             if (taskCur.IsNoteChange)
             { //Using taskOld because the notes changed from the old one to the new one.

@@ -17,7 +17,7 @@ namespace OpenDental {
 		///<summary>We need access to a few other fields of the sheetDef.</summary>
 		public SheetDef SheetDefCur;
 		public bool IsReadOnly;
-		private List<Def> _listImageCatDefs;
+		private List<Definition> _listImageCatDefs;
 
 		public FormSheetFieldPatImage() {
 			InitializeComponent();
@@ -39,10 +39,10 @@ namespace OpenDental {
 
 		private void FillCombo(){
 			comboImageCategory.Items.Clear();
-			_listImageCatDefs=Defs.GetDefsForCategory(DefCat.ImageCats,true);
+			_listImageCatDefs=Definition.GetByCategory(DefinitionCategory.ImageCats);
 			for(int i=0;i<_listImageCatDefs.Count;i++) {
-				comboImageCategory.Items.Add(_listImageCatDefs[i].ItemName);
-				if(SheetFieldDefCur.FieldName==_listImageCatDefs[i].DefNum.ToString()) {
+				comboImageCategory.Items.Add(_listImageCatDefs[i].Description);
+				if(SheetFieldDefCur.FieldName==_listImageCatDefs[i].Id.ToString()) {
 					comboImageCategory.SelectedIndex=i;
 				}
 			}
@@ -66,7 +66,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select an image category first.");
 				return;
 			}
-			SheetFieldDefCur.FieldName=_listImageCatDefs[comboImageCategory.SelectedIndex].DefNum.ToString();
+			SheetFieldDefCur.FieldName=_listImageCatDefs[comboImageCategory.SelectedIndex].Id.ToString();
 			SheetFieldDefCur.XPos=PIn.Int(textXPos.Text);
 			SheetFieldDefCur.YPos=PIn.Int(textYPos.Text);
 			SheetFieldDefCur.Width=PIn.Int(textWidth.Text);

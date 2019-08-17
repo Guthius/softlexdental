@@ -191,7 +191,7 @@ namespace OpenDentBusiness
                     + "\r\n" + string.Join(", ", table.Select().Select(x => x["Description"].ToString())));
             }
             //validate that not already in use by clinicPref.
-            command = "SELECT ClinicNum FROM clinicpref WHERE ValueString='" + POut.Long(sheetDefNum) + "' AND PrefName='" + POut.String(PrefName.SheetsDefaultRx.ToString()) + "'";
+            command = "SELECT ClinicNum FROM clinicpref WHERE ValueString='" + POut.Long(sheetDefNum) + "' AND PrefName='" + POut.String(PreferenceName.SheetsDefaultRx.ToString()) + "'";
             table = Db.GetTable(command);
             if (table.Rows.Count > 0)
             {
@@ -261,7 +261,7 @@ namespace OpenDentBusiness
         {
             //No need to check RemotingRole; no call to db.
             Dictionary<SheetTypeEnum, SheetDef> retVal = new Dictionary<SheetTypeEnum, SheetDef>();
-            ClinicPref clinicPrefCur = ClinicPrefs.GetPref(Prefs.GetSheetDefPref(SheetTypeEnum.Rx), clinicNum);
+            ClinicPref clinicPrefCur = ClinicPrefs.GetPref(Preference.GetSheetDefPref(SheetTypeEnum.Rx), clinicNum);
             SheetDef defaultRxDef = SheetsInternal.GetSheetDef(SheetTypeEnum.Rx);
             if (clinicPrefCur != null && PIn.Long(clinicPrefCur.ValueString) != 0)
             {//If ValueString is 0 then we want to keep it as the internal sheet def.
@@ -278,7 +278,7 @@ namespace OpenDentBusiness
         public static SheetDef GetSheetsDefault(SheetTypeEnum sheetType, long clinicNum = 0)
         {
             //No need to check RemotingRole; no call to db.
-            ClinicPref clinicPrefCur = ClinicPrefs.GetPref(Prefs.GetSheetDefPref(sheetType), clinicNum);
+            ClinicPref clinicPrefCur = ClinicPrefs.GetPref(Preference.GetSheetDefPref(sheetType), clinicNum);
             SheetDef defaultSheetDef;
             if (clinicPrefCur == null)
             {//If there wasn't a row for the specific clinic, use the base default sheetdef

@@ -38,7 +38,7 @@ namespace OpenDental
         /// </summary>
         void FormAuditOneType_Load(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(Preferences.GetString(PrefName.ArchiveServerName)))
+            if (string.IsNullOrEmpty(Preference.GetString(PreferenceName.ArchiveServerName)))
             {
                 includeArchivedCheckBox.Enabled = false;
             }

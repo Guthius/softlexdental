@@ -30,7 +30,7 @@ namespace OpenDental {
 			textCompareString.Text=Element.CompareString;
 			if(Element.Restriction==EhrRestrictionType.Problem && !IsNew) {
 				textCompareString.Text="";//clear text box for simplicity
-				if(ICD9s.CodeExists(Element.CompareString)) {
+				if(ICD9.CodeExists(Element.CompareString)) {
 					textCompareString.Text=Element.CompareString;
 				}
 				else if(Snomeds.CodeExists(Element.CompareString)) {
@@ -58,7 +58,7 @@ namespace OpenDental {
 
 		private void fillCombos() {
 			//Units of measure----------------------------------------
-			_listUCUM=Ucums.GetAll();
+			_listUCUM=Ucum.All();
 			if(_listUCUM.Count==0) {
 				MsgBox.Show(this,"Units of measure have not been imported. Go to the code system importer window to import UCUM codes to continue.");
 				DialogResult=DialogResult.Cancel;
@@ -66,8 +66,8 @@ namespace OpenDental {
 			}
 			int _tempSelectedIndex=0;
 			for(int i=0;i<_listUCUM.Count;i++) {
-				comboUnits.Items.Add(_listUCUM[i].UcumCode);
-				if(_listUCUM[i].UcumCode=="mg/dL") {//arbitrarily chosen common unit of measure.
+				comboUnits.Items.Add(_listUCUM[i].Code);
+				if(_listUCUM[i].Code=="mg/dL") {//arbitrarily chosen common unit of measure.
 					_tempSelectedIndex=i;
 				}
 			}
@@ -332,7 +332,7 @@ namespace OpenDental {
 						return false;
 					}
 					if(textCompareString.Text!="") {
-						if(!ICD9s.CodeExists(textCompareString.Text)) {
+						if(!ICD9.CodeExists(textCompareString.Text)) {
 							MsgBox.Show(this,"ICD9 code does not exist in database, pick from list.");
 							return false;
 						}
@@ -355,7 +355,7 @@ namespace OpenDental {
 						MsgBox.Show(this,"Please enter a valid medication.");
 						return false;
 					}
-					if(Medications.GetMedicationFromDbByName(textCompareString.Text)==null) {
+					if(Medication.GetByDescription(textCompareString.Text)==null) {
 						MsgBox.Show(this,"Medication does not exist in database, pick from list.");
 						return false;
 					}
@@ -440,7 +440,7 @@ namespace OpenDental {
 						if(FormI9.DialogResult!=DialogResult.OK) {
 							return;
 						}
-						textCompareString.Text=FormI9.SelectedIcd9.ICD9Code;
+						textCompareString.Text=FormI9.SelectedIcd9.Code;
 						textSNOMED.Text="";
 					}
 					else if(sender.Equals(butSNOMED)) {
@@ -461,7 +461,7 @@ namespace OpenDental {
 					if(FormM.DialogResult!=DialogResult.OK) {
 						return;
 					}
-					textCompareString.Text=Medications.GetNameOnly(FormM.SelectedMedicationNum);
+					textCompareString.Text= Medication.GetDescription(FormM.SelectedMedicationNum);
 					break;
 				case 3://LabResult
 					FormLoincs FormL=new FormLoincs();

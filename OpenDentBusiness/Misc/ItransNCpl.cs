@@ -28,7 +28,7 @@ namespace OpenDentBusiness {
 		
 		///<summary>Returns a blank string if there were no errors while attempting to update internal carriers using iTrans n-cpl.json file.</summary>
 		public static string TryCarrierUpdate(bool isAutomatic=true,ItransImportFields fieldsToImport=ItransImportFields.None) {
-			string json;
+			string json = "";
 			DateTime dateTimeTrans=DateTime.Now;
 			Clearinghouse clearinghouse=Clearinghouses.GetDefaultDental();
 			if(clearinghouse==null) {
@@ -39,8 +39,8 @@ namespace OpenDentBusiness {
 				if(!File.Exists(ODFileUtils.CombinePaths(clearinghouse.ResponsePath,"ITRANS Claims Director.exe"))) {
 					return Lans.g("Clearinghouse","Unable to find 'ITRANS Claims Director.exe'. Make sure the file exists and the path is correct.");
 				}
-				if(isAutomatic && Preferences.GetString(PrefName.WebServiceServerName).ToLower()!=Dns.GetHostName().ToLower()) {//Only server can run when isOnlyServer is true.
-					return Lans.g("Clearinghouse","Update can only run on the web service server "+Preferences.GetString(PrefName.WebServiceServerName))+
+				if(isAutomatic && Preference.GetString(PreferenceName.WebServiceServerName).ToLower()!=Dns.GetHostName().ToLower()) {//Only server can run when isOnlyServer is true.
+					return Lans.g("Clearinghouse","Update can only run on the web service server "+ Preference.GetString(PreferenceName.WebServiceServerName))+
 						". "+Lans.g("Clearinghouse","Connect to the server and try again.");
 				}
 				Process process=new Process {
@@ -56,13 +56,13 @@ namespace OpenDentBusiness {
 				dateTimeTrans=File.GetCreationTime(ncplFilePath);
 			}
 			else {//ITRANS2 not used or not setup correctly, go to HQ for file content.
-				try {
-					string result=WebServiceMainHQProxy.GetWebServiceMainHQInstance().CanadaCarrierUpdate(PayloadHelper.CreatePayload("",eServiceCode.Undefined));
-					json=WebSerializer.DeserializePrimitiveOrThrow<string>(result);
-				}
-				catch(Exception ex) {
-					return Lans.g("Clearinghouse","Unable to update carrier list from HQ web services.")+"\r\n"+ex.Message.ToString();
-				}
+				//try {
+				//	string result=WebServiceMainHQProxy.GetWebServiceMainHQInstance().CanadaCarrierUpdate(PayloadHelper.CreatePayload("",eServiceCode.Undefined));
+				//	json=WebSerializer.DeserializePrimitiveOrThrow<string>(result);
+				//}
+				//catch(Exception ex) {
+				//	return Lans.g("Clearinghouse","Unable to update carrier list from HQ web services.")+"\r\n"+ex.Message.ToString();
+				//}
 			}
 			EtransMessageText msgTextPrev=EtransMessageTexts.GetMostRecentForType(EtransType.ItransNcpl);
 			if(msgTextPrev!=null && msgTextPrev.MessageText==json) {

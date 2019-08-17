@@ -25,7 +25,7 @@ namespace OpenDentBusiness
             List<ProcedureCode> listProcCodes = new List<ProcedureCode>();
             if (isCategories)
             {
-                Def[][] arrayDefs = ReportsComplex.RunFuncOnReportServer(() => Defs.GetArrayShortNoCache());
+                Definition[][] arrayDefs = ReportsComplex.RunFuncOnReportServer(() => Defs.GetArrayShortNoCache());
                 listProcCodes = ReportsComplex.RunFuncOnReportServer(() => ProcedureCodes.GetProcList(arrayDefs))
                     .OrderBy(x => x.ProcCat).ThenBy(x => x.ProcCode).ToList(); //Ordered by category
             }
@@ -34,7 +34,7 @@ namespace OpenDentBusiness
                 listProcCodes = ReportsComplex.RunFuncOnReportServer(() => ProcedureCodes.GetAllCodes()); //Ordered by ProcCode, used for the non-category version of the report if they want blanks.
             }
             bool isFound;
-            List<Def> listDefs = Defs.GetDefsNoCache(DefCat.ProcCodeCats);
+            List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.ProcCodeCats);
             for (int i = 0; i < listProcCodes.Count; i++)
             {
                 isFound = false;
@@ -42,8 +42,8 @@ namespace OpenDentBusiness
                 if (isCategories)
                 {
                     //reports should no longer use the cache.
-                    Def def = listDefs.FirstOrDefault(x => x.DefNum == listProcCodes[i].ProcCat);
-                    row[0] = def == null ? "" : def.ItemName;
+                    Definition def = listDefs.FirstOrDefault(x => x.Id == listProcCodes[i].ProcCat);
+                    row[0] = def == null ? "" : def.Description;
                     row[1] = listProcCodes[i].ProcCode;
                     row[2] = listProcCodes[i].Descript;
                     row[3] = listProcCodes[i].AbbrDesc;

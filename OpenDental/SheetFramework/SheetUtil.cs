@@ -120,7 +120,7 @@ namespace OpenDental{
 							//This logic mimics SheetPrinting.drawFieldGrid(...)
 							SheetParameter param=SheetParameter.GetParamByName(sheet.Parameters,"IsSingleClaimPaid");
 							bool isSingleClaim=(param.ParamValue==null)?false:true;//param is only set when true
-							bool isOneClaimPerPage=Preferences.GetBool(PrefName.EraPrintOneClaimPerPage);
+							bool isOneClaimPerPage=Preference.GetBool(PreferenceName.EraPrintOneClaimPerPage);
 							X835 era=(X835)SheetParameter.GetParamByName(sheet.Parameters,"ERA").ParamValue;//Required field.
 							DataTable tableClaimsPaid=GetDataTableForGridType(sheet,dataSet,field.FieldName,stmt,medLab);
 							DataTable tableRemarks=GetDataTableForGridType(sheet,dataSet,"EraClaimsPaidProcRemarks",stmt,medLab);
@@ -1110,7 +1110,7 @@ namespace OpenDental{
 						row.Done="X";
 					}
 					ProcedureCode procCode=ProcedureCodes.GetProcCode(treatPlan.ListProcTPs[i].ProcCode);
-					row.Priority=Defs.GetName(DefCat.TxPriorities,treatPlan.ListProcTPs[i].Priority);
+					row.Priority=Defs.GetName(DefinitionCategory.TxPriorities,treatPlan.ListProcTPs[i].Priority);
 					row.Tth=treatPlan.ListProcTPs[i].ToothNumTP;
 					row.Surf=treatPlan.ListProcTPs[i].Surf;
 					row.Code=treatPlan.ListProcTPs[i].ProcCode;
@@ -1144,7 +1144,7 @@ namespace OpenDental{
 					subTaxEst+=(decimal)treatPlan.ListProcTPs[i].TaxAmt;
 					totTaxEst+=(decimal)treatPlan.ListProcTPs[i].TaxAmt;
 					row.Dx=treatPlan.ListProcTPs[i].Dx;
-					row.ColorText=Defs.GetColor(DefCat.TxPriorities,treatPlan.ListProcTPs[i].Priority);
+					row.ColorText=Defs.GetColor(DefinitionCategory.TxPriorities,treatPlan.ListProcTPs[i].Priority);
 					if(row.ColorText==System.Drawing.Color.White) {
 						row.ColorText=System.Drawing.Color.Black;
 					}
@@ -1162,7 +1162,7 @@ namespace OpenDental{
 						row.Pat=subpat;
 						row.FeeAllowed=subfeeallowed;
 						row.TaxEst=subTaxEst;
-						row.ColorText=Defs.GetColor(DefCat.TxPriorities,treatPlan.ListProcTPs[i].Priority);
+						row.ColorText=Defs.GetColor(DefinitionCategory.TxPriorities,treatPlan.ListProcTPs[i].Priority);
 						if(row.ColorText==System.Drawing.Color.White) {
 							row.ColorText=System.Drawing.Color.Black;
 						}
@@ -1209,7 +1209,7 @@ namespace OpenDental{
 				//If any plan allows substitution, show X
 				dRow["Sub"]=SubstitutionLinks.HasSubstCodeForProcCode(procCode,tpRow.Tth,listSubLinks,listInsPlans) ? "X" : "";
 				dRow["Description"]            =tpRow.Description;
-				if(Preferences.GetBool(PrefName.TreatPlanItemized) 
+				if(Preference.GetBool(PreferenceName.TreatPlanItemized) 
 					|| tpRow.Description==Lan.g("TableTP","Subtotal") || tpRow.Description==Lan.g("TableTP","Total")) 
 				{
 					dRow["Fee"]                  =tpRow.Fee.ToString("F");
@@ -1573,7 +1573,7 @@ namespace OpenDental{
 
 		///<Summary>DataSet should be prefilled with AccountModules.GetAccount() before calling this method.</Summary>
 		private static DataTable GetTable_StatementEnclosed(DataSet dataSet,Statement stmt,Patient patGuar=null) {
-			int payPlanVersionCur=Preferences.GetInt(PrefName.PayPlansVersion);
+			int payPlanVersionCur=Preference.GetInt(PreferenceName.PayPlansVersion);
 			DataTable tableMisc=dataSet.Tables["misc"];
 			string text="";
 			DataTable table=new DataTable();
@@ -1596,7 +1596,7 @@ namespace OpenDental{
 					double balCur;
 					foreach(Patient guarantor in listSuperFamGuars) {
 						balCur=guarantor.BalTotal;
-						if(!Preferences.GetBool(PrefName.BalancesDontSubtractIns)) {
+						if(!Preference.GetBool(PreferenceName.BalancesDontSubtractIns)) {
 							balCur-=guarantor.InsEst;
 						}
 						if(balCur<=0) {//if this guarantor has a negative balance, don't subtract from the super statement amount due (Ryan says so)
@@ -1607,7 +1607,7 @@ namespace OpenDental{
 				}
 				else {
 					balTotal=patGuar.BalTotal;
-					if(!Preferences.GetBool(PrefName.BalancesDontSubtractIns)) {
+					if(!Preference.GetBool(PreferenceName.BalancesDontSubtractIns)) {
 						balTotal-=patGuar.InsEst;
 					}
 				}
@@ -1668,7 +1668,7 @@ namespace OpenDental{
 						|| x["PayNum"].ToString()!="0"//patient payments, will be credits with charges==0
 						|| x["ClaimPaymentNum"].ToString()!="0").ToList()//claimproc payments+writeoffs, will be credits with charges==0
 					.Sum(x => PIn.Double(x["chargesDouble"].ToString())-PIn.Double(x["creditsDouble"].ToString()));//add charges-credits
-				if(Preferences.GetBool(PrefName.BalancesDontSubtractIns)) {
+				if(Preference.GetBool(PreferenceName.BalancesDontSubtractIns)) {
 					text=statementTotal.ToString("c");
 				}
 				else {
@@ -1680,11 +1680,11 @@ namespace OpenDental{
 			}
 			#endregion Statement Type LimitedStatement
 			row[0]=text;
-			if(Preferences.GetLong(PrefName.StatementsCalcDueDate)==-1) {
+			if(Preference.GetLong(PreferenceName.StatementsCalcDueDate)==-1) {
 				text=Lans.g("Statements","Upon Receipt");
 			}
 			else {
-				text=DateTime.Today.AddDays(Preferences.GetLong(PrefName.StatementsCalcDueDate)).ToShortDateString();
+				text=DateTime.Today.AddDays(Preference.GetLong(PreferenceName.StatementsCalcDueDate)).ToShortDateString();
 			}
 			row[1]=text;
 			row[2]="";
@@ -1694,7 +1694,7 @@ namespace OpenDental{
 
 		///<summary>DataSet should be prefilled with AccountModules.GetAccount() before calling this method.  Only returns results for invoices.</summary>
 		private static DataTable GetTable_StatementInvoicePayment(Statement stmt) {
-			int payPlanVersionCur=Preferences.GetInt(PrefName.PayPlansVersion);
+			int payPlanVersionCur=Preference.GetInt(PreferenceName.PayPlansVersion);
 			DataTable table=new DataTable(); //not sure what other codes we should add.
 			table.Columns.Add(new DataColumn("date"));
 			table.Columns.Add(new DataColumn("prov"));

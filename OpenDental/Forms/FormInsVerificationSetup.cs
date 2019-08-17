@@ -12,18 +12,18 @@ namespace OpenDental {
 		}
 
 		private void FormInsVerificationSetup_Load(object sender,EventArgs e) {
-			textInsBenefitEligibilityDays.Text=POut.Int(Preferences.GetInt(PrefName.InsVerifyBenefitEligibilityDays));
-			textPatientEnrollmentDays.Text=POut.Int(Preferences.GetInt(PrefName.InsVerifyPatientEnrollmentDays));
-			textScheduledAppointmentDays.Text=POut.Int(Preferences.GetInt(PrefName.InsVerifyAppointmentScheduledDays));
-			textPastDueDays.Text=POut.Int(Preferences.GetInt(PrefName.InsVerifyDaysFromPastDueAppt));
-			checkInsVerifyUseCurrentUser.Checked=Preferences.GetBool(PrefName.InsVerifyDefaultToCurrentUser);
-			checkInsVerifyExcludePatVerify.Checked=Preferences.GetBool(PrefName.InsVerifyExcludePatVerify);
-			checkFutureDateBenefitYear.Checked=Preferences.GetBool(PrefName.InsVerifyFutureDateBenefitYear);
-			if(!Preferences.GetBool(PrefName.ShowFeaturePatientClone)) {
+			textInsBenefitEligibilityDays.Text=POut.Int(Preference.GetInt(PreferenceName.InsVerifyBenefitEligibilityDays));
+			textPatientEnrollmentDays.Text=POut.Int(Preference.GetInt(PreferenceName.InsVerifyPatientEnrollmentDays));
+			textScheduledAppointmentDays.Text=POut.Int(Preference.GetInt(PreferenceName.InsVerifyAppointmentScheduledDays));
+			textPastDueDays.Text=POut.Int(Preference.GetInt(PreferenceName.InsVerifyDaysFromPastDueAppt));
+			checkInsVerifyUseCurrentUser.Checked=Preference.GetBool(PreferenceName.InsVerifyDefaultToCurrentUser);
+			checkInsVerifyExcludePatVerify.Checked=Preference.GetBool(PreferenceName.InsVerifyExcludePatVerify);
+			checkFutureDateBenefitYear.Checked=Preference.GetBool(PreferenceName.InsVerifyFutureDateBenefitYear);
+			if(!Preference.GetBool(PreferenceName.ShowFeaturePatientClone)) {
 				checkExcludePatientClones.Visible=false;
 			}
 			else {
-				checkExcludePatientClones.Checked=Preferences.GetBool(PrefName.InsVerifyExcludePatientClones);
+				checkExcludePatientClones.Checked=Preference.GetBool(PreferenceName.InsVerifyExcludePatientClones);
 			}
 		}
 
@@ -48,14 +48,14 @@ namespace OpenDental {
 			int patientEnrollmentDays=PIn.Int(textPatientEnrollmentDays.Text);
 			int scheduledAppointmentDays=PIn.Int(textScheduledAppointmentDays.Text);
 			int pastDueDays=PIn.Int(textPastDueDays.Text);
-			if(Prefs.UpdateInt(PrefName.InsVerifyBenefitEligibilityDays,insBenefitEligibilityDays)
-				| Prefs.UpdateInt(PrefName.InsVerifyPatientEnrollmentDays,patientEnrollmentDays)
-				| Prefs.UpdateInt(PrefName.InsVerifyAppointmentScheduledDays,scheduledAppointmentDays)
-				| Prefs.UpdateInt(PrefName.InsVerifyDaysFromPastDueAppt,pastDueDays)
-				| Prefs.UpdateBool(PrefName.InsVerifyExcludePatVerify,checkInsVerifyExcludePatVerify.Checked)
-				| Prefs.UpdateBool(PrefName.InsVerifyExcludePatientClones,checkExcludePatientClones.Checked)
-				| Prefs.UpdateBool(PrefName.InsVerifyFutureDateBenefitYear,checkFutureDateBenefitYear.Checked)
-				| Prefs.UpdateBool(PrefName.InsVerifyDefaultToCurrentUser,checkInsVerifyUseCurrentUser.Checked)) 
+			if(Preference.Update(PreferenceName.InsVerifyBenefitEligibilityDays,insBenefitEligibilityDays)
+				| Preference.Update(PreferenceName.InsVerifyPatientEnrollmentDays,patientEnrollmentDays)
+				| Preference.Update(PreferenceName.InsVerifyAppointmentScheduledDays,scheduledAppointmentDays)
+				| Preference.Update(PreferenceName.InsVerifyDaysFromPastDueAppt,pastDueDays)
+				| Preference.Update(PreferenceName.InsVerifyExcludePatVerify,checkInsVerifyExcludePatVerify.Checked)
+				| Preference.Update(PreferenceName.InsVerifyExcludePatientClones,checkExcludePatientClones.Checked)
+				| Preference.Update(PreferenceName.InsVerifyFutureDateBenefitYear,checkFutureDateBenefitYear.Checked)
+				| Preference.Update(PreferenceName.InsVerifyDefaultToCurrentUser,checkInsVerifyUseCurrentUser.Checked)) 
 			{
 				_hasChanged=true;
 			}

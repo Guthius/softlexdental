@@ -49,7 +49,7 @@ namespace OpenDentBusiness.Crud{
 				rxDef.Refills           = PIn.String(row["Refills"].ToString());
 				rxDef.Notes             = PIn.String(row["Notes"].ToString());
 				rxDef.IsControlled      = PIn.Bool  (row["IsControlled"].ToString());
-				rxDef.RxCui             = PIn.Long  (row["RxCui"].ToString());
+				rxDef.RxCui             = PIn.String(row["RxCui"].ToString());
 				rxDef.IsProcRequired    = PIn.Bool  (row["IsProcRequired"].ToString());
 				rxDef.PatientInstruction= PIn.String(row["PatientInstruction"].ToString());
 				retVal.Add(rxDef);
@@ -82,7 +82,7 @@ namespace OpenDentBusiness.Crud{
 					            rxDef.Refills,
 					            rxDef.Notes,
 					POut.Bool  (rxDef.IsControlled),
-					POut.Long  (rxDef.RxCui),
+					            rxDef.RxCui,
 					POut.Bool  (rxDef.IsProcRequired),
 					            rxDef.PatientInstruction,
 				});
@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(rxDef.Refills)+"',"
 				+"'"+POut.String(rxDef.Notes)+"',"
 				+    POut.Bool  (rxDef.IsControlled)+","
-				+    POut.Long  (rxDef.RxCui)+","
+				+    POut.String(rxDef.RxCui)+","
 				+    POut.Bool  (rxDef.IsProcRequired)+","
 				+    DbHelper.ParamChar+"paramPatientInstruction)";
 			if(rxDef.PatientInstruction==null) {
@@ -138,7 +138,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one RxDef into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(RxDef rxDef,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO rxdef (";
 			if(!useExistingPK && isRandomKeys) {
 				rxDef.RxDefNum=ReplicationServers.GetKeyNoCache("rxdef","RxDefNum");
@@ -157,7 +157,7 @@ namespace OpenDentBusiness.Crud{
 				+"'"+POut.String(rxDef.Refills)+"',"
 				+"'"+POut.String(rxDef.Notes)+"',"
 				+    POut.Bool  (rxDef.IsControlled)+","
-				+    POut.Long  (rxDef.RxCui)+","
+				+    POut.String(rxDef.RxCui)+","
 				+    POut.Bool  (rxDef.IsProcRequired)+","
 				+    DbHelper.ParamChar+"paramPatientInstruction)";
 			if(rxDef.PatientInstruction==null) {
@@ -182,7 +182,7 @@ namespace OpenDentBusiness.Crud{
 				+"Refills           = '"+POut.String(rxDef.Refills)+"', "
 				+"Notes             = '"+POut.String(rxDef.Notes)+"', "
 				+"IsControlled      =  "+POut.Bool  (rxDef.IsControlled)+", "
-				+"RxCui             =  "+POut.Long  (rxDef.RxCui)+", "
+				+"RxCui             =  "+POut.String(rxDef.RxCui)+", "
 				+"IsProcRequired    =  "+POut.Bool  (rxDef.IsProcRequired)+", "
 				+"PatientInstruction=  "+DbHelper.ParamChar+"paramPatientInstruction "
 				+"WHERE RxDefNum = "+POut.Long(rxDef.RxDefNum);
@@ -222,8 +222,8 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(rxDef.RxCui != oldRxDef.RxCui) {
 				if(command!="") { command+=",";}
-				command+="RxCui = "+POut.Long(rxDef.RxCui)+"";
-			}
+				command+= "RxCui = '" + POut.String(rxDef.RxCui) + "'";
+            }
 			if(rxDef.IsProcRequired != oldRxDef.IsProcRequired) {
 				if(command!="") { command+=",";}
 				command+="IsProcRequired = "+POut.Bool(rxDef.IsProcRequired)+"";

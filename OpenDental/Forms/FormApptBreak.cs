@@ -41,7 +41,7 @@ namespace OpenDental
         /// </summary>
         void FormApptBreak_Load(object sender, EventArgs e)
         {
-            var brokenApptProcs = (BrokenApptProcedure)Preferences.GetInt(PrefName.BrokenApptProcedure);
+            var brokenApptProcs = (BrokenApptProcedure)Preference.GetInt(PreferenceName.BrokenApptProcedure);
 
             radioMissed.Enabled     = brokenApptProcs.In(BrokenApptProcedure.Missed, BrokenApptProcedure.Both);
             radioCancelled.Enabled  = brokenApptProcs.In(BrokenApptProcedure.Cancelled, BrokenApptProcedure.Both);
@@ -81,7 +81,7 @@ namespace OpenDental
         void PromptTextASAPList()
         {
             // Check whether the webscheduler ASAP function is enabled and whether there are appointments on the ASAP list.
-            if (!Preferences.GetBool(PrefName.WebSchedAsapEnabled) ||  Appointments.RefreshASAP(0, 0, appointment.ClinicNum, new List<ApptStatus>()).Count == 0)
+            if (!Preference.GetBool(PreferenceName.WebSchedAsapEnabled) ||  Appointments.RefreshASAP(0, 0, appointment.ClinicNum, new List<ApptStatus>()).Count == 0)
             {
                 return;
             }

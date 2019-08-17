@@ -242,7 +242,7 @@ namespace OpenDental{
 			Font fontSubTitle=new Font("Tahoma",10,FontStyle.Bold);
 			report.ReportName=Lan.g(this,"Patient Portion Uncollected");
 			report.AddTitle("Title",Lan.g(this,"Patient Portion Uncollected"),fontTitle);
-			report.AddSubTitle("Practice Title",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
+			report.AddSubTitle("Practice Title",Preference.GetString(PreferenceName.PracticeTitle),fontSubTitle);
 			report.AddSubTitle("Dates of Report",date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d"),fontSubTitle);
 			if(Preferences.HasClinicsEnabled) {
 				report.AddSubTitle("Clinics",subtitleClinics,fontSubTitle);

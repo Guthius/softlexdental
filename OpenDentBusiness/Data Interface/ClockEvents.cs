@@ -155,7 +155,7 @@ namespace OpenDentBusiness
         {
             long clockEventNum = 0;
             clockEventNum = Crud.ClockEventCrud.Insert(clockEvent);
-            if (Preferences.GetBool(PrefName.LocalTimeOverridesServerTime))
+            if (Preference.GetBool(PreferenceName.LocalTimeOverridesServerTime))
             {
                 //Cannot call update since we manually have to update the TimeEntered1 because it is a DateEntry column
                 string command = "UPDATE clockevent SET TimeEntered1=" + POut.DateT(DateTime.Now) + ", TimeDisplayed1=" + POut.DateT(DateTime.Now) + " WHERE clockEventNum=" + POut.Long(clockEventNum);
@@ -254,7 +254,7 @@ namespace OpenDentBusiness
             else if (clockEvent.ClockStatus == TimeClockStatus.Break)
             {//only incomplete breaks will have been returned.
              //clocking back in from break
-                if (Preferences.GetBool(PrefName.LocalTimeOverridesServerTime))
+                if (Preference.GetBool(PreferenceName.LocalTimeOverridesServerTime))
                 {
                     clockEvent.TimeEntered2 = DateTime.Now;
                 }
@@ -281,8 +281,8 @@ namespace OpenDentBusiness
                     ClockEvents.Insert(clockEvent);//times handled
                 }
             }
-            Employee emp = Employees.GetEmp(employeeNum);
-            SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff, 0, emp.FName + " " + emp.LName + " " + "clocked in from " + clockEvent.ClockStatus.ToString() + ".");
+            Employee emp = Employee.GetById(employeeNum);
+            SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff, 0, emp.FirstName + " " + emp.LastName + " " + "clocked in from " + clockEvent.ClockStatus.ToString() + ".");
         }
 
         ///<summary>Will throw an exception if already clocked out.</summary>
@@ -315,7 +315,7 @@ namespace OpenDentBusiness
             }
             else
             {//finish the existing event
-                if (Preferences.GetBool(PrefName.LocalTimeOverridesServerTime))
+                if (Preference.GetBool(PreferenceName.LocalTimeOverridesServerTime))
                 {
                     clockEvent.TimeEntered2 = DateTime.Now;
                 }
@@ -327,8 +327,8 @@ namespace OpenDentBusiness
                 clockEvent.ClockStatus = clockStatus;//whatever the user selected
                 ClockEvents.Update(clockEvent);
             }
-            Employee emp = Employees.GetEmp(employeeNum);
-            SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff, 0, emp.FName + " " + emp.LName + " " + "clocked out for " + clockEvent.ClockStatus.ToString() + ".");
+            Employee emp = Employee.GetById(employeeNum);
+            SecurityLogs.MakeLogEntry(Permissions.UserLogOnOff, 0, emp.FirstName + " " + emp.LastName + " " + "clocked out for " + clockEvent.ClockStatus.ToString() + ".");
         }
 
         ///<summary>Used in the timecard to track hours worked per week when the week started in a previous time period.  This gets all the hours of the first week before the date listed.  Also adds in any adjustments for that week.</summary>
@@ -337,7 +337,7 @@ namespace OpenDentBusiness
             //No need to check RemotingRole; no call to db.
             TimeSpan retVal = new TimeSpan(0);
             //If the first day of the pay period is the starting date for the overtime, then there is no need to retrieve any times from the previous pay period.
-            if (date.DayOfWeek == (DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))
+            if (date.DayOfWeek == (DayOfWeek)Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek))
             {
                 return retVal;
             }
@@ -354,7 +354,7 @@ namespace OpenDentBusiness
                                                          //Loop backwards through the week days until the TimeCardOvertimeFirstDayOfWeek is hit.
             for (int i = 1; i < 7; i++)
             {//1 based because we already know that TimeCardOvertimeFirstDayOfWeek is not set to today so no need to check it.
-                if (mostRecentFirstDayOfWeekDate.AddDays(-i).DayOfWeek == (DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))
+                if (mostRecentFirstDayOfWeekDate.AddDays(-i).DayOfWeek == (DayOfWeek)Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek))
                 {
                     mostRecentFirstDayOfWeekDate = mostRecentFirstDayOfWeekDate.AddDays(-i);
                     break;
@@ -415,7 +415,7 @@ namespace OpenDentBusiness
         ///<summary>-hh:mm or -hh.mm.ss or -hh.mm, depending on the pref.TimeCardsUseDecimalInsteadOfColon and pref.TimeCardShowSeconds.  Blank if zero.</summary>
         public static string Format(TimeSpan span)
         {
-            if (Preferences.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon))
+            if (Preference.GetBool(PreferenceName.TimeCardsUseDecimalInsteadOfColon))
             {
                 if (span == TimeSpan.Zero)
                 {
@@ -423,7 +423,7 @@ namespace OpenDentBusiness
                 }
                 return span.TotalHours.ToString("n");
             }
-            else if (Preferences.GetBool(PrefName.TimeCardShowSeconds))
+            else if (Preference.GetBool(PreferenceName.TimeCardShowSeconds))
             {//Colon format with seconds
                 return span.ToStringHmmss();
             }
@@ -531,8 +531,8 @@ namespace OpenDentBusiness
             retVal.Columns.Add("Note");
             //Loop through employees.  Each employee adds one row to table --------------------------------------------------------------------------------
             List<Employee> listEmployees;
-            listEmployees = Employees.GetForTimeCard();//Gets all non-hidden employees
-            List<Employee> listEmpsForClinic = Employees.GetEmpsForClinic(clinicNum);
+            listEmployees = Employee.GetForTimeCard();//Gets all non-hidden employees
+            List<Employee> listEmpsForClinic = Employee.GetEmpsForClinic(clinicNum);
             //get all pay period notes for all employees for this pay period. 
             List<TimeAdjust> listPayPeriodNotes = TimeAdjusts.GetNotesForPayPeriod(startDate);
             for (int e = 0; e < listEmployees.Count; e++)
@@ -544,9 +544,9 @@ namespace OpenDentBusiness
                                                   //PayrollID-------------------------------------------------------------------------------------------------------------------------------------
                 dataRowCur["PayrollID"] = listEmployees[e].PayrollID;
                 //EmployeeNum and Name----------------------------------------------------------------------------------------------------------------------------------
-                dataRowCur["EmployeeNum"] = listEmployees[e].EmployeeNum;
-                dataRowCur["firstName"] = listEmployees[e].FName;
-                dataRowCur["lastName"] = listEmployees[e].LName;
+                dataRowCur["EmployeeNum"] = listEmployees[e].Id;
+                dataRowCur["firstName"] = listEmployees[e].FirstName;
+                dataRowCur["lastName"] = listEmployees[e].LastName;
                 //Begin calculations------------------------------------------------------------------------------------------------------------------------------------
                 //each list below will contain one entry per week.
                 List<TimeSpan> listTsRegularHoursWeekly = new List<TimeSpan>();//Total non-overtime hours.  Used for calculation, not displayed or part of dataTable.
@@ -556,7 +556,7 @@ namespace OpenDentBusiness
                 List<TimeAdjust> listTimeAdjusts = new List<TimeAdjust>();//per clinic
                 try
                 {
-                    listClockEvents = ClockEvents.GetListForTimeCardManage(listEmployees[e].EmployeeNum, clinicNum, startDate, stopDate, isAll);
+                    listClockEvents = ClockEvents.GetListForTimeCardManage(listEmployees[e].Id, clinicNum, startDate, stopDate, isAll);
                 }
                 catch (Exception ex)
                 {
@@ -564,7 +564,7 @@ namespace OpenDentBusiness
                 }
                 try
                 {
-                    listTimeAdjusts = TimeAdjusts.GetListForTimeCardManage(listEmployees[e].EmployeeNum, clinicNum, startDate, stopDate, isAll);
+                    listTimeAdjusts = TimeAdjusts.GetListForTimeCardManage(listEmployees[e].Id, clinicNum, startDate, stopDate, isAll);
                 }
                 catch (Exception ex)
                 {
@@ -573,7 +573,7 @@ namespace OpenDentBusiness
                 //If there are no clock events, nor time adjusts, and the current employee isn't "assigned" to the clinic passed in, skip.
                 if (listClockEvents.Count == 0 //employee has no clock events for this clinic.
                     && listTimeAdjusts.Count == 0 //employee has no time adjusts for this clinic.
-                    && (!isAll && listEmpsForClinic.Count(x => x.EmployeeNum == listEmployees[e].EmployeeNum) == 0)) //employee not explicitly assigned to clinic
+                    && (!isAll && listEmpsForClinic.Count(x => x.Id == listEmployees[e].Id) == 0)) //employee not explicitly assigned to clinic
                 {
                     continue;
                 }
@@ -685,7 +685,7 @@ namespace OpenDentBusiness
                 dataRowCur["rate2Hours"] = TimeSpan.FromHours(r2Hours).ToString();
                 dataRowCur["rate1OTHours"] = TimeSpan.FromHours(r1OTHours).ToString();
                 dataRowCur["rate2OTHours"] = TimeSpan.FromHours(r2OTHours).ToString();
-                string payPeriodNote = listPayPeriodNotes.FirstOrDefault(x => x.EmployeeNum == listEmployees[e].EmployeeNum)?.Note;
+                string payPeriodNote = listPayPeriodNotes.FirstOrDefault(x => x.EmployeeNum == listEmployees[e].Id)?.Note;
                 if (string.IsNullOrEmpty(payPeriodNote))
                 {
                     dataRowCur["Note"] = note;
@@ -775,7 +775,7 @@ namespace OpenDentBusiness
         private static List<DateTime> weekStartHelper(DateTime startDate, DateTime stopDate)
         {
             List<DateTime> retVal = new List<DateTime>();
-            DayOfWeek fdow = (DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek);
+            DayOfWeek fdow = (DayOfWeek)Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek);
             for (int i = 0; i < 7; i++)
             {//start date of first week.
                 if (startDate.AddDays(-i).DayOfWeek == fdow)

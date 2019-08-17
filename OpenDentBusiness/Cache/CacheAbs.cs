@@ -11,7 +11,7 @@ using CodeBase;
 
 namespace OpenDentBusiness {
 	///<summary>The purpose of this class is to provide a shared read lock and an exclusive write lock on a cache.</summary>
-	public abstract class CacheAbs<T> where T : ODTable {
+	public abstract class CacheAbs<T> {
 		///<summary>Called at the end of FillCache which tells all implementors to refresh their caches with the new items within listItemsAll.</summary>
 		protected abstract void OnNewCacheReceived(List<T> listItemsAll);
 		///<summary>This method queries the database for the list of objects and return it. Remoting role does not need to be checked.</summary>

@@ -182,7 +182,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one CreditCard into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(CreditCard creditCard,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO creditcard (";
 			if(!useExistingPK && isRandomKeys) {
 				creditCard.CreditCardNum=ReplicationServers.GetKeyNoCache("creditcard","CreditCardNum");

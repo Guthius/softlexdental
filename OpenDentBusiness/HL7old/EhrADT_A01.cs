@@ -41,14 +41,14 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		private void InitializeVariables() {
-			Provider provFacility=Providers.GetProv(Preferences.GetInt(PrefName.PracticeDefaultProv));
+			Provider provFacility=Providers.GetProv(Preference.GetInt(PreferenceName.PracticeDefaultProv));
 			_sendingFacilityNpi=provFacility.NationalProvID;
-			_sendingFacilityName=Preferences.GetString(PrefName.PracticeTitle);
-			_sendingFacilityAddress1=Preferences.GetString(PrefName.PracticeAddress);
-			_sendingFacilityAddress2=Preferences.GetString(PrefName.PracticeAddress2);
-			_sendingFacilityCity=Preferences.GetString(PrefName.PracticeCity);
-			_sendingFacilityState=Preferences.GetString(PrefName.PracticeST);
-			_sendingFacilityZip=Preferences.GetString(PrefName.PracticeZip);
+			_sendingFacilityName= Preference.GetString(PreferenceName.PracticeTitle);
+			_sendingFacilityAddress1= Preference.GetString(PreferenceName.PracticeAddress);
+			_sendingFacilityAddress2= Preference.GetString(PreferenceName.PracticeAddress2);
+			_sendingFacilityCity= Preference.GetString(PreferenceName.PracticeCity);
+			_sendingFacilityState= Preference.GetString(PreferenceName.PracticeST);
+			_sendingFacilityZip= Preference.GetString(PreferenceName.PracticeZip);
 			if(Preferences.HasClinicsEnabled && _appt.ClinicNum!=0) {//Using clinics and a clinic is assigned.
 				Clinic clinic=Clinics.GetClinic(_appt.ClinicNum);
 				_sendingFacilityName=clinic.Description;
@@ -208,12 +208,12 @@ namespace OpenDentBusiness.HL7 {
 						codeSystemAbbrev="SCT";
 					}
 					else if(obs.ValCodeSystem.Trim().ToUpper()=="ICD9") {
-						ICD9 icd9Val=ICD9s.GetByCode(obs.ValReported);
+						ICD9 icd9Val=ICD9.GetByCode(obs.ValReported);
 						codeDescript=icd9Val.Description;
 						codeSystemAbbrev="I9";
 					}
 					else if(obs.ValCodeSystem.Trim().ToUpper()=="ICD10") {
-						Icd10 icd10Val=Icd10s.GetByCode(obs.ValReported);
+						ICD10 icd10Val=ICD10.GetByCode(obs.ValReported);
 						codeDescript=icd10Val.Description;
 						codeSystemAbbrev="I10";
 					}
@@ -246,8 +246,8 @@ namespace OpenDentBusiness.HL7 {
 						WriteCE(6,"UNK","","NULLFL");
 					}
 					else {
-						Ucum ucum=Ucums.GetByCode(obs.UcumCode);
-						WriteCE(6,ucum.UcumCode,ucum.Description,"UCUM");
+						Ucum ucum=Ucum.GetByCode(obs.UcumCode);
+						WriteCE(6,ucum.Code,ucum.Description,"UCUM");
 					}
 				}
 				//OBX-7 References Range.  No longer used.
@@ -541,7 +541,7 @@ namespace OpenDentBusiness.HL7 {
 
 		public static string Validate(Appointment appt) {
 			StringBuilder sb=new StringBuilder();
-			Provider provFacility=Providers.GetProv(Preferences.GetInt(PrefName.PracticeDefaultProv));
+			Provider provFacility=Providers.GetProv(Preference.GetInt(PreferenceName.PracticeDefaultProv));
 			if(!Regex.IsMatch(provFacility.NationalProvID,"^(80840)?[0-9]{10}$")) {
 				WriteError(sb,"Invalid NPI for provider '"+provFacility.Abbr+"'");
 			}
@@ -552,7 +552,7 @@ namespace OpenDentBusiness.HL7 {
 				}
 			}
 			else {//Not using clinics for this patient
-				if(Preferences.GetString(PrefName.PracticeTitle)=="") {
+				if(Preference.GetString(PreferenceName.PracticeTitle)=="") {
 					WriteError(sb,"Missing practice title.");
 				}
 			}
@@ -580,20 +580,20 @@ namespace OpenDentBusiness.HL7 {
 						}
 					}
 					else if(obs.ValCodeSystem.Trim().ToUpper()=="ICD9") {
-						ICD9 icd9Val=ICD9s.GetByCode(obs.ValReported);
+						ICD9 icd9Val=ICD9.GetByCode(obs.ValReported);
 						if(icd9Val==null) {
-							WriteError(sb,"ICD9 code not found '"+icd9Val.ICD9Code+"'.  Please add by going to Setup | Chart | EHR.");
+							WriteError(sb,"ICD9 code not found '"+icd9Val.Code+"'.  Please add by going to Setup | Chart | EHR.");
 						}
 					}
 					else if(obs.ValCodeSystem.Trim().ToUpper()=="ICD10") {
-						Icd10 icd10Val=Icd10s.GetByCode(obs.ValReported);
+						ICD10 icd10Val= ICD10.GetByCode(obs.ValReported);
 						if(icd10Val==null) {
-							WriteError(sb,"ICD10 code not found '"+icd10Val.Icd10Code+"'.  Please add by going to Setup | Chart | EHR.");
+							WriteError(sb,"ICD10 code not found '"+icd10Val.Code+"'.  Please add by going to Setup | Chart | EHR.");
 						}
 					}
 				}
 				else if(obs.ValType==EhrAptObsType.Numeric && obs.UcumCode!="") {//We only validate the ucum code if it will be sent out.  Blank units allowed.
-					Ucum ucum=Ucums.GetByCode(obs.UcumCode);
+					Ucum ucum=Ucum.GetByCode(obs.UcumCode);
 					if(ucum==null) {
 						WriteError(sb,"Invalid unit code '"+obs.UcumCode+"' for observation (must be UCUM code).");
 					}

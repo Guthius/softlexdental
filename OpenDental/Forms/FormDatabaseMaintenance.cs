@@ -1052,17 +1052,17 @@ namespace OpenDental {
 				butApptProcs.Visible=false;
 				labelApptProcs.Visible=false;
 			}
-			if(Preferences.GetBool(PrefName.DatabaseMaintenanceDisableOptimize)) {
+			if(Preference.GetBool(PreferenceName.DatabaseMaintenanceDisableOptimize)) {
 				butOptimize.Enabled=false;
 			}
-			if(Preferences.GetBool(PrefName.DatabaseMaintenanceSkipCheckTable)) {
+			if(Preference.GetBool(PreferenceName.DatabaseMaintenanceSkipCheckTable)) {
 				labelSkipCheckTable.Visible=true;
 			}
 			FillGrid();
 			FillGridHidden();
 			FillGridOld();
 
-			textBoxUpdateInProg.Text=Preferences.GetString(PrefName.UpdateInProgressOnComputerName);
+			textBoxUpdateInProg.Text=Preference.GetString(PreferenceName.UpdateInProgressOnComputerName);
 			if(string.IsNullOrWhiteSpace(textBoxUpdateInProg.Text)) {
 				butClearUpdateInProgress.Enabled=false;
 			}
@@ -1255,7 +1255,7 @@ namespace OpenDental {
 		#region Database Tools
 
 		private void butClearUpdateInProgress_Click(object sender,EventArgs e) {
-			Prefs.UpdateString(PrefName.UpdateInProgressOnComputerName,"");
+			Preference.Update(PreferenceName.UpdateInProgressOnComputerName,"");
 			DataValid.SetInvalid(InvalidType.Prefs);
 			textBoxUpdateInProg.Text="";
 		}
@@ -1700,7 +1700,7 @@ namespace OpenDental {
 		}
 
 		private void Fix(bool isOld=false) {
-			List<Computer> runningComps=Computers.GetRunningComputers();
+			List<Computer> runningComps=Computer.AllActive();
 			if(runningComps.Count>50) {
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"WARNING!\r\nMore than 50 workstations are connected to this database. "
 					+"Running DBM may cause severe network slowness. "

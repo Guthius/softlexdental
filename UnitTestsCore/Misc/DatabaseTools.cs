@@ -14,7 +14,7 @@ namespace UnitTestsCore
         {
             try
             {
-                DataConnection.SetDb(serverAddr, dbName, userName, password, true);
+                DataConnection.Configure(serverAddr, dbName, userName, password, true);
 
                 return true;
             }

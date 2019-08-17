@@ -100,7 +100,7 @@ namespace OpenDentHL7
             }
             DataConnection dcon = new DataConnection();
             //check db version
-            string dbVersion = Preferences.GetString(PrefName.ProgramVersion);
+            string dbVersion = Preference.GetString(PreferenceName.ProgramVersion);
             if (Application.ProductVersion.ToString() != dbVersion)
             {
                 EventLog.WriteEntry("OpenDentHL7", "Versions do not match.  Db version:" + dbVersion + ".  Application version:" + Application.ProductVersion.ToString(), EventLogEntryType.Error);

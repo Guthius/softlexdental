@@ -12,8 +12,8 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormIcd10s:ODForm {
 		public bool IsSelectionMode;
-		public Icd10 SelectedIcd10;
-		private List<Icd10> listIcd10s;
+		public ICD10 SelectedIcd10;
+		private List<ICD10> listIcd10s;
 
 		public FormIcd10s() {
 			InitializeComponent();
@@ -48,11 +48,11 @@ namespace OpenDental {
 			//gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			listIcd10s=Icd10s.GetBySearchText(textCode.Text);
+			listIcd10s=ICD10.Find(textCode.Text);
 			//List<ODGridRow> listAll=new List<ODGridRow>();//for sorting grid after it has been filled.
 			for(int i=0;i<listIcd10s.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(listIcd10s[i].Icd10Code);
+				row.Cells.Add(listIcd10s[i].Code);
 				row.Cells.Add(listIcd10s[i].Description);
 				//row.Cells.Add(EhrCodes.GetMeasureIdsForCode(listCpts[i].SnomedCode,"SNOMEDCT"));
 				row.Tag=listIcd10s[i];;
@@ -84,7 +84,7 @@ namespace OpenDental {
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			if(IsSelectionMode) {
-				SelectedIcd10=(Icd10)gridMain.Rows[e.Row].Tag;
+				SelectedIcd10=(ICD10)gridMain.Rows[e.Row].Tag;
 				DialogResult=DialogResult.OK;
 				return;
 			}
@@ -118,7 +118,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select an item first.");
 				return;
 			}
-			SelectedIcd10=(Icd10)gridMain.Rows[gridMain.GetSelectedIndex()].Tag;
+			SelectedIcd10=(ICD10)gridMain.Rows[gridMain.GetSelectedIndex()].Tag;
 			DialogResult=DialogResult.OK;
 		}
 

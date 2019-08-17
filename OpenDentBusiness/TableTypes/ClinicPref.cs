@@ -14,7 +14,7 @@ namespace OpenDentBusiness{
 		public long ClinicNum;
 		///<summary>Enum: </summary>
 		[ODTableColumn(SpecialType=CrudSpecialColType.EnumAsString)]
-		public PrefName PrefName;
+		public PreferenceName PrefName;
 		///<summary>The stored value.</summary>
 		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
 		public string ValueString;
@@ -23,13 +23,13 @@ namespace OpenDentBusiness{
 			
 		}
 
-		public ClinicPref(long clinicNum, PrefName prefName, bool valueBool) {
+		public ClinicPref(long clinicNum, PreferenceName prefName, bool valueBool) {
 			this.ClinicNum=clinicNum;
 			this.PrefName=prefName;
 			this.ValueString=POut.Bool(valueBool);
 		}
 
-		public ClinicPref(long clinicNum, PrefName prefName, string valueString) {
+		public ClinicPref(long clinicNum, PreferenceName prefName, string valueString) {
 			this.ClinicNum=clinicNum;
 			this.PrefName=prefName;
 			this.ValueString=valueString;

@@ -40,7 +40,7 @@ namespace OpenDental
             for (int i = 0; i < allergiesList.Count; i++)
             {
                 allergyComboBox.Items.Add(allergiesList[i].Description);
-                if (!AllergyCur.IsNew && allergiesList[i].AllergyDefNum == AllergyCur.AllergyDefNum)
+                if (!AllergyCur.IsNew && allergiesList[i].Id == AllergyCur.AllergyDefNum)
                 {
                     allergyIndex = i;
                 }
@@ -151,7 +151,7 @@ namespace OpenDental
             }
 
             AllergyCur.DateAdverseReaction = dateTime;
-            AllergyCur.AllergyDefNum = allergiesList[allergyComboBox.SelectedIndex].AllergyDefNum;
+            AllergyCur.AllergyDefNum = allergiesList[allergyComboBox.SelectedIndex].Id;
             AllergyCur.Reaction = reactionTextBox.Text;
             AllergyCur.SnomedReaction = snomedReaction?.SnomedCode ?? "";
             AllergyCur.StatusIsActive = activeCheckBox.Checked;

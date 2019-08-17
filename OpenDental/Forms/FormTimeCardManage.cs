@@ -141,7 +141,7 @@ namespace OpenDental {
 				row=new ODGridRow();
 				//row.Cells.Add(Employees.GetNameFL(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())));
 				row.Cells.Add(MainTable.Rows[i]["lastName"]+", "+MainTable.Rows[i]["firstName"]);
-				if(Preferences.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon)) {
+				if(Preference.GetBool(PreferenceName.TimeCardsUseDecimalInsteadOfColon)) {
 					row.Cells.Add(PIn.Time(MainTable.Rows[i]["totalHours"].ToString()).TotalHours.ToString("n"));
 					row.Cells.Add(PIn.Time(MainTable.Rows[i]["rate1Hours"].ToString()).TotalHours.ToString("n"));
 					row.Cells.Add(PIn.Time(MainTable.Rows[i]["rate1OTHours"].ToString()).TotalHours.ToString("n"));
@@ -152,7 +152,7 @@ namespace OpenDental {
 					//row.Cells.Add(PIn.Time(MainTable.Rows[i]["TimeAdjustRegAdj"].ToString()).TotalHours.ToString("n"));
 					//row.Cells.Add(PIn.Time(MainTable.Rows[i]["TimeAdjustOTAdj"].ToString()).TotalHours.ToString("n"));
 				}
-				else if(Preferences.GetBool(PrefName.TimeCardShowSeconds)) {//Colon format with seconds
+				else if(Preference.GetBool(PreferenceName.TimeCardShowSeconds)) {//Colon format with seconds
 					row.Cells.Add(PIn.Time(MainTable.Rows[i]["totalHours"].ToString()).ToStringHmmss());
 					row.Cells.Add(PIn.Time(MainTable.Rows[i]["rate1Hours"].ToString()).ToStringHmmss());
 					row.Cells.Add(PIn.Time(MainTable.Rows[i]["rate1OTHours"].ToString()).ToStringHmmss());
@@ -187,11 +187,11 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
-			//FormTimeCard does some list sorting so we need to break the pass by reference chain.
-			List<Employee> listEmployeesCopy=_listEmployees.Select(x => x.Copy()).ToList();
+            //FormTimeCard does some list sorting so we need to break the pass by reference chain.
+            List<Employee> listEmployeesCopy = new List<Employee>(_listEmployees);
 			FormTimeCard FormTC=new FormTimeCard(listEmployeesCopy);
 			FormTC.IsByLastName=true;
-			FormTC.EmployeeCur=Employees.GetEmp(PIn.Long(MainTable.Rows[e.Row]["EmployeeNum"].ToString()));
+			FormTC.EmployeeCur=Employee.GetById(PIn.Long(MainTable.Rows[e.Row]["EmployeeNum"].ToString()));
 			FormTC.SelectedPayPeriod=SelectedPayPeriod;
 			FormTC.ShowDialog();
 			FillMain();
@@ -200,12 +200,12 @@ namespace OpenDental {
 		///<summary>This is a modified version of FormTimeCard.FillMain().  It fills one time card per employee.</summary>
 		private ODGrid GetGridForPrinting(Employee emp) {
 			ODGrid gridTimeCard=new ODGrid();
-			List<ClockEvent> clockEventList=ClockEvents.Refresh(emp.EmployeeNum,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text),false);
-			List<TimeAdjust> timeAdjustList=TimeAdjusts.Refresh(emp.EmployeeNum,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
+			List<ClockEvent> clockEventList=ClockEvents.Refresh(emp.Id,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text),false);
+			List<TimeAdjust> timeAdjustList=TimeAdjusts.Refresh(emp.Id,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
 			#region Hide time card note (we will show it at the top of the printout above the grid)
 			DateTime date=_listPayPeriods[SelectedPayPeriod].DateStart.Date;
 			DateTime midnightFirstDay=new DateTime(date.Year,date.Month,date.Day,0,0,0);
-			_timeAdjustNote=TimeAdjusts.GetPayPeriodNote(emp.EmployeeNum,midnightFirstDay);
+			_timeAdjustNote=TimeAdjusts.GetPayPeriodNote(emp.Id,midnightFirstDay);
 			if(_timeAdjustNote!=null) { //a note row exists for this pay period.
 				timeAdjustList.RemoveAll(x => x.TimeAdjustNum==_timeAdjustNote.TimeAdjustNum);
 			}
@@ -257,7 +257,7 @@ namespace OpenDental {
 			TimeSpan daySpan=new TimeSpan(0);//used for daily totals.
 			TimeSpan weekSpan=new TimeSpan(0);//used for weekly totals.
 			if(mergedAL.Count>0){
-				weekSpan=ClockEvents.GetWeekTotal(emp.EmployeeNum,GetDateForRow(0,mergedAL));
+				weekSpan=ClockEvents.GetWeekTotal(emp.Id,GetDateForRow(0,mergedAL));
 			}
 			TimeSpan periodSpan=new TimeSpan(0);//used to add up totals for entire page.
 			TimeSpan otspan=new TimeSpan(0);//overtime for the entire period
@@ -373,8 +373,8 @@ namespace OpenDental {
 					weeklyTotals[i]=weekSpan;
 					//if this is the last entry for a given week
 					if(i==mergedAL.Count-1//if this is the last row 
-						|| cal.GetWeekOfYear(GetDateForRow(i+1,mergedAL),rule,(DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
-						!= cal.GetWeekOfYear(clock.TimeDisplayed1.Date,rule,(DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
+						|| cal.GetWeekOfYear(GetDateForRow(i+1,mergedAL),rule,(DayOfWeek)Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
+						!= cal.GetWeekOfYear(clock.TimeDisplayed1.Date,rule,(DayOfWeek)Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
 					{
 						row.Cells.Add(ClockEvents.Format(weekSpan));
 						weekSpan=new TimeSpan(0);
@@ -437,8 +437,8 @@ namespace OpenDental {
 					weeklyTotals[i]=weekSpan;
 					//if this is the last entry for a given week
 					if(i==mergedAL.Count-1//if this is the last row 
-						|| cal.GetWeekOfYear(GetDateForRow(i+1,mergedAL),rule,(DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
-						!= cal.GetWeekOfYear(adjust.TimeEntry.Date,rule,(DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
+						|| cal.GetWeekOfYear(GetDateForRow(i+1,mergedAL),rule,(DayOfWeek)Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
+						!= cal.GetWeekOfYear(adjust.TimeEntry.Date,rule,(DayOfWeek)Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
 					{
 						ODGridCell cell=new ODGridCell(ClockEvents.Format(weekSpan));
 						cell.ColorText=Color.Black;
@@ -494,7 +494,7 @@ namespace OpenDental {
 		private void PrintEveryTimeCard(object sender,System.Drawing.Printing.PrintPageEventArgs e) {
 			//A preview of every single emp on their own page will show up. User will print from there.
 			Graphics g=e.Graphics;
-			Employee employeeCur=Employees.GetEmp(PIn.Long(MainTable.Rows[_pagesPrinted]["EmployeeNum"].ToString()));
+			Employee employeeCur=Employee.GetById(PIn.Long(MainTable.Rows[_pagesPrinted]["EmployeeNum"].ToString()));
 			ODGrid timeCardGrid=GetGridForPrinting(employeeCur);
 			int linesPrinted=0;
 			//Create a timecardgrid for this employee?
@@ -507,7 +507,7 @@ namespace OpenDental {
 			SolidBrush brush=new SolidBrush(Color.Black);
 			Pen pen=new Pen(Color.Black);
 			//Title
-			str=employeeCur.FName+" "+employeeCur.LName;
+			str=employeeCur.FirstName+" "+employeeCur.LastName;
 			str+="\r\n"+Lan.g(this,"Note")+": "+_timeAdjustNote?.Note.ToString()??"";
 			g.DrawString(str,fontTitle,brush,xPos,yPos);
 			yPos+=42;
@@ -625,7 +625,7 @@ namespace OpenDental {
 		private void PrintEmployeeTimeCard(object sender, System.Drawing.Printing.PrintPageEventArgs e) {
 			//A preview of every single emp on their own page will show up. User will print from there.
 			Graphics g=e.Graphics;
-			Employee employeeCur=Employees.GetEmp(PIn.Long(MainTable.Rows[gridMain.SelectedIndices[_pagesPrinted]]["EmployeeNum"].ToString()));
+			Employee employeeCur=Employee.GetById(PIn.Long(MainTable.Rows[gridMain.SelectedIndices[_pagesPrinted]]["EmployeeNum"].ToString()));
 			ODGrid timeCardGrid=GetGridForPrinting(employeeCur);
 			int linesPrinted=0;
 			//Create a timecardgrid for this employee?
@@ -638,7 +638,7 @@ namespace OpenDental {
 			SolidBrush brush=new SolidBrush(Color.Black);
 			Pen pen=new Pen(Color.Black);
 			//Title
-			str=employeeCur.FName+" "+employeeCur.LName;
+			str=employeeCur.FirstName+" "+employeeCur.LastName;
 			str+="\r\n"+Lan.g(this,"Note")+": "+_timeAdjustNote?.Note.ToString()??"";
 			g.DrawString(str,fontTitle,brush,xPos,yPos);
 			yPos+=42;
@@ -786,7 +786,7 @@ namespace OpenDental {
 			string aggregateErrors="";
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 				try {
-					TimeCardRules.CalculateDailyOvertime(Employees.GetEmp(PIn.Long(MainTable.Rows[gridMain.SelectedIndices[i]]["EmployeeNum"].ToString()))
+					TimeCardRules.CalculateDailyOvertime(Employee.GetById(PIn.Long(MainTable.Rows[gridMain.SelectedIndices[i]]["EmployeeNum"].ToString()))
 						,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
 				}
 				catch(Exception ex) {
@@ -825,7 +825,7 @@ namespace OpenDental {
 			string aggregateErrors="";
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
 				try {
-					TimeCardRules.CalculateWeeklyOvertime(Employees.GetEmp(PIn.Long(MainTable.Rows[gridMain.SelectedIndices[i]]["EmployeeNum"].ToString()))
+					TimeCardRules.CalculateWeeklyOvertime(Employee.GetById(PIn.Long(MainTable.Rows[gridMain.SelectedIndices[i]]["EmployeeNum"].ToString()))
 						,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
 				}
 				catch(Exception ex) {
@@ -992,10 +992,10 @@ namespace OpenDental {
 						case "rate2Hours":
 						case "rate2OTHours":
 							//Time must me formatted differently.
-							if(Preferences.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon)) {
+							if(Preference.GetBool(PreferenceName.TimeCardsUseDecimalInsteadOfColon)) {
 								row+=PIn.Time(MainTable.Rows[i][c].ToString()).TotalHours.ToString("n");
 							}
-							else if(Preferences.GetBool(PrefName.TimeCardShowSeconds)) {//Colon format with seconds
+							else if(Preference.GetBool(PreferenceName.TimeCardShowSeconds)) {//Colon format with seconds
 								row+=PIn.Time(MainTable.Rows[i][c].ToString()).ToStringHmmss();
 							}
 							else {//Colon format without seconds
@@ -1025,8 +1025,8 @@ namespace OpenDental {
 			string errors="";
 			string warnings="";
 			string errorIndent="  ";
-			strb.AppendLine("Co Code,Batch ID,File #"+(Preferences.GetBool(PrefName.TimeCardADPExportIncludesName)?",Employee Name":"")+",Rate Code,Reg Hours,O/T Hours");
-			string coCode=Preferences.GetString(PrefName.ADPCompanyCode);
+			strb.AppendLine("Co Code,Batch ID,File #"+(Preference.GetBool(PreferenceName.TimeCardADPExportIncludesName)?",Employee Name":"")+",Rate Code,Reg Hours,O/T Hours");
+			string coCode=Preference.GetString(PreferenceName.ADPCompanyCode);
 			string batchID=DateStop.ToString("yyyyMMdd");//max 8 characters
 			if(coCode.Length<2 || coCode.Length>3){
 				errors+=errorIndent+"Company code must be two to three alpha numeric characters long.  Go to Setup>TimeCards to edit.\r\n";
@@ -1054,7 +1054,7 @@ namespace OpenDental {
 					fileNum=fileNum.PadLeft(6,'0');
 				}
 				try {
-					employeeName=Employees.GetNameFL(Employees.GetEmp(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())));
+					employeeName=Employee.GetNameFL(Employee.GetById(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())));
 				}
 				catch {
 					employeeName="Error";
@@ -1077,10 +1077,10 @@ namespace OpenDental {
 				}
 				string textToAdd="";
 				if(r1hours!="" || r1OThours!="") {//no entry should be made unless there are actually hours for this employee.
-					textToAdd+=coCode+","+batchID+","+fileNum+(Preferences.GetBool(PrefName.TimeCardADPExportIncludesName)?","+employeeName:"")+",,"+r1hours+","+r1OThours+"\r\n";
+					textToAdd+=coCode+","+batchID+","+fileNum+(Preference.GetBool(PreferenceName.TimeCardADPExportIncludesName)?","+employeeName:"")+",,"+r1hours+","+r1OThours+"\r\n";
 				}
 				if(r2hours!="" || r2OThours!="") {//no entry should be made unless there are actually hours for this employee.
-					textToAdd+=coCode+","+batchID+","+fileNum+(Preferences.GetBool(PrefName.TimeCardADPExportIncludesName)?","+employeeName:"")+",2,"+r2hours+","+r2OThours+"\r\n";
+					textToAdd+=coCode+","+batchID+","+fileNum+(Preference.GetBool(PreferenceName.TimeCardADPExportIncludesName)?","+employeeName:"")+",2,"+r2hours+","+r2OThours+"\r\n";
 				}
 				if(textToAdd=="") {
 					warningsForEmployee+=errorIndent+"No clocked hours.\r\n";// for "+Employees.GetNameFL(Employees.GetEmp(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())))+"\r\n";
@@ -1102,10 +1102,10 @@ namespace OpenDental {
 				}
 				//Aggregate employee errors into aggregate error messages.--------------------------------------------------------------------------------
 				if(errorsForEmployee!="") {
-					errors+=Employees.GetNameFL(Employees.GetEmp(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())))+":\r\n"+errorsForEmployee+"\r\n";
+					errors+=Employee.GetNameFL(Employee.GetById(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())))+":\r\n"+errorsForEmployee+"\r\n";
 				}
 				if(warningsForEmployee!="") {
-					warnings+=Employees.GetNameFL(Employees.GetEmp(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())))+":\r\n"+warningsForEmployee+"\r\n";
+					warnings+=Employee.GetNameFL(Employee.GetById(PIn.Long(MainTable.Rows[i]["EmployeeNum"].ToString())))+":\r\n"+warningsForEmployee+"\r\n";
 				}
 			}
 			FolderBrowserDialog fbd = new FolderBrowserDialog();

@@ -82,8 +82,8 @@ namespace OpenDental.Reporting.Allocators.MyAllocator1 {
 						Db.NonQOld(commands.ToArray());
 						Cache.Refresh(InvalidType.Prefs);
 					}
-					Prefs.UpdateRaw(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun,"1");
-					Prefs.UpdateRaw(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use,"1");
+					Preference.Update(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun,"1");
+					Preference.Update(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use,"1");
 				}
 			}
 			RefreshForm();

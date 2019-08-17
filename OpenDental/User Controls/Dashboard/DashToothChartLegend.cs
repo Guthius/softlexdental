@@ -8,7 +8,7 @@ namespace OpenDental {
 		public const int DefaultWidth=600;
 		public const int DefaultHeight=14;
 		private SheetField _sheetField;
-		private List<Def> _listDefs;
+		private List<Definition> _listDefs;
 
 		public DashToothChartLegend() {
 			InitializeComponent();
@@ -16,7 +16,7 @@ namespace OpenDental {
 
 		public void RefreshData(Patient pat,SheetField sheetField) {
 			_sheetField=sheetField;
-			_listDefs=Defs.GetDefsForCategory(DefCat.ChartGraphicColors,true);
+			_listDefs=Definition.GetByCategory(DefinitionCategory.ChartGraphicColors);;
 		}
 
 		public void RefreshView() {

@@ -11,7 +11,7 @@ namespace UnitTestsCore {
 		///<summary>Removes the IntrospectionItems preference from the database.
 		///Manually refreshes the preference cache so that the change instantly takes place.</summary>
 		public static void DeletePref() {
-			string command="DELETE FROM preference WHERE prefname='"+nameof(PrefName.IntrospectionItems)+"'";
+			string command="DELETE FROM preference WHERE prefname='"+nameof(PreferenceName.IntrospectionItems)+"'";
 			DataCore.NonQ(command);
 			Prefs.RefreshCache();
 			Introspection.ClearDictOverrides();

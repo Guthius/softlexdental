@@ -331,8 +331,8 @@ namespace OpenDentBusiness.HL7 {
 					pat.PatNum=patNumFromExtIds;
 					pat.Guarantor=patNumFromExtIds;
 				}
-				pat.PriProv=Preferences.GetLong(PrefName.PracticeDefaultProv);
-				pat.BillingType=Preferences.GetLong(PrefName.PracticeDefaultBillType);
+				pat.PriProv= Preference.GetLong(PreferenceName.PracticeDefaultProv);
+				pat.BillingType= Preference.GetLong(PreferenceName.PracticeDefaultBillType);
 			}
 			else {
 				patOld=pat.Copy();
@@ -606,7 +606,7 @@ namespace OpenDentBusiness.HL7 {
 			Appointment aptOld=apt.Copy();
 			long provNum=0;
 			string strProvType="";
-			Def[] listConfirmStats=Defs.GetDefsForCategory(DefCat.ApptConfirmed,true).ToArray();
+			Definition[] listConfirmStats=Definition.GetByCategory(DefinitionCategory.ApptConfirmed).ToArray();
 			for(int i=0;i<segDef.hl7DefFields.Count;i++) {
 				int itemOrder=segDef.hl7DefFields[i].OrdinalPos;
 				if(itemOrder<1) {
@@ -634,10 +634,10 @@ namespace OpenDentBusiness.HL7 {
 					case "apt.confirmStatus":
 						long aptConfirmDefNum=0;
 						for(int j=0;j<listConfirmStats.Length;j++) {
-							if(seg.GetFieldComponent(itemOrder,1).ToLower()==listConfirmStats[j].ItemName.ToLower()//ItemName is the confirmation name
-								|| (listConfirmStats[j].ItemValue!="" && seg.GetFieldComponent(itemOrder,1).ToLower()==listConfirmStats[j].ItemValue.ToLower()))//ItemValue is the confirmation abbreviation, which may be blank
+							if(seg.GetFieldComponent(itemOrder,1).ToLower()==listConfirmStats[j].Description.ToLower()//ItemName is the confirmation name
+								|| (listConfirmStats[j].Value!="" && seg.GetFieldComponent(itemOrder,1).ToLower()==listConfirmStats[j].Value.ToLower()))//ItemValue is the confirmation abbreviation, which may be blank
 							{
-								aptConfirmDefNum=listConfirmStats[j].DefNum;
+								aptConfirmDefNum=listConfirmStats[j].Id;
 								break;
 							}
 						}
@@ -670,7 +670,7 @@ namespace OpenDentBusiness.HL7 {
 				//Log confirmation status changes.
 				SecurityLogs.MakeLogEntry(Permissions.ApptConfirmStatusEdit,apt.PatNum,
 					Lans.g("MessageParser","Appointment confirmation status automatically changed from")+" "
-					+Defs.GetName(DefCat.ApptConfirmed,aptOld.Confirmed)+" "+Lans.g("MessageParser","to")+" "+Defs.GetName(DefCat.ApptConfirmed,apt.Confirmed)
+					+Defs.GetName(DefinitionCategory.ApptConfirmed,aptOld.Confirmed)+" "+Lans.g("MessageParser","to")+" "+Defs.GetName(DefinitionCategory.ApptConfirmed,apt.Confirmed)
 					+" "+Lans.g("MessageParser","due to an indound HL7 message")+".",apt.AptNum,LogSources.HL7,aptOld.DateTStamp);
 			}
 			_aptProcessed=apt;
@@ -685,7 +685,7 @@ namespace OpenDentBusiness.HL7 {
 			if(apt==null) {//We have to have an appt to process the AIL segment
 				return;
 			}
-			Def[] listConfirmStats=Defs.GetDefsForCategory(DefCat.ApptConfirmed,true).ToArray();
+			Definition[] listConfirmStats=Definition.GetByCategory(DefinitionCategory.ApptConfirmed).ToArray();
 			Appointment aptOld=apt.Copy();	
 			for(int i=0;i<segDef.hl7DefFields.Count;i++) {
 				int intItemOrder=segDef.hl7DefFields[i].OrdinalPos;
@@ -693,10 +693,10 @@ namespace OpenDentBusiness.HL7 {
 					case "apt.confirmStatus":
 						long aptConfirmDefNum=0;
 						for(int j=0;j<listConfirmStats.Length;j++) {
-							if(seg.GetFieldComponent(intItemOrder,1).ToLower()==listConfirmStats[j].ItemName.ToLower()//ItemName is the confirmation name
-								|| (listConfirmStats[j].ItemValue!="" && seg.GetFieldComponent(intItemOrder,1).ToLower()==listConfirmStats[j].ItemValue.ToLower()))//ItemValue is the confirmation abbreviation, which may be blank
+							if(seg.GetFieldComponent(intItemOrder,1).ToLower()==listConfirmStats[j].Description.ToLower()//ItemName is the confirmation name
+								|| (listConfirmStats[j].Value!="" && seg.GetFieldComponent(intItemOrder,1).ToLower()==listConfirmStats[j].Value.ToLower()))//ItemValue is the confirmation abbreviation, which may be blank
 							{
-								aptConfirmDefNum=listConfirmStats[j].DefNum;
+								aptConfirmDefNum=listConfirmStats[j].Id;
 								break;
 							}
 						}
@@ -720,7 +720,7 @@ namespace OpenDentBusiness.HL7 {
 				//Log confirmation status changes.
 				SecurityLogs.MakeLogEntry(Permissions.ApptConfirmStatusEdit,apt.PatNum,
 					Lans.g("MessageParser","Appointment confirmation status automatically changed from")+" "
-					+Defs.GetName(DefCat.ApptConfirmed,aptOld.Confirmed)+" "+Lans.g("MessageParser","to")+" "+Defs.GetName(DefCat.ApptConfirmed,apt.Confirmed)
+					+Defs.GetName(DefinitionCategory.ApptConfirmed,aptOld.Confirmed)+" "+Lans.g("MessageParser","to")+" "+Defs.GetName(DefinitionCategory.ApptConfirmed,apt.Confirmed)
 					+" "+Lans.g("MessageParser","due to an indound HL7 message")+".",apt.AptNum,LogSources.HL7,aptOld.DateTStamp);
 			}
 			_aptProcessed=apt;
@@ -777,12 +777,12 @@ namespace OpenDentBusiness.HL7 {
 			//see if there is already an active allergy with this AllergyDefNum for this patient
 			List<Allergy> listAllergForPat=Allergies.GetAll(pat.PatNum,false);
 			for(int i=0;i<listAllergForPat.Count;i++) {
-				if(listAllergForPat[i].AllergyDefNum==allergyDefCur.AllergyDefNum) {
+				if(listAllergForPat[i].AllergyDefNum==allergyDefCur.Id) {
 					return;//already an active allergy with this AllergyDefNum
 				}
 			}
 			Allergy allergyCur=new Allergy();
-			allergyCur.AllergyDefNum=allergyDefCur.AllergyDefNum;
+			allergyCur.AllergyDefNum=allergyDefCur.Id;
 			allergyCur.PatNum=pat.PatNum;
 			allergyCur.StatusIsActive=true;
 			Allergies.Insert(allergyCur);
@@ -1107,8 +1107,8 @@ namespace OpenDentBusiness.HL7 {
 					guar.PatNum=guarExtPatNum;
 					guar.Guarantor=guarExtPatNum;
 				}
-				guar.PriProv=Preferences.GetLong(PrefName.PracticeDefaultProv);
-				guar.BillingType=Preferences.GetLong(PrefName.PracticeDefaultBillType);
+				guar.PriProv= Preference.GetLong(PreferenceName.PracticeDefaultProv);
+				guar.BillingType= Preference.GetLong(PreferenceName.PracticeDefaultBillType);
 			}
 			else {
 				guarOld=guar.Copy();
@@ -1363,7 +1363,7 @@ namespace OpenDentBusiness.HL7 {
 					+pat.GetNameFLnoPref()+".  The RxNorm code supplied in the OBX segment was invalid.",EventLogEntryType.Information);
 				return;//not able to enter this medication if not given a valid rxnorm
 			}
-			Medication medCur=Medications.GetMedicationFromDbByRxCui(rxnorm);//an RxNorm could be attached to multiple medications, we will just add the first one we come to
+			Medication medCur=Medication.GetByRxCui(rxnorm.ToString());//an RxNorm could be attached to multiple medications, we will just add the first one we come to
 			if(medCur==null) {
 				EventLog.WriteEntry("OpenDentHL7","A medication was not added for patient "+pat.GetNameFLnoPref()
 					+".  There is not a medication in the database with the RxNorm code of "+rxnorm.ToString()+".",EventLogEntryType.Information);
@@ -1371,13 +1371,13 @@ namespace OpenDentBusiness.HL7 {
 			}
 			List<MedicationPat> listMedPatsCur=MedicationPats.Refresh(pat.PatNum,false);
 			for(int i=0;i<listMedPatsCur.Count;i++) {
-				if(listMedPatsCur[i].MedicationNum==medCur.MedicationNum) {
+				if(listMedPatsCur[i].MedicationNum==medCur.Id) {
 					return;//this patient already has this medication recorded and active
 				}
 			}
 			MedicationPat medpatCur=new MedicationPat();
 			medpatCur.PatNum=pat.PatNum;
-			medpatCur.MedicationNum=medCur.MedicationNum;
+			medpatCur.MedicationNum=medCur.Id;
 			medpatCur.ProvNum=pat.PriProv;
 			medpatCur.RxCui=medCur.RxCui;
 			MedicationPats.Insert(medpatCur);
@@ -1817,7 +1817,7 @@ namespace OpenDentBusiness.HL7 {
 				default:
 					break;
 			}
-			if(procCur.ProcStatus==ProcStat.C && dateProc.Date > DateTime.Today.Date && !Preferences.GetBool(PrefName.FutureTransDatesAllowed)) {
+			if(procCur.ProcStatus==ProcStat.C && dateProc.Date > DateTime.Today.Date && !Preference.GetBool(PreferenceName.FutureTransDatesAllowed)) {
 				EventLog.WriteEntry("OpenDentalHL7", "A procedure was not added for patient "+pat.GetNameFLnoPref()+". Procedures are not allowed for future dates.",EventLogEntryType.Information);
 				return;
 			}
@@ -1843,8 +1843,8 @@ namespace OpenDentBusiness.HL7 {
 			procCur.BaseUnits=procCode.BaseUnits;
 			procCur.SiteNum=pat.SiteNum;
 			procCur.RevCode=procCode.RevenueCodeDefault;
-			procCur.DiagnosticCode=Preferences.GetString(PrefName.ICD9DefaultForNewProcs);
-			procCur.PlaceService=(PlaceOfService)Preferences.GetInt(PrefName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used.
+			procCur.DiagnosticCode= Preference.GetString(PreferenceName.ICD9DefaultForNewProcs);
+			procCur.PlaceService=(PlaceOfService)Preference.GetInt(PreferenceName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used.
 			List<PatPlan> listPatPlan=PatPlans.Refresh(pat.PatNum);
 			List<InsSub> listSubs=InsSubs.RefreshForFam(Patients.GetFamily(pat.PatNum));
 			List<InsPlan> insPlanList=InsPlans.RefreshForSubList(listSubs);
@@ -1926,7 +1926,7 @@ namespace OpenDentBusiness.HL7 {
 				EventLog.WriteEntry("OpenDentHL7","The PRB segment was not processed.  The action codes supported are 'AD' for add or 'UP' for update.",EventLogEntryType.Information);
 				return;
 			}
-			long probDefNum=DiseaseDefs.GetNumFromSnomed(PIn.String(seg.GetFieldComponent(probCodeOrder,0)));
+			long probDefNum=DiseaseDef.GetNumFromSnomed(PIn.String(seg.GetFieldComponent(probCodeOrder,0)));
 			//The problem must be a SNOMEDCT code, identified by the coding system table 0396 value "SNM" in component 3 of the CWE problem code field
 			//There must be a disease def setup with the SNOMEDCT code in the problem list or we will ignore this problem
 			if(seg.GetFieldComponent(probCodeOrder,2).ToLower()!="snm" || probDefNum==0) {
@@ -1991,7 +1991,7 @@ namespace OpenDentBusiness.HL7 {
 			}
 			Disease probOld=probCur.Copy();
 			probCur.PatNum=pat.PatNum;
-			probCur.DiseaseDefNum=probDefNum;
+			probCur.DiseaseDefNum=(int)probDefNum;
 			probCur.ProbStatus=ProblemStatus.Active;
 			probCur.DateStart=dateProbStart;//could be '0001-01-01' if not present or not the correct format, handled by FieldParser.DateTimeParse
 			probCur.DateStop=dateProbStop;//could be '0001-01-01' if not present or not the correct format, handled by FieldParser.DateTimeParse

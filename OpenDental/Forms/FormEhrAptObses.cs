@@ -47,20 +47,20 @@ namespace OpenDental {
 						row.Cells.Add(snomedValue.Description);//2 Value
 					}
 					else if(obs.ValCodeSystem=="ICD9") {
-						ICD9 icd9Value=ICD9s.GetByCode(obs.ValReported);
+						ICD9 icd9Value=ICD9.GetByCode(obs.ValReported);
 						row.Cells.Add(icd9Value.Description);//2 Value
 					}
 					else if(obs.ValCodeSystem=="ICD10") {
-						Icd10 icd10Value=Icd10s.GetByCode(obs.ValReported);
+						ICD10 icd10Value= ICD10.GetByCode(obs.ValReported);
 						row.Cells.Add(icd10Value.Description);//2 Value
 					}
 				}
 				else if(obs.ValType==EhrAptObsType.Address) {
-					string sendingFacilityAddress1=Preferences.GetString(PrefName.PracticeAddress);
-					string sendingFacilityAddress2=Preferences.GetString(PrefName.PracticeAddress2);
-					string sendingFacilityCity=Preferences.GetString(PrefName.PracticeCity);
-					string sendingFacilityState=Preferences.GetString(PrefName.PracticeST);
-					string sendingFacilityZip=Preferences.GetString(PrefName.PracticeZip);
+					string sendingFacilityAddress1=Preference.GetString(PreferenceName.PracticeAddress);
+					string sendingFacilityAddress2=Preference.GetString(PreferenceName.PracticeAddress2);
+					string sendingFacilityCity=Preference.GetString(PreferenceName.PracticeCity);
+					string sendingFacilityState=Preference.GetString(PreferenceName.PracticeST);
+					string sendingFacilityZip=Preference.GetString(PreferenceName.PracticeZip);
 					if(Preferences.HasClinicsEnabled && _appt.ClinicNum!=0) {//Using clinics and a clinic is assigned.
 						Clinic clinic=Clinics.GetClinic(_appt.ClinicNum);
 						sendingFacilityAddress1=clinic.Address;

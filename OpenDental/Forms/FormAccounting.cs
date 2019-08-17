@@ -310,7 +310,8 @@ namespace OpenDental
 		}
 
 		private void FillGrid(){
-			Account.RefreshCache();
+            CacheManager.Invalidate<Account>();
+
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableChartOfAccounts","Type"),70);
@@ -379,10 +380,9 @@ namespace OpenDental
 
 		private void Add_Click() {
 			Account acct=new Account();
-			acct.AcctType=AccountType.Asset;
-			acct.AccountColor=Color.White;
+			acct.Type=AccountType.Asset;
+			acct.Color=Color.White;
 			FormAccountEdit FormA=new FormAccountEdit(acct);
-			FormA.IsNew=true;
 			FormA.ShowDialog();
 			FillGrid();
 		}
@@ -397,7 +397,7 @@ namespace OpenDental
 				MsgBox.Show(this,"This account is generated automatically, and cannot be edited.");
 				return;
 			}
-			Account acct=Account.GetAccount(acctNum);
+			Account acct=Account.GetById(acctNum);
 			FormAccountEdit FormA=new FormAccountEdit(acct);
 			FormA.ShowDialog();
 			FillGrid();
@@ -428,7 +428,7 @@ namespace OpenDental
 			else{
 				asofDate=PIn.Date(textDate.Text);
 			}
-			Account acct=Account.GetAccount(acctNum);
+			Account acct=Account.GetById(acctNum);
 			FormJournal FormJ=new FormJournal(acct);
 			FormJ.InitialAsOfDate=asofDate;
 			FormJ.ShowDialog();

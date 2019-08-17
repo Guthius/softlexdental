@@ -62,7 +62,7 @@ namespace OpenDental
         }
 
         private List<Site> _listSites;
-        private List<Def> _listBillingTypeDefs;
+        private List<Definition> _listBillingTypeDefs;
 
 
         public Patient PreselectedPatient { get; private set; }
@@ -109,12 +109,12 @@ namespace OpenDental
             }
             billingTypeComboBox.Items.Add(Lan.g(this, "All"));
             billingTypeComboBox.SelectedIndex = 0;
-            _listBillingTypeDefs = Defs.GetDefsForCategory(DefCat.BillingTypes, true);
+            _listBillingTypeDefs = Definition.GetByCategory(DefinitionCategory.BillingTypes);;
             for (int i = 0; i < _listBillingTypeDefs.Count; i++)
             {
-                billingTypeComboBox.Items.Add(_listBillingTypeDefs[i].ItemName);
+                billingTypeComboBox.Items.Add(_listBillingTypeDefs[i].Description);
             }
-            if (Preferences.GetBool(PrefName.EasyHidePublicHealth))
+            if (Preference.GetBool(PreferenceName.EasyHidePublicHealth))
             {
                 siteComboBox.Visible = false;
                 siteLabel.Visible = false;
@@ -201,7 +201,7 @@ namespace OpenDental
             switch (ComputerPrefs.LocalComputer.PatSelectSearchMode)
             {
                 case SearchMode.Default:
-                    checkRefresh.Checked = !Preferences.GetBool(PrefName.PatientSelectUsesSearchButton);//Use global preference
+                    checkRefresh.Checked = !Preference.GetBool(PreferenceName.PatientSelectUsesSearchButton);//Use global preference
                     break;
                 case SearchMode.RefreshWhileTyping:
                     checkRefresh.Checked = true;
@@ -413,10 +413,10 @@ namespace OpenDental
             long billingType = 0;
             if (billingTypeComboBox.SelectedIndex != 0)
             {
-                billingType = _listBillingTypeDefs[billingTypeComboBox.SelectedIndex - 1].DefNum;
+                billingType = _listBillingTypeDefs[billingTypeComboBox.SelectedIndex - 1].Id;
             }
             long siteNum = 0;
-            if (!Preferences.GetBool(PrefName.EasyHidePublicHealth) && siteComboBox.SelectedIndex != 0)
+            if (!Preference.GetBool(PreferenceName.EasyHidePublicHealth) && siteComboBox.SelectedIndex != 0)
             {
                 siteNum = _listSites[siteComboBox.SelectedIndex - 1].SiteNum;
             }
@@ -681,7 +681,7 @@ namespace OpenDental
             }
 
             long primaryProviderNum = 0;
-            if (!Preferences.GetBool(PrefName.PriProvDefaultToSelectProv))
+            if (!Preference.GetBool(PreferenceName.PriProvDefaultToSelectProv))
             {
                 if (Preferences.HasClinicsEnabled && clinicComboBox.SelectedIndex != 0)
                 {

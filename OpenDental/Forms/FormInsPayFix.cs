@@ -31,7 +31,7 @@ namespace OpenDental {
 				if(claim==null) {
 					continue;
 				}
-				if(claim.DateReceived.Date>curDate && !Preferences.GetBool(PrefName.AllowFutureInsPayments) && !Preferences.GetBool(PrefName.FutureTransDatesAllowed)) {
+				if(claim.DateReceived.Date>curDate && !Preference.GetBool(PreferenceName.AllowFutureInsPayments) && !Preference.GetBool(PreferenceName.FutureTransDatesAllowed)) {
 					invalidClaimDate+="\r\n"+Lan.g(this,"PatNum")+" "+claim.PatNum+", "+claim.DateService.ToShortDateString();
 					continue;
 				}
@@ -40,7 +40,7 @@ namespace OpenDental {
 				cp.CheckAmt=splits[i].InsPayAmt;
 				cp.ClinicNum=claim.ClinicNum;
 				cp.CarrierName=splits[i].Carrier;
-				cp.PayType=Defs.GetFirstForCategory(DefCat.InsurancePaymentType,true).DefNum;
+				cp.PayType=Defs.GetFirstForCategory(DefinitionCategory.InsurancePaymentType,true).Id;
 				ClaimPayments.Insert(cp);
 				List<ClaimProc> claimP=ClaimProcs.RefreshForClaim(splits[i].ClaimNum);
 				for(int j=0;j<claimP.Count;j++) {

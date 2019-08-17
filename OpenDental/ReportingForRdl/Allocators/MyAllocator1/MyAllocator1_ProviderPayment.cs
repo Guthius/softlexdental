@@ -81,9 +81,9 @@ namespace OpenDental.Reporting.Allocators {
 				bool toolRan = false;
 				bool isUsing = false;
 				if(Preferences.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun))
-					toolRan = Preferences.GetRaw(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun)=="1";
+					toolRan = Preference.GetString(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_ToolHasRun)=="1";
 				if(Preferences.ContainsKey(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use))
-					isUsing = Preferences.GetRaw(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use)=="1";
+					isUsing = Preference.GetString(MyAllocator1_ProviderPayment.Pref_AllocatorProvider1_Use)=="1";
 				if(toolRan & isUsing) {
 					_AllocateExecute(iGuarantor);
 					AllocatedNomally = true;

@@ -158,14 +158,14 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Called from FormTransactionEdit.</summary>
-        public static DateTime GetReconcileDate(List<JournalEntry> journalList)
+        public static DateTime? GetReconcileDate(List<JournalEntry> journalList)
         {
             //No need to check RemotingRole; no call to db.
             for (int i = 0; i < journalList.Count; i++)
             {
                 if (journalList[i].ReconcileNum != 0)
                 {
-                    return Reconciles.GetOne(journalList[i].ReconcileNum).DateReconcile;
+                    return Reconciliation.GetById(journalList[i].ReconcileNum).ReconciliationDate;
                 }
             }
             return DateTime.MinValue;

@@ -43,7 +43,7 @@ namespace OpenDentBusiness.Crud{
 			foreach(DataRow row in table.Rows) {
 				appointment=new Appointment();
 				appointment.AptNum               = PIn.Long  (row["AptNum"].ToString());
-				appointment.PatNum               = PIn.Long  (row["PatNum"].ToString());
+				appointment.PatNum               = PIn.Int  (row["PatNum"].ToString());
 				appointment.AptStatus            = (OpenDentBusiness.ApptStatus)PIn.Int(row["AptStatus"].ToString());
 				appointment.Pattern              = PIn.String(row["Pattern"].ToString());
 				appointment.Confirmed            = PIn.Long  (row["Confirmed"].ToString());
@@ -226,7 +226,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Appointment into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(Appointment appointment,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO appointment (";
 			if(!useExistingPK && isRandomKeys) {
 				appointment.AptNum=ReplicationServers.GetKeyNoCache("appointment","AptNum");

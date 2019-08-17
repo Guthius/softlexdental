@@ -30,8 +30,8 @@ namespace OpenDental {
 			}
 			EhrProvKeys.Delete(_keyCur.EhrProvKeyNum);
 			//if the radiology proc alert is enabled and they just deleted the last ehrprovkey, disable the alert (OpenDentalService will stop alerting)
-			if(Preferences.GetBool(PrefName.IsAlertRadiologyProcsEnabled) && !EhrProvKeys.HasEhrKeys()) {
-				Prefs.UpdateBool(PrefName.IsAlertRadiologyProcsEnabled,false);
+			if(Preference.GetBool(PreferenceName.IsAlertRadiologyProcsEnabled) && !EhrProvKeys.HasEhrKeys()) {
+				Preference.Update(PreferenceName.IsAlertRadiologyProcsEnabled,false);
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			DialogResult=DialogResult.OK;
@@ -56,13 +56,13 @@ namespace OpenDental {
 			_keyCur.ProvKey=textKey.Text;
 			if(_keyCur.IsNew) {
 				bool isFirstKey=false;
-				if(!Preferences.GetBool(PrefName.IsAlertRadiologyProcsEnabled)) {
+				if(!Preference.GetBool(PreferenceName.IsAlertRadiologyProcsEnabled)) {
 					isFirstKey=!EhrProvKeys.HasEhrKeys();
 				}
 				EhrProvKeys.Insert(_keyCur);
 				//if radiology procs alert is disabled and this is the first ehrprovkey, enable the alert (alert handled by the OpenDentalService)
-				if(!Preferences.GetBool(PrefName.IsAlertRadiologyProcsEnabled) && isFirstKey) {
-					Prefs.UpdateBool(PrefName.IsAlertRadiologyProcsEnabled,true);
+				if(!Preference.GetBool(PreferenceName.IsAlertRadiologyProcsEnabled) && isFirstKey) {
+					Preference.Update(PreferenceName.IsAlertRadiologyProcsEnabled,true);
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 			}

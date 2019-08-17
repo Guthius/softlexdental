@@ -31,8 +31,8 @@ namespace OpenDental {
 
 		private void FormClaimAttachment_Load(object sender,EventArgs e) {
 			_claimPat=Patients.GetPat(_claimCur.PatNum);
-			List<Def> imageTypeCategories=new List<Def>();
-			List<Def> listClaimAttachmentDefs=CheckImageCatDefs();
+			List<Definition> imageTypeCategories=new List<Definition>();
+			List<Definition> listClaimAttachmentDefs=CheckImageCatDefs();
 			if(listClaimAttachmentDefs.Count<1) {//At least one Claim Attachment image definition exists.
 				labelClaimAttachWarning.Visible=true;
 			}
@@ -88,9 +88,9 @@ namespace OpenDental {
 		}
 
 		///<summary>Checks to see if the user has made a Claim Attachment image category definition. Returns the list of Defs found.</summary>
-		private List<Def> CheckImageCatDefs() {
+		private List<Definition> CheckImageCatDefs() {
 			//Filter down to image categories that have been marked as Claim Attachment.
-			return Defs.GetCatList((int)DefCat.ImageCats).ToList().FindAll(x => x.ItemValue.Contains("C")&&!x.IsHidden);
+			return Definition.GetByCategory(DefinitionCategory.ImageCats).FindAll(x => x.Value.Contains("C"));
 		}
 
 		///<summary>A helper method that does the actual validation of the claim. 
@@ -259,17 +259,17 @@ namespace OpenDental {
 			}
 			//Used for determining which category to save the image attachments to. 0 will save the image to the first category in the Images module.
 			long imageTypeDefNum=0;
-			Def defClaimAttachCat=CheckImageCatDefs().FirstOrDefault();
+			Definition defClaimAttachCat=CheckImageCatDefs().FirstOrDefault();
 			if(defClaimAttachCat!=null) {
-				imageTypeDefNum=defClaimAttachCat.DefNum;
+				imageTypeDefNum=defClaimAttachCat.Id;
 			}
 			else {//User does not have a Claim Attachment image category, just use the first image category available.
-				imageTypeDefNum=Defs.GetCatList((int)DefCat.ImageCats).FirstOrDefault(x => !x.IsHidden).DefNum;
+				imageTypeDefNum= Definition.GetByCategory(DefinitionCategory.ImageCats).FirstOrDefault().Id;
 			}
 			List<ClaimAttach> listClaimAttachments=new List<ClaimAttach>();
 			for(int i=0;i<gridAttachedImages.Rows.Count;i++) {
 				ClaimConnect.ImageAttachment imageRow=((ClaimConnect.ImageAttachment)gridAttachedImages.Rows[i].Tag);
-				if(Preferences.GetBool(PrefName.SaveDXCAttachments)) {
+				if(Preference.GetBool(PreferenceName.SaveDXCAttachments)) {
 					Bitmap imageBitmap=new Bitmap(imageRow.Image);
 					Document docCur=ImageStore.Import(imageBitmap,imageTypeDefNum,ImageType.Document,_claimPat);
 					imageRow.ImageFileNameActual=docCur.FileName;

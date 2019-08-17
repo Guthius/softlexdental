@@ -113,13 +113,13 @@ namespace OpenDental {
 			gridMain.Rows.Clear();
 			ODGridRow row;
 			List<User> ListUsers=Userods.GetDeepCopy(true);
-			UserGroup[] ArrayGroups=UserGroups.GetDeepCopy().ToArray();
+            UserGroup[] ArrayGroups = UserGroup.All().ToArray();
 			//if(radioUser.Checked) {//by user
 			for(int i=0;i<ListUsers.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(ListUsers[i].UserName);
 				for(int g=0;g<ArrayGroups.Length;g++) {//group name.
-					if(!ListUsers[i].IsInUserGroup(ArrayGroups[g].UserGroupNum)) {
+					if(!ListUsers[i].IsInUserGroup(ArrayGroups[g].Id)) {
 						continue;
 					}
 					row.Cells.Add(ArrayGroups[g].Description);

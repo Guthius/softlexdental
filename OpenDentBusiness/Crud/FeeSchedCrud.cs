@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one FeeSched into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(FeeSched feeSched,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO feesched (";
 			if(!useExistingPK && isRandomKeys) {
 				feeSched.FeeSchedNum=ReplicationServers.GetKeyNoCache("feesched","FeeSchedNum");

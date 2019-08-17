@@ -110,8 +110,8 @@ namespace OpenDentBusiness
                     return Db.GetTable(command);
                 });
                 List<SecurityLog> listLogsArchive = Crud.SecurityLogCrud.TableToList(tableArchive);
-                Dictionary<long, Patient> dictPats = Patients.GetMultPats(listLogsArchive.Select(x => x.PatNum).Distinct().ToList())
-                    .ToDictionary(x => x.PatNum);
+                Dictionary<long, Patient> dictPats = Patients.GetMultPats(listLogsArchive.Select(x => (long)x.PatNum).Distinct().ToList())
+                    .ToDictionary(x => (long)x.PatNum);
                 for (int i = 0; i < listLogsArchive.Count; i++)
                 {
                     Patient pat;
@@ -300,7 +300,7 @@ namespace OpenDentBusiness
             securityLog.UserNum = Security.CurUser.UserNum;
             securityLog.LogText = logText;
             securityLog.CompName = Security.CurComputerName;
-            securityLog.PatNum = patNum;
+            securityLog.PatNum = (int)patNum;
             securityLog.FKey = fKey;
             securityLog.LogSource = logSource;
             securityLog.DefNum = defNum;
@@ -323,7 +323,7 @@ namespace OpenDentBusiness
             securityLog.UserNum = userNum;
             securityLog.LogText = logText;
             securityLog.CompName = Security.CurComputerName;
-            securityLog.PatNum = patnum;
+            securityLog.PatNum = (int)patnum;
             securityLog.FKey = 0;
             securityLog.LogSource = source;
             securityLog.SecurityLogNum = SecurityLogs.InsertNoCache(securityLog);

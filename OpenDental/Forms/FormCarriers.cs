@@ -371,7 +371,7 @@ namespace OpenDental{
 			Clearinghouse ch=Clearinghouses.GetDefaultDental();
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA") && ch.Eformat==ElectronicClaimFormat.Canadian) {
 				groupItrans.Visible=true;
-				ItransImportFields fieldsToImport=(ItransImportFields)Preferences.GetInt(PrefName.ItransImportFields);
+				ItransImportFields fieldsToImport=(ItransImportFields)Preference.GetInt(PreferenceName.ItransImportFields);
 				checkITransPhone.Checked=(fieldsToImport.HasFlag(ItransImportFields.Phone));
 				checkItransAddress.Checked=(fieldsToImport.HasFlag(ItransImportFields.Address));
 				checkItransName.Checked=(fieldsToImport.HasFlag(ItransImportFields.Name));
@@ -570,7 +570,7 @@ namespace OpenDental{
 					return;
 				}
 			}
-			Prefs.UpdateInt(PrefName.ItransImportFields,(int)fieldsToImport);
+			Preference.Update(PreferenceName.ItransImportFields,(int)fieldsToImport);
 			DataValid.SetInvalid(InvalidType.Prefs);
 			string errorMsg=ItransNCpl.TryCarrierUpdate(false,fieldsToImport);
 			if(!string.IsNullOrEmpty(errorMsg)) {

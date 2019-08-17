@@ -329,13 +329,14 @@ namespace OpenDental{
 		#endregion
 
 		private void FormPayPeriods_Load(object sender,System.EventArgs e) {
-			checkUseDecimal.Checked=Preferences.GetBool(PrefName.TimeCardsUseDecimalInsteadOfColon);
-			checkAdjOverBreaks.Checked=Preferences.GetBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks);
-			checkShowSeconds.Checked=Preferences.GetBool(PrefName.TimeCardShowSeconds);
-			Employees.RefreshCache();
+			checkUseDecimal.Checked=Preference.GetBool(PreferenceName.TimeCardsUseDecimalInsteadOfColon);
+			checkAdjOverBreaks.Checked=Preference.GetBool(PreferenceName.TimeCardsMakesAdjustmentsForOverBreaks);
+			checkShowSeconds.Checked=Preference.GetBool(PreferenceName.TimeCardShowSeconds);
+
+            CacheManager.Invalidate<Employee>();
 			FillGrid();
 			FillRules();
-			textADPCompanyCode.Text=Preferences.GetString(PrefName.ADPCompanyCode);
+			textADPCompanyCode.Text=Preference.GetString(PreferenceName.ADPCompanyCode);
 		}
 
 		///<summary>Does not refresh the cached list.  Make sure any updates to _listPayPeriods are done before calling this method.</summary>
@@ -379,7 +380,7 @@ namespace OpenDental{
 			//Start with a convenient sorting of all employees on top, followed by a last name sort.
 			List<TimeCardRule> listSorted=TimeCardRules.GetDeepCopy().OrderBy(x => x.IsOvertimeExempt)
 				.ThenBy(x => x.EmployeeNum!=0)
-				.ThenBy(x => (Employees.GetEmp(x.EmployeeNum)??new Employee()).LName)
+				.ThenBy(x => (Employee.GetById(x.EmployeeNum)??new Employee()).LastName)
 				.ToList();
 			gridRules.BeginUpdate();
 			gridRules.Columns.Clear();
@@ -403,8 +404,8 @@ namespace OpenDental{
 					row.Cells.Add(Lan.g(this,"All Employees"));
 				}
 				else {
-					Employee emp=Employees.GetEmp(listSorted[i].EmployeeNum);
-					row.Cells.Add(emp.FName+" "+emp.LName);
+					Employee emp=Employee.GetById(listSorted[i].EmployeeNum);
+					row.Cells.Add(emp.FirstName+" "+emp.LastName);
 				}
 				row.Cells.Add(listSorted[i].BeforeTimeOfDay.ToStringHmm());
 				row.Cells.Add(listSorted[i].AfterTimeOfDay.ToStringHmm());
@@ -493,19 +494,19 @@ namespace OpenDental{
 		}
 
 		private void checkUseDecimal_Click(object sender,EventArgs e) {
-			if(Prefs.UpdateBool(PrefName.TimeCardsUseDecimalInsteadOfColon,checkUseDecimal.Checked)) {
+			if(Preference.Update(PreferenceName.TimeCardsUseDecimalInsteadOfColon,checkUseDecimal.Checked)) {
 				changed=true;
 			}
 		}
 
 		private void checkAdjOverBreaks_Click(object sender,EventArgs e) {
-			if(Prefs.UpdateBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks,checkAdjOverBreaks.Checked)) {
+			if(Preference.Update(PreferenceName.TimeCardsMakesAdjustmentsForOverBreaks,checkAdjOverBreaks.Checked)) {
 				changed=true;
 			}
 		}
 
 		private void checkShowSeconds_Click(object sender,EventArgs e) {
-			if(Prefs.UpdateBool(PrefName.TimeCardShowSeconds,checkShowSeconds.Checked)) {
+			if(Preference.Update(PreferenceName.TimeCardShowSeconds,checkShowSeconds.Checked)) {
 				changed=true;
 			}
 		}
@@ -589,7 +590,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"ADP Company Code must be two or three alpha-numeric characters.\r\nFix or clear before continuing.");
 				e.Cancel=true;
 			}
-			if(Prefs.UpdateString(PrefName.ADPCompanyCode,textADPCompanyCode.Text)) {
+			if(Preference.Update(PreferenceName.ADPCompanyCode,textADPCompanyCode.Text)) {
 				changed=true;
 			}
 			if(changed) {

@@ -110,7 +110,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one TaskSubscription into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(TaskSubscription taskSubscription,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO tasksubscription (";
 			if(!useExistingPK && isRandomKeys) {
 				taskSubscription.TaskSubscriptionNum=ReplicationServers.GetKeyNoCache("tasksubscription","TaskSubscriptionNum");

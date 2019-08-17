@@ -24,21 +24,21 @@ namespace OpenDental {
 			if(!_evalDefCur.IsNew) {
 				textTitle.Text=_evalDefCur.EvalTitle;
 				textCourse.Text=SchoolCourses.GetDescript(_evalDefCur.SchoolCourseNum);
-				textGradeScaleName.Text=GradingScales.GetOne(_evalDefCur.GradingScaleNum).Description;
+				textGradeScaleName.Text= GradingScale.GetById(_evalDefCur.GradingScaleNum).Description;
 			}
 			_criterionDefsForEval=EvaluationCriterionDefs.GetAllForEvaluationDef(_evalDefCur.EvaluationDefNum);
 			_itemOrder=new List<long>();
 			for(int j=0;j<_criterionDefsForEval.Count;j++) {
 				_itemOrder.Add(_criterionDefsForEval[j].EvaluationCriterionDefNum);
 			}
-			List<GradingScale> gradingScales=GradingScales.RefreshList();
+			List<GradingScale> gradingScales= GradingScale.All();
 			_gradingScales=new Dictionary<long,GradingScale>();
 			for(int i=0;i<gradingScales.Count;i++) {
-				_gradingScales.Add(gradingScales[i].GradingScaleNum,gradingScales[i]);
+				_gradingScales.Add(gradingScales[i].Id,gradingScales[i]);
 			}
 			if(_gradingScales.Count!=0 
 				&& !_evalDefCur.IsNew
-				&& _gradingScales[_evalDefCur.GradingScaleNum].ScaleType!=EnumScaleType.Weighted) 
+				&& _gradingScales[_evalDefCur.GradingScaleNum].ScaleType!=GradingScaleType.Weighted) 
 			{
 				labelTotalPoint.Visible=false;
 				textTotalPoints.Visible=false;
@@ -54,7 +54,7 @@ namespace OpenDental {
 			col=new ODGridColumn(Lan.g("FormEvaluationDefEdit","Grading Scale"),100);
 			gridMain.Columns.Add(col);
 			if(_evalDefCur.GradingScaleNum!=0
-				&& _gradingScales[_evalDefCur.GradingScaleNum].ScaleType==EnumScaleType.Weighted) 
+				&& _gradingScales[_evalDefCur.GradingScaleNum].ScaleType==GradingScaleType.Weighted) 
 			{
 				col=new ODGridColumn(Lan.g("FormEvaluationDefEdit","Max Points"),80);
 				gridMain.Columns.Add(col);
@@ -73,7 +73,7 @@ namespace OpenDental {
 					row.Cells.Add(_gradingScales[_criterionDefsForEval[i].GradingScaleNum].Description);
 				}
 				if(_evalDefCur.GradingScaleNum!=0 
-					&& _gradingScales[_evalDefCur.GradingScaleNum].ScaleType==EnumScaleType.Weighted)
+					&& _gradingScales[_evalDefCur.GradingScaleNum].ScaleType==GradingScaleType.Weighted)
 				{
 					points+=_criterionDefsForEval[i].MaxPointsPoss;
 					if(_criterionDefsForEval[i].IsCategoryName) {
@@ -142,12 +142,12 @@ namespace OpenDental {
 			FormGS.ShowDialog();
 			if(FormGS.DialogResult==DialogResult.OK) {
 				textGradeScaleName.Text=FormGS.SelectedGradingScale.Description;
-				_evalDefCur.GradingScaleNum=FormGS.SelectedGradingScale.GradingScaleNum;
+				_evalDefCur.GradingScaleNum=FormGS.SelectedGradingScale.Id;
 				//If they added a new grading scale, add the scale to the dictionary.
-				if(!_gradingScales.ContainsKey(FormGS.SelectedGradingScale.GradingScaleNum)) {
-					_gradingScales.Add(FormGS.SelectedGradingScale.GradingScaleNum,GradingScales.GetOne(FormGS.SelectedGradingScale.GradingScaleNum));
+				if(!_gradingScales.ContainsKey(FormGS.SelectedGradingScale.Id)) {
+					_gradingScales.Add(FormGS.SelectedGradingScale.Id, GradingScale.GetById(FormGS.SelectedGradingScale.Id));
 				}
-				if(_gradingScales[_evalDefCur.GradingScaleNum].ScaleType==EnumScaleType.Weighted) {
+				if(_gradingScales[_evalDefCur.GradingScaleNum].ScaleType==GradingScaleType.Weighted) {
 					labelTotalPoint.Visible=true;
 					textTotalPoints.Visible=true;
 				}

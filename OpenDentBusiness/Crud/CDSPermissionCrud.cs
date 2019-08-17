@@ -142,7 +142,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one CDSPermission into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(CDSPermission cDSPermission,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO cdspermission (";
 			if(!useExistingPK && isRandomKeys) {
 				cDSPermission.CDSPermissionNum=ReplicationServers.GetKeyNoCache("cdspermission","CDSPermissionNum");

@@ -19,7 +19,7 @@ namespace OpenDental {
 		}
 
 		private void FormEhrSetup_Load(object sender,EventArgs e) {
-			if(Preferences.GetBool(PrefName.EhrEmergencyNow)) {
+			if(Preference.GetBool(PreferenceName.EhrEmergencyNow)) {
 				panelEmergencyNow.BackColor=Color.Red;
 			}
 			else {
@@ -85,13 +85,13 @@ namespace OpenDental {
 		}
 
 		private void butEmergencyNow_Click(object sender,EventArgs e) {
-			if(Preferences.GetBool(PrefName.EhrEmergencyNow)) {
+			if(Preference.GetBool(PreferenceName.EhrEmergencyNow)) {
 				panelEmergencyNow.BackColor=SystemColors.Control;
-				Prefs.UpdateBool(PrefName.EhrEmergencyNow,false);
+				Preference.Update(PreferenceName.EhrEmergencyNow,false);
 			}
 			else {
 				panelEmergencyNow.BackColor=Color.Red;
-				Prefs.UpdateBool(PrefName.EhrEmergencyNow,true);
+				Preference.Update(PreferenceName.EhrEmergencyNow,true);
 			}
 			DataValid.SetInvalid(InvalidType.Prefs);
 		}
@@ -205,19 +205,19 @@ namespace OpenDental {
 				//TODO: include more user information
 				writer.WriteStartElement("UpdateRequest");
 				writer.WriteStartElement("RegistrationKey");
-				writer.WriteString(Preferences.GetString(PrefName.RegistrationKey));
+				writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
 				writer.WriteEndElement();
 				writer.WriteStartElement("PracticeTitle");
-				writer.WriteString(Preferences.GetString(PrefName.PracticeTitle));
+				writer.WriteString(Preference.GetString(PreferenceName.PracticeTitle));
 				writer.WriteEndElement();
 				writer.WriteStartElement("PracticeAddress");
-				writer.WriteString(Preferences.GetString(PrefName.PracticeAddress));
+				writer.WriteString(Preference.GetString(PreferenceName.PracticeAddress));
 				writer.WriteEndElement();
 				writer.WriteStartElement("PracticePhone");
-				writer.WriteString(Preferences.GetString(PrefName.PracticePhone));
+				writer.WriteString(Preference.GetString(PreferenceName.PracticePhone));
 				writer.WriteEndElement();
 				writer.WriteStartElement("ProgramVersion");
-				writer.WriteString(Preferences.GetString(PrefName.ProgramVersion));
+				writer.WriteString(Preference.GetString(PreferenceName.ProgramVersion));
 				writer.WriteEndElement();
 				writer.WriteStartElement("CodeSystemRequested");
 				writer.WriteString(codeSystemName);
@@ -230,9 +230,9 @@ namespace OpenDental {
 			OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
 			updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
 #endif
-			if(Preferences.GetString(PrefName.UpdateWebProxyAddress) !="") {
-				IWebProxy proxy = new WebProxy(Preferences.GetString(PrefName.UpdateWebProxyAddress));
-				ICredentials cred=new NetworkCredential(Preferences.GetString(PrefName.UpdateWebProxyUserName),Preferences.GetString(PrefName.UpdateWebProxyPassword));
+			if(Preference.GetString(PreferenceName.UpdateWebProxyAddress) !="") {
+				IWebProxy proxy = new WebProxy(Preference.GetString(PreferenceName.UpdateWebProxyAddress));
+				ICredentials cred=new NetworkCredential(Preference.GetString(PreferenceName.UpdateWebProxyUserName),Preference.GetString(PreferenceName.UpdateWebProxyPassword));
 				proxy.Credentials=cred;
 				updateService.Proxy=proxy;
 			}

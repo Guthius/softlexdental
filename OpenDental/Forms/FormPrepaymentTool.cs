@@ -647,9 +647,9 @@ namespace OpenDental {
 			ReturnPayment.PatNum=_patCur.PatNum;
 			ReturnPayment.ClinicNum=0;
 			ReturnPayment.PayAmt=PIn.Double(textTotal.Text);
-			ReturnPayment.DateEntry=DateTimeOD.Today; List<Def> listDefs=Defs.GetDefsForCategory(DefCat.PaymentTypes,true);
+			ReturnPayment.DateEntry=DateTimeOD.Today; List<Definition> listDefs=Definition.GetByCategory(DefinitionCategory.PaymentTypes);
 			if(listDefs.Count>0) {
-				ReturnPayment.PayType=listDefs[0].DefNum;
+				ReturnPayment.PayType=listDefs[0].Id;
 			}
 			CreateProcedureLogs();
 			DialogResult=DialogResult.OK;

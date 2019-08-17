@@ -17,9 +17,9 @@ namespace OpenDental
         /// </summary>
         void FormAccountingLock_Load(object sender, EventArgs e)
         {
-            if (Preferences.GetDate(PrefName.AccountingLockDate).Year > 1880)
+            if (Preference.GetDate(PreferenceName.AccountingLockDate).Year > 1880)
             {
-                textDate.Text = Preferences.GetDate(PrefName.AccountingLockDate).ToShortDateString();
+                textDate.Text = Preference.GetDate(PreferenceName.AccountingLockDate).ToShortDateString();
             }
         }
 
@@ -41,7 +41,7 @@ namespace OpenDental
                 return;
             }
 
-            if (Prefs.UpdateString(PrefName.AccountingLockDate, POut.Date(PIn.Date(textDate.Text), false)))
+            if (Preference.Update(PreferenceName.AccountingLockDate, POut.Date(PIn.Date(textDate.Text), false)))
             {
                 DataValid.SetInvalid(InvalidType.Prefs);
             }

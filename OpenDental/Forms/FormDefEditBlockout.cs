@@ -25,7 +25,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public bool IsNew;
 		private System.Windows.Forms.CheckBox checkHidden;
-		private Def DefCur;
+		private Definition DefCur;
 		private CheckBox checkCutCopyPaste;
 		private CheckBox checkOverlap;
 		private Button butColor;
@@ -34,7 +34,7 @@ namespace OpenDental{
 		private GroupBox groupBoxUsage;
 		
 		///<summary></summary>
-		public FormDefEditBlockout(Def defCur) {
+		public FormDefEditBlockout(Definition defCur) {
 			InitializeComponent();// Required for Windows Form Designer support
 			Lan.F(this);
 			DefCur=defCur.Copy();
@@ -210,15 +210,15 @@ namespace OpenDental{
 		#endregion
 
 		private void FormDefEdit_Load(object sender,System.EventArgs e) {
-			textName.Text=DefCur.ItemName;
-			if(DefCur.ItemValue.Contains(BlockoutType.DontCopy.GetDescription())) {
+			textName.Text=DefCur.Description;
+			if(DefCur.Value.Contains(BlockoutType.DontCopy.GetDescription())) {
 				checkCutCopyPaste.Checked=true;
 			}
-			if(DefCur.ItemValue.Contains(BlockoutType.NoSchedule.GetDescription())) {
+			if(DefCur.Value.Contains(BlockoutType.NoSchedule.GetDescription())) {
 				checkOverlap.Checked=true;
 			}
-			checkHidden.Checked=DefCur.IsHidden;
-			butColor.BackColor=DefCur.ItemColor;
+			checkHidden.Checked=DefCur.Hidden;
+			butColor.BackColor=DefCur.Color;
 		}
 
 		private void butColor_Click(object sender,EventArgs e) {
@@ -232,7 +232,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Name required.");
 				return;
 			}
-			DefCur.ItemName=textName.Text;
+			DefCur.Description=textName.Text;
 			List<string> itemVal=new List<string>();
 			if(checkCutCopyPaste.Checked) {
 				itemVal.Add(BlockoutType.DontCopy.GetDescription());
@@ -240,14 +240,14 @@ namespace OpenDental{
 			if(checkOverlap.Checked) {
 				itemVal.Add(BlockoutType.NoSchedule.GetDescription());
 			}
-			DefCur.ItemValue=string.Join(",", itemVal);
-			DefCur.IsHidden=checkHidden.Checked;
-			DefCur.ItemColor=butColor.BackColor;
+			DefCur.Value=string.Join(",", itemVal);
+			DefCur.Hidden=checkHidden.Checked;
+			DefCur.Color=butColor.BackColor;
 			if(IsNew){
-				Defs.Insert(DefCur);
+                Definition.Insert(DefCur);
 			}
 			else{
-				Defs.Update(DefCur);
+                Definition.Update(DefCur);
 			}
 			DialogResult=DialogResult.OK;
 		}

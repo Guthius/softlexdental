@@ -52,8 +52,8 @@ namespace OpenDental{
 			Lan.F(this);
 			_emailAddressCur=emailAddress;
 			List<long> listDefaultAddressNums=new List<long>() {
-				Preferences.GetLong(PrefName.EmailNotifyAddressNum),
-				Preferences.GetLong(PrefName.EmailDefaultAddressNum)
+				Preference.GetLong(PreferenceName.EmailNotifyAddressNum),
+				Preference.GetLong(PreferenceName.EmailDefaultAddressNum)
 			};
 			if(isOpenedFromEmailSetup && Security.IsAuthorized(Permissions.SecurityAdmin,true) 
 				&& (_isNew || !_emailAddressCur.EmailAddressNum.In(listDefaultAddressNums)))
@@ -500,8 +500,8 @@ namespace OpenDental{
 				textPortIncoming.Text=_emailAddressCur.ServerPortIncoming.ToString();
 				//Both EmailNotifyAddressNum and EmailDefaultAddressNum could be 0 (unset), in which case we still may want to display the user.
 				List<long> listDefaultAddressNums=new List<long>() {
-					Preferences.GetLong(PrefName.EmailNotifyAddressNum),
-					Preferences.GetLong(PrefName.EmailDefaultAddressNum)
+					Preference.GetLong(PreferenceName.EmailNotifyAddressNum),
+					Preference.GetLong(PreferenceName.EmailDefaultAddressNum)
 				};
 				if(_isNew || !_emailAddressCur.EmailAddressNum.In(listDefaultAddressNums)) {
 					User user=Userods.GetUser(_emailAddressCur.UserNum);
@@ -519,11 +519,11 @@ namespace OpenDental{
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			if(_emailAddressCur.EmailAddressNum==Preferences.GetLong(PrefName.EmailDefaultAddressNum)) {
+			if(_emailAddressCur.EmailAddressNum==Preference.GetLong(PreferenceName.EmailDefaultAddressNum)) {
 				MsgBox.Show(this,"Cannot delete the default email address.");
 				return;
 			}
-			if(_emailAddressCur.EmailAddressNum==Preferences.GetLong(PrefName.EmailNotifyAddressNum)) {
+			if(_emailAddressCur.EmailAddressNum==Preference.GetLong(PreferenceName.EmailNotifyAddressNum)) {
 				MsgBox.Show(this,"Cannot delete the notify email address.");
 				return;
 			}

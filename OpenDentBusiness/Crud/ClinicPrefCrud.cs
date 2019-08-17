@@ -46,13 +46,13 @@ namespace OpenDentBusiness.Crud{
 				clinicPref.ClinicNum    = PIn.Long  (row["ClinicNum"].ToString());
 				string prefName=row["PrefName"].ToString();
 				if(prefName=="") {
-					clinicPref.PrefName   =(PrefName)0;
+					clinicPref.PrefName   =(PreferenceName)0;
 				}
 				else try{
-					clinicPref.PrefName   =(PrefName)Enum.Parse(typeof(PrefName),prefName);
+					clinicPref.PrefName   =(PreferenceName)Enum.Parse(typeof(PreferenceName),prefName);
 				}
 				catch{
-					clinicPref.PrefName   =(PrefName)0;
+					clinicPref.PrefName   =(PreferenceName)0;
 				}
 				clinicPref.ValueString  = PIn.String(row["ValueString"].ToString());
 				retVal.Add(clinicPref);
@@ -123,7 +123,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ClinicPref into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(ClinicPref clinicPref,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO clinicpref (";
 			if(!useExistingPK && isRandomKeys) {
 				clinicPref.ClinicPrefNum=ReplicationServers.GetKeyNoCache("clinicpref","ClinicPrefNum");

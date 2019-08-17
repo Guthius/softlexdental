@@ -40,7 +40,7 @@ namespace OpenDentHL7
             //IsStandalone=false;
             //#endif
 
-            ecwOldHl7FolderOut = Preferences.GetString(PrefName.HL7FolderOut);
+            ecwOldHl7FolderOut = Preference.GetString(PreferenceName.HL7FolderOut);
             if (!Directory.Exists(ecwOldHl7FolderOut))
             {
                 throw new ApplicationException(ecwOldHl7FolderOut + " does not exist.");
@@ -53,7 +53,7 @@ namespace OpenDentHL7
                 return;//do not continue with the HL7 sending code below
             }
             //start polling the db for new HL7 messages to send. Every 1.8 seconds.
-            ecwOldHl7FolderIn = Preferences.GetString(PrefName.HL7FolderIn);
+            ecwOldHl7FolderIn = Preference.GetString(PreferenceName.HL7FolderIn);
             if (!Directory.Exists(ecwOldHl7FolderIn))
             {
                 throw new ApplicationException(ecwOldHl7FolderIn + " does not exist.");

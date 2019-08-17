@@ -53,7 +53,7 @@ namespace UnitTests.UnitTests {
 			Payment pay=PaymentT.MakePayment(pat.PatNum,71,payDate,procNum:proc1.ProcNum);//pre-existing payment
 			//attempt to make another payment. Auto splits should not suggest a negative split.
 			Payment newPayment=PaymentT.MakePaymentNoSplits(pat.PatNum,2,payDate,isNew:true,
-				payType:Defs.GetDefsForCategory(DefCat.PaymentTypes,true)[0].DefNum);//current payment we're trying to make
+				payType:Defs.GetDefsForCategory(DefinitionCategory.PaymentTypes,true)[0].Id);//current payment we're trying to make
 			PaymentEdit.LoadData loadData=PaymentEdit.GetLoadData(pat,newPayment,new List<long>() {pat.PatNum },true,false);
 			PaymentEdit.ConstructChargesData chargeData=PaymentEdit.GetConstructChargesData(new List<long> {pat.PatNum },pat.PatNum,
 				PaySplits.GetForPayment(pay.PayNum),pay.PayNum,false);
@@ -326,7 +326,7 @@ namespace UnitTests.UnitTests {
 		///worth 55 at the end of auto splitting (was originally 75, and payment is for 20)</summary>
 		[TestMethod]
 		public void PaymentEdit_Init_FIFOWithPosAdjustment() {
-			PrefT.UpdateInt(PrefName.AutoSplitLogic,(int)AutoSplitPreference.FIFO);
+			PrefT.UpdateInt(PreferenceName.AutoSplitLogic,(int)AutoSplitPreference.FIFO);
 			Patient pat=PatientT.CreatePatient(MethodBase.GetCurrentMethod().Name);
 			long provNum=ProviderT.CreateProvider("prov1");
 			Procedure proc1=ProcedureT.CreateProcedure(pat,"D0220",ProcStat.C,"",75,DateTime.Today.AddMonths(-1),provNum:provNum);
@@ -344,7 +344,7 @@ namespace UnitTests.UnitTests {
 		///an adjustment and that the adjustment (worth 20) is fully paid (by payment worth 20)</summary>
 		[TestMethod]
 		public void PaymentEdit_Init_AdjustmentPreferWithPosAdjustment() {
-			PrefT.UpdateInt(PrefName.AutoSplitLogic,(int)AutoSplitPreference.Adjustments);
+			PrefT.UpdateInt(PreferenceName.AutoSplitLogic,(int)AutoSplitPreference.Adjustments);
 			Patient pat=PatientT.CreatePatient(MethodBase.GetCurrentMethod().Name);
 			long provNum=ProviderT.CreateProvider("prov1");
 			Procedure proc1=ProcedureT.CreateProcedure(pat,"D0220",ProcStat.C,"",75,DateTime.Today.AddMonths(-1),provNum:provNum);
@@ -788,7 +788,7 @@ namespace UnitTests.UnitTests {
 		[TestMethod]
 		public void PaymentEdit_ExplicitlyLinkCredits_ShowCorrectAmountNeedingPaymentWhenPaymentPlanV2IsClosedAndPartiallyPaid() {
 			//Explicitly Link Credits is the method that will contain the method being tested, but test will call Init to run through the whole gambit.
-			PrefT.UpdateInt(PrefName.PayPlansVersion,(int)PayPlanVersions.AgeCreditsAndDebits);
+			PrefT.UpdateInt(PreferenceName.PayPlansVersion,(int)PayPlanVersions.AgeCreditsAndDebits);
 			Patient pat=PatientT.CreatePatient(MethodBase.GetCurrentMethod().Name);
 			Procedure proc=ProcedureT.CreateProcedure(pat,"D1120",ProcStat.C,"",100,DateTime.Today.AddMonths(-4));
 			PayPlan payplan=PayPlanT.CreatePayPlanWithCredits(pat.PatNum,30,DateTime.Today.AddMonths(-3),0,new List<Procedure>() {proc});
@@ -992,7 +992,7 @@ namespace UnitTests.UnitTests {
 			PaymentEdit.AutoSplit results=PaymentEdit.AutoSplitForPayment(new List<long>() { pat.PatNum },pat.PatNum,new List<PaySplit>(),
 				payCur,new List<AccountEntry>(),false,false,new PaymentEdit.LoadData());
 			Assert.AreEqual(1,results.ListAutoSplits.Count);
-			Assert.AreEqual(results.ListAutoSplits[0].AdjNum,adjust1.AdjNum);
+			Assert.AreEqual(results.ListAutoSplits[0].AdjNum,adjust1.Id);
 		}
 
 		///<summary>Auto split logic should not use later payments to allocate to the same adjustment that's been allocated to already.</summary>
@@ -1007,7 +1007,7 @@ namespace UnitTests.UnitTests {
 			long provNum=ProviderT.CreateProvider("ProvA");
 			Adjustment adjust1=AdjustmentT.MakeAdjustment(pat.PatNum,50,DateTime.Today.AddDays(-3),provNum:provNum);
 			Payment payOld=PaymentT.MakePaymentNoSplits(pat.PatNum,50,DateTime.Today.AddDays(-3));
-			PaySplitT.CreateSplit(adjust1.ClinicNum,pat.PatNum,payOld.PayNum,0,DateTime.Today.AddDays(-3),0,provNum,50,0,adjust1.AdjNum);
+			PaySplitT.CreateSplit(adjust1.ClinicNum,pat.PatNum,payOld.PayNum,0,DateTime.Today.AddDays(-3),0,provNum,50,0,adjust1.Id);
 			Procedure proc=ProcedureT.CreateProcedure(pat,"D0120",ProcStat.C,"",25);
 			Payment payCur=PaymentT.MakePaymentNoSplits(pat.PatNum,50,DateTime.Today);
 			PaymentEdit.AutoSplit results=PaymentEdit.AutoSplitForPayment(new List<long>() { pat.PatNum },pat.PatNum,new List<PaySplit>(),
@@ -1056,7 +1056,7 @@ namespace UnitTests.UnitTests {
 			PaySplit prepaySplit=PaySplitT.CreateSplit(0,pat.PatNum,payOld.PayNum,0,DateTime.Today,0,0,50,20);//Some arbitrary unearned type number
 			Payment payXfer=PaymentT.MakePaymentNoSplits(pat.PatNum,0,DateTime.Today);
 			PaySplit negSplit=PaySplitT.CreateSplit(prepaySplit.ClinicNum,prepaySplit.PatNum,payXfer.PayNum,0,DateTime.Today,0,prepaySplit.ProvNum,-50,prepaySplit.UnearnedType,0,prepaySplit.SplitNum);//negative split taking 50 from prepay split
-			PaySplit posSplit=PaySplitT.CreateSplit(adjust1.ClinicNum,adjust1.PatNum,payXfer.PayNum,0,DateTime.Today,0,adjust1.ProvNum,50,0,adjust1.AdjNum,negSplit.SplitNum);//positive split allocating 50 to adjustment
+			PaySplit posSplit=PaySplitT.CreateSplit(adjust1.ClinicNum,adjust1.PatNum,payXfer.PayNum,0,DateTime.Today,0,adjust1.ProvNum,50,0,adjust1.Id,negSplit.SplitNum);//positive split allocating 50 to adjustment
 			Procedure proc=ProcedureT.CreateProcedure(pat,"D0120",ProcStat.C,"",25,DateTime.Today.AddDays(-3));//pre-date procedure for before adjust.  In the old way, we'd implicitly use the income on this instead of adjustment.
 			Payment payCur=PaymentT.MakePaymentNoSplits(pat.PatNum,0,DateTime.Today);
 			PaymentEdit.ConstructResults results=PaymentEdit.ConstructAndLinkChargeCredits(new List<long>() { pat.PatNum },pat.PatNum,new List<PaySplit>(),
@@ -1214,7 +1214,7 @@ namespace UnitTests.UnitTests {
 			//unearned amount. 
 			Patient pat=PatientT.CreatePatient(MethodBase.GetCurrentMethod().Name);
 			Family fam=new Family(new List<Patient> {pat});
-			Def unearned=DefT.CreateDefinition(DefCat.PaySplitUnearnedType,MethodBase.GetCurrentMethod().Name);
+			Definition unearned=DefT.CreateDefinition(DefinitionCategory.PaySplitUnearnedType,MethodBase.GetCurrentMethod().Name);
 			//Create 2 separate prepayments (bug would only show when more than 1 was present)
 			PaySplit prepay1=PaySplitT.CreatePrepayment(pat.PatNum,65,DateTime.Today.AddMonths(-3));
 			PaySplit prepay2=PaySplitT.CreatePrepayment(pat.PatNum,5,DateTime.Today.AddMonths(-3));
@@ -1223,10 +1223,10 @@ namespace UnitTests.UnitTests {
 			Procedure proc2=ProcedureT.CreateProcedure(pat,"D1110",ProcStat.C,"",5,DateTime.Today);
 			//Manually allocate the prepayments to the procedures.
 			Payment pay1=PaymentT.MakePaymentNoSplits(pat.PatNum,0,DateTime.Today);
-			PaySplitT.CreateSplit(0,pat.PatNum,pay1.PayNum,0,prepay1.SecDateTEdit,0,0,-65,unearned.DefNum,prepay1.SplitNum);
+			PaySplitT.CreateSplit(0,pat.PatNum,pay1.PayNum,0,prepay1.SecDateTEdit,0,0,-65,unearned.Id,prepay1.SplitNum);
 			PaySplitT.CreateSplit(0,pat.PatNum,pay1.PayNum,0,proc1.ProcDate,proc1.ProcNum,proc1.ProvNum,65,0);
 			Payment pay2=PaymentT.MakePaymentNoSplits(pat.PatNum,0,DateTime.Today);
-			PaySplitT.CreateSplit(0,pat.PatNum,pay2.PayNum,0,prepay2.SecDateTEdit,0,0,-5,unearned.DefNum,prepay2.SplitNum);
+			PaySplitT.CreateSplit(0,pat.PatNum,pay2.PayNum,0,prepay2.SecDateTEdit,0,0,-5,unearned.Id,prepay2.SplitNum);
 			PaySplitT.CreateSplit(0,pat.PatNum,pay2.PayNum,0,proc2.ProcDate,proc2.ProcNum,proc2.ProvNum,5,0);
 			decimal unearnedAmt=PaySplits.GetUnearnedForFam(fam);
 			Assert.AreEqual(0,unearnedAmt);

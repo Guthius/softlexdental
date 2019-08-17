@@ -1167,8 +1167,8 @@ namespace OpenDental {
 		private void butExport_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			SaveFileDialog Dlg=new SaveFileDialog();
-			if(Directory.Exists(Preferences.GetString(PrefName.ExportPath))){
-				Dlg.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
+			if(Directory.Exists(Preference.GetString(PreferenceName.ExportPath))){
+				Dlg.InitialDirectory=Preference.GetString(PreferenceName.ExportPath);
 			}
 			else if(Directory.Exists("C:\\")) {
 				Dlg.InitialDirectory="C:\\";
@@ -1211,8 +1211,8 @@ namespace OpenDental {
 			}
 			Cursor=Cursors.WaitCursor;
 			OpenFileDialog Dlg=new OpenFileDialog();
-			if(Directory.Exists(Preferences.GetString(PrefName.ExportPath))) {
-				Dlg.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
+			if(Directory.Exists(Preference.GetString(PreferenceName.ExportPath))) {
+				Dlg.InitialDirectory=Preference.GetString(PreferenceName.ExportPath);
 			}
 			else if(Directory.Exists("C:\\")) {
 				Dlg.InitialDirectory="C:\\";
@@ -1277,7 +1277,7 @@ namespace OpenDental {
 				using(XmlWriter writer=XmlWriter.Create(strbuild,settings)) {
 					writer.WriteStartElement("RequestFeeSched");
 					writer.WriteStartElement("RegistrationKey");
-					writer.WriteString(Preferences.GetString(PrefName.RegistrationKey));
+					writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
 					writer.WriteEndElement();//RegistrationKey
 					writer.WriteStartElement("FeeSchedFileName");
 					writer.WriteString(formPick.FileChosenName);
@@ -1323,14 +1323,14 @@ namespace OpenDental {
 				node=doc.SelectSingleNode("//KeyDisabled");
 				if(node==null) {
 					//no error, and no disabled message
-					if(Prefs.UpdateBool(PrefName.RegistrationKeyIsDisabled,false)) {//this is one of three places in the program where this happens.
+					if(Preference.Update(PreferenceName.RegistrationKeyIsDisabled,false)) {//this is one of three places in the program where this happens.
 						DataValid.SetInvalid(InvalidType.Prefs);
 					}
 				}
 				else {
 					actionCloseFeeSchedImportCanadaProgress?.Invoke();
 					MessageBox.Show(node.InnerText);
-					if(Prefs.UpdateBool(PrefName.RegistrationKeyIsDisabled,true)) {//this is one of three places in the program where this happens.
+					if(Preference.Update(PreferenceName.RegistrationKeyIsDisabled,true)) {//this is one of three places in the program where this happens.
 						DataValid.SetInvalid(InvalidType.Prefs);
 					}
 					return;
@@ -1491,10 +1491,10 @@ namespace OpenDental {
 			if(Preferences.HasClinicsEnabled
 				&& !Security.CurUser.ClinicIsRestricted
 				&& _listSelectedClinicsGlobalUpdates.Any(x => x.ClinicNum==-1) //user selected 'All'
-				&& !string.IsNullOrEmpty(Preferences.GetString(PrefName.GlobalUpdateWriteOffLastClinicCompleted)))//previous 'All' run was interrupted, resume
+				&& !string.IsNullOrEmpty(Preference.GetString(PreferenceName.GlobalUpdateWriteOffLastClinicCompleted)))//previous 'All' run was interrupted, resume
 			{
 				try {
-					long prevClinic=Preferences.GetLong(PrefName.GlobalUpdateWriteOffLastClinicCompleted);
+					long prevClinic=Preference.GetLong(PreferenceName.GlobalUpdateWriteOffLastClinicCompleted);
 					indexPrevClinic=listWriteoffClinics.FindIndex(x => x.ClinicNum==prevClinic);
 				}
 				catch {

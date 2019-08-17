@@ -16,7 +16,7 @@ namespace OpenDentBusiness
         /// <returns></returns>
         public static DataTable GetLineItemUnearnedData(List<long> listClinics, DateTime date1Start, DateTime date2Start)
         {
-            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Prefs.HasClinicsEnabledNoCache);
+            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Preference.HasClinicsEnabledNoCache);
             string command = "";
             string whereClin = "";
             //This query is kind-of a mess, but we're trying to account for bugs in previous versions.
@@ -265,7 +265,7 @@ namespace OpenDentBusiness
         /// <returns></returns>
         public static DataTable GetUnearnedAccountData(List<long> listClinics)
         {
-            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Prefs.HasClinicsEnabledNoCache);
+            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Preference.HasClinicsEnabledNoCache);
             string command = "";
             string whereClin = "";
             //This query is kind-of a mess, but we're trying to account for bugs in previous versions.

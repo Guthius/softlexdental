@@ -188,7 +188,7 @@ namespace OpenDental
             this.quantityTextBox.MaxVal = 255;
             this.quantityTextBox.MinVal = 0;
             this.quantityTextBox.Name = "quantityTextBox";
-            this.quantityTextBox.PrefNameBinding = OpenDentBusiness.PrefName.NotApplicable;
+            this.quantityTextBox.PrefNameBinding = OpenDentBusiness.PreferenceName.NotApplicable;
             this.quantityTextBox.Size = new System.Drawing.Size(60, 23);
             this.quantityTextBox.TabIndex = 9;
             this.quantityTextBox.TextChanged += new System.EventHandler(this.QuantityTextBox_TextChanged);

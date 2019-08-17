@@ -86,7 +86,7 @@ namespace OpenDentBusiness
         /// </summary>
         public static void Delete(Adjustment adj)
         {
-            Crud.AdjustmentCrud.Delete(adj.AdjNum);
+            Crud.AdjustmentCrud.Delete(adj.Id);
             CreateOrUpdateSalesTaxIfNeeded(adj);
             PaySplits.UnlinkForAdjust(adj);
         }
@@ -168,7 +168,7 @@ namespace OpenDentBusiness
             AdjustmentCur.ProcDate = procedure.ProcDate;
             AdjustmentCur.ProvNum = procedure.ProvNum;
             AdjustmentCur.PatNum = procedure.PatNum;
-            AdjustmentCur.AdjType = Preferences.GetLong(PrefName.TreatPlanDiscountAdjustmentType);
+            AdjustmentCur.AdjType = Preference.GetLong(PreferenceName.TreatPlanDiscountAdjustmentType);
             AdjustmentCur.ClinicNum = procedure.ClinicNum;
             AdjustmentCur.AdjAmt = -procedure.Discount; // Discount must be negative here.
             AdjustmentCur.ProcNum = procedure.ProcNum;
@@ -273,7 +273,7 @@ namespace OpenDentBusiness
                     procedure.TaxAmt = salesTaxAdj.AdjAmt;
                     Crud.ProcedureCrud.Update(procedure);
                 }
-                if (salesTaxAdj.AdjNum == 0)
+                if (salesTaxAdj.Id == 0)
                 {
                     // The only way to get salesTaxAdj.AdjAmt=0 when AvaTax.DidUpdateAdjustment() returns true is if there was an error.
                     if (isRepeatCharge && salesTaxAdj.AdjAmt == 0)
@@ -402,7 +402,7 @@ namespace OpenDentBusiness
             double retVal = 0;
             for (int i = 0; i < List.Length; i++)
             {
-                if ((List[i].AdjNum == excludedNum))
+                if ((List[i].Id == excludedNum))
                 {
                     continue;
                 }
@@ -420,11 +420,11 @@ namespace OpenDentBusiness
         public static long UndoFinanceOrBillingCharges(DateTime dateUndo, bool isBillingCharges)
         {
             string adjTypeStr = "Finance";
-            long adjTypeDefNum = Preferences.GetLong(PrefName.FinanceChargeAdjustmentType);
+            long adjTypeDefNum = Preference.GetLong(PreferenceName.FinanceChargeAdjustmentType);
             if (isBillingCharges)
             {
                 adjTypeStr = "Billing";
-                adjTypeDefNum = Preferences.GetLong(PrefName.BillingChargeAdjustmentType);
+                adjTypeDefNum = Preference.GetLong(PreferenceName.BillingChargeAdjustmentType);
             }
 
             string command = 

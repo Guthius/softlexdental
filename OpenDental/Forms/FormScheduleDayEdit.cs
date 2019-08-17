@@ -598,10 +598,10 @@ namespace OpenDental{
 			//Fill Provider Override
 			_listProviders=Providers.GetDeepCopy(true);
 			_listProviders.ForEach(x => comboProv.Items.Add(x.Abbr));
-			comboProv.SelectedIndex=_listProviders.FindIndex(x => x.ProvNum==Preferences.GetLong(PrefName.ScheduleProvUnassigned));
+			comboProv.SelectedIndex=_listProviders.FindIndex(x => x.ProvNum==Preference.GetLong(PreferenceName.ScheduleProvUnassigned));
 			labelDate.Text=_dateSched.ToString("dddd")+"\r\n"+_dateSched.ToShortDateString();
 			_listScheds=Schedules.RefreshDayEditForPracticeProvsEmps(_dateSched,_listProvs.Select(x => x.ProvNum).Where(x => x>0).ToList(),
-				_listEmps.Select(x => x.EmployeeNum).Where(x => x>0).ToList(),_selectedClinicNum);
+				_listEmps.Select(x => x.Id).Where(x => x>0).ToList(),_selectedClinicNum);
 			_listSchedsOld=_listScheds.Select(x => x.Copy()).ToList();
 			if(_isFromSchedule && (_provAbbrFilter!="" || _employeeNameFilter!="")) {//single person was passed in from the schedule window.
 				if(_provAbbrFilter!="") {//it was a provider schedule
@@ -641,7 +641,7 @@ namespace OpenDental{
 			//Fill lists with new information from new clinic
 			FillProvsAndEmps();
 			_listScheds=Schedules.RefreshDayEditForPracticeProvsEmps(_dateSched,_listProvs.Select(x => x.ProvNum).Where(x => x>0).ToList(),
-				_listEmps.Select(x => x.EmployeeNum).Where(x => x>0).ToList(),_selectedClinicNum);
+				_listEmps.Select(x => x.Id).Where(x => x>0).ToList(),_selectedClinicNum);
 			_listSchedsOld=_listScheds.Select(x => x.Copy()).ToList();
 			FillGrid();
 		}
@@ -651,15 +651,15 @@ namespace OpenDental{
 			tabPageEmp.Text=Lan.g(this,"Employees")+" (0)";
 			//Seed emp list and prov list with a dummy emp/prov with 'none' for the field that fills the list, FName and Abbr respectively.
 			//That way we don't have to add/subtract one in order when selecting from the list based on selected indexes.
-			_listEmps=new List<Employee>() { new Employee() { EmployeeNum=0,FName="none" } };
+			_listEmps=new List<Employee>() { new Employee() { FirstName="none" } };
 			_listProvs=new List<Provider>() { new Provider() { ProvNum=0,Abbr="none" } };
 			if(Preferences.HasClinicsEnabled) {
 				_listProvs.AddRange(Providers.GetProvsForClinic(_selectedClinicNum));
-				_listEmps.AddRange(Employees.GetEmpsForClinic(_selectedClinicNum));
+				_listEmps.AddRange(Employee.GetEmpsForClinic(_selectedClinicNum));
 			}
 			else {
 				_listProvs.AddRange(Providers.GetDeepCopy(true));
-				_listEmps.AddRange(Employees.GetDeepCopy(true));
+				_listEmps.AddRange(Employee.All());
 			}
 			//Prov Listbox
 			List<long> listPreviouslySelectedProvNums=listProv.SelectedTags<Provider>().Select(x => x.ProvNum).ToList();
@@ -669,9 +669,9 @@ namespace OpenDental{
 				listProv.SelectedIndex=0;//select the 'none' entry
 			}
 			//Emp Listbox
-			List<long> listPreviouslySelectedEmpNums=listEmp.SelectedTags<Employee>().Select(x => x.EmployeeNum).ToList();
+			List<long> listPreviouslySelectedEmpNums=listEmp.SelectedTags<Employee>().Select(x => x.Id).ToList();
 			listEmp.Items.Clear();
-			listEmp.SetItems(_listEmps,x => x.FName,x => listPreviouslySelectedEmpNums.Contains(x.EmployeeNum));
+			listEmp.SetItems(_listEmps,x => x.FirstName,x => listPreviouslySelectedEmpNums.Contains(x.Id));
 			if(listEmp.SelectedIndices.Count==0) {
 				listEmp.SelectedIndex=0;//select the 'none' entry
 			}
@@ -687,8 +687,8 @@ namespace OpenDental{
 
 		private void FillGrid() {
 			//do not refresh from db
-			_dictEmpNumEmployee=_listScheds.Select(x => x.EmployeeNum).Distinct().Select(x => Employees.GetEmp(x))//returns null if EmployeeNum==0 or invalid
-				.Where(x => x!=null).ToDictionary(x => x.EmployeeNum);//speed up sort.
+			_dictEmpNumEmployee=_listScheds.Select(x => x.EmployeeNum).Distinct().Select(x => Employee.GetById(x))//returns null if EmployeeNum==0 or invalid
+				.Where(x => x!=null).ToDictionary(x => x.Id);//speed up sort.
 			_dictProvNumProvider=_listScheds.Select(x => x.ProvNum).Distinct().Select(x => Providers.GetProv(x))//returns null if ProvNum==0 or invalid
 				.Where(x => x!=null).ToDictionary(x => x.ProvNum);//speed up sort.
 
@@ -727,7 +727,7 @@ namespace OpenDental{
 					row.Cells.Add("");
 				}
 				else {
-					row.Cells.Add(Employees.GetEmp(schedCur.EmployeeNum).FName);
+					row.Cells.Add(Employee.GetById(schedCur.EmployeeNum).FirstName);
 				}
 				//times
 				if(schedCur.StartTime==TimeSpan.Zero && schedCur.StopTime==TimeSpan.Zero) {
@@ -811,11 +811,11 @@ namespace OpenDental{
 			if(x.EmployeeNum!=y.EmployeeNum) {
 				Employee empx= _dictEmpNumEmployee[x.EmployeeNum];//use dictionary to greatly speed up sort
 				Employee empy= _dictEmpNumEmployee[y.EmployeeNum];//use dictionary to greatly speed up sort
-				if(empx.FName!=empy.FName) {
-					return empx.FName.CompareTo(empy.FName);
+				if(empx.FirstName!=empy.FirstName) {
+					return empx.FirstName.CompareTo(empy.FirstName);
 				}
-				if(empx.LName!=empy.LName) {
-					return empx.LName.CompareTo(empy.LName);
+				if(empx.LastName!=empy.LastName) {
+					return empx.LastName.CompareTo(empy.LastName);
 				}
 				return x.EmployeeNum.CompareTo(y.EmployeeNum);
 			}
@@ -869,7 +869,7 @@ namespace OpenDental{
 				return;
 			}
 			_listScheds=Schedules.RefreshDayEditForPracticeProvsEmps(_dateSched,_listProvs.Select(x => x.ProvNum).Where(x => x>0).ToList(),
-				_listEmps.Select(x => x.EmployeeNum).Where(x => x>0).ToList(),_selectedClinicNum);
+				_listEmps.Select(x => x.Id).Where(x => x>0).ToList(),_selectedClinicNum);
 			_listSchedsOld=_listScheds.Select(x => x.Copy()).ToList();
 			FillGrid();
 		}
@@ -942,7 +942,7 @@ namespace OpenDental{
 				schedTemp=new Schedule();
 				schedTemp=schedCur.Copy();
 				schedTemp.SchedType=ScheduleType.Employee;
-				schedTemp.EmployeeNum=_listEmps[listEmp.SelectedIndices[i]].EmployeeNum;
+				schedTemp.EmployeeNum=_listEmps[listEmp.SelectedIndices[i]].Id;
 				_listScheds.Add(schedTemp);
 			}
 			FillGrid();
@@ -977,7 +977,7 @@ namespace OpenDental{
 				schedTemp=new Schedule();
 				schedTemp=schedCur.Copy();
 				schedTemp.SchedType=ScheduleType.Employee;
-				schedTemp.EmployeeNum=_listEmps[listEmpIndex].EmployeeNum;
+				schedTemp.EmployeeNum=_listEmps[listEmpIndex].Id;
 				_listScheds.Add(schedTemp);
 			}
 			FillGrid();
@@ -1032,7 +1032,7 @@ namespace OpenDental{
 			//Fill lists with new information from new clinic
 			FillProvsAndEmps();
 			_listScheds=Schedules.RefreshDayEditForPracticeProvsEmps(_dateSched,_listProvs.Select(x => x.ProvNum).Where(x => x>0).ToList(),
-				_listEmps.Select(x => x.EmployeeNum).Where(x => x>0).ToList(),_selectedClinicNum);
+				_listEmps.Select(x => x.Id).Where(x => x>0).ToList(),_selectedClinicNum);
 			_listSchedsOld=_listScheds.Select(x => x.Copy()).ToList();
 			FillGrid();
 		}
@@ -1051,7 +1051,7 @@ namespace OpenDental{
 			//Fill lists with new information from new clinic
 			FillProvsAndEmps();
 			_listScheds=Schedules.RefreshDayEditForPracticeProvsEmps(_dateSched,_listProvs.Select(x => x.ProvNum).Where(x => x>0).ToList(),
-				_listEmps.Select(x => x.EmployeeNum).Where(x => x>0).ToList(),_selectedClinicNum);
+				_listEmps.Select(x => x.Id).Where(x => x>0).ToList(),_selectedClinicNum);
 			_listSchedsOld=_listScheds.Select(x => x.Copy()).ToList();
 			FillGrid();
 		}
@@ -1091,7 +1091,7 @@ namespace OpenDental{
 				return;
 			}
 			if(comboProv.SelectedIndex!=-1
-				&& Prefs.UpdateLong(PrefName.ScheduleProvUnassigned,_listProviders[comboProv.SelectedIndex].ProvNum))//Must use provider cache here, not _listProvs.
+				&& Preference.Update(PreferenceName.ScheduleProvUnassigned,_listProviders[comboProv.SelectedIndex].ProvNum))//Must use provider cache here, not _listProvs.
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}

@@ -855,8 +855,8 @@ namespace OpenDental{
 			textBankBranch.Text=ClaimPaymentCur.BankBranch;
 			textCarrierName.Text=ClaimPaymentCur.CarrierName;
 			textNote.Text=ClaimPaymentCur.Note;
-			textPayType.Text=Defs.GetName(DefCat.InsurancePaymentType,ClaimPaymentCur.PayType);
-			textPayGroup.Text=Defs.GetName(DefCat.ClaimPaymentGroups,ClaimPaymentCur.PayGroup);
+			textPayType.Text=Defs.GetName(DefinitionCategory.InsurancePaymentType,ClaimPaymentCur.PayType);
+			textPayGroup.Text=Defs.GetName(DefinitionCategory.ClaimPaymentGroups,ClaimPaymentCur.PayGroup);
 		}
 
 		private void FillGrids(bool doRefreshOutstandingClaims=true){
@@ -1301,8 +1301,8 @@ namespace OpenDental{
 				MsgBox.Show(this,"At least one claim must be attached to this insurance payment.");
 				return;
 			}
-			if(!Preferences.GetBool(PrefName.AllowFutureInsPayments)
-				&& !Preferences.GetBool(PrefName.FutureTransDatesAllowed)
+			if(!Preference.GetBool(PreferenceName.AllowFutureInsPayments)
+				&& !Preference.GetBool(PreferenceName.FutureTransDatesAllowed)
 				&& ClaimPaymentCur.CheckDate.Date>MiscData.GetNowDateTime().Date)
 			{
 				MsgBox.Show(this,"Insurance Payment Date must not be a future date.");
@@ -1339,7 +1339,7 @@ namespace OpenDental{
 			if(ClaimPaymentCur.IsPartial) {
 				if(IsAmountAndTotalEqual(isSilent:true)) {
 					if(gridAttached.Rows.Count > 0
-						&& !Preferences.GetBool(PrefName.PromptForSecondaryClaim))
+						&& !Preference.GetBool(PreferenceName.PromptForSecondaryClaim))
 					{
 						//If PromptForSecondaryClaim is enabled the user was prompted to make a decision when there are secondary claims for every claim they attached.
 						//No point in showing them a list of any secondary claims since they already decided how to handle them individually.

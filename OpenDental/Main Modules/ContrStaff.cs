@@ -7,7 +7,6 @@ using System.Threading;
 using System.Windows.Forms;
 using CodeBase;
 using OpenDental.UI;
-using OpenDentalCloud;
 using OpenDentBusiness;
 
 namespace OpenDental
@@ -71,7 +70,7 @@ namespace OpenDental
 
         void RefreshModuleData(long patNum)
         {
-            if (Preferences.GetBool(PrefName.LocalTimeOverridesServerTime))
+            if (Preference.GetBool(PreferenceName.LocalTimeOverridesServerTime))
             {
                 TimeDelta = new TimeSpan(0);
             }
@@ -79,12 +78,12 @@ namespace OpenDental
             {
                 TimeDelta = MiscData.GetNowDateTime() - DateTime.Now;
             }
-            Employees.RefreshCache();
+            CacheManager.Invalidate<Employee>();
         }
 
         void RefreshModuleScreen()
         {
-            if (Preferences.GetBool(PrefName.LocalTimeOverridesServerTime))
+            if (Preference.GetBool(PreferenceName.LocalTimeOverridesServerTime))
             {
                 labelCurrentTime.Text = "Local Time";
             }
@@ -98,10 +97,10 @@ namespace OpenDental
             FillMessageDefs();
 
             butManage.Enabled = Security.IsAuthorized(Permissions.TimecardsEditAll, true);
-            butBreaks.Visible = Preferences.GetBool(PrefName.ClockEventAllowBreak);
+            butBreaks.Visible = Preference.GetBool(PreferenceName.ClockEventAllowBreak);
 
             importInsPlansButton.Visible = true;
-            if (Preferences.GetBool(PrefName.EasyHidePublicHealth))
+            if (Preference.GetBool(PreferenceName.EasyHidePublicHealth))
             {
                 importInsPlansButton.Visible = false; // Import Ins Plans button is only visible when Public Health feature is enabled.
             }
@@ -460,10 +459,12 @@ namespace OpenDental
 
                 string userName = listPropsForClinic.Find(x => x.PropertyDesc == "SftpUsername")?.PropertyValue ?? "";
                 string userPassword = listPropsForClinic.Find(x => x.PropertyDesc == "SftpPassword")?.PropertyValue ?? "";
-                if (Sftp.IsConnectionValid(sftpAddress, userName, userPassword, sftpPort))
-                {
-                    return true;
-                }
+
+                // TODO: Fix me
+                //if (Sftp.IsConnectionValid(sftpAddress, userName, userPassword, sftpPort))
+                //{
+                //    return true;
+                //}
             }
             return false;
         }
@@ -526,17 +527,17 @@ namespace OpenDental
 
             if (Preferences.HasClinicsEnabled)
             {
-                _listEmployees = Employees.GetEmpsForClinic(Clinics.ClinicNum, false, true);
+                _listEmployees = Employee.GetEmpsForClinic(Clinics.ClinicNum, false, true);
             }
             else
             {
-                _listEmployees = Employees.GetDeepCopy(true);
+                _listEmployees = Employee.All();
             }
 
             foreach (Employee emp in _listEmployees)
             {
                 var row = new ODGridRow();
-                row.Cells.Add(Employees.GetNameFL(emp));
+                row.Cells.Add(Employee.GetNameFL(emp));
                 row.Cells.Add(ConvertClockStatus(emp.ClockStatus));
                 row.Tag = emp;
                 employeeGrid.Rows.Add(row);
@@ -549,7 +550,7 @@ namespace OpenDental
             foreach (TimeClockStatus timeClockStatus in Enum.GetValues(typeof(TimeClockStatus)))
             {
                 string statusDescript = timeClockStatus.GetDescription();
-                if (!Preferences.GetBool(PrefName.ClockEventAllowBreak))
+                if (!Preference.GetBool(PreferenceName.ClockEventAllowBreak))
                 {
                     if (timeClockStatus == TimeClockStatus.Break)
                     {
@@ -566,7 +567,7 @@ namespace OpenDental
 
             for (int i = 0; i < _listEmployees.Count; i++)
             {
-                if (_listEmployees[i].EmployeeNum == Security.CurUser.EmployeeNum)
+                if (_listEmployees[i].Id == Security.CurUser.EmployeeNum)
                 {
                     SelectEmployee(i);
                     return;
@@ -582,7 +583,7 @@ namespace OpenDental
         /// </summary>
         string ConvertClockStatus(string status)
         {
-            if (!Preferences.GetBool(PrefName.ClockEventAllowBreak) && status == TimeClockStatus.Lunch.GetDescription())
+            if (!Preference.GetBool(PreferenceName.ClockEventAllowBreak) && status == TimeClockStatus.Lunch.GetDescription())
             {
                 status = TimeClockStatus.Break.GetDescription();
             }
@@ -609,7 +610,7 @@ namespace OpenDental
             employeeGrid.SetSelected(index, true);
             EmployeeCur = _listEmployees[index];
 
-            ClockEvent clockEvent = ClockEvents.GetLastEvent(EmployeeCur.EmployeeNum);
+            ClockEvent clockEvent = ClockEvents.GetLastEvent(EmployeeCur.Id);
             if (clockEvent == null) // New employee. They need to clock in.
             {
                 butClockIn.Enabled = true;
@@ -627,7 +628,7 @@ namespace OpenDental
                 butClockOut.Enabled = false;
                 butTimeCard.Enabled = true;
                 butBreaks.Enabled = true;
-                if (Preferences.GetBool(PrefName.ClockEventAllowBreak))
+                if (Preference.GetBool(PreferenceName.ClockEventAllowBreak))
                 {
                     listStatus.SelectedIndex = _listShownTimeClockStatuses.IndexOf(TimeClockStatus.Break);
                 }
@@ -671,9 +672,9 @@ namespace OpenDental
                 return;
             }
 
-            if (Preferences.GetBool(PrefName.TimecardSecurityEnabled))
+            if (Preference.GetBool(PreferenceName.TimecardSecurityEnabled))
             {
-                if (Security.CurUser.EmployeeNum != _listEmployees[e.Row].EmployeeNum)
+                if (Security.CurUser.EmployeeNum != _listEmployees[e.Row].Id)
                 {
                     if (!Security.IsAuthorized(Permissions.TimecardsEditAll, true))
                     {
@@ -702,7 +703,7 @@ namespace OpenDental
                     throw new Exception("You need to authenticate to clock-in");
                 }
 
-                ClockEvents.ClockIn(EmployeeCur.EmployeeNum);
+                ClockEvents.ClockIn(EmployeeCur.Id);
             }
             catch (Exception ex)
             {
@@ -711,7 +712,7 @@ namespace OpenDental
             }
 
             EmployeeCur.ClockStatus = Lan.g(this, "Working");
-            Employees.Update(EmployeeCur);
+            Employee.Update(EmployeeCur);
             ModuleSelected(PatCurNum);
             if (!PayPeriods.HasPayPeriodForDate(DateTime.Today))
             {
@@ -739,7 +740,7 @@ namespace OpenDental
                 {
                     throw new Exception("You need to authenticate to clock-out");
                 }
-                ClockEvents.ClockOut(EmployeeCur.EmployeeNum, _listShownTimeClockStatuses[listStatus.SelectedIndex]);
+                ClockEvents.ClockOut(EmployeeCur.Id, _listShownTimeClockStatuses[listStatus.SelectedIndex]);
             }
             catch (Exception ex)
             {
@@ -748,7 +749,7 @@ namespace OpenDental
             }
 
             EmployeeCur.ClockStatus = Lan.g("enumTimeClockStatus", (_listShownTimeClockStatuses[listStatus.SelectedIndex]).GetDescription());
-            Employees.Update(EmployeeCur);
+            Employee.Update(EmployeeCur);
             ModuleSelected(PatCurNum);
         }
 
@@ -835,7 +836,7 @@ namespace OpenDental
 
         private void butViewSched_Click(object sender, EventArgs e)
         {
-            List<long> listPreSelectedEmpNums = employeeGrid.SelectedGridRows.Select(x => ((Employee)x.Tag).EmployeeNum).ToList();
+            List<long> listPreSelectedEmpNums = employeeGrid.SelectedGridRows.Select(x => ((Employee)x.Tag).Id).ToList();
             List<long> listPreSelectedProvNums = Userods.GetWhere(x => listPreSelectedEmpNums.Contains(x.EmployeeNum) && x.ProvNum != 0)
                 .Select(x => x.ProvNum)
                 .ToList();

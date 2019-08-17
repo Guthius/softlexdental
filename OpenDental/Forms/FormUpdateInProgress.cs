@@ -45,9 +45,9 @@ namespace OpenDental
         /// </summary>
         void RetryButton_Click(object sender, EventArgs e)
         {
-            Prefs.RefreshCache();
+            Preference.Refresh();
 
-            if (Preferences.GetString(PrefName.UpdateInProgressOnComputerName) != "")
+            if (Preference.GetString(PreferenceName.UpdateInProgressOnComputerName) != "")
             {
                 MessageBox.Show(
                     string.Format(
@@ -68,7 +68,7 @@ namespace OpenDental
         /// </summary>
         void OverrideButton_Click(object sender, EventArgs e)
         {
-            Prefs.UpdateString(PrefName.UpdateInProgressOnComputerName, "");
+            Preference.Update(PreferenceName.UpdateInProgressOnComputerName, "");
 
             MessageBox.Show(
                 Translation.Language.YouWillBeAllowedAccessWhenYouRestart,

@@ -34,9 +34,9 @@ namespace OpenDentBusiness
 
         ///<summary>Returns a Def representing the patient specialty associated through DefLinks to the passed in Patient.
         ///Returns null if no specialty found.</summary>
-        public static Def GetPatientSpecialtyDef(long patNum)
+        public static Definition GetPatientSpecialtyDef(long patNum)
         {
-            Dictionary<Patient, Def> dictSpecialties = GetClonesAndSpecialtiesForPatients(new List<long> { patNum });
+            Dictionary<Patient, Definition> dictSpecialties = GetClonesAndSpecialtiesForPatients(new List<long> { patNum });
             if (dictSpecialties.Keys.Any(x => x.PatNum == patNum))
             {
                 return dictSpecialties.FirstOrDefault(x => x.Key.PatNum == patNum).Value;
@@ -48,7 +48,7 @@ namespace OpenDentBusiness
         ///Even if the patNum passed in is itself a clone, all clones for the clone's master will still get returned.
         ///The returned dictionary will always contain the master patient so that it can be displayed to the user if desired.
         ///Specialties are only important if clinics are enabled.  If clinics are disabled then the corresponding Def will be null.</summary>
-        public static Dictionary<Patient, Def> GetClonesAndSpecialties(long patNum)
+        public static Dictionary<Patient, Definition> GetClonesAndSpecialties(long patNum)
         {
             //No need to check RemotingRole; no call to db.
             return GetClonesAndSpecialtiesForPatients(GetClonePatNumsAll(patNum));
@@ -57,11 +57,11 @@ namespace OpenDentBusiness
         ///<summary>Gets all potential clones and their corresponding specialty for the original patients passed in.
         ///The returned dictionary will always contain the master patient so that it can be displayed to the user if desired.
         ///Specialties are only important if clinics are enabled.  If clinics are disabled then the corresponding Def will be null.</summary>
-        public static Dictionary<Patient, Def> GetClonesAndSpecialtiesForPatients(List<long> listPatNums)
+        public static Dictionary<Patient, Definition> GetClonesAndSpecialtiesForPatients(List<long> listPatNums)
         {
             //No need to check RemotingRole; no call to db.
             //Get every single patientlink possible whether the patNum passed in was the master patient or the clone patient.
-            Dictionary<Patient, Def> dictCloneSpecialty = new Dictionary<Patient, Def>();
+            Dictionary<Patient, Definition> dictCloneSpecialty = new Dictionary<Patient, Definition>();
             if (listPatNums == null || listPatNums.Count == 0)
             {
                 return dictCloneSpecialty;//No clones found.
@@ -73,14 +73,14 @@ namespace OpenDentBusiness
                 return dictCloneSpecialty;//No patients for clone links found.
             }
             List<DefLink> listPatDefLink = DefLinks.GetDefLinksByType(DefLinkType.Patient);
-            List<Def> listDefs = Defs.GetDefsForCategory(DefCat.ClinicSpecialty);
+            List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.ClinicSpecialty);
             foreach (Patient clone in arrayPatientClones)
             {
                 DefLink defLink = listPatDefLink.FirstOrDefault(x => x.FKey == clone.PatNum);
-                Def specialty = null;
+                Definition specialty = null;
                 if (defLink != null)
                 {
-                    specialty = Defs.GetDef(DefCat.ClinicSpecialty, defLink.DefNum, listDefs);//Can return null which is fine.
+                    specialty = Defs.GetDef(DefinitionCategory.ClinicSpecialty, defLink.DefNum, listDefs);//Can return null which is fine.
                 }
                 dictCloneSpecialty[clone] = specialty;
             }
@@ -116,7 +116,7 @@ namespace OpenDentBusiness
         ///there are any unsent procs for each pataging.  Only used for the A/R Manager</summary>
         public static List<PatAging> GetAgingList()
         {
-            long collectionBillType = Defs.GetDefsForCategory(DefCat.BillingTypes, true).FirstOrDefault(x => x.ItemValue.ToLower() == "c")?.DefNum ?? 0;
+            long collectionBillType = Definition.GetByCategory(DefinitionCategory.BillingTypes).FirstOrDefault(x => x.Value.ToLower() == "c")?.Id ?? 0;
             string whereCollBillType = (collectionBillType > 0 ? (@"
 					OR guar.BillingType = " + POut.Long(collectionBillType)) : "");
             string command = @"SELECT guar.PatNum,guar.Bal_0_30,guar.Bal_31_60,guar.Bal_61_90,guar.BalOver90,guar.BalTotal,guar.InsEst,
@@ -142,7 +142,7 @@ namespace OpenDentBusiness
                     long patNum = PIn.Long(row["PatNum"].ToString());
                     dictAll[patNum] = new PatAging()
                     {
-                        PatNum = patNum,
+                        PatNum = (int)patNum,
                         Guarantor = patNum,
                         Bal_0_30 = PIn.Double(row["Bal_0_30"].ToString()),
                         Bal_31_60 = PIn.Double(row["Bal_31_60"].ToString()),
@@ -186,7 +186,7 @@ namespace OpenDentBusiness
             {
                 foreach (DataRow row in table.Rows)
                 {
-                    long guarNum = PIn.Long(row["Guarantor"].ToString());
+                    int guarNum = PIn.Int(row["Guarantor"].ToString());
                     if (!dictAll.ContainsKey(guarNum))
                     {
                         continue;
@@ -201,11 +201,11 @@ namespace OpenDentBusiness
 					AND claim.ClaimType IN ('P','S','Other')";
             foreach (long guarNum in Db.GetListLong(command))
             {
-                if (!dictAll.ContainsKey(guarNum))
+                if (!dictAll.ContainsKey((int)guarNum))
                 {
                     continue;
                 }
-                dictAll[guarNum].HasInsPending = true;
+                dictAll[(int)guarNum].HasInsPending = true;
             }
             command = @"SELECT patient.Guarantor,MAX(procedurelog.ProcDate) MaxProcDate,COALESCE(MAX(claimproc.ProcNum),0)>0 HasUnsentProcs
 				FROM patient
@@ -222,7 +222,7 @@ namespace OpenDentBusiness
             {
                 foreach (DataRow row in table.Rows)
                 {
-                    long guarNum = PIn.Long(row["Guarantor"].ToString());
+                    int guarNum = PIn.Int(row["Guarantor"].ToString());
                     if (!dictAll.ContainsKey(guarNum))
                     {
                         continue;
@@ -238,7 +238,7 @@ namespace OpenDentBusiness
         {
             Dictionary<long, PatAging> dictAll = listPatAgingAll.ToDictionary(x => x.PatNum);
             Dictionary<long, DateTime> dictDateBals = Ledgers.GetDateBalanceBegan();//uses today's date, doesn't consider super families
-            foreach (long patNum in dictAll.Keys)
+            foreach (int patNum in dictAll.Keys)
             {
                 if (!dictDateBals.ContainsKey(patNum))
                 {
@@ -251,7 +251,7 @@ namespace OpenDentBusiness
         ///<summary>Used by the OpenDentalService Transworld thread to sync accounts sent to collection.</summary>
         public static List<long> GetListCollectionGuarNums(bool doIncludeSuspended = true)
         {
-            List<Def> listBillTypes = Defs.GetDefsForCategory(DefCat.BillingTypes, true).FindAll(x => x.ItemValue.ToLower() == "c");
+            List<Definition> listBillTypes = Definition.GetByCategory(DefinitionCategory.BillingTypes).FindAll(x => x.Value.ToLower() == "c");
             List<long> listSuspendedGuarNums = new List<long>();
             if (doIncludeSuspended)
             {
@@ -264,7 +264,7 @@ namespace OpenDentBusiness
             string command = "SELECT patient.Guarantor "
                 + "FROM patient "
                 + "WHERE patient.PatNum=patient.Guarantor "
-                + "AND patient.BillingType IN (" + string.Join(",", listBillTypes.Select(x => POut.Long(x.DefNum))) + ")";
+                + "AND patient.BillingType IN (" + string.Join(",", listBillTypes.Select(x => POut.Long(x.Id))) + ")";
             return Db.GetListLong(command).Union(listSuspendedGuarNums).ToList();
         }
 
@@ -276,7 +276,7 @@ namespace OpenDentBusiness
             {
                 return true;
             }
-            Def billTypeColl = Defs.GetDefsForCategory(DefCat.BillingTypes, true).FirstOrDefault(x => x.ItemValue.ToLower() == "c");
+            Definition billTypeColl = Definition.GetByCategory(DefinitionCategory.BillingTypes).FirstOrDefault(x => x.Value.ToLower() == "c");
             if (billTypeColl == null)
             {
                 return false;//if not suspended and no billing type marked as collection billing type, return false, guar not a collection guar
@@ -285,7 +285,7 @@ namespace OpenDentBusiness
                 + "FROM patient "
                 + "WHERE PatNum=" + POut.Long(guarNum) + " "
                 + "AND PatNum=Guarantor "
-                + "AND BillingType=" + POut.Long(billTypeColl.DefNum) + " "
+                + "AND BillingType=" + POut.Long(billTypeColl.Id) + " "
                 + DbHelper.LimitAnd(1);
             return PIn.Bool(Db.GetScalar(command));
         }
@@ -312,7 +312,7 @@ namespace OpenDentBusiness
                 return new List<long>();
             }
             //If two patients in the same family are passed in, it will still only return that families guarantor once.
-            string command = "SELECT DISTINCT Guarantor FROM patient WHERE PatNum IN (" + String.Join<long>(",", listPatNums) + ") ";
+            string command = "SELECT DISTINCT Guarantor FROM patient WHERE PatNum IN (" + String.Join(",", listPatNums) + ") ";
             return Db.GetListLong(command);
         }
 
@@ -366,7 +366,7 @@ namespace OpenDentBusiness
             //PriPro is intentionally not synched so the clone can be assigned to a different provider for tracking production.
             if (primaryProvNum == 0)
             {
-                primaryProvNum = Preferences.GetLong(PrefName.PracticeDefaultProv);
+                primaryProvNum = Preference.GetLong(PreferenceName.PracticeDefaultProv);
             }
             patientSynch.PriProv = primaryProvNum;
             patientSynch.ClinicNum = clinicNum;
@@ -383,7 +383,7 @@ namespace OpenDentBusiness
             patientSynch = Patients.GetPat(patientSynch.PatNum);
             Patient patientSynchOld = patientSynch.Copy();
             //Now that the clone has been inserted and has a primary key we can consider what family and/or super family the clone should be part of.
-            if (Preferences.GetBool(PrefName.CloneCreateSuperFamily))
+            if (Preference.GetBool(PreferenceName.CloneCreateSuperFamily))
             {
                 //Put the clone into their own family.
                 patientSynch.Guarantor = patientSynch.PatNum;
@@ -781,10 +781,10 @@ namespace OpenDentBusiness
             }
             if (patientSynch.BillingType != patient.BillingType)
             {
-                Def defCloneBillingType = Defs.GetDef(DefCat.BillingTypes, patientSynch.BillingType);
-                Def defNonCloneBillingType = Defs.GetDef(DefCat.BillingTypes, patient.BillingType);
-                string cloneBillType = (defCloneBillingType == null ? "" : defCloneBillingType.ItemName);
-                string nonCloneBillType = (defNonCloneBillingType == null ? "" : defNonCloneBillingType.ItemName);
+                Definition defCloneBillingType = Defs.GetDef(DefinitionCategory.BillingTypes, patientSynch.BillingType);
+                Definition defNonCloneBillingType = Defs.GetDef(DefinitionCategory.BillingTypes, patient.BillingType);
+                string cloneBillType = (defCloneBillingType == null ? "" : defCloneBillingType.Description);
+                string nonCloneBillType = (defNonCloneBillingType == null ? "" : defNonCloneBillingType.Description);
                 patientCloneDemoChanges.ListFieldsUpdated.Add(new PatientCloneField("Billing Type", cloneBillType, nonCloneBillType));
                 patientSynch.BillingType = patient.BillingType;
             }
@@ -1191,7 +1191,7 @@ namespace OpenDentBusiness
             }
             patient.Birthdate = birthDate;
             patient.PatStatus = PatientStatus.Patient;
-            patient.BillingType = Preferences.GetLong(PrefName.PracticeDefaultBillType);
+            patient.BillingType = Preference.GetLong(PreferenceName.PracticeDefaultBillType);
             patient.PriProv = priProv;
             patient.Gender = PatientGender.Unknown;
             patient.ClinicNum = clinicNum;
@@ -1520,7 +1520,7 @@ namespace OpenDentBusiness
 					INNER JOIN deflink ON definition.DefNum=deflink.DefNum
 					WHERE deflink.LinkType=" + POut.Int((int)DefLinkType.Patient) + @"
 					AND deflink.FKey=patient.PatNum
-					AND definition.Category=" + POut.Int((int)DefCat.ClinicSpecialty) + @"
+					AND definition.Category=" + POut.Int((int)DefinitionCategory.ClinicSpecialty) + @"
 				) ";
             }
             else
@@ -1583,7 +1583,7 @@ namespace OpenDentBusiness
             }
             if (fname.Length > 0)
             {
-                if (Preferences.GetBool(PrefName.PatientSelectUseFNameForPreferred))
+                if (Preference.GetBool(PreferenceName.PatientSelectUseFNameForPreferred))
                 {
                     //Nathan has approved the preferred name search for first name only. It is not intended to work with last name for our customers.
                     command += "AND (patient.FName LIKE '" + POut.String(fname) + "%' OR patient.Preferred LIKE '" + POut.String(fname) + "%') ";
@@ -1764,7 +1764,7 @@ namespace OpenDentBusiness
                 r["WkPhone"] = dRow["WkPhone"].ToString();
                 r["Address"] = dRow["Address"].ToString();
                 r["PatStatus"] = ((PatientStatus)PIn.Long(dRow["PatStatus"].ToString())).ToString();
-                r["BillingType"] = Defs.GetName(DefCat.BillingTypes, PIn.Long(dRow["BillingType"].ToString()));
+                r["BillingType"] = Defs.GetName(DefinitionCategory.BillingTypes, PIn.Long(dRow["BillingType"].ToString()));
                 r["ChartNumber"] = dRow["ChartNumber"].ToString();
                 r["City"] = dRow["City"].ToString();
                 r["State"] = dRow["State"].ToString();
@@ -1872,7 +1872,7 @@ namespace OpenDentBusiness
             DataTable table = new DataTable();
             if (patNums.Count > 0)
             {
-                string command = "SELECT * FROM patient WHERE PatNum IN (" + String.Join<long>(",", patNums) + ") ";
+                string command = "SELECT * FROM patient WHERE PatNum IN (" + String.Join(",", patNums) + ") ";
                 table = Db.GetTable(command);
             }
             Patient[] multPats = Crud.PatientCrud.TableToList(table).ToArray();
@@ -1917,7 +1917,7 @@ namespace OpenDentBusiness
                 return new Patient();
             }
             Patient Lim = new Patient();
-            Lim.PatNum = PIn.Long(table.Rows[0][0].ToString());
+            Lim.PatNum = PIn.Int(table.Rows[0][0].ToString());
             Lim.LName = PIn.String(table.Rows[0][1].ToString());
             Lim.FName = PIn.String(table.Rows[0][2].ToString());
             Lim.MiddleI = PIn.String(table.Rows[0][3].ToString());
@@ -1944,7 +1944,7 @@ namespace OpenDentBusiness
             for (int i = 0; i < table.Rows.Count; i++)
             {
                 Patient patLim = new Patient();
-                patLim.PatNum = PIn.Long(table.Rows[i]["PatNum"].ToString());
+                patLim.PatNum = PIn.Int(table.Rows[i]["PatNum"].ToString());
                 patLim.State = PIn.String(table.Rows[i]["State"].ToString());
                 retVal.Add(patLim.PatNum, patLim.State);
             }
@@ -1966,7 +1966,7 @@ namespace OpenDentBusiness
             foreach (DataRow row in table.Rows)
             {
                 Patient patLim = new Patient();
-                patLim.PatNum = PIn.Long(row["PatNum"].ToString());
+                patLim.PatNum = PIn.Int(row["PatNum"].ToString());
                 patLim.LName = PIn.String(row["LName"].ToString());
                 patLim.FName = PIn.String(row["FName"].ToString());
                 patLim.MiddleI = PIn.String(row["MiddleI"].ToString());
@@ -2044,7 +2044,7 @@ namespace OpenDentBusiness
 						WHERE patient.PatNum=paysplit.PatNum
 						AND paysplit.PayNum!=" + POut.Long(excludePayNum) + @"
 						AND patient.Guarantor=" + POut.Long(guarNum);
-            if (Preferences.GetInt(PrefName.PayPlansVersion) == 1)
+            if (Preference.GetInt(PreferenceName.PayPlansVersion) == 1)
             { //for payplans v1, exclude paysplits attached to payplans
                 command += @"
 						AND paysplit.PayPlanNum=0 ";
@@ -2053,7 +2053,7 @@ namespace OpenDentBusiness
 						GROUP BY patient.PatNum,paysplit.ProvNum,paysplit.ClinicNum)
 					UNION ALL	
 						(SELECT patient.PatNum,payplancharge.ProvNum,payplancharge.ClinicNum,-payplan.CompletedAmt ";
-            if (Preferences.GetInt(PrefName.PayPlansVersion) == 2)
+            if (Preference.GetInt(PreferenceName.PayPlansVersion) == 2)
             {
                 command += "+ SUM(CASE WHEN payplancharge.ChargeType=" + POut.Int((int)PayPlanChargeType.Debit) + @"
 						AND payplancharge.ChargeDate <= CURDATE() THEN payplancharge.Principal + payplancharge.Interest ELSE 0 END) ";
@@ -2159,7 +2159,7 @@ namespace OpenDentBusiness
         public static Dictionary<long, string> GetPatientNames(List<long> listPatNums)
         {
             return Patients.GetLimForPats(listPatNums)
-                .ToDictionary(x => x.PatNum, x => x.GetNameLF());
+                .ToDictionary(x => (long)x.PatNum, x => x.GetNameLF());
         }
 
         ///<summary>DEPRECATED. This method should not be used because it will take a long time on large databases. 
@@ -2494,7 +2494,7 @@ namespace OpenDentBusiness
             }
             List<string> listWhereAnds = new List<string>();
             string strMinusIns = "";
-            if (!Preferences.GetBool(PrefName.BalancesDontSubtractIns))
+            if (!Preference.GetBool(PreferenceName.BalancesDontSubtractIns))
             {
                 strMinusIns = "-guar.InsEst";
             }
@@ -2596,9 +2596,9 @@ namespace OpenDentBusiness
                 dictSuperFamPatAging = Db.GetTable(command).Select().Where(x => listSuperFamNums.Contains(x["PatNum"].ToString()))
                     .ToDictionary(x => PIn.Long(x["PatNum"].ToString()), x => new PatAging()
                     {
-                        PatNum = PIn.Long(x["PatNum"].ToString()),
+                        PatNum = PIn.Int(x["PatNum"].ToString()),
                         DateLastStatement = PIn.Date(x["lastSuperStatement"].ToString()),
-                        SuperFamily = PIn.Long(x["SuperFamily"].ToString()),
+                        SuperFamily = PIn.Int(x["SuperFamily"].ToString()),
                         HasSuperBilling = true,//query only returns super heads who do have super billing
                         PatName = Patients.GetNameLF(PIn.String(x["LName"].ToString()), PIn.String(x["FName"].ToString()), PIn.String(x["Preferred"].ToString()),
                              PIn.String(x["MiddleI"].ToString())),
@@ -2638,8 +2638,8 @@ namespace OpenDentBusiness
             foreach (DataRow rowCur in table.Rows)
             {
                 patage = new PatAging();
-                patage.PatNum = PIn.Long(rowCur["PatNum"].ToString());
-                patage.SuperFamily = PIn.Long(rowCur["SuperFamily"].ToString());
+                patage.PatNum = PIn.Int(rowCur["PatNum"].ToString());
+                patage.SuperFamily = PIn.Int(rowCur["SuperFamily"].ToString());
                 patage.HasSuperBilling = PIn.Bool(rowCur["HasSuperBilling"].ToString());
                 patage.ClinicNum = PIn.Long(rowCur["ClinicNum"].ToString());
                 dateLastStatement = DateTime.MinValue;
@@ -2738,7 +2738,7 @@ namespace OpenDentBusiness
             return Db.GetTable(command).Select().Select(x =>
                 new PatAging()
                 {
-                    PatNum = PIn.Long(x["PatNum"].ToString()),
+                    PatNum = PIn.Int(x["PatNum"].ToString()),
                     Bal_0_30 = PIn.Double(x["Bal_0_30"].ToString()),
                     Bal_31_60 = PIn.Double(x["Bal_31_60"].ToString()),
                     Bal_61_90 = PIn.Double(x["Bal_61_90"].ToString()),
@@ -2751,7 +2751,7 @@ namespace OpenDentBusiness
                     PriProv = PIn.Long(x["PriProv"].ToString()),
                     BillingType = PIn.Long(x["BillingType"].ToString()),
                     Guarantor = PIn.Long(x["Guarantor"].ToString()),
-                    SuperFamily = PIn.Long(x["SuperFamily"].ToString()),
+                    SuperFamily = PIn.Int(x["SuperFamily"].ToString()),
                     HasSuperBilling = PIn.Bool(x["HasSuperBilling"].ToString()),
                     ClinicNum = PIn.Long(x["ClinicNum"].ToString())
                 }).ToList();
@@ -2771,7 +2771,7 @@ namespace OpenDentBusiness
                 + "AND patient.Guarantor=patient.PatNum";
             List<PatAging> listPatAgings = Db.GetTable(command).Select().Select(x => new PatAging()
             {
-                PatNum = PIn.Long(x["PatNum"].ToString()),
+                PatNum = PIn.Int(x["PatNum"].ToString()),
                 Guarantor = PIn.Long(x["Guarantor"].ToString()),
                 PatName = PIn.String(x["LName"].ToString()) + ", " + PIn.String(x["FName"].ToString()) + " " + PIn.String(x["MiddleI"].ToString()),
                 PriProv = PIn.Long(x["PriProv"].ToString()),
@@ -2795,7 +2795,7 @@ namespace OpenDentBusiness
                 .ToDictionary(x => x.Key, x => x.OrderByDescending(y => y.TransDateTime).ToList());
             foreach (PatAging patAgingCur in listPatAgings)
             {
-                if (!dictPatNumListTrans.TryGetValue(patAgingCur.Guarantor, out patAgingCur.ListTsiLogs))
+                if (!dictPatNumListTrans.TryGetValue((int)patAgingCur.Guarantor, out patAgingCur.ListTsiLogs))
                 {
                     patAgingCur.ListTsiLogs = new List<TsiTransLog>();
                 }
@@ -2879,7 +2879,7 @@ namespace OpenDentBusiness
             long retval = pat.PriProv;
             if (retval == 0)
             {
-                retval = Preferences.GetLong(PrefName.PracticeDefaultProv);
+                retval = Preference.GetLong(PreferenceName.PracticeDefaultProv);
             }
             if (retval == 0)
             {
@@ -3340,11 +3340,11 @@ namespace OpenDentBusiness
             }
             //check any prefs that are FK's to the definition.DefNum column and warn if a pref is using the def
             if (new[] {
-                    PrefName.TransworldPaidInFullBillingType,PrefName.ApptEConfirmStatusSent,PrefName.ApptEConfirmStatusAccepted,
-                    PrefName.ApptEConfirmStatusDeclined,PrefName.ApptEConfirmStatusSendFailed,PrefName.ApptConfirmExcludeEConfirm,
-                    PrefName.ApptConfirmExcludeERemind,PrefName.ApptConfirmExcludeESend,PrefName.BrokenAppointmentAdjustmentType,PrefName.ConfirmStatusEmailed,
-                    PrefName.ConfirmStatusTextMessaged,PrefName.PrepaymentUnearnedType,PrefName.SalesTaxAdjustmentType }
-                .Select(x => Preferences.GetString(x))
+                    PreferenceName.TransworldPaidInFullBillingType,PreferenceName.ApptEConfirmStatusSent,PreferenceName.ApptEConfirmStatusAccepted,
+                    PreferenceName.ApptEConfirmStatusDeclined,PreferenceName.ApptEConfirmStatusSendFailed,PreferenceName.ApptConfirmExcludeEConfirm,
+                    PreferenceName.ApptConfirmExcludeERemind,PreferenceName.ApptConfirmExcludeESend,PreferenceName.BrokenAppointmentAdjustmentType,PreferenceName.ConfirmStatusEmailed,
+                    PreferenceName.ConfirmStatusTextMessaged,PreferenceName.PrepaymentUnearnedType,PreferenceName.SalesTaxAdjustmentType }
+                .Select(x => Preference.GetString(x))
                 .SelectMany(x => x.Split(',').Select(y => PIn.Long(y, false)).Where(y => y > 0))//some prefs are comma delimited lists of longs. SelectMany will return a single list of longs
                 .Any(x => x == defNum))
             {
@@ -4191,7 +4191,7 @@ namespace OpenDentBusiness
                 + "WHERE payplancharge.PatNum IN (" + string.Join(",", listPatNums) + ") "
                 + "AND payplancharge.ChargeType=" + POut.Int((int)PayPlanChargeType.Debit) + " "
                 + "AND StatementNum=0 "
-                + "AND " + POut.Bool(Preferences.GetInt(PrefName.PayPlansVersion) == (int)PayPlanVersions.AgeCreditsAndDebits) + " "
+                + "AND " + POut.Bool(Preference.GetInt(PreferenceName.PayPlansVersion) == (int)PayPlanVersions.AgeCreditsAndDebits) + " "
                 + "AND payplancharge.ChargeDate<" + DbHelper.DateAddMonth(DbHelper.Now(), "3") + " "//Only show payplan charges less than 3 mos into the future
             + ") procadj ORDER BY procadj.Date DESC";
             return Db.GetTable(command);
@@ -4314,7 +4314,7 @@ namespace OpenDentBusiness
             List<long> listPatNums = new List<long>();
             listPatNums.Add(patNum);
             string command = "";
-            if (Preferences.GetBool(PrefName.FamPhiAccess))
+            if (Preference.GetBool(PreferenceName.FamPhiAccess))
             { //Include guarantor's family if pref is set.
               //Include any patient where this PatNum is the Guarantor.
                 command = "SELECT PatNum FROM patient WHERE Guarantor = " + POut.Long(patNum);
@@ -4449,7 +4449,7 @@ namespace OpenDentBusiness
             for (int i = 0; i < table.Rows.Count; i++)
             {
                 Patient Lim = new Patient();
-                Lim.PatNum = PIn.Long(table.Rows[i]["PatNum"].ToString());
+                Lim.PatNum = PIn.Int(table.Rows[i]["PatNum"].ToString());
                 Lim.LName = PIn.String(table.Rows[i]["LName"].ToString());
                 Lim.FName = PIn.String(table.Rows[i]["FName"].ToString());
                 Lim.MiddleI = PIn.String(table.Rows[i]["MiddleI"].ToString());
@@ -4484,7 +4484,7 @@ namespace OpenDentBusiness
                 command += clinic.ClinicNum;
             }
             command += " ClinicNum FROM patient WHERE PatNum IN (" + string.Join(",", patNumsSearch.Distinct()) + ") ";
-            bool isUnknownNo = Preferences.GetBool(PrefName.TextMsgOkStatusTreatAsNo);
+            bool isUnknownNo = Preference.GetBool(PreferenceName.TextMsgOkStatusTreatAsNo);
             List<Clinic> listAllClinics;
             if (clinic == null)
             {
@@ -4530,7 +4530,7 @@ namespace OpenDentBusiness
         public static List<PatComm> GetPatComms(List<Patient> listPats)
         {
             //No need to check RemotingRole; no call to db.
-            bool isUnknownNo = Preferences.GetBool(PrefName.TextMsgOkStatusTreatAsNo);
+            bool isUnknownNo = Preference.GetBool(PreferenceName.TextMsgOkStatusTreatAsNo);
             string curCulture = System.Globalization.CultureInfo.CurrentCulture.Name.Right(2);
             List<PatComm> listPatComms = new List<PatComm>();
             foreach (Patient pat in listPats)
@@ -4619,7 +4619,7 @@ namespace OpenDentBusiness
             foreach (DataRow row in table.Rows)
             {
                 Patient patCur = new Patient();
-                patCur.PatNum = PIn.Long(row["PatNum"].ToString());
+                patCur.PatNum = PIn.Int(row["PatNum"].ToString());
                 patCur.PatStatus = (PatientStatus)PIn.Long(row["PatStatus"].ToString());
                 patCur.FName = PIn.String(row["FName"].ToString());
                 patCur.LName = PIn.String(row["LName"].ToString());
@@ -4806,7 +4806,7 @@ namespace OpenDentBusiness
             {
                 return "Not sending text because texting is not enabled for this clinic.";
             }
-            if (TxtMsgOk == YN.No || (TxtMsgOk == YN.Unknown && Preferences.GetBool(PrefName.TextMsgOkStatusTreatAsNo)))
+            if (TxtMsgOk == YN.No || (TxtMsgOk == YN.Unknown && Preference.GetBool(PreferenceName.TextMsgOkStatusTreatAsNo)))
             {
                 return "Not sending text because this patient is set to not receive texts.";
             }
@@ -4858,7 +4858,7 @@ namespace OpenDentBusiness
         ///<summary></summary>
         public double PayPlanDue;
         ///<summary></summary>
-        public long SuperFamily;
+        public int SuperFamily;
         ///<summary></summary>
         public bool HasSuperBilling;
         ///<summary></summary>

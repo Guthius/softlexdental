@@ -13,7 +13,7 @@ namespace OpenDental {
 		private DataTable RefTable;
 		public List<CustReference> SelectedCustRefs;
 		public long GotoPatNum;
-		private List<Def> _listBillingTypeDefs;
+		private List<Definition> _listBillingTypeDefs;
 
 		public FormReference() {
 			InitializeComponent();
@@ -21,9 +21,9 @@ namespace OpenDental {
 		}
 
 		private void FormReference_Load(object sender,EventArgs e) {
-			_listBillingTypeDefs=Defs.GetDefsForCategory(DefCat.BillingTypes,true);
+			_listBillingTypeDefs=Definition.GetByCategory(DefinitionCategory.BillingTypes);
 			for(int i=0;i<_listBillingTypeDefs.Count;i++){
-				listBillingType.Items.Add(_listBillingTypeDefs[i].ItemName);
+				listBillingType.Items.Add(_listBillingTypeDefs[i].Description);
 				listBillingType.SetSelected(i,true);
 			}
 			listBillingType.TopIndex=0;
@@ -45,7 +45,7 @@ namespace OpenDental {
 			long[] billingTypes=new long[listBillingType.SelectedIndices.Count];
 			if(listBillingType.SelectedIndices.Count!=0){
 				for(int i=0;i<listBillingType.SelectedIndices.Count;i++) {
-					billingTypes[i]=_listBillingTypeDefs[listBillingType.SelectedIndices[i]].DefNum;
+					billingTypes[i]=_listBillingTypeDefs[listBillingType.SelectedIndices[i]].Id;
 				}
 			}
 			RefTable=CustReferences.GetReferenceTable(limit,billingTypes,checkBadRefs.Checked,checkUsedRefs.Checked,checkGuarOnly.Checked,textCity.Text,textState.Text,

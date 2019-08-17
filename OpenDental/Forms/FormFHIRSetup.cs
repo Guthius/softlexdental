@@ -109,14 +109,14 @@ namespace OpenDental {
 			StringBuilder strbuild=new StringBuilder();
 			//Send the message and get the result-------------------------------------------------------------------------------------
 			string result="";
-			try {
-				string officeData=PayloadHelper.CreatePayload(strbuild.ToString(),eServiceCode.FHIR);
-				result=WebServiceMainHQProxy.GetWebServiceMainHQInstance().GetFHIRAPIKeysForOffice(officeData);
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
-				return null;
-			}
+			//try {
+			//	string officeData=PayloadHelper.CreatePayload(strbuild.ToString(),eServiceCode.FHIR);
+			//	result=WebServiceMainHQProxy.GetWebServiceMainHQInstance().GetFHIRAPIKeysForOffice(officeData);
+			//}
+			//catch(Exception ex) {
+			//	MessageBox.Show(ex.Message);
+			//	return null;
+			//}
 			XmlDocument doc=new XmlDocument();
 			doc.LoadXml(result);
 			XPathNavigator nav=doc.CreateNavigator();
@@ -184,14 +184,14 @@ namespace OpenDental {
 			StringBuilder strbuild=new StringBuilder();
 			//Send the message and get the result-------------------------------------------------------------------------------------
 			string result="";
-			try {
-				string officeData=PayloadHelper.CreatePayload(strbuild.ToString(),eServiceCode.FHIR);
-				result=WebServiceMainHQProxy.GetWebServiceMainHQInstance().GenerateFHIRAPIKey(officeData);
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
-				return null;
-			}
+			//try {
+			//	string officeData=PayloadHelper.CreatePayload(strbuild.ToString(),eServiceCode.FHIR);
+			//	result=WebServiceMainHQProxy.GetWebServiceMainHQInstance().GenerateFHIRAPIKey(officeData);
+			//}
+			//catch(Exception ex) {
+			//	MessageBox.Show(ex.Message);
+			//	return null;
+			//}
 			XmlDocument doc=new XmlDocument();
 			doc.LoadXml(result);
 			//Process errors------------------------------------------------------------------------------------------------------------
@@ -315,14 +315,14 @@ namespace OpenDental {
 			}
 			//Send the message and get the result-------------------------------------------------------------------------------------
 			string result="";
-			try {
-				string officeData=PayloadHelper.CreatePayload(strbuild.ToString(),eServiceCode.FHIR);
-				result=WebServiceMainHQProxy.GetWebServiceMainHQInstance().UpdateFHIRAPIKeys(officeData);
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
-				return false;
-			}
+			//try {
+			//	string officeData=PayloadHelper.CreatePayload(strbuild.ToString(),eServiceCode.FHIR);
+			//	result=WebServiceMainHQProxy.GetWebServiceMainHQInstance().UpdateFHIRAPIKeys(officeData);
+			//}
+			//catch(Exception ex) {
+			//	MessageBox.Show(ex.Message);
+			//	return false;
+			//}
 			XmlDocument doc=new XmlDocument();
 			doc.LoadXml(result);
 			//Process errors------------------------------------------------------------------------------------------------------------

@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Mount into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(Mount mount,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO mount (";
 			if(!useExistingPK && isRandomKeys) {
 				mount.MountNum=ReplicationServers.GetKeyNoCache("mount","MountNum");

@@ -285,7 +285,7 @@ namespace OpenDental
 
 		private void FormRpBirthday_Load(object sender, System.EventArgs e){
 			SetNextMonth();
-			textPostcardMsg.Text=Preferences.GetString(PrefName.BirthdayPostcardMsg);
+			textPostcardMsg.Text=Preference.GetString(PreferenceName.BirthdayPostcardMsg);
             Plugin.Trigger(this, "FormRpBirthday_Loaded");
 		}
 
@@ -383,7 +383,7 @@ namespace OpenDental
 		}
 
 		private void butSave_Click(object sender,EventArgs e) {
-			if(Prefs.UpdateString(PrefName.BirthdayPostcardMsg,textPostcardMsg.Text)){
+			if(Preference.Update(PreferenceName.BirthdayPostcardMsg,textPostcardMsg.Text)){
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 		}
@@ -412,18 +412,18 @@ namespace OpenDental
 			patientsPrinted=0;
 			PaperSize paperSize;
 			PrintoutOrientation orient=PrintoutOrientation.Default;
-			if(Preferences.GetLong(PrefName.RecallPostcardsPerSheet)==1) {
+			if(Preference.GetLong(PreferenceName.RecallPostcardsPerSheet)==1) {
 				paperSize=new PaperSize("Postcard",400,600);
 				orient=PrintoutOrientation.Landscape;
 			}
-			else if(Preferences.GetLong(PrefName.RecallPostcardsPerSheet)==3) {
+			else if(Preference.GetLong(PreferenceName.RecallPostcardsPerSheet)==3) {
 				paperSize=new PaperSize("Postcard",850,1100);
 			}
 			else {//4
 				paperSize=new PaperSize("Postcard",850,1100);
 				orient=PrintoutOrientation.Landscape;
 			}
-			int totalPages=(int)Math.Ceiling((double)BirthdayTable.Rows.Count/(double)Preferences.GetLong(PrefName.RecallPostcardsPerSheet));
+			int totalPages=(int)Math.Ceiling((double)BirthdayTable.Rows.Count/(double)Preference.GetLong(PreferenceName.RecallPostcardsPerSheet));
 			PrinterL.TryPreview(pdCards_PrintPage,
 				Lan.g(this,"Birthday report postcards printed"),
 				PrintSituation.Postcard,
@@ -437,7 +437,7 @@ namespace OpenDental
 
 		///<summary>raised for each page to be printed.</summary>
 		private void pdCards_PrintPage(object sender,PrintPageEventArgs ev) {
-			int totalPages=(int)Math.Ceiling((double)BirthdayTable.Rows.Count/(double)Preferences.GetLong(PrefName.RecallPostcardsPerSheet));
+			int totalPages=(int)Math.Ceiling((double)BirthdayTable.Rows.Count/(double)Preference.GetLong(PreferenceName.RecallPostcardsPerSheet));
 			Graphics g=ev.Graphics;
 			float yPos=0;//these refer to the upper left origin of each postcard
 			float xPos=0;
@@ -446,15 +446,15 @@ namespace OpenDental
 			DateTime birthdate;
 			while(yPos<ev.PageBounds.Height-100 && patientsPrinted<BirthdayTable.Rows.Count) {
 				//Return Address--------------------------------------------------------------------------
-				if(Preferences.GetBool(PrefName.RecallCardsShowReturnAdd)) {
-					str=Preferences.GetString(PrefName.PracticeTitle)+"\r\n";
+				if(Preference.GetBool(PreferenceName.RecallCardsShowReturnAdd)) {
+					str=Preference.GetString(PreferenceName.PracticeTitle)+"\r\n";
 					g.DrawString(str,new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold),Brushes.Black,xPos+45,yPos+60);
-					str=Preferences.GetString(PrefName.PracticeAddress)+"\r\n";
-					if(Preferences.GetString(PrefName.PracticeAddress2)!="") {
-						str+=Preferences.GetString(PrefName.PracticeAddress2)+"\r\n";
+					str=Preference.GetString(PreferenceName.PracticeAddress)+"\r\n";
+					if(Preference.GetString(PreferenceName.PracticeAddress2)!="") {
+						str+=Preference.GetString(PreferenceName.PracticeAddress2)+"\r\n";
 					}
-					str+=Preferences.GetString(PrefName.PracticeCity)+",  "+Preferences.GetString(PrefName.PracticeST)+"  "+Preferences.GetString(PrefName.PracticeZip)+"\r\n";
-					string phone=Preferences.GetString(PrefName.PracticePhone);
+					str+=Preference.GetString(PreferenceName.PracticeCity)+",  "+Preference.GetString(PreferenceName.PracticeST)+"  "+Preference.GetString(PreferenceName.PracticeZip)+"\r\n";
+					string phone=Preference.GetString(PreferenceName.PracticePhone);
 					if(CultureInfo.CurrentCulture.Name=="en-US"&& phone.Length==10) {
 						str+="("+phone.Substring(0,3)+")"+phone.Substring(3,3)+"-"+phone.Substring(6);
 					}
@@ -489,10 +489,10 @@ namespace OpenDental
 					+BirthdayTable.Rows[patientsPrinted]["State"].ToString()+"   "
 					+BirthdayTable.Rows[patientsPrinted]["Zip"].ToString()+"\r\n";
 				g.DrawString(str,new Font(FontFamily.GenericSansSerif,11),Brushes.Black,xPos+320,yPos+240);
-				if(Preferences.GetLong(PrefName.RecallPostcardsPerSheet)==1) {
+				if(Preference.GetLong(PreferenceName.RecallPostcardsPerSheet)==1) {
 					yPos+=400;
 				}
-				else if(Preferences.GetLong(PrefName.RecallPostcardsPerSheet)==3) {
+				else if(Preference.GetLong(PreferenceName.RecallPostcardsPerSheet)==3) {
 					yPos+=366;
 				}
 				else {//4
@@ -537,7 +537,7 @@ namespace OpenDental
 			Font fontSubTitle=new Font("Tahoma",10,FontStyle.Bold);
 			report.ReportName=Lan.g(this,"Birthdays");
 			report.AddTitle("Title",Lan.g(this,"Birthdays"),fontTitle);
-			report.AddSubTitle("PracTitle",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
+			report.AddSubTitle("PracTitle",Preference.GetString(PreferenceName.PracticeTitle),fontSubTitle);
 			report.AddSubTitle("Date",dateFrom.ToShortDateString()+" - "+dateTo.ToShortDateString(),fontSubTitle);
 			QueryObject query=report.AddQuery(RpBirthday.GetBirthdayTable(dateFrom,dateTo),"","",SplitByKind.None,1,true);
 			query.AddColumn("LName",90,FieldValueType.String,font);

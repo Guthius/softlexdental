@@ -558,15 +558,15 @@ namespace OpenDental{
 					row.Cells.Add(new string('*',decrypted.Length));//Show the password as '*'
 				}
 				else if(ProgramCur.ProgName==ProgramName.XVWeb.ToString() && property.PropertyDesc==XVWeb.ProgramProps.ImageCategory) {
-					Def imageCat=Defs.GetDefsForCategory(DefCat.ImageCats).FirstOrDefault(x => x.DefNum==PIn.Long(property.PropertyValue));
+					Definition imageCat=Definition.GetByCategory(DefinitionCategory.ImageCats).FirstOrDefault(x => x.Id==PIn.Long(property.PropertyValue));
 					if(imageCat==null) {
 						row.Cells.Add("");
 					}
-					else if(imageCat.IsHidden) {
-						row.Cells.Add(imageCat.ItemName+" "+Lans.g(this,"(hidden)"));
+					else if(imageCat.Hidden) {
+						row.Cells.Add(imageCat.Description+" "+Lans.g(this,"(hidden)"));
 					}
 					else {
-						row.Cells.Add(imageCat.ItemName);
+						row.Cells.Add(imageCat.Description);
 					}
 				}
 				else {
@@ -633,14 +633,14 @@ namespace OpenDental{
 		///<summary>Opens the appropriate form to edit the program property.</summary>
 		private void PropertyTypeDirector(ProgramProperty prop) {
 			if(ProgramCur.ProgName==ProgramName.XVWeb.ToString() && prop.PropertyDesc==XVWeb.ProgramProps.ImageCategory){ //imageCategory
-				List<Def> listDefs=Defs.GetDefsForCategory(DefCat.ImageCats,true);
-				int idxDef=listDefs.FindIndex(x => x.DefNum==PIn.Long(prop.PropertyValue));
-				InputBox inputBox = new InputBox("Choose an Image Category",listDefs.Select(x => x.ItemName).ToList(),idxDef);
+				List<Definition> listDefs=Definition.GetByCategory(DefinitionCategory.ImageCats);
+				int idxDef=listDefs.FindIndex(x => x.Id==PIn.Long(prop.PropertyValue));
+				InputBox inputBox = new InputBox("Choose an Image Category",listDefs.Select(x => x.Description).ToList(),idxDef);
 				inputBox.ShowDialog();
 				if(inputBox.DialogResult!=DialogResult.OK || inputBox.SelectedIndex==-1) {
 					return;
 				}
-				prop.PropertyValue=POut.Long(listDefs[inputBox.SelectedIndex].DefNum);
+				prop.PropertyValue=POut.Long(listDefs[inputBox.SelectedIndex].Id);
 				ProgramProperties.Update(prop);
 			}
 			else {

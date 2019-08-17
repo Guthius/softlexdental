@@ -26,7 +26,7 @@ namespace OpenDentBusiness
             { //get patNum for insAgingReport only
                 queryAg += "patient.PatNum, ";
             }
-            if (ReportsComplex.RunFuncOnReportServer(() => (Prefs.GetBoolNoCache(PrefName.ReportsShowPatNum))))
+            if (ReportsComplex.RunFuncOnReportServer(() => (Preference.GetBoolNoCache(PreferenceName.ReportsShowPatNum))))
             {
                 queryAg += DbHelper.Concat("patient.PatNum", "' - '", "patient.LName", "', '", "patient.FName", "' '", "patient.MiddleI");
             }
@@ -98,7 +98,7 @@ namespace OpenDentBusiness
             {//if all provs is selected, list will be empty
                 listWhereAnds.Add("patient.PriProv IN (" + string.Join(",", rpo.ListProvNums.Select(x => POut.Long(x))) + ")");
             }
-            if (ReportsComplex.RunFuncOnReportServer(() => Prefs.HasClinicsEnabledNoCache)) //if clinics enabled, at least one clinic will be selected
+            if (ReportsComplex.RunFuncOnReportServer(() => Preference.HasClinicsEnabledNoCache)) //if clinics enabled, at least one clinic will be selected
             {
                 //listClin may contain "Unassigned" clinic with ClinicNum 0, in which case it will also be in the query string
                 listWhereAnds.Add("patient.ClinicNum IN (" + string.Join(",", rpo.ListClinicNums.Select(x => POut.Long(x))) + ")");

@@ -49,7 +49,7 @@ namespace UnitTests.UnitTests {
 		#region ProviderTime
 		[TestMethod]
 		public void Appointments_GetSearchResults_GetBasicSearchResultsWithConflictsForProviderTime() {
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
 			//create provider and schedule for provider that the search will be for
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
 			AppointmentSearchData appSearchData=AppointmentT.CreateScheduleAndOpsForProv(1,0,provNum,11);//starts with today
@@ -82,7 +82,7 @@ namespace UnitTests.UnitTests {
 
 		[TestMethod]
 		public void Appointments_GetSearchResults_MultipleOpsForProvWithOneOpConflictProvTime() {
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
 			//create provider and schedule for provider that the search will be for
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
 			AppointmentSearchData appSearchData=AppointmentT.CreateScheduleAndOpsForProv(2,0,provNum,11);//starts with today, go one more than what shows in result
@@ -107,7 +107,7 @@ namespace UnitTests.UnitTests {
 
 		[TestMethod]
 		public void Appointments_GetSearchResults_MultipleOpsForProvWithOpConflictsProvTime() {
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
 			//create provider and schedule for provider that the search will be for
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
 			AppointmentSearchData appSearchData=AppointmentT.CreateScheduleAndOpsForProv(2,0,provNum,11);//starts with today, go one more than what shows in result
@@ -138,7 +138,7 @@ namespace UnitTests.UnitTests {
 		[TestMethod]
 		public void Appointments_GetDataForSearch_SearchResultsForHygenist() {
 			//Prov is scheduled in two ops. There are appointment conflicts in both ops, but only one of the ops is in the current appointment view.
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
 			//create provider and schedule for provider that the search will be for
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
 			long provHyg=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvHygienTest");
@@ -164,7 +164,7 @@ namespace UnitTests.UnitTests {
 		[TestMethod]
 		public void Appointments_GetSearchResults_MultipleOpsForProvOnlyOneInClinicWithOpConflictsProvTime() {
 			//Prov is scheduled in two ops, that serve as two clinics for this test. There are appointment conflicts in both ops, but only one of the ops is in the current "clinic".
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
 			//create provider and schedule for provider that the search will be for
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
 			AppointmentSearchData appSearchData=AppointmentT.CreateScheduleAndOpsForProv(2,0,provNum,11);//starts with today, go one more than what shows in result
@@ -192,7 +192,7 @@ namespace UnitTests.UnitTests {
 		[TestMethod]
 		public void Appointments_GetSearchResults_SearchForProvButProvIsNotInCurrentClinic() {
 			//Prov is scheduled in two ops. There are appointment conflicts in both ops, but only one of the ops is in the current clinic.
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
 			//create provider and schedule for provider that the search will be for
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
 			long provHyg=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvHygienTest");
@@ -218,7 +218,7 @@ namespace UnitTests.UnitTests {
 		[TestMethod]
 		public void Appointments_GetSearchResults_SearchForBlockoutByProvTime() {
 			//Test to find a single blockout slot. Blockout schedule is over the provider's schedule. 
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
 			//provider will be 0 in this test - simulating just searching for a blockout, no provider specified. 
 			//This provider will be the prov that will be seeing the patient on the appointment date.
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
@@ -226,7 +226,7 @@ namespace UnitTests.UnitTests {
 			Appointment patApt=AppointmentT.CreateAppointment(appSearchData.Patient.PatNum,DateTime.Now,appSearchData.ListOps[0].OperatoryNum,provNum);
 			TimeSpan beforeTime=TestT.SetDateTime(hour:18);//6 pm
 			TimeSpan afterTime=TestT.SetDateTime();//8 am
-			long blockoutType=DefT.CreateDefinition(DefCat.BlockoutTypes,"SearchBlockout1").DefNum;
+			long blockoutType=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,"SearchBlockout1").Id;
 			//create a schedule for both the reg provider and a blockout sched that goes over it.
 			DateTime date=appSearchData.ListSchedules[1].SchedDate;
 			Schedule blockoutSched=ScheduleT.CreateSchedule(date,TestT.SetDateTime(date,hour:13),TestT.SetDateTime(date,hour:15),ScheduleType.Blockout
@@ -242,14 +242,14 @@ namespace UnitTests.UnitTests {
 		[TestMethod]
 		public void Appointments_GetSearchResultsForBlockoutAndProvider_SearchBlockoutProviderByProvTime() {
 			//Test to find a blockout slot that is in a provider's scheduled operatory.
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
 			//Two providers, Prov 0 is the blockout provider and the other will be the prov who's op we want to schedule in.
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
 			AppointmentSearchData appSearchData=AppointmentT.CreateScheduleAndOpsForProv(3,1,provNum,11);
 			Appointment patApt=AppointmentT.CreateAppointment(appSearchData.Patient.PatNum,DateTime.Now,appSearchData.ListOps[0].OperatoryNum,provNum);
 			TimeSpan beforeTime=TestT.SetDateTime(hour:18);//6 pm
 			TimeSpan afterTime=TestT.SetDateTime();//8 am
-			long blockoutType=DefT.CreateDefinition(DefCat.BlockoutTypes,"SearchBlockout2").DefNum;
+			long blockoutType=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,"SearchBlockout2").Id;
 			//create a schedule for both the reg provider and a blockout sched that goes over it.
 			DateTime date=appSearchData.ListSchedules[1].SchedDate;
 			Schedule blockoutSched=ScheduleT.CreateSchedule(date,TestT.SetDateTime(date,hour:13),TestT.SetDateTime(date,hour:15),ScheduleType.Blockout
@@ -266,7 +266,7 @@ namespace UnitTests.UnitTests {
 		public void ApptSearch_GetSearchResults_NoResultsWhenProvNotScheduledAndBlockoutIsOnSchedule() {
 			//Goal of this test is to verify that we do not suggest times for providers on days that they do not work. 
 			//To address a bug where a time was suggested because there was a blockout that returned an opening. 
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
 			//make our schedules for the provider
 			AppointmentSearchData appSearchData=AppointmentT.CreateScheduleAndOpsForProv(1,1,provNum,10);
@@ -281,7 +281,7 @@ namespace UnitTests.UnitTests {
 			ScheduleT.DeleteSchedule(scheduleNoProvider.ScheduleNum);
 			appSearchData.ListSchedules.Remove(scheduleNoProvider);//do not schedule prov on the first day.
 			//make our blockout that is does not allow scheduling. 
-			long blockoutType=DefT.CreateDefinition(DefCat.BlockoutTypes,"SearchBlockout"+MethodBase.GetCurrentMethod().Name,"NS").DefNum;//Do Not Schedule
+			long blockoutType=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,"SearchBlockout"+MethodBase.GetCurrentMethod().Name,"NS").Id;//Do Not Schedule
 			Schedule blockout=ScheduleT.CreateSchedule(date,TestT.SetDateTime(date,hour:8),TestT.SetDateTime(date,hour:11),ScheduleType.Blockout,
 				blockoutType:blockoutType,listOpNums:new List<long>() {appSearchData.ListOps[0].OperatoryNum });
 			//run the appointment search
@@ -296,7 +296,7 @@ namespace UnitTests.UnitTests {
 		#region ProviderTimeOperatory
 		[TestMethod]
 		public void Appointments_GetSearchResults_GetBasicSearchResultsWithConflictsForProviderTimeOperatory() {
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);//just look at the op conflicts,no prov time
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);//just look at the op conflicts,no prov time
 			//create provider and schedule for provider that the search will be for
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
 			AppointmentSearchData appSearchData=AppointmentT.CreateScheduleAndOpsForProv(1,0,provNum,11);//starts with today
@@ -330,7 +330,7 @@ namespace UnitTests.UnitTests {
 
 		[TestMethod]
 		public void Appointments_GetSearchResults_MultipleOpsForProvWithOneOpConflict() {
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);//just look at the op conflicts,no prov time 
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);//just look at the op conflicts,no prov time 
 			//create provider and schedule for provider that the search will be for
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
 			AppointmentSearchData appSearchData=AppointmentT.CreateScheduleAndOpsForProv(2,0,provNum,11);//starts with today
@@ -355,7 +355,7 @@ namespace UnitTests.UnitTests {
 
 		[TestMethod]
 		public void Appointments_GetSearchResults_MultipleOpsForProvWithOpConflicts() {
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);//just look at the op conflicts,no prov time 
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);//just look at the op conflicts,no prov time 
 			//create provider and schedule for provider that the search will be for
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
 			AppointmentSearchData appSearchData=AppointmentT.CreateScheduleAndOpsForProv(2,0,provNum,11);//starts with today, go one more than what shows in result
@@ -387,7 +387,7 @@ namespace UnitTests.UnitTests {
 		public void Appointments_GetSearchResults_MultipleOpsForProvOnlyOneInClinicWithOpConflictsProvOpTime() {
 			//Prov is scheduled in two ops. There are appointment conflicts in both ops, but only one of the ops is in the current appointment view/clinic.
 			//Clinics and appointment views can both be reprsented by this test, just depends on the appropriate operatories being passed in.  
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
 			//create provider and schedule for provider that the search will be for
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
 			AppointmentSearchData appSearchData=AppointmentT.CreateScheduleAndOpsForProv(2,0,provNum,11);//starts with today
@@ -416,7 +416,7 @@ namespace UnitTests.UnitTests {
 		public void Appointments_GetSearchResults_SearchForProvButProvIsNotInCurrentViewOrClinic() {
 			//Prov is scheduled in two ops. There are appointment conflicts in both ops, but only one of the ops is in the current appointment view/clinic.
 			//Apppointment View and clinics can both be represented in this test by passing in the appropriate operatories.  
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
 			//create provider and schedule for provider that the search will be for
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
 			long provHyg=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvHygienTest");
@@ -442,14 +442,14 @@ namespace UnitTests.UnitTests {
 		[TestMethod]
 		public void Appointments_GetAllForDate_NoResultsForDoNotScheduleBlockouts() {
 			//Blockouts need to be assigned to operatories so this should only not return results when using non-dynamic schedules and provider time operatory 
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
 			AppointmentSearchData appSearchData=AppointmentT.CreateScheduleAndOpsForProv(1,0,provNum,11);//starts with today
 			Operatory provOp=appSearchData.ListOps[0];//get one of the ops for the provider. 
 			//Create a blockout in the op for the provider from 8 am to 9:40 am.
-			Def blockoutDef=DefT.CreateDefinition(DefCat.BlockoutTypes,"DoNotSchedule",BlockoutType.NoSchedule.GetDescription());
+			Definition blockoutDef=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,"DoNotSchedule",BlockoutType.NoSchedule.GetDescription());
 			ScheduleT.CreateSchedule(appSearchData.ListSchedules[1].SchedDate,TestT.SetDateTime(),TestT.SetDateTime(hour:9,minute:40),ScheduleType.Blockout,
-				blockoutType:blockoutDef.DefNum,listOpNums:new List<long>() {provOp.OperatoryNum });
+				blockoutType:blockoutDef.Id,listOpNums:new List<long>() {provOp.OperatoryNum });
 			TimeSpan beforeTime=TestT.SetDateTime(hour:18);
 			TimeSpan afterTime=TestT.SetDateTime();//8 AM
 			//Create appointment that the search will be to find a spot for.
@@ -464,7 +464,7 @@ namespace UnitTests.UnitTests {
 		[TestMethod]
 		public void Appointments_GetSearchResults_SearchForBlockoutByProvTimeOperatory() {
 			//Test to find a single blockout slot. Blockout schedule is over the provider's schedule. 
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
 			//provider will be 0 in this test - simulating just searching for a blockout, no provider specified. 
 			//This provider will be the prov that will be seeing the patient on the appointment date.
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
@@ -472,7 +472,7 @@ namespace UnitTests.UnitTests {
 			Appointment patApt=AppointmentT.CreateAppointment(appSearchData.Patient.PatNum,DateTime.Now,appSearchData.ListOps[0].OperatoryNum,provNum);
 			TimeSpan beforeTime=TestT.SetDateTime(hour:18);//6 pm
 			TimeSpan afterTime=TestT.SetDateTime();//8 am
-			long blockoutType=DefT.CreateDefinition(DefCat.BlockoutTypes,"SearchBlockout3").DefNum;
+			long blockoutType=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,"SearchBlockout3").Id;
 			//create a schedule for both the reg provider and a blockout sched that goes over it.
 			DateTime date=appSearchData.ListSchedules[1].SchedDate;
 			Schedule blockoutSched=ScheduleT.CreateSchedule(date,TestT.SetDateTime(date,hour:13),TestT.SetDateTime(date,hour:15),ScheduleType.Blockout
@@ -488,14 +488,14 @@ namespace UnitTests.UnitTests {
 		[TestMethod]
 		public void Appointments_GetSearchResultsForBlockoutAndProvider_SearchBlockoutProviderByProvTimeOperatory() {
 			//Test to find a blockout slot that is in a provider's scheduled operatory.
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
 			//Two providers, Prov 0 is the blockout provider and the other will be the prov who's op we want to schedule in.
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
 			AppointmentSearchData appSearchData=AppointmentT.CreateScheduleAndOpsForProv(3,1,provNum,11);
 			Appointment patApt=AppointmentT.CreateAppointment(appSearchData.Patient.PatNum,DateTime.Now,appSearchData.ListOps[0].OperatoryNum,provNum);
 			TimeSpan beforeTime=TestT.SetDateTime(hour:18);//6 pm
 			TimeSpan afterTime=TestT.SetDateTime();//8 am
-			long blockoutType=DefT.CreateDefinition(DefCat.BlockoutTypes,"SearchBlockout4").DefNum;
+			long blockoutType=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,"SearchBlockout4").Id;
 			//create a schedule for both the reg provider and a blockout sched that goes over it.
 			DateTime date=appSearchData.ListSchedules[1].SchedDate;
 			Schedule blockoutSched=ScheduleT.CreateSchedule(date,TestT.SetDateTime(date,hour:13),TestT.SetDateTime(date,hour:15),ScheduleType.Blockout
@@ -511,7 +511,7 @@ namespace UnitTests.UnitTests {
 		[TestMethod]
 		public void Appointments_GetSearchResults_SearchResultsForBlockoutsOnlyForDifferentOperatories() {
 			//Test is specifically for provider time operatory as there is no way to determine operatory when only seraching provider time. 
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
 			//Test for case when a no schedule blockout exists on the same day, but different operatory and different time than searching blockout.
 			//create providers and schedules
 			string suffix=MethodBase.GetCurrentMethod().Name;
@@ -526,11 +526,11 @@ namespace UnitTests.UnitTests {
 			TimeSpan afterTime=TestT.SetDateTime();//8 am
 			DateTime date=dataForProvA.ListSchedules[1].SchedDate;
 			//create the blockout we want to find
-			long desiredBlockout=DefT.CreateDefinition(DefCat.BlockoutTypes,suffix).DefNum;
+			long desiredBlockout=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,suffix).Id;
 			Schedule schedForDesiredBlockout=ScheduleT.CreateSchedule(date,TestT.SetDateTime(date,hour:9),TestT.SetDateTime(date,hour:10)
 				,ScheduleType.Blockout,blockoutType:desiredBlockout,listOpNums:dataForProvA.ListOps.Select(x => x.OperatoryNum).ToList());
 			//create the blockout for the other provider, that is not supposed to allow scheduling. 
-			long noSchedBlockout=DefT.CreateDefinition(DefCat.BlockoutTypes,suffix+"NS",BlockoutType.NoSchedule.GetDescription()).DefNum;
+			long noSchedBlockout=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,suffix+"NS",BlockoutType.NoSchedule.GetDescription()).Id;
 			Schedule schedForNsBlockout=ScheduleT.CreateSchedule(date,TestT.SetDateTime(date,hour:8),TestT.SetDateTime(date,hour:9),ScheduleType.Blockout,
 				blockoutType:noSchedBlockout,listOpNums:dataForProvB.ListOps.Select(x => x.OperatoryNum).ToList());
 			//run the search
@@ -547,7 +547,7 @@ namespace UnitTests.UnitTests {
 		[TestMethod]
 		public void Appointments_GetSearchResults_SearchResultsForBlockoutsOnlyForDifferentOperatoriesAtTheSameTime() {
 			//Test is specifically for provider time operatory as there is no way to determine operatory when only seraching provider time. 
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
 			//Test for case when a no schedule blockout exists on the same day, but different operatory and same time as searching blockout.
 			//create providers and schedules
 			string suffix=MethodBase.GetCurrentMethod().Name;
@@ -562,11 +562,11 @@ namespace UnitTests.UnitTests {
 			TimeSpan afterTime=TestT.SetDateTime();//8 am
 			DateTime date=dataForProvA.ListSchedules[1].SchedDate;
 			//create the blockout we want to find
-			long desiredBlockout=DefT.CreateDefinition(DefCat.BlockoutTypes,suffix).DefNum;
+			long desiredBlockout=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,suffix).Id;
 			Schedule schedForDesiredBlockout=ScheduleT.CreateSchedule(date,TestT.SetDateTime(date,hour:9),TestT.SetDateTime(date,hour:10)
 				,ScheduleType.Blockout,blockoutType:desiredBlockout,listOpNums:dataForProvA.ListOps.Select(x => x.OperatoryNum).ToList());
 			//create the blockout for the other provider, that is not supposed to allow scheduling. 
-			long noSchedBlockout=DefT.CreateDefinition(DefCat.BlockoutTypes,suffix+"NS",BlockoutType.NoSchedule.GetDescription()).DefNum;
+			long noSchedBlockout=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,suffix+"NS",BlockoutType.NoSchedule.GetDescription()).Id;
 			Schedule schedForNsBlockout=ScheduleT.CreateSchedule(date,TestT.SetDateTime(date,hour:9),TestT.SetDateTime(date,hour:10),ScheduleType.Blockout,
 				blockoutType:noSchedBlockout,listOpNums:dataForProvB.ListOps.Select(x => x.OperatoryNum).ToList());
 			//run the search
@@ -584,7 +584,7 @@ namespace UnitTests.UnitTests {
 		[TestMethod]
 		public void Appointments_GetSearchResults_SearchResultsForBlockoutsOnlyForSameProvider() {
 			//Test is specifically for provider time operatory as there is no way to determine operatory when only seraching provider time. 
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
 			//Test for case when a no schedule blockout exists on the same day, same operatory and different time than searching blockout.
 			//create providers and schedules
 			string suffix=MethodBase.GetCurrentMethod().Name;
@@ -599,11 +599,11 @@ namespace UnitTests.UnitTests {
 			TimeSpan afterTime=TestT.SetDateTime();//8 am
 			DateTime date=dataForProvA.ListSchedules[1].SchedDate;
 			//create the blockout we want to find
-			long desiredBlockout=DefT.CreateDefinition(DefCat.BlockoutTypes,suffix).DefNum;
+			long desiredBlockout=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,suffix).Id;
 			Schedule schedForDesiredBlockout=ScheduleT.CreateSchedule(date,TestT.SetDateTime(date,hour:10),TestT.SetDateTime(date,hour:11)
 				,ScheduleType.Blockout,blockoutType:desiredBlockout,listOpNums:dataForProvA.ListOps.Select(x => x.OperatoryNum).ToList());
 			//create the blockout for the same provider, that is not supposed to allow scheduling. 
-			long noSchedBlockout=DefT.CreateDefinition(DefCat.BlockoutTypes,suffix+"NS",BlockoutType.NoSchedule.GetDescription()).DefNum;
+			long noSchedBlockout=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,suffix+"NS",BlockoutType.NoSchedule.GetDescription()).Id;
 			Schedule schedForNsBlockout=ScheduleT.CreateSchedule(date,TestT.SetDateTime(date,hour:8),TestT.SetDateTime(date,hour:9),ScheduleType.Blockout,
 				blockoutType:noSchedBlockout,listOpNums:dataForProvA.ListOps.Select(x => x.OperatoryNum).ToList());
 			//For some reason, another NS blockout needs to be in another operatory to create the bug.
@@ -623,7 +623,7 @@ namespace UnitTests.UnitTests {
 		[TestMethod]
 		public void Appointments_GetSearchResults_DoNotIncludeUndesiredBlockoutsInSearchResults() {
 			//Test is specifically for provider time operatory as there is no way to determine operatory when only seraching provider time. 
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
 			//Test with two regular blockouts to make sure correct blockout gets returned. 
 			//create providers and schedules
 			string suffix=MethodBase.GetCurrentMethod().Name;
@@ -638,18 +638,18 @@ namespace UnitTests.UnitTests {
 			TimeSpan afterTime=TestT.SetDateTime();//8 am
 			DateTime date=dataForProvA.ListSchedules[1].SchedDate;
 			//create the blockout we want to find
-			long desiredBlockout=DefT.CreateDefinition(DefCat.BlockoutTypes,suffix).DefNum;
+			long desiredBlockout=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,suffix).Id;
 			Schedule schedForDesiredBlockout=ScheduleT.CreateSchedule(date,TestT.SetDateTime(date,hour:10),TestT.SetDateTime(date,hour:11)
 				,ScheduleType.Blockout,blockoutType:desiredBlockout,listOpNums:dataForProvA.ListOps.Select(x => x.OperatoryNum).ToList());
 			//create the blockout for the same provider, that is not supposed to allow scheduling. 
-			long noSchedBlockout=DefT.CreateDefinition(DefCat.BlockoutTypes,suffix+"NS",BlockoutType.NoSchedule.GetDescription()).DefNum;
+			long noSchedBlockout=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,suffix+"NS",BlockoutType.NoSchedule.GetDescription()).Id;
 			Schedule schedForNsBlockout=ScheduleT.CreateSchedule(date,TestT.SetDateTime(date,hour:8),TestT.SetDateTime(date,hour:9),ScheduleType.Blockout,
 				blockoutType:noSchedBlockout,listOpNums:dataForProvA.ListOps.Select(x => x.OperatoryNum).ToList());
 			//For some reason, another NS blockout needs to be in another operatory to create the bug.
 			ScheduleT.CreateSchedule(date,TestT.SetDateTime(date,hour:9),TestT.SetDateTime(date,hour:10),ScheduleType.Blockout,
 				blockoutType:noSchedBlockout,listOpNums:dataForProvB.ListOps.Select(x => x.OperatoryNum).ToList());
 			//create yet another blockout that is ok to schedule, but a different type so we can verify correct blockout is getting returned.
-			long otherBlockout=DefT.CreateDefinition(DefCat.BlockoutTypes,suffix).DefNum;
+			long otherBlockout=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,suffix).Id;
 			ScheduleT.CreateSchedule(date,TestT.SetDateTime(date,hour:9),TestT.SetDateTime(date,hour:10)
 				,ScheduleType.Blockout,blockoutType:otherBlockout,listOpNums:dataForProvA.ListOps.Select(x => x.OperatoryNum).ToList());
 			//run the search
@@ -666,8 +666,8 @@ namespace UnitTests.UnitTests {
 		[TestMethod]
 		public void Appointments_GetSearchResults_SearchForSchedulesAndOperatoriesForSpecificDays() {
 			//Test is specifically for provider time operatory as there is no way to determine operatory when only seraching provider time. 
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
-			Prefs.UpdateInt(PrefName.AppointmentTimeIncrement,5);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
+			Prefs.UpdateInt(PreferenceName.AppointmentTimeIncrement,5);
 			//Test when a provider is scheduled in multilple ops for different days that ops are only suggested for where the op the provider is in,
 			//for the current day. Ex (Day1 in Op1, Day2 in Op 2 so when searching for opening for Day1 only Op1 is searched for). 
 			//create providers and schedules
@@ -712,8 +712,8 @@ namespace UnitTests.UnitTests {
 		[TestMethod]
 		public void Appointments_GetSearchResults_SearchForOpeningsWhenProvidersShareAnOperatory() {
 			//Test is specifically for provider time operatory as there is no way to determine operatory when only seraching provider time. 
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
-			Prefs.UpdateInt(PrefName.AppointmentTimeIncrement,5);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
+			Prefs.UpdateInt(PreferenceName.AppointmentTimeIncrement,5);
 			//Test when multiple providers are scheduled in the same operatory (ex provA is there from 8-9 and provB from 9-10).
 			string suffix=MethodBase.GetCurrentMethod().Name;
 			long provNumA=ProviderT.CreateProvider(suffix+"A");
@@ -780,7 +780,7 @@ namespace UnitTests.UnitTests {
 		[TestMethod]
 		public void Appointments_GetSearchResultsForBlockoutAndProvider_FindResultsForBlockoutInSpecificProviderOperatory() {
 			//Test is specifically for provider time operatory as there is no way to determine operatory when only seraching provider time. 
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
 			//Test scenario where ProvA and ProvB are scheduled to work. ProvA has blockout1 in their op at 9am and ProvB has the same blockout at 8am.
 			//When searching by provider AND blockout for ProvA and blockout1 we should get results for 9am in ProvA's operatory.
 			//create providers and schedules
@@ -796,7 +796,7 @@ namespace UnitTests.UnitTests {
 			TimeSpan afterTime=TestT.SetDateTime();//8 am
 			DateTime date=dataForProvA.ListSchedules[1].SchedDate;
 			//create the blockout type we want to find
-			long blockoutType=DefT.CreateDefinition(DefCat.BlockoutTypes,suffix).DefNum;
+			long blockoutType=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,suffix).Id;
 			//create blockout in ProviderB's op for 8 am
 			ScheduleT.CreateSchedule(date,TestT.SetDateTime(date,hour:8),TestT.SetDateTime(date,hour:9)
 				,ScheduleType.Blockout,blockoutType:blockoutType,listOpNums:dataForProvB.ListOps.Select(x => x.OperatoryNum).ToList());
@@ -817,8 +817,8 @@ namespace UnitTests.UnitTests {
 		[TestMethod]
 		public void Appointments_GetSearchResults_DifferentBlockoutsSameOp() {
 			//Test is specifically for provider time operatory as there is no way to determine operatory when only seraching provider time. 
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
-			Prefs.UpdateInt(PrefName.AppointmentTimeIncrement,5);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
+			Prefs.UpdateInt(PreferenceName.AppointmentTimeIncrement,5);
 			//Test when a provider is scheduled in multilple ops for different days that ops are only suggested for where the op the provider is in,
 			//for the current day. Ex (Day1 in Op1, Day2 in Op 2 so when searching for opening for Day1 only Op1 is searched for). 
 			//create providers and schedules
@@ -830,11 +830,11 @@ namespace UnitTests.UnitTests {
 						,new DateTime(DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.AddDays(1).Day,9,30,0).TimeOfDay
 						,ScheduleType.Provider,provNum:provNumA,listOpNums:new List<long>() {op1.OperatoryNum });
 			//create one blockout of a specific type and put in providers op. Blockout length should not be able to fit the appointment.
-			long blockoutType1=DefT.CreateDefinition(DefCat.BlockoutTypes,suffix).DefNum;
+			long blockoutType1=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,suffix).Id;
 			ScheduleT.CreateSchedule(schedProvA.SchedDate,TestT.SetDateTime(schedProvA.SchedDate,hour:8),TestT.SetDateTime(schedProvA.SchedDate,hour:8,minute:30)
 				,ScheduleType.Blockout,blockoutType:blockoutType1,listOpNums:new List<long>() {op1.OperatoryNum });
 			//create one blockout of a different specific type and put in providers op. Blockout length should not be able to fit the appointment.
-			long blockoutType2=DefT.CreateDefinition(DefCat.BlockoutTypes,suffix).DefNum;
+			long blockoutType2=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,suffix).Id;
 			ScheduleT.CreateSchedule(schedProvA.SchedDate,TestT.SetDateTime(schedProvA.SchedDate,hour:8,minute:30),TestT.SetDateTime(schedProvA.SchedDate,hour:9)
 				,ScheduleType.Blockout,blockoutType:blockoutType2,listOpNums:new List<long>() {op1.OperatoryNum });
 			//create the appointment and search criteria for the appointment trying to be scheduled.
@@ -857,7 +857,7 @@ namespace UnitTests.UnitTests {
 		//test for dynamic scheduling
 		[TestMethod]
 		public void Appointments_GetSearchResults_DynamicGetSearchTimesWithConflictsProvTimeOp() {
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);//just look at the op conflicts,no prov time
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);//just look at the op conflicts,no prov time
 			//create provider and schedule for provider that the search will be for
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
 			AppointmentSearchData appSearchData=AppointmentT.CreateScheduleAndOpsForProv(1,0,provNum,11,isDynamic:true);
@@ -890,7 +890,7 @@ namespace UnitTests.UnitTests {
 		//test for dynamic scheduling by provider operatory time
 		[TestMethod]
 		public void Appointments_GetSearchResults_DynamicBasics() {
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTimeOperatory);
 			Patient pat=PatientT.CreatePatient();
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
 			Operatory op1=OperatoryT.CreateOperatory(provDentist:provNum);
@@ -915,7 +915,7 @@ namespace UnitTests.UnitTests {
 		//basic test for dynamic scheduling by provider time
 		[TestMethod]
 		public void Appointments_GetSearchResults_DynamicBasicsProviderTime() {
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
 			Patient pat=PatientT.CreatePatient();
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
 			Operatory op1=OperatoryT.CreateOperatory(provDentist:provNum);
@@ -946,7 +946,7 @@ namespace UnitTests.UnitTests {
 		[TestMethod]
 		public void Appointments_GetSearchResults_SearchForProvButProvIsNotInCurrentViewProvTime() {
 			//Prov is scheduled in two ops. There are appointment conflicts in both ops, but only one of the ops is in the current appointment view. 
-			PrefT.UpdateInt(PrefName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
+			PrefT.UpdateInt(PreferenceName.AppointmentSearchBehavior,(int)SearchBehaviorCriteria.ProviderTime);
 			//create provider and schedule for provider that the search will be for
 			long provNum=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvDentTest");
 			long provHyg=ProviderT.CreateProvider(MethodBase.GetCurrentMethod().Name+"ProvHygienTest");
@@ -1010,7 +1010,7 @@ namespace UnitTests.UnitTests {
 			double procFee=100d;
 			string strDesc="RecallType_"+MethodBase.GetCurrentMethod().Name;
 			RecallType recallType=RecallTypeT.CreateRecallType(description:strDesc,procedures:strRecallProcCode);
-			PrefT.UpdateString(PrefName.RecallTypesShowingInList,string.Join(",", Preferences.GetString(PrefName.RecallTypesShowingInList),recallType.RecallTypeNum));
+			PrefT.UpdateString(PreferenceName.RecallTypesShowingInList,string.Join(",", Preferences.GetString(PreferenceName.RecallTypesShowingInList),recallType.RecallTypeNum));
 			Patient pat=PatientT.CreatePatient(priProvNum:provNum,lName:MethodBase.GetCurrentMethod().Name);
 			Recall recall=RecallT.CreateRecall(pat.PatNum,recallType.RecallTypeNum,dateTimeRecall,intervalRecall,dateScheduled:dateTimeRecall);
 			Appointment appt=AppointmentT.CreateAppointment(pat.PatNum,dateTimeAppt,opNum,provNum,aptStatus:apptStatus,aptNote:note);
@@ -1034,7 +1034,7 @@ namespace UnitTests.UnitTests {
 			double procFee=100d;
 			string strDesc="RecallType_"+MethodBase.GetCurrentMethod().Name;
 			RecallType recallType=RecallTypeT.CreateRecallType(description:strDesc,procedures:strRecallProcCode);
-			PrefT.UpdateString(PrefName.RecallTypesShowingInList,string.Join(",", Preferences.GetString(PrefName.RecallTypesShowingInList),recallType.RecallTypeNum));
+			PrefT.UpdateString(PreferenceName.RecallTypesShowingInList,string.Join(",", Preferences.GetString(PreferenceName.RecallTypesShowingInList),recallType.RecallTypeNum));
 			Patient pat=PatientT.CreatePatient(priProvNum:provNum,lName:MethodBase.GetCurrentMethod().Name);
 			Recall recall=RecallT.CreateRecall(pat.PatNum,recallType.RecallTypeNum,dateTimeRecall,intervalRecall,dateScheduled:dateTimeRecall);
 			Appointment appt=AppointmentT.CreateAppointment(pat.PatNum,dateTimeAppt,opNum,provNum,aptStatus:apptStatus,aptNote:note);
@@ -1059,7 +1059,7 @@ namespace UnitTests.UnitTests {
 			string strDesc="RecallType_"+MethodBase.GetCurrentMethod().Name;
 			RecallType recallType=RecallTypeT.CreateRecallType(description:strDesc,procedures:strRecallProcCode);
 			Patient pat=PatientT.CreatePatient(priProvNum:provNum,lName:MethodBase.GetCurrentMethod().Name);
-			PrefT.UpdateString(PrefName.RecallTypesShowingInList,string.Join(",", Preferences.GetString(PrefName.RecallTypesShowingInList),recallType.RecallTypeNum));
+			PrefT.UpdateString(PreferenceName.RecallTypesShowingInList,string.Join(",", Preferences.GetString(PreferenceName.RecallTypesShowingInList),recallType.RecallTypeNum));
 			Recall recall=RecallT.CreateRecall(pat.PatNum,recallType.RecallTypeNum,dateTimeRecall,intervalRecall,dateScheduled:dateTimeRecall);
 			Appointment appt=AppointmentT.CreateAppointment(pat.PatNum,dateTimeAppt,opNum,provNum,aptStatus:apptStatus,aptNote:note);
 			ProcedureT.CreateProcedure(pat,strApptProcCode,procStatus,toothNum,procFee,dateTimeAppt,provNum:provNum,aptNum:appt.AptNum);
@@ -1116,25 +1116,25 @@ namespace UnitTests.UnitTests {
 			AppointmentRuleT.CreateAppointmentRule(desc,"D0110","D1110");
 			//Set the appttype as a webschednewpat appt type
 			AppointmentType apptType=AppointmentTypeT.CreateAppointmentType(desc,codeStr:"D0120",pattern:"//XXXX//");
-			Def wsnpApptTypeDef=DefT.CreateDefinition(DefCat.WebSchedNewPatApptTypes,desc,POut.Long(apptType.AppointmentTypeNum));
-			DefLinkT.CreateDefLink(wsnpApptTypeDef.DefNum,apptType.AppointmentTypeNum,DefLinkType.AppointmentType);
+			Definition wsnpApptTypeDef=DefT.CreateDefinition(DefinitionCategory.WebSchedNewPatApptTypes,desc,POut.Long(apptType.AppointmentTypeNum));
+			DefLinkT.CreateDefLink(wsnpApptTypeDef.Id,apptType.AppointmentTypeNum,DefLinkType.AppointmentType);
 			//Setup create two operatories with the same provider and set these available for wsnp
 			Clinic clinic=ClinicT.CreateClinic(desc);
 			long provNum=ProviderT.CreateProvider(desc);
 			Operatory opA=OperatoryT.CreateOperatory(desc+"A",desc+"A",provNum,clinicNum:clinic.ClinicNum,isWebSched:true);
 			Operatory opB=OperatoryT.CreateOperatory(desc+"B",desc+"B",provNum,clinicNum:clinic.ClinicNum,isWebSched:true);
-			DefLinkT.CreateDefLink(wsnpApptTypeDef.DefNum,opA.OperatoryNum,DefLinkType.Operatory);
-			DefLinkT.CreateDefLink(wsnpApptTypeDef.DefNum,opB.OperatoryNum,DefLinkType.Operatory);
+			DefLinkT.CreateDefLink(wsnpApptTypeDef.Id,opA.OperatoryNum,DefLinkType.Operatory);
+			DefLinkT.CreateDefLink(wsnpApptTypeDef.Id,opB.OperatoryNum,DefLinkType.Operatory);
 			//Set schedules, and confirm we can get all the timeslots we expect
 			Schedule provSched=ScheduleT.CreateSchedule(tomorrow,TimeSpan.FromHours(8),TimeSpan.FromHours(16),schedType:ScheduleType.Provider,clinicNum:clinic.ClinicNum,provNum:provNum,listOpNums:new List<long>() { opA.OperatoryNum,opB.OperatoryNum });
-			List<TimeSlot> listTimeSlots=TimeSlots.GetAvailableNewPatApptTimeSlots(tomorrow.Date,tomorrow.AddHours(23),clinic.ClinicNum,wsnpApptTypeDef.DefNum);
+			List<TimeSlot> listTimeSlots=TimeSlots.GetAvailableNewPatApptTimeSlots(tomorrow.Date,tomorrow.AddHours(23),clinic.ClinicNum,wsnpApptTypeDef.Id);
 			Assert.IsTrue(listTimeSlots.Any(x => x.DateTimeStart==tomorrow.AddHours(12)));
 			//Create an appointment that would use the appointment rule we created
 			Patient patA=PatientT.CreatePatient(desc+"A",provNum,clinic.ClinicNum);
 			Appointment apptA=AppointmentT.CreateAppointment(patA.PatNum,tomorrow.AddHours(12),opA.OperatoryNum,provNum);
 			ProcedureT.CreateProcedure(patA,"D0120",ProcStat.TP,"",50,provNum:provNum,aptNum:apptA.AptNum);
 			//Refetch timeslots and make sure that the list does not contain the double booked slot
-			List<TimeSlot> listTimeSlotsAfter=TimeSlots.GetAvailableNewPatApptTimeSlots(tomorrow.Date,tomorrow.AddHours(23),clinic.ClinicNum,wsnpApptTypeDef.DefNum);
+			List<TimeSlot> listTimeSlotsAfter=TimeSlots.GetAvailableNewPatApptTimeSlots(tomorrow.Date,tomorrow.AddHours(23),clinic.ClinicNum,wsnpApptTypeDef.Id);
 			Assert.IsFalse(listTimeSlotsAfter.Any(x => x.DateTimeStart==tomorrow.AddHours(12)));
 		}
 
@@ -1145,28 +1145,28 @@ namespace UnitTests.UnitTests {
 			//Clear appointment rules & create a new rule
 			AppointmentRuleT.ClearAppointmentRuleTable();
 			//Set the webschednewpat Pref to allow double booking
-			Prefs.UpdateInt(PrefName.WebSchedNewPatApptDoubleBooking,0);
+			Prefs.UpdateInt(PreferenceName.WebSchedNewPatApptDoubleBooking,0);
 			//Set the appttype as a webschednewpat appt type
 			AppointmentType apptType=AppointmentTypeT.CreateAppointmentType(desc,codeStr:"D0120",pattern:"//XXXX//");
-			Def wsnpApptTypeDef=DefT.CreateDefinition(DefCat.WebSchedNewPatApptTypes,desc,POut.Long(apptType.AppointmentTypeNum));
-			DefLinkT.CreateDefLink(wsnpApptTypeDef.DefNum,apptType.AppointmentTypeNum,DefLinkType.AppointmentType);
+			Definition wsnpApptTypeDef=DefT.CreateDefinition(DefinitionCategory.WebSchedNewPatApptTypes,desc,POut.Long(apptType.AppointmentTypeNum));
+			DefLinkT.CreateDefLink(wsnpApptTypeDef.Id,apptType.AppointmentTypeNum,DefLinkType.AppointmentType);
 			//Setup create two operatories with the same provider and set these available for wsnp
 			Clinic clinic=ClinicT.CreateClinic(desc);
 			long provNum=ProviderT.CreateProvider(desc);
 			Operatory opA=OperatoryT.CreateOperatory(desc+"A",desc+"A",provNum,clinicNum:clinic.ClinicNum,isWebSched:true);
 			Operatory opB=OperatoryT.CreateOperatory(desc+"B",desc+"B",provNum,clinicNum:clinic.ClinicNum,isWebSched:true);
-			DefLinkT.CreateDefLink(wsnpApptTypeDef.DefNum,opA.OperatoryNum,DefLinkType.Operatory);
-			DefLinkT.CreateDefLink(wsnpApptTypeDef.DefNum,opB.OperatoryNum,DefLinkType.Operatory);
+			DefLinkT.CreateDefLink(wsnpApptTypeDef.Id,opA.OperatoryNum,DefLinkType.Operatory);
+			DefLinkT.CreateDefLink(wsnpApptTypeDef.Id,opB.OperatoryNum,DefLinkType.Operatory);
 			//Set schedules, and confirm we can get all the timeslots we expect
 			Schedule provSched=ScheduleT.CreateSchedule(tomorrow,TimeSpan.FromHours(8),TimeSpan.FromHours(16),schedType:ScheduleType.Provider,clinicNum:clinic.ClinicNum,provNum:provNum,listOpNums:new List<long>() { opA.OperatoryNum,opB.OperatoryNum });
-			List<TimeSlot> listTimeSlots=TimeSlots.GetAvailableNewPatApptTimeSlots(tomorrow.Date,tomorrow.AddHours(23),clinic.ClinicNum,wsnpApptTypeDef.DefNum);
+			List<TimeSlot> listTimeSlots=TimeSlots.GetAvailableNewPatApptTimeSlots(tomorrow.Date,tomorrow.AddHours(23),clinic.ClinicNum,wsnpApptTypeDef.Id);
 			Assert.IsTrue(listTimeSlots.Any(x => x.DateTimeStart==tomorrow.AddHours(12)));
 			//Create an appointment that would use the appointment rule we created
 			Patient patA=PatientT.CreatePatient(desc+"A",provNum,clinic.ClinicNum);
 			Appointment apptA=AppointmentT.CreateAppointment(patA.PatNum,tomorrow.AddHours(12),opA.OperatoryNum,provNum);
 			ProcedureT.CreateProcedure(patA,"D0120",ProcStat.TP,"",50,provNum:provNum,aptNum:apptA.AptNum);
 			//Refetch timeslots and make sure that the list does not contain the double booked slot
-			List<TimeSlot> listTimeSlotsAfter=TimeSlots.GetAvailableNewPatApptTimeSlots(tomorrow.Date,tomorrow.AddHours(23),clinic.ClinicNum,wsnpApptTypeDef.DefNum);
+			List<TimeSlot> listTimeSlotsAfter=TimeSlots.GetAvailableNewPatApptTimeSlots(tomorrow.Date,tomorrow.AddHours(23),clinic.ClinicNum,wsnpApptTypeDef.Id);
 			Assert.IsFalse(listTimeSlotsAfter.Any(x => x.DateTimeStart==tomorrow.AddHours(12)));
 		}
 
@@ -1177,28 +1177,28 @@ namespace UnitTests.UnitTests {
 			//Clear appointment rules & create a new rule
 			AppointmentRuleT.ClearAppointmentRuleTable();
 			//Set the webschednewpat Pref to allow double booking
-			Prefs.UpdateInt(PrefName.WebSchedNewPatApptDoubleBooking,1);
+			Prefs.UpdateInt(PreferenceName.WebSchedNewPatApptDoubleBooking,1);
 			//Set the appttype as a webschednewpat appt type
 			AppointmentType apptType=AppointmentTypeT.CreateAppointmentType(desc,codeStr:"D0120",pattern:"//XXXX//");
-			Def wsnpApptTypeDef=DefT.CreateDefinition(DefCat.WebSchedNewPatApptTypes,desc,POut.Long(apptType.AppointmentTypeNum));
-			DefLinkT.CreateDefLink(wsnpApptTypeDef.DefNum,apptType.AppointmentTypeNum,DefLinkType.AppointmentType);
+			Definition wsnpApptTypeDef=DefT.CreateDefinition(DefinitionCategory.WebSchedNewPatApptTypes,desc,POut.Long(apptType.AppointmentTypeNum));
+			DefLinkT.CreateDefLink(wsnpApptTypeDef.Id,apptType.AppointmentTypeNum,DefLinkType.AppointmentType);
 			//Setup create two operatories with the same provider and set these available for wsnp
 			Clinic clinic=ClinicT.CreateClinic(desc);
 			long provNum=ProviderT.CreateProvider(desc);
 			Operatory opA=OperatoryT.CreateOperatory(desc+"A",desc+"A",provNum,clinicNum:clinic.ClinicNum,isWebSched:true);
 			Operatory opB=OperatoryT.CreateOperatory(desc+"B",desc+"B",provNum,clinicNum:clinic.ClinicNum,isWebSched:true);
-			DefLinkT.CreateDefLink(wsnpApptTypeDef.DefNum,opA.OperatoryNum,DefLinkType.Operatory);
-			DefLinkT.CreateDefLink(wsnpApptTypeDef.DefNum,opB.OperatoryNum,DefLinkType.Operatory);
+			DefLinkT.CreateDefLink(wsnpApptTypeDef.Id,opA.OperatoryNum,DefLinkType.Operatory);
+			DefLinkT.CreateDefLink(wsnpApptTypeDef.Id,opB.OperatoryNum,DefLinkType.Operatory);
 			//Set schedules, and confirm we can get all the timeslots we expect
 			Schedule provSched=ScheduleT.CreateSchedule(tomorrow,TimeSpan.FromHours(8),TimeSpan.FromHours(16),schedType:ScheduleType.Provider,clinicNum:clinic.ClinicNum,provNum:provNum,listOpNums:new List<long>() { opA.OperatoryNum,opB.OperatoryNum });
-			List<TimeSlot> listTimeSlots=TimeSlots.GetAvailableNewPatApptTimeSlots(tomorrow.Date,tomorrow.AddHours(23),clinic.ClinicNum,wsnpApptTypeDef.DefNum);
+			List<TimeSlot> listTimeSlots=TimeSlots.GetAvailableNewPatApptTimeSlots(tomorrow.Date,tomorrow.AddHours(23),clinic.ClinicNum,wsnpApptTypeDef.Id);
 			Assert.IsTrue(listTimeSlots.Any(x => x.DateTimeStart==tomorrow.AddHours(12)));
 			//Create an appointment that would use the appointment rule we created
 			Patient patA=PatientT.CreatePatient(desc+"A",provNum,clinic.ClinicNum);
 			Appointment apptA=AppointmentT.CreateAppointment(patA.PatNum,tomorrow.AddHours(12),opA.OperatoryNum,provNum);
 			ProcedureT.CreateProcedure(patA,"D0120",ProcStat.TP,"",50,provNum:provNum,aptNum:apptA.AptNum);
 			//Refetch timeslots and make sure that the list does not contain the double booked slot
-			List<TimeSlot> listTimeSlotsAfter=TimeSlots.GetAvailableNewPatApptTimeSlots(tomorrow.Date,tomorrow.AddHours(23),clinic.ClinicNum,wsnpApptTypeDef.DefNum);
+			List<TimeSlot> listTimeSlotsAfter=TimeSlots.GetAvailableNewPatApptTimeSlots(tomorrow.Date,tomorrow.AddHours(23),clinic.ClinicNum,wsnpApptTypeDef.Id);
 			Assert.IsFalse(listTimeSlotsAfter.Any(x => x.DateTimeStart==tomorrow.AddHours(12)));
 		}
 
@@ -1209,7 +1209,7 @@ namespace UnitTests.UnitTests {
 			//Clear appointment rules & create a new rule
 			AppointmentRuleT.ClearAppointmentRuleTable();
 			//Set the webschednewpat Pref to allow double booking
-			Prefs.UpdateInt(PrefName.WebSchedRecallDoubleBooking,0);
+			Prefs.UpdateInt(PreferenceName.WebSchedRecallDoubleBooking,0);
 			//Create a recall type
 			RecallTypeT.ClearRecallTypeTable();
 			RecallType recallType=RecallTypeT.CreateRecallType(timePattern:"XXXX");
@@ -1242,7 +1242,7 @@ namespace UnitTests.UnitTests {
 			//Clear appointment rules & create a new rule
 			AppointmentRuleT.ClearAppointmentRuleTable();
 			//Set the webschednewpat Pref to allow double booking
-			Prefs.UpdateInt(PrefName.WebSchedRecallDoubleBooking,1);
+			Prefs.UpdateInt(PreferenceName.WebSchedRecallDoubleBooking,1);
 			//Create a recall type
 			RecallTypeT.ClearRecallTypeTable();
 			RecallType recallType=RecallTypeT.CreateRecallType(timePattern:"XXXX");

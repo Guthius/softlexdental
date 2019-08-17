@@ -56,7 +56,7 @@ namespace OpenDental {
 		///This should only be called if a dynamic sheetDef was added/modified/deleted, the SheetLayoutMode has changed, or a new user signed in.</summary>
 		public void RefreshSheetLayout() {
 			int countPreviousTotal=(ListLayoutSheetDefs?.Count??0);//Null when first loading
-			long defaultSheetDefNum=Preferences.GetLong(PrefName.ChartDefaultLayoutSheetDefNum);
+			long defaultSheetDefNum=Preference.GetLong(PreferenceName.ChartDefaultLayoutSheetDefNum);
 			ListLayoutSheetDefs=SheetDefs.GetCustomForType(_sheetType);
 			ListLayoutSheetDefs.Add(SheetsInternal.GetSheetDef(SheetsInternal.GetInternalType(_sheetType)));
 			ListLayoutSheetDefs=ListLayoutSheetDefs
@@ -99,8 +99,8 @@ namespace OpenDental {
 			if(userPref!=null && ListLayoutSheetDefs.Any(x => x.SheetDefNum==userPref.Fkey)) {
 				return ListLayoutSheetDefs.FirstOrDefault(x => x.SheetDefNum==userPref.Fkey);//Use the layout from the user pref.
 			}
-			else if(ListLayoutSheetDefs.Any(x => x.SheetDefNum==Preferences.GetLong(PrefName.ChartDefaultLayoutSheetDefNum))) {//Use practice default.
-				return ListLayoutSheetDefs.FirstOrDefault(x => x.SheetDefNum==Preferences.GetLong(PrefName.ChartDefaultLayoutSheetDefNum));
+			else if(ListLayoutSheetDefs.Any(x => x.SheetDefNum==Preference.GetLong(PreferenceName.ChartDefaultLayoutSheetDefNum))) {//Use practice default.
+				return ListLayoutSheetDefs.FirstOrDefault(x => x.SheetDefNum==Preference.GetLong(PreferenceName.ChartDefaultLayoutSheetDefNum));
 			}
 			else {
 				return ListLayoutSheetDefs[0];//Use first in the list.

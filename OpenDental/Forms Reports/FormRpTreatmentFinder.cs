@@ -551,10 +551,10 @@ namespace OpenDental{
 			  comboBoxMultiProv.Items.Add(new ODBoxItem<Provider>(_listProviders[i].GetLongDesc(),_listProviders[i]));
 			}
 			comboBoxMultiProv.SetSelected(0,true);
-			comboBoxMultiBilling.Items.Add(new ODBoxItem<Def>("All",new Def() { DefNum = 0 }));
-			List<Def> listBillingTypeDefs=Defs.GetDefsForCategory(DefCat.BillingTypes,true);
+			comboBoxMultiBilling.Items.Add(new ODBoxItem<Definition>("All",new Definition()));
+			List<Definition> listBillingTypeDefs=Definition.GetByCategory(DefinitionCategory.BillingTypes);
 			for(int i=0;i<listBillingTypeDefs.Count;i++){
-				comboBoxMultiBilling.Items.Add(new ODBoxItem<Def>(listBillingTypeDefs[i].ItemName,listBillingTypeDefs[i]));
+				comboBoxMultiBilling.Items.Add(new ODBoxItem<Definition>(listBillingTypeDefs[i].Description,listBillingTypeDefs[i]));
 			}
 			comboBoxMultiBilling.SetSelected(0,true);
 			comboMonthStart.SelectedIndex=0;
@@ -563,7 +563,7 @@ namespace OpenDental{
 				labelClinic.Visible=true;
 				FillClinics();
 			}
-			checkBenefitAssumeGeneral.Checked=Preferences.GetBool(PrefName.TreatFinderProcsAllGeneral);
+			checkBenefitAssumeGeneral.Checked=Preference.GetBool(PreferenceName.TreatFinderProcsAllGeneral);
 			FillGrid();
 		}
 
@@ -646,7 +646,7 @@ namespace OpenDental{
 			Cursor=Cursors.WaitCursor;
 			table=RpTreatmentFinder.GetTreatmentFinderList(checkIncludeNoIns.Checked,checkIncludePatsWithApts.Checked,monthStart,dateSince,aboveAmount,
 				comboBoxMultiProv.ListSelectedItems.Select(x => ((ODBoxItem<Provider>)x).Tag).Select(x => x.ProvNum).ToList(),
-				comboBoxMultiBilling.ListSelectedItems.Select(x => ((ODBoxItem<Def>)x).Tag).Select(x => x.DefNum).ToList(),codeRangeFilter.StartRange,
+				comboBoxMultiBilling.ListSelectedItems.Select(x => ((ODBoxItem<Definition>)x).Tag).Select(x => x.Id).ToList(),codeRangeFilter.StartRange,
 				codeRangeFilter.EndRange,listClinicNums,checkBenefitAssumeGeneral.Checked);
 			ODGridRow row;
 			for(int i=0;i<table.Rows.Count;i++) {
@@ -967,16 +967,16 @@ namespace OpenDental{
       saveFileDialog2.AddExtension=true;
 			saveFileDialog2.Title=Lan.g(this,"Treatment Finder");
 			saveFileDialog2.FileName=Lan.g(this,"Treatment Finder");
-			if(!Directory.Exists(Preferences.GetString(PrefName.ExportPath) )){
+			if(!Directory.Exists(Preference.GetString(PreferenceName.ExportPath) )){
 				try{
-					Directory.CreateDirectory(Preferences.GetString(PrefName.ExportPath) );
-					saveFileDialog2.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
+					Directory.CreateDirectory(Preference.GetString(PreferenceName.ExportPath) );
+					saveFileDialog2.InitialDirectory=Preference.GetString(PreferenceName.ExportPath);
 				}
 				catch{
 					//initialDirectory will be blank
 				}
 			}
-			else saveFileDialog2.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
+			else saveFileDialog2.InitialDirectory=Preference.GetString(PreferenceName.ExportPath);
 			saveFileDialog2.Filter="Text files(*.txt)|*.txt|Excel Files(*.xls)|*.xls|All files(*.*)|*.*";
       saveFileDialog2.FilterIndex=0;
 		  if(saveFileDialog2.ShowDialog()!=DialogResult.OK){

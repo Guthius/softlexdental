@@ -175,7 +175,7 @@ namespace OpenDental{
 			}
 			gridMain.Columns.Add(new ODGridColumn(Lan.g(this,"Letter"),100));
 			gridMain.Rows.Clear();
-			List<Employee> listEmpsAll = Employees.GetDeepCopy(true).OrderBy(x => x.LName).ThenBy(x => x.FName).ToList();
+			List<Employee> listEmpsAll = Employee.All().OrderBy(x => x.LastName).ThenBy(x => x.FirstName).ToList();
 			List<ClockEvent> listClockEventsAll = ClockEvents.GetAllForPeriod(_monthT2,_monthT2.AddMonths(3));//get all three months of clock events
 			listClockEventsAll.RemoveAll(x => x.ClockStatus==TimeClockStatus.Break);//remove breaks, they have already been acounted for on the clock events.
 			listClockEventsAll.RemoveAll(x => x.TimeDisplayed2<=x.TimeDisplayed1);//Remove all mal-formed entries with stop time before start time. (also if user has not clocked out.)
@@ -185,28 +185,28 @@ namespace OpenDental{
 				//Construct each row, then filter out if neccesary.
 				ODGridRow row = new ODGridRow();
 				//Name
-				row.Cells.Add(empCur.LName);
-				row.Cells.Add(empCur.FName);
+				row.Cells.Add(empCur.LastName);
+				row.Cells.Add(empCur.FirstName);
 				//Month T-2 (current month -2 months)
 				TimeSpan ts2 = TimeSpan.FromTicks(listClockEventsAll
-					.FindAll(x => x.EmployeeNum==empCur.EmployeeNum
+					.FindAll(x => x.EmployeeNum==empCur.Id
 						&& x.TimeDisplayed1.Year==_monthT2.Year
 						&& x.TimeDisplayed1.Month==_monthT2.Month)
 					.Select(x => (x.TimeDisplayed2-x.TimeDisplayed1)+(x.AdjustIsOverridden ? x.Adjust : x.AdjustAuto))
 					.Sum(x=>x.Ticks));
-				ts2.Add(TimeSpan.FromTicks(listTimeAdjustAll.FindAll(x => x.EmployeeNum==empCur.EmployeeNum
+				ts2.Add(TimeSpan.FromTicks(listTimeAdjustAll.FindAll(x => x.EmployeeNum==empCur.Id
 						&& x.TimeEntry.Year==_monthT2.Year
 						&& x.TimeEntry.Month==_monthT2.Month)
 						.Sum(x => x.RegHours.Ticks)));
 				row.Cells.Add(new ODGridCell(string.Format("{0:0.00}",Math.Round(ts2.TotalHours,2,MidpointRounding.AwayFromZero))) { CellColor=(ts2.TotalHours<125 ? lightRed : Color.Empty) });
 				//Month T-1
 				TimeSpan ts1 = TimeSpan.FromTicks(listClockEventsAll
-					.FindAll(x => x.EmployeeNum==empCur.EmployeeNum
+					.FindAll(x => x.EmployeeNum==empCur.Id
 						&& x.TimeDisplayed1.Year==_monthT1.Year
 						&& x.TimeDisplayed1.Month==_monthT1.Month)
 					.Select(x => (x.TimeDisplayed2-x.TimeDisplayed1)+(x.AdjustIsOverridden ? x.Adjust : x.AdjustAuto))
 					.Sum(x => x.Ticks));
-				ts1.Add(TimeSpan.FromTicks(listTimeAdjustAll.FindAll(x => x.EmployeeNum==empCur.EmployeeNum
+				ts1.Add(TimeSpan.FromTicks(listTimeAdjustAll.FindAll(x => x.EmployeeNum==empCur.Id
 						&& x.TimeEntry.Year==_monthT1.Year
 						&& x.TimeEntry.Month==_monthT1.Month)
 						.Select(x => x.RegHours)
@@ -214,12 +214,12 @@ namespace OpenDental{
 				row.Cells.Add(new ODGridCell(string.Format("{0:0.00}",Math.Round(ts1.TotalHours,2,MidpointRounding.AwayFromZero))) { CellColor=(ts1.TotalHours<125 ? lightRed : Color.Empty) });
 				//Month T-0
 				TimeSpan ts0 = TimeSpan.FromTicks(listClockEventsAll
-					.FindAll(x => x.EmployeeNum==empCur.EmployeeNum
+					.FindAll(x => x.EmployeeNum==empCur.Id
 						&& x.TimeDisplayed1.Year==_monthT0.Year
 						&& x.TimeDisplayed1.Month==_monthT0.Month)
 					.Select(x => (x.TimeDisplayed2-x.TimeDisplayed1)+(x.AdjustIsOverridden ? x.Adjust : x.AdjustAuto))
 					.Sum(x => x.Ticks));
-				ts0.Add(TimeSpan.FromTicks(listTimeAdjustAll.FindAll(x => x.EmployeeNum==empCur.EmployeeNum
+				ts0.Add(TimeSpan.FromTicks(listTimeAdjustAll.FindAll(x => x.EmployeeNum==empCur.Id
 						&& x.TimeEntry.Year==_monthT0.Year
 						&& x.TimeEntry.Month==_monthT0.Month)
 						.Select(x => x.RegHours)

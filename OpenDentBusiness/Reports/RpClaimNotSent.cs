@@ -11,7 +11,7 @@ namespace OpenDentBusiness
         public static DataTable GetClaimsNotSent(DateTime fromDate, DateTime toDate, List<long> listClinicNums
             , bool hasClaimTypeExpanded, ClaimNotSentStatuses claimStatusFilter)
         {
-            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Prefs.HasClinicsEnabledNoCache);
+            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Preference.HasClinicsEnabledNoCache);
             string command = "";
             string whereClin = "";
             string claimFilter = "";

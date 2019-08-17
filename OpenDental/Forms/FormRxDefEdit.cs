@@ -430,7 +430,7 @@ namespace OpenDental{
 			textNotes.Text=RxDefCur.Notes;
 			textPatInstruction.Text=RxDefCur.PatientInstruction;
 			checkControlled.Checked=RxDefCur.IsControlled;
-			if(Preferences.GetBool(PrefName.RxHasProc)) {
+			if(Preference.GetBool(PreferenceName.RxHasProc)) {
 				checkProcRequired.Enabled=true;
 				checkProcRequired.Checked=RxDefCur.IsProcRequired;
 			}
@@ -445,11 +445,11 @@ namespace OpenDental{
 				butRxNormSelect.Visible=false;
 				return;
 			}
-			if(RxDefCur.RxCui==0) {
+			if(string.IsNullOrEmpty(RxDefCur.RxCui)) {
 				textRxCui.Text="";
 			}
 			else {
-				textRxCui.Text=RxDefCur.RxCui.ToString()+" - "+RxNorms.GetDescByRxCui(RxDefCur.RxCui.ToString());
+				textRxCui.Text=RxDefCur.RxCui.ToString()+" - "+RxNorms.GetDescByRxCui(RxDefCur.RxCui);
 			}
 		}
 
@@ -458,7 +458,7 @@ namespace OpenDental{
 			listAlerts.Items.Clear();
 			for(int i=0;i<RxAlertList.Count;i++) {
 				if(RxAlertList[i].DiseaseDefNum>0) {
-					listAlerts.Items.Add(DiseaseDefs.GetName(RxAlertList[i].DiseaseDefNum));
+					listAlerts.Items.Add(DiseaseDef.GetName(RxAlertList[i].DiseaseDefNum));
 				}
 				if(RxAlertList[i].AllergyDefNum>0) {
 					AllergyDef allergyDef=AllergyDefs.GetOne(RxAlertList[i].AllergyDefNum);
@@ -467,10 +467,10 @@ namespace OpenDental{
 					}
 				}
 				if(RxAlertList[i].MedicationNum>0) {
-					Medications.RefreshCache();
-					Medication med=Medications.GetMedication(RxAlertList[i].MedicationNum);
+                    Medication.Refresh();
+					Medication med= Medication.GetById(RxAlertList[i].MedicationNum);
 					if(med!=null) {
-						listAlerts.Items.Add(med.MedName);
+						listAlerts.Items.Add(med.Description);
 					}
 				}
 			}
@@ -496,7 +496,7 @@ namespace OpenDental{
 			}
 			for(int i=0;i<FormD.ListSelectedDiseaseDefs.Count;i++) {
 				RxAlert alert=new RxAlert();
-				alert.DiseaseDefNum=FormD.ListSelectedDiseaseDefs[i].DiseaseDefNum;
+				alert.DiseaseDefNum=FormD.ListSelectedDiseaseDefs[i].Id;
 				alert.RxDefNum=RxDefCur.RxDefNum;
 				RxAlerts.Insert(alert);
 			}
@@ -539,7 +539,7 @@ namespace OpenDental{
 			if(FormRN.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			RxDefCur.RxCui=PIn.Long(FormRN.SelectedRxNorm.RxCui);
+			RxDefCur.RxCui=FormRN.SelectedRxNorm.RxCui;
 			FillRxCui();
 		}
 
@@ -553,7 +553,7 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			//RxCui is set when butRxNormSelect is clicked.
-			if(CultureInfo.CurrentCulture.Name.EndsWith("US") && RxDefCur.RxCui==0) {//United States
+			if(CultureInfo.CurrentCulture.Name.EndsWith("US") && string.IsNullOrEmpty(RxDefCur.RxCui)) {//United States
 				if(!MsgBox.Show(this,true,"Warning: RxNorm was not picked.  "
 					+"RxNorm uniquely identifies drugs in the United States and helps you keep your medications organized.  "
 					+"RxNorm is used to send information to and from eRx if you are using or plan to use eRx.\r\n"

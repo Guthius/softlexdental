@@ -28,7 +28,7 @@ namespace OpenDental
         ///and the payment type has not been set.</summary>
         private int _indexClinicRevert;
 
-        private List<Def> _listPaymentTypeDefs;
+        private List<Definition> _listPaymentTypeDefs;
 
         public FormPayConnectSetup() => InitializeComponent();
 
@@ -112,11 +112,11 @@ namespace OpenDental
             portalPayEnabledCheckBox.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps, PayConnect.ProgramProperties.PatientPortalPaymentsEnabled, clinicNum));
             tokenTextBox.Text = PIn.String(ProgramProperties.GetPropValFromList(_listProgProps, PayConnect.ProgramProperties.PatientPortalPaymentsToken, clinicNum));
             comboPaymentType.Items.Clear();
-            _listPaymentTypeDefs = Defs.GetDefsForCategory(DefCat.PaymentTypes, true);
+            _listPaymentTypeDefs = Definition.GetByCategory(DefinitionCategory.PaymentTypes);;
             for (int i = 0; i < _listPaymentTypeDefs.Count; i++)
             {
-                comboPaymentType.Items.Add(_listPaymentTypeDefs[i].ItemName);
-                if (_listPaymentTypeDefs[i].DefNum.ToString() == payTypeDefNum)
+                comboPaymentType.Items.Add(_listPaymentTypeDefs[i].Description);
+                if (_listPaymentTypeDefs[i].Id.ToString() == payTypeDefNum)
                 {
                     comboPaymentType.SelectedIndex = i;
                 }
@@ -166,7 +166,7 @@ namespace OpenDental
             string payTypeCur = "";
             if (comboPaymentType.SelectedIndex > -1)
             {
-                payTypeCur = _listPaymentTypeDefs[comboPaymentType.SelectedIndex].DefNum.ToString();
+                payTypeCur = _listPaymentTypeDefs[comboPaymentType.SelectedIndex].Id.ToString();
             }
             //for each distinct ClinicNum in the prog property list for PayConnect except HQ
             foreach (long clinicNum in _listProgProps.Select(x => x.ClinicNum).Where(x => x > 0).Distinct())
@@ -197,7 +197,7 @@ namespace OpenDental
             string payTypeSelected = "";
             if (comboPaymentType.SelectedIndex > -1)
             {
-                payTypeSelected = _listPaymentTypeDefs[comboPaymentType.SelectedIndex].DefNum.ToString();
+                payTypeSelected = _listPaymentTypeDefs[comboPaymentType.SelectedIndex].Id.ToString();
             }
             string processingMethodSelected = comboDefaultProcessing.SelectedIndex.ToString();
             //set the values in the list for this clinic
@@ -460,7 +460,7 @@ namespace OpenDental
                 if (((ProgramProperties.GetPropValFromList(_listProgProps, "Username", _listUserClinicNums[i]) != "" //if username set
                     && ProgramProperties.GetPropValFromList(_listProgProps, "Password", _listUserClinicNums[i]) != "") //and password set
                     || ProgramProperties.GetPropValFromList(_listProgProps, "TerminalProcessingEnabled", _listUserClinicNums[i]) == "1")//or terminal enabled
-                    && !_listPaymentTypeDefs.Any(x => x.DefNum.ToString() == payTypeCur)) //and paytype is not a valid DefNum
+                    && !_listPaymentTypeDefs.Any(x => x.Id.ToString() == payTypeCur)) //and paytype is not a valid DefNum
                 {
                     MsgBox.Show(this, "Please select the payment type for all clinics with PayConnect username and password set.");
                     return;

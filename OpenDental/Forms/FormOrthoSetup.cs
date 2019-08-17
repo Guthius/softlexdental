@@ -22,17 +22,17 @@ namespace OpenDental {
 		}
 
 		private void FormOrthoSetup_Load(object sender,EventArgs e) {
-			checkPatClone.Checked=Preferences.GetBool(PrefName.ShowFeaturePatientClone);
-			checkApptModuleShowOrthoChartItem.Checked=Preferences.GetBool(PrefName.ApptModuleShowOrthoChartItem);
-			checkOrthoEnabled.Checked=Preferences.GetBool(PrefName.OrthoEnabled);
-			checkOrthoFinancialInfoInChart.Checked=Preferences.GetBool(PrefName.OrthoCaseInfoInOrthoChart);
-			checkOrthoClaimMarkAsOrtho.Checked=Preferences.GetBool(PrefName.OrthoClaimMarkAsOrtho);
-			checkOrthoClaimUseDatePlacement.Checked=Preferences.GetBool(PrefName.OrthoClaimUseDatePlacement);
-			textOrthoMonthsTreat.Text=Preferences.GetByte(PrefName.OrthoDefaultMonthsTreat).ToString();
-			_orthoAutoProcCodeNum=Preferences.GetLong(PrefName.OrthoAutoProcCodeNum);
+			checkPatClone.Checked=Preference.GetBool(PreferenceName.ShowFeaturePatientClone);
+			checkApptModuleShowOrthoChartItem.Checked=Preference.GetBool(PreferenceName.ApptModuleShowOrthoChartItem);
+			checkOrthoEnabled.Checked=Preference.GetBool(PreferenceName.OrthoEnabled);
+			checkOrthoFinancialInfoInChart.Checked=Preference.GetBool(PreferenceName.OrthoCaseInfoInOrthoChart);
+			checkOrthoClaimMarkAsOrtho.Checked=Preference.GetBool(PreferenceName.OrthoClaimMarkAsOrtho);
+			checkOrthoClaimUseDatePlacement.Checked=Preference.GetBool(PreferenceName.OrthoClaimUseDatePlacement);
+			textOrthoMonthsTreat.Text=Preference.GetByte(PreferenceName.OrthoDefaultMonthsTreat).ToString();
+			_orthoAutoProcCodeNum=Preference.GetLong(PreferenceName.OrthoAutoProcCodeNum);
 			textOrthoAutoProc.Text=ProcedureCodes.GetStringProcCode(_orthoAutoProcCodeNum);
-			checkConsolidateInsPayment.Checked=Preferences.GetBool(PrefName.OrthoInsPayConsolidated);
-			string strListOrthoNums = Preferences.GetString(PrefName.OrthoPlacementProcsList);
+			checkConsolidateInsPayment.Checked=Preference.GetBool(PreferenceName.OrthoInsPayConsolidated);
+			string strListOrthoNums = Preference.GetString(PreferenceName.OrthoPlacementProcsList);
 			if(strListOrthoNums!="") {
 				_listOrthoPlacementCodeNums.AddRange(strListOrthoNums.Split(new char[] { ',' }).ToList().Select(x => PIn.Long(x)));
 			}
@@ -92,19 +92,19 @@ namespace OpenDental {
 				MsgBox.Show(this,"Default months treatment must be between 0 and 255 months.");
 				return;
 			}
-			if(Preferences.GetBool(PrefName.ShowFeaturePatientClone)!=checkPatClone.Checked) {
+			if(Preference.GetBool(PreferenceName.ShowFeaturePatientClone)!=checkPatClone.Checked) {
 				MsgBox.Show(this,"You will need to restart OpenDental for this change to take effect.");
 			}
-			if(Prefs.UpdateBool(PrefName.ShowFeaturePatientClone,checkPatClone.Checked)
-			| Prefs.UpdateBool(PrefName.ApptModuleShowOrthoChartItem,checkApptModuleShowOrthoChartItem.Checked)
-			| Prefs.UpdateBool(PrefName.OrthoEnabled,checkOrthoEnabled.Checked)
-			| Prefs.UpdateBool(PrefName.OrthoCaseInfoInOrthoChart,checkOrthoFinancialInfoInChart.Checked)
-			| Prefs.UpdateBool(PrefName.OrthoClaimMarkAsOrtho,checkOrthoClaimMarkAsOrtho.Checked)
-			| Prefs.UpdateBool(PrefName.OrthoClaimUseDatePlacement,checkOrthoClaimUseDatePlacement.Checked)
-			| Prefs.UpdateByte(PrefName.OrthoDefaultMonthsTreat,PIn.Byte(textOrthoMonthsTreat.Text))
-			| Prefs.UpdateBool(PrefName.OrthoInsPayConsolidated,checkConsolidateInsPayment.Checked)
-			| Prefs.UpdateLong(PrefName.OrthoAutoProcCodeNum,_orthoAutoProcCodeNum)
-			| Prefs.UpdateString(PrefName.OrthoPlacementProcsList,string.Join(",",_listOrthoPlacementCodeNums))
+			if(Preference.Update(PreferenceName.ShowFeaturePatientClone,checkPatClone.Checked)
+			| Preference.Update(PreferenceName.ApptModuleShowOrthoChartItem,checkApptModuleShowOrthoChartItem.Checked)
+			| Preference.Update(PreferenceName.OrthoEnabled,checkOrthoEnabled.Checked)
+			| Preference.Update(PreferenceName.OrthoCaseInfoInOrthoChart,checkOrthoFinancialInfoInChart.Checked)
+			| Preference.Update(PreferenceName.OrthoClaimMarkAsOrtho,checkOrthoClaimMarkAsOrtho.Checked)
+			| Preference.Update(PreferenceName.OrthoClaimUseDatePlacement,checkOrthoClaimUseDatePlacement.Checked)
+			| Preference.Update(PreferenceName.OrthoDefaultMonthsTreat,PIn.Byte(textOrthoMonthsTreat.Text))
+			| Preference.Update(PreferenceName.OrthoInsPayConsolidated,checkConsolidateInsPayment.Checked)
+			| Preference.Update(PreferenceName.OrthoAutoProcCodeNum,_orthoAutoProcCodeNum)
+			| Preference.Update(PreferenceName.OrthoPlacementProcsList,string.Join(",",_listOrthoPlacementCodeNums))
 			) {
 				_hasChanges=true;
 			}

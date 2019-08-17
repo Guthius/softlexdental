@@ -255,7 +255,7 @@ namespace OpenDental.Bridges {
 			}
 			//store the image in the database
 			string imageCat=ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb),ProgramProps.ImageCategory);
-			Document doc=ImageStore.Import(saveImage,(Defs.GetDef(DefCat.ImageCats,PIn.Long(imageCat)).DefNum),ImageType.Photo,patCur);
+			Document doc=ImageStore.Import(saveImage,(Defs.GetDef(DefinitionCategory.ImageCats,PIn.Long(imageCat)).Id),ImageType.Photo,patCur);
 			doc.ToothNumbers=img.FormattedTeeth;
 			doc.DateCreated=img.AcquisitionDate;
 			doc.Description=doc.ToothNumbers;

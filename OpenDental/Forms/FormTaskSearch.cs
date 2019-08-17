@@ -15,7 +15,7 @@ namespace OpenDental {
 
 		private DataTable _tableTasks;
 		private List<long> _listPreLoadedTaskNums;
-		private List<Def> _listTaskPriorities;
+		private List<Definition> _listTaskPriorities;
 		private List<User> _listUsers;
 		public TaskObjectType GotoType;
 		public long UserNum;
@@ -34,7 +34,7 @@ namespace OpenDental {
 				butClose.Text="Cancel";
 			}
 			//Note: DateTime strings that are empty actually are " " due to how the empty datetime control behaves.
-			_listTaskPriorities=Defs.GetDefsForCategory(DefCat.TaskPriorities);
+			_listTaskPriorities=Definition.GetByCategory(DefinitionCategory.TaskPriorities);;
 			long userNum=0;
 			comboUsers.Items.Add(Lan.g(this,"All"));
 			comboUsers.Items.Add(Lan.g(this,"Me"));
@@ -43,7 +43,7 @@ namespace OpenDental {
 			_listUsers.ForEach(x => comboUsers.Items.Add(x.UserName));
 			comboPriority.Items.Add(Lan.g(this,"All"));
 			for(int i=0;i<_listTaskPriorities.Count;i++) {
-				comboPriority.Items.Add(_listTaskPriorities[i].ItemName);
+				comboPriority.Items.Add(_listTaskPriorities[i].Description);
 			}
 			comboPriority.SelectedIndex=0;
 			checkLimit.Checked=true;
@@ -96,7 +96,7 @@ namespace OpenDental {
 		private void RefreshTable() {
 			long priority=0;
 			if(comboPriority.SelectedIndex!=0) {
-				priority=_listTaskPriorities[comboPriority.SelectedIndex-1].DefNum;
+				priority=_listTaskPriorities[comboPriority.SelectedIndex-1].Id;
 			}
 			long userNum=0;
 			if(comboUsers.SelectedIndex==1){//Me

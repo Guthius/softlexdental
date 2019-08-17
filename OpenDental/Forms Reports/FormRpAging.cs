@@ -50,7 +50,7 @@ namespace OpenDental{
 		private CheckBox checkAgeNegAdjs;
 		private CheckBox checkAgePatPayPlanPayments;
 		private Label labelFutureTrans;
-		private List<Def> _listBillingTypeDefs;
+		private List<Definition> _listBillingTypeDefs;
 
 		///<summary></summary>
 		public FormRpAging(){
@@ -561,19 +561,19 @@ namespace OpenDental{
 
 		private void FormAging_Load(object sender, System.EventArgs e) {
 			_listProviders=Providers.GetListReports();
-			DateTime lastAgingDate=Preferences.GetDate(PrefName.DateLastAging);
+			DateTime lastAgingDate=Preference.GetDate(PreferenceName.DateLastAging);
 			if(lastAgingDate.Year<1880) {
 				textDate.Text="";
 			}
-			else if(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)){
+			else if(Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily)){
 				textDate.Text=lastAgingDate.ToShortDateString();
 			}
 			else{
 				textDate.Text=DateTime.Today.ToShortDateString();
 			}
-			_listBillingTypeDefs=Defs.GetDefsForCategory(DefCat.BillingTypes,true);
+			_listBillingTypeDefs=Definition.GetByCategory(DefinitionCategory.BillingTypes);;
 			for(int i=0;i<_listBillingTypeDefs.Count;i++){
-				listBillType.Items.Add(_listBillingTypeDefs[i].ItemName);
+				listBillType.Items.Add(_listBillingTypeDefs[i].Description);
 			}
 			if(listBillType.Items.Count>0){
 				listBillType.SelectedIndex=0;
@@ -605,13 +605,13 @@ namespace OpenDental{
 					listClin.Visible=false;
 				}
 			}
-			checkAgeNegAdjs.Checked=Preferences.GetBool(PrefName.AgingNegativeAdjsByAdjDate);
-			if(Preferences.GetBool(PrefName.AgingReportShowAgePatPayplanPayments)) {
+			checkAgeNegAdjs.Checked=Preference.GetBool(PreferenceName.AgingNegativeAdjsByAdjDate);
+			if(Preference.GetBool(PreferenceName.AgingReportShowAgePatPayplanPayments)) {
 				//Visibility set to false in designer, only set to visible here.  No UI for pref, only set true via query for specific customer.
 				checkAgePatPayPlanPayments.Visible=true;
 			}
-			if(Preferences.GetBool(PrefName.FutureTransDatesAllowed) || Preferences.GetBool(PrefName.AccountAllowFutureDebits) 
-				|| Preferences.GetBool(PrefName.AllowFutureInsPayments)) 
+			if(Preference.GetBool(PreferenceName.FutureTransDatesAllowed) || Preference.GetBool(PreferenceName.AccountAllowFutureDebits) 
+				|| Preference.GetBool(PreferenceName.AllowFutureInsPayments)) 
 			{
 				labelFutureTrans.Visible=true;//Set to false in designer
 			}
@@ -714,7 +714,7 @@ namespace OpenDental{
 			rpo.DoAgePatPayPlanPayments=checkAgePatPayPlanPayments.Checked;
 			rpo.IsInsPayWoCombined=false;
 			if(!checkBillTypesAll.Checked) {
-				rpo.ListBillTypes=listBillType.SelectedIndices.OfType<int>().Select(x => _listBillingTypeDefs[x].DefNum).ToList();
+				rpo.ListBillTypes=listBillType.SelectedIndices.OfType<int>().Select(x => _listBillingTypeDefs[x].Id).ToList();
 			}
 			if(!checkProvAll.Checked) {
 				rpo.ListProvNums=listProv.SelectedIndices.OfType<int>().Select(x => _listProviders[x].ProvNum).ToList();
@@ -761,7 +761,7 @@ namespace OpenDental{
 			report.IsLandscape=checkHasDateLastPay.Checked;
 			report.ReportName=Lan.g(this,"AGING OF ACCOUNTS RECEIVABLE REPORT");
 			report.AddTitle("Aging Report",Lan.g(this,"AGING OF ACCOUNTS RECEIVABLE"));
-			report.AddSubTitle("PracTitle",Preferences.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("PracTitle",Preference.GetString(PreferenceName.PracticeTitle));
 			report.AddSubTitle("AsOf",Lan.g(this,"As of ")+textDate.Text);
 			if(radioAny.Checked){
 				report.AddSubTitle("Balance",Lan.g(this,"Any Balance"));
@@ -779,7 +779,7 @@ namespace OpenDental{
 				report.AddSubTitle("AllBillingTypes",Lan.g(this,"All Billing Types"));
 			}
 			else{
-				report.AddSubTitle("",string.Join(", ",listBillType.SelectedIndices.OfType<int>().Select(x => _listBillingTypeDefs[x].ItemName)));
+				report.AddSubTitle("",string.Join(", ",listBillType.SelectedIndices.OfType<int>().Select(x => _listBillingTypeDefs[x].Description)));
 			}
 			if(checkProvAll.Checked) {
 				report.AddSubTitle("Providers",Lan.g(this,"All Providers"));

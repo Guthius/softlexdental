@@ -19,10 +19,10 @@ namespace OpenDental {
 
 		private void FormEvaluationCriterionDefEdit_Load(object sender,EventArgs e) {
 			textDescript.Text=_evalCritDef.CriterionDescript;
-			_gradeScale=GradingScales.GetOne(_evalCritDef.GradingScaleNum);
+			_gradeScale=GradingScale.GetById(_evalCritDef.GradingScaleNum);
 			textGradeScaleName.Text=_gradeScale.Description;
 			checkIsCategoryName.Checked=_evalCritDef.IsCategoryName;
-			if(_gradeScale.ScaleType==EnumScaleType.Weighted) {
+			if(_gradeScale.ScaleType==GradingScaleType.Weighted) {
 				textPoints.Visible=true;
 				labelPoints.Visible=true;
 				textPoints.Text=_evalCritDef.MaxPointsPoss.ToString();
@@ -42,8 +42,8 @@ namespace OpenDental {
 			if(FormGS.DialogResult==DialogResult.OK) {
 				textGradeScaleName.Text=FormGS.SelectedGradingScale.Description;
 				_gradeScale=FormGS.SelectedGradingScale;
-				_evalCritDef.GradingScaleNum=_gradeScale.GradingScaleNum;
-				if(FormGS.SelectedGradingScale.ScaleType==EnumScaleType.Weighted) {
+				_evalCritDef.GradingScaleNum=_gradeScale.Id;
+				if(FormGS.SelectedGradingScale.ScaleType==GradingScaleType.Weighted) {
 					textPoints.Visible=true;
 					labelPoints.Visible=true;
 					textPoints.Text=_evalCritDef.MaxPointsPoss.ToString();
@@ -73,7 +73,7 @@ namespace OpenDental {
 				return;
 			}
 			float points=0;
-			if(_gradeScale.ScaleType==EnumScaleType.Weighted && !float.TryParse(textPoints.Text,out points)) {
+			if(_gradeScale.ScaleType==GradingScaleType.Weighted && !float.TryParse(textPoints.Text,out points)) {
 				MsgBox.Show(this,"The specified point value is not a valid number.  Please input a valid number to save the criterion.");
 				return;
 			}

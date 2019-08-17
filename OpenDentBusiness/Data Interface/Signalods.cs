@@ -16,22 +16,6 @@ namespace OpenDentBusiness
     ///<summary></summary>
     public class Signalods
     {
-        #region Get Methods
-        #endregion
-
-        #region Modification Methods
-
-        #region Insert
-        #endregion
-
-        #region Update
-        #endregion
-
-        #region Delete
-        #endregion
-
-        #endregion
-
         #region Misc Methods
         #endregion
 
@@ -320,7 +304,7 @@ namespace OpenDentBusiness
             {
                 return false;
             }
-            int days = Preferences.GetInt(PrefName.ApptAutoRefreshRange);
+            int days = Preference.GetInt(PreferenceName.ApptAutoRefreshRange);
             if (days == -1)
             {
                 //ApptAutoRefreshRange preference is -1, so all appointments are in range
@@ -557,8 +541,8 @@ namespace OpenDentBusiness
         {
             try
             {
-                if (Prefs.GetContainsKey(PrefName.SignalLastClearedDate.ToString())
-                    && Preferences.GetDateTime(PrefName.SignalLastClearedDate) > MiscData.GetNowDateTime().AddDays(-7)) //Has already been run in the past week. This is all server based time.
+                if (Preference.Exists(PreferenceName.SignalLastClearedDate) && 
+                    Preference.GetDateTime(PreferenceName.SignalLastClearedDate) > MiscData.GetNowDateTime().AddDays(-7)) //Has already been run in the past week. This is all server based time.
                 {
                     return;//Do not run this process again.
                 }
@@ -569,7 +553,7 @@ namespace OpenDentBusiness
 
                 SigMessages.ClearOldSigMessages();//Clear messaging buttons which use to be stored in the signal table.
                                                   //SigElements.DeleteOrphaned();
-                Prefs.UpdateDateT(PrefName.SignalLastClearedDate, MiscData.GetNowDateTime());//Set Last cleared to now.
+                Preference.Update(PreferenceName.SignalLastClearedDate, MiscData.GetNowDateTime());//Set Last cleared to now.
             }
             catch (Exception)
             {

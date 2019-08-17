@@ -95,7 +95,7 @@ namespace OpenDental {
 			this.checkCapitation.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkCapitation.Location = new System.Drawing.Point(12, 37);
 			this.checkCapitation.Name = "checkCapitation";
-			this.checkCapitation.PrefNameBinding = OpenDentBusiness.PrefName.EasyHideCapitation;
+			this.checkCapitation.PrefNameBinding = OpenDentBusiness.PreferenceName.EasyHideCapitation;
 			this.checkCapitation.ReverseValue = true;
 			this.checkCapitation.Size = new System.Drawing.Size(258, 19);
 			this.checkCapitation.TabIndex = 2;
@@ -109,7 +109,7 @@ namespace OpenDental {
 			this.checkMedicaid.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkMedicaid.Location = new System.Drawing.Point(12, 61);
 			this.checkMedicaid.Name = "checkMedicaid";
-			this.checkMedicaid.PrefNameBinding = OpenDentBusiness.PrefName.EasyHideMedicaid;
+			this.checkMedicaid.PrefNameBinding = OpenDentBusiness.PreferenceName.EasyHideMedicaid;
 			this.checkMedicaid.ReverseValue = true;
 			this.checkMedicaid.Size = new System.Drawing.Size(258, 19);
 			this.checkMedicaid.TabIndex = 3;
@@ -135,7 +135,7 @@ namespace OpenDental {
 			this.checkClinical.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkClinical.Location = new System.Drawing.Point(12, 181);
 			this.checkClinical.Name = "checkClinical";
-			this.checkClinical.PrefNameBinding = OpenDentBusiness.PrefName.EasyHideClinical;
+			this.checkClinical.PrefNameBinding = OpenDentBusiness.PreferenceName.EasyHideClinical;
 			this.checkClinical.ReverseValue = true;
 			this.checkClinical.Size = new System.Drawing.Size(258, 19);
 			this.checkClinical.TabIndex = 5;
@@ -149,7 +149,7 @@ namespace OpenDental {
 			this.checkBasicModules.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkBasicModules.Location = new System.Drawing.Point(12, 205);
 			this.checkBasicModules.Name = "checkBasicModules";
-			this.checkBasicModules.PrefNameBinding = OpenDentBusiness.PrefName.EasyBasicModules;
+			this.checkBasicModules.PrefNameBinding = OpenDentBusiness.PreferenceName.EasyBasicModules;
 			this.checkBasicModules.ReverseValue = false;
 			this.checkBasicModules.Size = new System.Drawing.Size(258, 19);
 			this.checkBasicModules.TabIndex = 6;
@@ -163,7 +163,7 @@ namespace OpenDental {
 			this.checkPublicHealth.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkPublicHealth.Location = new System.Drawing.Point(12, 85);
 			this.checkPublicHealth.Name = "checkPublicHealth";
-			this.checkPublicHealth.PrefNameBinding = OpenDentBusiness.PrefName.EasyHidePublicHealth;
+			this.checkPublicHealth.PrefNameBinding = OpenDentBusiness.PreferenceName.EasyHidePublicHealth;
 			this.checkPublicHealth.ReverseValue = true;
 			this.checkPublicHealth.Size = new System.Drawing.Size(258, 19);
 			this.checkPublicHealth.TabIndex = 7;
@@ -189,7 +189,7 @@ namespace OpenDental {
 			this.checkDentalSchools.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkDentalSchools.Location = new System.Drawing.Point(12, 109);
 			this.checkDentalSchools.Name = "checkDentalSchools";
-			this.checkDentalSchools.PrefNameBinding = OpenDentBusiness.PrefName.EasyHideDentalSchools;
+			this.checkDentalSchools.PrefNameBinding = OpenDentBusiness.PreferenceName.EasyHideDentalSchools;
 			this.checkDentalSchools.ReverseValue = true;
 			this.checkDentalSchools.Size = new System.Drawing.Size(258, 19);
 			this.checkDentalSchools.TabIndex = 9;
@@ -204,7 +204,7 @@ namespace OpenDental {
 			this.checkRepeatCharges.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkRepeatCharges.Location = new System.Drawing.Point(12, 253);
 			this.checkRepeatCharges.Name = "checkRepeatCharges";
-			this.checkRepeatCharges.PrefNameBinding = OpenDentBusiness.PrefName.EasyHideRepeatCharges;
+			this.checkRepeatCharges.PrefNameBinding = OpenDentBusiness.PreferenceName.EasyHideRepeatCharges;
 			this.checkRepeatCharges.ReverseValue = true;
 			this.checkRepeatCharges.Size = new System.Drawing.Size(258, 19);
 			this.checkRepeatCharges.TabIndex = 10;
@@ -218,7 +218,7 @@ namespace OpenDental {
 			this.checkInsurance.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkInsurance.Location = new System.Drawing.Point(12, 157);
 			this.checkInsurance.Name = "checkInsurance";
-			this.checkInsurance.PrefNameBinding = OpenDentBusiness.PrefName.EasyHideInsurance;
+			this.checkInsurance.PrefNameBinding = OpenDentBusiness.PreferenceName.EasyHideInsurance;
 			this.checkInsurance.ReverseValue = true;
 			this.checkInsurance.Size = new System.Drawing.Size(258, 19);
 			this.checkInsurance.TabIndex = 11;
@@ -233,7 +233,7 @@ namespace OpenDental {
 			this.checkHospitals.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkHospitals.Location = new System.Drawing.Point(12, 133);
 			this.checkHospitals.Name = "checkHospitals";
-			this.checkHospitals.PrefNameBinding = OpenDentBusiness.PrefName.EasyHideHospitals;
+			this.checkHospitals.PrefNameBinding = OpenDentBusiness.PreferenceName.EasyHideHospitals;
 			this.checkHospitals.ReverseValue = true;
 			this.checkHospitals.Size = new System.Drawing.Size(258, 19);
 			this.checkHospitals.TabIndex = 12;
@@ -247,7 +247,7 @@ namespace OpenDental {
 			this.checkMedicalIns.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkMedicalIns.Location = new System.Drawing.Point(12, 278);
 			this.checkMedicalIns.Name = "checkMedicalIns";
-			this.checkMedicalIns.PrefNameBinding = OpenDentBusiness.PrefName.ShowFeatureMedicalInsurance;
+			this.checkMedicalIns.PrefNameBinding = OpenDentBusiness.PreferenceName.ShowFeatureMedicalInsurance;
 			this.checkMedicalIns.ReverseValue = false;
 			this.checkMedicalIns.Size = new System.Drawing.Size(258, 19);
 			this.checkMedicalIns.TabIndex = 13;
@@ -261,7 +261,7 @@ namespace OpenDental {
 			this.checkEhr.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkEhr.Location = new System.Drawing.Point(12, 303);
 			this.checkEhr.Name = "checkEhr";
-			this.checkEhr.PrefNameBinding = OpenDentBusiness.PrefName.ShowFeatureEhr;
+			this.checkEhr.PrefNameBinding = OpenDentBusiness.PreferenceName.ShowFeatureEhr;
 			this.checkEhr.ReverseValue = false;
 			this.checkEhr.Size = new System.Drawing.Size(258, 19);
 			this.checkEhr.TabIndex = 14;
@@ -276,7 +276,7 @@ namespace OpenDental {
 			this.checkSuperFam.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkSuperFam.Location = new System.Drawing.Point(12, 328);
 			this.checkSuperFam.Name = "checkSuperFam";
-			this.checkSuperFam.PrefNameBinding = OpenDentBusiness.PrefName.ShowFeatureSuperfamilies;
+			this.checkSuperFam.PrefNameBinding = OpenDentBusiness.PreferenceName.ShowFeatureSuperfamilies;
 			this.checkSuperFam.ReverseValue = false;
 			this.checkSuperFam.Size = new System.Drawing.Size(258, 19);
 			this.checkSuperFam.TabIndex = 15;
@@ -300,7 +300,7 @@ namespace OpenDental {
 			this.checkPatClone.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkPatClone.Location = new System.Drawing.Point(12, 352);
 			this.checkPatClone.Name = "checkPatClone";
-			this.checkPatClone.PrefNameBinding = OpenDentBusiness.PrefName.ShowFeaturePatientClone;
+			this.checkPatClone.PrefNameBinding = OpenDentBusiness.PreferenceName.ShowFeaturePatientClone;
 			this.checkPatClone.ReverseValue = false;
 			this.checkPatClone.Size = new System.Drawing.Size(258, 19);
 			this.checkPatClone.TabIndex = 17;
@@ -315,7 +315,7 @@ namespace OpenDental {
 			this.checkQuestionnaire.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkQuestionnaire.Location = new System.Drawing.Point(12, 377);
 			this.checkQuestionnaire.Name = "checkQuestionnaire";
-			this.checkQuestionnaire.PrefNameBinding = OpenDentBusiness.PrefName.AccountShowQuestionnaire;
+			this.checkQuestionnaire.PrefNameBinding = OpenDentBusiness.PreferenceName.AccountShowQuestionnaire;
 			this.checkQuestionnaire.ReverseValue = false;
 			this.checkQuestionnaire.Size = new System.Drawing.Size(258, 19);
 			this.checkQuestionnaire.TabIndex = 18;
@@ -329,7 +329,7 @@ namespace OpenDental {
 			this.checkTrojanCollect.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkTrojanCollect.Location = new System.Drawing.Point(12, 402);
 			this.checkTrojanCollect.Name = "checkTrojanCollect";
-			this.checkTrojanCollect.PrefNameBinding = OpenDentBusiness.PrefName.AccountShowTrojanExpressCollect;
+			this.checkTrojanCollect.PrefNameBinding = OpenDentBusiness.PreferenceName.AccountShowTrojanExpressCollect;
 			this.checkTrojanCollect.ReverseValue = false;
 			this.checkTrojanCollect.Size = new System.Drawing.Size(258, 19);
 			this.checkTrojanCollect.TabIndex = 19;
@@ -343,7 +343,7 @@ namespace OpenDental {
 			this.checkShowEnterprise.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkShowEnterprise.Location = new System.Drawing.Point(12, 427);
 			this.checkShowEnterprise.Name = "checkShowEnterprise";
-			this.checkShowEnterprise.PrefNameBinding = OpenDentBusiness.PrefName.ShowFeatureEnterprise;
+			this.checkShowEnterprise.PrefNameBinding = OpenDentBusiness.PreferenceName.ShowFeatureEnterprise;
 			this.checkShowEnterprise.ReverseValue = false;
 			this.checkShowEnterprise.Size = new System.Drawing.Size(258, 19);
 			this.checkShowEnterprise.TabIndex = 20;
@@ -357,7 +357,7 @@ namespace OpenDental {
 			this.checkShowReactivations.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.checkShowReactivations.Location = new System.Drawing.Point(12, 452);
 			this.checkShowReactivations.Name = "checkShowReactivations";
-			this.checkShowReactivations.PrefNameBinding = OpenDentBusiness.PrefName.ShowFeatureReactivations;
+			this.checkShowReactivations.PrefNameBinding = OpenDentBusiness.PreferenceName.ShowFeatureReactivations;
 			this.checkShowReactivations.ReverseValue = false;
 			this.checkShowReactivations.Size = new System.Drawing.Size(258, 19);
 			this.checkShowReactivations.TabIndex = 21;

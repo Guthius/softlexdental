@@ -107,7 +107,7 @@ namespace OpenDental{
 			this.checkDropExistingIns.DoAutoSave = true;
 			this.checkDropExistingIns.Location = new System.Drawing.Point(12, 117);
 			this.checkDropExistingIns.Name = "checkDropExistingIns";
-			this.checkDropExistingIns.PrefNameBinding = OpenDentBusiness.PrefName.Ins834DropExistingPatPlans;
+			this.checkDropExistingIns.PrefNameBinding = OpenDentBusiness.PreferenceName.Ins834DropExistingPatPlans;
 			this.checkDropExistingIns.Size = new System.Drawing.Size(291, 17);
 			this.checkDropExistingIns.TabIndex = 11;
 			this.checkDropExistingIns.Text = "Drop all existing patient plans when importing new plans.";
@@ -119,7 +119,7 @@ namespace OpenDental{
 			this.checkIsPatientCreate.DoAutoSave = true;
 			this.checkIsPatientCreate.Location = new System.Drawing.Point(12, 96);
 			this.checkIsPatientCreate.Name = "checkIsPatientCreate";
-			this.checkIsPatientCreate.PrefNameBinding = OpenDentBusiness.PrefName.Ins834IsPatientCreate;
+			this.checkIsPatientCreate.PrefNameBinding = OpenDentBusiness.PreferenceName.Ins834IsPatientCreate;
 			this.checkIsPatientCreate.Size = new System.Drawing.Size(688, 17);
 			this.checkIsPatientCreate.TabIndex = 12;
 			this.checkIsPatientCreate.Text = "Automatically create new patients when importing plans for unknown patients.  If " +

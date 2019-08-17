@@ -44,7 +44,7 @@ namespace OpenDentBusiness.Crud{
 				eduResource=new EduResource();
 				eduResource.EduResourceNum  = PIn.Long  (row["EduResourceNum"].ToString());
 				eduResource.DiseaseDefNum   = PIn.Long  (row["DiseaseDefNum"].ToString());
-				eduResource.MedicationNum   = PIn.Long  (row["MedicationNum"].ToString());
+				eduResource.MedicationNum   = PIn.Int(row["MedicationNum"].ToString());
 				eduResource.LabResultID     = PIn.String(row["LabResultID"].ToString());
 				eduResource.LabResultName   = PIn.String(row["LabResultName"].ToString());
 				eduResource.LabResultCompare= PIn.String(row["LabResultCompare"].ToString());
@@ -126,7 +126,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EduResource into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(EduResource eduResource,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO eduresource (";
 			if(!useExistingPK && isRandomKeys) {
 				eduResource.EduResourceNum=ReplicationServers.GetKeyNoCache("eduresource","EduResourceNum");

@@ -126,7 +126,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Employer into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(Employer employer,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO employer (";
 			if(!useExistingPK && isRandomKeys) {
 				employer.EmployerNum=ReplicationServers.GetKeyNoCache("employer","EmployerNum");

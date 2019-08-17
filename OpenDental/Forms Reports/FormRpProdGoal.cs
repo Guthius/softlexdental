@@ -438,7 +438,7 @@ namespace OpenDental {
 				checkClinicBreakdown.Visible=false;
 			}
 			else {
-				checkClinicBreakdown.Checked=Preferences.GetBool(PrefName.ReportPandIhasClinicBreakdown);
+				checkClinicBreakdown.Checked=Preference.GetBool(PreferenceName.ReportPandIhasClinicBreakdown);
 				_listClinics=Clinics.GetForUserod(Security.CurUser);
 				if(!Security.CurUser.ClinicIsRestricted) {
 					listClin.Items.Add(Lan.g(this,"Unassigned"));
@@ -456,7 +456,7 @@ namespace OpenDental {
 					}
 				}
 			}
-			switch(Preferences.GetInt(PrefName.ReportsPPOwriteoffDefaultToProcDate)) {
+			switch(Preference.GetInt(PreferenceName.ReportsPPOwriteoffDefaultToProcDate)) {
 				case 0:	radioWriteoffPay.Checked=true; break;
 				case 1:	radioWriteoffProc.Checked=true; break;
 				case 2:	radioWriteoffClaim.Checked=true; break;
@@ -629,7 +629,7 @@ namespace OpenDental {
 			}
 			report.ReportName="MonthlyP&IGoals";
 			report.AddTitle("Title",Lan.g(this,"Monthly Production Goal"));
-			report.AddSubTitle("PracName",Preferences.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("PracName",Preference.GetString(PreferenceName.PracticeTitle));
 			report.AddSubTitle("Date",_dateFrom.ToShortDateString()+" - "+_dateTo.ToShortDateString());
 			if(checkAllProv.Checked) {
 				report.AddSubTitle("Providers",Lan.g(this,"All Providers"));

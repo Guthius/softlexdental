@@ -56,8 +56,8 @@ namespace OpenDental {
 				gridMain.Location=new Point(8,6);
 				gridMain.Size=new Size(292,447);
 			}
-			checkPrompt.Checked=Preferences.GetBool(PrefName.AppointmentTypeShowPrompt);
-			checkWarn.Checked=Preferences.GetBool(PrefName.AppointmentTypeShowWarning);
+			checkPrompt.Checked=Preference.GetBool(PreferenceName.AppointmentTypeShowPrompt);
+			checkWarn.Checked=Preference.GetBool(PreferenceName.AppointmentTypeShowWarning);
 			//don't show hidden appointment types in selection mode
 			_listApptTypes=AppointmentTypes.GetDeepCopy(IsSelectionMode);
 			_listApptTypesOld=AppointmentTypes.GetDeepCopy();
@@ -284,8 +284,8 @@ namespace OpenDental {
 		private void FormApptTypes_FormClosing(object sender,FormClosingEventArgs e) {
 			if(!IsSelectionMode) {
 				if(_isChanged) {
-					Prefs.UpdateBool(PrefName.AppointmentTypeShowPrompt,checkPrompt.Checked);
-					Prefs.UpdateBool(PrefName.AppointmentTypeShowWarning,checkWarn.Checked);
+					Preference.Update(PreferenceName.AppointmentTypeShowPrompt,checkPrompt.Checked);
+					Preference.Update(PreferenceName.AppointmentTypeShowWarning,checkWarn.Checked);
 					for(int i=0;i<_listApptTypes.Count;i++) {
 						_listApptTypes[i].ItemOrder=i;
 					}

@@ -31,24 +31,28 @@ namespace OpenDentBusiness{
 			return PIn.Double(Db.GetScalar(command));
 		}
 
-		///<summary>This runs aging for all patients.  If using monthly aging, it always just runs the aging as of the last date again.  If using daily
-		///aging, it runs it as of today.  This logic used to be in FormAging, but is now centralized.
-		///<para>IMPORTANT: If AgingIsEnterprise the calling method MUST check the AgingBeginDateTime pref to determine whether or not another aging
-		///calculation has already started.  If a calculation is running and this is called again the famaging table could be truncated and one or both
-		///processes could update the family bals incorrectly.</para></summary>
-		public static void RunAging() {
-			//No need to check RemotingRole; no call to db.
-			if(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {
-				ComputeAging(0,Preferences.GetDate(PrefName.DateLastAging));
-			}
-			else {
-				ComputeAging(0,DateTime.Today);
-				if(Preferences.GetDate(PrefName.DateLastAging) != DateTime.Today) {
-					Prefs.UpdateString(PrefName.DateLastAging,POut.Date(DateTime.Today,false));
-					//Since this is always called from UI, the above line works fine to keep the prefs cache current.
-				}
-			}
-		}
+        ///<summary>This runs aging for all patients.  If using monthly aging, it always just runs the aging as of the last date again.  If using daily
+        ///aging, it runs it as of today.  This logic used to be in FormAging, but is now centralized.
+        ///<para>IMPORTANT: If AgingIsEnterprise the calling method MUST check the AgingBeginDateTime pref to determine whether or not another aging
+        ///calculation has already started.  If a calculation is running and this is called again the famaging table could be truncated and one or both
+        ///processes could update the family bals incorrectly.</para></summary>
+        public static void RunAging()
+        {
+            //No need to check RemotingRole; no call to db.
+            if (Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily))
+            {
+                ComputeAging(0, Preference.GetDate(PreferenceName.DateLastAging));
+            }
+            else
+            {
+                ComputeAging(0, DateTime.Today);
+                if (Preference.GetDate(PreferenceName.DateLastAging) != DateTime.Today)
+                {
+                    Preference.Update(PreferenceName.DateLastAging, DateTime.Today);
+                    //Since this is always called from UI, the above line works fine to keep the prefs cache current.
+                }
+            }
+        }
 
 		///<summary>Computes aging for the family specified. Specify guarantor=0 in order to calculate aging for all families. Gets all info from db.
 		///<para>IMPORTANT: If AgingIsEnterprise and guarantorNum is 0 (i.e. run for all patients), the calling method MUST check the AgingBeginDateTime
@@ -68,38 +72,42 @@ namespace OpenDentBusiness{
 			}
 		}
 
-		///<summary>Computes aging for the family specified. Specify guarantor=0 in order to calculate aging for all families. Gets all info from db.
-		///<para>IMPORTANT: If AgingIsEnterprise and listGuarantorNums has more than one guarantor in it, the calling method MUST check the
-		///AgingBeginDateTime pref to determine whether or not another aging calculation has already started.  If a calculation is running and this is
-		///called again the famaging table could be truncated and one or both processes could update the family bals incorrectly.</para>
-		///<para>The aging calculation will use the following rules within each family:</para>
-		///<para>1) The aging "buckets" (0 to 30, 31 to 60, 61 to 90 and Over 90) ONLY include account activity on or before AsOfDate.</para>
-		///<para>2) BalTotal includes all account activity, even future entries. If historical, BalTotal excludes entries after AsOfDate.</para>
-		///<para>3) InsEst includes all insurance estimates, even future estimates. If historical, InsEst excludes ins est after AsOfDate.</para>
-		///<para>4) PayPlanDue includes all payplan charges minus credits. If historical, PayPlanDue excludes charges and credits after AsOfDate.</para></summary>
-		public static void ComputeAging(List<long> listGuarantorNums,DateTime asOfDate) {
-			string command="";
-			if(Preferences.GetBool(PrefName.AgingIsEnterprise)) {
-				#region Using FamAging Table
-				if(listGuarantorNums.Count==1) {
-					FamAging famAgingCur=Crud.FamAgingCrud.SelectOne(GetAgingQueryString(asOfDate,listGuarantorNums));
-					command="UPDATE patient p SET "
-						+"p.BalOver90 =CASE WHEN p.Guarantor!=p.PatNum THEN 0 ELSE "+famAgingCur.BalOver90 +" END,"
-						+"p.Bal_61_90 =CASE WHEN p.Guarantor!=p.PatNum THEN 0 ELSE "+famAgingCur.Bal_61_90 +" END,"
-						+"p.Bal_31_60 =CASE WHEN p.Guarantor!=p.PatNum THEN 0 ELSE "+famAgingCur.Bal_31_60 +" END,"
-						+"p.Bal_0_30  =CASE WHEN p.Guarantor!=p.PatNum THEN 0 ELSE "+famAgingCur.Bal_0_30  +" END,"
-						+"p.BalTotal  =CASE WHEN p.Guarantor!=p.PatNum THEN 0 ELSE "+famAgingCur.BalTotal  +" END,"
-						+"p.InsEst    =CASE WHEN p.Guarantor!=p.PatNum THEN 0 ELSE "+famAgingCur.InsEst    +" END,"
-						+"p.PayPlanDue=CASE WHEN p.Guarantor!=p.PatNum THEN 0 ELSE "+famAgingCur.PayPlanDue+" END "
-						+"WHERE p.Guarantor="+listGuarantorNums[0];
-				}
-				else {
-					List<FamAging> listFamAgings=Crud.FamAgingCrud.SelectMany(GetAgingQueryString(asOfDate,listGuarantorNums)
-						+" HAVING BalOver90!=0 OR Bal_61_90!=0 OR Bal_31_60!=0 OR Bal_0_30!=0 OR BalTotal!=0 OR PayPlanDue!=0 OR InsEst!=0");
-					command="TRUNCATE TABLE famaging";
-					Db.NonQ(command);
-					FamAgings.InsertMany(listFamAgings);//use InsertMany so inserts are broken into statements no larger than max allowed packet
-					command=@"UPDATE patient p
+        ///<summary>Computes aging for the family specified. Specify guarantor=0 in order to calculate aging for all families. Gets all info from db.
+        ///<para>IMPORTANT: If AgingIsEnterprise and listGuarantorNums has more than one guarantor in it, the calling method MUST check the
+        ///AgingBeginDateTime pref to determine whether or not another aging calculation has already started.  If a calculation is running and this is
+        ///called again the famaging table could be truncated and one or both processes could update the family bals incorrectly.</para>
+        ///<para>The aging calculation will use the following rules within each family:</para>
+        ///<para>1) The aging "buckets" (0 to 30, 31 to 60, 61 to 90 and Over 90) ONLY include account activity on or before AsOfDate.</para>
+        ///<para>2) BalTotal includes all account activity, even future entries. If historical, BalTotal excludes entries after AsOfDate.</para>
+        ///<para>3) InsEst includes all insurance estimates, even future estimates. If historical, InsEst excludes ins est after AsOfDate.</para>
+        ///<para>4) PayPlanDue includes all payplan charges minus credits. If historical, PayPlanDue excludes charges and credits after AsOfDate.</para></summary>
+        public static void ComputeAging(List<long> listGuarantorNums, DateTime asOfDate)
+        {
+            string command = "";
+            if (Preference.GetBool(PreferenceName.AgingIsEnterprise))
+            {
+                #region Using FamAging Table
+                if (listGuarantorNums.Count == 1)
+                {
+                    FamAging famAgingCur = Crud.FamAgingCrud.SelectOne(GetAgingQueryString(asOfDate, listGuarantorNums));
+                    command = "UPDATE patient p SET "
+                        + "p.BalOver90 =CASE WHEN p.Guarantor!=p.PatNum THEN 0 ELSE " + famAgingCur.BalOver90 + " END,"
+                        + "p.Bal_61_90 =CASE WHEN p.Guarantor!=p.PatNum THEN 0 ELSE " + famAgingCur.Bal_61_90 + " END,"
+                        + "p.Bal_31_60 =CASE WHEN p.Guarantor!=p.PatNum THEN 0 ELSE " + famAgingCur.Bal_31_60 + " END,"
+                        + "p.Bal_0_30  =CASE WHEN p.Guarantor!=p.PatNum THEN 0 ELSE " + famAgingCur.Bal_0_30 + " END,"
+                        + "p.BalTotal  =CASE WHEN p.Guarantor!=p.PatNum THEN 0 ELSE " + famAgingCur.BalTotal + " END,"
+                        + "p.InsEst    =CASE WHEN p.Guarantor!=p.PatNum THEN 0 ELSE " + famAgingCur.InsEst + " END,"
+                        + "p.PayPlanDue=CASE WHEN p.Guarantor!=p.PatNum THEN 0 ELSE " + famAgingCur.PayPlanDue + " END "
+                        + "WHERE p.Guarantor=" + listGuarantorNums[0];
+                }
+                else
+                {
+                    List<FamAging> listFamAgings = Crud.FamAgingCrud.SelectMany(GetAgingQueryString(asOfDate, listGuarantorNums)
+                        + " HAVING BalOver90!=0 OR Bal_61_90!=0 OR Bal_31_60!=0 OR Bal_0_30!=0 OR BalTotal!=0 OR PayPlanDue!=0 OR InsEst!=0");
+                    command = "TRUNCATE TABLE famaging";
+                    Db.NonQ(command);
+                    FamAgings.InsertMany(listFamAgings);//use InsertMany so inserts are broken into statements no larger than max allowed packet
+                    command = @"UPDATE patient p
 						LEFT JOIN famaging f ON p.PatNum=f.PatNum
 						SET
 						p.BalOver90  = COALESCE(f.BalOver90,0),
@@ -109,102 +117,111 @@ namespace OpenDentBusiness{
 						p.BalTotal   = COALESCE(f.BalTotal,0),
 						p.InsEst     = COALESCE(f.InsEst,0),
 						p.PayPlanDue = COALESCE(f.PayPlanDue,0)
-						"+(listGuarantorNums.Count>0?(@" WHERE p.Guarantor IN ("+string.Join(",",listGuarantorNums)+@")"):"")+@";
+						" + (listGuarantorNums.Count > 0 ? (@" WHERE p.Guarantor IN (" + string.Join(",", listGuarantorNums) + @")") : "") + @";
 						TRUNCATE TABLE famaging;";
-				}
-				#endregion Using FamAging Table
-			}
-			else {
-				#region Not Using FamAging Table
-				//If is for all patients, not single family, zero out all aged bals in order to catch former guarantors.  Zeroing out for a single family is
-				//handled in the query below. (see the region "Get All Family PatNums")  Unioning is too slow for all patients, so run this statement first.
-				//Added to the same query string to force Galera Cluster to process both queries on the same node to prevent a deadlock error.
-				if(listGuarantorNums.Count==0) {
-					command="UPDATE patient SET "
-					+"Bal_0_30   = 0,"
-					+"Bal_31_60  = 0,"
-					+"Bal_61_90  = 0,"
-					+"BalOver90  = 0,"
-					+"InsEst     = 0,"
-					+"BalTotal   = 0,"
-					+"PayPlanDue = 0;";
-				}
-				command+="UPDATE patient p, "
-					+"("+GetAgingGuarTransQuery(asOfDate,listGuarantorNums)+") famSums "
-					//Update the patient table based on the family amounts summed from 'famSums', and distribute the payments into the oldest balances first.
-					+"SET p.BalOver90=(CASE WHEN p.Guarantor != p.PatNum THEN 0 "//zero out non-guarantors
-						+"ELSE ROUND(CASE WHEN famSums.TotalCredits >= famSums.ChargesOver90 THEN 0 "//over 90 day bal paid in full
-						+"ELSE famSums.ChargesOver90-famSums.TotalCredits END,3) END),"//over 90 day bal partially paid or unpaid.
-					+"p.Bal_61_90=(CASE WHEN p.Guarantor != p.PatNum THEN 0 "//zero out non-guarantors
-						+"ELSE ROUND(CASE WHEN famSums.TotalCredits <= famSums.ChargesOver90 THEN famSums.Charges_61_90 "//61-90 day bal unpaid
-						+"WHEN famSums.ChargesOver90+famSums.Charges_61_90 <= famSums.TotalCredits THEN 0 "//61-90 day bal paid in full
-						+"ELSE famSums.ChargesOver90+famSums.Charges_61_90-famSums.TotalCredits END,3) END),"//61-90 day bal partially paid
-					+"p.Bal_31_60=(CASE WHEN p.Guarantor != p.PatNum THEN 0 "//zero out non-guarantors
-						+"ELSE ROUND(CASE WHEN famSums.TotalCredits < famSums.ChargesOver90+famSums.Charges_61_90 "
-						+"THEN famSums.Charges_31_60 "//31-60 day bal unpaid
-						+"WHEN famSums.ChargesOver90+famSums.Charges_61_90+famSums.Charges_31_60 <= famSums.TotalCredits THEN 0 "//31-60 day bal paid in full
-						+"ELSE famSums.ChargesOver90+famSums.Charges_61_90+famSums.Charges_31_60-famSums.TotalCredits END,3) END),"//31-60 day bal partially paid
-					+"p.Bal_0_30=(CASE WHEN p.Guarantor != p.PatNum THEN 0 "//zero out non-guarantors
-						+"ELSE ROUND(CASE WHEN famSums.TotalCredits < famSums.ChargesOver90+famSums.Charges_61_90+famSums.Charges_31_60 "
-						+"THEN famSums.Charges_0_30 "//0-30 day bal unpaid
-						+"WHEN famSums.ChargesOver90+famSums.Charges_61_90+famSums.Charges_31_60+famSums.Charges_0_30 <= famSums.TotalCredits "
-						+"THEN 0 "//0-30 day bal paid in full
-						+"ELSE famSums.ChargesOver90+famSums.Charges_61_90+famSums.Charges_31_60+famSums.Charges_0_30-famSums.TotalCredits "
-						+"END,3) END),"//0-30 day bal partially paid
-					+"p.BalTotal=(CASE WHEN p.Guarantor != p.PatNum THEN 0 "//zero out non-guarantors
-						+"ELSE ROUND(famSums.BalTotal,3) END),"
-					+"p.InsEst=(CASE WHEN p.Guarantor != p.PatNum THEN 0 "//zero out non-guarantors
-						+"ELSE ROUND(famSums.InsPayEst+famSums.InsWoEst,3) END),"
-					+"p.PayPlanDue=(CASE WHEN p.Guarantor != p.PatNum THEN 0 "//zero out non-guarantors
-						+"ELSE ROUND(famSums.PayPlanDue,3) END)"
-					+" WHERE p.Guarantor=famSums.PatNum";//Aging calculations only apply to guarantors, zero out non-guarantor bals
-				#endregion Not Using FamAging Table
-			}
-			Db.NonQ(command);
-		}
+                }
+                #endregion Using FamAging Table
+            }
+            else
+            {
+                #region Not Using FamAging Table
+                //If is for all patients, not single family, zero out all aged bals in order to catch former guarantors.  Zeroing out for a single family is
+                //handled in the query below. (see the region "Get All Family PatNums")  Unioning is too slow for all patients, so run this statement first.
+                //Added to the same query string to force Galera Cluster to process both queries on the same node to prevent a deadlock error.
+                if (listGuarantorNums.Count == 0)
+                {
+                    command = "UPDATE patient SET "
+                    + "Bal_0_30   = 0,"
+                    + "Bal_31_60  = 0,"
+                    + "Bal_61_90  = 0,"
+                    + "BalOver90  = 0,"
+                    + "InsEst     = 0,"
+                    + "BalTotal   = 0,"
+                    + "PayPlanDue = 0;";
+                }
+                command += "UPDATE patient p, "
+                    + "(" + GetAgingGuarTransQuery(asOfDate, listGuarantorNums) + ") famSums "
+                    //Update the patient table based on the family amounts summed from 'famSums', and distribute the payments into the oldest balances first.
+                    + "SET p.BalOver90=(CASE WHEN p.Guarantor != p.PatNum THEN 0 "//zero out non-guarantors
+                        + "ELSE ROUND(CASE WHEN famSums.TotalCredits >= famSums.ChargesOver90 THEN 0 "//over 90 day bal paid in full
+                        + "ELSE famSums.ChargesOver90-famSums.TotalCredits END,3) END),"//over 90 day bal partially paid or unpaid.
+                    + "p.Bal_61_90=(CASE WHEN p.Guarantor != p.PatNum THEN 0 "//zero out non-guarantors
+                        + "ELSE ROUND(CASE WHEN famSums.TotalCredits <= famSums.ChargesOver90 THEN famSums.Charges_61_90 "//61-90 day bal unpaid
+                        + "WHEN famSums.ChargesOver90+famSums.Charges_61_90 <= famSums.TotalCredits THEN 0 "//61-90 day bal paid in full
+                        + "ELSE famSums.ChargesOver90+famSums.Charges_61_90-famSums.TotalCredits END,3) END),"//61-90 day bal partially paid
+                    + "p.Bal_31_60=(CASE WHEN p.Guarantor != p.PatNum THEN 0 "//zero out non-guarantors
+                        + "ELSE ROUND(CASE WHEN famSums.TotalCredits < famSums.ChargesOver90+famSums.Charges_61_90 "
+                        + "THEN famSums.Charges_31_60 "//31-60 day bal unpaid
+                        + "WHEN famSums.ChargesOver90+famSums.Charges_61_90+famSums.Charges_31_60 <= famSums.TotalCredits THEN 0 "//31-60 day bal paid in full
+                        + "ELSE famSums.ChargesOver90+famSums.Charges_61_90+famSums.Charges_31_60-famSums.TotalCredits END,3) END),"//31-60 day bal partially paid
+                    + "p.Bal_0_30=(CASE WHEN p.Guarantor != p.PatNum THEN 0 "//zero out non-guarantors
+                        + "ELSE ROUND(CASE WHEN famSums.TotalCredits < famSums.ChargesOver90+famSums.Charges_61_90+famSums.Charges_31_60 "
+                        + "THEN famSums.Charges_0_30 "//0-30 day bal unpaid
+                        + "WHEN famSums.ChargesOver90+famSums.Charges_61_90+famSums.Charges_31_60+famSums.Charges_0_30 <= famSums.TotalCredits "
+                        + "THEN 0 "//0-30 day bal paid in full
+                        + "ELSE famSums.ChargesOver90+famSums.Charges_61_90+famSums.Charges_31_60+famSums.Charges_0_30-famSums.TotalCredits "
+                        + "END,3) END),"//0-30 day bal partially paid
+                    + "p.BalTotal=(CASE WHEN p.Guarantor != p.PatNum THEN 0 "//zero out non-guarantors
+                        + "ELSE ROUND(famSums.BalTotal,3) END),"
+                    + "p.InsEst=(CASE WHEN p.Guarantor != p.PatNum THEN 0 "//zero out non-guarantors
+                        + "ELSE ROUND(famSums.InsPayEst+famSums.InsWoEst,3) END),"
+                    + "p.PayPlanDue=(CASE WHEN p.Guarantor != p.PatNum THEN 0 "//zero out non-guarantors
+                        + "ELSE ROUND(famSums.PayPlanDue,3) END)"
+                    + " WHERE p.Guarantor=famSums.PatNum";//Aging calculations only apply to guarantors, zero out non-guarantor bals
+                #endregion Not Using FamAging Table
+            }
+            Db.NonQ(command);
+        }
 
-		///<summary>Computes aging for PaySplits not associated to the patient passed in. Does nothing if all PaySplits are for the passed in PatNum.
-		///Returns error message if AgingIsEnterprise preference is on and someone is currently computing aging. Otherwise returns empty string.</summary>
-		public static string ComputeAgingForPaysplitsAllocatedToDiffPats(long patNum,List<PaySplit> listPaySplits) {
-			//No need to check RemotingRole; no call to db.;
-			List<long> listFamPatNums=Patients.GetFamily(patNum).ListPats.Select(x => x.PatNum).ToList();
-			//Get all PatNums not in the patient's family
-			List<long> listPatNumsAssociatedToDiffFam=listPaySplits.Where(x => !x.PatNum.In(listFamPatNums)).Select(y => y.PatNum).Distinct().ToList();
-			if(listPatNumsAssociatedToDiffFam.Count==0) {
-				return "";//all PaySplits are for the patient's family passed in. 
-			}
-			string strErrorMsg="";
-			List<long> listGuarantorNums=Patients.GetGuarantorsForPatNums(listPatNumsAssociatedToDiffFam);
-			DateTime dateAsOf=DateTime.Today.Date;
-			DateTime dateTAgingBeganPref=DateTime.MinValue;
-			DateTime dtNow=MiscData.GetNowDateTime();
-			if(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {
-				dateAsOf=Preferences.GetDate(PrefName.DateLastAging);
-			}
-			bool isFamaging=(Preferences.GetBool(PrefName.AgingIsEnterprise) && listGuarantorNums.Count>1);//will only use the famaging table if more than 1 guar
-			if(isFamaging) {//if this will utilize the famaging table we need to check and set the pref to block others from starting aging
-				Prefs.RefreshCache();
-				dateTAgingBeganPref=Preferences.GetDateTime(PrefName.AgingBeginDateTime);
-				if(dateTAgingBeganPref>DateTime.MinValue) {//pref has been set by another process, don't run aging and notify user
-					strErrorMsg=Lans.g("Ledgers","Aging failed to run for patients who had paysplits created outside of the current family. This is due to "
-						+"the currently running aging calculations which began on")+" "+dateTAgingBeganPref.ToString()+".  "+Lans.g("Ledgers","If you "
-						+"believe the current aging process has finished, a user with SecurityAdmin permission can manually clear the date and time by going "
-						+"to Setup | Miscellaneous and pressing the 'Clear' button.  You will need to run aging manually once the current aging process has "
-						+"finished or date and time is cleared.");
-				}
-				else {
-					Prefs.UpdateString(PrefName.AgingBeginDateTime,POut.DateT(dtNow,false));//get lock on pref to block others
-					Signalods.SetInvalid(InvalidType.Prefs);//signal a cache refresh so other computers will have the updated pref as quickly as possible
-					Ledgers.ComputeAging(listGuarantorNums,dateAsOf);
-					Prefs.UpdateString(PrefName.AgingBeginDateTime,"");//clear lock on pref whether aging was successful or not
-					Signalods.SetInvalid(InvalidType.Prefs);
-				}
-			}
-			else {//not enterprise aging or only 1 guar so not using the famaging table, just run aging as usual
-				Ledgers.ComputeAging(listGuarantorNums,dateAsOf);
-			}
-			return strErrorMsg;
-		}
+        ///<summary>Computes aging for PaySplits not associated to the patient passed in. Does nothing if all PaySplits are for the passed in PatNum.
+        ///Returns error message if AgingIsEnterprise preference is on and someone is currently computing aging. Otherwise returns empty string.</summary>
+        public static string ComputeAgingForPaysplitsAllocatedToDiffPats(long patNum, List<PaySplit> listPaySplits)
+        {
+            //No need to check RemotingRole; no call to db.;
+            List<long> listFamPatNums = Patients.GetFamily(patNum).ListPats.Select(x => x.PatNum).ToList();
+            //Get all PatNums not in the patient's family
+            List<long> listPatNumsAssociatedToDiffFam = listPaySplits.Where(x => !x.PatNum.In(listFamPatNums)).Select(y => y.PatNum).Distinct().ToList();
+            if (listPatNumsAssociatedToDiffFam.Count == 0)
+            {
+                return "";//all PaySplits are for the patient's family passed in. 
+            }
+            string strErrorMsg = "";
+            List<long> listGuarantorNums = Patients.GetGuarantorsForPatNums(listPatNumsAssociatedToDiffFam);
+            DateTime dateAsOf = DateTime.Today.Date;
+            DateTime dateTAgingBeganPref = DateTime.MinValue;
+            DateTime dtNow = MiscData.GetNowDateTime();
+            if (Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily))
+            {
+                dateAsOf = Preference.GetDate(PreferenceName.DateLastAging);
+            }
+            bool isFamaging = (Preference.GetBool(PreferenceName.AgingIsEnterprise) && listGuarantorNums.Count > 1);//will only use the famaging table if more than 1 guar
+            if (isFamaging)
+            {//if this will utilize the famaging table we need to check and set the pref to block others from starting aging
+                Preference.Refresh();
+                dateTAgingBeganPref = Preference.GetDateTime(PreferenceName.AgingBeginDateTime);
+                if (dateTAgingBeganPref > DateTime.MinValue)
+                {//pref has been set by another process, don't run aging and notify user
+                    strErrorMsg = Lans.g("Ledgers", "Aging failed to run for patients who had paysplits created outside of the current family. This is due to "
+                        + "the currently running aging calculations which began on") + " " + dateTAgingBeganPref.ToString() + ".  " + Lans.g("Ledgers", "If you "
+                        + "believe the current aging process has finished, a user with SecurityAdmin permission can manually clear the date and time by going "
+                        + "to Setup | Miscellaneous and pressing the 'Clear' button.  You will need to run aging manually once the current aging process has "
+                        + "finished or date and time is cleared.");
+                }
+                else
+                {
+                    Preference.Update(PreferenceName.AgingBeginDateTime, dtNow);//get lock on pref to block others
+                    Signalods.SetInvalid(InvalidType.Prefs);//signal a cache refresh so other computers will have the updated pref as quickly as possible
+                    Ledgers.ComputeAging(listGuarantorNums, dateAsOf);
+                    Preference.Update(PreferenceName.AgingBeginDateTime, "");//clear lock on pref whether aging was successful or not
+                    Signalods.SetInvalid(InvalidType.Prefs);
+                }
+            }
+            else
+            {//not enterprise aging or only 1 guar so not using the famaging table, just run aging as usual
+                Ledgers.ComputeAging(listGuarantorNums, dateAsOf);
+            }
+            return strErrorMsg;
+        }
 
 		///<summary>Generates a dictionary where the Key:PatNum and Val:FamilyBalance for passed-in guarantors.</summary>
 		public static Dictionary<long,double> GetBalancesForFamilies(List<long> listGuarantorNums) {
@@ -273,7 +290,7 @@ namespace OpenDentBusiness{
 			command="";
 			bool isAllPats=string.IsNullOrWhiteSpace(familyPatNums);//true if guarantor==0 or invalid, meaning for all patients not just one family
 			//Negative adjustments can optionally be overridden in order to ignore the global preference.
-			bool isNegAdjAged=(isForceAgeNegAdj??Preferences.GetBool(PrefName.AgingNegativeAdjsByAdjDate));//if isForceAgeNegAdj==null, use the pref
+			bool isNegAdjAged=(isForceAgeNegAdj?? Preference.GetBool(PreferenceName.AgingNegativeAdjsByAdjDate));//if isForceAgeNegAdj==null, use the pref
 			if(isWoAged || isNegAdjAged) {
 				//WriteoffOrig and/or negative Adjs are included in the charges buckets.  Since that could reduce a bucket to less than 0 we need to move any
 				//excess to the TotalCredits bucket to be applied to the oldest charge first
@@ -316,7 +333,7 @@ namespace OpenDentBusiness{
 			if(isGroupByGuar) {
 				command+="INNER JOIN patient p ON p.PatNum=trans.PatNum "
 					+"GROUP BY p.Guarantor";
-				if(!isAllPats || !Preferences.GetBool(PrefName.AgingIsEnterprise)) {//only if for one fam or if not using famaging table
+				if(!isAllPats || !Preference.GetBool(PreferenceName.AgingIsEnterprise)) {//only if for one fam or if not using famaging table
 					command+=" ORDER BY NULL";
 				}
 			}
@@ -341,13 +358,13 @@ namespace OpenDentBusiness{
 				//This if statement never really does anything.  The only places that call this function with historic=true don't look at the
 				//patient.payplandue amount, and patient aging gets reset after the reports are generated.  In the future if we start looking at payment plan
 				//due amounts when historic=true we may need to revaluate this if statement.
-				billInAdvanceDate=POut.Date(DateTime.Today.AddDays(Preferences.GetLong(PrefName.PayPlansBillInAdvanceDays)));
+				billInAdvanceDate=POut.Date(DateTime.Today.AddDays(Preference.GetLong(PreferenceName.PayPlansBillInAdvanceDays)));
 			}
 			else {
-				billInAdvanceDate=POut.Date(asOfDate.AddDays(Preferences.GetLong(PrefName.PayPlansBillInAdvanceDays)));
+				billInAdvanceDate=POut.Date(asOfDate.AddDays(Preference.GetLong(PreferenceName.PayPlansBillInAdvanceDays)));
 			}
 			string asOfDateStr=POut.Date(asOfDate);
-			PayPlanVersions payPlanVersionCur=(PayPlanVersions)Preferences.GetInt(PrefName.PayPlansVersion);
+			PayPlanVersions payPlanVersionCur=(PayPlanVersions)Preference.GetInt(PreferenceName.PayPlansVersion);
 			bool isAllPats=string.IsNullOrWhiteSpace(familyPatNums);
 			string command="";
 			#region Completed Procs
@@ -585,7 +602,7 @@ namespace OpenDentBusiness{
 				isAllPats=true;//isAllPats==true means we don't set patNumStr and the table retrieved will include all pats (grouped by guar, so actually all guars)
 			}
 			//key=SuperFamily (PatNum); value=list of PatNums for the guars of each fam on a superbill, or if not a superbill, a list containing the GuarNum
-			Dictionary<long,List<long>> dictSuperFamGNums=new Dictionary<long,List<long>>();
+			Dictionary<long, List<long>> dictSuperFamGNums=new Dictionary<long, List<long>>();
 			foreach(PatAging patAgeCur in listGuarantors) {
 				//if making superBills and this guarantor has super billing and is also the superhead for the super family,
 				//fill dict with all guarnums and add all family members for all guars included in the superbill to the all patnums list

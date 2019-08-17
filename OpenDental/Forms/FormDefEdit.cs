@@ -28,7 +28,7 @@ namespace OpenDental {
 		public bool IsNew;
 		private System.Windows.Forms.Label labelColor;
 		private System.Windows.Forms.CheckBox checkHidden;
-		private Def DefCur;
+		private Definition DefCur;
 		//private Def 
 		private OpenDental.UI.Button butDelete;
 		private CheckBox checkExcludeSend;
@@ -47,10 +47,10 @@ namespace OpenDental {
 		private CheckBox checkNoColor;
 
 		///<summary>The list of definitions that is showing in FormDefinitions.  This list will typically be out of synch with the cache.  Gets set in the constructor.</summary>
-		private List<Def> _defsList;
+		private List<Definition> _defsList;
 		
 		///<summary>defCur should be the currently selected def from FormDefinitions.  defList is going to be the in-memory list of definitions currently displaying to the user.  defList typically is out of synch with the cache which is why we need to pass it in.</summary>
-		public FormDefEdit(Def defCur,List<Def> defsList,DefCatOptions defCatOptions){
+		public FormDefEdit(Definition defCur,List<Definition> defsList,DefCatOptions defCatOptions){
 			InitializeComponent();// Required for Windows Form Designer support
 			Lan.F(this);
 			DefCur=defCur;
@@ -343,24 +343,24 @@ namespace OpenDental {
 		#endregion
 
 		private void FormDefEdit_Load(object sender, System.EventArgs e) {
-			if(DefCur.Category==DefCat.ApptConfirmed) {
-				_listExcludeSendNums=Preferences.GetString(PrefName.ApptConfirmExcludeESend).Split(',').ToList().Select(x => PIn.Long(x)).ToList();
-				_listExcludeConfirmNums=Preferences.GetString(PrefName.ApptConfirmExcludeEConfirm).Split(',').ToList().Select(x => PIn.Long(x)).ToList();
-				_listExcludeRemindNums=Preferences.GetString(PrefName.ApptConfirmExcludeERemind).Split(',').ToList().Select(x => PIn.Long(x)).ToList();
+			if(DefCur.Category==DefinitionCategory.ApptConfirmed) {
+				_listExcludeSendNums=Preference.GetString(PreferenceName.ApptConfirmExcludeESend).Split(',').ToList().Select(x => PIn.Long(x)).ToList();
+				_listExcludeConfirmNums=Preference.GetString(PreferenceName.ApptConfirmExcludeEConfirm).Split(',').ToList().Select(x => PIn.Long(x)).ToList();
+				_listExcludeRemindNums=Preference.GetString(PreferenceName.ApptConfirmExcludeERemind).Split(',').ToList().Select(x => PIn.Long(x)).ToList();
 				//0 will get automatically added to the list when this is the first of its kind.  We never want 0 inserted.
 				_listExcludeSendNums.Remove(0);
 				_listExcludeConfirmNums.Remove(0);
 				_listExcludeRemindNums.Remove(0);
-				checkExcludeSend.Checked=_listExcludeSendNums.Contains(DefCur.DefNum);
-				checkExcludeConfirm.Checked=_listExcludeConfirmNums.Contains(DefCur.DefNum);
-				checkExcludeRemind.Checked=_listExcludeRemindNums.Contains(DefCur.DefNum);
+				checkExcludeSend.Checked=_listExcludeSendNums.Contains(DefCur.Id);
+				checkExcludeConfirm.Checked=_listExcludeConfirmNums.Contains(DefCur.Id);
+				checkExcludeRemind.Checked=_listExcludeRemindNums.Contains(DefCur.Id);
 			}
 			else {
 				groupEConfirm.Visible=false;
 				groupBoxEReminders.Visible=false;
 			}
-			if(DefCur.DefNum.In(Preferences.GetLong(PrefName.AppointmentTimeArrivedTrigger),Preferences.GetLong(PrefName.AppointmentTimeDismissedTrigger),
-				Preferences.GetLong(PrefName.AppointmentTimeSeatedTrigger))) 
+			if(DefCur.Id.In(Preference.GetLong(PreferenceName.AppointmentTimeArrivedTrigger),Preference.GetLong(PreferenceName.AppointmentTimeDismissedTrigger),
+				Preference.GetLong(PreferenceName.AppointmentTimeSeatedTrigger))) 
 			{
 				//We never want to send confirmation or reminders to an appointment when it is in a triggered confirm status.
 				checkExcludeConfirm.Enabled=false;
@@ -370,19 +370,19 @@ namespace OpenDental {
 				checkExcludeRemind.Checked=true;
 				checkExcludeSend.Checked=true;
 			}
-			string itemName=DefCur.ItemName;
-			_selectedValueString=DefCur.ItemValue;
+			string itemName=DefCur.Description;
+			_selectedValueString=DefCur.Value;
 			if(!_defCatOptions.CanEditName) {
 				//Allow foreign users to translate definitions that they do not have access to translate.
 				//Use FormDefinitions instead of 'this' because the users will have already translated the item names in that form and no need to duplicate.
-				itemName=Lan.g("FormDefinitions",DefCur.ItemName);
+				itemName=Lan.g("FormDefinitions",DefCur.Description);
 				textName.ReadOnly=true;
-				if(!DefCur.IsHidden || Defs.IsDefDeprecated(DefCur)) {
+				if(!DefCur.Hidden || Defs.IsDefDeprecated(DefCur)) {
 					checkHidden.Enabled=false;//prevent hiding defs that are hard-coded into OD. Prevent unhiding defs that are deprecated.
 				}
 			}
 			labelValue.Text=_defCatOptions.ValueText;
-			if(DefCur.Category==DefCat.AdjTypes && !IsNew){
+			if(DefCur.Category==DefinitionCategory.AdjTypes && !IsNew){
 				labelValue.Text="Not allowed to change type after an adjustment is created.";
 				textValue.Visible=false;
 			}
@@ -404,32 +404,32 @@ namespace OpenDental {
 				textValue.ReadOnly=true;
 				textValue.BackColor=SystemColors.Control;
 				labelValue.Text=Lan.g("FormDefinitions","Use the select button to choose a definition from the list.");
-				long defNumCur=PIn.Long(DefCur.ItemValue??"");
+				long defNumCur=PIn.Long(DefCur.Value??"");
 				if(defNumCur>0) {
-					textValue.Text=_defsList.FirstOrDefault(x => defNumCur==x.DefNum)?.ItemName??"";
+					textValue.Text=_defsList.FirstOrDefault(x => defNumCur==x.Id)?.Description??"";
 				}
 				butSelect.Visible=true;
 				butClearValue.Visible=true;
 			}
 			else if(_defCatOptions.DoShowItemOrderInValue) {
 				labelValue.Text=Lan.g(this,"Internal Priority");
-				textValue.Text=DefCur.ItemOrder.ToString();
+				textValue.Text=DefCur.SortOrder.ToString();
 				textValue.ReadOnly=true;
 				butSelect.Visible=false;
 				butClearValue.Visible=false;
 			}
 			else {
-				textValue.Text=DefCur.ItemValue;
+				textValue.Text=DefCur.Value;
 				butSelect.Visible=false;
 				butClearValue.Visible=false;
 			}
 			textName.Text=itemName;
-			butColor.BackColor=DefCur.ItemColor;
-			checkHidden.Checked=DefCur.IsHidden;
+			butColor.BackColor=DefCur.Color;
+			checkHidden.Checked=DefCur.Hidden;
 			if(_defCatOptions.DoShowNoColor) {
 				checkNoColor.Visible=true;
 				//If there is no color in the database currently, make the UI match this.
-				checkNoColor.Checked=(DefCur.ItemColor.ToArgb()==Color.Empty.ToArgb());
+				checkNoColor.Checked=(DefCur.Color.ToArgb()==Color.Empty.ToArgb());
 			}
 		}
 
@@ -437,10 +437,10 @@ namespace OpenDental {
 		private bool IsDefCurLastShowing() {
 			int countShowing=0;
 			for(int i=0;i<_defsList.Count;i++) {
-				if(_defsList[i].DefNum==DefCur.DefNum) {
+				if(_defsList[i].Id==DefCur.Id) {
 					continue;
 				}
-				if(_defsList[i].IsHidden) {
+				if(_defsList[i].Hidden) {
 					continue;
 				}
 				countShowing++;
@@ -457,17 +457,17 @@ namespace OpenDental {
 		}
 
 		private void butSelect_Click(object sender,EventArgs e) {
-			long defNumParent=PIn.Long(DefCur.ItemValue);//ItemValue could be blank, in which case defNumCur will be 0
-			FormDefinitionPicker FormDP=new FormDefinitionPicker(DefCur.Category,_defsList.ToList().FindAll(x => x.DefNum==defNumParent),DefCur.DefNum);
+			long defNumParent=PIn.Long(DefCur.Value);//ItemValue could be blank, in which case defNumCur will be 0
+			FormDefinitionPicker FormDP=new FormDefinitionPicker(DefCur.Category,_defsList.ToList().FindAll(x => x.Id==defNumParent),DefCur.Id);
 			FormDP.IsMultiSelectionMode=false;
 			FormDP.HasShowHiddenOption=false;
 			FormDP.ShowDialog();
 			if(FormDP.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			Def selectedDef=FormDP.ListSelectedDefs.DefaultIfEmpty(new Def() { ItemName="" }).First();
-			_selectedValueString=selectedDef.DefNum==0?"":selectedDef.DefNum.ToString();//list should have exactly one def in it, but this is safe
-			textValue.Text=selectedDef.ItemName;
+			Definition selectedDef=FormDP.ListSelectedDefs.DefaultIfEmpty(new Definition() { Description="" }).First();
+			_selectedValueString=selectedDef.Id==0?"":selectedDef.Id.ToString();//list should have exactly one def in it, but this is safe
+			textValue.Text=selectedDef.Description;
 		}
 
 		private void butClearValue_Click(object sender,EventArgs e) {
@@ -487,15 +487,15 @@ namespace OpenDental {
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			if(DefCur.Category==DefCat.ClaimCustomTracking && _defsList.Count(x => x.Category==DefCat.ClaimCustomTracking)==1
-				|| DefCur.Category==DefCat.InsurancePaymentType && _defsList.Count(x => x.Category==DefCat.InsurancePaymentType)==1
-				|| DefCur.Category==DefCat.SupplyCats && _defsList.Count(x => x.Category==DefCat.SupplyCats)==1) 
+			if(DefCur.Category==DefinitionCategory.ClaimCustomTracking && _defsList.Count(x => x.Category==DefinitionCategory.ClaimCustomTracking)==1
+				|| DefCur.Category==DefinitionCategory.InsurancePaymentType && _defsList.Count(x => x.Category==DefinitionCategory.InsurancePaymentType)==1
+				|| DefCur.Category==DefinitionCategory.SupplyCats && _defsList.Count(x => x.Category==DefinitionCategory.SupplyCats)==1) 
 			{
 				MsgBox.Show(this,"Cannot delete the last definition from this category.");
 				return;
 			}
 			bool isAutoNoteRefresh=false;
-			if(DefCur.Category==DefCat.AutoNoteCats && AutoNotes.GetExists(x => x.Category==DefCur.DefNum)) {
+			if(DefCur.Category==DefinitionCategory.AutoNoteCats && AutoNotes.GetExists(x => x.Category==DefCur.Id)) {
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Deleting this Auto Note Category will uncategorize some auto notes.  Delete anyway?")) {
 					return;
 				}
@@ -517,35 +517,35 @@ namespace OpenDental {
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(Defs.IsHidable(DefCur.Category) && checkHidden.Checked) {
 				if(Defs.IsDefinitionInUse(DefCur)) {
-					if(DefCur.DefNum==Preferences.GetLong(PrefName.BrokenAppointmentAdjustmentType)
-						|| DefCur.DefNum==Preferences.GetLong(PrefName.AppointmentTimeArrivedTrigger)
-						|| DefCur.DefNum==Preferences.GetLong(PrefName.AppointmentTimeSeatedTrigger)
-						|| DefCur.DefNum==Preferences.GetLong(PrefName.AppointmentTimeDismissedTrigger)
-						|| DefCur.DefNum==Preferences.GetLong(PrefName.TreatPlanDiscountAdjustmentType)
-						|| DefCur.DefNum==Preferences.GetLong(PrefName.BillingChargeAdjustmentType)
-						|| DefCur.DefNum==Preferences.GetLong(PrefName.FinanceChargeAdjustmentType)
-						|| DefCur.DefNum==Preferences.GetLong(PrefName.PrepaymentUnearnedType)
-						|| DefCur.DefNum==Preferences.GetLong(PrefName.PracticeDefaultBillType)
-						|| DefCur.DefNum==Preferences.GetLong(PrefName.SalesTaxAdjustmentType)
-						|| DefCur.DefNum==Preferences.GetLong(PrefName.RecurringChargesPayTypeCC))
+					if(DefCur.Id==Preference.GetLong(PreferenceName.BrokenAppointmentAdjustmentType)
+						|| DefCur.Id==Preference.GetLong(PreferenceName.AppointmentTimeArrivedTrigger)
+						|| DefCur.Id==Preference.GetLong(PreferenceName.AppointmentTimeSeatedTrigger)
+						|| DefCur.Id==Preference.GetLong(PreferenceName.AppointmentTimeDismissedTrigger)
+						|| DefCur.Id==Preference.GetLong(PreferenceName.TreatPlanDiscountAdjustmentType)
+						|| DefCur.Id==Preference.GetLong(PreferenceName.BillingChargeAdjustmentType)
+						|| DefCur.Id==Preference.GetLong(PreferenceName.FinanceChargeAdjustmentType)
+						|| DefCur.Id==Preference.GetLong(PreferenceName.PrepaymentUnearnedType)
+						|| DefCur.Id==Preference.GetLong(PreferenceName.PracticeDefaultBillType)
+						|| DefCur.Id==Preference.GetLong(PreferenceName.SalesTaxAdjustmentType)
+						|| DefCur.Id==Preference.GetLong(PreferenceName.RecurringChargesPayTypeCC))
 					{
 						MsgBox.Show(this,"You cannot hide a definition if it is in use within Module Preferences.");
 						return;
 					}
-					else if(DefCur.DefNum.In(
-						Preferences.GetLong(PrefName.RecallStatusMailed),
-						Preferences.GetLong(PrefName.RecallStatusTexted),
-						Preferences.GetLong(PrefName.RecallStatusEmailed),
-						Preferences.GetLong(PrefName.RecallStatusEmailedTexted))) 
+					else if(DefCur.Id.In(
+						Preference.GetLong(PreferenceName.RecallStatusMailed),
+						Preference.GetLong(PreferenceName.RecallStatusTexted),
+						Preference.GetLong(PreferenceName.RecallStatusEmailed),
+						Preference.GetLong(PreferenceName.RecallStatusEmailedTexted))) 
 					{
 						MsgBox.Show(this,"You cannot hide a definition that is used as a status in the Setup Recall window.");
 						return;
 					}
-					else if(DefCur.DefNum==Preferences.GetLong(PrefName.WebSchedNewPatConfirmStatus)) {
+					else if(DefCur.Id==Preference.GetLong(PreferenceName.WebSchedNewPatConfirmStatus)) {
 						MsgBox.Show(this,"You cannot hide a definition that is used as an appointment confirmation status in Web Sched New Pat Appt.");
 						return;
 					}
-					else if(DefCur.DefNum==Preferences.GetLong(PrefName.WebSchedRecallConfirmStatus)) {
+					else if(DefCur.Id==Preference.GetLong(PreferenceName.WebSchedRecallConfirmStatus)) {
 						MsgBox.Show(this,"You cannot hide a definition that is used as an appointment confirmation status in Web Sched Recall Appt.");
 						return;
 					}
@@ -556,7 +556,7 @@ namespace OpenDental {
 					}
 				}
 				//Stop users from hiding the last definition in categories that must have at least one def in them.
-				if(!_defsList.Any(x=>x.DefNum!=DefCur.DefNum && !x.IsHidden)) {
+				if(!_defsList.Any(x=>x.Id!=DefCur.Id && !x.Hidden)) {
 					MsgBox.Show(this,"You cannot hide the last definition in this category.");
 					return;
 				}
@@ -566,8 +566,8 @@ namespace OpenDental {
 				return;
 			}
 			switch(DefCur.Category){
-				case DefCat.AccountQuickCharge:
-				case DefCat.ApptProcsQuickAdd:
+				case DefinitionCategory.AccountQuickCharge:
+				case DefinitionCategory.ApptProcsQuickAdd:
 					string[] procCodes=textValue.Text.Split(',');
 					List<string> listProcCodes=new List<string>();
 					for(int i=0;i<procCodes.Length;i++) {
@@ -584,39 +584,39 @@ namespace OpenDental {
 					}
 					textValue.Text=String.Join(",",listProcCodes);
 					break;
-				case DefCat.AdjTypes:
+				case DefinitionCategory.AdjTypes:
 					if(textValue.Text!="+" && textValue.Text!="-" && textValue.Text!="dp"){
 						MessageBox.Show(Lan.g(this,"Valid values are +, -, or dp."));
 						return;
 					}
 					break;
-				case DefCat.BillingTypes:
+				case DefinitionCategory.BillingTypes:
 					if(textValue.Text!="" && textValue.Text!="E" && textValue.Text!="C") 
 					{
 						MsgBox.Show(this,"Valid values are blank, E, or C.");
 						return;
 					}
-					if(checkHidden.Checked && Patients.IsBillingTypeInUse(DefCur.DefNum)) {
+					if(checkHidden.Checked && Patients.IsBillingTypeInUse(DefCur.Id)) {
 						if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Warning: Billing type is currently in use by patients, insurance plans, or preferences.")) {
 							return;
 						}
 					}
 					break;
-				case DefCat.ClaimCustomTracking:
+				case DefinitionCategory.ClaimCustomTracking:
 					int value=0;
 					if(!Int32.TryParse(textValue.Text,out value) || value<0) {
 						MsgBox.Show(this,"Days Suppressed must be a valid non-negative number.");
 						return;
 					}
 					break;
-				case DefCat.CommLogTypes:
+				case DefinitionCategory.CommLogTypes:
 					List<string> listCommItemTypes=Commlogs.GetCommItemTypes().Select(x => x.GetDescription(useShortVersionIfAvailable:true)).ToList();
 					if(textValue.Text!="" && !listCommItemTypes.Any(x => x==textValue.Text)) {
 						MessageBox.Show(Lan.g(this,"Valid values are:")+" "+string.Join(", ",listCommItemTypes));
 						return;
 					}
 					break;
-				case DefCat.DiscountTypes:
+				case DefinitionCategory.DiscountTypes:
 					int discVal;
 					if(textValue.Text=="") break;
 					try {
@@ -641,25 +641,25 @@ namespace OpenDental {
 					}
 					else textValue.Text="";
 					break;*/
-				case DefCat.ImageCats:
+				case DefinitionCategory.ImageCats:
 					textValue.Text=textValue.Text.ToUpper().Replace(",","");
 					if(!Regex.IsMatch(textValue.Text,@"^[XPS]*$")){
 						textValue.Text="";
 					}
 					break;
-				case DefCat.InsurancePaymentType:
+				case DefinitionCategory.InsurancePaymentType:
 					if(textValue.Text!="" && textValue.Text!="N") {
 						MsgBox.Show(this,"Valid values are blank or N.");
 						return;
 					}
 					break;
-				case DefCat.OperatoriesOld:
+				case DefinitionCategory.OperatoriesOld:
 					if(textValue.Text.Length > 5){
 						MessageBox.Show(Lan.g(this,"Maximum length of abbreviation is 5."));
 						return;
 					}
 					break;
-				case DefCat.ProcCodeCats:
+				case DefinitionCategory.ProcCodeCats:
 					if(checkHidden.Checked) {
 						if(IsDefCurLastShowing()) {
 							MsgBox.Show(this,"At least one procedure code category must be enabled.");
@@ -667,23 +667,23 @@ namespace OpenDental {
 						}
 					}
 					break;
-				case DefCat.ProviderSpecialties:
+				case DefinitionCategory.ProviderSpecialties:
 					if(checkHidden.Checked
-						&& (Providers.IsSpecialtyInUse(DefCur.DefNum)
-						|| Referrals.IsSpecialtyInUse(DefCur.DefNum)))
+						&& (Providers.IsSpecialtyInUse(DefCur.Id)
+						|| Referrals.IsSpecialtyInUse(DefCur.Id)))
 					{
 						MsgBox.Show(this,"You cannot hide a specialty if it is in use by a provider or a referral source.");
 						checkHidden.Checked=false;
 						return;
 					}
 					break;
-				case DefCat.RecallUnschedStatus:
+				case DefinitionCategory.RecallUnschedStatus:
 					if(textValue.Text.Length > 7){
 						MessageBox.Show(Lan.g(this,"Maximum length is 7."));
 						return;
 					}
 					break;
-				case DefCat.TaskPriorities:
+				case DefinitionCategory.TaskPriorities:
 					if(checkHidden.Checked) {
 						if(IsDefCurLastShowing()) {
 							MsgBox.Show(this,"You cannot hide the last priority.");
@@ -691,7 +691,7 @@ namespace OpenDental {
 						}
 					}
 					break;
-				case DefCat.TxPriorities:
+				case DefinitionCategory.TxPriorities:
 					if(textValue.Text.Length > 7){
 						MessageBox.Show(Lan.g(this,"Maximum length of abbreviation is 7."));
 						return;
@@ -700,51 +700,51 @@ namespace OpenDental {
 				default:
 					break;
 			}//end switch DefCur.Category
-			DefCur.ItemName=textName.Text;
-			DefCur.ItemValue=_selectedValueString;
+			DefCur.Description=textName.Text;
+			DefCur.Value=_selectedValueString;
 			if(_defCatOptions.EnableValue && !_defCatOptions.IsValueDefNum) {
-				DefCur.ItemValue=textValue.Text;
+				DefCur.Value=textValue.Text;
 			}
 			if(_defCatOptions.EnableColor) {
 				//If checkNoColor is checked, insert empty into the database. Otherwise, use the color they picked.
-				DefCur.ItemColor=(checkNoColor.Checked ? Color.Empty : butColor.BackColor);
+				DefCur.Color=(checkNoColor.Checked ? Color.Empty : butColor.BackColor);
 			}
-			DefCur.IsHidden=checkHidden.Checked;
+			DefCur.Hidden=checkHidden.Checked;
 			if(IsNew){
-				Defs.Insert(DefCur);
+                Definition.Insert(DefCur);
 			}
 			else{
-				Defs.Update(DefCur);
+                Definition.Update(DefCur);
 			}
 			//Must be after the upsert so that we have access to the DefNum for new Defs.
-			if(DefCur.Category==DefCat.ApptConfirmed) {
+			if(DefCur.Category==DefinitionCategory.ApptConfirmed) {
 				//==================== EXCLUDE SEND ====================
 				if(checkExcludeSend.Checked) {
-					_listExcludeSendNums.Add(DefCur.DefNum);
+					_listExcludeSendNums.Add(DefCur.Id);
 				}
 				else {
-					_listExcludeSendNums.RemoveAll(x => x==DefCur.DefNum);
+					_listExcludeSendNums.RemoveAll(x => x==DefCur.Id);
 				}
 				string sendString=string.Join(",",_listExcludeSendNums.Distinct().OrderBy(x => x));
-				Prefs.UpdateString(PrefName.ApptConfirmExcludeESend,sendString);
+				Preference.Update(PreferenceName.ApptConfirmExcludeESend,sendString);
 				//==================== EXCLUDE CONFIRM ====================
 				if(checkExcludeConfirm.Checked) {
-					_listExcludeConfirmNums.Add(DefCur.DefNum);
+					_listExcludeConfirmNums.Add(DefCur.Id);
 				}
 				else {
-					_listExcludeConfirmNums.RemoveAll(x => x==DefCur.DefNum);
+					_listExcludeConfirmNums.RemoveAll(x => x==DefCur.Id);
 				}
 				string confirmString = string.Join(",",_listExcludeConfirmNums.Distinct().OrderBy(x => x));
-				Prefs.UpdateString(PrefName.ApptConfirmExcludeEConfirm,confirmString);
+				Preference.Update(PreferenceName.ApptConfirmExcludeEConfirm,confirmString);
 				//==================== EXCLUDE REMIND ====================
 				if(checkExcludeRemind.Checked) {
-					_listExcludeRemindNums.Add(DefCur.DefNum);
+					_listExcludeRemindNums.Add(DefCur.Id);
 				}
 				else {
-					_listExcludeRemindNums.RemoveAll(x => x==DefCur.DefNum);
+					_listExcludeRemindNums.RemoveAll(x => x==DefCur.Id);
 				}
 				string remindString=string.Join(",",_listExcludeRemindNums.Distinct().OrderBy(x => x));
-				Prefs.UpdateString(PrefName.ApptConfirmExcludeERemind,remindString);
+				Preference.Update(PreferenceName.ApptConfirmExcludeERemind,remindString);
 				Signalods.SetInvalid(InvalidType.Prefs);
 			}
 			DialogResult=DialogResult.OK;

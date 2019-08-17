@@ -26,17 +26,17 @@ namespace OpenDental {
 		private void FillGrids(long selectedIneranlKey=0,long selectedCustomKey=0) {
 			_listCustomAlertCategory.Clear();
 			_listInternalAlertCategory.Clear();
-			AlertCategories.GetDeepCopy().ForEach(x =>
+			AlertCategory.All().ForEach(x =>
 			{
-				if(x.IsHQCategory) {
+				if(x.Locked) {
 					_listInternalAlertCategory.Add(x);
 				}
 				else {
 					_listCustomAlertCategory.Add(x);
 				}
 			});
-			_listInternalAlertCategory.OrderBy(x => x.InternalName);
-			_listCustomAlertCategory.OrderBy(x => x.InternalName);
+			_listInternalAlertCategory.OrderBy(x => x.Name);
+			_listCustomAlertCategory.OrderBy(x => x.Name);
 			FillInternalGrid(selectedIneranlKey);
 			FillCustomGrid(selectedCustomKey);
 		}
@@ -51,9 +51,9 @@ namespace OpenDental {
 			for(int i=0;i<_listInternalAlertCategory.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(_listInternalAlertCategory[i].Description);
-				row.Tag=_listInternalAlertCategory[i].AlertCategoryNum;
+				row.Tag=_listInternalAlertCategory[i].Id;
 				int index=gridInternal.Rows.Add(row);
-				if(selectedIneranlKey==_listInternalAlertCategory[i].AlertCategoryNum) {
+				if(selectedIneranlKey==_listInternalAlertCategory[i].Id) {
 					gridCustom.SetSelected(index,true);
 				}
 			}
@@ -71,9 +71,9 @@ namespace OpenDental {
 			for(int i=0;i<_listCustomAlertCategory.Count;i++){
 				row=new ODGridRow();
 				row.Cells.Add(_listCustomAlertCategory[i].Description);
-				row.Tag=_listCustomAlertCategory[i].AlertCategoryNum;
+				row.Tag=_listCustomAlertCategory[i].Id;
 				index=gridCustom.Rows.Add(row);
-				if(selectedCustomKey!=_listCustomAlertCategory[i].AlertCategoryNum) {
+				if(selectedCustomKey!=_listCustomAlertCategory[i].Id) {
 					index=0;
 				}
 			}
@@ -102,7 +102,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select an internal alert category from the list first.");
 				return;
 			}
-			InsertCopyAlertCategory(_listInternalAlertCategory[gridInternal.GetSelectedIndex()].Copy());
+			InsertCopyAlertCategory(_listInternalAlertCategory[gridInternal.GetSelectedIndex()]);
 		}
 
 		private void butDuplicate_Click(object sender,EventArgs e) {
@@ -110,18 +110,18 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select a custom alert category from the list first.");
 				return;
 			}
-			InsertCopyAlertCategory(_listCustomAlertCategory[gridCustom.GetSelectedIndex()].Copy());
+			InsertCopyAlertCategory(_listCustomAlertCategory[gridCustom.GetSelectedIndex()]);
 		}
 
 		private void InsertCopyAlertCategory(AlertCategory alertCat) {
-			alertCat.IsHQCategory=false;
+			alertCat.Locked=false;
 			alertCat.Description+=Lan.g(this,"(Copy)");
 			//alertCat.AlertCategoryNum reflects the original pre-copied PK. After Insert this will be a new PK for the new row.
-			List<AlertCategoryLink> listAlertCategoryType=AlertCategoryLinks.GetForCategory(alertCat.AlertCategoryNum);
-			alertCat.AlertCategoryNum=AlertCategories.Insert(alertCat);
+			List<AlertCategoryLink> listAlertCategoryType=AlertCategoryLinks.GetForCategory(alertCat.Id);
+			AlertCategory.Insert(alertCat);
 			//At this point alertCat has a new PK, so we need to update and insert our new copied alertCategoryLinks
 			listAlertCategoryType.ForEach(x => {
-				x.AlertCategoryNum=alertCat.AlertCategoryNum;
+				x.AlertCategoryNum=alertCat.Id;
 				AlertCategoryLinks.Insert(x);
 			});
 			DataValid.SetInvalid(InvalidType.AlertCategories,InvalidType.AlertCategoryLinks);

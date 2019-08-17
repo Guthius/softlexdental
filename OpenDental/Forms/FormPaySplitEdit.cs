@@ -37,7 +37,7 @@ namespace OpenDental {
 		private List<Provider> _listProviders;
 		private PaySplit _paySplitCopy;
 		private Procedure ProcCur;
-		private List<Def> _listPaySplitUnearnedTypeDefs;
+		private List<Definition> _listPaySplitUnearnedTypeDefs;
 		///<summary>True if the payment for this paysplit is an income transfer.</summary>
 		private bool _isIncomeTransfer;
 		private Adjustment _adjCur;
@@ -69,10 +69,10 @@ namespace OpenDental {
 			textAmount.Text=PaySplitCur.SplitAmt.ToString("F");
 			comboUnearnedTypes.Items.Add(Lan.g(this,"None"));
 			comboUnearnedTypes.SelectedIndex=0;
-			_listPaySplitUnearnedTypeDefs=Defs.GetDefsForCategory(DefCat.PaySplitUnearnedType,true);
+			_listPaySplitUnearnedTypeDefs=Definition.GetByCategory(DefinitionCategory.PaySplitUnearnedType);
 			for(int i=0;i<_listPaySplitUnearnedTypeDefs.Count;i++) {
-				comboUnearnedTypes.Items.Add(_listPaySplitUnearnedTypeDefs[i].ItemName);
-				if(_listPaySplitUnearnedTypeDefs[i].DefNum==PaySplitCur.UnearnedType) {
+				comboUnearnedTypes.Items.Add(_listPaySplitUnearnedTypeDefs[i].Description);
+				if(_listPaySplitUnearnedTypeDefs[i].Id==PaySplitCur.UnearnedType) {
 					comboUnearnedTypes.SelectedIndex=i+1;
 				}
 			}
@@ -127,7 +127,7 @@ namespace OpenDental {
 		///<summary>Sets the patient GroupBox, provider combobox & picker button, 
 		///and clinic combobox enabled/disabled depending on whether a proc is attached.</summary>
 		private void SetEnabledProc() {
-			if((ProcCur!=null || _adjCur!=null) && !_isEditAnyway && Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
+			if((ProcCur!=null || _adjCur!=null) && !_isEditAnyway && Preference.GetInt(PreferenceName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
 				groupPatient.Enabled=false;
 				comboProvider.Enabled=false;
 				butPickProv.Enabled=false;
@@ -170,8 +170,8 @@ namespace OpenDental {
 			else {
 				PaySplitCur.ProvNum=0;
 			}
-			if(_isEditAnyway || Preferences.GetInt(PrefName.RigorousAccounting)!=(int)RigorousAccounting.EnforceFully 
-				|| Preferences.GetBool(PrefName.AllowPrepayProvider)) 
+			if(_isEditAnyway || Preference.GetInt(PreferenceName.RigorousAccounting)!=(int)RigorousAccounting.EnforceFully 
+				|| Preference.GetBool(PreferenceName.AllowPrepayProvider)) 
 			{
 				return;
 			}
@@ -187,13 +187,13 @@ namespace OpenDental {
 
 		private void comboUnearnedTypes_SelectionChangeCommitted(object sender,EventArgs e) {
 			if(comboUnearnedTypes.SelectedIndex>0) {
-				PaySplitCur.UnearnedType=_listPaySplitUnearnedTypeDefs[comboUnearnedTypes.SelectedIndex-1].DefNum;
+				PaySplitCur.UnearnedType=_listPaySplitUnearnedTypeDefs[comboUnearnedTypes.SelectedIndex-1].Id;
 			}
 			else {
 				PaySplitCur.UnearnedType=0;
 			}
-			if(_isEditAnyway || Preferences.GetInt(PrefName.RigorousAccounting)!=(int)RigorousAccounting.EnforceFully 
-				|| Preferences.GetBool(PrefName.AllowPrepayProvider)) 
+			if(_isEditAnyway || Preference.GetInt(PreferenceName.RigorousAccounting)!=(int)RigorousAccounting.EnforceFully 
+				|| Preference.GetBool(PreferenceName.AllowPrepayProvider)) 
 			{
 				return;
 			}
@@ -377,7 +377,7 @@ namespace OpenDental {
 				comboClinic.SelectedIndex=_listClinics.FindIndex(x => x.ClinicNum==PaySplitCur.ClinicNum);
 			}
 			butAttachProc.Enabled=false;
-			if(!_isEditAnyway && Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
+			if(!_isEditAnyway && Preference.GetInt(PreferenceName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
 				comboProvider.Enabled=false;
 				comboClinic.Enabled=false;
 				butPickProv.Enabled=false;
@@ -420,9 +420,9 @@ namespace OpenDental {
 			textAdjProv.Text=Providers.GetAbbr(_adjCur.ProvNum);
 			textAdjAmt.Text=_adjCur.AdjAmt.ToString("F");//Adjustment's original amount
 			//Don't include any splits on current payment - Since they could be modified and DB doesn't know about it yet.
-			_adjPrevPaid=Adjustments.GetAmtAllocated(_adjCur.AdjNum,PaySplitCur.PayNum);
+			_adjPrevPaid=Adjustments.GetAmtAllocated(_adjCur.Id,PaySplitCur.PayNum);
 			//ListSplitsCur contains current paysplit, we need to remove it somehow.  PaySplitCur could have SplitNum=0 though.
-			List<PaySplit> listSplits=ListSplitsCur.FindAll(x => x.AdjNum==_adjCur.AdjNum);
+			List<PaySplit> listSplits=ListSplitsCur.FindAll(x => x.AdjNum==_adjCur.Id);
 			if(listSplits.Count>0) {
 				_adjPrevPaid+=listSplits.Sum(x => x.SplitAmt);
 				//There needs to be something here so _adjPrevPaid isn't adjusted by current split amt if the split isn't in listSplits
@@ -441,7 +441,7 @@ namespace OpenDental {
 			butAttachAdjust.Enabled=false;
 			checkPayPlan.Checked=false;
 			checkPayPlan.Enabled=false;
-			if(!_isEditAnyway && Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
+			if(!_isEditAnyway && Preference.GetInt(PreferenceName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
 				comboProvider.Enabled=false;
 				comboClinic.Enabled=false;
 				butPickProv.Enabled=false;
@@ -491,7 +491,7 @@ namespace OpenDental {
 			}
 			List<PaySplit> listPaySplitAllocatedElseWhere=new List<PaySplit>();
 			DateTime datePay=SplitAssociated.PaySplitOrig.DatePay;
-			string prePayType=Defs.GetName(DefCat.PaySplitUnearnedType,SplitAssociated.PaySplitOrig.UnearnedType);
+			string prePayType=Defs.GetName(DefinitionCategory.PaySplitUnearnedType,SplitAssociated.PaySplitOrig.UnearnedType);
 			decimal amt=PIn.Decimal(textAmount.Text);
 			decimal prepayAmt=0;
 			decimal usedHere=Math.Abs(amt);
@@ -607,7 +607,7 @@ namespace OpenDental {
 
 		private void butDetachAdjust_Click(object sender,EventArgs e) {
 			if(_adjCur!=null) {
-				ListSplitsCur.Where(x => x.AdjNum==_adjCur.AdjNum && x.IsSame(PaySplitCur))
+				ListSplitsCur.Where(x => x.AdjNum==_adjCur.Id && x.IsSame(PaySplitCur))
 					.ForEach(x => x.AdjNum=0);
 			}
 			_adjCur=null;
@@ -655,13 +655,13 @@ namespace OpenDental {
 			if(isNegSplit) {//if negative then we're allocating money from the original prepayment.
 				butAttachProc.Enabled=false;
 				butDetachProc.Enabled=false;
-				if(Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully && !Preferences.GetBool(PrefName.AllowPrepayProvider)) {
+				if(Preference.GetInt(PreferenceName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully && !Preference.GetBool(PreferenceName.AllowPrepayProvider)) {
 					comboProvider.Enabled=false;
 					butPickProv.Enabled=false;  
 				}
 				if(comboUnearnedTypes.SelectedIndex==0) {//unearned has not been set
-					int selectedIndex=_listPaySplitUnearnedTypeDefs.FindIndex(x => x.DefNum==SplitAssociated.PaySplitOrig.UnearnedType)+1;//+1 because of 'None'
-					comboUnearnedTypes.SelectIndex(selectedIndex,Defs.GetName(DefCat.PaySplitUnearnedType,SplitAssociated.PaySplitOrig.UnearnedType));
+					int selectedIndex=_listPaySplitUnearnedTypeDefs.FindIndex(x => x.Id==SplitAssociated.PaySplitOrig.UnearnedType)+1;//+1 because of 'None'
+					comboUnearnedTypes.SelectIndex(selectedIndex,Defs.GetName(DefinitionCategory.PaySplitUnearnedType,SplitAssociated.PaySplitOrig.UnearnedType));
 					PaySplitCur.UnearnedType=SplitAssociated.PaySplitOrig.UnearnedType;
 				}
 				comboUnearnedTypes.Enabled=false;
@@ -774,7 +774,7 @@ namespace OpenDental {
 				return false;
 			}
 			double amount=PIn.Double(textAmount.Text);
-			if(Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully && PaySplitCur.UnearnedType!=0 && ProcCur!=null 
+			if(Preference.GetInt(PreferenceName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully && PaySplitCur.UnearnedType!=0 && ProcCur!=null 
 				&& !_isEditAnyway) 
 			{
 				MsgBox.Show(this,"Cannot have an unallocated split that also has an attached procedure.");
@@ -789,7 +789,7 @@ namespace OpenDental {
 					return false;
 				}
 			}
-      if(Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully && ProcCur==null && PaySplitCur.UnearnedType==0 
+      if(Preference.GetInt(PreferenceName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully && ProcCur==null && PaySplitCur.UnearnedType==0 
 					&& _adjCur==null) 
 			{
 				MsgBox.Show(this,"You must attach a procedure or adjustment to this payment.");
@@ -814,13 +814,13 @@ namespace OpenDental {
 			}
 			//Provider and Unearned combos will be correct at this point, based on ProvNum or UnearnedType.
 			//Unearned type and provider are set in SelectionChangeCommitted events for the respective combo boxes, when rigorous and provs not allowed
-			if(!_isEditAnyway && Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
+			if(!_isEditAnyway && Preference.GetInt(PreferenceName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
 				PaySplit split=SplitAssociated?.PaySplitOrig??new PaySplit();
 				if(split.ProvNum!=0 && ProcCur!=null && split.ProvNum!=ProcCur.ProvNum) {
 					MsgBox.Show(this,"Procedure provider and original paysplit provider do not match.");
 					return false;
 				}
-				if(PaySplitCur.ProvNum>0 && !Preferences.GetBool(PrefName.AllowPrepayProvider)) {
+				if(PaySplitCur.ProvNum>0 && !Preference.GetBool(PreferenceName.AllowPrepayProvider)) {
 					PaySplitCur.UnearnedType=0;
 				}
 				else if(PaySplitCur.ProvNum<=0){
@@ -831,10 +831,10 @@ namespace OpenDental {
 					}
 					PaySplitCur.ProvNum=0;//This means it's unallocated.
 					if(comboUnearnedTypes.SelectedIndex==0) {
-						PaySplitCur.UnearnedType=Preferences.GetLong(PrefName.PrepaymentUnearnedType);
+						PaySplitCur.UnearnedType=Preference.GetLong(PreferenceName.PrepaymentUnearnedType);
 					}
 					else {
-						PaySplitCur.UnearnedType=_listPaySplitUnearnedTypeDefs[comboUnearnedTypes.SelectedIndex-1].DefNum;
+						PaySplitCur.UnearnedType=_listPaySplitUnearnedTypeDefs[comboUnearnedTypes.SelectedIndex-1].Id;
 					}
 				}
 			}
@@ -853,7 +853,7 @@ namespace OpenDental {
 			PaySplitCur.DatePay=PIn.Date(textDatePay.Text);//gets overwritten anyway
 			PaySplitCur.SplitAmt=amount;
 			PaySplitCur.ProcNum=ProcCur == null ? 0 : ProcCur.ProcNum;
-			PaySplitCur.AdjNum=_adjCur == null ? 0 : _adjCur.AdjNum;
+			PaySplitCur.AdjNum=_adjCur == null ? 0 : _adjCur.Id;
 			if(IsNew) {
 				string secLogText="Paysplit created";
 				if(_isEditAnyway) {

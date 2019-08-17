@@ -86,7 +86,7 @@ namespace OpenDental {
 
 			Progress("Get Clearinghouse Authentication & Authorization..");
 			// Make 1st HTTP Call And Get the authenticaton
-			PatienteBillServerAddress = Preferences.GetRaw("PatienteBillServerAddress");
+			PatienteBillServerAddress = Preference.GetString("PatienteBillServerAddress");
 			if(PatienteBillServerAddress.Length == 0) {
 				Error("Missing Patient eBill Server Information."+PWContactInfo);
 				return false;
@@ -158,9 +158,9 @@ namespace OpenDental {
 		private bool isValidFolder() {
 			try {
 				Progress("Verify Folder Location..");
-				if(Directory.Exists(Preferences.GetRaw("PatienteBillPath")) == false) {
+				if(Directory.Exists(Preference.GetString("PatienteBillPath")) == false) {
 					// Create Directory
-					Directory.CreateDirectory(Preferences.GetRaw("PatienteBillPath"));
+					Directory.CreateDirectory(Preference.GetString("PatienteBillPath"));
 				}
 			}
 			catch(Exception ex) {
@@ -217,7 +217,7 @@ namespace OpenDental {
 
 				// Prepare AccountNumber Attribute
 				XmlAttribute AccountNumber = Doc.CreateAttribute("AccountNumber");
-				AccountNumber.Value = Preferences.GetRaw("PWClientAccountNumber");
+				AccountNumber.Value = Preference.GetString("PWClientAccountNumber");
 				Practice.Attributes.Append(AccountNumber);
 
 				//**********************************************
@@ -246,43 +246,43 @@ namespace OpenDental {
 			// Prepare Name Element for Practice Element
 			XmlNode PracticeName = Doc.CreateNode(XmlNodeType.Element,"Name","");
 			XmlCDataSection CDataPracticeName;
-			CDataPracticeName = Doc.CreateCDataSection(Preferences.GetString(PrefName.PracticeTitle));
+			CDataPracticeName = Doc.CreateCDataSection(Preference.GetString(PreferenceName.PracticeTitle));
 			PracticeName.AppendChild(CDataPracticeName);
 			Practice.AppendChild(PracticeName);
 
 			// Prepare Address1 Element for Practice Element
 			XmlNode PracticeAddress1 = Doc.CreateNode(XmlNodeType.Element,"Address1","");
 			XmlCDataSection CDataPracticeAddress1;
-			CDataPracticeAddress1 = Doc.CreateCDataSection(Preferences.GetString(PrefName.PracticeAddress));
+			CDataPracticeAddress1 = Doc.CreateCDataSection(Preference.GetString(PreferenceName.PracticeAddress));
 			PracticeAddress1.AppendChild(CDataPracticeAddress1);
 			Practice.AppendChild(PracticeAddress1);
 
 			// Prepare Address2 Element for Practice Element
 			XmlNode PracticeAddress2 = Doc.CreateNode(XmlNodeType.Element,"Address2","");
 			XmlCDataSection CDataPracticeAddress2;
-			CDataPracticeAddress2 = Doc.CreateCDataSection(Preferences.GetString(PrefName.PracticeAddress2));
+			CDataPracticeAddress2 = Doc.CreateCDataSection(Preference.GetString(PreferenceName.PracticeAddress2));
 			PracticeAddress2.AppendChild(CDataPracticeAddress2);
 			Practice.AppendChild(PracticeAddress2);
 
 			// Prepare City Element for Practice Element
 			XmlNode PracticeCity = Doc.CreateNode(XmlNodeType.Element,"City","");
 			XmlCDataSection CDataPracticeCity;
-			CDataPracticeCity = Doc.CreateCDataSection(Preferences.GetString(PrefName.PracticeCity));
+			CDataPracticeCity = Doc.CreateCDataSection(Preference.GetString(PreferenceName.PracticeCity));
 			PracticeCity.AppendChild(CDataPracticeCity);
 			Practice.AppendChild(PracticeCity);
 
 			// Prepare State Element for Practice Element
 			XmlNode PracticeState = Doc.CreateNode(XmlNodeType.Element,"State","");
-			PracticeState.InnerText = Preferences.GetString(PrefName.PracticeST);
+			PracticeState.InnerText = Preference.GetString(PreferenceName.PracticeST);
 			Practice.AppendChild(PracticeState);
 
 			// Prepare Zip Element for Practice Element
 			XmlNode PracticeZip = Doc.CreateNode(XmlNodeType.Element,"Zip","");
-			PracticeZip.InnerText = Preferences.GetString(PrefName.PracticeZip);
+			PracticeZip.InnerText = Preference.GetString(PreferenceName.PracticeZip);
 			Practice.AppendChild(PracticeZip);
 
 			// Format Phone -- Start
-			string formatPhone = Preferences.GetString(PrefName.PracticePhone);
+			string formatPhone = Preference.GetString(PreferenceName.PracticePhone);
 			if(formatPhone.Length > 0)
 				formatPhone = "(" + formatPhone.Substring(0,3) + ")" + formatPhone.Substring(3,3) + "-" + formatPhone.Substring(6);
 			// Format Phone -- End
@@ -300,44 +300,44 @@ namespace OpenDental {
 			XmlNode PracticeRemitAddress = Doc.CreateNode(XmlNodeType.Element,"RemitAddress","");
 			Practice.AppendChild(PracticeRemitAddress);
 			// If Billing Address is blank then Remit address is same as Practionar address
-			if(Preferences.GetString(PrefName.PracticeBillingAddress).Length == 0) {
+			if(Preference.GetString(PreferenceName.PracticeBillingAddress).Length == 0) {
 				// Append Name, Address and Phone of Practice
 				// Prepare Name, Address, and Phone for Remit Address
 				XmlNode RemitAddressName = Doc.CreateNode(XmlNodeType.Element,"Name","");
 				XmlCDataSection CDataRemitAddressName;
-				CDataRemitAddressName = Doc.CreateCDataSection(Preferences.GetString(PrefName.PracticeTitle));
+				CDataRemitAddressName = Doc.CreateCDataSection(Preference.GetString(PreferenceName.PracticeTitle));
 				RemitAddressName.AppendChild(CDataRemitAddressName);
 				PracticeRemitAddress.AppendChild(RemitAddressName);
 
 				// Prepare Address1 Element for RemitAddress Element
 				XmlNode RemitAddressAddress1 = Doc.CreateNode(XmlNodeType.Element,"Address1","");
 				XmlCDataSection CDataRemitAddressAddress1;
-				CDataRemitAddressAddress1 = Doc.CreateCDataSection(Preferences.GetString(PrefName.PracticeAddress));
+				CDataRemitAddressAddress1 = Doc.CreateCDataSection(Preference.GetString(PreferenceName.PracticeAddress));
 				RemitAddressAddress1.AppendChild(CDataRemitAddressAddress1);
 				PracticeRemitAddress.AppendChild(RemitAddressAddress1);
 
 				// Prepare Address2 Element for RemitAddress Element
 				XmlNode RemitAddressAddress2 = Doc.CreateNode(XmlNodeType.Element,"Address2","");
 				XmlCDataSection CDataRemitAddressAddress2;
-				CDataRemitAddressAddress2 = Doc.CreateCDataSection(Preferences.GetString(PrefName.PracticeAddress2));
+				CDataRemitAddressAddress2 = Doc.CreateCDataSection(Preference.GetString(PreferenceName.PracticeAddress2));
 				RemitAddressAddress2.AppendChild(CDataRemitAddressAddress2);
 				PracticeRemitAddress.AppendChild(RemitAddressAddress2);
 
 				// Prepare City Element for RemitAddress Element
 				XmlNode RemitAddressCity = Doc.CreateNode(XmlNodeType.Element,"City","");
 				XmlCDataSection CDataRemitAddressCity;
-				CDataRemitAddressCity = Doc.CreateCDataSection(Preferences.GetString(PrefName.PracticeCity));
+				CDataRemitAddressCity = Doc.CreateCDataSection(Preference.GetString(PreferenceName.PracticeCity));
 				RemitAddressCity.AppendChild(CDataRemitAddressCity);
 				PracticeRemitAddress.AppendChild(RemitAddressCity);
 
 				// Prepare State Element for RemitAddress Element
 				XmlNode RemitAddressState = Doc.CreateNode(XmlNodeType.Element,"State","");
-				RemitAddressState.InnerText = Preferences.GetString(PrefName.PracticeST);
+				RemitAddressState.InnerText = Preference.GetString(PreferenceName.PracticeST);
 				PracticeRemitAddress.AppendChild(RemitAddressState);
 
 				// Prepare Zip Element for RemitAddress Element
 				XmlNode RemitAddressZip = Doc.CreateNode(XmlNodeType.Element,"Zip","");
-				RemitAddressZip.InnerText = Preferences.GetString(PrefName.PracticeZip);
+				RemitAddressZip.InnerText = Preference.GetString(PreferenceName.PracticeZip);
 				PracticeRemitAddress.AppendChild(RemitAddressZip);
 
 				// Prepare Phone Element for RemitAddress Element
@@ -349,39 +349,39 @@ namespace OpenDental {
 				// Prepare Name, Address, and Phone for Remit Address
 				XmlNode RemitAddressName = Doc.CreateNode(XmlNodeType.Element,"Name","");
 				XmlCDataSection CDataRemitAddressName;
-				CDataRemitAddressName = Doc.CreateCDataSection(Preferences.GetString(PrefName.PracticeTitle));
+				CDataRemitAddressName = Doc.CreateCDataSection(Preference.GetString(PreferenceName.PracticeTitle));
 				RemitAddressName.AppendChild(CDataRemitAddressName);
 				PracticeRemitAddress.AppendChild(RemitAddressName);
 
 				// Prepare Address1 Element for RemitAddress Element
 				XmlNode RemitAddressAddress1 = Doc.CreateNode(XmlNodeType.Element,"Address","");
 				XmlCDataSection CDataRemitAddressAddress1;
-				CDataRemitAddressAddress1 = Doc.CreateCDataSection(Preferences.GetString(PrefName.PracticeBillingAddress));
+				CDataRemitAddressAddress1 = Doc.CreateCDataSection(Preference.GetString(PreferenceName.PracticeBillingAddress));
 				RemitAddressAddress1.AppendChild(CDataRemitAddressAddress1);
 				PracticeRemitAddress.AppendChild(RemitAddressAddress1);
 
 				// Prepare Address2 Element for RemitAddress Element
 				XmlNode RemitAddressAddress2 = Doc.CreateNode(XmlNodeType.Element,"Address2","");
 				XmlCDataSection CDataRemitAddressAddress2;
-				CDataRemitAddressAddress2 = Doc.CreateCDataSection(Preferences.GetString(PrefName.PracticeBillingAddress2));
+				CDataRemitAddressAddress2 = Doc.CreateCDataSection(Preference.GetString(PreferenceName.PracticeBillingAddress2));
 				RemitAddressAddress2.AppendChild(CDataRemitAddressAddress2);
 				PracticeRemitAddress.AppendChild(RemitAddressAddress2);
 
 				// Prepare City Element for RemitAddress Element
 				XmlNode RemitAddressCity = Doc.CreateNode(XmlNodeType.Element,"City","");
 				XmlCDataSection CDataRemitAddressCity;
-				CDataRemitAddressCity = Doc.CreateCDataSection(Preferences.GetString(PrefName.PracticeBillingCity));
+				CDataRemitAddressCity = Doc.CreateCDataSection(Preference.GetString(PreferenceName.PracticeBillingCity));
 				RemitAddressCity.AppendChild(CDataRemitAddressCity);
 				PracticeRemitAddress.AppendChild(RemitAddressCity);
 
 				// Prepare State Element for RemitAddress Element
 				XmlNode RemitAddressState = Doc.CreateNode(XmlNodeType.Element,"State","");
-				RemitAddressState.InnerText = Preferences.GetString(PrefName.PracticeBillingST);
+				RemitAddressState.InnerText = Preference.GetString(PreferenceName.PracticeBillingST);
 				PracticeRemitAddress.AppendChild(RemitAddressState);
 
 				// Prepare Zip Element for RemitAddress Element
 				XmlNode RemitAddressZip = Doc.CreateNode(XmlNodeType.Element,"Zip","");
-				RemitAddressZip.InnerText = Preferences.GetString(PrefName.PracticeBillingZip);
+				RemitAddressZip.InnerText = Preference.GetString(PreferenceName.PracticeBillingZip);
 				PracticeRemitAddress.AppendChild(RemitAddressZip);
 
 				// Prepare Phone Element for RemitAddress Element
@@ -403,19 +403,19 @@ namespace OpenDental {
 		private void PreapreRendringProvider(XmlNode Practice) {
 			string RPName;
 			string RPLicense;
-			if(Preferences.GetString(PrefName.PracticeDefaultProv).Length > 0) {				
+			if(Preference.GetString(PreferenceName.PracticeDefaultProv).Length > 0) {				
 				DataTable RenderingTable = Providers.GetDefaultPracticeProvider();
 				if(RenderingTable.Rows.Count > 0) {
 					RPName = RenderingTable.Rows[0]["FName"].ToString() + " " + RenderingTable.Rows[0]["LName"].ToString() + " " + RenderingTable.Rows[0]["Suffix"].ToString();
 					RPLicense = RenderingTable.Rows[0]["StateLicense"].ToString();
 				}
 				else {
-					RPName = Preferences.GetString(PrefName.PracticeTitle).ToString();
+					RPName = Preference.GetString(PreferenceName.PracticeTitle).ToString();
 					RPLicense = "";
 				}
 			}
 			else {
-				RPName = Preferences.GetString(PrefName.PracticeTitle).ToString();
+				RPName = Preference.GetString(PreferenceName.PracticeTitle).ToString();
 				RPLicense = "";
 			}
 			// Prepare RenderingProvider Element for Practice Element
@@ -434,7 +434,7 @@ namespace OpenDental {
 
 			// Prepare State Element for RenderingProvider Element
 			XmlNode RenderingProviderState = Doc.CreateNode(XmlNodeType.Element,"State","");
-			RenderingProviderState.InnerText = Preferences.GetString(PrefName.PracticeST);
+			RenderingProviderState.InnerText = Preference.GetString(PreferenceName.PracticeST);
 			PracticeRenderingProvider.AppendChild(RenderingProviderState);
 		}
 
@@ -563,7 +563,7 @@ namespace OpenDental {
 
 				// Prepare DueDate Element For AccountSummary Element
 				XmlNode DueDate = Doc.CreateNode(XmlNodeType.Element,"DueDate","");
-				StmtCalcDueDate = Preferences.GetInt(PrefName.StatementsCalcDueDate);
+				StmtCalcDueDate = Preference.GetInt(PreferenceName.StatementsCalcDueDate);
 				if(StmtCalcDueDate != -1)
 					DueDate.InnerText = DateTime.Now.AddDays(StmtCalcDueDate).ToString("d");
 				else
@@ -763,7 +763,7 @@ namespace OpenDental {
 		// Store file
 		private bool isPatientFileCreated() {
 			Progress("Store Statements for Transmission..");
-			fileName = Preferences.GetRaw("PatienteBillPath") + "\\patientebill.xml";
+			fileName = Preference.GetString("PatienteBillPath") + "\\patientebill.xml";
 			try {
 				// remove any prior trasmitted file
 				if(File.Exists(fileName)) {
@@ -790,7 +790,7 @@ namespace OpenDental {
 					string gc_MimeSource = "Content-Disposition: form-data; name=\"Source\"";
 					string gc_MimeAuth = "Content-Disposition: form-data; name=\"AuthenticationID\"";
 					string gc_MimeFile = "Content-Disposition: form-data; name=\"File\"; filename=\"";
-					string tempFile = Preferences.GetRaw("PatienteBillPath") + "\\tmp.xml";
+					string tempFile = Preference.GetString("PatienteBillPath") + "\\tmp.xml";
 					string RequestStr = "--" + gc_MimeSep + "\r\n" + gc_MimeFunction +
                                              "\r\n\r\n" + "Upload\r\n" + "--" + gc_MimeSep + "\r\n" +
                                               gc_MimeSource + "\r\n\r\n" + "STM\r\n" + "--" + gc_MimeSep + "\r\n"

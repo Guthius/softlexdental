@@ -238,16 +238,16 @@ namespace OpenDental {
 			textDescription.Text=InsFilingCodeCur.Descript;
 			textEclaimCode.Text=InsFilingCodeCur.EclaimCode;
 			//Fill Group combobox
-			List<Def> listDefs=new List<Def>();
+			List<Definition> listDefs=new List<Definition>();
 			//Add placeholder "None"
-			listDefs.Add(new Def { DefNum=0,ItemName=Lans.g(this,"None"),Category=DefCat.InsuranceFilingCodeGroup });
-			listDefs.AddRange(Defs.GetDefsForCategory(DefCat.InsuranceFilingCodeGroup));
+			listDefs.Add(new Definition { Description=Lans.g(this,"None"),Category=DefinitionCategory.InsuranceFilingCodeGroup });
+			listDefs.AddRange(Definition.GetByCategory(DefinitionCategory.InsuranceFilingCodeGroup));
 			//Don't show hidden unless selected previously
-			listDefs=listDefs.Where(x => !x.IsHidden || InsFilingCodeCur.GroupType==x.DefNum).ToList();
-			foreach(Def def in listDefs) {
-				comboGroup.Items.Add(new ODBoxItem<Def>(def.ItemName+(def.IsHidden ? " "+Lans.g(this,"(hidden)") : ""),def));
+			listDefs=listDefs.Where(x => !x.Hidden || InsFilingCodeCur.GroupType==x.Id).ToList();
+			foreach(Definition def in listDefs) {
+				comboGroup.Items.Add(new ODBoxItem<Definition>(def.Description+(def.Hidden ? " "+Lans.g(this,"(hidden)") : ""),def));
 			}
-			comboGroup.SetSelectedItem<Def>(x => x.DefNum==InsFilingCodeCur.GroupType,Lans.g(this,"MISSING DEFINITION"));
+			comboGroup.SetSelectedItem<Definition>(x => x.Id==InsFilingCodeCur.GroupType,Lans.g(this,"MISSING DEFINITION"));
 			FillGrid();
 		}
 
@@ -337,7 +337,7 @@ namespace OpenDental {
 				MessageBox.Show(Lan.g(this,"Please enter an electronic claim code."));
 				return;
 			}
-			if(comboGroup.SelectedTag<Def>()==null) {
+			if(comboGroup.SelectedTag<Definition>()==null) {
 				MsgBox.Show(this,"Please select a group.");
 				return;
 			}
@@ -348,7 +348,7 @@ namespace OpenDental {
 		private void SaveFilingCode(){
 			InsFilingCodeCur.Descript=textDescription.Text;
 			InsFilingCodeCur.EclaimCode=textEclaimCode.Text;
-			InsFilingCodeCur.GroupType=comboGroup.SelectedTag<Def>().DefNum;
+			InsFilingCodeCur.GroupType=comboGroup.SelectedTag<Definition>().Id;
 			try {
 				if(InsFilingCodeCur.IsNew) {
 					InsFilingCodes.Insert(InsFilingCodeCur);

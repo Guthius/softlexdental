@@ -410,7 +410,7 @@ namespace OpenDental{
 			Font fontSubTitle=new Font("Tahoma",10,FontStyle.Bold);
 			report.ReportName=Lan.g(this,"Daily Procedures");
 			report.AddTitle("Title",Lan.g(this,"Daily Procedures"),fontTitle);
-			report.AddSubTitle("Practice Title",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
+			report.AddSubTitle("Practice Title",Preference.GetString(PreferenceName.PracticeTitle),fontSubTitle);
 			report.AddSubTitle("Dates of Report",date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d"),fontSubTitle);
 			report.AddSubTitle("Providers",subtitleProvs,fontSubTitle);
 			if(Preferences.HasClinicsEnabled) {
@@ -453,7 +453,7 @@ namespace OpenDental{
 			Font fontSubTitle=new Font("Tahoma",10,FontStyle.Bold);
 			report.ReportName=Lan.g(this,"Procedures By Procedure Code");
 			report.AddTitle("Title",Lan.g(this,"Procedures By Procedure Code"),fontTitle);
-			report.AddSubTitle("Practice Title",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
+			report.AddSubTitle("Practice Title",Preference.GetString(PreferenceName.PracticeTitle),fontSubTitle);
 			report.AddSubTitle("Dates of Report",date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d"),fontSubTitle);
 			report.AddSubTitle("Providers",subtitleProvs,fontSubTitle);
 			if(Preferences.HasClinicsEnabled) {

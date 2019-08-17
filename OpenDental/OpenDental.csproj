@@ -270,10 +270,6 @@
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="WindowsFormsIntegration" />
-    <Reference Include="xImageDeviceManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Required dlls\xImageDeviceManager.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bridges\FormOryxUserSettings.cs">
@@ -4882,11 +4878,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="Web References\MobileWeb\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
     <Compile Include="Web References\NewCrop\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -7893,11 +7884,6 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Web References\CallFireService\SMSService.wsdl" />
-    <None Include="Web References\MobileWeb\Mobile.wsdl" />
-    <None Include="Web References\MobileWeb\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <None Include="Web References\NewCrop\AccountStatusDetailV2Result.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -8243,7 +8229,6 @@
     <None Include="Resources\TxtMsg1.gif" />
     <None Include="Resources\UDS3b.gif" />
     <None Include="Resources\UDS3a.gif" />
-    <None Include="Web References\MobileWeb\Mobile.disco" />
     <EmbeddedResource Include="Bridges\FormTrophyNamePick.resx">
       <DependentUpon>FormTrophyNamePick.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -8790,17 +8775,6 @@
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>OpenDental_customerUpdates_Service1</CachedSettingsPropName>
     </WebReferenceUrl>
-    <WebReferenceUrl Include="http://localhost:2923/Mobile.asmx">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\MobileWeb\</RelPath>
-      <UpdateFromURL>http://localhost:2923/Mobile.asmx</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>OpenDental_MobileWeb_Mobile</CachedSettingsPropName>
-    </WebReferenceUrl>
     <WebReferenceUrl Include="http://localhost:3824/Service1.asmx">
       <UrlBehavior>Static</UrlBehavior>
       <RelPath>Web References\localhost\</RelPath>
@@ -8890,10 +8864,6 @@
     <ProjectReference Include="..\OpenDental.Translation\OpenDental.Translation.csproj">
       <Project>{1180aa61-8cbc-479f-9143-b1ab1b149028}</Project>
       <Name>OpenDental.Translation</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\OpenDentalCloud\OpenDentalCloud.csproj">
-      <Project>{f90d0481-3d97-4c72-af6e-dd81177e3de1}</Project>
-      <Name>OpenDentalCloud</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpenDentalGraph\OpenDentalGraph.csproj">
       <Project>{015e240b-23fb-4d91-b20c-ce221ddccb0f}</Project>

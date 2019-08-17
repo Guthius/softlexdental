@@ -38,15 +38,18 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			//Get list of contents in directory of textPath.Text
-			OpenDentalCloud.Core.TaskStateListFolders state=CloudStorage.ListFolderContents(textPath.Text);
-			List<string> listFiles=state.ListFolderPathsDisplay;
-			for(int i=0;i<listFiles.Count;i++){
-				row=new ODGridRow();
-				row.Cells.Add(Path.GetFileName(listFiles[i]));	
-				gridMain.Rows.Add(row);
-			}
-			gridMain.EndUpdate();
+
+            // TODO: Fix me
+
+            // //Get list of contents in directory of textPath.Text
+            // OpenDentalCloud.Core.TaskStateListFolders state=CloudStorage.ListFolderContents(textPath.Text);
+            // List<string> listFiles=state.ListFolderPathsDisplay;
+            // for(int i=0;i<listFiles.Count;i++){
+            // 	row=new ODGridRow();
+            // 	row.Cells.Add(Path.GetFileName(listFiles[i]));	
+            // 	gridMain.Rows.Add(row);
+            // }
+            gridMain.EndUpdate();
 		}
 
 		private void butGo_Click(object sender,EventArgs e) {
@@ -63,25 +66,27 @@ namespace OpenDental {
 			if(!gridMain.Rows[gridMain.GetSelectedIndex()].Cells[0].Text.Contains(".")) {//File path doesn't contain an extension and thus is a subfolder.
 				return;
 			}
-			FormProgress FormP=new FormProgress();
-			FormP.DisplayText="Downloading...";
-			FormP.NumberFormat="F";
-			FormP.NumberMultiplication=1;
-			FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-			FormP.TickMS=1000;
-			OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(textPath.Text
-				,Path.GetFileName(gridMain.Rows[gridMain.GetSelectedIndex()].Cells[0].Text)
-				,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-			if(FormP.ShowDialog()==DialogResult.Cancel) {
-				state.DoCancel=true;
-				return;
-			}
-			string tempFile=ODFileUtils.CreateRandomFile(Path.GetTempPath(),Path.GetExtension(gridMain.Rows[gridMain.GetSelectedIndex()].Cells[0].Text));
-			File.WriteAllBytes(tempFile,state.FileContent);
-			System.Diagnostics.Process.Start(tempFile);
-		}
+            // TODO: Fix me
 
-		private void butImport_Click(object sender,EventArgs e) {
+            //FormProgress FormP=new FormProgress();
+            //FormP.DisplayText="Downloading...";
+            //FormP.NumberFormat="F";
+            //FormP.NumberMultiplication=1;
+            //FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
+            //FormP.TickMS=1000;
+            //OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(textPath.Text
+            //	,Path.GetFileName(gridMain.Rows[gridMain.GetSelectedIndex()].Cells[0].Text)
+            //	,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
+            //if(FormP.ShowDialog()==DialogResult.Cancel) {
+            //	state.DoCancel=true;
+            //	return;
+            //}
+            //string tempFile=ODFileUtils.CreateRandomFile(Path.GetTempPath(),Path.GetExtension(gridMain.Rows[gridMain.GetSelectedIndex()].Cells[0].Text));
+            //File.WriteAllBytes(tempFile,state.FileContent);
+            //System.Diagnostics.Process.Start(tempFile);
+        }
+
+        private void butImport_Click(object sender,EventArgs e) {
 			OpenFileDialog dlg=new OpenFileDialog();
 			dlg.Multiselect=true;
 			dlg.InitialDirectory="";
@@ -114,23 +119,24 @@ namespace OpenDental {
 			//Determine if it's a folder or a file that was clicked
 			//If a folder, do nothing
 			//If a file, download a thumbnail and display it
-			if(gridMain.Rows[gridMain.GetSelectedIndex()].Cells[0].Text.Contains(".")) {//They selected a file because there is an extension.
-				//Place thumbnail within odPictureox to display
-				OpenDentalCloud.Core.TaskStateThumbnail state=CloudStorage.GetThumbnail(textPath.Text,gridMain.Rows[gridMain.GetSelectedIndex()].Cells[0].Text);
-				if(state==null || state.FileContent==null || state.FileContent.Length<2) {
-					labelThumbnail.Visible=true;
-					odPictureBox.Visible=false;
-				}
-				else { 
-					labelThumbnail.Visible=false;
-					odPictureBox.Visible=true;
-					using(MemoryStream stream=new MemoryStream(state.FileContent)) {
-						_thumbnail=new Bitmap(Image.FromStream(stream));
-					}
-					odPictureBox.Image=_thumbnail;
-					odPictureBox.Invalidate();
-				}
-			}
+			if(gridMain.Rows[gridMain.GetSelectedIndex()].Cells[0].Text.Contains("."))
+            {//They selected a file because there is an extension. // TODO: Fix me
+             //	//Place thumbnail within odPictureox to display
+             //	OpenDentalCloud.Core.TaskStateThumbnail state=CloudStorage.GetThumbnail(textPath.Text,gridMain.Rows[gridMain.GetSelectedIndex()].Cells[0].Text);
+             //	if(state==null || state.FileContent==null || state.FileContent.Length<2) {
+             //		labelThumbnail.Visible=true;
+             //		odPictureBox.Visible=false;
+             //	}
+             //	else { 
+             //		labelThumbnail.Visible=false;
+             //		odPictureBox.Visible=true;
+             //		using(MemoryStream stream=new MemoryStream(state.FileContent)) {
+             //			_thumbnail=new Bitmap(Image.FromStream(stream));
+             //		}
+             //		odPictureBox.Image=_thumbnail;
+             //		odPictureBox.Invalidate();
+             //	}
+            }
 			else {
 				labelThumbnail.Visible=false;
 				odPictureBox.Visible=false;

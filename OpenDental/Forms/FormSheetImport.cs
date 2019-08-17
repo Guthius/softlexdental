@@ -1321,7 +1321,7 @@ namespace OpenDental {
 					for(int j=0;j<listMedPatFull.Count;j++) {
 						string strMedName=listMedPatFull[j].MedDescript;//for meds that came back from NewCrop
 						if(listMedPatFull[j].MedicationNum!=0) {//For meds entered in OD and linked to Medication list.
-							strMedName=Medications.GetDescription(listMedPatFull[j].MedicationNum);
+							strMedName= Medication.GetDescription(listMedPatFull[j].MedicationNum);
 						}
 						if(currentMedList[i].FieldValue==strMedName) {
 							row.OldValDisplay="Y";
@@ -1396,7 +1396,7 @@ namespace OpenDental {
 					row.OldValDisplay="";
 					row.OldValObj=null;
 					for(int j=0;j<diseases.Count;j++) {
-						if(DiseaseDefs.GetName(diseases[j].DiseaseDefNum)==problemList[i].FieldName.Remove(0,8)) {
+						if(DiseaseDef.GetName(diseases[j].DiseaseDefNum)==problemList[i].FieldName.Remove(0,8)) {
 							if(diseases[j].ProbStatus==ProblemStatus.Active) {
 								row.OldValDisplay="Y";
 							}
@@ -1811,7 +1811,7 @@ namespace OpenDental {
 					}
 					Rows[e.Row].ImpValDisplay="Y";
 					Rows[e.Row].ImpValObj=FormM.SelectedMedicationNum;
-					string descript=Medications.GetDescription(FormM.SelectedMedicationNum);
+					string descript=Medication.GetDescription(FormM.SelectedMedicationNum);
 					Rows[e.Row].FieldDisplay=descript;
 					((SheetField)Rows[e.Row].NewValObj).FieldValue=descript;
 					Rows[e.Row].NewValDisplay="Y";
@@ -2458,7 +2458,7 @@ namespace OpenDental {
 						for(int j=0;j<allergyList.Count;j++) {
 							if(allergyList[j].Description==allergySheet.FieldName.Remove(0,8)) {
 								Allergy newAllergy=new Allergy();
-								newAllergy.AllergyDefNum=allergyList[j].AllergyDefNum;
+								newAllergy.AllergyDefNum=allergyList[j].Id;
 								newAllergy.PatNum=PatCur.PatNum;
 								newAllergy.StatusIsActive=true;
 								Allergies.Insert(newAllergy);
@@ -2488,14 +2488,14 @@ namespace OpenDental {
 							continue;
 						}
 					  //Medication does not exist for this patient yet so create it.
-					  List<Medication> medList=Medications.GetList("");
+					  List<Medication> medList= Medication.Find("");
 					  SheetField medSheet=(SheetField)Rows[i].NewValObj;
 					  //Find what medication user wants to import.
 					  for(int j=0;j<medList.Count;j++) {
-					    if(Medications.GetDescription(medList[j].MedicationNum)==medSheet.FieldValue) {
+					    if(Medication.GetDescription(medList[j].Id)==medSheet.FieldValue) {
 					      MedicationPat medPat=new MedicationPat();
 					      medPat.PatNum=PatCur.PatNum;
-					      medPat.MedicationNum=medList[j].MedicationNum;
+					      medPat.MedicationNum=medList[j].Id;
 					      MedicationPats.Insert(medPat);
 					      break;
 					    }
@@ -2521,13 +2521,13 @@ namespace OpenDental {
 						}
 						//Problem does not exist for this patient yet so create one.
 						SheetField diseaseSheet=(SheetField)Rows[i].NewValObj;
-						List<DiseaseDef> listDiseaseDefs=DiseaseDefs.GetDeepCopy(true);
+                        List<DiseaseDef> listDiseaseDefs = DiseaseDef.All();
 						//Find what allergy user wants to import.
 						for(int j=0;j<listDiseaseDefs.Count;j++) {
-							if(listDiseaseDefs[j].DiseaseName==diseaseSheet.FieldName.Remove(0,8)) {
+							if(listDiseaseDefs[j].Name==diseaseSheet.FieldName.Remove(0,8)) {
 								Disease newDisease=new Disease();
 								newDisease.PatNum=PatCur.PatNum;
-								newDisease.DiseaseDefNum=listDiseaseDefs[j].DiseaseDefNum;
+								newDisease.DiseaseDefNum=listDiseaseDefs[j].Id;
 								newDisease.ProbStatus=ProblemStatus.Active;
 								Diseases.Insert(newDisease);
 								break;

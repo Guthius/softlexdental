@@ -242,7 +242,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ProcedureCode into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(ProcedureCode procedureCode,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO procedurecode (";
 			if(!useExistingPK && isRandomKeys) {
 				procedureCode.CodeNum=ReplicationServers.GetKeyNoCache("procedurecode","CodeNum");

@@ -64,11 +64,11 @@ namespace OpenDentBusiness{
 				return;//Base case
 			}
 			foreach(long patNumTo in listPatNumTos) {
-				if(listPatNums.Contains(patNumTo)) {
+				if(listPatNums.Contains((int)patNumTo)) {
 					continue;//So that a patient that links to itself does not cause an infinite circle of recursion.
 				}
-				listPatNums.Add(patNumTo);
-				AddPatNumsLinkedFromRecursive(patNumTo,patLinkType,listPatNums);//Find all the patients that are linked to the "To" patient.
+				listPatNums.Add((int)patNumTo);
+				AddPatNumsLinkedFromRecursive((int)patNumTo,patLinkType,listPatNums);//Find all the patients that are linked to the "To" patient.
 			}
 		}
 
@@ -139,10 +139,10 @@ namespace OpenDentBusiness{
 			if(!IsPatientAClone(patNum)) {
 				return patNum;//Not a clone so this patient must be the original.
 			}
-			long patNumOriginal=0;
+            int patNumOriginal =0;
 			List<long> listMatchingClonePatNums=GetPatNumsLinkedTo(patNum,PatientLinkType.Clone);
 			if(listMatchingClonePatNums!=null && listMatchingClonePatNums.Count > 0) {
-				patNumOriginal=listMatchingClonePatNums[0];
+				patNumOriginal=(int)listMatchingClonePatNums[0];
 			}
 			return patNumOriginal;
 		}
@@ -165,7 +165,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Returns true if one patient is a clone of the other or if both are clones of the same master, otherwise false.
 		///Always returns false if patNum1 and patNum2 are the same PatNum.</summary>
-		public static bool ArePatientsClonesOfEachOther(long patNum1,long patNum2) {
+		public static bool ArePatientsClonesOfEachOther(long patNum1, long patNum2) {
 			//No need to check RemotingRole; no call to db.
 			if(patNum1==patNum2) {//A patient is not considered a clone of themselves.  Even if the database has this scenario we do not honor it.
 				return false;

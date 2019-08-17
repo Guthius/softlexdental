@@ -87,7 +87,7 @@ namespace OpenDentBusiness.HL7 {
 						return "";
 					}
 					//Example: |^Appointment Confirmed|
-					return gConcat(def.ComponentSeparator,"",Defs.GetName(DefCat.ApptConfirmed,apt.Confirmed));//this will return an empty string if apt.Confirmed is 0 or invalid
+					return gConcat(def.ComponentSeparator,"",Defs.GetName(DefinitionCategory.ApptConfirmed,apt.Confirmed));//this will return an empty string if apt.Confirmed is 0 or invalid
 				case "apt.endAptDateTime":
 					if(apt==null) {
 						return "";
@@ -117,7 +117,7 @@ namespace OpenDentBusiness.HL7 {
 					if(opCur!=null) {
 						opName=opCur.OpName;
 					}
-					string practiceName=Preferences.GetString(PrefName.PracticeTitle);
+					string practiceName= Preference.GetString(PreferenceName.PracticeTitle);
 					return gConcat(def.ComponentSeparator,aptClinicDescript,opName,"",def.SubcomponentSeparator+practiceName,"","C");//all of these could be empty strings and it works fine
 				case "apt.length":
 					//Example: 60^min&&ANS+, ANS+ is the name of the coding system
@@ -321,7 +321,7 @@ namespace OpenDentBusiness.HL7 {
 						return "";
 					}
 					string patClinicDescript=Clinics.GetDesc(pat.ClinicNum);
-					practiceName=Preferences.GetString(PrefName.PracticeTitle);
+					practiceName= Preference.GetString(PreferenceName.PracticeTitle);
 					return gConcat(def.ComponentSeparator,patClinicDescript,"","",def.SubcomponentSeparator+practiceName,"","C");
 				case "pat.nameLFM":
 					return gConcat(def.ComponentSeparator,pat.LName,pat.FName,pat.MiddleI);
@@ -419,8 +419,8 @@ namespace OpenDentBusiness.HL7 {
 						if(retval!="") {
 							retval+=def.RepetitionSeparator;
 						}
-						ICD9 icd9Cur=ICD9s.GetByCode(listDiagCodes[i]);
-						Icd10 icd10Cur=Icd10s.GetByCode(listDiagCodes[i]);
+						ICD9 icd9Cur=ICD9.GetByCode(listDiagCodes[i]);
+						ICD10 icd10Cur= ICD10.GetByCode(listDiagCodes[i]);
 						if(icd9Cur!=null && icd10Cur==null) {
 							retval+=gConcat(def.ComponentSeparator,listDiagCodes[i],icd9Cur.Description,"I9C","","","","31");//See HL7 v2.6 Ch 6.5.2.3
 							continue;
@@ -450,7 +450,7 @@ namespace OpenDentBusiness.HL7 {
 							procOpName=procOp.OpName;
 						}
 					}
-					practiceName=Preferences.GetString(PrefName.PracticeTitle);
+					practiceName= Preference.GetString(PreferenceName.PracticeTitle);
 					return gConcat(def.ComponentSeparator,procClinicDescript,procOpName,"",def.SubcomponentSeparator+practiceName,"","C");
 				case "proc.procDateTime":
 					if(proc==null) {

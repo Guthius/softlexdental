@@ -125,7 +125,7 @@ namespace OpenDentBusiness.WebTypes.WebForms.Crud{
 				Db.NonQ(command);
 			}
 			else {
-				webForms_Sheet.SheetID=Db.NonQ(command,true,"SheetID","webForms_Sheet");
+				webForms_Sheet.SheetID=Db.NonQ(command);
 			}
 			return webForms_Sheet.SheetID;
 		}
@@ -161,7 +161,7 @@ namespace OpenDentBusiness.WebTypes.WebForms.Crud{
 				Db.NonQ(command);
 			}
 			else {
-				webForms_Sheet.SheetID=Db.NonQ(command,true,"SheetID","webForms_Sheet");
+				webForms_Sheet.SheetID=Db.NonQ(command);
 			}
 			return webForms_Sheet.SheetID;
 		}

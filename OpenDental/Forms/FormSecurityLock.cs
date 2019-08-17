@@ -197,13 +197,13 @@ namespace OpenDental{
 		#endregion
 
 		private void FormSecurityLock_Load(object sender,EventArgs e) {
-			if(Preferences.GetDate(PrefName.SecurityLockDate).Year>1880){
-				textDate.Text=Preferences.GetDate(PrefName.SecurityLockDate).ToShortDateString();
+			if(Preference.GetDate(PreferenceName.SecurityLockDate).Year>1880){
+				textDate.Text=Preference.GetDate(PreferenceName.SecurityLockDate).ToShortDateString();
 			}
-			if(Preferences.GetInt(PrefName.SecurityLockDays)>0) {
-				textDays.Text=Preferences.GetInt(PrefName.SecurityLockDays).ToString();
+			if(Preference.GetInt(PreferenceName.SecurityLockDays)>0) {
+				textDays.Text=Preference.GetInt(PreferenceName.SecurityLockDays).ToString();
 			}
-			checkAdmin.Checked=Preferences.GetBool(PrefName.SecurityLockIncludesAdmin);
+			checkAdmin.Checked=Preference.GetBool(PreferenceName.SecurityLockIncludesAdmin);
 		}
 
 		private void textDate_KeyDown(object sender,System.Windows.Forms.KeyEventArgs e) {
@@ -241,9 +241,9 @@ namespace OpenDental{
 				}
 			}
 			DateTime date=PIn.Date(textDate.Text);
-			if(Prefs.UpdateString(PrefName.SecurityLockDate,POut.Date(date,false))
-				| Prefs.UpdateInt(PrefName.SecurityLockDays,days)
-				| Prefs.UpdateBool(PrefName.SecurityLockIncludesAdmin,checkAdmin.Checked)  )
+			if(Preference.Update(PreferenceName.SecurityLockDate,POut.Date(date,false))
+				| Preference.Update(PreferenceName.SecurityLockDays,days)
+				| Preference.Update(PreferenceName.SecurityLockIncludesAdmin,checkAdmin.Checked)  )
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}

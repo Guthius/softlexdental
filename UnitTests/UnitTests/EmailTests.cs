@@ -15,28 +15,28 @@ namespace UnitTests {
 		[TestMethod]
 		public void EmailMessages_FindAndReplacePostalAddressTag() {
 			//Format disclaimer.
-			PrefT.UpdateString(PrefName.EmailDisclaimerTemplate,"This email has been sent to you from:\r\n[PostalAddress].\r\n\r\nHow to unsubscribe:\r\nIf you no longer want to receive any email messages from us, simply reply to this email with the word \"unsubscribe\" in the subject line.");
+			PrefT.UpdateString(PreferenceName.EmailDisclaimerTemplate,"This email has been sent to you from:\r\n[PostalAddress].\r\n\r\nHow to unsubscribe:\r\nIf you no longer want to receive any email messages from us, simply reply to this email with the word \"unsubscribe\" in the subject line.");
 			//Setup practice address.
-			PrefT.UpdateString(PrefName.PracticeAddress,"Practice Address1 Here");
-			PrefT.UpdateString(PrefName.PracticeAddress2,"3275 Marietta St SE");
-			PrefT.UpdateString(PrefName.PracticeCity,"Salem");
-			PrefT.UpdateString(PrefName.PracticeST,"OR");
-			PrefT.UpdateString(PrefName.PracticeZip,"97317");
+			PrefT.UpdateString(PreferenceName.PracticeAddress,"Practice Address1 Here");
+			PrefT.UpdateString(PreferenceName.PracticeAddress2,"3275 Marietta St SE");
+			PrefT.UpdateString(PreferenceName.PracticeCity,"Salem");
+			PrefT.UpdateString(PreferenceName.PracticeST,"OR");
+			PrefT.UpdateString(PreferenceName.PracticeZip,"97317");
 			//Setup clinic address.
 			Clinic clinic=ClinicT.CreateClinic();
 			clinic.Address="Clinic Address1 Here";
 			Clinics.Update(clinic);
 			Clinics.RefreshCache();
 			//Turn feature off.
-			PrefT.UpdateBool(PrefName.EmailDisclaimerIsOn,false);
+			PrefT.UpdateBool(PreferenceName.EmailDisclaimerIsOn,false);
 			string emailBody="Hi, this is an email.\r\n\r\nRegards,\r\nEvery OD Engineer... ever.";
 			string emailBodyWithDisclaimer=EmailMessages.FindAndReplacePostalAddressTag(emailBody,0);
 			//Feature is off so no disclaimer added.
 			Assert.AreEqual(emailBody,emailBodyWithDisclaimer);
 			//Turn feature on.
-			PrefT.UpdateBool(PrefName.EmailDisclaimerIsOn,true);
+			PrefT.UpdateBool(PreferenceName.EmailDisclaimerIsOn,true);
 			//Turn clinics off.
-			PrefT.UpdateBool(PrefName.EasyNoClinics,true);
+			PrefT.UpdateBool(PreferenceName.EasyNoClinics,true);
 			emailBodyWithDisclaimer=EmailMessages.FindAndReplacePostalAddressTag(emailBody,0);
 			//Feature is on so disclaimer added (no clinic).
 			Assert.AreNotEqual(emailBody,emailBodyWithDisclaimer);
@@ -44,7 +44,7 @@ namespace UnitTests {
 			Assert.IsTrue(emailBodyWithDisclaimer.Contains("Practice Address"));
 			Assert.IsFalse(emailBodyWithDisclaimer.Contains("Clinic Address"));
 			//Turn clinics on.
-			PrefT.UpdateBool(PrefName.EasyNoClinics,false);
+			PrefT.UpdateBool(PreferenceName.EasyNoClinics,false);
 			emailBodyWithDisclaimer=EmailMessages.FindAndReplacePostalAddressTag(emailBody,clinic.ClinicNum);
 			//Feature is on so disclaimer added (with clinic).
 			Assert.AreNotEqual(emailBody,emailBodyWithDisclaimer);

@@ -11,8 +11,8 @@ using OpenDentBusiness;
 namespace OpenDentalGraph {
 	public partial class BrokenApptGraphOptionsCtrl:BaseGraphOptionsCtrl {
 
-		private List<Def> _listAdjTypes=null;
-		public List<Def> ListAdjTypes {
+		private List<Definition> _listAdjTypes=null;
+		public List<Definition> ListAdjTypes {
 			get {
 				if(_listAdjTypes==null) {
 					_listAdjTypes=Defs.GetPositiveAdjTypes();
@@ -26,7 +26,7 @@ namespace OpenDentalGraph {
 				#region Init based on PrefName.BrokenApptProcedure
 				if(_listBrokenApptProcs==null) {
 					_listBrokenApptProcs=new List<BrokenApptProcedure>();
-					switch((BrokenApptProcedure)Preferences.GetInt(PrefName.BrokenApptProcedure)) {
+					switch((BrokenApptProcedure)Preference.GetInt(PreferenceName.BrokenApptProcedure)) {
 						case BrokenApptProcedure.None:
 						case BrokenApptProcedure.Missed:
 							_listBrokenApptProcs.Add(BrokenApptProcedure.Missed);
@@ -85,13 +85,13 @@ namespace OpenDentalGraph {
 					return 0;
 				}
 				else {
-					return ListAdjTypes[comboAdjType.SelectedIndex].DefNum;
+					return ListAdjTypes[comboAdjType.SelectedIndex].Id;
 				}
 			}
 			set
 			{
 				for(int i = 0;i<ListAdjTypes.Count;i++) {
-					if(ListAdjTypes[i].DefNum==value) {
+					if(ListAdjTypes[i].Id==value) {
 						comboAdjType.SelectedIndex=i;
 						return;
 					}
@@ -101,7 +101,7 @@ namespace OpenDentalGraph {
 		public BrokenApptProcedure BrokenApptCodeCur {
 			get {
 				if(comboBrokenProcType.SelectedIndex==-1) {
-					return (BrokenApptProcedure)Preferences.GetInt(PrefName.BrokenApptProcedure);
+					return (BrokenApptProcedure)Preference.GetInt(PreferenceName.BrokenApptProcedure);
 				}
 				return ListBrokenProcOptions[comboBrokenProcType.SelectedIndex];
 			}
@@ -138,8 +138,8 @@ namespace OpenDentalGraph {
 
 		private void FillComboAdj() {
 			try { //Internal tools call this inadvertantly and don't have a connection to OD db. Swallow the exception.
-				foreach(Def adjType in ListAdjTypes) {
-					comboAdjType.Items.Add(adjType.ItemName);
+				foreach(Definition adjType in ListAdjTypes) {
+					comboAdjType.Items.Add(adjType.Description);
 				}
 			} catch{ }			
 			if(comboAdjType.Items.Count<=0) {
@@ -151,7 +151,7 @@ namespace OpenDentalGraph {
 		private void FillComboBrokenProc() {
 			//Mimics FormRpBrokenAppointments.cs
 			int index=0;
-			BrokenApptProcedure brokenApptCodeDB=(BrokenApptProcedure)Preferences.GetInt(PrefName.BrokenApptProcedure);
+			BrokenApptProcedure brokenApptCodeDB=(BrokenApptProcedure)Preference.GetInt(PreferenceName.BrokenApptProcedure);
 			switch(brokenApptCodeDB) {
 				case BrokenApptProcedure.None:
 				case BrokenApptProcedure.Missed:

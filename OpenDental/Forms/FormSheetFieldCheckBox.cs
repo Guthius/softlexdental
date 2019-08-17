@@ -40,7 +40,7 @@ namespace OpenDental {
 					return listMedical.SelectedTag<AllergyDef>().Description;
 				}
 				if(listMedical.HasSelectedTag<DiseaseDef>()) {
-					return listMedical.SelectedTag<DiseaseDef>().DiseaseName;
+					return listMedical.SelectedTag<DiseaseDef>().Name;
 				}
 				return "";
 			}
@@ -61,7 +61,7 @@ namespace OpenDental {
 		}
 
 		private void FormSheetFieldCheckBox_Load(object sender,EventArgs e) {
-			_listDiseaseDefs=DiseaseDefs.GetDeepCopy(true);
+            _listDiseaseDefs = DiseaseDef.All();
 			textYPos.MaxVal=_sheetDefCur.HeightTotal-1;//The maximum y-value of the sheet field must be within the page vertically.
 			labelReportableName.Visible=false;
 			textReportableName.Visible=false;
@@ -162,7 +162,7 @@ namespace OpenDental {
 					listMedical.SetItems(_listAllergies,(item) => item.Description,(item) => item.Description==medSelection);
 					break;
 				case MedicalListType.problem:
-					listMedical.SetItems(_listDiseaseDefs,(item) => item.DiseaseName,(item) => item.DiseaseName==medSelection);
+					listMedical.SetItems(_listDiseaseDefs,(item) => item.Name,(item) => item.Name==medSelection);
 					break;
 			}
 		}
@@ -283,7 +283,6 @@ namespace OpenDental {
 		private void AddAllergy(SheetFieldDef SheetFieldDefCur) {
 			FormAllergyDefEdit formADE=new FormAllergyDefEdit();
 			formADE.AllergyDefCur=new AllergyDef();
-			formADE.AllergyDefCur.IsNew=true;
 			formADE.AllergyDefCur.Description=SheetFieldDefCur?.FieldName.Replace("allergy:","")??"";
 			formADE.ShowDialog();
 			if(formADE.DialogResult!=DialogResult.OK) {
@@ -303,10 +302,10 @@ namespace OpenDental {
 			}
 			DiseaseDef def=new DiseaseDef() {
 				ICD9Code="",
-				Icd10Code="",
+				ICD10Code="",
 				SnomedCode="",
-				ItemOrder=DiseaseDefs.GetCount(),
-				DiseaseName=SheetFieldDefCur?.FieldName.Replace("problem:","")??""
+				SortOrder=(int)DiseaseDef.GetCount(),
+				Name=SheetFieldDefCur?.FieldName.Replace("problem:","")??""
 			};
 			FormDiseaseDefEdit formDDE=new FormDiseaseDefEdit(def,false);
 			formDDE.IsNew=true;
@@ -314,9 +313,9 @@ namespace OpenDental {
 			if(formDDE.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			DiseaseDefs.Insert(formDDE.DiseaseDefCur);
+			DiseaseDef.Insert(formDDE.DiseaseDefCur);
 			DataValid.SetInvalid(InvalidType.Diseases);
-			_listDiseaseDefs=DiseaseDefs.GetDeepCopy(true);
+            _listDiseaseDefs = DiseaseDef.All();
 			SecurityLogs.MakeLogEntry(Permissions.ProblemEdit,0,formDDE.SecurityLogMsgText);
 			FillListMedical(MedicalListType.problem);
 		}

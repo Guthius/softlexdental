@@ -144,7 +144,7 @@ namespace OpenDentBusiness {
 						break;
 					case "CVX":
 						if(countCvxDB==-1) {
-							countCvxDB=Cvxs.GetCodeCount();
+							countCvxDB=CVX.GetCount();
 						}
 						if(countCvxDB>countCvxList) {
 							listt[i].IsInDb=true;
@@ -160,7 +160,7 @@ namespace OpenDentBusiness {
 						break;
 					case "ICD9CM":
 						if(countIcd9DB==-1) {
-							countIcd9DB=ICD9s.GetCodeCount();
+							countIcd9DB=ICD9.GetCount();
 						}
 						if(countIcd9DB>countIcd9List) {
 							listt[i].IsInDb=true;
@@ -168,7 +168,7 @@ namespace OpenDentBusiness {
 						break;
 					case "ICD10CM":
 						if(countIcd10DB==-1) {
-							countIcd10DB=Icd10s.GetCodeCount();
+							countIcd10DB= ICD10.GetCount();
 						}
 						if(countIcd10DB>countIcd10List) {
 							listt[i].IsInDb=true;

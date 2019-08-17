@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command,paramDescription,paramAnswer);
 			}
 			else {
-				question.QuestionNum=Db.NonQ(command,true,"QuestionNum","question",paramDescription,paramAnswer);
+				question.QuestionNum=Db.NonQ(command,paramDescription,paramAnswer);
 			}
 			return question.QuestionNum;
 		}
@@ -126,7 +126,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Question into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(Question question,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO question (";
 			if(!useExistingPK && isRandomKeys) {
 				question.QuestionNum=ReplicationServers.GetKeyNoCache("question","QuestionNum");
@@ -156,7 +156,7 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command,paramDescription,paramAnswer);
 			}
 			else {
-				question.QuestionNum=Db.NonQ(command,true,"QuestionNum","question",paramDescription,paramAnswer);
+				question.QuestionNum=Db.NonQ(command,paramDescription,paramAnswer);
 			}
 			return question.QuestionNum;
 		}

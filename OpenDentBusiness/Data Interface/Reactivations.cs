@@ -64,9 +64,9 @@ namespace OpenDentBusiness
         {
 
             //Get information we will need to do the query
-            List<long> listReactCommLogTypeDefNums = Defs.GetDefsForCategory(DefCat.CommLogTypes, isShort: true)
-                .FindAll(x => CommItemTypeAuto.REACT.GetDescription(useShortVersionIfAvailable: true).Equals(x.ItemValue)).Select(x => x.DefNum).ToList();
-            int contactInterval = Preferences.GetInt(PrefName.ReactivationContactInterval);
+            List<long> listReactCommLogTypeDefNums = Definition.GetByCategory(DefinitionCategory.CommLogTypes)
+                .FindAll(x => CommItemTypeAuto.REACT.GetDescription(useShortVersionIfAvailable: true).Equals(x.Value)).Select(x => x.Id).ToList();
+            int contactInterval = Preference.GetInt(PreferenceName.ReactivationContactInterval);
             //Get the raw set of patients who should be on the reactivation list
             string cmd =
                 $@"SELECT 
@@ -119,7 +119,7 @@ namespace OpenDentBusiness
             cmd += showDoNotContact ? "" : " AND (react.DoNotContact IS NULL OR react.DoNotContact=0)";
             cmd += contactInterval > -1 ? " AND (comm.DateLastContacted IS NULL OR comm.DateLastContacted <= " + POut.DateT(DateTime.Today.AddDays(-contactInterval)) + ") " : "";
             //set number of contact attempts
-            int maxReminds = Preferences.GetInt(PrefName.ReactivationCountContactMax);
+            int maxReminds = Preference.GetInt(PreferenceName.ReactivationCountContactMax);
             if (showReactivations == RecallListShowNumberReminders.SixPlus)
             {
                 cmd += " AND ContactedCount>=6 "; //don't need to look at pref this only shows in UI if the prefvalue allows it

@@ -42,7 +42,7 @@ namespace OpenDentBusiness.Crud{
 			Patient patient;
 			foreach(DataRow row in table.Rows) {
 				patient=new Patient();
-				patient.PatNum                   = PIn.Long  (row["PatNum"].ToString());
+				patient.PatNum                   = PIn.Int(row["PatNum"].ToString());
 				patient.LName                    = PIn.String(row["LName"].ToString());
 				patient.FName                    = PIn.String(row["FName"].ToString());
 				patient.MiddleI                  = PIn.String(row["MiddleI"].ToString());
@@ -310,9 +310,6 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Patient into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Patient patient,bool useExistingPK) {
-			if(!useExistingPK && Preferences.RandomKeys) {
-				patient.PatNum=ReplicationServers.GetKey("patient","PatNum");
-			}
 			string command="INSERT INTO patient (";
 			if(useExistingPK || Preferences.RandomKeys) {
 				command+="PatNum,";
@@ -414,7 +411,7 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command,paramAddrNote,paramFamFinUrgNote);
 			}
 			else {
-				patient.PatNum=Db.NonQ(command,true,"PatNum","patient",paramAddrNote,paramFamFinUrgNote);
+				patient.PatNum=(int)Db.NonQ(command,true,"PatNum","patient",paramAddrNote,paramFamFinUrgNote);
 			}
 			return patient.PatNum;
 		}
@@ -426,11 +423,8 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Patient into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(Patient patient,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO patient (";
-			if(!useExistingPK && isRandomKeys) {
-				patient.PatNum=ReplicationServers.GetKeyNoCache("patient","PatNum");
-			}
 			if(isRandomKeys || useExistingPK) {
 				command+="PatNum,";
 			}
@@ -531,7 +525,7 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command,paramAddrNote,paramFamFinUrgNote);
 			}
 			else {
-				patient.PatNum=Db.NonQ(command,true,"PatNum","patient",paramAddrNote,paramFamFinUrgNote);
+				patient.PatNum=(int)Db.NonQ(command,true,"PatNum","patient",paramAddrNote,paramFamFinUrgNote);
 			}
 			return patient.PatNum;
 		}

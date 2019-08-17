@@ -115,7 +115,7 @@ namespace OpenDental
                 // Add the new category header in this row if it doesn't match the previous row's category.
                 if (suppliesGrid.Rows.Count == 0 || (suppliesGrid.Rows.Count > 0 && supply.Category != ((Supply)suppliesGrid.Rows[suppliesGrid.Rows.Count - 1].Tag).Category))
                 {
-                    row.Cells.Add(Defs.GetName(DefCat.SupplyCats, supply.Category)); 
+                    row.Cells.Add(Defs.GetName(DefinitionCategory.SupplyCats, supply.Category)); 
                 }
                 else
                 {
@@ -194,7 +194,7 @@ namespace OpenDental
             if (!string.IsNullOrEmpty(searchTextBox.Text) &&
                 !supply.Descript.ToUpper().Contains(searchTextBox.Text.ToUpper()) &&
                 !supply.CatalogNumber.ToString().ToUpper().Contains(searchTextBox.Text.ToUpper()) &&
-                !Defs.GetName(DefCat.SupplyCats, supply.Category).ToUpper().Contains(searchTextBox.Text.ToUpper()) &&
+                !Defs.GetName(DefinitionCategory.SupplyCats, supply.Category).ToUpper().Contains(searchTextBox.Text.ToUpper()) &&
                 !supply.LevelDesired.ToString().Contains(searchTextBox.Text) &&
                 !supply.Price.ToString().ToUpper().Contains(searchTextBox.Text.ToUpper()) &&
                 !supply.SupplierNum.ToString().Contains(searchTextBox.Text))
@@ -211,7 +211,7 @@ namespace OpenDental
         void AddButton_Click(object sender, EventArgs e)
         {
             // No supply categories have been entered, not allowed to enter supply
-            if (Defs.GetDefsForCategory(DefCat.SupplyCats, true).Count == 0)
+            if (Definition.GetByCategory(DefinitionCategory.SupplyCats).Count == 0)
             {
                 MessageBox.Show(
                     Translation.Language.NoSupplyCategoriesHaveBeenCreated,

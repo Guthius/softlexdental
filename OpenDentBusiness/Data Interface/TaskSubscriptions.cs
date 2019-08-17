@@ -73,7 +73,7 @@ namespace OpenDentBusiness
         {
             //No remoting role check; no call to db
             List<Task> listReminderTasks = new List<Task>();
-            if (!Preferences.GetBool(PrefName.TasksUseRepeating))
+            if (!Preference.GetBool(PreferenceName.TasksUseRepeating))
             {//Using Reminders (Reminders not allowed if using repeating tasks)
                 List<Task> listRefreshedTasks = Tasks.GetNewTasksThisUser(curUserNum, Clinics.ClinicNum);//Get all tasks pertaining to current user.
                 foreach (Task task in listRefreshedTasks)

@@ -52,7 +52,7 @@ namespace OpenDental{
 
 		private void checkRestart_Click(object sender,EventArgs e) {
 			ODCheckBoxPref checkBox=(ODCheckBoxPref)sender;
-			if(checkBox.Checked!=(checkBox.ReverseValue?!Preferences.GetBool(checkBox.PrefNameBinding):Preferences.GetBool(checkBox.PrefNameBinding))) {
+			if(checkBox.Checked!=(checkBox.ReverseValue?!Preference.GetBool(checkBox.PrefNameBinding):Preference.GetBool(checkBox.PrefNameBinding))) {
 				MsgBox.Show(this,"You will need to restart the program for the change to take effect.");
 			}
 		}
@@ -70,7 +70,7 @@ namespace OpenDental{
 					return true;
 				}
 				//Turn clinics on/off locally and send the signal to other workstations. This must happen before we call HQ so we tell HQ the new value.
-				Prefs.UpdateBool(PrefName.EasyNoClinics,!checkEnableClinics.Checked);
+				Preference.Update(PreferenceName.EasyNoClinics,!checkEnableClinics.Checked);
 				DataValid.SetInvalid(InvalidType.Prefs);
 				//Create an alert for the user to know they may need to restart the eConnector if they are subscribed to eServices
 				AlertItems.Insert(new AlertItem()

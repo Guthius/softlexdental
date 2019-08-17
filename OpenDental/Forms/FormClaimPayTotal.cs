@@ -21,7 +21,7 @@ namespace OpenDental {
 		private List<InsPlan> PlanList;
 		private List<PatPlan> PatPlanList;
 		private List<InsSub> SubList;
-		private List<Def> _listClaimPaymentTrackingDefs;
+		private List<Definition> _listClaimPaymentTrackingDefs;
 		private List<ClaimProc> _listClaimProcsOld;
 		///<summary>True if the user has permission to edit WriteOffs based on the minimum proc.DateEntryC of the procedures to which the claimprocs
 		///in the ClaimProcsToEdit array are attached.</summary>
@@ -54,7 +54,7 @@ namespace OpenDental {
 				textInsPayAmt.Location=new Point(textInsPayAllowed.Right-1,textInsPayAllowed.Location.Y);
 				textWriteOff.Location=new Point(textInsPayAmt.Right-1,textInsPayAllowed.Location.Y);
 			}
-			_listClaimPaymentTrackingDefs=Defs.GetDefsForCategory(DefCat.ClaimPaymentTracking,true);
+			_listClaimPaymentTrackingDefs=Definition.GetByCategory(DefinitionCategory.ClaimPaymentTracking);
 			FillGrid();
 		}
 
@@ -78,7 +78,7 @@ namespace OpenDental {
 			List<string> listDefDescripts=new List<string>();
 			listDefDescripts.Add("None");
 			for(int i=0;i<_listClaimPaymentTrackingDefs.Count;i++){
-				listDefDescripts.Add(_listClaimPaymentTrackingDefs[i].ItemName);
+				listDefDescripts.Add(_listClaimPaymentTrackingDefs[i].Description);
 			}
 			ODGridColumn col=new ODGridColumn(Lan.g("TableClaimProc","Date"),66);
 			gridMain.Columns.Add(col);
@@ -202,8 +202,8 @@ namespace OpenDental {
 				}
 				bool isDefPresent=false;
 				for(int j=0;j<_listClaimPaymentTrackingDefs.Count;j++) {
-					if(ClaimProcsToEdit[i].ClaimPaymentTracking==_listClaimPaymentTrackingDefs[j].DefNum) {
-						row.Cells.Add(_listClaimPaymentTrackingDefs[j].ItemName);
+					if(ClaimProcsToEdit[i].ClaimPaymentTracking==_listClaimPaymentTrackingDefs[j].Id) {
+						row.Cells.Add(_listClaimPaymentTrackingDefs[j].Description);
 						row.Cells[row.Cells.Count-1].SelectedIndex=j+1;
 						isDefPresent=true;
 						break;
@@ -323,7 +323,7 @@ namespace OpenDental {
 				ClaimProcsToEdit[i].InsPayAmt=PIn.Double(gridMain.Rows[i].Cells[insPayIdx].Text);
 				ClaimProcsToEdit[i].WriteOff=PIn.Double(gridMain.Rows[i].Cells[writeoffIdx].Text);
 				int idx=gridMain.Rows[i].Cells[gridMain.Columns.GetIndex(Lan.g("TableClaimProc","Pay Tracking"))].SelectedIndex;
-				ClaimProcsToEdit[i].ClaimPaymentTracking=idx==0 ? 0 : _listClaimPaymentTrackingDefs[idx-1].DefNum;
+				ClaimProcsToEdit[i].ClaimPaymentTracking=idx==0 ? 0 : _listClaimPaymentTrackingDefs[idx-1].Id;
 				ClaimProcsToEdit[i].Remarks=gridMain.Rows[i].Cells[gridMain.Columns.GetIndex(Lan.g("TableClaimProc","Remarks"))].Text;
 			}
 			return true;
@@ -331,7 +331,7 @@ namespace OpenDental {
 
 		/// <summary>Returns true if ClaimProcAllowCreditsGreaterThanProcFee preference allows the user to add credits greater than the proc fee. Otherwise returns false </summary>
 		private bool isClaimProcGreaterThanProcFee() {
-			ClaimProcCreditsGreaterThanProcFee creditsGreaterPref=(ClaimProcCreditsGreaterThanProcFee)Preferences.GetInt(PrefName.ClaimProcAllowCreditsGreaterThanProcFee);
+			ClaimProcCreditsGreaterThanProcFee creditsGreaterPref=(ClaimProcCreditsGreaterThanProcFee)Preference.GetInt(PreferenceName.ClaimProcAllowCreditsGreaterThanProcFee);
 			if(creditsGreaterPref==ClaimProcCreditsGreaterThanProcFee.Allow) {
 				return true;
 			}
@@ -385,7 +385,7 @@ namespace OpenDental {
 		///<summary>Returns true if InsPayNoWriteoffMoreThanProc preference is turned on and the sum of write off amount is greater than the proc fee.
 		///Otherwise returns false </summary>
 		private bool IsWriteOffGreaterThanProcFee() {
-			if(!Preferences.GetBool(PrefName.InsPayNoWriteoffMoreThanProc)) {
+			if(!Preference.GetBool(PreferenceName.InsPayNoWriteoffMoreThanProc)) {
 				return false;//InsPayNoWriteoffMoreThanProc preference is off. No need to check.
 			}
 			List<ClaimProc> listClaimProcsForPat=ClaimProcs.Refresh(PatCur.PatNum);
@@ -609,7 +609,7 @@ namespace OpenDental {
 				return;
 			}
 			SaveAllowedFees();
-			if(Preferences.GetBool(PrefName.ClaimSnapshotEnabled)) {
+			if(Preference.GetBool(PreferenceName.ClaimSnapshotEnabled)) {
 				Claim claimCur=Claims.GetClaim(_listClaimProcsOld[0].ClaimNum);
 				if(claimCur.ClaimType!="PreAuth") {
 					ClaimSnapshots.CreateClaimSnapshot(_listClaimProcsOld,ClaimSnapshotTrigger.InsPayment,claimCur.ClaimType);

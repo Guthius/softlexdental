@@ -8,9 +8,9 @@ namespace UnitTestsCore {
 		public static Employee CreateEmployee(string prefix){
 			Employee emp=new Employee();
 			emp.ClockStatus="Home";
-			emp.FName=prefix+"Bob";
-			emp.LName=prefix+"Boberson";
-			emp.MiddleI=prefix+"Bobbity";
+			emp.FirstName=prefix+"Bob";
+			emp.LastName=prefix+"Boberson";
+			emp.Initials=prefix+"Bobbity";
 			Employees.Insert(emp);
 			return emp;
 		}

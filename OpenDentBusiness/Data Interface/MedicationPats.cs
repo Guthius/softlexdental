@@ -64,7 +64,7 @@ namespace OpenDentBusiness
         ///If isProvOrder is true, then the medical order provNum will be set to the prescription provNum.  If isProvOrder is false, then the medical order provNum will be set to 0.
         ///The MedDescript and ErxGuid will always be copied from the prescription to the medical order and the medical order MedicationNum will be set to 0.
         ///This method return the medOrderNum for the new/updated medicationPat. Unlike most medical orders this does not create an entry in the medical order table.</summary>
-        public static long InsertOrUpdateMedOrderForRx(RxPat rxPat, long rxCui, bool isProvOrder, bool hasRx = true)
+        public static long InsertOrUpdateMedOrderForRx(RxPat rxPat, string rxCui, bool isProvOrder, bool hasRx = true)
         {
             long medOrderNum;
             MedicationPat medOrderOld = null;
@@ -84,7 +84,7 @@ namespace OpenDentBusiness
             if (hasRx)
             {//If there is no prescription attached, don't give a start/stop date.  We can't simply check rxPat==null because we needed the info from rxPat elsewhere.
                 medOrder.DateStart = rxPat.RxDate;//Only if actually has Rx
-                int numDays = Preferences.GetInt(PrefName.MedDefaultStopDays);
+                int numDays = Preference.GetInt(PreferenceName.MedDefaultStopDays);
                 if (numDays != 0)
                 {
                     medOrder.DateStop = rxPat.RxDate.AddDays(numDays);//Only if actually has Rx
@@ -92,16 +92,16 @@ namespace OpenDentBusiness
             }
             medOrder.MedDescript = rxPat.Drug;
             medOrder.RxCui = rxCui;
-            if (rxCui != 0)
+            if (!string.IsNullOrEmpty(rxCui))
             {
                 //The customer may not have a medication entered for this RxCui the first few times they get this particular medication back from eRx.
                 //Once the customer adds the medication to their medication list, then we can automatically attach the order to the medication.
                 //The reason we decided not to automatically create the medication if one does not already exist is because we do not want to
                 //accidentally bloat the medication list, if for example, the user has the medication entered but has not set the RxCui on it yet.
-                List<Medication> listMeds = Medications.GetAllMedsByRxCui(rxCui);
-                if (listMeds.Count > 0)
+                var medication = Medication.GetByRxCui(rxCui);
+                if (medication != null)
                 {
-                    medOrder.MedicationNum = listMeds[0].MedicationNum;
+                    medOrder.MedicationNum = medication.Id;
                 }
             }
             medOrder.ErxGuid = rxPat.ErxGuid;
@@ -249,9 +249,9 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Used to synch medication.RxCui with medicationpat.RxCui.  Updates all medicationpat.RxCui to the given value for those medication pats linked to the given medication num.</summary>
-        public static void UpdateRxCuiForMedication(long medicationNum, long rxCui)
+        public static void UpdateRxCuiForMedication(long medicationNum, string rxCui)
         {
-            string command = "UPDATE medicationpat SET RxCui=" + POut.Long(rxCui) + " WHERE MedicationNum=" + POut.Long(medicationNum);
+            string command = "UPDATE medicationpat SET RxCui=" + POut.String(rxCui) + " WHERE MedicationNum=" + POut.Long(medicationNum);
             Db.NonQ(command);
         }
 

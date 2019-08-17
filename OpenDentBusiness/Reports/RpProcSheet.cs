@@ -70,7 +70,7 @@ namespace OpenDentBusiness
             {
                 query += "AND procedurelog.ProvNum IN (" + String.Join(",", listProvNums) + ") ";
             }
-            if (ReportsComplex.RunFuncOnReportServer(() => Prefs.HasClinicsEnabledNoCache))
+            if (ReportsComplex.RunFuncOnReportServer(() => Preference.HasClinicsEnabledNoCache))
             {
                 query += "AND procedurelog.ClinicNum IN (" + String.Join(",", listClinicNums) + ") ";
             }

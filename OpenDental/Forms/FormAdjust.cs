@@ -25,9 +25,9 @@ namespace OpenDental
         ///<summary>When true, the OK click will not let the user leave the window unless the check amount is 0.</summary>
         private bool _checkZeroAmount;
         ///<summary>All positive adjustment defs.</summary>
-        private List<Def> _listAdjPosCats;
+        private List<Definition> _listAdjPosCats;
         ///<summary>All negative adjustment defs.</summary>
-        private List<Def> _listAdjNegCats;
+        private List<Definition> _listAdjNegCats;
         ///<summary>Cached list of clinics available to user. Also includes a dummy Clinic at index 0 for "none".</summary>
         private List<Clinic> _listClinics;
         ///<summary>Filtered list of providers based on which clinic is selected. If no clinic is selected displays all providers. Also includes a dummy clinic at index 0 for "none"</summary>
@@ -90,7 +90,7 @@ namespace OpenDental
                         deleteButton.Enabled = true;
                     }
                 }
-                List<PaySplit> listSplits = PaySplits.GetForAdjustments(new List<long>() { _adjustmentCur.AdjNum });
+                List<PaySplit> listSplits = PaySplits.GetForAdjustments(new List<long>() { _adjustmentCur.Id });
                 if (listSplits.Count > 0)
                 {
                     butAttachProc.Enabled = false;
@@ -98,9 +98,9 @@ namespace OpenDental
                     labelProcDisabled.Visible = true;//Do we want to somehow give info on which payments are on this adjustment?
                 }
                 //Do not let the user change the adjustment type if the current adjustment is a "discount plan" adjustment type.
-                if (Defs.GetValue(DefCat.AdjTypes, _adjustmentCur.AdjType) == "dp")
+                if (Defs.GetValue(DefinitionCategory.AdjTypes, _adjustmentCur.AdjType) == "dp")
                 {
-                    labelAdditions.Text = Lan.g(this, "Discount Plan") + ": " + Defs.GetName(DefCat.AdjTypes, _adjustmentCur.AdjType);
+                    labelAdditions.Text = Lan.g(this, "Discount Plan") + ": " + Defs.GetName(DefinitionCategory.AdjTypes, _adjustmentCur.AdjType);
                     labelSubtractions.Visible = false;
                     listTypePos.Visible = false;
                     listTypeNeg.Visible = false;
@@ -109,15 +109,15 @@ namespace OpenDental
             textDateEntry.Text = _adjustmentCur.DateEntry.ToShortDateString();
             textAdjDate.Text = _adjustmentCur.AdjDate.ToShortDateString();
             textProcDate.Text = _adjustmentCur.ProcDate.ToShortDateString();
-            if (Defs.GetValue(DefCat.AdjTypes, _adjustmentCur.AdjType) == "+")
+            if (Defs.GetValue(DefinitionCategory.AdjTypes, _adjustmentCur.AdjType) == "+")
             {//pos
                 textAmount.Text = _adjustmentCur.AdjAmt.ToString("F");
             }
-            else if (Defs.GetValue(DefCat.AdjTypes, _adjustmentCur.AdjType) == "-")
+            else if (Defs.GetValue(DefinitionCategory.AdjTypes, _adjustmentCur.AdjType) == "-")
             {//neg
                 textAmount.Text = (-_adjustmentCur.AdjAmt).ToString("F");//shows without the neg sign
             }
-            else if (Defs.GetValue(DefCat.AdjTypes, _adjustmentCur.AdjType) == "dp")
+            else if (Defs.GetValue(DefinitionCategory.AdjTypes, _adjustmentCur.AdjType) == "dp")
             {//Discount Plan (neg)
                 textAmount.Text = (-_adjustmentCur.AdjAmt).ToString("F");//shows without the neg sign
             }
@@ -139,7 +139,7 @@ namespace OpenDental
             _selectedProvNum = _adjustmentCur.ProvNum;
             comboProv.SelectedIndex = -1;
             FillComboProvHyg();
-            if (_adjustmentCur.ProcNum != 0 && Preferences.GetInt(PrefName.RigorousAdjustments) == (int)RigorousAdjustments.EnforceFully)
+            if (_adjustmentCur.ProcNum != 0 && Preference.GetInt(PreferenceName.RigorousAdjustments) == (int)RigorousAdjustments.EnforceFully)
             {
                 comboProv.Enabled = false;
                 butPickProv.Enabled = false;
@@ -153,15 +153,15 @@ namespace OpenDental
             //prevents FillProcedure from being called too many times.  Event handlers hooked back up after the lists are filled.
             listTypeNeg.SelectedIndexChanged -= listTypeNeg_SelectedIndexChanged;
             listTypePos.SelectedIndexChanged -= listTypePos_SelectedIndexChanged;
-            List<Def> adjCat = Defs.GetDefsForCategory(DefCat.AdjTypes, true);
+            List<Definition> adjCat = Definition.GetByCategory(DefinitionCategory.AdjTypes);;
             //Positive adjustment types
-            _listAdjPosCats = adjCat.FindAll(x => x.ItemValue == "+");
-            _listAdjPosCats.ForEach(x => listTypePos.Items.Add(x.ItemName));
-            listTypePos.SelectedIndex = _listAdjPosCats.FindIndex(x => x.DefNum == _adjustmentCur.AdjType);//can be -1
+            _listAdjPosCats = adjCat.FindAll(x => x.Value == "+");
+            _listAdjPosCats.ForEach(x => listTypePos.Items.Add(x.Description));
+            listTypePos.SelectedIndex = _listAdjPosCats.FindIndex(x => x.Id == _adjustmentCur.AdjType);//can be -1
                                                                                                            //Negative adjustment types
-            _listAdjNegCats = adjCat.FindAll(x => x.ItemValue == "-");
-            _listAdjNegCats.ForEach(x => listTypeNeg.Items.Add(x.ItemName));
-            listTypeNeg.SelectedIndex = _listAdjNegCats.FindIndex(x => x.DefNum == _adjustmentCur.AdjType);//can be -1
+            _listAdjNegCats = adjCat.FindAll(x => x.Value == "-");
+            _listAdjNegCats.ForEach(x => listTypeNeg.Items.Add(x.Description));
+            listTypeNeg.SelectedIndex = _listAdjNegCats.FindIndex(x => x.Id == _adjustmentCur.AdjType);//can be -1
             listTypeNeg.SelectedIndexChanged += listTypeNeg_SelectedIndexChanged;
             listTypePos.SelectedIndexChanged += listTypePos_SelectedIndexChanged;
             FillProcedure();
@@ -256,7 +256,7 @@ namespace OpenDental
             Procedure procCur = Procedures.GetOneProc(_adjustmentCur.ProcNum, false);
             List<ClaimProc> listClaimProcs = ClaimProcs.Refresh(procCur.PatNum);
             List<Adjustment> listAdjustments = Adjustments.Refresh(procCur.PatNum)
-                .Where(x => x.ProcNum == procCur.ProcNum && x.AdjNum != _adjustmentCur.AdjNum).ToList();
+                .Where(x => x.ProcNum == procCur.ProcNum && x.Id != _adjustmentCur.Id).ToList();
             textProcDate.Text = procCur.ProcDate.ToShortDateString();
             textProcDate2.Text = procCur.ProcDate.ToShortDateString();
             textProcProv.Text = Providers.GetAbbr(procCur.ProvNum);
@@ -283,7 +283,7 @@ namespace OpenDental
                 {//pos
                     procAdjCur = PIn.Double(textAmount.Text);
                 }
-                else if (listTypeNeg.SelectedIndex > -1 || Defs.GetValue(DefCat.AdjTypes, _adjustmentCur.AdjType) == "dp")
+                else if (listTypeNeg.SelectedIndex > -1 || Defs.GetValue(DefinitionCategory.AdjTypes, _adjustmentCur.AdjType) == "dp")
                 {//neg or discount plan
                     procAdjCur = -PIn.Double(textAmount.Text);
                 }
@@ -302,13 +302,13 @@ namespace OpenDental
             {
                 return;
             }
-            if (Preferences.GetInt(PrefName.RigorousAdjustments) < 2)
+            if (Preference.GetInt(PreferenceName.RigorousAdjustments) < 2)
             {//Enforce Linking
                 _selectedProvNum = FormPS.ListSelectedProcs[0].ProvNum;
                 _selectedClinicNum = FormPS.ListSelectedProcs[0].ClinicNum;
                 comboProv.IndexSelectOrSetText(_listProviders.FindIndex(x => x.ProvNum == _selectedProvNum), () => { return Providers.GetAbbr(_selectedProvNum); });
                 comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum == _selectedClinicNum), () => { return Clinics.GetAbbr(_selectedClinicNum); });
-                if (Preferences.GetInt(PrefName.RigorousAdjustments) == (int)RigorousAdjustments.EnforceFully && !_isEditAnyway)
+                if (Preference.GetInt(PreferenceName.RigorousAdjustments) == (int)RigorousAdjustments.EnforceFully && !_isEditAnyway)
                 {
                     if (Security.IsAuthorized(Permissions.Setup, true))
                     {
@@ -348,7 +348,7 @@ namespace OpenDental
 
         private void butOK_Click(object sender, System.EventArgs e)
         {
-            bool isDiscountPlanAdj = (Defs.GetValue(DefCat.AdjTypes, _adjustmentCur.AdjType) == "dp");
+            bool isDiscountPlanAdj = (Defs.GetValue(DefinitionCategory.AdjTypes, _adjustmentCur.AdjType) == "dp");
             if (textAdjDate.errorProvider1.GetError(textAdjDate) != ""
                 || textProcDate.errorProvider1.GetError(textProcDate) != ""
                 || textAmount.errorProvider1.GetError(textAmount) != "")
@@ -356,7 +356,7 @@ namespace OpenDental
                 MsgBox.Show(this, "Please fix data entry errors first.");
                 return;
             }
-            if (PIn.Date(textAdjDate.Text).Date > DateTime.Today.Date && !Preferences.GetBool(PrefName.FutureTransDatesAllowed))
+            if (PIn.Date(textAdjDate.Text).Date > DateTime.Today.Date && !Preference.GetBool(PreferenceName.FutureTransDatesAllowed))
             {
                 MsgBox.Show(this, "Adjustment date can not be in the future.");
                 return;
@@ -372,12 +372,12 @@ namespace OpenDental
                 return;
             }
             if (IsNew && AvaTax.IsEnabled() && listTypePos.SelectedIndex > -1 &&
-                (_listAdjPosCats[listTypePos.SelectedIndex].DefNum == AvaTax.SalesTaxAdjType || _listAdjPosCats[listTypePos.SelectedIndex].DefNum == AvaTax.SalesTaxReturnAdjType) &&
+                (_listAdjPosCats[listTypePos.SelectedIndex].Id == AvaTax.SalesTaxAdjType || _listAdjPosCats[listTypePos.SelectedIndex].Id == AvaTax.SalesTaxReturnAdjType) &&
                 !Security.IsAuthorized(Permissions.SalesTaxAdjEdit))
             {
                 return;
             }
-            if (Preferences.GetInt(PrefName.RigorousAdjustments) == 0 && _adjustmentCur.ProcNum == 0)
+            if (Preference.GetInt(PreferenceName.RigorousAdjustments) == 0 && _adjustmentCur.ProcNum == 0)
             {
                 MsgBox.Show(this, "You must attach a procedure to the adjustment.");
                 return;
@@ -413,14 +413,14 @@ namespace OpenDental
                 }
                 if (_adjustmentCur.ProvNum != _selectedProvNum)
                 {
-                    listPaySplitsForAdjust = PaySplits.GetForAdjustments(new List<long>() { _adjustmentCur.AdjNum });
+                    listPaySplitsForAdjust = PaySplits.GetForAdjustments(new List<long>() { _adjustmentCur.Id });
                     foreach (PaySplit paySplit in listPaySplitsForAdjust)
                     {
                         if (!Security.IsAuthorized(Permissions.PaymentEdit, Payments.GetPayment(paySplit.PayNum).PayDate))
                         {
                             return;
                         }
-                        if (_selectedProvNum != paySplit.ProvNum && Preferences.GetInt(PrefName.RigorousAccounting) == (int)RigorousAdjustments.EnforceFully)
+                        if (_selectedProvNum != paySplit.ProvNum && Preference.GetInt(PreferenceName.RigorousAccounting) == (int)RigorousAdjustments.EnforceFully)
                         {
                             changeAdjSplit = true;
                             break;
@@ -442,12 +442,12 @@ namespace OpenDental
             _adjustmentCur.ClinicNum = _selectedClinicNum;
             if (listTypePos.SelectedIndex != -1)
             {
-                _adjustmentCur.AdjType = _listAdjPosCats[listTypePos.SelectedIndex].DefNum;
+                _adjustmentCur.AdjType = _listAdjPosCats[listTypePos.SelectedIndex].Id;
                 _adjustmentCur.AdjAmt = PIn.Double(textAmount.Text);
             }
             if (listTypeNeg.SelectedIndex != -1)
             {
-                _adjustmentCur.AdjType = _listAdjNegCats[listTypeNeg.SelectedIndex].DefNum;
+                _adjustmentCur.AdjType = _listAdjNegCats[listTypeNeg.SelectedIndex].Id;
                 _adjustmentCur.AdjAmt = -PIn.Double(textAmount.Text);
             }
             if (isDiscountPlanAdj)

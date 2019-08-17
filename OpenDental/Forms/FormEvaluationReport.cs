@@ -250,15 +250,15 @@ namespace OpenDental {
 				row[2]=table.Rows[i]["CourseID"].ToString();
 				row[3]=table.Rows[i]["InstructorName"].ToString();
 				row[4]=table.Rows[i]["EvalTitle"].ToString();
-				switch((EnumScaleType)PIn.Int(table.Rows[i]["ScaleType"].ToString())) {
-					case EnumScaleType.PickList:
-						row[5]=Enum.GetName(typeof(EnumScaleType),(int)EnumScaleType.PickList);
+				switch((GradingScaleType)PIn.Int(table.Rows[i]["ScaleType"].ToString())) {
+					case GradingScaleType.PickList:
+						row[5]=Enum.GetName(typeof(GradingScaleType),(int)GradingScaleType.PickList);
 						break;
-					case EnumScaleType.Percentage:
-						row[5]=Enum.GetName(typeof(EnumScaleType),(int)EnumScaleType.Percentage);
+					case GradingScaleType.Percentage:
+						row[5]=Enum.GetName(typeof(GradingScaleType),(int)GradingScaleType.Percentage);
 						break;
-					case EnumScaleType.Weighted:
-						row[5]=Enum.GetName(typeof(EnumScaleType),(int)EnumScaleType.Weighted);
+					case GradingScaleType.Weighted:
+						row[5]=Enum.GetName(typeof(GradingScaleType),(int)GradingScaleType.Weighted);
 						break;
 				}
 				row[6]=table.Rows[i]["OverallGradeShowing"].ToString();

@@ -27,7 +27,7 @@ namespace OpenDental
             supply = Supplies.GetSupply(ItemCur.SupplyNum);
 
             supplierTextBox.Text = Suppliers.GetName(ListSupplier, supply.SupplierNum);
-            categoryTextBox.Text = Defs.GetName(DefCat.SupplyCats, supply.Category);
+            categoryTextBox.Text = Defs.GetName(DefinitionCategory.SupplyCats, supply.Category);
             catalogNumberTextBox.Text = supply.CatalogNumber;
             descriptionTextBox.Text = supply.Descript;
             quantityTextBox.Text = (quantity = ItemCur.Qty).ToString();

@@ -707,7 +707,7 @@ namespace OpenDental{
 
 		private void FormDepositEdit_Load(object sender,System.EventArgs e) {
 			butSendQB.Visible=false;
-			IsQuickBooks=Preferences.GetInt(PrefName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks;
+			IsQuickBooks=Preference.GetInt(PreferenceName.AccountingSoftware)==(int)AccountingSoftware.QuickBooks;
 			if(IsNew) {
 				if(!Security.IsAuthorized(Permissions.DepositSlips,DateTime.Today)) {
 					//we will check the date again when saving
@@ -722,21 +722,21 @@ namespace OpenDental{
 					butDelete.Enabled=false;
 				}
 			}
-			if(Preferences.GetBool(PrefName.ShowAutoDeposit)) {
+			if(Preference.GetBool(PreferenceName.ShowAutoDeposit)) {
 				labelDepositAccountNum.Visible=true;
 				comboDepositAccountNum.Visible=true;
-				List<Def> listAutoDepositDefsAll=Defs.GetDefsForCategory(DefCat.AutoDeposit);
+				List<Definition> listAutoDepositDefsAll=Definition.GetByCategory(DefinitionCategory.AutoDeposit);;
 				//Fill deposit account num drop down
 				comboDepositAccountNum.Items.Clear();
-				foreach(Def defDepositAccount in listAutoDepositDefsAll.Where(x => !x.IsHidden)) {
-					comboDepositAccountNum.Items.Add(new ODBoxItem<Def>(defDepositAccount.ItemName,defDepositAccount));
+				foreach(Definition defDepositAccount in listAutoDepositDefsAll.Where(x => !x.Hidden)) {
+					comboDepositAccountNum.Items.Add(new ODBoxItem<Definition>(defDepositAccount.Description,defDepositAccount));
 				}
-				Def defAutoDeposit=listAutoDepositDefsAll.FirstOrDefault(x => x.DefNum==_depositCur.DepositAccountNum);
-				comboDepositAccountNum.IndexSelectOrSetText(listAutoDepositDefsAll.FindIndex(x => x.DefNum==_depositCur.DepositAccountNum)
-					,() => { return (defAutoDeposit!=null ? defAutoDeposit.ItemName+" "+Lan.g(this,"(hidden)") : ""); });
+				Definition defAutoDeposit=listAutoDepositDefsAll.FirstOrDefault(x => x.Id==_depositCur.DepositAccountNum);
+				comboDepositAccountNum.IndexSelectOrSetText(listAutoDepositDefsAll.FindIndex(x => x.Id==_depositCur.DepositAccountNum)
+					,() => { return (defAutoDeposit!=null ? defAutoDeposit.Description+" "+Lan.g(this,"(hidden)") : ""); });
 			}
 			if(IsNew) {
-				textDateStart.Text=PIn.Date(Preferences.GetString(PrefName.DateDepositsStarted)).ToShortDateString();
+				textDateStart.Text=PIn.Date(Preference.GetString(PreferenceName.DateDepositsStarted)).ToShortDateString();
 				if(!Preferences.HasClinicsEnabled) {
 					comboClinic.Visible=false;
 					labelClinic.Visible=false;
@@ -751,31 +751,31 @@ namespace OpenDental{
 						comboClinic.SelectedIndex=i+1;//Plus 1 to account for 'All'
 					}
 				}
-				List<Def> listPaymentTypeDefs=Defs.GetDefsForCategory(DefCat.PaymentTypes,true);
-				List<Def> listInsurancePaymentTypeDefs=Defs.GetDefsForCategory(DefCat.InsurancePaymentType,true);
+				List<Definition> listPaymentTypeDefs=Definition.GetByCategory(DefinitionCategory.PaymentTypes);;
+				List<Definition> listInsurancePaymentTypeDefs=Definition.GetByCategory(DefinitionCategory.InsurancePaymentType);;
 				_payTypeDefNums=new List<long>();
 				for(int i=0;i<listPaymentTypeDefs.Count;i++) {
-					if(listPaymentTypeDefs[i].ItemValue!="") {
+					if(listPaymentTypeDefs[i].Value!="") {
 						continue;//skip defs not selected for deposit slip
 					}
-					listPayType.Items.Add(listPaymentTypeDefs[i].ItemName);
-					_payTypeDefNums.Add(listPaymentTypeDefs[i].DefNum);
+					listPayType.Items.Add(listPaymentTypeDefs[i].Description);
+					_payTypeDefNums.Add(listPaymentTypeDefs[i].Id);
 					listPayType.SetSelected(listPayType.Items.Count-1,true);
 				}
 				_insPayDefNums=new List<long>();
 				for(int i=0;i<listInsurancePaymentTypeDefs.Count;i++) {
-					if(listInsurancePaymentTypeDefs[i].ItemValue!="") {
+					if(listInsurancePaymentTypeDefs[i].Value!="") {
 						continue;//skip defs not selected for deposit slip
 					}
-					listInsPayType.Items.Add(listInsurancePaymentTypeDefs[i].ItemName);
-					_insPayDefNums.Add(listInsurancePaymentTypeDefs[i].DefNum);
+					listInsPayType.Items.Add(listInsurancePaymentTypeDefs[i].Description);
+					_insPayDefNums.Add(listInsurancePaymentTypeDefs[i].Id);
 					listInsPayType.SetSelected(listInsPayType.Items.Count-1,true);
 				}
 				textDepositAccount.Visible=false;//this is never visible for new. It's a description if already attached.
 				if(Account.DepositsLinked() && !IsQuickBooks) {
 					DepositAccounts=Account.GetDepositAccounts();
 					for(int i=0;i<DepositAccounts.Length;i++) {
-						comboDepositAccount.Items.Add(Account.GetDescript(DepositAccounts[i]));
+						comboDepositAccount.Items.Add(Account.GetDescription(DepositAccounts[i]));
 					}
 					comboDepositAccount.SelectedIndex=0;
 				}
@@ -802,8 +802,8 @@ namespace OpenDental{
 					labelDepositAccount.Text=Lan.g(this,"Deposited into Account");
 					List<JournalEntry> jeL=JournalEntries.GetForTrans(trans.TransactionNum);
 					for(int i=0;i<jeL.Count;i++) {
-						if(Account.GetAccount(jeL[i].AccountNum).AcctType==AccountType.Asset) {
-							comboDepositAccount.Items.Add(Account.GetDescript(jeL[i].AccountNum));
+						if(Account.GetById(jeL[i].AccountNum).Type==AccountType.Asset) {
+							comboDepositAccount.Items.Add(Account.GetDescription(jeL[i].AccountNum));
 							comboDepositAccount.SelectedIndex=0;
 							textDepositAccount.Text=jeL[i].DateDisplayed.ToShortDateString()
 								+" "+jeL[i].DebitAmt.ToString("c");
@@ -822,7 +822,7 @@ namespace OpenDental{
 					butSendQB.Visible=true;
 				}
 			}
-			if(Preferences.GetBool(PrefName.QuickBooksClassRefsEnabled)) {
+			if(Preference.GetBool(PreferenceName.QuickBooksClassRefsEnabled)) {
 				if(!IsNew) {
 					//Show groupbox and hide all the controls except for labelClassRef and comboClassRefs
 					groupSelect.Visible=true;
@@ -838,7 +838,7 @@ namespace OpenDental{
 				}
 				labelClassRef.Visible=true;
 				comboClassRefs.Visible=true;
-				string classStr=Preferences.GetString(PrefName.QuickBooksClassRefs);
+				string classStr=Preference.GetString(PreferenceName.QuickBooksClassRefs);
 				_arrayClassesQB=classStr.Split(new char[] { ',' });
 				for(int i = 0;i<_arrayClassesQB.Length;i++) {
 					if(_arrayClassesQB[i]=="") {
@@ -922,7 +922,7 @@ namespace OpenDental{
 				row=new OpenDental.UI.ODGridRow();
 				row.Cells.Add(PatPayList[i].PayDate.ToShortDateString());
 				row.Cells.Add(Patients.GetOnePat(pats,PatPayList[i].PatNum).GetNameLF());
-				row.Cells.Add(Defs.GetName(DefCat.PaymentTypes,PatPayList[i].PayType));
+				row.Cells.Add(Defs.GetName(DefinitionCategory.PaymentTypes,PatPayList[i].PayType));
 				row.Cells.Add(PatPayList[i].CheckNum);
 				row.Cells.Add(PatPayList[i].BankBranch);
 				row.Cells.Add(PatPayList[i].PayAmt.ToString("F"));
@@ -949,7 +949,7 @@ namespace OpenDental{
 				row=new OpenDental.UI.ODGridRow();
 				row.Cells.Add(ClaimPayList[i].CheckDate.ToShortDateString());
 				row.Cells.Add(ClaimPayList[i].CarrierName);
-				row.Cells.Add(Defs.GetName(DefCat.InsurancePaymentType,ClaimPayList[i].PayType));
+				row.Cells.Add(Defs.GetName(DefinitionCategory.InsurancePaymentType,ClaimPayList[i].PayType));
 				row.Cells.Add(ClaimPayList[i].CheckNum);
 				row.Cells.Add(ClaimPayList[i].BankBranch);
 				row.Cells.Add(ClaimPayList[i].CheckAmt.ToString("F"));
@@ -1036,7 +1036,7 @@ namespace OpenDental{
 				}
 				Cursor.Current=Cursors.WaitCursor;
 				string classRef="";
-				if(Preferences.GetBool(PrefName.QuickBooksClassRefsEnabled)) {
+				if(Preference.GetBool(PreferenceName.QuickBooksClassRefsEnabled)) {
 					classRef=comboClassRefs.SelectedItem.ToString();
 				}
 				QuickBooks.CreateDeposit(_depositCur.DateDeposit
@@ -1092,7 +1092,7 @@ namespace OpenDental{
 			_depositCur.Memo=PIn.String(textMemo.Text);
 			_depositCur.Batch=PIn.String(textBatch.Text);
 			if(comboDepositAccountNum.SelectedIndex > -1) {
-				_depositCur.DepositAccountNum=((ODBoxItem<Def>)comboDepositAccountNum.SelectedItem).Tag.DefNum;
+				_depositCur.DepositAccountNum=((ODBoxItem<Definition>)comboDepositAccountNum.SelectedItem).Tag.Id;
 			}
 			if(IsNew){
 				if(gridPat.SelectedIndices.Length+gridIns.SelectedIndices.Length>18 && IsQuickBooks) {
@@ -1374,12 +1374,12 @@ namespace OpenDental{
 			gridIns.SetSelected(true);
 			ComputeAmt();
 			if(comboClinic.SelectedIndex==0){
-				textBankAccountInfo.Text=Preferences.GetString(PrefName.PracticeBankNumber);
+				textBankAccountInfo.Text=Preference.GetString(PreferenceName.PracticeBankNumber);
 			}
 			else{
 				textBankAccountInfo.Text=_listClinics[comboClinic.SelectedIndex-1].BankNumber;
 			}
-			if(Prefs.UpdateString(PrefName.DateDepositsStarted,POut.Date(PIn.Date(textDateStart.Text),false))){
+			if(Preference.Update(PreferenceName.DateDepositsStarted,POut.Date(PIn.Date(textDateStart.Text),false))){
 				changed=true;
 			}
 		}
@@ -1442,17 +1442,17 @@ namespace OpenDental{
 					je.DateDisplayed=_depositCur.DateDeposit;//it would be nice to add security here.
 					je.DebitAmt=_depositCur.Amount;
 					je.Memo=Lan.g(this,"Deposit");
-					je.Splits=Account.GetDescript(Preferences.GetLong(PrefName.AccountingIncomeAccount));
+					je.Splits=Account.GetDescription(Preference.GetLong(PreferenceName.AccountingIncomeAccount));
 					je.TransactionNum=trans.TransactionNum;
 					JournalEntries.Insert(je);
 					//then, the income entry
 					je=new JournalEntry();
-					je.AccountNum=Preferences.GetLong(PrefName.AccountingIncomeAccount);
+					je.AccountNum=Preference.GetLong(PreferenceName.AccountingIncomeAccount);
 					//je.CheckNumber=;
 					je.DateDisplayed=_depositCur.DateDeposit;//it would be nice to add security here.
 					je.CreditAmt=_depositCur.Amount;
 					je.Memo=Lan.g(this,"Deposit");
-					je.Splits=Account.GetDescript(DepositAccounts[comboDepositAccount.SelectedIndex]);
+					je.Splits=Account.GetDescription(DepositAccounts[comboDepositAccount.SelectedIndex]);
 					je.TransactionNum=trans.TransactionNum;
 					JournalEntries.Insert(je);
 				}

@@ -126,7 +126,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ToothGridCol into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(ToothGridCol toothGridCol,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO toothgridcol (";
 			if(!useExistingPK && isRandomKeys) {
 				toothGridCol.ToothGridColNum=ReplicationServers.GetKeyNoCache("toothgridcol","ToothGridColNum");

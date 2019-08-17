@@ -20,7 +20,7 @@ namespace OpenDental
         /// </summary>
         void FormRegistrationKey_Load(object sender, EventArgs e)
         {
-            key = Preferences.GetString(PrefName.RegistrationKey);
+            key = Preference.GetString(PreferenceName.RegistrationKey);
             keyTextBox.Text = License.FormatKey(key);
 
             agreementRichTextBox.Rtf = Properties.Resources.CDT_Content_End_User_License;
@@ -141,7 +141,7 @@ namespace OpenDental
                 return;
             }
 
-            Prefs.UpdateString(PrefName.RegistrationKey, registrationKey);
+            Preference.Update(PreferenceName.RegistrationKey, registrationKey);
             DialogResult = DialogResult.OK;
         }
     }

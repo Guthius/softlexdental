@@ -62,13 +62,13 @@ namespace OpenDental {
 						}
 						break;
 					case "ICD9CM":
-						ICD9 i9Cur=ICD9s.GetByCode(listIntervention[i].CodeValue);
+						ICD9 i9Cur=ICD9.GetByCode(listIntervention[i].CodeValue);
 						if(i9Cur!=null) {
 							descript=i9Cur.Description;
 						}
 						break;
 					case "ICD10CM":
-						Icd10 i10Cur=Icd10s.GetByCode(listIntervention[i].CodeValue);
+						ICD10 i10Cur=ICD10.GetByCode(listIntervention[i].CodeValue);
 						if(i10Cur!=null) {
 							descript=i10Cur.Description;
 						}
@@ -116,10 +116,10 @@ namespace OpenDental {
 				row=new ODGridRow();
 				row.Cells.Add(listMedPats[i].DateStart.ToShortDateString());
 				row.Cells.Add(Providers.GetAbbr(listMedPats[i].ProvNum));
-				if(listMedPats[i].RxCui==314153 || listMedPats[i].RxCui==692876) {
+				if(listMedPats[i].RxCui== "314153" || listMedPats[i].RxCui== "692876") {
 					row.Cells.Add(InterventionCodeSet.AboveNormalWeight.ToString()+" Medication");
 				}
-				else if(listMedPats[i].RxCui==577154 || listMedPats[i].RxCui==860215 || listMedPats[i].RxCui==860221 || listMedPats[i].RxCui==860225 || listMedPats[i].RxCui==860231) {
+				else if(listMedPats[i].RxCui== "577154" || listMedPats[i].RxCui== "860215" || listMedPats[i].RxCui== "860221" || listMedPats[i].RxCui== "860225" || listMedPats[i].RxCui== "860231") {
 					row.Cells.Add(InterventionCodeSet.BelowNormalWeight.ToString()+" Medication");
 				}
 				else {//There are 48 total medications that can be used as interventions.  The remaining 41 medications are tobacco cessation medications

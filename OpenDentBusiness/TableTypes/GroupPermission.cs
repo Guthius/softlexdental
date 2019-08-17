@@ -1,34 +1,48 @@
 using System;
-using System.Collections;
 using System.ComponentModel;
 
-namespace OpenDentBusiness{
+namespace OpenDentBusiness
+{
 
-	///<summary>Every user group has certain permissions.  This defines a permission for a group.  The absense of permission would cause that row to be deleted from this table.</summary>
-	[Serializable]
-	[ODTable(IsSynchable=true)]
+    /// <summary>
+    /// Every user group has certain permissions.
+    /// This defines a permission for a group.
+    /// The absense of permission would cause that row to be deleted from this table.
+    /// </summary>
+    public class GroupPermission : ODTable
+    {
+        public long GroupPermNum;
+        
+        /// <summary>
+        /// Only granted permission if newer than this date.  Can be Minimum (01-01-0001) to always grant permission.
+        /// </summary>
+        public DateTime NewerDate;
+       
+        /// <summary>
+        /// Can be 0 to always grant permission.  Otherwise, only granted permission if item is newer than the given number of days.  1 would mean only if entered today.
+        /// </summary>
+        public int NewerDays;
+       
+        /// <summary>
+        /// FK to usergroup.UserGroupNum.  The user group for which this permission is granted.  If not authorized, then this groupPermission will have been deleted.
+        /// </summary>
+        public long UserGroupNum;
+        
+        /// <summary>
+        /// Enum:Permissions
+        /// </summary>
+        public Permissions PermType;
+        
+        /// <summary>
+        /// Generic foreign key to any other table.  Typically used in combination with PermType to give permission to specific things.
+        /// </summary>
+        public long FKey;
 
-	public class GroupPermission:ODTable {
-		///<summary>Primary key.</summary>
-		[ODTableColumn(PrimaryKey=true)]
-		public long GroupPermNum;
-		///<summary>Only granted permission if newer than this date.  Can be Minimum (01-01-0001) to always grant permission.</summary>
-		public DateTime NewerDate;
-		///<summary>Can be 0 to always grant permission.  Otherwise, only granted permission if item is newer than the given number of days.  1 would mean only if entered today.</summary>
-		public int NewerDays;
-		///<summary>FK to usergroup.UserGroupNum.  The user group for which this permission is granted.  If not authorized, then this groupPermission will have been deleted.</summary>
-		public long UserGroupNum;
-		///<summary>Enum:Permissions</summary>
-		public Permissions PermType;
-		///<summary>Generic foreign key to any other table.  Typically used in combination with PermType to give permission to specific things.</summary>
-		public long FKey;
-
-		///<summary></summary>
-		public GroupPermission Copy(){
-			return (GroupPermission)this.MemberwiseClone();
-		}
-
-	}
+        public GroupPermission Copy()
+        {
+            return (GroupPermission)MemberwiseClone();
+        }
+    }
 
     ///<summary>A hard-coded list of permissions which may be granted to usergroups.</summary>
     public enum Permissions {

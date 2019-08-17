@@ -125,7 +125,7 @@ namespace OpenDentBusiness
             if (isFromTsi)
             {
                 msgText = "This was not a message sent to Transworld.  This adjustment was entered due to a payment received from Transworld.";
-                InsertTsiLogsForAdjustment(patGuar, adj.AdjNum, adj.AdjAmt, msgText);
+                InsertTsiLogsForAdjustment(patGuar, adj.Id, adj.AdjAmt, msgText);
                 return;
             }
             Program transworldProg = Programs.GetCur(ProgramName.Transworld);
@@ -134,7 +134,7 @@ namespace OpenDentBusiness
             string negType = listProperties.FirstOrDefault(x => x.PropertyDesc == "SyncExcludeNegAdjType")?.PropertyValue ?? "";
             if (adj.AdjType.In(PIn.Long(posType), PIn.Long(negType)))
             {
-                InsertTsiLogsForAdjustment(patGuar, adj.AdjNum, adj.AdjAmt, msgText);
+                InsertTsiLogsForAdjustment(patGuar, adj.Id, adj.AdjAmt, msgText);
             }
         }
 
@@ -204,7 +204,7 @@ namespace OpenDentBusiness
                 listDisabledClinicNums.AddRange(dictAllProps.Where(x => !TsiTransLogs.ValidateClinicSftpDetails(x.Value, false)).Select(x => x.Key));
                 listDisabledClinicNums.AddRange(listAllClinics
                     .FindAll(x => x.IsHidden || (listDisabledClinicNums.Contains(0) && !dictAllProps.ContainsKey(x.ClinicNum)))//if no props for HQ, skip other clinics without props
-                    .Select(x => x.ClinicNum)
+                    .Select(x => (long)x.ClinicNum)
                 );
             }
             else
@@ -252,8 +252,8 @@ namespace OpenDentBusiness
                     + Lans.g("TsiTransLogs", "or is not setup properly.");
             }
             List<ProgramProperty> listProps = dictAllProps[clinicNum];
-            long newBillType = Preferences.GetLong(PrefName.TransworldPaidInFullBillingType);
-            if (newBillType == 0 || Defs.GetDef(DefCat.BillingTypes, newBillType) == null)
+            long newBillType = Preference.GetLong(PreferenceName.TransworldPaidInFullBillingType);
+            if (newBillType == 0 || Defs.GetDef(DefinitionCategory.BillingTypes, newBillType) == null)
             {
                 return Lans.g("TsiTransLogs", "The default paid in full billing type is not set.  An automated suspend message cannot be sent until the "
                     + "default paid in full billing type is set in the Transworld program link")

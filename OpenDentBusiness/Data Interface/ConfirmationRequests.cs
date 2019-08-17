@@ -88,27 +88,27 @@ namespace OpenDentBusiness
         ///<summary>Expire confirmations for any appointments that have been rescheduled since sending out a confirmation request.</summary>
         public static void HandleConfirmationsApptChanged()
         {
-            //No remoting role check needed.		
-            List<ConfirmationRequest> listChanged = GetForApptChanged();
-            listChanged = listChanged.Where(x => !x.DoNotResend).ToList();//Remove those that the user specifically said to not resend
-            List<string> listShortGuids = listChanged.Where(x => !string.IsNullOrWhiteSpace(x.ShortGUID)).Select(x => x.ShortGUID).ToList();
-            listShortGuids.AddRange(listChanged.Where(x => !string.IsNullOrWhiteSpace(x.ShortGuidEmail)).Select(x => x.ShortGuidEmail));
-            if (listShortGuids.Count == 0)
-            {
-                return;
-            }
-            string hqPayload = PayloadHelper.CreatePayload(PayloadHelper.CreatePayloadContent(listShortGuids, "ListShortGuids"),
-                eServiceCode.ConfirmationRequest);
-            string result = WebServiceMainHQProxy.GetWebServiceMainHQInstance().HandleConfirmationsApptChanged(hqPayload);
-            XmlDocument doc = new XmlDocument();
-            doc.LoadXml(result);
-            XmlNode node = doc.SelectSingleNode("//Error");
-            if (node != null)
-            {
-                throw new Exception(node.InnerText);
-            }
-            //Deleting these will cause the AutoComm thread to resend where necessary.
-            DeleteShortGuids(listShortGuids);
+            ////No remoting role check needed.		
+            //List<ConfirmationRequest> listChanged = GetForApptChanged();
+            //listChanged = listChanged.Where(x => !x.DoNotResend).ToList();//Remove those that the user specifically said to not resend
+            //List<string> listShortGuids = listChanged.Where(x => !string.IsNullOrWhiteSpace(x.ShortGUID)).Select(x => x.ShortGUID).ToList();
+            //listShortGuids.AddRange(listChanged.Where(x => !string.IsNullOrWhiteSpace(x.ShortGuidEmail)).Select(x => x.ShortGuidEmail));
+            //if (listShortGuids.Count == 0)
+            //{
+            //    return;
+            //}
+            //string hqPayload = PayloadHelper.CreatePayload(PayloadHelper.CreatePayloadContent(listShortGuids, "ListShortGuids"),
+            //    eServiceCode.ConfirmationRequest);
+            //string result = WebServiceMainHQProxy.GetWebServiceMainHQInstance().HandleConfirmationsApptChanged(hqPayload);
+            //XmlDocument doc = new XmlDocument();
+            //doc.LoadXml(result);
+            //XmlNode node = doc.SelectSingleNode("//Error");
+            //if (node != null)
+            //{
+            //    throw new Exception(node.InnerText);
+            //}
+            ////Deleting these will cause the AutoComm thread to resend where necessary.
+            //DeleteShortGuids(listShortGuids);
         }
 
         ///<summary>Update the RSVPStatusCode for the list of ConfirmationRequests matching the provided shortGuids</summary>
@@ -122,7 +122,8 @@ namespace OpenDentBusiness
             string command = "DELETE FROM confirmationrequest "
                 + "WHERE ShortGUID IN('" + string.Join("','", listShortGuids.Select(x => POut.String(x))) + "')"
                 + " OR ShortGuidEmail IN('" + string.Join("','", listShortGuids.Select(x => POut.String(x))) + "')";
-            DataCore.NonQ(command);
+
+            DataConnection.ExecuteNonQuery(command);
         }
     }
 }

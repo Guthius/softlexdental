@@ -91,7 +91,7 @@ namespace UnitTests {
 		///<summary>Fill the cache with the fees from the HQ clinic and the currently selected Clinic.</summary>
 		[TestMethod]
 		public void Fees_FillCache() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			FeeTestArgs args=CreateManyFees(1,1,1,MethodBase.GetCurrentMethod().Name);
 			Clinics.ClinicNum=args.ListClinics.First().ClinicNum;
 			List<Fee> listExpectedFees=args.ListFees.OrderBy(x => x.FeeNum).ToList();
@@ -129,7 +129,7 @@ namespace UnitTests {
 		/// <summary>Test the FeeCache initializes with the expected standard fees.</summary>
 		[TestMethod]
 		public void FeeCache_Initialize() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			FeeTestArgs args=CreateManyFees(1,1,1,MethodBase.GetCurrentMethod().Name);
 			Clinics.ClinicNum=args.ListClinics.First().ClinicNum;
 			FeeCache cache=new FeeCache();
@@ -146,7 +146,7 @@ namespace UnitTests {
 		/// fee schedule is refreshed and loaded into the copy.</summary>
 		[TestMethod]
 		public void FeeCache_GetCopy() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			FeeTestArgs args=CreateManyFees(5,3,2,MethodBase.GetCurrentMethod().Name);
 			FeeCache cache=new FeeCache();
 			cache.GetFeesForClinics(args.ListClinics.Select(x => x.ClinicNum)); //load these clinics into memory
@@ -162,7 +162,7 @@ namespace UnitTests {
 		///<summary>Create a single fee and add to the local cache only.</summary>
 		[TestMethod]
 		public void FeeCache_AddFee() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			FeeCache cache=new FeeCache();
 			long feeSchedNum=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,MethodBase.GetCurrentMethod().Name);
 			Fee fee=new Fee()
@@ -180,7 +180,7 @@ namespace UnitTests {
 		///<summary>Fill the cache, then get a fee from a clinic. Use to load test the time it takes to fill the cache with a new clinic.</summary>
 		[TestMethod]
 		public void FeeCache_AddClinic() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			FeeTestArgs args=CreateManyFees(1,1,1,MethodBase.GetCurrentMethod().Name);
 			FeeCache cache=new FeeCache();
 			List<Fee> listExpectedFees=args.ListFees.Where(x => x.ClinicNum==args.ListClinics.Select(y => y.ClinicNum).Last()).OrderBy(x => x.FeeNum).ToList();
@@ -191,7 +191,7 @@ namespace UnitTests {
 		///<summary>Update a single fee in the local cache only.</summary>
 		[TestMethod]
 		public void FeeCache_UpdateFee() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			Fee fee=CreateSingleFee(MethodBase.GetCurrentMethod().Name);
 			fee.Amount=75;
 			FeeCache cache=new FeeCache();
@@ -203,7 +203,7 @@ namespace UnitTests {
 		///<summary>Remove a single fee from the local cache only.</summary>
 		[TestMethod]
 		public void FeeCache_RemoveFee() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			Fee fee=CreateSingleFee(MethodBase.GetCurrentMethod().Name);
 			FeeCache cache=new FeeCache();
 			Assert.IsTrue(cache.Remove(fee));
@@ -214,7 +214,7 @@ namespace UnitTests {
 		///Implicitly tests Fees.UpdateFromCache.</summary>
 		[TestMethod]
 		public void FeeCache_Transaction() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			FeeTestArgs args=CreateManyFees(2,6,2,MethodBase.GetCurrentMethod().Name);
 			List<Tuple<Fee,long>> listChanges=new List<Tuple<Fee, long>>();
 			List<Fee> listFeesToUse=args.ListFees.OrderBy(x => _rand.Next()).Take(100).ToList();
@@ -267,7 +267,7 @@ namespace UnitTests {
 		///It is not intended for load testing, or it may take a very long time.</summary>
 		[TestMethod]
 		public void FeeCache_CycleClinics() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			FeeCache cache=new FeeCache();//Fees.GetCache();
 			List<Fee> listFees=CreateManyFees(2,7,2,MethodBase.GetCurrentMethod().Name).ListFees;
 			//Only check a random subset of elements in the created list in order to prevent this test from taking a long time
@@ -280,7 +280,7 @@ namespace UnitTests {
 		/// <summary>Creates three fee schedules. Invalidate two fee schedules, confirm that getting the fees still returns the proper amount.</summary>
 		[TestMethod]
 		public void Fees_InvalidateFeeSchedules() {
-			PrefT.UpdateBool(PrefName.FeesUseCache,true);
+			PrefT.UpdateBool(PreferenceName.FeesUseCache,true);
 			FeeTestArgs args=CreateManyFees(3,1,1,MethodBase.GetCurrentMethod().Name);
 			FeeCache cache=new FeeCache(args.ListFees);
 			Fee fee1=args.ListFees.First();

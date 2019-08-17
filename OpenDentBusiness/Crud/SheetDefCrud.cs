@@ -142,7 +142,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SheetDef into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(SheetDef sheetDef,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO sheetdef (";
 			if(!useExistingPK && isRandomKeys) {
 				sheetDef.SheetDefNum=ReplicationServers.GetKeyNoCache("sheetdef","SheetDefNum");

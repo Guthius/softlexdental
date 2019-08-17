@@ -307,7 +307,7 @@ namespace OpenDental{
 					}
 				}
 			}
-			switch(Preferences.GetInt(PrefName.ReportsPPOwriteoffDefaultToProcDate)){
+			switch(Preference.GetInt(PreferenceName.ReportsPPOwriteoffDefaultToProcDate)){
 				case 0: radioWriteoffPay.Checked=true; break;
 				case 1: radioWriteoffProc.Checked=true; break;
 				case 2: radioWriteoffClaim.Checked=true; break;
@@ -408,7 +408,7 @@ namespace OpenDental{
 			Font fontSubTitle=new Font("Tahoma",10,FontStyle.Bold);
 			report.ReportName=Lan.g(this,"Daily Writeoffs");
 			report.AddTitle("Title",Lan.g(this,"Daily Writeoffs"),fontTitle);
-			report.AddSubTitle("PracticeTitle",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
+			report.AddSubTitle("PracticeTitle",Preference.GetString(PreferenceName.PracticeTitle),fontSubTitle);
 			report.AddSubTitle("Date SubTitle",date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d"),fontSubTitle);
 			if(checkAllProv.Checked) {
 				report.AddSubTitle("Providers",Lan.g(this,"All Providers")); 

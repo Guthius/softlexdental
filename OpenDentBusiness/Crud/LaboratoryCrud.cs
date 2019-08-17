@@ -146,7 +146,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Laboratory into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(Laboratory laboratory,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO laboratory (";
 			if(!useExistingPK && isRandomKeys) {
 				laboratory.LaboratoryNum=ReplicationServers.GetKeyNoCache("laboratory","LaboratoryNum");

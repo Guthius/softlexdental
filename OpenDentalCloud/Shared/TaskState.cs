@@ -3,9 +3,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenDentalCloud {
+namespace OpenDentalCloud
+{
 
-	public delegate void ProgressHandler(double newCurVal,string newDisplayText,double newMaxVal,string errorMessage);
+    public delegate void ProgressHandler(double newCurVal, string newDisplayText, double newMaxVal, string errorMessage);
 
     public abstract class TaskState
     {

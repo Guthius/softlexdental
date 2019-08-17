@@ -89,7 +89,7 @@ namespace OpenDental {
 		private bool _startedInOthersInbox;
 		private System.Windows.Forms.Button butColor;
 		///<summary>Filled on load with all non-hidden task priority definitions.</summary>
-		private List<Def> _listTaskPriorities;
+		private List<Definition> _listTaskPriorities;
 		private long _pritoryDefNumSelected;
 		///<summary>FK to the definition.DefNum at HQ for the triage priority color for red.</summary>
 		private const long _triageRedNum=501;
@@ -423,7 +423,7 @@ namespace OpenDental {
             this.textReminderRepeatFrequency.MaxVal = 999999999;
             this.textReminderRepeatFrequency.MinVal = 1;
             this.textReminderRepeatFrequency.Name = "textReminderRepeatFrequency";
-            this.textReminderRepeatFrequency.PrefNameBinding = OpenDentBusiness.PrefName.NotApplicable;
+            this.textReminderRepeatFrequency.PrefNameBinding = OpenDentBusiness.PreferenceName.NotApplicable;
             this.textReminderRepeatFrequency.Size = new System.Drawing.Size(50, 20);
             this.textReminderRepeatFrequency.TabIndex = 1;
             this.textReminderRepeatFrequency.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textReminderRepeatFrequency_KeyUp);
@@ -1250,7 +1250,7 @@ namespace OpenDental {
 					textDescript.BackColor=System.Drawing.SystemColors.Window;
 				}
 			}
-			_listTaskPriorities=Defs.GetDefsForCategory(DefCat.TaskPriorities,true);//Fill list with non-hidden priorities.
+			_listTaskPriorities=Definition.GetByCategory(DefinitionCategory.TaskPriorities);//Fill list with non-hidden priorities.
 			//There must be at least one priority in Setup | Definitions.  Do not let them load the task edit window without at least one priority.
 			if(_listTaskPriorities.Count < 1) {
 				MsgBox.Show(this,"There are no task priorities in Setup | Definitions.  There must be at least one in order to use the task system.");
@@ -1260,9 +1260,9 @@ namespace OpenDental {
 			bool hasDefault=false;
 			_pritoryDefNumSelected=_taskCur.PriorityDefNum;
 			if(_pritoryDefNumSelected==0 && IsNew && _taskCur.ReminderType!=TaskReminderType.NoReminder) {
-				foreach(Def defTaskPriority in _listTaskPriorities) {
-					if(defTaskPriority.ItemValue=="R") {
-						_pritoryDefNumSelected=defTaskPriority.DefNum;
+				foreach(Definition defTaskPriority in _listTaskPriorities) {
+					if(defTaskPriority.Value=="R") {
+						_pritoryDefNumSelected=defTaskPriority.Id;
 						hasDefault=true;
 						break;
 					}
@@ -1270,8 +1270,8 @@ namespace OpenDental {
 			}
 			if(_pritoryDefNumSelected==0) {//The task does not yet have a priority assigned.  Find the default and assign it, if available.
 				for(int i=0;i<_listTaskPriorities.Count;i++) {
-					if(_listTaskPriorities[i].ItemValue=="D") {
-						_pritoryDefNumSelected=_listTaskPriorities[i].DefNum;
+					if(_listTaskPriorities[i].Value=="D") {
+						_pritoryDefNumSelected=_listTaskPriorities[i].Id;
 						hasDefault=true;
 						break;
 					}
@@ -1279,22 +1279,22 @@ namespace OpenDental {
 			}
 			comboTaskPriorities.Items.Clear();
 			for(int i=0;i<_listTaskPriorities.Count;i++) {//Add non-hidden defs first
-				comboTaskPriorities.Items.Add(_listTaskPriorities[i].ItemName);
-				if(_pritoryDefNumSelected==_listTaskPriorities[i].DefNum) {//Use priority listed within the database.
+				comboTaskPriorities.Items.Add(_listTaskPriorities[i].Description);
+				if(_pritoryDefNumSelected==_listTaskPriorities[i].Id) {//Use priority listed within the database.
 					comboTaskPriorities.SelectedIndex=i;//Sets combo text too
 				}
 			}
 			if((IsNew || _pritoryDefNumSelected==0) && !hasDefault) {//If no default has been set in the definitions, select the last item in the list.
 				comboTaskPriorities.SelectedIndex=comboTaskPriorities.Items.Count-1;
-				_pritoryDefNumSelected=_listTaskPriorities[_listTaskPriorities.Count-1].DefNum;
+				_pritoryDefNumSelected=_listTaskPriorities[_listTaskPriorities.Count-1].Id;
 			}
 			if(comboTaskPriorities.SelectedIndex==-1) {//Priority for task wasn't found in the non-hidden priorities list (and isn't triageBlue), so it must be a hidden priority.
-				List<Def> listTaskDefsLong=Defs.GetDefsForCategory(DefCat.TaskPriorities);//Get all priorities
+				List<Definition> listTaskDefsLong=Definition.GetByCategory(DefinitionCategory.TaskPriorities);;//Get all priorities
 				for(int i=0;i<listTaskDefsLong.Count;i++) {
-					if(listTaskDefsLong[i].DefNum==_pritoryDefNumSelected) {//We find the hidden priority and set the text of the combo box.
+					if(listTaskDefsLong[i].Id==_pritoryDefNumSelected) {//We find the hidden priority and set the text of the combo box.
 						comboTaskPriorities.DropDownStyle=ComboBoxStyle.DropDown;
-						comboTaskPriorities.Text=(listTaskDefsLong[i].ItemName+" (Hidden)");
-						butColor.BackColor=listTaskDefsLong[i].ItemColor;
+						comboTaskPriorities.Text=(listTaskDefsLong[i].Description+" (Hidden)");
+						butColor.BackColor=listTaskDefsLong[i].Color;
 					}
 				}
 			}
@@ -1328,7 +1328,7 @@ namespace OpenDental {
 				textDescript.Select(_taskCur.Descript.Length,0);//Place the cursor at the end of the description box.
 			}
 			long mailboxUserNum=0;
-			if(Preferences.GetBool(PrefName.TasksNewTrackedByUser) && _taskCur.TaskListNum !=0) {
+			if(Preference.GetBool(PreferenceName.TasksNewTrackedByUser) && _taskCur.TaskListNum !=0) {
 				mailboxUserNum=TaskLists.GetMailboxUserNum(_taskCur.TaskListNum);
 				if(mailboxUserNum != 0 && mailboxUserNum != Security.CurUser.UserNum) {
 					_startedInOthersInbox=true;
@@ -1345,7 +1345,7 @@ namespace OpenDental {
 					checkNew.Checked=false;
 					_statusChanged=true;
 				}
-				else if(Preferences.GetBool(PrefName.TasksNewTrackedByUser)) {
+				else if(Preference.GetBool(PreferenceName.TasksNewTrackedByUser)) {
 					if(_startedInOthersInbox) {
 						_taskCur.IsUnread=TaskUnreads.IsUnread(mailboxUserNum,_taskCur);
 					}
@@ -1364,8 +1364,8 @@ namespace OpenDental {
 					}
 				}
 			}
-			groupReminder.Visible=(!Preferences.GetBool(PrefName.TasksUseRepeating));
-			panelRepeating.Visible=Preferences.GetBool(PrefName.TasksUseRepeating);
+			groupReminder.Visible=(!Preference.GetBool(PreferenceName.TasksUseRepeating));
+			panelRepeating.Visible=Preference.GetBool(PreferenceName.TasksUseRepeating);
 			textReminderRepeatFrequency.Text=(IsNew?"1":_taskCur.ReminderFrequency.ToString());
 			//Fill comboReminderRepeat with repeating options.
 			_listTaskReminderTypeNames=new List<TaskReminderType>() {
@@ -1429,7 +1429,7 @@ namespace OpenDental {
 			for(int i=0;i<Enum.GetNames(typeof(TaskObjectType)).Length;i++) {
 				listObjectType.Items.Add(Lan.g("enumTaskObjectType",Enum.GetNames(typeof(TaskObjectType))[i]));
 			}
-			_listTaskPriorities=Defs.GetDefsForCategory(DefCat.TaskPriorities,true);//Fill list with non-hidden priorities.
+			_listTaskPriorities=Definition.GetByCategory(DefinitionCategory.TaskPriorities);//Fill list with non-hidden priorities.
 			//There must be at least one priority in Setup | Definitions.  Do not let them load the task edit window without at least one priority.
 			if(_listTaskPriorities.Count < 1) {
 				MsgBox.Show(this,"There are no task priorities in Setup | Definitions.  There must be at least one in order to use the task system.");
@@ -1743,7 +1743,7 @@ namespace OpenDental {
 			if(_pritoryDefNumSelected==_triageBlueNum) {//Blue button is clicked while it's already blue
 				_pritoryDefNumSelected=_triageWhiteNum;//Change to white.
 				for(int i=0;i<_listTaskPriorities.Count;i++) {
-					if(_listTaskPriorities[i].DefNum==_triageWhiteNum) {
+					if(_listTaskPriorities[i].Id==_triageWhiteNum) {
 						comboTaskPriorities.SelectedIndex=i;//Change selection to the triage white
 					}
 				}	
@@ -1751,7 +1751,7 @@ namespace OpenDental {
 			else {//Blue button is clicked while it's red or white, simply change it to blue
 				_pritoryDefNumSelected=_triageBlueNum;//Change to blue.
 				for(int i=0;i<_listTaskPriorities.Count;i++) {
-					if(_listTaskPriorities[i].DefNum==_triageBlueNum) {
+					if(_listTaskPriorities[i].Id==_triageBlueNum) {
 						comboTaskPriorities.SelectedIndex=i;//Change selection to the triage blue
 					}
 				}	
@@ -1762,7 +1762,7 @@ namespace OpenDental {
 			if(_pritoryDefNumSelected==_triageRedNum) {//Red button is clicked while it's already red
 				_pritoryDefNumSelected=_triageWhiteNum;//Change to white.
 				for(int i=0;i<_listTaskPriorities.Count;i++) {
-					if(_listTaskPriorities[i].DefNum==_triageWhiteNum) {
+					if(_listTaskPriorities[i].Id==_triageWhiteNum) {
 						comboTaskPriorities.SelectedIndex=i;//Change combo selection to the triage white
 					}
 				}	
@@ -1770,7 +1770,7 @@ namespace OpenDental {
 			else {//Red button is clicked while it's blue or white, simply change it to red
 				_pritoryDefNumSelected=_triageRedNum;//Change to red.
 				for(int i=0;i<_listTaskPriorities.Count;i++) {
-					if(_listTaskPriorities[i].DefNum==_triageRedNum) {
+					if(_listTaskPriorities[i].Id==_triageRedNum) {
 						comboTaskPriorities.SelectedIndex=i;//Change combo selection to the triage red
 					}
 				}
@@ -1791,8 +1791,8 @@ namespace OpenDental {
 
 		///<summary>This event is fired whenever the combo box is changed manually or the index is changed programmatically.</summary>
 		private void comboTaskPriorities_SelectedIndexChanged(object sender,EventArgs e) {
-			_pritoryDefNumSelected=_listTaskPriorities[comboTaskPriorities.SelectedIndex].DefNum;
-			butColor.BackColor=Defs.GetColor(DefCat.TaskPriorities,_pritoryDefNumSelected);//Change the color swatch so people know the priority's color
+			_pritoryDefNumSelected=_listTaskPriorities[comboTaskPriorities.SelectedIndex].Id;
+			butColor.BackColor=Defs.GetColor(DefinitionCategory.TaskPriorities,_pritoryDefNumSelected);//Change the color swatch so people know the priority's color
 		}
 
 		private void comboTaskPriorities_SelectionChangeCommitted(object sender,EventArgs e) {
@@ -1957,7 +1957,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please enter a description.");
 				return false;
 			}
-			if(taskReminderType!=TaskReminderType.NoReminder && !Preferences.GetBool(PrefName.TasksUseRepeating)) {//Is a reminder and not using legacy task system
+			if(taskReminderType!=TaskReminderType.NoReminder && !Preference.GetBool(PreferenceName.TasksUseRepeating)) {//Is a reminder and not using legacy task system
 				if(taskReminderType!=TaskReminderType.Once &&
 					(textReminderRepeatFrequency.errorProvider1.GetError(textReminderRepeatFrequency)!="" || PIn.Int(textReminderRepeatFrequency.Text) < 1))
 				{
@@ -2024,7 +2024,7 @@ namespace OpenDental {
 				TaskUnreads.DeleteForTask(_taskCur);//clear out taskunreads. We have too many tasks to read the done ones.
 			}
 			else {//because it can't be both new and done.
-				if(Preferences.GetBool(PrefName.TasksNewTrackedByUser)) {
+				if(Preference.GetBool(PreferenceName.TasksNewTrackedByUser)) {
 					if(_taskCur.TaskStatus==TaskStatusEnum.Done) {
 						_taskCur.TaskStatus=TaskStatusEnum.Viewed;
 					}
@@ -2283,7 +2283,7 @@ namespace OpenDental {
 				taskCopy.TaskListNum=taskListNum;
 				taskCopy.IsUnread=true;
 				taskCopy.ReminderGroupId="";
-				if(taskCopy.ReminderType!=TaskReminderType.NoReminder && !Preferences.GetBool(PrefName.TasksUseRepeating)) {//Make a new ID if it's blank no matter what.  Could be an old task being changed.
+				if(taskCopy.ReminderType!=TaskReminderType.NoReminder && !Preference.GetBool(PreferenceName.TasksUseRepeating)) {//Make a new ID if it's blank no matter what.  Could be an old task being changed.
 					Tasks.SetReminderGroupId(taskCopy);
 				}
 				try {
@@ -2407,7 +2407,7 @@ namespace OpenDental {
 				e.Cancel=true;
 				return;
 			}
-			if(Preferences.GetBool(PrefName.TasksNewTrackedByUser)) {
+			if(Preference.GetBool(PreferenceName.TasksNewTrackedByUser)) {
 				//No more automation here
 			}
 			else {

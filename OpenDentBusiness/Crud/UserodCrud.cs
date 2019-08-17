@@ -23,7 +23,7 @@ namespace OpenDentBusiness.Crud{
 				userod.UserName               = PIn.String(row["UserName"].ToString());
 				userod.Password               = PIn.String(row["Password"].ToString());
 				userod.UserGroupNum           = PIn.Long  (row["UserGroupNum"].ToString());
-				userod.EmployeeNum            = PIn.Long  (row["EmployeeNum"].ToString());
+				userod.EmployeeNum            = PIn.Int  (row["EmployeeNum"].ToString());
 				userod.ClinicNum              = PIn.Long  (row["ClinicNum"].ToString());
 				userod.ProvNum                = PIn.Long  (row["ProvNum"].ToString());
 				userod.IsHidden               = PIn.Bool  (row["IsHidden"].ToString());
@@ -147,7 +147,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Userod into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(User userod,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO userod (";
 			if(!useExistingPK && isRandomKeys) {
 				userod.UserNum=ReplicationServers.GetKeyNoCache("userod","UserNum");

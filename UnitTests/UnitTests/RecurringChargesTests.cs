@@ -41,7 +41,7 @@ namespace UnitTests
         [TestMethod]
         public void RecurringCharges_FillCharges_CreateCharge()
         {
-            PrefT.UpdateBool(PrefName.EasyNoClinics, true);
+            PrefT.UpdateBool(PreferenceName.EasyNoClinics, true);
             string suffix = MethodBase.GetCurrentMethod().Name;
             Patient pat = PatientT.CreatePatient(suffix);
             CreditCard cc = CreditCardT.CreateCard(pat.PatNum, 50, DateTime.Today, 0);
@@ -56,7 +56,7 @@ namespace UnitTests
         [TestMethod]
         public void RecurringCharges_FillCharges_PendingCharge()
         {
-            PrefT.UpdateBool(PrefName.EasyNoClinics, true);
+            PrefT.UpdateBool(PreferenceName.EasyNoClinics, true);
             string suffix = MethodBase.GetCurrentMethod().Name;
             Patient pat = PatientT.CreatePatient(suffix);
             CreditCard cc = CreditCardT.CreateCard(pat.PatNum, 50, DateTime.Today, 0);
@@ -72,7 +72,7 @@ namespace UnitTests
         [TestMethod]
         public void RecurringCharges_FillCharges_PendingChargeYesterday()
         {
-            PrefT.UpdateBool(PrefName.EasyNoClinics, true);
+            PrefT.UpdateBool(PreferenceName.EasyNoClinics, true);
             string suffix = MethodBase.GetCurrentMethod().Name;
             Patient pat = PatientT.CreatePatient(suffix);
             CreditCard cc = CreditCardT.CreateCard(pat.PatNum, 50, DateTime.Today, 0);
@@ -88,7 +88,7 @@ namespace UnitTests
         [TestMethod]
         public void RecurringCharges_FillCharges_AdjustmentsOnProcs()
         {
-            PrefT.UpdateBool(PrefName.EasyNoClinics, true);
+            PrefT.UpdateBool(PreferenceName.EasyNoClinics, true);
             string suffix = MethodBase.GetCurrentMethod().Name;
             Patient pat = PatientT.CreatePatient(suffix);
             CreditCard cc = CreditCardT.CreateCard(pat.PatNum, 50, DateTime.Today, 0, authorizedProcs: "001");
@@ -109,7 +109,7 @@ namespace UnitTests
         [TestMethod]
         public void RecurringCharges_FillCharges_TwoAdjustmentsOnProcs()
         {
-            PrefT.UpdateBool(PrefName.EasyNoClinics, true);
+            PrefT.UpdateBool(PreferenceName.EasyNoClinics, true);
             string suffix = MethodBase.GetCurrentMethod().Name;
             Patient pat = PatientT.CreatePatient(suffix);
             CreditCard cc = CreditCardT.CreateCard(pat.PatNum, 50, DateTime.Today, 0, authorizedProcs: "001");
@@ -432,10 +432,10 @@ namespace UnitTests
             string suffix = MethodBase.GetCurrentMethod().Name;
             string strRecurringChargesBeginDateTimeExpected = "";//Should be blank after recurring charges completes.
             string strRecurringChargesBeginDateTimeStarting = "RecurringChargesBeginDateTime should be blank after running " + suffix;
-            PrefT.UpdateString(PrefName.RecurringChargesBeginDateTime, strRecurringChargesBeginDateTimeStarting);
+            PrefT.UpdateString(PreferenceName.RecurringChargesBeginDateTime, strRecurringChargesBeginDateTimeStarting);
             RecurringChargerator charger = new RecurringChargerator(null, false);
             charger.SendCharges(new List<RecurringChargeData>(), false);//Passing an empty list won't actually send anything.  Just updates pref.
-            Assert.AreEqual(strRecurringChargesBeginDateTimeExpected, Preferences.GetString(PrefName.RecurringChargesBeginDateTime));
+            Assert.AreEqual(strRecurringChargesBeginDateTimeExpected, Preferences.GetString(PreferenceName.RecurringChargesBeginDateTime));
         }
 
         ///<summary>Tests that a card that gets charged once per month sets the RecurringChargeDate on the payment properly.</summary>
@@ -443,7 +443,7 @@ namespace UnitTests
         public void RecurringCharges_CreatePayment_SetsRecurringChargeDate()
         {
             string suffix = MethodBase.GetCurrentMethod().Name;
-            PrefT.UpdateBool(PrefName.RecurringChargesUseTransDate, true);
+            PrefT.UpdateBool(PreferenceName.RecurringChargesUseTransDate, true);
             Patient pat = PatientT.CreatePatient(suffix);
             DateTime cardStartDate = new DateTime(2019, 01, 25);
             CreditCard cc = CreditCardT.CreateCard(pat.PatNum, 50, cardStartDate, 0);
@@ -464,7 +464,7 @@ namespace UnitTests
         public void RecurringCharges_CreatePayment_SetsRecurringChargeDateEveryOtherFriday()
         {
             string suffix = MethodBase.GetCurrentMethod().Name;
-            PrefT.UpdateBool(PrefName.RecurringChargesUseTransDate, true);
+            PrefT.UpdateBool(PreferenceName.RecurringChargesUseTransDate, true);
             Patient pat = PatientT.CreatePatient(suffix);
             DateTime cardStartDate = new DateTime(2019, 01, 25);//Friday
             CreditCard cc = CreditCardT.CreateCard(pat.PatNum, 50, cardStartDate, 0, "", ChargeFrequencyType.FixedWeekDay, DayOfWeekFrequency.EveryOther,
@@ -488,7 +488,7 @@ namespace UnitTests
         public void RecurringCharges_CreatePayment_SetsRecurringChargeDateEveryWednesday()
         {
             string suffix = MethodBase.GetCurrentMethod().Name;
-            PrefT.UpdateBool(PrefName.RecurringChargesUseTransDate, true);
+            PrefT.UpdateBool(PreferenceName.RecurringChargesUseTransDate, true);
             Patient pat = PatientT.CreatePatient(suffix);
             DateTime cardStartDate = new DateTime(2019, 01, 23);//Wednesday
             CreditCard cc = CreditCardT.CreateCard(pat.PatNum, 50, cardStartDate, 0, "", ChargeFrequencyType.FixedWeekDay, DayOfWeekFrequency.Every,
@@ -513,7 +513,7 @@ namespace UnitTests
         public void RecurringCharges_CreatePayment_SetsRecurringChargeDateEveryTuesday()
         {
             string suffix = MethodBase.GetCurrentMethod().Name;
-            PrefT.UpdateBool(PrefName.RecurringChargesUseTransDate, true);
+            PrefT.UpdateBool(PreferenceName.RecurringChargesUseTransDate, true);
             Patient pat = PatientT.CreatePatient(suffix);
             DateTime cardStartDate = new DateTime(2019, 01, 22);//Tuesday
             CreditCard cc = CreditCardT.CreateCard(pat.PatNum, 50, cardStartDate, 0, "", ChargeFrequencyType.FixedWeekDay, DayOfWeekFrequency.Every,
@@ -536,7 +536,7 @@ namespace UnitTests
         public void RecurringCharges_CreatePayment_SetsRecurringChargeDateThreeFixedDays()
         {
             string suffix = MethodBase.GetCurrentMethod().Name;
-            PrefT.UpdateBool(PrefName.RecurringChargesUseTransDate, true);
+            PrefT.UpdateBool(PreferenceName.RecurringChargesUseTransDate, true);
             Patient pat = PatientT.CreatePatient(suffix);
             DateTime cardStartDate = new DateTime(2019, 01, 01);
             CreditCard cc = CreditCardT.CreateCard(pat.PatNum, 50, cardStartDate, 0, "", ChargeFrequencyType.FixedDayOfMonth, daysOfMonth: "3,10,17");

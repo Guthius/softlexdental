@@ -7,7 +7,7 @@ namespace UnitTestsCore {
 	public class ClinicT {
 
 		///<summary>Inserts the new clinic, refreshes the cache and then returns the clinic.</summary>
-		public static Clinic CreateClinic(string description="",long emailAddressNum=0,string address="",Def regionDef=null) {
+		public static Clinic CreateClinic(string description="",long emailAddressNum=0,string address="",Definition regionDef=null) {
 			Clinic clinic=new Clinic();
 			clinic.Description=description;
 			clinic.Abbr=description;
@@ -22,7 +22,7 @@ namespace UnitTestsCore {
 			clinic.State="OR";
 			clinic.Zip="97302-1288";
 			clinic.Phone="5033635432";
-			clinic.Region=regionDef?.DefNum??0;
+			clinic.Region=regionDef?.Id??0;
 			Clinics.Insert(clinic);
 			if(description=="") {
 				clinic.Description="Clinic "+clinic.ClinicNum.ToString();
@@ -36,9 +36,9 @@ namespace UnitTestsCore {
 		///<summary>Returns the practice as clinic zero.</summary>
 		public static Clinic CreatePracticeClinic(string practiceTitle="The Land of Mordor",long emailAddressNum=0) {
 			if(emailAddressNum!=0) {
-				Prefs.UpdateLong(PrefName.EmailDefaultAddressNum,emailAddressNum);
+				Prefs.UpdateLong(PreferenceName.EmailDefaultAddressNum,emailAddressNum);
 			}
-			Prefs.UpdateString(PrefName.PracticeTitle,practiceTitle);
+			Prefs.UpdateString(PreferenceName.PracticeTitle,practiceTitle);
 			return Clinics.GetPracticeAsClinicZero();
 		}
 

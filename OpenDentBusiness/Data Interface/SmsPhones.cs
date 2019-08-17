@@ -327,9 +327,9 @@ namespace OpenDentBusiness
             double limit = 0;
             if (!Preferences.HasClinicsEnabled)
             {
-                if (Preferences.GetDate(PrefName.SmsContractDate).Year > 1880)
+                if (Preference.GetDate(PreferenceName.SmsContractDate).Year > 1880)
                 {
-                    limit = Preferences.GetDouble(PrefName.SmsMonthlyLimit);
+                    limit = Preference.GetDouble(PreferenceName.SmsMonthlyLimit);
                 }
             }
             else
@@ -361,7 +361,7 @@ namespace OpenDentBusiness
             }
             if (!Preferences.HasClinicsEnabled)
             {
-                return Preferences.GetDateTime(PrefName.SmsContractDate).Year > 1880;
+                return Preference.GetDateTime(PreferenceName.SmsContractDate).Year > 1880;
             }
             return (Clinics.GetFirstOrDefault(x => x.SmsContractDate.Year > 1880) != null);
         }
@@ -379,7 +379,7 @@ namespace OpenDentBusiness
             {//if pat assigned to invalid clinic or clinic num 0
                 return clinic.ClinicNum;
             }
-            return Preferences.GetLong(PrefName.TextingDefaultClinicNum);
+            return Preference.GetLong(PreferenceName.TextingDefaultClinicNum);
         }
 
         ///<summary>Returns true if there is an active phone for the country code.</summary>

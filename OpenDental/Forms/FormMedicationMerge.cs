@@ -29,11 +29,11 @@ namespace OpenDental {
 			FormM.IsSelectionMode=true;
 			FormM.ShowDialog();
 			if(FormM.DialogResult==DialogResult.OK) {
-				_medInto=Medications.GetMedication(FormM.SelectedMedicationNum);
-				textGenNumInto.Text=POut.Long(_medInto.GenericNum);
-				textMedNameInto.Text=_medInto.MedName;
-				textMedNumInto.Text=POut.Long(_medInto.MedicationNum);
-				textRxInto.Text=POut.Long(_medInto.RxCui);
+				_medInto= Medication.GetById(FormM.SelectedMedicationNum);
+				textGenNumInto.Text=_medInto.GenericId.Value.ToString();
+				textMedNameInto.Text=_medInto.Description;
+				textMedNumInto.Text=POut.Long(_medInto.Id);
+				textRxInto.Text=_medInto.RxCui;
 			}
 			CheckUIState();
 		}
@@ -43,11 +43,11 @@ namespace OpenDental {
 			FormM.IsSelectionMode=true;
 			FormM.ShowDialog();
 			if(FormM.DialogResult==DialogResult.OK) {
-				_medFrom=Medications.GetMedication(FormM.SelectedMedicationNum);
-				textGenNumFrom.Text=POut.Long(_medFrom.GenericNum);
-				textMedNameFrom.Text=_medFrom.MedName;
-				textMedNumFrom.Text=POut.Long(_medFrom.MedicationNum);
-				textRxFrom.Text=POut.Long(_medFrom.RxCui);
+				_medFrom= Medication.GetById(FormM.SelectedMedicationNum);
+				textGenNumFrom.Text=_medFrom.GenericId.Value.ToString();
+				textMedNameFrom.Text=_medFrom.Description;
+				textMedNumFrom.Text=POut.Long(_medFrom.Id);
+				textRxFrom.Text=_medFrom.RxCui;
 			}
 			CheckUIState();
 		}
@@ -60,7 +60,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"You must select two different medications to merge.");
 				return;
 			}
-			if(_medFrom.MedicationNum==_medFrom.GenericNum && _medInto.MedicationNum!=_medInto.GenericNum) {
+			if(_medFrom.Id==_medFrom.GenericId && _medInto.Id!=_medInto.GenericId) {
 				msgText=Lan.g(this,"You may not merge a generic medication into a brand")+".  "+
 					Lan.g(this,"Select the generic version of the medication to merge into instead")+".";
 				MessageBox.Show(msgText);
@@ -75,7 +75,7 @@ namespace OpenDental {
 			if(textRxFrom.Text!=textRxInto.Text) {
 				differentFields+="\r\n"+Lan.g(this,"RxCui");
 			}
-			long numPats=Medications.CountPats(_medFrom.MedicationNum);
+			long numPats= Medication.CountPats(_medFrom.Id);
 			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Are you sure?  The results are permanent and cannot be undone.")) {
 				return;
 			}
@@ -88,8 +88,8 @@ namespace OpenDental {
 			if(MessageBox.Show(msgText,"",MessageBoxButtons.OKCancel)!=DialogResult.OK) {
 				return;
 			}
-			long rowsChanged=Medications.Merge(_medFrom.MedicationNum,_medInto.MedicationNum);
-			string logText=Lan.g(this,"Medications merged")+": "+_medFrom.MedName+" "+Lan.g(this,"merged into")+" "+_medInto.MedName+".\r\n"
+			long rowsChanged= Medication.Merge(_medFrom.Id,_medInto.Id);
+			string logText=Lan.g(this,"Medications merged")+": "+_medFrom.Description+" "+Lan.g(this,"merged into")+" "+_medInto.Description+".\r\n"
 			+Lan.g(this,"Rows changed")+": "+POut.Long(rowsChanged);
 			SecurityLogs.MakeLogEntry(Permissions.MedicationMerge,0,logText);
 			textRxFrom.Clear();

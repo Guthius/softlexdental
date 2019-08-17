@@ -29,7 +29,7 @@ namespace OpenDental
             butPW.Visible = Programs.IsEnabled(ProgramName.PracticeWebReports);
             //hiding feature for 13.3
             //butPatList.Visible=PrefC.GetBool(PrefName.ShowFeatureEhr);
-            ehrPatientExportButton.Visible = Preferences.GetBool(PrefName.ShowFeatureEhr);
+            ehrPatientExportButton.Visible = Preference.GetBool(PreferenceName.ShowFeatureEhr);
             FillLists();
         }
 

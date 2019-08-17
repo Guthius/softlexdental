@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ReplicationServer into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(ReplicationServer replicationServer,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO replicationserver (";
 			if(!useExistingPK && isRandomKeys) {
 				replicationServer.ReplicationServerNum=ReplicationServers.GetKeyNoCache("replicationserver","ReplicationServerNum");

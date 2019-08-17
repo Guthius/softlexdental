@@ -592,7 +592,7 @@ namespace OpenDental{
 				butAddTemplate.Enabled=false;
 				butDeleteTemplate.Enabled=false;
 			}
-			if(Preferences.GetBool(PrefName.ShowFeatureEhr)) {
+			if(Preference.GetBool(PreferenceName.ShowFeatureEhr)) {
 				butDirectMessage.Visible=true;
 			}
 			Cursor=Cursors.WaitCursor;
@@ -627,7 +627,7 @@ namespace OpenDental{
 			}
 			FillTemplates();
 			FillAutographs();
-			if(Preferences.GetBool(PrefName.FuchsOptionsOn)) {
+			if(Preference.GetBool(PreferenceName.FuchsOptionsOn)) {
 				buttonFuchsMailDMF.Visible=true;
 				buttonFuchsMailDSF.Visible=true;
 			}

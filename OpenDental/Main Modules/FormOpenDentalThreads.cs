@@ -30,8 +30,8 @@ namespace OpenDental {
 		private void SetTimersAndThreads(bool doStart) {
 			if(doStart) {
 				//Timers
-				if(Preferences.GetInt(PrefName.ProcessSigsIntervalInSecs)!=0) {
-					timerSignals.Interval=Preferences.GetInt(PrefName.ProcessSigsIntervalInSecs)*1000;
+				if(Preference.GetInt(PreferenceName.ProcessSigsIntervalInSecs)!=0) {
+					timerSignals.Interval=Preference.GetInt(PreferenceName.ProcessSigsIntervalInSecs)*1000;
 					timerSignals.Start();
 				}
 				timerTimeIndic.Start();
@@ -117,7 +117,6 @@ namespace OpenDental {
 			});
 			odThread.GroupName=FormODThreadNames.CacheFillForFees.GetDescription();
 			odThread.Name=FormODThreadNames.CacheFillForFees.GetDescription();
-			odThread.AddSetupHandler(o => DataConnection.ConnectionRetryTimeoutSeconds=(int)TimeSpan.FromMinutes(1).TotalSeconds);
 			odThread.Start(true);
 			_listOdThreadsRunOnce.Add(odThread);
 		}
@@ -189,12 +188,12 @@ namespace OpenDental {
 			if(IsThreadAlreadyRunning(FormODThreadNames.ClaimReport)) {
 				return;
 			}
-			if(Preferences.GetBool(PrefName.ClaimReportReceivedByService)) {
+			if(Preference.GetBool(PreferenceName.ClaimReportReceivedByService)) {
 				return;
 			}
-			int claimReportRetrieveIntervalMS=(int)TimeSpan.FromMinutes(Preferences.GetInt(PrefName.ClaimReportReceiveInterval)).TotalMilliseconds;
+			int claimReportRetrieveIntervalMS=(int)TimeSpan.FromMinutes(Preference.GetInt(PreferenceName.ClaimReportReceiveInterval)).TotalMilliseconds;
 			ODThread odThread=new ODThread(claimReportRetrieveIntervalMS,(o) => {
-				string claimReportComputer=Preferences.GetString(PrefName.ClaimReportComputerName);
+				string claimReportComputer=Preference.GetString(PreferenceName.ClaimReportComputerName);
 				if(claimReportComputer=="" || claimReportComputer!=Dns.GetHostName()) {
 					return;
 				}
@@ -214,7 +213,7 @@ namespace OpenDental {
 			}
 			ODThread threadCompHeartbeat=new ODThread(180000,o => {//Every three minutes
 				ODException.SwallowAnyException(() => {
-					Computers.UpdateHeartBeat(Environment.MachineName,false);
+					Computer.UpdateHeartBeat(Environment.MachineName);
 				});
 			});
 			threadCompHeartbeat.GroupName=FormODThreadNames.ComputerHeartbeat.GetDescription();
@@ -224,35 +223,6 @@ namespace OpenDental {
 
 		#endregion
 		#region CrashedTableMonitorThread
-
-		private void BeginCrashedTableMonitorThread(CrashedTableEventArgs e) {
-			if(_odThreadCrashedTableMonitor!=null) {
-				return;
-			}
-			_odThreadCrashedTableMonitor=new ODThread((o) => {
-				string errorMessage=(string)e.Tag;
-				Func<bool> funcShouldWindowClose=() => {
-					if(DataConnection.IsTableCrashed(e.TableName)) {
-						return false;//The table is still marked as crashed so do not close the Connection Lost window.
-					}
-					else {
-						//We have detected that the table is no longer marked as crashed so let everyone know and then close the Connection Lost window.
-						CrashedTableEvent.Fire(new CrashedTableEventArgs(false,e.TableName));
-						return true;
-					}
-				};
-				FormConnectionLost FormCL=new FormConnectionLost(funcShouldWindowClose,ODEventType.CrashedTable,errorMessage,typeof(CrashedTableEvent));
-				if(FormCL.ShowDialog()==DialogResult.Cancel) {
-					ExitCode=108;//User decided to exit the program due to a crashed table UE.
-					Environment.Exit(ExitCode);
-					return;
-				}
-			});
-			_odThreadCrashedTableMonitor.AddExitHandler((ex) => _odThreadCrashedTableMonitor=null);
-			_odThreadCrashedTableMonitor.GroupName=FormODThreadNames.CrashedTableMonitor.GetDescription();
-			_odThreadCrashedTableMonitor.Name=FormODThreadNames.CrashedTableMonitor.GetDescription();
-			_odThreadCrashedTableMonitor.Start();
-		}
 
 		#endregion
 		#region DataConnectionLostThread
@@ -305,7 +275,7 @@ namespace OpenDental {
 				return;
 			}
 			//For EHR users we want to load up the EHR code list from the obfuscated dll in a background thread because it takes roughly 11 seconds to load up.
-			if(!Preferences.GetBool(PrefName.ShowFeatureEhr)) {
+			if(!Preference.GetBool(PreferenceName.ShowFeatureEhr)) {
 				return;
 			}
 			ODThread odThread=new ODThread(o => {
@@ -337,40 +307,42 @@ namespace OpenDental {
 		}
 
 		private void EnableFeaturesWorker() {
-			Pref featurePref=Prefs.GetPref(PrefName.ProgramAdditionalFeatures.ToString());
-			if(featurePref==null || Preferences.GetDateTime(PrefName.ProgramAdditionalFeatures) > MiscData.GetNowDateTime()) {
-				return;
-			}
-			DateTime dateOriginal=MiscData.GetNowDateTime().AddMinutes(-30);
-			featurePref.ValueString=dateOriginal.AddDays(1).ToString(CultureInfo.InvariantCulture);//default try again in one day unless set below.
-			Prefs.Update(featurePref);
-			Signalods.SetInvalid(InvalidType.Prefs);
-			string response=WebServiceMainHQProxy.GetWebServiceMainHQInstance()
-				.EnableAdditionalFeatures(PayloadHelper.CreatePayload("",eServiceCode.Undefined));
-			XmlDocument doc=new XmlDocument();
-			doc.LoadXml(response);
-			XmlNode node;
-			bool refreshNeeded=false;
-			//Update all "Disable Advertising HQ" program links based on what HQ provided.
-			refreshNeeded|=SetAdvertising(ProgramName.CentralDataStorage,doc);
-			refreshNeeded|=SetAdvertising(ProgramName.DentalTekSmartOfficePhone,doc);
-			refreshNeeded|=SetAdvertising(ProgramName.Podium,doc);
-			refreshNeeded|=SetAdvertising(ProgramName.RapidCall,doc);
-			refreshNeeded|=SetAdvertising(ProgramName.Transworld,doc);
-			refreshNeeded|=SetAdvertising(ProgramName.DentalIntel,doc);
-			refreshNeeded|=SetAdvertising(ProgramName.PracticeByNumbers,doc);
-			refreshNeeded|=SetAdvertising(ProgramName.DXCPatientCreditScore,doc);
-			refreshNeeded|=SetAdvertising(ProgramName.Oryx,doc);
-			if(refreshNeeded) {
-				Signalods.SetInvalid(InvalidType.Programs);
-			}
-			node=doc.SelectSingleNode("//NextIntervalDays");
-			if(node!=null) {
-				long days=7;//default value;
-				long.TryParse(node.InnerText,out days);
-				Prefs.UpdateDateT(PrefName.ProgramAdditionalFeatures,dateOriginal.AddDays(days));
-				Prefs.Update(featurePref);
-			}
+            // TODO: Fix me
+
+			//Preference featurePref=Prefs.GetPref(PreferenceName.ProgramAdditionalFeatures.ToString());
+			//if(featurePref==null || Preference.GetDateTime(PreferenceName.ProgramAdditionalFeatures) > MiscData.GetNowDateTime()) {
+			//	return;
+			//}
+			//DateTime dateOriginal=MiscData.GetNowDateTime().AddMinutes(-30);
+			//featurePref.Value=dateOriginal.AddDays(1).ToString(CultureInfo.InvariantCulture);//default try again in one day unless set below.
+			//Prefs.Update(featurePref);
+			//Signalods.SetInvalid(InvalidType.Prefs);
+			//string response=WebServiceMainHQProxy.GetWebServiceMainHQInstance()
+			//	.EnableAdditionalFeatures(PayloadHelper.CreatePayload("",eServiceCode.Undefined));
+			//XmlDocument doc=new XmlDocument();
+			//doc.LoadXml(response);
+			//XmlNode node;
+			//bool refreshNeeded=false;
+			////Update all "Disable Advertising HQ" program links based on what HQ provided.
+			//refreshNeeded|=SetAdvertising(ProgramName.CentralDataStorage,doc);
+			//refreshNeeded|=SetAdvertising(ProgramName.DentalTekSmartOfficePhone,doc);
+			//refreshNeeded|=SetAdvertising(ProgramName.Podium,doc);
+			//refreshNeeded|=SetAdvertising(ProgramName.RapidCall,doc);
+			//refreshNeeded|=SetAdvertising(ProgramName.Transworld,doc);
+			//refreshNeeded|=SetAdvertising(ProgramName.DentalIntel,doc);
+			//refreshNeeded|=SetAdvertising(ProgramName.PracticeByNumbers,doc);
+			//refreshNeeded|=SetAdvertising(ProgramName.DXCPatientCreditScore,doc);
+			//refreshNeeded|=SetAdvertising(ProgramName.Oryx,doc);
+			//if(refreshNeeded) {
+			//	Signalods.SetInvalid(InvalidType.Programs);
+			//}
+			//node=doc.SelectSingleNode("//NextIntervalDays");
+			//if(node!=null) {
+			//	long days=7;//default value;
+			//	long.TryParse(node.InnerText,out days);
+			//	Preference.Update(PreferenceName.ProgramAdditionalFeatures,dateOriginal.AddDays(days));
+			//	Prefs.Update(featurePref);
+			//}
 		}
 
 		#endregion
@@ -386,7 +358,7 @@ namespace OpenDental {
 				return;//Do not start the listener service monitor for users without permission.
 			}
 			//Process any Error signals that happened due to an update:
-			EServiceSignals.ProcessErrorSignalsAroundTime(Preferences.GetDateTime(PrefName.ProgramVersionLastUpdated));
+			EServiceSignals.ProcessErrorSignalsAroundTime(Preference.GetDateTime(PreferenceName.ProgramVersionLastUpdated));
 			//Create a separate thread that will run every 60 seconds to monitor eService signals.
 			ODThread odThread=new ODThread(60000,EServiceMonitorWorker);
 			//Currently we don't want to do anything if the eService signal processing fails.  Simply try again in a minute.  
@@ -448,7 +420,7 @@ namespace OpenDental {
 		///<summary>Thread set to run every 15 seconds. This interval must be longer than the interval of the timer in FormLogoffWarning (10s), 
 		///or it will go into a loop.</summary>
 		private void LogOffWorker() {
-			if(Preferences.GetInt(PrefName.SecurityLogOffAfterMinutes)==0) {
+			if(Preference.GetInt(PreferenceName.SecurityLogOffAfterMinutes)==0) {
 				return;
 			}
 			if(this.InvokeRequired) {
@@ -503,7 +475,7 @@ namespace OpenDental {
 					return;
 				}
 			}
-			DateTime dtDeadline=Security.DateTimeLastActivity+TimeSpan.FromMinutes((double)Preferences.GetInt(PrefName.SecurityLogOffAfterMinutes));
+			DateTime dtDeadline=Security.DateTimeLastActivity+TimeSpan.FromMinutes((double)Preference.GetInt(PreferenceName.SecurityLogOffAfterMinutes));
 			//Debug.WriteLine("Now:"+DateTime.Now.ToLongTimeString()+", Deadline:"+dtDeadline.ToLongTimeString());
 			if(DateTime.Now<dtDeadline) {
 				return;
@@ -559,7 +531,7 @@ namespace OpenDental {
 				return;
 			}
 			ODThread odThread=new ODThread((o) => {
-				if(Preferences.GetString(PrefName.WebServiceServerName)!="" && ODEnvironment.IdIsThisComputer(Preferences.GetString(PrefName.WebServiceServerName))) {
+				if(Preference.GetString(PreferenceName.WebServiceServerName)!="" && ODEnvironment.IdIsThisComputer(Preference.GetString(PreferenceName.WebServiceServerName))) {
 					//An InvalidOperationException can get thrown if services could not start.  E.g. current user is not running Open Dental as an 
 					//administrator.	We do not want to halt the startup sequence here.  If we want to notify customers of a downed service, there needs to 
 					//be an additional monitoring service installed.
@@ -711,13 +683,13 @@ namespace OpenDental {
 			}
 			//Shut down all copies of OD and set ReplicationFailureAtServer_id to this server_id
 			//No workstations will be able to connect to this single server while this flag is set.
-			Prefs.UpdateLong(PrefName.ReplicationFailureAtServer_id,ReplicationServers.Server_id);
+			Preference.Update(PreferenceName.ReplicationFailureAtServer_id,ReplicationServers.Server_id);
 			//shut down all workstations on all servers
 			Signalods.SignalLastRefreshed=MiscData.GetNowDateTime().AddSeconds(5);
 			Signalod sig=new Signalod();
 			sig.IType=InvalidType.ShutDownNow;
 			Signalods.Insert(sig);
-			Computers.ClearAllHeartBeats(Environment.MachineName);//always assume success
+			Computer.ClearAllHeartBeats(Environment.MachineName);//always assume success
 			o.QuitAsync();//Quitting the thread here will quit it once this method exits (after the invoke returns).
 			this.Invoke(() => {
 				MsgBox.Show(this,"This database is temporarily unavailable.  Please connect instead to your alternate database at the other location.");
@@ -803,7 +775,7 @@ namespace OpenDental {
 			NTPv4 ntp=new NTPv4();
 			double nistOffset=double.MaxValue;
 			ODException.SwallowAnyException(() => {//Invalid NIST Server URL if fails
-				nistOffset=ntp.getTime(Preferences.GetString(PrefName.NistTimeServerUrl));
+				nistOffset=ntp.getTime(Preference.GetString(PreferenceName.NistTimeServerUrl));
 			});
 			if(nistOffset!=double.MaxValue) {
 				//Did not timeout, or have invalid NIST server URL
@@ -876,7 +848,7 @@ namespace OpenDental {
 			ODThread threadRegistrationKeyIsDisabled=new ODThread(
 				(int)TimeSpan.FromMinutes(10).TotalMilliseconds,
 				(o) => {
-					if(Preferences.GetBoolSilent(PrefName.RegistrationKeyIsDisabled,false)) {
+					if(Preference.GetBool(PreferenceName.RegistrationKeyIsDisabled,false)) {
 						this.Invoke(() => {
 							MessageBox.Show(
 								"Registration key has been disabled.  You are using an unauthorized version of this program.",

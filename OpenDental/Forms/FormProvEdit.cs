@@ -1475,11 +1475,11 @@ namespace OpenDental{
 			comboEhrMu.Items.Add("Stage 2");
 			comboEhrMu.Items.Add("Modified Stage 2");
 			comboEhrMu.SelectedIndex=ProvCur.EhrMuStage;
-			if(!Preferences.GetBool(PrefName.ShowFeatureEhr)) {
+			if(!Preference.GetBool(PreferenceName.ShowFeatureEhr)) {
 				comboEhrMu.Visible=false;
 				labelEhrMU.Visible=false;
 			}
-			if(!Preferences.GetBool(PrefName.EasyHideDentalSchools) //Dental Schools is turned on
+			if(!Preference.GetBool(PreferenceName.EasyHideDentalSchools) //Dental Schools is turned on
 				&& (ProvCur.SchoolClassNum!=0 || ProvCur.IsInstructor))//Adding/Editing Students or Instructors
 			{
 				if(!ProvCur.IsNew) {
@@ -1601,10 +1601,10 @@ namespace OpenDental{
 				listFeeSched.SelectedIndex=0;
 			}
 			listSpecialty.Items.Clear();
-			Def[] specDefs=Defs.GetDefsForCategory(DefCat.ProviderSpecialties,true).ToArray();
+			Definition[] specDefs=Definition.GetByCategory(DefinitionCategory.ProviderSpecialties).ToArray();
 			for(int i=0;i<specDefs.Length;i++) {
-				listSpecialty.Items.Add(Lan.g("enumDentalSpecialty",specDefs[i].ItemName));
-				if(i==0 || ProvCur.Specialty==specDefs[i].DefNum) {//default to the first item in the list
+				listSpecialty.Items.Add(Lan.g("enumDentalSpecialty",specDefs[i].Description));
+				if(i==0 || ProvCur.Specialty==specDefs[i].Id) {//default to the first item in the list
 					listSpecialty.SelectedIndex=i;
 				}
 			}
@@ -1862,7 +1862,7 @@ namespace OpenDental{
 				return;
 			}
 			if(checkIsHidden.Checked) {
-				if(Preferences.GetLong(PrefName.PracticeDefaultProv)==ProvCur.ProvNum) {
+				if(Preference.GetLong(PreferenceName.PracticeDefaultProv)==ProvCur.ProvNum) {
 					MsgBox.Show(this,"Not allowed to hide practice default provider.");
 					return;
 				}
@@ -1870,7 +1870,7 @@ namespace OpenDental{
 					MsgBox.Show(this,"Not allowed to hide a clinic default provider.");
 					return;
 				}
-				if(Preferences.GetLong(PrefName.InsBillingProv)==ProvCur.ProvNum) {
+				if(Preference.GetLong(PreferenceName.InsBillingProv)==ProvCur.ProvNum) {
 					if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"You are about to hide the default ins billing provider. Continue?")) {
 						return;
 					}
@@ -1881,7 +1881,7 @@ namespace OpenDental{
 					}
 				}
 			}
-			if(Providers.GetExists(x => x.ProvNum!=ProvCur.ProvNum && x.Abbr==textAbbr.Text && Preferences.GetBool(PrefName.EasyHideDentalSchools))) {
+			if(Providers.GetExists(x => x.ProvNum!=ProvCur.ProvNum && x.Abbr==textAbbr.Text && Preference.GetBool(PreferenceName.EasyHideDentalSchools))) {
 				if(!MsgBox.Show(this,true,"This abbreviation is already in use by another provider.  Continue anyway?")) {
 					return;
 				}
@@ -1910,7 +1910,7 @@ namespace OpenDental{
 				}
 				Providers.RemoveProvFromFutureSchedule(ProvCur.ProvNum);
 			}
-			if(!Preferences.GetBool(PrefName.EasyHideDentalSchools) && (ProvCur.IsInstructor || ProvCur.SchoolClassNum!=0)) {//Is an Instructor or a Student
+			if(!Preference.GetBool(PreferenceName.EasyHideDentalSchools) && (ProvCur.IsInstructor || ProvCur.SchoolClassNum!=0)) {//Is an Instructor or a Student
 				if(textUserName.Text=="") {
 					MsgBox.Show(this,"User Name is not allowed to be blank.");
 					return;
@@ -1980,7 +1980,7 @@ namespace OpenDental{
 			ProvCur.WebSchedDescript=textWebSchedDescript.Text;
 			ProvCur.HourlyProdGoalAmt=PIn.Double(textProdGoalHr.Text);
 			ProvCur.DateTerm=dateTerm.GetDateTime();
-			if(!Preferences.GetBool(PrefName.EasyHideDentalSchools)) {
+			if(!Preference.GetBool(PreferenceName.EasyHideDentalSchools)) {
 				if(ProvCur.SchoolClassNum!=0) {
 					ProvCur.SchoolClassNum=_listSchoolClasses[comboSchoolClass.SelectedIndex].SchoolClassNum;
 				}
@@ -1989,7 +1989,7 @@ namespace OpenDental{
 				ProvCur.FeeSched=_listFeeSchedShort[listFeeSched.SelectedIndex].FeeSchedNum;
 			}
 			//default to first specialty in the list if it can't find the specialty by exact name
-			ProvCur.Specialty=Defs.GetByExactNameNeverZero(DefCat.ProviderSpecialties,listSpecialty.SelectedItem.ToString());//selected index defaults to 0
+			ProvCur.Specialty=Defs.GetByExactNameNeverZero(DefinitionCategory.ProviderSpecialties,listSpecialty.SelectedItem.ToString());//selected index defaults to 0
 			ProvCur.TaxonomyCodeOverride=textTaxonomyOverride.Text;
 			if(radAnesthSurg.Checked) {
 				ProvCur.AnesthProvType=1;
@@ -2012,7 +2012,7 @@ namespace OpenDental{
 					user.LoginDetails=Authentication.GenerateLoginDetailsSHA512(textPassword.Text);
 					user.ProvNum=provNum;
 					try {
-						Userods.Insert(user,new List<long> { Preferences.GetLong(PrefName.SecurityGroupForInstructors) });
+						Userods.Insert(user,new List<long> { Preference.GetLong(PreferenceName.SecurityGroupForInstructors) });
 					}
 					catch(Exception ex) {
 						Providers.Delete(ProvCur);

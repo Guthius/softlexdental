@@ -30,7 +30,7 @@ namespace OpenDental {
 			//This window fills all necessary data on load. This eliminates the need for multiple calls to the database.
 			textDate.Text=_evalCur.DateEval.ToShortDateString();
 			textTitle.Text=_evalCur.EvalTitle;
-			_evalGradeScale=GradingScales.GetOne(_evalCur.GradingScaleNum);
+			_evalGradeScale=GradingScale.GetById(_evalCur.GradingScaleNum);
 			_listEvalGradeItems=GradingScaleItems.Refresh(_evalCur.GradingScaleNum);
 			textGradeScaleName.Text=_evalGradeScale.Description;
 			_provInstructor=Providers.GetProv(_evalCur.InstructNum);
@@ -44,12 +44,12 @@ namespace OpenDental {
 			textGradeShowingOverride.Text=_evalCur.OverallGradeShowing;
 			_listEvalCrits=EvaluationCriterions.Refresh(_evalCur.EvaluationNum);
 			for(int i=0;i<_listEvalCrits.Count;i++) {
-				GradingScale critGradeScale=GradingScales.GetOne(_listEvalCrits[i].GradingScaleNum);
-				if(!_dictCritGradeScales.ContainsKey(critGradeScale.GradingScaleNum)) {
-					_dictCritGradeScales.Add(critGradeScale.GradingScaleNum,critGradeScale);
+				GradingScale critGradeScale= GradingScale.GetById(_listEvalCrits[i].GradingScaleNum);
+				if(!_dictCritGradeScales.ContainsKey(critGradeScale.Id)) {
+					_dictCritGradeScales.Add(critGradeScale.Id,critGradeScale);
 				}
-				if(!_dictCritGradeItems.ContainsKey(critGradeScale.GradingScaleNum)) {
-					_dictCritGradeItems.Add(critGradeScale.GradingScaleNum,GradingScaleItems.Refresh(critGradeScale.GradingScaleNum));
+				if(!_dictCritGradeItems.ContainsKey(critGradeScale.Id)) {
+					_dictCritGradeItems.Add(critGradeScale.Id,GradingScaleItems.Refresh(critGradeScale.Id));
 				}
 			}
 			FillGridCriterion();
@@ -105,10 +105,10 @@ namespace OpenDental {
 		}
 
 		private void FillGridGrading(long gradingScaleNum) {
-			if(_dictCritGradeScales[gradingScaleNum].ScaleType==EnumScaleType.Weighted) {
+			if(_dictCritGradeScales[gradingScaleNum].ScaleType==GradingScaleType.Weighted) {
 				FillGridGradingWithWeighted(gradingScaleNum);
 			}
-			else if(_dictCritGradeScales[gradingScaleNum].ScaleType==EnumScaleType.Percentage) {
+			else if(_dictCritGradeScales[gradingScaleNum].ScaleType==GradingScaleType.Percentage) {
 				FillGridGradingWithPercentage(gradingScaleNum);
 			}
 			else {//PickList ScaleType
@@ -215,7 +215,7 @@ namespace OpenDental {
 				gridCriterion.Rows[gridCriterion.SelectedCell.Y].Cells[3].Text=_listEvalCrits[gridCriterion.SelectedCell.Y].GradeNumber.ToString();
 				return;
 			}
-			if(_dictCritGradeScales[_listEvalCrits[gridCriterion.SelectedCell.Y].GradingScaleNum].ScaleType==EnumScaleType.PickList) {
+			if(_dictCritGradeScales[_listEvalCrits[gridCriterion.SelectedCell.Y].GradingScaleNum].ScaleType==GradingScaleType.PickList) {
 				//If using a picklist the value entered must equal a value that exists in the list. You cannot type in a value that does not have a corresponding grade item.
 				bool isValid=false;
 				for(int i=0;i<_dictCritGradeItems[_listEvalCrits[gridCriterion.SelectedCell.Y].GradingScaleNum].Count;i++) {
@@ -241,8 +241,8 @@ namespace OpenDental {
 		}
 
 		private void gridGrades_CellClick(object sender,ODGridClickEventArgs e) {
-			if(_dictCritGradeScales[_listEvalCrits[gridCriterion.SelectedCell.Y].GradingScaleNum].ScaleType==EnumScaleType.Weighted
-				|| _dictCritGradeScales[_listEvalCrits[gridCriterion.SelectedCell.Y].GradingScaleNum].ScaleType==EnumScaleType.Percentage) 
+			if(_dictCritGradeScales[_listEvalCrits[gridCriterion.SelectedCell.Y].GradingScaleNum].ScaleType==GradingScaleType.Weighted
+				|| _dictCritGradeScales[_listEvalCrits[gridCriterion.SelectedCell.Y].GradingScaleNum].ScaleType==GradingScaleType.Percentage) 
 			{
 					return;
 			}
@@ -269,7 +269,7 @@ namespace OpenDental {
 					maxPoints+=_listEvalCrits[i].MaxPointsPoss;
 				}
 			}
-			if(_evalGradeScale.ScaleType==EnumScaleType.PickList || _evalGradeScale.ScaleType==EnumScaleType.Percentage) {
+			if(_evalGradeScale.ScaleType==GradingScaleType.PickList || _evalGradeScale.ScaleType==GradingScaleType.Percentage) {
 				//Grades here are calculated as an average. All criterion in these modes will be worth the same "weight".
 				//This could be improved later by adding weights to questions. This would mean they get 'averaged' into the grade
 				//multiple times dependent on the weight. i.e. Criterion 1 has a weight of 3 and it gets graded an A.
@@ -278,15 +278,15 @@ namespace OpenDental {
 					gradeNumberDisplay=gradeSum/critCount;
 				}
 			}
-			if(_evalGradeScale.ScaleType==EnumScaleType.Weighted) {
+			if(_evalGradeScale.ScaleType==GradingScaleType.Weighted) {
 				//This grade is calculated as a sum of all criterion grade numbers over the maximum points possible all the criterion.
 				gradeNumberDisplay=gradeSum;
 			}
-			if(_evalGradeScale.ScaleType==EnumScaleType.Percentage) {
+			if(_evalGradeScale.ScaleType==GradingScaleType.Percentage) {
 				textGradeNumber.Text=gradeNumberDisplay.ToString();
 				textGradeShowing.Text=gradeNumberDisplay.ToString();
 			}
-			if(_evalGradeScale.ScaleType==EnumScaleType.PickList){
+			if(_evalGradeScale.ScaleType==GradingScaleType.PickList){
 				float dif=float.MaxValue;
 				float closestNumber=0;
 				string closestShowing="";
@@ -300,7 +300,7 @@ namespace OpenDental {
 				textGradeNumber.Text=closestNumber.ToString();
 				textGradeShowing.Text=closestShowing;
 			}
-			if(_evalGradeScale.ScaleType==EnumScaleType.Weighted) {
+			if(_evalGradeScale.ScaleType==GradingScaleType.Weighted) {
 				textGradeNumber.Text=gradeNumberDisplay.ToString();
 				textGradeShowing.Text=gradeNumberDisplay+"/"+maxPoints;
 			}

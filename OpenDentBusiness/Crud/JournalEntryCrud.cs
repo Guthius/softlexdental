@@ -44,14 +44,14 @@ namespace OpenDentBusiness.Crud{
 				journalEntry=new JournalEntry();
 				journalEntry.JournalEntryNum= PIn.Long  (row["JournalEntryNum"].ToString());
 				journalEntry.TransactionNum = PIn.Long  (row["TransactionNum"].ToString());
-				journalEntry.AccountNum     = PIn.Long  (row["AccountNum"].ToString());
+				journalEntry.AccountNum     = PIn.Int   (row["AccountNum"].ToString());
 				journalEntry.DateDisplayed  = PIn.Date  (row["DateDisplayed"].ToString());
 				journalEntry.DebitAmt       = PIn.Double(row["DebitAmt"].ToString());
 				journalEntry.CreditAmt      = PIn.Double(row["CreditAmt"].ToString());
 				journalEntry.Memo           = PIn.String(row["Memo"].ToString());
 				journalEntry.Splits         = PIn.String(row["Splits"].ToString());
 				journalEntry.CheckNumber    = PIn.String(row["CheckNumber"].ToString());
-				journalEntry.ReconcileNum   = PIn.Long  (row["ReconcileNum"].ToString());
+				journalEntry.ReconcileNum   = PIn.Int(row["ReconcileNum"].ToString());
 				journalEntry.SecUserNumEntry= PIn.Long  (row["SecUserNumEntry"].ToString());
 				journalEntry.SecDateTEntry  = PIn.DateT (row["SecDateTEntry"].ToString());
 				journalEntry.SecUserNumEdit = PIn.Long  (row["SecUserNumEdit"].ToString());
@@ -158,7 +158,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one JournalEntry into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(JournalEntry journalEntry,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO journalentry (";
 			if(!useExistingPK && isRandomKeys) {
 				journalEntry.JournalEntryNum=ReplicationServers.GetKeyNoCache("journalentry","JournalEntryNum");

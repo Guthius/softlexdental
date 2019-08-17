@@ -76,10 +76,10 @@ namespace OpenDental {
 		private const string _autoNotePromptRegex=@"\[Prompt:""[a-zA-Z_0-9 ]+""\]";
 		///<summary>True only when modifications to this canadian lab proc will affect the attached parent proc ins estimate.</summary>
 		private bool _isEstimateRecompute=false;
-		private List<Def> _listDiagnosisDefs;
-		private List<Def> _listPrognosisDefs;
-		private List<Def> _listTxPriorityDefs;
-		private List<Def> _listBillingTypeDefs;
+		private List<Definition> _listDiagnosisDefs;
+		private List<Definition> _listPrognosisDefs;
+		private List<Definition> _listTxPriorityDefs;
+		private List<Definition> _listBillingTypeDefs;
 		///<summary>Most of the data necessary to load this form.</summary>
 		private ProcEdit.LoadData _loadData;
 		///<summary>There are a number of places in this form that need fees, but none of them are heavily used.  This will help a little.  Lazy loaded, do not directly use this variable, use the property instead.</summary>
@@ -133,7 +133,7 @@ namespace OpenDental {
 			//LoopList=null;
 			InitializeComponent();
 			Lan.F(this);
-			if(!Preferences.GetBool(PrefName.ShowFeatureMedicalInsurance)) {
+			if(!Preference.GetBool(PreferenceName.ShowFeatureMedicalInsurance)) {
 				tabControl.TabPages.Remove(tabPageMedical);
 				//groupMedical.Visible=false;
 			}
@@ -161,20 +161,20 @@ namespace OpenDental {
 			//Set the title bar to show the patient's name much like the main screen does.
 			this.Text+=" - "+_patCur.GetNameLF();
 			textDateEntry.Text=_procCur.DateEntryC.ToShortDateString();
-			if(Preferences.GetBool(PrefName.EasyHidePublicHealth)){
+			if(Preference.GetBool(PreferenceName.EasyHidePublicHealth)){
 				labelPlaceService.Visible=false;
 				comboPlaceService.Visible=false;
 				labelSite.Visible=false;
 				textSite.Visible=false;
 				butPickSite.Visible=false;
 			}
-			if(Preferences.GetLong(PrefName.UseInternationalToothNumbers)==1){
+			if(Preference.GetLong(PreferenceName.UseInternationalToothNumbers)==1){
 				listBoxTeeth.Items.Clear();
 				listBoxTeeth.Items.AddRange(new string[] {"18","17","16","15","14","13","12","11","21","22","23","24","25","26","27","28"});
 				listBoxTeeth2.Items.Clear();
 				listBoxTeeth2.Items.AddRange(new string[] {"48","47","46","45","44","43","42","41","31","32","33","34","35","36","37","38"});
 			}
-			if(Preferences.GetLong(PrefName.UseInternationalToothNumbers)==3){
+			if(Preference.GetLong(PreferenceName.UseInternationalToothNumbers)==3){
 				listBoxTeeth.Items.Clear();
 				listBoxTeeth.Items.AddRange(new string[] {"8","7","6","5","4","3","2","1","1","2","3","4","5","6","7","8"});
 				listBoxTeeth2.Items.Clear();
@@ -188,7 +188,7 @@ namespace OpenDental {
 			}
 			_listClaims=_loadData.ListClaims;
 			_procedureCode2=ProcedureCodes.GetProcCode(_procCur.CodeNum);
-			if(_procCur.ProcStatus==ProcStat.C && Preferences.GetBool(PrefName.ProcLockingIsAllowed) && !_procCur.IsLocked) {
+			if(_procCur.ProcStatus==ProcStat.C && Preference.GetBool(PreferenceName.ProcLockingIsAllowed) && !_procCur.IsLocked) {
 				butLock.Visible=true;
 			}
 			else {
@@ -247,13 +247,13 @@ namespace OpenDental {
 				labelClaim.Visible=true;
 				butAddEstimate.Enabled=false;
 			}
-			if(Preferences.GetBool(PrefName.EasyHideClinical)){
+			if(Preference.GetBool(PreferenceName.EasyHideClinical)){
 				labelDx.Visible=false;
 				comboDx.Visible=false;
 				labelPrognosis.Visible=false;
 				comboPrognosis.Visible=false;
 			}
-			if(Preferences.GetBool(PrefName.EasyHideMedicaid)) {
+			if(Preference.GetBool(PreferenceName.EasyHideMedicaid)) {
 				comboBillingTypeOne.Visible=false;
 				labelBillingTypeOne.Visible=false;
 				comboBillingTypeTwo.Visible=false;
@@ -336,14 +336,14 @@ namespace OpenDental {
 			else {
 				tabControl.Controls.Remove(tabPageOrion);
 			}
-			if(Programs.UsingOrion || Preferences.GetBool(PrefName.ShowFeatureMedicalInsurance)) {
+			if(Programs.UsingOrion || Preference.GetBool(PreferenceName.ShowFeatureMedicalInsurance)) {
 				labelEndTime.Visible=true;
 				textTimeEnd.Visible=true;
 				butNow.Visible=true;
 				labelTimeFinal.Visible=true;
 				textTimeFinal.Visible=true;
 			}
-			if(Preferences.GetBool(PrefName.ShowFeatureEhr)) {
+			if(Preference.GetBool(PreferenceName.ShowFeatureEhr)) {
 				textNotes.HideSelection=false;//When text is selected programmatically using our Search function, this causes the selection to be visible to the users.
 			}
 			else {
@@ -427,7 +427,7 @@ namespace OpenDental {
 			}
 			_listClinics=new List<Clinic>() { new Clinic() { Abbr=Lan.g(this,"None") } };
 			_listClinics.AddRange(Clinics.GetForUserod(_curUser));//Not Security.CurUser
-			bool isListAlpha = Preferences.GetBool(PrefName.ClinicListIsAlphabetical);
+			bool isListAlpha = Preference.GetBool(PreferenceName.ClinicListIsAlphabetical);
 			_listClinics=_listClinics.OrderBy(x => x.ClinicNum>0)
 				.ThenBy(x => isListAlpha?x.Abbr:x.ItemOrder.ToString().PadLeft(6,'0'))//sort by Abbr or Item order based on pref. string sort.
 				.ToList();
@@ -554,22 +554,22 @@ namespace OpenDental {
 				butAddAdjust.Enabled=false;
 			}
 			//if clinical is hidden, then there's a chance that no item is selected at this point.
-			_listDiagnosisDefs=Defs.GetDefsForCategory(DefCat.Diagnosis,true);
-			_listPrognosisDefs=Defs.GetDefsForCategory(DefCat.Prognosis,true);
-			_listTxPriorityDefs=Defs.GetDefsForCategory(DefCat.TxPriorities,true);
-			_listBillingTypeDefs=Defs.GetDefsForCategory(DefCat.BillingTypes,true);
+			_listDiagnosisDefs=Definition.GetByCategory(DefinitionCategory.Diagnosis);
+			_listPrognosisDefs=Definition.GetByCategory(DefinitionCategory.Prognosis);
+			_listTxPriorityDefs=Definition.GetByCategory(DefinitionCategory.TxPriorities);
+			_listBillingTypeDefs=Definition.GetByCategory(DefinitionCategory.BillingTypes);
 			comboDx.Items.Clear();
 			for(int i=0;i<_listDiagnosisDefs.Count;i++){
-				comboDx.Items.Add(_listDiagnosisDefs[i].ItemName);
-				if(_listDiagnosisDefs[i].DefNum==_procCur.Dx)
+				comboDx.Items.Add(_listDiagnosisDefs[i].Description);
+				if(_listDiagnosisDefs[i].Id==_procCur.Dx)
 					comboDx.SelectedIndex=i;
 			}
 			comboPrognosis.Items.Clear();
 			comboPrognosis.Items.Add(Lan.g(this,"no prognosis"));
 			comboPrognosis.SelectedIndex=0;
 			for(int i=0;i<_listPrognosisDefs.Count;i++) {
-				comboPrognosis.Items.Add(_listPrognosisDefs[i].ItemName);
-				if(_listPrognosisDefs[i].DefNum==_procCur.Prognosis)
+				comboPrognosis.Items.Add(_listPrognosisDefs[i].Description);
+				if(_listPrognosisDefs[i].Id==_procCur.Prognosis)
 					comboPrognosis.SelectedIndex=i+1;
 			}
 			checkHideGraphics.Checked=_procCur.HideGraphics;
@@ -582,24 +582,24 @@ namespace OpenDental {
 			comboPriority.Items.Add(Lan.g(this,"no priority"));
 			comboPriority.SelectedIndex=0;
 			for(int i=0;i<_listTxPriorityDefs.Count;i++){
-				comboPriority.Items.Add(_listTxPriorityDefs[i].ItemName);
-				if(_listTxPriorityDefs[i].DefNum==_procCur.Priority)
+				comboPriority.Items.Add(_listTxPriorityDefs[i].Description);
+				if(_listTxPriorityDefs[i].Id==_procCur.Priority)
 					comboPriority.SelectedIndex=i+1;
 			}
 			comboBillingTypeOne.Items.Clear();
 			comboBillingTypeOne.Items.Add(Lan.g(this,"none"));
 			comboBillingTypeOne.SelectedIndex=0;
 			for(int i=0;i<_listBillingTypeDefs.Count;i++) {
-				comboBillingTypeOne.Items.Add(_listBillingTypeDefs[i].ItemName);
-				if(_listBillingTypeDefs[i].DefNum==_procCur.BillingTypeOne)
+				comboBillingTypeOne.Items.Add(_listBillingTypeDefs[i].Description);
+				if(_listBillingTypeDefs[i].Id==_procCur.BillingTypeOne)
 					comboBillingTypeOne.SelectedIndex=i+1;
 			}
 			comboBillingTypeTwo.Items.Clear();
 			comboBillingTypeTwo.Items.Add(Lan.g(this,"none"));
 			comboBillingTypeTwo.SelectedIndex=0;
 			for(int i=0;i<_listBillingTypeDefs.Count;i++) {
-				comboBillingTypeTwo.Items.Add(_listBillingTypeDefs[i].ItemName);
-				if(_listBillingTypeDefs[i].DefNum==_procCur.BillingTypeTwo)
+				comboBillingTypeTwo.Items.Add(_listBillingTypeDefs[i].Description);
+				if(_listBillingTypeDefs[i].Id==_procCur.BillingTypeTwo)
 					comboBillingTypeTwo.SelectedIndex=i+1;
 			}
 			textBillingNote.Text=_procCur.BillingNote;
@@ -797,7 +797,7 @@ namespace OpenDental {
 
 		private void FormProcEdit_Shown(object sender,EventArgs e) {
 			//Prompt users for auto notes if they have the preference set.
-			if(Preferences.GetBool(PrefName.ProcPromptForAutoNote)) {//Replace [[text]] sections within the note with AutoNotes.
+			if(Preference.GetBool(PreferenceName.ProcPromptForAutoNote)) {//Replace [[text]] sections within the note with AutoNotes.
 				PromptForAutoNotes();
 			}
 			//Scroll to the end of the note for procedures for today (or completed today).
@@ -880,7 +880,7 @@ namespace OpenDental {
 				if(dateT.ToShortTimeString()!="12:00 AM"){
 					textTimeStart.Text+=dateT.ToShortTimeString();
 				}
-				if(Programs.UsingOrion || Preferences.GetBool(PrefName.ShowFeatureMedicalInsurance)) {
+				if(Programs.UsingOrion || Preference.GetBool(PreferenceName.ShowFeatureMedicalInsurance)) {
 					dateT=PIn.DateT(_procCur.ProcTimeEnd.ToString());
 					if(dateT.ToShortTimeString()!="12:00 AM") {
 						textTimeEnd.Text=dateT.ToShortTimeString();
@@ -1420,10 +1420,10 @@ namespace OpenDental {
 				row.Cells.Add(adjustment.AdjDate.ToShortDateString());
 				row.Cells.Add(adjustment.AdjAmt.ToString("F"));
 				row.Cells[row.Cells.Count-1].Bold=true;
-				row.Cells.Add(Defs.GetName(DefCat.AdjTypes,adjustment.AdjType));
+				row.Cells.Add(Defs.GetName(DefinitionCategory.AdjTypes,adjustment.AdjType));
 				row.Cells.Add(adjustment.AdjNote);
 				gridAdj.Rows.Add(row);
-				if(adjustment.AdjType==Preferences.GetLong(PrefName.TreatPlanDiscountAdjustmentType)) {
+				if(adjustment.AdjType==Preference.GetLong(PreferenceName.TreatPlanDiscountAdjustmentType)) {
 					discountAmt-=adjustment.AdjAmt;//Discounts are stored as negatives, we want a positive discount value.
 				}
 			}
@@ -1738,7 +1738,7 @@ namespace OpenDental {
 			}
 			if(comboProcStatus.SelectedTag<ProcStat>()==ProcStat.C) {
 				bool isAllowedToCompl=true;
-				if(!Preferences.GetBool(PrefName.AllowSettingProcsComplete)) {
+				if(!Preference.GetBool(PreferenceName.AllowSettingProcsComplete)) {
 					MsgBox.Show(this,"Set the procedure complete by setting the appointment complete.  "
 						+"If you want to be able to set procedures complete, you must turn on that option in Setup | Chart | Chart Preferences.");
 					isAllowedToCompl=false;
@@ -1753,7 +1753,7 @@ namespace OpenDental {
 					if(_procCur.ProcStatus==ProcStat.TP) {
 						comboProcStatus.SetSelectedItem<ProcStat>(x => x==ProcStat.TP,"");
 					}
-					else if(Preferences.GetBool(PrefName.EasyHideClinical)) {
+					else if(Preference.GetBool(PreferenceName.EasyHideClinical)) {
 						comboProcStatus.SelectedIndex=-1;//original status must not be visible
 					}
 					else {
@@ -1797,7 +1797,7 @@ namespace OpenDental {
 			//If it's already locked, there's simply no way to save the changes made to this control.
 			//If status was just changed to C, then we should show the lock button.
 			if(_procCur.ProcStatus==ProcStat.C) {
-				if(Preferences.GetBool(PrefName.ProcLockingIsAllowed) && !_procCur.IsLocked) {
+				if(Preference.GetBool(PreferenceName.ProcLockingIsAllowed) && !_procCur.IsLocked) {
 					butLock.Visible=true;
 				}
 			}
@@ -1809,7 +1809,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Procedure was already set complete.");
 				return;
 			}
-			if(!Preferences.GetBool(PrefName.AllowSettingProcsComplete)) {
+			if(!Preference.GetBool(PreferenceName.AllowSettingProcsComplete)) {
 				MsgBox.Show(this,"Set the procedure complete by setting the appointment complete.  "
 					+"If you want to be able to set procedures complete, you must turn on that option in Setup | Chart | Chart Preferences.");
 				return;
@@ -1852,7 +1852,7 @@ namespace OpenDental {
 			comboProcStatus.SelectedIndex=-1;
 			_procCur.ProcStatus=ProcStat.C;
 			_procCur.SiteNum=_patCur.SiteNum;
-			comboPlaceService.SelectedIndex=Preferences.GetInt(PrefName.DefaultProcedurePlaceService);
+			comboPlaceService.SelectedIndex=Preference.GetInt(PreferenceName.DefaultProcedurePlaceService);
 			if(EntriesAreValid()){
 				SaveAndClose();
 			}
@@ -1875,7 +1875,7 @@ namespace OpenDental {
 			if(!string.IsNullOrEmpty(procNoteDefault)) {
 				textNotes.Text+=procNoteDefault;
 			}
-			if(!Preferences.GetBool(PrefName.ProcPromptForAutoNote)) {
+			if(!Preference.GetBool(PreferenceName.ProcPromptForAutoNote)) {
 				//Users do not want to be prompted for auto notes, so remove them all from the procedure note.
 				textNotes.Text=Regex.Replace(textNotes.Text,@"\[\[.+?\]\]","");
 			}
@@ -2484,14 +2484,14 @@ namespace OpenDental {
 				FormIcd10s formI=new FormIcd10s();
 				formI.IsSelectionMode=true;
 				if(formI.ShowDialog()==DialogResult.OK) {
-					textBoxDiagnosisCode.Text=formI.SelectedIcd10.Icd10Code;
+					textBoxDiagnosisCode.Text=formI.SelectedIcd10.Code;
 				}
 			}
 			else {//ICD-9
 				FormIcd9s formI=new FormIcd9s();
 				formI.IsSelectionMode=true;
 				if(formI.ShowDialog()==DialogResult.OK) {
-					textBoxDiagnosisCode.Text=formI.SelectedIcd9.ICD9Code;
+					textBoxDiagnosisCode.Text=formI.SelectedIcd9.Code;
 				}
 			}
 		}
@@ -2665,7 +2665,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Procedures cannot be set complete in this window.  Set the procedure complete by setting the appointment complete.");
 				return false;
 			}
-			if(_procCur.ProcStatus==ProcStat.C && PIn.Date(textDate.Text).Date > DateTime.Today.Date && !Preferences.GetBool(PrefName.FutureTransDatesAllowed)) {
+			if(_procCur.ProcStatus==ProcStat.C && PIn.Date(textDate.Text).Date > DateTime.Today.Date && !Preference.GetBool(PreferenceName.FutureTransDatesAllowed)) {
 				MsgBox.Show(this,"Completed procedures cannot have future dates.");
 				return false;
 			}
@@ -2892,7 +2892,7 @@ namespace OpenDental {
 					if(!Security.IsAuthorized(Permissions.AdjustmentEdit,adjust.AdjDate)) {
 						return;
 					}
-					if(_procCur.ProvNum!=adjust.ProvNum && Preferences.GetInt(PrefName.RigorousAdjustments)==(int)RigorousAdjustments.EnforceFully) {
+					if(_procCur.ProvNum!=adjust.ProvNum && Preference.GetInt(PreferenceName.RigorousAdjustments)==(int)RigorousAdjustments.EnforceFully) {
 						hasAdjProvChanged=true;
 					}
 				}
@@ -2918,14 +2918,14 @@ namespace OpenDental {
 			else if(_procOld.ProcStatus!=ProcStat.C && _procCur.ProcStatus==ProcStat.C) {//Proc set complete.
 				_procCur.DateEntryC=DateTime.Now;//this triggers it to set to server time NOW().
 				if(_procCur.DiagnosticCode=="") {
-					_procCur.DiagnosticCode=Preferences.GetString(PrefName.ICD9DefaultForNewProcs);
+					_procCur.DiagnosticCode=Preference.GetString(PreferenceName.ICD9DefaultForNewProcs);
 				}
 			}
 			_procCur.DateTP=PIn.Date(this.textDateTP.Text);
 			_procCur.ProcDate=PIn.Date(this.textDate.Text);
 			DateTime dateT=PIn.DateT(this.textTimeStart.Text);
 			_procCur.ProcTime=new TimeSpan(dateT.Hour,dateT.Minute,0);
-			if(Programs.UsingOrion || Preferences.GetBool(PrefName.ShowFeatureMedicalInsurance)) {
+			if(Programs.UsingOrion || Preference.GetBool(PreferenceName.ShowFeatureMedicalInsurance)) {
 				dateT=ParseTime(textTimeStart.Text);
 				_procCur.ProcTime=new TimeSpan(dateT.Hour,dateT.Minute,0);
 				dateT=ParseTime(textTimeEnd.Text);
@@ -2993,11 +2993,11 @@ namespace OpenDental {
 			//Larger offices have trouble with doctors editing specific procedure notes at the same time.
 			//One of our customers paid for custom programming that will merge the two notes together in a specific fashion if there was concurrency issues.
 			//A specific preference was added because this functionality is so custom.  Typical users can just use the Chart View Audit mode for this info.
-			if(_procOld.ProcNum > 0 && Preferences.GetBool(PrefName.ProcNoteConcurrencyMerge)) {
+			if(_procOld.ProcNum > 0 && Preference.GetBool(PreferenceName.ProcNoteConcurrencyMerge)) {
 				//Go to the database to get the most recent version of the current procedure's note and check it against ProcOld.Note to see if they differ.
 				List<ProcNote> listProcNotes=ProcNotes.GetProcNotesForProc(_procOld.ProcNum)
 					.OrderByDescending(x => x.EntryDateTime)
-					.ThenBy(x => x.ProcNoteNum)//Just in case two notes were entered at the "same time" (current version of MySQL can't handle milliseconds)
+					.ThenBy(x => x.Id)//Just in case two notes were entered at the "same time" (current version of MySQL can't handle milliseconds)
 					.ToList();
 				//If there are notes for the current procedure, get the most recent note and compare it to ProcOld.Note.
 				//If the current database note differs from the ProcOld.Note then there was a concurrency issue and we have to merge the db note.
@@ -3031,19 +3031,19 @@ namespace OpenDental {
 			#endregion
 			_procCur.HideGraphics=checkHideGraphics.Checked;
 			if(comboDx.SelectedIndex!=-1) {
-				_procCur.Dx=_listDiagnosisDefs[comboDx.SelectedIndex].DefNum;
+				_procCur.Dx=_listDiagnosisDefs[comboDx.SelectedIndex].Id;
 			}
 			if(comboPrognosis.SelectedIndex==0) {
 				_procCur.Prognosis=0;
 			}
 			else {
-				_procCur.Prognosis=_listPrognosisDefs[comboPrognosis.SelectedIndex-1].DefNum;
+				_procCur.Prognosis=_listPrognosisDefs[comboPrognosis.SelectedIndex-1].Id;
 			}
 			if(comboPriority.SelectedIndex==0) {
 				_procCur.Priority=0;
 			}
 			else {
-				_procCur.Priority=_listTxPriorityDefs[comboPriority.SelectedIndex-1].DefNum;
+				_procCur.Priority=_listTxPriorityDefs[comboPriority.SelectedIndex-1].Id;
 			}
 			_procCur.PlaceService=(PlaceOfService)comboPlaceService.SelectedIndex;
 			//site set when user picks from list.
@@ -3051,13 +3051,13 @@ namespace OpenDental {
 				_procCur.BillingTypeOne=0;
 			}
 			else{
-				_procCur.BillingTypeOne=_listBillingTypeDefs[comboBillingTypeOne.SelectedIndex-1].DefNum;
+				_procCur.BillingTypeOne=_listBillingTypeDefs[comboBillingTypeOne.SelectedIndex-1].Id;
 			}
 			if(comboBillingTypeTwo.SelectedIndex==0) {
 				_procCur.BillingTypeTwo=0;
 			}
 			else {
-				_procCur.BillingTypeTwo=_listBillingTypeDefs[comboBillingTypeTwo.SelectedIndex-1].DefNum;
+				_procCur.BillingTypeTwo=_listBillingTypeDefs[comboBillingTypeTwo.SelectedIndex-1].Id;
 			}
 			_procCur.BillingNote=textBillingNote.Text;
 			//ProcCur.HideGraphical=checkHideGraphical.Checked;
@@ -3111,14 +3111,14 @@ namespace OpenDental {
 						labFee1.ProcNumLab=_procCur.ProcNum;
 						labFee1.CodeNum=ProcedureCodes.GetCodeNum("99111");
 						//Not sure if Place of Service is required for canadian labs. (I don't see any reason why this would/could/should break anything.)
-						labFee1.PlaceService=(PlaceOfService)Preferences.GetInt(PrefName.DefaultProcedurePlaceService);//Default proc place of service for the Practice is used.
+						labFee1.PlaceService=(PlaceOfService)Preference.GetInt(PreferenceName.DefaultProcedurePlaceService);//Default proc place of service for the Practice is used.
 						if(labFee1.CodeNum==0) { //Code does not exist.
 							ProcedureCode code99111=new ProcedureCode();
 							code99111.IsCanadianLab=true;
 							code99111.ProcCode="99111";
 							code99111.Descript="+L Commercial Laboratory Procedures";
 							code99111.AbbrDesc="Lab Fee";
-							code99111.ProcCat=Defs.GetByExactNameNeverZero(DefCat.ProcCodeCats,"Adjunctive General Services");
+							code99111.ProcCat=Defs.GetByExactNameNeverZero(DefinitionCategory.ProcCodeCats,"Adjunctive General Services");
 							ProcedureCodes.Insert(code99111);
 							labFee1.CodeNum=code99111.CodeNum;
 							ProcedureCodes.RefreshCache();
@@ -3153,14 +3153,14 @@ namespace OpenDental {
 						labFee2.ProcNumLab=_procCur.ProcNum;
 						labFee2.CodeNum=ProcedureCodes.GetCodeNum("99111");
 						//Not sure if Place of Service is required for canadian labs. (I don't see any reason why this would/could/should break anything.)
-						labFee2.PlaceService=(PlaceOfService)Preferences.GetInt(PrefName.DefaultProcedurePlaceService);//Default proc place of service for the Practice is used.
+						labFee2.PlaceService=(PlaceOfService)Preference.GetInt(PreferenceName.DefaultProcedurePlaceService);//Default proc place of service for the Practice is used.
 						if(labFee2.CodeNum==0) { //Code does not exist.
 							ProcedureCode code99111=new ProcedureCode();
 							code99111.IsCanadianLab=true;
 							code99111.ProcCode="99111";
 							code99111.Descript="+L Commercial Laboratory Procedures";
 							code99111.AbbrDesc="Lab Fee";
-							code99111.ProcCat=Defs.GetByExactNameNeverZero(DefCat.ProcCodeCats,"Adjunctive General Services");
+							code99111.ProcCat=Defs.GetByExactNameNeverZero(DefinitionCategory.ProcCodeCats,"Adjunctive General Services");
 							ProcedureCodes.Insert(code99111);
 							labFee2.CodeNum=code99111.CodeNum;
 							ProcedureCodes.RefreshCache();
@@ -3268,7 +3268,7 @@ namespace OpenDental {
 					FormAutoCodeLessIntrusive FormACLI=new FormAutoCodeLessIntrusive(_patCur,_procCur,_procedureCode2,verifyCode,_listPatPlans,_listInsSubs,_listInsPlans,
 						_listBenefits,_listClaimProcsForProc,listBoxTeeth.Text);
 					if(FormACLI.ShowDialog() != DialogResult.OK
-						&& Preferences.GetBool(PrefName.ProcEditRequireAutoCodes)) 
+						&& Preference.GetBool(PreferenceName.ProcEditRequireAutoCodes)) 
 					{
 						return;//send user back to fix information or use suggested auto code.
 					}

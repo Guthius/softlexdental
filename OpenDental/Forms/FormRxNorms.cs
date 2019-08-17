@@ -70,8 +70,8 @@ namespace OpenDental {
 		private void FillGrid(bool isExact) {
 			Cursor=Cursors.WaitCursor;
 			rxList=RxNorms.GetListByCodeOrDesc(textCode.Text,isExact,checkIgnore.Checked);
-			List <string> listMedicationRxCuis=Medications.GetWhere(x => x.RxCui!=0).Select(x => x.RxCui.ToString()).Distinct().ToList();
-			List <string> listMedPatRxCuis=MedicationPats.GetForRxCuis(rxList.Select(x => x.RxCui).ToList()).Select(x => x.RxCui.ToString()).ToList();
+			List <string> listMedicationRxCuis=Medication.All().Where(x => !string.IsNullOrEmpty(x.RxCui)).Select(x => x.RxCui).Distinct().ToList();
+			List <string> listMedPatRxCuis=MedicationPats.GetForRxCuis(rxList.Select(x => x.RxCui).ToList()).Select(x => x.RxCui).ToList();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("FormRxNorms","Code"),80);

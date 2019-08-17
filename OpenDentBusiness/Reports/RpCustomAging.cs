@@ -100,7 +100,7 @@ namespace OpenDentBusiness
 			WHERE TRUE ";
             if (ageOptions.ListBillTypes != null && ageOptions.ListBillTypes.Count > 0)
             {
-                command += " AND patient.BillingType IN (" + String.Join(",", ageOptions.ListBillTypes.Select(x => x.DefNum)) + ") ";
+                command += " AND patient.BillingType IN (" + String.Join(",", ageOptions.ListBillTypes.Select(x => x.Id)) + ") ";
             }
             if (ageOptions.ListProvs != null && ageOptions.ListProvs.Count > 0)
             {
@@ -166,7 +166,7 @@ namespace OpenDentBusiness
             {
                 Patient patLim = new Patient()
                 {
-                    PatNum = PIn.Long(row["PatNum"].ToString()),
+                    PatNum = PIn.Int(row["PatNum"].ToString()),
                     FName = PIn.String(row["FName"].ToString()),
                     LName = PIn.String(row["LName"].ToString()),
                 };
@@ -357,7 +357,7 @@ namespace OpenDentBusiness
         public NegativeBalAgingOptions NegativeBalOptions;
         public List<Provider> ListProvs;
         public List<Clinic> ListClins;
-        public List<Def> ListBillTypes;
+        public List<Definition> ListBillTypes;
         public bool ExcludeInactive;
         public bool ExcludeArchive;
         public bool ExcludeBadAddress;

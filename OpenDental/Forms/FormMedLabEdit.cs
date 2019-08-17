@@ -340,7 +340,7 @@ namespace OpenDental {
 			HL7Def defCur=HL7Defs.GetOneDeepEnabled(true);
 			long category=defCur.LabResultImageCat;
 			if(category==0) {
-				category=Defs.GetFirstForCategory(DefCat.ImageCats,true).DefNum;//put it in the first category.
+				category=Defs.GetFirstForCategory(DefinitionCategory.ImageCats,true).Id;//put it in the first category.
 			}
 			//create doc--------------------------------------------------------------------------------------
 			OpenDentBusiness.Document docc=null;
@@ -370,24 +370,25 @@ namespace OpenDental {
 				string patFolder=ImageStore.GetPatientFolder(Patients.GetPat(_medLabCur.PatNum),ImageStore.GetPreferredAtoZpath());
 				filePathAndName=ODFileUtils.CombinePaths(patFolder,docc.FileName);
 			}
-			else if(CloudStorage.IsCloudStorage) {
-				FormProgress FormP=new FormProgress();
-				FormP.DisplayText="Downloading...";
-				FormP.NumberFormat="F";
-				FormP.NumberMultiplication=1;
-				FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-				FormP.TickMS=1000;
-				OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(
-					ImageStore.GetPatientFolder(Patients.GetPat(_medLabCur.PatNum),ImageStore.GetPreferredAtoZpath())
-					,docc.FileName
-					,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-				if(FormP.ShowDialog()==DialogResult.Cancel) {
-					state.DoCancel=true;
-					return;
-				}
-				filePathAndName=Preferences.GetRandomTempFile(Path.GetExtension(docc.FileName));
-				File.WriteAllBytes(filePathAndName,state.FileContent);
-			}
+			else if(CloudStorage.IsCloudStorage)
+            { // TODO: Fix me
+              //	FormProgress FormP=new FormProgress();
+              //	FormP.DisplayText="Downloading...";
+              //	FormP.NumberFormat="F";
+              //	FormP.NumberMultiplication=1;
+              //	FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
+              //	FormP.TickMS=1000;
+              //	OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(
+              //		ImageStore.GetPatientFolder(Patients.GetPat(_medLabCur.PatNum),ImageStore.GetPreferredAtoZpath())
+              //		,docc.FileName
+              //		,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
+              //	if(FormP.ShowDialog()==DialogResult.Cancel) {
+              //		state.DoCancel=true;
+              //		return;
+              //	}
+              //	filePathAndName=Preferences.GetRandomTempFile(Path.GetExtension(docc.FileName));
+              //	File.WriteAllBytes(filePathAndName,state.FileContent);
+            }
 			Cursor=Cursors.Default;
 			if(filePathAndName!="") {
 				Process.Start(filePathAndName);
@@ -507,21 +508,23 @@ namespace OpenDental {
 					}
 				}
 				else if(CloudStorage.IsCloudStorage) {
-					//move files around in the cloud
-					FormProgress FormP=new FormProgress(false);
-					FormP.DisplayText="Uploading...";
-					FormP.NumberFormat="F";
-					FormP.NumberMultiplication=1;
-					FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-					FormP.TickMS=1000;
-					OpenDentalCloud.Core.TaskStateMove state=CloudStorage.MoveAsync(atozFrom
-						,atozTo
-						,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-					FormP.ShowDialog();//Don't allow users to cancel from here due to the limitations of the current feature for figuring out which files were moved successfully.
-				}
-				//if we get here the file was copied successfully or not storing images in the database, so update the document row
-				//Safe to update the document FileName and PatNum to PatCur and new file name
-				doc.PatNum=PatCur.PatNum;
+                    // TODO: Fix me
+
+                    //move files around in the cloud
+                    // FormProgress FormP=new FormProgress(false);
+                    // FormP.DisplayText="Uploading...";
+                    // FormP.NumberFormat="F";
+                    // FormP.NumberMultiplication=1;
+                    // FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
+                    // FormP.TickMS=1000;
+                    // OpenDentalCloud.Core.TaskStateMove state=CloudStorage.MoveAsync(atozFrom
+                    // 	,atozTo
+                    // 	,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
+                    // FormP.ShowDialog();//Don't allow users to cancel from here due to the limitations of the current feature for figuring out which files were moved successfully.
+                }
+                //if we get here the file was copied successfully or not storing images in the database, so update the document row
+                //Safe to update the document FileName and PatNum to PatCur and new file name
+                doc.PatNum=PatCur.PatNum;
 				doc.FileName=destFileName;
 				Documents.Update(doc);
 			}

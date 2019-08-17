@@ -29,9 +29,9 @@ namespace UnitTestsCore {
 		}
 
 		public static PaySplit CreatePrepayment(long patNum,int amt,DateTime datePay,long provNum=0,long clinicNum=0) {
-			Def unearnedType=Defs.GetDefByExactName(DefCat.PaySplitUnearnedType,"PrePayment")??DefT.CreateDefinition(DefCat.PaySplitUnearnedType,"PrePayment");
-			Def payType=Defs.GetDefByExactName(DefCat.PaymentTypes,"Check")??DefT.CreateDefinition(DefCat.PaymentTypes,"Check");
-			Payment pay=PaymentT.MakePaymentNoSplits(patNum,amt,datePay,clinicNum:clinicNum,payType:payType.DefNum);
+			Definition unearnedType=Defs.GetDefByExactName(DefinitionCategory.PaySplitUnearnedType,"PrePayment")??DefT.CreateDefinition(DefinitionCategory.PaySplitUnearnedType,"PrePayment");
+			Definition payType=Defs.GetDefByExactName(DefinitionCategory.PaymentTypes,"Check")??DefT.CreateDefinition(DefinitionCategory.PaymentTypes,"Check");
+			Payment pay=PaymentT.MakePaymentNoSplits(patNum,amt,datePay,clinicNum:clinicNum,payType:payType.Id);
 			PaySplit split=new PaySplit();
 			split.PayNum=pay.PayNum;
 			split.PatNum=pay.PatNum;
@@ -42,7 +42,7 @@ namespace UnitTestsCore {
 			split.ProcNum=0;
 			split.SplitAmt=amt;
 			split.DateEntry=datePay;
-			split.UnearnedType=unearnedType.DefNum;
+			split.UnearnedType=unearnedType.Id;
 			PaySplits.Insert(split);
 			return split;
 		}
@@ -57,9 +57,9 @@ namespace UnitTestsCore {
 			if(prov!=0) {
 				provNum=prov;
 			}
-			Def unearnedType=Defs.GetDefByExactName(DefCat.PaySplitUnearnedType,"PrePayment")??DefT.CreateDefinition(DefCat.PaySplitUnearnedType,"PrePayment");
-			Def payType=Defs.GetDefByExactName(DefCat.PaymentTypes,"Check")??DefT.CreateDefinition(DefCat.PaymentTypes,"Check");
-			Payment pay=PaymentT.MakePaymentNoSplits(proc.PatNum,amtToUse,payDate:DateTime.Now,clinicNum:clinicNum,payType:unearnedType.DefNum);
+			Definition unearnedType=Defs.GetDefByExactName(DefinitionCategory.PaySplitUnearnedType,"PrePayment")??DefT.CreateDefinition(DefinitionCategory.PaySplitUnearnedType,"PrePayment");
+			Definition payType=Defs.GetDefByExactName(DefinitionCategory.PaymentTypes,"Check")??DefT.CreateDefinition(DefinitionCategory.PaymentTypes,"Check");
+			Payment pay=PaymentT.MakePaymentNoSplits(proc.PatNum,amtToUse,payDate:DateTime.Now,clinicNum:clinicNum,payType:unearnedType.Id);
 			PaySplit splitNeg=new PaySplit();
 			splitNeg.PatNum=prePaySplit?.PatNum??proc.PatNum;
 			splitNeg.PayNum=pay.PayNum;
@@ -67,7 +67,7 @@ namespace UnitTestsCore {
 			splitNeg.ClinicNum=clinicNum;
 			splitNeg.ProvNum=provNum;
 			splitNeg.SplitAmt=0-amtToUse;
-			splitNeg.UnearnedType=prePaySplit?.UnearnedType??unearnedType.DefNum;
+			splitNeg.UnearnedType=prePaySplit?.UnearnedType??unearnedType.Id;
 			splitNeg.DatePay=DateTime.Now;
 			PaySplits.Insert(splitNeg);
 			retVal.Add(splitNeg);

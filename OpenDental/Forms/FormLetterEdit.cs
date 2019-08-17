@@ -157,17 +157,17 @@ namespace OpenDental{
 
 		private void FormLetterEdit_Load(object sender, System.EventArgs e) {
 			textDescription.Text=LetterCur.Description;
-			textBody.Text=LetterCur.BodyText;
+			textBody.Text=LetterCur.Body;
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			LetterCur.Description=textDescription.Text;
-			LetterCur.BodyText=textBody.Text;
+			LetterCur.Body=textBody.Text;
 			if(IsNew){
-				Letters.Insert(LetterCur);
+				Letter.Insert(LetterCur);
 			}
 			else{
-				Letters.Update(LetterCur);
+				Letter.Update(LetterCur);
 			}
 			DialogResult=DialogResult.OK;
 		}

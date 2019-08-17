@@ -312,7 +312,7 @@ namespace OpenDental {
 					ald=ListAllergyDefNew[ListAllergyNew.IndexOf(_listAllergyReconcile[i])];
 				}
 				for(int j=0;j<_listAllergyDefCur.Count;j++) {
-					if(_listAllergyReconcile[i].AllergyDefNum > 0 && _listAllergyReconcile[i].AllergyDefNum==_listAllergyDefCur[j].AllergyDefNum) {
+					if(_listAllergyReconcile[i].AllergyDefNum > 0 && _listAllergyReconcile[i].AllergyDefNum==_listAllergyDefCur[j].Id) {
 						ald=_listAllergyDefCur[j];//Gets the allergydef matching the allergy so we can use it to populate the grid
 						break;
 					}
@@ -521,7 +521,7 @@ namespace OpenDental {
 					ListAllergyNew[index].AllergyDefNum=AllergyDefs.Insert(ListAllergyDefNew[index]);
 				}
 				else {
-					ListAllergyNew[index].AllergyDefNum=alDU.AllergyDefNum;//Set the allergydefnum on the allergy.
+					ListAllergyNew[index].AllergyDefNum=alDU.Id;//Set the allergydefnum on the allergy.
 				}
 				Allergies.Insert(ListAllergyNew[index]);
 			}

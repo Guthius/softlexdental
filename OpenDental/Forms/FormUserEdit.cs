@@ -565,19 +565,19 @@ namespace OpenDental{
 			}
 			textUserName.Text=UserCur.UserName;
 			textDomainUser.Text=UserCur.DomainUser;
-			if(!Preferences.GetBool(PrefName.DomainLoginEnabled)) {
+			if(!Preference.GetBool(PreferenceName.DomainLoginEnabled)) {
 				labelDomainUser.Visible=false;
 				textDomainUser.Visible=false;
 				butPickDomainUser.Visible=false;
 			}
 			checkRequireReset.Checked=UserCur.IsPasswordResetRequired;
-			_listUserGroups=UserGroups.GetList();
+			_listUserGroups=UserGroup.All();
 			for(int i=0;i<_listUserGroups.Count;i++){
 				listUserGroup.Items.Add(new ODBoxItem<UserGroup>(_listUserGroups[i].Description,_listUserGroups[i]));
-				if(!_isFromAddUser && UserCur.IsInUserGroup(_listUserGroups[i].UserGroupNum)) {
+				if(!_isFromAddUser && UserCur.IsInUserGroup(_listUserGroups[i].Id)) {
 					listUserGroup.SetSelected(i,true);
 				}
-				if(_isFromAddUser && _listUserGroups[i].UserGroupNum==Preferences.GetLong(PrefName.DefaultUserGroup)) {
+				if(_isFromAddUser && _listUserGroups[i].Id==Preference.GetLong(PreferenceName.DefaultUserGroup)) {
 					listUserGroup.SetSelected(i,true);
 				}
 			}
@@ -587,10 +587,10 @@ namespace OpenDental{
 			listEmployee.Items.Clear();
 			listEmployee.Items.Add(Lan.g(this,"none"));
 			listEmployee.SelectedIndex=0;
-			_listEmployees=Employees.GetDeepCopy(true);
+            _listEmployees = Employee.All();
 			for(int i=0;i<_listEmployees.Count;i++){
-				listEmployee.Items.Add(Employees.GetNameFL(_listEmployees[i]));
-				if(UserCur.EmployeeNum==_listEmployees[i].EmployeeNum) {
+				listEmployee.Items.Add(Employee.GetNameFL(_listEmployees[i]));
+				if(UserCur.EmployeeNum==_listEmployees[i].Id) {
 					listEmployee.SelectedIndex=i+1;
 				}
 			}
@@ -610,11 +610,11 @@ namespace OpenDental{
 			List<long> listAlertCatNums=_listUserAlertTypesOld.Select(x => x.AlertCategoryNum).Distinct().ToList();
 			bool isAllClinicsSubscribed=listSubscribedClinics.Count==_listClinics.Count+1;//Plus 1 for HQ
 			listAlertSubMulti.Items.Clear();
-			_listAlertCategories=AlertCategories.GetDeepCopy();
+			_listAlertCategories=AlertCategory.All();
 			List<long> listUserAlertCatNums=_listUserAlertTypesOld.Select(x => x.AlertCategoryNum).ToList();
 			foreach(AlertCategory cat in _listAlertCategories) {
 				int index=listAlertSubMulti.Items.Add(Lan.g(this,cat.Description));
-				listAlertSubMulti.SetSelected(index,listUserAlertCatNums.Contains(cat.AlertCategoryNum));
+				listAlertSubMulti.SetSelected(index,listUserAlertCatNums.Contains(cat.Id));
 			}
 			if(!Preferences.HasClinicsEnabled) {
 				tabClinics.Enabled=false;//Disables all controls in the clinics tab.  Tab is still selectable.
@@ -686,13 +686,13 @@ namespace OpenDental{
 		private void butPickDomainUser_Click(object sender,EventArgs e) {
 			//DirectoryEntry does recognize an empty string as a valid LDAP entry and will just return all logins from all available domains
 			//But all logins should be on the same domain, so this field is required
-			if(string.IsNullOrWhiteSpace(Preferences.GetString(PrefName.DomainLoginPath))) {
+			if(string.IsNullOrWhiteSpace(Preference.GetString(PreferenceName.DomainLoginPath))) {
 				MsgBox.Show(this,"DomainLoginPath is missing in security settings. DomainLoginPath is required before assigning domain logins to user accounts.");
 				return;
 			}
 			//Try to access the specified DomainLoginPath
 			try {
-				DirectoryEntry.Exists(Preferences.GetString(PrefName.DomainLoginPath));
+				DirectoryEntry.Exists(Preference.GetString(PreferenceName.DomainLoginPath));
 			}
 			catch(Exception ex) {
 				MessageBox.Show(Lan.g(this,"An error occurred while attempting to access the provided DomainLoginPath:")+" "+ex.Message);
@@ -772,7 +772,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter a username.");
 				return;
 			}
-			if(IsNew && Preferences.GetBool(PrefName.PasswordsMustBeStrong) && string.IsNullOrWhiteSpace(_passwordTyped)) {
+			if(IsNew && Preference.GetBool(PreferenceName.PasswordsMustBeStrong) && string.IsNullOrWhiteSpace(_passwordTyped)) {
 				MsgBox.Show(this,"Password may not be blank when the strong password feature is turned on.");
 				return;
 			}
@@ -785,11 +785,11 @@ namespace OpenDental{
 				return;
 			}
 			if(_isFromAddUser && !Security.IsAuthorized(Permissions.SecurityAdmin,true)
-				&& (listUserGroup.SelectedItems.Count!=1 || listUserGroup.SelectedTag<UserGroup>().UserGroupNum!=Preferences.GetLong(PrefName.DefaultUserGroup)))
+				&& (listUserGroup.SelectedItems.Count!=1 || listUserGroup.SelectedTag<UserGroup>().Id!=Preference.GetLong(PreferenceName.DefaultUserGroup)))
 			{
 				MsgBox.Show(this,"This user must be assigned to the default user group.");
 				for(int i=0;i<listUserGroup.Items.Count;i++) {
-					if(((ODBoxItem<UserGroup>)listUserGroup.Items[i]).Tag.UserGroupNum==Preferences.GetLong(PrefName.DefaultUserGroup)) {
+					if(((ODBoxItem<UserGroup>)listUserGroup.Items[i]).Tag.Id==Preference.GetLong(PreferenceName.DefaultUserGroup)) {
 						listUserGroup.SetSelected(i,true);
 					}
 					else {
@@ -826,7 +826,7 @@ namespace OpenDental{
 				UserCur.EmployeeNum=0;
 			}
 			else{
-				UserCur.EmployeeNum=_listEmployees[listEmployee.SelectedIndex-1].EmployeeNum;
+				UserCur.EmployeeNum=_listEmployees[listEmployee.SelectedIndex-1].Id;
 			}
 			if(listProv.SelectedIndex==0) {
 				Provider prov=Providers.GetProv(UserCur.ProvNum);
@@ -848,7 +848,7 @@ namespace OpenDental{
 			}
 			try{
 				if(IsNew){
-					Userods.Insert(UserCur,listUserGroup.SelectedItems.OfType<ODBoxItem<UserGroup>>().Select(x => x.Tag.UserGroupNum).ToList());
+					Userods.Insert(UserCur,listUserGroup.SelectedItems.OfType<ODBoxItem<UserGroup>>().Select(x => x.Tag.Id).ToList());
 					//Set the userodprefs to the new user's UserNum that was just retreived from the database.
 					_listDoseSpotUserPrefNew.ForEach(x => x.UserNum=UserCur.UserNum);
 					SecurityLogs.MakeLogEntry(Permissions.AddNewUser,0,"New user '"+UserCur.UserName+"' added");
@@ -856,7 +856,7 @@ namespace OpenDental{
 				else{
 					List<UserGroup> listNewUserGroups=listUserGroup.SelectedItems.OfType<ODBoxItem<UserGroup>>().Select(x => x.Tag).ToList();
 					List<UserGroup> listOldUserGroups=UserCur.GetGroups();
-					Userods.Update(UserCur,listNewUserGroups.Select(x => x.UserGroupNum).ToList());
+					Userods.Update(UserCur,listNewUserGroups.Select(x => x.Id).ToList());
 					//if this is the current user, update the user, credentials, etc.
 					if(UserCur.UserNum==Security.CurUser.UserNum) {
 						Security.CurUser=UserCur.Copy();
@@ -868,7 +868,7 @@ namespace OpenDental{
 					Func<List<UserGroup>,List<UserGroup>,List<UserGroup>> funcGetMissing=(listCur,listCompare) => {
 						List<UserGroup> retVal=new List<UserGroup>();
 						foreach(UserGroup group in listCur) {
-							if(listCompare.Exists(x => x.UserGroupNum==group.UserGroupNum)) {
+							if(listCompare.Exists(x => x.Id==group.Id)) {
 								continue;
 							}
 							retVal.Add(group);
@@ -905,7 +905,7 @@ namespace OpenDental{
 			//List of AlertTypes that are selected.
 			List<long> listUserAlertCats=new List<long>();
 			foreach(int index in listAlertSubMulti.SelectedIndices) {
-				listUserAlertCats.Add(_listAlertCategories[index].AlertCategoryNum);
+				listUserAlertCats.Add(_listAlertCategories[index].Id);
 			}
 			List<long> listClinics=new List<long>();
 			foreach(int index in listAlertSubsClinicsMulti.SelectedIndices) {
@@ -923,7 +923,7 @@ namespace OpenDental{
 				Clinic clinic=_listClinics[index-2];//Subtract 2 for 'All' and 'HQ'
 				listClinics.Add(clinic.ClinicNum);
 			}
-			List<AlertSub> _listUserAlertTypesNew=_listUserAlertTypesOld.Select(x => x.Copy()).ToList();
+            List<AlertSub> _listUserAlertTypesNew = new List<AlertSub>(_listUserAlertTypesOld);
 			//Remove AlertTypes that have been deselected through either deslecting the type or clinic.
 			_listUserAlertTypesNew.RemoveAll(x => !listUserAlertCats.Contains(x.AlertCategoryNum));
 			if(Preferences.HasClinicsEnabled) {

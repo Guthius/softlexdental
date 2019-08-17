@@ -19,14 +19,14 @@ namespace OpenDental
             if (node != null)
             {
                 //Disabled message. Update the preference and return the error.
-                if (Prefs.UpdateBool(PrefName.RegistrationKeyIsDisabled, true))
+                if (Preference.Update(PreferenceName.RegistrationKeyIsDisabled, true))
                 {
                     DataValid.SetInvalid(InvalidType.Prefs);
                 }
                 return node.InnerText;
             }
             //no error, and no disabled message
-            if (Prefs.UpdateBool(PrefName.RegistrationKeyIsDisabled, false))
+            if (Preference.Update(PreferenceName.RegistrationKeyIsDisabled, false))
             {
                 DataValid.SetInvalid(InvalidType.Prefs);
             }

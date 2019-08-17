@@ -312,14 +312,14 @@ namespace OpenDental {
 			switch(autoCond.Comparison) {//Find out what operand to use.
 				case AutoCondComparison.Equals:
 					for(int i=0;i<problemList.Count;i++) {//Includes hidden
-						if(DiseaseDefs.GetName(problemList[i].DiseaseDefNum)==autoCond.CompareString) {
+						if(DiseaseDef.GetName(problemList[i].DiseaseDefNum)==autoCond.CompareString) {
 							return true;
 						}
 					}
 					break;
 				case AutoCondComparison.Contains:
 					for(int i=0;i<problemList.Count;i++) {
-						if(DiseaseDefs.GetName(problemList[i].DiseaseDefNum).ToLower().Contains(autoCond.CompareString.ToLower())) {
+						if(DiseaseDef.GetName(problemList[i].DiseaseDefNum).ToLower().Contains(autoCond.CompareString.ToLower())) {
 							return true;
 						}
 					}
@@ -329,18 +329,18 @@ namespace OpenDental {
 		}
 
 		private static bool MedicationComparison(AutomationCondition autoCond,long patNum) {
-			List<Medication> medList=Medications.GetMedicationsByPat(patNum);
+			List<Medication> medList=Medication.GetByPatient(patNum);
 			switch(autoCond.Comparison) {
 				case AutoCondComparison.Equals:
 					for(int i=0;i<medList.Count;i++) {
-						if(medList[i].MedName==autoCond.CompareString) {
+						if(medList[i].Description==autoCond.CompareString) {
 							return true;
 						}
 					}
 					break;
 				case AutoCondComparison.Contains:
 					for(int i=0;i<medList.Count;i++) {
-						if(medList[i].MedName.ToLower().Contains(autoCond.CompareString.ToLower())) {
+						if(medList[i].Description.ToLower().Contains(autoCond.CompareString.ToLower())) {
 							return true;
 						}
 					}
@@ -443,15 +443,15 @@ namespace OpenDental {
 		///<summary>Returns true if the patient's billing type matches the autocondition billing type.</summary>
 		private static bool BillingTypeComparison(AutomationCondition autoCond,long patNum) {			
 			Patient pat=Patients.GetPat(patNum);
-			Def patBillType=Defs.GetDef(DefCat.BillingTypes,pat.BillingType);
+			Definition patBillType=Defs.GetDef(DefinitionCategory.BillingTypes,pat.BillingType);
 			if(patBillType==null) {
 				return false;
 			}
 			switch(autoCond.Comparison) {
 				case AutoCondComparison.Equals:
-					return patBillType.ItemName.ToLower()==autoCond.CompareString.ToLower();
+					return patBillType.Description.ToLower()==autoCond.CompareString.ToLower();
 				case AutoCondComparison.Contains:
-					return patBillType.ItemName.ToLower().Contains(autoCond.CompareString.ToLower());
+					return patBillType.Description.ToLower().Contains(autoCond.CompareString.ToLower());
 				default:
 					return false;
 			}

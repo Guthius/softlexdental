@@ -123,7 +123,7 @@ namespace OpenDental
         private VoiceController _voiceController;
         private PerioCell _prevLocation;
         private PerioCell _curLocation;
-        private List<Def> _listMiscColorDefs;
+        private List<Definition> _listMiscColorDefs;
 
         ///<summary>The toothChartData must be a direct reference to the tooth data from the Chart module to be used inside FormPerioGraphical.</summary>
         public FormPerio(Patient patCur, List<Procedure> listPatProcs, ToothChartData toothChartData)
@@ -1251,17 +1251,17 @@ namespace OpenDental
 
         private void FormPerio_Load(object sender, System.EventArgs e)
         {
-            _listMiscColorDefs = Defs.GetDefsForCategory(DefCat.MiscColors, true);
-            butColorBleed.BackColor = _listMiscColorDefs[1].ItemColor;
-            butColorPus.BackColor = _listMiscColorDefs[2].ItemColor;
-            butColorPlaque.BackColor = _listMiscColorDefs[4].ItemColor;
-            butColorCalculus.BackColor = _listMiscColorDefs[5].ItemColor;
-            textRedProb.Text = Preferences.GetString(PrefName.PerioRedProb);
-            textRedMGJ.Text = Preferences.GetString(PrefName.PerioRedMGJ);
-            textRedGing.Text = Preferences.GetString(PrefName.PerioRedGing);
-            textRedCAL.Text = Preferences.GetString(PrefName.PerioRedCAL);
-            textRedFurc.Text = Preferences.GetString(PrefName.PerioRedFurc);
-            textRedMob.Text = Preferences.GetString(PrefName.PerioRedMob);
+            _listMiscColorDefs = Definition.GetByCategory(DefinitionCategory.MiscColors);;
+            butColorBleed.BackColor = _listMiscColorDefs[1].Color;
+            butColorPus.BackColor = _listMiscColorDefs[2].Color;
+            butColorPlaque.BackColor = _listMiscColorDefs[4].Color;
+            butColorCalculus.BackColor = _listMiscColorDefs[5].Color;
+            textRedProb.Text = Preference.GetString(PreferenceName.PerioRedProb);
+            textRedMGJ.Text = Preference.GetString(PreferenceName.PerioRedMGJ);
+            textRedGing.Text = Preference.GetString(PreferenceName.PerioRedGing);
+            textRedCAL.Text = Preference.GetString(PreferenceName.PerioRedCAL);
+            textRedFurc.Text = Preference.GetString(PreferenceName.PerioRedFurc);
+            textRedMob.Text = Preference.GetString(PreferenceName.PerioRedMob);
             //Procedure[] procList=Procedures.Refresh(PatCur.PatNum);
             List<ToothInitial> initialList = ToothInitials.Refresh(PatCur.PatNum);
             _listMissingTeeth = ToothInitials.GetMissingOrHiddenTeeth(initialList);
@@ -1739,7 +1739,7 @@ namespace OpenDental
                 listSkippedTeeth = PerioMeasures.GetSkipped(PerioExams.ListExams[PerioExams.ListExams.Count - 1].PerioExamNum);
             }
             //For patient's first perio chart, any teeth marked missing are automatically marked skipped.
-            if (PerioExams.ListExams.Count == 0 || Preferences.GetBool(PrefName.PerioSkipMissingTeeth))
+            if (PerioExams.ListExams.Count == 0 || Preference.GetBool(PreferenceName.PerioSkipMissingTeeth))
             {
                 for (int i = 0; i < _listMissingTeeth.Count; i++)
                 {
@@ -1749,7 +1749,7 @@ namespace OpenDental
                     }
                     int toothNum = PIn.Int(_listMissingTeeth[i]);
                     //Check if this tooth has had an implant done AND the office has the preference to SHOW implants
-                    if (Preferences.GetBool(PrefName.PerioTreatImplantsAsNotMissing) && ContrPerio.IsImplant(toothNum))
+                    if (Preference.GetBool(PreferenceName.PerioTreatImplantsAsNotMissing) && ContrPerio.IsImplant(toothNum))
                     {
                         listSkippedTeeth.RemoveAll(x => x == toothNum);//Remove the tooth from the list of skipped teeth if it exists.
                         continue;//We do note want to add it back to the list below.
@@ -2007,9 +2007,9 @@ namespace OpenDental
                 return;
             }
             butColorBleed.BackColor = colorDialog1.Color;
-            Def DefCur = _listMiscColorDefs[1].Copy();
-            DefCur.ItemColor = colorDialog1.Color;
-            Defs.Update(DefCur);
+            Definition DefCur = _listMiscColorDefs[1].Copy();
+            DefCur.Color = colorDialog1.Color;
+            Definition.Update(DefCur);
             Cache.Refresh(InvalidType.Defs);
             localDefsChanged = true;
             gridP.SetColors();
@@ -2025,9 +2025,9 @@ namespace OpenDental
                 return;
             }
             butColorPus.BackColor = colorDialog1.Color;
-            Def DefCur = _listMiscColorDefs[2].Copy();
-            DefCur.ItemColor = colorDialog1.Color;
-            Defs.Update(DefCur);
+            Definition DefCur = _listMiscColorDefs[2].Copy();
+            DefCur.Color = colorDialog1.Color;
+            Definition.Update(DefCur);
             Cache.Refresh(InvalidType.Defs);
             localDefsChanged = true;
             gridP.SetColors();
@@ -2043,9 +2043,9 @@ namespace OpenDental
                 return;
             }
             butColorPlaque.BackColor = colorDialog1.Color;
-            Def DefCur = _listMiscColorDefs[4].Copy();
-            DefCur.ItemColor = colorDialog1.Color;
-            Defs.Update(DefCur);
+            Definition DefCur = _listMiscColorDefs[4].Copy();
+            DefCur.Color = colorDialog1.Color;
+            Definition.Update(DefCur);
             Cache.Refresh(InvalidType.Defs);
             localDefsChanged = true;
             gridP.SetColors();
@@ -2061,9 +2061,9 @@ namespace OpenDental
                 return;
             }
             butColorCalculus.BackColor = colorDialog1.Color;
-            Def DefCur = _listMiscColorDefs[5].Copy();
-            DefCur.ItemColor = colorDialog1.Color;
-            Defs.Update(DefCur);
+            Definition DefCur = _listMiscColorDefs[5].Copy();
+            DefCur.Color = colorDialog1.Color;
+            Definition.Update(DefCur);
             Cache.Refresh(InvalidType.Defs);
             localDefsChanged = true;
             gridP.SetColors();
@@ -2089,32 +2089,32 @@ namespace OpenDental
             }
             //this is necessary because Microsoft's updown control is too buggy to be useful
             Cursor = Cursors.WaitCursor;
-            PrefName prefname = PrefName.PerioRedProb;
+            PreferenceName prefname = PreferenceName.PerioRedProb;
             if (sender == updownProb)
             {
-                prefname = PrefName.PerioRedProb;
+                prefname = PreferenceName.PerioRedProb;
             }
             else if (sender == updownMGJ)
             {
-                prefname = PrefName.PerioRedMGJ;
+                prefname = PreferenceName.PerioRedMGJ;
             }
             else if (sender == updownGing)
             {
-                prefname = PrefName.PerioRedGing;
+                prefname = PreferenceName.PerioRedGing;
             }
             else if (sender == updownCAL)
             {
-                prefname = PrefName.PerioRedCAL;
+                prefname = PreferenceName.PerioRedCAL;
             }
             else if (sender == updownFurc)
             {
-                prefname = PrefName.PerioRedFurc;
+                prefname = PreferenceName.PerioRedFurc;
             }
             else if (sender == updownMob)
             {
-                prefname = PrefName.PerioRedMob;
+                prefname = PreferenceName.PerioRedMob;
             }
-            int currentValue = Preferences.GetInt(prefname);
+            int currentValue = Preference.GetInt(prefname);
             if (e.Y < 8)
             {//up
                 currentValue++;
@@ -2128,7 +2128,7 @@ namespace OpenDental
                 }
                 currentValue--;
             }
-            Prefs.UpdateLong(prefname, currentValue);
+            Preference.Update(prefname, currentValue);
             //pref.ValueString=currentValue.ToString();
             //Prefs.Update(pref);
             localDefsChanged = true;
@@ -2235,7 +2235,7 @@ namespace OpenDental
             }
             else
             {
-                clinicName = Preferences.GetString(PrefName.PracticeTitle);
+                clinicName = Preference.GetString(PreferenceName.PracticeTitle);
             }
             float y = 50f;
             SizeF m;
@@ -2360,7 +2360,7 @@ namespace OpenDental
             }
             else
             {
-                clinicName = Preferences.GetString(PrefName.PracticeTitle);
+                clinicName = Preference.GetString(PreferenceName.PracticeTitle);
             }
             StringFormat format = new StringFormat();
             format.Alignment = StringAlignment.Center;

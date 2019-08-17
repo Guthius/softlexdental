@@ -18,7 +18,7 @@ namespace UnitTests {
 		[ClassInitialize]
 		public static void SetupClass(TestContext testContext) {
 			//Make sure the SpellCheck preference is enabled.
-			PrefT.UpdateBool(PrefName.SpellCheckIsEnabled,true);
+			PrefT.UpdateBool(PreferenceName.SpellCheckIsEnabled,true);
 		}
 
 		[TestMethod]

@@ -140,7 +140,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one WikiPage into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(WikiPage wikiPage,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO wikipage (";
 			if(!useExistingPK && isRandomKeys) {
 				wikiPage.WikiPageNum=ReplicationServers.GetKeyNoCache("wikipage","WikiPageNum");

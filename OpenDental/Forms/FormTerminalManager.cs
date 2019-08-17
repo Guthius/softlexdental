@@ -262,7 +262,7 @@ namespace OpenDental {
 
 		private void FormTerminalManager_Load(object sender,EventArgs e) {
 			PatientChangedEvent.Fired+=PatientChangedEvent_Fired;
-			textPassword.Text=Preferences.GetString(PrefName.TerminalClosePassword);
+			textPassword.Text=Preference.GetString(PreferenceName.TerminalClosePassword);
 			FillGrid();
 			FillPat();
 		}
@@ -276,7 +276,7 @@ namespace OpenDental {
 
 		public override void OnProcessSignals(List<Signalod> listSignals) {
 			if(listSignals.Any(x => x.IType==InvalidType.Prefs)) {
-				textPassword.Text=Preferences.GetString(PrefName.TerminalClosePassword);
+				textPassword.Text=Preference.GetString(PreferenceName.TerminalClosePassword);
 			}
 			int processIdCur=Process.GetCurrentProcess().Id;
 			if(listSignals.All(x => x.IType!=InvalidType.Kiosk || (x.FKeyType==KeyType.ProcessId && x.FKey==processIdCur))) {
@@ -403,7 +403,7 @@ namespace OpenDental {
 		}
 
 		private void butSave_Click(object sender,EventArgs e) {
-			if(Prefs.UpdateString(PrefName.TerminalClosePassword,textPassword.Text)){
+			if(Preference.Update(PreferenceName.TerminalClosePassword,textPassword.Text)){
 				Signalods.SetInvalid(InvalidType.Prefs);
 			}
 			MsgBox.Show(this,"Done.");
@@ -415,7 +415,7 @@ namespace OpenDental {
 
 		private void FormTerminalManager_FormClosing(object sender,FormClosingEventArgs e) {
 			PatientChangedEvent.Fired-=PatientChangedEvent_Fired;
-			if(Prefs.UpdateString(PrefName.TerminalClosePassword,textPassword.Text)){
+			if(Preference.Update(PreferenceName.TerminalClosePassword,textPassword.Text)){
 				Signalods.SetInvalid(InvalidType.Prefs);
 			}
 		}

@@ -10,15 +10,15 @@ namespace UnitTestsCore {
 		///<summary>Inserts the new medication and returns it.</summary>
 		public static Medication CreateMedication(string medName="",string rxCui="") {
 			Medication medication=new Medication();
-			medication.MedName=medName;
-			if(medication.MedName=="") {
-				medication.MedName="Med_"+MiscUtils.CreateRandomAlphaNumericString(8);
+			medication.Description=medName;
+			if(medication.Description=="") {
+				medication.Description="Med_"+MiscUtils.CreateRandomAlphaNumericString(8);
 			}
 			medication.RxCui=PIn.Long(rxCui,false);
 			if(medication.RxCui!=0 && RxNorms.GetByRxCUI(rxCui)==null) {
 				RxNorm rxNorm=new RxNorm();
 				rxNorm.RxCui=rxCui;
-				rxNorm.Description=medication.MedName;
+				rxNorm.Description=medication.Description;
 				RxNorms.Insert(rxNorm);
 			}
 			Medications.Insert(medication);

@@ -332,7 +332,7 @@ namespace OpenDental {
 			using(XmlWriter writer=XmlWriter.Create(strbuild,settings)) {
 				writer.WriteStartElement("FeatureRequestGetList");
 				writer.WriteStartElement("RegistrationKey");
-				writer.WriteString(Preferences.GetString(PrefName.RegistrationKey));
+				writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
 				writer.WriteEndElement();
 				writer.WriteStartElement("SearchString");
 				writer.WriteString(textSearch.Text);
@@ -370,14 +370,14 @@ namespace OpenDental {
 			node=doc.SelectSingleNode("//KeyDisabled");
 			if(node==null) {
 				//no error, and no disabled message
-				if(Prefs.UpdateBool(PrefName.RegistrationKeyIsDisabled,false)) {//this is one of two places in the program where this happens.
+				if(Preference.Update(PreferenceName.RegistrationKeyIsDisabled,false)) {//this is one of two places in the program where this happens.
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 			}
 			else {
 				//textConnectionMessage.Text=node.InnerText;
 				MessageBox.Show(node.InnerText);
-				if(Prefs.UpdateBool(PrefName.RegistrationKeyIsDisabled,true)) {//this is one of two places in the program where this happens.
+				if(Preference.Update(PreferenceName.RegistrationKeyIsDisabled,true)) {//this is one of two places in the program where this happens.
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 				return;

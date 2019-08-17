@@ -143,40 +143,40 @@ namespace OpenDentBusiness
             strb.AppendLine(Sout(billProv.SSN, 30) + "~");//REF02: ID 
                                                           //2100B N3: Information Receiver Address
             seg++;
-            if (Preferences.GetBool(PrefName.UseBillingAddressOnClaims))
+            if (Preference.GetBool(PreferenceName.UseBillingAddressOnClaims))
             {
-                strb.Append("N3*" + Sout(Preferences.GetString(PrefName.PracticeBillingAddress), 55));//N301: Address
+                strb.Append("N3*" + Sout(Preference.GetString(PreferenceName.PracticeBillingAddress), 55));//N301: Address
             }
             else if (clinic == null)
             {
-                strb.Append("N3*" + Sout(Preferences.GetString(PrefName.PracticeAddress), 55));//N301: Address
+                strb.Append("N3*" + Sout(Preference.GetString(PreferenceName.PracticeAddress), 55));//N301: Address
             }
             else
             {
                 strb.Append("N3*" + Sout(clinic.Address, 55));//N301: Address
             }
-            if (Preferences.GetBool(PrefName.UseBillingAddressOnClaims))
+            if (Preference.GetBool(PreferenceName.UseBillingAddressOnClaims))
             {
-                if (Preferences.GetString(PrefName.PracticeBillingAddress2) == "")
+                if (Preference.GetString(PreferenceName.PracticeBillingAddress2) == "")
                 {
                     strb.AppendLine("~");
                 }
                 else
                 {
                     //N302: Address2. Optional.
-                    strb.AppendLine("*" + Sout(Preferences.GetString(PrefName.PracticeBillingAddress2), 55) + "~");
+                    strb.AppendLine("*" + Sout(Preference.GetString(PreferenceName.PracticeBillingAddress2), 55) + "~");
                 }
             }
             else if (clinic == null)
             {
-                if (Preferences.GetString(PrefName.PracticeAddress2) == "")
+                if (Preference.GetString(PreferenceName.PracticeAddress2) == "")
                 {
                     strb.AppendLine("~");
                 }
                 else
                 {
                     //N302: Address2. Optional.
-                    strb.AppendLine("*" + Sout(Preferences.GetString(PrefName.PracticeAddress2), 55) + "~");
+                    strb.AppendLine("*" + Sout(Preference.GetString(PreferenceName.PracticeAddress2), 55) + "~");
                 }
             }
             else
@@ -193,17 +193,17 @@ namespace OpenDentBusiness
             }
             //2100B N4: Information Receiver City/State/Zip
             seg++;
-            if (Preferences.GetBool(PrefName.UseBillingAddressOnClaims))
+            if (Preference.GetBool(PreferenceName.UseBillingAddressOnClaims))
             {
-                strb.AppendLine("N4*" + Sout(Preferences.GetString(PrefName.PracticeBillingCity), 30) + "*"//N401: City
-                    + Sout(Preferences.GetString(PrefName.PracticeBillingST), 2) + "*"//N402: State
-                    + Sout(Preferences.GetString(PrefName.PracticeBillingZip).Replace("-", ""), 15) + "~");//N403: Zip
+                strb.AppendLine("N4*" + Sout(Preference.GetString(PreferenceName.PracticeBillingCity), 30) + "*"//N401: City
+                    + Sout(Preference.GetString(PreferenceName.PracticeBillingST), 2) + "*"//N402: State
+                    + Sout(Preference.GetString(PreferenceName.PracticeBillingZip).Replace("-", ""), 15) + "~");//N403: Zip
             }
             else if (clinic == null)
             {
-                strb.AppendLine("N4*" + Sout(Preferences.GetString(PrefName.PracticeCity), 30) + "*"//N401: City
-                    + Sout(Preferences.GetString(PrefName.PracticeST), 2) + "*"//N402: State
-                    + Sout(Preferences.GetString(PrefName.PracticeZip).Replace("-", ""), 15) + "~");//N403: Zip
+                strb.AppendLine("N4*" + Sout(Preference.GetString(PreferenceName.PracticeCity), 30) + "*"//N401: City
+                    + Sout(Preference.GetString(PreferenceName.PracticeST), 2) + "*"//N402: State
+                    + Sout(Preference.GetString(PreferenceName.PracticeZip).Replace("-", ""), 15) + "~");//N403: Zip
             }
             else
             {
@@ -392,7 +392,7 @@ IEA*1*000012145~";
                 strb.Append("Prov TIN 9 digits");
             }
             X12Validate.BillProv(billProv, strb);
-            if (Preferences.GetBool(PrefName.UseBillingAddressOnClaims))
+            if (Preference.GetBool(PreferenceName.UseBillingAddressOnClaims))
             {
                 X12Validate.BillingAddress(strb);
             }

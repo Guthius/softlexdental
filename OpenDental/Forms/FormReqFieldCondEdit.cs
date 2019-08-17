@@ -18,7 +18,7 @@ namespace OpenDental {
 		///<summary>Keeps track of which enum value is at which index.</summary>
 		private List<RequiredFieldName> _listIndexFieldNames;
 		private RequiredField _reqField;
-		private List<Def> _listBillingTypeDefs;
+		private List<Definition> _listBillingTypeDefs;
 
 		public FormReqFieldCondEdit(RequiredField reqField) {
 			InitializeComponent();
@@ -37,10 +37,10 @@ namespace OpenDental {
 
 		private void FormReqFieldCondEdit_Load(object sender,EventArgs e) {
 			_listLanguages=new List<string>();
-			if(Preferences.GetString(PrefName.LanguagesUsedByPatients)!="") {
-				_listLanguages=Preferences.GetString(PrefName.LanguagesUsedByPatients).Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries).ToList();
+			if(Preference.GetString(PreferenceName.LanguagesUsedByPatients)!="") {
+				_listLanguages=Preference.GetString(PreferenceName.LanguagesUsedByPatients).Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries).ToList();
 			}
-			_listBillingTypeDefs=Defs.GetDefsForCategory(DefCat.BillingTypes,true);
+			_listBillingTypeDefs=Definition.GetByCategory(DefinitionCategory.BillingTypes);
 			_listClinics=Clinics.GetDeepCopy();
 			_listProvs=Providers.GetDeepCopy(true);
 			comboOperator1.Items.Add(">");
@@ -52,7 +52,7 @@ namespace OpenDental {
 			comboOperator2.Items.Add("\u2265");//Greater than or equal to
 			comboOperator2.Items.Add("\u2264");//Less than or equal to
 			_listIndexFieldNames=new List<RequiredFieldName>();
-			if(!Preferences.GetBool(PrefName.EasyHideHospitals)) {
+			if(!Preference.GetBool(PreferenceName.EasyHideHospitals)) {
 				AddListConditionType(RequiredFieldName.AdmitDate);
 			}
 			AddListConditionType(RequiredFieldName.Birthdate);
@@ -60,14 +60,14 @@ namespace OpenDental {
 			if(Preferences.HasClinicsEnabled) {
 				AddListConditionType(RequiredFieldName.Clinic);
 			}
-			if(Preferences.GetBool(PrefName.ShowFeatureEhr)) {
+			if(Preference.GetBool(PreferenceName.ShowFeatureEhr)) {
 				AddListConditionType(RequiredFieldName.DateTimeDeceased);
 			}
 			AddListConditionType(RequiredFieldName.Gender);
-			if(Preferences.GetString(PrefName.LanguagesUsedByPatients)!="") {
+			if(Preference.GetString(PreferenceName.LanguagesUsedByPatients)!="") {
 				AddListConditionType(RequiredFieldName.Language);
 			}
-			if(!Preferences.GetBool(PrefName.EasyHideMedicaid)) {
+			if(!Preference.GetBool(PreferenceName.EasyHideMedicaid)) {
 				AddListConditionType(RequiredFieldName.MedicaidID);
 				AddListConditionType(RequiredFieldName.MedicaidState);
 			}
@@ -221,7 +221,7 @@ namespace OpenDental {
 				case RequiredFieldName.BillingType:
 					SetFieldVisibleHelper(true);
 					for(int i=0;i<_listBillingTypeDefs.Count;i++) {
-						listConditionValues.Items.Add(_listBillingTypeDefs[i].ItemName);
+						listConditionValues.Items.Add(_listBillingTypeDefs[i].Description);
 					}
 					ListValuesSetIndices();
 					break;
@@ -285,7 +285,7 @@ namespace OpenDental {
 			}
 			for(int i=0;i<listConditionValues.Items.Count;i++) {
 				if(selectedType==RequiredFieldName.BillingType
-					&& _listReqFieldConds.Exists(x => x.ConditionValue==_listBillingTypeDefs[i].DefNum.ToString()))
+					&& _listReqFieldConds.Exists(x => x.ConditionValue==_listBillingTypeDefs[i].Id.ToString()))
 				{
 					listConditionValues.SelectedIndices.Add(i);
 					continue;
@@ -436,7 +436,7 @@ namespace OpenDental {
 					}
 					else if(selectedField==RequiredFieldName.BillingType) {
 						for(int i=0;i<listConditionValues.SelectedIndices.Count;i++) {
-							listFkNums.Add(_listBillingTypeDefs[listConditionValues.SelectedIndices[i]].DefNum);
+							listFkNums.Add(_listBillingTypeDefs[listConditionValues.SelectedIndices[i]].Id);
 						}
 					}
 					else {	//selectedField==RequiredFieldName.Clinic

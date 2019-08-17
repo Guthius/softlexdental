@@ -897,7 +897,7 @@ namespace OpenDental {
 				textDaysOldMin,textDaysOldMax);
 			_hasFormLoaded=false;
 			SetDates(DateTime.MinValue,DateTime.Today.Date.AddDays(-30));
-			if(Preferences.GetInt(PrefName.OutstandingInsReportDateFilterTab)==(int)RpOutstandingIns.DateFilterTab.DaysOld) {
+			if(Preference.GetInt(PreferenceName.OutstandingInsReportDateFilterTab)==(int)RpOutstandingIns.DateFilterTab.DaysOld) {
 				tabControlDate.SelectTab(tabDaysOld);
 			}
 			else {
@@ -982,21 +982,21 @@ namespace OpenDental {
 		}
 
 		private void FillCustomTrack() {
-			comboLastClaimTrack.Items.Add(new ODBoxItem<Def>("All"));//tag=null
-			Def[] arrayDefs=Defs.GetDefsForCategory(DefCat.ClaimCustomTracking,true).ToArray();
-			foreach(Def definition in arrayDefs) {
-				comboLastClaimTrack.Items.Add(new ODBoxItem<Def>(definition.ItemName,definition));
+			comboLastClaimTrack.Items.Add(new ODBoxItem<Definition>("All"));//tag=null
+			Definition[] arrayDefs=Definition.GetByCategory(DefinitionCategory.ClaimCustomTracking).ToArray();
+			foreach(Definition definition in arrayDefs) {
+				comboLastClaimTrack.Items.Add(new ODBoxItem<Definition>(definition.Description,definition));
 			}
 			comboLastClaimTrack.SelectedIndex=0;
 		}
 
 		private void FillErrorDef() {
-			List<Def> listErrorDefs = Defs.GetDefsForCategory(DefCat.ClaimErrorCode,true);
-			ODBoxItem<Def> errorItem=new ODBoxItem<Def>(Lan.g(this,"None"));//tag=null
+			List<Definition> listErrorDefs = Definition.GetByCategory(DefinitionCategory.ClaimErrorCode);
+			ODBoxItem<Definition> errorItem=new ODBoxItem<Definition>(Lan.g(this,"None"));//tag=null
 			comboErrorDef.Items.Add(errorItem);
 			comboErrorDef.SelectedIndex=0;
-			foreach(Def errorDef in listErrorDefs) {
-				errorItem=new ODBoxItem<Def>(errorDef.ItemName,errorDef);
+			foreach(Definition errorDef in listErrorDefs) {
+				errorItem=new ODBoxItem<Definition>(errorDef.Description,errorDef);
 				comboErrorDef.Items.Add(errorItem);
 			}
 		}
@@ -1045,8 +1045,8 @@ namespace OpenDental {
 			string carrier=textCarrier.Text;
 			RpOutstandingIns.DateFilterBy comboFilterBy=comboDateFilterBy.SelectedTag<RpOutstandingIns.DateFilterBy>();
 			bool isIgnoreCustomChecked=checkIgnoreCustom.Checked;
-			Def selectedLastClaimTrackDef=comboLastClaimTrack.SelectedTag<Def>();//Can be null
-			Def selectedErrorDef=comboErrorDef.SelectedTag<Def>();//Can be null
+			Definition selectedLastClaimTrackDef=comboLastClaimTrack.SelectedTag<Definition>();//Can be null
+			Definition selectedErrorDef=comboErrorDef.SelectedTag<Definition>();//Can be null
 			List<ODGridRow> listRows=null;
 			ODProgress.ShowAction(
 				() => { 
@@ -1079,13 +1079,13 @@ namespace OpenDental {
 		}
 
 		private List<ODGridRow> GetGridRows(List<RpOutstandingIns.OutstandingInsClaim> listOustandingInsClaims,List<DisplayField> listDisplayFields
-			,bool checkIgnoreCustomChecked,Def comboLastClaimTrackSelectedTag,Def comboErrorDefSelectedTag)
+			,bool checkIgnoreCustomChecked,Definition comboLastClaimTrackSelectedTag,Definition comboErrorDefSelectedTag)
 		{
 			List<ODGridRow> listRows=new List<ODGridRow>();
 			ODGridRow row;
 			string type;
 			total=0;
-			List<Def> listErrorDefs=Defs.GetDefsForCategory(DefCat.ClaimErrorCode,true);
+			List<Definition> listErrorDefs=Definition.GetByCategory(DefinitionCategory.ClaimErrorCode);
 			foreach(RpOutstandingIns.OutstandingInsClaim claimCur in listOustandingInsClaims) {
 				if(!checkIgnoreCustomChecked) {
 					DateTime dateSuppressed;
@@ -1099,10 +1099,10 @@ namespace OpenDental {
 						continue;
 					}
 				}
-				if(comboLastClaimTrackSelectedTag != null && claimCur.CustomTrackingDefNum!=comboLastClaimTrackSelectedTag.DefNum) {
+				if(comboLastClaimTrackSelectedTag != null && claimCur.CustomTrackingDefNum!=comboLastClaimTrackSelectedTag.Id) {
 					continue;
 				}
-				if(comboErrorDefSelectedTag != null && comboErrorDefSelectedTag.DefNum != claimCur.ErrorCodeDefNum) {
+				if(comboErrorDefSelectedTag != null && comboErrorDefSelectedTag.Id != claimCur.ErrorCodeDefNum) {
 					continue;
 				}
 				row=new ODGridRow();
@@ -1145,7 +1145,7 @@ namespace OpenDental {
 							break;
 						case "PatName":
 							string patName=claimCur.PatLName+", "+claimCur.PatFName+" "+claimCur.PatMiddleI;
-							if(Preferences.GetBool(PrefName.ReportsShowPatNum)) {
+							if(Preference.GetBool(PreferenceName.ReportsShowPatNum)) {
 								row.Cells.Add(claimCur.PatNum+"-"+patName);
 							}
 							else {
@@ -1165,14 +1165,14 @@ namespace OpenDental {
 							row.Cells.Add(claimCur.DateOrigSent.ToShortDateString());
 							break;
 						case "TrackStat":
-							row.Cells.Add(Defs.GetDefsForCategory(DefCat.ClaimCustomTracking,true)
-								.FirstOrDefault(x => x.DefNum==claimCur.CustomTrackingDefNum)?.ItemName??"-");
+							row.Cells.Add(Definition.GetByCategory(DefinitionCategory.ClaimCustomTracking)
+								.FirstOrDefault(x => x.Id==claimCur.CustomTrackingDefNum)?.Description??"-");
 							break;
 						case "DateStat":
 							row.Cells.Add(claimCur.DateLog.ToShortDateString());
 							break;
 						case "Error":
-							row.Cells.Add(listErrorDefs.FirstOrDefault(x => x.DefNum == claimCur.ErrorCodeDefNum)?.ItemName??"-");
+							row.Cells.Add(listErrorDefs.FirstOrDefault(x => x.Id == claimCur.ErrorCodeDefNum)?.Description??"-");
 							break;
 						case "Amount":
 							row.Cells.Add(claimCur.ClaimFee.ToString("f"));
@@ -1569,17 +1569,17 @@ namespace OpenDental {
 			SaveFileDialog saveFileDialog=new SaveFileDialog();
 			saveFileDialog.AddExtension=true;
 			saveFileDialog.FileName="Outstanding Insurance Claims";
-			if(!Directory.Exists(Preferences.GetString(PrefName.ExportPath))) {
+			if(!Directory.Exists(Preference.GetString(PreferenceName.ExportPath))) {
 				try {
-					Directory.CreateDirectory(Preferences.GetString(PrefName.ExportPath));
-					saveFileDialog.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
+					Directory.CreateDirectory(Preference.GetString(PreferenceName.ExportPath));
+					saveFileDialog.InitialDirectory=Preference.GetString(PreferenceName.ExportPath);
 				}
 				catch {
 					//initialDirectory will be blank
 				}
 			}
 			else {
-				saveFileDialog.InitialDirectory=Preferences.GetString(PrefName.ExportPath);
+				saveFileDialog.InitialDirectory=Preference.GetString(PreferenceName.ExportPath);
 			}
 			saveFileDialog.Filter="Text files(*.txt)|*.txt|Excel Files(*.xls)|*.xls|All files(*.*)|*.*";
 			saveFileDialog.FilterIndex=0;

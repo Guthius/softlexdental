@@ -172,7 +172,7 @@ namespace OpenDental{
 				//details: 
 				detail="";
 				if(_listAutomations[i].AutoAction==AutomationAction.CreateCommlog) {
-					detail+=Defs.GetName(DefCat.CommLogTypes,_listAutomations[i].CommType)
+					detail+=Defs.GetName(DefinitionCategory.CommLogTypes,_listAutomations[i].CommType)
 						+".  "+_listAutomations[i].MessageContent;
 				}
 				else if(_listAutomations[i].AutoAction==AutomationAction.PrintPatientLetter) {

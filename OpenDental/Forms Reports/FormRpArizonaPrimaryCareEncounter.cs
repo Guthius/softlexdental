@@ -52,7 +52,7 @@ namespace OpenDental {
 			}
 			string command="";
 			//Locate the payment definition number for payments of patients using the Arizona Primary Care program.
-			command="SELECT DefNum FROM definition WHERE Category="+POut.Long((int)DefCat.PaymentTypes)+" AND IsHidden=0 AND LOWER(TRIM(ItemName))='noah'";
+			command="SELECT DefNum FROM definition WHERE Category="+POut.Long((int)DefinitionCategory.PaymentTypes)+" AND IsHidden=0 AND LOWER(TRIM(ItemName))='noah'";
 			DataTable payDefNumTab=Reports.GetTable(command);
 			if(payDefNumTab.Rows.Count!=1) {
 				MessageBox.Show("You must define exactly one payment type with the name 'NOAH' before running this report. "+

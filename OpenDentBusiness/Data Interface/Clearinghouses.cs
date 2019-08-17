@@ -96,7 +96,7 @@ namespace OpenDentBusiness
         public static Clearinghouse GetDefaultEligibility()
         {
             //No need to check RemotingRole; no call to db.
-            return GetClearinghouse(Preferences.GetLong(PrefName.ClearinghouseDefaultEligibility));
+            return GetClearinghouse(Preference.GetLong(PreferenceName.ClearinghouseDefaultEligibility));
         }
 
         ///<summary>Gets the last batch number from db for the HQ version of this clearinghouseClin and increments it by one.
@@ -147,15 +147,15 @@ namespace OpenDentBusiness
             Clearinghouse clearinghouseHq = null;
             if (medType == EnumClaimMedType.Dental)
             {
-                if (Preferences.GetLong(PrefName.ClearinghouseDefaultDent) == 0)
+                if (Preference.GetLong(PreferenceName.ClearinghouseDefaultDent) == 0)
                 {
                     return 0;
                 }
-                clearinghouseHq = GetClearinghouse(Preferences.GetLong(PrefName.ClearinghouseDefaultDent));
+                clearinghouseHq = GetClearinghouse(Preference.GetLong(PreferenceName.ClearinghouseDefaultDent));
             }
             if (medType == EnumClaimMedType.Medical || medType == EnumClaimMedType.Institutional)
             {
-                if (Preferences.GetLong(PrefName.ClearinghouseDefaultMed) == 0)
+                if (Preference.GetLong(PreferenceName.ClearinghouseDefaultMed) == 0)
                 {
                     //No default set, substituting emdeon medical otherwise first medical clearinghouse.
                     List<Clearinghouse> listClearingHouses = GetDeepCopy(false);
@@ -171,7 +171,7 @@ namespace OpenDentBusiness
                     }
                     return clearinghouseHq.ClearinghouseNum;
                 }
-                clearinghouseHq = GetClearinghouse(Preferences.GetLong(PrefName.ClearinghouseDefaultMed));
+                clearinghouseHq = GetClearinghouse(Preference.GetLong(PreferenceName.ClearinghouseDefaultMed));
             }
             if (clearinghouseHq == null)
             {//we couldn't find a default clearinghouse for that medType.  Needs to always be a default.
@@ -226,7 +226,7 @@ namespace OpenDentBusiness
         public static Clearinghouse GetDefaultDental()
         {
             //No need to check RemotingRole; no call to db.
-            return GetClearinghouse(Preferences.GetLong(PrefName.ClearinghouseDefaultDent));
+            return GetClearinghouse(Preference.GetLong(PreferenceName.ClearinghouseDefaultDent));
         }
 
         ///<summary>Gets an HQ clearinghouse from cache.  Will return null if invalid.</summary>
@@ -423,10 +423,10 @@ namespace OpenDentBusiness
             bool isTimeToRetrieve = IsTimeToRetrieveReports(true, out errMsg);
             if (isTimeToRetrieve)
             {
-                Prefs.UpdateDateT(PrefName.ClaimReportReceiveLastDateTime, DateTime.Now);
+                Preference.Update(PreferenceName.ClaimReportReceiveLastDateTime, DateTime.Now);
             }
             List<Clearinghouse> listClearinghousesHq = GetDeepCopy();
-            long defaultClearingHouseNum = Preferences.GetLong(PrefName.ClearinghouseDefaultDent);
+            long defaultClearingHouseNum = Preference.GetLong(PreferenceName.ClearinghouseDefaultDent);
             for (int i = 0; i < listClearinghousesHq.Count; i++)
             {
                 Clearinghouse clearinghouseHq = listClearinghousesHq[i];
@@ -444,9 +444,9 @@ namespace OpenDentBusiness
         private static bool IsTimeToRetrieveReports(bool isAutomaticMode, out string errorMessage, IODProgressExtended progress = null)
         {
             progress = progress ?? new ODProgressExtendedNull();
-            DateTime timeLastReport = PIn.DateT(Preferences.GetStringNoCache(PrefName.ClaimReportReceiveLastDateTime));
-            double timeReceiveInternal = PIn.Double(Preferences.GetStringNoCache(PrefName.ClaimReportReceiveInterval));//Interval in minutes.
-            DateTime timeToRecieve = DateTime.Now.Date + Preferences.GetDateTime(PrefName.ClaimReportReceiveTime).TimeOfDay;
+            DateTime timeLastReport = PIn.DateT(Preference.GetStringNoCache(PreferenceName.ClaimReportReceiveLastDateTime));
+            double timeReceiveInternal = PIn.Double(Preference.GetStringNoCache(PreferenceName.ClaimReportReceiveInterval));//Interval in minutes.
+            DateTime timeToRecieve = DateTime.Now.Date + Preference.GetDateTime(PreferenceName.ClaimReportReceiveTime).TimeOfDay;
             double timeDiff = DateTime.Now.Subtract(timeLastReport).TotalMinutes;
             errorMessage = "";
             if (isAutomaticMode)
@@ -764,7 +764,7 @@ namespace OpenDentBusiness
             {//Timer interval OK.  Now we can retrieve the reports from web services.
                 if (!isAutomaticMode)
                 {
-                    Prefs.UpdateDateT(PrefName.ClaimReportReceiveLastDateTime, DateTime.Now);
+                    Preference.Update(PreferenceName.ClaimReportReceiveLastDateTime, DateTime.Now);
                 }
                 errorMessage = RetrieveReports(clearinghouseClin, isAutomaticMode, progress);
                 if (errorMessage != "")
@@ -807,11 +807,11 @@ namespace OpenDentBusiness
         ///<summary>Returns and error message to display to the user if default clearinghouses are not set up; Otherwise, empty string.</summary>
         public static string CheckClearinghouseDefaults()
         {
-            if (Preferences.GetLong(PrefName.ClearinghouseDefaultDent) == 0)
+            if (Preference.GetLong(PreferenceName.ClearinghouseDefaultDent) == 0)
             {
                 return Lans.g("ContrAccount", "No default dental clearinghouse defined.");
             }
-            if (Preferences.GetBool(PrefName.ShowFeatureMedicalInsurance) && Preferences.GetLong(PrefName.ClearinghouseDefaultMed) == 0)
+            if (Preference.GetBool(PreferenceName.ShowFeatureMedicalInsurance) && Preference.GetLong(PreferenceName.ClearinghouseDefaultMed) == 0)
             {
                 return Lans.g("ContrAccount", "No default medical clearinghouse defined.");
             }

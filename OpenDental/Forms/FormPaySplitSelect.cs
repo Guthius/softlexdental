@@ -106,7 +106,7 @@ namespace OpenDental {
 				row.Cells.Add(paySplit.DatePay.ToShortDateString());
 				row.Cells.Add(Patients.GetNameLF(paySplit.PatNum));
 				row.Cells.Add(Providers.GetAbbr(paySplit.ProvNum));
-				row.Cells.Add(Defs.GetName(DefCat.PaySplitUnearnedType,paySplit.UnearnedType));
+				row.Cells.Add(Defs.GetName(DefinitionCategory.PaySplitUnearnedType,paySplit.UnearnedType));
 				if(isShowAll || !_dictLeftOverAmounts.ContainsKey(paySplit.SplitNum)) {
 					row.Cells.Add(paySplit.SplitAmt.ToString("F"));//show the original amount
 				}

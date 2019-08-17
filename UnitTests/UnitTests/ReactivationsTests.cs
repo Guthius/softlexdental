@@ -18,28 +18,28 @@ namespace UnitTests {
 		[ClassInitialize]
 		public static void SetupClass(TestContext testContext) {
 			//Set all the reactivations prefs
-			PrefName.ShowFeatureReactivations.Update(true);
-			PrefName.ReactivationContactInterval.Update(180); //~6 months
-			PrefName.ReactivationCountContactMax.Update(2);
-			PrefName.ReactivationDaysPast.Update(730); //Two years
-			PrefName.ReactivationEmailFamMsg.Update(""); //Set these later if they're needed for a test
-			PrefName.ReactivationEmailMessage.Update(""); //Set these later if they're needed for a test
-			PrefName.ReactivationEmailSubject.Update(""); //Set these later if they're needed for a test
-			PrefName.ReactivationGroupByFamily.Update(false);
-			PrefName.ReactivationPostcardFamMsg.Update(""); //Set these later if they're needed for a test
-			PrefName.ReactivationPostcardMessage.Update(""); //Set these later if they're needed for a test
-			PrefName.ReactivationPostcardsPerSheet.Update(3);
+			PreferenceName.ShowFeatureReactivations.Update(true);
+			PreferenceName.ReactivationContactInterval.Update(180); //~6 months
+			PreferenceName.ReactivationCountContactMax.Update(2);
+			PreferenceName.ReactivationDaysPast.Update(730); //Two years
+			PreferenceName.ReactivationEmailFamMsg.Update(""); //Set these later if they're needed for a test
+			PreferenceName.ReactivationEmailMessage.Update(""); //Set these later if they're needed for a test
+			PreferenceName.ReactivationEmailSubject.Update(""); //Set these later if they're needed for a test
+			PreferenceName.ReactivationGroupByFamily.Update(false);
+			PreferenceName.ReactivationPostcardFamMsg.Update(""); //Set these later if they're needed for a test
+			PreferenceName.ReactivationPostcardMessage.Update(""); //Set these later if they're needed for a test
+			PreferenceName.ReactivationPostcardsPerSheet.Update(3);
 			//Set the defs for reactivation statuses
-			long reactEmailed=Defs.Insert(new Def() { Category=DefCat.RecallUnschedStatus,ItemName="Reactivation E-Mailed" });
-			PrefName.ReactivationStatusEmailed.Update(reactEmailed);
-			long reactEmailedTexted=Defs.Insert(new Def() { Category=DefCat.RecallUnschedStatus,ItemName="Reactivation E-Mailed/Texted" });
-			PrefName.ReactivationStatusEmailedTexted.Update(reactEmailedTexted);
-			long reactMailed=Defs.Insert(new Def() { Category=DefCat.RecallUnschedStatus,ItemName="Reactivation Mailed" });
-			PrefName.ReactivationStatusMailed.Update(reactMailed);
-			long reactTexted=Defs.Insert(new Def() { Category=DefCat.RecallUnschedStatus,ItemName="Reactivation Texted" });
-			PrefName.ReactivationStatusTexted.Update(reactTexted);
+			long reactEmailed=Defs.Insert(new Definition() { Category=DefinitionCategory.RecallUnschedStatus,Description="Reactivation E-Mailed" });
+			PreferenceName.ReactivationStatusEmailed.Update(reactEmailed);
+			long reactEmailedTexted=Defs.Insert(new Definition() { Category=DefinitionCategory.RecallUnschedStatus,Description="Reactivation E-Mailed/Texted" });
+			PreferenceName.ReactivationStatusEmailedTexted.Update(reactEmailedTexted);
+			long reactMailed=Defs.Insert(new Definition() { Category=DefinitionCategory.RecallUnschedStatus,Description="Reactivation Mailed" });
+			PreferenceName.ReactivationStatusMailed.Update(reactMailed);
+			long reactTexted=Defs.Insert(new Definition() { Category=DefinitionCategory.RecallUnschedStatus,Description="Reactivation Texted" });
+			PreferenceName.ReactivationStatusTexted.Update(reactTexted);
 			//Create a commlog type for reactivations
-			_reactivationCommLogType=Defs.Insert(new Def() { Category=DefCat.CommLogTypes,ItemName="ReactivationsComm",ItemValue="REACT" });
+			_reactivationCommLogType=Defs.Insert(new Definition() { Category=DefinitionCategory.CommLogTypes,Description="ReactivationsComm",Value="REACT" });
 			Defs.RefreshCache();
 		}
 
@@ -53,7 +53,7 @@ namespace UnitTests {
 
 		[ClassCleanup]
 		public static void TearDownClass() {
-			PrefName.ShowFeatureReactivations.Update(false);
+			PreferenceName.ShowFeatureReactivations.Update(false);
 		}
 
 		[TestMethod]
@@ -81,7 +81,7 @@ namespace UnitTests {
 				DoNotContact=false,
 			});
 			//Confirm that the patient appears in the Reactivation List
-			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-Preferences.GetInt(PrefName.ReactivationDaysPast)),false,false,provNum,
+			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-Preferences.GetInt(PreferenceName.ReactivationDaysPast)),false,false,provNum,
 				clinic.ClinicNum,0,0,ReactivationListSort.LastContacted,RecallListShowNumberReminders.One);
 			//Only one patient should be in the list
 			Assert.AreEqual(1,tbl.Rows.Count);
@@ -116,7 +116,7 @@ namespace UnitTests {
 			//Patient has a future appointment scheduled.
 			AppointmentT.CreateAppointment(pat.PatNum,DateTime.Today.AddDays(1),op.OperatoryNum,provNum);
 			//Confirm that the patient does not in the Reactivation List
-			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-Preferences.GetInt(PrefName.ReactivationDaysPast)),false,false,provNum,
+			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-Preferences.GetInt(PreferenceName.ReactivationDaysPast)),false,false,provNum,
 				clinic.ClinicNum,0,0,ReactivationListSort.LastContacted,RecallListShowNumberReminders.One);
 			//No patients in the list
 			Assert.AreEqual(0,tbl.Rows.Count);
@@ -147,7 +147,7 @@ namespace UnitTests {
 				DoNotContact=false,
 			});
 			//Confirm that the patient does not in the Reactivation List
-			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-Preferences.GetInt(PrefName.ReactivationDaysPast)),false,false,provNum,
+			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-Preferences.GetInt(PreferenceName.ReactivationDaysPast)),false,false,provNum,
 				clinic.ClinicNum,0,0,ReactivationListSort.LastContacted,RecallListShowNumberReminders.One);
 			//No patients in the list
 			Assert.AreEqual(0,tbl.Rows.Count);
@@ -162,7 +162,7 @@ namespace UnitTests {
 			//Patient has not been seen since further in the past than the ReactivationDaysPast preference.
 			Procedure proc=ProcedureT.CreateProcedure(pat,"D0120",ProcStat.C,"",50,procDate:DateTime.Now.AddYears(-3),provNum:provNum); //3 year old proc
 			//Patient has been contacted the max amount of times
-			for(int i=0;i< Preferences.GetInt(PrefName.ReactivationCountContactMax);i++) {
+			for(int i=0;i< Preferences.GetInt(PreferenceName.ReactivationCountContactMax);i++) {
 				//Patient has been contacted, and the ReactivationContactInterval has elapsed.
 				Commlog comm=new Commlog()
 				{
@@ -181,7 +181,7 @@ namespace UnitTests {
 				DoNotContact=false,
 			});
 			//Confirm that the patient does not show in the Reactivation List
-			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-Preferences.GetInt(PrefName.ReactivationDaysPast)),false,false,provNum,
+			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-Preferences.GetInt(PreferenceName.ReactivationDaysPast)),false,false,provNum,
 				clinic.ClinicNum,0,0,ReactivationListSort.LastContacted,RecallListShowNumberReminders.All);
 			//No patients in the list
 			Assert.AreEqual(0,tbl.Rows.Count);
@@ -212,7 +212,7 @@ namespace UnitTests {
 				DoNotContact=true,
 			});
 			//Confirm that the patient does not in the Reactivation List
-			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-Preferences.GetInt(PrefName.ReactivationDaysPast)),false,false,provNum,
+			DataTable tbl=Reactivations.GetReactivationList(DateTime.Today.AddDays(-Preferences.GetInt(PreferenceName.ReactivationDaysPast)),false,false,provNum,
 				clinic.ClinicNum,0,0,ReactivationListSort.LastContacted,RecallListShowNumberReminders.One);
 			//No patients in the list
 			Assert.AreEqual(0,tbl.Rows.Count);

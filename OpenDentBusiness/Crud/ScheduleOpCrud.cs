@@ -160,7 +160,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ScheduleOp into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(ScheduleOp scheduleOp,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO scheduleop (";
 			if(!useExistingPK && isRandomKeys) {
 				scheduleOp.ScheduleOpNum=ReplicationServers.GetKeyNoCache("scheduleop","ScheduleOpNum");

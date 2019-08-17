@@ -47,7 +47,7 @@ namespace OpenDental{
 		private Label labelFutureTrans;
 		private GroupBox groupBox2;
 		private GroupBox groupBox1;
-		private List<Def> _listBillingTypeDefs;
+		private List<Definition> _listBillingTypeDefs;
 
 		///<summary></summary>
 		public FormRpInsAging(){
@@ -485,18 +485,18 @@ namespace OpenDental{
 
 		private void FormRpInsAging_Load(object sender, System.EventArgs e) {
 			_listProviders=Providers.GetListReports();
-			DateTime lastAgingDate=Preferences.GetDate(PrefName.DateLastAging);
+			DateTime lastAgingDate=Preference.GetDate(PreferenceName.DateLastAging);
 			if(lastAgingDate.Year<1880) {
 				textDate.Text="";
 			}
-			else if(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)){
+			else if(Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily)){
 				textDate.Text=lastAgingDate.ToShortDateString();
 			}
 			else{
 				textDate.Text=DateTime.Today.ToShortDateString();
 			}
-			_listBillingTypeDefs=Defs.GetDefsForCategory(DefCat.BillingTypes,true);
-			listBillType.Items.AddRange(_listBillingTypeDefs.Select(x => x.ItemName).ToArray());
+			_listBillingTypeDefs=Definition.GetByCategory(DefinitionCategory.BillingTypes);
+			listBillType.Items.AddRange(_listBillingTypeDefs.Select(x => x.Description).ToArray());
 			listBillType.SelectedIndex=(listBillType.Items.Count>0?0:-1);
 			checkBillTypesAll.Checked=true; //all billing types by default, event handler will set visibility
 			listProv.Items.AddRange(_listProviders.Select(x => x.GetLongDesc()).ToArray());
@@ -516,8 +516,8 @@ namespace OpenDental{
 				listClin.SelectedIndex=listClinics.FindIndex(x => x.ClinicNum==Clinics.ClinicNum);//FindIndex could return -1, which is fine
 				checkAllClin.Checked=(Clinics.ClinicNum==0);//event handler will set visibility
 			}
-			if(Preferences.GetBool(PrefName.FutureTransDatesAllowed) || Preferences.GetBool(PrefName.AccountAllowFutureDebits) 
-				|| Preferences.GetBool(PrefName.AllowFutureInsPayments)) 
+			if(Preference.GetBool(PreferenceName.FutureTransDatesAllowed) || Preference.GetBool(PreferenceName.AccountAllowFutureDebits) 
+				|| Preference.GetBool(PreferenceName.AllowFutureInsPayments)) 
 			{
 				labelFutureTrans.Visible=true;//Set to false in designer
 			}
@@ -553,7 +553,7 @@ namespace OpenDental{
 			rpo.IsGroupByFam=radioGroupByFam.Checked;
 			rpo.IsInsPayWoCombined=false;
 			if(!checkBillTypesAll.Checked) {
-				rpo.ListBillTypes=listBillType.SelectedIndices.OfType<int>().Select(x => _listBillingTypeDefs[x].DefNum).ToList();
+				rpo.ListBillTypes=listBillType.SelectedIndices.OfType<int>().Select(x => _listBillingTypeDefs[x].Id).ToList();
 			}
 			if(!checkProvAll.Checked) {
 				rpo.ListProvNums=listProv.SelectedIndices.OfType<int>().Select(x => _listProviders[x].ProvNum).ToList();
@@ -621,7 +621,7 @@ namespace OpenDental{
 			tableAging=RpInsAging.GetInsAgingTable(rpo);
 			report.ReportName=Lan.g(this,"Insurance Aging Report");
 			report.AddTitle("InsAging",Lan.g(this, "Insurance Aging Report"));
-			report.AddSubTitle("PracTitle",Preferences.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("PracTitle",Preference.GetString(PreferenceName.PracticeTitle));
 			report.AddSubTitle("AsOf",Lan.g(this,"As of")+" "+rpo.AsOfDate.ToShortDateString());
 			if(radioAny.Checked){
 				report.AddSubTitle("Balance",Lan.g(this,"Any Balance"));
@@ -639,7 +639,7 @@ namespace OpenDental{
 				report.AddSubTitle("AllBillingTypes",Lan.g(this,"All Billing Types"));
 			}
 			else{
-				report.AddSubTitle("",string.Join(", ",listBillType.SelectedIndices.OfType<int>().Select(x => _listBillingTypeDefs[x].ItemName)));//there must be at least one selected
+				report.AddSubTitle("",string.Join(", ",listBillType.SelectedIndices.OfType<int>().Select(x => _listBillingTypeDefs[x].Description)));//there must be at least one selected
 			}
 			if(checkProvAll.Checked) {
 				report.AddSubTitle("Providers",Lan.g(this,"All Providers"));

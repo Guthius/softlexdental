@@ -34,11 +34,11 @@ namespace UnitTests.UnitTests {
 			string suffix=MethodBase.GetCurrentMethod().Name;
 			//Make sure that clinics are enabled for this test.
 			//Create two clinics.  Clinic B will have an invalid appointment scheduled (spans past midnight) and Clinic A should still return time slots.
-			PrefT.UpdateBool(PrefName.EasyNoClinics,false);//Not no clinics.
+			PrefT.UpdateBool(PreferenceName.EasyNoClinics,false);//Not no clinics.
 			long clinicNumA=ClinicT.CreateClinic("Clinic A-"+suffix).ClinicNum;
 			long clinicNumB=ClinicT.CreateClinic("Clinic B-"+suffix).ClinicNum;
 			//Make sure the that Appointment View time increment is set to 10 min.
-			Prefs.UpdateInt(PrefName.AppointmentTimeIncrement,10);
+			Prefs.UpdateInt(PreferenceName.AppointmentTimeIncrement,10);
 			//Create a date that will always be in the future.  This date will be used for schedules and recalls.
 			DateTime dateTimeSchedule=DateTime.Now.AddYears(1);
 			long provNumDocA=ProviderT.CreateProvider("Doc A-"+suffix);
@@ -50,11 +50,11 @@ namespace UnitTests.UnitTests {
 			Operatory opDocB=OperatoryT.CreateOperatory("B-"+suffix,"Doc Op B-"+suffix,provNumDocB,clinicNum: clinicNumB);
 			//Create a new patient appointment type that has a pattern that will fit within an hour block (40 mins).
 			AppointmentType appointmentType=AppointmentTypeT.CreateAppointmentType(suffix,pattern:"/XXXXXX/");
-			Def defApptType=DefT.CreateDefinition(DefCat.WebSchedNewPatApptTypes,suffix);
-			DefLinkT.CreateDefLink(defApptType.DefNum,appointmentType.AppointmentTypeNum,DefLinkType.AppointmentType);
+			Definition defApptType=DefT.CreateDefinition(DefinitionCategory.WebSchedNewPatApptTypes,suffix);
+			DefLinkT.CreateDefLink(defApptType.Id,appointmentType.AppointmentTypeNum,DefLinkType.AppointmentType);
 			//Associate the new patient appointment type to the operatories above so that they are valid "new pat appt" ops.
-			DefLinkT.CreateDefLink(defApptType.DefNum,opDocA.OperatoryNum,DefLinkType.Operatory);
-			DefLinkT.CreateDefLink(defApptType.DefNum,opDocB.OperatoryNum,DefLinkType.Operatory);
+			DefLinkT.CreateDefLink(defApptType.Id,opDocA.OperatoryNum,DefLinkType.Operatory);
+			DefLinkT.CreateDefLink(defApptType.Id,opDocB.OperatoryNum,DefLinkType.Operatory);
 			//Create schedules for the doctors from 09:00 - 10:00 on the same day.
 			Schedule schedDocA=ScheduleT.CreateSchedule(dateTimeSchedule,new TimeSpan(new DateTime(1,1,1,9,0,0).Ticks)
 				,new TimeSpan(new DateTime(1,1,1,10,0,0).Ticks),schedType: ScheduleType.Provider,provNum: provNumDocA,clinicNum: clinicNumA
@@ -68,7 +68,7 @@ namespace UnitTests.UnitTests {
 				,pattern: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",clinicNum: clinicNumB);
 			//An open time slot should be returned for clinic A.
 			List<TimeSlot> listTimeSlots=TimeSlots.GetAvailableNewPatApptTimeSlots(dateTimeSchedule,dateTimeSchedule.AddDays(5),clinicNumA
-				,defApptType.DefNum);
+				,defApptType.Id);
 			Assert.AreEqual(1,listTimeSlots.Count);
 			Assert.AreEqual(listTimeSlots[0].DateTimeStart.Date,dateTimeSchedule.Date);
 			Assert.AreEqual(listTimeSlots[0].DateTimeStart,new DateTime(dateTimeSchedule.Year,dateTimeSchedule.Month,dateTimeSchedule.Day,9,0,0));
@@ -80,7 +80,7 @@ namespace UnitTests.UnitTests {
 			try {
 				//The following method call should throw an exception OR return no results (if we end up fixing the core issue) for clinic B.
 				listTimeSlots=TimeSlots.GetAvailableNewPatApptTimeSlots(dateTimeSchedule,dateTimeSchedule.AddDays(5),clinicNumB
-					,defApptType.DefNum);
+					,defApptType.Id);
 				if(listTimeSlots.Count==0) {
 					isExpectedResult=true;
 				}
@@ -96,7 +96,7 @@ namespace UnitTests.UnitTests {
 		public void TimeSlots_GetAvailableWebSchedTimeSlots_ClinicPriority() {
 			string suffix=MethodBase.GetCurrentMethod().Name;
 			//Turn clinics ON!
-			Prefs.UpdateBool(PrefName.EasyNoClinics,false);//Not no clinics.
+			Prefs.UpdateBool(PreferenceName.EasyNoClinics,false);//Not no clinics.
 			long clinicNum1=ClinicT.CreateClinic("1 - "+suffix).ClinicNum;
 			long clinicNum2=ClinicT.CreateClinic("2 - "+suffix).ClinicNum;
 			//Create a date that will always be in the future.  This date will be used for schedules and recalls.
@@ -106,8 +106,8 @@ namespace UnitTests.UnitTests {
 			//Create the patient and have them associated to the second clinic.
 			Patient pat=PatientT.CreatePatient(suffix,provNumDoc,clinicNum2);
 			//Make sure the that Appointment View time increment is set to 10 min.
-			Prefs.UpdateInt(PrefName.AppointmentTimeIncrement,10);
-			Def defLunchBlockout=DefT.CreateDefinition(DefCat.BlockoutTypes,"Lunch-"+suffix,itemColor:System.Drawing.Color.Azure);
+			Prefs.UpdateInt(PreferenceName.AppointmentTimeIncrement,10);
+			Definition defLunchBlockout=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,"Lunch-"+suffix,itemColor:System.Drawing.Color.Azure);
 			//Create a psudo prophy recall type that lasts 40 mins and has an interval of every 6 months and 1 day.
 			RecallType recallType=RecallTypeT.CreateRecallType("Prophy-"+suffix,"D1110,D1330","//X/",new Interval(1,0,6,0));
 			//Create a recall for our patient.
@@ -120,7 +120,7 @@ namespace UnitTests.UnitTests {
 				,new TimeSpan(new DateTime(1,1,1,11,30,0).Ticks),schedType:ScheduleType.Provider,provNum:provNumDoc);
 			//Create a blockout for lunch because why not.
 			Schedule schedDocLunch=ScheduleT.CreateSchedule(dateTimeSchedule,new TimeSpan(new DateTime(1,1,1,11,30,0).Ticks)
-				,new TimeSpan(new DateTime(1,1,1,12,0,0).Ticks),schedType:ScheduleType.Blockout,blockoutType:defLunchBlockout.DefNum);
+				,new TimeSpan(new DateTime(1,1,1,12,0,0).Ticks),schedType:ScheduleType.Blockout,blockoutType:defLunchBlockout.Id);
 			//Schedule for closing from 12:00 - 17:00
 			Schedule schedDocEvening=ScheduleT.CreateSchedule(dateTimeSchedule,new TimeSpan(new DateTime(1,1,1,12,0,0).Ticks)
 				,new TimeSpan(new DateTime(1,1,1,17,0,0).Ticks),schedType:ScheduleType.Provider,provNum: provNumDoc);
@@ -134,7 +134,7 @@ namespace UnitTests.UnitTests {
 				,new TimeSpan(new DateTime(1,1,1,4,0,0).Ticks),schedType:ScheduleType.Provider,provNum:provNumDoc);
 			//Create a European length lunch.
 			Schedule schedDocLunch2=ScheduleT.CreateSchedule(dateTimeSchedule,new TimeSpan(new DateTime(1,1,1,4,0,0).Ticks)
-				,new TimeSpan(new DateTime(1,1,1,19,0,0).Ticks),schedType:ScheduleType.Blockout,blockoutType:defLunchBlockout.DefNum);
+				,new TimeSpan(new DateTime(1,1,1,19,0,0).Ticks),schedType:ScheduleType.Blockout,blockoutType:defLunchBlockout.Id);
 			//Schedule for closing from 19:00 - 23:20
 			Schedule schedDocEvening2=ScheduleT.CreateSchedule(dateTimeSchedule,new TimeSpan(new DateTime(1,1,1,19,0,0).Ticks)
 				,new TimeSpan(new DateTime(1,1,1,23,20,0).Ticks),schedType:ScheduleType.Provider,provNum:provNumDoc);
@@ -187,8 +187,8 @@ namespace UnitTests.UnitTests {
 			long provNumHyg=ProviderT.CreateProvider("Hyg-"+suffix,isSecondary:true);
 			Patient pat=PatientT.CreatePatient(suffix,provNumHyg);
 			//Make sure the that Appointment View time increment is set to 10 min.
-			Prefs.UpdateInt(PrefName.AppointmentTimeIncrement,10);
-			Def defLunchBlockout=DefT.CreateDefinition(DefCat.BlockoutTypes,"Lunch-"+suffix,itemColor:System.Drawing.Color.Azure);
+			Prefs.UpdateInt(PreferenceName.AppointmentTimeIncrement,10);
+			Definition defLunchBlockout=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,"Lunch-"+suffix,itemColor:System.Drawing.Color.Azure);
 			//Create a psudo prophy recall type that lasts 40 mins and has an interval of every 6 months and 1 day.
 			RecallType recallType=RecallTypeT.CreateRecallType("Prophy-"+suffix,"D1110,D1330","//X/",new Interval(1,0,6,0));
 			//Create a recall for our patient.
@@ -237,8 +237,8 @@ namespace UnitTests.UnitTests {
 			long provNumHyg=ProviderT.CreateProvider("Hyg-"+suffix,isSecondary:true);
 			Patient pat=PatientT.CreatePatient(suffix,provNumHyg);
 			//Make sure the that Appointment View time increment is set to 10 min.
-			Prefs.UpdateInt(PrefName.AppointmentTimeIncrement,10);
-			Def defLunchBlockout=DefT.CreateDefinition(DefCat.BlockoutTypes,"Lunch-"+suffix,itemColor:System.Drawing.Color.Azure);
+			Prefs.UpdateInt(PreferenceName.AppointmentTimeIncrement,10);
+			Definition defLunchBlockout=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,"Lunch-"+suffix,itemColor:System.Drawing.Color.Azure);
 			//Create a psudo prophy recall type that lasts 40 mins and has an interval of every 6 months and 1 day.
 			RecallType recallType=RecallTypeT.CreateRecallType("Prophy-"+suffix,"D1110,D1330","//X/",new Interval(1,0,6,0));
 			//Create a recall for our patient.
@@ -288,8 +288,8 @@ namespace UnitTests.UnitTests {
 			long provNumHyg=ProviderT.CreateProvider("Hyg-"+suffix,isSecondary:true);
 			Patient pat=PatientT.CreatePatient(suffix,provNumDoc);
 			//Make sure the that Appointment View time increment is set to 10 min.
-			Prefs.UpdateInt(PrefName.AppointmentTimeIncrement,10);
-			Def defLunchBlockout=DefT.CreateDefinition(DefCat.BlockoutTypes,"Lunch-"+suffix,itemColor:System.Drawing.Color.Azure);
+			Prefs.UpdateInt(PreferenceName.AppointmentTimeIncrement,10);
+			Definition defLunchBlockout=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,"Lunch-"+suffix,itemColor:System.Drawing.Color.Azure);
 			//Create a psudo prophy recall type that lasts 40 mins and has an interval of every 6 months and 1 day.
 			RecallType recallType=RecallTypeT.CreateRecallType("Prophy-"+suffix,"D1110,D1330","//X/",new Interval(1,0,6,0));
 			//Create a recall for our patient.
@@ -302,7 +302,7 @@ namespace UnitTests.UnitTests {
 				,new TimeSpan(new DateTime(1,1,1,11,30,0).Ticks),schedType:ScheduleType.Provider,provNum:provNumDoc);
 			//Create a blockout for lunch because why not.
 			Schedule schedDocLunch=ScheduleT.CreateSchedule(dateTimeSchedule,new TimeSpan(new DateTime(1,1,1,11,30,0).Ticks)
-				,new TimeSpan(new DateTime(1,1,1,12,0,0).Ticks),schedType:ScheduleType.Blockout,blockoutType:defLunchBlockout.DefNum);
+				,new TimeSpan(new DateTime(1,1,1,12,0,0).Ticks),schedType:ScheduleType.Blockout,blockoutType:defLunchBlockout.Id);
 			//Schedule for closing from 12:00 - 17:00
 			Schedule schedDocEvening=ScheduleT.CreateSchedule(dateTimeSchedule,new TimeSpan(new DateTime(1,1,1,12,0,0).Ticks)
 				,new TimeSpan(new DateTime(1,1,1,17,0,0).Ticks),schedType:ScheduleType.Provider,provNum: provNumDoc);
@@ -316,7 +316,7 @@ namespace UnitTests.UnitTests {
 				,new TimeSpan(new DateTime(1,1,1,4,0,0).Ticks),schedType:ScheduleType.Provider,provNum:provNumDoc);
 			//Create a European length lunch.
 			Schedule schedDocLunch2=ScheduleT.CreateSchedule(dateTimeSchedule,new TimeSpan(new DateTime(1,1,1,4,0,0).Ticks)
-				,new TimeSpan(new DateTime(1,1,1,19,0,0).Ticks),schedType:ScheduleType.Blockout,blockoutType:defLunchBlockout.DefNum);
+				,new TimeSpan(new DateTime(1,1,1,19,0,0).Ticks),schedType:ScheduleType.Blockout,blockoutType:defLunchBlockout.Id);
 			//Schedule for closing from 19:00 - 23:20
 			Schedule schedDocEvening2=ScheduleT.CreateSchedule(dateTimeSchedule,new TimeSpan(new DateTime(1,1,1,19,0,0).Ticks)
 				,new TimeSpan(new DateTime(1,1,1,23,20,0).Ticks),schedType:ScheduleType.Provider,provNum:provNumDoc);
@@ -367,8 +367,8 @@ namespace UnitTests.UnitTests {
 			long provNumHyg=ProviderT.CreateProvider("Hyg-"+suffix,isSecondary:true);
 			Patient pat=PatientT.CreatePatient(suffix,provNumHyg);
 			//Make sure the that Appointment View time increment is set to 10 min.
-			Prefs.UpdateInt(PrefName.AppointmentTimeIncrement,10);
-			Def defLunchBlockout=DefT.CreateDefinition(DefCat.BlockoutTypes,"Lunch-"+suffix,itemColor:System.Drawing.Color.Azure);
+			Prefs.UpdateInt(PreferenceName.AppointmentTimeIncrement,10);
+			Definition defLunchBlockout=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,"Lunch-"+suffix,itemColor:System.Drawing.Color.Azure);
 			//Create a psudo prophy recall type that lasts 40 mins and has an interval of every 6 months and 1 day.
 			RecallType recallType=RecallTypeT.CreateRecallType("Prophy-"+suffix,"D1110,D1330","//X/",new Interval(1,0,6,0));
 			//Create a recall for our patient.
@@ -416,7 +416,7 @@ namespace UnitTests.UnitTests {
 			long provNumHyg=ProviderT.CreateProvider("Hyg-"+suffix,isSecondary:true);
 			Patient pat=PatientT.CreatePatient(suffix,provNumHyg);
 			//Make sure the that Appointment View time increment is set to 10 min.
-			Prefs.UpdateInt(PrefName.AppointmentTimeIncrement,10);
+			Prefs.UpdateInt(PreferenceName.AppointmentTimeIncrement,10);
 			//Create a psudo prophy recall type that lasts 30 mins with prov time in the middle and has an interval of every 6 months and 1 day.
 			RecallType recallType=RecallTypeT.CreateRecallType("Prophy-"+suffix,"D1110,D1330","/X/",new Interval(1,0,6,0));
 			//Create a recall for our patient.
@@ -458,8 +458,8 @@ namespace UnitTests.UnitTests {
 			long provNumHyg=ProviderT.CreateProvider("Hyg-"+suffix,isSecondary:true);
 			Patient pat=PatientT.CreatePatient(suffix,provNumDoc);
 			//Make sure the that Appointment View time increment is set to 10 min.
-			Prefs.UpdateInt(PrefName.AppointmentTimeIncrement,10);
-			Def defLunchBlockout=DefT.CreateDefinition(DefCat.BlockoutTypes,"Lunch-"+suffix,itemColor:System.Drawing.Color.Azure);
+			Prefs.UpdateInt(PreferenceName.AppointmentTimeIncrement,10);
+			Definition defLunchBlockout=DefT.CreateDefinition(DefinitionCategory.BlockoutTypes,"Lunch-"+suffix,itemColor:System.Drawing.Color.Azure);
 			//Create operatories for the providers but make the Hygiene op NON-WEB SCHED.
 			Operatory opDoc=OperatoryT.CreateOperatory("1-"+suffix,"Doc Op - "+suffix,provNumDoc,provNumHyg,isWebSched:true,itemOrder:0);
 			Operatory opHyg=OperatoryT.CreateOperatory("2-"+suffix,"Hyg Op - "+suffix,provNumDoc,provNumHyg,itemOrder:1,isHygiene:true);
@@ -468,7 +468,7 @@ namespace UnitTests.UnitTests {
 				,new TimeSpan(new DateTime(1,1,1,11,30,0).Ticks),schedType:ScheduleType.Provider,provNum:provNumDoc);
 			//Create a blockout for lunch because why not.
 			Schedule schedDocLunch=ScheduleT.CreateSchedule(dateTimeSchedule,new TimeSpan(new DateTime(1,1,1,11,30,0).Ticks)
-				,new TimeSpan(new DateTime(1,1,1,12,0,0).Ticks),schedType:ScheduleType.Blockout,blockoutType:defLunchBlockout.DefNum);
+				,new TimeSpan(new DateTime(1,1,1,12,0,0).Ticks),schedType:ScheduleType.Blockout,blockoutType:defLunchBlockout.Id);
 			//Schedule for closing from 12:00 - 17:00
 			Schedule schedDocEvening=ScheduleT.CreateSchedule(dateTimeSchedule,new TimeSpan(new DateTime(1,1,1,12,0,0).Ticks)
 				,new TimeSpan(new DateTime(1,1,1,17,0,0).Ticks),schedType:ScheduleType.Provider,provNum: provNumDoc);
@@ -482,7 +482,7 @@ namespace UnitTests.UnitTests {
 				,new TimeSpan(new DateTime(1,1,1,4,0,0).Ticks),schedType:ScheduleType.Provider,provNum:provNumDoc);
 			//Create a European length lunch.
 			Schedule schedDocLunch2=ScheduleT.CreateSchedule(dateTimeSchedule,new TimeSpan(new DateTime(1,1,1,4,0,0).Ticks)
-				,new TimeSpan(new DateTime(1,1,1,19,0,0).Ticks),schedType:ScheduleType.Blockout,blockoutType:defLunchBlockout.DefNum);
+				,new TimeSpan(new DateTime(1,1,1,19,0,0).Ticks),schedType:ScheduleType.Blockout,blockoutType:defLunchBlockout.Id);
 			//Schedule for closing from 19:00 - 23:20
 			Schedule schedDocEvening2=ScheduleT.CreateSchedule(dateTimeSchedule,new TimeSpan(new DateTime(1,1,1,19,0,0).Ticks)
 				,new TimeSpan(new DateTime(1,1,1,23,20,0).Ticks),schedType:ScheduleType.Provider,provNum:provNumDoc);
@@ -535,7 +535,7 @@ namespace UnitTests.UnitTests {
 			long provNumDoc=ProviderT.CreateProvider("Doc-"+suffix);
 			Patient pat=PatientT.CreatePatient(suffix,provNumDoc);
 			//Make sure the that Appointment View time increment is set to 5 min.
-			Prefs.UpdateInt(PrefName.AppointmentTimeIncrement,5);
+			Prefs.UpdateInt(PreferenceName.AppointmentTimeIncrement,5);
 			//Create operatories for the provider.
 			Operatory opDoc=OperatoryT.CreateOperatory("1-"+suffix,"Doc Op - "+suffix,provNumDoc,isWebSched:true,itemOrder:0);
 			//Create a schedule for the doctor from 08:00 - 18:00
@@ -615,7 +615,7 @@ namespace UnitTests.UnitTests {
 			long provNumHyg=ProviderT.CreateProvider("Hyg-"+suffix);
 			Patient pat=PatientT.CreatePatient(suffix,provNumHyg);
 			//Make sure the that Appointment View time increment is set to 15 min.
-			Prefs.UpdateInt(PrefName.AppointmentTimeIncrement,15);
+			Prefs.UpdateInt(PreferenceName.AppointmentTimeIncrement,15);
 			//Create an operatory for the provider.
 			Operatory opHyg=OperatoryT.CreateOperatory("1-"+suffix,"Hyg Op - "+suffix,provHygienist:provNumHyg,isWebSched:true,itemOrder:0);
 			//Create a schedule for the provider from 08:00 - 19:00

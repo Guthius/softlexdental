@@ -176,12 +176,12 @@ namespace OpenDental {
 					medicationNums.Add(_listMedicationPatCur[h].MedicationNum);
 				}
 			}
-			_listMedicationCur=Medications.GetMultMedications(medicationNums);
+			_listMedicationCur= Medication.GetMultMedications(medicationNums);
 			ODGridRow row;
 			Medication med;
 			for(int i=0;i<_listMedicationPatCur.Count;i++) {
 				row=new ODGridRow();
-				med=Medications.GetMedication(_listMedicationPatCur[i].MedicationNum);//Possibly change if we decided to postpone caching medications
+				med= Medication.GetById(_listMedicationPatCur[i].MedicationNum);//Possibly change if we decided to postpone caching medications
 				row.Cells.Add(_listMedicationPatCur[i].DateTStamp.ToShortDateString());
 				if(_listMedicationPatCur[i].DateStart.Year<1880) {
 					row.Cells.Add("");
@@ -195,11 +195,11 @@ namespace OpenDental {
 				else {
 					row.Cells.Add(_listMedicationPatCur[i].DateStop.ToShortDateString());
 				}
-				if(med.MedName==null) {
+				if(med.Description==null) {
 					row.Cells.Add("");
 				}
 				else {
-					row.Cells.Add(med.MedName);
+					row.Cells.Add(med.Description);
 				}
 				gridMedExisting.Rows.Add(row);
 			}
@@ -247,12 +247,12 @@ namespace OpenDental {
 					}
 				}
 				else {
-					Medication med=Medications.GetMedication(_listMedicationPatReconcile[i].MedicationNum);
-					if(med.MedName==null) {
+					Medication med= Medication.GetById(_listMedicationPatReconcile[i].MedicationNum);
+					if(med.Description==null) {
 						row.Cells.Add("");
 					}
 					else {
-						row.Cells.Add(med.MedName);
+						row.Cells.Add(med.Description);
 					}
 				}
 				if(_listMedicationPatReconcile[i].PatNote==null) {
@@ -280,7 +280,7 @@ namespace OpenDental {
 				//Since gridMedImport and ListMedicationPatNew are a 1:1 list we can use the selected index position to get our medP
 				medP=ListMedicationPatNew[gridMedImport.SelectedIndices[i]];
 				for(int j=0;j<gridMedReconcile.Rows.Count;j++) {
-					if(medP.RxCui > 0 && medP.RxCui==_listMedicationPatReconcile[j].RxCui) {
+					if(!string.IsNullOrEmpty(medP.RxCui) && medP.RxCui==_listMedicationPatReconcile[j].RxCui) {
 						isValid=false;
 						skipCount++;
 						break;
@@ -309,7 +309,7 @@ namespace OpenDental {
 				//Since gridMedImport and ListMedicationPatNew are a 1:1 list we can use the selected index position to get our medP
 				medP=_listMedicationPatCur[gridMedExisting.SelectedIndices[i]];
 				for(int j=0;j<gridMedReconcile.Rows.Count;j++) {
-					if(medP.RxCui > 0 && medP.RxCui==_listMedicationPatReconcile[j].RxCui) {
+					if(!string.IsNullOrEmpty(medP.RxCui) && medP.RxCui==_listMedicationPatReconcile[j].RxCui) {
 						isValid=false;
 						skipCount++;
 						break;
@@ -356,7 +356,7 @@ namespace OpenDental {
 				isActive=false;
 				medP=_listMedicationPatCur[i];
 				for(int j=0;j<_listMedicationPatReconcile.Count;j++) {//Compare each reconcile medication to the current medication
-					if(medP.RxCui > 0 && medP.RxCui==_listMedicationPatReconcile[j].RxCui && _listMedicationPatReconcile[j].MedicationNum==_listMedicationPatCur[i].MedicationNum) {//Has an RxNorm code and they are equal
+					if(!string.IsNullOrEmpty(medP.RxCui) && medP.RxCui==_listMedicationPatReconcile[j].RxCui && _listMedicationPatReconcile[j].MedicationNum==_listMedicationPatCur[i].MedicationNum) {//Has an RxNorm code and they are equal
 						isActive=true;
 						break;
 					}
@@ -378,17 +378,17 @@ namespace OpenDental {
 					continue;
 				}
 				if(_listMedicationPatReconcile[j]==ListMedicationPatNew[index]) {
-					med=Medications.GetMedicationFromDbByRxCui(_listMedicationPatReconcile[j].RxCui);
+					med= Medication.GetByRxCui(_listMedicationPatReconcile[j].RxCui);
 					if(med==null) {
 						med=new Medication();
-						med.MedName=ListMedicationPatNew[index].MedDescript;
+						med.Description=ListMedicationPatNew[index].MedDescript;
 						med.RxCui=ListMedicationPatNew[index].RxCui;
-						ListMedicationPatNew[index].MedicationNum=Medications.Insert(med);
-						med.GenericNum=med.MedicationNum;
-						Medications.Update(med);
+						ListMedicationPatNew[index].MedicationNum=Medication.Insert(med);
+						med.GenericId=med.Id;
+                        Medication.Update(med);
 					}
 					else {
-						ListMedicationPatNew[index].MedicationNum=med.MedicationNum;
+						ListMedicationPatNew[index].MedicationNum=med.Id;
 					}
 					ListMedicationPatNew[index].ProvNum=0;//Since imported, set provnum to 0 so it does not affect CPOE.
 					MedicationPats.Insert(ListMedicationPatNew[index]);
@@ -402,7 +402,7 @@ namespace OpenDental {
 			EhrMeasureEvents.Insert(newMeasureEvent);
 			for(int inter=0;inter<_listMedicationPatReconcile.Count;inter++) {
 				if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.UserNum).MedicationCDS) {
-					Medication medInter=Medications.GetMedicationFromDbByRxCui(_listMedicationPatReconcile[inter].RxCui);
+					Medication medInter=Medication.GetByRxCui(_listMedicationPatReconcile[inter].RxCui);
 					FormCDSIntervention FormCDSI=new FormCDSIntervention();
 					FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(medInter,_patCur);
 					FormCDSI.ShowIfRequired(false);

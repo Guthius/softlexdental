@@ -155,9 +155,9 @@ namespace OpenDental {
 				}
 			}
 			//Exclude default practice email address, since it is added on another line below.
-			listAddresses.RemoveAll(x => x.EmailAddressNum==Preferences.GetLong(PrefName.EmailDefaultAddressNum));
+			listAddresses.RemoveAll(x => x.EmailAddressNum==Preference.GetLong(PreferenceName.EmailDefaultAddressNum));
 			//Exclude web mail notification email address.
-			listAddresses.RemoveAll(x => x.EmailAddressNum==Preferences.GetLong(PrefName.EmailNotifyAddressNum));
+			listAddresses.RemoveAll(x => x.EmailAddressNum==Preference.GetLong(PreferenceName.EmailNotifyAddressNum));
 			//Add clinic defaults that the user has access to.  Do not add duplicates.
 			if(Preferences.HasClinicsEnabled) {
 				List<Clinic> listClinicForUser=Clinics.GetForUserod(Security.CurUser);
@@ -169,7 +169,7 @@ namespace OpenDental {
 				listAddresses.Insert(0,emailClinic);
 				}
 			}
-			EmailAddress emailAddressPractice=EmailAddresses.GetOne(Preferences.GetLong(PrefName.EmailDefaultAddressNum));
+			EmailAddress emailAddressPractice=EmailAddresses.GetOne(Preference.GetLong(PreferenceName.EmailDefaultAddressNum));
 			EmailAddress emailAddressMe=EmailAddresses.GetForUser(Security.CurUser.UserNum);
 			//Add addresses which are: not associated to anything, or not default, or unique per clinic.			
 			_listEmailAddresses=new List<EmailAddress>();

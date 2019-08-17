@@ -147,13 +147,13 @@ namespace OpenDental {
 						disCur=null;
 					}
 					else {
-						disdefCur=DiseaseDefs.GetItem(disCur.DiseaseDefNum);
+						disdefCur=DiseaseDef.GetById(disCur.DiseaseDefNum);
 						if(disdefCur==null) {
 							VitalsignCur.PregDiseaseNum=0;
 							disCur=null;
 						}
 						else {//disease points to valid def
-							pregDisDefNumCur=disdefCur.DiseaseDefNum;
+							pregDisDefNumCur=disdefCur.Id;
 						}
 					}
 				}
@@ -162,7 +162,7 @@ namespace OpenDental {
 			if(VitalsignCur.PregDiseaseNum==0) {//not currently attached to a disease
 				#region Get DiseaseDefNum from existing pregnancy problem
 				if(examDate.Year>1880) {//only try to find existing problem if a valid exam date is entered before checking the box, otherwise we do not know what date to compare to the active dates of the pregnancy dx
-					List<DiseaseDef> listPregDisDefs=DiseaseDefs.GetAllPregDiseaseDefs();
+					List<DiseaseDef> listPregDisDefs=DiseaseDef.GetAllPregDiseaseDefs();
 					List<Disease> listPatDiseases=Diseases.Refresh(VitalsignCur.PatNum,true);
 					for(int i=0;i<listPatDiseases.Count;i++) {//loop through all diseases for this patient, shouldn't be very many
 						if(listPatDiseases[i].DateStart>examDate.Date //startdate for current disease is after the exam date set in form
@@ -171,7 +171,7 @@ namespace OpenDental {
 							continue;
 						}
 						for(int j=0;j<listPregDisDefs.Count;j++) {//loop through preg disease defs in the db, shouldn't be very many
-							if(listPatDiseases[i].DiseaseDefNum!=listPregDisDefs[j].DiseaseDefNum) {//see if this problem is a pregnancy problem
+							if(listPatDiseases[i].DiseaseDefNum!=listPregDisDefs[j].Id) {//see if this problem is a pregnancy problem
 								continue;
 							}
 							if(disCur==null || listPatDiseases[i].DateStart>disCur.DateStart) {//if we haven't found a disease match yet or this match is more recent (later start date)
@@ -189,28 +189,28 @@ namespace OpenDental {
 				else {//we are going to insert either the default pregnancy problem or a manually selected problem
 					#region Get DiseaseDefNum from global default pregnancy problem
 					//if preg dx doesn't exist, use the default pregnancy code if set to something other than blank or 'none'
-					pregCode=Preferences.GetString(PrefName.PregnancyDefaultCodeValue);//could be 'none' which disables the automatic dx insertion
-					string pregCodeSys=Preferences.GetString(PrefName.PregnancyDefaultCodeSystem);//if 'none' for code, code system will default to 'SNOMEDCT', display will be ""
+					pregCode=Preference.GetString(PreferenceName.PregnancyDefaultCodeValue);//could be 'none' which disables the automatic dx insertion
+					string pregCodeSys=Preference.GetString(PreferenceName.PregnancyDefaultCodeSystem);//if 'none' for code, code system will default to 'SNOMEDCT', display will be ""
 					if(pregCode!="" && pregCode!="none") {//default pregnancy code set to a code other than 'none', should never be blank, we set in ConvertDB and don't allow blank
-						pregDisDefNumCur=DiseaseDefs.GetNumFromCode(pregCode);//see if the code is attached to a valid diseasedef
+						pregDisDefNumCur=DiseaseDef.GetNumFromCode(pregCode);//see if the code is attached to a valid diseasedef
 						if(pregDisDefNumCur==0) {//no diseasedef in db for the default code, create and insert def
 							disdefCur=new DiseaseDef();
-							disdefCur.DiseaseName="Pregnant";
+							disdefCur.Name="Pregnant";
 							switch(pregCodeSys) {
 								case "ICD9CM":
 									disdefCur.ICD9Code=pregCode;
 									break;
 								case "ICD10CM":
-									disdefCur.Icd10Code=pregCode;
+									disdefCur.ICD10Code=pregCode;
 									break;
 								case "SNOMEDCT":
 									disdefCur.SnomedCode=pregCode;
 									break;
 							}
-							pregDisDefNumCur=DiseaseDefs.Insert(disdefCur);
-							DiseaseDefs.RefreshCache();
+							pregDisDefNumCur=DiseaseDef.Insert(disdefCur);
+                            CacheManager.Invalidate<DiseaseDef>();
 							DataValid.SetInvalid(InvalidType.Diseases);
-							SecurityLogs.MakeLogEntry(Permissions.ProblemEdit,0,disdefCur.DiseaseName+" added.");
+							SecurityLogs.MakeLogEntry(Permissions.ProblemEdit,0,disdefCur.Name+" added.");
 						}
 					}
 					#endregion
@@ -230,7 +230,7 @@ namespace OpenDental {
 						}
 						labelPregNotice.Text=pregManualText;
 						//the list should only ever contain one item.
-						pregDisDefNumCur=FormDD.ListSelectedDiseaseDefs[0].DiseaseDefNum;
+						pregDisDefNumCur=FormDD.ListSelectedDiseaseDefs[0].Id;
 					}
 					#endregion
 				}
@@ -242,18 +242,18 @@ namespace OpenDental {
 				labelPregNotice.Visible=false;
 				return;
 			}
-			disdefCur=DiseaseDefs.GetItem(pregDisDefNumCur);
+			disdefCur=DiseaseDef.GetById(pregDisDefNumCur);
 			if(disdefCur.ICD9Code!="") {
-				ICD9 i9Preg=ICD9s.GetByCode(disdefCur.ICD9Code);
+				ICD9 i9Preg=ICD9.GetByCode(disdefCur.ICD9Code);
 				if(i9Preg!=null) {
-					pregCode=i9Preg.ICD9Code;
+					pregCode=i9Preg.Code;
 					descript=i9Preg.Description;
 				}
 			}
-			else if(disdefCur.Icd10Code!="") {
-				Icd10 i10Preg=Icd10s.GetByCode(disdefCur.Icd10Code);
+			else if(disdefCur.ICD10Code!="") {
+				ICD10 i10Preg=ICD10.GetByCode(disdefCur.ICD10Code);
 				if(i10Preg!=null) {
-					pregCode=i10Preg.Icd10Code;
+					pregCode=i10Preg.Code;
 					descript=i10Preg.Description;
 				}
 			}
@@ -265,7 +265,7 @@ namespace OpenDental {
 				}
 			}
 			if(pregCode=="none" || pregCode=="") {
-				descript=disdefCur.DiseaseName;
+				descript=disdefCur.Name;
 			}
 			#endregion
 			textPregCode.Text=pregCode;
@@ -986,13 +986,13 @@ namespace OpenDental {
 						}
 						break;
 					case "ICD9CM":
-						ICD9 i9Cur=ICD9s.GetByCode(listIntervention[i].CodeValue);
+						ICD9 i9Cur=ICD9.GetByCode(listIntervention[i].CodeValue);
 						if(i9Cur!=null) {
 							descript=i9Cur.Description;
 						}
 						break;
 					case "ICD10CM":
-						Icd10 i10Cur=Icd10s.GetByCode(listIntervention[i].CodeValue);
+						ICD10 i10Cur=ICD10.GetByCode(listIntervention[i].CodeValue);
 						if(i10Cur!=null) {
 							descript=i10Cur.Description;
 						}
@@ -1019,7 +1019,7 @@ namespace OpenDental {
 			for(int i=0;i<listMedPats.Count;i++) {
 				row=new ODGridRow();
 				row.Cells.Add(listMedPats[i].DateStart.ToShortDateString());
-				if(listMedPats[i].RxCui==314153 || listMedPats[i].RxCui==692876) {
+				if(listMedPats[i].RxCui== "314153" || listMedPats[i].RxCui== "692876") {
 					row.Cells.Add(InterventionCodeSet.AboveNormalWeight.ToString()+" Medication");
 				}
 				else {
@@ -1144,7 +1144,7 @@ Do you want to remove the pregnancy diagnosis?"))
 					checkPregnant.Checked=false;
 					return;
 				}
-				if(DiseaseDefs.GetItem(disCur.DiseaseDefNum)==null) {
+				if(DiseaseDef.GetById(disCur.DiseaseDefNum)==null) {
 					MessageBox.Show(Lan.g(this,"Invalid disease.  Please run database maintenance method")+" "
 						+nameof(DatabaseMaintenances.DiseaseWithInvalidDiseaseDef));
 					return;

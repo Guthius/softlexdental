@@ -13,16 +13,16 @@ namespace OpenDental {
 		}
 
 		private void FormTaskPreferences_Load(object sender,EventArgs e) {
-			checkShowLegacyRepeatingTasks.Checked=Preferences.GetBool(PrefName.TasksUseRepeating);
-			checkTaskListAlwaysShow.Checked=Preferences.GetBool(PrefName.TaskListAlwaysShowsAtBottom);
+			checkShowLegacyRepeatingTasks.Checked=Preference.GetBool(PreferenceName.TasksUseRepeating);
+			checkTaskListAlwaysShow.Checked=Preference.GetBool(PreferenceName.TaskListAlwaysShowsAtBottom);
 			if(checkTaskListAlwaysShow.Checked) {
 				groupBoxComputerDefaults.Enabled=true;
 			}
 			else {
 				groupBoxComputerDefaults.Enabled=false;
 			}
-			checkTasksNewTrackedByUser.Checked=Preferences.GetBool(PrefName.TasksNewTrackedByUser);
-			checkShowOpenTickets.Checked=Preferences.GetBool(PrefName.TasksShowOpenTickets);
+			checkTasksNewTrackedByUser.Checked=Preference.GetBool(PreferenceName.TasksNewTrackedByUser);
+			checkShowOpenTickets.Checked=Preference.GetBool(PreferenceName.TasksShowOpenTickets);
 			checkBoxTaskKeepListHidden.Checked=ComputerPrefs.LocalComputer.TaskKeepListHidden;
 			if(ComputerPrefs.LocalComputer.TaskDock==0) {
 				radioBottom.Checked=true;
@@ -32,20 +32,20 @@ namespace OpenDental {
 			}
 			validNumX.Text=ComputerPrefs.LocalComputer.TaskX.ToString();
 			validNumY.Text=ComputerPrefs.LocalComputer.TaskY.ToString();
-			checkTaskSortApptDateTime.Checked=Preferences.GetBool(PrefName.TaskSortApptDateTime);
+			checkTaskSortApptDateTime.Checked=Preference.GetBool(PreferenceName.TaskSortApptDateTime);
 			FillComboGlobalFilter();
 		}
 
 		///<summary>Fills the Global Task filter combobox with options.  Only visible if Clinics are enabled, or if previous selection no is longer 
 		///available, example: Clinics have been turned off, Clinic filter no longer available.</summary>
 		private void FillComboGlobalFilter() {
-			GlobalTaskFilterType globalPref=(GlobalTaskFilterType)Preferences.GetInt(PrefName.TasksGlobalFilterType);
+			GlobalTaskFilterType globalPref=(GlobalTaskFilterType)Preference.GetInt(PreferenceName.TasksGlobalFilterType);
 			comboGlobalFilter.Items.Add(new ODBoxItem<GlobalTaskFilterType>(Lan.g(this,GlobalTaskFilterType.Disabled.GetDescription()),GlobalTaskFilterType.Disabled));
 			comboGlobalFilter.Items.Add(new ODBoxItem<GlobalTaskFilterType>(Lan.g(this,GlobalTaskFilterType.None.GetDescription()),GlobalTaskFilterType.None));
 			if(Preferences.HasClinicsEnabled) {
 				SetControlsVisible(true,labelGlobalFilter,comboGlobalFilter);
 				comboGlobalFilter.Items.Add(new ODBoxItem<GlobalTaskFilterType>(Lan.g(this,GlobalTaskFilterType.Clinic.GetDescription()),GlobalTaskFilterType.Clinic));
-				if(Defs.GetDefsForCategory(DefCat.Regions).Count>0) {
+				if(Definition.GetByCategory(DefinitionCategory.Regions).Count>0) {
 					comboGlobalFilter.Items.Add(new ODBoxItem<GlobalTaskFilterType>(Lan.g(this,GlobalTaskFilterType.Region.GetDescription()),GlobalTaskFilterType.Region));
 				}
 			}
@@ -110,12 +110,12 @@ namespace OpenDental {
 				return;
 			}
 			bool changed = false;
-			if(Prefs.UpdateBool(PrefName.TaskListAlwaysShowsAtBottom,checkTaskListAlwaysShow.Checked)
-				| Prefs.UpdateBool(PrefName.TasksUseRepeating,checkShowLegacyRepeatingTasks.Checked)
-				| Prefs.UpdateBool(PrefName.TasksNewTrackedByUser,checkTasksNewTrackedByUser.Checked)
-				| Prefs.UpdateBool(PrefName.TasksShowOpenTickets,checkShowOpenTickets.Checked)
-				| Prefs.UpdateBool(PrefName.TaskSortApptDateTime,checkTaskSortApptDateTime.Checked)
-				| Prefs.UpdateInt(PrefName.TasksGlobalFilterType,(int)comboGlobalFilter.SelectedTag<GlobalTaskFilterType>())
+			if(Preference.Update(PreferenceName.TaskListAlwaysShowsAtBottom,checkTaskListAlwaysShow.Checked)
+				| Preference.Update(PreferenceName.TasksUseRepeating,checkShowLegacyRepeatingTasks.Checked)
+				| Preference.Update(PreferenceName.TasksNewTrackedByUser,checkTasksNewTrackedByUser.Checked)
+				| Preference.Update(PreferenceName.TasksShowOpenTickets,checkShowOpenTickets.Checked)
+				| Preference.Update(PreferenceName.TaskSortApptDateTime,checkTaskSortApptDateTime.Checked)
+				| Preference.Update(PreferenceName.TasksGlobalFilterType,(int)comboGlobalFilter.SelectedTag<GlobalTaskFilterType>())
 				) {
 				changed=true;
 			}

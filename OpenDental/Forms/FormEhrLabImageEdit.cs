@@ -62,7 +62,7 @@ namespace OpenDental {
 				row=new ODGridRow();
 				row.Cells.Add(isAttached?"X":"");
 				row.Cells.Add(_listPatientDocuments[i].DateCreated.ToString());
-				row.Cells.Add(Defs.GetName(DefCat.ImageCats,_listPatientDocuments[i].DocCategory));			  
+				row.Cells.Add(Defs.GetName(DefinitionCategory.ImageCats,_listPatientDocuments[i].DocCategory));			  
 				row.Cells.Add(_listPatientDocuments[i].Description);
 				row.Tag=_listPatientDocuments[i];
 				gridMain.Rows.Add(row);

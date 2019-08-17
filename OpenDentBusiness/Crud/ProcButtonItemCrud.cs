@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ProcButtonItem into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(ProcButtonItem procButtonItem,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO procbuttonitem (";
 			if(!useExistingPK && isRandomKeys) {
 				procButtonItem.ProcButtonItemNum=ReplicationServers.GetKeyNoCache("procbuttonitem","ProcButtonItemNum");

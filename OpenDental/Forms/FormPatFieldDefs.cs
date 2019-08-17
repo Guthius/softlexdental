@@ -215,7 +215,7 @@ namespace OpenDental{
 
 		private void FormPatFieldDefs_Load(object sender, System.EventArgs e) {
 			_listPatFieldDefs=PatFieldDefs.GetDeepCopy();
-			checkDisplayRenamed.Checked=Preferences.GetBool(PrefName.DisplayRenamedPatFields);
+			checkDisplayRenamed.Checked=Preference.GetBool(PreferenceName.DisplayRenamedPatFields);
 			if(_isSelectionMode) {
 				_listPatFieldDefs=_listPatFieldDefs.FindAll(x => !x.IsHidden);
 				butAdd.Visible=false;
@@ -341,7 +341,7 @@ namespace OpenDental{
 		}
 
 		private void butClose_Click(object sender, System.EventArgs e) {
-			if(Prefs.UpdateBool(PrefName.DisplayRenamedPatFields,checkDisplayRenamed.Checked)) {
+			if(Preference.Update(PreferenceName.DisplayRenamedPatFields,checkDisplayRenamed.Checked)) {
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			Close();

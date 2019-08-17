@@ -715,7 +715,7 @@ namespace OpenDental{
 			if(!IsStartingUp && !Security.IsAuthorized(Permissions.Setup)) {//Verify user has Setup permission to change paths, after user has logged in.
 				butOK.Enabled=false;
 			}
-			textDocPath.Text=Preferences.GetString(PrefName.DocPath);
+			textDocPath.Text=Preference.GetString(PreferenceName.DocPath);
 			//ComputerPref compPref=ComputerPrefs.GetForLocalComputer();
 			if(ReplicationServers.Server_id==0) {
 				labelServerPath.Visible=false;
@@ -727,8 +727,8 @@ namespace OpenDental{
 				textServerPath.Text=ReplicationServers.GetAtoZpath();
 			}
 			textLocalPath.Text=ImageStore.LocalAtoZpath;//This was set on startup.  //compPref.AtoZpath;
-			textExportPath.Text=Preferences.GetString(PrefName.ExportPath);
-			textLetterMergePath.Text=Preferences.GetString(PrefName.LetterMergePath);
+			textExportPath.Text=Preference.GetString(PreferenceName.ExportPath);
+			textLetterMergePath.Text=Preference.GetString(PreferenceName.LetterMergePath);
 			SetRadioButtonChecked(Preferences.AtoZfolderUsed);
 			// The opt***_checked event will enable/disable the appropriate UI elements.
 			checkMultiplePaths.Checked=(textDocPath.Text.LastIndexOf(';')!=-1);	
@@ -1041,19 +1041,19 @@ namespace OpenDental{
 			if(radioUseFolder.Checked){
 				if(textLocalPath.Text!="") {
 					if(ImageStore.GetValidPathFromString(textLocalPath.Text)==null) {
-						MsgBox.Show(this,"The path override for this computer is invalid.  The folder must exist and must contain all 26 A through Z folders.");
+						MsgBox.Show(this,"The path override for this computer is invalid. The folder must exist and must contain all 26 A through Z folders.");
 						return;
 					}
 				}
 				else if(textServerPath.Text!="") {
 					if(ImageStore.GetValidPathFromString(textServerPath.Text)==null) {
-						MsgBox.Show(this,"The path override for this server is invalid.  The folder must exist and must contain all 26 A through Z folders.");
+						MsgBox.Show(this,"The path override for this server is invalid. The folder must exist and must contain all 26 A through Z folders.");
 						return;
 					}
 				}
 				else {
 					if(ImageStore.GetValidPathFromString(textDocPath.Text)==null) {
-						MsgBox.Show(this,"The path is invalid.  The folder must exist and must contain all 26 A through Z folders.");
+						MsgBox.Show(this,"The path is invalid. The folder must exist and must contain all 26 A through Z folders.");
 						return;
 					}
 				}				
@@ -1065,13 +1065,16 @@ namespace OpenDental{
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
-			if(radioDropboxStorage.Checked && !OpenDentalCloud.Dropbox.FileExists(textAccessToken.Text,
-				ODFileUtils.CombinePaths(textAtoZPath.Text,"A",'/'))) 
-			{
-				Cursor=Cursors.Default;
-				MsgBox.Show(this,"The Dropbox folder cannot be accessed or does not exist. The folder must contain all 26 A through Z folders.");
-				return;
-			}
+
+            // TODO: Fix me
+
+			//if(radioDropboxStorage.Checked && !OpenDentalCloud.Dropbox.FileExists(textAccessToken.Text,
+			//	ODFileUtils.CombinePaths(textAtoZPath.Text,"A",'/'))) 
+			//{
+			//	Cursor=Cursors.Default;
+			//	MsgBox.Show(this,"The Dropbox folder cannot be accessed or does not exist. The folder must contain all 26 A through Z folders.");
+			//	return;
+			//}
 			Cursor=Cursors.Default;
 			if(radioDropboxStorage.Checked && ProgramProperties.UpdateProgramPropertyWithValue(_ppDropboxPathAtoZ,textAtoZPath.Text)) {
 				DataValid.SetInvalid(InvalidType.Programs);
@@ -1079,15 +1082,17 @@ namespace OpenDental{
 			Cursor=Cursors.WaitCursor;
 			if(radioSftp.Checked) { 
 				try {
-					if(!OpenDentalCloud.Sftp.FileExists(textSftpHostname.Text,textSftpUsername.Text,textSftpPassword.Text,
-						ODFileUtils.CombinePaths(textSftpAtoZ.Text,"A",'/'))) 
-					{
-						Cursor=Cursors.Default;
-						MsgBox.Show(this,"The SFTP folder cannot be accessed or does not exist. The folder must contain all 26 A through Z folders.");
-						return;
-					}
-				}
-				catch(Exception ex) {
+                    // TODO: Fix me
+
+                    //if(!OpenDentalCloud.Sftp.FileExists(textSftpHostname.Text,textSftpUsername.Text,textSftpPassword.Text,
+                    //	ODFileUtils.CombinePaths(textSftpAtoZ.Text,"A",'/'))) 
+                    //{
+                    //	Cursor=Cursors.Default;
+                    //	MsgBox.Show(this,"The SFTP folder cannot be accessed or does not exist. The folder must contain all 26 A through Z folders.");
+                    //	return;
+                    //}
+                }
+                catch (Exception ex) {
 					Cursor=Cursors.Default;
 					MessageBox.Show(Lan.g(this,"Error connecting to SFTP host: ")+ex.Message);
 					return;
@@ -1108,10 +1113,10 @@ namespace OpenDental{
 			{
 				DataValid.SetInvalid(InvalidType.Programs);
 			}
-			if(	Prefs.UpdateInt(PrefName.AtoZfolderUsed,(int)_storageType)
-				| Prefs.UpdateString(PrefName.DocPath,textDocPath.Text)
-				| Prefs.UpdateString(PrefName.ExportPath,textExportPath.Text)
-				| Prefs.UpdateString(PrefName.LetterMergePath,textLetterMergePath.Text))
+			if(	Preference.Update(PreferenceName.AtoZfolderUsed,(int)_storageType)
+				| Preference.Update(PreferenceName.DocPath,textDocPath.Text)
+				| Preference.Update(PreferenceName.ExportPath,textExportPath.Text)
+				| Preference.Update(PreferenceName.LetterMergePath,textLetterMergePath.Text))
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}

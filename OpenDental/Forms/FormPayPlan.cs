@@ -120,7 +120,7 @@ namespace OpenDental{
 		private FormPaymentPlanOptions FormPayPlanOpts;
 		///<summary>Cached list of PayPlanCharges.</summary>
 		private List<PayPlanCharge> _listPayPlanCharges;
-		private Def[] _arrayAccountColors;//Putting this here so we do one DB call for colors instead of many.  They'll never change.
+		private Definition[] _arrayAccountColors;//Putting this here so we do one DB call for colors instead of many.  They'll never change.
 		private FormPayPlanRecalculate _formPayPlanRecalculate;
 		private List<PaySplit> _listPaySplits;
 		private DataTable _bundledClaimProcs;
@@ -1226,12 +1226,12 @@ namespace OpenDental{
 		#endregion
 
 		private void FormPayPlan_Load(object sender,System.EventArgs e) {
-			List<Def> listCats=Defs.GetDefsForCategory(DefCat.PayPlanCategories,true);
+			List<Definition> listCats=Definition.GetByCategory(DefinitionCategory.PayPlanCategories);
 			comboCategory.Items.Add(new ODBoxItem<long>("None",0));
-			foreach(Def category in listCats) {
-				ODBoxItem<long> comboItem=new ODBoxItem<long>(category.ItemName,category.DefNum);
+			foreach(Definition category in listCats) {
+				ODBoxItem<long> comboItem=new ODBoxItem<long>(category.Description,category.Id);
 				comboCategory.Items.Add(comboItem);
-				if(category.DefNum==_payPlanCur.PlanCategory) {
+				if(category.Id==_payPlanCur.PlanCategory) {
 					comboCategory.SelectedItem=comboItem;
 				}
 			}
@@ -1313,7 +1313,7 @@ namespace OpenDental{
 				textDate.Location=new Point(textDate.Location.X+22,textDate.Location.Y);//line up with text boxes below
 				labelDateAgreement.Location=new Point(labelDateAgreement.Location.X+22,labelDateAgreement.Location.Y);
 			}
-			_arrayAccountColors=Defs.GetDefsForCategory(DefCat.AccountColors,true).ToArray();
+			_arrayAccountColors=Definition.GetByCategory(DefinitionCategory.AccountColors).ToArray();
 			//If the amort schedule has been created and the first payment date has passed, don't allow user to change the first payment date or downpayment
 			//until the schedule is cleared.
 			if(!IsNew && PIn.Date(textDateFirstPay.Text)<DateTime.Today) {
@@ -1330,7 +1330,7 @@ namespace OpenDental{
 				butClosePlan.Enabled=false;
 				labelClosed.Visible=true;
 			}
-			if(Preferences.GetBool(PrefName.PayPlansUseSheets)) {
+			if(Preference.GetBool(PreferenceName.PayPlansUseSheets)) {
 				Sheet sheetPP=null;
 				sheetPP=PayPlanToSheet(_payPlanCur);
 				//check to see if sig box is on the sheet
@@ -1342,7 +1342,7 @@ namespace OpenDental{
 					}
 				}
 			}
-			checkExcludePast.Checked=Preferences.GetBool(PrefName.PayPlansExcludePastActivity);
+			checkExcludePast.Checked=Preference.GetBool(PreferenceName.PayPlansExcludePastActivity);
 			FillCharges();
 			if(_payPlanCur.Signature!="" && _payPlanCur.Signature!=null) {
 				//check to see if sheet is signed before showing
@@ -1570,7 +1570,7 @@ namespace OpenDental{
 				row.Cells.Add("");//interest
 				row.Cells.Add("");//due
 				row.Cells.Add("");//payment
-				row.ColorText=_arrayAccountColors[1].ItemColor;//1 => Adjustment Account Color def.
+				row.ColorText=_arrayAccountColors[1].Color;//1 => Adjustment Account Color def.
 				row.Cells.Add((payPlanCharge.Principal).ToString("n")); //adjustment
 			}
 			else {//regular charge
@@ -1587,7 +1587,7 @@ namespace OpenDental{
 		}
 
 		private ODGridRow CreateRowForPaySplit(DataRow rowBundlePayment,PaySplit paySplit) {
-			string descript=Defs.GetName(DefCat.PaymentTypes,PIn.Long(rowBundlePayment["PayType"].ToString()));
+			string descript=Defs.GetName(DefinitionCategory.PaymentTypes,PIn.Long(rowBundlePayment["PayType"].ToString()));
 			if(rowBundlePayment["CheckNum"].ToString()!="") {
 				descript+=" #"+rowBundlePayment["CheckNum"].ToString();
 			}
@@ -1606,12 +1606,12 @@ namespace OpenDental{
 			row.Cells.Add("");//7 Adjustment
 			row.Cells.Add("");//8 Balance (filled later)
 			row.Tag=paySplit;
-			row.ColorText=_arrayAccountColors[3].ItemColor;//Setup | Definitions | Account Colors | Payment;
+			row.ColorText=_arrayAccountColors[3].Color;//Setup | Definitions | Account Colors | Payment;
 			return row;
 		}
 
 		private ODGridRow CreateRowForClaimProcs(DataRow rowBundleClaimProc) {//Either a claimpayment or a bundle of claimprocs with no claimpayment that were on the same date.
-			string descript=Defs.GetName(DefCat.InsurancePaymentType,PIn.Long(rowBundleClaimProc["PayType"].ToString()));
+			string descript=Defs.GetName(DefinitionCategory.InsurancePaymentType,PIn.Long(rowBundleClaimProc["PayType"].ToString()));
 			if(rowBundleClaimProc["CheckNum"].ToString()!="") {
 				descript+=" #"+rowBundleClaimProc["CheckNum"];
 			}
@@ -1637,7 +1637,7 @@ namespace OpenDental{
 			row.Cells.Add("");//7 Adjustment
 			row.Cells.Add("");//8 Balance (filled later)
 			row.Tag=rowBundleClaimProc;
-			row.ColorText=_arrayAccountColors[7].ItemColor;//Setup | Definitions | Account Colors | Insurance Payment
+			row.ColorText=_arrayAccountColors[7].Color;//Setup | Definitions | Account Colors | Insurance Payment
 			return row;
 		}
 
@@ -1938,7 +1938,7 @@ namespace OpenDental{
 				return;
 			}
 			SaveData();
-			if(Preferences.GetBool(PrefName.PayPlansUseSheets)) {
+			if(Preference.GetBool(PreferenceName.PayPlansUseSheets)) {
 				Sheet sheetPP=null;
 				sheetPP=PayPlanToSheet(_payPlanCur);
 				SheetPrinting.Print(sheetPP);
@@ -1950,7 +1950,7 @@ namespace OpenDental{
 				Font fontSubTitle=new Font("Tahoma",10,FontStyle.Bold);
 				ReportComplex report=new ReportComplex(false,false);
 				report.AddTitle("Title",Lan.g(this,"Payment Plan Terms"),fontTitle);
-				report.AddSubTitle("PracTitle",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
+				report.AddSubTitle("PracTitle",Preference.GetString(PreferenceName.PracticeTitle),fontSubTitle);
 				report.AddSubTitle("Date SubTitle",DateTime.Today.ToShortDateString(),fontSubTitle);
 				AreaSectionType sectType=AreaSectionType.ReportHeader;
 				Section section=report.Sections[AreaSectionType.ReportHeader];
@@ -2124,7 +2124,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"A provider must be selected first.");
 				return true;
 			}
-			if(PIn.Date(textDate.Text).Date > DateTime.Today.Date && !Preferences.GetBool(PrefName.FutureTransDatesAllowed)) {
+			if(PIn.Date(textDate.Text).Date > DateTime.Today.Date && !Preference.GetBool(PreferenceName.FutureTransDatesAllowed)) {
 				MsgBox.Show(this,"Payment plan date cannot be set for the future.");
 				return true;
 			}
@@ -2441,7 +2441,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Cannot add adjustments to closed payment plans.");
 				return;
 			}
-			if(Preferences.GetInt(PrefName.PayPlanAdjType)==0) {
+			if(Preference.GetInt(PreferenceName.PayPlanAdjType)==0) {
 				MsgBox.Show(this,"Adjustments cannot be created for payment plans until a default adjustment type has been selected in account preferences.");
 				return;
 			}
@@ -2485,8 +2485,8 @@ namespace OpenDental{
 				adj.AdjNote=Lan.g(this,"Payment plan adjustment");
 				adj.SecUserNumEntry=Security.CurUser.UserNum;
 				adj.SecDateTEdit=DateTime.Now;
-				if(Defs.GetDef(DefCat.AdjTypes,Preferences.GetLong(PrefName.PayPlanAdjType))!=null) {
-					adj.AdjType=Defs.GetDef(DefCat.AdjTypes,Preferences.GetLong(PrefName.PayPlanAdjType)).DefNum;
+				if(Defs.GetDef(DefinitionCategory.AdjTypes,Preference.GetLong(PreferenceName.PayPlanAdjType))!=null) {
+					adj.AdjType=Defs.GetDef(DefinitionCategory.AdjTypes,Preference.GetLong(PreferenceName.PayPlanAdjType)).Id;
 				}
 				_listAdjustments.Add(adj);
 			}
@@ -2661,7 +2661,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"An insurance plan must be selected.");
 				return;
 			}
-			if(Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
+			if(Preference.GetInt(PreferenceName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
 				//If no procs attached and not an adjustment with a negative amount
 				if(_listPayPlanCharges.Where(x=> x.ChargeType==PayPlanChargeType.Credit).Any(x => x.ProcNum==0 && !x.IsCreditAdjustment)) {
 					MsgBox.Show(this,"All treatment credits (excluding adjustments) must have a procedure.");
@@ -2675,7 +2675,7 @@ namespace OpenDental{
 				}
 			}
 			else if(!IsInsPayPlan && PIn.Double(textTotalTxAmt.Text)!=PIn.Double(textAmount.Text) 
-				&& Preferences.GetInt(PrefName.PayPlansVersion)!=(int)PayPlanVersions.NoCharges) //Credits do not matter in ppv4
+				&& Preference.GetInt(PreferenceName.PayPlansVersion)!=(int)PayPlanVersions.NoCharges) //Credits do not matter in ppv4
 			{
 				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Total Tx Amt and Total Amount do not match, continue?")) {
 					return;

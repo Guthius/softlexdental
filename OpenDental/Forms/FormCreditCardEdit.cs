@@ -450,7 +450,7 @@ namespace OpenDental {
 				}
 				catch(Exception ex) {
 					if(MessageBox.Show(Lans.g(this,"Error when deleting from PaySimple:")+"\r\n"+ex.Message+"\r\n\r\n"
-						+Lans.g(this,"Do you still want to delete the card from ")+Preferences.GetString(PrefName.SoftwareName)+"?",
+						+Lans.g(this,"Do you still want to delete the card from ")+Preference.GetString(PreferenceName.SoftwareName)+"?",
 						"",MessageBoxButtons.YesNo)==DialogResult.No) 
 					{
 						return false;

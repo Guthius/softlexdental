@@ -106,11 +106,11 @@ namespace OpenDentBusiness{
 		///This is necessary because the resource for the internal sheet likely does not contain a valid Def primary key.</summary>
 		private static void SetPatImageFieldNames(SheetDef sheetDef) {
 			//We need to figure out which Image Category should be used for any PatImage SheetFieldDefs.
-			List<Def> listImageDefs=Defs.GetDefsForCategory(DefCat.ImageCats,true);
+			List<Definition> listImageDefs=Definition.GetByCategory(DefinitionCategory.ImageCats);
 			long defNum=0;
 			//A user can define a specific image category as being the Patient Picture definition, see FormDefEditImages.butOK_Click().
 			//SheetFieldDef.FieldName corresponds to Def.DefNum for a PatImage type SheetFieldDef.
-			Def def=listImageDefs.FirstOrDefault(x => x.ItemValue.Contains("P"));
+			Definition def=listImageDefs.FirstOrDefault(x => x.Value.Contains("P"));
 			if(def==null) {
 				def=listImageDefs.FirstOrDefault();//Default to the first image category definition if one isn't defined as the Patient Image definition.
 			}
@@ -118,7 +118,7 @@ namespace OpenDentBusiness{
 				defNum=0;
 			}
 			else {
-				defNum=def.DefNum;
+				defNum=def.Id;
 			}
 			foreach(SheetFieldDef sheetFieldDef in sheetDef.SheetFieldDefs) {
 				if(sheetFieldDef.FieldType!=SheetFieldType.PatImage) {

@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one RxNorm into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(RxNorm rxNorm,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO rxnorm (";
 			if(!useExistingPK && isRandomKeys) {
 				rxNorm.RxNormNum=ReplicationServers.GetKeyNoCache("rxnorm","RxNormNum");

@@ -46,11 +46,13 @@ namespace OpenDental {
 					files=Directory.GetFiles(SheetUtil.GetImagePath());
 				}
 				else {//Cloud
-					//Get file list
-					OpenDentalCloud.Core.TaskStateListFolders state=CloudStorage.ListFolderContents(SheetUtil.GetImagePath());
-					files=state.ListFolderPathsDisplay.ToArray();
-				}
-				for(int i=0;i<files.Length;i++) {
+                      // TODO: Fix me
+
+                      //Get file list
+                      // OpenDentalCloud.Core.TaskStateListFolders state=CloudStorage.ListFolderContents(SheetUtil.GetImagePath());
+                      // files=state.ListFolderPathsDisplay.ToArray();
+                }
+                for (int i=0;i<files.Length;i++) {
 					//remove some common offending file types (non image files)
 					if(files[i].EndsWith("db")
 					  ||files[i].EndsWith("doc")
@@ -88,27 +90,28 @@ namespace OpenDental {
 				}
 				File.Copy(dlg.FileName,newName);
 			}
-			else if(CloudStorage.IsCloudStorage) {
-				if(CloudStorage.FileExists(ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),Path.GetFileName(dlg.FileName)))) {
-					MsgBox.Show(this,"A file of that name already exists in SheetImages.  Please rename the file before importing.");
-					return;
-				}
-				FormProgress FormP=new FormProgress();
-				FormP.DisplayText=Lan.g(CloudStorage.LanThis,"Uploading...");
-				FormP.NumberFormat="F";
-				FormP.NumberMultiplication=1;
-				FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-				FormP.TickMS=1000;
-				OpenDentalCloud.Core.TaskStateUpload state=CloudStorage.UploadAsync(SheetUtil.GetImagePath(),Path.GetFileName(dlg.FileName)
-					,File.ReadAllBytes(dlg.FileName)
-					,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-				if(FormP.ShowDialog()==DialogResult.Cancel) {
-					state.DoCancel=true;
-					return;
-				}
-				newName=Path.GetFileName(dlg.FileName);
-				//It would be nice to save the image somewhere so that we don't have to download it again.
-			}			
+			else if(CloudStorage.IsCloudStorage)
+            { // TODO: Fix me
+              //	if(CloudStorage.FileExists(ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),Path.GetFileName(dlg.FileName)))) {
+              //		MsgBox.Show(this,"A file of that name already exists in SheetImages.  Please rename the file before importing.");
+              //		return;
+              //	}
+              //	FormProgress FormP=new FormProgress();
+              //	FormP.DisplayText=Lan.g(CloudStorage.LanThis,"Uploading...");
+              //	FormP.NumberFormat="F";
+              //	FormP.NumberMultiplication=1;
+              //	FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
+              //	FormP.TickMS=1000;
+              //	OpenDentalCloud.Core.TaskStateUpload state=CloudStorage.UploadAsync(SheetUtil.GetImagePath(),Path.GetFileName(dlg.FileName)
+              //		,File.ReadAllBytes(dlg.FileName)
+              //		,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
+              //	if(FormP.ShowDialog()==DialogResult.Cancel) {
+              //		state.DoCancel=true;
+              //		return;
+              //	}
+              //	newName=Path.GetFileName(dlg.FileName);
+              //	//It would be nice to save the image somewhere so that we don't have to download it again.
+            }			
 			FillCombo();
 			for(int i=0;i<comboFieldName.Items.Count;i++){
 				if(comboFieldName.Items[i].ToString()==Path.GetFileName(newName)){
@@ -155,33 +158,34 @@ namespace OpenDental {
 				pictureBox.Image=OpenDentBusiness.Properties.Resources.Patient_Info;
 				textFullPath.Text="Patient Info.gif (internal)";
 			}
-			else if(CloudStorage.IsCloudStorage) {
-				if(comboFieldName.Text==SheetFieldDefCur.FieldName && SheetFieldDefCur.ImageField != null) {
-					pictureBox.Image=SheetFieldDefCur.ImageField;
-				}
-				else {
-					FormProgress FormP=new FormProgress();
-					FormP.DisplayText=Lan.g(CloudStorage.LanThis,"Downloading...");
-					FormP.NumberFormat="F";
-					FormP.NumberMultiplication=1;
-					FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-					FormP.TickMS=1000;
-					OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(SheetUtil.GetImagePath(),comboFieldName.Text,
-						new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-					if(FormP.ShowDialog()==DialogResult.Cancel) {
-						state.DoCancel=true;
-						return;
-					}
-					if(state==null || state.FileContent==null) {
-						pictureBox.Image=null;
-					}
-					else {
-						using(MemoryStream stream=new MemoryStream(state.FileContent)) {
-							pictureBox.Image=new Bitmap(Image.FromStream(stream));
-						}
-					}
-				}
-			} 
+			else if(CloudStorage.IsCloudStorage)
+            { // TODO: Fix me
+              //	if(comboFieldName.Text==SheetFieldDefCur.FieldName && SheetFieldDefCur.ImageField != null) {
+              //		pictureBox.Image=SheetFieldDefCur.ImageField;
+              //	}
+              //	else {
+              //		FormProgress FormP=new FormProgress();
+              //		FormP.DisplayText=Lan.g(CloudStorage.LanThis,"Downloading...");
+              //		FormP.NumberFormat="F";
+              //		FormP.NumberMultiplication=1;
+              //		FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
+              //		FormP.TickMS=1000;
+              //		OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(SheetUtil.GetImagePath(),comboFieldName.Text,
+              //			new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
+              //		if(FormP.ShowDialog()==DialogResult.Cancel) {
+              //			state.DoCancel=true;
+              //			return;
+              //		}
+              //		if(state==null || state.FileContent==null) {
+              //			pictureBox.Image=null;
+              //		}
+              //		else {
+              //			using(MemoryStream stream=new MemoryStream(state.FileContent)) {
+              //				pictureBox.Image=new Bitmap(Image.FromStream(stream));
+              //			}
+              //		}
+              //	}
+            } 
 			else{
 				pictureBox.Image=null;
 			}

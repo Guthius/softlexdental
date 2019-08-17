@@ -16,7 +16,7 @@ namespace OpenDental
         UserOdPref userOdPrefClearNote;
         UserOdPref userOdPrefEndDate;
         UserOdPref userOdPrefUpdateDateTimeNewPat;
-        List<Def> commlogTypeDefsList;
+        List<Definition> commlogTypeDefsList;
 
         public Commlog CommlogCur;
 
@@ -172,13 +172,13 @@ namespace OpenDental
         /// The list of non-hidden CommLogTypes defs.  
         /// This property is mainly used as an example to show how we might use business logic within models.
         /// </summary>
-        public List<Def> ListCommlogTypeDefs
+        public List<Definition> ListCommlogTypeDefs
         {
             get
             {
                 if (commlogTypeDefsList == null)
                 {
-                    commlogTypeDefsList = Defs.GetDefsForCategory(DefCat.CommLogTypes, true);
+                    commlogTypeDefsList = Definition.GetByCategory(DefinitionCategory.CommLogTypes);;
                 }
                 return commlogTypeDefsList;
             }
@@ -222,8 +222,8 @@ namespace OpenDental
             // There will usually be a commtype set before this dialog is opened
             for (int i = 0; i < ListCommlogTypeDefs.Count; i++)
             {
-                typeListBox.Items.Add(ListCommlogTypeDefs[i].ItemName);
-                if (ListCommlogTypeDefs[i].DefNum == CommlogCur.CommType)
+                typeListBox.Items.Add(ListCommlogTypeDefs[i].Description);
+                if (ListCommlogTypeDefs[i].Id == CommlogCur.CommType)
                 {
                     typeListBox.SelectedIndex = i;
                 }
@@ -256,7 +256,7 @@ namespace OpenDental
                 deleteButton.Visible = false;
             }
 
-            if (IsNew && Preferences.GetBool(PrefName.CommLogAutoSave))
+            if (IsNew && Preference.GetBool(PreferenceName.CommLogAutoSave))
             {
                 autoSaveTimer.Start();
             }

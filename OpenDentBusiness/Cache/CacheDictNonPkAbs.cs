@@ -13,7 +13,7 @@ namespace OpenDentBusiness {
 	///It will be more wasteful in the sense that it will store two deep copies of the entire cache instead of just one.
 	///It will be less trustworthy because the dictionary has the potential to be missing items that are present within the list.
 	///This class was created in order to preserve old behavior for several of our caches that don't care if the dict ismissing data at times.</summary>
-	public abstract class CacheDictNonPkAbs<T, KEY_TYPE, VALUE_TYPE> : CacheDictAbs<T,KEY_TYPE,VALUE_TYPE> where T : ODTable {
+	public abstract class CacheDictNonPkAbs<T, KEY_TYPE, VALUE_TYPE> : CacheDictAbs<T,KEY_TYPE,VALUE_TYPE> {
 		protected abstract DataTable ListToTable(List<T> listAllItems);
 		///<summary>A lock object that allows multiple threads to obtain a read lock but allows only one thread to obtain a write lock.</summary>
 		private ReaderWriterLockSlim _lock=new ReaderWriterLockSlim();

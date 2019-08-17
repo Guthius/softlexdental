@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using OpenDental.UI;
+using System.Linq;
 
 namespace OpenDental {
 	public partial class FormSnomeds:ODForm {
@@ -154,11 +155,11 @@ namespace OpenDental {
 			}
 			int changeCount=0;
 			Dictionary<string,string> dictionaryIcd9ToSnomed = Snomeds.GetICD9toSNOMEDDictionary();
-			DiseaseDefs.RefreshCache();
-			List<DiseaseDef> listDiseaseDefs=DiseaseDefs.GetWhere(x => x.SnomedCode=="" && dictionaryIcd9ToSnomed.ContainsKey(x.ICD9Code));
+            CacheManager.Invalidate<DiseaseDef>();
+			var listDiseaseDefs=DiseaseDef.All().Where(x => x.SnomedCode=="" && dictionaryIcd9ToSnomed.ContainsKey(x.ICD9Code));
 			foreach(DiseaseDef def in listDiseaseDefs) {
 				def.SnomedCode=dictionaryIcd9ToSnomed[def.ICD9Code];
-				DiseaseDefs.Update(def);
+				DiseaseDef.Update(def);
 				changeCount++;
 			}
 			MessageBox.Show(Lan.g(this,"SNOMED CT codes added: ")+changeCount);

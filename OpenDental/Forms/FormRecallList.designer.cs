@@ -546,7 +546,7 @@
 			this.comboProv.IsUsingProvAbbr = false;
 			this.comboProv.Location = new System.Drawing.Point(437, 11);
 			this.comboProv.Name = "comboProv";
-			this.comboProv.PrefNameBinding = OpenDentBusiness.PrefName.NotApplicable;
+			this.comboProv.PrefNameBinding = OpenDentBusiness.PreferenceName.NotApplicable;
 			this.comboProv.Size = new System.Drawing.Size(160, 21);
 			this.comboProv.SpecialOption = CodeBase.ComboBoxSpecialValues.All;
 			this.comboProv.TabIndex = 41;
@@ -1113,7 +1113,7 @@
 			this.checkReactGroupFamilies.DoAutoSave = false;
 			this.checkReactGroupFamilies.Location = new System.Drawing.Point(26, 14);
 			this.checkReactGroupFamilies.Name = "checkReactGroupFamilies";
-			this.checkReactGroupFamilies.PrefNameBinding = OpenDentBusiness.PrefName.ReactivationGroupByFamily;
+			this.checkReactGroupFamilies.PrefNameBinding = OpenDentBusiness.PreferenceName.ReactivationGroupByFamily;
 			this.checkReactGroupFamilies.ReverseValue = false;
 			this.checkReactGroupFamilies.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.checkReactGroupFamilies.Size = new System.Drawing.Size(159, 18);
@@ -1131,7 +1131,7 @@
 			this.comboReactProv.IsUsingProvAbbr = false;
 			this.comboReactProv.Location = new System.Drawing.Point(437, 11);
 			this.comboReactProv.Name = "comboReactProv";
-			this.comboReactProv.PrefNameBinding = OpenDentBusiness.PrefName.NotApplicable;
+			this.comboReactProv.PrefNameBinding = OpenDentBusiness.PreferenceName.NotApplicable;
 			this.comboReactProv.Size = new System.Drawing.Size(160, 21);
 			this.comboReactProv.SpecialOption = CodeBase.ComboBoxSpecialValues.All;
 			this.comboReactProv.TabIndex = 43;

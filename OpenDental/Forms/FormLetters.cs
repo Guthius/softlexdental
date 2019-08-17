@@ -220,8 +220,8 @@ namespace OpenDental{
 		}
 
 		private void FillList(){
-			Letters.RefreshCache();
-			_listLetters=Letters.GetDeepCopy();
+            CacheManager.Invalidate<Letter>();
+			_listLetters=Letter.All();
 			listLetters.Items.Clear();
 			for(int i=0;i<_listLetters.Count;i++){
 				listLetters.Items.Add(_listLetters[i].Description);
@@ -239,13 +239,13 @@ namespace OpenDental{
 			StringBuilder str = new StringBuilder();
 			//return address
 			//if (checkIncludeRet.Checked) {
-				str.Append(Preferences.GetString(PrefName.PracticeTitle) + "\r\n");
-				str.Append(Preferences.GetString(PrefName.PracticeAddress) + "\r\n");
-				if (Preferences.GetString(PrefName.PracticeAddress2) != "")
-					str.Append(Preferences.GetString(PrefName.PracticeAddress2) + "\r\n");
-				str.Append(Preferences.GetString(PrefName.PracticeCity) + ", ");
-				str.Append(Preferences.GetString(PrefName.PracticeST) + "  ");
-				str.Append(Preferences.GetString(PrefName.PracticeZip) + "\r\n");
+				str.Append(Preference.GetString(PreferenceName.PracticeTitle) + "\r\n");
+				str.Append(Preference.GetString(PreferenceName.PracticeAddress) + "\r\n");
+				if (Preference.GetString(PreferenceName.PracticeAddress2) != "")
+					str.Append(Preference.GetString(PreferenceName.PracticeAddress2) + "\r\n");
+				str.Append(Preference.GetString(PreferenceName.PracticeCity) + ", ");
+				str.Append(Preference.GetString(PreferenceName.PracticeST) + "  ");
+				str.Append(Preference.GetString(PreferenceName.PracticeZip) + "\r\n");
 			//}
 			//else {
 			//	str.Append("\r\n\r\n\r\n\r\n");
@@ -303,7 +303,7 @@ namespace OpenDental{
 			}
 			str.Append(",\r\n\r\n");
 			//body text
-			str.Append(LetterCur.BodyText);
+			str.Append(LetterCur.Body);
 			//closing
 			if (CultureInfo.CurrentCulture.Name == "en-GB") {
 				str.Append("\r\n\r\nYours sincerely,\r\n\r\n\r\n\r\n");
@@ -311,11 +311,11 @@ namespace OpenDental{
 			else {
 				str.Append("\r\n\r\n" + Lan.g(this, "Sincerely,") + "\r\n\r\n\r\n\r\n");
 			}
-			if (Preferences.GetBool(PrefName.FuchsOptionsOn)) {
+			if (Preference.GetBool(PreferenceName.FuchsOptionsOn)) {
 				str.Append("Dr. Fuchs");
 			}
 			else {
-				str.Append(Preferences.GetString(PrefName.PracticeTitle));
+				str.Append(Preference.GetString(PreferenceName.PracticeTitle));
 			}
 			textBody.Text = str.ToString();
 			//bodyChanged = false;
@@ -353,7 +353,7 @@ namespace OpenDental{
 				!=DialogResult.OK){
 				return;
 			}
-			Letters.Delete(_listLetters[listLetters.SelectedIndex]);
+			Letter.Delete(_listLetters[listLetters.SelectedIndex].Id);
 			FillList();
 		}
 

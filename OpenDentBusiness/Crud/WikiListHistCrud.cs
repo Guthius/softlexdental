@@ -124,7 +124,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one WikiListHist into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(WikiListHist wikiListHist,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO wikilisthist (";
 			if(!useExistingPK && isRandomKeys) {
 				wikiListHist.WikiListHistNum=ReplicationServers.GetKeyNoCache("wikilisthist","WikiListHistNum");

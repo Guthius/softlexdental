@@ -241,19 +241,19 @@ namespace OpenDental
 
 		///<summary>Sets the user editable colors</summary>
 		public void SetColors(){
-			if(Defs.GetDictIsNull()) {
-				cBlood=Color.FromArgb(240,20,20);
-				cSupp=Color.FromArgb(255,160,0);
-				cPlaque=Color.FromArgb(240,20,20);
-				cCalc=Color.FromArgb(255,160,0);
-			}
-			else {
-				List<Def> listDefs=Defs.GetDefsForCategory(DefCat.MiscColors);
-				cBlood=listDefs[1].ItemColor;
-				cSupp=listDefs[2].ItemColor;
-				cPlaque=listDefs[4].ItemColor;
-				cCalc=listDefs[5].ItemColor;
-			}
+            cBlood = Color.FromArgb(240, 20, 20);
+            cSupp = Color.FromArgb(255, 160, 0);
+            cPlaque = Color.FromArgb(240, 20, 20);
+            cCalc = Color.FromArgb(255, 160, 0);
+
+            List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.MiscColors);
+            if (listDefs.Count > 6)
+            {
+                cBlood = listDefs[1].Color;
+                cSupp = listDefs[2].Color;
+                cPlaque = listDefs[4].Color;
+                cCalc = listDefs[5].Color;
+            }
 		}
 
 		///<summary></summary>
@@ -667,22 +667,22 @@ namespace OpenDental
 				//test for red
 				switch(RowTypes[GetSection(row)][GetSectionRow(row)]){
 					case PerioSequenceType.Probing:
-						redThresh=Preferences.GetInt(PrefName.PerioRedProb);
+						redThresh=Preference.GetInt(PreferenceName.PerioRedProb);
 						break;
 					case PerioSequenceType.MGJ:
-						redThresh=Preferences.GetInt(PrefName.PerioRedMGJ);
+						redThresh=Preference.GetInt(PreferenceName.PerioRedMGJ);
 						break;
 					case PerioSequenceType.GingMargin:
-						redThresh=Preferences.GetInt(PrefName.PerioRedGing);
+						redThresh=Preference.GetInt(PreferenceName.PerioRedGing);
 						break;
 					case PerioSequenceType.CAL:
-						redThresh=Preferences.GetInt(PrefName.PerioRedCAL);
+						redThresh=Preference.GetInt(PreferenceName.PerioRedCAL);
 						break;
 					case PerioSequenceType.Furcation:
-						redThresh=Preferences.GetInt(PrefName.PerioRedFurc);
+						redThresh=Preference.GetInt(PreferenceName.PerioRedFurc);
 						break;
 					case PerioSequenceType.Mobility:
-						redThresh=Preferences.GetInt(PrefName.PerioRedMob);
+						redThresh=Preference.GetInt(PreferenceName.PerioRedMob);
 						break;
 				}
 				if((RowTypes[GetSection(row)][GetSectionRow(row)]
@@ -953,7 +953,7 @@ namespace OpenDental
 			if(doSelectCell) {
 				CurCell=new Point(1,GetTableRow(selectedExam,0,PerioSequenceType.Probing));
 				OnDirectionChangedLeft();//Always start looping to the left.
-				if(!Preferences.GetBool(PrefName.PerioTreatImplantsAsNotMissing) && skippedTeeth.Count==32) {
+				if(!Preference.GetBool(PreferenceName.PerioTreatImplantsAsNotMissing) && skippedTeeth.Count==32) {
 					return;
 				}
 				int curTooth = GetToothNumCur(GetSection(CurCell.Y));
@@ -2077,22 +2077,22 @@ namespace OpenDental
 			int prefVal=0;
 			switch(seqType){
 				case PerioSequenceType.Probing:
-					prefVal=Preferences.GetInt(PrefName.PerioRedProb);
+					prefVal=Preference.GetInt(PreferenceName.PerioRedProb);
 					break;
 				case PerioSequenceType.MGJ:
-					prefVal=Preferences.GetInt(PrefName.PerioRedMGJ);
+					prefVal=Preference.GetInt(PreferenceName.PerioRedMGJ);
 					break;
 				case PerioSequenceType.GingMargin:
-					prefVal=Preferences.GetInt(PrefName.PerioRedGing);
+					prefVal=Preference.GetInt(PreferenceName.PerioRedGing);
 					break;
 				case PerioSequenceType.CAL:
-					prefVal=Preferences.GetInt(PrefName.PerioRedCAL);
+					prefVal=Preference.GetInt(PreferenceName.PerioRedCAL);
 					break;
 				case PerioSequenceType.Furcation:
-					prefVal=Preferences.GetInt(PrefName.PerioRedFurc);
+					prefVal=Preference.GetInt(PreferenceName.PerioRedFurc);
 					break;
 				case PerioSequenceType.Mobility:
-					prefVal=Preferences.GetInt(PrefName.PerioRedMob);
+					prefVal=Preference.GetInt(PreferenceName.PerioRedMob);
 					break;
 			}
 			ArrayList retList=new ArrayList();

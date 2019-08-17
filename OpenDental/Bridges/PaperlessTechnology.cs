@@ -325,7 +325,7 @@ namespace OpenDental.Bridges{
 					if(txt==""){
 						continue;
 					}
-					diseaseDefNum=DiseaseDefs.GetNumFromName(txt);
+					diseaseDefNum=DiseaseDef.GetNumFromName(txt);
 					if(diseaseDefNum==0){
 						note+="Disease: "+txt+", "+diseaseNote+"\r\n";
 					}
@@ -525,7 +525,7 @@ namespace OpenDental.Bridges{
 					sw.Write(referral.Telephone+",");//PAT_REFPHN
 					sw.Write(Tidy(referral.EMail)+",");//PAT_REFEML Referral source email
 					if(referral.PatNum==0 && !referral.NotPerson){//not a patient, and is a person
-						sw.Write(Defs.GetName(DefCat.ProviderSpecialties,referral.Specialty));
+						sw.Write(Defs.GetName(DefinitionCategory.ProviderSpecialties,referral.Specialty));
 					}
 					sw.Write(",");//PAT_REFSPE Referral specialty. Customizable, so any allowed
 				}

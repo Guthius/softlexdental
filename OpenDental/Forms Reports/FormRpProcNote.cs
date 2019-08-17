@@ -362,8 +362,8 @@ namespace OpenDental{
 		#endregion
 
 		private void FormRpProcNote_Load(object sender,System.EventArgs e) {
-			checkNoNotes.Checked=Preferences.GetBool(PrefName.ReportsIncompleteProcsNoNotes);
-			checkUnsignedNote.Checked=Preferences.GetBool(PrefName.ReportsIncompleteProcsUnsigned);
+			checkNoNotes.Checked=Preference.GetBool(PreferenceName.ReportsIncompleteProcsNoNotes);
+			checkUnsignedNote.Checked=Preference.GetBool(PreferenceName.ReportsIncompleteProcsUnsigned);
 			FillProvs();
 			if(!Preferences.HasClinicsEnabled) {
 				comboBoxMultiClinics.Visible=false;
@@ -466,7 +466,7 @@ namespace OpenDental{
 			}
 			return RpProcNote.GetData(_listSelectedProvNums,comboBoxMultiClinics.ListSelectedClinicNums,dateRangePicker.GetDateTimeFrom(),
 				dateRangePicker.GetDateTimeTo(),checkNoNotes.Checked,checkUnsignedNote.Checked,
-				(ToothNumberingNomenclature)Preferences.GetInt(PrefName.UseInternationalToothNumbers),groupBy);
+				(ToothNumberingNomenclature)Preference.GetInt(PreferenceName.UseInternationalToothNumbers),groupBy);
 		}
 
 		private void butRefresh_Click(object sender,EventArgs e) {
@@ -540,7 +540,7 @@ namespace OpenDental{
 				text=Lan.g(this,"Incomplete Procedure Notes");
 				g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,headingFont).Width/2,yPos);
 				yPos+=(int)g.MeasureString(text,headingFont).Height;
-				text=Preferences.GetString(PrefName.PracticeTitle);
+				text=Preference.GetString(PreferenceName.PracticeTitle);
 				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
 				yPos+=(int)g.MeasureString(text,headingFont).Height;
 				if(_listSelectedProvNums.Count==0 || _listSelectedProvNums.Count==comboBoxMultiProv.Items.Count-1) {

@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one DatabaseMaintenance into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(DatabaseMaintenance databaseMaintenance,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO databasemaintenance (";
 			if(!useExistingPK && isRandomKeys) {
 				databaseMaintenance.DatabaseMaintenanceNum=ReplicationServers.GetKeyNoCache("databasemaintenance","DatabaseMaintenanceNum");

@@ -126,7 +126,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EhrQuarterlyKey into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(EhrQuarterlyKey ehrQuarterlyKey,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO ehrquarterlykey (";
 			if(!useExistingPK && isRandomKeys) {
 				ehrQuarterlyKey.EhrQuarterlyKeyNum=ReplicationServers.GetKeyNoCache("ehrquarterlykey","EhrQuarterlyKeyNum");

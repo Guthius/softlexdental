@@ -29,11 +29,11 @@ namespace OpenDental{
 		private Schedule _schedCur;
 		private long _clinicNum;
 		private List<Operatory> _listOps;
-		private List<Def> _listBlockoutCatDefs;
+		private List<Definition> _listBlockoutCatDefs;
 
 		///<summary>Setting clinicNum to 0 will show all operatories, otherwise only operatories for the clinic passed in will show.  
 		///If a list of defs is passed in it will fill the blockout type select box.  If no list is passed in, it will show all defs.</summary>
-		public FormScheduleBlockEdit(Schedule schedCur, long clinicNum, List<Def> listDefsToShow=null) {
+		public FormScheduleBlockEdit(Schedule schedCur, long clinicNum, List<Definition> listDefsToShow=null) {
 			InitializeComponent();
 			_schedCur=schedCur;
 			_clinicNum=clinicNum;
@@ -249,11 +249,11 @@ namespace OpenDental{
 			listType.Items.Clear();
 			//This list will be null if there isn't a passed in list.  We pass in lists if we want to show a special modified list.
 			if(_listBlockoutCatDefs==null) {
-				_listBlockoutCatDefs=Defs.GetDefsForCategory(DefCat.BlockoutTypes,true);
+				_listBlockoutCatDefs=Definition.GetByCategory(DefinitionCategory.BlockoutTypes);
 			}
 			for(int i=0;i<_listBlockoutCatDefs.Count;i++){
-				listType.Items.Add(_listBlockoutCatDefs[i].ItemName);
-				if(_schedCur.BlockoutType==_listBlockoutCatDefs[i].DefNum){
+				listType.Items.Add(_listBlockoutCatDefs[i].Description);
+				if(_schedCur.BlockoutType==_listBlockoutCatDefs[i].Id){
 					listType.SelectedIndex=i;
 				}
 			}
@@ -321,14 +321,14 @@ namespace OpenDental{
 				return;
 			}
       _schedCur.Note=textNote.Text;
-			_schedCur.BlockoutType=_listBlockoutCatDefs[listType.SelectedIndex].DefNum;
+			_schedCur.BlockoutType=_listBlockoutCatDefs[listType.SelectedIndex].Id;
 			_schedCur.Ops=new List<long>();
 			for(int i=0;i<listOp.SelectedIndices.Count;i++){
 				_schedCur.Ops.Add(_listOps[listOp.SelectedIndices[i]].OperatoryNum);
 			}
 			List<Schedule> listOverlapSchedules;
 			if(Schedules.Overlaps(_schedCur,out listOverlapSchedules)) {
-				if(!Preferences.GetBool(PrefName.ReplaceExistingBlockout) || !Schedules.IsAppointmentBlocking(_schedCur.BlockoutType)) {
+				if(!Preference.GetBool(PreferenceName.ReplaceExistingBlockout) || !Schedules.IsAppointmentBlocking(_schedCur.BlockoutType)) {
 					MsgBox.Show(this,"Blockouts not allowed to overlap.");
 					return;
 				}

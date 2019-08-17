@@ -47,11 +47,11 @@ namespace OpenDental {
 			comboUnits.Items.Clear();
 			comboUnits.Items.Add("none");
 			comboUnits.SelectedIndex=0;
-			List<string> listUcumCodes=Ucums.GetAllCodes();
+			var listUcumCodes=Ucum.All();
 			for(int i=0;i<listUcumCodes.Count;i++) {
-				string ucumCode=listUcumCodes[i];
-				comboUnits.Items.Add(ucumCode);
-				if(ucumCode==_vaccineObsCur.UcumCode) {
+				var ucumCode=listUcumCodes[i];
+				comboUnits.Items.Add(ucumCode.Code);
+				if(ucumCode.Code==_vaccineObsCur.UcumCode) {
 					comboUnits.SelectedIndex=i+1;
 				}
 			}

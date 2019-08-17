@@ -167,7 +167,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one PayConnectResponseWeb into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(PayConnectResponseWeb payConnectResponseWeb,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO payconnectresponseweb (";
 			if(!useExistingPK && isRandomKeys) {
 				payConnectResponseWeb.PayConnectResponseWebNum=ReplicationServers.GetKeyNoCache("payconnectresponseweb","PayConnectResponseWebNum");

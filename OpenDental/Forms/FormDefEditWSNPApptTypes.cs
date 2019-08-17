@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace OpenDental {
 	public partial class FormDefEditWSNPApptTypes:ODForm {
-		private Def _defCur;
+		private Definition _defCur;
 		private AppointmentType _apptTypeCur;
 
 		public bool IsDeleted {
@@ -17,15 +17,15 @@ namespace OpenDental {
 			private set;
 		}
 
-		public FormDefEditWSNPApptTypes(Def defCur) {
+		public FormDefEditWSNPApptTypes(Definition defCur) {
 			InitializeComponent();
 			Lan.F(this);
 			_defCur=defCur;
-			checkHidden.Checked=_defCur.IsHidden;
-			textName.Text=_defCur.ItemName;
+			checkHidden.Checked=_defCur.Hidden;
+			textName.Text=_defCur.Description;
 			//Look for an associated appointment type.
 			List<DefLink> listDefLinks=DefLinks.GetDefLinksByType(DefLinkType.AppointmentType);
-			DefLink defLink=listDefLinks.FirstOrDefault(x => x.DefNum==_defCur.DefNum);
+			DefLink defLink=listDefLinks.FirstOrDefault(x => x.DefNum==_defCur.Id);
 			if(defLink!=null) {
 				_apptTypeCur=AppointmentTypes.GetFirstOrDefault(x => x.AppointmentTypeNum==defLink.FKey);
 			}
@@ -65,14 +65,14 @@ namespace OpenDental {
 				MsgBox.Show(this,"Appointment Type required.");
 				return;
 			}
-			_defCur.ItemName=PIn.String(textName.Text);
-			if(_defCur.IsNew) {
-				Defs.Insert(_defCur);
+			_defCur.Description=PIn.String(textName.Text);
+			if(_defCur.Id == 0) {
+                Definition.Insert(_defCur);
 			}
 			else {
-				Defs.Update(_defCur);
+                Definition.Update(_defCur);
 			}
-			DefLinks.SetFKeyForDef(_defCur.DefNum,_apptTypeCur.AppointmentTypeNum,DefLinkType.AppointmentType);
+			DefLinks.SetFKeyForDef(_defCur.Id,_apptTypeCur.AppointmentTypeNum,DefLinkType.AppointmentType);
 			DialogResult=DialogResult.OK;
 		}
 
@@ -84,8 +84,8 @@ namespace OpenDental {
 			try {
 				Defs.Delete(_defCur);
 				//Web Sched New Pat Appt appointment type defs are associated to appointment type and operatory deflinks.  Clean them up.
-				DefLinks.DeleteAllForDef(_defCur.DefNum,DefLinkType.AppointmentType);
-				DefLinks.DeleteAllForDef(_defCur.DefNum,DefLinkType.Operatory);
+				DefLinks.DeleteAllForDef(_defCur.Id,DefLinkType.AppointmentType);
+				DefLinks.DeleteAllForDef(_defCur.Id,DefLinkType.Operatory);
 				IsDeleted=true;
 				DialogResult=DialogResult.OK;
 			}

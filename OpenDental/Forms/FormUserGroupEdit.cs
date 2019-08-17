@@ -159,12 +159,12 @@ namespace OpenDental{
 				DialogResult=DialogResult.Cancel;
 				return;
 			}
-			if(Preferences.GetLong(PrefName.DefaultUserGroup)==CurGroup.UserGroupNum) {
+			if(Preference.GetLong(PreferenceName.DefaultUserGroup)==CurGroup.Id) {
 				MsgBox.Show(this,"Cannot delete user group that is set as the default user group.");
 				return;
 			}
 			try{
-				UserGroups.Delete(CurGroup);
+                UserGroup.Delete(CurGroup);
 				DataValid.SetInvalid(InvalidType.Security);
 				DialogResult=DialogResult.OK;
 			}
@@ -181,10 +181,10 @@ namespace OpenDental{
 			CurGroup.Description=textDescription.Text;
 			try{
 				if(IsNew){
-					UserGroups.Insert(CurGroup);
+					UserGroup.Insert(CurGroup);
 				}
 				else{
-					UserGroups.Update(CurGroup);
+                    UserGroup.Update(CurGroup);
 				}
 			}
 			catch(Exception ex){

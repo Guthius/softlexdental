@@ -116,7 +116,7 @@ namespace OpenDentBusiness{
 		///There are several places in the program that need a BW group.  E.g. when computing limitations.</summary>
 		public static List<long> ListBWCodeNums {
 			get {
-				return GetCodeNumsForPref(PrefName.InsBenBWCodes);
+				return GetCodeNumsForPref(PreferenceName.InsBenBWCodes);
 			}
 		}
 
@@ -124,7 +124,7 @@ namespace OpenDentBusiness{
 		///There are several places in the program that need a Exam group.  E.g. when computing limitations.</summary>
 		public static List<long> ListExamCodeNums {
 			get {
-				return GetCodeNumsForPref(PrefName.InsBenExamCodes);
+				return GetCodeNumsForPref(PreferenceName.InsBenExamCodes);
 			}
 		}
 
@@ -132,7 +132,7 @@ namespace OpenDentBusiness{
 		///There are several places in the program that need a PanoFMX group.  E.g. when computing limitations.</summary>
 		public static List<long> ListPanoFMXCodeNums {
 			get {
-				return GetCodeNumsForPref(PrefName.InsBenPanoCodes);
+				return GetCodeNumsForPref(PreferenceName.InsBenPanoCodes);
 			}
 		}
 
@@ -140,7 +140,7 @@ namespace OpenDentBusiness{
 		///There are several places in the program that need a BW group.  E.g. when computing limitations.</summary>
 		public static List<long> ListCancerScreeningCodeNums {
 			get {
-				return GetCodeNumsForPref(PrefName.InsBenCancerScreeningCodes);
+				return GetCodeNumsForPref(PreferenceName.InsBenCancerScreeningCodes);
 			}
 		}
 
@@ -148,7 +148,7 @@ namespace OpenDentBusiness{
 		///There are several places in the program that need a Exam group.  E.g. when computing limitations.</summary>
 		public static List<long> ListProphyCodeNums {
 			get {
-				return GetCodeNumsForPref(PrefName.InsBenProphyCodes);
+				return GetCodeNumsForPref(PreferenceName.InsBenProphyCodes);
 			}
 		}
 
@@ -156,7 +156,7 @@ namespace OpenDentBusiness{
 		///There are several places in the program that need a PanoFMX group.  E.g. when computing limitations.</summary>
 		public static List<long> ListFlourideCodeNums {
 			get {
-				return GetCodeNumsForPref(PrefName.InsBenFlourideCodes);
+				return GetCodeNumsForPref(PreferenceName.InsBenFlourideCodes);
 			}
 		}
 
@@ -164,7 +164,7 @@ namespace OpenDentBusiness{
 		///There are several places in the program that need a BW group.  E.g. when computing limitations.</summary>
 		public static List<long> ListSealantCodeNums {
 			get {
-				return GetCodeNumsForPref(PrefName.InsBenSealantCodes);
+				return GetCodeNumsForPref(PreferenceName.InsBenSealantCodes);
 			}
 		}
 
@@ -172,7 +172,7 @@ namespace OpenDentBusiness{
 		///There are several places in the program that need a Exam group.  E.g. when computing limitations.</summary>
 		public static List<long> ListCrownCodeNums {
 			get {
-				return GetCodeNumsForPref(PrefName.InsBenCrownCodes);
+				return GetCodeNumsForPref(PreferenceName.InsBenCrownCodes);
 			}
 		}
 
@@ -180,7 +180,7 @@ namespace OpenDentBusiness{
 		///There are several places in the program that need a PanoFMX group.  E.g. when computing limitations.</summary>
 		public static List<long> ListSRPCodeNums {
 			get {
-				return GetCodeNumsForPref(PrefName.InsBenSRPCodes);
+				return GetCodeNumsForPref(PreferenceName.InsBenSRPCodes);
 			}
 		}
 
@@ -188,7 +188,7 @@ namespace OpenDentBusiness{
 		///There are several places in the program that need a BW group.  E.g. when computing limitations.</summary>
 		public static List<long> ListFullDebridementCodeNums {
 			get {
-				return GetCodeNumsForPref(PrefName.InsBenFullDebridementCodes);
+				return GetCodeNumsForPref(PreferenceName.InsBenFullDebridementCodes);
 			}
 		}
 
@@ -196,7 +196,7 @@ namespace OpenDentBusiness{
 		///There are several places in the program that need a Exam group.  E.g. when computing limitations.</summary>
 		public static List<long> ListPerioMaintCodeNums {
 			get {
-				return GetCodeNumsForPref(PrefName.InsBenPerioMaintCodes);
+				return GetCodeNumsForPref(PreferenceName.InsBenPerioMaintCodes);
 			}
 		}
 
@@ -204,7 +204,7 @@ namespace OpenDentBusiness{
 		///There are several places in the program that need a PanoFMX group.  E.g. when computing limitations.</summary>
 		public static List<long> ListDenturesCodeNums {
 			get {
-				return GetCodeNumsForPref(PrefName.InsBenDenturesCodes);
+				return GetCodeNumsForPref(PreferenceName.InsBenDenturesCodes);
 			}
 		}
 
@@ -212,14 +212,14 @@ namespace OpenDentBusiness{
 		///There are several places in the program that need a BW group.  E.g. when computing limitations.</summary>
 		public static List<long> ListImplantCodeNums {
 			get {
-				return GetCodeNumsForPref(PrefName.InsBenImplantCodes);
+				return GetCodeNumsForPref(PreferenceName.InsBenImplantCodes);
 			}
 		}
 
 		#region InsHist Preference Procedures
 
 		///<summary>Returns the first procedure code for the InsHist preference passed in.</summary>
-		public static ProcedureCode GetByInsHistPref(PrefName prefName) {
+		public static ProcedureCode GetByInsHistPref(PreferenceName prefName) {
 			return GetProcCode(GetCodeNumsForPref(prefName).FirstOrDefault());
 		}
 
@@ -446,7 +446,7 @@ namespace OpenDentBusiness{
 		///<summary>Gets a list of ProcedureCode for a given treatment area,including codes in hidden categories if isHiddenIncluded=true.</summary>
 		public static List<ProcedureCode> GetProcCodesByTreatmentArea(bool isHiddenIncluded,params TreatmentArea[] arrayTreatmentAreas) {
 			return _procedureCodeCache.GetWhere(x => x.TreatArea.In<TreatmentArea>(arrayTreatmentAreas) 
-				&& (isHiddenIncluded || !Defs.GetHidden(DefCat.ProcCodeCats,x.ProcCat)));
+				&& (isHiddenIncluded || !Defs.IsHidden(x.ProcCat)));
 		}
 
 		///<summary>If a substitute exists for the given proc code, then it will give the CodeNum of that code.
@@ -503,34 +503,34 @@ namespace OpenDentBusiness{
 		}
 		
 		///<summary>Gets the proc codes as a comma separated list from the preference and finds the corresponding code nums.</summary>
-		public static List<long> GetCodeNumsForPref(PrefName pref) {
-			List<string> listCodes=Preferences.GetString(pref).Split(',').Select(x => x.Trim()).ToList();
+		public static List<long> GetCodeNumsForPref(PreferenceName pref) {
+			List<string> listCodes= Preference.GetString(pref).Split(',').Select(x => x.Trim()).ToList();
 			return GetWhereFromList(x => x.ProcCode.In(listCodes)).Select(x => x.CodeNum).ToList();
 		}
 
 		///<summary>Gets the CodeNums for the passed in InsHist preference.</summary>
-		public static List<long> GetCodeNumsForInsHistPref(PrefName pref) {
+		public static List<long> GetCodeNumsForInsHistPref(PreferenceName pref) {
 			List<long> retVal=GetCodeNumsForPref(pref);
 			switch(pref) {
-				case PrefName.InsHistBWCodes:
+				case PreferenceName.InsHistBWCodes:
 					retVal.AddRange(ProcedureCodes.ListBWCodeNums);
 					break;
-				case PrefName.InsHistExamCodes:
+				case PreferenceName.InsHistExamCodes:
 					retVal.AddRange(ProcedureCodes.ListExamCodeNums);
 					break;
-				case PrefName.InsHistPanoCodes:
+				case PreferenceName.InsHistPanoCodes:
 					retVal.AddRange(ProcedureCodes.ListPanoFMXCodeNums);
 					break;
-				case PrefName.InsHistPerioLLCodes:
-				case PrefName.InsHistPerioLRCodes:
-				case PrefName.InsHistPerioULCodes:
-				case PrefName.InsHistPerioURCodes:
+				case PreferenceName.InsHistPerioLLCodes:
+				case PreferenceName.InsHistPerioLRCodes:
+				case PreferenceName.InsHistPerioULCodes:
+				case PreferenceName.InsHistPerioURCodes:
 					retVal.AddRange(ProcedureCodes.ListSRPCodeNums);
 					break;
-				case PrefName.InsHistPerioMaintCodes:
+				case PreferenceName.InsHistPerioMaintCodes:
 					retVal.AddRange(ProcedureCodes.ListPerioMaintCodeNums);
 					break;
-				case PrefName.InsHistProphyCodes:
+				case PreferenceName.InsHistProphyCodes:
 					retVal.AddRange(ProcedureCodes.ListProphyCodeNums);
 					break;
 				default:
@@ -586,20 +586,20 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Grouped by Category.  Used only in FormRpProcCodes.</summary>
-		public static ProcedureCode[] GetProcList(Def[][] arrayDefs=null) {
+		public static ProcedureCode[] GetProcList(Definition[][] arrayDefs=null) {
 			//No need to check RemotingRole; no call to db.
 			List<ProcedureCode> retVal=new List<ProcedureCode>();
-			Def[] array=null;
+			Definition[] array=null;
 			if(arrayDefs==null) {
-				array=Defs.GetDefsForCategory(DefCat.ProcCodeCats,true).ToArray();
+				array= Definition.GetByCategory(DefinitionCategory.ProcCodeCats).ToArray();
 			}
 			else {
-				array=arrayDefs[(int)DefCat.ProcCodeCats];
+				array=arrayDefs[(int)DefinitionCategory.ProcCodeCats];
 			}
 			List<ProcedureCode> listProcedureCodes=GetListDeep();
-			for(int j=0;j<arrayDefs[(int)DefCat.ProcCodeCats].Length;j++) {
+			for(int j=0;j<arrayDefs[(int)DefinitionCategory.ProcCodeCats].Length;j++) {
 				for(int k=0;k<listProcedureCodes.Count;k++) {
-					if(arrayDefs[(int)DefCat.ProcCodeCats][j].DefNum==listProcedureCodes[k].ProcCat) {
+					if(arrayDefs[(int)DefinitionCategory.ProcCodeCats][j].Id==listProcedureCodes[k].ProcCat) {
 						retVal.Add(listProcedureCodes[k].Copy());
 					}
 				}
@@ -755,26 +755,26 @@ namespace OpenDentBusiness{
 				AND definition.IsHidden=0
 				AND procedurecode.ProcCat=definition.DefNum";
 			table=Db.GetTable(command);
-			long catNum=Defs.GetByExactName(DefCat.ProcCodeCats,"Obsolete");//check to make sure an Obsolete category exists.
-			Def def;
+			long catNum=Defs.GetByExactName(DefinitionCategory.ProcCodeCats,"Obsolete");//check to make sure an Obsolete category exists.
+			Definition def;
 			if(catNum!=0) {//if a category exists with that name
-				def=Defs.GetDef(DefCat.ProcCodeCats,catNum);
-				if(!def.IsHidden) {
-					def.IsHidden=true;
-					Defs.Update(def);
-					Defs.RefreshCache();
-				}
+				def=Defs.GetDef(DefinitionCategory.ProcCodeCats,catNum);
+				if(!def.Hidden) {
+					def.Hidden=true;
+					Definition.Update(def);
+                    CacheManager.Invalidate<Definition>();
+                }
 			}
 			if(catNum==0) {
-				List<Def> listDefs=Defs.GetDefsForCategory(DefCat.ProcCodeCats);
-				def=new Def();
-				def.Category=DefCat.ProcCodeCats;
-				def.ItemName="Obsolete";
-				def.ItemOrder=listDefs.Count;
-				def.IsHidden=true;
-				Defs.Insert(def);
-				Defs.RefreshCache();
-				catNum=def.DefNum;
+				List<Definition> listDefs= Definition.GetByCategory(DefinitionCategory.ProcCodeCats);
+				def=new Definition();
+				def.Category=DefinitionCategory.ProcCodeCats;
+				def.Description="Obsolete";
+				def.SortOrder=listDefs.Count;
+				def.Hidden=true;
+				Definition.Insert(def);
+                CacheManager.Invalidate<Definition>();
+                catNum =def.Id;
 			}
 			for(int i=0;i<table.Rows.Count;i++) {
 				command="UPDATE procedurecode SET ProcCat="+POut.Long(catNum)
@@ -784,14 +784,14 @@ namespace OpenDentBusiness{
 			}
 			//finally, set Never Used category to be hidden.  This isn't really part of clearing Tcodes, but is required
 			//because many customers won't have that category hidden
-			catNum=Defs.GetByExactName(DefCat.ProcCodeCats,"Never Used");
+			catNum=Defs.GetByExactName(DefinitionCategory.ProcCodeCats,"Never Used");
 			if(catNum!=0) {//if a category exists with that name
-				def=Defs.GetDef(DefCat.ProcCodeCats,catNum);
-				if(!def.IsHidden) {
-					def.IsHidden=true;
-					Defs.Update(def);
-					Defs.RefreshCache();
-				}
+				def=Defs.GetDef(DefinitionCategory.ProcCodeCats,catNum);
+				if(!def.Hidden) {
+					def.Hidden=true;
+					Definition.Update(def);
+                    CacheManager.Invalidate<Definition>();
+                }
 			}
 		}
 
@@ -819,7 +819,7 @@ namespace OpenDentBusiness{
 				"DentAdj","N4102",
 				"Consult","D9310"
 			};
-			Def def;
+			Definition def;
 			string[] codelist;
 			bool allvalid;
 			int itemorder=0;
@@ -835,12 +835,12 @@ namespace OpenDentBusiness{
 				if(!allvalid) {
 					continue;
 				}
-				def=new Def();
-				def.Category=DefCat.ApptProcsQuickAdd;
-				def.ItemOrder=itemorder;
-				def.ItemName=array[i];
-				def.ItemValue=array[i+1];
-				Defs.Insert(def);
+				def=new Definition();
+				def.Category=DefinitionCategory.ApptProcsQuickAdd;
+				def.SortOrder=itemorder;
+				def.Description=array[i];
+				def.Value=array[i+1];
+				Definition.Insert(def);
 				itemorder++;
 			}
 		}
@@ -935,7 +935,7 @@ namespace OpenDentBusiness{
 		///Otherwise gets all procedure codes that start with D8</summary>
 		public static List<long> GetOrthoBandingCodeNums() {
 			//No need to check RemotingRole; no call to db.
-			string strListOrthoNums = Preferences.GetString(PrefName.OrthoPlacementProcsList);
+			string strListOrthoNums = Preference.GetString(PreferenceName.OrthoPlacementProcsList);
 			List<long> listCodeNums = new List<long>();
 			if(strListOrthoNums!="") {
 				return strListOrthoNums.Split(new char[] { ',' }).ToList().Select(x => PIn.Long(x)).ToList();

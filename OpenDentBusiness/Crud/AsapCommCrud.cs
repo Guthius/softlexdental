@@ -187,7 +187,7 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command,paramTemplateText,paramTemplateEmail,paramNote,paramGuidMessageToMobile);
 			}
 			else {
-				asapComm.AsapCommNum=Db.NonQ(command,true,"AsapCommNum","asapComm",paramTemplateText,paramTemplateEmail,paramNote,paramGuidMessageToMobile);
+				asapComm.AsapCommNum=Db.NonQ(command,paramTemplateText,paramTemplateEmail,paramNote,paramGuidMessageToMobile);
 			}
 			return asapComm.AsapCommNum;
 		}
@@ -247,7 +247,7 @@ namespace OpenDentBusiness.Crud{
 					sbRow.Append("'"+POut.String(asapComm.Note)+"'"); sbRow.Append(",");
 					sbRow.Append("'"+POut.String(asapComm.GuidMessageToMobile)+"'"); sbRow.Append(")");
 					if(sbCommands.Length+sbRow.Length+1 > ODTable.MaxAllowedPacketCount) {
-						Db.NonQ(sbCommands.ToString());
+						Db.NonQ(sbCommands.ToString(), new OdSqlParameter("test", OdDbType.VarChar255, ""));
 						sbCommands=null;
 					}
 					else {
@@ -256,7 +256,7 @@ namespace OpenDentBusiness.Crud{
 						}
 						sbCommands.Append(sbRow.ToString());
 						if(index==listAsapComms.Count-1) {
-							Db.NonQ(sbCommands.ToString());
+							Db.NonQ(sbCommands.ToString(), new OdSqlParameter("test", OdDbType.VarChar255, ""));
 						}
 						index++;
 					}
@@ -271,7 +271,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one AsapComm into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(AsapComm asapComm,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO asapcomm (";
 			if(!useExistingPK && isRandomKeys) {
 				asapComm.AsapCommNum=ReplicationServers.GetKeyNoCache("asapcomm","AsapCommNum");
@@ -325,7 +325,7 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command,paramTemplateText,paramTemplateEmail,paramNote,paramGuidMessageToMobile);
 			}
 			else {
-				asapComm.AsapCommNum=Db.NonQ(command,true,"AsapCommNum","asapComm",paramTemplateText,paramTemplateEmail,paramNote,paramGuidMessageToMobile);
+				asapComm.AsapCommNum=Db.NonQ(command,paramTemplateText,paramTemplateEmail,paramNote,paramGuidMessageToMobile);
 			}
 			return asapComm.AsapCommNum;
 		}
@@ -554,7 +554,7 @@ namespace OpenDentBusiness.Crud{
 		public static void Delete(long asapCommNum) {
 			string command="DELETE FROM asapcomm "
 				+"WHERE AsapCommNum = "+POut.Long(asapCommNum);
-			Db.NonQ(command);
+            Db.NonQ(command, new OdSqlParameter("temp", OdDbType.VarChar255, "")) ;
 		}
 
 	}

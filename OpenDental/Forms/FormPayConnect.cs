@@ -153,8 +153,8 @@ namespace OpenDental
             {//Other cards
                 textZipCode.Text = _patCur.Zip;
                 textNameOnCard.Text = _patCur.GetNameFL();
-                checkSaveToken.Checked = Preferences.GetBool(PrefName.StoreCCtokens);
-                if (Preferences.GetBool(PrefName.StoreCCnumbers))
+                checkSaveToken.Checked = Preference.GetBool(PreferenceName.StoreCCtokens);
+                if (Preference.GetBool(PreferenceName.StoreCCnumbers))
                 {
                     labelStoreCCNumWarning.Visible = true;
                 }
@@ -435,7 +435,7 @@ namespace OpenDental
                 return false;
             }
             string paytype = ProgramProperties.GetPropVal(_progCur.ProgramNum, "PaymentType", _clinicNum);
-            if (!Defs.GetDefsForCategory(DefCat.PaymentTypes, true).Any(x => x.DefNum.ToString() == paytype))
+            if (!Definition.GetByCategory(DefinitionCategory.PaymentTypes).Any(x => x.Id.ToString() == paytype))
             { //paytype is not a valid DefNum
                 MsgBox.Show(this, "The PayConnect payment type has not been set.");
                 return false;
@@ -643,7 +643,7 @@ namespace OpenDental
                 _receiptStr = PayConnect.BuildReceiptString(_request, _response, sigResponse, _clinicNum);
                 PrintReceipt(_receiptStr);
             }
-            if (!Preferences.GetBool(PrefName.StoreCCnumbers) && !checkSaveToken.Checked)
+            if (!Preference.GetBool(PreferenceName.StoreCCnumbers) && !checkSaveToken.Checked)
             {//not storing the card number or the token
                 return true;
             }
@@ -658,7 +658,7 @@ namespace OpenDental
                 _creditCardCur.ItemOrder = itemOrderCount.Count;
             }
             _creditCardCur.CCExpiration = new DateTime(expYear, expMonth, DateTime.DaysInMonth(expYear, expMonth));
-            if (Preferences.GetBool(PrefName.StoreCCnumbers))
+            if (Preference.GetBool(PreferenceName.StoreCCnumbers))
             {
                 _creditCardCur.CCNumberMasked = textCardNumber.Text;
             }
@@ -680,7 +680,7 @@ namespace OpenDental
             if (_creditCardCur.IsNew)
             {
                 _creditCardCur.ClinicNum = _clinicNum;
-                _creditCardCur.Procedures = Preferences.GetString(PrefName.DefaultCCProcs);
+                _creditCardCur.Procedures = Preference.GetString(PreferenceName.DefaultCCProcs);
                 CreditCards.Insert(_creditCardCur);
             }
             else

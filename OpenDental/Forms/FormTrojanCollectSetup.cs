@@ -22,7 +22,7 @@ namespace OpenDental{
 		/// Required designer variable.
 		/// </summary>
 		private System.ComponentModel.Container components = null;
-		private List<Def> _listBillingTypeDefs;
+		private List<Definition> _listBillingTypeDefs;
 
 		///<summary></summary>
 		public FormTrojanCollectSetup()
@@ -154,12 +154,12 @@ namespace OpenDental{
 		#endregion
 
 		private void FormTrojanCollectSetup_Load(object sender,EventArgs e) {
-			textExportFolder.Text=Preferences.GetString(PrefName.TrojanExpressCollectPath);
-			long billtype=Preferences.GetLong(PrefName.TrojanExpressCollectBillingType);
-			_listBillingTypeDefs=Defs.GetDefsForCategory(DefCat.BillingTypes,true);
+			textExportFolder.Text=Preference.GetString(PreferenceName.TrojanExpressCollectPath);
+			long billtype=Preference.GetLong(PreferenceName.TrojanExpressCollectBillingType);
+			_listBillingTypeDefs=Definition.GetByCategory(DefinitionCategory.BillingTypes);
 			for(int i=0;i<_listBillingTypeDefs.Count;i++){
-				comboBillType.Items.Add(_listBillingTypeDefs[i].ItemName);
-				if(_listBillingTypeDefs[i].DefNum==billtype){
+				comboBillType.Items.Add(_listBillingTypeDefs[i].Description);
+				if(_listBillingTypeDefs[i].Id==billtype){
 					comboBillType.SelectedIndex=i;
 				}
 			}
@@ -177,9 +177,9 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please select a billing type.");
 				return;
 			}
-			long billtype=_listBillingTypeDefs[comboBillType.SelectedIndex].DefNum;
-			if( Prefs.UpdateString(PrefName.TrojanExpressCollectPath,textExportFolder.Text)
-				| Prefs.UpdateLong(PrefName.TrojanExpressCollectBillingType,billtype))
+			long billtype=_listBillingTypeDefs[comboBillType.SelectedIndex].Id;
+			if( Preference.Update(PreferenceName.TrojanExpressCollectPath,textExportFolder.Text)
+				| Preference.Update(PreferenceName.TrojanExpressCollectBillingType,billtype))
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}

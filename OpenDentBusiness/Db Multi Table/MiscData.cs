@@ -44,46 +44,6 @@ namespace OpenDentBusiness
             return PIn.DateT(dbtime);
         }
 
-        ///<summary>Returns specific information regarding the current version of Windows that is running.</summary>
-        public static string GetOSVersionInfo()
-        {
-            string versionInfo = "";
-            //Utilize the visual basic ComputerInfo class in order to get the most accurate OS version.
-            //This is because Environment.OSVersion was always returning a version that represented Windows 8.
-            ComputerInfo computerInfo = new ComputerInfo();
-            versionInfo = computerInfo.OSFullName + (Environment.Is64BitOperatingSystem ? " 64-bit" : " 32-bit");   //OSFullName will be blank on wine
-                                                                                                                    //This chunk is to get the correct version number.  If we use Environment.OSVersion, it will return an incorrect number.
-                                                                                                                    //This is because the application isn't manifested to windows 8.1 or 10.  As a result is will always return a version num of 6.2.
-                                                                                                                    //https://msdn.microsoft.com/en-us/library/windows/desktop/ms724832(v=vs.85).aspx
-            try
-            {
-                ManagementObjectSearcher mangementQuery = new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem");
-                ManagementObject systemInfo = mangementQuery.Get().Cast<ManagementObject>().FirstOrDefault();
-                versionInfo += " Build " + systemInfo.Properties["Version"].Value;
-            }
-            catch 
-            {
-               
-            }
-            return versionInfo;
-        }
-
-        ///<summary>Used in MakeABackup to ensure a unique backup database name.</summary>
-        private static bool Contains(string[] arrayToSearch, string valueToTest)
-        {
-            //No need to check RemotingRole; no call to db.
-            string compare;
-            for (int i = 0; i < arrayToSearch.Length; i++)
-            {
-                compare = arrayToSearch[i];
-                if (arrayToSearch[i] == valueToTest)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         ///<summary>Backs up the database to the same directory as the original just in case the user did not have sense enough to do a backup first.
         ///Does not work for Oracle, due to some MySQL specific commands inside.</summary>
         public static long MakeABackup()
@@ -151,39 +111,6 @@ namespace OpenDentBusiness
             return 0;
         }
 
-        ///<summary></summary>
-        public static void CreateArchiveDatabase()
-        {
-            string command = "CREATE DATABASE `" + GetArchiveDatabaseName() + "` CHARACTER SET utf8";
-            Db.NonQ(command);//We should already be connected to the archive server.
-        }
-
-        public static string GenerateTableQuery(string table)
-        {
-            string command = "SHOW CREATE TABLE " + POut.String(table);
-            return Db.GetTable(command).Rows[0][1].ToString();
-        }
-
-        public static void MakeTables(List<string> listTableQueries)
-        {
-            foreach (string command in listTableQueries)
-            {
-                Db.NonQ(command);
-            }
-        }
-
-        public static void InsertPreferences(DataTable preferences)
-        {
-            string command = "";
-            foreach (DataRow row in preferences.Rows)
-            {
-
-                command = "INSERT INTO preference (PrefName,ValueString) VALUES('" + POut.String(row[1].ToString()) + "','" + POut.String(row[2].ToString()) + "')";
-                Db.NonQ(command);
-
-            }
-        }
-
         public static string GetCurrentDatabase()
         {
             string command = "SELECT database()";
@@ -210,16 +137,16 @@ namespace OpenDentBusiness
             try
             {
                 //Keep track of the original connection settings so that we can revert back to them once finished archiving.
-                Version versionDbOrig = new Version(Preferences.GetString(PrefName.DataBaseVersion));
-                string archiveServerName = Preferences.GetString(PrefName.ArchiveServerName);
-                string archiveUserName = Preferences.GetString(PrefName.ArchiveUserName);
+                Version versionDbOrig = new Version(Preference.GetString(PreferenceName.DataBaseVersion));
+                string archiveServerName = Preference.GetString(PreferenceName.ArchiveServerName);
+                string archiveUserName = Preference.GetString(PreferenceName.ArchiveUserName);
                 string decryptedPass;
-                Encryption.TryDecrypt(Preferences.GetString(PrefName.ArchivePassHash), out decryptedPass);
+                Encryption.TryDecrypt(Preference.GetString(PreferenceName.ArchivePassHash), out decryptedPass);
                 //Connect to the archive database.  This can throw many exceptions.
-                DataConnection.SetDb(archiveServerName, MiscData.GetArchiveDatabaseName(), archiveUserName, decryptedPass);
+                DataConnection.Configure(archiveServerName, MiscData.GetArchiveDatabaseName(), archiveUserName, decryptedPass);
                 #region Validate archive database version
                 //At this point there is an active connection to the archive database, validate the DataBaseVersion.
-                string version = Preferences.GetStringNoCache(PrefName.DataBaseVersion);
+                string version = Preference.GetStringNoCache(PreferenceName.DataBaseVersion);
                 if (string.IsNullOrEmpty(version))
                 {
                     //Preference table does not have version information.  Somehow they have a database with proper structure but no data.
@@ -265,7 +192,7 @@ namespace OpenDentBusiness
             //string rawHostName=DataConnection.GetServerName();//This could be a human readable name, or it might be "localhost" or "127.0.0.1" or another IP address.
             //return Dns.GetHostEntry(rawHostName).HostName;//Return the human readable name (full domain name) corresponding to the rawHostName.
             //Had to strip off the port, caused Dns.GetHostEntry to fail and is not needed to get the hostname
-            string rawHostName = DataConnection.Server;
+            string rawHostName = DataConnection.Host;
             if (rawHostName != null)
             {//rawHostName will be null if the user used a custom ConnectionString when they chose their database.
                 rawHostName = rawHostName.Split(':')[0];//This could be a human readable name, or it might be "localhost" or "127.0.0.1" or another IP address.
@@ -297,18 +224,10 @@ namespace OpenDentBusiness
             return maxAllowedPacket;
         }
 
-        ///<summary>Sets the global MySQL variable max_allowed_packet to the passed in size (in bytes).
-        ///Returns the results of GetMaxAllowedPacket() after running the SET GLOBAL command.</summary>
-        public static int SetMaxAllowedPacket(int sizeBytes)
-        {
-            //As of MySQL 5.0.84 the session level max_allowed_packet variable is read only so we only need to change the global.
-            string command = "SET GLOBAL max_allowed_packet=" + POut.Int(sizeBytes);
-            Db.NonQ(command);
-            return GetMaxAllowedPacket();
-        }
-
         public static void SetSqlMode()
         {
+            return;
+
             try
             {
                 if (Preferences.IsCloudMode)

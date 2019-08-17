@@ -396,7 +396,7 @@ namespace OpenDentBusiness {
 			}
 			command= "SELECT "+DbHelper.DtimeToDate("t.AptDateTime")+" SchedDate,SUM(t.Fee-t.WriteoffEstimate) Amount,ClinicNum "
 				+"FROM (SELECT appointment.AptDateTime,IFNULL(procedurelog.ProcFee,0) Fee,appointment.ClinicNum,";
-			if(ReportsComplex.RunFuncOnReportServer(() => Prefs.GetBoolNoCache(PrefName.ReportPandIschedProdSubtractsWO))) {
+			if(ReportsComplex.RunFuncOnReportServer(() => Preference.GetBoolNoCache(PreferenceName.ReportPandIschedProdSubtractsWO))) {
 				//Subtract both PPO and capitation writeoffs
 				command+="SUM(IFNULL(CASE WHEN WriteOffEstOverride != -1 THEN WriteOffEstOverride ELSE WriteOffEst END,0)) WriteoffEstimate ";
 			}

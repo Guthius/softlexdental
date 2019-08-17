@@ -156,10 +156,10 @@ namespace OpenDentBusiness{
 			if(tempFileName==null) {
 				return;
 			}
-			Dictionary<string,Cvx> dictCodes=Cvxs.GetAll().ToDictionary(x => x.CvxCode,x => x);
+			Dictionary<string,CVX> dictCodes=CVX.All().ToDictionary(x => x.Code,x => x);
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayCvx;
-			Cvx cvx=new Cvx();
+			CVX cvx=new CVX();
 			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
 				if(quit) {
 					return;
@@ -172,14 +172,14 @@ namespace OpenDentBusiness{
 					cvx=dictCodes[arrayCvx[0]];
 					if(updateExisting && cvx.Description!=arrayCvx[1]) {//We do want to update and description is different.
 						cvx.Description=arrayCvx[1];
-						Cvxs.Update(cvx);
+						CVX.Update(cvx);
 						numCodesUpdated++;
 					}
 					continue;
 				}
-				cvx.CvxCode			=arrayCvx[0];
+				cvx.Code			=arrayCvx[0];
 				cvx.Description	=arrayCvx[1];
-				Cvxs.Insert(cvx);
+				CVX.Insert(cvx);
 				numCodesImported++;
 			}
 		}
@@ -223,39 +223,41 @@ namespace OpenDentBusiness{
 		public static void ImportIcd10(string tempFileName,ProgressArgs progress,ref bool quit,ref int numCodesImported,ref int numCodesUpdated,
 			bool updateExisting) 
 		{
-			if(tempFileName==null) {
-				return;
-			}
-			Dictionary<string,Icd10> dictIcd10s=Icd10s.GetAll().ToDictionary(x => x.Icd10Code,x => x);
-			string[] lines=File.ReadAllLines(tempFileName);
-			string[] arrayICD10;
-			Icd10 icd10=new Icd10();
-			for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
-				if(quit) {
-					return;
-				}
-				if(i%100==0) {
-					progress(i+1,lines.Length);
-				}
-				arrayICD10=lines[i].Split('\t');
-				if(dictIcd10s.ContainsKey(arrayICD10[0])) {//code already exists
-					icd10=dictIcd10s[arrayICD10[0]];
-					if(updateExisting && 
-						(icd10.Description!=arrayICD10[1] || icd10.IsCode!=arrayICD10[2])) //Code informatin is different
-					{
-						icd10.Description=arrayICD10[1];
-						icd10.IsCode=arrayICD10[2];
-						Icd10s.Update(icd10);
-						numCodesUpdated++;
-					}
-					continue;
-				}
-				icd10.Icd10Code		=arrayICD10[0];
-				icd10.Description	=arrayICD10[1];
-				icd10.IsCode			=arrayICD10[2];
-				Icd10s.Insert(icd10);
-				numCodesImported++;
-			}
+            // TODO: Fix me.
+
+			//if(tempFileName==null) {
+			//	return;
+			//}
+			//Dictionary<string,ICD10> dictIcd10s=ICD10.All().ToDictionary(x => x.Code,x => x);
+			//string[] lines=File.ReadAllLines(tempFileName);
+			//string[] arrayICD10;
+			//ICD10 icd10=new ICD10();
+			//for(int i=0;i<lines.Length;i++) {//each loop should read exactly one line of code. and each line of code should be a unique code
+			//	if(quit) {
+			//		return;
+			//	}
+			//	if(i%100==0) {
+			//		progress(i+1,lines.Length);
+			//	}
+			//	arrayICD10=lines[i].Split('\t');
+			//	if(dictIcd10s.ContainsKey(arrayICD10[0])) {//code already exists
+			//		icd10=dictIcd10s[arrayICD10[0]];
+			//		if(updateExisting && 
+			//			(icd10.Description!=arrayICD10[1] || icd10.Header!=arrayICD10[2])) //Code informatin is different
+			//		{
+			//			icd10.Description=arrayICD10[1];
+			//			icd10.Header=arrayICD10[2];
+			//			Icd10s.Update(icd10);
+			//			numCodesUpdated++;
+			//		}
+			//		continue;
+			//	}
+			//	icd10.Code		=arrayICD10[0];
+			//	icd10.Description	=arrayICD10[1];
+			//	icd10.Header			=arrayICD10[2];
+			//	Icd10s.Insert(icd10);
+			//	numCodesImported++;
+			//}
 		}
 
 		///<summary>Called after file is downloaded.  Throws exceptions.  It is assumed that this is called from a worker thread.  Progress delegate will be called every 100th iteration to inform thread of current progress. Quit flag can be set at any time in order to quit importing prematurely.</summary>
@@ -266,8 +268,8 @@ namespace OpenDentBusiness{
 				return;
 			}
 			//Customers may have an old codeset that has a truncated uppercase description, if so we want to update with new descriptions.
-			bool IsOldDescriptions=ICD9s.IsOldDescriptions();
-			Dictionary<string,ICD9> dictCodes=ICD9s.GetAll().ToDictionary(x => x.ICD9Code,x => x);
+
+			Dictionary<string,ICD9> dictCodes=ICD9.All().ToDictionary(x => x.Code,x => x);
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayICD9;
 			ICD9 icd9=new ICD9();
@@ -281,16 +283,16 @@ namespace OpenDentBusiness{
 				arrayICD9=lines[i].Split('\t');
 				if(dictCodes.ContainsKey(arrayICD9[0])) {//code already exists
 					icd9=dictCodes[arrayICD9[0]];
-					if((IsOldDescriptions || updateExisting) && icd9.Description!=arrayICD9[1]) {//The new description does not match the description in the database.
+					if(updateExisting && icd9.Description!=arrayICD9[1]) {//The new description does not match the description in the database.
 						icd9.Description=arrayICD9[1];
-						ICD9s.Update(icd9);
+						ICD9.Update(icd9);
 						numCodesUpdated++;
 					}
 					continue;
 				}
-				icd9.ICD9Code		=arrayICD9[0];
+				icd9.Code		=arrayICD9[0];
 				icd9.Description=arrayICD9[1];
-				ICD9s.Insert(icd9);
+				ICD9.Insert(icd9);
 				numCodesImported++;
 			}
 		}
@@ -501,7 +503,7 @@ namespace OpenDentBusiness{
 			if(tempFileName==null) {
 				return;
 			}
-			Dictionary<string,Ucum> dictUcums=Ucums.GetAll().ToDictionary(x => x.UcumCode,x => x);
+			Dictionary<string,Ucum> dictUcums=Ucum.All().ToDictionary(x => x.Code,x => x);
 			string[] lines=File.ReadAllLines(tempFileName);
 			string[] arrayUcum;
 			Ucum ucum=new Ucum();
@@ -517,15 +519,14 @@ namespace OpenDentBusiness{
 					ucum=dictUcums[arrayUcum[0]];
 					if(updateExisting && ucum.Description!=arrayUcum[1]) {
 						ucum.Description=arrayUcum[1];
-						Ucums.Update(ucum);
+						Ucum.Update(ucum);
 						numCodesUpdated++;
 					}
 					continue;
 				}
-				ucum.UcumCode			=arrayUcum[0];
+				ucum.Code			=arrayUcum[0];
 				ucum.Description	=arrayUcum[1];
-				ucum.IsInUse			=false;
-				Ucums.Insert(ucum);
+				Ucum.Insert(ucum);
 				numCodesImported++;
 			}
 		}

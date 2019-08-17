@@ -11,7 +11,7 @@ namespace OpenDental {
 	public partial class FormVaccineDefEdit:ODForm {
 		public VaccineDef VaccineDefCur;
 		public bool IsNew;
-		private List<DrugManufacturer> _listDrugManufacturers;
+		private List<Manufacturer> _listDrugManufacturers;
 
 		public FormVaccineDefEdit() {
 			InitializeComponent();
@@ -21,10 +21,10 @@ namespace OpenDental {
 		private void FormVaccineDefEdit_Load(object sender,EventArgs e) {
 			textCVXCode.Text=VaccineDefCur.CVXCode;
 			textVaccineName.Text=VaccineDefCur.VaccineName;
-			_listDrugManufacturers=DrugManufacturers.GetDeepCopy();
+			_listDrugManufacturers=Manufacturer.All();
 			for(int i=0;i<_listDrugManufacturers.Count;i++) {
-				comboManufacturer.Items.Add(_listDrugManufacturers[i].ManufacturerCode + " - " + _listDrugManufacturers[i].ManufacturerName);
-				if(_listDrugManufacturers[i].DrugManufacturerNum==VaccineDefCur.DrugManufacturerNum) {
+				comboManufacturer.Items.Add(_listDrugManufacturers[i].Code + " - " + _listDrugManufacturers[i].Name);
+				if(_listDrugManufacturers[i].Id==VaccineDefCur.DrugManufacturerNum) {
 					comboManufacturer.SelectedIndex=i;
 				}
 			}
@@ -37,7 +37,7 @@ namespace OpenDental {
 			if(FormC.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			textCVXCode.Text=FormC.SelectedCvx.CvxCode;
+			textCVXCode.Text=FormC.SelectedCvx.Code;
 			textVaccineName.Text=FormC.SelectedCvx.Description;
 		}
 
@@ -70,7 +70,7 @@ namespace OpenDental {
 			}
 			VaccineDefCur.CVXCode=textCVXCode.Text;
 			VaccineDefCur.VaccineName=textVaccineName.Text;
-			VaccineDefCur.DrugManufacturerNum=_listDrugManufacturers[comboManufacturer.SelectedIndex].DrugManufacturerNum;
+			VaccineDefCur.DrugManufacturerNum=_listDrugManufacturers[comboManufacturer.SelectedIndex].Id;
 			if(IsNew) {
 				if(VaccineDefs.GetExists(x => x.CVXCode==textCVXCode.Text
 					&& x.DrugManufacturerNum==VaccineDefCur.DrugManufacturerNum)) 

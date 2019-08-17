@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one QuickPasteNote into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(QuickPasteNote quickPasteNote,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO quickpastenote (";
 			if(!useExistingPK && isRandomKeys) {
 				quickPasteNote.QuickPasteNoteNum=ReplicationServers.GetKeyNoCache("quickpastenote","QuickPasteNoteNum");

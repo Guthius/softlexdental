@@ -98,7 +98,7 @@ namespace OpenDentBusiness
             public PatField[] ArrPatFields;
             public List<Patient> SuperFamilyMembers;
             public List<Patient> SuperFamilyGuarantors;
-            public Dictionary<Patient, Def> DictCloneSpecialities;
+            public Dictionary<Patient, Definition> DictCloneSpecialities;
             public Document PatPict;
             ///<summary>Is yes if we have retrieved the PatPict from the db. No if we have tried but PatPict is null. Unknown if we have not attempted
             ///to retrieve the PatPict.</summary>

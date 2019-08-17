@@ -22,7 +22,7 @@ namespace OpenDental.User_Controls.SetupWizard
         {
             LoadEmployees();
 
-            if (employeesList.Where(x => x.FName.ToLower() != "default").ToList().Count == 0)
+            if (employeesList.Where(x => x.FirstName.ToLower() != "default").ToList().Count == 0)
             {
                 MessageBox.Show(
                     "You have no valid employees. Please click the 'Add' button to add an employee.", 
@@ -34,7 +34,7 @@ namespace OpenDental.User_Controls.SetupWizard
 
         void LoadEmployees()
         {
-            employeesList = Employees.GetDeepCopy(true);
+            employeesList = Employee.All();
             Color colorNeedsAttn = OpenDental.SetupWizard.GetColor(ODSetupStatus.NeedsAttention);
 
             employeesGrid.BeginUpdate();
@@ -46,7 +46,7 @@ namespace OpenDental.User_Controls.SetupWizard
             employeesGrid.Rows.Clear();
 
             bool isAllComplete = true;
-            if (employeesList.Where(x => x.FName.ToLower() != "default").ToList().Count == 0)
+            if (employeesList.Where(x => x.FirstName.ToLower() != "default").ToList().Count == 0)
             {
                 isAllComplete = false;
             }
@@ -55,21 +55,21 @@ namespace OpenDental.User_Controls.SetupWizard
             {
                 var row = new ODGridRow();
 
-                row.Cells.Add(emp.LName);
-                if (string.IsNullOrEmpty(emp.LName) || emp.LName.ToLower() == "default")
+                row.Cells.Add(emp.LastName);
+                if (string.IsNullOrEmpty(emp.LastName) || emp.LastName.ToLower() == "default")
                 {
                     row.Cells[row.Cells.Count - 1].CellColor = colorNeedsAttn;
                     isAllComplete = false;
                 }
 
-                row.Cells.Add(emp.FName);
-                if (string.IsNullOrEmpty(emp.FName) || emp.FName.ToLower() == "default")
+                row.Cells.Add(emp.FirstName);
+                if (string.IsNullOrEmpty(emp.FirstName) || emp.FirstName.ToLower() == "default")
                 {
                     row.Cells[row.Cells.Count - 1].CellColor = colorNeedsAttn;
                     isAllComplete = false;
                 }
 
-                row.Cells.Add(emp.MiddleI);
+                row.Cells.Add(emp.Initials);
                 row.Cells.Add(emp.PayrollID);
                 row.Tag = emp;
 
@@ -89,7 +89,7 @@ namespace OpenDental.User_Controls.SetupWizard
                 formEmployeeEdit.EmployeeCur = employee;
                 if (formEmployeeEdit.ShowDialog() == DialogResult.OK)
                 {
-                    Employees.RefreshCache();
+                    CacheManager.Invalidate<Employee>();
 
                     LoadEmployees();
 
@@ -107,7 +107,7 @@ namespace OpenDental.User_Controls.SetupWizard
 
                 if (formEmployeeEdit.ShowDialog() == DialogResult.OK)
                 {
-                    Employees.RefreshCache();
+                    CacheManager.Invalidate<Employee>();
 
                     LoadEmployees();
 

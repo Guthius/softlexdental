@@ -16,13 +16,13 @@ namespace OpenDental {
 		}
 
 		private void FormPerioGraphicalSetup_Load(object sender,EventArgs e) {
-			this.butColorCal.BackColor=Preferences.GetColor(PrefName.PerioColorCAL);
-			this.butColorFurc.BackColor=Preferences.GetColor(PrefName.PerioColorFurcations);
-			this.butColorFurcRed.BackColor=Preferences.GetColor(PrefName.PerioColorFurcationsRed);
-			this.butColorGM.BackColor=Preferences.GetColor(PrefName.PerioColorGM);
-			this.butColorMGJ.BackColor=Preferences.GetColor(PrefName.PerioColorMGJ);	
-			this.butColorProbing.BackColor=Preferences.GetColor(PrefName.PerioColorProbing);
-			this.butColorProbingRed.BackColor=Preferences.GetColor(PrefName.PerioColorProbingRed);
+			this.butColorCal.BackColor=Preference.GetColor(PreferenceName.PerioColorCAL);
+			this.butColorFurc.BackColor=Preference.GetColor(PreferenceName.PerioColorFurcations);
+			this.butColorFurcRed.BackColor=Preference.GetColor(PreferenceName.PerioColorFurcationsRed);
+			this.butColorGM.BackColor=Preference.GetColor(PreferenceName.PerioColorGM);
+			this.butColorMGJ.BackColor=Preference.GetColor(PreferenceName.PerioColorMGJ);	
+			this.butColorProbing.BackColor=Preference.GetColor(PreferenceName.PerioColorProbing);
+			this.butColorProbingRed.BackColor=Preference.GetColor(PreferenceName.PerioColorProbingRed);
 		}
 
 		private void butColorCal_Click(object sender,EventArgs e) {
@@ -75,13 +75,13 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			Prefs.UpdateLong(PrefName.PerioColorCAL,this.butColorCal.BackColor.ToArgb());
-			Prefs.UpdateLong(PrefName.PerioColorFurcations,this.butColorFurc.BackColor.ToArgb());
-			Prefs.UpdateLong(PrefName.PerioColorFurcationsRed,this.butColorFurcRed.BackColor.ToArgb());
-			Prefs.UpdateLong(PrefName.PerioColorGM,this.butColorGM.BackColor.ToArgb());
-			Prefs.UpdateLong(PrefName.PerioColorMGJ,this.butColorMGJ.BackColor.ToArgb());
-			Prefs.UpdateLong(PrefName.PerioColorProbing,this.butColorProbing.BackColor.ToArgb());
-			Prefs.UpdateLong(PrefName.PerioColorProbingRed,this.butColorProbingRed.BackColor.ToArgb());
+			Preference.Update(PreferenceName.PerioColorCAL,this.butColorCal.BackColor.ToArgb());
+			Preference.Update(PreferenceName.PerioColorFurcations,this.butColorFurc.BackColor.ToArgb());
+			Preference.Update(PreferenceName.PerioColorFurcationsRed,this.butColorFurcRed.BackColor.ToArgb());
+			Preference.Update(PreferenceName.PerioColorGM,this.butColorGM.BackColor.ToArgb());
+			Preference.Update(PreferenceName.PerioColorMGJ,this.butColorMGJ.BackColor.ToArgb());
+			Preference.Update(PreferenceName.PerioColorProbing,this.butColorProbing.BackColor.ToArgb());
+			Preference.Update(PreferenceName.PerioColorProbingRed,this.butColorProbingRed.BackColor.ToArgb());
 			DialogResult=DialogResult.OK;
 		}
 

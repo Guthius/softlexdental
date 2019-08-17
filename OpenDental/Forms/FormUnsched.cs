@@ -385,7 +385,7 @@ namespace OpenDental{
 			for(int i=0;i<_listProviders.Count;i++) {
 				comboProv.Items.Add(_listProviders[i].GetLongDesc());
 			}
-			if(Preferences.GetBool(PrefName.EasyHidePublicHealth)){
+			if(Preference.GetBool(PreferenceName.EasyHidePublicHealth)){
 				comboSite.Visible=false;
 				labelSite.Visible=false;
 			}
@@ -412,7 +412,7 @@ namespace OpenDental{
 		}
 
 		private void InitDateRange() {
-			int dayCount=Preferences.GetInt(PrefName.UnschedDaysPast);
+			int dayCount=Preference.GetInt(PreferenceName.UnschedDaysPast);
 			if(dayCount==-1) {
 				//Set the text to blank
 				dateRangePicker.SetDateTimeFrom(DateTime.MinValue);
@@ -420,7 +420,7 @@ namespace OpenDental{
 			else {
 				dateRangePicker.SetDateTimeFrom(DateTime.Today.AddDays(-dayCount));
 			}
-			dayCount=Preferences.GetInt(PrefName.UnschedDaysFuture);
+			dayCount=Preference.GetInt(PreferenceName.UnschedDaysFuture);
 			if(dayCount==-1) {
 				//Set the text to blank. We check for DateTime.MinValue in Appointments.RefreshUnsched() and modify the query to not have an end date.
 				dateRangePicker.SetDateTimeTo(DateTime.MinValue);
@@ -577,7 +577,7 @@ namespace OpenDental{
 						provNum=_listProviders[comboProv.SelectedIndex-1].ProvNum;
 					}
 					long siteNum=0;
-					if(!Preferences.GetBool(PrefName.EasyHidePublicHealth) && comboSite.SelectedIndex!=0) {
+					if(!Preference.GetBool(PreferenceName.EasyHidePublicHealth) && comboSite.SelectedIndex!=0) {
 						siteNum=_listSites[comboSite.SelectedIndex-1].SiteNum;
 					}
 					bool showBrokenAppts;
@@ -622,7 +622,7 @@ namespace OpenDental{
 						else {
 							row.Cells.Add(Lan.g(this,"Unscheduled"));
 						}
-						row.Cells.Add(Defs.GetName(DefCat.RecallUnschedStatus,apt.UnschedStatus));
+						row.Cells.Add(Defs.GetName(DefinitionCategory.RecallUnschedStatus,apt.UnschedStatus));
 						row.Cells.Add(Providers.GetAbbr(apt.ProvNum));
 						row.Cells.Add(apt.ProcDescript);
 						row.Cells.Add(apt.Note);

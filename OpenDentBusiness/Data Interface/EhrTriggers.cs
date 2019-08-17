@@ -32,7 +32,7 @@ namespace OpenDentBusiness
         }
 
         ///<summary>This is the first step of automation, this checks to see if the passed in object matches any related trigger conditions.</summary>
-        public static List<CDSIntervention> TriggerMatch(Icd10 icd10, Patient patCur)
+        public static List<CDSIntervention> TriggerMatch(ICD10 icd10, Patient patCur)
         {
             return TriggerMatch((object)icd10, patCur);
         }
@@ -56,7 +56,7 @@ namespace OpenDentBusiness
         }
 
         ///<summary>This is the first step of automation, this checks to see if the passed in object matches any related trigger conditions.</summary>
-        public static List<CDSIntervention> TriggerMatch(Cvx cvx, Patient patCur)
+        public static List<CDSIntervention> TriggerMatch(CVX cvx, Patient patCur)
         {
             return TriggerMatch((object)cvx, patCur);
         }
@@ -99,11 +99,11 @@ namespace OpenDentBusiness
             //Define objects to be used in matching triggers.
             DiseaseDef diseaseDef;
             ICD9 icd9;
-            Icd10 icd10;
+            ICD10 icd10;
             Snomed snomed;
             Medication medication;
             RxNorm rxNorm;
-            Cvx cvx;
+            CVX cvx;
             AllergyDef allergyDef;
             EhrLabResult ehrLabResult;
             Patient pat;
@@ -115,23 +115,23 @@ namespace OpenDentBusiness
                 case "DiseaseDef":
                     diseaseDef = (DiseaseDef)triggerObject;
                     command = "SELECT * FROM ehrtrigger"
-                    + " WHERE ProblemDefNumList LIKE '% " + POut.String(diseaseDef.DiseaseDefNum.ToString()) + " %'";// '% <code> %' so we get exact matches.
+                    + " WHERE ProblemDefNumList LIKE '% " + POut.String(diseaseDef.Id.ToString()) + " %'";// '% <code> %' so we get exact matches.
                     if (diseaseDef.ICD9Code != "")
                     {
                         command += " OR ProblemIcd9List LIKE '% " + POut.String(diseaseDef.ICD9Code) + " %'";
-                        ICD9 icd10Cur = ICD9s.GetByCode(diseaseDef.ICD9Code);
+                        ICD9 icd10Cur = ICD9.GetByCode(diseaseDef.ICD9Code);
                         if (icd10Cur != null)
                         {
                             triggerObjectMessage += "  -" + diseaseDef.ICD9Code + "(Icd9)  " + icd10Cur.Description + "\r\n";
                         }
                     }
-                    if (diseaseDef.Icd10Code != "")
+                    if (diseaseDef.ICD10Code != "")
                     {
-                        command += " OR ProblemIcd10List LIKE '% " + POut.String(diseaseDef.Icd10Code) + " %'";
-                        Icd10 icd10Cur = Icd10s.GetByCode(diseaseDef.Icd10Code);
+                        command += " OR ProblemIcd10List LIKE '% " + POut.String(diseaseDef.ICD10Code) + " %'";
+                        ICD10 icd10Cur = ICD10.GetByCode(diseaseDef.ICD10Code);
                         if (icd10Cur != null)
                         {
-                            triggerObjectMessage += "  -" + diseaseDef.Icd10Code + "(Icd10)  " + icd10Cur.Description + "\r\n";
+                            triggerObjectMessage += "  -" + diseaseDef.ICD10Code + "(Icd10)  " + icd10Cur.Description + "\r\n";
                         }
                     }
                     if (diseaseDef.SnomedCode != "")
@@ -148,13 +148,13 @@ namespace OpenDentBusiness
                     icd9 = (ICD9)triggerObject;
                     //TODO: TriggerObjectMessage
                     command = "SELECT * FROM ehrtrigger"
-                    + " WHERE Icd9List LIKE '% " + POut.String(icd9.ICD9Code) + " %'";// '% <code> %' so that we can get exact matches.
+                    + " WHERE Icd9List LIKE '% " + POut.String(icd9.Code) + " %'";// '% <code> %' so that we can get exact matches.
                     break;
                 case "Icd10":
-                    icd10 = (Icd10)triggerObject;
+                    icd10 = (ICD10)triggerObject;
                     //TODO: TriggerObjectMessage
                     command = "SELECT * FROM ehrtrigger"
-                    + " WHERE Icd10List LIKE '% " + POut.String(icd10.Icd10Code) + " %'";// '% <code> %' so that we can get exact matches.
+                    + " WHERE Icd10List LIKE '% " + POut.String(icd10.Code) + " %'";// '% <code> %' so that we can get exact matches.
                     break;
                 case "Snomed":
                     snomed = (Snomed)triggerObject;
@@ -167,13 +167,13 @@ namespace OpenDentBusiness
                     RxNorm rxNormCur = RxNorms.GetByRxCUI(medication.RxCui.ToString());
                     if (rxNormCur != null)
                     {
-                        triggerObjectMessage = "  - " + medication.MedName + (medication.RxCui == 0 ? "" : " (RxCui:" + rxNormCur.RxCui + ")") + "\r\n";
+                        triggerObjectMessage = "  - " + medication.Description + (string.IsNullOrEmpty(medication.RxCui) ? "" : " (RxCui:" + rxNormCur.RxCui + ")") + "\r\n";
                     }
                     command = "SELECT * FROM ehrtrigger"
-                    + " WHERE MedicationNumList LIKE '% " + POut.String(medication.MedicationNum.ToString()) + " %'";// '% <code> %' so that we can get exact matches.
-                    if (medication.RxCui != 0)
+                    + " WHERE MedicationNumList LIKE '% " + POut.String(medication.Id.ToString()) + " %'";// '% <code> %' so that we can get exact matches.
+                    if (!string.IsNullOrEmpty(medication.RxCui))
                     {
-                        command += " OR RxCuiList LIKE '% " + POut.String(medication.RxCui.ToString()) + " %'";// '% <code> %' so that we can get exact matches.
+                        command += " OR RxCuiList LIKE '% " + POut.String(medication.RxCui) + " %'";// '% <code> %' so that we can get exact matches.
                     }
                     break;
                 case "RxNorm":
@@ -183,16 +183,16 @@ namespace OpenDentBusiness
                     + " WHERE RxCuiList LIKE '% " + POut.String(rxNorm.RxCui) + " %'";// '% <code> %' so that we can get exact matches.
                     break;
                 case "Cvx":
-                    cvx = (Cvx)triggerObject;
+                    cvx = (CVX)triggerObject;
                     //TODO: TriggerObjectMessage
                     command = "SELECT * FROM ehrtrigger"
-                    + " WHERE CvxList LIKE '% " + POut.String(cvx.CvxCode) + " %'";// '% <code> %' so that we can get exact matches.
+                    + " WHERE CvxList LIKE '% " + POut.String(cvx.Code) + " %'";// '% <code> %' so that we can get exact matches.
                     break;
                 case "AllergyDef":
                     allergyDef = (AllergyDef)triggerObject;
                     //TODO: TriggerObjectMessage
                     command = "SELECT * FROM ehrtrigger"
-                    + " WHERE AllergyDefNumList LIKE '% " + POut.String(allergyDef.AllergyDefNum.ToString()) + " %'";// '% <code> %' so that we can get exact matches.
+                    + " WHERE AllergyDefNumList LIKE '% " + POut.String(allergyDef.Id.ToString()) + " %'";// '% <code> %' so that we can get exact matches.
                     break;
                 case "EhrLabResult"://match loinc only, no longer 
                     ehrLabResult = (EhrLabResult)triggerObject;
@@ -476,7 +476,7 @@ namespace OpenDentBusiness
             }
             for (int i = 0; i < listDiseases.Count; i++)
             {
-                listDiseaseDefs.Add(DiseaseDefs.GetItem(listDiseases[i].DiseaseDefNum));
+                listDiseaseDefs.Add(DiseaseDef.GetById(listDiseases[i].DiseaseDefNum));
             }
             for (int i = 0; i < listEhrTriggers.Count; i++)
             {
@@ -506,7 +506,7 @@ namespace OpenDentBusiness
                 if (listDiseaseDefs[d].ICD9Code != ""
                     && ehrTrig.ProblemIcd9List.Contains(" " + listDiseaseDefs[d].ICD9Code + " "))
                 {
-                    ICD9 currentICD9 = ICD9s.GetByCode(listDiseaseDefs[d].ICD9Code);
+                    ICD9 currentICD9 = ICD9.GetByCode(listDiseaseDefs[d].ICD9Code);
                     if (currentICD9 != null)
                     {
                         listObjectMatches.Add(listDiseaseDefs[d]);
@@ -514,10 +514,10 @@ namespace OpenDentBusiness
                     }
                     continue;
                 }
-                if (listDiseaseDefs[d].Icd10Code != ""
-                    && ehrTrig.ProblemIcd10List.Contains(" " + listDiseaseDefs[d].Icd10Code + " "))
+                if (listDiseaseDefs[d].ICD10Code != ""
+                    && ehrTrig.ProblemIcd10List.Contains(" " + listDiseaseDefs[d].ICD10Code + " "))
                 {
-                    Icd10 icd10Cur = Icd10s.GetByCode(listDiseaseDefs[d].Icd10Code);
+                    ICD10 icd10Cur = ICD10.GetByCode(listDiseaseDefs[d].ICD10Code);
                     if (icd10Cur != null)
                     {
                         listObjectMatches.Add(listDiseaseDefs[d]);
@@ -536,10 +536,10 @@ namespace OpenDentBusiness
                     }
                     continue;
                 }
-                if (ehrTrig.ProblemDefNumList.Contains(" " + listDiseaseDefs[d].DiseaseDefNum + " "))
+                if (ehrTrig.ProblemDefNumList.Contains(" " + listDiseaseDefs[d].Id + " "))
                 {
                     listObjectMatches.Add(listDiseaseDefs[d]);
-                    triggerMessage += "  -(Problem Def) " + listDiseaseDefs[d].DiseaseName + "\r\n";
+                    triggerMessage += "  -(Problem Def) " + listDiseaseDefs[d].Name + "\r\n";
                     continue;
                 }
             }
@@ -549,36 +549,35 @@ namespace OpenDentBusiness
                 if (ehrTrig.MedicationNumList.Contains(" " + listMedicationPats[m].MedicationNum + " "))
                 {
                     listObjectMatches.Add(listMedicationPats[m]);
-                    Medication medCur = Medications.GetMedication(listMedicationPats[m].MedicationNum);
+                    Medication medCur = Medication.GetById(listMedicationPats[m].MedicationNum);
                     if (medCur == null)
                     {
                         continue;
                     }
-                    triggerMessage += "  - " + medCur.MedName;
+                    triggerMessage += "  - " + medCur.Description;
                     RxNorm rxNormCur = RxNorms.GetByRxCUI(medCur.RxCui.ToString());
                     if (rxNormCur == null)
                     {
                         continue;
                     }
-                    triggerMessage += (medCur.RxCui == 0 ? "" : " (RxCui:" + rxNormCur.RxCui + ")") + "\r\n";
+                    triggerMessage += (string.IsNullOrEmpty(medCur.RxCui) ? "" : " (RxCui:" + rxNormCur.RxCui + ")") + "\r\n";
                     continue;
                 }
-                if (listMedicationPats[m].RxCui != 0
-                    && ehrTrig.RxCuiList.Contains(" " + listMedicationPats[m].RxCui + " "))
+                if (!string.IsNullOrEmpty(listMedicationPats[m].RxCui) && ehrTrig.RxCuiList.Contains(" " + listMedicationPats[m].RxCui + " "))
                 {
                     listObjectMatches.Add(listMedicationPats[m]);
-                    Medication medCur = Medications.GetMedication(listMedicationPats[m].MedicationNum);
+                    Medication medCur = Medication.GetById(listMedicationPats[m].MedicationNum);
                     if (medCur == null)
                     {
                         continue;
                     }
-                    triggerMessage += "  - " + medCur.MedName;
+                    triggerMessage += "  - " + medCur.Description;
                     RxNorm rxNormCur = RxNorms.GetByRxCUI(medCur.RxCui.ToString());
                     if (rxNormCur == null)
                     {
                         continue;
                     }
-                    triggerMessage += (medCur.RxCui == 0 ? "" : " (RxCui:" + rxNormCur.RxCui + ")") + "\r\n";
+                    triggerMessage += (string.IsNullOrEmpty(medCur.RxCui) ? "" : " (RxCui:" + rxNormCur.RxCui + ")") + "\r\n";
                     continue;
                 }
                 //Cvx 
@@ -939,7 +938,7 @@ namespace OpenDentBusiness
             for (int c = 0; c < arrayIcd10Codes.Length; c++)
             {
                 if (listObjectMatches.FindAll(x => x is DiseaseDef)
-                    .Exists(x => ((DiseaseDef)x).Icd10Code == arrayIcd10Codes[c]))
+                    .Exists(x => ((DiseaseDef)x).ICD10Code == arrayIcd10Codes[c]))
                 {
                     continue;//found required code
                 }
@@ -993,7 +992,7 @@ namespace OpenDentBusiness
             for (int c = 0; c < arrayAllergyDefNums.Length; c++)
             {
                 if (listObjectMatches.FindAll(x => x is AllergyDef)
-                    .Exists(x => ((AllergyDef)x).AllergyDefNum.ToString() == arrayAllergyDefNums[c]))
+                    .Exists(x => ((AllergyDef)x).Id.ToString() == arrayAllergyDefNums[c]))
                 {
                     continue;//found required code
                 }
@@ -1108,16 +1107,16 @@ namespace OpenDentBusiness
                 case "DiseaseDef":
                     cdsTrig = new KnowledgeRequest();
                     cdsTrig.Type = "Problem";
-                    cdsTrig.Code = POut.Long(((DiseaseDef)objectMatch).DiseaseDefNum);
+                    cdsTrig.Code = POut.Long(((DiseaseDef)objectMatch).Id);
                     cdsTrig.CodeSystem = CodeSyst.ProblemDef;
-                    cdsTrig.Description = ((DiseaseDef)objectMatch).DiseaseName;
+                    cdsTrig.Description = ((DiseaseDef)objectMatch).Name;
                     listCDSTrigs.Add(cdsTrig);
                     if (((DiseaseDef)objectMatch).ICD9Code != "")
                     {
                         cdsTrig = new KnowledgeRequest();
-                        ICD9 icd9 = ICD9s.GetByCode(((DiseaseDef)objectMatch).ICD9Code);
+                        ICD9 icd9 = ICD9.GetByCode(((DiseaseDef)objectMatch).ICD9Code);
                         cdsTrig.Type = "Problem";
-                        cdsTrig.Code = icd9.ICD9Code;
+                        cdsTrig.Code = icd9.Code;
                         cdsTrig.CodeSystem = CodeSyst.Icd9;
                         cdsTrig.Description = icd9.Description;
                         listCDSTrigs.Add(cdsTrig);
@@ -1132,19 +1131,19 @@ namespace OpenDentBusiness
                         cdsTrig.Description = snomed.Description;
                         listCDSTrigs.Add(cdsTrig);
                     }
-                    if (((DiseaseDef)objectMatch).Icd10Code != "")
+                    if (((DiseaseDef)objectMatch).ICD10Code != "")
                     {
                         cdsTrig = new KnowledgeRequest();
-                        Icd10 icd10 = Icd10s.GetByCode(((DiseaseDef)objectMatch).Icd10Code);
+                        ICD10 icd10 = ICD10.GetByCode(((DiseaseDef)objectMatch).ICD10Code);
                         cdsTrig.Type = "Problem";
-                        cdsTrig.Code = icd10.Icd10Code;
+                        cdsTrig.Code = icd10.Code;
                         cdsTrig.CodeSystem = CodeSyst.Icd10;
                         cdsTrig.Description = icd10.Description;
                         listCDSTrigs.Add(cdsTrig);
                     }
                     break;
                 case "Medication":
-                    if (((Medication)objectMatch).RxCui != 0)
+                    if (!string.IsNullOrEmpty(((Medication)objectMatch).RxCui))
                     {
                         cdsTrig = new KnowledgeRequest();
                         RxNorm rxNorm = RxNorms.GetByRxCUI(((Medication)objectMatch).RxCui.ToString());
@@ -1154,18 +1153,18 @@ namespace OpenDentBusiness
                         cdsTrig.Description = rxNorm.Description;
                         listCDSTrigs.Add(cdsTrig);
                     }
-                    if (((Medication)objectMatch).RxCui == 0)
+                    if (!string.IsNullOrEmpty(((Medication)objectMatch).RxCui))
                     {
                         cdsTrig = new KnowledgeRequest();
                         cdsTrig.Type = "Medication";
                         cdsTrig.Code = "";
                         cdsTrig.CodeSystem = CodeSyst.None;
-                        cdsTrig.Description = ((Medication)objectMatch).MedName;
+                        cdsTrig.Description = ((Medication)objectMatch).Description;
                         listCDSTrigs.Add(cdsTrig);
                     }
                     break;
                 case "MedicationPat":
-                    if (((MedicationPat)objectMatch).RxCui != 0)
+                    if (!string.IsNullOrEmpty(((MedicationPat)objectMatch).RxCui))
                     {
                         cdsTrig = new KnowledgeRequest();
                         RxNorm rxNorm = RxNorms.GetByRxCUI(((MedicationPat)objectMatch).RxCui.ToString());
@@ -1189,16 +1188,16 @@ namespace OpenDentBusiness
                     cdsTrig = new KnowledgeRequest();
                     ICD9 icd9Obj = (ICD9)objectMatch;
                     cdsTrig.Type = "Code";
-                    cdsTrig.Code = icd9Obj.ICD9Code;
+                    cdsTrig.Code = icd9Obj.Code;
                     cdsTrig.CodeSystem = CodeSyst.Icd9;
                     cdsTrig.Description = icd9Obj.Description;
                     listCDSTrigs.Add(cdsTrig);
                     break;
                 case "Icd10":
                     cdsTrig = new KnowledgeRequest();
-                    Icd10 icd10Obj = (Icd10)objectMatch;
+                    ICD10 icd10Obj = (ICD10)objectMatch;
                     cdsTrig.Type = "Problem";
-                    cdsTrig.Code = icd10Obj.Icd10Code;
+                    cdsTrig.Code = icd10Obj.Code;
                     cdsTrig.CodeSystem = CodeSyst.Icd10;
                     cdsTrig.Description = icd10Obj.Description;
                     listCDSTrigs.Add(cdsTrig);
@@ -1262,9 +1261,9 @@ namespace OpenDentBusiness
                     cdsTrig = new KnowledgeRequest();
                     AllergyDef allergyObj = (AllergyDef)objectMatch;
                     cdsTrig.Type = "Allergy";
-                    cdsTrig.Code = POut.Long(allergyObj.AllergyDefNum);
+                    cdsTrig.Code = POut.Long(allergyObj.Id);
                     cdsTrig.CodeSystem = CodeSyst.AllergyDef;
-                    cdsTrig.Description = AllergyDefs.GetOne(allergyObj.AllergyDefNum).Description;
+                    cdsTrig.Description = AllergyDefs.GetOne(allergyObj.Id).Description;
                     listCDSTrigs.Add(cdsTrig);
                     break;
                 default:

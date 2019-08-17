@@ -23,7 +23,7 @@ namespace OpenDental{
 				MessageBox.Show("Error, program entry not found in database.");
 				return;
 			}
-			if(pat!=null && Preferences.GetBool(PrefName.ShowFeaturePatientClone)) {
+			if(pat!=null && Preference.GetBool(PreferenceName.ShowFeaturePatientClone)) {
 				pat=Patients.GetOriginalPatientForClone(pat);
 			}
 			if(prog.PluginDllName!="") {

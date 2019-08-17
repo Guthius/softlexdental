@@ -84,7 +84,7 @@ namespace OpenDentBusiness{
 		private class ClinicCache : CacheListAbs<Clinic> {
 			protected override List<Clinic> GetCacheFromDb() {
 				string command="SELECT * FROM clinic ";
-				if(Preferences.GetBool(PrefName.ClinicListIsAlphabetical)) {
+				if(Preference.GetBool(PreferenceName.ClinicListIsAlphabetical)) {
 					command+="ORDER BY Abbr";
 				}
 				else {
@@ -171,7 +171,7 @@ namespace OpenDentBusiness{
 				if(Security.CurUser==null) {
 					return;
 				}
-				if(Preferences.GetString(PrefName.ClinicTrackLast)!="User") {
+				if(Preference.GetString(PreferenceName.ClinicTrackLast)!="User") {
 					return;
 				}
 				List<UserOdPref> prefs = UserOdPrefs.GetByUserAndFkeyType(Security.CurUser.UserNum,UserOdFkeyType.ClinicLast);//should only be one.
@@ -196,7 +196,7 @@ namespace OpenDentBusiness{
 				return;
 			}
 			List<Clinic> listClinics = Clinics.GetForUserod(Security.CurUser);
-			switch(Preferences.GetString(PrefName.ClinicTrackLast)) {
+			switch(Preference.GetString(PreferenceName.ClinicTrackLast)) {
 				case "Workstation":
 					if(Security.CurUser.ClinicIsRestricted && Security.CurUser.ClinicNum!=ComputerPrefs.LocalComputer.ClinicNum) {//The user is restricted and it's not the clinic this computer has by default
 						//User's default clinic isn't the LocalComputer's clinic, see if they have access to the Localcomputer's clinic, if so, use it.
@@ -243,7 +243,7 @@ namespace OpenDentBusiness{
 				_clinicNum=0;
 				return;
 			}
-			switch(Preferences.GetString(PrefName.ClinicTrackLast)) {
+			switch(Preference.GetString(PreferenceName.ClinicTrackLast)) {
 				case "Workstation":
 					ComputerPrefs.LocalComputer.ClinicNum=Clinics.ClinicNum;
 					ComputerPrefs.Update(ComputerPrefs.LocalComputer);
@@ -505,7 +505,7 @@ namespace OpenDentBusiness{
 				+"INNER JOIN recall ON patient.PatNum=recall.PatNum "
 				+"WHERE recall.RecallNum="+POut.Long(recallNum)+" "
 				+DbHelper.LimitAnd(1);
-			long patientClinicNum=PIn.Long(DataCore.GetScalar(command));
+			long patientClinicNum=PIn.Long(DataConnection.ExecuteScalar(command));
 			if(patientClinicNum>0) {
 				return GetFirstOrDefault(x => x.ClinicNum==patientClinicNum);
 			}
@@ -516,7 +516,7 @@ namespace OpenDentBusiness{
 				WHERE appointment.AptStatus IN ("+POut.Int((int)ApptStatus.Scheduled)+","+POut.Int((int)ApptStatus.Complete)+")"+@"
 				ORDER BY AptDateTime DESC";
 			command=DbHelper.LimitOrderBy(command,1);
-			long appointmentClinicNum=PIn.Long(DataCore.GetScalar(command));
+			long appointmentClinicNum=PIn.Long(DataConnection.ExecuteScalar(command));
 			if(appointmentClinicNum>0) {
 				return GetFirstOrDefault(x => x.ClinicNum==appointmentClinicNum);
 			}
@@ -559,7 +559,7 @@ namespace OpenDentBusiness{
 		public static PlaceOfService GetPlaceService(long clinicNum) {
 			//No need to check RemotingRole; no call to db.
 			Clinic clinic=GetFirstOrDefault(x => x.ClinicNum==clinicNum);
-			return (clinic==null ? (PlaceOfService)Preferences.GetLong(PrefName.DefaultProcedurePlaceService) : clinic.DefaultPlaceService);
+			return (clinic==null ? (PlaceOfService)Preference.GetLong(PreferenceName.DefaultProcedurePlaceService) : clinic.DefaultPlaceService);
 		}
 
 		///<summary>Used by HL7 when parsing incoming messages.  
@@ -626,7 +626,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Gets the default clinic for texting. Returns null if no clinic is set as default.</summary>
 		public static Clinic GetDefaultForTexting() {
-			return GetFirstOrDefault(x => x.ClinicNum==Preferences.GetLong(PrefName.TextingDefaultClinicNum));
+			return GetFirstOrDefault(x => x.ClinicNum== Preference.GetLong(PreferenceName.TextingDefaultClinicNum));
 		}
 
 		public static bool IsTextingEnabled(long clinicNum) {
@@ -636,7 +636,7 @@ namespace OpenDentBusiness{
             }
 			if(clinicNum==0) {
 				if(Preferences.HasClinicsEnabled) {
-					clinicNum=Preferences.GetLong(PrefName.TextingDefaultClinicNum);
+					clinicNum= Preference.GetLong(PreferenceName.TextingDefaultClinicNum);
 				}
 				else {
 					return SmsPhones.IsIntegratedTextingEnabled();
@@ -656,7 +656,7 @@ namespace OpenDentBusiness{
 		public static bool IsMedicalPracticeOrClinic(long clinicNum) {
 			//No need to check RemotingRole; no call to db.
 			if(clinicNum==0) {//either headquarters is selected or the clinics feature is not enabled, use practice pref
-				return Preferences.GetBool(PrefName.PracticeIsMedicalOnly);
+				return Preference.GetBool(PreferenceName.PracticeIsMedicalOnly);
 			}
 			Clinic clinicCur=Clinics.GetClinic(clinicNum);
 			if(clinicCur!=null) {
@@ -670,37 +670,37 @@ namespace OpenDentBusiness{
 		public static Clinic GetPracticeAsClinicZero(string clinicName = null) {
 			//No need to check RemotingRole; no call to db.
 			if(clinicName==null) {
-				clinicName=Preferences.GetString(PrefName.PracticeTitle);
+				clinicName= Preference.GetString(PreferenceName.PracticeTitle);
 			}
 			return new Clinic {
 				ClinicNum=0,
 				Abbr=clinicName,
 				Description=clinicName,
-				Address=Preferences.GetString(PrefName.PracticeAddress),
-				Address2=Preferences.GetString(PrefName.PracticeAddress2),
-				City=Preferences.GetString(PrefName.PracticeCity),
-				State=Preferences.GetString(PrefName.PracticeST),
-				Zip=Preferences.GetString(PrefName.PracticeZip),
-				BillingAddress=Preferences.GetString(PrefName.PracticeBillingAddress),
-				BillingAddress2=Preferences.GetString(PrefName.PracticeBillingAddress2),
-				BillingCity=Preferences.GetString(PrefName.PracticeBillingCity),
-				BillingState=Preferences.GetString(PrefName.PracticeBillingST),
-				BillingZip=Preferences.GetString(PrefName.PracticeBillingZip),
-				PayToAddress=Preferences.GetString(PrefName.PracticePayToAddress),
-				PayToAddress2=Preferences.GetString(PrefName.PracticePayToAddress2),
-				PayToCity=Preferences.GetString(PrefName.PracticePayToCity),
-				PayToState=Preferences.GetString(PrefName.PracticePayToST),
-				PayToZip=Preferences.GetString(PrefName.PracticePayToZip),
-				Phone=Preferences.GetString(PrefName.PracticePhone),
-				BankNumber=Preferences.GetString(PrefName.PracticeBankNumber),
-				DefaultPlaceService=(PlaceOfService)Preferences.GetInt(PrefName.DefaultProcedurePlaceService),
-				InsBillingProv=Preferences.GetLong(PrefName.InsBillingProv),
-				Fax=Preferences.GetString(PrefName.PracticeFax),
-				EmailAddressNum=Preferences.GetLong(PrefName.EmailDefaultAddressNum),
-				DefaultProv=Preferences.GetLong(PrefName.PracticeDefaultProv),
-				SmsContractDate=Preferences.GetDate(PrefName.SmsContractDate),
-				SmsMonthlyLimit=Preferences.GetDouble(PrefName.SmsMonthlyLimit),
-				IsMedicalOnly=Preferences.GetBool(PrefName.PracticeIsMedicalOnly)
+				Address= Preference.GetString(PreferenceName.PracticeAddress),
+				Address2= Preference.GetString(PreferenceName.PracticeAddress2),
+				City= Preference.GetString(PreferenceName.PracticeCity),
+				State= Preference.GetString(PreferenceName.PracticeST),
+				Zip= Preference.GetString(PreferenceName.PracticeZip),
+				BillingAddress= Preference.GetString(PreferenceName.PracticeBillingAddress),
+				BillingAddress2= Preference.GetString(PreferenceName.PracticeBillingAddress2),
+				BillingCity= Preference.GetString(PreferenceName.PracticeBillingCity),
+				BillingState= Preference.GetString(PreferenceName.PracticeBillingST),
+				BillingZip= Preference.GetString(PreferenceName.PracticeBillingZip),
+				PayToAddress= Preference.GetString(PreferenceName.PracticePayToAddress),
+				PayToAddress2= Preference.GetString(PreferenceName.PracticePayToAddress2),
+				PayToCity= Preference.GetString(PreferenceName.PracticePayToCity),
+				PayToState= Preference.GetString(PreferenceName.PracticePayToST),
+				PayToZip= Preference.GetString(PreferenceName.PracticePayToZip),
+				Phone= Preference.GetString(PreferenceName.PracticePhone),
+				BankNumber= Preference.GetString(PreferenceName.PracticeBankNumber),
+				DefaultPlaceService=(PlaceOfService)Preference.GetInt(PreferenceName.DefaultProcedurePlaceService),
+				InsBillingProv= Preference.GetLong(PreferenceName.InsBillingProv),
+				Fax= Preference.GetString(PreferenceName.PracticeFax),
+				EmailAddressNum= Preference.GetLong(PreferenceName.EmailDefaultAddressNum),
+				DefaultProv= Preference.GetLong(PreferenceName.PracticeDefaultProv),
+				SmsContractDate= Preference.GetDate(PreferenceName.SmsContractDate),
+				SmsMonthlyLimit= Preference.GetDouble(PreferenceName.SmsMonthlyLimit),
+				IsMedicalOnly= Preference.GetBool(PreferenceName.PracticeIsMedicalOnly)
 			};
 		}
 
@@ -709,15 +709,15 @@ namespace OpenDentBusiness{
 		///Replaces: [OfficePhone], [OfficeFax], [OfficeName], [OfficeAddress]. </summary>
 		public static string ReplaceOffice(string message,Clinic clinic) {
 			string retVal=message;
-			string officePhone=Preferences.GetString(PrefName.PracticePhone);
-			string officeFax=Preferences.GetString(PrefName.PracticeFax);
-			string officeName=Preferences.GetString(PrefName.PracticeTitle);
+			string officePhone= Preference.GetString(PreferenceName.PracticePhone);
+			string officeFax= Preference.GetString(PreferenceName.PracticeFax);
+			string officeName= Preference.GetString(PreferenceName.PracticeTitle);
 			string officeAddr=Patients.GetAddressFull(
-				Preferences.GetString(PrefName.PracticeAddress),
-				Preferences.GetString(PrefName.PracticeAddress2),
-				Preferences.GetString(PrefName.PracticeCity),
-				Preferences.GetString(PrefName.PracticeST),
-				Preferences.GetString(PrefName.PracticeZip));
+                Preference.GetString(PreferenceName.PracticeAddress),
+                Preference.GetString(PreferenceName.PracticeAddress2),
+                Preference.GetString(PreferenceName.PracticeCity),
+                Preference.GetString(PreferenceName.PracticeST),
+                Preference.GetString(PreferenceName.PracticeZip));
 			if(clinic!=null && !String.IsNullOrEmpty(clinic.Phone)) {
 				officePhone=clinic.Phone;
 			}

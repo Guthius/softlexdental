@@ -14,8 +14,8 @@ namespace UnitTests {
 		private static Clinic _clinicNW;
 		private static Patient _patN;
 		private static Patient _patS;
-		private static Def _defRegionN;
-		private static Def _defRegionS;
+		private static Definition _defRegionN;
+		private static Definition _defRegionS;
 		///<summary>Contains all tasks added in the setup for this test class.</summary>
 		private static List<Task> _listTasks;
 		///<summary>Subset of _listTasks, containing all tasks _userA is subscribed to.  Must be properly managed by test cases.</summary>
@@ -29,8 +29,8 @@ namespace UnitTests {
 
 		[ClassInitialize]
 		public static void SetupClass(TestContext testContext) {
-			_defRegionN=DefT.CreateDefinition(DefCat.Regions,"RegionN","RegionN");
-			_defRegionS=DefT.CreateDefinition(DefCat.Regions,"RegionS","RegionS");
+			_defRegionN=DefT.CreateDefinition(DefinitionCategory.Regions,"RegionN","RegionN");
+			_defRegionS=DefT.CreateDefinition(DefinitionCategory.Regions,"RegionS","RegionS");
 			_clinicN=ClinicT.CreateClinic("ClinicN",regionDef:_defRegionN);
 			_clinicNW=ClinicT.CreateClinic("ClinicNW",regionDef:_defRegionN);
 			_clinicS=ClinicT.CreateClinic("ClinicS",regionDef:_defRegionS);
@@ -46,8 +46,8 @@ namespace UnitTests {
 
 		[TestInitialize]
 		public void SetupTest() {
-			PrefT.UpdateBool(PrefName.EasyNoClinics,false);
-			PrefT.UpdateInt(PrefName.TasksGlobalFilterType,(int)GlobalTaskFilterType.None);//Default is disabled.  Turn on, but set to None.
+			PrefT.UpdateBool(PreferenceName.EasyNoClinics,false);
+			PrefT.UpdateInt(PreferenceName.TasksGlobalFilterType,(int)GlobalTaskFilterType.None);//Default is disabled.  Turn on, but set to None.
 			TaskListT.ClearTaskListTable();
 			TaskT.ClearTaskTable();
 			TaskSubscriptionT.ClearTaskSubscriptionTable();

@@ -62,23 +62,23 @@ namespace OpenDental {
 			checkUseDefaults.Checked=true;
 			string baseVars=Lan.g(this,"Available variables:")+" [NameF], [Date], [Time], [OfficeName], [OfficePhone]";
 			ODGridRow row;
-			row=BuildRowForTemplate(PrefName.ASAPTextTemplate,"Text manual",baseVars);
+			row=BuildRowForTemplate(PreferenceName.ASAPTextTemplate,"Text manual",baseVars);
 			gridMain.Rows.Add(row);
-			row=BuildRowForTemplate(PrefName.WebSchedAsapTextTemplate,"Web Sched Text",baseVars+", [AsapURL]");
+			row=BuildRowForTemplate(PreferenceName.WebSchedAsapTextTemplate,"Web Sched Text",baseVars+", [AsapURL]");
 			gridMain.Rows.Add(row);
-			row=BuildRowForTemplate(PrefName.WebSchedAsapEmailTemplate,"Web Sched Email Body",baseVars+", [AsapURL]");
+			row=BuildRowForTemplate(PreferenceName.WebSchedAsapEmailTemplate,"Web Sched Email Body",baseVars+", [AsapURL]");
 			gridMain.Rows.Add(row);
-			row=BuildRowForTemplate(PrefName.WebSchedAsapEmailSubj,"Web Sched Email Subject",baseVars);
+			row=BuildRowForTemplate(PreferenceName.WebSchedAsapEmailSubj,"Web Sched Email Subject",baseVars);
 			gridMain.Rows.Add(row);
 			gridMain.EndUpdate();
 			if(_selectedClinicNum==0) {
-				textWebSchedPerDay.Text=Preferences.GetString(PrefName.WebSchedAsapTextLimit);
+				textWebSchedPerDay.Text=Preference.GetString(PreferenceName.WebSchedAsapTextLimit);
 				checkUseDefaults.Checked=false;
 			}
 			else {
-				ClinicPref clinicPref=ClinicPrefs.GetPref(PrefName.WebSchedAsapTextLimit,_selectedClinicNum);
+				ClinicPref clinicPref=ClinicPrefs.GetPref(PreferenceName.WebSchedAsapTextLimit,_selectedClinicNum);
 				if(clinicPref==null || clinicPref.ValueString==null) {
-					textWebSchedPerDay.Text=Preferences.GetString(PrefName.WebSchedAsapTextLimit);
+					textWebSchedPerDay.Text=Preference.GetString(PreferenceName.WebSchedAsapTextLimit);
 				}
 				else {
 					textWebSchedPerDay.Text=clinicPref.ValueString;
@@ -88,17 +88,17 @@ namespace OpenDental {
 		}
 
 		///<summary>Creates a row for the passed in template type. Unchecks checkUseDefaults if a clinic-level template is in use.</summary>
-		private ODGridRow BuildRowForTemplate(PrefName prefName,string templateName,string availableVars) {
+		private ODGridRow BuildRowForTemplate(PreferenceName prefName,string templateName,string availableVars) {
 			string templateText;
 			bool doShowDefault=false;
 			if(_selectedClinicNum==0) {
-				templateText=Preferences.GetString(prefName);
+				templateText=Preference.GetString(prefName);
 				checkUseDefaults.Checked=false;
 			}
 			else {
 				ClinicPref clinicPref=ClinicPrefs.GetPref(prefName,_selectedClinicNum);
 				if(clinicPref==null || clinicPref.ValueString==null) {
-					templateText=Preferences.GetString(prefName);
+					templateText=Preference.GetString(prefName);
 					doShowDefault=true;
 				}
 				else {
@@ -126,12 +126,12 @@ namespace OpenDental {
 		}
 
 		private void checkUseDefaults_Click(object sender,EventArgs e) {
-			List<PrefName> listPrefs=new List<PrefName> {
-				PrefName.ASAPTextTemplate,
-				PrefName.WebSchedAsapTextTemplate,
-				PrefName.WebSchedAsapEmailTemplate,
-				PrefName.WebSchedAsapEmailSubj,
-				PrefName.WebSchedAsapTextLimit,
+			List<PreferenceName> listPrefs=new List<PreferenceName> {
+				PreferenceName.ASAPTextTemplate,
+				PreferenceName.WebSchedAsapTextTemplate,
+				PreferenceName.WebSchedAsapEmailTemplate,
+				PreferenceName.WebSchedAsapEmailSubj,
+				PreferenceName.WebSchedAsapTextLimit,
 			};
 			if(checkUseDefaults.Checked) {
 				if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Delete custom templates for this clinic and switch to using defaults? This cannot be undone.")) {
@@ -144,8 +144,8 @@ namespace OpenDental {
 			}
 			else {//Was checked, now user is unchecking it.
 				bool wasChanged=false;
-				foreach(PrefName pref in listPrefs) {
-					if(ClinicPrefs.Upsert(pref,_selectedClinicNum,Preferences.GetString(pref))) {
+				foreach(PreferenceName pref in listPrefs) {
+					if(ClinicPrefs.Upsert(pref,_selectedClinicNum,Preference.GetString(pref))) {
 						wasChanged=true;
 					}
 				}
@@ -157,15 +157,15 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			PrefName prefName=(PrefName)gridMain.Rows[e.Row].Tag;
+			PreferenceName prefName=(PreferenceName)gridMain.Rows[e.Row].Tag;
 			FormRecallMessageEdit FormR=new FormRecallMessageEdit(prefName);
 			if(_selectedClinicNum==0) {
-				FormR.MessageVal=Preferences.GetString(prefName);
+				FormR.MessageVal=Preference.GetString(prefName);
 			}
 			else {
 				ClinicPref clinicPref=ClinicPrefs.GetPref(prefName,_selectedClinicNum);
 				if(clinicPref==null || string.IsNullOrEmpty(clinicPref.ValueString)) {
-					FormR.MessageVal=Preferences.GetString(prefName);
+					FormR.MessageVal=Preference.GetString(prefName);
 				}
 				else {
 					FormR.MessageVal=clinicPref.ValueString;
@@ -176,7 +176,7 @@ namespace OpenDental {
 				return;
 			}
 			if(_selectedClinicNum==0) {
-				if(Prefs.UpdateString(prefName,FormR.MessageVal)) {
+				if(Preference.Update(prefName,FormR.MessageVal)) {
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 			}
@@ -193,12 +193,12 @@ namespace OpenDental {
 				return;
 			}
 			if(_selectedClinicNum==0) {
-				if(Prefs.UpdateString(PrefName.WebSchedAsapTextLimit,textWebSchedPerDay.Text)) {
+				if(Preference.Update(PreferenceName.WebSchedAsapTextLimit,textWebSchedPerDay.Text)) {
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 			}
 			else {
-				if(ClinicPrefs.Upsert(PrefName.WebSchedAsapTextLimit,_selectedClinicNum,textWebSchedPerDay.Text)) {
+				if(ClinicPrefs.Upsert(PreferenceName.WebSchedAsapTextLimit,_selectedClinicNum,textWebSchedPerDay.Text)) {
 					DataValid.SetInvalid(InvalidType.ClinicPrefs);
 				}
 			}

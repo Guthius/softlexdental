@@ -401,7 +401,7 @@ namespace OpenDental {
 							textColor=ProviderTextColor;
 						}
 						else if(schedule.EmployeeNum!=0) { //Employee
-							desc=Employees.GetEmp(schedule.EmployeeNum).FName;
+							desc=Employee.GetById(schedule.EmployeeNum).FirstName;
 							barColor=EmployeeBarColor;
 							textColor=EmployeeTextColor;
 						}
@@ -610,7 +610,7 @@ namespace OpenDental {
 				return Providers.GetProv(x.ProvNum).ItemOrder.CompareTo(Providers.GetProv(y.ProvNum).ItemOrder);
 			}
 			if(x.EmployeeNum!=y.EmployeeNum) { //we are dealing with an employee
-				return Employees.GetEmp(x.EmployeeNum).FName.CompareTo(Employees.GetEmp(y.EmployeeNum).FName);
+				return Employee.GetById(x.EmployeeNum).FirstName.CompareTo(Employee.GetById(y.EmployeeNum).FirstName);
 			}
 			return 0;
 		}

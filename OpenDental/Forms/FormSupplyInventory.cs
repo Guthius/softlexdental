@@ -77,7 +77,7 @@ namespace OpenDental
         {
             if (!Security.IsAuthorized(Permissions.Setup)) return;
 
-            using (var formDefinitions = new FormDefinitions(DefCat.SupplyCats))
+            using (var formDefinitions = new FormDefinitions(DefinitionCategory.SupplyCats))
             {
                 formDefinitions.ShowDialog(this);
             }

@@ -43,7 +43,7 @@ namespace OpenDental {
 				row.Tag=patFieldDef;
 				grid.Rows.Add(row);
 			}
-			if(!Preferences.GetBool(PrefName.DisplayRenamedPatFields)) {
+			if(!Preference.GetBool(PreferenceName.DisplayRenamedPatFields)) {
 				return;
 			}
 			//Now loop through the PatFields that do not have a matching PatFieldDef.

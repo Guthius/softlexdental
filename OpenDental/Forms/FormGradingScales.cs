@@ -29,7 +29,7 @@ namespace OpenDental {
 		}
 
 		private void FillGrid() {
-			_listGradingScales=GradingScales.RefreshList();
+			_listGradingScales=GradingScale.All();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("FormGradingScales","Description"),160);
@@ -57,8 +57,7 @@ namespace OpenDental {
 
 		private void butAdd_Click(object sender,EventArgs e) {
 			GradingScale gradingScaleNew=new GradingScale();
-			gradingScaleNew.GradingScaleNum=GradingScales.Insert(gradingScaleNew);
-			gradingScaleNew.IsNew=true;
+			GradingScale.Insert(gradingScaleNew);
 			FormGradingScaleEdit FormGSE=new FormGradingScaleEdit(gradingScaleNew);
 			FormGSE.ShowDialog();
 			FillGrid();

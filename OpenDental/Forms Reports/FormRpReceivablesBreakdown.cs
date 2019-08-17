@@ -250,7 +250,7 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,System.EventArgs e) {
-			int payPlanVersion = Preferences.GetInt(PrefName.PayPlansVersion);
+			int payPlanVersion = Preference.GetInt(PreferenceName.PayPlansVersion);
 			string bDate;
 			string eDate;
 			decimal rcvStart = 0;
@@ -508,7 +508,7 @@ namespace OpenDental {
 					Font fontSubTitle = new Font("Tahoma",10,FontStyle.Bold);
 					report.ReportName=Lan.g(this,"Receivables Breakdown");
 					report.AddTitle("Title",Lan.g(this,"Receivables Breakdown"),fontTitle);
-					report.AddSubTitle("PracticeTitle",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
+					report.AddSubTitle("PracticeTitle",Preference.GetString(PreferenceName.PracticeTitle),fontSubTitle);
 					report.AddSubTitle("Date SubTitle",date1.SelectionStart.ToString("d"),fontSubTitle);
 					string provNames = "";
 					for(int i=0;i<listProv.SelectedIndices.Count;i++) {

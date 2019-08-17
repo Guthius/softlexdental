@@ -22,7 +22,7 @@ namespace OpenDental{
 		private System.ComponentModel.Container components = null;
 		private UI.ODGrid gridMain;
 		private Contact[] ContactList;
-		private List<Def> _listContactCategoryDefs;
+		private List<Definition> _listContactCategoryDefs;
 
 		///<summary></summary>
 		public FormContacts()
@@ -153,9 +153,9 @@ namespace OpenDental{
 		#endregion
 
 		private void FormContacts_Load(object sender, System.EventArgs e) {
-			_listContactCategoryDefs=Defs.GetDefsForCategory(DefCat.ContactCategories,true);
+			_listContactCategoryDefs=Definition.GetByCategory(DefinitionCategory.ContactCategories);
 			for(int i=0;i<_listContactCategoryDefs.Count;i++){
-				listCategory.Items.Add(_listContactCategoryDefs[i].ItemName);
+				listCategory.Items.Add(_listContactCategoryDefs[i].Description);
 			}
 			if(listCategory.Items.Count>0) {
 				listCategory.SelectedIndex=0;
@@ -167,7 +167,9 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			ContactList=Contacts.Refresh(_listContactCategoryDefs[listCategory.SelectedIndex].DefNum);
+            CacheManager.Invalidate<Contact>();
+
+            ContactList = Contact.All().ToArray();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			gridMain.Columns.Add(new ODGridColumn(Lan.g("TableContacts","Last Name"),100));
@@ -179,9 +181,9 @@ namespace OpenDental{
 			ODGridRow row;
 			foreach(Contact contactCur in ContactList) {
 				row=new ODGridRow();
-				row.Cells.Add(contactCur.LName);
-				row.Cells.Add(contactCur.FName);
-				row.Cells.Add(contactCur.WkPhone);
+				row.Cells.Add(contactCur.LastName);
+				row.Cells.Add(contactCur.FirstName);
+				row.Cells.Add(contactCur.Phone);
 				row.Cells.Add(contactCur.Fax);
 				row.Cells.Add(contactCur.Notes);
 				gridMain.Rows.Add(row);
@@ -200,7 +202,7 @@ namespace OpenDental{
 
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			Contact ContactCur=new Contact();
-			ContactCur.Category=_listContactCategoryDefs[listCategory.SelectedIndex].DefNum;
+			ContactCur.Category=_listContactCategoryDefs[listCategory.SelectedIndex].Id;
 			FormContactEdit FormCE=new FormContactEdit();
 			FormCE.ContactCur=ContactCur;
 			FormCE.IsNew=true;

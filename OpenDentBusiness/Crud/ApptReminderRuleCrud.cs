@@ -186,7 +186,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ApptReminderRule into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(ApptReminderRule apptReminderRule,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO apptreminderrule (";
 			if(!useExistingPK && isRandomKeys) {
 				apptReminderRule.ApptReminderRuleNum=ReplicationServers.GetKeyNoCache("apptreminderrule","ApptReminderRuleNum");

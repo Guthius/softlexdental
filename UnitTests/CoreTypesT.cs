@@ -15,7 +15,7 @@ namespace UnitTests
             string command;
 
             command = "DROP TABLE IF EXISTS tempcore";
-            DataCore.NonQ(command);
+            Db.NonQ(command);
             command = @"CREATE TABLE tempcore (
 					TempCoreNum bigint NOT NULL,
 					TimeOfDayTest time NOT NULL DEFAULT '00:00:00',
@@ -31,14 +31,14 @@ namespace UnitTests
 					TextLargeTest mediumtext NOT NULL,
 					VarCharTest varchar(255) NOT NULL
 					) DEFAULT CHARSET=utf8";
-            DataCore.NonQ(command);
+            Db.NonQ(command);
 
             command = "DROP TABLE IF EXISTS tempgroupconcat";
-            DataCore.NonQ(command);
+            Db.NonQ(command);
             command = @"CREATE TABLE tempgroupconcat (
 					Names varchar(255)
 					) DEFAULT CHARSET=utf8";
-            DataCore.NonQ(command);
+            Db.NonQ(command);
 
             retVal += "Temp tables created.\r\n";
             //retVal+="Temp tables cannot yet be created.\r\n";

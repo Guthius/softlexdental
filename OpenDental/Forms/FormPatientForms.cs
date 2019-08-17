@@ -95,7 +95,7 @@ namespace OpenDental {
 			if(!Security.IsAuthorized(Permissions.Setup)) {
 				return;
 			}
-			FormDefinitions formD=new FormDefinitions(DefCat.ImageCats);
+			FormDefinitions formD=new FormDefinitions(DefinitionCategory.ImageCats);
 			formD.ShowDialog();
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Defs");
 			FillGrid();
@@ -148,7 +148,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"No forms for this patient are set to show in the kiosk.");
 				return;
 			}
-			if(Preferences.GetLong(PrefName.ProcessSigsIntervalInSecs)==0) {
+			if(Preference.GetLong(PreferenceName.ProcessSigsIntervalInSecs)==0) {
 				MsgBox.Show(this,"Cannot open kiosk unless process signal interval is set. To set it, go to Setup > Miscellaneous.");
 				return;
 			}

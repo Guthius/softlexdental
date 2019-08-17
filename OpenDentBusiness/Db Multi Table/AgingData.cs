@@ -102,7 +102,7 @@ namespace OpenDentBusiness
                     + $@"WHERE payplancharge.Principal + payplancharge.Interest>0
 					AND payplancharge.ChargeType = {(int)PayPlanChargeType.Debit} "
                     //include all charges in the past or due 'PayPlanBillInAdvance' days into the future.
-                    + $@"AND payplancharge.ChargeDate <= {POut.Date(DateTime.Today.AddDays(Preferences.GetDouble(PrefName.PayPlansBillInAdvanceDays)))}
+                    + $@"AND payplancharge.ChargeDate <= {POut.Date(DateTime.Today.AddDays(Preference.GetDouble(PreferenceName.PayPlansBillInAdvanceDays)))}
 					{whereAndClinNum}
 					GROUP BY {guarOrPat}.PatNum";
                 using (DataTable tableMaxPPCDate = Db.GetTable(command))
@@ -142,9 +142,9 @@ namespace OpenDentBusiness
                 }
             }
             DateTime dateAsOf = DateTime.Today;//used to determine when the balance on this date began
-            if (Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily))
+            if (Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily))
             {//if aging calculated monthly, use the last aging date instead of today
-                dateAsOf = Preferences.GetDate(PrefName.DateLastAging);
+                dateAsOf = Preference.GetDate(PreferenceName.DateLastAging);
             }
             List<PatComm> listPatComms = new List<PatComm>();
             using (DataTable tableDateBalsBegan = Ledgers.GetDateBalanceBegan(null, dateAsOf, isSuperBills, listClinicNums))

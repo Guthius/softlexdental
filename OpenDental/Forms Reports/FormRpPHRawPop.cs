@@ -19,7 +19,7 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.ListBox listAdjType;
 		private FormQuery FormQuery2;
-		private List<Def> _listAdjTypeDefs;
+		private List<Definition> _listAdjTypeDefs;
 
 		///<summary></summary>
 		public FormRpPHRawPop(){
@@ -148,9 +148,9 @@ namespace OpenDental{
 			//will start out 1st through 30th of previous month
 			date1.SelectionStart=new DateTime(today.Year,today.Month,1).AddMonths(-1);
 			date2.SelectionStart=new DateTime(today.Year,today.Month,1).AddDays(-1);
-			_listAdjTypeDefs=Defs.GetDefsForCategory(DefCat.AdjTypes,true);
+			_listAdjTypeDefs=Definition.GetByCategory(DefinitionCategory.AdjTypes);
 			for(int i=0;i<_listAdjTypeDefs.Count;i++){
-				listAdjType.Items.Add(_listAdjTypeDefs[i].ItemName);
+				listAdjType.Items.Add(_listAdjTypeDefs[i].Description);
 			}
 		}
 
@@ -173,7 +173,7 @@ namespace OpenDental{
 					types+="OR ";
 				}
 				types+="AdjType='"
-					+_listAdjTypeDefs[listAdjType.SelectedIndices[i]].DefNum.ToString()
+					+_listAdjTypeDefs[listAdjType.SelectedIndices[i]].Id.ToString()
 					+"' ";
 			}
 			types+=")";

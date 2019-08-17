@@ -221,7 +221,7 @@ namespace OpenDentBusiness
         ///<summary>Updates this payment.  Must make sure to update the datePay of all attached paysplits so that they are always in synch.  Also need to manually set IsSplit before here.  Will throw an exception if bad date, so surround by try-catch.  Set excludeDepositNum to true from FormPayment to prevent collision from another worksation that just deleted a deposit.</summary>
         public static void Update(Payment pay, bool excludeDepositNum)
         {
-            if (!Preferences.GetBool(PrefName.AccountAllowFutureDebits) && !Preferences.GetBool(PrefName.FutureTransDatesAllowed) && pay.PayDate.Date > DateTime.Today.Date)
+            if (!Preference.GetBool(PreferenceName.AccountAllowFutureDebits) && !Preference.GetBool(PreferenceName.FutureTransDatesAllowed) && pay.PayDate.Date > DateTime.Today.Date)
             {
                 throw new ApplicationException(Lans.g("Payments", "Payment Date must not be a future date."));
             }
@@ -295,7 +295,7 @@ namespace OpenDentBusiness
             {
                 estBal = PIn.Double(table.Rows[0][0].ToString());
             }
-            if (!Preferences.GetBool(PrefName.BalancesDontSubtractIns))
+            if (!Preference.GetBool(PreferenceName.BalancesDontSubtractIns))
             {
                 command = @"SELECT SUM(InsPayEst)+SUM(Writeoff) 
 					FROM claimproc
@@ -342,9 +342,9 @@ namespace OpenDentBusiness
                 if (table.Rows[i]["PatNum"].ToString() == pay.PatNum.ToString())
                 {
                     pat = new Patient();
-                    pat.PatNum = PIn.Long(table.Rows[i][0].ToString());
+                    pat.PatNum = PIn.Int(table.Rows[i][0].ToString());
                     pat.EstBalance = PIn.Double(table.Rows[i][1].ToString());
-                    if (!Preferences.GetBool(PrefName.BalancesDontSubtractIns))
+                    if (!Preference.GetBool(PreferenceName.BalancesDontSubtractIns))
                     {
                         pat.EstBalance -= PIn.Double(table.Rows[i]["insEst_"].ToString());
                     }
@@ -360,9 +360,9 @@ namespace OpenDentBusiness
                     continue;
                 }
                 pat = new Patient();
-                pat.PatNum = PIn.Long(table.Rows[i][0].ToString());
+                pat.PatNum = PIn.Int(table.Rows[i][0].ToString());
                 pat.EstBalance = PIn.Double(table.Rows[i][1].ToString());
-                if (!Preferences.GetBool(PrefName.BalancesDontSubtractIns))
+                if (!Preference.GetBool(PreferenceName.BalancesDontSubtractIns))
                 {
                     pat.EstBalance -= PIn.Double(table.Rows[i]["insEst_"].ToString());
                 }
@@ -468,7 +468,7 @@ namespace OpenDentBusiness
             }
             for (int i = 0; i < jeL.Count; i++)
             {//we make sure down below that this count is exactly 2.
-                if (Account.GetAccount(jeL[i].AccountNum).AcctType == AccountType.Asset)
+                if (Account.GetById(jeL[i].AccountNum).Type == AccountType.Asset)
                 {
                     oldAcct = jeL[i].AccountNum;
                 }
@@ -542,7 +542,7 @@ namespace OpenDentBusiness
                 Transactions.Insert(trans);//sets entry date
                                            //first the deposit entry
                 JournalEntry je = new JournalEntry();
-                je.AccountNum = newAcct;//DepositAccounts[comboDepositAccount.SelectedIndex];
+                je.AccountNum = (int)newAcct;//DepositAccounts[comboDepositAccount.SelectedIndex];
                 je.CheckNumber = Lans.g("Payments", "DEP");
                 je.DateDisplayed = payDate;//it would be nice to add security here.
                 if (absNew == newAmt)
@@ -554,12 +554,12 @@ namespace OpenDentBusiness
                     je.CreditAmt = absNew;
                 }
                 je.Memo = Lans.g("Payments", "Payment -") + " " + patName;
-                je.Splits = Account.GetDescript(Preferences.GetLong(PrefName.AccountingCashIncomeAccount));
+                je.Splits = Account.GetDescription(Preference.GetInt(PreferenceName.AccountingCashIncomeAccount));
                 je.TransactionNum = trans.TransactionNum;
                 JournalEntries.Insert(je);
                 //then, the income entry
                 je = new JournalEntry();
-                je.AccountNum = Preferences.GetLong(PrefName.AccountingCashIncomeAccount);
+                je.AccountNum = Preference.GetInt(PreferenceName.AccountingCashIncomeAccount);
                 //je.CheckNumber=;
                 je.DateDisplayed = payDate;//it would be nice to add security here.
                 if (absNew == newAmt)
@@ -571,7 +571,7 @@ namespace OpenDentBusiness
                     je.DebitAmt = absNew;
                 }
                 je.Memo = Lans.g("Payments", "Payment -") + " " + patName;
-                je.Splits = Account.GetDescript(newAcct);
+                je.Splits = Account.GetDescription((int)newAcct);
                 je.TransactionNum = trans.TransactionNum;
                 JournalEntries.Insert(je);
                 return;
@@ -597,7 +597,7 @@ namespace OpenDentBusiness
             }
             for (int i = 0; i < 2; i++)
             {
-                if (Account.GetAccount(jeL[i].AccountNum).AcctType == AccountType.Asset)
+                if (Account.GetById(jeL[i].AccountNum).Type == AccountType.Asset)
                 {
                     oldAcct = jeL[i].AccountNum;
                 }
@@ -644,11 +644,11 @@ namespace OpenDentBusiness
             {
                 if (jeDebit.AccountNum == oldAcct)
                 {
-                    jeDebit.AccountNum = newAcct;
+                    jeDebit.AccountNum = (int)newAcct;
                 }
                 if (jeCredit.AccountNum == oldAcct)
                 {
-                    jeCredit.AccountNum = newAcct;
+                    jeCredit.AccountNum = (int)newAcct;
                 }
             }
             JournalEntries.Update(jeDebit);

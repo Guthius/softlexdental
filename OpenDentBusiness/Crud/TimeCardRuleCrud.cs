@@ -44,7 +44,7 @@ namespace OpenDentBusiness.Crud{
 			foreach(DataRow row in table.Rows) {
 				timeCardRule=new TimeCardRule();
 				timeCardRule.TimeCardRuleNum = PIn.Long  (row["TimeCardRuleNum"].ToString());
-				timeCardRule.EmployeeNum     = PIn.Long  (row["EmployeeNum"].ToString());
+				timeCardRule.EmployeeNum     = PIn.Int  (row["EmployeeNum"].ToString());
 				timeCardRule.OverHoursPerDay = PIn.Time(row["OverHoursPerDay"].ToString());
 				timeCardRule.AfterTimeOfDay  = PIn.Time(row["AfterTimeOfDay"].ToString());
 				timeCardRule.BeforeTimeOfDay = PIn.Time(row["BeforeTimeOfDay"].ToString());
@@ -180,7 +180,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one TimeCardRule into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(TimeCardRule timeCardRule,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO timecardrule (";
 			if(!useExistingPK && isRandomKeys) {
 				timeCardRule.TimeCardRuleNum=ReplicationServers.GetKeyNoCache("timecardrule","TimeCardRuleNum");

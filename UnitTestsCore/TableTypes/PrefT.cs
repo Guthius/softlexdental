@@ -11,12 +11,12 @@ namespace UnitTestsCore {
 		///<summary>Key: Pref.PrefName, Value: Pref.ValueString</summary>
 		private static Dictionary<string,string> _dictPrefsOrig=new Dictionary<string, string>();
 
-		private static void AddToDict(PrefName prefName,string newValue) {
+		private static void AddToDict(PreferenceName prefName,string newValue) {
 			AddToDict(prefName.ToString(),newValue);
 		}
 
 		private static void AddToDict(string prefName,string newValue) {
-			string oldValue=Prefs.GetPref(prefName.ToString()).ValueString;
+			string oldValue=Prefs.GetPref(prefName.ToString()).Value;
 			if(oldValue==newValue || _dictPrefsOrig.ContainsKey(prefName)) {
 				return;
 			}
@@ -44,7 +44,7 @@ namespace UnitTestsCore {
 		}
 
 		///<summary>Updates a pref of type int.  Returns true if a change was required, or false if no change needed.</summary>
-		public static bool UpdateInt(PrefName prefName,int newValue) {
+		public static bool UpdateInt(PreferenceName prefName,int newValue) {
 			return UpdateInt(prefName.ToString(),newValue);
 		}
 
@@ -54,12 +54,12 @@ namespace UnitTestsCore {
 		}
 
 		///<summary>Updates a pref of type byte.  Returns true if a change was required, or false if no change needed.</summary>
-		public static bool UpdateByte(PrefName prefName,byte newValue) {
+		public static bool UpdateByte(PreferenceName prefName,byte newValue) {
 			return UpdateLong(prefName,newValue);
 		}
 
 		///<summary>Updates a pref of type long.  Returns true if a change was required, or false if no change needed.</summary>
-		public static bool UpdateLong(PrefName prefName,long newValue) {
+		public static bool UpdateLong(PreferenceName prefName,long newValue) {
 			return UpdateLong(prefName.ToString(),newValue);
 		}
 
@@ -71,25 +71,25 @@ namespace UnitTestsCore {
 
 		///<summary>Updates a pref of type double.  Returns true if a change was required, or false if no change needed.
 		///Set doRounding false when the double passed in needs to be Multiple Precision Floating-Point Reliable (MPFR).</summary>
-		public static bool UpdateDouble(PrefName prefName,double newValue,bool doRounding=true) {
+		public static bool UpdateDouble(PreferenceName prefName,double newValue,bool doRounding=true) {
 			AddToDict(prefName,POut.Double(newValue));
 			return Prefs.UpdateDouble(prefName,newValue,doRounding);
 		}
 
 		///<summary>Returns true if a change was required, or false if no change needed.</summary>
-		public static bool UpdateBool(PrefName prefName,bool newValue) {
+		public static bool UpdateBool(PreferenceName prefName,bool newValue) {
 			AddToDict(prefName,POut.Bool(newValue));
 			return Prefs.UpdateBool(prefName,newValue);
 		}
 
 		///<summary>Returns true if a change was required, or false if no change needed.</summary>
-		public static bool UpdateString(PrefName prefName,string newValue) {
+		public static bool UpdateString(PreferenceName prefName,string newValue) {
 			AddToDict(prefName,newValue);
 			return Prefs.UpdateString(prefName,newValue);
 		}
 
 		///<summary>Returns true if a change was required, or false if no change needed.</summary>
-		public static bool UpdateDateT(PrefName prefName,DateTime newValue) {
+		public static bool UpdateDateT(PreferenceName prefName,DateTime newValue) {
 			AddToDict(prefName,POut.DateT(newValue));
 			return Prefs.UpdateDateT(prefName,newValue);
 		}

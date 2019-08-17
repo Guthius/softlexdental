@@ -131,7 +131,7 @@ namespace OpenDentBusiness {
 
 		///<summary>Throws an exception if validation fails.</summary>
 		private string GenerateCCD(Patient pat,string referralReason,bool hasAllergy,bool hasEncounter,bool hasFunctionalStatus,bool hasImmunization,bool hasMedication,bool hasPlanOfCare,bool hasProblem,bool hasProcedure,bool hasReferral,bool hasResult,bool hasSocialHistory,bool hasVitalSign,string instructions,DateTime date) {
-			Medications.RefreshCache();
+			Medication.Refresh();
 			string strErrors=ValidateAll(pat,date);
 			if(strErrors!="") {
 				throw new ApplicationException(strErrors);
@@ -260,8 +260,8 @@ namespace OpenDentBusiness {
 				Start("assignedAuthor");
 				StartAndEnd("id","extension",provAuthor.NationalProvID,"root","2.16.840.1.113883.4.6");//Validated NPI. TODO: We might need to assign a global GUID for each office so that the provider can be uniquely identified anywhere in the world.
 				StartAndEnd("code","code",GetTaxonomy(provAuthor),"codeSystem",strCodeSystemNucc,"codeSystemName",strCodeSystemNameNucc);
-				AddressUnitedStates(Preferences.GetString(PrefName.PracticeAddress),Preferences.GetString(PrefName.PracticeAddress2),Preferences.GetString(PrefName.PracticeCity),Preferences.GetString(PrefName.PracticeST));//Validated
-				string strPracticePhone=Preferences.GetString(PrefName.PracticePhone);//Validated
+				AddressUnitedStates(Preference.GetString(PreferenceName.PracticeAddress), Preference.GetString(PreferenceName.PracticeAddress2), Preference.GetString(PreferenceName.PracticeCity), Preference.GetString(PreferenceName.PracticeST));//Validated
+				string strPracticePhone= Preference.GetString(PreferenceName.PracticePhone);//Validated
 				strPracticePhone=strPracticePhone.Substring(0,3)+"-"+strPracticePhone.Substring(3,3)+"-"+strPracticePhone.Substring(6);
 				StartAndEnd("telecom","use","WP","value","tel:"+strPracticePhone);//Validated
 				Start("assignedPerson");
@@ -276,16 +276,16 @@ namespace OpenDentBusiness {
 				#region custodian-----------------------------------------------------------------------------------------------------------------------------
 				//"Represents the organization in charge of maintaining the document." Section 2.1.5, page 72
 				//The custodian is the steward that is entrusted with the care of the document. Every CDA document has exactly one custodian.
-				Provider provCustodian=Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv));
+				Provider provCustodian=Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));
 				Start("custodian");
 				Start("assignedCustodian");
 				Start("representedCustodianOrganization");
 				StartAndEnd("id","extension",provCustodian.NationalProvID,"root","2.16.840.1.113883.4.6");//Validated NPI. We might need to assign a global GUID for each office so that the provider can be uniquely identified anywhere in the world.
-				string custodianTitle=Preferences.GetString(PrefName.PracticeTitle);
-				string custodianAddress=Preferences.GetString(PrefName.PracticeAddress);//Validated
-				string custodianAddress2=Preferences.GetString(PrefName.PracticeAddress2);//Validated
-				string custodianCity=Preferences.GetString(PrefName.PracticeCity);//Validated
-				string custodianState=Preferences.GetString(PrefName.PracticeST);//Validated
+				string custodianTitle= Preference.GetString(PreferenceName.PracticeTitle);
+				string custodianAddress= Preference.GetString(PreferenceName.PracticeAddress);//Validated
+				string custodianAddress2= Preference.GetString(PreferenceName.PracticeAddress2);//Validated
+				string custodianCity= Preference.GetString(PreferenceName.PracticeCity);//Validated
+				string custodianState= Preference.GetString(PreferenceName.PracticeST);//Validated
 				string custodianPhone=strPracticePhone;
 				if(Preferences.HasClinicsEnabled && _patOutCcd.ClinicNum!=0) {
 					Clinic clinicCustodian=Clinics.GetClinic(_patOutCcd.ClinicNum);
@@ -305,7 +305,7 @@ namespace OpenDentBusiness {
 				#endregion custodian
 				#region legalAuthenticator--------------------------------------------------------------------------------------------------------------------
 				//This element identifies the single person legally responsible for the document and must be present if the document has been legally authenticated.
-				Provider provLegal=Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv));
+				Provider provLegal=Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));
 				if(!provLegal.IsNotPerson) {
 					Start("legalAuthenticator");
 					TimeElement("time",DateTime.Now);
@@ -315,10 +315,10 @@ namespace OpenDentBusiness {
 						provLegal=Providers.GetProv(pat.PriProv);
 					}
 					StartAndEnd("id","root","2.16.840.1.113883.4.6","extension",provLegal.NationalProvID);//Validated NPI. We might need to assign a global GUID for each office so that the provider can be uniquely identified anywhere in the world.
-					string legalAuthAddress=Preferences.GetString(PrefName.PracticeAddress);//Validated
-					string legalAuthAddress2=Preferences.GetString(PrefName.PracticeAddress2);//Validated
-					string legalAuthCity=Preferences.GetString(PrefName.PracticeCity);//Validated
-					string legalAuthState=Preferences.GetString(PrefName.PracticeST);//Validated
+					string legalAuthAddress= Preference.GetString(PreferenceName.PracticeAddress);//Validated
+					string legalAuthAddress2= Preference.GetString(PreferenceName.PracticeAddress2);//Validated
+					string legalAuthCity= Preference.GetString(PreferenceName.PracticeCity);//Validated
+					string legalAuthState= Preference.GetString(PreferenceName.PracticeST);//Validated
 					string legalAuthPhone=strPracticePhone;
 					if(Preferences.HasClinicsEnabled && _patOutCcd.ClinicNum!=0) {
 						Clinic clinicAuth=Clinics.GetClinic(_patOutCcd.ClinicNum);
@@ -352,10 +352,10 @@ namespace OpenDentBusiness {
 					Start("performer","typeCode","PRF");
 					Start("assignedEntity");
 					if(provPri==null) {
-						provPri=Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv));
+						provPri=Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));
 					}
 					StartAndEnd("id","root","2.16.840.1.113883.4.6","extension",provPri.NationalProvID);//Validated NPI. We might need to assign a global GUID for each office so that the provider can be uniquely identified anywhere in the world.
-					AddressUnitedStates(Preferences.GetString(PrefName.PracticeAddress),Preferences.GetString(PrefName.PracticeAddress2),Preferences.GetString(PrefName.PracticeCity),Preferences.GetString(PrefName.PracticeST));//Validated
+					AddressUnitedStates(Preference.GetString(PreferenceName.PracticeAddress), Preference.GetString(PreferenceName.PracticeAddress2), Preference.GetString(PreferenceName.PracticeCity), Preference.GetString(PreferenceName.PracticeST));//Validated
 					StartAndEnd("telecom","use","WP","value","tel:"+strPracticePhone);//Validated
 					Start("assignedPerson");
 					Start("name");
@@ -406,11 +406,11 @@ Body
 				return provider.TaxonomyCodeOverride;
 			}
 			string spec="1223G0001X";//general
-			Def provSpec=Defs.GetDef(DefCat.ProviderSpecialties,provider.Specialty);
+			Definition provSpec=Defs.GetDef(DefinitionCategory.ProviderSpecialties,provider.Specialty);
 			if(provSpec==null) {
 				return spec;
 			}
-			switch(provSpec.ItemName) {
+			switch(provSpec.Description) {
 				case "General": spec="1223G0001X"; break;
 				case "Hygienist": spec="124Q00000X"; break;
 				case "PublicHealth": spec="1223D0001X"; break;
@@ -485,8 +485,8 @@ Allergies
 						}
 					}
 					else {
-						med=Medications.GetMedication(allergyDef.MedicationNum);
-						_w.WriteElementString("td",med.RxCui.ToString()+" - "+med.MedName);
+						med=Medication.GetById(allergyDef.MedicationNum);
+						_w.WriteElementString("td",med.RxCui.ToString()+" - "+med.Description);
 					}
 					//}
 					_w.WriteElementString("td",allergy.Reaction);
@@ -626,8 +626,8 @@ Allergies
 				//For example, you might enter an allergy for Vicoprofen.
 				//}
 				else {//Medication Brand Name or Medication Clinical Drug (RxNorm codes)
-					Medication med=Medications.GetMedication(allergyDef.MedicationNum);
-					StartAndEnd("code","code",med.RxCui.ToString(),"displayName",med.MedName,"codeSystem",strCodeSystemRxNorm,"codeSystemName",strCodeSystemNameRxNorm);
+					Medication med=Medication.GetById(allergyDef.MedicationNum);
+					StartAndEnd("code","code",med.RxCui.ToString(),"displayName",med.Description,"codeSystem",strCodeSystemRxNorm,"codeSystemName",strCodeSystemNameRxNorm);
 				}
 				End("playingEntity");
 				End("participantRole");
@@ -910,7 +910,7 @@ Functional and Cognitive Status
 					DiseaseDef diseaseDef=null;
 					Snomed snomedProblem=null;
 					if(listProblemsFiltered[i].DiseaseDefNum>0) {
-						diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
+						diseaseDef=DiseaseDef.GetById(listProblemsFiltered[i].DiseaseDefNum);
 						if(diseaseDef!=null && !String.IsNullOrEmpty(diseaseDef.SnomedCode)) {
 							snomedProblem=Snomeds.GetByCode(diseaseDef.SnomedCode);
 						}
@@ -952,7 +952,7 @@ Functional and Cognitive Status
 				DiseaseDef diseaseDef=null;
 				Snomed snomedProblem=null;
 				if(listProblemsFiltered[i].PatNum!=0) {
-					diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
+					diseaseDef=DiseaseDef.GetById(listProblemsFiltered[i].DiseaseDefNum);
 					snomedProblem=Snomeds.GetByCode(diseaseDef.SnomedCode);
 				}
 				if(diseaseDef==null) {
@@ -1129,18 +1129,18 @@ Immunizations
 						vaccineDef=VaccineDefs.GetOne(listVaccinePatsFiltered[i].VaccineDefNum);
 					}
 					Start("tr");
-					Cvx cvx;
+					CVX cvx;
 					if(String.IsNullOrEmpty(vaccineDef.CVXCode)) {
-						cvx=new Cvx();
+						cvx=new CVX();
 					}
 					else {
-						cvx=Cvxs.GetOneFromDb(vaccineDef.CVXCode);
+						cvx=CVX.GetByCode(vaccineDef.CVXCode);
 					}
-					if(String.IsNullOrEmpty(cvx.CvxCode)) {
+					if(String.IsNullOrEmpty(cvx.Code)) {
 						_w.WriteElementString("td","");
 					}
 					else {
-						_w.WriteElementString("td",cvx.CvxCode+" - "+cvx.Description);
+						_w.WriteElementString("td",cvx.Code+" - "+cvx.Description);
 					}
 					if(listVaccinePatsFiltered[i].DateTimeStart.Year<1880) {
 						_w.WriteElementString("td","");
@@ -1194,8 +1194,8 @@ Immunizations
 					StartAndEnd("code","nullFlavor","UNK");
 				}
 				else {
-					Cvx cvx=Cvxs.GetOneFromDb(vaccineDef.CVXCode);
-					StartAndEnd("code","code",cvx.CvxCode,"codeSystem",strCodeSystemCvx,"displayName",cvx.Description,"codeSystemName",strCodeSystemNameCvx);
+					CVX cvx=CVX.GetByCode(vaccineDef.CVXCode);
+					StartAndEnd("code","code",cvx.Code,"codeSystem",strCodeSystemCvx,"displayName",cvx.Description,"codeSystemName",strCodeSystemNameCvx);
 				}
 				End("manufacturedMaterial");
 				End("manufacturedProduct");
@@ -1272,10 +1272,10 @@ Medications
 				for(int i=0;i<listMedPatsFiltered.Count;i++) {
 					string strMedName=listMedPatsFiltered[i].MedDescript;
 					if(listMedPatsFiltered[i].MedicationNum!=0) {
-						strMedName=Medications.GetNameOnly(listMedPatsFiltered[i].MedicationNum);
+						strMedName=Medication.GetDescription(listMedPatsFiltered[i].MedicationNum, false);
 					}
 					Start("tr");
-					if(listMedPatsFiltered[i].RxCui==0) {
+					if(string.IsNullOrEmpty(listMedPatsFiltered[i].RxCui)) {
 						_w.WriteElementString("td","");
 					}
 					else {
@@ -1316,7 +1316,7 @@ Medications
 					strMedName=listMedPatsFiltered[i].MedDescript;//This might be blank, for example not from NewCrop.
 				}
 				if(listMedPatsFiltered[i].MedicationNum!=0) {//If NewCrop, this will be 0.  Also might be zero in the future when we start allowing freeform medications.
-					strMedName=Medications.GetNameOnly(listMedPatsFiltered[i].MedicationNum);
+					strMedName=Medication.GetDescription(listMedPatsFiltered[i].MedicationNum, false);
 				}
 				Start("entry","typeCode","DRIV");
 				Start("substanceAdministration","classCode","SBADM","moodCode","EVN");
@@ -1351,7 +1351,7 @@ Medications
 				Guid();
 				Start("manufacturedMaterial");
 				//The code must be an RxNorm.
-				if(listMedPatsFiltered[i].RxCui==0) {
+				if(string.IsNullOrEmpty(listMedPatsFiltered[i].RxCui)) {
 					Start("code","nullFlavor","UNK");
 				}
 				else {
@@ -1505,14 +1505,14 @@ Problems
 						diseaseDef=new DiseaseDef();
 					}
 					else {
-						diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
+						diseaseDef=DiseaseDef.GetById(listProblemsFiltered[i].DiseaseDefNum);
 					}
 					Start("tr");
 					if(String.IsNullOrEmpty(diseaseDef.SnomedCode)) {
 						_w.WriteElementString("td","");
 					}
 					else {
-						_w.WriteElementString("td",diseaseDef.SnomedCode+" - "+diseaseDef.DiseaseName);
+						_w.WriteElementString("td",diseaseDef.SnomedCode+" - "+diseaseDef.Name);
 					}
 					if(listProblemsFiltered[i].DateStart.Year<1880) {
 						_w.WriteElementString("td","");//Directions
@@ -1590,7 +1590,7 @@ Problems
 					diseaseDef=new DiseaseDef();
 				}
 				else {
-					diseaseDef=DiseaseDefs.GetItem(listProblemsFiltered[i].DiseaseDefNum);
+					diseaseDef=DiseaseDef.GetById(listProblemsFiltered[i].DiseaseDefNum);
 				}
 				Start("entry","typeCode","DRIV");
 				Start("act","classCode","ACT","moodCode","EVN");
@@ -1634,7 +1634,7 @@ Problems
 					Attribs("nullFlavor","UNK");
 				}
 				else {
-					Attribs("code",diseaseDef.SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",diseaseDef.DiseaseName);
+					Attribs("code",diseaseDef.SnomedCode,"codeSystem",strCodeSystemSnomed,"displayName",diseaseDef.Name);
 				}
 				End("value");
 				Start("entryRelationship","typeCode","REFR");
@@ -2419,37 +2419,37 @@ Vital Signs
 		///Returns empty string if no errors, otherwise returns a string containing error messages.</summary>
 		public static string ValidateSettings() {
 			string strErrors="";
-			if(Preferences.GetString(PrefName.PracticeTitle).Trim()=="") {
+			if(Preference.GetString(PreferenceName.PracticeTitle).Trim()=="") {
 				if(strErrors!="") {
 					strErrors+="\r\n";
 				}
 				strErrors+="Missing practice title.";
 			}
-			if(Preferences.GetString(PrefName.PracticePhone).Trim()=="") {
+			if(Preference.GetString(PreferenceName.PracticePhone).Trim()=="") {
 				if(strErrors!="") {
 					strErrors+="\r\n";
 				}
 				strErrors+="Missing practice phone.";
 			}
-			if(Preferences.GetString(PrefName.PracticeAddress).Trim()=="") {
+			if(Preference.GetString(PreferenceName.PracticeAddress).Trim()=="") {
 				if(strErrors!="") {
 					strErrors+="\r\n";
 				}
 				strErrors+="Missing practice address line 1.";
 			}
-			if(Preferences.GetString(PrefName.PracticeCity).Trim()=="") {
+			if(Preference.GetString(PreferenceName.PracticeCity).Trim()=="") {
 				if(strErrors!="") {
 					strErrors+="\r\n";
 				}
 				strErrors+="Missing practice city.";
 			}
-			if(Preferences.GetString(PrefName.PracticeST).Trim().Length!=2) {
+			if(Preference.GetString(PreferenceName.PracticeST).Trim().Length!=2) {
 				if(strErrors!="") {
 					strErrors+="\r\n";
 				}
 				strErrors+="Invalid practice state.  Must be two letters.";
 			}
-			Provider provDefault=Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv));
+			Provider provDefault=Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));
 			if(provDefault.FName.Trim()=="" && !provDefault.IsNotPerson) {//Have a first name and is a person.
 				if(strErrors!="") {
 					strErrors+="\r\n";
@@ -2477,7 +2477,7 @@ Vital Signs
 				}
 				strErrors+="Missing SNOMED codes.  Go to Setup | Chart | EHR | Code System Importer to download.";
 			}
-			if(Cvxs.GetCodeCount()==0) {
+			if(CVX.GetCount()==0) {
 				//TODO: We need to replace this check with a more extensive check which validates the CVX codes that will actually go out on the CCD to ensure they are in our database.
 				//One way a CVX code could get into the patinet record without being in the snomed table, would be via an imported CCD. We might get around this issue by simply
 				//exporting the code without the description, because the descriptions are usually optional.
@@ -2574,7 +2574,7 @@ Vital Signs
 					strErrors+="Invalid clinic '"+clinic.Description+"' state.  Must be two letters.";
 				}
 			}
-			Provider provPractice=Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv));
+			Provider provPractice=Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));
 			if(provPractice.FName.Trim()=="" && !provPractice.IsNotPerson) {
 				if(strErrors!="") {
 					strErrors+="\r\n";
@@ -2593,7 +2593,7 @@ Vital Signs
 				}
 				strErrors+="Missing provider "+provPractice.Abbr+" NPI.";
 			}
-			if(pat.PriProv>0 && pat.PriProv!=Preferences.GetLong(PrefName.PracticeDefaultProv)) {
+			if(pat.PriProv>0 && pat.PriProv!= Preference.GetLong(PreferenceName.PracticeDefaultProv)) {
 				Provider provPri=Providers.GetProv(pat.PriProv);
 				if(provPri.FName.Trim()=="" && !provPri.IsNotPerson) {
 					if(strErrors!="") {
@@ -2634,8 +2634,8 @@ Vital Signs
 				allergyDef=AllergyDefs.GetOne(listAllergiesAll[i].AllergyDefNum);
 				bool isMedAllergy=false;
 				if(allergyDef.MedicationNum!=0) {
-					Medication med=Medications.GetMedication(allergyDef.MedicationNum);
-					if(med.RxCui!=0) {
+					Medication med=Medication.GetById(allergyDef.MedicationNum);
+					if(!string.IsNullOrEmpty(med.RxCui)) {
 						isMedAllergy=true;
 					}
 				}
@@ -3076,7 +3076,7 @@ Vital Signs
 					}
 					MedicationPat medicationPat=new MedicationPat();
 					medicationPat.IsNew=true;//Needed for reconcile window to know this record is not in the db yet.
-					medicationPat.RxCui=PIn.Long(strCode);
+					medicationPat.RxCui=strCode;
 					medicationPat.MedDescript=strMedDescript;
 					medicationPat.DateStart=dateTimeEffectiveLow;
 					medicationPat.DateStop=dateTimeEffectiveHigh;
@@ -3149,10 +3149,10 @@ Vital Signs
 				}
 				listDiseases.Add(dis);
 				DiseaseDef disD=new DiseaseDef();
-				disD.IsHidden=false;
+				disD.Hidden=false;
 				disD.IsNew=true;
 				disD.SnomedCode=probCode;
-				disD.DiseaseName=probName;
+				disD.Name=probName;
 				listDiseaseDef.Add(disD);
 			}
 		}
@@ -3246,14 +3246,14 @@ Vital Signs
 					string strCodeRx=xmlNodeCode.Attributes["code"].Value;
 					string strRxName=xmlNodeCode.Attributes["displayName"].Value;//Look into this being required or not.
 					allergyDefName=strRxName;
-					med=Medications.GetMedicationFromDbByRxCui(PIn.Long(strCodeRx));
+					med=Medication.GetByRxCui(strCodeRx);
 					if(med==null) {
 						med=new Medication();
-						med.MedName=strRxName;
-						med.RxCui=PIn.Long(strCodeRx);
-						Medications.Insert(med);
-						med.GenericNum=med.MedicationNum;
-						Medications.Update(med);
+						med.Description=strRxName;
+						med.RxCui=strCodeRx;
+						Medication.Insert(med);
+						med.GenericId=med.Id;
+						Medication.Update(med);
 					}
 					allergyMeds.Add(med);
 				}
@@ -3265,16 +3265,15 @@ Vital Signs
 						continue;//We can only import Snomeds
 					}
 					AllergyDef allergyDef=new AllergyDef();
-					allergyDef.IsNew=true;//Needed for reconcile window to know this record is not in the db yet.
-					if(med.MedicationNum!=0) {
-						allergyDef.MedicationNum=med.MedicationNum;
+					if(med.Id!=0) {
+						allergyDef.MedicationNum=med.Id;
 					}
 					//else {TODO: Change to Unii
 					//	allergyDef.SnomedAllergyTo=PIn.String(strCode);
 					//}
 					allergyDef.Description=allergyDefName;
 					allergyDef.IsHidden=false;
-					allergyDef.MedicationNum=allergyMeds[j].MedicationNum;
+					allergyDef.MedicationNum=allergyMeds[j].Id;
 					#region Snomed type determination
 					if(strCode=="419511003") {
 						allergyDef.SnomedType=SnomedAllergy.AdverseReactionsToDrug;

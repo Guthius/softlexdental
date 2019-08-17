@@ -221,7 +221,7 @@ namespace OpenDental {
 					Dictionary<SheetTypeEnum,SheetDef> defaultDefNumsOld=_dictSheetsCur[0];//Guaranteed to have the key of 0
 					foreach(KeyValuePair<SheetTypeEnum,SheetDef> sheetDef in dictSheetsCurForClinic.Value) {
 						if(defaultDefNumsOld.ContainsKey(sheetDef.Key)) {//Should always happen for defaults
-							if(Prefs.UpdateLong(Prefs.GetSheetDefPref(sheetDef.Key),sheetDef.Value.SheetDefNum)) {
+							if(Preference.Update(Preference.GetSheetDefPref(sheetDef.Key),sheetDef.Value.SheetDefNum)) {
 								hasChanged=true;
 							}
 						}
@@ -236,16 +236,16 @@ namespace OpenDental {
 								//Delete the clinic override if the current Clinic value same as base default
 								if(sheetDef.Value==null) {
 									//We know we want to delete because we found this value from _dictSheetsOld which was filled from the database
-									ClinicPrefs.Delete(ClinicPrefs.GetPref(Prefs.GetSheetDefPref(sheetDef.Key),dictSheetsCurForClinic.Key).ClinicPrefNum);
+									ClinicPrefs.Delete(ClinicPrefs.GetPref(Preference.GetSheetDefPref(sheetDef.Key),dictSheetsCurForClinic.Key).ClinicPrefNum);
 									hasChanged=true;
 								}
-								else if(ClinicPrefs.UpdateLong(Prefs.GetSheetDefPref(sheetDef.Key),dictSheetsCurForClinic.Key,sheetDef.Value.SheetDefNum)) {
+								else if(ClinicPrefs.UpdateLong(Preference.GetSheetDefPref(sheetDef.Key),dictSheetsCurForClinic.Key,sheetDef.Value.SheetDefNum)) {
 									hasChanged=true;
 								}
 							}
 							else {//Current sheetdef doesn't exist in db, insert
 								if(sheetDef.Value!=null) {//Clinic value different than base default
-									ClinicPrefs.InsertPref(Prefs.GetSheetDefPref(sheetDef.Key),dictSheetsCurForClinic.Key,POut.Long(sheetDef.Value.SheetDefNum));
+									ClinicPrefs.InsertPref(Preference.GetSheetDefPref(sheetDef.Key),dictSheetsCurForClinic.Key,POut.Long(sheetDef.Value.SheetDefNum));
 									hasChanged=true;
 								}
 							}
@@ -255,7 +255,7 @@ namespace OpenDental {
 						foreach(KeyValuePair<SheetTypeEnum,SheetDef> sheetDef in dictSheetsCurForClinic.Value) {
 							//No preferences exist for this clinic, so add all that we have stored from being on on this form.
 							if(sheetDef.Value!=null) {//Clinic value set to use a specific sheet def instead of default
-								ClinicPrefs.InsertPref(Prefs.GetSheetDefPref(sheetDef.Key),dictSheetsCurForClinic.Key,POut.Long(sheetDef.Value.SheetDefNum));
+								ClinicPrefs.InsertPref(Preference.GetSheetDefPref(sheetDef.Key),dictSheetsCurForClinic.Key,POut.Long(sheetDef.Value.SheetDefNum));
 								hasChanged=true;
 							}
 						}

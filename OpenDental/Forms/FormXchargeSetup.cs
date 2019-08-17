@@ -59,7 +59,7 @@ namespace OpenDental{
 		///<summary>Used to revert the clinic drop down selected index if the user tries to change clinics and the payment type hasn't been set.</summary>
 		private int _indexClinicRevert;
 		private CheckBox checkPreventSavingNewCC;
-		private List<Def> _listPayTypeDefs;
+		private List<Definition> _listPayTypeDefs;
 
 		///<summary></summary>
 		public FormXchargeSetup()
@@ -558,9 +558,9 @@ namespace OpenDental{
 			//PaymentType ComboBox
 			string payTypeDefNum=ProgramProperties.GetPropValFromList(_listProgProps,"PaymentType",clinicNum);
 			comboPaymentType.Items.Clear();
-			_listPayTypeDefs=Defs.GetDefsForCategory(DefCat.PaymentTypes,true);
-			_listPayTypeDefs.ForEach(x => comboPaymentType.Items.Add(x.ItemName));
-			comboPaymentType.SelectedIndex=_listPayTypeDefs.FindIndex(x => x.DefNum.ToString()==payTypeDefNum);
+			_listPayTypeDefs=Definition.GetByCategory(DefinitionCategory.PaymentTypes);
+			_listPayTypeDefs.ForEach(x => comboPaymentType.Items.Add(x.Description));
+			comboPaymentType.SelectedIndex=_listPayTypeDefs.FindIndex(x => x.Id.ToString()==payTypeDefNum);
 			//Other text boxes and check boxes
 			textUsername.Text=ProgramProperties.GetPropValFromList(_listProgProps,"Username",clinicNum);
 			textXWebID.Text=ProgramProperties.GetPropValFromList(_listProgProps,"XWebID",clinicNum);
@@ -597,7 +597,7 @@ namespace OpenDental{
 			}			
 			string payTypeCur="";
 			if(comboPaymentType.SelectedIndex>-1) {
-				payTypeCur=_listPayTypeDefs[comboPaymentType.SelectedIndex].DefNum.ToString();
+				payTypeCur=_listPayTypeDefs[comboPaymentType.SelectedIndex].Id.ToString();
 			}
 			_listProgProps.FindAll(x => x.ClinicNum==_listUserClinicNums[_indexClinicRevert] && x.PropertyDesc=="Username")
 				.ForEach(x => x.PropertyValue=textUsername.Text.Trim());//always 1 item, null safe
@@ -774,7 +774,7 @@ namespace OpenDental{
 					|| ProgramProperties.GetPropValFromList(_listProgProps,"TerminalID",_listUserClinicNums[i]).Length>0);
 				//if the program is enabled and the username and password fields are not blank for client, or XWebID, AuthKey, and TerminalID are not blank
 				//for XWeb, then X-Charge is enabled for this clinic so make sure the payment type is also set
-				if((isClientEnabled || isXWebEnabled)	&& !_listPayTypeDefs.Any(x => x.DefNum.ToString()==payTypeCur)) {
+				if((isClientEnabled || isXWebEnabled)	&& !_listPayTypeDefs.Any(x => x.Id.ToString()==payTypeCur)) {
 					MsgBox.Show(this,"Please select the payment type for all clinics with X-Charge enabled.");
 					return false;
 				}
@@ -801,7 +801,7 @@ namespace OpenDental{
 			//IsOnlinePaymentsEnabled will not be synced with HQ so specific clinics can be disabled for patient portal payments.
 			string payTypeCur="";
 			if(comboPaymentType.SelectedIndex>-1) {
-				payTypeCur=_listPayTypeDefs[comboPaymentType.SelectedIndex].DefNum.ToString();
+				payTypeCur=_listPayTypeDefs[comboPaymentType.SelectedIndex].Id.ToString();
 			}
 			string passwordEncrypted="";
 			if(textPassword.Text.Trim().Length>0) {
@@ -903,7 +903,7 @@ namespace OpenDental{
 			}			
 			string payTypeCur="";
 			if(comboPaymentType.SelectedIndex>-1) {
-				payTypeCur=_listPayTypeDefs[comboPaymentType.SelectedIndex].DefNum.ToString();
+				payTypeCur=_listPayTypeDefs[comboPaymentType.SelectedIndex].Id.ToString();
 			}
 			//set the values in the list for this clinic
 			_listProgProps.FindAll(x => x.ClinicNum==clinicNum && x.PropertyDesc=="Username")

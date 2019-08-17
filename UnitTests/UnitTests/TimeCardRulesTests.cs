@@ -41,14 +41,14 @@ namespace UnitTests {
 			Employee emp=EmployeeT.CreateEmployee(suffix);
 			PayPeriod payP1=PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
 			PayPeriods.RefreshCache();
-			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
-			Prefs.UpdateBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks,true);
-			TimeCardRuleT.CreateHoursTimeRule(emp.EmployeeNum,TimeSpan.FromHours(10));
+			Prefs.UpdateInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek,0);
+			Prefs.UpdateBool(PreferenceName.TimeCardsMakesAdjustmentsForOverBreaks,true);
+			TimeCardRuleT.CreateHoursTimeRule(emp.Id,TimeSpan.FromHours(10));
 			TimeCardRules.RefreshCache();
-			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddHours(8),startDate.AddHours(13),0);
-			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddHours(14),startDate.AddHours(21),0);
-			ClockEventT.InsertBreak(emp.EmployeeNum,startDate.AddHours(10),20,0);
-			ClockEventT.InsertBreak(emp.EmployeeNum,startDate.AddHours(16),20,0);
+			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddHours(8),startDate.AddHours(13),0);
+			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddHours(14),startDate.AddHours(21),0);
+			ClockEventT.InsertBreak(emp.Id,startDate.AddHours(10),20,0);
+			ClockEventT.InsertBreak(emp.Id,startDate.AddHours(16),20,0);
 			CalculateDailyOvertime(emp,payP1.DateStart,payP1.DateStop);
 			//Validate
 			Assert.AreEqual(TimeSpan.FromMinutes(-10),ClockEvents.GetOne(clockEvent2).AdjustAuto);
@@ -63,15 +63,15 @@ namespace UnitTests {
 			Employee emp=EmployeeT.CreateEmployee(suffix);
 			PayPeriod payP1=PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
 			PayPeriods.RefreshCache();
-			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
+			Prefs.UpdateInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek,0);
 			TimeCardRules.RefreshCache();
-			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(0).AddHours(6),startDate.AddDays(0).AddHours(17));
-			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(1).AddHours(6),startDate.AddDays(1).AddHours(17));
-			long clockEvent3=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(2).AddHours(6),startDate.AddDays(2).AddHours(17));
-			long clockEvent4=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(3).AddHours(6),startDate.AddDays(3).AddHours(17));
+			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(0).AddHours(6),startDate.AddDays(0).AddHours(17));
+			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(1).AddHours(6),startDate.AddDays(1).AddHours(17));
+			long clockEvent3=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(2).AddHours(6),startDate.AddDays(2).AddHours(17));
+			long clockEvent4=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(3).AddHours(6),startDate.AddDays(3).AddHours(17));
 			TimeCardRules.CalculateWeeklyOvertime(emp,payP1.DateStart,payP1.DateStop);
 			//Validate
-			TimeAdjust result=TimeAdjusts.Refresh(emp.EmployeeNum,startDate,startDate.AddDays(13))[0];
+			TimeAdjust result=TimeAdjusts.Refresh(emp.Id,startDate,startDate.AddDays(13))[0];
 			Assert.AreEqual(TimeSpan.FromHours(-4),result.RegHours);
 			Assert.AreEqual(TimeSpan.FromHours(4),result.OTimeHours);
 		}
@@ -86,17 +86,17 @@ namespace UnitTests {
 			PayPeriod payP1=PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
 			PayPeriod payP2=PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate.AddDays(14));
 			PayPeriods.RefreshCache();
-			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
+			Prefs.UpdateInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek,0);
 			TimeCardRules.RefreshCache();
-			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(10).AddHours(6),startDate.AddDays(10).AddHours(17),0);
-			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(11).AddHours(6),startDate.AddDays(11).AddHours(17),0);
-			long clockEvent3=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(12).AddHours(6),startDate.AddDays(12).AddHours(17),0);
+			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(10).AddHours(6),startDate.AddDays(10).AddHours(17),0);
+			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(11).AddHours(6),startDate.AddDays(11).AddHours(17),0);
+			long clockEvent3=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(12).AddHours(6),startDate.AddDays(12).AddHours(17),0);
 			//new pay period
-			long clockEvent4=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(14).AddHours(6),startDate.AddDays(14).AddHours(17),0);
+			long clockEvent4=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(14).AddHours(6),startDate.AddDays(14).AddHours(17),0);
 			TimeCardRules.CalculateWeeklyOvertime(emp,payP1.DateStart,payP1.DateStop);
 			TimeCardRules.CalculateWeeklyOvertime(emp,payP2.DateStart,payP2.DateStop);
 			//Validate
-			List<TimeAdjust> resultList=TimeAdjusts.Refresh(emp.EmployeeNum,startDate,startDate.AddDays(28));
+			List<TimeAdjust> resultList=TimeAdjusts.Refresh(emp.Id,startDate,startDate.AddDays(28));
 			Assert.IsFalse(resultList.Count < 1);
 			TimeAdjust result=resultList[0];
 			Assert.AreEqual(TimeSpan.FromHours(-4),result.RegHours);
@@ -112,18 +112,18 @@ namespace UnitTests {
 			Employee emp=EmployeeT.CreateEmployee(suffix);
 			PayPeriod payP1=PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
 			PayPeriods.RefreshCache();
-			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,3);
+			Prefs.UpdateInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek,3);
 			TimeCardRules.RefreshCache();
-			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(0).AddHours(6),startDate.AddDays(0).AddHours(17),0);
-			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(1).AddHours(6),startDate.AddDays(1).AddHours(17),0);
+			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(0).AddHours(6),startDate.AddDays(0).AddHours(17),0);
+			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(1).AddHours(6),startDate.AddDays(1).AddHours(17),0);
 			//new work week	
-			long clockEvent3=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(2).AddHours(6),startDate.AddDays(2).AddHours(17),0);
-			long clockEvent4=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(3).AddHours(6),startDate.AddDays(3).AddHours(17),0);
-			long clockEvent5=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(4).AddHours(6),startDate.AddDays(4).AddHours(17),0);
-			long clockEvent6=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(5).AddHours(6),startDate.AddDays(5).AddHours(17),0);
+			long clockEvent3=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(2).AddHours(6),startDate.AddDays(2).AddHours(17),0);
+			long clockEvent4=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(3).AddHours(6),startDate.AddDays(3).AddHours(17),0);
+			long clockEvent5=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(4).AddHours(6),startDate.AddDays(4).AddHours(17),0);
+			long clockEvent6=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(5).AddHours(6),startDate.AddDays(5).AddHours(17),0);
 			TimeCardRules.CalculateWeeklyOvertime(emp,payP1.DateStart,payP1.DateStop);
 			//Validate
-			TimeAdjust result=TimeAdjusts.Refresh(emp.EmployeeNum,startDate,startDate.AddDays(28))[0];
+			TimeAdjust result=TimeAdjusts.Refresh(emp.Id,startDate,startDate.AddDays(28))[0];
 			Assert.AreEqual(TimeSpan.FromHours(-4),result.RegHours);
 			Assert.AreEqual(TimeSpan.FromHours(4),result.OTimeHours);
 		}
@@ -138,13 +138,13 @@ namespace UnitTests {
 			Employee emp=EmployeeT.CreateEmployee(suffix);
 			PayPeriod payP1=PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
 			PayPeriods.RefreshCache();
-			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
-			Prefs.UpdateBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks,true);
+			Prefs.UpdateInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek,0);
+			Prefs.UpdateBool(PreferenceName.TimeCardsMakesAdjustmentsForOverBreaks,true);
 			Prefs.RefreshCache();
-			TimeCardRuleT.CreatePMTimeRule(emp.EmployeeNum,TimeSpan.FromHours(16));
+			TimeCardRuleT.CreatePMTimeRule(emp.Id,TimeSpan.FromHours(16));
 			TimeCardRules.RefreshCache();
-			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddHours(8),startDate.AddHours(16).AddMinutes(40),0);
-			ClockEventT.InsertBreak(emp.EmployeeNum,startDate.AddHours(11),40,0);
+			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddHours(8),startDate.AddHours(16).AddMinutes(40),0);
+			ClockEventT.InsertBreak(emp.Id,startDate.AddHours(11),40,0);
 			CalculateDailyOvertime(emp,payP1.DateStart,payP1.DateStop);
 			//Validate
 			Assert.AreEqual(TimeSpan.FromMinutes(-10),ClockEvents.GetOne(clockEvent1).AdjustAuto);
@@ -161,12 +161,12 @@ namespace UnitTests {
 			Employee emp=EmployeeT.CreateEmployee(suffix);
 			PayPeriod payP1=PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
 			PayPeriods.RefreshCache();
-			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
-			Prefs.UpdateBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks,true);
-			TimeCardRuleT.CreateAMTimeRule(emp.EmployeeNum,TimeSpan.FromHours(7.5));
+			Prefs.UpdateInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek,0);
+			Prefs.UpdateBool(PreferenceName.TimeCardsMakesAdjustmentsForOverBreaks,true);
+			TimeCardRuleT.CreateAMTimeRule(emp.Id,TimeSpan.FromHours(7.5));
 			TimeCardRules.RefreshCache();
-			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddHours(6),startDate.AddHours(16),0);
-			ClockEventT.InsertBreak(emp.EmployeeNum,startDate.AddHours(11),40,0);
+			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddHours(6),startDate.AddHours(16),0);
+			ClockEventT.InsertBreak(emp.Id,startDate.AddHours(11),40,0);
 			CalculateDailyOvertime(emp,payP1.DateStart,payP1.DateStop);
 			//Validate
 			Assert.AreEqual(TimeSpan.FromMinutes(-10),ClockEvents.GetOne(clockEvent1).AdjustAuto);
@@ -181,17 +181,17 @@ namespace UnitTests {
 			Employee emp=EmployeeT.CreateEmployee(suffix);
 			PayPeriod payP1=PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
 			PayPeriods.RefreshCache();
-			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
+			Prefs.UpdateInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek,0);
 			TimeCardRules.RefreshCache();
 			//Each of these are 11 hour days. Should have 4 hours of OT with clinic 3 and 11 hours OT with clinic 4 the end of the pay period.
-			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(0).AddHours(6),startDate.AddDays(0).AddHours(17),0);
-			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(1).AddHours(6),startDate.AddDays(1).AddHours(17),1);
-			long clockEvent3=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(2).AddHours(6),startDate.AddDays(2).AddHours(17),2);
-			long clockEvent4=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(3).AddHours(6),startDate.AddDays(3).AddHours(17),3);
-			long clockEvent5=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(4).AddHours(6),startDate.AddDays(4).AddHours(17),4);
+			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(0).AddHours(6),startDate.AddDays(0).AddHours(17),0);
+			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(1).AddHours(6),startDate.AddDays(1).AddHours(17),1);
+			long clockEvent3=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(2).AddHours(6),startDate.AddDays(2).AddHours(17),2);
+			long clockEvent4=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(3).AddHours(6),startDate.AddDays(3).AddHours(17),3);
+			long clockEvent5=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(4).AddHours(6),startDate.AddDays(4).AddHours(17),4);
 			TimeCardRules.CalculateWeeklyOvertime(emp,payP1.DateStart,payP1.DateStop);
 			//Validate
-			List<TimeAdjust> listAdjusts=TimeAdjusts.GetValidList(emp.EmployeeNum,startDate,startDate.AddDays(5)).OrderBy(x=>x.OTimeHours).ToList();
+			List<TimeAdjust> listAdjusts=TimeAdjusts.GetValidList(emp.Id,startDate,startDate.AddDays(5)).OrderBy(x=>x.OTimeHours).ToList();
 			Assert.AreEqual(2,listAdjusts.Count);
 			Assert.AreEqual(TimeSpan.FromHours(-4),listAdjusts[0].RegHours);
 			Assert.AreEqual(3,listAdjusts[0].ClinicNum);
@@ -210,18 +210,18 @@ namespace UnitTests {
 			PayPeriod payP1=PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
 			PayPeriod payP2=PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate.AddDays(14));
 			PayPeriods.RefreshCache();
-			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
+			Prefs.UpdateInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek,0);
 			TimeCardRules.RefreshCache();
 			//Each of these are 11 hour days. Should have 4 hours of OT with clinic 3 in the second pay period.
-			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(10).AddHours(6),startDate.AddDays(10).AddHours(17),0);
-			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(11).AddHours(6),startDate.AddDays(11).AddHours(17),1);
-			long clockEvent3=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(12).AddHours(6),startDate.AddDays(12).AddHours(17),2);
+			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(10).AddHours(6),startDate.AddDays(10).AddHours(17),0);
+			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(11).AddHours(6),startDate.AddDays(11).AddHours(17),1);
+			long clockEvent3=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(12).AddHours(6),startDate.AddDays(12).AddHours(17),2);
 			//New pay period
-			long clockEvent4=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(14).AddHours(6),startDate.AddDays(14).AddHours(17),3);
+			long clockEvent4=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(14).AddHours(6),startDate.AddDays(14).AddHours(17),3);
 			TimeCardRules.CalculateWeeklyOvertime(emp,payP1.DateStart,payP1.DateStop);
 			TimeCardRules.CalculateWeeklyOvertime(emp,payP2.DateStart,payP2.DateStop);
 			//Validate
-			List<TimeAdjust> listAdjusts=TimeAdjusts.GetValidList(emp.EmployeeNum,startDate,startDate.AddDays(28));
+			List<TimeAdjust> listAdjusts=TimeAdjusts.GetValidList(emp.Id,startDate,startDate.AddDays(28));
 			Assert.AreEqual(1,listAdjusts.Count);
 			Assert.AreEqual(TimeSpan.FromHours(-4),listAdjusts[0].RegHours);
 			Assert.AreEqual(3,listAdjusts[0].ClinicNum);
@@ -238,19 +238,19 @@ namespace UnitTests {
 			PayPeriod payP1=PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
 			PayPeriod payP2=PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate.AddDays(14));
 			PayPeriods.RefreshCache();
-			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
+			Prefs.UpdateInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek,0);
 			TimeCardRules.RefreshCache();
 			//Each of these are 11 hour days. Should have 4 hours of OT with clinic 3 in the second pay period and 11 hours for clinic 4.
-			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(10).AddHours(6),startDate.AddDays(10).AddHours(17),0);//Sun
-			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(11).AddHours(6),startDate.AddDays(11).AddHours(17),1);//Mon
-			long clockEvent3=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(12).AddHours(6),startDate.AddDays(12).AddHours(17),2);//Tue
+			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(10).AddHours(6),startDate.AddDays(10).AddHours(17),0);//Sun
+			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(11).AddHours(6),startDate.AddDays(11).AddHours(17),1);//Mon
+			long clockEvent3=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(12).AddHours(6),startDate.AddDays(12).AddHours(17),2);//Tue
 			//new pay period
-			long clockEvent4=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(14).AddHours(6),startDate.AddDays(14).AddHours(17),3);//Wed
-			long clockEvent5=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(15).AddHours(6),startDate.AddDays(15).AddHours(17),4);//Thurs
+			long clockEvent4=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(14).AddHours(6),startDate.AddDays(14).AddHours(17),3);//Wed
+			long clockEvent5=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(15).AddHours(6),startDate.AddDays(15).AddHours(17),4);//Thurs
 			TimeCardRules.CalculateWeeklyOvertime(emp,payP1.DateStart,payP1.DateStop);
 			TimeCardRules.CalculateWeeklyOvertime(emp,payP2.DateStart,payP2.DateStop);
 			//Validate
-			List<TimeAdjust> listAdjusts=TimeAdjusts.GetValidList(emp.EmployeeNum,startDate,startDate.AddDays(28)).OrderBy(x=>x.OTimeHours).ToList();
+			List<TimeAdjust> listAdjusts=TimeAdjusts.GetValidList(emp.Id,startDate,startDate.AddDays(28)).OrderBy(x=>x.OTimeHours).ToList();
 			Assert.AreEqual(2,listAdjusts.Count);
 			Assert.AreEqual(TimeSpan.FromHours(-4),listAdjusts[0].RegHours);
 			Assert.AreEqual(3,listAdjusts[0].ClinicNum);
@@ -271,24 +271,24 @@ namespace UnitTests {
 			Employee emp=EmployeeT.CreateEmployee(suffix);
 			PayPeriod payP1=PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
 			PayPeriods.RefreshCache();
-			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
+			Prefs.UpdateInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek,0);
 			TimeCardRules.RefreshCache();
 			//Each of these are 11 hour days. Should have 4 hours of OT with clinic 3 in the second pay period and 11 hours for clinic 4.
 			//Week 1 - 40.4 hours
-			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(0).AddHours(6),startDate.AddDays(0).AddHours(6+8),0);//Mon
-			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(1).AddHours(6),startDate.AddDays(1).AddHours(6+8),0);//Tue
-			long clockEvent3=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(2).AddHours(6),startDate.AddDays(2).AddHours(6+8.76),0,0.06);//Wed
-			long clockEvent4=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(3).AddHours(6),startDate.AddDays(3).AddHours(6+8.72),0,0.73);//Thurs
-			long clockEvent5=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(4).AddHours(6),startDate.AddDays(4).AddHours(6+8.12),0,0.41);//Fri
+			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(0).AddHours(6),startDate.AddDays(0).AddHours(6+8),0);//Mon
+			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(1).AddHours(6),startDate.AddDays(1).AddHours(6+8),0);//Tue
+			long clockEvent3=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(2).AddHours(6),startDate.AddDays(2).AddHours(6+8.76),0,0.06);//Wed
+			long clockEvent4=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(3).AddHours(6),startDate.AddDays(3).AddHours(6+8.72),0,0.73);//Thurs
+			long clockEvent5=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(4).AddHours(6),startDate.AddDays(4).AddHours(6+8.12),0,0.41);//Fri
 			//Week 2 - 41.23 hours
-			long clockEvent6=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(7).AddHours(6),startDate.AddDays(7).AddHours(6+8.79),0,0.4);//Mon
-			long clockEvent7=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(8).AddHours(6),startDate.AddDays(8).AddHours(6+8.85),0,0.38);//Tue
-			long clockEvent8=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(9).AddHours(6),startDate.AddDays(9).AddHours(6+7.78),0,0.29);//Wed
-			long clockEvent9=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(10).AddHours(6),startDate.AddDays(10).AddHours(6+8.88),0,0.02);//Thurs
-			long clockEvent10=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(11).AddHours(6),startDate.AddDays(11).AddHours(6+8.59),0,0.57);//Fri
+			long clockEvent6=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(7).AddHours(6),startDate.AddDays(7).AddHours(6+8.79),0,0.4);//Mon
+			long clockEvent7=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(8).AddHours(6),startDate.AddDays(8).AddHours(6+8.85),0,0.38);//Tue
+			long clockEvent8=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(9).AddHours(6),startDate.AddDays(9).AddHours(6+7.78),0,0.29);//Wed
+			long clockEvent9=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(10).AddHours(6),startDate.AddDays(10).AddHours(6+8.88),0,0.02);//Thurs
+			long clockEvent10=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(11).AddHours(6),startDate.AddDays(11).AddHours(6+8.59),0,0.57);//Fri
 			TimeCardRules.CalculateWeeklyOvertime(emp,payP1.DateStart,payP1.DateStop);
 			//Validate
-			List<TimeAdjust> listAdjusts=TimeAdjusts.GetValidList(emp.EmployeeNum,startDate,startDate.AddDays(28)).OrderBy(x=>x.OTimeHours).ToList();
+			List<TimeAdjust> listAdjusts=TimeAdjusts.GetValidList(emp.Id,startDate,startDate.AddDays(28)).OrderBy(x=>x.OTimeHours).ToList();
 			Assert.AreEqual(2,listAdjusts.Count);
 			Assert.AreEqual(TimeSpan.FromHours(-0.4),listAdjusts[0].RegHours);
 			Assert.AreEqual(TimeSpan.FromHours(0.4),listAdjusts[0].OTimeHours);
@@ -305,20 +305,20 @@ namespace UnitTests {
 			Employee emp=EmployeeT.CreateEmployee(suffix);
 			PayPeriod payP1=PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
 			PayPeriods.RefreshCache();
-			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
+			Prefs.UpdateInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek,0);
 			TimeCardRules.RefreshCache();
 			//Each of these are 11 hour days. Should have 4 hours of OT with clinic 3 in the second pay period and 11 hours for clinic 4.
 			//Week 1 - 40.13 (Note: These appear as they should after CalculateDaily is run.)
-			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(0).AddHours(6),startDate.AddDays(0).AddHours(6+8.06),0);//Mon
-			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(1).AddHours(6),startDate.AddDays(1).AddHours(6+8),0);//Tue
-			long clockEvent3=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(2).AddHours(6),startDate.AddDays(2).AddHours(6+8.08),0);//Wed
-			long clockEvent4=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(3).AddHours(6),startDate.AddDays(3).AddHours(6+8),0,0.02);//Thurs
-			long clockEvent5=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(4).AddHours(6),startDate.AddDays(4).AddHours(6+8.01),0);//Fri
+			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(0).AddHours(6),startDate.AddDays(0).AddHours(6+8.06),0);//Mon
+			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(1).AddHours(6),startDate.AddDays(1).AddHours(6+8),0);//Tue
+			long clockEvent3=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(2).AddHours(6),startDate.AddDays(2).AddHours(6+8.08),0);//Wed
+			long clockEvent4=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(3).AddHours(6),startDate.AddDays(3).AddHours(6+8),0,0.02);//Thurs
+			long clockEvent5=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(4).AddHours(6),startDate.AddDays(4).AddHours(6+8.01),0);//Fri
 			//SATURDAY - 4.1 HRS OF OVERTIME 
 			ClockEvent ce=new ClockEvent();
 			ce.ClinicNum=0;
 			ce.ClockStatus=TimeClockStatus.Home;
-			ce.EmployeeNum=emp.EmployeeNum;
+			ce.EmployeeNum=emp.Id;
 			ce.OTimeHours=TimeSpan.FromHours(4.1);
 			ce.TimeDisplayed1=new DateTime(startDate.Year,startDate.Month,startDate.AddDays(5).Day,6,54,0);
 			ce.TimeDisplayed2=new DateTime(startDate.Year,startDate.Month,startDate.AddDays(5).Day,11,0,0);
@@ -327,14 +327,14 @@ namespace UnitTests {
 			ce.ClockEventNum=ClockEvents.Insert(ce);
 			ClockEvents.Update(ce);
 			//Week 2 - 41.06
-			long clockEvent6=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(7).AddHours(6),startDate.AddDays(7).AddHours(6+8.02),0);//Mon
-			long clockEvent7=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(8).AddHours(6),startDate.AddDays(8).AddHours(6+8),0);//Tue
-			long clockEvent8=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(9).AddHours(6),startDate.AddDays(9).AddHours(6+8),0);//Wed
-			long clockEvent9=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(10).AddHours(6),startDate.AddDays(10).AddHours(6+9.04),0);//Thurs
-			long clockEvent10=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(11).AddHours(6),startDate.AddDays(11).AddHours(6+8),0);//Fri
+			long clockEvent6=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(7).AddHours(6),startDate.AddDays(7).AddHours(6+8.02),0);//Mon
+			long clockEvent7=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(8).AddHours(6),startDate.AddDays(8).AddHours(6+8),0);//Tue
+			long clockEvent8=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(9).AddHours(6),startDate.AddDays(9).AddHours(6+8),0);//Wed
+			long clockEvent9=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(10).AddHours(6),startDate.AddDays(10).AddHours(6+9.04),0);//Thurs
+			long clockEvent10=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(11).AddHours(6),startDate.AddDays(11).AddHours(6+8),0);//Fri
 			TimeCardRules.CalculateWeeklyOvertime(emp,payP1.DateStart,payP1.DateStop);
 			//Validate
-			List<TimeAdjust> listAdjusts=TimeAdjusts.GetValidList(emp.EmployeeNum,startDate,startDate.AddDays(28)).OrderBy(x=>x.OTimeHours).ToList();
+			List<TimeAdjust> listAdjusts=TimeAdjusts.GetValidList(emp.Id,startDate,startDate.AddDays(28)).OrderBy(x=>x.OTimeHours).ToList();
 			Assert.AreEqual(2,listAdjusts.Count);
 			Assert.AreEqual(TimeSpan.FromHours(-0.13),listAdjusts[0].RegHours);
 			Assert.AreEqual(TimeSpan.FromHours(0.13),listAdjusts[0].OTimeHours);
@@ -351,15 +351,15 @@ namespace UnitTests {
 			Employee emp=EmployeeT.CreateEmployee("CalculateDailyWhileEmployeeClockedInDuringPayPeriod");
 			PayPeriod payP1=PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
 			PayPeriods.RefreshCache();
-			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
-			Prefs.UpdateBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks,true);
+			Prefs.UpdateInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek,0);
+			Prefs.UpdateBool(PreferenceName.TimeCardsMakesAdjustmentsForOverBreaks,true);
 			Prefs.RefreshCache();
 			TimeCardRules.RefreshCache();
 			//10 hour day with 45 minute break
-			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddHours(8),startDate.AddHours(18));
-			long break1=ClockEventT.InsertBreak(emp.EmployeeNum,startDate.AddHours(12),45);
+			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddHours(8),startDate.AddHours(18));
+			long break1=ClockEventT.InsertBreak(emp.Id,startDate.AddHours(12),45);
 			//Next day clock in, but have no clock out event yet.
-			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(1).AddHours(8),DateTime.MinValue);
+			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(1).AddHours(8),DateTime.MinValue);
 			CalculateDailyOvertime(emp,payP1.DateStart,payP1.DateStop);
 			//Ensure that the 15 minutes was subtracted from the shift.
 			Assert.AreEqual(TimeSpan.FromMinutes(-15),ClockEvents.GetOne(clockEvent1).AdjustAuto);
@@ -374,16 +374,16 @@ namespace UnitTests {
 			Employee emp=EmployeeT.CreateEmployee("CalculateDailyWhileEmployeeClockedOutDuringPayPeriod");
 			PayPeriod payP1=PayPeriodT.CreateTwoWeekPayPeriodIfNotExists(startDate);
 			PayPeriods.RefreshCache();
-			Prefs.UpdateInt(PrefName.TimeCardOvertimeFirstDayOfWeek,0);
-			Prefs.UpdateBool(PrefName.TimeCardsMakesAdjustmentsForOverBreaks,true);
+			Prefs.UpdateInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek,0);
+			Prefs.UpdateBool(PreferenceName.TimeCardsMakesAdjustmentsForOverBreaks,true);
 			Prefs.RefreshCache();
 			TimeCardRules.RefreshCache();
 			//10 hour day with 45 minute break
-			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddHours(8),startDate.AddHours(18));
-			long break1=ClockEventT.InsertBreak(emp.EmployeeNum,startDate.AddHours(12),45);
+			long clockEvent1=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddHours(8),startDate.AddHours(18));
+			long break1=ClockEventT.InsertBreak(emp.Id,startDate.AddHours(12),45);
 			//Next day clock in and out for home
-			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.EmployeeNum,startDate.AddDays(1).AddHours(8),startDate.AddDays(1).AddHours(18));
-			long break2=ClockEventT.InsertBreak(emp.EmployeeNum,startDate.AddDays(1).AddHours(12),45);
+			long clockEvent2=ClockEventT.InsertWorkPeriod(emp.Id,startDate.AddDays(1).AddHours(8),startDate.AddDays(1).AddHours(18));
+			long break2=ClockEventT.InsertBreak(emp.Id,startDate.AddDays(1).AddHours(12),45);
 			CalculateDailyOvertime(emp,payP1.DateStart,payP1.DateStop);
 			//Ensure that the 15 minutes was subtracted from both shifts.
 			Assert.AreEqual(TimeSpan.FromMinutes(-15),ClockEvents.GetOne(clockEvent1).AdjustAuto);

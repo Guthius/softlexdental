@@ -147,7 +147,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one DashboardCell into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(DashboardCell dashboardCell,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO dashboardcell (";
 			if(!useExistingPK && isRandomKeys) {
 				dashboardCell.DashboardCellNum=ReplicationServers.GetKeyNoCache("dashboardcell","DashboardCellNum");

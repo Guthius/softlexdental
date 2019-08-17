@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ScreenGroup into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(ScreenGroup screenGroup,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO screengroup (";
 			if(!useExistingPK && isRandomKeys) {
 				screenGroup.ScreenGroupNum=ReplicationServers.GetKeyNoCache("screengroup","ScreenGroupNum");

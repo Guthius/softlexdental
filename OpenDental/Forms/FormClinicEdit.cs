@@ -107,7 +107,7 @@ namespace OpenDental {
 		///<summary>True if an HL7Def is enabled with the type HL7InternalType.MedLabv2_3, otherwise false.</summary>
 		private bool _isMedLabHL7DefEnabled;
 		private CheckBox checkProcCodeRequired;
-		private List<Def> _listRegionDefs;
+		private List<Definition> _listRegionDefs;
 
 		///<summary></summary>
 		public FormClinicEdit(Clinic clinicCur)
@@ -1104,7 +1104,7 @@ namespace OpenDental {
 			textFax.Text=TelephoneNumbers.ReFormat(ClinicCur.Fax);
 			checkUseBillingAddressOnClaims.Checked=ClinicCur.UseBillAddrOnClaims;
 			checkExcludeFromInsVerifyList.Checked=ClinicCur.IsInsVerifyExcluded;
-			if(Preferences.GetBool(PrefName.RxHasProc)) {
+			if(Preference.GetBool(PreferenceName.RxHasProc)) {
 				checkProcCodeRequired.Enabled=true;
 				checkProcCodeRequired.Checked=(ClinicCur.IsNew || ClinicCur.HasProcOnRx);
 			}
@@ -1139,10 +1139,10 @@ namespace OpenDental {
 			comboRegion.Items.Clear();
 			comboRegion.Items.Add(Lan.g(this,"None"));
 			comboRegion.SelectedIndex=0;
-			_listRegionDefs=Defs.GetDefsForCategory(DefCat.Regions,true);
+			_listRegionDefs=Definition.GetByCategory(DefinitionCategory.Regions);
 			for(int i=0;i<_listRegionDefs.Count;i++) {
-				comboRegion.Items.Add(_listRegionDefs[i].ItemName);
-				if(_listRegionDefs[i].DefNum==ClinicCur.Region) {
+				comboRegion.Items.Add(_listRegionDefs[i].Description);
+				if(_listRegionDefs[i].Id==ClinicCur.Region) {
 					comboRegion.SelectedIndex=i+1;
 				}
 			}
@@ -1222,7 +1222,7 @@ namespace OpenDental {
 		}
 
 		private void FillSpecialty() {
-			Dictionary<long,Def> dictClinicDefs=Defs.GetDefsForCategory(DefCat.ClinicSpecialty).ToDictionary(x => x.DefNum);
+			Dictionary<long,Definition> dictClinicDefs=Definition.GetByCategory(DefinitionCategory.ClinicSpecialty).ToDictionary(x => x.Id);
 			gridSpecialty.BeginUpdate();
 			gridSpecialty.Columns.Clear();
 			gridSpecialty.Columns.Add(new ODGridColumn("Specialty",100));
@@ -1231,10 +1231,10 @@ namespace OpenDental {
 			string specialtyDescript;
 			foreach(DefLink defLink in ClinicCur.ListClinicSpecialtyDefLinks) {
 				row=new ODGridRow();
-				Def defCur;
+				Definition defCur;
 				specialtyDescript="";
 				if(dictClinicDefs.TryGetValue(defLink.DefNum,out defCur)) {
-					specialtyDescript=defCur.ItemName+(defCur.IsHidden?(" ("+Lan.g(this,"hidden")+")"):"");
+					specialtyDescript=defCur.Description+(defCur.Hidden?(" ("+Lan.g(this,"hidden")+")"):"");
 				}
 				row.Cells.Add(specialtyDescript);
 				row.Tag=defLink;
@@ -1244,17 +1244,17 @@ namespace OpenDental {
 		}
 		
 		private void butAdd_Click(object sender,EventArgs e) {
-			FormDefinitionPicker FormDP=new FormDefinitionPicker(DefCat.ClinicSpecialty);
+			FormDefinitionPicker FormDP=new FormDefinitionPicker(DefinitionCategory.ClinicSpecialty);
 			FormDP.HasShowHiddenOption=false;
 			FormDP.IsMultiSelectionMode=true;
 			FormDP.ShowDialog();
 			if(FormDP.DialogResult==DialogResult.OK) {
-				foreach(Def defCur in FormDP.ListSelectedDefs) {
-					if(ClinicCur.ListClinicSpecialtyDefLinks.Any(x => x.DefNum==defCur.DefNum)) {
+				foreach(Definition defCur in FormDP.ListSelectedDefs) {
+					if(ClinicCur.ListClinicSpecialtyDefLinks.Any(x => x.DefNum==defCur.Id)) {
 						continue;//Definition already added to this clinic. 
 					}
 					DefLink defLink=new DefLink();
-					defLink.DefNum=defCur.DefNum;
+					defLink.DefNum=defCur.Id;
 					defLink.FKey=ClinicCur.ClinicNum;//could be 0 if IsNew
 					defLink.LinkType=DefLinkType.Clinic;
 					ClinicCur.ListClinicSpecialtyDefLinks.Add(defLink);
@@ -1386,7 +1386,7 @@ namespace OpenDental {
 			ClinicCur.ExternalID=externalID;
 			long defNumRegion=0;
 			if(comboRegion.SelectedIndex>0){
-				defNumRegion=_listRegionDefs[comboRegion.SelectedIndex-1].DefNum;
+				defNumRegion=_listRegionDefs[comboRegion.SelectedIndex-1].Id;
 			}
 			ClinicCur.Region=defNumRegion;
 			if(radioInsBillingProvDefault.Checked){//default=0

@@ -267,19 +267,19 @@ namespace OpenDental.Bridges {
 				return;
 			}
 			long imageCatDefNum=0;
-			List<Def> listImageCatDefs=Defs.GetDefsForCategory(DefCat.ImageCats);
+			List<Definition> listImageCatDefs=Definition.GetByCategory(DefinitionCategory.ImageCats);;
 			for(int j=0;j<listImageCatDefs.Count;j++) { //Look for an image category with the name "Xray"
-				if(listImageCatDefs[j].ItemName.ToLower()=="xray") {
-					imageCatDefNum=listImageCatDefs[j].DefNum;
+				if(listImageCatDefs[j].Description.ToLower()=="xray") {
+					imageCatDefNum=listImageCatDefs[j].Id;
 				}
 			}
 			if(imageCatDefNum==0) { //If no "Xray" category exists, insert new category with the name "Xray"
-				Def def = new Def();
-				def.ItemName="Xray";
-				def.Category=DefCat.ImageCats;
-				def.ItemValue="X"; //Will make this category show in the chart module
-				def.ItemOrder=listImageCatDefs.Count;
-				imageCatDefNum=Defs.Insert(def);
+				Definition def = new Definition();
+				def.Description="Xray";
+				def.Category=DefinitionCategory.ImageCats;
+				def.Value="X"; //Will make this category show in the chart module
+				def.SortOrder=listImageCatDefs.Count;
+				imageCatDefNum=Definition.Insert(def);
 				Cache.Refresh(InvalidType.Defs);
 			}
 			string newFileName="TV_"+filename.Substring(0,filename.IndexOf('.')+1)+CodeBase.MiscUtils.CreateRandomAlphaNumericString(4);

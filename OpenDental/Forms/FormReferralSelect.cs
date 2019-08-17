@@ -281,7 +281,7 @@ namespace OpenDental {
 			checkShowPat.Checked=IsShowPat;
 			checkShowDoctor.Checked=IsShowDoc;
 			checkShowOther.Checked=IsShowOther;
-			checkPreferred.Checked=Preferences.GetBool(PrefName.ShowPreferedReferrals);
+			checkPreferred.Checked=Preference.GetBool(PreferenceName.ShowPreferedReferrals);
 			FillTable();
 			//labelResultCount.Text="";
 		}
@@ -331,7 +331,7 @@ namespace OpenDental {
 				row.Cells.Add(refCur.FName);
 				row.Cells.Add(refCur.MName.Left(1).ToUpper());//Left(1) will return empty string if MName is null or empty string, so ToUpper is null safe
 				row.Cells.Add(refCur.Title);
-				row.Cells.Add(refCur.IsDoctor?Lan.g("enumDentalSpecialty",Defs.GetName(DefCat.ProviderSpecialties,refCur.Specialty)):"");
+				row.Cells.Add(refCur.IsDoctor?Lan.g("enumDentalSpecialty",Defs.GetName(DefinitionCategory.ProviderSpecialties,refCur.Specialty)):"");
 				row.Cells.Add(refCur.PatNum>0?"X":"");
 				row.Cells.Add(refCur.Note);
 				if(refCur.IsHidden) {

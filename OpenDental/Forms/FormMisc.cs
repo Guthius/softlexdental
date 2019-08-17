@@ -151,7 +151,7 @@ namespace OpenDental {
 			this.textAuditEntries.MaxVal = 10000;
 			this.textAuditEntries.MinVal = 1;
 			this.textAuditEntries.Name = "textAuditEntries";
-			this.textAuditEntries.PrefNameBinding = OpenDentBusiness.PrefName.AccountingCashIncomeAccount;
+			this.textAuditEntries.PrefNameBinding = OpenDentBusiness.PreferenceName.AccountingCashIncomeAccount;
 			this.textAuditEntries.Size = new System.Drawing.Size(74, 20);
 			this.textAuditEntries.TabIndex = 225;
 			this.textAuditEntries.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -702,35 +702,35 @@ namespace OpenDental {
 		#endregion
 
 		private void FormMisc_Load(object sender, System.EventArgs e) {
-			if(Preferences.GetLong(PrefName.ProcessSigsIntervalInSecs)==0){
+			if(Preference.GetLong(PreferenceName.ProcessSigsIntervalInSecs)==0){
 				textSigInterval.Text="";
 			}
 			else{
-				textSigInterval.Text=Preferences.GetLong(PrefName.ProcessSigsIntervalInSecs).ToString();
+				textSigInterval.Text=Preference.GetLong(PreferenceName.ProcessSigsIntervalInSecs).ToString();
 			}
-			if(Preferences.GetLong(PrefName.SignalInactiveMinutes)==0) {
+			if(Preference.GetLong(PreferenceName.SignalInactiveMinutes)==0) {
 				textInactiveSignal.Text="";
 			}
 			else {
-				textInactiveSignal.Text=Preferences.GetLong(PrefName.SignalInactiveMinutes).ToString();
+				textInactiveSignal.Text=Preference.GetLong(PreferenceName.SignalInactiveMinutes).ToString();
 			}
 
-			checkUserTheme.Checked=Preferences.GetBool(PrefName.ThemeSetByUser);
-      checkTimeCardUseLocal.Checked=Preferences.GetBool(PrefName.LocalTimeOverridesServerTime);
-			checkRefresh.Checked=!Preferences.GetBool(PrefName.PatientSelectUsesSearchButton);
-			checkPrefFName.Checked=Preferences.GetBool(PrefName.PatientSelectUseFNameForPreferred);
-			textMainWindowTitle.Text=Preferences.GetString(PrefName.MainWindowTitle);
-			checkUseClinicAbbr.Checked=Preferences.GetBool(PrefName.TitleBarClinicUseAbbr);
-			checkTitleBarShowSpecialty.Checked=Preferences.GetBool(PrefName.TitleBarShowSpecialty);
+			checkUserTheme.Checked=Preference.GetBool(PreferenceName.ThemeSetByUser);
+      checkTimeCardUseLocal.Checked=Preference.GetBool(PreferenceName.LocalTimeOverridesServerTime);
+			checkRefresh.Checked=!Preference.GetBool(PreferenceName.PatientSelectUsesSearchButton);
+			checkPrefFName.Checked=Preference.GetBool(PreferenceName.PatientSelectUseFNameForPreferred);
+			textMainWindowTitle.Text=Preference.GetString(PreferenceName.MainWindowTitle);
+			checkUseClinicAbbr.Checked=Preference.GetBool(PreferenceName.TitleBarClinicUseAbbr);
+			checkTitleBarShowSpecialty.Checked=Preference.GetBool(PreferenceName.TitleBarShowSpecialty);
 			comboShowID.Items.Add(Lan.g(this,"None"));
 			comboShowID.Items.Add(Lan.g(this,"PatNum"));
 			comboShowID.Items.Add(Lan.g(this,"ChartNumber"));
 			comboShowID.Items.Add(Lan.g(this,"Birthdate"));
-			comboShowID.SelectedIndex=Preferences.GetInt(PrefName.ShowIDinTitleBar);
-			checkImeCompositionCompatibility.Checked=Preferences.GetBool(PrefName.ImeCompositionCompatibility);
-			checkTitleBarShowSite.Checked=Preferences.GetBool(PrefName.TitleBarShowSite);
-			textWebServiceServerName.Text=Preferences.GetString(PrefName.WebServiceServerName);
-			if(Preferences.GetString(PrefName.LanguageAndRegion)!="") {
+			comboShowID.SelectedIndex=Preference.GetInt(PreferenceName.ShowIDinTitleBar);
+			checkImeCompositionCompatibility.Checked=Preference.GetBool(PreferenceName.ImeCompositionCompatibility);
+			checkTitleBarShowSite.Checked=Preference.GetBool(PreferenceName.TitleBarShowSite);
+			textWebServiceServerName.Text=Preference.GetString(PreferenceName.WebServiceServerName);
+			if(Preference.GetString(PreferenceName.LanguageAndRegion)!="") {
 				textLanguageAndRegion.Text=Preferences.GetLanguageAndRegion().DisplayName;
 			}
 			else {
@@ -739,7 +739,7 @@ namespace OpenDental {
 			textNumDecimals.Text=CultureInfo.CurrentCulture.NumberFormat.CurrencyDecimalDigits.ToString();
 			_trackLastClinicBy=new List<string> { "None","Workstation","User" };//must be in english because these values are stored in DB.
 			_trackLastClinicBy.ForEach(x => comboTrackClinic.Items.Add(Lan.g(this,x)));//translation is for display only.
-			comboTrackClinic.SelectedIndex=_trackLastClinicBy.FindIndex(x => x==Preferences.GetString(PrefName.ClinicTrackLast));
+			comboTrackClinic.SelectedIndex=_trackLastClinicBy.FindIndex(x => x==Preference.GetString(PreferenceName.ClinicTrackLast));
 			if(comboTrackClinic.SelectedIndex==-1) {
 				comboTrackClinic.SelectedIndex=0;
 			}
@@ -748,12 +748,12 @@ namespace OpenDental {
 				comboTrackClinic.Visible=false;
 				checkUseClinicAbbr.Visible=false;
 			}
-			textSyncCode.Text=Preferences.GetString(PrefName.CentralManagerSyncCode);
-			textAuditEntries.Text=Preferences.GetString(PrefName.AuditTrailEntriesDisplayed);
-			if(Preferences.GetBool(PrefName.AgingIsEnterprise)) {
+			textSyncCode.Text=Preference.GetString(PreferenceName.CentralManagerSyncCode);
+			textAuditEntries.Text=Preference.GetString(PreferenceName.AuditTrailEntriesDisplayed);
+			if(Preference.GetBool(PreferenceName.AgingIsEnterprise)) {
 				//Enterprise
 				checkAgingIsEnterprise.Checked=true;
-				DateTime agingBeginDateT=Preferences.GetDateTime(PrefName.AgingBeginDateTime);
+				DateTime agingBeginDateT=Preference.GetDateTime(PreferenceName.AgingBeginDateTime);
 				if(agingBeginDateT>DateTime.MinValue) {
 					textAgingBeginDateT.Text=agingBeginDateT.ToString();
 				}
@@ -764,17 +764,17 @@ namespace OpenDental {
 				textAgingBeginDateT.Visible=false;
 				butClearAgingBeginDateT.Visible=false;
 			}
-			if(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {
+			if(Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily)) {
 				textAutoAgingRunTime.Enabled=false;
 			}
 			else {
-				DateTime agingDateTDue=Preferences.GetDateTime(PrefName.AgingServiceTimeDue);
+				DateTime agingDateTDue=Preference.GetDateTime(PreferenceName.AgingServiceTimeDue);
 				if(agingDateTDue!=DateTime.MinValue) {
 					textAutoAgingRunTime.Text=agingDateTDue.ToShortTimeString();
 				}
 			}
-			checkSubmitExceptions.Checked=Preferences.GetBool(PrefName.SendUnhandledExceptionsToHQ);
-			checkMiddleTierCacheFees.Checked=Preferences.GetBool(PrefName.MiddleTierCacheFees);
+			checkSubmitExceptions.Checked=Preference.GetBool(PreferenceName.SendUnhandledExceptionsToHQ);
+			checkMiddleTierCacheFees.Checked=Preference.GetBool(PreferenceName.MiddleTierCacheFees);
 			if(Preferences.IsCloudMode) {
 				textWebServiceServerName.ReadOnly=true;
 			}
@@ -791,7 +791,7 @@ namespace OpenDental {
 		private void butPickLanguageAndRegion_Click(object sender,EventArgs e) {
 			FormLanguageAndRegion FormLAR=new FormLanguageAndRegion();//FormLanguageAndRegion saves pref to DB.
 			FormLAR.ShowDialog();
-			if(Preferences.GetString(PrefName.LanguageAndRegion)!="") {
+			if(Preference.GetString(PreferenceName.LanguageAndRegion)!="") {
 				textLanguageAndRegion.Text=Preferences.GetLanguageAndRegion().DisplayName;
 			}
 			else {
@@ -809,10 +809,10 @@ namespace OpenDental {
 		}
 
 		private void checkUseFamAgingTable_Click(object sender,EventArgs e) {
-			if(checkAgingIsEnterprise.Checked && !Preferences.GetBool(PrefName.AgingIsEnterprise)) {
+			if(checkAgingIsEnterprise.Checked && !Preference.GetBool(PreferenceName.AgingIsEnterprise)) {
 				//Enabling feature that is turned off according to pref table.
 				string msgTxt=Lan.g(this,"In order to enable enterprise aging, enter the password from our manual below.");
-				if(Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)) {
+				if(Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily)) {
 					//Conditional warning that only affects Monthly Aging customers.
 					msgTxt+="\r\n"+Lan.g(this,"Note: This will change your aging from calculated monthly to calculated daily.");
 				}
@@ -835,7 +835,7 @@ namespace OpenDental {
 		///AgingIsEnterprise is enabled, the next time the form is accessed they may have the option to clear the DateTime.  Requires SecurityAdmin permission.</summary>
 		private void butClearAgingBeginDateT_Click(object sender,EventArgs e) {
 			//user doesn't have permission or the pref is already cleared
-			if(!Security.IsAuthorized(Permissions.SecurityAdmin) || Preferences.GetDateTime(PrefName.AgingBeginDateTime)==DateTime.MinValue) {//blank=DateTime.MinValue
+			if(!Security.IsAuthorized(Permissions.SecurityAdmin) || Preference.GetDateTime(PreferenceName.AgingBeginDateTime)==DateTime.MinValue) {//blank=DateTime.MinValue
 				return;
 			}
 			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"This will override the lock on the famaging table, potentially allowing a second connection to start "
@@ -845,7 +845,7 @@ namespace OpenDental {
 				return;
 			}
 			textAgingBeginDateT.Text="";
-			Prefs.UpdateString(PrefName.AgingBeginDateTime,"");
+			Preference.Update(PreferenceName.AgingBeginDateTime,"");
 			DataValid.SetInvalid(InvalidType.Prefs);
 		}
 
@@ -854,12 +854,12 @@ namespace OpenDental {
 				MessageBox.Show(Lan.g(this,"Please fix data entry errors first."));
 				return;
 			}
-			if(string.IsNullOrWhiteSpace(textSigInterval.Text) && Preferences.GetLong(PrefName.ProcessSigsIntervalInSecs)!=0) {
+			if(string.IsNullOrWhiteSpace(textSigInterval.Text) && Preference.GetLong(PreferenceName.ProcessSigsIntervalInSecs)!=0) {
 				bool proceed=MsgBox.Show(sender,MsgBoxButtons.YesNo,"Disabling the process signal interval prevents the use of kiosks.\r\n"
 					+"This should not be done if there are multiple workstations in the office.\r\n"
 					+"Proceed?");
 				if (!proceed) {
-					textSigInterval.Text=Preferences.GetLong(PrefName.ProcessSigsIntervalInSecs).ToString();
+					textSigInterval.Text=Preference.GetLong(PreferenceName.ProcessSigsIntervalInSecs).ToString();
 					return;
 				}
 			}
@@ -872,7 +872,7 @@ namespace OpenDental {
 			}
 			DateTime autoAgingRunTime=DateTime.MinValue;
 			if(!string.IsNullOrWhiteSpace(textAutoAgingRunTime.Text)
-				&& !Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily)
+				&& !Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily)
 				&& !DateTime.TryParse(textAutoAgingRunTime.Text,out autoAgingRunTime))
 			{
 				MsgBox.Show(this,"Automated Aging Run Time must be blank or a valid time of day.");
@@ -882,61 +882,61 @@ namespace OpenDental {
 				comboTrackClinic.SelectedIndex=0;
 			}
 			bool changed=false;
-			if( Prefs.UpdateString(PrefName.MainWindowTitle,textMainWindowTitle.Text)
-				| Prefs.UpdateLong(PrefName.ShowIDinTitleBar,comboShowID.SelectedIndex)
-				| Prefs.UpdateBool(PrefName.TitleBarShowSite, checkTitleBarShowSite.Checked)
-				| Prefs.UpdateString(PrefName.WebServiceServerName,textWebServiceServerName.Text)
-        | Prefs.UpdateBool(PrefName.LocalTimeOverridesServerTime,checkTimeCardUseLocal.Checked)
-				| Prefs.UpdateBool(PrefName.PatientSelectUseFNameForPreferred,checkPrefFName.Checked)
-				| Prefs.UpdateBool(PrefName.PatientSelectUsesSearchButton,!checkRefresh.Checked)
-				| Prefs.UpdateBool(PrefName.ImeCompositionCompatibility,checkImeCompositionCompatibility.Checked)
-				| Prefs.UpdateString(PrefName.ClinicTrackLast,_trackLastClinicBy[comboTrackClinic.SelectedIndex])
-				| Prefs.UpdateString(PrefName.CentralManagerSyncCode,textSyncCode.Text)
-				| Prefs.UpdateString(PrefName.AuditTrailEntriesDisplayed,textAuditEntries.Text)
-				| Prefs.UpdateBool(PrefName.AgingIsEnterprise,checkAgingIsEnterprise.Checked)
-				| Prefs.UpdateBool(PrefName.TitleBarClinicUseAbbr,checkUseClinicAbbr.Checked)
-				| Prefs.UpdateBool(PrefName.TitleBarShowSpecialty,checkTitleBarShowSpecialty.Checked)
-				| Prefs.UpdateBool(PrefName.SendUnhandledExceptionsToHQ,checkSubmitExceptions.Checked)
-				| Prefs.UpdateBool(PrefName.MiddleTierCacheFees,checkMiddleTierCacheFees.Checked)
-				| Prefs.UpdateBool(PrefName.ThemeSetByUser,checkUserTheme.Checked)
+			if( Preference.Update(PreferenceName.MainWindowTitle,textMainWindowTitle.Text)
+				| Preference.Update(PreferenceName.ShowIDinTitleBar,comboShowID.SelectedIndex)
+				| Preference.Update(PreferenceName.TitleBarShowSite, checkTitleBarShowSite.Checked)
+				| Preference.Update(PreferenceName.WebServiceServerName,textWebServiceServerName.Text)
+        | Preference.Update(PreferenceName.LocalTimeOverridesServerTime,checkTimeCardUseLocal.Checked)
+				| Preference.Update(PreferenceName.PatientSelectUseFNameForPreferred,checkPrefFName.Checked)
+				| Preference.Update(PreferenceName.PatientSelectUsesSearchButton,!checkRefresh.Checked)
+				| Preference.Update(PreferenceName.ImeCompositionCompatibility,checkImeCompositionCompatibility.Checked)
+				| Preference.Update(PreferenceName.ClinicTrackLast,_trackLastClinicBy[comboTrackClinic.SelectedIndex])
+				| Preference.Update(PreferenceName.CentralManagerSyncCode,textSyncCode.Text)
+				| Preference.Update(PreferenceName.AuditTrailEntriesDisplayed,textAuditEntries.Text)
+				| Preference.Update(PreferenceName.AgingIsEnterprise,checkAgingIsEnterprise.Checked)
+				| Preference.Update(PreferenceName.TitleBarClinicUseAbbr,checkUseClinicAbbr.Checked)
+				| Preference.Update(PreferenceName.TitleBarShowSpecialty,checkTitleBarShowSpecialty.Checked)
+				| Preference.Update(PreferenceName.SendUnhandledExceptionsToHQ,checkSubmitExceptions.Checked)
+				| Preference.Update(PreferenceName.MiddleTierCacheFees,checkMiddleTierCacheFees.Checked)
+				| Preference.Update(PreferenceName.ThemeSetByUser,checkUserTheme.Checked)
 			)
 			{
 				changed=true;
 			}
-			if(Prefs.UpdateInt(PrefName.ColorTheme,comboTheme.SelectedIndex)) {
+			if(Preference.Update(PreferenceName.ColorTheme,comboTheme.SelectedIndex)) {
 				changed=true;
 			}
 			if(textSigInterval.Text==""){
-				if(Prefs.UpdateLong(PrefName.ProcessSigsIntervalInSecs,0)){
+				if(Preference.Update(PreferenceName.ProcessSigsIntervalInSecs,0)){
 					changed=true;
 				}
 			}
 			else{
-				if(Prefs.UpdateLong(PrefName.ProcessSigsIntervalInSecs,PIn.Long(textSigInterval.Text))){
+				if(Preference.Update(PreferenceName.ProcessSigsIntervalInSecs,PIn.Long(textSigInterval.Text))){
 					changed=true;
 				}
 			}
 			if(textInactiveSignal.Text=="") {
-				if(Prefs.UpdateLong(PrefName.SignalInactiveMinutes,0)) {
+				if(Preference.Update(PreferenceName.SignalInactiveMinutes,0)) {
 					changed=true;
 				}
 			}
 			else {
-				if(Prefs.UpdateLong(PrefName.SignalInactiveMinutes,PIn.Long(textInactiveSignal.Text))) {
+				if(Preference.Update(PreferenceName.SignalInactiveMinutes,PIn.Long(textInactiveSignal.Text))) {
 					changed=true;
 				}
 			}
 			//if AgingIsEnterprise, change the aging to daily aging if it is currently set to monthly.  AgingIsEnterprise requires daily aging.
-			if(checkAgingIsEnterprise.Checked && Prefs.UpdateBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily,false)) {
+			if(checkAgingIsEnterprise.Checked && Preference.Update(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily,false)) {
 				changed=true;
 			}
 			if(autoAgingRunTime==DateTime.MinValue) {
-				if(Prefs.UpdateString(PrefName.AgingServiceTimeDue,"")) {
+				if(Preference.Update(PreferenceName.AgingServiceTimeDue,"")) {
 					changed=true;
 				}
 			}
 			else {
-				if(Prefs.UpdateString(PrefName.AgingServiceTimeDue,POut.DateT(autoAgingRunTime,false))) {
+				if(Preference.Update(PreferenceName.AgingServiceTimeDue,POut.DateT(autoAgingRunTime,false))) {
 					changed=true;
 				}
 			}

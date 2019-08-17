@@ -308,11 +308,11 @@ namespace OpenDental{
 			for(int i=0;i<AllCultures.Length;i++) {
 				listAvailable.Items.Add(AllCultures[i].DisplayName);
 			}
-			if(Preferences.GetString(PrefName.LanguagesUsedByPatients)=="") {
+			if(Preference.GetString(PreferenceName.LanguagesUsedByPatients)=="") {
 				LangsUsed=new List<string>();
 			}
 			else {
-				LangsUsed=new List<string>(Preferences.GetString(PrefName.LanguagesUsedByPatients).Split(','));
+				LangsUsed=new List<string>(Preference.GetString(PreferenceName.LanguagesUsedByPatients).Split(','));
 			}
 			FillListUsed();
 		}
@@ -344,7 +344,7 @@ namespace OpenDental{
 				CultureInfo culture=CodeBase.MiscUtils.GetCultureFromThreeLetter(LangsUsed[i]);
 				if(culture==null) {//custom language
 					comboLanguagesIndicateNone.Items.Add(LangsUsed[i]);//Only add custom languages to this combobox.
-					if(LangsUsed[i]==Preferences.GetString(PrefName.LanguagesIndicateNone)) {
+					if(LangsUsed[i]==Preference.GetString(PreferenceName.LanguagesIndicateNone)) {
 						comboLanguagesIndicateNone.SelectedIndex=comboLanguagesIndicateNone.Items.Count-1;//Select the item we just added.
 					}
 				}
@@ -425,12 +425,12 @@ namespace OpenDental{
 				}
 				str+=LangsUsed[i];
 			}
-			Prefs.UpdateString(PrefName.LanguagesUsedByPatients,str);
+			Preference.Update(PreferenceName.LanguagesUsedByPatients,str);
 			if(comboLanguagesIndicateNone.SelectedIndex==-1) {
-				Prefs.UpdateString(PrefName.LanguagesIndicateNone,"");
+				Preference.Update(PreferenceName.LanguagesIndicateNone,"");
 			}
 			else {
-				Prefs.UpdateString(PrefName.LanguagesIndicateNone,comboLanguagesIndicateNone.Items[comboLanguagesIndicateNone.SelectedIndex].ToString());
+				Preference.Update(PreferenceName.LanguagesIndicateNone,comboLanguagesIndicateNone.Items[comboLanguagesIndicateNone.SelectedIndex].ToString());
 			}
 			//prefs refresh handled by the calling form.
 			DialogResult=DialogResult.OK;
@@ -442,8 +442,8 @@ namespace OpenDental{
 
 		private void FormLanguagesUsed_FormClosing(object sender,FormClosingEventArgs e) {
 			//if LanguagesUsedByPatients does not contain LanguagesIndicateNone clear LanguagesIndicateNone
-			if(!Preferences.GetString(PrefName.LanguagesUsedByPatients).Contains(Preferences.GetString(PrefName.LanguagesIndicateNone))) {
-				Prefs.UpdateString(PrefName.LanguagesIndicateNone,"");
+			if(!Preference.GetString(PreferenceName.LanguagesUsedByPatients).Contains(Preference.GetString(PreferenceName.LanguagesIndicateNone))) {
+				Preference.Update(PreferenceName.LanguagesIndicateNone,"");
 			}
 		}
 

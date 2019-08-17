@@ -44,14 +44,14 @@ namespace OpenDentBusiness.Crud{
 				medicationPat=new MedicationPat();
 				medicationPat.MedicationPatNum= PIn.Long  (row["MedicationPatNum"].ToString());
 				medicationPat.PatNum          = PIn.Long  (row["PatNum"].ToString());
-				medicationPat.MedicationNum   = PIn.Long  (row["MedicationNum"].ToString());
+				medicationPat.MedicationNum   = PIn.Int  (row["MedicationNum"].ToString());
 				medicationPat.PatNote         = PIn.String(row["PatNote"].ToString());
 				medicationPat.DateTStamp      = PIn.DateT (row["DateTStamp"].ToString());
 				medicationPat.DateStart       = PIn.Date  (row["DateStart"].ToString());
 				medicationPat.DateStop        = PIn.Date  (row["DateStop"].ToString());
 				medicationPat.ProvNum         = PIn.Long  (row["ProvNum"].ToString());
 				medicationPat.MedDescript     = PIn.String(row["MedDescript"].ToString());
-				medicationPat.RxCui           = PIn.Long  (row["RxCui"].ToString());
+				medicationPat.RxCui           = PIn.String(row["RxCui"].ToString());
 				medicationPat.ErxGuid         = PIn.String(row["ErxGuid"].ToString());
 				medicationPat.IsCpoe          = PIn.Bool  (row["IsCpoe"].ToString());
 				retVal.Add(medicationPat);
@@ -88,7 +88,7 @@ namespace OpenDentBusiness.Crud{
 					POut.DateT (medicationPat.DateStop,false),
 					POut.Long  (medicationPat.ProvNum),
 					            medicationPat.MedDescript,
-					POut.Long  (medicationPat.RxCui),
+					            medicationPat.RxCui,
 					            medicationPat.ErxGuid,
 					POut.Bool  (medicationPat.IsCpoe),
 				});
@@ -123,8 +123,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Date  (medicationPat.DateStop)+","
 				+    POut.Long  (medicationPat.ProvNum)+","
 				+"'"+POut.String(medicationPat.MedDescript)+"',"
-				+    POut.Long  (medicationPat.RxCui)+","
-				+"'"+POut.String(medicationPat.ErxGuid)+"',"
+                +"'"+POut.String(medicationPat.RxCui) + "',"
+                +"'"+POut.String(medicationPat.ErxGuid)+"',"
 				+    POut.Bool  (medicationPat.IsCpoe)+")";
 			if(medicationPat.PatNote==null) {
 				medicationPat.PatNote="";
@@ -146,7 +146,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one MedicationPat into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(MedicationPat medicationPat,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO medicationpat (";
 			if(!useExistingPK && isRandomKeys) {
 				medicationPat.MedicationPatNum=ReplicationServers.GetKeyNoCache("medicationpat","MedicationPatNum");
@@ -167,8 +167,8 @@ namespace OpenDentBusiness.Crud{
 				+    POut.Date  (medicationPat.DateStop)+","
 				+    POut.Long  (medicationPat.ProvNum)+","
 				+"'"+POut.String(medicationPat.MedDescript)+"',"
-				+    POut.Long  (medicationPat.RxCui)+","
-				+"'"+POut.String(medicationPat.ErxGuid)+"',"
+                + "'" + POut.String(medicationPat.RxCui) + "',"
+                + "'"+POut.String(medicationPat.ErxGuid)+"',"
 				+    POut.Bool  (medicationPat.IsCpoe)+")";
 			if(medicationPat.PatNote==null) {
 				medicationPat.PatNote="";
@@ -194,8 +194,8 @@ namespace OpenDentBusiness.Crud{
 				+"DateStop        =  "+POut.Date  (medicationPat.DateStop)+", "
 				+"ProvNum         =  "+POut.Long  (medicationPat.ProvNum)+", "
 				+"MedDescript     = '"+POut.String(medicationPat.MedDescript)+"', "
-				+"RxCui           =  "+POut.Long  (medicationPat.RxCui)+", "
-				+"ErxGuid         = '"+POut.String(medicationPat.ErxGuid)+"', "
+				+ "RxCui           = '" + POut.String(medicationPat.RxCui) + "', "
+                + "ErxGuid         = '"+POut.String(medicationPat.ErxGuid)+"', "
 				+"IsCpoe          =  "+POut.Bool  (medicationPat.IsCpoe)+" "
 				+"WHERE MedicationPatNum = "+POut.Long(medicationPat.MedicationPatNum);
 			if(medicationPat.PatNote==null) {
@@ -239,8 +239,8 @@ namespace OpenDentBusiness.Crud{
 			}
 			if(medicationPat.RxCui != oldMedicationPat.RxCui) {
 				if(command!="") { command+=",";}
-				command+="RxCui = "+POut.Long(medicationPat.RxCui)+"";
-			}
+				command+= "RxCui = '" + POut.String(medicationPat.RxCui) + "'";
+            }
 			if(medicationPat.ErxGuid != oldMedicationPat.ErxGuid) {
 				if(command!="") { command+=",";}
 				command+="ErxGuid = '"+POut.String(medicationPat.ErxGuid)+"'";

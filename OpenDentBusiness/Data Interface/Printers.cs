@@ -134,13 +134,12 @@ namespace OpenDentBusiness
         ///<summary>Gets the set printer whether or not it is valid.  Returns null if the current computer OR printer cannot be found.</summary>
         public static Printer GetForSit(PrintSituation sit)
         {
-            //No need to check RemotingRole; no call to db.
-            Computer compCur = Computers.GetCur();
+            Computer compCur = Computer.Current;
             if (compCur == null)
             {
                 return null;
             }
-            return GetFirstOrDefault(x => x.ComputerNum == compCur.ComputerNum && x.PrintSit == sit);
+            return GetFirstOrDefault(x => x.ComputerNum == compCur.Id && x.PrintSit == sit);
         }
 
         ///<summary>Either does an insert or an update to the database if need to create a Printer object.  Or it also deletes a printer object if needed.</summary>
@@ -185,20 +184,23 @@ namespace OpenDentBusiness
         ///<summary>Called from FormPrinterSetup if user selects the easy option.  Since the other options will be hidden, we have to clear them.  User should be sternly warned before this happens.</summary>
         public static void ClearAll()
         {
-            //first, delete all entries
-            string command = "DELETE FROM printer";
-            Db.NonQ(command);
+            DataConnection.ExecuteNonQuery("DELETE FROM printer");
+
+
             //then, add one printer for each computer. Default and show prompt
-            Computers.RefreshCache();
+            // TODO: Computer.RefreshCache();
             Printer cur;
-            List<Computer> listComputers = Computers.GetDeepCopy();
-            for (int i = 0; i < listComputers.Count; i++)
+
+            var computerList = Computer.All();
+            for (int i = 0; i < computerList.Count; i++)
             {
-                cur = new Printer();
-                cur.ComputerNum = listComputers[i].ComputerNum;
-                cur.PrintSit = PrintSituation.Default;
-                cur.PrinterName = "";
-                cur.DisplayPrompt = true;
+                cur = new Printer
+                {
+                    ComputerNum = computerList[i].Id,
+                    PrintSit = PrintSituation.Default,
+                    PrinterName = "",
+                    DisplayPrompt = true
+                };
                 Insert(cur);
             }
         }

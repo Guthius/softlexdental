@@ -20,7 +20,7 @@ namespace OpenDental
         void FormAllergyEdit_Load(object sender, EventArgs e)
         {
             descriptionTextBox.Text = AllergyDefCur?.Description ?? "";
-            if (!AllergyDefCur.IsNew)
+            if (AllergyDefCur.Id > 0)
             {
                 hiddenCheckBox.Checked = AllergyDefCur.IsHidden;
             }
@@ -31,7 +31,7 @@ namespace OpenDental
             }
             allergyTypeComboBox.SelectedIndex = (int)AllergyDefCur.SnomedType;
 
-            medicationTextBox.Text = Medications.GetDescription(AllergyDefCur.MedicationNum);
+            medicationTextBox.Text = Medication.GetDescription(AllergyDefCur.MedicationNum);
             uniiTextBox.Text = AllergyDefCur.UniiCode;
         }
 
@@ -66,7 +66,7 @@ namespace OpenDental
 
                 AllergyDefCur.MedicationNum = formMedications.SelectedMedicationNum;
 
-                medicationTextBox.Text = Medications.GetDescription(AllergyDefCur.MedicationNum);
+                medicationTextBox.Text = Medication.GetDescription(AllergyDefCur.MedicationNum);
             }
         }
 
@@ -84,9 +84,9 @@ namespace OpenDental
         /// </summary>
         void deleteButton_Click(object sender, EventArgs e)
         {
-            if (!AllergyDefCur.IsNew)
+            if (AllergyDefCur.Id > 0)
             {
-                if (!AllergyDefs.DefIsInUse(AllergyDefCur.AllergyDefNum))
+                if (!AllergyDefs.DefIsInUse(AllergyDefCur.Id))
                 {
                     var result = 
                         MessageBox.Show(
@@ -97,7 +97,7 @@ namespace OpenDental
 
                     if (result == DialogResult.Cancel) return;
 
-                    AllergyDefs.Delete(AllergyDefCur.AllergyDefNum);
+                    AllergyDefs.Delete(AllergyDefCur.Id);
                 }
                 else
                 {
@@ -178,7 +178,7 @@ namespace OpenDental
 
             // TODO: Do UNII check once the table is added
 
-            if (AllergyDefCur.IsNew)
+            if (AllergyDefCur.Id == 0)
             {
                 AllergyDefs.Insert(AllergyDefCur);
             }

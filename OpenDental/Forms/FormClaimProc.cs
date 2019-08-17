@@ -46,7 +46,7 @@ namespace OpenDental {
 		private double WriteOffOtherIns;
 		private bool SaveToDb;
 		private List<InsSub> SubList;
-		private List<Def> _listPayTrackDefs;
+		private List<Definition> _listPayTrackDefs;
 		public bool IsSaved;
 		private List<Provider> _listProviders;
 
@@ -399,11 +399,11 @@ namespace OpenDental {
 			else {
 				checkPayPlan.Checked=true;
 			}
-			_listPayTrackDefs=Defs.GetDefsForCategory(DefCat.ClaimPaymentTracking,true);
+			_listPayTrackDefs=Definition.GetByCategory(DefinitionCategory.ClaimPaymentTracking);
 			comboPayTracker.Items.Add("None");
 			for(int i=0;i<_listPayTrackDefs.Count;i++) {
-				comboPayTracker.Items.Add(_listPayTrackDefs[i].ItemName);
-				if(_listPayTrackDefs[i].DefNum==ClaimProcCur.ClaimPaymentTracking) {
+				comboPayTracker.Items.Add(_listPayTrackDefs[i].Description);
+				if(_listPayTrackDefs[i].Id==ClaimProcCur.ClaimPaymentTracking) {
 					comboPayTracker.SelectedIndex=i+1;
 				}
 			}
@@ -1136,7 +1136,7 @@ namespace OpenDental {
 			if(!IsProc) {
 				return true;
 			}
-			ClaimProcCreditsGreaterThanProcFee creditsGreaterPref=(ClaimProcCreditsGreaterThanProcFee)Preferences.GetInt(PrefName.ClaimProcAllowCreditsGreaterThanProcFee);
+			ClaimProcCreditsGreaterThanProcFee creditsGreaterPref=(ClaimProcCreditsGreaterThanProcFee)Preference.GetInt(PreferenceName.ClaimProcAllowCreditsGreaterThanProcFee);
 			if(creditsGreaterPref==ClaimProcCreditsGreaterThanProcFee.Allow) {
 				return true;
 			}
@@ -1176,7 +1176,7 @@ namespace OpenDental {
 		///<summary>Returns true if InsPayNoWriteoffMoreThanProc preference is turned on and the sum of write off amount is greater than the proc fee.
 		///Otherwise returns false </summary>
 		private bool IsWriteOffGreaterThanProcFee() {
-			if(!IsProc || !Preferences.GetBool(PrefName.InsPayNoWriteoffMoreThanProc)) {
+			if(!IsProc || !Preference.GetBool(PreferenceName.InsPayNoWriteoffMoreThanProc)) {
 				return false;
 			}
 			List<ClaimProc> listClaimProcsForPat=ClaimProcs.Refresh(PatCur.PatNum);
@@ -1240,8 +1240,8 @@ namespace OpenDental {
 				return;
 			}
 			if(PIn.Date(textDateCP.Text).Date > DateTime.Today.Date
-				&& !Preferences.GetBool(PrefName.FutureTransDatesAllowed) 
-				&& !Preferences.GetBool(PrefName.AllowFutureInsPayments)
+				&& !Preference.GetBool(PreferenceName.FutureTransDatesAllowed) 
+				&& !Preference.GetBool(PreferenceName.AllowFutureInsPayments)
 				&& ClaimProcCur.Status.In(ClaimProcStatus.Received,ClaimProcStatus.Supplemental,ClaimProcStatus.CapClaim,ClaimProcStatus.CapComplete)) 
 			{ 
 				MsgBox.Show(this,"Payment date cannot be for the future.");
@@ -1285,7 +1285,7 @@ namespace OpenDental {
 					ClaimProcCur.DateEntry=DateTime.Now;
 				}
 			}
-			ClaimProcCur.ClaimPaymentTracking=comboPayTracker.SelectedIndex==0 ? 0 : _listPayTrackDefs[comboPayTracker.SelectedIndex-1].DefNum;
+			ClaimProcCur.ClaimPaymentTracking=comboPayTracker.SelectedIndex==0 ? 0 : _listPayTrackDefs[comboPayTracker.SelectedIndex-1].Id;
 			if(SaveToDb) {
 				//Fix pre-auth statuses.
 				Claim curClaim=Claims.GetClaim(ClaimProcCur.ClaimNum);

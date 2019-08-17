@@ -274,7 +274,7 @@ namespace OpenDental{
 			if(EntryCur==null){
 				MessageBox.Show("Entry cannot be null.");
 			}
-			AccountPicked=Account.GetAccount(EntryCur.AccountNum);//might be null
+			AccountPicked=Account.GetById(EntryCur.AccountNum);//might be null
 			/*
 			for(int i=0;i<Accounts.ListShort.Length;i++) {
 				comboAccount.Items.Add(Accounts.ListShort[i].Description);
@@ -299,7 +299,7 @@ namespace OpenDental{
 				textReconcile.Visible=false;
 			}
 			else{//attached
-				textReconcile.Text=Reconciles.GetOne(EntryCur.ReconcileNum).DateReconcile.ToShortDateString();
+				textReconcile.Text=Reconciliation.GetById(EntryCur.ReconcileNum).ReconciliationDate.Value.ToShortDateString();
 				textDebit.ReadOnly=true;
 				textCredit.ReadOnly=true;
 				butDelete.Enabled=false;
@@ -319,7 +319,7 @@ namespace OpenDental{
 			//AccountCur=Accounts.ListShort[comboAccount.SelectedIndex];
 			textAccount.Text=AccountPicked.Description;
 			butChange.Text=Lan.g(this,"Change");
-			if(Account.DebitIsPos(AccountPicked.AcctType)) {
+			if(Account.DebitIsPos(AccountPicked.Type)) {
 				labelDebit.Text=Lan.g(this,"Debit")+Lan.g(this,"(+)");
 				labelCredit.Text=Lan.g(this,"Credit")+Lan.g(this,"(-)");
 			}
@@ -375,11 +375,11 @@ namespace OpenDental{
 				MsgBox.Show(this,"Only one amount can be filled in.");
 				return;
 			}
-			if(AccountPicked==null || AccountPicked.AccountNum==0) {
+			if(AccountPicked==null || AccountPicked.Id==0) {
 				MsgBox.Show(this,"Please select an account.");
 				return;
 			}
-			EntryCur.AccountNum=AccountPicked.AccountNum;
+			EntryCur.AccountNum=AccountPicked.Id;
 			EntryCur.DebitAmt=PIn.Double(textDebit.Text);
 			EntryCur.CreditAmt=PIn.Double(textCredit.Text);
 			EntryCur.Memo=textMemo.Text;

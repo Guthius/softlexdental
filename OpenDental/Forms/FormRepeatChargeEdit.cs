@@ -77,11 +77,11 @@ namespace OpenDental{
 		///<summary>Already in a comma-delimited string that can be stored in the db.</summary>
 		private string _selectedUnearnedTypes {
 			get {
-				if(comboUnearnedTypes.SelectedTags<Def>().Any(x => x.DefNum==0)) {
+				if(comboUnearnedTypes.SelectedTags<Definition>().Any(x => x.Id==0)) {
 					//'All' is selected. An empty database column indicates all unearned types are to be used.
 					return "";
 				}
-				return string.Join(",",comboUnearnedTypes.SelectedTags<Def>().Select(x => x.DefNum));
+				return string.Join(",",comboUnearnedTypes.SelectedTags<Definition>().Select(x => x.Id));
 			}
 		}
 
@@ -459,7 +459,7 @@ namespace OpenDental{
 			this.textBillingDay.MaxVal = 31;
 			this.textBillingDay.MinVal = 1;
 			this.textBillingDay.Name = "textBillingDay";
-			this.textBillingDay.PrefNameBinding = OpenDentBusiness.PrefName.AccountingCashIncomeAccount;
+			this.textBillingDay.PrefNameBinding = OpenDentBusiness.PreferenceName.AccountingCashIncomeAccount;
 			this.textBillingDay.Size = new System.Drawing.Size(75, 20);
 			this.textBillingDay.TabIndex = 8;
 			this.textBillingDay.Visible = false;
@@ -706,21 +706,21 @@ namespace OpenDental{
 			else {
 				textBillingDay.Text=pat.BillingCycleDay.ToString();
 			}
-			if(Preferences.GetBool(PrefName.BillingUseBillingCycleDay)) {
+			if(Preference.GetBool(PreferenceName.BillingUseBillingCycleDay)) {
 				labelBillingCycleDay.Visible=true;
 				textBillingDay.Visible=true;
 			}
 			checkUseUnearned.Checked=RepeatCur.UsePrepay;
 			List<long> listDefNumsUnearnedTypeCur=(RepeatCur.UnearnedTypes??"").Split(new char[] { ',' },StringSplitOptions.RemoveEmptyEntries)
 				.Select(x => PIn.Long(x,false)).ToList();
-			List<Def> listUnearned=new List<Def> {
-				new Def { DefNum=0,ItemName="All" },
+			List<Definition> listUnearned=new List<Definition> {
+				new Definition { Description="All" },
 			};
-			listUnearned.AddRange(Defs.GetDefsForCategory(DefCat.PaySplitUnearnedType,true));
-			comboUnearnedTypes.SetItems(listUnearned,x => x.ItemName,x => x.DefNum.In(listDefNumsUnearnedTypeCur));
+			listUnearned.AddRange(Definition.GetByCategory(DefinitionCategory.PaySplitUnearnedType));
+			comboUnearnedTypes.SetItems(listUnearned,x => x.Description,x => x.Id.In(listDefNumsUnearnedTypeCur));
 			if(string.IsNullOrEmpty(RepeatCur.UnearnedTypes)) {
 				//An empty value indicates 'All'
-				comboUnearnedTypes.SetSelectedItem<Def>(x => x.DefNum==0);
+				comboUnearnedTypes.SetSelectedItem<Definition>(x => x.Id==0);
 			}
 		}
 
@@ -788,15 +788,15 @@ namespace OpenDental{
 		}
 
 		private void comboUnearnedTypes_SelectionChangeCommitted(object sender,EventArgs e) {
-			if(comboUnearnedTypes.SelectedTags<Def>().Any(x => x.DefNum==0)) {//'All' is selected
+			if(comboUnearnedTypes.SelectedTags<Definition>().Any(x => x.Id==0)) {//'All' is selected
 				comboUnearnedTypes.SetSelected(false);
-				comboUnearnedTypes.SetSelectedItem<Def>(x => x.DefNum==0);//Select 'All'
+				comboUnearnedTypes.SetSelectedItem<Definition>(x => x.Id==0);//Select 'All'
 			}
 		}
 
 		private void butManual_Click(object sender,EventArgs e) {
-			Prefs.RefreshCache();//Refresh the cache in case another machine has updated this pref
-			if(Preferences.GetString(PrefName.RepeatingChargesBeginDateTime)!="") {
+			Preference.Refresh();//Refresh the cache in case another machine has updated this pref
+			if(Preference.GetString(PreferenceName.RepeatingChargesBeginDateTime)!="") {
 				MsgBox.Show(this,"Repeating charges already running on another workstation, you must wait for them to finish before continuing.");
 				return;
 			}
@@ -918,7 +918,7 @@ namespace OpenDental{
 			if(!UpdateRepeatCharge(RepeatCur)) {
 				return;
 			}
-			if(Preferences.GetBool(PrefName.BillingUseBillingCycleDay) && textBillingDay.Text!="") {
+			if(Preference.GetBool(PreferenceName.BillingUseBillingCycleDay) && textBillingDay.Text!="") {
 				Patient patOld=Patients.GetPat(RepeatCur.PatNum);
 				Patient patNew=patOld.Copy();
 				patNew.BillingCycleDay=PIn.Int(textBillingDay.Text);

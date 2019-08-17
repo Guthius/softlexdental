@@ -44,7 +44,7 @@ namespace OpenDentBusiness.Crud{
 				disease=new Disease();
 				disease.DiseaseNum       = PIn.Long  (row["DiseaseNum"].ToString());
 				disease.PatNum           = PIn.Long  (row["PatNum"].ToString());
-				disease.DiseaseDefNum    = PIn.Long  (row["DiseaseDefNum"].ToString());
+				disease.DiseaseDefNum    = PIn.Int  (row["DiseaseDefNum"].ToString());
 				disease.PatNote          = PIn.String(row["PatNote"].ToString());
 				disease.DateTStamp       = PIn.DateT (row["DateTStamp"].ToString());
 				disease.ProbStatus       = (OpenDentBusiness.ProblemStatus)PIn.Int(row["ProbStatus"].ToString());
@@ -138,7 +138,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Disease into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(Disease disease,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO disease (";
 			if(!useExistingPK && isRandomKeys) {
 				disease.DiseaseNum=ReplicationServers.GetKeyNoCache("disease","DiseaseNum");

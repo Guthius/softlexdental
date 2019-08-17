@@ -20,7 +20,7 @@ namespace OpenDental.User_Controls.SetupWizard
 
         void LoadRegistrationKey()
         {
-            textRegKey.Text = License.FormatKey(Preferences.GetString(PrefName.RegistrationKey));
+            textRegKey.Text = License.FormatKey(Preference.GetString(PreferenceName.RegistrationKey));
 
             IsDone = !string.IsNullOrEmpty(textRegKey.Text);
 
@@ -38,7 +38,7 @@ namespace OpenDental.User_Controls.SetupWizard
 
             DataValid.SetInvalid(InvalidType.Prefs);
 
-            textRegKey.Text = License.FormatKey(Preferences.GetString(PrefName.RegistrationKey));
+            textRegKey.Text = License.FormatKey(Preference.GetString(PreferenceName.RegistrationKey));
 
             IsDone = !string.IsNullOrEmpty(textRegKey.Text);
             groupProcTools.Enabled = IsDone;

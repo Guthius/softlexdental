@@ -176,7 +176,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Vitalsign into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(Vitalsign vitalsign,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys= Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO vitalsign (";
 			if(!useExistingPK && isRandomKeys) {
 				vitalsign.VitalsignNum=ReplicationServers.GetKeyNoCache("vitalsign","VitalsignNum");

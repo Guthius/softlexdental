@@ -388,7 +388,7 @@ namespace OpenDentBusiness
         ///<summary>Unlinks all paysplits that are currently linked to the passed-in adjustment. (Sets paysplit.AdjNum to 0)</summary>
         public static void UnlinkForAdjust(Adjustment adj)
         {
-            List<PaySplit> listPaySplit = GetForAdjustments(new List<long>() { adj.AdjNum });
+            List<PaySplit> listPaySplit = GetForAdjustments(new List<long>() { adj.Id });
             foreach (PaySplit paySplitCur in listPaySplit)
             {
                 paySplitCur.AdjNum = 0;
@@ -401,7 +401,7 @@ namespace OpenDentBusiness
         {
             if (listSplits == null)
             {
-                listSplits = PaySplits.GetForAdjustments(new List<long>() { adj.AdjNum });
+                listSplits = PaySplits.GetForAdjustments(new List<long>() { adj.Id });
             }
             foreach (PaySplit split in listSplits)
             {

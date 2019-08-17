@@ -449,11 +449,11 @@ namespace OpenDental.UI {
 		///<summary>Called on startup and if color prefs change.</summary>
 		public void SetColors(Color colorOpen,Color colorClosed,Color colorHoliday,Color colorBlockText,Color colorTimeLine){
 			//Example pseudocode hints for calling this method:
-			//List<Def> listDefs=Defs.GetDefsForCategory(DefCat.AppointmentColors);
+			//List<Def> listDefs=Definition.GetByCategory(DefCat.AppointmentColors);
 			//colorOpen=(listDefs[0].ItemColor);
 			//colorClosed=(listDefs[1].ItemColor);
 			//colorHoliday=(listDefs[3].ItemColor);
-			//colorBlockText=Defs.GetDefsForCategory(DefCat.AppointmentColors,true)[4].ItemColor;
+			//colorBlockText=Definition.GetByCategory(DefCat.AppointmentColors,true)[4].ItemColor;
 			//colorTimeLine=PrefC.GetColor(PrefName.AppointmentTimeLineColor)
 			_brushOpen=new SolidBrush(colorOpen);
 			_brushClosed=new SolidBrush(colorClosed);
@@ -623,9 +623,9 @@ namespace OpenDental.UI {
 			string blockText;
 			RectangleF rect;
 			for(int i=0;i<schedForType.Length;i++) {
-				brushBlockBackg=new SolidBrush(Defs.GetColor(DefCat.BlockoutTypes,schedForType[i].BlockoutType));
-				penOutline=new Pen(Defs.GetColor(DefCat.BlockoutTypes,schedForType[i].BlockoutType),2);
-				blockText=Defs.GetName(DefCat.BlockoutTypes,schedForType[i].BlockoutType)+"\r\n"+schedForType[i].Note;
+				brushBlockBackg=new SolidBrush(Defs.GetColor(DefinitionCategory.BlockoutTypes,schedForType[i].BlockoutType));
+				penOutline=new Pen(Defs.GetColor(DefinitionCategory.BlockoutTypes,schedForType[i].BlockoutType),2);
+				blockText=Defs.GetName(DefinitionCategory.BlockoutTypes,schedForType[i].BlockoutType)+"\r\n"+schedForType[i].Note;
 				for(int o=0;o<schedForType[i].Ops.Count;o++) {
 					int startHour=_timeStart.Hours;
 					if(_isPrinting) {//Filtering logic for printing.
@@ -677,7 +677,7 @@ namespace OpenDental.UI {
 							+(schedForType[i].StopTime-schedForType[i].StartTime).Minutes*_lineH/_minPerRow);
 					}
 					//paint either solid block or outline
-					if(Preferences.GetBool(PrefName.SolidBlockouts)) {
+					if(Preference.GetBool(PreferenceName.SolidBlockouts)) {
 						g.FillRectangle(brushBlockBackg,rect);
 						g.DrawLine(Pens.Black,rect.X,rect.Y+1,rect.Right-1,rect.Y+1);
 					}

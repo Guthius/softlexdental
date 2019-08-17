@@ -22,10 +22,10 @@ namespace OpenDental{
 		private OpenDental.UI.Button butDown;
 		private OpenDental.UI.Button butHide;
 		private UI.ODGrid gridDefs;
-		private DefCat _initialCat;
+		private DefinitionCategory _initialCat;
 		private bool _isDefChanged;
 		private UI.Button butAlphabetize;
-		private List<Def> _listDefsAll;
+		private List<Definition> _listDefsAll;
 
 		///<summary>Gets the currently selected DefCat along with its options.</summary>
 		private DefCatOptions _selectedDefCatOpt {
@@ -33,12 +33,12 @@ namespace OpenDental{
 		}
 
 		///<summary>All definitions for the current category, hidden and non-hidden.</summary>
-		private List<Def> _listDefsCur {
-			get { return _listDefsAll.Where(x => x.Category == _selectedDefCatOpt.DefCat).OrderBy(x => x.ItemOrder).ToList(); }
+		private List<Definition> _listDefsCur {
+			get { return _listDefsAll.Where(x => x.Category == _selectedDefCatOpt.DefCat).OrderBy(x => x.SortOrder).ToList(); }
 		}
 
 		///<summary>Must check security before allowing this window to open.</summary>
-		public FormDefinitions(DefCat initialCat){
+		public FormDefinitions(DefinitionCategory initialCat){
 			InitializeComponent();// Required for Windows Form Designer support
 			_initialCat=initialCat;
 			Lan.F(this);
@@ -266,7 +266,7 @@ namespace OpenDental{
 
 		private void LoadListDefCats() {
 			List<DefCatOptions> listDefCatsOrdered = new List<DefCatOptions>();
-			listDefCatsOrdered=DefL.GetOptionsForDefCats(Enum.GetValues(typeof(DefCat)));
+			listDefCatsOrdered=DefL.GetOptionsForDefCats(Enum.GetValues(typeof(DefinitionCategory)));
 			listDefCatsOrdered = listDefCatsOrdered.OrderBy(x => x.DefCat.GetDescription()).ToList(); //orders alphabetically.
 			ODBoxItem<DefCatOptions> defCatItem;
 			foreach(DefCatOptions defCOpt in listDefCatsOrdered) {
@@ -283,8 +283,8 @@ namespace OpenDental{
 		}
 
 		private void RefreshDefs() {
-			Defs.RefreshCache();
-			_listDefsAll=Defs.GetDeepCopy().SelectMany(x => x.Value).ToList();
+            CacheManager.Invalidate<Definition>();
+            _listDefsAll = Definition.All();
 		}
 
 		private void FillGridDefs(){
@@ -311,7 +311,7 @@ namespace OpenDental{
 		}
 
 		private void gridDefs_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			Def selectedDef = (Def)gridDefs.Rows[e.Row].Tag;
+			Definition selectedDef = (Definition)gridDefs.Rows[e.Row].Tag;
 			_isDefChanged=DefL.GridDefsDoubleClick(selectedDef,gridDefs,_selectedDefCatOpt,_listDefsCur,_listDefsAll,_isDefChanged);
 			if(_isDefChanged) {
 				RefreshDefs();
@@ -353,10 +353,10 @@ namespace OpenDental{
 			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Alphabetizing this definition category is irreversible. Are you sure you want to continue?")) {
 				return;
 			}
-			List<Def> listDefsSorting=_listDefsCur.OrderBy(x => x.ItemName).ToList(); 
+			List<Definition> listDefsSorting=_listDefsCur.OrderBy(x => x.Description).ToList(); 
 			for(int i=0;i < listDefsSorting.Count;i++) {
-				listDefsSorting[i].ItemOrder=i;
-				Defs.Update(listDefsSorting[i]);
+				listDefsSorting[i].SortOrder=i;
+                Definition.Update(listDefsSorting[i]);
 			}
 			_isDefChanged=true;
 			RefreshDefs();
@@ -367,22 +367,29 @@ namespace OpenDental{
 			Close();
 		}
 
-		private void FormDefinitions_Closing(object sender,System.ComponentModel.CancelEventArgs e) {
-			//Correct the item orders of all definition categories.
-			List<Def> listDefUpdates=new List<Def>();
-			foreach(KeyValuePair<DefCat,List<Def>> kvp in Defs.GetDeepCopy()) {
-				for(int i=0;i<kvp.Value.Count;i++) {
-					if(kvp.Value[i].ItemOrder!=i) {
-						kvp.Value[i].ItemOrder=i;
-						listDefUpdates.Add(kvp.Value[i]);
-					}
-				}
-			}
-			listDefUpdates.ForEach(x => Defs.Update(x));
-			if(_isDefChanged || listDefUpdates.Count>0) {
-				DataValid.SetInvalid(InvalidType.Defs);
-			}
-		}
+        private void FormDefinitions_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //Correct the item orders of all definition categories.
+            List<Definition> listDefUpdates = new List<Definition>();
 
+            foreach (var array in Defs.GetArrayShortNoCache())
+            {
+                for (int i = 0; i < array.Length; i++)
+                {
+                    if (array[i].SortOrder != i)
+                    {
+                        array[i].SortOrder = i;
+
+                        listDefUpdates.Add(array[i]);
+                    }
+                }
+            }
+
+            listDefUpdates.ForEach(x => Definition.Update(x));
+            if (_isDefChanged || listDefUpdates.Count > 0)
+            {
+                DataValid.SetInvalid(InvalidType.Defs);
+            }
+        }
 	}
 }

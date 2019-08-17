@@ -138,7 +138,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Evaluation into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(Evaluation evaluation,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO evaluation (";
 			if(!useExistingPK && isRandomKeys) {
 				evaluation.EvaluationNum=ReplicationServers.GetKeyNoCache("evaluation","EvaluationNum");

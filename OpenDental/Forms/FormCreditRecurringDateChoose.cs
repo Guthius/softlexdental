@@ -25,7 +25,7 @@ namespace OpenDental {
 		}
 
 		private void FormCreditRecurringDateChoose_Load(object sender,EventArgs e) {
-			if(Preferences.GetBool(PrefName.RecurringChargesUseTransDate)) {
+			if(Preference.GetBool(PreferenceName.RecurringChargesUseTransDate)) {
 				labelLastMonth.Text=Lan.g(this,"Recurring charge date will be:")+" "+_lastMonth.ToShortDateString();
 				labelThisMonth.Text=Lan.g(this,"Recurring charge date will be:")+" "+_thisMonth.ToShortDateString();
 			}

@@ -727,21 +727,21 @@ namespace OpenDentBusiness
         ///off.</summary>
         public static string GetEmailDisclaimer(long clinicNum)
         {
-            if (!Preferences.GetBool(PrefName.EmailDisclaimerIsOn))
+            if (!Preference.GetBool(PreferenceName.EmailDisclaimerIsOn))
             {
                 return "";
             }
-            string disclaimer = Preferences.GetString(PrefName.EmailDisclaimerTemplate);
+            string disclaimer = Preference.GetString(PreferenceName.EmailDisclaimerTemplate);
             if (string.IsNullOrEmpty(disclaimer))
             {
                 return "";
             }
-            string postalAddress = Preferences.GetString(PrefName.PracticeTitle) + "\r\n" + Patients.GetAddressFull(
-                Preferences.GetString(PrefName.PracticeAddress),
-                Preferences.GetString(PrefName.PracticeAddress2),
-                Preferences.GetString(PrefName.PracticeCity),
-                Preferences.GetString(PrefName.PracticeST),
-                Preferences.GetString(PrefName.PracticeZip));
+            string postalAddress = Preference.GetString(PreferenceName.PracticeTitle) + "\r\n" + Patients.GetAddressFull(
+                Preference.GetString(PreferenceName.PracticeAddress),
+                Preference.GetString(PreferenceName.PracticeAddress2),
+                Preference.GetString(PreferenceName.PracticeCity),
+                Preference.GetString(PreferenceName.PracticeST),
+                Preference.GetString(PreferenceName.PracticeZip));
             if (Preferences.HasClinicsEnabled)
             {
                 Clinic clinic = Clinics.GetClinic(clinicNum);
@@ -2527,7 +2527,7 @@ namespace OpenDentBusiness
         public static void SendTestUnsecure(string subjectAndBody, string attachName1, string attachContents1, string attachName2, string attachContents2)
         {
             //No need to check RemotingRole; no call to db.
-            string strTo = Preferences.GetString(PrefName.EHREmailToAddress);
+            string strTo = Preference.GetString(PreferenceName.EHREmailToAddress);
             if (strTo == "")
             {
                 throw new ApplicationException("This feature cannot be used except in a test environment because email is not secure.");
@@ -2556,19 +2556,19 @@ namespace OpenDentBusiness
         public static string ReceiveOneForEhrTest()
         {
             //No need to check RemotingRole; no call to db.
-            if (Preferences.GetString(PrefName.EHREmailToAddress) == "")
+            if (Preference.GetString(PreferenceName.EHREmailToAddress) == "")
             {//this pref is hidden, so no practical way for user to turn this on.
                 throw new ApplicationException("This feature cannot be used except in a test environment because email is not secure.");
             }
-            if (Preferences.GetString(PrefName.EHREmailPOPserver) == "")
+            if (Preference.GetString(PreferenceName.EHREmailPOPserver) == "")
             {
                 throw new ApplicationException("No POP server set up.");
             }
             EmailAddress emailAddress = new EmailAddress();
-            emailAddress.Pop3ServerIncoming = Preferences.GetString(PrefName.EHREmailPOPserver);
-            emailAddress.ServerPortIncoming = Preferences.GetInt(PrefName.EHREmailPort);
-            emailAddress.EmailUsername = Preferences.GetString(PrefName.EHREmailFromAddress);
-            emailAddress.EmailPassword = Preferences.GetString(PrefName.EHREmailPassword);
+            emailAddress.Pop3ServerIncoming = Preference.GetString(PreferenceName.EHREmailPOPserver);
+            emailAddress.ServerPortIncoming = Preference.GetInt(PreferenceName.EHREmailPort);
+            emailAddress.EmailUsername = Preference.GetString(PreferenceName.EHREmailFromAddress);
+            emailAddress.EmailPassword = Preference.GetString(PreferenceName.EHREmailPassword);
             List<EmailMessage> emailMessages = ReceiveFromInbox(1, emailAddress);
             if (emailMessages.Count == 0)
             {

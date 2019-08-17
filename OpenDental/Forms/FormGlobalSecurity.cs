@@ -18,34 +18,34 @@ namespace OpenDental {
 		}
 
 		private void FormGlobalSecurity_Load(object sender,EventArgs e) {
-			textLogOffAfterMinutes.Text=Preferences.GetInt(PrefName.SecurityLogOffAfterMinutes).ToString();
-			checkPasswordsMustBeStrong.Checked=Preferences.GetBool(PrefName.PasswordsMustBeStrong);
-			checkPasswordsStrongIncludeSpecial.Checked=Preferences.GetBool(PrefName.PasswordsStrongIncludeSpecial);
-			checkPasswordForceWeakToStrong.Checked=Preferences.GetBool(PrefName.PasswordsWeakChangeToStrong);
-			checkTimecardSecurityEnabled.Checked=Preferences.GetBool(PrefName.TimecardSecurityEnabled);
-			checkCannotEditOwn.Checked=Preferences.GetBool(PrefName.TimecardUsersDontEditOwnCard);
+			textLogOffAfterMinutes.Text=Preference.GetInt(PreferenceName.SecurityLogOffAfterMinutes).ToString();
+			checkPasswordsMustBeStrong.Checked=Preference.GetBool(PreferenceName.PasswordsMustBeStrong);
+			checkPasswordsStrongIncludeSpecial.Checked=Preference.GetBool(PreferenceName.PasswordsStrongIncludeSpecial);
+			checkPasswordForceWeakToStrong.Checked=Preference.GetBool(PreferenceName.PasswordsWeakChangeToStrong);
+			checkTimecardSecurityEnabled.Checked=Preference.GetBool(PreferenceName.TimecardSecurityEnabled);
+			checkCannotEditOwn.Checked=Preference.GetBool(PreferenceName.TimecardUsersDontEditOwnCard);
 			checkCannotEditOwn.Enabled=checkTimecardSecurityEnabled.Checked;
-			checkDomainLoginEnabled.Checked=Preferences.GetBool(PrefName.DomainLoginEnabled);
+			checkDomainLoginEnabled.Checked=Preference.GetBool(PreferenceName.DomainLoginEnabled);
 			textDomainLoginPath.ReadOnly=!checkDomainLoginEnabled.Checked;
-			textDomainLoginPath.Text=Preferences.GetString(PrefName.DomainLoginPath);
-			checkLogOffWindows.Checked=Preferences.GetBool(PrefName.SecurityLogOffWithWindows);
-			checkUserNameManualEntry.Checked=Preferences.GetBool(PrefName.UserNameManualEntry);
-			if(Preferences.GetDate(PrefName.BackupReminderLastDateRun).ToShortDateString()==DateTime.MaxValue.AddMonths(-1).ToShortDateString()) {
+			textDomainLoginPath.Text=Preference.GetString(PreferenceName.DomainLoginPath);
+			checkLogOffWindows.Checked=Preference.GetBool(PreferenceName.SecurityLogOffWithWindows);
+			checkUserNameManualEntry.Checked=Preference.GetBool(PreferenceName.UserNameManualEntry);
+			if(Preference.GetDate(PreferenceName.BackupReminderLastDateRun).ToShortDateString()==DateTime.MaxValue.AddMonths(-1).ToShortDateString()) {
 				checkDisableBackupReminder.Checked=true;
 			}
-			if(Preferences.GetInt(PrefName.SecurityLockDays)>0) {
-				textDaysLock.Text=Preferences.GetInt(PrefName.SecurityLockDays).ToString();
+			if(Preference.GetInt(PreferenceName.SecurityLockDays)>0) {
+				textDaysLock.Text=Preference.GetInt(PreferenceName.SecurityLockDays).ToString();
 			}
-			if(Preferences.GetDate(PrefName.SecurityLockDate).Year>1880) {
-				textDateLock.Text=Preferences.GetDate(PrefName.SecurityLockDate).ToShortDateString();
+			if(Preference.GetDate(PreferenceName.SecurityLockDate).Year>1880) {
+				textDateLock.Text=Preference.GetDate(PreferenceName.SecurityLockDate).ToShortDateString();
 			}
-			if(Preferences.GetBool(PrefName.CentralManagerSecurityLock)) {
+			if(Preference.GetBool(PreferenceName.CentralManagerSecurityLock)) {
 				butChange.Enabled=false;
 				labelGlobalDateLockDisabled.Visible=true;			}
-			List<UserGroup> listGroupsNotAdmin=UserGroups.GetList().FindAll(x => !GroupPermissions.HasPermission(x.UserGroupNum,Permissions.SecurityAdmin,0));
+			List<UserGroup> listGroupsNotAdmin=UserGroup.All().FindAll(x => !GroupPermissions.HasPermission(x.Id,Permissions.SecurityAdmin,0));
 			foreach(UserGroup group in listGroupsNotAdmin) {
 				int idx=comboGroups.Items.Add(new ODBoxItem<UserGroup>(group.Description,group));
-				if(Preferences.GetLong(PrefName.DefaultUserGroup)==group.UserGroupNum) {
+				if(Preference.GetLong(PreferenceName.DefaultUserGroup)==group.Id) {
 					comboGroups.SelectedIndex=idx;
 				}
 			}
@@ -125,14 +125,14 @@ namespace OpenDental {
 		private void butChange_Click(object sender,EventArgs e) {
 			FormSecurityLock FormS = new FormSecurityLock();
 			FormS.ShowDialog();//prefs are set invalid within that form if needed.
-			if(Preferences.GetInt(PrefName.SecurityLockDays)>0) {
-				textDaysLock.Text=Preferences.GetInt(PrefName.SecurityLockDays).ToString();
+			if(Preference.GetInt(PreferenceName.SecurityLockDays)>0) {
+				textDaysLock.Text=Preference.GetInt(PreferenceName.SecurityLockDays).ToString();
 			}
 			else {
 				textDaysLock.Text="";
 			}
-			if(Preferences.GetDate(PrefName.SecurityLockDate).Year>1880) {
-				textDateLock.Text=Preferences.GetDate(PrefName.SecurityLockDate).ToShortDateString();
+			if(Preference.GetDate(PreferenceName.SecurityLockDate).Year>1880) {
+				textDateLock.Text=Preference.GetDate(PreferenceName.SecurityLockDate).ToShortDateString();
 			}
 			else {
 				textDateLock.Text="";
@@ -155,32 +155,32 @@ namespace OpenDental {
 			DataValid.SetInvalid(InvalidType.Security);
 			bool invalidatePrefs=false;
 			if( //Prefs.UpdateBool(PrefName.PasswordsMustBeStrong,checkPasswordsMustBeStrong.Checked) //handled when box clicked.
-				Prefs.UpdateBool(PrefName.TimecardSecurityEnabled,checkTimecardSecurityEnabled.Checked)
-				| Prefs.UpdateBool(PrefName.TimecardUsersDontEditOwnCard,checkCannotEditOwn.Checked)
-				| Prefs.UpdateBool(PrefName.SecurityLogOffWithWindows,checkLogOffWindows.Checked)
-				| Prefs.UpdateBool(PrefName.UserNameManualEntry,checkUserNameManualEntry.Checked)
-				| Prefs.UpdateBool(PrefName.PasswordsStrongIncludeSpecial,checkPasswordsStrongIncludeSpecial.Checked)
-				| Prefs.UpdateBool(PrefName.PasswordsWeakChangeToStrong,checkPasswordForceWeakToStrong.Checked)
-				| Prefs.UpdateInt(PrefName.SecurityLogOffAfterMinutes,PIn.Int(textLogOffAfterMinutes.Text))
-				| Prefs.UpdateString(PrefName.DomainLoginPath,PIn.String(textDomainLoginPath.Text))
-				| Prefs.UpdateString(PrefName.DomainLoginPath,textDomainLoginPath.Text)
-				| Prefs.UpdateString(PrefName.DomainLoginPath,textDomainLoginPath.Text)
-				| Prefs.UpdateBool(PrefName.DomainLoginEnabled,checkDomainLoginEnabled.Checked)
-				| Prefs.UpdateLong(PrefName.DefaultUserGroup,comboGroups.SelectedIndex==-1?0:comboGroups.SelectedTag<UserGroup>().UserGroupNum)
+				Preference.Update(PreferenceName.TimecardSecurityEnabled,checkTimecardSecurityEnabled.Checked)
+				| Preference.Update(PreferenceName.TimecardUsersDontEditOwnCard,checkCannotEditOwn.Checked)
+				| Preference.Update(PreferenceName.SecurityLogOffWithWindows,checkLogOffWindows.Checked)
+				| Preference.Update(PreferenceName.UserNameManualEntry,checkUserNameManualEntry.Checked)
+				| Preference.Update(PreferenceName.PasswordsStrongIncludeSpecial,checkPasswordsStrongIncludeSpecial.Checked)
+				| Preference.Update(PreferenceName.PasswordsWeakChangeToStrong,checkPasswordForceWeakToStrong.Checked)
+				| Preference.Update(PreferenceName.SecurityLogOffAfterMinutes,PIn.Int(textLogOffAfterMinutes.Text))
+				| Preference.Update(PreferenceName.DomainLoginPath,PIn.String(textDomainLoginPath.Text))
+				| Preference.Update(PreferenceName.DomainLoginPath,textDomainLoginPath.Text)
+				| Preference.Update(PreferenceName.DomainLoginPath,textDomainLoginPath.Text)
+				| Preference.Update(PreferenceName.DomainLoginEnabled,checkDomainLoginEnabled.Checked)
+				| Preference.Update(PreferenceName.DefaultUserGroup,comboGroups.SelectedIndex==-1?0:comboGroups.SelectedTag<UserGroup>().Id)
 				) 
 			{
 				invalidatePrefs=true;
 			}
 			//if PasswordsMustBeStrong was unchecked, then reset the strong password flags.
-			if(Prefs.UpdateBool(PrefName.PasswordsMustBeStrong,checkPasswordsMustBeStrong.Checked) && !checkPasswordsMustBeStrong.Checked) {
+			if(Preference.Update(PreferenceName.PasswordsMustBeStrong,checkPasswordsMustBeStrong.Checked) && !checkPasswordsMustBeStrong.Checked) {
 				invalidatePrefs=true;
 				Userods.ResetStrongPasswordFlags();
 			}
 			if(checkDisableBackupReminder.Checked) {
-				invalidatePrefs|=Prefs.UpdateDateT(PrefName.BackupReminderLastDateRun,DateTime.MaxValue.AddMonths(-1)); //if MaxValue, gives error on startup.
+				invalidatePrefs|=Preference.Update(PreferenceName.BackupReminderLastDateRun,DateTime.MaxValue.AddMonths(-1)); //if MaxValue, gives error on startup.
 			}
 			else {
-				invalidatePrefs|=Prefs.UpdateDateT(PrefName.BackupReminderLastDateRun,DateTimeOD.Today);
+				invalidatePrefs|=Preference.Update(PreferenceName.BackupReminderLastDateRun,DateTimeOD.Today);
 			}
 			if(invalidatePrefs) {
 				DataValid.SetInvalid(InvalidType.Prefs);

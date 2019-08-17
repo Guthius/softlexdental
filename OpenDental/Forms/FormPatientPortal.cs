@@ -49,18 +49,18 @@ namespace OpenDental {
 				textOnlinePassword.ReadOnly=false;
 				textOnlineUsername.ReadOnly=false;
 			}
-			textPatientPortalURL.Text=Preferences.GetString(PrefName.PatientPortalURL);
+			textPatientPortalURL.Text=Preference.GetString(PreferenceName.PatientPortalURL);
 		}
 
 		private void menuItemSetup_Click(object sender,EventArgs e) {
 			//FormEServicesSetup formPPS=new FormEServicesSetup(FormEServicesSetup.EService.PatientPortal);
 			//formPPS.ShowDialog();
-			textPatientPortalURL.Text=Preferences.GetString(PrefName.PatientPortalURL);
+			textPatientPortalURL.Text=Preference.GetString(PreferenceName.PatientPortalURL);
 		}
 
 		private void butGiveAccess_Click(object sender,EventArgs e) {
 			if(butGiveAccess.Text=="Provide Online Access") {//When form open opens with a blank password
-				if(Preferences.GetString(PrefName.PatientPortalURL)=="") {
+				if(Preference.GetString(PreferenceName.PatientPortalURL)=="") {
 					//User probably hasn't set up the patient portal yet.
 					MsgBox.Show(this,"Patient Facing URL is required to be set before granting online access.  Click Setup to set the Patient Facing URL.");
 					return;

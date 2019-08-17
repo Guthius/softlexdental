@@ -84,7 +84,7 @@ namespace OpenDentBusiness {
 				Patient patCur=Patients.GetPat(cc.PatNum);
 				if(patCur==null) {
 					patCur=new Patient() {
-						PatNum=patNum,
+						PatNum=(int)patNum,
 						FName="",
 						LName="",
 					};

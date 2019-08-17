@@ -1227,7 +1227,7 @@ namespace OpenDental{
 			FillProblems();
 			FillAllergies();
 			FillVitalSigns();
-			if(Preferences.GetBool(PrefName.ShowFeatureEhr)) {
+			if(Preference.GetBool(PreferenceName.ShowFeatureEhr)) {
 				FillFamilyHealth();
 				TobaccoUseTabLoad();
 			}
@@ -1267,7 +1267,7 @@ namespace OpenDental{
 		#region Medications Tab
 		private void FillMeds(bool isForPrinting = false) {
 			ODGrid gridToFill=isForPrinting?gridMedsPrint:gridMeds;
-			Medications.RefreshCache();
+            Medication.Refresh();
 			medList=MedicationPats.Refresh(PatCur.PatNum,checkDiscontinued.Checked);
 			gridToFill.BeginUpdate();
 			gridToFill.Columns.Clear();
@@ -1301,13 +1301,13 @@ namespace OpenDental{
 					row.Cells.Add("");//generic notes
 				}
 				else {
-					Medication generic=Medications.GetGeneric(medList[i].MedicationNum);
-					string medName=Medications.GetMedication(medList[i].MedicationNum).MedName;
-					if(generic.MedicationNum!=medList[i].MedicationNum) {//not generic
-						medName+=" ("+generic.MedName+")";
+					Medication generic=Medication.GetGeneric(medList[i].MedicationNum);
+					string medName= Medication.GetById(medList[i].MedicationNum).Description;
+					if(generic.Id!=medList[i].MedicationNum) {//not generic
+						medName+=" ("+generic.Description+")";
 					}
 					row.Cells.Add(medName);
-					row.Cells.Add(Medications.GetGeneric(medList[i].MedicationNum).Notes);
+					row.Cells.Add(Medication.GetGeneric(medList[i].MedicationNum).Notes);
 				}
 				row.Cells.Add(medList[i].PatNote);
 				if(MedicationPats.IsMedActive(medList[i])) {
@@ -1345,7 +1345,7 @@ namespace OpenDental{
 				listKnowledgeRequests=new List<KnowledgeRequest> {
 					new KnowledgeRequest {
 						Type="Medication",
-						Code=POut.Long(medPat.RxCui),
+						Code=medPat.RxCui,
 						CodeSystem=CodeSyst.RxNorm,
 						Description=medPat.MedDescript
 					}
@@ -1372,14 +1372,14 @@ namespace OpenDental{
 			{
 				FormCDSIntervention FormCDSI=new FormCDSIntervention();
 				if(FormMP.MedicationPatCur.MedicationNum > 0) {//0 indicats the med is from NewCrop.
-					Medication medication=Medications.GetMedication(FormMP.MedicationPatCur.MedicationNum);
+					Medication medication= Medication.GetById(FormMP.MedicationPatCur.MedicationNum);
 					if(medication!=null) {
 						FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(medication,PatCur);
 						FormCDSI.ShowIfRequired(false);
 					}
 				}
-				else if(FormMP.MedicationPatCur.RxCui > 0) {//Meds from NewCrop might have a valid RxNorm.
-					RxNorm rxNorm=RxNorms.GetByRxCUI(FormMP.MedicationPatCur.RxCui.ToString());
+				else if(!string.IsNullOrEmpty(FormMP.MedicationPatCur.RxCui)) {//Meds from NewCrop might have a valid RxNorm.
+					RxNorm rxNorm=RxNorms.GetByRxCUI(FormMP.MedicationPatCur.RxCui);
 					if(rxNorm!=null) {
 						FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(rxNorm,PatCur);
 						FormCDSI.ShowIfRequired(false);
@@ -1399,7 +1399,7 @@ namespace OpenDental{
 			} 
 			if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.UserNum).MedicationCDS) {
 				FormCDSIntervention FormCDSI=new FormCDSIntervention();
-				FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(Medications.GetMedication(FormM.SelectedMedicationNum),PatCur);
+				FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(Medication.GetById(FormM.SelectedMedicationNum),PatCur);
 				FormCDSI.ShowIfRequired();
 				if(FormCDSI.DialogResult==DialogResult.Abort) {
 					return;//do not add medication
@@ -1408,7 +1408,7 @@ namespace OpenDental{
 			MedicationPat MedicationPatCur=new MedicationPat();
 			MedicationPatCur.PatNum=PatCur.PatNum;
 			MedicationPatCur.MedicationNum=FormM.SelectedMedicationNum;
-			MedicationPatCur.RxCui=Medications.GetMedication(FormM.SelectedMedicationNum).RxCui;
+			MedicationPatCur.RxCui=Medication.GetById(FormM.SelectedMedicationNum).RxCui;
 			MedicationPatCur.ProvNum=PatCur.PriProv;
 			FormMedPat FormMP=new FormMedPat();
 			FormMP.MedicationPatCur=MedicationPatCur;
@@ -1579,7 +1579,7 @@ namespace OpenDental{
 				row=new ODGridRow();
 				row.Cells.Add(Lan.g("enumFamilyRelationship",ListFamHealth[i].Relationship.ToString()));
 				row.Cells.Add(ListFamHealth[i].PersonName);
-				row.Cells.Add(DiseaseDefs.GetName(ListFamHealth[i].DiseaseDefNum));
+				row.Cells.Add(DiseaseDef.GetName(ListFamHealth[i].DiseaseDefNum));
 				gridFamilyHealth.Rows.Add(row);
 			}
 			gridFamilyHealth.EndUpdate();
@@ -1631,10 +1631,10 @@ namespace OpenDental{
 					row.Cells.Add("0");//index of infobutton
 				}
 				if(DiseaseList[i].DiseaseDefNum!=0) {
-					row.Cells.Add(DiseaseDefs.GetName(DiseaseList[i].DiseaseDefNum));
+					row.Cells.Add(DiseaseDef.GetName(DiseaseList[i].DiseaseDefNum));
 				}
 				else {
-					row.Cells.Add(DiseaseDefs.GetName(DiseaseList[i].DiseaseDefNum));
+					row.Cells.Add(DiseaseDef.GetName(DiseaseList[i].DiseaseDefNum));
 				}
 				row.Cells.Add(DiseaseList[i].PatNote);
 				row.Cells.Add(DiseaseList[i].ProbStatus.ToString());
@@ -1658,7 +1658,7 @@ namespace OpenDental{
 			for(int i=0;i<FormDD.ListSelectedDiseaseDefs.Count;i++) {
 				Disease disease=new Disease();
 				disease.PatNum=PatCur.PatNum;
-				disease.DiseaseDefNum=FormDD.ListSelectedDiseaseDefs[i].DiseaseDefNum;
+				disease.DiseaseDefNum=FormDD.ListSelectedDiseaseDefs[i].Id;
 				Diseases.Insert(disease);
 				if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.UserNum).ProblemCDS){
 					FormCDSIntervention FormCDSI=new FormCDSIntervention();
@@ -1669,7 +1669,7 @@ namespace OpenDental{
 						continue;//cancel 
 					}
 				}
-				SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,PatCur.PatNum,FormDD.ListSelectedDiseaseDefs[i].DiseaseName+" added"); //Audit log made outside form because the form is just a list of problems and is called from many places.
+				SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,PatCur.PatNum,FormDD.ListSelectedDiseaseDefs[i].Name+" added"); //Audit log made outside form because the form is just a list of problems and is called from many places.
 			}
 			FillProblems();
 		}
@@ -1695,7 +1695,7 @@ namespace OpenDental{
 			if(e.Col!=0) {
 				return;
 			}
-			List<KnowledgeRequest> listKnowledgeRequests=EhrTriggers.ConvertToKnowledgeRequests(DiseaseDefs.GetItem(DiseaseList[e.Row].DiseaseDefNum));
+			List<KnowledgeRequest> listKnowledgeRequests=EhrTriggers.ConvertToKnowledgeRequests(DiseaseDef.GetById(DiseaseList[e.Row].DiseaseDefNum));
 			FormInfobutton FormIB=new FormInfobutton(listKnowledgeRequests);
 			FormIB.PatCur=PatCur;
 			FormIB.ShowDialog();
@@ -1703,7 +1703,7 @@ namespace OpenDental{
 		}
 
 		private void gridDiseases_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(DiseaseDefs.GetItem(DiseaseList[e.Row].DiseaseDefNum)==null) {
+			if(DiseaseDef.GetById(DiseaseList[e.Row].DiseaseDefNum)==null) {
 				MessageBox.Show(Lan.g(this,"Invalid disease.  Please run database maintenance method")+" "
 					+nameof(DatabaseMaintenances.DiseaseWithInvalidDiseaseDef));
 				return;
@@ -1715,7 +1715,7 @@ namespace OpenDental{
 				&& CDSPermissions.GetForUser(Security.CurUser.UserNum).ProblemCDS) 
 			{
 				FormCDSIntervention FormCDSI=new FormCDSIntervention();
-				FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(DiseaseDefs.GetItem(DiseaseList[e.Row].DiseaseDefNum),PatCur);
+				FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(DiseaseDef.GetById(DiseaseList[e.Row].DiseaseDefNum),PatCur);
 				FormCDSI.ShowIfRequired(false);
 			}
 			FillProblems();
@@ -2324,20 +2324,20 @@ namespace OpenDental{
 			DateTime dateCur=PIn.Date(textDateIntervention.Text);
 			if(iCodeCur.CodeSystem=="RXNORM" && !checkPatientDeclined.Checked) {//if patient declines the medication, enter as a declined intervention
 				//codeVal will be RxCui of medication, see if it already exists in Medication table
-				Medication medCur=Medications.GetMedicationFromDbByRxCui(PIn.Long(iCodeCur.CodeValue));
+				Medication medCur= Medication.GetByRxCui(iCodeCur.CodeValue);
 				if(medCur==null) {//no med with this RxCui, create one
 					medCur=new Medication();
-					Medications.Insert(medCur);//so that we will have the primary key
-					medCur.GenericNum=medCur.MedicationNum;
-					medCur.RxCui=PIn.Long(iCodeCur.CodeValue);
-					medCur.MedName=RxNorms.GetDescByRxCui(iCodeCur.CodeValue);
-					Medications.Update(medCur);
-					Medications.RefreshCache();//refresh cache to include new medication
+					Medication.Insert(medCur);//so that we will have the primary key
+					medCur.GenericId=medCur.Id;
+					medCur.RxCui=iCodeCur.CodeValue;
+					medCur.Description=RxNorms.GetDescByRxCui(iCodeCur.CodeValue);
+                    Medication.Update(medCur);
+                    Medication.Refresh();//refresh cache to include new medication
 				}
 				MedicationPat medPatCur=new MedicationPat();
 				medPatCur.PatNum=PatCur.PatNum;
 				medPatCur.ProvNum=PatCur.PriProv;
-				medPatCur.MedicationNum=medCur.MedicationNum;
+				medPatCur.MedicationNum=medCur.Id;
 				medPatCur.RxCui=medCur.RxCui;
 				medPatCur.DateStart=dateCur;
 				FormMedPat FormMP=new FormMedPat();

@@ -101,7 +101,7 @@ namespace OpenDentBusiness.WebTypes.WebForms.Crud{
 				Db.NonQ(command,paramLogMessage);
 			}
 			else {
-				webForms_Log.LogNum=Db.NonQ(command,true,"LogNum","webForms_Log",paramLogMessage);
+				webForms_Log.LogNum=Db.NonQ(command,paramLogMessage);
 			}
 			return webForms_Log.LogNum;
 		}
@@ -134,7 +134,7 @@ namespace OpenDentBusiness.WebTypes.WebForms.Crud{
 				Db.NonQ(command,paramLogMessage);
 			}
 			else {
-				webForms_Log.LogNum=Db.NonQ(command,true,"LogNum","webForms_Log",paramLogMessage);
+				webForms_Log.LogNum=Db.NonQ(command,paramLogMessage);
 			}
 			return webForms_Log.LogNum;
 		}

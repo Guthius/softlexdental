@@ -207,14 +207,14 @@ namespace UnitTests {
 		public void ProcedureCodes_GetProcCodesByTreatmentArea_HiddenCategories() {
 			string suffix=MethodBase.GetCurrentMethod().Name;
 			List<ProcedureCode> listMouthProcCodesOld=ProcedureCodes.GetProcCodesByTreatmentArea(false,TreatmentArea.Mouth,TreatmentArea.None);
-			Def defCat=Defs.GetDef(DefCat.ProcCodeCats,listMouthProcCodesOld.FirstOrDefault(x => x.ProcCat>0 
-				&& !Defs.GetHidden(DefCat.ProcCodeCats,x.ProcCat)).ProcCat);
-			defCat.IsHidden=true;
+			Definition defCat=Defs.GetDef(DefinitionCategory.ProcCodeCats,listMouthProcCodesOld.FirstOrDefault(x => x.ProcCat>0 
+				&& !Defs.GetHidden(DefinitionCategory.ProcCodeCats,x.ProcCat)).ProcCat);
+			defCat.Hidden=true;
 			Defs.Update(defCat);
 			Defs.RefreshCache();
 			//ProcedureCodes.RefreshCache();
 			List<ProcedureCode> listMouthProcCodesNew=ProcedureCodes.GetProcCodesByTreatmentArea(false,TreatmentArea.Mouth,TreatmentArea.None);
-			defCat.IsHidden=false;			
+			defCat.Hidden=false;			
 			Defs.Update(defCat);
 			Defs.RefreshCache();
 			Assert.AreNotEqual(listMouthProcCodesOld.Count,listMouthProcCodesNew.Count);

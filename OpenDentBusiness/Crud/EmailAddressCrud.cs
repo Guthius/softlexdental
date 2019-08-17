@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EmailAddress into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(EmailAddress emailAddress,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO emailaddress (";
 			if(!useExistingPK && isRandomKeys) {
 				emailAddress.EmailAddressNum=ReplicationServers.GetKeyNoCache("emailaddress","EmailAddressNum");

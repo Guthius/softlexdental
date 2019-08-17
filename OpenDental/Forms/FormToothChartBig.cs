@@ -103,7 +103,7 @@ namespace OpenDental{
 			//ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
 			toothChart.UseHardware=ComputerPrefs.LocalComputer.GraphicsUseHardware;
 			toothChart.PreferredPixelFormatNumber=ComputerPrefs.LocalComputer.PreferredPixelFormatNum;
-			toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)Preferences.GetInt(PrefName.UseInternationalToothNumbers));
+			toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)Preference.GetInt(PreferenceName.UseInternationalToothNumbers));
 			//Must be last preference set, last so that all settings are caried through in the reinitialization this line triggers.
 			if(ComputerPrefs.LocalComputer.GraphicsSimple==DrawingMode.Simple2D) {
 				toothChart.DrawMode=DrawingMode.Simple2D;
@@ -131,11 +131,11 @@ namespace OpenDental{
 		private void FillToothChart(){
 			Cursor=Cursors.WaitCursor;
 			toothChart.SuspendLayout();
-			List<Def> listDefs=Defs.GetDefsForCategory(DefCat.ChartGraphicColors);
-			toothChart.ColorBackground=listDefs[10].ItemColor;
-			toothChart.ColorText=listDefs[11].ItemColor;
-			toothChart.ColorTextHighlight=listDefs[12].ItemColor;
-			toothChart.ColorBackHighlight=listDefs[13].ItemColor;
+			List<Definition> listDefs=Definition.GetByCategory(DefinitionCategory.ChartGraphicColors);;
+			toothChart.ColorBackground=listDefs[10].Color;
+			toothChart.ColorText=listDefs[11].Color;
+			toothChart.ColorTextHighlight=listDefs[12].Color;
+			toothChart.ColorBackHighlight=listDefs[13].Color;
 			//remember which teeth were selected
 			List<string> selectedTeeth=new List<string>(toothChart.SelectedTeeth);
 			//ArrayList selectedTeeth=new ArrayList();//integers 1-32
@@ -204,7 +204,7 @@ namespace OpenDental{
 			string[] teeth;
 			Color cLight=Color.White;
 			Color cDark=Color.White;
-			List<Def> listDefs=Defs.GetDefsForCategory(DefCat.ChartGraphicColors,true);
+			List<Definition> listDefs=Definition.GetByCategory(DefinitionCategory.ChartGraphicColors);
 			for(int i=0;i<ProcList.Count;i++) {
 				if(ProcList[i]["HideGraphics"].ToString()=="1") {
 					continue;
@@ -219,28 +219,28 @@ namespace OpenDental{
 				if(ProcedureCodes.GetProcCode(ProcList[i]["ProcCode"].ToString()).GraphicColor.ToArgb()==Color.FromArgb(0).ToArgb()) {
 					switch((ProcStat)PIn.Long(ProcList[i]["ProcStatus"].ToString())) {
 						case ProcStat.C:
-							cDark=listDefs[1].ItemColor;
-							cLight=listDefs[6].ItemColor;
+							cDark=listDefs[1].Color;
+							cLight=listDefs[6].Color;
 							break;
 						case ProcStat.TP:
-							cDark=listDefs[0].ItemColor;
-							cLight=listDefs[5].ItemColor;
+							cDark=listDefs[0].Color;
+							cLight=listDefs[5].Color;
 							break;
 						case ProcStat.EC:
-							cDark=listDefs[2].ItemColor;
-							cLight=listDefs[7].ItemColor;
+							cDark=listDefs[2].Color;
+							cLight=listDefs[7].Color;
 							break;
 						case ProcStat.EO:
-							cDark=listDefs[3].ItemColor;
-							cLight=listDefs[8].ItemColor;
+							cDark=listDefs[3].Color;
+							cLight=listDefs[8].Color;
 							break;
 						case ProcStat.R:
-							cDark=listDefs[4].ItemColor;
-							cLight=listDefs[9].ItemColor;
+							cDark=listDefs[4].Color;
+							cLight=listDefs[9].Color;
 							break;
 						case ProcStat.Cn:
-							cDark=listDefs[16].ItemColor;
-							cLight=listDefs[17].ItemColor;
+							cDark=listDefs[16].Color;
+							cLight=listDefs[17].Color;
 							break;
 					}
 				}

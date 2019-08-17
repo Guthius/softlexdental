@@ -68,24 +68,6 @@ namespace OpenDentBusiness {
 			return true;
 		}
 
-		///<summary>Checks the password of a reseller.  Retruns true if the inputPass is correct.
-		///Automatically upgrades the password to SHA3-512 if it isn't already hashed as such.</summary>
-		public static bool CheckPassword(Reseller userReseller, string inputPass) {
-			//No need to check RemotingRole; no call to db.
-			string hashedPass=userReseller.ResellerPassword;
-			if(hashedPass=="") {
-				return inputPass=="";
-			}
-			if(!CheckPassword(inputPass,userReseller.LoginDetails)) {
-				return false;
-			}
-			if(userReseller.LoginDetails.HashType!=HashTypes.SHA3_512) {
-				//Force update to SHA3-512.
-				UpdatePasswordReseller(userReseller,inputPass,HashTypes.SHA3_512);
-			}
-			return true;
-		}
-
 		///<summary>Trys to find the correct algorithm and compares the hashes.  If the passHash is blank the inputPass should be too.
 		///The salt is only used when using SHA3-512, not MD5 or MD5_ECW.</summary>
 		public static bool CheckPassword(string inputPass,string salt,string passHash,bool isEcw=false) {
@@ -181,18 +163,6 @@ namespace OpenDentBusiness {
 			return true;
 		}
 
-		///<summary>Updates a password for a given Reseller account and saves it to the database.  Suggested hash type is SHA3-512.</summary>
-		public static bool UpdatePasswordReseller(Reseller user,string inputPass,HashTypes hashType=HashTypes.SHA3_512) {
-			//No need to check RemotingRole; no call to db.
-			user.LoginDetails=GenerateLoginDetails(inputPass,hashType);
-			try {
-				Resellers.Update(user);
-			}
-			catch {
-				return false;
-			}
-			return true;
-		}
 		#endregion Modification
 
 		#region MD5

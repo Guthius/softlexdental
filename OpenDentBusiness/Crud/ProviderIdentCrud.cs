@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ProviderIdent into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(ProviderIdent providerIdent,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO providerident (";
 			if(!useExistingPK && isRandomKeys) {
 				providerIdent.ProviderIdentNum=ReplicationServers.GetKeyNoCache("providerident","ProviderIdentNum");

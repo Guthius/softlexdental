@@ -102,7 +102,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ConnectionGroup into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(ConnectionGroup connectionGroup,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO connectiongroup (";
 			if(!useExistingPK && isRandomKeys) {
 				connectionGroup.ConnectionGroupNum=ReplicationServers.GetKeyNoCache("connectiongroup","ConnectionGroupNum");

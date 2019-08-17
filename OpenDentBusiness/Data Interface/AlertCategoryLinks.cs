@@ -21,7 +21,7 @@ namespace OpenDentBusiness
                 return Crud.AlertCategoryLinkCrud.TableToList(table);
             }
 
-            protected override AlertCategoryLink Copy(AlertCategoryLink alertCategoryLink) => alertCategoryLink.Copy();
+            protected override AlertCategoryLink Copy(AlertCategoryLink alertCategoryLink) => (AlertCategoryLink)alertCategoryLink.Clone();
             
             protected override DataTable ListToTable(List<AlertCategoryLink> listAlertCategoryLinks)
             {

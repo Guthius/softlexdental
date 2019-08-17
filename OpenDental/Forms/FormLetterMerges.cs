@@ -51,7 +51,7 @@ namespace OpenDental{
 		private OpenDental.UI.Button butViewData;
 		private OpenDental.UI.Button butPreview;
 		private ComboBox comboImageCategory;
-		private List<Def> _listLetterMergeCatDefs;
+		private List<Definition> _listLetterMergeCatDefs;
 		private Label labelImageCategory;
 
 		///<summary></summary>
@@ -323,7 +323,7 @@ namespace OpenDental{
 
 		
 		private void FormLetterMerges_Load(object sender, System.EventArgs e) {
-			mergePath=Preferences.GetString(PrefName.LetterMergePath);
+			mergePath=Preference.GetString(PreferenceName.LetterMergePath);
 			FillCats();
 			if(listCategories.Items.Count>0){
 				listCategories.SelectedIndex=0;
@@ -332,21 +332,21 @@ namespace OpenDental{
 			if(listLetters.Items.Count>0){
 				listLetters.SelectedIndex=0;
 			}
-			List<Def> listImageCatDefs=Defs.GetDefsForCategory(DefCat.ImageCats,true);
+			List<Definition> listImageCatDefs=Definition.GetByCategory(DefinitionCategory.ImageCats);
 			comboImageCategory.Items.Clear();
 			//Create None image category
-			comboImageCategory.Items.Add(new ODBoxItem<Def>(Lan.g(this,"None"),new Def() { DefNum=0 }));
-			foreach(Def imageCat in listImageCatDefs) {
-				comboImageCategory.Items.Add(new ODBoxItem<Def>(imageCat.ItemName,imageCat));
+			comboImageCategory.Items.Add(new ODBoxItem<Definition>(Lan.g(this,"None"),new Definition()));
+			foreach(Definition imageCat in listImageCatDefs) {
+				comboImageCategory.Items.Add(new ODBoxItem<Definition>(imageCat.Description,imageCat));
 			}
 			SelectImageCat();
 		}
 
 		private void FillCats() {
-			_listLetterMergeCatDefs=Defs.GetDefsForCategory(DefCat.LetterMergeCats,true);
+			_listLetterMergeCatDefs=Definition.GetByCategory(DefinitionCategory.LetterMergeCats);
 			listCategories.Items.Clear();
 			for(int i=0;i<_listLetterMergeCatDefs.Count;i++){
-				listCategories.Items.Add(_listLetterMergeCatDefs[i].ItemName);
+				listCategories.Items.Add(_listLetterMergeCatDefs[i].Description);
 			}
 		}
 
@@ -373,7 +373,7 @@ namespace OpenDental{
 				}
 			}
 			if(defNumLetter!=0) {
-				comboImageCategory.SetSelectedItem<Def>(x => x.DefNum==defNumLetter,Defs.GetName(DefCat.ImageCats,defNumLetter)+" "+Lan.g(this,"(hidden)"));
+				comboImageCategory.SetSelectedItem<Definition>(x => x.Id==defNumLetter,Defs.GetName(DefinitionCategory.ImageCats,defNumLetter)+" "+Lan.g(this,"(hidden)"));
 			}
 			else {
 				comboImageCategory.SelectedIndex=0;
@@ -393,7 +393,7 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.Setup)){
 				return;
 			}
-			FormDefinitions FormD=new FormDefinitions(DefCat.LetterMergeCats);
+			FormDefinitions FormD=new FormDefinitions(DefinitionCategory.LetterMergeCats);
 			FormD.ShowDialog();
 			FillCats();
 		}
@@ -430,7 +430,7 @@ namespace OpenDental{
 				return;
 			}
 			LetterMerge letter=new LetterMerge();
-			letter.Category=_listLetterMergeCatDefs[listCategories.SelectedIndex].DefNum;
+			letter.Category=_listLetterMergeCatDefs[listCategories.SelectedIndex].Id;
 			letter.Fields=new List<string>();
 			FormLetterMergeEdit FormL=new FormLetterMergeEdit(letter);
 			FormL.IsNew=true;
@@ -503,7 +503,7 @@ namespace OpenDental{
 				return;
 			}
 			LetterMerge letterCur=ListForCat[listLetters.SelectedIndex];
-			string dataFile=Preferences.GetString(PrefName.LetterMergePath)+letterCur.DataFileName;
+			string dataFile=Preference.GetString(PreferenceName.LetterMergePath)+letterCur.DataFileName;
 			Process.Start(dataFile);
 		}
 
@@ -513,8 +513,8 @@ namespace OpenDental{
 				return false;
 			}
 			LetterMerge letterCur=ListForCat[listLetters.SelectedIndex];
-			string dataFile=Preferences.GetString(PrefName.LetterMergePath)+letterCur.DataFileName;
-			if(!Directory.Exists(Preferences.GetString(PrefName.LetterMergePath))){
+			string dataFile=Preference.GetString(PreferenceName.LetterMergePath)+letterCur.DataFileName;
+			if(!Directory.Exists(Preference.GetString(PreferenceName.LetterMergePath))){
 				MsgBox.Show(this,"Letter merge path not valid.");
 				return false;
 			}
@@ -537,9 +537,9 @@ namespace OpenDental{
 				return;
 			}
 			LetterMerge letterCur=ListForCat[listLetters.SelectedIndex];
-			letterCur.ImageFolder=comboImageCategory.SelectedTag<Def>().DefNum;
-			string templateFile=ODFileUtils.CombinePaths(Preferences.GetString(PrefName.LetterMergePath),letterCur.TemplateName);
-			string dataFile=ODFileUtils.CombinePaths(Preferences.GetString(PrefName.LetterMergePath),letterCur.DataFileName);
+			letterCur.ImageFolder=comboImageCategory.SelectedTag<Definition>().Id;
+			string templateFile=ODFileUtils.CombinePaths(Preference.GetString(PreferenceName.LetterMergePath),letterCur.TemplateName);
+			string dataFile=ODFileUtils.CombinePaths(Preference.GetString(PreferenceName.LetterMergePath),letterCur.DataFileName);
 			if(!File.Exists(templateFile)){
 				MsgBox.Show(this,"Template file does not exist.");
 				return;
@@ -622,9 +622,9 @@ namespace OpenDental{
 				return;
 			}
 			LetterMerge letterCur=ListForCat[listLetters.SelectedIndex];
-			letterCur.ImageFolder=comboImageCategory.SelectedTag<Def>().DefNum;
-			string templateFile=ODFileUtils.CombinePaths(Preferences.GetString(PrefName.LetterMergePath),letterCur.TemplateName);
-			string dataFile=ODFileUtils.CombinePaths(Preferences.GetString(PrefName.LetterMergePath),letterCur.DataFileName);
+			letterCur.ImageFolder=comboImageCategory.SelectedTag<Definition>().Id;
+			string templateFile=ODFileUtils.CombinePaths(Preference.GetString(PreferenceName.LetterMergePath),letterCur.TemplateName);
+			string dataFile=ODFileUtils.CombinePaths(Preference.GetString(PreferenceName.LetterMergePath),letterCur.DataFileName);
 			if(!File.Exists(templateFile)){
 				MsgBox.Show(this,"Template file does not exist.");
 				return;
@@ -777,8 +777,8 @@ namespace OpenDental{
 				return;
 			}
 			LetterMerge letterCur=ListForCat[listLetters.SelectedIndex];
-			string templateFile=ODFileUtils.CombinePaths(Preferences.GetString(PrefName.LetterMergePath),letterCur.TemplateName);
-			string dataFile=ODFileUtils.CombinePaths(Preferences.GetString(PrefName.LetterMergePath),letterCur.DataFileName);
+			string templateFile=ODFileUtils.CombinePaths(Preference.GetString(PreferenceName.LetterMergePath),letterCur.TemplateName);
+			string dataFile=ODFileUtils.CombinePaths(Preference.GetString(PreferenceName.LetterMergePath),letterCur.DataFileName);
 			if(!File.Exists(templateFile)){
 				MessageBox.Show(Lan.g(this,"Template file does not exist:")+"  "+templateFile);
 				return;

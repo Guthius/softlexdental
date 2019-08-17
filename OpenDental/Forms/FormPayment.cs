@@ -174,7 +174,7 @@ namespace OpenDental {
 		private readonly Family _famCur;
 		/// <summary>Superfamily of the current patient, if one exists.</summary>
 		private Family _superFamCur;
-		private List<Def> _listPaymentTypeDefs;
+		private List<Definition> _listPaymentTypeDefs;
 		private SplitContainer splitContainerCharges;
 		private bool _isInit;
 		private int _originalHeight;
@@ -1597,13 +1597,13 @@ namespace OpenDental {
 			textAmount.Text=_paymentCur.PayAmt.ToString("F");
 			textCheckNum.Text=_paymentCur.CheckNum;
 			textBankBranch.Text=_paymentCur.BankBranch;
-			_listPaymentTypeDefs=Defs.GetDefsForCategory(DefCat.PaymentTypes,true);
+			_listPaymentTypeDefs=Definition.GetByCategory(DefinitionCategory.PaymentTypes);
 			for(int i=0;i<_listPaymentTypeDefs.Count;i++) {
-				listPayType.Items.Add(_listPaymentTypeDefs[i].ItemName);
-				if(IsNew && Preferences.GetBool(PrefName.PaymentsPromptForPayType)) {//skip auto selecting payment type if preference is enabled and payment is new
+				listPayType.Items.Add(_listPaymentTypeDefs[i].Description);
+				if(IsNew && Preference.GetBool(PreferenceName.PaymentsPromptForPayType)) {//skip auto selecting payment type if preference is enabled and payment is new
 					continue;//user will be forced to selectan indexbefore closing or clicking ok
 				}
-				if(_listPaymentTypeDefs[i].DefNum==_paymentCur.PayType) {
+				if(_listPaymentTypeDefs[i].Id==_paymentCur.PayType) {
 					listPayType.SelectedIndex=i;
 				}
 			}
@@ -1658,9 +1658,9 @@ namespace OpenDental {
 					//add only the description based on PaymentCur attached to transaction
 					List<JournalEntry> jeL=JournalEntries.GetForTrans(trans.TransactionNum);
 					for(int i=0;i<jeL.Count;i++) {
-						Account account=Account.GetAccount(jeL[i].AccountNum);
+						Account account=Account.GetById(jeL[i].AccountNum);
 						//The account could be null if the AccountNum was never set correctly due to the automatic payment entry setup missing an income account from older versions.
-						if(account!=null && account.AcctType==AccountType.Asset) {
+						if(account!=null && account.Type==AccountType.Asset) {
 							textDepositAccount.Text=jeL[i].DateDisplayed.ToShortDateString();
 							if(jeL[i].DebitAmt>0) {
 								textDepositAccount.Text+=" "+jeL[i].DebitAmt.ToString("c");
@@ -1674,7 +1674,7 @@ namespace OpenDental {
 				}
 			}
 			if(!string.IsNullOrEmpty(_paymentCur.Receipt)) {
-				if(Preferences.GetBool(PrefName.AllowEmailCCReceipt)) {
+				if(Preference.GetBool(PreferenceName.AllowEmailCCReceipt)) {
 					butEmailReceipt.Visible=true;
 				}
 				butPrintReceipt.Visible=true;
@@ -1711,7 +1711,7 @@ namespace OpenDental {
 			}
 			CheckUIState();
 			_originalHeight=Height;
-			if(Preferences.GetBool(PrefName.PaymentWindowDefaultHideSplits)) {
+			if(Preference.GetBool(PreferenceName.PaymentWindowDefaultHideSplits)) {
 				ToggleShowHideSplits();//set hidden
 			}
 			textCheckNum.Select();
@@ -1851,7 +1851,7 @@ namespace OpenDental {
 					string paymentType=ProgramProperties.GetPropVal(progPayConnect.ProgramNum,"PaymentType",_paymentCur.ClinicNum);
 					if(!string.IsNullOrEmpty(ProgramProperties.GetPropVal(progPayConnect.ProgramNum,"Username",_paymentCur.ClinicNum))
 						&& !string.IsNullOrEmpty(ProgramProperties.GetPropVal(progPayConnect.ProgramNum,"Password",_paymentCur.ClinicNum))
-						&& _listPaymentTypeDefs.Any(x => x.DefNum.ToString()==paymentType))
+						&& _listPaymentTypeDefs.Any(x => x.Id.ToString()==paymentType))
 					{
 						butPayConnect.Visible=true;
 					}
@@ -1867,7 +1867,7 @@ namespace OpenDental {
 					string paymentType=ProgramProperties.GetPropVal(_xProg.ProgramNum,"PaymentType",_paymentCur.ClinicNum);
 					if(!string.IsNullOrEmpty(ProgramProperties.GetPropVal(_xProg.ProgramNum,"Username",_paymentCur.ClinicNum))
 						&& !string.IsNullOrEmpty(ProgramProperties.GetPropVal(_xProg.ProgramNum,"Password",_paymentCur.ClinicNum))
-						&& _listPaymentTypeDefs.Any(x => x.DefNum.ToString()==paymentType))
+						&& _listPaymentTypeDefs.Any(x => x.Id.ToString()==paymentType))
 					{
 						panelXcharge.Visible=true;
 					}
@@ -1882,7 +1882,7 @@ namespace OpenDental {
 					string paymentType=ProgramProperties.GetPropValForClinicOrDefault(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimplePayTypeCC,_paymentCur.ClinicNum);
 					if(!string.IsNullOrEmpty(ProgramProperties.GetPropValForClinicOrDefault(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiUserName,_paymentCur.ClinicNum))
 						&& !string.IsNullOrEmpty(ProgramProperties.GetPropValForClinicOrDefault(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiKey,_paymentCur.ClinicNum))
-						&& _listPaymentTypeDefs.Any(x => x.DefNum.ToString()==paymentType)) {
+						&& _listPaymentTypeDefs.Any(x => x.Id.ToString()==paymentType)) {
 						butPaySimple.Visible=true;
 					}
 				}
@@ -1925,7 +1925,7 @@ namespace OpenDental {
 				row.Cells.Add(Clinics.GetAbbr(_listPaySplitAllocations[i].ClinicNum));
 				row.Cells.Add(_curFamOrSuperFam.GetNameInFamFL(_listPaySplitAllocations[i].PatNum));
 				row.Cells.Add(_listPaySplitAllocations[i].SplitAmt.ToString("F"));
-				row.Cells.Add(Defs.GetName(DefCat.PaySplitUnearnedType,_listPaySplitAllocations[i].UnearnedType));//handles 0 just fine
+				row.Cells.Add(Defs.GetName(DefinitionCategory.PaySplitUnearnedType,_listPaySplitAllocations[i].UnearnedType));//handles 0 just fine
 				gridAllocated.Rows.Add(row);
 			}
 			gridAllocated.EndUpdate();
@@ -2009,7 +2009,7 @@ namespace OpenDental {
 					if(type!="") {
 						type+="\r\n";
 					}
-					type+=Defs.GetName(DefCat.PaySplitUnearnedType,_listSplitsCur[i].UnearnedType);//Type
+					type+=Defs.GetName(DefinitionCategory.PaySplitUnearnedType,_listSplitsCur[i].UnearnedType);//Type
 				}
 				else if(_listSplitsCur[i].AdjNum!=0) {
 					type+="Adjustment";
@@ -2402,9 +2402,9 @@ namespace OpenDental {
 			paySplitCur.PatNum=_patCur.PatNum;
 			paySplitCur.PayNum=_paymentCur.PayNum;
 			paySplitCur.DatePay=_paymentCur.PayDate;//this may be updated upon closing
-			if(Preferences.GetInt(PrefName.RigorousAccounting) < (int)RigorousAccounting.DontEnforce) {
+			if(Preference.GetInt(PreferenceName.RigorousAccounting) < (int)RigorousAccounting.DontEnforce) {
 				paySplitCur.ProvNum=0;
-				paySplitCur.UnearnedType=Preferences.GetLong(PrefName.PrepaymentUnearnedType);//Use default unallocated type
+				paySplitCur.UnearnedType=Preference.GetLong(PreferenceName.PrepaymentUnearnedType);//Use default unallocated type
 			}
 			else { 
 				paySplitCur.ProvNum=Patients.GetProvNum(_patCur);
@@ -2432,14 +2432,14 @@ namespace OpenDental {
 		///<summary>Called from all 3 places where listPayType gets changed.</summary>
 		private void SetComboDepositAccounts() {
 			if(listPayType.SelectedIndex==-1) {
-				if(IsNew && (PayClinicSetting)Preferences.GetInt(PrefName.PaymentClinicSetting)==PayClinicSetting.PatientDefaultClinic) {
+				if(IsNew && (PayClinicSetting)Preference.GetInt(PreferenceName.PaymentClinicSetting)==PayClinicSetting.PatientDefaultClinic) {
 					labelDepositAccount.Visible=false;
 					comboDepositAccount.Visible=false;
 				}
 				return;
 			}
-			AccountingAutoPay autoPay=AccountingAutoPays.GetForPayType(
-				_listPaymentTypeDefs[listPayType.SelectedIndex].DefNum);
+			AccountAutoPay autoPay= AccountAutoPay.GetByPayType(
+				_listPaymentTypeDefs[listPayType.SelectedIndex].Id);
 			if(autoPay==null) {
 				labelDepositAccount.Visible=false;
 				comboDepositAccount.Visible=false;
@@ -2447,10 +2447,10 @@ namespace OpenDental {
 			else {
 				labelDepositAccount.Visible=true;
 				comboDepositAccount.Visible=true;
-				_arrayDepositAcctNums=AccountingAutoPays.GetPickListAccounts(autoPay);
+				_arrayDepositAcctNums= AccountAutoPay.GetPickListAccounts(autoPay).ToArray();
 				comboDepositAccount.Items.Clear();
 				for(int i=0;i<_arrayDepositAcctNums.Length;i++) {
-					comboDepositAccount.Items.Add(Account.GetDescript(_arrayDepositAcctNums[i]));
+					comboDepositAccount.Items.Add(Account.GetDescription(_arrayDepositAcctNums[i]));
 				}
 				if(comboDepositAccount.Items.Count>0) {
 					comboDepositAccount.SelectedIndex=0;
@@ -2496,7 +2496,7 @@ namespace OpenDental {
 		///A patient is not required for prepaid cards.</summary>
 		public string MakeXChargeTransaction(double prepaidAmt=0) {
 			//Need to refresh this list locally in case we are coming from another form
-			_listPaymentTypeDefs=_listPaymentTypeDefs??Defs.GetDefsForCategory(DefCat.PaymentTypes,true);
+			_listPaymentTypeDefs=_listPaymentTypeDefs??Definition.GetByCategory(DefinitionCategory.PaymentTypes);
 			_xChargeMilestone="Validation";
 			CreditCard cc=null;
 			List<CreditCard> creditCards=null;
@@ -2528,7 +2528,7 @@ namespace OpenDental {
 				}
 			}
 			if(PIn.Date(textDate.Text).Date > DateTime.Today.Date
-					&& !Preferences.GetBool(PrefName.FutureTransDatesAllowed) && !Preferences.GetBool(PrefName.AccountAllowFutureDebits))
+					&& !Preference.GetBool(PreferenceName.FutureTransDatesAllowed) && !Preference.GetBool(PreferenceName.AccountAllowFutureDebits))
 			{
 				MsgBox.Show(this,"Payment date cannot be in the future.");
 				return null;
@@ -2552,7 +2552,7 @@ namespace OpenDental {
 				//These UI changes only need to happen for regular credit cards when the payment window is displayed.
 				string xPayTypeNum=ProgramProperties.GetPropVal(_xProg.ProgramNum,"PaymentType",_paymentCur.ClinicNum);
 				//still need to add functionality for accountingAutoPay
-				listPayType.SelectedIndex=Defs.GetOrder(DefCat.PaymentTypes,PIn.Long(xPayTypeNum));
+				listPayType.SelectedIndex=Defs.GetOrder(DefinitionCategory.PaymentTypes,PIn.Long(xPayTypeNum));
 				SetComboDepositAccounts();
 			}
 			/*XCharge.exe [/TRANSACTIONTYPE:type] [/AMOUNT:amount] [/ACCOUNT:account] [/EXP:exp]
@@ -2618,7 +2618,7 @@ namespace OpenDental {
 			}
 			else if(cc!=null) {//Have CC on file, no XChargeToken so not a recurring charge, and might need a token.
 				notRecurring=true;
-				if(!Preferences.GetBool(PrefName.StoreCCnumbers)) {//Use token only if user has has pref unchecked in module setup (allow store credit card nums).
+				if(!Preference.GetBool(PreferenceName.StoreCCnumbers)) {//Use token only if user has has pref unchecked in module setup (allow store credit card nums).
 					needToken=true;//Will create a token from result file so credit card info isn't saved in our db.
 				}
 			}
@@ -2810,7 +2810,7 @@ namespace OpenDental {
 						cc.XChargeToken=xChargeToken;
 						cc.CCNumberMasked=accountMasked;
 						cc.CCExpiration=expDate;
-						cc.Procedures=Preferences.GetString(PrefName.DefaultCCProcs);
+						cc.Procedures=Preference.GetString(PreferenceName.DefaultCCProcs);
 						cc.CCSource=CreditCardSource.XServer;
 						CreditCards.Update(cc);
 					}
@@ -2824,7 +2824,7 @@ namespace OpenDental {
 							cc.CCExpiration=new DateTime(Convert.ToInt32("20"+expiration.Substring(2,2)),Convert.ToInt32(expiration.Substring(0,2)),1);
 							cc.XChargeToken=xChargeToken;
 							cc.CCNumberMasked=accountMasked;
-							cc.Procedures=Preferences.GetString(PrefName.DefaultCCProcs);
+							cc.Procedures=Preference.GetString(PreferenceName.DefaultCCProcs);
 							cc.CCSource=CreditCardSource.XServer;
 							cc.ClinicNum=_paymentCur.ClinicNum;
 							creditCardNum=CreditCards.Insert(cc);
@@ -2942,7 +2942,7 @@ namespace OpenDental {
 			_paymentCur.Receipt=receipt;
 			if(!string.IsNullOrEmpty(receipt)) {
 				butPrintReceipt.Visible=true;
-				if(Preferences.GetBool(PrefName.AllowEmailCCReceipt)) {
+				if(Preference.GetBool(PreferenceName.AllowEmailCCReceipt)) {
 					butEmailReceipt.Visible=true;
 				}
 				if(_printReceipt && prepaidAmt==0) {
@@ -3087,7 +3087,7 @@ namespace OpenDental {
 		}
 
 		private bool HasXCharge() {
-			_listPaymentTypeDefs=_listPaymentTypeDefs??Defs.GetDefsForCategory(DefCat.PaymentTypes,true);
+			_listPaymentTypeDefs=_listPaymentTypeDefs??Definition.GetByCategory(DefinitionCategory.PaymentTypes);
 			if(_xProg==null) {
 				MsgBox.Show(this,"X-Charge entry is missing from the database.");//should never happen
 				return false;
@@ -3100,7 +3100,7 @@ namespace OpenDental {
 				string paymentType=ProgramProperties.GetPropVal(_xProg.ProgramNum,"PaymentType",_paymentCur.ClinicNum);
 				if(string.IsNullOrEmpty(ProgramProperties.GetPropVal(_xProg.ProgramNum,"Username",_paymentCur.ClinicNum))
 					|| string.IsNullOrEmpty(ProgramProperties.GetPropVal(_xProg.ProgramNum,"Password",_paymentCur.ClinicNum))
-					|| !_listPaymentTypeDefs.Any(x => x.DefNum.ToString()==paymentType))
+					|| !_listPaymentTypeDefs.Any(x => x.Id.ToString()==paymentType))
 				{
 					isSetupRequired=true;
 				}
@@ -3290,7 +3290,7 @@ namespace OpenDental {
 				}
 			}
 			if(PIn.Date(textDate.Text).Date > DateTime.Today.Date
-					&& !Preferences.GetBool(PrefName.FutureTransDatesAllowed) && !Preferences.GetBool(PrefName.AccountAllowFutureDebits))
+					&& !Preference.GetBool(PreferenceName.FutureTransDatesAllowed) && !Preference.GetBool(PreferenceName.AccountAllowFutureDebits))
 			{
 				MsgBox.Show(this,"Payment date cannot be in the future.");
 				return null;
@@ -3318,7 +3318,7 @@ namespace OpenDental {
 				Program prog=Programs.GetCur(ProgramName.PayConnect);
 				//still need to add functionality for accountingAutoPay
 				string paytype=ProgramProperties.GetPropVal(prog.ProgramNum,"PaymentType",_paymentCur.ClinicNum);//paytype could be an empty string
-				listPayType.SelectedIndex=Defs.GetOrder(DefCat.PaymentTypes,PIn.Long(paytype));
+				listPayType.SelectedIndex=Defs.GetOrder(DefinitionCategory.PaymentTypes,PIn.Long(paytype));
 				SetComboDepositAccounts();
 			}
 			string resultNote=null;
@@ -3415,7 +3415,7 @@ namespace OpenDental {
 			}
 			if(!string.IsNullOrEmpty(_paymentCur.Receipt)) {
 				butPrintReceipt.Visible=true;
-				if(Preferences.GetBool(PrefName.AllowEmailCCReceipt)) {
+				if(Preference.GetBool(PreferenceName.AllowEmailCCReceipt)) {
 					butEmailReceipt.Visible=true;
 				}
 			}
@@ -3432,7 +3432,7 @@ namespace OpenDental {
 
 		///<summary>Returns true if payconnect is enabled and completely setup.</summary>
 		private bool HasPayConnect() {
-			_listPaymentTypeDefs=_listPaymentTypeDefs??Defs.GetDefsForCategory(DefCat.PaymentTypes,true);
+			_listPaymentTypeDefs=_listPaymentTypeDefs??Definition.GetByCategory(DefinitionCategory.PaymentTypes);
 			Program prog=Programs.GetCur(ProgramName.PayConnect);
 			bool isSetupRequired=false;
 			if(prog.Enabled) {
@@ -3440,7 +3440,7 @@ namespace OpenDental {
 				string paymentType=ProgramProperties.GetPropVal(prog.ProgramNum,"PaymentType",_paymentCur.ClinicNum);
 				if(string.IsNullOrEmpty(ProgramProperties.GetPropVal(prog.ProgramNum,"Username",_paymentCur.ClinicNum))
 					|| string.IsNullOrEmpty(ProgramProperties.GetPropVal(prog.ProgramNum,"Password",_paymentCur.ClinicNum))
-					|| !_listPaymentTypeDefs.Any(x => x.DefNum.ToString()==paymentType)) 
+					|| !_listPaymentTypeDefs.Any(x => x.Id.ToString()==paymentType)) 
 				{
 					isSetupRequired=true;
 				}
@@ -3508,7 +3508,7 @@ namespace OpenDental {
 				AddCreditCardsToCombo(creditCards,x => x.PaySimpleToken==paySimpleToken && !string.IsNullOrEmpty(paySimpleToken));
 				//still need to add functionality for accountingAutoPay
 				string paytype=ProgramProperties.GetPropValForClinicOrDefault(prog.ProgramNum,PaySimple.PropertyDescs.PaySimplePayTypeCC,_paymentCur.ClinicNum);//paytype could be an empty string
-				listPayType.SelectedIndex=Defs.GetOrder(DefCat.PaymentTypes,PIn.Long(paytype));
+				listPayType.SelectedIndex=Defs.GetOrder(DefinitionCategory.PaymentTypes,PIn.Long(paytype));
 				SetComboDepositAccounts();
 			}
 			if(prepaidAmt!=0) {
@@ -3525,7 +3525,7 @@ namespace OpenDental {
 				if(form.ApiResponseOut.CCSource==CreditCardSource.PaySimpleACH) {
 					string paytype=ProgramProperties.GetPropValForClinicOrDefault(prog.ProgramNum,PaySimple.PropertyDescs.PaySimplePayTypeACH,
 						_paymentCur.ClinicNum);
-					int defOrder=Defs.GetOrder(DefCat.PaymentTypes,PIn.Long(paytype));
+					int defOrder=Defs.GetOrder(DefinitionCategory.PaymentTypes,PIn.Long(paytype));
 					//paytype could be an empty string, so then leave listPayType as it was.
 					if(defOrder>=-1) {
 						listPayType.SelectedIndex=defOrder;
@@ -3608,7 +3608,7 @@ namespace OpenDental {
 			Payments.Update(_paymentCur,true);
 			if(!string.IsNullOrEmpty(_paymentCur.Receipt)) {
 				butPrintReceipt.Visible=true;
-				if(Preferences.GetBool(PrefName.AllowEmailCCReceipt)) {
+				if(Preference.GetBool(PreferenceName.AllowEmailCCReceipt)) {
 					butEmailReceipt.Visible=true;
 				}
 			}
@@ -3624,7 +3624,7 @@ namespace OpenDental {
 
 		///<summary>Returns true if PaySimple is enabled and completely setup.</summary>
 		private bool HasPaySimple() {
-			_listPaymentTypeDefs=_listPaymentTypeDefs??Defs.GetDefsForCategory(DefCat.PaymentTypes,true);
+			_listPaymentTypeDefs=_listPaymentTypeDefs??Definition.GetByCategory(DefinitionCategory.PaymentTypes);
 			Program prog=Programs.GetCur(ProgramName.PaySimple);
 			bool isSetupRequired=false;
 			if(prog.Enabled) {
@@ -3632,7 +3632,7 @@ namespace OpenDental {
 				string paymentType=ProgramProperties.GetPropValForClinicOrDefault(prog.ProgramNum,PaySimple.PropertyDescs.PaySimplePayTypeCC,_paymentCur.ClinicNum);
 				if(string.IsNullOrEmpty(ProgramProperties.GetPropValForClinicOrDefault(prog.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiUserName,_paymentCur.ClinicNum))
 					|| string.IsNullOrEmpty(ProgramProperties.GetPropValForClinicOrDefault(prog.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiKey,_paymentCur.ClinicNum))
-					|| !_listPaymentTypeDefs.Any(x => x.DefNum.ToString()==paymentType)) 
+					|| !_listPaymentTypeDefs.Any(x => x.Id.ToString()==paymentType)) 
 				{
 					isSetupRequired=true;
 				}
@@ -3843,7 +3843,7 @@ namespace OpenDental {
 					comboGroupBy.SelectedIndex=1;
 				}
 				comboGroupBy.Enabled=false;
-				if(Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
+				if(Preference.GetInt(PreferenceName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
 					butCreatePartial.Text=Lan.g(this,"Proc Breakdown");
 					butPay.Visible=false;
 				}
@@ -4509,7 +4509,7 @@ namespace OpenDental {
 			split.SplitAmt=PIn.Double(textAmount.Text);
 			split.DatePay=DateTime.Now;
 			split.ClinicNum=_paymentCur.ClinicNum;
-			split.UnearnedType=Preferences.GetLong(PrefName.PrepaymentUnearnedType);
+			split.UnearnedType=Preference.GetLong(PreferenceName.PrepaymentUnearnedType);
 			_listSplitsCur.Add(split);
 			FillGridSplits();
 			Application.DoEvents();
@@ -4525,7 +4525,7 @@ namespace OpenDental {
 				return false;
 			}
 			if(PIn.Date(textDate.Text).Date > DateTime.Today.Date
-					&& !Preferences.GetBool(PrefName.FutureTransDatesAllowed) && !Preferences.GetBool(PrefName.AccountAllowFutureDebits))
+					&& !Preference.GetBool(PreferenceName.FutureTransDatesAllowed) && !Preference.GetBool(PreferenceName.AccountAllowFutureDebits))
 			{
 				MsgBox.Show(this,"Payment date cannot be in the future.");
 				return false;
@@ -4547,7 +4547,7 @@ namespace OpenDental {
 					return false;
 				}
 			}
-			if(Preferences.GetInt(PrefName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
+			if(Preference.GetInt(PreferenceName.RigorousAccounting)==(int)RigorousAccounting.EnforceFully) {
 				if(_listSplitsCur.Any(x => x.ProcNum==0 && x.UnearnedType==0 && x.AdjNum==0)) {//if no procs and no adjust and not an unearned type
 					MsgBox.Show(this,"A procedure, adjustment, or unearned type must be selected for each of the payment splits.");
 					return false;
@@ -4636,7 +4636,7 @@ namespace OpenDental {
 					return false;
 				}
 				//This will change the PayDate to work better with the recurring charge automation.  User was notified in previous window.
-				if(!Preferences.GetBool(PrefName.RecurringChargesUseTransDate)) {
+				if(!Preference.GetBool(PreferenceName.RecurringChargesUseTransDate)) {
 					_paymentCur.PayDate=formDateChoose.PayDate;
 				}
 				_paymentCur.RecurringChargeDate=formDateChoose.PayDate;
@@ -4654,10 +4654,10 @@ namespace OpenDental {
 				_paymentCur.PayType=0;
 			}
 			else {
-				_paymentCur.PayType=_listPaymentTypeDefs[listPayType.SelectedIndex].DefNum;
+				_paymentCur.PayType=_listPaymentTypeDefs[listPayType.SelectedIndex].Id;
 			}
 			if(_listSplitsCur.Count==0) {//Existing payment with no splits.
-				if(!_isCCDeclined && Preferences.GetInt(PrefName.RigorousAccounting) < (int)RigorousAccounting.DontEnforce) {
+				if(!_isCCDeclined && Preference.GetInt(PreferenceName.RigorousAccounting) < (int)RigorousAccounting.DontEnforce) {
 					_listSplitsCur.AddRange(AutoSplitForPayment(_paymentCur.PayDate,_loadData));
 					_paymentCur.PayAmt=PIn.Double(textAmount.Text);//AutoSplitForPayment reduces PayAmt - Set it back to what it should be.
 				}
@@ -4786,7 +4786,7 @@ namespace OpenDental {
 				e.Cancel=true;//Stop the form from closing
 				return;
 			}
-			if(payDateCur.Date > DateTime.Today.Date && !Preferences.GetBool(PrefName.AccountAllowFutureDebits) && !Preferences.GetBool(PrefName.FutureTransDatesAllowed)) {
+			if(payDateCur.Date > DateTime.Today.Date && !Preference.GetBool(PreferenceName.AccountAllowFutureDebits) && !Preference.GetBool(PreferenceName.FutureTransDatesAllowed)) {
 				MsgBox.Show(this,"Payment Date must not be a future date.");
 				e.Cancel=true;//Stop the form from closing
 				return;
@@ -4802,7 +4802,7 @@ namespace OpenDental {
 				_paymentCur.PayType=0;
 			}
 			else {
-				_paymentCur.PayType=_listPaymentTypeDefs[listPayType.SelectedIndex].DefNum;
+				_paymentCur.PayType=_listPaymentTypeDefs[listPayType.SelectedIndex].Id;
 			}
 			if(_listSplitsCur.Count==0) {
 				AddOneSplit();

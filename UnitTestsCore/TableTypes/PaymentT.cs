@@ -59,9 +59,9 @@ namespace UnitTestsCore {
 			paymentCur.PatNum=pat.PatNum;
 			paymentCur.ClinicNum=clinic.ClinicNum;
 			paymentCur.DateEntry=DateTime.Today;
-			List<Def> listDefs=Defs.GetDefsForCategory(DefCat.PaymentTypes,true);
+			List<Definition> listDefs=Defs.GetDefsForCategory(DefinitionCategory.PaymentTypes,true);
 			if(listDefs.Count>0) {
-				paymentCur.PayType=listDefs[0].DefNum;
+				paymentCur.PayType=listDefs[0].Id;
 			}
 			paymentCur.PaymentSource=CreditCardSource.None;
 			paymentCur.ProcessStatus=ProcessStat.OfficeProcessed;

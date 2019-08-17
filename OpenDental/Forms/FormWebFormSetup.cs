@@ -68,7 +68,7 @@ namespace OpenDental {
 				}
 			}
 			butSave.Enabled=false;
-			checkAutoFillNameAndBirthdate.Checked=Preferences.GetBool(PrefName.WebFormsAutoFillNameAndBirthdate);
+			checkAutoFillNameAndBirthdate.Checked=Preference.GetBool(PreferenceName.WebFormsAutoFillNameAndBirthdate);
 		}
 
 		private void FormWebFormSetup_Shown(object sender,EventArgs e) {
@@ -77,7 +77,7 @@ namespace OpenDental {
 
 		private void FetchValuesFromWebServer() {
 			try {
-				String WebHostSynchServerURL=Preferences.GetString(PrefName.WebHostSynchServerURL);
+				String WebHostSynchServerURL=Preference.GetString(PreferenceName.WebHostSynchServerURL);
 				textboxWebHostAddress.Text=WebHostSynchServerURL;
 				butSave.Enabled=false;
 				if((WebHostSynchServerURL==WebFormL.SynchUrlStaging) || (WebHostSynchServerURL==WebFormL.SynchUrlDev)) {
@@ -161,8 +161,8 @@ namespace OpenDental {
 			if(_webFormPrefOld.ColorBorder.ToArgb()!=_webFormPref.ColorBorder.ToArgb()
 				|| _webFormPrefOld.CultureName!=_webFormPref.CultureName
 				|| _webFormPrefOld.DisableSignatures!=_webFormPref.DisableSignatures
-				|| textboxWebHostAddress.Text.Trim()!=Preferences.GetString(PrefName.WebHostSynchServerURL) 
-				|| checkAutoFillNameAndBirthdate.Checked!=Preferences.GetBool(PrefName.WebFormsAutoFillNameAndBirthdate))
+				|| textboxWebHostAddress.Text.Trim()!=Preference.GetString(PreferenceName.WebHostSynchServerURL) 
+				|| checkAutoFillNameAndBirthdate.Checked!=Preference.GetBool(PreferenceName.WebFormsAutoFillNameAndBirthdate))
 			{
 				butSave.Enabled=true;
 			}
@@ -190,8 +190,8 @@ namespace OpenDental {
 				return false;
 			}
 			_webFormPrefOld=_webFormPref.Copy();
-			if(Prefs.UpdateString(PrefName.WebHostSynchServerURL,textboxWebHostAddress.Text.Trim())
-				|| (includeAutoFillBirthdatePref && Prefs.UpdateBool(PrefName.WebFormsAutoFillNameAndBirthdate,checkAutoFillNameAndBirthdate.Checked)))
+			if(Preference.Update(PreferenceName.WebHostSynchServerURL,textboxWebHostAddress.Text.Trim())
+				|| (includeAutoFillBirthdatePref && Preference.Update(PreferenceName.WebFormsAutoFillNameAndBirthdate,checkAutoFillNameAndBirthdate.Checked)))
 			{
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}

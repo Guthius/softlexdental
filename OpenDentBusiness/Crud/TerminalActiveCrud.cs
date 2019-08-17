@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one TerminalActive into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(TerminalActive terminalActive,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBool(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO terminalactive (";
 			if(!useExistingPK && isRandomKeys) {
 				terminalActive.TerminalActiveNum=ReplicationServers.GetKeyNoCache("terminalactive","TerminalActiveNum");

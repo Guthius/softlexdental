@@ -19,7 +19,7 @@ namespace OpenDental{
 		/// </summary>
 		private System.ComponentModel.Container components = null;
 		private OpenDental.UI.ODGrid grid;
-		private Reconcile[] RList;
+		private Reconciliation[] RList;
 		private long AccountNum;
 
 		///<summary></summary>
@@ -128,7 +128,7 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			RList=Reconciles.GetList(AccountNum);
+			RList= Reconciliation.GetByAccountId(AccountNum).ToArray();
 			grid.BeginUpdate();
 			grid.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("TableReconciles","Date"),80);
@@ -139,8 +139,8 @@ namespace OpenDental{
 			OpenDental.UI.ODGridRow row;
 			for(int i=0;i<RList.Length;i++){
 				row=new OpenDental.UI.ODGridRow();
-				row.Cells.Add(RList[i].DateReconcile.ToShortDateString());
-				row.Cells.Add(RList[i].EndingBal.ToString("F"));
+				row.Cells.Add(RList[i].ReconciliationDate.Value.ToShortDateString());
+				row.Cells.Add(RList[i].EndBalance.ToString("F"));
 				grid.Rows.Add(row);
 			}
 			grid.EndUpdate();
@@ -158,10 +158,10 @@ namespace OpenDental{
 
 		///<summary></summary>
 		private void butAdd_Click(object sender, System.EventArgs e) {
-			Reconcile rec=new Reconcile();
-			rec.DateReconcile=DateTimeOD.Today;
-			rec.AccountNum=AccountNum;
-			Reconciles.Insert(rec);
+			Reconciliation rec=new Reconciliation();
+			rec.ReconciliationDate=DateTimeOD.Today;
+			rec.AccountId=AccountNum;
+            Reconciliation.Insert(rec);
 			FormReconcileEdit FormR=new FormReconcileEdit(rec);
 			FormR.IsNew=true;
 			FormR.ShowDialog();

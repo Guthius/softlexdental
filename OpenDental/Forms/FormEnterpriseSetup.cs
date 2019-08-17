@@ -34,94 +34,93 @@ namespace OpenDental {
 
 		/// <summary>Sets UI for preferences that we know for sure will exist.</summary>
 		private void FillStandardPrefs() {
-			checkAgingMonthly.Checked=Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily);
-			checkUseOpHygProv.Checked=Preferences.GetBool(PrefName.ApptSecondaryProviderConsiderOpOnly);
-			checkApptsRequireProcs.Checked=Preferences.GetBool(PrefName.ApptsRequireProc);
-			checkBillingShowProgress.Checked=Preferences.GetBool(PrefName.BillingShowSendProgress);
-			checkBillShowTransSinceZero.Checked=Preferences.GetBool(PrefName.BillingShowTransSinceBalZero);
-			checkReceiveReportsService.Checked=Preferences.GetBool(PrefName.ClaimReportReceivedByService);
-			checkSuperFamCloneCreate.Checked=Preferences.GetBool(PrefName.CloneCreateSuperFamily);
-			checkEnterpriseApptList.Checked=Preferences.GetBool(PrefName.EnterpriseApptList);
-			checkPasswordsMustBeStrong.Checked=Preferences.GetBool(PrefName.PasswordsMustBeStrong);
-			checkPasswordsStrongIncludeSpecial.Checked=Preferences.GetBool(PrefName.PasswordsStrongIncludeSpecial);
-			checkPasswordForceWeakToStrong.Checked=Preferences.GetBool(PrefName.PasswordsWeakChangeToStrong);
-			checkHidePaysplits.Checked=Preferences.GetBool(PrefName.PaymentWindowDefaultHideSplits);
-			checkPaymentsPromptForPayType.Checked=Preferences.GetBool(PrefName.PaymentsPromptForPayType);
-			checkLockIncludesAdmin.Checked=Preferences.GetBool(PrefName.SecurityLockIncludesAdmin);
-			checkPatClone.Checked=Preferences.GetBool(PrefName.ShowFeaturePatientClone);
-			checkSuperFam.Checked=Preferences.GetBool(PrefName.ShowFeatureSuperfamilies);
-			checkUserNameManualEntry.Checked=Preferences.GetBool(PrefName.UserNameManualEntry);
-			textBillingElectBatchMax.Text=Preferences.GetInt(PrefName.BillingElectBatchMax).ToString();
-			textClaimIdentifier.Text=Preferences.GetString(PrefName.ClaimIdPrefix);
+			checkAgingMonthly.Checked=Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily);
+			checkUseOpHygProv.Checked=Preference.GetBool(PreferenceName.ApptSecondaryProviderConsiderOpOnly);
+			checkApptsRequireProcs.Checked=Preference.GetBool(PreferenceName.ApptsRequireProc);
+			checkBillingShowProgress.Checked=Preference.GetBool(PreferenceName.BillingShowSendProgress);
+			checkBillShowTransSinceZero.Checked=Preference.GetBool(PreferenceName.BillingShowTransSinceBalZero);
+			checkReceiveReportsService.Checked=Preference.GetBool(PreferenceName.ClaimReportReceivedByService);
+			checkSuperFamCloneCreate.Checked=Preference.GetBool(PreferenceName.CloneCreateSuperFamily);
+			checkEnterpriseApptList.Checked=Preference.GetBool(PreferenceName.EnterpriseApptList);
+			checkPasswordsMustBeStrong.Checked=Preference.GetBool(PreferenceName.PasswordsMustBeStrong);
+			checkPasswordsStrongIncludeSpecial.Checked=Preference.GetBool(PreferenceName.PasswordsStrongIncludeSpecial);
+			checkPasswordForceWeakToStrong.Checked=Preference.GetBool(PreferenceName.PasswordsWeakChangeToStrong);
+			checkHidePaysplits.Checked=Preference.GetBool(PreferenceName.PaymentWindowDefaultHideSplits);
+			checkPaymentsPromptForPayType.Checked=Preference.GetBool(PreferenceName.PaymentsPromptForPayType);
+			checkLockIncludesAdmin.Checked=Preference.GetBool(PreferenceName.SecurityLockIncludesAdmin);
+			checkPatClone.Checked=Preference.GetBool(PreferenceName.ShowFeaturePatientClone);
+			checkSuperFam.Checked=Preference.GetBool(PreferenceName.ShowFeatureSuperfamilies);
+			checkUserNameManualEntry.Checked=Preference.GetBool(PreferenceName.UserNameManualEntry);
+			textBillingElectBatchMax.Text=Preference.GetInt(PreferenceName.BillingElectBatchMax).ToString();
+			textClaimIdentifier.Text=Preference.GetString(PreferenceName.ClaimIdPrefix);
 			//Reports, copied from FormReportSetup.
-			checkUseReportServer.Checked=(Preferences.GetString(PrefName.ReportingServerCompName)!="" || Preferences.GetString(PrefName.ReportingServerURI)!="");
-			textServerName.Text=Preferences.GetString(PrefName.ReportingServerCompName);
-			comboDatabase.Text=Preferences.GetString(PrefName.ReportingServerDbName);
-			textMysqlUser.Text=Preferences.GetString(PrefName.ReportingServerMySqlUser);
+			checkUseReportServer.Checked=(Preference.GetString(PreferenceName.ReportingServerCompName)!="" || Preference.GetString(PreferenceName.ReportingServerURI)!="");
+			textServerName.Text=Preference.GetString(PreferenceName.ReportingServerCompName);
+			comboDatabase.Text=Preference.GetString(PreferenceName.ReportingServerDbName);
+			textMysqlUser.Text=Preference.GetString(PreferenceName.ReportingServerMySqlUser);
 			string decryptedPass;
-            Encryption.TryDecrypt(Preferences.GetString(PrefName.ReportingServerMySqlPassHash),out decryptedPass);
+            Encryption.TryDecrypt(Preference.GetString(PreferenceName.ReportingServerMySqlPassHash),out decryptedPass);
 			textMysqlPass.Text=decryptedPass;
 			textMysqlPass.PasswordChar='*';
-			textMiddleTierURI.Text=Preferences.GetString(PrefName.ReportingServerURI);
-			FillComboDatabases();
+			textMiddleTierURI.Text=Preference.GetString(PreferenceName.ReportingServerURI);
 			SetReportServerUIEnabled();
 			//Claim report receive interval.
-			_claimReportReceiveInterval=Preferences.GetInt(PrefName.ClaimReportReceiveInterval);
+			_claimReportReceiveInterval=Preference.GetInt(PreferenceName.ClaimReportReceiveInterval);
 			if(_claimReportReceiveInterval==0) {
 				radioTime.Checked=true;
-				DateTime fullDateTime=Preferences.GetDateTime(PrefName.ClaimReportReceiveTime);
+				DateTime fullDateTime=Preference.GetDateTime(PreferenceName.ClaimReportReceiveTime);
 				textReportCheckTime.Text=fullDateTime.ToShortTimeString();
 			}
 			else {
 				textReportCheckInterval.Text=POut.Int(_claimReportReceiveInterval);
 				radioInterval.Checked=true;
 			}
-			long sigInterval=Preferences.GetLong(PrefName.ProcessSigsIntervalInSecs);
+			long sigInterval=Preference.GetLong(PreferenceName.ProcessSigsIntervalInSecs);
 			textSigInterval.Text=(sigInterval==0 ? "" : sigInterval.ToString());
-			textDaysLock.Text=Preferences.GetInt(PrefName.SecurityLockDays).ToString();
-			textDateLock.Text=Preferences.GetDate(PrefName.SecurityLockDate).ToShortDateString();
-			textLogOffAfterMinutes.Text=Preferences.GetInt(PrefName.SecurityLogOffAfterMinutes).ToString();
-			long signalInactive=Preferences.GetLong(PrefName.SignalInactiveMinutes);
+			textDaysLock.Text=Preference.GetInt(PreferenceName.SecurityLockDays).ToString();
+			textDateLock.Text=Preference.GetDate(PreferenceName.SecurityLockDate).ToShortDateString();
+			textLogOffAfterMinutes.Text=Preference.GetInt(PreferenceName.SecurityLogOffAfterMinutes).ToString();
+			long signalInactive=Preference.GetLong(PreferenceName.SignalInactiveMinutes);
 			textInactiveSignal.Text=(signalInactive==0 ? "" : signalInactive.ToString());
-			textClaimSnapshotRunTime.Text=Preferences.GetDateTime(PrefName.ClaimSnapshotRunTime).ToShortTimeString();
+			textClaimSnapshotRunTime.Text=Preference.GetDateTime(PreferenceName.ClaimSnapshotRunTime).ToShortTimeString();
 			for(int i=0;i<Enum.GetNames(typeof(AutoSplitPreference)).Length;i++) {
 				comboAutoSplitPref.Items.Add(Lans.g(this,Enum.GetNames(typeof(AutoSplitPreference))[i]));
 			}
-			comboAutoSplitPref.SelectedIndex=Preferences.GetInt(PrefName.AutoSplitLogic);
+			comboAutoSplitPref.SelectedIndex=Preference.GetInt(PreferenceName.AutoSplitLogic);
 			foreach(ClaimSnapshotTrigger trigger in Enum.GetValues(typeof(ClaimSnapshotTrigger))) {
 				comboClaimSnapshotTrigger.Items.Add(trigger.GetDescription());
 			}
-			comboClaimSnapshotTrigger.SelectedIndex=(int)PIn.Enum<ClaimSnapshotTrigger>(Preferences.GetString(PrefName.ClaimSnapshotTriggerType),true);
+			comboClaimSnapshotTrigger.SelectedIndex=(int)PIn.Enum<ClaimSnapshotTrigger>(Preference.GetString(PreferenceName.ClaimSnapshotTriggerType),true);
 			foreach(PayPlanVersions version in Enum.GetValues(typeof(PayPlanVersions))) {
 				comboPayPlansVersion.Items.Add(Lan.g("enumPayPlanVersions",version.GetDescription()));
 			}
-			comboPayPlansVersion.SelectedIndex=Preferences.GetInt(PrefName.PayPlansVersion)-1;
+			comboPayPlansVersion.SelectedIndex=Preference.GetInt(PreferenceName.PayPlansVersion)-1;
 			foreach(PayClinicSetting prompt in Enum.GetValues(typeof(PayClinicSetting))) {
 				comboPaymentClinicSetting.Items.Add(Lan.g(this,prompt.GetDescription()));
 			}
-			comboPaymentClinicSetting.SelectedIndex=Preferences.GetInt(PrefName.PaymentClinicSetting);
+			comboPaymentClinicSetting.SelectedIndex=Preference.GetInt(PreferenceName.PaymentClinicSetting);
 			List<RigorousAccounting> listEnums=Enum.GetValues(typeof(RigorousAccounting)).OfType<RigorousAccounting>().ToList();
 			for(int i=0;i<listEnums.Count;i++) {
 				comboRigorousAccounting.Items.Add(listEnums[i].GetDescription());
 			}
-			comboRigorousAccounting.SelectedIndex=Preferences.GetInt(PrefName.RigorousAccounting);
+			comboRigorousAccounting.SelectedIndex=Preference.GetInt(PreferenceName.RigorousAccounting);
 			List<RigorousAdjustments> listAdjEnums=Enum.GetValues(typeof(RigorousAdjustments)).OfType<RigorousAdjustments>().ToList();
 			for(int i=0;i<listAdjEnums.Count;i++) {
 				comboRigorousAdjustments.Items.Add(listAdjEnums[i].GetDescription());
 			}
-			comboRigorousAdjustments.SelectedIndex=Preferences.GetInt(PrefName.RigorousAdjustments);
+			comboRigorousAdjustments.SelectedIndex=Preference.GetInt(PreferenceName.RigorousAdjustments);
 		}
 
 		///<summary>Load values from database for hidden preferences if they exist.  If a pref doesn't exist then the corresponding UI is hidden.</summary>
 		private void FillHiddenPrefs() {
-			FillOptionalPrefBool(checkAgingEnterprise,PrefName.AgingIsEnterprise);
-			FillOptionalPrefBool(checkAgingShowPayplanPayments,PrefName.AgingReportShowAgePatPayplanPayments);
-			FillOptionalPrefBool(checkClaimSnapshotEnabled,PrefName.ClaimSnapshotEnabled);
-			FillOptionalPrefBool(checkDBMDisableOptimize,PrefName.DatabaseMaintenanceDisableOptimize);
-			FillOptionalPrefBool(checkDBMSkipCheckTable,PrefName.DatabaseMaintenanceSkipCheckTable);
-			validDateAgingServiceTimeDue.Text=Preferences.GetDateTime(PrefName.AgingServiceTimeDue).ToShortTimeString();
+			FillOptionalPrefBool(checkAgingEnterprise,PreferenceName.AgingIsEnterprise);
+			FillOptionalPrefBool(checkAgingShowPayplanPayments,PreferenceName.AgingReportShowAgePatPayplanPayments);
+			FillOptionalPrefBool(checkClaimSnapshotEnabled,PreferenceName.ClaimSnapshotEnabled);
+			FillOptionalPrefBool(checkDBMDisableOptimize,PreferenceName.DatabaseMaintenanceDisableOptimize);
+			FillOptionalPrefBool(checkDBMSkipCheckTable,PreferenceName.DatabaseMaintenanceSkipCheckTable);
+			validDateAgingServiceTimeDue.Text=Preference.GetDateTime(PreferenceName.AgingServiceTimeDue).ToShortTimeString();
 			checkEnableClinics.Checked=Preferences.HasClinicsEnabled;
-			string updateStreamline=GetHiddenPrefString(PrefName.UpdateStreamLinePassword);
+			string updateStreamline=GetHiddenPrefString(PreferenceName.UpdateStreamLinePassword);
 			if(updateStreamline!=null) {
 				checkUpdateStreamlinePassword.Checked=(updateStreamline=="abracadabra");
 			}
@@ -131,10 +130,10 @@ namespace OpenDental {
 		}
 
 		///<summary>Returns the ValueString of a pref or null if that pref is not found in the database.</summary>
-		private string GetHiddenPrefString(PrefName pref) {
+		private string GetHiddenPrefString(PreferenceName pref) {
 			try {
-				Pref hiddenPref=Prefs.GetOne(pref);
-				return hiddenPref.ValueString;
+				Preference hiddenPref= Preference.GetByName(pref);
+				return hiddenPref.Value;
 			}
 			catch {
 
@@ -143,7 +142,7 @@ namespace OpenDental {
 		}
 
 		///<summary>Helper method for setting UI for boolean preferences.  Some of the preferences calling this may not exist in the database.</summary>
-		private void FillOptionalPrefBool(CheckBox checkPref,PrefName pref) {
+		private void FillOptionalPrefBool(CheckBox checkPref,PreferenceName pref) {
 			string valueString=GetHiddenPrefString(pref);
 			if(valueString==null) {
 				checkPref.Visible=false;
@@ -175,87 +174,55 @@ namespace OpenDental {
 			}
 		}
 
-		private void FillComboDatabases() {
-			comboDatabase.Items.Clear();
-			comboDatabase.Items.AddRange(GetDatabases());
-		}
-
-		///<summary>Taken from FormReportSetup.</summary>
-		private string[] GetDatabases() {
-			if(textServerName.Text=="") {
-				return new string[0];
-			}
-			try {
-				//use the one table that we know exists
-				if(textMysqlUser.Text=="") {
-					DataConnection.SetDb(textServerName.Text,"mysql","root",textMysqlPass.Text);
-				}
-				else {
-                    DataConnection.SetDb(textServerName.Text,"mysql",textMysqlUser.Text,textMysqlPass.Text);
-				}
-				string command="SHOW DATABASES";
-				//if this next step fails, table will simply have 0 rows
-				DataTable table= DataConnection.GetTable(command,false);
-				string[] dbNames=new string[table.Rows.Count];
-				for(int i=0;i<table.Rows.Count;i++) {
-					dbNames[i]=table.Rows[i][0].ToString();
-				}
-				return dbNames;
-			}
-			catch(Exception) {
-				return new string[0];
-			}
-		}
-
 		#endregion
 		#region Update preference helpers
 
 		private void UpdatePreferenceChanges() {
 			bool hasChanges=false;
-			if(Prefs.UpdateBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily,checkAgingMonthly.Checked)
-				| Prefs.UpdateBool(PrefName.ApptSecondaryProviderConsiderOpOnly,checkUseOpHygProv.Checked)
-				| Prefs.UpdateBool(PrefName.ApptsRequireProc,checkApptsRequireProcs.Checked)
-				| Prefs.UpdateBool(PrefName.BillingShowSendProgress,checkBillingShowProgress.Checked)
-				| Prefs.UpdateBool(PrefName.BillingShowTransSinceBalZero,checkBillShowTransSinceZero.Checked)
-				| Prefs.UpdateBool(PrefName.ClaimReportReceivedByService,checkReceiveReportsService.Checked)
-				| Prefs.UpdateBool(PrefName.CloneCreateSuperFamily,checkSuperFamCloneCreate.Checked)
-				| Prefs.UpdateBool(PrefName.EnterpriseApptList,checkEnterpriseApptList.Checked)
-				| Prefs.UpdateBool(PrefName.PasswordsMustBeStrong,checkPasswordsMustBeStrong.Checked)
-				| Prefs.UpdateBool(PrefName.PasswordsStrongIncludeSpecial,checkPasswordsStrongIncludeSpecial.Checked)
-				| Prefs.UpdateBool(PrefName.PasswordsWeakChangeToStrong,checkPasswordForceWeakToStrong.Checked)
-				| Prefs.UpdateBool(PrefName.PaymentWindowDefaultHideSplits,checkHidePaysplits.Checked)
-				| Prefs.UpdateBool(PrefName.PaymentsPromptForPayType,checkPaymentsPromptForPayType.Checked)
-				| Prefs.UpdateBool(PrefName.SecurityLockIncludesAdmin,checkLockIncludesAdmin.Checked)
-				| Prefs.UpdateBool(PrefName.ShowFeaturePatientClone,checkPatClone.Checked)
-				| Prefs.UpdateBool(PrefName.ShowFeatureSuperfamilies,checkSuperFam.Checked)
-				| Prefs.UpdateBool(PrefName.UserNameManualEntry,checkUserNameManualEntry.Checked)
-				| Prefs.UpdateInt(PrefName.BillingElectBatchMax,PIn.Int(textBillingElectBatchMax.Text))
-				| Prefs.UpdateString(PrefName.ClaimIdPrefix,textClaimIdentifier.Text)
-				| Prefs.UpdateInt(PrefName.ClaimReportReceiveInterval,PIn.Int(textReportCheckInterval.Text))
-				| Prefs.UpdateDateT(PrefName.ClaimReportReceiveTime,PIn.DateT(textReportCheckTime.Text))
-				| Prefs.UpdateLong(PrefName.ProcessSigsIntervalInSecs,PIn.Long(textSigInterval.Text))
+			if(Preference.Update(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily,checkAgingMonthly.Checked)
+				| Preference.Update(PreferenceName.ApptSecondaryProviderConsiderOpOnly,checkUseOpHygProv.Checked)
+				| Preference.Update(PreferenceName.ApptsRequireProc,checkApptsRequireProcs.Checked)
+				| Preference.Update(PreferenceName.BillingShowSendProgress,checkBillingShowProgress.Checked)
+				| Preference.Update(PreferenceName.BillingShowTransSinceBalZero,checkBillShowTransSinceZero.Checked)
+				| Preference.Update(PreferenceName.ClaimReportReceivedByService,checkReceiveReportsService.Checked)
+				| Preference.Update(PreferenceName.CloneCreateSuperFamily,checkSuperFamCloneCreate.Checked)
+				| Preference.Update(PreferenceName.EnterpriseApptList,checkEnterpriseApptList.Checked)
+				| Preference.Update(PreferenceName.PasswordsMustBeStrong,checkPasswordsMustBeStrong.Checked)
+				| Preference.Update(PreferenceName.PasswordsStrongIncludeSpecial,checkPasswordsStrongIncludeSpecial.Checked)
+				| Preference.Update(PreferenceName.PasswordsWeakChangeToStrong,checkPasswordForceWeakToStrong.Checked)
+				| Preference.Update(PreferenceName.PaymentWindowDefaultHideSplits,checkHidePaysplits.Checked)
+				| Preference.Update(PreferenceName.PaymentsPromptForPayType,checkPaymentsPromptForPayType.Checked)
+				| Preference.Update(PreferenceName.SecurityLockIncludesAdmin,checkLockIncludesAdmin.Checked)
+				| Preference.Update(PreferenceName.ShowFeaturePatientClone,checkPatClone.Checked)
+				| Preference.Update(PreferenceName.ShowFeatureSuperfamilies,checkSuperFam.Checked)
+				| Preference.Update(PreferenceName.UserNameManualEntry,checkUserNameManualEntry.Checked)
+				| Preference.Update(PreferenceName.BillingElectBatchMax,PIn.Int(textBillingElectBatchMax.Text))
+				| Preference.Update(PreferenceName.ClaimIdPrefix,textClaimIdentifier.Text)
+				| Preference.Update(PreferenceName.ClaimReportReceiveInterval,PIn.Int(textReportCheckInterval.Text))
+				| Preference.Update(PreferenceName.ClaimReportReceiveTime,PIn.DateT(textReportCheckTime.Text))
+				| Preference.Update(PreferenceName.ProcessSigsIntervalInSecs,PIn.Long(textSigInterval.Text))
 				//SecurityLockDate and SecurityLockDays are handled in FormSecurityLock
-				//| Prefs.UpdateString(PrefName.SecurityLockDate,POut.Date(PIn.Date(textDateLock.Text),false))
+				//| Preference.Update(PrefName.SecurityLockDate,POut.Date(PIn.Date(textDateLock.Text),false))
 				//| Prefs.UpdateInt(PrefName.SecurityLockDays,PIn.Int(textDaysLock.Text))
-				| Prefs.UpdateInt(PrefName.SecurityLogOffAfterMinutes,PIn.Int(textLogOffAfterMinutes.Text))
-				| Prefs.UpdateLong(PrefName.SignalInactiveMinutes,PIn.Long(textInactiveSignal.Text))
-				| Prefs.UpdateInt(PrefName.AutoSplitLogic,comboAutoSplitPref.SelectedIndex)
-				| Prefs.UpdateInt(PrefName.PayPlansVersion,comboPayPlansVersion.SelectedIndex+1)
-				| Prefs.UpdateInt(PrefName.PaymentClinicSetting,comboPaymentClinicSetting.SelectedIndex)
+				| Preference.Update(PreferenceName.SecurityLogOffAfterMinutes,PIn.Int(textLogOffAfterMinutes.Text))
+				| Preference.Update(PreferenceName.SignalInactiveMinutes,PIn.Long(textInactiveSignal.Text))
+				| Preference.Update(PreferenceName.AutoSplitLogic,comboAutoSplitPref.SelectedIndex)
+				| Preference.Update(PreferenceName.PayPlansVersion,comboPayPlansVersion.SelectedIndex+1)
+				| Preference.Update(PreferenceName.PaymentClinicSetting,comboPaymentClinicSetting.SelectedIndex)
 			)
 			{
 				hasChanges=true;
 			}
-			int prefRigorousAccounting=Preferences.GetInt(PrefName.RigorousAccounting);
+			int prefRigorousAccounting=Preference.GetInt(PreferenceName.RigorousAccounting);
 			//Copied logging for RigorousAccounting and RigorousAdjustments from FormModuleSetup.
-			if(Prefs.UpdateInt(PrefName.RigorousAccounting,comboRigorousAccounting.SelectedIndex)) {
+			if(Preference.Update(PreferenceName.RigorousAccounting,comboRigorousAccounting.SelectedIndex)) {
 				hasChanges=true;
 				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Rigorous accounting changed from "+
 					((RigorousAccounting)prefRigorousAccounting).GetDescription()+" to "
 					+((RigorousAccounting)comboRigorousAccounting.SelectedIndex).GetDescription()+".");
 			}
-			int prefRigorousAdjustments=Preferences.GetInt(PrefName.RigorousAdjustments);
-			if(Prefs.UpdateInt(PrefName.RigorousAdjustments,comboRigorousAdjustments.SelectedIndex)) {
+			int prefRigorousAdjustments=Preference.GetInt(PreferenceName.RigorousAdjustments);
+			if(Preference.Update(PreferenceName.RigorousAdjustments,comboRigorousAdjustments.SelectedIndex)) {
 				hasChanges=true;
 				SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Rigorous adjustments changed from "+
 					((RigorousAdjustments)prefRigorousAdjustments).GetDescription()+" to "
@@ -273,11 +240,11 @@ namespace OpenDental {
 		private bool UpdateReportingServer() {
 			bool changed=false;
 			if(!checkUseReportServer.Checked) {
-				if(Prefs.UpdateString(PrefName.ReportingServerCompName,"")
-					| Prefs.UpdateString(PrefName.ReportingServerDbName,"")
-					| Prefs.UpdateString(PrefName.ReportingServerMySqlUser,"")
-					| Prefs.UpdateString(PrefName.ReportingServerMySqlPassHash,"")
-					| Prefs.UpdateString(PrefName.ReportingServerURI,"")
+				if(Preference.Update(PreferenceName.ReportingServerCompName,"")
+					| Preference.Update(PreferenceName.ReportingServerDbName,"")
+					| Preference.Update(PreferenceName.ReportingServerMySqlUser,"")
+					| Preference.Update(PreferenceName.ReportingServerMySqlPassHash,"")
+					| Preference.Update(PreferenceName.ReportingServerURI,"")
 				)
 				{
 					changed=true;
@@ -287,22 +254,22 @@ namespace OpenDental {
 				if(radioReportServerDirect.Checked) {
 					string encryptedPass;
                     Encryption.TryEncrypt(textMysqlPass.Text,out encryptedPass);
-					if(Prefs.UpdateString(PrefName.ReportingServerCompName,textServerName.Text)
-						| Prefs.UpdateString(PrefName.ReportingServerDbName,comboDatabase.Text)
-						| Prefs.UpdateString(PrefName.ReportingServerMySqlUser,textMysqlUser.Text)
-						| Prefs.UpdateString(PrefName.ReportingServerMySqlPassHash,encryptedPass)
-						| Prefs.UpdateString(PrefName.ReportingServerURI,"")
+					if(Preference.Update(PreferenceName.ReportingServerCompName,textServerName.Text)
+						| Preference.Update(PreferenceName.ReportingServerDbName,comboDatabase.Text)
+						| Preference.Update(PreferenceName.ReportingServerMySqlUser,textMysqlUser.Text)
+						| Preference.Update(PreferenceName.ReportingServerMySqlPassHash,encryptedPass)
+						| Preference.Update(PreferenceName.ReportingServerURI,"")
 					)
 					{
 						changed=true;
 					}
 				}
 				else {
-					if(Prefs.UpdateString(PrefName.ReportingServerCompName,"")
-						|Prefs.UpdateString(PrefName.ReportingServerDbName,"")
-						|Prefs.UpdateString(PrefName.ReportingServerMySqlUser,"")
-						|Prefs.UpdateString(PrefName.ReportingServerMySqlPassHash,"")
-						|Prefs.UpdateString(PrefName.ReportingServerURI,textMiddleTierURI.Text)
+					if(Preference.Update(PreferenceName.ReportingServerCompName,"")
+						|Preference.Update(PreferenceName.ReportingServerDbName,"")
+						|Preference.Update(PreferenceName.ReportingServerMySqlUser,"")
+						|Preference.Update(PreferenceName.ReportingServerMySqlPassHash,"")
+						|Preference.Update(PreferenceName.ReportingServerURI,textMiddleTierURI.Text)
 					)
 					{
 						changed=true;
@@ -316,13 +283,13 @@ namespace OpenDental {
 			DateTime claimSnapshotRunTime=DateTime.MinValue;
 			DateTime.TryParse(textClaimSnapshotRunTime.Text,out claimSnapshotRunTime);//This already gets checked in the validate method.
 			claimSnapshotRunTime=new DateTime(1881,01,01,claimSnapshotRunTime.Hour,claimSnapshotRunTime.Minute,claimSnapshotRunTime.Second);
-			return Prefs.UpdateDateT(PrefName.ClaimSnapshotRunTime,claimSnapshotRunTime);
+			return Preference.Update(PreferenceName.ClaimSnapshotRunTime,claimSnapshotRunTime);
 		}
 
 		private bool UpdateClaimSnapshotTrigger() {
 			foreach(ClaimSnapshotTrigger trigger in Enum.GetValues(typeof(ClaimSnapshotTrigger))) {
 				if(trigger.GetDescription()==comboClaimSnapshotTrigger.Text) {
-					return Prefs.UpdateString(PrefName.ClaimSnapshotTriggerType,trigger.ToString());
+					return Preference.Update(PreferenceName.ClaimSnapshotTriggerType,trigger.ToString());
 				}
 			}
 			return false;
@@ -416,19 +383,19 @@ namespace OpenDental {
 			//Copied from FormGlobalSecurity.
 			FormSecurityLock FormS=new FormSecurityLock();
 			FormS.ShowDialog();//prefs are set invalid within that form if needed.
-			if(Preferences.GetInt(PrefName.SecurityLockDays)>0) {
-				textDaysLock.Text=Preferences.GetInt(PrefName.SecurityLockDays).ToString();
+			if(Preference.GetInt(PreferenceName.SecurityLockDays)>0) {
+				textDaysLock.Text=Preference.GetInt(PreferenceName.SecurityLockDays).ToString();
 			}
 			else {
 				textDaysLock.Text="";
 			}
-			if(Preferences.GetDate(PrefName.SecurityLockDate).Year>1880) {
-				textDateLock.Text=Preferences.GetDate(PrefName.SecurityLockDate).ToShortDateString();
+			if(Preference.GetDate(PreferenceName.SecurityLockDate).Year>1880) {
+				textDateLock.Text=Preference.GetDate(PreferenceName.SecurityLockDate).ToShortDateString();
 			}
 			else {
 				textDateLock.Text="";
 			}
-			checkLockIncludesAdmin.Checked=Preferences.GetBool(PrefName.SecurityLockIncludesAdmin);
+			checkLockIncludesAdmin.Checked=Preference.GetBool(PreferenceName.SecurityLockIncludesAdmin);
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

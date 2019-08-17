@@ -33,7 +33,7 @@ namespace OpenDental
                         Signalod sig = new Signalod();
                         sig.IType = InvalidType.ShutDownNow;
                         Signalods.Insert(sig);
-                        Computers.ClearAllHeartBeats(Environment.MachineName);//always assume success
+                        Computer.ClearAllHeartBeats(Environment.MachineName);//always assume success
                         isShutdownWindowNeeded = false;
                         //SecurityLogs.MakeLogEntry(Permissions.Setup,0,"Shutdown all workstations.");//can't do this because sometimes no user.
                     }
@@ -53,7 +53,7 @@ namespace OpenDental
                 }
 
                 // No other workstation will be able to start up until this value is reset.
-                Prefs.UpdateString(PrefName.UpdateInProgressOnComputerName, Environment.MachineName);
+                Preference.Update(PreferenceName.UpdateInProgressOnComputerName, Environment.MachineName);
             }
 
             try
@@ -64,7 +64,7 @@ namespace OpenDental
             {
                 FormFriendlyException.Show("Error deleting file:\r\n" + ex.Message, ex);
 
-                Prefs.UpdateString(PrefName.UpdateInProgressOnComputerName, "");
+                Preference.Update(PreferenceName.UpdateInProgressOnComputerName, "");
                 return;
             }
 
@@ -80,7 +80,7 @@ namespace OpenDental
 
                 msgbox.ShowDialog();
 
-                Prefs.UpdateString(PrefName.UpdateInProgressOnComputerName, "");
+                Preference.Update(PreferenceName.UpdateInProgressOnComputerName, "");
                 return;
             }
 
@@ -99,7 +99,7 @@ namespace OpenDental
             if (FormP.DialogResult == DialogResult.Cancel)
             {
                 workerThread.Abort();
-                Prefs.UpdateString(PrefName.UpdateInProgressOnComputerName, "");
+                Preference.Update(PreferenceName.UpdateInProgressOnComputerName, "");
                 return;
             }
 
@@ -114,7 +114,7 @@ namespace OpenDental
                     catch (Exception ex)
                     {
                         FormFriendlyException.Show("Error deleting file:\r\n" + ex.Message, ex);
-                        Prefs.UpdateString(PrefName.UpdateInProgressOnComputerName, "");
+                        Preference.Update(PreferenceName.UpdateInProgressOnComputerName, "");
                         return;
                     }
                 }
@@ -128,14 +128,14 @@ namespace OpenDental
             if (MessageBox.Show(msg, "", MessageBoxButtons.OKCancel) != DialogResult.OK)
             {
                 //Clicking cancel gives the user a chance to avoid running the setup program,
-                Prefs.UpdateString(PrefName.UpdateInProgressOnComputerName, "");//unlock workstations, since nothing was actually done.
+                Preference.Update(PreferenceName.UpdateInProgressOnComputerName, "");//unlock workstations, since nothing was actually done.
                 return;
             }
 
             #region Stop OpenDent Services
             //If the update has been initiated from the designated update server then try and stop all "OpenDent..." services.
             //They will be automatically restarted once Open Dental has successfully upgraded.
-            if (Preferences.GetString(PrefName.WebServiceServerName) != "" && ODEnvironment.IdIsThisComputer(Preferences.GetString(PrefName.WebServiceServerName)))
+            if (Preference.GetString(PreferenceName.WebServiceServerName) != "" && ODEnvironment.IdIsThisComputer(Preference.GetString(PreferenceName.WebServiceServerName)))
             {
                 Action actionCloseStopServicesProgress = ODProgress.Show(ODEventType.MiscData, typeof(MiscDataEvent), "Stopping services...");
                 List<ServiceController> listOpenDentServices = ServicesHelper.GetAllOpenDentServices();
@@ -164,7 +164,7 @@ namespace OpenDental
             }
             catch
             {
-                Prefs.UpdateString(PrefName.UpdateInProgressOnComputerName, "");
+                Preference.Update(PreferenceName.UpdateInProgressOnComputerName, "");
                 MsgBox.Show(FormP, "Could not launch setup");
             }
         }
@@ -277,9 +277,9 @@ namespace OpenDental
             return 
                 ServicesHelper.CreateServiceConfigFile(
                     configFileName, 
-                    DataConnection.Server, 
+                    DataConnection.Host, 
                     DataConnection.Database, 
-                    DataConnection.UserID, 
+                    DataConnection.Username, 
                     DataConnection.Password, 
                     passwordHash, 
                     "", "");

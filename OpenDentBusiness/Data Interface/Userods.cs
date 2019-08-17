@@ -592,7 +592,7 @@ namespace OpenDentBusiness
         {
             string command;
             //Check if the user group that the students or instructors are trying to go to has the SecurityAdmin permission.
-            if (!GroupPermissions.HasPermission(userGroup.UserGroupNum, Permissions.SecurityAdmin, 0))
+            if (!GroupPermissions.HasPermission(userGroup.Id, Permissions.SecurityAdmin, 0))
             {
                 //We need to make sure that moving these users to the new user group does not eliminate all SecurityAdmin users in db.
                 command = "SELECT COUNT(*) FROM usergroupattach "
@@ -618,7 +618,7 @@ namespace OpenDentBusiness
                 }
             }
             command = "UPDATE userod INNER JOIN provider ON userod.ProvNum=provider.ProvNum "
-                    + "SET UserGroupNum=" + POut.Long(userGroup.UserGroupNum) + " "
+                    + "SET UserGroupNum=" + POut.Long(userGroup.Id) + " "
                     + "WHERE provider.IsInstructor=" + POut.Bool(isInstructor);
             if (!isInstructor)
             {
@@ -685,7 +685,7 @@ namespace OpenDentBusiness
             {
                 throw new Exception(Lans.g("Userods", "The current user must be in at least one user group."));
             }
-            Validate(false, userToUpdate, true, listUserGroups.Select(x => x.UserGroupNum).ToList());
+            Validate(false, userToUpdate, true, listUserGroups.Select(x => x.Id).ToList());
             Crud.UserodCrud.Update(userToUpdate);
         }
 
@@ -693,7 +693,7 @@ namespace OpenDentBusiness
         ///Surround with try/catch because it can throw exceptions.</summary>
         public static long Insert(User userod, List<long> listUserGroupNums, bool isForCEMT = false)
         {
-            if (userod.IsHidden && UserGroups.IsAdminGroup(listUserGroupNums))
+            if (userod.IsHidden && UserGroup.IsAdminGroup(listUserGroupNums))
             {
                 throw new Exception(Lans.g("Userods", "Admins cannot be hidden."));
             }
@@ -904,7 +904,7 @@ namespace OpenDentBusiness
             {
                 return Lans.g("FormUserPassword", "Password must contain at least one lower case letter when the strong password feature is turned on.");
             }
-            if (Preferences.GetBool(PrefName.PasswordsStrongIncludeSpecial))
+            if (Preference.GetBool(PreferenceName.PasswordsStrongIncludeSpecial))
             {
                 bool hasSpecial = false;
                 for (int i = 0; i < pass.Length; i++)

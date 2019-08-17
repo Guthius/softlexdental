@@ -289,20 +289,20 @@ namespace OpenDental{
 		#endregion
 
 		private void FormDiseaseDefEdit_Load(object sender, System.EventArgs e) {
-			textName.Text=DiseaseDefCur.DiseaseName;
-			string i9descript=ICD9s.GetCodeAndDescription(DiseaseDefCur.ICD9Code);
+			textName.Text=DiseaseDefCur.Name;
+			string i9descript=ICD9.GetCodeAndDescription(DiseaseDefCur.ICD9Code);
 			if(i9descript=="") {
 				textICD9.Text=DiseaseDefCur.ICD9Code;
 			}
 			else {
 				textICD9.Text=i9descript;
 			}
-			Icd10 i10=Icd10s.GetByCode(DiseaseDefCur.Icd10Code);
+			ICD10 i10=ICD10.GetByCode(DiseaseDefCur.ICD10Code);
 			if(i10==null) {
-				textIcd10.Text=DiseaseDefCur.Icd10Code;
+				textIcd10.Text=DiseaseDefCur.ICD10Code;
 			}
 			else {
-				textIcd10.Text=i10.Icd10Code+"-"+i10.Description;
+				textIcd10.Text=i10.Code+"-"+i10.Description;
 			}
 			string sdescript=Snomeds.GetCodeAndDescription(DiseaseDefCur.SnomedCode);
 			if(sdescript=="") {
@@ -311,7 +311,7 @@ namespace OpenDental{
 			else {
 				textSnomed.Text=sdescript;
 			}
-			checkIsHidden.Checked=DiseaseDefCur.IsHidden;
+			checkIsHidden.Checked=DiseaseDefCur.Hidden;
 		}
 
 		private void butSnomed_Click(object sender,EventArgs e) {
@@ -321,7 +321,7 @@ namespace OpenDental{
 			if(FormS.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			if(DiseaseDefs.ContainsSnomed(FormS.SelectedSnomed.SnomedCode,DiseaseDefCur.DiseaseDefNum)) {//DiseaseDefNum could be zero
+			if(DiseaseDef.ContainsSnomed(FormS.SelectedSnomed.SnomedCode,DiseaseDefCur.Id)) {//DiseaseDefNum could be zero
 				MsgBox.Show(this,"Snomed code already exists in the problems list.");
 				return;
 			}
@@ -342,14 +342,14 @@ namespace OpenDental{
 			if(FormI.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			if(DiseaseDefs.ContainsICD9(FormI.SelectedIcd9.ICD9Code,DiseaseDefCur.DiseaseDefNum)) {
+			if(DiseaseDef.ContainsICD9(FormI.SelectedIcd9.Code,DiseaseDefCur.Id)) {
 				MsgBox.Show(this,"ICD-9 code already exists in the problems list.");
 				return;
 			}
-			DiseaseDefCur.ICD9Code=FormI.SelectedIcd9.ICD9Code;
-			string i9descript=ICD9s.GetCodeAndDescription(FormI.SelectedIcd9.ICD9Code);
+			DiseaseDefCur.ICD9Code=FormI.SelectedIcd9.Code;
+			string i9descript=ICD9.GetCodeAndDescription(FormI.SelectedIcd9.Code);
 			if(i9descript=="") {
-				textICD9.Text=FormI.SelectedIcd9.ICD9Code;
+				textICD9.Text=FormI.SelectedIcd9.Code;
 			}
 			else {
 				textICD9.Text=i9descript;
@@ -363,12 +363,12 @@ namespace OpenDental{
 			if(FormI.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			if(DiseaseDefs.ContainsIcd10(FormI.SelectedIcd10.Icd10Code,DiseaseDefCur.DiseaseDefNum)) {
+			if(DiseaseDef.ContainsICD10(FormI.SelectedIcd10.Code,DiseaseDefCur.Id)) {
 				MsgBox.Show(this,"ICD-10 code already exists in the problems list.");
 				return;
 			}
-			DiseaseDefCur.Icd10Code=FormI.SelectedIcd10.Icd10Code;
-			textIcd10.Text=FormI.SelectedIcd10.Icd10Code+"-"+FormI.SelectedIcd10.Description;
+			DiseaseDefCur.ICD10Code=FormI.SelectedIcd10.Code;
+			textIcd10.Text=FormI.SelectedIcd10.Code+"-"+FormI.SelectedIcd10.Description;
 		}
 
 		private void butDelete_Click(object sender,EventArgs e) {
@@ -380,7 +380,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"This problem def is currently in use and cannot be deleted.");
 				return;
 			}
-			SecurityLogMsgText=DiseaseDefCur.DiseaseName+" "+Lan.g(this,"deleted.");
+			SecurityLogMsgText=DiseaseDefCur.Name+" "+Lan.g(this,"deleted.");
 			DiseaseDefCur=null;//Flags this disease for removal in outside forms.
 			DialogResult=DialogResult.OK;
 		}
@@ -391,14 +391,14 @@ namespace OpenDental{
 				return;
 			}
 			//Icd9Code and SnomedCode set on load or on return from code picker forms
-			DiseaseDefCur.DiseaseName=textName.Text;
-			DiseaseDefCur.IsHidden=checkIsHidden.Checked;
+			DiseaseDefCur.Name=textName.Text;
+			DiseaseDefCur.Hidden=checkIsHidden.Checked;
 			//Possibly remove this part and let the sync take care of insert/update in FormDiseaseDefs.cs
 			if(IsNew) {
-				SecurityLogMsgText=DiseaseDefCur.DiseaseName+" added.";
+				SecurityLogMsgText=DiseaseDefCur.Name+" added.";
 			}
 			else{
-				SecurityLogMsgText=DiseaseDefCur.DiseaseName;
+				SecurityLogMsgText=DiseaseDefCur.Name;
 			}
 			//Cache invalidation done in FormDiseaseDefs.cs
 			DialogResult=DialogResult.OK;

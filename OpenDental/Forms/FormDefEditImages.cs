@@ -22,7 +22,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public bool IsNew;
 		private System.Windows.Forms.CheckBox checkHidden;
-		private Def DefCur;
+		private Definition DefCur;
 		private CheckBox checkT;
 		private CheckBox checkS;
 		private CheckBox checkP;
@@ -36,7 +36,7 @@ namespace OpenDental{
 		private GroupBox groupBox1;
 		
 		///<summary></summary>
-		public FormDefEditImages(Def defCur) {
+		public FormDefEditImages(Definition defCur) {
 			InitializeComponent();// Required for Windows Form Designer support
 			Lan.F(this);
 			DefCur=defCur.Copy();
@@ -289,39 +289,39 @@ namespace OpenDental{
 
 		private void FormDefEdit_Load(object sender,System.EventArgs e) {
 			//Also see Defs.GetImageCat and ImageCategorySpecial when reworking this form.
-			textName.Text=DefCur.ItemName;
+			textName.Text=DefCur.Description;
 			//textValue.Text=DefCur.ItemValue;
-			if(DefCur.ItemValue.Contains("X")) {
+			if(DefCur.Value.Contains("X")) {
 				checkX.Checked=true;
 			}
-			if(DefCur.ItemValue.Contains("F")) {
+			if(DefCur.Value.Contains("F")) {
 				checkF.Checked=true;
 			}
-			if(DefCur.ItemValue.Contains("L")) {
+			if(DefCur.Value.Contains("L")) {
 				checkL.Checked=true;
 			}
-			if(DefCur.ItemValue.Contains("P")) {
+			if(DefCur.Value.Contains("P")) {
 				checkP.Checked=true;
 			}
-			if(DefCur.ItemValue.Contains("S")) {
+			if(DefCur.Value.Contains("S")) {
 				checkS.Checked=true;
 			}
-			if(DefCur.ItemValue.Contains("T")) {
+			if(DefCur.Value.Contains("T")) {
 				checkT.Checked=true;
 			}
-			if(DefCur.ItemValue.Contains("R")) {
+			if(DefCur.Value.Contains("R")) {
 				checkR.Checked=true;
 			}
-			if(DefCur.ItemValue.Contains("E") || (IsNew && Preferences.GetInt(PrefName.ImagesModuleTreeIsCollapsed)!=1)) {
+			if(DefCur.Value.Contains("E") || (IsNew && Preference.GetInt(PreferenceName.ImagesModuleTreeIsCollapsed)!=1)) {
 					checkE.Checked=true;
 			}
-			if(DefCur.ItemValue.Contains("A")) {
+			if(DefCur.Value.Contains("A")) {
 				checkA.Checked=true;
 			}
-			if(DefCur.ItemValue.Contains("C")) {
+			if(DefCur.Value.Contains("C")) {
 				checkC.Checked=true;
 			}
-			checkHidden.Checked=DefCur.IsHidden;
+			checkHidden.Checked=DefCur.Hidden;
 		}
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(checkHidden.Checked) {
@@ -335,7 +335,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Name required.");
 				return;
 			}
-			DefCur.ItemName=textName.Text;
+			DefCur.Description=textName.Text;
 			string itemVal="";
 			if(checkX.Checked) {
 				itemVal+="X";
@@ -364,22 +364,22 @@ namespace OpenDental{
 			if(checkA.Checked) {
 				itemVal+="A";
 			}
-			if(!IsNew && checkE.Checked != DefCur.ItemValue.Contains("E")) {//If checkbox has been changed since opening form.
+			if(!IsNew && checkE.Checked != DefCur.Value.Contains("E")) {//If checkbox has been changed since opening form.
 				if(MsgBox.Show(this,true,"Expanded by default option changed.  This change will affect all users.  Continue?")) {
 					//Remove all user specific preferences to enforce the new default.
-					UserOdPrefs.DeleteForFkey(0,UserOdFkeyType.Definition,DefCur.DefNum);
+					UserOdPrefs.DeleteForFkey(0,UserOdFkeyType.Definition,DefCur.Id);
 				}
 			}
 			if(checkC.Checked) {
 				itemVal+="C";
 			}
-			DefCur.ItemValue=itemVal;
-			DefCur.IsHidden=checkHidden.Checked;
+			DefCur.Value=itemVal;
+			DefCur.Hidden=checkHidden.Checked;
 			if(IsNew){
-				Defs.Insert(DefCur);
+                Definition.Insert(DefCur);
 			}
 			else{
-				Defs.Update(DefCur);
+                Definition.Update(DefCur);
 			}
 			DialogResult=DialogResult.OK;
 		}

@@ -156,12 +156,12 @@ namespace OpenDentBusiness.UI
             Brush openBrush;
             Brush closedBrush;
             Brush holidayBrush;
-            List<Def> listDefs = Defs.GetDefsForCategory(DefCat.AppointmentColors);
+            List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.AppointmentColors);
             try
             {
-                openBrush = new SolidBrush(listDefs[0].ItemColor);
-                closedBrush = new SolidBrush(listDefs[1].ItemColor);
-                holidayBrush = new SolidBrush(listDefs[3].ItemColor);
+                openBrush = new SolidBrush(listDefs[0].Color);
+                closedBrush = new SolidBrush(listDefs[1].Color);
+                holidayBrush = new SolidBrush(listDefs[3].Color);
             }
             catch
             {//this is just for design-time
@@ -280,12 +280,12 @@ namespace OpenDentBusiness.UI
             Font blockFont = new Font("Arial", fontSize);
             string blockText;
             RectangleF rect;
-            Color colorBlockText = Defs.GetDefsForCategory(DefCat.AppointmentColors, true)[4].ItemColor;
+            Color colorBlockText = Definition.GetByCategory(DefinitionCategory.AppointmentColors)[4].Color;
             for (int i = 0; i < schedForType.Length; i++)
             {
-                blockBrush = new SolidBrush(Defs.GetColor(DefCat.BlockoutTypes, schedForType[i].BlockoutType));
-                penOutline = new Pen(Defs.GetColor(DefCat.BlockoutTypes, schedForType[i].BlockoutType), 2);
-                blockText = Defs.GetName(DefCat.BlockoutTypes, schedForType[i].BlockoutType) + "\r\n" + schedForType[i].Note;
+                blockBrush = new SolidBrush(Defs.GetColor(DefinitionCategory.BlockoutTypes, schedForType[i].BlockoutType,Color.White));
+                penOutline = new Pen(Defs.GetColor(DefinitionCategory.BlockoutTypes, schedForType[i].BlockoutType, Color.Black), 2);
+                blockText = Defs.GetName(DefinitionCategory.BlockoutTypes, schedForType[i].BlockoutType) + "\r\n" + schedForType[i].Note;
                 for (int o = 0; o < schedForType[i].Ops.Count; o++)
                 {
                     int startHour = startTime.Hour;
@@ -348,7 +348,7 @@ namespace OpenDentBusiness.UI
                             + (schedForType[i].StopTime - schedForType[i].StartTime).Minutes * LineH / MinPerRow);
                     }
                     //paint either solid block or outline
-                    if (Preferences.GetBool(PrefName.SolidBlockouts))
+                    if (Preference.GetBool(PreferenceName.SolidBlockouts))
                     {
                         g.FillRectangle(blockBrush, rect);
                         g.DrawLine(Pens.Black, rect.X, rect.Y + 1, rect.Right - 1, rect.Y + 1);
@@ -375,7 +375,7 @@ namespace OpenDentBusiness.UI
             Font blockFont = new Font("Arial", fontSize);
             string blockText;
             RectangleF rect;
-            Color colorBlockText = Defs.GetDefsForCategory(DefCat.AppointmentColors, true)[4].ItemColor;
+            Color colorBlockText = Definition.GetByCategory(DefinitionCategory.AppointmentColors)[4].Color;
             for (int i = 0; i < schedForType.Length; i++)
             {
                 blockText = Lans.g("ContrAppt", "Web Sched ASAP Slot") + "\r\n" + schedForType[i].Note;
@@ -529,7 +529,7 @@ namespace OpenDentBusiness.UI
             Brush openBrush;
             try
             {
-                openBrush = new SolidBrush(Defs.GetFirstForCategory(DefCat.AppointmentColors).ItemColor);
+                openBrush = new SolidBrush(Defs.GetFirstForCategory(DefinitionCategory.AppointmentColors).Color);
             }
             catch
             {//this is just for design-time
@@ -678,7 +678,7 @@ namespace OpenDentBusiness.UI
         public static void DrawTimeIndicatorLine(Graphics g)
         {
             int curTimeY = (int)(DateTime.Now.Hour * LineH * RowsPerHr + DateTime.Now.Minute / 60f * (float)LineH * RowsPerHr);
-            using (Pen penAppointmentTimeLineColor = new Pen(Preferences.GetColor(PrefName.AppointmentTimeLineColor)))
+            using (Pen penAppointmentTimeLineColor = new Pen(Preference.GetColor(PreferenceName.AppointmentTimeLineColor)))
             {
                 g.DrawLine(penAppointmentTimeLineColor, 0, curTimeY, TimeWidth * 2 + ProvWidth * ProvCount + ColWidth * ColCount, curTimeY);
                 g.DrawLine(penAppointmentTimeLineColor, 0, curTimeY + 1, TimeWidth * 2 + ProvWidth * ProvCount + ColWidth * ColCount, curTimeY + 1);
@@ -943,7 +943,7 @@ namespace OpenDentBusiness.UI
                         ColWidth = (ApptSheetWidth - TimeWidth * 2 - ProvWidth * ProvCount) / ColCount;
                     }
                 }
-                MinPerIncr = Preferences.GetInt(PrefName.AppointmentTimeIncrement);
+                MinPerIncr = Preference.GetInt(PreferenceName.AppointmentTimeIncrement);
                 MinPerRow = (float)MinPerIncr / RowsPerIncr;
                 RowsPerHr = 60 / MinPerIncr * RowsPerIncr;
             }

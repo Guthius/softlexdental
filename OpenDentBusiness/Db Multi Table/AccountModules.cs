@@ -355,7 +355,7 @@ namespace OpenDentBusiness
             DataTable rawPay = DataConnection.GetTable(command);
             decimal payamt;
             decimal amt;
-            List<Def> listDefs = Defs.GetDefsForCategory(DefCat.AccountColors);
+            List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.AccountColors);
             for (int i = 0; i < rawPay.Rows.Count; i++)
             {
                 row = table.NewRow();
@@ -366,12 +366,12 @@ namespace OpenDentBusiness
                 row["charges"] = "";
                 row["ClaimNum"] = 0;
                 row["ClaimPaymentNum"] = "0";
-                row["colorText"] = listDefs[3].ItemColor.ToArgb().ToString();
+                row["colorText"] = listDefs[3].Color.ToArgb().ToString();
                 if (payPlanPlanNum != 0)
                 {//ins payments
                     row["ClaimNum"] = PIn.Long(rawPay.Rows[i]["ClaimNum"].ToString());
                     row["ClaimPaymentNum"] = rawPay.Rows[i]["ClaimPaymentNum"].ToString();
-                    row["colorText"] = listDefs[7].ItemColor.ToArgb().ToString();
+                    row["colorText"] = listDefs[7].Color.ToArgb().ToString();
                 }
                 if (payPlanPlanNum == 0)
                 {
@@ -396,12 +396,12 @@ namespace OpenDentBusiness
                 row["dateTimeSort"] = PIn.DateT(rawPay.Rows[i]["SecDateTEdit"].ToString());//SecDateTEdit will be used for sorting if RandomKeys is enabled
                 if (payPlanPlanNum == 0)
                 {
-                    row["description"] = Defs.GetName(DefCat.PaymentTypes, PIn.Long(rawPay.Rows[i]["PayType"].ToString()));
+                    row["description"] = Defs.GetName(DefinitionCategory.PaymentTypes, PIn.Long(rawPay.Rows[i]["PayType"].ToString()));
                     payamt = PIn.Decimal(rawPay.Rows[i]["PayAmt"].ToString());
                 }
                 else
                 {
-                    row["description"] = Defs.GetName(DefCat.InsurancePaymentType, PIn.Long(rawPay.Rows[i]["PayType"].ToString()));
+                    row["description"] = Defs.GetName(DefinitionCategory.InsurancePaymentType, PIn.Long(rawPay.Rows[i]["PayType"].ToString()));
                     payamt = PIn.Decimal(rawPay.Rows[i]["CheckAmt"].ToString());
                 }
                 if (rawPay.Rows[i]["CheckNum"].ToString() != "")
@@ -514,7 +514,7 @@ namespace OpenDentBusiness
                 dictPatFNames = fam.ListPats.ToDictionary(x => x.PatNum.ToString(), x => x.FName);
             }
             #region commlog
-            List<Def> listCommLogTypeDefs = Defs.GetDefsForCategory(DefCat.CommLogTypes);
+            List<Definition> listCommLogTypeDefs = Definition.GetByCategory(DefinitionCategory.CommLogTypes);
             long podiumProgramNum = Programs.GetCur(ProgramName.Podium).ProgramNum;
             bool showPodiumCommlogs = PIn.Bool(ProgramProperties.GetPropVal(podiumProgramNum, Podium.PropertyDescs.ShowCommlogsInChartAndAccount));
             string andNotPodiumCommlog = " AND (commlog.CommSource!=" + POut.Int((int)CommItemSource.ProgramLink) + " "
@@ -531,11 +531,11 @@ namespace OpenDentBusiness
                 row = table.NewRow();
                 dateT = PIn.DateT(rowCur["CommDateTime"].ToString());
                 long commTypeDefNum = PIn.Long(rowCur["CommType"].ToString());
-                Def commlogType = listCommLogTypeDefs.FirstOrDefault(x => x.DefNum == commTypeDefNum);
+                Definition commlogType = listCommLogTypeDefs.FirstOrDefault(x => x.Id == commTypeDefNum);
                 //If Def exists and not an empty color use that color. Otherwise, leave row blank.
-                if (commlogType != null && commlogType.ItemColor.ToArgb() != Color.Empty.ToArgb())
+                if (commlogType != null && commlogType.Color.ToArgb() != Color.Empty.ToArgb())
                 {
-                    row["colorText"] = commlogType.ItemColor.ToArgb().ToString();
+                    row["colorText"] = commlogType.Color.ToArgb().ToString();
                 }
                 row["CommDateTime"] = dateT;
                 row["commDate"] = dateT.ToString(Lans.GetShortDateTimeFormat());
@@ -545,7 +545,7 @@ namespace OpenDentBusiness
                     row["commTime"] = dateT.ToString("h:mm") + dateT.ToString("%t").ToLower();
                 }
                 row["CommlogNum"] = rowCur["CommlogNum"].ToString();
-                row["commType"] = Defs.GetName(DefCat.CommLogTypes, commTypeDefNum, listCommLogTypeDefs);
+                row["commType"] = Defs.GetName(DefinitionCategory.CommLogTypes, commTypeDefNum, listCommLogTypeDefs);
                 row["EmailMessageNum"] = "0";
                 row["FormPatNum"] = "0";
                 row["mode"] = "";
@@ -748,7 +748,7 @@ namespace OpenDentBusiness
             bool showProcBreakdown = false;
             if (!stmtCur.IsInvoice)
             {
-                showProcBreakdown = Preferences.GetBool(PrefName.StatementShowProcBreakdown);
+                showProcBreakdown = Preference.GetBool(PreferenceName.StatementShowProcBreakdown);
             }
             List<long> listPayPlanNums = new List<long>();
             foreach (Patient guarantor in listSuperFamilyGuars)
@@ -762,7 +762,7 @@ namespace OpenDentBusiness
                 decimal payPlanDue = 0;
                 decimal balanceForward = 0;
                 DataSet account = GetAccount(guarantor.PatNum, stmtCur.DateRangeFrom, stmtCur.DateRangeTo, true, false, stmtCur.StatementNum, showProcBreakdown,
-                    Preferences.GetBool(PrefName.StatementShowNotes), stmtCur.IsInvoice, Preferences.GetBool(PrefName.StatementShowAdjNotes), true, guarantor, fam,
+                    Preference.GetBool(PreferenceName.StatementShowNotes), stmtCur.IsInvoice, Preference.GetBool(PreferenceName.StatementShowAdjNotes), true, guarantor, fam,
                     out payPlanDue, out balanceForward, stmtCur, isComputeAging, doIncludePatLName, listPayPlanNums);
                 //Setting the PatNum for all rows to the guarantor so that each family will be interminged in one grid. 
                 account.Tables["account"].Rows.Cast<DataRow>().ToList().ForEach(x => x["PatNum"] = guarantor.PatNum);
@@ -841,14 +841,14 @@ namespace OpenDentBusiness
             bool showProcBreakdown = false;
             if (!stmt.IsInvoice)
             {
-                showProcBreakdown = Preferences.GetBool(PrefName.StatementShowProcBreakdown);
+                showProcBreakdown = Preference.GetBool(PreferenceName.StatementShowProcBreakdown);
             }
             Family fam = Patients.GetFamily(patNum);
             Patient pat = fam.GetPatient(patNum);
             decimal payPlanDue = 0;
             decimal balanceForward = 0;
             DataSet retVal = GetAccount(patNum, stmt.DateRangeFrom, stmt.DateRangeTo, stmt.Intermingled, stmt.SinglePatient, stmt.StatementNum, showProcBreakdown,
-                Preferences.GetBool(PrefName.StatementShowNotes), stmt.IsInvoice, Preferences.GetBool(PrefName.StatementShowAdjNotes), true, pat, fam, out payPlanDue,
+                Preference.GetBool(PreferenceName.StatementShowNotes), stmt.IsInvoice, Preference.GetBool(PreferenceName.StatementShowAdjNotes), true, pat, fam, out payPlanDue,
                 out balanceForward, stmt, isComputeAging, doIncludePatLName);
             retVal.Tables.Add(GetApptTable(fam, stmt.SinglePatient, patNum));
             retVal.Tables.Add(GetMisc(fam, patNum, payPlanDue, balanceForward, stmt.StatementType, retVal));//table=misc; Just holds some info we can't find anywhere else.
@@ -883,9 +883,9 @@ namespace OpenDentBusiness
             if (isComputeAging)
             {
                 //run aging.-------------------------------------------------------
-                if (Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily))
+                if (Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily))
                 {
-                    Ledgers.ComputeAging(pat.Guarantor, Preferences.GetDate(PrefName.DateLastAging));
+                    Ledgers.ComputeAging(pat.Guarantor, Preference.GetDate(PreferenceName.DateLastAging));
                 }
                 else
                 {
@@ -965,7 +965,7 @@ namespace OpenDentBusiness
             }
             DateTime procdate;
             decimal writeoff;
-            List<Def> listDefs = Defs.GetDefsForCategory(DefCat.AccountColors);
+            List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.AccountColors);
             foreach (DataRow rawClaimPayRow in rawClaimPay.Rows)
             {//0 rows if isInvoice or is LimitedStatement with no procs
                 row = table.NewRow();
@@ -985,7 +985,7 @@ namespace OpenDentBusiness
                 long clinicNumCur = PIn.Long(rawClaimPayRow["ClinicNum"].ToString());
                 row["clinic"] = Clinics.GetDesc(clinicNumCur);
                 row["ClinicNum"] = clinicNumCur;
-                row["colorText"] = listDefs[7].ItemColor.ToArgb().ToString();
+                row["colorText"] = listDefs[7].Color.ToArgb().ToString();
                 amt = PIn.Decimal(rawClaimPayRow["InsPayAmt_"].ToString());//payments tracked in payment plans will show in the payment plan grid
                 writeoff = PIn.Decimal(rawClaimPayRow["WriteOff_"].ToString());
                 if (rawClaimPayRow["PayPlanNum"].ToString() != "0" && amt + writeoff == 0)
@@ -1010,7 +1010,7 @@ namespace OpenDentBusiness
                 }
                 if (writeoff != 0)
                 {
-                    string writeoffDescript = Preferences.GetString(PrefName.InsWriteoffDescript);
+                    string writeoffDescript = Preference.GetString(PreferenceName.InsWriteoffDescript);
                     if (writeoffDescript == "")
                     {
                         writeoffDescript = Lans.g("AccountModule", "Writeoff");
@@ -1136,15 +1136,15 @@ namespace OpenDentBusiness
                 string procCode = rawProcRow["ProcCode"].ToString();
                 if (procCode == "D9986")
                 {//Broken appointment procedure
-                    row["colorText"] = Defs.GetDefByExactName(DefCat.AccountColors, "Broken Appointment Procedure").ItemColor.ToArgb().ToString();
+                    row["colorText"] = Definition.GetByDescription(DefinitionCategory.AccountColors, "Broken Appointment Procedure").Color.ToArgb().ToString();
                 }
                 else if (procCode == "D9987")
                 {//Canceled appointment procedure
-                    row["colorText"] = Defs.GetDefByExactName(DefCat.AccountColors, "Canceled Appointment Procedure").ItemColor.ToArgb().ToString();
+                    row["colorText"] = Definition.GetByDescription(DefinitionCategory.AccountColors, "Canceled Appointment Procedure").Color.ToArgb().ToString();
                 }
                 else
                 {//Not a broken appointment procedure.
-                    row["colorText"] = Defs.GetDefByExactName(DefCat.AccountColors, "Default").ItemColor.ToArgb().ToString();
+                    row["colorText"] = Definition.GetByDescription(DefinitionCategory.AccountColors, "Default").Color.ToArgb().ToString();
                 }
                 row["creditsDouble"] = 0;
                 row["credits"] = "";
@@ -1214,7 +1214,7 @@ namespace OpenDentBusiness
                     extraDetail += Lans.g("AccountModule", "Ins Paid: ") + insPayAmt.ToString("c");
                     if (writeOff > 0)
                     {
-                        string writeoffDescript = Preferences.GetString(PrefName.InsWriteoffDescript);
+                        string writeoffDescript = Preference.GetString(PreferenceName.InsWriteoffDescript);
                         if (writeoffDescript == "")
                         {
                             writeoffDescript = Lans.g("AccountModule", "Writeoff");
@@ -1341,12 +1341,12 @@ namespace OpenDentBusiness
                 long clinicNumCur = PIn.Long(rawAdj.Rows[i]["ClinicNum"].ToString());
                 row["clinic"] = Clinics.GetDesc(clinicNumCur);
                 row["ClinicNum"] = clinicNumCur;
-                row["colorText"] = listDefs[1].ItemColor.ToArgb().ToString();
+                row["colorText"] = listDefs[1].Color.ToArgb().ToString();
                 dateT = PIn.DateT(rawAdj.Rows[i]["AdjDate"].ToString());
                 row["DateTime"] = dateT;
                 row["date"] = dateT.ToString(Lans.GetShortDateTimeFormat());
                 row["dateTimeSort"] = PIn.DateT(rawAdj.Rows[i]["SecDateTEdit"].ToString());//SecDateTEdit will be used for sorting if RandomKeys is enabled
-                row["description"] = Defs.GetName(DefCat.AdjTypes, PIn.Long(rawAdj.Rows[i]["AdjType"].ToString()));
+                row["description"] = Defs.GetName(DefinitionCategory.AdjTypes, PIn.Long(rawAdj.Rows[i]["AdjType"].ToString()));
                 if (rawAdj.Rows[i]["AdjNote"].ToString() != "" && showAdjNotes)
                 {
                     row["description"] += "\r\n" + rawAdj.Rows[i]["AdjNote"].ToString();
@@ -1479,7 +1479,7 @@ namespace OpenDentBusiness
                     rowRp["AdjNums_"] += string.Join(",", listPaySplitMatches.Select(x => x.AdjNum));
                 }
             }
-            PayPlanVersions payPlanVersionCur = (PayPlanVersions)Preferences.GetInt(PrefName.PayPlansVersion);
+            PayPlanVersions payPlanVersionCur = (PayPlanVersions)Preference.GetInt(PreferenceName.PayPlansVersion);
             decimal payamt;
             //if isInvoice or if it's a LimitedStatement and no paysplits or procs were selected there will be 0 rows and this loop will be skipped
             for (int i = 0; i < rawPay.Rows.Count; i++)
@@ -1513,7 +1513,7 @@ namespace OpenDentBusiness
                 long clinicNumCur = PIn.Long(rawPay.Rows[i]["ClinicNum"].ToString());
                 row["clinic"] = Clinics.GetDesc(clinicNumCur);
                 row["ClinicNum"] = clinicNumCur;
-                row["colorText"] = listDefs[3].ItemColor.ToArgb().ToString();
+                row["colorText"] = listDefs[3].Color.ToArgb().ToString();
                 amt = PIn.Decimal(rawPay.Rows[i]["splitAmt_"].ToString());
                 row["creditsDouble"] = amt;
                 row["credits"] = ((decimal)row["creditsDouble"]).ToString("n");
@@ -1521,7 +1521,7 @@ namespace OpenDentBusiness
                 row["DateTime"] = dateT;
                 row["date"] = dateT.ToString(Lans.GetShortDateTimeFormat());
                 row["dateTimeSort"] = PIn.DateT(rawPay.Rows[i]["SecDateTEdit"].ToString());//MAX SecDateTEdit will be used for sorting if RandomKeys is enabled
-                row["description"] = Defs.GetName(DefCat.PaymentTypes, PIn.Long(rawPay.Rows[i]["PayType"].ToString()));
+                row["description"] = Defs.GetName(DefinitionCategory.PaymentTypes, PIn.Long(rawPay.Rows[i]["PayType"].ToString()));
                 if (rawPay.Rows[i]["CheckNum"].ToString() != "")
                 {
                     row["description"] += " #" + rawPay.Rows[i]["CheckNum"].ToString();
@@ -1539,7 +1539,7 @@ namespace OpenDentBusiness
                 }
                 if (rawPay.Rows[i]["UnearnedType"].ToString() != "0")
                 {
-                    row["description"] += " - " + Defs.GetName(DefCat.PaySplitUnearnedType, PIn.Long(rawPay.Rows[i]["UnearnedType"].ToString()));
+                    row["description"] += " - " + Defs.GetName(DefinitionCategory.PaySplitUnearnedType, PIn.Long(rawPay.Rows[i]["UnearnedType"].ToString()));
                 }
                 if (rawPay.Rows[i]["PayType"].ToString() == "0")
                 {//if a txfr, clear the description
@@ -1554,7 +1554,7 @@ namespace OpenDentBusiness
                     }
                     row["description"] += rawPay.Rows[i]["PayNote"].ToString();
                 }
-                if (Preferences.GetBool(PrefName.AccountShowPaymentNums))
+                if (Preference.GetBool(PreferenceName.AccountShowPaymentNums))
                 {
                     row["description"] += "\r\n" + Lans.g("AccountModule", "Payment Number: ") + rawPay.Rows[i]["PayNum"].ToString();
                 }
@@ -1674,7 +1674,7 @@ namespace OpenDentBusiness
                 long clinicNumCur = PIn.Long(rawClaim.Rows[i]["ClinicNum"].ToString());
                 row["clinic"] = Clinics.GetDesc(clinicNumCur);
                 row["ClinicNum"] = clinicNumCur;
-                row["colorText"] = listDefs[4].ItemColor.ToArgb().ToString();
+                row["colorText"] = listDefs[4].Color.ToArgb().ToString();
                 //might be changed lower down based on claim status
                 row["creditsDouble"] = 0;
                 row["credits"] = "";
@@ -1717,7 +1717,7 @@ namespace OpenDentBusiness
                     {
                         row["description"] += daterec.ToShortDateString();
                     }
-                    row["colorText"] = listDefs[8].ItemColor.ToArgb().ToString();
+                    row["colorText"] = listDefs[8].Color.ToArgb().ToString();
                 }
                 else if (claimStatus == "U")
                 {
@@ -1766,7 +1766,7 @@ namespace OpenDentBusiness
                 amtpaid = PIn.Decimal(rawClaim.Rows[i]["InsPayAmt"].ToString());
                 writeoff = PIn.Decimal(rawClaim.Rows[i]["WriteOff"].ToString());
                 deductible = PIn.Decimal(rawClaim.Rows[i]["DedApplied"].ToString());
-                if (!Preferences.GetBool(PrefName.BalancesDontSubtractIns)
+                if (!Preference.GetBool(PreferenceName.BalancesDontSubtractIns)
                     && (claimStatus == "W" || claimStatus == "S")
                     && rawClaim.Rows[i]["ClaimType"].ToString() != "Cap")
                 {
@@ -1792,7 +1792,7 @@ namespace OpenDentBusiness
                 }
                 if (writeoff != 0)
                 {
-                    string writeoffDesctipt = Preferences.GetString(PrefName.InsWriteoffDescript);
+                    string writeoffDesctipt = Preference.GetString(PreferenceName.InsWriteoffDescript);
                     if (writeoffDesctipt == "")
                     {
                         writeoffDesctipt = Lans.g("ContrAccount", "Writeoff");
@@ -1803,7 +1803,7 @@ namespace OpenDentBusiness
                 {
                     row["description"] += "\r\n" + Lans.g("ContrAccount", "Deductible Applied:") + " " + deductible.ToString("c");
                 }
-                if (!Preferences.GetBool(PrefName.BalancesDontSubtractIns)
+                if (!Preference.GetBool(PreferenceName.BalancesDontSubtractIns)
                     && (claimStatus == "W" || claimStatus == "S")
                     && rawClaim.Rows[i]["ClaimType"].ToString() != "Cap")
                 {
@@ -1882,7 +1882,7 @@ namespace OpenDentBusiness
                 row["ClaimPaymentNum"] = "0";
                 row["clinic"] = "";
                 row["ClinicNum"] = "0";
-                row["colorText"] = listDefs[5].ItemColor.ToArgb().ToString();
+                row["colorText"] = listDefs[5].Color.ToArgb().ToString();
                 row["creditsDouble"] = 0;
                 row["credits"] = "";
                 dateT = PIn.DateT(rowCur["DateSent"].ToString());
@@ -1968,7 +1968,7 @@ namespace OpenDentBusiness
                     long clinicNumCur = PIn.Long(rawPayPlan.Rows[i]["ClinicNum"].ToString());
                     row["clinic"] = Clinics.GetDesc(clinicNumCur);
                     row["ClinicNum"] = clinicNumCur;
-                    row["colorText"] = listDefs[6].ItemColor.ToArgb().ToString();
+                    row["colorText"] = listDefs[6].Color.ToArgb().ToString();
                     //amt=PIn.PDouble(rawPayPlan.Rows[i]["principal_"].ToString());
                     amt = PIn.Decimal(rawPayPlan.Rows[i]["CompletedAmt"].ToString());
                     row["creditsDouble"] = amt;
@@ -2090,7 +2090,7 @@ namespace OpenDentBusiness
                     long clinicNumCur = PIn.Long(rawPayPlan2.Rows[i]["ClinicNum"].ToString());
                     row["clinic"] = Clinics.GetDesc(clinicNumCur);
                     row["ClinicNum"] = clinicNumCur;
-                    row["colorText"] = listDefs[6].ItemColor.ToArgb().ToString();
+                    row["colorText"] = listDefs[6].Color.ToArgb().ToString();
                     dateT = PIn.DateT(rawPayPlan2.Rows[i]["ChargeDate"].ToString());
                     row["DateTime"] = dateT;
                     row["date"] = dateT.ToString(Lans.GetShortDateTimeFormat());
@@ -2172,7 +2172,7 @@ namespace OpenDentBusiness
                     long clinicNumCur = PIn.Long(rawPayPlan3.Rows[i]["ClinicNum"].ToString());
                     row["clinic"] = Clinics.GetDesc(clinicNumCur);
                     row["ClinicNum"] = clinicNumCur;
-                    row["colorText"] = listDefs[6].ItemColor.ToArgb().ToString();
+                    row["colorText"] = listDefs[6].Color.ToArgb().ToString();
                     dateT = PIn.DateT(rawPayPlan3.Rows[i]["ChargeDate"].ToString());
                     row["DateTime"] = dateT;
                     row["date"] = dateT.ToString(Lans.GetShortDateTimeFormat());
@@ -2647,7 +2647,7 @@ namespace OpenDentBusiness
                     }
                 }
                 //If on version 1, don't show closed plans with nothing due. If on version 2, don't show closed payplans at all.
-                if (rawPayPlan.Rows[i]["IsClosed"].ToString() == "1" && (Preferences.GetInt(PrefName.PayPlansVersion) == 2 || bal == 0))
+                if (rawPayPlan.Rows[i]["IsClosed"].ToString() == "1" && (Preference.GetInt(PreferenceName.PayPlansVersion) == 2 || bal == 0))
                 {
                     continue;
                 }
@@ -2707,7 +2707,7 @@ namespace OpenDentBusiness
                 //remove future entries, going backwards
                 for (int d = rawAmort.Rows.Count - 1; d >= 0; d--)
                 {
-                    if ((DateTime)rawAmort.Rows[d]["DateTime"] > toDate.AddDays(Preferences.GetLong(PrefName.PayPlansBillInAdvanceDays)))
+                    if ((DateTime)rawAmort.Rows[d]["DateTime"] > toDate.AddDays(Preference.GetLong(PreferenceName.PayPlansBillInAdvanceDays)))
                     {
                         rawAmort.Rows.RemoveAt(d);
                     }
@@ -3107,7 +3107,7 @@ namespace OpenDentBusiness
                     + "FROM claimproc "
                     + "INNER JOIN claimpayment ON claimpayment.ClaimPaymentNum = claimproc.ClaimPaymentNum "
                     + "WHERE claimproc.PatNum IN (" + POut.String(string.Join(",", listPatNums)) + ") ";
-            if (Preferences.GetBool(PrefName.InvoicePaymentsGridShowNetProd))
+            if (Preference.GetBool(PreferenceName.InvoicePaymentsGridShowNetProd))
             {
                 command += ""
                     //adjustments can already be manually selected to be included in invoices.
@@ -3255,7 +3255,7 @@ namespace OpenDentBusiness
                     claimError = claimError.AppendLine(Lans.g("ContrAccount", "All procedures do not have the same clinic."));
                     return new Tuple<bool, Claim, string>(false, new Claim(), claimError);
                 }
-                if (!Preferences.GetBool(PrefName.EasyHidePublicHealth) && proc.PlaceService != placeService)
+                if (!Preference.GetBool(PreferenceName.EasyHidePublicHealth) && proc.PlaceService != placeService)
                 {
                     claimError = claimError.AppendLine(Lans.g("ContrAccount", "All procedures do not have the same place of service."));
                     return new Tuple<bool, Claim, string>(false, new Claim(), claimError);
@@ -3397,7 +3397,7 @@ namespace OpenDentBusiness
                 case "Med":
                     ClaimCur.PatRelat = PatPlans.GetFromList(PatPlanList, SubCur.InsSubNum).Relationship;
                     ClaimCur.ClaimType = "Other";
-                    if (Preferences.GetBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical))
+                    if (Preference.GetBool(PreferenceName.ClaimMedTypeIsInstWhenInsPlanIsMedical))
                     {
                         ClaimCur.MedType = EnumClaimMedType.Institutional;
                     }
@@ -3413,7 +3413,7 @@ namespace OpenDentBusiness
                     ClaimCur.ClaimForm = 0;
                     if (PlanCur.IsMedical)
                     {
-                        if (Preferences.GetBool(PrefName.ClaimMedTypeIsInstWhenInsPlanIsMedical))
+                        if (Preference.GetBool(PreferenceName.ClaimMedTypeIsInstWhenInsPlanIsMedical))
                         {
                             ClaimCur.MedType = EnumClaimMedType.Institutional;
                         }
@@ -3546,7 +3546,7 @@ namespace OpenDentBusiness
                     ClaimCur.ClaimNote += procCodeCur.DefaultClaimNote;
                     listCodeNums.Add(procCodeCur.CodeNum);
                 }
-                if (!ClaimCur.IsOrtho && Preferences.GetBool(PrefName.OrthoClaimMarkAsOrtho))
+                if (!ClaimCur.IsOrtho && Preference.GetBool(PreferenceName.OrthoClaimMarkAsOrtho))
                 {//if it's already marked as Ortho (from a previous procedure), just skip this logic.
                     CovCat orthoCategory = CovCats.GetFirstOrDefault(x => x.EbenefitCat == EbenefitCategory.Orthodontics, true);
                     if (orthoCategory != null)
@@ -3561,9 +3561,9 @@ namespace OpenDentBusiness
                             }
                             else if (!Byte.TryParse(patNote.OrthoMonthsTreatOverride.ToString(), out ClaimCur.OrthoTotalM))
                             {
-                                ClaimCur.OrthoTotalM = Preferences.GetByte(PrefName.OrthoDefaultMonthsTreat);
+                                ClaimCur.OrthoTotalM = Preference.GetByte(PreferenceName.OrthoDefaultMonthsTreat);
                             }
-                            if (Preferences.GetBool(PrefName.OrthoClaimUseDatePlacement))
+                            if (Preference.GetBool(PreferenceName.OrthoClaimUseDatePlacement))
                             {
                                 DateTime orthoProcDate = Procedures.GetFirstOrthoProcDate(patNote);
                                 if (orthoProcDate != DateTime.MinValue)
@@ -3594,8 +3594,8 @@ namespace OpenDentBusiness
             }
             Claims.CalculateAndUpdate(procsForPat, planList, ClaimCur, PatPlanList, Benefits.Refresh(PatPlanList, subList), pat, subList);
             //Insert claim snapshots for historical reporting purposes.
-            if (Preferences.GetBool(PrefName.ClaimSnapshotEnabled)
-                && PIn.Enum<ClaimSnapshotTrigger>(Preferences.GetString(PrefName.ClaimSnapshotTriggerType), true) == ClaimSnapshotTrigger.ClaimCreate
+            if (Preference.GetBool(PreferenceName.ClaimSnapshotEnabled)
+                && PIn.Enum<ClaimSnapshotTrigger>(Preference.GetString(PreferenceName.ClaimSnapshotTriggerType), true) == ClaimSnapshotTrigger.ClaimCreate
                 && claimType != "PreAuth")
             {
                 ClaimSnapshots.CreateClaimSnapshot(ClaimProcs.Refresh(pat.PatNum).FindAll(x => x.ClaimNum == ClaimCur.ClaimNum), ClaimSnapshotTrigger.ClaimCreate, claimType);

@@ -1291,13 +1291,13 @@ namespace OpenDental {
 				_tempPdfFile=Preferences.GetRandomTempFile(".pdf");
 				SheetPrinting.CreatePdf(SheetCur,_tempPdfFile,Stmt,MedLabCur);
 				//Import pdf, this will move the pdf into the correct location for the patient.
-				long defNum=Defs.GetByExactName(DefCat.ImageCats,"Letters");
+				long defNum=Defs.GetByExactName(DefinitionCategory.ImageCats,"Letters");
 				if(defNum==0) {
 					//This will throw an exception if all ImageCats defs are hidden.  However, many other places in this program make the same assumption that
 					//at least one of these definitions is not hidden.
-					Def def=Defs.GetCatList((int)DefCat.ImageCats).FirstOrDefault(x => !x.IsHidden);
-					defNum=def.DefNum;
-					MessageBox.Show(this,Lan.g(this,"The Image Category Definition \"Letters\" could not be found.  Referral letter saved to:\r\n")+def.ItemName);
+					Definition def= Definition.GetByCategory(DefinitionCategory.ImageCats).FirstOrDefault();
+					defNum=def.Id;
+					MessageBox.Show(this,Lan.g(this,"The Image Category Definition \"Letters\" could not be found.  Referral letter saved to:\r\n")+def.Description);
 				}
 				Document doc=ImageStore.Import(_tempPdfFile,defNum,patCur);
 				//Update sheetCur with the docnum
@@ -1603,21 +1603,21 @@ namespace OpenDental {
 				//Determine the first category that this PP should be saved to.
 				//"A"==payplan; see FormDefEditImages.cs
 				//look at ContrTreat.cs to change it to handle more than one
-				List<Def> listDefs=Defs.GetDefsForCategory(DefCat.ImageCats,true);
+				List<Definition> listDefs=Definition.GetByCategory(DefinitionCategory.ImageCats);
 				for(int i = 0;i<listDefs.Count;i++) {
-					if(Regex.IsMatch(listDefs[i].ItemValue,@"A")) {
-						category=listDefs[i].DefNum;
+					if(Regex.IsMatch(listDefs[i].Value,@"A")) {
+						category=listDefs[i].Id;
 						break;
 					}
 				}
 				if(category==0) {
-					List<Def> listImageCatDefsShort=Defs.GetDefsForCategory(DefCat.ImageCats,true);
-					List<Def> listImageCatDefsLong=Defs.GetDefsForCategory(DefCat.ImageCats);
+					List<Definition> listImageCatDefsShort=Definition.GetByCategory(DefinitionCategory.ImageCats);
+					List<Definition> listImageCatDefsLong=Definition.GetByCategory(DefinitionCategory.ImageCats);;
 					if(listImageCatDefsShort.Count!=0) {
-						category=listImageCatDefsShort[0].DefNum;//put it in the first category.
+						category=listImageCatDefsShort[0].Id;//put it in the first category.
 					}
 					else if(listImageCatDefsLong.Count!=0) {//All categories are hidden
-						category=listImageCatDefsLong[0].DefNum;//put it in the first category.
+						category=listImageCatDefsLong[0].Id;//put it in the first category.
 					}
 					else {
 						MsgBox.Show(this,"Error saving document. Unable to find image category.");

@@ -123,7 +123,7 @@ namespace OpenDental
             }
 
             string explanation = Userods.IsPasswordStrong(newPasswordTextBox.Text);
-            if (Preferences.GetBool(PrefName.PasswordsMustBeStrong))
+            if (Preference.GetBool(PreferenceName.PasswordsMustBeStrong))
             {
                 if (explanation != "")
                 {

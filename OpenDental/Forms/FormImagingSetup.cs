@@ -556,8 +556,8 @@ namespace OpenDental{
 			textScanDocResolution.Text=ComputerPrefs.LocalComputer.ScanDocResolution.ToString();
 			textScanDocQuality.Text=ComputerPrefs.LocalComputer.ScanDocQuality.ToString();
 			//textScanDocQuality.Text=PrefC.GetLong(PrefName.ScannerCompression).ToString();
-			slider.MinVal=Preferences.GetInt(PrefName.ImageWindowingMin);
-			slider.MaxVal=Preferences.GetInt(PrefName.ImageWindowingMax);
+			slider.MinVal=Preference.GetInt(PreferenceName.ImageWindowingMin);
+			slider.MaxVal=Preference.GetInt(PreferenceName.ImageWindowingMax);
 			upDownPort.Value=ComputerPrefs.LocalComputer.SensorPort;
 			comboType.Text=ComputerPrefs.LocalComputer.SensorType;
 			checkBinned.Checked=ComputerPrefs.LocalComputer.SensorBinned;
@@ -588,7 +588,7 @@ namespace OpenDental{
 		}
 
 		private void butSetScanner_Click(object sender,EventArgs e) {
-			xImageDeviceManager.Obfuscator.ActivateEZTwain();
+			//xImageDeviceManager.Obfuscator.ActivateEZTwain();
 			EZTwain.SelectImageSource(this.Handle);
 		}
 
@@ -612,11 +612,11 @@ namespace OpenDental{
 			ComputerPrefs.LocalComputer.ScanDocGrayscale=checkScanDocGrayscale.Checked;
 			ComputerPrefs.LocalComputer.ScanDocResolution=PIn.Int(textScanDocResolution.Text);
 			ComputerPrefs.LocalComputer.ScanDocQuality=PIn.Byte(textScanDocQuality.Text);
-			//Prefs.UpdateLong(PrefName.ScannerCompression,PIn.Long(textScanDocQuality.Text));
-			Prefs.UpdateLong(PrefName.ImageWindowingMin,slider.MinVal);
-			Prefs.UpdateLong(PrefName.ImageWindowingMax,slider.MaxVal);
+			//Preference.Update(PrefName.ScannerCompression,PIn.Long(textScanDocQuality.Text));
+			Preference.Update(PreferenceName.ImageWindowingMin,slider.MinVal);
+			Preference.Update(PreferenceName.ImageWindowingMax,slider.MaxVal);
 			//Prefs.UpdateBool(PrefName.ScannerSuppressDialog,checkScanDocShowOptions.Checked);
-			//Prefs.UpdateLong(PrefName.ScannerResolution,PIn.Long(textScanDocResolution.Text));
+			//Preference.Update(PrefName.ScannerResolution,PIn.Long(textScanDocResolution.Text));
 			ComputerPrefs.LocalComputer.SensorType=comboType.Text;
 			ComputerPrefs.LocalComputer.SensorPort=(int)upDownPort.Value;
 			ComputerPrefs.LocalComputer.SensorExposure=(int)upDownExposure.Value;

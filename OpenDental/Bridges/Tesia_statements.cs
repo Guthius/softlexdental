@@ -46,13 +46,13 @@ namespace OpenDental.Bridges {
 				writer.WriteElementString("Phone",phone);
 			}
 			else{//not using clinics
-				writer.WriteElementString("Name",Preferences.GetString(PrefName.PracticeTitle));
-				writer.WriteElementString("Address",Preferences.GetString(PrefName.PracticeAddress));
-				writer.WriteElementString("Address2",Preferences.GetString(PrefName.PracticeAddress2));
-				writer.WriteElementString("City",Preferences.GetString(PrefName.PracticeCity));
-				writer.WriteElementString("State",Preferences.GetString(PrefName.PracticeST));
-				writer.WriteElementString("Zip",Preferences.GetString(PrefName.PracticeZip));
-				writer.WriteElementString("Phone",Preferences.GetString(PrefName.PracticePhone));
+				writer.WriteElementString("Name",Preference.GetString(PreferenceName.PracticeTitle));
+				writer.WriteElementString("Address",Preference.GetString(PreferenceName.PracticeAddress));
+				writer.WriteElementString("Address2",Preference.GetString(PreferenceName.PracticeAddress2));
+				writer.WriteElementString("City",Preference.GetString(PreferenceName.PracticeCity));
+				writer.WriteElementString("State",Preference.GetString(PreferenceName.PracticeST));
+				writer.WriteElementString("Zip",Preference.GetString(PreferenceName.PracticeZip));
+				writer.WriteElementString("Phone",Preference.GetString(PreferenceName.PracticePhone));
 			}
 			writer.WriteEndElement();//RemitAddress
 			//Patient-------------------------------------------------------------------------------
@@ -67,11 +67,11 @@ namespace OpenDental.Bridges {
 			writer.WriteEndElement();//Patient
 			//Account summary-----------------------------------------------------------------------
 			writer.WriteStartElement("AccountSummary");
-			if(Preferences.GetLong(PrefName.StatementsCalcDueDate)==-1){
+			if(Preference.GetLong(PreferenceName.StatementsCalcDueDate)==-1){
 				writer.WriteElementString("DueDate",Lan.g("FormRpStatement","Upon Receipt"));
 			}
 			else{
-				DateTime dueDate=DateTime.Today.AddDays(Preferences.GetLong(PrefName.StatementsCalcDueDate));
+				DateTime dueDate=DateTime.Today.AddDays(Preference.GetLong(PreferenceName.StatementsCalcDueDate));
 				writer.WriteElementString("DueDate",dueDate.ToString("MM/dd/yyyy"));
 			}
 			writer.WriteElementString("StatementDate",stmt.DateSent.ToString("MM/dd/yyyy"));
@@ -92,7 +92,7 @@ namespace OpenDental.Bridges {
 					amountDue+=PIn.Double(dataSet.Tables["misc"].Rows[m]["value"].ToString());
 				}
 			}
-			if(Preferences.GetBool(PrefName.BalancesDontSubtractIns)) {
+			if(Preference.GetBool(PreferenceName.BalancesDontSubtractIns)) {
 				writer.WriteElementString("EstInsPayments","");//optional.
 			}
 			else {//this is typical

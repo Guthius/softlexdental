@@ -65,7 +65,7 @@ namespace OpenDentBusiness
                 return retVal;
             }
             DateTime dateEvaluating = data.DateEvaluating;
-            SearchBehaviorCriteria searchType = (SearchBehaviorCriteria)Preferences.GetInt(PrefName.AppointmentSearchBehavior);
+            SearchBehaviorCriteria searchType = (SearchBehaviorCriteria)Preference.GetInt(PreferenceName.AppointmentSearchBehavior);
             if (hasProvAndBlockout)
             {//searching for intersection of providers and blockouts get as many results as possible.
                 while (dateEvaluating < dateEnd)
@@ -388,17 +388,17 @@ namespace OpenDentBusiness
             #endregion
             #region Remove provider availiabilty for blockouts set to Do Not Schedule
             List<long> listBlockoutsDoNotSchedule = new List<long>();
-            List<Def> listBlockoutsAll = Defs.GetDefsForCategory(DefCat.BlockoutTypes, true);
-            foreach (Def blockout in listBlockoutsAll)
+            List<Definition> listBlockoutsAll = Definition.GetByCategory(DefinitionCategory.BlockoutTypes);
+            foreach (Definition blockout in listBlockoutsAll)
             {
-                if (blockout.ItemValue.Contains(BlockoutType.NoSchedule.GetDescription()))
+                if (blockout.Value.Contains(BlockoutType.NoSchedule.GetDescription()))
                 {
-                    listBlockoutsDoNotSchedule.Add(blockout.DefNum);//do not return results for blockouts set to 'Do Not Schedule'
+                    listBlockoutsDoNotSchedule.Add(blockout.Id);//do not return results for blockouts set to 'Do Not Schedule'
                     continue;
                 }
-                if (blockoutType != 0 && blockoutType != blockout.DefNum)
+                if (blockoutType != 0 && blockoutType != blockout.Id)
                 {
-                    listBlockoutsDoNotSchedule.Add(blockout.DefNum);//do not return results for blockouts that are not of our requested type
+                    listBlockoutsDoNotSchedule.Add(blockout.Id);//do not return results for blockouts that are not of our requested type
                 }
             }
             if (listBlockoutsDoNotSchedule.Count > 0)

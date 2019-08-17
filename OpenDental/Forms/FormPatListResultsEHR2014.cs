@@ -22,8 +22,8 @@ namespace OpenDental {
 		}
 
 		private void FormPatListResults_Load(object sender,EventArgs e) {
-			if(Preferences.GetString(PrefName.SoftwareName)!="") {
-				this.Text+=" - "+Preferences.GetString(PrefName.SoftwareName);
+			if(Preference.GetString(PreferenceName.SoftwareName)!="") {
+				this.Text+=" - "+Preference.GetString(PreferenceName.SoftwareName);
 			}
 			EhrMeasureEvent measureEvent=new EhrMeasureEvent();
 			measureEvent.DateTEvent=DateTime.Now;
@@ -79,9 +79,9 @@ namespace OpenDental {
 						gridMain.Columns.Add(col);
 						break;
 					case EhrRestrictionType.Problem:
-						colWidth=System.Convert.ToInt32(g.MeasureString("Date Diagnosed: "+DiseaseDefs.GetNameByCode(elementList[i].CompareString),this.Font).Width);
+						colWidth=System.Convert.ToInt32(g.MeasureString("Date Diagnosed: "+DiseaseDef.GetNameByCode(elementList[i].CompareString),this.Font).Width);
 						colWidth=colWidth+(colWidth/10);//Add 10%
-						col=new ODGridColumn("Date Diagnosed: "+DiseaseDefs.GetNameByCode(elementList[i].CompareString),colWidth,HorizontalAlignment.Center);
+						col=new ODGridColumn("Date Diagnosed: "+DiseaseDef.GetNameByCode(elementList[i].CompareString),colWidth,HorizontalAlignment.Center);
 						col.SortingStrategy=ODGridSortingStrategy.DateParse;
 						gridMain.Columns.Add(col);
 						break;
@@ -209,7 +209,7 @@ namespace OpenDental {
 				text=providerName;
 				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
 				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
-				text=Preferences.GetString(PrefName.SoftwareName);
+				text=Preference.GetString(PreferenceName.SoftwareName);
 				g.DrawString(text,subHeadingFont,Brushes.Black,center-g.MeasureString(text,subHeadingFont).Width/2,yPos);
 				yPos+=(int)g.MeasureString(text,subHeadingFont).Height;
 				text=DateTime.Now.ToShortDateString();

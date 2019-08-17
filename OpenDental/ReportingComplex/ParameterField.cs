@@ -60,7 +60,7 @@ namespace OpenDental.ReportingComplex
         
         ///<summary>If ValueKind is DefParameter, then this specifies which DefCat.
         ///</summary>
-        public DefCat DefCategory { get; set; }
+        public DefinitionCategory DefCategory { get; set; }
         
         ///<summary>If ValueKind is ForeignKey, then this specifies which one.
         ///</summary>
@@ -97,7 +97,7 @@ namespace OpenDental.ReportingComplex
             EnumerationType = thisEnumerationType;
         }
 
-        public ParameterField(string thisName, FieldValueType thisValueType, ArrayList theseDefaultValues, string thisPromptingText, string thisSnippet, DefCat thisDefCategory)
+        public ParameterField(string thisName, FieldValueType thisValueType, ArrayList theseDefaultValues, string thisPromptingText, string thisSnippet, DefinitionCategory thisDefCategory)
         {
             Name = thisName;
             ValueType = thisValueType;

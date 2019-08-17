@@ -142,7 +142,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one Benefit into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(Benefit benefit,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO benefit (";
 			if(!useExistingPK && isRandomKeys) {
 				benefit.BenefitNum=ReplicationServers.GetKeyNoCache("benefit","BenefitNum");

@@ -38,9 +38,9 @@ namespace OpenDentBusiness.HL7 {
 		}
 
 		private void InitializeVariables() {
-			_sendingFacilityName=Preferences.GetString(PrefName.PracticeTitle);
-			cityWhereEntered=Preferences.GetString(PrefName.PracticeCity);
-			stateWhereEntered=Preferences.GetString(PrefName.PracticeST);
+			_sendingFacilityName= Preference.GetString(PreferenceName.PracticeTitle);
+			cityWhereEntered= Preference.GetString(PreferenceName.PracticeCity);
+			stateWhereEntered= Preference.GetString(PreferenceName.PracticeST);
 			if(Preferences.HasClinicsEnabled && _pat.ClinicNum!=0) {//Using clinics and a clinic is assigned.
 				Clinic clinic=Clinics.GetClinic(_pat.ClinicNum);
 				_sendingFacilityName=clinic.Description;
@@ -349,7 +349,7 @@ namespace OpenDentBusiness.HL7 {
 				if(vaccineObs.ValType==VaccineObsType.Coded) {
 					string codeDescript=vaccineObs.ValReported.Trim();//If we do not know the description, then the code will also be placed into the description. The testing tool required non-empty entries.
 					if(vaccineObs.ValCodeSystem==VaccineObsValCodeSystem.CVX) {
-						Cvx cvx=Cvxs.GetByCode(vaccineObs.ValReported);
+						CVX cvx=CVX.GetByCode(vaccineObs.ValReported);
 						codeDescript=cvx.Description;
 					}
 					else if(vaccineObs.ValCodeSystem==VaccineObsValCodeSystem.HL70064) {
@@ -407,8 +407,8 @@ namespace OpenDentBusiness.HL7 {
 				}
 				//OBX-6 Units.  Required if OBX-2 is "NM" or "SN" (SN appears to be missing from definition).
 				if(vaccineObs.ValType==VaccineObsType.Numeric) {
-					Ucum ucum=Ucums.GetByCode(vaccineObs.UcumCode);
-					WriteCE(6,ucum.UcumCode,ucum.Description,"UCUM");
+					Ucum ucum=Ucum.GetByCode(vaccineObs.UcumCode);
+					WriteCE(6,ucum.Code,ucum.Description,"UCUM");
 				}
 				//OBX-7 References Range.  Optional.
 				//OBX-8 Abnormal Flags.  Optional.
@@ -461,8 +461,8 @@ namespace OpenDentBusiness.HL7 {
 					WriteXCN(10,provEnteredBy.FName,provEnteredBy.LName,provEnteredBy.MI,vaccine.UserNum.ToString(),cityWhereEntered,stateWhereEntered,"D");
 				}
 				else if(userod.EmployeeNum!=0) {
-					Employee employee=Employees.GetEmp(userod.EmployeeNum);
-					WriteXCN(10,employee.FName,employee.LName,employee.MiddleI,vaccine.UserNum.ToString(),cityWhereEntered,stateWhereEntered,"D");
+					Employee employee=Employee.GetById(userod.EmployeeNum);
+					WriteXCN(10,employee.FirstName,employee.LastName,employee.Initials,vaccine.UserNum.ToString(),cityWhereEntered,stateWhereEntered,"D");
 				}
 			}
 			//ORD-11 Verified By.  Optional.
@@ -686,8 +686,8 @@ namespace OpenDentBusiness.HL7 {
 			}
 			else {
 				vaccineDef=VaccineDefs.GetOne(vaccine.VaccineDefNum);
-				Cvx cvx=Cvxs.GetByCode(vaccineDef.CVXCode);
-				WriteCE(5,cvx.CvxCode,cvx.Description,"CVX");
+				CVX cvx=CVX.GetByCode(vaccineDef.CVXCode);
+				WriteCE(5,cvx.Code,cvx.Description,"CVX");
 			}
 			//RXA-6 Administered Amount.  Required (length 1..20).  If amount is not known or not meaningful, then use "999".
 			if(vaccine.AdministeredAmt>0) {
@@ -699,8 +699,8 @@ namespace OpenDentBusiness.HL7 {
 			//RXA-7 Administered Units.  Required if RXA-6 is not "999".  Cadinality [0..1].  Type CE (guide page 53).  Value set HL70396 (guide page 231).  Must be UCUM coding.
 			if(vaccine.AdministeredAmt>0 && vaccine.DrugUnitNum!=0) {
 				DrugUnit drugUnit=DrugUnits.GetOne(vaccine.DrugUnitNum);
-				Ucum ucum=Ucums.GetByCode(drugUnit.UnitIdentifier);
-				WriteCE(7,ucum.UcumCode,ucum.Description,"UCUM");//UCUM is not in table HL70396, but it there was a note stating that it was required in the guide and UCUM was required in the test cases.
+				Ucum ucum=Ucum.GetByCode(drugUnit.UnitIdentifier);
+				WriteCE(7,ucum.Code,ucum.Description,"UCUM");//UCUM is not in table HL70396, but it there was a note stating that it was required in the guide and UCUM was required in the test cases.
 			}
 			//RXA-8 Administered Dosage Form.  Optional.
 			//RXA-9 Administration Notes.  Required if RXA-20 is "CP" or "PA".  Value set NIP 0001.  Type CE.
@@ -753,8 +753,8 @@ namespace OpenDentBusiness.HL7 {
 			}
 			//RXA-17 Substance Manufacturer Name.  Requred if RXA-9.1 is "00".  Cardinality [0..*].  Value set MVX.  Type CE.
 			if(vaccine.CompletionStatus!=VaccineCompletionStatus.NotAdministered && vaccineDef.DrugManufacturerNum!=0) {
-				DrugManufacturer manufacturer=DrugManufacturers.GetOne(vaccineDef.DrugManufacturerNum);
-				WriteCE(17,manufacturer.ManufacturerCode,manufacturer.ManufacturerName,"MVX");
+				Manufacturer manufacturer=Manufacturer.GetById(vaccineDef.DrugManufacturerNum);
+				WriteCE(17,manufacturer.Code,manufacturer.Name,"MVX");
 			}
 			//RXA-18 Substance/Treatment Refusal Reason.  Required if RXA-20 is "RE".  Cardinality [0..*].  Required when RXA-20 is "RE", otherwise do not send.  Value set NIP002.
 			if(vaccine.RefusalReason==VaccineRefusalReason.ParentalDecision) {
@@ -1185,11 +1185,11 @@ namespace OpenDentBusiness.HL7 {
 				if(vaccine.CompletionStatus!=VaccineCompletionStatus.NotAdministered) {//Some fields are not used when the vaccine was not administered.
 					vaccineDef=VaccineDefs.GetOne(vaccine.VaccineDefNum);
 					vaccineName=vaccineDef.VaccineName;
-					if(!Cvxs.CodeExists(vaccineDef.CVXCode)) {
+					if(!CVX.CodeExists(vaccineDef.CVXCode)) {
 						WriteError(sb,"Invalid CVX code '"+vaccineDef.CVXCode+"' for vaccine '"+vaccineDef.VaccineName+"'");
 					}
 					if(vaccineDef.DrugManufacturerNum!=0) {
-						DrugManufacturer manufacturer=DrugManufacturers.GetOne(vaccineDef.DrugManufacturerNum);
+						Manufacturer manufacturer=Manufacturer.GetById(vaccineDef.DrugManufacturerNum);
 						//manufacturer.ManufacturerCode;//TODO: Consider validating MVX codes here. We do not currently store MVX codes.
 					}
 					if(vaccine.AdministrationNoteCode==VaccineAdministrationNote.NewRecord && vaccine.LotNumber.Trim()=="") {
@@ -1204,7 +1204,7 @@ namespace OpenDentBusiness.HL7 {
 				}
 				if(vaccine.AdministeredAmt>0 && vaccine.DrugUnitNum!=0) {
 					DrugUnit drugUnit=DrugUnits.GetOne(vaccine.DrugUnitNum);
-					Ucum ucum=Ucums.GetByCode(drugUnit.UnitIdentifier);
+					Ucum ucum=Ucum.GetByCode(drugUnit.UnitIdentifier);
 					if(ucum==null) {
 						WriteError(sb,"Drug unit invalid UCUM code.");
 					}
@@ -1243,10 +1243,10 @@ namespace OpenDentBusiness.HL7 {
 					}
 				}
 				else {
-					if(stateCodes.IndexOf(Preferences.GetString(PrefName.PracticeST).ToUpper())==-1) {
+					if(stateCodes.IndexOf(Preference.GetString(PreferenceName.PracticeST).ToUpper())==-1) {
 						WriteError(sb,"Practice state must be 2 letter state or territory code for the United States.");
 					}
-					if(Preferences.GetString(PrefName.PracticeCity).Trim()=="") {
+					if(Preference.GetString(PreferenceName.PracticeCity).Trim()=="") {
 						WriteError(sb,"Missing practice city.");
 					}
 				}
@@ -1259,7 +1259,7 @@ namespace OpenDentBusiness.HL7 {
 					if(vaccineObs.ValReported.Trim()=="") {
 						WriteError(sb,"Missing value for observation with type '"+vaccineObs.ValType.ToString()+"' attached to vaccine '"+vaccineName+"'");
 					}
-					Ucum ucum=Ucums.GetByCode(vaccineObs.UcumCode);
+					Ucum ucum=Ucum.GetByCode(vaccineObs.UcumCode);
 					if(ucum==null && vaccineObs.ValType==VaccineObsType.Numeric) {
 						WriteError(sb,"Invalid unit code (must be UCUM) for observation with type '"+vaccineObs.ValType.ToString()+"' attached to vaccine '"+vaccineName+"'");
 					}

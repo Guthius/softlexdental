@@ -223,7 +223,7 @@ namespace OpenDentBusiness
                 activePlan = new TreatPlan()
                 {
                     Heading = Lans.g("TreatPlans", "Active Treatment Plan"),
-                    Note = Preferences.GetString(PrefName.TreatmentPlanNote),
+                    Note = Preference.GetString(PreferenceName.TreatmentPlanNote),
                     TPStatus = TreatPlanStatus.Active,
                     PatNum = patNum,
                     //UserNumPresenter=userNum,
@@ -247,7 +247,7 @@ namespace OpenDentBusiness
                 unassignedPlan = new TreatPlan()
                 {
                     Heading = Lans.g("TreatPlans", "Unassigned"),
-                    Note = Preferences.GetString(PrefName.TreatmentPlanNote),
+                    Note = Preference.GetString(PreferenceName.TreatmentPlanNote),
                     TPStatus = TreatPlanStatus.Inactive,
                     PatNum = patNum,
                     //UserNumPresenter=userNum,

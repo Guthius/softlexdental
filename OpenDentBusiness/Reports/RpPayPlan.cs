@@ -28,7 +28,7 @@ namespace OpenDentBusiness
                 whereProv += ") ";
             }
             string whereClin = "";
-            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Prefs.HasClinicsEnabledNoCache);
+            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Preference.HasClinicsEnabledNoCache);
             if (hasClinicsEnabled)
             {//Using clinics
                 whereClin += " AND payplancharge.ClinicNum IN(";

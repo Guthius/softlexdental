@@ -378,7 +378,7 @@ namespace OpenDental{
 			if(shouldRetainSelection && gridAllMedications.GetSelectedIndex()!=-1) {
 				medSelected=(Medication)gridAllMedications.Rows[gridAllMedications.GetSelectedIndex()].Tag;
 			}
-			List <long> listInUseMedicationNums=Medications.GetAllInUseMedicationNums();
+			List <long> listInUseMedicationNums=Medication.GetAllInUseMedicationNums();
 			int sortColIndex=gridAllMedications.SortedByColumnIdx;
 			bool isSortAscending=gridAllMedications.SortedIsAscending;
 			gridAllMedications.BeginUpdate();
@@ -397,31 +397,31 @@ namespace OpenDental{
 			col=new ODGridColumn(Lan.g(this,"Notes for Generic"),250);
 			gridAllMedications.Columns.Add(col);
 			gridAllMedications.Rows.Clear();
-			List <Medication> listMeds=Medications.GetList(textSearch.Text);
+			List <Medication> listMeds=Medication.Find(textSearch.Text);
 			foreach(Medication med in listMeds) {
 				ODGridRow row=new ODGridRow();
 				row.Tag=med;
-				if(med.MedicationNum==med.GenericNum) {//isGeneric
-					row.Cells.Add(med.MedName);
+				if(!med.GenericId.HasValue) {//isGeneric
+					row.Cells.Add(med.Description);
 					row.Cells.Add("");
 				}
 				else{
-					row.Cells.Add(med.MedName);
-					row.Cells.Add(Medications.GetGenericName(med.GenericNum));
+					row.Cells.Add(med.Description);
+					row.Cells.Add(Medication.GetGenericName(med.GenericId.Value));
 				}
-				if(listInUseMedicationNums.Contains(med.MedicationNum)) {
+				if(listInUseMedicationNums.Contains(med.Id)) {
 					row.Cells.Add("X");//InUse
 				}
 				else {
 					row.Cells.Add("");//InUse
 				}
 				if(CultureInfo.CurrentCulture.Name.EndsWith("US")) {//United States
-					if(med.RxCui==0) {
+					if(string.IsNullOrEmpty(med.RxCui)) {
 						row.Cells.Add(Lan.g(this,"(select)"));
 						row.Cells[row.Cells.Count-1].Bold=true;
 					}
 					else {
-						row.Cells.Add(med.RxCui.ToString());
+						row.Cells.Add(med.RxCui);
 					}
 				}
 				row.Cells.Add(med.Notes);
@@ -432,7 +432,7 @@ namespace OpenDental{
 			if(medSelected!=null) {//Will be null if nothing is selected.
 				for(int i=0;i<gridAllMedications.Rows.Count;i++) {
 					Medication medCur=(Medication)gridAllMedications.Rows[i].Tag;
-					if(medCur.MedicationNum==medSelected.MedicationNum) {
+					if(medCur.Id==medSelected.Id) {
 						gridAllMedications.SetSelected(i,true);
 						break;
 					}
@@ -458,11 +458,11 @@ namespace OpenDental{
 					dictMissingUnique[key]=new List<MedicationPat>();
 					ODGridRow row=new ODGridRow();
 					row.Tag=dictMissingUnique[key];
-					if(medPat.RxCui==0) {
+					if(string.IsNullOrEmpty(medPat.RxCui)) {
 						row.Cells.Add("");
 					}
 					else {
-						row.Cells.Add(medPat.RxCui.ToString());
+						row.Cells.Add(medPat.RxCui);
 					}
 					row.Cells.Add(medPat.MedDescript);
 					gridMissing.Rows.Add(row);
@@ -475,8 +475,8 @@ namespace OpenDental{
 
 		private void butAddGeneric_Click(object sender, System.EventArgs e) {
 			Medication MedicationCur=new Medication();
-			Medications.Insert(MedicationCur);//so that we will have the primary key
-			MedicationCur.GenericNum=MedicationCur.MedicationNum;
+			Medication.Insert(MedicationCur);//so that we will have the primary key
+			MedicationCur.GenericId=MedicationCur.Id;
 			FormMedicationEdit FormME=new FormMedicationEdit();
 			FormME.MedicationCur=MedicationCur;
 			FormME.IsNew=true;
@@ -490,13 +490,13 @@ namespace OpenDental{
 				return;
 			}
 			Medication medSelected=(Medication)gridAllMedications.Rows[gridAllMedications.GetSelectedIndex()].Tag;
-			if(medSelected.MedicationNum!=medSelected.GenericNum){
+			if(medSelected.Id!=medSelected.GenericId){
 				MessageBox.Show(Lan.g(this,"The selected medication is not generic."));
 				return;
 			}
 			Medication MedicationCur=new Medication();
-			Medications.Insert(MedicationCur);//so that we will have the primary key
-			MedicationCur.GenericNum=medSelected.MedicationNum;
+			Medication.Insert(MedicationCur);//so that we will have the primary key
+			MedicationCur.GenericId=medSelected.Id;
 			FormMedicationEdit FormME=new FormMedicationEdit();
 			FormME.MedicationCur=MedicationCur;
 			FormME.IsNew=true;
@@ -530,7 +530,7 @@ namespace OpenDental{
 				return;
 			}
 			//}
-			int countImportedMedications=MedicationL.ImportMedications(listImportMeds,Medications.GetList());
+			int countImportedMedications=MedicationL.ImportMedications(listImportMeds,Medication.All());
 			int countDuplicateMedications=listImportMeds.Count-countImportedMedications;
 			DataValid.SetInvalid(InvalidType.Medications);
 			Cursor=Cursors.Default;
@@ -566,7 +566,7 @@ namespace OpenDental{
 			}
 			try {
 				Cursor=Cursors.WaitCursor;
-				countExportedMeds=MedicationL.ExportMedications(fileName,Medications.GetList());
+				countExportedMeds=MedicationL.ExportMedications(fileName,Medication.All());
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
@@ -582,8 +582,8 @@ namespace OpenDental{
 		private string GetFilenameFromUser(bool isImport) {
 			Cursor=Cursors.WaitCursor;
 			string initialDirectory="";
-			if(Directory.Exists(Preferences.GetString(PrefName.DocPath))) {
-				initialDirectory=Preferences.GetString(PrefName.DocPath);
+			if(Directory.Exists(Preference.GetString(PreferenceName.DocPath))) {
+				initialDirectory=Preference.GetString(PreferenceName.DocPath);
 			}
 			else if(Directory.Exists("C:\\")) {
 				initialDirectory="C:\\";
@@ -620,13 +620,13 @@ namespace OpenDental{
 			if(CultureInfo.CurrentCulture.Name.EndsWith("US") && e.Col==3) {//United States RxNorm Column
 				FormRxNorms formRxNorm=new FormRxNorms();
 				formRxNorm.IsSelectionMode=true;
-				formRxNorm.InitSearchCodeOrDescript=med.MedName;
+				formRxNorm.InitSearchCodeOrDescript=med.Description;
 				formRxNorm.ShowDialog();
 				if(formRxNorm.DialogResult==DialogResult.OK) {
-					med.RxCui=PIn.Long(formRxNorm.SelectedRxNorm.RxCui);
+					med.RxCui=formRxNorm.SelectedRxNorm.RxCui;
 					//The following behavior mimics FormMedicationEdit OK click.
-					Medications.Update(med);
-					MedicationPats.UpdateRxCuiForMedication(med.MedicationNum,med.RxCui);
+					Medication.Update(med);
+					MedicationPats.UpdateRxCuiForMedication(med.Id,med.RxCui);
 					DataValid.SetInvalid(InvalidType.Medications);
 				}
 				FillTab();
@@ -635,13 +635,13 @@ namespace OpenDental{
 
 		private void gridAllMedications_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			Medication med=(Medication)gridAllMedications.Rows[e.Row].Tag;
-			med=Medications.GetMedication(med.MedicationNum);
+			med=Medication.GetById(med.Id);
 			if(med==null) {//Possible to delete the medication from a separate WS while medication loaded in memory.
 				MsgBox.Show(this,"An error occurred loading medication.");
 				return;
 			}
 			if(IsSelectionMode){
-				SelectedMedicationNum=med.MedicationNum;
+				SelectedMedicationNum=med.Id;
 				DialogResult=DialogResult.OK;
 			}
 			else{//normal mode from main menu
@@ -660,40 +660,46 @@ namespace OpenDental{
 				return;
 			}
 			List<MedicationPat> listMedPats=(List<MedicationPat>)gridMissing.Rows[gridMissing.SelectedIndices[0]].Tag;
-			List<Medication> listRxCuiMeds=null;
+			Medication existingMed=null;
 			Medication medGeneric=null;
-			if(listMedPats[0].RxCui!=0) {
-				listRxCuiMeds=Medications.GetAllMedsByRxCui(listMedPats[0].RxCui);
-				medGeneric=listRxCuiMeds.FirstOrDefault(x => x.MedicationNum==x.GenericNum);
-				if(medGeneric==null && listRxCuiMeds.FirstOrDefault(x => x.MedicationNum!=x.GenericNum)!=null) {//A Brand Medication exists with matching RxCui.
-					MsgBox.Show(this,"A brand medication matching the RxNorm of the selected medication already exists in the medication list.  "
-						+"You cannot create a generic for the selected medication.  Use the Convert to Brand button instead.");
-					return;
-				}
-			}
-			if(listRxCuiMeds==null || listRxCuiMeds.Count==0) {//No medications found matching the RxCui
-				medGeneric=new Medication();
-				medGeneric.MedName=listMedPats[0].MedDescript;
-				medGeneric.RxCui=listMedPats[0].RxCui;
-				Medications.Insert(medGeneric);//To get primary key.
-				medGeneric.GenericNum=medGeneric.MedicationNum;
-				Medications.Update(medGeneric);//Now that we have primary key, flag the medication as a generic.
-				FormMedicationEdit FormME=new FormMedicationEdit();
-				FormME.MedicationCur=medGeneric;
-				FormME.IsNew=true;
-				FormME.ShowDialog();//This window refreshes the Medication cache if the user clicked OK.
-				if(FormME.DialogResult!=DialogResult.OK) {
-					return;//User canceled.
-				}
-			}
-			else if(medGeneric!=null &&
-				!MsgBox.Show(this,true,"A generic medication matching the RxNorm of the selected medication already exists in the medication list.  "
-					+"Click OK to use the existing medication as the generic for the selected medication, or click Cancel to abort."))
-			{
-				return;
-			}
+
+            if (!string.IsNullOrEmpty(listMedPats[0].RxCui))
+            {
+                existingMed = Medication.GetByRxCui(listMedPats[0].RxCui);
+                if (existingMed != null && existingMed.GenericId.HasValue)
+                {//A Brand Medication exists with matching RxCui.
+                    MsgBox.Show(this, "A brand medication matching the RxNorm of the selected medication already exists in the medication list.  "
+                        + "You cannot create a generic for the selected medication.  Use the Convert to Brand button instead.");
+                    return;
+                }
+            }
+
+            if (existingMed == null)
+            {//No medications found matching the RxCui
+                medGeneric = new Medication();
+                medGeneric.Description = listMedPats[0].MedDescript;
+                medGeneric.RxCui = listMedPats[0].RxCui;
+                Medication.Insert(medGeneric);//To get primary key.
+                medGeneric.GenericId = medGeneric.Id;
+                Medication.Update(medGeneric);//Now that we have primary key, flag the medication as a generic.
+                FormMedicationEdit FormME = new FormMedicationEdit();
+                FormME.MedicationCur = medGeneric;
+                FormME.IsNew = true;
+                FormME.ShowDialog();//This window refreshes the Medication cache if the user clicked OK.
+                if (FormME.DialogResult != DialogResult.OK)
+                {
+                    return;//User canceled.
+                }
+            }
+
+            else if (medGeneric != null &&
+                !MsgBox.Show(this, true, "A generic medication matching the RxNorm of the selected medication already exists in the medication list.  "
+                    + "Click OK to use the existing medication as the generic for the selected medication, or click Cancel to abort."))
+            {
+                return;
+            }
 			Cursor=Cursors.WaitCursor;
-			MedicationPats.UpdateMedicationNumForMany(medGeneric.MedicationNum,listMedPats.Select(x => x.MedicationPatNum).ToList());
+			MedicationPats.UpdateMedicationNumForMany(medGeneric.Id,listMedPats.Select(x => x.MedicationPatNum).ToList());
 			FillTab();
 			Cursor=Cursors.Default;
 			MsgBox.Show(this,"Done.");
@@ -705,22 +711,24 @@ namespace OpenDental{
 				return;
 			}
 			List<MedicationPat> listMedPats=(List<MedicationPat>)gridMissing.Rows[gridMissing.SelectedIndices[0]].Tag;
-			List<Medication> listRxCuiMeds=null;
+			Medication existingMed=null;
 			Medication medBrand=null;
-			if(listMedPats[0].RxCui!=0) {
-				listRxCuiMeds=Medications.GetAllMedsByRxCui(listMedPats[0].RxCui);
-				medBrand=listRxCuiMeds.FirstOrDefault(x => x.MedicationNum!=x.GenericNum);
-				if(medBrand==null && listRxCuiMeds.FirstOrDefault(x => x.MedicationNum==x.GenericNum)!=null) {//A Generic Medication exists with matching RxCui.
-					MsgBox.Show(this,"A generic medication matching the RxNorm of the selected medication already exists in the medication list.  "
-						+"You cannot create a brand for the selected medication.  Use the Convert to Generic button instead.");
-					return;
-				}
-			}
-			if(listRxCuiMeds==null || listRxCuiMeds.Count==0) {//No medications found matching the RxCui
+            if (!string.IsNullOrEmpty(listMedPats[0].RxCui))
+            {
+                existingMed = Medication.GetByRxCui(listMedPats[0].RxCui);
+                if (existingMed != null && !existingMed.GenericId.HasValue)
+                {//A Generic Medication exists with matching RxCui.
+                    MsgBox.Show(this, "A generic medication matching the RxNorm of the selected medication already exists in the medication list.  "
+                        + "You cannot create a brand for the selected medication.  Use the Convert to Generic button instead.");
+                    return;
+                }
+            }
+
+			if(existingMed == null) {//No medications found matching the RxCui
 				Medication medGeneric=null;
 				if(gridAllMedications.SelectedIndices.Length > 0) {
 					medGeneric=(Medication)gridAllMedications.Rows[gridAllMedications.SelectedIndices[0]].Tag;
-					if(medGeneric.MedicationNum!=medGeneric.GenericNum) {
+					if(medGeneric.Id!=medGeneric.GenericId) {
 						medGeneric=null;//The selected medication is a brand medication, not a generic medication.
 					}
 				}
@@ -730,10 +738,10 @@ namespace OpenDental{
 					return;
 				}
 				medBrand=new Medication();
-				medBrand.MedName=listMedPats[0].MedDescript;
+				medBrand.Description=listMedPats[0].MedDescript;
 				medBrand.RxCui=listMedPats[0].RxCui;
-				medBrand.GenericNum=medGeneric.MedicationNum;
-				Medications.Insert(medBrand);
+				medBrand.GenericId=medGeneric.Id;
+				Medication.Insert(medBrand);
 				FormMedicationEdit FormME=new FormMedicationEdit();
 				FormME.MedicationCur=medBrand;
 				FormME.IsNew=true;
@@ -749,7 +757,7 @@ namespace OpenDental{
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
-			MedicationPats.UpdateMedicationNumForMany(medBrand.MedicationNum,listMedPats.Select(x => x.MedicationPatNum).ToList());
+			MedicationPats.UpdateMedicationNumForMany(medBrand.Id,listMedPats.Select(x => x.MedicationPatNum).ToList());
 			FillTab();
 			Cursor=Cursors.Default;
 			MsgBox.Show(this,"Done.");
@@ -761,7 +769,7 @@ namespace OpenDental{
 				MessageBox.Show(Lan.g(this,"Please select an item first."));
 				return;
 			}
-			SelectedMedicationNum=((Medication)gridAllMedications.Rows[gridAllMedications.GetSelectedIndex()].Tag).MedicationNum;
+			SelectedMedicationNum=((Medication)gridAllMedications.Rows[gridAllMedications.GetSelectedIndex()].Tag).Id;
 			DialogResult=DialogResult.OK;
 		}
 

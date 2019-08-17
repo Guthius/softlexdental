@@ -476,7 +476,7 @@ namespace OpenDentBusiness {
 			//aggregate with master
 			if(isEmail) {
 				if(canAggregate) {
-					s=Preferences.GetString(PrefName.EmailMasterTemplate).Replace("@@@body@@@",strbOut.ToString());
+					s= Preference.GetString(PreferenceName.EmailMasterTemplate).Replace("@@@body@@@",strbOut.ToString());
 					return s;
 				}
 				return strbOut.ToString();

@@ -28,7 +28,7 @@ namespace OpenDental {
 			}
 			comboFieldTypes.SelectedIndex=0;
 			FillAvailable();
-			checkMedicaidLength.Checked=Preferences.GetBool(PrefName.EnforceMedicaidIDLength);
+			checkMedicaidLength.Checked=Preference.GetBool(PreferenceName.EnforceMedicaidIDLength);
 		}
 
 		private void FillAvailable() {
@@ -49,7 +49,7 @@ namespace OpenDental {
 			for(int i=0;i<arrayRequiredFieldNames.Length;i++) {
 				switch(arrayRequiredFieldNames[i]) {
 					case RequiredFieldName.AdmitDate:
-						if(Preferences.GetBool(PrefName.EasyHideHospitals)) {
+						if(Preference.GetBool(PreferenceName.EasyHideHospitals)) {
 							continue;//Don't include AdmitDate in the list if hospitals is not enabled
 						}
 						break;
@@ -59,7 +59,7 @@ namespace OpenDental {
 						}
 						break;
 					case RequiredFieldName.Ward:
-						if(Preferences.GetBool(PrefName.EasyHideHospitals)) {
+						if(Preference.GetBool(PreferenceName.EasyHideHospitals)) {
 							continue;//Don't include Ward in the list if hospitals is not enabled
 						}
 						break;
@@ -74,7 +74,7 @@ namespace OpenDental {
 					case RequiredFieldName.MothersMaidenFirstName:
 					case RequiredFieldName.MothersMaidenLastName:
 					case RequiredFieldName.DateTimeDeceased:
-						if(!Preferences.GetBool(PrefName.ShowFeatureEhr)) {
+						if(!Preference.GetBool(PreferenceName.ShowFeatureEhr)) {
 							continue;//EHR features
 						}
 						break;
@@ -90,7 +90,7 @@ namespace OpenDental {
 						break;
 					case RequiredFieldName.MedicaidID:
 					case RequiredFieldName.MedicaidState:
-						if(Preferences.GetBool(PrefName.EasyHideMedicaid)) {
+						if(Preference.GetBool(PreferenceName.EasyHideMedicaid)) {
 							continue;//Don't show Medicaid fields
 						}
 						break;
@@ -100,13 +100,13 @@ namespace OpenDental {
 					case RequiredFieldName.GradeLevel:
 					case RequiredFieldName.TreatmentUrgency:
 					case RequiredFieldName.ResponsibleParty:
-						if(Preferences.GetBool(PrefName.EasyHidePublicHealth)) { 
+						if(Preference.GetBool(PreferenceName.EasyHidePublicHealth)) { 
 							continue;//Don't show Public Health fields
 						}
 						break;
 					case RequiredFieldName.Ethnicity:
-						if(Preferences.GetBool(PrefName.EasyHidePublicHealth)
-							|| !Preferences.GetBool(PrefName.ShowFeatureEhr))
+						if(Preference.GetBool(PreferenceName.EasyHidePublicHealth)
+							|| !Preference.GetBool(PreferenceName.ShowFeatureEhr))
 						{
 							continue;//Don't show Ethnicity
 						}
@@ -209,7 +209,7 @@ namespace OpenDental {
 						}
 						break;
 					case RequiredFieldName.BillingType:
-						condVal=Defs.GetName(DefCat.BillingTypes,PIn.Long(condVal));
+						condVal=Defs.GetName(DefinitionCategory.BillingTypes,PIn.Long(condVal));
 						break;
 					case RequiredFieldName.PrimaryProvider:
 						condVal=Providers.GetLongDesc(PIn.Long(condVal));
@@ -411,7 +411,7 @@ namespace OpenDental {
 		}
 
 		private void FormRequiredFields_FormClosing(object sender,FormClosingEventArgs e) {
-			if(Prefs.UpdateBool(PrefName.EnforceMedicaidIDLength,checkMedicaidLength.Checked)) {
+			if(Preference.Update(PreferenceName.EnforceMedicaidIDLength,checkMedicaidLength.Checked)) {
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			DataValid.SetInvalid(InvalidType.RequiredFields);

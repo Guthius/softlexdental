@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using CodeBase;
@@ -46,7 +47,7 @@ namespace OpenDentBusiness
         public static bool IsReminderTask(Task task)
         {
             //No remoting role check; no call to db
-            if (!Preferences.GetBool(PrefName.TasksUseRepeating) && !String.IsNullOrEmpty(task.ReminderGroupId)
+            if (!Preference.GetBool(PreferenceName.TasksUseRepeating) && !String.IsNullOrEmpty(task.ReminderGroupId)
                 && task.ReminderType != TaskReminderType.NoReminder)
             {
                 return true;
@@ -142,9 +143,9 @@ namespace OpenDentBusiness
                 //All notes for the tasks.	(Ordered by dateTime)		
                 listTaskNotes = ReportsComplex.RunFuncOnReportServer(() => TaskNotes.RefreshForTasks(listSearchTaskNums), doRunOnReportServer);
             }
-            List<Def> listDefs = Defs.GetDefsForCategory(DefCat.ProgNoteColors, true);
-            int textColor = Defs.GetColor(DefCat.ProgNoteColors, listDefs[18].DefNum).ToArgb();//18="Patient Note Text"
-            int textCompletedColor = Defs.GetColor(DefCat.ProgNoteColors, listDefs[20].DefNum).ToArgb();//20="Completed Pt Note Text"
+            List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.ProgNoteColors);
+            int textColor = Defs.GetColor(DefinitionCategory.ProgNoteColors, listDefs[18].Id, Color.White).ToArgb();//18="Patient Note Text"
+            int textCompletedColor = Defs.GetColor(DefinitionCategory.ProgNoteColors, listDefs[20].Id,Color.Black).ToArgb();//20="Completed Pt Note Text"
             List<TaskList> listTaskLists = ReportsComplex.RunFuncOnReportServer(() => TaskLists.GetMany(listTaskListNums), doRunOnReportServer);
             string txt;
             DataRow row;
@@ -492,17 +493,17 @@ namespace OpenDentBusiness
                 listRows.Add(table.Rows[i]);
             }
             #region Set Sort Variables. This greatly increases sort speed.
-            List<Def> listTaskPriorities = Defs.GetDefsForCategory(DefCat.TaskPriorities, true);
+            List<Definition> listTaskPriorities = Definition.GetByCategory(DefinitionCategory.TaskPriorities);
             for (int i = 0; i < listTaskPriorities.Count; i++)
             {
-                if (listTaskPriorities[i].ItemValue.ToUpper() == "D")
+                if (listTaskPriorities[i].Value.ToUpper() == "D")
                 {
-                    _defaultTaskPriorityDefNum = listTaskPriorities[i].DefNum;
+                    _defaultTaskPriorityDefNum = listTaskPriorities[i].Id;
                     break;
                 }
             }
             #endregion
-            List<Def> listDefs = Defs.GetDefsForCategory(DefCat.TaskPriorities);
+            List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.TaskPriorities);
             List<TaskCompareObj> listTaskCompareObjs = new List<TaskCompareObj>();
             foreach (DataRow row in listRows)
             {
@@ -663,12 +664,12 @@ namespace OpenDentBusiness
                 listRows.Add(table.Rows[i]);
             }
             #region Set Sort Variables. This greatly increases sort speed.
-            List<Def> listTaskPriorities = Defs.GetDefsForCategory(DefCat.TaskPriorities, true);
+            List<Definition> listTaskPriorities = Definition.GetByCategory(DefinitionCategory.TaskPriorities);
             for (int i = 0; i < listTaskPriorities.Count; i++)
             {
-                if (listTaskPriorities[i].ItemValue.ToUpper() == "D")
+                if (listTaskPriorities[i].Value.ToUpper() == "D")
                 {
-                    _defaultTaskPriorityDefNum = listTaskPriorities[i].DefNum;
+                    _defaultTaskPriorityDefNum = listTaskPriorities[i].Id;
                     break;
                 }
             }
@@ -695,7 +696,7 @@ namespace OpenDentBusiness
                 }
             }
             #endregion
-            List<Def> listDefs = Defs.GetDefsForCategory(DefCat.TaskPriorities);
+            List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.TaskPriorities);
             List<TaskCompareObj> listTaskCompareObjs = new List<TaskCompareObj>();
             foreach (DataRow row in listRows)
             {
@@ -791,7 +792,7 @@ namespace OpenDentBusiness
         {
             string command = string.Empty;
             //Only add JOINs if filtering.  Filtering will never happen if clinics are turned off, because regions link via clinics.
-            if ((GlobalTaskFilterType)Preferences.GetInt(PrefName.TasksGlobalFilterType) == GlobalTaskFilterType.Disabled
+            if ((GlobalTaskFilterType)Preference.GetInt(PreferenceName.TasksGlobalFilterType) == GlobalTaskFilterType.Disabled
                 || globalFilterType == GlobalTaskFilterType.None || !Preferences.HasClinicsEnabled)
             {
                 return command;
@@ -808,7 +809,7 @@ namespace OpenDentBusiness
         private static string BuildFilterWhereClause(long currentUserNum, GlobalTaskFilterType globalFilterType, long filterFkey)
         {
             //Only add WHERE clauses if filtering.  Filtering will never happen if clinics are turned off, because regions link via clinics.
-            if ((GlobalTaskFilterType)Preferences.GetInt(PrefName.TasksGlobalFilterType) == GlobalTaskFilterType.Disabled
+            if ((GlobalTaskFilterType)Preference.GetInt(PreferenceName.TasksGlobalFilterType) == GlobalTaskFilterType.Disabled
                 || globalFilterType == GlobalTaskFilterType.None || !Preferences.HasClinicsEnabled)
             {
                 return "";
@@ -1253,7 +1254,7 @@ namespace OpenDentBusiness
                 }
             }
             //1)Sort by IsUnread status
-            if (Preferences.GetBool(PrefName.TasksNewTrackedByUser))
+            if (Preference.GetBool(PreferenceName.TasksNewTrackedByUser))
             {
                 if (x.RowTask["IsUnread"].ToString() != y.RowTask["IsUnread"].ToString())
                 {
@@ -1276,7 +1277,7 @@ namespace OpenDentBusiness
                     yTaskPriorityDefNum = _defaultTaskPriorityDefNum;
                 }
                 //x.ItemOrder.CompareTo(y.ItemOrder)
-                return Defs.GetDef(DefCat.TaskPriorities, xTaskPriorityDefNum, x.ListTaskPriorityDefs).ItemOrder.CompareTo(Defs.GetDef(DefCat.TaskPriorities, yTaskPriorityDefNum, x.ListTaskPriorityDefs).ItemOrder);
+                return Defs.GetDef(DefinitionCategory.TaskPriorities, xTaskPriorityDefNum, x.ListTaskPriorityDefs).SortOrder.CompareTo(Defs.GetDef(DefinitionCategory.TaskPriorities, yTaskPriorityDefNum, x.ListTaskPriorityDefs).SortOrder);
             }
             //3)Sort by Date Time
             return CompareTimes(x.RowTask, y.RowTask);
@@ -1326,7 +1327,7 @@ namespace OpenDentBusiness
         public class TaskCompareObj
         {
             public DataRow RowTask;
-            public List<Def> ListTaskPriorityDefs;
+            public List<Definition> ListTaskPriorityDefs;
         }
     }
 }

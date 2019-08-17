@@ -201,12 +201,12 @@ namespace OpenDental.UI
 				else if(multInputItems[i].ValueType==FieldValueType.Def){
 					//add a psuedo combobox filled with visible defs for one category
 					inputs[i]=new ComboBoxMulti();
-					List<Def> listDefs=Defs.GetDefsForCategory(multInputItems[i].DefCategory,true);
+					List<Definition> listDefs=Definition.GetByCategory(multInputItems[i].DefCategory);
 					for(int j=0;j<listDefs.Count;j++){
-						((ComboBoxMulti)inputs[i]).Items.Add(listDefs[j].ItemName);
+						((ComboBoxMulti)inputs[i]).Items.Add(listDefs[j].Description);
 						if(multInputItems[i].CurrentValues.Count > 0
 							&& multInputItems[i].CurrentValues
-							.Contains(listDefs[j].DefNum))
+							.Contains(listDefs[j].Id))
 						{
 							((ComboBoxMulti)inputs[i]).SetSelected(j,true);
 						}
@@ -356,7 +356,7 @@ namespace OpenDental.UI
     }
 
 		/// <summary></summary>
-		public void AddInputItem(string promptingText,FieldValueType valueType,ArrayList currentValues,EnumType enumerationType,DefCat defCategory,ReportFKType fKType){
+		public void AddInputItem(string promptingText,FieldValueType valueType,ArrayList currentValues,EnumType enumerationType,DefinitionCategory defCategory,ReportFKType fKType){
 			multInputItems.Add(new MultInputItem(promptingText,valueType,currentValues,enumerationType,defCategory,fKType));
 		}
 
@@ -365,11 +365,11 @@ namespace OpenDental.UI
 			ArrayList currentValues=new ArrayList();
 			currentValues.Add(currentValue);
 			//the enumtype and defcat are completely arbitrary.
-			multInputItems.Add(new MultInputItem(promptingText,valueType,currentValues,EnumType.ApptStatus,DefCat.AccountColors,ReportFKType.None));
+			multInputItems.Add(new MultInputItem(promptingText,valueType,currentValues,EnumType.ApptStatus,DefinitionCategory.AccountColors,ReportFKType.None));
 		}
 
 		/// <summary>Overload for using DefCat.</summary>
-		public void AddInputItem(string promptingText,FieldValueType valueType,ArrayList currentValues,DefCat defCategory){
+		public void AddInputItem(string promptingText,FieldValueType valueType,ArrayList currentValues,DefinitionCategory defCategory){
 			if(currentValues==null)
 				currentValues=new ArrayList();
 			multInputItems.Add(new MultInputItem(promptingText,valueType,currentValues,EnumType.ApptStatus,defCategory,ReportFKType.None));
@@ -379,7 +379,7 @@ namespace OpenDental.UI
 		public void AddInputItem(string promptingText,FieldValueType valueType,ArrayList currentValues,EnumType enumerationType){
 			if(currentValues==null)
 				currentValues=new ArrayList();
-			multInputItems.Add(new MultInputItem(promptingText,valueType,currentValues,enumerationType,DefCat.AccountColors,ReportFKType.None));
+			multInputItems.Add(new MultInputItem(promptingText,valueType,currentValues,enumerationType,DefinitionCategory.AccountColors,ReportFKType.None));
 		}
 
 		private void ContrMultInput_Paint(object sender, System.Windows.Forms.PaintEventArgs e) {
@@ -404,10 +404,10 @@ namespace OpenDental.UI
 			}
 			else if(multInputItems[item].ValueType==FieldValueType.Def){
 				ComboBoxMulti comboBox=(ComboBoxMulti)inputs[item];
-				List<Def> listDefs=Defs.GetDefsForCategory(multInputItems[item].DefCategory,true);
+				List<Definition> listDefs=Definition.GetByCategory(multInputItems[item].DefCategory,true);
 				for(int j=0;j<comboBox.SelectedIndices.Count;j++){
 					retVal.Add(
-						listDefs[(int)comboBox.SelectedIndices[j]].DefNum);
+						listDefs[(int)comboBox.SelectedIndices[j]].Id);
 				}
 			}
 			else if(multInputItems[item].ValueType==FieldValueType.Enum){
@@ -470,7 +470,7 @@ namespace OpenDental.UI
 	///<summary>A single input item in the ContrMultInput control.</summary>
 	public struct MultInputItem{
 		/// <summary></summary>
-		public MultInputItem(string promptingText,FieldValueType valueType,ArrayList currentValues,EnumType enumerationType,DefCat defCategory,ReportFKType fKType){
+		public MultInputItem(string promptingText,FieldValueType valueType,ArrayList currentValues,EnumType enumerationType,DefinitionCategory defCategory,ReportFKType fKType){
 			PromptingText=promptingText;
 			ValueType=valueType;
 			CurrentValues=currentValues;
@@ -488,7 +488,7 @@ namespace OpenDental.UI
 		///<summary>If the ValueKind is EnumField, then this specifies which type of enum.</summary>
 		public EnumType EnumerationType;
 		///<summary>If ValueKind is DefParameter, then this specifies which DefCat.</summary>
-		public DefCat DefCategory;
+		public DefinitionCategory DefCategory;
 		///<summary>If ValueKind is Foreign key, then this specifies which table.</summary>
 		public ReportFKType FKType;
 	}

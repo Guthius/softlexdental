@@ -22,7 +22,7 @@ namespace OpenDental {
 
 		private void FormEvaluationCriterionEdit_Load(object sender,EventArgs e) {
 			//There is always going to be an EvaluationCriterion when coming into this window.
-			_gradingScale=GradingScales.GetOne(_evalCritCur.GradingScaleNum);
+			_gradingScale=GradingScale.GetById(_evalCritCur.GradingScaleNum);
 			textCriterionDescript.Text=_evalCritCur.CriterionDescript;
 			textGradingScale.Text=_gradingScale.Description;
 			textNote.Text=_evalCritCur.Notes;

@@ -930,7 +930,7 @@ namespace OpenDentBusiness.HL7 {
 			doc.FileName=".pdf";
 			doc.ImgType=ImageType.Document;
 			doc.DateCreated=DateTime.Now;
-			doc.DocCategory=Defs.GetFirstForCategory(DefCat.ImageCats,true).DefNum;//put it in the first category
+			doc.DocCategory=Defs.GetFirstForCategory(DefinitionCategory.ImageCats,true).Id;//put it in the first category
 			if(_defCur.LabResultImageCat>0) {//if category is set for the def, use that image category
 				doc.DocCategory=_defCur.LabResultImageCat;
 			}

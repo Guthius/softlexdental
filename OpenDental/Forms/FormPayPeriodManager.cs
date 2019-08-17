@@ -397,7 +397,7 @@ namespace OpenDental {
 			else {
 				dateTimeStart.Value=payPeriod.DateStop.AddDays(1);
 			}
-			PayPeriodInterval payPeriodInterval=(PayPeriodInterval)Preferences.GetInt(PrefName.PayPeriodIntervalSetting);
+			PayPeriodInterval payPeriodInterval=(PayPeriodInterval)Preference.GetInt(PreferenceName.PayPeriodIntervalSetting);
 			if(payPeriodInterval==PayPeriodInterval.Weekly) {
 				radioWeekly.Checked=true;
 				numPayPeriods.Text="52";
@@ -410,7 +410,7 @@ namespace OpenDental {
 				radioMonthly.Checked=true;
 				numPayPeriods.Text="12";
 			}
-			int dayOfWeek=Preferences.GetInt(PrefName.PayPeriodPayDay);
+			int dayOfWeek=Preference.GetInt(PreferenceName.PayPeriodPayDay);
 			if(dayOfWeek!=0) {//They have a day of the week selected
 				comboDay.SelectedIndex=dayOfWeek;
 				numDaysAfterPayPeriod.Enabled=false;
@@ -420,10 +420,10 @@ namespace OpenDental {
 			}
 			else {
 				comboDay.SelectedIndex=0;
-				numDaysAfterPayPeriod.Text=Preferences.GetString(PrefName.PayPeriodPayAfterNumberOfDays);
-				checkExcludeWeekends.Checked=Preferences.GetBool(PrefName.PayPeriodPayDateExcludesWeekends);
+				numDaysAfterPayPeriod.Text=Preference.GetString(PreferenceName.PayPeriodPayAfterNumberOfDays);
+				checkExcludeWeekends.Checked=Preference.GetBool(PreferenceName.PayPeriodPayDateExcludesWeekends);
 				if(checkExcludeWeekends.Checked) {
-					if(Preferences.GetBool(PrefName.PayPeriodPayDateBeforeWeekend)) {
+					if(Preference.GetBool(PreferenceName.PayPeriodPayDateBeforeWeekend)) {
 						radioPayBefore.Checked=true;
 					}
 					else {
@@ -647,22 +647,22 @@ namespace OpenDental {
 			}
 			//Save Preferences
 			if(radioWeekly.Checked) {
-				Prefs.UpdateInt(PrefName.PayPeriodIntervalSetting,(int)PayPeriodInterval.Weekly);
+				Preference.Update(PreferenceName.PayPeriodIntervalSetting,(int)PayPeriodInterval.Weekly);
 			}
 			else if(radioBiWeekly.Checked) {
-				Prefs.UpdateInt(PrefName.PayPeriodIntervalSetting,(int)PayPeriodInterval.BiWeekly);
+				Preference.Update(PreferenceName.PayPeriodIntervalSetting,(int)PayPeriodInterval.BiWeekly);
 			}
 			else {
-				Prefs.UpdateInt(PrefName.PayPeriodIntervalSetting,(int)PayPeriodInterval.Monthly);
+				Preference.Update(PreferenceName.PayPeriodIntervalSetting,(int)PayPeriodInterval.Monthly);
 			}
-			Prefs.UpdateInt(PrefName.PayPeriodPayDay,comboDay.SelectedIndex);
-			Prefs.UpdateInt(PrefName.PayPeriodPayAfterNumberOfDays,PIn.Int(numDaysAfterPayPeriod.Text));
-			Prefs.UpdateBool(PrefName.PayPeriodPayDateExcludesWeekends,checkExcludeWeekends.Checked);
+			Preference.Update(PreferenceName.PayPeriodPayDay,comboDay.SelectedIndex);
+			Preference.Update(PreferenceName.PayPeriodPayAfterNumberOfDays,PIn.Int(numDaysAfterPayPeriod.Text));
+			Preference.Update(PreferenceName.PayPeriodPayDateExcludesWeekends,checkExcludeWeekends.Checked);
 			if(radioPayBefore.Checked) {
-				Prefs.UpdateBool(PrefName.PayPeriodPayDateBeforeWeekend,true);
+				Preference.Update(PreferenceName.PayPeriodPayDateBeforeWeekend,true);
 			}
 			else if(radioPayAfter.Checked) {
-				Prefs.UpdateBool(PrefName.PayPeriodPayDateBeforeWeekend,false);
+				Preference.Update(PreferenceName.PayPeriodPayDateBeforeWeekend,false);
 			}
 			DialogResult=DialogResult.OK;
 		}

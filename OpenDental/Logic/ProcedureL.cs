@@ -97,7 +97,7 @@ namespace OpenDental {
 			if(listCompletedProcWithDifferentProv.Count==0) {
 				return false;//no completed procedures or prov changed. 
 			}
-			if(Preferences.GetBool(PrefName.ProcProvChangesClaimProcWithClaim)) {
+			if(Preference.GetBool(PreferenceName.ProcProvChangesClaimProcWithClaim)) {
 				List<ClaimProc> listClaimProcs=ClaimProcs.RefreshForProcs(listCompletedProcWithDifferentProv.Select(x => x.ProcNum).ToList());
 				if(listClaimProcs.Any(x => x.Status==ClaimProcStatus.Received
 					|| x.Status==ClaimProcStatus.Supplemental
@@ -152,7 +152,7 @@ namespace OpenDental {
 			//show what the value would represent if set to complete, in case user changes to complete from another status.
 			bool isInProcess=ProcMultiVisits.IsProcInProcess(procNum,true);
 			listProcStat.Add(new ODBoxItem<ProcStat>(Lan.g("Procedures","Complete"+(isInProcess?" (In Process)":"")),ProcStat.C));
-			if(!Preferences.GetBool(PrefName.EasyHideClinical)) {
+			if(!Preference.GetBool(PreferenceName.EasyHideClinical)) {
 				listProcStat.Add(new ODBoxItem<ProcStat>(Lan.g("Procedures","Existing-Current Prov"),ProcStat.EC));
 				listProcStat.Add(new ODBoxItem<ProcStat>(Lan.g("Procedures","Existing-Other Prov"),ProcStat.EO));
 				listProcStat.Add(new ODBoxItem<ProcStat>(Lan.g("Procedures","Referred Out"),ProcStat.R));
@@ -173,7 +173,7 @@ namespace OpenDental {
 		}
 
 		public static bool AreTimesValid(string timeStart,string timeEnd) {
-			if(Programs.UsingOrion || Preferences.GetBool(PrefName.ShowFeatureMedicalInsurance)) {
+			if(Programs.UsingOrion || Preference.GetBool(PreferenceName.ShowFeatureMedicalInsurance)) {
 				if(!ValidateTime(timeStart)) {
 					MessageBox.Show(Lan.g("Procedures","Start time is invalid."));
 					return false;
@@ -232,7 +232,7 @@ namespace OpenDental {
 		///<summary></summary>
 		public static bool ValidateProvider(List<ClaimProc> listClaimProcsForProc,long selectedProvNum,long provNumForProc) {
 			//validate for provider change
-			if(provNumForProc!=selectedProvNum && Preferences.GetBool(PrefName.ProcProvChangesClaimProcWithClaim)) {
+			if(provNumForProc!=selectedProvNum && Preference.GetBool(PreferenceName.ProcProvChangesClaimProcWithClaim)) {
 				//if selected prov is null (no selection made), no change will happen to the provider
 				if(listClaimProcsForProc.Any(x => x.Status.In(ClaimProcStatus.Received,ClaimProcStatus.Supplemental,ClaimProcStatus.CapClaim))) {
 					MsgBox.Show("Procedures","The provider cannot be changed when this procedure is attached to a claim.");

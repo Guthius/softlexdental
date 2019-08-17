@@ -21,7 +21,7 @@ namespace UnitTestsCore {
 				IsNew=true,
 				LName=lName+suffix,
 				FName=fName+suffix,
-				BillingType= Preferences.GetLong(PrefName.PracticeDefaultBillType),
+				BillingType= Preferences.GetLong(PreferenceName.PracticeDefaultBillType),
 				ClinicNum=clinicNum,
 				Preferred=preferredName,
 				Birthdate=birthDate,
@@ -31,7 +31,7 @@ namespace UnitTestsCore {
 				pat.PriProv=priProvNum;
 			}
 			else {
-				pat.PriProv=Preferences.GetLong(PrefName.PracticeDefaultProv);//This causes standard fee sched to be 53.
+				pat.PriProv=Preferences.GetLong(PreferenceName.PracticeDefaultProv);//This causes standard fee sched to be 53.
 			}
 			if(setPortalAccessInfo) {
 				pat.Address="666 Church St NE";

@@ -290,7 +290,7 @@ namespace OpenDental {
 			List<PayPlanCharge> listChargesToRemove=new List<PayPlanCharge>();
 			foreach(PayPlanCharge ppc in listPayPlanCharges) {
 				PayPlan pp=listPayPlans.Find(x => x.PayPlanNum==ppc.PayPlanNum);
-				if(pp.IsClosed && Preferences.GetInt(PrefName.PayPlansVersion)==(int)PayPlanVersions.AgeCreditsAndDebits) {
+				if(pp.IsClosed && Preference.GetInt(PreferenceName.PayPlansVersion)==(int)PayPlanVersions.AgeCreditsAndDebits) {
 					listChargesToRemove.Add(ppc);
 					continue;
 				}
@@ -450,7 +450,7 @@ namespace OpenDental {
 				split=new PaySplit();
 				if(charge.GetType()==typeof(PayPlanCharge)) { //payments are allocated differently for payment plan charges
 					//it's an autosplit, so pass in 0 for payAmt (the method uses the classwide PaymentAmt variable instead)
-					PayPlanVersions payPlanVer=(PayPlanVersions)Preferences.GetInt(PrefName.PayPlansVersion);
+					PayPlanVersions payPlanVer=(PayPlanVersions)Preference.GetInt(PreferenceName.PayPlansVersion);
 					if(payPlanVer!=PayPlanVersions.AgeCreditsAndDebits 
 						|| (payPlanVer==PayPlanVersions.AgeCreditsAndDebits && !PayPlans.GetOne(((PayPlanCharge)charge.Tag).PayPlanNum).IsClosed)) 
 					{ 
@@ -496,7 +496,7 @@ namespace OpenDental {
 				split.DatePay=date;
 				split.PatNum=PaymentCur.PatNum;
 				split.ProvNum=0;
-				split.UnearnedType=Preferences.GetLong(PrefName.PrepaymentUnearnedType);//Use default unallocated type
+				split.UnearnedType=Preference.GetLong(PreferenceName.PrepaymentUnearnedType);//Use default unallocated type
 				if(Preferences.HasClinicsEnabled) {//Clinics
 					split.ClinicNum=PaymentCur.ClinicNum;
 				}
@@ -510,7 +510,7 @@ namespace OpenDental {
 				split.DatePay=date;
 				split.PatNum=PaymentCur.PatNum;
 				split.ProvNum=0;
-				split.UnearnedType=Preferences.GetLong(PrefName.PrepaymentUnearnedType);//Use default unallocated type
+				split.UnearnedType=Preference.GetLong(PreferenceName.PrepaymentUnearnedType);//Use default unallocated type
 				if(Preferences.HasClinicsEnabled) {//Clinics
 					split.ClinicNum=PaymentCur.ClinicNum;
 				}
@@ -839,7 +839,7 @@ namespace OpenDental {
 				split.DatePay=PaymentCur.DateEntry;
 				split.PatNum=PaymentCur.PatNum;
 				split.ProvNum=0; //unallocated. This will make the text appear red so that the user knows to check it. If saved, will default to being a prepayment.
-				split.UnearnedType=Preferences.GetLong(PrefName.PrepaymentUnearnedType);//Use default unallocated type
+				split.UnearnedType=Preference.GetLong(PreferenceName.PrepaymentUnearnedType);//Use default unallocated type
 				if(Preferences.HasClinicsEnabled) {//Clinics
 					split.ClinicNum=PaymentCur.ClinicNum;
 				}

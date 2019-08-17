@@ -7,7 +7,7 @@ namespace OpenDental
 {
     public partial class FormSupplyEdit : FormBase
     {
-        List<Def> supplyCategoriesList;
+        List<Definition> supplyCategoriesList;
         long categoryInitialVal;
 
         public Supply Supp;
@@ -25,11 +25,11 @@ namespace OpenDental
         {
             supplierTextBox.Text = Suppliers.GetName(ListSupplier, Supp.SupplierNum);
 
-            supplyCategoriesList = Defs.GetDefsForCategory(DefCat.SupplyCats, true);
+            supplyCategoriesList = Definition.GetByCategory(DefinitionCategory.SupplyCats);;
             for (int i = 0; i < supplyCategoriesList.Count; i++)
             {
-                categoryComboBox.Items.Add(supplyCategoriesList[i].ItemName);
-                if (Supp.Category == supplyCategoriesList[i].DefNum)
+                categoryComboBox.Items.Add(supplyCategoriesList[i].Description);
+                if (Supp.Category == supplyCategoriesList[i].Id)
                 {
                     categoryComboBox.SelectedIndex = i;
                 }
@@ -125,7 +125,7 @@ namespace OpenDental
                 return;
             }
 
-            Supp.Category = supplyCategoriesList[categoryComboBox.SelectedIndex].DefNum;
+            Supp.Category = supplyCategoriesList[categoryComboBox.SelectedIndex].Id;
             Supp.CatalogNumber = catalogNumberTextBox.Text;
             Supp.Descript = descriptionTextBox.Text;
             Supp.LevelDesired = PIn.Float(levelDesiredTextBox.Text);

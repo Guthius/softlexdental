@@ -135,7 +135,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one HL7DefSegment into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(HL7DefSegment hL7DefSegment,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO hl7defsegment (";
 			if(!useExistingPK && isRandomKeys) {
 				hL7DefSegment.HL7DefSegmentNum=ReplicationServers.GetKeyNoCache("hl7defsegment","HL7DefSegmentNum");

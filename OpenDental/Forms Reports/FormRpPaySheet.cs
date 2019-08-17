@@ -34,9 +34,9 @@ namespace OpenDental{
 		private CheckBox checkUnearned;
 		private CheckBox checkShowProvSeparate;
 		private List<Provider> _listProviders;
-		private List<Def> _listInsDefs;
-		private List<Def> _listPayDefs;
-		private List<Def> _listClaimPayGroupDefs;
+		private List<Definition> _listInsDefs;
+		private List<Definition> _listPayDefs;
+		private List<Definition> _listClaimPayGroupDefs;
 
 		///<summary></summary>
 		public FormRpPaySheet(){
@@ -385,19 +385,19 @@ namespace OpenDental{
 					}
 				}
 			}
-			_listPayDefs=Defs.GetDefsForCategory(DefCat.PaymentTypes,true);
-			_listInsDefs=Defs.GetDefsForCategory(DefCat.InsurancePaymentType,true);
-			_listClaimPayGroupDefs=Defs.GetDefsForCategory(DefCat.ClaimPaymentGroups,true);
+			_listPayDefs=Definition.GetByCategory(DefinitionCategory.PaymentTypes);
+			_listInsDefs=Definition.GetByCategory(DefinitionCategory.InsurancePaymentType);
+			_listClaimPayGroupDefs=Definition.GetByCategory(DefinitionCategory.ClaimPaymentGroups);
 			for(int i=0;i<_listPayDefs.Count;i++) {
-				listPatientTypes.Items.Add(_listPayDefs[i].ItemName);
+				listPatientTypes.Items.Add(_listPayDefs[i].Description);
 			}
 			listPatientTypes.Visible=false;
 			for(int i=0;i<_listInsDefs.Count;i++) {
-				listInsuranceTypes.Items.Add(_listInsDefs[i].ItemName);
+				listInsuranceTypes.Items.Add(_listInsDefs[i].Description);
 			}
 			listInsuranceTypes.Visible=false;
 			for(int i=0;i<_listClaimPayGroupDefs.Count;i++) {
-				listClaimPayGroups.Items.Add(_listClaimPayGroupDefs[i].ItemName);
+				listClaimPayGroups.Items.Add(_listClaimPayGroupDefs[i].Description);
 			}
 			listClaimPayGroups.Visible=false;
             Plugin.Trigger(this, "FormPaymentSheet_Loaded");
@@ -506,22 +506,22 @@ namespace OpenDental{
 				}
 			}
 			if(checkInsuranceTypes.Checked) {
-				listInsTypes=_listInsDefs.Select(x => x.DefNum).ToList();
+				listInsTypes=_listInsDefs.Select(x => x.Id).ToList();
 			}
 			else {
-				listInsTypes=listInsuranceTypes.SelectedIndices.OfType<int>().Select(x => _listInsDefs[x].DefNum).ToList();
+				listInsTypes=listInsuranceTypes.SelectedIndices.OfType<int>().Select(x => _listInsDefs[x].Id).ToList();
 			}
 			if(checkPatientTypes.Checked) {
-				listPatTypes=_listPayDefs.Select(x => x.DefNum).ToList();
+				listPatTypes=_listPayDefs.Select(x => x.Id).ToList();
 			}
 			else {
-				listPatTypes=listPatientTypes.SelectedIndices.OfType<int>().Select(x => _listPayDefs[x].DefNum).ToList();
+				listPatTypes=listPatientTypes.SelectedIndices.OfType<int>().Select(x => _listPayDefs[x].Id).ToList();
 			}
 			if(checkAllClaimPayGroups.Checked) {
-				listSelectedClaimPayGroupNums=_listClaimPayGroupDefs.Select(x => x.DefNum).ToList();
+				listSelectedClaimPayGroupNums=_listClaimPayGroupDefs.Select(x => x.Id).ToList();
 			}
 			else {
-				listSelectedClaimPayGroupNums=listClaimPayGroups.SelectedIndices.OfType<int>().Select(x => _listClaimPayGroupDefs[x].DefNum).ToList();
+				listSelectedClaimPayGroupNums=listClaimPayGroups.SelectedIndices.OfType<int>().Select(x => _listClaimPayGroupDefs[x].Id).ToList();
 			}
 			DataTable tableIns=new DataTable();
 			if(listProvNums.Count!=0) {
@@ -568,20 +568,20 @@ namespace OpenDental{
 			Font fontSubTitle=new Font("Tahoma",10,FontStyle.Bold);
 			report.ReportName=Lan.g(this,"Daily Payments");
 			report.AddTitle("Title",Lan.g(this,"Daily Payments"),fontTitle);
-			report.AddSubTitle("PracTitle",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
+			report.AddSubTitle("PracTitle",Preference.GetString(PreferenceName.PracticeTitle),fontSubTitle);
 			report.AddSubTitle("Providers",subtitleProvs,fontSubTitle);
 			if(Preferences.HasClinicsEnabled) {
 				report.AddSubTitle("Clinics",subtitleClinics,fontSubTitle);
 			}
 			Dictionary<long,string> dictInsDefNames=new Dictionary<long,string>();
 			Dictionary<long,string> dictPatDefNames=new Dictionary<long,string>();
-			List<Def> insDefs=Defs.GetDefsForCategory(DefCat.InsurancePaymentType,true);
-			List<Def> patDefs=Defs.GetDefsForCategory(DefCat.PaymentTypes,true);
+			List<Definition> insDefs=Definition.GetByCategory(DefinitionCategory.InsurancePaymentType);
+			List<Definition> patDefs=Definition.GetByCategory(DefinitionCategory.PaymentTypes);
 			for(int i=0;i<insDefs.Count;i++) {
-				dictInsDefNames.Add(insDefs[i].DefNum,insDefs[i].ItemName);
+				dictInsDefNames.Add(insDefs[i].Id,insDefs[i].Description);
 			}
 			for(int i=0;i<patDefs.Count;i++) {
-				dictPatDefNames.Add(patDefs[i].DefNum,patDefs[i].ItemName);
+				dictPatDefNames.Add(patDefs[i].Id,patDefs[i].Description);
 			}
 			dictPatDefNames.Add(0,"Income Transfer");//Otherwise income transfers show up with a payment type of "Undefined"
 			int[] summaryGroups1= { 1 };

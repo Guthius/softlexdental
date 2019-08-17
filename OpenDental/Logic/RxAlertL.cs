@@ -22,13 +22,13 @@ namespace OpenDental {
 			List<string> allergiesMatches=new List<string>();
 			List<string> medicationsMatches=new List<string>();
 			List<string> customMessages=new List<string>();
-			bool showHighSigOnly=Preferences.GetBool(PrefName.EhrRxAlertHighSeverity);
+			bool showHighSigOnly=Preference.GetBool(PreferenceName.EhrRxAlertHighSeverity);
 			for(int i=0;i<alertList.Count;i++){
 				for(int j=0;j<diseases.Count;j++){
 					//This does not look for matches with icd9s.
 					if(alertList[i].DiseaseDefNum==diseases[j].DiseaseDefNum && diseases[j].ProbStatus==0){//ProbStatus is active.
 						if(alertList[i].NotificationMsg=="") {
-							diseaseMatches.Add(DiseaseDefs.GetName(diseases[j].DiseaseDefNum));
+							diseaseMatches.Add(DiseaseDef.GetName(diseases[j].DiseaseDefNum));
 						}
 						else {
 							customMessages.Add(alertList[i].NotificationMsg);
@@ -47,14 +47,14 @@ namespace OpenDental {
 				}
 				for(int j=0;j<medicationPats.Count;j++) {
 					bool isMedInteraction=false;
-					Medication medForAlert=Medications.GetMedication(alertList[i].MedicationNum);
+					Medication medForAlert=Medication.GetById(alertList[i].MedicationNum);
 					if(medForAlert==null) {
 						continue;//MedicationNum will be 0 for all other alerts that are not medication alerts.
 					}
 					if(medicationPats[j].MedicationNum!=0 && alertList[i].MedicationNum==medicationPats[j].MedicationNum) {//Medication from medication list.
 						isMedInteraction=true;
 					}
-					else if(medicationPats[j].MedicationNum==0 && medForAlert.RxCui!=0 && medicationPats[j].RxCui==medForAlert.RxCui) {//Medication from NewCrop. Unfortunately, neither of these RxCuis are required.
+					else if(medicationPats[j].MedicationNum==0 && !string.IsNullOrEmpty(medForAlert.RxCui) && medicationPats[j].RxCui==medForAlert.RxCui) {//Medication from NewCrop. Unfortunately, neither of these RxCuis are required.
 						isMedInteraction=true;
 					}
 					if(!isMedInteraction) {
@@ -65,8 +65,8 @@ namespace OpenDental {
 						continue;//Low significance alert.
 					}
 					if(alertList[i].NotificationMsg=="") {
-						Medications.RefreshCache();
-						medicationsMatches.Add(Medications.GetMedication(alertList[i].MedicationNum).MedName);
+						Medication.Refresh();
+						medicationsMatches.Add(Medication.GetById(alertList[i].MedicationNum).Description);
 					}
 					else {
 						customMessages.Add(alertList[i].NotificationMsg);

@@ -298,7 +298,7 @@ namespace OpenDental{
 		private void FormJournal_Load(object sender,EventArgs e) {
 			DateTime firstofYear=new DateTime(InitialAsOfDate.Year,1,1);
 			textDateTo.Text=InitialAsOfDate.ToShortDateString();
-			if(_acctCur.AcctType==AccountType.Income || _acctCur.AcctType==AccountType.Expense){
+			if(_acctCur.Type==AccountType.Income || _acctCur.Type==AccountType.Expense){
 				textDateFrom.Text=firstofYear.ToShortDateString();
 			}
 			LayoutToolBar();
@@ -311,7 +311,7 @@ namespace OpenDental{
 		public void LayoutToolBar() {
 			ToolBarMain.Buttons.Clear();
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Add Entry"), Resources.IconAdd, "","Add"));
-			if(_acctCur.AcctType==AccountType.Asset){
+			if(_acctCur.Type==AccountType.Asset){
 				ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Reconcile"),null,"","Reconcile"));
 			}
 			ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this,"Print"), Resources.IconPrint, "","Print"));
@@ -367,13 +367,13 @@ namespace OpenDental{
 			}
 			//Resize grid to fit, important for later resizing
 			gridToFill.BeginUpdate();
-			gridToFill.Title=_acctCur.Description+" ("+Lan.g("enumAccountType",_acctCur.AcctType.ToString())+")";
+			gridToFill.Title=_acctCur.Description+" ("+Lan.g("enumAccountType",_acctCur.Type.ToString())+")";
 			FillColumns(isPrinting,isResizing);
 			DateTime dateFrom=PIn.Date(textDateFrom.Text);
 			DateTime dateTo=string.IsNullOrEmpty(textDateTo.Text)?DateTime.MaxValue:PIn.Date(textDateTo.Text);
 			double filterAmt=string.IsNullOrEmpty(textAmt.errorProvider1.GetError(textAmt))?PIn.Double(textAmt.Text):0;
 			if(!isResizing || _listJEntries==null || _dictTransUsers==null) {
-				_listJEntries=JournalEntries.GetForAccount(_acctCur.AccountNum);
+				_listJEntries=JournalEntries.GetForAccount(_acctCur.Id);
 				_dictTransUsers=Transactions.GetManyTrans(_listJEntries.Select(x => x.TransactionNum).ToList())
 					.ToDictionary(x => x.TransactionNum,x => x.UserNum);
 			}
@@ -386,12 +386,12 @@ namespace OpenDental{
 				if(jeCur.DateDisplayed>dateTo) {
 					break;
 				}
-				if(new[] { AccountType.Income,AccountType.Expense }.Contains(_acctCur.AcctType) && jeCur.DateDisplayed<dateFrom) {
+				if(new[] { AccountType.Income,AccountType.Expense }.Contains(_acctCur.Type) && jeCur.DateDisplayed<dateFrom) {
 					continue;//for income and expense accounts, previous balances are not included. Only the current timespan.
 				}
 				//DebitIsPos=true for checking acct, bal+=DebitAmt-CreditAmt
-				bal+=(Account.DebitIsPos(_acctCur.AcctType)?1:-1)*((decimal)jeCur.DebitAmt-(decimal)jeCur.CreditAmt);
-				if(new[] { AccountType.Asset,AccountType.Liability,AccountType.Equity }.Contains(_acctCur.AcctType) && jeCur.DateDisplayed<dateFrom) {
+				bal+=(Account.DebitIsPos(_acctCur.Type)?1:-1)*((decimal)jeCur.DebitAmt-(decimal)jeCur.CreditAmt);
+				if(new[] { AccountType.Asset,AccountType.Liability,AccountType.Equity }.Contains(_acctCur.Type) && jeCur.DateDisplayed<dateFrom) {
 					continue;//for asset, liability, and equity accounts, older entries do affect the current balance.
 				}
 				if(filterAmt!=0 && filterAmt!=jeCur.CreditAmt && filterAmt!=jeCur.DebitAmt){
@@ -436,8 +436,8 @@ namespace OpenDental{
 		private void FillColumns(bool isPrinting,bool isResizing) {
 			ODGrid gridToFill=isPrinting?gridMainPrint:gridMain;
 			List<string> listColHeadings=new List<string>(new[] { "Chk #","Date","Memo","Splits",
-				"Debit"+(Account.DebitIsPos(_acctCur.AcctType)?"(+)":"(-)"),
-				"Credit"+(Account.DebitIsPos(_acctCur.AcctType)?"(-)":"(+)"),
+				"Debit"+(Account.DebitIsPos(_acctCur.Type)?"(+)":"(-)"),
+				"Credit"+(Account.DebitIsPos(_acctCur.Type)?"(-)":"(+)"),
 				"Balance","Created By","Last Edited By","Clear" });
 			Dictionary<string,Tuple<int,HorizontalAlignment>> dictColWidths=new Dictionary<string,Tuple<int,HorizontalAlignment>>();
 			dictColWidths["Chk #"]=Tuple.Create(60,HorizontalAlignment.Center);
@@ -450,8 +450,8 @@ namespace OpenDental{
 			//grid width minus scroll bar width if not printing minus width of all cols except Debit, Credit, and Balance and divide by 3
 			//distribute the remaining grid width between the three cols: Debit, Credit, and Balance
 			int colW=(gridToFill.Width-(isPrinting?0:19)-dictColWidths.Values.Sum(x => x.Item1))/3;
-			dictColWidths["Debit"+(Account.DebitIsPos(_acctCur.AcctType)?"(+)":"(-)")]=Tuple.Create(colW,HorizontalAlignment.Right);
-			dictColWidths["Credit"+(Account.DebitIsPos(_acctCur.AcctType)?"(-)":"(+)")]=Tuple.Create(colW,HorizontalAlignment.Right);
+			dictColWidths["Debit"+(Account.DebitIsPos(_acctCur.Type)?"(+)":"(-)")]=Tuple.Create(colW,HorizontalAlignment.Right);
+			dictColWidths["Credit"+(Account.DebitIsPos(_acctCur.Type)?"(-)":"(+)")]=Tuple.Create(colW,HorizontalAlignment.Right);
 			dictColWidths["Balance"]=Tuple.Create(colW,HorizontalAlignment.Right);
 			if((isPrinting || isResizing) && gridToFill.Columns!=null && gridToFill.Columns.Count>0) {//printing/resizing and cols already filled, adjust widths
 				Tuple<int,HorizontalAlignment> colCurTuple;
@@ -467,7 +467,7 @@ namespace OpenDental{
 			Transaction trans=new Transaction();
 			trans.UserNum=Security.CurUser.UserNum;
 			Transactions.Insert(trans);//we now have a TransactionNum, and datetimeEntry has been set
-			FormTransactionEdit FormT=new FormTransactionEdit(trans.TransactionNum,_acctCur.AccountNum);
+			FormTransactionEdit FormT=new FormTransactionEdit(trans.TransactionNum,_acctCur.Id);
 			FormT.IsNew=true;
 			FormT.ShowDialog();
 			if(FormT.DialogResult==DialogResult.Cancel){
@@ -480,7 +480,7 @@ namespace OpenDental{
 		private void Reconcile_Click() {
 			int selectedRow=gridMain.GetSelectedIndex();
 			int scrollValue=gridMain.ScrollValue;
-			FormReconciles FormR=new FormReconciles(_acctCur.AccountNum);
+			FormReconciles FormR=new FormReconciles(_acctCur.Id);
 			FormR.ShowDialog();
 			FillGrid();
 			gridMain.SetSelected(selectedRow,true);
@@ -513,7 +513,7 @@ namespace OpenDental{
 				int center=bounds.X+bounds.Width/2;
 				#region printHeading
 				if(!_headingPrinted) {
-					text=_acctCur.Description+" ("+Lan.g("enumAccountType",_acctCur.AcctType.ToString())+")";
+					text=_acctCur.Description+" ("+Lan.g("enumAccountType",_acctCur.Type.ToString())+")";
 					g.DrawString(text,headingFont,Brushes.Black,center-g.MeasureString(text,headingFont).Width/2,yPos);
 					yPos+=(int)g.MeasureString(text,headingFont).Height;
 					text=DateTime.Today.ToShortDateString();
@@ -549,7 +549,7 @@ namespace OpenDental{
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			int selectedRow=e.Row;
 			int scrollValue=gridMain.ScrollValue;
-			FormTransactionEdit FormT=new FormTransactionEdit((long)gridMain.Rows[e.Row].Tag,_acctCur.AccountNum);
+			FormTransactionEdit FormT=new FormTransactionEdit((long)gridMain.Rows[e.Row].Tag,_acctCur.Id);
 			FormT.ShowDialog();
 			if(FormT.DialogResult==DialogResult.Cancel) {
 				return;

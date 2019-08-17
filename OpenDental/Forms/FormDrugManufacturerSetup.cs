@@ -9,7 +9,7 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public partial class FormDrugManufacturerSetup:ODForm {
-		private List<DrugManufacturer> _listDrugManufacturers;
+		private List<Manufacturer> _listDrugManufacturers;
 
 		public FormDrugManufacturerSetup() {
 			InitializeComponent();
@@ -21,11 +21,11 @@ namespace OpenDental {
 		}
 
 		private void FillGrid() {
-			DrugManufacturers.RefreshCache();
-			_listDrugManufacturers=DrugManufacturers.GetDeepCopy();
+            CacheManager.Invalidate<Manufacturer>();
+			_listDrugManufacturers=Manufacturer.All();
 			listMain.Items.Clear();
 			for(int i=0;i<_listDrugManufacturers.Count;i++) {
-				listMain.Items.Add(_listDrugManufacturers[i].ManufacturerCode + " - " + _listDrugManufacturers[i].ManufacturerName);
+				listMain.Items.Add(_listDrugManufacturers[i].Code + " - " + _listDrugManufacturers[i].Name);
 			}
 		}
 
@@ -41,7 +41,7 @@ namespace OpenDental {
 
 		private void butAdd_Click(object sender,EventArgs e) {
 			FormDrugManufacturerEdit FormD=new FormDrugManufacturerEdit();
-			FormD.DrugManufacturerCur=new DrugManufacturer();
+			FormD.DrugManufacturerCur=new Manufacturer();
 			FormD.IsNew=true;
 			FormD.ShowDialog();
 			FillGrid();

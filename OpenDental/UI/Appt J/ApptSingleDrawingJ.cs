@@ -55,7 +55,7 @@ namespace OpenDental.UI {
 			SolidBrush brushProvBackground;
 			Color backColor;
 			Color provColor;
-			List<Def> listDefs=Defs.GetDefsForCategory(DefCat.AppointmentColors);
+			List<Definition> listDefs=Definition.GetByCategory(DefinitionCategory.AppointmentColors);;
 			if(dataRoww["ProvNum"].ToString()!="0" && dataRoww["IsHygiene"].ToString()=="0") {//dentist
 				provColor=Providers.GetColor(PIn.Long(dataRoww["ProvNum"].ToString()));
 				penProvOutline=new Pen(Providers.GetOutlineColor(PIn.Long(dataRoww["ProvNum"].ToString())));
@@ -71,16 +71,16 @@ namespace OpenDental.UI {
 			brushProvBackground=new SolidBrush(provColor);
 			backColor=provColor;//Default the appointment to the primary provider's color.
 			if(PIn.Long(dataRoww["AptStatus"].ToString())==(int)ApptStatus.Complete) {
-				backColor=listDefs[2].ItemColor;
+				backColor=listDefs[2].Color;
 			}
 			else if(PIn.Long(dataRoww["AptStatus"].ToString())==(int)ApptStatus.PtNote) {
-				backColor=listDefs[5].ItemColor;
+				backColor=listDefs[5].Color;
 				if(PIn.Int(dataRoww["ColorOverride"].ToString()) != 0) {//Patient note has an override.
 					backColor=Color.FromArgb(PIn.Int(dataRoww["ColorOverride"].ToString()));
 				}
 			}
 			else if(PIn.Long(dataRoww["AptStatus"].ToString())==(int)ApptStatus.PtNoteCompleted) {
-				backColor=listDefs[6].ItemColor;
+				backColor=listDefs[6].Color;
 			}
 			else if(PIn.Int(dataRoww["ColorOverride"].ToString()) != 0) {
 				backColor=Color.FromArgb(PIn.Int(dataRoww["ColorOverride"].ToString()));
@@ -565,7 +565,7 @@ namespace OpenDental.UI {
 					rect=new RectangleF(drawLoc,noteSize);
 					using(Graphics gfx=Graphics.FromImage(bitmap)) {
 						gfx.SmoothingMode=SmoothingMode.HighQuality;
-						Color confirmColor=Defs.GetColor(DefCat.ApptConfirmed,PIn.Long(dataRoww["Confirmed"].ToString()));
+						Color confirmColor=Defs.GetColor(DefinitionCategory.ApptConfirmed,PIn.Long(dataRoww["Confirmed"].ToString()));
 						SolidBrush confirmBrush=new SolidBrush(confirmColor);
 						gfx.FillEllipse(confirmBrush,0,0,11,11);
 						gfx.DrawEllipse(_penBlack,0,0,11,11);
@@ -631,7 +631,7 @@ namespace OpenDental.UI {
 						rect=new RectangleF(drawLoc,noteSize);
 						using(Graphics gfx=Graphics.FromImage(bitmap)) {
 							gfx.SmoothingMode=SmoothingMode.HighQuality;
-							Color confirmColor=Defs.GetColor(DefCat.ApptConfirmed,PIn.Long(dataRoww["Confirmed"].ToString()));
+							Color confirmColor=Defs.GetColor(DefinitionCategory.ApptConfirmed,PIn.Long(dataRoww["Confirmed"].ToString()));
 							SolidBrush confirmBrush=new SolidBrush(confirmColor);
 							gfx.FillEllipse(confirmBrush,0,0,11,11);
 							gfx.DrawEllipse(_penBlack,0,0,11,11);
@@ -675,7 +675,7 @@ namespace OpenDental.UI {
 						rect=new RectangleF(drawLoc,noteSize);
 						using(Graphics gfx=Graphics.FromImage(bitmap)) {
 							gfx.SmoothingMode=SmoothingMode.HighQuality;
-							Color confirmColor=Defs.GetColor(DefCat.ApptConfirmed,PIn.Long(dataRoww["Confirmed"].ToString()));
+							Color confirmColor=Defs.GetColor(DefinitionCategory.ApptConfirmed,PIn.Long(dataRoww["Confirmed"].ToString()));
 							SolidBrush confirmBrush=new SolidBrush(confirmColor);
 							gfx.FillEllipse(confirmBrush,0,0,11,11);
 							gfx.DrawEllipse(_penBlack,0,0,11,11);
@@ -722,7 +722,7 @@ namespace OpenDental.UI {
 						rect=new RectangleF(drawLoc,noteSize);
 						using(Graphics gfx=Graphics.FromImage(bitmap)) {
 							gfx.SmoothingMode=SmoothingMode.HighQuality;
-							Color confirmColor=Defs.GetColor(DefCat.ApptConfirmed,PIn.Long(dataRoww["Confirmed"].ToString()));
+							Color confirmColor=Defs.GetColor(DefinitionCategory.ApptConfirmed,PIn.Long(dataRoww["Confirmed"].ToString()));
 							SolidBrush confirmBrush=new SolidBrush(confirmColor);
 							gfx.FillEllipse(confirmBrush,0,0,11,11);
 							gfx.DrawEllipse(_penBlack,0,0,11,11);
@@ -766,7 +766,7 @@ namespace OpenDental.UI {
 						rect=new RectangleF(drawLoc,noteSize);
 						using(Graphics gfx=Graphics.FromImage(bitmap)) {
 							gfx.SmoothingMode=SmoothingMode.HighQuality;
-							Color confirmColor=Defs.GetColor(DefCat.ApptConfirmed,PIn.Long(dataRoww["Confirmed"].ToString()));
+							Color confirmColor=Defs.GetColor(DefinitionCategory.ApptConfirmed,PIn.Long(dataRoww["Confirmed"].ToString()));
 							SolidBrush confirmBrush=new SolidBrush(confirmColor);
 							gfx.FillEllipse(confirmBrush,0,0,11,11);
 							gfx.DrawEllipse(_penBlack,0,0,11,11);

@@ -70,12 +70,12 @@ namespace OpenDental {
 			_dictClinicListProgProps=ProgramProperties.GetForProgram(_progCur.ProgramNum)//get list of all props for the program
 				.GroupBy(x => x.ClinicNum)//group each clinic
 				.ToDictionary(x => x.Key,x => x.ToList());//turn list into a dictionary of key=ClinicNum, value=List<ProgramProperty> for the clinic
-			DateTime dateTSend=Preferences.GetDateTime(PrefName.TransworldServiceTimeDue);
+			DateTime dateTSend=Preference.GetDateTime(PreferenceName.TransworldServiceTimeDue);
 			if(dateTSend!=DateTime.MinValue) {
 				textUpdatesTimeOfDay.Text=dateTSend.ToShortTimeString();
 			}
 			comboSendFrequencyUnits.Items.AddRange(Enum.GetNames(typeof(FrequencyUnit)));
-			string[] sendFreqStrs=Preferences.GetString(PrefName.TransworldServiceSendFrequency).Split(new char[] { ' ' },StringSplitOptions.RemoveEmptyEntries);
+			string[] sendFreqStrs=Preference.GetString(PreferenceName.TransworldServiceSendFrequency).Split(new char[] { ' ' },StringSplitOptions.RemoveEmptyEntries);
 			if(sendFreqStrs.Length==2) {
 				int sendFreq=PIn.Int(sendFreqStrs[0],false);
 				FrequencyUnit sendFreqUnit;
@@ -94,22 +94,22 @@ namespace OpenDental {
 
 		/// <summary>Fill the combo boxes with items. Some will have their indicies set later in FillFields() </summary>
 		private void FillComboBoxes() {
-			foreach(Def defCur in Defs.GetDefsForCategory(DefCat.BillingTypes,true).Where(x => x.ItemValue.ToLower()!="c")) {
-				comboPaidInFullBillType.Items.Add(new ODBoxItem<Def>(defCur.ItemName,defCur.Copy()));
-				if(defCur.DefNum==Preferences.GetLong(PrefName.TransworldPaidInFullBillingType)) {
+			foreach(Definition defCur in Definition.GetByCategory(DefinitionCategory.BillingTypes).Where(x => x.Value.ToLower()!="c")) {
+				comboPaidInFullBillType.Items.Add(new ODBoxItem<Definition>(defCur.Description,defCur.Copy()));
+				if(defCur.Id==Preference.GetLong(PreferenceName.TransworldPaidInFullBillingType)) {
 					comboPaidInFullBillType.SelectedIndex=comboPaidInFullBillType.Items.Count-1;
 				}
 			}
-			ODBoxItem<Def> noneDef=new ODBoxItem<Def>("None",new Def());
+			ODBoxItem<Definition> noneDef=new ODBoxItem<Definition>("None",new Definition());
 			comboPosAdjType.Items.Add(noneDef);
 			comboPosAdjType.SelectedIndex=0;
-			foreach(Def defCur in Defs.GetDefsForCategory(DefCat.AdjTypes,true).Where(x => x.ItemValue.Contains("+"))) {
-				comboPosAdjType.Items.Add(new ODBoxItem<Def>(defCur.ItemName,defCur));
+			foreach(Definition defCur in Definition.GetByCategory(DefinitionCategory.AdjTypes).Where(x => x.Value.Contains("+"))) {
+				comboPosAdjType.Items.Add(new ODBoxItem<Definition>(defCur.Description,defCur));
 			}
 			comboNegAdjType.Items.Add(noneDef);
 			comboNegAdjType.SelectedIndex=0;
-			foreach(Def defCur in Defs.GetDefsForCategory(DefCat.AdjTypes,true).Where(x => x.ItemValue.Contains("-"))) {
-				comboNegAdjType.Items.Add(new ODBoxItem<Def>(defCur.ItemName,defCur));
+			foreach(Definition defCur in Definition.GetByCategory(DefinitionCategory.AdjTypes).Where(x => x.Value.Contains("-"))) {
+				comboNegAdjType.Items.Add(new ODBoxItem<Definition>(defCur.Description,defCur));
 			}
 		}
 
@@ -154,10 +154,10 @@ namespace OpenDental {
 						checkCollService.Checked=propCur.PropertyValue.Contains(((int)TsiDemandType.Collection).ToString());
 						continue;
 					case "SyncExcludePosAdjType":
-							comboPosAdjType.SetSelectedItem<Def>(x => x.DefNum==PIn.Long(propCur.PropertyValue),"");
+							comboPosAdjType.SetSelectedItem<Definition>(x => x.Id==PIn.Long(propCur.PropertyValue),"");
 						continue;
 					case "SyncExcludeNegAdjType":
-							comboNegAdjType.SetSelectedItem<Def>(x => x.DefNum==PIn.Long(propCur.PropertyValue),"");
+							comboNegAdjType.SetSelectedItem<Definition>(x => x.Id==PIn.Long(propCur.PropertyValue),"");
 						continue;
 				}
 			}
@@ -241,10 +241,10 @@ namespace OpenDental {
 						propCur.PropertyValue=string.Join(",",selectedServices);
 						continue;
 					case "SyncExcludePosAdjType":
-							propCur.PropertyValue=comboPosAdjType.SelectedTag<Def>().DefNum.ToString();
+							propCur.PropertyValue=comboPosAdjType.SelectedTag<Definition>().Id.ToString();
 						continue;
 					case "SyncExcludeNegAdjType":
-							propCur.PropertyValue=comboNegAdjType.SelectedTag<Def>().DefNum.ToString();
+							propCur.PropertyValue=comboNegAdjType.SelectedTag<Definition>().Id.ToString();
 						continue;
 				}
 			}
@@ -340,7 +340,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please enter a valid value for the Account Activity Updates repeat frequency.");
 				return;
 			}
-			long billTypePaidInFullDefNum=comboPaidInFullBillType.SelectedTag<Def>()?.DefNum??0;
+			long billTypePaidInFullDefNum=comboPaidInFullBillType.SelectedTag<Definition>()?.Id??0;
 			if(billTypePaidInFullDefNum==0 && checkEnabled.Checked) {
 				MsgBox.Show(this,"Please select a Paid in Full Billing Type.");
 				return;
@@ -354,13 +354,13 @@ namespace OpenDental {
 			DataValid.SetInvalid(InvalidType.Programs);
 			string updateFreq=numericSendFrequency.Value+" "+(FrequencyUnit)comboSendFrequencyUnits.SelectedIndex;
 			bool hasChanged=false;
-			if(Prefs.UpdateString(PrefName.TransworldServiceTimeDue,accountUpdatesRuntime==DateTime.MinValue?"":POut.Time(accountUpdatesRuntime.TimeOfDay,false))
-				| Prefs.UpdateString(PrefName.TransworldServiceSendFrequency,updateFreq))
+			if(Preference.Update(PreferenceName.TransworldServiceTimeDue,accountUpdatesRuntime==DateTime.MinValue?"":POut.Time(accountUpdatesRuntime.TimeOfDay,false))
+				| Preference.Update(PreferenceName.TransworldServiceSendFrequency,updateFreq))
 			{
-				Prefs.UpdateDateT(PrefName.TransworldDateTimeLastUpdated,DateTime.MinValue);
+				Preference.Update(PreferenceName.TransworldDateTimeLastUpdated,DateTime.MinValue);
 				hasChanged=true;
 			}
-			if(Prefs.UpdateLong(PrefName.TransworldPaidInFullBillingType,billTypePaidInFullDefNum) | hasChanged) {
+			if(Preference.Update(PreferenceName.TransworldPaidInFullBillingType,billTypePaidInFullDefNum) | hasChanged) {
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			DialogResult=DialogResult.OK;

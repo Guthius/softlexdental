@@ -42,12 +42,12 @@ namespace OpenDentBusiness.Crud{
 			AllergyDef allergyDef;
 			foreach(DataRow row in table.Rows) {
 				allergyDef=new AllergyDef();
-				allergyDef.AllergyDefNum= PIn.Long  (row["AllergyDefNum"].ToString());
+				allergyDef.Id= PIn.Long  (row["AllergyDefNum"].ToString());
 				allergyDef.Description  = PIn.String(row["Description"].ToString());
 				allergyDef.IsHidden     = PIn.Bool  (row["IsHidden"].ToString());
 				allergyDef.DateTStamp   = PIn.DateT (row["DateTStamp"].ToString());
 				allergyDef.SnomedType   = (OpenDentBusiness.SnomedAllergy)PIn.Int(row["SnomedType"].ToString());
-				allergyDef.MedicationNum= PIn.Long  (row["MedicationNum"].ToString());
+				allergyDef.MedicationNum= PIn.Int  (row["MedicationNum"].ToString());
 				allergyDef.UniiCode     = PIn.String(row["UniiCode"].ToString());
 				retVal.Add(allergyDef);
 			}
@@ -69,7 +69,7 @@ namespace OpenDentBusiness.Crud{
 			table.Columns.Add("UniiCode");
 			foreach(AllergyDef allergyDef in listAllergyDefs) {
 				table.Rows.Add(new object[] {
-					POut.Long  (allergyDef.AllergyDefNum),
+					POut.Long  (allergyDef.Id),
 					            allergyDef.Description,
 					POut.Bool  (allergyDef.IsHidden),
 					POut.DateT (allergyDef.DateTStamp,false),
@@ -89,7 +89,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one AllergyDef into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(AllergyDef allergyDef,bool useExistingPK) {
 			if(!useExistingPK && Preferences.RandomKeys) {
-				allergyDef.AllergyDefNum=ReplicationServers.GetKey("allergydef","AllergyDefNum");
+				allergyDef.Id=ReplicationServers.GetKey("allergydef","AllergyDefNum");
 			}
 			string command="INSERT INTO allergydef (";
 			if(useExistingPK || Preferences.RandomKeys) {
@@ -97,7 +97,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+="Description,IsHidden,SnomedType,MedicationNum,UniiCode) VALUES(";
 			if(useExistingPK || Preferences.RandomKeys) {
-				command+=POut.Long(allergyDef.AllergyDefNum)+",";
+				command+=POut.Long(allergyDef.Id)+",";
 			}
 			command+=
 				 "'"+POut.String(allergyDef.Description)+"',"
@@ -110,9 +110,9 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command);
 			}
 			else {
-				allergyDef.AllergyDefNum=Db.NonQ(command,true,"AllergyDefNum","allergyDef");
+				allergyDef.Id=Db.NonQ(command,true,"AllergyDefNum","allergyDef");
 			}
-			return allergyDef.AllergyDefNum;
+			return allergyDef.Id;
 		}
 
 		///<summary>Inserts one AllergyDef into the database.  Returns the new priKey.  Doesn't use the cache.</summary>
@@ -122,17 +122,17 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one AllergyDef into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(AllergyDef allergyDef,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO allergydef (";
 			if(!useExistingPK && isRandomKeys) {
-				allergyDef.AllergyDefNum=ReplicationServers.GetKeyNoCache("allergydef","AllergyDefNum");
+				allergyDef.Id=ReplicationServers.GetKeyNoCache("allergydef","AllergyDefNum");
 			}
 			if(isRandomKeys || useExistingPK) {
 				command+="AllergyDefNum,";
 			}
 			command+="Description,IsHidden,SnomedType,MedicationNum,UniiCode) VALUES(";
 			if(isRandomKeys || useExistingPK) {
-				command+=POut.Long(allergyDef.AllergyDefNum)+",";
+				command+=POut.Long(allergyDef.Id)+",";
 			}
 			command+=
 				 "'"+POut.String(allergyDef.Description)+"',"
@@ -145,9 +145,9 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command);
 			}
 			else {
-				allergyDef.AllergyDefNum=Db.NonQ(command,true,"AllergyDefNum","allergyDef");
+				allergyDef.Id=Db.NonQ(command,true,"AllergyDefNum","allergyDef");
 			}
-			return allergyDef.AllergyDefNum;
+			return allergyDef.Id;
 		}
 
 		///<summary>Updates one AllergyDef in the database.</summary>
@@ -159,7 +159,7 @@ namespace OpenDentBusiness.Crud{
 				+"SnomedType   =  "+POut.Int   ((int)allergyDef.SnomedType)+", "
 				+"MedicationNum=  "+POut.Long  (allergyDef.MedicationNum)+", "
 				+"UniiCode     = '"+POut.String(allergyDef.UniiCode)+"' "
-				+"WHERE AllergyDefNum = "+POut.Long(allergyDef.AllergyDefNum);
+				+"WHERE AllergyDefNum = "+POut.Long(allergyDef.Id);
 			Db.NonQ(command);
 		}
 
@@ -191,7 +191,7 @@ namespace OpenDentBusiness.Crud{
 				return false;
 			}
 			command="UPDATE allergydef SET "+command
-				+" WHERE AllergyDefNum = "+POut.Long(allergyDef.AllergyDefNum);
+				+" WHERE AllergyDefNum = "+POut.Long(allergyDef.Id);
 			Db.NonQ(command);
 			return true;
 		}

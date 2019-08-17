@@ -22,13 +22,13 @@ namespace OpenDental {
 
 		private void FormRpCustomAging_Load(object sender,EventArgs e) {
 			textDate.Text=DateTimeOD.Today.ToShortDateString();
-			switch(Preferences.GetInt(PrefName.ReportsPPOwriteoffDefaultToProcDate)) {
+			switch(Preference.GetInt(PreferenceName.ReportsPPOwriteoffDefaultToProcDate)) {
 				case 0:	radioWriteoffInsPayDate.Checked=true; break;
 				case 1:	radioWriteoffProcDate.Checked=true; break;
 				case 2:	radioWriteoffClaimDate.Checked=true; break;
 				default: radioWriteoffClaimDate.Checked=true; break;
 			}
-			if(Preferences.GetInt(PrefName.PayPlansVersion) == (int)PayPlanVersions.AgeCreditsAndDebits) {
+			if(Preference.GetInt(PreferenceName.PayPlansVersion) == (int)PayPlanVersions.AgeCreditsAndDebits) {
 				checkAgePayPlanCharges.Checked=true;
 				checkAgePayPlanCredits.Checked=true;
 			}
@@ -43,9 +43,9 @@ namespace OpenDental {
 
 		private void FillBillType() {
 			listBoxBillTypes.Items.Clear();
-			List<Def> listBillTypes = Defs.GetDefsForCategory(DefCat.BillingTypes,true);
+			List<Definition> listBillTypes = Definition.GetByCategory(DefinitionCategory.BillingTypes);
 			for(int i = 0;i < listBillTypes.Count;i++) {
-				listBoxBillTypes.Items.Add(new ODBoxItem<Def>(listBillTypes[i].ItemName,listBillTypes[i]));
+				listBoxBillTypes.Items.Add(new ODBoxItem<Definition>(listBillTypes[i].Description,listBillTypes[i]));
 				listBoxBillTypes.SetSelected(i,true);
 			}
 		}
@@ -225,7 +225,7 @@ namespace OpenDental {
 				//pass in null for lists to not limit by them.
 				ListProvs = checkAllProv.Checked ? null : listBoxProvs.SelectedItems.OfType<ODBoxItem<Provider>>().Select(x => x.Tag).ToList(),
 				ListClins = checkAllClin.Checked ? null : listBoxClins.SelectedItems.OfType<ODBoxItem<Clinic>>().Select(x => x.Tag).ToList(),
-				ListBillTypes = checkAllBillType.Checked ? null : listBoxBillTypes.SelectedItems.OfType<ODBoxItem<Def>>().Select(x => x.Tag).ToList(),
+				ListBillTypes = checkAllBillType.Checked ? null : listBoxBillTypes.SelectedItems.OfType<ODBoxItem<Definition>>().Select(x => x.Tag).ToList(),
 				AgeCredits = checkAgeCredits.Checked,
 			};
 			if(_agingOptions.AgingInc == (AgingOptions.AgingInclude.None)) {
@@ -284,7 +284,7 @@ namespace OpenDental {
 			ReportComplex report=new ReportComplex(true,false);
 			report.ReportName=Lan.g(this,"Custom Aging of Accounts Receivable");
 			report.AddTitle("Custom Aging Report",Lan.g(this,"Custom Aging of Accounts Receivable"));
-			report.AddSubTitle("PracTitle",Preferences.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("PracTitle",Preference.GetString(PreferenceName.PracticeTitle));
 			report.AddSubTitle("AsOf",Lan.g(this,"As of ")+_agingOptions.DateAsOf.ToShortDateString());
 			List<string> listAgingInc=new List<string>();
 			//Go through every aging option and for every one that is selected, add the descriptions as a subtitle
@@ -317,7 +317,7 @@ namespace OpenDental {
 				report.AddSubTitle("BillingTypes",Lan.g(this,"All Billing Types"));
 			}
 			else {
-				report.AddSubTitle("BillingTypes",string.Join(", ",_agingOptions.ListBillTypes.Select(x => x.ItemName)));
+				report.AddSubTitle("BillingTypes",string.Join(", ",_agingOptions.ListBillTypes.Select(x => x.Description)));
 			}
 			if(_agingOptions.ListProvs==null) {
 				report.AddSubTitle("Providers",Lan.g(this,"All Providers"));

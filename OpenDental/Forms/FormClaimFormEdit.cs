@@ -789,25 +789,26 @@ namespace OpenDental{
 					extension=Path.GetExtension(fileName);
 				}
 				else if(CloudStorage.IsCloudStorage) {
-					FormProgress FormP=new FormProgress();
-					FormP.DisplayText="Downloading...";
-					FormP.NumberFormat="F";
-					FormP.NumberMultiplication=1;
-					FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-					FormP.TickMS=1000;
-					OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(ImageStore.GetPreferredAtoZpath()
-								,claimFormItem.ImageFileName
-								,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-					FormP.ShowDialog();
-					if(FormP.DialogResult==DialogResult.Cancel) {
-						state.DoCancel=true;
-						return null;
-					}
-					//Download was successful
-					using(MemoryStream stream=new MemoryStream(state.FileContent)) {
-						img=Image.FromStream(stream);
-						extension=Path.GetExtension(fileName);
-					}
+                    // TODO: Fix me
+					//FormProgress FormP=new FormProgress();
+					//FormP.DisplayText="Downloading...";
+					//FormP.NumberFormat="F";
+					//FormP.NumberMultiplication=1;
+					//FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
+					//FormP.TickMS=1000;
+					//OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(ImageStore.GetPreferredAtoZpath()
+					//			,claimFormItem.ImageFileName
+					//			,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
+					//FormP.ShowDialog();
+					//if(FormP.DialogResult==DialogResult.Cancel) {
+					//	state.DoCancel=true;
+					//	return null;
+					//}
+					////Download was successful
+					//using(MemoryStream stream=new MemoryStream(state.FileContent)) {
+					//	img=Image.FromStream(stream);
+					//	extension=Path.GetExtension(fileName);
+					//}
 				}
 			}
 			return img;

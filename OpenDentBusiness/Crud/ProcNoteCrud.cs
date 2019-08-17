@@ -42,7 +42,7 @@ namespace OpenDentBusiness.Crud{
 			ProcNote procNote;
 			foreach(DataRow row in table.Rows) {
 				procNote=new ProcNote();
-				procNote.ProcNoteNum  = PIn.Long  (row["ProcNoteNum"].ToString());
+				procNote.Id  = PIn.Long  (row["ProcNoteNum"].ToString());
 				procNote.PatNum       = PIn.Long  (row["PatNum"].ToString());
 				procNote.ProcNum      = PIn.Long  (row["ProcNum"].ToString());
 				procNote.EntryDateTime= PIn.DateT (row["EntryDateTime"].ToString());
@@ -71,7 +71,7 @@ namespace OpenDentBusiness.Crud{
 			table.Columns.Add("Signature");
 			foreach(ProcNote procNote in listProcNotes) {
 				table.Rows.Add(new object[] {
-					POut.Long  (procNote.ProcNoteNum),
+					POut.Long  (procNote.Id),
 					POut.Long  (procNote.PatNum),
 					POut.Long  (procNote.ProcNum),
 					POut.DateT (procNote.EntryDateTime,false),
@@ -92,7 +92,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one ProcNote into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(ProcNote procNote,bool useExistingPK) {
 			if(!useExistingPK && Preferences.RandomKeys) {
-				procNote.ProcNoteNum=ReplicationServers.GetKey("procnote","ProcNoteNum");
+				procNote.Id=ReplicationServers.GetKey("procnote","ProcNoteNum");
 			}
 			string command="INSERT INTO procnote (";
 			if(useExistingPK || Preferences.RandomKeys) {
@@ -100,7 +100,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+="PatNum,ProcNum,EntryDateTime,UserNum,Note,SigIsTopaz,Signature) VALUES(";
 			if(useExistingPK || Preferences.RandomKeys) {
-				command+=POut.Long(procNote.ProcNoteNum)+",";
+				command+=POut.Long(procNote.Id)+",";
 			}
 			command+=
 				     POut.Long  (procNote.PatNum)+","
@@ -122,9 +122,9 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command,paramNote,paramSignature);
 			}
 			else {
-				procNote.ProcNoteNum=Db.NonQ(command,true,"ProcNoteNum","procNote",paramNote,paramSignature);
+				procNote.Id=Db.NonQ(command,true,"ProcNoteNum","procNote",paramNote,paramSignature);
 			}
-			return procNote.ProcNoteNum;
+			return procNote.Id;
 		}
 
 		///<summary>Inserts one ProcNote into the database.  Returns the new priKey.  Doesn't use the cache.</summary>
@@ -134,17 +134,17 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ProcNote into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(ProcNote procNote,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO procnote (";
 			if(!useExistingPK && isRandomKeys) {
-				procNote.ProcNoteNum=ReplicationServers.GetKeyNoCache("procnote","ProcNoteNum");
+				procNote.Id=ReplicationServers.GetKeyNoCache("procnote","ProcNoteNum");
 			}
 			if(isRandomKeys || useExistingPK) {
 				command+="ProcNoteNum,";
 			}
 			command+="PatNum,ProcNum,EntryDateTime,UserNum,Note,SigIsTopaz,Signature) VALUES(";
 			if(isRandomKeys || useExistingPK) {
-				command+=POut.Long(procNote.ProcNoteNum)+",";
+				command+=POut.Long(procNote.Id)+",";
 			}
 			command+=
 				     POut.Long  (procNote.PatNum)+","
@@ -166,9 +166,9 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command,paramNote,paramSignature);
 			}
 			else {
-				procNote.ProcNoteNum=Db.NonQ(command,true,"ProcNoteNum","procNote",paramNote,paramSignature);
+				procNote.Id=Db.NonQ(command,true,"ProcNoteNum","procNote",paramNote,paramSignature);
 			}
-			return procNote.ProcNoteNum;
+			return procNote.Id;
 		}
 
 		///<summary>Updates one ProcNote in the database.</summary>
@@ -181,7 +181,7 @@ namespace OpenDentBusiness.Crud{
 				+"Note         =  "+DbHelper.ParamChar+"paramNote, "
 				+"SigIsTopaz   =  "+POut.Bool  (procNote.SigIsTopaz)+", "
 				+"Signature    =  "+DbHelper.ParamChar+"paramSignature "
-				+"WHERE ProcNoteNum = "+POut.Long(procNote.ProcNoteNum);
+				+"WHERE ProcNoteNum = "+POut.Long(procNote.Id);
 			if(procNote.Note==null) {
 				procNote.Note="";
 			}
@@ -233,7 +233,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			OdSqlParameter paramSignature=new OdSqlParameter("paramSignature",OdDbType.Text,POut.StringParam(procNote.Signature));
 			command="UPDATE procnote SET "+command
-				+" WHERE ProcNoteNum = "+POut.Long(procNote.ProcNoteNum);
+				+" WHERE ProcNoteNum = "+POut.Long(procNote.Id);
 			Db.NonQ(command,paramNote,paramSignature);
 			return true;
 		}

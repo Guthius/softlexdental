@@ -421,18 +421,18 @@ namespace OpenDental{
 		#endregion
 
 		private void FormDiseaseEdit_Load(object sender,EventArgs e) {
-			DiseaseDef diseasedef=DiseaseDefs.GetItem(DiseaseCur.DiseaseDefNum);//guaranteed to have one
-			textProblem.Text=diseasedef.DiseaseName;
-			string i9descript=ICD9s.GetCodeAndDescription(diseasedef.ICD9Code);
+			DiseaseDef diseasedef=DiseaseDef.GetById(DiseaseCur.DiseaseDefNum);//guaranteed to have one
+			textProblem.Text=diseasedef.Name;
+			string i9descript=ICD9.GetCodeAndDescription(diseasedef.ICD9Code);
 			if(i9descript=="") {
 				textIcd9.Text=diseasedef.ICD9Code;
 			}
 			else {
 				textIcd9.Text=i9descript;
 			}
-			string i10descript=Icd10s.GetCodeAndDescription(diseasedef.Icd10Code);
+			string i10descript=ICD10.GetCodeAndDescription(diseasedef.ICD10Code);
 			if(i10descript=="") {
-				textIcd10.Text=diseasedef.Icd10Code;
+				textIcd10.Text=diseasedef.ICD10Code;
 			}
 			else {
 				textIcd10.Text=i10descript;
@@ -519,7 +519,7 @@ namespace OpenDental{
 					return;
 				}
 			}
-			SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,DiseaseCur.PatNum,DiseaseDefs.GetName(DiseaseCur.DiseaseDefNum)+" deleted");
+			SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,DiseaseCur.PatNum,DiseaseDef.GetName(DiseaseCur.DiseaseDefNum)+" deleted");
 			Diseases.Delete(DiseaseCur);
 			DialogResult=DialogResult.OK;
 		}
@@ -560,7 +560,7 @@ namespace OpenDental{
 			if(IsNew){
 				//This code is never hit in current implementation 09/26/2013.
 				Diseases.Insert(DiseaseCur);
-				SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,DiseaseCur.PatNum,DiseaseDefs.GetName(DiseaseCur.DiseaseDefNum)+" added");
+				SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,DiseaseCur.PatNum,DiseaseDef.GetName(DiseaseCur.DiseaseDefNum)+" added");
 			}
 			else{
 				//See if this problem is the pregnancy linked to a vitalsign exam
@@ -580,7 +580,7 @@ namespace OpenDental{
 					}
 				}
 				Diseases.Update(DiseaseCur);
-				SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,DiseaseCur.PatNum,DiseaseDefs.GetName(DiseaseCur.DiseaseDefNum)+" edited");
+				SecurityLogs.MakeLogEntry(Permissions.PatProblemListEdit,DiseaseCur.PatNum,DiseaseDef.GetName(DiseaseCur.DiseaseDefNum)+" edited");
 			}
 			DialogResult=DialogResult.OK;
 		}

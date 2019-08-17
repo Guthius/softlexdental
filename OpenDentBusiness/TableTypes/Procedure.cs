@@ -204,7 +204,7 @@ namespace OpenDentBusiness {
 		public int PriorityOrder {
 			get {
 				if(_priorityOrder==int.MinValue) {
-					_priorityOrder=Defs.GetOrder(DefCat.TxPriorities,this.Priority);
+					_priorityOrder=Defs.GetOrder(DefinitionCategory.TxPriorities,this.Priority);
 				}
 				return _priorityOrder;
 			}
@@ -226,7 +226,7 @@ namespace OpenDentBusiness {
 
 		public Procedure() {
 			UnitQty=1;
-			IcdVersion=Preferences.GetByte(PrefName.DxIcdVersion);
+			IcdVersion= Preference.GetByte(PreferenceName.DxIcdVersion);
 		}
 
 		///<summary>Returns a copy of the procedure.</summary>

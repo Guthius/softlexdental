@@ -38,7 +38,7 @@ namespace OpenDental {
 					comboClinic.Items.Add(clin.Abbr);
 				}
 			}
-			if(Preferences.GetBool(PrefName.EasyHidePublicHealth)) {
+			if(Preference.GetBool(PreferenceName.EasyHidePublicHealth)) {
 				comboSite.Visible=false;
 				labelSite.Visible=false;
 			}
@@ -86,7 +86,7 @@ namespace OpenDental {
 				clinicNum=_listClinics[comboClinic.SelectedIndex-1].ClinicNum;
 			}
 			long siteNum=0;
-			if(!Preferences.GetBool(PrefName.EasyHidePublicHealth) && comboSite.SelectedIndex!=0) {
+			if(!Preference.GetBool(PreferenceName.EasyHidePublicHealth) && comboSite.SelectedIndex!=0) {
 				siteNum=_listSites[comboSite.SelectedIndex-1].SiteNum;
 			}
 			//Get table
@@ -106,7 +106,7 @@ namespace OpenDental {
 				col=new ODGridColumn("Clinic",110);
 				gridMain.Columns.Add(col);
 			}
-			if(!Preferences.GetBool(PrefName.EasyHidePublicHealth)) {
+			if(!Preference.GetBool(PreferenceName.EasyHidePublicHealth)) {
 				col=new ODGridColumn("Site",110);
 				gridMain.Columns.Add(col);
 			}
@@ -121,7 +121,7 @@ namespace OpenDental {
 				if(Preferences.HasClinicsEnabled) {
 					row.Cells.Add(_table.Rows[i]["Clinic"].ToString());
 				}
-				if(!Preferences.GetBool(PrefName.EasyHidePublicHealth)) {
+				if(!Preference.GetBool(PreferenceName.EasyHidePublicHealth)) {
 					row.Cells.Add(_table.Rows[i]["Site"].ToString());
 				}
 				row.Tag=PIn.Long(_table.Rows[i]["PatNum"].ToString());

@@ -365,7 +365,7 @@ namespace OpenDental{
 			for(int i=0;i<_listProviders.Count;i++) {
 				comboProv.Items.Add(_listProviders[i].GetLongDesc());
 			}
-			if(Preferences.GetBool(PrefName.EasyHidePublicHealth)){
+			if(Preference.GetBool(PreferenceName.EasyHidePublicHealth)){
 				comboSite.Visible=false;
 				labelSite.Visible=false;
 			}
@@ -385,9 +385,9 @@ namespace OpenDental{
 		}
 
 		private void InitDateRange() {
-			int dayCount=Preferences.GetInt(PrefName.PlannedApptDaysPast);
+			int dayCount=Preference.GetInt(PreferenceName.PlannedApptDaysPast);
 			dateRangePicker.SetDateTimeFrom(DateTime.Today.AddDays(-dayCount));
-			dayCount=Preferences.GetInt(PrefName.PlannedApptDaysFuture);
+			dayCount=Preference.GetInt(PreferenceName.PlannedApptDaysFuture);
 			dateRangePicker.SetDateTimeTo(DateTime.Today.AddDays(dayCount));
 		}
 		
@@ -448,7 +448,7 @@ namespace OpenDental{
 						else{
 							row.Cells.Add(apt.AptDateTime.ToShortDateString());
 						}
-						row.Cells.Add(Defs.GetName(DefCat.RecallUnschedStatus,apt.UnschedStatus));
+						row.Cells.Add(Defs.GetName(DefinitionCategory.RecallUnschedStatus,apt.UnschedStatus));
 						if(apt.IsHygiene) {
 							Provider provHyg=Providers.GetFirstOrDefault(x => x.ProvNum==apt.ProvHyg);
 							row.Cells.Add(provHyg==null?Lan.g(this,"INVALID"):provHyg.Abbr);
@@ -488,7 +488,7 @@ namespace OpenDental{
 				provNum=_listProviders[comboProv.SelectedIndex-1].ProvNum;
 			}
 			long siteNum=0;
-			if(!Preferences.GetBool(PrefName.EasyHidePublicHealth) && comboSite.SelectedIndex!=0) {
+			if(!Preference.GetBool(PreferenceName.EasyHidePublicHealth) && comboSite.SelectedIndex!=0) {
 				siteNum=_listSites[comboSite.SelectedIndex-1].SiteNum;
 			}
 			_listPlannedAppts=Appointments.RefreshPlannedTracker(order,provNum,siteNum,comboClinic.SelectedClinicNum,codeRangeFilter.StartRange,

@@ -728,7 +728,7 @@ namespace OpenDentBusiness {
 					list.Add(new DisplayField("Super Head",0,category));
 					list.Add(new DisplayField("Patient Portal",0,category));
 					list.Add(new DisplayField("Broken Appts",0,category));
-					if(Preferences.GetBool(PrefName.ShowFeatureEhr)) {
+					if(Preference.GetBool(PreferenceName.ShowFeatureEhr)) {
 						list.Add(new DisplayField("Tobacco Use",0,category));
 					}
 					list.Add(new DisplayField("Pat Restrictions",0,category));

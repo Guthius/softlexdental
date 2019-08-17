@@ -249,7 +249,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one XWebResponse into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(XWebResponse xWebResponse,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO xwebresponse (";
 			if(!useExistingPK && isRandomKeys) {
 				xWebResponse.XWebResponseNum=ReplicationServers.GetKeyNoCache("xwebresponse","XWebResponseNum");

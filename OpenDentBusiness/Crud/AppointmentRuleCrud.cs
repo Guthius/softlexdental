@@ -114,7 +114,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one AppointmentRule into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(AppointmentRule appointmentRule,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO appointmentrule (";
 			if(!useExistingPK && isRandomKeys) {
 				appointmentRule.AppointmentRuleNum=ReplicationServers.GetKeyNoCache("appointmentrule","AppointmentRuleNum");

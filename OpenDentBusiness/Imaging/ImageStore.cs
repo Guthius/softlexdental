@@ -45,20 +45,21 @@ namespace OpenDentBusiness {
 					return replicationAtoZ;
 				}
 				//use this to handle possible multiple paths separated by semicolons.
-				return GetValidPathFromString(Preferences.GetString(PrefName.DocPath));
+				return GetValidPathFromString(Preference.GetString(PreferenceName.DocPath));
 			}
 			//If you got here you are using a cloud storage method.
 			return CloudStorage.AtoZPath;
 		}
 
 		public static string GetValidPathFromString(string documentPaths) {
+            // TODO: Fix me... create the A-Z structure...
 			string[] preferredPathsByOrder=documentPaths.Split(new char[] { ';' });
 			for(int i=0;i<preferredPathsByOrder.Length;i++) {
 				string path=preferredPathsByOrder[i];
 				string tryPath=ODFileUtils.CombinePaths(path,"A");
-				if(Directory.Exists(tryPath)) {
+				//if(Directory.Exists(tryPath)) {
 					return path;
-				}
+				//}
 			}
 			return null;
 		}
@@ -636,8 +637,8 @@ namespace OpenDentBusiness {
 			doc.DateCreated = DateTime.Now;
 			doc.PatNum = pat.PatNum;
 			doc.DocCategory = docCategory;
-			doc.WindowingMin = Preferences.GetInt(PrefName.ImageWindowingMin);
-			doc.WindowingMax = Preferences.GetInt(PrefName.ImageWindowingMax);
+			doc.WindowingMin = Preference.GetInt(PreferenceName.ImageWindowingMin);
+			doc.WindowingMax = Preference.GetInt(PreferenceName.ImageWindowingMax);
 			Documents.Insert(doc,pat);//creates filename and saves to db
 			doc=Documents.GetByNum(doc.DocNum);
 			try {
@@ -1153,8 +1154,8 @@ namespace OpenDentBusiness {
 				}
 				logMsg+=" "+Lans.g("ContrImages","with description")+" "+descriptDoc;
 			}
-			Def docCat=Defs.GetDef(DefCat.ImageCats,doc.DocCategory);
-			logMsg+=" "+Lans.g("ContrImages","with category")+" "+docCat.ItemName;
+			Definition docCat=Defs.GetDef(DefinitionCategory.ImageCats,doc.DocCategory);
+			logMsg+=" "+Lans.g("ContrImages","with category")+" "+docCat.Description;
 			SecurityLogs.MakeLogEntry(perm,doc.PatNum,logMsg,doc.DocNum,secDatePrevious);
 		}
 

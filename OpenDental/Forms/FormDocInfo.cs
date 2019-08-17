@@ -48,7 +48,7 @@ namespace OpenDental{
 		private TextBox textTime;
 		private string initialSelection;
 		private bool _isOkDisabled;
-		private List<Def> _listImageCatDefs;
+		private List<Definition> _listImageCatDefs;
 
 		///<summary>ALWAYS save docCur before loading this form.</summary>
 		public FormDocInfo(Patient patCur,Document docCur,string pInitialSelection,bool isOkDisabled=false){
@@ -343,11 +343,11 @@ namespace OpenDental{
 			}
 			//if (Docs.Cur.FileName.Equals(null))
 			listCategory.Items.Clear();
-			_listImageCatDefs=Defs.GetDefsForCategory(DefCat.ImageCats,true);
+			_listImageCatDefs=Definition.GetByCategory(DefinitionCategory.ImageCats);
 			for(int i=0;i<_listImageCatDefs.Count;i++){
-				string folderName=_listImageCatDefs[i].ItemName;
+				string folderName=_listImageCatDefs[i].Description;
 				listCategory.Items.Add(folderName);
-				if(i==0 || _listImageCatDefs[i].DefNum==DocCur.DocCategory || folderName==initialSelection){
+				if(i==0 || _listImageCatDefs[i].Id==DocCur.DocCategory || folderName==initialSelection){
 					listCategory.SelectedIndex=i;
 				}
 			}
@@ -388,26 +388,27 @@ namespace OpenDental{
 			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				System.Diagnostics.Process.Start("Explorer",Path.GetDirectoryName(textFileName.Text));
 			}
-			else if(CloudStorage.IsCloudStorage) {//First download, then open
-				FormProgress FormP=new FormProgress();
-				FormP.DisplayText="Downloading...";
-				FormP.NumberFormat="F";
-				FormP.NumberMultiplication=1;
-				FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-				FormP.TickMS=1000;
-				OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(ImageStore.GetPatientFolder(PatCur,"")
-					,DocCur.FileName
-					,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-				FormP.ShowDialog();
-				if(FormP.DialogResult==DialogResult.Cancel) {
-					state.DoCancel=true;
-					return;
-				}
-				//Create temp file here or create the file with the actual name?  Changes made when opening the file won't be saved, so I think temp file is best.
-				string tempFile=Preferences.GetRandomTempFile(Path.GetExtension(DocCur.FileName));
-				File.WriteAllBytes(tempFile,state.FileContent);
-				System.Diagnostics.Process.Start(tempFile);
-			}
+			else if(CloudStorage.IsCloudStorage)
+            {//First download, then open // TODO: Fix me
+             //	FormProgress FormP=new FormProgress();
+             //	FormP.DisplayText="Downloading...";
+             //	FormP.NumberFormat="F";
+             //	FormP.NumberMultiplication=1;
+             //	FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
+             //	FormP.TickMS=1000;
+             //	OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(ImageStore.GetPatientFolder(PatCur,"")
+             //		,DocCur.FileName
+             //		,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
+             //	FormP.ShowDialog();
+             //	if(FormP.DialogResult==DialogResult.Cancel) {
+             //		state.DoCancel=true;
+             //		return;
+             //	}
+             //	//Create temp file here or create the file with the actual name?  Changes made when opening the file won't be saved, so I think temp file is best.
+             //	string tempFile=Preferences.GetRandomTempFile(Path.GetExtension(DocCur.FileName));
+             //	File.WriteAllBytes(tempFile,state.FileContent);
+             //	System.Diagnostics.Process.Start(tempFile);
+            }
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e){
@@ -450,7 +451,7 @@ namespace OpenDental{
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			DocCur.DocCategory=_listImageCatDefs[listCategory.SelectedIndex].DefNum;
+			DocCur.DocCategory=_listImageCatDefs[listCategory.SelectedIndex].Id;
 			DocCur.ImgType=(ImageType)listType.SelectedIndex;
 			DocCur.Description=textDescript.Text;			
 			DocCur.DateCreated=dateTimeEntered;	

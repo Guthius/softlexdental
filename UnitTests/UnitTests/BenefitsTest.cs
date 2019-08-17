@@ -84,7 +84,7 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void Benefits_BitewingFrequency() {
-			PrefT.UpdateBool(PrefName.InsChecksFrequency,true);
+			PrefT.UpdateBool(PreferenceName.InsChecksFrequency,true);
 			string suffix=MethodBase.GetCurrentMethod().Name;
 			Patient pat=PatientT.CreatePatient(suffix);
 			InsuranceInfo ins=InsuranceT.AddInsurance(pat,suffix);
@@ -107,7 +107,7 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void Benefits_CancelScreeningFrequency() {
-			PrefT.UpdateBool(PrefName.InsChecksFrequency,true);
+			PrefT.UpdateBool(PreferenceName.InsChecksFrequency,true);
 			string suffix=MethodBase.GetCurrentMethod().Name;
 			Patient pat=PatientT.CreatePatient(suffix);
 			InsuranceInfo ins=InsuranceT.AddInsurance(pat,suffix);
@@ -130,7 +130,7 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void Benefits_CrownsFrequency() {
-			PrefT.UpdateBool(PrefName.InsChecksFrequency,true);
+			PrefT.UpdateBool(PreferenceName.InsChecksFrequency,true);
 			string suffix=MethodBase.GetCurrentMethod().Name;
 			Patient pat=PatientT.CreatePatient(suffix);
 			InsuranceInfo ins=InsuranceT.AddInsurance(pat,suffix);
@@ -153,7 +153,7 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void Benefits_SRPFrequency() {
-			PrefT.UpdateBool(PrefName.InsChecksFrequency,true);
+			PrefT.UpdateBool(PreferenceName.InsChecksFrequency,true);
 			string suffix=MethodBase.GetCurrentMethod().Name;
 			Patient pat=PatientT.CreatePatient(suffix);
 			InsuranceInfo ins=InsuranceT.AddInsurance(pat,suffix);
@@ -176,8 +176,8 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void Benefits_SealantAgeLimit() {
-			PrefT.UpdateBool(PrefName.InsChecksFrequency,true);
-			PrefT.UpdateString(PrefName.InsBenSealantCodes,"D1351,D1206");
+			PrefT.UpdateBool(PreferenceName.InsChecksFrequency,true);
+			PrefT.UpdateString(PreferenceName.InsBenSealantCodes,"D1351,D1206");
 			string suffix=MethodBase.GetCurrentMethod().Name;
 			Patient pat=PatientT.CreatePatient(suffix,birthDate:DateTime.Today.AddYears(-13));
 			InsuranceInfo ins=InsuranceT.AddInsurance(pat,suffix);
@@ -196,12 +196,12 @@ namespace UnitTests {
 		public void Benefits_BitewingFrequencyCanada() {
 			CultureInfo curCulture=CultureInfo.CurrentCulture;
 			Thread.CurrentThread.CurrentCulture=new CultureInfo("en-CA");//Canada
-			PrefT.UpdateBool(PrefName.InsChecksFrequency,true);
+			PrefT.UpdateBool(PreferenceName.InsChecksFrequency,true);
 			ProcedureCodeT.AddIfNotPresent("02142");
 			ProcedureCodeT.AddIfNotPresent("02143");
 			ProcedureCodeT.AddIfNotPresent("02144");
 			ProcedureCodes.RefreshCache();
-			PrefT.UpdateString(PrefName.InsBenBWCodes,"02142,02143,02144");
+			PrefT.UpdateString(PreferenceName.InsBenBWCodes,"02142,02143,02144");
 			CovCats.SetSpansToDefaultCanada();
 			CovSpans.RefreshCache();
 			try {
@@ -236,7 +236,7 @@ namespace UnitTests {
 		///year another Bitewing procedure is charted and verifies the frequency limitation applies to it.</summary>
 		[TestMethod]
 		public void Benefits_BitewingFrequencyPastYear() {
-			PrefT.UpdateBool(PrefName.InsChecksFrequency,true);
+			PrefT.UpdateBool(PreferenceName.InsChecksFrequency,true);
 			string suffix=MethodBase.GetCurrentMethod().Name;
 			Patient pat=PatientT.CreatePatient(suffix);
 			InsuranceInfo ins=InsuranceT.AddInsurance(pat,suffix);

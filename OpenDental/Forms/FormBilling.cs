@@ -629,7 +629,7 @@ namespace OpenDental{
 			gridBill.BeginUpdate();
 			gridBill.Columns.Clear();
 			ODGridColumn col=null;
-			if(Preferences.GetBool(PrefName.ShowFeatureSuperfamilies)) {
+			if(Preference.GetBool(PreferenceName.ShowFeatureSuperfamilies)) {
 				col=new ODGridColumn(Lan.g("TableBilling","Name"),150);
 			}
 			else {
@@ -650,7 +650,7 @@ namespace OpenDental{
 			gridBill.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("TableBilling","PayPlanDue"),70,HorizontalAlignment.Right);
 			gridBill.Columns.Add(col);
-			if(Preferences.GetBool(PrefName.ShowFeatureSuperfamilies)) {
+			if(Preference.GetBool(PreferenceName.ShowFeatureSuperfamilies)) {
 				col=new ODGridColumn(Lan.g("TableBilling","SF"),30);
 				gridBill.Columns.Add(col);
 			}
@@ -664,14 +664,14 @@ namespace OpenDental{
 				row.Cells.Add(rowCur["lastStatement"].ToString());
 				row.Cells.Add(rowCur["balTotal"].ToString());
 				row.Cells.Add(rowCur["insEst"].ToString());
-				if(Preferences.GetBool(PrefName.BalancesDontSubtractIns)) {
+				if(Preference.GetBool(PreferenceName.BalancesDontSubtractIns)) {
 					row.Cells.Add("");
 				}
 				else {
 					row.Cells.Add(rowCur["amountDue"].ToString());
 				}
 				row.Cells.Add(rowCur["payPlanDue"].ToString());
-				if(Preferences.GetBool(PrefName.ShowFeatureSuperfamilies) && rowCur["SuperFamily"].ToString()!="0") {
+				if(Preference.GetBool(PreferenceName.ShowFeatureSuperfamilies) && rowCur["SuperFamily"].ToString()!="0") {
 					row.Cells.Add("X");
 				}
 				row.Tag=rowCur;
@@ -699,9 +699,9 @@ namespace OpenDental{
 				_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==listClinicsAll[i].EmailAddressNum);
 			}
 			//Exclude default practice email address.
-			_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==Preferences.GetLong(PrefName.EmailDefaultAddressNum));
+			_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==Preference.GetLong(PreferenceName.EmailDefaultAddressNum));
 			//Exclude web mail notification email address.
-			_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==Preferences.GetLong(PrefName.EmailNotifyAddressNum));
+			_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==Preference.GetLong(PreferenceName.EmailNotifyAddressNum));
 			comboEmailFrom.Items.Add(Lan.g(this,"Practice/Clinic"));//default
 			comboEmailFrom.SelectedIndex=0;
 			//Add all email addresses which are not associated to a user, a clinic, or either of the default email addresses.
@@ -937,8 +937,8 @@ namespace OpenDental{
 			int numOfBatchesSent = 1;//Start at 1 so that it is better looking in the UI.
 			int numOfBatchesTotal = 0;
 			Dictionary<long,List<EbillStatement>> dictEbills = new Dictionary<long,List<EbillStatement>>();
-			int maxStmtsPerBatch = Preferences.GetInt(PrefName.BillingElectBatchMax);
-			if(maxStmtsPerBatch==0 || Preferences.GetString(PrefName.BillingUseElectronic)=="2") {//Max is disabled or Output to File billing option.
+			int maxStmtsPerBatch = Preference.GetInt(PreferenceName.BillingElectBatchMax);
+			if(maxStmtsPerBatch==0 || Preference.GetString(PreferenceName.BillingUseElectronic)=="2") {//Max is disabled or Output to File billing option.
 				maxStmtsPerBatch=gridBill.SelectedIndices.Length;//Make the batch size equal to the list of statements so that we send them all at once.
 			}
 			numOfBatchesTotal=(int)Math.Ceiling((decimal)gridBill.SelectedIndices.Length/maxStmtsPerBatch);
@@ -1005,8 +1005,8 @@ namespace OpenDental{
 					if(stmt==null) {//The statement was probably deleted by another user.
 						continue;
 					}
-					string billingType = Preferences.GetString(PrefName.BillingUseElectronic);
-					if(stmt.Mode_==StatementMode.Electronic && (billingType=="1" || billingType=="3") && !Preferences.GetBool(PrefName.BillingElectCreatePDF)) {
+					string billingType = Preference.GetString(PreferenceName.BillingUseElectronic);
+					if(stmt.Mode_==StatementMode.Electronic && (billingType=="1" || billingType=="3") && !Preference.GetBool(PreferenceName.BillingElectCreatePDF)) {
 						//Do not create a pdf
 					}
 					else {
@@ -1050,8 +1050,8 @@ namespace OpenDental{
 			int curStatementsInBatch = 0;
 			int pdfsPrinted = 0;
 			bool isComputeAging=true;//will be false if AgingIsEnterprise and aging was calculated for today already (or successfully runs for today)
-			if(Preferences.GetBool(PrefName.AgingIsEnterprise)) {
-				if(Preferences.GetDate(PrefName.DateLastAging).Date!=MiscData.GetNowDateTime().Date && !RunAgingEnterprise()) {//run aging for all patients
+			if(Preference.GetBool(PreferenceName.AgingIsEnterprise)) {
+				if(Preference.GetDate(PreferenceName.DateLastAging).Date!=MiscData.GetNowDateTime().Date && !RunAgingEnterprise()) {//run aging for all patients
 					return false;//if aging fails, don't generate and print statements
 				}
 				isComputeAging=false;
@@ -1120,9 +1120,9 @@ namespace OpenDental{
 				stmt.IsSent=true;
 				stmt.DateSent=DateTimeOD.Today;
 				#region Print PDFs
-				string billingType = Preferences.GetString(PrefName.BillingUseElectronic);
+				string billingType = Preference.GetString(PreferenceName.BillingUseElectronic);
 				string tempPdfFile="";
-				if(stmt.Mode_==StatementMode.Electronic && (billingType=="1" || billingType=="3") && !Preferences.GetBool(PrefName.BillingElectCreatePDF)) {
+				if(stmt.Mode_==StatementMode.Electronic && (billingType=="1" || billingType=="3") && !Preference.GetBool(PreferenceName.BillingElectCreatePDF)) {
 					//Do not create a pdf
 				}
 				else {
@@ -1282,7 +1282,7 @@ namespace OpenDental{
 						clinicNum=fam.ListPats[0].ClinicNum;
 					}
 					List<string> listElectErrors = new List<string>();
-					if(Preferences.GetString(PrefName.BillingUseElectronic)=="1") {//EHG
+					if(Preference.GetString(PreferenceName.BillingUseElectronic)=="1") {//EHG
 						listElectErrors=Bridges.EHG_statements.Validate(clinicNum);
 					}
 					if(listElectErrors.Count > 0) {
@@ -1320,8 +1320,8 @@ namespace OpenDental{
 			DataSet dataSet;
 			string selectedFile=null;
 			bool isComputeAging=true;//will be false if AgingIsEnterprise and aging was calculated for today already (or successfully runs for today)
-			if(Preferences.GetBool(PrefName.AgingIsEnterprise)) {
-				if(Preferences.GetDate(PrefName.DateLastAging).Date!=MiscData.GetNowDateTime().Date && !RunAgingEnterprise()) {//run aging for all patients
+			if(Preference.GetBool(PreferenceName.AgingIsEnterprise)) {
+				if(Preference.GetDate(PreferenceName.DateLastAging).Date!=MiscData.GetNowDateTime().Date && !RunAgingEnterprise()) {//run aging for all patients
 					return false;//if aging fails, don't generate and print statements
 				}
 				isComputeAging=false;
@@ -1335,8 +1335,8 @@ namespace OpenDental{
 				}
 				List<EbillStatement> listClinicStmts = entryForClinic.Value;
 				int maxNumOfBatches = listClinicStmts.Count;//Worst case scenario is number of statements total.
-				maxStmtsPerBatch = Preferences.GetInt(PrefName.BillingElectBatchMax);
-				if(maxStmtsPerBatch==0 || Preferences.GetString(PrefName.BillingUseElectronic)=="2") {//Max is disabled or Output to File billing option.
+				maxStmtsPerBatch = Preference.GetInt(PreferenceName.BillingElectBatchMax);
+				if(maxStmtsPerBatch==0 || Preference.GetString(PreferenceName.BillingUseElectronic)=="2") {//Max is disabled or Output to File billing option.
 					maxStmtsPerBatch=listClinicStmts.Count;//Make the batch size equal to the list of statements so that we send them all at once.
 				}
 				XmlWriterSettings xmlSettings = new XmlWriterSettings();
@@ -1353,16 +1353,16 @@ namespace OpenDental{
 					StringBuilder strBuildElect = new StringBuilder();
 					XmlWriter writerElect = XmlWriter.Create(strBuildElect,xmlSettings);
 					List<long> listElectStmtNums = new List<long>();
-					if(Preferences.GetString(PrefName.BillingUseElectronic)=="1") {
+					if(Preference.GetString(PreferenceName.BillingUseElectronic)=="1") {
 						Bridges.EHG_statements.GeneratePracticeInfo(writerElect,entryForClinic.Key);
 					}
-					else if(Preferences.GetString(PrefName.BillingUseElectronic)=="2") {
+					else if(Preference.GetString(PreferenceName.BillingUseElectronic)=="2") {
 						Bridges.POS_statements.GeneratePracticeInfo(writerElect,entryForClinic.Key);
 					}
-					else if(Preferences.GetString(PrefName.BillingUseElectronic)=="3") {
+					else if(Preference.GetString(PreferenceName.BillingUseElectronic)=="3") {
 						Bridges.ClaimX_Statements.GeneratePracticeInfo(writerElect,entryForClinic.Key);
 					}
-					else if(Preferences.GetString(PrefName.BillingUseElectronic)=="4") {
+					else if(Preference.GetString(PreferenceName.BillingUseElectronic)=="4") {
 						Bridges.EDS_Statements.GeneratePracticeInfo(writerElect,entryForClinic.Key);
 					}
 					int stmtCountCur = 0;
@@ -1399,19 +1399,19 @@ namespace OpenDental{
 							//then the partially generated statement will not be added to the strBuildElect.
 							StringBuilder strBuildStatement = new StringBuilder();
 							using(XmlWriter writerStatement = XmlWriter.Create(strBuildStatement,writerElect.Settings)) {
-								if(Preferences.GetString(PrefName.BillingUseElectronic)=="0") {
+								if(Preference.GetString(PreferenceName.BillingUseElectronic)=="0") {
 									throw new Exception(Lan.g(this,"\'No billing electronic\' is currently selected in Billing Defaults."));
 								}
-								else if(Preferences.GetString(PrefName.BillingUseElectronic)=="1") {
+								else if(Preference.GetString(PreferenceName.BillingUseElectronic)=="1") {
 									OpenDental.Bridges.EHG_statements.GenerateOneStatement(writerStatement,stmtCur,pat,fam,dataSet);
 								}
-								else if(Preferences.GetString(PrefName.BillingUseElectronic)=="2") {
+								else if(Preference.GetString(PreferenceName.BillingUseElectronic)=="2") {
 									OpenDental.Bridges.POS_statements.GenerateOneStatement(writerStatement,stmtCur,pat,fam,dataSet);
 								}
-								else if(Preferences.GetString(PrefName.BillingUseElectronic)=="3") {
+								else if(Preference.GetString(PreferenceName.BillingUseElectronic)=="3") {
 									OpenDental.Bridges.ClaimX_Statements.GenerateOneStatement(writerStatement,stmtCur,pat,fam,dataSet);
 								}
-								else if(Preferences.GetString(PrefName.BillingUseElectronic)=="4") {
+								else if(Preference.GetString(PreferenceName.BillingUseElectronic)=="4") {
 									Bridges.EDS_Statements.GenerateOneStatement(writerStatement,stmtCur,pat,fam,dataSet);
 								}
 							}
@@ -1437,7 +1437,7 @@ namespace OpenDental{
 						continue;//Go on to next batch
 					}
 					_progExtended.Fire(new ODEventArgs(ODEventType.Billing,new ProgressBarHelper(Lan.g(this,"Statement")+"\r\n"+curStmtIdx+" / "+gridBill.SelectedIndices.Length,"90%",90,100,ProgBarStyle.Blocks,"3")));
-					if(Preferences.GetString(PrefName.BillingUseElectronic)=="1") {
+					if(Preference.GetString(PreferenceName.BillingUseElectronic)=="1") {
 						writerElect.Close();
 						for(int attempts = 0;attempts<3;attempts++) {
 							try {
@@ -1478,9 +1478,9 @@ namespace OpenDental{
 								+dictStatementsForSend.Count,Math.Ceiling(((double)curStatementsProcessed/dictStatementsForSend[numOfBatchesSent].Count)*100)+"%",curStatementsProcessed,dictStatementsForSend[numOfBatchesSent].Count,ProgBarStyle.Blocks,"2")));
 						}
 					}
-					if(Preferences.GetString(PrefName.BillingUseElectronic)=="2") {
+					if(Preference.GetString(PreferenceName.BillingUseElectronic)=="2") {
 						writerElect.Close();
-						string filePath=Preferences.GetString(PrefName.BillingElectStmtOutputPathPos);
+						string filePath=Preference.GetString(PreferenceName.BillingElectStmtOutputPathPos);
 						if(Directory.Exists(filePath)) {
 							filePath=ODFileUtils.CombinePaths(filePath,"Statements.xml");
 						}
@@ -1517,7 +1517,7 @@ namespace OpenDental{
 								+dictStatementsForSend.Count,Math.Ceiling(((double)curStatementsProcessed /dictStatementsForSend[numOfBatchesSent].Count)*100)+"%",curStatementsProcessed,dictStatementsForSend[numOfBatchesSent].Count,ProgBarStyle.Blocks,"2")));
 						}
 					}
-					if(Preferences.GetString(PrefName.BillingUseElectronic)=="3") {
+					if(Preference.GetString(PreferenceName.BillingUseElectronic)=="3") {
 						writerElect.Close();
 						if(!String.IsNullOrEmpty(selectedFile)) {//User already chose a filepath to output to on the previous pass.
 							//We will reuse the selectedPath below.
@@ -1555,9 +1555,9 @@ namespace OpenDental{
 								+dictStatementsForSend.Count,Math.Ceiling(((double)curStatementsProcessed/dictStatementsForSend[numOfBatchesSent].Count)*100)+"%",curStatementsProcessed,dictStatementsForSend[numOfBatchesSent].Count,ProgBarStyle.Blocks,"2")));
 						}
 					}
-					if(Preferences.GetString(PrefName.BillingUseElectronic)=="4") {
+					if(Preference.GetString(PreferenceName.BillingUseElectronic)=="4") {
 						writerElect.Close();
-						string filePath=Preferences.GetString(PrefName.BillingElectStmtOutputPathEds);
+						string filePath=Preference.GetString(PreferenceName.BillingElectStmtOutputPathEds);
 						if(Directory.Exists(filePath)) {
 							filePath=ODFileUtils.CombinePaths(filePath,"Statements.xml");
 						}
@@ -1656,7 +1656,7 @@ namespace OpenDental{
 					IsTimeSensitive=false,
 					MobilePhoneNumber=patComm.SmsPhone,
 					PatNum=stmt.PatNum,
-					MsgText=Statements.ReplaceVarsForSms(Preferences.GetString(PrefName.BillingDefaultsSmsTemplate),pat,stmt),
+					MsgText=Statements.ReplaceVarsForSms(Preference.GetString(PreferenceName.BillingDefaultsSmsTemplate),pat,stmt),
 					MsgType=SmsMessageSource.Statements,
 				};
 				guidBatch=guidBatch??textToSend.GuidMessage;
@@ -1715,12 +1715,12 @@ namespace OpenDental{
 		private bool RunAgingEnterprise() {
 			DateTime dtNow=MiscData.GetNowDateTime();
 			DateTime dtToday=dtNow.Date;
-			DateTime dateLastAging=Preferences.GetDate(PrefName.DateLastAging);
+			DateTime dateLastAging=Preference.GetDate(PreferenceName.DateLastAging);
 			if(dateLastAging.Date==dtToday) {
 				return true;//already ran aging for this date, just move on
 			}
-			Prefs.RefreshCache();
-			DateTime dateTAgingBeganPref=Preferences.GetDateTime(PrefName.AgingBeginDateTime);
+			Preference.Refresh();
+			DateTime dateTAgingBeganPref=Preference.GetDateTime(PreferenceName.AgingBeginDateTime);
 			if(dateTAgingBeganPref>DateTime.MinValue) {
 				MessageBox.Show(this,Lan.g(this,"In order to print or send statments, aging must be re-calculated, but you cannot run aging until it has "
 					+"finished the current calculations which began on")+" "+dateTAgingBeganPref.ToString()+".\r\n"+Lans.g(this,"If you believe the current "
@@ -1729,7 +1729,7 @@ namespace OpenDental{
 				return false;
 			}
 			SecurityLogs.MakeLogEntry(Permissions.AgingRan,0,"Aging Ran Automatically - Billing Form");
-			Prefs.UpdateString(PrefName.AgingBeginDateTime,POut.DateT(dtNow,false));//get lock on pref to block others
+			Preference.Update(PreferenceName.AgingBeginDateTime,POut.DateT(dtNow,false));//get lock on pref to block others
 			Signalods.SetInvalid(InvalidType.Prefs);//signal a cache refresh so other computers will have the updated pref as quickly as possible
 			Cursor=Cursors.WaitCursor;
 			bool result=true;
@@ -1737,7 +1737,7 @@ namespace OpenDental{
 			ODProgress.ShowAction(
 				() => {
 					Ledgers.ComputeAging(0,dtToday);
-					Prefs.UpdateString(PrefName.DateLastAging,POut.Date(dtToday,false));
+					Preference.Update(PreferenceName.DateLastAging,POut.Date(dtToday,false));
 				},
 				startingMessage:msgText,
 				actionException:ex => {
@@ -1746,7 +1746,7 @@ namespace OpenDental{
 				}
 			);
 			Cursor=Cursors.Default;
-			Prefs.UpdateString(PrefName.AgingBeginDateTime,"");//clear lock on pref whether aging was successful or not
+			Preference.Update(PreferenceName.AgingBeginDateTime,"");//clear lock on pref whether aging was successful or not
 			Signalods.SetInvalid(InvalidType.Prefs);
 			return result;
 		}

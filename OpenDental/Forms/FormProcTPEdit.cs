@@ -50,7 +50,7 @@ namespace OpenDental{
 		private bool _isSigned;
 		private ValidDouble textFeeAllowed;
 		private Label labelFeeAllowed;
-		private List<Def> _listTxPriorityDefs;
+		private List<Definition> _listTxPriorityDefs;
 
 		///<summary></summary>
 		public FormProcTPEdit(ProcTP procCur,DateTime dateTP,bool isSigned)
@@ -480,10 +480,10 @@ namespace OpenDental{
 			}
 			comboPriority.Items.Add(Lan.g(this,"none"));
 			comboPriority.SelectedIndex=0;
-			_listTxPriorityDefs=Defs.GetDefsForCategory(DefCat.TxPriorities,true);
+			_listTxPriorityDefs=Definition.GetByCategory(DefinitionCategory.TxPriorities);
 			for(int i=0;i<_listTxPriorityDefs.Count;i++){
-				comboPriority.Items.Add(_listTxPriorityDefs[i].ItemName);
-				if(ProcCur.Priority==_listTxPriorityDefs[i].DefNum){
+				comboPriority.Items.Add(_listTxPriorityDefs[i].Description);
+				if(ProcCur.Priority==_listTxPriorityDefs[i].Id){
 					comboPriority.SelectedIndex=i+1;
 				}
 			}
@@ -530,7 +530,7 @@ namespace OpenDental{
 				ProcCur.Priority=0;
 			}
 			else{
-				ProcCur.Priority=_listTxPriorityDefs[comboPriority.SelectedIndex-1].DefNum;
+				ProcCur.Priority=_listTxPriorityDefs[comboPriority.SelectedIndex-1].Id;
 			}
 			ProcCur.ToothNumTP=textToothNumTP.Text;
 			ProcCur.Surf=textSurf.Text;

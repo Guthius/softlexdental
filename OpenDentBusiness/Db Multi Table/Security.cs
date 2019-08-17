@@ -210,7 +210,7 @@ namespace OpenDentBusiness
             }
             if (perm == Permissions.AccountingCreate || perm == Permissions.AccountingEdit)
             {
-                if (date <= Preferences.GetDate(PrefName.AccountingLockDate))
+                if (date <= Preference.GetDate(PreferenceName.AccountingLockDate))
                 {
                     if (!suppressMessage && !suppressLockDateMessage)
                     {
@@ -230,7 +230,7 @@ namespace OpenDentBusiness
                 return true;
             }
             //Include CEMT users, as a CEMT user could be logged in when this is checked.
-            DateTime dateLimit = GetDateLimit(perm, curUser.GetGroups(true).Select(x => x.UserGroupNum).ToList());
+            DateTime dateLimit = GetDateLimit(perm, curUser.GetGroups().Select(x => x.Id).ToList());
             if (date > dateLimit)
             {//authorized
                 return true;
@@ -295,7 +295,7 @@ namespace OpenDentBusiness
             {
                 return false;//Invalid or MinDate passed in.
             }
-            if (!Preferences.GetBool(PrefName.SecurityLockIncludesAdmin) && GroupPermissions.HasPermission(Security.CurUser, Permissions.SecurityAdmin, 0))
+            if (!Preference.GetBool(PreferenceName.SecurityLockIncludesAdmin) && GroupPermissions.HasPermission(Security.CurUser, Permissions.SecurityAdmin, 0))
             {
                 return false;//admins are never affected by global date limitation when preference is false.
             }
@@ -309,16 +309,16 @@ namespace OpenDentBusiness
                 return false;
             }
             //If global lock is Date based.
-            if (date <= Preferences.GetDate(PrefName.SecurityLockDate))
+            if (date <= Preference.GetDate(PreferenceName.SecurityLockDate))
             {
                 if (!isSilent)
                 {
-                    MessageBox.Show(Lans.g("Security", "Locked by Administrator before ") + Preferences.GetDate(PrefName.SecurityLockDate).ToShortDateString());
+                    MessageBox.Show(Lans.g("Security", "Locked by Administrator before ") + Preference.GetDate(PreferenceName.SecurityLockDate).ToShortDateString());
                 }
                 return true;
             }
             //If global lock is days based.
-            int lockDays = Preferences.GetInt(PrefName.SecurityLockDays);
+            int lockDays = Preference.GetInt(PreferenceName.SecurityLockDays);
             if (lockDays > 0 && date <= DateTime.Today.AddDays(-lockDays))
             {
                 if (!isSilent)

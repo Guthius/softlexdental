@@ -82,7 +82,7 @@ namespace OpenDental
         {
             if (IsSelectionMode)
             {
-                SelectedAllergyDefNum = allergiesList[e.Row].AllergyDefNum;
+                SelectedAllergyDefNum = allergiesList[e.Row].Id;
                 DialogResult = DialogResult.OK;
             }
             else
@@ -106,7 +106,6 @@ namespace OpenDental
             using (var formAllergyDefEdit = new FormAllergyDefEdit())
             {
                 formAllergyDefEdit.AllergyDefCur = new AllergyDef();
-                formAllergyDefEdit.AllergyDefCur.IsNew = true;
 
                 if (formAllergyDefEdit.ShowDialog() == DialogResult.OK)
                 {
@@ -132,7 +131,7 @@ namespace OpenDental
                 return;
             }
 
-            SelectedAllergyDefNum = allergiesList[allergiesGrid.GetSelectedIndex()].AllergyDefNum;
+            SelectedAllergyDefNum = allergiesList[allergiesGrid.GetSelectedIndex()].Id;
 
             DialogResult = DialogResult.OK;
         }

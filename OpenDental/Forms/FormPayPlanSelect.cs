@@ -208,7 +208,7 @@ namespace OpenDental{
 					row.Cells.Add(Lan.g(this,"None"));
 				}
 				else {
-					row.Cells.Add(Defs.GetDef(DefCat.PayPlanCategories,planCur.PlanCategory).ItemName);
+					row.Cells.Add(Defs.GetDef(DefinitionCategory.PayPlanCategories,planCur.PlanCategory).Description);
 				}
 				row.Cells.Add(PayPlans.GetTotalCost(planCur.PayPlanNum,_listPayPlanCharges).ToString("F"));//total cost
 				row.Cells.Add(PayPlans.GetBalance(planCur.PayPlanNum,_listPayPlanCharges,listPaySplits).ToString("F"));//balance

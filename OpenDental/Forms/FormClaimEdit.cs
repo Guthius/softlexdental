@@ -16,7 +16,6 @@ using CodeBase;
 using OpenDentBusiness;
 using System.Linq;
 using OpenDentBusiness.Eclaims;
-using OpenDentalCloud.Core;
 
 namespace OpenDental{
 	///<summary></summary>
@@ -338,7 +337,7 @@ namespace OpenDental{
 				SetFormReadOnly(this);
 				this.Text+=" - "+Lan.g(this,"READ ONLY - USER RESTRICTED TO A DIFFERENT CLINIC");
 			}
-			if(!Preferences.GetBool(PrefName.AllowProcAdjFromClaim)) {
+			if(!Preference.GetBool(PreferenceName.AllowProcAdjFromClaim)) {
 				contextAdjust.MenuItems.Remove(menuItemAddAdj);
 			}
 			//Show the claim attachment button if the office is using ClaimConnect
@@ -593,7 +592,7 @@ namespace OpenDental{
 			if(comboClinic.SelectedIndex<0) {
 				comboClinic.SelectedIndex=0;//Default to None.
 			}
-			if(Defs.GetDefsForCategory(DefCat.ClaimCustomTracking).Count==0) {
+			if(Definition.GetByCategory(DefinitionCategory.ClaimCustomTracking).Count==0) {
 				butAdd.Visible=false;
 			}
 			else{
@@ -641,7 +640,7 @@ namespace OpenDental{
 			}
 			else{
 				textOrthoDate.Text=ClaimCur.OrthoDate.ToShortDateString();
-				if(Preferences.GetBool(PrefName.OrthoClaimUseDatePlacement) && ClaimCur.OrthoDate != null && ClaimCur.OrthoDate.Year > 1880) {
+				if(Preference.GetBool(PreferenceName.OrthoClaimUseDatePlacement) && ClaimCur.OrthoDate != null && ClaimCur.OrthoDate.Year > 1880) {
 					textOrthoDate.Enabled=false;
 				}
 			}
@@ -1123,21 +1122,23 @@ namespace OpenDental{
 				}
 				//found it, download and display
 				//This chunk of code was pulled from FormFilePicker.cs
-				FormProgress FormP=new FormProgress();
-				FormP.DisplayText="Downloading...";
-				FormP.NumberFormat="F";
-				FormP.NumberMultiplication=1;
-				FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-				FormP.TickMS=1000;
-				TaskStateDownload state=CloudStorage.DownloadAsync(patFolder,claimAttachCur.ActualFileName,
-					new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-				if(FormP.ShowDialog()==DialogResult.Cancel) {
-					state.DoCancel=true;
-					return;
-				}
-				string tempFile=Preferences.GetRandomTempFile(Path.GetExtension(pathAndFileName));
-				File.WriteAllBytes(tempFile,state.FileContent);
-				Process.Start(tempFile);
+
+            // TODO: Fix me
+				//FormProgress FormP=new FormProgress();
+				//FormP.DisplayText="Downloading...";
+				//FormP.NumberFormat="F";
+				//FormP.NumberMultiplication=1;
+				//FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
+				//FormP.TickMS=1000;
+				//TaskStateDownload state=CloudStorage.DownloadAsync(patFolder,claimAttachCur.ActualFileName,
+				//	new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
+				//if(FormP.ShowDialog()==DialogResult.Cancel) {
+				//	state.DoCancel=true;
+				//	return;
+				//}
+				//string tempFile=Preferences.GetRandomTempFile(Path.GetExtension(pathAndFileName));
+				//File.WriteAllBytes(tempFile,state.FileContent);
+				//Process.Start(tempFile);
 			}
 			else {//Local storage
 				string pathAndFileName=ODFileUtils.CombinePaths(patFolder,claimAttachCur.ActualFileName);
@@ -1241,7 +1242,7 @@ namespace OpenDental{
 				row.Cells.Add("");
 			}
 			if(claimProcCur.ClaimPaymentTracking!=0) {
-				row.Cells.Add(Defs.GetDef(DefCat.ClaimPaymentTracking,claimProcCur.ClaimPaymentTracking).ItemName);//EOB Code
+				row.Cells.Add(Defs.GetDef(DefinitionCategory.ClaimPaymentTracking,claimProcCur.ClaimPaymentTracking).Description);//EOB Code
 			}
 			else {
 				row.Cells.Add("");
@@ -1275,10 +1276,10 @@ namespace OpenDental{
 			foreach(ClaimTracking claimTrackingEntry in listCustomStatusEntries.OrderByDescending(x => x.DateTimeEntry)) {
 				row=new ODGridRow();
 				row.Cells.Add(claimTrackingEntry.DateTimeEntry.ToShortDateString()+" "+claimTrackingEntry.DateTimeEntry.ToShortTimeString());
-				String defValue=Defs.GetName(DefCat.ClaimCustomTracking,claimTrackingEntry.TrackingDefNum);//get definition Name
+				String defValue=Defs.GetName(DefinitionCategory.ClaimCustomTracking,claimTrackingEntry.TrackingDefNum);//get definition Name
 				row.Cells.Add(defValue);
 				row.Cells.Add(claimTrackingEntry.Note);
-				row.Cells.Add(Defs.GetName(DefCat.ClaimErrorCode,claimTrackingEntry.TrackingErrorDefNum));
+				row.Cells.Add(Defs.GetName(DefinitionCategory.ClaimErrorCode,claimTrackingEntry.TrackingErrorDefNum));
 				row.Cells.Add(Userods.GetName(claimTrackingEntry.UserNum));
 				gridStatusHistory.Rows.Add(row);
 				row.Tag=claimTrackingEntry;
@@ -1485,7 +1486,7 @@ namespace OpenDental{
 				if(MessageBox.Show(Lan.g(this,"If you enter by total, the insurance payment will affect the patient balance.  It is recommended to enter by procedure instead.  Continue anyway?"),"",MessageBoxButtons.OKCancel)!=DialogResult.OK)
 				return;
 			}
-			if(Preferences.GetBool(PrefName.OrthoInsPayConsolidated)) {
+			if(Preference.GetBool(PreferenceName.OrthoInsPayConsolidated)) {
 				InsPlan planCur = InsPlans.GetPlan(ClaimCur.PlanNum,PlanList);
 				long orthoAutoCodeNum = InsPlans.GetOrthoAutoProc(planCur);
 				//if all the procedures on this claim are ortho auto procedures...
@@ -1634,7 +1635,7 @@ namespace OpenDental{
 				}
 			}
 			#region OrthoInsPayConsolidated
-			if(Preferences.GetBool(PrefName.OrthoInsPayConsolidated)) {
+			if(Preference.GetBool(PreferenceName.OrthoInsPayConsolidated)) {
 				List<int> listOrthoAutoGridRows = new List<int>();
 				InsPlan planCur = InsPlans.GetPlan(ClaimCur.PlanNum,PlanList);
 				long orthoAutoCodeNum = InsPlans.GetOrthoAutoProc(planCur);
@@ -1966,7 +1967,7 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.InsPayCreate)) {//date not checked here, but it will be checked when saving the check to prevent backdating
 				return;
 			}
-			if(Preferences.GetBool(PrefName.ClaimPaymentBatchOnly)) {
+			if(Preference.GetBool(PreferenceName.ClaimPaymentBatchOnly)) {
 				//Is there a permission in the manage module that would block this behavior? Are we sending the user into a TRAP?!
 				MsgBox.Show(this,"Please use Batch Insurance in Manage Module to Finalize Payments.");
 				return;
@@ -2056,7 +2057,7 @@ namespace OpenDental{
 		///<summary>Helper method that shows the payment window if the user has the "Show provider income transfer window after entering insurance payment"
 		///preference enabled.  This method should always be called after an insurance payment has been made.</summary>
 		public static void ShowProviderTransferWindow(Claim claimCur,Patient patCur, Family famCur) {
-			if(!Preferences.GetBool(PrefName.ProviderIncomeTransferShows) || claimCur.ClaimType=="PreAuth") {
+			if(!Preference.GetBool(PreferenceName.ProviderIncomeTransferShows) || claimCur.ClaimType=="PreAuth") {
 				return;
 			}
 			Payment PaymentCur=new Payment();
@@ -2172,7 +2173,7 @@ namespace OpenDental{
 			string text=PatCur.GetNameFL();
 			Font font=new Font("Microsoft Sans Serif",12,FontStyle.Bold);
 			g.DrawString(text,font,Brushes.Black,595/2-g.MeasureString(text,font).Width/2,5);
-			text=Preferences.GetString(PrefName.PracticeTitle);
+			text=Preference.GetString(PreferenceName.PracticeTitle);
 			font=new Font("Microsoft Sans Serif",9,FontStyle.Bold);
 			g.DrawString(text,font,Brushes.Black,595/2-g.MeasureString(text,font).Width/2,28);
 			g.DrawImage(bitmap,0,50);
@@ -2182,32 +2183,33 @@ namespace OpenDental{
 			string attachPath=EmailAttaches.GetAttachPath();
 			string newPath=ODFileUtils.CombinePaths(attachPath,newName);
 			try {
-				if(CloudStorage.IsCloudStorage) {
-					FormProgress FormP=new FormProgress();
-					FormP.DisplayText="Uploading...";
-					FormP.NumberFormat="F";
-					FormP.NumberMultiplication=1;
-					FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-					FormP.TickMS=1000;
-					OpenDentalCloud.Core.TaskStateUpload state=null;
-					using(MemoryStream ms=new MemoryStream()) {
-						bitmapBig.Save(ms,System.Drawing.Imaging.ImageFormat.Bmp);
-						state=CloudStorage.UploadAsync(
-							CloudStorage.AtoZPath+"/EmailAttachments"
-							,newName
-							,ms.ToArray()
-							,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-					}
-					FormP.ShowDialog();
-					if(FormP.DialogResult==DialogResult.Cancel) {
-						state.DoCancel=true;
-						return;
-					}
-					//Upload was successful, so continue attaching
-				}
-				else { 
-					bitmapBig.Save(newPath);
-				}
+                // TODO: Fix me
+				//if(CloudStorage.IsCloudStorage) {
+				//	FormProgress FormP=new FormProgress();
+				//	FormP.DisplayText="Uploading...";
+				//	FormP.NumberFormat="F";
+				//	FormP.NumberMultiplication=1;
+				//	FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
+				//	FormP.TickMS=1000;
+				//	OpenDentalCloud.Core.TaskStateUpload state=null;
+				//	using(MemoryStream ms=new MemoryStream()) {
+				//		bitmapBig.Save(ms,System.Drawing.Imaging.ImageFormat.Bmp);
+				//		state=CloudStorage.UploadAsync(
+				//			CloudStorage.AtoZPath+"/EmailAttachments"
+				//			,newName
+				//			,ms.ToArray()
+				//			,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
+				//	}
+				//	FormP.ShowDialog();
+				//	if(FormP.DialogResult==DialogResult.Cancel) {
+				//		state.DoCancel=true;
+				//		return;
+				//	}
+				//	//Upload was successful, so continue attaching
+				//}
+				//else { 
+				//	bitmapBig.Save(newPath);
+				//}
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);
@@ -2221,7 +2223,7 @@ namespace OpenDental{
 		}
 
 		private void butExport_Click(object sender,EventArgs e) {
-			string exportPath=Preferences.GetString(PrefName.ClaimAttachExportPath);
+			string exportPath=Preference.GetString(PreferenceName.ClaimAttachExportPath);
 			if(!Directory.Exists(exportPath)){
 				if(MessageBox.Show(Lan.g(this,"The claim export path no longer exists at:")+" "+exportPath+"\r\n"
 					+Lan.g(this,"Would you like to create it?"),"", MessageBoxButtons.YesNo)==DialogResult.Yes) 
@@ -2549,7 +2551,7 @@ namespace OpenDental{
 		///<summary>Returns true if the claim has ICD9 codes and the user insists on sending the claim with them attached.</summary>
 		private bool HasIcd9Codes() {
 			List<Procedure> listProcsOnClaim=ProcList.FindAll(x => _listClaimProcsForClaim.Any(y => y.ProcNum==x.ProcNum));			
-			if(ICD9s.HasICD9Codes(listProcsOnClaim)) {
+			if(ICD9.HasICD9Codes(listProcsOnClaim)) {
 				string msgText="There are ICD-9 codes attached to a procedure.  Would you like to send the claim without the ICD-9 codes? ";
 				if(MessageBox.Show(msgText,"",MessageBoxButtons.YesNo)==DialogResult.Yes) {
 					return false;//They have codes, but they are willing to send without them.
@@ -3378,7 +3380,7 @@ namespace OpenDental{
 					SecurityLogs.MakeLogEntry(_claimEditPermission,PatCur.PatNum,"Claim saved for "+PatCur.LName+","+PatCur.FName);
 				}
 				if(comboClaimStatus.SelectedIndex==5) {//Received
-					if(_isPaymentEntered && Preferences.GetBool(PrefName.PromptForSecondaryClaim) && Security.IsAuthorized(Permissions.ClaimSend,true)) {
+					if(_isPaymentEntered && Preference.GetBool(PreferenceName.PromptForSecondaryClaim) && Security.IsAuthorized(Permissions.ClaimSend,true)) {
 						//We currenlty require that payment be entered in this instance of the form.
 						//We might later decide that we want to check for secondary whenever the primary is recieved and there is financial values entered
 						//regardless of when they were entered.
@@ -3422,7 +3424,7 @@ namespace OpenDental{
 				}
 			}
 			//When the user "cancels" out of a new claim we want to delete any corresponding claim snapshots.
-			if(Preferences.GetBool(PrefName.ClaimSnapshotEnabled)) {
+			if(Preference.GetBool(PreferenceName.ClaimSnapshotEnabled)) {
 				ClaimSnapshots.DeleteForClaimProcs(_listClaimProcsForClaim.Select(x => x.ClaimProcNum).ToList());
 			}
 			ClaimProcs.DeleteEstimatesForDroppedPatPlan(_listClaimProcsForClaim);

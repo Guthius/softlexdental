@@ -20,7 +20,7 @@ namespace OpenDental {
 		private void FormReplicationEdit_Load(object sender,EventArgs e) {
 			textDescript.Text=RepServ.Descript;
 			textServerId.Text=RepServ.ServerId.ToString();
-			if(Preferences.GetBool(PrefName.RandomPrimaryKeys)) {
+			if(Preference.GetBool(PreferenceName.RandomPrimaryKeys)) {
 				if(RepServ.RangeStart!=0) {
 					textRangeStart.Text=RepServ.RangeStart.ToString();
 				}
@@ -38,7 +38,7 @@ namespace OpenDental {
 			textAtoZpath.Text=RepServ.AtoZpath;
 			checkUpdateBlocked.Checked=RepServ.UpdateBlocked;
 			textSlaveMonitor.Text=RepServ.SlaveMonitor;
-			if(RepServ.ReplicationServerNum==Preferences.GetLong(PrefName.ReplicationUserQueryServer)) {
+			if(RepServ.ReplicationServerNum==Preference.GetLong(PreferenceName.ReplicationUserQueryServer)) {
 				checkReportServer.Checked=true;
 			}
 		}
@@ -59,8 +59,8 @@ namespace OpenDental {
 			if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"Delete?")) {
 				return;
 			}
-			if(RepServ.ReplicationServerNum==Preferences.GetLong(PrefName.ReplicationUserQueryServer)) {//Current report server.
-				if(Prefs.UpdateLong(PrefName.ReplicationUserQueryServer,0)) {
+			if(RepServ.ReplicationServerNum==Preference.GetLong(PreferenceName.ReplicationUserQueryServer)) {//Current report server.
+				if(Preference.Update(PreferenceName.ReplicationUserQueryServer,0)) {
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 			}
@@ -130,12 +130,12 @@ namespace OpenDental {
 			}
 			//Update the ReplicationUserQueryServer preference as needed.
 			if(checkReportServer.Checked) {
-				if(Prefs.UpdateLong(PrefName.ReplicationUserQueryServer,RepServ.ReplicationServerNum)) {
+				if(Preference.Update(PreferenceName.ReplicationUserQueryServer,RepServ.ReplicationServerNum)) {
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 			}
-			else if(RepServ.ReplicationServerNum==Preferences.GetLong(PrefName.ReplicationUserQueryServer)) {//If this replication server was the original report server, set the current server to 0.
-				if(Prefs.UpdateLong(PrefName.ReplicationUserQueryServer,0)) {
+			else if(RepServ.ReplicationServerNum==Preference.GetLong(PreferenceName.ReplicationUserQueryServer)) {//If this replication server was the original report server, set the current server to 0.
+				if(Preference.Update(PreferenceName.ReplicationUserQueryServer,0)) {
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 			}

@@ -39,7 +39,7 @@ namespace OpenDental {
 			//If clinics are enabled, the Username, Password, and PaymentType fields are allowed to be blank/invalid for any clinic not using X-Charge
 			//Therefore, we will validate the credentials and payment type using FormOpenDental.ClinicNum
 			string paymentType=ProgramProperties.GetPropVal(prog.ProgramNum,"PaymentType",Clinics.ClinicNum);
-			List<Def> _listPayTypeDefs=Defs.GetDefsForCategory(DefCat.PaymentTypes,true).FindAll(x => x.DefNum.ToString()==paymentType);//should be a list of 0 or 1
+			List<Definition> _listPayTypeDefs=Definition.GetByCategory(DefinitionCategory.PaymentTypes).FindAll(x => x.Id.ToString()==paymentType);//should be a list of 0 or 1
 			_xUsername=ProgramProperties.GetPropVal(prog.ProgramNum,"Username",Clinics.ClinicNum);
 			_xPassword=ProgramProperties.GetPropVal(prog.ProgramNum,"Password",Clinics.ClinicNum);
 			if(string.IsNullOrEmpty(_xUsername) || string.IsNullOrEmpty(_xPassword) || _listPayTypeDefs.Count<1) {

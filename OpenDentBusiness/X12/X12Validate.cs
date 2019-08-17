@@ -116,48 +116,48 @@ namespace OpenDentBusiness {
 		}
 
 		public static void PracticeAddress(StringBuilder strb) {
-			if(Preferences.GetString(PrefName.PracticePhone).Length!=10) {
+			if(Preference.GetString(PreferenceName.PracticePhone).Length!=10) {
 				//10 digit phone is required by WebMD (Emdeon Dental) and is universally assumed
 				Comma(strb);
 				strb.Append("Practice Phone");
 			}
-			if(Preferences.GetString(PrefName.PracticeAddress).Trim()=="") {
+			if(Preference.GetString(PreferenceName.PracticeAddress).Trim()=="") {
 				Comma(strb);
 				strb.Append("Practice Address");
 			}
-			if(Preferences.GetString(PrefName.PracticeCity).Trim().Length<2) {
+			if(Preference.GetString(PreferenceName.PracticeCity).Trim().Length<2) {
 				Comma(strb);
 				strb.Append("Practice City");
 			}
-			if(Preferences.GetString(PrefName.PracticeST).Trim().Length!=2) {
+			if(Preference.GetString(PreferenceName.PracticeST).Trim().Length!=2) {
 				Comma(strb);
 				strb.Append("Practice State(2 char)");
 			}
-			if(!Regex.IsMatch(Preferences.GetString(PrefName.PracticeZip).Trim(),"^[0-9]{5}\\-?([0-9]{4})?$")) {//#####, or #####-, or #####-####, or #########. Dashes are removed when X12 is generated.
+			if(!Regex.IsMatch(Preference.GetString(PreferenceName.PracticeZip).Trim(),"^[0-9]{5}\\-?([0-9]{4})?$")) {//#####, or #####-, or #####-####, or #########. Dashes are removed when X12 is generated.
 				Comma(strb);
 				strb.Append("Practice Zip");
 			}
 		}
 
 		public static void BillingAddress(StringBuilder strb) {
-			if(Preferences.GetString(PrefName.PracticePhone).Length!=10) { //There is no billing phone, so the practice phone is sent electronically.
+			if(Preference.GetString(PreferenceName.PracticePhone).Length!=10) { //There is no billing phone, so the practice phone is sent electronically.
 				//10 digit phone is required by WebMD and is universally assumed 
 				Comma(strb);
 				strb.Append("Practice Phone");
 			}
-			if(Preferences.GetString(PrefName.PracticeBillingAddress).Trim()=="") {
+			if(Preference.GetString(PreferenceName.PracticeBillingAddress).Trim()=="") {
 				Comma(strb);
 				strb.Append("Practice Billing Address");
 			}
-			if(Preferences.GetString(PrefName.PracticeBillingCity).Trim().Length<2) {
+			if(Preference.GetString(PreferenceName.PracticeBillingCity).Trim().Length<2) {
 				Comma(strb);
 				strb.Append("Practice Billing City");
 			}
-			if(Preferences.GetString(PrefName.PracticeBillingST).Trim().Length!=2) {
+			if(Preference.GetString(PreferenceName.PracticeBillingST).Trim().Length!=2) {
 				Comma(strb);
 				strb.Append("Practice Billing State(2 char)");
 			}
-			if(!Regex.IsMatch(Preferences.GetString(PrefName.PracticeBillingZip).Trim(),"^[0-9]{5}\\-?([0-9]{4})?$")) {
+			if(!Regex.IsMatch(Preference.GetString(PreferenceName.PracticeBillingZip).Trim(),"^[0-9]{5}\\-?([0-9]{4})?$")) {
 				//#####, or #####-, or #####-####, or #########. Dashes are removed when X12 is generated.
 				Comma(strb);
 				strb.Append("Practice Billing Zip");

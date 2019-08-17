@@ -138,7 +138,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ProviderErx into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(ProviderErx providerErx,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO providererx (";
 			if(!useExistingPK && isRandomKeys) {
 				providerErx.ProviderErxNum=ReplicationServers.GetKeyNoCache("providererx","ProviderErxNum");

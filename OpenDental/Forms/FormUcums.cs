@@ -44,10 +44,10 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			_listUcum=Ucums.GetBySearchText(textCode.Text);
+			_listUcum=Ucum.Find(textCode.Text);
 			for(int i=0;i<_listUcum.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(_listUcum[i].UcumCode);
+				row.Cells.Add(_listUcum[i].Code);
 				row.Cells.Add(_listUcum[i].Description);
 				row.Tag=_listUcum[i];
 				gridMain.Rows.Add(row);

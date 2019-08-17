@@ -52,11 +52,11 @@ namespace OpenDental.Bridges {
 			Ebill eBillDefault=Ebills.GetForClinic(0);
 			writer.WriteProcessingInstruction("xml","version = \"1.0\" standalone=\"yes\"");
 			writer.WriteStartElement("EISStatementFile");
-			writer.WriteAttributeString("VendorID",Preferences.GetString(PrefName.BillingElectVendorId));
+			writer.WriteAttributeString("VendorID",Preference.GetString(PreferenceName.BillingElectVendorId));
 			writer.WriteAttributeString("OutputFormat","StmOut_Blue6Col");
 			writer.WriteAttributeString("Version","2");
 			writer.WriteElementString("SubmitDate",DateTime.Today.ToString("yyyy-MM-dd"));
-			writer.WriteElementString("PrimarySubmitter",Preferences.GetString(PrefName.BillingElectVendorPMSCode));
+			writer.WriteElementString("PrimarySubmitter",Preference.GetString(PreferenceName.BillingElectVendorPMSCode));
 			writer.WriteElementString("Transmitter","EHG");
 			writer.WriteStartElement("Practice");
 			string billingClientAccountNumber=eBillDefault.ClientAcctNumber;
@@ -67,7 +67,7 @@ namespace OpenDental.Bridges {
 			//sender address----------------------------------------------------------
 			writer.WriteStartElement("SenderAddress");
 			if(clinic==null) {
-				writer.WriteElementString("Name",Preferences.GetString(PrefName.PracticeTitle));
+				writer.WriteElementString("Name",Preference.GetString(PreferenceName.PracticeTitle));
 			}
 			else {
 				writer.WriteElementString("Name",clinic.Description);
@@ -82,7 +82,7 @@ namespace OpenDental.Bridges {
 			//remit address----------------------------------------------------------
 			writer.WriteStartElement("RemitAddress");
 			if(clinic==null) {
-				writer.WriteElementString("Name",Preferences.GetString(PrefName.PracticeTitle));
+				writer.WriteElementString("Name",Preference.GetString(PreferenceName.PracticeTitle));
 			}
 			else {
 				writer.WriteElementString("Name",clinic.Description);
@@ -95,12 +95,12 @@ namespace OpenDental.Bridges {
 			}
 			writer.WriteEndElement();//remitAddress
 			//Rendering provider------------------------------------------------------
-			Provider prov=Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv));
+			Provider prov=Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));
 			writer.WriteStartElement("RenderingProvider");
 			writer.WriteElementString("Name",prov.GetFormalName());
 			ProviderClinic provClinic=ProviderClinics.GetOneOrDefault(prov.ProvNum,clinicNum);
 			writer.WriteElementString("LicenseNumber",(provClinic==null ? "" : provClinic.StateLicense));
-			writer.WriteElementString("State",Preferences.GetString(PrefName.PracticeST));
+			writer.WriteElementString("State",Preference.GetString(PreferenceName.PracticeST));
 			writer.WriteEndElement();//Rendering provider
 		}
 
@@ -119,30 +119,30 @@ namespace OpenDental.Bridges {
 			EHG_Address address=new EHG_Address();
 			//If using practice information or using the default (no clinic) Ebill and a clinic enum is specified, use the practice level information.
 			if(eBillAddress==EbillAddress.PracticePhysical || (clinic==null && eBillAddress==EbillAddress.ClinicPhysical)) {
-				address.Address1=Preferences.GetString(PrefName.PracticeAddress);
-				address.Address2=Preferences.GetString(PrefName.PracticeAddress2);
-				address.City=Preferences.GetString(PrefName.PracticeCity);
-				address.State=Preferences.GetString(PrefName.PracticeST);
-				address.Zip=Preferences.GetString(PrefName.PracticeZip);
-				address.Phone=Preferences.GetString(PrefName.PracticePhone);//enforced to be 10 digit fairly rigidly by the UI
+				address.Address1=Preference.GetString(PreferenceName.PracticeAddress);
+				address.Address2=Preference.GetString(PreferenceName.PracticeAddress2);
+				address.City=Preference.GetString(PreferenceName.PracticeCity);
+				address.State=Preference.GetString(PreferenceName.PracticeST);
+				address.Zip=Preference.GetString(PreferenceName.PracticeZip);
+				address.Phone=Preference.GetString(PreferenceName.PracticePhone);//enforced to be 10 digit fairly rigidly by the UI
 				address.Source="Practice Physical Treating Address";
 			}
 			else if(eBillAddress==EbillAddress.PracticePayTo || (clinic==null && eBillAddress==EbillAddress.ClinicPayTo)) {
-				address.Address1=Preferences.GetString(PrefName.PracticePayToAddress);
-				address.Address2=Preferences.GetString(PrefName.PracticePayToAddress2);
-				address.City=Preferences.GetString(PrefName.PracticePayToCity);
-				address.State=Preferences.GetString(PrefName.PracticePayToST);
-				address.Zip=Preferences.GetString(PrefName.PracticePayToZip);
-				address.Phone=Preferences.GetString(PrefName.PracticePhone);//enforced to be 10 digit fairly rigidly by the UI
+				address.Address1=Preference.GetString(PreferenceName.PracticePayToAddress);
+				address.Address2=Preference.GetString(PreferenceName.PracticePayToAddress2);
+				address.City=Preference.GetString(PreferenceName.PracticePayToCity);
+				address.State=Preference.GetString(PreferenceName.PracticePayToST);
+				address.Zip=Preference.GetString(PreferenceName.PracticePayToZip);
+				address.Phone=Preference.GetString(PreferenceName.PracticePhone);//enforced to be 10 digit fairly rigidly by the UI
 				address.Source="Practice Pay To Address";
 			}
 			else if(eBillAddress==EbillAddress.PracticeBilling || (clinic==null && eBillAddress==EbillAddress.ClinicBilling)) {
-				address.Address1=Preferences.GetString(PrefName.PracticeBillingAddress);
-				address.Address2=Preferences.GetString(PrefName.PracticeBillingAddress2);
-				address.City=Preferences.GetString(PrefName.PracticeBillingCity);
-				address.State=Preferences.GetString(PrefName.PracticeBillingST);
-				address.Zip=Preferences.GetString(PrefName.PracticeBillingZip);
-				address.Phone=Preferences.GetString(PrefName.PracticePhone);//enforced to be 10 digit fairly rigidly by the UI
+				address.Address1=Preference.GetString(PreferenceName.PracticeBillingAddress);
+				address.Address2=Preference.GetString(PreferenceName.PracticeBillingAddress2);
+				address.City=Preference.GetString(PreferenceName.PracticeBillingCity);
+				address.State=Preference.GetString(PreferenceName.PracticeBillingST);
+				address.Zip=Preference.GetString(PreferenceName.PracticeBillingZip);
+				address.Phone=Preference.GetString(PreferenceName.PracticePhone);//enforced to be 10 digit fairly rigidly by the UI
 				address.Source="Practice Billing Address";
 			}
 			else if(eBillAddress==EbillAddress.ClinicPhysical) {
@@ -185,7 +185,7 @@ namespace OpenDental.Bridges {
 			}
 			writer.WriteStartElement("EisStatement");
 			writer.WriteAttributeString("OutputFormat","StmOut_Blue6Col");
-			writer.WriteAttributeString("CreditCardChoice",Preferences.GetString(PrefName.BillingElectCreditCardChoices));
+			writer.WriteAttributeString("CreditCardChoice",Preference.GetString(PreferenceName.BillingElectCreditCardChoices));
 			writer.WriteStartElement("Patient");
 			writer.WriteElementString("Name",guar.GetNameFLFormal());
 			writer.WriteElementString("Account",guar.PatNum.ToString());
@@ -204,11 +204,11 @@ namespace OpenDental.Bridges {
 				writer.WriteElementString("PriorStatementDate",stmt.DateRangeFrom.AddDays(-1).ToString("MM/dd/yyyy"));
 			}
 			DateTime dueDate;
-			if(Preferences.GetLong(PrefName.StatementsCalcDueDate)==-1){
+			if(Preference.GetLong(PreferenceName.StatementsCalcDueDate)==-1){
 				dueDate=DateTime.Today.AddDays(10);
 			}
 			else{
-				dueDate=DateTime.Today.AddDays(Preferences.GetLong(PrefName.StatementsCalcDueDate));
+				dueDate=DateTime.Today.AddDays(Preference.GetLong(PreferenceName.StatementsCalcDueDate));
 			}
 			writer.WriteElementString("DueDate",dueDate.ToString("MM/dd/yyyy"));
 			writer.WriteElementString("StatementDate",stmt.DateSent.ToString("MM/dd/yyyy"));
@@ -227,12 +227,12 @@ namespace OpenDental.Bridges {
 			//On a regular printed statement, the amount due at the top might be different from the balance at the middle right due to payplan balances.
 			//But in e-bills, there is only one amount due.  Insurance estimate is already subtracted, and payment plan balance is already added.
 			double amountDue=guar.BalTotal;
-			if(Preferences.GetInt(PrefName.PayPlansVersion)==1) {//with version 2, payplan debits/credits are aged individually and are included in guar.BalTotal
+			if(Preference.GetInt(PreferenceName.PayPlansVersion)==1) {//with version 2, payplan debits/credits are aged individually and are included in guar.BalTotal
 				amountDue+=tableMisc.Rows.OfType<DataRow>().Where(x => x["descript"].ToString()=="payPlanDue")
 					.Select(x => PIn.Double(x["value"].ToString())).DefaultIfEmpty(0).Sum();//add payplan(s) due amt
 			}
 			double insEst=0;
-			if(!Preferences.GetBool(PrefName.BalancesDontSubtractIns)) {//this is typical
+			if(!Preference.GetBool(PreferenceName.BalancesDontSubtractIns)) {//this is typical
 				insEst=guar.InsEst;
 			}
 			InstallmentPlan installPlan=InstallmentPlans.GetOneForFam(guar.PatNum);
@@ -404,7 +404,7 @@ namespace OpenDental.Bridges {
 				sr.Dispose();
 			}
 			string strHistoryFile="";
-			if(Preferences.GetBool(PrefName.BillingElectSaveHistory)) {
+			if(Preference.GetBool(PreferenceName.BillingElectSaveHistory)) {
 				string strHistoryDir=CodeBase.ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"EHG_History");
 				if(!Directory.Exists(strHistoryDir)) {
 					Directory.CreateDirectory(strHistoryDir);
@@ -427,7 +427,7 @@ namespace OpenDental.Bridges {
 			string alertmsg="";
 			string curParam="";
 			string serverName="https://claimconnect.dentalxchange.com/dci/upload.svl";//live URL for claims (According to phone call with Dentalxchange)
-			string serverNameOverride = Preferences.GetString(PrefName.BillingElectStmtUploadURL);
+			string serverNameOverride = Preference.GetString(PreferenceName.BillingElectStmtUploadURL);
 			if(!string.IsNullOrEmpty(serverNameOverride)) {
 				serverName=serverNameOverride;
 			}

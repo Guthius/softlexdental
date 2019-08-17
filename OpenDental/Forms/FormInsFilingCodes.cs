@@ -252,7 +252,7 @@ namespace OpenDental {
 				row.Cells.Add(_listInsFilingCodes[i].Descript);
 				string group="";
 				if(_listInsFilingCodes[i].GroupType > 0) {
-					group=Defs.GetDef(DefCat.InsuranceFilingCodeGroup,_listInsFilingCodes[i].GroupType)?.ItemName??"";
+					group=Defs.GetDef(DefinitionCategory.InsuranceFilingCodeGroup,_listInsFilingCodes[i].GroupType)?.Description??"";
 				}
 				row.Cells.Add(group);
 				row.Cells.Add(_listInsFilingCodes[i].EclaimCode);

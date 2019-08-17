@@ -115,7 +115,7 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command);
 			}
 			else {
-				apptReminderSent.ApptReminderSentNum=Db.NonQ(command,true,"ApptReminderSentNum","apptReminderSent");
+				apptReminderSent.ApptReminderSentNum=Db.NonQ(command);
 			}
 			return apptReminderSent.ApptReminderSentNum;
 		}
@@ -185,7 +185,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ApptReminderSent into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(ApptReminderSent apptReminderSent,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO apptremindersent (";
 			if(!useExistingPK && isRandomKeys) {
 				apptReminderSent.ApptReminderSentNum=ReplicationServers.GetKeyNoCache("apptremindersent","ApptReminderSentNum");
@@ -209,7 +209,7 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command);
 			}
 			else {
-				apptReminderSent.ApptReminderSentNum=Db.NonQ(command,true,"ApptReminderSentNum","apptReminderSent");
+				apptReminderSent.ApptReminderSentNum=Db.NonQ(command);
 			}
 			return apptReminderSent.ApptReminderSentNum;
 		}

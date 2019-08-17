@@ -2103,7 +2103,7 @@ namespace UnitTests.UnitTests {
 			//}
 			Assert.AreEqual(0,claimProc.WriteOffEst);
 			//Now test insurance numbers with calculating secondary PPO insurance writeoffs
-			Prefs.UpdateBool(PrefName.InsPPOsecWriteoffs,true);
+			Prefs.UpdateBool(PreferenceName.InsPPOsecWriteoffs,true);
 			Procedures.ComputeEstimates(proc,patNum,ref claimProcs,false,planList,patPlans,benefitList,histList,loopList,true,pat.Age,subList);
 			claimProcs=ClaimProcs.Refresh(patNum);
 			claimProc=ClaimProcs.GetEstimate(claimProcs,procNum,planNum1,subNum1);
@@ -2126,7 +2126,7 @@ namespace UnitTests.UnitTests {
 			Assert.AreEqual(148.01,claimProc.WriteOffEst);
 			retVal+="40: Passed.  Dual insurance with secondary PPO insurance writeoffs calculated based on preference.\r\n";
 			//}
-			Prefs.UpdateBool(PrefName.InsPPOsecWriteoffs,false);
+			Prefs.UpdateBool(PreferenceName.InsPPOsecWriteoffs,false);
 			//return retVal;
 		}
 
@@ -3270,7 +3270,7 @@ namespace UnitTests.UnitTests {
 			long subNum1=sub1.InsSubNum;
 			InsSub sub2=InsSubT.CreateInsSub(pat.PatNum,planNum2);
 			long subNum2=sub2.InsSubNum;
-			PrefT.UpdateBool(PrefName.InsEstRecalcReceived,true);
+			PrefT.UpdateBool(PreferenceName.InsEstRecalcReceived,true);
 			BenefitT.CreateDeductibleGeneral(planNum2,BenefitCoverageLevel.Individual,50);
 			BenefitT.CreateCategoryPercent(planNum2,EbenefitCategory.Crowns,80);
 			PatPlanT.CreatePatPlan(1,patNum,subNum1);
@@ -3362,7 +3362,7 @@ namespace UnitTests.UnitTests {
 			PaymentT.MakePayment(patNum,100,DateTime.Today.AddMonths(-3),payPlan.PayPlanNum);
 			CreditCardT.CreateCard(patNum,50,DateTime.Today.AddMonths(-3),payPlan.PayPlanNum);
 			//Test with PayPlanVersion 2--------------------------------------------------------------------------------------------------------
-			Prefs.UpdateInt(PrefName.PayPlansVersion,2);
+			Prefs.UpdateInt(PreferenceName.PayPlansVersion,2);
 			Prefs.RefreshCache();
 			Ledgers.ComputeAging(0,DateTime.Today);
 			FormCreditRecurringCharges FormCRC=new FormCreditRecurringCharges();
@@ -3407,7 +3407,7 @@ namespace UnitTests.UnitTests {
 				listFailedTests.Add(4);//PayPlanVersion 2 Scenario 4: Pay plan due more than repeat amount
 			}
 			//Test with PayPlanVersion 1--------------------------------------------------------------------------------------------------------
-			Prefs.UpdateInt(PrefName.PayPlansVersion,1);
+			Prefs.UpdateInt(PreferenceName.PayPlansVersion,1);
 			Prefs.RefreshCache();
 			Ledgers.ComputeAging(0,DateTime.Today);
 			FormCRC=new FormCreditRecurringCharges();

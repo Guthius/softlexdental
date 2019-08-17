@@ -12,14 +12,14 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class ODTextBoxPref:TextBox,IPrefBinding {
 
-		private PrefName _prefNameBinding=PrefName.NotApplicable;//Set this by default, if it's set in the designer it will overwite this later.
+		private PreferenceName _prefNameBinding=PreferenceName.NotApplicable;//Set this by default, if it's set in the designer it will overwite this later.
 		public bool DoAutoSave { get; set; }
 
 		public ODTextBoxPref() {
 			InitializeComponent();
 		}
 
-		public PrefName PrefNameBinding
+		public PreferenceName PrefNameBinding
 		{
 			get { return _prefNameBinding; }
 			set

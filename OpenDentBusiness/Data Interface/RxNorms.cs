@@ -102,7 +102,7 @@ namespace OpenDentBusiness
         {
             List<string> retVal = new List<string>();
             string command = "SELECT RxCui FROM rxnorm";//will return some duplicates due to the nature of the data in the table. This is acceptable.
-            DataTable table = DataCore.GetTable(command);
+            DataTable table = DataConnection.GetTable(command);
             for (int i = 0; i < table.Rows.Count; i++)
             {
                 retVal.Add(table.Rows[i].ItemArray[0].ToString());

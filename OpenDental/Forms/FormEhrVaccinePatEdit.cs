@@ -39,8 +39,8 @@ namespace OpenDental {
 			}
 			if(!IsNew && VaccinePatCur.VaccineDefNum!=0) {
 				VaccineDef vaccineDef=VaccineDefs.GetOne(VaccinePatCur.VaccineDefNum);//Need vaccine to get manufacturer.
-				DrugManufacturer manufacturer=DrugManufacturers.GetOne(vaccineDef.DrugManufacturerNum);
-				textManufacturer.Text=manufacturer.ManufacturerCode + " - " + manufacturer.ManufacturerName;
+				Manufacturer manufacturer= Manufacturer.GetById(vaccineDef.DrugManufacturerNum);
+				textManufacturer.Text=manufacturer.Code + " - " + manufacturer.Name;
 			}
 			if(VaccinePatCur.DateTimeStart.Year>1880) {
 				textDateTimeStart.Text=VaccinePatCur.DateTimeStart.ToString();
@@ -86,8 +86,8 @@ namespace OpenDental {
 			textNote.Text=VaccinePatCur.Note;
 			if(IsNew) {
 				if(pat.ClinicNum==0) {
-					VaccinePatCur.FilledCity=Preferences.GetString(PrefName.PracticeCity);
-					VaccinePatCur.FilledST=Preferences.GetString(PrefName.PracticeST);
+					VaccinePatCur.FilledCity=Preference.GetString(PreferenceName.PracticeCity);
+					VaccinePatCur.FilledST=Preference.GetString(PreferenceName.PracticeST);
 				}
 				else {
 					Clinic clinic=Clinics.GetClinic(pat.ClinicNum);
@@ -204,8 +204,8 @@ namespace OpenDental {
 		}
 
 		private void comboVaccine_SelectedIndexChanged(object sender,EventArgs e) {
-			DrugManufacturer manufacturer=DrugManufacturers.GetOne(_listVaccineDefs[comboVaccine.SelectedIndex].DrugManufacturerNum);
-			textManufacturer.Text=manufacturer.ManufacturerCode + " - " + manufacturer.ManufacturerName;
+			Manufacturer manufacturer= Manufacturer.GetById(_listVaccineDefs[comboVaccine.SelectedIndex].DrugManufacturerNum);
+			textManufacturer.Text=manufacturer.Code + " - " + manufacturer.Name;
 		}
 
 		private void comboProvNumOrdering_SelectionChangeCommitted(object sender,EventArgs e) {

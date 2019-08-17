@@ -44,7 +44,7 @@ namespace OpenDentBusiness
         /// </summary>
         public static bool UsesApptReminders()
         {
-            bool isEnabled = Preferences.GetBool(PrefName.ApptRemindAutoEnabled);
+            bool isEnabled = Preference.GetBool(PreferenceName.ApptRemindAutoEnabled);
             if (!isEnabled)
             {
                 return false;
@@ -150,7 +150,7 @@ namespace OpenDentBusiness
 
             SecurityLogs.MakeLogEntry(
                 Permissions.ApptConfirmStatusEdit, aptCur.PatNum,
-                "Appointment confirmation status changed from " + Defs.GetName(DefCat.ApptConfirmed, aptOld.Confirmed) + " to " + Defs.GetName(DefCat.ApptConfirmed, aptCur.Confirmed) + " due to an eConfirmation.",
+                "Appointment confirmation status changed from " + Defs.GetName(DefinitionCategory.ApptConfirmed, aptOld.Confirmed) + " to " + Defs.GetName(DefinitionCategory.ApptConfirmed, aptCur.Confirmed) + " due to an eConfirmation.",
                 aptCur.AptNum,
                 LogSources.AutoConfirmations,
                 aptOld.DateTStamp);
@@ -277,7 +277,7 @@ Password: [Password]
                         break;
                     }
             }
-            if (Preferences.GetBool(PrefName.EmailDisclaimerIsOn))
+            if (Preference.GetBool(PreferenceName.EmailDisclaimerIsOn))
             {
                 rule.TemplateEmail += "\r\n\r\n\r\n[EmailDisclaimer]";
                 rule.TemplateEmailAggShared += "\r\n\r\n\r\n[EmailDisclaimer]";

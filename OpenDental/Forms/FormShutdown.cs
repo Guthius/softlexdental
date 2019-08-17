@@ -23,7 +23,7 @@ namespace OpenDental
         /// </summary>
         void FormShutdown_Load(object sender, EventArgs e)
         {
-            var computersList = Computers.GetRunningComputers().Select(x => x.CompName).ToList();
+            var computersList = Computer.AllActive().Select(x => x.Name).ToList();
             for (int i = 0; i < computersList.Count; i++)
             {
                 workstationList.Items.Add(computersList[i]);

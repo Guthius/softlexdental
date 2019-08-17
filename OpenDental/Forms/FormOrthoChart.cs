@@ -55,7 +55,7 @@ namespace OpenDental {
 		}
 
 		private void FormOrthoChart_Load(object sender,EventArgs e) {
-			if(string.IsNullOrEmpty(Preferences.GetString(PrefName.ArchiveServerName))) {//Archive db not setup.
+			if(string.IsNullOrEmpty(Preference.GetString(PreferenceName.ArchiveServerName))) {//Archive db not setup.
 				checkIncludeArchived.Enabled=false;
 			}
 			signatureBoxWrapper.SetAllowDigitalSig(true);
@@ -76,7 +76,7 @@ namespace OpenDental {
                 FillGrid();
 			}
 			FillGridPat();
-			if(Preferences.GetBool(PrefName.OrthoCaseInfoInOrthoChart)) {
+			if(Preference.GetBool(PreferenceName.OrthoCaseInfoInOrthoChart)) {
 				gridOrtho.Visible=true;
 				FillOrtho();
 			}
@@ -285,7 +285,7 @@ namespace OpenDental {
 
 				row = new ODGridRow();
 				row.Cells.Add(Lan.g(this,"Tx Months Total")+": "); //this patient's OrthoClaimMonthsTreatment, or the practice default if 0.
-				int txMonthsTotal=(_patNoteCur.OrthoMonthsTreatOverride==-1?Preferences.GetByte(PrefName.OrthoDefaultMonthsTreat):_patNoteCur.OrthoMonthsTreatOverride);
+				int txMonthsTotal=(_patNoteCur.OrthoMonthsTreatOverride==-1?Preference.GetByte(PreferenceName.OrthoDefaultMonthsTreat):_patNoteCur.OrthoMonthsTreatOverride);
 				row.Cells.Add(txMonthsTotal.ToString());
 				gridOrtho.Rows.Add(row);
 

@@ -44,48 +44,48 @@ namespace OpenDental {
 			gridMain.Rows.Clear();
 			#region 1st Reminder
 			//ReactivationEmailSubject
-			gridMain.AddRow(PrefName.ReactivationEmailSubject,Lan.g(this,"E-mail"), Lan.g(this,"Subject line")
-				,Preferences.GetString(PrefName.ReactivationEmailSubject)
+			gridMain.AddRow(PreferenceName.ReactivationEmailSubject,Lan.g(this,"E-mail"), Lan.g(this,"Subject line")
+				,Preference.GetString(PreferenceName.ReactivationEmailSubject)
 			);
 			//ReactivationEmailMessage
-			gridMain.AddRow(PrefName.ReactivationEmailMessage,Lan.g(this,"E-mail"),Lan.g(this,"Available variables")+": "+availableFields
-				,Preferences.GetString(PrefName.ReactivationEmailMessage)
+			gridMain.AddRow(PreferenceName.ReactivationEmailMessage,Lan.g(this,"E-mail"),Lan.g(this,"Available variables")+": "+availableFields
+				,Preference.GetString(PreferenceName.ReactivationEmailMessage)
 			);
 			//ReactivationEmailFamMsg
-			gridMain.AddRow(PrefName.ReactivationEmailFamMsg,Lan.g(this,"E-mail")
+			gridMain.AddRow(PreferenceName.ReactivationEmailFamMsg,Lan.g(this,"E-mail")
 				,Lan.g(this,"For multiple patients in one family.  Use [FamilyList] where the list of family members should show.")
-				,Preferences.GetString(PrefName.ReactivationEmailFamMsg)
+				,Preference.GetString(PreferenceName.ReactivationEmailFamMsg)
 			);
 			//ReactivationPostcardMessage
-			gridMain.AddRow(PrefName.ReactivationPostcardMessage,Lan.g(this,"Postcard"),Lan.g(this,"Available variables")+": "+availableFields
-				,Preferences.GetString(PrefName.ReactivationPostcardMessage)
+			gridMain.AddRow(PreferenceName.ReactivationPostcardMessage,Lan.g(this,"Postcard"),Lan.g(this,"Available variables")+": "+availableFields
+				,Preference.GetString(PreferenceName.ReactivationPostcardMessage)
 			);
 			//ReactivationPostcardFamMsg
-			gridMain.AddRow(PrefName.ReactivationPostcardFamMsg,Lan.g(this,"Postcard")
+			gridMain.AddRow(PreferenceName.ReactivationPostcardFamMsg,Lan.g(this,"Postcard")
 				,Lan.g(this,"For multiple patients in one family.  Use [FamilyList] where the list of family members should show.")
-				,Preferences.GetString(PrefName.ReactivationPostcardFamMsg)
+				,Preference.GetString(PreferenceName.ReactivationPostcardFamMsg)
 			);
 			#endregion
 			gridMain.EndUpdate();
 		}
 
 		private void FillStatusComboBoxes() {
-			List<Def> listDefs=(Defs.GetDefsForCategory(DefCat.RecallUnschedStatus,true));
-			comboStatusMailedReactivation.SetItems(listDefs,(def) => new ODBoxItem<long>(def.ItemName,def.DefNum));
-			comboStatusEmailedReactivation.SetItems(listDefs,(def) => new ODBoxItem<long>(def.ItemName,def.DefNum));
-			comboStatusTextedReactivation.SetItems(listDefs,(def) => new ODBoxItem<long>(def.ItemName,def.DefNum));
-			comboStatusEmailTextReactivation.SetItems(listDefs,(def) => new ODBoxItem<long>(def.ItemName,def.DefNum));
+			List<Definition> listDefs=(Definition.GetByCategory(DefinitionCategory.RecallUnschedStatus));
+			comboStatusMailedReactivation.SetItems(listDefs,(def) => new ODBoxItem<long>(def.Description,def.Id));
+			comboStatusEmailedReactivation.SetItems(listDefs,(def) => new ODBoxItem<long>(def.Description,def.Id));
+			comboStatusTextedReactivation.SetItems(listDefs,(def) => new ODBoxItem<long>(def.Description,def.Id));
+			comboStatusEmailTextReactivation.SetItems(listDefs,(def) => new ODBoxItem<long>(def.Description,def.Id));
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			PrefName prefName=gridMain.SelectedTag<PrefName>();
+			PreferenceName prefName=gridMain.SelectedTag<PreferenceName>();
 			FormRecallMessageEdit FormR = new FormRecallMessageEdit(prefName);
-			FormR.MessageVal=Preferences.GetString(prefName);
+			FormR.MessageVal=Preference.GetString(prefName);
 			FormR.ShowDialog();
 			if(FormR.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			if(Prefs.UpdateString(prefName,FormR.MessageVal)) {
+			if(Preference.Update(prefName,FormR.MessageVal)) {
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			FillGrid();

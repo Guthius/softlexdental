@@ -126,7 +126,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SigElementDef into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(SigElementDef sigElementDef,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO sigelementdef (";
 			if(!useExistingPK && isRandomKeys) {
 				sigElementDef.SigElementDefNum=ReplicationServers.GetKeyNoCache("sigelementdef","SigElementDefNum");

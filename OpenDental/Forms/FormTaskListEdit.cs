@@ -318,7 +318,7 @@ namespace OpenDental{
 		}
 
 		private void FillComboGlobalFilter() {
-			if((GlobalTaskFilterType)Preferences.GetInt(PrefName.TasksGlobalFilterType)==GlobalTaskFilterType.Disabled) {
+			if((GlobalTaskFilterType)Preference.GetInt(PreferenceName.TasksGlobalFilterType)==GlobalTaskFilterType.Disabled) {
 				comboGlobalFilter.Visible=false;
 				labelGlobalFilter.Visible=false;
 				return;
@@ -327,7 +327,7 @@ namespace OpenDental{
 			comboGlobalFilter.Items.Add(new ODBoxItem<GlobalTaskFilterType>(Lan.g(this,GlobalTaskFilterType.None.GetDescription()),GlobalTaskFilterType.None));
 			if(Preferences.HasClinicsEnabled) {
 				comboGlobalFilter.Items.Add(new ODBoxItem<GlobalTaskFilterType>(Lan.g(this,GlobalTaskFilterType.Clinic.GetDescription()),GlobalTaskFilterType.Clinic));
-				if(Defs.GetDefsForCategory(DefCat.Regions).Count>0) {
+				if(Definition.GetByCategory(DefinitionCategory.Regions).Count>0) {
 					comboGlobalFilter.Items.Add(new ODBoxItem<GlobalTaskFilterType>(Lan.g(this,GlobalTaskFilterType.Region.GetDescription()),GlobalTaskFilterType.Region));
 				}
 			}

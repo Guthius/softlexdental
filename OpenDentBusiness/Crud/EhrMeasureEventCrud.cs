@@ -205,7 +205,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EhrMeasureEvent into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(EhrMeasureEvent ehrMeasureEvent,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO ehrmeasureevent (";
 			if(!useExistingPK && isRandomKeys) {
 				ehrMeasureEvent.EhrMeasureEventNum=ReplicationServers.GetKeyNoCache("ehrmeasureevent","EhrMeasureEventNum");

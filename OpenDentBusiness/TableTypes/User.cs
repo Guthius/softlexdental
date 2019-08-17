@@ -112,9 +112,9 @@ namespace OpenDentBusiness
         /// <summary>
         /// Gets all of the usergroups attached to this user.
         /// </summary>
-        public List<UserGroup> GetGroups(bool includeCEMT = false)
+        public List<UserGroup> GetGroups()
         {
-            return UserGroups.GetForUser(UserNum, includeCEMT);
+            return UserGroup.GetByUser(UserNum);
         }
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace OpenDentBusiness
                     UserName                = Convert.ToString(row["UserName"]),
                     Password                = Convert.ToString(row["Password"]),
                     UserGroupNum            = Convert.ToInt64(row["UserGroupNum"]),
-                    EmployeeNum             = Convert.ToInt64(row["EmployeeNum"]),
+                    EmployeeNum             = Convert.ToInt32(row["EmployeeNum"]),
                     ClinicNum               = Convert.ToInt64(row["ClinicNum"]),
                     ProvNum                 = Convert.ToInt64(row["ProvNum"]),
                     IsHidden                = Convert.ToBoolean(row["IsHidden"]),

@@ -113,13 +113,13 @@ namespace OpenDental {
 		  }
 		  if(procOld.Dx != procCur.Dx) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Diagnosis changed from "+Defs.GetDef(DefCat.Diagnosis,procOld.Dx).ItemName
-					+" to "+Defs.GetDef(DefCat.Diagnosis,procCur.Dx).ItemName+".";
+		    Changes+="Diagnosis changed from "+Defs.GetDef(DefinitionCategory.Diagnosis,procOld.Dx).Description
+					+" to "+Defs.GetDef(DefinitionCategory.Diagnosis,procCur.Dx).Description+".";
 		  }
 		  if(procOld.Priority != procCur.Priority) {
 		    if(Changes!=""){ Changes+="\r\n";}
-		    Changes+="Priority changed from "+((procOld.Priority!=0)?Defs.GetDef(DefCat.TxPriorities,procOld.Priority).ItemName:"no priority")
-					+" to "+((procCur.Priority!=0)?Defs.GetDef(DefCat.TxPriorities,procCur.Priority).ItemName:"no priority")+".";
+		    Changes+="Priority changed from "+((procOld.Priority!=0)?Defs.GetDef(DefinitionCategory.TxPriorities,procOld.Priority).Description:"no priority")
+					+" to "+((procCur.Priority!=0)?Defs.GetDef(DefinitionCategory.TxPriorities,procCur.Priority).Description:"no priority")+".";
 		  }
 		  if(procOld.PlaceService != procCur.PlaceService) {
 		    if(Changes!=""){ Changes+="\r\n";}

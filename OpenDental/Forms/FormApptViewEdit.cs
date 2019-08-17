@@ -755,7 +755,7 @@ namespace OpenDental{
 			textScrollTime.Text=ApptViewCur.ApptTimeScrollStart.ToStringHmm();
 			checkApptBubblesDisabled.Checked=ApptViewCur.IsApptBubblesDisabled;
 			if(IsNew) {
-				checkApptBubblesDisabled.Checked=Preferences.GetBool(PrefName.AppointmentBubblesDisabled);
+				checkApptBubblesDisabled.Checked=Preference.GetBool(PreferenceName.AppointmentBubblesDisabled);
 			}
 			FillElements();
 		}

@@ -48,7 +48,7 @@ namespace OpenDentBusiness.Crud{
 				histAppointment.HistApptAction       = (OpenDentBusiness.HistAppointmentAction)PIn.Int(row["HistApptAction"].ToString());
 				histAppointment.ApptSource           = (OpenDentBusiness.EServiceTypes)PIn.Int(row["ApptSource"].ToString());
 				histAppointment.AptNum               = PIn.Long  (row["AptNum"].ToString());
-				histAppointment.PatNum               = PIn.Long  (row["PatNum"].ToString());
+				histAppointment.PatNum               = PIn.Int(row["PatNum"].ToString());
 				histAppointment.AptStatus            = (OpenDentBusiness.ApptStatus)PIn.Int(row["AptStatus"].ToString());
 				histAppointment.Pattern              = PIn.String(row["Pattern"].ToString());
 				histAppointment.Confirmed            = PIn.Long  (row["Confirmed"].ToString());
@@ -246,7 +246,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one HistAppointment into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(HistAppointment histAppointment,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO histappointment (";
 			if(!useExistingPK && isRandomKeys) {
 				histAppointment.HistApptNum=ReplicationServers.GetKeyNoCache("histappointment","HistApptNum");

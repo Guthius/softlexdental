@@ -122,7 +122,7 @@ namespace OpenDental.UI {
 		}
 
 		public void SetAllowDigitalSig(bool allowDigitalSig) {
-			butESign.Visible=allowDigitalSig && Preferences.GetBool(PrefName.SignatureAllowDigital);
+			butESign.Visible=allowDigitalSig && Preference.GetBool(PreferenceName.SignatureAllowDigital);
 		}
 
 		protected void OnSignatureChanged() {

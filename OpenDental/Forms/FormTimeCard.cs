@@ -76,9 +76,9 @@ namespace OpenDental{
 		private bool _cannotEdit {
 			get {
 				return Security.CurUser!=null &&
-					Security.CurUser.EmployeeNum==EmployeeCur.EmployeeNum &&
-					Preferences.GetBool(PrefName.TimecardSecurityEnabled) &&
-					Preferences.GetBool(PrefName.TimecardUsersDontEditOwnCard);
+					Security.CurUser.EmployeeNum==EmployeeCur.Id &&
+					Preference.GetBool(PreferenceName.TimecardSecurityEnabled) &&
+					Preference.GetBool(PreferenceName.TimecardUsersDontEditOwnCard);
 			}
 		}
 
@@ -586,10 +586,10 @@ namespace OpenDental{
 
 		public void SortEmployeeList() {
 			if(IsByLastName) {
-				_listEmp.Sort(Employees.SortByLastName);
+				_listEmp.Sort(Employee.SortByLastName);
 			}
 			else {
-				_listEmp.Sort(Employees.SortByFirstName);
+				_listEmp.Sort(Employee.SortByFirstName);
 			}
 		}
 
@@ -599,13 +599,13 @@ namespace OpenDental{
 				butAdj.Enabled=false;
 				butCalcWeekOT.Enabled=false;//butCompute.Enabled=false;
 			}
-			Text=Lan.g(this,"Time Card for")+" "+EmployeeCur.FName+" "+EmployeeCur.LName
+			Text=Lan.g(this,"Time Card for")+" "+EmployeeCur.FirstName+" "+EmployeeCur.LastName
 				+(_cannotEdit ? " - You cannot modify your timecard":"");
 			TimeDelta=MiscData.GetNowDateTime()-DateTime.Now;
 			if(SelectedPayPeriod==0) {
 				SelectedPayPeriod=PayPeriods.GetForDate(dateInitial);
 			}
-			if(!Preferences.GetBool(PrefName.ClockEventAllowBreak)) {//Breaks turned off, Lunch is now "Break", but maintains Lunch functionality.
+			if(!Preference.GetBool(PreferenceName.ClockEventAllowBreak)) {//Breaks turned off, Lunch is now "Break", but maintains Lunch functionality.
 				IsBreaks=false;
 				groupBox2.Visible=false;
 			}
@@ -665,10 +665,10 @@ namespace OpenDental{
 		private TimeAdjust GetOrCreatePayPeriodNote() {
 			DateTime date=_listPayPeriods[SelectedPayPeriod].DateStart.Date;
 			DateTime midnightFirstDay=new DateTime(date.Year,date.Month,date.Day,0,0,0);
-			TimeAdjust noteRow=TimeAdjusts.GetPayPeriodNote(EmployeeCur.EmployeeNum,midnightFirstDay);
+			TimeAdjust noteRow=TimeAdjusts.GetPayPeriodNote(EmployeeCur.Id,midnightFirstDay);
 			if(noteRow==null) {
 				noteRow=new TimeAdjust {
-					EmployeeNum=EmployeeCur.EmployeeNum,
+					EmployeeNum=EmployeeCur.Id,
 					TimeEntry=midnightFirstDay,
 					Note="",
 					IsAuto=false
@@ -717,12 +717,12 @@ namespace OpenDental{
 		///<summary>fromDB is set to false when it is refreshing every second so that there will be no extra network traffic.</summary>
 		private void FillMain(bool fromDB){
 			if(fromDB){
-				ClockEventList=ClockEvents.Refresh(EmployeeCur.EmployeeNum,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text),IsBreaks);
+				ClockEventList=ClockEvents.Refresh(EmployeeCur.Id,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text),IsBreaks);
 				if(IsBreaks){
 					TimeAdjustList=new List<TimeAdjust>();
 				}
 				else{
-					TimeAdjustList=TimeAdjusts.Refresh(EmployeeCur.EmployeeNum,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
+					TimeAdjustList=TimeAdjusts.Refresh(EmployeeCur.Id,PIn.Date(textDateStart.Text),PIn.Date(textDateStop.Text));
 				}
 			}
 			TimeAdjustList.RemoveAll(x => x.TimeAdjustNum==_timeAdjustNote.TimeAdjustNum);//Do not show the note row in the grid.
@@ -784,7 +784,7 @@ namespace OpenDental{
 			TimeSpan weekSpan=new TimeSpan(0);//used for weekly totals.
 			if(mergedAL.Count>0) {  //Have to check fromDB here because we dont want to call DB every timer tick
 				if(fromDB) {
-					weekSpan=ClockEvents.GetWeekTotal(EmployeeCur.EmployeeNum,GetDateForRow(0));
+					weekSpan=ClockEvents.GetWeekTotal(EmployeeCur.Id,GetDateForRow(0));
 					storedWeekSpan=weekSpan;
 				}
 				else {
@@ -843,7 +843,7 @@ namespace OpenDental{
 					//status--------------------------------------
 					//row.Cells.Add(clock.ClockStatus.ToString());
 					//in------------------------------------------
-					if(Preferences.GetBool(PrefName.TimeCardShowSeconds)) {
+					if(Preference.GetBool(PreferenceName.TimeCardShowSeconds)) {
 						row.Cells.Add(clock.TimeDisplayed1.ToLongTimeString());
 					}
 					else {
@@ -857,7 +857,7 @@ namespace OpenDental{
 						row.Cells.Add("");//not clocked out yet
 					}
 					else{
-						if(Preferences.GetBool(PrefName.TimeCardShowSeconds)) {
+						if(Preference.GetBool(PreferenceName.TimeCardShowSeconds)) {
 							row.Cells.Add(clock.TimeDisplayed2.ToLongTimeString());
 						}
 						else {
@@ -963,8 +963,8 @@ namespace OpenDental{
 					}
 					//if this is the last entry for a given week
 					else if(i==mergedAL.Count-1//if this is the last row 
-						|| cal.GetWeekOfYear(GetDateForRow(i+1),rule,(DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
-						!= cal.GetWeekOfYear(clock.TimeDisplayed1.Date,rule,(DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
+						|| cal.GetWeekOfYear(GetDateForRow(i+1),rule,(DayOfWeek)Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
+						!= cal.GetWeekOfYear(clock.TimeDisplayed1.Date,rule,(DayOfWeek)Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
 					{
 						row.Cells.Add(ClockEvents.Format(weekSpan));
 						weekSpan=new TimeSpan(0);
@@ -1032,8 +1032,8 @@ namespace OpenDental{
 					}
 					//if this is the last entry for a given week
 					else if(i==mergedAL.Count-1//if this is the last row 
-						|| cal.GetWeekOfYear(GetDateForRow(i+1),rule,(DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
-						!= cal.GetWeekOfYear(adjust.TimeEntry.Date,rule,(DayOfWeek)Preferences.GetInt(PrefName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
+						|| cal.GetWeekOfYear(GetDateForRow(i+1),rule,(DayOfWeek)Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek))//or the next row has a
+						!= cal.GetWeekOfYear(adjust.TimeEntry.Date,rule,(DayOfWeek)Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek)))//different week of year
 					{
 						ODGridCell cell=new ODGridCell(ClockEvents.Format(weekSpan));
 						cell.ColorText=Color.Black;
@@ -1111,7 +1111,7 @@ namespace OpenDental{
 				return;
 			}
 			TimeAdjust adjust=new TimeAdjust();
-			adjust.EmployeeNum=EmployeeCur.EmployeeNum;
+			adjust.EmployeeNum=EmployeeCur.Id;
 			if(Preferences.HasClinicsEnabled) {
 				adjust.ClinicNum=Clinics.ClinicNum;
 			}
@@ -1155,7 +1155,7 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.TimecardsEditAll)) {
 				return;
 			}
-			string errors=TimeCardRules.ValidateOvertimeRules(new List<long>{EmployeeCur.EmployeeNum});
+			string errors=TimeCardRules.ValidateOvertimeRules(new List<long>{EmployeeCur.Id});
 			if(errors != "") {
 				MessageBox.Show(this,"Please fix the following timecard rule errors first:\r\n"+errors);
 				return;
@@ -1178,7 +1178,7 @@ namespace OpenDental{
 			SaveNoteToDb();
 			linesPrinted=0;
 			PrinterL.TryPrintOrDebugClassicPreview(pd_PrintPage,
-				Lan.g(this,"Time card for")+" "+EmployeeCur.LName+","+EmployeeCur.FName+" "+Lan.g(this,"printed"),
+				Lan.g(this,"Time card for")+" "+EmployeeCur.LastName+","+EmployeeCur.FirstName+" "+Lan.g(this,"printed"),
 				new Margins(0,0,0,0),
 				printoutOrigin:PrintoutOrigin.AtMargin
 			);
@@ -1196,7 +1196,7 @@ namespace OpenDental{
 			SolidBrush brush=new SolidBrush(Color.Black);
 			Pen pen=new Pen(Color.Black);
 			//Title
-			str=EmployeeCur.FName+" "+EmployeeCur.LName;
+			str=EmployeeCur.FirstName+" "+EmployeeCur.LastName;
 			str+="\r\n"+Lan.g(this,"Note")+": "+_timeAdjustNote.Note.ToString();
 			g.DrawString(str,fontTitle,brush,xPos,yPos);
 			yPos+=42;
@@ -1304,7 +1304,7 @@ namespace OpenDental{
 			int empIndex=0;
 			for(int i=0;i<_listEmp.Count;i++) {
 				//find current employee index by Employeenum
-				if(EmployeeCur.EmployeeNum==_listEmp[i].EmployeeNum) {
+				if(EmployeeCur.Id==_listEmp[i].Id) {
 					if(sender.Equals(butPrevEmp)) {
 						empIndex=i-1;//go to previous employee in list
 					}
@@ -1316,7 +1316,7 @@ namespace OpenDental{
 				}
 			}
 			EmployeeCur=_listEmp[empIndex];
-			Text=Lan.g(this,"Time Card for")+" "+EmployeeCur.FName+" "+EmployeeCur.LName
+			Text=Lan.g(this,"Time Card for")+" "+EmployeeCur.FirstName+" "+EmployeeCur.LastName
 				+(_cannotEdit?" - You cannot modify your timecard":"");
 			FillPayPeriod();
 			FillMain(true);

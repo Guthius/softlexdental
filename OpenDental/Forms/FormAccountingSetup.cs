@@ -58,7 +58,7 @@ namespace OpenDental{
 		private Label labelIncomeAccountQB;
 		private Label labelConnectQB;
 		///<summary>Arraylist of AccountingAutoPays.</summary>
-		private List<AccountingAutoPay> payList;
+		private List<AccountAutoPay> payList;
 		private AccountingSoftware AcctSoftware;
 		private Label labelQuickBooksTitle;
 		private UI.Button butRemoveIncomeQB;
@@ -709,7 +709,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormAccountingSetup_Load(object sender,EventArgs e) {
-			AcctSoftware=(AccountingSoftware)Preferences.GetInt(PrefName.AccountingSoftware);
+			AcctSoftware=(AccountingSoftware)Preference.GetInt(PreferenceName.AccountingSoftware);
 			if(AcctSoftware==AccountingSoftware.QuickBooks) {
 				PanelLayoutQB();
 			}
@@ -722,7 +722,7 @@ namespace OpenDental{
 		private void FillDepList(){
 			listAccountsDep.Items.Clear();
 			for(int i=0;i<depAL.Count;i++){
-				listAccountsDep.Items.Add(Account.GetDescript((long)depAL[i]));
+				listAccountsDep.Items.Add(Account.GetDescription((long)depAL[i]));
 			}
 		}
 
@@ -737,8 +737,8 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<payList.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(Defs.GetName(DefCat.PaymentTypes,payList[i].PayType));
-				row.Cells.Add(AccountingAutoPays.GetPickListDesc(payList[i]));
+				row.Cells.Add(Defs.GetName(DefinitionCategory.PaymentTypes,payList[i].PayType));
+				row.Cells.Add(AccountAutoPay.GetPickListDescription(payList[i]));
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -765,7 +765,7 @@ namespace OpenDental{
 			if(FormA.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			depAL.Add(FormA.SelectedAccount.AccountNum);
+			depAL.Add(FormA.SelectedAccount.Id);
 			FillDepList();
 		}
 
@@ -784,8 +784,8 @@ namespace OpenDental{
 			if(FormA.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			PickedDepAccountNum=FormA.SelectedAccount.AccountNum;
-			textAccountInc.Text=Account.GetDescript(PickedDepAccountNum);
+			PickedDepAccountNum=FormA.SelectedAccount.Id;
+			textAccountInc.Text=Account.GetDescription(PickedDepAccountNum);
 		}
 
 		private void butBrowseQB_Click(object sender,EventArgs e) {
@@ -849,7 +849,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Browse to your QuickBooks company file first.");
 				return;
 			}
-			if(Prefs.UpdateString(PrefName.QuickBooksCompanyFile,textCompanyFileQB.Text)) {
+			if(Preference.Update(PreferenceName.QuickBooksCompanyFile,textCompanyFileQB.Text)) {
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			List<string> listClasses=new List<string>();
@@ -894,7 +894,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Browse to your QuickBooks company file first.");
 				return null;
 			}
-			if(Prefs.UpdateString(PrefName.QuickBooksCompanyFile,textCompanyFileQB.Text)) {
+			if(Preference.Update(PreferenceName.QuickBooksCompanyFile,textCompanyFileQB.Text)) {
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			FormAccountPick FormA=new FormAccountPick();
@@ -943,7 +943,7 @@ namespace OpenDental{
 			panelOD.Size=new Size(519,222);
 			groupAutomaticPayment.Visible=true;
 			//Update the grids for this layout.
-			string depStr=Preferences.GetString(PrefName.AccountingDepositAccounts);
+			string depStr=Preference.GetString(PreferenceName.AccountingDepositAccounts);
 			string[] depStrArray=depStr.Split(new char[] { ',' });
 			depAL=new ArrayList();
 			for(int i=0;i<depStrArray.Length;i++) {
@@ -953,13 +953,13 @@ namespace OpenDental{
 				depAL.Add(PIn.Long(depStrArray[i]));
 			}
 			FillDepList();
-			PickedDepAccountNum=Preferences.GetLong(PrefName.AccountingIncomeAccount);
-			textAccountInc.Text=Account.GetDescript(PickedDepAccountNum);
-			//pay----------------------------------------------------------
-			payList=AccountingAutoPays.GetDeepCopy();
+			PickedDepAccountNum=Preference.GetLong(PreferenceName.AccountingIncomeAccount);
+			textAccountInc.Text=Account.GetDescription(PickedDepAccountNum);
+            //pay----------------------------------------------------------
+            payList = AccountAutoPay.All();
 			FillPayGrid();
-			PickedPayAccountNum=Preferences.GetLong(PrefName.AccountingCashIncomeAccount);
-			textAccountCashInc.Text=Account.GetDescript(PickedPayAccountNum);
+			PickedPayAccountNum=Preference.GetLong(PreferenceName.AccountingCashIncomeAccount);
+			textAccountCashInc.Text=Account.GetDescription(PickedPayAccountNum);
 		}
 
 		///<summary>Changes the window visually for QuickBooks users.</summary>
@@ -970,9 +970,9 @@ namespace OpenDental{
 			panelQB.Location=new Point(27,27);
 			panelQB.Size=new Size(519,606);
 			groupAutomaticPayment.Visible=false;
-			textCompanyFileQB.Text=Preferences.GetString(PrefName.QuickBooksCompanyFile);
-			checkQuickBooksClassRefsEnabled.Checked=Preferences.GetBool(PrefName.QuickBooksClassRefsEnabled);
-			string acctStr=Preferences.GetString(PrefName.QuickBooksIncomeAccount);
+			textCompanyFileQB.Text=Preference.GetString(PreferenceName.QuickBooksCompanyFile);
+			checkQuickBooksClassRefsEnabled.Checked=Preference.GetBool(PreferenceName.QuickBooksClassRefsEnabled);
+			string acctStr=Preference.GetString(PreferenceName.QuickBooksIncomeAccount);
 			string[] acctStrArray=acctStr.Split(new char[] { ',' });
 			listIncomeAccountsQB=new List<string>();
 			for(int i=0;i<acctStrArray.Length;i++) {
@@ -981,7 +981,7 @@ namespace OpenDental{
 				}
 				listIncomeAccountsQB.Add(acctStrArray[i]);
 			}
-			string depStr=Preferences.GetString(PrefName.QuickBooksDepositAccounts);
+			string depStr=Preference.GetString(PreferenceName.QuickBooksDepositAccounts);
 			string[] depStrArray=depStr.Split(new char[] { ',' });
 			listDepositAccountsQB=new List<string>();
 			for(int i=0;i<depStrArray.Length;i++) {
@@ -990,7 +990,7 @@ namespace OpenDental{
 				}
 				listDepositAccountsQB.Add(depStrArray[i]);
 			}
-			string classStr=Preferences.GetString(PrefName.QuickBooksClassRefs);
+			string classStr=Preference.GetString(PreferenceName.QuickBooksClassRefs);
 			string[] classStrArray=classStr.Split(new char[] { ',' });
 			_listClassRefsQB=new List<string>();
 			for(int i = 0;i<classStrArray.Length;i++) {
@@ -1018,7 +1018,7 @@ namespace OpenDental{
 		}
 
 		private void butAddPay_Click(object sender,EventArgs e) {
-			AccountingAutoPay autoPay=new AccountingAutoPay();
+			AccountAutoPay autoPay=new AccountAutoPay();
 			FormAccountingAutoPayEdit FormA=new FormAccountingAutoPayEdit();
 			FormA.AutoPayCur=autoPay;
 			FormA.IsNew=true;
@@ -1035,8 +1035,8 @@ namespace OpenDental{
 			if(FormA.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			PickedPayAccountNum=FormA.SelectedAccount.AccountNum;
-			textAccountCashInc.Text=Account.GetDescript(PickedPayAccountNum);
+			PickedPayAccountNum=FormA.SelectedAccount.Id;
+			textAccountCashInc.Text=Account.GetDescription(PickedPayAccountNum);
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
@@ -1052,16 +1052,16 @@ namespace OpenDental{
 					}
 					depStr+=depAL[i].ToString();
 				}
-				if(Prefs.UpdateString(PrefName.AccountingDepositAccounts,depStr)) {
+				if(Preference.Update(PreferenceName.AccountingDepositAccounts,depStr)) {
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
-				if(Prefs.UpdateLong(PrefName.AccountingIncomeAccount,PickedDepAccountNum)) {
+				if(Preference.Update(PreferenceName.AccountingIncomeAccount,PickedDepAccountNum)) {
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
-				//pay------------------------------------------------------------------------------------------
-				AccountingAutoPays.SaveList(payList);//just deletes them all and starts over
+                //pay------------------------------------------------------------------------------------------
+                AccountAutoPay.SaveList(payList);//just deletes them all and starts over
 				DataValid.SetInvalid(InvalidType.AccountingAutoPays);
-				if(Prefs.UpdateLong(PrefName.AccountingCashIncomeAccount,PickedPayAccountNum)) {
+				if(Preference.Update(PreferenceName.AccountingCashIncomeAccount,PickedPayAccountNum)) {
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 			}
@@ -1087,17 +1087,17 @@ namespace OpenDental{
 					}
 					classStr+=listBoxClassRefsQB.Items[i].ToString();
 				}
-				if(Prefs.UpdateString(PrefName.QuickBooksCompanyFile,textCompanyFileQB.Text)
-					| Prefs.UpdateString(PrefName.QuickBooksDepositAccounts,depStr)
-					| Prefs.UpdateString(PrefName.QuickBooksIncomeAccount,incomeStr)
-					| Prefs.UpdateBool(PrefName.QuickBooksClassRefsEnabled,checkQuickBooksClassRefsEnabled.Checked)
-					| Prefs.UpdateString(PrefName.QuickBooksClassRefs,classStr)) 
+				if(Preference.Update(PreferenceName.QuickBooksCompanyFile,textCompanyFileQB.Text)
+					| Preference.Update(PreferenceName.QuickBooksDepositAccounts,depStr)
+					| Preference.Update(PreferenceName.QuickBooksIncomeAccount,incomeStr)
+					| Preference.Update(PreferenceName.QuickBooksClassRefsEnabled,checkQuickBooksClassRefsEnabled.Checked)
+					| Preference.Update(PreferenceName.QuickBooksClassRefs,classStr)) 
 				{
 					DataValid.SetInvalid(InvalidType.Prefs);
 				}
 			}
 			//Update the selected accounting software.
-			if(Prefs.UpdateInt(PrefName.AccountingSoftware,listSoftware.SelectedIndex)) {
+			if(Preference.Update(PreferenceName.AccountingSoftware,listSoftware.SelectedIndex)) {
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			DialogResult=DialogResult.OK;

@@ -95,29 +95,29 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary></summary>
-		public static List<ClinicPref> GetPrefAllClinics(PrefName pref) {
+		public static List<ClinicPref> GetPrefAllClinics(PreferenceName pref) {
 			//No need to check RemotingRole; no call to db.
 			return GetWhere(x => x.PrefName==pref);
 		}
 
 		///<summary></summary>
-		public static ClinicPref GetPref(PrefName pref,long clinicNum) {
+		public static ClinicPref GetPref(PreferenceName pref,long clinicNum) {
 			//No need to check RemotingRole; no call to db.
 			return GetPrefAllClinics(pref).FirstOrDefault(x => x.ClinicNum==clinicNum);
 		}
 
 		///<summary>Gets the ValueString for this clinic's pref or gets the actual preference if it does not exist.</summary>
-		public static string GetPrefValue(PrefName pref,long clinicNum) {
+		public static string GetPrefValue(PreferenceName pref,long clinicNum) {
 			//No need to check RemotingRole; no call to db.
 			ClinicPref clinicPref=GetPrefAllClinics(pref).FirstOrDefault(x => x.ClinicNum==clinicNum);
 			if(clinicPref==null) {
-				return Preferences.GetString(pref);
+				return Preference.GetString(pref);
 			}
 			return clinicPref.ValueString;
 		}
 
 		///<summary>Returns 0 if there is no clinicpref entry for the specified pref.</summary>
-		public static long GetLong(PrefName prefName,long clinicNum) {
+		public static long GetLong(PreferenceName prefName,long clinicNum) {
 			//No need to check RemotingRole; no call to db.
 			ClinicPref pref=GetPref(prefName,clinicNum);
 			if(pref==null) {
@@ -128,16 +128,16 @@ namespace OpenDentBusiness{
 
 
 		///<summary>Gets the ValueString as a boolean for this clinic's pref or gets the actual preference if it does not exist.</summary>
-		public static bool GetBool(PrefName prefName,long clinicNum) {
+		public static bool GetBool(PreferenceName prefName,long clinicNum) {
 			ClinicPref pref=GetPref(prefName,clinicNum);
 			if(pref==null) {
-				return Preferences.GetBool(prefName);
+				return Preference.GetBool(prefName);
 			}
 			return PIn.Bool(pref.ValueString);
 		}
 
 		///<summary>Inserts a pref of type long for the specified clinic.  Throws an exception if the preference already exists.</summary>
-		public static void InsertPref(PrefName prefName,long clinicNum,string valueAsString) {
+		public static void InsertPref(PreferenceName prefName,long clinicNum,string valueAsString) {
 			//No need to check RemotingRole; no call to db.
 			if(GetFirstOrDefault(x => x.ClinicNum==clinicNum && x.PrefName==prefName)!=null) {
 				throw new ApplicationException("The PrefName "+prefName+" already exists for ClinicNum: "+clinicNum);
@@ -150,7 +150,7 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Updates a pref of type long for the specified clinic.  Returns true if a change was required, or false if no change needed.</summary>
-		public static bool UpdateLong(PrefName prefName,long clinicNum,long newValue) {
+		public static bool UpdateLong(PreferenceName prefName,long clinicNum,long newValue) {
 			//Very unusual.  Involves cache, so Meth is used further down instead of here at the top.
 			ClinicPref clinicPref=GetFirstOrDefault(x => x.ClinicNum==clinicNum && x.PrefName==prefName);
 			if(clinicPref==null) {
@@ -175,7 +175,7 @@ namespace OpenDentBusiness{
 
 		///<summary>Inserts a new clinic pref or updates the existing one.</summary>
 		///<returns>True if an insert or update was made, false otherwise.</returns>
-		public static bool Upsert(PrefName pref,long clinicNum,string newValue) {
+		public static bool Upsert(PreferenceName pref,long clinicNum,string newValue) {
 			//No need to check RemotingRole; no call to db.
 			ClinicPref clinicPref=GetPref(pref,clinicNum);
 			if(clinicPref==null) {
@@ -191,9 +191,9 @@ namespace OpenDentBusiness{
 		}
 
 		///<summary>Deletes the prefs for this clinic. If any pref does not exist, then nothing will be done with that pref.</summary>
-		public static void DeletePrefs(long clinicNum,List<PrefName> listPrefs) {
+		public static void DeletePrefs(long clinicNum,List<PreferenceName> listPrefs) {
 			List<ClinicPref> listClinicPrefs=new List<ClinicPref>();
-			foreach(PrefName pref in listPrefs) {
+			foreach(PreferenceName pref in listPrefs) {
 				ClinicPref clinicPref=GetPref(pref,clinicNum);
 				if(clinicPref!=null) {
 					listClinicPrefs.Add(clinicPref);

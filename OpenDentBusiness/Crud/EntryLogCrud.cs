@@ -175,7 +175,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EntryLog into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(EntryLog entryLog,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO entrylog (";
 			if(!useExistingPK && isRandomKeys) {
 				entryLog.EntryLogNum=ReplicationServers.GetKeyNoCache("entrylog","EntryLogNum");

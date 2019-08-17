@@ -135,7 +135,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one HL7DefField into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(HL7DefField hL7DefField,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO hl7deffield (";
 			if(!useExistingPK && isRandomKeys) {
 				hL7DefField.HL7DefFieldNum=ReplicationServers.GetKeyNoCache("hl7deffield","HL7DefFieldNum");

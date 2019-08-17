@@ -187,15 +187,15 @@ namespace OpenDental {
 			else {//either not fill on load or no user pref, store the expanded node state to restore after filling tree
 				//only defs (category folders) can be expanded or have children nodes
 				listExpandedDefNums=treeNotes.Nodes.OfType<TreeNode>().SelectMany(x => GetNodeAndChildren(x))
-					.Where(x => x.IsExpanded && x.Tag is Def).Select(x => ((Def)x.Tag).DefNum).ToList();
+					.Where(x => x.IsExpanded && x.Tag is Definition).Select(x => ((Definition)x.Tag).Id).ToList();
 			}
 			TreeNode selectedNode=treeNotes.SelectedNode;
 			TreeNode topNode=null;
 			string topNodePath=treeNotes.TopNode?.FullPath;
 			treeNotes.BeginUpdate();
 			treeNotes.Nodes.Clear();//clear current tree contents
-			_dictChildNodesForDefNum=Defs.GetDefsForCategory(DefCat.AutoNoteCats,true).GroupBy(x => x.ItemValue??"0")
-				.ToDictionary(x => PIn.Long(x.Key),x => new NodeChildren() { ListChildDefNodes=x.Select(y => new TreeNode(y.ItemName,0,0) { Tag=y }).ToList() });
+			_dictChildNodesForDefNum=Definition.GetByCategory(DefinitionCategory.AutoNoteCats).GroupBy(x => x.Value??"0")
+				.ToDictionary(x => PIn.Long(x.Key),x => new NodeChildren() { ListChildDefNodes=x.Select(y => new TreeNode(y.Description,0,0) { Tag=y }).ToList() });
 			Dictionary<long,List<TreeNode>> dictDefNumAutoNotes=AutoNotes.GetDeepCopy().GroupBy(x => x.Category)
 				.ToDictionary(x => x.Key,x => x.Select(y => new TreeNode(y.AutoNoteName,1,1) { Tag=y }).ToList());
 			foreach(KeyValuePair<long,List<TreeNode>> kvp in dictDefNumAutoNotes) {
@@ -219,7 +219,7 @@ namespace OpenDental {
 				if(!string.IsNullOrEmpty(topNodePath) && nodeCur.FullPath==topNodePath) {
 					topNode=nodeCur;
 				}
-				if(nodeCur.Tag is Def && listExpandedDefNums.Contains(((Def)nodeCur.Tag).DefNum)) {
+				if(nodeCur.Tag is Definition && listExpandedDefNums.Contains(((Definition)nodeCur.Tag).Id)) {
 					nodeCur.Expand();
 				}
 				if(selectedNode==null) {
@@ -244,7 +244,7 @@ namespace OpenDental {
 				return false;
 			}
 			if((nodeA.Tag is AutoNote && nodeB.Tag is AutoNote && ((AutoNote)nodeA.Tag).AutoNoteNum==((AutoNote)nodeB.Tag).AutoNoteNum)
-				|| (nodeA.Tag is Def && nodeB.Tag is Def && ((Def)nodeA.Tag).DefNum==((Def)nodeB.Tag).DefNum))
+				|| (nodeA.Tag is Definition && nodeB.Tag is Definition && ((Definition)nodeA.Tag).Id==((Definition)nodeB.Tag).Id))
 			{
 				return true;
 			}
@@ -260,7 +260,7 @@ namespace OpenDental {
 			}
 			List<TreeNode> listChildNodes=new List<TreeNode>();
 			NodeChildren nodeChildrenCur;
-			if(_dictChildNodesForDefNum.TryGetValue(((Def)defNodeCur.Tag).DefNum,out nodeChildrenCur)) {
+			if(_dictChildNodesForDefNum.TryGetValue(((Definition)defNodeCur.Tag).Id,out nodeChildrenCur)) {
 				nodeChildrenCur.ListChildDefNodes.ForEach(x => SetAllDescendantsForNode(x));
 				listChildNodes.AddRange(nodeChildrenCur.ListChildDefNodes);
 				listChildNodes.AddRange(nodeChildrenCur.ListAutoNoteNodes);
@@ -277,7 +277,7 @@ namespace OpenDental {
 			}
 			listRetval.Add(treeNode);
 			for(int i=0;i<listRetval.Count;i++) {
-				listRetval.AddRange(listRetval[i].Nodes.OfType<TreeNode>().Where(x => !isCatsOnly || x.Tag is Def));
+				listRetval.AddRange(listRetval[i].Nodes.OfType<TreeNode>().Where(x => !isCatsOnly || x.Tag is Definition));
 			}
 			return listRetval;
 		}
@@ -359,7 +359,7 @@ namespace OpenDental {
 				return; 
 			}
 			TreeNode sourceNode=(TreeNode)e.Data.GetData("System.Windows.Forms.TreeNode");
-			if(sourceNode==null || !(sourceNode.Tag is Def || sourceNode.Tag is AutoNote)) {
+			if(sourceNode==null || !(sourceNode.Tag is Definition || sourceNode.Tag is AutoNote)) {
 				return;
 			}
 			TreeNode topNodeCur=treeNotes.TopNode;
@@ -369,15 +369,15 @@ namespace OpenDental {
 			}
 			Point pt=((TreeView)sender).PointToClient(new Point(e.X,e.Y));
 			TreeNode destNode=((TreeView)sender).GetNodeAt(pt);
-			if(destNode==null || !(destNode.Tag is Def || destNode.Tag is AutoNote)) {//moving to root node (category 0)
+			if(destNode==null || !(destNode.Tag is Definition || destNode.Tag is AutoNote)) {//moving to root node (category 0)
 				if(sourceNode.Parent==null) {//already at the root node, nothing to do
 					return;
 				}
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Move the selected "+(sourceNode.Tag is AutoNote?"Auto Note":"category")+" to the root level?")) {
 					return;
 				}
-				if(sourceNode.Tag is Def) {
-					((Def)sourceNode.Tag).ItemValue="";
+				if(sourceNode.Tag is Definition) {
+					((Definition)sourceNode.Tag).Value="";
 				}
 				else {//must be an AutoNote
 					((AutoNote)sourceNode.Tag).Category=0;
@@ -387,7 +387,7 @@ namespace OpenDental {
 				if(destNode.Tag is AutoNote) {
 					destNode=destNode.Parent;//if destination is AutoNote, set destination to the parent, which is the category def node for the note
 				}
-				if(!IsValidDestination(sourceNode,destNode,sourceNode.Tag is Def)) {
+				if(!IsValidDestination(sourceNode,destNode,sourceNode.Tag is Definition)) {
 					return;
 				}
 				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,
@@ -396,16 +396,16 @@ namespace OpenDental {
 					return;
 				}
 				//destNode will be null if a root AutoNote was selected as the destination
-				long destDefNum=(destNode==null?0:((Def)destNode.Tag).DefNum);
-				if(sourceNode.Tag is Def) {
-					((Def)sourceNode.Tag).ItemValue=(destDefNum==0?"":destDefNum.ToString());//make a DefNum of 0 be a blank string in the db, not a "0" string
+				long destDefNum=(destNode==null?0:((Definition)destNode.Tag).Id);
+				if(sourceNode.Tag is Definition) {
+					((Definition)sourceNode.Tag).Value=(destDefNum==0?"":destDefNum.ToString());//make a DefNum of 0 be a blank string in the db, not a "0" string
 				}
 				else {//must be an AutoNote
 					((AutoNote)sourceNode.Tag).Category=destDefNum;
 				}
 			}
-			if(sourceNode.Tag is Def) {
-				Defs.Update((Def)sourceNode.Tag);
+			if(sourceNode.Tag is Definition) {
+                Definition.Update((Definition)sourceNode.Tag);
 				DataValid.SetInvalid(InvalidType.Defs);
 			}
 			else {//must be an AutoNote
@@ -448,8 +448,8 @@ namespace OpenDental {
 				return;
 			}
 			long selectedDefNum=0;
-			if(treeNotes.SelectedNode?.Tag is Def) {
-				selectedDefNum=((Def)treeNotes.SelectedNode.Tag).DefNum;
+			if(treeNotes.SelectedNode?.Tag is Definition) {
+				selectedDefNum=((Definition)treeNotes.SelectedNode.Tag).Id;
 			}
 			else if(treeNotes.SelectedNode?.Tag is AutoNote) {
 				selectedDefNum=((AutoNote)treeNotes.SelectedNode.Tag).Category;
@@ -480,7 +480,7 @@ namespace OpenDental {
 			List<long> listExpandedDefNums=treeNotes.Nodes.OfType<TreeNode>()
 				.SelectMany(x => GetNodeAndChildren(x,true))
 				.Where(x => x.IsExpanded)
-				.Select(x => ((Def)x.Tag).DefNum)
+				.Select(x => ((Definition)x.Tag).Id)
 				.Where(x => x>0).ToList();
 			if(_userOdCurPref==null) {
 				UserOdPrefs.Insert(new UserOdPref() {
@@ -500,17 +500,17 @@ namespace OpenDental {
 	public class NodeSorter:IComparer<TreeNode> {
 
 		public int Compare(TreeNode x,TreeNode y) {
-			if(x.Tag is Def && y.Tag is AutoNote) {
+			if(x.Tag is Definition && y.Tag is AutoNote) {
 				return -1;
 			}
-			if(x.Tag is AutoNote && y.Tag is Def) {
+			if(x.Tag is AutoNote && y.Tag is Definition) {
 				return 1;
 			}
-			if(x.Tag is Def && y.Tag is Def) {
-				Def defX=(Def)x.Tag;
-				Def defY=(Def)y.Tag;
-				if(defX.ItemOrder!=defY.ItemOrder) {
-					return defX.ItemOrder.CompareTo(defY.ItemOrder);
+			if(x.Tag is Definition && y.Tag is Definition) {
+				Definition defX=(Definition)x.Tag;
+				Definition defY=(Definition)y.Tag;
+				if(defX.SortOrder!=defY.SortOrder) {
+					return defX.SortOrder.CompareTo(defY.SortOrder);
 				}
 			}
 			//either both nodes are AutoNote nodes or both are Def nodes and both have the same ItemOrder (shouldn't happen), sort alphabetically

@@ -23,18 +23,18 @@ namespace OpenDental {
 		private InsVerifyGridObject _gridRowSelected;
 		private List<User> _listUsersInRegionWithAssignedIns=new List<User>();
 		private List<User> _listUsersInRegion=new List<User>();
-		private List<Def> _listVerifyStatuses=new List<Def>();
+		private List<Definition> _listVerifyStatuses=new List<Definition>();
 		private long _userNumVerifyGrid=0;
 		private int _selectedRowVerifyGrid;
 		private int _selectedRowAssignGrid;
-		private Dictionary<long,Def> _dictStatusDefs=new Dictionary<long,Def>();
+		private Dictionary<long,Definition> _dictStatusDefs=new Dictionary<long,Definition>();
 		private ContextMenu menuRightClick=new ContextMenu();
-		private List<Def> _listRegionDefs;
+		private List<Definition> _listRegionDefs;
 
 		///<summary>Indicates whether the "All" option is enabled for the listbox for clinics.</summary>
 		private bool _isAllClinicsEnabled {
 			get{
-				return Preferences.HasClinicsEnabled && !Security.CurUser.ClinicIsRestricted && !Preferences.GetBool(PrefName.EnterpriseApptList);
+				return Preferences.HasClinicsEnabled && !Security.CurUser.ClinicIsRestricted && !Preference.GetBool(PreferenceName.EnterpriseApptList);
 			}
 		}
 
@@ -57,7 +57,7 @@ namespace OpenDental {
 		private void FormInsVerificationList_Load(object sender,EventArgs e) {
 			SetFilterControlsAndAction(() => FillGrids(),
 				textPatientEnrollmentDays,textInsBenefitEligibilityDays,textAppointmentScheduledDays,textVerifyCarrier);
-			if(Preferences.GetBool(PrefName.InsVerifyDefaultToCurrentUser)) {
+			if(Preference.GetBool(PreferenceName.InsVerifyDefaultToCurrentUser)) {
 				_verifyUserNum=Security.CurUser.UserNum;
 			}
 			if(!Preferences.HasClinicsEnabled) {
@@ -66,15 +66,15 @@ namespace OpenDental {
 				labelRegion.Visible=false;
 				listBoxVerifyRegions.Visible=false;
 			}
-			List<Def> listVerifyStatuses=Defs.GetDefsForCategory(DefCat.InsuranceVerificationStatus,true);
-			foreach(Def defCur in listVerifyStatuses) {
-				if(!_dictStatusDefs.ContainsKey(defCur.DefNum)) {
-					_dictStatusDefs.Add(defCur.DefNum,defCur);
+			List<Definition> listVerifyStatuses=Definition.GetByCategory(DefinitionCategory.InsuranceVerificationStatus);
+			foreach(Definition defCur in listVerifyStatuses) {
+				if(!_dictStatusDefs.ContainsKey(defCur.Id)) {
+					_dictStatusDefs.Add(defCur.Id,defCur);
 				}
 			}
-			textAppointmentScheduledDays.Text=POut.Int(Preferences.GetInt(PrefName.InsVerifyAppointmentScheduledDays));
-			textInsBenefitEligibilityDays.Text=POut.Int(Preferences.GetInt(PrefName.InsVerifyBenefitEligibilityDays));
-			textPatientEnrollmentDays.Text=POut.Int(Preferences.GetInt(PrefName.InsVerifyPatientEnrollmentDays));
+			textAppointmentScheduledDays.Text=POut.Int(Preference.GetInt(PreferenceName.InsVerifyAppointmentScheduledDays));
+			textInsBenefitEligibilityDays.Text=POut.Int(Preference.GetInt(PreferenceName.InsVerifyBenefitEligibilityDays));
+			textPatientEnrollmentDays.Text=POut.Int(Preference.GetInt(PreferenceName.InsVerifyPatientEnrollmentDays));
 			InsVerifies.CleanupInsVerifyRows(DateTime.Today,DateTime.Today.AddDays(PIn.Int(textAppointmentScheduledDays.Text)));
 			FillGrids();
 		}
@@ -156,14 +156,14 @@ namespace OpenDental {
 			comboFilterVerifyStatus.Items.Clear();
 			comboFilterVerifyStatus.Items.Add("All");
 			comboSetVerifyStatus.Items.Add("none");
-			_listVerifyStatuses=Defs.GetDefsForCategory(DefCat.InsuranceVerificationStatus,true);
+			_listVerifyStatuses=Definition.GetByCategory(DefinitionCategory.InsuranceVerificationStatus);
 			for(int i=0;i<_listVerifyStatuses.Count;i++) {
-				comboFilterVerifyStatus.Items.Add(_listVerifyStatuses[i].ItemName);
-				comboSetVerifyStatus.Items.Add(_listVerifyStatuses[i].ItemName);
-				if(_listVerifyStatuses[i].DefNum==_defNumVerifyStatusFilter) {
+				comboFilterVerifyStatus.Items.Add(_listVerifyStatuses[i].Description);
+				comboSetVerifyStatus.Items.Add(_listVerifyStatuses[i].Description);
+				if(_listVerifyStatuses[i].Id==_defNumVerifyStatusFilter) {
 					comboFilterVerifyStatus.SelectedIndex=i+1;
 				}
-				if(_listVerifyStatuses[i].DefNum==_defNumVerifyStatusAssign) {
+				if(_listVerifyStatuses[i].Id==_defNumVerifyStatusAssign) {
 					comboSetVerifyStatus.SelectedIndex=i+1;
 				}
 			}
@@ -175,14 +175,14 @@ namespace OpenDental {
 			}
 			listBoxVerifyRegions.Items.Clear();
 			if(Preferences.HasClinicsEnabled) {
-				_listRegionDefs=Defs.GetDefsForCategory(DefCat.Regions,true);
+				_listRegionDefs=Definition.GetByCategory(DefinitionCategory.Regions);
 				List<Clinic> listClinicsForUser=Clinics.GetForUserod(Security.CurUser);
 				if(_listRegionDefs.Count!=0) {
-					_listRegionDefs.RemoveAll(x => !listClinicsForUser.Any(y => y.Region==x.DefNum));
+					_listRegionDefs.RemoveAll(x => !listClinicsForUser.Any(y => y.Region==x.Id));
 					listBoxVerifyRegions.Items.Add(Lan.g(this,"All"));
 					for(int i = 0;i<_listRegionDefs.Count;i++) {
-						listBoxVerifyRegions.Items.Add(_listRegionDefs[i].ItemName);
-						if(_listDefNumsVerifyRegionsFilter.Contains(_listRegionDefs[i].DefNum)) {
+						listBoxVerifyRegions.Items.Add(_listRegionDefs[i].Description);
+						if(_listDefNumsVerifyRegionsFilter.Contains(_listRegionDefs[i].Id)) {
 							listBoxVerifyRegions.SelectedIndex=i+1;
 						}
 					}
@@ -304,12 +304,12 @@ namespace OpenDental {
 			{
 				return listGridRows;
 			}
-			bool excludePatVerifyWhenNoIns=Preferences.GetBool(PrefName.InsVerifyExcludePatVerify);
-			bool excludePatClones=(Preferences.GetBool(PrefName.ShowFeaturePatientClone)==true) && Preferences.GetBool(PrefName.InsVerifyExcludePatientClones);
+			bool excludePatVerifyWhenNoIns=Preference.GetBool(PreferenceName.InsVerifyExcludePatVerify);
+			bool excludePatClones=(Preference.GetBool(PreferenceName.ShowFeaturePatientClone)==true) && Preference.GetBool(PreferenceName.InsVerifyExcludePatientClones);
 			DateTime dateTimeStart=DateTime.Today;
 			DateTime dateTimeEnd=DateTime.Today.AddDays(PIn.Int(textAppointmentScheduledDays.Text));//Don't need to add 1 because we will be getting only the date portion of this datetime.
 			if(!isAssignGrid && tabControlVerificationList.SelectedTab==tabPastDue) {
-				dateTimeStart=DateTime.Today.AddDays(-Preferences.GetInt(PrefName.InsVerifyDaysFromPastDueAppt));
+				dateTimeStart=DateTime.Today.AddDays(-Preference.GetInt(PreferenceName.InsVerifyDaysFromPastDueAppt));
 				dateTimeEnd=DateTime.Today.AddDays(-1);
 			}
 			DateTime dateTimeLastPatEligibility=DateTime.Today.AddDays(-PIn.Int(textPatientEnrollmentDays.Text));
@@ -518,8 +518,8 @@ namespace OpenDental {
 			}
 			menuRightClick.MenuItems.Add(assignUserToolItem);
 			MenuItem verifyStatusToolItem=new MenuItem(Lan.g(this,"Set Verify Status to"));
-			foreach(Def status in _listVerifyStatuses) {
-				MenuItem verifyStatusDropDownCur=new MenuItem(status.ItemName);
+			foreach(Definition status in _listVerifyStatuses) {
+				MenuItem verifyStatusDropDownCur=new MenuItem(status.Description);
 				verifyStatusDropDownCur.Tag=status;
 				verifyStatusDropDownCur.Click+=new EventHandler(verifyStatusToolItemDropDown_Click);
 				verifyStatusToolItem.MenuItems.Add(verifyStatusDropDownCur);
@@ -710,8 +710,8 @@ namespace OpenDental {
 			}
 			menuRightClick.MenuItems.Add(assignUserToolItem);
 			MenuItem verifyStatusToolItem=new MenuItem(Lan.g(this,"Set Verify Status to"));
-			foreach(Def status in _listVerifyStatuses) {
-				MenuItem verifyStatusDropDownCur=new MenuItem(status.ItemName);
+			foreach(Definition status in _listVerifyStatuses) {
+				MenuItem verifyStatusDropDownCur=new MenuItem(status.Description);
 				verifyStatusDropDownCur.Tag=status;
 				verifyStatusDropDownCur.Click+=new EventHandler(verifyStatusToolItemDropDown_Click);
 				verifyStatusToolItem.MenuItems.Add(verifyStatusDropDownCur);
@@ -758,8 +758,8 @@ namespace OpenDental {
 				comboSetVerifyStatus.Text="none";
 			}
 			else {
-				_defNumVerifyStatusAssign=_listVerifyStatuses[comboSetVerifyStatus.SelectedIndex-1].DefNum;
-				comboSetVerifyStatus.Text=_listVerifyStatuses[comboSetVerifyStatus.SelectedIndex-1].ItemName;
+				_defNumVerifyStatusAssign=_listVerifyStatuses[comboSetVerifyStatus.SelectedIndex-1].Id;
+				comboSetVerifyStatus.Text=_listVerifyStatuses[comboSetVerifyStatus.SelectedIndex-1].Description;
 			}
 			if(gridMain.GetSelectedIndex()!=-1 || gridPastDue.GetSelectedIndex()!=-1) {//Both grids cannot have a selection at the same time
 				SetStatus(_defNumVerifyStatusAssign,true);
@@ -779,7 +779,7 @@ namespace OpenDental {
 				_defNumVerifyStatusFilter=0;
 			}
 			else {
-				_defNumVerifyStatusFilter=_listVerifyStatuses[comboFilterVerifyStatus.SelectedIndex-1].DefNum;
+				_defNumVerifyStatusFilter=_listVerifyStatuses[comboFilterVerifyStatus.SelectedIndex-1].Id;
 			}
 			FillGrids();
 		}
@@ -798,7 +798,7 @@ namespace OpenDental {
 					_listDefNumsVerifyRegionsFilter.Add(-1);
 				}
 				else {
-					_listDefNumsVerifyRegionsFilter.Add(_listRegionDefs[i-1].DefNum);
+					_listDefNumsVerifyRegionsFilter.Add(_listRegionDefs[i-1].Id);
 				}
 			}
 			//Has "All" selected as well as specific clinics
@@ -900,12 +900,12 @@ namespace OpenDental {
 		}
 
 		private void verifyStatusToolItemDropDown_Click(object sender, EventArgs e) {
-			Def status=(Def)((MenuItem)sender).Tag;
+			Definition status=(Definition)((MenuItem)sender).Tag;
 			if(tabControl1.SelectedTab==tabVerify) {
-				SetStatus(status.DefNum,true);
+				SetStatus(status.Id,true);
 			}
 			if(tabControl1.SelectedTab==tabAssign) {
-				SetStatus(status.DefNum,false);
+				SetStatus(status.Id,false);
 			}
 			FillGrids();
 		}
@@ -986,7 +986,7 @@ namespace OpenDental {
 
 			///<summary>An updated dictionary of status defs should be passed in.  
 			///This is to avoid grabbing definitions cache from inside this nested class, which will be instanced in a loop.</summary>
-			public InsVerifyGridRow(InsVerifyGridObject gridObj,Dictionary<long,Def> dictStatusDefs,List<User> listUsers,bool isAssignGrid) {
+			public InsVerifyGridRow(InsVerifyGridObject gridObj,Dictionary<long,Definition> dictStatusDefs,List<User> listUsers,bool isAssignGrid) {
 				if(gridObj==null) {
 					return;
 				}
@@ -1008,7 +1008,7 @@ namespace OpenDental {
 						gridObj.PatInsVerify.DateLastVerified : 
 						gridObj.PlanInsVerify.DateLastVerified);
 					if(dictStatusDefs.ContainsKey(gridObj.PatInsVerify.DefNum)) {
-						VerifyStatus=dictStatusDefs[gridObj.PatInsVerify.DefNum].ItemName;
+						VerifyStatus=dictStatusDefs[gridObj.PatInsVerify.DefNum].Description;
 					}
 					bool isPatLastAssignedNewer=gridObj.PatInsVerify.DateLastAssigned>=gridObj.PlanInsVerify.DateLastAssigned;
 					//Get the most recent DateLastAssigned
@@ -1037,7 +1037,7 @@ namespace OpenDental {
 					CarrierName=gridObj.PatInsVerify.CarrierName;
 					DateLastVerified=gridObj.PatInsVerify.DateLastVerified;
 					if(dictStatusDefs.ContainsKey(gridObj.PatInsVerify.DefNum)) {
-						VerifyStatus=dictStatusDefs[gridObj.PatInsVerify.DefNum].ItemName;
+						VerifyStatus=dictStatusDefs[gridObj.PatInsVerify.DefNum].Description;
 					}
 					DateLastAssigned=gridObj.PatInsVerify.DateLastAssigned;
 					User userCur=listUsers.FirstOrDefault(x => x.UserNum==gridObj.PatInsVerify.UserNum);
@@ -1054,7 +1054,7 @@ namespace OpenDental {
 					CarrierName=gridObj.PlanInsVerify.CarrierName;
 					DateLastVerified=gridObj.PlanInsVerify.DateLastVerified;
 					if(dictStatusDefs.ContainsKey(gridObj.PlanInsVerify.DefNum)) {
-						VerifyStatus=dictStatusDefs[gridObj.PlanInsVerify.DefNum].ItemName;
+						VerifyStatus=dictStatusDefs[gridObj.PlanInsVerify.DefNum].Description;
 					}
 					DateLastAssigned=gridObj.PlanInsVerify.DateLastAssigned;
 					User userCur=listUsers.FirstOrDefault(x => x.UserNum==gridObj.PlanInsVerify.UserNum);

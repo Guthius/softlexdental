@@ -1,17 +1,12 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
-using System.Reflection;
 
 namespace OpenDentBusiness
 {
-    ///<summary></summary>
     public class DeletedObjects
     {
-        ///<summary></summary>
         public static void SetDeleted(DeletedObjectType objType, long objectNum)
         {
             DeletedObject delObj = new DeletedObject();
@@ -76,18 +71,5 @@ namespace OpenDentBusiness
             return deletedObjectList;
         }
         #endregion
-
-        ///<summary>This is only run at the server for the mobile db. Deleted patients are not handled here because patients never get deleted.</summary>
-        public static void DeleteForMobile(List<DeletedObject> list, long customerNum)
-        {
-            for (int i = 0; i < list.Count; i++)
-            {
-                //mobile
-                if (list[i].ObjectType == DeletedObjectType.Appointment)
-                {
-                    Mobile.Crud.AppointmentmCrud.Delete(customerNum, list[i].ObjectNum);
-                }
-            }
-        }
     }
 }

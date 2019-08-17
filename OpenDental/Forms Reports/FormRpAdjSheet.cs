@@ -32,7 +32,7 @@ namespace OpenDental{
 		private bool _hasClinicsEnabled;
 		private CheckBox checkAllAdjs;
 		///<summary>Holds all adjustment types, does NOT include hidden.</summary>
-		private List<Def> _listAdjTypeDefs;
+		private List<Definition> _listAdjTypeDefs;
 
 		///<summary></summary>
 		public FormRpAdjSheet(){
@@ -277,10 +277,10 @@ namespace OpenDental{
 					}
 				}
 			}
-			_listAdjTypeDefs=Defs.GetDefsForCategory(DefCat.AdjTypes,true);//Exclude hidden.
+			_listAdjTypeDefs=Definition.GetByCategory(DefinitionCategory.AdjTypes);//Exclude hidden.
 			checkAllAdjs.Checked=true;
 			for(int i=0;i<_listAdjTypeDefs.Count;i++) {
-				listType.Items.Add(_listAdjTypeDefs[i].ItemName);
+				listType.Items.Add(_listAdjTypeDefs[i].Description);
 			}
 		}
 
@@ -372,11 +372,11 @@ namespace OpenDental{
 			List<string> listAdjType=new List<string>();
 			if(checkAllAdjs.Checked) {
 				//add all adjustment types, including hidden
-				listAdjType=Defs.GetDefsForCategory(DefCat.AdjTypes).Select(x => POut.Long(x.DefNum)).ToList();
+				listAdjType=Definition.GetByCategory(DefinitionCategory.AdjTypes).Select(x => POut.Long(x.Id)).ToList();
 			}
 			else {
 				for(int i=0;i<listType.SelectedIndices.Count;i++) {//1:1
-					listAdjType.Add(POut.Long(_listAdjTypeDefs[listType.SelectedIndices[i]].DefNum));
+					listAdjType.Add(POut.Long(_listAdjTypeDefs[listType.SelectedIndices[i]].Id));
 				}
 			}
 			ReportComplex report=new ReportComplex(true,false);	 
@@ -387,7 +387,7 @@ namespace OpenDental{
 			Font fontSubTitle=new Font("Tahoma",10,FontStyle.Bold);
 			report.ReportName=Lan.g(this,"Daily Adjustments");
 			report.AddTitle("Title",Lan.g(this,"Daily Adjustments"),fontTitle);
-			report.AddSubTitle("PracticeTitle",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
+			report.AddSubTitle("PracticeTitle",Preference.GetString(PreferenceName.PracticeTitle),fontSubTitle);
 			report.AddSubTitle("Date SubTitle",date1.SelectionStart.ToString("d")+" - "+date2.SelectionStart.ToString("d"),fontSubTitle);
 			if(checkAllProv.Checked) {
 				report.AddSubTitle("Provider SubTitle",Lan.g(this,"All Providers"));

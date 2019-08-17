@@ -106,9 +106,9 @@ namespace OpenDental
         bool insertRequired = false;
 
 
-        private List<Def> _listRecallUnschedStatusDefs;
-        private List<Def> _listApptConfirmedDefs;
-        private List<Def> _listApptProcsQuickAddDefs;
+        private List<Definition> _listRecallUnschedStatusDefs;
+        private List<Definition> _listApptConfirmedDefs;
+        private List<Definition> _listApptProcsQuickAddDefs;
         ///<summary>A list of all ClaimProcs that are related to the patient's current procedures</summary>
         private List<ClaimProc> _listClaimProcs;
         ///<summary>A list of all Adjustments that are related to the patient's current procedures</summary>
@@ -237,7 +237,7 @@ namespace OpenDental
 
             _selectedAptType = null;
             _aptTypeIndex = 0;
-            if (Preferences.GetBool(PrefName.AppointmentTypeShowPrompt) && IsNew
+            if (Preference.GetBool(PreferenceName.AppointmentTypeShowPrompt) && IsNew
                 && !AptCur.AptStatus.In(ApptStatus.PtNote, ApptStatus.PtNoteCompleted))
             {
                 FormApptTypes FormAT = new FormApptTypes();
@@ -253,7 +253,7 @@ namespace OpenDental
             new ODThread((o) =>
             {
                 //Sleep for the delay and then set the variable to false.
-                Thread.Sleep(Math.Max((int)(TimeSpan.FromSeconds(Preferences.GetDouble(PrefName.FormClickDelay)).TotalMilliseconds), 1));
+                Thread.Sleep(Math.Max((int)(TimeSpan.FromSeconds(Preference.GetDouble(PreferenceName.FormClickDelay)).TotalMilliseconds), 1));
                 _isClickLocked = false;
             }).Start();
 
@@ -312,7 +312,7 @@ namespace OpenDental
             else if (IsSchedulingUnscheduledAppt)
             {//User is authorized for Permissions.ApptConfirmStatusEdit.
              //Causes the confirmation status to be reset in the UI, mimics ContrAppt.pinBoard_MouseUp(...)
-                AptCur.Confirmed = Defs.GetFirstForCategory(DefCat.ApptConfirmed, true).DefNum;
+                AptCur.Confirmed = Defs.GetFirstForCategory(DefinitionCategory.ApptConfirmed, true).Id;
             }
             //The objects below are needed when adding procs to this appt.
             fam = _loadData.Family;
@@ -338,12 +338,12 @@ namespace OpenDental
                 _isPlanned = true;
             }
             _labCur = _loadData.Lab;
-            if (Preferences.GetBool(PrefName.EasyHideDentalSchools))
+            if (Preference.GetBool(PreferenceName.EasyHideDentalSchools))
             {
                 butRequirement.Visible = false;
                 textRequirement.Visible = false;
             }
-            if (Preferences.GetBool(PrefName.ShowFeatureEhr))
+            if (Preference.GetBool(PreferenceName.ShowFeatureEhr))
             {
                 butSyndromicObservations.Visible = true;
                 labelSyndromicObservations.Visible = true;
@@ -441,19 +441,19 @@ namespace OpenDental
             }
             comboUnschedStatus.Items.Add(Lan.g(this, "none"));
             comboUnschedStatus.SelectedIndex = 0;
-            _listRecallUnschedStatusDefs = Defs.GetDefsForCategory(DefCat.RecallUnschedStatus, true);
-            _listApptConfirmedDefs = Defs.GetDefsForCategory(DefCat.ApptConfirmed, true);
-            _listApptProcsQuickAddDefs = Defs.GetDefsForCategory(DefCat.ApptProcsQuickAdd, true);
+            _listRecallUnschedStatusDefs = Definition.GetByCategory(DefinitionCategory.RecallUnschedStatus);;
+            _listApptConfirmedDefs = Definition.GetByCategory(DefinitionCategory.ApptConfirmed);;
+            _listApptProcsQuickAddDefs = Definition.GetByCategory(DefinitionCategory.ApptProcsQuickAdd);;
             for (int i = 0; i < _listRecallUnschedStatusDefs.Count; i++)
             {
-                comboUnschedStatus.Items.Add(_listRecallUnschedStatusDefs[i].ItemName);
-                if (_listRecallUnschedStatusDefs[i].DefNum == AptCur.UnschedStatus)
+                comboUnschedStatus.Items.Add(_listRecallUnschedStatusDefs[i].Description);
+                if (_listRecallUnschedStatusDefs[i].Id == AptCur.UnschedStatus)
                     comboUnschedStatus.SelectedIndex = i + 1;
             }
             for (int i = 0; i < _listApptConfirmedDefs.Count; i++)
             {
-                comboConfirmed.Items.Add(_listApptConfirmedDefs[i].ItemName);
-                if (_listApptConfirmedDefs[i].DefNum == AptCur.Confirmed)
+                comboConfirmed.Items.Add(_listApptConfirmedDefs[i].Description);
+                if (_listApptConfirmedDefs[i].Id == AptCur.Confirmed)
                 {
                     comboConfirmed.SelectedIndex = i;
                 }
@@ -462,7 +462,7 @@ namespace OpenDental
             appointmentNoteTextBox.Text = AptCur.Note;
             for (int i = 0; i < _listApptProcsQuickAddDefs.Count; i++)
             {
-                quickAddListBox.Items.Add(_listApptProcsQuickAddDefs[i].ItemName);
+                quickAddListBox.Items.Add(_listApptProcsQuickAddDefs[i].Description);
             }
             //Fill Clinics
             _listClinics = new List<Clinic>() { new Clinic() { Abbr = Lan.g(this, "None") } }; //Seed with "None"
@@ -486,11 +486,11 @@ namespace OpenDental
             //Fill comboAssistant with employees and none option
             comboAssistant.Items.Add(Lan.g(this, "none"));
             comboAssistant.SelectedIndex = 0;
-            _listEmployees = Employees.GetDeepCopy(true);
+            _listEmployees = Employee.All();
             for (int i = 0; i < _listEmployees.Count; i++)
             {
-                comboAssistant.Items.Add(_listEmployees[i].FName);
-                if (_listEmployees[i].EmployeeNum == AptCur.Assistant)
+                comboAssistant.Items.Add(_listEmployees[i].FirstName);
+                if (_listEmployees[i].Id == AptCur.Assistant)
                     comboAssistant.SelectedIndex = i + 1;
             }
             textLabCase.Text = GetLabCaseDescript();
@@ -532,7 +532,7 @@ namespace OpenDental
                 textInsPlan1.Text = InsPlans.GetCarrierName(AptCur.InsPlan1, PlanList);
                 textInsPlan2.Text = InsPlans.GetCarrierName(AptCur.InsPlan2, PlanList);
             }
-            if (!Preferences.GetBool(PrefName.EasyHideDentalSchools))
+            if (!Preference.GetBool(PreferenceName.EasyHideDentalSchools))
             {
                 List<ReqStudent> listStudents = _loadData.ListStudents;
                 string requirements = "";
@@ -836,7 +836,7 @@ namespace OpenDental
             gridComm.Columns.Add(col);
             gridComm.Rows.Clear();
             ODGridRow row;
-            List<Def> listMiscColorDefs = Defs.GetDefsForCategory(DefCat.MiscColors);
+            List<Definition> listMiscColorDefs = Definition.GetByCategory(DefinitionCategory.MiscColors);;
             for (int i = 0; i < _tableComms.Rows.Count; i++)
             {
                 row = new ODGridRow();
@@ -846,7 +846,7 @@ namespace OpenDental
                     row.Cells.Add(_tableComms.Rows[i]["Note"].ToString());
                     if (_tableComms.Rows[i]["CommType"].ToString() == Commlogs.GetTypeAuto(CommItemTypeAuto.APPT).ToString())
                     {
-                        row.ColorBackG = listMiscColorDefs[7].ItemColor;
+                        row.ColorBackG = listMiscColorDefs[7].Color;
                     }
                 }
                 else if (PIn.Long(_tableComms.Rows[i]["EmailMessageNum"].ToString()) > 0)
@@ -979,7 +979,7 @@ namespace OpenDental
                             }
                             break;
                         case "Priority":
-                            row.Cells.Add(Defs.GetName(DefCat.TxPriorities, proc.Priority));
+                            row.Cells.Add(Defs.GetName(DefinitionCategory.TxPriorities, proc.Priority));
                             break;
                         case "Code":
                             row.Cells.Add(procCode.ProcCode);
@@ -1123,7 +1123,7 @@ namespace OpenDental
                     return;
                 }
             }
-            if (pat.TxtMsgOk == YN.Unknown && Preferences.GetBool(PrefName.TextMsgOkStatusTreatAsNo))
+            if (pat.TxtMsgOk == YN.Unknown && Preference.GetBool(PreferenceName.TextMsgOkStatusTreatAsNo))
             {
                 if (MsgBox.Show(this, MsgBoxButtons.YesNo, "This patient might not want to receive text messages. "
                     + "Would you like to mark this patient as okay to receive text messages?"))
@@ -1142,7 +1142,7 @@ namespace OpenDental
                 Patients.Update(pat, patOld);
             }
             string message;
-            message = Preferences.GetString(PrefName.ConfirmTextMessage);
+            message = Preference.GetString(PreferenceName.ConfirmTextMessage);
             message = message.Replace("[NameF]", pat.GetNameFirst());
             message = message.Replace("[NameFL]", pat.GetNameFL());
             message = message.Replace("[date]", AptCur.AptDateTime.ToShortDateString());
@@ -1456,7 +1456,7 @@ namespace OpenDental
                 }
             }
 
-            string[] codes = _listApptProcsQuickAddDefs[index].ItemValue.Split(',');
+            string[] codes = _listApptProcsQuickAddDefs[index].Value.Split(',');
             for (int i = 0; i < codes.Length; i++)
             {
                 if (!ProcedureCodes.GetContainsKey(codes[i])) // these are D codes, not codeNums.
@@ -1718,7 +1718,7 @@ namespace OpenDental
             //First check that they have an procedures attached to this appointment. If the appointment is an existing appointment that did not originally
             //have any procedures attached, the prompt will not come up.
             if ((IsNew || _listProcNumsAttachedStart.Count > 0)
-                && Preferences.GetBool(PrefName.ApptsRequireProc)
+                && Preference.GetBool(PreferenceName.ApptsRequireProc)
                 && gridProc.SelectedIndices.Length == 0
                 && !AptCur.AptStatus.In(ApptStatus.PtNote, ApptStatus.PtNoteCompleted))
             {
@@ -1779,7 +1779,7 @@ namespace OpenDental
                     }
                 }
             }
-            if (Preferences.GetBool(PrefName.ApptsRequireProc) && dictProcsBeingMoved.Count > 0)
+            if (Preference.GetBool(PreferenceName.ApptsRequireProc) && dictProcsBeingMoved.Count > 0)
             {//Only check if we are actually moving procedures.
                 Dictionary<long, int> dictAptsProcCount = Appointments.GetProcCountForUnscheduledApts(dictProcsBeingMoved.Keys.ToList());
                 //Check to see if the number of procedures we are stealing from the original appointment is the same
@@ -1840,7 +1840,7 @@ namespace OpenDental
                         + PatRestrictions.GetPatRestrictDesc(PatRestrict.ApptSchedule) + ".");
                     return false;
                 }
-                if (Preferences.GetBool(PrefName.UnscheduledListNoRecalls)
+                if (Preference.GetBool(PreferenceName.UnscheduledListNoRecalls)
                     && Appointments.IsRecallAppointment(AptCur, gridProc.SelectedGridRows.Select(x => (Procedure)(x.Tag)).ToList()))
                 {
                     if (MsgBox.Show(this, MsgBoxButtons.YesNo, "Recall appointments cannot be sent to the Unscheduled List.\r\nDelete appointment instead?"))
@@ -1921,7 +1921,7 @@ namespace OpenDental
                 }
             }
             //This change was just slightly too risky to make to 6.9, so 7.0 only
-            if (!Preferences.GetBool(PrefName.ApptAllowFutureComplete)//Not allowed to set future appts complete.
+            if (!Preference.GetBool(PreferenceName.ApptAllowFutureComplete)//Not allowed to set future appts complete.
                 && AptCur.AptStatus != ApptStatus.Complete//was not originally complete
                 && AptCur.AptStatus != ApptStatus.PtNote
                 && AptCur.AptStatus != ApptStatus.PtNoteCompleted
@@ -1936,7 +1936,7 @@ namespace OpenDental
                 .Select(x => gridProc.Rows[x].Tag as Procedure)
                 //true if any row had a valid procedure as a tag
                 .Any(x => x != null);
-            if (!Preferences.GetBool(PrefName.ApptAllowEmptyComplete)
+            if (!Preference.GetBool(PreferenceName.ApptAllowEmptyComplete)
                 && AptCur.AptStatus != ApptStatus.Complete//was not originally complete
                 && AptCur.AptStatus != ApptStatus.PtNote
                 && AptCur.AptStatus != ApptStatus.PtNoteCompleted
@@ -1974,7 +1974,7 @@ namespace OpenDental
             #endregion Provider Term Date Check
             List<Procedure> listProcs = gridProc.SelectedIndices.OfType<int>().Select(x => (Procedure)gridProc.Rows[x].Tag).ToList();
             if (listProcs.Count > 0 && statusComboBox.SelectedIndex == 1 && AptCur.AptDateTime.Date > DateTime.Today.Date
-                && !Preferences.GetBool(PrefName.FutureTransDatesAllowed))
+                && !Preference.GetBool(PreferenceName.FutureTransDatesAllowed))
             {
                 MsgBox.Show(this, "Not allowed to set procedures complete with future dates.");
                 return false;
@@ -2026,11 +2026,11 @@ namespace OpenDental
             }
             else
             {
-                AptCur.UnschedStatus = _listRecallUnschedStatusDefs[comboUnschedStatus.SelectedIndex - 1].DefNum;
+                AptCur.UnschedStatus = _listRecallUnschedStatusDefs[comboUnschedStatus.SelectedIndex - 1].Id;
             }
             if (comboConfirmed.SelectedIndex != -1)
             {
-                AptCur.Confirmed = _listApptConfirmedDefs[comboConfirmed.SelectedIndex].DefNum;
+                AptCur.Confirmed = _listApptConfirmedDefs[comboConfirmed.SelectedIndex].Id;
             }
             AptCur.TimeLocked = checkTimeLocked.Checked;
             AptCur.ColorOverride = butColor.BackColor;
@@ -2045,7 +2045,7 @@ namespace OpenDental
             }
             else
             {
-                AptCur.Assistant = _listEmployees[comboAssistant.SelectedIndex - 1].EmployeeNum;
+                AptCur.Assistant = _listEmployees[comboAssistant.SelectedIndex - 1].Id;
             }
             AptCur.IsNewPatient = checkIsNewPatient.Checked;
             AptCur.DateTimeAskedToArrive = dateTimeAskedToArrive;
@@ -2288,8 +2288,8 @@ namespace OpenDental
             gridProg.NoteSpanStop = 7;
             gridProg.Rows.Clear();
             List<Procedure> procsForDay = Procedures.GetProcsForPatByDate(AptCur.PatNum, AptCur.AptDateTime);
-            List<Def> listProgNoteColorDefs = Defs.GetDefsForCategory(DefCat.ProgNoteColors);
-            List<Def> listMiscColorDefs = Defs.GetDefsForCategory(DefCat.MiscColors);
+            List<Definition> listProgNoteColorDefs = Definition.GetByCategory(DefinitionCategory.ProgNoteColors);;
+            List<Definition> listMiscColorDefs = Definition.GetByCategory(DefinitionCategory.MiscColors);;
             for (int i = 0; i < procsForDay.Count; i++)
             {
                 Procedure proc = procsForDay[i];
@@ -2356,31 +2356,31 @@ namespace OpenDental
                 switch (proc.ProcStatus)
                 {
                     case ProcStat.TP:
-                        row.ColorText = listProgNoteColorDefs[0].ItemColor;
+                        row.ColorText = listProgNoteColorDefs[0].Color;
                         break;
                     case ProcStat.C:
-                        row.ColorText = listProgNoteColorDefs[1].ItemColor;
+                        row.ColorText = listProgNoteColorDefs[1].Color;
                         break;
                     case ProcStat.EC:
-                        row.ColorText = listProgNoteColorDefs[2].ItemColor;
+                        row.ColorText = listProgNoteColorDefs[2].Color;
                         break;
                     case ProcStat.EO:
-                        row.ColorText = listProgNoteColorDefs[3].ItemColor;
+                        row.ColorText = listProgNoteColorDefs[3].Color;
                         break;
                     case ProcStat.R:
-                        row.ColorText = listProgNoteColorDefs[4].ItemColor;
+                        row.ColorText = listProgNoteColorDefs[4].Color;
                         break;
                     case ProcStat.D:
                         row.ColorText = System.Drawing.Color.Black;
                         break;
                     case ProcStat.Cn:
-                        row.ColorText = listProgNoteColorDefs[22].ItemColor;
+                        row.ColorText = listProgNoteColorDefs[22].Color;
                         break;
                 }
                 row.ColorBackG = System.Drawing.Color.White;
                 if (proc.ProcDate.Date == DateTime.Today)
                 {
-                    row.ColorBackG = listMiscColorDefs[6].ItemColor;
+                    row.ColorBackG = listMiscColorDefs[6].Color;
                 }
                 gridProg.Rows.Add(row);
             }
@@ -2604,7 +2604,7 @@ namespace OpenDental
                 //if there are procedures that would get detached
                 //and if they have the preference AppointmentTypeWarning on,
                 //Display the warning
-                if (listProcCodeNumsToDetach.Count > 0 && Preferences.GetBool(PrefName.AppointmentTypeShowWarning))
+                if (listProcCodeNumsToDetach.Count > 0 && Preference.GetBool(PreferenceName.AppointmentTypeShowWarning))
                 {
                     if (!MsgBox.Show(this, MsgBoxButtons.OKCancel, "Selecting this appointment type will dissociate the current procedures from this "
                         + "appointment and attach the procedures defined for this appointment type.  Do you want to continue?"))
@@ -2676,20 +2676,20 @@ namespace OpenDental
 
         private void comboConfirmed_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (Preferences.GetLong(PrefName.AppointmentTimeArrivedTrigger) != 0 //Using appointmentTimeArrivedTrigger preference
-                && _listApptConfirmedDefs[comboConfirmed.SelectedIndex].DefNum == Preferences.GetLong(PrefName.AppointmentTimeArrivedTrigger) //selected index matches pref
+            if (Preference.GetLong(PreferenceName.AppointmentTimeArrivedTrigger) != 0 //Using appointmentTimeArrivedTrigger preference
+                && _listApptConfirmedDefs[comboConfirmed.SelectedIndex].Id == Preference.GetLong(PreferenceName.AppointmentTimeArrivedTrigger) //selected index matches pref
                 && String.IsNullOrWhiteSpace(textTimeArrived.Text))//time not already set 
             {
                 textTimeArrived.Text = DateTime.Now.ToShortTimeString();
             }
-            if (Preferences.GetLong(PrefName.AppointmentTimeSeatedTrigger) != 0 //Using AppointmentTimeSeatedTrigger preference
-                && _listApptConfirmedDefs[comboConfirmed.SelectedIndex].DefNum == Preferences.GetLong(PrefName.AppointmentTimeSeatedTrigger) //selected index matches pref
+            if (Preference.GetLong(PreferenceName.AppointmentTimeSeatedTrigger) != 0 //Using AppointmentTimeSeatedTrigger preference
+                && _listApptConfirmedDefs[comboConfirmed.SelectedIndex].Id == Preference.GetLong(PreferenceName.AppointmentTimeSeatedTrigger) //selected index matches pref
                 && String.IsNullOrWhiteSpace(textTimeSeated.Text))//time not already set 
             {
                 textTimeSeated.Text = DateTime.Now.ToShortTimeString();
             }
-            if (Preferences.GetLong(PrefName.AppointmentTimeDismissedTrigger) != 0 //Using AppointmentTimeDismissedTrigger preference
-                && _listApptConfirmedDefs[comboConfirmed.SelectedIndex].DefNum == Preferences.GetLong(PrefName.AppointmentTimeDismissedTrigger) //selected index matches pref
+            if (Preference.GetLong(PreferenceName.AppointmentTimeDismissedTrigger) != 0 //Using AppointmentTimeDismissedTrigger preference
+                && _listApptConfirmedDefs[comboConfirmed.SelectedIndex].Id == Preference.GetLong(PreferenceName.AppointmentTimeDismissedTrigger) //selected index matches pref
                 && String.IsNullOrWhiteSpace(textTimeDismissed.Text))//time not already set 
             {
                 textTimeDismissed.Text = DateTime.Now.ToShortTimeString();
@@ -2988,7 +2988,7 @@ namespace OpenDental
                 else
                 {  //User clicked cancel (or X button) on an existing appt
                     AptCur = AptOld.Copy();  //We do not want to save any other changes made in this form.
-                    if (AptCur.AptStatus == ApptStatus.Scheduled && Preferences.GetBool(PrefName.InsChecksFrequency) && !CheckFrequencies())
+                    if (AptCur.AptStatus == ApptStatus.Scheduled && Preference.GetBool(PreferenceName.InsChecksFrequency) && !CheckFrequencies())
                     {
                         e.Cancel = true;
                         return;
@@ -3000,7 +3000,7 @@ namespace OpenDental
              //Note that Procedures.Sync is never used.  This is intentional.  In order to properly use procedure.Sync logic in this form we would
              //need to enhance ProcEdit and all its possible child forms to also not insert into DB until OK is clicked.  This would be a massive undertaking
              //and as such we just immediately push changes to DB.
-                if (AptCur.AptStatus == ApptStatus.Scheduled && !_isDeleted && Preferences.GetBool(PrefName.InsChecksFrequency) && !CheckFrequencies())
+                if (AptCur.AptStatus == ApptStatus.Scheduled && !_isDeleted && Preference.GetBool(PreferenceName.InsChecksFrequency) && !CheckFrequencies())
                 {
                     e.Cancel = true;
                     return;

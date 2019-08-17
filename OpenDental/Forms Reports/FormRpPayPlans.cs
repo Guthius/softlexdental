@@ -444,7 +444,7 @@ namespace OpenDental
 			else {
 				displayPayPlanType=DisplayPayPlanType.Both;
 			}
-			bool isPayPlanV2=(Preferences.GetInt(PrefName.PayPlansVersion)==2);
+			bool isPayPlanV2=(Preference.GetInt(PreferenceName.PayPlansVersion)==2);
 			DataSet ds=RpPayPlan.GetPayPlanTable(dateStart.Value,dateEnd.Value,listProvNums,listClinicNums,checkAllProv.Checked
 					,displayPayPlanType,checkHideCompletePlans.Checked,checkShowFamilyBalance.Checked,checkHasDateRange.Checked,isPayPlanV2);
 			DataTable table=ds.Tables["Clinic"];
@@ -454,7 +454,7 @@ namespace OpenDental
 			Font fontSubTitle=new Font("Tahoma",10,FontStyle.Bold);
 			report.ReportName=Lan.g(this,"PaymentPlans");
 			report.AddTitle("Title",Lan.g(this,"Payment Plans"),fontTitle);
-			report.AddSubTitle("PracticeTitle",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
+			report.AddSubTitle("PracticeTitle",Preference.GetString(PreferenceName.PracticeTitle),fontSubTitle);
 			if(checkHasDateRange.Checked) {
 				report.AddSubTitle("Date SubTitle",dateStart.Value.ToShortDateString()+" - "+dateEnd.Value.ToShortDateString(),fontSubTitle);
 			}

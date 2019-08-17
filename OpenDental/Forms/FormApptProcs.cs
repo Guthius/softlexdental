@@ -93,7 +93,7 @@ namespace OpenDental {
 					row.Cells.Add("");
 				}
 				row.Cells.Add(ProcedureCodes.GetStringProcCode(ProcList[i].CodeNum));
-				row.Cells.Add(Defs.GetName(DefCat.TxPriorities,ProcList[i].Priority));
+				row.Cells.Add(Defs.GetName(DefinitionCategory.TxPriorities,ProcList[i].Priority));
 				row.Cells.Add(Tooth.ToInternat(ProcList[i].ToothNum));
 				row.Cells.Add(ProcedureCodes.GetLaymanTerm(ProcList[i].CodeNum));
 				row.Cells.Add(ProcList[i].ProcFee.ToString("F"));
@@ -155,8 +155,8 @@ namespace OpenDental {
 			ProcCur.BaseUnits=procCodeCur.BaseUnits;
 			ProcCur.SiteNum=pat.SiteNum;
 			ProcCur.RevCode=procCodeCur.RevenueCodeDefault;
-			ProcCur.DiagnosticCode=Preferences.GetString(PrefName.ICD9DefaultForNewProcs);
-			ProcCur.PlaceService=(PlaceOfService)Preferences.GetInt(PrefName.DefaultProcedurePlaceService);//Default proc place of service for the Practice is used. 
+			ProcCur.DiagnosticCode=Preference.GetString(PreferenceName.ICD9DefaultForNewProcs);
+			ProcCur.PlaceService=(PlaceOfService)Preference.GetInt(PreferenceName.DefaultProcedurePlaceService);//Default proc place of service for the Practice is used. 
 			if(Userods.IsUserCpoe(Security.CurUser)) {
 				//This procedure is considered CPOE because the provider is the one that has added it.
 				ProcCur.IsCpoe=true;

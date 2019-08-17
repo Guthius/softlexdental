@@ -9,8 +9,8 @@ using OpenDentBusiness;
 namespace OpenDental {
 	public partial class FormAvaTax:ODForm {
 
-		private Def _defCurrentSalesTaxAdjType;
-		private Def _defCurrentSalesTaxReturnAdjType;
+		private Definition _defCurrentSalesTaxAdjType;
+		private Definition _defCurrentSalesTaxReturnAdjType;
 		private PatFieldDef _patFieldDefCurrentTaxExempt;
 		public Program ProgramCur;
 
@@ -62,10 +62,10 @@ namespace OpenDental {
 			}
 			//Set company code and sales tax def
 			textCompanyCode.Text=AvaTax.CompanyCode;
-			_defCurrentSalesTaxAdjType=Defs.GetDef(DefCat.AdjTypes,AvaTax.SalesTaxAdjType);
-			textAdjType.Text=_defCurrentSalesTaxAdjType.ItemName;
-			_defCurrentSalesTaxReturnAdjType=Defs.GetDef(DefCat.AdjTypes,AvaTax.SalesTaxReturnAdjType)??new Def();
-			textReturnAdjType.Text=_defCurrentSalesTaxReturnAdjType.ItemName;
+			_defCurrentSalesTaxAdjType=Defs.GetDef(DefinitionCategory.AdjTypes,AvaTax.SalesTaxAdjType);
+			textAdjType.Text=_defCurrentSalesTaxAdjType.Description;
+			_defCurrentSalesTaxReturnAdjType=Defs.GetDef(DefinitionCategory.AdjTypes,AvaTax.SalesTaxReturnAdjType)??new Definition();
+			textReturnAdjType.Text=_defCurrentSalesTaxReturnAdjType.Description;
 			_patFieldDefCurrentTaxExempt=AvaTax.TaxExemptPatField;
 			textTaxExempt.Text=(_patFieldDefCurrentTaxExempt!=null) ? _patFieldDefCurrentTaxExempt.FieldName : "";
 			validTaxLockDate.Text=AvaTax.TaxLockDate.ToShortDateString();
@@ -87,19 +87,19 @@ namespace OpenDental {
 
 		///<summary>Pop a def picker to allow the user to select which def they wish to use for sales tax</summary>
 		private void butChooseTaxAdjType_Click(object sender,EventArgs e) {
-			FormDefinitionPicker formDP=new FormDefinitionPicker(DefCat.AdjTypes);
+			FormDefinitionPicker formDP=new FormDefinitionPicker(DefinitionCategory.AdjTypes);
 			if(formDP.ShowDialog()==DialogResult.OK) {
 				_defCurrentSalesTaxAdjType=formDP.ListSelectedDefs[0];
-				textAdjType.Text=_defCurrentSalesTaxAdjType.ItemName;
+				textAdjType.Text=_defCurrentSalesTaxAdjType.Description;
 			}
 		}
 
 		///<summary>Pop a def picker to allow the user to select which def they wish to use for sales tax returns</summary>
 		private void butChooseRetAdjType_Click(object sender,EventArgs e) {
-			FormDefinitionPicker formDP=new FormDefinitionPicker(DefCat.AdjTypes);
+			FormDefinitionPicker formDP=new FormDefinitionPicker(DefinitionCategory.AdjTypes);
 			if(formDP.ShowDialog()==DialogResult.OK) {
 				_defCurrentSalesTaxReturnAdjType=formDP.ListSelectedDefs[0];
-				textReturnAdjType.Text=_defCurrentSalesTaxReturnAdjType.ItemName;
+				textReturnAdjType.Text=_defCurrentSalesTaxReturnAdjType.Description;
 			}
 		}
 
@@ -144,8 +144,8 @@ namespace OpenDental {
 			ProgramProperties.SetProperty(progNum,ProgramProperties.PropertyDescs.Username,textUsername.Text);
 			ProgramProperties.SetProperty(progNum,ProgramProperties.PropertyDescs.Password,textPassword.Text);
 			ProgramProperties.SetProperty(progNum,"Company Code",textCompanyCode.Text);
-			ProgramProperties.SetProperty(progNum,"Sales Tax Adjustment Type",POut.Long(_defCurrentSalesTaxAdjType.DefNum));
-			ProgramProperties.SetProperty(progNum,"Sales Tax Return Adjustment Type",POut.Long(_defCurrentSalesTaxReturnAdjType.DefNum));
+			ProgramProperties.SetProperty(progNum,"Sales Tax Adjustment Type",POut.Long(_defCurrentSalesTaxAdjType.Id));
+			ProgramProperties.SetProperty(progNum,"Sales Tax Return Adjustment Type",POut.Long(_defCurrentSalesTaxReturnAdjType.Id));
 			ProgramProperties.SetProperty(progNum,"Taxable States",string.Join(",",listBoxTaxedStates.Items.Cast<ODBoxItem<string>>().Select(x => x.Tag)));
 			ProgramProperties.SetProperty(progNum,"Log Level",POut.Int((int)listBoxLogLevel.SelectedTag<LogLevel>()));
 			ProgramProperties.SetProperty(progNum,"Prepay Proc Codes",POut.String(textPrePayCodes.Text));

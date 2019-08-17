@@ -102,7 +102,7 @@ namespace OpenDental
 
             if (!e.Handled)
             {
-                OpenDentalHelp.ODHelp.GetManualPage(e.FormName, Preferences.GetString(PrefName.ProgramVersion));
+                OpenDentalHelp.ODHelp.GetManualPage(e.FormName, Preference.GetString(PreferenceName.ProgramVersion));
             }
         }
 

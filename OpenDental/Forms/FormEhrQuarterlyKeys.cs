@@ -18,7 +18,7 @@ namespace OpenDental {
 		}
 
 		private void FormEhrQuarterlyKeys_Load(object sender,EventArgs e) {
-			textPracticeTitle.Text=Preferences.GetString(PrefName.PracticeTitle);
+			textPracticeTitle.Text=Preference.GetString(PreferenceName.PracticeTitle);
 			FillGrid();
 		}
 

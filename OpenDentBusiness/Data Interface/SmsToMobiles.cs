@@ -237,8 +237,9 @@ namespace OpenDentBusiness
             string result = "";
             try
             {
-                result = WebServiceMainHQProxy.GetWebServiceMainHQInstance()
-                    .SmsSend(PayloadHelper.CreatePayload(strbuild.ToString(), eServiceCode.IntegratedTexting));
+                // TODO: Fix me...
+                //result = WebServiceMainHQProxy.GetWebServiceMainHQInstance()
+                 //   .SmsSend(PayloadHelper.CreatePayload(strbuild.ToString(), eServiceCode.IntegratedTexting));
             }
             catch 
             {

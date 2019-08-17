@@ -14,7 +14,7 @@ namespace OpenDental
         long selectedCat;
         ProcButton[] ButtonList;
         List<ProcButtonQuick> procButtonsList;
-        List<Def> procButtonCategoryDefsList;
+        List<Definition> procButtonCategoryDefsList;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FormProcButtons"/> class.
@@ -83,7 +83,7 @@ namespace OpenDental
             categoriesListBox.Items.Clear();
             categoriesListBox.Items.Add("Quick Buttons");
 
-            procButtonCategoryDefsList = Defs.GetDefsForCategory(DefCat.ProcButtonCats, true);
+            procButtonCategoryDefsList = Definition.GetByCategory(DefinitionCategory.ProcButtonCats);;
 
             if (procButtonCategoryDefsList.Count == 0)
             {
@@ -94,8 +94,8 @@ namespace OpenDental
 
             for (int i = 0; i < procButtonCategoryDefsList.Count; i++)
             {
-                categoriesListBox.Items.Add(procButtonCategoryDefsList[i].ItemName);
-                if (selectedCat == procButtonCategoryDefsList[i].DefNum)
+                categoriesListBox.Items.Add(procButtonCategoryDefsList[i].Description);
+                if (selectedCat == procButtonCategoryDefsList[i].Id)
                 {
                     categoriesListBox.SelectedIndex = i + 1;
                 }
@@ -109,7 +109,7 @@ namespace OpenDental
 
             if (categoriesListBox.SelectedIndex > 0)
             {
-                selectedCat = procButtonCategoryDefsList[categoriesListBox.SelectedIndex - 1].DefNum;
+                selectedCat = procButtonCategoryDefsList[categoriesListBox.SelectedIndex - 1].Id;
             }
         }
 
@@ -173,7 +173,7 @@ namespace OpenDental
 
             selectedCat =
                 categoriesListBox.SelectedIndex > 0 ?
-                     procButtonCategoryDefsList[categoriesListBox.SelectedIndex - 1].DefNum :
+                     procButtonCategoryDefsList[categoriesListBox.SelectedIndex - 1].Id :
                      0;
 
             LoadButtons();
@@ -186,7 +186,7 @@ namespace OpenDental
         {
             if (!Security.IsAuthorized(Permissions.Setup)) return;
 
-            using (var formDefinitions = new FormDefinitions(DefCat.ProcButtonCats))
+            using (var formDefinitions = new FormDefinitions(DefinitionCategory.ProcButtonCats))
             {
                 formDefinitions.ShowDialog();
             }

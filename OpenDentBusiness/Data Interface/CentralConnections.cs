@@ -281,15 +281,15 @@ namespace OpenDentBusiness
                 //use the one table that we know exists
                 if (centralConnection.MySqlUser == "")
                 {
-                     DataConnection.SetDb(centralConnection.ServerName, "mysql", "root", centralConnection.MySqlPassword);
+                     DataConnection.Configure(centralConnection.ServerName, "mysql", "root", centralConnection.MySqlPassword);
                 }
                 else
                 {
-                    DataConnection.SetDb(centralConnection.ServerName, "mysql", centralConnection.MySqlUser, centralConnection.MySqlPassword);
+                    DataConnection.Configure(centralConnection.ServerName, "mysql", centralConnection.MySqlUser, centralConnection.MySqlPassword);
                 }
                 string command = "SHOW DATABASES";
                 //if this next step fails, table will simply have 0 rows
-                DataTable table = DataConnection.GetTable(command, false);
+                DataTable table = DataConnection.GetTable(command);
                 string[] dbNames = new string[table.Rows.Count];
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
@@ -317,7 +317,7 @@ namespace OpenDentBusiness
             {
                 //Password could be plain text password from the Password field of the config file, the decrypted password from the MySQLPassHash field
                 //of the config file, or password entered by the user and can be blank (empty string) in all cases
-                DataConnection.SetDb(centralConnection.ServerName, centralConnection.DatabaseName, centralConnection.MySqlUser, centralConnection.MySqlPassword);
+                DataConnection.Configure(centralConnection.ServerName, centralConnection.DatabaseName, centralConnection.MySqlUser, centralConnection.MySqlPassword);
             }
 
             TrySaveConnectionSettings(centralConnection, connectionString, noShowOnStartup, listAdminCompNames, isCommandLineArgs, useDynamicMode);

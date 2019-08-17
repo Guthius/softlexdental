@@ -49,7 +49,7 @@ namespace OpenDentBusiness
             if (listITypes.Contains(InvalidType.AccountingAutoPays) || isAll)
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.AccountingAutoPays.ToString());
-                ds.Tables.Add(AccountingAutoPays.GetTableFromCache(doRefreshServerCache));
+                //ds.Tables.Add(AccountingAutoPays.GetTableFromCache(doRefreshServerCache));
             }
             //if(listITypes.Contains(InvalidType.AlertItems) || isAll) {//THIS IS NOT CACHED. But is used to make server run the alert logic in OpenDentalService.
             //	ds.Tables.Add(AlertItems.RefreshCache());
@@ -57,7 +57,7 @@ namespace OpenDentBusiness
             if (listITypes.Contains(InvalidType.AlertCategories) || isAll)
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.AlertCategories.ToString());
-                ds.Tables.Add(AlertCategories.GetTableFromCache(doRefreshServerCache));
+                //ds.Tables.Add(AlertCategories.GetTableFromCache(doRefreshServerCache));
             }
             if (listITypes.Contains(InvalidType.AlertCategoryLinks) || isAll)
             {
@@ -116,14 +116,14 @@ namespace OpenDentBusiness
             //InvalidType.Clinics see InvalidType.Providers
             if (listITypes.Contains(InvalidType.Computers) || isAll)
             {
-                ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Computers.ToString());
-                ds.Tables.Add(Computers.GetTableFromCache(doRefreshServerCache));
-                ds.Tables.Add(Printers.GetTableFromCache(doRefreshServerCache));
+                //ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Computers.ToString());
+                //ds.Tables.Add(Computers.GetTableFromCache(doRefreshServerCache));
+                //ds.Tables.Add(Printers.GetTableFromCache(doRefreshServerCache));
             }
             if (listITypes.Contains(InvalidType.Defs) || isAll)
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Defs.ToString());
-                ds.Tables.Add(Defs.GetTableFromCache(doRefreshServerCache));
+                //ds.Tables.Add(Defs.GetTableFromCache(doRefreshServerCache));
             }
             if (listITypes.Contains(InvalidType.DentalSchools) || isAll)
             {
@@ -138,9 +138,9 @@ namespace OpenDentBusiness
             }
             if (listITypes.Contains(InvalidType.Diseases) || isAll)
             {
-                ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Diseases.ToString());
-                ds.Tables.Add(DiseaseDefs.GetTableFromCache(doRefreshServerCache));
-                ds.Tables.Add(ICD9s.GetTableFromCache(doRefreshServerCache));
+                //ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Diseases.ToString());
+                //ds.Tables.Add(DiseaseDefs.GetTableFromCache(doRefreshServerCache));
+                //ds.Tables.Add(ICD9s.GetTableFromCache(doRefreshServerCache));
             }
             if (listITypes.Contains(InvalidType.DisplayFields) || isAll)
             {
@@ -177,7 +177,7 @@ namespace OpenDentBusiness
             if (listITypes.Contains(InvalidType.Employees) || isAll)
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Employees.ToString());
-                ds.Tables.Add(Employees.GetTableFromCache(doRefreshServerCache));
+                //ds.Tables.Add(Employees.GetTableFromCache(doRefreshServerCache));
                 ds.Tables.Add(PayPeriods.GetTableFromCache(doRefreshServerCache));
             }
             if (listITypes.Contains(InvalidType.Employers) || isAll)
@@ -187,7 +187,7 @@ namespace OpenDentBusiness
             }
             if (listITypes.Contains(InvalidType.Fees) || isAll)
             {
-                if (Preferences.GetBool(PrefName.FeesUseCache))
+                if (Preference.GetBool(PreferenceName.FeesUseCache))
                 {
                     ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Fees.ToString());
                     //Fee Cache follows an unusual pattern. This fills the cache with the HQ fees, and whatever clinics happen to be currently cached.
@@ -230,7 +230,7 @@ namespace OpenDentBusiness
             if (listITypes.Contains(InvalidType.Letters) || isAll)
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Letters.ToString());
-                ds.Tables.Add(Letters.GetTableFromCache(doRefreshServerCache));
+                //ds.Tables.Add(Letters.GetTableFromCache(doRefreshServerCache));
             }
             if (listITypes.Contains(InvalidType.LetterMerge) || isAll)
             {
@@ -241,7 +241,7 @@ namespace OpenDentBusiness
             if (listITypes.Contains(InvalidType.Medications) || isAll)
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Medications.ToString());
-                ds.Tables.Add(Medications.GetTableFromCache(doRefreshServerCache));
+                //ds.Tables.Add(Medications.GetTableFromCache(doRefreshServerCache));
             }
             if (listITypes.Contains(InvalidType.Operatories) || isAll)
             {
@@ -268,7 +268,7 @@ namespace OpenDentBusiness
             if (listITypes.Contains(InvalidType.Prefs) || isAll)
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Prefs.ToString());
-                ds.Tables.Add(Prefs.GetTableFromCache(doRefreshServerCache));
+                //ds.Tables.Add(Prefs.GetTableFromCache(doRefreshServerCache));
             }
             if (listITypes.Contains(InvalidType.ProcButtons) || isAll)
             {
@@ -345,17 +345,17 @@ namespace OpenDentBusiness
             }
             if (listITypes.Contains(InvalidType.Security) || isAll)
             {
-                ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Security.ToString());
-                //There is a chance that some future engineer will introduce a signal that tells another workstation to refresh the users when it shouldn't.
-                //It is completely safe to skip over getting the user cache when IsCacheAllowed is false because the setter for that boolean nulls the cache.
-                //This means that the cache will refill itself automatically the next time it is accessed as soon as the boolean flips back to true.
-                if (Userods.GetIsCacheAllowed())
-                {
-                    ds.Tables.Add(Userods.GetTableFromCache(doRefreshServerCache));
-                }
-                ds.Tables.Add(UserGroups.GetTableFromCache(doRefreshServerCache));
-                ds.Tables.Add(GroupPermissions.GetTableFromCache(doRefreshServerCache));
-                ds.Tables.Add(UserGroupAttaches.GetTableFromCache(doRefreshServerCache));
+                //ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Security.ToString());
+                ////There is a chance that some future engineer will introduce a signal that tells another workstation to refresh the users when it shouldn't.
+                ////It is completely safe to skip over getting the user cache when IsCacheAllowed is false because the setter for that boolean nulls the cache.
+                ////This means that the cache will refill itself automatically the next time it is accessed as soon as the boolean flips back to true.
+                //if (Userods.GetIsCacheAllowed())
+                //{
+                //    ds.Tables.Add(Userods.GetTableFromCache(doRefreshServerCache));
+                //}
+                //ds.Tables.Add(UserGroups.GetTableFromCache(doRefreshServerCache));
+                //ds.Tables.Add(GroupPermissions.GetTableFromCache(doRefreshServerCache));
+                //ds.Tables.Add(UserGroupAttaches.GetTableFromCache(doRefreshServerCache));
             }
             if (listITypes.Contains(InvalidType.Sheets) || isAll)
             {
@@ -419,7 +419,7 @@ namespace OpenDentBusiness
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Vaccines.ToString());
                 ds.Tables.Add(VaccineDefs.GetTableFromCache(doRefreshServerCache));
-                ds.Tables.Add(DrugManufacturers.GetTableFromCache(doRefreshServerCache));
+                //ds.Tables.Add(DrugManufacturers.GetTableFromCache(doRefreshServerCache));
                 ds.Tables.Add(DrugUnits.GetTableFromCache(doRefreshServerCache));
             }
             if (listITypes.Contains(InvalidType.Views) || isAll)
@@ -457,7 +457,7 @@ namespace OpenDentBusiness
             if (listITypes.Contains(InvalidType.AccountingAutoPays) || isAll)
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.AccountingAutoPays.ToString());
-                AccountingAutoPays.FillCacheFromTable(ds.Tables["AccountingAutoPay"]);
+                //AccountingAutoPays.FillCacheFromTable(ds.Tables["AccountingAutoPay"]);
             }
             //if(listITypes.Contains(InvalidType.AlertItems) || isAll) {//THIS IS NOT CACHED. But is used to make server run the alert logic in OpenDentalService.
             //	AlertSubs.FillCache(ds.Tables["AlertItem"]);
@@ -465,7 +465,7 @@ namespace OpenDentBusiness
             if (listITypes.Contains(InvalidType.AlertCategories) || isAll)
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.AlertCategories.ToString());
-                AlertCategories.FillCacheFromTable(ds.Tables["AlertCategory"]);
+                //AlertCategories.FillCacheFromTable(ds.Tables["AlertCategory"]);
             }
             if (listITypes.Contains(InvalidType.AlertCategoryLinks) || isAll)
             {
@@ -523,14 +523,14 @@ namespace OpenDentBusiness
             }
             if (listITypes.Contains(InvalidType.Computers) || isAll)
             {
-                ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Computers.ToString());
-                Computers.FillCacheFromTable(ds.Tables["Computer"]);
-                Printers.FillCacheFromTable(ds.Tables["Printer"]);
+                //ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Computers.ToString());
+                //Computers.FillCacheFromTable(ds.Tables["Computer"]);
+                //Printers.FillCacheFromTable(ds.Tables["Printer"]);
             }
             if (listITypes.Contains(InvalidType.Defs) || isAll)
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Defs.ToString());
-                Defs.FillCacheFromTable(ds.Tables["Def"]);
+                //Defs.FillCacheFromTable(ds.Tables["Def"]);
             }
             if (listITypes.Contains(InvalidType.DentalSchools) || isAll)
             {
@@ -545,9 +545,9 @@ namespace OpenDentBusiness
             }
             if (listITypes.Contains(InvalidType.Diseases) || isAll)
             {
-                ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Diseases.ToString());
-                DiseaseDefs.FillCacheFromTable(ds.Tables["DiseaseDef"]);
-                ICD9s.FillCacheFromTable(ds.Tables["ICD9"]);
+                //ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Diseases.ToString());
+                //DiseaseDefs.FillCacheFromTable(ds.Tables["DiseaseDef"]);
+                //ICD9s.FillCacheFromTable(ds.Tables["ICD9"]);
             }
             if (listITypes.Contains(InvalidType.DisplayFields) || isAll)
             {
@@ -578,7 +578,7 @@ namespace OpenDentBusiness
             if (listITypes.Contains(InvalidType.Employees) || isAll)
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Employees.ToString());
-                Employees.FillCacheFromTable(ds.Tables["Employee"]);
+                //Employees.FillCacheFromTable(ds.Tables["Employee"]);
                 PayPeriods.FillCacheFromTable(ds.Tables["PayPeriod"]);
             }
             if (listITypes.Contains(InvalidType.Employers) || isAll)
@@ -588,7 +588,7 @@ namespace OpenDentBusiness
             }
             if (listITypes.Contains(InvalidType.Fees) || isAll)
             {
-                if (Preferences.GetBool(PrefName.FeesUseCache))
+                if (Preference.GetBool(PreferenceName.FeesUseCache))
                 {
                     ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Fees.ToString());
                     Fees.FillCacheFromTable(ds.Tables["Fee"]);
@@ -627,7 +627,7 @@ namespace OpenDentBusiness
             if (listITypes.Contains(InvalidType.Letters) || isAll)
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Letters.ToString());
-                Letters.FillCacheFromTable(ds.Tables["Letter"]);
+                //Letters.FillCacheFromTable(ds.Tables["Letter"]);
             }
             if (listITypes.Contains(InvalidType.LetterMerge) || isAll)
             {
@@ -638,7 +638,7 @@ namespace OpenDentBusiness
             if (listITypes.Contains(InvalidType.Medications) || isAll)
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Medications.ToString());
-                Medications.FillCacheFromTable(ds.Tables["Medication"]);
+                //Medications.FillCacheFromTable(ds.Tables["Medication"]);
             }
             if (listITypes.Contains(InvalidType.Operatories) || isAll)
             {
@@ -665,7 +665,7 @@ namespace OpenDentBusiness
             if (listITypes.Contains(InvalidType.Prefs) || isAll)
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Prefs.ToString());
-                Prefs.FillCacheFromTable(ds.Tables["Pref"]);
+                //Prefs.FillCacheFromTable(ds.Tables["Pref"]);
             }
             if (listITypes.Contains(InvalidType.ProcButtons) || isAll)
             {
@@ -739,18 +739,18 @@ namespace OpenDentBusiness
             //}
             if (listITypes.Contains(InvalidType.Security) || isAll)
             {
-                ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Security.ToString());
-                //There is a chance that some future engineer will introduce a signal that tells another workstation to refresh the users when it shouldn't.
-                //It is completely safe to skip over filling the user cache when IsCacheAllowed is false because the setter for that boolean nulls the cache.
-                //This means that as soon as the boolean flips back to true the cache will refill itself automatically the next time it is accessed.
-                if (Userods.GetIsCacheAllowed() && ds.Tables.Contains("Userod"))
-                {
-                    Userods.FillCacheFromTable(ds.Tables["Userod"]);
-                }
-                //Always refresh the user groups,group permissions, and group attaches.  There is no harm in caching this data.
-                UserGroups.FillCacheFromTable(ds.Tables["UserGroup"]);
-                GroupPermissions.FillCacheFromTable(ds.Tables["GroupPermission"]);
-                UserGroupAttaches.FillCacheFromTable(ds.Tables["UserGroupAttach"]);
+                //ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Security.ToString());
+                ////There is a chance that some future engineer will introduce a signal that tells another workstation to refresh the users when it shouldn't.
+                ////It is completely safe to skip over filling the user cache when IsCacheAllowed is false because the setter for that boolean nulls the cache.
+                ////This means that as soon as the boolean flips back to true the cache will refill itself automatically the next time it is accessed.
+                //if (Userods.GetIsCacheAllowed() && ds.Tables.Contains("Userod"))
+                //{
+                //    Userods.FillCacheFromTable(ds.Tables["Userod"]);
+                //}
+                ////Always refresh the user groups,group permissions, and group attaches.  There is no harm in caching this data.
+                //UserGroups.FillCacheFromTable(ds.Tables["UserGroup"]);
+                //GroupPermissions.FillCacheFromTable(ds.Tables["GroupPermission"]);
+                //UserGroupAttaches.FillCacheFromTable(ds.Tables["UserGroupAttach"]);
             }
             if (listITypes.Contains(InvalidType.Sheets) || isAll)
             {
@@ -814,7 +814,7 @@ namespace OpenDentBusiness
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Vaccines.ToString());
                 VaccineDefs.FillCacheFromTable(ds.Tables["VaccineDef"]);
-                DrugManufacturers.FillCacheFromTable(ds.Tables["DrugManufacturer"]);
+                //DrugManufacturers.FillCacheFromTable(ds.Tables["DrugManufacturer"]);
                 DrugUnits.FillCacheFromTable(ds.Tables["DrugUnit"]);
             }
             if (listITypes.Contains(InvalidType.Views) || isAll)

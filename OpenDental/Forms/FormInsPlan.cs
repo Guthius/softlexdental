@@ -238,7 +238,7 @@ namespace OpenDental{
 		///<summary>Ins sub for the currently selected plan.</summary>
 		private InsSub _subCur;
 		///<summary>A one to one list of defs that are displayed within the billing type combo box.  Item 0 will always be "None".</summary>
-		private List<Def> _listBillingTypeDefs;
+		private List<Definition> _listBillingTypeDefs;
 		private ComboBox comboSendElectronically;
 		private Label labelSendElectronically;
 		private CheckBox checkPpoSubWo;
@@ -314,7 +314,7 @@ namespace OpenDental{
 			if(CultureInfo.CurrentCulture.Name.Length>=4 && CultureInfo.CurrentCulture.Name.Substring(3)=="GB"){//en-GB
 				labelCitySTZip.Text=Lan.g(this,"City,Postcode");
 			}
-			panelPat.BackColor=Defs.GetFirstForCategory(DefCat.MiscColors).ItemColor;
+			panelPat.BackColor=Defs.GetFirstForCategory(DefinitionCategory.MiscColors).Color;
 			//labelViewRequestDocument.Text="         ";
 			//if(!PrefC.GetBool(PrefName.CustomizedForPracticeWeb")) {
 			//	butEligibility.Visible=false;
@@ -2475,7 +2475,7 @@ namespace OpenDental{
 				butDelete.Visible=false;
 			}
 			else {//editing from a patient
-				if(Preferences.GetBool(PrefName.InsurancePlansShared)) {
+				if(Preference.GetBool(PreferenceName.InsurancePlansShared)) {
 					radioChangeAll.Checked=true;
 				}
 			}
@@ -2487,10 +2487,10 @@ namespace OpenDental{
 			if(IsNewPlan) {//Regardless of whether from big list or from individual patient.  Overrides above settings.
 				//radioCreateNew.Checked=true;//this logic needs to be repeated in OK.
 				//groupChanges.Visible=false;//because it wouldn't make sense to apply anything to "all"
-				if(Preferences.GetBool(PrefName.InsDefaultPPOpercent)) {
+				if(Preference.GetBool(PreferenceName.InsDefaultPPOpercent)) {
 					_planCur.PlanType="p";
 				}
-				_planCur.CobRule=(EnumCobRule)Preferences.GetInt(PrefName.InsDefaultCobRule);
+				_planCur.CobRule=(EnumCobRule)Preference.GetInt(PreferenceName.InsDefaultCobRule);
 				textDateLastVerifiedBenefits.Text="";
 			}
 			benefitList=Benefits.RefreshForPlan(_planCur.PlanNum,patPlanNum);
@@ -2501,11 +2501,11 @@ namespace OpenDental{
 			if(_planCur.PlanNum!=0) {
 				textInsPlanNum.Text=_planCur.PlanNum.ToString();
 			}
-			if(Preferences.GetBool(PrefName.EasyHideCapitation)) {
+			if(Preference.GetBool(PreferenceName.EasyHideCapitation)) {
 				//groupCoPay.Visible=false;
 				//comboCopay.Visible=false;
 			}
-			if(Preferences.GetBool(PrefName.EasyHideMedicaid)) {
+			if(Preference.GetBool(PreferenceName.EasyHideMedicaid)) {
 				checkAlternateCode.Visible=false;
 			}
 			Program ProgramCur=Programs.GetCur(ProgramName.Trojan);
@@ -2613,7 +2613,7 @@ namespace OpenDental{
 
 		///<summary>Fills controls with ortho information.  Also hides the controls if needed.</summary>
 		private void FillOrtho() {
-			if(!Preferences.GetBool(PrefName.OrthoEnabled)) {
+			if(!Preference.GetBool(PreferenceName.OrthoEnabled)) {
 				butPatOrtho.Visible=false;
 				tabControlInsPlan.TabPages.Remove(tabPageOrtho);
 				return;
@@ -2636,7 +2636,7 @@ namespace OpenDental{
 				textOrthoAutoProc.Text=_orthoAutoProc.ProcCode;
 			}
 			else {
-				textOrthoAutoProc.Text=ProcedureCodes.GetProcCode(Preferences.GetLong(PrefName.OrthoAutoProcCodeNum)).ProcCode +" ("+ Lan.g(this,"Default")+")";
+				textOrthoAutoProc.Text=ProcedureCodes.GetProcCode(Preference.GetLong(PreferenceName.OrthoAutoProcCodeNum)).ProcCode +" ("+ Lan.g(this,"Default")+")";
 			}
 			SetEnabledOrtho();
 		}
@@ -2683,7 +2683,7 @@ namespace OpenDental{
 			_employerNameCur=textEmployer.Text;
 			textGroupName.Text=_planCur.GroupName;
 			textGroupNum.Text=_planCur.GroupNum;
-			if(Preferences.GetBool(PrefName.ShowFeatureEhr)) {
+			if(Preference.GetBool(PreferenceName.ShowFeatureEhr)) {
 				textBIN.Text=_planCur.RxBIN;
 			}
 			else{
@@ -2699,7 +2699,7 @@ namespace OpenDental{
 			comboPlanType.Items.Add(Lan.g(this,"PPO Fixed Benefit"));
 			comboPlanType.Items.Add(Lan.g(this,"Medicaid or Flat Co-pay"));
 			//Capitation must always be last, since it is sometimes hidden.
-			if(!Preferences.GetBool(PrefName.EasyHideCapitation)) {
+			if(!Preference.GetBool(PreferenceName.EasyHideCapitation)) {
 				comboPlanType.Items.Add(Lan.g(this,"Capitation"));
 				if(_planCur.PlanType=="c") {
 					comboPlanType.SelectedIndex=(int)InsPlanTypeComboItem.Capitation;
@@ -2724,14 +2724,14 @@ namespace OpenDental{
 			checkCodeSubst.Checked=_planCur.CodeSubstNone;
 			checkPpoSubWo.Checked=_planCur.HasPpoSubstWriteoffs;
 			checkIsMedical.Checked=_planCur.IsMedical;
-			if(!Preferences.GetBool(PrefName.ShowFeatureMedicalInsurance)) {
+			if(!Preference.GetBool(PreferenceName.ShowFeatureMedicalInsurance)) {
 				checkIsMedical.Visible=false;//This line prevents most users from modifying the Medical Insurance checkbox by accident, because most offices are dental only.
 			}
 			checkClaimsUseUCR.Checked=_planCur.ClaimsUseUCR;
-			if(IsNewPlan && _planCur.PlanType=="" && Preferences.GetBool(PrefName.InsDefaultShowUCRonClaims) && !isPicked) {
+			if(IsNewPlan && _planCur.PlanType=="" && Preference.GetBool(PreferenceName.InsDefaultShowUCRonClaims) && !isPicked) {
 				checkClaimsUseUCR.Checked=true;
 			}
-			if(IsNewPlan && !Preferences.GetBool(PrefName.InsDefaultAssignBen) && !isPicked) {
+			if(IsNewPlan && !Preference.GetBool(PreferenceName.InsDefaultAssignBen) && !isPicked) {
 				checkAssign.Checked=false;
 			}
 			checkIsHidden.Checked=_planCur.IsHidden;
@@ -2746,7 +2746,7 @@ namespace OpenDental{
 			}
 			if(comboClaimForm.Items.Count>0 && comboClaimForm.SelectedIndex==-1) {
 				for(int i=0;i<_listClaimForms.Count;i++) {
-					if(_listClaimForms[i].ClaimFormNum==Preferences.GetLong(PrefName.DefaultClaimForm)) {
+					if(_listClaimForms[i].ClaimFormNum==Preference.GetLong(PreferenceName.DefaultClaimForm)) {
 						comboClaimForm.SelectedIndex=i;
 					}
 				}
@@ -2774,11 +2774,11 @@ namespace OpenDental{
 			}
 			FillComboFilingSubtype(selectedFilingCodeNum);
 			comboBillType.Items.Clear();
-			_listBillingTypeDefs=new List<Def>() { new Def() { DefNum=0,ItemName=Lans.g(this,"None")} };
-			_listBillingTypeDefs.AddRange(Defs.GetDefsForCategory(DefCat.BillingTypes,true));
-			_listBillingTypeDefs.ForEach(x => comboBillType.Items.Add(x.ItemName));
-			comboBillType.IndexSelectOrSetText(_listBillingTypeDefs.FindIndex(x => x.DefNum==_planCur.BillingType),() => { 
-					return Defs.GetName(DefCat.BillingTypes,_planCur.BillingType)+" "+Lans.g(this,"(hidden)");
+			_listBillingTypeDefs=new List<Definition>() { new Definition() { Description=Lans.g(this,"None")} };
+			_listBillingTypeDefs.AddRange(Definition.GetByCategory(DefinitionCategory.BillingTypes));
+			_listBillingTypeDefs.ForEach(x => comboBillType.Items.Add(x.Description));
+			comboBillType.IndexSelectOrSetText(_listBillingTypeDefs.FindIndex(x => x.Id==_planCur.BillingType),() => { 
+					return Defs.GetName(DefinitionCategory.BillingTypes,_planCur.BillingType)+" "+Lans.g(this,"(hidden)");
 			});
 			comboExclusionFeeRule.Items.Clear();
 			Enum.GetValues(typeof(ExclusionRule)).Cast<ExclusionRule>().ForEach(x => comboExclusionFeeRule.Items.Add(x.GetDescription()));
@@ -3022,7 +3022,7 @@ namespace OpenDental{
 				default:
 					break;
 			}
-			if(Preferences.GetBool(PrefName.InsDefaultShowUCRonClaims)) {//otherwise, no automation on this field.
+			if(Preference.GetBool(PreferenceName.InsDefaultShowUCRonClaims)) {//otherwise, no automation on this field.
 				if(_planCur.PlanType=="") {
 					checkClaimsUseUCR.Checked=true;
 				}
@@ -3420,7 +3420,7 @@ namespace OpenDental{
 				}
 			}
 			catch(Exception ex){
-				if(Preferences.GetBool(PrefName.SubscriberAllowChangeAlways)) {
+				if(Preference.GetBool(PreferenceName.SubscriberAllowChangeAlways)) {
 					DialogResult dres=MessageBox.Show(Lan.g(this,"Warning!  Do not change unless fixing database corruption.  ")+"\r\n"+ex.Message);
 					if(dres!=DialogResult.OK) {
 						return;
@@ -3472,7 +3472,7 @@ namespace OpenDental{
 		}
 
 		private void comboBillType_SelectionChangeCommitted(object sender,EventArgs e) {
-			_planCur.BillingType=_listBillingTypeDefs[comboBillType.SelectedIndex].DefNum;
+			_planCur.BillingType=_listBillingTypeDefs[comboBillType.SelectedIndex].Id;
 		}
 
 		private void comboExclusionFeeRule_SelectionChangeCommitted(object sender,EventArgs e) {
@@ -4431,7 +4431,7 @@ namespace OpenDental{
 
 		private void butGetElectronic_Click(object sender,EventArgs e) {
 			//button not visible if SubCur is null
-			if(Preferences.GetBool(PrefName.CustomizedForPracticeWeb)) {
+			if(Preference.GetBool(PreferenceName.CustomizedForPracticeWeb)) {
 				EligibilityCheckDentalXchange();
 				return;
 			}
@@ -4711,20 +4711,20 @@ namespace OpenDental{
 			XmlNode InfoState = doc.CreateNode(XmlNodeType.Element,"State","");
 			XmlNode InfoZip = doc.CreateNode(XmlNodeType.Element,"Zip","");
 			//  Populate Practioner demographic from hash table
-			practiceAddress1 = Preferences.GetString(PrefName.PracticeAddress);
-			practiceAddress2 = Preferences.GetString(PrefName.PracticeAddress2);
+			practiceAddress1 = Preference.GetString(PreferenceName.PracticeAddress);
+			practiceAddress2 = Preference.GetString(PreferenceName.PracticeAddress2);
 			// Format Phone
-			if(Preferences.GetString(PrefName.PracticePhone).Length == 10) {
-				practicePhone = Preferences.GetString(PrefName.PracticePhone).Substring(0,3)
-                                    + "-" + Preferences.GetString(PrefName.PracticePhone).Substring(3,3)
-                                    + "-" + Preferences.GetString(PrefName.PracticePhone).Substring(6);
+			if(Preference.GetString(PreferenceName.PracticePhone).Length == 10) {
+				practicePhone = Preference.GetString(PreferenceName.PracticePhone).Substring(0,3)
+                                    + "-" + Preference.GetString(PreferenceName.PracticePhone).Substring(3,3)
+                                    + "-" + Preference.GetString(PreferenceName.PracticePhone).Substring(6);
 			}
 			else {
-				practicePhone = Preferences.GetString(PrefName.PracticePhone);
+				practicePhone = Preference.GetString(PreferenceName.PracticePhone);
 			}
-			practiceCity = Preferences.GetString(PrefName.PracticeCity);
-			practiceState = Preferences.GetString(PrefName.PracticeST);
-			practiceZip = Preferences.GetString(PrefName.PracticeZip);
+			practiceCity = Preference.GetString(PreferenceName.PracticeCity);
+			practiceState = Preference.GetString(PreferenceName.PracticeST);
+			practiceZip = Preference.GetString(PreferenceName.PracticeZip);
 			InfoAddressLine1.InnerText = practiceAddress1;
 			InfoAddressLine2.InnerText = practiceAddress2;
 			InfoPhone.InnerText = practicePhone;
@@ -5291,7 +5291,7 @@ namespace OpenDental{
 			if(comboAllowedFeeSched.SelectedIndex==0){
 				if(IsNewPlan
 					&& _planCur.PlanType==""//percentage
-					&& Preferences.GetBool(PrefName.AllowedFeeSchedsAutomate)){
+					&& Preference.GetBool(PreferenceName.AllowedFeeSchedsAutomate)){
 					//add a fee schedule if needed
 					FeeSched sched=FeeScheds.GetByExactName(_carrierCur.CarrierName,FeeScheduleType.OutNetwork);
 					if(sched==null){
@@ -5434,7 +5434,7 @@ namespace OpenDental{
 
 		private void butDefaultAutoOrthoProc_Click(object sender,EventArgs e) {
 			_orthoAutoProc=null;
-			textOrthoAutoProc.Text=ProcedureCodes.GetProcCode(Preferences.GetLong(PrefName.OrthoAutoProcCodeNum)).ProcCode+" ("+Lan.g(this,"Default")+")";
+			textOrthoAutoProc.Text=ProcedureCodes.GetProcCode(Preference.GetLong(PreferenceName.OrthoAutoProcCodeNum)).ProcCode+" ("+Lan.g(this,"Default")+")";
 		}
 
 		private void butOK_Click(object sender,System.EventArgs e) {
@@ -5940,7 +5940,7 @@ namespace OpenDental{
 					&& PatPlanCur.Ordinal==1//Primary insurance.
 					&& _planCur.BillingType!=0//Selection made.
 					&& Security.IsAuthorized(Permissions.PatientBillingEdit,true)
-					&& Preferences.GetBool(PrefName.PatInitBillingTypeFromPriInsPlan))
+					&& Preference.GetBool(PreferenceName.PatInitBillingTypeFromPriInsPlan))
 				{
 					Patient patOld=Patients.GetPat(PatPlanCur.PatNum);
 					if(patOld.BillingType!=_planCur.BillingType) {

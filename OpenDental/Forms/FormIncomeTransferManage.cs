@@ -263,7 +263,7 @@ namespace OpenDental {
 						procCodes="Unallocated";
 					}
 					else {
-						procCodes=Defs.GetName(DefCat.PaySplitUnearnedType,split.UnearnedType);
+						procCodes=Defs.GetName(DefinitionCategory.PaySplitUnearnedType,split.UnearnedType);
 					}
 				}
 				else if(entryCharge.GetType()==typeof(PaySplit) && ((PaySplit)entryCharge.Tag).ProcNum!=0) {
@@ -411,8 +411,8 @@ namespace OpenDental {
 				posSplit.ProcNum=posCharge.GetType()==typeof(Procedure) ? posCharge.PriKey : 0;//PosCharge may or may not be a proc.  If it is proc, use ProcNum
 				posSplit.ProvNum=posCharge.ProvNum;
 				posSplit.SplitAmt=(double)amt;
-				posSplit.UnearnedType=posSplit.ProvNum==0 ? Preferences.GetLong(PrefName.PrepaymentUnearnedType) : 0;//Unearned type will likely be 0, but if we make a positive split to ProvNum=0, use default unearned type.
-				posSplit.AdjNum=posCharge.GetType()==typeof(Adjustment) ? (((Adjustment)posCharge.Tag).ProcNum==0 ? ((Adjustment)posCharge.Tag).AdjNum : 0) : 0;
+				posSplit.UnearnedType=posSplit.ProvNum==0 ? Preference.GetLong(PreferenceName.PrepaymentUnearnedType) : 0;//Unearned type will likely be 0, but if we make a positive split to ProvNum=0, use default unearned type.
+				posSplit.AdjNum=posCharge.GetType()==typeof(Adjustment) ? (((Adjustment)posCharge.Tag).ProcNum==0 ? ((Adjustment)posCharge.Tag).Id : 0) : 0;
 				PaySplit negSplit=new PaySplit();
 				negSplit.DatePay=DateTimeOD.Today;
 				negSplit.ClinicNum=negCharge.ClinicNum;
@@ -422,10 +422,10 @@ namespace OpenDental {
 				negSplit.PayNum=_paymentCur.PayNum;
 				negSplit.ProcNum=negCharge.GetType()==typeof(PaySplit) ? ((PaySplit)negCharge.Tag).ProcNum : negCharge.GetType()==typeof(Procedure) ? negCharge.PriKey : negCharge.GetType()==typeof(Adjustment) ? ((Adjustment)negCharge.Tag).ProcNum : 0;//Money may be coming from an overpaid procedure instead of paysplit.
 				negSplit.ProvNum=negCharge.ProvNum;
-				negSplit.AdjNum=negCharge.GetType()==typeof(Adjustment) ? (((Adjustment)negCharge.Tag).ProcNum==0 ? ((Adjustment)negCharge.Tag).AdjNum : 0) : 0;
+				negSplit.AdjNum=negCharge.GetType()==typeof(Adjustment) ? (((Adjustment)negCharge.Tag).ProcNum==0 ? ((Adjustment)negCharge.Tag).Id : 0) : 0;
 				negSplit.SplitAmt=0-(double)amt;
 				negSplit.UnearnedType=negCharge.GetType()==typeof(PaySplit) ? ((PaySplit)negCharge.Tag).UnearnedType : 0;//If money is coming from paysplit, use its unearned type (if any)
-				if(Preferences.GetInt(PrefName.RigorousAccounting)==0) {
+				if(Preference.GetInt(PreferenceName.RigorousAccounting)==0) {
 					if(Math.Sign(posSplit.ProcNum)!=Math.Sign(posSplit.ProvNum)
 						|| Math.Sign(negSplit.ProcNum)!=Math.Sign(negSplit.ProvNum)
 						|| Math.Sign(posSplit.UnearnedType)==Math.Sign(posSplit.ProvNum)

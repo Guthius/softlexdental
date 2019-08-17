@@ -19,7 +19,7 @@ namespace OpenDentBusiness
             ppCharge.PayPlanNum = payplan.PayPlanNum;
             //FamCur is the family of the patient, so check to see if the guarantor is in the patient's family. 
             //If the guar and pat are in the same family, then use the patnum. else, use guarantor.
-            if (famCur.ListPats.Select(x => x.PatNum).Contains(payplan.Guarantor))
+            if (famCur.ListPats.Select(x => (long)x.PatNum).Contains(payplan.Guarantor))
             {
                 ppCharge.Guarantor = payplan.PatNum;
             }
@@ -317,7 +317,7 @@ namespace OpenDentBusiness
         public static DataRow CreateRowForPayPlanSplitDT(DataTable table, PaySplit payPlanSplit, DataRow rowBundlePayment, int payPlanChargeOrdinal)
         {
             DataRow retVal = table.NewRow();
-            string descript = Defs.GetName(DefCat.PaymentTypes, PIn.Long(rowBundlePayment["PayType"].ToString()));
+            string descript = Defs.GetName(DefinitionCategory.PaymentTypes, PIn.Long(rowBundlePayment["PayType"].ToString()));
             if (rowBundlePayment["CheckNum"].ToString() != "")
             {
                 descript += " #" + rowBundlePayment["CheckNum"].ToString();
@@ -345,7 +345,7 @@ namespace OpenDentBusiness
         public static DataRow CreateRowForClaimProcsDT(DataTable table, DataRow rowBundleClaimProc)
         {//Either a claimpayment or a bundle of claimprocs with no claimpayment that were on the same date.
             DataRow retVal = table.NewRow();
-            string descript = Defs.GetName(DefCat.InsurancePaymentType, PIn.Long(rowBundleClaimProc["PayType"].ToString()));
+            string descript = Defs.GetName(DefinitionCategory.InsurancePaymentType, PIn.Long(rowBundleClaimProc["PayType"].ToString()));
             if (rowBundleClaimProc["CheckNum"].ToString() != "")
             {
                 descript += " #" + rowBundleClaimProc["CheckNum"];

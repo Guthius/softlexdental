@@ -44,7 +44,7 @@ namespace OpenDentBusiness.Crud{
 				userGroupAttach=new UserGroupAttach();
 				userGroupAttach.UserGroupAttachNum= PIn.Long  (row["UserGroupAttachNum"].ToString());
 				userGroupAttach.UserNum           = PIn.Long  (row["UserNum"].ToString());
-				userGroupAttach.UserGroupNum      = PIn.Long  (row["UserGroupNum"].ToString());
+				userGroupAttach.UserGroupNum      = PIn.Int(row["UserGroupNum"].ToString());
 				retVal.Add(userGroupAttach);
 			}
 			return retVal;
@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one UserGroupAttach into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(UserGroupAttach userGroupAttach,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO usergroupattach (";
 			if(!useExistingPK && isRandomKeys) {
 				userGroupAttach.UserGroupAttachNum=ReplicationServers.GetKeyNoCache("usergroupattach","UserGroupAttachNum");

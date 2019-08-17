@@ -7,7 +7,7 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	public interface IPrefBinding {
-		PrefName PrefNameBinding { get; set; }
+		PreferenceName PrefNameBinding { get; set; }
 		bool DoAutoSave { get; set; }
 		///<summary>Returns true if a change was required, or false if no change needed.</summary>
 		bool Save();

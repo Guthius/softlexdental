@@ -15,13 +15,13 @@ namespace OpenDental.User_Controls.SetupWizard {
 		}
 
 		private void RefreshControls() {
-			checkCapitation.Checked=!Preferences.GetBool(PrefName.EasyHideCapitation);
-			checkMedicaid.Checked=!Preferences.GetBool(PrefName.EasyHideMedicaid);
-			checkInsurance.Checked=!Preferences.GetBool(PrefName.EasyHideInsurance);
-			checkClinical.Checked=!Preferences.GetBool(PrefName.EasyHideClinical);
+			checkCapitation.Checked=!Preference.GetBool(PreferenceName.EasyHideCapitation);
+			checkMedicaid.Checked=!Preference.GetBool(PreferenceName.EasyHideMedicaid);
+			checkInsurance.Checked=!Preference.GetBool(PreferenceName.EasyHideInsurance);
+			checkClinical.Checked=!Preference.GetBool(PreferenceName.EasyHideClinical);
 			checkNoClinics.Checked=Preferences.HasClinicsEnabled;
-			checkMedicalIns.Checked=Preferences.GetBool(PrefName.ShowFeatureMedicalInsurance);
-			checkEhr.Checked=Preferences.GetBool(PrefName.ShowFeatureEhr);
+			checkMedicalIns.Checked=Preference.GetBool(PreferenceName.ShowFeatureMedicalInsurance);
+			checkEhr.Checked=Preference.GetBool(PreferenceName.ShowFeatureEhr);
 			IsDone=true;
 		}
 
@@ -44,13 +44,13 @@ namespace OpenDental.User_Controls.SetupWizard {
         protected override void OnControlDone(EventArgs e)
         {
             if (
-                Prefs.UpdateBool(PrefName.EasyHideCapitation, !checkCapitation.Checked)
-                | Prefs.UpdateBool(PrefName.EasyHideMedicaid, !checkMedicaid.Checked)
-                | Prefs.UpdateBool(PrefName.EasyHideInsurance, !checkInsurance.Checked)
-                | Prefs.UpdateBool(PrefName.EasyHideClinical, !checkClinical.Checked)
-                | Prefs.UpdateBool(PrefName.EasyNoClinics, !checkNoClinics.Checked)
-                | Prefs.UpdateBool(PrefName.ShowFeatureMedicalInsurance, checkMedicalIns.Checked)
-                | Prefs.UpdateBool(PrefName.ShowFeatureEhr, checkEhr.Checked)
+                Preference.Update(PreferenceName.EasyHideCapitation, !checkCapitation.Checked)
+                | Preference.Update(PreferenceName.EasyHideMedicaid, !checkMedicaid.Checked)
+                | Preference.Update(PreferenceName.EasyHideInsurance, !checkInsurance.Checked)
+                | Preference.Update(PreferenceName.EasyHideClinical, !checkClinical.Checked)
+                | Preference.Update(PreferenceName.EasyNoClinics, !checkNoClinics.Checked)
+                | Preference.Update(PreferenceName.ShowFeatureMedicalInsurance, checkMedicalIns.Checked)
+                | Preference.Update(PreferenceName.ShowFeatureEhr, checkEhr.Checked)
             )
             {
                 DataValid.SetInvalid(InvalidType.Prefs);

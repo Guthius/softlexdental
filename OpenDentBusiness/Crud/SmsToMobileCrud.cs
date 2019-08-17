@@ -239,7 +239,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one SmsToMobile into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(SmsToMobile smsToMobile,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO smstomobile (";
 			if(!useExistingPK && isRandomKeys) {
 				smsToMobile.SmsToMobileNum=ReplicationServers.GetKeyNoCache("smstomobile","SmsToMobileNum");

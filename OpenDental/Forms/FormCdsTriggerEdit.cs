@@ -27,8 +27,8 @@ namespace OpenDental {
 		}
 
 		private void FormEhrTriggerEdit_Load(object sender,EventArgs e) {
-			if(Preferences.GetString(PrefName.SoftwareName)!="") {
-				this.Text+=" - "+Preferences.GetString(PrefName.SoftwareName);
+			if(Preference.GetString(PreferenceName.SoftwareName)!="") {
+				this.Text+=" - "+Preference.GetString(PreferenceName.SoftwareName);
 			}
 			if(!CDSPermissions.GetForUser(Security.CurUser.UserNum).EditBibliography) {
 				textBibliography.Enabled=false;
@@ -89,7 +89,7 @@ namespace OpenDental {
 				row.Cells.Add("Problem");
 				row.Cells.Add(arrayString[i]);
 				row.Cells.Add("Problem Def");
-				row.Cells.Add(DiseaseDefs.GetItem(PIn.Long(arrayString[i])).DiseaseName);
+				row.Cells.Add(DiseaseDef.GetById(PIn.Long(arrayString[i])).Name);
 				gridMain.Rows.Add(row);
 			}
 			//EhrTriggerCur.ProblemIcd9List---------------------------------------------------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ namespace OpenDental {
 				row.Cells.Add("Problem");
 				row.Cells.Add(arrayString[i]);
 				row.Cells.Add("ICD9 CM");
-				row.Cells.Add(ICD9s.GetByCode(arrayString[i]).Description);
+				row.Cells.Add(ICD9.GetByCode(arrayString[i]).Description);
 				gridMain.Rows.Add(row);
 			}
 			//EhrTriggerCur.ProblemIcd10List;
@@ -109,7 +109,7 @@ namespace OpenDental {
 				row.Cells.Add("Problem");
 				row.Cells.Add(arrayString[i]);
 				row.Cells.Add("ICD10 CM");
-				row.Cells.Add(Icd10s.GetByCode(arrayString[i]).Description);
+				row.Cells.Add(ICD10.GetByCode(arrayString[i]).Description);
 				gridMain.Rows.Add(row);
 			}
 			//EhrTriggerCur.ProblemSnomedList;
@@ -129,7 +129,7 @@ namespace OpenDental {
 				row.Cells.Add("Medication");
 				row.Cells.Add(arrayString[i]);
 				row.Cells.Add("Medication Def");
-				row.Cells.Add(Medications.GetDescription(PIn.Long(arrayString[i])));
+				row.Cells.Add(Medication.GetDescription(PIn.Long(arrayString[i])));
 				gridMain.Rows.Add(row);
 			}
 			//EhrTriggerCur.RxCuiList
@@ -149,7 +149,7 @@ namespace OpenDental {
 				row.Cells.Add("Medication");
 				row.Cells.Add(arrayString[i]);
 				row.Cells.Add("Cvx");
-				row.Cells.Add(Cvxs.GetByCode(arrayString[i]).Description);
+				row.Cells.Add(CVX.GetByCode(arrayString[i]).Description);
 				gridMain.Rows.Add(row);
 			}
 			//EhrTriggerCur.AllergyDefNumList
@@ -274,16 +274,16 @@ namespace OpenDental {
 			//the list should only ever contain one item.
 			DiseaseDef diseaseDef=FormDD.ListSelectedDiseaseDefs[0];
 			//DiseaseDefNum
-			if(!EhrTriggerCur.ProblemDefNumList.Contains(" "+diseaseDef.DiseaseDefNum+" ")){
-				EhrTriggerCur.ProblemDefNumList+=" "+diseaseDef.DiseaseDefNum+" ";
+			if(!EhrTriggerCur.ProblemDefNumList.Contains(" "+diseaseDef.Id+" ")){
+				EhrTriggerCur.ProblemDefNumList+=" "+diseaseDef.Id+" ";
 			}
 			//Icd9Num
 			if(diseaseDef.ICD9Code!="" && !EhrTriggerCur.ProblemIcd9List.Contains(" "+diseaseDef.ICD9Code+" ")) {
 				EhrTriggerCur.ProblemIcd9List+=" "+diseaseDef.ICD9Code+" ";
 			}
 			//Icd10Num
-			if(diseaseDef.Icd10Code!="" && !EhrTriggerCur.ProblemIcd9List.Contains(" "+diseaseDef.Icd10Code+" ")) {
-				EhrTriggerCur.ProblemIcd10List+=" "+diseaseDef.Icd10Code+" ";
+			if(diseaseDef.ICD10Code!="" && !EhrTriggerCur.ProblemIcd9List.Contains(" "+diseaseDef.ICD10Code+" ")) {
+				EhrTriggerCur.ProblemIcd10List+=" "+diseaseDef.ICD10Code+" ";
 			}
 			//Snomed
 			if(diseaseDef.SnomedCode!="" && !EhrTriggerCur.ProblemIcd9List.Contains(" "+diseaseDef.SnomedCode+" ")) {
@@ -299,7 +299,7 @@ namespace OpenDental {
 			if(FormI9.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			EhrTriggerCur.ProblemIcd9List+=" "+FormI9.SelectedIcd9.ICD9Code+" ";
+			EhrTriggerCur.ProblemIcd9List+=" "+FormI9.SelectedIcd9.Code+" ";
 			FillGrid();
 		}
 
@@ -310,7 +310,7 @@ namespace OpenDental {
 			if(FormI10.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			EhrTriggerCur.ProblemIcd10List+=" "+FormI10.SelectedIcd10.Icd10Code+" ";
+			EhrTriggerCur.ProblemIcd10List+=" "+FormI10.SelectedIcd10.Code+" ";
 			FillGrid();
 		}
 
@@ -334,9 +334,9 @@ namespace OpenDental {
 			if(FormM.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			Medication m=Medications.GetMedication(FormM.SelectedMedicationNum);
-			EhrTriggerCur.MedicationNumList+=" "+m.MedicationNum+" ";
-			if(m.RxCui!=0) {
+			Medication m=Medication.GetById(FormM.SelectedMedicationNum);
+			EhrTriggerCur.MedicationNumList+=" "+m.Id+" ";
+			if(!string.IsNullOrEmpty(m.RxCui)) {
 				EhrTriggerCur.RxCuiList+=" "+m.RxCui+" ";
 			}
 			FillGrid();

@@ -148,7 +148,7 @@ namespace UnitTests.IntegrationTests {
 		[TestMethod]
 		///<summary>Context menu right-click and select the "Mark Read" with TaskNewTrackedByUser preference turned off.</summary>
 		public void UserControlTasks_MarkRead() {
-			Prefs.UpdateBool(PrefName.TasksNewTrackedByUser,false);//TaskNewTrackedByUser=false;
+			Prefs.UpdateBool(PreferenceName.TasksNewTrackedByUser,false);//TaskNewTrackedByUser=false;
 			_userControlTasksAccessor.Invoke("MarkRead",_task);
 			List<Signalod> listSignals=SignalodT.GetAllSignalods();
 			Assert.AreEqual(1,listSignals.Count);
@@ -161,7 +161,7 @@ namespace UnitTests.IntegrationTests {
 		[TestMethod]
 		///<summary>Context menu right-click and select the "Mark Read" with TaskNewTrackedByUser preference turned on.</summary>
 		public void UserControlTasks_MarkRead_TasksNewTrackedByUser() {
-			Prefs.UpdateBool(PrefName.TasksNewTrackedByUser,true);//TaskNewTrackedByUser=true;
+			Prefs.UpdateBool(PreferenceName.TasksNewTrackedByUser,true);//TaskNewTrackedByUser=true;
 			TaskUnreads.SetUnread(Security.CurUser.UserNum,_task);//Set the task to unread for our user.
 			_userControlTasksAccessor.Invoke("MarkRead",_task);//TaskNewTrackedByUser=false;
 			List<Signalod> listSignals=SignalodT.GetAllSignalods();
@@ -174,14 +174,14 @@ namespace UnitTests.IntegrationTests {
 		[TestMethod]
 		///<summary>Context menu right-click and drill down in the "Set Priority" option, selecting one of the priority options.</summary>
 		public void UserControlTasks_menuTaskPriority_Click() {
-			Def newDef=new Def() { DefNum=5 };
+			Definition newDef=new Definition() { Id=5 };
 			_userControlTasksAccessor.Invoke("menuTaskPriority_Click",_task,newDef);
 			List<Signalod> listSignals=SignalodT.GetAllSignalods();
 			Assert.AreEqual(1,listSignals.Count);
 			Assert.IsTrue(listSignals.Exists(x => x.IType==InvalidType.Task && x.FKeyType==KeyType.Task 
 				&& x.FKey==_task.TaskNum));//Signal for _task.
 			OpenDentBusiness.Task taskDb=Tasks.GetOne(_task.TaskNum);
-			Assert.AreEqual(newDef.DefNum,taskDb.PriorityDefNum);
+			Assert.AreEqual(newDef.Id,taskDb.PriorityDefNum);
 		}
 
 		[TestMethod]

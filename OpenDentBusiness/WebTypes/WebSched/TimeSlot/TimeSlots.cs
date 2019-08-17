@@ -71,7 +71,7 @@ namespace OpenDentBusiness.WebTypes.WebSched.TimeSlot {
 			}
 			string timePatternAppointment=RecallTypes.ConvertTimePattern(timePatternRecall);
 			return GetTimeSlotsForRange(dateStart,dateEnd,timePatternAppointment,listProvNums,listOperatories,listSchedules,clinic,
-				isDoubleBookingAllowed:Preferences.GetInt(PrefName.WebSchedRecallDoubleBooking)==0);//is double booking allowed according to the preference
+				isDoubleBookingAllowed: Preference.GetInt(PreferenceName.WebSchedRecallDoubleBooking)==0);//is double booking allowed according to the preference
 		}
 
 		///<summary>Gets up to 30 days of open time slots for New Patient Appointments based on the timePattern passed in.
@@ -103,7 +103,7 @@ namespace OpenDentBusiness.WebTypes.WebSched.TimeSlot {
 			List<long> listProvNums=listProviders.Select(x => x.ProvNum).Distinct().ToList();
 			List<Schedule> listSchedules=Schedules.GetSchedulesAndBlockoutsForWebSched(listProvNums,dateStart,dateEnd,false,clinicNum);
 			return GetTimeSlotsForRange(dateStart,dateEnd,timePattern,listProvNums,listOperatories,listSchedules,clinic,defNumApptType,
-				isDoubleBookingAllowed:Preferences.GetInt(PrefName.WebSchedNewPatApptDoubleBooking)==0);//is double booking allowed according to the preference
+				isDoubleBookingAllowed: Preference.GetInt(PreferenceName.WebSchedNewPatApptDoubleBooking)==0);//is double booking allowed according to the preference
 		}
 
 		///<summary>Gets open time slots based on the parameters passed in.
@@ -147,7 +147,7 @@ namespace OpenDentBusiness.WebTypes.WebSched.TimeSlot {
 			listProviderSchedulesAll=listProviderSchedulesAll.OrderBy(x => x.SchedDate).ToList();
 			List<TimeSlot> listAvailableTimeSlots=new List<TimeSlot>();
 			List<DateTime> listUniqueDays=new List<DateTime>();
-			int timeIncrement=Preferences.GetInt(PrefName.AppointmentTimeIncrement);
+			int timeIncrement= Preference.GetInt(PreferenceName.AppointmentTimeIncrement);
 			//Loop through all schedules five minutes at a time to find time slots large enough that have no appointments and no blockouts within them.
 			foreach(Schedule schedule in listProviderSchedulesAll) {
 				DateTime dateSched=schedule.SchedDate;
@@ -224,7 +224,7 @@ namespace OpenDentBusiness.WebTypes.WebSched.TimeSlot {
 			//No need to check RemotingRole; no call to db and this is a private method.
 			//Figure out how large of a time slot we need to find in order to consider this time slot "available".
 			int apptLengthMins=timePattern.Length * 5;
-			int timeIncrement=Preferences.GetInt(PrefName.AppointmentTimeIncrement);
+			int timeIncrement= Preference.GetInt(PreferenceName.AppointmentTimeIncrement);
 			DateTime dateSched=schedule.SchedDate;
 			//Filter out all blockouts that are not pertinent to this dateSched and operatoryNum combo.
 			List<Schedule> listBlockoutsForDateAndOp=listBlockouts.FindAll(x => x.SchedDate.Date==dateSched.Date && x.Ops.Contains(operatoryNum));

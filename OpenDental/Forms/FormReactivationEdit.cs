@@ -31,7 +31,7 @@ namespace OpenDental {
 			textPatName.Text=Patients.GetNameFL(_reactivationCur.PatNum);
 			DateTime lastContacted=Reactivations.GetDateLastContacted(_reactivationCur.PatNum);
 			textDateLastContacted.Text=lastContacted==DateTime.MinValue?"":lastContacted.ToString();
-			comboStatus.SetItems(Defs.GetCatList((int)DefCat.RecallUnschedStatus),(def) => def.ItemName,(def) => def.DefNum==_reactivationCur.ReactivationStatus,ComboBoxSpecialValues.None);
+			comboStatus.SetItems(Definition.GetByCategory(DefinitionCategory.RecallUnschedStatus),(def) => def.Description,(def) => def.Id==_reactivationCur.ReactivationStatus,ComboBoxSpecialValues.None);
 			checkBoxDNC.Checked=_reactivationCur.DoNotContact;
 		}
 
@@ -47,9 +47,9 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			Def selectedStatus=comboStatus.SelectedTag<Def>();
-			bool didStatusChange=_reactivationCur.ReactivationStatus!=selectedStatus.DefNum;
-			_reactivationCur.ReactivationStatus=selectedStatus==null?0:selectedStatus.DefNum;
+			Definition selectedStatus=comboStatus.SelectedTag<Definition>();
+			bool didStatusChange=_reactivationCur.ReactivationStatus!=selectedStatus.Id;
+			_reactivationCur.ReactivationStatus=selectedStatus==null?0:selectedStatus.Id;
 			_reactivationCur.ReactivationNote=textNote.Text;
 			_reactivationCur.DoNotContact=checkBoxDNC.Checked;
 			if(_reactivationCur.IsNew) {

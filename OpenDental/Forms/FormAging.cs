@@ -18,7 +18,7 @@ namespace OpenDental
         /// </summary>
         private void FormAging_Load(object sender, System.EventArgs e)
         {
-            var dateLastAging = Preferences.GetDate(PrefName.DateLastAging);
+            var dateLastAging = Preference.GetDate(PreferenceName.DateLastAging);
             if (dateLastAging.Year < 1880)
             {
                 lastDateTextBox.Text = "";
@@ -28,7 +28,7 @@ namespace OpenDental
                 lastDateTextBox.Text = dateLastAging.ToShortDateString();
             }
 
-            if (Preferences.GetBool(PrefName.AgingCalculatedMonthlyInsteadOfDaily))
+            if (Preference.GetBool(PreferenceName.AgingCalculatedMonthlyInsteadOfDaily))
             {
                 if (dateLastAging < DateTime.Today.AddDays(-15))
                 {
@@ -42,7 +42,7 @@ namespace OpenDental
             else
             {
                 calculateDateTextBox.Text = DateTime.Today.ToShortDateString();
-                if (Preferences.GetBool(PrefName.AgingIsEnterprise)) // Enterprise aging requires daily not monthly calc
+                if (Preference.GetBool(PreferenceName.AgingIsEnterprise)) // Enterprise aging requires daily not monthly calc
                 {
                     calculateDateTextBox.ReadOnly = true;
                     calculateDateTextBox.BackColor = SystemColors.Control;
@@ -57,7 +57,7 @@ namespace OpenDental
         /// <returns>True if aging ran succesfully; otherwise, false.</returns>
         bool RunAgingEnterprise(DateTime calculateDate)
         {
-            DateTime dateLastAging = Preferences.GetDate(PrefName.DateLastAging);
+            DateTime dateLastAging = Preference.GetDate(PreferenceName.DateLastAging);
             if (dateLastAging.Date == calculateDate.Date)
             {
                 var result =
@@ -73,9 +73,9 @@ namespace OpenDental
             }
 
             // Refresh prefs because AgingBeginDateTime is very time sensitive
-            Prefs.RefreshCache();
+            Preference.Refresh();
 
-            DateTime agingBeginDateTime = Preferences.GetDateTime(PrefName.AgingBeginDateTime);
+            DateTime agingBeginDateTime = Preference.GetDateTime(PreferenceName.AgingBeginDateTime);
             if (agingBeginDateTime > DateTime.MinValue)
             {
                 MessageBox.Show(
@@ -93,7 +93,7 @@ namespace OpenDental
 
             SecurityLogs.MakeLogEntry(Permissions.AgingRan, 0, "Aging Ran - Aging Form");
 
-            Prefs.UpdateString(PrefName.AgingBeginDateTime, POut.DateT(MiscData.GetNowDateTime(), false));
+            Preference.Update(PreferenceName.AgingBeginDateTime, POut.DateT(MiscData.GetNowDateTime(), false));
             Signalods.SetInvalid(InvalidType.Prefs); // Signal a cache refresh so other computers will have the updated pref as quickly as possible
 
             Cursor = Cursors.WaitCursor;
@@ -104,7 +104,7 @@ namespace OpenDental
                     () =>
                     {
                         Ledgers.ComputeAging(0, calculateDate);
-                        Prefs.UpdateString(PrefName.DateLastAging, POut.Date(calculateDate, false));
+                        Preference.Update(PreferenceName.DateLastAging, POut.Date(calculateDate, false));
                     },
                     startingMessage: string.Format("Calculating enterprise aging for all patients as of {0}...", calculateDate.ToShortDateString()),
                     actionException: ex =>
@@ -116,7 +116,7 @@ namespace OpenDental
 
                 Cursor = Cursors.Default;
 
-                Prefs.UpdateString(PrefName.AgingBeginDateTime, ""); // Clear lock on pref whether aging was successful or not
+                Preference.Update(PreferenceName.AgingBeginDateTime, ""); // Clear lock on pref whether aging was successful or not
                 Signalods.SetInvalid(InvalidType.Prefs);
 
                 return result;
@@ -140,7 +140,7 @@ namespace OpenDental
             }
 
             var calculateDate = PIn.Date(calculateDateTextBox.Text);
-            if (Preferences.GetBool(PrefName.AgingIsEnterprise))
+            if (Preference.GetBool(PreferenceName.AgingIsEnterprise))
             {
                 // If this is true, calculateDate has to be DateTime.Today and aging calculated daily not monthly.
                 if (!RunAgingEnterprise(calculateDate))
@@ -173,7 +173,7 @@ namespace OpenDental
                     return;
                 }
 
-                if (Prefs.UpdateString(PrefName.DateLastAging, POut.Date(calculateDate, false)))
+                if (Preference.Update(PreferenceName.DateLastAging, POut.Date(calculateDate, false)))
                 {
                     DataValid.SetInvalid(InvalidType.Prefs);
                 }

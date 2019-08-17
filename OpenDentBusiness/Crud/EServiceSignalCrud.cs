@@ -138,7 +138,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one EServiceSignal into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(EServiceSignal eServiceSignal,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO eservicesignal (";
 			if(!useExistingPK && isRandomKeys) {
 				eServiceSignal.EServiceSignalNum=ReplicationServers.GetKeyNoCache("eservicesignal","EServiceSignalNum");

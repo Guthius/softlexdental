@@ -146,7 +146,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one CentralConnection into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(CentralConnection centralConnection,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO centralconnection (";
 			if(!useExistingPK && isRandomKeys) {
 				centralConnection.CentralConnectionNum=ReplicationServers.GetKeyNoCache("centralconnection","CentralConnectionNum");

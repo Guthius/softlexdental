@@ -91,8 +91,8 @@ namespace OpenDentBusiness
                     {
                         return -1;//x is less than y. Priorities always come first.
                     }
-                    return Defs.GetOrder(DefCat.TxPriorities, PIn.Long(x["Priority"].ToString())).CompareTo
-                        (Defs.GetOrder(DefCat.TxPriorities, PIn.Long(y["Priority"].ToString())));
+                    return Defs.GetOrder(DefinitionCategory.TxPriorities, PIn.Long(x["Priority"].ToString())).CompareTo
+                        (Defs.GetOrder(DefinitionCategory.TxPriorities, PIn.Long(y["Priority"].ToString())));
                 }
             }
             //priorities are the same, so sort by toothrange
@@ -155,7 +155,7 @@ namespace OpenDentBusiness
                 {
                     return -1;//x is less than y. Priorities always come first.
                 }
-                return Defs.GetOrder(DefCat.TxPriorities, x.Priority).CompareTo(Defs.GetOrder(DefCat.TxPriorities, y.Priority));
+                return Defs.GetOrder(DefinitionCategory.TxPriorities, x.Priority).CompareTo(Defs.GetOrder(DefinitionCategory.TxPriorities, y.Priority));
             }
             //priorities are the same, so sort by toothrange
             if (x.ToothRange != y.ToothRange)

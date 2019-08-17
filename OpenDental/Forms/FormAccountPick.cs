@@ -53,7 +53,7 @@ namespace OpenDental
             accountsGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnInactive, 70));
             accountsGrid.Rows.Clear();
 
-            var listAccounts = Account.GetDeepCopy(false);
+            var listAccounts = Account.All();
             for (int i = 0; i < listAccounts.Count; i++)
             {
                 if (!checkInactive.Checked && listAccounts[i].Inactive)
@@ -62,11 +62,11 @@ namespace OpenDental
                 }
 
                 var row = new ODGridRow();
-                row.Cells.Add(listAccounts[i].AcctType.ToString());
+                row.Cells.Add(listAccounts[i].Type.ToString());
                 row.Cells.Add(listAccounts[i].Description);
-                if (listAccounts[i].AcctType == AccountType.Asset)
+                if (listAccounts[i].Type == AccountType.Asset)
                 {
-                    row.Cells.Add(Account.GetBalance(listAccounts[i].AccountNum, listAccounts[i].AcctType).ToString("N"));
+                    row.Cells.Add(Account.GetBalance(listAccounts[i].Id, listAccounts[i].Type).ToString("N"));
                 }
                 else
                 {
@@ -76,13 +76,13 @@ namespace OpenDental
                 row.Cells.Add(listAccounts[i].BankNumber);
                 row.Cells.Add(listAccounts[i].Inactive ? "X" : "");
 
-                if (i < listAccounts.Count - 1 && listAccounts[i].AcctType != listAccounts[i + 1].AcctType)
+                if (i < listAccounts.Count - 1 && listAccounts[i].Type != listAccounts[i + 1].Type)
                 {
                     row.ColorLborder = Color.Black;
                 }
 
-                row.Tag = listAccounts[i].Clone();
-                row.ColorBackG = listAccounts[i].AccountColor;
+                row.Tag = listAccounts[i];
+                row.ColorBackG = listAccounts[i].Color;
 
                 accountsGrid.Rows.Add(row);
             }
@@ -135,7 +135,7 @@ namespace OpenDental
             }
             else
             {
-                SelectedAccount = ((Account)accountsGrid.Rows[e.Row].Tag).Clone();
+                SelectedAccount = (Account)accountsGrid.Rows[e.Row].Tag;
             }
             DialogResult = DialogResult.OK;
         }
@@ -170,7 +170,7 @@ namespace OpenDental
             }
             else
             {
-                SelectedAccount = ((Account)accountsGrid.Rows[accountsGrid.GetSelectedIndex()].Tag).Clone();
+                SelectedAccount = (Account)accountsGrid.Rows[accountsGrid.GetSelectedIndex()].Tag;
             }
 
             DialogResult = DialogResult.OK;

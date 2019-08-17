@@ -47,7 +47,7 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textBox1;
 		private Label labelImageCategory;
 		private ComboBox comboImageCategory;
-		private List<Def> _listLetterMergeCatDefs;
+		private List<Definition> _listLetterMergeCatDefs;
 
 		//private ArrayList ALpatSelect;
 
@@ -413,28 +413,28 @@ namespace OpenDental{
 
 		private void FormLetterMergeEdit_Load(object sender, System.EventArgs e) {
 			textDescription.Text=LetterMergeCur.Description;
-			mergePath=Preferences.GetString(PrefName.LetterMergePath);
+			mergePath=Preference.GetString(PreferenceName.LetterMergePath);
 			textPath.Text=mergePath;
 			textTemplateName.Text=LetterMergeCur.TemplateName;
 			textDataFileName.Text=LetterMergeCur.DataFileName;
-			_listLetterMergeCatDefs=Defs.GetDefsForCategory(DefCat.LetterMergeCats,true);
+			_listLetterMergeCatDefs=Definition.GetByCategory(DefinitionCategory.LetterMergeCats);;
 			for(int i=0;i<_listLetterMergeCatDefs.Count;i++){
-				comboCategory.Items.Add(_listLetterMergeCatDefs[i].ItemName);
-				if(LetterMergeCur.Category==_listLetterMergeCatDefs[i].DefNum){
+				comboCategory.Items.Add(_listLetterMergeCatDefs[i].Description);
+				if(LetterMergeCur.Category==_listLetterMergeCatDefs[i].Id){
 					comboCategory.SelectedIndex=i;
 				}
 			}
-			List<Def> listImageCatDefs=Defs.GetDefsForCategory(DefCat.ImageCats,true);
+			List<Definition> listImageCatDefs=Definition.GetByCategory(DefinitionCategory.ImageCats);;
 			comboImageCategory.Items.Clear();
 			//Create None image category
-			comboImageCategory.Items.Add(new ODBoxItem<Def>(Lan.g(this,"None"),new Def() { DefNum=0 }));
+			comboImageCategory.Items.Add(new ODBoxItem<Definition>(Lan.g(this,"None"),new Definition()));
 			comboImageCategory.SelectedIndex=0;
-			foreach(Def imageCat in listImageCatDefs) {
-				comboImageCategory.Items.Add(new ODBoxItem<Def>(imageCat.ItemName,imageCat));
+			foreach(Definition imageCat in listImageCatDefs) {
+				comboImageCategory.Items.Add(new ODBoxItem<Definition>(imageCat.Description,imageCat));
 			}
 			if(LetterMergeCur.ImageFolder!=0) {
-				comboImageCategory.SetSelectedItem<Def>(x => x.DefNum==LetterMergeCur.ImageFolder
-					,Defs.GetName(DefCat.ImageCats,LetterMergeCur.ImageFolder)+" "+Lan.g(this,"(hidden)"));
+				comboImageCategory.SetSelectedItem<Definition>(x => x.Id==LetterMergeCur.ImageFolder
+					,Defs.GetName(DefinitionCategory.ImageCats,LetterMergeCur.ImageFolder)+" "+Lan.g(this,"(hidden)"));
 			}
 			FillPatSelect();
 			FillListReferral();
@@ -560,16 +560,16 @@ namespace OpenDental{
 		private void butEditPaths_Click(object sender, System.EventArgs e) {
 			FormPath FormP=new FormPath();
 			FormP.ShowDialog();
-			mergePath=Preferences.GetString(PrefName.LetterMergePath);
+			mergePath=Preference.GetString(PreferenceName.LetterMergePath);
 			textPath.Text=mergePath;
 		}
 
 		private void butBrowse_Click(object sender, System.EventArgs e) {
-			if(!Directory.Exists(Preferences.GetString(PrefName.LetterMergePath))){
+			if(!Directory.Exists(Preference.GetString(PreferenceName.LetterMergePath))){
 				MsgBox.Show(this,"Letter merge path invalid");
 				return;
 			}
-			openFileDlg.InitialDirectory=Preferences.GetString(PrefName.LetterMergePath);
+			openFileDlg.InitialDirectory=Preference.GetString(PreferenceName.LetterMergePath);
 			if(openFileDlg.ShowDialog() !=DialogResult.OK){
 				return;
 			}
@@ -581,7 +581,7 @@ namespace OpenDental{
 				MessageBox.Show(this, "This version of Open Dental does not support Microsoft Word.");
 				return;
 			#endif
-			if(!Directory.Exists(Preferences.GetString(PrefName.LetterMergePath))){
+			if(!Directory.Exists(Preference.GetString(PreferenceName.LetterMergePath))){
 				MsgBox.Show(this,"Letter merge path invalid");
 				return;
 			}
@@ -589,7 +589,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter a template file name first.");
 				return;
 			}
-			string templateFile=ODFileUtils.CombinePaths(Preferences.GetString(PrefName.LetterMergePath),textTemplateName.Text);
+			string templateFile=ODFileUtils.CombinePaths(Preference.GetString(PreferenceName.LetterMergePath),textTemplateName.Text);
 			if(File.Exists(templateFile)){
 				MsgBox.Show(this,"A file with that name already exists.  Choose a different name, or close this window to edit the template.");
 				return;
@@ -654,8 +654,8 @@ namespace OpenDental{
 			LetterMergeCur.TemplateName=textTemplateName.Text;
 			LetterMergeCur.DataFileName=textDataFileName.Text;
 			LetterMergeCur.Category
-				=_listLetterMergeCatDefs[comboCategory.SelectedIndex].DefNum;
-			LetterMergeCur.ImageFolder=comboImageCategory.SelectedTag<Def>().DefNum;
+				=_listLetterMergeCatDefs[comboCategory.SelectedIndex].Id;
+			LetterMergeCur.ImageFolder=comboImageCategory.SelectedTag<Definition>().Id;
 			if(IsNew){
 				LetterMerges.Insert(LetterMergeCur);
 			}

@@ -719,7 +719,7 @@ namespace OpenDental{
 			_listShownTimeClockStatuses.Clear();
 			foreach(TimeClockStatus timeClockStatus in Enum.GetValues(typeof(TimeClockStatus))){
 				string statusDescript=timeClockStatus.GetDescription();
-				if(!Preferences.GetBool(PrefName.ClockEventAllowBreak)) {
+				if(!Preference.GetBool(PreferenceName.ClockEventAllowBreak)) {
 					if(timeClockStatus==TimeClockStatus.Break) {
 						continue;//Skip Break option.
 					}
@@ -955,7 +955,7 @@ namespace OpenDental{
 				return;
 			}
 			ClockEvents.Delete(ClockEventCur.ClockEventNum);
-			Employees.UpdateClockStatus(ClockEventCur.EmployeeNum);
+			Employee.UpdateClockStatus(ClockEventCur.EmployeeNum);
 			SecurityLogs.MakeLogEntry(Permissions.TimecardDeleteEntry,0,
 				"Original entry: "+ClockEventCur.TimeEntered1.ToString());
 			DialogResult=DialogResult.OK;
@@ -1104,7 +1104,7 @@ namespace OpenDental{
 				ClockEventCur.ClinicNum=_selectedClinicNum;
 			}
 			ClockEvents.Update(ClockEventCur);
-			Employees.UpdateClockStatus(ClockEventCur.EmployeeNum);
+			Employee.UpdateClockStatus(ClockEventCur.EmployeeNum);
 			DialogResult=DialogResult.OK;
 		}
 

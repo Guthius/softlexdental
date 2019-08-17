@@ -12,8 +12,8 @@ using OpenDental.UI;
 namespace OpenDental {
 	public partial class FormCvxs:ODForm {
 		public bool IsSelectionMode;
-		public Cvx SelectedCvx;
-		private List<Cvx> listCvxs;
+		public CVX SelectedCvx;
+		private List<CVX> listCvxs;
 
 		public FormCvxs() {
 			InitializeComponent();
@@ -44,10 +44,10 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			listCvxs=Cvxs.GetBySearchText(textCode.Text);
+			listCvxs=CVX.Find(textCode.Text);
 			for(int i=0;i<listCvxs.Count;i++) {
 				row=new ODGridRow();
-				row.Cells.Add(listCvxs[i].CvxCode);
+				row.Cells.Add(listCvxs[i].Code);
 				row.Cells.Add(listCvxs[i].Description);
 				row.Tag=listCvxs[i];
 				gridMain.Rows.Add(row);
@@ -57,7 +57,7 @@ namespace OpenDental {
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			if(IsSelectionMode) {
-				SelectedCvx=(Cvx)gridMain.Rows[e.Row].Tag;
+				SelectedCvx=(CVX)gridMain.Rows[e.Row].Tag;
 				DialogResult=DialogResult.OK;
 				return;
 			}
@@ -69,7 +69,7 @@ namespace OpenDental {
 				MsgBox.Show(this,"Please select an item first.");
 				return;
 			}
-			SelectedCvx=(Cvx)gridMain.Rows[gridMain.GetSelectedIndex()].Tag;
+			SelectedCvx=(CVX)gridMain.Rows[gridMain.GetSelectedIndex()].Tag;
 			DialogResult=DialogResult.OK;
 		}
 

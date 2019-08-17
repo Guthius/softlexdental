@@ -125,7 +125,7 @@ namespace OpenDentBusiness{
 				if(ProcCat==0){//only used in xml import. We have an incomplete object.
 					return procCatDescript;
 				}
-				return Defs.GetName(DefCat.ProcCodeCats,ProcCat);
+				return Defs.GetName(DefinitionCategory.ProcCodeCats,ProcCat);
 			}
 			set{
 				procCatDescript=value;

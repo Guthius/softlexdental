@@ -52,9 +52,6 @@ namespace OpenDental {
 			else if(_eventInfoFired.EventHandlerType==typeof(DataConnectionEventHandler)) {
 				return Delegate.CreateDelegate(_eventInfoFired.EventHandlerType,this,"DataConnectionEvent_Fired");
 			}
-			else if(_eventInfoFired.EventHandlerType==typeof(MiddleTierConnectionEventHandler)) {
-				return Delegate.CreateDelegate(_eventInfoFired.EventHandlerType,this,"MiddleTierConnectionEvent_Fired");
-			}
 			else {
 				throw new ApplicationException("The 'EventHandlerType' on the eventType.Fired event passed into FormConnectionLost is not supported.\r\n"
 					+"EventHandlerType passed in: "+_eventInfoFired.EventHandlerType);
@@ -78,22 +75,6 @@ namespace OpenDental {
 			_threadShouldWindowClose.Start();
 		}
 
-		public void CrashedTableEvent_Fired(CrashedTableEventArgs e) {
-			try {
-				//Check to see if an ODEventType was set otherwise check the ODEventName to make sure this is an event that this instance cares to process.
-				if(_odEventType!=ODEventType.Undefined) {
-					if(_odEventType!=e.EventType) {
-						return;
-					}
-				}
-				if(!e.IsTableCrashed) {
-					_shouldWindowClose=true;
-				}
-			}
-			catch {
-			}
-		}
-
 		public void DataConnectionEvent_Fired(DataConnectionEventArgs e) {
 			try {
 				//Check to see if an ODEventType was set otherwise check the ODEventName to make sure this is an event that this instance cares to process.
@@ -107,23 +88,6 @@ namespace OpenDental {
 				}
 			}
 			catch {
-			}
-		}
-
-		public void MiddleTierConnectionEvent_Fired(MiddleTierConnectionEventArgs e) {
-			try {
-				//Check to see if an ODEventType was set otherwise check the ODEventName to make sure this is an event that this instance cares to process.
-				if(_odEventType!=ODEventType.Undefined) {
-					if(_odEventType!=e.EventType) {
-						return;
-					}
-				}
-				if(e.IsConnectionRestored) {
-					_shouldWindowClose=true;
-				}
-			}
-			catch {
-
 			}
 		}
 

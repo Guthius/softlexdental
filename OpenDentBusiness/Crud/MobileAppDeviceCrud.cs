@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one MobileAppDevice into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(MobileAppDevice mobileAppDevice,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO mobileappdevice (";
 			if(!useExistingPK && isRandomKeys) {
 				mobileAppDevice.MobileAppDeviceNum=ReplicationServers.GetKeyNoCache("mobileappdevice","MobileAppDeviceNum");

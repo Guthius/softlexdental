@@ -228,9 +228,9 @@ namespace OpenDental {
 				userNameL=prov.LName;
 			}
 			else if(userod.EmployeeNum!=0) {
-				Employee emp=Employees.GetEmp(userod.EmployeeNum);
-				userNameF=emp.FName;
-				userNameL=emp.LName;
+				Employee emp=Employee.GetById(userod.EmployeeNum);
+				userNameF=emp.FirstName;
+				userNameL=emp.LastName;
 			}
 			retVal=retVal.Replace("[UserNameF]",userNameF);
 			retVal=retVal.Replace("[UserNameL]",userNameL);

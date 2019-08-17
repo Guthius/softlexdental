@@ -190,24 +190,26 @@ namespace OpenDental {
 						Documents.MergePatientDocuments(_patFrom.PatNum,_patTo.PatNum);
 					}
 					else {
-						FormProgress FormP=new FormProgress();
-						FormP.DisplayText="Moving Documents...";
-						FormP.NumberFormat="F";
-						FormP.NumberMultiplication=1;
-						FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-						FormP.TickMS=1000;
-						OpenDentalCloud.Core.TaskStateMove state=CloudStorage.MoveAsync(atozFrom
-							,atozTo
-							,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-						if(FormP.ShowDialog()==DialogResult.Cancel) {
-							state.DoCancel=true;
-							fileCopyFailures=state.CountTotal-state.CountSuccess;
-						}
-						else {
-							fileCopyFailures=state.CountFailed;
-						}
-					}
-				}
+                        // TODO: Fix me
+
+                        //FormProgress FormP=new FormProgress();
+                        //FormP.DisplayText="Moving Documents...";
+                        //FormP.NumberFormat="F";
+                        //FormP.NumberMultiplication=1;
+                        //FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
+                        //FormP.TickMS=1000;
+                        //OpenDentalCloud.Core.TaskStateMove state=CloudStorage.MoveAsync(atozFrom
+                        //	,atozTo
+                        //	,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
+                        //if(FormP.ShowDialog()==DialogResult.Cancel) {
+                        //	state.DoCancel=true;
+                        //	fileCopyFailures=state.CountTotal-state.CountSuccess;
+                        //}
+                        //else {
+                        //	fileCopyFailures=state.CountFailed;
+                        //}
+                    }
+                }
 				Cursor=Cursors.Default;
 				if(fileCopyFailures>0) {
 					MessageBox.Show(Lan.g(this,"Some files belonging to the from patient were not copied.")+"\r\n"

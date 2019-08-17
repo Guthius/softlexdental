@@ -236,7 +236,7 @@ namespace OpenDental{
 		private void FormRxSelect_Load(object sender, System.EventArgs e) {
 			_arrayRxDefs=RxDefs.Refresh();
 			FillGrid();
-			if(Preferences.GetBool(PrefName.ShowFeatureEhr)) {
+			if(Preference.GetBool(PreferenceName.ShowFeatureEhr)) {
 				//We cannot allow blank prescription when using EHR, because each prescription created in this window must have an RxCui.
 				//If we allowed blank, we would not know where to pull the RxCui from.
 				butBlank.Visible=false;
@@ -329,7 +329,7 @@ namespace OpenDental{
 				return;
 			}
 			RxDef RxDefCur=(RxDef)gridMain.Rows[gridMain.GetSelectedIndex()].Tag;
-			if(Preferences.GetBool(PrefName.ShowFeatureEhr) && RxDefCur.RxCui==0) {
+			if(Preference.GetBool(PreferenceName.ShowFeatureEhr) && string.IsNullOrEmpty(RxDefCur.RxCui)) {
 				string strMsgText=Lan.g(this,"The selected prescription is missing an RxNorm")+".\r\n"
 					+Lan.g(this,"Prescriptions without RxNorms cannot be exported in EHR documents")+".\r\n";
 				if(!Security.IsAuthorized(Permissions.RxEdit,true)) {
@@ -357,13 +357,13 @@ namespace OpenDental{
 			RxPatCur.PatNum=PatCur.PatNum;
 			RxPatCur.Drug=RxDefCur.Drug;
 			RxPatCur.IsControlled=RxDefCur.IsControlled;
-			if(Preferences.GetBool(PrefName.RxHasProc) && (Clinics.ClinicNum==0 || Clinics.GetClinic(Clinics.ClinicNum).HasProcOnRx)) {
+			if(Preference.GetBool(PreferenceName.RxHasProc) && (Clinics.ClinicNum==0 || Clinics.GetClinic(Clinics.ClinicNum).HasProcOnRx)) {
 				RxPatCur.IsProcRequired=RxDefCur.IsProcRequired;
 			}
 			RxPatCur.Sig=RxDefCur.Sig;
 			RxPatCur.Disp=RxDefCur.Disp;
 			RxPatCur.Refills=RxDefCur.Refills;
-			if(Preferences.GetBool(PrefName.RxSendNewToQueue)) {
+			if(Preference.GetBool(PreferenceName.RxSendNewToQueue)) {
 				RxPatCur.SendStatus=RxSendStatus.InElectQueue;
 			}
 			else {
@@ -396,7 +396,7 @@ namespace OpenDental{
 			RxPat RxPatCur=new RxPat();
 			RxPatCur.RxDate=DateTime.Today;
 			RxPatCur.PatNum=PatCur.PatNum;
-			if(Preferences.GetBool(PrefName.RxSendNewToQueue)) {
+			if(Preference.GetBool(PreferenceName.RxSendNewToQueue)) {
 				RxPatCur.SendStatus=RxSendStatus.InElectQueue;
 			}
 			else {
@@ -418,7 +418,7 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(gridMain.GetSelectedIndex()==-1){
-				if(Preferences.GetBool(PrefName.ShowFeatureEhr)) {
+				if(Preference.GetBool(PreferenceName.ShowFeatureEhr)) {
 					MsgBox.Show(this,"Please select Rx first.");
 				}
 				else {

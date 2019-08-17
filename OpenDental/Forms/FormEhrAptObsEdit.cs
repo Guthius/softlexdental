@@ -15,7 +15,7 @@ namespace OpenDental {
 		private Loinc _loincValue=null;
 		private Snomed _snomedValue=null;
 		private ICD9 _icd9Value=null;
-		private Icd10 _icd10Value=null;
+		private ICD10 _icd10Value=null;
 
 		public FormEhrAptObsEdit(EhrAptObs ehrAptObs) {
 			InitializeComponent();
@@ -54,11 +54,11 @@ namespace OpenDental {
 					textValue.Text=_snomedValue.Description;
 				}
 				else if(_ehrAptObsCur.ValCodeSystem=="ICD9") {
-					_icd9Value=ICD9s.GetByCode(_ehrAptObsCur.ValReported);
+					_icd9Value=ICD9.GetByCode(_ehrAptObsCur.ValReported);
 					textValue.Text=_icd9Value.Description;
 				}
 				else if(_ehrAptObsCur.ValCodeSystem=="ICD10") {
-					_icd10Value=Icd10s.GetByCode(_ehrAptObsCur.ValReported);
+					_icd10Value=ICD10.GetByCode(_ehrAptObsCur.ValReported);
 					textValue.Text=_icd10Value.Description;
 				}
 			}
@@ -68,11 +68,11 @@ namespace OpenDental {
 			comboUnits.Items.Clear();
 			comboUnits.Items.Add("none");
 			comboUnits.SelectedIndex=0;
-			List<string> listUcumCodes=Ucums.GetAllCodes();
+            var listUcumCodes = Ucum.All();
 			for(int i=0;i<listUcumCodes.Count;i++) {
-				string ucumCode=listUcumCodes[i];
-				comboUnits.Items.Add(ucumCode);
-				if(ucumCode==_ehrAptObsCur.UcumCode) {
+				var ucumCode=listUcumCodes[i];
+				comboUnits.Items.Add(ucumCode.Code);
+				if(ucumCode.Code==_ehrAptObsCur.UcumCode) {
 					comboUnits.SelectedIndex=i+1;
 				}
 			}
@@ -112,12 +112,12 @@ namespace OpenDental {
 			if(listValueType.SelectedIndex==(int)EhrAptObsType.Address) {
 				labelValue.Text="Facility Address";
 				textValue.ReadOnly=true;
-				string sendingFacilityName=Preferences.GetString(PrefName.PracticeTitle);
-				string sendingFacilityAddress1=Preferences.GetString(PrefName.PracticeAddress);
-				string sendingFacilityAddress2=Preferences.GetString(PrefName.PracticeAddress2);
-				string sendingFacilityCity=Preferences.GetString(PrefName.PracticeCity);
-				string sendingFacilityState=Preferences.GetString(PrefName.PracticeST);
-				string sendingFacilityZip=Preferences.GetString(PrefName.PracticeZip);
+				string sendingFacilityName=Preference.GetString(PreferenceName.PracticeTitle);
+				string sendingFacilityAddress1=Preference.GetString(PreferenceName.PracticeAddress);
+				string sendingFacilityAddress2=Preference.GetString(PreferenceName.PracticeAddress2);
+				string sendingFacilityCity=Preference.GetString(PreferenceName.PracticeCity);
+				string sendingFacilityState=Preference.GetString(PreferenceName.PracticeST);
+				string sendingFacilityZip=Preference.GetString(PreferenceName.PracticeZip);
 				if(Preferences.HasClinicsEnabled && _appt.ClinicNum!=0) {//Using clinics and a clinic is assigned.
 					Clinic clinic=Clinics.GetClinic(_appt.ClinicNum);
 					sendingFacilityName=clinic.Description;
@@ -212,10 +212,10 @@ namespace OpenDental {
 					_ehrAptObsCur.ValReported=_snomedValue.SnomedCode;
 				}
 				else if(_strValCodeSystem=="ICD9") {
-					_ehrAptObsCur.ValReported=_icd9Value.ICD9Code;
+					_ehrAptObsCur.ValReported=_icd9Value.Code;
 				}
 				else if(_strValCodeSystem=="ICD10") {
-					_ehrAptObsCur.ValReported=_icd10Value.Icd10Code;
+					_ehrAptObsCur.ValReported=_icd10Value.Code;
 				}
 			}
 			else if(_ehrAptObsCur.ValType==EhrAptObsType.Address) {

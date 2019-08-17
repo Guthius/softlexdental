@@ -72,7 +72,7 @@ namespace OpenDental{
 		private long _insBillingProvNum;
 		private long _selectedBillingProvNum;
 		private List<Provider> _listProviders;
-		private List<Def> _listBillingTypeDefs;
+		private List<Definition> _listBillingTypeDefs;
 
 		///<summary></summary>
 		public FormPractice(){
@@ -738,33 +738,33 @@ namespace OpenDental{
 		#endregion
 
 		private void FormPractice_Load(object sender, System.EventArgs e) {
-			checkIsMedicalOnly.Checked=Preferences.GetBool(PrefName.PracticeIsMedicalOnly);
+			checkIsMedicalOnly.Checked=Preference.GetBool(PreferenceName.PracticeIsMedicalOnly);
 			if(Programs.UsingEcwTightOrFullMode()) {
 				checkIsMedicalOnly.Visible=false;
 			}
-			textPracticeTitle.Text=Preferences.GetString(PrefName.PracticeTitle);
-			textAddress.Text=Preferences.GetString(PrefName.PracticeAddress);
-			textAddress2.Text=Preferences.GetString(PrefName.PracticeAddress2);
-			textCity.Text=Preferences.GetString(PrefName.PracticeCity);
-			textST.Text=Preferences.GetString(PrefName.PracticeST);
-			textZip.Text=Preferences.GetString(PrefName.PracticeZip);
-			textPhone.Text=TelephoneNumbers.ReFormat(Preferences.GetString(PrefName.PracticePhone));
-			textFax.Text=TelephoneNumbers.ReFormat(Preferences.GetString(PrefName.PracticeFax));
-			checkUseBillingAddressOnClaims.Checked=Preferences.GetBool(PrefName.UseBillingAddressOnClaims);
-			textBillingAddress.Text=Preferences.GetString(PrefName.PracticeBillingAddress);
-			textBillingAddress2.Text=Preferences.GetString(PrefName.PracticeBillingAddress2);
-			textBillingCity.Text=Preferences.GetString(PrefName.PracticeBillingCity);
-			textBillingST.Text=Preferences.GetString(PrefName.PracticeBillingST);
-			textBillingZip.Text=Preferences.GetString(PrefName.PracticeBillingZip);
-			textPayToAddress.Text=Preferences.GetString(PrefName.PracticePayToAddress);
-			textPayToAddress2.Text=Preferences.GetString(PrefName.PracticePayToAddress2);
-			textPayToCity.Text=Preferences.GetString(PrefName.PracticePayToCity);
-			textPayToST.Text=Preferences.GetString(PrefName.PracticePayToST);
-			textPayToZip.Text=Preferences.GetString(PrefName.PracticePayToZip);
-			textBankNumber.Text=Preferences.GetString(PrefName.PracticeBankNumber);
+			textPracticeTitle.Text=Preference.GetString(PreferenceName.PracticeTitle);
+			textAddress.Text=Preference.GetString(PreferenceName.PracticeAddress);
+			textAddress2.Text=Preference.GetString(PreferenceName.PracticeAddress2);
+			textCity.Text=Preference.GetString(PreferenceName.PracticeCity);
+			textST.Text=Preference.GetString(PreferenceName.PracticeST);
+			textZip.Text=Preference.GetString(PreferenceName.PracticeZip);
+			textPhone.Text=TelephoneNumbers.ReFormat(Preference.GetString(PreferenceName.PracticePhone));
+			textFax.Text=TelephoneNumbers.ReFormat(Preference.GetString(PreferenceName.PracticeFax));
+			checkUseBillingAddressOnClaims.Checked=Preference.GetBool(PreferenceName.UseBillingAddressOnClaims);
+			textBillingAddress.Text=Preference.GetString(PreferenceName.PracticeBillingAddress);
+			textBillingAddress2.Text=Preference.GetString(PreferenceName.PracticeBillingAddress2);
+			textBillingCity.Text=Preference.GetString(PreferenceName.PracticeBillingCity);
+			textBillingST.Text=Preference.GetString(PreferenceName.PracticeBillingST);
+			textBillingZip.Text=Preference.GetString(PreferenceName.PracticeBillingZip);
+			textPayToAddress.Text=Preference.GetString(PreferenceName.PracticePayToAddress);
+			textPayToAddress2.Text=Preference.GetString(PreferenceName.PracticePayToAddress2);
+			textPayToCity.Text=Preference.GetString(PreferenceName.PracticePayToCity);
+			textPayToST.Text=Preference.GetString(PreferenceName.PracticePayToST);
+			textPayToZip.Text=Preference.GetString(PreferenceName.PracticePayToZip);
+			textBankNumber.Text=Preference.GetString(PreferenceName.PracticeBankNumber);
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CH")) {//CH is for switzerland. eg de-CH
-				textBankRouting.Text=Preferences.GetString(PrefName.BankRouting);
-				textBankAddress.Text=Preferences.GetString(PrefName.BankAddress);
+				textBankRouting.Text=Preference.GetString(PreferenceName.BankRouting);
+				textBankAddress.Text=Preference.GetString(PreferenceName.BankAddress);
 			}
 			else {
 				groupSwiss.Visible=false;
@@ -773,18 +773,18 @@ namespace OpenDental{
 			_listProviders=Providers.GetDeepCopy(true);
 			for(int i=0;i<_listProviders.Count;i++){
 				listProvider.Items.Add(_listProviders[i].GetLongDesc());
-				if(_listProviders[i].ProvNum==Preferences.GetLong(PrefName.PracticeDefaultProv)){
+				if(_listProviders[i].ProvNum==Preference.GetLong(PreferenceName.PracticeDefaultProv)){
 					listProvider.SelectedIndex=i;
 				}
 			}
 			listBillType.Items.Clear();
-			_listBillingTypeDefs=Defs.GetDefsForCategory(DefCat.BillingTypes,true);
+			_listBillingTypeDefs=Definition.GetByCategory(DefinitionCategory.BillingTypes);
 			for(int i=0;i<_listBillingTypeDefs.Count;i++){
-				listBillType.Items.Add(_listBillingTypeDefs[i].ItemName);
-				if(_listBillingTypeDefs[i].DefNum==Preferences.GetLong(PrefName.PracticeDefaultBillType))
+				listBillType.Items.Add(_listBillingTypeDefs[i].Description);
+				if(_listBillingTypeDefs[i].Id==Preference.GetLong(PreferenceName.PracticeDefaultBillType))
 					listBillType.SelectedIndex=i;
 			}
-			if(Preferences.GetBool(PrefName.EasyHidePublicHealth)){
+			if(Preference.GetBool(PreferenceName.EasyHidePublicHealth)){
 				labelPlaceService.Visible=false;
 				listPlaceService.Visible=false;
 			}
@@ -792,8 +792,8 @@ namespace OpenDental{
 			for(int i=0;i<Enum.GetNames(typeof(PlaceOfService)).Length;i++){
 				listPlaceService.Items.Add(Lan.g("enumPlaceOfService",Enum.GetNames(typeof(PlaceOfService))[i]));
 			}
-			listPlaceService.SelectedIndex=Preferences.GetInt(PrefName.DefaultProcedurePlaceService);
-			_selectedBillingProvNum=Preferences.GetLong(PrefName.InsBillingProv);
+			listPlaceService.SelectedIndex=Preference.GetInt(PreferenceName.DefaultProcedurePlaceService);
+			_selectedBillingProvNum=Preference.GetLong(PreferenceName.InsBillingProv);
 			_insBillingProvNum=_selectedBillingProvNum;
 			FillComboInsBillingProv();
 		}
@@ -845,64 +845,64 @@ namespace OpenDental{
 				return;
 			}
 			bool changed=false;
-			if( Prefs.UpdateBool(PrefName.PracticeIsMedicalOnly,checkIsMedicalOnly.Checked)
-				| Prefs.UpdateString(PrefName.PracticeTitle,textPracticeTitle.Text)
-				| Prefs.UpdateString(PrefName.PracticeAddress,textAddress.Text)
-				| Prefs.UpdateString(PrefName.PracticeAddress2,textAddress2.Text)
-				| Prefs.UpdateString(PrefName.PracticeCity,textCity.Text)
-				| Prefs.UpdateString(PrefName.PracticeST,textST.Text)
-				| Prefs.UpdateString(PrefName.PracticeZip,textZip.Text)
-				| Prefs.UpdateString(PrefName.PracticePhone,phone)
-				| Prefs.UpdateString(PrefName.PracticeFax,fax)
-				| Prefs.UpdateBool(PrefName.UseBillingAddressOnClaims,checkUseBillingAddressOnClaims.Checked)
-				| Prefs.UpdateString(PrefName.PracticeBillingAddress,textBillingAddress.Text)
-				| Prefs.UpdateString(PrefName.PracticeBillingAddress2,textBillingAddress2.Text)
-				| Prefs.UpdateString(PrefName.PracticeBillingCity,textBillingCity.Text)
-				| Prefs.UpdateString(PrefName.PracticeBillingST,textBillingST.Text)
-				| Prefs.UpdateString(PrefName.PracticeBillingZip,textBillingZip.Text)
-				| Prefs.UpdateString(PrefName.PracticePayToAddress,textPayToAddress.Text)
-				| Prefs.UpdateString(PrefName.PracticePayToAddress2,textPayToAddress2.Text)
-				| Prefs.UpdateString(PrefName.PracticePayToCity,textPayToCity.Text)
-				| Prefs.UpdateString(PrefName.PracticePayToST,textPayToST.Text)
-				| Prefs.UpdateString(PrefName.PracticePayToZip,textPayToZip.Text)
-				| Prefs.UpdateString(PrefName.PracticeBankNumber,textBankNumber.Text))
+			if( Preference.Update(PreferenceName.PracticeIsMedicalOnly,checkIsMedicalOnly.Checked)
+				| Preference.Update(PreferenceName.PracticeTitle,textPracticeTitle.Text)
+				| Preference.Update(PreferenceName.PracticeAddress,textAddress.Text)
+				| Preference.Update(PreferenceName.PracticeAddress2,textAddress2.Text)
+				| Preference.Update(PreferenceName.PracticeCity,textCity.Text)
+				| Preference.Update(PreferenceName.PracticeST,textST.Text)
+				| Preference.Update(PreferenceName.PracticeZip,textZip.Text)
+				| Preference.Update(PreferenceName.PracticePhone,phone)
+				| Preference.Update(PreferenceName.PracticeFax,fax)
+				| Preference.Update(PreferenceName.UseBillingAddressOnClaims,checkUseBillingAddressOnClaims.Checked)
+				| Preference.Update(PreferenceName.PracticeBillingAddress,textBillingAddress.Text)
+				| Preference.Update(PreferenceName.PracticeBillingAddress2,textBillingAddress2.Text)
+				| Preference.Update(PreferenceName.PracticeBillingCity,textBillingCity.Text)
+				| Preference.Update(PreferenceName.PracticeBillingST,textBillingST.Text)
+				| Preference.Update(PreferenceName.PracticeBillingZip,textBillingZip.Text)
+				| Preference.Update(PreferenceName.PracticePayToAddress,textPayToAddress.Text)
+				| Preference.Update(PreferenceName.PracticePayToAddress2,textPayToAddress2.Text)
+				| Preference.Update(PreferenceName.PracticePayToCity,textPayToCity.Text)
+				| Preference.Update(PreferenceName.PracticePayToST,textPayToST.Text)
+				| Preference.Update(PreferenceName.PracticePayToZip,textPayToZip.Text)
+				| Preference.Update(PreferenceName.PracticeBankNumber,textBankNumber.Text))
 			{
 				changed=true;
 			}
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CH")) {//CH is for switzerland. eg de-CH
-				if( Prefs.UpdateString(PrefName.BankRouting,textBankRouting.Text)
-					| Prefs.UpdateString(PrefName.BankAddress,textBankAddress.Text))
+				if( Preference.Update(PreferenceName.BankRouting,textBankRouting.Text)
+					| Preference.Update(PreferenceName.BankAddress,textBankAddress.Text))
 				{
 					changed=true;
 				}
 			}
 			if(listProvider.SelectedIndex!=-1){
-				if(Prefs.UpdateLong(PrefName.PracticeDefaultProv,_listProviders[listProvider.SelectedIndex].ProvNum)){
+				if(Preference.Update(PreferenceName.PracticeDefaultProv,_listProviders[listProvider.SelectedIndex].ProvNum)){
 					changed=true;
 				}
 			}
 			if(listBillType.SelectedIndex!=-1){
-				if(Prefs.UpdateLong(PrefName.PracticeDefaultBillType
-					,_listBillingTypeDefs[listBillType.SelectedIndex].DefNum))
+				if(Preference.Update(PreferenceName.PracticeDefaultBillType
+					,_listBillingTypeDefs[listBillType.SelectedIndex].Id))
 				{
 					changed=true;
 				}
 			}
-			if(Prefs.UpdateLong(PrefName.DefaultProcedurePlaceService,listPlaceService.SelectedIndex)){
+			if(Preference.Update(PreferenceName.DefaultProcedurePlaceService,listPlaceService.SelectedIndex)){
 				changed=true;
 			}
 			if(radioInsBillingProvDefault.Checked){//default=0
-				if(Prefs.UpdateLong(PrefName.InsBillingProv,0)){
+				if(Preference.Update(PreferenceName.InsBillingProv,0)){
 					changed=true;
 				}
 			}
 			else if(radioInsBillingProvTreat.Checked){//treat=-1
-				if(Prefs.UpdateLong(PrefName.InsBillingProv,-1)){
+				if(Preference.Update(PreferenceName.InsBillingProv,-1)){
 					changed=true;
 				}
 			}
 			else{
-				if(Prefs.UpdateLong(PrefName.InsBillingProv,_selectedBillingProvNum)){
+				if(Preference.Update(PreferenceName.InsBillingProv,_selectedBillingProvNum)){
 					changed=true;
 				}
 			}

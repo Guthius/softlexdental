@@ -21,7 +21,7 @@ namespace OpenDental {
 		}
 
 		private void FormReplicationSetup_Load(object sender,EventArgs e) {
-			checkRandomPrimaryKeys.Checked=Preferences.GetBool(PrefName.RandomPrimaryKeys);
+			checkRandomPrimaryKeys.Checked=Preference.GetBool(PreferenceName.RandomPrimaryKeys);
 			if(checkRandomPrimaryKeys.Checked) {
 				//not allowed to uncheck it
 				checkRandomPrimaryKeys.Enabled=false;
@@ -34,9 +34,9 @@ namespace OpenDental {
 				butTest.Visible=false;
 				label2.Visible=false;
 			}
-			if(Preferences.GetInt(PrefName.ReplicationFailureAtServer_id)>0) {
+			if(Preference.GetInt(PreferenceName.ReplicationFailureAtServer_id)>0) {
 				groupBoxReplicationFailure.Visible=true;
-				textReplicaitonFailureAtServer_id.Text=Preferences.GetInt(PrefName.ReplicationFailureAtServer_id).ToString();
+				textReplicaitonFailureAtServer_id.Text=Preference.GetInt(PreferenceName.ReplicationFailureAtServer_id).ToString();
 			}
 			FillGrid();
 		}
@@ -50,7 +50,7 @@ namespace OpenDental {
 			gridMain.Columns.Add(col);
 			col=new ODGridColumn(Lan.g("FormReplicationSetup","server_id"),65);
 			gridMain.Columns.Add(col);
-			if(Preferences.GetBool(PrefName.RandomPrimaryKeys)) {	
+			if(Preference.GetBool(PreferenceName.RandomPrimaryKeys)) {	
 				col=new ODGridColumn(Lan.g("FormReplicationSetup","Key Range Start"),160);
 				gridMain.Columns.Add(col);
 				col=new ODGridColumn(Lan.g("FormReplicationSetup","Key Range End"),160);
@@ -70,14 +70,14 @@ namespace OpenDental {
 				row=new ODGridRow();
 				row.Cells.Add(_listReplicationServers[i].Descript);
 				row.Cells.Add(_listReplicationServers[i].ServerId.ToString());
-				if(Preferences.GetBool(PrefName.RandomPrimaryKeys)) {
+				if(Preference.GetBool(PreferenceName.RandomPrimaryKeys)) {
 					row.Cells.Add(_listReplicationServers[i].RangeStart.ToString("n0"));
 					row.Cells.Add(_listReplicationServers[i].RangeEnd.ToString("n0"));
 				}
 				row.Cells.Add(_listReplicationServers[i].AtoZpath);
 				row.Cells.Add(_listReplicationServers[i].UpdateBlocked ? "X" : "");
 				row.Cells.Add(_listReplicationServers[i].SlaveMonitor.ToString());
-				row.Cells.Add(_listReplicationServers[i].ReplicationServerNum==Preferences.GetLong(PrefName.ReplicationUserQueryServer) ? "X" : "");
+				row.Cells.Add(_listReplicationServers[i].ReplicationServerNum==Preference.GetLong(PreferenceName.ReplicationUserQueryServer) ? "X" : "");
 				gridMain.Rows.Add(row);
 			}
 			gridMain.EndUpdate();
@@ -228,7 +228,7 @@ namespace OpenDental {
 		}
 
 		private void butResetReplicationFailureAtServer_id_Click(object sender,EventArgs e) {
-			Prefs.UpdateInt(PrefName.ReplicationFailureAtServer_id,0);
+			Preference.Update(PreferenceName.ReplicationFailureAtServer_id,0);
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

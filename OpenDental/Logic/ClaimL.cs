@@ -239,7 +239,7 @@ namespace OpenDental {
 
 		public static void AllocateUnearnedPayment(Patient patcur,Family famcur,double unearnedAmt,Claim ClaimCur) {
 			//do not try to allocate payment if preference is disabled or if there isn't a payment to allocate
-			if(!Preferences.GetBool(PrefName.ShowAllocateUnearnedPaymentPrompt) || ClaimProcs.GetPatPortionForClaim(ClaimCur)<=0) { 
+			if(!Preference.GetBool(PreferenceName.ShowAllocateUnearnedPaymentPrompt) || ClaimProcs.GetPatPortionForClaim(ClaimCur)<=0) { 
 				return;
 			}
 			FormProcSelect FormPS=new FormProcSelect(patcur.PatNum,false,true,true);
@@ -254,10 +254,10 @@ namespace OpenDental {
 			//disabled clinics because we use the ClinicNum to determine which PayConnect or XCharge/XWeb credentials to use for payments.
 			paymentCur.ClinicNum=0;
 			if(Preferences.HasClinicsEnabled) {//if clinics aren't enabled default to 0
-				if((PayClinicSetting)Preferences.GetInt(PrefName.PaymentClinicSetting)==PayClinicSetting.PatientDefaultClinic) {
+				if((PayClinicSetting)Preference.GetInt(PreferenceName.PaymentClinicSetting)==PayClinicSetting.PatientDefaultClinic) {
 					paymentCur.ClinicNum=patcur.ClinicNum;
 				}
-				else if((PayClinicSetting)Preferences.GetInt(PrefName.PaymentClinicSetting)==PayClinicSetting.SelectedExceptHQ) {
+				else if((PayClinicSetting)Preference.GetInt(PreferenceName.PaymentClinicSetting)==PayClinicSetting.SelectedExceptHQ) {
 					paymentCur.ClinicNum=(Clinics.ClinicNum==0)?patcur.ClinicNum:Clinics.ClinicNum;
 				}
 				else {
@@ -265,9 +265,9 @@ namespace OpenDental {
 				}
 			}
 			paymentCur.DateEntry=DateTimeOD.Today;//So that it will show properly in the new window.
-			List<Def> listDefs=Defs.GetDefsForCategory(DefCat.PaymentTypes,true);
+			List<Definition> listDefs= Definition.GetByCategory(DefinitionCategory.PaymentTypes);;
 			if(listDefs.Count>0) {
-				paymentCur.PayType=listDefs[0].DefNum;
+				paymentCur.PayType=listDefs[0].Id;
 			}
 			paymentCur.PaymentSource=CreditCardSource.None;
 			paymentCur.ProcessStatus=ProcessStat.OfficeProcessed;
@@ -354,7 +354,7 @@ namespace OpenDental {
 			List<Procedure> listSelectedProcs=createClaimDataWrapper.ClaimData.ListProcs.FindAll(x => x.ProcNum.In(listSelectedProcNums));
 			//If we are going to block based on a preference, do that before figuring out other claim validation.
 			//Ignore "No Bill Ins" here, because we want "No Bill Ins" to be the more important block for backwards compatability.
-			switch(PIn.Enum<ClaimZeroDollarProcBehavior>(Preferences.GetInt(PrefName.ClaimZeroDollarProcBehavior))) {
+			switch(PIn.Enum<ClaimZeroDollarProcBehavior>(Preference.GetInt(PreferenceName.ClaimZeroDollarProcBehavior))) {
 				case ClaimZeroDollarProcBehavior.Warn:
 					if(listSelectedProcs.FirstOrDefault(x => x.ProcFee.IsZero() && !Procedures.NoBillIns(x,createClaimDataWrapper.ClaimData.ListClaimProcs
 							,PlanCur.PlanNum))!=null
@@ -487,7 +487,7 @@ namespace OpenDental {
 			}
 			Claims.Update(claim);
 			//JM - If we ever decide to enable ERA automation this will need to be considered.
-			if(Preferences.GetBool(PrefName.PromptForSecondaryClaim) && Security.IsAuthorized(Permissions.ClaimSend,true)) {
+			if(Preference.GetBool(PreferenceName.PromptForSecondaryClaim) && Security.IsAuthorized(Permissions.ClaimSend,true)) {
 				ClaimL.PromptForSecondaryClaim(listClaimProcsForClaim);
 			}
 		}
@@ -627,7 +627,7 @@ namespace OpenDental {
 					return ClaimIsValidState.FalseClaimProcsChanged;
 				}
 			}
-			if(Preferences.GetBool(PrefName.ClaimsValidateACN)) {
+			if(Preference.GetBool(PreferenceName.ClaimsValidateACN)) {
 				InsPlan plan=InsPlans.GetPlan(claimPlanNum,listInsPlans);//Does a query if listInsPlans is null or if claimPlanNum is not in list.
 				if(plan!=null && plan.GroupName.Contains("ADDP")) {
 					if(!Regex.IsMatch(claimNote,"ACN[0-9]{5,}")) {//ACN with at least 5 digits following

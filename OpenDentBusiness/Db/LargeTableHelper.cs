@@ -453,7 +453,7 @@ namespace OpenDentBusiness
                         if (!string.IsNullOrEmpty(_serverTo))
                         {//SetDbT here if server is specified
 
-                            DataConnection.SetDb(_serverTo, _databaseTo, _userTo, _passwordTo);
+                            DataConnection.Configure(_serverTo, _databaseTo, _userTo, _passwordTo);
                         }
                         bool isBatchQueued = false;
                         bool insertFailed = true;

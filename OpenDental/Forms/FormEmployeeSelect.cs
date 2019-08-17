@@ -160,8 +160,8 @@ namespace OpenDental{
 		}
 
 		private void FillGrid(){
-			Employees.RefreshCache();
-			_listEmployees=Employees.GetDeepCopy();
+            CacheManager.Invalidate<Employee>();
+            _listEmployees = Employee.All();
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("FormEmployeeSelect","FName"),75);
@@ -176,10 +176,10 @@ namespace OpenDental{
 			ODGridRow row;
 			for(int i=0;i<_listEmployees.Count;i++){
 				row=new ODGridRow();
-				row.Cells.Add(_listEmployees[i].FName);
-				row.Cells.Add(_listEmployees[i].LName);
-				row.Cells.Add(_listEmployees[i].MiddleI);
-				if(_listEmployees[i].IsHidden){
+				row.Cells.Add(_listEmployees[i].FirstName);
+				row.Cells.Add(_listEmployees[i].LastName);
+				row.Cells.Add(_listEmployees[i].Initials);
+				if(_listEmployees[i].Hidden){
 					row.Cells.Add("X");
 				}
 				else{
@@ -200,14 +200,14 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			long empNum=_listEmployees[e.Row].EmployeeNum;
+			long empNum=_listEmployees[e.Row].Id;
 			FormEmployeeEdit FormEE=new FormEmployeeEdit();
 			FormEE.EmployeeCur=_listEmployees[e.Row];
 			FormEE.ShowDialog();
 			FillGrid();
 			isChanged=true;
 			for(int i=0;i<_listEmployees.Count;i++){
-				if(_listEmployees[i].EmployeeNum==empNum){
+				if(_listEmployees[i].Id==empNum){
 					gridMain.SetSelected(i,true);
 				}
 			}
@@ -219,7 +219,7 @@ namespace OpenDental{
 			}
 			for(int i=0;i<_listEmployees.Count;i++){
 				try{
-					Employees.Delete(_listEmployees[i].EmployeeNum);
+					Employee.Delete(_listEmployees[i].Id);
 				}
 				catch{}
 			}

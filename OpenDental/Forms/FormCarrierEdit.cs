@@ -83,7 +83,7 @@ namespace OpenDental{
 		private ComboBox comboSendElectronically;
 
 		///<summary>List of carrier group name defs.  The first def in the list will always be 'Unspecified' with a DefNum of 0.</summary>
-		private List<Def> _listCarrierGroupNames;
+		private List<Definition> _listCarrierGroupNames;
 
 		///<summary></summary>
 		public FormCarrierEdit(){
@@ -886,8 +886,8 @@ namespace OpenDental{
 			textState.Text=CarrierCur.State;
 			textZip.Text=CarrierCur.Zip;
 			textElectID.Text=CarrierCur.ElectID;
-			_listCarrierGroupNames=new List<Def> { new Def() { DefNum=0,ItemName=Lan.g(this,"Unspecified") } };
-			_listCarrierGroupNames.AddRange(Defs.GetDefsForCategory(DefCat.CarrierGroupNames,true));//Only Add non hidden definitions
+			_listCarrierGroupNames=new List<Definition> { new Definition() { Description=Lan.g(this,"Unspecified") } };
+			_listCarrierGroupNames.AddRange(Definition.GetByCategory(DefinitionCategory.CarrierGroupNames));//Only Add non hidden definitions
 			if(_listCarrierGroupNames.Count>1) {//only show if at least one CarrierGroupName definition
 				labelCarrierGroupName.Visible=true;
 				comboCarrierGroupName.Visible=true;
@@ -954,10 +954,10 @@ namespace OpenDental{
 		private void FillComboCarrierGroupName(long selectedDefNum) {
 			comboCarrierGroupName.Items.Clear();
 			for(int i = 0;i<_listCarrierGroupNames.Count;i++) {
-				comboCarrierGroupName.Items.Add(new ODBoxItem<Def>(_listCarrierGroupNames[i].ItemName,_listCarrierGroupNames[i]));
+				comboCarrierGroupName.Items.Add(new ODBoxItem<Definition>(_listCarrierGroupNames[i].Description,_listCarrierGroupNames[i]));
 			}
-			comboCarrierGroupName.IndexSelectOrSetText(_listCarrierGroupNames.FindIndex(x => x.DefNum==selectedDefNum)
-				,() => { return Defs.GetName(DefCat.CarrierGroupNames,selectedDefNum)+" "+Lan.g(this,"(hidden)"); });
+			comboCarrierGroupName.IndexSelectOrSetText(_listCarrierGroupNames.FindIndex(x => x.Id==selectedDefNum)
+				,() => { return Defs.GetName(DefinitionCategory.CarrierGroupNames,selectedDefNum)+" "+Lan.g(this,"(hidden)"); });
 		}
 
 		private void textCarrierName_TextChanged(object sender, System.EventArgs e) {
@@ -1052,7 +1052,7 @@ namespace OpenDental{
 			//The SelectedItem will be null if hidden. Don't change if the def selected is still hidden.
 			//DefNum will be 0 if "Unspecified" is selected. 
 			if(comboCarrierGroupName.SelectedItem!=null) {
-				CarrierCur.CarrierGroupName=((ODBoxItem<Def>)comboCarrierGroupName.SelectedItem).Tag.DefNum;
+				CarrierCur.CarrierGroupName=((ODBoxItem<Definition>)comboCarrierGroupName.SelectedItem).Tag.Id;
 			}
 			CarrierCur.NoSendElect=comboSendElectronically.SelectedTag<NoSendElectType>();
 			CarrierCur.IsHidden=checkIsHidden.Checked;

@@ -30,7 +30,7 @@ namespace UnitTestsCore {
 			proc.ProcNumLab=procNumLab;
 			proc.ToothNum=toothNum;
 			proc.Prosthesis="I";
-			proc.Priority=Defs.GetDefsForCategory(DefCat.TxPriorities,true)[priority].DefNum;
+			proc.Priority=Defs.GetDefsForCategory(DefinitionCategory.TxPriorities,true)[priority].Id;
 			proc.AptNum=aptNum;
 			proc.PlannedAptNum=plannedAptNum;
 			proc.ClinicNum=pat.ClinicNum;
@@ -49,7 +49,7 @@ namespace UnitTestsCore {
 
 		public static void SetPriority(Procedure procedure,int priority){
 			Procedure oldProcedure=procedure.Copy();
-			procedure.Priority=Defs.GetDefsForCategory(DefCat.TxPriorities,true)[priority].DefNum;
+			procedure.Priority=Defs.GetDefsForCategory(DefinitionCategory.TxPriorities,true)[priority].Id;
 			Procedures.Update(procedure,oldProcedure);
 		}
 

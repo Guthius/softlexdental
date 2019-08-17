@@ -40,7 +40,7 @@ namespace OpenDental {
 		private void butOK_Click(object sender,EventArgs e) {
 			/*Prefs.UpdateBool(PrefName.PublicHealthScreeningUsePat,checkUsePat.Checked);
 			if(comboExamSheets.SelectedIndex!=-1) {
-				Prefs.UpdateLong(PrefName.PublicHealthScreeningSheet,listSheets[comboExamSheets.SelectedIndex].SheetDefNum);
+				Preference.Update(PrefName.PublicHealthScreeningSheet,listSheets[comboExamSheets.SelectedIndex].SheetDefNum);
 			}*/
 			DialogResult=DialogResult.OK;
 		}

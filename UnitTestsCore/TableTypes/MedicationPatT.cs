@@ -15,7 +15,7 @@ namespace UnitTestsCore {
 			medPat.PatNum=patNum;
 			medPat.MedicationNum=medicationNum;
 			if(medicationNum==0) {
-				medPat.MedicationNum=MedicationT.CreateMedication().MedicationNum;
+				medPat.MedicationNum=MedicationT.CreateMedication().Id;
 			}
 			medPat.DateStart=dateStart;
 			medPat.DateStop=dateStop;

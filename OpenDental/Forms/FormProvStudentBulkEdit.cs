@@ -51,7 +51,7 @@ namespace OpenDental {
 			ODGridRow row;
 			for(int i=0;i<table.Rows.Count;i++) {
 				row=new ODGridRow();
-				if(!Preferences.GetBool(PrefName.EasyHideDentalSchools)) {
+				if(!Preference.GetBool(PreferenceName.EasyHideDentalSchools)) {
 					row.Cells.Add(table.Rows[i]["ProvNum"].ToString());
 				}
 				row.Cells.Add(table.Rows[i]["LName"].ToString());

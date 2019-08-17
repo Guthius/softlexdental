@@ -74,7 +74,7 @@ namespace UnitTests {
 			ProcedureCode procCode=_listProcCodes[1];
 			InsPlan plan=GenerateMediFlatInsPlan(MethodBase.GetCurrentMethod().Name);
 			Fee feeDefault=FeeT.GetNewFee(plan.FeeSched,procCode.CodeNum,25);
-			Prefs.UpdateBool(PrefName.CoPay_FeeSchedule_BlankLikeZero,false);
+			Prefs.UpdateBool(PreferenceName.CoPay_FeeSchedule_BlankLikeZero,false);
 			double amt=InsPlans.GetCopay(procCode.CodeNum,plan.FeeSched,plan.CopayFeeSched,plan.CodeSubstNone,"",0,0,plan.PlanNum);
 			Assert.AreEqual(feeDefault.Amount,amt);
 		}
@@ -85,10 +85,10 @@ namespace UnitTests {
 			ProcedureCode procCode=_listProcCodes[2];
 			InsPlan plan=GenerateMediFlatInsPlan(MethodBase.GetCurrentMethod().Name);
 			Fee feeDefault=FeeT.GetNewFee(plan.FeeSched,procCode.CodeNum,35);
-			Prefs.UpdateBool(PrefName.CoPay_FeeSchedule_BlankLikeZero,true);
+			Prefs.UpdateBool(PreferenceName.CoPay_FeeSchedule_BlankLikeZero,true);
 			double amt=InsPlans.GetCopay(procCode.CodeNum,plan.FeeSched,plan.CopayFeeSched,plan.CodeSubstNone,"",0,0,plan.PlanNum);
 			Assert.AreEqual(-1,amt);
-			Prefs.UpdateBool(PrefName.CoPay_FeeSchedule_BlankLikeZero,false);
+			Prefs.UpdateBool(PreferenceName.CoPay_FeeSchedule_BlankLikeZero,false);
 		}
 
 		///<summary>Get the copay value for when there is no substitute fee and the exact copay fee exists.</summary>
@@ -184,12 +184,12 @@ namespace UnitTests {
 			procCode.SubstitutionCode=_listProcCodes[14].ProcCode;
 			ProcedureCodes.Update(procCode);
 			ProcedureCodes.RefreshCache();
-			Provider prov=Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv));
+			Provider prov=Providers.GetProv(Preferences.GetLong(PreferenceName.PracticeDefaultProv));
 			long provFeeSched=FeeSchedT.CreateFeeSched(FeeScheduleType.Normal,MethodBase.GetCurrentMethod().Name);
 			prov.FeeSched=provFeeSched;
 			Providers.Update(prov);
 			Providers.RefreshCache();
-			Fee defaultFee=FeeT.GetNewFee(Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv)).FeeSched,
+			Fee defaultFee=FeeT.GetNewFee(Providers.GetProv(Preferences.GetLong(PreferenceName.PracticeDefaultProv)).FeeSched,
 				ProcedureCodes.GetSubstituteCodeNum(procCode.ProcCode,"",plan.PlanNum),80);
 			double amt=InsPlans.GetAllowed(procCode.ProcCode,plan.FeeSched,plan.AllowedFeeSched,plan.CodeSubstNone,plan.PlanType,"",0,0,plan.PlanNum);
 			Assert.AreEqual(defaultFee.Amount,amt);

@@ -106,7 +106,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one HL7ProcAttach into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(HL7ProcAttach hL7ProcAttach,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO hl7procattach (";
 			if(!useExistingPK && isRandomKeys) {
 				hL7ProcAttach.HL7ProcAttachNum=ReplicationServers.GetKeyNoCache("hl7procattach","HL7ProcAttachNum");

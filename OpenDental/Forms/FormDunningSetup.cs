@@ -12,7 +12,7 @@ namespace OpenDental {
 	public partial class FormDunningSetup:ODForm {
 		private List<Dunning> _listAllDunnings;
 		private List<Clinic> _listClinics;
-		private List<Def> _listBillingTypeDefs;
+		private List<Definition> _listBillingTypeDefs;
 
 		public FormDunningSetup() {
 			InitializeComponent();
@@ -20,10 +20,10 @@ namespace OpenDental {
 		}
 
 		private void FormDunningSetup_Load(object sender,EventArgs e) {
-			_listBillingTypeDefs=Defs.GetDefsForCategory(DefCat.BillingTypes,true);
+			_listBillingTypeDefs=Definition.GetByCategory(DefinitionCategory.BillingTypes);
 			listBill.Items.Add("("+Lan.g(this,"all")+")");
 			listBill.SetSelected(0,true);
-			listBill.Items.AddRange(_listBillingTypeDefs.Select(x => x.ItemName).ToArray());
+			listBill.Items.AddRange(_listBillingTypeDefs.Select(x => x.Description).ToArray());
 			FillClinics();
 			FillGrids(true);
 		}
@@ -70,7 +70,7 @@ namespace OpenDental {
 				_listAllDunnings=Dunnings.Refresh(_listClinics.Select(x => x.ClinicNum).ToList());
 			}
 			List<Dunning> listSubDunnings=_listAllDunnings.FindAll(x => ValidateDunningFilters(x));
-			if(!Preferences.GetBool(PrefName.ShowFeatureSuperfamilies)) {
+			if(!Preference.GetBool(PreferenceName.ShowFeatureSuperfamilies)) {
 				listSubDunnings.RemoveAll(x => x.IsSuperFamily);
 			}
 			gridDunning.BeginUpdate();
@@ -81,7 +81,7 @@ namespace OpenDental {
 			gridDunning.Columns.Add(new ODGridColumn("Message",150));
 			gridDunning.Columns.Add(new ODGridColumn("Bold Message",150));
 			gridDunning.Columns.Add(new ODGridColumn("Email",35,HorizontalAlignment.Center));
-			if(Preferences.GetBool(PrefName.ShowFeatureSuperfamilies)) {
+			if(Preference.GetBool(PreferenceName.ShowFeatureSuperfamilies)) {
 				gridDunning.Columns.Add(new ODGridColumn("SF",30,HorizontalAlignment.Center));
 			}
 			if(Preferences.HasClinicsEnabled) {
@@ -95,7 +95,7 @@ namespace OpenDental {
 					row.Cells.Add(Lan.g(this,"all"));
 				}
 				else{
-					row.Cells.Add(Defs.GetName(DefCat.BillingTypes,dunnCur.BillingType));
+					row.Cells.Add(Defs.GetName(DefinitionCategory.BillingTypes,dunnCur.BillingType));
 				}
 				if(dunnCur.AgeAccount==0){
 					row.Cells.Add(Lan.g(this,"any"));
@@ -115,7 +115,7 @@ namespace OpenDental {
 				row.Cells.Add(dunnCur.DunMessage);
 				row.Cells.Add(new ODGridCell(dunnCur.MessageBold) { Bold=true,ColorText=Color.DarkRed });
 				row.Cells.Add((!string.IsNullOrEmpty(dunnCur.EmailBody) || !string.IsNullOrEmpty(dunnCur.EmailSubject))?"X":"");
-				if(Preferences.GetBool(PrefName.ShowFeatureSuperfamilies)) {
+				if(Preference.GetBool(PreferenceName.ShowFeatureSuperfamilies)) {
 					row.Cells.Add(dunnCur.IsSuperFamily?"X":"");
 				}
 				if(Preferences.HasClinicsEnabled) {
@@ -130,7 +130,7 @@ namespace OpenDental {
 		private bool ValidateDunningFilters(Dunning dunning) {
 			long clinicNum=GetSelectedClinicNum();
 			if((clinicNum!=-1 && clinicNum!=dunning.ClinicNum)
-				||(!listBill.SelectedIndices.Contains(0) && !listBill.SelectedIndices.OfType<int>().Select(x => _listBillingTypeDefs[x-1].DefNum).Contains(dunning.BillingType))
+				||(!listBill.SelectedIndices.Contains(0) && !listBill.SelectedIndices.OfType<int>().Select(x => _listBillingTypeDefs[x-1].Id).Contains(dunning.BillingType))
 				||(!radioAny.Checked && dunning.AgeAccount!=(byte)(30*new List<RadioButton> { radioAny,radio30,radio60,radio90 }.FindIndex(x => x.Checked)))//0, 30, 60, or 90
 				||(!string.IsNullOrWhiteSpace(textAdv.Text) && dunning.DaysInAdvance!=PIn.Int(textAdv.Text,false))//blank=0
 				||(!radioU.Checked && dunning.InsIsPending!=(YN)new List<RadioButton> { radioU,radioY,radioN }.FindIndex(x => x.Checked)))//0=Unknown, 1=Yes, 2=No+

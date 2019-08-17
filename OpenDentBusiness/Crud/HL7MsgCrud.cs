@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one HL7Msg into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(HL7Msg hL7Msg,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO hl7msg (";
 			if(!useExistingPK && isRandomKeys) {
 				hL7Msg.HL7MsgNum=ReplicationServers.GetKeyNoCache("hl7msg","HL7MsgNum");

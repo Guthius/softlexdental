@@ -285,7 +285,7 @@ namespace OpenDental{
 			}
 			report.ReportName=Lan.g(this,"Insurance Overpaid");
 			report.AddTitle("Title",Lan.g(this,"Insurance Overpaid"));
-			report.AddSubTitle("Practice Name",Preferences.GetString(PrefName.PracticeTitle));
+			report.AddSubTitle("Practice Name",Preference.GetString(PreferenceName.PracticeTitle));
 			if(Preferences.HasClinicsEnabled) {
 				report.AddSubTitle("Clinics",subtitleClinics);
 			}

@@ -12,9 +12,9 @@ namespace OpenDentBusiness
         ///<summary>If not using clinics then supply an empty list of clinicNums. dateStart and dateEnd can be MinVal/MaxVal to indicate "forever".</summary>
         public static DataTable GetActivePatientTable(DateTime dateStart, DateTime dateEnd, List<long> listProvNums, List<long> listClinicNums, List<long> listBillingTypes, bool hasAllProvs, bool hasAllClinics, bool hasAllBilling)
         {
-            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Prefs.HasClinicsEnabledNoCache);
+            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Preference.HasClinicsEnabledNoCache);
             List<Provider> listProvs = ReportsComplex.RunFuncOnReportServer(() => Providers.GetAll());
-            List<Def> listDefs = ReportsComplex.RunFuncOnReportServer(() => Defs.GetDefsNoCache(DefCat.BillingTypes));
+            List<Definition> listDefs = ReportsComplex.RunFuncOnReportServer(() => Definition.GetByCategory(DefinitionCategory.BillingTypes));
             List<Clinic> listClinics = ReportsComplex.RunFuncOnReportServer(() => Clinics.GetClinicsNoCache());
             DataTable table = new DataTable();
             table.Columns.Add("name");
@@ -67,7 +67,7 @@ namespace OpenDentBusiness
             Patient pat;
             for (int i = 0; i < raw.Rows.Count; i++)
             {
-                Def billingType = listDefs.FirstOrDefault(x => x.DefNum == PIn.Long(raw.Rows[i]["BillingType"].ToString()));
+                Definition billingType = listDefs.FirstOrDefault(x => x.Id == PIn.Long(raw.Rows[i]["BillingType"].ToString()));
                 row = table.NewRow();
                 pat = new Patient();
                 pat.LName = raw.Rows[i]["LName"].ToString();
@@ -85,7 +85,7 @@ namespace OpenDentBusiness
                 row["HmPhone"] = raw.Rows[i]["HmPhone"].ToString();
                 row["WkPhone"] = raw.Rows[i]["WkPhone"].ToString();
                 row["WirelessPhone"] = raw.Rows[i]["WirelessPhone"].ToString();
-                row["billingType"] = (billingType == null) ? "" : billingType.ItemValue;
+                row["billingType"] = (billingType == null) ? "" : billingType.Value;
                 row["secProv"] = Providers.GetLName(PIn.Long(raw.Rows[i]["SecProv"].ToString()), listProvs);
                 if (hasClinicsEnabled)
                 {//Using clinics

@@ -33,7 +33,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public bool IsNew;
 		public Contact ContactCur;
-		private List<Def> _listContactCategoryDefs;
+		private List<Definition> _listContactCategoryDefs;
 
 		///<summary></summary>
 		public FormContactEdit()
@@ -264,16 +264,16 @@ namespace OpenDental{
 		#endregion
 
 		private void FormContactEdit_Load(object sender, System.EventArgs e) {
-			_listContactCategoryDefs=Defs.GetDefsForCategory(DefCat.ContactCategories,true);
+			_listContactCategoryDefs=Definition.GetByCategory(DefinitionCategory.ContactCategories);
 			for(int i=0;i<_listContactCategoryDefs.Count;i++){
-				listCategory.Items.Add(_listContactCategoryDefs[i].ItemName);
-				if(ContactCur.Category==_listContactCategoryDefs[i].DefNum){
+				listCategory.Items.Add(_listContactCategoryDefs[i].Description);
+				if(ContactCur.Category==_listContactCategoryDefs[i].Id){
 					listCategory.SelectedIndex=i;
 				}
 			}
-			textLName.Text=ContactCur.LName;
-			textFName.Text=ContactCur.FName;
-			textWkPhone.Text=ContactCur.WkPhone;
+			textLName.Text=ContactCur.LastName;
+			textFName.Text=ContactCur.FirstName;
+			textWkPhone.Text=ContactCur.Phone;
 			textFax.Text=ContactCur.Fax;
 			textNotes.Text=ContactCur.Notes;
 		}
@@ -286,7 +286,7 @@ namespace OpenDental{
 				DialogResult=DialogResult.Cancel;
 			}
 			else{
-				Contacts.Delete(ContactCur);
+				Contact.Delete(ContactCur);
 				DialogResult=DialogResult.OK;
 			}
 		}
@@ -311,17 +311,17 @@ namespace OpenDental{
 				return;
 			}
 			//a category will always be selected because of the manner in which Contact is accessed
-			ContactCur.Category=_listContactCategoryDefs[listCategory.SelectedIndex].DefNum;
-			ContactCur.LName=textLName.Text;
-			ContactCur.FName=textFName.Text;
-			ContactCur.WkPhone=textWkPhone.Text;
+			ContactCur.Category=_listContactCategoryDefs[listCategory.SelectedIndex].Id;
+			ContactCur.LastName=textLName.Text;
+			ContactCur.FirstName=textFName.Text;
+			ContactCur.Phone=textWkPhone.Text;
 			ContactCur.Fax=textFax.Text;
 			ContactCur.Notes=textNotes.Text;
 			if(IsNew){
-				Contacts.Insert(ContactCur);
+                Contact.Insert(ContactCur);
 			}
 			else{
-				Contacts.Update(ContactCur);
+                Contact.Update(ContactCur);
 			}
 			DialogResult=DialogResult.OK;
 		}

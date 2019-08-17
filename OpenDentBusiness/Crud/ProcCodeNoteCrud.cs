@@ -122,7 +122,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one ProcCodeNote into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(ProcCodeNote procCodeNote,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO proccodenote (";
 			if(!useExistingPK && isRandomKeys) {
 				procCodeNote.ProcCodeNoteNum=ReplicationServers.GetKeyNoCache("proccodenote","ProcCodeNoteNum");

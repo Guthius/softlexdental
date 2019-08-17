@@ -452,9 +452,9 @@ namespace OpenDental{
    		  case "Specialty":
           setListBoxConditions();
           comboBox.Items.Clear();
-					Def[] specDefs=Defs.GetDefsForCategory(DefCat.ProviderSpecialties,true).ToArray();
+					Definition[] specDefs=Definition.GetByCategory(DefinitionCategory.ProviderSpecialties).ToArray();
 					for(int i=0;i<specDefs.Length;i++) {
-						comboBox.Items.Add(Lan.g("enumDentalSpecialty",specDefs[i].ItemName));
+						comboBox.Items.Add(Lan.g("enumDentalSpecialty",specDefs[i].Description));
 					}
 					break;
    		  case "UsingTIN":
@@ -492,7 +492,7 @@ namespace OpenDental{
 			else if(isDropDown){
 				if(DropListFilter.SelectedItem.ToString()=="Specialty"){
 					sItem="";
-					Def[] specDefs=Defs.GetDefsForCategory(DefCat.ProviderSpecialties,true).ToArray();
+					Definition[] specDefs=Definition.GetByCategory(DefinitionCategory.ProviderSpecialties).ToArray();
 					for(int i=0;i<comboBox.SelectedIndices.Count;i++){
 						if(i==0){ 
               sItem="(";
@@ -501,7 +501,7 @@ namespace OpenDental{
               sItem="OR ";
             }
 						sItem+="Specialty "+ListConditions.SelectedItem.ToString()+" '"+
-							specDefs[comboBox.SelectedIndices[i]].DefNum.ToString()+"'"; 
+							specDefs[comboBox.SelectedIndices[i]].Id.ToString()+"'"; 
 						if(i==comboBox.SelectedIndices.Count-1)
 							sItem+=")";
 						ListPrerequisites.Items.Add(sItem);

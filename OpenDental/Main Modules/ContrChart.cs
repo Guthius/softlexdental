@@ -3458,10 +3458,10 @@ namespace OpenDental
         {
             listPriorities.Items.Clear();
             listPriorities.Items.Add(Lan.g("ContrChart", "No Priority"));
-            List<Def> listDefs = Defs.GetDefsForCategory(DefCat.TxPriorities, true);
+            List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.TxPriorities);;
             for (int i = 0; i < listDefs.Count; i++)
             {
-                listPriorities.Items.Add(listDefs[i].ItemName);
+                listPriorities.Items.Add(listDefs[i].Description);
             }
         }
 
@@ -3475,7 +3475,7 @@ namespace OpenDental
                 tabProc.TabPages.Remove(tabCustomer);
             
             //ComputerPref computerPref=ComputerPrefs.GetForLocalComputer();
-            toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)Preferences.GetInt(PrefName.UseInternationalToothNumbers));
+            toothChart.SetToothNumberingNomenclature((ToothNumberingNomenclature)Preference.GetInt(PreferenceName.UseInternationalToothNumbers));
             toothChart.UseHardware = ComputerPrefs.LocalComputer.GraphicsUseHardware;
             toothChart.PreferredPixelFormatNumber = ComputerPrefs.LocalComputer.PreferredPixelFormatNum;
             toothChart.DeviceFormat = new ToothChartDirectX.DirectXDeviceFormat(ComputerPrefs.LocalComputer.DirectXFormat);
@@ -3540,7 +3540,7 @@ namespace OpenDental
                         ToolBarMain.Buttons["Commlog"].Enabled = false;
                         webBrowserEcw.Url = null;
                     }
-                    if (Preferences.GetBool(PrefName.ShowFeatureEhr))
+                    if (Preference.GetBool(PreferenceName.ShowFeatureEhr))
                     {
                         ToolBarMain.Buttons["EHR"].Enabled = false;
                     }
@@ -3650,7 +3650,7 @@ namespace OpenDental
             {//button will show in this toolbar instead of the usual one.
                 ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Commlog"), Resources.IconRawAccessLog, Lan.g(this, "New Commlog Entry"), "Commlog"));
             }
-            if (Preferences.GetBool(PrefName.ShowFeatureEhr))
+            if (Preference.GetBool(PreferenceName.ShowFeatureEhr))
             {
                 ToolBarMain.Buttons.Add(new ODToolBarButton("EHR", null, "", "EHR"));
             }
@@ -3669,7 +3669,7 @@ namespace OpenDental
                 button = new ODToolBarButton("Layout", null, "", "Layout");
                 button.Style = ODToolBarButtonStyle.DropDownButton;
                 List<MenuItem> listMenuItems = new List<MenuItem>(new[] { new MenuItem(Lan.g(this, "Add/Edit Layouts"), LayoutMenuItem_Click), new MenuItem("-") });
-                long selectedLayoutSheetDefNum = (DynamicLayoutCur?.SheetDefNum ?? Preferences.GetLong(PrefName.ChartDefaultLayoutSheetDefNum));
+                long selectedLayoutSheetDefNum = (DynamicLayoutCur?.SheetDefNum ?? Preference.GetLong(PreferenceName.ChartDefaultLayoutSheetDefNum));
                 listMenuItems.AddRange(
                     ListLayoutSheetDefs.FindAll(x => x.SheetDefNum > 0)//add all custom SheetDefs
                         .Select(x => new MenuItem(x.Description, LayoutMenuItem_Click) { Tag = x, Checked = (selectedLayoutSheetDefNum == x.SheetDefNum) })
@@ -3760,7 +3760,7 @@ namespace OpenDental
 
         private void PlannedApptPromptHelper()
         {
-            if (PatCur == null || !Preferences.GetBool(PrefName.ShowPlannedAppointmentPrompt))
+            if (PatCur == null || !Preference.GetBool(PreferenceName.ShowPlannedAppointmentPrompt))
             {
                 return;
             }
@@ -3792,9 +3792,9 @@ namespace OpenDental
             {
                 return;
             }
-            List<Def> treatPlanPriorities = Defs.GetDefsForCategory(DefCat.TxPriorities, true);
+            List<Definition> treatPlanPriorities = Definition.GetByCategory(DefinitionCategory.TxPriorities);;
             List<Procedure> listProcsHighestPriority = listEligibleProcs
-                .GroupBy(x => treatPlanPriorities.Find(y => y.DefNum == x.Priority)?.ItemOrder ?? int.MaxValue, x => x)
+                .GroupBy(x => treatPlanPriorities.Find(y => y.Id == x.Priority)?.SortOrder ?? int.MaxValue, x => x)
                 .OrderBy(x => x.Key).First()?.ToList();
             int itemOrder = _loadData.TablePlannedAppts.Rows.Count + 1;
             List<long> listProcNums = listProcsHighestPriority.Select(x => x.ProcNum).ToList();
@@ -4071,7 +4071,7 @@ namespace OpenDental
                         labelECWerror.Visible = true;
                     }
                 }
-                if (Preferences.GetBool(PrefName.ShowFeatureEhr))
+                if (Preference.GetBool(PreferenceName.ShowFeatureEhr))
                 { //didn't work either
                   //if(ToolBarMain.Buttons["EHR"]!=null) {
                     ToolBarMain.Buttons["EHR"].Enabled = true;
@@ -4087,7 +4087,7 @@ namespace OpenDental
                 butErxAccess.Enabled = true;
                 if (PrevPtNum != PatCur.PatNum)
                 {//reset to TP status on every new patient selected
-                    if (Preferences.GetBool(PrefName.AutoResetTPEntryStatus))
+                    if (Preference.GetBool(PreferenceName.AutoResetTPEntryStatus))
                     {
                         radioEntryTP.Select();
                     }
@@ -4177,7 +4177,7 @@ namespace OpenDental
 
         private void EasyHideClinicalData()
         {
-            if (Preferences.GetBool(PrefName.EasyHideClinical))
+            if (Preference.GetBool(PreferenceName.EasyHideClinical))
             {
                 gridPtInfo.Visible = false;
                 checkShowE.Visible = false;
@@ -4313,7 +4313,7 @@ namespace OpenDental
         private bool NewCropIsAccountIdValid()
         {
             bool validKey = false;
-            string newCropAccountId = Preferences.GetString(PrefName.NewCropAccountId);
+            string newCropAccountId = Preference.GetString(PreferenceName.NewCropAccountId);
             if (Regex.IsMatch(newCropAccountId, "[0-9]+\\-[0-9A-Za-z]{3}[0-9]{2}"))
             { //Must contain at least 1 digit for patnum, 1 dash, 3 random alpha-numeric characters, then 2 digits for checksum.
               //Verify key checksum to make certain that this key was generated by OD and not a reseller.
@@ -4352,7 +4352,7 @@ namespace OpenDental
             {
                 return false;
             }
-            string newCropAccountId = Preferences.GetString(PrefName.NewCropAccountId);
+            string newCropAccountId = Preference.GetString(PreferenceName.NewCropAccountId);
             if (newCropAccountId == "")
             {//We check for NewCropAccountID validity below, but we also need to be sure to exit this check for resellers if blank.
                 return false;
@@ -4361,7 +4361,7 @@ namespace OpenDental
             {
                 //The NewCropAccountID will be invalid for resellers, because the checksum will be wrong.
                 //Therefore, resellers should be allowed to continue if both the NewCropName and NewCropPassword are specified. NewCrop does not allow blank passwords.
-                if (Preferences.GetString(PrefName.NewCropName) == "" || Preferences.GetString(PrefName.NewCropPassword) == "")
+                if (Preference.GetString(PreferenceName.NewCropName) == "" || Preference.GetString(PreferenceName.NewCropPassword) == "")
                 {
                     return false;
                 }
@@ -4463,7 +4463,7 @@ namespace OpenDental
             { //In case NewCrop returns invalid XML.
                 return false;//abort gracefully
             }
-            DateTime rxStartDateT = Preferences.GetDateTime(PrefName.ElectronicRxDateStartedUsing131);
+            DateTime rxStartDateT = Preference.GetDateTime(PreferenceName.ElectronicRxDateStartedUsing131);
             XmlNode nodeNewDataSet = xml.FirstChild;
             List<long> listActiveMedicationPatNums = new List<long>();
             List<RxPat> listNewRx = new List<RxPat>();
@@ -4681,7 +4681,7 @@ namespace OpenDental
                         rx.ProvNum = rxOld.ProvNum;//Preserve the provnum if already in the database, because it may have already been corrected by the user after the previous download.
                     }
                 }
-                long medicationPatNum = Erx.InsertOrUpdateErxMedication(rxOld, rx, rxCui, strDrugName, strGenericName, isProv);
+                long medicationPatNum = Erx.InsertOrUpdateErxMedication(rxOld, rx, rxCui.ToString(), strDrugName, strGenericName, isProv);
                 listActiveMedicationPatNums.Add(medicationPatNum);
                 if (rxOld == null)
                 {//Only add the rx if it is new.  We don't want to trigger automation for existing prescriptions.
@@ -4784,7 +4784,7 @@ namespace OpenDental
             #endregion Provider Term Date Check
             if (erxOption == ErxOption.Legacy)
             {
-                string newCropAccountId = Preferences.GetString(PrefName.NewCropAccountId);
+                string newCropAccountId = Preference.GetString(PreferenceName.NewCropAccountId);
                 if (newCropAccountId == "")
                 {//NewCrop has not been enabled yet.
                     if (!MsgBox.Show(this, MsgBoxButtons.YesNo, "Continuing will enable basic Electronic Rx (eRx).  Fees are associated with this secure e-prescribing system.  See our online manual for details.  To enable comprehensive eRx (with drug interaction checks, formulary checks, etc.), contact support.  At this time, eRx only works for the United States and its territories, including Puerto Rico.  Continue?"))
@@ -4800,7 +4800,7 @@ namespace OpenDental
                     {
                         writer.WriteStartElement("CustomerIdRequest");
                         writer.WriteStartElement("RegistrationKey");
-                        writer.WriteString(Preferences.GetString(PrefName.RegistrationKey));
+                        writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
                         writer.WriteEndElement();
                         writer.WriteEndElement();
                     }
@@ -4810,10 +4810,10 @@ namespace OpenDental
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
 					updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
 #endif
-                    if (Preferences.GetString(PrefName.UpdateWebProxyAddress) != "")
+                    if (Preference.GetString(PreferenceName.UpdateWebProxyAddress) != "")
                     {
-                        IWebProxy proxy = new WebProxy(Preferences.GetString(PrefName.UpdateWebProxyAddress));
-                        ICredentials cred = new NetworkCredential(Preferences.GetString(PrefName.UpdateWebProxyUserName), Preferences.GetString(PrefName.UpdateWebProxyPassword));
+                        IWebProxy proxy = new WebProxy(Preference.GetString(PreferenceName.UpdateWebProxyAddress));
+                        ICredentials cred = new NetworkCredential(Preference.GetString(PreferenceName.UpdateWebProxyUserName), Preference.GetString(PreferenceName.UpdateWebProxyPassword));
                         proxy.Credentials = cred;
                         updateService.Proxy = proxy;
                     }
@@ -4839,7 +4839,7 @@ namespace OpenDental
                         checkSum += Convert.ToByte(newCropAccountId[newCropAccountId.IndexOf('-') + 2]) * 5;
                         checkSum += Convert.ToByte(newCropAccountId[newCropAccountId.IndexOf('-') + 3]) * 7;
                         newCropAccountId += (checkSum % 100).ToString().PadLeft(2, '0');
-                        Prefs.UpdateString(PrefName.NewCropAccountId, newCropAccountId);
+                        Preference.Update(PreferenceName.NewCropAccountId, newCropAccountId);
                         programErx.Enabled = true;
                         Programs.Update(programErx);
                     }
@@ -4858,8 +4858,8 @@ namespace OpenDental
                     }
                     if (!NewCropIsAccountIdValid())
                     {
-                        string newCropName = Preferences.GetString(PrefName.NewCropName);
-                        string newCropPassword = Preferences.GetString(PrefName.NewCropPassword);
+                        string newCropName = Preference.GetString(PreferenceName.NewCropName);
+                        string newCropPassword = Preference.GetString(PreferenceName.NewCropPassword);
                         if (newCropName == "" || newCropPassword == "")
                         { //NewCrop does not allow blank passwords.
                             MsgBox.Show(this, "NewCropName preference and NewCropPassword preference must not be blank when using a NewCrop AccountID provided by a reseller.");
@@ -4886,7 +4886,7 @@ namespace OpenDental
                 if (Preferences.HasClinicsEnabled)
                 {
                     clinicNum = Clinics.ClinicNum;
-                    if (!Preferences.GetBool(PrefName.ElectronicRxClinicUseSelected))
+                    if (!Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected))
                     {
                         clinicNum = PatCur.ClinicNum;
                     }
@@ -5060,7 +5060,7 @@ namespace OpenDental
                 //Clinic Validation
                 if (Preferences.HasClinicsEnabled)
                 {
-                    if (Preferences.GetBool(PrefName.ElectronicRxClinicUseSelected))
+                    if (Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected))
                     {
                         clinic = Clinics.GetClinic(Clinics.ClinicNum);
                     }
@@ -5075,13 +5075,13 @@ namespace OpenDental
                 }
                 if (isEmp)
                 {
-                    emp = Employees.GetEmp(Security.CurUser.EmployeeNum);
-                    if (emp.LName == "")
+                    emp = Employee.GetById(Security.CurUser.EmployeeNum);
+                    if (emp.LastName == "")
                     {//Checked in UI, but check here just in case this database was converted from another software.
                         MessageBox.Show(Lan.g(this, "Employee last name missing for user") + ": " + Security.CurUser.UserName);
                         return;
                     }
-                    if (emp.FName == "")
+                    if (emp.FirstName == "")
                     {//Not validated in UI.
                         MessageBox.Show(Lan.g(this, "Employee first name missing for user") + ": " + Security.CurUser.UserName);
                         return;
@@ -5107,9 +5107,9 @@ namespace OpenDental
             bool isAccessAllowed = true;
             UpdateErxAccess(npi, "", 0, "", "", erxOption);//0/blank/blank for clinicNum/clinicid/clinickey is fine because we don't enable/disable the clinic for NewCrop.
             ProviderErx provErx = ProviderErxs.GetOneForNpiAndOption(npi, erxOption);
-            if (!Preferences.GetBool(PrefName.NewCropIsLegacy) && !provErx.IsIdentifyProofed)
+            if (!Preference.GetBool(PreferenceName.NewCropIsLegacy) && !provErx.IsIdentifyProofed)
             {
-                if (Preferences.GetString(PrefName.NewCropPartnerName) != "" || Preferences.GetString(PrefName.NewCropPassword) != "")
+                if (Preference.GetString(PreferenceName.NewCropPartnerName) != "" || Preference.GetString(PreferenceName.NewCropPassword) != "")
                 {//Customer of a distributor
                     MessageBox.Show(Lan.g(this, "Provider") + " " + prov.Abbr + " "
                         + Lan.g(this, "must complete Identity Proofing (IDP) before using eRx.  Call support for details."));
@@ -5208,7 +5208,7 @@ namespace OpenDental
             ODThread thread = new ODThread((odThread) =>
             {
                 long clinicNum = Clinics.ClinicNum;
-                if (Preferences.HasClinicsEnabled && !Preferences.GetBool(PrefName.ElectronicRxClinicUseSelected))
+                if (Preferences.HasClinicsEnabled && !Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected))
                 {
                     clinicNum = PatCur.ClinicNum;
                 }
@@ -5355,7 +5355,7 @@ namespace OpenDental
                 if (erxOption == ErxOption.Legacy)
                 {
                     provErxCur.IsEnabled = ErxStatus.Disabled;
-                    if (Preferences.GetBool(PrefName.NewCropIsLegacy))
+                    if (Preference.GetBool(PreferenceName.NewCropIsLegacy))
                     {
                         provErxCur.IsEnabled = ErxStatus.Enabled;
                     }
@@ -5383,24 +5383,24 @@ namespace OpenDental
                 DoseSpot.SyncClinicErxsWithHQ();
             }
             bool isDistributorCustomer = false;
-            if (Preferences.GetString(PrefName.NewCropPartnerName) != "" || Preferences.GetString(PrefName.NewCropPassword) != "")
+            if (Preference.GetString(PreferenceName.NewCropPartnerName) != "" || Preference.GetString(PreferenceName.NewCropPassword) != "")
             {
                 isDistributorCustomer = true;
             }
             bool isOdUpdateAddress = false;
-            if (Preferences.GetString(PrefName.UpdateServerAddress).ToLower().Contains("opendentalsoft.com") ||
-                Preferences.GetString(PrefName.UpdateServerAddress).ToLower().Contains("open-dent.com"))
+            if (Preference.GetString(PreferenceName.UpdateServerAddress).ToLower().Contains("opendentalsoft.com") ||
+                Preference.GetString(PreferenceName.UpdateServerAddress).ToLower().Contains("open-dent.com"))
             {
                 isOdUpdateAddress = true;
             }
             DateTime dateLastAccessMonth = DateTime.MinValue;
             if (erxOption == ErxOption.Legacy)
             {
-                dateLastAccessMonth = Preferences.GetDate(PrefName.NewCropDateLastAccessCheck);
+                dateLastAccessMonth = Preference.GetDate(PreferenceName.NewCropDateLastAccessCheck);
             }
             else
             {//DoseSpot
-                dateLastAccessMonth = Preferences.GetDate(PrefName.DoseSpotDateLastAccessCheck);
+                dateLastAccessMonth = Preference.GetDate(PreferenceName.DoseSpotDateLastAccessCheck);
             }
             dateLastAccessMonth = new DateTime(dateLastAccessMonth.Year, dateLastAccessMonth.Month, 1);
             if (isDistributorCustomer && isOdUpdateAddress)
@@ -5409,7 +5409,7 @@ namespace OpenDental
                 //Do not contact the OD web service.
             }
             else if (provErxCur.IsEnabled != ErxStatus.Enabled //If prov is not yet enabled, always check with OD HQ to see if the prov has been enabled yet.
-                || (erxOption == ErxOption.Legacy && !Preferences.GetBool(PrefName.NewCropIsLegacy) && !provErxCur.IsIdentifyProofed)//If new prov is not yet identity proofed, send to OD HQ.
+                || (erxOption == ErxOption.Legacy && !Preference.GetBool(PreferenceName.NewCropIsLegacy) && !provErxCur.IsIdentifyProofed)//If new prov is not yet identity proofed, send to OD HQ.
                 || !provErxCur.IsSentToHq//If prov has not been sent to OD HQ yet, always send to OD HQ so we can track our providers using eRx.
                 || dateLastAccessMonth < new DateTime(DateTimeOD.Today.Year, DateTimeOD.Today.Month, 1))//If it has been over a month since sent to OD HQ, send.
             {
@@ -5424,7 +5424,7 @@ namespace OpenDental
                 {
                     writer.WriteStartElement("ErxAccessRequest");
                     writer.WriteStartElement("RegistrationKey");
-                    writer.WriteString(Preferences.GetString(PrefName.RegistrationKey));
+                    writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
                     writer.WriteEndElement();//End reg key
                     List<ProviderErx> listUnsentProviders = ProviderErxs.GetAllUnsent();
                     for (int i = 0; i < listUnsentProviders.Count; i++)
@@ -5444,10 +5444,10 @@ namespace OpenDental
 				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
 					updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
 #endif
-                if (Preferences.GetString(PrefName.UpdateWebProxyAddress) != "")
+                if (Preference.GetString(PreferenceName.UpdateWebProxyAddress) != "")
                 {
-                    IWebProxy proxy = new WebProxy(Preferences.GetString(PrefName.UpdateWebProxyAddress));
-                    ICredentials cred = new NetworkCredential(Preferences.GetString(PrefName.UpdateWebProxyUserName), Preferences.GetString(PrefName.UpdateWebProxyPassword));
+                    IWebProxy proxy = new WebProxy(Preference.GetString(PreferenceName.UpdateWebProxyAddress));
+                    ICredentials cred = new NetworkCredential(Preference.GetString(PreferenceName.UpdateWebProxyUserName), Preference.GetString(PreferenceName.UpdateWebProxyPassword));
                     proxy.Credentials = cred;
                     updateService.Proxy = proxy;
                 }
@@ -5544,14 +5544,14 @@ namespace OpenDental
                     }
                     if (erxOption == ErxOption.Legacy)
                     {
-                        if (Prefs.UpdateDateT(PrefName.NewCropDateLastAccessCheck, DateTimeOD.Today))
+                        if (Preference.Update(PreferenceName.NewCropDateLastAccessCheck, DateTimeOD.Today))
                         {
                             DataValid.SetInvalid(InvalidType.Prefs);
                         }
                     }
                     else
                     {//DoseSpot
-                        if (Prefs.UpdateDateT(PrefName.DoseSpotDateLastAccessCheck, DateTimeOD.Today))
+                        if (Preference.Update(PreferenceName.DoseSpotDateLastAccessCheck, DateTimeOD.Today))
                         {
                             DataValid.SetInvalid(InvalidType.Prefs);
                         }
@@ -6211,8 +6211,8 @@ namespace OpenDental
             gridPtInfo.Rows.Clear();
             ODGridCell cell;
             ODGridRow row;
-            List<Def> listMiscColorDefs = Defs.GetDefsForCategory(DefCat.MiscColors);
-            List<Def> listMiscColorShortDefs = Defs.GetDefsForCategory(DefCat.MiscColors, true);//Preserving old behavior.
+            List<Definition> listMiscColorDefs = Definition.GetByCategory(DefinitionCategory.MiscColors);;
+            List<Definition> listMiscColorShortDefs = Definition.GetByCategory(DefinitionCategory.MiscColors);;//Preserving old behavior.
             List<DisplayField> fields = DisplayFields.GetForCategory(DisplayFieldCategory.ChartPatientInformation);
             DisplayField fieldCur;
             for (int f = 0; f < fields.Count; f++)
@@ -6260,7 +6260,7 @@ namespace OpenDental
                         }
                         cell.Bold = true;
                         row.Cells.Add(cell);
-                        row.ColorBackG = listMiscColorDefs[3].ItemColor;
+                        row.ColorBackG = listMiscColorDefs[3].Color;
                         row.Tag = "tabAllergies";
                         if (allergyList.Count > 0)
                         {
@@ -6279,7 +6279,7 @@ namespace OpenDental
                             cell.ColorText = Color.Red;
                             row.Cells.Add(cell);
                             row.Cells.Add(allergyList[i].Reaction);
-                            row.ColorBackG = listMiscColorDefs[3].ItemColor;
+                            row.ColorBackG = listMiscColorDefs[3].Color;
                             row.Tag = "tabAllergies";
                             if (i != allergyList.Count - 1)
                             {
@@ -6302,7 +6302,7 @@ namespace OpenDental
                     #endregion AskToArriveEarly
                     #region Billing Type
                     case "Billing Type":
-                        row.Cells.Add(Defs.GetName(DefCat.BillingTypes, PatCur.BillingType));
+                        row.Cells.Add(Defs.GetName(DefinitionCategory.BillingTypes, PatCur.BillingType));
                         break;
                     #endregion Billing Type
                     #region Birthdate
@@ -6334,7 +6334,7 @@ namespace OpenDental
                         }
                         else
                         {
-                            count = Adjustments.GetAdjustForPatByType(PatCur.PatNum, Preferences.GetLong(PrefName.BrokenAppointmentAdjustmentType)).Count;
+                            count = Adjustments.GetAdjustForPatByType(PatCur.PatNum, Preference.GetLong(PreferenceName.BrokenAppointmentAdjustmentType)).Count;
                         }
                         row.Cells.Add(count.ToString());
                         break;
@@ -6387,26 +6387,22 @@ namespace OpenDental
                         cell.ColorText = Color.Red;
                         cell.Bold = true;
                         row.Cells.Add(cell);
-                        row.ColorBackG = listMiscColorDefs[3].ItemColor;
+                        row.ColorBackG = listMiscColorDefs[3].Color;
                         row.Tag = "tabMedical";
                         break;
                     #endregion Med Urgent
                     #region Medical Summary
                     case "Medical Summary":
                         row.Cells.Add(PatientNoteCur.Medical);
-                        row.ColorBackG = listMiscColorDefs[3].ItemColor;
+                        row.ColorBackG = listMiscColorDefs[3].Color;
                         row.Tag = "tabMedical";
                         break;
                     #endregion Medical Summary
                     #region Medications
                     case "Medications":
-                        if (doRefreshData || _loadData.TableMeds == null)
+                        if (doRefreshData)
                         {
-                            Medications.RefreshCache();
-                        }
-                        else
-                        {
-                            Medications.FillCacheFromTable(_loadData.TableMeds);
+                            Medication.Refresh();
                         }
                         if (doRefreshData || _loadData.ListMedPats == null)
                         {
@@ -6425,7 +6421,7 @@ namespace OpenDental
                         }
                         cell.Bold = true;
                         row.Cells.Add(cell);
-                        row.ColorBackG = listMiscColorDefs[3].ItemColor;
+                        row.ColorBackG = listMiscColorDefs[3].Color;
                         row.Tag = "tabMedications";
                         if (medList.Count > 0)
                         {
@@ -6447,11 +6443,11 @@ namespace OpenDental
                             }
                             else
                             {
-                                med = Medications.GetMedication(medList[i].MedicationNum);
-                                text = med.MedName;
-                                if (med.MedicationNum != med.GenericNum)
+                                med = Medication.GetById(medList[i].MedicationNum);
+                                text = med.Description;
+                                if (med.GenericId.HasValue)
                                 {
-                                    text += "(" + Medications.GetMedication(med.GenericNum).MedName + ")";
+                                    text += "(" + Medication.GetById(med.GenericId.Value).Description + ")";
                                 }
                                 row.Cells.Add(text);
                             }
@@ -6459,14 +6455,14 @@ namespace OpenDental
                             string noteMedGeneric = "";
                             if (medList[i].MedicationNum != 0)
                             {
-                                noteMedGeneric = Medications.GetGeneric(medList[i].MedicationNum).Notes;
+                                noteMedGeneric = Medication.GetGeneric(medList[i].MedicationNum).Notes;
                             }
                             if (noteMedGeneric != "")
                             {
                                 text += "(" + noteMedGeneric + ")";
                             }
                             row.Cells.Add(text);
-                            row.ColorBackG = listMiscColorDefs[3].ItemColor;
+                            row.ColorBackG = listMiscColorDefs[3].Color;
                             row.Tag = "tabMedications";
                             if (i != medList.Count - 1)
                             {
@@ -6503,7 +6499,7 @@ namespace OpenDental
                                 row.Cells.Add(fieldCur.Description);
                             }
                             row.Cells.Add(PatRestrictions.GetPatRestrictDesc(listPatRestricts[i].PatRestrictType));
-                            row.ColorBackG = listMiscColorShortDefs[10].ItemColor;//index 10 is Patient Restrictions (hard coded in convertdatabase4)
+                            row.ColorBackG = listMiscColorShortDefs[10].Color;//index 10 is Patient Restrictions (hard coded in convertdatabase4)
                             if (i == listPatRestricts.Count - 1)
                             {//last row added outside of switch statement
                                 break;
@@ -6562,7 +6558,7 @@ namespace OpenDental
                             cell.ColorText = Color.Red;
                             cell.Bold = true;
                             row.Cells.Add(cell);
-                            row.ColorBackG = listMiscColorDefs[3].ItemColor;
+                            row.ColorBackG = listMiscColorDefs[3].Color;
                             row.Tag = "tabMedical";
                             gridPtInfo.Rows.Add(row);
                         }
@@ -6608,7 +6604,7 @@ namespace OpenDental
                         }
                         cell.Bold = true;
                         row.Cells.Add(cell);
-                        row.ColorBackG = listMiscColorDefs[3].ItemColor;
+                        row.ColorBackG = listMiscColorDefs[3].Color;
                         row.Tag = "tabProblems";
                         if (DiseaseList.Count > 0)
                         {
@@ -6625,7 +6621,7 @@ namespace OpenDental
                             row = new ODGridRow();
                             if (DiseaseList[i].DiseaseDefNum != 0)
                             {
-                                cell = new ODGridCell(DiseaseDefs.GetName(DiseaseList[i].DiseaseDefNum));
+                                cell = new ODGridCell(DiseaseDef.GetName(DiseaseList[i].DiseaseDefNum));
                                 cell.ColorText = Color.Red;
                                 cell.Bold = true;
                                 row.Cells.Add(cell);
@@ -6634,13 +6630,13 @@ namespace OpenDental
                             else
                             {
                                 row.Cells.Add("");
-                                cell = new ODGridCell(DiseaseDefs.GetItem(DiseaseList[i].DiseaseDefNum)?.DiseaseName ?? Lan.g(this, "INVALID PROBLEM"));
+                                cell = new ODGridCell(DiseaseDef.GetById(DiseaseList[i].DiseaseDefNum)?.Name ?? Lan.g(this, "INVALID PROBLEM"));
                                 cell.ColorText = Color.Red;
                                 cell.Bold = true;
                                 row.Cells.Add(cell);
                                 //row.Cells.Add(DiseaseList[i].PatNote);//no place to show a pat note
                             }
-                            row.ColorBackG = listMiscColorDefs[3].ItemColor;
+                            row.ColorBackG = listMiscColorDefs[3].Color;
                             row.Tag = "tabProblems";
                             if (i != DiseaseList.Count - 1)
                             {
@@ -6679,13 +6675,13 @@ namespace OpenDental
                         {
                             row.Cells.Add(Lan.g("TablePatient", "None"));
                             row.Tag = "References";
-                            row.ColorBackG = listMiscColorShortDefs[8].ItemColor;
+                            row.ColorBackG = listMiscColorShortDefs[8].Color;
                         }
                         else
                         {
                             row.Cells.Add(Lan.g("TablePatient", ""));
                             row.Tag = "References";
-                            row.ColorBackG = listMiscColorShortDefs[8].ItemColor;
+                            row.ColorBackG = listMiscColorShortDefs[8].Color;
                             gridPtInfo.Rows.Add(row);
                         }
                         for (int i = 0; i < custREList.Count; i++)
@@ -6694,7 +6690,7 @@ namespace OpenDental
                             row.Cells.Add(custREList[i].DateEntry.ToShortDateString());
                             row.Cells.Add(CustReferences.GetCustNameFL(custREList[i].PatNumRef));
                             row.Tag = custREList[i];
-                            row.ColorBackG = listMiscColorShortDefs[8].ItemColor;
+                            row.ColorBackG = listMiscColorShortDefs[8].Color;
                             if (i < custREList.Count - 1)
                             {
                                 gridPtInfo.Rows.Add(row);
@@ -6749,13 +6745,13 @@ namespace OpenDental
                     #region Service Notes
                     case "Service Notes":
                         row.Cells.Add(PatientNoteCur.Service);
-                        row.ColorBackG = listMiscColorDefs[3].ItemColor;
+                        row.ColorBackG = listMiscColorDefs[3].Color;
                         row.Tag = "tabMedical";
                         break;
                     #endregion Service Notes
                     #region Specialty
                     case "Specialty":
-                        row.Cells.Add(Patients.GetPatientSpecialtyDef(PatCur.PatNum)?.ItemName ?? "");
+                        row.Cells.Add(Patients.GetPatientSpecialtyDef(PatCur.PatNum)?.Description ?? "");
                         row.Tag = null;
                         break;
                     #endregion Specialty
@@ -6778,7 +6774,7 @@ namespace OpenDental
                     #endregion Super Head
                     #region Tobacco Use (Patient Smoking Status)
                     case "Tobacco Use":
-                        if (!Preferences.GetBool(PrefName.ShowFeatureEhr))
+                        if (!Preference.GetBool(PreferenceName.ShowFeatureEhr))
                         {
                             continue;
                         }
@@ -6789,7 +6785,7 @@ namespace OpenDental
                         }
                         List<EhrMeasureEvent> listTobaccoStatuses = _loadData.ListTobaccoStatuses
                             .OrderByDescending(x => x.DateTEvent).Take(3).ToList();//only display the last three assessments at most
-                        row = new ODGridRow() { ColorBackG = listMiscColorDefs[3].ItemColor, Tag = "tabTobaccoUse" };
+                        row = new ODGridRow() { ColorBackG = listMiscColorDefs[3].Color, Tag = "tabTobaccoUse" };
                         row.Cells.Add(new ODGridCell(Text = fieldCur.Description == "" ? fieldCur.InternalName : fieldCur.Description) { Bold = true });
                         row.Cells.Add(listTobaccoStatuses.Count > 0 ? "" : Lan.g("TableChartPtInfo", "none"));
                         if (listTobaccoStatuses.Count > 0)
@@ -6800,7 +6796,7 @@ namespace OpenDental
                         for (int i = 0; i < listTobaccoStatuses.Count; i++)
                         {//show the last three tobacco use assessments at most
                             EhrMeasureEvent eCur = listTobaccoStatuses[i];
-                            row = new ODGridRow() { ColorBackG = listMiscColorDefs[3].ItemColor, Tag = "tabTobaccoUse" };
+                            row = new ODGridRow() { ColorBackG = listMiscColorDefs[3].Color, Tag = "tabTobaccoUse" };
                             snmCur = Snomeds.GetByCode(eCur.CodeValueResult);
                             row.Cells.Add(snmCur != null ? snmCur.Description : "");
                             row.Cells.Add(eCur.DateTEvent.ToShortDateString() + (eCur.MoreInfo == "" ? "" : (" - " + eCur.MoreInfo)));
@@ -7595,7 +7591,7 @@ namespace OpenDental
             }
             row.ColorText = Color.FromArgb(PIn.Int(rowCur["colorText"].ToString()));
             long provNum = PIn.Long(rowCur["ProvNum"].ToString());
-            if (Preferences.GetBool(PrefName.UseProviderColorsInChart)
+            if (Preference.GetBool(PreferenceName.UseProviderColorsInChart)
                     && procNumCur > 0
                     && provNum > 0
                     && new[] { ProcStat.C, ProcStat.EC }.Contains((ProcStat)PIn.Int(rowCur["ProcStatus"].ToString())))
@@ -7712,8 +7708,8 @@ namespace OpenDental
                 long treatPlanNumCur = _listTreatPlans[gridTreatPlans.SelectedIndices[i]].TreatPlanNum;
                 List<TreatPlanAttach> listTreatPlanAttaches = (List<TreatPlanAttach>)gridTreatPlans.Rows[gridTreatPlans.SelectedIndices[i]].Tag;
                 List<Procedure> listProcsForTP = Procedures.GetManyProc(listTreatPlanAttaches.Select(x => x.ProcNum).ToList(), false)
-                    .OrderBy(x => Defs.GetOrder(DefCat.TxPriorities, listTreatPlanAttaches.FirstOrDefault(y => y.ProcNum == x.ProcNum).Priority) < 0)
-                    .ThenBy(x => Defs.GetOrder(DefCat.TxPriorities, listTreatPlanAttaches.FirstOrDefault(y => y.ProcNum == x.ProcNum).Priority))
+                    .OrderBy(x => Defs.GetOrder(DefinitionCategory.TxPriorities, listTreatPlanAttaches.FirstOrDefault(y => y.ProcNum == x.ProcNum).Priority) < 0)
+                    .ThenBy(x => Defs.GetOrder(DefinitionCategory.TxPriorities, listTreatPlanAttaches.FirstOrDefault(y => y.ProcNum == x.ProcNum).Priority))
                     .ThenBy(x => Tooth.ToInt(x.ToothNum))
                     .ThenBy(x => x.ProcDate).ToList();
                 List<ProcTP> listProcTPsCur = new List<ProcTP>();
@@ -7722,7 +7718,7 @@ namespace OpenDental
                 {
                     row = new TpRow();
                     //Fill TpRow object with information.
-                    row.Priority = Defs.GetName(DefCat.TxPriorities, listTreatPlanAttaches.FirstOrDefault(x => x.ProcNum == listProcsForTP[j].ProcNum).Priority);
+                    row.Priority = Defs.GetName(DefinitionCategory.TxPriorities, listTreatPlanAttaches.FirstOrDefault(x => x.ProcNum == listProcsForTP[j].ProcNum).Priority);
                     row.Tth = Tooth.ToInternat(listProcsForTP[j].ToothNum);
                     if (ProcedureCodes.GetProcCode(listProcsForTP[j].CodeNum).TreatArea == TreatmentArea.Surf)
                     {
@@ -7730,7 +7726,7 @@ namespace OpenDental
                     }
                     else if (ProcedureCodes.GetProcCode(listProcsForTP[j].CodeNum).TreatArea == TreatmentArea.Sextant)
                     {
-                        row.Surf = Tooth.GetSextant(listProcsForTP[j].Surf, (ToothNumberingNomenclature)Preferences.GetInt(PrefName.UseInternationalToothNumbers));
+                        row.Surf = Tooth.GetSextant(listProcsForTP[j].Surf, (ToothNumberingNomenclature)Preference.GetInt(PreferenceName.UseInternationalToothNumbers));
                     }
                     else
                     {
@@ -7743,7 +7739,7 @@ namespace OpenDental
                         descript += " #" + Tooth.FormatRangeForDisplay(listProcsForTP[j].ToothRange);
                     }
                     row.Description = descript;
-                    row.ColorText = Defs.GetColor(DefCat.TxPriorities, listTreatPlanAttaches.FirstOrDefault(y => y.ProcNum == listProcsForTP[j].ProcNum).Priority);
+                    row.ColorText = Defs.GetColor(DefinitionCategory.TxPriorities, listTreatPlanAttaches.FirstOrDefault(y => y.ProcNum == listProcsForTP[j].ProcNum).Priority, Color.Black);
                     if (row.ColorText == System.Drawing.Color.White)
                     {
                         row.ColorText = System.Drawing.Color.Black;
@@ -8074,11 +8070,11 @@ namespace OpenDental
             }
             Cursor = Cursors.WaitCursor;
             toothChart.SuspendLayout();
-            List<Def> listChartGraphicColorDefs = Defs.GetDefsForCategory(DefCat.ChartGraphicColors);
-            toothChart.ColorBackground = listChartGraphicColorDefs[10].ItemColor;
-            toothChart.ColorText = listChartGraphicColorDefs[11].ItemColor;
-            toothChart.ColorTextHighlight = listChartGraphicColorDefs[12].ItemColor;
-            toothChart.ColorBackHighlight = listChartGraphicColorDefs[13].ItemColor;
+            List<Definition> listChartGraphicColorDefs = Definition.GetByCategory(DefinitionCategory.ChartGraphicColors);;
+            toothChart.ColorBackground = listChartGraphicColorDefs[10].Color;
+            toothChart.ColorText = listChartGraphicColorDefs[11].Color;
+            toothChart.ColorTextHighlight = listChartGraphicColorDefs[12].Color;
+            toothChart.ColorBackHighlight = listChartGraphicColorDefs[13].Color;
             //remember which teeth were selected
             //ArrayList selectedTeeth=new ArrayList();//integers 1-32
             //for(int i=0;i<toothChart.SelectedTeeth.Length;i++) {
@@ -8251,7 +8247,7 @@ namespace OpenDental
             string[] teeth;
             Color cLight = Color.White;
             Color cDark = Color.White;
-            List<Def> listDefs = Defs.GetDefsForCategory(DefCat.ChartGraphicColors, true);
+            List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.ChartGraphicColors);;
             for (int i = 0; i < _procListForGraphical.Count; i++)
             {
                 if (_procListForGraphical[i]["HideGraphics"].ToString() == "1")
@@ -8276,29 +8272,29 @@ namespace OpenDental
                     switch ((ProcStat)PIn.Long(_procListForGraphical[i]["ProcStatus"].ToString()))
                     {
                         case ProcStat.C:
-                            cDark = listDefs[1].ItemColor;
-                            cLight = listDefs[6].ItemColor;
+                            cDark = listDefs[1].Color;
+                            cLight = listDefs[6].Color;
                             break;
                         case ProcStat.TP:
                         case ProcStat.TPi:// TPi color should be the same as TP color.
-                            cDark = listDefs[0].ItemColor;
-                            cLight = listDefs[5].ItemColor;
+                            cDark = listDefs[0].Color;
+                            cLight = listDefs[5].Color;
                             break;
                         case ProcStat.EC:
-                            cDark = listDefs[2].ItemColor;
-                            cLight = listDefs[7].ItemColor;
+                            cDark = listDefs[2].Color;
+                            cLight = listDefs[7].Color;
                             break;
                         case ProcStat.EO:
-                            cDark = listDefs[3].ItemColor;
-                            cLight = listDefs[8].ItemColor;
+                            cDark = listDefs[3].Color;
+                            cLight = listDefs[8].Color;
                             break;
                         case ProcStat.R:
-                            cDark = listDefs[4].ItemColor;
-                            cLight = listDefs[9].ItemColor;
+                            cDark = listDefs[4].Color;
+                            cLight = listDefs[9].Color;
                             break;
                         case ProcStat.Cn:
-                            cDark = listDefs[16].ItemColor;
-                            cLight = listDefs[17].ItemColor;
+                            cDark = listDefs[16].Color;
+                            cLight = listDefs[17].Color;
                             break;
                     }
                 }
@@ -8497,29 +8493,29 @@ namespace OpenDental
                 textDate.Text = DateTime.Today.ToShortDateString();
             }
             //}
-            List<Def> listChartGraphicColorDefs = Defs.GetDefsForCategory(DefCat.ChartGraphicColors);
-            List<Def> listProcButtonCatDefs = Defs.GetDefsForCategory(DefCat.ProcButtonCats, true);
-            List<Def> listDiagnosisDefs = Defs.GetDefsForCategory(DefCat.Diagnosis, true);
-            List<Def> listPrognosisDefs = Defs.GetDefsForCategory(DefCat.Prognosis, true);
-            List<Def> listTxPrioritiesDefs = Defs.GetDefsForCategory(DefCat.TxPriorities, true);
+            List<Definition> listChartGraphicColorDefs = Definition.GetByCategory(DefinitionCategory.ChartGraphicColors);;
+            List<Definition> listProcButtonCatDefs = Definition.GetByCategory(DefinitionCategory.ProcButtonCats);;
+            List<Definition> listDiagnosisDefs = Definition.GetByCategory(DefinitionCategory.Diagnosis);;
+            List<Definition> listPrognosisDefs = Definition.GetByCategory(DefinitionCategory.Prognosis);;
+            List<Definition> listTxPrioritiesDefs = Definition.GetByCategory(DefinitionCategory.TxPriorities);;
             listDx.Items.Clear();
             for (int i = 0; i < listDiagnosisDefs.Count; i++)
             {//move to instantClasses?
-                this.listDx.Items.Add(listDiagnosisDefs[i].ItemName);
+                this.listDx.Items.Add(listDiagnosisDefs[i].Description);
             }
             int selectedPrognosis = comboPrognosis.SelectedIndex;//retain prognosis selection
             comboPrognosis.Items.Clear();
             comboPrognosis.Items.Add(Lan.g(this, "no prognosis"));
             for (int i = 0; i < listPrognosisDefs.Count; i++)
             {
-                comboPrognosis.Items.Add(listPrognosisDefs[i].ItemName);
+                comboPrognosis.Items.Add(listPrognosisDefs[i].Description);
             }
             int selectedPriority = comboPriority.SelectedIndex;//retain current selection
             comboPriority.Items.Clear();
             comboPriority.Items.Add(Lan.g(this, "no priority"));
             for (int i = 0; i < listTxPrioritiesDefs.Count; i++)
             {
-                this.comboPriority.Items.Add(listTxPrioritiesDefs[i].ItemName);
+                this.comboPriority.Items.Add(listTxPrioritiesDefs[i].Description);
             }
             if (selectedPrognosis > 0 && selectedPrognosis < comboPrognosis.Items.Count)
             {
@@ -8540,7 +8536,7 @@ namespace OpenDental
             listButtonCats.Items.Add(Lan.g(this, "Quick Buttons"));
             for (int i = 0; i < listProcButtonCatDefs.Count; i++)
             {
-                listButtonCats.Items.Add(listProcButtonCatDefs[i].ItemName);
+                listButtonCats.Items.Add(listProcButtonCatDefs[i].Description);
             }
             if (selectedButtonCat < listButtonCats.Items.Count)
             {
@@ -8558,14 +8554,14 @@ namespace OpenDental
             page.Text = Lan.g(this, "All");
             tabControlImages.TabPages.Add(page);
             visImageCats = new ArrayList();
-            List<Def> listImageCatDefs = Defs.GetDefsForCategory(DefCat.ImageCats, true);
+            List<Definition> listImageCatDefs = Definition.GetByCategory(DefinitionCategory.ImageCats);;
             for (int i = 0; i < listImageCatDefs.Count; i++)
             {
-                if (listImageCatDefs[i].ItemValue.Contains("X"))
+                if (listImageCatDefs[i].Value.Contains("X"))
                 {//if tagged to show in Chart
                     visImageCats.Add(i);
                     page = new TabPage();
-                    page.Text = listImageCatDefs[i].ItemName;
+                    page.Text = listImageCatDefs[i].Description;
                     tabControlImages.TabPages.Add(page);
                 }
             }
@@ -8573,16 +8569,16 @@ namespace OpenDental
             {
                 tabControlImages.SelectedIndex = selectedImageTab;
             }
-            panelTPdark.BackColor = listChartGraphicColorDefs[0].ItemColor;
-            panelCdark.BackColor = listChartGraphicColorDefs[1].ItemColor;
-            panelECdark.BackColor = listChartGraphicColorDefs[2].ItemColor;
-            panelEOdark.BackColor = listChartGraphicColorDefs[3].ItemColor;
-            panelRdark.BackColor = listChartGraphicColorDefs[4].ItemColor;
-            panelTPlight.BackColor = listChartGraphicColorDefs[5].ItemColor;
-            panelClight.BackColor = listChartGraphicColorDefs[6].ItemColor;
-            panelEClight.BackColor = listChartGraphicColorDefs[7].ItemColor;
-            panelEOlight.BackColor = listChartGraphicColorDefs[8].ItemColor;
-            panelRlight.BackColor = listChartGraphicColorDefs[9].ItemColor;
+            panelTPdark.BackColor = listChartGraphicColorDefs[0].Color;
+            panelCdark.BackColor = listChartGraphicColorDefs[1].Color;
+            panelECdark.BackColor = listChartGraphicColorDefs[2].Color;
+            panelEOdark.BackColor = listChartGraphicColorDefs[3].Color;
+            panelRdark.BackColor = listChartGraphicColorDefs[4].Color;
+            panelTPlight.BackColor = listChartGraphicColorDefs[5].Color;
+            panelClight.BackColor = listChartGraphicColorDefs[6].Color;
+            panelEClight.BackColor = listChartGraphicColorDefs[7].Color;
+            panelEOlight.BackColor = listChartGraphicColorDefs[8].Color;
+            panelRlight.BackColor = listChartGraphicColorDefs[9].Color;
         }
 
         private void FillProcButtons(bool doRefreshData = true)
@@ -8611,7 +8607,7 @@ namespace OpenDental
             {
                 ProcButtons.RefreshCache();
             }
-            ProcButtonList = ProcButtons.GetForCat(Defs.GetDefsForCategory(DefCat.ProcButtonCats, true)[listButtonCats.SelectedIndex - 1].DefNum);
+            ProcButtonList = ProcButtons.GetForCat(Definition.GetByCategory(DefinitionCategory.ProcButtonCats)[listButtonCats.SelectedIndex - 1].Id);
             ListViewItem item;
             for (int i = 0; i < ProcButtonList.Length; i++)
             {
@@ -8669,16 +8665,16 @@ namespace OpenDental
             {
                 return;
             }
-            List<Def> listImageCatDefs = Defs.GetDefsForCategory(DefCat.ImageCats, true);
+            List<Definition> listImageCatDefs = Definition.GetByCategory(DefinitionCategory.ImageCats);;
             for (int i = 0; i < DocumentList.Length; i++)
             {
-                if (!visImageCats.Contains(listImageCatDefs.FindIndex(x => x.DefNum == DocumentList[i].DocCategory)))
+                if (!visImageCats.Contains(listImageCatDefs.FindIndex(x => x.Id == DocumentList[i].DocCategory)))
                 {
                     continue;//if category not visible, continue
                 }
                 if (tabControlImages.SelectedIndex > 0)
                 {//any category except 'all'
-                    if (DocumentList[i].DocCategory != listImageCatDefs[(int)visImageCats[tabControlImages.SelectedIndex - 1]].DefNum)
+                    if (DocumentList[i].DocCategory != listImageCatDefs[(int)visImageCats[tabControlImages.SelectedIndex - 1]].Id)
                     {
                         continue;//if not in category, continue
                     }
@@ -8739,8 +8735,8 @@ namespace OpenDental
                 listIdsToExclude.AddRange(_listApteryxThumbnails.Select(x => x.Image.Id.ToString()));
             }
             bool doDisplayXVWebInChart = XVWeb.IsDisplayingImagesInProgram
-                && Defs.GetDefsForCategory(DefCat.ImageCats, true).Any(x => x.ItemValue.Contains("X") //if tagged to show in Chart
-                 && x.DefNum == PIn.Long(ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWeb.ProgramProps.ImageCategory)));
+                && Definition.GetByCategory(DefinitionCategory.ImageCats).Any(x => x.Value.Contains("X") //if tagged to show in Chart
+                 && x.Id == PIn.Long(ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWeb.ProgramProps.ImageCategory)));
             if (!doDisplayXVWebInChart)
             {
                 return;
@@ -8772,7 +8768,7 @@ namespace OpenDental
             }
             long imageCat = PIn.Long(ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.XVWeb), XVWeb.ProgramProps.ImageCategory));
             if (tabControlImages.SelectedIndex > 0 //any category except 'all'
-                && imageCat != Defs.GetDefsForCategory(DefCat.ImageCats, true)[(int)visImageCats[tabControlImages.SelectedIndex - 1]].DefNum)
+                && imageCat != Definition.GetByCategory(DefinitionCategory.ImageCats)[(int)visImageCats[tabControlImages.SelectedIndex - 1]].Id)
             {
                 return;//if the currently selected tab is not for XVWeb
             }
@@ -8817,7 +8813,7 @@ namespace OpenDental
                 TreatPlan activePlan = new TreatPlan()
                 {
                     Heading = Lans.g("TreatPlans", "Active Treatment Plan"),
-                    Note = Preferences.GetString(PrefName.TreatmentPlanNote),
+                    Note = Preference.GetString(PreferenceName.TreatmentPlanNote),
                     TPStatus = TreatPlanStatus.Active,
                     PatNum = PatCur.PatNum,
                     TPType = PatCur.DiscountPlanNum == 0 ? TreatPlanType.Insurance : TreatPlanType.Discount
@@ -8833,7 +8829,7 @@ namespace OpenDental
             long priorityNum = 0;
             if (comboPriority.SelectedIndex > 0)
             {
-                priorityNum = Defs.GetDefsForCategory(DefCat.TxPriorities, true)[comboPriority.SelectedIndex - 1].DefNum;
+                priorityNum = Definition.GetByCategory(DefinitionCategory.TxPriorities)[comboPriority.SelectedIndex - 1].Id;
             }
             listTpNums.ForEach(x => TreatPlanAttaches.Insert(new TreatPlanAttach() { TreatPlanNum = x, ProcNum = proc.ProcNum, Priority = priorityNum }));
             //if all treatplans selected are not the active treatplan, then chart proc as status TPi
@@ -9377,7 +9373,7 @@ namespace OpenDental
             #endregion ProvNum
             if (newStatus == ProcStat.C)
             {
-                if (ProcCur.ProcDate.Date > DateTime.Today.Date && !Preferences.GetBool(PrefName.FutureTransDatesAllowed))
+                if (ProcCur.ProcDate.Date > DateTime.Today.Date && !Preference.GetBool(PreferenceName.FutureTransDatesAllowed))
                 {
                     MsgBox.Show(this, "Completed procedures cannot be set for future dates.");
                     return false;
@@ -9393,7 +9389,7 @@ namespace OpenDental
                     ProcCur.Note += "\r\n"; //add a new line if there was already a ProcNote on the procedure.
                 }
                 ProcCur.Note += procNoteDefault;
-                if (!Preferences.GetBool(PrefName.ProcPromptForAutoNote))
+                if (!Preference.GetBool(PreferenceName.ProcPromptForAutoNote))
                 {
                     //Users do not want to be prompted for auto notes, so remove them all from the procedure note.
                     ProcCur.Note = Regex.Replace(ProcCur.Note, @"\[\[.+?\]\]", "");
@@ -9422,21 +9418,21 @@ namespace OpenDental
             }
             //surf
             //toothnum
-            List<Def> listDiagnosisDefs = Defs.GetDefsForCategory(DefCat.Diagnosis, true);
-            List<Def> listPrognosisDefs = Defs.GetDefsForCategory(DefCat.Prognosis, true);
-            List<Def> listTxPrioritiesDefs = Defs.GetDefsForCategory(DefCat.TxPriorities, true);
+            List<Definition> listDiagnosisDefs = Definition.GetByCategory(DefinitionCategory.Diagnosis);;
+            List<Definition> listPrognosisDefs = Definition.GetByCategory(DefinitionCategory.Prognosis);;
+            List<Definition> listTxPrioritiesDefs = Definition.GetByCategory(DefinitionCategory.TxPriorities);;
             if (comboPriority.SelectedIndex == 0)
             {
                 ProcCur.Priority = 0;
             }
             else
             {
-                ProcCur.Priority = listTxPrioritiesDefs[comboPriority.SelectedIndex - 1].DefNum;
+                ProcCur.Priority = listTxPrioritiesDefs[comboPriority.SelectedIndex - 1].Id;
             }
             ProcCur.ProcStatus = newStatus;
             if (listDx.SelectedIndex != -1)
             {
-                ProcCur.Dx = listDiagnosisDefs[listDx.SelectedIndex].DefNum;
+                ProcCur.Dx = listDiagnosisDefs[listDx.SelectedIndex].Id;
             }
             if (comboPrognosis.SelectedIndex == 0)
             {
@@ -9444,13 +9440,13 @@ namespace OpenDental
             }
             else
             {
-                ProcCur.Prognosis = listPrognosisDefs[comboPrognosis.SelectedIndex - 1].DefNum;
+                ProcCur.Prognosis = listPrognosisDefs[comboPrognosis.SelectedIndex - 1].Id;
             }
             ProcCur.BaseUnits = procCodeCur.BaseUnits;
             ProcCur.SiteNum = PatCur.SiteNum;
             ProcCur.RevCode = procCodeCur.RevenueCodeDefault;
-            ProcCur.DiagnosticCode = Preferences.GetString(PrefName.ICD9DefaultForNewProcs);
-            ProcCur.PlaceService = (PlaceOfService)Preferences.GetInt(PrefName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used. 
+            ProcCur.DiagnosticCode = Preference.GetString(PreferenceName.ICD9DefaultForNewProcs);
+            ProcCur.PlaceService = (PlaceOfService)Preference.GetInt(PreferenceName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used. 
             if (Userods.IsUserCpoe(Security.CurUser))
             {
                 //This procedure is considered CPOE because the provider is the one that has added it.
@@ -9490,7 +9486,7 @@ namespace OpenDental
                 FormAutoCodeLessIntrusive FormACLI = new FormAutoCodeLessIntrusive(PatCur, ProcCur, procCodeCur, verifyCode, PatPlanList, SubList, PlanList,
                     BenefitList, listClaimProcs);
                 if (FormACLI.ShowDialog() != DialogResult.OK
-                    && Preferences.GetBool(PrefName.ProcEditRequireAutoCodes))
+                    && Preference.GetBool(PreferenceName.ProcEditRequireAutoCodes))
                 {
                     FormProcEdit FormPE = new FormProcEdit(ProcCur, PatCur, FamCur);//ProcCur may be modified in this form due to passing by reference. Intentional.
                     FormPE.ShowDialog();
@@ -9515,7 +9511,7 @@ namespace OpenDental
         {
             if (newStatus == ProcStat.C)
             {
-                if (!Preferences.GetBool(PrefName.AllowSettingProcsComplete))
+                if (!Preference.GetBool(PreferenceName.AllowSettingProcsComplete))
                 {
                     MsgBox.Show("Set the procedure complete by setting the appointment complete.  "
                         + "If you want to be able to set procedures complete, you must turn on that option in Setup | Chart | Chart Preferences.");
@@ -9887,7 +9883,7 @@ namespace OpenDental
         {
             if (newStatus == ProcStat.C)
             {
-                if (!Preferences.GetBool(PrefName.AllowSettingProcsComplete))
+                if (!Preference.GetBool(PreferenceName.AllowSettingProcsComplete))
                 {
                     MsgBox.Show(this, "Set the procedure complete by setting the appointment complete.  "
                         + "If you want to be able to set procedures complete, you must turn on that option in Setup | Chart | Chart Preferences.");
@@ -9911,7 +9907,7 @@ namespace OpenDental
         {
             if (newStatus == ProcStat.C)
             {
-                if (!Preferences.GetBool(PrefName.AllowSettingProcsComplete))
+                if (!Preference.GetBool(PreferenceName.AllowSettingProcsComplete))
                 {
                     MsgBox.Show(this, "Set the procedure complete by setting the appointment complete.  "
                         + "If you want to be able to set procedures complete, you must turn on that option in Setup | Chart | Chart Preferences.");
@@ -10376,7 +10372,7 @@ namespace OpenDental
             //orionProcNum=0;
             if (newStatus == ProcStat.C)
             {
-                if (!Preferences.GetBool(PrefName.AllowSettingProcsComplete))
+                if (!Preference.GetBool(PreferenceName.AllowSettingProcsComplete))
                 {
                     MsgBox.Show(this, "Set the procedure complete by setting the appointment complete.  "
                         + "If you want to be able to set procedures complete, you must turn on that option in Setup | Chart | Chart Preferences.");
@@ -10397,7 +10393,7 @@ namespace OpenDental
                 else
                 { //or if it's a 4 digit code that's hidden, also add the D
                     ProcedureCode procCode = ProcedureCodes.GetProcCode(textProcCode.Text);
-                    if (Defs.GetHidden(DefCat.ProcCodeCats, procCode.ProcCat))
+                    if (Defs.IsHidden(procCode.ProcCat))
                     {
                         textProcCode.Text = "D" + textProcCode.Text;
                     }
@@ -10410,7 +10406,7 @@ namespace OpenDental
                 textProcCode.SelectionStart = textProcCode.Text.Length;
                 return;
             }
-            if (Defs.GetHidden(DefCat.ProcCodeCats, ProcedureCodes.GetProcCode(textProcCode.Text).ProcCat))
+            if (Defs.IsHidden(ProcedureCodes.GetProcCode(textProcCode.Text).ProcCat))
             {//if the category is hidden
                 MessageBox.Show(Lan.g(this, "Code is in a hidden category and cannot be added from here."));
                 textProcCode.SelectionStart = textProcCode.Text.Length;
@@ -12380,7 +12376,7 @@ namespace OpenDental
         {
             if (e.Button == MouseButtons.Right)
             {
-                if (Preferences.GetBool(PrefName.EasyHideHospitals))
+                if (Preference.GetBool(PreferenceName.EasyHideHospitals))
                 {
                     menuItemPrintDay.Visible = false;
                 }
@@ -12569,19 +12565,19 @@ namespace OpenDental
                 }
                 if (apt.AptDateTime.Date > DateTime.Today.Date)
                 {
-                    if (!Preferences.GetBool(PrefName.ApptAllowFutureComplete))
+                    if (!Preference.GetBool(PreferenceName.ApptAllowFutureComplete))
                     {
                         MsgBox.Show(this, "Not allowed to set future appointments complete.");
                         return;
                     }
-                    if (!Preferences.GetBool(PrefName.FutureTransDatesAllowed))
+                    if (!Preference.GetBool(PreferenceName.FutureTransDatesAllowed))
                     {
                         MsgBox.Show(this, "Not allowed to set procedures complete with future dates.");
                         return;
                     }
                 }
                 if (apt.AptStatus != ApptStatus.PtNote && apt.AptStatus != ApptStatus.PtNoteCompleted  //PtNote blocked above, added here in case we ever enhance
-                    && !Preferences.GetBool(PrefName.ApptAllowEmptyComplete)
+                    && !Preference.GetBool(PreferenceName.ApptAllowEmptyComplete)
                     && !Appointments.HasProcsAttached(apt.AptNum))
                 {
                     MsgBox.Show(this, "Appointments without procedures attached can not be set complete.");
@@ -12695,7 +12691,7 @@ namespace OpenDental
         ///<summary>Sets the selected rows to the ProcStatus passed in.</summary>
         private void MenuItemSetSelectedProcsStatus(ProcStat newProcStatus)
         {
-            if (newProcStatus == ProcStat.C && !Preferences.GetBool(PrefName.AllowSettingProcsComplete))
+            if (newProcStatus == ProcStat.C && !Preference.GetBool(PreferenceName.AllowSettingProcsComplete))
             {
                 MsgBox.Show(this, "Only single appointments and tasks may be set complete.  If you want to be able to set procedures complete, you must turn "
                     + "on that option in Setup | Chart | Chart Preferences.");
@@ -12784,7 +12780,7 @@ namespace OpenDental
                     {
                         return;
                     }
-                    if (procDate.Date > DateTime.Today.Date && !Preferences.GetBool(PrefName.FutureTransDatesAllowed))
+                    if (procDate.Date > DateTime.Today.Date && !Preference.GetBool(PreferenceName.FutureTransDatesAllowed))
                     {
                         MsgBox.Show(this, "Completed procedures cannot be set for future dates.");
                         return;
@@ -12815,7 +12811,7 @@ namespace OpenDental
                         procNew.Note += "\r\n"; //add a new line if there was already a ProcNote on the procedure.
                     }
                     procNew.Note += procNoteDefault;
-                    if (!Preferences.GetBool(PrefName.ProcPromptForAutoNote))
+                    if (!Preference.GetBool(PreferenceName.ProcPromptForAutoNote))
                     {
                         //Users do not want to be prompted for auto notes, so remove them all from the procedure note.
                         procNew.Note = Regex.Replace(procNew.Note, @"\[\[.+?\]\]", "");
@@ -12824,7 +12820,7 @@ namespace OpenDental
                     procNew.DateEntryC = DateTime.Now;//Should this be server date?
                     if (procNew.DiagnosticCode == "")
                     {
-                        procNew.DiagnosticCode = Preferences.GetString(PrefName.ICD9DefaultForNewProcs);
+                        procNew.DiagnosticCode = Preference.GetString(PreferenceName.ICD9DefaultForNewProcs);
                     }
                     //broken appointment procedure codes shouldn't trigger DateFirstVisit update.
                     if (ProcedureCodes.GetStringProcCode(procNew.CodeNum).In("D9986", "D9987"))
@@ -12844,7 +12840,7 @@ namespace OpenDental
                 else
                 {
                     procNew.ProcDate = PIn.Date(textDate.Text);
-                    procNew.PlaceService = (PlaceOfService)Preferences.GetLong(PrefName.DefaultProcedurePlaceService);
+                    procNew.PlaceService = (PlaceOfService)Preference.GetLong(PreferenceName.DefaultProcedurePlaceService);
                 }
                 if (procNew.ProcDate.Year < 1880)
                 {
@@ -12974,7 +12970,7 @@ namespace OpenDental
                     MsgBox.Show(this, "Procedures must have the same provider to attach a group note.");
                     return;
                 }
-                if (proclist[i].ProcStatus == ProcStat.C && proclist[i].ProcDate.Date > DateTime.Today.Date && !Preferences.GetBool(PrefName.FutureTransDatesAllowed))
+                if (proclist[i].ProcStatus == ProcStat.C && proclist[i].ProcDate.Date > DateTime.Today.Date && !Preference.GetBool(PreferenceName.FutureTransDatesAllowed))
                 {
                     MsgBox.Show(this, "Completed procedures cannot be set complete for days in the future.");
                     return;
@@ -12989,7 +12985,7 @@ namespace OpenDental
             group.ProvNum = provNum;
             group.ClinicNum = clinicNum;
             group.CodeNum = ProcedureCodes.GetCodeNum(ProcedureCodes.GroupProcCode);
-            if (Preferences.GetBool(PrefName.ProcGroupNoteDoesAggregate))
+            if (Preference.GetBool(PreferenceName.ProcGroupNoteDoesAggregate))
             {
                 string aggNote = "";
                 for (int i = 0; i < proclist.Count; i++)
@@ -13006,7 +13002,7 @@ namespace OpenDental
             {
                 //group notes are special; they have a status of EC but still get their procedure notes populated.
                 group.Note = ProcCodeNotes.GetNote(group.ProvNum, group.CodeNum, group.ProcStatus, true);
-                if (!Preferences.GetBool(PrefName.ProcPromptForAutoNote))
+                if (!Preference.GetBool(PreferenceName.ProcPromptForAutoNote))
                 {
                     //Users do not want to be prompted for auto notes, so remove them all from the procedure note.
                     group.Note = Regex.Replace(group.Note, @"\[\[.+?\]\]", "");
@@ -13040,7 +13036,7 @@ namespace OpenDental
             {
                 return;
             }
-            if (Preferences.GetBool(PrefName.ProcGroupNoteDoesAggregate))
+            if (Preference.GetBool(PreferenceName.ProcGroupNoteDoesAggregate))
             {
                 //remove the notes from all the attached procs
                 for (int i = 0; i < proclist.Count; i++)
@@ -13361,7 +13357,7 @@ namespace OpenDental
                 g.DrawString(text, headingFont, Brushes.Black, center - g.MeasureString(text, headingFont).Width / 2, yPos);
                 yPos += (int)g.MeasureString(text, headingFont).Height;
                 //practice
-                text = Preferences.GetString(PrefName.PracticeTitle);
+                text = Preference.GetString(PreferenceName.PracticeTitle);
                 if (Preferences.HasClinicsEnabled)
                 {
                     DataRow row;
@@ -13579,7 +13575,7 @@ namespace OpenDental
             selectedTpNumProcNums.AddRange(gridTpProcs.SelectedIndices.Where(x => gridTpProcs.Rows[x].Tag != null).Select(x => (ProcTP)gridTpProcs.Rows[x].Tag)
                 .Select(x => new Tuple<long, long>(x.TreatPlanNum, x.ProcNumOrig)));
             List<TreatPlanAttach> listAllTpAttaches = gridTreatPlans.SelectedIndices.ToList().SelectMany(x => (List<TreatPlanAttach>)gridTreatPlans.Rows[x].Tag).ToList();
-            List<Def> listDefs = Defs.GetDefsForCategory(DefCat.TxPriorities, true);
+            List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.TxPriorities);;
             foreach (int selectedIdx in gridTpProcs.SelectedIndices)
             {
                 if (gridTpProcs.Rows[selectedIdx].Tag == null)
@@ -13595,7 +13591,7 @@ namespace OpenDental
                 tpa.Priority = 0;
                 if (clickedRow > 0)
                 {
-                    tpa.Priority = listDefs[clickedRow - 1].DefNum;
+                    tpa.Priority = listDefs[clickedRow - 1].Id;
                 }
             }
             listAllTpAttaches.Select(x => x.TreatPlanNum).Distinct().ToList()
@@ -14176,10 +14172,10 @@ namespace OpenDental
             proc.DateTP = DateTime.Now;
             proc.ProcFee = procFee;
             proc.ProcStatus = ProcStat.TP;
-            proc.ProvNum = Preferences.GetLong(PrefName.PracticeDefaultProv);
+            proc.ProvNum = Preference.GetLong(PreferenceName.PracticeDefaultProv);
             proc.MedicalCode = ProcedureCodes.GetProcCode(proc.CodeNum).MedicalCode;
             proc.BaseUnits = ProcedureCodes.GetProcCode(proc.CodeNum).BaseUnits;
-            proc.PlaceService = (PlaceOfService)Preferences.GetInt(PrefName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used. 
+            proc.PlaceService = (PlaceOfService)Preference.GetInt(PreferenceName.DefaultProcedurePlaceService);//Default Proc Place of Service for the Practice is used. 
             Procedures.Insert(proc);//no recall synch needed because dental offices don't use this feature
             listCommonProcs.SelectedIndex = -1;
             FillProgNotes();
@@ -14191,7 +14187,7 @@ namespace OpenDental
             FormTPCE.TreatPlanCur = new TreatPlan()
             {
                 Heading = "Inactive Treatment Plan",
-                Note = Preferences.GetString(PrefName.TreatmentPlanNote),
+                Note = Preference.GetString(PreferenceName.TreatmentPlanNote),
                 PatNum = PatCur.PatNum,
                 TPStatus = TreatPlanStatus.Inactive,
             };

@@ -20,13 +20,13 @@ namespace OpenDental {
 
 		private void FormEduResourceEdit_Load(object sender,EventArgs e) {
 			if(EduResourceCur.DiseaseDefNum!=0) {
-				DiseaseDef def=DiseaseDefs.GetItem(EduResourceCur.DiseaseDefNum);
-				textProblem.Text=def.DiseaseName;
-				textICD9.Text=ICD9s.GetCodeAndDescription(def.ICD9Code);
+				DiseaseDef def=DiseaseDef.GetById(EduResourceCur.DiseaseDefNum);
+				textProblem.Text=def.Name;
+				textICD9.Text= ICD9.GetCodeAndDescription(def.ICD9Code);
 				textSnomed.Text=Snomeds.GetCodeAndDescription(def.SnomedCode);
 			}
 			else if(EduResourceCur.MedicationNum!=0) {
-				textMedication.Text=Medications.GetDescription(EduResourceCur.MedicationNum);
+				textMedication.Text=Medication.GetDescription(EduResourceCur.MedicationNum);
 			}
 			else if(EduResourceCur.SmokingSnoMed!="") {
 				textTobaccoAssessment.Text=Snomeds.GetCodeAndDescription(EduResourceCur.SmokingSnoMed);
@@ -49,14 +49,14 @@ namespace OpenDental {
 			if(disCur==null) {
 				return;
 			}
-			EduResourceCur.DiseaseDefNum=disCur.DiseaseDefNum;
+			EduResourceCur.DiseaseDefNum=disCur.Id;
 			EduResourceCur.MedicationNum=0;
 			EduResourceCur.SmokingSnoMed="";
 			EduResourceCur.LabResultID="";
 			EduResourceCur.LabResultName="";
 			EduResourceCur.LabResultCompare="";
-			textProblem.Text=disCur.DiseaseName;
-			textICD9.Text=ICD9s.GetCodeAndDescription(disCur.ICD9Code);
+			textProblem.Text=disCur.Name;
+			textICD9.Text=ICD9.GetCodeAndDescription(disCur.ICD9Code);
 			textSnomed.Text=Snomeds.GetCodeAndDescription(disCur.SnomedCode);
 			textMedication.Text="";
 			textTobaccoAssessment.Text="";
@@ -81,7 +81,7 @@ namespace OpenDental {
 			textProblem.Text="";
 			textICD9.Text="";
 			textSnomed.Text="";
-			textMedication.Text=Medications.GetDescription(FormM.SelectedMedicationNum);
+			textMedication.Text=Medication.GetDescription(FormM.SelectedMedicationNum);
 			textTobaccoAssessment.Text="";
 			textLabResultsID.Text="";
 			textLabTestName.Text="";

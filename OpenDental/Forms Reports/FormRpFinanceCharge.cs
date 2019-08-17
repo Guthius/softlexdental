@@ -27,7 +27,7 @@ namespace OpenDental {
 		private Label label4;
 		private FormQuery FormQuery2;
 		private List<Provider> _listProviders=new List<Provider>();
-		private List<Def> _listBillingTypeDefs=new List<Def>();
+		private List<Definition> _listBillingTypeDefs=new List<Definition>();
 
         public FormRpFinanceCharge()
         {
@@ -227,12 +227,12 @@ namespace OpenDental {
 		#endregion
 
 		private void FormRpFinanceCharge_Load(object sender, System.EventArgs e) {
-			textDateFrom.Text=Preferences.GetDate(PrefName.FinanceChargeLastRun).ToShortDateString();
-			textDateTo.Text=Preferences.GetDate(PrefName.FinanceChargeLastRun).ToShortDateString();
+			textDateFrom.Text=Preference.GetDate(PreferenceName.FinanceChargeLastRun).ToShortDateString();
+			textDateTo.Text=Preference.GetDate(PreferenceName.FinanceChargeLastRun).ToShortDateString();
 			_listProviders=Providers.GetListReports();
-			_listBillingTypeDefs=Defs.GetDefsForCategory(DefCat.BillingTypes,true);
-			foreach(Def billingType in _listBillingTypeDefs) {
-				listBillingType.Items.Add(billingType.ItemName);
+			_listBillingTypeDefs=Definition.GetByCategory(DefinitionCategory.BillingTypes);
+			foreach(Definition billingType in _listBillingTypeDefs) {
+				listBillingType.Items.Add(billingType.Description);
 			}
 			if(listBillingType.Items.Count>0) {
 				listBillingType.SelectedIndex=0;
@@ -277,15 +277,15 @@ namespace OpenDental {
 			}
 			List<long> listBillingDefNums= new List<long>();
 			if(!checkAllBilling.Checked) {
-				listBillingDefNums.AddRange(listBillingType.SelectedIndices.OfType<int>().Select(x => _listBillingTypeDefs[x].DefNum).ToList());
+				listBillingDefNums.AddRange(listBillingType.SelectedIndices.OfType<int>().Select(x => _listBillingTypeDefs[x].Id).ToList());
 			}
-			DataTable table=RpFinanceCharge.GetFinanceChargeTable(dateFrom,dateTo,Preferences.GetLong(PrefName.FinanceChargeAdjustmentType),listProvNums,listBillingDefNums);
+			DataTable table=RpFinanceCharge.GetFinanceChargeTable(dateFrom,dateTo,Preference.GetLong(PreferenceName.FinanceChargeAdjustmentType),listProvNums,listBillingDefNums);
 			Font font=new Font("Tahoma",9);
 			Font fontTitle=new Font("Tahoma",17,FontStyle.Bold);
 			Font fontSubTitle=new Font("Tahoma",10,FontStyle.Bold);
 			report.ReportName=Lan.g(this,"Finance Charge Report");
 			report.AddTitle("Title",Lan.g(this,"Finance Charge Report"),fontTitle);
-			report.AddSubTitle("PracticeTitle",Preferences.GetString(PrefName.PracticeTitle),fontSubTitle);
+			report.AddSubTitle("PracticeTitle",Preference.GetString(PreferenceName.PracticeTitle),fontSubTitle);
 			report.AddSubTitle("Date SubTitle",dateFrom.ToString("d")+" - "+dateTo.ToString("d"),fontSubTitle);
 			string subtitleProvs="";
 			if(listProvNums.Count>0) {
@@ -297,7 +297,7 @@ namespace OpenDental {
 			report.AddSubTitle("Provider Subtitle",subtitleProvs);
 			string subtBillingTypes="";
 			if(listBillingDefNums.Count>0) {
-				subtBillingTypes+=string.Join(", ",listBillingType.SelectedIndices.OfType<int>().Select(x => _listBillingTypeDefs[x].ItemName));
+				subtBillingTypes+=string.Join(", ",listBillingType.SelectedIndices.OfType<int>().Select(x => _listBillingTypeDefs[x].Description));
 			}
 			else {
 				subtBillingTypes=Lan.g(this,"All Billing Types");

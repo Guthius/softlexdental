@@ -48,14 +48,14 @@ namespace OpenDental {
 		///<summary>Helper property to get the Web Mail subject preference.</summary>
 		private string SubjectInsecure {
 			get {
-				return Preferences.GetString(PrefName.PatientPortalNotifySubject);
+				return Preference.GetString(PreferenceName.PatientPortalNotifySubject);
 			}
 		}
 
 		///<summary>Helper property to get the Web Mail body text preference.  Also replaces all replaceable variables.</summary>
 		private string BodyTextInsecure {
 			get {
-				return Preferences.GetString(PrefName.PatientPortalNotifyBody).Replace("[URL]",Preferences.GetString(PrefName.PatientPortalURL));
+				return Preference.GetString(PreferenceName.PatientPortalNotifyBody).Replace("[URL]",Preference.GetString(PreferenceName.PatientPortalURL));
 			}
 		}
 
@@ -86,7 +86,7 @@ namespace OpenDental {
 				}
 			}
 			//Webmail notification email address.  One notification email per database (not clinic specific).
-			_emailAddressSender=EmailAddresses.GetOne(Preferences.GetLong(PrefName.EmailNotifyAddressNum));
+			_emailAddressSender=EmailAddresses.GetOne(Preference.GetLong(PreferenceName.EmailNotifyAddressNum));
 			if(_emailAddressSender==null
 				|| _emailAddressSender.EmailAddressNum==0
 				|| _emailAddressSender.EmailUsername=="") 
@@ -247,10 +247,10 @@ namespace OpenDental {
 					BlockSendNotificationMessage("Patient who sent this message cannot access PHI for regarding patient.");
 				}
 			}
-			if(Preferences.GetString(PrefName.PatientPortalNotifySubject)=="") {
+			if(Preference.GetString(PreferenceName.PatientPortalNotifySubject)=="") {
 				BlockSendNotificationMessage("Missing notification email subject. Create a subject in Setup.");
 			}
-			if(Preferences.GetString(PrefName.PatientPortalNotifyBody)=="") {
+			if(Preference.GetString(PreferenceName.PatientPortalNotifyBody)=="") {
 				BlockSendNotificationMessage("Missing notification email body. Create a body in Setup.");
 			}
 			if(_allowSendNotificationMessage) {

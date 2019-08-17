@@ -62,7 +62,7 @@ namespace OpenDental {
 
 		public ODComboBoxProv() {
 			InitializeComponent();
-			PrefNameBinding=PrefName.NotApplicable;//Set this by default, if it's set in the designer it will overwite this later.
+			PrefNameBinding=PreferenceName.NotApplicable;//Set this by default, if it's set in the designer it will overwite this later.
 		}
 
 		public void FillProviders() {

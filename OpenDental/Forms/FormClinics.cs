@@ -387,7 +387,7 @@ namespace OpenDental {
 		#endregion
 
 		private void FormClinics_Load(object sender, System.EventArgs e) {
-			checkOrderAlphabetical.Checked=Preferences.GetBool(PrefName.ClinicListIsAlphabetical);
+			checkOrderAlphabetical.Checked=Preference.GetBool(PreferenceName.ClinicListIsAlphabetical);
 			if(ListClinics==null) {
 				ListClinics=Clinics.GetAllForUserod(Security.CurUser);
 				if(IncludeHQInList) {
@@ -452,7 +452,7 @@ namespace OpenDental {
 			}
 			gridMain.Rows.Clear();
 			ODGridRow row;
-			Dictionary<long,string> dictClinicSpecialtyDescripts=Defs.GetDefsForCategory(DefCat.ClinicSpecialty).ToDictionary(x => x.DefNum,x => x.ItemName);
+			Dictionary<long,string> dictClinicSpecialtyDescripts=Definition.GetByCategory(DefinitionCategory.ClinicSpecialty).ToDictionary(x => x.Id,x => x.Description);
 			List<int> listIndicesToReselect=new List<int>();
 			foreach(Clinic clinCur in ListClinics) {
 				if(!checkShowHidden.Checked && clinCur.IsHidden) {
@@ -487,7 +487,7 @@ namespace OpenDental {
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			Clinic clinicCur=new Clinic();
 			clinicCur.IsNew=true;
-			if(Preferences.GetBool(PrefName.PracticeIsMedicalOnly)) {
+			if(Preference.GetBool(PreferenceName.PracticeIsMedicalOnly)) {
 				clinicCur.IsMedicalOnly=true;
 			}
 			clinicCur.ItemOrder=gridMain.Rows.Count-(IncludeHQInList?1:0);//Set it last in the last position (minus 1 for HQ)
@@ -739,7 +739,7 @@ namespace OpenDental {
 			if(IsSelectionMode) {
 				return;
 			}
-			if(Prefs.UpdateBool(PrefName.ClinicListIsAlphabetical,checkOrderAlphabetical.Checked)) {
+			if(Preference.Update(PreferenceName.ClinicListIsAlphabetical,checkOrderAlphabetical.Checked)) {
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 			bool hasClinicChanges=Clinics.Sync(ListClinics,_listClinicsOld);//returns true if clinics were updated/inserted/deleted

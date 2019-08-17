@@ -25,7 +25,7 @@ namespace OpenDental {
 			foreach(Carrier carrier in carriers) {
 				listCarriers.Items.Add(carrier.CarrierName);
 			}
-			long defaultProvNum=Preferences.GetLong(PrefName.PracticeDefaultProv);
+			long defaultProvNum=Preference.GetLong(PreferenceName.PracticeDefaultProv);
 			_listProviders=Providers.GetDeepCopy(true);
 			for(int i=0;i<_listProviders.Count;i++) {
 				if(_listProviders[i].IsCDAnet) {

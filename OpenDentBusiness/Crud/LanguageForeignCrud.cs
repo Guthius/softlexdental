@@ -134,7 +134,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one LanguageForeign into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(LanguageForeign languageForeign,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO languageforeign (";
 			if(!useExistingPK && isRandomKeys) {
 				languageForeign.LanguageForeignNum=ReplicationServers.GetKeyNoCache("languageforeign","LanguageForeignNum");

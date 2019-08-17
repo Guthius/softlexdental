@@ -52,8 +52,8 @@ namespace OpenDental {
 				isNoteChecked=false;
 			}
 			return listMedsExisting.Any(
-				x => x.MedName.Trim().ToLower()==med.MedName.Trim().ToLower() 
-				&& Medications.GetGenericName(x.GenericNum).Trim().ToLower()==genericName.Trim().ToLower() 
+				x => x.Description.Trim().ToLower()==med.Description.Trim().ToLower() 
+				&& Medication.GetGenericName(x.GenericId.Value).Trim().ToLower()==genericName.Trim().ToLower() 
 				&& x.RxCui==med.RxCui
 				&& (isNoteChecked ? (x.Notes.Trim().ToLower()==med.Notes.Trim().ToLower()) : true)
 			);
@@ -65,14 +65,14 @@ namespace OpenDental {
 		private static void InsertNewMed(Tuple<Medication,string> medGenNamePair,List<Medication> listMedsExisting) {
 			Medication medNew=medGenNamePair.Item1;
 			string genericName=medGenNamePair.Item2;
-			long genNum=listMedsExisting.FirstOrDefault(x => x.MedName==genericName)?.MedicationNum??0;
+			long genNum=listMedsExisting.FirstOrDefault(x => x.Description==genericName)?.Id??0;
 			if(genNum!=0) {//Found a match.
-				medNew.GenericNum=genNum;
+				medNew.GenericId=genNum;
 			}
-			Medications.Insert(medNew);//Assigns new primary key.
+			Medication.Insert(medNew);//Assigns new primary key.
 			if(genNum==0) {//Found no match initially, assume given medication is the generic.
-				medNew.GenericNum=medNew.MedicationNum;
-				Medications.Update(medNew);
+				medNew.GenericId=medNew.Id;
+				Medication.Update(medNew);
 			}
 			listMedsExisting.Add(medNew);//Keep in memory list and database in sync.
 		}
@@ -87,7 +87,7 @@ namespace OpenDental {
 				 * export, then import this newly exported file, any medications with special characters will not register as a duplicate and you will end up
 				 * with more than 10 medications in your list, some of them being duplicates except with \' instead of ' (as an example special character).
 				 * */
-				strBldrOutput.AppendLine(med.MedName+'\t'+Medications.GetGenericName(med.GenericNum)+'\t'+med.Notes+'\t'+med.RxCui);
+				strBldrOutput.AppendLine(med.Description+'\t'+Medication.GetGenericName(med.GenericId.Value)+'\t'+med.Notes+'\t'+med.RxCui);
 			}
 			File.WriteAllText(filename,strBldrOutput.ToString());//Allow Exception to trickle up.
 			SecurityLogs.MakeLogEntry(Permissions.Setup,0,
@@ -115,10 +115,10 @@ namespace OpenDental {
 					throw new ODException(Lan.g("Medications","Invalid formatting detected in file."));
 				}
 				Medication medication=new Medication();
-				medication.MedName=PIn.String(medLine[0]).Trim();//MedName
+				medication.Description=PIn.String(medLine[0]).Trim();//MedName
 				string genericName=PIn.String(medLine[1]).Trim();//GenericName, not a field in Medication.cs but used for matching.
 				medication.Notes=PIn.String(medLine[2]).Trim();//Notes
-				medication.RxCui=PIn.Long(medLine[3]);//RxCui
+				medication.RxCui=PIn.String(medLine[3]);//RxCui
 				listMedsNew.Add(new Tuple<Medication, string>(medication,genericName));
 			}
 			return SortMedGenericsFirst(listMedsNew);
@@ -152,7 +152,7 @@ namespace OpenDental {
 			foreach(Tuple<Medication,string> pair in listMedLines) {
 				Medication med=pair.Item1;
 				string genericName=pair.Item2;
-				if(med.MedName.ToLower().In(genericName.ToLower(),"")) {//Generic if names directly match, or assume generic if no genericName provided.
+				if(med.Description.ToLower().In(genericName.ToLower(),"")) {//Generic if names directly match, or assume generic if no genericName provided.
 					listMedGeneric.Add(pair);
 				}
 				else {//Branded

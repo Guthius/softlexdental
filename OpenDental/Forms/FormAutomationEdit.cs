@@ -44,7 +44,7 @@ namespace OpenDental{
 		private List<AutomationAction> _listAutoActions;
 		///<summary>Matches list of appointments in comboAppointmentType. Does not include hidden types unless current automation already has that type set.</summary>
 		private List<AppointmentType> _listAptTypes;
-		private List<Def> _listCommLogTypeDefs;
+		private List<Definition> _listCommLogTypeDefs;
 
 		///<summary></summary>
 		public FormAutomationEdit(Automation autoCur)
@@ -336,7 +336,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormAutomationEdit_Load(object sender, System.EventArgs e) {
-			_listCommLogTypeDefs=Defs.GetDefsForCategory(DefCat.CommLogTypes,true);
+			_listCommLogTypeDefs=Definition.GetByCategory(DefinitionCategory.CommLogTypes);
 			textDescription.Text=AutoCur.Description;
 			_listAptTypes=new List<AppointmentType>() { new AppointmentType() { AppointmentTypeName="none" } };
 			AppointmentTypes.GetWhere(x => !x.IsHidden || x.AppointmentTypeNum==AutoCur.AppointmentTypeNum)
@@ -410,8 +410,8 @@ namespace OpenDental{
 					labelActionObject.Visible=true;
 					labelActionObject.Text=Lan.g(this,"Commlog Type");
 					comboActionObject.Visible=true;
-					_listCommLogTypeDefs.ForEach(x => comboActionObject.Items.Add(x.ItemName));
-					comboActionObject.SelectedIndex=_listCommLogTypeDefs.FindIndex(x => x.DefNum==AutoCur.CommType);
+					_listCommLogTypeDefs.ForEach(x => comboActionObject.Items.Add(x.Description));
+					comboActionObject.SelectedIndex=_listCommLogTypeDefs.FindIndex(x => x.Id==AutoCur.CommType);
 					labelMessage.Visible=true;
 					textMessage.Visible=true;
 					return;
@@ -551,7 +551,7 @@ namespace OpenDental{
 						MsgBox.Show(this,"A commlog type must be selected.");
 						return;
 					}
-					AutoCur.CommType=_listCommLogTypeDefs[comboActionObject.SelectedIndex].DefNum;
+					AutoCur.CommType=_listCommLogTypeDefs[comboActionObject.SelectedIndex].Id;
 					AutoCur.MessageContent=textMessage.Text;
 					break;
 				case AutomationAction.PopUp:

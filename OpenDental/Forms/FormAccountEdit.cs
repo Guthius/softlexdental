@@ -6,10 +6,7 @@ namespace OpenDental
 {
     public partial class FormAccountEdit : FormBase
     {
-        public bool IsNew;
-
         Account account;
-        Account accountOld;
 
         public FormAccountEdit(Account account)
         {
@@ -20,17 +17,15 @@ namespace OpenDental
 
         void FormAccountEdit_Load(object sender, EventArgs e)
         {
-            accountOld = account.Clone();
-
             descriptionTextBox.Text = account.Description;
             bankNumberTextBox.Text = account.BankNumber;
             inactiveCheckBox.Checked = account.Inactive;
-            colorButton.BackColor = account.AccountColor;
+            colorButton.BackColor = account.Color;
 
             for (int i = 0; i < Enum.GetNames(typeof(AccountType)).Length; i++)
             {
                 typeListBox.Items.Add(Enum.GetNames(typeof(AccountType))[i]);
-                if ((int)account.AcctType == i)
+                if ((int)account.Type == i)
                 {
                     typeListBox.SelectedIndex = i;
                 }
@@ -51,7 +46,7 @@ namespace OpenDental
 
         void DeleteButton_Click(object sender, EventArgs e)
         {
-            if (IsNew)
+            if (account.Id == 0)
             {
                 DialogResult = DialogResult.Cancel;
                 return;
@@ -104,18 +99,18 @@ namespace OpenDental
             }
 
             account.Description = descriptionTextBox.Text;
-            account.AcctType = (AccountType)typeListBox.SelectedIndex;
+            account.Type = (AccountType)typeListBox.SelectedIndex;
             account.BankNumber = bankNumberTextBox.Text;
             account.Inactive = inactiveCheckBox.Checked;
-            account.AccountColor = colorButton.BackColor;
+            account.Color = colorButton.BackColor;
 
-            if (IsNew)
+            if (account.Id == 0)
             {
                 Account.Insert(account);
             }
             else
             {
-                Account.Update(account, accountOld);
+                Account.Update(account);
             }
 
             DialogResult = DialogResult.OK;

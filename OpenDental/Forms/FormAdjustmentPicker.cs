@@ -62,7 +62,7 @@ namespace OpenDental
 
                 row.Cells.Add(adjCur.AdjDate.ToShortDateString());
                 row.Cells.Add(adjCur.PatNum.ToString());
-                row.Cells.Add(Defs.GetName(DefCat.AdjTypes, adjCur.AdjType));
+                row.Cells.Add(Defs.GetName(DefinitionCategory.AdjTypes, adjCur.AdjType));
                 row.Cells.Add(adjCur.AdjAmt.ToString("F"));
                 if (adjCur.ProcNum != 0)
                 {

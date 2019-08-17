@@ -26,8 +26,8 @@ namespace OpenDental {
 
 		private void FormApptPrintSetup_Load(object sender,EventArgs e) {
 			TimeSpan time;
-			string timeStart=Preferences.GetDateTime(PrefName.ApptPrintTimeStart).ToShortTimeString();
-			string timeStop=Preferences.GetDateTime(PrefName.ApptPrintTimeStop).ToShortTimeString();
+			string timeStart=Preference.GetDateTime(PreferenceName.ApptPrintTimeStart).ToShortTimeString();
+			string timeStop=Preference.GetDateTime(PreferenceName.ApptPrintTimeStop).ToShortTimeString();
 			for(int i=0;i<=24;i++) {
 				time=new TimeSpan(i,0,0);
 				comboStart.Items.Add(time.ToShortTimeString());
@@ -39,8 +39,8 @@ namespace OpenDental {
 					comboStop.SelectedIndex=i;
 				}
 			}
-			textFontSize.Text=Preferences.GetString(PrefName.ApptPrintFontSize);
-			textColumnsPerPage.Text=Preferences.GetInt(PrefName.ApptPrintColumnsPerPage).ToString();
+			textFontSize.Text=Preference.GetString(PreferenceName.ApptPrintFontSize);
+			textColumnsPerPage.Text=Preference.GetInt(PreferenceName.ApptPrintColumnsPerPage).ToString();
 			if(Preferences.HasClinicsEnabled && Clinics.ClinicNum==0) {//Hide if clinics is enabled and headquarters is selected
 				groupBoxPrintRouting.Enabled=false;
 			}
@@ -95,10 +95,10 @@ namespace OpenDental {
 
 		private void SaveChanges(bool suppressMessage) {
 			if(ValidEntries()) {
-				Prefs.UpdateDateT(PrefName.ApptPrintTimeStart,PIn.DateT(comboStart.SelectedItem.ToString()));
-				Prefs.UpdateDateT(PrefName.ApptPrintTimeStop,PIn.DateT(comboStop.SelectedItem.ToString()));
-				Prefs.UpdateString(PrefName.ApptPrintFontSize,textFontSize.Text);
-				Prefs.UpdateInt(PrefName.ApptPrintColumnsPerPage,PIn.Int(textColumnsPerPage.Text));
+				Preference.Update(PreferenceName.ApptPrintTimeStart,PIn.DateT(comboStart.SelectedItem.ToString()));
+				Preference.Update(PreferenceName.ApptPrintTimeStop,PIn.DateT(comboStop.SelectedItem.ToString()));
+				Preference.Update(PreferenceName.ApptPrintFontSize,textFontSize.Text);
+				Preference.Update(PreferenceName.ApptPrintColumnsPerPage,PIn.Int(textColumnsPerPage.Text));
 				if(!suppressMessage) {
 					MsgBox.Show(this,"Settings saved.");
 				}
@@ -110,10 +110,10 @@ namespace OpenDental {
 			if(!ValidEntries()) {
 				return false;
 			}
-			if(PIn.DateT(comboStart.SelectedItem.ToString()).Hour!=Preferences.GetDateTime(PrefName.ApptPrintTimeStart).Hour
-				|| PIn.DateT(comboStop.SelectedItem.ToString()).Hour!=Preferences.GetDateTime(PrefName.ApptPrintTimeStop).Hour
-				|| textFontSize.Text!=Preferences.GetString(PrefName.ApptPrintFontSize)
-				|| textColumnsPerPage.Text!=Preferences.GetInt(PrefName.ApptPrintColumnsPerPage).ToString())
+			if(PIn.DateT(comboStart.SelectedItem.ToString()).Hour!=Preference.GetDateTime(PreferenceName.ApptPrintTimeStart).Hour
+				|| PIn.DateT(comboStop.SelectedItem.ToString()).Hour!=Preference.GetDateTime(PreferenceName.ApptPrintTimeStop).Hour
+				|| textFontSize.Text!=Preference.GetString(PreferenceName.ApptPrintFontSize)
+				|| textColumnsPerPage.Text!=Preference.GetInt(PreferenceName.ApptPrintColumnsPerPage).ToString())
 			{
 				changed=true;
 			}

@@ -18,7 +18,7 @@ namespace OpenDental {
 			CultureInfo cultureCur=Preferences.GetLanguageAndRegion();
 			_listAllCultures=CultureInfo.GetCultures(CultureTypes.AllCultures).Where(x => !x.IsNeutralCulture).OrderBy(x => x.DisplayName).ToList();
 			textLARLocal.Text=CultureInfo.CurrentCulture.DisplayName;
-			if(Preferences.GetString(PrefName.LanguageAndRegion)=="") {
+			if(Preference.GetString(PreferenceName.LanguageAndRegion)=="") {
 				textLARDB.Text="None";
 			}
 			else {
@@ -44,7 +44,7 @@ namespace OpenDental {
 			}
 			if(Security.IsAuthorized(Permissions.Setup,true)) {
 				//_cultureCur=_listAllCultures[comboLanguageAndRegion.SelectedIndex];
-				if(Prefs.UpdateString(PrefName.LanguageAndRegion,_listAllCultures[comboLanguageAndRegion.SelectedIndex].Name)) {
+				if(Preference.Update(PreferenceName.LanguageAndRegion,_listAllCultures[comboLanguageAndRegion.SelectedIndex].Name)) {
 					MsgBox.Show(this,"Program must be restarted for changes to take full effect.");
 				}
 				ComputerPrefs.LocalComputer.NoShowLanguage=checkNoShow.Checked;

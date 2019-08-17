@@ -31,7 +31,7 @@ namespace OpenDental {
 		private void FillAndSortListFees() {
 			List<long> listClinicNums=Clinics.GetForUserod(Security.CurUser,true).Select(x => x.ClinicNum).ToList();
 			_listFees=Fees.GetFeesForCode(_procCode.CodeNum,listClinicNums);//already sorted
-			if(Preferences.GetBool(PrefName.FeesUseCache)){
+			if(Preference.GetBool(PreferenceName.FeesUseCache)){
 				//Create a temporary list that will be used to keep track of the Fees after they've been sorted within each fee schedule.
 				List<Fee> listFees=new List<Fee>();
 				for(int i=0;i<_listFeeScheds.Count;i++) {

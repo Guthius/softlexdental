@@ -128,15 +128,15 @@ namespace OpenDental {
 		}
 
 		private void FillBlockouts() {
-			List<Def> listBlockoutDefs=Defs.GetDefsForCategory(DefCat.BlockoutTypes,true);
+			List<Definition> listBlockoutDefs=Definition.GetByCategory(DefinitionCategory.BlockoutTypes);
 			comboBlockout.Items.Clear();
-			comboBlockout.Items.Add(new ODBoxItem<Def>(Lan.g(this,"None"),null));//tag=null //if they select 'None' then only search for the provider(s).
+			comboBlockout.Items.Add(new ODBoxItem<Definition>(Lan.g(this,"None"),null));//tag=null //if they select 'None' then only search for the provider(s).
 			comboBlockout.SelectedIndex=0;//default to none
-			foreach(Def blockoutType in listBlockoutDefs) {
-				if(blockoutType.ItemValue.Contains(BlockoutType.NoSchedule.GetDescription())) {
+			foreach(Definition blockoutType in listBlockoutDefs) {
+				if(blockoutType.Value.Contains(BlockoutType.NoSchedule.GetDescription())) {
 					continue;//The search will already not show results for Do Not Schedule Blockout types, so users shouldn't be able to select them.
 				}
-				comboBlockout.Items.Add(new ODBoxItem<Def>(blockoutType.ItemName,blockoutType));
+				comboBlockout.Items.Add(new ODBoxItem<Definition>(blockoutType.Description,blockoutType));
 			}
 			comboBlockout.SelectedIndex=0;
 		}
@@ -196,7 +196,7 @@ namespace OpenDental {
 					return;
 				}
 			}
-			if(comboBoxMultiProv.SelectedTags<Provider>().Contains(null) && comboBlockout.SelectedTag<Def>()==null) {
+			if(comboBoxMultiProv.SelectedTags<Provider>().Contains(null) && comboBlockout.SelectedTag<Definition>()==null) {
 				Cursor=Cursors.Default;
 				MsgBox.Show(this,"Please pick a provider or a blockout type.");
 				return;
@@ -207,8 +207,8 @@ namespace OpenDental {
 			List<long> listClinicNums=new List<long>();
 			List<long> listProvNums=new List<long>();
 			long blockoutType=0;
-			if(comboBlockout.SelectedTag<Def>()!=null) {
-				blockoutType=comboBlockout.SelectedTag<Def>().DefNum;
+			if(comboBlockout.SelectedTag<Definition>()!=null) {
+				blockoutType=comboBlockout.SelectedTag<Definition>().Id;
 				listProvNums.Add(0);//providers don't matter for blockouts
 			}
 			if(!comboBoxMultiProv.SelectedTags<Provider>().Contains(null)) {

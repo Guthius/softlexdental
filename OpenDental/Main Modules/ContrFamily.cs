@@ -33,7 +33,7 @@ namespace OpenDental
         private List<Patient> SuperFamilyMembers;
         private long _patNumLast;
         private SortStrategy _superFamSortStrat;
-        private Dictionary<Patient, Def> _dictCloneSpecialty;
+        private Dictionary<Patient, Definition> _dictCloneSpecialty;
         private FamilyModules.LoadData _loadData;
 
         public ContrFamily()
@@ -87,7 +87,7 @@ namespace OpenDental
             SuperFamilyGuarantors = _loadData.SuperFamilyGuarantors;
             _dictCloneSpecialty = _loadData.DictCloneSpecialities;
             //Takes the preference string and converts it to an enum object
-            _superFamSortStrat = (SortStrategy)Preferences.GetInt(PrefName.SuperFamSortStrategy);
+            _superFamSortStrat = (SortStrategy)Preference.GetInt(PreferenceName.SuperFamSortStrategy);
         }
 
         private void RefreshModuleScreen()
@@ -99,7 +99,7 @@ namespace OpenDental
                 ToolBarMain.Buttons["Delete"].Enabled = true;
                 ToolBarMain.Buttons["Guarantor"].Enabled = true;
                 ToolBarMain.Buttons["Move"].Enabled = true;
-                if (ToolBarMain.Buttons["Ins"] != null && !Preferences.GetBool(PrefName.EasyHideInsurance))
+                if (ToolBarMain.Buttons["Ins"] != null && !Preference.GetBool(PreferenceName.EasyHideInsurance))
                 {
                     ToolBarMain.Buttons["Ins"].Enabled = true;
                     ToolBarMain.Buttons["Discount"].Enabled = true;
@@ -116,7 +116,7 @@ namespace OpenDental
                     gridIns.Location = superClonesSplitContainer.Location;
                     gridIns.Width = this.Width - gridIns.Left;
                 }
-                if (Preferences.GetBool(PrefName.ShowFeatureSuperfamilies) && ToolBarMain.Buttons["AddSuper"] != null)
+                if (Preference.GetBool(PreferenceName.ShowFeatureSuperfamilies) && ToolBarMain.Buttons["AddSuper"] != null)
                 {
                     ToolBarMain.Buttons["AddSuper"].Enabled = true;
                 }
@@ -133,7 +133,7 @@ namespace OpenDental
                     ToolBarMain.Buttons["RemoveSuper"].Enabled = true;
                     ToolBarMain.Buttons["DisbandSuper"].Enabled = true;
                 }
-                if (Preferences.GetBool(PrefName.ShowFeaturePatientClone)
+                if (Preference.GetBool(PreferenceName.ShowFeaturePatientClone)
                     && ToolBarMain.Buttons["AddClone"] != null)
                 {
                     ToolBarMain.Buttons["AddClone"].Enabled = true;
@@ -176,12 +176,12 @@ namespace OpenDental
                     ToolBarMain.Buttons["RemoveSuper"].Enabled = false;
                     ToolBarMain.Buttons["DisbandSuper"].Enabled = false;
                 }
-                if (ToolBarMain.Buttons["Ins"] != null && !Preferences.GetBool(PrefName.EasyHideInsurance))
+                if (ToolBarMain.Buttons["Ins"] != null && !Preference.GetBool(PreferenceName.EasyHideInsurance))
                 {
                     ToolBarMain.Buttons["Ins"].Enabled = false;
                     ToolBarMain.Buttons["Discount"].Enabled = false;
                 }
-                if (Preferences.GetBool(PrefName.ShowFeaturePatientClone)
+                if (Preference.GetBool(PreferenceName.ShowFeaturePatientClone)
                     && ToolBarMain.Buttons["AddClone"] != null
                     && ToolBarMain.Buttons["SynchClone"] != null
                     && ToolBarMain.Buttons["BreakClone"] != null)
@@ -192,7 +192,7 @@ namespace OpenDental
                 }
                 ToolBarMain.Invalidate();
             }
-            if (Preferences.GetBool(PrefName.EasyHideInsurance))
+            if (Preference.GetBool(PreferenceName.EasyHideInsurance))
             {
                 gridIns.Visible = false;
             }
@@ -208,7 +208,7 @@ namespace OpenDental
                 {
                     ToolBarMain.Buttons["Add"].Enabled = false;
                     ToolBarMain.Buttons["Delete"].Enabled = false;
-                    if (Preferences.GetBool(PrefName.ShowFeaturePatientClone)
+                    if (Preference.GetBool(PreferenceName.ShowFeaturePatientClone)
                         && ToolBarMain.Buttons["AddClone"] != null
                         && ToolBarMain.Buttons["SynchClone"] != null
                         && ToolBarMain.Buttons["BreakClone"] != null)
@@ -225,7 +225,7 @@ namespace OpenDental
                 {
                     ToolBarMain.Buttons["Add"].Enabled = false;
                     ToolBarMain.Buttons["Delete"].Enabled = false;
-                    if (Preferences.GetBool(PrefName.ShowFeaturePatientClone)
+                    if (Preference.GetBool(PreferenceName.ShowFeaturePatientClone)
                         && ToolBarMain.Buttons["AddClone"] != null
                         && ToolBarMain.Buttons["SynchClone"] != null
                         && ToolBarMain.Buttons["BreakClone"] != null)
@@ -314,7 +314,7 @@ namespace OpenDental
             ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Delete"), Resources.IconDelete, Lan.g(this, "Delete Family Member"), "Delete"));
             ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Set Guarantor"), Resources.IconStar, Lan.g(this, "Set as Guarantor"), "Guarantor"));
             ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Move"), Resources.IconUserGo, Lan.g(this, "Move to Another Family"), "Move"));
-            if (Preferences.GetBool(PrefName.ShowFeaturePatientClone))
+            if (Preference.GetBool(PreferenceName.ShowFeaturePatientClone))
             {
                 ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
                 button = new ODToolBarButton(Lan.g(this, "Clones:"), null, "", "");
@@ -324,7 +324,7 @@ namespace OpenDental
                 ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Synch"), null, Lan.g(this, "Synch information to the clone patient or create a clone of the currently selected patient if one does not exist"), "SynchClone"));
                 ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Break"), null, Lan.g(this, "Remove selected patient from the clone group."), "BreakClone"));
             }
-            if (Preferences.GetBool(PrefName.ShowFeatureSuperfamilies))
+            if (Preference.GetBool(PreferenceName.ShowFeatureSuperfamilies))
             {
                 ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
                 button = new ODToolBarButton(Lan.g(this, "Super Family:"), null, "", "");
@@ -334,7 +334,7 @@ namespace OpenDental
                 ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Remove"), null, Lan.g(this, "Remove selected patient, and their family, from super family"), "RemoveSuper"));
                 ToolBarMain.Buttons.Add(new ODToolBarButton(Lan.g(this, "Disband"), null, Lan.g(this, "Disband the current super family by removing all members of the super family."), "DisbandSuper"));
             }
-            if (!Preferences.GetBool(PrefName.EasyHideInsurance))
+            if (!Preference.GetBool(PreferenceName.EasyHideInsurance))
             {
                 ToolBarMain.Buttons.Add(new ODToolBarButton(ODToolBarButtonStyle.Separator));
                 button = new ODToolBarButton(Lan.g(this, "Add Insurance"), Resources.IconInsurance, "", "Ins");
@@ -531,7 +531,7 @@ namespace OpenDental
             ODGridRow row;
             List<DisplayField> fields = DisplayFields.GetForCategory(DisplayFieldCategory.PatientInformation);
             DisplayField fieldCur;
-            List<Def> listMiscColorDefs = Defs.GetDefsForCategory(DefCat.MiscColors, true);
+            List<Definition> listMiscColorDefs = Definition.GetByCategory(DefinitionCategory.MiscColors);
             for (int f = 0; f < fields.Count; f++)
             {
                 fieldCur = fields[f];
@@ -658,8 +658,8 @@ namespace OpenDental
                     #endregion Arrive Early
                     #region Billing Type
                     case "Billing Type":
-                        string billingtype = Defs.GetName(DefCat.BillingTypes, PatCur.BillingType);
-                        if (Defs.GetHidden(DefCat.BillingTypes, PatCur.BillingType))
+                        string billingtype = Defs.GetName(DefinitionCategory.BillingTypes, PatCur.BillingType);
+                        if (Defs.IsHidden(PatCur.BillingType))
                         {
                             billingtype += " " + Lan.g(this, "(hidden)");
                         }
@@ -762,13 +762,13 @@ namespace OpenDental
                     #region ICE Name
                     case "ICE Name":
                         row.Cells.Add(PatNoteCur.ICEName);
-                        row.ColorBackG = listMiscColorDefs[(int)DefCatMiscColors.FamilyModuleICE].ItemColor;
+                        row.ColorBackG = listMiscColorDefs[(int)DefCatMiscColors.FamilyModuleICE].Color;
                         break;
                     #endregion ICE Name
                     #region ICE Phone
                     case "ICE Phone":
                         row.Cells.Add(PatNoteCur.ICEPhone);
-                        row.ColorBackG = listMiscColorDefs[(int)DefCatMiscColors.FamilyModuleICE].ItemColor;
+                        row.ColorBackG = listMiscColorDefs[(int)DefCatMiscColors.FamilyModuleICE].Color;
                         break;
                     #endregion ICE Phone
                     #region Language
@@ -825,7 +825,7 @@ namespace OpenDental
                                 row.Cells.Add(fieldCur.Description);
                             }
                             row.Cells.Add(PatRestrictions.GetPatRestrictDesc(listPatRestricts[i].PatRestrictType));
-                            row.ColorBackG = listMiscColorDefs[10].ItemColor;//index 10 is Patient Restrictions (hard coded in convertdatabase4)
+                            row.ColorBackG = listMiscColorDefs[10].Color;//index 10 is Patient Restrictions (hard coded in convertdatabase4)
                             if (i == listPatRestricts.Count - 1)
                             {//last row added outside of switch statement
                                 break;
@@ -869,13 +869,13 @@ namespace OpenDental
                         {
                             row.Cells.Add(Lan.g("TablePatient", "None"));
                             row.Tag = "References";
-                            row.ColorBackG = listMiscColorDefs[8].ItemColor;
+                            row.ColorBackG = listMiscColorDefs[8].Color;
                         }
                         else
                         {
                             row.Cells.Add(Lan.g("TablePatient", ""));
                             row.Tag = "References";
-                            row.ColorBackG = listMiscColorDefs[8].ItemColor;
+                            row.ColorBackG = listMiscColorDefs[8].Color;
                             gridPat.Rows.Add(row);
                         }
                         for (int i = 0; i < custREList.Count; i++)
@@ -892,7 +892,7 @@ namespace OpenDental
                                 row.Cells.Add(CustReferences.GetCustNameFL(custREList[i].PatNumRef));
                             }
                             row.Tag = custREList[i];
-                            row.ColorBackG = listMiscColorDefs[8].ItemColor;
+                            row.ColorBackG = listMiscColorDefs[8].Color;
                             if (i < custREList.Count - 1)
                             {
                                 gridPat.Rows.Add(row);
@@ -912,7 +912,7 @@ namespace OpenDental
                         {
                             row.Cells.Add(Lan.g("TablePatient", "None"));
                             row.Tag = "Referral";
-                            row.ColorBackG = listMiscColorDefs[8].ItemColor;
+                            row.ColorBackG = listMiscColorDefs[8].Color;
                         }
                         //else{
                         //	row.Cells.Add("");
@@ -956,7 +956,7 @@ namespace OpenDental
                                 row.Cells.Add("");//if referral is null because using random keys and had bug.
                             }
                             row.Tag = "Referral";
-                            row.ColorBackG = listMiscColorDefs[8].ItemColor;
+                            row.ColorBackG = listMiscColorDefs[8].Color;
                             if (i < listRefs.Count - 1)
                             {
                                 gridPat.Rows.Add(row);
@@ -974,7 +974,7 @@ namespace OpenDental
                         {
                             row.Cells.Add((_loadData.ResponsibleParty ?? Patients.GetLim(PatCur.ResponsParty)).GetNameLF());
                         }
-                        row.ColorBackG = listMiscColorDefs[8].ItemColor;
+                        row.ColorBackG = listMiscColorDefs[8].Color;
                         break;
                     #endregion ResponsParty
                     #region Salutation
@@ -1136,8 +1136,8 @@ namespace OpenDental
                 for (int j = 0; j < RecallList.Count; j++)
                 {
                     if (RecallList[j].PatNum == FamCur.ListPats[i].PatNum
-                        && (RecallList[j].RecallTypeNum == Preferences.GetLong(PrefName.RecallTypeSpecialProphy)
-                        || RecallList[j].RecallTypeNum == Preferences.GetLong(PrefName.RecallTypeSpecialPerio)))
+                        && (RecallList[j].RecallTypeNum == Preference.GetLong(PreferenceName.RecallTypeSpecialProphy)
+                        || RecallList[j].RecallTypeNum == Preference.GetLong(PreferenceName.RecallTypeSpecialPerio)))
                     {
                         recallDate = RecallList[j].DateDue;
                     }
@@ -1206,7 +1206,7 @@ namespace OpenDental
             tempPat.HmPhone = PatCur.HmPhone;
             tempPat.Guarantor = PatCur.Guarantor;
             tempPat.CreditType = PatCur.CreditType;
-            if (!Preferences.GetBool(PrefName.PriProvDefaultToSelectProv))
+            if (!Preference.GetBool(PreferenceName.PriProvDefaultToSelectProv))
             {
                 tempPat.PriProv = PatCur.PriProv;
             }
@@ -1516,7 +1516,7 @@ namespace OpenDental
                         //keep current superfamily
                         Patients.Update(PatCur, PatOld);
                         //if moving a superfamily non-guar family member out as guar of their own family within the sf, and pref is set, add ins to family members if necessary
-                        if (PatCur.SuperFamily > 0 && Preferences.GetBool(PrefName.SuperFamNewPatAddIns))
+                        if (PatCur.SuperFamily > 0 && Preference.GetBool(PreferenceName.SuperFamNewPatAddIns))
                         {
                             AddSuperGuarPriInsToFam(PatCur.Guarantor);
                         }
@@ -1731,7 +1731,7 @@ namespace OpenDental
                                 {
                                     cellStr += ", ";
                                 }
-                                cellStr += Defs.GetName(DefCat.RecallUnschedStatus, recallListPat[i].RecallStatus);
+                                cellStr += Defs.GetName(DefinitionCategory.RecallUnschedStatus, recallListPat[i].RecallStatus);
                             }
                             if (recallListPat[i].Note != "")
                             {
@@ -1912,7 +1912,7 @@ namespace OpenDental
                     return;
                 }
                 Patients.AssignToSuperfamily(patSelected.Guarantor, PatCur.SuperFamily);
-                if (Preferences.GetBool(PrefName.SuperFamNewPatAddIns))
+                if (Preference.GetBool(PreferenceName.SuperFamNewPatAddIns))
                 {
                     AddSuperGuarPriInsToFam(patSelected.Guarantor);
                 }
@@ -2083,7 +2083,7 @@ namespace OpenDental
             }
             int selectedIndex = -1;
             ODGridRow row;
-            foreach (KeyValuePair<Patient, Def> cloneAndSpecialty in _dictCloneSpecialty)
+            foreach (KeyValuePair<Patient, Definition> cloneAndSpecialty in _dictCloneSpecialty)
             {
                 //Never add deleted patients to the grid.  Deleted patients should not be selectable.
                 if (cloneAndSpecialty.Key.PatStatus == PatientStatus.Deleted)
@@ -2097,7 +2097,7 @@ namespace OpenDental
                     row.Cells.Add(Clinics.GetAbbr(cloneAndSpecialty.Key.ClinicNum));
                 }
                 //Check for null because an office could have just turned on clinics and a specialty would not have been required prior.
-                row.Cells.Add((cloneAndSpecialty.Value == null) ? "" : cloneAndSpecialty.Value.ItemName);
+                row.Cells.Add((cloneAndSpecialty.Value == null) ? "" : cloneAndSpecialty.Value.Description);
                 row.Tag = cloneAndSpecialty.Key;
                 //If we are about to add the clone that is currently selected, save the index of said patient so that we can select them after the update.
                 if (PatCur != null && cloneAndSpecialty.Key.PatNum == PatCur.PatNum)
@@ -2440,15 +2440,15 @@ namespace OpenDental
                 {
                     discountPlan = _loadData.DiscountPlan;
                 }
-                Def adjType = Defs.GetDef(DefCat.AdjTypes, discountPlan.DefNum);
+                Definition adjType = Defs.GetDef(DefinitionCategory.AdjTypes, discountPlan.DefNum);
                 ODGridRow discountRow = new ODGridRow();
                 discountRow.Cells.Add(Lan.g("TableDiscountPlans", "Description"));
                 discountRow.Cells.Add(discountPlan.Description);
-                discountRow.ColorBackG = Defs.GetFirstForCategory(DefCat.MiscColors).ItemColor;
+                discountRow.ColorBackG = Defs.GetFirstForCategory(DefinitionCategory.MiscColors).Color;
                 gridIns.Rows.Add(discountRow);
                 discountRow = new ODGridRow();
                 discountRow.Cells.Add(Lan.g("TableDiscountPlans", "Adjustment Type"));
-                discountRow.Cells.Add(adjType.ItemName);
+                discountRow.Cells.Add(adjType.Description);
                 gridIns.Rows.Add(discountRow);
                 discountRow = new ODGridRow();
                 discountRow.Cells.Add(Lan.g("TableDiscountPlans", "Fee Schedule"));
@@ -2469,7 +2469,7 @@ namespace OpenDental
                 gridIns.EndUpdate();
                 return;
             }
-            List<Def> listDefs = Defs.GetDefsForCategory(DefCat.MiscColors);
+            List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.MiscColors);;
             List<InsSub> subArray = new List<InsSub>();//prevents repeated calls to db.
             List<InsPlan> planArray = new List<InsPlan>();
             InsSub sub;
@@ -2520,7 +2520,7 @@ namespace OpenDental
             {
                 row.Cells.Add(FamCur.GetNameInFamFL(subArray[i].Subscriber));
             }
-            row.ColorBackG = listDefs[0].ItemColor;
+            row.ColorBackG = listDefs[0].Color;
             gridIns.Rows.Add(row);
             //subscriber ID
             row = new ODGridRow();
@@ -2529,7 +2529,7 @@ namespace OpenDental
             {
                 row.Cells.Add(subArray[i].SubscriberID);
             }
-            row.ColorBackG = listDefs[0].ItemColor;
+            row.ColorBackG = listDefs[0].Color;
             gridIns.Rows.Add(row);
             //relationship
             row = new ODGridRow();
@@ -2538,7 +2538,7 @@ namespace OpenDental
             {
                 row.Cells.Add(Lan.g("enumRelat", PatPlanList[i].Relationship.ToString()));
             }
-            row.ColorBackG = listDefs[0].ItemColor;
+            row.ColorBackG = listDefs[0].Color;
             gridIns.Rows.Add(row);
             //patient ID
             row = new ODGridRow();
@@ -2547,7 +2547,7 @@ namespace OpenDental
             {
                 row.Cells.Add(PatPlanList[i].PatID);
             }
-            row.ColorBackG = listDefs[0].ItemColor;
+            row.ColorBackG = listDefs[0].Color;
             gridIns.Rows.Add(row);
             //pending
             row = new ODGridRow();
@@ -2563,7 +2563,7 @@ namespace OpenDental
                     row.Cells.Add("");
                 }
             }
-            row.ColorBackG = listDefs[0].ItemColor;
+            row.ColorBackG = listDefs[0].Color;
             row.ColorLborder = Color.Black;
             gridIns.Rows.Add(row);
             //employer
@@ -2950,7 +2950,7 @@ namespace OpenDental
             row.ColorLborder = Color.Black;
             gridIns.Rows.Add(row);
             //InsHist
-            foreach (PrefName prefName in Prefs.GetInsHistPrefNames())
+            foreach (PreferenceName prefName in Preference.GetInsHistPrefNames())
             {
                 row = new ODGridRow();
                 row.Cells.Add(Lan.g("TableCoverage", prefName.GetDescription()));

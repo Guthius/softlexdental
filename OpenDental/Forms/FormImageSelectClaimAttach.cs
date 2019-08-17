@@ -142,7 +142,7 @@ namespace OpenDental{
 			for(int i=0;i<Docs.Length;i++){
 				row=new ODGridRow();
 				row.Cells.Add(Docs[i].DateCreated.ToString());
-				row.Cells.Add(Defs.GetName(DefCat.ImageCats,Docs[i].DocCategory));
+				row.Cells.Add(Defs.GetName(DefinitionCategory.ImageCats,Docs[i].DocCategory));
 			  row.Cells.Add(Docs[i].Description);
 				gridMain.Rows.Add(row);
 			}
@@ -205,40 +205,42 @@ namespace OpenDental{
 							bitmapnew.Save(newPath);
 						}
 						else if(CloudStorage.IsCloudStorage) {
-							//First, download the file. 
-							FormProgress FormP=new FormProgress();
-							FormP.DisplayText="Downloading Image...";
-							FormP.NumberFormat="F";
-							FormP.NumberMultiplication=1;
-							FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-							FormP.TickMS=1000;
-							OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(patfolder
-								,doc.FileName
-								,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-							FormP.ShowDialog();
-							if(FormP.DialogResult==DialogResult.Cancel) {
-								state.DoCancel=true;
-								return;
-							}
-							//Successfully downloaded, now do stuff with state.FileContent
-							FormP=new FormProgress();
-							FormP.DisplayText="Uploading Image for Claim Attach...";
-							FormP.NumberFormat="F";
-							FormP.NumberMultiplication=1;
-							FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-							FormP.TickMS=1000;
-							OpenDentalCloud.Core.TaskStateUpload state2=CloudStorage.UploadAsync(attachPath
-								,newName
-								,state.FileContent
-								,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-							FormP.ShowDialog();
-							if(FormP.DialogResult==DialogResult.Cancel) {
-								state2.DoCancel=true;
-								return;
-							}
-							//Upload was successful
-						}
-					}
+                            // TODO: Fix me
+
+                            // //First, download the file. 
+                            // FormProgress FormP=new FormProgress();
+                            // FormP.DisplayText="Downloading Image...";
+                            // FormP.NumberFormat="F";
+                            // FormP.NumberMultiplication=1;
+                            // FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
+                            // FormP.TickMS=1000;
+                            // OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(patfolder
+                            // 	,doc.FileName
+                            // 	,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
+                            // FormP.ShowDialog();
+                            // if(FormP.DialogResult==DialogResult.Cancel) {
+                            // 	state.DoCancel=true;
+                            // 	return;
+                            // }
+                            // //Successfully downloaded, now do stuff with state.FileContent
+                            // FormP=new FormProgress();
+                            // FormP.DisplayText="Uploading Image for Claim Attach...";
+                            // FormP.NumberFormat="F";
+                            // FormP.NumberMultiplication=1;
+                            // FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
+                            // FormP.TickMS=1000;
+                            // OpenDentalCloud.Core.TaskStateUpload state2=CloudStorage.UploadAsync(attachPath
+                            // 	,newName
+                            // 	,state.FileContent
+                            // 	,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
+                            // FormP.ShowDialog();
+                            // if(FormP.DialogResult==DialogResult.Cancel) {
+                            // 	state2.DoCancel=true;
+                            // 	return;
+                            // }
+                            // //Upload was successful
+                        }
+                    }
 					else {
 						File.Copy(oldPath,newPath);
 					}

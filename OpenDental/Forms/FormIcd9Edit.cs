@@ -23,7 +23,7 @@ namespace OpenDental {
 			if(!IsNew) {
 				textCode.Enabled=false;
 			}
-			textCode.Text=Icd9Cur.ICD9Code;
+			textCode.Text=Icd9Cur.Code;
 			textDescription.Text=Icd9Cur.Description;
 		}
 
@@ -36,7 +36,7 @@ namespace OpenDental {
 				return;
 			}
 			try {
-				ICD9s.Delete(Icd9Cur.ICD9Num);
+                ICD9.Delete(Icd9Cur.Id);
 				DialogResult=DialogResult.OK;
 			}
 			catch(ApplicationException ex) {
@@ -45,17 +45,17 @@ namespace OpenDental {
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			Icd9Cur.ICD9Code=textCode.Text;
+			Icd9Cur.Code=textCode.Text;
 			Icd9Cur.Description=textDescription.Text;
 			if(IsNew) {//Used the "+Add" button to open this form.
-				if(ICD9s.CodeExists(Icd9Cur.ICD9Code)) {//Must enter a unique code.
+				if(ICD9.CodeExists(Icd9Cur.Code)) {//Must enter a unique code.
 					MsgBox.Show(this,"You must choose a unique code.");
 					return;
 				}
-				ICD9s.Insert(Icd9Cur);
+				ICD9.Insert(Icd9Cur);
 			}
 			else {
-				ICD9s.Update(Icd9Cur);
+                ICD9.Update(Icd9Cur);
 			}
 			DialogResult=DialogResult.OK;
 		}

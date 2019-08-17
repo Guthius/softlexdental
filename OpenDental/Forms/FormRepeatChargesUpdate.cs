@@ -135,7 +135,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormRepeatChargesUpdate_Load(object sender, EventArgs e) {
-			checkRunAging.Checked=Preferences.GetBool(PrefName.RepeatingChargesRunAging);//this will cause the label text to be updated
+			checkRunAging.Checked=Preference.GetBool(PreferenceName.RepeatingChargesRunAging);//this will cause the label text to be updated
 		}
 
 		///<summary>Do not use this method in release code. This is only to be used for Unit Tests 53-56.</summary>
@@ -157,8 +157,8 @@ namespace OpenDental{
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			Prefs.RefreshCache();//Just to be sure we don't miss someone who has just started running repeating charges.
-			if(Preferences.GetString(PrefName.RepeatingChargesBeginDateTime)!="") {
+			Preference.Refresh();//Just to be sure we don't miss someone who has just started running repeating charges.
+			if(Preference.GetString(PreferenceName.RepeatingChargesBeginDateTime)!="") {
 				MsgBox.Show(this,"Repeating charges already running on another workstation, you must wait for them to finish before continuing.");
 				return;
 			}

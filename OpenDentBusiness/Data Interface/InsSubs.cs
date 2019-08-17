@@ -397,7 +397,7 @@ namespace OpenDentBusiness
                 insSubMovedCount++;
                 for (int j = 0; j < tablePatsForInsSub.Rows.Count; j++)
                 {
-                    long patNum = PIn.Long(tablePatsForInsSub.Rows[j]["PatNum"].ToString());
+                    int patNum = PIn.Int(tablePatsForInsSub.Rows[j]["PatNum"].ToString());
                     List<PatPlan> listPatPlans = PatPlans.Refresh(patNum);
                     for (int k = 0; k < listPatPlans.Count; k++)
                     {
@@ -413,7 +413,7 @@ namespace OpenDentBusiness
                     //Now that the plan has changed for the current subscriber, recalculate estimates.
                     bool prefChanged = false;
                     //Forcefully set pref false to prevent creating new estimates for all procs (including completed, sent procs)
-                    if (Prefs.UpdateBool(PrefName.ClaimProcsAllowedToBackdate, false))
+                    if (Preference.Update(PreferenceName.ClaimProcsAllowedToBackdate, false))
                     {
                         prefChanged = true;//We will turn the preference back on for the user after we finish our computations.
                     }
@@ -428,7 +428,7 @@ namespace OpenDentBusiness
                     Procedures.ComputeEstimatesForAll(patNum, listClaimProcs, listProcs, listInsPlans, listPatPlans, listBenefits, pat.Age, listInsSubs);
                     if (prefChanged)
                     {
-                        Prefs.UpdateBool(PrefName.ClaimProcsAllowedToBackdate, true);//set back to original value if changed.
+                        Preference.Update(PreferenceName.ClaimProcsAllowedToBackdate, true);//set back to original value if changed.
                     }
                 }
             }

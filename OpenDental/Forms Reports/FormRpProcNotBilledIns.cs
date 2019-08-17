@@ -39,7 +39,7 @@ namespace OpenDental{
 			gridMain.ContextMenu=contextMenuGrid;
 			dateRangePicker.SetDateTimeTo(DateTime.Today);
 			dateRangePicker.SetDateTimeFrom(DateTime.Today);
-			if(Preferences.GetBool(PrefName.ShowFeatureMedicalInsurance)) {
+			if(Preference.GetBool(PreferenceName.ShowFeatureMedicalInsurance)) {
 				checkMedical.Visible=true;
 			}
 			if(Preferences.HasClinicsEnabled) {
@@ -47,7 +47,7 @@ namespace OpenDental{
 				labelClinic.Visible=true;
 				FillClinics();
 			}
-			if(Preferences.GetBool(PrefName.ClaimProcsNotBilledToInsAutoGroup)) {
+			if(Preference.GetBool(PreferenceName.ClaimProcsNotBilledToInsAutoGroup)) {
 				checkAutoGroupProcs.Checked=true;
 			}
 			FillGrid();
@@ -187,7 +187,7 @@ namespace OpenDental{
 			_myReport=new ReportComplex(true,false,false);
 			_myReport.ReportName=Lan.g(this,"Procedures Not Billed to Insurance");
 			_myReport.AddTitle("Title",Lan.g(this,"Procedures Not Billed to Insurance"));
-			_myReport.AddSubTitle("Practice Name",Preferences.GetString(PrefName.PracticeTitle));
+			_myReport.AddSubTitle("Practice Name",Preference.GetString(PreferenceName.PracticeTitle));
 			if(_myReportDateFrom==_myReportDateTo) {
 				_myReport.AddSubTitle("Report Dates",_myReportDateFrom.ToShortDateString());
 			}
@@ -266,7 +266,7 @@ namespace OpenDental{
 			List<ClaimProc> listCurClaimProcs=new List<ClaimProc>();
 			//find the date user is restricted by for this permission so it doesn't get called in a loop. General permission was already checked.
 			DateTime dateRestricted=GroupPermissions.GetDateRestrictedForPermission(Permissions.NewClaimsProcNotBilled,
-				Security.CurUser.GetGroups(true).Select(x => x.UserGroupNum).ToList());
+				Security.CurUser.GetGroups().Select(x => x.Id).ToList());
 			//Table rows need to be 1:1 with gridMain rows due to logic in ContrAccount.toolBarButIns_Click(...).
 			DataTable table=new DataTable();
 			//Required columns as mentioned by ContrAccount.toolBarButIns_Click().
@@ -359,7 +359,7 @@ namespace OpenDental{
 					if(Preferences.HasClinicsEnabled) {//Group by clinic only if clinics enabled.
 						listProcs=listProcs.FindAll(x => x.ClinicNum==procNotBilled.ClinicNum);
 					}
-					else if(!Preferences.GetBool(PrefName.EasyHidePublicHealth)) {//Group by Place of Service only if Public Health feature is enabled.
+					else if(!Preference.GetBool(PreferenceName.EasyHidePublicHealth)) {//Group by Place of Service only if Public Health feature is enabled.
 						listProcs=listProcs.FindAll(x => x.PlaceService==procNotBilled.PlaceService);
 					}
 				}
@@ -481,7 +481,7 @@ namespace OpenDental{
 		}
 
 		private void FormRpProcNotBilledIns_FormClosing(object sender,FormClosingEventArgs e) {
-			Prefs.UpdateBool(PrefName.ClaimProcsNotBilledToInsAutoGroup,checkAutoGroupProcs.Checked);
+			Preference.Update(PreferenceName.ClaimProcsNotBilledToInsAutoGroup,checkAutoGroupProcs.Checked);
 		}
 
 	}//end class FormRpProcNotBilledIns

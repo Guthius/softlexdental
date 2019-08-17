@@ -34,7 +34,7 @@ namespace OpenDental {
 			listTransType.Items.Add("Adjustment");
 			listTransType.Items.Add("Void");
 			listTransType.SelectedIndex=0;
-			checkSaveToken.Checked=Preferences.GetBool(PrefName.StoreCCtokens);
+			checkSaveToken.Checked=Preference.GetBool(PreferenceName.StoreCCtokens);
 			Program prog=Programs.GetCur(ProgramName.Xcharge);
 			if(prog==null) {
 				return;

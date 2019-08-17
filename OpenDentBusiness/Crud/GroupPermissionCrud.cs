@@ -45,7 +45,7 @@ namespace OpenDentBusiness.Crud{
 				groupPermission.GroupPermNum= PIn.Long  (row["GroupPermNum"].ToString());
 				groupPermission.NewerDate   = PIn.Date  (row["NewerDate"].ToString());
 				groupPermission.NewerDays   = PIn.Int   (row["NewerDays"].ToString());
-				groupPermission.UserGroupNum= PIn.Long  (row["UserGroupNum"].ToString());
+				groupPermission.UserGroupNum= PIn.Int  (row["UserGroupNum"].ToString());
 				groupPermission.PermType    = (OpenDentBusiness.Permissions)PIn.Int(row["PermType"].ToString());
 				groupPermission.FKey        = PIn.Long  (row["FKey"].ToString());
 				retVal.Add(groupPermission);
@@ -118,7 +118,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one GroupPermission into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(GroupPermission groupPermission,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO grouppermission (";
 			if(!useExistingPK && isRandomKeys) {
 				groupPermission.GroupPermNum=ReplicationServers.GetKeyNoCache("grouppermission","GroupPermNum");

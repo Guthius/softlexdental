@@ -58,10 +58,7 @@ namespace OpenDental
         /// </summary>
         void AddButton_Click(object sender, EventArgs e)
         {
-            var supplier = new Supplier
-            {
-                IsNew = true
-            };
+            var supplier = new Supplier();
 
             using (var formSupplierEdit = new FormSupplierEdit())
             {

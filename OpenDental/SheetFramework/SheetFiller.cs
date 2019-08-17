@@ -449,7 +449,7 @@ namespace OpenDental{
 								+Procedures.GetDescription(procListTP[i])+", "
 								+procListTP[i].ProcFee.ToString("c");
 							//Get the procedure's priority.
-							string priority=Defs.GetName(DefCat.TxPriorities,procListTP[i].Priority);
+							string priority=Defs.GetName(DefinitionCategory.TxPriorities,procListTP[i].Priority);
 							if(priority=="") {
 								priority=Lan.g("TreatmentPlans","No priority");
 							}
@@ -467,7 +467,7 @@ namespace OpenDental{
 				if(tempReferralFrom!=null) {
 					if(tempReferralFrom.IsDoctor) {
 						referredFrom+=tempReferralFrom.FName+" "+tempReferralFrom.LName+" "+tempReferralFrom.Title+" : "
-							+Defs.GetName(DefCat.ProviderSpecialties,tempReferralFrom.Specialty);
+							+Defs.GetName(DefinitionCategory.ProviderSpecialties,tempReferralFrom.Specialty);
 					}
 					else {
 						referredFrom+=tempReferralFrom.FName+" "+tempReferralFrom.LName;
@@ -480,7 +480,7 @@ namespace OpenDental{
 					Referral tempRef;
 					if(Referrals.TryGetReferral(RefAttachList[i].ReferralNum,out tempRef)) {
 						if(tempRef.IsDoctor) {
-							referredTo+=tempRef.FName+" "+tempRef.LName+" "+tempRef.Title+" : "+Defs.GetName(DefCat.ProviderSpecialties,tempRef.Specialty)+" "
+							referredTo+=tempRef.FName+" "+tempRef.LName+" "+tempRef.Title+" : "+Defs.GetName(DefinitionCategory.ProviderSpecialties,tempRef.Specialty)+" "
 								+RefAttachList[i].RefDate.ToShortDateString()+"\r\n";
 						}
 						else {
@@ -874,13 +874,13 @@ namespace OpenDental{
 				//Pat Clinic-------------------------------------------------------------------------------------------------------------
 				Clinic clinic=Clinics.GetClinic(pat.ClinicNum);
 				if(clinic==null) {
-					clinicPatDescription=Preferences.GetString(PrefName.PracticeTitle);
-					clinicPatAddress=Preferences.GetString(PrefName.PracticeAddress);
-					if(Preferences.GetString(PrefName.PracticeAddress2)!="") {
-						clinicPatAddress+=", "+Preferences.GetString(PrefName.PracticeAddress2);
+					clinicPatDescription=Preference.GetString(PreferenceName.PracticeTitle);
+					clinicPatAddress=Preference.GetString(PreferenceName.PracticeAddress);
+					if(Preference.GetString(PreferenceName.PracticeAddress2)!="") {
+						clinicPatAddress+=", "+Preference.GetString(PreferenceName.PracticeAddress2);
 					}
-					clinicPatCityStZip=Preferences.GetString(PrefName.PracticeCity)+", "+Preferences.GetString(PrefName.PracticeST)+"  "+Preferences.GetString(PrefName.PracticeZip);
-					phone=Preferences.GetString(PrefName.PracticePhone);
+					clinicPatCityStZip=Preference.GetString(PreferenceName.PracticeCity)+", "+Preference.GetString(PreferenceName.PracticeST)+"  "+Preference.GetString(PreferenceName.PracticeZip);
+					phone=Preference.GetString(PreferenceName.PracticePhone);
 				}
 				else {
 					clinicPatDescription=clinic.Description;
@@ -895,13 +895,13 @@ namespace OpenDental{
 				//Current selected Clinic-------------------------------------------------------------------------------------------------------
 				Clinic clinicCur=Clinics.GetClinic(Clinics.ClinicNum);
 				if(clinicCur==null) {
-					clinicCurDescription=Preferences.GetString(PrefName.PracticeTitle);
-					clinicCurAddress=Preferences.GetString(PrefName.PracticeAddress);
-					if(Preferences.GetString(PrefName.PracticeAddress2)!="") {
-						clinicCurAddress+=", "+Preferences.GetString(PrefName.PracticeAddress2);
+					clinicCurDescription=Preference.GetString(PreferenceName.PracticeTitle);
+					clinicCurAddress=Preference.GetString(PreferenceName.PracticeAddress);
+					if(Preference.GetString(PreferenceName.PracticeAddress2)!="") {
+						clinicCurAddress+=", "+Preference.GetString(PreferenceName.PracticeAddress2);
 					}
-					clinicCurCityStZip=Preferences.GetString(PrefName.PracticeCity)+", "+Preferences.GetString(PrefName.PracticeST)+"  "+Preferences.GetString(PrefName.PracticeZip);
-					phone=Preferences.GetString(PrefName.PracticePhone);
+					clinicCurCityStZip=Preference.GetString(PreferenceName.PracticeCity)+", "+Preference.GetString(PreferenceName.PracticeST)+"  "+Preference.GetString(PreferenceName.PracticeZip);
+					phone=Preference.GetString(PreferenceName.PracticePhone);
 				}
 				else {
 					clinicCurDescription=clinicCur.Description;
@@ -920,7 +920,7 @@ namespace OpenDental{
 					if(activeProblems!="") {
 						activeProblems+=", ";
 					}
-					activeProblems+=DiseaseDefs.GetName(listDiseases[i].DiseaseDefNum);
+					activeProblems+=DiseaseDef.GetName(listDiseases[i].DiseaseDefNum);
 				}
 				List<Allergy> listAllergies=data.ListAllergies;
 				for(int i=0;i<listAllergies.Count;i++) {
@@ -936,12 +936,12 @@ namespace OpenDental{
 					//Default to using the MedicationPat description (e.g. an eRx from NewCrop that is not in the Medication table).
 					string medDescript=medPat.MedDescript??"";
 					//Prefer the description associated to the Medication object if available.
-					Medication medCur=Medications.GetMedication(medPat.MedicationNum);
+					Medication medCur= Medication.GetById(medPat.MedicationNum);
 					if(medCur!=null) {
-						medDescript=medCur.MedName;
-						if(medCur.MedicationNum!=medCur.GenericNum) {
-							Medication medGeneric=Medications.GetMedication(medCur.GenericNum);
-							medDescript+=(medGeneric==null) ? "" : " ("+medGeneric.MedName+")";
+						medDescript=medCur.Description;
+						if(medCur.GenericId.HasValue) {
+							Medication medGeneric= Medication.GetById(medCur.GenericId.Value);
+							medDescript+=(medGeneric==null) ? "" : " ("+medGeneric.Description+")";
 						}
 					}
 					currentMedications+=((currentMedications=="") ? "" : ", ")+medDescript;
@@ -993,7 +993,7 @@ namespace OpenDental{
 					fldval=fldval.Replace("[balOver90]",fam.ListPats[0].BalOver90.ToString("c"));
 					fldval=fldval.Replace("[balInsEst]",fam.ListPats[0].InsEst.ToString("c"));
 					fldval=fldval.Replace("[balTotalMinusInsEst]",(fam.ListPats[0].BalTotal-fam.ListPats[0].InsEst).ToString("c"));
-					fldval=fldval.Replace("[BillingType]",Defs.GetName(DefCat.BillingTypes,pat.BillingType));
+					fldval=fldval.Replace("[BillingType]",Defs.GetName(DefinitionCategory.BillingTypes,pat.BillingType));
 					fldval=fldval.Replace("[Birthdate]",birthdate);
 					fldval=fldval.Replace("[carrierName]",carrierName);
 					fldval=fldval.Replace("[carrier2Name]",carrier2Name);
@@ -1124,7 +1124,7 @@ namespace OpenDental{
 				}
 				fldval=fldval.Replace("[dateToday]",DateTime.Today.ToShortDateString());
 				fldval=fldval.Replace("[dateTodayLong]",DateTime.Today.ToLongDateString());
-				fldval=fldval.Replace("[practiceTitle]",Preferences.GetString(PrefName.PracticeTitle));
+				fldval=fldval.Replace("[practiceTitle]",Preference.GetString(PreferenceName.PracticeTitle));
 				field.FieldValue=fldval;
 			}
 			#endregion
@@ -1425,7 +1425,7 @@ namespace OpenDental{
 
 		private static void FillFieldsForRx(Sheet sheet,RxPat rx,Patient pat,Provider prov) {
 			Clinic clinic=null;
-			if(Preferences.GetBool(PrefName.ElectronicRxClinicUseSelected)) {
+			if(Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected)) {
 				clinic=Clinics.GetClinic(Clinics.ClinicNum);
 			}
 			else if(pat.ClinicNum!=0) {
@@ -1626,21 +1626,21 @@ namespace OpenDental{
 						}
 						break;
 					case SheetFieldsAvailable.Practice.Title:
-						field.FieldValue=Preferences.GetString(PrefName.PracticeTitle);
+						field.FieldValue=Preference.GetString(PreferenceName.PracticeTitle);
 						break;
 					case SheetFieldsAvailable.Practice.Address:
-						field.FieldValue=Preferences.GetString(PrefName.PracticeAddress);
-						if(Preferences.GetString(PrefName.PracticeAddress2) != ""){
-							field.FieldValue+="\r\n"+Preferences.GetString(PrefName.PracticeAddress2);
+						field.FieldValue=Preference.GetString(PreferenceName.PracticeAddress);
+						if(Preference.GetString(PreferenceName.PracticeAddress2) != ""){
+							field.FieldValue+="\r\n"+Preference.GetString(PreferenceName.PracticeAddress2);
 						}
 						break;
 					case SheetFieldsAvailable.Practice.CityStateZip:
-						field.FieldValue=Preferences.GetString(PrefName.PracticeCity)+", "
-							+Preferences.GetString(PrefName.PracticeST)+"  "
-							+Preferences.GetString(PrefName.PracticeZip);
+						field.FieldValue=Preference.GetString(PreferenceName.PracticeCity)+", "
+							+Preference.GetString(PreferenceName.PracticeST)+"  "
+							+Preference.GetString(PreferenceName.PracticeZip);
 						break;
 					case SheetFieldsAvailable.Practice.Phone:
-						field.FieldValue=Preferences.GetString(PrefName.PracticePhone);
+						field.FieldValue=Preference.GetString(PreferenceName.PracticePhone);
 						break;
 					default:
 						break;
@@ -1665,18 +1665,18 @@ namespace OpenDental{
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
 					case "PracticeTitle":
-						field.FieldValue=Preferences.GetString(PrefName.PracticeTitle);
+						field.FieldValue=Preference.GetString(PreferenceName.PracticeTitle);
 						break;
 					case "PracticeAddress":
-						field.FieldValue=Preferences.GetString(PrefName.PracticeAddress);
-						if(Preferences.GetString(PrefName.PracticeAddress2) != ""){
-							field.FieldValue+="\r\n"+Preferences.GetString(PrefName.PracticeAddress2);
+						field.FieldValue=Preference.GetString(PreferenceName.PracticeAddress);
+						if(Preference.GetString(PreferenceName.PracticeAddress2) != ""){
+							field.FieldValue+="\r\n"+Preference.GetString(PreferenceName.PracticeAddress2);
 						}
 						break;
 					case "practiceCityStateZip":
-						field.FieldValue=Preferences.GetString(PrefName.PracticeCity)+", "
-							+Preferences.GetString(PrefName.PracticeST)+"  "
-							+Preferences.GetString(PrefName.PracticeZip);
+						field.FieldValue=Preference.GetString(PreferenceName.PracticeCity)+", "
+							+Preference.GetString(PreferenceName.PracticeST)+"  "
+							+Preference.GetString(PreferenceName.PracticeZip);
 						break;
 					case "patient.nameFL":
 						field.FieldValue=pat.GetNameFLFormal();
@@ -1866,8 +1866,8 @@ namespace OpenDental{
 						}
 						break;
 					case "sendClinicCEMT":
-						string strClinic=Preferences.GetStringNoCache(PrefName.PracticeTitle);
-						if(Prefs.HasClinicsEnabledNoCache){
+						string strClinic=Preference.GetStringNoCache(PreferenceName.PracticeTitle);
+						if(Preferences.HasClinicsEnabled){
 							Clinic clinic=Clinics.GetClinicNoCache(pat.ClinicNum);
 							if(clinic!=null) {
 								strClinic=clinic.Abbr;
@@ -1925,16 +1925,16 @@ namespace OpenDental{
 				}
 				switch(field.FieldName) {
 					case "PracticeTitle":
-						field.FieldValue=Preferences.GetString(PrefName.PracticeTitle);
+						field.FieldValue=Preference.GetString(PreferenceName.PracticeTitle);
 						break;
 					case "PracticeAddress":
-						field.FieldValue=Preferences.GetString(PrefName.PracticeAddress);
-						if(Preferences.GetString(PrefName.PracticeAddress2) != ""){
-							field.FieldValue+="\r\n"+Preferences.GetString(PrefName.PracticeAddress2);
+						field.FieldValue=Preference.GetString(PreferenceName.PracticeAddress);
+						if(Preference.GetString(PreferenceName.PracticeAddress2) != ""){
+							field.FieldValue+="\r\n"+Preference.GetString(PreferenceName.PracticeAddress2);
 						}
 						break;
 					case "PracticePhoneNumber":
-						string practicePhone=Preferences.GetString(PrefName.PracticePhone);
+						string practicePhone=Preference.GetString(PreferenceName.PracticePhone);
 						field.FieldValue=practicePhone;
 						if(practicePhone.Length==10) {
 							field.FieldValue="("+practicePhone.Substring(0,3)+")"
@@ -1943,9 +1943,9 @@ namespace OpenDental{
 						}
 						break;
 					case "practiceCityStateZip":
-						field.FieldValue=Preferences.GetString(PrefName.PracticeCity)+", "
-							+Preferences.GetString(PrefName.PracticeST)+"  "
-							+Preferences.GetString(PrefName.PracticeZip);
+						field.FieldValue=Preference.GetString(PreferenceName.PracticeCity)+", "
+							+Preference.GetString(PreferenceName.PracticeST)+"  "
+							+Preference.GetString(PreferenceName.PracticeZip);
 						break;
 					case "today.DayDate":
 						field.FieldValue=DateTime.Today.ToString("dddd")+", "+DateTime.Today.ToShortDateString();
@@ -2414,7 +2414,7 @@ namespace OpenDental{
 					else if(field.FieldName.StartsWith("problem:")) {//"problem:Hepatitis B"
 						List<Disease> diseases=Diseases.Refresh(pat.PatNum,false);
 						for(int i=0;i<diseases.Count;i++) {
-							if(DiseaseDefs.GetName(diseases[i].DiseaseDefNum)==field.FieldName.Remove(0,8)) {
+							if(DiseaseDef.GetName(diseases[i].DiseaseDefNum)==field.FieldName.Remove(0,8)) {
 								if(diseases[i].ProbStatus==ProblemStatus.Active && field.RadioButtonValue=="Y") {
 									field.FieldValue="X";
 								}
@@ -2443,7 +2443,7 @@ namespace OpenDental{
 						inputMedList[i].FieldValue=medPatList[i].MedDescript;
 					}
 					else {
-						inputMedList[i].FieldValue=Medications.GetDescription(medPatList[i].MedicationNum);
+						inputMedList[i].FieldValue= Medication.GetDescription(medPatList[i].MedicationNum);
 					}
 					inputMedList[i].FieldType=SheetFieldType.OutputText;//Don't try to import as a new medication.
 				}
@@ -2771,7 +2771,7 @@ namespace OpenDental{
 					case "accountNumber":
 						#region Account Number
 						field.FieldValue=Lan.g("Statements","Account Number")+" ";
-						if(Preferences.GetBool(PrefName.StatementAccountsUseChartNumber)) {
+						if(Preference.GetBool(PreferenceName.StatementAccountsUseChartNumber)) {
 							field.FieldValue+=patGuar.ChartNumber;
 						}
 						else {
@@ -2875,7 +2875,7 @@ namespace OpenDental{
 						break;
 					case "returnAddress":
 						#region ReturnAddress
-						if(!Preferences.GetBool(PrefName.StatementShowReturnAddress)) {
+						if(!Preference.GetBool(PreferenceName.StatementShowReturnAddress)) {
 							field.FieldValue="";
 							break;
 						}
@@ -2886,11 +2886,11 @@ namespace OpenDental{
 							Clinic clinic=Clinics.GetClinic(patGuar.ClinicNum);
 							field.FieldValue=clinic.Description+"\r\n";
 							if(CultureInfo.CurrentCulture.Name=="en-AU") {//Australia
-								Provider defaultProv=Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv));
+								Provider defaultProv=Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));
 								field.FieldValue+="ABN: "+defaultProv.NationalProvID+"\r\n";
 							}
 							if(CultureInfo.CurrentCulture.Name=="en-NZ") {//New Zealand
-								Provider defaultProv=Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv));
+								Provider defaultProv=Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));
 								field.FieldValue+="GST: "+defaultProv.SSN+"\r\n";
 							}
 							field.FieldValue+=clinic.Address+"\r\n";
@@ -2914,33 +2914,33 @@ namespace OpenDental{
 							}
 						}
 						else {//no clinics
-							field.FieldValue=Preferences.GetString(PrefName.PracticeTitle)+"\r\n";
+							field.FieldValue=Preference.GetString(PreferenceName.PracticeTitle)+"\r\n";
 							if(CultureInfo.CurrentCulture.Name=="en-AU") {//Australia
-								Provider defaultProv=Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv));
+								Provider defaultProv=Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));
 								field.FieldValue+="ABN: "+defaultProv.NationalProvID+"\r\n";
 							}
 							if(CultureInfo.CurrentCulture.Name=="en-NZ") {//New Zealand
-								Provider defaultProv=Providers.GetProv(Preferences.GetLong(PrefName.PracticeDefaultProv));
+								Provider defaultProv=Providers.GetProv(Preference.GetLong(PreferenceName.PracticeDefaultProv));
 								field.FieldValue+="GST: "+defaultProv.SSN+"\r\n";
 							}
-							field.FieldValue+=Preferences.GetString(PrefName.PracticeAddress)+"\r\n";
-							if(Preferences.GetString(PrefName.PracticeAddress2)!="") {
-								field.FieldValue+=Preferences.GetString(PrefName.PracticeAddress2)+"\r\n";
+							field.FieldValue+=Preference.GetString(PreferenceName.PracticeAddress)+"\r\n";
+							if(Preference.GetString(PreferenceName.PracticeAddress2)!="") {
+								field.FieldValue+=Preference.GetString(PreferenceName.PracticeAddress2)+"\r\n";
 							}
 							if(CultureInfo.CurrentCulture.Name.EndsWith("CH")) {//CH is for switzerland. eg de-CH
-								field.FieldValue+=Preferences.GetString(PrefName.PracticeZip)+" "+Preferences.GetString(PrefName.PracticeCity)+"\r\n";
+								field.FieldValue+=Preference.GetString(PreferenceName.PracticeZip)+" "+Preference.GetString(PreferenceName.PracticeCity)+"\r\n";
 							}
 							else if(CultureInfo.CurrentCulture.Name.EndsWith("SG")) {//SG=Singapore
-								field.FieldValue+=Preferences.GetString(PrefName.PracticeCity)+" "+Preferences.GetString(PrefName.PracticeZip)+"\r\n";
+								field.FieldValue+=Preference.GetString(PreferenceName.PracticeCity)+" "+Preference.GetString(PreferenceName.PracticeZip)+"\r\n";
 							}
 							else {
-								field.FieldValue+=Preferences.GetString(PrefName.PracticeCity)+", "+Preferences.GetString(PrefName.PracticeST)+" "+Preferences.GetString(PrefName.PracticeZip)+"\r\n";
+								field.FieldValue+=Preference.GetString(PreferenceName.PracticeCity)+", "+Preference.GetString(PreferenceName.PracticeST)+" "+Preference.GetString(PreferenceName.PracticeZip)+"\r\n";
 							}
-							if(Preferences.GetString(PrefName.PracticePhone).Length==10) {
-								field.FieldValue+="("+Preferences.GetString(PrefName.PracticePhone).Substring(0,3)+")"+Preferences.GetString(PrefName.PracticePhone).Substring(3,3)+"-"+Preferences.GetString(PrefName.PracticePhone).Substring(6)+"\r\n";
+							if(Preference.GetString(PreferenceName.PracticePhone).Length==10) {
+								field.FieldValue+="("+Preference.GetString(PreferenceName.PracticePhone).Substring(0,3)+")"+Preference.GetString(PreferenceName.PracticePhone).Substring(3,3)+"-"+Preference.GetString(PreferenceName.PracticePhone).Substring(6)+"\r\n";
 							}
 							else {
-								field.FieldValue+=Preferences.GetString(PrefName.PracticePhone)+"\r\n";
+								field.FieldValue+=Preference.GetString(PreferenceName.PracticePhone)+"\r\n";
 							}
 						}
 						#endregion
@@ -2983,7 +2983,7 @@ namespace OpenDental{
 						#endregion
 						break;
 					case "practiceTitle":
-						field.FieldValue=Preferences.GetString(PrefName.PracticeTitle);
+						field.FieldValue=Preference.GetString(PreferenceName.PracticeTitle);
 						break;
 					case "statementIsCopy":
 						field.FieldValue=(Stmt.IsInvoiceCopy?Lan.g("Statements","COPY"):"");
@@ -2993,15 +2993,15 @@ namespace OpenDental{
 						field.FieldValue=(Stmt.IsReceipt?Lan.g("Statements","KEEP THIS RECEIPT FOR INCOME TAX PURPOSES"):"");
 						break;
 					case "practiceAddress":
-						field.FieldValue=Preferences.GetString(PrefName.PracticeAddress);
-						if(Preferences.GetString(PrefName.PracticeAddress2) != "") {
-							field.FieldValue+="\r\n"+Preferences.GetString(PrefName.PracticeAddress2);
+						field.FieldValue=Preference.GetString(PreferenceName.PracticeAddress);
+						if(Preference.GetString(PreferenceName.PracticeAddress2) != "") {
+							field.FieldValue+="\r\n"+Preference.GetString(PreferenceName.PracticeAddress2);
 						}
 						break;
 					case "practiceCityStateZip":
-						field.FieldValue=Preferences.GetString(PrefName.PracticeCity)+", "
-							+Preferences.GetString(PrefName.PracticeST)+"  "
-							+Preferences.GetString(PrefName.PracticeZip);
+						field.FieldValue=Preference.GetString(PreferenceName.PracticeCity)+", "
+							+Preference.GetString(PreferenceName.PracticeST)+"  "
+							+Preference.GetString(PreferenceName.PracticeZip);
 						break;
 					case "statement.DateSent":
 						field.FieldValue=Stmt.DateSent.ToShortDateString();
@@ -3044,7 +3044,7 @@ namespace OpenDental{
 							}
 						}
 						catch {
-							field.FieldValue=Preferences.GetString(PrefName.PatientPortalURL);
+							field.FieldValue=Preference.GetString(PreferenceName.PatientPortalURL);
 						}
 						break;
 					case "invoicePayPlanValue":
@@ -3416,36 +3416,36 @@ namespace OpenDental{
 						break;
 					case "practiceAddrCityStZip":
 						field.FieldValue="";
-						if(Preferences.GetString(PrefName.PracticeAddress)!="") {
-							field.FieldValue+=Preferences.GetString(PrefName.PracticeAddress)+"\r\n";
+						if(Preference.GetString(PreferenceName.PracticeAddress)!="") {
+							field.FieldValue+=Preference.GetString(PreferenceName.PracticeAddress)+"\r\n";
 						}
-						if(Preferences.GetString(PrefName.PracticeAddress2)!="") {
-							field.FieldValue+=Preferences.GetString(PrefName.PracticeAddress2)+"\r\n";
+						if(Preference.GetString(PreferenceName.PracticeAddress2)!="") {
+							field.FieldValue+=Preference.GetString(PreferenceName.PracticeAddress2)+"\r\n";
 						}
-						if(Preferences.GetString(PrefName.PracticeCity)!="") {
-							field.FieldValue+=Preferences.GetString(PrefName.PracticeCity);
-							if(Preferences.GetString(PrefName.PracticeST)!="" || Preferences.GetString(PrefName.PracticeZip)!="") {
+						if(Preference.GetString(PreferenceName.PracticeCity)!="") {
+							field.FieldValue+=Preference.GetString(PreferenceName.PracticeCity);
+							if(Preference.GetString(PreferenceName.PracticeST)!="" || Preference.GetString(PreferenceName.PracticeZip)!="") {
 								field.FieldValue+=", ";
 							}
 						}
-						if(Preferences.GetString(PrefName.PracticeST)!="") {
-							field.FieldValue+=Preferences.GetString(PrefName.PracticeST);
-							if(Preferences.GetString(PrefName.PracticeZip)!="") {
+						if(Preference.GetString(PreferenceName.PracticeST)!="") {
+							field.FieldValue+=Preference.GetString(PreferenceName.PracticeST);
+							if(Preference.GetString(PreferenceName.PracticeZip)!="") {
 								field.FieldValue+=" ";
 							}
 						}
-						field.FieldValue+=Preferences.GetString(PrefName.PracticeZip);
+						field.FieldValue+=Preference.GetString(PreferenceName.PracticeZip);
 						break;
 					case "PracticePh":
-						if(Preferences.GetString(PrefName.PracticePhone).Length==10) {
-							field.FieldValue=Preferences.GetString(PrefName.PracticePhone).Substring(0,3)+"-"+Preferences.GetString(PrefName.PracticePhone).Substring(3,3)+
-								"-"+Preferences.GetString(PrefName.PracticePhone).Substring(6);
+						if(Preference.GetString(PreferenceName.PracticePhone).Length==10) {
+							field.FieldValue=Preference.GetString(PreferenceName.PracticePhone).Substring(0,3)+"-"+Preference.GetString(PreferenceName.PracticePhone).Substring(3,3)+
+								"-"+Preference.GetString(PreferenceName.PracticePhone).Substring(6);
 							break;
 						}
-						field.FieldValue=Preferences.GetString(PrefName.PracticePhone);
+						field.FieldValue=Preference.GetString(PreferenceName.PracticePhone);
 						break;
 					case "PracticeTitle":
-						field.FieldValue=Preferences.GetString(PrefName.PracticeTitle);
+						field.FieldValue=Preference.GetString(PreferenceName.PracticeTitle);
 						break;
 				}
 			}
@@ -3588,7 +3588,7 @@ namespace OpenDental{
 				sLine2=Lan.g("Statements","Adjustments:");
 				sLine6=Lan.g("Statements","Pay Plan Charges:");
 				sLine3=Lan.g("Statements","Total:");
-				if(Preferences.GetBool(PrefName.InvoicePaymentsGridShowNetProd)) {
+				if(Preference.GetBool(PreferenceName.InvoicePaymentsGridShowNetProd)) {
 					sLine4=Lan.g("Statements","Payments & WriteOffs");
 				}
 				else {
@@ -3596,7 +3596,7 @@ namespace OpenDental{
 				}
 				sLine5=Lan.g("Statements","Balance Remaining:");
 			}
-			else if(Preferences.GetBool(PrefName.BalancesDontSubtractIns)) {
+			else if(Preference.GetBool(PreferenceName.BalancesDontSubtractIns)) {
 				if(Stmt.SuperFamily!=0) {
 					sLine1=Lan.g("Statements","Sum of Balances:");
 				}
@@ -3607,7 +3607,7 @@ namespace OpenDental{
 				//sLine3=Lan.g("Statements","After Ins:");
 			}
 			else {//this is more common
-				if(Preferences.GetBool(PrefName.FuchsOptionsOn)) {
+				if(Preference.GetBool(PreferenceName.FuchsOptionsOn)) {
 					sLine1=Lan.g("Statements","Balance:");
 					sLine2=Lan.g("Statements","-Ins Estimate:");
 					sLine3=Lan.g("Statements","=Owed Now:");
@@ -3684,7 +3684,7 @@ namespace OpenDental{
 						|| x["PayNum"].ToString()!="0"//patient payments, will be credits with charges==0
 						|| x["ClaimPaymentNum"].ToString()!="0").ToList()//claimproc payments+writeoffs, will be credits with charges==0
 					.Sum(x => PIn.Double(x["chargesDouble"].ToString())-PIn.Double(x["creditsDouble"].ToString()));//add charges-credits
-				if(Preferences.GetBool(PrefName.BalancesDontSubtractIns)) {
+				if(Preference.GetBool(PreferenceName.BalancesDontSubtractIns)) {
 					sLine1+=statementTotal.ToString("c");
 				}
 				else {
@@ -3696,7 +3696,7 @@ namespace OpenDental{
 					sLine3+=(statementTotal-patInsEst).ToString("c");
 				}
 			}
-			else if(Preferences.GetBool(PrefName.BalancesDontSubtractIns)) {
+			else if(Preference.GetBool(PreferenceName.BalancesDontSubtractIns)) {
 				if(Stmt.SinglePatient) {
 					sLine1+=pat.EstBalance.ToString("c");
 				}
@@ -3765,7 +3765,7 @@ namespace OpenDental{
 			foreach(SheetField field in sheet.SheetFields) {
 				switch(field.FieldName) {
 					case "PracticeTitle":
-						field.FieldValue=Preferences.GetString(PrefName.PracticeTitle);
+						field.FieldValue=Preference.GetString(PreferenceName.PracticeTitle);
 						break;
 					case "dateToday":
 						field.FieldValue=DateTime.Today.ToShortDateString();
@@ -4681,9 +4681,9 @@ namespace OpenDental{
 				}
 			}
 			else {
-				text=Preferences.GetString(PrefName.PracticeAddress);
-				if(Preferences.GetString(PrefName.PracticeAddress2)!="") {
-					text+="\r\n"+Preferences.GetString(PrefName.PracticeAddress2);
+				text=Preference.GetString(PreferenceName.PracticeAddress);
+				if(Preference.GetString(PreferenceName.PracticeAddress2)!="") {
+					text+="\r\n"+Preference.GetString(PreferenceName.PracticeAddress2);
 				}
 			}
 			return text;
@@ -4695,7 +4695,7 @@ namespace OpenDental{
 				text=clinic.City+", "+clinic.State+" "+clinic.Zip;
 			}
 			else {
-				text=Preferences.GetString(PrefName.PracticeCity)+", "+Preferences.GetString(PrefName.PracticeST)+" "+Preferences.GetString(PrefName.PracticeZip);
+				text=Preference.GetString(PreferenceName.PracticeCity)+", "+Preference.GetString(PreferenceName.PracticeST)+" "+Preference.GetString(PreferenceName.PracticeZip);
 			}
 			return text;
 		}
@@ -4706,7 +4706,7 @@ namespace OpenDental{
 				text=clinic.Phone;
 			}
 			else {
-				text=Preferences.GetString(PrefName.PracticePhone);
+				text=Preference.GetString(PreferenceName.PracticePhone);
 				text=new string(text.Where(x => char.IsDigit(x)).ToArray());
 			}
 			if(text.Length==10) {

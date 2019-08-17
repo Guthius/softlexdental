@@ -22,7 +22,7 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void ClaimProcs_ComputeBaseEst_FixedBenefitBlankLikeZeroOffFalse_PPO60_FixedBenefitFeeBlank() {
-			PrefT.UpdateBool(PrefName.FixedBenefitBlankLikeZero,false);
+			PrefT.UpdateBool(PreferenceName.FixedBenefitBlankLikeZero,false);
 			double procFee=100;
 			double ppoFee=60;
 			double fixedBenefitFee=-1;//blank
@@ -37,7 +37,7 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void ClaimProcs_ComputeBaseEst_FixedBenefitBlankLikeZeroOffTrue_PPO60_FixedBenefitFeeBlank() {
-			PrefT.UpdateBool(PrefName.FixedBenefitBlankLikeZero,true);
+			PrefT.UpdateBool(PreferenceName.FixedBenefitBlankLikeZero,true);
 			double procFee=100;
 			double ppoFee=60;
 			double fixedBenefitFee=-1;//blank
@@ -52,7 +52,7 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void ClaimProcs_ComputeBaseEst_FixedBenefitBlankLikeZeroOffFalse_PPO60_FixedBenefitFeeZero() {
-			PrefT.UpdateBool(PrefName.FixedBenefitBlankLikeZero,false);
+			PrefT.UpdateBool(PreferenceName.FixedBenefitBlankLikeZero,false);
 			double procFee=100;
 			double ppoFee=60;
 			double fixedBenefitFee=0;
@@ -67,7 +67,7 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void ClaimProcs_ComputeBaseEst_FixedBenefitBlankLikeZeroOffTrue_PPO60_FixedBenefitFeeZero() {
-			PrefT.UpdateBool(PrefName.FixedBenefitBlankLikeZero,true);
+			PrefT.UpdateBool(PreferenceName.FixedBenefitBlankLikeZero,true);
 			double procFee=100;
 			double ppoFee=60;
 			double fixedBenefitFee=0;
@@ -82,7 +82,7 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void ClaimProcs_ComputeBaseEst_FixedBenefitBlankLikeZeroOffFalse_PPOBlank_FixedBenefitFeeBlank() {
-			PrefT.UpdateBool(PrefName.FixedBenefitBlankLikeZero,false);
+			PrefT.UpdateBool(PreferenceName.FixedBenefitBlankLikeZero,false);
 			double procFee=100;
 			double ppoFee=-1;//blank
 			double fixedBenefitFee=-1;//blank
@@ -97,7 +97,7 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void ClaimProcs_ComputeBaseEst_FixedBenefitBlankLikeZeroOffTrue_PPOBlank_FixedBenefitFeeBlank() {
-			PrefT.UpdateBool(PrefName.FixedBenefitBlankLikeZero,true);
+			PrefT.UpdateBool(PreferenceName.FixedBenefitBlankLikeZero,true);
 			double procFee=100;
 			double ppoFee=-1;//blank
 			double fixedBenefitFee=-1;//blank
@@ -182,19 +182,19 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void ClaimProcs_ComputeBaseEst_Exclusion_BlankFee_PPO_ExcludedUseUCR() {
-			PrefT.UpdateBool(PrefName.InsPlanUseUcrFeeForExclusions,true);
+			PrefT.UpdateBool(PreferenceName.InsPlanUseUcrFeeForExclusions,true);
 			AssertExclusions("p",feeSchedFee: _blankFee,hasExclusion: true,eProcFee: _ucrFee,eWriteOff: 0,ePatPortion:_ucrFee);
 		}
 
 		[TestMethod]
 		public void ClaimProcs_ComputeBaseEst_Exclusion_ZeroFee_PPO_ExcludedUseUCR() {
-			PrefT.UpdateBool(PrefName.InsPlanUseUcrFeeForExclusions,true);
+			PrefT.UpdateBool(PreferenceName.InsPlanUseUcrFeeForExclusions,true);
 			AssertExclusions("p",feeSchedFee: 0,hasExclusion: true,eProcFee: _ucrFee,eWriteOff: 0,ePatPortion:_ucrFee);
 		}
 
 		[TestMethod]
 		public void ClaimProcs_ComputeBaseEst_Exclusion_NormalFee_PPO_ExcludedUseUCR() {
-			PrefT.UpdateBool(PrefName.InsPlanUseUcrFeeForExclusions,true);
+			PrefT.UpdateBool(PreferenceName.InsPlanUseUcrFeeForExclusions,true);
 			AssertExclusions("p",feeSchedFee: _fee,hasExclusion: true,eProcFee: _ucrFee,eWriteOff: 0,ePatPortion:_ucrFee);
 		}
 		#endregion
@@ -232,19 +232,19 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void ClaimProcs_ComputeBaseEst_Exclusion_BlankFee_Medicaid_ExcludedUseUCR() {
-			PrefT.UpdateBool(PrefName.InsPlanUseUcrFeeForExclusions,true);
+			PrefT.UpdateBool(PreferenceName.InsPlanUseUcrFeeForExclusions,true);
 			AssertExclusions("f",feeSchedFee: _blankFee,hasExclusion: true,eProcFee: _ucrFee,eWriteOff: -1,ePatPortion:_ucrFee);
 		}
 
 		[TestMethod]
 		public void ClaimProcs_ComputeBaseEst_Exclusion_ZeroFee_Medicaid_ExcludedUseUCR() {
-			PrefT.UpdateBool(PrefName.InsPlanUseUcrFeeForExclusions,true);
+			PrefT.UpdateBool(PreferenceName.InsPlanUseUcrFeeForExclusions,true);
 			AssertExclusions("f",feeSchedFee: 0,hasExclusion: true,eProcFee: _ucrFee,eWriteOff: -1,ePatPortion:_ucrFee);
 		}
 
 		[TestMethod]
 		public void ClaimProcs_ComputeBaseEst_Exclusion_NormalFee_Medicaid_ExcludedUseUCR() {
-			PrefT.UpdateBool(PrefName.InsPlanUseUcrFeeForExclusions,true);
+			PrefT.UpdateBool(PreferenceName.InsPlanUseUcrFeeForExclusions,true);
 			AssertExclusions("f",feeSchedFee: _fee,hasExclusion: true,eProcFee: _ucrFee,eWriteOff: -1,ePatPortion:_ucrFee);
 		}
 		#endregion
@@ -282,19 +282,19 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void ClaimProcs_ComputeBaseEst_Exclusion_BlankFee_Capitation_ExcludedUseUCR() {
-			PrefT.UpdateBool(PrefName.InsPlanUseUcrFeeForExclusions,true);
+			PrefT.UpdateBool(PreferenceName.InsPlanUseUcrFeeForExclusions,true);
 			AssertExclusions("c",feeSchedFee: _blankFee,hasExclusion: true,eProcFee: _ucrFee,eWriteOff: 0,ePatPortion:_ucrFee);
 		}
 
 		[TestMethod]
 		public void ClaimProcs_ComputeBaseEst_Exclusion_ZeroFee_Capitation_ExcludedUseUCR() {
-			PrefT.UpdateBool(PrefName.InsPlanUseUcrFeeForExclusions,true);
+			PrefT.UpdateBool(PreferenceName.InsPlanUseUcrFeeForExclusions,true);
 			AssertExclusions("c",feeSchedFee: 0,hasExclusion: true,eProcFee: _ucrFee,eWriteOff: 0,ePatPortion:_ucrFee);
 		}
 
 		[TestMethod]
 		public void ClaimProcs_ComputeBaseEst_Exclusion_NormalFee_Capitation_ExcludedUseUCR() {
-			PrefT.UpdateBool(PrefName.InsPlanUseUcrFeeForExclusions,true);
+			PrefT.UpdateBool(PreferenceName.InsPlanUseUcrFeeForExclusions,true);
 			AssertExclusions("c",feeSchedFee: _fee,hasExclusion: true,eProcFee: _ucrFee,eWriteOff: 0,ePatPortion:_ucrFee);
 		}
 
@@ -357,19 +357,19 @@ namespace UnitTests {
 
 		[TestMethod]
 		public void ClaimProcs_ComputeBaseEst_Exclusion_BlankFee_CatPercent_ExcludedUseUCR() {
-			PrefT.UpdateBool(PrefName.InsPlanUseUcrFeeForExclusions,true);
+			PrefT.UpdateBool(PreferenceName.InsPlanUseUcrFeeForExclusions,true);
 			AssertExclusions("",feeSchedFee: _blankFee,hasExclusion: true,eProcFee: _ucrFee,eWriteOff: -1,ePatPortion:_ucrFee);
 		}
 
 		[TestMethod]
 		public void ClaimProcs_ComputeBaseEst_Exclusion_ZeroFee_CatPercent_ExcludedUseUCR() {
-			PrefT.UpdateBool(PrefName.InsPlanUseUcrFeeForExclusions,true);
+			PrefT.UpdateBool(PreferenceName.InsPlanUseUcrFeeForExclusions,true);
 			AssertExclusions("",feeSchedFee: 0,hasExclusion: true,eProcFee: _ucrFee,eWriteOff: -1,ePatPortion:_ucrFee);
 		}
 
 		[TestMethod]
 		public void ClaimProcs_ComputeBaseEst_Exclusion_NormalFee_CatPercent_ExcludedUseUCR() {
-			PrefT.UpdateBool(PrefName.InsPlanUseUcrFeeForExclusions,true);
+			PrefT.UpdateBool(PreferenceName.InsPlanUseUcrFeeForExclusions,true);
 			AssertExclusions("",feeSchedFee: _fee,hasExclusion: true,eProcFee: _ucrFee,eWriteOff: -1,ePatPortion:_ucrFee);
 		}
 		#endregion
@@ -377,7 +377,7 @@ namespace UnitTests {
 		#region NoBillins Preference
 		[TestMethod]
 		public void ClaimProcs_ComputeBaseEst_Exclusion_NoBillIns() {
-			PrefT.UpdateBool(PrefName.InsPlanExclusionsMarkDoNotBillIns,true);
+			PrefT.UpdateBool(PreferenceName.InsPlanExclusionsMarkDoNotBillIns,true);
 			AssertExclusions("",feeSchedFee: _fee,hasExclusion: true,eProcFee: _fee,eWriteOff: -1,ePatPortion: _fee,eNoBillIns: true);
 		}
 		#endregion
@@ -424,7 +424,7 @@ namespace UnitTests {
 			List<SubstitutionLink> listSubLinks=SubstitutionLinks.GetAllForPlans(listPlans);
 			List<ClaimProcHist> histList=new List<ClaimProcHist>();
 			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
-			PrefT.UpdateBool(PrefName.InsEstRecalcReceived,true);//Set InsEstRecalcReceived preference to true.
+			PrefT.UpdateBool(PreferenceName.InsEstRecalcReceived,true);//Set InsEstRecalcReceived preference to true.
 			ClaimProcs.ComputeBaseEst(priClaimProc,proc,priPlan,priPatPlan.PatPlanNum,listBens,histList,loopList,listPatPlans,0
 				,0,pat.Age,0,listPlans,listSubs,listSubLinks,false,null);
 			Assert.AreEqual(eBaseEst,priClaimProc.BaseEst);
@@ -471,7 +471,7 @@ namespace UnitTests {
 			List<SubstitutionLink> listSubLinks=SubstitutionLinks.GetAllForPlans(listPlans);
 			List<ClaimProcHist> histList=new List<ClaimProcHist>();
 			List<ClaimProcHist> loopList=new List<ClaimProcHist>();
-			PrefT.UpdateBool(PrefName.InsEstRecalcReceived,false);//Set InsEstRecalcReceived preference to false.
+			PrefT.UpdateBool(PreferenceName.InsEstRecalcReceived,false);//Set InsEstRecalcReceived preference to false.
 			ClaimProcs.ComputeBaseEst(priClaimProc,proc,priPlan,priPatPlan.PatPlanNum,listBens,histList,loopList,listPatPlans,0
 				,0,pat.Age,0,listPlans,listSubs,listSubLinks,false,null);
 			Assert.AreEqual(eBaseEst,priClaimProc.BaseEst);

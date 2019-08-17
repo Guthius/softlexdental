@@ -87,7 +87,7 @@ namespace OpenDentBusiness
             stopWatch.Restart();
 #endif
             //insurance writeoffs
-            switch ((PPOWriteoffDateCalc)Preferences.GetInt(PrefName.ReportsPPOwriteoffDefaultToProcDate))
+            switch ((PPOWriteoffDateCalc)Preference.GetInt(PreferenceName.ReportsPPOwriteoffDefaultToProcDate))
             {//use procdate
                 case PPOWriteoffDateCalc.ProcDate:
                     command = @"UPDATE tempdash" + rndStr + @" 
@@ -397,7 +397,7 @@ namespace OpenDentBusiness
             _elapsedTimeProdInc += "tableAdj: " + stopWatch.Elapsed.ToString() + "\r\n";
             stopWatch.Restart();
 #endif
-            switch ((PPOWriteoffDateCalc)Preferences.GetInt(PrefName.ReportsPPOwriteoffDefaultToProcDate))
+            switch ((PPOWriteoffDateCalc)Preference.GetInt(PreferenceName.ReportsPPOwriteoffDefaultToProcDate))
             {
                 case PPOWriteoffDateCalc.InsPayDate:
                     command = "SELECT "

@@ -36,20 +36,20 @@ namespace OpenDental {
 			}
 			switch((EhrCriterion)comboReminderCriterion.SelectedIndex) {
 				case EhrCriterion.Problem:
-					DiseaseDef def=DiseaseDefs.GetItem(RuleCur.CriterionFK);
-					textCriterionFK.Text=def.DiseaseName;
+					DiseaseDef def=DiseaseDef.GetById(RuleCur.CriterionFK);
+					textCriterionFK.Text=def.Name;
 					textICD9.Text=def.ICD9Code;
 					break;
 				//case EhrCriterion.ICD9:
 				//  textCriterionFK.Text=ICD9s.GetDescription(RuleCur.CriterionFK);
 				//  break;
 				case EhrCriterion.Medication:
-					Medication tempMed = Medications.GetMedication(RuleCur.CriterionFK);
-					if(tempMed.MedicationNum==tempMed.GenericNum) {//handle generic medication names.
-						textCriterionFK.Text=tempMed.MedName;
+					Medication tempMed = Medication.GetById(RuleCur.CriterionFK);
+					if(!tempMed.GenericId.HasValue) {//handle generic medication names.
+						textCriterionFK.Text=tempMed.Description;
 					}
 					else {
-						textCriterionFK.Text=tempMed.MedName+" / "+Medications.GetGenericName(tempMed.GenericNum);
+						textCriterionFK.Text=tempMed.Description+" / "+ Medication.GetGenericName(tempMed.GenericId.Value);
 					}
 					break;
 				case EhrCriterion.Allergy:
@@ -110,7 +110,7 @@ namespace OpenDental {
 						return;
 					}
 					//the list should only ever contain one item.
-					RuleCur.CriterionFK=formD.ListSelectedDiseaseDefs[0].DiseaseDefNum;
+					RuleCur.CriterionFK=formD.ListSelectedDiseaseDefs[0].Id;
 					break;
 				case EhrCriterion.Medication:
 					FormMedications formM=new FormMedications();

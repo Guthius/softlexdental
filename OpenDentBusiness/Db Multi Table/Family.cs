@@ -170,7 +170,7 @@ namespace OpenDentBusiness
                 return new Patient();
             }
             Patient Lim = new Patient();
-            Lim.PatNum = PIn.Long(table.Rows[0][0].ToString());
+            Lim.PatNum = PIn.Int(table.Rows[0][0].ToString());
             Lim.LName = PIn.String(table.Rows[0][1].ToString());
             Lim.FName = PIn.String(table.Rows[0][2].ToString());
             Lim.MiddleI = PIn.String(table.Rows[0][3].ToString());

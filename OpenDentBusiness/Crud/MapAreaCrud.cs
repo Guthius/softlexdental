@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one MapArea into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(MapArea mapArea,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys= Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO maparea (";
 			if(!useExistingPK && isRandomKeys) {
 				mapArea.MapAreaNum=ReplicationServers.GetKeyNoCache("maparea","MapAreaNum");

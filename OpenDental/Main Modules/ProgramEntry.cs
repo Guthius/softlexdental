@@ -29,12 +29,12 @@ namespace OpenDental
             catch (Exception ex)
             {
                 FormFriendlyException.Show(
-                    string.Format("A critical error has occurred: {0}", ex.Message), 
-                    ex, "&Quit");
+                    string.Format("A critical error has occurred: {0}", ex.Message), ex, "&Quit");
 
                 return;
             }
 
+            DataConnection.Configure("localhost", "demo", "root", "softlex");
 
             //Register an EventHandler which handles unhandled exceptions.
             //AppDomain.CurrentDomain.UnhandledException+=new UnhandledExceptionEventHandler(OnUnhandeledExceptionPolicy);

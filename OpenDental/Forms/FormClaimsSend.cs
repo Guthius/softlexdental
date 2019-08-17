@@ -66,7 +66,7 @@ namespace OpenDental{
 		private List<int> _listNumberOfClaims;
 		private List<Clearinghouse> _listClearinghouses;
 		private ODDateRangePicker dateRangePicker;
-		private List<Def> _listClaimCustomTrackingDefs;
+		private List<Definition> _listClaimCustomTrackingDefs;
 		///<summary>Index of the Clearinghouse column in the main grid.  Can change depending on if clinics feature is enabled or not.</summary>
 		private int clearinghouseIndex=-1;
 
@@ -376,14 +376,14 @@ namespace OpenDental{
 			}
 			comboCustomTracking.Items.Add(Lan.g(this,"all"));
 			comboCustomTracking.SelectedIndex=0;
-			_listClaimCustomTrackingDefs=Defs.GetDefsForCategory(DefCat.ClaimCustomTracking);
+			_listClaimCustomTrackingDefs=Definition.GetByCategory(DefinitionCategory.ClaimCustomTracking);;
 			if(_listClaimCustomTrackingDefs.Count==0){
 				labelCustomTracking.Visible=false;
 				comboCustomTracking.Visible=false;
 			}
 			else{
 				for(int i=0;i<_listClaimCustomTrackingDefs.Count;i++) {
-					comboCustomTracking.Items.Add(_listClaimCustomTrackingDefs[i].ItemName);
+					comboCustomTracking.Items.Add(_listClaimCustomTrackingDefs[i].Description);
 				}
 			}
 			if(Preferences.RandomKeys && Preferences.HasClinicsEnabled){//using random keys and clinics
@@ -396,7 +396,7 @@ namespace OpenDental{
 			}
 			FillGrid();
 			//Validate all claims if the preference is enabled.
-			if(Preferences.GetBool(PrefName.ClaimsSendWindowValidatesOnLoad)) {
+			if(Preference.GetBool(PreferenceName.ClaimsSendWindowValidatesOnLoad)) {
 				//This can be very slow if there are lots of claims to validate.
 				ValidateClaims(_arrayQueueAll.ToList());
 			}
@@ -549,7 +549,7 @@ namespace OpenDental{
 			if(Preferences.HasClinicsEnabled) {
 				long claimCustomTracking=0;
 				if(comboCustomTracking.SelectedIndex!=0) {
-					claimCustomTracking=Defs.GetDefsForCategory(DefCat.ClaimCustomTracking,true)[comboCustomTracking.SelectedIndex-1].DefNum;
+					claimCustomTracking=Definition.GetByCategory(DefinitionCategory.ClaimCustomTracking)[comboCustomTracking.SelectedIndex-1].Id;
 				}
 				FillClinicsList(claimCustomTracking);
 			}
@@ -660,7 +660,7 @@ namespace OpenDental{
 				}
 			}
 			if(comboCustomTracking.SelectedIndex!=0) {
-				customTracking=_listClaimCustomTrackingDefs[comboCustomTracking.SelectedIndex-1].DefNum;
+				customTracking=_listClaimCustomTrackingDefs[comboCustomTracking.SelectedIndex-1].Id;
 			}
 			List<ClaimSendQueueItem> listClaimSend=new List<ClaimSendQueueItem>();
 			listClaimSend.AddRange(_arrayQueueAll);

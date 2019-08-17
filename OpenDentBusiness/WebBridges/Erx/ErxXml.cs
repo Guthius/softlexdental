@@ -44,14 +44,14 @@ namespace OpenDentBusiness {
 			}
 			ncScript.Destination=new DestinationType();
 			ncScript.Destination.requestedPage=RequestedPageType.compose;//This is the tab that the user will want 90% of the time.
-			string practiceTitle=Tidy(Preferences.GetString(PrefName.PracticeTitle),50);//May be blank.
-			string practicePhone=Preferences.GetString(PrefName.PracticePhone);//Validated to be 10 digits within the chart.
-			string practiceFax=Preferences.GetString(PrefName.PracticeFax);//Validated to be 10 digits within the chart.
-			string practiceAddress=Preferences.GetString(PrefName.PracticeAddress);//Validated to exist in chart.
-			string practiceAddress2=Preferences.GetString(PrefName.PracticeAddress2);//May be blank.
-			string practiceCity=Preferences.GetString(PrefName.PracticeCity);//Validated to exist in chart.
-			string practiceState=Preferences.GetString(PrefName.PracticeST).ToUpper();//Validated to be a US state code in chart.
-			string practiceZip=Regex.Replace(Preferences.GetString(PrefName.PracticeZip),"[^0-9]*","");//Zip with all non-numeric characters removed. Validated to be 9 digits in chart.
+			string practiceTitle=Tidy(Preference.GetString(PreferenceName.PracticeTitle),50);//May be blank.
+			string practicePhone= Preference.GetString(PreferenceName.PracticePhone);//Validated to be 10 digits within the chart.
+			string practiceFax= Preference.GetString(PreferenceName.PracticeFax);//Validated to be 10 digits within the chart.
+			string practiceAddress= Preference.GetString(PreferenceName.PracticeAddress);//Validated to exist in chart.
+			string practiceAddress2= Preference.GetString(PreferenceName.PracticeAddress2);//May be blank.
+			string practiceCity= Preference.GetString(PreferenceName.PracticeCity);//Validated to exist in chart.
+			string practiceState= Preference.GetString(PreferenceName.PracticeST).ToUpper();//Validated to be a US state code in chart.
+			string practiceZip=Regex.Replace(Preference.GetString(PreferenceName.PracticeZip),"[^0-9]*","");//Zip with all non-numeric characters removed. Validated to be 9 digits in chart.
 			string practiceZip4=practiceZip.Substring(5);//Last 4 digits of zip.
 			practiceZip=practiceZip.Substring(0,5);//First 5 digits of zip.
 			string country="US";//Always United States for now.
@@ -60,7 +60,7 @@ namespace OpenDentBusiness {
 			//}
 			ncScript.Account=new AccountTypeRx();
 			//Each LicensedPrescriberID must be unique within an account. Since we send ProvNum for LicensedPrescriberID, each OD database must have a unique AccountID.
-			ncScript.Account.ID=Preferences.GetString(PrefName.NewCropAccountId);//Customer account number then a dash then a random alpha-numeric string of 3 characters, followed by 2 digits.
+			ncScript.Account.ID= Preference.GetString(PreferenceName.NewCropAccountId);//Customer account number then a dash then a random alpha-numeric string of 3 characters, followed by 2 digits.
 			ncScript.Account.accountName=practiceTitle;//May be blank.
 			ncScript.Account.siteID="1";//Always send 1.  For each AccountID/SiteID pair, a separate database will be created in NewCrop.
 			ncScript.Account.AccountAddress=new AddressType();
@@ -76,8 +76,8 @@ namespace OpenDentBusiness {
 			ncScript.Location=new LocationType();
 			ProviderClinic provClinic=null;
 			if(!Preferences.HasClinicsEnabled
-				|| (!Preferences.GetBool(PrefName.ElectronicRxClinicUseSelected) && pat.ClinicNum==0)
-				|| (Preferences.GetBool(PrefName.ElectronicRxClinicUseSelected) && Clinics.ClinicNum==0 && pat.ClinicNum==0))
+				|| (!Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected) && pat.ClinicNum==0)
+				|| (Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected) && Clinics.ClinicNum==0 && pat.ClinicNum==0))
 			{ //No clinic.
 				ncScript.Location.ID="0";//Always 0, since clinicnums must be >= 1, will never overlap with a clinic if the office turns clinics on after first use.
 				ncScript.Location.locationName=practiceTitle;//May be blank.
@@ -95,7 +95,7 @@ namespace OpenDentBusiness {
 			}
 			else { //Using clinics.
 				Clinic clinic=null;
-				if(Preferences.GetBool(PrefName.ElectronicRxClinicUseSelected) && Clinics.ClinicNum!=0) {
+				if(Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected) && Clinics.ClinicNum!=0) {
 					clinic=Clinics.GetClinic(Clinics.ClinicNum);
 				}
 				else {
@@ -166,11 +166,11 @@ namespace OpenDentBusiness {
 			}
 			if(emp!=null) {
 				ncScript.Staff=new StaffType();
-				ncScript.Staff.ID="emp"+emp.EmployeeNum.ToString();//A positive integer. Returned in the ExternalUserID field when retreiving prescriptions from NewCrop. Also, provider ID is returned in the same field if a provider created the prescription, so that we can create a distintion between employee IDs and provider IDs.
+				ncScript.Staff.ID="emp"+emp.Id.ToString();//A positive integer. Returned in the ExternalUserID field when retreiving prescriptions from NewCrop. Also, provider ID is returned in the same field if a provider created the prescription, so that we can create a distintion between employee IDs and provider IDs.
 				ncScript.Staff.StaffName=new PersonNameType();
-				ncScript.Staff.StaffName.first=emp.FName;//First name or last name will not be blank. Validated in Chart.
-				ncScript.Staff.StaffName.last=emp.LName;//First name or last name will not be blank. Validated in Chart.
-				ncScript.Staff.StaffName.middle=emp.MiddleI;//May be blank.
+				ncScript.Staff.StaffName.first=emp.FirstName;//First name or last name will not be blank. Validated in Chart.
+				ncScript.Staff.StaffName.last=emp.LastName;//First name or last name will not be blank. Validated in Chart.
+				ncScript.Staff.StaffName.middle=emp.Initials;//May be blank.
 			}
 			ncScript.Patient=new PatientType();
 			ncScript.Patient.ID=pat.PatNum.ToString();//A positive integer.
@@ -246,11 +246,11 @@ namespace OpenDentBusiness {
 				listIcd10Codes.Add(x.DiagnosticCode4);
 			});
 			listIcd10Codes=listIcd10Codes.FindAll(x => !string.IsNullOrWhiteSpace(x)).Distinct().ToList();
-			//If customer calls stating that the ICD10 codes are not being sent to NewCrop,
-			//then the customer can fix by downloading the ICD10 codeset through the import tool.
-			Icd10s.GetByCodes(listIcd10Codes).ForEach(x => {
+            //If customer calls stating that the ICD10 codes are not being sent to NewCrop,
+            //then the customer can fix by downloading the ICD10 codeset through the import tool.
+            ICD10.GetByCodes(listIcd10Codes).ForEach(x => {
 				listPatDiagnosis.Add(new PatientDiagnosisType() {
-					diagnosisID=x.Icd10Code,
+					diagnosisID=x.Code,
 					diagnosisType=DiagnosisType.ICD10,
 					diagnosisName=x.Description,
 				});

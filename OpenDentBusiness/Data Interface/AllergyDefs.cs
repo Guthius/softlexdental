@@ -18,7 +18,7 @@ namespace OpenDentBusiness
         {
             for (int i = 0; i < listAllergyDef.Count; i++)
             {
-                if (allergyDefNum == listAllergyDef[i].AllergyDefNum)
+                if (allergyDefNum == listAllergyDef[i].Id)
                 {
                     return listAllergyDef[i];
                 }
@@ -82,7 +82,7 @@ namespace OpenDentBusiness
                 return true;
             }
 
-            if (allergyDefNum == Preferences.GetLong(PrefName.AllergiesIndicateNone))
+            if (allergyDefNum == Preference.GetLong(PreferenceName.AllergiesIndicateNone))
             {
                 return true;
             }

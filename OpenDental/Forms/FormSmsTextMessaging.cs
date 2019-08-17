@@ -195,7 +195,7 @@ namespace OpenDental {
 				_listClinics=Clinics.GetForUserod(Security.CurUser);
 				if(!Security.CurUser.ClinicIsRestricted || Security.CurUser.ClinicNum==0) {
 					Clinic hqClinic=Clinics.GetPracticeAsClinicZero();
-					hqClinic.Abbr=(Preferences.GetString(PrefName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")");
+					hqClinic.Abbr=(Preference.GetString(PreferenceName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")");
 					_listClinics.Insert(0,hqClinic);//Add HQ
 				}
 				for(int i=0;i<_listClinics.Count;i++) {
@@ -209,7 +209,7 @@ namespace OpenDental {
 					comboClinic.SetSelected(0,true);
 				}
 				//HQ clinic is selected so select all clinics in the filter unless EnterpriseApptList is set.
-				if(Clinics.ClinicNum==0 && !Preferences.GetBool(PrefName.EnterpriseApptList)) {
+				if(Clinics.ClinicNum==0 && !Preference.GetBool(PreferenceName.EnterpriseApptList)) {
 					comboClinic.SetSelected(true);
 				}
 			}
@@ -322,7 +322,7 @@ namespace OpenDental {
 				row.Cells.Add("0.00");//Cost
 				if(Preferences.HasClinicsEnabled) {
 					if(smsFromMobile.ClinicNum==0) {
-						row.Cells.Add(Preferences.GetString(PrefName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")");
+						row.Cells.Add(Preference.GetString(PreferenceName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")");
 					}
 					else { 
 						Clinic clinic=Clinics.GetClinic(smsFromMobile.ClinicNum);
@@ -366,7 +366,7 @@ namespace OpenDental {
 					row.Cells.Add(smsToMobile.MsgChargeUSD.ToString("f"));//Cost
 					if(Preferences.HasClinicsEnabled) {
 						if(smsToMobile.ClinicNum==0) {
-							row.Cells.Add(Preferences.GetString(PrefName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")");
+							row.Cells.Add(Preference.GetString(PreferenceName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")");
 						}
 						else { 
 							Clinic clinic=Clinics.GetClinic(smsToMobile.ClinicNum);
@@ -478,7 +478,7 @@ namespace OpenDental {
 					PatPhone=x.First().MobilePhoneNumber,
 					PatNum=x.First().PatNum,
 					ClinicNum=x.First().ClinicNum,
-					ClinicAbbr=Preferences.HasClinicsEnabled ? (x.First().ClinicNum==0 ? Preferences.GetString(PrefName.PracticeTitle)+
+					ClinicAbbr=Preferences.HasClinicsEnabled ? (x.First().ClinicNum==0 ? Preference.GetString(PreferenceName.PracticeTitle)+
 						" ("+Lan.g(this,"Practice")+")" : Clinics.GetClinic(x.First().ClinicNum).Abbr) : "",
 					PatName=x.First().PatNum==0 ? Lan.g(this,"Unassigned") : GetPatientName(x.First().PatNum),
 					TextMsg=x.First().MsgText,
@@ -498,7 +498,7 @@ namespace OpenDental {
 						PatPhone=x.First().MobilePhoneNumber,
 						PatNum=x.First().PatNum,
 						ClinicNum=x.First().ClinicNum,
-						ClinicAbbr=Preferences.HasClinicsEnabled ? (x.First().ClinicNum==0 ? Preferences.GetString(PrefName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")"
+						ClinicAbbr=Preferences.HasClinicsEnabled ? (x.First().ClinicNum==0 ? Preference.GetString(PreferenceName.PracticeTitle)+" ("+Lan.g(this,"Practice")+")"
 							: Clinics.GetClinic(x.First().ClinicNum).Abbr) : "",
 						PatName=x.First().PatNum==0 ? Lan.g(this,"Unassigned") : GetPatientName(x.First().PatNum),
 						TextMsg=x.First().MsgText,
@@ -881,7 +881,7 @@ namespace OpenDental {
 				return;
 			}
 			if(Preferences.HasClinicsEnabled && clinicNum==0) {
-				clinicNum=Preferences.GetLong(PrefName.TextingDefaultClinicNum);
+				clinicNum=Preference.GetLong(PreferenceName.TextingDefaultClinicNum);
 				if(clinicNum==0) {
 					MsgBox.Show(this,"No default clinic setup for texting.");
 					return;

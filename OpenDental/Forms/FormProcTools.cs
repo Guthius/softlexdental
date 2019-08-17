@@ -413,7 +413,7 @@ namespace OpenDental{
 			#region Appt Procs Quick Add
 			if(checkApptProcsQuickAdd.Checked) {
 				//checking for any ApptProcsQuickAdd and prompting the user if they exist
-				if(Defs.GetDefsForCategory(DefCat.ApptProcsQuickAdd).Count>0) {
+				if(Definition.GetByCategory(DefinitionCategory.ApptProcsQuickAdd).Count>0) {
 					if(MsgBox.Show(this,MsgBoxButtons.YesNo,"This tool will reset the list of procedures in the appointment edit window to the defaults. Continue?")) {
 						ProcedureCodes.ResetApptProcsQuickAdd();
 						Changed=true;

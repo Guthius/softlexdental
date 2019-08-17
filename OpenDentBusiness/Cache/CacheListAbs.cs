@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OpenDentBusiness
 {
-    public abstract class CacheListAbs<T> : CacheAbs<T> where T : ODTable
+    public abstract class CacheListAbs<T> : CacheAbs<T>
     {
         protected abstract DataTable ListToTable(List<T> listAllItems);
 

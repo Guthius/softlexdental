@@ -61,7 +61,7 @@ namespace OpenDental{
 		private ComboBox comboViewStatus;
 		private Label label1;
 		private UI.Button butRefresh;
-		private List<Def> _listApptConfirmedDefs;
+		private List<Definition> _listApptConfirmedDefs;
 
 		///<summary></summary>
 		public FormConfirmList(){
@@ -525,12 +525,12 @@ namespace OpenDental{
 			//textPostcardMessage.Text=PrefC.GetString(PrefName.ConfirmPostcardMessage");
 			comboStatus.Items.Clear();
 			comboViewStatus.Items.Clear();
-			comboViewStatus.Items.Add(new ODBoxItem<Def>(Lan.g(this,"None"),new Def()));
+			comboViewStatus.Items.Add(new ODBoxItem<Definition>(Lan.g(this,"None"),new Definition()));
 			comboViewStatus.SelectedIndex=0;
-			_listApptConfirmedDefs=Defs.GetDefsForCategory(DefCat.ApptConfirmed,true);
+			_listApptConfirmedDefs=Definition.GetByCategory(DefinitionCategory.ApptConfirmed);
 			for(int i=0;i<_listApptConfirmedDefs.Count;i++){
-				comboStatus.Items.Add(_listApptConfirmedDefs[i].ItemName);
-				comboViewStatus.Items.Add(new ODBoxItem<Def>(_listApptConfirmedDefs[i].ItemName,_listApptConfirmedDefs[i]));
+				comboStatus.Items.Add(_listApptConfirmedDefs[i].Description);
+				comboViewStatus.Items.Add(new ODBoxItem<Definition>(_listApptConfirmedDefs[i].Description,_listApptConfirmedDefs[i]));
 			}
 			if(!Security.IsAuthorized(Permissions.ApptConfirmStatusEdit,true)) {//Suppress message because it would be very annoying to users.
 				comboStatus.Enabled=false;
@@ -552,9 +552,9 @@ namespace OpenDental{
 				_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==listClinicsAll[i].EmailAddressNum);
 			}
 			//Exclude default practice email address.
-			_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==Preferences.GetLong(PrefName.EmailDefaultAddressNum));
+			_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==Preference.GetLong(PreferenceName.EmailDefaultAddressNum));
 			//Exclude web mail notification email address.
-			_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==Preferences.GetLong(PrefName.EmailNotifyAddressNum));
+			_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==Preference.GetLong(PreferenceName.EmailNotifyAddressNum));
 			comboEmailFrom.Items.Add(Lan.g(this,"Practice/Clinic"));//default
 			comboEmailFrom.SelectedIndex=0;
 			//Add all email addresses which are not associated to a user, a clinic, or either of the default email addresses.
@@ -662,9 +662,9 @@ namespace OpenDental{
 					if(comboShowRecall.SelectedIndex==0 || comboShowRecall.SelectedIndex==3) {//All or Hygiene Prescheduled
 						showHygienePrescheduled=true;
 					}
-					Def apptConfirmedType=((ODBoxItem<Def>)comboViewStatus.SelectedItem).Tag;
+					Definition apptConfirmedType=((ODBoxItem<Definition>)comboViewStatus.SelectedItem).Tag;
 					Table=Appointments.GetConfirmList(dateFrom,dateTo,provNum,comboClinic.SelectedClinicNum,showRecalls,showNonRecalls,
-						showHygienePrescheduled,apptConfirmedType.DefNum);
+						showHygienePrescheduled,apptConfirmedType.Id);
 					ConfirmationListEvent.Fire(ODEventType.ConfirmationList,Lans.g(this,"Filling the Confirmation List grid..."));
 					int scrollVal=gridMain.ScrollValue;
 					gridMain.BeginUpdate();
@@ -790,7 +790,7 @@ namespace OpenDental{
 				apt=Appointments.GetOneApt(PIn.Long(Table.Rows[gridMain.SelectedIndices[i]]["AptNum"].ToString()));
 				Appointment aptOld=apt.Copy();
 				int selectedI=comboStatus.SelectedIndex;
-				apt.Confirmed=_listApptConfirmedDefs[selectedI].DefNum;
+				apt.Confirmed=_listApptConfirmedDefs[selectedI].Id;
 				try{
 					Appointments.Update(apt,aptOld);
 				}
@@ -802,7 +802,7 @@ namespace OpenDental{
 				if(apt.Confirmed!=aptOld.Confirmed) {
 					//Log confirmation status changes.
 					SecurityLogs.MakeLogEntry(Permissions.ApptConfirmStatusEdit,apt.PatNum,Lans.g(this,"Appointment confirmation status changed from")+" "
-						+Defs.GetName(DefCat.ApptConfirmed,aptOld.Confirmed)+" "+Lans.g(this,"to")+" "+Defs.GetName(DefCat.ApptConfirmed,apt.Confirmed)
+						+Defs.GetName(DefinitionCategory.ApptConfirmed,aptOld.Confirmed)+" "+Lans.g(this,"to")+" "+Defs.GetName(DefinitionCategory.ApptConfirmed,apt.Confirmed)
 						+" "+Lans.g(this,"from the confirmation list")+".",apt.AptNum,aptOld.DateTStamp);
 				}
 			}
@@ -904,18 +904,18 @@ namespace OpenDental{
 			patientsPrinted=0;
 			PaperSize paperSize;
 			PrintoutOrientation orient=PrintoutOrientation.Default;
-			if(Preferences.GetLong(PrefName.RecallPostcardsPerSheet)==1) {
+			if(Preference.GetLong(PreferenceName.RecallPostcardsPerSheet)==1) {
 				paperSize=new PaperSize("Postcard",500,700);
 				orient=PrintoutOrientation.Landscape;
 			}
-			else if(Preferences.GetLong(PrefName.RecallPostcardsPerSheet)==3) {
+			else if(Preference.GetLong(PreferenceName.RecallPostcardsPerSheet)==3) {
 				paperSize=new PaperSize("Postcard",850,1100);
 			}
 			else {//4
 				paperSize=new PaperSize("Postcard",850,1100);
 				orient=PrintoutOrientation.Landscape;
 			}
-			int totalPages=((int)Math.Ceiling((double)AddrTable.Rows.Count/(double)Preferences.GetLong(PrefName.RecallPostcardsPerSheet)));
+			int totalPages=((int)Math.Ceiling((double)AddrTable.Rows.Count/(double)Preference.GetLong(PreferenceName.RecallPostcardsPerSheet)));
 			bool isDialogOk=PrinterL.TryPreview(pdCards_PrintPage,
 				Lan.g(this,"Confirmation list postcards printed"),
 				PrintSituation.Postcard,
@@ -989,26 +989,26 @@ namespace OpenDental{
 
 		///<summary>raised for each page to be printed.</summary>
 		private void pdCards_PrintPage(object sender, PrintPageEventArgs ev){
-			int totalPages=(int)Math.Ceiling((double)AddrTable.Rows.Count/(double)Preferences.GetLong(PrefName.RecallPostcardsPerSheet));
+			int totalPages=(int)Math.Ceiling((double)AddrTable.Rows.Count/(double)Preference.GetLong(PreferenceName.RecallPostcardsPerSheet));
 			Graphics g=ev.Graphics;
-			int yAdj=(int)(Preferences.GetDouble(PrefName.RecallAdjustDown)*100);
-			int xAdj=(int)(Preferences.GetDouble(PrefName.RecallAdjustRight)*100);
+			int yAdj=(int)(Preference.GetDouble(PreferenceName.RecallAdjustDown)*100);
+			int xAdj=(int)(Preference.GetDouble(PreferenceName.RecallAdjustRight)*100);
 			float yPos=0+yAdj;//these refer to the upper left origin of each postcard
 			float xPos=0+xAdj;
 			const int bottomPageMargin=100;
 			string str;
 			while(yPos<ev.PageBounds.Height-bottomPageMargin && patientsPrinted<AddrTable.Rows.Count){
 				//Return Address--------------------------------------------------------------------------
-				if(Preferences.GetBool(PrefName.RecallCardsShowReturnAdd)){
+				if(Preference.GetBool(PreferenceName.RecallCardsShowReturnAdd)){
 					if(!Preferences.HasClinicsEnabled || PIn.Long(AddrTable.Rows[patientsPrinted]["ClinicNum"].ToString())==0) {//No clinics or no clinic selected for this appt
-						str=Preferences.GetString(PrefName.PracticeTitle)+"\r\n";
+						str=Preference.GetString(PreferenceName.PracticeTitle)+"\r\n";
 						g.DrawString(str,new Font(FontFamily.GenericSansSerif,9,FontStyle.Bold),Brushes.Black,xPos+45,yPos+60);
-						str=Preferences.GetString(PrefName.PracticeAddress)+"\r\n";
-						if(Preferences.GetString(PrefName.PracticeAddress2)!="") {
-							str+=Preferences.GetString(PrefName.PracticeAddress2)+"\r\n";
+						str=Preference.GetString(PreferenceName.PracticeAddress)+"\r\n";
+						if(Preference.GetString(PreferenceName.PracticeAddress2)!="") {
+							str+=Preference.GetString(PreferenceName.PracticeAddress2)+"\r\n";
 						}
-						str+=Preferences.GetString(PrefName.PracticeCity)+",  "+Preferences.GetString(PrefName.PracticeST)+"  "+Preferences.GetString(PrefName.PracticeZip)+"\r\n";
-						string phone=Preferences.GetString(PrefName.PracticePhone);
+						str+=Preference.GetString(PreferenceName.PracticeCity)+",  "+Preference.GetString(PreferenceName.PracticeST)+"  "+Preference.GetString(PreferenceName.PracticeZip)+"\r\n";
+						string phone=Preference.GetString(PreferenceName.PracticePhone);
 						if(CultureInfo.CurrentCulture.Name=="en-US"&& phone.Length==10) {
 							str+="("+phone.Substring(0,3)+")"+phone.Substring(3,3)+"-"+phone.Substring(6);
 						}
@@ -1036,7 +1036,7 @@ namespace OpenDental{
 					g.DrawString(str,new Font(FontFamily.GenericSansSerif,8),Brushes.Black,xPos+45,yPos+75);
 				}
 				//Body text-------------------------------------------------------------------------------
-				str=Preferences.GetString(PrefName.ConfirmPostcardMessage);
+				str=Preference.GetString(PreferenceName.ConfirmPostcardMessage);
 				//textPostcardMessage.Text;
 				DateTime dateTimeCur=PIn.Date(AddrTable.Rows[patientsPrinted]["DateTimeAskedToArrive"].ToString());
 				if(dateTimeCur==DateTime.MinValue) {//If there is no DateTimeAskedToArrive set for this appointment.
@@ -1058,11 +1058,11 @@ namespace OpenDental{
 						+AddrTable.Rows[patientsPrinted]["State"].ToString()+"   "
 						+AddrTable.Rows[patientsPrinted]["Zip"].ToString()+"\r\n";
 				g.DrawString(str,new Font(FontFamily.GenericSansSerif,11),Brushes.Black,xPos+320,yPos+240);
-				if(Preferences.GetLong(PrefName.RecallPostcardsPerSheet)==1){
+				if(Preference.GetLong(PreferenceName.RecallPostcardsPerSheet)==1){
 					//Setting it to this value will cause it to break out of the while loop.
 					yPos=ev.PageBounds.Height-bottomPageMargin;
 				}
-				else if(Preferences.GetLong(PrefName.RecallPostcardsPerSheet)==3){
+				else if(Preference.GetLong(PreferenceName.RecallPostcardsPerSheet)==3){
 					yPos+=366;
 				}
 				else{//4
@@ -1123,7 +1123,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
 				return;
 			}
-			if(Preferences.GetLong(PrefName.ConfirmStatusEmailed)==0) {
+			if(Preference.GetLong(PreferenceName.ConfirmStatusEmailed)==0) {
 				MsgBox.Show(this,"No 'Status for e-mailed confirmation' set in the Setup Confirmation window.");
 				return;
 			}
@@ -1134,7 +1134,7 @@ namespace OpenDental{
 					if(cmeth!=ContactMethod.Email) {
 						continue;
 					}
-					if(Table.Rows[i]["confirmed"].ToString()==Defs.GetName(DefCat.ApptConfirmed,Preferences.GetLong(PrefName.ConfirmStatusEmailed))) {//Already confirmed by email
+					if(Table.Rows[i]["confirmed"].ToString()==Defs.GetName(DefinitionCategory.ApptConfirmed,Preference.GetLong(PreferenceName.ConfirmStatusEmailed))) {//Already confirmed by email
 						continue;
 					}
 					if(Table.Rows[i]["email"].ToString()=="") {
@@ -1186,9 +1186,9 @@ namespace OpenDental{
 					emailAddress=_listEmailAddresses[comboEmailFrom.SelectedIndex-1];//-1 to account for predefined "Clinic/Practice" item in combobox
 				}
 				message.FromAddress=emailAddress.GetFrom();				
-				message.Subject=Preferences.GetString(PrefName.ConfirmEmailSubject);
+				message.Subject=Preference.GetString(PreferenceName.ConfirmEmailSubject);
 				listPatNumsSelected.Add(message.PatNum);
-				str=Preferences.GetString(PrefName.ConfirmEmailMessage);
+				str=Preference.GetString(PreferenceName.ConfirmEmailMessage);
 				str=str.Replace("[NameF]",Table.Rows[gridMain.SelectedIndices[i]]["nameF"].ToString());
 				str=str.Replace("[NameFL]",Table.Rows[gridMain.SelectedIndices[i]]["nameFL"].ToString());
 				str=str.Replace("[date]",((DateTime)Table.Rows[gridMain.SelectedIndices[i]]["AptDateTime"]).ToString(Preferences.PatientCommunicationDateFormat));
@@ -1208,7 +1208,7 @@ namespace OpenDental{
 				message.SentOrReceived=EmailSentOrReceived.Sent;
 				EmailMessages.Insert(message);
 				Appointment appt=Appointments.GetOneApt(PIn.Long(Table.Rows[gridMain.SelectedIndices[i]]["AptNum"].ToString()));
-				Appointments.SetConfirmed(appt,Preferences.GetLong(PrefName.ConfirmStatusEmailed));
+				Appointments.SetConfirmed(appt,Preference.GetLong(PreferenceName.ConfirmStatusEmailed));
 			}
 			Cursor=Cursors.Default;
 			if(listPatNumsFailed.Count==gridMain.SelectedIndices.Length){ //all failed
@@ -1257,7 +1257,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"There are no Patients in the table.  Must have at least one.");
 				return;
 			}
-			if(Preferences.GetLong(PrefName.ConfirmStatusTextMessaged)==0) {
+			if(Preference.GetLong(PreferenceName.ConfirmStatusTextMessaged)==0) {
 				MsgBox.Show(this,"You need to set a status for text message confirmations in the Confirmation Setup window.");
 				return;
 			}
@@ -1268,7 +1268,7 @@ namespace OpenDental{
 					if(cmeth!=ContactMethod.TextMessage) {
 						continue;
 					}
-					if(Table.Rows[i]["confirmed"].ToString()==Defs.GetName(DefCat.ApptConfirmed,Preferences.GetLong(PrefName.ConfirmStatusTextMessaged))) {//Already confirmed by text
+					if(Table.Rows[i]["confirmed"].ToString()==Defs.GetName(DefinitionCategory.ApptConfirmed,Preference.GetLong(PreferenceName.ConfirmStatusTextMessaged))) {//Already confirmed by text
 						continue;
 					}
 					if(!Table.Rows[i]["contactMethod"].ToString().StartsWith("Text:")) {//Check contact method
@@ -1291,7 +1291,7 @@ namespace OpenDental{
 					continue;
 				}
 				txtMsgOk=(YN)PIn.Int(Table.Rows[gridMain.SelectedIndices[i]]["TxtMsgOk"].ToString());
-				if(txtMsgOk==YN.Unknown	&& Preferences.GetBool(PrefName.TextMsgOkStatusTreatAsNo)) {//Check if OK to text
+				if(txtMsgOk==YN.Unknown	&& Preference.GetBool(PreferenceName.TextMsgOkStatusTreatAsNo)) {//Check if OK to text
 					skipped++;
 					gridMain.SetSelected(gridMain.SelectedIndices[i],false);
 					continue;
@@ -1330,7 +1330,7 @@ namespace OpenDental{
 				long clinicNum=SmsPhones.GetClinicNumForTexting(patNum);
 				wirelessPhone=PIn.String(Table.Rows[gridMain.SelectedIndices[i]]["WirelessPhone"].ToString());
 				txtMsgOk=((YN)PIn.Int(Table.Rows[gridMain.SelectedIndices[i]]["TxtMsgOk"].ToString()));
-				message=Preferences.GetString(PrefName.ConfirmTextMessage);
+				message=Preference.GetString(PreferenceName.ConfirmTextMessage);
 				message=message.Replace("[NameF]",Table.Rows[gridMain.SelectedIndices[i]]["nameF"].ToString());
 				message=message.Replace("[NameFL]",Table.Rows[gridMain.SelectedIndices[i]]["nameFL"].ToString());
 				message=message.Replace("[date]",((DateTime)Table.Rows[gridMain.SelectedIndices[i]]["AptDateTime"])
@@ -1338,7 +1338,7 @@ namespace OpenDental{
 				message=message.Replace("[time]",((DateTime)Table.Rows[gridMain.SelectedIndices[i]]["AptDateTime"]).ToShortTimeString());
 				if(FormTME.SendText(patNum,wirelessPhone,message,txtMsgOk,clinicNum,SmsMessageSource.Confirmation)) {
 					long aptNum=PIn.Long(Table.Rows[gridMain.SelectedIndices[i]]["AptNum"].ToString());
-					long newStatus=Preferences.GetLong(PrefName.ConfirmStatusTextMessaged);
+					long newStatus=Preference.GetLong(PreferenceName.ConfirmStatusTextMessaged);
 					Appointment aptOld = Appointments.GetOneApt(aptNum);
 					long oldStatus=aptOld.Confirmed;
 					Appointments.SetConfirmed(aptOld,newStatus);
@@ -1346,7 +1346,7 @@ namespace OpenDental{
 						//Log confirmation status changes.
 						SecurityLogs.MakeLogEntry(Permissions.ApptConfirmStatusEdit,patNum,
 							Lans.g(this,"Appointment confirmation status automatically changed from")+" "
-							+Defs.GetName(DefCat.ApptConfirmed,oldStatus)+" "+Lans.g(this,"to")+" "+Defs.GetName(DefCat.ApptConfirmed,newStatus)
+							+Defs.GetName(DefinitionCategory.ApptConfirmed,oldStatus)+" "+Lans.g(this,"to")+" "+Defs.GetName(DefinitionCategory.ApptConfirmed,newStatus)
 							+" "+Lans.g(this,"from the confirmation list")+".",ContrApptSingle.SelectedAptNum,aptOld.DateTStamp);
 					}
 				}

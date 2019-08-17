@@ -9,12 +9,12 @@ namespace UnitTestsCore {
 	public class DefT {
 
 		///<summary></summary>
-		public static Def CreateDefinition(DefCat category,string itemName,string itemValue="",Color itemColor=new Color()) {
-			Def def=new Def();
+		public static Definition CreateDefinition(DefinitionCategory category,string itemName,string itemValue="",Color itemColor=new Color()) {
+			Definition def=new Definition();
 			def.Category=category;
-			def.ItemColor=itemColor;
-			def.ItemName=itemName;
-			def.ItemValue=itemValue;
+			def.Color=itemColor;
+			def.Description=itemName;
+			def.Value=itemValue;
 			Defs.Insert(def);
 			Defs.RefreshCache();
 			return def;

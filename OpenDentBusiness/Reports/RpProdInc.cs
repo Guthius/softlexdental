@@ -1319,7 +1319,7 @@ namespace OpenDentBusiness
             {
                 whereClin = "AND adjustment.ClinicNum IN (" + String.Join(",", listClinicNums) + ") ";
             }
-            string listBadDebtAdj = ReportsComplex.RunFuncOnReportServer(() => Preferences.GetStringNoCache(PrefName.BadDebtAdjustmentTypes));
+            string listBadDebtAdj = ReportsComplex.RunFuncOnReportServer(() => Preference.GetStringNoCache(PreferenceName.BadDebtAdjustmentTypes));
             if (String.IsNullOrEmpty(listBadDebtAdj))
             {
                 listBadDebtAdj = "0";
@@ -1562,7 +1562,7 @@ namespace OpenDentBusiness
             {
                 whereClin = "AND adjustment.ClinicNum IN (" + String.Join(",", listClinicNums) + ") ";
             }
-            string listBadDebtAdj = ReportsComplex.RunFuncOnReportServer(() => Preferences.GetStringNoCache(PrefName.BadDebtAdjustmentTypes));
+            string listBadDebtAdj = ReportsComplex.RunFuncOnReportServer(() => Preference.GetStringNoCache(PreferenceName.BadDebtAdjustmentTypes));
             if (String.IsNullOrEmpty(listBadDebtAdj))
             {
                 listBadDebtAdj = "0";
@@ -2184,7 +2184,7 @@ namespace OpenDentBusiness
             }
             command = "SELECT " + DbHelper.DtimeToDate("t.AptDateTime") + " SchedDate,SUM(t.Fee-t.WriteoffEstimate) Amount,ClinicNum "
                 + "FROM (SELECT appointment.AptDateTime,IFNULL(procedurelog.ProcFee,0) Fee,appointment.ClinicNum,";
-            if (ReportsComplex.RunFuncOnReportServer(() => Prefs.GetBoolNoCache(PrefName.ReportPandIschedProdSubtractsWO)))
+            if (ReportsComplex.RunFuncOnReportServer(() => Preference.GetBoolNoCache(PreferenceName.ReportPandIschedProdSubtractsWO)))
             {
                 //Subtract both PPO and capitation writeoffs
                 command += "SUM(IFNULL(CASE WHEN WriteOffEstOverride != -1 THEN WriteOffEstOverride ELSE WriteOffEst END,0)) WriteoffEstimate ";

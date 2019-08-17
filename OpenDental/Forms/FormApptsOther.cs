@@ -350,7 +350,7 @@ namespace OpenDental {
 			}
 			aptCur.Pattern="/X/";
 			if(_patCur.PriProv==0) {
-				aptCur.ProvNum=Preferences.GetLong(PrefName.PracticeDefaultProv);
+				aptCur.ProvNum=Preference.GetLong(PreferenceName.PracticeDefaultProv);
 			}
 			else {
 				aptCur.ProvNum=_patCur.PriProv;
@@ -358,7 +358,7 @@ namespace OpenDental {
 			aptCur.ProvHyg=_patCur.SecProv;
 			aptCur.AptStatus=ApptStatus.PtNote;
 			aptCur.ClinicNum=_patCur.ClinicNum;
-			aptCur.TimeLocked=Preferences.GetBool(PrefName.AppointmentTimeIsLocked);
+			aptCur.TimeLocked=Preference.GetBool(PreferenceName.AppointmentTimeIsLocked);
 			if(IsInitialClick) {//initially double clicked on appt module
 				DateTime date;
 				if(ApptDrawing.IsWeeklyView) {

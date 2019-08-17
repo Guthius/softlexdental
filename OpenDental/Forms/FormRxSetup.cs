@@ -148,7 +148,7 @@ namespace OpenDental{
 		#endregion
 
 		private void FormRxSetup_Load(object sender, System.EventArgs e) {
-			checkProcCodeRequired.Checked=Preferences.GetBool(PrefName.RxHasProc);
+			checkProcCodeRequired.Checked=Preference.GetBool(PreferenceName.RxHasProc);
 			FillGrid();
 		}
 
@@ -189,7 +189,7 @@ namespace OpenDental{
 		}
 
 		private void checkProcCodeRequired_Click(object sender,EventArgs e) {
-			if(Prefs.UpdateBool(PrefName.RxHasProc,checkProcCodeRequired.Checked)) {
+			if(Preference.Update(PreferenceName.RxHasProc,checkProcCodeRequired.Checked)) {
 				DataValid.SetInvalid(InvalidType.Prefs);
 			}
 		}

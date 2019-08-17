@@ -122,7 +122,7 @@ namespace OpenDentBusiness
         public static List<LetterMerge> GetListForCat(int catIndex)
         {
             //No need to check RemotingRole; no call to db.
-            long defNum = Defs.GetDefsForCategory(DefCat.LetterMergeCats, true)[catIndex].DefNum;
+            long defNum = Definition.GetByCategory(DefinitionCategory.LetterMergeCats)[catIndex].Id;
             return GetWhere(x => x.Category == defNum);
         }
     }

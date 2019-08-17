@@ -42,7 +42,7 @@ namespace OpenDentBusiness
 						INNER JOIN task ON task.TaskNum=taskancestor.TaskNum
 							AND NOT(COALESCE(task.ReminderGroupId,'') != '' AND task.DateTimeEntry > " + DbHelper.Now() + ") ";//no future reminders
             command += BuildFilterJoins(filterClinicFkey);
-            if (Preferences.GetBool(PrefName.TasksNewTrackedByUser))
+            if (Preference.GetBool(PreferenceName.TasksNewTrackedByUser))
             {
                 command += @"
 						INNER JOIN taskunread ON taskunread.TaskNum=task.TaskNum 
@@ -86,7 +86,7 @@ namespace OpenDentBusiness
             {
                 //No filter.
             }
-            if (Preferences.GetBool(PrefName.TasksNewTrackedByUser))
+            if (Preference.GetBool(PreferenceName.TasksNewTrackedByUser))
             {
                 command += "AND task.TaskStatus!=" + POut.Int((int)TaskStatusEnum.Done) + " ";
                 command += @"
@@ -162,7 +162,7 @@ namespace OpenDentBusiness
             {
                 //No filter.
             }
-            if (Preferences.GetBool(PrefName.TasksNewTrackedByUser))
+            if (Preference.GetBool(PreferenceName.TasksNewTrackedByUser))
             {
                 command += "AND EXISTS(SELECT * FROM taskunread WHERE taskunread.TaskNum=task.TaskNum ";
                 //if a list is someone's inbox,
@@ -260,7 +260,7 @@ namespace OpenDentBusiness
         {
             string command = string.Empty;
             //Only add JOINs if filtering.  Filtering will never happen if clinics are turned off, because regions link via clinics.
-            if ((GlobalTaskFilterType)Preferences.GetInt(PrefName.TasksGlobalFilterType) == GlobalTaskFilterType.Disabled || filterClinicFkey == 0
+            if ((GlobalTaskFilterType)Preference.GetInt(PreferenceName.TasksGlobalFilterType) == GlobalTaskFilterType.Disabled || filterClinicFkey == 0
                 || !Preferences.HasClinicsEnabled)
             {
                 return command;
@@ -277,7 +277,7 @@ namespace OpenDentBusiness
         {
             string command = string.Empty;
             //Only add WHERE clauses if filtering.  Filtering will never happen if clinics are turned off, because regions link via clinics.
-            if ((GlobalTaskFilterType)Preferences.GetInt(PrefName.TasksGlobalFilterType) == GlobalTaskFilterType.Disabled
+            if ((GlobalTaskFilterType)Preference.GetInt(PreferenceName.TasksGlobalFilterType) == GlobalTaskFilterType.Disabled
                 || (filterClinicFkey == 0 && filterRegionFkey == 0) || !Preferences.HasClinicsEnabled)
             {
                 return command;
@@ -296,7 +296,7 @@ namespace OpenDentBusiness
             string strRegionFilterNums = string.Join(",", listClinicNumsInRegion.Select(x => POut.Long(x)));
             //Clause for TaskLists that have Default filter.
             string cmdFilterTaskListByDefault = "(tasklistfortask.GlobalTaskFilterType=" + POut.Long((long)GlobalTaskFilterType.Default)
-                + GetDefaultFilterTypeString((GlobalTaskFilterType)Preferences.GetInt(PrefName.TasksGlobalFilterType), strClinicFilterNums, strRegionFilterNums) + ") ";
+                + GetDefaultFilterTypeString((GlobalTaskFilterType)Preference.GetInt(PreferenceName.TasksGlobalFilterType), strClinicFilterNums, strRegionFilterNums) + ") ";
             //Clause for TaskLists that have None filter.
             string cmdFilterTaskListByNone = "(tasklistfortask.GlobalTaskFilterType=" + POut.Long((long)GlobalTaskFilterType.None) + ")";
             //Clause for TaskLists that have Clinic filter.

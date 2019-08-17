@@ -154,7 +154,7 @@ namespace OpenDental.Bridges {
 							else {
 								writer.WriteAttributeString("status","3");
 							}
-							if(Defs.GetDef(DefCat.ApptConfirmed,apt.Confirmed).ItemName.ToLower()=="unconfirmed") {
+							if(Defs.GetDef(DefinitionCategory.ApptConfirmed,apt.Confirmed).Description.ToLower()=="unconfirmed") {
 								writer.WriteAttributeString("confirmed","0");
 							}
 							else {

@@ -116,7 +116,7 @@ namespace OpenDentBusiness.Crud{
 
 		///<summary>Inserts one WikiListHeaderWidth into the database.  Provides option to use the existing priKey.  Doesn't use the cache.</summary>
 		public static long InsertNoCache(WikiListHeaderWidth wikiListHeaderWidth,bool useExistingPK) {
-			bool isRandomKeys=Prefs.GetBoolNoCache(PrefName.RandomPrimaryKeys);
+			bool isRandomKeys= Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO wikilistheaderwidth (";
 			if(!useExistingPK && isRandomKeys) {
 				wikiListHeaderWidth.WikiListHeaderWidthNum=ReplicationServers.GetKeyNoCache("wikilistheaderwidth","WikiListHeaderWidthNum");

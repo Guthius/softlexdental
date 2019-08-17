@@ -60,7 +60,7 @@
             this.computerListBox.Size = new System.Drawing.Size(280, 218);
             this.computerListBox.TabIndex = 4;
             this.computerListBox.DrawItem += new System.Windows.Forms.DrawItemEventHandler(this.ComputerListBox_DrawItem);
-            this.computerListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.computerListBox_MouseDoubleClick);
+            this.computerListBox.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ComputerListBox_MouseDoubleClick);
             // 
             // cancelButton
             // 
@@ -91,7 +91,7 @@
             this.deleteButton.Size = new System.Drawing.Size(110, 30);
             this.deleteButton.TabIndex = 5;
             this.deleteButton.Text = "&Delete";
-            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
+            this.deleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
             // computerNameLabel
             // 
@@ -111,7 +111,7 @@
             this.setSimpleGraphicsButton.Size = new System.Drawing.Size(150, 30);
             this.setSimpleGraphicsButton.TabIndex = 1;
             this.setSimpleGraphicsButton.Text = "Use Simple Graphics";
-            this.setSimpleGraphicsButton.Click += new System.EventHandler(this.setSimpleGraphicsButton_Click);
+            this.setSimpleGraphicsButton.Click += new System.EventHandler(this.SetSimpleGraphicsButton_Click);
             // 
             // fixLabel
             // 

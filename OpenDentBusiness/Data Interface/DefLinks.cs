@@ -45,9 +45,9 @@ namespace OpenDentBusiness
         {
             //No need to check RemotingRole; no call to db.
             //Get all definitions that are associated to the WebSchedNewPatApptTypes category that are linked to an operatory.
-            List<Def> listWSNPAATDefs = Defs.GetDefsForCategory(DefCat.WebSchedNewPatApptTypes);//Cannot hide defs of this category at this time.
+            List<Definition> listWSNPAATDefs = Definition.GetByCategory(DefinitionCategory.WebSchedNewPatApptTypes);//Cannot hide defs of this category at this time.
                                                                                                 //Return all of the deflinks that are of type Operatory in order to get the operatory specific deflinks.
-            return DefLinks.GetDefLinksByTypeAndDefs(DefLinkType.Operatory, listWSNPAATDefs.Select(x => x.DefNum).ToList());
+            return DefLinks.GetDefLinksByTypeAndDefs(DefLinkType.Operatory, listWSNPAATDefs.Select(x => x.Id).ToList());
         }
 
         ///<summary>Gets list of all appointment type specific DefLinks associated to the WebSchedNewPatApptTypes definition category.</summary>
@@ -55,9 +55,9 @@ namespace OpenDentBusiness
         {
             //No need to check RemotingRole; no call to db.
             //Get all definitions that are associated to the WebSchedNewPatApptTypes category that are linked to an operatory.
-            List<Def> listWSNPAATDefs = Defs.GetDefsForCategory(DefCat.WebSchedNewPatApptTypes);//Cannot hide defs of this category at this time.
+            List<Definition> listWSNPAATDefs = Definition.GetByCategory(DefinitionCategory.WebSchedNewPatApptTypes);//Cannot hide defs of this category at this time.
                                                                                                 //Return all of the deflinks that are of type Operatory in order to get the operatory specific deflinks.
-            return DefLinks.GetDefLinksByTypeAndDefs(DefLinkType.AppointmentType, listWSNPAATDefs.Select(x => x.DefNum).ToList());
+            return DefLinks.GetDefLinksByTypeAndDefs(DefLinkType.AppointmentType, listWSNPAATDefs.Select(x => x.Id).ToList());
         }
 
         ///<summary>Gets one DefLinks by FKey. Must provide DefLinkType.  Returns null if not found.</summary>

@@ -294,7 +294,7 @@ namespace OpenDental{
 			}
 			for(int i=0;i<LabelList.Count;i++){
 				comboLabel.Items.Add(LabelList[i].Description);
-				if(Preferences.GetLong(PrefName.LabelPatientDefaultSheetDefNum)==LabelList[i].SheetDefNum){
+				if(Preference.GetLong(PreferenceName.LabelPatientDefaultSheetDefNum)==LabelList[i].SheetDefNum){
 					comboLabel.SelectedIndex=i+1;
 				}
 			}
@@ -463,7 +463,7 @@ namespace OpenDental{
 			}
 			for(int i=0;i<LabelList.Count;i++){
 				comboLabel.Items.Add(LabelList[i].Description);
-				if(Preferences.GetLong(PrefName.LabelPatientDefaultSheetDefNum)==LabelList[i].SheetDefNum){
+				if(Preference.GetLong(PreferenceName.LabelPatientDefaultSheetDefNum)==LabelList[i].SheetDefNum){
 					comboLabel.SelectedIndex=i+1;
 				}
 			}
@@ -471,10 +471,10 @@ namespace OpenDental{
 
 		private void comboLabel_SelectionChangeCommitted(object sender,EventArgs e) {
 			if(comboLabel.SelectedIndex==0){
-				Prefs.UpdateLong(PrefName.LabelPatientDefaultSheetDefNum,0);
+				Preference.Update(PreferenceName.LabelPatientDefaultSheetDefNum,0);
 			}
 			else{
-				Prefs.UpdateLong(PrefName.LabelPatientDefaultSheetDefNum,LabelList[comboLabel.SelectedIndex-1].SheetDefNum);
+				Preference.Update(PreferenceName.LabelPatientDefaultSheetDefNum,LabelList[comboLabel.SelectedIndex-1].SheetDefNum);
 			}
 			DataValid.SetInvalid(InvalidType.Prefs);
 		}

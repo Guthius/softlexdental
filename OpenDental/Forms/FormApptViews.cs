@@ -44,11 +44,11 @@ namespace OpenDental
             }
 
             FillViewList();
-            if (Preferences.GetInt(PrefName.AppointmentTimeIncrement) == 5)
+            if (Preference.GetInt(PreferenceName.AppointmentTimeIncrement) == 5)
             {
                 increment5RadioButton.Checked = true;
             }
-            else if (Preferences.GetInt(PrefName.AppointmentTimeIncrement) == 10)
+            else if (Preference.GetInt(PreferenceName.AppointmentTimeIncrement) == 10)
             {
                 increment10RadioButton.Checked = true;
             }
@@ -254,7 +254,7 @@ namespace OpenDental
                 newIncrement = 10;
             }
 
-            if (Prefs.UpdateInt(PrefName.AppointmentTimeIncrement, newIncrement))
+            if (Preference.Update(PreferenceName.AppointmentTimeIncrement, newIncrement))
             {
                 DataValid.SetInvalid(InvalidType.Prefs);
             }

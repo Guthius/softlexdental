@@ -222,6 +222,9 @@
       <HintPath>..\Required dlls\RS232.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.4.0\lib\netstandard1.1\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -230,11 +233,23 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.3\lib\netstandard1.1\System.Memory.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard1.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.2\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Services" />
@@ -256,7 +271,9 @@
     <Compile Include="Cache\FeeCache.cs" />
     <Compile Include="Cache\FeeNoCache.cs" />
     <Compile Include="Cache\IFeeCache.cs" />
-    <Compile Include="Crud\AlertCategoryCrud.cs" />
+    <Compile Include="Crud Interface\CrudColumnAttribute.cs" />
+    <Compile Include="Crud Interface\CrudTableAttribute.cs" />
+    <Compile Include="Crud Interface\TableBase.cs" />
     <Compile Include="Crud\AlertCategoryLinkCrud.cs" />
     <Compile Include="Crud\AsapCommCrud.cs" />
     <Compile Include="Crud\MobileAppDeviceCrud.cs" />
@@ -283,11 +300,9 @@
     <Compile Include="Crud\SmsBlockPhoneCrud.cs" />
     <Compile Include="Crud\SubstitutionLinkCrud.cs" />
     <Compile Include="Crud\StmtLinkCrud.cs" />
-    <Compile Include="Crud\TaskTakenCrud.cs" />
     <Compile Include="Crud\TsiTransLogCrud.cs" />
     <Compile Include="Crud\UserGroupAttachCrud.cs" />
     <Compile Include="Crud\WebSchedRecallCrud.cs" />
-    <Compile Include="Data Interface\AlertCategories.cs" />
     <Compile Include="Data Interface\AlertCategoryLinks.cs" />
     <Compile Include="Data Interface\AsapComms.cs" />
     <Compile Include="Data Interface\ClaimTrackings.cs" />
@@ -305,18 +320,22 @@
     <Compile Include="Data Interface\ProcMultiVisits.cs" />
     <Compile Include="Data Interface\ProviderClinicLinks.cs" />
     <Compile Include="Data Interface\Reactivations.cs" />
+    <Compile Include="DataException.cs" />
+    <Compile Include="DataRecord.cs" />
+    <Compile Include="DataRecordCache.cs" />
+    <Compile Include="Data\PreferenceName.cs" />
     <Compile Include="Db Multi Table\ApptSearch.cs" />
     <Compile Include="Db\DataConnection.cs" />
     <Compile Include="Db\DataConnectionEvent.cs" />
-    <Compile Include="Db\DbAdminMysql.cs" />
     <Compile Include="Db\SIn.cs" />
     <Compile Include="Db\SOut.cs" />
+    <Compile Include="Data\0_READY\DefinitionCategory.cs" />
+    <Compile Include="DefCatOptions.cs" />
     <Compile Include="Email\BasicEmailAddress.cs" />
     <Compile Include="Email\BasicEmailMessage.cs" />
     <Compile Include="Email\SendEmails.cs" />
     <Compile Include="Data Interface\ProviderClinics.cs" />
     <Compile Include="Data Interface\RecurringCharges.cs" />
-    <Compile Include="Data Interface\TaskTakens.cs" />
     <Compile Include="Db Multi Table\AgingData.cs" />
     <Compile Include="Db Multi Table\MarkupEdit.cs" />
     <Compile Include="Db Multi Table\PayPlanEdit.cs" />
@@ -324,7 +343,7 @@
     <Compile Include="Misc\Authentication.cs" />
     <Compile Include="Misc\Introspection.cs" />
     <Compile Include="ODEvents\ODEvents.cs" />
-    <Compile Include="ODEvents\MiddleTierConnectionEvent.cs" />
+    <Compile Include="PrefNameExtensions.cs" />
     <Compile Include="Reports\RpProcOverpaid.cs" />
     <Compile Include="Reports\RpProdGoal.cs" />
     <Compile Include="TableTypes\MobileAppDevice.cs" />
@@ -440,9 +459,6 @@
     <Compile Include="Eclaims\WebMD.cs" />
     <Compile Include="Eclaims\x270Controller.cs" />
     <Compile Include="Eclaims\x837Controller.cs" />
-    <Compile Include="CrudFramework\CrudTableAttribute.cs" />
-    <Compile Include="CrudFramework\CrudColumnAttribute.cs" />
-    <Compile Include="Crud\AccountingAutoPayCrud.cs" />
     <Compile Include="Crud\AdjustmentCrud.cs" />
     <Compile Include="Crud\AlertItemCrud.cs" />
     <Compile Include="Crud\AlertReadCrud.cs" />
@@ -508,9 +524,7 @@
     <Compile Include="Crud\ClockEventCrud.cs" />
     <Compile Include="Crud\CodeSystemCrud.cs" />
     <Compile Include="Crud\CommlogCrud.cs" />
-    <Compile Include="Crud\ComputerCrud.cs" />
     <Compile Include="Crud\ComputerPrefCrud.cs" />
-    <Compile Include="Crud\ContactCrud.cs" />
     <Compile Include="Crud\CountyCrud.cs" />
     <Compile Include="Crud\CovCatCrud.cs" />
     <Compile Include="Crud\CovSpanCrud.cs" />
@@ -518,18 +532,14 @@
     <Compile Include="Crud\CreditCardCrud.cs" />
     <Compile Include="Crud\CustRefEntryCrud.cs" />
     <Compile Include="Crud\CustReferenceCrud.cs" />
-    <Compile Include="Crud\CvxCrud.cs" />
     <Compile Include="Crud\DashboardARCrud.cs" />
-    <Compile Include="Crud\DefCrud.cs" />
     <Compile Include="Crud\DeletedObjectCrud.cs" />
     <Compile Include="Crud\DepositCrud.cs" />
     <Compile Include="Crud\DictCustomCrud.cs" />
     <Compile Include="Crud\DiseaseCrud.cs" />
-    <Compile Include="Crud\DiseaseDefCrud.cs" />
     <Compile Include="Crud\DisplayFieldCrud.cs" />
     <Compile Include="Crud\DocumentCrud.cs" />
     <Compile Include="Crud\DocumentMiscCrud.cs" />
-    <Compile Include="Crud\DrugManufacturerCrud.cs" />
     <Compile Include="Crud\DrugUnitCrud.cs" />
     <Compile Include="Crud\DunningCrud.cs" />
     <Compile Include="Crud\EduResourceCrud.cs" />
@@ -550,7 +560,6 @@
     <Compile Include="Crud\EmailMessageCrud.cs" />
     <Compile Include="Crud\EmailMessageUidCrud.cs" />
     <Compile Include="Crud\EmailTemplateCrud.cs" />
-    <Compile Include="Crud\EmployeeCrud.cs" />
     <Compile Include="Crud\EmployerCrud.cs" />
     <Compile Include="Crud\EncounterCrud.cs" />
     <Compile Include="Crud\EobAttachCrud.cs" />
@@ -571,7 +580,6 @@
     <Compile Include="Crud\FHIRSubscriptionCrud.cs" />
     <Compile Include="Crud\FieldDefLinkCrud.cs" />
     <Compile Include="Crud\FormPatCrud.cs" />
-    <Compile Include="Crud\GradingScaleCrud.cs" />
     <Compile Include="Crud\GradingScaleItemCrud.cs" />
     <Compile Include="Crud\GroupPermissionCrud.cs" />
     <Compile Include="Crud\GuardianCrud.cs" />
@@ -582,8 +590,6 @@
     <Compile Include="Crud\HL7DefSegmentCrud.cs" />
     <Compile Include="Crud\HL7MsgCrud.cs" />
     <Compile Include="Crud\HL7ProcAttachCrud.cs" />
-    <Compile Include="Crud\Icd10Crud.cs" />
-    <Compile Include="Crud\ICD9Crud.cs" />
     <Compile Include="Crud\InsFilingCodeCrud.cs" />
     <Compile Include="Crud\InsFilingCodeSubtypeCrud.cs" />
     <Compile Include="Crud\InsPlanCrud.cs" />
@@ -600,13 +606,11 @@
     <Compile Include="Crud\LabTurnaroundCrud.cs" />
     <Compile Include="Crud\LanguageCrud.cs" />
     <Compile Include="Crud\LanguageForeignCrud.cs" />
-    <Compile Include="Crud\LetterCrud.cs" />
     <Compile Include="Crud\LetterMergeCrud.cs" />
     <Compile Include="Crud\LetterMergeFieldCrud.cs" />
     <Compile Include="Crud\LoincCrud.cs" />
     <Compile Include="Crud\MapAreaCrud.cs" />
     <Compile Include="Crud\MedicalOrderCrud.cs" />
-    <Compile Include="Crud\MedicationCrud.cs" />
     <Compile Include="Crud\MedicationPatCrud.cs" />
     <Compile Include="Crud\MedLabFacAttachCrud.cs" />
     <Compile Include="Crud\MedLabCrud.cs" />
@@ -642,7 +646,6 @@
     <Compile Include="Crud\PharmacyCrud.cs" />
     <Compile Include="Crud\PlannedApptCrud.cs" />
     <Compile Include="Crud\PopupCrud.cs" />
-    <Compile Include="Crud\PrefCrud.cs" />
     <Compile Include="Crud\PrinterCrud.cs" />
     <Compile Include="Crud\ProcApptColorCrud.cs" />
     <Compile Include="Crud\ProcButtonCrud.cs" />
@@ -666,10 +669,8 @@
     <Compile Include="Crud\RecallCrud.cs" />
     <Compile Include="Crud\RecallTriggerCrud.cs" />
     <Compile Include="Crud\RecallTypeCrud.cs" />
-    <Compile Include="Crud\ReconcileCrud.cs" />
     <Compile Include="Crud\RefAttachCrud.cs" />
     <Compile Include="Crud\ReferralCrud.cs" />
-    <Compile Include="Crud\RegistrationKeyCrud.cs" />
     <Compile Include="Crud\ReminderRuleCrud.cs" />
     <Compile Include="Crud\RepeatChargeCrud.cs" />
     <Compile Include="Crud\ReplicationServerCrud.cs" />
@@ -677,8 +678,6 @@
     <Compile Include="Crud\ReqStudentCrud.cs" />
     <Compile Include="Crud\RequiredFieldConditionCrud.cs" />
     <Compile Include="Crud\RequiredFieldCrud.cs" />
-    <Compile Include="Crud\ResellerCrud.cs" />
-    <Compile Include="Crud\ResellerServiceCrud.cs" />
     <Compile Include="Crud\RxAlertCrud.cs" />
     <Compile Include="Crud\RxDefCrud.cs" />
     <Compile Include="Crud\RxNormCrud.cs" />
@@ -770,8 +769,6 @@
     <Compile Include="Crud\ToothInitialCrud.cs" />
     <Compile Include="Crud\TransactionCrud.cs" />
     <Compile Include="Crud\TreatPlanCrud.cs" />
-    <Compile Include="Crud\UcumCrud.cs" />
-    <Compile Include="Crud\UserGroupCrud.cs" />
     <Compile Include="Crud\UserodApptViewCrud.cs" />
     <Compile Include="Crud\UserodCrud.cs" />
     <Compile Include="Crud\UserQueryCrud.cs" />
@@ -831,9 +828,7 @@
     <Compile Include="Data Interface\Evaluations.cs" />
     <Compile Include="Data Interface\FamilyHealths.cs" />
     <Compile Include="Data Interface\GradingScaleItems.cs" />
-    <Compile Include="Data Interface\GradingScales.cs" />
     <Compile Include="Data Interface\Hcpcses.cs" />
-    <Compile Include="Data Interface\Icd10s.cs" />
     <Compile Include="Data Interface\Interventions.cs" />
     <Compile Include="Data Interface\Loincs.cs" />
     <Compile Include="Data Interface\MapAreas.cs" />
@@ -851,12 +846,9 @@
     <Compile Include="Data Interface\SmsPhones.cs" />
     <Compile Include="Data Interface\TaskHists.cs" />
     <Compile Include="Data Interface\ProcButtonQuicks.cs" />
-    <Compile Include="Data Interface\Resellers.cs" />
-    <Compile Include="Data Interface\ResellerServices.cs" />
     <Compile Include="Data Interface\SecurityLogHashes.cs" />
     <Compile Include="Data Interface\Snomeds.cs" />
     <Compile Include="Data Interface\Sops.cs" />
-    <Compile Include="Data Interface\Ucums.cs" />
     <Compile Include="Data Interface\UserodApptViews.cs" />
     <Compile Include="Data Interface\VaccineObses.cs" />
     <Compile Include="Data Interface\WikiListHeaderWidths.cs" />
@@ -888,7 +880,6 @@
     <Compile Include="Data Interface\HL7DefMessages.cs" />
     <Compile Include="Data Interface\HL7Defs.cs" />
     <Compile Include="Data Interface\HL7DefSegments.cs" />
-    <Compile Include="Data Interface\ICD9s.cs" />
     <Compile Include="Data Interface\InsSubs.cs" />
     <Compile Include="Data Interface\InstallmentPlans.cs" />
     <Compile Include="Data Interface\LabPanels.cs" />
@@ -909,8 +900,7 @@
     <Compile Include="Data Interface\TaskNotes.cs" />
     <Compile Include="Data Interface\TaskUnreads.cs" />
     <Compile Include="Cache\Cache.cs" />
-    <Compile Include="Cache\EnumRemotingRole.cs" />
-    <Compile Include="Cache\PrefC.cs" />
+    <Compile Include="Data\1_CLEANUP\Preferences.cs" />
     <Compile Include="Data Interface\TimeCardRules.cs" />
     <Compile Include="Data Interface\ToothGridCells.cs" />
     <Compile Include="Data Interface\ToothGridCols.cs" />
@@ -966,61 +956,6 @@
     <Compile Include="Misc\NTPv4.cs" />
     <Compile Include="Misc\TsiMsgConstructor.cs" />
     <Compile Include="Misc\WindowsTime.cs" />
-    <Compile Include="Mobile\Crud\AllergyDefmCrud.cs" />
-    <Compile Include="Mobile\Crud\AllergymCrud.cs" />
-    <Compile Include="Mobile\Crud\DiseaseDefmCrud.cs" />
-    <Compile Include="Mobile\Crud\DiseasemCrud.cs" />
-    <Compile Include="Mobile\Crud\DocumentmCrud.cs" />
-    <Compile Include="Mobile\Crud\ICD9mCrud.cs" />
-    <Compile Include="Mobile\Crud\LabPanelmCrud.cs" />
-    <Compile Include="Mobile\Crud\LabResultmCrud.cs" />
-    <Compile Include="Mobile\Crud\MedicationmCrud.cs" />
-    <Compile Include="Mobile\Crud\MedicationPatmCrud.cs" />
-    <Compile Include="Mobile\Crud\PharmacymCrud.cs" />
-    <Compile Include="Mobile\Crud\ProvidermCrud.cs" />
-    <Compile Include="Mobile\Crud\RecallmCrud.cs" />
-    <Compile Include="Mobile\Crud\RxPatmCrud.cs" />
-    <Compile Include="Mobile\Crud\StatementmCrud.cs" />
-    <Compile Include="Mobile\Crud\UsermCrud.cs" />
-    <Compile Include="Mobile\Data Interface\AllergyDefms.cs" />
-    <Compile Include="Mobile\Data Interface\Allergyms.cs" />
-    <Compile Include="Mobile\Data Interface\DiseaseDefms.cs" />
-    <Compile Include="Mobile\Data Interface\Diseasems.cs" />
-    <Compile Include="Mobile\Data Interface\Documentms.cs" />
-    <Compile Include="Mobile\Data Interface\ICD9ms.cs" />
-    <Compile Include="Mobile\Data Interface\LabPanelms.cs" />
-    <Compile Include="Mobile\Data Interface\LabResultms.cs" />
-    <Compile Include="Mobile\Data Interface\Medicationms.cs" />
-    <Compile Include="Mobile\Data Interface\MedicationPatms.cs" />
-    <Compile Include="Mobile\Data Interface\Pharmacyms.cs" />
-    <Compile Include="Mobile\Data Interface\PrefmC.cs" />
-    <Compile Include="Mobile\Data Interface\Prefms.cs" />
-    <Compile Include="Mobile\Data Interface\Providerms.cs" />
-    <Compile Include="Mobile\Data Interface\Recallms.cs" />
-    <Compile Include="Mobile\Data Interface\RxPatms.cs" />
-    <Compile Include="Mobile\Data Interface\Statementms.cs" />
-    <Compile Include="Mobile\Data Interface\Userms.cs" />
-    <Compile Include="Mobile\TableTypes\AllergyDefm.cs" />
-    <Compile Include="Mobile\TableTypes\Allergym.cs" />
-    <Compile Include="Mobile\TableTypes\DiseaseDefm.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Mobile\TableTypes\Diseasem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Mobile\TableTypes\Documentm.cs" />
-    <Compile Include="Mobile\TableTypes\ICD9m.cs" />
-    <Compile Include="Mobile\TableTypes\LabPanelm.cs" />
-    <Compile Include="Mobile\TableTypes\LabResultm.cs" />
-    <Compile Include="Mobile\TableTypes\Medicationm.cs" />
-    <Compile Include="Mobile\TableTypes\MedicationPatm.cs" />
-    <Compile Include="Mobile\TableTypes\Pharmacym.cs" />
-    <Compile Include="Mobile\TableTypes\Providerm.cs" />
-    <Compile Include="Mobile\TableTypes\Recallm.cs" />
-    <Compile Include="Mobile\TableTypes\Statementm.cs" />
-    <Compile Include="Mobile\TableTypes\Userm.cs" />
-    <Compile Include="Mobile\TableTypes\RxPatm.cs" />
-    <Compile Include="Data Interface\AccountingAutoPays.cs" />
     <Compile Include="Data Interface\Adjustments.cs" />
     <Compile Include="Data Interface\AppointmentRules.cs" />
     <Compile Include="Data Interface\ApptViewItems.cs" />
@@ -1046,18 +981,15 @@
     <Compile Include="Data Interface\ClockEvents.cs" />
     <Compile Include="Data Interface\Commlogs.cs" />
     <Compile Include="Data Interface\ComputerPrefs.cs" />
-    <Compile Include="Data Interface\Computers.cs" />
-    <Compile Include="Data Interface\Contacts.cs" />
     <Compile Include="Data Interface\Counties.cs" />
     <Compile Include="Data Interface\Deposits.cs" />
-    <Compile Include="Data Interface\DiseaseDefs.cs" />
+    <Compile Include="Data\0_READY\AccountType.cs" />
     <Compile Include="Data Interface\Diseases.cs" />
     <Compile Include="Data Interface\Dunnings.cs" />
     <Compile Include="Data Interface\ElectIDs.cs" />
     <Compile Include="Data Interface\EmailAttaches.cs" />
     <Compile Include="Data Interface\EmailMessages.cs" />
     <Compile Include="Data Interface\EmailTemplates.cs" />
-    <Compile Include="Data Interface\Employees.cs" />
     <Compile Include="Data Interface\Employers.cs" />
     <Compile Include="Data Interface\Etranss.cs" />
     <Compile Include="Data Interface\Fees.cs" />
@@ -1072,9 +1004,7 @@
     <Compile Include="Data Interface\LanguageForeigns.cs" />
     <Compile Include="Data Interface\LetterMergeFields.cs" />
     <Compile Include="Data Interface\LetterMerges.cs" />
-    <Compile Include="Data Interface\Letters.cs" />
     <Compile Include="Data Interface\MedicationPats.cs" />
-    <Compile Include="Data Interface\Medications.cs" />
     <Compile Include="Data Interface\PatFieldDefs.cs" />
     <Compile Include="Data Interface\PatFields.cs" />
     <Compile Include="Data Interface\PatPlans.cs" />
@@ -1105,7 +1035,6 @@
     <Compile Include="Data Interface\RecallTriggers.cs" />
     <Compile Include="Data Interface\RecallTypes.cs" />
     <Compile Include="Data Interface\DeletedObjects.cs" />
-    <Compile Include="Data Interface\Reconciles.cs" />
     <Compile Include="Data Interface\RefAttaches.cs" />
     <Compile Include="Data Interface\Referrals.cs" />
     <Compile Include="Data Interface\RepeatCharges.cs" />
@@ -1129,11 +1058,10 @@
     <Compile Include="Data Interface\Pharmacies.cs" />
     <Compile Include="Data Interface\CovCats.cs" />
     <Compile Include="Data Interface\CovSpans.cs" />
-    <Compile Include="Data Interface\Defs.cs" />
+    <Compile Include="Data\Defs.cs" />
     <Compile Include="Db Multi Table\FamilyModules.cs" />
     <Compile Include="Data Interface\GroupPermissions.cs" />
     <Compile Include="Data Interface\Operatories.cs" />
-    <Compile Include="Data Interface\Prefs.cs" />
     <Compile Include="Data Interface\SigButDefs.cs" />
     <Compile Include="Data Interface\SigElementDefs.cs" />
     <Compile Include="Data Interface\Statements.cs" />
@@ -1163,7 +1091,6 @@
     <Compile Include="Data Interface\ToothInitials.cs" />
     <Compile Include="Data Interface\Transactions.cs" />
     <Compile Include="Data Interface\TreatPlans.cs" />
-    <Compile Include="Data Interface\UserGroups.cs" />
     <Compile Include="Data Interface\UserQueries.cs" />
     <Compile Include="Data Interface\ZipCodes.cs" />
     <Compile Include="HL7\ComponentHL7.cs" />
@@ -1180,7 +1107,6 @@
     <Compile Include="Data Interface\Appointments.cs" />
     <Compile Include="Logic\BenefitLogic.cs" />
     <Compile Include="Db Multi Table\ChartModules.cs" />
-    <Compile Include="Db\DataCore.cs" />
     <Compile Include="Logic\PatientLogic.cs" />
     <Compile Include="Logic\ProcedureLogic.cs" />
     <Compile Include="Data Interface\ProcNotes.cs" />
@@ -1194,14 +1120,6 @@
     <Compile Include="Db\OdSqlParameter.cs" />
     <Compile Include="Misc\TimeSpanExtension.cs" />
     <Compile Include="Misc\TrojanQueries.cs" />
-    <Compile Include="Mobile\ConvertDatabasem.cs" />
-    <Compile Include="Mobile\Crud\AppointmentmCrud.cs" />
-    <Compile Include="Mobile\Crud\PatientmCrud.cs" />
-    <Compile Include="Mobile\Data Interface\Appointmentms.cs" />
-    <Compile Include="Mobile\Data Interface\Patientms.cs" />
-    <Compile Include="Mobile\TableTypes\Appointmentm.cs" />
-    <Compile Include="Mobile\TableTypes\Patientm.cs" />
-    <Compile Include="Mobile\TableTypes\Prefm.cs" />
     <Compile Include="Plugins\Plugins.cs" />
     <Compile Include="Remoting\WebSerializer.cs" />
     <Compile Include="Reports\RpCustomAging.cs" />
@@ -1243,7 +1161,7 @@
     <Compile Include="Reports\RpRouting.cs" />
     <Compile Include="Reports\RpUnearnedIncome.cs" />
     <Compile Include="TableTypes\AlertCategoryLink.cs" />
-    <Compile Include="TableTypes\AlertCategory.cs" />
+    <Compile Include="Data\AlertCategory.cs" />
     <Compile Include="TableTypes\AsapComm.cs" />
     <Compile Include="TableTypes\DefLink.cs" />
     <Compile Include="TableTypes\Etrans835Attach.cs" />
@@ -1323,7 +1241,7 @@
     <Compile Include="TableTypes\EhrLabClinicalInfo.cs" />
     <Compile Include="TableTypes\EhrLab.cs" />
     <Compile Include="TableTypes\EhrCarePlan.cs" />
-    <Compile Include="TableTypes\Ucum.cs" />
+    <Compile Include="Data\Ucum.cs" />
     <Compile Include="TableTypes\EmailMessageUid.cs" />
     <Compile Include="TableTypes\EhrTrigger.cs" />
     <Compile Include="TableTypes\MapArea.cs" />
@@ -1342,11 +1260,11 @@
     <Compile Include="TableTypes\Encounter.cs" />
     <Compile Include="TableTypes\PayorType.cs" />
     <Compile Include="TableTypes\SOP.cs" />
-    <Compile Include="TableTypes\Cvx.cs" />
+    <Compile Include="Data\0_READY\CVX.cs" />
     <Compile Include="TableTypes\Hcpcs.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TableTypes\Icd10.cs" />
+    <Compile Include="Data\0_READY\ICD10.cs" />
     <Compile Include="TableTypes\Intervention.cs" />
     <Compile Include="TableTypes\EhrNotPerformed.cs" />
     <Compile Include="TableTypes\EhrCode.cs" />
@@ -1354,8 +1272,6 @@
     <Compile Include="TableTypes\SecurityLogHash.cs" />
     <Compile Include="TableTypes\FamilyHealth.cs" />
     <Compile Include="TableTypes\PatientRace.cs" />
-    <Compile Include="TableTypes\ResellerService.cs" />
-    <Compile Include="TableTypes\Reseller.cs" />
     <Compile Include="TableTypes\Snomed.cs" />
     <Compile Include="TableTypes\VaccineObs.cs" />
     <Compile Include="TableTypes\WikiListHeaderWidth.cs" />
@@ -1363,7 +1279,7 @@
     <Compile Include="TableTypes\GradingScaleItem.cs" />
     <Compile Include="TableTypes\EvaluationCriterionDef.cs" />
     <Compile Include="TableTypes\EvaluationDef.cs" />
-    <Compile Include="TableTypes\GradingScale.cs" />
+    <Compile Include="Data\GradingScale.cs" />
     <Compile Include="TableTypes\Evaluation.cs" />
     <Compile Include="TableTypes\WikiPageHist.cs" />
     <Compile Include="TableTypes\WikiPage.cs" />
@@ -1382,7 +1298,7 @@
     <Compile Include="TableTypes\EhrQuarterlyKey.cs" />
     <Compile Include="TableTypes\EhrSummaryCcd.cs" />
     <Compile Include="TableTypes\EhrProvKey.cs" />
-    <Compile Include="TableTypes\DrugManufacturer.cs" />
+    <Compile Include="Data\0_READY\Manufacturer.cs" />
     <Compile Include="TableTypes\DrugUnit.cs" />
     <Compile Include="TableTypes\EduResource.cs" />
     <Compile Include="TableTypes\EhrMeasure.cs" />
@@ -1396,7 +1312,7 @@
     <Compile Include="TableTypes\LabResult.cs" />
     <Compile Include="TableTypes\MedicalOrder.cs" />
     <Compile Include="TableTypes\CreditCard.cs" />
-    <Compile Include="TableTypes\ICD9.cs" />
+    <Compile Include="Data\0_READY\ICD9.cs" />
     <Compile Include="TableTypes\InsSub.cs" />
     <Compile Include="TableTypes\OrionProc.cs" />
     <Compile Include="TableTypes\OrthoChart.cs" />
@@ -1413,7 +1329,6 @@
     <Compile Include="TableTypes\EtransMessageText.cs" />
     <Compile Include="TableTypes\InsFilingCode.cs" />
     <Compile Include="TableTypes\InsFilingCodeSubtype.cs" />
-    <Compile Include="CrudFramework\TableBase.cs" />
     <Compile Include="TableTypes\TimeCardRule.cs" />
     <Compile Include="TableTypes\VaccineDef.cs" />
     <Compile Include="TableTypes\VaccinePat.cs" />
@@ -1474,15 +1389,10 @@
     <Compile Include="WebBridges\PaySimple.cs" />
     <Compile Include="WebBridges\Podium.cs" />
     <Compile Include="WebBridges\Sftp.cs" />
-    <Compile Include="WebServices\IOpenDentalServer.cs" />
     <Compile Include="WebServices\ISheetsSynch.cs" />
-    <Compile Include="WebServices\IWebServiceMainHQ.cs" />
     <Compile Include="WebServices\PayloadHelper.cs" />
     <Compile Include="WebServices\SheetsSynchProxy.cs" />
-    <Compile Include="WebServices\WebServiceMainHQMockDemo.cs" />
     <Compile Include="WebServices\SheetsSynchReal.cs" />
-    <Compile Include="WebServices\WebServiceMainHQReal.cs" />
-    <Compile Include="WebServices\WebServiceMainHQProxy.cs" />
     <Compile Include="WebTypes\eConnector\EConnectorStatistics.cs" />
     <Compile Include="WebTypes\Shared\XWeb\XWeb.cs" />
     <Compile Include="WebTypes\Shared\XWeb\XWebCrud.cs" />
@@ -1525,7 +1435,6 @@
     <Compile Include="X12\X837_4010.cs" />
     <Compile Include="X12\X997.cs" />
     <Compile Include="ODDataSet\ODDataRow.cs" />
-    <Compile Include="ODDataSet\ODDataSet.cs" />
     <Compile Include="ODDataSet\ODDataTable.cs" />
     <Compile Include="Db\PIn.cs" />
     <Compile Include="Db\POut.cs" />
@@ -1557,8 +1466,8 @@
     <Compile Include="SheetFramework\SheetFieldsAvailable.cs" />
     <Compile Include="SheetFramework\SheetParameter.cs" />
     <Compile Include="SheetFramework\SheetsInternal.cs" />
-    <Compile Include="Data\Account.cs" />
-    <Compile Include="TableTypes\AccountingAutoPay.cs" />
+    <Compile Include="Data\0_READY\Account.cs" />
+    <Compile Include="Data\0_READY\AccountAutoPay.cs" />
     <Compile Include="TableTypes\Adjustment.cs" />
     <Compile Include="TableTypes\Appointment.cs" />
     <Compile Include="TableTypes\AppointmentRule.cs" />
@@ -1582,13 +1491,12 @@
     <Compile Include="TableTypes\Clinic.cs" />
     <Compile Include="TableTypes\ClockEvent.cs" />
     <Compile Include="TableTypes\Commlog.cs" />
-    <Compile Include="TableTypes\Computer.cs" />
+    <Compile Include="Data\0_READY\Computer.cs" />
     <Compile Include="TableTypes\ComputerPref.cs" />
-    <Compile Include="TableTypes\Contact.cs" />
+    <Compile Include="Data\0_READY\Contact.cs" />
     <Compile Include="TableTypes\CanadianNetwork.cs" />
     <Compile Include="TableTypes\ClaimAttach.cs" />
     <Compile Include="TableTypes\SheetField.cs" />
-    <Compile Include="TableTypes\FilesOld.cs" />
     <Compile Include="TableTypes\Pharmacy.cs" />
     <Compile Include="TableTypes\Sheet.cs" />
     <Compile Include="TableTypes\Site.cs" />
@@ -1617,17 +1525,17 @@
     <Compile Include="TableTypes\County.cs" />
     <Compile Include="TableTypes\CovCat.cs" />
     <Compile Include="TableTypes\CovSpan.cs" />
-    <Compile Include="TableTypes\Def.cs" />
+    <Compile Include="Data\0_READY\Definition.cs" />
     <Compile Include="TableTypes\Deposit.cs" />
     <Compile Include="TableTypes\Disease.cs" />
-    <Compile Include="TableTypes\DiseaseDef.cs" />
+    <Compile Include="Data\DiseaseDef.cs" />
     <Compile Include="TableTypes\Document.cs" />
     <Compile Include="TableTypes\Dunning.cs" />
     <Compile Include="TableTypes\ElectID.cs" />
     <Compile Include="TableTypes\EmailAttach.cs" />
     <Compile Include="TableTypes\EmailMessage.cs" />
     <Compile Include="TableTypes\EmailTemplate.cs" />
-    <Compile Include="TableTypes\Employee.cs" />
+    <Compile Include="Data\0_READY\Employee.cs" />
     <Compile Include="TableTypes\Employer.cs" />
     <Compile Include="TableTypes\Fee.cs" />
     <Compile Include="TableTypes\GroupPermission.cs" />
@@ -1637,10 +1545,10 @@
     <Compile Include="TableTypes\JournalEntry.cs" />
     <Compile Include="TableTypes\Language.cs" />
     <Compile Include="TableTypes\LanguageForeign.cs" />
-    <Compile Include="TableTypes\Letter.cs" />
+    <Compile Include="Data\Letter.cs" />
     <Compile Include="TableTypes\LetterMerge.cs" />
     <Compile Include="TableTypes\LetterMergeField.cs" />
-    <Compile Include="TableTypes\Medication.cs" />
+    <Compile Include="Data\0_READY\Medication.cs" />
     <Compile Include="TableTypes\MedicationPat.cs" />
     <Compile Include="TableTypes\Operatory.cs" />
     <Compile Include="TableTypes\PatField.cs" />
@@ -1655,7 +1563,7 @@
     <Compile Include="TableTypes\PaySplit.cs" />
     <Compile Include="TableTypes\PerioExam.cs" />
     <Compile Include="TableTypes\PerioMeasure.cs" />
-    <Compile Include="TableTypes\Pref.cs" />
+    <Compile Include="Data\0_READY\Preference.cs" />
     <Compile Include="TableTypes\Printer.cs" />
     <Compile Include="TableTypes\ProcButton.cs" />
     <Compile Include="TableTypes\ProcButtonItem.cs" />
@@ -1672,10 +1580,9 @@
     <Compile Include="TableTypes\QuickPasteCat.cs" />
     <Compile Include="TableTypes\QuickPasteNote.cs" />
     <Compile Include="TableTypes\Recall.cs" />
-    <Compile Include="TableTypes\Reconcile.cs" />
+    <Compile Include="Data\0_READY\Reconciliation.cs" />
     <Compile Include="TableTypes\RefAttach.cs" />
     <Compile Include="TableTypes\Referral.cs" />
-    <Compile Include="TableTypes\RegistrationKey.cs" />
     <Compile Include="TableTypes\RepeatCharge.cs" />
     <Compile Include="TableTypes\RxAlert.cs" />
     <Compile Include="TableTypes\RxDef.cs" />
@@ -1697,7 +1604,7 @@
     <Compile Include="TableTypes\Transaction.cs" />
     <Compile Include="TableTypes\TreatPlan.cs" />
     <Compile Include="TableTypes\User.cs" />
-    <Compile Include="TableTypes\UserGroup.cs" />
+    <Compile Include="Data\0_READY\UserGroup.cs" />
     <Compile Include="TableTypes\UserQuery.cs" />
     <Compile Include="TableTypes\ZipCode.cs" />
     <Compile Include="Web References\OpenDentalServer\Reference.cs">

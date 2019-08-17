@@ -1023,9 +1023,9 @@ namespace OpenDental{
 		private void FillDiseases(){
 			//this never gets filled with existing patient info.  Only blank list.
 			listDiseases.Items.Clear();
-			_listDiseaseDefs=DiseaseDefs.GetDeepCopy(true);
+			_listDiseaseDefs=DiseaseDef.All();
 			for(int i=0;i<_listDiseaseDefs.Count;i++){
-				listDiseases.Items.Add(_listDiseaseDefs[i].DiseaseName);
+				listDiseases.Items.Add(_listDiseaseDefs[i].Name);
 			}
 		}
 
@@ -1328,7 +1328,7 @@ namespace OpenDental{
 			for(int i=0;i<listDiseases.CheckedIndices.Count;i++){
 				disease=new Disease();
 				disease.PatNum=PatCur.PatNum;
-				disease.DiseaseDefNum=_listDiseaseDefs[listDiseases.CheckedIndices[i]].DiseaseDefNum;
+				disease.DiseaseDefNum=_listDiseaseDefs[listDiseases.CheckedIndices[i]].Id;
 				Diseases.Insert(disease);
 			}
 		}
@@ -1366,7 +1366,7 @@ namespace OpenDental{
 			if(input.DialogResult!=DialogResult.OK){
 				return;
 			}
-			if(input.textResult.Text!=Preferences.GetString(PrefName.TerminalClosePassword)){
+			if(input.textResult.Text!=Preference.GetString(PreferenceName.TerminalClosePassword)){
 				MsgBox.Show(this,"Invalid password.");
 				return;
 			}

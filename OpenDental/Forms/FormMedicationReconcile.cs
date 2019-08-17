@@ -27,7 +27,7 @@ namespace OpenDental {
 		}
 
 		private void FillMeds() {
-			Medications.RefreshCache();
+            Medication.Refresh();
 			medList=MedicationPats.Refresh(PatCur.PatNum,checkDiscontinued.Checked);
 			gridMeds.BeginUpdate();
 			gridMeds.Columns.Clear();
@@ -45,10 +45,10 @@ namespace OpenDental {
 					row.Cells.Add(medList[i].MedDescript);
 				}
 				else {
-					Medication generic=Medications.GetGeneric(medList[i].MedicationNum);
-					string medName=Medications.GetMedication(medList[i].MedicationNum).MedName;
-					if(generic.MedicationNum!=medList[i].MedicationNum) {//not generic
-						medName+=" ("+generic.MedName+")";
+					Medication generic= Medication.GetGeneric(medList[i].MedicationNum);
+					string medName= Medication.GetById(medList[i].MedicationNum).Description;
+					if(generic.Id!=medList[i].MedicationNum) {//not generic
+						medName+=" ("+generic.Description+")";
 					}
 					row.Cells.Add(medName);
 				}
@@ -157,27 +157,28 @@ namespace OpenDental {
 			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
 				BitmapOriginal=ImageStore.OpenImage(doc,patFolder);
 			}
-			else {
-				FormProgress FormP=new FormProgress();
-				FormP.DisplayText="Downloading Image...";
-				FormP.NumberFormat="F";
-				FormP.NumberMultiplication=1;
-				FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-				FormP.TickMS=1000;
-				OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(patFolder
-					,doc.FileName
-					,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-				FormP.ShowDialog();
-				if(FormP.DialogResult==DialogResult.Cancel) {
-					state.DoCancel=true;
-					return;
-				}
-				else { 
-					using (MemoryStream ms=new MemoryStream(state.FileContent)) {
-						BitmapOriginal=new Bitmap(ms);
-					}
-				}
-			}
+			else
+            { // TODO: Fix me
+              //	FormProgress FormP=new FormProgress();
+              //	FormP.DisplayText="Downloading Image...";
+              //	FormP.NumberFormat="F";
+              //	FormP.NumberMultiplication=1;
+              //	FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
+              //	FormP.TickMS=1000;
+              //	OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(patFolder
+              //		,doc.FileName
+              //		,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
+              //	FormP.ShowDialog();
+              //	if(FormP.DialogResult==DialogResult.Cancel) {
+              //		state.DoCancel=true;
+              //		return;
+              //	}
+              //	else { 
+              //		using (MemoryStream ms=new MemoryStream(state.FileContent)) {
+              //			BitmapOriginal=new Bitmap(ms);
+              //		}
+              //	}
+            }
 			Bitmap bitmap=ImageHelper.ApplyDocumentSettingsToImage(doc,BitmapOriginal,ImageSettingFlags.ALL);
 			pictBox.BackgroundImage=bitmap;
 			resizePictBox();

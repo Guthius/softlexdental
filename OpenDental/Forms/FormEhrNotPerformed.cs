@@ -78,7 +78,7 @@ namespace OpenDental {
 						}
 						break;
 					case "CVX":
-						Cvx cvxCur=Cvxs.GetOneFromDb(listNotPerf[i].CodeValue);
+						CVX cvxCur=CVX.GetByCode(listNotPerf[i].CodeValue);
 						if(cvxCur!=null) {
 							descript=cvxCur.Description;
 						}

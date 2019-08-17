@@ -388,11 +388,11 @@ namespace OpenDentBusiness
                         + "INNER JOIN procedurecode ON procedurelog.CodeNum = procedurecode.CodeNum "
                         + "AND procedurecode.ProcCode NOT IN ('D9986','D9987') "
                         + "GROUP BY patient.PatNum) A "
-                        + "LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM disease WHERE DiseaseDefNum=" + POut.Long(Preferences.GetLong(PrefName.ProblemsIndicateNone)) + " "
+                        + "LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM disease WHERE DiseaseDefNum=" + POut.Long(Preference.GetLong(PreferenceName.ProblemsIndicateNone)) + " "
                         + "AND ProbStatus=0 GROUP BY PatNum) problemsNone ON problemsNone.PatNum=A.PatNum "
                         + "LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM disease "
                         + "INNER JOIN diseasedef ON disease.DiseaseDefNum=diseasedef.DiseaseDefNum "
-                        + "AND disease.DiseaseDefNum!=" + POut.Long(Preferences.GetLong(PrefName.ProblemsIndicateNone)) + " "
+                        + "AND disease.DiseaseDefNum!=" + POut.Long(Preference.GetLong(PreferenceName.ProblemsIndicateNone)) + " "
                         + "WHERE (diseasedef.SnomedCode!='' OR diseasedef.ICD9Code!='') "
                         + "GROUP BY PatNum) problemsAll ON problemsAll.PatNum=A.PatNum";
                     tableRaw = Db.GetTable(command);
@@ -409,10 +409,10 @@ namespace OpenDentBusiness
                         + "AND procedurecode.ProcCode NOT IN ('D9986','D9987') "
                         + "GROUP BY patient.PatNum) A "
                         + "LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM medicationpat "
-                        + "WHERE MedicationNum=" + POut.Long(Preferences.GetLong(PrefName.MedicationsIndicateNone)) + " "
+                        + "WHERE MedicationNum=" + POut.Long(Preference.GetLong(PreferenceName.MedicationsIndicateNone)) + " "
                         + "AND (YEAR(DateStop)<1880 OR DateStop>" + POut.Date(dateEnd) + ") GROUP BY PatNum) medsNone ON medsNone.PatNum=A.PatNum "
                         + "LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM medicationpat "
-                        + "WHERE MedicationNum!=" + POut.Long(Preferences.GetLong(PrefName.MedicationsIndicateNone)) + " "
+                        + "WHERE MedicationNum!=" + POut.Long(Preference.GetLong(PreferenceName.MedicationsIndicateNone)) + " "
                         + "GROUP BY PatNum) medsAll ON medsAll.PatNum=A.PatNum";
                     tableRaw = Db.GetTable(command);
                     break;
@@ -440,10 +440,10 @@ namespace OpenDentBusiness
                         + "AND procedurecode.ProcCode NOT IN ('D9986','D9987') "
                         + "GROUP BY patient.PatNum) A "
                         + "LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM allergy	"
-                        + "WHERE AllergyDefNum=" + POut.Long(Preferences.GetLong(PrefName.AllergiesIndicateNone)) + " AND StatusIsActive=1 "
+                        + "WHERE AllergyDefNum=" + POut.Long(Preference.GetLong(PreferenceName.AllergiesIndicateNone)) + " AND StatusIsActive=1 "
                         + "GROUP BY PatNum) allergiesNone ON allergiesNone.PatNum=A.PatNum "
                         + "LEFT JOIN (SELECT PatNum,COUNT(*) AS 'Count' FROM allergy	"
-                        + "WHERE AllergyDefNum!=" + POut.Long(Preferences.GetLong(PrefName.AllergiesIndicateNone)) + " "
+                        + "WHERE AllergyDefNum!=" + POut.Long(Preference.GetLong(PreferenceName.AllergiesIndicateNone)) + " "
                         + "GROUP BY PatNum) allergiesAll ON allergiesAll.PatNum=A.PatNum";
                     tableRaw = Db.GetTable(command);
                     break;
@@ -613,7 +613,7 @@ namespace OpenDentBusiness
                         + "INNER JOIN procedurecode ON procedurelog.CodeNum = procedurecode.CodeNum "
                         + "AND procedurecode.ProcCode NOT IN ('D9986','D9987') "
                         + "INNER JOIN medicationpat ON medicationpat.PatNum=patient.PatNum "
-                        + "AND MedicationNum!=" + POut.Long(Preferences.GetLong(PrefName.MedicationsIndicateNone)) + " "
+                        + "AND MedicationNum!=" + POut.Long(Preference.GetLong(PreferenceName.MedicationsIndicateNone)) + " "
                         + "GROUP BY patient.PatNum) allpats "//allpats seen by provider in date range with medication in med list that is not the 'None' medication
                         + "LEFT JOIN (SELECT medicationpat.PatNum,COUNT(*) AS 'Count' FROM medicationpat "
                         + "WHERE medicationpat.IsCpoe=1 GROUP BY medicationpat.PatNum) CountCpoe ON CountCpoe.PatNum=allpats.PatNum";
@@ -1891,7 +1891,7 @@ namespace OpenDentBusiness
                         else
                         {
                             bool diseasesNone = false;
-                            if (listDisease.Count == 1 && listDisease[0].DiseaseDefNum == Preferences.GetLong(PrefName.ProblemsIndicateNone))
+                            if (listDisease.Count == 1 && listDisease[0].DiseaseDefNum == Preference.GetLong(PreferenceName.ProblemsIndicateNone))
                             {
                                 diseasesNone = true;
                             }
@@ -1904,7 +1904,7 @@ namespace OpenDentBusiness
                             {
                                 for (int m = 0; m < listDisease.Count; m++)
                                 {
-                                    DiseaseDef diseaseCur = DiseaseDefs.GetItem(listDisease[m].DiseaseDefNum);
+                                    DiseaseDef diseaseCur = DiseaseDef.GetById(listDisease[m].DiseaseDefNum);
                                     if (diseaseCur.ICD9Code == "" && diseaseCur.SnomedCode == "")
                                     {
                                         continue;
@@ -1935,7 +1935,7 @@ namespace OpenDentBusiness
                         {
                             mu.Met = MuMet.True;
                             bool medsNone = false;
-                            if (medList.Count == 1 && medList[0].MedicationNum == Preferences.GetLong(PrefName.MedicationsIndicateNone))
+                            if (medList.Count == 1 && medList[0].MedicationNum == Preference.GetLong(PreferenceName.MedicationsIndicateNone))
                             {
                                 medsNone = true;
                             }
@@ -1962,7 +1962,7 @@ namespace OpenDentBusiness
                         {
                             mu.Met = MuMet.True;
                             bool allergiesNone = false;
-                            if (listAllergies.Count == 1 && listAllergies[0].AllergyDefNum == Preferences.GetLong(PrefName.AllergiesIndicateNone))
+                            if (listAllergies.Count == 1 && listAllergies[0].AllergyDefNum == Preference.GetLong(PreferenceName.AllergiesIndicateNone))
                             {
                                 allergiesNone = true;
                             }
@@ -3167,7 +3167,7 @@ namespace OpenDentBusiness
                         + "AND ehrlab.ObservationDateTimeStart BETWEEN DATE_FORMAT(" + POut.Date(dateStart) + ",'%Y%m%d') AND DATE_FORMAT(" + POut.Date(dateEnd) + ",'%Y%m%d') "
                         + "AND (CASE WHEN ehrlab.UsiCodeSystemName='LN' THEN ehrlab.UsiID WHEN ehrlab.UsiCodeSystemNameAlt='LN' THEN ehrlab.UsiIDAlt ELSE '' END) "
                             + "IN (SELECT LoincCode FROM loinc WHERE loinc.ClassType LIKE '%RAD%')";
-                    DateTime dateStartRad154 = Preferences.GetDate(PrefName.RadiologyDateStartedUsing154);
+                    DateTime dateStartRad154 = Preference.GetDate(PreferenceName.RadiologyDateStartedUsing154);
                     //Only count radiology orders via the procedurelog table if the date that the office updated to v15.4.1 is less than the end date.
                     if (dateStartRad154 < dateEnd.Date)
                     {
@@ -4279,7 +4279,7 @@ namespace OpenDentBusiness
                         + " INNER JOIN loinc on ehrlab.UsiID=loinc.LoincCode"
                         + " AND loinc.ClassType LIKE '%rad%'";
                     countRadOrders = PIn.Int(Db.GetScalar(command));
-                    DateTime dateStartRad154 = Preferences.GetDate(PrefName.RadiologyDateStartedUsing154);
+                    DateTime dateStartRad154 = Preference.GetDate(PreferenceName.RadiologyDateStartedUsing154);
                     //Only count radiology orders via the procedurelog table if the date that the office updated to v15.4.1 is less than the end date.
                     if (dateStartRad154 < dateEnd.Date)
                     {
@@ -6278,7 +6278,7 @@ namespace OpenDentBusiness
                         else
                         {
                             bool diseasesNone = false;
-                            if (listDisease.Count == 1 && listDisease[0].DiseaseDefNum == Preferences.GetLong(PrefName.ProblemsIndicateNone))
+                            if (listDisease.Count == 1 && listDisease[0].DiseaseDefNum == Preference.GetLong(PreferenceName.ProblemsIndicateNone))
                             {
                                 diseasesNone = true;
                             }
@@ -6291,7 +6291,7 @@ namespace OpenDentBusiness
                             {
                                 for (int m = 0; m < listDisease.Count; m++)
                                 {
-                                    DiseaseDef diseaseCur = DiseaseDefs.GetItem(listDisease[m].DiseaseDefNum);
+                                    DiseaseDef diseaseCur = DiseaseDef.GetById(listDisease[m].DiseaseDefNum);
                                     if (diseaseCur.ICD9Code == "" && diseaseCur.SnomedCode == "")
                                     {
                                         continue;
@@ -6322,7 +6322,7 @@ namespace OpenDentBusiness
                         {
                             mu.Met = MuMet.True;
                             bool medsNone = false;
-                            if (medList.Count == 1 && medList[0].MedicationNum == Preferences.GetLong(PrefName.MedicationsIndicateNone))
+                            if (medList.Count == 1 && medList[0].MedicationNum == Preference.GetLong(PreferenceName.MedicationsIndicateNone))
                             {
                                 medsNone = true;
                             }
@@ -6349,7 +6349,7 @@ namespace OpenDentBusiness
                         {
                             mu.Met = MuMet.True;
                             bool allergiesNone = false;
-                            if (listAllergies.Count == 1 && listAllergies[0].AllergyDefNum == Preferences.GetLong(PrefName.AllergiesIndicateNone))
+                            if (listAllergies.Count == 1 && listAllergies[0].AllergyDefNum == Preference.GetLong(PreferenceName.AllergiesIndicateNone))
                             {
                                 allergiesNone = true;
                             }
@@ -6506,7 +6506,7 @@ namespace OpenDentBusiness
                         + "AND ehrlab.ObservationDateTimeStart BETWEEN DATE_FORMAT(" + POut.Date(dateStart) + ",'%Y%m%d') AND DATE_FORMAT(" + POut.Date(dateEnd) + ",'%Y%m%d') "
                         + "AND (CASE WHEN ehrlab.UsiCodeSystemName='LN' THEN ehrlab.UsiID WHEN ehrlab.UsiCodeSystemNameAlt='LN' THEN ehrlab.UsiIDAlt ELSE '' END) "
                             + "IN (SELECT LoincCode FROM loinc WHERE loinc.ClassType LIKE '%RAD%')";
-                    DateTime dateStartRad154 = Preferences.GetDate(PrefName.RadiologyDateStartedUsing154);
+                    DateTime dateStartRad154 = Preference.GetDate(PreferenceName.RadiologyDateStartedUsing154);
                     //Only count radiology orders via the procedurelog table if the date that the office updated to v15.4.1 is less than the end date.
                     if (dateStartRad154 < dateEnd.Date)
                     {

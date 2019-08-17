@@ -22,21 +22,21 @@ namespace OpenDental {
 
 		private void FormGradingScaleEdit_Load(object sender,EventArgs e) {
 			comboScaleType.SelectedIndex=-1;
-			for(int i=0;i<Enum.GetNames(typeof(EnumScaleType)).Length;i++) {
-				comboScaleType.Items.Add(Lan.g("FormGradingScaleEdit",Enum.GetNames(typeof(EnumScaleType))[i]));
+			for(int i=0;i<Enum.GetNames(typeof(GradingScaleType)).Length;i++) {
+				comboScaleType.Items.Add(Lan.g("FormGradingScaleEdit",Enum.GetNames(typeof(GradingScaleType))[i]));
 				if(i==(int)_gradingScaleCur.ScaleType) {
 					comboScaleType.SelectedIndex=i;
 				}
 			}
-			if(comboScaleType.SelectedIndex==(int)EnumScaleType.Percentage) {
+			if(comboScaleType.SelectedIndex==(int)GradingScaleType.Percentage) {
 				labelPercent.Visible=true;
 			}
 			textDescription.Text=_gradingScaleCur.Description;
-			if(_gradingScaleCur.IsNew) {
+			if(_gradingScaleCur.Id == 0) {
 				return;
 			}
 			LoadScaleType();
-			if(GradingScales.IsInUseByEvaluation(_gradingScaleCur)) {
+			if(GradingScale.IsInUseByEvaluation(_gradingScaleCur)) {
 				//Locking grading scales from being edited is necessary with the current schema since changing grading scales that are in use 
 				//would result in changing grades for previously filled out evaluations. 
 				//This could be changed later by creating copies of grading scales and attaching them to the evaluation/criterion similarly to evaluationdefs.
@@ -52,7 +52,7 @@ namespace OpenDental {
 		}
 
 		private void FillGrid() {
-			_listGradingScaleItems=GradingScaleItems.Refresh(_gradingScaleCur.GradingScaleNum);
+			_listGradingScaleItems=GradingScaleItems.Refresh(_gradingScaleCur.Id);
 			gridMain.BeginUpdate();
 			gridMain.Columns.Clear();
 			ODGridColumn col=new ODGridColumn(Lan.g("FormGradingScaleEdit","Shown"),60);
@@ -84,7 +84,7 @@ namespace OpenDental {
 
 		private void butAdd_Click(object sender,EventArgs e) {
 			GradingScaleItem gradingScaleItemNew=new GradingScaleItem();
-			gradingScaleItemNew.GradingScaleNum=_gradingScaleCur.GradingScaleNum;//Must be set prior to edit window being open if a new item.
+			gradingScaleItemNew.GradingScaleNum=_gradingScaleCur.Id;//Must be set prior to edit window being open if a new item.
 			gradingScaleItemNew.IsNew=true;
 			FormGradingScaleItemEdit FormGSIE=new FormGradingScaleItemEdit(gradingScaleItemNew);
 			FormGSIE.ShowDialog();
@@ -101,12 +101,12 @@ namespace OpenDental {
 			//Later it may be useful to change maximum points to be on criterion instead and have this points grading scale
 			//be more like a flag that designates whether or not those criterion need to be given maximum points.
 			//For now MaximumPoints is used to determine a point max for the evaluation, it is still possible to give them less than the maximum.
-			if(comboScaleType.SelectedIndex==(int)EnumScaleType.PickList) {
+			if(comboScaleType.SelectedIndex==(int)GradingScaleType.PickList) {
 				butAdd.Enabled=true;
 				labelWarning.Visible=false;
 				labelPercent.Visible=false;
 			}
-			else if(comboScaleType.SelectedIndex==(int)EnumScaleType.Percentage) {
+			else if(comboScaleType.SelectedIndex==(int)GradingScaleType.Percentage) {
 				butAdd.Enabled=false;
 				labelWarning.Visible=true;
 				labelPercent.Visible=true;
@@ -123,7 +123,7 @@ namespace OpenDental {
 				return;
 			}
 			try {
-				GradingScales.Delete(_gradingScaleCur.GradingScaleNum);
+                GradingScale.Delete(_gradingScaleCur.Id);
 				DialogResult=DialogResult.OK;
 			}
 			catch(Exception ex) {
@@ -137,24 +137,24 @@ namespace OpenDental {
 				return;
 			}
 			_gradingScaleCur.Description=textDescription.Text;
-			_gradingScaleCur.ScaleType=(EnumScaleType)comboScaleType.SelectedIndex;
-			if(GradingScales.IsDupicateDescription(_gradingScaleCur)) {//This will check it for like types.
+			_gradingScaleCur.ScaleType=(GradingScaleType)comboScaleType.SelectedIndex;
+			if(GradingScale.IsDupicateDescription(_gradingScaleCur)) {//This will check it for like types.
 				MsgBox.Show(this,"The selected grading scale description is already used by another grading scale.  Please input a unique description.");
 				return;
 			}
 			_gradingScaleCur.Description=textDescription.Text;
-			_gradingScaleCur.ScaleType=(EnumScaleType)comboScaleType.SelectedIndex;
-			if(comboScaleType.SelectedIndex!=(int)EnumScaleType.PickList && comboScaleType.Visible) {//Deletes all items if not picklist scaletype.
-				GradingScaleItems.DeleteAllByGradingScale(_gradingScaleCur.GradingScaleNum);
+			_gradingScaleCur.ScaleType=(GradingScaleType)comboScaleType.SelectedIndex;
+			if(comboScaleType.SelectedIndex!=(int)GradingScaleType.PickList && comboScaleType.Visible) {//Deletes all items if not picklist scaletype.
+				GradingScaleItems.DeleteAllByGradingScale(_gradingScaleCur.Id);
 			}
-			GradingScales.Update(_gradingScaleCur);
+			GradingScale.Update(_gradingScaleCur);
 			DialogResult=DialogResult.OK;
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {
-			if(_gradingScaleCur.IsNew) {
+			if(_gradingScaleCur.Id == 0) {
 				try {
-					GradingScales.Delete(_gradingScaleCur.GradingScaleNum);
+                    GradingScale.Delete(_gradingScaleCur.Id);
 				}
 				catch(Exception ex) {
 					MessageBox.Show(this,ex.Message);

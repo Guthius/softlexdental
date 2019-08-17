@@ -24,12 +24,12 @@ namespace OpenDental
                 acceptButton.Enabled = false;
             }
 
-            addressTextBox.Text = Preferences.GetString(PrefName.UpdateServerAddress);
-            proxyAddresTextBox.Text = Preferences.GetString(PrefName.UpdateWebProxyAddress);
-            proxyUsernameTextBox.Text = Preferences.GetString(PrefName.UpdateWebProxyUserName);
-            proxyPasswordTextBox.Text = Preferences.GetString(PrefName.UpdateWebProxyPassword);
+            addressTextBox.Text = Preference.GetString(PreferenceName.UpdateServerAddress);
+            proxyAddresTextBox.Text = Preference.GetString(PreferenceName.UpdateWebProxyAddress);
+            proxyUsernameTextBox.Text = Preference.GetString(PreferenceName.UpdateWebProxyUserName);
+            proxyPasswordTextBox.Text = Preference.GetString(PreferenceName.UpdateWebProxyPassword);
 
-            registrationKey = Preferences.GetString(PrefName.RegistrationKey);
+            registrationKey = Preference.GetString(PreferenceName.RegistrationKey);
             registrationKeyTextBox.Text = License.FormatKey(registrationKey);
         }
 
@@ -58,7 +58,7 @@ namespace OpenDental
 
                 DataValid.SetInvalid(InvalidType.Prefs);
 
-                registrationKey = Preferences.GetString(PrefName.RegistrationKey);
+                registrationKey = Preference.GetString(PreferenceName.RegistrationKey);
                 registrationKeyTextBox.Text = License.FormatKey(registrationKey);
             }
         }
@@ -69,10 +69,10 @@ namespace OpenDental
         void AcceptButton_Click(object sender, EventArgs e)
         {
             bool refreshCache = false;
-            if (Prefs.UpdateString(PrefName.UpdateServerAddress, addressTextBox.Text) |
-                Prefs.UpdateString(PrefName.UpdateWebProxyAddress, proxyAddresTextBox.Text) |
-                Prefs.UpdateString(PrefName.UpdateWebProxyUserName, proxyUsernameTextBox.Text) |
-                Prefs.UpdateString(PrefName.UpdateWebProxyPassword, proxyPasswordTextBox.Text))
+            if (Preference.Update(PreferenceName.UpdateServerAddress, addressTextBox.Text) |
+                Preference.Update(PreferenceName.UpdateWebProxyAddress, proxyAddresTextBox.Text) |
+                Preference.Update(PreferenceName.UpdateWebProxyUserName, proxyUsernameTextBox.Text) |
+                Preference.Update(PreferenceName.UpdateWebProxyPassword, proxyPasswordTextBox.Text))
             {
                 refreshCache = true;
             }

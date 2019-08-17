@@ -19,7 +19,7 @@ namespace OpenDentBusiness
             Stopwatch s = new Stopwatch();
             s.Start();
 #endif
-            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Prefs.HasClinicsEnabledNoCache);
+            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Preference.HasClinicsEnabledNoCache);
             string query = "SELECT procedurelog.ProcDate,CONCAT(patient.LName,', ',patient.FName)AS Patient, procedurecode.AbbrDesc, "
                 + "procedurelog.ProcFee*(procedurelog.BaseUnits+procedurelog.UnitQty)-IFNULL(cp.CapWriteOff,0) Fee,"
                 + "IFNULL((procedurelog.ProcFee*(procedurelog.BaseUnits+procedurelog.UnitQty))-IFNULL(cp.CapWriteOff,0)-IFNULL(cp.InsAmt,0)"

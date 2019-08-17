@@ -1,61 +1,51 @@
 using System;
 using System.Collections;
 
-namespace OpenDentBusiness{
+namespace OpenDentBusiness
+{
+    ///<summary>A deposit slip.  Contains multiple insurance and patient checks.</summary>
+    public class Deposit
+    {
+        public long DepositNum;
 
-	///<summary>A deposit slip.  Contains multiple insurance and patient checks.</summary>
-	[Serializable]
-	public class Deposit:ODTable{
-		///<summary>Primary key.</summary>
-		[ODTableColumn(PrimaryKey=true)]
-		public long DepositNum;
-		///<summary>The date of the deposit.</summary>
-		public DateTime DateDeposit;
-		///<summary>User editable.  Usually includes name on the account and account number.  Possibly the bank name as well.</summary>
-		[ODTableColumn(SpecialType=CrudSpecialColType.TextIsClob)]
-		public string BankAccountInfo;
-		///<summary>Total amount of the deposit. User not allowed to directly edit.</summary>
-		public double Amount;
-		///<summary>Short description to help identify the deposit.</summary>
-		public string Memo;
-		///<summary>Holds the batch number for the deposit. Does not have a default value. 25 character limit.</summary>
-		public string Batch;
-		///<summary>FK to Def.DefNum. Links this deposit to a definition of type AutoDeposit.  When set to a valid value, it indicates that this deposit is an "auto deposit".</summary>
-		public long DepositAccountNum;
-		///<summary>Not in the database table.  Identifies the clinic(s) that the deposit is associated to.
-		///'(None)', specific clinic abbr or '(Multiple)'.</summary>
-		[ODTableColumn(IsNotDbColumn=true)]
-		public string ClinicAbbr;
-		
-		///<summary></summary>
-		public Deposit Copy(){
-			return (Deposit)this.MemberwiseClone();
-		}
-	}
+        /// <summary>
+        /// The date of the deposit.
+        /// </summary>
+        public DateTime DateDeposit;
 
-	
+        /// <summary>
+        /// User editable.  Usually includes name on the account and account number.  Possibly the bank name as well.
+        /// </summary>
+        [ODTableColumn(SpecialType = CrudSpecialColType.TextIsClob)]
+        public string BankAccountInfo;
+        
+        /// <summary>
+        /// Total amount of the deposit. User not allowed to directly edit.
+        /// </summary>
+        public double Amount;
+        
+        /// <summary>
+        /// Short description to help identify the deposit.
+        /// </summary>
+        public string Memo;
+        
+        /// <summary>
+        /// Holds the batch number for the deposit. Does not have a default value. 25 character limit.
+        /// </summary>
+        public string Batch;
+        
+        ///<summary>FK to Def.DefNum. Links this deposit to a definition of type AutoDeposit.  When set to a valid value, it indicates that this deposit is an "auto deposit".</summary>
+        public long DepositAccountNum;
+        
+        /// <summary>
+        /// Not in the database table.  Identifies the clinic(s) that the deposit is associated to.
+        /// '(None)', specific clinic abbr or '(Multiple)'.
+        /// </summary>
+        public string ClinicAbbr;
 
-	
-
-
+        public Deposit Copy()
+        {
+            return (Deposit)this.MemberwiseClone();
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

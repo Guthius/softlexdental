@@ -125,7 +125,7 @@ namespace OpenDental
         ///Accepts null for pat and 0 for clinicNum.</summary>
         public static string GetMainTitle(Patient pat, long clinicNum)
         {
-            string retVal = Preferences.GetString(PrefName.MainWindowTitle);
+            string retVal = Preference.GetString(PreferenceName.MainWindowTitle);
 
             retVal = Plugin.Filter(null, "Patient_FilterMainTitle", retVal);
 
@@ -142,7 +142,7 @@ namespace OpenDental
                 {
                     retVal += " - " + Lan.g("FormOpenDental", "Clinic") + ": ";
                 }
-                if (Preferences.GetBool(PrefName.TitleBarClinicUseAbbr))
+                if (Preference.GetBool(PreferenceName.TitleBarClinicUseAbbr))
                 {
                     retVal += Clinics.GetAbbr(clinicNum);
                 }
@@ -165,20 +165,20 @@ namespace OpenDental
             }
             retVal += " - " + pat.GetNameLF();
             //A query is required to get the Specialty for the selected patient so only run this code if the patient has changed.
-            if (Preferences.GetBool(PrefName.TitleBarShowSpecialty) && hasPatChanged)
+            if (Preference.GetBool(PreferenceName.TitleBarShowSpecialty) && hasPatChanged)
             {
-                string specialty = Patients.GetPatientSpecialtyDef(pat.PatNum)?.ItemName ?? "";
+                string specialty = Patients.GetPatientSpecialtyDef(pat.PatNum)?.Description ?? "";
                 retVal += string.IsNullOrWhiteSpace(specialty) ? "" : " (" + specialty + ")";
             }
-            if (Preferences.GetLong(PrefName.ShowIDinTitleBar) == 1)
+            if (Preference.GetLong(PreferenceName.ShowIDinTitleBar) == 1)
             {
                 retVal += " - " + pat.PatNum.ToString();
             }
-            else if (Preferences.GetLong(PrefName.ShowIDinTitleBar) == 2)
+            else if (Preference.GetLong(PreferenceName.ShowIDinTitleBar) == 2)
             {
                 retVal += " - " + pat.ChartNumber;
             }
-            else if (Preferences.GetLong(PrefName.ShowIDinTitleBar) == 3)
+            else if (Preference.GetLong(PreferenceName.ShowIDinTitleBar) == 3)
             {
                 if (pat.Birthdate.Year > 1880)
                 {
@@ -200,14 +200,14 @@ namespace OpenDental
         ///Currently only used to refresh the title bar when the timer ticks for the update time countdown.</summary>
         public static string GetMainTitleSamePat()
         {
-            string retVal = Preferences.GetString(PrefName.MainWindowTitle);
+            string retVal = Preference.GetString(PreferenceName.MainWindowTitle);
             if (Preferences.HasClinicsEnabled && _clinSelectedCur > 0)
             {
                 if (retVal != "")
                 {
                     retVal += " - " + Lan.g("FormOpenDental", "Clinic") + ": ";
                 }
-                if (Preferences.GetBool(PrefName.TitleBarClinicUseAbbr))
+                if (Preference.GetBool(PreferenceName.TitleBarClinicUseAbbr))
                 {
                     retVal += Clinics.GetAbbr(_clinSelectedCur);
                 }
@@ -234,20 +234,20 @@ namespace OpenDental
                 return retVal;
             }
             retVal += " - " + _patSelectedCur.GetNameLF();
-            if (Preferences.GetBool(PrefName.TitleBarShowSpecialty))
+            if (Preference.GetBool(PreferenceName.TitleBarShowSpecialty))
             {
-                string specialty = Patients.GetPatientSpecialtyDef(_patSelectedCur.PatNum)?.ItemName ?? "";
+                string specialty = Patients.GetPatientSpecialtyDef(_patSelectedCur.PatNum)?.Description ?? "";
                 retVal += string.IsNullOrWhiteSpace(specialty) ? "" : " (" + specialty + ")";
             }
-            if (Preferences.GetLong(PrefName.ShowIDinTitleBar) == 1)
+            if (Preference.GetLong(PreferenceName.ShowIDinTitleBar) == 1)
             {
                 retVal += " - " + _patSelectedCur.PatNum.ToString();
             }
-            else if (Preferences.GetLong(PrefName.ShowIDinTitleBar) == 2)
+            else if (Preference.GetLong(PreferenceName.ShowIDinTitleBar) == 2)
             {
                 retVal += " - " + _patSelectedCur.ChartNumber;
             }
-            else if (Preferences.GetLong(PrefName.ShowIDinTitleBar) == 3)
+            else if (Preference.GetLong(PreferenceName.ShowIDinTitleBar) == 3)
             {
                 if (_patSelectedCur.Birthdate.Year > 1880)
                 {

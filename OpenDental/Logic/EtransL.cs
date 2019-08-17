@@ -340,7 +340,7 @@ namespace OpenDental {
 				listClaimProcsForClaim.Insert(0,cpByTotal);
 			}
 			if(isAutomatic) {
-				ClaimL.ReceiveEraPayment(claim,claimPaid,listClaimProcsForClaim,Preferences.GetBool(PrefName.EraIncludeWOPercCoPay),isSupplementalPay);
+				ClaimL.ReceiveEraPayment(claim,claimPaid,listClaimProcsForClaim,Preference.GetBool(PreferenceName.EraIncludeWOPercCoPay),isSupplementalPay);
 			}
 			else {
 				FormEtrans835ClaimPay FormP=new FormEtrans835ClaimPay(x835,claimPaid,claim,pat,fam,listInsPlans,listPatPlans,listInsSubs,isSupplementalPay);
@@ -490,13 +490,13 @@ namespace OpenDental {
 			claimPay.CheckNum=x835.TransRefNum;
 			long defNum=0;
 			if(x835._paymentMethodCode=="CHK") {//Physical check
-				defNum=Defs.GetByExactName(DefCat.InsurancePaymentType,"Check");
+				defNum=Defs.GetByExactName(DefinitionCategory.InsurancePaymentType,"Check");
 			}
 			else if(x835._paymentMethodCode=="ACH") {//Electronic check
-				defNum=Defs.GetByExactName(DefCat.InsurancePaymentType,"EFT");
+				defNum=Defs.GetByExactName(DefinitionCategory.InsurancePaymentType,"EFT");
 			}
 			else if(x835._paymentMethodCode=="FWT") {//Wire transfer
-				defNum=Defs.GetByExactName(DefCat.InsurancePaymentType,"Wired");
+				defNum=Defs.GetByExactName(DefinitionCategory.InsurancePaymentType,"Wired");
 			}
 			claimPay.PayType=defNum;		
 			ClaimPayments.Insert(claimPay);
@@ -583,8 +583,8 @@ namespace OpenDental {
 						Patients.Insert(member.Pat,false);
 						Patient memberPatOld=member.Pat.Copy();
 						member.Pat.PatStatus=PatientStatus.Patient;
-						member.Pat.BillingType=Preferences.GetLong(PrefName.PracticeDefaultBillType);
-						if(!Preferences.GetBool(PrefName.PriProvDefaultToSelectProv)) {
+						member.Pat.BillingType=Preference.GetLong(PreferenceName.PracticeDefaultBillType);
+						if(!Preference.GetBool(PreferenceName.PriProvDefaultToSelectProv)) {
 							//Set the patients primary provider to the practice default provider.
 							member.Pat.PriProv=Providers.GetDefaultProvider().ProvNum;
 						}
@@ -811,7 +811,7 @@ namespace OpenDental {
 				insPlan.PlanNote="";
 				insPlan.FeeSched=0;
 				insPlan.PlanType="";
-				insPlan.ClaimFormNum=Preferences.GetLong(PrefName.DefaultClaimForm);
+				insPlan.ClaimFormNum=Preference.GetLong(PreferenceName.DefaultClaimForm);
 				insPlan.UseAltCode=false;
 				insPlan.ClaimsUseUCR=false;
 				insPlan.CopayFeeSched=0;

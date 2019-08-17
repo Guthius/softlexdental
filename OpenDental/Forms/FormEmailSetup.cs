@@ -279,26 +279,26 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.SecurityAdmin,true)){
 				textPassword.PasswordChar='*';
 			}
-			textSMTPserver.Text=Preferences.GetString(PrefName.EmailSMTPserver);
-			textUsername.Text=Preferences.GetString(PrefName.EmailUsername);
-			textPassword.Text=Preferences.GetString(PrefName.EmailPassword);
-			textPort.Text=Preferences.GetString(PrefName.EmailPort);
-			checkSSL.Checked=Preferences.GetBool(PrefName.EmailUseSSL);
-			textSender.Text=Preferences.GetString(PrefName.EmailSenderAddress);
+			textSMTPserver.Text=Preference.GetString(PreferenceName.EmailSMTPserver);
+			textUsername.Text=Preference.GetString(PreferenceName.EmailUsername);
+			textPassword.Text=Preference.GetString(PreferenceName.EmailPassword);
+			textPort.Text=Preference.GetString(PreferenceName.EmailPort);
+			checkSSL.Checked=Preference.GetBool(PreferenceName.EmailUseSSL);
+			textSender.Text=Preference.GetString(PreferenceName.EmailSenderAddress);
 		}
 
 		private void butOK_Click(object sender, System.EventArgs e) {
-			Prefs.UpdateString(PrefName.EmailSMTPserver,textSMTPserver.Text);
-			Prefs.UpdateString(PrefName.EmailUsername,textUsername.Text);
-			Prefs.UpdateString(PrefName.EmailPassword,textPassword.Text);
+			Preference.Update(PreferenceName.EmailSMTPserver,textSMTPserver.Text);
+			Preference.Update(PreferenceName.EmailUsername,textUsername.Text);
+			Preference.Update(PreferenceName.EmailPassword,textPassword.Text);
 			try{
-				Prefs.UpdateLong(PrefName.EmailPort,PIn.Long(textPort.Text));
+				Preference.Update(PreferenceName.EmailPort,PIn.Long(textPort.Text));
 			}
 			catch{
 				MsgBox.Show(this,"invalid port number.");
 			}
-			Prefs.UpdateBool(PrefName.EmailUseSSL,checkSSL.Checked);
-			Prefs.UpdateString(PrefName.EmailSenderAddress,textSender.Text);
+			Preference.Update(PreferenceName.EmailUseSSL,checkSSL.Checked);
+			Preference.Update(PreferenceName.EmailSenderAddress,textSender.Text);
 			DataValid.SetInvalid(InvalidType.Prefs);
 			DialogResult=DialogResult.OK;
 		}

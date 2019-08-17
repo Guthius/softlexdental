@@ -32,7 +32,7 @@ namespace OpenDental
                 return;
             }
 
-            simpleCheckBox.Checked = Preferences.GetBool(PrefName.EasyHidePrinters);
+            simpleCheckBox.Checked = Preference.GetBool(PreferenceName.EasyHidePrinters);
 
             SetControls(this, installedPrinters);
         }
@@ -186,7 +186,7 @@ namespace OpenDental
         void acceptButton_Click(object sender, EventArgs e)
         {
             string computerName = Environment.MachineName;
-            if (simpleCheckBox.Checked && !Preferences.GetBool(PrefName.EasyHidePrinters))
+            if (simpleCheckBox.Checked && !Preference.GetBool(PreferenceName.EasyHidePrinters))
             {
                 var result =
                     MessageBox.Show(
@@ -245,9 +245,9 @@ namespace OpenDental
             }
 
             DataValid.SetInvalid(InvalidType.Computers);
-            if (simpleCheckBox.Checked != Preferences.GetBool(PrefName.EasyHidePrinters))
+            if (simpleCheckBox.Checked != Preference.GetBool(PreferenceName.EasyHidePrinters))
             {
-                Prefs.UpdateBool(PrefName.EasyHidePrinters, simpleCheckBox.Checked);
+                Preference.Update(PreferenceName.EasyHidePrinters, simpleCheckBox.Checked);
                 DataValid.SetInvalid(InvalidType.Prefs);
             }
 

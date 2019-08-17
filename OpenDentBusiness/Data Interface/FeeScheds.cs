@@ -367,9 +367,9 @@ namespace OpenDentBusiness{
 			//No need to check RemotingRole; no call to db.
 			long totalWriteoffsUpdated=0;
 			List<Fee> listFeesHQ=Fees.GetByClinicNum(0);//All HQ fees
-			Dictionary<long,List<Procedure>> dictPatProcs;
-			Dictionary<long,Dictionary<long,Tuple<int,List<Procedure>>>> dictFamProcs;
-			Dictionary<long,List<ClaimProc>> dictClaimProcs;
+			Dictionary<long, List<Procedure>> dictPatProcs;
+			Dictionary<long, Dictionary<long, Tuple<int, List<Procedure>>>> dictFamProcs;
+			Dictionary<long, List<ClaimProc>> dictClaimProcs;
 			List<Fee> listFeesHQandClinic;
 			Lookup<FeeKey2,Fee> lookupFeesByCodeAndSched;
 			List<InsSub> listInsSubs;
@@ -446,8 +446,8 @@ namespace OpenDentBusiness{
 					if(progress.IsCanceled) {
 						return;
 					}
-					#endregion Has Cancelled
-					long guarNum=x.Key;
+                    #endregion Has Cancelled
+                    long guarNum =x.Key;
 					List<InsSub> listInsSubsCur=listInsSubs.FindAll(y => y.Subscriber.In(x.Value.Keys));
 					List<InsPlan> listInsPlansCur=listInsPlans.FindAll(y => listInsSubsCur.Exists(z => z.PlanNum==y.PlanNum));
 					List<SubstitutionLink> listSubstitutionLinks=SubstitutionLinks.GetAllForPlans(listInsPlansCur);
@@ -455,12 +455,12 @@ namespace OpenDentBusiness{
 					List<Benefit> listBenefitsCur;
 					List<ClaimProc> listClaimProcsCur;
 					List<Procedure> listProcs;
-					foreach(KeyValuePair<long,Tuple<int,List<Procedure>>> kvp in x.Value) {//foreach patient in the family
+					foreach(KeyValuePair<long, Tuple<int,List<Procedure>>> kvp in x.Value) {//foreach patient in the family
 						listProcs=kvp.Value.Item2;
 						if((listProcs?.Count??0)==0) {
 							continue;
 						}
-						long patNum=kvp.Key;
+                        long patNum =kvp.Key;
 						int patAge=kvp.Value.Item1;
 						listPatPlansCur=listPatPlans.FindAll(y => y.PatNum==patNum);
 						listBenefitsCur=listBenefits
@@ -497,10 +497,10 @@ namespace OpenDentBusiness{
 					//if storing previously completed clinic and we actually completed this clinic's procs, update the pref
 					if(listWriteoffClinics.Last().ClinicNum==clinicCur.ClinicNum) {
 						//if this is the last clinic in the list, clear the last clinic pref so the next time it will run for all clinics
-						Prefs.UpdateString(PrefName.GlobalUpdateWriteOffLastClinicCompleted,"");
+						Preference.Update(PreferenceName.GlobalUpdateWriteOffLastClinicCompleted,"");
 					}
 					else {
-						Prefs.UpdateString(PrefName.GlobalUpdateWriteOffLastClinicCompleted,POut.Long(clinicCur.ClinicNum));
+						Preference.Update(PreferenceName.GlobalUpdateWriteOffLastClinicCompleted,clinicCur.ClinicNum);
 					}
 					Signalods.SetInvalid(InvalidType.Prefs);
 				}

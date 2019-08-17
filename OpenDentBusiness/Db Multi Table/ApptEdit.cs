@@ -30,7 +30,7 @@ namespace OpenDentBusiness
             data.PatientTable = Appointments.GetPatTable(AptCur.PatNum.ToString(), AptCur);
             data.ListClaimProcs = ClaimProcs.RefreshForProcs(data.ListProcsForAppt.Select(x => x.ProcNum).ToList());
             data.ListAdjustments = Adjustments.GetForProcs(data.ListProcsForAppt.Select(x => x.ProcNum).ToList());
-            if (!Preferences.GetBool(PrefName.EasyHideDentalSchools))
+            if (!Preference.GetBool(PreferenceName.EasyHideDentalSchools))
             {
                 data.ListStudents = ReqStudents.GetForAppt(AptCur.AptNum);
             }

@@ -37,7 +37,7 @@ namespace OpenDental {
 			watch.Stop();
 			long latency=watch.ElapsedMilliseconds;
 			watch.Restart();
-			Prefs.RefreshCache();
+			Preference.Refresh();
 			watch.Stop();
 			long speed=watch.ElapsedMilliseconds-latency;
 			textSpeed.Text=speed.ToString();
