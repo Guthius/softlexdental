@@ -88,7 +88,7 @@ namespace OpenDentBusiness
         /// <param name="category">The category.</param>
         /// <returns>A list of definitions.</returns>
         public static List<Definition> GetByCategory(DefinitionCategory category, bool includeHidden = false) =>
-            SelectMany("SELECT * FROM definitions WHERE category = @category WHERE @include_hidden OR hidden = 0 ORDER BY sort_order", FromReader,
+            SelectMany("SELECT * FROM definitions WHERE category = @category AND (@include_hidden OR hidden = 0) ORDER BY sort_order", FromReader,
                 new MySqlParameter("category", (int)category),
                 new MySqlParameter("include_hidden", includeHidden));
 

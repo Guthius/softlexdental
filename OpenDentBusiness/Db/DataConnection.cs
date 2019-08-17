@@ -328,16 +328,16 @@ namespace OpenDentBusiness
         {
             if (databaseAction != null)
             {
-                try
-                {
+                //try
+                //{
                     using (var connection = Connection)
                     {
                         connection.Open();
 
                         databaseAction(connection);
                     }
-                }
-                catch { }
+                //}
+                //catch { }
             }
         }
 

@@ -338,19 +338,18 @@ namespace OpenDentBusiness
         internal static long NonQ(string command, params OdSqlParameter[] parameters)
         {
             LastCommand = command;
-            return ExecuteQueryFunc<long>(() =>
-            {
-                List<MySqlParameter> pgParameters = new List<MySqlParameter>();
-                foreach (var parameter in parameters)
-                {
-                    pgParameters.Add(
-                        new MySqlParameter(
-                            parameter.ParameterName, 
-                            parameter.Value));
-                }
 
-                return DataConnection.ExecuteNonQuery(command, pgParameters.ToArray());
-            });
+            List<MySqlParameter> pgParameters = new List<MySqlParameter>();
+            foreach (var parameter in parameters)
+            {
+                pgParameters.Add(
+                    new MySqlParameter(
+                        parameter.ParameterName,
+                        parameter.Value));
+            }
+
+            return DataConnection.ExecuteNonQuery(command, pgParameters.ToArray());
+
         }
 
 
