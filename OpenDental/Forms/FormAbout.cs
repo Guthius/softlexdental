@@ -1,10 +1,5 @@
-﻿using CodeBase;
-using OpenDentBusiness;
+﻿using OpenDentBusiness;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Windows.Forms;
 
 namespace OpenDental
@@ -23,32 +18,31 @@ namespace OpenDental
         {
             string softwareName = Preference.GetString(PreferenceName.SoftwareName);
 
-            labelVersion.Text = "Version: " + Application.ProductVersion;
+            versionLabel.Text = "Version: " + Application.ProductVersion;
 
             var updateHistory = UpdateHistories.GetForVersion(Application.ProductVersion);
             if (updateHistory != null)
             {
-                labelVersion.Text += "  Since: " + updateHistory.DateTimeUpdated.ToShortDateString();
+                versionLabel.Text += "  Since: " + updateHistory.DateTimeUpdated.ToShortDateString();
             }
 
-            // Keeps the trailing year up to date
-            labelCopyright.Text = softwareName + " Copyright 2003-" + DateTime.Now.ToString("yyyy") + ", Jordan S. Sparks, D.M.D.";
-            labelMySQLCopyright.Text = "MySQL - Copyright 1995-" + DateTime.Now.ToString("yyyy") + ", www.mysql.com";
+            copyrightLabel.Text = softwareName + " Copyright 2003-" + DateTime.Now.ToString("yyyy") + ", Jordan S. Sparks, D.M.D.";
+            copyrightMySqlLabel.Text = "MySQL - Copyright 1995-" + DateTime.Now.ToString("yyyy") + ", www.mysql.com";
 
-            List<string> serviceList = Computer.GetServiceInfo();
-            labelName.Text = serviceList[2].ToString();
-            labelService.Text = serviceList[0].ToString();
-            labelMySqlVersion.Text = serviceList[3].ToString();
-            labelServComment.Text = serviceList[1].ToString();
-            labelMachineName.Text = Environment.MachineName.ToUpper();
+            var serviceList = Computer.GetServiceInfo();
+            machineNameLabel.Text = Environment.MachineName.ToUpper();
+            serviceNameLabel.Text = serviceList[0].ToString();
+            serviceCommentLabel.Text = serviceList[1].ToString();
+            serverNameLabel.Text = serviceList[2].ToString();
+            serviceVersionLabel.Text = serviceList[3].ToString();
         }
 
         /// <summary>
         /// Generate and display diagnostic information.
         /// </summary>
-        void diagnosticsButton_Click(object sender, EventArgs e)
+        void DiagnosticsButton_Click(object sender, EventArgs e)
         {
-            // TODO: Fix me...
+            // TODO: Fix me
 
             //BugSubmission.SubmissionInfo subInfo = new BugSubmission(new Exception()).Info;
             //StringBuilder strBuilder = new StringBuilder();
@@ -101,7 +95,7 @@ namespace OpenDental
         /// <summary>
         /// Displays all licenses.
         /// </summary>
-        void licensesButton_Click(object sender, EventArgs e)
+        void LicensesButton_Click(object sender, EventArgs e)
         {
             using (var formLicense = new FormLicense())
             {
