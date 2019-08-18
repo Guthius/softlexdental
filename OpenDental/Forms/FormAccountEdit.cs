@@ -6,7 +6,7 @@ namespace OpenDental
 {
     public partial class FormAccountEdit : FormBase
     {
-        Account account;
+        readonly Account account;
 
         public FormAccountEdit(Account account)
         {
@@ -56,7 +56,7 @@ namespace OpenDental
             {
                 Account.Delete(account);
             }
-            catch (ApplicationException ex)
+            catch (DataException ex)
             {
                 MessageBox.Show(
                     ex.Message,
@@ -75,7 +75,7 @@ namespace OpenDental
             if (descriptionTextBox.Text == "")
             {
                 MessageBox.Show(
-                    "Description is required.",
+                    "A description is required.",
                     "Edit Account",
                     MessageBoxButtons.OK, 
                     MessageBoxIcon.Error);
