@@ -1,19 +1,18 @@
 #if !DISABLE_WINDOWS_BRIDGES
+using NDde.Advanced;
+using NDde.Client;
+using OpenDentBusiness;
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using NDde;
-using OpenDentBusiness;
-using System.Collections.Generic;
 
-namespace OpenDental.Bridges{
-	/// <summary></summary>
-	public class Vipersoft{
+namespace OpenDental.Bridges
+{
+    /// <summary></summary>
+    public class Vipersoft{
 
 		/// <summary></summary>
 		public Vipersoft(){

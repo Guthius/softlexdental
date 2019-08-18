@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using NDde;
 using OpenDentBusiness;
 using System.Collections.Generic;
+using NDde.Client;
+using NDde.Advanced;
 
 namespace OpenDental.Bridges{
 	/// <summary></summary>
