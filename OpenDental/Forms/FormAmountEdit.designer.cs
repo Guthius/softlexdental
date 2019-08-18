@@ -1,106 +1,102 @@
-namespace OpenDental{
-	partial class FormAmountEdit {
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+namespace OpenDental
+{
+    partial class FormAmountEdit
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing) {
-			if(disposing && (components != null)) {
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAmountEdit));
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.textAmount = new System.Windows.Forms.TextBox();
-			this.labelText = new System.Windows.Forms.Label();
-			this.SuspendLayout();
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(89, 57);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 24);
-			this.butOK.TabIndex = 1;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(170, 57);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// textAmount
-			// 
-			this.textAmount.Location = new System.Drawing.Point(161, 21);
-			this.textAmount.Name = "textAmount";
-			this.textAmount.Size = new System.Drawing.Size(84, 20);
-			this.textAmount.TabIndex = 0;
-			// 
-			// labelText
-			// 
-			this.labelText.Location = new System.Drawing.Point(1, 21);
-			this.labelText.Name = "labelText";
-			this.labelText.Size = new System.Drawing.Size(154, 21);
-			this.labelText.TabIndex = 3;
-			this.labelText.Text = "Amount";
-			this.labelText.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			// 
-			// FormAmountEdit
-			// 
-			this.AcceptButton = this.butOK;
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(257, 93);
-			this.Controls.Add(this.labelText);
-			this.Controls.Add(this.textAmount);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butCancel);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MinimumSize = new System.Drawing.Size(100, 100);
-			this.Name = "FormAmountEdit";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Enter Amount";
-			this.Load += new System.EventHandler(this.FormAmountEdit_Load);
-			this.ResumeLayout(false);
-			this.PerformLayout();
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAmountEdit));
+            this.acceptButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.amountTextBox = new System.Windows.Forms.TextBox();
+            this.amountLabel = new System.Windows.Forms.Label();
+            this.SuspendLayout();
+            // 
+            // acceptButton
+            // 
+            this.acceptButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.acceptButton.Location = new System.Drawing.Point(75, 88);
+            this.acceptButton.Name = "acceptButton";
+            this.acceptButton.Size = new System.Drawing.Size(110, 30);
+            this.acceptButton.TabIndex = 1;
+            this.acceptButton.Text = "&OK";
+            this.acceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(191, 88);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(110, 30);
+            this.cancelButton.TabIndex = 2;
+            this.cancelButton.Text = "&Cancel";
+            // 
+            // amountTextBox
+            // 
+            this.amountTextBox.Location = new System.Drawing.Point(170, 30);
+            this.amountTextBox.Name = "amountTextBox";
+            this.amountTextBox.Size = new System.Drawing.Size(84, 23);
+            this.amountTextBox.TabIndex = 0;
+            // 
+            // amountLabel
+            // 
+            this.amountLabel.Location = new System.Drawing.Point(13, 30);
+            this.amountLabel.Name = "amountLabel";
+            this.amountLabel.Size = new System.Drawing.Size(150, 23);
+            this.amountLabel.TabIndex = 3;
+            this.amountLabel.Text = "Amount";
+            this.amountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // FormAmountEdit
+            // 
+            this.AcceptButton = this.acceptButton;
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(314, 131);
+            this.Controls.Add(this.amountLabel);
+            this.Controls.Add(this.amountTextBox);
+            this.Controls.Add(this.acceptButton);
+            this.Controls.Add(this.cancelButton);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(100, 100);
+            this.Name = "FormAmountEdit";
+            this.Text = "Enter Amount";
+            this.Load += new System.EventHandler(this.FormAmountEdit_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private OpenDental.UI.Button butOK;
-		private OpenDental.UI.Button butCancel;
-		private System.Windows.Forms.TextBox textAmount;
-		private System.Windows.Forms.Label labelText;
-	}
+        private System.Windows.Forms.Button acceptButton;
+        private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.TextBox amountTextBox;
+        private System.Windows.Forms.Label amountLabel;
+    }
 }
