@@ -178,9 +178,8 @@
     <Reference Include="MySql.Data, Version=8.0.11.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\Required dlls\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="NDde, Version=1.3.171.0, Culture=neutral, PublicKeyToken=6949dadb6e675e5a">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Required dlls\NDde.dll</HintPath>
+    <Reference Include="NDde, Version=2.1.563.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NDde.2.01.0563\lib\NDde.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -7701,6 +7700,7 @@
     </EmbeddedResource>
     <BaseApplicationManifest Include="Properties\app.manifest" />
     <None Include="OpenDental.ruleset" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -8680,6 +8680,7 @@
       <DependentUpon>SignatureBoxWrapper.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Resource Include="NDde.xml" />
     <Content Include="ReportingForRdl\Allocators\MyAllocator1\Images\SnuffLight1.gif" />
     <Content Include="ReportingForRdl\Allocators\MyAllocator1\Images\SnuffLight2.gif" />
     <Content Include="ReportingForRdl\Allocators\MyAllocator1\Images\SnuffLight3.gif" />
