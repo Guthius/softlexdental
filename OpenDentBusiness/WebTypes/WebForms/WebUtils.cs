@@ -25,24 +25,23 @@ namespace OpenDentBusiness.WebTypes.WebForms
             return 0;
         }
 
-        /// <summary></summary>
-        /// <param name="regKey"></param>
-        /// <returns></returns>
         public static string GetSheetDefAddress(string regKey = null)
         {
             if (string.IsNullOrEmpty(regKey))
             {
                 regKey = Preference.GetString(PreferenceName.RegistrationKey);
             }
+
             try
             {
                 string payload = PayloadHelper.CreatePayloadWebHostSynch(regKey, new PayloadItem(regKey, "RegKey"));
+
                 return WebSerializer.DeserializeTag<string>(SheetsSynchProxy.GetWebServiceInstance().GetSheetDefAddress(payload), "Success");
             }
             catch
             {
-
             }
+
             return "";
         }
     }

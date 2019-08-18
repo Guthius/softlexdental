@@ -409,11 +409,5 @@ namespace OpenDentBusiness
                 Programs.IsEnabled(ProgramName.Xcharge),Programs.IsEnabled(ProgramName.PayConnect),Programs.IsEnabled(ProgramName.PaySimple)
             }.Count(x => x == true) >= 2;
         }
-
-        ///<summary>Called when we want to inform HQ about changes maded to enabled programs.</summary>
-        public static void SendEnabledProgramsToHQ()
-        {
-            CustomerUpdatesProxy.SendAndReceiveUpdateRequestXml();//Piggy back on this, we don't do anything with result just want to trigger some code.
-        }
     }
 }

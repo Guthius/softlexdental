@@ -1,25 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using OpenDentBusiness;
-using Avalara.AvaTax.RestClient;
-using System.Linq;
+﻿using Avalara.AvaTax.RestClient;
 using CodeBase;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
 
 namespace OpenDentBusiness
 {
-
-    ///<summary>This is an unusual bridge, currently available for HQ only that will handle sales tax calls to the Avalara API. 
+    ///<summary>
+    /// This is an unusual bridge, currently available for HQ only that will handle sales tax calls to the Avalara API. 
     ///This is a wrapper class for calling the Avalara SDK, as we are not implementing our own interface for the API. 
-    ///SDK Documentation: https://github.com/avadev/AvaTax-REST-V2-DotNet-SDK API Documentation: https://developer.avalara.com/avatax/dev-guide/. 
-    ///</summary>
+    /// SDK Documentation: https://github.com/avadev/AvaTax-REST-V2-DotNet-SDK API Documentation: https://developer.avalara.com/avatax/dev-guide/. 
+    /// </summary>
     public class AvaTax
     {
-
         #region Properties
 
-        ///<summary>A program property.  The adjustment type defnum to be associated with SalesTax adjustments.</summary>
+        /// <summary>A program property.  The adjustment type defnum to be associated with SalesTax adjustments.</summary>
         public static long SalesTaxAdjType
         {
             get
@@ -140,54 +138,63 @@ namespace OpenDentBusiness
         {
         }
 
-        ///<summary>True if we are in HQ and AvaTax is enabled.</summary>
+        /// <summary>
+        /// True if we are in HQ and AvaTax is enabled.
+        /// </summary>
         public static bool IsEnabled()
         {
             // TODO: Update this to work for anyone that wants to use it...
             return Programs.IsEnabled(ProgramName.AvaTax);
         }
 
-        ///<summary>True if we are in HQ, AvaTax is enabled, we tax the customer's state, and either the customer's tax exempt field is not defined or 
-        ///they are explicitly not tax exempt.  Executes a small query.</summary>
+        /// <summary>
+        /// True if we are in HQ, AvaTax is enabled, we tax the customer's state, and either the
+        /// customer's tax exempt field is not defined or they are explicitly not tax exempt.
+        /// </summary>
         public static bool IsTaxable(long patNum)
         {
-            if (!IsEnabled())
-            {
-                return false;//Save a few db calls
-            }
-            Patient pat = Patients.GetPat(patNum);
-            if (pat == null)
+            if (!IsEnabled()) return false;
+
+            var patient = Patients.GetPat(patNum);
+            if (patient == null)
             {
                 return false;
             }
-            PatField taxExempt = null;
+
+            PatField taxExemptField = null;
             if (TaxExemptPatField != null)
             {
-                taxExempt = PatFields.Refresh(patNum).FirstOrDefault(x => x.FieldName == TaxExemptPatField.FieldName);
+                taxExemptField = PatFields.Refresh(patNum).FirstOrDefault(x => x.FieldName == TaxExemptPatField.FieldName);
             }
-            return ListTaxableStates.Count > 0
-                && ListTaxableStates.Any(x => x == pat.State) && (taxExempt == null || !PIn.Bool(taxExempt.FieldValue));
+
+            return 
+                ListTaxableStates.Count > 0 && 
+                ListTaxableStates.Any(x => x == patient.State) && 
+                (taxExemptField == null || !SIn.Bool(taxExemptField.FieldValue));
         }
 
-        ///<summary>True if we are in HQ, AvaTax is enabled, we tax the customer's state, and the procedure has a taxable proccode.
-        ///Executes a small query.</summary>
-        public static bool CanProcedureBeTaxed(Procedure proc, bool isSilent = false)
+        /// <summary>
+        /// True if we are in HQ, AvaTax is enabled, we tax the customer's state, and the procedure has a taxable proccode.
+        /// </summary>
+        public static bool CanProcedureBeTaxed(Procedure procedure, bool isSilent = false)
         {
-            ProcedureCode procCode = ProcedureCodes.GetProcCode(proc.CodeNum);
-            bool retVal = IsTaxable(proc.PatNum) && !string.IsNullOrWhiteSpace(procCode.TaxCode) && proc.ProcFee > 0;//repeat charges for prepay use ProcFee=0
-            if (retVal && !Patients.HasValidUSZipCode(proc.PatNum))
-            {//Only checks zip code if the procedure is taxable.
+            var procedureCode = ProcedureCodes.GetProcCode(procedure.CodeNum);
+
+            bool isTaxable = IsTaxable(procedure.PatNum) && !string.IsNullOrWhiteSpace(procedureCode.TaxCode) && procedure.ProcFee > 0;//repeat charges for prepay use ProcFee=0
+            if (isTaxable && !Patients.HasValidUSZipCode(procedure.PatNum))
+            {
                 if (isSilent)
                 {
-                    Logger.Write(LogLevel.Error, $"Invalid ZipCode for PatNum {proc.PatNum} while running Repeat Charge Tool on {DateTime.Today}");
+                    Logger.Write(LogLevel.Error, 
+                        $"Invalid ZipCode for PatNum {procedure.PatNum} while running Repeat Charge Tool on {DateTime.Today}");
                 }
                 else
                 {
-                    MessageBox.Show(Lans.g("Procedures", "A valid zip code is required to process sales tax on procedures in this patient's state. "
-                    + "Please update the patient information with a valid zip code before continuing"));
+                    MessageBox.Show(
+                        "A valid zip code is required to process sales tax on procedures in this patient's state. Please update the patient information with a valid zip code before continuing.");
                 }
             }
-            return retVal;
+            return isTaxable;
         }
 
         ///<summary>Checks to see if we need to replace the tax code for this state and procedure code with a different tax code.
@@ -231,45 +238,51 @@ namespace OpenDentBusiness
             return procCode.TaxCode;
         }
 
-        ///<summary>Pings the API service with the provided test settings to check if the settings will work and the API is available.</summary>
+        /// <summary>
+        /// Pings the API service with the provided test settings to check if the settings will work and the API is available.
+        /// </summary>
         public static bool IsApiAvailable(bool isProduction, string username, string password)
         {
-            AvaTaxClient testClient = new AvaTaxClient("TestClient", "1.0", Environment.MachineName, isProduction ? AvaTaxEnvironment.Production : AvaTaxEnvironment.Sandbox)
-                .WithSecurity(username, password);
-            return testClient.Ping().authenticated ?? false;
+            var avaTaxClient = 
+                new AvaTaxClient("TestClient", "1.0", Environment.MachineName, isProduction ? AvaTaxEnvironment.Production : AvaTaxEnvironment.Sandbox)
+                    .WithSecurity(username, password);
+
+            return avaTaxClient.Ping().authenticated ?? false;
         }
 
-        ///<summary>Tests our connection to the API client using the stored credentials.  Returns true if we can connect.</summary>
-        public static bool PingAvaTax()
-        {
-            return Client.Ping().authenticated ?? false;
-        }
+        /// <summary>
+        /// Tests our connection to the API client using the stored credentials. Returns true if we can connect; otherwise, false.
+        /// </summary>
+        public static bool PingAvaTax() => Client.Ping().authenticated ?? false;
 
-        ///<summary>Returns the tax estimate for this specific patient, procCode, and feeAmts.
-        ///Calls AvaTax/CreateTransaction: https://developer.avalara.com/api-reference/avatax/rest/v2/methods/Transactions/CreateTransaction/ but does
-        ///not save the transaction in the Avalara DB.</summary>
-        public static decimal GetEstimate(long codeNum, long patNum, double procFee, bool hasExceptions = false)
+        /// <summary>
+        /// Returns the tax estimate for this specific patient, procCode, and feeAmts.
+        /// Calls AvaTax/CreateTransaction: https://developer.avalara.com/api-reference/avatax/rest/v2/methods/Transactions/CreateTransaction/ but does
+        /// not save the transaction in the Avalara DB.
+        /// </summary>
+        public static decimal GetEstimate(long procedureCodeId, long patientId, double procedureFee, bool hasExceptions = false)
         {
-            if (!IsTaxable(patNum))
-            {
-                return 0;
-            }
-            ProcedureCode procCode = ProcedureCodes.GetProcCode(codeNum);
+            if (!IsTaxable(patientId)) return 0;
+            
+            var procedureCode = ProcedureCodes.GetProcCode(procedureCodeId);
             try
             {
-                TransactionBuilder builder = SetUpTransaction(DocumentType.SalesOrder, patNum);//Sales Order is AvaTax's way of getting an estimate
-                builder.WithLine((decimal)procFee, 1, GetTaxOverrideIfNeeded(Patients.GetPat(patNum), procCode), procCode.Descript, procCode.ProcCode);
+                TransactionBuilder builder = SetUpTransaction(DocumentType.SalesOrder, patientId);//Sales Order is AvaTax's way of getting an estimate
+
+                builder.WithLine((decimal)procedureFee, 1, GetTaxOverrideIfNeeded(Patients.GetPat(patientId), procedureCode), procedureCode.Descript, procedureCode.ProcCode);
+
                 TransactionModel result = Client.CreateTransaction("Lines", builder.GetCreateTransactionModel());
                 return result.totalTax.Value;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Logger.Write(LogLevel.Error, $"Error getting estimate from Avatax for PatNum: {patNum}");
+                Logger.Write(LogLevel.Error, $"Error getting estimate from Avatax for PatNum: {patientId}");
                 if (hasExceptions)
                 {
-                    throw ex;//Loses call stack, but everywhere that catches this only cares about the message.
+                    throw exception;
                 }
-                //For now we just enter $0 because we don't have any proc or adjustment to attach this to, and we already have logging for errors
+
+                // For now we just enter $0 because we don't have any proc or adjustment to attach this to, and we already have logging for errors.
                 return 0;
             }
         }

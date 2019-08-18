@@ -28,44 +28,5 @@ namespace OpenDentBusiness
             }
             return ws;
         }
-
-        ///<summary>The proxy's working directory.</summary>
-        public static string SendAndReceiveUpdateRequestXml()
-        {
-            List<string> listProgramsEnabled = Programs.GetWhere(x => x.Enabled && !string.IsNullOrWhiteSpace(x.ProgName))
-                .Select(x => x.ProgName).ToList();
-            //prepare the xml document to send--------------------------------------------------------------------------------------
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
-            settings.IndentChars = ("    ");
-            StringBuilder strbuild = new StringBuilder();
-            using (XmlWriter writer = XmlWriter.Create(strbuild, settings))
-            {
-                writer.WriteStartElement("UpdateRequest");
-                writer.WriteStartElement("RegistrationKey");
-                writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
-                writer.WriteEndElement();
-                writer.WriteStartElement("PracticeTitle");
-                writer.WriteString(Preference.GetString(PreferenceName.PracticeTitle));
-                writer.WriteEndElement();
-                writer.WriteStartElement("PracticePhone");
-                writer.WriteString(Preference.GetString(PreferenceName.PracticePhone));
-                writer.WriteEndElement();
-                writer.WriteStartElement("ProgramVersion");
-                writer.WriteString(Preference.GetString(PreferenceName.ProgramVersion));
-                writer.WriteEndElement();
-                writer.WriteStartElement("ClinicCount");
-                writer.WriteString(Preferences.HasClinicsEnabled ? Clinics.GetCount(true).ToString() : "0");
-                writer.WriteEndElement();
-                writer.WriteStartElement("ListProgramsEnabled");
-                new XmlSerializer(typeof(List<string>)).Serialize(writer, listProgramsEnabled);
-                writer.WriteEndElement();
-                writer.WriteStartElement("DateFormat");
-                writer.WriteString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
-                writer.WriteEndElement();
-                writer.WriteEndElement();//UpdateRequest
-            }
-            return GetWebServiceInstance().RequestUpdate(strbuild.ToString());
-        }
     }
 }

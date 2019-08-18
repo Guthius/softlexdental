@@ -5,8 +5,9 @@ namespace OpenDentBusiness.WebTypes.WebForms
 {
     public class WebForms_Preferences
     {
-
-        /// <summary>Attempts to set preferences on web forms server using the currently saved connection url, or urlOverride if specified.</summary>
+        /// <summary>
+        /// Attempts to set preferences on web forms server using the currently saved connection url, or urlOverride if specified.
+        /// </summary>
         public static bool SetPreferences(WebForms_Preference pref, string regKey = null, string urlOverride = null)
         {
             bool retVal = false;
@@ -31,9 +32,6 @@ namespace OpenDentBusiness.WebTypes.WebForms
             return retVal;
         }
 
-        /// <summary></summary>
-        /// <param name="regKey"></param>
-        /// <returns></returns>
         public static bool TryGetPreference(out WebForms_Preference pref, string regKey = null)
         {
             pref = new WebForms_Preference();

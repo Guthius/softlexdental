@@ -1,19 +1,15 @@
 ﻿using CodeBase;
 using Newtonsoft.Json;
-using OpenDentBusiness.WebTypes;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using WebServiceSerializer;
 
-namespace OpenDentBusiness {
-	public class PaySimple:WebBase {
+namespace OpenDentBusiness
+{
+    public class PaySimple {
 
 		public class PropertyDescs {
 			public const string PaySimpleApiUserName="PaySimple API User Name";
