@@ -90,11 +90,22 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="MySql.Data, Version=6.10.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.10.9\lib\net452\MySql.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -133,7 +144,6 @@
     <Compile Include="UnitTests\InstrospectionTests.cs" />
     <Compile Include="UnitTests\TimeCardRulesTests.cs" />
     <Compile Include="UnitTests\RecurringChargesTests.cs" />
-    <Compile Include="UnitTests\aaTemplateTests.cs" />
     <Compile Include="UnitTests\AppointmentsTests.cs" />
     <Compile Include="UnitTests\CacheAbsTests.cs" />
     <Compile Include="UnitTests\InsPlansTests.cs" />
@@ -146,7 +156,6 @@
     <Compile Include="UnitTests\PaymentsTest.cs" />
     <Compile Include="UnitTests\ProceduresTests.cs" />
     <Compile Include="Misc\TestBase.cs" />
-    <Compile Include="CoreTypesT.cs" />
     <Compile Include="DatabaseTools.cs" />
     <Compile Include="FormUnitTests.cs">
       <SubType>Form</SubType>
@@ -177,6 +186,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

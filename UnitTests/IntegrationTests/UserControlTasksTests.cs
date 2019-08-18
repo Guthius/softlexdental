@@ -1,18 +1,14 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenDental;
+using OpenDentBusiness;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenDental;
-using OpenDental.UI;
-using OpenDentBusiness;
 using UnitTestsCore;
 
-namespace UnitTests.IntegrationTests {
-	[TestClass]
+namespace UnitTests.IntegrationTests
+{
+    [TestClass]
 	public class UserControlTasksTests:TestBase {
 		private TaskList _taskListParent;
 		private TaskList _taskListChild;
@@ -148,7 +144,7 @@ namespace UnitTests.IntegrationTests {
 		[TestMethod]
 		///<summary>Context menu right-click and select the "Mark Read" with TaskNewTrackedByUser preference turned off.</summary>
 		public void UserControlTasks_MarkRead() {
-			Prefs.UpdateBool(PreferenceName.TasksNewTrackedByUser,false);//TaskNewTrackedByUser=false;
+			Preference.Update(PreferenceName.TasksNewTrackedByUser,false);//TaskNewTrackedByUser=false;
 			_userControlTasksAccessor.Invoke("MarkRead",_task);
 			List<Signalod> listSignals=SignalodT.GetAllSignalods();
 			Assert.AreEqual(1,listSignals.Count);
@@ -161,7 +157,7 @@ namespace UnitTests.IntegrationTests {
 		[TestMethod]
 		///<summary>Context menu right-click and select the "Mark Read" with TaskNewTrackedByUser preference turned on.</summary>
 		public void UserControlTasks_MarkRead_TasksNewTrackedByUser() {
-			Prefs.UpdateBool(PreferenceName.TasksNewTrackedByUser,true);//TaskNewTrackedByUser=true;
+            Preference.Update(PreferenceName.TasksNewTrackedByUser,true);//TaskNewTrackedByUser=true;
 			TaskUnreads.SetUnread(Security.CurUser.UserNum,_task);//Set the task to unread for our user.
 			_userControlTasksAccessor.Invoke("MarkRead",_task);//TaskNewTrackedByUser=false;
 			List<Signalod> listSignals=SignalodT.GetAllSignalods();
@@ -174,7 +170,7 @@ namespace UnitTests.IntegrationTests {
 		[TestMethod]
 		///<summary>Context menu right-click and drill down in the "Set Priority" option, selecting one of the priority options.</summary>
 		public void UserControlTasks_menuTaskPriority_Click() {
-			Definition newDef=new Definition() { Id=5 };
+            Definition newDef = Definition.GetById(5);
 			_userControlTasksAccessor.Invoke("menuTaskPriority_Click",_task,newDef);
 			List<Signalod> listSignals=SignalodT.GetAllSignalods();
 			Assert.AreEqual(1,listSignals.Count);

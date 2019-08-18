@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using OpenDentBusiness;
+using System;
 using System.Reflection;
-using System.Text;
-using OpenDental;
-using OpenDentBusiness;
-using System.Windows.Forms;
-using CodeBase;
 
 namespace UnitTests
 {
@@ -17,36 +12,28 @@ namespace UnitTests
             Security.CurUser = Security.CurUser ?? new User();
             if (!isOracle)
             {
-                string command = "DROP DATABASE IF EXISTS " + TestBase.UnitTestDbName;
+                string command = ;
                 try
                 {
-                    DataCore.NonQ(command);
+                    DataConnection.ExecuteNonQuery("DROP DATABASE IF EXISTS " + TestBase.UnitTestDbName);
                 }
                 catch
                 {
                     throw new Exception("Database could not be dropped.  Please remove any remaining text files and try again.");
                 }
-                command = "CREATE DATABASE " + TestBase.UnitTestDbName;
-                DataCore.NonQ(command);
+
+                DataConnection.ExecuteNonQuery("CREATE DATABASE " + TestBase.UnitTestDbName);
                 UnitTestsCore.DatabaseTools.SetDbConnection(TestBase.UnitTestDbName, serverAddr, port, userName, password, false);
-                command = Properties.Resources.dump;
-                DataCore.NonQ(command);
+ 
+                DataConnection.ExecuteNonQuery(Properties.Resources.dump);
                 string toVersion = Assembly.GetAssembly(typeof(OpenDental.PrefL)).GetName().Version.ToString();
-                //MessageBox.Show(Application.ProductVersion+" - "+
-                //if (!PrefL.ConvertDB(true, toVersion, null, false))
-                //{
-                //    throw new Exception("Wrong version.");
-                //}
+
                 ProcedureCodes.TcodesClear();
-                //FormProcCodes.ImportProcCodes("", CDT.Class1.GetADAcodes(), "");//IF THIS LINE CRASHES:
-                                                                                //Go to Solution, Configuration Manager.  Exclude UnitTest project from build.
                 AutoCodes.SetToDefault();
                 ProcButtons.SetToDefault();
                 ProcedureCodes.ResetApptProcsQuickAdd();
-                //RefreshCache (might be missing a few)  Or, it might make more sense to do this as an entirely separate method when running.
                 ProcedureCodes.RefreshCache();
-                command = "UPDATE userod SET Password='qhd+xdy/iMpe3xcjbBmB6A==' WHERE UserNum=1";//sets Password to 'pass' for middle tier testing.
-                DataCore.NonQ(command);
+                DataConnection.ExecuteNonQuery("UPDATE userod SET Password='qhd+xdy/iMpe3xcjbBmB6A==' WHERE UserNum=1");
                 AddCdcrecCodes();
             }
             else
@@ -62,11 +49,12 @@ namespace UnitTests
             return "Fresh database loaded from sql dump.\r\n";
         }
 
-        ///<summary>Manually adds the few CDCREC codes necessary for the HL7 unit tests.</summary>
-        private static void AddCdcrecCodes()
+        /// <summary>
+        /// Manually adds the few CDCREC codes necessary for the HL7 unit tests.
+        /// </summary>
+        static void AddCdcrecCodes()
         {
-            string command = "SELECT COUNT(*) FROM cdcrec";
-            if (DataCore.GetScalar(command) == "0")
+            if (DataConnection.ExecuteLong("SELECT COUNT(*) FROM cdcrec") == 0)
             {
                 Cdcrecs.Insert(new Cdcrec()
                 {
@@ -74,6 +62,7 @@ namespace UnitTests
                     HeirarchicalCode = "R5",
                     Description = "WHITE"
                 });
+
                 Cdcrecs.Insert(new Cdcrec()
                 {
                     CdcrecCode = "2135-2",

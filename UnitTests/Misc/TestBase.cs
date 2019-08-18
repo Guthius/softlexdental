@@ -32,8 +32,10 @@ namespace UnitTests
             }
         }
 
-        /// <summary> TestBase.Initialize will be called before the ClassInitialize and TestInitialize methods specific to each class.
-        /// Do this first so that the time the Initialize and ClassInitialize methods take doesn't get counted in the test times. </summary>
+        /// <summary>
+        /// TestBase.Initialize will be called before the ClassInitialize and TestInitialize methods specific to each class.
+        /// Do this first so that the time the Initialize and ClassInitialize methods take doesn't get counted in the test times.
+        /// </summary>
         [AssemblyInitialize]
         public static void Initialize(TestContext context)
         {

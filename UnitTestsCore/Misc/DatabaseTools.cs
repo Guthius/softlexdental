@@ -10,11 +10,11 @@ namespace UnitTestsCore
         /// <summary>
         /// This function allows connecting to a specific server.
         /// </summary>
-        public static bool SetDbConnection(string dbName, string serverAddr, string port, string userName, string password, bool isOracle)
+        public static bool SetDbConnection(string dbName, string serverAddr, string port, string userName, string password)
         {
             try
             {
-                DataConnection.Configure(serverAddr, dbName, userName, password, true);
+                DataConnection.Configure(serverAddr, dbName, userName, password);
 
                 return true;
             }
@@ -66,9 +66,11 @@ namespace UnitTestsCore
 					DELETE FROM userweb;
 				";
 
-            DataCore.NonQ(command);
+            DataConnection.ExecuteNonQuery(command);
+
             Providers.RefreshCache();
             FeeScheds.RefreshCache();
+
             return "Database cleared of old data.\r\n";
         }
     }
