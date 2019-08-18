@@ -49,7 +49,7 @@ namespace OpenDentBusiness
             {
                 return false;
             }
-            return Db.GetLong("SELECT count(*) FROM ApptReminderRule WHERE TSPrior>0") > 0;
+            return DataConnection.ExecuteLong("SELECT count(*) FROM ApptReminderRule WHERE TSPrior>0") > 0;
         }
 
         /// <summary>

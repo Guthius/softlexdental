@@ -64,7 +64,7 @@ namespace OpenDental
             this.databaseComboBox.Name = "databaseComboBox";
             this.databaseComboBox.Size = new System.Drawing.Size(338, 23);
             this.databaseComboBox.TabIndex = 8;
-            this.databaseComboBox.DropDown += new System.EventHandler(this.databaseComboBox_DropDown);
+            this.databaseComboBox.DropDown += new System.EventHandler(this.DatabaseComboBox_DropDown);
             // 
             // computerNameComboBox
             // 
@@ -162,7 +162,7 @@ namespace OpenDental
             this.acceptButton.Size = new System.Drawing.Size(110, 30);
             this.acceptButton.TabIndex = 9;
             this.acceptButton.Text = "&OK";
-            this.acceptButton.Click += new System.EventHandler(this.acceptButton_Click);
+            this.acceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
             // 
             // FormChooseDatabase
             // 

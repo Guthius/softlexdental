@@ -3372,7 +3372,7 @@ namespace OpenDentBusiness
                         foreach (long clinicNumInvalid in listInvalidClinicNums)
                         {
                             command = "SELECT MAX(ItemOrder) FROM clinic";
-                            int itemOrd = Db.GetInt(command) + 1;
+                            int itemOrd = DataConnection.ExecuteInt(command) + 1;
                             Clinic missingClinic = new Clinic()
                             {
                                 ClinicNum = clinicNumInvalid,

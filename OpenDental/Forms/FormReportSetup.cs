@@ -242,7 +242,7 @@ namespace OpenDental {
 				changed=true;
 			}
       if(UpdateReportingServer()) {
-				ConnectionStore.ClearConnectionDictionary();
+				
         changed=true;
       }
 			if(changed) {

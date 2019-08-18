@@ -18,11 +18,11 @@ namespace OpenDentBusiness
             listCarrierNums.Add(carrierNum);
             List<InsEditLog> retVal = new List<InsEditLog>();
             string command = @"SELECT PlanNum FROM insplan WHERE PlanNum = " + POut.Long(planNum);
-            long insPlanNum = Db.GetLong(command);
+            long insPlanNum = DataConnection.ExecuteLong(command);
             command = @"SELECT CarrierNum FROM carrier WHERE CarrierNum IN (" + string.Join(",", listCarrierNums) + @")";
             listCarrierNums = Db.GetListLong(command);
             command = @"SELECT EmployerNum FROM employer WHERE EmployerNum=" + POut.Long(employerNum);
-            long empNum = Db.GetLong(command);
+            long empNum = DataConnection.ExecuteLong(command);
             List<string> listWhereOrs = new List<string>();
             if (insPlanNum > 0)
             {

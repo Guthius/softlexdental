@@ -26,7 +26,7 @@ namespace OpenDentBusiness
         ///<summary>Appends the passed in rawBase64 string to the RawBase64 column in the db for the UpdateFiles DocMiscType row.</summary>
         public static void AppendRawBase64ForUpdateFiles(string rawBase64)
         {
-            string command = "UPDATE documentmisc SET RawBase64=CONCAT(" + DbHelper.IfNull("RawBase64", "") + "," + DbHelper.ParamChar + "paramRawBase64) "
+            string command = "UPDATE documentmisc SET RawBase64=CONCAT(IFNULL(RawBase64, ''),@paramRawBase64) "
                 + "WHERE DocMiscType=" + POut.Int((int)DocumentMiscType.UpdateFiles);
             OdSqlParameter paramRawBase64 = new OdSqlParameter("paramRawBase64", OdDbType.Text, rawBase64);
             Db.NonQ(command, paramRawBase64);

@@ -261,7 +261,7 @@ namespace OpenDentBusiness
             long fSplitNum = paySplit.FSplitNum;
             if (paySplit.UnearnedType == 0)
             {//paySplit is pos allocation split, find negative income transfer split first
-                fSplitNum = Db.GetLong("SELECT FSplitNum FROM paysplit WHERE paysplit.SplitNum=" + POut.Long(paySplit.FSplitNum));
+                fSplitNum = DataConnection.ExecuteLong("SELECT FSplitNum FROM paysplit WHERE paysplit.SplitNum=" + POut.Long(paySplit.FSplitNum));
             }
             string command = "SELECT * FROM paysplit WHERE paysplit.SplitNum=" + POut.Long(fSplitNum);
             return Crud.PaySplitCrud.SelectOne(command);

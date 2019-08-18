@@ -4571,7 +4571,7 @@ namespace OpenDentBusiness
                     retval.Add(groupMaxPatNum);
                 }
                 command = "SELECT MAX(PatNum) FROM (SELECT PatNum FROM patient " + whereClause + "ORDER BY PatNum LIMIT " + groupNum + "," + numPerGroup + ") patNumGroup";
-                groupMaxPatNum = Db.GetLong(command);
+                groupMaxPatNum = DataConnection.ExecuteLong(command);
                 groupNum += numPerGroup;
             } while (groupMaxPatNum > 0);
             return retval;

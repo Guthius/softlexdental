@@ -3,13 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenDentBusiness
 {
-
-    ///<summary>This class is used to dynamically construct WHERE clauses for SQL queries.</summary>
+    /// <summary>
+    /// This class is used to dynamically construct WHERE clauses for SQL queries.
+    /// </summary>
     [Serializable]
     public class SQLWhere
     {
@@ -45,26 +44,6 @@ namespace OpenDentBusiness
             {
                 sqlParam._whereClause = (doTreatDtAsDate ? DbHelper.DtimeToDate(columnName) : columnName)
                     + " IN (" + string.Join(",", listValues.Select(x => POutObj(x, doTreatDtAsDate))) + ")";
-            }
-            return sqlParam;
-        }
-
-        ///<summary>Creates a NOT IN clause using the specified column and the specified values.</summary>
-        public static SQLWhere CreateNotIn<T>(string columnName, List<T> listValues, bool doTreatDtAsDate = false, string tableName = "")
-        {
-            if (!string.IsNullOrEmpty(tableName))
-            {
-                columnName = tableName.ToLower() + "." + columnName;
-            }
-            SQLWhere sqlParam = new SQLWhere();
-            if (listValues.Count == 0)
-            {
-                sqlParam._whereClause = " TRUE ";
-            }
-            else
-            {
-                sqlParam._whereClause = (doTreatDtAsDate ? DbHelper.DtimeToDate(columnName) : columnName)
-                    + " NOT IN (" + string.Join(",", listValues.Select(x => POutObj(x, doTreatDtAsDate))) + ")";
             }
             return sqlParam;
         }

@@ -79,10 +79,7 @@ namespace OpenDental
 
             CentralConnections.GetChooseDatabaseConnectionSettings(
                 out CentralConnectionCur,
-                out _,
-                out bool noShow,
-                out ListAdminCompNames,
-                out _);
+                out bool noShow);
 
             NoShow = noShow;
         }
@@ -92,12 +89,6 @@ namespace OpenDental
         /// </summary>
         void ChooseDatabaseView_Load(object sender, EventArgs e)
         {
-            var computerNames = CentralConnections.GetComputerNames();
-            foreach (var computerName in computerNames)
-            {
-                computerNameComboBox.Items.Add(computerName);
-            }
-
             ComputerName = CentralConnectionCur.ServerName;
             Database = CentralConnectionCur.DatabaseName;
             User = CentralConnectionCur.MySqlUser;
@@ -118,7 +109,7 @@ namespace OpenDental
         /// <summary>
         /// Loads the list of databases.
         /// </summary>
-        void databaseComboBox_DropDown(object sender, EventArgs e)
+        void DatabaseComboBox_DropDown(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
 
@@ -138,16 +129,12 @@ namespace OpenDental
         /// <summary>
         /// Try to connect with the current settings. If connection is succesful close the form.
         /// </summary>
-        void acceptButton_Click(object sender, EventArgs e)
+        void AcceptButton_Click(object sender, EventArgs e)
         {
             UpdateConnection();
             try
             {
-                CentralConnections.TryToConnect(
-                    CentralConnectionCur,
-                    "",
-                    NoShow,
-                    ListAdminCompNames);
+                CentralConnections.TryToConnect(CentralConnectionCur, NoShow);
             }
             catch (Exception ex)
             {

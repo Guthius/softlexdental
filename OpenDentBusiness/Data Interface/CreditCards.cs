@@ -481,7 +481,7 @@ namespace OpenDentBusiness{
 			if(!includeXWeb) {
 				command+=$"AND CCSource NOT IN({POut.Int((int)CreditCardSource.XWeb)},{POut.Int((int)CreditCardSource.XWebPortalLogin)}) ";
 			}
-			return Db.GetInt(command);
+			return DataConnection.ExecuteInt(command);
 		}
 
 		///<summary>Returns number of times token is in use.</summary>
@@ -490,7 +490,7 @@ namespace OpenDentBusiness{
 				return 0;
 			}
 			string command=$"SELECT COUNT(*) FROM creditcard WHERE PayConnectToken='{POut.String(token)}' ";
-			return Db.GetInt(command);
+			return DataConnection.ExecuteInt(command);
 		}
 
 		///<summary>Returns number of times token is in use.</summary>
@@ -502,7 +502,7 @@ namespace OpenDentBusiness{
 			if(!isAch) {
 				command+=$"AND CCSource!={POut.Int((int)CreditCardSource.PaySimpleACH)} ";
 			}
-			return Db.GetInt(command);
+			return DataConnection.ExecuteInt(command);
 		}
 
 		///<summary>Returns number of times token is in use.  Token was duplicated once and caused the wrong card to be charged.</summary>

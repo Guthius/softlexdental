@@ -112,25 +112,11 @@ namespace OpenDentBusiness
             return string.Join(separator, listQueries);
         }
 
-        /// <summary>
-        /// In Oracle, union order by combos can only use ordinals and not column names. Values for ordinal start at 1.
-        /// </summary>
-        public static string UnionOrderBy(string colName, int ordinal) => colName;
-
-        /// <summary>
-        /// Helper for getting the correct "use index" syntax that will force a query to use the index passed in. 
-        /// tableName is required for Oracle and it CANNOT reference the schema name E.g. "customers.patient" 
-        /// fails, just pass in "patient".
-        /// </summary>
-        public static string UseIndex(string indexName, string tableName) => "USE INDEX(" + indexName + ")";
-
         public static string DateAddDay(string date, string days) => "ADDDATE(" + date + "," + days + ")";
 
         public static string DateAddMonth(string date, string months) => "ADDDATE(" + date + ",INTERVAL " + months + " MONTH)";
 
         public static string DateAddYear(string date, string years) => "ADDDATE(" + date + ",INTERVAL " + years + " YEAR)";
-
-        public static string DateAddSecond(string date, string seconds) => "ADDDATE(" + date + ",INTERVAL " + seconds + " SECOND)";
 
         /// <summary>
         /// Use the overload taking three arguments in order to take advantage of indexes on the column.
@@ -560,12 +546,6 @@ namespace OpenDentBusiness
             }
             return retval;
         }
-
-        /// <summary>
-        /// Helper for Oracle that will return equivalent of MySQL IFNULL().
-        /// Automatically adds single quotes around valWhenNull so that it is treated as text in the query.
-        /// </summary>
-        public static string IfNull(string expr, string valWhenNull) => IfNull(expr, valWhenNull, true);
 
         /// <summary>
         /// Helper for Oracle that will return equivalent of MySQL IFNULL().

@@ -36,8 +36,10 @@ namespace OpenDentBusiness
 
             int previousNum = Convert.ToInt32(table.Rows[0][0].ToString());
 
-            int result = 
-                Db.NonQ32(
+            table.Dispose();
+
+            var result =
+                DataConnection.ExecuteNonQuery(
                     "UPDATE `preference` SET `ValueString` = '" + (previousNum + 1) + "' " +
                     "WHERE `PrefName` = 'TrojanExpressCollectPreviousFileNumber' " +
                     "AND `ValueString` = '" + previousNum + "'");
@@ -46,7 +48,7 @@ namespace OpenDentBusiness
             {
                 previousNum++;
 
-                result = Db.NonQ32(
+                DataConnection.ExecuteNonQuery(
                     "UPDATE `preference` SET `ValueString` = '" + (previousNum + 1) + "' " +
                     "WHERE `PrefName` = 'TrojanExpressCollectPreviousFileNumber' " +
                     "AND `ValueString`  ='" + previousNum + "'");

@@ -219,7 +219,7 @@ namespace OpenDentBusiness
         {
             string command = "SELECT MAX(ShowInTerminal) FROM sheet WHERE PatNum=" + POut.Long(patNum)
                 + " AND IsDeleted=0";
-            return Db.GetInt(command);
+            return DataConnection.ExecuteInt(command);
         }
 
         ///<summary>Trys to set the out params with sheet fields valus for LName,FName,DOB,PhoneNumbers, and email. Used when importing CEMT patient transfers.</summary>

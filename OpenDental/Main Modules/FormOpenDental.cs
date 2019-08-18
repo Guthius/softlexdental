@@ -579,11 +579,8 @@ namespace OpenDental
                         {
                             CentralConnections.TryToConnect(
                                 formChooseDatabase.CentralConnectionCur,
-                                "",
                                 formChooseDatabase.NoShow,
-                                formChooseDatabase.ListAdminCompNames,
-                                (CommandLineArgs.Length != 0),
-                                false);
+                                CommandLineArgs.Length != 0);
                         }
                         catch (Exception)
                         {

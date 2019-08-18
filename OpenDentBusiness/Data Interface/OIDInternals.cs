@@ -132,7 +132,7 @@ namespace OpenDentBusiness
 
                 command = "INSERT INTO oidinternal (IDType,IDRoot) "
                 + "VALUES('" + ((IdentifierType)i).ToString() + "','')";
-                Db.NonQ32(command);
+                DataConnection.ExecuteNonQuery(command);
 
             }
         }

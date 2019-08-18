@@ -314,7 +314,7 @@ namespace OpenDentBusiness
             //Some extremely large tables get chopped up into huge batches (e.g. 645,000 items) and Open Dental starts to run out of memory when creating
             //each individual insert statement.  The easiest solution is to arbitrarily limit the batches to a maximum number of items.  This does not
             //affect the time it takes to execute all of these insert statements because we are going to run them all in parallel regardless.
-            _rowsPerBatch = Math.Min(Db.GetInt(command), 25000);
+            _rowsPerBatch = Math.Min(DataConnection.ExecuteInt(command), 25000);
         }
 
         ///<summary>Creates actions that load batches of data into the queue for inserting by the insert threads and runs them with

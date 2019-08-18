@@ -130,7 +130,7 @@ namespace OpenDentBusiness.Crud
 				+    DbHelper.ParamChar+"paramAdjNote,"
 				+    POut.Date  (adjustment.ProcDate)+","
 				+    POut.Long  (adjustment.ProcNum)+","
-				+    DbHelper.Now()+","
+				+    "NOW(),"
 				+    POut.Long  (adjustment.ClinicNum)+","
 				+    POut.Long  (adjustment.StatementNum)+","
 				+    POut.Long  (adjustment.SecUserNumEntry)+","
