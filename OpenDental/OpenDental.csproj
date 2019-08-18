@@ -609,6 +609,7 @@
     <Compile Include="Main Modules\FormOpenDental.Designer.cs">
       <DependentUpon>FormOpenDental.cs</DependentUpon>
     </Compile>
+    <Compile Include="Misc\Aggregate.cs" />
     <Compile Include="Misc\WebServiceRequest.cs" />
     <Compile Include="Module.cs">
       <SubType>UserControl</SubType>
@@ -4645,6 +4646,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UI\TopazWrapper.cs" />
+    <Compile Include="UI\ValidDate.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UI\ValidDouble.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="UI\Voice\FormMsgBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -7558,6 +7565,14 @@
       <DependentUpon>FormPrintPreview.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="UI\ValidDate.resx">
+      <DependentUpon>ValidDate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ValidDouble.resx">
+      <DependentUpon>ValidDouble.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\Voice\FormMsgBox.resx">
       <DependentUpon>FormMsgBox.cs</DependentUpon>
     </EmbeddedResource>
@@ -8853,10 +8868,6 @@
       <Project>{18F7BC78-4B99-48D3-A1F1-0D13A63E3CF9}</Project>
       <Name>xCodeBase</Name>
       <Aliases>global</Aliases>
-    </ProjectReference>
-    <ProjectReference Include="..\ODR\xODR.csproj">
-      <Project>{84688345-BB6A-4F2F-8672-A82B52FD433B}</Project>
-      <Name>xODR</Name>
     </ProjectReference>
     <ProjectReference Include="..\OpenDental.Security\OpenDental.Security.csproj">
       <Project>{a2ad6ad8-2a7b-41b1-8b1f-df8618ce4263}</Project>
