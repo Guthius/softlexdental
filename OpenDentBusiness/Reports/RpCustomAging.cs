@@ -160,7 +160,7 @@ namespace OpenDentBusiness
                 command += " AND BalTotal < 0 ";
             }
             command += " ORDER BY pat.LName, pat.FName ";
-            DataTable table = Db.GetTable(command);
+            DataTable table = DataConnection.GetTable(command);
             List<AgingPat> retVal = new List<AgingPat>();
             foreach (DataRow row in table.Rows)
             {

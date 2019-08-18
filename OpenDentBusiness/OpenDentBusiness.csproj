@@ -1145,7 +1145,6 @@
     <Compile Include="Reports\RpNewPatients.cs" />
     <Compile Include="Reports\RpOutstandingIns.cs" />
     <Compile Include="Reports\RpPayPlan.cs" />
-    <Compile Include="Reports\ReportsComplex.cs" />
     <Compile Include="Reports\RpPaySheet.cs" />
     <Compile Include="Reports\RpProcNote.cs" />
     <Compile Include="Reports\RpProcCodes.cs" />
@@ -1444,7 +1443,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Reports\Reports.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="SheetFramework\SheetEnums.cs">
       <SubType>Code</SubType>

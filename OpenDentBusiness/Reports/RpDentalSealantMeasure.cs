@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Reflection;
+﻿using System.Data;
 
 namespace OpenDentBusiness
 {
@@ -133,8 +130,7 @@ namespace OpenDentBusiness
 				)ColC ON ColC.NumeratorPat = ColA.DenominatorPat
 				INNER JOIN provider ON provider.ProvNum = ColA.ProvNum
 				GROUP BY LName";
-            return ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
-
+            return DataConnection.GetTable(command);
         }
     }
 }

@@ -332,7 +332,7 @@ namespace OpenDentBusiness
                 //run historical aging on all patients based on the date entered.
                 command = "SELECT SUM(Bal_0_30+Bal_31_60+Bal_61_90+BalOver90),SUM(InsEst) "
                     + "FROM (" + Ledgers.GetAgingQueryString(dateLastOfMonth, isHistoric: true) + ") guarBals";
-                DataTable table = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
+                DataTable table = DataConnection.GetTable(command);
 #if DEBUG
                 stopWatch.Stop();
                 _elapsedTimeAR += "Aging using Ledgers.GetHistoricAgingQueryString() #" + i + " : " + stopWatch.Elapsed.ToString() + "\r\n";
@@ -344,7 +344,7 @@ namespace OpenDentBusiness
                 DashboardARs.Insert(dash);//save it to the db for later. 
                 if (!string.IsNullOrEmpty(Preferences.ReportingServer.Server))
                 { //only attempt to insert into the reporting server if the reporting server is set up.
-                    ReportsComplex.RunFuncOnReportServer(() => (DashboardARs.Insert(dash)));//save it to the db for later.
+                    DashboardARs.Insert(dash);//save it to the db for later.
                 }
                 listRet.Add(dash); //and also use it now.
             }
@@ -611,12 +611,6 @@ namespace OpenDentBusiness
             return retVal;
         }
 
-        #region OpenDentalGraph Queries
-        public static DataTable GetTable(string command, bool doRunOnReportServer = true)
-        {
-            return ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command), doRunOnReportServer);
-        }
-        #endregion
-
+        public static DataTable GetTable(string command, bool doRunOnReportServer = true) => DataConnection.GetTable(command);
     }
 }

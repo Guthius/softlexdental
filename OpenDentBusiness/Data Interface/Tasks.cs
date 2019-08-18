@@ -113,9 +113,7 @@ namespace OpenDentBusiness
             DateTime dateCreatedTo = PIn.Date(taskDateCreatedTo);//will be DateTime.MinValue if not set, i.e. if " "
             DateTime dateCompletedFrom = PIn.Date(taskDateCompletedFrom);//will be DateTime.MinValue if not set, i.e. if " "
             DateTime dateCompletedTo = PIn.Date(taskDateCompletedTo);//will be DateTime.MinValue if not set, i.e. if " "
-            List<long> listSearchTaskNums = ReportsComplex.RunFuncOnReportServer(() => GetTasksNumsForSearch(userNum, listTaskListNums, listTaskNums, dateCreatedFrom,
-                      dateCreatedTo, dateCompletedFrom, dateCompletedTo, taskDescription, taskPriorityNum, patNum, doIncludeTaskNote, doIncludeCompleted, limit),
-                doRunOnReportServer);
+            List<long> listSearchTaskNums = GetTasksNumsForSearch(userNum, listTaskListNums, listTaskNums, dateCreatedFrom, dateCreatedTo, dateCompletedFrom, dateCompletedTo, taskDescription, taskPriorityNum, patNum, doIncludeTaskNote, doIncludeCompleted, limit);
             DataTable table = new DataTable();
             table.Columns.Add(new DataColumn("description"));
             table.Columns.Add(new DataColumn("note"));
@@ -130,7 +128,7 @@ namespace OpenDentBusiness
                 return table;//empty table with correct structure.
             }
             //listTaskNums contains too many items. Tasks found from matching task notes must be filtered too. (This prevents a costly join in the query.)
-            List<Task> listTasks = ReportsComplex.RunFuncOnReportServer(() => Tasks.GetMany(listSearchTaskNums), doRunOnReportServer)//All tasks for the notes and tasks
+            List<Task> listTasks = GetMany(listSearchTaskNums)//All tasks for the notes and tasks
                 .Where(x => listTaskListNums.Count == 0 || listTaskListNums.Contains(x.TaskListNum))//filter by TaskListNum, if neccesary
                 .Where(x => taskPriorityNum == 0 || taskPriorityNum == x.PriorityDefNum)//filter by priority, if neccesary
                 .Where(x => patNum == 0 || (x.ObjectType == TaskObjectType.Patient && x.KeyNum == patNum))//filter by patnum, if neccesary
@@ -141,12 +139,12 @@ namespace OpenDentBusiness
             if (doIncludeTaskNote)
             {
                 //All notes for the tasks.	(Ordered by dateTime)		
-                listTaskNotes = ReportsComplex.RunFuncOnReportServer(() => TaskNotes.RefreshForTasks(listSearchTaskNums), doRunOnReportServer);
+                listTaskNotes = TaskNotes.RefreshForTasks(listSearchTaskNums);
             }
             List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.ProgNoteColors);
             int textColor = Defs.GetColor(DefinitionCategory.ProgNoteColors, listDefs[18].Id, Color.White).ToArgb();//18="Patient Note Text"
             int textCompletedColor = Defs.GetColor(DefinitionCategory.ProgNoteColors, listDefs[20].Id,Color.Black).ToArgb();//20="Completed Pt Note Text"
-            List<TaskList> listTaskLists = ReportsComplex.RunFuncOnReportServer(() => TaskLists.GetMany(listTaskListNums), doRunOnReportServer);
+            List<TaskList> listTaskLists = TaskLists.GetMany(listTaskListNums);
             string txt;
             DataRow row;
             foreach (Task taskCur in listTasks)
@@ -381,7 +379,7 @@ namespace OpenDentBusiness
                 command += TaskLists.BuildFilterJoins(clinicNum);
                 command += " WHERE TRUE " + TaskLists.BuildFilterWhereClause(userNum, clinicNum, Clinics.GetClinic(clinicNum)?.Region ?? 0);
             }
-            List<Task> ret = TableToList(Db.GetTable(command));//This is how we set the IsUnread column.
+            List<Task> ret = TableToList(DataConnection.GetTable(command));//This is how we set the IsUnread column.
             return ret;
         }
 
@@ -397,7 +395,7 @@ namespace OpenDentBusiness
 				FROM appointment 
 				INNER JOIN patient ON patient.PatNum=appointment.PatNum 
 				WHERE appointment.AptNum IN (" + string.Join(",", listPatApts) + ")";
-            DataTable table = Db.GetTable(command);
+            DataTable table = DataConnection.GetTable(command);
             Dictionary<long, string> dictTaskString = new Dictionary<long, string>();
             foreach (DataRow aptRow in table.Rows)
             {
@@ -486,7 +484,7 @@ namespace OpenDentBusiness
             command += BuildFilterWhereClause(userNum, globalFilterType, filterFkey);
             command += "GROUP BY task.TaskNum "//in case there are duplicate unreads
                 + "ORDER BY task.DateTimeEntry";
-            DataTable table = Db.GetTable(command);
+            DataTable table = DataConnection.GetTable(command);
             List<DataRow> listRows = new List<DataRow>();
             for (int i = 0; i < table.Rows.Count; i++)
             {

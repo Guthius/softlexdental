@@ -361,7 +361,7 @@ namespace OpenDentBusiness
         public static List<long> GetNumsByDescription(string descript, bool doRunOnReportServer)
         {
             string command = "SELECT TaskListNum FROM tasklist WHERE Descript LIKE '%" + POut.String(descript) + "%'";
-            return ReportsComplex.RunFuncOnReportServer(() => Db.GetListLong(command), doRunOnReportServer);
+            return Db.GetListLong(command);
         }
 
         ///<summary>The table passed in can contain additional columns: "NewTaskCount", "ParentDesc1", "ParentDesc2".  These additional columns are used when getting a list of task lists for trunks.</summary>
@@ -456,19 +456,19 @@ namespace OpenDentBusiness
         public static void Delete(TaskList tlist)
         {
             string command = "SELECT COUNT(*) FROM tasklist WHERE Parent=" + POut.Long(tlist.TaskListNum);
-            DataTable table = Db.GetTable(command);
+            DataTable table = DataConnection.GetTable(command);
             if (table.Rows[0][0].ToString() != "0")
             {
                 throw new Exception(Lans.g("TaskLists", "Not allowed to delete task list because it still has child lists attached."));
             }
             command = "SELECT COUNT(*) FROM task WHERE TaskListNum=" + POut.Long(tlist.TaskListNum);
-            table = Db.GetTable(command);
+            table = DataConnection.GetTable(command);
             if (table.Rows[0][0].ToString() != "0")
             {
                 throw new Exception(Lans.g("TaskLists", "Not allowed to delete task list because it still has child tasks attached."));
             }
             command = "SELECT COUNT(*) FROM userod WHERE TaskListInBox=" + POut.Long(tlist.TaskListNum);
-            table = Db.GetTable(command);
+            table = DataConnection.GetTable(command);
             if (table.Rows[0][0].ToString() != "0")
             {
                 throw new Exception(Lans.g("TaskLists", "Not allowed to delete task list because it is attached to a user inbox."));

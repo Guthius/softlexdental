@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Reflection;
+﻿using System.Data;
 
 namespace OpenDentBusiness
 {
     public class RpInsCo
     {
-        ///<summary></summary>
         public static DataTable GetInsCoTable(string carrier)
         {
             string query = "SELECT carrier.CarrierName"
@@ -17,13 +13,10 @@ namespace OpenDentBusiness
                 + "WHERE inssub.Subscriber=patient.PatNum "
                 + "AND inssub.PlanNum=insplan.PlanNum "
                 + "AND EXISTS (SELECT * FROM patplan WHERE patplan.InsSubNum=inssub.InsSubNum) "
-                //+"AND insplan.PlanNum=patplan.PlanNum "
-                //+"AND patplan.PatNum=patient.PatNum "
-                //+"AND patplan.Ordinal=1 "
                 + "AND carrier.CarrierNum=insplan.CarrierNum "
                 + "AND carrier.CarrierName LIKE '" + POut.String(carrier) + "%' "
                 + "ORDER BY carrier.CarrierName,patient.LName";
-            return ReportsComplex.RunFuncOnReportServer(() => ReportsComplex.GetTable(query));
+            return DataConnection.GetTable(query);
         }
     }
 }

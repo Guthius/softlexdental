@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Reflection;
-using System.Text;
 using System.Linq;
 
 namespace OpenDentBusiness
@@ -31,7 +29,7 @@ namespace OpenDentBusiness
             }
             string whereClin = "";
             //reports should no longer use the cache
-            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Preference.HasClinicsEnabledNoCache);
+            bool hasClinicsEnabled = Preference.HasClinicsEnabledNoCache;
             if (hasClinicsEnabled)
             {
                 whereClin += " AND claimproc.ClinicNum IN(";
@@ -106,7 +104,7 @@ namespace OpenDentBusiness
             {
                 queryIns = DbHelper.LimitOrderBy(queryIns, 0);
             }
-            return ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(queryIns));
+            return DataConnection.GetTable(queryIns);
         }
 
         ///<summary>If not using clinics, or for all clinics with clinics enabled, supply an empty list of clinicNums.  If the user is restricted, for all
@@ -115,7 +113,7 @@ namespace OpenDentBusiness
             bool hasAllProvs, bool hasAllClinics, bool hasPatientTypes, bool isGroupedByPatient, bool isUnearnedIncluded, bool doShowProvSeparate)
         {
             //reports should no longer use the cache
-            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Preference.HasClinicsEnabledNoCache);
+            bool hasClinicsEnabled = Preference.HasClinicsEnabledNoCache;
             //patient payments-----------------------------------------------------------------------------------------
             //the selected columns have to remain in this order due to the way the report complex populates the returned sheet
             string queryPat = "SELECT payment.PayDate DatePay,"
@@ -169,7 +167,7 @@ namespace OpenDentBusiness
             {
                 queryPat = DbHelper.LimitOrderBy(queryPat, 0);
             }
-            return ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(queryPat));
+            return DataConnection.GetTable(queryPat);
         }
     }
 }

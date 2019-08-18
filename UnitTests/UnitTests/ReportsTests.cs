@@ -57,14 +57,14 @@ namespace UnitTests
                 //Next, make sure that user low cannot create the new table.  Required to use the Middle Tier otherwise user low is ignored.
 
                 //User low should be able to run SELECT and SHOW commands.
-                if (Reports.GetTable(tempTableShowQuery).Rows.Count != 0)
+                if (DataConnection.GetTable(tempTableShowQuery).Rows.Count != 0)
                 {//Should have been dropped via root user above.
                     throw new ApplicationException("Temporary table was not dropped correctly.");
                 }
                 //Reports.GetTable() should throw an exception due to the lack of the CREATE permission.  Swallow it.
-                ODException.SwallowAnyException(() => Reports.GetTable(tempTableCreateQuery));
+                ODException.SwallowAnyException(() => DataConnection.GetTable(tempTableCreateQuery));
                 //User low should not have been able to create the table.
-                if (Reports.GetTable(tempTableShowQuery).Rows.Count != 0)
+                if (DataConnection.GetTable(tempTableShowQuery).Rows.Count != 0)
                 {
                     throw new ApplicationException("User low was able to create a table.");
                 }

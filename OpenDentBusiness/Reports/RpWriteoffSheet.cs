@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Reflection;
 
 namespace OpenDentBusiness
 {
     public class RpWriteoffSheet
     {
         ///<summary>If not using clinics then supply an empty list of clinicNums.</summary>
-        public static DataTable GetWriteoffTable(DateTime dateStart, DateTime dateEnd, List<long> listProvNums, List<long> listClinicNums
-            , bool hasAllClinics, bool hasClinicsEnabled, PPOWriteoffDateCalc writeoffPayType)
+        public static DataTable GetWriteoffTable(DateTime dateStart, DateTime dateEnd, List<long> listProvNums, List<long> listClinicNums, bool hasAllClinics, bool hasClinicsEnabled, PPOWriteoffDateCalc writeoffPayType)
         {
             string whereProv = "";
             if (listProvNums.Count > 0)
@@ -102,7 +100,7 @@ namespace OpenDentBusiness
                     + "GROUP BY claimproc.ProvNum,claimsnapshot.DateTEntry,claimproc.ClinicNum,claimproc.PatNum "
                     + "ORDER BY claimsnapshot.DateTEntry,claimproc.PatNum";
             }
-            return ReportsComplex.RunFuncOnReportServer(() => ReportsComplex.GetTable(query));
+            return DataConnection.GetTable(query);
         }
     }
 }

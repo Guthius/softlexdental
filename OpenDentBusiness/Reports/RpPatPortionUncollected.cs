@@ -1,12 +1,8 @@
-﻿using CodeBase;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Diagnostics;
+using System.Linq;
 
 namespace OpenDentBusiness
 {
@@ -19,7 +15,7 @@ namespace OpenDentBusiness
             Stopwatch s = new Stopwatch();
             s.Start();
 #endif
-            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Preference.HasClinicsEnabledNoCache);
+            bool hasClinicsEnabled = Preference.HasClinicsEnabledNoCache;
             string query = "SELECT procedurelog.ProcDate,CONCAT(patient.LName,', ',patient.FName)AS Patient, procedurecode.AbbrDesc, "
                 + "procedurelog.ProcFee*(procedurelog.BaseUnits+procedurelog.UnitQty)-IFNULL(cp.CapWriteOff,0) Fee,"
                 + "IFNULL((procedurelog.ProcFee*(procedurelog.BaseUnits+procedurelog.UnitQty))-IFNULL(cp.CapWriteOff,0)-IFNULL(cp.InsAmt,0)"
@@ -76,7 +72,7 @@ namespace OpenDentBusiness
                 query += "AND procedurelog.ClinicNum IN(" + string.Join(",", listClinicNums.Select(x => POut.Long(x))) + ") ";
             }
             query += "ORDER BY procedurelog.ProcDate,patient.LName,patient.FName,procedurecode.ProcCode";
-            DataTable table = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(query));
+            DataTable table = DataConnection.GetTable(query);
 #if DEBUG
             s.Stop();
             Console.WriteLine("Total time to generate report with " + string.Format("{0:#,##0.##}", table.Rows.Count) + " rows: "

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Reflection;
 
 namespace OpenDentBusiness
 {
@@ -209,7 +208,7 @@ namespace OpenDentBusiness
                         + "ORDER BY payplancharge.ChargeDate ";
                     break;
             }
-            return ReportsComplex.RunFuncOnReportServer(() => ReportsComplex.GetTable(query));
+            return DataConnection.GetTable(query);
         }
     }
 }

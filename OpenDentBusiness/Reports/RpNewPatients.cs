@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Reflection;
 
 namespace OpenDentBusiness
 {
     public class RpNewPatients
     {
-
         public static DataTable GetNewPatients(DateTime dateFrom, DateTime dateTo, List<long> listProvNums, bool includeAddress, bool excludeNoProd, bool hasAllProvs)
         {
             string query = @"SET @pos=0;
@@ -48,7 +46,7 @@ namespace OpenDentBusiness
                 query += " HAVING $HowMuch > 0";
             }
             query += " ORDER BY dateFirstProc,patient.LName,patient.FName) result";
-            return ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(query));
+            return DataConnection.GetTable(query);
         }
     }
 }

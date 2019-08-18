@@ -288,7 +288,7 @@ namespace OpenDentalGraph.Cache {
 			if(filter.UseProvFilter && filter.ProvNum==0) {
 				return new List<T>();
 			}
-			return DashboardQueries.GetTable(GetCommand(filter),UseReportServer)
+			return DataConnection.GetTable(GetCommand(filter))
 				.AsEnumerable()
 				.Select(x => GetInstanceFromDataRow(x))
 				.ToList();

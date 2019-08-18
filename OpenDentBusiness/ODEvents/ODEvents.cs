@@ -28,11 +28,6 @@ namespace OpenDentBusiness {
 		public void FireEvent(ODEventArgs e) { Fired?.Invoke(e); }
 	}
 
-	public class BugSubmissionEvent {
-		public static event ODEventHandler Fired;
-		public static void Fire(ODEventType odEventType,object tag) { Fired?.Invoke(new ODEventArgs(odEventType,tag)); }
-	}
-
 	public class ClearinghouseEvent:IODEvent {
 		public static event ODEventHandler Fired;
 		public static void Fire(ODEventType odEventType,object tag) { Fired?.Invoke(new ODEventArgs(odEventType,tag)); }
@@ -64,19 +59,9 @@ namespace OpenDentBusiness {
 		public static void Fire(ODEventType odEventType,object tag) { Fired?.Invoke(new ODEventArgs(odEventType,tag)); }
 	}
 
-	public class DXCValidationEvent {
-		public static event ODEventHandler Fired;
-		public static void Fire(ODEventType odEventType,object tag=null) { Fired?.Invoke(new ODEventArgs(odEventType,tag)); }
-	}
-
 	public class EmailSaveEvent {
 		public static event ODEventHandler Fired;
 		public static void Fire(ODEventType odEventType,object tag=null) { Fired?.Invoke(new ODEventArgs(odEventType,tag)); }
-	}
-
-	public class EServicesEvent {
-		public static event ODEventHandler Fired;
-		public static void Fire(ODEventType odEventType,object tag) { Fired?.Invoke(new ODEventArgs(odEventType,tag)); }
 	}
 
 	public class EtransEvent {
@@ -96,11 +81,6 @@ namespace OpenDentBusiness {
 	}
 
 	public class InsuranceVerificationEvent {
-		public static event ODEventHandler Fired;
-		public static void Fire(ODEventType odEventType,object tag) { Fired?.Invoke(new ODEventArgs(odEventType,tag)); }
-	}
-
-	public class JobEvent {
 		public static event ODEventHandler Fired;
 		public static void Fire(ODEventType odEventType,object tag) { Fired?.Invoke(new ODEventArgs(odEventType,tag)); }
 	}

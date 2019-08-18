@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Reflection;
-using System.Text;
 using System.Linq;
 
 namespace OpenDentBusiness
@@ -25,13 +22,12 @@ namespace OpenDentBusiness
             List<ProcedureCode> listProcCodes = new List<ProcedureCode>();
             if (isCategories)
             {
-                Definition[][] arrayDefs = ReportsComplex.RunFuncOnReportServer(() => Defs.GetArrayShortNoCache());
-                listProcCodes = ReportsComplex.RunFuncOnReportServer(() => ProcedureCodes.GetProcList(arrayDefs))
-                    .OrderBy(x => x.ProcCat).ThenBy(x => x.ProcCode).ToList(); //Ordered by category
+                Definition[][] arrayDefs = Defs.GetArrayShortNoCache();
+                listProcCodes = ProcedureCodes.GetProcList(arrayDefs).OrderBy(x => x.ProcCat).ThenBy(x => x.ProcCode).ToList(); //Ordered by category
             }
             else
             {
-                listProcCodes = ReportsComplex.RunFuncOnReportServer(() => ProcedureCodes.GetAllCodes()); //Ordered by ProcCode, used for the non-category version of the report if they want blanks.
+                listProcCodes = ProcedureCodes.GetAllCodes(); //Ordered by ProcCode, used for the non-category version of the report if they want blanks.
             }
             bool isFound;
             List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.ProcCodeCats);
@@ -110,7 +106,7 @@ namespace OpenDentBusiness
                 + "AND fee.ClinicNum='" + POut.Long(clinicNum) + "' "
                 + "AND fee.ProvNum='" + POut.Long(provNum) + "' "
                 + "ORDER BY procedurecode.ProcCode";
-            return ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
+            return DataConnection.GetTable(command);
         }
     }
 }

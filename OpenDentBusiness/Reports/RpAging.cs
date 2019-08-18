@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenDentBusiness
 {
@@ -13,7 +10,7 @@ namespace OpenDentBusiness
         public static DataTable GetAgingTable(RpAgingParamObject rpo)
         {
             string queryAg = GetQueryString(rpo);
-            return ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(queryAg));
+            return DataConnection.GetTable(queryAg);
         }
 
         public static string GetQueryString(RpAgingParamObject rpo)
@@ -26,7 +23,7 @@ namespace OpenDentBusiness
             { //get patNum for insAgingReport only
                 queryAg += "patient.PatNum, ";
             }
-            if (ReportsComplex.RunFuncOnReportServer(() => (Preference.GetBoolNoCache(PreferenceName.ReportsShowPatNum))))
+            if (Preference.GetBoolNoCache(PreferenceName.ReportsShowPatNum))
             {
                 queryAg += DbHelper.Concat("patient.PatNum", "' - '", "patient.LName", "', '", "patient.FName", "' '", "patient.MiddleI");
             }
@@ -41,9 +38,9 @@ namespace OpenDentBusiness
             //Must select "blankCol" for use with reportComplex to fix spacing of final column
             queryAg += (rpo.HasDateLastPay ? ",'' blankCol,guarAging.DateLastPay " : " ")
                 + "FROM ("
-                    + ReportsComplex.RunFuncOnReportServer(() => Ledgers.GetAgingQueryString(asOfDate: rpo.AsOfDate, isHistoric: rpo.IsHistoric,
+                    + Ledgers.GetAgingQueryString(asOfDate: rpo.AsOfDate, isHistoric: rpo.IsHistoric,
                          isInsPayWoCombined: rpo.IsInsPayWoCombined, hasDateLastPay: rpo.HasDateLastPay, isGroupByGuar: rpo.IsGroupByFam, isWoAged: rpo.IsWoAged,
-                         isForceAgeNegAdj: rpo.IsForceAgeNegAdj, doAgePatPayPlanPayments: rpo.DoAgePatPayPlanPayments))
+                         isForceAgeNegAdj: rpo.IsForceAgeNegAdj, doAgePatPayPlanPayments: rpo.DoAgePatPayPlanPayments)
                 + ") guarAging "
                 + "INNER JOIN patient ON patient.PatNum=guarAging.PatNum ";
             List<string> listWhereAnds = new List<string>();
@@ -98,7 +95,7 @@ namespace OpenDentBusiness
             {//if all provs is selected, list will be empty
                 listWhereAnds.Add("patient.PriProv IN (" + string.Join(",", rpo.ListProvNums.Select(x => POut.Long(x))) + ")");
             }
-            if (ReportsComplex.RunFuncOnReportServer(() => Preference.HasClinicsEnabledNoCache)) //if clinics enabled, at least one clinic will be selected
+            if (Preference.HasClinicsEnabledNoCache) //if clinics enabled, at least one clinic will be selected
             {
                 //listClin may contain "Unassigned" clinic with ClinicNum 0, in which case it will also be in the query string
                 listWhereAnds.Add("patient.ClinicNum IN (" + string.Join(",", rpo.ListClinicNums.Select(x => POut.Long(x))) + ")");
@@ -115,14 +112,10 @@ namespace OpenDentBusiness
 
     public enum AgeOfAccount
     {
-        ///<summary>0</summary>
-        Any,
-        ///<summary>1</summary>
-        Over30,
-        ///<summary>2</summary>
-        Over60,
-        ///<summary>3</summary>
-        Over90,
+        Any = 0,
+        Over30 = 1,
+        Over60 = 2,
+        Over90 = 3,
     }
 
     [Serializable]
@@ -153,14 +146,5 @@ namespace OpenDentBusiness
         public bool GroupByGroupName = false;
         public string CarrierNameFilter = "";
         public string GroupNameFilter = "";
-
-        public RpAgingParamObject Copy()
-        {
-            RpAgingParamObject retval = (RpAgingParamObject)this.MemberwiseClone();
-            retval.ListProvNums = this.ListProvNums.ToList();
-            retval.ListClinicNums = this.ListClinicNums.ToList();
-            retval.ListBillTypes = this.ListBillTypes.ToList();
-            return retval;
-        }
     }
 }

@@ -306,7 +306,7 @@ namespace OpenDentBusiness
             return false;
         }
 
-        ///<summary></summary>
+        [Obsolete]
         internal static DataTable GetTable(string command)
         {
             LastCommand = command;

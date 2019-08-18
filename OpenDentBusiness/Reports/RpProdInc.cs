@@ -21,8 +21,7 @@ namespace OpenDentBusiness
         ///<summary>If not using clinics then supply an empty list of clinicNums.  Also used for the CEMT Provider P and I report.  
         ///showUnearedCEMT should only be considered from CEMT (or if you have a "Show Unearned" checkbox, which currently only applies to CEMT).</summary>
         //////<param name="hasChangeInWriteoff">If true, then this will include Write Off Est and Write Off Adjustments instead of Write Off.</param>
-        public static DataSet GetDailyData(DateTime dateFrom, DateTime dateTo, List<Provider> listProvs, List<Clinic> listClinics, bool hasAllProvs
-            , bool hasAllClinics, bool hasBreakdown, bool hasClinicInfo, bool isUnearnedIncluded, PPOWriteoffDateCalc writeoffType, bool isCEMT = false)
+        public static DataSet GetDailyData(DateTime dateFrom, DateTime dateTo, List<Provider> listProvs, List<Clinic> listClinics, bool hasAllProvs, bool hasAllClinics, bool hasBreakdown, bool hasClinicInfo, bool isUnearnedIncluded, PPOWriteoffDateCalc writeoffType, bool isCEMT = false)
         {
             //No need to check RemotingRole; no call to db.
             if (listClinics.Count > 0)
@@ -922,20 +921,15 @@ namespace OpenDentBusiness
                 + "GROUP BY procedurelog.ProcNum "
                 + "ORDER BY Date,namelf";
             DataTable tableProduction = new DataTable();
-            if (isCEMT)
-            {
-                tableProduction = Db.GetTable(command);
-            }
-            else
-            {
-                tableProduction = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
-            }
+
+                tableProduction = DataConnection.GetTable(command);
+
             tableProduction.TableName = "tableProduction";
             #endregion
             #region Adjustments
             if (!hasAllClinics && listClinicNums.Count > 0)
             {
-                whereClin = "AND adjustment.ClinicNum IN (" + String.Join(",", listClinicNums) + ") ";
+                whereClin = "AND adjustment.ClinicNum IN (" + string.Join(",", listClinicNums) + ") ";
             }
             command = "SELECT "
                 + "adjustment.AdjDate Date, "
@@ -956,14 +950,9 @@ namespace OpenDentBusiness
                     + whereClin + " "
                 + "ORDER BY Date,namelf";
             DataTable tableAdj = new DataTable();
-            if (isCEMT)
-            {
-                tableAdj = Db.GetTable(command);
-            }
-            else
-            {
-                tableAdj = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
-            }
+
+                tableAdj = DataConnection.GetTable(command);
+
             tableAdj.TableName = "tableAdj";
             #endregion
             #region InsWriteoff
@@ -1068,11 +1057,11 @@ namespace OpenDentBusiness
             DataTable tableInsWriteoff = new DataTable();
             if (isCEMT)
             {
-                tableInsWriteoff = Db.GetTable(command);
+                tableInsWriteoff = DataConnection.GetTable(command);
             }
             else
             {
-                tableInsWriteoff = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
+                tableInsWriteoff = DataConnection.GetTable(command);
             }
             tableInsWriteoff.TableName = "tableInsWriteoff";
             #endregion
@@ -1080,7 +1069,7 @@ namespace OpenDentBusiness
             string wherePtIncomeProvs = "";
             if (!hasAllProvs && listProvNums.Count > 0)
             {
-                wherePtIncomeProvs = " AND paysplit.ProvNum IN (" + String.Join(",", listProvNums);
+                wherePtIncomeProvs = " AND paysplit.ProvNum IN (" + string.Join(",", listProvNums);
                 wherePtIncomeProvs += ") ";
             }
             if (!isUnearnedIncluded)
@@ -1115,11 +1104,11 @@ namespace OpenDentBusiness
             DataTable tablePay = new DataTable();
             if (isCEMT)
             {
-                tablePay = Db.GetTable(command);
+                tablePay = DataConnection.GetTable(command);
             }
             else
             {
-                tablePay = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
+                tablePay = DataConnection.GetTable(command);
             }
             tablePay.TableName = "tablePay";
             #endregion
@@ -1155,14 +1144,9 @@ namespace OpenDentBusiness
                 + "GROUP BY claimproc.PatNum,claimproc.ProvNum,claimproc.PlanNum,claimproc.ClinicNum,claimpayment.CheckDate "
                 + "ORDER BY Date,namelf";
             DataTable tableIns = new DataTable();
-            if (isCEMT)
-            {
-                tableIns = Db.GetTable(command);
-            }
-            else
-            {
-                tableIns = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
-            }
+
+                tableIns = DataConnection.GetTable(command);
+
             tableIns.TableName = "tableIns";
             #endregion
             #region WriteOffAdjustments
@@ -1203,14 +1187,9 @@ namespace OpenDentBusiness
                     + whereClin
                     + "GROUP BY claimproc.ClaimProcNum "
                     + "ORDER BY Date,namelf";
-                if (isCEMT)
-                {
-                    tableWriteOffAdjustments = Db.GetTable(command);
-                }
-                else
-                {
-                    tableWriteOffAdjustments = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
-                }
+
+                    tableWriteOffAdjustments = DataConnection.GetTable(command);
+
             }
             tableWriteOffAdjustments.TableName = "tableWriteOffAdjustments";
             #endregion
@@ -1288,7 +1267,7 @@ namespace OpenDentBusiness
                 + whereProv
                 + whereClin
                 + "AND procedurelog.DateComplete BETWEEN " + POut.Date(dateFrom) + " AND " + POut.Date(dateTo) + " ";
-            tableProduction = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
+            tableProduction = DataConnection.GetTable(command);
             tableProduction.TableName = tableProductionName;
             //Insurance WriteOff Estimates----------------------------------------------------------------------------
             if (hasProvs)
@@ -1308,7 +1287,7 @@ namespace OpenDentBusiness
                 + "WHERE procedurelog.DateComplete BETWEEN " + POut.Date(dateFrom) + " AND " + POut.Date(dateTo) + " "
                 + whereProv
                 + whereClin;
-            tableInsWOEst = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
+            tableInsWOEst =DataConnection.GetTable(command);
             tableInsWOEst.TableName = tableInsWOEstName;
             //Adjustments----------------------------------------------------------------------------
             if (hasProvs)
@@ -1319,7 +1298,7 @@ namespace OpenDentBusiness
             {
                 whereClin = "AND adjustment.ClinicNum IN (" + String.Join(",", listClinicNums) + ") ";
             }
-            string listBadDebtAdj = ReportsComplex.RunFuncOnReportServer(() => Preference.GetStringNoCache(PreferenceName.BadDebtAdjustmentTypes));
+            string listBadDebtAdj = Preference.GetStringNoCache(PreferenceName.BadDebtAdjustmentTypes);
             if (String.IsNullOrEmpty(listBadDebtAdj))
             {
                 listBadDebtAdj = "0";
@@ -1334,16 +1313,16 @@ namespace OpenDentBusiness
                 + whereProv
                 + whereClin
                 + "AND adjustment.DateEntry BETWEEN " + POut.Date(dateFrom) + " AND " + POut.Date(dateTo) + " ";
-            tableAdj = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
+            tableAdj = DataConnection.GetTable(command);
             tableAdj.TableName = tableAdjName;
             //InsWriteoff--------------------------------------------------------------------------
             if (hasProvs)
             {
-                whereProv = "AND claimproc.ProvNum IN (" + String.Join(",", listProvNums) + ") ";
+                whereProv = "AND claimproc.ProvNum IN (" + string.Join(",", listProvNums) + ") ";
             }
             if (hasClinics)
             {
-                whereClin = "AND claimproc.ClinicNum IN (" + String.Join(",", listClinicNums) + ") ";
+                whereClin = "AND claimproc.ClinicNum IN (" + string.Join(",", listClinicNums) + ") ";
             }
             command = "SELECT claimproc.PatNum, claimproc.ProvNum, claimproc.ClinicNum, claimproc.DateSuppReceived TranDate,0 as Amount, claimproc.WriteOff WriteOff, "
                 + DbHelper.IfNull("NULLIF(claimsnapshot.WriteOff, -1)", "0", false) + " WriteoffEst "
@@ -1352,7 +1331,7 @@ namespace OpenDentBusiness
                 + "WHERE claimproc.DateSuppReceived BETWEEN " + POut.Date(dateFrom) + " AND " + POut.Date(dateTo) + " "
                 + whereProv
                 + whereClin;
-            tableInsWriteOff = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
+            tableInsWriteOff = DataConnection.GetTable(command);
             tableInsWriteOff.TableName = tableInsWriteOffName;
             //AllocatedPtIncome--------------------------------------------------------------------------------
             if (hasProvs)
@@ -1370,7 +1349,7 @@ namespace OpenDentBusiness
                 + whereClin
                 + "AND paysplit.ProcNum!=0 "
                 + "AND paysplit.DateEntry BETWEEN " + POut.Date(dateFrom) + " AND " + POut.Date(dateTo) + " ";
-            tableAllocatedPatInc = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
+            tableAllocatedPatInc = DataConnection.GetTable(command);
             tableAllocatedPatInc.TableName = tableAllocatedPatIncName;
             //UnallocatedPtIncome--------------------------------------------------------------------------------
             whereProv = "";
@@ -1389,7 +1368,7 @@ namespace OpenDentBusiness
                 + whereClin
                 + "AND paysplit.ProcNum=0 "
                 + "AND paysplit.DateEntry BETWEEN " + POut.Date(dateFrom) + " AND " + POut.Date(dateTo) + " ";
-            tableUnallocatedPatInc = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
+            tableUnallocatedPatInc = DataConnection.GetTable(command);
             tableUnallocatedPatInc.TableName = tableUnallocatedPatIncName;
             //InsIncome---------------------------------------------------------------------------------
             if (hasProvs)
@@ -1407,7 +1386,7 @@ namespace OpenDentBusiness
                 + whereProv
                 + whereClin
                 + "AND claimproc.DateSuppReceived BETWEEN " + POut.Date(dateFrom) + " AND " + POut.Date(dateTo) + " ";
-            tableInsIncome = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
+            tableInsIncome = DataConnection.GetTable(command);
             tableInsIncome.TableName = tableInsIncomeName;
             //InsIncomeNotFinalized---------------------------------------------------------------------------------
             if (hasProvs)
@@ -1424,7 +1403,7 @@ namespace OpenDentBusiness
                 + whereProv
                 + whereClin
                 + "AND claimproc.ClaimPaymentNum=0";
-            tableInsIncomeNotFinalized = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
+            tableInsIncomeNotFinalized = DataConnection.GetTable(command);
             tableInsIncomeNotFinalized.TableName = tableInsIncomeNotFinalizedName;
             DataSet dataSet = new DataSet();
             dataSet.Tables.Add(tableProduction);
@@ -1562,8 +1541,8 @@ namespace OpenDentBusiness
             {
                 whereClin = "AND adjustment.ClinicNum IN (" + String.Join(",", listClinicNums) + ") ";
             }
-            string listBadDebtAdj = ReportsComplex.RunFuncOnReportServer(() => Preference.GetStringNoCache(PreferenceName.BadDebtAdjustmentTypes));
-            if (String.IsNullOrEmpty(listBadDebtAdj))
+            string listBadDebtAdj = Preference.GetStringNoCache(PreferenceName.BadDebtAdjustmentTypes);
+            if (string.IsNullOrEmpty(listBadDebtAdj))
             {
                 listBadDebtAdj = "0";
             }
@@ -1620,7 +1599,7 @@ namespace OpenDentBusiness
 				LEFT JOIN procedurecode on procedurecode.CodeNum=procedurelog.CodeNum
 				WHERE NOT (UCR=0 AND OrigEstWO=0 AND EstVsActualWO=0 AND Adjustment=0 AND NPR=0)
 				ORDER BY TranType,CalendarDate,PatNum";
-            DataTable retVal = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
+            DataTable retVal = DataConnection.GetTable(command);
             return retVal;
         }
 
@@ -2067,11 +2046,11 @@ namespace OpenDentBusiness
             DataTable tableProduction = new DataTable();
             if (isCEMT)
             {
-                tableProduction = Db.GetTable(command);
+                tableProduction = DataConnection.GetTable(command);
             }
             else
             {
-                tableProduction = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
+                tableProduction = DataConnection.GetTable(command);
             }
             tableProduction.TableName = "tableProduction";
             #endregion
@@ -2096,14 +2075,9 @@ namespace OpenDentBusiness
                 + "GROUP BY ClinicNum,YEAR(adjustment.AdjDate),MONTH(adjustment.AdjDate),DAY(adjustment.AdjDate)";
             command += " ORDER BY ClinicNum,AdjDate";
             DataTable tableAdj = new DataTable();
-            if (isCEMT)
-            {
-                tableAdj = Db.GetTable(command);
-            }
-            else
-            {
-                tableAdj = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
-            }
+
+                tableAdj = DataConnection.GetTable(command);
+
             tableAdj.TableName = "tableAdj";
             #endregion
             #region TableInsWriteoff
@@ -2161,14 +2135,9 @@ namespace OpenDentBusiness
                 command += " ORDER BY ClinicNum,ProcDate";
             }
             DataTable tableInsWriteoff = new DataTable();
-            if (isCEMT)
-            {
-                tableInsWriteoff = Db.GetTable(command);
-            }
-            else
-            {
-                tableInsWriteoff = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
-            }
+
+                tableInsWriteoff = DataConnection.GetTable(command);
+
             tableInsWriteoff.TableName = "tableInsWriteoff";
             #endregion
             #region TableSched
@@ -2184,7 +2153,7 @@ namespace OpenDentBusiness
             }
             command = "SELECT " + DbHelper.DtimeToDate("t.AptDateTime") + " SchedDate,SUM(t.Fee-t.WriteoffEstimate) Amount,ClinicNum "
                 + "FROM (SELECT appointment.AptDateTime,IFNULL(procedurelog.ProcFee,0) Fee,appointment.ClinicNum,";
-            if (ReportsComplex.RunFuncOnReportServer(() => Preference.GetBoolNoCache(PreferenceName.ReportPandIschedProdSubtractsWO)))
+            if (Preference.GetBoolNoCache(PreferenceName.ReportPandIschedProdSubtractsWO))
             {
                 //Subtract both PPO and capitation writeoffs
                 command += "SUM(IFNULL(CASE WHEN WriteOffEstOverride != -1 THEN WriteOffEstOverride ELSE WriteOffEst END,0)) WriteoffEstimate ";
@@ -2209,14 +2178,9 @@ namespace OpenDentBusiness
                 + " GROUP BY procedurelog.ProcNum) t "//without this, there can be duplicate proc rows due to the claimproc join with dual insurance.
                 + "GROUP BY SchedDate,ClinicNum "
                 + "ORDER BY SchedDate";
-            if (isCEMT)
-            {
-                tableSched = Db.GetTable(command);
-            }
-            else
-            {
-                tableSched = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
-            }
+
+                tableSched = DataConnection.GetTable(command);
+
             tableSched.TableName = "tableSched";
             #endregion
             #region PtIncome
@@ -2247,14 +2211,9 @@ namespace OpenDentBusiness
                 + "GROUP BY ClinicNum,YEAR(paysplit.DatePay),MONTH(paysplit.DatePay),DAY(paysplit.DatePay)";
             command += " ORDER BY ClinicNum,DatePay";
             DataTable tablePay = new DataTable();
-            if (isCEMT)
-            {
-                tablePay = Db.GetTable(command);
-            }
-            else
-            {
-                tablePay = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
-            }
+
+                tablePay = DataConnection.GetTable(command);
+
             tablePay.TableName = "tablePay";
             #endregion
             #region InsIncome
@@ -2276,14 +2235,9 @@ namespace OpenDentBusiness
                 + whereClin
                 + " GROUP BY claimpayment.CheckDate,ClinicNum ORDER BY ClinicNum,CheckDate";
             DataTable tableIns = new DataTable();
-            if (isCEMT)
-            {
-                tableIns = Db.GetTable(command);
-            }
-            else
-            {
-                tableIns = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
-            }
+
+                tableIns = DataConnection.GetTable(command);
+
             tableIns.TableName = "tableIns";
             #endregion
             #region WriteOffAdjustments
@@ -2303,14 +2257,9 @@ namespace OpenDentBusiness
                 + whereProv
                 + whereClin
                 + "GROUP BY ClinicNum,YEAR(claimproc.DateCP), MONTH(claimproc.DateCP),DAY(claimproc.DateCP)";
-                if (isCEMT)
-                {
-                    tableWriteOffAdjustments = Db.GetTable(command);
-                }
-                else
-                {
-                    tableWriteOffAdjustments = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
-                }
+
+                tableWriteOffAdjustments = DataConnection.GetTable(command);
+
             }
             tableWriteOffAdjustments.TableName = "tableWriteOffAdjustments";
             #endregion
@@ -2707,14 +2656,9 @@ namespace OpenDentBusiness
                 + "GROUP BY ClinicNum,YEAR(procedurelog.ProcDate),MONTH(procedurelog.ProcDate)";//Does not work for Oracle. Consider enhancing with DbHelper.Year(),DbHelper.Month()
             command += " ORDER BY ClinicNum,ProcDate";
             DataTable tableProduction = new DataTable();
-            if (isCEMT)
-            {
-                tableProduction = Db.GetTable(command);
-            }
-            else
-            {
-                tableProduction = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
-            }
+
+            tableProduction = DataConnection.GetTable(command);
+
             tableProduction.TableName = "tableProduction";
             #endregion
             #region Adjustments
@@ -2738,14 +2682,9 @@ namespace OpenDentBusiness
                 + "GROUP BY ClinicNum,YEAR(adjustment.AdjDate),MONTH(adjustment.AdjDate)";
             command += " ORDER BY ClinicNum,AdjDate";
             DataTable tableAdj = new DataTable();
-            if (isCEMT)
-            {
-                tableAdj = Db.GetTable(command);
-            }
-            else
-            {
-                tableAdj = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
-            }
+
+            tableAdj = DataConnection.GetTable(command);
+
             tableAdj.TableName = "tableAdj";
             #endregion
             #region InsWriteoff
@@ -2803,14 +2742,9 @@ namespace OpenDentBusiness
                 command += " ORDER BY ClinicNum,ProcDate";
             }
             DataTable tableInsWriteoff = new DataTable();
-            if (isCEMT)
-            {
-                tableInsWriteoff = Db.GetTable(command);
-            }
-            else
-            {
-                tableInsWriteoff = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
-            }
+
+            tableInsWriteoff = DataConnection.GetTable(command);
+
             tableInsWriteoff.TableName = "tableInsWriteoff";
             #endregion
             #region PtIncome
@@ -2842,14 +2776,9 @@ namespace OpenDentBusiness
                 + "GROUP BY ClinicNum,YEAR(paysplit.DatePay),MONTH(paysplit.DatePay)";
             command += " ORDER BY ClinicNum,DatePay";
             DataTable tablePay = new DataTable();
-            if (isCEMT)
-            {
-                tablePay = Db.GetTable(command);
-            }
-            else
-            {
-                tablePay = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
-            }
+
+            tablePay = DataConnection.GetTable(command);
+
             tablePay.TableName = "tablePay";
             #endregion
             #region InsIncome
@@ -2871,14 +2800,9 @@ namespace OpenDentBusiness
                 + whereClin
                 + " GROUP BY claimpayment.CheckDate,ClinicNum ORDER BY ClinicNum,CheckDate";
             DataTable tableIns = new DataTable();
-            if (isCEMT)
-            {
-                tableIns = Db.GetTable(command);
-            }
-            else
-            {
-                tableIns = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
-            }
+
+            tableIns = DataConnection.GetTable(command);
+
             tableIns.TableName = "tableIns";
             #endregion
             #region WriteOffAdjustments
@@ -2898,14 +2822,9 @@ namespace OpenDentBusiness
                 + whereProv
                 + whereClin
                 + " GROUP BY ClinicNum,YEAR(claimproc.DateCP), MONTH(claimproc.DateCP) ";
-                if (isCEMT)
-                {
-                    tableWriteOffAdjustments = Db.GetTable(command);
-                }
-                else
-                {
-                    tableWriteOffAdjustments = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
-                }
+
+                tableWriteOffAdjustments = DataConnection.GetTable(command);
+
             }
             tableWriteOffAdjustments.TableName = "tableWriteOffAdjustments";
             #endregion

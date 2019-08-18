@@ -1054,7 +1054,7 @@ namespace OpenDental.ReportingComplex
             {
                 try
                 {
-                    _reportTable = ReportsComplex.GetTable(_stringQuery);
+                    _reportTable = DataConnection.GetTable(_stringQuery);
                     //_reportTable=ReportsComplex.RunFuncOnReportServer(() => ReportsComplex.GetTable(_stringQuery)); //submit query on different thread to the reporting server.
                 }
                 catch (Exception)

@@ -7,7 +7,6 @@ namespace OpenDentBusiness
 {
     public class RpReferralAnalysis
     {
-        ///<summary></summary>
         public static DataTable GetReferralTable(DateTime dateStart, DateTime dateEnd, List<long> listProvNums
             , bool hasAddress, bool hasOnlyNewPats)
         {
@@ -64,7 +63,7 @@ namespace OpenDentBusiness
             }
             query += " GROUP BY referral.ReferralNum"
                 + " ORDER BY HowMany Desc";
-            return ReportsComplex.RunFuncOnReportServer(() => ReportsComplex.GetTable(query));
+            return DataConnection.GetTable(query);
         }
     }
 }

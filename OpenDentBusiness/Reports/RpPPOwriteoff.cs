@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Reflection;
 
 namespace OpenDentBusiness
 {
     public class RpPPOwriteoff
     {
-        ///<summary></summary>
         public static DataTable GetWriteoffTable(DateTime dateStart, DateTime dateEnd, bool isIndividual, string carrierText, PPOWriteoffDateCalc writeoffType)
         {
             string queryText = "";
@@ -151,7 +148,7 @@ namespace OpenDentBusiness
 						ORDER BY carrier.CarrierName";
                 }
             }
-            return ReportsComplex.RunFuncOnReportServer(() => ReportsComplex.GetTable(queryText));
+            return DataConnection.GetTable(queryText);
         }
     }
 }

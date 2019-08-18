@@ -1055,7 +1055,7 @@ namespace OpenDental {
 							return;
 						}
 						command += " WHERE " + DbHelper.Concat("carrier.CarrierName","carrier.Address") + " = '" + textInsCoStart.Text + labInsCoStartAddr.Text + "'";
-						RptAddrTable = Reports.GetTable(command);
+						RptAddrTable = DataConnection.GetTable(command);
 						if(RptAddrTable.Rows.Count==0) {
 							MsgBox.Show(this,"No matching carriers found.");
 							return;
@@ -1185,7 +1185,7 @@ namespace OpenDental {
 			return patStat;
 		}
 		private void buildLabelTable(string getData) {
-			AddrTable = Reports.GetTable(getData);
+			AddrTable = DataConnection.GetTable(getData);
 			buildLabels();
 		}
 

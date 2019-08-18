@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenDentBusiness
 {
@@ -16,8 +12,7 @@ namespace OpenDentBusiness
         ///<param name="listProviders">Include '0' in the list to get for all providers.</param>
         ///<param name="listBilling">Include '0' in the list to get for all billing types.</param>
         ///<param name="listClinicNums">Pass in an empty list to get for all clinics.</param>
-        public static DataTable GetTreatmentFinderList(bool noIns, bool patsWithAppts, int monthStart, DateTime dateSince, double aboveAmount,
-            List<long> listProviders, List<long> listBilling, string code1, string code2, List<long> listClinicNums, bool isProcsGeneral)
+        public static DataTable GetTreatmentFinderList(bool noIns, bool patsWithAppts, int monthStart, DateTime dateSince, double aboveAmount, List<long> listProviders, List<long> listBilling, string code1, string code2, List<long> listClinicNums, bool isProcsGeneral)
         {
 #if DEBUG
             Stopwatch sw = Stopwatch.StartNew();

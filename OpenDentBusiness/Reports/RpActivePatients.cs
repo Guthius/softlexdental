@@ -2,20 +2,18 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Reflection;
 
 namespace OpenDentBusiness
 {
     public class RpActivePatients
     {
-
         ///<summary>If not using clinics then supply an empty list of clinicNums. dateStart and dateEnd can be MinVal/MaxVal to indicate "forever".</summary>
         public static DataTable GetActivePatientTable(DateTime dateStart, DateTime dateEnd, List<long> listProvNums, List<long> listClinicNums, List<long> listBillingTypes, bool hasAllProvs, bool hasAllClinics, bool hasAllBilling)
         {
-            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Preference.HasClinicsEnabledNoCache);
-            List<Provider> listProvs = ReportsComplex.RunFuncOnReportServer(() => Providers.GetAll());
-            List<Definition> listDefs = ReportsComplex.RunFuncOnReportServer(() => Definition.GetByCategory(DefinitionCategory.BillingTypes));
-            List<Clinic> listClinics = ReportsComplex.RunFuncOnReportServer(() => Clinics.GetClinicsNoCache());
+            bool hasClinicsEnabled = Preference.HasClinicsEnabledNoCache;
+            List<Provider> listProvs = Providers.GetAll();
+            List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.BillingTypes);
+            List<Clinic> listClinics = Clinics.GetClinicsNoCache();
             DataTable table = new DataTable();
             table.Columns.Add("name");
             table.Columns.Add("priProv");
@@ -63,7 +61,7 @@ namespace OpenDentBusiness
             {//Using clinics
                 command += " ORDER BY patient.ClinicNum,provider.Abbr,patient.LName,patient.FName";
             }
-            DataTable raw = ReportsComplex.RunFuncOnReportServer(() => ReportsComplex.GetTable(command));
+            DataTable raw = DataConnection.GetTable(command);
             Patient pat;
             for (int i = 0; i < raw.Rows.Count; i++)
             {

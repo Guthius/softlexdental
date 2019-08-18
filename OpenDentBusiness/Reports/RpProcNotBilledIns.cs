@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
-using System.Reflection;
 
 namespace OpenDentBusiness
 {
@@ -69,7 +68,7 @@ namespace OpenDentBusiness
             }
             query += "GROUP BY procedurelog.ProcNum "
                 + "ORDER BY patient.LName,patient.FName,patient.PatNum,procedurelog.ProcDate";
-            return Db.GetTable(query);
+            return DataConnection.GetTable(query);
         }
     }
 }

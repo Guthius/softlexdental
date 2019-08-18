@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace OpenDentBusiness
 {
@@ -115,7 +113,7 @@ namespace OpenDentBusiness
             command += "ORDER BY carrier.CarrierName,claim.DateService,patient.LName,patient.FName,claim.ClaimType";
             command = Plugin.Filter(null, "Data_Claim_GetOutInsClaims_Query", command); // TODO: Give this filter a better name...
 
-            DataTable table = Db.GetTable(command);
+            DataTable table = DataConnection.GetTable(command);
             List<OutstandingInsClaim> listOutstandingInsClaims = table.Rows.OfType<DataRow>().Select(x => new OutstandingInsClaim(x)).ToList();
             return listOutstandingInsClaims;
         }

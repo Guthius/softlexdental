@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace OpenDentBusiness
 {
@@ -27,7 +23,7 @@ namespace OpenDentBusiness
                 command += "AND ClinicNum IN (" + string.Join(",", listClinicNums) + ") ";
             }
             command += "ORDER BY AptDateTime";
-            return ReportsComplex.RunFuncOnReportServer(() => Db.GetListLong(command));
+            return Db.GetListLong(command);
         }
     }
 }

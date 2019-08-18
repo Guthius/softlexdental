@@ -53,7 +53,7 @@ namespace OpenDental {
 			string command="";
 			//Locate the payment definition number for payments of patients using the Arizona Primary Care program.
 			command="SELECT DefNum FROM definition WHERE Category="+POut.Long((int)DefinitionCategory.PaymentTypes)+" AND IsHidden=0 AND LOWER(TRIM(ItemName))='noah'";
-			DataTable payDefNumTab=Reports.GetTable(command);
+			DataTable payDefNumTab= DataConnection.GetTable(command);
 			if(payDefNumTab.Rows.Count!=1) {
 				MessageBox.Show("You must define exactly one payment type with the name 'NOAH' before running this report. "+
 					"This payment type must be used on payments made by Arizona Primary Care patients.");
@@ -73,7 +73,7 @@ namespace OpenDental {
 			command="SELECT DISTINCT p.PatNum FROM patplan pp,inssub,insplan i,patient p,carrier c "+
 				"WHERE p.PatNum=pp.PatNum AND inssub.InsSubNum=pp.InsSubNum AND inssub.PlanNum=i.PlanNum AND i.CarrierNum=c.CarrierNum "+
 				"AND LOWER(TRIM(c.CarrierName))='noah'";
-			DataTable primaryCarePatients=Reports.GetTable(command);
+			DataTable primaryCarePatients= DataConnection.GetTable(command);
 			for(int i=0;i<primaryCarePatients.Rows.Count;i++) {
 				string patNum=POut.Long(PIn.Long(primaryCarePatients.Rows[i][0].ToString()));
 				//Now that we have an Arizona Primary Care patient's patNum, we need to see if there are any appointments
@@ -83,7 +83,7 @@ namespace OpenDental {
 					"a.AptDateTime BETWEEN "+POut.Date(dateTimeFrom.Value)+" AND "+POut.Date(dateTimeTo.Value)+" AND "+
 					"(SELECT COUNT(*) FROM procedurelog pl,procedurecode pc WHERE pl.AptNum=a.AptNum AND pc.CodeNum=pl.CodeNum AND "+
 					"pc.ProcCode IN ("+billableProcedures+") "+DbHelper.LimitAnd(1)+")>0";
-				DataTable appointmentList=Reports.GetTable(command);
+				DataTable appointmentList= DataConnection.GetTable(command);
 				for(int j=0;j<appointmentList.Rows.Count;j++){
 					string aptNum=POut.Long(PIn.Long(appointmentList.Rows[j][0].ToString()));
 					string datesql="CURDATE()";
@@ -154,7 +154,7 @@ namespace OpenDental {
 							"WHERE ap.AptNum="+aptNum+" AND pr.ProvNum=ap.ProvNum "+DbHelper.LimitAnd(1)+") PhysicianLName "+//Physician's last name
 						"FROM patient p WHERE "+
 						"p.PatNum="+patNum;
-					DataTable primaryCareReportRow=Reports.GetTable(command);
+					DataTable primaryCareReportRow= DataConnection.GetTable(command);
 					string outputRow="";
 					string rowErrors="";
 					string rowWarnings="";

@@ -1,19 +1,13 @@
-﻿using System;
+﻿using CodeBase;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using CodeBase;
 
 namespace OpenDentBusiness
 {
     public class Cache
     {
-        /// <summary>This is only used in the RefreshCache methods.  Used instead of Meth.  The command is only used if not ClientWeb.</summary>
-        //public static DataTable GetTableRemotelyIfNeeded(MethodBase methodBase, string command) => Db.GetTable(command);
-
         public static void Refresh(params InvalidType[] arrayITypes)
         {
             Refresh(true, arrayITypes);
@@ -33,7 +27,10 @@ namespace OpenDentBusiness
             return GetCacheDs(false, arrayITypes);
         }
 
-        ///<summary>If ClientWeb, then this method is instead run on the server, and the result passed back to the client.  And since it's ClientWeb, FillCache will be run on the client.</summary>
+        /// <summary>
+        /// If ClientWeb, then this method is instead run on the server, and the result passed back to the client.
+        /// And since it's ClientWeb, FillCache will be run on the client.
+        /// </summary>
         public static DataSet GetCacheDs(bool doRefreshServerCache, params InvalidType[] arrayITypes)
         {
             string suffix =  "Refreshing Caches: ";

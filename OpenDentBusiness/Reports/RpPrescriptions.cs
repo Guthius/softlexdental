@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Reflection;
+﻿using System.Data;
 
 namespace OpenDentBusiness
 {
     public class RpPrescriptions
     {
-        ///<summary></summary>
         public static DataTable GetPrescriptionTable(bool isRadioPatient, string inputText)
         {
             string query = "SELECT CONCAT(CONCAT(CONCAT(CONCAT(patient.LName,', '),patient.FName)," +
@@ -24,7 +20,7 @@ namespace OpenDentBusiness
                 query += "AND rxpat.drug like '" + POut.String(inputText) + "%'"
                 + " ORDER BY patient.lname,rxpat.drug,rxpat.rxdate";
             }
-            return ReportsComplex.RunFuncOnReportServer(() => ReportsComplex.GetTable(query));
+            return DataConnection.GetTable(query);
         }
     }
 }

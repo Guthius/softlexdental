@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Reflection;
 
 namespace OpenDentBusiness
 {
@@ -28,7 +27,7 @@ namespace OpenDentBusiness
                 whereProv += ") ";
             }
             string whereClin = "";
-            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Preference.HasClinicsEnabledNoCache);
+            bool hasClinicsEnabled = Preference.HasClinicsEnabledNoCache;
             if (hasClinicsEnabled)
             {//Using clinics
                 whereClin += " AND payplancharge.ClinicNum IN(";
@@ -142,8 +141,8 @@ namespace OpenDentBusiness
             {
                 command += "ORDER BY LName,FName";
             }
-            DataTable raw = ReportsComplex.RunFuncOnReportServer(() => ReportsComplex.GetTable(command));
-            List<Provider> listProvs = ReportsComplex.RunFuncOnReportServer(() => Providers.GetAll());
+            DataTable raw = DataConnection.GetTable(command);
+            List<Provider> listProvs = Providers.GetAll();
             //DateTime payplanDate;
             Patient pat;
             double princ;
@@ -203,13 +202,13 @@ namespace OpenDentBusiness
                 }
                 if (showFamilyBalance)
                 {
-                    Family famCur = ReportsComplex.RunFuncOnReportServer(() => Patients.GetFamily(PIn.Long(raw.Rows[i]["PatNum"].ToString())));
+                    Family famCur = Patients.GetFamily(PIn.Long(raw.Rows[i]["PatNum"].ToString()));
                     famBal = (decimal)famCur.ListPats[0].BalTotal;
                     row["famBal"] = (famBal - (decimal)famCur.ListPats[0].InsEst).ToString("F");
                 }
                 if (hasClinicsEnabled)
                 {//Using clinics
-                    List<Clinic> listClinics = ReportsComplex.RunFuncOnReportServer(() => Clinics.GetClinicsNoCache());
+                    List<Clinic> listClinics = Clinics.GetClinicsNoCache();
                     string clinicAbbr = Clinics.GetAbbr(PIn.Long(raw.Rows[i]["ClinicNum"].ToString()), listClinics);
                     clinicAbbr = (clinicAbbr == "") ? Lans.g("FormRpPayPlans", "Unassigned") : clinicAbbr;
                     if (!String.IsNullOrEmpty(clinicAbbrOld) && clinicAbbr != clinicAbbrOld)

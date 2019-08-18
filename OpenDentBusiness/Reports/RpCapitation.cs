@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Reflection;
 
 namespace OpenDentBusiness
 {
     public class RpCapitation
     {
-        ///<summary></summary>
         public static DataTable GetCapitationTable(DateTime dateStart, DateTime dateEnd, string textCarrier, bool isMedicalOrClinic)
         {
             string queryString = @"SELECT carrier.CarrierName,CONCAT(CONCAT(patSub.LName,', '),patSub.FName) 
@@ -35,7 +32,7 @@ namespace OpenDentBusiness
                 + "AND procedurelog.ProcDate <= " + POut.Date(dateEnd) + " "
                 + "AND insplan.PlanType = 'c' "
                 + "AND procedurelog.ProcStatus = " + POut.Int((int)ProcStat.C);
-            return ReportsComplex.RunFuncOnReportServer(() => ReportsComplex.GetTable(queryString));
+            return DataConnection.GetTable(queryString);
         }
     }
 }

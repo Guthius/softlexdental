@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
-using System.Reflection;
+﻿using System.Data;
 
 namespace OpenDentBusiness
 {
     public class RpDiscountPlan
     {
-        ///<summary>Gets a table of data using low permissions.</summary>
         public static DataTable GetTable(string description)
         {
             string query = "SELECT discountplan.Description, feesched.Description FeeSched, definition.ItemName AdjType," +
@@ -19,7 +14,7 @@ namespace OpenDentBusiness
                 " INNER JOIN patient ON patient.DiscountPlanNum=discountplan.DiscountPlanNum" +
                 " WHERE discountplan.Description LIKE '%" + POut.String(description) + "%'" +
                 " ORDER BY discountplan.Description,patient.LName,patient.FName,patient.MiddleI";
-            return ReportsComplex.RunFuncOnReportServer(() => ReportsComplex.GetTable(query));
+            return DataConnection.GetTable(query);
         }
     }
 }

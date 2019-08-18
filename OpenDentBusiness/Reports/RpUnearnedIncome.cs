@@ -2,21 +2,17 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenDentBusiness
 {
     public class RpUnearnedIncome
     {
-
         /// <summary>Retrieves the Line Item Unearned dataset from the database.</summary>
         /// <param name="listClinics">The list of clinics to filter by. Pass in an empty list if this should not be filtered by clinic.</param>
         /// <returns></returns>
         public static DataTable GetLineItemUnearnedData(List<long> listClinics, DateTime date1Start, DateTime date2Start)
         {
-            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Preference.HasClinicsEnabledNoCache);
+            bool hasClinicsEnabled = Preference.HasClinicsEnabledNoCache;
             string command = "";
             string whereClin = "";
             //This query is kind-of a mess, but we're trying to account for bugs in previous versions.
@@ -57,7 +53,7 @@ namespace OpenDentBusiness
                 command += "LEFT JOIN clinic ON clinic.ClinicNum=results.ClinicNum ";
             }
             command += "ORDER BY results.DatePay,Patient,results.SplitNum";
-            DataTable raw = ReportsComplex.RunFuncOnReportServer(() => ReportsComplex.GetTable(command));
+            DataTable raw = DataConnection.GetTable(command);
             return raw;
         }
 
@@ -112,17 +108,16 @@ namespace OpenDentBusiness
 				HAVING ABS(UnallocAmt) > 0.005 ";
             }
             //one row per family
-            DataTable tableUnallocatedUnearned = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
+            DataTable tableUnallocatedUnearned = DataConnection.GetTable(command);
             List<long> listGuarantors = tableUnallocatedUnearned.Rows.OfType<DataRow>().Select(x => PIn.Long(x["Guarantor"].ToString())).ToList();
             //all procedures for the families that have not been explicitly paid off.
             //Key: GuarantorNum | Val:ListRemainingProcsForFam
-            List<UnearnedProc> listRemProcs = ReportsComplex.RunFuncOnReportServer(() => Procedures.GetRemainingProcsForFamilies(listGuarantors));
+            List<UnearnedProc> listRemProcs = Procedures.GetRemainingProcsForFamilies(listGuarantors);
             Dictionary<long, List<UnearnedProc>> dictFamRemainingProcs = listRemProcs.GroupBy(x => x.GuarNum)
                 .ToDictionary(x => x.Key, y => y.ToList());
-            Dictionary<long, double> dictFamilyBalances = ReportsComplex.RunFuncOnReportServer(() => Ledgers.GetBalancesForFamilies(listGuarantors));
-            Dictionary<long, string> dictPatNames = ReportsComplex.RunFuncOnReportServer(() =>
-                 Patients.GetPatientNames(Patients.GetAllFamilyPatNums(listGuarantors)));
-            List<ProcedureCode> listProcCodes = ReportsComplex.RunFuncOnReportServer(() => ProcedureCodes.GetAllCodes());
+            Dictionary<long, double> dictFamilyBalances = Ledgers.GetBalancesForFamilies(listGuarantors);
+            Dictionary<long, string> dictPatNames = Patients.GetPatientNames(Patients.GetAllFamilyPatNums(listGuarantors));
+            List<ProcedureCode> listProcCodes = ProcedureCodes.GetAllCodes();
             DataTable retVal = new DataTable();
             retVal.Columns.Add("Guar");
             retVal.Columns.Add("FamBal");
@@ -227,7 +222,7 @@ namespace OpenDentBusiness
                 command += @"
 				HAVING ABS(UnallocatedAmt) > 0.005";
             }
-            DataTable tableUnallocatedPrepayments = ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
+            DataTable tableUnallocatedPrepayments = DataConnection.GetTable(command);
             //get remaining amount for all procedures of the returned families.
             List<long> listGuarantorNums = tableUnallocatedPrepayments.Rows.OfType<DataRow>().Select(x => PIn.Long(x["Guarantor"].ToString())).ToList();
             if (listGuarantorNums.Count == 0)
@@ -235,9 +230,8 @@ namespace OpenDentBusiness
                 return retVal;//No families have paysplits with unallocated prepayments. Return empty table.
             }
             /*As long as any patient in the family has AT LEAST ONE procedure that is not fully, explicitly paid off, they will not show in this report.*/
-            List<UnearnedProc> listGuarantorRemainingProcs = ReportsComplex.RunFuncOnReportServer(() =>
-                Procedures.GetRemainingProcsForFamilies(listGuarantorNums));
-            Dictionary<long, double> dictFamilyBalances = ReportsComplex.RunFuncOnReportServer(() => Ledgers.GetBalancesForFamilies(listGuarantorNums));
+            List<UnearnedProc> listGuarantorRemainingProcs = Procedures.GetRemainingProcsForFamilies(listGuarantorNums);
+            Dictionary<long, double> dictFamilyBalances = Ledgers.GetBalancesForFamilies(listGuarantorNums);
             foreach (DataRow rowCur in tableUnallocatedPrepayments.Rows)
             {
                 long unallocatedGuarantor = PIn.Long(rowCur["Guarantor"].ToString());
@@ -265,7 +259,7 @@ namespace OpenDentBusiness
         /// <returns></returns>
         public static DataTable GetUnearnedAccountData(List<long> listClinics)
         {
-            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Preference.HasClinicsEnabledNoCache);
+            bool hasClinicsEnabled = Preference.HasClinicsEnabledNoCache;
             string command = "";
             string whereClin = "";
             //This query is kind-of a mess, but we're trying to account for bugs in previous versions.
@@ -307,7 +301,7 @@ namespace OpenDentBusiness
             command += whereClin;
             command += "GROUP BY guar.PatNum HAVING ABS(Amount) > 0.005 ";//still won't work for oracle
             command += "ORDER BY guar.LName, guar.FName, guar.MiddleI, Amount";
-            DataTable raw = ReportsComplex.RunFuncOnReportServer(() => ReportsComplex.GetTable(command));
+            DataTable raw = DataConnection.GetTable(command);
             return raw;
         }
 

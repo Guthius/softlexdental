@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Reflection;
 
 namespace OpenDentBusiness
 {
@@ -11,7 +10,7 @@ namespace OpenDentBusiness
         public static DataTable GetClaimsNotSent(DateTime fromDate, DateTime toDate, List<long> listClinicNums
             , bool hasClaimTypeExpanded, ClaimNotSentStatuses claimStatusFilter)
         {
-            bool hasClinicsEnabled = ReportsComplex.RunFuncOnReportServer(() => Preference.HasClinicsEnabledNoCache);
+            bool hasClinicsEnabled = Preference.HasClinicsEnabledNoCache;
             string command = "";
             string whereClin = "";
             string claimFilter = "";
@@ -77,7 +76,7 @@ namespace OpenDentBusiness
                 + " GROUP BY claim.ClaimNum";
 
             command += " ORDER BY claim.DateService";
-            return ReportsComplex.RunFuncOnReportServer(() => Db.GetTable(command));
+            return DataConnection.GetTable(command);
         }
     }
 }
