@@ -1452,7 +1452,7 @@ namespace OpenDentBusiness
         ///<summary>Boolean.  Defaults to false to hide repeating tasks feature if no repeating tasks are in use when updating to 16.3.</summary>
         TasksUseRepeating,
         ///<summary>Keeps track of date of one-time cleanup of temp files.  Prevents continued annoying cleanups after the first month.</summary>
-        TempFolderDateFirstCleaned,
+        [Obsolete] TempFolderDateFirstCleaned,
         TerminalClosePassword,
         ///<summary>If true, treat Yes-No-Unknown status of Unknown as if it were a No.</summary>
         TextMsgOkStatusTreatAsNo,
