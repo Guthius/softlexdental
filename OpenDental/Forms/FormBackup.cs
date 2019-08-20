@@ -833,7 +833,7 @@ namespace OpenDental {
 			double dbSize=GetFileSizes(textBackupFromPath.Text+dbName)/1024;
 			//Attempt to get the free disk space on the drive or share of the destination folder.
 			//If the free space cannot be determined the backup will be attempted anyway (old behavior).
-			if(ODFileUtils.GetDiskFreeSpace(textBackupToPath.Text,out driveFreeSpace)) {
+			if(ODFileUtils.TryGetFreeDiskSpace(textBackupToPath.Text,out driveFreeSpace)) {
 				if((ulong)dbSize*1024*1024>=driveFreeSpace) {//dbSize is in megabytes, cast to ulong to compare. It will never be negative so this is safe.
 					Invoke(new ErrorMessageDelegate(SetErrorMessage),new object[] { Lan.g(this,"Not enough free disk space available on the destination drive to backup the database.") });
 					//We now want to automatically close FormProgress.  This is done by clearing out the variables.
@@ -901,7 +901,7 @@ namespace OpenDental {
 					driveFreeSpace=0;
 					//Attempt to get the free disk space on the drive or share of the destination folder.
 					//If the free space cannot be determined the backup will be attempted anyway (old behavior).
-					if(ODFileUtils.GetDiskFreeSpace(textBackupToPath.Text,out driveFreeSpace)) {
+					if(ODFileUtils.TryGetFreeDiskSpace(textBackupToPath.Text,out driveFreeSpace)) {
 						if((ulong)(atozSize*1024*1024)>=driveFreeSpace) {//atozSize is in megabytes, cast to ulong in order to compare.  It will never be negative so it's safe.
 							//Not enough free space to perform the backup.
 							throw new ApplicationException(Lan.g(this,"Backing up A to Z images folder failed.  Not enough free disk space available on the destination drive.")
