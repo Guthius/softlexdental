@@ -1,42 +1,39 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
-using System.Reflection;
-using System.Text;
 
 namespace OpenDentBusiness
 {
     public class TrojanQueries
     {
-        public static DataTable GetMaxProcedureDate(long patNum)
+        public static DataTable GetMaxProcedureDate(long patientId)
         {
-            return Db.GetTable(
+            return DataConnection.GetTable(
                 "SELECT MAX(`ProcDate`) FROM `procedurelog`, `patient` " +
                 "WHERE `patient`.`PatNum` = `procedurelog`.`PatNum` " +
-                "AND `patient`.`Guarantor` = " + patNum);
+                "AND `patient`.`Guarantor` = " + patientId);
         }
 
-        public static DataTable GetMaxPaymentDate(long patNum)
+        public static DataTable GetMaxPaymentDate(long patientId)
         {
-            return Db.GetTable(
+            return DataConnection.GetTable(
                 "SELECT MAX(`DatePay`) FROM `paysplit`, `patient` " +
                 "WHERE `patient`.PatNum = `paysplit`.`PatNum` " +
-                "AND `patient`.`Guarantor` = " + patNum);
+                "AND `patient`.`Guarantor` = " + patientId);
         }
 
         public static int GetUniqueFileNum()
         {
-            DataTable table = 
-                Db.GetTable(
+            var dataTable =
+                DataConnection.GetTable(
                     "SELECT `ValueString` FROM `preference` " +
                     "WHERE `PrefName` = 'TrojanExpressCollectPreviousFileNumber'");
 
-            int previousNum = Convert.ToInt32(table.Rows[0][0].ToString());
+            int previousNum = Convert.ToInt32(dataTable.Rows[0][0].ToString());
 
-            table.Dispose();
+            dataTable.Dispose();
 
             var result =
                 DataConnection.ExecuteNonQuery(
@@ -72,7 +69,7 @@ namespace OpenDentBusiness
                 whereTrojanID += "i.`TrojanID` = '" + deletePatientRecords[i][0] + "' ";
             }
 
-            return Db.GetTable(
+            return DataConnection.GetTable(
                 "SELECT DISTINCT " +
                 "p.FName," +
                 "p.LName," +
@@ -112,7 +109,7 @@ namespace OpenDentBusiness
                 whereTrojanID += "i.`TrojanID` = '" + deleteTrojanRecords[i][0] + "' ";
             }
 
-            return Db.GetTable(
+            return DataConnection.GetTable(
                 "SELECT DISTINCT " +
                 "p.FName," +
                 "p.LName," +
@@ -150,7 +147,7 @@ namespace OpenDentBusiness
         {
             long employerNum = Employers.GetEmployerNum(troj.ENAME);
 
-            Db.NonQ(
+            DataConnection.ExecuteNonQuery(
                 "UPDATE insplan SET " +
                 "EmployerNum = " + employerNum + ", " +
                 "GroupName = '" + MySqlHelper.EscapeString(troj.PLANDESC) + "', " +
@@ -158,14 +155,14 @@ namespace OpenDentBusiness
                 "CarrierNum = " + troj.CarrierNum + " " +
                 "WHERE PlanNum = " + planNum);
 
-            Db.NonQ(
+            DataConnection.ExecuteNonQuery(
                 "UPDATE `inssub` " +
                 "SET `BenefitNotes` = '" + MySqlHelper.EscapeString(troj.BenefitNotes) + "' " +
                 "WHERE `PlanNum` = " + planNum);
 
             if (updateBenefits)
             {
-                Db.NonQ("DELETE FROM `benefit` WHERE `PlanNum` = " + planNum);
+                DataConnection.ExecuteNonQuery("DELETE FROM `benefit` WHERE `PlanNum` = " + planNum);
 
                 for (int j = 0; j < troj.BenefitList.Count; j++)
                 {

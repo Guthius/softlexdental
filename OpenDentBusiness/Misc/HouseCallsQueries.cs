@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Reflection;
-using System.Text;
 
 namespace OpenDentBusiness
 {
     public class HouseCallsQueries
     {
-
         public static DataTable GetHouseCalls(DateTime FromDate, DateTime ToDate)
         {
             //now, the query--------------------------------------------------------------------------
@@ -45,7 +41,7 @@ namespace OpenDentBusiness
                 + "AND (appointment.AptStatus=1 OR appointment.AptStatus=4) "//sched or ASAP
                 + "AND appointment.AptDateTime > " + POut.Date(FromDate)//> midnight
                 + " AND appointment.AptDateTime < " + POut.Date(ToDate.AddDays(1));//< midnight
-            return Db.GetTable(command);
+            return DataConnection.GetTable(command);
         }
     }
 }

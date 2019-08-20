@@ -312,9 +312,6 @@
   <data name="OpenDental" xml:space="preserve">
     <value>Open Dental</value>
   </data>
-  <data name="UseTheCEMTToolToChangeYourPassword" xml:space="preserve">
-    <value>Use the CEMT tool to change your password.</value>
-  </data>
   <data name="AllergyConfirmDelete" xml:space="preserve">
     <value>Are you sure you want to delete this allergy?</value>
   </data>

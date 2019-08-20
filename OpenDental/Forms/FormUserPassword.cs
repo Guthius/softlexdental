@@ -105,8 +105,8 @@ namespace OpenDental
                 {
                     MessageBox.Show(
                         Translation.Language.PasswordsMustMatchAndNotBeEmpty,
-                        Translation.Language.ChangePassword, 
-                        MessageBoxButtons.OK, 
+                        Translation.Language.ChangePassword,
+                        MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
 
                     return;
@@ -116,8 +116,8 @@ namespace OpenDental
             {
                 MessageBox.Show(
                     Translation.Language.CurrentPasswordIncorrect,
-                    Translation.Language.ChangePassword, 
-                    MessageBoxButtons.OK, 
+                    Translation.Language.ChangePassword,
+                    MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
                 return;
             }
@@ -129,8 +129,8 @@ namespace OpenDental
                 {
                     MessageBox.Show(
                         explanation,
-                        Translation.Language.ChangePassword, 
-                        MessageBoxButtons.OK, 
+                        Translation.Language.ChangePassword,
+                        MessageBoxButtons.OK,
                         MessageBoxIcon.Error);
 
                     return;
@@ -139,14 +139,8 @@ namespace OpenDental
 
             // If the PasswordsMustBeStrong preference is off, still store whether or not the password is strong in case the preference is turned on later
             PasswordIsStrong = string.IsNullOrEmpty(explanation);
-            if (Programs.UsingEcwTightOrFullMode())
-            {
-                LoginDetails = Authentication.GenerateLoginDetails(newPasswordTextBox.Text, HashTypes.MD5_ECW);
-            }
-            else
-            {
-                LoginDetails = Authentication.GenerateLoginDetailsSHA512(newPasswordTextBox.Text);
-            }
+
+            LoginDetails = Authentication.GenerateLoginDetailsSHA512(newPasswordTextBox.Text);
 
             DialogResult = DialogResult.OK;
         }

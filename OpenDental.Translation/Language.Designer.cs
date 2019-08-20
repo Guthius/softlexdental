@@ -1488,15 +1488,6 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the CEMT tool to change your password..
-        /// </summary>
-        public static string UseTheCEMTToolToChangeYourPassword {
-            get {
-                return ResourceManager.GetString("UseTheCEMTToolToChangeYourPassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Using version {0}.
         /// </summary>
         public static string UsingVersion {

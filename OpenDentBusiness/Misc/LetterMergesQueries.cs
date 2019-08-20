@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 
 namespace OpenDentBusiness
 {
     public class LetterMergesQueries
     {
-
-        ///<summary>Throws exceptions.</summary>
         public static DataTable GetLetterMergeInfo(Patient PatCur, LetterMerge letter)
         {
             //Throw explicit arguement exceptions so that we can hopefully get more information as to what is actually failing for our users.
@@ -153,7 +148,7 @@ namespace OpenDentBusiness
                 + "WHERE patient.PatNum=" + POut.Long(PatCur.PatNum)
                 + " GROUP BY patient.PatNum "
                 + "ORDER BY refattach.ItemOrder";
-            return Db.GetTable(command);
+            return DataConnection.GetTable(command);
         }
     }
 }

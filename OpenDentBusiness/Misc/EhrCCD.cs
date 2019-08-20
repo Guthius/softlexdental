@@ -1,21 +1,17 @@
-﻿using System;
-using System.IO;
+﻿using CodeBase;
+using OpenDentBusiness.FileIO;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
-using CodeBase;
-using System.Xml;
-using System.Xml.XPath;
 using System.Text.RegularExpressions;
-using OpenDentBusiness.FileIO;
+using System.Xml;
 
-namespace OpenDentBusiness {
-	public class EhrCCD {
+namespace OpenDentBusiness
+{
+    public class EhrCCD {
 
 		///<summary>OID: 2.16.840.1.113883.6.96</summary>
 		private const string strCodeSystemSnomed="2.16.840.1.113883.6.96";

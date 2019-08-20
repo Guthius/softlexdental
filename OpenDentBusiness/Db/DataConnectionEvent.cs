@@ -67,6 +67,4 @@ namespace OpenDentBusiness
     }
 
     public delegate void DataConnectionEventHandler(DataConnectionEventArgs e);
-
-    public delegate void CrashedTableEventHandler(CrashedTableEventArgs e);
 }

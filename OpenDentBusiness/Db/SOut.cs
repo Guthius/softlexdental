@@ -1,4 +1,3 @@
-using CodeBase;
 using System;
 using System.Drawing.Imaging;
 using System.Globalization;
@@ -8,13 +7,13 @@ using System.Text.RegularExpressions;
 
 namespace OpenDentBusiness
 {
-
-    ///<summary>Converts various datatypes into strings formatted correctly for MySQL. 
-    ///"S" is short for Scrub because this class was written specifically to replace parameters in the mysql queries.</summary>
+    /// <summary>
+    /// Converts various datatypes into strings formatted correctly for MySQL. 
+    /// "S" is short for Scrub because this class was written specifically to replace parameters in the mysql queries.
+    /// </summary>
+    [Obsolete]
     public class SOut
     {
-
-        ///<summary></summary>
         public static string Bool(bool myBool)
         {
             if (myBool == true)
@@ -27,19 +26,10 @@ namespace OpenDentBusiness
             }
         }
 
-        ///<summary></summary>
-        public static string Byte(byte myByte)
-        {
-            return myByte.ToString();
-        }
+        public static string Byte(byte myByte) => myByte.ToString();
+        
+        public static string DateT(DateTime myDateT) => DateT(myDateT, true);
 
-        ///<summary>Always encapsulates the result, depending on the current database connection.</summary>
-        public static string DateT(DateTime myDateT)
-        {
-            return DateT(myDateT, true);
-        }
-
-        ///<summary></summary>
         public static string DateT(DateTime myDateT, bool encapsulate)
         {
             if (myDateT.Year < 1880)
@@ -59,15 +49,16 @@ namespace OpenDentBusiness
             }
             catch 
             {
-                return "";//this saves zeros to a mysql database
+                return "";
             }
         }
 
-        ///<summary>Converts a date to yyyy-MM-dd format which is the format required by MySQL. myDate is the date you want to convert. encapsulate is true for the first overload, making the result look like this: 'yyyy-MM-dd' for MySQL.</summary>
-        public static string Date(DateTime myDate)
-        {
-            return Date(myDate, true);
-        }
+        /// <summary>
+        /// Converts a date to yyyy-MM-dd format which is the format required by MySQL. 
+        /// myDate is the date you want to convert. encapsulate is true for the first overload, 
+        /// making the result look like this: 'yyyy-MM-dd' for MySQL.
+        /// </summary>
+        public static string Date(DateTime myDate) => Date(myDate, true);
 
         public static string Date(DateTime myDate, bool encapsulate)
         {
@@ -85,21 +76,24 @@ namespace OpenDentBusiness
             }
             catch 
             {
-                return "";//this saves zeros to the database
+                return "";
             }
         }
 
-        ///<summary>Timespans that might be invalid time of day.  Can be + or - and can be up to 800+ hours.  Stored in Oracle as varchar2.  Never encapsulates</summary>
+        /// <summary>
+        /// Timespans that might be invalid time of day. 
+        /// Can be + or - and can be up to 800+ hours.
+        /// </summary>
         public static string TSpan(TimeSpan myTimeSpan)
         {
-            if (myTimeSpan == System.TimeSpan.Zero)
+            if (myTimeSpan == TimeSpan.Zero)
             {
                 return "00:00:00"; ;
             }
             try
             {
                 string retval = "";
-                if (myTimeSpan < System.TimeSpan.Zero)
+                if (myTimeSpan < TimeSpan.Zero)
                 {
                     retval += "-";
                     myTimeSpan = myTimeSpan.Duration();
@@ -114,13 +108,15 @@ namespace OpenDentBusiness
             }
         }
 
-        ///<summary>Timespans that are guaranteed to always be a valid time of day.  No negatives or hours over 24.  Stored in Oracle as datetime.  Encapsulated by default.</summary>
-        public static string Time(TimeSpan myTimeSpan)
-        {
-            return SOut.Time(myTimeSpan, true);
-        }
+        /// <summary>
+        /// Timespans that are guaranteed to always be a valid time of day. No negatives or hours over 24. 
+        /// </summary>
+        public static string Time(TimeSpan myTimeSpan) => Time(myTimeSpan, true);
+        
 
-        ///<summary>Timespans that are guaranteed to always be a valid time of day.  No negatives or hours over 24.  Stored in Oracle as datetime.  Encapsulated by default.</summary>
+        /// <summary>
+        /// Timespans that are guaranteed to always be a valid time of day.  No negatives or hours over 24.  Stored in Oracle as datetime.  Encapsulated by default.
+        /// </summary>
         public static string Time(TimeSpan myTimeSpan, bool encapsulate)
         {
             string retval = myTimeSpan.Hours.ToString().PadLeft(2, '0') + ":" + myTimeSpan.Minutes.ToString().PadLeft(2, '0') + ":" + myTimeSpan.Seconds.ToString().PadLeft(2, '0');
@@ -128,7 +124,6 @@ namespace OpenDentBusiness
             {
 
                 return "'" + retval + "'";
-
             }
             else
             {
@@ -136,20 +131,20 @@ namespace OpenDentBusiness
             }
         }
 
-        ///<summary>By default, rounds input up to max of 2 decimal places. EG: .0047 will return "0.00"; .0051 will return "0.01".
-        ///Set doRounding false when the double passed in needs to be Multiple Precision Floating-Point Reliable (MPFR).</summary>
+        /// <summary>
+        /// By default, rounds input up to max of 2 decimal places. EG: .0047 will return "0.00"; .0051 will return "0.01".
+        /// Set doRounding false when the double passed in needs to be Multiple Precision Floating-Point Reliable (MPFR).
+        /// </summary>
         public static string Double(double myDouble, bool doRounding = true)
         {
             try
             {
                 if (doRounding)
                 {
-                    //because decimal is a comma in Europe, this sends it to db with period instead 
                     return myDouble.ToString("f", CultureInfo.InvariantCulture);
                 }
                 else
                 {
-                    //This will send the double to the database with a comma for some countries.  E.g. Europe uses commas instead of periods. 
                     return myDouble.ToString();
                 }
             }
@@ -159,12 +154,13 @@ namespace OpenDentBusiness
             }
         }
 
-        ///<summary>Rounds input up to max of 2 decimal places. EG: .0047 will return "0.00"; .0051 will return "0.01".</summary>
+        /// <summary>
+        /// Rounds input up to max of 2 decimal places. EG: .0047 will return "0.00"; .0051 will return "0.01".
+        /// </summary>
         public static string Decimal(decimal myDecimal)
         {
             try
             {
-                //because decimal is a comma in Europe, this sends it to db with period instead 
                 return myDecimal.ToString("f", CultureInfo.InvariantCulture);
             }
             catch 
@@ -173,25 +169,12 @@ namespace OpenDentBusiness
             }
         }
 
-        ///<summary></summary>
-        public static string Long(long myLong)
-        {
-            return myLong.ToString();
-        }
+        public static string Long(long myLong) => myLong.ToString();
 
-        ///<summary></summary>
-        public static string Int(int myInt)
-        {
-            return myInt.ToString();
-        }
+        public static string Int(int myInt) => myInt.ToString();
 
-        ///<summary></summary>
-        public static string Float(float myFloat)
-        {
-            return myFloat.ToString(CultureInfo.InvariantCulture);//sends as comma in Europe.  (comes back from mysql later as a period)
-        }
+        public static string Float(float myFloat) => myFloat.ToString(CultureInfo.InvariantCulture);
 
-        ///<summary>Escapes all necessary characters.</summary>
         public static string String(string myString)
         {
             if (myString == null)
@@ -219,11 +202,13 @@ namespace OpenDentBusiness
             return strBuild.ToString();
         }
 
-        ///<summary>Should never be used outside of the crud.  Used for large columns (i.e. text, mediumtext, longtext) where it is possible to enter too 
-        ///many consecutive new line characters for the windows control to draw.  This can cause a graphics memory error.  If there are more than 50 
-        ///consecutive new line characters, this will replace them with a single new line.  It will do the same with tabs.  Any null characters will also
-        ///removed.</summary>
-        ///<param name="doEscapeCharacters">Only needs to be true when using parameters to construct the query. When true, will call POut.String.</param>
+        /// <summary>
+        /// Should never be used outside of the crud.  Used for large columns (i.e. text, mediumtext, longtext) where it is possible to enter too 
+        /// many consecutive new line characters for the windows control to draw.  This can cause a graphics memory error.  If there are more than 50 
+        /// consecutive new line characters, this will replace them with a single new line.  It will do the same with tabs.  Any null characters will also
+        /// removed.
+        /// </summary>
+        /// <param name="doEscapeCharacters">Only needs to be true when using parameters to construct the query. When true, will call POut.String.</param>
         public static string StringNote(string myString, bool doEscapeCharacters = false)
         {
             if (myString == null)
@@ -241,10 +226,12 @@ namespace OpenDentBusiness
             {
                 return String(myString);
             }
-            return myString;//Do not use POut.String here.  Crud will handle via db parameters.
+            return myString;
         }
 
-        ///<summary>Should never be used outside of the crud. Scrubs unwanted unicode symbols from SQL parameters.</summary>
+        /// <summary>
+        /// Should never be used outside of the crud. Scrubs unwanted unicode symbols from SQL parameters.
+        /// </summary>
         public static string StringParam(string myString)
         {
             if (myString == null)
@@ -252,10 +239,9 @@ namespace OpenDentBusiness
                 return "";
             }
             myString = StringScrub(myString);
-            return myString;//Do not use POut.String here.  Crud will handle via db parameters.
+            return myString;
         }
 
-        ///<summary></summary>
         public static string Bitmap(System.Drawing.Bitmap bitmap, ImageFormat imageFormat)
         {
             if (bitmap == null)
@@ -270,7 +256,11 @@ namespace OpenDentBusiness
             }
         }
 
-        ///<summary>Converts the specified wav file into a string representation.  The timing of this is a little different than with the other "P" functions and is only used by the import button in FormSigElementDefEdit.  After that, the wav spends the rest of it's life as a string until "played" or exported.</summary>
+        /// <summary>
+        /// Converts the specified wav file into a string representation.
+        /// The timing of this is a little different than with the other "P" functions and is only used by the import button in FormSigElementDefEdit.
+        /// After that, the wav spends the rest of it's life as a string until "played" or exported.
+        /// </summary>
         public static string Sound(string filename)
         {
             if (!File.Exists(filename))
@@ -287,21 +277,9 @@ namespace OpenDentBusiness
             return Convert.ToBase64String(rawData);
         }
 
-        ///<summary>The supplied string should already be in safe base64 format, and should not need any special escaping.  The purpose of this function is to enforce that the supplied string meets these requirements.  This is done quickly.</summary>
-        public static string Base64(string myString)
-        {
-            if (myString == null)
-            {
-                return "";
-            }
-            if (!Regex.IsMatch(myString, "[A-Z0-9]*"))
-            {
-                throw new ApplicationException("Characters found that do not match base64 format.");
-            }
-            return myString;
-        }
-
-        ///<summary>Removes unsupported UTF-8 characters from the string so that inserting into the database can preserve as much of the string as possible.</summary>
+        /// <summary>
+        /// Removes unsupported UTF-8 characters from the string so that inserting into the database can preserve as much of the string as possible.
+        /// </summary>
         private static string StringScrub(string myString)
         {
             //Explicitly check for exactly null in order to preserve old behavior of returning an empty string.
@@ -340,11 +318,9 @@ namespace OpenDentBusiness
             return myString;
         }
 
-        ///<summary>Returns true if some characters would be stripped out of str before appending to a query.</summary>
-        public static bool HasInjectionChars(string str)
-        {
-            string strShort = SOut.String(str);
-            return (str != strShort);
-        }
+        /// <summary>
+        /// Returns true if some characters would be stripped out of str before appending to a query.
+        /// </summary>
+        public static bool HasInjectionChars(string str) => !String(str).Equals(str);
     }
 }

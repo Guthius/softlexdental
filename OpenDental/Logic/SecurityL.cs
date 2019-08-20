@@ -10,26 +10,16 @@ namespace OpenDental
         /// <summary>
         /// Called to change the password for <see cref="Security.CurUser"/>.
         /// </summary>
-        /// <param name="isForcedLogOff">A value indicating whether to force a log off if the user cancels out the change password dialog.</param>
-        /// <param name="doRefreshSecurityCache"></param>
+        /// <param name="forceLogOff">A value indicating whether to force a log off if the user cancels out the change password dialog.</param>
+        /// <param name="refreshSecurityCache"></param>
         /// <returns>True if the password was changed succesfully; otherwise, false.</returns>
-        public static bool ChangePassword(bool isForcedLogOff, bool doRefreshSecurityCache = true)
+        public static bool ChangePassword(bool forceLogOff, bool refreshSecurityCache = true)
         {
-            if (Security.CurUser.UserNumCEMT != 0)
-            {
-                MessageBox.Show(
-                    Translation.Language.UseTheCEMTToolToChangeYourPassword, 
-                    Translation.Language.OpenDental, 
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                return false;
-            }
-
             using (var formUserPassword = new FormUserPassword(false, Security.CurUser.UserName))
             {
                 if (formUserPassword.ShowDialog() == DialogResult.Cancel)
                 {
-                    if (isForcedLogOff)
+                    if (forceLogOff)
                     {
                         var forms = Application.OpenForms.OfType<FormOpenDental>().ToList();
                         if (forms.Count > 0)
@@ -67,7 +57,7 @@ namespace OpenDental
                 Security.PasswordTyped = formUserPassword.Password;
             }
 
-            if (doRefreshSecurityCache)
+            if (refreshSecurityCache)
             {
                 DataValid.SetInvalid(InvalidType.Security);
             }

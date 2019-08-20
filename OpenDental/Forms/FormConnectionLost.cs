@@ -46,10 +46,7 @@ namespace OpenDental {
 		}
 
 		private Delegate GetDelegateFired(Type eventHandlerType) {
-			if(_eventInfoFired.EventHandlerType==typeof(CrashedTableEventHandler)) {
-				return Delegate.CreateDelegate(_eventInfoFired.EventHandlerType,this,"CrashedTableEvent_Fired");
-			}
-			else if(_eventInfoFired.EventHandlerType==typeof(DataConnectionEventHandler)) {
+			if(_eventInfoFired.EventHandlerType==typeof(DataConnectionEventHandler)) {
 				return Delegate.CreateDelegate(_eventInfoFired.EventHandlerType,this,"DataConnectionEvent_Fired");
 			}
 			else {

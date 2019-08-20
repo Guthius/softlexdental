@@ -1,16 +1,18 @@
-using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace OpenDentBusiness
 {
     public class ProcedureLogic
     {
-        ///<summary>The supplied DataRows must include the following columns: ProcStatus(optional),Priority(optional),ToothRange,ToothNum,ProcCode.  This sorts procedures based on priority, then tooth number, then procCode.  It does not care about dates or status.  Currently used in Account module, appointments, and Chart module sorting.  TP uses Procedures.ProcedureComparer.</summary>
+        /// <summary>
+        /// The supplied DataRows must include the following columns: ProcStatus(optional),Priority(optional),ToothRange,ToothNum,ProcCode.
+        /// This sorts procedures based on priority, then tooth number, then procCode. It does not care about dates or status. 
+        /// Currently used in Account module, appointments, and Chart module sorting. TP uses Procedures.ProcedureComparer.
+        /// </summary>
         public static int CompareProcedures(DataRow x, DataRow y)
         {
-            //first, by status
+            // first, by status
             if (x.Table.Columns.Contains("ProcStatus") && y.Table.Columns.Contains("ProcStatus"))
             {
                 if (x["ProcStatus"].ToString() != y["ProcStatus"].ToString())
@@ -116,9 +118,11 @@ namespace OpenDentBusiness
             return x["ProcNum"].ToString().CompareTo(y["ProcNum"].ToString());
         }
 
-        ///<summary>Compares two procedures and returns the order they should appear based on status, priority, toothrange, toothnum, then proccode.  
-        ///Uses the same logic as the other CompareProcedures but takes Procedure objects instead of DataRows.  
-        ///Only used for the Appointment Edit window currently.</summary>
+        /// <summary>
+        /// Compares two procedures and returns the order they should appear based on status, priority, toothrange, toothnum, then proccode. 
+        /// Uses the same logic as the other CompareProcedures but takes Procedure objects instead of DataRows.  
+        /// Only used for the Appointment Edit window currently.
+        /// </summary>
         public static int CompareProcedures(Procedure x, Procedure y)
         {
             //first by status

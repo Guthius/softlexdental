@@ -2,17 +2,20 @@
 
 namespace CodeBase
 {
-    ///<summary>An object that represents a range of dates.</summary>
+    /// <summary>
+    /// An object that represents a range of dates.
+    /// </summary>
     public class DateRange
     {
-        ///<summary>The beginning of the date range.</summary>
+        /// <summary>
+        /// The beginning of the date range.
+        /// </summary>
         public DateTime Start;
-        ///<summary>The end of the date range.</summary>
-        public DateTime End;
 
-        public DateRange()
-        {
-        }
+        /// <summary>
+        /// The end of the date range.
+        /// </summary>
+        public DateTime End;
 
         public DateRange(DateTime dateRangeStart, DateTime dateRangeEnd)
         {
@@ -20,9 +23,6 @@ namespace CodeBase
             End = dateRangeEnd;
         }
 
-        public bool IsInRange(DateTime dateTime)
-        {
-            return dateTime.Between(Start, End);
-        }
+        public bool IsInRange(DateTime dateTime) => dateTime.Between(Start, End);
     }
 }

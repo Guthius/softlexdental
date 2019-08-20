@@ -159,9 +159,6 @@ namespace OpenDental
 
             var passwordTyped = Plugin.Filter(this, "FormLogOn_PasswordHash", passwordTextBox.Text, userName);
 
-            // ECW requires hash, but non-ecw requires actual password
-            if (isEcw) passwordTyped = Authentication.HashPasswordMD5(passwordTyped, true);
-
             try
             {
                 userCur = Userods.CheckUserAndPassword(userName, passwordTyped, isEcw);

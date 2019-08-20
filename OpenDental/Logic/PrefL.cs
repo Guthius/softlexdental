@@ -199,6 +199,7 @@ namespace OpenDental
                     progressIndicator.ErrorMessage = ex.Message;
                 }
             }
+
             //If the file was successfully downloaded, set the progress indicator to maximum so that it closes the progress window.
             //Otherwise leave the window open so that the error message can be displayed to the user in red text.
             if (string.IsNullOrEmpty(progressIndicator.ErrorMessage))
@@ -206,83 +207,15 @@ namespace OpenDental
                 progressIndicator.CurrentVal = (double)contentLength / 1024;
             }
             else
-            {//There was an unexpected error.
+            {
                 try
                 {
-                    File.Delete(destinationPath);//Try to clean up after ourselves.
+                    File.Delete(destinationPath);
                 }
                 catch
                 {
                 }
             }
-        }
-
-        ///<summary>Tries to install the OpenDentalService if needed.  Returns false if failed.
-        ///Set isSilent to false to show meaningful error messages, otherwise fails silently.</summary>
-        public static bool TryInstallOpenDentalService(bool isSilent)
-        {
-            try
-            {
-                List<ServiceController> listOpenDentalServices = ServicesHelper.GetServicesByExe("OpenDentalService.exe");
-                if (listOpenDentalServices.Count > 0)
-                {
-                    return true;//An Open Dental Service is already installed.
-                }
-                string odServiceFilePath = ODFileUtils.CombinePaths(Directory.GetCurrentDirectory(), "OpenDentalService", "OpenDentalService.exe");
-                if (!ServicesHelper.Install("OpenDentalService", odServiceFilePath))
-                {
-                    AlertItems.CreateGenericAlert(Lans.g("ServicesHelper", "Open Dental Service Error"), Lans.g("ServicesHelper", "Failed to install OpenDentalService, try running as admin."));
-                    return false;
-                }
-                //Create a new OpenDentalServiceConfig.xml file for Open Dental Service if one is not already present.
-                if (!CreateConfigForOpenDentalService())
-                {
-                    AlertItems.CreateGenericAlert(Lans.g("ServicesHelper", "Open Dental Service Error"), Lans.g("ServicesHelper", "Failed to create OpenDentalServiceConfig.xml file."));
-                    return false;
-                }
-                //Now that the service has finally installed we need to try and start it.
-                listOpenDentalServices = ServicesHelper.GetServicesByExe("OpenDentalService.exe");
-                if (listOpenDentalServices.Count < 1)
-                {
-                    AlertItems.CreateGenericAlert(Lans.g("ServicesHelper", "Open Dental Service Error"), Lans.g("ServicesHelper", "OpenDental Service could not be found."));
-                    return false;
-                }
-                string openDentalServiceStartingErrors = ServicesHelper.StartServices(listOpenDentalServices);
-                if (!string.IsNullOrEmpty(openDentalServiceStartingErrors))
-                {
-                    AlertItems.CreateGenericAlert(Lans.g("ServicesHelper", "Open Dental Service Error"), Lans.g("ServicesHelper", "The following service(s) could not start:") + " " + openDentalServiceStartingErrors);
-                    return false;
-                }
-                return true;
-            }
-            catch (Exception e)
-            {
-                AlertItems.CreateGenericAlert(Lans.g("ServicesHelper", "Open Dental Service Error"), Lans.g("ServicesHelper", "Unknown exception:") + " " + e.Message);
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Creates a default OpenDentalServiceConfig.xml file for Open Dental Service if one is not already present.
-        /// Uses the current connection settings in DataConnection.
-        /// </summary>
-        public static bool CreateConfigForOpenDentalService()
-        {
-            var configFileName = Path.Combine(Directory.GetCurrentDirectory(), "OpenDentalService", "OpenDentalServiceConfig.xml");
-
-            if (File.Exists(configFileName)) return true;
-
-            Encryption.TryEncrypt(DataConnection.Password, out string passwordHash);
-
-            return 
-                ServicesHelper.CreateServiceConfigFile(
-                    configFileName, 
-                    DataConnection.Host, 
-                    DataConnection.Database, 
-                    DataConnection.Username, 
-                    DataConnection.Password, 
-                    passwordHash, 
-                    "", "");
         }
     }
 }

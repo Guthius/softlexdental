@@ -185,56 +185,62 @@ namespace OpenDentBusiness
 
         #region Modification Methods
 
-        ///<summary>CAUTION.  This does not perform all validations.  Throws exceptions.</summary>
+        /// <summary>CAUTION.  This does not perform all validations.  Throws exceptions.</summary>
         public static void Delete(Definition def)
         {
             string command;
-            List<string> listCommands = new List<string>();
+
+            var commandList = new List<string>();
             switch (def.Category)
             {
                 case DefinitionCategory.ClaimCustomTracking:
-                    listCommands.Add("SELECT COUNT(*) FROM securitylog WHERE DefNum=" + POut.Long(def.Id));
-                    listCommands.Add("SELECT COUNT(*) FROM claim WHERE CustomTracking=" + POut.Long(def.Id));
+                    commandList.Add("SELECT COUNT(*) FROM securitylog WHERE DefNum=" + def.Id);
+                    commandList.Add("SELECT COUNT(*) FROM claim WHERE CustomTracking=" + def.Id);
                     break;
+
                 case DefinitionCategory.ClaimErrorCode:
-                    listCommands.Add("SELECT COUNT(*) FROM claimtracking WHERE TrackingErrorDefNum=" + POut.Long(def.Id));
+                    commandList.Add("SELECT COUNT(*) FROM claimtracking WHERE TrackingErrorDefNum=" + def.Id);
                     break;
+
                 case DefinitionCategory.InsurancePaymentType:
-                    listCommands.Add("SELECT COUNT(*) FROM claimpayment WHERE PayType=" + POut.Long(def.Id));
+                    commandList.Add("SELECT COUNT(*) FROM claimpayment WHERE PayType=" + def.Id);
                     break;
+
                 case DefinitionCategory.SupplyCats:
-                    listCommands.Add("SELECT COUNT(*) FROM supply WHERE Category=" + POut.Long(def.Id));
+                    commandList.Add("SELECT COUNT(*) FROM supply WHERE Category=" + def.Id);
                     break;
+
                 case DefinitionCategory.AccountQuickCharge:
                     break;//Users can delete AcctProcQuickCharge entries.  Nothing has an FKey to a AcctProcQuickCharge Def so no need to check anything.
+
                 case DefinitionCategory.AutoNoteCats:
                     AutoNotes.RemoveFromCategory(def.Id);//set any autonotes assinged to this category to 0 (unassigned), user already warned about this
-                    listCommands.Add("SELECT COUNT(*) FROM autonote WHERE Category=" + POut.Long(def.Id));//just in case update failed or concurrency issue
+                    commandList.Add("SELECT COUNT(*) FROM autonote WHERE Category=" + def.Id);//just in case update failed or concurrency issue
                     break;
+
                 case DefinitionCategory.WebSchedNewPatApptTypes:
                     //Do not let the user delete the last WebSchedNewPatApptTypes definition.  Must be at least one.
-                    command = "SELECT COUNT(*) FROM definition WHERE Category=" + POut.Int((int)DefinitionCategory.WebSchedNewPatApptTypes);
-                    if (PIn.Int(Db.GetCount(command), false) <= 1)
+                    command = "SELECT COUNT(*) FROM definition WHERE Category=" + (int)DefinitionCategory.WebSchedNewPatApptTypes;
+                    if (DataConnection.ExecuteLong(command) <= 1)
                     {
                         throw new ApplicationException("NOT Allowed to delete the last def of this type.");
                     }
                     break;
+
                 default:
                     throw new ApplicationException("NOT Allowed to delete this type of def.");
             }
-            for (int i = 0; i < listCommands.Count; i++)
+
+            for (int i = 0; i < commandList.Count; i++)
             {
-                if (Db.GetCount(listCommands[i]) != "0")
+                if (DataConnection.ExecuteLong(commandList[i]) > 0)
                 {
                     throw new ApplicationException(Lans.g("Defs", "Def is in use.  Not allowed to delete."));
                 }
             }
-            command = "DELETE FROM definition WHERE DefNum=" + POut.Long(def.Id);
-            Db.NonQ(command);
-            command = "UPDATE definition SET ItemOrder=ItemOrder-1 "
-                + "WHERE Category=" + POut.Long((int)def.Category)
-                + " AND ItemOrder > " + POut.Long(def.SortOrder);
-            Db.NonQ(command);
+
+            DataConnection.ExecuteNonQuery("DELETE FROM definition WHERE DefNum=" + def.Id);
+            DataConnection.ExecuteNonQuery("UPDATE definition SET ItemOrder=ItemOrder-1 WHERE Category=" + (int)def.Category + " AND ItemOrder > " + def.SortOrder);
         }
 
         #endregion
@@ -300,10 +306,10 @@ namespace OpenDentBusiness
 
         ///<summary>Returns true if this definition is in use within the program. Consider enhancing this method if you add a definition category.
         ///Does not check patient billing type or provider specialty since those are handled in their S-class.</summary>
-        public static bool IsDefinitionInUse(Definition def)
+        public static bool IsDefinitionInUse(Definition definition)
         {
-            List<string> listStrCommands = new List<string>();
-            switch (def.Category)
+            var commandList = new List<string>();
+            switch (definition.Category)
             {
                 case DefinitionCategory.AdjTypes:
                     if (new[] {
@@ -312,12 +318,13 @@ namespace OpenDentBusiness
                             PreferenceName.BillingChargeAdjustmentType,
                             PreferenceName.FinanceChargeAdjustmentType,
                             PreferenceName.SalesTaxAdjustmentType
-                        }.Any(x => Preference.GetLong(x) == def.Id))
+                        }.Any(x => Preference.GetLong(x) == definition.Id))
                     {
                         return true;
                     }
-                    listStrCommands.Add("SELECT COUNT(*) FROM adjustment WHERE AdjType=" + POut.Long(def.Id));
+                    commandList.Add("SELECT COUNT(*) FROM adjustment WHERE AdjType=" + definition.Id);
                     break;
+
                 case DefinitionCategory.ApptConfirmed:
                     if (new[] {
                             PreferenceName.AppointmentTimeArrivedTrigger,
@@ -325,53 +332,68 @@ namespace OpenDentBusiness
                             PreferenceName.AppointmentTimeDismissedTrigger,
                             PreferenceName.WebSchedNewPatConfirmStatus,
                             PreferenceName.WebSchedRecallConfirmStatus,
-                        }.Any(x => Preference.GetLong(x) == def.Id))
+                        }.Any(x => Preference.GetLong(x) == definition.Id))
                     {
                         return true;
                     }
-                    if (new[] { PreferenceName.ApptEConfirmStatusSent, PreferenceName.ApptEConfirmStatusAccepted, PreferenceName.ApptEConfirmStatusDeclined, PreferenceName.ApptEConfirmStatusSendFailed }
-                        .Any(x => Preference.GetLong(x) == def.Id))
+
+                    if (new[] {
+                            PreferenceName.ApptEConfirmStatusSent,
+                            PreferenceName.ApptEConfirmStatusAccepted,
+                            PreferenceName.ApptEConfirmStatusDeclined,
+                            PreferenceName.ApptEConfirmStatusSendFailed
+                        }.Any(x => Preference.GetLong(x) == definition.Id))
                     {
                         return true;
                     }
-                    listStrCommands.Add("SELECT COUNT(*) FROM appointment WHERE Confirmed=" + POut.Long(def.Id));
+
+                    commandList.Add("SELECT COUNT(*) FROM appointment WHERE Confirmed=" + definition.Id);
                     break;
+
                 case DefinitionCategory.AutoNoteCats:
-                    listStrCommands.Add("SELECT COUNT(*) FROM autonote WHERE Category=" + POut.Long(def.Id));
+                    commandList.Add("SELECT COUNT(*) FROM autonote WHERE Category=" + definition.Id);
                     break;
+
                 case DefinitionCategory.BillingTypes:
                     if (new[] {
                             PreferenceName.PracticeDefaultBillType
-                        }.Any(x => Preference.GetLong(x) == def.Id))
+                        }.Any(x => Preference.GetLong(x) == definition.Id))
                     {
                         return true;
                     }
                     break;
+
                 case DefinitionCategory.ContactCategories:
-                    listStrCommands.Add("SELECT COUNT(*) FROM contact WHERE Category=" + POut.Long(def.Id));
+                    commandList.Add("SELECT COUNT(*) FROM contact WHERE Category=" + definition.Id);
                     break;
+
                 case DefinitionCategory.Diagnosis:
-                    listStrCommands.Add("SELECT COUNT(*) FROM procedurelog WHERE Dx=" + POut.Long(def.Id));
+                    commandList.Add("SELECT COUNT(*) FROM procedurelog WHERE Dx=" + definition.Id);
                     break;
+
                 case DefinitionCategory.ImageCats:
-                    listStrCommands.Add("SELECT COUNT(*) FROM document WHERE DocCategory=" + POut.Long(def.Id));
-                    listStrCommands.Add("SELECT COUNT(*) FROM sheetfielddef WHERE FieldType=" + POut.Int((int)SheetFieldType.PatImage) + " AND FieldName=" + POut.Long(def.Id));
+                    commandList.Add("SELECT COUNT(*) FROM document WHERE DocCategory=" + definition.Id);
+                    commandList.Add("SELECT COUNT(*) FROM sheetfielddef WHERE FieldType=" + (int)SheetFieldType.PatImage + " AND FieldName=" + definition.Id);
                     break;
+
                 case DefinitionCategory.PaymentTypes:
-                    if (Preference.GetLong(PreferenceName.RecurringChargesPayTypeCC) == def.Id)
+                    if (Preference.GetLong(PreferenceName.RecurringChargesPayTypeCC) == definition.Id)
                     {
                         return true;
                     }
-                    listStrCommands.Add("SELECT COUNT(*) FROM payment WHERE PayType=" + POut.Long(def.Id));
+                    commandList.Add("SELECT COUNT(*) FROM payment WHERE PayType=" + definition.Id);
                     break;
+
                 case DefinitionCategory.PaySplitUnearnedType:
-                    listStrCommands.Add("SELECT COUNT(*) FROM paysplit WHERE UnearnedType=" + POut.Long(def.Id));
+                    commandList.Add("SELECT COUNT(*) FROM paysplit WHERE UnearnedType=" + definition.Id);
                     break;
+
                 case DefinitionCategory.Prognosis:
-                    listStrCommands.Add("SELECT COUNT(*) FROM procedurelog WHERE Prognosis=" + POut.Long(def.Id));
+                    commandList.Add("SELECT COUNT(*) FROM procedurelog WHERE Prognosis=" + definition.Id);
                     break;
+
                 case DefinitionCategory.RecallUnschedStatus:
-                    if (def.Id.In(
+                    if (definition.Id.In(
                         Preference.GetInt(PreferenceName.RecallStatusMailed),
                         Preference.GetInt(PreferenceName.RecallStatusTexted),
                         Preference.GetInt(PreferenceName.RecallStatusEmailed),
@@ -379,22 +401,25 @@ namespace OpenDentBusiness
                     {
                         return true;
                     }
-                    listStrCommands.Add("SELECT COUNT(*) FROM appointment WHERE UnschedStatus=" + POut.Long(def.Id));
-                    listStrCommands.Add("SELECT COUNT(*) FROM recall WHERE RecallStatus=" + POut.Long(def.Id));
+                    commandList.Add("SELECT COUNT(*) FROM appointment WHERE UnschedStatus=" + definition.Id);
+                    commandList.Add("SELECT COUNT(*) FROM recall WHERE RecallStatus=" + definition.Id);
                     break;
                 case DefinitionCategory.TaskPriorities:
-                    listStrCommands.Add("SELECT COUNT(*) FROM task WHERE PriorityDefNum=" + POut.Long(def.Id));
+                    commandList.Add("SELECT COUNT(*) FROM task WHERE PriorityDefNum=" + definition.Id);
                     break;
+
                 case DefinitionCategory.TxPriorities:
-                    listStrCommands.Add("SELECT COUNT(*) FROM procedurelog WHERE Priority=" + POut.Long(def.Id));
+                    commandList.Add("SELECT COUNT(*) FROM procedurelog WHERE Priority=" + definition.Id);
                     break;
+
                 case DefinitionCategory.CommLogTypes:
-                    listStrCommands.Add("SELECT COUNT(*) FROM commlog WHERE CommType=" + POut.Long(def.Id));
+                    commandList.Add("SELECT COUNT(*) FROM commlog WHERE CommType=" + definition.Id);
                     break;
+
                 default:
                     break;
             }
-            return listStrCommands.Any(x => Db.GetCount(x) != "0");
+            return commandList.Any(x => DataConnection.ExecuteLong(x) > 0);
         }
 
         #endregion

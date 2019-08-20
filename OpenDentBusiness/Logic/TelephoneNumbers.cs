@@ -1,8 +1,5 @@
 ﻿using CodeBase;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace OpenDentBusiness
@@ -45,68 +42,82 @@ namespace OpenDentBusiness
             return true;
         }
 
-        ///<summary>Used in the tool that loops through the database fixing telephone numbers.  Also used in the patient import from XML tool, carrier edit window, and PT Dental bridge.</summary>
+        /// <summary>
+        /// Used in the tool that loops through the database fixing telephone numbers.
+        /// Also used in the patient import from XML tool, carrier edit window, and PT Dental bridge.
+        /// </summary>
         public static string ReFormat(string phoneNum)
         {
             if (string.IsNullOrEmpty(phoneNum))
             {
                 return "";
             }
+
             if (!IsFormattingAllowed)
             {
                 return phoneNum;
             }
-            Regex regex;
-            regex = new Regex(@"^\d{10}$");//eg. 5033635432
+
+            var regex = new Regex(@"^\d{10}$");//eg. 5033635432
             if (regex.IsMatch(phoneNum))
             {
                 return "(" + phoneNum.Substring(0, 3) + ")" + phoneNum.Substring(3, 3) + "-" + phoneNum.Substring(6);
             }
+
             regex = new Regex(@"^\d{11}$");//eg. 15033635432
             if (regex.IsMatch(phoneNum))
             {
                 return phoneNum.Substring(0, 1) + "(" + phoneNum.Substring(1, 3) + ")" + phoneNum.Substring(4, 3) + "-" + phoneNum.Substring(7);
             }
+
             regex = new Regex(@"^\d{3}-\d{3}-\d{4}");//eg. 503-363-5432
             if (regex.IsMatch(phoneNum))
             {
                 return "(" + phoneNum.Substring(0, 3) + ")" + phoneNum.Substring(4);
             }
+
             regex = new Regex(@"^\d-\d{3}-\d{3}-\d{4}");//eg. 1-503-363-5432 to 1(503)363-5432
             if (regex.IsMatch(phoneNum))
             {
                 return phoneNum.Substring(0, 1) + "(" + phoneNum.Substring(2, 3) + ")" + phoneNum.Substring(6);
             }
+
             regex = new Regex(@"^\d{3} \d{3}-\d{4}");//eg 503 363-5432
             if (regex.IsMatch(phoneNum))
             {
                 return "(" + phoneNum.Substring(0, 3) + ")" + phoneNum.Substring(4);
             }
+
             regex = new Regex(@"^\d{3} \d{3} \d{4}");//eg 916 363 5432
             if (regex.IsMatch(phoneNum))
             {
                 return "(" + phoneNum.Substring(0, 3) + ")" + phoneNum.Substring(4, 3) + "-" + phoneNum.Substring(8);
             }
+
             regex = new Regex(@"^\(\d{3}\) \d{3} \d{4}");//eg (916) 363 5432
             if (regex.IsMatch(phoneNum))
             {
                 return "(" + phoneNum.Substring(1, 3) + ")" + phoneNum.Substring(6, 3) + "-" + phoneNum.Substring(10);
             }
+
             regex = new Regex(@"^\(\d{3}\) \d{3}-\d{4}");//eg (916) 363-5432
             if (regex.IsMatch(phoneNum))
             {
                 return "(" + phoneNum.Substring(1, 3) + ")" + phoneNum.Substring(6, 3) + "-" + phoneNum.Substring(10);
             }
+
             regex = new Regex(@"^\d{7}");//eg 3635432
             if (regex.IsMatch(phoneNum))
             {//this must be run after the d{10} match up above.
                 return (phoneNum.Substring(0, 3) + "-" + phoneNum.Substring(3));
             }
+
             regex = new Regex(@"^\(\d{3}-\d{3}-\d{4}");//eg (916-363-5432
             if (regex.IsMatch(phoneNum))
             {
                 return "(" + phoneNum.Substring(1, 3) + ")" + phoneNum.Substring(5, 3) + "-" + phoneNum.Substring(9);
             }
+
             regex = new Regex(@"^\d{3}\)\d{3}-\d{4}");//eg 916)363-5432
             if (regex.IsMatch(phoneNum))
             {

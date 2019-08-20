@@ -13,10 +13,6 @@ namespace OpenDentBusiness
         private const long TicksPerSecond = TimeSpan.TicksPerSecond;
         private static readonly DateTime Epoch = new DateTime(1900, 1, 1);
 
-        public NTPv4()
-        {
-        }
-
         /// <summary>
         /// Sends an NTPv4 request to the passed url and returns the offset from DateTime.Now.
         /// Returns double.MaxValue if request timed out. Will throw exception if nistServerUrl is invalid.
@@ -69,22 +65,20 @@ namespace OpenDentBusiness
         /// </summary>
         DateTime RawToDateTime(byte[] arraySource, int startIdx)
         {
-            UInt64 seconds = 0;
             byte[] arraySeconds = new byte[8];
             for (int i = 0; i <= 3; i++)
             {
                 arraySeconds[3 - i] = arraySource[startIdx + i];
             }
-            seconds = BitConverter.ToUInt64(arraySeconds, 0);
-            UInt64 fractions = 0;
+            ulong seconds = BitConverter.ToUInt64(arraySeconds, 0);
             byte[] arrayFractions = new byte[8];
             for (int i = 4; i <= 7; i++)
             {
                 arrayFractions[7 - i] = arraySource[startIdx + i];
             }
-            fractions = BitConverter.ToUInt64(arrayFractions, 0);
-            UInt64 ticks = (seconds * TicksPerSecond) + ((fractions * TicksPerSecond) / 0x100000000L);
-            return Epoch + TimeSpan.FromTicks((Int64)ticks);
+            ulong fractions = BitConverter.ToUInt64(arrayFractions, 0);
+            ulong ticks = (seconds * TicksPerSecond) + ((fractions * TicksPerSecond) / 0x100000000L);
+            return Epoch + TimeSpan.FromTicks((long)ticks);
         }
 
         /// <summary>
@@ -97,9 +91,9 @@ namespace OpenDentBusiness
             arrayPacket[0] = 0x1B;//Identifies us as a Client, and using Version NTPv4
                                   //byte 1-39 don't fill
                                   //byte 40-47 (Current system time)
-            UInt64 ticks = (UInt64)(DateTime.Now.ToUniversalTime() - Epoch).Ticks;
-            UInt64 seconds = ticks / TicksPerSecond;
-            UInt64 fractions = ((ticks % TicksPerSecond) * 0x100000000L) / TicksPerSecond;
+            ulong ticks = (ulong)(DateTime.Now.ToUniversalTime() - Epoch).Ticks;
+            ulong seconds = ticks / TicksPerSecond;
+            ulong fractions = ((ticks % TicksPerSecond) * 0x100000000L) / TicksPerSecond;
             byte[] arraySeconds = BitConverter.GetBytes(seconds);
             byte[] arrayFractions = BitConverter.GetBytes(fractions);
             for (int i = 3; i >= 0; i--)
@@ -112,7 +106,5 @@ namespace OpenDentBusiness
             }
             return arrayPacket;
         }
-
     }
-
 }

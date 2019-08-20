@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
 
 namespace OpenDentBusiness
 {
@@ -37,6 +34,7 @@ namespace OpenDentBusiness
             {
                 dateTimeTo = DateTime.Now;
             }
+
             if (dateTimeTo < dateBirth)
             {
                 return "";

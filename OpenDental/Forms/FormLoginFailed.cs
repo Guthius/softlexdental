@@ -32,7 +32,7 @@ namespace OpenDental {
 					if(Security.CurUser==null) {
 						Security.CurUser=new User();
 					}
-					password=Authentication.HashPasswordMD5(password,true);
+					password=Authentication.HashPasswordMD5(password);
 				}
 				string username=textUser.Text;
 				#if DEBUG

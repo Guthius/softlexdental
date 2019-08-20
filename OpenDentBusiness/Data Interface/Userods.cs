@@ -459,134 +459,6 @@ namespace OpenDentBusiness
             }
         }
 
-        //public static void LoadDatabaseInfoFromFile(string configFilePath)
-        //{
-        //    //No need to check RemotingRole; no call to db.
-        //    if (!File.Exists(configFilePath))
-        //    {
-        //        throw new Exception("Could not find " + configFilePath + " on the web server.");
-        //    }
-        //    XmlDocument doc = new XmlDocument();
-        //    try
-        //    {
-        //        doc.Load(configFilePath);
-        //    }
-        //    catch
-        //    {
-        //        throw new Exception("Web server " + configFilePath + " could not be opened or is in an invalid format.");
-        //    }
-        //    XPathNavigator Navigator = doc.CreateNavigator();
-        //    //always picks the first database entry in the file:
-        //    XPathNavigator navConn = Navigator.SelectSingleNode("//DatabaseConnection");//[Database='"+database+"']");
-        //    if (navConn == null)
-        //    {
-        //        throw new Exception(configFilePath + " does not contain a valid database entry.");//database+" is not an allowed database.");
-        //    }
-        //
-        //    #region Verify ApplicationName Config File Value
-        //    XPathNavigator configFileNode = navConn.SelectSingleNode("ApplicationName");//usually /OpenDentalServer
-        //    if (configFileNode == null)
-        //    {//when first updating, this node will not exist in the xml file, so just add it.
-        //        try
-        //        {
-        //            //AppendChild does not affect the position of the XPathNavigator; adds <ApplicationName>/OpenDentalServer<ApplicationName/> to the xml
-        //            using (XmlWriter writer = navConn.AppendChild())
-        //            {
-        //                writer.WriteElementString("ApplicationName", HostingEnvironment.ApplicationVirtualPath);
-        //            }
-        //            doc.Save(configFilePath);
-        //        }
-        //        catch { }//do nothing, unable to write to the XML file, move on anyway
-        //    }
-        //    else if (string.IsNullOrWhiteSpace(configFileNode.Value))
-        //    {//empty node, add the Application Virtual Path
-        //        try
-        //        {
-        //            configFileNode.SetValue(HostingEnvironment.ApplicationVirtualPath);//sets value to /OpenDentalServer or whatever they named their app
-        //            doc.Save(configFilePath);
-        //        }
-        //        catch { }//do nothing, unable to write to the XML file, move on anyway
-        //    }
-        //    else if (configFileNode.Value.ToLower() != HostingEnvironment.ApplicationVirtualPath.ToLower())
-        //    {
-        //        //the xml node exists and this file already has an Application Virtual Path in it that does not match the name of the IIS attempting to access it
-        //        string filePath = ODFileUtils.CombinePaths(Path.GetDirectoryName(configFilePath), HostingEnvironment.ApplicationVirtualPath.Trim('/') + "Config.xml");
-        //        throw new Exception("Multiple middle tier servers are potentially trying to connect to the same database.\r\n"
-        //            + "This middle tier server cannot connect to the database within the config file found.\r\n"
-        //            + "This middle tier server should be using the following config file:\r\n\t" + filePath + "\r\n"
-        //            + "The config file is expecting an ApplicationName of:\r\n\t" + HostingEnvironment.ApplicationVirtualPath);
-        //    }
-        //    #endregion Verify ApplicationName Config File Value
-        //
-        //
-        //    string connString = "", server = "", database = "", mysqlUser = "", mysqlPassword = "", mysqlUserLow = "", mysqlPasswordLow = "";
-        //    XPathNavigator navConString = navConn.SelectSingleNode("ConnectionString");
-        //    if (navConString != null)
-        //    {//If there is a connection string then use it.
-        //        connString = navConString.Value;
-        //    }
-        //    else
-        //    {
-        //        //return navOne.SelectSingleNode("summary").Value;
-        //        //now, get the values for this connection
-        //        server = navConn.SelectSingleNode("ComputerName").Value;
-        //        database = navConn.SelectSingleNode("Database").Value;
-        //        mysqlUser = navConn.SelectSingleNode("User").Value;
-        //        mysqlPassword = navConn.SelectSingleNode("Password").Value;
-        //        XPathNavigator encryptedPwdNode = navConn.SelectSingleNode("MySQLPassHash");
-        //        string decryptedPwd;
-        //        if (mysqlPassword == "" && encryptedPwdNode != null && encryptedPwdNode.Value != "" && CDT.Class1.Decrypt(encryptedPwdNode.Value, out decryptedPwd))
-        //        {
-        //            mysqlPassword = decryptedPwd;
-        //        }
-        //        mysqlUserLow = navConn.SelectSingleNode("UserLow").Value;
-        //        mysqlPasswordLow = navConn.SelectSingleNode("PasswordLow").Value;
-        //    }
-        //    DataConnection dcon = new DataConnection();
-        //    if (connString != "")
-        //    {
-        //        try
-        //        {
-        //            dcon.SetDb(connString, "");
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            throw new Exception(e.Message + "\r\n" + "Connection to database failed.  Check the values in the config file on the web server " + configFilePath);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        try
-        //        {
-        //            dcon.SetDb(server, database, mysqlUser, mysqlPassword, mysqlUserLow, mysqlPasswordLow);
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            throw new Exception(e.Message + "\r\n" + "Connection to database failed.  Check the values in the config file on the web server " + configFilePath);
-        //        }
-        //    }
-        //    //todo?: make sure no users have blank passwords.
-        //}
-
-        ///<summary>DEPRICATED DO NOT USE.  Use OpenDentBusiness.Authentication class instead.  For middle tier backward-compatability only.</summary>
-        public static string HashPassword(string inputPass)
-        {
-            //No need to check RemotingRole; no call to db.
-            bool useEcwAlgorithm = Programs.IsEnabled(ProgramName.eClinicalWorks);
-            return HashPassword(inputPass, useEcwAlgorithm);
-        }
-
-        ///<summary>DEPRICATED DO NOT USE.  Use OpenDentBusiness.Authentication class instead.  For middle tier backward-compatability only.</summary>
-        public static string HashPassword(string inputPass, bool useEcwAlgorithm)
-        {
-            //No need to check RemotingRole; no call to db.
-            if (inputPass == "")
-            {
-                return "";
-            }
-            return Authentication.HashPasswordMD5(inputPass, useEcwAlgorithm);
-        }
-
         ///<summary>Updates all students/instructors to the specified user group.  Surround with try/catch because it can throw exceptions.</summary>
         public static void UpdateUserGroupsForDentalSchools(UserGroup userGroup, bool isInstructor)
         {
@@ -610,15 +482,15 @@ namespace OpenDentBusiness
                 {
                     command += "AND provider.IsInstructor=" + POut.Bool(isInstructor) + ") ";
                 }
-                command += "AND grouppermission.PermType=" + POut.Int((int)Permissions.SecurityAdmin) + " ";
-                int lastAdmin = PIn.Int(Db.GetCount(command));
+                command += "AND grouppermission.PermType=" + (int)Permissions.SecurityAdmin + " ";
+                var lastAdmin = DataConnection.ExecuteLong(command);
                 if (lastAdmin == 0)
                 {
                     throw new Exception("Cannot move students or instructors to the new user group because it would leave no users with the SecurityAdmin permission.");
                 }
             }
             command = "UPDATE userod INNER JOIN provider ON userod.ProvNum=provider.ProvNum "
-                    + "SET UserGroupNum=" + POut.Long(userGroup.Id) + " "
+                    + "SET UserGroupNum=" + userGroup.Id + " "
                     + "WHERE provider.IsInstructor=" + POut.Bool(isInstructor);
             if (!isInstructor)
             {

@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CodeBase
+﻿namespace CodeBase
 {
     public class ODInitialize
     {
-
         ///<summary>Indicates that the program is running unit tests.  Should only be set to true from TestBase.Initialize().
         ///Useful for methods that should behave differently in unit tests, such as FriendlyException.Show().</summary>
         public static bool IsRunningInUnitTest;
+        
         ///<summary>Indicates that Initialize has been invoked at least once and has successfully executed.</summary>
         public static bool HasInitialized;
 

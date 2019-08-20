@@ -2,28 +2,22 @@
 
 namespace CodeBase
 {
-    //public static class ODExceptionExtensions
-    //{
-    //    ///<summary>Does nothing to the object except reference it. Usefull for handling the Exception ex declared but never used warning.</summary>
-    //    //public static void DoNothing(this Exception ex) { }
-    //}
-
     public class ODException : ApplicationException
     {
-        private int _errorCode = 0;
-        ///<summary>Contains query text when an ErrorCode in the 700s was thrown. This is the query that was attempted prior to an exception.</summary>
+        /// <summary>
+        /// Contains query text when an ErrorCode in the 700s was thrown. This is the query that was attempted prior to an exception.
+        /// </summary>
         private string _query = "";
 
-        ///<summary>Gets the error code associated to this exception.  Defaults to 0 if no error code was explicitly set.</summary>		
-        public int ErrorCode
-        {
-            get
-            {
-                return _errorCode;
-            }
-        }
+        /// <summary>
+        /// Gets the error code associated to this exception.
+        /// Defaults to 0 if no error code was explicitly set.
+        /// </summary>		
+        public int ErrorCode { get; } = 0;
 
-        ///<summary>Contains query text when an ErrorCode in the 700s was thrown. This is the query that was attempted prior to an exception.</summary>
+        /// <summary>
+        /// Contains query text when an ErrorCode in the 700s was thrown. This is the query that was attempted prior to an exception.
+        /// </summary>
         public string Query
         {
             get
@@ -32,53 +26,51 @@ namespace CodeBase
             }
         }
 
-        ///<summary>Convert an int to an Enum typed ErrorCode. Returns NotDefined if the input errorCode is not defined in ErrorCodes.</summary>		
+        /// <summary>
+        /// Convert an int to an Enum typed ErrorCode. Returns NotDefined if the input errorCode is not defined in ErrorCodes.
+        /// </summary>		
         public static ErrorCodes GetErrorCodeAsEnum(int errorCode)
         {
             if (!Enum.IsDefined(typeof(ErrorCodes), errorCode))
             {
                 return ErrorCodes.NotDefined;
             }
+
             return (ErrorCodes)errorCode;
         }
 
-        ///<summary>Gets the pre-defined error code associated to this exception.  
-        ///Defaults to NotDefined if the error code (int) specified is not defined in ErrorCodes enum.</summary>		
+        /// <summary>
+        /// Gets the pre-defined error code associated to this exception.  
+        /// Defaults to NotDefined if the error code (int) specified is not defined in ErrorCodes enum.
+        /// </summary>		
         public ErrorCodes ErrorCodeAsEnum
         {
             get
             {
-                return GetErrorCodeAsEnum(_errorCode);
+                return GetErrorCodeAsEnum(ErrorCode);
             }
         }
 
-        public ODException() { }
+        public ODException(string message) 
+            : this(message, 0) { }
 
-        public ODException(int errorCode) : this("", errorCode) { }
-
-        public ODException(string message) : this(message, 0) { }
-
-        public ODException(string message, ErrorCodes errorCodeAsEnum) : this(message, (int)errorCodeAsEnum) { }
+        public ODException(string message, ErrorCodes errorCodeAsEnum) 
+            : this(message, (int)errorCodeAsEnum) { }
 
         public ODException(string message, int errorCode)
             : base(message)
         {
-            _errorCode = errorCode;
-        }
-
-        ///<summary>Used for query based exceptions in Db.cs</summary>
-        public ODException(string message, string query, Exception ex) : base(message, ex)
-        {
-            _query = query;
-            _errorCode = (int)ErrorCodes.DbQueryError;
+            ErrorCode = errorCode;
         }
 
         public ODException(string message, Exception ex) : base(message, ex)
         {
         }
 
-        ///<summary>Wrap the given action in a try/catch and swallow any exceptions that are thrown. 
-        ///This should be used sparingly as we typically want to handle the exception or let it bubble up to the UI but sometimes you just want to ignore it.</summary>
+        /// <summary>
+        /// Wrap the given action in a try/catch and swallow any exceptions that are thrown.
+        /// This should be used sparingly as we typically want to handle the exception or let it bubble up to the UI but sometimes you just want to ignore it.
+        /// </summary>
         public static void SwallowAnyException(Action a)
         {
             try
@@ -90,22 +82,11 @@ namespace CodeBase
             }
         }
 
-        ///<summary>Swallows and logs any exception that thrown from executing the action..</summary>
-        public static void SwallowAndLogAnyException(string subDirectory, Action a)
-        {
-            try
-            {
-                a();
-            }
-            catch (Exception ex)
-            {
-                Logger.Write(ex);
-            }
-        }
-
-        ///<summary>Does nothing if the exception passed in is null. Preserves the callstack of the exception passed in.
-        ///Typically used when a work thread throws an exception and we want to wait until we are back on the main thread in order to throw the exception.
-        ///Calling this when there is no worker thread involved is harmless and unnecessary but will still preserve the call stack.</summary>
+        /// <summary>
+        /// Does nothing if the exception passed in is null. Preserves the callstack of the exception passed in.
+        /// Typically used when a work thread throws an exception and we want to wait until we are back on the main thread in order to throw the exception.
+        /// Calling this when there is no worker thread involved is harmless and unnecessary but will still preserve the call stack.
+        /// </summary>
         public static void TryThrowPreservedCallstack(Exception ex)
         {
             if (ex == null)

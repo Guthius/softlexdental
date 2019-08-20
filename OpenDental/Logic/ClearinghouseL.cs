@@ -1,4 +1,5 @@
 using OpenDentBusiness;
+using System.Windows.Forms;
 
 namespace OpenDental
 {
@@ -9,10 +10,7 @@ namespace OpenDental
         /// Will only return an HQ-level clearinghouse.
         /// Do not attempt to pass in a clinic-level clearinghouseNum.
         /// </summary>
-        public static Clearinghouse GetClearinghouseHq(long hqClearinghouseNum)
-        {
-            return GetClearinghouseHq(hqClearinghouseNum, false);
-        }
+        public static Clearinghouse GetClearinghouseHq(long clearinghouseId) => GetClearinghouseHq(clearinghouseId, false);
 
         /// <summary>
         /// Returns the clearinghouse specified by the given num. 
@@ -20,24 +18,24 @@ namespace OpenDental
         /// Do not attempt to pass in a clinic-level clearinghouseNum. 
         /// Can return null if no match found.
         /// </summary>
-        public static Clearinghouse GetClearinghouseHq(long hqClearinghouseNum, bool suppressError)
+        public static Clearinghouse GetClearinghouseHq(long clearinghouseId, bool suppressError)
         {
-            var clearinghouse = Clearinghouses.GetClearinghouse(hqClearinghouseNum);
+            var clearinghouse = Clearinghouses.GetClearinghouse(clearinghouseId);
             if (clearinghouse == null && !suppressError)
             {
-                MsgBox.Show("Clearinghouses", "Error. Could not locate Clearinghouse.");
+                MessageBox.Show("Error. Could not locate Clearinghouse.", "Clearinghouses");
             }
             return clearinghouse;
         }
 
-
-        public static string GetDescript(long clearinghouseNum)
+        public static string GetDescript(long clearinghouseId)
         {
-            if (clearinghouseNum == 0)
+            if (clearinghouseId == 0)
             {
                 return "";
             }
-            return GetClearinghouseHq(clearinghouseNum).Description;
+
+            return GetClearinghouseHq(clearinghouseId).Description;
         }
     }
 }
