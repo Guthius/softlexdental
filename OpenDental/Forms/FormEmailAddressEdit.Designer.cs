@@ -236,6 +236,8 @@
             // 
             // incomingGroupBox
             // 
+            this.incomingGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.incomingGroupBox.Controls.Add(this.pop3ServerHelpLabel);
             this.incomingGroupBox.Controls.Add(this.pop3ServerTextBox);
             this.incomingGroupBox.Controls.Add(this.pop3ServerLabel);
@@ -244,7 +246,7 @@
             this.incomingGroupBox.Controls.Add(this.pop3PortLabel);
             this.incomingGroupBox.Location = new System.Drawing.Point(13, 298);
             this.incomingGroupBox.Name = "incomingGroupBox";
-            this.incomingGroupBox.Size = new System.Drawing.Size(628, 140);
+            this.incomingGroupBox.Size = new System.Drawing.Size(558, 140);
             this.incomingGroupBox.TabIndex = 5;
             this.incomingGroupBox.TabStop = false;
             this.incomingGroupBox.Text = "Incoming Email Settings (POP3)";
@@ -314,12 +316,14 @@
             // 
             // userGroupBox
             // 
+            this.userGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.userGroupBox.Controls.Add(this.pickUserButton);
             this.userGroupBox.Controls.Add(this.userLabel);
             this.userGroupBox.Controls.Add(this.userTextBox);
             this.userGroupBox.Location = new System.Drawing.Point(13, 444);
             this.userGroupBox.Name = "userGroupBox";
-            this.userGroupBox.Size = new System.Drawing.Size(628, 60);
+            this.userGroupBox.Size = new System.Drawing.Size(558, 60);
             this.userGroupBox.TabIndex = 10;
             this.userGroupBox.TabStop = false;
             this.userGroupBox.Text = "User";
@@ -370,6 +374,7 @@
             this.Controls.Add(this.passwordLabel);
             this.Controls.Add(this.passwordTextBox);
             this.Controls.Add(this.usernameLabel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;

@@ -50,7 +50,7 @@ namespace OpenDental
             | System.Windows.Forms.AnchorStyles.Right)));
             this.infoLabel.Location = new System.Drawing.Point(13, 16);
             this.infoLabel.Name = "infoLabel";
-            this.infoLabel.Size = new System.Drawing.Size(728, 40);
+            this.infoLabel.Size = new System.Drawing.Size(762, 40);
             this.infoLabel.TabIndex = 13;
             this.infoLabel.Text = "Setup clinic, practice, user, and group email addresses here.\r\nIndividual user in" +
     "boxes can also be setup in File | User Email Address.";
@@ -60,7 +60,7 @@ namespace OpenDental
             this.defaultGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.defaultGroupBox.Controls.Add(this.defaultLabel);
             this.defaultGroupBox.Controls.Add(this.defaultButton);
-            this.defaultGroupBox.Location = new System.Drawing.Point(747, 51);
+            this.defaultGroupBox.Location = new System.Drawing.Point(781, 51);
             this.defaultGroupBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 20);
             this.defaultGroupBox.Name = "defaultGroupBox";
             this.defaultGroupBox.Size = new System.Drawing.Size(150, 140);
@@ -94,7 +94,7 @@ namespace OpenDental
             // checkIntervalTextBox
             // 
             this.checkIntervalTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.checkIntervalTextBox.Location = new System.Drawing.Point(172, 503);
+            this.checkIntervalTextBox.Location = new System.Drawing.Point(172, 525);
             this.checkIntervalTextBox.MaxLength = 2147483647;
             this.checkIntervalTextBox.Name = "checkIntervalTextBox";
             this.checkIntervalTextBox.Size = new System.Drawing.Size(47, 23);
@@ -104,7 +104,7 @@ namespace OpenDental
             // 
             this.checkIntervalHelpLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkIntervalHelpLabel.AutoSize = true;
-            this.checkIntervalHelpLabel.Location = new System.Drawing.Point(225, 506);
+            this.checkIntervalHelpLabel.Location = new System.Drawing.Point(225, 528);
             this.checkIntervalHelpLabel.Margin = new System.Windows.Forms.Padding(3, 0, 20, 0);
             this.checkIntervalHelpLabel.Name = "checkIntervalHelpLabel";
             this.checkIntervalHelpLabel.Size = new System.Drawing.Size(96, 15);
@@ -116,7 +116,7 @@ namespace OpenDental
             // 
             this.checkIntervalLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.checkIntervalLabel.AutoSize = true;
-            this.checkIntervalLabel.Location = new System.Drawing.Point(10, 506);
+            this.checkIntervalLabel.Location = new System.Drawing.Point(10, 528);
             this.checkIntervalLabel.Name = "checkIntervalLabel";
             this.checkIntervalLabel.Size = new System.Drawing.Size(156, 15);
             this.checkIntervalLabel.TabIndex = 7;
@@ -138,7 +138,7 @@ namespace OpenDental
             this.emailAddressGrid.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
             this.emailAddressGrid.Name = "emailAddressGrid";
             this.emailAddressGrid.ScrollValue = 0;
-            this.emailAddressGrid.Size = new System.Drawing.Size(728, 431);
+            this.emailAddressGrid.Size = new System.Drawing.Size(762, 453);
             this.emailAddressGrid.TabIndex = 4;
             this.emailAddressGrid.Title = "Email Addresses";
             this.emailAddressGrid.TitleVisible = true;
@@ -149,7 +149,7 @@ namespace OpenDental
             this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.addButton.Image = global::OpenDental.Properties.Resources.IconAdd;
             this.addButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.addButton.Location = new System.Drawing.Point(747, 214);
+            this.addButton.Location = new System.Drawing.Point(781, 214);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(150, 30);
             this.addButton.TabIndex = 3;
@@ -161,7 +161,7 @@ namespace OpenDental
             // acceptButton
             // 
             this.acceptButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.acceptButton.Location = new System.Drawing.Point(747, 424);
+            this.acceptButton.Location = new System.Drawing.Point(781, 446);
             this.acceptButton.Name = "acceptButton";
             this.acceptButton.Size = new System.Drawing.Size(150, 30);
             this.acceptButton.TabIndex = 2;
@@ -172,7 +172,7 @@ namespace OpenDental
             // 
             this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.cancelButton.Location = new System.Drawing.Point(747, 460);
+            this.cancelButton.Location = new System.Drawing.Point(781, 482);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(150, 30);
             this.cancelButton.TabIndex = 2;
@@ -183,7 +183,7 @@ namespace OpenDental
             this.disclaimerCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.disclaimerCheckBox.AutoSize = true;
             this.disclaimerCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.disclaimerCheckBox.Location = new System.Drawing.Point(344, 504);
+            this.disclaimerCheckBox.Location = new System.Drawing.Point(344, 526);
             this.disclaimerCheckBox.Name = "disclaimerCheckBox";
             this.disclaimerCheckBox.Size = new System.Drawing.Size(176, 20);
             this.disclaimerCheckBox.TabIndex = 14;
@@ -194,7 +194,7 @@ namespace OpenDental
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.CancelButton = this.cancelButton;
-            this.ClientSize = new System.Drawing.Size(910, 539);
+            this.ClientSize = new System.Drawing.Size(944, 561);
             this.Controls.Add(this.disclaimerCheckBox);
             this.Controls.Add(this.infoLabel);
             this.Controls.Add(this.defaultGroupBox);
