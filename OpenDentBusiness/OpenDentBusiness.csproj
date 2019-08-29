@@ -184,6 +184,12 @@
     <Reference Include="Avalara.AvaTax.RestClient.net45">
       <HintPath>..\Required dlls\Avalara.AvaTax.RestClient.net45.dll</HintPath>
     </Reference>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.3.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.3.1\lib\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.6.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Protobuf.3.6.1\lib\net45\Google.Protobuf.dll</HintPath>
+    </Reference>
     <Reference Include="Health.Direct.Agent">
       <HintPath>..\Required dlls\Health.Direct.Agent.dll</HintPath>
     </Reference>
@@ -202,8 +208,8 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="MySql.Data, Version=6.10.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>..\packages\MySql.Data.6.10.9\lib\net452\MySql.Data.dll</HintPath>
+    <Reference Include="MySql.Data, Version=8.0.17.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.8.0.17\lib\net452\MySql.Data.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -218,6 +224,9 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Renci.SshNet, Version=2016.1.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
+      <HintPath>..\packages\SSH.NET.2016.1.0\lib\net40\Renci.SshNet.dll</HintPath>
+    </Reference>
     <Reference Include="RS232">
       <HintPath>..\Required dlls\RS232.dll</HintPath>
     </Reference>
@@ -556,12 +565,6 @@
     <Compile Include="Crud\EhrQuarterlyKeyCrud.cs" />
     <Compile Include="Crud\EhrSummaryCcdCrud.cs" />
     <Compile Include="Crud\ElectIDCrud.cs" />
-    <Compile Include="Crud\EmailAddressCrud.cs" />
-    <Compile Include="Crud\EmailAttachCrud.cs" />
-    <Compile Include="Crud\EmailAutographCrud.cs" />
-    <Compile Include="Crud\EmailMessageCrud.cs" />
-    <Compile Include="Crud\EmailMessageUidCrud.cs" />
-    <Compile Include="Crud\EmailTemplateCrud.cs" />
     <Compile Include="Crud\EmployerCrud.cs" />
     <Compile Include="Crud\EncounterCrud.cs" />
     <Compile Include="Crud\EobAttachCrud.cs" />
@@ -721,7 +724,6 @@
     <Compile Include="Data Interface\DashboardLayouts.cs" />
     <Compile Include="Data Interface\DisplayReports.cs" />
     <Compile Include="Data Interface\Ebills.cs" />
-    <Compile Include="Data Interface\EmailAutographs.cs" />
     <Compile Include="Data Interface\FamAgings.cs" />
     <Compile Include="Data Interface\FHIRContactPoints.cs" />
     <Compile Include="Data Interface\FHIRSubscriptions.cs" />
@@ -814,13 +816,11 @@
     <Compile Include="Data Interface\ChartViews.cs" />
     <Compile Include="Data Interface\CodeSystems.cs" />
     <Compile Include="Data Interface\Cpts.cs" />
-    <Compile Include="Data Interface\Cvxs.cs" />
     <Compile Include="Data Interface\EhrAmendments.cs" />
     <Compile Include="Data Interface\EhrCodes.cs" />
     <Compile Include="Data Interface\EhrNotPerformeds.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data Interface\EmailMessageUids.cs" />
     <Compile Include="Data Interface\Encounters.cs" />
     <Compile Include="Data Interface\EServiceSignals.cs" />
     <Compile Include="Data Interface\EvaluationCriterionDefs.cs" />
@@ -872,7 +872,6 @@
     <Compile Include="Data Interface\EhrProvKeys.cs" />
     <Compile Include="Data Interface\EhrQuarterlyKeys.cs" />
     <Compile Include="Data Interface\EhrSummaryCcds.cs" />
-    <Compile Include="Data Interface\EmailAddresses.cs" />
     <Compile Include="Data Interface\EobAttaches.cs" />
     <Compile Include="Data Interface\ErxLogs.cs" />
     <Compile Include="Data Interface\Guardians.cs" />
@@ -988,9 +987,6 @@
     <Compile Include="Data Interface\Diseases.cs" />
     <Compile Include="Data Interface\Dunnings.cs" />
     <Compile Include="Data Interface\ElectIDs.cs" />
-    <Compile Include="Data Interface\EmailAttaches.cs" />
-    <Compile Include="Data Interface\EmailMessages.cs" />
-    <Compile Include="Data Interface\EmailTemplates.cs" />
     <Compile Include="Data Interface\Employers.cs" />
     <Compile Include="Data Interface\Etranss.cs" />
     <Compile Include="Data Interface\Fees.cs" />
@@ -1202,7 +1198,7 @@
     <Compile Include="TableTypes\InsVerifyHist.cs" />
     <Compile Include="TableTypes\TreatPlanAttach.cs" />
     <Compile Include="TableTypes\Ebill.cs" />
-    <Compile Include="TableTypes\EmailAutograph.cs" />
+    <Compile Include="Data\EmailAutograph.cs" />
     <Compile Include="TableTypes\EServiceSignal.cs" />
     <Compile Include="TableTypes\ProviderErx.cs" />
     <Compile Include="TableTypes\RequiredField.cs" />
@@ -1241,7 +1237,7 @@
     <Compile Include="TableTypes\EhrLab.cs" />
     <Compile Include="TableTypes\EhrCarePlan.cs" />
     <Compile Include="Data\Ucum.cs" />
-    <Compile Include="TableTypes\EmailMessageUid.cs" />
+    <Compile Include="Data\EmailMessageUid.cs" />
     <Compile Include="TableTypes\EhrTrigger.cs" />
     <Compile Include="TableTypes\MapArea.cs" />
     <Compile Include="TableTypes\EhrAmendment.cs" />
@@ -1283,7 +1279,7 @@
     <Compile Include="TableTypes\WikiPageHist.cs" />
     <Compile Include="TableTypes\WikiPage.cs" />
     <Compile Include="TableTypes\DictCustom.cs" />
-    <Compile Include="TableTypes\EmailAddress.cs" />
+    <Compile Include="Data\EmailAddress.cs" />
     <Compile Include="TableTypes\ErxLog.cs" />
     <Compile Include="TableTypes\ScreenPat.cs" />
     <Compile Include="TableTypes\ToothGridCell.cs" />
@@ -1516,9 +1512,9 @@
     <Compile Include="TableTypes\Document.cs" />
     <Compile Include="TableTypes\Dunning.cs" />
     <Compile Include="TableTypes\ElectID.cs" />
-    <Compile Include="TableTypes\EmailAttach.cs" />
-    <Compile Include="TableTypes\EmailMessage.cs" />
-    <Compile Include="TableTypes\EmailTemplate.cs" />
+    <Compile Include="Data\EmailAttach.cs" />
+    <Compile Include="Data\EmailMessage.cs" />
+    <Compile Include="Data\EmailTemplate.cs" />
     <Compile Include="Data\0_READY\Employee.cs" />
     <Compile Include="TableTypes\Employer.cs" />
     <Compile Include="TableTypes\Fee.cs" />

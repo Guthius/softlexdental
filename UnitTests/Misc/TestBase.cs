@@ -72,15 +72,15 @@ namespace UnitTests
         {
             EmailAddress email = new EmailAddress()
             {
-                SenderAddress = TestEmaiAddress,
-                EmailUsername = TestEmaiAddress,
-                EmailPassword = MiscUtils.Encrypt(TestEmaiPwd),
-                ServerPort = 587,
-                UseSSL = true,
-                Pop3ServerIncoming = "pop.gmail.com",
-                ServerPortIncoming = 110,
-                SMTPserver = "smtp.gmail.com",
-                UserNum = 0,
+                Sender = TestEmaiAddress,
+                SmtpUsername = TestEmaiAddress,
+                SmtpPassword = MiscUtils.Encrypt(TestEmaiPwd),
+                SmtpPort = 587,
+                UseSsl = true,
+                Pop3Server = "pop.gmail.com",
+                Pop3Port = 110,
+                SmtpServer = "smtp.gmail.com",
+                UserId = 0,
                 WebmailProvNum = 0,
             };
             EmailAddresses.Insert(email);

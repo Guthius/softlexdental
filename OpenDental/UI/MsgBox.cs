@@ -1,8 +1,9 @@
+using System;
 using System.Windows.Forms;
 
 namespace OpenDental {
 	///<summary></summary>
-	public class MsgBox {
+	[Obsolete] public class MsgBox {
 
 		///<summary>Automates the language translation. Do NOT use if the text is variable in any way.</summary>
 		public static void Show(object sender,string text) {

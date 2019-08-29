@@ -126,7 +126,7 @@ namespace OpenDental {
 			string outputStr=vxu.GenerateMessage();
 			Cursor=Cursors.WaitCursor;
 			try {
-				EmailMessages.SendTestUnsecure("Immunization Submission","vxu.txt",outputStr);
+				//EmailMessages.SendTestUnsecure("Immunization Submission","vxu.txt",outputStr);
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;

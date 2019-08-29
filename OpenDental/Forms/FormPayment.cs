@@ -4417,7 +4417,7 @@ namespace OpenDental {
 				return;
 			}
 			List<string> errors=new List<string>();
-			if(!EmailAddresses.ExistsValidEmail()) {
+			if(!EmailAddress.ExistsValidEmail()) {
 				errors.Add(Lan.g(this,"SMTP server name missing in e-mail setup."));
 			}
 			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase){
@@ -4427,7 +4427,7 @@ namespace OpenDental {
 				MessageBox.Show(this,Lan.g(this,"The following errors need to be resolved before creating an email")+":\r\n"+string.Join("\r\n",errors));
 				return;
 			}
-			string attachPath=EmailAttaches.GetAttachPath();
+			string attachPath= EmailAttachment.GetAttachmentPath();
 			Random rnd=new Random();
 			string tempFile=ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),
 				DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf");
@@ -4437,18 +4437,17 @@ namespace OpenDental {
 			pdfRenderer.PdfDocument.Save(tempFile);
 			FileAtoZ.Copy(tempFile,FileAtoZ.CombinePaths(attachPath,Path.GetFileName(tempFile)),FileAtoZSourceDestination.LocalToAtoZ);
 			EmailMessage message=new EmailMessage();
-			message.PatNum=_paymentCur.PatNum;
+			message.PatientId=_paymentCur.PatNum;
 			message.ToAddress=_patCur.Email;
-			EmailAddress address=EmailAddresses.GetByClinic(_patCur.ClinicNum);
+			EmailAddress address=EmailAddress.GetByClinic(_patCur.ClinicNum);
 			message.FromAddress=address.GetFrom();
 			message.Subject=Lan.g(this,"Receipt for payment received ")+_paymentCur.PayDate.ToShortDateString();
-			EmailAttach attachRcpt=new EmailAttach() {
-				DisplayedFileName="Receipt.pdf",
-				ActualFileName=Path.GetFileName(tempFile)
+			EmailAttachment attachRcpt=new EmailAttachment() {
+				Description="Receipt.pdf",
+				FileName=Path.GetFileName(tempFile)
 			};
-			message.Attachments=new List<EmailAttach>() { attachRcpt };
+			message.Attachments=new List<EmailAttachment>() { attachRcpt };
 			FormEmailMessageEdit FormE=new FormEmailMessageEdit(message,address);
-			FormE.IsNew=true;
 			FormE.ShowDialog();
 		}
 

@@ -572,9 +572,7 @@ namespace OpenDentBusiness
             command = "SELECT emailmessage.MsgDateTime,emailmessage.SentOrReceived,emailmessage.Subject,emailmessage.EmailMessageNum, "
                 + "emailmessage.PatNum,emailmessage.RecipientAddress,emailmessage.HideIn "
                 + "FROM emailmessage "
-                + "WHERE emailmessage.PatNum IN (" + familyPatNums + ") "
-                + "AND emailmessage.SentOrReceived NOT IN (" + POut.Int((int)EmailSentOrReceived.AckDirectProcessed) + ","
-                    + POut.Int((int)EmailSentOrReceived.AckDirectNotSent) + ") ";//Do not show Direct message acknowledgements. Rows are ordered at the end
+                + "WHERE emailmessage.PatNum IN (" + familyPatNums + ")";
             DataTable rawEmail = DataConnection.GetTable(command);
             string txt;
             for (int i = 0; i < rawEmail.Rows.Count; i++)

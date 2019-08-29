@@ -7,7 +7,7 @@ using CodeBase;
 
 namespace OpenDental.UI {
 	///<summary>A custom button with rounded corners and theme support.</summary>
-	public class Button : System.Windows.Forms.Button {
+	[Obsolete] public class Button : System.Windows.Forms.Button {
 		private ControlState _butState=ControlState.Normal;
 		private bool _bCanClick=false;
 		private Point _adjustImageLocation;

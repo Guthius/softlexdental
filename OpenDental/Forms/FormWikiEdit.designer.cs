@@ -40,7 +40,7 @@ namespace OpenDental
             this.toolBar2 = new OpenDental.UI.ODToolBar();
             this.webBrowserWiki = new System.Windows.Forms.WebBrowser();
             this.ToolBarMain = new OpenDental.UI.ODToolBar();
-            this.textContent = new OpenDental.ODcodeBox();
+            this.textContent = new System.Windows.Forms.TextBox();
             this.contextMenuMain.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -118,15 +118,15 @@ namespace OpenDental
             // 
             this.toolBar2.Location = new System.Drawing.Point(0, 26);
             this.toolBar2.Name = "toolBar2";
-            this.toolBar2.Size = new System.Drawing.Size(863, 25);
+            this.toolBar2.Size = new System.Drawing.Size(863, 30);
             this.toolBar2.TabIndex = 82;
-            this.toolBar2.ButtonClick += new System.EventHandler<UI.ODToolBarButtonClickEventArgs>(this.toolBar2_ButtonClick);
+            this.toolBar2.ButtonClick += new System.EventHandler<OpenDental.UI.ODToolBarButtonClickEventArgs>(this.toolBar2_ButtonClick);
             // 
             // webBrowserWiki
             // 
             this.webBrowserWiki.AllowWebBrowserDrop = false;
-            this.webBrowserWiki.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.webBrowserWiki.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.webBrowserWiki.Location = new System.Drawing.Point(474, 58);
             this.webBrowserWiki.MinimumSize = new System.Drawing.Size(20, 20);
@@ -141,23 +141,24 @@ namespace OpenDental
             // 
             this.ToolBarMain.Location = new System.Drawing.Point(0, 0);
             this.ToolBarMain.Name = "ToolBarMain";
-            this.ToolBarMain.Size = new System.Drawing.Size(863, 25);
+            this.ToolBarMain.Size = new System.Drawing.Size(863, 30);
             this.ToolBarMain.TabIndex = 3;
-            this.ToolBarMain.ButtonClick += new System.EventHandler<UI.ODToolBarButtonClickEventArgs>(this.ToolBarMain_ButtonClick);
+            this.ToolBarMain.ButtonClick += new System.EventHandler<OpenDental.UI.ODToolBarButtonClickEventArgs>(this.ToolBarMain_ButtonClick);
             // 
             // textContent
             // 
+            this.textContent.AcceptsReturn = true;
             this.textContent.AcceptsTab = true;
-            this.textContent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.textContent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textContent.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textContent.Location = new System.Drawing.Point(0, 57);
+            this.textContent.Multiline = true;
             this.textContent.Name = "textContent";
-            this.textContent.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.textContent.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textContent.Size = new System.Drawing.Size(472, 515);
             this.textContent.TabIndex = 83;
-            this.textContent.Text = "";
             this.textContent.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textContent_KeyPress);
             this.textContent.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.textContent_MouseDoubleClick);
             // 
@@ -177,6 +178,7 @@ namespace OpenDental
             this.SizeChanged += new System.EventHandler(this.FormWikiEdit_SizeChanged);
             this.contextMenuMain.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -192,6 +194,6 @@ namespace OpenDental
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem menuItemUndo;
         private UI.ODToolBar toolBar2;
-        private OpenDental.ODcodeBox textContent;
+        private System.Windows.Forms.TextBox textContent;
     }
 }

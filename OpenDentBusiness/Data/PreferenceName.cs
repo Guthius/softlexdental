@@ -626,7 +626,7 @@ namespace OpenDentBusiness
         ///<summary>String that contains the HTML shell for emails. </summary>
         EmailMasterTemplate,
         ///<summary>FK to EmailAddress.EmailAddressNum.  Used for webmail notifications (Patient Portal).</summary>
-        EmailNotifyAddressNum,
+        [Obsolete] EmailNotifyAddressNum,
         /// <summary>Deprecated. Use emailaddress.EmailPassword instead.</summary>
         EmailPassword,
         /// <summary>Deprecated. Use emailaddress.ServerPort instead.</summary>
@@ -695,8 +695,9 @@ namespace OpenDentBusiness
         ///<summary>Double defaults to 0. Prevents clicks from happening in a window. 
         ///Currently used in ApptEdit to prevent procedures from being attached or detached for delay amount in tenths of a second.</summary>
         FormClickDelay,
-        FuchsListSelectionColor,
-        FuchsOptionsOn,
+        [Obsolete] FuchsListSelectionColor,
+        [Obsolete] FuchsOptionsOn,
+
         /// <summary>Bool defaults to 0. When false, future dates transactions are not allowed. </summary>
         FutureTransDatesAllowed,
         GenericEClaimsForm,

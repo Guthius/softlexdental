@@ -213,7 +213,7 @@ namespace CodeBase {
 		/// <param name="pattern">Must be a REGEX compatible pattern.</param>
 		/// <param name="replacement">The string that should be used to replace each occurance of the pattern.</param>
 		/// <param name="regexOptions">IgnoreCase by default, allows others.</param>
-		public static void RegReplace(this StringBuilder value, string pattern, string replacement,RegexOptions regexOptions=RegexOptions.IgnoreCase) {
+		[Obsolete] public static void RegReplace(this StringBuilder value, string pattern, string replacement,RegexOptions regexOptions=RegexOptions.IgnoreCase) {
 			string newVal=Regex.Replace(value.ToString(),pattern,replacement,regexOptions);
 			value.Clear();
 			value.Append(newVal);

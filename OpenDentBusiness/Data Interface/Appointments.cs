@@ -4578,11 +4578,11 @@ namespace OpenDentBusiness
                 textTemplate = Patients.ReplacePatient(textTemplate, pat);
                 textTemplate = Appointments.ReplaceAppointment(textTemplate, appt);
                 textTemplate = Clinics.ReplaceOffice(textTemplate, clinic);
-                string emailSubj = OpenDentBusiness.EmailMessages.SubjectTidy(ClinicPrefs.GetPrefValue(emailSubjPref, appt.ClinicNum));
+                string emailSubj = ClinicPrefs.GetPrefValue(emailSubjPref, appt.ClinicNum);
                 emailSubj = Patients.ReplacePatient(emailSubj, pat);
                 emailSubj = Appointments.ReplaceAppointment(emailSubj, appt);
                 emailSubj = Clinics.ReplaceOffice(emailSubj, clinic);
-                string emailBody = OpenDentBusiness.EmailMessages.BodyTidy(ClinicPrefs.GetPrefValue(emailBodyPref, appt.ClinicNum));
+                string emailBody = ClinicPrefs.GetPrefValue(emailBodyPref, appt.ClinicNum);
                 emailBody = Patients.ReplacePatient(emailBody, pat);
                 emailBody = Appointments.ReplaceAppointment(emailBody, appt);
                 emailBody = Clinics.ReplaceOffice(emailBody, clinic);
@@ -4594,23 +4594,23 @@ namespace OpenDentBusiness
                 //send e-mail
                 if (verificationType == WebSchedVerifyType.Email || verificationType == WebSchedVerifyType.TextAndEmail)
                 {
-                    EmailAddress addr = EmailAddresses.GetByClinic(appt.ClinicNum, true);
+                    EmailAddress addr = EmailAddress.GetByClinic(appt.ClinicNum);
                     if (addr == null)
                     { //If clinic is not setup for email then don't bother trying to send.
                         return;
                     }
                     EmailMessage msg = new EmailMessage()
                     {
-                        PatNum = pat.PatNum,
+                        PatientId = pat.PatNum,
                         ToAddress = pat.Email,
                         FromAddress = addr.GetFrom(),
                         Subject = emailSubj,
-                        BodyText = EmailMessages.FindAndReplacePostalAddressTag(emailBody, appt.ClinicNum),
-                        MsgDateTime = DateTime.Now,
-                        SentOrReceived = EmailSentOrReceived.Sent,
+                        Body = EmailMessage.FindAndReplacePostalAddressTag(emailBody, appt.ClinicNum),
+                        Date = DateTime.Now,
+                        Status = EmailMessageStatus.Sent,
                     };
-                    EmailMessages.SendEmailUnsecure(msg, addr);
-                    OpenDentBusiness.EmailMessages.Insert(msg);
+                    EmailMessage.Send(addr, msg);
+                    EmailMessage.Insert(msg);
                 }
             }
             catch (Exception e)

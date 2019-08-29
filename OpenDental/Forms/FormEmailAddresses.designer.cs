@@ -1,255 +1,235 @@
-namespace OpenDental{
-	partial class FormEmailAddresses {
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+namespace OpenDental
+{
+    partial class FormEmailAddresses
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing) {
-			if(disposing && (components != null)) {
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEmailAddresses));
-			this.label2 = new System.Windows.Forms.Label();
-			this.groupEmailPrefs = new System.Windows.Forms.GroupBox();
-			this.label1 = new System.Windows.Forms.Label();
-			this.butSetDefault = new OpenDental.UI.Button();
-			this.butWebMailNotify = new OpenDental.UI.Button();
-			this.textInboxCheckInterval = new System.Windows.Forms.TextBox();
-			this.labelInboxCheckUnits = new System.Windows.Forms.Label();
-			this.labelInboxCheckInterval = new System.Windows.Forms.Label();
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butAdd = new OpenDental.UI.Button();
-			this.butOK = new OpenDental.UI.Button();
-			this.butCancel = new OpenDental.UI.Button();
-			this.checkEmailDisclaimer = new System.Windows.Forms.CheckBox();
-			this.groupEmailPrefs.SuspendLayout();
-			this.SuspendLayout();
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(16, 5);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(393, 33);
-			this.label2.TabIndex = 13;
-			this.label2.Text = "Setup clinic, practice, user, and group email addresses here.\r\nIndividual user in" +
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEmailAddresses));
+            this.infoLabel = new System.Windows.Forms.Label();
+            this.defaultGroupBox = new System.Windows.Forms.GroupBox();
+            this.defaultLabel = new System.Windows.Forms.Label();
+            this.defaultButton = new System.Windows.Forms.Button();
+            this.checkIntervalTextBox = new System.Windows.Forms.TextBox();
+            this.checkIntervalHelpLabel = new System.Windows.Forms.Label();
+            this.checkIntervalLabel = new System.Windows.Forms.Label();
+            this.emailAddressGrid = new OpenDental.UI.ODGrid();
+            this.addButton = new System.Windows.Forms.Button();
+            this.acceptButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.disclaimerCheckBox = new System.Windows.Forms.CheckBox();
+            this.defaultGroupBox.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // infoLabel
+            // 
+            this.infoLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.infoLabel.Location = new System.Drawing.Point(13, 16);
+            this.infoLabel.Name = "infoLabel";
+            this.infoLabel.Size = new System.Drawing.Size(728, 40);
+            this.infoLabel.TabIndex = 13;
+            this.infoLabel.Text = "Setup clinic, practice, user, and group email addresses here.\r\nIndividual user in" +
     "boxes can also be setup in File | User Email Address.";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// groupEmailPrefs
-			// 
-			this.groupEmailPrefs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.groupEmailPrefs.Controls.Add(this.label1);
-			this.groupEmailPrefs.Controls.Add(this.butSetDefault);
-			this.groupEmailPrefs.Controls.Add(this.butWebMailNotify);
-			this.groupEmailPrefs.Location = new System.Drawing.Point(794, 35);
-			this.groupEmailPrefs.Name = "groupEmailPrefs";
-			this.groupEmailPrefs.Size = new System.Drawing.Size(102, 163);
-			this.groupEmailPrefs.TabIndex = 3;
-			this.groupEmailPrefs.TabStop = false;
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(6, 12);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(90, 91);
-			this.label1.TabIndex = 12;
-			this.label1.Text = "Highlight an email address in the grid, then use one of these buttons.  Not requi" +
-    "red.";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// butSetDefault
-			// 
-			this.butSetDefault.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butSetDefault.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butSetDefault.Autosize = true;
-			this.butSetDefault.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSetDefault.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butSetDefault.CornerRadius = 4F;
-			this.butSetDefault.Location = new System.Drawing.Point(5, 106);
-			this.butSetDefault.Name = "butSetDefault";
-			this.butSetDefault.Size = new System.Drawing.Size(90, 24);
-			this.butSetDefault.TabIndex = 3;
-			this.butSetDefault.Text = "Set Default";
-			this.butSetDefault.Click += new System.EventHandler(this.butSetDefault_Click);
-			// 
-			// butWebMailNotify
-			// 
-			this.butWebMailNotify.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butWebMailNotify.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butWebMailNotify.Autosize = true;
-			this.butWebMailNotify.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butWebMailNotify.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butWebMailNotify.CornerRadius = 4F;
-			this.butWebMailNotify.Location = new System.Drawing.Point(5, 133);
-			this.butWebMailNotify.Name = "butWebMailNotify";
-			this.butWebMailNotify.Size = new System.Drawing.Size(90, 24);
-			this.butWebMailNotify.TabIndex = 3;
-			this.butWebMailNotify.Text = "WebMail Notify";
-			this.butWebMailNotify.UseVisualStyleBackColor = true;
-			this.butWebMailNotify.Click += new System.EventHandler(this.butWebMailNotify_Click);
-			// 
-			// textInboxCheckInterval
-			// 
-			this.textInboxCheckInterval.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.textInboxCheckInterval.Location = new System.Drawing.Point(19, 502);
-			this.textInboxCheckInterval.MaxLength = 2147483647;
-			this.textInboxCheckInterval.Multiline = true;
-			this.textInboxCheckInterval.Name = "textInboxCheckInterval";
-			this.textInboxCheckInterval.Size = new System.Drawing.Size(30, 20);
-			this.textInboxCheckInterval.TabIndex = 8;
-			// 
-			// labelInboxCheckUnits
-			// 
-			this.labelInboxCheckUnits.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.labelInboxCheckUnits.Location = new System.Drawing.Point(50, 504);
-			this.labelInboxCheckUnits.Name = "labelInboxCheckUnits";
-			this.labelInboxCheckUnits.Size = new System.Drawing.Size(102, 17);
-			this.labelInboxCheckUnits.TabIndex = 9;
-			this.labelInboxCheckUnits.Text = "minutes (1 to 60)";
-			this.labelInboxCheckUnits.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// labelInboxCheckInterval
-			// 
-			this.labelInboxCheckInterval.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.labelInboxCheckInterval.Location = new System.Drawing.Point(19, 484);
-			this.labelInboxCheckInterval.Name = "labelInboxCheckInterval";
-			this.labelInboxCheckInterval.Size = new System.Drawing.Size(335, 17);
-			this.labelInboxCheckInterval.TabIndex = 7;
-			this.labelInboxCheckInterval.Text = "Inbox Receive Interval";
-			this.labelInboxCheckInterval.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            // 
+            // defaultGroupBox
+            // 
+            this.defaultGroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.defaultGroupBox.Controls.Add(this.defaultLabel);
+            this.defaultGroupBox.Controls.Add(this.defaultButton);
+            this.defaultGroupBox.Location = new System.Drawing.Point(747, 51);
+            this.defaultGroupBox.Margin = new System.Windows.Forms.Padding(3, 3, 3, 20);
+            this.defaultGroupBox.Name = "defaultGroupBox";
+            this.defaultGroupBox.Size = new System.Drawing.Size(150, 140);
+            this.defaultGroupBox.TabIndex = 3;
+            this.defaultGroupBox.TabStop = false;
+            // 
+            // defaultLabel
+            // 
+            this.defaultLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
-			this.gridMain.EditableEnterMovesDown = false;
-			this.gridMain.HasAddButton = false;
-			this.gridMain.HasDropDowns = false;
-			this.gridMain.HasMultilineHeaders = false;
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(19, 41);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(766, 440);
-			this.gridMain.TabIndex = 4;
-			this.gridMain.Title = "Email Addresses";
-			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
-			// 
-			// butAdd
-			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(794, 248);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75, 24);
-			this.butAdd.TabIndex = 3;
-			this.butAdd.Text = "Add";
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(815, 472);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 24);
-			this.butOK.TabIndex = 2;
-			this.butOK.Text = "&OK";
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// butCancel
-			// 
-			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butCancel.CornerRadius = 4F;
-			this.butCancel.Location = new System.Drawing.Point(815, 502);
-			this.butCancel.Name = "butCancel";
-			this.butCancel.Size = new System.Drawing.Size(75, 24);
-			this.butCancel.TabIndex = 2;
-			this.butCancel.Text = "&Cancel";
-			this.butCancel.Click += new System.EventHandler(this.butCancel_Click);
-			// 
-			// checkEmailDisclaimer
-			// 
-			this.checkEmailDisclaimer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-			this.checkEmailDisclaimer.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.checkEmailDisclaimer.Location = new System.Drawing.Point(158, 504);
-			this.checkEmailDisclaimer.Name = "checkEmailDisclaimer";
-			this.checkEmailDisclaimer.Size = new System.Drawing.Size(152, 17);
-			this.checkEmailDisclaimer.TabIndex = 14;
-			this.checkEmailDisclaimer.Text = "Include Opt-Out Statement";
-			this.checkEmailDisclaimer.UseVisualStyleBackColor = true;
-			// 
-			// FormEmailAddresses
-			// 
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(910, 539);
-			this.Controls.Add(this.checkEmailDisclaimer);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.groupEmailPrefs);
-			this.Controls.Add(this.textInboxCheckInterval);
-			this.Controls.Add(this.labelInboxCheckUnits);
-			this.Controls.Add(this.labelInboxCheckInterval);
-			this.Controls.Add(this.gridMain);
-			this.Controls.Add(this.butAdd);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.butCancel);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MinimumSize = new System.Drawing.Size(545, 400);
-			this.Name = "FormEmailAddresses";
-			this.Text = "Email Addresses";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormEmailAddresses_FormClosing);
-			this.Load += new System.EventHandler(this.FormEmailAddresses_Load);
-			this.groupEmailPrefs.ResumeLayout(false);
-			this.ResumeLayout(false);
-			this.PerformLayout();
+            this.defaultLabel.Location = new System.Drawing.Point(6, 19);
+            this.defaultLabel.Name = "defaultLabel";
+            this.defaultLabel.Size = new System.Drawing.Size(138, 82);
+            this.defaultLabel.TabIndex = 12;
+            this.defaultLabel.Text = "Highlight an email address in the grid, then use one of these buttons.  Not requi" +
+    "red.";
+            this.defaultLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // defaultButton
+            // 
+            this.defaultButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.defaultButton.Location = new System.Drawing.Point(6, 104);
+            this.defaultButton.Name = "defaultButton";
+            this.defaultButton.Size = new System.Drawing.Size(138, 30);
+            this.defaultButton.TabIndex = 3;
+            this.defaultButton.Text = "Set Default";
+            this.defaultButton.Click += new System.EventHandler(this.DefaultButton_Click);
+            // 
+            // checkIntervalTextBox
+            // 
+            this.checkIntervalTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkIntervalTextBox.Location = new System.Drawing.Point(172, 503);
+            this.checkIntervalTextBox.MaxLength = 2147483647;
+            this.checkIntervalTextBox.Name = "checkIntervalTextBox";
+            this.checkIntervalTextBox.Size = new System.Drawing.Size(47, 23);
+            this.checkIntervalTextBox.TabIndex = 8;
+            // 
+            // checkIntervalHelpLabel
+            // 
+            this.checkIntervalHelpLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkIntervalHelpLabel.AutoSize = true;
+            this.checkIntervalHelpLabel.Location = new System.Drawing.Point(225, 506);
+            this.checkIntervalHelpLabel.Margin = new System.Windows.Forms.Padding(3, 0, 20, 0);
+            this.checkIntervalHelpLabel.Name = "checkIntervalHelpLabel";
+            this.checkIntervalHelpLabel.Size = new System.Drawing.Size(96, 15);
+            this.checkIntervalHelpLabel.TabIndex = 9;
+            this.checkIntervalHelpLabel.Text = "minutes (1 to 60)";
+            this.checkIntervalHelpLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // checkIntervalLabel
+            // 
+            this.checkIntervalLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.checkIntervalLabel.AutoSize = true;
+            this.checkIntervalLabel.Location = new System.Drawing.Point(10, 506);
+            this.checkIntervalLabel.Name = "checkIntervalLabel";
+            this.checkIntervalLabel.Size = new System.Drawing.Size(156, 15);
+            this.checkIntervalLabel.TabIndex = 7;
+            this.checkIntervalLabel.Text = "Check for new e-mails every";
+            this.checkIntervalLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // emailAddressGrid
+            // 
+            this.emailAddressGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.emailAddressGrid.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
+            this.emailAddressGrid.EditableEnterMovesDown = false;
+            this.emailAddressGrid.HasAddButton = false;
+            this.emailAddressGrid.HasDropDowns = false;
+            this.emailAddressGrid.HasMultilineHeaders = false;
+            this.emailAddressGrid.HScrollVisible = false;
+            this.emailAddressGrid.Location = new System.Drawing.Point(13, 59);
+            this.emailAddressGrid.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
+            this.emailAddressGrid.Name = "emailAddressGrid";
+            this.emailAddressGrid.ScrollValue = 0;
+            this.emailAddressGrid.Size = new System.Drawing.Size(728, 431);
+            this.emailAddressGrid.TabIndex = 4;
+            this.emailAddressGrid.Title = "Email Addresses";
+            this.emailAddressGrid.TitleVisible = true;
+            this.emailAddressGrid.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.EmailAddressGrid_CellDoubleClick);
+            // 
+            // addButton
+            // 
+            this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.addButton.Image = global::OpenDental.Properties.Resources.IconAdd;
+            this.addButton.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.addButton.Location = new System.Drawing.Point(747, 214);
+            this.addButton.Name = "addButton";
+            this.addButton.Size = new System.Drawing.Size(150, 30);
+            this.addButton.TabIndex = 3;
+            this.addButton.Text = "Add";
+            this.addButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.addButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.addButton.Click += new System.EventHandler(this.AddButton_Click);
+            // 
+            // acceptButton
+            // 
+            this.acceptButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.acceptButton.Location = new System.Drawing.Point(747, 424);
+            this.acceptButton.Name = "acceptButton";
+            this.acceptButton.Size = new System.Drawing.Size(150, 30);
+            this.acceptButton.TabIndex = 2;
+            this.acceptButton.Text = "&OK";
+            this.acceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.cancelButton.Location = new System.Drawing.Point(747, 460);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(150, 30);
+            this.cancelButton.TabIndex = 2;
+            this.cancelButton.Text = "&Cancel";
+            // 
+            // disclaimerCheckBox
+            // 
+            this.disclaimerCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.disclaimerCheckBox.AutoSize = true;
+            this.disclaimerCheckBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.disclaimerCheckBox.Location = new System.Drawing.Point(344, 504);
+            this.disclaimerCheckBox.Name = "disclaimerCheckBox";
+            this.disclaimerCheckBox.Size = new System.Drawing.Size(176, 20);
+            this.disclaimerCheckBox.TabIndex = 14;
+            this.disclaimerCheckBox.Text = "Include Opt-Out Statement";
+            this.disclaimerCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // FormEmailAddresses
+            // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.CancelButton = this.cancelButton;
+            this.ClientSize = new System.Drawing.Size(910, 539);
+            this.Controls.Add(this.disclaimerCheckBox);
+            this.Controls.Add(this.infoLabel);
+            this.Controls.Add(this.defaultGroupBox);
+            this.Controls.Add(this.checkIntervalTextBox);
+            this.Controls.Add(this.checkIntervalHelpLabel);
+            this.Controls.Add(this.checkIntervalLabel);
+            this.Controls.Add(this.emailAddressGrid);
+            this.Controls.Add(this.addButton);
+            this.Controls.Add(this.acceptButton);
+            this.Controls.Add(this.cancelButton);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(545, 400);
+            this.Name = "FormEmailAddresses";
+            this.Text = "Email Addresses";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormEmailAddresses_FormClosing);
+            this.Load += new System.EventHandler(this.FormEmailAddresses_Load);
+            this.defaultGroupBox.ResumeLayout(false);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private OpenDental.UI.Button butSetDefault;
-		private OpenDental.UI.Button butCancel;
-		private UI.ODGrid gridMain;
-		private UI.Button butAdd;
-		private UI.Button butOK;
-		private System.Windows.Forms.Label labelInboxCheckInterval;
-		private System.Windows.Forms.Label labelInboxCheckUnits;
-		private System.Windows.Forms.TextBox textInboxCheckInterval;
-		private UI.Button butWebMailNotify;
-		private System.Windows.Forms.GroupBox groupEmailPrefs;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.CheckBox checkEmailDisclaimer;
-	}
+        private System.Windows.Forms.Button defaultButton;
+        private System.Windows.Forms.Button cancelButton;
+        private UI.ODGrid emailAddressGrid;
+        private System.Windows.Forms.Button addButton;
+        private System.Windows.Forms.Button acceptButton;
+        private System.Windows.Forms.Label checkIntervalLabel;
+        private System.Windows.Forms.Label checkIntervalHelpLabel;
+        private System.Windows.Forms.TextBox checkIntervalTextBox;
+        private System.Windows.Forms.GroupBox defaultGroupBox;
+        private System.Windows.Forms.Label defaultLabel;
+        private System.Windows.Forms.Label infoLabel;
+        private System.Windows.Forms.CheckBox disclaimerCheckBox;
+    }
 }

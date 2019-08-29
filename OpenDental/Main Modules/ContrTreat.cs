@@ -1924,7 +1924,7 @@ namespace OpenDental{
 			}
 			#endregion
 			PrepImageForPrinting();
-			string attachPath=EmailAttaches.GetAttachPath();
+			string attachPath=EmailAttachment.GetAttachmentPath();
 			Random rnd=new Random();
 			string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 			string filePathAndName=FileAtoZ.CombinePaths(attachPath,fileName);
@@ -1965,17 +1965,16 @@ namespace OpenDental{
 				FileAtoZ.Copy(filePathAndName,FileAtoZ.CombinePaths(attachPath,fileName),FileAtoZSourceDestination.LocalToAtoZ);
 			}
 			EmailMessage message=new EmailMessage();
-			message.PatNum=PatCur.PatNum;
+			message.PatientId=PatCur.PatNum;
 			message.ToAddress=PatCur.Email;
-			EmailAddress address=EmailAddresses.GetByClinic(PatCur.ClinicNum);
+			EmailAddress address=EmailAddress.GetByClinic(PatCur.ClinicNum);
 			message.FromAddress=address.GetFrom();
 			message.Subject=Lan.g(this,"Treatment Plan");
-			EmailAttach attach=new EmailAttach();
-			attach.DisplayedFileName="TreatmentPlan.pdf";
-			attach.ActualFileName=fileName;
+			EmailAttachment attach=new EmailAttachment();
+			attach.Description="TreatmentPlan.pdf";
+			attach.FileName=fileName;
 			message.Attachments.Add(attach);
 			FormEmailMessageEdit FormE=new FormEmailMessageEdit(message,address);
-			FormE.IsNew=true;
 			FormE.ShowDialog();
 			//if(FormE.DialogResult==DialogResult.OK) {
 			//	RefreshCurrentModule();

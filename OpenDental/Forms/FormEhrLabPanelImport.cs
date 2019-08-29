@@ -36,7 +36,7 @@ OBX|4|NM|14927-8^Triglycerides^LN|333123|127|mg/dl|<150| N|||F|||20100920083000"
 			string sample="";
 			Cursor=Cursors.WaitCursor;
 			try {
-				sample=EmailMessages.ReceiveOneForEhrTest();
+				// TODO: sample=EmailMessages.ReceiveOneForEhrTest();
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;

@@ -166,10 +166,10 @@ namespace OpenDentBusiness
             }
             if (listITypes.Contains(InvalidType.Email) || isAll)
             {
-                ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Email.ToString());
-                ds.Tables.Add(EmailAddresses.GetTableFromCache(doRefreshServerCache));
-                ds.Tables.Add(EmailTemplates.GetTableFromCache(doRefreshServerCache));
-                ds.Tables.Add(EmailAutographs.GetTableFromCache(doRefreshServerCache));
+                //ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Email.ToString());
+                //ds.Tables.Add(EmailAddresses.GetTableFromCache(doRefreshServerCache));
+                //ds.Tables.Add(EmailTemplates.GetTableFromCache(doRefreshServerCache));
+                //ds.Tables.Add(EmailAutographs.GetTableFromCache(doRefreshServerCache));
             }
             if (listITypes.Contains(InvalidType.Employees) || isAll)
             {
@@ -568,9 +568,9 @@ namespace OpenDentBusiness
             }
             if (listITypes.Contains(InvalidType.Email) || isAll)
             {
-                ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Email.ToString());
-                EmailAddresses.FillCacheFromTable(ds.Tables["EmailAddress"]);
-                EmailTemplates.FillCacheFromTable(ds.Tables["EmailTemplate"]);
+                //ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Email.ToString());
+                //EmailAddresses.FillCacheFromTable(ds.Tables["EmailAddress"]);
+                //EmailTemplates.FillCacheFromTable(ds.Tables["EmailTemplate"]);
             }
             if (listITypes.Contains(InvalidType.Employees) || isAll)
             {

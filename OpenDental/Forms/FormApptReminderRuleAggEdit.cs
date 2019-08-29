@@ -48,12 +48,12 @@ namespace OpenDental {
 		
 		private void butEditEmail_Click(object sender,EventArgs e) {
 			FormEmailEdit formEE=new FormEmailEdit();
-			formEE.MarkupText=_emailPlainTextShared;
+			formEE.Body=_emailPlainTextShared;
 			formEE.ShowDialog();
 			if(formEE.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			_emailPlainTextShared=formEE.MarkupText;
+			_emailPlainTextShared=formEE.Body;
 			RefreshEmail();
 		}
 

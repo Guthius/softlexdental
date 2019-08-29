@@ -237,25 +237,25 @@ namespace OpenDental {
 				return;
 			}
 			Cursor=Cursors.WaitCursor;
-			EmailAddress emailAddressFrom=EmailAddresses.GetByClinic(0);//Default for clinic/practice.
+			EmailAddress emailAddressFrom=EmailAddress.GetByClinic(0);//Default for clinic/practice.
 			EmailMessage emailMessage=new EmailMessage();
-			emailMessage.PatNum=PatCur.PatNum;
-			emailMessage.MsgDateTime=DateTime.Now;
-			emailMessage.SentOrReceived=EmailSentOrReceived.Neither;//To force FormEmailMessageEdit into "compose" mode.
-			emailMessage.FromAddress=emailAddressFrom.EmailUsername;//Cannot be emailAddressFrom.SenderAddress, because it would cause encryption to fail.
+			emailMessage.PatientId=PatCur.PatNum;
+			emailMessage.Date=DateTime.Now;
+			emailMessage.Status=EmailMessageStatus.Unknown;//To force FormEmailMessageEdit into "compose" mode.
+			emailMessage.FromAddress=emailAddressFrom.SmtpUsername;//Cannot be emailAddressFrom.SenderAddress, because it would cause encryption to fail.
 			emailMessage.ToAddress="";//User must set inside of FormEmailMessageEdit
 			emailMessage.Subject="Summary of Care";
-			emailMessage.BodyText="Summary of Care";
+			emailMessage.Body="Summary of Care";
 			try {
-				emailMessage.Attachments.Add(EmailAttaches.CreateAttach("ccd.xml",Encoding.UTF8.GetBytes(ccd)));
-				emailMessage.Attachments.Add(EmailAttaches.CreateAttach("ccd.xsl",Encoding.UTF8.GetBytes(FormEHR.GetEhrResource("CCD"))));
+				emailMessage.Attachments.Add(EmailAttachment.CreateAttachment("ccd.xml",Encoding.UTF8.GetBytes(ccd)));
+				emailMessage.Attachments.Add(EmailAttachment.CreateAttachment("ccd.xsl",Encoding.UTF8.GetBytes(FormEHR.GetEhrResource("CCD"))));
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
 				MessageBox.Show(ex.Message);
 				return;
 			}
-			EmailMessages.Insert(emailMessage);
+			EmailMessage.Insert(emailMessage);
 			FormEmailMessageEdit formE=new FormEmailMessageEdit(emailMessage,emailAddressFrom);//Not "new" message because it already exists in db due to pre-insert.
 			if(formE.ShowDialog()==DialogResult.OK) {
 				EhrMeasureEvent newMeasureEvent=new EhrMeasureEvent();

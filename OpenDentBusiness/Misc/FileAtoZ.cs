@@ -6,14 +6,16 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace OpenDentBusiness.FileIO
+namespace OpenDentBusiness
 {
+    // TODO: Properly implement this to make it work with any kind of storage and add async methods...
+
     /// <summary>
     /// This class is used to access files in the A to Z folder. Depending on the storage type in
     /// use, it will read/write to a local location or it will download/upload from the cloud.
     /// All methods are synchronous.
     /// </summary>
-    public class FileAtoZ
+    public class FileSystem
     {
         /// <summary>
         /// Returns the string contents of the file. Sychronous for cloud storage.
@@ -30,6 +32,10 @@ namespace OpenDentBusiness.FileIO
                 return File.ReadAllText(fileName);
             }
         }
+
+        public static string Combine(params string[] args) => Path.Combine(args);
+
+        public static void CreateDirectory(string path) => Directory.CreateDirectory(path);
 
         /// <summary>
         /// Returns the byte contents of the file. Sychronous for cloud storage.
@@ -92,6 +98,7 @@ namespace OpenDentBusiness.FileIO
         /// <summary>
         /// Use this instead of ODFileUtils.CombinePaths when the path is in the A to Z folder.
         /// </summary>
+        [Obsolete]
         public static string CombinePaths(params string[] paths) => 
             CloudStorage.PathTidy(ODFileUtils.CombinePaths(paths));
 
@@ -104,7 +111,7 @@ namespace OpenDentBusiness.FileIO
         /// <summary>
         /// Returns true if the file exists. If cloud, checks if the file exists in the cloud. Sychronous for cloud storage.
         /// </summary>
-        public static bool Exists(string filePath)
+        public static bool FileExists(string filePath)
         {
             if (CloudStorage.IsCloudStorage)
             {
@@ -227,37 +234,37 @@ namespace OpenDentBusiness.FileIO
     public class FileAtoZInst : IFileAtoZ
     {
         public string AppendSuffix(string filePath, string suffix) =>
-            FileAtoZ.AppendSuffix(filePath, suffix);
+            FileSystem.AppendSuffix(filePath, suffix);
 
         public string CombinePaths(params string[] paths) => 
-            FileAtoZ.CombinePaths(paths);
+            FileSystem.CombinePaths(paths);
         
 
         public void Copy(string sourceFileName, string destinationFileName, FileAtoZSourceDestination sourceDestination, string uploadMessage = "Copying file...", bool isFolder = false, bool doOverwrite = false)
         {
-            FileAtoZ.Copy(sourceFileName, destinationFileName, sourceDestination, isFolder);
+            FileSystem.Copy(sourceFileName, destinationFileName, sourceDestination, isFolder);
         }
 
         public void Delete(string fileName) => 
-            FileAtoZ.Delete(fileName);
+            FileSystem.Delete(fileName);
 
         public bool DirectoryExists(string folderName) => 
-            FileAtoZ.DirectoryExists(folderName);
+            FileSystem.DirectoryExists(folderName);
 
         public bool Exists(string filePath) => 
-            FileAtoZ.Exists(filePath);
+            FileSystem.FileExists(filePath);
 
         public List<string> GetFilesInDirectory(string folder) =>
-            FileAtoZ.GetFilesInDirectory(folder);
+            FileSystem.GetFilesInDirectory(folder);
 
         public Image GetImage(string imagePath) => 
-            FileAtoZ.GetImage(imagePath);
+            FileSystem.GetImage(imagePath);
 
         public string ReadAllText(string fileName) => 
-            FileAtoZ.ReadAllText(fileName);
+            FileSystem.ReadAllText(fileName);
 
         public void WriteAllText(string fileName, string textForFile) => 
-            FileAtoZ.WriteAllText(fileName, textForFile);
+            FileSystem.WriteAllText(fileName, textForFile);
     }
 }
 

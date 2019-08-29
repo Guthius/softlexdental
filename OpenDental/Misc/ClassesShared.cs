@@ -130,7 +130,7 @@ namespace OpenDental
     /// <summary>
     /// Handles a global event to keep local data synchronized.
     /// </summary>
-    public class DataValid
+    [Obsolete] public class DataValid
     {
         /// <summary>
         /// Triggers an event that causes a signal to be sent to all other computers telling them what kind of locally stored data needs to be updated.

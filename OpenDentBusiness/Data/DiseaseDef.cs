@@ -36,8 +36,6 @@ namespace OpenDentBusiness
         /// </summary>
         public string SnomedCode;
 
-        [Obsolete] public bool IsNew;
-
         /// <summary>
         /// Constructs a new instance of the <see cref="DiseaseDef"/> class.
         /// </summary>

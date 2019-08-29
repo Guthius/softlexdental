@@ -156,7 +156,7 @@ namespace OpenDental {
 			//Send the encrypted message followed by encrypted hash.
 			Cursor=Cursors.WaitCursor;
 			try {
-				EmailMessages.SendTestUnsecure("Encryption","encryption.txt",attachContents);
+				//EmailMessages.SendTestUnsecure("Encryption","encryption.txt",attachContents);
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;

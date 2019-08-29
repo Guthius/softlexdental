@@ -17,6 +17,11 @@ namespace OpenDentBusiness
         public long Id { get; protected set; }
 
         /// <summary>
+        /// Gets a value indicating whether the record is new (i.e. not saved to the database). A record is considered new when it has not been assigned a ID yet.
+        /// </summary>
+        public bool IsNew => Id == 0;
+
+        /// <summary>
         /// Selects a list of records from the database.
         /// </summary>
         /// <typeparam name="T">The data record type.</typeparam>

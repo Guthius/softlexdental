@@ -81,16 +81,16 @@ namespace UnitTests
             Assert.AreEqual("8", alertCount);
             //
             //Mark 2 of the emails as read, to decrease the amount of unread emails
-            string command = "UPDATE emailmessage SET SentOrReceived=" + POut.Int((int)EmailSentOrReceived.WebMailRecdRead) +
-                " WHERE SentOrReceived=" + POut.Int((int)EmailSentOrReceived.WebMailReceived) + " AND ProvNumWebMail=" + POut.Long(selectedUser.ProvNum) + " LIMIT 2";
+            string command = "UPDATE emailmessage SET SentOrReceived=" + POut.Int((int)EmailMessageStatus.WebMailRecdRead) +
+                " WHERE SentOrReceived=" + POut.Int((int)EmailMessageStatus.WebMailReceived) + " AND ProvNumWebMail=" + POut.Long(selectedUser.ProvNum) + " LIMIT 2";
             DataConnection.ExecuteNonQuery(command);
             AlertItems_CreateAlertsForWebmailMethodCall();
             alertCount = DataConnection.ExecuteLong("SELECT Description FROM alertitem WHERE Type=" + POut.Int((int)AlertType.WebMailRecieved) + " AND UserNum=" + selectedUser.UserNum);
             Assert.AreEqual("6", alertCount);
             //
             //Now we mark all of this user's emails as read, as if that user has read all of their webmail.
-            command = "UPDATE emailmessage SET SentOrReceived=" + POut.Int((int)EmailSentOrReceived.WebMailRecdRead) +
-                " WHERE SentOrReceived=" + POut.Int((int)EmailSentOrReceived.WebMailReceived) + " AND ProvNumWebMail=" + POut.Long(selectedUser.ProvNum);
+            command = "UPDATE emailmessage SET SentOrReceived=" + POut.Int((int)EmailMessageStatus.WebMailRecdRead) +
+                " WHERE SentOrReceived=" + POut.Int((int)EmailMessageStatus.WebMailReceived) + " AND ProvNumWebMail=" + POut.Long(selectedUser.ProvNum);
             DataConnection.ExecuteNonQuery(command);
             AlertItems_CreateAlertsForWebmailMethodCall();
             alertCount = DataConnection.ExecuteLong("SELECT COUNT(*) FROM alertitem WHERE Type=" + POut.Int((int)AlertType.WebMailRecieved) + " AND UserNum=" + selectedUser.UserNum);

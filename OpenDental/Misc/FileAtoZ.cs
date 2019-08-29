@@ -1,18 +1,17 @@
-﻿using System;
+﻿using CodeBase;
+using OpenDentBusiness;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using CodeBase;
-using OpenDentBusiness;
 
-namespace OpenDental {
-	///<summary>This class is used to access files in the AtoZ folder. Depending on the storage type in use, it will read/write to a local 
-	///location or it will download/upload from the cloud.</summary>
-	public class FileAtoZ {
+namespace OpenDental
+{
+    ///<summary>This class is used to access files in the AtoZ folder. Depending on the storage type in use, it will read/write to a local 
+    ///location or it will download/upload from the cloud.</summary>
+    public class FileAtoZ {
 
 		///<summary>Returns the string contents of the file.</summary>
 		public static string ReadAllText(string fileName) {
@@ -54,7 +53,7 @@ namespace OpenDental {
 
 		///<summary>Gets a list of the files in the specified directory.</summary>
 		public static List<string> GetFilesInDirectory(string folder) {
-			return OpenDentBusiness.FileIO.FileAtoZ.GetFilesInDirectory(folder);
+			return FileSystem.GetFilesInDirectory(folder);
 		}
 
 		///<summary>Copies or downloads the file and opens it. acutalFileName should be a full path, displayedFileName should be a file name only.
@@ -106,7 +105,7 @@ namespace OpenDental {
 
 		///<summary>Returns true if the file exists. If cloud, checks if the file exists in the cloud.</summary>
 		public static bool Exists(string filePath) {
-			return OpenDentBusiness.FileIO.FileAtoZ.Exists(filePath);
+			return FileSystem.FileExists(filePath);
 		}
 
 		///<summary>Returns null if the the image could not be downloaded or the user canceled the download.</summary>
@@ -198,12 +197,12 @@ namespace OpenDental {
 
 		///<summary>Deletes the file.</summary>
 		public static void Delete(string fileName) {
-			OpenDentBusiness.FileIO.FileAtoZ.Delete(fileName);
+			FileSystem.Delete(fileName);
 		}
 
 		///<summary>Returns true if the directory exists. If cloud, checks if that directory exists in the cloud.</summary>
 		public static bool DirectoryExists(string folderName) {
-			return OpenDentBusiness.FileIO.FileAtoZ.DirectoryExists(folderName);
+			return FileSystem.DirectoryExists(folderName);
 		}
 
 		///<summary>Opens the directory. If cloud, opens the directory in FormFilePicker.</summary>

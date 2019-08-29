@@ -1,11 +1,7 @@
+using OpenDentBusiness.HL7;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using CodeBase;
-using OpenDentBusiness.FileIO;
-using OpenDentBusiness.HL7;
 
 namespace OpenDentBusiness
 {
@@ -169,7 +165,7 @@ namespace OpenDentBusiness
                 {
                     if (Preferences.AtoZfolderUsed != DataStorageType.InDatabase)
                     {
-                        fileTextCur = FileAtoZ.ReadAllText(FileAtoZ.CombinePaths(ImageStore.GetPreferredAtoZpath(), relativePath));
+                        fileTextCur = FileSystem.ReadAllText(FileSystem.CombinePaths(ImageStore.GetPreferredAtoZpath(), relativePath));
                     }
                 }
                 catch 

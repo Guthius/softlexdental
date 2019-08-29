@@ -851,10 +851,6 @@ namespace OpenDental
                 }
                 else if (PIn.Long(_tableComms.Rows[i]["EmailMessageNum"].ToString()) > 0)
                 {
-                    if (((HideInFlags)PIn.Int(_tableComms.Rows[i]["EmailMessageHideIn"].ToString())).HasFlag(HideInFlags.ApptEdit))
-                    {
-                        continue;
-                    }
                     row.Cells.Add(PIn.Date(_tableComms.Rows[i]["commDateTime"].ToString()).ToShortDateString());
                     row.Cells.Add(_tableComms.Rows[i]["Subject"].ToString());
                 }
@@ -883,7 +879,7 @@ namespace OpenDental
             }
             else if (msgNum > 0)
             {
-                EmailMessage email = EmailMessages.GetOne(msgNum);
+                EmailMessage email = EmailMessage.GetById(msgNum);
                 if (email == null)
                 {
                     MsgBox.Show(this, "This e-mail has been deleted by another user.");

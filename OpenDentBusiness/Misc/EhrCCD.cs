@@ -1,5 +1,4 @@
 ﻿using CodeBase;
-using OpenDentBusiness.FileIO;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -3146,7 +3145,6 @@ Vital Signs
 				listDiseases.Add(dis);
 				DiseaseDef disD=new DiseaseDef();
 				disD.Hidden=false;
-				disD.IsNew=true;
 				disD.SnomedCode=probCode;
 				disD.Name=probName;
 				listDiseaseDef.Add(disD);
@@ -3328,12 +3326,12 @@ Vital Signs
 			return false;
 		}
 
-		public static bool IsCcdEmailAttachment(EmailAttach emailAttach) {
-			string strFilePathAttach=FileAtoZ.CombinePaths(EmailAttaches.GetAttachPath(),emailAttach.ActualFileName);
+		public static bool IsCcdEmailAttachment(EmailAttachment emailAttach) {
+			string strFilePathAttach=FileSystem.CombinePaths(EmailAttachment.GetAttachmentPath(),emailAttach.FileName);
 			if(Path.GetExtension(strFilePathAttach).ToLower()!=".xml") {
 				return false;
 			}
-			string strTextXml=FileAtoZ.ReadAllText(strFilePathAttach);
+			string strTextXml=FileSystem.ReadAllText(strFilePathAttach);
 			if(!EhrCCD.IsCCD(strTextXml)) {
 				return false;
 			}

@@ -693,26 +693,26 @@ namespace OpenDental{
 		}
 
 		private void FillComboEmail() {
-			_listEmailAddresses=EmailAddresses.GetDeepCopy();//Does not include user specific email addresses.
+			_listEmailAddresses=EmailAddress.All();//Does not include user specific email addresses.
 			List<Clinic> listClinicsAll=Clinics.GetDeepCopy();
 			for(int i=0;i<listClinicsAll.Count;i++) {//Exclude any email addresses that are associated to a clinic.
-				_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==listClinicsAll[i].EmailAddressNum);
+				_listEmailAddresses.RemoveAll(x => x.Id==listClinicsAll[i].EmailAddressNum);
 			}
 			//Exclude default practice email address.
-			_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==Preference.GetLong(PreferenceName.EmailDefaultAddressNum));
+			_listEmailAddresses.RemoveAll(x => x.Id==Preference.GetLong(PreferenceName.EmailDefaultAddressNum));
 			//Exclude web mail notification email address.
-			_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==Preference.GetLong(PreferenceName.EmailNotifyAddressNum));
+			_listEmailAddresses.RemoveAll(x => x.Id==Preference.GetLong(PreferenceName.EmailNotifyAddressNum));
 			comboEmailFrom.Items.Add(Lan.g(this,"Practice/Clinic"));//default
 			comboEmailFrom.SelectedIndex=0;
 			//Add all email addresses which are not associated to a user, a clinic, or either of the default email addresses.
 			for(int i=0;i<_listEmailAddresses.Count;i++) {
-				comboEmailFrom.Items.Add(_listEmailAddresses[i].EmailUsername);
+				comboEmailFrom.Items.Add(_listEmailAddresses[i].SmtpUsername);
 			}
 			//Add user specific email address if present.
-			EmailAddress emailAddressMe=EmailAddresses.GetForUser(Security.CurUser.UserNum);//can be null
+			EmailAddress emailAddressMe=EmailAddress.GetByUser(Security.CurUser.UserNum);//can be null
 			if(emailAddressMe!=null) {
 				_listEmailAddresses.Insert(0,emailAddressMe);
-				comboEmailFrom.Items.Insert(1,Lan.g(this,"Me")+" <"+emailAddressMe.EmailUsername+">");//Just below Practice/Clinic
+				comboEmailFrom.Items.Insert(1,Lan.g(this,"Me")+" <"+emailAddressMe.SmtpUsername+">");//Just below Practice/Clinic
 			}
 		}
 
@@ -1039,7 +1039,7 @@ namespace OpenDental{
 			string filePathAndName;
 			string attachPath;
 			EmailMessage message;
-			EmailAttach attach;
+			EmailAttachment attach;
 			EmailAddress emailAddress;
 			Patient pat;
 			string patFolder;
@@ -1092,14 +1092,14 @@ namespace OpenDental{
 				patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
 				dataSet=AccountModules.GetStatementDataSet(stmt,isComputeAging);
 				if(comboEmailFrom.SelectedIndex==0) { //clinic/practice default
-					emailAddress=EmailAddresses.GetByClinic(pat.ClinicNum);
+					emailAddress=EmailAddress.GetByClinic(pat.ClinicNum);
 				}
 				else { //me or static email address, email address for 'me' is the first one in _listEmailAddresses
 					emailAddress=_listEmailAddresses[comboEmailFrom.SelectedIndex-1];//-1 to account for predefined "Clinic/Practice" item in combobox
 				}
 				_progExtended.Fire(new ODEventArgs(ODEventType.Billing,new ProgressBarHelper(Lan.g(this,"Statement")+"\r\n"+curStmtIdx+" / "+gridBill.SelectedIndices.Length,"10%",10,100,ProgBarStyle.Blocks,"3")));
 				if(stmt.Mode_==StatementMode.Email) {
-					if(emailAddress.SMTPserver=="") {
+					if(emailAddress.SmtpServer=="") {
 						_progExtended.Close();
 						MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
 						Cursor=Cursors.Default;
@@ -1205,7 +1205,7 @@ namespace OpenDental{
 				if(stmt.Mode_==StatementMode.Email) {
 					_progExtended.Fire(new ODEventArgs(ODEventType.Billing,new ProgressBarHelper(Lan.g(this,"Preparing Email")+"..."
 						,progressBarEventType:ProgBarEventType.TextMsg)));
-					attachPath=EmailAttaches.GetAttachPath();
+					attachPath=EmailAttachment.GetAttachmentPath();
 					rnd=new Random();
 					fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 					filePathAndName=FileAtoZ.CombinePaths(attachPath,fileName);
@@ -1219,17 +1219,17 @@ namespace OpenDental{
 					_progExtended.Fire(new ODEventArgs(ODEventType.Billing,new ProgressBarHelper(Lan.g(this,"Statement")+"\r\n"+curStmtIdx+" / "+gridBill.SelectedIndices.Length,"40%",40,100,ProgBarStyle.Blocks,"3")));
 					message=Statements.GetEmailMessageForStatement(stmt,pat);
 					_progExtended.Fire(new ODEventArgs(ODEventType.Billing,new ProgressBarHelper(Lan.g(this,"Statement")+"\r\n"+curStmtIdx+" / "+gridBill.SelectedIndices.Length,"70%",70,100,ProgBarStyle.Blocks,"3")));
-					attach=new EmailAttach();
-					attach.DisplayedFileName="Statement.pdf";
-					attach.ActualFileName=fileName;
+					attach=new EmailAttachment();
+					attach.Description="Statement.pdf";
+					attach.FileName=fileName;
 					message.Attachments.Add(attach);
 					try {
 						//If IsCloudStorage==true, then we will end up downloading the file again in EmailMessages.SendEmailUnsecure.
-						EmailMessages.SendEmailUnsecure(message,emailAddress);
+						EmailMessage.Send(emailAddress, message);
 						_progExtended.Fire(new ODEventArgs(ODEventType.Billing,new ProgressBarHelper(Lan.g(this,"Statement")+"\r\n"+curStmtIdx+" / "+gridBill.SelectedIndices.Length,"90%",90,100,ProgBarStyle.Blocks,"3")));
-						message.SentOrReceived=EmailSentOrReceived.Sent;
-						message.MsgDateTime=DateTime.Now;
-						EmailMessages.Insert(message);
+						message.Status=EmailMessageStatus.Sent;
+						message.Date=DateTime.Now;
+						EmailMessage.Insert(message);
 						_progExtended.Fire(new ODEventArgs(ODEventType.Billing,new ProgressBarHelper(Lan.g(this,"Statement")+"\r\n"+curStmtIdx+" / "+gridBill.SelectedIndices.Length,"95%",95,100,ProgBarStyle.Blocks,"3")));
 						emailed++;
 						curStatementsProcessed++;

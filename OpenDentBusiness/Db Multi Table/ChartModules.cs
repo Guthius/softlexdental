@@ -1309,8 +1309,7 @@ namespace OpenDentBusiness
                 //If a user creates an email that is attached to a patient, it will show up here for everyone.
                 command = "SELECT EmailMessageNum,MsgDateTime,Subject,BodyText,PatNum,SentOrReceived,UserNum,emailmessage.HideIn,emailmessage.IsHTML "
                 + "FROM emailmessage "
-                + "WHERE PatNum=" + POut.Long(patNum) + " AND SentOrReceived NOT IN (" + POut.Int((int)EmailSentOrReceived.AckDirectProcessed) + ","
-                    + POut.Int((int)EmailSentOrReceived.AckDirectNotSent) + ") "//Do not show Direct message acknowledgements in Chart progress notes
+                + "WHERE PatNum=" + POut.Long(patNum) + " "
                 + "ORDER BY MsgDateTime";
                 DataTable rawEmail = DataConnection.GetTable(command);
                 for (int i = 0; i < rawEmail.Rows.Count; i++)

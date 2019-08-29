@@ -179,7 +179,7 @@ namespace OpenDental{
 			Random rnd=new Random();
 			string newName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()
 				+Path.GetExtension(oldPath);
-			string attachPath=EmailAttaches.GetAttachPath();
+			string attachPath=EmailAttachment.GetAttachmentPath();
 			string newPath=ODFileUtils.CombinePaths(attachPath,newName);
 			if(CloudStorage.IsCloudStorage) {
 				oldPath=oldPath.Replace("\\","/");

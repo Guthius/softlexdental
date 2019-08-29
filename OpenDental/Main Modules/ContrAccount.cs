@@ -1047,13 +1047,7 @@ namespace OpenDental
                 {
                     continue;
                 }
-                else if (table.Rows[i]["EmailMessageNum"].ToString() != "0")
-                {//if this is an Email
-                    if (((HideInFlags)PIn.Int(table.Rows[i]["EmailMessageHideIn"].ToString())).HasFlag(HideInFlags.AccountCommLog))
-                    {
-                        continue;
-                    }
-                }
+
                 row = new ODGridRow();
                 int argbColor = PIn.Int(table.Rows[i]["colorText"].ToString());//Convert to int. If blank or 0, will use default color.
                 if (argbColor != Color.Empty.ToArgb())
@@ -3338,19 +3332,18 @@ namespace OpenDental
                     Cursor = Cursors.Default;
                     return;
                 }
-                string attachPath = EmailAttaches.GetAttachPath();
+                string attachPath = EmailAttachment.GetAttachmentPath();
                 Random rnd = new Random();
                 string fileName = DateTime.Now.ToString("yyyyMMdd") + DateTime.Now.TimeOfDay.Ticks.ToString() + rnd.Next(1000).ToString() + ".pdf";
                 string filePathAndName = FileAtoZ.CombinePaths(attachPath, fileName);
                 FileAtoZ.Copy(ImageStore.GetFilePath(Documents.GetByNum(stmt.DocNum), guarFolder), filePathAndName, FileAtoZSourceDestination.AtoZToAtoZ);
                 //Process.Start(filePathAndName);
                 EmailMessage message = Statements.GetEmailMessageForStatement(stmt, guar);
-                EmailAttach attach = new EmailAttach();
-                attach.DisplayedFileName = "Statement.pdf";
-                attach.ActualFileName = fileName;
+                EmailAttachment attach = new EmailAttachment();
+                attach.Description = "Statement.pdf";
+                attach.FileName = fileName;
                 message.Attachments.Add(attach);
-                FormEmailMessageEdit FormE = new FormEmailMessageEdit(message, EmailAddresses.GetByClinic(guar.ClinicNum));
-                FormE.IsNew = true;
+                FormEmailMessageEdit FormE = new FormEmailMessageEdit(message, EmailAddress.GetByClinic(guar.ClinicNum));
                 FormE.ShowDialog();
                 //If user clicked delete or cancel, delete pdf and statement
                 if (FormE.DialogResult == DialogResult.Cancel)
@@ -3782,28 +3775,15 @@ namespace OpenDental
             else if (DataSetMain.Tables["Commlog"].Rows[row]["EmailMessageNum"].ToString() != "0")
             {
                 EmailMessage email =
-                    EmailMessages.GetOne(PIn.Long(DataSetMain.Tables["Commlog"].Rows[row]["EmailMessageNum"].ToString()));
-                if (email.SentOrReceived == EmailSentOrReceived.WebMailReceived
-                    || email.SentOrReceived == EmailSentOrReceived.WebMailRecdRead
-                    || email.SentOrReceived == EmailSentOrReceived.WebMailSent
-                    || email.SentOrReceived == EmailSentOrReceived.WebMailSentRead)
-                {
-                    //web mail uses special secure messaging portal
-                    FormWebMailMessageEdit FormWMME = new FormWebMailMessageEdit(PatCur.PatNum, email);
-                    if (FormWMME.ShowDialog() == DialogResult.OK)
-                    {
-                        ModuleSelected(PatCur.PatNum);
-                    }
-                }
-                else
-                {
+                    EmailMessage.GetById(PIn.Long(DataSetMain.Tables["Commlog"].Rows[row]["EmailMessageNum"].ToString()));
+
                     FormEmailMessageEdit FormE = new FormEmailMessageEdit(email);
                     FormE.ShowDialog();
                     if (FormE.DialogResult == DialogResult.OK)
                     {
                         ModuleSelected(PatCur.PatNum);
                     }
-                }
+                
             }
             else if (DataSetMain.Tables["Commlog"].Rows[row]["FormPatNum"].ToString() != "0")
             {
@@ -4013,13 +3993,7 @@ namespace OpenDental
                         continue;
                     }
                 }
-                else if (table.Rows[i]["EmailMessageNum"].ToString() != "0")
-                {//if this is an Email
-                    if (((HideInFlags)PIn.Int(table.Rows[i]["EmailMessageHideIn"].ToString())).HasFlag(HideInFlags.AccountProgNotes))
-                    {
-                        continue;
-                    }
-                }
+
                 row = new ODGridRow();
                 row.ColorLborder = Color.Black;
                 //remember that columns that start with lowercase are already altered for display rather than being raw data.
@@ -4130,7 +4104,7 @@ namespace OpenDental
             }
             else if (row["EmailMessageNum"].ToString() != "0")
             {
-                EmailMessage msg = EmailMessages.GetOne(PIn.Long(row["EmailMessageNum"].ToString()));
+                EmailMessage msg = EmailMessage.GetById(PIn.Long(row["EmailMessageNum"].ToString()));
                 FormEmailMessageEdit FormE = new FormEmailMessageEdit(msg);
                 FormE.ShowDialog();
                 if (FormE.DialogResult != DialogResult.OK)

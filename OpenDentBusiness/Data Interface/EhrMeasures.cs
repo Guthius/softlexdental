@@ -6150,23 +6150,24 @@ namespace OpenDentBusiness
                     #endregion
                     #region SecureMessaging
                     case EhrMeasureType.SecureMessaging:
-                        List<Procedure> listProcsMsg = Procedures.GetCompletedForDateRange(DateTime.Now.AddYears(-1), DateTime.Now, listPatNums: new List<long> { pat.PatNum });
-                        if (listProcsMsg.Count == 0)
-                        {
-                            mu.Met = MuMet.NA;
-                            mu.Details = "No visits within the last year.";
-                        }
-                        else if (EmailMessages.GetWebMailForPat(pat.PatNum)
-                            .Any(x => x.SentOrReceived == EmailSentOrReceived.WebMailSent || x.SentOrReceived == EmailSentOrReceived.WebMailSentRead))
-                        {
-                            mu.Met = MuMet.True;
-                            mu.Details = "Web mail message has been sent.";
-                        }
-                        else
-                        {
+                        // TODO: Fix this.
+                        //List<Procedure> listProcsMsg = Procedures.GetCompletedForDateRange(DateTime.Now.AddYears(-1), DateTime.Now, listPatNums: new List<long> { pat.PatNum });
+                        //if (listProcsMsg.Count == 0)
+                        //{
+                        //    mu.Met = MuMet.NA;
+                        //    mu.Details = "No visits within the last year.";
+                        //}
+                        //else if (EmailMessages.GetWebMailForPat(pat.PatNum)
+                        //    .Any(x => x.Status == EmailMessageStatus.WebMailSent || x.Status == EmailMessageStatus.WebMailSentRead))
+                        //{
+                        //    mu.Met = MuMet.True;
+                        //    mu.Details = "Web mail message has been sent.";
+                        //}
+                        //else
+                        //{
                             mu.Met = MuMet.False;
                             mu.Details = "No web mail messages sent to this patient.";
-                        }
+                        //}
                         mu.Action = "Send a web mail message to this patient.";
                         break;
                     #endregion
@@ -6847,26 +6848,27 @@ namespace OpenDentBusiness
                 #endregion
                 #region SecureMessaging
                 case EhrMeasureType.SecureMessaging:
-                    command = "SELECT patient.PatNum, "
-                        + "patient.LName, "
-                        + "patient.FName, "
-                        + "(CASE COALESCE(Emails.PatNumSubj,0) WHEN 0 THEN 0 ELSE 1 END) AS PatEmailed "
-                        + "FROM procedurelog "
-                        + "INNER JOIN procedurecode ON procedurecode.CodeNum = procedurelog.CodeNum AND procedurecode.ProcCode NOT IN ('D9986', 'D9987') "
-                        + "INNER JOIN patient ON patient.PatNum = procedurelog.PatNum "
-                        + "LEFT JOIN( "
-                            + "SELECT emailmessage.PatNumSubj "
-                            + "FROM emailmessage "
-                            + "WHERE emailmessage.SentOrReceived IN (" + POut.Int((int)EmailSentOrReceived.WebMailSent) + "," + POut.Int((int)EmailSentOrReceived.WebMailSentRead) + ") "
-                            + "AND emailmessage.MsgDateTime BETWEEN DATE_FORMAT(" + POut.Date(dateStart) + ",'%Y-01-01') AND (DATE_FORMAT(" + POut.Date(dateEnd) + ",'%Y-12-31')+INTERVAL 1 DAY) "
-                            + "AND emailmessage.ProvNumWebMail IN(" + POut.String(provs) + ")	"
-                            + "GROUP BY emailmessage.PatNumSubj "
-                        + ") Emails ON Emails.PatNumSubj = procedurelog.PatNum "
-                        + "WHERE procedurelog.ProcStatus=" + POut.Int((int)ProcStat.C) + " "
-                        + "AND procedurelog.ProvNum IN(" + POut.String(provs) + ")	"
-                        + "AND procedurelog.ProcDate BETWEEN " + POut.Date(dateStart) + " AND " + POut.Date(dateEnd) + " "
-                        + "GROUP BY procedurelog.PatNum";
-                    tableRaw = Db.GetTable(command);
+                    // TODO: Fix me...
+                    //command = "SELECT patient.PatNum, "
+                    //    + "patient.LName, "
+                    //    + "patient.FName, "
+                    //    + "(CASE COALESCE(Emails.PatNumSubj,0) WHEN 0 THEN 0 ELSE 1 END) AS PatEmailed "
+                    //    + "FROM procedurelog "
+                    //    + "INNER JOIN procedurecode ON procedurecode.CodeNum = procedurelog.CodeNum AND procedurecode.ProcCode NOT IN ('D9986', 'D9987') "
+                    //    + "INNER JOIN patient ON patient.PatNum = procedurelog.PatNum "
+                    //    + "LEFT JOIN( "
+                    //        + "SELECT emailmessage.PatNumSubj "
+                    //        + "FROM emailmessage "
+                    //        + "WHERE emailmessage.SentOrReceived IN (" + POut.Int((int)EmailMessageStatus.WebMailSent) + "," + POut.Int((int)EmailMessageStatus.WebMailSentRead) + ") "
+                    //        + "AND emailmessage.MsgDateTime BETWEEN DATE_FORMAT(" + POut.Date(dateStart) + ",'%Y-01-01') AND (DATE_FORMAT(" + POut.Date(dateEnd) + ",'%Y-12-31')+INTERVAL 1 DAY) "
+                    //        + "AND emailmessage.ProvNumWebMail IN(" + POut.String(provs) + ")	"
+                    //        + "GROUP BY emailmessage.PatNumSubj "
+                    //    + ") Emails ON Emails.PatNumSubj = procedurelog.PatNum "
+                    //    + "WHERE procedurelog.ProcStatus=" + POut.Int((int)ProcStat.C) + " "
+                    //    + "AND procedurelog.ProvNum IN(" + POut.String(provs) + ")	"
+                    //    + "AND procedurelog.ProcDate BETWEEN " + POut.Date(dateStart) + " AND " + POut.Date(dateEnd) + " "
+                    //    + "GROUP BY procedurelog.PatNum";
+                    //tableRaw = Db.GetTable(command);
                     break;
                 #endregion
                 #region FamilyHistory

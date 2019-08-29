@@ -797,12 +797,9 @@ namespace OpenDental
             });
             Text = PatientL.GetMainTitle(Patients.GetPat(CurPatNum), Clinics.ClinicNum);
             Security.DateTimeLastActivity = DateTime.Now;
-            //Certificate stores for emails need to be created on all computers since any of the computers are able to potentially send encrypted email.
-            //If this fails, prrobably a permission issue creating the stores. Nothing we can do except explain in the manual.
-            ODException.SwallowAnyException(() =>
-            {
-                EmailMessages.CreateCertificateStoresIfNeeded();
-            });
+
+
+
             Patient pat = Patients.GetPat(CurPatNum);
             if (pat != null && (_StrCmdLineShow == "popup" || _StrCmdLineShow == "popups") && myOutlookBar.SelectedIndex != -1)
             {
@@ -1844,13 +1841,12 @@ namespace OpenDental
                 return;
             }
             EmailMessage message = new EmailMessage();
-            message.PatNum = CurPatNum;
+            message.PatientId = CurPatNum;
             Patient pat = Patients.GetPat(CurPatNum);
             message.ToAddress = pat.Email;
-            EmailAddress selectedAddress = EmailAddresses.GetNewEmailDefault(Security.CurUser.UserNum, pat.ClinicNum);
+            EmailAddress selectedAddress = EmailAddress.GetDefault(Security.CurUser.UserNum, pat.ClinicNum);
             message.FromAddress = selectedAddress.GetFrom();
             FormEmailMessageEdit FormE = new FormEmailMessageEdit(message, selectedAddress);
-            FormE.IsNew = true;
             FormE.ShowDialog();
             if (FormE.DialogResult == DialogResult.OK)
             {
@@ -1910,12 +1906,12 @@ namespace OpenDental
 
         private void OnWebMail_Click()
         {
-            if (!Security.IsAuthorized(Permissions.WebMailSend))
-            {
-                return;
-            }
-            FormWebMailMessageEdit FormWMME = new FormWebMailMessageEdit(CurPatNum);
-            FormWMME.ShowDialog();
+            //if (!Security.IsAuthorized(Permissions.WebMailSend))
+            //{
+            //    return;
+            //}
+            //FormWebMailMessageEdit FormWMME = new FormWebMailMessageEdit(CurPatNum);
+            //FormWMME.ShowDialog();
         }
 
         private void menuEmail_Click(object sender, System.EventArgs e)
@@ -1934,14 +1930,13 @@ namespace OpenDental
                     //MsgBox.Show(this,"");
                 }
                 EmailMessage message = new EmailMessage();
-                message.PatNum = CurPatNum;
+                message.PatientId = CurPatNum;
                 Patient pat = Patients.GetPat(CurPatNum);
                 message.ToAddress = refer.EMail;//pat.Email;
-                EmailAddress address = EmailAddresses.GetByClinic(pat.ClinicNum);
+                EmailAddress address = EmailAddress.GetByClinic(pat.ClinicNum);
                 message.FromAddress = address.GetFrom();
                 message.Subject = Lan.g(this, "RE: ") + pat.GetNameFL();
                 FormEmailMessageEdit FormE = new FormEmailMessageEdit(message, address);
-                FormE.IsNew = true;
                 FormE.ShowDialog();
                 if (FormE.DialogResult == DialogResult.OK)
                 {
@@ -4109,12 +4104,9 @@ namespace OpenDental
         /// </summary>
         void menuItemUserEmailAddress_Click(object sender, EventArgs e)
         {
-            var emailAddress = EmailAddresses.GetForUser(Security.CurUser.UserNum);
+            var emailAddress = EmailAddress.GetByUser(Security.CurUser.UserNum) ?? new EmailAddress { UserId = Security.CurUser.UserNum };
 
-            using (var formEmailAddressEdit =
-                (emailAddress == null) ?
-                    new FormEmailAddressEdit(Security.CurUser.UserNum) :
-                    new FormEmailAddressEdit(emailAddress))
+            using (var formEmailAddressEdit = new FormEmailAddressEdit(emailAddress))
             {
                 formEmailAddressEdit.ShowDialog();
             }

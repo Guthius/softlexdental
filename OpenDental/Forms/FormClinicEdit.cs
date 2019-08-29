@@ -1155,7 +1155,7 @@ namespace OpenDental {
 			else{
 				radioInsBillingProvSpecific.Checked=true;//specific=any number >0. Foreign key to ProvNum
 			}
-			EmailAddress emailAddress=EmailAddresses.GetOne(ClinicCur.EmailAddressNum);
+			EmailAddress emailAddress=EmailAddress.GetById(ClinicCur.EmailAddressNum);
 			if(emailAddress!=null) {
 				textEmail.Text=emailAddress.GetFrom();
 				butEmailNone.Enabled=true;
@@ -1281,8 +1281,8 @@ namespace OpenDental {
 			if(FormEA.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			ClinicCur.EmailAddressNum=FormEA.EmailAddressNum;
-			textEmail.Text=EmailAddresses.GetOne(FormEA.EmailAddressNum).GetFrom();
+			ClinicCur.EmailAddressNum=FormEA.EmailAddressId;
+			textEmail.Text=EmailAddress.GetById(FormEA.EmailAddressId).GetFrom();
 			butEmailNone.Enabled=true;
 		}
 

@@ -2180,7 +2180,7 @@ namespace OpenDental{
 			g.Dispose();
 			Random rnd=new Random();
 			string newName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".jpg";
-			string attachPath=EmailAttaches.GetAttachPath();
+			string attachPath= EmailAttachment.GetAttachmentPath();
 			string newPath=ODFileUtils.CombinePaths(attachPath,newName);
 			try {
                 // TODO: Fix me
@@ -2241,7 +2241,7 @@ namespace OpenDental{
 				}
 			}
 			for(int i=0;i<ClaimCur.Attachments.Count;i++){
-				string curAttachPath=FileAtoZ.CombinePaths(EmailAttaches.GetAttachPath(),ClaimCur.Attachments[i].ActualFileName);
+				string curAttachPath=FileAtoZ.CombinePaths(EmailAttachment.GetAttachmentPath(),ClaimCur.Attachments[i].ActualFileName);
 				string newFilePath=ODFileUtils.CombinePaths(exportPath,
 					PatCur.FName+PatCur.LName+PatCur.PatNum+"_"+i+Path.GetExtension(ClaimCur.Attachments[i].ActualFileName));
 				if(!FileAtoZ.Exists(curAttachPath)) {
@@ -2274,7 +2274,7 @@ namespace OpenDental{
 		}
 
 		private void menuItemOpen_Click(object sender,EventArgs e) {
-			FileAtoZ.OpenFile(FileAtoZ.CombinePaths(EmailAttaches.GetAttachPath(),ClaimCur.Attachments[listAttachments.SelectedIndex].ActualFileName),
+			FileAtoZ.OpenFile(FileAtoZ.CombinePaths(EmailAttachment.GetAttachmentPath(),ClaimCur.Attachments[listAttachments.SelectedIndex].ActualFileName),
 				ClaimCur.Attachments[listAttachments.SelectedIndex].DisplayedFileName);
 		}
 
@@ -2298,7 +2298,7 @@ namespace OpenDental{
 			if(listAttachments.SelectedIndex==-1) {
 				return;
 			}
-			FileAtoZ.OpenFile(FileAtoZ.CombinePaths(EmailAttaches.GetAttachPath(),ClaimCur.Attachments[listAttachments.SelectedIndex].ActualFileName),
+			FileAtoZ.OpenFile(FileAtoZ.CombinePaths(EmailAttachment.GetAttachmentPath(),ClaimCur.Attachments[listAttachments.SelectedIndex].ActualFileName),
 				ClaimCur.Attachments[listAttachments.SelectedIndex].DisplayedFileName);
 		}		
 

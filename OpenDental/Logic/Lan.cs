@@ -6,7 +6,7 @@ using OpenDentBusiness;
 
 namespace OpenDental {
 	///<summary>Lan is short for language.  Used to translate text to another language.</summary>
-	public class Lan{
+	[Obsolete] public class Lan{
 
 		//strings-----------------------------------------------
 		///<summary>Converts a string to the current language.</summary>

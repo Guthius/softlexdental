@@ -111,32 +111,31 @@ namespace OpenDental {
 				//TODO: It would be more patient friendly if we instead generated a PDF file containing the Clinical Summary printout, or if we simply displayed the Clinical Summary in the portal.
 				//The CMS definition does not prohibit sending human readable files, and sending a PDF to the portal mimics printing the Clinical Summary and handing to patient.
 				Random rnd=new Random();
-				string attachPath=EmailAttaches.GetAttachPath();
-				List<EmailAttach> listAttachments=new List<EmailAttach>();
-				EmailAttach attachCcd=new EmailAttach();//Save Clinical Summary to file in the email attachments folder.
-				attachCcd.DisplayedFileName="ccd.xml";
-				attachCcd.ActualFileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".xml";
+				string attachPath=EmailAttachment.GetAttachmentPath();
+				List<EmailAttachment> listAttachments=new List<EmailAttachment>();
+				EmailAttachment attachCcd=new EmailAttachment();//Save Clinical Summary to file in the email attachments folder.
+				attachCcd.Description="ccd.xml";
+				attachCcd.FileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".xml";
 				listAttachments.Add(attachCcd);
-				FileAtoZ.WriteAllText(FileAtoZ.CombinePaths(attachPath,attachCcd.ActualFileName),FormEEC.CCD,"Uploading Attachment for Clinical Summary...");			
-				EmailAttach attachSs=new EmailAttach();//Style sheet attachment.
-				attachSs.DisplayedFileName="ccd.xsl";
-				attachSs.ActualFileName=attachCcd.ActualFileName.Substring(0,attachCcd.ActualFileName.Length-4)+".xsl";//Same base name as the CCD.  The base names must match or the file will not display properly in internet browsers.
+				FileAtoZ.WriteAllText(FileAtoZ.CombinePaths(attachPath,attachCcd.FileName),FormEEC.CCD,"Uploading Attachment for Clinical Summary...");			
+				EmailAttachment attachSs=new EmailAttachment();//Style sheet attachment.
+				attachSs.Description="ccd.xsl";
+				attachSs.FileName=attachCcd.FileName.Substring(0,attachCcd.FileName.Length-4)+".xsl";//Same base name as the CCD.  The base names must match or the file will not display properly in internet browsers.
 				listAttachments.Add(attachSs);
-				FileAtoZ.WriteAllText(FileAtoZ.CombinePaths(attachPath,attachSs.ActualFileName),FormEHR.GetEhrResource("CCD"),
+				FileAtoZ.WriteAllText(FileAtoZ.CombinePaths(attachPath,attachSs.FileName),FormEHR.GetEhrResource("CCD"),
 					"Uploading Attachment for Clinical Summary...");
 				//Create and save the webmail message containing the attachments.
 				EmailMessage msgWebMail=new EmailMessage();				
 				msgWebMail.FromAddress=prov.GetFormalName();
 				msgWebMail.ToAddress=PatCur.GetNameFL();
-				msgWebMail.PatNum=PatCur.PatNum;
-				msgWebMail.SentOrReceived=EmailSentOrReceived.WebMailSent;
-				msgWebMail.ProvNumWebMail=prov.ProvNum;
+				msgWebMail.PatientId=PatCur.PatNum;
+				msgWebMail.Status=EmailMessageStatus.Sent; // WebMailSent
+				msgWebMail.ProviderId=prov.ProvNum;
 				msgWebMail.Subject="Clinical Summary";
-				msgWebMail.BodyText="To view the clinical summary:\r\n1) Download all attachments to the same folder.  Do not rename the files.\r\n2) Open the ccd.xml file in an internet browser.";
-				msgWebMail.MsgDateTime=DateTime.Now;
-				msgWebMail.PatNumSubj=PatCur.PatNum;
+				msgWebMail.Body="To view the clinical summary:\r\n1) Download all attachments to the same folder.  Do not rename the files.\r\n2) Open the ccd.xml file in an internet browser.";
+				msgWebMail.Date=DateTime.Now;
 				msgWebMail.Attachments=listAttachments;
-				EmailMessages.Insert(msgWebMail);
+				EmailMessage.Insert(msgWebMail);
 			}
 			catch(Exception ex) {
 				MessageBox.Show(ex.Message);

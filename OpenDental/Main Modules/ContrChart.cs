@@ -7433,7 +7433,7 @@ namespace OpenDental
             }
             else if (rowCur["EmailMessageNum"].ToString() != "0")
             {//if this is an Email
-                if (!checkEmail.Checked || ((HideInFlags)PIn.Int(rowCur["EmailMessageHideIn"].ToString())).HasFlag(HideInFlags.ChartProgNotes))
+                if (!checkEmail.Checked)
                 {
                     return false;
                 }
@@ -9146,27 +9146,13 @@ namespace OpenDental
             }
             else if (row["EmailMessageNum"].ToString() != "0")
             {
-                EmailMessage msg = EmailMessages.GetOne(PIn.Long(row["EmailMessageNum"].ToString()));
-                if (msg.SentOrReceived == EmailSentOrReceived.WebMailReceived
-                    || msg.SentOrReceived == EmailSentOrReceived.WebMailRecdRead
-                    || msg.SentOrReceived == EmailSentOrReceived.WebMailSent
-                    || msg.SentOrReceived == EmailSentOrReceived.WebMailSentRead)
+                EmailMessage msg = EmailMessage.GetById(PIn.Long(row["EmailMessageNum"].ToString()));
+
+                FormEmailMessageEdit FormE = new FormEmailMessageEdit(msg);
+                FormE.ShowDialog();
+                if (FormE.DialogResult != DialogResult.OK)
                 {
-                    //web mail uses special secure messaging portal
-                    FormWebMailMessageEdit FormWMME = new FormWebMailMessageEdit(PatCur.PatNum, msg);
-                    if (FormWMME.ShowDialog() == DialogResult.Cancel)
-                    {//This will cause an unneccesary refresh in the case of a validation error with the webmail
-                        return;
-                    }
-                }
-                else
-                {
-                    FormEmailMessageEdit FormE = new FormEmailMessageEdit(msg);
-                    FormE.ShowDialog();
-                    if (FormE.DialogResult != DialogResult.OK)
-                    {
-                        return;
-                    }
+                    return;
                 }
             }
             else if (row["SheetNum"].ToString() != "0")

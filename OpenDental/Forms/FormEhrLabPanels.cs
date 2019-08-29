@@ -94,7 +94,7 @@ namespace OpenDental {
 			}
 			string outputStr=oru.GenerateMessage();
 			try {
-				EmailMessages.SendTestUnsecure("Public Health","oru.txt",outputStr);
+				//EmailMessages.SendTestUnsecure("Public Health","oru.txt",outputStr);
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;

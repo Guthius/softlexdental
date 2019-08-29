@@ -10,9 +10,9 @@ namespace UnitTestsCore {
 		///<summary>Inserts the new email address and returns it.</summary>
 		public static EmailAddress CreateEmailAddress(string senderAddress="") {
 			EmailAddress email=new EmailAddress();
-			email.SenderAddress=senderAddress;
+			email.Sender=senderAddress;
 			if(senderAddress=="") {
-				email.SenderAddress="Email"+MiscUtils.CreateRandomAlphaNumericString(4);
+				email.Sender="Email"+MiscUtils.CreateRandomAlphaNumericString(4);
 			}
 			EmailAddresses.Insert(email);
 			EmailAddresses.RefreshCache();

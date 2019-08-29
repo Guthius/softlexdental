@@ -14,7 +14,7 @@ using System.Windows;
 namespace OpenDentBusiness
 {
     ///<summary></summary>
-    public class Signalods
+    [Obsolete] public class Signalods
     {
         #region Misc Methods
         #endregion

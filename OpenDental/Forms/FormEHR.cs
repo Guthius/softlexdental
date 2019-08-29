@@ -318,11 +318,11 @@ namespace OpenDental {
 						FillGridMu();
 						break;
 					case EhrMeasureType.SecureMessaging:
-						if(Preference.GetInt(PreferenceName.MeaningfulUseTwo)==2) {/*Modified Stage 2*/
-							FormWebMailMessageEdit FormWMME=new FormWebMailMessageEdit(PatCur.PatNum);
-							FormWMME.ShowDialog();
-							FillGridMu();
-						}
+						//if(Preference.GetInt(PreferenceName.MeaningfulUseTwo)==2) {/*Modified Stage 2*/
+						//	FormWebMailMessageEdit FormWMME=new FormWebMailMessageEdit(PatCur.PatNum);
+						//	FormWMME.ShowDialog();
+						//	FillGridMu();
+						//}
 						break;
 					case EhrMeasureType.FamilyHistory:
 						FormMed=new FormMedical(PatNotCur,PatCur,"tabFamHealthHist");

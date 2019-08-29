@@ -1339,19 +1339,18 @@ namespace OpenDental{
 			SheetUtil.CalculateHeights(sheet);
 			string sheetName=sheet.Description+"_"+DateTime.Now.ToString("yyyyMMdd_hhmmssfff")+".pdf";
 			string tempFile=ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),sheetName);
-			string filePathAndName=FileAtoZ.CombinePaths(EmailAttaches.GetAttachPath(),sheetName);
+			string filePathAndName=FileAtoZ.CombinePaths(EmailAttachment.GetAttachmentPath(),sheetName);
 			SheetPrinting.CreatePdf(sheet,tempFile,null);
 			FileAtoZ.Copy(tempFile,filePathAndName,FileAtoZSourceDestination.LocalToAtoZ);
 			EmailMessage message=new EmailMessage();
-			EmailAddress address=EmailAddresses.GetByClinic(Clinics.ClinicNum);
+			EmailAddress address=EmailAddress.GetByClinic(Clinics.ClinicNum);
 			message.FromAddress=address.GetFrom();
 			message.Subject=sheet.Description;
-			EmailAttach attach=new EmailAttach();
-			attach.ActualFileName=sheetName;
-			attach.DisplayedFileName=sheetName;
+			EmailAttachment attach=new EmailAttachment();
+			attach.FileName=sheetName;
+			attach.Description=sheetName;
 			message.Attachments.Add(attach);
 			FormEmailMessageEdit FormE=new FormEmailMessageEdit(message,address);
-			FormE.IsNew=true;
 			FormE.ShowDialog();
 		}
 

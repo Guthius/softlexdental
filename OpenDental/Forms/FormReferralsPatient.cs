@@ -462,41 +462,40 @@ namespace OpenDental{
 						EmailMessage msgWebMail=new EmailMessage();//New mail object				
 						msgWebMail.FromAddress=prov.GetFormalName();//Adding from address
 						msgWebMail.ToAddress=PatCur.GetNameFL();//Adding to address
-						msgWebMail.PatNum=PatCur.PatNum;//Adding patient number
-						msgWebMail.SentOrReceived=EmailSentOrReceived.WebMailSent;//Setting to sent
-						msgWebMail.ProvNumWebMail=prov.ProvNum;//Adding provider number
+						msgWebMail.PatientId=PatCur.PatNum;//Adding patient number
+                        msgWebMail.Status = EmailMessageStatus.Sent; // TODO: EmailMessageStatus.WebMailSent ;//Setting to sent
+                        msgWebMail.ProviderId=prov.ProvNum;//Adding provider number
 						msgWebMail.Subject="Referral To "+FormRS.SelectedReferral.GetNameFL();
-						msgWebMail.BodyText=
+						msgWebMail.Body=
 							"You have been referred to another provider.  Your summary of care is attached.\r\n"
 							+"You may give a copy of this summary of care to the referred provider if desired.\r\n"
 							+"The contact information for the doctor you are being referred to is as follows:\r\n"
 							+"\r\n";
 						//Here we provide the same information that would go out on a Referral Slip.
 						//When the user prints a Referral Slip, the doctor referred to information is included and contains the doctor's name, address, and phone.
-						msgWebMail.BodyText+="Name: "+FormRS.SelectedReferral.GetNameFL()+"\r\n";
+						msgWebMail.Body+="Name: "+FormRS.SelectedReferral.GetNameFL()+"\r\n";
 						if(FormRS.SelectedReferral.Address.Trim()!="") {
-							msgWebMail.BodyText+="Address: "+FormRS.SelectedReferral.Address.Trim()+"\r\n";
+							msgWebMail.Body+="Address: "+FormRS.SelectedReferral.Address.Trim()+"\r\n";
 							if(FormRS.SelectedReferral.Address2.Trim()!="") {
-								msgWebMail.BodyText+="\t"+FormRS.SelectedReferral.Address2.Trim()+"\r\n";
+								msgWebMail.Body+="\t"+FormRS.SelectedReferral.Address2.Trim()+"\r\n";
 							}
-							msgWebMail.BodyText+="\t"+FormRS.SelectedReferral.City+" "+FormRS.SelectedReferral.ST+" "+FormRS.SelectedReferral.Zip+"\r\n";
+							msgWebMail.Body+="\t"+FormRS.SelectedReferral.City+" "+FormRS.SelectedReferral.ST+" "+FormRS.SelectedReferral.Zip+"\r\n";
 						}
 						if(FormRS.SelectedReferral.Telephone!="") {
-							msgWebMail.BodyText+="Phone: ("+FormRS.SelectedReferral.Telephone.Substring(0,3)+")"+FormRS.SelectedReferral.Telephone.Substring(3,3)+"-"+FormRS.SelectedReferral.Telephone.Substring(6)+"\r\n";
+							msgWebMail.Body+="Phone: ("+FormRS.SelectedReferral.Telephone.Substring(0,3)+")"+FormRS.SelectedReferral.Telephone.Substring(3,3)+"-"+FormRS.SelectedReferral.Telephone.Substring(6)+"\r\n";
 						}
-						msgWebMail.BodyText+=
+						msgWebMail.Body+=
 							"\r\n"
 							+"To view the Summary of Care for the referral to this provider:\r\n"
 							+"1) Download all attachments to the same folder.  Do not rename the files.\r\n"
 							+"2) Open the ccd.xml file in an internet browser.";
-						msgWebMail.MsgDateTime=DateTime.Now;//Message time is now
-						msgWebMail.PatNumSubj=PatCur.PatNum;//Subject of the message is current patient
+						msgWebMail.Date=DateTime.Now;//Message time is now
 						string ccd="";
 						Cursor=Cursors.WaitCursor;
 						ccd=EhrCCD.GenerateSummaryOfCare(Patients.GetPat(PatNum));//Create summary of care, can throw exceptions but they're caught below
-						msgWebMail.Attachments.Add(EmailAttaches.CreateAttach("ccd.xml",Encoding.UTF8.GetBytes(ccd)));//Create summary of care attachment, can throw exceptions but caught below
-						msgWebMail.Attachments.Add(EmailAttaches.CreateAttach("ccd.xsl",Encoding.UTF8.GetBytes(FormEHR.GetEhrResource("CCD"))));//Create xsl attachment, can throw exceptions
-						EmailMessages.Insert(msgWebMail);//Insert mail into DB for patient portal
+						msgWebMail.Attachments.Add(EmailAttachment.CreateAttachment("ccd.xml",Encoding.UTF8.GetBytes(ccd)));//Create summary of care attachment, can throw exceptions but caught below
+						msgWebMail.Attachments.Add(EmailAttachment.CreateAttachment("ccd.xsl",Encoding.UTF8.GetBytes(FormEHR.GetEhrResource("CCD"))));//Create xsl attachment, can throw exceptions
+						EmailMessage.Insert(msgWebMail);//Insert mail into DB for patient portal
 						EhrMeasureEvent newMeasureEvent=new EhrMeasureEvent();
 						newMeasureEvent.DateTEvent=DateTime.Now;
 						newMeasureEvent.EventType=EhrMeasureEventType.SummaryOfCareProvidedToDr;

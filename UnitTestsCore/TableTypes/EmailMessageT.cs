@@ -18,10 +18,10 @@ namespace UnitTestsCore {
 				FromAddress=fromAddress,
 				ToAddress=toAddress,
 				RecipientAddress=recipientAddress,
-				PatNum=patNum,
-				PatNumSubj=patNumSubj,
+				PatientId=patNum,
+				RecipientPatientId=patNumSubj,
 				Subject=subject,
-				BodyText=bodyText,
+				Body=bodyText,
 			};
 			EmailMessages.Insert(email);
 			return email;
@@ -36,12 +36,12 @@ namespace UnitTestsCore {
 				FromAddress=fromAddress,
 				ToAddress=toAddress,
 				RecipientAddress=recipientAddress,
-				PatNum=patNum,
-				PatNumSubj=patNumSubj,
+				PatientId=patNum,
+				RecipientPatientId=patNumSubj,
 				Subject=subject,
-				BodyText=bodyText,
-				SentOrReceived=EmailSentOrReceived.WebMailReceived,
-				ProvNumWebMail=provnum,
+				Body=bodyText,
+				Status=EmailMessageStatus.WebMailReceived,
+				ProviderId=provnum,
 			};
 			EmailMessages.Insert(email);
 			return email;

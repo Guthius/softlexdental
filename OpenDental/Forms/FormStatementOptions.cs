@@ -1405,7 +1405,7 @@ namespace OpenDental{
 
 		/// <summary>Also displays the dialog for the email.  Must have already created and attached the pdf.  Returns false if it could not create the email.</summary>
 		private bool CreateEmailMessage(){
-			string attachPath=EmailAttaches.GetAttachPath();
+			string attachPath=EmailAttachment.GetAttachmentPath();
 			Random rnd=new Random();
 			string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
 			string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
@@ -1458,12 +1458,11 @@ namespace OpenDental{
             }
             //Process.Start(filePathAndName);
             EmailMessage message=Statements.GetEmailMessageForStatement(StmtCur,pat);
-			EmailAttach attach=new EmailAttach();
-			attach.DisplayedFileName="Statement.pdf";
-			attach.ActualFileName=fileName;
+			EmailAttachment attach=new EmailAttachment();
+			attach.Description="Statement.pdf";
+			attach.FileName=fileName;
 			message.Attachments.Add(attach);
-			FormEmailMessageEdit FormE=new FormEmailMessageEdit(message,EmailAddresses.GetByClinic(pat.ClinicNum));
-			FormE.IsNew=true;
+			FormEmailMessageEdit FormE=new FormEmailMessageEdit(message,EmailAddress.GetByClinic(pat.ClinicNum));
 			FormE.ShowDialog();
 			if(FormE.DialogResult==DialogResult.OK){
 				return true;
@@ -1584,8 +1583,7 @@ namespace OpenDental{
 			if(MsgBox.Show(this,MsgBoxButtons.YesNo,"Send an email to the patient notifying them that a statement in available?")) {
 				Patient pat=Patients.GetPat(StmtCur.PatNum);
 				EmailMessage message=Statements.GetEmailMessageForPortalStatement(StmtCur,pat);
-				FormEmailMessageEdit FormE=new FormEmailMessageEdit(message,EmailAddresses.GetByClinic(pat.ClinicNum));
-				FormE.IsNew=true;
+				FormEmailMessageEdit FormE=new FormEmailMessageEdit(message,EmailAddress.GetByClinic(pat.ClinicNum));
 				FormE.ShowDialog();
 				if(FormE.DialogResult != DialogResult.OK) {
 					return;

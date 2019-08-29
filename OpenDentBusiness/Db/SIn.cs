@@ -9,7 +9,7 @@ namespace OpenDentBusiness
 {
 
     ///<summary>"S" stands for Scrub.  Converts strings coming in from user input into the appropriate type.</summary>
-    public class SIn
+    [Obsolete] public class SIn
     {
         ///<summary></summary>
         public static Bitmap Bitmap(string myString)

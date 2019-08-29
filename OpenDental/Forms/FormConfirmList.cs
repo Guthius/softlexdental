@@ -546,26 +546,26 @@ namespace OpenDental{
 		}
 
 		private void FillComboEmail() {
-			_listEmailAddresses=EmailAddresses.GetDeepCopy();//Does not include user specific email addresses.
+			_listEmailAddresses=EmailAddress.All();//Does not include user specific email addresses.
 			List<Clinic> listClinicsAll=Clinics.GetDeepCopy();
 			for(int i=0;i<listClinicsAll.Count;i++) {//Exclude any email addresses that are associated to a clinic.
-				_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==listClinicsAll[i].EmailAddressNum);
+				_listEmailAddresses.RemoveAll(x => x.Id==listClinicsAll[i].EmailAddressNum);
 			}
 			//Exclude default practice email address.
-			_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==Preference.GetLong(PreferenceName.EmailDefaultAddressNum));
+			_listEmailAddresses.RemoveAll(x => x.Id==Preference.GetLong(PreferenceName.EmailDefaultAddressNum));
 			//Exclude web mail notification email address.
-			_listEmailAddresses.RemoveAll(x => x.EmailAddressNum==Preference.GetLong(PreferenceName.EmailNotifyAddressNum));
+			_listEmailAddresses.RemoveAll(x => x.Id==Preference.GetLong(PreferenceName.EmailNotifyAddressNum));
 			comboEmailFrom.Items.Add(Lan.g(this,"Practice/Clinic"));//default
 			comboEmailFrom.SelectedIndex=0;
 			//Add all email addresses which are not associated to a user, a clinic, or either of the default email addresses.
 			for(int i=0;i<_listEmailAddresses.Count;i++) {
-				comboEmailFrom.Items.Add(_listEmailAddresses[i].EmailUsername);
+				comboEmailFrom.Items.Add(_listEmailAddresses[i].SmtpUsername);
 			}
 			//Add user specific email address if present.
-			EmailAddress emailAddressMe=EmailAddresses.GetForUser(Security.CurUser.UserNum);//can be null
+			EmailAddress emailAddressMe=EmailAddress.GetByUser(Security.CurUser.UserNum);//can be null
 			if(emailAddressMe!=null) {
 				_listEmailAddresses.Insert(0,emailAddressMe);
-				comboEmailFrom.Items.Insert(1,Lan.g(this,"Me")+" <"+emailAddressMe.EmailUsername+">");//Just below Practice/Clinic
+				comboEmailFrom.Items.Insert(1,Lan.g(this,"Me")+" <"+emailAddressMe.SmtpUsername+">");//Just below Practice/Clinic
 			}
 		}
 
@@ -1119,7 +1119,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"There are no Patients in the table.  Must have at least one.");
 				return;
 			}
-			if(!EmailAddresses.ExistsValidEmail()) {
+			if(!EmailAddress.ExistsValidEmail()) {
 				MsgBox.Show(this,"You need to enter an SMTP server name in e-mail setup before you can send e-mail.");
 				return;
 			}
@@ -1175,38 +1175,38 @@ namespace OpenDental{
 			string errors="";
 			for(int i=0;i<gridMain.SelectedIndices.Length;i++){
 				message=new EmailMessage();
-				message.PatNum=PIn.Long(Table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString());
+				message.PatientId=PIn.Long(Table.Rows[gridMain.SelectedIndices[i]]["PatNum"].ToString());
 				message.ToAddress=Table.Rows[gridMain.SelectedIndices[i]]["email"].ToString();//Could be guarantor email.
 				long clinicNum=Clinics.ClinicNum;
 				if(comboEmailFrom.SelectedIndex==0) { //clinic/practice default
 					clinicNum=PIn.Long(Table.Rows[gridMain.SelectedIndices[i]]["ClinicNum"].ToString());
-					emailAddress=EmailAddresses.GetByClinic(clinicNum);
+					emailAddress=EmailAddress.GetByClinic(clinicNum);
 				}
 				else { //me or static email address, email address for 'me' is the first one in _listEmailAddresses
 					emailAddress=_listEmailAddresses[comboEmailFrom.SelectedIndex-1];//-1 to account for predefined "Clinic/Practice" item in combobox
 				}
 				message.FromAddress=emailAddress.GetFrom();				
 				message.Subject=Preference.GetString(PreferenceName.ConfirmEmailSubject);
-				listPatNumsSelected.Add(message.PatNum);
+				listPatNumsSelected.Add(message.PatientId.Value);
 				str=Preference.GetString(PreferenceName.ConfirmEmailMessage);
 				str=str.Replace("[NameF]",Table.Rows[gridMain.SelectedIndices[i]]["nameF"].ToString());
 				str=str.Replace("[NameFL]",Table.Rows[gridMain.SelectedIndices[i]]["nameFL"].ToString());
 				str=str.Replace("[date]",((DateTime)Table.Rows[gridMain.SelectedIndices[i]]["AptDateTime"]).ToString(Preferences.PatientCommunicationDateFormat));
 				str=str.Replace("[time]",((DateTime)Table.Rows[gridMain.SelectedIndices[i]]["AptDateTime"]).ToShortTimeString());
-				message.BodyText=EmailMessages.FindAndReplacePostalAddressTag(str,clinicNum);
+				message.Body=EmailMessage.FindAndReplacePostalAddressTag(str,clinicNum);
 				try {
-					EmailMessages.SendEmailUnsecure(message,emailAddress);
+					EmailMessage.Send(emailAddress, message);
 				}
 				catch (Exception ex){
-					listPatNumsFailed.Add(message.PatNum);
-					if(!errors.Contains("Message send fail for Patnum:"+message.PatNum+":  "+ex.Message)) {//unique messages only.
-						errors+=("Message send fail for Patnum:"+message.PatNum+":  "+ex.Message+"\r\n");
+					listPatNumsFailed.Add(message.PatientId.Value);
+					if(!errors.Contains("Message send fail for Patnum:"+message.PatientId+":  "+ex.Message)) {//unique messages only.
+						errors+=("Message send fail for Patnum:"+message.PatientId+":  "+ex.Message+"\r\n");
 					}
 					continue;
 				}
-				message.MsgDateTime=DateTime.Now;
-				message.SentOrReceived=EmailSentOrReceived.Sent;
-				EmailMessages.Insert(message);
+				message.Date=DateTime.Now;
+				message.Status=EmailMessageStatus.Sent;
+				EmailMessage.Insert(message);
 				Appointment appt=Appointments.GetOneApt(PIn.Long(Table.Rows[gridMain.SelectedIndices[i]]["AptNum"].ToString()));
 				Appointments.SetConfirmed(appt,Preference.GetLong(PreferenceName.ConfirmStatusEmailed));
 			}

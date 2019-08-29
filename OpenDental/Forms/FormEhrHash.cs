@@ -23,7 +23,7 @@ namespace OpenDental {
 			string attachContents="Original message:\r\n"+textMessage.Text+"\r\n\r\n\r\nHash:\r\n"+textHash.Text;
 			Cursor=Cursors.WaitCursor;
 			try {
-				EmailMessages.SendTestUnsecure("Hash","hash.txt",attachContents);
+				// TODO: EmailMessages.SendTestUnsecure("Hash","hash.txt",attachContents);
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;

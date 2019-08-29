@@ -1,180 +1,216 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Net;
-using System.Text;
-using System.Windows.Forms;
+/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
 using OpenDental.UI;
 using OpenDentBusiness;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
-namespace OpenDental {
-	public partial class FormEmailAddresses:ODForm {
-		public bool IsSelectionMode;
-		public long EmailAddressNum;
-		///<summary>If true, a signal for invalid Email cache will be sent out upon closing.</summary>
-		public bool IsChanged;
-		private List<EmailAddress> _listEmailAddresses;
+namespace OpenDental
+{
+    public partial class FormEmailAddresses : FormBase
+    {
+        List<EmailAddress> emailAddressList;
 
-		public FormEmailAddresses() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        public bool IsSelectionMode;
+        public bool IsChanged;
+        public long EmailAddressId;
 
-		private void FormEmailAddresses_Load(object sender,EventArgs e) {
-			checkEmailDisclaimer.Checked=Preference.GetBool(PreferenceName.EmailDisclaimerIsOn);
-			if(IsSelectionMode) {
-				labelInboxCheckInterval.Visible=false;
-				textInboxCheckInterval.Visible=false;
-				labelInboxCheckUnits.Visible=false;
-				groupEmailPrefs.Visible=false;
-				butAdd.Visible=false;
-				checkEmailDisclaimer.Visible=false;
-			}
-			else {
-				textInboxCheckInterval.Text=Preference.GetInt(PreferenceName.EmailInboxCheckInterval).ToString();//Calls PIn() internally.
-			}
-			FillGrid();
-		}
+        public FormEmailAddresses() => InitializeComponent();
 
-		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(IsSelectionMode) {
-				EmailAddressNum=_listEmailAddresses[gridMain.GetSelectedIndex()].EmailAddressNum;
-				DialogResult=DialogResult.OK;
-			}
-			else {
-				FormEmailAddressEdit FormEAE=new FormEmailAddressEdit(_listEmailAddresses[e.Row],true);
-				FormEAE.ShowDialog();
-				if(FormEAE.DialogResult==DialogResult.OK) {
-					IsChanged=true;
-					FillGrid();
-				}
-			}
-		}
+        void FormEmailAddresses_Load(object sender, EventArgs e)
+        {
+            disclaimerCheckBox.Checked = Preference.GetBool(PreferenceName.EmailDisclaimerIsOn);
 
-		private void FillGrid() {
-			EmailAddresses.RefreshCache();
-			_listEmailAddresses=EmailAddresses.GetDeepCopy();
-			//Add user specific email addresses to the list
-			List<User> listUsers=new List<User>();
-			if(Security.IsAuthorized(Permissions.SecurityAdmin,true) && !IsSelectionMode) {
-				listUsers.AddRange(Userods.GetUsers());//If authorized, get all non-hidden users.
-			}
-			else {
-				listUsers.Add(Security.CurUser);//Otherwise, just this user.
-			}
-			foreach(User user in listUsers) {
-				EmailAddress userAddress=EmailAddresses.GetForUser(user.UserNum);
-				if(userAddress!=null) {
-					_listEmailAddresses.Insert(0,userAddress);
-				}
-			}
-			gridMain.BeginUpdate();
-			gridMain.Columns.Clear();
-			ODGridColumn col;
-			col=new ODGridColumn(Lan.g(this,"User Name"),240);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Sender Address"),270);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"User"),135);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Default"),50,HorizontalAlignment.Center);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn(Lan.g(this,"Notify"),0,HorizontalAlignment.Center);
-			gridMain.Columns.Add(col);
-			gridMain.Rows.Clear();
-			ODGridRow row;
-			foreach(EmailAddress emailAddress in _listEmailAddresses) {
-				row=new ODGridRow();
-				row.Cells.Add(emailAddress.EmailUsername);
-				row.Cells.Add(emailAddress.SenderAddress);
-				row.Cells.Add(Userods.GetName(emailAddress.UserNum));
-				row.Cells.Add((emailAddress.EmailAddressNum==Preference.GetLong(PreferenceName.EmailDefaultAddressNum))?"X":"");
-				row.Cells.Add((emailAddress.EmailAddressNum==Preference.GetLong(PreferenceName.EmailNotifyAddressNum))?"X":"");
-				row.Tag=emailAddress;
-				gridMain.Rows.Add(row);
-			}
-			gridMain.EndUpdate();
-		}
+            if (IsSelectionMode)
+            {
+                checkIntervalLabel.Visible = false;
+                checkIntervalTextBox.Visible = false;
+                checkIntervalHelpLabel.Visible = false;
+                defaultGroupBox.Visible = false;
+                addButton.Visible = false;
+                disclaimerCheckBox.Visible = false;
+            }
+            else
+            {
+                checkIntervalTextBox.Text = Preference.GetInt(PreferenceName.EmailInboxCheckInterval).ToString();
+            }
 
-		private void butSetDefault_Click(object sender,EventArgs e) {
-			if(gridMain.GetSelectedIndex()==-1) {
-				MsgBox.Show(this,"Please select a row first.");
-				return;
-			}
-			if(gridMain.SelectedTag<EmailAddress>().UserNum>0) {
-				MsgBox.Show(this,"User email address cannot be set as the default.");
-				return;
-			}
-			if(Preference.Update(PreferenceName.EmailDefaultAddressNum,_listEmailAddresses[gridMain.GetSelectedIndex()].EmailAddressNum)) {
-				DataValid.SetInvalid(InvalidType.Prefs);
-			}
-			FillGrid();
-		}
+            LoadEmailAddressList();
+        }
 
-		private void butWebMailNotify_Click(object sender,EventArgs e) {
-			if(gridMain.GetSelectedIndex()==-1) {
-				MsgBox.Show(this,"Please select a row first.");
-				return;
-			}
-			if(gridMain.SelectedTag<EmailAddress>().UserNum>0) {
-				MsgBox.Show(this,"User email address cannot be set as WebMail Notify.");
-				return;
-			}
-			if(Preference.Update(PreferenceName.EmailNotifyAddressNum,_listEmailAddresses[gridMain.GetSelectedIndex()].EmailAddressNum)) {
-				DataValid.SetInvalid(InvalidType.Prefs);
-			}
-			FillGrid();
-		}
+        void FormEmailAddresses_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (IsChanged)
+            {
+                DataValid.SetInvalid(InvalidType.Email);
+            }
+        }
 
-		private void butAdd_Click(object sender,EventArgs e) {
-			FormEmailAddressEdit FormEAE=new FormEmailAddressEdit(0,true);
-			FormEAE.ShowDialog();
-			if(FormEAE.DialogResult==DialogResult.OK) {
-				FillGrid();
-				IsChanged=true;
-			}
-		}
+        void EmailAddressGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
+        {
+            if (IsSelectionMode)
+            {
+                EmailAddressId = emailAddressList[emailAddressGrid.GetSelectedIndex()].Id;
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+                DialogResult = DialogResult.OK;
+            }
+            else
+            {
+                using (var formEmailAddressEdit = new FormEmailAddressEdit(emailAddressList[e.Row], true))
+                {
+                    formEmailAddressEdit.ShowDialog();
+                    if (formEmailAddressEdit.DialogResult == DialogResult.OK)
+                    {
+                        IsChanged = true;
 
-		private void butOK_Click(object sender,EventArgs e) {
-			if(IsSelectionMode) {
-				if(gridMain.GetSelectedIndex()==-1) {
-					MsgBox.Show(this,"Please select an email address.");
-					return;
-				}
-				EmailAddressNum=_listEmailAddresses[gridMain.GetSelectedIndex()].EmailAddressNum;
-			}
-			else {//The following fields are only visible when not in selection mode.
-				int inboxCheckIntervalMinuteCount=0;
-				try {
-					inboxCheckIntervalMinuteCount=int.Parse(textInboxCheckInterval.Text);
-					if(inboxCheckIntervalMinuteCount<1 || inboxCheckIntervalMinuteCount>60) {
-						throw new ApplicationException("Invalid value.");//User never sees this message.
-					}
-				}
-				catch {
-					MsgBox.Show(this,"Inbox check interval must be between 1 and 60 inclusive.");
-					return;
-				}
-				if(Preference.Update(PreferenceName.EmailInboxCheckInterval,inboxCheckIntervalMinuteCount)
-					| Preference.Update(PreferenceName.EmailDisclaimerIsOn,checkEmailDisclaimer.Checked)) 
-				{
-					DataValid.SetInvalid(InvalidType.Prefs);
-				}
-			}
-			DialogResult=DialogResult.OK;
-		}
+                        LoadEmailAddressList();
+                    }
+                }
+            }
+        }
 
-		private void FormEmailAddresses_FormClosing(object sender,FormClosingEventArgs e) {
-			if(IsChanged) {
-				DataValid.SetInvalid(InvalidType.Email);
-			}
-		}
+        void LoadEmailAddressList()
+        {
+            emailAddressList = EmailAddress.All();
 
-	}
+            var isSecurityAdmin = Security.IsAuthorized(Permissions.SecurityAdmin, true);
+            
+            emailAddressGrid.BeginUpdate();
+            emailAddressGrid.Columns.Clear();
+            emailAddressGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnUserName, 240));
+            emailAddressGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnSender, 270));
+            emailAddressGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnUser, 135));
+            emailAddressGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnDefault, 50, HorizontalAlignment.Center));
+            emailAddressGrid.Rows.Clear();
+
+            var defaultEmailAddressId = Preference.GetLong(PreferenceName.EmailDefaultAddressNum);
+            foreach (var emailAddress in emailAddressList)
+            {
+                // Users with SecurityAdmin authorization see every e-mail address. Users without SecurityAdmin authorization 
+                // will only see the e-mail address assigned to them and public e-mail addresses (e.g. e-mail addresses that have 
+                // no user assigned).
+                if (isSecurityAdmin || !emailAddress.UserId.HasValue || Security.CurUser.UserNum == emailAddress.UserId)
+                {
+                    var row = new ODGridRow();
+
+                    row.Cells.Add(emailAddress.SmtpUsername);
+                    row.Cells.Add(emailAddress.Sender);
+                    row.Cells.Add(emailAddress.UserId.HasValue ? Userods.GetName(emailAddress.UserId.Value) : "");
+                    row.Cells.Add((emailAddress.Id == defaultEmailAddressId) ? "X" : "");
+                    row.Tag = emailAddress;
+
+                    emailAddressGrid.Rows.Add(row);
+                }
+            }
+            emailAddressGrid.EndUpdate();
+        }
+
+        void DefaultButton_Click(object sender, EventArgs e)
+        {
+            if (emailAddressGrid.GetSelectedIndex() == -1)
+            {
+                MessageBox.Show(
+                    Translation.Language.PleaseSelectARowFirst,
+                    Translation.Language.Mail,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            if (emailAddressGrid.SelectedTag<EmailAddress>().UserId > 0)
+            {
+                MessageBox.Show(
+                    Translation.Language.UserMailAddressCannotBeSetAsDefault,
+                    Translation.Language.Mail,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            if (Preference.Update(PreferenceName.EmailDefaultAddressNum, emailAddressList[emailAddressGrid.GetSelectedIndex()].Id))
+            {
+                DataValid.SetInvalid(InvalidType.Prefs);
+            }
+
+            LoadEmailAddressList();
+        }
+
+        void AddButton_Click(object sender, EventArgs e)
+        {
+            using (var formEmailAddressEdit = new FormEmailAddressEdit(new EmailAddress(), true))
+            {
+                formEmailAddressEdit.ShowDialog();
+                if (formEmailAddressEdit.DialogResult == DialogResult.OK)
+                {
+                    LoadEmailAddressList();
+
+                    IsChanged = true;
+                }
+            }
+        }
+
+        void AcceptButton_Click(object sender, EventArgs e)
+        {
+            if (IsSelectionMode)
+            {
+                if (emailAddressGrid.GetSelectedIndex() == -1)
+                {
+                    MessageBox.Show(
+                        Translation.Language.PleaseSelectAMailAddress,
+                        Translation.Language.Mail,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
+
+                    return;
+                }
+                EmailAddressId = emailAddressList[emailAddressGrid.GetSelectedIndex()].Id;
+            }
+            else
+            {
+                if (!int.TryParse(checkIntervalTextBox.Text, out var checkInterval))
+                {
+                    MessageBox.Show(
+                        Translation.Language.InboxCheckIntervalMustBeBetween1And60,
+                        Translation.Language.Mail,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+
+                    checkIntervalTextBox.Focus();
+
+                    return;
+                }
+
+                if (checkInterval < 1 || checkInterval > 60)
+                {
+                    MessageBox.Show(
+                        Translation.Language.InboxCheckIntervalMustBeBetween1And60,
+                        Translation.Language.Mail,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+
+                    checkIntervalTextBox.Focus();
+
+                    return;
+                }
+
+                if (Preference.Update(PreferenceName.EmailInboxCheckInterval, checkInterval) | 
+                    Preference.Update(PreferenceName.EmailDisclaimerIsOn, disclaimerCheckBox.Checked))
+                {
+                    DataValid.SetInvalid(InvalidType.Prefs);
+                }  
+            }
+
+            DialogResult = DialogResult.OK;
+        }
+    }
 }

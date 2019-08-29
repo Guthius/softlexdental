@@ -1058,16 +1058,16 @@ namespace OpenDental {
 		private string EmailSheet(string addr_to,string subject) {
 			EmailMessage message;
 			Random rnd=new Random();
-			string attachPath=EmailAttaches.GetAttachPath();
+			string attachPath= EmailAttachment.GetAttachmentPath();
 			string fileName;
 			string filePathAndName;
 			EmailAddress emailAddress;
 			Patient patCur=Patients.GetPat(SheetCur.PatNum);
 			if(patCur==null) {
-				emailAddress=EmailAddresses.GetByClinic(0);
+				emailAddress=EmailAddress.GetByClinic(0); // TODO: Fix this?...
 			}
 			else {
-				emailAddress=EmailAddresses.GetByClinic(patCur.ClinicNum);
+				emailAddress=EmailAddress.GetByClinic(patCur.ClinicNum);
 			}
 			if(!Security.IsAuthorized(Permissions.EmailSend,false)) {//Still need to return after printing, but not send emails.
 				OkClose();
@@ -1105,15 +1105,14 @@ namespace OpenDental {
 				message=Statements.GetEmailMessageForStatement(Stmt,patCur);
 				shortFileName="Statement";
 			}
-			message.PatNum=SheetCur.PatNum;
+			message.PatientId=SheetCur.PatNum;
 			message.ToAddress=addr_to;
 			message.FromAddress=emailAddress.GetFrom();//Can be blank just as it could with the old pref.
-			EmailAttach attach=new EmailAttach();
-			attach.DisplayedFileName=shortFileName+".pdf";
-			attach.ActualFileName=fileName;
+			EmailAttachment attach=new EmailAttachment();
+			attach.Description=shortFileName+".pdf";
+			attach.FileName=fileName;
 			message.Attachments.Add(attach);
 			FormEmailMessageEdit FormE=new FormEmailMessageEdit(message,emailAddress);
-			FormE.IsNew=true;
 			if(FormE.ShowDialog()==DialogResult.OK) {
 				HasEmailBeenSent=true;
 			}

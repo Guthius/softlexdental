@@ -199,12 +199,12 @@ namespace OpenDental {
 
 		private void butEditEmail_Click(object sender,EventArgs e) {
 			FormEmailEdit formEE=new FormEmailEdit();
-			formEE.MarkupText=_emailPlainText;
+			formEE.Body=_emailPlainText;
 			formEE.ShowDialog();
 			if(formEE.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			_emailPlainText=formEE.MarkupText;
+			_emailPlainText=formEE.Body;
 			RefreshEmail();
 		}
 

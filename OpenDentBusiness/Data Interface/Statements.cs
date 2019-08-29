@@ -256,9 +256,9 @@ namespace OpenDentBusiness
             }
             //No need to check RemotingRole; no call to db.
             EmailMessage message = new EmailMessage();
-            message.PatNum = pat.PatNum;
+            message.PatientId = pat.PatNum;
             message.ToAddress = pat.Email;
-            message.FromAddress = EmailAddresses.GetByClinic(pat.ClinicNum).GetFrom();
+            message.FromAddress = EmailAddress.GetByClinic(pat.ClinicNum).GetFrom();
             string str;
             if (stmt.EmailSubject != null && stmt.EmailSubject != "")
             {
@@ -277,7 +277,7 @@ namespace OpenDentBusiness
             {//Body was not set.  Set str to the default billing email body text.
                 str = Preference.GetString(PreferenceName.BillingEmailBodyText);
             }
-            message.BodyText = Statements.ReplaceVarsForEmail(str, pat, stmt);
+            message.Body = Statements.ReplaceVarsForEmail(str, pat, stmt);
             return message;
         }
 
@@ -292,9 +292,9 @@ namespace OpenDentBusiness
                 SecurityLogs.MakeLogEntry(Permissions.StatementPatNumMismatch, stmt.PatNum, logMsg, LogSources.Diagnostic);
             }
             EmailMessage message = new EmailMessage();
-            message.PatNum = pat.PatNum;
+            message.PatientId = pat.PatNum;
             message.ToAddress = pat.Email;
-            message.FromAddress = EmailAddresses.GetByClinic(pat.ClinicNum).GetFrom();
+            message.FromAddress = EmailAddress.GetByClinic(pat.ClinicNum).GetFrom();
             string emailBody;
             if (stmt.EmailSubject != null && stmt.EmailSubject != "")
             {
@@ -317,7 +317,7 @@ namespace OpenDentBusiness
                     + Lans.g("Statements", "2. Enter your credentials to gain access to your account.") + "\r\n"
                     + Lans.g("Statements", "3. Click the Account icon on the left and select the Statements tab.");
             }
-            message.BodyText = Statements.ReplaceVarsForEmail(emailBody, pat, stmt);
+            message.Body = Statements.ReplaceVarsForEmail(emailBody, pat, stmt);
             return message;
         }
         #endregion

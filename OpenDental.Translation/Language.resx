@@ -444,9 +444,6 @@ Please wait and click 'Try Again'.</value>
   <data name="YouWillBeAllowedAccessWhenYouRestart" xml:space="preserve">
     <value>You will be allowed access when you restart.</value>
   </data>
-  <data name="4" xml:space="preserve">
-    <value>All</value>
-  </data>
   <data name="AllSuppliers" xml:space="preserve">
     <value>All Suppliers</value>
   </data>
@@ -731,5 +728,83 @@ Click 'Skip' if you do not wish to finish setting this section up at this time.<
   </data>
   <data name="PleaseSelectAnAccountFirst" xml:space="preserve">
     <value>Please select an account first.</value>
+  </data>
+  <data name="CannotDeleteDefaultMailAddress" xml:space="preserve">
+    <value>Cannot delete the default mail address.</value>
+  </data>
+  <data name="CannotDeleteMailAddressInUseByClinic" xml:space="preserve">
+    <value>Cannot delete the e-mail address because it is used by clinic {0}.</value>
+  </data>
+  <data name="ColumnDefault" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="ColumnSender" xml:space="preserve">
+    <value>Sender</value>
+  </data>
+  <data name="InboxCheckIntervalMustBeBetween1And60" xml:space="preserve">
+    <value>Inbox check interval must be between 1 and 60 inclusive.</value>
+  </data>
+  <data name="InvalidIncomingPortNumber" xml:space="preserve">
+    <value>Invalid incoming port number.</value>
+  </data>
+  <data name="InvalidOutgoingPortNumber" xml:space="preserve">
+    <value>Invalid outgoing port number.</value>
+  </data>
+  <data name="Mail" xml:space="preserve">
+    <value>Mail</value>
+  </data>
+  <data name="MailAddressAlreadyExistsForUser" xml:space="preserve">
+    <value>An mail address already exists for {0}.</value>
+  </data>
+  <data name="AutographCannotBeBlank" xml:space="preserve">
+    <value>Autograph cannot be blank.</value>
+  </data>
+  <data name="Autograph" xml:space="preserve">
+    <value>Autograph</value>
+  </data>
+  <data name="PleaseEnterAValidMailAddress" xml:space="preserve">
+    <value>Please enter a valid mail address.</value>
+  </data>
+  <data name="PleaseSelectAMailAddress" xml:space="preserve">
+    <value>Please select an mail address.</value>
+  </data>
+  <data name="PleaseSelectARowFirst" xml:space="preserve">
+    <value>Please select a row first.</value>
+  </data>
+  <data name="UserMailAddressCannotBeSetAsDefault" xml:space="preserve">
+    <value>User mail address cannot be set as the default.</value>
+  </data>
+  <data name="PleaseSelectAnEmailMessage" xml:space="preserve">
+    <value>Please select an email message.</value>
+  </data>
+  <data name="YouMustSelectAnEmailBeforeReplying" xml:space="preserve">
+    <value>You must select an email before replying.</value>
+  </data>
+  <data name="YouMustSelectAnEmailToForward" xml:space="preserve">
+    <value>You must select an email to forward.</value>
+  </data>
+  <data name="Template" xml:space="preserve">
+    <value>Template</value>
+  </data>
+  <data name="TemplateSubjectAndBodyCannotBeLeftBlank" xml:space="preserve">
+    <value>Both the subject and body of the template cannot be left blank.</value>
+  </data>
+  <data name="ColumnDateReceived" xml:space="preserve">
+    <value>Date Received</value>
+  </data>
+  <data name="ColumnFrom" xml:space="preserve">
+    <value>From</value>
+  </data>
+  <data name="ColumnMessageType" xml:space="preserve">
+    <value>Message Type</value>
+  </data>
+  <data name="ColumnPatient" xml:space="preserve">
+    <value>Patient</value>
+  </data>
+  <data name="ColumnSubject" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="PleaseSpecifySearchCriteriaBeforeSearching" xml:space="preserve">
+    <value>Please specify some search criteria before searching.</value>
   </data>
 </root>

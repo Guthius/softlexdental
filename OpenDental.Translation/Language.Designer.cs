@@ -63,15 +63,6 @@ namespace OpenDental.Translation {
         /// <summary>
         ///   Looks up a localized string similar to All.
         /// </summary>
-        public static string _4 {
-            get {
-                return ResourceManager.GetString("4", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All.
-        /// </summary>
         public static string All {
             get {
                 return ResourceManager.GetString("All", resourceCulture);
@@ -190,11 +181,47 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Autograph.
+        /// </summary>
+        public static string Autograph {
+            get {
+                return ResourceManager.GetString("Autograph", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Autograph cannot be blank..
+        /// </summary>
+        public static string AutographCannotBeBlank {
+            get {
+                return ResourceManager.GetString("AutographCannotBeBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string ButtonCancel {
             get {
                 return ResourceManager.GetString("ButtonCancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot delete the default mail address..
+        /// </summary>
+        public static string CannotDeleteDefaultMailAddress {
+            get {
+                return ResourceManager.GetString("CannotDeleteDefaultMailAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot delete the e-mail address because it is used by clinic {0}..
+        /// </summary>
+        public static string CannotDeleteMailAddressInUseByClinic {
+            get {
+                return ResourceManager.GetString("CannotDeleteMailAddressInUseByClinic", resourceCulture);
             }
         }
         
@@ -325,6 +352,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Date Received.
+        /// </summary>
+        public static string ColumnDateReceived {
+            get {
+                return ResourceManager.GetString("ColumnDateReceived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Date Sold.
         /// </summary>
         public static string ColumnDateSold {
@@ -339,6 +375,15 @@ namespace OpenDental.Translation {
         public static string ColumnDateTime {
             get {
                 return ResourceManager.GetString("ColumnDateTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        public static string ColumnDefault {
+            get {
+                return ResourceManager.GetString("ColumnDefault", resourceCulture);
             }
         }
         
@@ -366,6 +411,15 @@ namespace OpenDental.Translation {
         public static string ColumnEstValue {
             get {
                 return ResourceManager.GetString("ColumnEstValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to From.
+        /// </summary>
+        public static string ColumnFrom {
+            get {
+                return ResourceManager.GetString("ColumnFrom", resourceCulture);
             }
         }
         
@@ -415,6 +469,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Message Type.
+        /// </summary>
+        public static string ColumnMessageType {
+            get {
+                return ResourceManager.GetString("ColumnMessageType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         public static string ColumnName {
@@ -456,6 +519,15 @@ namespace OpenDental.Translation {
         public static string ColumnPassword {
             get {
                 return ResourceManager.GetString("ColumnPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Patient.
+        /// </summary>
+        public static string ColumnPatient {
+            get {
+                return ResourceManager.GetString("ColumnPatient", resourceCulture);
             }
         }
         
@@ -523,6 +595,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sender.
+        /// </summary>
+        public static string ColumnSender {
+            get {
+                return ResourceManager.GetString("ColumnSender", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Serial Number.
         /// </summary>
         public static string ColumnSerialNumber {
@@ -555,6 +636,15 @@ namespace OpenDental.Translation {
         public static string ColumnStockQty {
             get {
                 return ResourceManager.GetString("ColumnStockQty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subject.
+        /// </summary>
+        public static string ColumnSubject {
+            get {
+                return ResourceManager.GetString("ColumnSubject", resourceCulture);
             }
         }
         
@@ -802,11 +892,38 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Inbox check interval must be between 1 and 60 inclusive..
+        /// </summary>
+        public static string InboxCheckIntervalMustBeBetween1And60 {
+            get {
+                return ResourceManager.GetString("InboxCheckIntervalMustBeBetween1And60", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid date..
         /// </summary>
         public static string InvalidDate {
             get {
                 return ResourceManager.GetString("InvalidDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid incoming port number..
+        /// </summary>
+        public static string InvalidIncomingPortNumber {
+            get {
+                return ResourceManager.GetString("InvalidIncomingPortNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid outgoing port number..
+        /// </summary>
+        public static string InvalidOutgoingPortNumber {
+            get {
+                return ResourceManager.GetString("InvalidOutgoingPortNumber", resourceCulture);
             }
         }
         
@@ -915,6 +1032,24 @@ namespace OpenDental.Translation {
         public static string LogOffConfirmation {
             get {
                 return ResourceManager.GetString("LogOffConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mail.
+        /// </summary>
+        public static string Mail {
+            get {
+                return ResourceManager.GetString("Mail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An mail address already exists for {0}..
+        /// </summary>
+        public static string MailAddressAlreadyExistsForUser {
+            get {
+                return ResourceManager.GetString("MailAddressAlreadyExistsForUser", resourceCulture);
             }
         }
         
@@ -1072,6 +1207,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please enter a valid mail address..
+        /// </summary>
+        public static string PleaseEnterAValidMailAddress {
+            get {
+                return ResourceManager.GetString("PleaseEnterAValidMailAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please enter date purchased..
         /// </summary>
         public static string PleaseEnterDatePurchased {
@@ -1108,11 +1252,38 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select an mail address..
+        /// </summary>
+        public static string PleaseSelectAMailAddress {
+            get {
+                return ResourceManager.GetString("PleaseSelectAMailAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please select an account first..
         /// </summary>
         public static string PleaseSelectAnAccountFirst {
             get {
                 return ResourceManager.GetString("PleaseSelectAnAccountFirst", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select an email message..
+        /// </summary>
+        public static string PleaseSelectAnEmailMessage {
+            get {
+                return ResourceManager.GetString("PleaseSelectAnEmailMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a row first..
+        /// </summary>
+        public static string PleaseSelectARowFirst {
+            get {
+                return ResourceManager.GetString("PleaseSelectARowFirst", resourceCulture);
             }
         }
         
@@ -1158,6 +1329,15 @@ namespace OpenDental.Translation {
         public static string PleaseSelectAUserThatDoesNotHaveAnInbox {
             get {
                 return ResourceManager.GetString("PleaseSelectAUserThatDoesNotHaveAnInbox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please specify some search criteria before searching..
+        /// </summary>
+        public static string PleaseSpecifySearchCriteriaBeforeSearching {
+            get {
+                return ResourceManager.GetString("PleaseSpecifySearchCriteriaBeforeSearching", resourceCulture);
             }
         }
         
@@ -1380,6 +1560,24 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Template.
+        /// </summary>
+        public static string Template {
+            get {
+                return ResourceManager.GetString("Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Both the subject and body of the template cannot be left blank..
+        /// </summary>
+        public static string TemplateSubjectAndBodyCannotBeLeftBlank {
+            get {
+                return ResourceManager.GetString("TemplateSubjectAndBodyCannotBeLeftBlank", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are no updates available. You are using the most current version..
         /// </summary>
         public static string ThereAreNoUpdatesAvailable {
@@ -1475,6 +1673,15 @@ namespace OpenDental.Translation {
         public static string UpdatesNotAllowedOnReplicationServer {
             get {
                 return ResourceManager.GetString("UpdatesNotAllowedOnReplicationServer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User mail address cannot be set as the default..
+        /// </summary>
+        public static string UserMailAddressCannotBeSetAsDefault {
+            get {
+                return ResourceManager.GetString("UserMailAddressCannotBeSetAsDefault", resourceCulture);
             }
         }
         
@@ -1880,6 +2087,24 @@ namespace OpenDental.Translation {
         public static string WorkstationIsStillUpdating {
             get {
                 return ResourceManager.GetString("WorkstationIsStillUpdating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must select an email before replying..
+        /// </summary>
+        public static string YouMustSelectAnEmailBeforeReplying {
+            get {
+                return ResourceManager.GetString("YouMustSelectAnEmailBeforeReplying", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must select an email to forward..
+        /// </summary>
+        public static string YouMustSelectAnEmailToForward {
+            get {
+                return ResourceManager.GetString("YouMustSelectAnEmailToForward", resourceCulture);
             }
         }
         

@@ -1,17 +1,14 @@
+using CodeBase;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using OpenDentBusiness;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Drawing.Imaging;
-using CodeBase;
 using System.IO;
-using System.Collections.ObjectModel;
-using System.Windows.Forms;
-using System.Security.Cryptography;
-using System.Diagnostics;
 using System.Linq;
-using OpenDentBusiness.FileIO;
+using System.Security.Cryptography;
+using System.Text;
+using System.Windows.Forms;
 
 namespace OpenDentBusiness
 {
@@ -201,7 +198,7 @@ namespace OpenDentBusiness
                 return retVal;
             }
             string AtoZPath = GetPreferredAtoZpath();
-            retVal = FileAtoZ.CombinePaths(AtoZPath, "ProviderImages");
+            retVal = FileSystem.CombinePaths(AtoZPath, "ProviderImages");
             if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(retVal))
             {
                 if (string.IsNullOrEmpty(AtoZPath))
@@ -225,7 +222,7 @@ namespace OpenDentBusiness
             {
                 throw new ApplicationException(Lans.g("WikiPages", "Must be using AtoZ folders."));
             }
-            emailPath = FileAtoZ.CombinePaths(GetPreferredAtoZpath(), "EmailImages");
+            emailPath = FileSystem.CombinePaths(GetPreferredAtoZpath(), "EmailImages");
             if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(emailPath))
             {
                 Directory.CreateDirectory(emailPath);
@@ -737,7 +734,7 @@ namespace OpenDentBusiness
         {
             string patFolder = GetPatientFolder(pat, GetPreferredAtoZpath());
             string pathSourceFile = CloudStorage.PathTidy(ODFileUtils.CombinePaths(GetPreferredAtoZpath(), "Forms", form));
-            if (!FileAtoZ.Exists(pathSourceFile))
+            if (!FileSystem.FileExists(pathSourceFile))
             {
                 throw new Exception(Lans.g("ContrDocs", "Could not find file: ") + pathSourceFile);
             }
@@ -979,8 +976,8 @@ namespace OpenDentBusiness
             }
             else
             {//Using an AtoZ folder
-                string docPath = FileAtoZ.CombinePaths(GetPatientFolder(pat, GetPreferredAtoZpath()), doc.FileName);
-                FileAtoZ.Copy(docPath, saveToPath, FileAtoZSourceDestination.AtoZToLocal);
+                string docPath = FileSystem.CombinePaths(GetPatientFolder(pat, GetPreferredAtoZpath()), doc.FileName);
+                FileSystem.Copy(docPath, saveToPath, FileAtoZSourceDestination.AtoZToLocal);
             }
         }
 
@@ -1001,7 +998,7 @@ namespace OpenDentBusiness
             else
             {//Using an AtoZ folder
                 string eobPath = ODFileUtils.CombinePaths(GetEobFolder(), eob.FileName);
-                FileAtoZ.Copy(eobPath, saveToPath, FileAtoZSourceDestination.AtoZToLocal);
+                FileSystem.Copy(eobPath, saveToPath, FileAtoZSourceDestination.AtoZToLocal);
             }
         }
 
@@ -1022,7 +1019,7 @@ namespace OpenDentBusiness
             else
             {//Using an AtoZ folder
                 string eobPath = ODFileUtils.CombinePaths(GetAmdFolder(), amd.FileName);
-                FileAtoZ.Copy(eobPath, saveToPath, FileAtoZSourceDestination.AtoZToLocal);
+                FileSystem.Copy(eobPath, saveToPath, FileAtoZSourceDestination.AtoZToLocal);
             }
         }
 
@@ -1374,7 +1371,7 @@ namespace OpenDentBusiness
         public static string GetFilePath(Document doc, string patFolder)
         {
             //string patFolder=GetPatientFolder(pat);
-            return FileAtoZ.CombinePaths(patFolder, doc.FileName);
+            return FileSystem.CombinePaths(patFolder, doc.FileName);
         }
 
         /// <summary>Returns true if the given filename contains a supported file image extension.</summary>

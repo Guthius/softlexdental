@@ -13,6 +13,7 @@ namespace CodeBase
 {
     public static class MiscUtils
     {
+        const string CryptKey = "AKQjlLUjlcABVbqp";
 
         [DllImport("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
@@ -28,95 +29,82 @@ namespace CodeBase
             return result;
         }
 
-        public static string CreateRandomNumericString(int length)
-        {
-            string result = "";
-            string randChrs = "0123456789";
-            for (int i = 0; i < length; i++)
-            {
-                result += randChrs[ODRandom.Next(0, randChrs.Length - 1)];
-            }
-            return result;
-        }
-
-        ///<summary>Encrypts signature text and returns a base 64 string so that it can go directly into the database.</summary>
         public static string Encrypt(string encrypt)
         {
-            UTF8Encoding enc = new UTF8Encoding();
             byte[] arrayEncryptBytes = Encoding.UTF8.GetBytes(encrypt);
-            MemoryStream ms = new MemoryStream();
-            CryptoStream cs = null;
-            Aes aes = new AesCryptoServiceProvider();
-            aes.Key = enc.GetBytes("AKQjlLUjlcABVbqp");
-            aes.IV = new byte[16];
-            ICryptoTransform encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
-            cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write);
-            cs.Write(arrayEncryptBytes, 0, arrayEncryptBytes.Length);
-            cs.FlushFinalBlock();
-            byte[] retval = new byte[ms.Length];
-            ms.Position = 0;
-            ms.Read(retval, 0, (int)ms.Length);
-            cs.Dispose();
-            ms.Dispose();
-            if (aes != null)
+
+            using (var memoryStream = new MemoryStream())
             {
-                aes.Clear();
+                var aes = new AesCryptoServiceProvider
+                {
+                    Key = Encoding.UTF8.GetBytes(CryptKey),
+                    IV = new byte[16]
+                };
+
+                var encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+                using (var cryptoStream = new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write))
+                {
+                    cryptoStream.Write(arrayEncryptBytes, 0, arrayEncryptBytes.Length);
+                    cryptoStream.FlushFinalBlock();
+
+                    aes.Dispose();
+
+                    return Convert.ToBase64String(memoryStream.ToArray());
+                }
             }
-            return Convert.ToBase64String(retval);
         }
 
         public static string Decrypt(string encString, bool doThrow = false)
         {
             try
             {
-                byte[] encrypted = Convert.FromBase64String(encString);
-                MemoryStream ms = null;
-                CryptoStream cs = null;
-                StreamReader sr = null;
-                Aes aes = new AesCryptoServiceProvider();
-                UTF8Encoding enc = new UTF8Encoding();
-                aes.Key = enc.GetBytes("AKQjlLUjlcABVbqp");
-                aes.IV = new byte[16];
-                ICryptoTransform decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
-                ms = new MemoryStream(encrypted);
-                cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read);
-                sr = new StreamReader(cs);
-                string decrypted = sr.ReadToEnd();
-                ms.Dispose();
-                cs.Dispose();
-                sr.Dispose();
-                if (aes != null)
+                using (var memoryStream = new MemoryStream(Convert.FromBase64String(encString)))
                 {
-                    aes.Clear();
+                    var aes = new AesCryptoServiceProvider
+                    {
+                        Key = Encoding.UTF8.GetBytes(CryptKey),
+                        IV = new byte[16]
+                    };
+
+                    var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+                    using (var cryptoStream = new CryptoStream(memoryStream, decryptor, CryptoStreamMode.Read))
+                    using (var streamReader = new StreamReader(cryptoStream))
+                    {
+                        var result = streamReader.ReadToEnd();
+
+                        aes.Dispose();
+
+                        return result;
+                    }
                 }
-                return decrypted;
             }
-            catch (Exception e)
+            catch
             {
-                if (doThrow)
-                {
-                    throw e;
-                }
+                if (doThrow) throw;
+
                 MessageBox.Show("Text entered was not valid encrypted text.");
                 return "";
             }
         }
 
-        ///<summary>Accepts a 3 character string which represents a neutral culture (for example, "eng" for English) in the ISO639-2 format.  Returns null if the three letter ISO639-2 name is not standard (useful for determining custom languages).</summary>
-        public static CultureInfo GetCultureFromThreeLetter(string strThreeLetterISOname)
+        /// <summary>
+        /// Accepts a 3 character string which represents a neutral culture (for example, "eng" for English) in the ISO639-2 format. 
+        /// Returns null if the three letter ISO639-2 name is not standard (useful for determining custom languages).
+        /// </summary>
+        /// <param name="iso3Code">The three-letter ISO code.</param>
+        public static CultureInfo GetCultureFromThreeLetter(string iso3Code)
         {
-            if (strThreeLetterISOname == null || strThreeLetterISOname.Length != 3)
-            {//Length check helps quickly identify custom languages.
-                return null;
-            }
-            CultureInfo[] arrayCulturesNeutral = CultureInfo.GetCultures(CultureTypes.NeutralCultures);
-            for (int i = 0; i < arrayCulturesNeutral.Length; i++)
+            if (iso3Code == null || iso3Code.Length != 3) return null;
+
+            var cultureInfoArray = CultureInfo.GetCultures(CultureTypes.NeutralCultures);
+            foreach (var cultureInfo in cultureInfoArray)
             {
-                if (arrayCulturesNeutral[i].ThreeLetterISOLanguageName == strThreeLetterISOname)
+                if (cultureInfo.ThreeLetterISOLanguageName == iso3Code)
                 {
-                    return arrayCulturesNeutral[i];
+                    return cultureInfo;
                 }
             }
+
             return null;
         }
 

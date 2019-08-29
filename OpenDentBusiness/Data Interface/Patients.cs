@@ -4495,7 +4495,7 @@ namespace OpenDentBusiness
                 listAllClinics = new List<Clinic> { clinic };
             }
             Dictionary<string, bool> dictEmailValidForClinics = listAllClinics
-                .ToDictionary(x => x.ClinicNum.ToString(), x => EmailAddresses.GetFirstOrDefault(y => y.EmailAddressNum == x.EmailAddressNum) != null);
+                .ToDictionary(x => x.ClinicNum.ToString(), x => EmailAddress.GetById(x.EmailAddressNum) != null);
             Dictionary<string, bool> dictTextingEnabledForClinics = listAllClinics.ToDictionary(x => x.ClinicNum.ToString(), x => Clinics.IsTextingEnabled(x.ClinicNum));
             string curCulture = System.Globalization.CultureInfo.CurrentCulture.Name.Right(2);
             Dictionary<string, string> dictClinicCountryCodes = listAllClinics.ToDictionary(x => x.ClinicNum.ToString(), x => SmsPhones.GetFirstOrDefault(y => y.ClinicNum == x.ClinicNum)?.CountryCode ?? "");
@@ -4536,7 +4536,7 @@ namespace OpenDentBusiness
             foreach (Patient pat in listPats)
             {
                 Clinic clinic = Clinics.GetFirstOrDefault(x => x.ClinicNum == pat.ClinicNum) ?? Clinics.GetPracticeAsClinicZero();
-                bool isEmailValidForClinic = (EmailAddresses.GetFirstOrDefault(x => x.EmailAddressNum == clinic.EmailAddressNum) != null);
+                bool isEmailValidForClinic = (EmailAddress.GetById(clinic.EmailAddressNum) != null);
                 bool isTextingEnabledForClinic = Clinics.IsTextingEnabled(clinic.ClinicNum);
                 string countryCodePhone = SmsPhones.GetFirstOrDefault(x => x.ClinicNum == clinic.ClinicNum)?.CountryCode ?? "";
                 listPatComms.Add(new PatComm(pat, isEmailValidForClinic, isTextingEnabledForClinic, isUnknownNo, curCulture, countryCodePhone));

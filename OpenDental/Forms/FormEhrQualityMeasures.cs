@@ -248,7 +248,7 @@ namespace OpenDental {
 			}
 			Cursor=Cursors.WaitCursor;
 			try {
-				EmailMessages.SendTestUnsecure("PQRI","pqri.xml",GeneratePQRS_xml());
+				//EmailMessages.SendTestUnsecure("PQRI","pqri.xml",GeneratePQRS_xml());
 			}
 			catch(Exception ex) {
 				Cursor=Cursors.Default;
