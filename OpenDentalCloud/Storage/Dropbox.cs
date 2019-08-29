@@ -90,16 +90,18 @@ namespace OpenDentalCloud {
                         throw new Exception("Operation cancelled by user");
                     }
                     bool lastChunk = i == numOfChunks;
+
                     int curChunkSize = chunkSize;
                     if (lastChunk)
                     {
                         curChunkSize = FileContent.Length - index;
                     }
-                    using (MemoryStream memStream = new MemoryStream(FileContent, index, curChunkSize))
+
+                    using (var memoryStream = new MemoryStream(FileContent, index, curChunkSize))
                     {
                         if (i == 1)
                         {
-                            UploadSessionStartResult result = await _client.Files.UploadSessionStartAsync(false, memStream);
+                            UploadSessionStartResult result = await _client.Files.UploadSessionStartAsync(false, memoryStream);
                             sessionId = result.SessionId;
                         }
                         else
@@ -109,18 +111,20 @@ namespace OpenDentalCloud {
                             {
                                 //Always forcing Dropbox to overwrite any conflicting files.  
                                 //Otherwise a Dropbox.Api.Files.UploadSessionFinishError.Path error will be returned by Dropbox if there is a "path/conflict/file/..."
-                                await _client.Files.UploadSessionFinishAsync(cursor
-                                    , new CommitInfo(ODFileUtils.CombinePaths(Folder, FileName, '/'), WriteMode.Overwrite.Instance)
-                                    , memStream);
+                                await _client.Files.UploadSessionFinishAsync(cursor, 
+                                    new CommitInfo(
+                                        ODFileUtils.CombinePaths(Folder, FileName, '/'), 
+                                        WriteMode.Overwrite.Instance), 
+                                    memoryStream);
                             }
                             else
                             {
-                                await _client.Files.UploadSessionAppendV2Async(cursor, false, memStream);
+                                await _client.Files.UploadSessionAppendV2Async(cursor, false, memoryStream);
                             }
                         }
                         index += curChunkSize;
                     }
-                    OnProgress((double)(chunkSize * i) / (double)1024 / (double)1024, "?currentVal MB of ?maxVal MB uploaded", (double)FileContent.Length / (double)1024 / (double)1024, "");
+                    OnProgress((double)(chunkSize * i) / 1024 / 1024, "?currentVal MB of ?maxVal MB uploaded", (double)FileContent.Length / 1024 / 1024, "");
                 }
             }
         }
@@ -183,7 +187,7 @@ namespace OpenDentalCloud {
             protected override async Task PerformIO()
             {
                 //If path is a folder, all contents will be deleted.
-                await _client.Files.DeleteAsync(Path);
+                await _client.Files.DeleteV2Async(Path);
             }
         }
 
@@ -198,8 +202,8 @@ namespace OpenDentalCloud {
 
             protected override async Task PerformIO()
             {
-                IDownloadResponse<FileMetadata> data = await _client.Files.GetThumbnailAsync(ODFileUtils.CombinePaths(Folder, FileName, '/')
-                    , size: ThumbnailSize.W128h128.Instance);
+                var data = await _client.Files.GetThumbnailAsync(ODFileUtils.CombinePaths(Folder, FileName, '/'), size: ThumbnailSize.W128h128.Instance);
+
                 FileContent = await data.GetContentAsByteArrayAsync();
             }
         }
@@ -287,11 +291,11 @@ namespace OpenDentalCloud {
                         //Throws if fails.
                         if (IsCopy)
                         {
-                            await _client.Files.CopyAsync(fromPathFull, toPathFull);
+                            await _client.Files.CopyV2Async(fromPathFull, toPathFull);
                         }
                         else
                         {
-                            await _client.Files.MoveAsync(ODFileUtils.CombinePaths(FromPath, fromPathFull, '/'), toPathFull);
+                            await _client.Files.MoveV2Async(ODFileUtils.CombinePaths(FromPath, fromPathFull, '/'), toPathFull);
                         }
                         CountSuccess++;
                     }
@@ -345,36 +349,41 @@ namespace OpenDentalCloud {
         /// <summary>
         /// Returns true if a file exists in the passed in filePath
         /// </summary>
-        public static bool FileExists(string accessToken, string filePath) => FileExists(new DropboxClient(accessToken), filePath);
+        public static bool FileExists(string accessToken, string filePath)
+        {
+            using (var dropboxClient = new DropboxClient(accessToken))
+            {
+                return FileExists(dropboxClient, filePath);
+            }
+        }
 
         /// <summary>
         /// Returns true if a file exists in the passed in filePath
         /// </summary>
-        private static bool FileExists(DropboxClient client, string filePath)
+        static bool FileExists(DropboxClient client, string filePath)
         {
-            bool retVal = false;
+            bool fileExists = false;
 
-            ManualResetEvent wait = new ManualResetEvent(false);
-
-            new Task(async () =>
+            using (var manualResetEvent = new ManualResetEvent(false))
             {
-                try
+                Task.Factory.StartNew(async () =>
                 {
-                    Metadata data = await client.Files.GetMetadataAsync(filePath);
-                    retVal = true;
-                }
-                catch (Exception)
-                {
-                }
-                wait.Set();
-            }).Start();
+                    try
+                    {
+                        Metadata data = await client.Files.GetMetadataAsync(filePath);
 
-            if (!wait.WaitOne(10000))
-            {
-                throw new Exception("Checking if file exists in Dropbox timed out.");
+                        fileExists = true;
+                    }
+                    catch (Exception)
+                    {
+                    }
+                    manualResetEvent.Set();
+                });
+
+                if (!manualResetEvent.WaitOne(10000)) throw new Exception("Checking if file exists in Dropbox timed out.");
             }
 
-            return retVal;
+            return fileExists;
         }
 	}
 }

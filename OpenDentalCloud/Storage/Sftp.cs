@@ -21,7 +21,7 @@ namespace OpenDentalCloud
 
         public class Upload : TaskStateUpload
         {
-            private SftpClient _client;
+            private readonly SftpClient _client;
 
             public Upload(string host, string user, string pass, int port = 22)
             {
@@ -42,7 +42,7 @@ namespace OpenDentalCloud
                         {
                             res.IsUploadCanceled = true;
                         }
-                        OnProgress((double)res.UploadedBytes / (double)1024 / (double)1024, "?currentVal MB of ?maxVal MB uploaded", (double)FileContent.Length / (double)1024 / (double)1024, "");
+                        OnProgress(res.UploadedBytes / 1024 / 1024, "?currentVal MB of ?maxVal MB uploaded", FileContent.Length / 1024 / 1024, "");
                     }
                     _client.EndUploadFile(res);
                     if (res.IsUploadCanceled)
@@ -71,7 +71,6 @@ namespace OpenDentalCloud
 
             internal Download()
             {
-
             }
 
             protected override async Task PerformIO()
@@ -124,7 +123,7 @@ namespace OpenDentalCloud
 
         public class Thumbnail : TaskStateThumbnail
         {
-            private SftpClient _client;
+            private readonly SftpClient _client;
 
             public Thumbnail(string host, string user, string pass)
             {
@@ -172,11 +171,11 @@ namespace OpenDentalCloud
 
         public class Move : TaskStateMove
         {
-            private SftpClient _client;
+            private readonly SftpClient _client;
             internal bool IsCopy = false;
-            private string _host;
-            private string _user;
-            private string _pass;
+            private readonly string _host;
+            private readonly string _user;
+            private readonly string _pass;
 
             public Move(string host, string user, string pass)
             {
@@ -307,7 +306,7 @@ namespace OpenDentalCloud
 
         public class Copy : TaskStateCopy
         {
-            TaskStateMove _stateMove;
+            readonly TaskStateMove _stateMove;
 
             public Copy(string host, string user, string pass)
             {
@@ -340,8 +339,10 @@ namespace OpenDentalCloud
         /// </summary>
         public static bool FileExists(string host, string user, string pass, string filePath)
         {
-            SftpClient client = Init(host, user, pass);
-            return FileExists(client, filePath);
+            using (SftpClient client = Init(host, user, pass))
+            {
+                return FileExists(client, filePath);
+            }
         }
 
         /// <summary>
@@ -368,12 +369,14 @@ namespace OpenDentalCloud
             bool retval = false;
             try
             {
-                SftpClient client = Init(host, user, pass, port);
-                client.Connect();
-                if (client.IsConnected)
+                using (SftpClient client = Init(host, user, pass, port))
                 {
-                    retval = true;
-                    client.Disconnect();
+                    client.Connect();
+                    if (client.IsConnected)
+                    {
+                        retval = true;
+                        client.Disconnect();
+                    }
                 }
             }
             catch
