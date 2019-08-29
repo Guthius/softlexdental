@@ -10,37 +10,46 @@ using CodeBase;
 using OpenDental.UI;
 using OpenDentBusiness;
 
-namespace OpenDental {
-	public partial class FormEhrEduBrowser:ODForm {
-		public string ResourceURL;
-		public bool DidPrint;
+namespace OpenDental
+{
+    public partial class FormEhrEduBrowser : ODForm
+    {
+        public string ResourceURL;
+        public bool DidPrint;
 
-		public FormEhrEduBrowser(string resourceURL) {
-			ResourceURL=resourceURL;
-			InitializeComponent();
-		}
+        public FormEhrEduBrowser(string resourceURL)
+        {
+            ResourceURL = resourceURL;
+            InitializeComponent();
+        }
 
-		private void FormEduBrowser_Load(object sender,EventArgs e) {
-			Cursor=Cursors.WaitCursor;
-			try {
-				webBrowser1.Url=new Uri(ResourceURL);
-			}
-			catch(UriFormatException) {
-				MessageBox.Show("The specified URL is in an incorrect format.  Did you include the http:// ?");
-				DialogResult=DialogResult.Cancel;
-			}
-			Cursor=Cursors.Default;
-		}
+        void FormEduBrowser_Load(object sender, EventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
 
-		private void butPrint_Click(object sender,EventArgs e) {
-			//use the modeless version, which also allows user to choose printer
-			webBrowser1.ShowPrintDialog();
-			DidPrint = true;			
-		}
+            try
+            {
+                webBrowser1.Url = new Uri(ResourceURL);
+            }
+            catch (UriFormatException)
+            {
+                MessageBox.Show(
+                    "The specified URL is in an incorrect format.  Did you include the http:// ?",
+                    "", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
 
-		private void butClose_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+                DialogResult = DialogResult.Cancel;
+            }
 
-	}
+            Cursor = Cursors.Default;
+        }
+
+        void PrintButton_Click(object sender, EventArgs e)
+        {
+            webBrowser1.ShowPrintDialog();
+
+            DidPrint = true;
+        }
+    }
 }

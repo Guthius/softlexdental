@@ -1,108 +1,114 @@
-﻿namespace OpenDental {
-	partial class FormEhrLabOrders {
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+﻿namespace OpenDental
+{
+    partial class FormEhrLabOrders
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing) {
-			if(disposing && (components != null)) {
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEhrLabOrders));
-			this.butAdd = new System.Windows.Forms.Button();
-			this.butImport = new System.Windows.Forms.Button();
-			this.butClose = new System.Windows.Forms.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.SuspendLayout();
-			// 
-			// butAdd
-			// 
-			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butAdd.Location = new System.Drawing.Point(887, 41);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75, 23);
-			this.butAdd.TabIndex = 8;
-			this.butAdd.Text = "Add";
-			this.butAdd.UseVisualStyleBackColor = true;
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
-			// 
-			// butImport
-			// 
-			this.butImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butImport.Location = new System.Drawing.Point(887, 12);
-			this.butImport.Name = "butImport";
-			this.butImport.Size = new System.Drawing.Size(75, 23);
-			this.butImport.TabIndex = 7;
-			this.butImport.Text = "Import";
-			this.butImport.UseVisualStyleBackColor = true;
-			this.butImport.Click += new System.EventHandler(this.butImport_Click);
-			// 
-			// butClose
-			// 
-			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Location = new System.Drawing.Point(887, 367);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75, 23);
-			this.butClose.TabIndex = 9;
-			this.butClose.Text = "Close";
-			this.butClose.UseVisualStyleBackColor = true;
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEhrLabOrders));
+            this.addButton = new System.Windows.Forms.Button();
+            this.importButton = new System.Windows.Forms.Button();
+            this.closeButton = new System.Windows.Forms.Button();
+            this.ordersGrid = new OpenDental.UI.ODGrid();
+            this.SuspendLayout();
+            // 
+            // addButton
+            // 
+            this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.addButton.Location = new System.Drawing.Point(851, 55);
+            this.addButton.Name = "addButton";
+            this.addButton.Size = new System.Drawing.Size(110, 30);
+            this.addButton.TabIndex = 8;
+            this.addButton.Text = "Add";
+            this.addButton.UseVisualStyleBackColor = true;
+            this.addButton.Click += new System.EventHandler(this.AddButton_Click);
+            // 
+            // importButton
+            // 
+            this.importButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.importButton.Location = new System.Drawing.Point(851, 19);
+            this.importButton.Name = "importButton";
+            this.importButton.Size = new System.Drawing.Size(110, 30);
+            this.importButton.TabIndex = 7;
+            this.importButton.Text = "Import";
+            this.importButton.UseVisualStyleBackColor = true;
+            this.importButton.Click += new System.EventHandler(this.ImportButton_Click);
+            // 
+            // closeButton
+            // 
+            this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.closeButton.Location = new System.Drawing.Point(851, 359);
+            this.closeButton.Name = "closeButton";
+            this.closeButton.Size = new System.Drawing.Size(110, 30);
+            this.closeButton.TabIndex = 9;
+            this.closeButton.Text = "Close";
+            this.closeButton.UseVisualStyleBackColor = true;
+            // 
+            // ordersGrid
+            // 
+            this.ordersGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
-			this.gridMain.HasAddButton = false;
-			this.gridMain.HasDropDowns = false;
-			this.gridMain.HasMultilineHeaders = false;
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(12, 12);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(862, 378);
-			this.gridMain.TabIndex = 5;
-			this.gridMain.Title = "Laboratory Orders";
-			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
-			// 
-			// FormEhrLabOrders
-			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(974, 402);
-			this.Controls.Add(this.butClose);
-			this.Controls.Add(this.butAdd);
-			this.Controls.Add(this.butImport);
-			this.Controls.Add(this.gridMain);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "FormEhrLabOrders";
-			this.Text = "Lab Orders";
-			this.Load += new System.EventHandler(this.FormEhrLabOrders_Load);
-			this.ResumeLayout(false);
+            this.ordersGrid.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
+            this.ordersGrid.EditableEnterMovesDown = false;
+            this.ordersGrid.HasAddButton = false;
+            this.ordersGrid.HasDropDowns = false;
+            this.ordersGrid.HasMultilineHeaders = false;
+            this.ordersGrid.HScrollVisible = false;
+            this.ordersGrid.Location = new System.Drawing.Point(13, 19);
+            this.ordersGrid.Name = "ordersGrid";
+            this.ordersGrid.ScrollValue = 0;
+            this.ordersGrid.Size = new System.Drawing.Size(832, 370);
+            this.ordersGrid.TabIndex = 5;
+            this.ordersGrid.Title = "Laboratory Orders";
+            this.ordersGrid.TitleVisible = true;
+            this.ordersGrid.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.OrdersGrid_CellDoubleClick);
+            // 
+            // FormEhrLabOrders
+            // 
+            this.CancelButton = this.closeButton;
+            this.ClientSize = new System.Drawing.Size(974, 402);
+            this.Controls.Add(this.closeButton);
+            this.Controls.Add(this.addButton);
+            this.Controls.Add(this.importButton);
+            this.Controls.Add(this.ordersGrid);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "FormEhrLabOrders";
+            this.Text = "Lab Orders";
+            this.Load += new System.EventHandler(this.FormEhrLabOrders_Load);
+            this.ResumeLayout(false);
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private System.Windows.Forms.Button butAdd;
-		private System.Windows.Forms.Button butImport;
-		private OpenDental.UI.ODGrid gridMain;
-		private System.Windows.Forms.Button butClose;
-	}
+        private System.Windows.Forms.Button addButton;
+        private System.Windows.Forms.Button importButton;
+        private OpenDental.UI.ODGrid ordersGrid;
+        private System.Windows.Forms.Button closeButton;
+    }
 }

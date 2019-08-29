@@ -469,6 +469,9 @@
     <Compile Include="Forms\FormComputers.Designer.cs">
       <DependentUpon>FormComputers.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormCountyEdit.Designer.cs">
+      <DependentUpon>FormCountyEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormEmailAddressEdit.Designer.cs">
       <DependentUpon>FormEmailAddressEdit.cs</DependentUpon>
     </Compile>

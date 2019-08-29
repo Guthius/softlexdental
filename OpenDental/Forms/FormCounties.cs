@@ -186,7 +186,7 @@ namespace OpenDental{
 				return;
 			}
 			FormCountyEdit FormSE=new FormCountyEdit();
-			FormSE.CountyCur=CountiesList[listCounties.SelectedIndex];
+			FormSE.County=CountiesList[listCounties.SelectedIndex];
 			FormSE.ShowDialog();
 			if(FormSE.DialogResult!=DialogResult.OK){
 				return;
@@ -197,7 +197,7 @@ namespace OpenDental{
 		private void butAdd_Click(object sender, System.EventArgs e) {
 			FormCountyEdit FormSE=new FormCountyEdit();
 			FormSE.IsNew=true;
-			FormSE.CountyCur=new County();
+			FormSE.County=new County();
 			FormSE.ShowDialog();
 			if(FormSE.DialogResult!=DialogResult.OK){
 				return;

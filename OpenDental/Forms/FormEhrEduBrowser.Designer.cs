@@ -38,7 +38,6 @@
 			this.butClose.TabIndex = 0;
 			this.butClose.Text = "Close";
 			this.butClose.UseVisualStyleBackColor = true;
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
 			// webBrowser1
 			// 
@@ -61,7 +60,7 @@
 			this.butPrint.TabIndex = 2;
 			this.butPrint.Text = "Print";
 			this.butPrint.UseVisualStyleBackColor = true;
-			this.butPrint.Click += new System.EventHandler(this.butPrint_Click);
+			this.butPrint.Click += new System.EventHandler(this.PrintButton_Click);
 			// 
 			// FormEhrEduBrowser
 			// 

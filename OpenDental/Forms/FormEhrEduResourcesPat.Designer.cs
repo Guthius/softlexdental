@@ -1,154 +1,181 @@
-﻿namespace OpenDental {
-	partial class FormEhrEduResourcesPat {
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+﻿namespace OpenDental
+{
+    partial class FormEhrEduResourcesPat
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing) {
-			if(disposing && (components != null)) {
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEhrEduResourcesPat));
-			this.butClose = new System.Windows.Forms.Button();
-			this.gridEdu = new OpenDental.UI.ODGrid();
-			this.label1 = new System.Windows.Forms.Label();
-			this.gridProvided = new OpenDental.UI.ODGrid();
-			this.label2 = new System.Windows.Forms.Label();
-			this.butDelete = new System.Windows.Forms.Button();
-			this.label3 = new System.Windows.Forms.Label();
-			this.SuspendLayout();
-			// 
-			// butClose
-			// 
-			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Location = new System.Drawing.Point(784, 636);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75, 23);
-			this.butClose.TabIndex = 0;
-			this.butClose.Text = "Close";
-			this.butClose.UseVisualStyleBackColor = true;
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// gridEdu
-			// 
-			this.gridEdu.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridEdu.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
-			this.gridEdu.HasAddButton = false;
-			this.gridEdu.HasDropDowns = false;
-			this.gridEdu.HasMultilineHeaders = false;
-			this.gridEdu.HScrollVisible = false;
-			this.gridEdu.Location = new System.Drawing.Point(12, 53);
-			this.gridEdu.Name = "gridEdu";
-			this.gridEdu.ScrollValue = 0;
-			this.gridEdu.SelectionMode = OpenDental.UI.GridSelectionMode.None;
-			this.gridEdu.Size = new System.Drawing.Size(847, 264);
-			this.gridEdu.TabIndex = 1;
-			this.gridEdu.Title = "Educational Resources";
-			this.gridEdu.CellClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridEdu_CellClick);
-			// 
-			// label1
-			// 
-			this.label1.Location = new System.Drawing.Point(12, 10);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(679, 16);
-			this.label1.TabIndex = 2;
-			this.label1.Text = "To generate a patient education resource, single click on one of the links below," +
-    " then print.";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// gridProvided
-			// 
-			this.gridProvided.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEhrEduResourcesPat));
+            this.closeButton = new System.Windows.Forms.Button();
+            this.resourcesGrid = new OpenDental.UI.ODGrid();
+            this.resourcesLabel = new System.Windows.Forms.Label();
+            this.providedGrid = new OpenDental.UI.ODGrid();
+            this.providedLabel = new System.Windows.Forms.Label();
+            this.deleteButton = new System.Windows.Forms.Button();
+            this.resourcesSplitContainer = new System.Windows.Forms.SplitContainer();
+            ((System.ComponentModel.ISupportInitialize)(this.resourcesSplitContainer)).BeginInit();
+            this.resourcesSplitContainer.Panel1.SuspendLayout();
+            this.resourcesSplitContainer.Panel2.SuspendLayout();
+            this.resourcesSplitContainer.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // closeButton
+            // 
+            this.closeButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.closeButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.closeButton.Location = new System.Drawing.Point(861, 568);
+            this.closeButton.Name = "closeButton";
+            this.closeButton.Size = new System.Drawing.Size(110, 30);
+            this.closeButton.TabIndex = 0;
+            this.closeButton.Text = "Close";
+            this.closeButton.UseVisualStyleBackColor = true;
+            // 
+            // resourcesGrid
+            // 
+            this.resourcesGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridProvided.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
-			this.gridProvided.HasAddButton = false;
-			this.gridProvided.HasDropDowns = false;
-			this.gridProvided.HasMultilineHeaders = false;
-			this.gridProvided.HScrollVisible = false;
-			this.gridProvided.Location = new System.Drawing.Point(12, 357);
-			this.gridProvided.Name = "gridProvided";
-			this.gridProvided.ScrollValue = 0;
-			this.gridProvided.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
-			this.gridProvided.Size = new System.Drawing.Size(847, 273);
-			this.gridProvided.TabIndex = 3;
-			this.gridProvided.Title = "Education Provided";
-			// 
-			// label2
-			// 
-			this.label2.Location = new System.Drawing.Point(12, 338);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(679, 16);
-			this.label2.TabIndex = 4;
-			this.label2.Text = "This is a historical record of education resources provided to this patient.  Del" +
+            this.resourcesGrid.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
+            this.resourcesGrid.EditableEnterMovesDown = false;
+            this.resourcesGrid.HasAddButton = false;
+            this.resourcesGrid.HasDropDowns = false;
+            this.resourcesGrid.HasMultilineHeaders = false;
+            this.resourcesGrid.HScrollVisible = false;
+            this.resourcesGrid.Location = new System.Drawing.Point(3, 53);
+            this.resourcesGrid.Name = "resourcesGrid";
+            this.resourcesGrid.ScrollValue = 0;
+            this.resourcesGrid.SelectionMode = OpenDental.UI.GridSelectionMode.None;
+            this.resourcesGrid.Size = new System.Drawing.Size(952, 264);
+            this.resourcesGrid.TabIndex = 1;
+            this.resourcesGrid.Title = "Educational Resources";
+            this.resourcesGrid.TitleVisible = true;
+            this.resourcesGrid.CellClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.ResourcesGrid_CellClick);
+            // 
+            // resourcesLabel
+            // 
+            this.resourcesLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.resourcesLabel.Location = new System.Drawing.Point(3, 0);
+            this.resourcesLabel.Name = "resourcesLabel";
+            this.resourcesLabel.Size = new System.Drawing.Size(952, 50);
+            this.resourcesLabel.TabIndex = 2;
+            this.resourcesLabel.Text = resources.GetString("resourcesLabel.Text");
+            // 
+            // providedGrid
+            // 
+            this.providedGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.providedGrid.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
+            this.providedGrid.EditableEnterMovesDown = false;
+            this.providedGrid.HasAddButton = false;
+            this.providedGrid.HasDropDowns = false;
+            this.providedGrid.HasMultilineHeaders = false;
+            this.providedGrid.HScrollVisible = false;
+            this.providedGrid.Location = new System.Drawing.Point(3, 23);
+            this.providedGrid.Name = "providedGrid";
+            this.providedGrid.ScrollValue = 0;
+            this.providedGrid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.providedGrid.Size = new System.Drawing.Size(952, 193);
+            this.providedGrid.TabIndex = 3;
+            this.providedGrid.Title = "Education Provided";
+            this.providedGrid.TitleVisible = true;
+            // 
+            // providedLabel
+            // 
+            this.providedLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.providedLabel.Location = new System.Drawing.Point(3, 0);
+            this.providedLabel.Name = "providedLabel";
+            this.providedLabel.Size = new System.Drawing.Size(952, 20);
+            this.providedLabel.TabIndex = 4;
+            this.providedLabel.Text = "This is a historical record of education resources provided to this patient.  Del" +
     "ete any entries that are inaccurate.";
-			this.label2.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// butDelete
-			// 
-			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butDelete.Location = new System.Drawing.Point(12, 636);
-			this.butDelete.Name = "butDelete";
-			this.butDelete.Size = new System.Drawing.Size(75, 23);
-			this.butDelete.TabIndex = 5;
-			this.butDelete.Text = "Delete";
-			this.butDelete.UseVisualStyleBackColor = true;
-			this.butDelete.Click += new System.EventHandler(this.butDelete_Click);
-			// 
-			// label3
-			// 
-			this.label3.Location = new System.Drawing.Point(12, 29);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(798, 16);
-			this.label3.TabIndex = 6;
-			this.label3.Text = "Please note that it will not be possible to enter patient-specific educational re" +
-    "sources for patients who have no medications, problems, or lab results.";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
-			// FormEhrEduResourcesPat
-			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(871, 671);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.butDelete);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.gridProvided);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.gridEdu);
-			this.Controls.Add(this.butClose);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "FormEhrEduResourcesPat";
-			this.Text = "Educational Resources";
-			this.Load += new System.EventHandler(this.FormEduResourcesPat_Load);
-			this.ResumeLayout(false);
+            this.providedLabel.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // deleteButton
+            // 
+            this.deleteButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.deleteButton.Location = new System.Drawing.Point(13, 568);
+            this.deleteButton.Name = "deleteButton";
+            this.deleteButton.Size = new System.Drawing.Size(110, 30);
+            this.deleteButton.TabIndex = 5;
+            this.deleteButton.Text = "Delete";
+            this.deleteButton.UseVisualStyleBackColor = true;
+            this.deleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
+            // 
+            // resourcesSplitContainer
+            // 
+            this.resourcesSplitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.resourcesSplitContainer.Location = new System.Drawing.Point(13, 19);
+            this.resourcesSplitContainer.Name = "resourcesSplitContainer";
+            this.resourcesSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // resourcesSplitContainer.Panel1
+            // 
+            this.resourcesSplitContainer.Panel1.Controls.Add(this.resourcesGrid);
+            this.resourcesSplitContainer.Panel1.Controls.Add(this.resourcesLabel);
+            // 
+            // resourcesSplitContainer.Panel2
+            // 
+            this.resourcesSplitContainer.Panel2.Controls.Add(this.providedGrid);
+            this.resourcesSplitContainer.Panel2.Controls.Add(this.providedLabel);
+            this.resourcesSplitContainer.Size = new System.Drawing.Size(958, 543);
+            this.resourcesSplitContainer.SplitterDistance = 320;
+            this.resourcesSplitContainer.TabIndex = 7;
+            // 
+            // FormEhrEduResourcesPat
+            // 
+            this.CancelButton = this.closeButton;
+            this.ClientSize = new System.Drawing.Size(984, 611);
+            this.Controls.Add(this.resourcesSplitContainer);
+            this.Controls.Add(this.deleteButton);
+            this.Controls.Add(this.closeButton);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "FormEhrEduResourcesPat";
+            this.Text = "Educational Resources";
+            this.Load += new System.EventHandler(this.FormEhrEduResourcesPat_Load);
+            this.resourcesSplitContainer.Panel1.ResumeLayout(false);
+            this.resourcesSplitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.resourcesSplitContainer)).EndInit();
+            this.resourcesSplitContainer.ResumeLayout(false);
+            this.ResumeLayout(false);
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private System.Windows.Forms.Button butClose;
-		private OpenDental.UI.ODGrid gridEdu;
-		private System.Windows.Forms.Label label1;
-		private OpenDental.UI.ODGrid gridProvided;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Button butDelete;
-		private System.Windows.Forms.Label label3;
-	}
+        private System.Windows.Forms.Button closeButton;
+        private OpenDental.UI.ODGrid resourcesGrid;
+        private System.Windows.Forms.Label resourcesLabel;
+        private OpenDental.UI.ODGrid providedGrid;
+        private System.Windows.Forms.Label providedLabel;
+        private System.Windows.Forms.Button deleteButton;
+        private System.Windows.Forms.SplitContainer resourcesSplitContainer;
+    }
 }
