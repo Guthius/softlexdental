@@ -45,7 +45,6 @@
             this.serviceVersionCaptionLabel = new System.Windows.Forms.Label();
             this.machineNameLabel = new System.Windows.Forms.Label();
             this.pictureOpenDental = new System.Windows.Forms.PictureBox();
-            this.diagnosticsButton = new System.Windows.Forms.Button();
             this.connectionGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureOpenDental)).BeginInit();
             this.SuspendLayout();
@@ -68,7 +67,7 @@
             this.acceptButton.Location = new System.Drawing.Point(511, 298);
             this.acceptButton.Name = "acceptButton";
             this.acceptButton.Size = new System.Drawing.Size(110, 30);
-            this.acceptButton.TabIndex = 2;
+            this.acceptButton.TabIndex = 0;
             this.acceptButton.Text = "&Close";
             // 
             // copyrightLabel
@@ -78,7 +77,7 @@
             this.copyrightLabel.Location = new System.Drawing.Point(13, 271);
             this.copyrightLabel.Name = "copyrightLabel";
             this.copyrightLabel.Size = new System.Drawing.Size(608, 20);
-            this.copyrightLabel.TabIndex = 3;
+            this.copyrightLabel.TabIndex = 6;
             this.copyrightLabel.Text = "This program Copyright 2003-2007, Jordan S. Sparks, D.M.D.";
             this.copyrightLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -89,7 +88,7 @@
             this.copyrightMySqlLabel.Location = new System.Drawing.Point(13, 311);
             this.copyrightMySqlLabel.Name = "copyrightMySqlLabel";
             this.copyrightMySqlLabel.Size = new System.Drawing.Size(608, 20);
-            this.copyrightMySqlLabel.TabIndex = 6;
+            this.copyrightMySqlLabel.TabIndex = 8;
             this.copyrightMySqlLabel.Text = "MySQL - Copyright 1995-2007, www.mysql.com";
             this.copyrightMySqlLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -100,7 +99,7 @@
             this.licenseLabel.Location = new System.Drawing.Point(13, 251);
             this.licenseLabel.Name = "licenseLabel";
             this.licenseLabel.Size = new System.Drawing.Size(608, 20);
-            this.licenseLabel.TabIndex = 7;
+            this.licenseLabel.TabIndex = 5;
             this.licenseLabel.Text = "All parts of this program are licensed under the GPL, www.opensource.org/licenses" +
     "/gpl-license.php";
             this.licenseLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -108,10 +107,10 @@
             // licensesButton
             // 
             this.licensesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.licensesButton.Location = new System.Drawing.Point(512, 117);
+            this.licensesButton.Location = new System.Drawing.Point(512, 82);
             this.licensesButton.Name = "licensesButton";
             this.licensesButton.Size = new System.Drawing.Size(110, 30);
-            this.licensesButton.TabIndex = 50;
+            this.licensesButton.TabIndex = 3;
             this.licensesButton.Text = "View Licenses";
             this.licensesButton.Click += new System.EventHandler(this.LicensesButton_Click);
             // 
@@ -122,7 +121,7 @@
             this.copyrightAdaLabel.Location = new System.Drawing.Point(13, 291);
             this.copyrightAdaLabel.Name = "copyrightAdaLabel";
             this.copyrightAdaLabel.Size = new System.Drawing.Size(608, 20);
-            this.copyrightAdaLabel.TabIndex = 51;
+            this.copyrightAdaLabel.TabIndex = 7;
             this.copyrightAdaLabel.Text = "All CDT codes are Copyrighted by the ADA.";
             this.copyrightAdaLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -133,7 +132,7 @@
             this.serverNameLabel.Location = new System.Drawing.Point(161, 44);
             this.serverNameLabel.Name = "serverNameLabel";
             this.serverNameLabel.Size = new System.Drawing.Size(326, 20);
-            this.serverNameLabel.TabIndex = 52;
+            this.serverNameLabel.TabIndex = 3;
             this.serverNameLabel.Text = "-";
             this.serverNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -144,7 +143,7 @@
             this.serviceNameLabel.Location = new System.Drawing.Point(161, 69);
             this.serviceNameLabel.Name = "serviceNameLabel";
             this.serviceNameLabel.Size = new System.Drawing.Size(326, 20);
-            this.serviceNameLabel.TabIndex = 53;
+            this.serviceNameLabel.TabIndex = 5;
             this.serviceNameLabel.Text = "-";
             this.serviceNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -155,7 +154,7 @@
             this.serviceVersionLabel.Location = new System.Drawing.Point(161, 94);
             this.serviceVersionLabel.Name = "serviceVersionLabel";
             this.serviceVersionLabel.Size = new System.Drawing.Size(326, 20);
-            this.serviceVersionLabel.TabIndex = 54;
+            this.serviceVersionLabel.TabIndex = 7;
             this.serviceVersionLabel.Text = "-";
             this.serviceVersionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -166,7 +165,7 @@
             this.serviceCommentLabel.Location = new System.Drawing.Point(161, 119);
             this.serviceCommentLabel.Name = "serviceCommentLabel";
             this.serviceCommentLabel.Size = new System.Drawing.Size(326, 20);
-            this.serviceCommentLabel.TabIndex = 55;
+            this.serviceCommentLabel.TabIndex = 9;
             this.serviceCommentLabel.Text = "-";
             this.serviceCommentLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -177,7 +176,7 @@
             this.label2.Location = new System.Drawing.Point(13, 239);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(608, 2);
-            this.label2.TabIndex = 56;
+            this.label2.TabIndex = 4;
             // 
             // connectionGroupBox
             // 
@@ -196,7 +195,7 @@
             this.connectionGroupBox.Location = new System.Drawing.Point(13, 75);
             this.connectionGroupBox.Name = "connectionGroupBox";
             this.connectionGroupBox.Size = new System.Drawing.Size(493, 150);
-            this.connectionGroupBox.TabIndex = 57;
+            this.connectionGroupBox.TabIndex = 2;
             this.connectionGroupBox.TabStop = false;
             // 
             // machineNameCaptionLabel
@@ -204,7 +203,7 @@
             this.machineNameCaptionLabel.Location = new System.Drawing.Point(6, 19);
             this.machineNameCaptionLabel.Name = "machineNameCaptionLabel";
             this.machineNameCaptionLabel.Size = new System.Drawing.Size(149, 20);
-            this.machineNameCaptionLabel.TabIndex = 92;
+            this.machineNameCaptionLabel.TabIndex = 0;
             this.machineNameCaptionLabel.Text = "Client Machine Name: ";
             this.machineNameCaptionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -213,7 +212,7 @@
             this.serviceNameCaptionLabel.Location = new System.Drawing.Point(6, 69);
             this.serviceNameCaptionLabel.Name = "serviceNameCaptionLabel";
             this.serviceNameCaptionLabel.Size = new System.Drawing.Size(149, 20);
-            this.serviceNameCaptionLabel.TabIndex = 89;
+            this.serviceNameCaptionLabel.TabIndex = 4;
             this.serviceNameCaptionLabel.Text = "Service Name: ";
             this.serviceNameCaptionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -222,7 +221,7 @@
             this.serverNameCaptionLabel.Location = new System.Drawing.Point(6, 44);
             this.serverNameCaptionLabel.Name = "serverNameCaptionLabel";
             this.serverNameCaptionLabel.Size = new System.Drawing.Size(149, 20);
-            this.serverNameCaptionLabel.TabIndex = 88;
+            this.serverNameCaptionLabel.TabIndex = 2;
             this.serverNameCaptionLabel.Text = "Server Name: ";
             this.serverNameCaptionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -231,7 +230,7 @@
             this.serviceCommentsCaptionLabel.Location = new System.Drawing.Point(6, 119);
             this.serviceCommentsCaptionLabel.Name = "serviceCommentsCaptionLabel";
             this.serviceCommentsCaptionLabel.Size = new System.Drawing.Size(149, 20);
-            this.serviceCommentsCaptionLabel.TabIndex = 91;
+            this.serviceCommentsCaptionLabel.TabIndex = 8;
             this.serviceCommentsCaptionLabel.Text = "Service Comment: ";
             this.serviceCommentsCaptionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -240,7 +239,7 @@
             this.serviceVersionCaptionLabel.Location = new System.Drawing.Point(6, 94);
             this.serviceVersionCaptionLabel.Name = "serviceVersionCaptionLabel";
             this.serviceVersionCaptionLabel.Size = new System.Drawing.Size(149, 20);
-            this.serviceVersionCaptionLabel.TabIndex = 90;
+            this.serviceVersionCaptionLabel.TabIndex = 6;
             this.serviceVersionCaptionLabel.Text = "Service Version: ";
             this.serviceVersionCaptionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -251,7 +250,7 @@
             this.machineNameLabel.Location = new System.Drawing.Point(161, 19);
             this.machineNameLabel.Name = "machineNameLabel";
             this.machineNameLabel.Size = new System.Drawing.Size(326, 20);
-            this.machineNameLabel.TabIndex = 87;
+            this.machineNameLabel.TabIndex = 1;
             this.machineNameLabel.Text = "-";
             this.machineNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -264,22 +263,11 @@
             this.pictureOpenDental.TabIndex = 58;
             this.pictureOpenDental.TabStop = false;
             // 
-            // diagnosticsButton
-            // 
-            this.diagnosticsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.diagnosticsButton.Location = new System.Drawing.Point(512, 81);
-            this.diagnosticsButton.Name = "diagnosticsButton";
-            this.diagnosticsButton.Size = new System.Drawing.Size(110, 30);
-            this.diagnosticsButton.TabIndex = 59;
-            this.diagnosticsButton.Text = "Diagnostics";
-            this.diagnosticsButton.Click += new System.EventHandler(this.DiagnosticsButton_Click);
-            // 
             // FormAbout
             // 
             this.AcceptButton = this.acceptButton;
             this.CancelButton = this.acceptButton;
             this.ClientSize = new System.Drawing.Size(634, 341);
-            this.Controls.Add(this.diagnosticsButton);
             this.Controls.Add(this.pictureOpenDental);
             this.Controls.Add(this.connectionGroupBox);
             this.Controls.Add(this.label2);
@@ -323,7 +311,6 @@
         private System.Windows.Forms.GroupBox connectionGroupBox;
         private System.Windows.Forms.PictureBox pictureOpenDental;
         private System.Windows.Forms.Label machineNameLabel;
-        private System.Windows.Forms.Button diagnosticsButton;
         private System.Windows.Forms.Label machineNameCaptionLabel;
         private System.Windows.Forms.Label serviceNameCaptionLabel;
         private System.Windows.Forms.Label serverNameCaptionLabel;

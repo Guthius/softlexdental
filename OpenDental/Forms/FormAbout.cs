@@ -1,4 +1,13 @@
-﻿using OpenDentBusiness;
+﻿/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
+using OpenDentBusiness;
 using System;
 using System.Windows.Forms;
 
@@ -35,61 +44,6 @@ namespace OpenDental
             serviceCommentLabel.Text = serviceList[1].ToString();
             serverNameLabel.Text = serviceList[2].ToString();
             serviceVersionLabel.Text = serviceList[3].ToString();
-        }
-
-        /// <summary>
-        /// Generate and display diagnostic information.
-        /// </summary>
-        void DiagnosticsButton_Click(object sender, EventArgs e)
-        {
-            // TODO: Fix me
-
-            //BugSubmission.SubmissionInfo subInfo = new BugSubmission(new Exception()).Info;
-            //StringBuilder strBuilder = new StringBuilder();
-            //
-            //foreach (FieldInfo field in subInfo.GetType().GetFields())
-            //{
-            //    object value = field.GetValue(subInfo);
-            //    if (value.In(null, ""))
-            //    {
-            //        continue;
-            //    }
-            //
-            //    if (value is Dictionary<PrefName, string>)
-            //    {
-            //        Dictionary<PrefName, string> dictPrefValues = value as Dictionary<PrefName, string>;
-            //        if (dictPrefValues.Keys.Count > 0)
-            //        {
-            //            strBuilder.AppendLine(field.Name + ":");
-            //            dictPrefValues.ToList().ForEach(x => strBuilder.AppendLine("  " + x.Key.ToString() + ": " + x.Value));
-            //            strBuilder.AppendLine("-------------");
-            //        }
-            //    }
-            //    else if (value is List<string>)
-            //    {
-            //        List<string> enabledPlugins = value as List<string>;
-            //        if (enabledPlugins.Count > 0)
-            //        {
-            //            strBuilder.AppendLine(field.Name + ":");
-            //            enabledPlugins.ForEach(x => strBuilder.AppendLine("  " + x));
-            //            strBuilder.AppendLine("-------------");
-            //        }
-            //    }
-            //    else if (value is bool)
-            //    {
-            //        strBuilder.AppendLine(field.Name + ": " + (((bool)value) == true ? "true" : "false"));
-            //    }
-            //    else
-            //    {
-            //        strBuilder.AppendLine(field.Name + ": " + value);
-            //    }
-            //}
-            //
-            //using (var msgBoxCopyPaste = new MsgBoxCopyPaste(strBuilder.ToString()))
-            //{
-            //    msgBoxCopyPaste.Text = "Diagnostics";
-            //    msgBoxCopyPaste.ShowDialog();
-            //}
         }
 
         /// <summary>
