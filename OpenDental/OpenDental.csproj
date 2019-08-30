@@ -451,6 +451,9 @@
     <Compile Include="Forms\FormApptLists.Designer.cs">
       <DependentUpon>FormApptLists.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormApptRules.Designer.cs">
+      <DependentUpon>FormApptRules.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormApptViews.Designer.cs">
       <DependentUpon>FormApptViews.cs</DependentUpon>
     </Compile>
@@ -2011,12 +2014,6 @@
     </Compile>
     <Compile Include="Forms\FormCDSIntervention.designer.cs">
       <DependentUpon>FormCDSIntervention.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormAlertSimple.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormAlertSimple.designer.cs">
-      <DependentUpon>FormAlertSimple.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormEhrPatientExport.cs">
       <SubType>Form</SubType>
@@ -5662,9 +5659,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormCDSIntervention.resx">
       <DependentUpon>FormCDSIntervention.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormAlertSimple.resx">
-      <DependentUpon>FormAlertSimple.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormEhrPatientExport.resx">
       <DependentUpon>FormEhrPatientExport.cs</DependentUpon>

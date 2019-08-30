@@ -415,6 +415,15 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enabled.
+        /// </summary>
+        public static string ColumnEnabled {
+            get {
+                return ResourceManager.GetString("ColumnEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Est Value.
         /// </summary>
         public static string ColumnEstValue {
