@@ -55,7 +55,7 @@ namespace OpenDental
             this.acceptButton.TabIndex = 0;
             this.acceptButton.Text = "&OK";
             this.acceptButton.Visible = false;
-            this.acceptButton.Click += new System.EventHandler(this.acceptButton_Click);
+            this.acceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
             // 
             // showHiddenCheckBox
             // 
@@ -69,7 +69,7 @@ namespace OpenDental
             this.showHiddenCheckBox.TabStop = false;
             this.showHiddenCheckBox.Text = "Show Hidden";
             this.showHiddenCheckBox.UseVisualStyleBackColor = true;
-            this.showHiddenCheckBox.CheckedChanged += new System.EventHandler(this.showHiddenCheckBox_CheckedChanged);
+            this.showHiddenCheckBox.CheckedChanged += new System.EventHandler(this.ShowHiddenCheckBox_CheckedChanged);
             // 
             // allergiesGrid
             // 
@@ -89,7 +89,7 @@ namespace OpenDental
             this.allergiesGrid.TabIndex = 2;
             this.allergiesGrid.Title = "Allergies";
             this.allergiesGrid.TitleVisible = true;
-            this.allergiesGrid.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.allergiesGrid_CellDoubleClick);
+            this.allergiesGrid.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.AllergiesGrid_CellDoubleClick);
             // 
             // addButton
             // 
@@ -103,7 +103,7 @@ namespace OpenDental
             this.addButton.Text = "&Add";
             this.addButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.addButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.addButton.Click += new System.EventHandler(this.addButton_Click);
+            this.addButton.Click += new System.EventHandler(this.AddButton_Click);
             // 
             // FormAllergySetup
             // 
@@ -120,6 +120,7 @@ namespace OpenDental
             this.MinimizeBox = false;
             this.Name = "FormAllergySetup";
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Allergy Setup";
             this.Load += new System.EventHandler(this.FormAllergySetup_Load);
             this.ResumeLayout(false);

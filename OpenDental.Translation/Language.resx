@@ -807,4 +807,7 @@ Click 'Skip' if you do not wish to finish setting this section up at this time.<
   <data name="PleaseSpecifySearchCriteriaBeforeSearching" xml:space="preserve">
     <value>Please specify some search criteria before searching.</value>
   </data>
+  <data name="Account" xml:space="preserve">
+    <value>Account</value>
+  </data>
 </root>

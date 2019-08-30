@@ -1,3 +1,12 @@
+/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
 using OpenDentBusiness;
 using System;
 using System.Text;
@@ -38,7 +47,7 @@ namespace OpenDental
         /// <summary>
         /// Opens the form to select a UNII code.
         /// </summary>
-        void uniiBrowseButton_Click(object sender, EventArgs e)
+        void UniiBrowseButton_Click(object sender, EventArgs e)
         {
             // TODO: Implement this
         }
@@ -46,7 +55,7 @@ namespace OpenDental
         /// <summary>
         /// Clears the UNII code.
         /// </summary>
-        void uniiNoneButton_Click(object sender, EventArgs e)
+        void UniiNoneButton_Click(object sender, EventArgs e)
         {
             // TODO: Implement this
         }
@@ -54,7 +63,7 @@ namespace OpenDental
         /// <summary>
         /// Opens the form to select a medication.
         /// </summary>
-        void medicationBrowseButton_Click(object sender, EventArgs e)
+        void MedicationBrowseButton_Click(object sender, EventArgs e)
         {
             using (var formMedications = new FormMedications())
             {
@@ -73,7 +82,7 @@ namespace OpenDental
         /// <summary>
         /// Clears the selected medication.
         /// </summary>
-        void medicationNoneButton_Click(object sender, EventArgs e)
+        void MedicationNoneButton_Click(object sender, EventArgs e)
         {
             AllergyDefCur.MedicationNum = 0;
             medicationTextBox.Text = "";
@@ -82,7 +91,7 @@ namespace OpenDental
         /// <summary>
         /// Delete the allergy definition. Only allowed if the allergy is not in use.
         /// </summary>
-        void deleteButton_Click(object sender, EventArgs e)
+        void DeleteButton_Click(object sender, EventArgs e)
         {
             if (AllergyDefCur.Id > 0)
             {
@@ -116,9 +125,10 @@ namespace OpenDental
         /// <summary>
         /// Validates all the fields, saves the allergy def and closes the form.
         /// </summary>
-        void acceptButton_Click(object sender, EventArgs e)
+        void AcceptButton_Click(object sender, EventArgs e)
         {
-            if (descriptionTextBox.Text.Trim() == "")
+            var description = descriptionTextBox.Text.Trim();
+            if (description.Length == 0)
             {
                 MessageBox.Show(
                     Translation.Language.DescriptionCannotBeBlank,
@@ -140,12 +150,14 @@ namespace OpenDental
                 return;
             }
 
+            var uniiCode = uniiTextBox.Text.Trim();
+
             var invalidCharacters = new StringBuilder();
-            for (int i = 0; i < uniiTextBox.Text.Length; i++)
+            for (int i = 0; i < uniiCode.Length; i++)
             {
-                if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".IndexOf(uniiTextBox.Text[i]) == -1)
+                if ("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".IndexOf(uniiCode[i]) == -1)
                 {
-                    invalidCharacters.Append(uniiTextBox.Text[i]);
+                    invalidCharacters.Append(uniiCode[i]);
                 }
             }
 
@@ -159,8 +171,8 @@ namespace OpenDental
 
                 return;
             }
-
-            if (uniiTextBox.Text != "" && uniiTextBox.Text.Length != 10)
+            
+            if (uniiCode.Length > 0 && uniiCode.Length != 10)
             {
                 MessageBox.Show(
                     Translation.Language.AllergyUniiCodeMustBe10Characters,
@@ -171,10 +183,10 @@ namespace OpenDental
                 return;
             }
 
-            AllergyDefCur.Description = descriptionTextBox.Text;
+            AllergyDefCur.Description = description;
             AllergyDefCur.IsHidden = hiddenCheckBox.Checked;
             AllergyDefCur.SnomedType = (SnomedAllergy)allergyTypeComboBox.SelectedIndex;
-            AllergyDefCur.UniiCode = uniiTextBox.Text;
+            AllergyDefCur.UniiCode = uniiCode;
 
             // TODO: Do UNII check once the table is added
 

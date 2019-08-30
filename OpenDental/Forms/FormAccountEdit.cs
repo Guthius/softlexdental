@@ -1,3 +1,12 @@
+/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
 using OpenDentBusiness;
 using System;
 using System.Windows.Forms;
@@ -60,7 +69,7 @@ namespace OpenDental
             {
                 MessageBox.Show(
                     ex.Message,
-                    "Edit Account", 
+                    Translation.Language.Account, 
                     MessageBoxButtons.OK, 
                     MessageBoxIcon.Error);
 
@@ -75,8 +84,8 @@ namespace OpenDental
             if (descriptionTextBox.Text == "")
             {
                 MessageBox.Show(
-                    "A description is required.",
-                    "Edit Account",
+                    Translation.Language.PleaseEnterADescription,
+                    Translation.Language.Account,
                     MessageBoxButtons.OK, 
                     MessageBoxIcon.Error);
 
@@ -88,7 +97,7 @@ namespace OpenDental
                 var result =
                     MessageBox.Show(
                         "This will update the Splits column for all Transactions attached to this account that have a date after the Accounting Lock Date. Are you sure you want to continue?",
-                        "Edit Account", 
+                        Translation.Language.Account, 
                         MessageBoxButtons.YesNo, 
                         MessageBoxIcon.Question);
 

@@ -110,7 +110,7 @@ namespace OpenDental
             this.uniiNoneButton.Size = new System.Drawing.Size(60, 25);
             this.uniiNoneButton.TabIndex = 3;
             this.uniiNoneButton.Text = "None";
-            this.uniiNoneButton.Click += new System.EventHandler(this.uniiNoneButton_Click);
+            this.uniiNoneButton.Click += new System.EventHandler(this.UniiNoneButton_Click);
             // 
             // medicationNoneButton
             // 
@@ -119,7 +119,7 @@ namespace OpenDental
             this.medicationNoneButton.Size = new System.Drawing.Size(60, 25);
             this.medicationNoneButton.TabIndex = 7;
             this.medicationNoneButton.Text = "None";
-            this.medicationNoneButton.Click += new System.EventHandler(this.medicationNoneButton_Click);
+            this.medicationNoneButton.Click += new System.EventHandler(this.MedicationNoneButton_Click);
             // 
             // uniiBrowseButton
             // 
@@ -129,7 +129,7 @@ namespace OpenDental
             this.uniiBrowseButton.Name = "uniiBrowseButton";
             this.uniiBrowseButton.Size = new System.Drawing.Size(30, 25);
             this.uniiBrowseButton.TabIndex = 2;
-            this.uniiBrowseButton.Click += new System.EventHandler(this.uniiBrowseButton_Click);
+            this.uniiBrowseButton.Click += new System.EventHandler(this.UniiBrowseButton_Click);
             // 
             // medicationTextBox
             // 
@@ -156,7 +156,7 @@ namespace OpenDental
             this.medicationBrowseButton.Name = "medicationBrowseButton";
             this.medicationBrowseButton.Size = new System.Drawing.Size(30, 25);
             this.medicationBrowseButton.TabIndex = 6;
-            this.medicationBrowseButton.Click += new System.EventHandler(this.medicationBrowseButton_Click);
+            this.medicationBrowseButton.Click += new System.EventHandler(this.MedicationBrowseButton_Click);
             // 
             // medicationLabel
             // 
@@ -224,7 +224,7 @@ namespace OpenDental
             this.acceptButton.Size = new System.Drawing.Size(110, 30);
             this.acceptButton.TabIndex = 5;
             this.acceptButton.Text = "&OK";
-            this.acceptButton.Click += new System.EventHandler(this.acceptButton_Click);
+            this.acceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
             // 
             // deleteButton
             // 
@@ -238,7 +238,7 @@ namespace OpenDental
             this.deleteButton.Text = "&Delete";
             this.deleteButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.deleteButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
+            this.deleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
             // FormAllergyDefEdit
             // 

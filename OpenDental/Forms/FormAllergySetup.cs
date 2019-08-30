@@ -1,3 +1,12 @@
+/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
 using OpenDental.UI;
 using OpenDentBusiness;
 using System;
@@ -28,8 +37,6 @@ namespace OpenDental
         /// <summary>
         /// Loads the form.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         void FormAllergySetup_Load(object sender, EventArgs e)
         {
             if (IsSelectionMode)
@@ -73,12 +80,12 @@ namespace OpenDental
         /// <summary>
         /// Reloads the list of allergies when visibility of hidden items is toggled.
         /// </summary>
-        void showHiddenCheckBox_CheckedChanged(object sender, EventArgs e) => LoadAllergies();
+        void ShowHiddenCheckBox_CheckedChanged(object sender, EventArgs e) => LoadAllergies();
         
         /// <summary>
         /// Closes the form when in selection mode; otherwise, opens the form to edit the selected allergy.
         /// </summary>
-        void allergiesGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
+        void AllergiesGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
         {
             if (IsSelectionMode)
             {
@@ -90,7 +97,8 @@ namespace OpenDental
                 using (var formAllergyDefEdit = new FormAllergyDefEdit())
                 {
                     formAllergyDefEdit.AllergyDefCur = allergiesList[allergiesGrid.GetSelectedIndex()];
-                    if (formAllergyDefEdit.ShowDialog() == DialogResult.OK)
+
+                    if (formAllergyDefEdit.ShowDialog(this) == DialogResult.OK)
                     {
                         LoadAllergies();
                     }
@@ -101,13 +109,13 @@ namespace OpenDental
         /// <summary>
         /// Opens the form to add a new allergy.
         /// </summary>
-        void addButton_Click(object sender, EventArgs e)
+        void AddButton_Click(object sender, EventArgs e)
         {
             using (var formAllergyDefEdit = new FormAllergyDefEdit())
             {
                 formAllergyDefEdit.AllergyDefCur = new AllergyDef();
 
-                if (formAllergyDefEdit.ShowDialog() == DialogResult.OK)
+                if (formAllergyDefEdit.ShowDialog(this) == DialogResult.OK)
                 {
                     LoadAllergies();
                 }
@@ -117,9 +125,8 @@ namespace OpenDental
         /// <summary>
         /// Closes the form.
         /// </summary>
-        void acceptButton_Click(object sender, EventArgs e)
+        void AcceptButton_Click(object sender, EventArgs e)
         {
-            //Only visible in IsSelectionMode.
             if (allergiesGrid.GetSelectedIndex() == -1)
             {
                 MessageBox.Show(

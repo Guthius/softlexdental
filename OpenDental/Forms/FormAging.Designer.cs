@@ -5,19 +5,17 @@
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.Container components = null;
+        private System.ComponentModel.IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (disposing && (components != null))
             {
-                if (components != null)
-                {
-                    components.Dispose();
-                }
+                components.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -27,12 +25,12 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAging));
-            this.lastDateTextBox = new OpenDental.ValidDate();
+            this.lastDateTextBox = new System.Windows.Forms.TextBox();
             this.lastDateLabel = new System.Windows.Forms.Label();
             this.cancelButton = new System.Windows.Forms.Button();
             this.acceptButton = new System.Windows.Forms.Button();
             this.infoLabel = new System.Windows.Forms.Label();
-            this.calculateDateTextBox = new OpenDental.ValidDate();
+            this.calculateDateTextBox = new System.Windows.Forms.TextBox();
             this.calculateDateLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -42,7 +40,7 @@
             this.lastDateTextBox.Name = "lastDateTextBox";
             this.lastDateTextBox.ReadOnly = true;
             this.lastDateTextBox.Size = new System.Drawing.Size(94, 23);
-            this.lastDateTextBox.TabIndex = 2;
+            this.lastDateTextBox.TabIndex = 5;
             this.lastDateTextBox.TabStop = false;
             // 
             // lastDateLabel
@@ -51,7 +49,7 @@
             this.lastDateLabel.Location = new System.Drawing.Point(77, 92);
             this.lastDateLabel.Name = "lastDateLabel";
             this.lastDateLabel.Size = new System.Drawing.Size(87, 15);
-            this.lastDateLabel.TabIndex = 1;
+            this.lastDateLabel.TabIndex = 4;
             this.lastDateLabel.Text = "Last Calculated";
             this.lastDateLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
@@ -62,7 +60,7 @@
             this.cancelButton.Location = new System.Drawing.Point(311, 198);
             this.cancelButton.Name = "cancelButton";
             this.cancelButton.Size = new System.Drawing.Size(110, 30);
-            this.cancelButton.TabIndex = 6;
+            this.cancelButton.TabIndex = 2;
             this.cancelButton.Text = "&Cancel";
             // 
             // acceptButton
@@ -71,9 +69,9 @@
             this.acceptButton.Location = new System.Drawing.Point(195, 198);
             this.acceptButton.Name = "acceptButton";
             this.acceptButton.Size = new System.Drawing.Size(110, 30);
-            this.acceptButton.TabIndex = 5;
+            this.acceptButton.TabIndex = 1;
             this.acceptButton.Text = "&OK";
-            this.acceptButton.Click += new System.EventHandler(this.acceptButton_Click);
+            this.acceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
             // 
             // infoLabel
             // 
@@ -83,7 +81,7 @@
             this.infoLabel.Location = new System.Drawing.Point(13, 16);
             this.infoLabel.Name = "infoLabel";
             this.infoLabel.Size = new System.Drawing.Size(408, 70);
-            this.infoLabel.TabIndex = 0;
+            this.infoLabel.TabIndex = 3;
             this.infoLabel.Text = "If you use monthly billing instead of daily, then this is where you change the ag" +
     "ing date every month.  Otherwise, it\'s not necessary to manually run aging.  It\'" +
     "s all handled automatically.";
@@ -93,7 +91,7 @@
             this.calculateDateTextBox.Location = new System.Drawing.Point(170, 118);
             this.calculateDateTextBox.Name = "calculateDateTextBox";
             this.calculateDateTextBox.Size = new System.Drawing.Size(94, 23);
-            this.calculateDateTextBox.TabIndex = 4;
+            this.calculateDateTextBox.TabIndex = 0;
             // 
             // calculateDateLabel
             // 
@@ -101,7 +99,7 @@
             this.calculateDateLabel.Location = new System.Drawing.Point(80, 121);
             this.calculateDateLabel.Name = "calculateDateLabel";
             this.calculateDateLabel.Size = new System.Drawing.Size(84, 15);
-            this.calculateDateLabel.TabIndex = 3;
+            this.calculateDateLabel.TabIndex = 6;
             this.calculateDateLabel.Text = "Calculate as of";
             this.calculateDateLabel.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
@@ -134,8 +132,8 @@
         private System.Windows.Forms.Button cancelButton;
         private System.Windows.Forms.Button acceptButton;
         private System.Windows.Forms.Label infoLabel;
-        private OpenDental.ValidDate lastDateTextBox;
-        private OpenDental.ValidDate calculateDateTextBox;
+        private System.Windows.Forms.TextBox lastDateTextBox;
+        private System.Windows.Forms.TextBox calculateDateTextBox;
         private System.Windows.Forms.Label calculateDateLabel;
     }
 }

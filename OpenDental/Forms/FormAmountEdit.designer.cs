@@ -61,6 +61,7 @@ namespace OpenDental
             this.amountTextBox.Name = "amountTextBox";
             this.amountTextBox.Size = new System.Drawing.Size(84, 23);
             this.amountTextBox.TabIndex = 0;
+            this.amountTextBox.Validating += new System.ComponentModel.CancelEventHandler(this.AmountTextBox_Validating);
             // 
             // amountLabel
             // 
@@ -80,11 +81,15 @@ namespace OpenDental
             this.Controls.Add(this.amountTextBox);
             this.Controls.Add(this.acceptButton);
             this.Controls.Add(this.cancelButton);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(100, 100);
             this.Name = "FormAmountEdit";
+            this.ShowIcon = false;
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Enter Amount";
             this.Load += new System.EventHandler(this.FormAmountEdit_Load);
             this.ResumeLayout(false);

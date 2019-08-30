@@ -1,3 +1,12 @@
+/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
 using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
@@ -10,7 +19,7 @@ namespace OpenDental
         List<AllergyDef> allergiesList;
         Snomed snomedReaction;
 
-        public Allergy AllergyCur;
+        public Allergy Allergy { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FormAllergyEdit"/> class.
@@ -40,32 +49,32 @@ namespace OpenDental
             for (int i = 0; i < allergiesList.Count; i++)
             {
                 allergyComboBox.Items.Add(allergiesList[i].Description);
-                if (!AllergyCur.IsNew && allergiesList[i].Id == AllergyCur.AllergyDefNum)
+                if (!Allergy.IsNew && allergiesList[i].Id == Allergy.AllergyDefNum)
                 {
                     allergyIndex = i;
                 }
             }
 
             // Get the SNOMED reaction assigned to the allergy.
-            snomedReaction = Snomeds.GetByCode(AllergyCur.SnomedReaction);
+            snomedReaction = Snomeds.GetByCode(Allergy.SnomedReaction);
             if (snomedReaction != null)
             {
                 snomedTextBox.Text = snomedReaction.Description;
             }
 
-            if (!AllergyCur.IsNew)
+            if (!Allergy.IsNew)
             {
-                if (AllergyCur.DateAdverseReaction < DateTime.Parse("01-01-1880"))
+                if (Allergy.DateAdverseReaction < DateTime.Parse("01-01-1880"))
                 {
                     dateTextBox.Text = "";
                 }
                 else
                 {
-                    dateTextBox.Text = AllergyCur.DateAdverseReaction.ToShortDateString();
+                    dateTextBox.Text = Allergy.DateAdverseReaction.ToShortDateString();
                 }
                 allergyComboBox.SelectedIndex = allergyIndex;
-                reactionTextBox.Text = AllergyCur.Reaction;
-                activeCheckBox.Checked = AllergyCur.StatusIsActive;
+                reactionTextBox.Text = Allergy.Reaction;
+                activeCheckBox.Checked = Allergy.StatusIsActive;
             }
             else
             {
@@ -76,7 +85,7 @@ namespace OpenDental
         /// <summary>
         /// Opens the form to select a SNOMED reaction to assign to the allergy.
         /// </summary>
-        void snomedBrowseButton_Click(object sender, EventArgs e)
+        void SnomedBrowseButton_Click(object sender, EventArgs e)
         {
             using (var formSnomeds = new FormSnomeds())
             {
@@ -92,7 +101,7 @@ namespace OpenDental
         /// <summary>
         /// Clears the selected SNOMED reaction.
         /// </summary>
-        void snomedNoneButton_Click(object sender, EventArgs e)
+        void SnomedNoneButton_Click(object sender, EventArgs e)
         {
             snomedReaction = null;
             snomedTextBox.Text = "";
@@ -101,11 +110,12 @@ namespace OpenDental
         /// <summary>
         /// Deletes the allergy.
         /// </summary>
-        void deleteButton_Click(object sender, EventArgs e)
+        void DeleteButton_Click(object sender, EventArgs e)
         {
-            if (AllergyCur.IsNew)
+            if (Allergy.IsNew)
             {
                 DialogResult = DialogResult.Cancel;
+
                 return;
             }
 
@@ -118,14 +128,14 @@ namespace OpenDental
 
             if (result == DialogResult.Cancel) return;
 
-            Allergies.Delete(AllergyCur.AllergyNum);
+            Allergies.Delete(Allergy.AllergyNum);
 
             SecurityLogs.MakeLogEntry(
                 Permissions.PatAllergyListEdit, 
-                AllergyCur.PatNum, 
+                Allergy.PatNum, 
                 string.Format(
                     Translation.LanguageSecurity.GenericItemDeleted, 
-                    AllergyDefs.GetDescription(AllergyCur.AllergyDefNum)));
+                    AllergyDefs.GetDescription(Allergy.AllergyDefNum)));
 
             DialogResult = DialogResult.OK;
         }
@@ -133,7 +143,7 @@ namespace OpenDental
         /// <summary>
         /// Saves the allergy and closes the form.
         /// </summary>
-        void acceptButton_Click(object sender, EventArgs e)
+        void AcceptButton_Click(object sender, EventArgs e)
         {
             var dateTime = DateTime.MinValue;
             if (dateTextBox.Text != "")
@@ -150,33 +160,33 @@ namespace OpenDental
                 }
             }
 
-            AllergyCur.DateAdverseReaction = dateTime;
-            AllergyCur.AllergyDefNum = allergiesList[allergyComboBox.SelectedIndex].Id;
-            AllergyCur.Reaction = reactionTextBox.Text;
-            AllergyCur.SnomedReaction = snomedReaction?.SnomedCode ?? "";
-            AllergyCur.StatusIsActive = activeCheckBox.Checked;
+            Allergy.DateAdverseReaction = dateTime;
+            Allergy.AllergyDefNum = allergiesList[allergyComboBox.SelectedIndex].Id;
+            Allergy.Reaction = reactionTextBox.Text;
+            Allergy.SnomedReaction = snomedReaction?.SnomedCode ?? "";
+            Allergy.StatusIsActive = activeCheckBox.Checked;
 
-            if (AllergyCur.IsNew)
+            if (Allergy.IsNew)
             {
-                Allergies.Insert(AllergyCur);
+                Allergies.Insert(Allergy);
 
                 SecurityLogs.MakeLogEntry(
                     Permissions.PatAllergyListEdit, 
-                    AllergyCur.PatNum,
+                    Allergy.PatNum,
                     string.Format(
                         Translation.LanguageSecurity.GenericItemAdded,
-                        AllergyDefs.GetDescription(AllergyCur.AllergyDefNum)));
+                        AllergyDefs.GetDescription(Allergy.AllergyDefNum)));
             }
             else
             {
-                Allergies.Update(AllergyCur);
+                Allergies.Update(Allergy);
 
                 SecurityLogs.MakeLogEntry(
                     Permissions.PatAllergyListEdit, 
-                    AllergyCur.PatNum,
+                    Allergy.PatNum,
                     string.Format(
                         Translation.LanguageSecurity.GenericItemModified,
-                        AllergyDefs.GetDescription(AllergyCur.AllergyDefNum)));
+                        AllergyDefs.GetDescription(Allergy.AllergyDefNum)));
             }
 
             DialogResult = DialogResult.OK;

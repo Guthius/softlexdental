@@ -1,5 +1,15 @@
+/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
 using OpenDentBusiness;
 using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace OpenDental
@@ -10,7 +20,6 @@ namespace OpenDental
         /// Initializes a new instance of the <see cref="FormAccountingLock"/> class.
         /// </summary>
         public FormAccountingLock() => InitializeComponent();
-        
 
         /// <summary>
         /// Loads the form.
@@ -19,29 +28,44 @@ namespace OpenDental
         {
             if (Preference.GetDate(PreferenceName.AccountingLockDate).Year > 1880)
             {
-                textDate.Text = Preference.GetDate(PreferenceName.AccountingLockDate).ToShortDateString();
+                dateTextBox.Text = Preference.GetDate(PreferenceName.AccountingLockDate).ToShortDateString();
+            }
+        }
+
+        /// <summary>
+        /// Check whether the user has entered a valid date.
+        /// </summary>
+        void DateTextBox_Validating(object sender, CancelEventArgs e)
+        {
+            if (DateTime.TryParse(dateTextBox.Text, out var dateTime))
+            {
+                dateTextBox.Text = dateTime.ToShortDateString();
+            }
+            else
+            {
+                dateTextBox.Text = "";
             }
         }
 
         /// <summary>
         /// Updates the lock date and closes the form.
         /// </summary>
-        void acceptButton_Click(object sender, System.EventArgs e)
+        void AcceptButton_Click(object sender, EventArgs e)
         {
-            if (textDate.errorProvider1.GetError(textDate) != "")
+            if (!DateTime.TryParse(dateTextBox.Text, out var dateTime))
             {
                 MessageBox.Show(
-                    "Please fix error first.",
-                    "Lock Accounting", 
-                    MessageBoxButtons.OK, 
+                    "Please enter a valid date.",
+                    "Lock Accounting",
+                    MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
 
-                textDate.Focus();
+                dateTextBox.Focus();
 
                 return;
             }
 
-            if (Preference.Update(PreferenceName.AccountingLockDate, POut.Date(PIn.Date(textDate.Text), false)))
+            if (Preference.Update(PreferenceName.AccountingLockDate, dateTime))
             {
                 DataValid.SetInvalid(InvalidType.Prefs);
             }

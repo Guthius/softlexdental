@@ -5,19 +5,17 @@
         /// <summary>
         /// Required designer variable.
         /// </summary>
-        private System.ComponentModel.Container components = null;
+        private System.ComponentModel.IContainer components = null;
 
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (disposing && (components != null))
             {
-                if (components != null)
-                {
-                    components.Dispose();
-                }
+                components.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -59,7 +57,7 @@
             this.typeLabel.AutoSize = true;
             this.typeLabel.Location = new System.Drawing.Point(162, 48);
             this.typeLabel.Name = "typeLabel";
-            this.typeLabel.Size = new System.Drawing.Size(32, 15);
+            this.typeLabel.Size = new System.Drawing.Size(31, 15);
             this.typeLabel.TabIndex = 2;
             this.typeLabel.Text = "Type";
             this.typeLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -148,12 +146,14 @@
             // 
             // colorButton
             // 
+            this.colorButton.BackColor = System.Drawing.Color.White;
             this.colorButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.colorButton.Location = new System.Drawing.Point(200, 185);
             this.colorButton.Margin = new System.Windows.Forms.Padding(3, 10, 3, 3);
             this.colorButton.Name = "colorButton";
             this.colorButton.Size = new System.Drawing.Size(30, 25);
             this.colorButton.TabIndex = 8;
+            this.colorButton.UseVisualStyleBackColor = false;
             this.colorButton.Click += new System.EventHandler(this.ColorButton_Click);
             // 
             // colorLabel
@@ -183,19 +183,20 @@
             this.Controls.Add(this.descriptionLabel);
             this.Controls.Add(this.acceptButton);
             this.Controls.Add(this.cancelButton);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormAccountEdit";
             this.ShowInTaskbar = false;
-            this.Text = "Edit Account";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Account";
             this.Load += new System.EventHandler(this.FormAccountEdit_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
         #endregion
-
 
         private System.Windows.Forms.Label descriptionLabel;
         private System.Windows.Forms.Label typeLabel;

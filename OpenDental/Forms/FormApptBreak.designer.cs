@@ -95,7 +95,7 @@ namespace OpenDental
             this.unscheduledListButton.TabIndex = 1;
             this.unscheduledListButton.Text = "Send to Unscheduled List";
             this.unscheduledListButton.UseVisualStyleBackColor = true;
-            this.unscheduledListButton.Click += new System.EventHandler(this.unscheduledListButton_Click);
+            this.unscheduledListButton.Click += new System.EventHandler(this.UnscheduledListButton_Click);
             // 
             // pinboardButton
             // 
@@ -107,7 +107,7 @@ namespace OpenDental
             this.pinboardButton.TabIndex = 2;
             this.pinboardButton.Text = "Copy to Pinboard";
             this.pinboardButton.UseVisualStyleBackColor = true;
-            this.pinboardButton.Click += new System.EventHandler(this.pinboardButton_Click);
+            this.pinboardButton.Click += new System.EventHandler(this.PinboardButton_Click);
             // 
             // appointmentBookButton
             // 
@@ -119,7 +119,7 @@ namespace OpenDental
             this.appointmentBookButton.TabIndex = 3;
             this.appointmentBookButton.Text = "Leave on Appt Book";
             this.appointmentBookButton.UseVisualStyleBackColor = true;
-            this.appointmentBookButton.Click += new System.EventHandler(this.appointmentBookButton_Click);
+            this.appointmentBookButton.Click += new System.EventHandler(this.AppointmentBookButton_Click);
             // 
             // FormApptBreak
             // 
@@ -135,6 +135,7 @@ namespace OpenDental
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "FormApptBreak";
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Broken Appointment";
             this.Load += new System.EventHandler(this.FormApptBreak_Load);
             this.typeGroupBox.ResumeLayout(false);

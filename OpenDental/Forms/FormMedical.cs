@@ -1785,14 +1785,14 @@ namespace OpenDental{
 
 		private void gridAllergies_CellDoubleClick(object sender,ODGridClickEventArgs e) {
 			FormAllergyEdit FAE=new FormAllergyEdit();
-			FAE.AllergyCur=allergyList[gridAllergies.GetSelectedIndex()];
+			FAE.Allergy=allergyList[gridAllergies.GetSelectedIndex()];
 			FAE.ShowDialog();
 			if(FAE.DialogResult==DialogResult.OK 
 				&& CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS 
 				&& CDSPermissions.GetForUser(Security.CurUser.UserNum).AllergyCDS) 
 			{
 				FormCDSIntervention FormCDSI=new FormCDSIntervention();
-				FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(AllergyDefs.GetOne(FAE.AllergyCur.AllergyDefNum),PatCur);
+				FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(AllergyDefs.GetOne(FAE.Allergy.AllergyDefNum),PatCur);
 				FormCDSI.ShowIfRequired(false);
 			}
 			FillAllergies();
@@ -1804,17 +1804,17 @@ namespace OpenDental{
 
 		private void butAddAllergy_Click(object sender,EventArgs e) {
 			FormAllergyEdit formA=new FormAllergyEdit();
-			formA.AllergyCur=new Allergy();
-			formA.AllergyCur.StatusIsActive=true;
-			formA.AllergyCur.PatNum=PatCur.PatNum;
-			formA.AllergyCur.IsNew=true;
+			formA.Allergy=new Allergy();
+			formA.Allergy.StatusIsActive=true;
+			formA.Allergy.PatNum=PatCur.PatNum;
+			formA.Allergy.IsNew=true;
 			formA.ShowDialog();
 			if(formA.DialogResult!=DialogResult.OK) {
 				return;
 			}
 			if(CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowCDS && CDSPermissions.GetForUser(Security.CurUser.UserNum).AllergyCDS) {
 				FormCDSIntervention FormCDSI=new FormCDSIntervention();
-				FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(AllergyDefs.GetOne(formA.AllergyCur.AllergyDefNum),PatCur);
+				FormCDSI.ListCDSI=EhrTriggers.TriggerMatch(AllergyDefs.GetOne(formA.Allergy.AllergyDefNum),PatCur);
 				FormCDSI.ShowIfRequired(false);
 			}
 			FillAllergies();

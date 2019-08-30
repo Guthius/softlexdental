@@ -53,7 +53,7 @@ namespace OpenDental
             this.snomedNoneButton.Size = new System.Drawing.Size(60, 25);
             this.snomedNoneButton.TabIndex = 5;
             this.snomedNoneButton.Text = "None";
-            this.snomedNoneButton.Click += new System.EventHandler(this.snomedNoneButton_Click);
+            this.snomedNoneButton.Click += new System.EventHandler(this.SnomedNoneButton_Click);
             // 
             // snomedBrowseButton
             // 
@@ -63,7 +63,7 @@ namespace OpenDental
             this.snomedBrowseButton.Name = "snomedBrowseButton";
             this.snomedBrowseButton.Size = new System.Drawing.Size(30, 25);
             this.snomedBrowseButton.TabIndex = 4;
-            this.snomedBrowseButton.Click += new System.EventHandler(this.snomedBrowseButton_Click);
+            this.snomedBrowseButton.Click += new System.EventHandler(this.SnomedBrowseButton_Click);
             // 
             // snomedLabel
             // 
@@ -174,7 +174,7 @@ namespace OpenDental
             this.acceptButton.Size = new System.Drawing.Size(110, 30);
             this.acceptButton.TabIndex = 12;
             this.acceptButton.Text = "&OK";
-            this.acceptButton.Click += new System.EventHandler(this.acceptButton_Click);
+            this.acceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
             // 
             // deleteButton
             // 
@@ -188,7 +188,7 @@ namespace OpenDental
             this.deleteButton.Text = "&Delete";
             this.deleteButton.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.deleteButton.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.deleteButton.Click += new System.EventHandler(this.deleteButton_Click);
+            this.deleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
             // FormAllergyEdit
             // 
