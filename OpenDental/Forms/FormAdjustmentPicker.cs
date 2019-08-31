@@ -1,3 +1,12 @@
+/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
 using OpenDental.UI;
 using OpenDentBusiness;
 using System;
@@ -9,90 +18,79 @@ namespace OpenDental
 {
     public partial class FormAdjustmentPicker : FormBase
     {
-        bool _isUnattachedMode;
-        long _patNum;
-        List<Adjustment> _listAdjustments;
-        List<Adjustment> _listAdjustmentsFiltered;
+        readonly bool unattachedMode;
+        readonly long patientId;
+        List<Adjustment> adjustmentList;
+        List<Adjustment> adjustmentListFiltered;
 
         public Adjustment SelectedAdjustment;
 
-        public FormAdjustmentPicker(long patNum, bool isUnattachedMode = false, List<Adjustment> listAdjustments = null)
+        public FormAdjustmentPicker(long patientId, bool unattachedMode = false, List<Adjustment> adjustmentList = null)
         {
             InitializeComponent();
 
-            _patNum = patNum;
-            _isUnattachedMode = isUnattachedMode;
-            _listAdjustments = listAdjustments;
+            this.patientId = patientId;
+            this.unattachedMode = unattachedMode;
+            this.adjustmentList = adjustmentList;
         }
 
-        private void FormAdjustmentPicker_Load(object sender, EventArgs e)
+        void LoadAdjustments()
         {
-            if (_isUnattachedMode)
+            adjustmentListFiltered = adjustmentList;
+            if (unattachedCheckBox.Checked)
             {
-                checkUnattached.Checked = true;
-                checkUnattached.Enabled = false;
-            }
-            if (_listAdjustments == null)
-            {
-                _listAdjustments = Adjustments.Refresh(_patNum).ToList();
-            }
-            FillGrid();
-        }
-
-        void FillGrid()
-        {
-            _listAdjustmentsFiltered = _listAdjustments;
-            if (checkUnattached.Checked)
-            {
-                _listAdjustmentsFiltered = _listAdjustments.FindAll(x => x.ProcNum == 0);
+                adjustmentListFiltered = adjustmentList.FindAll(x => x.ProcNum == 0);
             }
 
-            gridMain.BeginUpdate();
-            gridMain.Columns.Clear();
-            gridMain.Columns.Add(new ODGridColumn("Date", 90));
-            gridMain.Columns.Add(new ODGridColumn("PatNum", 100));
-            gridMain.Columns.Add(new ODGridColumn("Type", 120));
-            gridMain.Columns.Add(new ODGridColumn("Amount", 70));
-            gridMain.Columns.Add(new ODGridColumn("Has Proc", 0, HorizontalAlignment.Center));
-            gridMain.Rows.Clear();
+            adjustmentGrid.BeginUpdate();
+            adjustmentGrid.Columns.Clear();
+            adjustmentGrid.Columns.Add(new ODGridColumn("Date", 90));
+            adjustmentGrid.Columns.Add(new ODGridColumn("PatNum", 100));
+            adjustmentGrid.Columns.Add(new ODGridColumn("Type", 120));
+            adjustmentGrid.Columns.Add(new ODGridColumn("Amount", 70));
+            adjustmentGrid.Columns.Add(new ODGridColumn("Has Proc", 0, HorizontalAlignment.Center));
+            adjustmentGrid.Rows.Clear();
 
-            foreach (Adjustment adjCur in _listAdjustmentsFiltered)
+            foreach (var adjustment in adjustmentListFiltered)
             {
                 var row = new ODGridRow();
 
-                row.Cells.Add(adjCur.AdjDate.ToShortDateString());
-                row.Cells.Add(adjCur.PatNum.ToString());
-                row.Cells.Add(Defs.GetName(DefinitionCategory.AdjTypes, adjCur.AdjType));
-                row.Cells.Add(adjCur.AdjAmt.ToString("F"));
-                if (adjCur.ProcNum != 0)
-                {
-                    row.Cells.Add("X");
-                }
-                else
-                {
-                    row.Cells.Add("");
-                }
-                row.Tag = adjCur;
+                row.Cells.Add(adjustment.AdjDate.ToShortDateString());
+                row.Cells.Add(adjustment.PatNum.ToString());
+                row.Cells.Add(Defs.GetName(DefinitionCategory.AdjTypes, adjustment.AdjType));
+                row.Cells.Add(adjustment.AdjAmt.ToString("F"));
+                row.Cells.Add(adjustment.ProcNum != 0 ? "X" : "");
+                row.Tag = adjustment;
 
-                gridMain.Rows.Add(row);
+                adjustmentGrid.Rows.Add(row);
             }
-            gridMain.EndUpdate();
+            adjustmentGrid.EndUpdate();
         }
 
-        private void checkUnattached_Click(object sender, EventArgs e)
+        void FormAdjustmentPicker_Load(object sender, EventArgs e)
         {
-            FillGrid();
+            if (unattachedMode)
+            {
+                unattachedCheckBox.Checked = true;
+                unattachedCheckBox.Enabled = false;
+            }
+
+            if (adjustmentList == null)
+            {
+                adjustmentList = Adjustments.Refresh(patientId).ToList();
+            }
+
+            LoadAdjustments();
         }
 
-        private void gridMain_CellDoubleClick(object sender, ODGridClickEventArgs e)
+        void AdjustmentGrid_CellDoubleClick(object sender, ODGridClickEventArgs e) => AcceptButton_Click(this, EventArgs.Empty);
+        
+        void UnattachedCheckBox_Click(object sender, EventArgs e) => LoadAdjustments();
+        
+        void AcceptButton_Click(object sender, EventArgs e)
         {
-            SelectedAdjustment = _listAdjustmentsFiltered[gridMain.GetSelectedIndex()];
-            DialogResult = DialogResult.OK;
-        }
+            SelectedAdjustment = adjustmentListFiltered[adjustmentGrid.GetSelectedIndex()];
 
-        private void butOK_Click(object sender, EventArgs e)
-        {
-            SelectedAdjustment = _listAdjustmentsFiltered[gridMain.GetSelectedIndex()];
             DialogResult = DialogResult.OK;
         }
     }
