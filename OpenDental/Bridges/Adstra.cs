@@ -1,53 +1,51 @@
-using System;
-using System.Collections;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Windows.Forms;
 using OpenDentBusiness;
+using System;
+using System.Diagnostics;
+using System.Windows.Forms;
 
-namespace OpenDental.Bridges{
-	public class Adstra {
+namespace OpenDental.Bridges
+{
+    public static class Adstra
+    {
+        public static void SendData(Program program, Patient patient)
+        {
+            string path = Programs.GetProgramPath(program);
+            if (patient == null)
+            {
+                MessageBox.Show(
+                    Translation.Language.PleaseSelectAPatientFirst, 
+                    "Adstra", 
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
 
-		///<summary></summary>
-		public Adstra(){
-			
-		}
+                return;
+            }
 
-		///<summary></summary>
-		public static void SendData(Program ProgramCur,Patient pat) {
-			string path=Programs.GetProgramPath(ProgramCur);
-			if(pat==null) {
-				MsgBox.Show("Adstra","Please select a patient first.");
-				return;
-			}
-			string str="";
-			str+=Tidy(pat.LName)+",";
-			str+=Tidy(pat.FName)+",";
-			if(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0"){
-				str+=pat.PatNum.ToString()+",,";
-			}
-			else{
-				str+=","+Tidy(pat.ChartNumber)+",";
-			}
-			//If birthdates are optional, only send them if they are valid.
-			str+=pat.Birthdate.ToString("yyyy/MM/dd"); //changed to match bridge format. Was MM/dd/yyy
-			try {
-				Process.Start(path,str);
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
-			}
-		}
+            string payload = Tidy(patient.LName) + "," + Tidy(patient.FName) + ",";
+            if (ProgramProperties.GetPropVal(program.ProgramNum, "Enter 0 to use PatientNum, or 1 to use ChartNum") == "0")
+            {
+                payload += patient.PatNum.ToString() + ",,";
+            }
+            else
+            {
+                payload += "," + Tidy(patient.ChartNumber) + ",";
+            }
+            payload += patient.Birthdate.ToString("yyyy/MM/dd");
 
-		///<summary>Removes semicolons and spaces.</summary>
-		private static string Tidy(string input) {
-			string retVal=input.Replace(";","");//get rid of any semicolons.
-			retVal=retVal.Replace(" ","");
-			return retVal;
-		}
+            try
+            {
+                Process.Start(path, payload);
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(
+                    exception.Message, 
+                    "Adstra", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+            }
+        }
 
-	}
+        private static string Tidy(string input) => input.Replace(";", "").Replace(" ", "");
+    }
 }
-

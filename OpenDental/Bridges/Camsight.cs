@@ -1,78 +1,81 @@
+using OpenDentBusiness;
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
-using OpenDentBusiness;
 
-namespace OpenDental.Bridges{
-	/// <summary></summary>
-	public class Camsight{
+namespace OpenDental.Bridges
+{
+    public static class Camsight
+    {
+        public static void SendData(Program program, Patient patient)
+        {
+            string programPath = Programs.GetProgramPath(program);
 
-		/// <summary></summary>
-		public Camsight() {
-			
-		}
+            //usage: C:\cdm\cdm\cdmx\cdmx.exe ;patID;fname;lname;SSN;birthdate
+            //example: ;5001;John;Smith;123456789;01012000
+            //We did not get this information from Camsight.
 
-		///<summary>Launches the program using command line.</summary>
-		public static void SendData(Program ProgramCur, Patient pat){
-			string path=Programs.GetProgramPath(ProgramCur);
-			//usage: C:\cdm\cdm\cdmx\cdmx.exe ;patID;fname;lname;SSN;birthdate
-			//example: ;5001;John;Smith;123456789;01012000
-			//We did not get this information from Camsight.
-			if(pat==null){
-				MsgBox.Show("Camsight","Please select a patient first.");
-				return;
-			}
-			if(!File.Exists(path)){
-				MessageBox.Show(path+" not found.");
-				return;
-			}
-			//List<ProgramProperty> listForProgram=ProgramProperties.GetListForProgram(ProgramCur.ProgramNum);
-			string info=";";
-			if(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="1") {
-				if(pat.ChartNumber=="") {
-					MsgBox.Show("Camsight","This patient has no ChartNumber entered.");
-					return;
-				}
-				info+=pat.ChartNumber;
-			}
-			else {
-				info+=pat.PatNum.ToString();
-			}
-			info+=";"+Tidy(pat.FName)
-				+";"+Tidy(pat.LName)
-				+";"+pat.SSN//dashes already missing
-				+";"+pat.Birthdate.ToString("MM/dd/yyyy");
-			Process process=new Process();
-			process.StartInfo=new ProcessStartInfo(path,info);
-			try{
-				process.Start();
-			}
-			catch(Exception ex){
-				MessageBox.Show(ex.Message);
-			}
-		}
+            if (patient == null)
+            {
+                MessageBox.Show(
+                    Translation.Language.PleaseSelectAPatientFirst,
+                    "Camsight",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
 
-		///<summary>Removes semicolons and spaces.</summary>
-		private static string Tidy(string input){
-			string retVal=input.Replace(";","");//get rid of any semicolons.
-			retVal=retVal.Replace(" ","");
-			return retVal;
-		}
+                return;
+            }
 
-	}
+            if (!File.Exists(programPath))
+            {
+                MessageBox.Show(
+                    string.Format(Translation.Language.BridgeExecutableNotFound, programPath),
+                    "Camsight",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            //List<ProgramProperty> listForProgram=ProgramProperties.GetListForProgram(ProgramCur.ProgramNum);
+
+            string payload = ";";
+            if (ProgramProperties.GetPropVal(program.ProgramNum, "Enter 0 to use PatientNum, or 1 to use ChartNum") == "1")
+            {
+                if (patient.ChartNumber == "")
+                {
+                    MessageBox.Show(
+                        "This patient has no ChartNumber entered.", 
+                        "Camsight", 
+                        MessageBoxButtons.OK, 
+                        MessageBoxIcon.Information);
+
+                    return;
+                }
+                payload += patient.ChartNumber;
+            }
+            else
+            {
+                payload += patient.PatNum.ToString();
+            }
+
+            payload +=  
+                ";" + Tidy(patient.FName) + 
+                ";" + Tidy(patient.LName) + 
+                ";" + patient.SSN + 
+                ";" + patient.Birthdate.ToString("MM/dd/yyyy");
+
+            try
+            {
+                Process.Start(programPath, payload);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private static string Tidy(string input) => input.Replace(";", "").Replace(" ", "");
+    }
 }
-
-
-
-
-
-
-
-
-
-

@@ -1,67 +1,62 @@
-using System;
-using System.Collections;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Windows.Forms;
 using OpenDentBusiness;
+using System.Diagnostics;
+using System.Windows.Forms;
 
-namespace OpenDental.Bridges{
-	/// <summary></summary>
-	public class BioPAK{
+namespace OpenDental.Bridges
+{
+    public static class BioPAK
+    {
+        public static void SendData(Program program, Patient patient)
+        {
+            var programPath = Programs.GetProgramPath(program);
+            if (patient == null)
+            {
+                // Should start rayMage without bringing up a pt.
+                try
+                {
+                    Process.Start(programPath);
+                }
+                catch
+                {
+                    MessageBox.Show(
+                        programPath + " is not available.",
+                        "BioPAK",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                string payload = " -n";
+                if (ProgramProperties.GetPropVal(program.ProgramNum, "Enter 0 to use PatientNum, or 1 to use ChartNum") == "0")
+                {
+                    payload += patient.PatNum.ToString();
+                }
+                else
+                {
+                    payload += patient.ChartNumber;
+                }
+                payload += " -l" + patient.LName.Replace(" ", "").Replace("\"", "") + " -f" + patient.FName.Replace(" ", "").Replace("\"", "") + " -i" + patient.MiddleI.Replace(" ", "").Replace("\"", "");
+                payload += " -s" + (patient.Gender == PatientGender.Female ? 'F' : 'M');
 
-		/// <summary></summary>
-		public BioPAK() {
-			
-		}
+                if (patient.Birthdate.Year > 1880)
+                {
+                    payload += " -m" + patient.Birthdate.Month + " -d" + patient.Birthdate.Day + " -y" + patient.Birthdate.Year;
+                }
 
-		public static void SendData(Program ProgramCur,Patient pat) {
-			string path=Programs.GetProgramPath(ProgramCur);
-			if(pat==null) {
-				try {
-					Process.Start(path);//should start rayMage without bringing up a pt.
-				}
-				catch {
-					MessageBox.Show(path+" is not available.");
-				}
-			}
-			else {
-				string info=" -n";
-				if(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0"){
-					info+=pat.PatNum.ToString();
-				}
-				else{
-					info+=pat.ChartNumber;
-				}
-				info+=" -l"+pat.LName.Replace(" ","").Replace("\"","")+" -f"+pat.FName.Replace(" ","").Replace("\"","")+" -i"+pat.MiddleI.Replace(" ","").Replace("\"","");
-				if(pat.Gender==PatientGender.Female) {
-					info+=" -sF";
-				}
-				else if(pat.Gender==PatientGender.Male) { 
-					info+=" -sM";
-				}
-				if(pat.Birthdate.Year>1880) {
-					info+=" -m"+pat.Birthdate.Month+" -d"+pat.Birthdate.Day+" -y"+pat.Birthdate.Year;
-				}
-				try {
-					Process.Start(path,ProgramCur.CommandLine+info);
-				}
-				catch {
-					MessageBox.Show(path+" is not available, or there is an error in the command line options.");
-				}
-			}
-		}
-
-	}
+                try
+                {
+                    Process.Start(programPath, program.CommandLine + payload);
+                }
+                catch
+                {
+                    MessageBox.Show(
+                        programPath + " is not available, or there is an error in the command line options.",
+                        "BioPAK", 
+                        MessageBoxButtons.OK, 
+                        MessageBoxIcon.Error);
+                }
+            }
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-

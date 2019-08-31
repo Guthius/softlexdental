@@ -208,6 +208,24 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} is not available, or there is an error in the command line options..
+        /// </summary>
+        public static string BridgeExecutableNotAvailable {
+            get {
+                return ResourceManager.GetString("BridgeExecutableNotAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} not found..
+        /// </summary>
+        public static string BridgeExecutableNotFound {
+            get {
+                return ResourceManager.GetString("BridgeExecutableNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string ButtonCancel {
@@ -1293,6 +1311,15 @@ namespace OpenDental.Translation {
         public static string PleaseSelectAnEmailMessage {
             get {
                 return ResourceManager.GetString("PleaseSelectAnEmailMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select a patient first..
+        /// </summary>
+        public static string PleaseSelectAPatientFirst {
+            get {
+                return ResourceManager.GetString("PleaseSelectAPatientFirst", resourceCulture);
             }
         }
         
