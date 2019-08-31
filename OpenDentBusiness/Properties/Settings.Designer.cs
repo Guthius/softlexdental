@@ -12,7 +12,7 @@ namespace OpenDentBusiness.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.2.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -26,40 +26,10 @@ namespace OpenDentBusiness.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost/OpenDentalServer/ServiceMain.asmx")]
-        public string OpenDentBusiness_OpenDentalServer_ServiceMain {
-            get {
-                return ((string)(this["OpenDentBusiness_OpenDentalServer_ServiceMain"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost/OpenDentalWebServiceHQ/webservicemainhq.asmx")]
-        public string OpenDentBusiness_WebServiceMainHQ_WebServiceMainHQ {
-            get {
-                return ((string)(this["OpenDentBusiness_WebServiceMainHQ_WebServiceMainHQ"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
         [global::System.Configuration.DefaultSettingValueAttribute("http://50.201.161.44:1942/WebServiceCustomerUpdates/Service1.asmx")]
         public string OpenDentBusiness_customerupdates_Service1 {
             get {
                 return ((string)(this["OpenDentBusiness_customerupdates_Service1"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:3824/Service1.asmx")]
-        public string OpenDentBusiness_localhost_Service1 {
-            get {
-                return ((string)(this["OpenDentBusiness_localhost_Service1"]));
             }
         }
         
@@ -116,20 +86,20 @@ namespace OpenDentBusiness.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:2923/SheetsSynch.asmx")]
-        public string OpenDentBusiness_SheetsSynch_SheetsSynch {
+        [global::System.Configuration.DefaultSettingValueAttribute("https://prelive2.dentalxchange.com:443/dea/DeaPartnerService")]
+        public string OpenDentBusiness_DentalxchangePartnerService_DeaPartnerService {
             get {
-                return ((string)(this["OpenDentBusiness_SheetsSynch_SheetsSynch"]));
+                return ((string)(this["OpenDentBusiness_DentalxchangePartnerService_DeaPartnerService"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://prelive2.dentalxchange.com:443/dea/DeaPartnerService")]
-        public string OpenDentBusiness_DentalxchangePartnerService_DeaPartnerService {
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:2923/SheetsSynch.asmx")]
+        public string OpenDentBusiness_SheetsSynch_SheetsSynch {
             get {
-                return ((string)(this["OpenDentBusiness_DentalxchangePartnerService_DeaPartnerService"]));
+                return ((string)(this["OpenDentBusiness_SheetsSynch_SheetsSynch"]));
             }
         }
     }

@@ -14,7 +14,6 @@ using System.Xml;
 
 namespace OpenDentBusiness
 {
-
     public class DoseSpot
     {
 
@@ -59,7 +58,7 @@ namespace OpenDentBusiness
             {
                 root = new OIDExternal();
                 root.IDType = IdentifierType.Root;
-                root.rootExternal = OIDInternals.OpenDentalOID + "." + _doseSpotPatNum + "." + OIDInternals.CustomerPatNum;
+                root.rootExternal = OIDInternals.OpenDentalOID + "." + _doseSpotPatNum + "." + "0"; // TODO: OIDInternals.CustomerPatNum;
                 OIDExternals.Insert(root);
             }
             return root.rootExternal;
@@ -69,7 +68,7 @@ namespace OpenDentBusiness
         public static OIDExternal GetDoseSpotPatID(long patNum)
         {
             //No remoting role check needed
-            return OIDExternals.GetOidExternal(GetDoseSpotRoot() + "." + POut.Int((int)IdentifierType.Patient), patNum, IdentifierType.Patient);
+            return OIDExternals.GetOidExternal(GetDoseSpotRoot() + "." + (int)IdentifierType.Patient, patNum, IdentifierType.Patient);
         }
 
         ///<summary>Gets the OIDExternal corresponding to Dose Spot oid given.  Returns null if no match found.
@@ -828,13 +827,10 @@ namespace OpenDentBusiness
                 }
                 writer.WriteEndElement();//End ErxAccessRequest
             }
-#if DEBUG
-            OpenDentBusiness.localhost.Service1 updateService = new OpenDentBusiness.localhost.Service1();
 
-#else
 			OpenDentBusiness.customerUpdates.Service1 updateService=new OpenDentBusiness.customerUpdates.Service1();
-			updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
-#endif
+			updateService.Url=Preference.GetString(PreferenceName.UpdateServerAddress);
+
             try
             {
                 string result = updateService.GetClinicErxAccess(strbuild.ToString());

@@ -403,7 +403,6 @@
     <Compile Include="WebBridges\AvaTax.cs" />
     <Compile Include="WebBridges\PDMP\PDMP.cs" />
     <Compile Include="WebBridges\PDMP\PDMPScript.cs" />
-    <Compile Include="WebServices\CustomerUpdatesProxy.cs" />
     <Compile Include="Misc\IFileAtoZ.cs" />
     <Compile Include="TableTypes\CommOptOut.cs" />
     <Compile Include="TableTypes\DbmLog.cs" />
@@ -1362,16 +1361,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="Web References\localhost\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
-    <Compile Include="Web References\WebServiceMainHQ\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
     <Compile Include="WebBridges\CloudStorage.cs" />
     <Compile Include="WebBridges\Dropbox.cs" />
     <Compile Include="WebBridges\Erx\DoseSpot.cs" />
@@ -1584,11 +1573,6 @@
     <Compile Include="Data\0_READY\UserGroup.cs" />
     <Compile Include="TableTypes\UserQuery.cs" />
     <Compile Include="TableTypes\ZipCode.cs" />
-    <Compile Include="Web References\OpenDentalServer\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
     <Compile Include="X12\X12object.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -1819,11 +1803,6 @@
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Web References\localhost\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\localhost\Service1.wsdl" />
     <None Include="Web References\PayConnectService\batchInfoResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -1855,37 +1834,8 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Web References\SheetsSynch\SheetsSynch.wsdl" />
-    <None Include="Web References\WebServiceMainHQ\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\WebServiceMainHQ\WebServiceMainHQ.wsdl">
-      <SubType>Designer</SubType>
-    </None>
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="http://localhost/OpenDentalServer/ServiceMain.asmx">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\OpenDentalServer\</RelPath>
-      <UpdateFromURL>http://localhost/OpenDentalServer/ServiceMain.asmx</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>OpenDentBusiness_OpenDentalServer_ServiceMain</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="http://localhost/OpenDentalWebServiceHQ/webservicemainhq.asmx">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\WebServiceMainHQ\</RelPath>
-      <UpdateFromURL>http://localhost/OpenDentalWebServiceHQ/webservicemainhq.asmx</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>OpenDentBusiness_WebServiceMainHQ_WebServiceMainHQ</CachedSettingsPropName>
-    </WebReferenceUrl>
     <WebReferenceUrl Include="http://50.201.161.44:1942/WebServiceCustomerUpdates/Service1.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\customerUpdates\</RelPath>
@@ -1907,17 +1857,6 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>OpenDentBusiness_SheetsSynch_SheetsSynch</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="http://localhost:3824/Service1.asmx">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\localhost\</RelPath>
-      <UpdateFromURL>http://localhost:3824/Service1.asmx</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>OpenDentBusiness_localhost_Service1</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="https://its.changehealthcare.com/ITS/ITSWS.asmx%3fwsdl">
       <UrlBehavior>Dynamic</UrlBehavior>
@@ -1992,12 +1931,6 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Resources\rxnorm.zip" />
-    <None Include="Web References\OpenDentalServer\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\OpenDentalServer\ServiceMain.disco" />
-    <None Include="Web References\OpenDentalServer\ServiceMain.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icd9.txt" />
@@ -2012,13 +1945,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Web References\WebServiceMainHQ\WebServiceMainHQ.disco" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Web References\customerUpdates\Service1.disco" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Web References\localhost\Service1.disco" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Right.gif" />

@@ -1620,305 +1620,304 @@ namespace OpenDentBusiness.Eclaims
         public static string PassToIca(string msgText, Clearinghouse clearinghouseClin, CanadianNetwork network, bool isAutomatic, out string errorMsg)
         {
             errorMsg = "";
-            if (clearinghouseClin == null)
-            {
-                errorMsg = Lans.g("Canadian", "A CDAnet compatible clearinghouse could not be found.");
-                return "";//Return empty response, since we never received one.
-            }
-            bool isItrans = (clearinghouseClin.CommBridge == EclaimsCommBridge.ITRANS);
-            bool isClaimstream = (clearinghouseClin.CommBridge == EclaimsCommBridge.Claimstream);
-            string saveFolder = clearinghouseClin.ExportPath;
-            if (isClaimstream)
-            {
-                DirectoryInfo dirInfo = new DirectoryInfo(saveFolder);
-                if (dirInfo.Name == "abc")
-                {//Is pointing to the "abc" sub-folder.
-                 //For backwards compatibility, if the export path is pointing to the "abc" sub-folder,
-                 //then automatically move up one directory to the parent directory before deciding which sub-folder to use (see below for sub-folder).
-                    saveFolder = dirInfo.Parent.FullName;
-                }
-                string subDir = "";
-                if (network.Abbrev == "ABC")
-                {//Alberta Blue Cross
-                    subDir = "abc";
-                }
-                else if (network.Abbrev == "TELUS A")
-                {
-                    subDir = "telusa";
-                }
-                else if (network.Abbrev == "TELUS B")
-                {
-                    subDir = "telusb";
-                }
-                else
-                {
-                    errorMsg = Lans.g("Canadian", "ClaimStream does not support this transaction for network") + " " + network.Descript;
-                    return "";//Return empty response, since we never received one.
-                }
-                saveFolder = ODFileUtils.CombinePaths(saveFolder, subDir);
-            }
-            if (!Directory.Exists(saveFolder))
-            {
-                errorMsg = saveFolder + " " + Lans.g("Canadian", "not found.");
-                return "";//Return empty response, since we never received one.
-            }
-            if (isClaimstream)
-            {
-                string certFileName = "";
-                if (network.Abbrev == "ABC")
-                {//Alberta Blue Cross
-                    certFileName = "OPENDENTAL.pem";
-                }
-                else if (network.Abbrev == "TELUS A" || network.Abbrev == "TELUS B")
-                {
-#if DEBUG
-                    certFileName = "OD_2018-02-26_2023-03-02_staging.pem";
-#else
-					certFileName="OD_2018-05-17_2023-05-21_prod.pem";
-#endif
-                }
-                string certFilePath = ODFileUtils.CombinePaths(saveFolder, certFileName);
-                if (!File.Exists(certFilePath))
-                {
-                    byte[] arrayCertFileBytes = null;
-                    try
-                    {
-                        XmlWriterSettings settings = new XmlWriterSettings();
-                        settings.Indent = true;
-                        settings.IndentChars = ("    ");
-                        StringBuilder strbuild = new StringBuilder();
-                        using (XmlWriter writer = XmlWriter.Create(strbuild, settings))
-                        {
-                            writer.WriteElementString("RegistrationKey", Preference.GetString(PreferenceName.RegistrationKey));
-                        }
-                        string response = null;
-                        if (network.Abbrev == "ABC")
-                        {//Alberta Blue Cross
-                            response = CustomerUpdatesProxy.GetWebServiceInstance().RequestCertCanadaABC(strbuild.ToString());
-                        }
-                        else if (network.Abbrev == "TELUS A" || network.Abbrev == "TELUS B")
-                        {
-#if DEBUG
-                            response = CustomerUpdatesProxy.GetWebServiceInstance().RequestCertCanadaTelusAandBtest(strbuild.ToString());
-#else
-							response=CustomerUpdatesProxy.GetWebServiceInstance().RequestCertCanadaTelusAandB(strbuild.ToString());
-#endif
-                        }
-                        XmlDocument doc = new XmlDocument();
-                        doc.LoadXml(response);
-                        XmlNode node = doc.SelectSingleNode("//Error");
-                        if (node != null)
-                        {
-                            errorMsg = node.InnerText;
-                            return "";//Return empty response, since we never received one.
-                        }
-                        node = doc.SelectSingleNode("//KeyDisabled");
-                        if (node != null)
-                        {
-                            if (Preference.Update(PreferenceName.RegistrationKeyIsDisabled, true))
-                            {
-                                Signalods.Insert(new Signalod() { IType = InvalidType.Prefs });
-                                Preference.Refresh();
-                            }
-                            errorMsg = node.InnerText;
-                            return "";//Return empty response, since we never received one.
-                        }
-                        //no error, and no disabled message
-                        if (Preference.Update(PreferenceName.RegistrationKeyIsDisabled, false))
-                        {
-                            Signalods.Insert(new Signalod() { IType = InvalidType.Prefs });
-                            Preference.Refresh();
-                        }
-                        node = doc.SelectSingleNode("//FileData64");
-                        arrayCertFileBytes = Convert.FromBase64String(node.InnerText);
-                    }
-                    catch (Exception ex)
-                    {
-                        errorMsg = Lans.g("Canadian", "Failed to download certificate file") + "\r\n  " + ex.Message;
-                        return "";//Return empty response, since we never received one.
-                    }
-                    try
-                    {
-                        File.WriteAllBytes(certFilePath, arrayCertFileBytes);
-                    }
-                    catch (Exception ex)
-                    {
-                        errorMsg = Lans.g("Canadian", "Failed to export certificate file to path") + " '" + certFilePath + "'\r\n  " + ex.Message;
-                        return "";//Return empty response, since we never received one.
-                    }
-                }
-            }
-            string officeSequenceNumber = msgText.Substring(12, 6);//Field A02. Office Sequence Number is always part of every message type and is always in the same place.
-            int fileNum = PIn.Int(officeSequenceNumber) % 1000;
-            //first, delete the result file from previous communication so that no such files can affect the loop logic below.
-            string outputFile = ODFileUtils.CombinePaths(saveFolder, "output." + fileNum.ToString().PadLeft(3, '0'));
-            if (File.Exists(outputFile))
-            {
-                try
-                {
-                    File.Delete(outputFile);//no exception thrown if file does not exist.
-                }
-                catch (Exception ex)
-                {//Will throw if the file does exist but cannot be deleted.
-                    errorMsg = Lans.g("Canadian", "Failed to remove old output file to make room for new output file.  Please try again.  File: ") + " '" + outputFile + "'\r\n" + ex.Message;
-                    return "";//Return empty response, since we never received one.
-                }
-            }
-            try
-            {
-                //create the input file with data:
-                string tempInputFile = ODFileUtils.CombinePaths(saveFolder, "tempinput." + fileNum.ToString().PadLeft(3, '0'));
-                //First, write to a temp file so that the clearinghouse software does not try to send the file while it is still being written.
-                File.WriteAllText(tempInputFile, msgText, Encoding.GetEncoding(850));
-                //Now that the file is completely written, rename it to the input format that the clearinghouse will recognize and process.
-                string inputFile = ODFileUtils.CombinePaths(saveFolder, "input." + fileNum.ToString().PadLeft(3, '0'));
-                File.Move(tempInputFile, inputFile);//The input file should not exist, because the clearinghouse software should process input files promptly, unless the clearinghouse service is off for 1000 transactions in a row. We want an exception to be thrown if this file already exists.
-            }
-            catch (Exception ex)
-            {
-                errorMsg = Lans.g("Canadian", "Failed to save outgoing claim to file.") + "  " + ex.Message;
-                return "";//Return empty response, since we never received one.
-            }
-            DateTime start = DateTime.Now;
-            while (DateTime.Now < start.AddSeconds(120))
-            {//We wait for up to 120 seconds. Responses can take up to 95 seconds and we need some extra time to be sure.
-                if (File.Exists(outputFile))
-                {
-                    break;
-                }
-                Thread.Sleep(200);//2/10 second
-                Application.DoEvents();
-            }
-            //The _nput.### file is just the input.### renamed after it is processed. The clearinghouse service renames the file so that it is not processed more than once.
-            string nputFile = ODFileUtils.CombinePaths(saveFolder, "_nput." + fileNum.ToString().PadLeft(3, '0'));
-            //We delete the intermediate file so that claim data is not just lying around.
-            if (File.Exists(nputFile))
-            {//The file would not appear to exist if there was a permission issue.
-                ODException.SwallowAnyException(() =>
-                {//Will throw if the file exists but cannot be deleted (ex if ITRANS is still using it).
-                    File.Delete(nputFile);//no exception thrown if file does not exist.
-                });
-            }
-            if (!File.Exists(outputFile))
-            {
-                if (isItrans)
-                {
-                    errorMsg = Lans.g("Canadian", "No response from iCAService. Ensure that the iCAService is started and the iCA folder has the necessary permissions.");
-                }
-                else if (isClaimstream)
-                {
-                    errorMsg = Lans.g("Canadian", "No response from the CCDWS service. Ensure that the CCDWS service is started and the ccd folder has the necessary permissions.");
-                }
-                else
-                {//Other clearinghouses, if we ever support them.
-                    errorMsg = Lans.g("Canadian", "No response from clearinghouse service. Ensure that the clearinghouse service is started and the export folder has the necessary permissions.");
-                }
-                return "";//Return empty response, since we never received one.
-            }
-            byte[] resultBytes = null;
-            try
-            {
-                resultBytes = File.ReadAllBytes(outputFile);
-            }
-            catch (Exception ex)
-            {
-                errorMsg = Lans.g("Canadian", "Failed to read response from file.") + "  " + ex.Message;
-                return "";//Return empty response, since we never received one.
-            }
-            string result = Encoding.GetEncoding(850).GetString(resultBytes);
-            //strip the prefix.  Example prefix: 123456,0,000,
-            string resultPrefix = "";
-            //Find position of third comma
-            Match match = Regex.Match(result, @"^\d*,\d+,\d+,");
-            if (!match.Success)
-            {
-                match = Regex.Match(result, @"^\d*,\d+,\d+$");//The 3rd comma is not present when the result message is blank.  Matches #,#,# only.
-            }
-            if (match.Success)
-            {
-                resultPrefix = result.Substring(0, match.Length);
-                result = result.Substring(resultPrefix.Length);
-            }
-            //We delete the output file so that claim data is not just lying around.
-            if (File.Exists(outputFile))
-            {//The file would not appear to exist if there was a permission issue.
-                ODException.SwallowAnyException(() =>
-                {//Will throw if the file exists but cannot be deleted (ex if ITRANS is still using it).
-                    File.Delete(outputFile);//no exception thrown if file does not exist.
-                });
-            }
-            if (result.Length >= 25 && result.Substring(12).StartsWith("NO MORE ITEMS"))
-            {
-                //Since the message does not have a well defined format, we skip the code below for parsing the result to check for a mailbox indicator.
-                //Additionally, there is no need to check for a mailbox indicator because this message from ITRANS tells us that the mailbox is empty anyway.
-                return result;
-            }
-            if (result.Length < 42)
-            {//The shortest message is a version 02 Request for Pended Claims with length 42. Any message shorter is considered to be an error message.
-             //The only valid message less than 42 characters in length is an Outstanding Transactions Acknowledgement indicating that the mailbox is empty. 
-                string[] responses = resultPrefix.Split(',');
-                string errorCode = Lans.g("Canadian", "UNKNOWN");
-                if (responses.Length >= 2)
-                {
-                    errorCode = responses[1];
-                }
-                errorMsg = Lans.g("Canadian", "Error") + " " + errorCode + "\r\n\r\n" + Lans.g("Canadian", "Raw Response") + ":\r\n" + resultPrefix + result + "\r\n\r\n";
-                if (isItrans)
-                {
-                    if (errorCode == "1013")
-                    {
-                        errorMsg += Lans.g("Canadian", "The CDA digital certificate for the provider is either missing, not exportable, expired, or invalid.") + "\r\n";
-                    }
-                    errorMsg += "\r\n" + Lans.g("Canadian", "Please see http://www.goitrans.com/itrans-support-error-codes/ for more details.") + "\r\n";
-                    string errorFile = ODFileUtils.CombinePaths(Path.GetDirectoryName(clearinghouseClin.ClientProgram), "ica.log");
-                    string errorlog = "";
-                    if (File.Exists(errorFile))
-                    {
-                        try
-                        {
-                            errorlog = File.ReadAllText(errorFile);
-                            errorMsg += Lans.g("Canadian", "Error log") + ":\r\n" + errorlog;
-                        }
-                        catch (Exception ex)
-                        {
-                            errorMsg = Lans.g("Canadian", "Failed to read error log file.") + "  " + ex.Message;
-                        }
-                    }
-                }
-                else if (isClaimstream)
-                {
-                    string errorDescription = "";
-                    string errorMessage = GetErrorMessageForCodeClaimstream(errorCode, ref errorDescription);
-                    errorMsg += Lans.g("Canadian", "Error Message") + ": " + Lans.g("Canadian", errorMessage) + "\r\n";
-                    errorMsg += Lans.g("Canadian", "Error Description") + ": " + Lans.g("Canadian", errorDescription) + "\r\n\r\n";
-                    errorMsg += Lans.g("Canadian", "For further error details, read the log file ccdws.log.");
-                }
-                return result;
-            }
-            else
-            {//Message is long enough to possibly be a valid response.  Try parsing it so we can check the mailbox indicator.
-                try
-                {
-                    CCDFieldInputter messageData = new CCDFieldInputter(result);
-                    //We check the mailbox indicator here, only when the response is returned the first time instead of showing it in FormCCDPrint, because 
-                    //we do not want the mailbox indicator to be examined multiple times, which could happen if a transaction is viewed again using FormCCDPrint.
-                    CCDField mailboxIndicator = messageData.GetFieldById("A11");
-                    if (mailboxIndicator != null)
-                    { //Field A11 should exist in all response types, but just in case.
-                        if (mailboxIndicator.valuestr.ToUpper() == "Y" || mailboxIndicator.valuestr.ToUpper() == "O"
-                            && !isAutomatic)
-                        {
-                            MessageBox.Show(Lans.g("Canadian", "NOTIFICATION: Items are waiting in the mailbox. Retrieve these items by going to the Manage module, click the Send Claims button, "
-                                + "then click the Outstanding button. This box will continue to show each time a claim is sent until the mailbox is cleared."));
-                        }
-                    }
-                }
-                catch 
-                {
-                    errorMsg += Lans.g("Canadian", "Response is not formatted according to message standards.");
-                }
-            }
-            return result;
+            //if (clearinghouseClin == null)
+            //{
+            //    errorMsg = Lans.g("Canadian", "A CDAnet compatible clearinghouse could not be found.");
+            //    return "";//Return empty response, since we never received one.
+            //}
+            //bool isItrans = (clearinghouseClin.CommBridge == EclaimsCommBridge.ITRANS);
+            //bool isClaimstream = (clearinghouseClin.CommBridge == EclaimsCommBridge.Claimstream);
+            //string saveFolder = clearinghouseClin.ExportPath;
+            //if (isClaimstream)
+            //{
+            //    DirectoryInfo dirInfo = new DirectoryInfo(saveFolder);
+            //    if (dirInfo.Name == "abc")
+            //    {//Is pointing to the "abc" sub-folder.
+            //     //For backwards compatibility, if the export path is pointing to the "abc" sub-folder,
+            //     //then automatically move up one directory to the parent directory before deciding which sub-folder to use (see below for sub-folder).
+            //        saveFolder = dirInfo.Parent.FullName;
+            //    }
+            //    string subDir = "";
+            //    if (network.Abbrev == "ABC")
+            //    {//Alberta Blue Cross
+            //        subDir = "abc";
+            //    }
+            //    else if (network.Abbrev == "TELUS A")
+            //    {
+            //        subDir = "telusa";
+            //    }
+            //    else if (network.Abbrev == "TELUS B")
+            //    {
+            //        subDir = "telusb";
+            //    }
+            //    else
+            //    {
+            //        errorMsg = Lans.g("Canadian", "ClaimStream does not support this transaction for network") + " " + network.Descript;
+            //        return "";//Return empty response, since we never received one.
+            //    }
+            //    saveFolder = ODFileUtils.CombinePaths(saveFolder, subDir);
+            //}
+            //if (!Directory.Exists(saveFolder))
+            //{
+            //    errorMsg = saveFolder + " " + Lans.g("Canadian", "not found.");
+            //    return "";//Return empty response, since we never received one.
+            //}
+            //if (isClaimstream)
+            //{
+            //    string certFileName = "";
+            //    if (network.Abbrev == "ABC")
+            //    {//Alberta Blue Cross
+            //        certFileName = "OPENDENTAL.pem";
+            //    }
+            //    else if (network.Abbrev == "TELUS A" || network.Abbrev == "TELUS B")
+            //    {
+#if DEBUG   //
+            //        certFileName = "OD_2018-02-26_2023-03-02_staging.pem";
+#else       //
+			//		certFileName="OD_2018-05-17_2023-05-21_prod.pem";
+#endif      //
+            //    }
+            //    string certFilePath = ODFileUtils.CombinePaths(saveFolder, certFileName);
+            //    if (!File.Exists(certFilePath))
+            //    {
+            //        byte[] arrayCertFileBytes = null;
+            //        try
+            //        {
+            //            XmlWriterSettings settings = new XmlWriterSettings();
+            //            settings.Indent = true;
+            //            settings.IndentChars = ("    ");
+            //            StringBuilder strbuild = new StringBuilder();
+            //            using (XmlWriter writer = XmlWriter.Create(strbuild, settings))
+            //            {
+            //                writer.WriteElementString("RegistrationKey", Preference.GetString(PreferenceName.RegistrationKey));
+            //            }
+            //            string response = null;
+            //            if (network.Abbrev == "ABC")
+            //            {//Alberta Blue Cross
+            //                response = CustomerUpdatesProxy.GetWebServiceInstance().RequestCertCanadaABC(strbuild.ToString());
+            //            }
+            //            else if (network.Abbrev == "TELUS A" || network.Abbrev == "TELUS B")
+            //            {
+            //				response=CustomerUpdatesProxy.GetWebServiceInstance().RequestCertCanadaTelusAandB(strbuild.ToString());
+            //
+            //            }
+            //            XmlDocument doc = new XmlDocument();
+            //            doc.LoadXml(response);
+            //            XmlNode node = doc.SelectSingleNode("//Error");
+            //            if (node != null)
+            //            {
+            //                errorMsg = node.InnerText;
+            //                return "";//Return empty response, since we never received one.
+            //            }
+            //            node = doc.SelectSingleNode("//KeyDisabled");
+            //            if (node != null)
+            //            {
+            //                if (Preference.Update(PreferenceName.RegistrationKeyIsDisabled, true))
+            //                {
+            //                    Signalods.Insert(new Signalod() { IType = InvalidType.Prefs });
+            //                    Preference.Refresh();
+            //                }
+            //                errorMsg = node.InnerText;
+            //                return "";//Return empty response, since we never received one.
+            //            }
+            //            //no error, and no disabled message
+            //            if (Preference.Update(PreferenceName.RegistrationKeyIsDisabled, false))
+            //            {
+            //                Signalods.Insert(new Signalod() { IType = InvalidType.Prefs });
+            //                Preference.Refresh();
+            //            }
+            //            node = doc.SelectSingleNode("//FileData64");
+            //            arrayCertFileBytes = Convert.FromBase64String(node.InnerText);
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            errorMsg = Lans.g("Canadian", "Failed to download certificate file") + "\r\n  " + ex.Message;
+            //            return "";//Return empty response, since we never received one.
+            //        }
+            //        try
+            //        {
+            //            File.WriteAllBytes(certFilePath, arrayCertFileBytes);
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            errorMsg = Lans.g("Canadian", "Failed to export certificate file to path") + " '" + certFilePath + "'\r\n  " + ex.Message;
+            //            return "";//Return empty response, since we never received one.
+            //        }
+            //    }
+            //}
+            //string officeSequenceNumber = msgText.Substring(12, 6);//Field A02. Office Sequence Number is always part of every message type and is always in the same place.
+            //int fileNum = PIn.Int(officeSequenceNumber) % 1000;
+            ////first, delete the result file from previous communication so that no such files can affect the loop logic below.
+            //string outputFile = ODFileUtils.CombinePaths(saveFolder, "output." + fileNum.ToString().PadLeft(3, '0'));
+            //if (File.Exists(outputFile))
+            //{
+            //    try
+            //    {
+            //        File.Delete(outputFile);//no exception thrown if file does not exist.
+            //    }
+            //    catch (Exception ex)
+            //    {//Will throw if the file does exist but cannot be deleted.
+            //        errorMsg = Lans.g("Canadian", "Failed to remove old output file to make room for new output file.  Please try again.  File: ") + " '" + outputFile + "'\r\n" + ex.Message;
+            //        return "";//Return empty response, since we never received one.
+            //    }
+            //}
+            //try
+            //{
+            //    //create the input file with data:
+            //    string tempInputFile = ODFileUtils.CombinePaths(saveFolder, "tempinput." + fileNum.ToString().PadLeft(3, '0'));
+            //    //First, write to a temp file so that the clearinghouse software does not try to send the file while it is still being written.
+            //    File.WriteAllText(tempInputFile, msgText, Encoding.GetEncoding(850));
+            //    //Now that the file is completely written, rename it to the input format that the clearinghouse will recognize and process.
+            //    string inputFile = ODFileUtils.CombinePaths(saveFolder, "input." + fileNum.ToString().PadLeft(3, '0'));
+            //    File.Move(tempInputFile, inputFile);//The input file should not exist, because the clearinghouse software should process input files promptly, unless the clearinghouse service is off for 1000 transactions in a row. We want an exception to be thrown if this file already exists.
+            //}
+            //catch (Exception ex)
+            //{
+            //    errorMsg = Lans.g("Canadian", "Failed to save outgoing claim to file.") + "  " + ex.Message;
+            //    return "";//Return empty response, since we never received one.
+            //}
+            //DateTime start = DateTime.Now;
+            //while (DateTime.Now < start.AddSeconds(120))
+            //{//We wait for up to 120 seconds. Responses can take up to 95 seconds and we need some extra time to be sure.
+            //    if (File.Exists(outputFile))
+            //    {
+            //        break;
+            //    }
+            //    Thread.Sleep(200);//2/10 second
+            //    Application.DoEvents();
+            //}
+            ////The _nput.### file is just the input.### renamed after it is processed. The clearinghouse service renames the file so that it is not processed more than once.
+            //string nputFile = ODFileUtils.CombinePaths(saveFolder, "_nput." + fileNum.ToString().PadLeft(3, '0'));
+            ////We delete the intermediate file so that claim data is not just lying around.
+            //if (File.Exists(nputFile))
+            //{//The file would not appear to exist if there was a permission issue.
+            //    ODException.SwallowAnyException(() =>
+            //    {//Will throw if the file exists but cannot be deleted (ex if ITRANS is still using it).
+            //        File.Delete(nputFile);//no exception thrown if file does not exist.
+            //    });
+            //}
+            //if (!File.Exists(outputFile))
+            //{
+            //    if (isItrans)
+            //    {
+            //        errorMsg = Lans.g("Canadian", "No response from iCAService. Ensure that the iCAService is started and the iCA folder has the necessary permissions.");
+            //    }
+            //    else if (isClaimstream)
+            //    {
+            //        errorMsg = Lans.g("Canadian", "No response from the CCDWS service. Ensure that the CCDWS service is started and the ccd folder has the necessary permissions.");
+            //    }
+            //    else
+            //    {//Other clearinghouses, if we ever support them.
+            //        errorMsg = Lans.g("Canadian", "No response from clearinghouse service. Ensure that the clearinghouse service is started and the export folder has the necessary permissions.");
+            //    }
+            //    return "";//Return empty response, since we never received one.
+            //}
+            //byte[] resultBytes = null;
+            //try
+            //{
+            //    resultBytes = File.ReadAllBytes(outputFile);
+            //}
+            //catch (Exception ex)
+            //{
+            //    errorMsg = Lans.g("Canadian", "Failed to read response from file.") + "  " + ex.Message;
+            //    return "";//Return empty response, since we never received one.
+            //}
+            //string result = Encoding.GetEncoding(850).GetString(resultBytes);
+            ////strip the prefix.  Example prefix: 123456,0,000,
+            //string resultPrefix = "";
+            ////Find position of third comma
+            //Match match = Regex.Match(result, @"^\d*,\d+,\d+,");
+            //if (!match.Success)
+            //{
+            //    match = Regex.Match(result, @"^\d*,\d+,\d+$");//The 3rd comma is not present when the result message is blank.  Matches #,#,# only.
+            //}
+            //if (match.Success)
+            //{
+            //    resultPrefix = result.Substring(0, match.Length);
+            //    result = result.Substring(resultPrefix.Length);
+            //}
+            ////We delete the output file so that claim data is not just lying around.
+            //if (File.Exists(outputFile))
+            //{//The file would not appear to exist if there was a permission issue.
+            //    ODException.SwallowAnyException(() =>
+            //    {//Will throw if the file exists but cannot be deleted (ex if ITRANS is still using it).
+            //        File.Delete(outputFile);//no exception thrown if file does not exist.
+            //    });
+            //}
+            //if (result.Length >= 25 && result.Substring(12).StartsWith("NO MORE ITEMS"))
+            //{
+            //    //Since the message does not have a well defined format, we skip the code below for parsing the result to check for a mailbox indicator.
+            //    //Additionally, there is no need to check for a mailbox indicator because this message from ITRANS tells us that the mailbox is empty anyway.
+            //    return result;
+            //}
+            //if (result.Length < 42)
+            //{//The shortest message is a version 02 Request for Pended Claims with length 42. Any message shorter is considered to be an error message.
+            // //The only valid message less than 42 characters in length is an Outstanding Transactions Acknowledgement indicating that the mailbox is empty. 
+            //    string[] responses = resultPrefix.Split(',');
+            //    string errorCode = Lans.g("Canadian", "UNKNOWN");
+            //    if (responses.Length >= 2)
+            //    {
+            //        errorCode = responses[1];
+            //    }
+            //    errorMsg = Lans.g("Canadian", "Error") + " " + errorCode + "\r\n\r\n" + Lans.g("Canadian", "Raw Response") + ":\r\n" + resultPrefix + result + "\r\n\r\n";
+            //    if (isItrans)
+            //    {
+            //        if (errorCode == "1013")
+            //        {
+            //            errorMsg += Lans.g("Canadian", "The CDA digital certificate for the provider is either missing, not exportable, expired, or invalid.") + "\r\n";
+            //        }
+            //        errorMsg += "\r\n" + Lans.g("Canadian", "Please see http://www.goitrans.com/itrans-support-error-codes/ for more details.") + "\r\n";
+            //        string errorFile = ODFileUtils.CombinePaths(Path.GetDirectoryName(clearinghouseClin.ClientProgram), "ica.log");
+            //        string errorlog = "";
+            //        if (File.Exists(errorFile))
+            //        {
+            //            try
+            //            {
+            //                errorlog = File.ReadAllText(errorFile);
+            //                errorMsg += Lans.g("Canadian", "Error log") + ":\r\n" + errorlog;
+            //            }
+            //            catch (Exception ex)
+            //            {
+            //                errorMsg = Lans.g("Canadian", "Failed to read error log file.") + "  " + ex.Message;
+            //            }
+            //        }
+            //    }
+            //    else if (isClaimstream)
+            //    {
+            //        string errorDescription = "";
+            //        string errorMessage = GetErrorMessageForCodeClaimstream(errorCode, ref errorDescription);
+            //        errorMsg += Lans.g("Canadian", "Error Message") + ": " + Lans.g("Canadian", errorMessage) + "\r\n";
+            //        errorMsg += Lans.g("Canadian", "Error Description") + ": " + Lans.g("Canadian", errorDescription) + "\r\n\r\n";
+            //        errorMsg += Lans.g("Canadian", "For further error details, read the log file ccdws.log.");
+            //    }
+            //    return result;
+            //}
+            //else
+            //{//Message is long enough to possibly be a valid response.  Try parsing it so we can check the mailbox indicator.
+            //    try
+            //    {
+            //        CCDFieldInputter messageData = new CCDFieldInputter(result);
+            //        //We check the mailbox indicator here, only when the response is returned the first time instead of showing it in FormCCDPrint, because 
+            //        //we do not want the mailbox indicator to be examined multiple times, which could happen if a transaction is viewed again using FormCCDPrint.
+            //        CCDField mailboxIndicator = messageData.GetFieldById("A11");
+            //        if (mailboxIndicator != null)
+            //        { //Field A11 should exist in all response types, but just in case.
+            //            if (mailboxIndicator.valuestr.ToUpper() == "Y" || mailboxIndicator.valuestr.ToUpper() == "O"
+            //                && !isAutomatic)
+            //            {
+            //                MessageBox.Show(Lans.g("Canadian", "NOTIFICATION: Items are waiting in the mailbox. Retrieve these items by going to the Manage module, click the Send Claims button, "
+            //                    + "then click the Outstanding button. This box will continue to show each time a claim is sent until the mailbox is cleared."));
+            //            }
+            //        }
+            //    }
+            //    catch 
+            //    {
+            //        errorMsg += Lans.g("Canadian", "Response is not formatted according to message standards.");
+            //    }
+            //}
+            //return result;
+
+            return string.Empty;
         }
 
         ///<summary>Examines the errorCode passed in and returns a short not translated error message string and sets the errorDescription.
