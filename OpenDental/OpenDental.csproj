@@ -8034,6 +8034,16 @@
     <None Include="Web References\NewCrop\Update1.wsdl" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\IconUserEdit.png" />
+    <None Include="Resources\IconUserComment.png" />
+    <None Include="Resources\IconUpdate.png" />
+    <None Include="Resources\IconThumbUp.png" />
+    <None Include="Resources\IconThumbDown.png" />
+    <None Include="Resources\IconArrowUp.png" />
+    <None Include="Resources\IconArrowDown.png" />
+    <None Include="Resources\IconUserSwitch.png" />
+    <None Include="Resources\IconUserSilhouette.png" />
+    <None Include="Resources\IconUserReport.png" />
     <None Include="Resources\IconEmailReplyAll.png" />
     <None Include="Resources\IconEmailReply.png" />
     <None Include="Resources\IconEmailInbox.png" />
