@@ -311,7 +311,7 @@ namespace OpenDentBusiness
         {
             LastCommand = command;
 
-            return DataConnection.GetTable(command);
+            return DataConnection.ExecuteDataTable(command);
 
         }
 
@@ -373,7 +373,7 @@ namespace OpenDentBusiness
         {
             LastCommand = command;
 
-            return DataConnection.GetTable(command).Rows[0][0].ToString();
+            return DataConnection.ExecuteDataTable(command).Rows[0][0].ToString();
         }
 
         /// <summary>

@@ -37,7 +37,7 @@ namespace OpenDentBusiness
                             + POut.Int((int)ClaimProcStatus.Supplemental) + "," + POut.Int((int)ClaimProcStatus.CapClaim) + @") 
 						GROUP BY claimproc.ClaimNum	
 			) partialpay";
-            DataTable table = DataConnection.GetTable(command);
+            DataTable table = DataConnection.ExecuteDataTable(command);
             List<Patient> listPats = Patients.GetMultPats(table.Select().Select(x => PIn.Long(x["PatNum"].ToString())).ToList()).ToList();
             List<Claim> listClaims = Claims.GetClaimsFromClaimNums(table.Select().Select(x => PIn.Long(x["ClaimNum"].ToString())).ToList());
             List<ClaimPayment> listPayments = ClaimPayments.GetByClaimPaymentNums(table.Select().Select(x => PIn.Long(x["ClaimPaymentNum"].ToString()))

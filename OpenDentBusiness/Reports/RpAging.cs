@@ -10,7 +10,7 @@ namespace OpenDentBusiness
         public static DataTable GetAgingTable(RpAgingParamObject rpo)
         {
             string queryAg = GetQueryString(rpo);
-            return DataConnection.GetTable(queryAg);
+            return DataConnection.ExecuteDataTable(queryAg);
         }
 
         public static string GetQueryString(RpAgingParamObject rpo)

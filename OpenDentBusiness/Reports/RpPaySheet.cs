@@ -104,7 +104,7 @@ namespace OpenDentBusiness
             {
                 queryIns = DbHelper.LimitOrderBy(queryIns, 0);
             }
-            return DataConnection.GetTable(queryIns);
+            return DataConnection.ExecuteDataTable(queryIns);
         }
 
         ///<summary>If not using clinics, or for all clinics with clinics enabled, supply an empty list of clinicNums.  If the user is restricted, for all
@@ -167,7 +167,7 @@ namespace OpenDentBusiness
             {
                 queryPat = DbHelper.LimitOrderBy(queryPat, 0);
             }
-            return DataConnection.GetTable(queryPat);
+            return DataConnection.ExecuteDataTable(queryPat);
         }
     }
 }

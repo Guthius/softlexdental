@@ -208,7 +208,7 @@ namespace OpenDentBusiness
                         + "ORDER BY payplancharge.ChargeDate ";
                     break;
             }
-            return DataConnection.GetTable(query);
+            return DataConnection.ExecuteDataTable(query);
         }
     }
 }

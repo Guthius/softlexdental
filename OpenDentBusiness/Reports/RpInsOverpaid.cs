@@ -65,7 +65,7 @@ namespace OpenDentBusiness
             query += @"INNER JOIN patient ON patient.PatNum=procs.PatNum
 				WHERE ROUND(procs.fee,3) < ROUND(cp.PayAmt,3)
 				ORDER BY patient.LName,patient.FName,procs.ProcDate ";
-            return DataConnection.GetTable(query);
+            return DataConnection.ExecuteDataTable(query);
         }
 
     }

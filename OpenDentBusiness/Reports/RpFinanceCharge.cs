@@ -24,7 +24,7 @@ namespace OpenDentBusiness
                 query += "AND patient.BillingType IN (" + string.Join(",", listBillingDefNums.Select(x => POut.Long(x))) + ") ";
             }
             query += "ORDER BY patient.LName,patient.FName,AdjAmt DESC";
-            DataTable table = DataConnection.GetTable(query);
+            DataTable table = DataConnection.ExecuteDataTable(query);
             return table;
         }
     }

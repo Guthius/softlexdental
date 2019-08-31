@@ -63,7 +63,7 @@ namespace OpenDentBusiness
             }
             query += " GROUP BY referral.ReferralNum"
                 + " ORDER BY HowMany Desc";
-            return DataConnection.GetTable(query);
+            return DataConnection.ExecuteDataTable(query);
         }
     }
 }

@@ -407,7 +407,6 @@
     <Compile Include="TableTypes\CommOptOut.cs" />
     <Compile Include="TableTypes\DbmLog.cs" />
     <Compile Include="TableTypes\ProviderClinic.cs" />
-    <Compile Include="Db\LargeTableHelper.cs" />
     <Compile Include="Misc\CreditCardUtils\CreditCardUtils.cs" />
     <Compile Include="Misc\CreditCardUtils\MagstripCardParser.cs" />
     <Compile Include="TableTypes\RecurringCharge.cs" />

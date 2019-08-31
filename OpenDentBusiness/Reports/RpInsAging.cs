@@ -73,7 +73,7 @@ namespace OpenDentBusiness
 					OR guarAging.InsPayEst_Total > 0.005)
 				ORDER BY guarAging.LName,guarAging.FName";
             ReportComplexEvent.Fire(ODEventType.ReportComplex, Lans.g("ReportComplex", "Running Insurance Estimate Query..."));
-            DataTable insTable = DataConnection.GetTable(command);
+            DataTable insTable = DataConnection.ExecuteDataTable(command);
             #endregion Insurance Aging
             #region Regular Aging
             DataTable regAging = new DataTable();

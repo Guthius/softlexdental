@@ -3451,7 +3451,7 @@ namespace OpenDentBusiness
         {
             List<string> retVal = new List<string>();
             string command = "SELECT SnomedCode FROM snomed";
-            DataTable table = DataConnection.GetTable(command);
+            DataTable table = DataConnection.ExecuteDataTable(command);
             for (int i = 0; i < table.Rows.Count; i++)
             {
                 retVal.Add(table.Rows[i].ItemArray[0].ToString());

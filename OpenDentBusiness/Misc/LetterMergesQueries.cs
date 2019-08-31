@@ -148,7 +148,7 @@ namespace OpenDentBusiness
                 + "WHERE patient.PatNum=" + POut.Long(PatCur.PatNum)
                 + " GROUP BY patient.PatNum "
                 + "ORDER BY refattach.ItemOrder";
-            return DataConnection.GetTable(command);
+            return DataConnection.ExecuteDataTable(command);
         }
     }
 }

@@ -115,7 +115,7 @@ namespace OpenDentBusiness
                 command += " securitylog.LogDateTime BETWEEN " + POut.Date(dateStart) + " AND " + POut.Date(dateEnd.AddDays(1))
                     + " ORDER BY securitylog.LogDateTime,appointment.AptDateTime,PatName";
             }
-            DataTable table = DataConnection.GetTable(command);
+            DataTable table = DataConnection.ExecuteDataTable(command);
             return table;
         }
 

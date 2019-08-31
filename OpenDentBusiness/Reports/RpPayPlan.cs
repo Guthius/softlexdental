@@ -141,7 +141,7 @@ namespace OpenDentBusiness
             {
                 command += "ORDER BY LName,FName";
             }
-            DataTable raw = DataConnection.GetTable(command);
+            DataTable raw = DataConnection.ExecuteDataTable(command);
             List<Provider> listProvs = Providers.GetAll();
             //DateTime payplanDate;
             Patient pat;

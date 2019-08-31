@@ -48,7 +48,7 @@ namespace OpenDentBusiness
                 command += "AND procedurelog.PatNum=" + POut.Long(patNum) + " ";
             }
             command += "ORDER BY procedurelog.ProcDate,patientName,procedurecode.ProcCode,provider.Abbr";
-            DataTable rawCompletedProcTable = DataConnection.GetTable(command);
+            DataTable rawCompletedProcTable = DataConnection.ExecuteDataTable(command);
             Dictionary<long, DataRow> dictCompletedProcRows = rawCompletedProcTable.Select().ToDictionary(x => PIn.Long(x["ProcNum"].ToString()));
             #endregion
             DataTable table = new DataTable();
@@ -69,7 +69,7 @@ namespace OpenDentBusiness
                 + @"GROUP BY claimproc.ProcNum
 				HAVING SUM(claimproc.InsPayAmt+claimproc.Writeoff)>0
 				ORDER BY NULL";
-            Dictionary<long, DataRow> dictClaimProcRows = DataConnection.GetTable(command).Select().ToDictionary(x => PIn.Long(x["ProcNum"].ToString()));
+            Dictionary<long, DataRow> dictClaimProcRows = DataConnection.ExecuteDataTable(command).Select().ToDictionary(x => PIn.Long(x["ProcNum"].ToString()));
             #endregion
             #region Patient Payments
             command = @"SELECT paysplit.ProcNum,SUM(paysplit.SplitAmt) ptAmt
@@ -78,7 +78,7 @@ namespace OpenDentBusiness
 				AND paysplit.PatNum IN(" + string.Join(",", listPatNums.Select(x => POut.Long(x))) + @")
 				GROUP BY paysplit.ProcNum
 				ORDER BY NULL";
-            Dictionary<long, DataRow> dictPatPayRows = DataConnection.GetTable(command).Select().ToDictionary(x => PIn.Long(x["ProcNum"].ToString()));
+            Dictionary<long, DataRow> dictPatPayRows = DataConnection.ExecuteDataTable(command).Select().ToDictionary(x => PIn.Long(x["ProcNum"].ToString()));
             #endregion
             #region Adjustments
             command = @"SELECT adjustment.ProcNum,SUM(adjustment.AdjAmt) AdjAmt
@@ -87,7 +87,7 @@ namespace OpenDentBusiness
 				AND adjustment.PatNum IN(" + string.Join(",", listPatNums.Select(x => POut.Long(x))) + @")
 				GROUP BY adjustment.ProcNum
 				ORDER BY NULL";
-            Dictionary<long, DataRow> dictAdjRows = DataConnection.GetTable(command).Select().ToDictionary(x => PIn.Long(x["ProcNum"].ToString()));
+            Dictionary<long, DataRow> dictAdjRows = DataConnection.ExecuteDataTable(command).Select().ToDictionary(x => PIn.Long(x["ProcNum"].ToString()));
             #endregion
             //columns that start with lowercase are altered for display rather than being raw data.
             table.Columns.Add("patientName");

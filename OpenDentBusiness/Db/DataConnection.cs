@@ -185,7 +185,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <param name="commandText">The SQL command to execute.</param>
         /// <returns></returns>
-        public static MySqlDataReader GetDataReader(string commandText, params MySqlParameter[] parameters)
+        public static MySqlDataReader ExecuteReader(string commandText, params MySqlParameter[] parameters)
         {
             using (var connection = Connection)
             {
@@ -208,7 +208,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <param name="commandText">The SQL command to execute.</param>
         /// <returns></returns>
-        public static DataTable GetTable(string commandText, params MySqlParameter[] parameters)
+        public static DataTable ExecuteDataTable(string commandText, params MySqlParameter[] parameters)
         {
             var dataTable = new DataTable();
 

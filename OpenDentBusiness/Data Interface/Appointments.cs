@@ -700,7 +700,7 @@ namespace OpenDentBusiness
                 }
                 command += ")";
             }
-            DataTable raw = DataConnection.GetTable(command);
+            DataTable raw = DataConnection.ExecuteDataTable(command);
             //rawProc table was historically used for other purposes.  It is currently only used for production--------------------------
             //rawProcLab table is only used for Canada and goes hand in hand with the rawProc table, also only used for production.
             DataTable rawProc;
@@ -774,7 +774,7 @@ namespace OpenDentBusiness
 
                 command += ") GROUP BY procedurelog.ProcNum";
 
-                rawProc = DataConnection.GetTable(command);
+                rawProc = DataConnection.ExecuteDataTable(command);
                 if (CultureInfo.CurrentCulture.Name.EndsWith("CA") && rawProc.Rows.Count > 0)
                 {//Canadian. en-CA or fr-CA
                     command = "SELECT procedurelog.ProcNum,ProcNumLab,ProcFee,"
@@ -807,7 +807,7 @@ namespace OpenDentBusiness
 
                     command += ") GROUP BY procedurelog.ProcNum";
 
-                    rawProcLab = DataConnection.GetTable(command);
+                    rawProcLab = DataConnection.ExecuteDataTable(command);
                 }
             }
             List<long> listPatNums = new List<long>();
@@ -844,7 +844,7 @@ namespace OpenDentBusiness
                     + "AND procedurelog.ProcDate >= " + POut.Date(DateTime.Now.AddYears(-1)) + " "//I'm sure this is the slow part.  Should be easy to make faster with less range
                     + "AND procedurelog.ProcDate <= " + POut.Date(DateTime.Now) + " "
                     + "GROUP BY patient.PatNum, patient.Guarantor";
-                rawInsProc = DataConnection.GetTable(command);
+                rawInsProc = DataConnection.ExecuteDataTable(command);
             }
             //Guardians-------------------------------------------------------------------------------------------------------------------
             command = "SELECT PatNumChild,PatNumGuardian,Relationship,patient.FName,patient.Preferred "
@@ -864,7 +864,7 @@ namespace OpenDentBusiness
                     command += raw.Rows[i]["apptPatNum"].ToString();
                 }
             command += ") ORDER BY Relationship";
-            DataTable rawGuardians = DataConnection.GetTable(command);
+            DataTable rawGuardians = DataConnection.ExecuteDataTable(command);
             DataTable tableCarriers = InsPlans.GetCarrierNames(listPlanNums);
             Dictionary<long, string> dictCarriers = tableCarriers.Select().ToDictionary(x => PIn.Long(x["PlanNum"].ToString()), x => PIn.String(x["CarrierName"].ToString()));
             Dictionary<long, string> dictCarrierColors = tableCarriers.Select().ToDictionary(x => PIn.Long(x["PlanNum"].ToString()), x => x["CarrierColor"].ToString());
@@ -1338,7 +1338,7 @@ namespace OpenDentBusiness
 				FROM appointment appt
 				WHERE appt.ProvNum=" + POut.Long(provNum) +
                 " AND appt.AptDateTime BETWEEN " + POut.DateT(dateTimeAppointmentStart.Date) + " AND " + POut.DateT(dateTimeAppointmentStart.AddDays(1).Date);
-            return DataConnection.GetTable(command);
+            return DataConnection.ExecuteDataTable(command);
         }
 
         ///<summary>Pass in the appointments table so that we can search based on appointments.</summary>
@@ -1373,7 +1373,7 @@ namespace OpenDentBusiness
                 }
             command += ")";
             DataConnection dcon = new DataConnection();
-            DataTable table = DataConnection.GetTable(command);
+            DataTable table = DataConnection.ExecuteDataTable(command);
             table.TableName = "ApptFields";
             return table;
         }
@@ -1390,7 +1390,7 @@ namespace OpenDentBusiness
                 + "FROM patfield "
                 + "WHERE PatNum IN (" + String.Join(",", listPatNums) + ")";
             DataConnection dcon = new DataConnection();
-            DataTable table = DataConnection.GetTable(command);
+            DataTable table = DataConnection.ExecuteDataTable(command);
             table.TableName = "PatFields";
             return table;
         }
@@ -1412,7 +1412,7 @@ namespace OpenDentBusiness
                 + "WHERE fielddeflink.FieldDefLinkNum IS NULL "
                 + "ORDER BY apptfielddef.FieldName";
             DataConnection dcon = new DataConnection();
-            DataTable table = DataConnection.GetTable(command);
+            DataTable table = DataConnection.ExecuteDataTable(command);
             table.TableName = "ApptFields";
             return table;
         }
@@ -1442,7 +1442,7 @@ namespace OpenDentBusiness
             command += "AND AptStatus IN (" + POut.Int((int)ApptStatus.Complete) + ","
                                                                      + POut.Int((int)ApptStatus.Scheduled) + ") "//None of the other statuses
                 + "ORDER BY AptDateTime";
-            DataTable raw = DataConnection.GetTable(command);
+            DataTable raw = DataConnection.ExecuteDataTable(command);
             TimeSpan timeArrived;
             //DateTime timeSeated;
             DateTime waitTime;

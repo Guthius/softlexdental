@@ -61,7 +61,7 @@ namespace OpenDentBusiness
             {//Using clinics
                 command += " ORDER BY patient.ClinicNum,provider.Abbr,patient.LName,patient.FName";
             }
-            DataTable raw = DataConnection.GetTable(command);
+            DataTable raw = DataConnection.ExecuteDataTable(command);
             Patient pat;
             for (int i = 0; i < raw.Rows.Count; i++)
             {

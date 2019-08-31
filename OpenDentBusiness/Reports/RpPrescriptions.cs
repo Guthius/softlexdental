@@ -20,7 +20,7 @@ namespace OpenDentBusiness
                 query += "AND rxpat.drug like '" + POut.String(inputText) + "%'"
                 + " ORDER BY patient.lname,rxpat.drug,rxpat.rxdate";
             }
-            return DataConnection.GetTable(query);
+            return DataConnection.ExecuteDataTable(query);
         }
     }
 }

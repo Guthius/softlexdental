@@ -106,7 +106,7 @@ namespace OpenDentBusiness
                 + "AND fee.ClinicNum='" + POut.Long(clinicNum) + "' "
                 + "AND fee.ProvNum='" + POut.Long(provNum) + "' "
                 + "ORDER BY procedurecode.ProcCode";
-            return DataConnection.GetTable(command);
+            return DataConnection.ExecuteDataTable(command);
         }
     }
 }

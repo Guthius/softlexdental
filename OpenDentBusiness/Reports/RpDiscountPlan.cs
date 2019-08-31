@@ -14,7 +14,7 @@ namespace OpenDentBusiness
                 " INNER JOIN patient ON patient.DiscountPlanNum=discountplan.DiscountPlanNum" +
                 " WHERE discountplan.Description LIKE '%" + POut.String(description) + "%'" +
                 " ORDER BY discountplan.Description,patient.LName,patient.FName,patient.MiddleI";
-            return DataConnection.GetTable(query);
+            return DataConnection.ExecuteDataTable(query);
         }
     }
 }

@@ -68,7 +68,7 @@ namespace OpenDentBusiness
             }
             query += "GROUP BY procedurelog.ProcNum "
                 + "ORDER BY patient.LName,patient.FName,patient.PatNum,procedurelog.ProcDate";
-            return DataConnection.GetTable(query);
+            return DataConnection.ExecuteDataTable(query);
         }
     }
 }

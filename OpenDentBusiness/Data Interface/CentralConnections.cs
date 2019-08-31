@@ -133,7 +133,7 @@ namespace OpenDentBusiness
                 }
 
                 // If this next step fails, table will simply have 0 rows
-                using (DataTable table = DataConnection.GetTable("SHOW DATABASES"))
+                using (DataTable table = DataConnection.ExecuteDataTable("SHOW DATABASES"))
                 {
                     string[] dbNames = new string[table.Rows.Count];
                     for (int i = 0; i < table.Rows.Count; i++)

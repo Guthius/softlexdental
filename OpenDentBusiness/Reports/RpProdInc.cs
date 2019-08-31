@@ -922,7 +922,7 @@ namespace OpenDentBusiness
                 + "ORDER BY Date,namelf";
             DataTable tableProduction = new DataTable();
 
-                tableProduction = DataConnection.GetTable(command);
+                tableProduction = DataConnection.ExecuteDataTable(command);
 
             tableProduction.TableName = "tableProduction";
             #endregion
@@ -951,7 +951,7 @@ namespace OpenDentBusiness
                 + "ORDER BY Date,namelf";
             DataTable tableAdj = new DataTable();
 
-                tableAdj = DataConnection.GetTable(command);
+                tableAdj = DataConnection.ExecuteDataTable(command);
 
             tableAdj.TableName = "tableAdj";
             #endregion
@@ -1057,11 +1057,11 @@ namespace OpenDentBusiness
             DataTable tableInsWriteoff = new DataTable();
             if (isCEMT)
             {
-                tableInsWriteoff = DataConnection.GetTable(command);
+                tableInsWriteoff = DataConnection.ExecuteDataTable(command);
             }
             else
             {
-                tableInsWriteoff = DataConnection.GetTable(command);
+                tableInsWriteoff = DataConnection.ExecuteDataTable(command);
             }
             tableInsWriteoff.TableName = "tableInsWriteoff";
             #endregion
@@ -1104,11 +1104,11 @@ namespace OpenDentBusiness
             DataTable tablePay = new DataTable();
             if (isCEMT)
             {
-                tablePay = DataConnection.GetTable(command);
+                tablePay = DataConnection.ExecuteDataTable(command);
             }
             else
             {
-                tablePay = DataConnection.GetTable(command);
+                tablePay = DataConnection.ExecuteDataTable(command);
             }
             tablePay.TableName = "tablePay";
             #endregion
@@ -1145,7 +1145,7 @@ namespace OpenDentBusiness
                 + "ORDER BY Date,namelf";
             DataTable tableIns = new DataTable();
 
-                tableIns = DataConnection.GetTable(command);
+                tableIns = DataConnection.ExecuteDataTable(command);
 
             tableIns.TableName = "tableIns";
             #endregion
@@ -1188,7 +1188,7 @@ namespace OpenDentBusiness
                     + "GROUP BY claimproc.ClaimProcNum "
                     + "ORDER BY Date,namelf";
 
-                    tableWriteOffAdjustments = DataConnection.GetTable(command);
+                    tableWriteOffAdjustments = DataConnection.ExecuteDataTable(command);
 
             }
             tableWriteOffAdjustments.TableName = "tableWriteOffAdjustments";
@@ -1267,7 +1267,7 @@ namespace OpenDentBusiness
                 + whereProv
                 + whereClin
                 + "AND procedurelog.DateComplete BETWEEN " + POut.Date(dateFrom) + " AND " + POut.Date(dateTo) + " ";
-            tableProduction = DataConnection.GetTable(command);
+            tableProduction = DataConnection.ExecuteDataTable(command);
             tableProduction.TableName = tableProductionName;
             //Insurance WriteOff Estimates----------------------------------------------------------------------------
             if (hasProvs)
@@ -1287,7 +1287,7 @@ namespace OpenDentBusiness
                 + "WHERE procedurelog.DateComplete BETWEEN " + POut.Date(dateFrom) + " AND " + POut.Date(dateTo) + " "
                 + whereProv
                 + whereClin;
-            tableInsWOEst =DataConnection.GetTable(command);
+            tableInsWOEst =DataConnection.ExecuteDataTable(command);
             tableInsWOEst.TableName = tableInsWOEstName;
             //Adjustments----------------------------------------------------------------------------
             if (hasProvs)
@@ -1313,7 +1313,7 @@ namespace OpenDentBusiness
                 + whereProv
                 + whereClin
                 + "AND adjustment.DateEntry BETWEEN " + POut.Date(dateFrom) + " AND " + POut.Date(dateTo) + " ";
-            tableAdj = DataConnection.GetTable(command);
+            tableAdj = DataConnection.ExecuteDataTable(command);
             tableAdj.TableName = tableAdjName;
             //InsWriteoff--------------------------------------------------------------------------
             if (hasProvs)
@@ -1331,7 +1331,7 @@ namespace OpenDentBusiness
                 + "WHERE claimproc.DateSuppReceived BETWEEN " + POut.Date(dateFrom) + " AND " + POut.Date(dateTo) + " "
                 + whereProv
                 + whereClin;
-            tableInsWriteOff = DataConnection.GetTable(command);
+            tableInsWriteOff = DataConnection.ExecuteDataTable(command);
             tableInsWriteOff.TableName = tableInsWriteOffName;
             //AllocatedPtIncome--------------------------------------------------------------------------------
             if (hasProvs)
@@ -1349,7 +1349,7 @@ namespace OpenDentBusiness
                 + whereClin
                 + "AND paysplit.ProcNum!=0 "
                 + "AND paysplit.DateEntry BETWEEN " + POut.Date(dateFrom) + " AND " + POut.Date(dateTo) + " ";
-            tableAllocatedPatInc = DataConnection.GetTable(command);
+            tableAllocatedPatInc = DataConnection.ExecuteDataTable(command);
             tableAllocatedPatInc.TableName = tableAllocatedPatIncName;
             //UnallocatedPtIncome--------------------------------------------------------------------------------
             whereProv = "";
@@ -1368,7 +1368,7 @@ namespace OpenDentBusiness
                 + whereClin
                 + "AND paysplit.ProcNum=0 "
                 + "AND paysplit.DateEntry BETWEEN " + POut.Date(dateFrom) + " AND " + POut.Date(dateTo) + " ";
-            tableUnallocatedPatInc = DataConnection.GetTable(command);
+            tableUnallocatedPatInc = DataConnection.ExecuteDataTable(command);
             tableUnallocatedPatInc.TableName = tableUnallocatedPatIncName;
             //InsIncome---------------------------------------------------------------------------------
             if (hasProvs)
@@ -1386,7 +1386,7 @@ namespace OpenDentBusiness
                 + whereProv
                 + whereClin
                 + "AND claimproc.DateSuppReceived BETWEEN " + POut.Date(dateFrom) + " AND " + POut.Date(dateTo) + " ";
-            tableInsIncome = DataConnection.GetTable(command);
+            tableInsIncome = DataConnection.ExecuteDataTable(command);
             tableInsIncome.TableName = tableInsIncomeName;
             //InsIncomeNotFinalized---------------------------------------------------------------------------------
             if (hasProvs)
@@ -1403,7 +1403,7 @@ namespace OpenDentBusiness
                 + whereProv
                 + whereClin
                 + "AND claimproc.ClaimPaymentNum=0";
-            tableInsIncomeNotFinalized = DataConnection.GetTable(command);
+            tableInsIncomeNotFinalized = DataConnection.ExecuteDataTable(command);
             tableInsIncomeNotFinalized.TableName = tableInsIncomeNotFinalizedName;
             DataSet dataSet = new DataSet();
             dataSet.Tables.Add(tableProduction);
@@ -1599,7 +1599,7 @@ namespace OpenDentBusiness
 				LEFT JOIN procedurecode on procedurecode.CodeNum=procedurelog.CodeNum
 				WHERE NOT (UCR=0 AND OrigEstWO=0 AND EstVsActualWO=0 AND Adjustment=0 AND NPR=0)
 				ORDER BY TranType,CalendarDate,PatNum";
-            DataTable retVal = DataConnection.GetTable(command);
+            DataTable retVal = DataConnection.ExecuteDataTable(command);
             return retVal;
         }
 
@@ -2046,11 +2046,11 @@ namespace OpenDentBusiness
             DataTable tableProduction = new DataTable();
             if (isCEMT)
             {
-                tableProduction = DataConnection.GetTable(command);
+                tableProduction = DataConnection.ExecuteDataTable(command);
             }
             else
             {
-                tableProduction = DataConnection.GetTable(command);
+                tableProduction = DataConnection.ExecuteDataTable(command);
             }
             tableProduction.TableName = "tableProduction";
             #endregion
@@ -2076,7 +2076,7 @@ namespace OpenDentBusiness
             command += " ORDER BY ClinicNum,AdjDate";
             DataTable tableAdj = new DataTable();
 
-                tableAdj = DataConnection.GetTable(command);
+                tableAdj = DataConnection.ExecuteDataTable(command);
 
             tableAdj.TableName = "tableAdj";
             #endregion
@@ -2136,7 +2136,7 @@ namespace OpenDentBusiness
             }
             DataTable tableInsWriteoff = new DataTable();
 
-                tableInsWriteoff = DataConnection.GetTable(command);
+                tableInsWriteoff = DataConnection.ExecuteDataTable(command);
 
             tableInsWriteoff.TableName = "tableInsWriteoff";
             #endregion
@@ -2179,7 +2179,7 @@ namespace OpenDentBusiness
                 + "GROUP BY SchedDate,ClinicNum "
                 + "ORDER BY SchedDate";
 
-                tableSched = DataConnection.GetTable(command);
+                tableSched = DataConnection.ExecuteDataTable(command);
 
             tableSched.TableName = "tableSched";
             #endregion
@@ -2212,7 +2212,7 @@ namespace OpenDentBusiness
             command += " ORDER BY ClinicNum,DatePay";
             DataTable tablePay = new DataTable();
 
-                tablePay = DataConnection.GetTable(command);
+                tablePay = DataConnection.ExecuteDataTable(command);
 
             tablePay.TableName = "tablePay";
             #endregion
@@ -2236,7 +2236,7 @@ namespace OpenDentBusiness
                 + " GROUP BY claimpayment.CheckDate,ClinicNum ORDER BY ClinicNum,CheckDate";
             DataTable tableIns = new DataTable();
 
-                tableIns = DataConnection.GetTable(command);
+                tableIns = DataConnection.ExecuteDataTable(command);
 
             tableIns.TableName = "tableIns";
             #endregion
@@ -2258,7 +2258,7 @@ namespace OpenDentBusiness
                 + whereClin
                 + "GROUP BY ClinicNum,YEAR(claimproc.DateCP), MONTH(claimproc.DateCP),DAY(claimproc.DateCP)";
 
-                tableWriteOffAdjustments = DataConnection.GetTable(command);
+                tableWriteOffAdjustments = DataConnection.ExecuteDataTable(command);
 
             }
             tableWriteOffAdjustments.TableName = "tableWriteOffAdjustments";
@@ -2657,7 +2657,7 @@ namespace OpenDentBusiness
             command += " ORDER BY ClinicNum,ProcDate";
             DataTable tableProduction = new DataTable();
 
-            tableProduction = DataConnection.GetTable(command);
+            tableProduction = DataConnection.ExecuteDataTable(command);
 
             tableProduction.TableName = "tableProduction";
             #endregion
@@ -2683,7 +2683,7 @@ namespace OpenDentBusiness
             command += " ORDER BY ClinicNum,AdjDate";
             DataTable tableAdj = new DataTable();
 
-            tableAdj = DataConnection.GetTable(command);
+            tableAdj = DataConnection.ExecuteDataTable(command);
 
             tableAdj.TableName = "tableAdj";
             #endregion
@@ -2743,7 +2743,7 @@ namespace OpenDentBusiness
             }
             DataTable tableInsWriteoff = new DataTable();
 
-            tableInsWriteoff = DataConnection.GetTable(command);
+            tableInsWriteoff = DataConnection.ExecuteDataTable(command);
 
             tableInsWriteoff.TableName = "tableInsWriteoff";
             #endregion
@@ -2777,7 +2777,7 @@ namespace OpenDentBusiness
             command += " ORDER BY ClinicNum,DatePay";
             DataTable tablePay = new DataTable();
 
-            tablePay = DataConnection.GetTable(command);
+            tablePay = DataConnection.ExecuteDataTable(command);
 
             tablePay.TableName = "tablePay";
             #endregion
@@ -2801,7 +2801,7 @@ namespace OpenDentBusiness
                 + " GROUP BY claimpayment.CheckDate,ClinicNum ORDER BY ClinicNum,CheckDate";
             DataTable tableIns = new DataTable();
 
-            tableIns = DataConnection.GetTable(command);
+            tableIns = DataConnection.ExecuteDataTable(command);
 
             tableIns.TableName = "tableIns";
             #endregion
@@ -2823,7 +2823,7 @@ namespace OpenDentBusiness
                 + whereClin
                 + " GROUP BY ClinicNum,YEAR(claimproc.DateCP), MONTH(claimproc.DateCP) ";
 
-                tableWriteOffAdjustments = DataConnection.GetTable(command);
+                tableWriteOffAdjustments = DataConnection.ExecuteDataTable(command);
 
             }
             tableWriteOffAdjustments.TableName = "tableWriteOffAdjustments";

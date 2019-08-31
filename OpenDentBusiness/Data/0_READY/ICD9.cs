@@ -133,7 +133,7 @@ namespace OpenDentBusiness
         public static void Delete(long icd9id)
         {
             var dataTable = 
-                DataConnection.GetTable(
+                DataConnection.ExecuteDataTable(
                     "SELECT lastname, firstname, patient.id " +
                     "FROM patients, patient_diseases, icd9" +
                     "WHERE patient.id = patient_diseases.patient_id " +

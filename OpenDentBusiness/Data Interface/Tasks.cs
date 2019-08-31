@@ -379,7 +379,7 @@ namespace OpenDentBusiness
                 command += TaskLists.BuildFilterJoins(clinicNum);
                 command += " WHERE TRUE " + TaskLists.BuildFilterWhereClause(userNum, clinicNum, Clinics.GetClinic(clinicNum)?.Region ?? 0);
             }
-            List<Task> ret = TableToList(DataConnection.GetTable(command));//This is how we set the IsUnread column.
+            List<Task> ret = TableToList(DataConnection.ExecuteDataTable(command));//This is how we set the IsUnread column.
             return ret;
         }
 
@@ -395,7 +395,7 @@ namespace OpenDentBusiness
 				FROM appointment 
 				INNER JOIN patient ON patient.PatNum=appointment.PatNum 
 				WHERE appointment.AptNum IN (" + string.Join(",", listPatApts) + ")";
-            DataTable table = DataConnection.GetTable(command);
+            DataTable table = DataConnection.ExecuteDataTable(command);
             Dictionary<long, string> dictTaskString = new Dictionary<long, string>();
             foreach (DataRow aptRow in table.Rows)
             {
@@ -484,7 +484,7 @@ namespace OpenDentBusiness
             command += BuildFilterWhereClause(userNum, globalFilterType, filterFkey);
             command += "GROUP BY task.TaskNum "//in case there are duplicate unreads
                 + "ORDER BY task.DateTimeEntry";
-            DataTable table = DataConnection.GetTable(command);
+            DataTable table = DataConnection.ExecuteDataTable(command);
             List<DataRow> listRows = new List<DataRow>();
             for (int i = 0; i < table.Rows.Count; i++)
             {

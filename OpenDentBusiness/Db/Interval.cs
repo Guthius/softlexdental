@@ -1,10 +1,10 @@
 using System;
-using System.Collections;
 using System.Collections.Specialized;
 
-namespace OpenDentBusiness{
-	///<summary>Currently used in recall interval. Uses all four values together to establish an interval between two dates, letting the user have total control.  Will later be used for such things as lab cases, appointment scheduling, etc.  Includes a way to combine all four values into one number to be stored in the database (as an int32).  Each value has a max of 255, except years has a max of 127.</summary>
-	public struct Interval {
+namespace OpenDentBusiness
+{
+    ///<summary>Currently used in recall interval. Uses all four values together to establish an interval between two dates, letting the user have total control.  Will later be used for such things as lab cases, appointment scheduling, etc.  Includes a way to combine all four values into one number to be stored in the database (as an int32).  Each value has a max of 255, except years has a max of 127.</summary>
+    public struct Interval {
 		///<summary></summary>
 		public int Years;
 		///<summary></summary>

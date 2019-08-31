@@ -58,7 +58,7 @@ namespace OpenDentBusiness
             {
                 queryBrokenApts = ByApptStatusQuery(hasClinicsEnabled, dateStart, dateEnd, whereProv, whereClin);
             }
-            return DataConnection.GetTable(queryBrokenApts);
+            return DataConnection.ExecuteDataTable(queryBrokenApts);
         }
 
         private static string ByProceduresQuery(bool hasClinicsEnabled, DateTime dateStart, DateTime dateEnd, string whereProv, string whereClin, BrokenApptProcedure brokenApptOption)

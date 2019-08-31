@@ -56,7 +56,7 @@ namespace OpenDentBusiness
         /// </summary>
         public static bool IsODServiceRunning()
         {
-            DataTable table = DataConnection.GetTable("SELECT ValueString,NOW() FROM preference WHERE PrefName='OpenDentalServiceHeartbeat'");
+            DataTable table = DataConnection.ExecuteDataTable("SELECT ValueString,NOW() FROM preference WHERE PrefName='OpenDentalServiceHeartbeat'");
             DateTime lastHeartbeat = PIn.DateT(table.Rows[0][0].ToString());
             DateTime dateTimeNow = PIn.DateT(table.Rows[0][1].ToString());
             if (lastHeartbeat.AddMinutes(6) < dateTimeNow)
@@ -80,7 +80,7 @@ namespace OpenDentBusiness
             // Check to make sure the asterisk server is still processing messages.
             ODException.SwallowAnyException(() =>
             {
-                table = DataConnection.GetTable("SELECT ValueString,NOW() DateTNow FROM preference WHERE PrefName='AsteriskServerHeartbeat'");
+                table = DataConnection.ExecuteDataTable("SELECT ValueString,NOW() DateTNow FROM preference WHERE PrefName='AsteriskServerHeartbeat'");
             });
 
             if (table != null && table.Rows.Count >= 1 && table.Columns.Count >= 2)

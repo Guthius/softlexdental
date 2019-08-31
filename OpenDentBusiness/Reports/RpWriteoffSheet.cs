@@ -100,7 +100,7 @@ namespace OpenDentBusiness
                     + "GROUP BY claimproc.ProvNum,claimsnapshot.DateTEntry,claimproc.ClinicNum,claimproc.PatNum "
                     + "ORDER BY claimsnapshot.DateTEntry,claimproc.PatNum";
             }
-            return DataConnection.GetTable(query);
+            return DataConnection.ExecuteDataTable(query);
         }
     }
 }

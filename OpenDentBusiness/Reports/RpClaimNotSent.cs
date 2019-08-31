@@ -76,7 +76,7 @@ namespace OpenDentBusiness
                 + " GROUP BY claim.ClaimNum";
 
             command += " ORDER BY claim.DateService";
-            return DataConnection.GetTable(command);
+            return DataConnection.ExecuteDataTable(command);
         }
     }
 }

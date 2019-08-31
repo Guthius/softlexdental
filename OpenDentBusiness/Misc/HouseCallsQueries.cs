@@ -41,7 +41,7 @@ namespace OpenDentBusiness
                 + "AND (appointment.AptStatus=1 OR appointment.AptStatus=4) "//sched or ASAP
                 + "AND appointment.AptDateTime > " + POut.Date(FromDate)//> midnight
                 + " AND appointment.AptDateTime < " + POut.Date(ToDate.AddDays(1));//< midnight
-            return DataConnection.GetTable(command);
+            return DataConnection.ExecuteDataTable(command);
         }
     }
 }

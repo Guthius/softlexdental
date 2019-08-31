@@ -68,7 +68,7 @@ namespace OpenDental{
 
 		///<summary>Sends the query to the database to retrieve the table.  Then initializes the column objects.</summary>
 		public void SubmitQuery(){
-			TableQ= DataConnection.GetTable(Query);
+			TableQ= DataConnection.ExecuteDataTable(Query);
 			InitializeColumns();
 		}
 
@@ -93,7 +93,7 @@ namespace OpenDental{
 
 		///<summary>Runs the query and returns the result.  An improvement would be to pass in the query, but no time to rewrite.</summary>
 		public DataTable GetTempTable(){
-			return DataConnection.GetTable(Query);
+			return DataConnection.ExecuteDataTable(Query);
 		}
 
 		///<summary>Assumes that the columns will be set in sequential order.  Automatically runs the language translation.</summary>

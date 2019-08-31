@@ -72,7 +72,7 @@ namespace OpenDentBusiness
                 query += "AND procedurelog.ClinicNum IN(" + string.Join(",", listClinicNums.Select(x => POut.Long(x))) + ") ";
             }
             query += "ORDER BY procedurelog.ProcDate,patient.LName,patient.FName,procedurecode.ProcCode";
-            DataTable table = DataConnection.GetTable(query);
+            DataTable table = DataConnection.ExecuteDataTable(query);
 #if DEBUG
             s.Stop();
             Console.WriteLine("Total time to generate report with " + string.Format("{0:#,##0.##}", table.Rows.Count) + " rows: "

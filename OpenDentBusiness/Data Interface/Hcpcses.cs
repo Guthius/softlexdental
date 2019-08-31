@@ -32,7 +32,7 @@ namespace OpenDentBusiness
         {
             List<string> retVal = new List<string>();
             string command = "SELECT HcpcsCode FROM hcpcs";
-            DataTable table = DataConnection.GetTable(command);
+            DataTable table = DataConnection.ExecuteDataTable(command);
             for (int i = 0; i < table.Rows.Count; i++)
             {
                 retVal.Add(table.Rows[i][0].ToString());

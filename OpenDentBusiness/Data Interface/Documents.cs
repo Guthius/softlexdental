@@ -505,7 +505,7 @@ namespace OpenDentBusiness
             table.Columns.Add("ImgType");
             //Move all documents which are invisible to the first document category.
             command = "SELECT DocNum FROM document WHERE PatNum='" + patNum + "' AND DocCategory<0";
-            raw = DataConnection.GetTable(command);
+            raw = DataConnection.ExecuteDataTable(command);
             if (raw.Rows.Count > 0)
             {//Are there any invisible documents?
                 command = "UPDATE document SET DocCategory='" + Defs.GetFirstForCategory(DefinitionCategory.ImageCats, true).Id
@@ -523,7 +523,7 @@ namespace OpenDentBusiness
             }
             //Load all documents into the result table.
             command = "SELECT DocNum,DocCategory,DateCreated,Description,ImgType,MountItemNum FROM document WHERE PatNum='" + patNum + "'";
-            raw = DataConnection.GetTable(command);
+            raw = DataConnection.ExecuteDataTable(command);
             for (int i = 0; i < raw.Rows.Count; i++)
             {
                 //Make sure hidden documents are never added (there is a small possibility that one is added after all are made visible).
@@ -549,7 +549,7 @@ namespace OpenDentBusiness
             }
             //Move all mounts which are invisible to the first document category.
             command = "SELECT MountNum FROM mount WHERE PatNum='" + patNum + "' AND DocCategory<0";
-            raw = DataConnection.GetTable(command);
+            raw = DataConnection.ExecuteDataTable(command);
             if (raw.Rows.Count > 0)
             {//Are there any invisible mounts?
                 command = "UPDATE mount SET DocCategory='" + Defs.GetFirstForCategory(DefinitionCategory.ImageCats, true).Id
@@ -567,7 +567,7 @@ namespace OpenDentBusiness
             }
             //Load all mounts into the result table.
             command = "SELECT MountNum,DocCategory,DateCreated,Description,ImgType FROM mount WHERE PatNum='" + patNum + "'";
-            raw = DataConnection.GetTable(command);
+            raw = DataConnection.ExecuteDataTable(command);
             for (int i = 0; i < raw.Rows.Count; i++)
             {
                 //Make sure hidden mounts are never added (there is a small possibility that one is added after all are made visible).

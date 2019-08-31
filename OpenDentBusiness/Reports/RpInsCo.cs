@@ -16,7 +16,7 @@ namespace OpenDentBusiness
                 + "AND carrier.CarrierNum=insplan.CarrierNum "
                 + "AND carrier.CarrierName LIKE '" + POut.String(carrier) + "%' "
                 + "ORDER BY carrier.CarrierName,patient.LName";
-            return DataConnection.GetTable(query);
+            return DataConnection.ExecuteDataTable(query);
         }
     }
 }

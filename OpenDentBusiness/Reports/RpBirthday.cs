@@ -30,7 +30,7 @@ namespace OpenDentBusiness
                 + "AND Birthdate > '1880-01-01' "
                 + "AND PatStatus=0	"
                 + "ORDER BY " + orderByClause;
-            DataTable table = DataConnection.GetTable(command);
+            DataTable table = DataConnection.ExecuteDataTable(command);
             table.Columns.Add("Age");
             for (int i = 0; i < table.Rows.Count; i++)
             {

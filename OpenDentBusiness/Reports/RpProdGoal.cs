@@ -341,7 +341,7 @@ namespace OpenDentBusiness
             command += " ORDER BY ClinicNum,ProcDate";
             DataTable tableProduction = new DataTable();
 
-            tableProduction = DataConnection.GetTable(command);
+            tableProduction = DataConnection.ExecuteDataTable(command);
 
             tableProduction.TableName = "tableProduction";
             #endregion
@@ -367,7 +367,7 @@ namespace OpenDentBusiness
             command += " ORDER BY ClinicNum,AdjDate";
             DataTable tableAdj = new DataTable();
 
-            tableAdj = DataConnection.GetTable(command);
+            tableAdj = DataConnection.ExecuteDataTable(command);
 
             tableAdj.TableName = "tableAdj";
             #endregion
@@ -427,7 +427,7 @@ namespace OpenDentBusiness
             }
             DataTable tableInsWriteoff = new DataTable();
 
-            tableInsWriteoff = DataConnection.GetTable(command);
+            tableInsWriteoff = DataConnection.ExecuteDataTable(command);
 
             tableInsWriteoff.TableName = "tableInsWriteoff";
             #endregion
@@ -470,7 +470,7 @@ namespace OpenDentBusiness
                 + "GROUP BY SchedDate,ClinicNum "
                 + "ORDER BY SchedDate";
 
-            tableSched = DataConnection.GetTable(command);
+            tableSched = DataConnection.ExecuteDataTable(command);
 
             tableSched.TableName = "tableSched";
             #endregion
@@ -501,7 +501,7 @@ namespace OpenDentBusiness
                 + "AND schedule." + DbHelper.BetweenDates("SchedDate", dateFrom, dateTo) + " "
                 + whereProv
                 + whereClin;
-            tableProdGoal = DataConnection.GetTable(command);
+            tableProdGoal = DataConnection.ExecuteDataTable(command);
             tableProdGoal.TableName = "tableProdGoal";
             #endregion
             DataSet dataSet = new DataSet();

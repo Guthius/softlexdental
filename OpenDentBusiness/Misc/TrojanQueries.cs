@@ -10,7 +10,7 @@ namespace OpenDentBusiness
     {
         public static DataTable GetMaxProcedureDate(long patientId)
         {
-            return DataConnection.GetTable(
+            return DataConnection.ExecuteDataTable(
                 "SELECT MAX(`ProcDate`) FROM `procedurelog`, `patient` " +
                 "WHERE `patient`.`PatNum` = `procedurelog`.`PatNum` " +
                 "AND `patient`.`Guarantor` = " + patientId);
@@ -18,7 +18,7 @@ namespace OpenDentBusiness
 
         public static DataTable GetMaxPaymentDate(long patientId)
         {
-            return DataConnection.GetTable(
+            return DataConnection.ExecuteDataTable(
                 "SELECT MAX(`DatePay`) FROM `paysplit`, `patient` " +
                 "WHERE `patient`.PatNum = `paysplit`.`PatNum` " +
                 "AND `patient`.`Guarantor` = " + patientId);
@@ -27,7 +27,7 @@ namespace OpenDentBusiness
         public static int GetUniqueFileNum()
         {
             var dataTable =
-                DataConnection.GetTable(
+                DataConnection.ExecuteDataTable(
                     "SELECT `ValueString` FROM `preference` " +
                     "WHERE `PrefName` = 'TrojanExpressCollectPreviousFileNumber'");
 
@@ -69,7 +69,7 @@ namespace OpenDentBusiness
                 whereTrojanID += "i.`TrojanID` = '" + deletePatientRecords[i][0] + "' ";
             }
 
-            return DataConnection.GetTable(
+            return DataConnection.ExecuteDataTable(
                 "SELECT DISTINCT " +
                 "p.FName," +
                 "p.LName," +
@@ -109,7 +109,7 @@ namespace OpenDentBusiness
                 whereTrojanID += "i.`TrojanID` = '" + deleteTrojanRecords[i][0] + "' ";
             }
 
-            return DataConnection.GetTable(
+            return DataConnection.ExecuteDataTable(
                 "SELECT DISTINCT " +
                 "p.FName," +
                 "p.LName," +

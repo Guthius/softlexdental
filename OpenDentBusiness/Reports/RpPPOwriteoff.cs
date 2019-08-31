@@ -148,7 +148,7 @@ namespace OpenDentBusiness
 						ORDER BY carrier.CarrierName";
                 }
             }
-            return DataConnection.GetTable(queryText);
+            return DataConnection.ExecuteDataTable(queryText);
         }
     }
 }

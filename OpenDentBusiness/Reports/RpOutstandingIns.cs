@@ -113,7 +113,7 @@ namespace OpenDentBusiness
             command += "ORDER BY carrier.CarrierName,claim.DateService,patient.LName,patient.FName,claim.ClaimType";
             command = Plugin.Filter(null, "Data_Claim_GetOutInsClaims_Query", command); // TODO: Give this filter a better name...
 
-            DataTable table = DataConnection.GetTable(command);
+            DataTable table = DataConnection.ExecuteDataTable(command);
             List<OutstandingInsClaim> listOutstandingInsClaims = table.Rows.OfType<DataRow>().Select(x => new OutstandingInsClaim(x)).ToList();
             return listOutstandingInsClaims;
         }

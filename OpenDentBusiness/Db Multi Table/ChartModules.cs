@@ -270,12 +270,12 @@ namespace OpenDentBusiness
                         + " OR IsLocked=1)";//Any locked proc should show.  This forces invalidated (deleted locked) procs to show.
                 }
                 command += " ORDER BY ProcDate";//we'll just have to reorder it anyway
-                DataTable rawProcs = DataConnection.GetTable(command);
+                DataTable rawProcs = DataConnection.ExecuteDataTable(command);
                 command = "SELECT ProcNum,EntryDateTime,UserNum,Note,"
                 + "CASE WHEN Signature!='' THEN 1 ELSE 0 END AS SigPresent "
                 + "FROM procnote WHERE PatNum=" + POut.Long(patNum)
                 + " ORDER BY EntryDateTime";// but this helps when looping for notes
-                DataTable rawNotes = DataConnection.GetTable(command);
+                DataTable rawNotes = DataConnection.ExecuteDataTable(command);
                 Dictionary<string, List<DataRow>> dictNotes = rawNotes.Select().GroupBy(x => x["ProcNum"].ToString())
                     .ToDictionary(x => x.Key, x => x.OrderByDescending(y => PIn.DateT(y["EntryDateTime"].ToString())).ToList());
                 Dictionary<string, ProcedureCode> dictProcCodes = ProcedureCodes.GetAllCodes().ToDictionary(x => x.CodeNum.ToString());
@@ -615,7 +615,7 @@ namespace OpenDentBusiness
                 + "AND p2.PatNum=" + POut.Long(patNum) + " "
                 + wherePodiumCommlog
                 + "ORDER BY CommDateTime";
-                DataTable rawComm = DataConnection.GetTable(command);
+                DataTable rawComm = DataConnection.ExecuteDataTable(command);
                 for (int i = 0; i < rawComm.Rows.Count; i++)
                 {
                     row = table.NewRow();
@@ -724,7 +724,7 @@ namespace OpenDentBusiness
                 #region formpat
                 command = "SELECT FormDateTime,FormPatNum "
                 + "FROM formpat WHERE PatNum ='" + POut.Long(patNum) + "' ORDER BY FormDateTime";
-                DataTable rawForm = DataConnection.GetTable(command);
+                DataTable rawForm = DataConnection.ExecuteDataTable(command);
                 for (int i = 0; i < rawForm.Rows.Count; i++)
                 {
                     row = table.NewRow();
@@ -809,7 +809,7 @@ namespace OpenDentBusiness
                 #region Rx
                 command = "SELECT RxNum,RxDate,Drug,Disp,ProvNum,Notes,PharmacyNum FROM rxpat WHERE PatNum=" + POut.Long(patNum)
                 + " ORDER BY RxDate";
-                DataTable rawRx = DataConnection.GetTable(command);
+                DataTable rawRx = DataConnection.ExecuteDataTable(command);
                 for (int i = 0; i < rawRx.Rows.Count; i++)
                 {
                     row = table.NewRow();
@@ -893,7 +893,7 @@ namespace OpenDentBusiness
                 + "WHERE labcase.LaboratoryNum=laboratory.LaboratoryNum "
                 + "AND PatNum=" + POut.Long(patNum)
                 + " ORDER BY DateTimeCreated";
-                DataTable rawLab = DataConnection.GetTable(command);
+                DataTable rawLab = DataConnection.ExecuteDataTable(command);
                 DateTime duedate;
                 for (int i = 0; i < rawLab.Rows.Count; i++)
                 {
@@ -1008,7 +1008,7 @@ namespace OpenDentBusiness
                 + "LEFT JOIN patient ON patient.PatNum=appointment.PatNum "
                 + "WHERE appointment.PatNum IN (" + string.Join(",", family.ListPats.Select(x => x.PatNum)) + ") "
                 + "ORDER BY DateTimeEntry";
-                DataTable rawTask = DataConnection.GetTable(command);
+                DataTable rawTask = DataConnection.ExecuteDataTable(command);
                 List<long> taskNums = rawTask.Select().Select(x => PIn.Long(x["TaskNum"].ToString())).ToList();
                 List<TaskList> listTaskLists = TaskLists.GetAll();
                 Dictionary<long, List<TaskNote>> dictTaskNotes = TaskNotes.RefreshForTasks(taskNums).GroupBy(x => x.TaskNum).ToDictionary(x => x.Key, x => x.ToList());
@@ -1171,7 +1171,7 @@ namespace OpenDentBusiness
                 command += " AND AptStatus = " + POut.Int((int)ApptStatus.Planned);
             }
             command += " ORDER BY AptDateTime";
-            rawApt = DataConnection.GetTable(command);
+            rawApt = DataConnection.ExecuteDataTable(command);
             long apptStatus;
             for (int i = 0; i < rawApt.Rows.Count; i++)
             {
@@ -1311,7 +1311,7 @@ namespace OpenDentBusiness
                 + "FROM emailmessage "
                 + "WHERE PatNum=" + POut.Long(patNum) + " "
                 + "ORDER BY MsgDateTime";
-                DataTable rawEmail = DataConnection.GetTable(command);
+                DataTable rawEmail = DataConnection.ExecuteDataTable(command);
                 for (int i = 0; i < rawEmail.Rows.Count; i++)
                 {
                     row = table.NewRow();
@@ -1421,7 +1421,7 @@ namespace OpenDentBusiness
                 }
                 command += "GROUP BY sheet.SheetNum,PatNum,Description,DateTimeSheet,SheetType "//Oracle compatible
                 + "ORDER BY DateTimeSheet";
-                DataTable rawSheet = DataConnection.GetTable(command);
+                DataTable rawSheet = DataConnection.ExecuteDataTable(command);
                 //SheetTypeEnum sheetType;
                 for (int i = 0; i < rawSheet.Rows.Count; i++)
                 {
@@ -1584,7 +1584,7 @@ namespace OpenDentBusiness
 
             command += "ORDER BY ItemOrder";
             //plannedappt.AptNum does refer to the planned appt, but the other fields in the result are for the linked scheduled appt.
-            DataTable rawPlannedAppts = DataConnection.GetTable(command);
+            DataTable rawPlannedAppts = DataConnection.ExecuteDataTable(command);
             DataRow aptRow;
             int itemOrder = 1;
             DateTime dateSched;

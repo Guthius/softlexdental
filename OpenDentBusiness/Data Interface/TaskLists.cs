@@ -456,19 +456,19 @@ namespace OpenDentBusiness
         public static void Delete(TaskList tlist)
         {
             string command = "SELECT COUNT(*) FROM tasklist WHERE Parent=" + POut.Long(tlist.TaskListNum);
-            DataTable table = DataConnection.GetTable(command);
+            DataTable table = DataConnection.ExecuteDataTable(command);
             if (table.Rows[0][0].ToString() != "0")
             {
                 throw new Exception(Lans.g("TaskLists", "Not allowed to delete task list because it still has child lists attached."));
             }
             command = "SELECT COUNT(*) FROM task WHERE TaskListNum=" + POut.Long(tlist.TaskListNum);
-            table = DataConnection.GetTable(command);
+            table = DataConnection.ExecuteDataTable(command);
             if (table.Rows[0][0].ToString() != "0")
             {
                 throw new Exception(Lans.g("TaskLists", "Not allowed to delete task list because it still has child tasks attached."));
             }
             command = "SELECT COUNT(*) FROM userod WHERE TaskListInBox=" + POut.Long(tlist.TaskListNum);
-            table = DataConnection.GetTable(command);
+            table = DataConnection.ExecuteDataTable(command);
             if (table.Rows[0][0].ToString() != "0")
             {
                 throw new Exception(Lans.g("TaskLists", "Not allowed to delete task list because it is attached to a user inbox."));

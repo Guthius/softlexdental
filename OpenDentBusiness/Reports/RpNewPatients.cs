@@ -46,7 +46,7 @@ namespace OpenDentBusiness
                 query += " HAVING $HowMuch > 0";
             }
             query += " ORDER BY dateFirstProc,patient.LName,patient.FName) result";
-            return DataConnection.GetTable(query);
+            return DataConnection.ExecuteDataTable(query);
         }
     }
 }

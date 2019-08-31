@@ -53,7 +53,7 @@ namespace OpenDentBusiness
                 command += "LEFT JOIN clinic ON clinic.ClinicNum=results.ClinicNum ";
             }
             command += "ORDER BY results.DatePay,Patient,results.SplitNum";
-            DataTable raw = DataConnection.GetTable(command);
+            DataTable raw = DataConnection.ExecuteDataTable(command);
             return raw;
         }
 
@@ -108,7 +108,7 @@ namespace OpenDentBusiness
 				HAVING ABS(UnallocAmt) > 0.005 ";
             }
             //one row per family
-            DataTable tableUnallocatedUnearned = DataConnection.GetTable(command);
+            DataTable tableUnallocatedUnearned = DataConnection.ExecuteDataTable(command);
             List<long> listGuarantors = tableUnallocatedUnearned.Rows.OfType<DataRow>().Select(x => PIn.Long(x["Guarantor"].ToString())).ToList();
             //all procedures for the families that have not been explicitly paid off.
             //Key: GuarantorNum | Val:ListRemainingProcsForFam
@@ -222,7 +222,7 @@ namespace OpenDentBusiness
                 command += @"
 				HAVING ABS(UnallocatedAmt) > 0.005";
             }
-            DataTable tableUnallocatedPrepayments = DataConnection.GetTable(command);
+            DataTable tableUnallocatedPrepayments = DataConnection.ExecuteDataTable(command);
             //get remaining amount for all procedures of the returned families.
             List<long> listGuarantorNums = tableUnallocatedPrepayments.Rows.OfType<DataRow>().Select(x => PIn.Long(x["Guarantor"].ToString())).ToList();
             if (listGuarantorNums.Count == 0)
@@ -301,7 +301,7 @@ namespace OpenDentBusiness
             command += whereClin;
             command += "GROUP BY guar.PatNum HAVING ABS(Amount) > 0.005 ";//still won't work for oracle
             command += "ORDER BY guar.LName, guar.FName, guar.MiddleI, Amount";
-            DataTable raw = DataConnection.GetTable(command);
+            DataTable raw = DataConnection.ExecuteDataTable(command);
             return raw;
         }
 
