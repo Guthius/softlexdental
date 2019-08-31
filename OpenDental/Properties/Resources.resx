@@ -817,4 +817,34 @@
   <data name="IconEmailTrace" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IconEmailTrace.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="IconArrowDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IconArrowDown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconArrowUp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IconArrowUp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconThumbDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IconThumbDown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconThumbUp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IconThumbUp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconUpdate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IconUpdate.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconUserComment" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IconUserComment.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconUserEdit" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IconUserEdit.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconUserReport" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IconUserReport.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconUserSilhouette" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IconUserSilhouette.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconUserSwitch" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IconUserSwitch.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
