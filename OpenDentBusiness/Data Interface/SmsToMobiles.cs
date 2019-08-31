@@ -225,15 +225,15 @@ namespace OpenDentBusiness
                 throw new Exception("No messages to send.");
             }
             StringBuilder strbuild = new StringBuilder();
-            using (XmlWriter writer = XmlWriter.Create(strbuild, WebSerializer.CreateXmlWriterSettings(true)))
-            {
-                writer.WriteStartElement("Payload");
-                writer.WriteStartElement("ListSmsToMobile");
-                System.Xml.Serialization.XmlSerializer xmlListSmsToMobileSerializer = new System.Xml.Serialization.XmlSerializer(typeof(List<SmsToMobile>));
-                xmlListSmsToMobileSerializer.Serialize(writer, listMessages);
-                writer.WriteEndElement(); //ListSmsToMobile	
-                writer.WriteEndElement(); //Payload	
-            }
+            //using (XmlWriter writer = XmlWriter.Create(strbuild, WebSerializer.CreateXmlWriterSettings(true)))
+            //{
+            //    writer.WriteStartElement("Payload");
+            //    writer.WriteStartElement("ListSmsToMobile");
+            //    System.Xml.Serialization.XmlSerializer xmlListSmsToMobileSerializer = new System.Xml.Serialization.XmlSerializer(typeof(List<SmsToMobile>));
+            //    xmlListSmsToMobileSerializer.Serialize(writer, listMessages);
+            //    writer.WriteEndElement(); //ListSmsToMobile	
+            //    writer.WriteEndElement(); //Payload	
+            //}
             string result = "";
             try
             {

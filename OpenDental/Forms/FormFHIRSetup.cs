@@ -306,13 +306,13 @@ namespace OpenDental {
 			settings.Indent=true;
 			settings.IndentChars=("    ");
 			StringBuilder strbuild=new StringBuilder();
-			using(XmlWriter writer = XmlWriter.Create(strbuild,WebSerializer.CreateXmlWriterSettings(true))) {
-				writer.WriteStartElement("Payload");
-				writer.WriteStartElement("ListAPIKeysUpdated");
-				WriteListAPIKeys(writer,_listApiKeysLocal);
-				writer.WriteEndElement();
-				writer.WriteEndElement(); //Payload	
-			}
+			//using(XmlWriter writer = XmlWriter.Create(strbuild,WebSerializer.CreateXmlWriterSettings(true))) {
+			//	writer.WriteStartElement("Payload");
+			//	writer.WriteStartElement("ListAPIKeysUpdated");
+			//	WriteListAPIKeys(writer,_listApiKeysLocal);
+			//	writer.WriteEndElement();
+			//	writer.WriteEndElement(); //Payload	
+			//}
 			//Send the message and get the result-------------------------------------------------------------------------------------
 			string result="";
 			//try {
