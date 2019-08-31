@@ -23,8 +23,5 @@
     <Setting Name="OpenDentBusiness_DentalxchangePartnerService_DeaPartnerService" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">https://prelive2.dentalxchange.com:443/dea/DeaPartnerService</Value>
     </Setting>
-    <Setting Name="OpenDentBusiness_SheetsSynch_SheetsSynch" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">http://localhost:2923/SheetsSynch.asmx</Value>
-    </Setting>
   </Settings>
 </SettingsFile>

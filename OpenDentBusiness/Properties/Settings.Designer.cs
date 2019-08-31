@@ -92,15 +92,5 @@ namespace OpenDentBusiness.Properties {
                 return ((string)(this["OpenDentBusiness_DentalxchangePartnerService_DeaPartnerService"]));
             }
         }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:2923/SheetsSynch.asmx")]
-        public string OpenDentBusiness_SheetsSynch_SheetsSynch {
-            get {
-                return ((string)(this["OpenDentBusiness_SheetsSynch_SheetsSynch"]));
-            }
-        }
     }
 }
