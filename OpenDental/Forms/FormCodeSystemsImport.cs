@@ -86,29 +86,29 @@ namespace OpenDental {
 			butDownload.Enabled=false;
 			checkKeepDescriptions.Enabled=false;
 			try {
-				string result="";
-				result=RequestCodeSystemsXml();
-				XmlDocument doc=new XmlDocument();
-				doc.LoadXml(result);
-				List<CodeSystem> listCodeSystemsAvailable=CodeSystems.GetForCurrentVersion(_isMemberNation);
-				for(int i=0;i<listCodeSystemsAvailable.Count;i++) {
-					string codeSystemName=listCodeSystemsAvailable[i].CodeSystemName;
-					try {
-						XmlNode node=doc.SelectSingleNode("//"+codeSystemName);
-						if(node!=null) {
-							listCodeSystemsAvailable[i].VersionAvail=node.Attributes["VersionAvailable"].InnerText;
-						}
-						else {
-							listCodeSystemsAvailable[i].VersionAvail=@"N\A";
-						}
-						CodeSystems.Update(listCodeSystemsAvailable[i]);						
-					}
-					catch {
-						//Might happen if they are running this tool without the right rows in the CodeSystem table? Maybe.
-						//Don't prevent the rest of the code systems from being downloaded just because 1 failed.
-						continue;
-					}
-				}
+				//string result="";
+				//result=RequestCodeSystemsXml();
+				//XmlDocument doc=new XmlDocument();
+				//doc.LoadXml(result);
+				//List<CodeSystem> listCodeSystemsAvailable=CodeSystems.GetForCurrentVersion(_isMemberNation);
+				//for(int i=0;i<listCodeSystemsAvailable.Count;i++) {
+				//	string codeSystemName=listCodeSystemsAvailable[i].CodeSystemName;
+				//	try {
+				//		XmlNode node=doc.SelectSingleNode("//"+codeSystemName);
+				//		if(node!=null) {
+				//			listCodeSystemsAvailable[i].VersionAvail=node.Attributes["VersionAvailable"].InnerText;
+				//		}
+				//		else {
+				//			listCodeSystemsAvailable[i].VersionAvail=@"N\A";
+				//		}
+				//		CodeSystems.Update(listCodeSystemsAvailable[i]);						
+				//	}
+				//	catch {
+				//		//Might happen if they are running this tool without the right rows in the CodeSystem table? Maybe.
+				//		//Don't prevent the rest of the code systems from being downloaded just because 1 failed.
+				//		continue;
+				//	}
+				//}
 				FillGrid();
 				//It is now safe to allow downloading.
 				butDownload.Enabled=true;
@@ -281,19 +281,6 @@ namespace OpenDental {
 			}
 			_hasDownloaded=true;
 			FillGrid();
-		}
-
-		///<summary>Returns a list of available code systems.  Throws exceptions, put in try catch block.</summary>
-		private static string RequestCodeSystemsXml() {
-			OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-			updateService.Url=Preference.GetString(PreferenceName.UpdateServerAddress);
-			if(Preference.GetString(PreferenceName.UpdateWebProxyAddress) !="") {
-				IWebProxy proxy=new WebProxy(Preference.GetString(PreferenceName.UpdateWebProxyAddress));
-				ICredentials cred=new NetworkCredential(Preference.GetString(PreferenceName.UpdateWebProxyUserName),Preference.GetString(PreferenceName.UpdateWebProxyPassword));
-				proxy.Credentials=cred;
-				updateService.Proxy=proxy;
-			}
-			return updateService.RequestCodeSystems("");//may throw error.  No security on this webmethod.
 		}
 
 		///<summary>Used to show EULA or other pre-download actions.  Displays message boxes. Returns false if pre-download checks not satisfied.</summary>

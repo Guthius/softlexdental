@@ -1,17 +1,14 @@
+using OpenDental.UI;
+using OpenDentBusiness;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
-using System.Xml.Serialization;
-using OpenDentBusiness;
-using OpenDental.UI;
 
-namespace OpenDental {
-	public partial class FormRequestEdit:ODForm {
+namespace OpenDental
+{
+    public partial class FormRequestEdit:ODForm {
 		public long RequestId;
 		public bool IsAdminMode;
 		private ODDataTable tableObj;

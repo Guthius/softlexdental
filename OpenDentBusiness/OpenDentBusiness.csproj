@@ -345,9 +345,6 @@
     <Compile Include="Db\SOut.cs" />
     <Compile Include="Data\0_READY\DefinitionCategory.cs" />
     <Compile Include="DefCatOptions.cs" />
-    <Compile Include="Email\BasicEmailAddress.cs" />
-    <Compile Include="Email\BasicEmailMessage.cs" />
-    <Compile Include="Email\SendEmails.cs" />
     <Compile Include="Data Interface\ProviderClinics.cs" />
     <Compile Include="Data Interface\RecurringCharges.cs" />
     <Compile Include="Db Multi Table\AgingData.cs" />

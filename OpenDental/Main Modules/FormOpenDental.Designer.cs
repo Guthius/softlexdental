@@ -207,7 +207,6 @@
             this.menuItemHelpIndex = new System.Windows.Forms.MenuItem();
             this.menuItemWebinar = new System.Windows.Forms.MenuItem();
             this.menuItemRemoteSupport = new System.Windows.Forms.MenuItem();
-            this.menuItemRequestFeatures = new System.Windows.Forms.MenuItem();
             this.menuItemUpdate = new System.Windows.Forms.MenuItem();
             this.menuItem11 = new System.Windows.Forms.MenuItem();
             this.menuItemAbout = new System.Windows.Forms.MenuItem();
@@ -1263,6 +1262,11 @@
             this.menuItemProcLockTool.Text = "Procedure Lock Tool";
             this.menuItemProcLockTool.Click += new System.EventHandler(this.menuItemProcLockTool_Click);
             // 
+            // menuItemServiceManager
+            // 
+            this.menuItemServiceManager.Index = 12;
+            this.menuItemServiceManager.Text = "";
+            // 
             // menuItemShutdown
             // 
             this.menuItemShutdown.Index = 13;
@@ -1450,7 +1454,6 @@
             this.menuItemHelpIndex,
             this.menuItemWebinar,
             this.menuItemRemoteSupport,
-            this.menuItemRequestFeatures,
             this.menuItemUpdate,
             this.menuItem11,
             this.menuItemAbout});
@@ -1493,26 +1496,20 @@
             this.menuItemRemoteSupport.Text = "Remote Support with Code";
             this.menuItemRemoteSupport.Click += new System.EventHandler(this.menuItemRemoteSupport_Click);
             // 
-            // menuItemRequestFeatures
-            // 
-            this.menuItemRequestFeatures.Index = 6;
-            this.menuItemRequestFeatures.Text = "Request Features";
-            this.menuItemRequestFeatures.Click += new System.EventHandler(this.menuItemRequestFeatures_Click);
-            // 
             // menuItemUpdate
             // 
-            this.menuItemUpdate.Index = 7;
+            this.menuItemUpdate.Index = 6;
             this.menuItemUpdate.Text = "&Update";
             this.menuItemUpdate.Click += new System.EventHandler(this.menuItemUpdate_Click);
             // 
             // menuItem11
             // 
-            this.menuItem11.Index = 8;
+            this.menuItem11.Index = 7;
             this.menuItem11.Text = "-";
             // 
             // menuItemAbout
             // 
-            this.menuItemAbout.Index = 9;
+            this.menuItemAbout.Index = 8;
             this.menuItemAbout.Text = "About";
             this.menuItemAbout.Click += new System.EventHandler(this.menuItemAbout_Click);
             // 

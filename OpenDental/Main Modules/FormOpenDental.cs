@@ -78,7 +78,6 @@ namespace OpenDental
         private List<PopupEvent> PopupEventList;
         private MenuItem menuItemPharmacies;
         private MenuItem menuItemSheets;
-        private MenuItem menuItemRequestFeatures;
         private MenuItem menuItemModules;
         private MenuItem menuItemRecallTypes;
         private MenuItem menuItemFeeScheds;
@@ -6528,12 +6527,6 @@ namespace OpenDental
             {
                 MsgBox.Show(this, "Could not find file.  Please use Online Support instead.");
             }
-        }
-
-        private void menuItemRequestFeatures_Click(object sender, EventArgs e)
-        {
-            FormFeatureRequest FormF = new FormFeatureRequest();
-            FormF.Show();
         }
 
         private void menuItemUpdate_Click(object sender, System.EventArgs e)
