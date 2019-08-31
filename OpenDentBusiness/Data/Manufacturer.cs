@@ -1,4 +1,13 @@
-﻿using MySql.Data.MySqlClient;
+﻿/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 
@@ -36,7 +45,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <returns>A list of manufacturers.</returns>
         public static List<Manufacturer> All() =>
-            SelectMany("SELECT * FROM manufacturers", FromReader);
+            SelectMany("SELECT * FROM `manufacturers`", FromReader);
 
         /// <summary>
         /// Gets the manufacturer with the specified ID.
@@ -44,7 +53,7 @@ namespace OpenDentBusiness
         /// <param name="manufacturerId">The ID of the manufacturer.</param>
         /// <returns>The manufacturer with the specified ID.</returns>
         public static Manufacturer GetById(long manufacturerId) =>
-            SelectOne("SELECT * FROM manufacturers WHERE id = " + manufacturerId, FromReader);
+            SelectOne("SELECT * FROM `manufacturers` WHERE `id` = " + manufacturerId, FromReader);
 
         /// <summary>
         /// Gets the manufacturer with the specified code.
@@ -52,7 +61,7 @@ namespace OpenDentBusiness
         /// <param name="code">The code of the manufacturer.</param>
         /// <returns>The manufacturer with the specified code.</returns>
         public static Manufacturer GetByCode(string code) =>
-            SelectOne("SELECT * FROM manufacturers WHERE code = :code", FromReader,
+            SelectOne("SELECT * FROM `manufacturers` WHERE `code` = ?code", FromReader,
                 new MySqlParameter("code", code));
 
         /// <summary>
@@ -62,7 +71,7 @@ namespace OpenDentBusiness
         /// <returns>The ID assigned to the manufacturer.</returns>
         public static long Insert(Manufacturer manufacturer) =>
             manufacturer.Id = DataConnection.ExecuteInsert(
-                "INSERT INTO manufacturers (name, code) VALUES (@name, @code)",
+                "INSERT INTO `manufacturers` (`name`, `code`) VALUES (?name, ?code)",
                     new MySqlParameter("name", manufacturer.Name ?? ""),
                     new MySqlParameter("code", manufacturer.Code ?? ""));
 
@@ -72,7 +81,7 @@ namespace OpenDentBusiness
         /// <param name="manufacturer">The manufacturer.</param>
         public static void Update(Manufacturer manufacturer) => 
             DataConnection.ExecuteNonQuery(
-                "UPDATE manufacturers SET name = @name, code = @code WHERE id = @id",
+                "UPDATE `manufacturers` SET `name` = ?name, `code` = ?code WHERE `id` = ?id",
                     new MySqlParameter("name", manufacturer.Name ?? ""),
                     new MySqlParameter("code", manufacturer.Code ?? ""),
                     new MySqlParameter("id", manufacturer.Id));
@@ -91,7 +100,7 @@ namespace OpenDentBusiness
                 throw new ApplicationException("Cannot delete: DrugManufacturer is in use by VaccineDef.");
             }
 
-            DataConnection.ExecuteNonQuery("DELETE FROM manufacturers WHERE id = " + manufacturerId);
+            DataConnection.ExecuteNonQuery("DELETE FROM `manufacturers` WHERE `id` = " + manufacturerId);
         }
     }
 }

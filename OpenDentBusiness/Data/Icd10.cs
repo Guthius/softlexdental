@@ -1,11 +1,20 @@
-﻿using MySql.Data.MySqlClient;
+﻿/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 
 namespace OpenDentBusiness
 {
     /// <summary>
-    /// Other tables generally use the ICD10Code string as their foreign key.
+    /// Other tables generally use the <see cref="Code"/> string as their foreign key.
     /// </summary>
     public class ICD10 : DataRecord
     {
@@ -48,7 +57,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <returns>A list of ICD10 codes.</returns>
         public static List<ICD10> All() => 
-            SelectMany("SELECT * FROM icd10", FromReader);
+            SelectMany("SELECT * FROM `icd10`", FromReader);
 
         /// <summary>
         /// Gets the ICD10 code with the specified ID.
@@ -56,7 +65,7 @@ namespace OpenDentBusiness
         /// <param name="icd10Id">The ID of the ICD10 code.</param>
         /// <returns>The ICD10 code with the specified ID.</returns>
         public static ICD10 GetById(long icd10Id) =>
-            SelectOne("SELECT * FROM icd10 WHERE id = " + icd10Id, FromReader);
+            SelectOne("SELECT * FROM `icd10` WHERE `id` = " + icd10Id, FromReader);
 
         /// <summary>
         /// Gets the ICD10 code with the specified code.
@@ -64,7 +73,7 @@ namespace OpenDentBusiness
         /// <param name="icd10Code">The ICD10 code.</param>
         /// <returns>The ICD10 code with the specified code.</returns>
         public static ICD10 GetByCode(string icd10Code) =>
-            SelectOne("SELECT * FROM icd10 WHERE code = @code", FromReader,
+            SelectOne("SELECT * FROM `icd10` WHERE `code` = ?code", FromReader,
                new MySqlParameter("code", icd10Code));
 
         /// <summary>
@@ -72,7 +81,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <returns>The number of ICD10 codes.</returns>
         public static long GetCount() =>
-            DataConnection.ExecuteLong("SELECT COUNT(*) FROM icd10 WHERE header = 0");
+            DataConnection.ExecuteLong("SELECT COUNT(*) FROM `icd10` WHERE `header` = 0");
 
         /// <summary>
         /// Gets the ICD10 codes in the specified list.
@@ -81,7 +90,7 @@ namespace OpenDentBusiness
         /// <returns>A list of ICD10 codes.</returns>
         public static List<ICD10> GetByCodes(List<string> icd10CodeList) =>
             SelectMany(
-                "SELECT * FROM icd10 WHERE code = ANY(:codes)", FromReader, 
+                "SELECT * FROM `icd10` WHERE code = ANY(:codes)", FromReader, 
                     new MySqlParameter("codes", icd10CodeList));
 
         /// <summary>
@@ -91,7 +100,7 @@ namespace OpenDentBusiness
         /// <returns>A list of ICD10 codes matching the search text.</returns>
         public static List<ICD10> Find(string searchText) =>
             SelectMany(
-                "SELECT * FROM icd10 WHERE code LIKE :search_text OR description LIKE @search_text", FromReader,
+                "SELECT * FROM `icd10` WHERE `code` LIKE ?search_text OR `description` LIKE ?search_text", FromReader,
                     new MySqlParameter("search_text", $"%{searchText}%"));
 
         /// <summary>
@@ -101,7 +110,7 @@ namespace OpenDentBusiness
         /// <returns>True if the code exists in the database; otherwise, false.</returns>
         public static bool CodeExists(string icd10Code) =>
             DataConnection.ExecuteLong(
-                "SELECT COUNT(*) FROM icd10 WHERE code = @code", 
+                "SELECT COUNT(*) FROM `icd10` WHERE `code` = ?code", 
                     new MySqlParameter("code", icd10Code)) > 0;
 
         /// <summary>
@@ -111,7 +120,7 @@ namespace OpenDentBusiness
         /// <returns></returns>
         public static long Insert(ICD10 icd10) =>
             icd10.Id = DataConnection.ExecuteInsert(
-                "INSERT INTO icd10 (code, description, header) VALUES (@code, @description, @header)",
+                "INSERT INTO `icd10` (`code`, `description`, `header`) VALUES (?code, ?description, ?header)",
                     new MySqlParameter("code", icd10.Code ?? ""),
                     new MySqlParameter("description", icd10.Description ?? ""),
                     new MySqlParameter("header", icd10.Header));
@@ -122,7 +131,7 @@ namespace OpenDentBusiness
         /// <param name="icd10">The ICD10 code.</param>
         public static void Update(ICD10 icd10) =>
             DataConnection.ExecuteNonQuery(
-                "UPDATE icd10 SET code = :code, description = @description, header = @header WHERE id =  @id",
+                "UPDATE `icd10` SET `code` = ?code, `description` = ?description, `header` = ?header WHERE `id` =  ?id",
                     new MySqlParameter("code", icd10.Code ?? ""),
                     new MySqlParameter("description", icd10.Description ?? ""),
                     new MySqlParameter("header", icd10.Header),
@@ -134,7 +143,7 @@ namespace OpenDentBusiness
         /// <param name="icd10Id">The ID of the ICD10 code.</param>
         public static void Delete(long icd10Id) =>
             DataConnection.ExecuteNonQuery(
-                "DELETE FROM icd10 WHERE id = " + icd10Id);
+                "DELETE FROM `icd10` WHERE `id` = " + icd10Id);
 
         #region CLEANUP
 

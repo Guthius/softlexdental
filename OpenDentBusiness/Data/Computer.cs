@@ -1,3 +1,12 @@
+/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -8,10 +17,9 @@ namespace OpenDentBusiness
     /// <summary>
     /// Keeps track of the computers in an office.
     /// 
-    /// The list will eventually become cluttered with the names of old
-    /// computers that are no longer in service. The old rows can be safely 
-    /// deleted. Although the primary key is used in at least one table, 
-    /// this will probably be changed, and the computername will become the 
+    /// The list will eventually become cluttered with the names of old computers that are no 
+    /// longer in service. The old rows can be safely deleted. Although the primary key is used in 
+    /// at least one table, this will probably be changed, and the computername will become the 
     /// primary key.
     /// </summary>
     public class Computer : DataRecord
@@ -64,15 +72,15 @@ namespace OpenDentBusiness
         /// </summary>
         /// <returns>A list of computers.</returns>
         public static List<Computer> All() =>
-            SelectMany("SELECT * FROM computers", FromReader);
+            SelectMany("SELECT * FROM `computers`", FromReader);
 
         /// <summary>
-        /// Gets a list of all active computers. A computer is considered
-        /// active when it has sent a heartbeat within the last 4 minutes.
+        /// Gets a list of all active computers. A computer is considered active when it has sent 
+        /// a heartbeat within the last 4 minutes.
         /// </summary>
         /// <returns>A list of computers.</returns>
         public static List<Computer> AllActive() =>
-            SelectMany("SELECT * FROM computers WHERE heartbeat > (NOW() - INTERVAL '4 MINUTE')", FromReader);
+            SelectMany("SELECT * FROM `computers` WHERE `heartbeat` > (NOW() - INTERVAL '4 MINUTE')", FromReader);
 
         /// <summary>
         /// Gets the computer with the specified ID.
@@ -80,7 +88,7 @@ namespace OpenDentBusiness
         /// <param name="computerId">The ID of the computer.</param>
         /// <returns>The computer with the specified ID.</returns>
         public static Computer GetById(long computerId) => 
-            SelectOne("SELECT * FROM computers WHERE id = " + computerId, FromReader);
+            SelectOne("SELECT * FROM `computers` WHERE `id` = " + computerId, FromReader);
 
         /// <summary>
         /// Inserts the specified computer into the database.
@@ -89,7 +97,7 @@ namespace OpenDentBusiness
         /// <returns>The ID assigned to the computer.</returns>
         public static long Insert(Computer computer) =>
             computer.Id = DataConnection.ExecuteInsert(
-                "INSERT INTO computers (name, heartbeat) VALUES(@name, @heartbeat)",
+                "INSERT INTO computers (`name`, `heartbeat`) VALUES(?name, ?heartbeat)",
                     new MySqlParameter("name", computer.Name ?? ""),
                     new MySqlParameter("heartbeat", computer.Heartbeat));
 
@@ -99,7 +107,7 @@ namespace OpenDentBusiness
         /// <param name="computer">The computer.</param>
         public static void Update(Computer computer) =>
             DataConnection.ExecuteNonQuery(
-                "UPDATE computers SET name = @name, heartbeat = @heartbeat WHERE id = @id",
+                "UPDATE `computers` SET `name` = ?name, `heartbeat` = ?heartbeat WHERE `id` = ?id",
                     new MySqlParameter("name", computer.Name ?? ""),
                     new MySqlParameter("heartbeat", computer.Heartbeat),
                     new MySqlParameter("id", computer.Id));
@@ -109,7 +117,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <param name="computerId">The ID of the computer.</param>
         public static void Delete(long computerId) => 
-            DataConnection.ExecuteNonQuery("DELETE FROM computers WHERE id = " + computerId);
+            DataConnection.ExecuteNonQuery("DELETE FROM `computers` WHERE `id` = " + computerId);
 
         /// <summary>
         /// Deletes the specified computer from the database.

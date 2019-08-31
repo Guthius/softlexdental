@@ -1,3 +1,12 @@
+/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -66,7 +75,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <returns>A list of accounts.</returns>
         public static List<Account> All() =>
-            SelectMany("SELECT * FROM accounts", FromReader);
+            SelectMany("SELECT * FROM `accounts`", FromReader);
 
         /// <summary>
         /// Gets the account with the specified ID.
@@ -74,7 +83,7 @@ namespace OpenDentBusiness
         /// <param name="accountId">The ID of the account.</param>
         /// <returns>The account with the specified ID.</returns>
         public static Account GetById(long accountId) =>
-            SelectOne("SELECT * FROM accounts WHERE id = " + accountId, FromReader);
+            SelectOne("SELECT * FROM `accounts` WHERE `id` = " + accountId, FromReader);
 
         /// <summary>
         /// Gets the description of the account with the specified ID.
@@ -91,7 +100,7 @@ namespace OpenDentBusiness
         /// <returns>The ID assigned to the account.</returns>
         public static long Insert(Account account) =>
             account.Id = DataConnection.ExecuteInsert(
-                "INSERT INTO accounts (description, type, bank_number, inactive, color) VALUES (@description, @type, @bank_number, @inactive, @color)",
+                "INSERT INTO `accounts` (`description`, `type`, `bank_number`, `inactive`, `color`) VALUES (?description, ?type, ?bank_number, ?inactive, ?color)",
                     new MySqlParameter("description", account.Description ?? ""),
                     new MySqlParameter("type", (int)account.Type),
                     new MySqlParameter("bank_number", account.BankNumber ?? ""),
@@ -104,7 +113,7 @@ namespace OpenDentBusiness
         /// <param name="account">The account.</param>
         public static void Update(Account account) =>
             DataConnection.ExecuteNonQuery(
-                "UPDATE accounts SET description = @description, type = @type, bank_number = @bank_number, inactive = @inactive, color = @color WHERE id = @id",
+                "UPDATE `accounts` SET `description` = ?description, `type` = ?type, `bank_number` = ?bank_number, `inactive` = ?inactive, `color` = ?color WHERE `id` = ?id",
                     new MySqlParameter("description", account.Description ?? ""),
                     new MySqlParameter("type", (int)account.Type),
                     new MySqlParameter("bank_number", account.BankNumber ?? ""),
@@ -116,12 +125,11 @@ namespace OpenDentBusiness
         /// Deletes the specified account from the database.
         /// </summary>
         /// <param name="account">The account.</param>
+        /// <exception cref="DataException">When the account is in use and cannot be deleted.</exception>
         public static void Delete(Account account)
         {
-            // TODO: Fix me
-
             // Check if there are any journal entries assigned to the account.
-            var count = DataConnection.ExecuteLong("SELECT COUNT(*) FROM journalentry WHERE AccountNum =" + account.Id);
+            var count = DataConnection.ExecuteLong("SELECT COUNT(*) FROM `journal_entries` WHERE `account_id` =" + account.Id);
             if (count > 0)
             {
                 throw new DataException("Not allowed to delete an account with existing journal entries.");
@@ -157,7 +165,7 @@ namespace OpenDentBusiness
                 }
             }
 
-            DataConnection.ExecuteNonQuery("DELETE FROM accounts WHERE id = " + account.Id);
+            DataConnection.ExecuteNonQuery("DELETE FROM `accounts` WHERE `id` = " + account.Id);
         }
 
         #region CLEANUP

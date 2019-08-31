@@ -1926,7 +1926,7 @@ namespace OpenDentBusiness.HL7 {
 				EventLog.WriteEntry("OpenDentHL7","The PRB segment was not processed.  The action codes supported are 'AD' for add or 'UP' for update.",EventLogEntryType.Information);
 				return;
 			}
-			long probDefNum=DiseaseDef.GetNumFromSnomed(PIn.String(seg.GetFieldComponent(probCodeOrder,0)));
+			long probDefNum=DiseaseDef.GetIdBySnomed(PIn.String(seg.GetFieldComponent(probCodeOrder,0)));
 			//The problem must be a SNOMEDCT code, identified by the coding system table 0396 value "SNM" in component 3 of the CWE problem code field
 			//There must be a disease def setup with the SNOMEDCT code in the problem list or we will ignore this problem
 			if(seg.GetFieldComponent(probCodeOrder,2).ToLower()!="snm" || probDefNum==0) {

@@ -487,7 +487,7 @@ namespace OpenDental {
 					continue;
 				}
 				if(_listProblemReconcile[j]==ListProblemNew[index]) {
-					disDU=DiseaseDef.GetById(DiseaseDef.GetNumFromCode(ListProblemDefNew[index].SnomedCode));
+					disDU=DiseaseDef.GetById(DiseaseDef.GetIdByCode(ListProblemDefNew[index].SnomedCode));
 					if(disDU==null) {
 						ListProblemNew[index].DiseaseDefNum=DiseaseDef.Insert(ListProblemDefNew[index]);
 					}

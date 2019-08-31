@@ -1,10 +1,19 @@
+/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 
 namespace OpenDentBusiness
 {
-    public class DiseaseDef : DataRecord
+    public class DiseaseDef : DataRecord // TODO: Rename to Disease...
     {
         /// <summary>
         /// The name of the disease.
@@ -60,7 +69,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <returns>The number of diseases.</returns>
         public static long GetCount() => 
-            DataConnection.ExecuteLong("SELECT COUNT(*) FROM diseases WHERE hidden = 0");
+            DataConnection.ExecuteLong("SELECT COUNT(*) FROM `diseases` WHERE `hidden` = 0");
 
         /// <summary>
         /// Gets a list of all diseases.
@@ -68,7 +77,7 @@ namespace OpenDentBusiness
         /// <param name="excludeHidden">A value indicating whether the exclude diseases.</param>
         /// <returns>A list of diseases.</returns>
         public static List<DiseaseDef> All(bool excludeHidden = true) =>
-            SelectMany("SELECT * FROM diseases ORDER BY sort_order WHERE hidden = 0 OR @show_hidden", FromReader,
+            SelectMany("SELECT * FROM `diseases` ORDER BY `sort_order` WHERE ?show_hidden OR `hidden` = 0", FromReader,
                 new MySqlParameter("show_hidden", !excludeHidden));
 
         /// <summary>
@@ -77,7 +86,7 @@ namespace OpenDentBusiness
         /// <param name="diseaseId">The ID of the disease.</param>
         /// <returns>The disease with the specified ID.</returns>
         public static DiseaseDef GetById(long diseaseId) =>
-            SelectOne("SELECT * FROM diseases WHERE id = " + diseaseId, FromReader);
+            SelectOne("SELECT * FROM `diseases` WHERE `id` = " + diseaseId, FromReader);
 
         /// <summary>
         /// Gets the disease with the specified name.
@@ -86,7 +95,7 @@ namespace OpenDentBusiness
         /// <returns>The disease with the specified name.</returns>
         public static DiseaseDef GetByName(string diseaseName) =>
             SelectOne(
-                "SELECT * FROM diseases WHERE name = @name AND hidden = 0", FromReader,
+                "SELECT * FROM `diseases` WHERE `name` = ?name AND `hidden` = 0", FromReader,
                     new MySqlParameter("name", diseaseName));
 
         /// <summary>
@@ -96,7 +105,7 @@ namespace OpenDentBusiness
         /// <returns>The ID assigned to the disease.</returns>
         public static long Insert(DiseaseDef disease) =>
             disease.Id = DataConnection.ExecuteInsert(
-                "INSERT INTO diseases (name, sort_order, hidden, icd9_code, icd10_code, snomed_code) VALUES (@name, @sort_order, @hidden, @icd9_code, @icd10_code, @snomed_code)",
+                "INSERT INTO `diseases` (`name`, `sort_order`, `hidden`, `icd9_code`, `icd10_code`, `snomed_code`) VALUES (?name, ?sort_order, ?hidden, ?icd9_code, ?icd10_code, ?snomed_code)",
                     new MySqlParameter("name", disease.Name),
                     new MySqlParameter("sort_order", disease.SortOrder),
                     new MySqlParameter("hidden", disease.Hidden),
@@ -110,7 +119,7 @@ namespace OpenDentBusiness
         /// <param name="disease">The disease.</param>
         public static void Update(DiseaseDef disease) =>
             DataConnection.ExecuteNonQuery(
-                "UPDATE diseases SET name = @name, sort_order = @sort_order, hidden = @hidden, icd9_code = @icd9_code, icd10_code = @icd10_code, snomed_code = @snomed_code WHERE id = @id",
+                "UPDATE `diseases` SET `name` = ?name, `sort_order` = ?sort_order, `hidden` = ?hidden, `icd9_code` = ?icd9_code, `icd10_code` = ?icd10_code, `snomed_code` = ?snomed_code WHERE `id` = ?id",
                     new MySqlParameter("name", disease.Name),
                     new MySqlParameter("sort_order", disease.SortOrder),
                     new MySqlParameter("hidden", disease.Hidden),
@@ -124,7 +133,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <param name="diseaseId">The ID of the disease.</param>
         public static void Delete(long diseaseId) => 
-            DataConnection.ExecuteNonQuery("DELETE FROM diseases WHERE id = " + diseaseId);
+            DataConnection.ExecuteNonQuery("DELETE FROM `diseases` WHERE `id` = " + diseaseId);
 
         public static int SortItemOrder(DiseaseDef x, DiseaseDef y)
         {
@@ -141,7 +150,7 @@ namespace OpenDentBusiness
         /// <returns>True if the sort orders where fixed; otherwise, false.</returns>
         public static bool FixSortOrders()
         {
-            var diseaseList = SelectMany("SELECT * FROM diseases", FromReader);
+            var diseaseList = SelectMany("SELECT * FROM `diseases`", FromReader);
             diseaseList.Sort((lhs, rhs) =>
             {
                 if (lhs.SortOrder != rhs.SortOrder)
@@ -159,7 +168,7 @@ namespace OpenDentBusiness
                 {
                     diseaseList[i].SortOrder = i;
 
-                    Update(diseaseList[i]);
+                    DataConnection.ExecuteNonQuery("UPDATE `diseases` SET `sort_order` = " + i + " WHERE `id` = " + diseaseList[i].Id);
 
                     updated = true;
                 }
@@ -244,8 +253,7 @@ namespace OpenDentBusiness
             return inUseDiseaseIdList;
         }
 
-        public static string GetName(long diseaseId) => 
-            DiseaseDef.GetById(diseaseId)?.Name ?? "";
+        public static string GetName(long diseaseId) => GetById(diseaseId)?.Name ?? "";
 
         /// <summary>
         /// Returns the name of the disease based on SNOMEDCode, then if no match tries ICD9Code, then if no match returns empty string. 
@@ -254,13 +262,13 @@ namespace OpenDentBusiness
         public static string GetNameByCode(string SNOMEDorICD9Code)
         {
             var disease = SelectOne(
-                "SELECT * FROM diseases WHERE snomed_code = @code", FromReader,
+                "SELECT * FROM `diseases` WHERE `snomed_code` = ?code", FromReader,
                     new MySqlParameter("code", SNOMEDorICD9Code));
 
             if (disease != null) return disease.Name;
 
             disease = SelectOne(
-                "SELECT * FROM diseases WHERE icd9_code = @code", FromReader,
+                "SELECT * FROM `diseases` WHERE `icd9_code` = ?code", FromReader,
                     new MySqlParameter("code", SNOMEDorICD9Code));
 
             return disease == null ? "" : disease.Name;
@@ -271,22 +279,22 @@ namespace OpenDentBusiness
         /// match returns 0. Used in EHR Patient Lists and when automatically inserting pregnancy Dx from FormVitalsignEdit2014.
         /// Will match hidden diseases.
         /// </summary>
-        public static long GetNumFromCode(string code)
+        public static long GetIdByCode(string code)
         {
             var disease = SelectOne(
-                "SELECT * FROM diseases WHERE snomed_code = @code", FromReader,
+                "SELECT * FROM `diseases` WHERE `snomed_code` = @code", FromReader,
                     new MySqlParameter("code", code));
 
             if (disease != null) return disease.Id;
 
             disease = SelectOne(
-                "SELECT * FROM diseases WHERE icd9_code = @code", FromReader,
+                "SELECT * FROM `diseases` WHERE `icd9_code` = @code", FromReader,
                     new MySqlParameter("code", code));
 
             if (disease != null) return disease.Id;
 
             disease = SelectOne(
-                "SELECT * FROM diseases WHERE icd10_code = @code", FromReader,
+                "SELECT * FROM `diseases` WHERE `icd10_code` = @code", FromReader,
                     new MySqlParameter("code", code));
 
             return disease == null ? 0 : disease.Id;
@@ -297,10 +305,10 @@ namespace OpenDentBusiness
         /// If no match or if SnomedCode is an empty string returns 0. 
         /// Only matches SNOMEDCode, not ICD9 or ICD10.
         /// </summary>
-        public static long GetNumFromSnomed(string SnomedCode)
+        public static long GetIdBySnomed(string SnomedCode)
         {
             var disease = SelectOne(
-                "SELECT * FROM diseases WHERE snomed_code = @code", FromReader,
+                "SELECT * FROM `diseases` WHERE `snomed_code` = ?code", FromReader,
                     new MySqlParameter("code", SnomedCode));
 
             return disease == null ? 0 : disease.Id;
@@ -311,16 +319,18 @@ namespace OpenDentBusiness
         /// Used in import functions when you only have the name to work with. 
         /// Can return 0 if no match. Does not match hidden diseases.
         /// </summary>
-        public static long GetNumFromName(string diseaseName) => GetNumFromName(diseaseName, false);
+        [Obsolete("Use GetByName")]
+        public static long GetIdByName(string diseaseName) => GetNumFromName(diseaseName, false);
 
         /// <summary>
         /// Returns the diseaseDefNum that exactly matches the specified string. Will return 0 if no match.
         /// Set matchHidden to true to match hidden diseasedefs as well.
         /// </summary>
+        [Obsolete("Use GetByName")]
         public static long GetNumFromName(string diseaseName, bool matchHidden)
         {
             var disease = SelectOne(
-                "SELECT * FROM diseases WHERE name = @name AND (hidden = 0 OR @match_hidden)", FromReader,
+                "SELECT * FROM `diseases` WHERE `name` = ?name AND (?match_hidden OR `hidden` = 0)", FromReader,
                     new MySqlParameter("name", diseaseName),
                     new MySqlParameter("match_hidden", matchHidden));
 

@@ -1,3 +1,12 @@
+/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -7,7 +16,7 @@ namespace OpenDentBusiness
 {
     /// <summary>
     /// The info in the definition table is used by other tables extensively.
-    /// Almost every table in the database links to definition. Almost all links to this table will be to a DefNum. 
+    /// Almost every table in the database links to definition. Almost all links to this table will be to a DefNum.
     /// Using the DefNum, you can find any of the other fields of interest, usually the ItemName. 
     /// Make sure to look at the Defs class to see how the definitions are used. 
     /// Loaded into memory ahead of time for speed. Some types of info such as operatories started out life in this table, 
@@ -72,7 +81,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <returns>A list of definitions.</returns>
         public static List<Definition> All() =>
-            SelectMany("SELECT * FROM definitions ORDER BY category, sort_order", FromReader);
+            SelectMany("SELECT * FROM `definitions` ORDER BY `category`, `sort_order`", FromReader);
 
         /// <summary>
         /// Gets the definition with the specified ID.
@@ -80,7 +89,7 @@ namespace OpenDentBusiness
         /// <param name="definitionId">The ID of the definition.</param>
         /// <returns>The definition with the specified ID.</returns>
         public static Definition GetById(long definitionId) =>
-            SelectOne("SELECT * FROM definitions WHERE id = " + definitionId, FromReader);
+            SelectOne("SELECT * FROM `definitions` WHERE `id` = " + definitionId, FromReader);
 
         /// <summary>
         /// Gets a list of all definition in the specified category.
@@ -88,7 +97,7 @@ namespace OpenDentBusiness
         /// <param name="category">The category.</param>
         /// <returns>A list of definitions.</returns>
         public static List<Definition> GetByCategory(DefinitionCategory category, bool includeHidden = false) =>
-            SelectMany("SELECT * FROM definitions WHERE category = @category AND (@include_hidden OR hidden = 0) ORDER BY sort_order", FromReader,
+            SelectMany("SELECT * FROM `definitions` WHERE `category` = ?category AND (?include_hidden OR `hidden` = 0) ORDER BY `sort_order`", FromReader,
                 new MySqlParameter("category", (int)category),
                 new MySqlParameter("include_hidden", includeHidden));
 
@@ -99,7 +108,7 @@ namespace OpenDentBusiness
         /// <param name="definitionId">The ID of the definition.</param>
         /// <returns>The definition with the specified ID.</returns>
         public static Definition GetByCategory(DefinitionCategory category, long definitionId) =>
-            SelectOne("SELECT * FROM definitions WHERE category = @category AND id = @id", FromReader,
+            SelectOne("SELECT * FROM `definitions` WHERE `category` = ?category AND `id` = ?id", FromReader,
                 new MySqlParameter("category", (int)category),
                 new MySqlParameter("id", definitionId));
 
@@ -110,7 +119,7 @@ namespace OpenDentBusiness
         /// <param name="description">The description of the definition.</param>
         /// <returns>The definition with the specified description.</returns>
         public static Definition GetByDescription(DefinitionCategory category, string description) =>
-            SelectOne("SELECT * FROM definitions WHERE category = @category AND description = @description", FromReader, 
+            SelectOne("SELECT * FROM `definitions` WHERE `category` = ?category AND `description` = ?description", FromReader, 
                 new MySqlParameter("category", (int)category), 
                 new MySqlParameter("description", description));
 
@@ -121,7 +130,7 @@ namespace OpenDentBusiness
         /// <returns>The ID assigned to the definition.</returns>
         public static long Insert(Definition definition) =>
             definition.Id = DataConnection.ExecuteInsert(
-                "INSERT INTO definitions (category, description, value, color, sort_order, hidden) VALUES (@category, @description, @value, @color, @sort_order, @hidden) RETURNING id",
+                "INSERT INTO `definitions` (`category`, `description`, `value`, `color`, `sort_order`, `hidden`) VALUES (?category, ?description, ?value, ?color, ?sort_order, ?hidden)",
                     new MySqlParameter("category", (int)definition.Category),
                     new MySqlParameter("description", definition.Description),
                     new MySqlParameter("value", definition.Value),
@@ -135,7 +144,7 @@ namespace OpenDentBusiness
         /// <param name="definition">The definition.</param>
         public static void Update(Definition definition) =>
             DataConnection.ExecuteNonQuery(
-                "UPDATE definitions SET category = @category, description = @description, value = @value, color = @color, sort_order = @sort_order, hidden = @hidden WHERE id = @id",
+                "UPDATE `definitions` SET `category` = ?category, `description` = ?description, `value` = ?value, `color` = ?color, `sort_order` = ?sort_order, `hidden` = ?hidden WHERE `id` = ?id",
                      new MySqlParameter("category", (int)definition.Category),
                      new MySqlParameter("description", definition.Description),
                      new MySqlParameter("value", definition.Value),
@@ -149,7 +158,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <param name="definitionId">The ID of the definition.</param>
         public static void Delete(long definitionId) =>
-            DataConnection.ExecuteNonQuery("DELETE FROM definitions WHERE id = " + definitionId);
+            DataConnection.ExecuteNonQuery("DELETE FROM `definitions` WHERE `id` = " + definitionId);
 
         #region CLEANUP
 

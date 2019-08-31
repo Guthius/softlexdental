@@ -1,3 +1,12 @@
+/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -34,7 +43,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <returns>A list of user groups.</returns>
         public static List<UserGroup> All() =>
-            SelectMany("SELECT * FROM user_groups", FromReader);
+            SelectMany("SELECT * FROM `user_groups`", FromReader);
 
         /// <summary>
         /// Gets the user group with the specified ID.
@@ -42,7 +51,7 @@ namespace OpenDentBusiness
         /// <param name="userGroupId">The ID of the user group.</param>
         /// <returns>The user group with the specified ID.</returns>
         public static UserGroup GetById(long userGroupId) =>
-            SelectOne("SELECT * FROM user_groups WHERE id = " + userGroupId, FromReader);
+            SelectOne("SELECT * FROM `user_groups` WHERE `id` = " + userGroupId, FromReader);
 
         /// <summary>
         /// Gets a list of all user groups the user with the specified ID is a member of.
@@ -81,7 +90,7 @@ namespace OpenDentBusiness
         /// <returns>The ID assigned to the user group.</returns>
         public static long Insert(UserGroup userGroup) =>
             userGroup.Id = DataConnection.ExecuteInsert(
-                "INSERT INTO user_groups (description) VALUES (@description)", 
+                "INSERT INTO `user_groups` (`description`) VALUES (?description)", 
                     new MySqlParameter("description", userGroup.Description));
 
         /// <summary>
@@ -90,7 +99,7 @@ namespace OpenDentBusiness
         /// <param name="userGroup">The user group.</param>
         public static void Update(UserGroup userGroup) =>
             DataConnection.ExecuteNonQuery(
-                "UPDATE user_groups SET description = @description WHERE id = @id", 
+                "UPDATE `user_groups` SET `description` = ?description WHERE `id` = ?id", 
                     new MySqlParameter("description", userGroup.Description), 
                     new MySqlParameter("id", userGroup.Id));
 
@@ -100,8 +109,7 @@ namespace OpenDentBusiness
         /// <param name="userGroupId">The ID of the user group.</param>
         public static void Delete(long userGroupId) =>
             DataConnection.ExecuteNonQuery(
-                "DELETE FROM user_groups WHERE id = @id",
-                    new MySqlParameter("id", userGroupId));
+                "DELETE FROM `user_groups` WHERE `id` = " + userGroupId);
 
         /// <summary>
         /// Deletes the specified user group from the database.

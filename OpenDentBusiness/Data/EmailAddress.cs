@@ -1,11 +1,20 @@
-﻿using MySql.Data.MySqlClient;
+﻿/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 
 namespace OpenDentBusiness
 {
     /// <summary>
-    /// Stores all the connection info for one email address. Linked to clinic by clinic.EmailAddressNum. Sends email based on patient's clinic.
+    /// Stores all the connection info for one e-mail address.
     /// </summary>
     public class EmailAddress : DataRecord
     {
@@ -19,6 +28,10 @@ namespace OpenDentBusiness
         public string Pop3Server = "pop.gmail.com";
         public int Pop3Port = 110;
 
+        /// <summary>
+        /// Returns a string representation of the e-mail address.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString() => SmtpUsername ?? "";
 
         /// <summary>
@@ -31,6 +44,11 @@ namespace OpenDentBusiness
         /// </summary>
         public string GetFrom() => string.IsNullOrEmpty(Sender) ? SmtpUsername : Sender;
 
+        /// <summary>
+        /// Constructs a new instance of the <see cref="EmailAddress"/> class.
+        /// </summary>
+        /// <param name="dataReader">The data reader containing record data.</param>
+        /// <returns>A <see cref="EmailAddress"/> instance.</returns>
         static EmailAddress FromReader(MySqlDataReader dataReader)
         {
             var emailAddress = new EmailAddress
@@ -55,12 +73,26 @@ namespace OpenDentBusiness
             return emailAddress;
         }
 
+        /// <summary>
+        /// Gets a list containing all e-mail addresses.
+        /// </summary>
+        /// <returns>A list of e-mail addresses.</returns>
         public static List<EmailAddress> All() =>
             SelectMany("SELECT * FROM `email_addresses`", FromReader);
-
+        
+        /// <summary>
+        /// Gets the e-mail address with the specified ID.
+        /// </summary>
+        /// <param name="emailAddressId">The ID of the e-mail address.</param>
+        /// <returns>The e-mail address with the specified ID.</returns>
         public static EmailAddress GetById(long emailAddressId) =>
             SelectOne("SELECT * FROM `email_addresses` WHERE `id` = " + emailAddressId, FromReader);
 
+        /// <summary>
+        /// Gets the e-mail address associated wth the clinic with the specified ID.
+        /// </summary>
+        /// <param name="clinicId">The ID of the clinic.</param>
+        /// <returns>The e-mail address assigned to the clinic with the specified ID; or null if no e-mail address is assigned.</returns>
         public static EmailAddress GetByClinic(long clinicId)
         {
             EmailAddress emailAddress = null;
@@ -77,9 +109,19 @@ namespace OpenDentBusiness
             return emailAddress ?? GetById(Preference.GetLong(PreferenceName.EmailDefaultAddressNum));
         }
 
+        /// <summary>
+        /// Gets the e-mail address assocated with the user with the specified ID.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns>The e-mail address assigned to the user with the specified ID; or null if no e-mail address assigned.</returns>
         public static EmailAddress GetByUser(long userId) =>
             SelectOne("SELECT * FROM `email_addresses` WHERE `user_id` = " + userId, FromReader);
 
+        /// <summary>
+        /// Inserts the specified e-mail address into the database.
+        /// </summary>
+        /// <param name="emailAddress">The e-mail address.</param>
+        /// <returns>The ID assigned to the e-mail address.</returns>
         public static long Insert(EmailAddress emailAddress) => // TODO: user_id column should be unique and Insert should check for duplicates...
             emailAddress.Id = DataConnection.ExecuteInsert(
                 "INSERT INTO `email_addresses` (`user_id`, `sender`, `smtp_server`, `smpt_username`, `smpt_password`, `smtp_port`, `use_ssl`, `pop3_server`, `pop3_port`) VALUES (?user_id, ?sender, ?smtp_server, ?smtp_username, ?smtp_password, ?smtp_port, ?use_ssl, ?pop3_server, ?pop3_port)",
@@ -93,6 +135,10 @@ namespace OpenDentBusiness
                     new MySqlParameter("pop3_server", emailAddress.Pop3Server ?? ""),
                     new MySqlParameter("pop3_port", emailAddress.Pop3Port));
 
+        /// <summary>
+        /// Updates the specified e-mail address in the database.
+        /// </summary>
+        /// <param name="emailAddress">The e-mail address.</param>
         public static void Update(EmailAddress emailAddress) =>
             DataConnection.ExecuteNonQuery(
                 "UPDATE `email_addresses` SET `user_id` = ?user_id, `sender` = ?sender, `smtp_server` = ?smtp_server, `smtp_username` = ?smtp_username, `smtp_password` = ?smtp_password, `smtp_port` = ?smtp_port, `use_ssl` = ?use_ssl, `pop3_server` = ?pop3_server, `pop3_port` = ?pop3_port WHERE `id` = ?id",
@@ -107,12 +153,28 @@ namespace OpenDentBusiness
                     new MySqlParameter("pop3_port", emailAddress.Pop3Port),
                     new MySqlParameter("id", emailAddress.Id));
 
+        /// <summary>
+        /// Deletes the e-mail address with the specified ID from the database.
+        /// </summary>
+        /// <param name="emailAdressId">The ID of the e-mail address.</param>
         public static void Delete(long emailAdressId) =>
             DataConnection.ExecuteNonQuery("DELETE FROM `email_addresses` WHERE `id` = " + emailAdressId);
 
+        /// <summary>
+        /// Checks whether a valid e-mail address exists in the database.
+        /// </summary>
+        /// <returns>True if a valid e-mail address is available; otherwise, false.</returns>
         public static bool ExistsValidEmail() => // TODO: Rename this...
             DataConnection.ExecuteLong("SELECT COUNT(*) FROM `email_addresses` WHERE `smtp_server` != ''") > 0;
 
+        /// <summary>
+        /// Gets the default e-mail address. Returns the e-mail of assigned to the user with the
+        /// specified ID if one has been assigned. If no e-mail address has been assigned to the 
+        /// user the e-mail address assigned to the clinic with the specified ID will be returned.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <param name="clinicId">The ID of the clinic.</param>
+        /// <returns>The default e-mail address.</returns>
         public static EmailAddress GetDefault(long userId, long clinicId) =>
             GetByUser(userId) ?? GetByClinic(clinicId);
     }

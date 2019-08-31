@@ -1,3 +1,12 @@
+/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -35,8 +44,8 @@ namespace OpenDentBusiness
         public DateTime? ReconciliationDate;
 
         /// <summary>
-        /// If StartBalance + sum of entries selected = EndBalance, the user can lock.
-        /// Unlock requires special permission, which nobody will have by default.
+        /// If StartBalance + sum of entries selected = EndBalance, the user can lock. Unlock 
+        /// requires special permission, which nobody will have by default.
         /// </summary>
         public bool Locked;
 
@@ -79,7 +88,7 @@ namespace OpenDentBusiness
         /// <param name="accountId">The ID of the account.</param>
         /// <returns>A list of reconciliations.</returns>
         public static List<Reconciliation> GetByAccountId(long accountId) =>
-            SelectMany("SELECT * FROM reconciliations WHERE account_id = @account_id ORDER BY reconciliation_date", FromReader,
+            SelectMany("SELECT * FROM `reconciliations` WHERE `account_id` = ?account_id ORDER BY `reconciliation_date`", FromReader,
                 new MySqlParameter("account_id", accountId));
 
         /// <summary>
@@ -89,7 +98,7 @@ namespace OpenDentBusiness
         /// <returns>The ID assigned to the reconciliation.</returns>
         public static long Insert(Reconciliation reconciliation) =>
             reconciliation.Id = DataConnection.ExecuteInsert(
-                "INSERT INTO reconciliations (account_id, start_balance, end_balance, reconciliation_date, locked) VALUES (@account_id, @start_balance, @end_balance, @reconciliation_date, @locked)",
+                "INSERT INTO reconciliations (`account_id`, `start_balance`, `end_balance`, `reconciliation_date`, `locked`) VALUES (?account_id, ?start_balance, ?end_balance, ?reconciliation_date, ?locked)",
                     new MySqlParameter("account_id", reconciliation.AccountId),
                     new MySqlParameter("start_balance", reconciliation.StartBalance),
                     new MySqlParameter("end_balance", reconciliation.EndBalance),
@@ -102,7 +111,7 @@ namespace OpenDentBusiness
         /// <param name="reconciliation">The reconciliation.</param>
         public static void Update(Reconciliation reconciliation) =>
             DataConnection.ExecuteNonQuery(
-                "UPDATE reconciliations SET account_id = @account_id, start_balance = @start_balance, end_balance = @end_balance, reconciliation_date = @reconciliation_date, locked = @locked WHERE id = @id",
+                "UPDATE `reconciliations` SET `account_id` = ?account_id, `start_balance` = ?start_balance, `end_balance` = ?end_balance, `reconciliation_date` = ?reconciliation_date, `locked` = ?locked WHERE `id` = ?id",
                     new MySqlParameter("account_id", reconciliation.AccountId),
                     new MySqlParameter("start_balance", reconciliation.StartBalance),
                     new MySqlParameter("end_balance", reconciliation.EndBalance),
@@ -117,18 +126,15 @@ namespace OpenDentBusiness
         /// <exception cref="DataException">If there are journal entries attached to the reconciliation.</exception>
         public static void Delete(Reconciliation reconciliation)
         {
-            // TODO: Fix me
-
+            // Check to see if any journal entries are attached to the reconciliation.
             var count = 
                 DataConnection.ExecuteLong(
-                    "SELECT COUNT(*) FROM journal_entries WHERE reconciliation_id = @reconciliation_id", 
-                        new MySqlParameter("reconciliation_id", reconciliation.Id));
+                    "SELECT COUNT(*) FROM `journal_entries` WHERE `reconciliation_id` = " + reconciliation.Id);
 
-            // Check to see if any journal entries are attached to the reconciliation.
             if (count > 0) throw new DataException("Not allowed to delete a reconciliation with existing journal entries.");
 
             // Delete the reconciliation.
-            DataConnection.ExecuteNonQuery("DELETE FROM reconciliations WHERE id = :id" + reconciliation.Id);
+            DataConnection.ExecuteNonQuery("DELETE FROM `reconciliations` WHERE `id` = " + reconciliation.Id);
 
             reconciliation.Id = 0;
         }

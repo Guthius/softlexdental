@@ -325,7 +325,7 @@ namespace OpenDental.Bridges{
 					if(txt==""){
 						continue;
 					}
-					diseaseDefNum=DiseaseDef.GetNumFromName(txt);
+					diseaseDefNum=DiseaseDef.GetIdByName(txt);
 					if(diseaseDefNum==0){
 						note+="Disease: "+txt+", "+diseaseNote+"\r\n";
 					}

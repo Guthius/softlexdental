@@ -1,3 +1,12 @@
+/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -63,7 +72,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <returns>A list of employees.</returns>
         public static List<Employee> All() =>
-            SelectMany("SELECT * FROM employees", FromReader); // TODO: Exclude hidden by default...
+            SelectMany("SELECT * FROM `employees`", FromReader); // TODO: Exclude hidden by default...
 
         /// <summary>
         /// Gets the employee with the specified ID.
@@ -78,7 +87,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <returns>A list of employees.</returns>
         public static List<Employee> GetForTimeCard() =>
-            SelectMany("SELECT * FROM employees WHERE hidden = 0 ORDER BY lastname, firstname", FromReader);
+            SelectMany("SELECT * FROM `employees` WHERE `hidden` = 0 ORDER BY `lastname`, `firstname`", FromReader);
 
         /// <summary>
         /// Inserts the specified employee into the database.
@@ -94,7 +103,7 @@ namespace OpenDentBusiness
 
             return employee.Id =
                 DataConnection.ExecuteInsert(
-                    "INSERT INTO employees (lastname, firstname, initials, hidden, payroll_id, clock_status) VALUES (@lastname, @firstname, @initials, @hidden, @payroll_id, @clock_status)",
+                    "INSERT INTO `employees` (`lastname`, `firstname`, `initials`, `hidden`, `payroll_id`, `clock_status`) VALUES (?lastname, ?firstname, ?initials, ?hidden, ?payroll_id, ?clock_status)",
                         new MySqlParameter("lastname", employee.LastName ?? ""),
                         new MySqlParameter("firstname", employee.FirstName ?? ""),
                         new MySqlParameter("initials", employee.Initials ?? ""),
@@ -111,12 +120,10 @@ namespace OpenDentBusiness
         public static void Update(Employee employee)
         {
             if (string.IsNullOrEmpty(employee.LastName) && string.IsNullOrEmpty(employee.FirstName))
-            {
                 throw new DataException("Must include either first name or last name");
-            }
 
             DataConnection.ExecuteNonQuery(
-                "UPDATE employees SET lastname = :lastname, firstname = :firstname, initials = :initials, hidden = :hidden, payroll_id = :payroll_id, clock_status = :clock_status WHERE id = :id",
+                "UPDATE `employees` SET `lastname` = ?lastname, `firstname` = ?firstname, `initials` = ?initials, `hidden` = ?hidden, `payroll_id` = ?payroll_id, `clock_status` = ?clock_status WHERE `id` = ?id",
                     new MySqlParameter("lastname", employee.LastName ?? ""),
                     new MySqlParameter("firstname", employee.FirstName ?? ""),
                     new MySqlParameter("initials", employee.Initials ?? ""),

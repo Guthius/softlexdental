@@ -337,13 +337,14 @@
     <Compile Include="DataException.cs" />
     <Compile Include="DataRecord.cs" />
     <Compile Include="DataRecordCache.cs" />
+    <Compile Include="Data\GradingScaleType.cs" />
     <Compile Include="Data\PreferenceName.cs" />
     <Compile Include="Db Multi Table\ApptSearch.cs" />
     <Compile Include="Db\DataConnection.cs" />
     <Compile Include="Db\DataConnectionEvent.cs" />
     <Compile Include="Db\SIn.cs" />
     <Compile Include="Db\SOut.cs" />
-    <Compile Include="Data\0_READY\DefinitionCategory.cs" />
+    <Compile Include="Data\DefinitionCategory.cs" />
     <Compile Include="DefCatOptions.cs" />
     <Compile Include="Data Interface\ProviderClinics.cs" />
     <Compile Include="Data Interface\RecurringCharges.cs" />
@@ -895,7 +896,7 @@
     <Compile Include="Data Interface\TaskNotes.cs" />
     <Compile Include="Data Interface\TaskUnreads.cs" />
     <Compile Include="Cache\Cache.cs" />
-    <Compile Include="Data\1_CLEANUP\Preferences.cs" />
+    <Compile Include="Data\WIP\Preferences.cs" />
     <Compile Include="Data Interface\TimeCardRules.cs" />
     <Compile Include="Data Interface\ToothGridCells.cs" />
     <Compile Include="Data Interface\ToothGridCols.cs" />
@@ -978,7 +979,7 @@
     <Compile Include="Data Interface\ComputerPrefs.cs" />
     <Compile Include="Data Interface\Counties.cs" />
     <Compile Include="Data Interface\Deposits.cs" />
-    <Compile Include="Data\0_READY\AccountType.cs" />
+    <Compile Include="Data\AccountType.cs" />
     <Compile Include="Data Interface\Diseases.cs" />
     <Compile Include="Data Interface\Dunnings.cs" />
     <Compile Include="Data Interface\ElectIDs.cs" />
@@ -1050,7 +1051,7 @@
     <Compile Include="Data Interface\Pharmacies.cs" />
     <Compile Include="Data Interface\CovCats.cs" />
     <Compile Include="Data Interface\CovSpans.cs" />
-    <Compile Include="Data\Defs.cs" />
+    <Compile Include="Data\WIP\Defs.cs" />
     <Compile Include="Db Multi Table\FamilyModules.cs" />
     <Compile Include="Data Interface\GroupPermissions.cs" />
     <Compile Include="Data Interface\Operatories.cs" />
@@ -1250,11 +1251,11 @@
     <Compile Include="TableTypes\Encounter.cs" />
     <Compile Include="TableTypes\PayorType.cs" />
     <Compile Include="TableTypes\SOP.cs" />
-    <Compile Include="Data\0_READY\CVX.cs" />
+    <Compile Include="Data\CVX.cs" />
     <Compile Include="TableTypes\Hcpcs.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data\0_READY\ICD10.cs" />
+    <Compile Include="Data\ICD10.cs" />
     <Compile Include="TableTypes\Intervention.cs" />
     <Compile Include="TableTypes\EhrNotPerformed.cs" />
     <Compile Include="TableTypes\EhrCode.cs" />
@@ -1288,7 +1289,7 @@
     <Compile Include="TableTypes\EhrQuarterlyKey.cs" />
     <Compile Include="TableTypes\EhrSummaryCcd.cs" />
     <Compile Include="TableTypes\EhrProvKey.cs" />
-    <Compile Include="Data\0_READY\Manufacturer.cs" />
+    <Compile Include="Data\Manufacturer.cs" />
     <Compile Include="TableTypes\DrugUnit.cs" />
     <Compile Include="TableTypes\EduResource.cs" />
     <Compile Include="TableTypes\EhrMeasure.cs" />
@@ -1302,7 +1303,7 @@
     <Compile Include="TableTypes\LabResult.cs" />
     <Compile Include="TableTypes\MedicalOrder.cs" />
     <Compile Include="TableTypes\CreditCard.cs" />
-    <Compile Include="Data\0_READY\ICD9.cs" />
+    <Compile Include="Data\ICD9.cs" />
     <Compile Include="TableTypes\InsSub.cs" />
     <Compile Include="TableTypes\OrionProc.cs" />
     <Compile Include="TableTypes\OrthoChart.cs" />
@@ -1431,8 +1432,8 @@
     <Compile Include="SheetFramework\SheetFieldsAvailable.cs" />
     <Compile Include="SheetFramework\SheetParameter.cs" />
     <Compile Include="SheetFramework\SheetsInternal.cs" />
-    <Compile Include="Data\0_READY\Account.cs" />
-    <Compile Include="Data\0_READY\AccountAutoPay.cs" />
+    <Compile Include="Data\Account.cs" />
+    <Compile Include="Data\AccountAutoPay.cs" />
     <Compile Include="TableTypes\Adjustment.cs" />
     <Compile Include="TableTypes\Appointment.cs" />
     <Compile Include="TableTypes\AppointmentRule.cs" />
@@ -1456,9 +1457,9 @@
     <Compile Include="TableTypes\Clinic.cs" />
     <Compile Include="TableTypes\ClockEvent.cs" />
     <Compile Include="TableTypes\Commlog.cs" />
-    <Compile Include="Data\0_READY\Computer.cs" />
+    <Compile Include="Data\Computer.cs" />
     <Compile Include="TableTypes\ComputerPref.cs" />
-    <Compile Include="Data\0_READY\Contact.cs" />
+    <Compile Include="Data\Contact.cs" />
     <Compile Include="TableTypes\CanadianNetwork.cs" />
     <Compile Include="TableTypes\ClaimAttach.cs" />
     <Compile Include="TableTypes\SheetField.cs" />
@@ -1490,17 +1491,17 @@
     <Compile Include="TableTypes\County.cs" />
     <Compile Include="TableTypes\CovCat.cs" />
     <Compile Include="TableTypes\CovSpan.cs" />
-    <Compile Include="Data\0_READY\Definition.cs" />
+    <Compile Include="Data\Definition.cs" />
     <Compile Include="TableTypes\Deposit.cs" />
     <Compile Include="TableTypes\Disease.cs" />
     <Compile Include="Data\DiseaseDef.cs" />
     <Compile Include="TableTypes\Document.cs" />
     <Compile Include="TableTypes\Dunning.cs" />
     <Compile Include="TableTypes\ElectID.cs" />
-    <Compile Include="Data\EmailAttach.cs" />
+    <Compile Include="Data\EmailAttachment.cs" />
     <Compile Include="Data\EmailMessage.cs" />
     <Compile Include="Data\EmailTemplate.cs" />
-    <Compile Include="Data\0_READY\Employee.cs" />
+    <Compile Include="Data\Employee.cs" />
     <Compile Include="TableTypes\Employer.cs" />
     <Compile Include="TableTypes\Fee.cs" />
     <Compile Include="TableTypes\GroupPermission.cs" />
@@ -1513,7 +1514,7 @@
     <Compile Include="Data\Letter.cs" />
     <Compile Include="TableTypes\LetterMerge.cs" />
     <Compile Include="TableTypes\LetterMergeField.cs" />
-    <Compile Include="Data\0_READY\Medication.cs" />
+    <Compile Include="Data\Medication.cs" />
     <Compile Include="TableTypes\MedicationPat.cs" />
     <Compile Include="TableTypes\Operatory.cs" />
     <Compile Include="TableTypes\PatField.cs" />
@@ -1528,7 +1529,7 @@
     <Compile Include="TableTypes\PaySplit.cs" />
     <Compile Include="TableTypes\PerioExam.cs" />
     <Compile Include="TableTypes\PerioMeasure.cs" />
-    <Compile Include="Data\0_READY\Preference.cs" />
+    <Compile Include="Data\Preference.cs" />
     <Compile Include="TableTypes\Printer.cs" />
     <Compile Include="TableTypes\ProcButton.cs" />
     <Compile Include="TableTypes\ProcButtonItem.cs" />
@@ -1545,7 +1546,7 @@
     <Compile Include="TableTypes\QuickPasteCat.cs" />
     <Compile Include="TableTypes\QuickPasteNote.cs" />
     <Compile Include="TableTypes\Recall.cs" />
-    <Compile Include="Data\0_READY\Reconciliation.cs" />
+    <Compile Include="Data\Reconciliation.cs" />
     <Compile Include="TableTypes\RefAttach.cs" />
     <Compile Include="TableTypes\Referral.cs" />
     <Compile Include="TableTypes\RepeatCharge.cs" />
@@ -1569,7 +1570,7 @@
     <Compile Include="TableTypes\Transaction.cs" />
     <Compile Include="TableTypes\TreatPlan.cs" />
     <Compile Include="TableTypes\User.cs" />
-    <Compile Include="Data\0_READY\UserGroup.cs" />
+    <Compile Include="Data\UserGroup.cs" />
     <Compile Include="TableTypes\UserQuery.cs" />
     <Compile Include="TableTypes\ZipCode.cs" />
     <Compile Include="X12\X12object.cs" />

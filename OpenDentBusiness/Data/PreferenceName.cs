@@ -1,11 +1,20 @@
-﻿using System;
+﻿/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
+using System;
 using System.ComponentModel;
 
 namespace OpenDentBusiness
 {
     /// <summary>
     /// Because this enum is stored in the database as strings rather than as numbers, we can do the order alphabetically.  
-    /// Deprecated preferences will start with "Deprecated" in the summary section.
+    /// 
     /// Preferences that are missing in general will start with "Missing in general" in the summary section.
     /// </summary>
     public enum PreferenceName

@@ -1,4 +1,13 @@
-﻿using MySql.Data.MySqlClient;
+﻿/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,8 +15,9 @@ using System.Linq;
 namespace OpenDentBusiness
 {
     /// <summary>
-    /// Other tables generally use the ICD9Code string as their foreign key.
+    /// Other tables generally use the <see cref="Code"/> string as their foreign key.
     /// Currently synched to mobile server in a very inefficient manner.
+    /// 
     /// It is implied that these are all ICD9CMs, although that may not be the case in the future.
     /// </summary>
     public class ICD9 : DataRecord
@@ -48,7 +58,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <returns>A list of ICD9 codes.</returns>
         public static List<ICD9> All() => 
-            SelectMany("SELECT * FROM icd9", FromReader);
+            SelectMany("SELECT * FROM `icd9`", FromReader);
 
         /// <summary>
         /// Gets the ICD9 code with the specified ID.
@@ -56,7 +66,7 @@ namespace OpenDentBusiness
         /// <param name="icd9id">The ID of the specified ICD9 code.</param>
         /// <returns>The ICD9 code with the specified ID.</returns>
         public static ICD9 GetById(long icd9id) => 
-            SelectOne("SELECT * FROM icd9 WHERE id = " + icd9id, FromReader);
+            SelectOne("SELECT * FROM `icd9` WHERE `id` = " + icd9id, FromReader);
 
         /// <summary>
         /// Gets the ICD9 with the specified code.
@@ -64,7 +74,7 @@ namespace OpenDentBusiness
         /// <param name="icd9Code"></param>
         /// <returns></returns>
         public static ICD9 GetByCode(string icd9Code) =>
-            SelectOne("SELECT * FROM icd9 WHERE code = @code", FromReader,
+            SelectOne("SELECT * FROM `icd9` WHERE `code` = ?code", FromReader,
                 new MySqlParameter("code", icd9Code));
 
         /// <summary>
@@ -73,7 +83,7 @@ namespace OpenDentBusiness
         /// <param name="searchText">The search text.</param>
         /// <returns>A list of ICD9 codes.</returns>
         public static List<ICD9> Find(string searchText) =>
-            SelectMany("SELECT * FROM icd9 WHERE code LIKE :search_text OR description LIKE @search_text", FromReader,
+            SelectMany("SELECT * FROM `icd9` WHERE `code` LIKE ?search_text OR `description` LIKE ?search_text", FromReader,
                 new MySqlParameter("search_text", $"%{searchText}%"));
 
         /// <summary>
@@ -81,7 +91,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <returns>The number of ICD9 codes.</returns>
         public static long GetCount() =>
-            DataConnection.ExecuteLong("SELECT COUNT(*) FROM icd9");
+            DataConnection.ExecuteLong("SELECT COUNT(*) FROM `icd9`");
 
         /// <summary>
         /// Checks whether the specified ICD9 code exists in the database.
@@ -90,7 +100,7 @@ namespace OpenDentBusiness
         /// <returns>True if the code exists in the database; otherwise, false.</returns>
         public static bool CodeExists(string icd9Code) =>
             DataConnection.ExecuteLong(
-                "SELECT COUNT(*) FROM icd9 WHERE code = @code", 
+                "SELECT COUNT(*) FROM `icd9` WHERE `code` = @code", 
                     new MySqlParameter("code", icd9Code ?? "")) > 0;
 
         /// <summary>
@@ -100,7 +110,7 @@ namespace OpenDentBusiness
         /// <returns></returns>
         public static List<long> GetChangedSince(DateTime changedSince) =>
             SelectMany(
-                "SELECT id FROM icd9 WHERE last_modified > :changed_since AND code IN (SELECT icd9_code FROM diseases)",
+                "SELECT `id` FROM `icd9` WHERE `last_modified` > ?changed_since AND `code` IN (SELECT `icd9_code` FROM `diseases`)",
                     dataReader => Convert.ToInt64(dataReader[0]),
                         new MySqlParameter("changed_since", changedSince));
 
@@ -111,7 +121,7 @@ namespace OpenDentBusiness
         /// <returns>The ID assigned to the ICD9 code.</returns>
         public static long Insert(ICD9 icd9) =>
             icd9.Id = DataConnection.ExecuteInsert(
-                "INSERT INTO icd9 (code, description) VALUES (:code, :description) RETURNING id",
+                "INSERT INTO `icd9` (`code`, `description`) VALUES (?code, ?description) RETURNING id",
                     new MySqlParameter("code", icd9.Code ?? ""),
                     new MySqlParameter("description", icd9.Description ?? ""));
 
@@ -121,7 +131,7 @@ namespace OpenDentBusiness
         /// <param name="icd9">The ICD9 code.</param>
         public static void Update(ICD9 icd9) =>
             DataConnection.ExecuteNonQuery(
-                "UPDATE icd9 SET code = @code, description = @description WHERE id = @id",
+                "UPDATE `icd9` SET `code` = ?code, `description` = ?description WHERE `id` = ?id",
                     new MySqlParameter("code", icd9.Code ?? ""),
                     new MySqlParameter("description", icd9.Description ?? ""),
                     new MySqlParameter("id", icd9.Id));
@@ -132,6 +142,8 @@ namespace OpenDentBusiness
         /// <param name="icd9id">The ID of the ICD9 code.</param>
         public static void Delete(long icd9id)
         {
+            // TODO: Optimize this.
+
             var dataTable = 
                 DataConnection.ExecuteDataTable(
                     "SELECT lastname, firstname, patient.id " +
@@ -143,14 +155,12 @@ namespace OpenDentBusiness
                     "GROUP BY patient.id", 
                         new MySqlParameter("id", icd9id));
 
-            // TODO: Optimize this.
-
             if (dataTable.Rows.Count > 0)
             {
                 throw new ApplicationException($"Not allowed to delete. Already in use by {dataTable.Rows.Count} patients");
             }
 
-            DataConnection.ExecuteNonQuery("DELETE FROM icd9 WHERE id = " + icd9id);
+            DataConnection.ExecuteNonQuery("DELETE FROM `icd9` WHERE `id` = " + icd9id);
 
             dataTable.Dispose();
         }

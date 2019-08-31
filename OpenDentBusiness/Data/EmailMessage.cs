@@ -1,3 +1,12 @@
+/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
 using CodeBase;
 using MySql.Data.MySqlClient;
 using OpenPop.Pop3;
@@ -18,11 +27,23 @@ namespace OpenDentBusiness
     {
         static readonly List<long> receivingEmailAddressIdList = new List<long>();
 
+        /// <summary>
+        /// The ID of the address that sent or received the message.
+        /// </summary>
         public long EmailAddressId;
         public long? PatientId;
         public long? AppointmentId;
+
+        /// <summary>
+        /// The ID of the user that sent the messsage.
+        /// </summary>
         public long? UserId;
+
+        /// <summary>
+        /// The ID of the provider that sent the message.
+        /// </summary>
         public long? ProviderId;
+
         public string FromName;
         public string FromAddress;
         public string ToAddress;
@@ -31,6 +52,10 @@ namespace OpenDentBusiness
         public string Subject;
         public string Body;
         public byte[] BodyRaw;
+
+        /// <summary>
+        /// The date on which the message was sent or received.
+        /// </summary>
         public DateTime Date;
         public EmailMessageFlags Flags;
         public EmailMessageStatus Status;
@@ -740,16 +765,16 @@ namespace OpenDentBusiness
                         .Select(emailMessage => emailMessage.BccAddress))
                 .Distinct();
 
-        public EmailMessage Copy()
-        {
-            EmailMessage e = (EmailMessage)this.MemberwiseClone();
-            e.Attachments = new List<EmailAttachment>();
-            for (int i = 0; i < Attachments.Count; i++)
-            {
-                e.Attachments.Add(Attachments[i].Copy());
-            }
-            return e;
-        }
+        //public EmailMessage Copy()
+        //{
+        //    EmailMessage e = (EmailMessage)this.MemberwiseClone();
+        //    e.Attachments = new List<EmailAttachment>();
+        //    for (int i = 0; i < Attachments.Count; i++)
+        //    {
+        //        e.Attachments.Add(Attachments[i].Copy());
+        //    }
+        //    return e;
+        //}
 
         // TODO: We removed the WebMail and Direct
 

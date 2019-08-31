@@ -192,7 +192,7 @@ namespace OpenDental {
 					pregCode=Preference.GetString(PreferenceName.PregnancyDefaultCodeValue);//could be 'none' which disables the automatic dx insertion
 					string pregCodeSys=Preference.GetString(PreferenceName.PregnancyDefaultCodeSystem);//if 'none' for code, code system will default to 'SNOMEDCT', display will be ""
 					if(pregCode!="" && pregCode!="none") {//default pregnancy code set to a code other than 'none', should never be blank, we set in ConvertDB and don't allow blank
-						pregDisDefNumCur=DiseaseDef.GetNumFromCode(pregCode);//see if the code is attached to a valid diseasedef
+						pregDisDefNumCur=DiseaseDef.GetIdByCode(pregCode);//see if the code is attached to a valid diseasedef
 						if(pregDisDefNumCur==0) {//no diseasedef in db for the default code, create and insert def
 							disdefCur=new DiseaseDef();
 							disdefCur.Name="Pregnant";

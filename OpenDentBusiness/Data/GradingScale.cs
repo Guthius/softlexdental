@@ -1,3 +1,12 @@
+/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -21,6 +30,11 @@ namespace OpenDentBusiness
         /// </summary>
         public GradingScaleType ScaleType;
 
+        /// <summary>
+        /// Constructs a new instance of the <see cref="GradingScale"/> class.
+        /// </summary>
+        /// <param name="dataReader">The data reader containing record data.</param>
+        /// <returns>A <see cref="GradingScale"/> instance.</returns>
         static GradingScale FromReader(MySqlDataReader dataReader)
         {
             return new GradingScale
@@ -31,34 +45,58 @@ namespace OpenDentBusiness
             };
         }
 
+        /// <summary>
+        /// Gets a list containing all grading scales.
+        /// </summary>
+        /// <returns>A list of grading scales.</returns>
         public static List<GradingScale> All() =>
-            SelectMany("SELECT * FROM grading_scales", FromReader);
+            SelectMany("SELECT * FROM `grading_scales`", FromReader);
 
+        /// <summary>
+        /// Gets the ID of the grading scale with the specified ID.
+        /// </summary>
+        /// <param name="gradingScaleId">The ID of the grading scale.</param>
+        /// <returns>The grading scale with the specified ID.</returns>
         public static GradingScale GetById(long gradingScaleId) =>
-            SelectOne("SELECT * FROM grading_scales WHERE id = " + gradingScaleId, FromReader);
+            SelectOne("SELECT * FROM `grading_scales` WHERE `id` = " + gradingScaleId, FromReader);
 
+        /// <summary>
+        /// Inserts the specified grading scale into the database.
+        /// </summary>
+        /// <param name="gradingScale">The grading scale.</param>
+        /// <returns>The ID assigned to the grading scale.</returns>
         public static long Insert(GradingScale gradingScale) =>
             gradingScale.Id = DataConnection.ExecuteInsert(
-                "INSERT INTO grading_scales (description, scale_type) VALUES (@description, @scale_type)", 
+                "INSERT INTO `grading_scales` (`description`, `scale_type`) VALUES (?description, ?scale_type)", 
                     new MySqlParameter("description", gradingScale.Description ?? ""),
                     new MySqlParameter("scale_type", gradingScale.ScaleType));
 
+        /// <summary>
+        /// Updates the specified grading scale in the database.
+        /// </summary>
+        /// <param name="gradingScale">The grading scale.</param>
         public static void Update(GradingScale gradingScale) =>
             DataConnection.ExecuteNonQuery(
-                "UPDATE grading_scales SET description = @description, scale_type = @scale_type WHERE id = @id",
+                "UPDATE `grading_scales` SET `description` = ?description, `scale_type` = ?scale_type WHERE `id` = ?id",
                     new MySqlParameter("description", gradingScale.Description ?? ""),
                     new MySqlParameter("scale_type", (int)gradingScale.ScaleType),
                     new MySqlParameter("id", gradingScale.Id));
 
+        /// <summary>
+        /// Deletes the grading scale with the specified ID from the database.
+        /// </summary>
+        /// <param name="gradingScaleId"></param>
         public static void Delete(long gradingScaleId) =>
             DataConnection.ExecuteNonQuery(
-                "DELETE FROM grading_scales WHERE id = " + gradingScaleId);
+                "DELETE FROM `grading_scales` WHERE `id` = " + gradingScaleId);
+
+        #region CLEANUP
 
         public static bool IsDupicateDescription(GradingScale gradingScale)
         {
             var count =
                 DataConnection.ExecuteLong(
-                    "SELECT COUNT(*) FROM grading_scales WHERE description = @description AND id != " + gradingScale.Id,
+                    "SELECT COUNT(*) FROM `grading_scales` WHERE `description` = ?description AND `id` != " + gradingScale.Id,
                         new MySqlParameter("description", gradingScale.Description ?? ""));
 
             return count > 0;
@@ -74,14 +112,11 @@ namespace OpenDentBusiness
             return count > 0;
         }
 
-
         // TODO: Implement:
 
         ///<summary>Also deletes attached GradeScaleItems.  Will throw an error if GradeScale is in use.  Be sure to surround with try-catch.</summary>
         //public static void Delete(long gradingScaleNum)
         //{
-
-
         //    string error = "";
         //    string command = "SELECT COUNT(*) FROM evaluationdef WHERE GradingScaleNum=" + POut.Long(gradingScaleNum);
         //    if (Db.GetCount(command) != "0")
@@ -111,26 +146,7 @@ namespace OpenDentBusiness
         //    command = "DELETE FROM gradingscale WHERE GradingScaleNum = " + POut.Long(gradingScaleNum);
         //    Db.NonQ(command);
         //}
-    }
 
-    /// <summary>
-    /// Used in GradingScale to determine how grades are assigned.
-    /// </summary>
-    public enum GradingScaleType
-    {
-        /// <summary>
-        /// User-Defined list of possible grades. Grade is calculated as an average.
-        /// </summary>
-        PickList = 0,
-        
-        /// <summary>
-        /// Percentage Scale 0-100. Grade is calculated as an average.
-        /// </summary>
-        Percentage = 1,
-        
-        /// <summary>
-        /// Allows point values for grades. Grade is calculated as a sum of all points out of points possible.
-        /// </summary>
-        Weighted = 2
+        #endregion
     }
 }

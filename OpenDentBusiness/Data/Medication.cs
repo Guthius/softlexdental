@@ -1,3 +1,12 @@
+/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -14,29 +23,24 @@ namespace OpenDentBusiness
     public class Medication : DataRecord
     {
         /// <summary>
-        /// RxNorm Code identifier. We should have used a string type. Used by
-        /// EHR in CQM. But the queries should use medicationpat.RxCui, NOT
-        /// this RxCui, because all medicationpats (meds and orders) coming
-        /// back from NewCrop will not have a FK to this medication table.
-        /// When this RxCui is modified by the user, then medicationpat. 
-        /// RxCui is automatically updated where medicationpat.MedicationNum 
-        /// matches this medication.
+        /// RxNorm Code identifier. We should have used a string type. Used by EHR in CQM. But the 
+        /// queries should use medicationpat.RxCui, NOT this RxCui, because all medicationpats 
+        /// (meds and orders) coming back from NewCrop will not have a FK to this medication table.
+        /// When this RxCui is modified by the user, then medicationpat. RxCui is automatically 
+        /// updated where medicationpat.MedicationNum matches this medication.
         /// </summary>
         public string RxCui;
 
         /// <summary>
-        /// Name of the medication. User can change this.
-        /// If an RxCui is present, the RxNorm string can be pulled from the
-        /// in-memory table for UI display in addition to the MedName.
+        /// Name of the medication. User can change this. If an RxCui is present, the RxNorm string
+        /// can be pulled from the in-memory table for UI display in addition to the MedName.
         /// </summary>
         public string Description;
 
         /// <summary>
-        /// FK to medication.MedicationNum. Cannot be zero.
-        /// If this is a generic drug, then the GenericNum will be the same as 
-        /// the MedicationNum. Otherwise, if this is a brand drug, then the 
-        /// GenericNum will be a non-zero value corresponding to another 
-        /// medicaiton.
+        /// FK to medication.MedicationNum. Cannot be zero. If this is a generic drug, then the 
+        /// GenericNum will be the same as the MedicationNum. Otherwise, if this is a brand drug, 
+        /// then the GenericNum will be a non-zero value corresponding to another medicaiton.
         /// </summary>
         public long? GenericId;
 
@@ -82,7 +86,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <returns>A list of medications.</returns>
         public static List<Medication> All() =>
-            SelectMany("SELECT * FROM medications", FromReader);
+            SelectMany("SELECT * FROM `medications`", FromReader);
 
         /// <summary>
         /// Gets the medication with the specified ID.
@@ -90,7 +94,7 @@ namespace OpenDentBusiness
         /// <param name="medicationId">The ID of the medification.</param>
         /// <returns>The medication with the specified ID.</returns>
         public static Medication GetById(long medicationId) =>
-            SelectOne("SELECT * FROM medications WHERE id = " + medicationId, FromReader);
+            SelectOne("SELECT * FROM `medications` WHERE `id` = " + medicationId, FromReader);
 
         /// <summary>
         /// Gets the medication with the specified RXCUI code.
@@ -98,7 +102,7 @@ namespace OpenDentBusiness
         /// <param name="rxcui">The RXCUI code.</param>
         /// <returns>The medication with the specified RXCUI code.</returns>
         public static Medication GetByRxCui(string rxcui) =>
-            SelectOne("SELECT * FROM medications WHERE rxcui = :rxcui ORDER BY id", FromReader,
+            SelectOne("SELECT * FROM `medications` WHERE `rxcui` = ?rxcui ORDER BY `id`", FromReader,
                 new MySqlParameter("rxcui", rxcui ?? ""));
 
         /// <summary>
@@ -107,7 +111,7 @@ namespace OpenDentBusiness
         /// <param name="description">The medication description.</param>
         /// <returns>The medication with the specified description.</returns>
         public static Medication GetByDescription(string description) =>
-            SelectOne("SELECT * FROM medications WHERE description = @description ORDER BY id", FromReader,
+            SelectOne("SELECT * FROM `medications` WHERE `description` = ?description ORDER BY `id`", FromReader,
                 new MySqlParameter("description", description));
 
         /// <summary>
@@ -116,7 +120,7 @@ namespace OpenDentBusiness
         /// <param name="medicationId">The ID of the generic medication.</param>
         /// <returns>A list of medications.</returns>
         public static List<Medication> GetBrands(long medicationId) =>
-            SelectMany("SELECT* FROM medications WHERE generic_id = " + medicationId, FromReader);
+            SelectMany("SELECT* FROM `medications` WHERE `generic_id` = " + medicationId, FromReader);
 
         /// <summary>
         /// Gets a list of all brands names for the generic medication with the specified ID.
@@ -124,7 +128,7 @@ namespace OpenDentBusiness
         /// <param name="medicationId">The ID of the generic medication.</param>
         /// <returns>A list of brand names.</returns>
         public static List<string> GetBrandNames(long medicationId) =>
-            SelectMany("SELECT description FROM medications WHERE generic_id = " + medicationId, reader => Convert.ToString(reader[0]));
+            SelectMany("SELECT `description` FROM `medications` WHERE `generic_id` = " + medicationId, reader => Convert.ToString(reader[0]));
 
         /// <summary>
         /// Finds all medications matching the specified search text.
@@ -134,10 +138,10 @@ namespace OpenDentBusiness
         public static List<Medication> Find(string searchText = "")
         {
             if (string.IsNullOrWhiteSpace(searchText))
-                return SelectMany("SELECT * FROM medications", FromReader);
+                return SelectMany("SELECT * FROM `medications`", FromReader);
 
             return
-                SelectMany("SELECT * FROM medications WHERE description LIKE @description", FromReader,
+                SelectMany("SELECT * FROM `medications` WHERE `description` LIKE ?description", FromReader,
                     new MySqlParameter("description", $"%{searchText}%"));
         }
 
@@ -148,7 +152,7 @@ namespace OpenDentBusiness
         /// <returns>The ID assigned to the medication.</returns>
         public static long Insert(Medication medication) =>
             medication.Id = DataConnection.ExecuteInsert(
-                "INSERT INTO medications (rxcui, description, generic_id, last_modified, notes) VALUES (@rxcui, @description, @generic_id, @last_modified, @notes)",
+                "INSERT INTO `medications` (`rxcui`, `description`, `generic_id`, `last_modified`, `notes`) VALUES (?rxcui, ?description, ?generic_id, ?last_modified, ?notes)",
                     new MySqlParameter("rxcui", medication.RxCui ?? ""),
                     new MySqlParameter("description", medication.Description ?? ""),
                     new MySqlParameter("generic_id", medication.GenericId.HasValue ? (object)medication.GenericId.Value : DBNull.Value),
@@ -161,7 +165,7 @@ namespace OpenDentBusiness
         /// <param name="medication">The medication.</param>
         public static void Update(Medication medication) =>
             DataConnection.ExecuteNonQuery(
-                "UPDATE medications SET rxcui = @rxcui, description = @description, generic_id = @generic_id, last_modified = @last_modified, notes = @notes WHERE id = @id",
+                "UPDATE `medications` SET `rxcui` = ?rxcui, `description` = ?description, `generic_id` = ?generic_id, `last_modified` = ?last_modified, `notes` = ?notes WHERE `id` = ?id",
                     new MySqlParameter("rxcui", medication.RxCui ?? ""),
                     new MySqlParameter("description", medication.Description ?? ""),
                     new MySqlParameter("generic_id", medication.GenericId.HasValue ? (object)medication.GenericId.Value : DBNull.Value),

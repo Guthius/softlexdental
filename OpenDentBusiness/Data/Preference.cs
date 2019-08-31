@@ -1,4 +1,13 @@
-﻿using MySql.Data.MySqlClient;
+﻿/*===========================================================================*
+ *        ____         __ _   _           ____             _        _        *
+ *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
+ *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
+ *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
+ *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
+ *                                                                           *
+ *   This file is covered by the LICENSE file in the root of this project.   *
+ *===========================================================================*/
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -7,7 +16,7 @@ using System.Linq;
 
 namespace OpenDentBusiness
 {
-    public class Preference : DataRecord, ICloneable
+    public class Preference : DataRecord
     {
         static readonly DataRecordCache<Preference> cache = CacheManager.Register("SELECT * FROM `preferences`", FromReader);
 
@@ -101,7 +110,7 @@ namespace OpenDentBusiness
         /// <returns>The preference value.</returns>
         public static string GetStringNoCache(PreferenceName preferenceName) =>
             DataConnection.ExecuteString(
-                "SELECT `value` FROM `preferences` WHERE `key` = @key",
+                "SELECT `value` FROM `preferences` WHERE `key` = ?key",
                     new MySqlParameter("key", preferenceName.ToString()));
 
         /// <summary>
@@ -188,7 +197,7 @@ namespace OpenDentBusiness
         {
             var value =
                 DataConnection.ExecuteString(
-                    "SELECT `value` FROM preferences WHERE `key` = @key",
+                    "SELECT `value` FROM preferences WHERE `key` = ?key",
                         new MySqlParameter("key", preferenceName.ToString()));
 
             if (value != null)
@@ -238,7 +247,7 @@ namespace OpenDentBusiness
         /// <param name="preference"></param>
         public static void Insert(Preference preference) =>
             DataConnection.ExecuteNonQuery(
-                "INSERT INTO preferences (key, value) VALUES (@key, @value) ON DUPLICATE KEY UPDATE value = @value",
+                "INSERT INTO preferences (`key`, `value`) VALUES (?key, ?value) ON DUPLICATE KEY UPDATE `value` = ?value",
                     new MySqlParameter("key", preference.Key ?? ""),
                     new MySqlParameter("value", preference.Value ?? ""));
 
@@ -364,7 +373,7 @@ namespace OpenDentBusiness
         /// <param name="preference">The preference.</param>
         public static void Update(Preference preference) =>
             DataConnection.ExecuteNonQuery(
-                "UPDATE `preferences` SET `value` = @value WHERE `key` = @key",
+                "UPDATE `preferences` SET `value` = ?value WHERE `key` = ?key",
                     new MySqlParameter("key", preference.Key ?? ""),
                     new MySqlParameter("value", preference.Value ?? ""));
 
@@ -374,7 +383,7 @@ namespace OpenDentBusiness
         /// <param name="preferenceKey">The preference key.</param>
         public static void Delete(string preferenceKey) =>
             DataConnection.ExecuteNonQuery(
-                "DELETE FROM `preferences` WHERE `key` = @key",
+                "DELETE FROM `preferences` WHERE `key` = ?key",
                     new MySqlParameter("key", preferenceKey ?? ""));
 
         /// <summary>
@@ -383,8 +392,6 @@ namespace OpenDentBusiness
         public static void Refresh() => cache.Refresh();
 
         #region CLEANUP
-
-        public object Clone() => MemberwiseClone();
 
         ///<summary>For UI display when we store a zero/meaningless value as -1. Returns "0" when useZero is true, otherwise "".</summary>
         public static string GetLongHideNegOne(PreferenceName prefName, bool useZero = false)
