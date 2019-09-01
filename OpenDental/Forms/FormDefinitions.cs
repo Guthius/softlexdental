@@ -41,7 +41,7 @@ namespace OpenDental{
 		public FormDefinitions(DefinitionCategory initialCat){
 			InitializeComponent();// Required for Windows Form Designer support
 			_initialCat=initialCat;
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

@@ -58,7 +58,7 @@ namespace OpenDental{
 			//
 			_dunningCur=dunningCur.Copy();
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		/// <summary>

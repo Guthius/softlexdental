@@ -32,7 +32,7 @@ namespace OpenDental{
 		public FormAutoCodeEdit(){
 			InitializeComponent();
       tbAutoItem.CellDoubleClicked += new OpenDental.ContrTable.CellEventHandler(tbAutoItem_CellDoubleClicked);
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

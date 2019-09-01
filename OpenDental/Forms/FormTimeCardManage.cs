@@ -35,7 +35,7 @@ namespace OpenDental {
 		public FormTimeCardManage(List<Employee> listEmployees) {
 			InitializeComponent();
 			_listEmployees=listEmployees;
-			Lan.F(this);
+			
 		}
 
 		private void FormTimeCardManage_Load(object sender,EventArgs e) {

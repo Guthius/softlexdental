@@ -72,43 +72,7 @@ namespace OpenDental {
 			LoopList=loopList;
 			PatPlanList=patPlanList;
 			SaveToDb=saveToDb;
-			InitializeComponent();// Required for Windows Form Designer support
-			//can't use Lan.F because of complexity of label use
-			Lan.C(this, new System.Windows.Forms.Control[]
-				{
-					this,
-					this.label1,
-					this.label9,
-					this.label30,
-					this.labelProcDate,
-					this.label28,
-					this.label29,
-					this.groupClaim,
-					this.radioEstimate,
-					this.radioClaim,
-					this.labelCodeSent,
-					this.labelFeeBilled,
-					this.labelRemarks,
-					this.labelNotInClaim,
-					this.checkNoBillIns,
-					this.labelFee,
-					this.labelCopayAmt,
-					this.label4,
-					this.groupClaimInfo,
-					this.labelDedApplied,
-					this.labelPaidOtherIns,
-					this.labelInsPayEst,
-					this.labelInsPayAmt,
-					this.labelWriteOff,
-					this.labelDateEntry,
-					this.checkPayPlan
-					//this.butRecalc
-			});
-			Lan.C("All", new System.Windows.Forms.Control[] {
-				butOK,
-				butCancel,
-				butDelete,
-			});
+			InitializeComponent();
 		}
 
 		private void FormClaimProcEdit_Load(object sender, System.EventArgs e) {

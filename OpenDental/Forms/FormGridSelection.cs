@@ -16,7 +16,7 @@ namespace OpenDental {
 		/// <summary>listGridRows must have tags set.</summary>
 		public FormGridSelection(List<ODGridColumn> listGridColumns,List<ODGridRow> listGridRows,string formTitle,string gridTitle) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_listGridColumns=listGridColumns;
 			_listGridRows=listGridRows;
 			this.Text=formTitle;

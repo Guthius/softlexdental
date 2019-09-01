@@ -14,7 +14,7 @@ namespace OpenDental {
 
 		public FormFamilyHealthEdit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormFamilyHealthEdit_Load(object sender,EventArgs e) {

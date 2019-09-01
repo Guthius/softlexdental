@@ -20,7 +20,7 @@ namespace OpenDental {
 		///Allows the user to selectivly block task lists that they are subscribed to.</summary>
 		public FormTaskListBlocks() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormTaskListBlock_Load(object sender,EventArgs e) {

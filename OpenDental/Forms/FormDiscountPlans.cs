@@ -12,7 +12,7 @@ namespace OpenDental {
 
 		public FormDiscountPlans() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormDiscountPlans_Load(object sender,EventArgs e) {

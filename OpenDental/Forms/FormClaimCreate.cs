@@ -40,7 +40,7 @@ namespace OpenDental{
 			InitializeComponent();
 			PatNum=patNum;
 			//tbPlans.CellDoubleClicked += new OpenDental.ContrTable.CellEventHandler(tbPlans_CellDoubleClicked);
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

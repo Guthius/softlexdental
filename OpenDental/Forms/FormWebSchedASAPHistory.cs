@@ -18,7 +18,6 @@ namespace OpenDental {
 
 		public FormWebSchedASAPHistory() {
 			InitializeComponent();
-			Lan.F(this);
 		}
 
 		private void FormWebSchedASAPHistory_Load(object sender,EventArgs e) {

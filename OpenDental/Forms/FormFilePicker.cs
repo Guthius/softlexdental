@@ -21,7 +21,7 @@ namespace OpenDental {
 
 		public FormFilePicker(string defaultPath) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			textPath.Text=defaultPath;
 		}
 

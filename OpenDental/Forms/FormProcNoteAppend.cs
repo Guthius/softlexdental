@@ -14,7 +14,7 @@ namespace OpenDental {
 
 		public FormProcNoteAppend() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormProcNoteAppend_Load(object sender,EventArgs e) {

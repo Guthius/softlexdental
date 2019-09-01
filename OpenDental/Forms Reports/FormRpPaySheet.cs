@@ -41,7 +41,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormRpPaySheet(){
 			InitializeComponent();
- 			Lan.F(this);
+ 			
 		}
 
 		///<summary></summary>

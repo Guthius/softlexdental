@@ -13,7 +13,7 @@ namespace OpenDental {
 
 		public FormProgramLinkOutputFile(Program program) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_curProg=program;
 		}
 

@@ -32,7 +32,7 @@ namespace OpenDental {
 
 		public FormEtrans835s() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 		
 		private void FormEtrans835s_Load(object sender,EventArgs e) {

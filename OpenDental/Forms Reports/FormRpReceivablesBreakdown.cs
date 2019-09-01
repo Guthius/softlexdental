@@ -44,7 +44,7 @@ namespace OpenDental {
 		///<summary></summary>
 		public FormRpReceivablesBreakdown() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

@@ -64,7 +64,7 @@ namespace OpenDental{
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			Lan.F(this);
+			
 			if(listDiseaseDefNums!=null) {
 				_listDiseaseDefNumsColored=listDiseaseDefNums;
 			}

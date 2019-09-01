@@ -10,7 +10,7 @@ namespace OpenDental {
 
  		public FormMedLabHL7MsgText() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormMedLabHL7MsgText_Load(object sender,EventArgs e) {

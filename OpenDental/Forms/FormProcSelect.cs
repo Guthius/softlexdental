@@ -95,7 +95,7 @@ namespace OpenDental{
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			Lan.F(this);
+			
 			_patNumCur=patNum;
 			_isSimpleView=isSimpleView;
 			_isMultiSelect=isMultiSelect;

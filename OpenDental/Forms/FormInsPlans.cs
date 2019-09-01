@@ -64,7 +64,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormInsPlans(){
 			InitializeComponent();// Required for Windows Form Designer support
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

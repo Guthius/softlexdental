@@ -52,7 +52,7 @@ namespace OpenDental{
 			//BenCur=benCur.Clone();
 			PatPlanNum=patPlanNum;
 			PlanNum=planNum;
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

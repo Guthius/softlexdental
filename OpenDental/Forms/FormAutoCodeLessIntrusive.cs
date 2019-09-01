@@ -54,7 +54,6 @@ namespace OpenDental{
 			_listClaimProcs=listClaimProcs;
 			_teethText=teethText;
 			InitializeComponent();
-			Lan.F(this,new Control[] {labelMain});
 			//labelMain is translated from calling Form (FormProcEdit)
 		}
 

@@ -31,7 +31,7 @@ namespace OpenDental{
 			//
 			QuickNote=quickNote.Copy();
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		/// <summary>

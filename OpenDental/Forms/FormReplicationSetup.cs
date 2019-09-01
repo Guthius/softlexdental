@@ -16,7 +16,7 @@ namespace OpenDental {
 
 		public FormReplicationSetup() {
 			InitializeComponent();
-			Lan.F(this);
+			
 			changed=false;
 		}
 

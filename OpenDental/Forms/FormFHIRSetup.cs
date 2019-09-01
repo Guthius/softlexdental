@@ -20,7 +20,7 @@ namespace OpenDental
 
 		public FormFHIRSetup() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormFHIRSetup_Load(object sender,EventArgs e) {

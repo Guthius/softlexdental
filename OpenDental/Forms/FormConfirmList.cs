@@ -66,7 +66,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormConfirmList(){
 			InitializeComponent();// Required for Windows Form Designer support
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

@@ -19,7 +19,7 @@ namespace OpenDental {
 		/// <summary></summary>
 		public FormCloneManager() {
 			InitializeComponent();
-			Lan.F(this);
+			
 	
 		}
 

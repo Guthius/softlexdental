@@ -22,7 +22,7 @@ namespace OpenDental {
 
 		public FormRpInsPayPlansPastDue() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormRpInsPayPlansPastDue_Load(object sender,EventArgs e) {

@@ -24,7 +24,7 @@ namespace OpenDental {
 		///currently selected def and any direct-line descendants from being selected as the category's parent.</summary>
 		public FormDefinitionPicker(DefinitionCategory cat,List<Definition> listDefs=null,long defNumCur=0) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			if(listDefs!=null) {
 				ListSelectedDefs=listDefs; //initially, selected defs and list defs are the same. However, ListSelectedDefs changes while _listDefInitial doesn't.
 				_listDefInitial=new List<Definition>(listDefs);

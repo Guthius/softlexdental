@@ -16,7 +16,7 @@ namespace OpenDental {
 
 		public FormInterventionEdit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

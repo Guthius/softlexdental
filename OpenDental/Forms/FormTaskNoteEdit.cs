@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormTaskNoteEdit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormTaskNoteEdit_Load(object sender,EventArgs e) {

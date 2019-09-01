@@ -76,7 +76,7 @@ namespace OpenDental
 		public FormSheetDefEdit(SheetDef sheetDef) {
 			InitializeComponent();
 			InitializeComponentSheetEditMobile();
-			Lan.F(this);
+			
 			_sheetDefCur=sheetDef;
 			if(sheetDef.IsLandscape){
 				Width=sheetDef.Height+190;

@@ -72,7 +72,7 @@ namespace OpenDental{
 			InitializeComponent();
 			RxPatCur=rxPatCur;
 			PatCur=patCur;
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

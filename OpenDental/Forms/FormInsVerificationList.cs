@@ -51,7 +51,7 @@ namespace OpenDental {
 			gridMain.ContextMenu=menuRightClick;
 			gridPastDue.ContextMenu=menuRightClick;
 			gridAssign.ContextMenu=menuRightClick;
-			Lan.F(this);
+			
 		}
 
 		private void FormInsVerificationList_Load(object sender,EventArgs e) {

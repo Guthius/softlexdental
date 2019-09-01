@@ -14,7 +14,7 @@ namespace OpenDental {
 
 		public FormEhrMeasureEvents() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormEhrMeasureEvents_Load(object sender,System.EventArgs e) {

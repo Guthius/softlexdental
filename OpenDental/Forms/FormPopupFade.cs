@@ -98,7 +98,7 @@ namespace OpenDental {
 
 		private FormPopupFade(string message,bool doDisplayClose) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_doDisplayCloseButton=doDisplayClose;
 			//Creates a border with rounded corners
 			if(_doDisplayCloseButton) {

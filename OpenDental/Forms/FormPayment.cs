@@ -294,7 +294,7 @@ namespace OpenDental {
 			_famCur=famCur;
 			_paymentCur=paymentCur;
 			_preferCurrentPat=preferCurrentPat;
-			Lan.F(this);
+			
 			panelXcharge.ContextMenu=contextMenuXcharge;
 			butPayConnect.ContextMenu=contextMenuPayConnect;
 			butPaySimple.ContextMenu=contextMenuPaySimple;

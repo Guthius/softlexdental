@@ -28,7 +28,7 @@ namespace OpenDental {
 			_patCur=patCur;
 			_paymentCur=payCur;
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormIncomeTransferManage_Load(object sender,EventArgs e) {

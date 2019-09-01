@@ -17,7 +17,7 @@ namespace OpenDental {
 		/// <summary>This window has two modes: Selection and Setup Mode.  By default the buttons and methods are in Setup mode.  Changing to Selection Mode will change the function of several actions in this window.  Most specifically, the grid's double click method.</summary>
 		public FormGradingScales() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormGradingScales_Load(object sender,EventArgs e) {

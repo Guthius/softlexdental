@@ -59,7 +59,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormRpTreatmentFinder() {
 			InitializeComponent();
-			Lan.F(this);
+			
 			gridMain.ContextMenu=contextRightClick;
 		}
 

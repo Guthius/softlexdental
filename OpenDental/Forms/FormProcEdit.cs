@@ -132,7 +132,7 @@ namespace OpenDental {
 			//HistList=null;
 			//LoopList=null;
 			InitializeComponent();
-			Lan.F(this);
+			
 			if(!Preference.GetBool(PreferenceName.ShowFeatureMedicalInsurance)) {
 				tabControl.TabPages.Remove(tabPageMedical);
 				//groupMedical.Visible=false;

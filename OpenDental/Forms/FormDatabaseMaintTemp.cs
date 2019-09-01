@@ -19,7 +19,7 @@ namespace OpenDental {
 
 		public FormDatabaseMaintTemp() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormDatabaseMaintTemp_Load(object sender,EventArgs e) {

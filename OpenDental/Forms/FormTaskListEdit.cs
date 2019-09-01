@@ -40,7 +40,7 @@ namespace OpenDental{
 			//
 			InitializeComponent();
 			Cur=cur;
-			Lan.F(this);
+			
 		}
 
 		/// <summary>

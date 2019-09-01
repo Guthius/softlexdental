@@ -44,7 +44,7 @@ namespace OpenDental {
 
 		public FormPrepaymentTool(Patient PatCur) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_patCur=PatCur;
 		}
 

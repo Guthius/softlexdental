@@ -11,7 +11,7 @@ namespace OpenDental {
 
 		public FormVaccineObsEdit(VaccineObs vaccineObs) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_vaccineObsCur=vaccineObs;
 		}
 

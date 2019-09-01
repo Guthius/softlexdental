@@ -95,7 +95,7 @@ namespace OpenDental{
 
 		public FormProcGroup() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		///<summary>Inserts are no longer done within this dialog, but must be done ahead of time from outside.You must specify a procedure to edit, and only the changes that are made in this dialog get saved.  Only used when double click in Account, Chart, TP, and in ContrChart.AddProcedure().  The procedure may be deleted if new, and user hits Cancel.</summary>
@@ -106,7 +106,7 @@ namespace OpenDental{
 			ProcGroupItem=ProcGroupItems.Refresh(groupNum);
 			//Proc
 			InitializeComponent();
-			Lan.F(this);
+			
 		}*/
 
 		#region Windows Form Designer generated code

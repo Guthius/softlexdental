@@ -19,7 +19,7 @@ namespace OpenDental {
 
 		public FormDiscountPlanEdit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormDiscountPlanEdit_Load(object sender,EventArgs e) {

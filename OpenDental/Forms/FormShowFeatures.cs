@@ -26,7 +26,7 @@ namespace OpenDental{
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormShowFeatures_Load(object sender, System.EventArgs e) {

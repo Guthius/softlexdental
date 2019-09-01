@@ -92,7 +92,7 @@ namespace OpenDental
         public FormPath()
         {
             InitializeComponent();
-            Lan.F(this);
+            
             //We only show the tabs in the designer for development purposes.  We want to hide them for our users.
             //Because the tab control is in "flat buttons" appearance and "fixed size" style the tabs will not show even if they are one pixel tall.
             //0,0 does not work because some size is required.

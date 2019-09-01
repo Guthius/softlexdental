@@ -16,7 +16,7 @@ namespace OpenDental {
 
 		public FormRequiredFields() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormRequiredFields_Load(object sender,EventArgs e) {

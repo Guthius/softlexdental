@@ -217,7 +217,6 @@ namespace OpenDental {
 			//Since field has not been inserted into the db, field.SheetFieldNum=0.  It's possible to have two fields with the same FieldName.
 			//Use NameXPosYPos as a likely unique id.
 			ctr.Name=GetSheetFieldID(field);
-			Lan.C(this,new Control[] { ctr });
 			Controls.Add(ctr);
 			HookUpDragEvents(ctr);
 			if(ctr is IDashWidgetField) {

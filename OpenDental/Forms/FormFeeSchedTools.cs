@@ -92,7 +92,7 @@ namespace OpenDental {
 		public FormFeeSchedTools(long schedNum,List<FeeSched> listFeeScheds,List<Provider> listProvs,List<Clinic> listClinics,FeeCache cache) {
 			// Required for Windows Form Designer support
 			InitializeComponent();
-			Lan.F(this);
+			
 			_schedNum=schedNum;
 			_listFeeScheds=listFeeScheds;
 			_feeCache=cache;

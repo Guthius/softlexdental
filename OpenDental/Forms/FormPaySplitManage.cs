@@ -37,7 +37,7 @@ namespace OpenDental {
 		public FormPaySplitManage(bool isIncomeTransfer) {
 			InitializeComponent();
 			_isIncomeTransfer=isIncomeTransfer;
-			Lan.F(this);
+			
 		}
 
 		private void FormPaySplitManage_Load(object sender,EventArgs e) {

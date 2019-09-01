@@ -15,7 +15,7 @@ namespace OpenDental {
 
 		public FormApptReminderRuleAggEdit(ApptReminderRule apptReminderCur) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			//This needs to remain a shallow copy because FormEServicesECR is expecting shallow copy changes only. Making a new instance would break that.
 			ApptReminderRuleCur=apptReminderCur;
 		}

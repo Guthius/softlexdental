@@ -202,7 +202,6 @@ namespace OpenDental
             ContrApptSheet2.MouseWheel += new MouseEventHandler(ContrApptSheet2_MouseWheel);
             _listApptViews = new List<ApptView>();
             _listOpPanels = new List<OpPanel>();
-            Lan.C(this, menuReminderEdit);
             gridReminders.ContextMenu = menuReminderEdit;
 
             //Add this control once. We will use ResetData() and Visible=true/false to control its visibility and layout.
@@ -1417,32 +1416,6 @@ namespace OpenDental
             menuItem.Name = MenuItemNames.TextApptsForDay;
             menuItem = menuBlockout.MenuItems.Add(Lan.g(this, "Update Provs on Future Appts"), OnUpdateProvs_Click);
             menuItem.Name = MenuItemNames.UpdateProvsOnFutureAppts;
-            Lan.C(this, new Control[]
-                {
-                butToday,
-				//butTodayWk,
-				butSearch,
-                butClearPin,
-                label2,
-                label7,
-                butMakeAppt,
-                butMakeRecall,
-                butFamRecall,
-                butViewAppts,
-                radioDay,
-                radioWeek,
-                tabWaiting,
-                tabSched,
-                tabProv,
-                butLab,
-                butBackWeek,
-                butBackMonth,
-                butFwdWeek,
-                butFwdMonth,
-                gridEmpSched,
-                gridWaiting,
-                gridProv
-                });
             LayoutToolBar();
             //Appointment action buttons
             toolTip1.SetToolTip(butUnsched, Lan.g(this, "Send to Unscheduled List"));

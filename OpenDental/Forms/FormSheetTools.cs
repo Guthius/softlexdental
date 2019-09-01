@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormSheetTools() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void butImport_Click(object sender,EventArgs e) {

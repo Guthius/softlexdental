@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormHL7Msgs() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormHL7Msgs_Load(object sender,EventArgs e) {

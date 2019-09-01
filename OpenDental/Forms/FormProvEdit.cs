@@ -147,7 +147,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormProvEdit(){
 			InitializeComponent();// Required for Windows Form Designer support
-			Lan.F(this);
+			
 			//ProvCur=provCur;
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				labelNPI.Text=Lan.g(this,"CDA Number");

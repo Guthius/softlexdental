@@ -25,7 +25,7 @@ namespace OpenDental {
 
 		public FormCreditCardEdit(Patient pat) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			PatCur=pat;
 			_isXChargeEnabled=Programs.IsEnabled(ProgramName.Xcharge);
 			_isPayConnectEnabled=Programs.IsEnabled(ProgramName.PayConnect);

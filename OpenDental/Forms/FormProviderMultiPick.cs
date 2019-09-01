@@ -18,7 +18,7 @@ namespace OpenDental {
 
 		public FormProvidersMultiPick(List<Provider> listProviders=null) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_listProviders=listProviders;
 		}
 

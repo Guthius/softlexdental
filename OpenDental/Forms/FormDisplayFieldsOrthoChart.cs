@@ -37,7 +37,7 @@ namespace OpenDental{
 
 		public FormDisplayFieldsOrthoChart() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		protected override void Dispose(bool disposing)	{

@@ -26,7 +26,7 @@ namespace OpenDental {
 		
 		public FormCodeSystemsImport(params CodeSystemName[] arrayAutoImportCodeSystemNames) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_arrayAutoImportCodeSystemNames=arrayAutoImportCodeSystemNames;
 		}
 

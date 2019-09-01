@@ -19,7 +19,6 @@ namespace OpenDental {
 
 		public FormWebSchedASAPSend(long clinicNum,long opNum,DateTime dtSlotStart,DateTime dtSlotEnd,List<Appointment> listAppts,List<Recall> listRecalls) {
 			InitializeComponent();
-			Lan.F(this);
 			_clinicNum=clinicNum;
 			_opNum=opNum;
 			_dtSlotStart=dtSlotStart;

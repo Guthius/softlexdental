@@ -295,7 +295,7 @@ namespace OpenDental{
 			listCars.BringToFront();
 			//tbPercentPlan.CellClicked += new OpenDental.ContrTable.CellEventHandler(tbPercentPlan_CellClicked);
 			//tbPercentPat.CellClicked += new OpenDental.ContrTable.CellEventHandler(tbPercentPat_CellClicked);
-			Lan.F(this);
+			
 			if(CultureInfo.CurrentCulture.Name.EndsWith("CA")) {//Canadian. en-CA or fr-CA
 				labelPatID.Text=Lan.g(this,"Dependant Code");
 				labelCitySTZip.Text=Lan.g(this,"City,Prov,Post");   //Postal Code";

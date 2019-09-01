@@ -15,7 +15,7 @@ namespace OpenDental {
 
 		public FormRpActivePatients() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormRpActivePatients_Load(object sender,EventArgs e) {

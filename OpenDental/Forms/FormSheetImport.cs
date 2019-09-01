@@ -45,7 +45,7 @@ namespace OpenDental {
 
 		public FormSheetImport() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormSheetImport_Load(object sender,EventArgs e) {

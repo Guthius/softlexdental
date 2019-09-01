@@ -63,7 +63,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormRecallSetup(){
 			InitializeComponent();
-			Lan.F(this);
+			
 			//Lan.C(this, new System.Windows.Forms.Control[] {
 				//textBox1,
 				//textBox6

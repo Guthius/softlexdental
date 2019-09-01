@@ -28,11 +28,6 @@ namespace OpenDental{
 			//FeeCur=feeCur;
 			//checkDefFee.Checked=FeeCur.UseDefaultFee;
 			//checkDefCov.Checked=FeeCur.UseDefaultCov;
-			Lan.F(this, new System.Windows.Forms.Control[] {
-				//exclude:
-				this.checkDefCov,
-				this.checkDefFee,
-			});
 		}
 
 		///<summary></summary>

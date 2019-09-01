@@ -16,7 +16,7 @@ namespace OpenDental {
 
 		public FormGradingScaleEdit(GradingScale gradingScaleCur) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_gradingScaleCur=gradingScaleCur;
 		}
 

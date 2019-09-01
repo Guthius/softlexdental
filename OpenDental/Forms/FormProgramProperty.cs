@@ -33,7 +33,7 @@ namespace OpenDental{
 			//
 			_isPassword=isPassword;
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		/// <summary>

@@ -22,7 +22,7 @@ namespace OpenDental {
 
 		public FormTransworldSetup() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormTransworldSetup_Load(object sender,EventArgs e) {

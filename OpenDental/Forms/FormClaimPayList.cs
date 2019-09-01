@@ -25,7 +25,7 @@ namespace OpenDental {
 
 		public FormClaimPayList() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormClaimPayList_Load(object sender,EventArgs e) {

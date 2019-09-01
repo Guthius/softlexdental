@@ -35,7 +35,7 @@ namespace OpenDental{
 		public FormRxSelect(Patient patCur){
 			InitializeComponent();// Required for Windows Form Designer support
 			PatCur=patCur;
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

@@ -19,7 +19,7 @@ namespace OpenDental {
 			InitializeComponent();
 			//get providerErx from provErxNum that was passed in
 			_providerErxCur=ProviderErxs.GetFirstOrDefault(x => x.ProviderErxNum==provErxNum);
-			Lan.F(this);
+			
 		}
 
 		private void FormDoseSpotAssignUserId_Load(object sender,EventArgs e) {

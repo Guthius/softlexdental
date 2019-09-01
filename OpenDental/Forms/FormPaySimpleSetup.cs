@@ -27,7 +27,7 @@ namespace OpenDental {
 
 		public FormPaySimpleSetup() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormPaySimpleSetup_Load(object sender,EventArgs e) {

@@ -27,7 +27,7 @@ namespace OpenDental {
 
 		public FormApptReminderRuleEdit(ApptReminderRule apptReminderCur,List<ApptReminderRule> listRulesClinic=null) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			ApptReminderRuleCur=apptReminderCur;
 			_listRulesClinic=listRulesClinic??new List<ApptReminderRule>();
 		}

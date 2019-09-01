@@ -27,7 +27,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormGroupPermEdit(GroupPermission cur){
 			InitializeComponent();
-			Lan.F(this);
+			
 			Cur=cur.Copy();
 		}
 

@@ -18,7 +18,7 @@ namespace OpenDental {
 		///<summary>Security handled in calling form.</summary>
 		public FormApptQuickAdd() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormApptQuickAdd_Load(object sender,EventArgs e) {

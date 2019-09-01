@@ -36,7 +36,7 @@ namespace OpenDental {
 			InitializeComponent();
 			_famCur=Patients.GetFamily(patNum);
 			_patCur=_famCur.GetPatient(patNum);
-			Lan.F(this);
+			
 			for(int i=0;i<listViewFamily.Columns.Count;i++) {
 				listViewFamily.Columns[i].Text=Lan.g(this,listViewFamily.Columns[i].Text);
 			}

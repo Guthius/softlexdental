@@ -41,7 +41,7 @@ namespace OpenDental {
 			_provNum=provNum;
 			_patCur=Patients.GetPat(payPlanCur.PatNum);
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormPayPlanCredits_Load(object sender,EventArgs e) {

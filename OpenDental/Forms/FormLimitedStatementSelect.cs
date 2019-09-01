@@ -45,7 +45,7 @@ namespace OpenDental {
 		public FormLimitedStatementSelect(DataTable accountTable) {
 			InitializeComponent();
 			_tableAccount=accountTable;
-			Lan.F(this);
+			
 		}
 
 		private void FormLimitedStatementSelect_Load(object sender,EventArgs e) {

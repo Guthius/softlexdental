@@ -13,7 +13,7 @@ namespace OpenDental {
 
 		public FormTaskOptions(bool isShowFinishedTasks, DateTime dateTimeStartShowFinished, bool isAptDateTimeSort) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			checkShowFinished.Checked=isShowFinishedTasks;
 			textStartDate.Text=dateTimeStartShowFinished.ToShortDateString();
 			checkTaskSortApptDateTime.Checked=isAptDateTimeSort;

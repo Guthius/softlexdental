@@ -29,7 +29,7 @@ namespace OpenDental {
 		///<summary>Pass in a list to only display certain procedures.  If none are provided, we will dynamically get unpaid procedures</summary>
 		public FormAdjMulti(Patient patCur, List<Procedure> selectedProcs=null) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_patCur=patCur;
 			_listSelectedProcs=selectedProcs;
 			if(selectedProcs!=null && selectedProcs.Count>0) {//The user specified procedures

@@ -13,7 +13,7 @@ namespace OpenDental {
 
 		public FormConfirmationSetup() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 

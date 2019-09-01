@@ -94,7 +94,7 @@ namespace OpenDental{
 			ClaimPaymentCur=claimPaymentCur;
 			gridAttached.ContextMenu=menuRightAttached;
 			gridOut.ContextMenu=menuRightOut;
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

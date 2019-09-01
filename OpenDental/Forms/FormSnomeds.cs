@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormSnomeds() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormSnomeds_Load(object sender,EventArgs e) {

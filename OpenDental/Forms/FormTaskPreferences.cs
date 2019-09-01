@@ -9,7 +9,7 @@ namespace OpenDental {
 
 		public FormTaskPreferences() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormTaskPreferences_Load(object sender,EventArgs e) {

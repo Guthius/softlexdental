@@ -17,7 +17,6 @@ namespace OpenDental {
 
 		public FormUserPrefAdditional(List<UserOdPref> listUserPref,User userCur) {
 			InitializeComponent();
-			Lan.F(this);
 			_listUserPref=listUserPref.Select(x => x.Clone()).ToList();
 			_userCur=userCur.Copy();
 		}

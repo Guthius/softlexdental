@@ -33,7 +33,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormRpNewPatients() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

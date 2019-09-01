@@ -19,7 +19,6 @@ namespace OpenDental {
 
 		public FormXchargeTokenTool() {
 			InitializeComponent();
-			Lan.F(this);
 		}
 
 		private void FormXchargeTokenTool_Load(object sender,EventArgs e) {

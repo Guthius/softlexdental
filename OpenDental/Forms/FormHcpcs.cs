@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormHcpcs() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormHcpcs_Load(object sender,EventArgs e) {

@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormProcCodeEditMore(ProcedureCode procCode) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_procCode=procCode;
 		}
 

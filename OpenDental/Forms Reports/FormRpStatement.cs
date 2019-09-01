@@ -44,10 +44,6 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormRpStatement(){
 			InitializeComponent();
-			Lan.F(this, new Control[] 
-				{//exclude:
-					labelTotPages
-				});
 		}
 
 		///<summary></summary>

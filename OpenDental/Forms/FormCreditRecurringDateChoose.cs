@@ -21,7 +21,7 @@ namespace OpenDental {
 			_pat=pat;
 			_lastMonth=GetValidPayDate(DateTime.Now.AddMonths(-1));
 			_thisMonth=GetValidPayDate(DateTime.Now);
-			Lan.F(this);
+			
 		}
 
 		private void FormCreditRecurringDateChoose_Load(object sender,EventArgs e) {

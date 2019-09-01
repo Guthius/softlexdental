@@ -16,7 +16,7 @@ namespace OpenDental {
 
 		public FormPendingPayments() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormPendingOnlinePayments_Load(object sender,EventArgs e) {

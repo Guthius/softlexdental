@@ -13,7 +13,7 @@ namespace OpenDental {
 
 		public FormInsRemain(long selectedPatNum) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_famCur=Patients.GetFamily(selectedPatNum);
 			_patCur=_famCur.GetPatient(selectedPatNum);
 		}

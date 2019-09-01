@@ -15,7 +15,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormLogoffWarning() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

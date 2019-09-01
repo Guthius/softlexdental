@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormRecallsPat() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormRecallsPat_Load(object sender,EventArgs e) {

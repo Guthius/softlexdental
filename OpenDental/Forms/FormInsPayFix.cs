@@ -12,7 +12,7 @@ namespace OpenDental {
 	public partial class FormInsPayFix:ODForm {
 		public FormInsPayFix() {
 			InitializeComponent();
-			Lan.F(this);
+			
 
 		}
 

@@ -21,7 +21,7 @@ namespace OpenDental {
 		///<summary>Set x835 to view all x835.ListClaims info. Otherwise set claimPaid to a specific Hx835_Claim to view.</summary>
 		public FormEtrans835Print(X835 x835,Hx835_Claim claimPaid=null) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_x835=x835;
 			_claimPaid=claimPaid;
 		}

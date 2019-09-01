@@ -76,7 +76,7 @@ namespace OpenDental{
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			Lan.F(this);
+			
 			_listPreSelectedEmpNums=listPreSelectedEmpNums;
 			_listPreSelectedProvNums=listPreSelectedProvNums;
 		}

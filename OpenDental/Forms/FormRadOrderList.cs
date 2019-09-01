@@ -21,7 +21,7 @@ namespace OpenDental {
 
 		public FormRadOrderList(User user) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			gridMain.ContextMenu=menuRightClick;
 			_user=user;
 		}

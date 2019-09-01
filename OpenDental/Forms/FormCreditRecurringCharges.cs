@@ -31,7 +31,7 @@ namespace OpenDental {
 		///<summary>Only works for XCharge,PayConnect, and PaySimple so far.</summary>
 		public FormCreditRecurringCharges() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormRecurringCharges_Load(object sender,EventArgs e) {

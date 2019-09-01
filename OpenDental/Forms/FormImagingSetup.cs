@@ -48,28 +48,6 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormImagingSetup(){
 			InitializeComponent();
-			//too many labels to use Lan.F()
-			Lan.C(this, new System.Windows.Forms.Control[]
-			{
-				this,
-				this.groupBox1,
-				this.groupBox2,
-				this.groupBox3,
-				this.label1,
-				this.label2,
-				this.label3,
-				this.label4,
-				this.label5,
-				this.label6,
-				this.label7,
-				this.label12,
-				this.labelPanoBW,
-				this.label37
-			});
-			Lan.C("All", new System.Windows.Forms.Control[] {
-				butOK,
-				butCancel,
-			});
 		}
 
 		///<summary></summary>

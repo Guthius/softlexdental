@@ -20,7 +20,7 @@ namespace OpenDental {
 
 		public FormOperatoryPick(List<Operatory> listOps) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_listOps=listOps.Select(x=>x.Copy()).ToList();
 		}
 		

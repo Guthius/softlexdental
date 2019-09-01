@@ -16,7 +16,7 @@ namespace OpenDental {
 
 		public FormDunningSetup() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormDunningSetup_Load(object sender,EventArgs e) {

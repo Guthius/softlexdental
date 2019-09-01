@@ -14,7 +14,7 @@ namespace OpenDental {
 
 		public FormRpDiscountPlan() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

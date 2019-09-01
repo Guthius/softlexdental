@@ -19,7 +19,7 @@ namespace OpenDental {
 
 		public FormEnterpriseSetup() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormEnterpriseSetup_Load(object sender,EventArgs e) {

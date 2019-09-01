@@ -76,7 +76,7 @@ namespace OpenDental{
 		public FormClaimsSend(){
 			InitializeComponent();
 			//tbQueue.CellDoubleClicked += new OpenDental.ContrTable.CellEventHandler(tbQueue_CellDoubleClicked);
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

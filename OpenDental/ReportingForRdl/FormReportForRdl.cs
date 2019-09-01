@@ -38,7 +38,6 @@ namespace OpenDental{
 			InitializeComponent();
 			SourceFilePath=null;
 			SourceRdlString=null;
-			Lan.F(this);
 		}
 
 		/// <summary>

@@ -15,7 +15,7 @@ namespace OpenDental {
 		public FormOrthoChartAddDate() {
 			InitializeComponent();
 			SelectedDate=new DateTime();
-			Lan.F(this);
+			
 		}
 
 		private void FormOrthoChartAddDate_Load(object sender,EventArgs e) {

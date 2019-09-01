@@ -117,7 +117,7 @@ namespace OpenDental {
 			//
 			ClinicCur=clinicCur;
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		/// <summary>

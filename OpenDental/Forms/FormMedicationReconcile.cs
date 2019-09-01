@@ -18,7 +18,7 @@ namespace OpenDental {
 
 		public FormMedicationReconcile() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormMedicationReconcile_Load(object sender,EventArgs e) {

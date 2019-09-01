@@ -34,7 +34,7 @@ namespace OpenDental{
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			Lan.F(this);
+			
 			//PatNum=patNum;
 			//FormPatCur=formPatCur.Clone();
 			multInput.IsQuestionnaire=true;

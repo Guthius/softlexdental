@@ -34,7 +34,7 @@ namespace OpenDental {
 
 		public FormMobileAppDevices() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		#endregion

@@ -18,7 +18,7 @@ namespace OpenDental {
 
 		public FormSheetFieldLine() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormSheetFieldLine_Load(object sender,EventArgs e) {

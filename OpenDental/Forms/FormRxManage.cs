@@ -21,7 +21,7 @@ namespace OpenDental {
 		public FormRxManage(Patient patCur) {
 			InitializeComponent();
 			_patCur=patCur;
-			Lan.F(this);
+			
 		}
 
 		private void FormRxManage_Load(object sender,System.EventArgs e) {

@@ -17,7 +17,7 @@ namespace OpenDental
         public FormDrugManufacturerEdit()
         {
             InitializeComponent();
-            Lan.F(this);
+            
         }
 
         private void FormDrugManufacturerEdit_Load(object sender, EventArgs e)

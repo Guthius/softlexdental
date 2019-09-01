@@ -41,7 +41,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormProcButtonEdit(ProcButton procButtonCur){
 			InitializeComponent();
-			Lan.F(this);
+			
 			ProcButtonCur=procButtonCur;
 		}
 

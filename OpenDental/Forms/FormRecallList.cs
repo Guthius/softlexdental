@@ -94,7 +94,7 @@ namespace OpenDental{
 			if(!Preference.GetBool(PreferenceName.ShowFeatureReactivations)) {
 				tabControl.Controls.Remove(tabPageReactivations);
 			}
-			Lan.F(this);
+			
 		}
 
 		private void FormRecallList_Load(object sender, System.EventArgs e) {

@@ -12,7 +12,7 @@ namespace OpenDental {
 
 		public FormPrepaymentEdit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormPrepaymentEdit_Load(object sender,EventArgs e) {

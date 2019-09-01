@@ -20,7 +20,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormAutoCode(){
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

@@ -135,7 +135,7 @@ namespace OpenDental
             PatCur = patCur;
             _listPatProcs = listPatProcs;
             _toothChartData = toothChartData;
-            Lan.F(this);
+            
         }
 
         /// <summary>

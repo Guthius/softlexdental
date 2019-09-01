@@ -16,7 +16,7 @@ namespace OpenDental {
 
 		public FormTaskInboxSetup() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormTaskInboxSetup_Load(object sender,EventArgs e) {

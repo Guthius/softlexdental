@@ -59,7 +59,7 @@ namespace OpenDental{
 			DocOld=DocCur.Copy();
 			_isOkDisabled=isOkDisabled;
 			initialSelection=pInitialSelection;
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

@@ -37,7 +37,7 @@ namespace OpenDental {
 		///If the claimNum is not found on this ERA then all claims will preview.</summary>
 		public FormEtrans835Edit(long printPreviewClaimNum=0) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_preLoadedPrintPreviewClaimNum=printPreviewClaimNum;
 		}
 

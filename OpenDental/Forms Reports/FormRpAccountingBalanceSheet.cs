@@ -21,7 +21,6 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormRpAccountingBalanceSheet() {
 			InitializeComponent();
- 			Lan.F(this);
 		}
 
 		///<summary></summary>

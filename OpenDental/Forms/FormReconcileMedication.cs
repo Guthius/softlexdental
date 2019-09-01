@@ -15,7 +15,7 @@ namespace OpenDental {
 		///<summary>Patient must be valid.  Do not pass null.</summary>
 		public FormReconcileMedication(Patient patCur) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_patCur=patCur;
 		}
 

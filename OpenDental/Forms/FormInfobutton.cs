@@ -38,13 +38,13 @@ namespace OpenDental {
 		public FormInfobutton() {
 			_listKnowledgeRequests=new List<KnowledgeRequest>();
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		public FormInfobutton(List<KnowledgeRequest> listKnowledgeRequests) {
 			_listKnowledgeRequests=listKnowledgeRequests;
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormInfobutton_Load(object sender,EventArgs e) {

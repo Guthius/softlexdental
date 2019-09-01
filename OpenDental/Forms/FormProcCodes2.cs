@@ -126,7 +126,7 @@ namespace OpenDental{
 		public FormProcCodes2(bool canShowHidden=false) {
 			InitializeComponent();// Required for Windows Form Designer support
 			gridMain.EditableEnterMovesDown=true;
-			Lan.F(this);
+			
 			_canShowHidden=canShowHidden;
 		}
 

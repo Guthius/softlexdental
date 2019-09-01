@@ -31,7 +31,7 @@ namespace OpenDental {
 		public FormInsCatEdit(CovCat covCatCur) {
 			InitializeComponent();
 			_covCatCur=covCatCur.Copy();
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

@@ -33,7 +33,7 @@ namespace OpenDental {
 
 		public FormPaySimple(long clinicNum,Patient pat,decimal amount,CreditCard creditCard,bool isAddingCard=false) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			textAmount.Text=POut.Decimal(amount);
 			textAmountACH.Text=POut.Decimal(amount);
 			_clinicNum=clinicNum;

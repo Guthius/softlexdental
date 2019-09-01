@@ -118,7 +118,7 @@ namespace OpenDental{
 		///<summary>When canShowHidden is true to the "Hidden" checkbox and "default" button are visible.</summary>
 		public FormProcCodes(bool canShowHidden=false) {
 			InitializeComponent();// Required for Windows Form Designer support
-			Lan.F(this);
+			
 			_canShowHidden=canShowHidden;
 		}
 

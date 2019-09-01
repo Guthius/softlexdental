@@ -48,7 +48,7 @@ namespace OpenDental{
 			SQLfrom="FROM referral ";
 			SQLwhere="";
 			ListConditions.SelectedIndex=0;
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

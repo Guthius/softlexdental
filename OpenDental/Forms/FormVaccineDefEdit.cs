@@ -15,7 +15,6 @@ namespace OpenDental {
 
 		public FormVaccineDefEdit() {
 			InitializeComponent();
-			Lan.F(this);
 		}
 
 		private void FormVaccineDefEdit_Load(object sender,EventArgs e) {

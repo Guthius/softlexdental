@@ -26,7 +26,7 @@ namespace OpenDental {
 
 		public FormInsPlanSubstitution(InsPlan insPlan) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_insPlan=insPlan;
 		}
 

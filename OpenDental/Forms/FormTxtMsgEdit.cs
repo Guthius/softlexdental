@@ -21,7 +21,7 @@ namespace OpenDental {
 		
 		public FormTxtMsgEdit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormTxtMsgEdit_Load(object sender,EventArgs e) {

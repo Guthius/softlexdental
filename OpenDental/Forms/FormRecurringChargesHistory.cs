@@ -20,7 +20,7 @@ namespace OpenDental {
 
 		public FormRecurringChargesHistory() {
 			InitializeComponent();
-			Lan.F(this);
+			
 			gridMain.ContextMenu=contextMenu;
 		}
 

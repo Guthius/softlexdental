@@ -19,7 +19,7 @@ namespace OpenDental {
 
 		public FormMedLabs() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormMedLabs_Load(object sender,EventArgs e) {

@@ -81,7 +81,7 @@ namespace OpenDental{
 			_isFromSchedule=isFromSchedule;
 			_provAbbrFilter=provAbbr;
 			_employeeNameFilter=empFName;
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

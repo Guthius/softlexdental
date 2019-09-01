@@ -54,7 +54,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormRpProviderPayroll(bool isDetailed=false){
 			InitializeComponent();
- 			Lan.F(this);
+ 			
 			if(isDetailed) {
 				radioDetailedReport.Checked=true;
 			}

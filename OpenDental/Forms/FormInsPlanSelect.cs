@@ -62,7 +62,7 @@ namespace OpenDental{
 				}
 			}
 			//tbPlans.CellDoubleClicked += new OpenDental.ContrTable.CellEventHandler(tbPlans_CellDoubleClicked);
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

@@ -21,7 +21,7 @@ namespace OpenDental {
 
 		public FormSheetDefDefaults() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormSheetDefDefaults_Load(object sender,EventArgs e) {

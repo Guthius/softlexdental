@@ -21,7 +21,7 @@ namespace OpenDental {
 
 		public FormSheetFieldOutput() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormSheetFieldDefEdit_Load(object sender,EventArgs e) {

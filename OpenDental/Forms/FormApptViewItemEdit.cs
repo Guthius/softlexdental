@@ -13,7 +13,7 @@ namespace OpenDental {
 
 		public FormApptViewItemEdit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormApptViewItemEdit_Load(object sender,EventArgs e) {

@@ -124,7 +124,7 @@ namespace OpenDental {
 		public FormRpOutstandingIns() {
 			InitializeComponent();
 			gridMain.ContextMenu=rightClickMenu;
-			Lan.F(this);
+			
 		}
 
 		private void InitializeComponent() {

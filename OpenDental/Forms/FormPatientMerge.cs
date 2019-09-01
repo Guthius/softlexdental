@@ -16,7 +16,7 @@ namespace OpenDental {
 
 		public FormPatientMerge() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormPatientMerge_Load(object sender,EventArgs e) {

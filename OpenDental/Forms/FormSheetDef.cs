@@ -22,7 +22,7 @@ namespace OpenDental {
 
 		public FormSheetDef() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormSheetDef_Load(object sender,EventArgs e) {

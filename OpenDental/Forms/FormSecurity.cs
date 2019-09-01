@@ -13,7 +13,7 @@ namespace OpenDental {
 
 		public FormSecurity() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 		
 		private void FormSecurityEdit_Load(object sender,EventArgs e) {

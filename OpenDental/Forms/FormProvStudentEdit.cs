@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormProvStudentEdit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormProvStudentEdit_Load(object sender,EventArgs e) {

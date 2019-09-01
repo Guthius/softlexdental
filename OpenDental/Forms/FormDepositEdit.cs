@@ -99,7 +99,7 @@ namespace OpenDental{
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			Lan.F(this);
+			
 			_depositCur=depositCur;
 			_depositOld=depositCur.Copy();
 		}

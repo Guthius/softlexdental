@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormSheetExport() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormSheetExport_Load(object sender,EventArgs e) {

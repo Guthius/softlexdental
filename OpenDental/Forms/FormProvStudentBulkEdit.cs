@@ -13,7 +13,7 @@ namespace OpenDental {
 
 		public FormProvStudentBulkEdit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormProvStudentBulkEdit_Load(object sender,EventArgs e) {

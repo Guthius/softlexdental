@@ -19,7 +19,7 @@ namespace OpenDental {
 
 		public FormCdsTriggers() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormEhrTriggers_Load(object sender,EventArgs e) {

@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormProvAdditional(List<ProviderClinic> listProvClinic,Provider provCur) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_listProvClinic=listProvClinic.Select(x => x.Copy()).ToList();
 			_provCur=provCur;
 		}

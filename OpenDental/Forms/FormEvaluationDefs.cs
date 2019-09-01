@@ -16,7 +16,7 @@ namespace OpenDental {
 
 		public FormEvaluationDefs() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormEvaluationDefs_Load(object sender,EventArgs e) {

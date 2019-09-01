@@ -18,7 +18,7 @@ namespace OpenDental {
 
 		public FormSheetFieldChart() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormSheetFieldChart_Load(object sender,EventArgs e) {

@@ -23,7 +23,7 @@ namespace OpenDental {
 
 		public FormApptConflicts(List<Appointment> listAppts) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_listAppts=listAppts.Select(x => x.Copy()).ToList();
 		}
 

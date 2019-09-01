@@ -35,7 +35,7 @@ namespace OpenDental {
 		///claim details do not match.</summary>
 		public FormEtrans835ClaimSelect(long patNum,Hx835_Claim x835Claim) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_x835Claim=x835Claim;
 			_patNum=patNum;
 			if(_patNum==0) {

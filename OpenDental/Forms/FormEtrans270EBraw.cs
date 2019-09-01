@@ -16,7 +16,7 @@ namespace OpenDental {
 
 		public FormEtrans270EBraw() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormEtrans270EBraw_Load(object sender,EventArgs e) {

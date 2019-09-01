@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormRpCustomAging() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormRpCustomAging_Load(object sender,EventArgs e) {

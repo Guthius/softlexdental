@@ -55,7 +55,7 @@ namespace OpenDental {
 			InitializeComponent();
 			_famCur=famCur;
 			_isIncomeTransfer=isIncomeTransfer;
-			Lan.F(this);
+			
 		}
 
 		private void FormPaySplitEdit_Load(object sender, System.EventArgs e) {

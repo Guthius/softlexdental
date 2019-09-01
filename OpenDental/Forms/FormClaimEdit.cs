@@ -102,7 +102,7 @@ namespace OpenDental{
 			//tbPay.CellDoubleClicked += new OpenDental.ContrTable.CellEventHandler(tbPay_CellDoubleClicked);
 			//tbProc.CellClicked += new OpenDental.ContrTable.CellEventHandler(tbProc_CellClicked);
 			//tbPay.CellClicked += new OpenDental.ContrTable.CellEventHandler(tbPay_CellClicked);
-			Lan.F(this);
+			
 			listAttachments.ContextMenu=contextMenuAttachments;
 			gridProc.ContextMenu=contextAdjust;
     }

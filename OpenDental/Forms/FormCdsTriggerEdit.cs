@@ -23,7 +23,7 @@ namespace OpenDental {
 		public FormCdsTriggerEdit() {
 			InitializeComponent();
 			
-			Lan.F(this);
+			
 		}
 
 		private void FormEhrTriggerEdit_Load(object sender,EventArgs e) {

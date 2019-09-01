@@ -15,7 +15,7 @@ namespace OpenDental {
 
 		public FormTaskHist() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormTaskHist_Load(object sender,EventArgs e) {

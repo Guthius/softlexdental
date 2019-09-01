@@ -18,7 +18,7 @@ namespace OpenDental {
 
 		public FormAsapSetup() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormAsapSetup_Load(object sender,EventArgs e) {

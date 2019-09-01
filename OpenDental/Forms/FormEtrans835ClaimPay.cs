@@ -87,7 +87,7 @@ namespace OpenDental {
 			_listPatPlans=patPlanList;
 			//If the claim is already received, then the only way to enter payment on top of the existing is to use supplemental.
 			_isSupplementalPay=isSupplementalPay;
-			Lan.F(this);
+			
 		}
 
 		///<summary>Clean up any resources being used.</summary>

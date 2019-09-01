@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormPopupAudit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormPopupAudit_Load(object sender,System.EventArgs e) {

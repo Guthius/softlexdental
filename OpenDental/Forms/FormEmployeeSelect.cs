@@ -24,7 +24,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormEmployeeSelect(){
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

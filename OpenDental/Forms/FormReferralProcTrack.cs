@@ -22,7 +22,7 @@ namespace OpenDental {
 
 		public FormReferralProcTrack() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormReferralProcTrack_Load(object sender,EventArgs e) {

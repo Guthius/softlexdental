@@ -13,7 +13,7 @@ namespace OpenDental {
 
 		public FormEtrans835PickEra(List<Etrans> listEtrans,long specificClaimNum) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_listEtrans=listEtrans;
 			_specificClaimNum=specificClaimNum;
 		}

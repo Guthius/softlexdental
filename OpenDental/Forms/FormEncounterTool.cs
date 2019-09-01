@@ -16,7 +16,7 @@ namespace OpenDental {
 
 		public FormEncounterTool() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormEncounterTool_Load(object sender,EventArgs e) {

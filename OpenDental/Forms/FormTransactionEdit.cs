@@ -75,7 +75,7 @@ namespace OpenDental{
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			Lan.F(this);
+			
 			TransCur=Transactions.GetTrans(transNum);
 			AccountOfOrigin=Account.GetById(accountNum);
 			//AccountNumOrigin=accountNumOrigin;

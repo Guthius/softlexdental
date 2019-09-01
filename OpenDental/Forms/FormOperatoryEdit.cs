@@ -68,7 +68,7 @@ namespace OpenDental{
 			//
 			OpCur=opCur;
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		/// <summary>

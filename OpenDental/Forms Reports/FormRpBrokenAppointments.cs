@@ -22,7 +22,7 @@ namespace OpenDental {
 		///<summary></summary>
 		public FormRpBrokenAppointments() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormRpBrokenAppointments_Load(object sender,EventArgs e) {

@@ -18,7 +18,7 @@ namespace OpenDental {
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormHL7DefEdit_Load(object sender,EventArgs e) {

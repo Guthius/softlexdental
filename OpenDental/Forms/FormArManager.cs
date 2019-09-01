@@ -31,7 +31,7 @@ namespace OpenDental
 
 		public FormArManager() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormArManager_Load(object sender,EventArgs e) {

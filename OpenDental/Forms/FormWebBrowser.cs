@@ -27,7 +27,6 @@ namespace OpenDental {
 		///passed in.</summary>
 		public FormWebBrowser(string url="",string htmlContent="",string postData=null,string additionalHeaders="",bool canWrapNewWindow=true) {
 			InitializeComponent();
-			Lan.F(this);
 			SHDocVw.WebBrowser axBrowser=(SHDocVw.WebBrowser)browser.ActiveXInstance;
 			if(axBrowser!=null) {//This was null once during testing.  Not sure when null can happen.  Not sure if we should allow the user to continue.
 				axBrowser.NewWindow2+=axBrowser_NewWindow2;

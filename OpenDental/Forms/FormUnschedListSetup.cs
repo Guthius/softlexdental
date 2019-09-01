@@ -11,7 +11,6 @@ namespace OpenDental {
 
 		public FormUnschedListSetup() {
 			InitializeComponent();
-			Lan.F(this);
 		}
 		
 		private void FormUnschedListSetup_Load(object sender,EventArgs e) {

@@ -13,7 +13,7 @@ namespace OpenDental {
 
 		public FormTreatmentPlanDiscount(List<Procedure> listProcs) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_oldListProcs=new List<Procedure>();
 			for(int i=0;i<listProcs.Count;i++) {
 				_oldListProcs.Add(listProcs[i].Copy());

@@ -43,7 +43,7 @@ namespace OpenDental{
 			DocCur=docCur;
 			PatCur=pat;
 			PatFolder=ImageStore.GetPatientFolder(pat);
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

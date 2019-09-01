@@ -19,7 +19,7 @@ namespace OpenDental {
 		///<summary></summary>
 		public FormHL7DefSegmentEdit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormHL7DefSegmentEdit_Load(object sender,EventArgs e) {

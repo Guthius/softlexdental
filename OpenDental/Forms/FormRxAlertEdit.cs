@@ -14,7 +14,7 @@ namespace OpenDental {
 
 		public FormRxAlertEdit(RxAlert rxAlertCur,RxDef rxDefCur) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			RxAlertCur=rxAlertCur;
 			RxDefCur=rxDefCur;
 		}

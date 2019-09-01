@@ -12,7 +12,7 @@ namespace OpenDental {
 
 		public FormGuardianEdit(Guardian guardianCur,Family fam){
 			InitializeComponent();
-			Lan.F(this);
+			
 			_guardianCur=guardianCur;
 			_fam=fam;
 		}

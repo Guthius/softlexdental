@@ -37,7 +37,7 @@ namespace OpenDental{
 			//
 			_payPeriodCur=payPeriodCur;
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		/// <summary>

@@ -7,7 +7,7 @@ namespace OpenDental {
 
 		public FormDentalSchoolSetup() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormDentalSchoolSetup_Load(object sender,EventArgs e) {

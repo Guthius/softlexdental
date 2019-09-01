@@ -38,7 +38,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormDefEditImages(Definition defCur) {
 			InitializeComponent();// Required for Windows Form Designer support
-			Lan.F(this);
+			
 			DefCur=defCur.Copy();
 		}
 

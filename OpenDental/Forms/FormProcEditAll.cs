@@ -29,7 +29,7 @@ namespace OpenDental {
 
 		public FormProcEditAll() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormProcEditAll_Load(object sender,EventArgs e) {

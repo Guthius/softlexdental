@@ -52,7 +52,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormRpInsAging(){
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

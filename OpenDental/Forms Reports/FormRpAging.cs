@@ -55,7 +55,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormRpAging(){
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

@@ -16,7 +16,6 @@ namespace OpenDental {
 		///<summary>Form showing new appointments made using web sched.</summary>
 		public FormWebSchedAppts() {
 			InitializeComponent();
-			Lan.F(this);
 		}
 
 		public FormWebSchedAppts(bool isNewPat,bool isRecall,bool isASAP):this() {

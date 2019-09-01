@@ -50,7 +50,6 @@ namespace OpenDental{
 		///<summary>PatientGoTo must be set before calling Show() or ShowDialog().</summary>
 		public FormUnsched(){
 			InitializeComponent();// Required for Windows Form Designer support
-			Lan.F(this);
 		}
 
 		///<summary></summary>

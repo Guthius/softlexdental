@@ -19,7 +19,7 @@ namespace OpenDental {
 
 		public FormSheetOutputFormat() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormSheetOutputFormat_Load(object sender,EventArgs e) {

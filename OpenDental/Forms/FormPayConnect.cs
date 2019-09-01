@@ -85,7 +85,7 @@ namespace OpenDental
         public FormPayConnect(long clinicNum, Patient pat, decimal amount, CreditCard creditCard, bool isAddingCard = false)
         {
             InitializeComponent();
-            Lan.F(this);
+            
             _clinicNum = clinicNum;
             _patCur = pat;
             _amountInit = amount;

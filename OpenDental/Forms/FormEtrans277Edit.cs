@@ -19,7 +19,7 @@ namespace OpenDental {
 
 		public FormEtrans277Edit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormEtrans277Edit_Load(object sender,EventArgs e) {

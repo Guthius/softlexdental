@@ -36,7 +36,7 @@ namespace OpenDental{
 		public FormRpClaimNotSent(){
 			InitializeComponent();
 			gridMain.ContextMenu=rightClickMenu;
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

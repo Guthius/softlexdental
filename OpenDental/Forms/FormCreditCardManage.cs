@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormCreditCardManage(Patient pat) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			PatCur=pat;
 		}
 		

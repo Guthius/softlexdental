@@ -9,7 +9,7 @@ namespace OpenDental {
 
 		public FormRecallMessageEdit(PreferenceName prefName) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_prefName=prefName;
 		}
 

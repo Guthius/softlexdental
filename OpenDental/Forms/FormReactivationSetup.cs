@@ -21,7 +21,7 @@ namespace OpenDental {
 		///<summary></summary>
 		public FormReactivationSetup(){
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		public void FormReactivationSetup_Load(object sender, System.EventArgs e) {

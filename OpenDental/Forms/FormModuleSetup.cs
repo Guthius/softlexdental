@@ -363,7 +363,7 @@ namespace OpenDental{
 		///<param name="selectedTab">0=Appts, 1=Family, 2=Account, 3=Treat' Plan, 4=Chart, 5=Images, 6=Manage</param>
 		public FormModuleSetup(int selectedTab) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			if(selectedTab<0 || selectedTab>6) {
 				selectedTab=0;//Default to Appts tab.
 			}

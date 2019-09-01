@@ -51,7 +51,7 @@ namespace OpenDental {
 			_prevRow=-1;
 			InitializeComponent();
 			_indexInitialTab=tabIndex;
-			Lan.F(this);
+			
 		}
 
 		private void FormOrthoChart_Load(object sender,EventArgs e) {

@@ -63,7 +63,7 @@ namespace OpenDental{
 			//
 			InitializeComponent();
 			gridScreenPats.ContextMenu=patContextMenu;
-			Lan.F(this);
+			
 			_screenGroup=screenGroup;
 		}
 

@@ -42,7 +42,7 @@ namespace OpenDental {
 
 		public FormEtrans270Edit(long patPlanNum,long planNum,long subNum,bool isDependent,long subPatNum,bool isCoinsuranceInverted) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			PatPlanNum=patPlanNum;
 			PlanNum=planNum;
 			SubNum=subNum;

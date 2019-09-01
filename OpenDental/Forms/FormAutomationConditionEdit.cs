@@ -16,7 +16,7 @@ namespace OpenDental {
 
 		public FormAutomationConditionEdit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 
 		}
 

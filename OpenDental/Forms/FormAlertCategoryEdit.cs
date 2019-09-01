@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormAlertCategoryEdit(AlertCategory category) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_categoryCur=category;
 		}
 		

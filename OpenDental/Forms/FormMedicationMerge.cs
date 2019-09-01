@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormMedicationMerge() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void CheckUIState() {

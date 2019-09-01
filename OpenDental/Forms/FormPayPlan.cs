@@ -191,7 +191,7 @@ namespace OpenDental{
 			if(_payPlanCur.PlanNum!=0) {
 				IsInsPayPlan=true;//This can also be set to true on the way in before a PlanNum has been assigned.
 			}
-			Lan.F(this);
+			
 		}
 
 		/// <summary>

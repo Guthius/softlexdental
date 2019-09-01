@@ -81,7 +81,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormBilling(){
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

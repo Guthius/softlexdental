@@ -13,7 +13,7 @@ namespace OpenDental {
 
 		public FormDispensary() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormDispensary_Load(object sender,EventArgs e) {

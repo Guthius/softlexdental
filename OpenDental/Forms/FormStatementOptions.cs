@@ -77,12 +77,12 @@ namespace OpenDental{
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		public FormStatementOptions(bool isFromBilling=false) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			if(isFromBilling) {
 				checkSinglePatient.Enabled=false;
 			}

@@ -18,7 +18,7 @@ namespace OpenDental {
 		public FormImagePicker(string imageFolder) {
 			InitializeComponent();
 			_imageFolder=imageFolder;
-			Lan.F(this);
+			
 		}
 
 		private void FormImagePicker_Load(object sender,EventArgs e) {

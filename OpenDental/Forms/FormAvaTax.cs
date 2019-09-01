@@ -16,7 +16,7 @@ namespace OpenDental {
 
 		public FormAvaTax() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormAvaTax_Load(object sender,EventArgs e) {

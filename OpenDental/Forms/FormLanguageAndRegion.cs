@@ -11,7 +11,7 @@ namespace OpenDental {
 
 		public FormLanguageAndRegion() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormLanguageAndRegion_Load(object sender,EventArgs e) {

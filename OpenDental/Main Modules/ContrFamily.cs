@@ -282,20 +282,6 @@ namespace OpenDental
             }
             InitializedOnStartup = true;
             //tbFamily.InstantClasses();
-            //cannot use Lan.F(this);
-            Lan.C(this, new Control[]
-                {
-					//butPatEdit,
-					//butEditPriCov,
-					//butEditPriPlan,
-					//butEditSecCov,
-					//butEditSecPlan,
-					gridFamily,
-                    gridRecall,
-                    gridPat,
-                    gridSuperFam,
-                    gridIns,
-                });
             LayoutToolBar();
             //gridPat.Height=this.ClientRectangle.Bottom-gridPat.Top-2;
         }

@@ -57,7 +57,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormRpProcNote() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		/// <summary>

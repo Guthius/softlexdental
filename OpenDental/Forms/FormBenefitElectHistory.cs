@@ -22,7 +22,7 @@ namespace OpenDental {
 
 		public FormBenefitElectHistory(long planNum,long patPlanNum,long subNum,long subPatNum,long carrierNum) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			PlanNum=planNum;
 			PatPlanNum=patPlanNum;
 			SubNum=subNum;

@@ -18,7 +18,7 @@ namespace OpenDental {
 
 		public FormSheetFieldSigBox() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormSheetFieldSigBox_Load(object sender,EventArgs e) {

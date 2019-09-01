@@ -13,7 +13,7 @@ namespace OpenDental {
 
 		public FormFieldDefLink(FieldLocations fieldLocation=FieldLocations.Account) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_fieldLocation=fieldLocation;
 		}
 

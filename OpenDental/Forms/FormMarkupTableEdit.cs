@@ -25,7 +25,7 @@ namespace OpenDental {
 
 		public FormMarkupTableEdit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormMarkupTableEdit_Load(object sender,EventArgs e) {

@@ -23,7 +23,7 @@ namespace OpenDental {
 
 		public FormTsiHistory() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormTsiHistory_Load(object sender,EventArgs e) {

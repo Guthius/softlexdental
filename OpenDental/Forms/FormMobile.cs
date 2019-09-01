@@ -51,7 +51,7 @@ namespace OpenDental
         public FormMobile()
         {
             InitializeComponent();
-            Lan.F(this);
+            
         }
 
         private void FormMobileSetup_Load(object sender, EventArgs e)

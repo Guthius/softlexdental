@@ -47,7 +47,7 @@ namespace OpenDental{
 			InitializeComponent();// Required for Windows Form Designer support
 			ClaimPaymentCur=claimPaymentCur;
 			splits=new List<ClaimPaySplit>();
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

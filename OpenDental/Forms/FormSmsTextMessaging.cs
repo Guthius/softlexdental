@@ -170,7 +170,7 @@ namespace OpenDental {
 		#region Init
 		public FormSmsTextMessaging(bool isSent,bool isReceived,Action smsNotifier) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			checkSent.Checked=isSent;
 			checkRead.Checked=isReceived;
 			_smsNotifier=smsNotifier;

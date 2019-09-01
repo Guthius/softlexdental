@@ -13,7 +13,7 @@ namespace OpenDental {
 
 		public FormReferralMerge() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void butChangeReferralInto_Click(object sender,EventArgs e) {

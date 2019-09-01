@@ -20,7 +20,7 @@ namespace OpenDental {
 		///<summary>Not currently used.  Might use again some day as a sub window of FormApptEdit.  Specify AptCur before opening this form.</summary>
 		public FormApptProcs() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormApptProcs_Load(object sender,EventArgs e) {

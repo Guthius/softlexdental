@@ -15,7 +15,7 @@ namespace OpenDental {
 		private List<Clinic> _listClinics;
 		public FormRpTreatPlanPresentationStatistics() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormRpTreatPlanPresenter_Load(object sender,EventArgs e) {

@@ -18,7 +18,7 @@ namespace OpenDental {
 
 		public FormRxNorms() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormRxNorms_Load(object sender,EventArgs e) {

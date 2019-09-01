@@ -14,7 +14,7 @@ namespace OpenDental {
 
 		public FormRecordAudio() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		/// <summary>mciSendString uses command strings to control MCI devices.  This link gives an example of using mciSendString():

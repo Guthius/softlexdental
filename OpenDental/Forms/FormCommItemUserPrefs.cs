@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormCommItemUserPrefs() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormCommItemUserPrefs_Load(object sender,EventArgs e) {

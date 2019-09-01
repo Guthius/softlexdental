@@ -13,7 +13,7 @@ namespace OpenDental {
 
 		public FormPopupsForFam(List<PopupEvent> listPopEvents) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_listPopEvents=listPopEvents;
 		}
 

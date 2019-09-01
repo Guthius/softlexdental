@@ -34,7 +34,7 @@ namespace OpenDental{
 			SQLfrom="FROM patient "; 
       SQLwhere="WHERE ";
       Fill(); 
- 			Lan.F(this); 
+ 			 
 		}
   
 		///<summary></summary>

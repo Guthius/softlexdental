@@ -24,7 +24,7 @@ namespace OpenDental{
 		public FormSchoolCourses(){
 			InitializeComponent();
 			//Providers.Selected=-1;
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

@@ -10,7 +10,7 @@ namespace OpenDental
 
 		public FormDropboxAuthorize() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormDropboxAuthorize_Load(object sender,EventArgs e) {

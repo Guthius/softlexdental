@@ -16,7 +16,7 @@ namespace OpenDental {
 
 		public FormPatientForms() {
 			InitializeComponent();
-			Lan.F(this);
+			
 			DocNum=0;
 		}
 

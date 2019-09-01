@@ -21,7 +21,7 @@ namespace OpenDental {
 		public FormApptPrintSetup(List<long> listAptNums) {
 			InitializeComponent();
 			_listAptNums=listAptNums;
-			Lan.F(this);
+			
 		}
 
 		private void FormApptPrintSetup_Load(object sender,EventArgs e) {

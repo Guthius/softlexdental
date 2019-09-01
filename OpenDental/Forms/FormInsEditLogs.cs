@@ -15,7 +15,7 @@ namespace OpenDental {
 		///<summary>Opens the window with the passed-in parameters set as the default.</summary>
 		public FormInsEditLogs(InsPlan insPlan, List<Benefit> listBenefits) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_insPlan=insPlan;
 			_listBenefits=listBenefits;
 		}

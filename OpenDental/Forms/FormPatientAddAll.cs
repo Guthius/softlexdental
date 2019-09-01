@@ -64,7 +64,7 @@ namespace OpenDental {
 
 		public FormPatientAddAll() {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_referredFromToolTip=new ToolTip();
 			_referredFromToolTip.InitialDelay=500;
 			_referredFromToolTip.ReshowDelay=100;

@@ -35,7 +35,7 @@ namespace OpenDental {
 			PlanList=planList;
 			SubList=subList;
 			PatPlanList=patPlanList;
-			Lan.F(this);
+			
 		}
 
 		private void FormClaimPayTotal_Load(object sender, System.EventArgs e) {

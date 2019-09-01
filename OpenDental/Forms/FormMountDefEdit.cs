@@ -31,7 +31,7 @@ namespace OpenDental{
 			//
 			MountDefCur=mountDefCur;
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		/// <summary>

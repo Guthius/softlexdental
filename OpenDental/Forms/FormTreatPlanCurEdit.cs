@@ -27,7 +27,7 @@ namespace OpenDental {
 
 		public FormTreatPlanCurEdit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormTreatPlanCurEdit_Load(object sender,EventArgs e) {

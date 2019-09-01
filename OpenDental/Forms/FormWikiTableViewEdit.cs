@@ -19,7 +19,6 @@ namespace OpenDental {
 
 		public FormWikiTableViewEdit() {
 			InitializeComponent();
-			Lan.F(this);
 		}
 
 		private void FormWikiTableViewEdit_Load(object sender,EventArgs e) {

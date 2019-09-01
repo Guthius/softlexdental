@@ -18,7 +18,7 @@ namespace OpenDental {
 
 		public FormSubscriberMove() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormSubscriberMove_Load(object sender,EventArgs e) {

@@ -33,7 +33,7 @@ namespace OpenDental{
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			Lan.F(this);
+			
 			Notes=new string[notes.Length];
 			notes.CopyTo(Notes,0);
 			if(UseTrojanImportDescription) {

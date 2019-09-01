@@ -32,7 +32,7 @@ namespace OpenDental {
 
 		public FormInsHistSetup(long patNum,InsSub insSub) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_patCur=Patients.GetPat(patNum);
 			_insSubCur=insSub;
 			_dictInsHistProcs=Procedures.GetDictInsHistProcs(patNum,insSub.InsSubNum,out _listClaimProcsForInsHistProcs);

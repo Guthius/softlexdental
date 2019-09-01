@@ -27,7 +27,7 @@ namespace OpenDental{
 		public FormInsAdj(ClaimProc claimProcCur){
 			ClaimProcCur=claimProcCur;
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

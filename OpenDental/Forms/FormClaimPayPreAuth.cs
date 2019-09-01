@@ -40,7 +40,7 @@ namespace OpenDental
 			PlanList=planList;
 			SubList=subList;
 			PatPlanList=patPlanList;
-			Lan.F(this);
+			
 		}
 
 		/// <summary>

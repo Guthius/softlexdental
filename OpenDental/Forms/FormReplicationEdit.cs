@@ -14,7 +14,7 @@ namespace OpenDental {
 
 		public FormReplicationEdit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormReplicationEdit_Load(object sender,EventArgs e) {

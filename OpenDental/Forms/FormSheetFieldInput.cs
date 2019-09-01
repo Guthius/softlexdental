@@ -20,7 +20,7 @@ namespace OpenDental {
 
 		public FormSheetFieldInput() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormSheetFieldInput_Load(object sender,EventArgs e) {

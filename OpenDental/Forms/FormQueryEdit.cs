@@ -26,7 +26,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormQueryEdit(){
 			InitializeComponent();// Required for Windows Form Designer support
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

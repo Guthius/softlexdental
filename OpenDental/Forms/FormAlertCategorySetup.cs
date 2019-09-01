@@ -16,7 +16,7 @@ namespace OpenDental {
 
 		public FormAlertCategorySetup() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 		
 		private void FormAlertCategorySetup_Load(object sender,EventArgs e) {

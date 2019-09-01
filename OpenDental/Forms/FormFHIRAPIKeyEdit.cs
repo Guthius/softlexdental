@@ -12,7 +12,7 @@ namespace OpenDental {
 
 		public FormFHIRAPIKeyEdit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormFHIRAPIKeyEdit_Load(object sender,EventArgs e) {

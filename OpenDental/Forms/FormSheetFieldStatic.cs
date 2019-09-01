@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormSheetFieldStatic() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormSheetFieldStatic_Load(object sender,EventArgs e) {

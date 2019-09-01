@@ -117,7 +117,7 @@ namespace OpenDental{
 		public FormProcCodeEdit(ProcedureCode procCode){
 			InitializeComponent();// Required for Windows Form Designer support
 			tbTime.CellClicked += new OpenDental.ContrTable.CellEventHandler(tbTime_CellClicked);
-			Lan.F(this);
+			
 			ProcCode=procCode;
 			_procCodeOld=procCode.Copy();
 		}

@@ -642,24 +642,7 @@ namespace OpenDental{
 			//checkShowIns.Checked=PrefC.GetBool(PrefName.TreatPlanShowIns");
 			//checkShowDiscount.Checked=PrefC.GetBool(PrefName.TreatPlanShowDiscount");
 			//showHidden=true;//shows hidden priorities
-			//can't use Lan.F(this);
-			Lan.C(this,new Control[]
-			{
-				label1,
-				tabShowSort,
-				checkShowCompleted,
-				checkShowIns,
-				checkShowDiscount,
-				checkShowMaxDed,
-				checkShowFees,
-				//checkShowStandard,
-				checkShowSubtotals,
-				checkShowTotals,
-				gridMain,
-				gridPlans,
-				gridPreAuth,
-				gridPrint,
-				});
+			//can't use 
 			LayoutToolBar();//redundant?
 			tabShowSort.TabPages.Remove(tabPagePrint);//We may add this back in gridPlans_CellClick.
 		}

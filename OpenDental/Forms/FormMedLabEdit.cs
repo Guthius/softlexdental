@@ -26,7 +26,7 @@ namespace OpenDental {
 
 		public FormMedLabEdit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormMedLabEdit_Load(object sender,EventArgs e) {

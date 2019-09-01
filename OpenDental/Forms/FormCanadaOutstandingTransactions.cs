@@ -16,7 +16,7 @@ namespace OpenDental {
 
 		public FormCanadaOutstandingTransactions() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormCanadaOutstandingTransactions_Load(object sender,EventArgs e) {

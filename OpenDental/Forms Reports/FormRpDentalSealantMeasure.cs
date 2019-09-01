@@ -10,7 +10,7 @@ namespace OpenDental {
 
 		public FormRpDentalSealantMeasure() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormRpDentalSealantMeasure_Load(object sender,EventArgs e) {

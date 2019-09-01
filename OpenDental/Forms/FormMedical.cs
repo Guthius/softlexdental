@@ -140,7 +140,7 @@ namespace OpenDental{
 			PatCur=patCur;
 			PatientNoteCur=patientNoteCur;
 			_selectedTab=selectedTab;
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

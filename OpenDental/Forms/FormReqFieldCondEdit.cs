@@ -22,14 +22,14 @@ namespace OpenDental {
 
 		public FormReqFieldCondEdit(RequiredField reqField) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_reqField=reqField;
 			_listReqFieldConds=new List<RequiredFieldCondition>();
 		}
 
 		public FormReqFieldCondEdit(RequiredField reqField,RequiredFieldName condType) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_reqField=reqField;
 			_originalFieldName=condType;
 			_listReqFieldConds=reqField.ListRequiredFieldConditions.FindAll(x => x.ConditionType==_originalFieldName);

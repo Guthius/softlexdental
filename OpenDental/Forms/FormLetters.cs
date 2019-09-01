@@ -45,7 +45,7 @@ namespace OpenDental{
 		public FormLetters(){
 			InitializeComponent();// Required for Windows Form Designer support
 			PatCur=new Patient();
-			Lan.F(this);
+			
 		}
 
 		/// <summary>

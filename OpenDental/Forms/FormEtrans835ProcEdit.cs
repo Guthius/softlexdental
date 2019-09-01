@@ -22,7 +22,7 @@ namespace OpenDental {
 
 		public FormEtrans835ProcEdit(Hx835_Proc proc) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_proc=proc;
 		}
 

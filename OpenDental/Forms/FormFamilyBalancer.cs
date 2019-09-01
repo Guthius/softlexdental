@@ -20,7 +20,7 @@ namespace OpenDental {
 		
 		public FormFamilyBalancer() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 		
 		private void FormFamilyBalancer_Load(object sender, System.EventArgs e) {

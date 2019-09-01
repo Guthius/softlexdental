@@ -58,7 +58,7 @@ namespace OpenDental{
 			//
 			InitializeComponent();
 			_isSetupMode=isSetupMode;
-			Lan.F(this);
+			
 		}
 
 		/// <summary>

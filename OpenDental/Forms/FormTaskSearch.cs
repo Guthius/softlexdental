@@ -25,7 +25,7 @@ namespace OpenDental {
 
 		public FormTaskSearch(List<long> listPreLoadedTask=null) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_listPreLoadedTaskNums=listPreLoadedTask;
 		}
 

@@ -88,10 +88,6 @@ namespace OpenDental{
 		///<summary>Can pass in null if not a report.</summary>
 		public FormQuery(ReportSimpleGrid report, bool submitQueryOnLoad = false){
 			InitializeComponent();// Required for Windows Form Designer support
-			Lan.F(this,new System.Windows.Forms.Control[] {
-				//exclude:
-				labelTotPages,
-			});
 			if(report!=null) {
 				this._reportSimpleGrid=report;
 			}

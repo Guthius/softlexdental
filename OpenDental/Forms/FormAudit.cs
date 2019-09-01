@@ -56,7 +56,7 @@ namespace OpenDental{
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			Lan.F(this);
+			
 			Permissions[] permArray=(Permissions[])Enum.GetValues(typeof(Permissions));
 			permissionsAlphabetic=new List<string>();
 			for(int i=1;i<permArray.Length;i++){

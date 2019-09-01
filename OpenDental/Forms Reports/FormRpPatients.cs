@@ -103,7 +103,7 @@ namespace OpenDental{
 			_listFeeScheds=FeeScheds.GetDeepCopy();
 			_listBillingTypeDefs=Definition.GetByCategory(DefinitionCategory.BillingTypes);;
 			_listRecallUnschedStatusDefs=Definition.GetByCategory(DefinitionCategory.RecallUnschedStatus);;
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

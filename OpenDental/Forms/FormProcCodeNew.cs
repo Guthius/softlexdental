@@ -44,7 +44,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormProcCodeNew(){
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

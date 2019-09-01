@@ -18,7 +18,7 @@ namespace OpenDental {
 
 		public FormSheetFieldGrid() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormSheetFieldGrid_Load(object sender,EventArgs e) {

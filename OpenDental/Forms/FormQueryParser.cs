@@ -14,7 +14,7 @@ namespace OpenDental {
 
 		public FormQueryParser(UserQuery queryCur) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_queryCur=queryCur;
 			_queryOld=queryCur.Copy();
 			//hide the query text by default.

@@ -19,7 +19,7 @@ namespace OpenDental {
 
 		public FormEhrAptObsEdit(EhrAptObs ehrAptObs) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_ehrAptObsCur=ehrAptObs;
 		}
 

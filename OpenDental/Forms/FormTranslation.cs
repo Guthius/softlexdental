@@ -30,10 +30,7 @@ namespace OpenDental{
 			
 			//tbLan.Fields[2]=CultureInfo.CurrentCulture.Parent.DisplayName;
 			//tbLan.Fields[3]=CultureInfo.CurrentCulture.Parent.DisplayName + " Comments";
-			//no need to translate much here
-			Lan.C("All", new System.Windows.Forms.Control[] {
-				butClose,																											
-			});
+
 			ClassType=classType;
 		}
 

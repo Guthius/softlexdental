@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormOrthoAutoClaims() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormAutoOrtho_Load(object sender,EventArgs e) {

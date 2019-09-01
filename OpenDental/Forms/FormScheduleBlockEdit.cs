@@ -38,7 +38,7 @@ namespace OpenDental{
 			_schedCur=schedCur;
 			_clinicNum=clinicNum;
 			_listBlockoutCatDefs=listDefsToShow;
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

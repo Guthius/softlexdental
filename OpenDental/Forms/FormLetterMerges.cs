@@ -59,7 +59,7 @@ namespace OpenDental{
 		public FormLetterMerges(Patient patCur){
 			InitializeComponent();// Required for Windows Form Designer support
 			PatCur=patCur;
-			Lan.F(this);
+			
 		}
 
 		/// <summary>

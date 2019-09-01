@@ -20,7 +20,7 @@ namespace OpenDental {
 
 		public FormEtrans834Preview(X834 x834) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_x834=x834;
 		}
 

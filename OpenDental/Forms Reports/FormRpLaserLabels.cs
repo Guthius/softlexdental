@@ -112,7 +112,7 @@ namespace OpenDental {
 
 		public FormRpLaserLabels() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void InitializeComponent() {

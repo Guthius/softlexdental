@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormCvxs() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormCvxs_Load(object sender,EventArgs e) {

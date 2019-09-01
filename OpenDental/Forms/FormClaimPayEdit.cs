@@ -86,7 +86,7 @@ namespace OpenDental{
 			ClaimPaymentCur=claimPaymentCur;
 			_depositOld=Deposits.GetOne(claimPaymentCur.DepositNum);
 			_claimPaymentOld=claimPaymentCur.Copy();
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

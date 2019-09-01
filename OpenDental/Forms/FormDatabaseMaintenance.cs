@@ -108,11 +108,6 @@ namespace OpenDental {
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			Lan.C(this,new System.Windows.Forms.Control[]{
-				this.textBox1,
-				//this.textBox2
-			});
-			Lan.F(this);
 		}
 
 		/// <summary>

@@ -60,7 +60,7 @@ namespace OpenDental{
 			//
 			InitializeComponent();
 			LetterMergeCur=letterMergeCur;
-			Lan.F(this);
+			
 		}
 
 		/// <summary>

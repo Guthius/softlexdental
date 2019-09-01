@@ -19,7 +19,7 @@ namespace OpenDental {
 
 		public FormSheetFieldComboBox() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormSheetFieldComboBox_Load(object sender,EventArgs e) {

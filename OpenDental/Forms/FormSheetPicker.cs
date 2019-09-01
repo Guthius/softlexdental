@@ -20,7 +20,7 @@ namespace OpenDental {
 
 		public FormSheetPicker() {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_listIndexesAdded=new List<int>();
 		}
 

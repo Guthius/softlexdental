@@ -65,7 +65,7 @@ namespace OpenDental{
 		///<summary>Not used for selection.  Use FormProviderPick or FormProviderMultiPick for that.</summary>
 		public FormProviderSetup(){
 			InitializeComponent();
-			Lan.F(this);
+			
 			if(Preference.GetBool(PreferenceName.EasyHideDentalSchools)) {
 				this.Width=940;
 			}

@@ -175,7 +175,7 @@ namespace OpenDental {
 				_taskOld=taskOld;
 			}
 			_taskListCur=TaskLists.GetOne(taskCur.TaskListNum);
-			Lan.F(this);
+			
 		}
 
 		/// <summary>

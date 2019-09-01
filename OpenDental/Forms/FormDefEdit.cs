@@ -52,7 +52,7 @@ namespace OpenDental {
 		///<summary>defCur should be the currently selected def from FormDefinitions.  defList is going to be the in-memory list of definitions currently displaying to the user.  defList typically is out of synch with the cache which is why we need to pass it in.</summary>
 		public FormDefEdit(Definition defCur,List<Definition> defsList,DefCatOptions defCatOptions){
 			InitializeComponent();// Required for Windows Form Designer support
-			Lan.F(this);
+			
 			DefCur=defCur;
 			_defCatOptions=defCatOptions;
 			_defsList=defsList;

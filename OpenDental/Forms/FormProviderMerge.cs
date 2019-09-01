@@ -12,7 +12,7 @@ namespace OpenDental {
 
 		public FormProviderMerge() {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_listActiveProvs=Providers.GetWhere(x => x.ProvStatus != ProviderStatus.Deleted,true);
 		}
 

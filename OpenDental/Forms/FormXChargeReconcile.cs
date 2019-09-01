@@ -13,7 +13,6 @@ namespace OpenDental {
 
 		public FormXChargeReconcile() {
 			InitializeComponent();
-			Lan.F(this);
 		}
 
 		private void butImport_Click(object sender,EventArgs e) {

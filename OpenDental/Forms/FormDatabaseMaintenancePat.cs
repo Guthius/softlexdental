@@ -19,7 +19,7 @@ namespace OpenDental {
 
 		public FormDatabaseMaintenancePat(List<MethodInfo> listDbmMethods,long patNum=0) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_patNum=patNum;
 			_listDbmMethodsGrid=listDbmMethods;
 		}

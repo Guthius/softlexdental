@@ -24,7 +24,7 @@ namespace OpenDental {
 
 		public FormDomainUserPick() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 				
 		private void FormDomainUserPick_Load(object sender,EventArgs e) {

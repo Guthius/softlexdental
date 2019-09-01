@@ -21,7 +21,7 @@ namespace OpenDental {
 
 		public FormEtrans834Import() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormEtrans834Import_Load(object sender,EventArgs e) {

@@ -19,7 +19,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormPasswordReset(){
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

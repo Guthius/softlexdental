@@ -20,7 +20,6 @@ namespace OpenDental {
 
 		public FormWikiTableHeaders() {
 			InitializeComponent();
-			Lan.F(this);
 		}
 
 		private void FormWikiTableHeaders_Load(object sender,EventArgs e) {

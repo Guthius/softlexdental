@@ -22,7 +22,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormRpPatPortionUncollected(){
 			InitializeComponent();
- 			Lan.F(this);
+ 			
 		}
 
 		///<summary></summary>

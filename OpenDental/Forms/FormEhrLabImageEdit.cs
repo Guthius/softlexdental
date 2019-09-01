@@ -23,7 +23,7 @@ namespace OpenDental {
 
 		public FormEhrLabImageEdit(long patNum,long ehrLabNum) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_patNum=patNum;
 			_ehrLabNum=ehrLabNum;
 		}

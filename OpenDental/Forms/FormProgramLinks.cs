@@ -25,7 +25,7 @@ namespace OpenDental
         public FormProgramLinks()
         {
             InitializeComponent();// Required for Windows Form Designer support
-            Lan.F(this);
+            
         }
 
         ///<summary></summary>

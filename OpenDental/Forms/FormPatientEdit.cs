@@ -117,7 +117,7 @@ namespace OpenDental{
 			listSites.MouseLeave += new System.EventHandler(listSites_MouseLeave);
 			Controls.Add(listSites);
 			listSites.BringToFront();
-			Lan.F(this);
+			
 			//if(Preferences.GetBool(PrefName.DockPhonePanelShow)) {
 			//	labelST.Text=Lan.g(this,"ST, Country");
 			//	textCountry.Visible=true;

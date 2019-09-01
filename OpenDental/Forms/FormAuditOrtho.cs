@@ -15,7 +15,7 @@ namespace OpenDental {
 
 		public FormAuditOrtho() {
 			InitializeComponent();
-			Lan.F(this);
+			
 			DictDateOrthoLogs=new SortedDictionary<DateTime,List<SecurityLog>>();
 			PatientFieldLogs=new List<SecurityLog>();
 		}

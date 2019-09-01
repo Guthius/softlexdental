@@ -23,7 +23,7 @@ namespace OpenDental {
 			_procCur=proc;
 			_procOld=proc.Copy();
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormProcBroken_Load(object sender,EventArgs e) {

@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormExamSheets() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormExamSheets_Load(object sender,EventArgs e) {

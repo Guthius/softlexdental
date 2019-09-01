@@ -146,7 +146,7 @@ namespace OpenDental {
 		///<summary></summary>
 		public FormASAP() {
 			InitializeComponent();// Required for Windows Form Designer support
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

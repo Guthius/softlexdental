@@ -21,7 +21,7 @@ namespace OpenDental {
 		
 		public FormTxtMsgMany(List<PatComm> listPatComms,string textMessageText,long clinicNum,SmsMessageSource messageSource) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_listPatComms=listPatComms;
 			textMessage.Text=textMessageText;
 			_clinicNum=clinicNum;

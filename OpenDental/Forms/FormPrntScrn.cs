@@ -60,7 +60,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormPrntScrn(){
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

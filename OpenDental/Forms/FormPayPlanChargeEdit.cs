@@ -41,7 +41,7 @@ namespace OpenDental{
 		public FormPayPlanChargeEdit(PayPlanCharge payPlanCharge){
 			InitializeComponent();
 			PayPlanChargeCur=payPlanCharge;
-			Lan.F(this);
+			
 			if(PayPlanChargeCur.Principal < 0) {//only adjustments are allowed to be negative. 
 				textPrincipal.MinVal=-100000000;
 				textPrincipal.MaxVal=0;

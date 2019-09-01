@@ -30,7 +30,7 @@ namespace OpenDental {
 			,List<Benefit> listBenefits=null) 
 		{
 			InitializeComponent();
-			Lan.F(this);
+			
 			_patientMaster=patientMaster;
 			_familyCur=familyCur;
 			_listInsSubs=listInsSubs;

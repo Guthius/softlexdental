@@ -22,7 +22,7 @@ namespace OpenDental {
 
 		public FormEvaluationEdit(Evaluation evalCur) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_evalCur=evalCur;
 		}
 

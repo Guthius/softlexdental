@@ -19,7 +19,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormStateAbbrs() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

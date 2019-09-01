@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormUcums() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormUcums_Load(object sender,EventArgs e) {

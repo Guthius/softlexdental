@@ -41,7 +41,7 @@ namespace OpenDental {
 		
 		public FormPatientRaceEthnicity(Patient pat,List<PatientRace> listPatientRaces) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_patCur=pat;
 			_listAllPatientRaces=listPatientRaces;
 		}

@@ -27,7 +27,7 @@ namespace OpenDental {
 		///<summary></summary>
 		public FormInsCatsSetup() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

@@ -51,7 +51,7 @@ namespace OpenDental {
 
 		public FormSheetFieldCheckBox(SheetDef sheetDef,SheetFieldDef sheetFieldDef,bool isReadOnly) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			SheetFieldDefCur=sheetFieldDef;
 			_sheetDefCur=sheetDef;
 			if(isReadOnly) {

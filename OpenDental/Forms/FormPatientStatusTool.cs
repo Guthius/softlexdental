@@ -14,7 +14,7 @@ namespace OpenDental {
 		
 		public FormPatientStatusTool() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormPatientStatusTool_Load(object sender,EventArgs e) {

@@ -16,7 +16,7 @@ namespace OpenDental {
 
 		public FormEhrProvKeysCustomer() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormEhrProvKeysCustomer_Load(object sender,EventArgs e) {

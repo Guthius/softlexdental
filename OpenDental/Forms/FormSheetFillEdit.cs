@@ -78,7 +78,7 @@ namespace OpenDental {
 		public FormSheetFillEdit(Sheet sheet, DataSet dataSet=null){
 			InitializeComponent();
 			MouseWheel+=FormSheetFillEdit_MouseWheelScroll;
-			Lan.F(this);
+			
 			SheetCur=sheet;
 			_dataSet=dataSet;
 			if(sheet.IsLandscape){

@@ -21,7 +21,6 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormZipCodes(){
 			InitializeComponent();
-			Lan.F(this);
 		}
 
 		///<summary></summary>

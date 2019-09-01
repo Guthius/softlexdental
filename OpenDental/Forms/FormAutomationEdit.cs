@@ -54,7 +54,7 @@ namespace OpenDental{
 			//
 			AutoCur=autoCur.Copy();
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		/// <summary>

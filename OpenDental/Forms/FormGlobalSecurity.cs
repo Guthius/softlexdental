@@ -14,7 +14,7 @@ namespace OpenDental {
 
 		public FormGlobalSecurity() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormGlobalSecurity_Load(object sender,EventArgs e) {

@@ -35,7 +35,7 @@ namespace OpenDental{
 
 		public FormDisplayFields() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		protected override void Dispose(bool disposing) {

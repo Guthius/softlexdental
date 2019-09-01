@@ -29,7 +29,7 @@ namespace OpenDental {
 
 		public FormMessageReplacements(MessageReplaceType replaceTypes,bool allowPHI=true) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_replaceTypes=replaceTypes;
 			_allowPHI=allowPHI;
 		}

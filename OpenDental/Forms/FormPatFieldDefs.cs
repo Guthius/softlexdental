@@ -38,7 +38,7 @@ namespace OpenDental{
 			//
 			_isSelectionMode=isSelectionModeOnly;
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		/// <summary>

@@ -15,7 +15,7 @@ namespace OpenDental {
 
 		public FormIcd9s() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormIcd9s_Load(object sender,EventArgs e) {

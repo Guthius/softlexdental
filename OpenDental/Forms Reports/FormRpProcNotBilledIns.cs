@@ -32,7 +32,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormRpProcNotBilledIns(){
 			InitializeComponent();
- 			Lan.F(this);
+ 			
 		}
 
 		private void FormProcNotAttach_Load(object sender, System.EventArgs e) {

@@ -21,7 +21,7 @@ namespace OpenDental {
 
 		public FormSheetFieldImage() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormSheetFieldImage_Load(object sender,EventArgs e) {

@@ -43,7 +43,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormProviderPick(List<Provider> listProviders=null) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			_listProviders=listProviders;
 		}
 

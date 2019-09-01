@@ -16,7 +16,7 @@ namespace OpenDental {
 
 		public FormAutoNoteControlEdit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormAutoNoteControlEdit_Load(object sender,EventArgs e) {

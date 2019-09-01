@@ -28,7 +28,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormRpInsOverpaid() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		///<summary></summary>

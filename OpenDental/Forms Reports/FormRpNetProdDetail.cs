@@ -52,7 +52,7 @@ namespace OpenDental{
 		///<summary></summary>
 		public FormRpNetProdDetail(bool isTransactionalDaily=false){
 			InitializeComponent();
- 			Lan.F(this);
+ 			
 			if(isTransactionalDaily) {
 				radioTransactionalToday.Checked=true;
 			}

@@ -17,7 +17,7 @@ namespace OpenDental {
 
 		public FormCanadaSummaryReconciliation() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormCanadaPaymentReconciliation_Load(object sender,EventArgs e) {

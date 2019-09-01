@@ -21,7 +21,7 @@ namespace OpenDental {
 			// Required for Windows Form Designer support
 			//
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormAutoNoteControls_Load(object sender, EventArgs e) {

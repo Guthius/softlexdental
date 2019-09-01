@@ -22,7 +22,7 @@ namespace OpenDental {
 
 		public FormEvaluationReport() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormEvaluationReport_Load(object sender,EventArgs e) {

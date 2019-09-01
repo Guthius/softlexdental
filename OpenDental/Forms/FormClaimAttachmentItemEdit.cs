@@ -28,7 +28,7 @@ namespace OpenDental {
 		///<summary>Takes an image the user has chosen to send with their claim.</summary>
 		public FormClaimAttachmentItemEdit(Image image) {
 			InitializeComponent();
-			Lan.F(this);
+			
 			FillImageTypeCombo();
 			_claimImage=image;
 			textDateCreated.Text=DateTime.Today.ToShortDateString();

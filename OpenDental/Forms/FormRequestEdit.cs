@@ -20,7 +20,7 @@ namespace OpenDental
 
 		public FormRequestEdit() {
 			InitializeComponent();
-			Lan.F(this);
+			
 			colorDisabled=Color.FromArgb(230, 229, 233);
 		}
 

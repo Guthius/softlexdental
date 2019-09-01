@@ -26,7 +26,7 @@ namespace OpenDental {
 
 		public FormBillingDefaults() {
 			InitializeComponent();
-			Lan.F(this);
+			
 		}
 
 		private void FormBillingDefaults_Load(object sender,EventArgs e) {
