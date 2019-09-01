@@ -23,6 +23,7 @@ using MigraDoc.Rendering;
 using MigraDoc.Rendering.Printing;
 using Document=OpenDentBusiness.Document;
 using OpenDental.Properties;
+using SLDental.Storage;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -1927,19 +1928,16 @@ namespace OpenDental{
 			string attachPath=EmailAttachment.GetAttachmentPath();
 			Random rnd=new Random();
 			string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
-			string filePathAndName=FileAtoZ.CombinePaths(attachPath,fileName);
-			if(CloudStorage.IsCloudStorage) {
-				filePathAndName=Preferences.GetRandomTempFile("pdf");//Save the pdf to a temp file and then upload it the Email Attachment folder later.
-			}
+			string filePathAndName= Storage.Default.CombinePath(attachPath,fileName);
 			if(gridPlans.SelectedIndices[0]>0 //not the default plan.
 				&& Preference.GetBool(PreferenceName.TreatPlanSaveSignedToPdf) //preference enabled
 			  && _listTreatPlans[gridPlans.SelectedIndices[0]].Signature!="" //and document is signed
 			  && Documents.DocExists(_listTreatPlans[gridPlans.SelectedIndices[0]].DocNum)) //and file exists
 			{
 				string filePathAndNameTemp=Documents.GetPath(_listTreatPlans[gridPlans.SelectedIndices[0]].DocNum);
-				//copy file to email attach folder so files will be where they are exptected to be.
-				File.Delete(filePathAndName);
-				File.Copy(filePathAndNameTemp,filePathAndName);
+                //copy file to email attach folder so files will be where they are exptected to be.
+                Storage.Default.DeleteFile(filePathAndName);
+                Storage.Default.CopyFile(filePathAndNameTemp,filePathAndName);
 			}
 			else if(DoPrintUsingSheets())	{
 				TreatPlan treatPlan;
@@ -1961,9 +1959,9 @@ namespace OpenDental{
 				pdfRenderer.PdfDocument.Save(filePathAndName);
 			}
 			//Process.Start(filePathAndName);
-			if(CloudStorage.IsCloudStorage) {
-				FileAtoZ.Copy(filePathAndName,FileAtoZ.CombinePaths(attachPath,fileName),FileAtoZSourceDestination.LocalToAtoZ);
-			}
+			//if(CloudStorage.IsCloudStorage) {
+			//	FileAtoZ.Copy(filePathAndName,FileAtoZ.CombinePaths(attachPath,fileName),FileAtoZSourceDestination.LocalToAtoZ);
+			//}
 			EmailMessage message=new EmailMessage();
 			message.PatientId=PatCur.PatNum;
 			message.ToAddress=PatCur.Email;
@@ -3305,31 +3303,14 @@ namespace OpenDental{
 				docSave.DocCategory=docCategory;
 				docSave.Description=fileName;//no extension.
 				docSave.RawBase64=rawBase64;//blank if using AtoZfolder
-				if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
-					string filePath=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());
-					while(File.Exists(filePath+"\\"+fileName+".pdf")) {
+
+					string filePath=ImageStore.GetPatientFolder(PatCur);
+					while(Storage.Default.FileExists(filePath+"\\"+fileName+".pdf")) {
 						fileName+="x";
 					}
-					File.Copy(tempFile,filePath+"\\"+fileName+".pdf");
-				}
-				else if(CloudStorage.IsCloudStorage)
-                { // TODO: Fix me
-                  //	//Upload file to patient's AtoZ folder
-                  //	FormProgress FormP=new FormProgress();
-                  //	FormP.DisplayText="Uploading Treatment Plan...";
-                  //	FormP.NumberFormat="F";
-                  //	FormP.NumberMultiplication=1;
-                  //	FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-                  //	FormP.TickMS=1000;
-                  //	OpenDentalCloud.Core.TaskStateUpload state=CloudStorage.UploadAsync(ImageStore.GetPatientFolder(PatCur,"")
-                  //		,fileName+".pdf"
-                  //		,File.ReadAllBytes(tempFile)
-                  //		,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-                  //	if(FormP.ShowDialog()==DialogResult.Cancel) {
-                  //		state.DoCancel=true;
-                  //		break;
-                  //	}
-                }
+                Storage.Default.CopyFile(tempFile,filePath+"\\"+fileName+".pdf");
+				
+
 				docSave.FileName=fileName+".pdf";//file extension used for both DB images and AtoZ images
 				Documents.Update(docSave);
 				retVal.Add(docSave);

@@ -11,6 +11,7 @@ using OpenDentBusiness;
 using System.Diagnostics;
 using System.Linq;
 using CodeBase;
+using SLDental.Storage;
 
 namespace OpenDental{
 	/// <summary>
@@ -1338,10 +1339,10 @@ namespace OpenDental{
 			SheetFiller.FillFields(sheet);
 			SheetUtil.CalculateHeights(sheet);
 			string sheetName=sheet.Description+"_"+DateTime.Now.ToString("yyyyMMdd_hhmmssfff")+".pdf";
-			string tempFile=ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),sheetName);
-			string filePathAndName=FileAtoZ.CombinePaths(EmailAttachment.GetAttachmentPath(),sheetName);
+			string tempFile= Storage.Default.CombinePath(Preferences.GetTempFolderPath(),sheetName);
+			string filePathAndName= Storage.Default.CombinePath(EmailAttachment.GetAttachmentPath(),sheetName);
 			SheetPrinting.CreatePdf(sheet,tempFile,null);
-			FileAtoZ.Copy(tempFile,filePathAndName,FileAtoZSourceDestination.LocalToAtoZ);
+            Storage.Local.CopyFile(tempFile, filePathAndName, Storage.Default);
 			EmailMessage message=new EmailMessage();
 			EmailAddress address=EmailAddress.GetByClinic(Clinics.ClinicNum);
 			message.FromAddress=address.GetFrom();

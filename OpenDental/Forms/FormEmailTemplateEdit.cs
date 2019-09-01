@@ -8,6 +8,7 @@
  *   This file is covered by the LICENSE file in the root of this project.   *
  *===========================================================================*/
 using OpenDentBusiness;
+using SLDental.Storage;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -121,11 +122,10 @@ namespace OpenDental
             if (attachmentsListView.SelectedItems.Count > 0 && 
                 attachmentsListView.SelectedItems[0].Tag is EmailAttachment emailAttachment)
             {
-                FileAtoZ.OpenFile(
-                    FileAtoZ.CombinePaths(
+                Storage.Default.OpenFile(
+                    Storage.Default.CombinePath(
                         EmailAttachment.GetAttachmentPath(),
-                        emailAttachment.FileName),
-                    emailAttachment.Description);
+                        emailAttachment.FileName));
             }
         }
 
@@ -187,7 +187,6 @@ namespace OpenDental
             Template.Subject = subjectTextBox.Text;
             Template.Body = bodyTextBox.Text;
             Template.Description = description;
-            Template.IsHtml = false;
 
             if (Template.IsNew)
             {

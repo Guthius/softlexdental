@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 using CodeBase;
 using OpenDental.UI;
 using OpenDentBusiness;
-
+using SLDental.Storage;
 
 namespace OpenDental {
 	public partial class FormSheetExport:ODForm {
@@ -63,7 +63,7 @@ namespace OpenDental {
 				strBuilder.AppendLine(Lan.g(this,"The following images will need to be manually imported with the same file name when importing this "
 					+"sheet to a new environment."));
 				strBuilder.AppendLine();
-				listFieldDefImages.ForEach(x => strBuilder.AppendLine(ODFileUtils.CombinePaths(sheetImagesPath,x.FieldName)));
+				listFieldDefImages.ForEach(x => strBuilder.AppendLine(Storage.Default.CombinePath(sheetImagesPath,x.FieldName)));
 				MsgBoxCopyPaste msgBox=new MsgBoxCopyPaste(strBuilder.ToString());
 				msgBox.ShowDialog();
 			}

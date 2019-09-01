@@ -1,4 +1,8 @@
-﻿using System;
+﻿using CodeBase;
+using OpenDental.UI;
+using OpenDentBusiness;
+using SLDental.Storage;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -6,13 +10,10 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using CodeBase;
-using OpenDental.UI;
-using OpenDentBusiness;
-using OpenDentBusiness.WebTypes.WebForms;
 
-namespace OpenDental{
-	public class SheetUtil {
+namespace OpenDental
+{
+    public class SheetUtil {
 		private static List<MedLabResult> _listResults;
 		///<summary>Supply a template sheet as well as a list of primary keys.  This method creates a new collection of sheets which each have a parameter of int.  It also fills the sheets with data from the database, so no need to run that separately.</summary>
 		public static List<Sheet> CreateBatch(SheetDef sheetDef,List<long> priKeys) {
@@ -71,7 +72,7 @@ namespace OpenDental{
 					string filePathAndName;
 					switch(field.FieldType) {
 						case SheetFieldType.Image:
-							filePathAndName=ODFileUtils.CombinePaths(GetImagePath(),field.FieldName);
+							filePathAndName= Storage.Default.CombinePath(GetImagePath(),field.FieldName);
 							break;
 						case SheetFieldType.PatImage:
 							if(field.FieldValue=="") {
@@ -80,7 +81,7 @@ namespace OpenDental{
 								break;
 							}
 							Document patDoc=Documents.GetByNum(PIn.Long(field.FieldValue));
-							List<string> paths=Documents.GetPaths(new List<long> { patDoc.DocNum },ImageStore.GetPreferredAtoZpath());
+							List<string> paths=Documents.GetPaths(new List<long> { patDoc.DocNum },"");
 							if(paths.Count < 1) {//No path was found so we cannot draw the image.
 								continue;
 							}
@@ -94,17 +95,15 @@ namespace OpenDental{
 					if(field.FieldName=="Patient Info.gif") {
 						continue;
 					}
-					if(CloudStorage.IsCloudStorage) {
-						if(CloudStorage.FileExists(filePathAndName)) {
-							continue;
-						}
-					}
-					else if(File.Exists(filePathAndName)) {
-						continue;
-					}
-					else {//img doesn't exist or we do not have access to it.
-						field.Height=0;//Set height to zero so that it will not cause extra pages to print.
-					}
+
+                    if (Storage.Default.FileExists(filePathAndName))
+                    {
+                        continue;
+                    }
+                    else
+                    {//img doesn't exist or we do not have access to it.
+                        field.Height = 0;//Set height to zero so that it will not cause extra pages to print.
+                    }
 				}
 				if(field.GrowthBehavior==GrowthBehaviorEnum.None){//Images don't have growth behavior, so images are excluded below this point.
 					continue;
@@ -484,53 +483,6 @@ namespace OpenDental{
 			return sheet;
 		}
 
-		///<summary>Creates a Sheet from a WebSheet. Does not insert it into the database.</summary>
-		public static Sheet CreateSheetFromWebSheet(long PatNum,WebForms_Sheet sheet) {
-			Sheet newSheet=null;
-			SheetDef sheetDef=new SheetDef((SheetTypeEnum)sheet.SheetType);
-			newSheet=CreateSheet(sheetDef,PatNum);
-			SheetParameter.SetParameter(newSheet,"PatNum",PatNum);
-			newSheet.DateTimeSheet=sheet.DateTimeSheet;
-			newSheet.Description=sheet.Description;
-			newSheet.Height=sheet.Height;
-			newSheet.Width=sheet.Width;
-			newSheet.FontName=sheet.FontName;
-			newSheet.FontSize=sheet.FontSize;
-			newSheet.SheetType=(SheetTypeEnum)sheet.SheetType;
-			newSheet.IsLandscape=sheet.IsLandscape;
-			newSheet.InternalNote="";
-			newSheet.IsWebForm=true;
-			newSheet.ClinicNum=sheet.ClinicNum;
-			//loop through each variable in a single sheetfield
-			foreach(WebForms_SheetField field in sheet.SheetFields) {
-				SheetField sheetfieldCopy=new SheetField();
-				sheetfieldCopy.FieldName=field.FieldName;
-				sheetfieldCopy.FieldType=field.FieldType;
-				sheetfieldCopy.FontIsBold=field.FontIsBold;
-				sheetfieldCopy.FontIsBold=field.FontIsBold;
-				sheetfieldCopy.FontName=field.FontName;
-				sheetfieldCopy.FontSize=field.FontSize;
-				sheetfieldCopy.Height=field.Height;
-				sheetfieldCopy.Width=field.Width;
-				sheetfieldCopy.XPos=field.XPos;
-				sheetfieldCopy.YPos=field.YPos;
-				sheetfieldCopy.IsRequired=field.IsRequired;
-				sheetfieldCopy.TabOrder=field.TabOrder;
-				sheetfieldCopy.ReportableName=field.ReportableName;
-				sheetfieldCopy.RadioButtonGroup=field.RadioButtonGroup;
-				sheetfieldCopy.RadioButtonValue=field.RadioButtonValue;
-				sheetfieldCopy.GrowthBehavior=field.GrowthBehavior;
-				sheetfieldCopy.FieldValue=field.FieldValue;
-				sheetfieldCopy.TextAlign=field.TextAlign;
-				sheetfieldCopy.ItemColor=field.ItemColor;
-				if(sheetfieldCopy.FieldType==SheetFieldType.SigBox && !string.IsNullOrWhiteSpace(sheetfieldCopy.FieldValue)) {
-					sheetfieldCopy.DateTimeSig=newSheet.DateTimeSheet;
-				}
-				newSheet.SheetFields.Add(sheetfieldCopy);
-			}
-			return newSheet;
-		}
-
 		///<summary>Returns either a user defined statements sheet, the internal sheet if StatementsUseSheets is true. Returns null if StatementsUseSheets is false.</summary>
 		public static SheetDef GetStatementSheetDef() {
 			List<SheetDef> listDefs=SheetDefs.GetCustomForType(SheetTypeEnum.Statement);
@@ -621,31 +573,28 @@ namespace OpenDental{
 			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 				throw new ApplicationException("Must be using AtoZ folders.");
 			}
-			imagePath=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"SheetImages");
-			if(CloudStorage.IsCloudStorage) {
-				imagePath=imagePath.Replace("\\","/");
-			}
-			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(imagePath)) {
-				Directory.CreateDirectory(imagePath);
+			imagePath="SheetImages";
+			if(!Storage.Default.DirectoryExists(imagePath)) {
+                Storage.Default.CreateDirectory(imagePath);
 			}
 			return imagePath;
 		}
 
-		///<summary>Typically returns something similar to \\SERVER\OpenDentImages\SheetImages</summary>
-		public static string GetPatImagePath() {
-			string imagePath;
-			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
-				throw new ApplicationException("Must be using AtoZ folders.");
-			}
-			imagePath=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"SheetPatImages");
-			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(imagePath)) {
-				Directory.CreateDirectory(imagePath);
-			}
-			if(CloudStorage.IsCloudStorage) {
-				imagePath=imagePath.Replace("\\","/");
-			}
-			return imagePath;
-		}
+        ///<summary>Typically returns something similar to \\SERVER\OpenDentImages\SheetImages</summary>
+        public static string GetPatImagePath()
+        {
+            string imagePath;
+            if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
+            {
+                throw new ApplicationException("Must be using AtoZ folders.");
+            }
+            imagePath = "SheetPatImages";
+            if (!Storage.Default.DirectoryExists(imagePath))
+            {
+                Storage.Default.CreateDirectory(imagePath);
+            }
+            return imagePath;
+        }
 
 		///<summary>Returns the current list of all columns available for the grid in the data table.</summary>
 		public static List<DisplayField> GetGridColumnsAvailable(string gridType) {

@@ -12,7 +12,7 @@ using System.IO;
 namespace OpenDental {
 	public partial class FormMedicationReconcile:ODForm {
 		public Patient PatCur;
-		private Bitmap BitmapOriginal;
+		private Image BitmapOriginal;
 		private List<EhrMeasureEvent> ehrMeasureEventsList;
 		private List<MedicationPat> medList;
 
@@ -144,7 +144,7 @@ namespace OpenDental {
 			if(formIS.DialogResult!=DialogResult.OK) {
 				return;
 			}		
-			string patFolder=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());
+			string patFolder=ImageStore.GetPatientFolder(PatCur);
 			Document doc=Documents.GetByNum(formIS.SelectedDocNum);
 			if(!ImageStore.HasImageExtension(doc.FileName)) {
 				MsgBox.Show(this,"The selected file is not a supported image type.");

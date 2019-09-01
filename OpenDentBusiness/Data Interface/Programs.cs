@@ -276,7 +276,7 @@ namespace OpenDentBusiness
                 if (File.Exists(path))
                 {
                     string dir = Path.GetDirectoryName(path);
-                    string linkage = CodeBase.ODFileUtils.CombinePaths(dir, "linkage.xml");
+                    string linkage = Path.Combine(dir, "linkage.xml");
                     if (File.Exists(linkage))
                     {
                         try
@@ -374,7 +374,7 @@ namespace OpenDentBusiness
             {
                 return;
             }
-            string strFileToScrub = CodeBase.ODFileUtils.CombinePaths(ProgramProperties.GetPropVal(program.ProgramNum, strFileProperty), strFilePropertySuffix);
+            string strFileToScrub = Path.Combine(ProgramProperties.GetPropVal(program.ProgramNum, strFileProperty), strFilePropertySuffix);
             if (!File.Exists(strFileToScrub))
             {
                 return;

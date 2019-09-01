@@ -17,6 +17,7 @@ using PdfSharp.Pdf.IO;
 using System.Linq;
 using System.Threading;
 using MySql.Data.MySqlClient;
+using SLDental.Storage;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -1089,7 +1090,7 @@ namespace OpenDental{
 					fam=Patients.GetFamily(stmt.PatNum);
 				}
 				pat=fam.GetPatient(stmt.PatNum);
-				patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
+				patFolder=ImageStore.GetPatientFolder(pat);
 				dataSet=AccountModules.GetStatementDataSet(stmt,isComputeAging);
 				if(comboEmailFrom.SelectedIndex==0) { //clinic/practice default
 					emailAddress=EmailAddress.GetByClinic(pat.ClinicNum);
@@ -1160,17 +1161,9 @@ namespace OpenDental{
 				//imageStore = OpenDental.Imaging.ImageStore.GetImageStore(pat);
 				//If stmt.DocNum==0, savedPdfPath will be "".  A blank savedPdfPath is fine for electronic statements.
 				Document docStmt=Documents.GetByNum(stmt.DocNum);
-				if(CloudStorage.IsCloudStorage) {
-					if(tempPdfFile != "")
-						savedPdfPath=tempPdfFile;//To save time by not having to download it.
-					else {
-						savedPdfPath=Preferences.GetRandomTempFile("pdf");
-						FileAtoZ.Copy(ImageStore.GetFilePath(docStmt,patFolder),savedPdfPath,FileAtoZSourceDestination.AtoZToLocal,uploadMessage:"Downloading statement...");
-					}
-				}
-				else {
+
 					savedPdfPath=ImageStore.GetFilePath(docStmt,patFolder);//savedPdfPath is just the filename when using DataStorageType.InDatabase
-				}
+				
 				if(stmt.Mode_==StatementMode.InPerson || stmt.Mode_==StatementMode.Mail) {
 					_hasToShowPdf=true;
 					if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
@@ -1208,13 +1201,13 @@ namespace OpenDental{
 					attachPath=EmailAttachment.GetAttachmentPath();
 					rnd=new Random();
 					fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
-					filePathAndName=FileAtoZ.CombinePaths(attachPath,fileName);
+					filePathAndName=Storage.Default.CombinePath(attachPath,fileName);
 					if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
 						ImageStore.Export(filePathAndName,docStmt,pat);
 					}
 					else {
-						FileAtoZ.Copy(savedPdfPath,filePathAndName,FileAtoZSourceDestination.LocalToAtoZ,uploadMessage:"Uploading statement...");
-					}
+                        Storage.Default.CopyFile(savedPdfPath,filePathAndName); // TODO: uploadMessage:"Uploading statement..."
+                    }
 					//Process.Start(filePathAndName);
 					_progExtended.Fire(new ODEventArgs(ODEventType.Billing,new ProgressBarHelper(Lan.g(this,"Statement")+"\r\n"+curStmtIdx+" / "+gridBill.SelectedIndices.Length,"40%",40,100,ProgBarStyle.Blocks,"3")));
 					message=Statements.GetEmailMessageForStatement(stmt,pat);
@@ -1481,8 +1474,8 @@ namespace OpenDental{
 					if(Preference.GetString(PreferenceName.BillingUseElectronic)=="2") {
 						writerElect.Close();
 						string filePath=Preference.GetString(PreferenceName.BillingElectStmtOutputPathPos);
-						if(Directory.Exists(filePath)) {
-							filePath=ODFileUtils.CombinePaths(filePath,"Statements.xml");
+						if(Storage.Default.DirectoryExists(filePath)) {
+							filePath= Storage.Default.CombinePath(filePath,"Statements.xml");
 						}
 						else if(!String.IsNullOrEmpty(selectedFile)) {//Default Output path not set, however, User already chose a filepath to output to on the previous pass.
 							filePath=selectedFile;
@@ -1559,7 +1552,7 @@ namespace OpenDental{
 						writerElect.Close();
 						string filePath=Preference.GetString(PreferenceName.BillingElectStmtOutputPathEds);
 						if(Directory.Exists(filePath)) {
-							filePath=ODFileUtils.CombinePaths(filePath,"Statements.xml");
+							filePath= Storage.Default.CombinePath(filePath,"Statements.xml");
 						}
 						else if(!String.IsNullOrEmpty(selectedFile)) {//Default Output path not set, however, User already chose a filepath to output to on the previous pass.
 							filePath=selectedFile;
@@ -1618,7 +1611,7 @@ namespace OpenDental{
 				clinicAbbr=Clinics.GetClinic(clinicNum).Abbr;//Abbr is required by our interface, so no need to check if blank.
 			}
 			string fileName=Path.GetFileNameWithoutExtension(filePath)+'-'+clinicAbbr+Path.GetExtension(filePath);
-			return ODFileUtils.CombinePaths(Path.GetDirectoryName(filePath),fileName);
+			return Storage.Default.CombinePath(Path.GetDirectoryName(filePath),fileName);
 		}
 
 		///<summary>Sends text messages to the current batch of statements.</summary>

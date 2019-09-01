@@ -42,7 +42,7 @@ namespace OpenDental {
 
 		///<summary>Constructs the ObjFormEhrMeasures fro use with late binding.</summary>
 		private static void constructObjFormEhrMeasuresHelper() {
-			string dllPathEHR=ODFileUtils.CombinePaths(Application.StartupPath,"EHR.dll");
+			string dllPathEHR=Path.Combine(Application.StartupPath,"EHR.dll");
 			ObjFormEhrMeasures=null;
 			AssemblyEHR=null;
 			if(File.Exists(dllPathEHR)) {//EHR.dll is available, so load it up

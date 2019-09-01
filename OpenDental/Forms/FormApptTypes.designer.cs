@@ -1,187 +1,182 @@
-namespace OpenDental{
-	partial class FormApptTypes {
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+namespace OpenDental
+{
+    partial class FormApptTypes
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing) {
-			if(disposing && (components != null)) {
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent() {
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormApptTypes));
-			this.butAdd = new OpenDental.UI.Button();
-			this.butClose = new OpenDental.UI.Button();
-			this.gridMain = new OpenDental.UI.ODGrid();
-			this.butDown = new OpenDental.UI.Button();
-			this.butUp = new OpenDental.UI.Button();
-			this.checkPrompt = new System.Windows.Forms.CheckBox();
-			this.checkWarn = new System.Windows.Forms.CheckBox();
-			this.butOK = new OpenDental.UI.Button();
-			this.SuspendLayout();
-			// 
-			// butAdd
-			// 
-			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butAdd.CornerRadius = 4F;
-			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
-			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butAdd.Location = new System.Drawing.Point(345, 88);
-			this.butAdd.Name = "butAdd";
-			this.butAdd.Size = new System.Drawing.Size(75, 24);
-			this.butAdd.TabIndex = 156;
-			this.butAdd.Text = "Add";
-			this.butAdd.Click += new System.EventHandler(this.butAdd_Click);
-			// 
-			// butClose
-			// 
-			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butClose.CornerRadius = 4F;
-			this.butClose.Location = new System.Drawing.Point(345, 427);
-			this.butClose.Name = "butClose";
-			this.butClose.Size = new System.Drawing.Size(75, 24);
-			this.butClose.TabIndex = 157;
-			this.butClose.Text = "Close";
-			this.butClose.Click += new System.EventHandler(this.butClose_Click);
-			// 
-			// gridMain
-			// 
-			this.gridMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormApptTypes));
+            this.addButton = new System.Windows.Forms.Button();
+            this.cancelButton = new System.Windows.Forms.Button();
+            this.typesGrid = new OpenDental.UI.ODGrid();
+            this.downButton = new System.Windows.Forms.Button();
+            this.upButton = new System.Windows.Forms.Button();
+            this.promptCheckBox = new System.Windows.Forms.CheckBox();
+            this.warnCheckBox = new System.Windows.Forms.CheckBox();
+            this.acceptButton = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // addButton
+            // 
+            this.addButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.addButton.Image = global::OpenDental.Properties.Resources.IconAdd;
+            this.addButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.addButton.Location = new System.Drawing.Point(421, 69);
+            this.addButton.Margin = new System.Windows.Forms.Padding(3, 3, 3, 30);
+            this.addButton.Name = "addButton";
+            this.addButton.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.addButton.Size = new System.Drawing.Size(110, 30);
+            this.addButton.TabIndex = 1;
+            this.addButton.Text = "Add";
+            this.addButton.Click += new System.EventHandler(this.AddButton_Click);
+            // 
+            // cancelButton
+            // 
+            this.cancelButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cancelButton.Location = new System.Drawing.Point(421, 518);
+            this.cancelButton.Name = "cancelButton";
+            this.cancelButton.Size = new System.Drawing.Size(110, 30);
+            this.cancelButton.TabIndex = 5;
+            this.cancelButton.Text = "Close";
+            // 
+            // typesGrid
+            // 
+            this.typesGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.gridMain.HasAddButton = false;
-			this.gridMain.HasMultilineHeaders = false;
-			this.gridMain.HScrollVisible = false;
-			this.gridMain.Location = new System.Drawing.Point(8, 52);
-			this.gridMain.Name = "gridMain";
-			this.gridMain.ScrollValue = 0;
-			this.gridMain.Size = new System.Drawing.Size(331, 401);
-			this.gridMain.TabIndex = 155;
-			this.gridMain.Title = "Appointment Types";
-			this.gridMain.CellDoubleClick += new System.EventHandler<UI.ODGridClickEventArgs>(this.gridMain_CellDoubleClick);
-			// 
-			// butDown
-			// 
-			this.butDown.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butDown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butDown.Autosize = true;
-			this.butDown.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDown.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butDown.CornerRadius = 4F;
-			this.butDown.Image = global::OpenDental.Properties.Resources.down;
-			this.butDown.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butDown.Location = new System.Drawing.Point(345, 229);
-			this.butDown.Name = "butDown";
-			this.butDown.Size = new System.Drawing.Size(79, 24);
-			this.butDown.TabIndex = 159;
-			this.butDown.Text = "&Down";
-			this.butDown.Click += new System.EventHandler(this.butDown_Click);
-			// 
-			// butUp
-			// 
-			this.butUp.AdjustImageLocation = new System.Drawing.Point(0, 1);
-			this.butUp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.butUp.Autosize = true;
-			this.butUp.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butUp.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butUp.CornerRadius = 4F;
-			this.butUp.Image = global::OpenDental.Properties.Resources.up;
-			this.butUp.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.butUp.Location = new System.Drawing.Point(345, 199);
-			this.butUp.Name = "butUp";
-			this.butUp.Size = new System.Drawing.Size(79, 24);
-			this.butUp.TabIndex = 158;
-			this.butUp.Text = "&Up";
-			this.butUp.Click += new System.EventHandler(this.butUp_Click);
-			// 
-			// checkPrompt
-			// 
-			this.checkPrompt.Location = new System.Drawing.Point(11, 6);
-			this.checkPrompt.Name = "checkPrompt";
-			this.checkPrompt.Size = new System.Drawing.Size(382, 20);
-			this.checkPrompt.TabIndex = 160;
-			this.checkPrompt.Text = "New appointments prompt for appointment type";
-			this.checkPrompt.UseVisualStyleBackColor = true;
-			this.checkPrompt.CheckedChanged += new System.EventHandler(this.checkPrompt_CheckedChanged);
-			// 
-			// checkWarn
-			// 
-			this.checkWarn.Location = new System.Drawing.Point(11, 30);
-			this.checkWarn.Name = "checkWarn";
-			this.checkWarn.Size = new System.Drawing.Size(382, 20);
-			this.checkWarn.TabIndex = 161;
-			this.checkWarn.Text = "Warn users before disassociating procedures from an appointment";
-			this.checkWarn.UseVisualStyleBackColor = true;
-			this.checkWarn.CheckedChanged += new System.EventHandler(this.checkWarn_CheckedChanged);
-			// 
-			// butOK
-			// 
-			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
-			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
-			this.butOK.CornerRadius = 4F;
-			this.butOK.Location = new System.Drawing.Point(345, 397);
-			this.butOK.Name = "butOK";
-			this.butOK.Size = new System.Drawing.Size(75, 24);
-			this.butOK.TabIndex = 162;
-			this.butOK.Text = "&OK";
-			this.butOK.Visible = false;
-			this.butOK.Click += new System.EventHandler(this.butOK_Click);
-			// 
-			// FormApptTypes
-			// 
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-			this.ClientSize = new System.Drawing.Size(434, 464);
-			this.Controls.Add(this.butOK);
-			this.Controls.Add(this.checkWarn);
-			this.Controls.Add(this.checkPrompt);
-			this.Controls.Add(this.butDown);
-			this.Controls.Add(this.butUp);
-			this.Controls.Add(this.butClose);
-			this.Controls.Add(this.butAdd);
-			this.Controls.Add(this.gridMain);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "FormApptTypes";
-			this.Text = "Setup Appointment Types";
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormApptTypes_FormClosing);
-			this.Load += new System.EventHandler(this.FormApptTypes_Load);
-			this.ResumeLayout(false);
+            this.typesGrid.CellFont = new System.Drawing.Font("Microsoft Sans Serif", 8.5F);
+            this.typesGrid.EditableEnterMovesDown = false;
+            this.typesGrid.HasAddButton = false;
+            this.typesGrid.HasDropDowns = false;
+            this.typesGrid.HasMultilineHeaders = false;
+            this.typesGrid.HScrollVisible = false;
+            this.typesGrid.Location = new System.Drawing.Point(13, 69);
+            this.typesGrid.Name = "typesGrid";
+            this.typesGrid.ScrollValue = 0;
+            this.typesGrid.Size = new System.Drawing.Size(402, 479);
+            this.typesGrid.TabIndex = 0;
+            this.typesGrid.Title = "Appointment Types";
+            this.typesGrid.TitleVisible = true;
+            this.typesGrid.CellDoubleClick += new System.EventHandler<OpenDental.UI.ODGridClickEventArgs>(this.TypesGrid_CellDoubleClick);
+            // 
+            // downButton
+            // 
+            this.downButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.downButton.Image = global::OpenDental.Properties.Resources.IconArrowDown;
+            this.downButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.downButton.Location = new System.Drawing.Point(421, 168);
+            this.downButton.Name = "downButton";
+            this.downButton.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.downButton.Size = new System.Drawing.Size(110, 30);
+            this.downButton.TabIndex = 3;
+            this.downButton.Text = "&Down";
+            this.downButton.Click += new System.EventHandler(this.DownButton_Click);
+            // 
+            // upButton
+            // 
+            this.upButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.upButton.Image = global::OpenDental.Properties.Resources.IconArrowUp;
+            this.upButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.upButton.Location = new System.Drawing.Point(421, 132);
+            this.upButton.Name = "upButton";
+            this.upButton.Padding = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.upButton.Size = new System.Drawing.Size(110, 30);
+            this.upButton.TabIndex = 2;
+            this.upButton.Text = "&Up";
+            this.upButton.Click += new System.EventHandler(this.UpButton_Click);
+            // 
+            // promptCheckBox
+            // 
+            this.promptCheckBox.AutoSize = true;
+            this.promptCheckBox.Location = new System.Drawing.Point(13, 19);
+            this.promptCheckBox.Name = "promptCheckBox";
+            this.promptCheckBox.Size = new System.Drawing.Size(286, 19);
+            this.promptCheckBox.TabIndex = 6;
+            this.promptCheckBox.Text = "New appointments prompt for appointment type";
+            this.promptCheckBox.UseVisualStyleBackColor = true;
+            this.promptCheckBox.CheckedChanged += new System.EventHandler(this.PromptCheckBox_CheckedChanged);
+            // 
+            // warnCheckBox
+            // 
+            this.warnCheckBox.AutoSize = true;
+            this.warnCheckBox.Location = new System.Drawing.Point(13, 44);
+            this.warnCheckBox.Name = "warnCheckBox";
+            this.warnCheckBox.Size = new System.Drawing.Size(377, 19);
+            this.warnCheckBox.TabIndex = 7;
+            this.warnCheckBox.Text = "Warn users before disassociating procedures from an appointment";
+            this.warnCheckBox.UseVisualStyleBackColor = true;
+            this.warnCheckBox.CheckedChanged += new System.EventHandler(this.WarnCheckBox_CheckedChanged);
+            // 
+            // acceptButton
+            // 
+            this.acceptButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.acceptButton.Location = new System.Drawing.Point(421, 482);
+            this.acceptButton.Name = "acceptButton";
+            this.acceptButton.Size = new System.Drawing.Size(110, 30);
+            this.acceptButton.TabIndex = 4;
+            this.acceptButton.Text = "&OK";
+            this.acceptButton.Visible = false;
+            this.acceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
+            // 
+            // FormApptTypes
+            // 
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.ClientSize = new System.Drawing.Size(544, 561);
+            this.Controls.Add(this.acceptButton);
+            this.Controls.Add(this.warnCheckBox);
+            this.Controls.Add(this.promptCheckBox);
+            this.Controls.Add(this.downButton);
+            this.Controls.Add(this.upButton);
+            this.Controls.Add(this.cancelButton);
+            this.Controls.Add(this.addButton);
+            this.Controls.Add(this.typesGrid);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "FormApptTypes";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Appointment Types";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormApptTypes_FormClosing);
+            this.Load += new System.EventHandler(this.FormApptTypes_Load);
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private UI.Button butAdd;
-		private UI.ODGrid gridMain;
-		private UI.Button butClose;
-		private UI.Button butDown;
-		private UI.Button butUp;
-		private System.Windows.Forms.CheckBox checkPrompt;
-		private System.Windows.Forms.CheckBox checkWarn;
-		private UI.Button butOK;
-	}
+        private System.Windows.Forms.Button addButton;
+        private UI.ODGrid typesGrid;
+        private System.Windows.Forms.Button cancelButton;
+        private System.Windows.Forms.Button downButton;
+        private System.Windows.Forms.Button upButton;
+        private System.Windows.Forms.CheckBox promptCheckBox;
+        private System.Windows.Forms.CheckBox warnCheckBox;
+        private System.Windows.Forms.Button acceptButton;
+    }
 }

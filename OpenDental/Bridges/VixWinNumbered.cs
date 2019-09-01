@@ -27,7 +27,7 @@ namespace OpenDental.Bridges {
 				return;
 			}
 			string subDirNumbers=(pat.PatNum%100).ToString().PadLeft(2,'0');//Take the rightmost 2 numbers, preceeding with 0 if patnum<10
-			string fullPath=ODFileUtils.CombinePaths(ppImagePath.Trim(),subDirNumbers,pat.PatNum.ToString());
+			string fullPath= Path.Combine(ppImagePath.Trim(),subDirNumbers,pat.PatNum.ToString());
 			if(!Directory.Exists(fullPath)){
 				try {
 					Directory.CreateDirectory(fullPath);

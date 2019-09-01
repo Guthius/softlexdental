@@ -18,6 +18,7 @@ using OpenDental.Properties;
 using OpenDental.UI;
 using OpenDentBusiness;
 using OpenDentBusiness.UI;
+using SLDental.Storage;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -108,7 +109,6 @@ namespace OpenDental
         private OpenDental.UI.ODToolBar ToolBarMain;
         private MenuItem menuItem3;
         private MenuItem menuApptFieldDefs;
-        private MenuItem menuItemWebForms;
         private FormTerminalManager formTerminalManager;
         private MenuItem menuItemCCRecurring;
         /////<summary>This will be null if EHR didn't load up.  EHRTEST conditional compilation constant is used because the EHR project is only part of the solution here at HQ.  We need to use late binding in a few places so that it will still compile for people who download our sourcecode.  But late binding prevents us from stepping through for debugging, so the EHRTEST lets us switch to early binding.</summary>
@@ -299,7 +299,6 @@ namespace OpenDental
         private MenuItem menuItemReports;
         private MenuItem menuItemAlertCategory;
         private MenuItem menuItemQuickPasteNotes;
-        private MenuItem menuItemWebForm;
         private MenuItem menuItemReportsUnfinalizedPay;
         private MenuItem menuItemDatabaseMaintenancePat;
         private MenuItem menuItemUserSettings;
@@ -714,28 +713,29 @@ namespace OpenDental
             BeginODDashboardStarterThread();
             FillSignalButtons();
 
+            // TODO: Fix...
 
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
-            {
-                string prefImagePath = ImageStore.GetPreferredAtoZpath();
-                if (prefImagePath == null || !Directory.Exists(prefImagePath))
-                {
-                    using (var formPath = new FormPath())
-                    {
-                        formPath.IsStartingUp = true;
-                        if (formPath.ShowDialog() != DialogResult.OK)
-                        {
-                            MessageBox.Show(
-                                "Invalid A to Z path. Closing program.",
-                                "Open Dental",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
-
-                            Application.Exit();
-                        }
-                    }
-                }
-            }
+            //if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+            //{
+            //    string prefImagePath = ImageStore.GetPreferredAtoZpath();
+            //    if (prefImagePath == null || !Directory.Exists(prefImagePath))
+            //    {
+            //        using (var formPath = new FormPath())
+            //        {
+            //            formPath.IsStartingUp = true;
+            //            if (formPath.ShowDialog() != DialogResult.OK)
+            //            {
+            //                MessageBox.Show(
+            //                    "Invalid A to Z path. Closing program.",
+            //                    "Open Dental",
+            //                    MessageBoxButtons.OK,
+            //                    MessageBoxIcon.Error);
+            //
+            //                Application.Exit();
+            //            }
+            //        }
+            //    }
+            //}
 
             IsTreatPlanSortByTooth = Preference.GetBool(PreferenceName.TreatPlanSortByTooth); //not a great place for this, but we don't have a better alternative.
             if (userControlTasks1.Visible)
@@ -970,8 +970,8 @@ namespace OpenDental
         {
             //We don't include OpenDentalFHIRConfig.xml in Setup.exe because we don't want to overwrite existing settings. We will check to see if it 
             //exists, and create it if it doesn't.
-            if (!Directory.Exists(ODFileUtils.CombinePaths(Application.StartupPath, "OpenDentalFHIR"))
-                || File.Exists(ODFileUtils.CombinePaths(Application.StartupPath, "OpenDentalFHIR/OpenDentalFHIRConfig.xml")))
+            if (!Directory.Exists(Path.Combine(Application.StartupPath, "OpenDentalFHIR"))
+                || File.Exists(Path.Combine(Application.StartupPath, "OpenDentalFHIR/OpenDentalFHIRConfig.xml")))
             {
                 return;
             }
@@ -986,7 +986,7 @@ namespace OpenDental
             XmlDocument document = new XmlDocument();
             try
             {
-                document.Load(ODFileUtils.CombinePaths(Application.StartupPath, "FreeDentalConfig.xml"));
+                document.Load(Path.Combine(Application.StartupPath, "FreeDentalConfig.xml"));
                 XPathNavigator Navigator = document.CreateNavigator();
                 XPathNavigator nav;
                 //Database type
@@ -1020,7 +1020,7 @@ namespace OpenDental
                 XmlWriterSettings settings = new XmlWriterSettings();
                 settings.Indent = true;
                 settings.IndentChars = ("    ");
-                using (XmlWriter writer = XmlWriter.Create(ODFileUtils.CombinePaths(Application.StartupPath, "OpenDentalFHIR/OpenDentalFHIRConfig.xml"),
+                using (XmlWriter writer = XmlWriter.Create(Path.Combine(Application.StartupPath, "OpenDentalFHIR/OpenDentalFHIRConfig.xml"),
                     settings))
                 {
                     writer.WriteStartElement("ConnectionSettings");
@@ -1492,9 +1492,8 @@ namespace OpenDental
             //Try to load custom reports, but only if using the A to Z folders.
             if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
             {
-                string imagePath = ImageStore.GetPreferredAtoZpath();
                 string reportFolderName = Preference.GetString(PreferenceName.ReportFolderName);
-                string reportDir = ODFileUtils.CombinePaths(imagePath, reportFolderName);
+                string reportDir = reportFolderName;
                 try
                 {
                     if (Directory.Exists(reportDir))
@@ -5037,17 +5036,6 @@ namespace OpenDental
             formQP.ShowDialog();
         }
 
-        private void menuItemWebForm_Click(object sender, EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormWebFormSetup formWFS = new FormWebFormSetup();
-            formWFS.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Web Forms Setup");
-        }
-
         #endregion
 
         #region Lists
@@ -5403,7 +5391,7 @@ namespace OpenDental
             //the image path should exist.
             FormReportCustom FormR = new FormReportCustom();
             FormR.SourceFilePath =
-                ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(), Preference.GetString(PreferenceName.ReportFolderName), ((MenuItem)sender).Text + ".rdl");
+                Storage.Default.CombinePath(Preference.GetString(PreferenceName.ReportFolderName), ((MenuItem)sender).Text + ".rdl");
             FormR.ShowDialog();
         }
 
@@ -5775,12 +5763,6 @@ namespace OpenDental
                 FormReqStudentsMany FormM = new FormReqStudentsMany();
                 FormM.ShowDialog();
             }
-        }
-
-        private void menuItemWebForms_Click(object sender, EventArgs e)
-        {
-            FormWebForms FormWF = new FormWebForms();
-            FormWF.Show();
         }
 
         private void menuItemWiki_Click(object sender, EventArgs e)
@@ -6513,7 +6495,7 @@ namespace OpenDental
         private void menuItemRemoteSupport_Click(object sender, EventArgs e)
         {
             //Check the installation directory for the GoToAssist corporate exe.
-            string fileGTA = CodeBase.ODFileUtils.CombinePaths(Application.StartupPath, "GoToAssist_Corporate_Customer_ver11_9.exe");
+            string fileGTA = Storage.Default.CombinePath(Application.StartupPath, "GoToAssist_Corporate_Customer_ver11_9.exe");
             try
             {
                 if (!File.Exists(fileGTA))

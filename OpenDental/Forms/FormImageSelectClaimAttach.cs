@@ -8,6 +8,8 @@ using System.Windows.Forms;
 using OpenDental.UI;
 using OpenDentBusiness;
 using CodeBase;
+using SLDental.Storage;
+using System.Drawing.Imaging;
 
 namespace OpenDental{
 	/// <summary></summary>
@@ -163,7 +165,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Error. Not using AtoZ images folder.");
 				return;
 			}
-			string patfolder=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());
+			string patfolder=ImageStore.GetPatientFolder(PatCur);
 				//ODFileUtils.CombinePaths(
 				//FormPath.GetPreferredImagePath(),PatCur.ImageFolder.Substring(0,1).ToUpper(),PatCur.ImageFolder);
 			//if(!Directory.Exists(patfolder)) {
@@ -175,16 +177,13 @@ namespace OpenDental{
 				MsgBox.Show(this,"Invalid file.  Only images may be attached, no other file format.");
 				return;
 			}
-			string oldPath=ODFileUtils.CombinePaths(patfolder,doc.FileName);
+			string oldPath= Storage.Default.CombinePath(patfolder,doc.FileName);
 			Random rnd=new Random();
 			string newName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()
 				+Path.GetExtension(oldPath);
 			string attachPath=EmailAttachment.GetAttachmentPath();
-			string newPath=ODFileUtils.CombinePaths(attachPath,newName);
-			if(CloudStorage.IsCloudStorage) {
-				oldPath=oldPath.Replace("\\","/");
-				newPath=newPath.Replace("\\","/");
-			}
+			string newPath= Storage.Default.CombinePath(attachPath,newName);
+
 			try {
 				if(ImageHelper.HasImageExtension(oldPath)) {
 					if(doc.CropH !=0
@@ -194,59 +193,32 @@ namespace OpenDental{
 						|| doc.DegreesRotated !=0
 						|| doc.IsFlipped
 						|| doc.WindowingMax !=0
-						|| doc.WindowingMin !=0
-						|| CloudStorage.IsCloudStorage) 
+						|| doc.WindowingMin !=0) 
 					{
 						//this does result in a significantly larger images size if jpg.  A later optimization would recompress it.
 						Bitmap bitmapold=null;
-						if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
-							bitmapold=(Bitmap)Bitmap.FromFile(oldPath);
-							Bitmap bitmapnew=ImageHelper.ApplyDocumentSettingsToImage(doc,bitmapold,ImageSettingFlags.ALL);
-							bitmapnew.Save(newPath);
-						}
-						else if(CloudStorage.IsCloudStorage) {
-                            // TODO: Fix me
 
-                            // //First, download the file. 
-                            // FormProgress FormP=new FormProgress();
-                            // FormP.DisplayText="Downloading Image...";
-                            // FormP.NumberFormat="F";
-                            // FormP.NumberMultiplication=1;
-                            // FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-                            // FormP.TickMS=1000;
-                            // OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(patfolder
-                            // 	,doc.FileName
-                            // 	,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-                            // FormP.ShowDialog();
-                            // if(FormP.DialogResult==DialogResult.Cancel) {
-                            // 	state.DoCancel=true;
-                            // 	return;
-                            // }
-                            // //Successfully downloaded, now do stuff with state.FileContent
-                            // FormP=new FormProgress();
-                            // FormP.DisplayText="Uploading Image for Claim Attach...";
-                            // FormP.NumberFormat="F";
-                            // FormP.NumberMultiplication=1;
-                            // FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-                            // FormP.TickMS=1000;
-                            // OpenDentalCloud.Core.TaskStateUpload state2=CloudStorage.UploadAsync(attachPath
-                            // 	,newName
-                            // 	,state.FileContent
-                            // 	,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-                            // FormP.ShowDialog();
-                            // if(FormP.DialogResult==DialogResult.Cancel) {
-                            // 	state2.DoCancel=true;
-                            // 	return;
-                            // }
-                            // //Upload was successful
+                        using (var stream = Storage.Default.OpenRead(oldPath))
+                        {
+                            bitmapold = new Bitmap(Image.FromStream(stream));
+
+                            Bitmap bitmapnew = ImageHelper.ApplyDocumentSettingsToImage(doc, bitmapold, ImageSettingFlags.ALL);
+                            using (var outputStream = Storage.Default.OpenWrite(newPath))
+                            {
+                                bitmapnew.Save(outputStream, ImageFormat.Png);
+                            }
                         }
+
+                            bitmapold = (Bitmap)Bitmap.FromFile(oldPath);
+							
+						
                     }
 					else {
-						File.Copy(oldPath,newPath);
+                        Storage.Default.CopyFile(oldPath,newPath);
 					}
 				}
 				else {
-					File.Copy(oldPath,newPath);
+                    Storage.Default.CopyFile(oldPath,newPath);
 				}
 				ClaimAttachNew=new ClaimAttach();
 				ClaimAttachNew.DisplayedFileName=Docs[gridMain.GetSelectedIndex()].FileName;

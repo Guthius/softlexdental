@@ -43,7 +43,7 @@ namespace OpenDental {
 
 		private void butRun_Click(object sender,EventArgs e) {
 			this.textLog.Text="";
-			string outFile=ODFileUtils.CombinePaths(textEligibilityFolder.Text,textEligibilityFile.Text);
+			string outFile= Path.Combine(textEligibilityFolder.Text,textEligibilityFile.Text);
 			if(File.Exists(outFile)) {
 				if(MessageBox.Show("The file at "+outFile+" already exists. Overwrite?","Overwrite File?",
 					MessageBoxButtons.YesNo)!=DialogResult.Yes) {

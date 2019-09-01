@@ -6,6 +6,7 @@ using CodeBase;
 using OpenDental.UI;
 using OpenDentBusiness;
 using System.Collections.Generic;
+using SLDental.Storage;
 
 namespace OpenDental {
 	public partial class FormEhrPatientExport:ODForm {
@@ -146,7 +147,7 @@ namespace OpenDental {
 				return;
 			}
 			DateTime dateNow=DateTime.Now;
-			string folderPath=ODFileUtils.CombinePaths(dlg.SelectedPath,(dateNow.Year+"_"+dateNow.Month+"_"+dateNow.Day));
+			string folderPath=Path.Combine(dlg.SelectedPath,(dateNow.Year+"_"+dateNow.Month+"_"+dateNow.Day));
 			if(Directory.Exists(folderPath)) {
 				int loopCount=1;
 				while(Directory.Exists(folderPath+"_"+loopCount)) {
@@ -198,7 +199,7 @@ namespace OpenDental {
 				fileName+="_"+patCur.PatNum;  //LName_FName_PatNum
 				string ccd=EhrCCD.GeneratePatientExport(patCur);
 				try {
-					File.WriteAllText(ODFileUtils.CombinePaths(folderPath,fileName+".xml"),ccd);
+                    Storage.Default.WriteAllText(Storage.Default.CombinePath(folderPath,fileName+".xml"),ccd);
 				}
 				catch {
 					MessageBox.Show("Error, Could not create xml file");
@@ -211,7 +212,7 @@ namespace OpenDental {
 				return;//Don't display "Exported" to the user because the CCD was not exported.
 			}
 			try {
-				File.WriteAllText(ODFileUtils.CombinePaths(folderPath,"CCD.xsl"),FormEHR.GetEhrResource("CCD"));
+                Storage.Default.WriteAllText(Storage.Default.CombinePath(folderPath,"CCD.xsl"),FormEHR.GetEhrResource("CCD"));
 			}
 			catch {
 				MessageBox.Show("Error, Could not create stylesheet file");

@@ -1,28 +1,23 @@
+using CodeBase;
+using OpenDental.UI;
+using OpenDentBusiness;
+using SLDental.Storage;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Drawing.Design;
 using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Drawing.Text;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
-using OpenDentBusiness;
-using CodeBase;
-using OpenDental.UI;
-using System.Threading;
-using OpenDentBusiness.WebTypes.WebForms;
-using System.Net;
-using System.Globalization;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
-namespace OpenDental {
-	public partial class FormSheetDefEdit:ODForm {
+namespace OpenDental
+{
+    public partial class FormSheetDefEdit:ODForm {
 		private SheetDef _sheetDefCur;
 		public bool IsInternal;
 		private bool MouseIsDown;
@@ -52,8 +47,6 @@ namespace OpenDental {
 		private Image _toothChart;
 		private bool _hasChartSealantComplete;
 		private bool _hasChartSealantTreatment;
-		///<summary>If the sheet def is linked to any web sheets, this will hold those web sheet defs.</summary>
-		private List<WebForms_SheetDef> _listWebSheetDefs;
 		private object _lock=new object();
 		///<summary>Set to true if the web forms have been downloaded or if an error occurred.</summary>
 		private bool _hasSheetsDownloaded=false;
@@ -218,18 +211,6 @@ namespace OpenDental {
 			if(_sheetDefCur.HasMobileLayout) { //Always open the mobile editor since they want to use the mobile layout.
 				sheetEditMobile.ShowHideModeless(true,_sheetDefCur.Description,this);
 			}
-			ODThread threadGetWebSheetId=new ODThread(GetWebSheetDefs);
-			threadGetWebSheetId.AddExceptionHandler(new ODThread.ExceptionDelegate((Exception ex) => {
-				//So that the main thread will know the worker thread is done getting the web sheet defs.
-				_hasSheetsDownloaded=true;
-			}));
-			threadGetWebSheetId.AddExitHandler(new ODThread.WorkerDelegate((ODThread o) => {
-				//So that the main thread will know the worker thread is done getting the web sheet defs.
-				_hasSheetsDownloaded=true;
-			}));
-			threadGetWebSheetId.Name="GetWebSheetIdThread";
-			threadGetWebSheetId.Start(true);
-			//textDescription.Focus();
 		}
 
 		///<summary>If areDashboardWidgetOptionsEnabled, only certain buttons will show, including DashboardWidget specific buttons.  Otherwise, 
@@ -295,20 +276,6 @@ namespace OpenDental {
 					break;
 				default:
 					break;
-			}
-		}
-
-		///<summary>Fills _listWebSheetIds with any webforms_sheetdefs that have the same SheetDefNum of the current SheetDef.</summary>
-		private void GetWebSheetDefs(ODThread odThread) {
-			//Ignore the certificate errors for the staging machine and development machine
-			if(Preference.GetString(PreferenceName.WebHostSynchServerURL).In(WebFormL.SynchUrlStaging,WebFormL.SynchUrlDev)) {
-				WebFormL.IgnoreCertificateErrors();
-			}
-			List<WebForms_SheetDef> listWebFormSheetDefs;
-			if(WebForms_SheetDefs.TryDownloadSheetDefs(out listWebFormSheetDefs)) {
-				lock(_lock) {
-					_listWebSheetDefs=listWebFormSheetDefs.Where(x => x.SheetDefNum==_sheetDefCur.SheetDefNum).ToList();
-				}
 			}
 		}
 
@@ -800,57 +767,43 @@ namespace OpenDental {
 			);
 		}
 
-		private void DrawImagesHelper(SheetFieldDef sheetFieldDef,Graphics g) {
-			string filePathAndName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),sheetFieldDef.FieldName);
-			Image img=null;
-			if(sheetFieldDef.ImageField!=null) {//The image has already been downloaded.
-				img=new Bitmap(sheetFieldDef.ImageField);
-			}
-			else if(sheetFieldDef.FieldName=="Patient Info.gif") {
-				img=OpenDentBusiness.Properties.Resources.Patient_Info;
-			}
-			else if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ && File.Exists(filePathAndName)) {
-				img=Image.FromFile(filePathAndName);
-			}
-			else if(CloudStorage.IsCloudStorage)
-            { // TODO: Fix me
-              //	FormProgress FormP=new FormProgress();
-              //	FormP.DisplayText=Lan.g(CloudStorage.LanThis,"Downloading...");
-              //	FormP.NumberFormat="F";
-              //	FormP.NumberMultiplication=1;
-              //	FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-              //	FormP.TickMS=1000;
-              //	OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(SheetUtil.GetImagePath(),sheetFieldDef.FieldName,
-              //		new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-              //	if(FormP.ShowDialog()==DialogResult.Cancel) {
-              //		state.DoCancel=true;
-              //		return;
-              //	}
-              //	if(state==null || state.FileContent==null) {
-              //		img=null;
-              //	}
-              //	else {
-              //		using(MemoryStream stream=new MemoryStream(state.FileContent)) {
-              //			img=new Bitmap(Image.FromStream(stream));
-              //			sheetFieldDef.ImageField=new Bitmap(Image.FromStream(stream));//So it doesn't have to be downloaded again the next time.
-              //		}
-              //	}
+        private void DrawImagesHelper(SheetFieldDef sheetFieldDef, Graphics g)
+        {
+            string filePathAndName = Path.Combine(SheetUtil.GetImagePath(), sheetFieldDef.FieldName);
+            Image img = null;
+
+            if (sheetFieldDef.ImageField != null)
+            {
+                img = new Bitmap(sheetFieldDef.ImageField);
             }
-			else {
+            else if (sheetFieldDef.FieldName == "Patient Info.gif")
+            {
+                img = OpenDentBusiness.Properties.Resources.Patient_Info;
+            }
+            else if (Storage.Default.FileExists(filePathAndName))
+            {
+                using (var stream = Storage.Default.OpenRead(filePathAndName))
+                {
+                    img = Image.FromStream(stream);
+                }
+            }
+            else
+            {
 #if DEBUG
-				g.DrawRectangle(new Pen(Brushes.IndianRed),sheetFieldDef.XPos,sheetFieldDef.YPos,sheetFieldDef.Width,sheetFieldDef.Height);
-				g.DrawString(Lan.g(this,"Cannot find image")+": "+sheetFieldDef.FieldName,Font,_argsDF.brush??Brushes.Black,sheetFieldDef.XPos,sheetFieldDef.YPos);
+                g.DrawRectangle(new Pen(Brushes.IndianRed), sheetFieldDef.XPos, sheetFieldDef.YPos, sheetFieldDef.Width, sheetFieldDef.Height);
+                g.DrawString("Cannot find image: " + sheetFieldDef.FieldName, Font, _argsDF.brush ?? Brushes.Black, sheetFieldDef.XPos, sheetFieldDef.YPos);
 #endif
-				return;
-			}
-			g.DrawImage(img,sheetFieldDef.XPos,sheetFieldDef.YPos,sheetFieldDef.Width,sheetFieldDef.Height);
+                return;
+            }
+            g.DrawImage(img, sheetFieldDef.XPos, sheetFieldDef.YPos, sheetFieldDef.Width, sheetFieldDef.Height);
 #if DEBUG
-			g.DrawRectangle(new Pen(Brushes.IndianRed),sheetFieldDef.XPos,sheetFieldDef.YPos,sheetFieldDef.Width,sheetFieldDef.Height);
+            g.DrawRectangle(new Pen(Brushes.IndianRed), sheetFieldDef.XPos, sheetFieldDef.YPos, sheetFieldDef.Width, sheetFieldDef.Height);
 #endif
-			if(img!=null) {
-				img.Dispose();
-			}
-		}
+            if (img != null)
+            {
+                img.Dispose();
+            }
+        }
 
 		private void DrawLineHelper(SheetFieldDef sheetFieldDef,Graphics g,bool isSelected) {
 			if(isSelected) {
@@ -2467,39 +2420,6 @@ namespace OpenDental {
 			return true;
 		}
 
-		///<summary>Updates the web sheet defs linked to this sheet def if the user agrees. Returns true if this sheet is okay to be saved to the 
-		///database.</summary>
-		private bool UpdateWebSheetDef() {
-			if(_sheetDefCur.IsNew) {
-				//There is no Web Form to sync because they just created this sheet def.
-				//Without this return we would show the user that this Sheet Def matches all web forms that are not yet linked to a valid Sheet Def.
-				return true;
-			}
-			Cursor=Cursors.WaitCursor;
-			while(!_hasSheetsDownloaded) {//The thread has not finished getting the list. 
-				Application.DoEvents();
-				Thread.Sleep(100);
-			}
-			Cursor=Cursors.Default;
-			if(_listWebSheetDefs==null || _listWebSheetDefs.Count==0) {//No web forms use this sheet def.
-				return true;
-			}
-			string message=Lan.g(this,"This Sheet Def is used by the following web "+(_listWebSheetDefs.Count==1?"form":"forms"))+":\r\n"
-				+string.Join("\r\n",_listWebSheetDefs.Select(x => x.Description))+"\r\n"
-				+Lan.g(this,"Do you want to update "+(_listWebSheetDefs.Count==1?"that web form":"those web forms")+"?");
-			if(MessageBox.Show(message,"",MessageBoxButtons.YesNo)==DialogResult.No) {
-				return true;
-			}
-			if(!WebFormL.VerifyRequiredFieldsPresent(_sheetDefCur)) {
-				return false;
-			}
-			Cursor=Cursors.WaitCursor;
-			WebFormL.LoadImagesToSheetDef(_sheetDefCur);
-			bool isSuccess=WebFormL.TryAddOrUpdateSheetDef(this,_sheetDefCur,false,_listWebSheetDefs);
-			Cursor=Cursors.Default;
-			return isSuccess;
-		}
-		
 		private void linkLabelTips_LinkClicked(object sender,LinkLabelLinkClickedEventArgs e) {
 			if(IsTabMode) {
 				return;
@@ -2747,9 +2667,6 @@ namespace OpenDental {
 				return;
 			}
 			if(!sheetEditMobile.MergeMobileSheetFieldDefs(_sheetDefCur,true,new Action<string>((err) => { MsgBox.Show(this,err); }))) {
-				return;
-			}
-			if(!UpdateWebSheetDef()) {
 				return;
 			}
 			SheetDefs.InsertOrUpdate(_sheetDefCur);

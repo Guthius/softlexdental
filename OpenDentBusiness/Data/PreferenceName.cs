@@ -1613,11 +1613,11 @@ namespace OpenDentBusiness
         ///<summary>DEPRECATED.  Used by OD HQ.  Not added to db convert script.  No UI to change this value.
         ///Determines how often in milliseconds that WebCamOD should capture and send a picture to the phone table.
         ///If this value is manually changed, all Web Cams need to be restarted for the change to take effect.</summary>
-        WebCamFrequencyMS,
+        [Obsolete] WebCamFrequencyMS,
         ///<summary>Boolean.  1 by default.  Determines whether or not the checkbox in FormWebFormSetup is checked by default.</summary>
-        WebFormsAutoFillNameAndBirthdate,
+        [Obsolete] WebFormsAutoFillNameAndBirthdate,
         ///<summary>Only used for sheet synch.  See Mobile... for URL for mobile synch.</summary>
-        WebHostSynchServerURL,
+        [Obsolete] WebHostSynchServerURL,
         ///<summary>The template that will be used for Web Sched automation when a reminder for multiple recalls is sent to the same phone number. There
         ///is no UI to change this preference.</summary>
         WebSchedAggregatedTextMessage,

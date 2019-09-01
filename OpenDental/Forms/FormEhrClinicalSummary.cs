@@ -10,6 +10,7 @@ using OpenDentBusiness;
 using CodeBase;
 using System.Xml;
 using OpenDental.UI;
+using SLDental.Storage;
 
 namespace OpenDental {
 	public partial class FormEhrClinicalSummary:ODForm {
@@ -60,7 +61,7 @@ namespace OpenDental {
 				return;
 			}
 			FolderBrowserDialog dlg=new FolderBrowserDialog();
-			dlg.SelectedPath=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());//Default to patient image folder.
+			dlg.SelectedPath=ImageStore.GetPatientFolder(PatCur);//Default to patient image folder.
 			DialogResult result=dlg.ShowDialog();
 			if(result!=DialogResult.OK) {
 				return;
@@ -117,15 +118,14 @@ namespace OpenDental {
 				attachCcd.Description="ccd.xml";
 				attachCcd.FileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".xml";
 				listAttachments.Add(attachCcd);
-				FileAtoZ.WriteAllText(FileAtoZ.CombinePaths(attachPath,attachCcd.FileName),FormEEC.CCD,"Uploading Attachment for Clinical Summary...");			
-				EmailAttachment attachSs=new EmailAttachment();//Style sheet attachment.
+                Storage.Default.WriteAllText(Storage.Default.CombinePath(attachPath,attachCcd.FileName),FormEEC.CCD);            // TODO: Status = "Uploading Attachment for Clinical Summary..."
+                EmailAttachment attachSs=new EmailAttachment();//Style sheet attachment.
 				attachSs.Description="ccd.xsl";
 				attachSs.FileName=attachCcd.FileName.Substring(0,attachCcd.FileName.Length-4)+".xsl";//Same base name as the CCD.  The base names must match or the file will not display properly in internet browsers.
 				listAttachments.Add(attachSs);
-				FileAtoZ.WriteAllText(FileAtoZ.CombinePaths(attachPath,attachSs.FileName),FormEHR.GetEhrResource("CCD"),
-					"Uploading Attachment for Clinical Summary...");
-				//Create and save the webmail message containing the attachments.
-				EmailMessage msgWebMail=new EmailMessage();				
+                Storage.Default.WriteAllText(Storage.Default.CombinePath(attachPath,attachSs.FileName),FormEHR.GetEhrResource("CCD")); // TODO: Status = "Uploading Attachment for Clinical Summary..."
+                                                                                                                                       //Create and save the webmail message containing the attachments.
+                EmailMessage msgWebMail=new EmailMessage();				
 				msgWebMail.FromAddress=prov.GetFormalName();
 				msgWebMail.ToAddress=PatCur.GetNameFL();
 				msgWebMail.PatientId=PatCur.PatNum;

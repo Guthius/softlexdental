@@ -206,7 +206,7 @@ namespace OpenDental {
 							versionID=input.textResult.Text;
 						}
 						//Add a new thread. We will run these all in parallel once we have them all queued.
-						UpdateCodeSystemThread.Add(ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),meduFileName),
+						UpdateCodeSystemThread.Add(Path.Combine(Preferences.GetTempFolderPath(),meduFileName),
 							_listCodeSystems[gridMain.SelectedIndices[i]],new UpdateCodeSystemThread.UpdateCodeSystemArgs(UpdateCodeSystemThread_UpdateSafe),
 							versionID,!checkKeepDescriptions.Checked);
 						//We got this far so the local file was retreived successfully. No initial status to report.
@@ -829,7 +829,7 @@ If the master term dictionary or software program containing the UCUM table, UCU
 					using(ZipFile unzipped=ZipFile.Read(zipFileDestination)) {
 						ZipEntry ze=unzipped[0];
 						ze.Extract(Preferences.GetTempFolderPath(),ExtractExistingFileAction.OverwriteSilently);
-						return ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),unzipped[0].FileName);
+						return Path.Combine(Preferences.GetTempFolderPath(),unzipped[0].FileName);
 					}
 				}
 				finally{

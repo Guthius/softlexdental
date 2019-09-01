@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using CodeBase;
 using OpenDentBusiness;
+using SLDental.Storage;
 
 namespace OpenDental{
 	///<summary></summary>
@@ -1081,7 +1082,7 @@ namespace OpenDental{
 				//Delete the archived copy of the statement
 				if(StmtCur.DocNum!=0){
 					Patient pat=Patients.GetPat(StmtCur.PatNum);
-					string patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
+					string patFolder=ImageStore.GetPatientFolder(pat);
 					List<Document> listdocs=new List<Document>();
 					listdocs.Add(Documents.GetByNum(StmtCur.DocNum,true));
 					try {
@@ -1129,8 +1130,8 @@ namespace OpenDental{
 			//check if file is available to print if it was already created.  Does not affect first time printing.
 			if(StmtCur.DocNum!=0 && checkIsSent.Checked) {
 				Patient pat=Patients.GetPat(StmtCur.PatNum);
-				string patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
-				if(!FileAtoZ.Exists(ImageStore.GetFilePath(Documents.GetByNum(StmtCur.DocNum),patFolder))) { 
+				string patFolder=ImageStore.GetPatientFolder(pat);
+				if(!Storage.Default.FileExists(ImageStore.GetFilePath(Documents.GetByNum(StmtCur.DocNum),patFolder))) { 
 					MsgBox.Show(this,"File not found: " + Documents.GetByNum(StmtCur.DocNum).FileName);
 					return;
 				}
@@ -1215,7 +1216,7 @@ namespace OpenDental{
 					SheetFiller.FillFields(sheet,dataSet,StmtCur);
 					SheetUtil.CalculateHeights(sheet,dataSet,StmtCur);
 				}
-				tempPath=ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),StmtCur.PatNum.ToString()+".pdf");
+				tempPath= Storage.Default.CombinePath(Preferences.GetTempFolderPath(),StmtCur.PatNum.ToString()+".pdf");
 				SheetPrinting.CreatePdf(sheet,tempPath,StmtCur,dataSet,null);
 			}
 			else {
@@ -1363,7 +1364,7 @@ namespace OpenDental{
 			sheet.Parameters.Add(new SheetParameter(true,"Statement") { ParamValue=StmtCur });
 			SheetFiller.FillFields(sheet,dataSet,StmtCur);
 			SheetUtil.CalculateHeights(sheet,dataSet,StmtCur);
-			string tempPath=ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),StmtCur.PatNum.ToString()+".pdf");
+			string tempPath= Storage.Default.CombinePath(Preferences.GetTempFolderPath(),StmtCur.PatNum.ToString()+".pdf");
 			SheetPrinting.CreatePdf(sheet,tempPath,StmtCur,dataSet,null);
 			long category=0;
 			for(int i=0;i<_listImageCatDefs.Count;i++) {
@@ -1408,55 +1409,13 @@ namespace OpenDental{
 			string attachPath=EmailAttachment.GetAttachmentPath();
 			Random rnd=new Random();
 			string fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
-			string filePathAndName=ODFileUtils.CombinePaths(attachPath,fileName);
-			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase){
-				MsgBox.Show(this,"Could not create email because no AtoZ folder.");
-				return false;
-			}
+			string filePathAndName= Storage.Default.CombinePath(attachPath,fileName);
 			Patient pat=Patients.GetPat(StmtCur.PatNum);
 			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
-				string oldPath=ODFileUtils.CombinePaths(ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath()),Documents.GetByNum(StmtCur.DocNum).FileName);
-				File.Copy(oldPath,filePathAndName);
+				string oldPath= Storage.Default.CombinePath(ImageStore.GetPatientFolder(pat),Documents.GetByNum(StmtCur.DocNum).FileName);
+                Storage.Default.CopyFile(oldPath,filePathAndName);
 			}
-			else {//Cloud
-
-                // TODO: Fix me
-
-                // FormProgress FormP=new FormProgress();
-                // FormP.DisplayText="Downloading patient statement...";
-                // FormP.NumberFormat="F";
-                // FormP.NumberMultiplication=1;
-                // FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-                // FormP.TickMS=1000;
-                // OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath())
-                // 	,Documents.GetByNum(StmtCur.DocNum).FileName
-                // 	,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-                // if(FormP.ShowDialog()==DialogResult.Cancel) {
-                // 	state.DoCancel=true;
-                // 	return false;
-                // }
-                // else {
-                // 	//Do stuff with state.FileContent
-                // 	FormP=new FormProgress();
-                // 	FormP.DisplayText="Uploading patient email...";
-                // 	FormP.NumberFormat="F";
-                // 	FormP.NumberMultiplication=1;
-                // 	FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-                // 	FormP.TickMS=1000;
-                // 	OpenDentalCloud.Core.TaskStateUpload state2=CloudStorage.UploadAsync(attachPath
-                // 		,fileName
-                // 		,state.FileContent
-                // 		,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-                // 	if(FormP.ShowDialog()==DialogResult.Cancel) {
-                // 		state2.DoCancel=true;
-                // 		return false;
-                // 	}
-                // 	else {
-                // 		//Upload was successful
-                // 	}
-                // }
-            }
-            //Process.Start(filePathAndName);
+            Storage.Default.OpenFile(filePathAndName);
             EmailMessage message=Statements.GetEmailMessageForStatement(StmtCur,pat);
 			EmailAttachment attach=new EmailAttachment();
 			attach.Description="Statement.pdf";
@@ -1549,15 +1508,15 @@ namespace OpenDental{
 
 		///<summary>Opens the saved PDF for the document.</summary>
 		private void LaunchArchivedPdf(Patient patCur) {
-			string patFolder=ImageStore.GetPatientFolder(patCur,ImageStore.GetPreferredAtoZpath());
+			string patFolder=ImageStore.GetPatientFolder(patCur);
 			Document doc=Documents.GetByNum(StmtCur.DocNum);
 			string fileName=ImageStore.GetFilePath(doc,patFolder);
-			if(!FileAtoZ.Exists(fileName)) {
-				MessageBox.Show(Lan.g(this,"File not found:")+" "+doc.FileName);
+			if(!Storage.Default.FileExists(fileName)) {
+				MessageBox.Show("File not found: "+doc.FileName);
 				return;
 			}
 			try {
-				FileAtoZ.StartProcess(fileName);
+                Storage.Default.OpenFile(fileName);
 			}
 			catch(Exception ex) {
                 FormFriendlyException.Show($"Unable to open the following file: {doc.FileName}",ex);
@@ -1866,7 +1825,7 @@ namespace OpenDental{
 					//deleted the pdf
 					pat=Patients.GetPat(StmtCur.PatNum);
 					try {
-						patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
+						patFolder=ImageStore.GetPatientFolder(pat);
 						List<Document> listdocs=new List<Document>();
 						listdocs.Add(Documents.GetByNum(StmtCur.DocNum,true));
 						ImageStore.DeleteDocuments(listdocs,patFolder);
@@ -1885,7 +1844,7 @@ namespace OpenDental{
 						//deleted the pdf
 						pat=Patients.GetPat(StmtList[i].PatNum);
 						try {
-							patFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
+							patFolder=ImageStore.GetPatientFolder(pat);
 							List<Document> listdocs=new List<Document>();
 							listdocs.Add(Documents.GetByNum(StmtList[i].DocNum,true));
 							ImageStore.DeleteDocuments(listdocs,patFolder);

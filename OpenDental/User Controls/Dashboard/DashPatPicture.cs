@@ -30,7 +30,7 @@ namespace OpenDental {
 				long newDocNum=PIn.Long(sheetField.FieldValue);
 				if(_docPatPicture==null || newDocNum!=_docPatPicture.DocNum) {
 					_docPatPicture=Documents.GetByNum(newDocNum,true);
-					Bitmap fullImage=ImageHelper.GetFullImage(_docPatPicture,ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath()));
+					Bitmap fullImage=ImageHelper.GetFullImage(_docPatPicture,ImageStore.GetPatientFolder(pat));
 					_patPicture=ImageHelper.GetThumbnail(fullImage,Math.Min(sheetField.Width,sheetField.Height));
 					fullImage.Dispose();
 				}

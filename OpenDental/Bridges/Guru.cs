@@ -155,7 +155,7 @@ namespace OpenDental.Bridges {
 				pat.ImageFolder=pat.LName+pat.FName+pat.PatNum;
 				Patients.Update(pat,patOld);
 			}
-			string imagePath=CodeBase.ODFileUtils.CombinePaths(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Guru image path"),pat.ImageFolder);
+			string imagePath=Path.Combine(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Guru image path"),pat.ImageFolder);
 			mvPatient.Directory = Tidy(imagePath,259);
 			if(MVSendPatient(mvPatient) != 0) {
 				MsgBox.Show("Guru","An error has occured.");

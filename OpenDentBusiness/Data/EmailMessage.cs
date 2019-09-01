@@ -663,7 +663,6 @@ namespace OpenDentBusiness
         {
             // TODO: Fix this...
 
-
             if (emailMessage.Attachments.IsNullOrEmpty())
             {
                 return null;
@@ -674,19 +673,8 @@ namespace OpenDentBusiness
 
             foreach (var emailAttachment in emailMessage.Attachments)
             {
-                string attachFullPath;
-
-                if (CloudStorage.IsCloudStorage)
-                {
-                    OpenDentalCloud.Core.TaskStateDownload state = CloudStorage.Download(attachmentPath, emailAttachment.FileName);
-                    attachFullPath = Preferences.GetRandomTempFile(Path.GetExtension(emailAttachment.FileName));
-                    File.WriteAllBytes(attachFullPath, state.FileContent);
-                }
-                else
-                {
-                    attachFullPath = Path.Combine(attachmentPath, emailAttachment.FileName);
-                }
-
+                string attachFullPath = Path.Combine(attachmentPath, emailAttachment.FileName);
+                
                 attachmentPathList.Add(new Tuple<string, string>(attachFullPath, emailAttachment.Description));
             }
             return attachmentPathList;

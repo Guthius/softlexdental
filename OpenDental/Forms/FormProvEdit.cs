@@ -11,6 +11,7 @@ using System.Linq;
 using CodeBase;
 using System.Data;
 using System.Text;
+using SLDental.Storage;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -1670,7 +1671,7 @@ namespace OpenDental{
 			if(string.IsNullOrEmpty(ProvCur.WebSchedImageLocation)) {
 				return;
 			}
-			string fullImagePath=FileAtoZ.CombinePaths(ImageStore.GetProviderImagesFolder(),ProvCur.WebSchedImageLocation);
+			string fullImagePath= Storage.Default.CombinePath(ImageStore.GetProviderImagesFolder(),ProvCur.WebSchedImageLocation);
 			try {
 				pictureWebSched.Image=FileAtoZ.GetImage(fullImagePath);
 			}
@@ -1779,11 +1780,11 @@ namespace OpenDental{
 				MsgBox.Show(this,"Only allowed to import an image.");
 				return;
 			}
-			string atoZFileName=FileAtoZ.CombinePaths(ImageStore.GetProviderImagesFolder(),Path.GetFileName(localFileName));
-			if(FileAtoZ.Exists(atoZFileName)) {
+			string atoZFileName= Storage.Default.CombinePath(ImageStore.GetProviderImagesFolder(),Path.GetFileName(localFileName));
+			if(Storage.Default.FileExists(atoZFileName)) {
 				int attempts=1;
 				string newAtoZFileName=FileAtoZ.AppendSuffix(atoZFileName,"_"+attempts);
-				while(FileAtoZ.Exists(newAtoZFileName)) {
+				while(Storage.Default.FileExists(newAtoZFileName)) {
 					if(attempts++ > 1000) {
 						MsgBox.Show(this,"Unable to upload image.");
 						return;

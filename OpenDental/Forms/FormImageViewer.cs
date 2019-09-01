@@ -10,6 +10,7 @@ using OpenDental.UI;
 using OpenDentBusiness;
 using System.Collections.Generic;
 using OpenDental.Properties;
+using SLDental.Storage;
 
 namespace OpenDental{
 	///<summary>Eventually, the user will be able to edit some image display settings and do a Documents.UpdateCur, but they can't actually make changes to the image.</summary>
@@ -154,8 +155,8 @@ namespace OpenDental{
 			displayedDoc=thisDocument;
 			List<long> docNums=new List<long>();
 			docNums.Add(thisDocument.DocNum);
-			string fileName=CloudStorage.PathTidy(Documents.GetPaths(docNums,ImageStore.GetPreferredAtoZpath())[0]);
-			if(!FileAtoZ.Exists(fileName)) {
+			string fileName=Documents.GetPaths(docNums, "")[0];
+			if(!Storage.Default.FileExists(fileName)) {
 				MessageBox.Show(fileName+" +"+Lan.g(this,"could not be found."));
 				return;
 			}

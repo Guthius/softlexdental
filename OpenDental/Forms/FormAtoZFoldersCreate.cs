@@ -8,6 +8,7 @@ using System.Security.AccessControl;
 using System.Windows.Forms;
 using CodeBase;
 using OpenDentBusiness;
+using SLDental.Storage;
 
 namespace OpenDental{
 	/// <summary>
@@ -174,7 +175,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Location does not exist.");
 				return;
 			}
-			if(Directory.Exists(ODFileUtils.CombinePaths(textLocation.Text,textName.Text))) {
+			if(Directory.Exists(Storage.Default.CombinePath(textLocation.Text,textName.Text))) {
 				MsgBox.Show(this,"Folder already exists.");
 				return;
 			}
@@ -184,7 +185,7 @@ namespace OpenDental{
 				ds.AddAccessRule(fsar);
 				string requestDir=textLocation.Text;
 				string rootFolderName=textName.Text;
-				string rootDir=ODFileUtils.CombinePaths(requestDir,rootFolderName);
+				string rootDir= Storage.Default.CombinePath(requestDir,rootFolderName);
 				//Enable file sharing for the A to Z folder.
 				if(Environment.OSVersion.Platform==PlatformID.Unix) {
 					//Process.Start("net","usershare add OpenDentImages \""+rootDir+"\"");//for future use.
@@ -201,7 +202,7 @@ namespace OpenDental{
 				};
 				//Create A to Z folders in root folder.
 				for(int i=0;i<aToZFolderNames.Length;i++) {
-					string pathToCreate=ODFileUtils.CombinePaths(rootDir,aToZFolderNames[i]);
+					string pathToCreate= Storage.Default.CombinePath(rootDir,aToZFolderNames[i]);
 					if(!Directory.Exists(pathToCreate)) {
 						// Mono does support Directory.CreateDirectory(string, DirectorySecurity)
 #if !LINUX

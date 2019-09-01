@@ -260,11 +260,11 @@ namespace OpenDental
                 Bitmap patPict;
                 if (_loadData.HasPatPict == YN.Unknown)
                 {
-                    Documents.GetPatPict(PatCur.PatNum, ImageStore.GetPatientFolder(PatCur, ImageStore.GetPreferredAtoZpath()), out patPict);
+                    Documents.GetPatPict(PatCur.PatNum, ImageStore.GetPatientFolder(PatCur), out patPict);
                 }
                 else
                 {
-                    Documents.GetPatPict(PatCur.PatNum, ImageStore.GetPatientFolder(PatCur, ImageStore.GetPreferredAtoZpath()), _loadData.PatPict, out patPict);
+                    Documents.GetPatPict(PatCur.PatNum, ImageStore.GetPatientFolder(PatCur), _loadData.PatPict, out patPict);
                 }
                 patientPictureBox.Image = patPict;
             }

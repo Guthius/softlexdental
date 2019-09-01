@@ -108,7 +108,7 @@ namespace OpenDentBusiness.Eclaims {
 				MessageBox.Show(saveFolder+" "+Lans.g("Dutch","not found."));
 				return false;
 			}
-			string saveFile=ODFileUtils.CombinePaths(saveFolder,"claims"+claim.ClaimNum.ToString()+".txt");
+			string saveFile=Path.Combine(saveFolder,"claims"+claim.ClaimNum.ToString()+".txt");
 			File.WriteAllText(saveFile,strb.ToString());
 			//MessageBox.Show(strb.ToString());
 			return true;

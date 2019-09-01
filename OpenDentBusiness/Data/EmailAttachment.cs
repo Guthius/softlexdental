@@ -8,6 +8,7 @@
  *   This file is covered by the LICENSE file in the root of this project.   *
  *===========================================================================*/
 using MySql.Data.MySqlClient;
+using SLDental.Storage;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -166,43 +167,43 @@ namespace OpenDentBusiness
 
             if (string.IsNullOrEmpty(emailAttachment.Description)) emailAttachment.Description = "[Attachment]";
 
-            string attachmentPath = FileSystem.Combine(GetAttachmentPath(), outbound ? "Out" : "In");
-            if (!FileSystem.DirectoryExists(attachmentPath))
+            string attachmentPath = Storage.Default.CombinePath(GetAttachmentPath(), outbound ? "Out" : "In");
+            if (!Storage.Default.DirectoryExists(attachmentPath))
             {
-                FileSystem.CreateDirectory(attachmentPath);
+                Storage.Default.CreateDirectory(attachmentPath);
             }
 
             if (string.IsNullOrEmpty(fileName))
             {
-                while (string.IsNullOrEmpty(emailAttachment.FileName) || FileSystem.FileExists(FileSystem.Combine(attachmentPath, emailAttachment.FileName)))
+                while (string.IsNullOrEmpty(emailAttachment.FileName) || Storage.Default.FileExists(Storage.Default.CombinePath(attachmentPath, emailAttachment.FileName)))
                 {
                     emailAttachment.FileName =
-                        Path.Combine(attachmentPath,
+                        Storage.Default.CombinePath(attachmentPath,
                             DateTime.UtcNow.ToString("yyyyMMdd") + "_" + DateTime.UtcNow.TimeOfDay.Ticks.ToString() + "_" + emailAttachment.Description);
                 }
             }
             else
             {
-                emailAttachment.FileName = FileSystem.Combine(attachmentPath, fileName);
+                emailAttachment.FileName = Storage.Default.CombinePath(attachmentPath, fileName);
             }
 
-            string attachmentFilePath = FileSystem.Combine(attachmentPath, emailAttachment.FileName);
-            if (FileSystem.FileExists(attachmentFilePath))
+            string attachmentFilePath = Storage.Default.CombinePath(attachmentPath, emailAttachment.FileName);
+            if (Storage.Default.FileExists(attachmentFilePath))
             {
                 throw new DataException("Email attachment could not be saved because a file with the same name already exists.");
             }
 
             try
             {
-                FileSystem.WriteAllBytes(attachmentFilePath, fileContent);
+                Storage.Default.WriteAllBytes(attachmentFilePath, fileContent);
             }
             catch (Exception exception)
             {
                 try
                 {
-                    if (FileSystem.FileExists(attachmentFilePath))
+                    if (Storage.Default.FileExists(attachmentFilePath))
                     {
-                        FileSystem.Delete(attachmentFilePath);
+                        Storage.Default.DeleteFile(attachmentFilePath);
                     }
                 }
                 catch
@@ -220,22 +221,10 @@ namespace OpenDentBusiness
         /// <returns>The storage path for attachments.</returns>
         public static string GetAttachmentPath()
         {
-            string attachmentPath;
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+            var attachmentPath = Storage.Default.CombinePath("EmailAttachments");
+            if (!Storage.Default.DirectoryExists(attachmentPath))
             {
-                attachmentPath = Path.Combine(ImageStore.GetPreferredAtoZpath(), "EmailAttachments");
-                if (!Directory.Exists(attachmentPath))
-                {
-                    Directory.CreateDirectory(attachmentPath);
-                }
-            }
-            else if (CloudStorage.IsCloudStorage)
-            {
-                attachmentPath = Path.Combine(ImageStore.GetPreferredAtoZpath(), "EmailAttachments");
-            }
-            else
-            {
-                attachmentPath = Path.Combine(Path.GetTempPath(), "OpenDental");
+                Storage.Default.CreateDirectory(attachmentPath);
             }
 
             return attachmentPath;

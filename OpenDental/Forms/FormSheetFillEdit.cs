@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using CodeBase;
 using OpenDental.UI;
 using OpenDentBusiness;
+using SLDental.Storage;
 
 namespace OpenDental {
 	public delegate void SaveStatementToDocDelegate(Statement stmt,Sheet sheet,string pdfFileName="");
@@ -1075,28 +1076,20 @@ namespace OpenDental {
 			}
 			//Format Email
 			fileName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf";
-			filePathAndName=FileAtoZ.CombinePaths(attachPath,fileName);
-			string pdfFile;
-			if(CloudStorage.IsCloudStorage) {
-				pdfFile=Preferences.GetRandomTempFile("pdf");
-			}
-			else {
-				pdfFile=filePathAndName;
-			}
+			filePathAndName= Storage.Default.CombinePath(attachPath,fileName);
+			string pdfFile=filePathAndName;
+			
 			if(!string.IsNullOrEmpty(_tempPdfFile) && File.Exists(_tempPdfFile)) {
-				if(CloudStorage.IsCloudStorage) {
-					pdfFile=_tempPdfFile;
-				}
-				else {
-					File.Copy(_tempPdfFile,pdfFile);
-				}
+
+                Storage.Default.CopyFile(_tempPdfFile,pdfFile);
+				
 			}
 			else {
 				SheetPrinting.CreatePdf(SheetCur,pdfFile,Stmt,MedLabCur);
 			}
-			if(CloudStorage.IsCloudStorage) {
-				FileAtoZ.Copy(pdfFile,filePathAndName,FileAtoZSourceDestination.LocalToAtoZ);
-			}
+			
+				FileAtoZ.Copy(pdfFile,filePathAndName);
+			
 			message=new EmailMessage();
 			message.Subject=subject;
 			string shortFileName=Regex.Replace(SheetCur.Description.ToString(), @"[^\w'@-_()&]", "");

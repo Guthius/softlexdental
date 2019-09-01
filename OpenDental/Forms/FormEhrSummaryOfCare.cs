@@ -7,6 +7,7 @@ using OpenDentBusiness;
 using CodeBase;
 using System.Xml;
 using OpenDental.UI;
+using SLDental.Storage;
 
 namespace OpenDental {
 	public partial class FormEhrSummaryOfCare:ODForm {
@@ -124,7 +125,7 @@ namespace OpenDental {
 				xslContents=FormEHR.GetEhrResource("CCD");
 				if(xslContents=="") { //XSL load from EHR dll failed so see if caller provided an alternative
 					if(strAlterateFilPathXslCCD!="") { //alternative XSL file was provided so use that for our stylesheet
-						xslContents=FileAtoZ.ReadAllText(strAlterateFilPathXslCCD);
+						xslContents= Storage.Default.ReadAllText(strAlterateFilPathXslCCD);
 					}
 				}
 				if(xslContents=="") { //one last check to see if we succeeded in finding a stylesheet
@@ -152,12 +153,12 @@ namespace OpenDental {
 			}
 			File.WriteAllText(Path.Combine(Preferences.GetTempFolderPath(),xmlFileName),doc.InnerXml.ToString());
 			File.WriteAllText(Path.Combine(Preferences.GetTempFolderPath(),xslFileName),xslContents);
-			FormEhrSummaryCcdEdit formESCD=new FormEhrSummaryCcdEdit(ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),xmlFileName),patCur);
+			FormEhrSummaryCcdEdit formESCD=new FormEhrSummaryCcdEdit(Storage.Default.CombinePath(Preferences.GetTempFolderPath(),xmlFileName),patCur);
 			formESCD.ShowDialog();
 			string[] arrayFileNames={"ccd.xml","ccd.xsl","ccr.xml","ccr.xsl"};
 			for(int i=0;i<arrayFileNames.Length;i++) {
 				try {
-					File.Delete(ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),arrayFileNames[i]));
+					File.Delete(Storage.Default.CombinePath(Preferences.GetTempFolderPath(),arrayFileNames[i]));
 				}
 				catch {
 					//Do nothing because the file could have been in use or there were not sufficient permissions.
@@ -186,7 +187,7 @@ namespace OpenDental {
 				return;
 			}
 			FolderBrowserDialog dlg=new FolderBrowserDialog();
-			dlg.SelectedPath=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());//Default to patient image folder.
+			dlg.SelectedPath=ImageStore.GetPatientFolder(PatCur);//Default to patient image folder.
 			DialogResult result=dlg.ShowDialog();
 			if(result!=DialogResult.OK) {
 				return;

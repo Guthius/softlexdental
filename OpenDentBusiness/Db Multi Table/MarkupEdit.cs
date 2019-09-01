@@ -1,4 +1,5 @@
 ﻿using CodeBase;
+using SLDental.Storage;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -79,33 +80,6 @@ namespace OpenDentBusiness
 			}
 		}
 
-		///<summary>Converts an image markup tag like [[img:myimage.jpeg]] to html.</summary>
-		private static string TranslateEmailImages(string s) {	
-				//[[img:myimage.jpg]]------------------------------------------------------------------------------------------------------------
-				MatchCollection matches=Regex.Matches(s,@"\[\[(img:).+?\]\]");
-				foreach(Match match in matches) {
-					string imgName=match.Value.Substring(match.Value.IndexOf(":")+1).TrimEnd("]".ToCharArray());
-					string imagePath="";
-					try {
-						imagePath=ImageStore.GetEmailImagePath();
-					}
-					catch {
-						
-						throw;
-					}
-					string fullPath=FileSystem.CombinePaths(imagePath,POut.String(imgName));
-					if(CloudStorage.IsCloudStorage) {				
-						//WebBrowser needs to have a local file to open, so we download the images to temp files.	
-						OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.Download(Path.GetDirectoryName(fullPath),Path.GetFileName(fullPath));
-						string tempFile=Preferences.GetRandomTempFile(Path.GetExtension(fullPath));
-						File.WriteAllBytes(tempFile,state.FileContent);
-						fullPath=tempFile;
-					}
-					s=s.Replace(match.Value,"<img src=\""+fullPath+"\"></img>");//"\" />");
-				}
-				return s;
-		}
-
         ///<summary>Surround with try/catch.  Also aggregates the content into the master page (unless specified to not).  
         ///If isPreviewOnly, then the internal links will not be checked to see if the page exists, as it would make the refresh sluggish.  
         ///And isPreviewOnly also changes the pointer so that the page looks non-clickable.
@@ -129,38 +103,8 @@ namespace OpenDentBusiness
             }
             #endregion
             #region regex replacements
-            if (isEmail)
-            {
-                s = TranslateEmailImages(s);//handle email images and wiki images separately.
-            }
-            else
-            {
-                //[[img:myimage.gif]]------------------------------------------------------------------------------------------------------------
-                matches = Regex.Matches(s, @"\[\[(img:).+?\]\]");
-                foreach (Match match in matches)
-                {
-                    string imgName = match.Value.Substring(match.Value.IndexOf(":") + 1).TrimEnd("]".ToCharArray());
-                    string wikiPath = "";
-                    try
-                    {
-                        wikiPath = WikiPages.GetWikiPath();
-                    }
-                    catch
-                    {
 
-                        throw;
-                    }
-                    string fullPath = FileSystem.CombinePaths(wikiPath, POut.String(imgName));
-                    if (CloudStorage.IsCloudStorage)
-                    {
-                        //WebBrowser needs to have a local file to open, so we download the images to temp files.	
-                        OpenDentalCloud.Core.TaskStateDownload state = CloudStorage.Download(Path.GetDirectoryName(fullPath), Path.GetFileName(fullPath));
-                        string tempFile = Preferences.GetRandomTempFile(Path.GetExtension(fullPath));
-                        File.WriteAllBytes(tempFile, state.FileContent);
-                        fullPath = tempFile;
-                    }
-                    s = s.Replace(match.Value, "<img src=\"file:///" + fullPath.Replace("\\", "/") + "\"></img>");
-                }
+
                 //[[keywords: key1, key2, etc.]]------------------------------------------------------------------------------------------------
                 matches = Regex.Matches(s, @"\[\[(keywords:).*?\]\]");
                 foreach (Match match in matches)
@@ -185,17 +129,17 @@ namespace OpenDentBusiness
                 matches = Regex.Matches(s, @"\[\[(filecloud:).*?\]\]");
                 foreach (Match match in matches)
                 {
-                    string fileName = CloudStorage.PathTidy(match.Value.Replace("[[filecloud:", "").TrimEnd(']'));
+                    string fileName = match.Value.Replace("[[filecloud:", "").TrimEnd(']');
                     s = s.Replace(match.Value, "<a href=\"wikifilecloud:" + fileName + "\">filecloud:" + fileName + "</a>");
                 }
                 //[[foldercloud:AtoZ/PenguinPictures/]]------------------------------------------------------------------------------------------------
                 matches = Regex.Matches(s, @"\[\[(foldercloud:).*?\]\]");
                 foreach (Match match in matches)
                 {
-                    string folderName = CloudStorage.PathTidy(match.Value.Replace("[[foldercloud:", "").TrimEnd(']'));
+                    string folderName = match.Value.Replace("[[foldercloud:", "").TrimEnd(']');
                     s = s.Replace(match.Value, "<a href=\"foldercloud:" + folderName + "\">foldercloud:" + folderName + "</a>");
                 }
-            }
+            
             //Color and text are for both wiki and email. It's important we do this before Internal Link or else the translation may not work. 
             //[[color:red|text]]----------------------------------------------------------------------------------------------------------------
             matches = Regex.Matches(s, @"\[\[(color:).*?\]\]");//.*? matches as few as possible.

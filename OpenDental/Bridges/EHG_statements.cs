@@ -405,7 +405,7 @@ namespace OpenDental.Bridges {
 			}
 			string strHistoryFile="";
 			if(Preference.GetBool(PreferenceName.BillingElectSaveHistory)) {
-				string strHistoryDir=CodeBase.ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"EHG_History");
+				string strHistoryDir="EHG_History";
 				if(!Directory.Exists(strHistoryDir)) {
 					Directory.CreateDirectory(strHistoryDir);
 				}

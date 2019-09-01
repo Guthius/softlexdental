@@ -5,8 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using CodeBase;
-using OpenDentalCloud;
-using OpenDentalCloud.Core;
 
 namespace OpenDentBusiness
 {
@@ -177,7 +175,8 @@ namespace OpenDentBusiness
             }
             if (doTestConnection)
             {
-                return Sftp.IsConnectionValid(sftpAddress, userName, userPassword, sftpPort);
+                // TODO: Fix...
+                //return Sftp.IsConnectionValid(sftpAddress, userName, userPassword, sftpPort);
             }
             return true;
         }
@@ -294,14 +293,14 @@ namespace OpenDentBusiness
             try
             {
                 byte[] fileContents = Encoding.ASCII.GetBytes(TsiMsgConstructor.GetUpdateFileHeader() + "\r\n" + msg);
-                TaskStateUpload state = new Sftp.Upload(sftpAddress, userName, userPassword, sftpPort)
-                {
-                    Folder = "/xfer/incoming",
-                    FileName = "TsiUpdates_" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".txt",
-                    FileContent = fileContents,
-                    HasExceptions = true
-                };
-                state.Execute(false);
+                //TaskStateUpload state = new Sftp.Upload(sftpAddress, userName, userPassword, sftpPort)
+                //{
+                //    Folder = "/xfer/incoming",
+                //    FileName = "TsiUpdates_" + DateTime.Now.ToString("yyyyMMddhhmmss") + ".txt",
+                //    FileContent = fileContents,
+                //    HasExceptions = true
+                //};
+                //state.Execute(false);
             }
             catch (Exception ex)
             {

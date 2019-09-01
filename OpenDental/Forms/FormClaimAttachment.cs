@@ -150,7 +150,7 @@ namespace OpenDental {
 		}
 
 		private void buttonAddImage_Click(object sender,EventArgs e) {
-			string patFolder=ImageStore.GetPatientFolder(_claimPat,ImageStore.GetPreferredAtoZpath());
+			string patFolder=ImageStore.GetPatientFolder(_claimPat);
 			OpenFileDialog fileDialog=new OpenFileDialog();
 			fileDialog.Multiselect=false;
 			fileDialog.InitialDirectory=patFolder;

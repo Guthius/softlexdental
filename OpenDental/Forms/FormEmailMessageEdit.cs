@@ -25,7 +25,7 @@ namespace OpenDental
             InitializeComponent();// Required for Windows Form Designer support
 
             _isDeleteAllowed = isDeleteAllowed;
-            _emailMessage = emailMessage.Copy();
+            _emailMessage = emailMessage;
 
 
             emailPreview.EmailAddressPreview = emailAddress;
@@ -252,14 +252,16 @@ namespace OpenDental
             string autographEmail;
             for (int i = 0; i < _listEmailAutographs.Count; i++)
             {
-                autographEmail = EmailMessage.GetAddressSimple(_listEmailAutographs[i].EmailAddress.Trim());
-                //Use Contains() because an autograph can theoretically have multiple email addresses associated with it.
-                if ((!string.IsNullOrWhiteSpace(emailUserName) && autographEmail.Contains(emailUserName))
-                    || (!string.IsNullOrWhiteSpace(emailSender) && autographEmail.Contains(emailSender)))
-                {
-                    InsertAutograph(_listEmailAutographs[i]);
-                    break;
-                }
+                // TODO: Fix...
+                //autographEmail = EmailMessage.GetAddressSimple(_listEmailAutographs[i].EmailAddress.Trim());
+                ////Use Contains() because an autograph can theoretically have multiple email addresses associated with it.
+                //if (
+                //    (!string.IsNullOrWhiteSpace(emailUserName) && autographEmail.Contains(emailUserName)) || 
+                //    (!string.IsNullOrWhiteSpace(emailSender) && autographEmail.Contains(emailSender)))
+                //{
+                //    InsertAutograph(_listEmailAutographs[i]);
+                //    break;
+                //}
             }
         }
 

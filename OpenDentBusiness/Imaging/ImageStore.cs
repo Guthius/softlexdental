@@ -1,688 +1,232 @@
-using CodeBase;
+using SLDental.Storage;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
 
 namespace OpenDentBusiness
 {
-    /// <summary></summary>
     public class ImageStore
     {
-        ///<summary>Remembers the computerpref.AtoZpath.  Set to empty string on startup.  If set to something else, this path will override all other paths.</summary>
-        public static string LocalAtoZpath = null;
-
-        ///<summary>Only makes a call to the database on startup.  After that, just uses cached data.  
-        ///Does not validate that the path exists except if the main one is used.  ONLY used from Client layer or S class methods that have
-        ///"No need to check RemotingRole; no call to db" and which also make sure PrefC.AtoZfolderUsed.
-        ///Returns Cloud AtoZ path if CloudStorage.IsCloudStorage</summary>
-        public static string GetPreferredAtoZpath()
+        public static string GetPatientFolder(Patient patient)
         {
-            if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
+            var path = "0";
+
+            string name = string.Concat(patient.LName, patient.FName);
+            for (int i = 0; i < name.Length; i++)
             {
-                return null;
+                if (char.IsLetter(name[i]))
+                {
+                    path = char.ToUpper(name[i]).ToString();
+
+                    break;
+                }
             }
-            else if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+
+            path = Storage.Default.CombinePath("Patients", path, patient.PatNum.ToString().PadLeft(8, '0'));
+            if (!Storage.Default.DirectoryExists(path))
             {
-                if (LocalAtoZpath == null)
-                {//on startup
-                    try
-                    {
-                        LocalAtoZpath = ComputerPrefs.LocalComputer.AtoZpath;
-                    }
-                    catch
-                    {//fails when loading plugins after switching to version 15.1 because of schema change.
-                        LocalAtoZpath = "";
-                    }
-                }
-                //Override path.  Because it overrides all other paths, we evaluate it first.
-                if (!string.IsNullOrEmpty(LocalAtoZpath))
+                try
                 {
-                    return LocalAtoZpath;
+                    Storage.Default.CreateDirectory(path);
                 }
-                string replicationAtoZ = ReplicationServers.GetAtoZpath();
-                if (!string.IsNullOrEmpty(replicationAtoZ))
+                catch
                 {
-                    return replicationAtoZ;
+                    throw new Exception("Error.  Could not create folder for patient: " + path);
                 }
-                //use this to handle possible multiple paths separated by semicolons.
-                return GetValidPathFromString(Preference.GetString(PreferenceName.DocPath));
             }
-            //If you got here you are using a cloud storage method.
-            return CloudStorage.AtoZPath;
+
+            return path;
         }
 
-        public static string GetValidPathFromString(string documentPaths)
+        private static string CreateDirectoryIfNotExists(string path)
         {
-            // TODO: Fix me... create the A-Z structure...
-            string[] preferredPathsByOrder = documentPaths.Split(new char[] { ';' });
-            for (int i = 0; i < preferredPathsByOrder.Length; i++)
+            if (!string.IsNullOrEmpty(path))
             {
-                string path = preferredPathsByOrder[i];
-                string tryPath = ODFileUtils.CombinePaths(path, "A");
-                //if(Directory.Exists(tryPath)) {
-                return path;
-                //}
+                if (!Storage.Default.DirectoryExists(path))
+                {
+                    Storage.Default.CreateDirectory(path);
+                }
             }
+            return path;
+        }
+
+        /// <summary>
+        /// Will create folder if needed.  Will validate that folder exists.
+        /// </summary>
+        public static string GetEobFolder() => CreateDirectoryIfNotExists("EOBs");
+
+        ///<summary>Will create folder if needed.  Will validate that folder exists.</summary>
+        public static string GetAmdFolder() => CreateDirectoryIfNotExists("Amendments");
+
+        /// <summary>
+        /// Gets the folder name where provider images are stored. Will create folder if needed.
+        /// </summary>
+        public static string GetProviderImagesFolder() => CreateDirectoryIfNotExists("ProviderImages");
+
+        public static string GetEmailImagePath() => CreateDirectoryIfNotExists("EmailImages");
+
+        public static void AddMissingFilesToDatabase(Patient patient)
+        {
+            // Scans the patient folder and scans for files that are not in the database and imports them automatically.
+
+        }
+
+        public static string GetHashString(Document document, string patientPath)
+        {
+            var bytes = Storage.Default.ReadAllBytes(Storage.Default.CombinePath(patientPath, document.FileName));
+
+            using (var sha1 = SHA1.Create())
+            {
+                var hash = sha1.ComputeHash(bytes);
+
+                var stringBuilder = new StringBuilder(hash.Length * 2);
+                foreach (var b in hash)
+                {
+                    stringBuilder.Append(b.ToString("x2"));
+                }
+
+                return stringBuilder.ToString();
+            }
+        }
+
+        public static IEnumerable<Image> OpenImages(IEnumerable<Document> documents, string patientPath)
+        {
+            foreach (var document in documents)
+            {
+                if (document != null)
+                {
+                    yield return OpenImage(document, patientPath);
+                }
+            }
+        }
+
+        public static Image OpenImage(Document document, string patientPath)
+        {
+            string path = Storage.Default.CombinePath(patientPath, document.FileName);
+
+            if (HasImageExtension(path))
+            {
+                using (var stream = Storage.Default.OpenRead(path))
+                {
+                    return Image.FromStream(stream);
+                }
+            }
+
             return null;
         }
 
-        ///<summary>Throw exceptions. Returns patient's AtoZ folder if local AtoZ used, blank if database is used, 
-        ///or Cloud AtoZ path if CloudStorage.IsCloudStorage. Will validate that folder exists. Will create folder if needed. 
-        ///It will set the pat.ImageFolder if pat.ImageFolder is blank.</summary>
-        public static string GetPatientFolder(Patient pat, string AtoZpath)
+        public static IEnumerable<Image> OpenImagesEob(EobAttach eob)
         {
-            string retVal = "";
-            if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
+            string path = Storage.Default.CombinePath(GetEobFolder(), eob.FileName);
+
+            if (HasImageExtension(path))
             {
-                return retVal;
-            }
-            if (CloudStorage.IsCloudStorage)
-            {
-                AtoZpath = CloudStorage.AtoZPath;
-            }
-            Patient PatOld = pat.Copy();
-            if (string.IsNullOrEmpty(pat.ImageFolder))
-            {//creates new folder for patient if none present
-                string name = pat.LName + pat.FName;
-                string folder = "";
-                for (int i = 0; i < name.Length; i++)
+                if (Storage.Default.FileExists(path))
                 {
-                    if (Char.IsLetter(name, i))
+                    using (var stream = Storage.Default.OpenRead(path))
                     {
-                        folder += name.Substring(i, 1);
+                        yield return Image.FromStream(stream);
                     }
                 }
-                folder += pat.PatNum.ToString();//ensures unique name
-                pat.ImageFolder = folder;
+                else
+                {
+                    throw new ApplicationException("File not found: " + path);
+                }
             }
-            if (CloudStorage.IsCloudStorage)
+        }
+
+        public static IEnumerable<Image> OpenImagesAmd(EhrAmendment amd)
+        {
+            string path = Storage.Default.CombinePath(GetAmdFolder(), amd.FileName);
+
+            if (HasImageExtension(path))
             {
-                retVal = ODFileUtils.CombinePaths(AtoZpath,
-                    pat.ImageFolder.Substring(0, 1).ToUpper(),
-                    pat.ImageFolder, '/');//use '/' char instead of Path.DirectorySeparatorChar
+                if (Storage.Default.FileExists(path))
+                {
+                    using (var stream = Storage.Default.OpenRead(path))
+                    {
+                        yield return Image.FromStream(stream);
+                    }
+                }
+                else
+                {
+                    throw new ApplicationException("File not found: " + path);
+                }
             }
-            else if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+        }
+
+        public static Document Import(string importFileName, long docCategory, Patient patient)
+        {
+            string patientPath = GetPatientFolder(patient);
+            
+            var document = new Document();
+            if (Path.GetExtension(importFileName) == "")
             {
-                retVal = ODFileUtils.CombinePaths(AtoZpath,
-                    pat.ImageFolder.Substring(0, 1).ToUpper(),
-                    pat.ImageFolder);//use Path.DirectorySeparatorChar
                 try
                 {
-                    if (string.IsNullOrEmpty(AtoZpath))
+                    using (var stream = Storage.Default.OpenRead(Storage.Default.CombinePath(patientPath, importFileName)))
                     {
-                        //If AtoZpath parameter was null or empty string and DataStorageType is LocalAtoZ, don't create a directory since retVal would then be
-                        //considered a relative path. Example: If AtoZpath is null, retVal will be like "P\PatientAustin1" after ODFileUtils.CombinePaths.
-                        //CreateDirectory treats this as a relative path and the full path would be "C:\Program Files (x86)\Open Dental\P\PatientAustin1".
-                        throw new ApplicationException();
+                        var image = Image.FromStream(stream);
                     }
-                    if (!Directory.Exists(retVal))
-                    {
-                        Directory.CreateDirectory(retVal);
-                    }
+
+                    document.FileName = ".jpg";
                 }
                 catch
                 {
-                    throw new ApplicationException(Lans.g("ContrDocs", "Error.  Could not create folder for patient:") + " " + retVal);
-                }
-            }
-            if (string.IsNullOrEmpty(PatOld.ImageFolder))
-            {
-                Patients.Update(pat, PatOld);
-            }
-            return retVal;
-        }
-
-        ///<summary>Will create folder if needed.  Will validate that folder exists.</summary>
-        public static string GetEobFolder()
-        {
-            string retVal = "";
-            if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
-            {
-                return retVal;
-            }
-            string AtoZPath = GetPreferredAtoZpath();
-            retVal = ODFileUtils.CombinePaths(AtoZPath, "EOBs");
-            if (CloudStorage.IsCloudStorage)
-            {
-                retVal = retVal.Replace("\\", "/");
-            }
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(retVal))
-            {
-                if (string.IsNullOrEmpty(AtoZPath))
-                {
-                    throw new ApplicationException(Lans.g("ContrDocs", "Could not find the path for the AtoZ folder."));
-                }
-                Directory.CreateDirectory(retVal);
-            }
-            return retVal;
-        }
-
-        ///<summary>Will create folder if needed.  Will validate that folder exists.</summary>
-        public static string GetAmdFolder()
-        {
-            string retVal = "";
-            if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
-            {
-                return retVal;
-            }
-            string AtoZPath = GetPreferredAtoZpath();
-            retVal = ODFileUtils.CombinePaths(AtoZPath, "Amendments");
-            if (CloudStorage.IsCloudStorage)
-            {
-                retVal = retVal.Replace("\\", "/");
-            }
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(retVal))
-            {
-                if (string.IsNullOrEmpty(AtoZPath))
-                {
-                    throw new ApplicationException(Lans.g("ContrDocs", "Could not find the path for the AtoZ folder."));
-                }
-                Directory.CreateDirectory(retVal);
-            }
-            return retVal;
-        }
-
-        ///<summary>Gets the folder name where provider images are stored. Will create folder if needed.</summary>
-        public static string GetProviderImagesFolder()
-        {
-            string retVal = "";
-            if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
-            {
-                return retVal;
-            }
-            string AtoZPath = GetPreferredAtoZpath();
-            retVal = FileSystem.CombinePaths(AtoZPath, "ProviderImages");
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(retVal))
-            {
-                if (string.IsNullOrEmpty(AtoZPath))
-                {
-                    throw new ApplicationException(Lans.g("ContrDocs", "Could not find the path for the AtoZ folder."));
-                }
-                Directory.CreateDirectory(retVal);
-            }
-            return retVal;
-        }
-
-        ///<summary>Surround with try/catch.  Typically returns something similar to \\SERVER\OpenDentImages\EmailImages.
-        ///This is the location of the email html template images.  The images are stored in this central location in order to
-        ///make them reusable on multiple email messages.  These images are not patient specific, therefore are in a different
-        ///location than the email attachments.  For location of patient attachments, see EmailAttaches.GetAttachPath().</summary>
-        public static string GetEmailImagePath()
-        {
-            //No need to check RemotingRole; no call to db.
-            string emailPath;
-            if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
-            {
-                throw new ApplicationException(Lans.g("WikiPages", "Must be using AtoZ folders."));
-            }
-            emailPath = FileSystem.CombinePaths(GetPreferredAtoZpath(), "EmailImages");
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(emailPath))
-            {
-                Directory.CreateDirectory(emailPath);
-            }
-            return emailPath;
-        }
-
-        ///<summary>When the Image module is opened, this loads newly added files.</summary>
-        public static void AddMissingFilesToDatabase(Patient pat)
-        {
-            //There is no such thing as adding files from any directory when not using AtoZ
-            if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
-            {
-                return;
-            }
-            string patFolder = GetPatientFolder(pat, GetPreferredAtoZpath());
-            List<string> fileList = new List<string>();
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
-            {
-                DirectoryInfo di = new DirectoryInfo(patFolder);
-                List<FileInfo> fiList = di.GetFiles().Where(x => !x.Attributes.HasFlag(FileAttributes.Hidden)).ToList();
-                fileList.AddRange(fiList.Select(x => x.FullName));
-            }
-            else
-            {//Cloud
-                OpenDentalCloud.Core.TaskStateListFolders state = CloudStorage.ListFolderContents(patFolder);
-                List<string> listFiles = state.ListFolderPathsDisplay;
-                List<Document> listDocs = Documents.GetAllWithPat(pat.PatNum).ToList();
-                listFiles = listFiles.Select(x => Path.GetFileName(x)).ToList();
-                foreach (string fileName in listFiles)
-                {
-                    if (!listDocs.Exists(x => x.FileName == fileName))
-                    {
-                        fileList.Add(fileName);
-                    }
-                }
-            }
-            int countAdded = Documents.InsertMissing(pat, fileList);//Automatically detects and inserts files that are in the patient's folder that aren't present in the database. Logs entries.
-                                                                    //should notify user
-                                                                    //if(countAdded > 0) {
-                                                                    //	Debug.WriteLine(countAdded.ToString() + " documents found and added to the first category.");
-                                                                    //}
-                                                                    //it will refresh in FillDocList
-        }
-
-        public static string GetHashString(Document doc, string patFolder)
-        {
-            //the key data is the bytes of the file, concatenated with the bytes of the note.
-            byte[] textbytes;
-            byte[] filebytes = new byte[1];
-            if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
-            {
-                patFolder = ODFileUtils.CombinePaths(Path.GetTempPath(), "opendental");
-                byte[] rawData = Convert.FromBase64String(doc.RawBase64);
-                using (FileStream file = new FileStream(ODFileUtils.CombinePaths(patFolder, doc.FileName), FileMode.Create, FileAccess.Write))
-                {
-                    file.Write(rawData, 0, rawData.Length);
-                    file.Close();
-                }
-            }
-            else if (CloudStorage.IsCloudStorage)
-            {
-                OpenDentalCloud.Core.TaskStateDownload state = CloudStorage.Download(patFolder.Replace("\\", "/")
-                    , doc.FileName);
-                filebytes = state.FileContent;
-            }
-            if (doc.Note == null)
-            {
-                textbytes = Encoding.UTF8.GetBytes("");
-            }
-            else
-            {
-                textbytes = Encoding.UTF8.GetBytes(doc.Note);
-            }
-            if (CloudStorage.IsCloudStorage)
-            {
-                filebytes = GetBytes(doc, patFolder);
-            }
-            if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
-            {
-                try
-                {
-                    File.Delete(ODFileUtils.CombinePaths(patFolder, doc.FileName));//Delete temp file
-                }
-                catch { }//Should never happen since the file was just created and the permissions were there moments ago when the file was created.
-            }
-            int fileLength = filebytes.Length;
-            byte[] buffer = new byte[textbytes.Length + filebytes.Length];
-            Array.Copy(filebytes, 0, buffer, 0, fileLength);
-            Array.Copy(textbytes, 0, buffer, fileLength, textbytes.Length);
-
-            using (MD5 sha1 = MD5.Create())
-            {
-                var hash = sha1.ComputeHash(buffer);
-                var sb = new StringBuilder(hash.Length * 2);
-
-                foreach (byte b in hash)
-                {
-                    sb.Append(b.ToString("X2"));
-                }
-
-                return sb.ToString();
-            }
-        }
-
-        public static Collection<Bitmap> OpenImages(IList<Document> documents, string patFolder, string localPath = "")
-        {
-            //string patFolder=GetPatientFolder(pat);
-            Collection<Bitmap> bitmaps = new Collection<Bitmap>();
-            foreach (Document document in documents)
-            {
-                if (document == null)
-                {
-                    bitmaps.Add(null);
-                }
-                else
-                {
-                    bitmaps.Add(OpenImage(document, patFolder, localPath));
-                }
-            }
-            return bitmaps;
-        }
-
-        public static Bitmap[] OpenImages(Document[] documents, string patFolder, string localPath = "")
-        {
-            Bitmap[] values = new Bitmap[documents.Length];
-            Collection<Bitmap> bitmaps = OpenImages(new Collection<Document>(documents), patFolder, localPath);
-            bitmaps.CopyTo(values, 0);
-            return values;
-        }
-
-        public static Bitmap OpenImage(Document doc, string patFolder, string localPath = "")
-        {
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
-            {
-                string srcFileName = ODFileUtils.CombinePaths(patFolder, doc.FileName);
-                if (HasImageExtension(srcFileName))
-                {
-                    //if(File.Exists(srcFileName) && HasImageExtension(srcFileName)) {
-                    try
-                    {
-                        return new Bitmap(srcFileName);
-                    }
-                    catch
-                    {
-                        return null;
-                    }
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            else if (CloudStorage.IsCloudStorage)
-            {
-                if (HasImageExtension(doc.FileName))
-                {
-                    Bitmap bmp = null;
-                    if (localPath != "")
-                    {
-                        bmp = new Bitmap(localPath);
-                    }
-                    else
-                    {
-                        try
-                        {
-                            OpenDentalCloud.Core.TaskStateDownload state = CloudStorage.Download(patFolder.Replace("\\", "/")
-                                , doc.FileName, true);
-                            using (MemoryStream ms = new MemoryStream(state.FileContent))
-                            {
-                                bmp = new Bitmap(ms);
-                            }
-                        }
-                        catch
-                        {
-
-                        }
-                    }
-                    return bmp;
-                }
-                else
-                {
-                    return null;
+                    document.FileName = ".txt";
                 }
             }
             else
             {
-                if (HasImageExtension(doc.FileName))
-                {
-                    return PIn.Bitmap(doc.RawBase64);
-                }
-                else
-                {
-                    return null;
-                }
+                document.FileName = Path.GetExtension(importFileName);
             }
-        }
-
-        public static Bitmap[] OpenImagesEob(EobAttach eob, string localPath = "")
-        {
-            Bitmap[] values = new Bitmap[1];
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+            document.DateCreated = File.GetLastWriteTime(importFileName);
+            document.PatNum = patient.PatNum;
+            if (HasImageExtension(document.FileName))
             {
-                string eobFolder = GetEobFolder();
-                string srcFileName = ODFileUtils.CombinePaths(eobFolder, eob.FileName);
-                if (HasImageExtension(srcFileName))
-                {
-                    if (File.Exists(srcFileName))
-                    {
-                        try
-                        {
-                            values[0] = new Bitmap(srcFileName);
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new ApplicationException(Lans.g("ImageStore", "File found but could not be opened:") + " " + srcFileName, ex);
-                        }
-                    }
-                    else
-                    {
-                        throw new ApplicationException(Lans.g("ImageStore", "File not found:") + " " + srcFileName);
-                    }
-                }
-                else
-                {
-                    values[0] = null;
-                }
-            }
-            else if (CloudStorage.IsCloudStorage)
-            {
-                if (HasImageExtension(eob.FileName))
-                {
-                    Bitmap bmp = null;
-                    try
-                    {
-                        if (localPath != "")
-                        {
-                            bmp = new Bitmap(localPath);
-                        }
-                        else
-                        {
-                            OpenDentalCloud.Core.TaskStateDownload state = CloudStorage.Download(GetEobFolder()
-                            , eob.FileName);
-                            using (MemoryStream ms = new MemoryStream(state.FileContent))
-                            {
-                                bmp = new Bitmap(ms);
-                            }
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ApplicationException(Lans.g("ImageStore", "File could not be opened:") + " " + eob.FileName, ex);
-                    }
-                    values[0] = bmp;
-                }
-                else
-                {
-                    values[0] = null;
-                }
+                document.ImgType = ImageType.Photo;
             }
             else
             {
-                if (HasImageExtension(eob.FileName))
-                {
-                    values[0] = PIn.Bitmap(eob.RawBase64);
-                }
-                else
-                {
-                    values[0] = null;
-                }
+                document.ImgType = ImageType.Document;
             }
-            return values;
-        }
+            document.DocCategory = docCategory;
+            document = Documents.InsertAndGet(document, patient);
 
-        public static Bitmap[] OpenImagesAmd(EhrAmendment amd)
-        {
-            Bitmap[] values = new Bitmap[1];
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
-            {
-                string amdFolder = GetAmdFolder();
-                string srcFileName = ODFileUtils.CombinePaths(amdFolder, amd.FileName);
-                if (HasImageExtension(srcFileName))
-                {
-                    if (File.Exists(srcFileName))
-                    {
-                        try
-                        {
-                            values[0] = new Bitmap(srcFileName);
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new ApplicationException(Lans.g("ImageStore", "File found but could not be opened:") + " " + srcFileName, ex);
-                        }
-                    }
-                    else
-                    {
-                        throw new ApplicationException(Lans.g("ImageStore", "File not found:") + " " + srcFileName);
-                    }
-                }
-                else
-                {
-                    values[0] = null;
-                }
-            }
-            else if (CloudStorage.IsCloudStorage)
-            {
-                if (HasImageExtension(amd.FileName))
-                {
-                    try
-                    {
-                        OpenDentalCloud.Core.TaskStateDownload state = CloudStorage.Download(GetAmdFolder()
-                        , amd.FileName);
-                        Bitmap bmp = null;
-                        using (MemoryStream ms = new MemoryStream(state.FileContent))
-                        {
-                            bmp = new Bitmap(ms);
-                        }
-                        values[0] = bmp;
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new ApplicationException(Lans.g("ImageStore", "File could not be opened:") + " " + amd.FileName, ex);
-                    }
-                }
-                else
-                {
-                    values[0] = null;
-                }
-            }
-            else
-            {
-                if (HasImageExtension(amd.FileName))
-                {
-                    values[0] = PIn.Bitmap(amd.RawBase64);
-                }
-                else
-                {
-                    values[0] = null;
-                }
-            }
-            return values;
-        }
-
-        ///<summary>Takes in a mount object and finds all the images pertaining to the mount, then combines them together into one large, unscaled image and returns that image. For use in other modules.</summary>
-        public static Bitmap GetMountImage(Mount mount, string patFolder)
-        {
-            //string patFolder=GetPatientFolder(pat);
-            List<MountItem> mountItems = MountItems.GetItemsForMount(mount.MountNum);
-            Document[] documents = Documents.GetDocumentsForMountItems(mountItems);
-            Bitmap[] originalImages = OpenImages(documents, patFolder);
-            Bitmap mountImage = new Bitmap(mount.Width, mount.Height);
-            ImageHelper.RenderMountImage(mountImage, originalImages, mountItems, documents, -1);
-            return mountImage;
-        }
-
-        public static byte[] GetBytes(Document doc, string patFolder)
-        {
-            /*if(ImageStoreIsDatabase) {not supported
-				byte[] buffer;
-				using(IDbConnection connection = DataSettings.GetConnection())
-				using(IDbCommand command = connection.CreateCommand()) {
-					command.CommandText =	@"SELECT Data FROM files WHERE DocNum = ?DocNum";
-					IDataParameter docNumParameter = command.CreateParameter();
-					docNumParameter.ParameterName = "?DocNum";
-					docNumParameter.Value = doc.DocNum;
-					command.Parameters.Add(docNumParameter);
-					connection.Open();
-					buffer = (byte[])command.ExecuteScalar();
-					connection.Close();
-				}
-				return buffer;
-			}
-			else {*/
-            string path = ODFileUtils.CombinePaths(patFolder, doc.FileName);
-            if (!File.Exists(path))
-            {
-                return new byte[] { };
-            }
-            byte[] buffer;
-            using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                int fileLength = (int)fs.Length;
-                buffer = new byte[fileLength];
-                fs.Read(buffer, 0, fileLength);
-            }
-            return buffer;
-        }
-
-        /// <summary></summary>
-        public static Document Import(string pathImportFrom, long docCategory, Patient pat)
-        {
-            string patFolder = "";
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage)
-            {
-                patFolder = GetPatientFolder(pat, GetPreferredAtoZpath());
-            }
-            Document doc = new Document();
-            //Document.Insert will use this extension when naming:
-            if (Path.GetExtension(pathImportFrom) == "")
-            {//If the file has no extension
-                try
-                {
-                    Bitmap bmp = new Bitmap(pathImportFrom);//check to see if file is an image and add .jpg extension
-                    doc.FileName = ".jpg";
-                }
-                catch
-                {
-                    //catch the error and do nothing. Default the file to .txt to prevent errors.
-                    doc.FileName = ".txt";
-                }
-            }
-            else
-            {
-                doc.FileName = Path.GetExtension(pathImportFrom);
-            }
-            doc.DateCreated = File.GetLastWriteTime(pathImportFrom);
-            doc.PatNum = pat.PatNum;
-            if (HasImageExtension(doc.FileName))
-            {
-                doc.ImgType = ImageType.Photo;
-            }
-            else
-            {
-                doc.ImgType = ImageType.Document;
-            }
-            doc.DocCategory = docCategory;
-            doc = Documents.InsertAndGet(doc, pat);//this assigns a filename and saves to db
             try
             {
-                SaveDocument(doc, pathImportFrom, patFolder);//Makes log entry
-                if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
-                {
-                    Documents.Update(doc);//Because SaveDocument() modified doc.RawBase64
-                }
+                SaveDocument(document, importFileName, patientPath);
             }
             catch (Exception ex)
             {
-                Documents.Delete(doc);
+                Documents.Delete(document);
+
                 throw ex;
             }
-            return doc;
+            return document;
         }
 
-        /// <summary>Saves to AtoZ folder, Cloud, or to db.  Saves image as a jpg.  Compression will differ depending on imageType.</summary>
-        public static Document Import(Bitmap image, long docCategory, ImageType imageType, Patient pat, string fileName = "")
+        public static Document Import(Image image, long docCategory, ImageType imageType, Patient pat, string fileName = "")
         {
-            string patFolder = "";
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage)
+            string patFolder = GetPatientFolder(pat);
+
+            var document = new Document
             {
-                patFolder = GetPatientFolder(pat, GetPreferredAtoZpath());
-            }
-            Document doc = new Document();
-            doc.ImgType = imageType;
-            doc.FileName = fileName + ".jpg";
-            doc.DateCreated = DateTime.Now;
-            doc.PatNum = pat.PatNum;
-            doc.DocCategory = docCategory;
-            Documents.Insert(doc, pat);//creates filename and saves to db
-            doc = Documents.GetByNum(doc.DocNum);
-            long qualityL = 0;
+                ImgType = imageType,
+                FileName = fileName + ".jpg",
+                DateCreated = DateTime.Now,
+                PatNum = pat.PatNum,
+                DocCategory = docCategory
+            };
+
+            Documents.Insert(document, pat);
+
+            long qualityL;
             if (imageType == ImageType.Radiograph)
             {
                 qualityL = 100;
@@ -692,10 +236,10 @@ namespace OpenDentBusiness
                 qualityL = 100;
             }
             else
-            {//Assume document
-             //Possible values 0-100?
-                qualityL = (long)ComputerPrefs.LocalComputer.ScanDocQuality;
+            {
+                qualityL = ComputerPrefs.LocalComputer.ScanDocQuality;
             }
+
             ImageCodecInfo myImageCodecInfo;
             ImageCodecInfo[] encoders;
             encoders = ImageCodecInfo.GetImageEncoders();
@@ -710,108 +254,95 @@ namespace OpenDentBusiness
             EncoderParameters myEncoderParameters = new EncoderParameters(1);
             EncoderParameter myEncoderParameter = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, qualityL);
             myEncoderParameters.Param[0] = myEncoderParameter;
-            //AutoCrop()?
+
             try
             {
-                SaveDocument(doc, image, myImageCodecInfo, myEncoderParameters, patFolder);//Makes log entry
-                if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
-                {
-                    Documents.Update(doc);//because SaveDocument stuck the image in doc.RawBase64.
-                                          //no thumbnail yet
-                }
+                SaveDocument(document, image, myImageCodecInfo, myEncoderParameters, patFolder);
             }
             catch
             {
 
-                Documents.Delete(doc);
+                Documents.Delete(document);
+
                 throw;
             }
-            return doc;
+            return document;
         }
 
-        /// <summary>Obviously no support for db storage</summary>
-        public static Document ImportForm(string form, long docCategory, Patient pat)
+        public static Document ImportForm(string form, long docCategory, Patient patient)
         {
-            string patFolder = GetPatientFolder(pat, GetPreferredAtoZpath());
-            string pathSourceFile = CloudStorage.PathTidy(ODFileUtils.CombinePaths(GetPreferredAtoZpath(), "Forms", form));
-            if (!FileSystem.FileExists(pathSourceFile))
+            var formPath = Storage.Default.CombinePath("Forms", form);
+            if (!Storage.Default.FileExists(formPath))
             {
-                throw new Exception(Lans.g("ContrDocs", "Could not find file: ") + pathSourceFile);
+                throw new Exception("Could not find file: " + formPath);
             }
-            Document doc = new Document();
-            doc.FileName = Path.GetExtension(pathSourceFile);
-            doc.DateCreated = DateTime.Now;
-            doc.DocCategory = docCategory;
-            doc.PatNum = pat.PatNum;
-            doc.ImgType = ImageType.Document;
-            Documents.Insert(doc, pat);//this assigns a filename and saves to db
-            doc = Documents.GetByNum(doc.DocNum);
+
+            var document = new Document
+            {
+                FileName = Path.GetExtension(formPath),
+                DateCreated = DateTime.Now,
+                DocCategory = docCategory,
+                PatNum = patient.PatNum,
+                ImgType = ImageType.Document
+            };
+
+            Documents.Insert(document, patient);
             try
             {
-                if (CloudStorage.IsCloudStorage)
-                {
-                    //byte[] bytes=OpenDentBusiness.FileIO.FileAtoZ.ReadAllBytes(pathSourceFile);
-                    //OpenDentBusiness.FileIO.FileAtoZ.WriteAllBytes(CloudStorage.PathTidy(ODFileUtils.CombinePaths(patFolder,doc.FileName)),bytes);
-                    CloudStorage.Copy(pathSourceFile, CloudStorage.PathTidy(ODFileUtils.CombinePaths(patFolder, doc.FileName)));
-                    ImageStore.LogDocument(Lans.g("ContrImages", "Document Created") + ": ", Permissions.ImageEdit, doc, DateTime.MinValue); //new doc, min date.
-                }
-                else
-                {
-                    SaveDocument(doc, pathSourceFile, patFolder);//Makes log entry
-                }
+                SaveDocument(document, formPath, GetPatientFolder(patient));
             }
             catch
             {
-                Documents.Delete(doc);
+                Documents.Delete(document);
+
                 throw;
             }
-            return doc;
+            return document;
         }
 
-        /// <summary>Always saves as bmp.  So the 'paste to mount' logic needs to be changed to prevent conversion to bmp.</summary>
-        public static Document ImportImageToMount(Bitmap image, short rotationAngle, long mountItemNum, long docCategory, Patient pat)
+        public static Document ImportImageToMount(Bitmap image, short rotationAngle, long mountItemNum, long docCategory, Patient patient)
         {
-            string patFolder = GetPatientFolder(pat, GetPreferredAtoZpath());
-            string fileExtention = ".bmp";//The file extention to save the greyscale image as.
-            Document doc = new Document();
-            doc.MountItemNum = mountItemNum;
-            doc.DegreesRotated = rotationAngle;
-            doc.ImgType = ImageType.Radiograph;
-            doc.FileName = fileExtention;
-            doc.DateCreated = DateTime.Now;
-            doc.PatNum = pat.PatNum;
-            doc.DocCategory = docCategory;
-            doc.WindowingMin = Preference.GetInt(PreferenceName.ImageWindowingMin);
-            doc.WindowingMax = Preference.GetInt(PreferenceName.ImageWindowingMax);
-            Documents.Insert(doc, pat);//creates filename and saves to db
-            doc = Documents.GetByNum(doc.DocNum);
+            var document = new Document
+            {
+                MountItemNum = mountItemNum,
+                DegreesRotated = rotationAngle,
+                ImgType = ImageType.Radiograph,
+                FileName = ".bmp",
+                DateCreated = DateTime.Now,
+                PatNum = patient.PatNum,
+                DocCategory = docCategory,
+                WindowingMin = Preference.GetInt(PreferenceName.ImageWindowingMin),
+                WindowingMax = Preference.GetInt(PreferenceName.ImageWindowingMax)
+            };
+
+            Documents.Insert(document, patient);
             try
             {
-                SaveDocument(doc, image, ImageFormat.Bmp, patFolder);//Makes log entry
+                SaveDocument(document, image, ImageFormat.Bmp, GetPatientFolder(patient));
             }
             catch
             {
-                Documents.Delete(doc);
+                Documents.Delete(document);
+
                 throw;
             }
-            return doc;
+            return document;
         }
 
-        /// <summary>Saves to either AtoZ folder or to db.  Saves image as a jpg.  Compression will be according to user setting.</summary>
         public static EobAttach ImportEobAttach(Bitmap image, long claimPaymentNum)
         {
-            string eobFolder = "";
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage)
+            string eobFolder = GetEobFolder();
+
+            EobAttach eob = new EobAttach
             {
-                eobFolder = GetEobFolder();
-            }
-            EobAttach eob = new EobAttach();
-            eob.FileName = ".jpg";
-            eob.DateTCreated = DateTime.Now;
-            eob.ClaimPaymentNum = claimPaymentNum;
-            EobAttaches.Insert(eob);//creates filename and saves to db
-            eob = EobAttaches.GetOne(eob.EobAttachNum);
-            long qualityL = (long)ComputerPrefs.LocalComputer.ScanDocQuality;
+                FileName = ".jpg",
+                DateTCreated = DateTime.Now,
+                ClaimPaymentNum = claimPaymentNum
+            };
+            EobAttaches.Insert(eob);
+
+            long qualityL = ComputerPrefs.LocalComputer.ScanDocQuality;
+
             ImageCodecInfo myImageCodecInfo;
             ImageCodecInfo[] encoders;
             encoders = ImageCodecInfo.GetImageEncoders();
@@ -823,60 +354,51 @@ namespace OpenDentBusiness
                     myImageCodecInfo = encoders[j];
                 }
             }
+
             EncoderParameters myEncoderParameters = new EncoderParameters(1);
             EncoderParameter myEncoderParameter = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, qualityL);
             myEncoderParameters.Param[0] = myEncoderParameter;
+
             try
             {
                 SaveEobAttach(eob, image, myImageCodecInfo, myEncoderParameters, eobFolder);
-                if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
-                {
-                    EobAttaches.Update(eob);//because SaveEobAttach stuck the image in EobAttach.RawBase64.
-                                            //no thumbnail
-                }
-                //No security log for creation of EOB's because they don't show up in the images module.
             }
             catch
             {
                 EobAttaches.Delete(eob.EobAttachNum);
+
                 throw;
             }
             return eob;
         }
 
-        /// <summary></summary>
+
         public static EobAttach ImportEobAttach(string pathImportFrom, long claimPaymentNum)
         {
-            string eobFolder = "";
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage)
-            {
-                eobFolder = GetEobFolder();
-            }
+            string eobFolder = GetEobFolder();
+            
             EobAttach eob = new EobAttach();
             if (Path.GetExtension(pathImportFrom) == "")
-            {//If the file has no extension
+            {
                 eob.FileName = ".jpg";
             }
             else
             {
                 eob.FileName = Path.GetExtension(pathImportFrom);
             }
+
             eob.DateTCreated = File.GetLastWriteTime(pathImportFrom);
             eob.ClaimPaymentNum = claimPaymentNum;
-            EobAttaches.Insert(eob);//creates filename and saves to db
-            eob = EobAttaches.GetOne(eob.EobAttachNum);
+
+            EobAttaches.Insert(eob);
             try
             {
                 SaveEobAttach(eob, pathImportFrom, eobFolder);
-                //No security log for creation of EOB's because they don't show up in the images module.
-                if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
-                {
-                    EobAttaches.Update(eob);
-                }
             }
             catch
             {
                 EobAttaches.Delete(eob.EobAttachNum);
+
                 throw;
             }
             return eob;
@@ -884,19 +406,17 @@ namespace OpenDentBusiness
 
         public static EhrAmendment ImportAmdAttach(Bitmap image, EhrAmendment amd)
         {
-            string amdFolder = "";
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage)
-            {
-                amdFolder = GetAmdFolder();
-            }
+            string amdFolder = GetAmdFolder();
+            
             amd.FileName = DateTime.Now.ToString("yyyyMMdd_HHmmss_") + amd.EhrAmendmentNum;
             amd.FileName += ".jpg";
             amd.DateTAppend = DateTime.Now;
             EhrAmendments.Update(amd);
-            amd = EhrAmendments.GetOne(amd.EhrAmendmentNum);
-            long qualityL = (long)ComputerPrefs.LocalComputer.ScanDocQuality;
+
+            long qualityL = ComputerPrefs.LocalComputer.ScanDocQuality;
             ImageCodecInfo myImageCodecInfo;
             ImageCodecInfo[] encoders;
+
             encoders = ImageCodecInfo.GetImageEncoders();
             myImageCodecInfo = null;
             for (int j = 0; j < encoders.Length; j++)
@@ -906,491 +426,270 @@ namespace OpenDentBusiness
                     myImageCodecInfo = encoders[j];
                 }
             }
+
             EncoderParameters myEncoderParameters = new EncoderParameters(1);
             EncoderParameter myEncoderParameter = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, qualityL);
             myEncoderParameters.Param[0] = myEncoderParameter;
             try
             {
                 SaveAmdAttach(amd, image, myImageCodecInfo, myEncoderParameters, amdFolder);
-                //No security log for creation of AMD Attaches because they don't show up in the images module
             }
             catch
             {
-                //EhrAmendments.Delete(amd.EhrAmendmentNum);
                 throw;
             }
-            if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
-            {
-                //EhrAmendments.Update(amd);
-                //no thumbnail
-            }
+
             return amd;
         }
 
         public static EhrAmendment ImportAmdAttach(string pathImportFrom, EhrAmendment amd)
         {
-            string amdFolder = "";
-            string amdFilename = "";
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage)
-            {
-                amdFolder = GetAmdFolder();
-                amdFilename = amd.FileName;
-            }
+            string amdFolder = GetAmdFolder();
+            string amdFilename = amd.FileName;
+
+
             amd.FileName = DateTime.Now.ToString("yyyyMMdd_HHmmss_") + amd.EhrAmendmentNum + Path.GetExtension(pathImportFrom);
+
             if (Path.GetExtension(pathImportFrom) == "")
-            {//If the file has no extension
+            {
                 amd.FileName += ".jpg";
             }
-            //EhrAmendments.Update(amd);
-            //amd=EhrAmendments.GetOne(amd.EhrAmendmentNum);
+
             try
             {
                 SaveAmdAttach(amd, pathImportFrom, amdFolder);
-                //No security log for creation of AMD Attaches because they don't show up in the images module
             }
             catch
             {
-                //EhrAmendments.Delete(amd.EhrAmendmentNum);
                 throw;
             }
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage)
-            {
-                amd.DateTAppend = DateTime.Now;
-                EhrAmendments.Update(amd);
-                CleanAmdAttach(amdFilename);
-            }
+
+
+            amd.DateTAppend = DateTime.Now;
+            EhrAmendments.Update(amd);
+
+            CleanAmdAttach(amdFilename);
+
             return amd;
         }
 
-        ///<summary> Save a Document to another location on the disk (outside of Open Dental). </summary>
-        public static void Export(string saveToPath, Document doc, Patient pat)
+        /// <summary>
+        /// Save a Document to another location on the disk (outside of Open Dental).
+        /// </summary>
+        public static void Export(string exportFileName, Document document, Patient patient)
         {
-            if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
-            {
-                byte[] rawData = Convert.FromBase64String(doc.RawBase64);
-                using (FileStream file = new FileStream(saveToPath, FileMode.Create, FileAccess.Write))
-                {
-                    file.Write(rawData, 0, rawData.Length);
-                    file.Close();
-                }
-            }
-            else
-            {//Using an AtoZ folder
-                string docPath = FileSystem.CombinePaths(GetPatientFolder(pat, GetPreferredAtoZpath()), doc.FileName);
-                FileSystem.Copy(docPath, saveToPath, FileAtoZSourceDestination.AtoZToLocal);
-            }
+            string filePath = Storage.Default.CombinePath(GetPatientFolder(patient), document.FileName);
+
+            Storage.Default.CopyFile(filePath, exportFileName);
         }
 
-        ///<summary> Save an Eob to another location on the disk (outside of Open Dental). </summary>
+        /// <summary>
+        /// Save an EOB to another location on the disk.
+        /// </summary>
         public static void ExportEobAttach(string saveToPath, EobAttach eob)
         {
-            if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
-            {
-                byte[] rawData = Convert.FromBase64String(eob.RawBase64);
-                Image image = null;
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    stream.Read(rawData, 0, rawData.Length);
-                    image = Image.FromStream(stream);
-                }
-                image.Save(saveToPath);
-            }
-            else
-            {//Using an AtoZ folder
-                string eobPath = ODFileUtils.CombinePaths(GetEobFolder(), eob.FileName);
-                FileSystem.Copy(eobPath, saveToPath, FileAtoZSourceDestination.AtoZToLocal);
-            }
+            string filePath = Storage.Default.CombinePath(GetEobFolder(), eob.FileName);
+
+            Storage.Default.CopyFile(filePath, saveToPath);
         }
 
-        ///<summary> Save an EHR amendment to another location on the disk (outside of Open Dental). </summary>
+        /// <summary>
+        /// Save an EHR amendment to another location on the disk.
+        /// </summary>
         public static void ExportAmdAttach(string saveToPath, EhrAmendment amd)
         {
-            if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
-            {
-                byte[] rawData = Convert.FromBase64String(amd.RawBase64);
-                Image image = null;
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    stream.Read(rawData, 0, rawData.Length);
-                    image = Image.FromStream(stream);
-                }
-                image.Save(saveToPath);
-            }
-            else
-            {//Using an AtoZ folder
-                string eobPath = ODFileUtils.CombinePaths(GetAmdFolder(), amd.FileName);
-                FileSystem.Copy(eobPath, saveToPath, FileAtoZSourceDestination.AtoZToLocal);
-            }
+            string filePath = Storage.Default.CombinePath(GetAmdFolder(), amd.FileName);
+
+            Storage.Default.CopyFile(filePath, saveToPath);
         }
 
-        ///<summary>If using AtoZ folder, then patFolder must be fully qualified and valid.  
-        ///If not using AtoZ folder, this uploads to Cloud or fills the doc.RawBase64 which must then be updated to db.  
-        ///The image format can be bmp, jpg, etc, but this overload does not allow specifying jpg compression quality.</summary>
-        public static void SaveDocument(Document doc, Bitmap image, ImageFormat format, string patFolder)
+        public static void SaveDocument(Document document, Image image, ImageFormat format, string patientPath)
         {
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+            using (var stream = Storage.Default.OpenWrite(Storage.Default.CombinePath(patientPath, document.FileName)))
             {
-                string pathFileOut = ODFileUtils.CombinePaths(patFolder, doc.FileName);
-                image.Save(pathFileOut);
+                image.Save(stream, format);
             }
-            else if (CloudStorage.IsCloudStorage)
-            {
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    image.Save(stream, format);
-                    CloudStorage.Upload(patFolder, doc.FileName, stream.ToArray());
-                }
-            }
-            else
-            {//saving to db
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    image.Save(stream, format);
-                    byte[] rawData = stream.ToArray();
-                    doc.RawBase64 = Convert.ToBase64String(rawData);
-                }
-            }
-            LogDocument(Lans.g("ContrImages", "Document Created") + ": ", Permissions.ImageEdit, doc, DateTime.MinValue); //a brand new document is always passed-in
+
+            LogDocument("Document Created: ", Permissions.ImageEdit, document, DateTime.MinValue); //a brand new document is always passed-in
         }
 
-        ///<summary>If usingAtoZfoler, then patFolder must be fully qualified and valid.  If not usingAtoZ folder, this uploads to Cloud or fills the doc.RawBase64 which must then be updated to db.</summary>
-        public static void SaveDocument(Document doc, Bitmap image, ImageCodecInfo codec, EncoderParameters encoderParameters, string patFolder)
+        public static void SaveDocument(Document doc, Image image, ImageCodecInfo codec, EncoderParameters encoderParameters, string patFolder)
         {
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
-            {//if saving to AtoZ folder
-                image.Save(ODFileUtils.CombinePaths(patFolder, doc.FileName), codec, encoderParameters);
-            }
-            else if (CloudStorage.IsCloudStorage)
+            using (var stream = Storage.Default.OpenWrite(Storage.Default.CombinePath(patFolder, doc.FileName)))
             {
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    image.Save(stream, codec, encoderParameters);
-                    CloudStorage.Upload(patFolder, doc.FileName, stream.ToArray());
-                }
+                image.Save(stream, codec, encoderParameters);
             }
-            else
-            {//if saving to db
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    image.Save(stream, codec, encoderParameters);
-                    byte[] rawData = stream.ToArray();
-                    doc.RawBase64 = Convert.ToBase64String(rawData);
-                }
-            }
-            LogDocument(Lans.g("ContrImages", "Document Created") + ": ", Permissions.ImageEdit, doc, DateTime.MinValue); //a brand new document is always passed-in
+
+            LogDocument("Document Created: ", Permissions.ImageEdit, doc, DateTime.MinValue); //a brand new document is always passed-in
         }
 
-        ///<summary>If using AtoZfolder, then patFolder must be fully qualified and valid.  If not using AtoZfolder, this uploads to Cloud or fills the eob.RawBase64 which must then be updated to db.</summary>
-        public static void SaveDocument(Document doc, string pathSourceFile, string patFolder)
+        public static void SaveDocument(Document doc, string sourceFileName, string patientPath)
         {
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
-            {
-                File.Copy(pathSourceFile, ODFileUtils.CombinePaths(patFolder, doc.FileName));
-            }
-            else if (CloudStorage.IsCloudStorage)
-            {
-                CloudStorage.Upload(patFolder, doc.FileName, File.ReadAllBytes(pathSourceFile));
-            }
-            else
-            {//saving to db
-                byte[] rawData = File.ReadAllBytes(pathSourceFile);
-                doc.RawBase64 = Convert.ToBase64String(rawData);
-            }
-            LogDocument(Lans.g("ContrImages", "Document Created") + ": ", Permissions.ImageEdit, doc, DateTime.MinValue); //a brand new document is always passed-in
+            Storage.Default.CopyFile(sourceFileName, Storage.Default.CombinePath(patientPath, doc.FileName));
+
+            LogDocument("Document Created: ", Permissions.ImageEdit, doc, DateTime.MinValue);
         }
 
-        ///<summary>If using AtoZfolder, then patFolder must be fully qualified and valid.  If not using AtoZfolder, this fills the eob.RawBase64 which must then be updated to db.</summary>
         public static void SaveEobAttach(EobAttach eob, Bitmap image, ImageCodecInfo codec, EncoderParameters encoderParameters, string eobFolder)
         {
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+            using (var stream = Storage.Default.OpenWrite(Storage.Default.CombinePath(eobFolder, eob.FileName)))
             {
-                image.Save(ODFileUtils.CombinePaths(eobFolder, eob.FileName), codec, encoderParameters);
+                image.Save(stream, codec, encoderParameters);
             }
-            else if (CloudStorage.IsCloudStorage)
-            {
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    image.Save(stream, codec, encoderParameters);
-                    CloudStorage.Upload(eobFolder, eob.FileName, stream.ToArray());
-                }
-            }
-            else
-            {//saving to db
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    image.Save(stream, codec, encoderParameters);
-                    byte[] rawData = stream.ToArray();
-                    eob.RawBase64 = Convert.ToBase64String(rawData);
-                }
-            }
-            //No security log for creation of EOB because they don't show up in the images module.
         }
 
-        ///<summary>If using AtoZfolder, then patFolder must be fully qualified and valid.  If not using AtoZfolder, this fills the eob.RawBase64 which must then be updated to db.</summary>
         public static void SaveAmdAttach(EhrAmendment amd, Bitmap image, ImageCodecInfo codec, EncoderParameters encoderParameters, string amdFolder)
         {
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+            using (var stream = Storage.Default.OpenWrite(Storage.Default.CombinePath(amdFolder, amd.FileName)))
             {
-                image.Save(ODFileUtils.CombinePaths(amdFolder, amd.FileName), codec, encoderParameters);
+                image.Save(stream, codec, encoderParameters);
             }
-            else if (CloudStorage.IsCloudStorage)
-            {
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    image.Save(stream, codec, encoderParameters);
-                    CloudStorage.Upload(amdFolder, amd.FileName, stream.ToArray());
-                }
-            }
-            else
-            {//saving to db
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    image.Save(stream, codec, encoderParameters);
-                    byte[] rawData = stream.ToArray();
-                    amd.RawBase64 = Convert.ToBase64String(rawData);
-                    EhrAmendments.Update(amd);
-                }
-            }
-            //No security log for creation of AMD Attaches because they don't show up in the images module
         }
 
-        ///<summary>If using AtoZfolder, then patFolder must be fully qualified and valid.  If not using AtoZfolder, this fills the eob.RawBase64 which must then be updated to db.</summary>
         public static void SaveEobAttach(EobAttach eob, string pathSourceFile, string eobFolder)
         {
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
-            {
-                File.Copy(pathSourceFile, ODFileUtils.CombinePaths(eobFolder, eob.FileName));
-            }
-            else if (CloudStorage.IsCloudStorage)
-            {
-                CloudStorage.Upload(eobFolder, eob.FileName, File.ReadAllBytes(pathSourceFile));
-            }
-            else
-            {//saving to db
-                byte[] rawData = File.ReadAllBytes(pathSourceFile);
-                eob.RawBase64 = Convert.ToBase64String(rawData);
-            }
-            //No security log for creation of EOB because they don't show up in the images module
+            Storage.Default.CopyFile(pathSourceFile, Storage.Default.CombinePath(eobFolder, eob.FileName));
         }
 
-        ///<summary>If using AtoZfolder, then patFolder must be fully qualified and valid.  If not using AtoZfolder, this fills the eob.RawBase64 which must then be updated to db.</summary>
         public static void SaveAmdAttach(EhrAmendment amd, string pathSourceFile, string amdFolder)
         {
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
-            {
-                File.Copy(pathSourceFile, ODFileUtils.CombinePaths(amdFolder, amd.FileName));
-            }
-            else if (CloudStorage.IsCloudStorage)
-            {
-                CloudStorage.Upload(amdFolder, amd.FileName, File.ReadAllBytes(pathSourceFile));
-            }
-            else
-            {//saving to db
-                byte[] rawData = File.ReadAllBytes(pathSourceFile);
-                amd.RawBase64 = Convert.ToBase64String(rawData);
-                EhrAmendments.Update(amd);
-            }
-            //No security log for creation of AMD Attaches because they don't show up in the images module
+            Storage.Default.CopyFile(pathSourceFile, Storage.Default.CombinePath(amdFolder, amd.FileName));
         }
 
-        ///<summary>For each of the documents in the list, deletes row from db and image from AtoZ folder if needed.  Throws exception if the file cannot be deleted.  Surround in try/catch.</summary>
-        public static void DeleteDocuments(IList<Document> documents, string patFolder)
+        public static void DeleteDocuments(IList<Document> documents, string patientPath)
         {
             for (int i = 0; i < documents.Count; i++)
             {
-                if (documents[i] == null)
+                if (documents[i] == null) continue;
+
+                // Check if document is referenced by a sheet.
+                List<Sheet> sheetList = Sheets.GetForDocument(documents[i].DocNum);
+                if (sheetList.Count != 0)
                 {
-                    continue;
-                }
-                //Check if document is referenced by a sheet. (PatImages)
-                List<Sheet> sheetRefList = Sheets.GetForDocument(documents[i].DocNum);
-                if (sheetRefList.Count != 0)
-                {
-                    //throw Exception with error message.
-                    string msgText = Lans.g("ContrImages", "Cannot delete image, it is referenced by sheets with the following dates") + ":";
-                    foreach (Sheet sheet in sheetRefList)
+                    string msgText = "Cannot delete image, it is referenced by sheets with the following dates:";
+                    foreach (var sheet in sheetList)
                     {
                         msgText += "\r\n" + sheet.DateTimeSheet.ToShortDateString();
                     }
+
                     throw new Exception(msgText);
                 }
-                //Attempt to delete the file.
-                if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+
+                try
                 {
-                    try
+                    string filePath = Storage.Default.CombinePath(patientPath, documents[i].FileName);
+                    if (Storage.Default.FileExists(filePath))
                     {
-                        string filePath = ODFileUtils.CombinePaths(patFolder, documents[i].FileName);
-                        if (File.Exists(filePath))
-                        {
-                            File.Delete(filePath);
-                            LogDocument(Lans.g("ContrImages", "Document Deleted") + ": ", Permissions.ImageDelete, documents[i], documents[i].DateTStamp);
-                        }
-                    }
-                    catch
-                    {
-                        throw new Exception(Lans.g("ContrImages", "Could not delete file.  It may be in use by another program, flagged as read-only, or you might not have sufficient permissions."));
+                        Storage.Default.DeleteFile(filePath);
+
+                        LogDocument("Document Deleted: ", Permissions.ImageDelete, documents[i], documents[i].DateTStamp);
                     }
                 }
-                else if (CloudStorage.IsCloudStorage)
+                catch
                 {
-                    CloudStorage.Delete(ODFileUtils.CombinePaths(patFolder, documents[i].FileName, '/'));
+                    throw new Exception("Could not delete file. It may be in use by another program, flagged as read-only, or you might not have sufficient permissions.");
                 }
-                //Row from db.  This deletes the "image file" also if it's stored in db.
+
+
                 Documents.Delete(documents[i]);
-            }//end documents
+            }
         }
 
-        ///<summary>Also handles deletion of db object.</summary>
         public static void DeleteEobAttach(EobAttach eob)
         {
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+            string filePath = Storage.Default.CombinePath(GetEobFolder(), eob.FileName);
+            if (Storage.Default.FileExists(filePath))
             {
-                string eobFolder = GetEobFolder();
-                string filePath = ODFileUtils.CombinePaths(eobFolder, eob.FileName);
-                if (File.Exists(filePath))
+                try
                 {
-                    try
-                    {
-                        File.Delete(filePath);
-                        //No security log for deletion of EOB's because they don't show up in the images module.
-                    }
-                    catch { }//file seems to be frequently locked.
+                    Storage.Default.DeleteFile(filePath);
+                }
+                catch
+                {
                 }
             }
-            else if (CloudStorage.IsCloudStorage)
-            {
-                CloudStorage.Delete(ODFileUtils.CombinePaths(GetEobFolder(), eob.FileName, '/'));
-            }
-            //db
+
             EobAttaches.Delete(eob.EobAttachNum);
         }
 
-        ///<summary>Also handles deletion of db object.</summary>
         public static void DeleteAmdAttach(EhrAmendment amendment)
         {
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+            string filePath = Storage.Default.CombinePath(GetAmdFolder(), amendment.FileName);
+            if (Storage.Default.FileExists(filePath))
             {
-                string amdFolder = GetAmdFolder();
-                string filePath = ODFileUtils.CombinePaths(amdFolder, amendment.FileName);
-                if (File.Exists(filePath))
+                try
                 {
-                    try
-                    {
-                        File.Delete(filePath);
-                        //No security log for deletion of AMD Attaches because they don't show up in the images module.
-                    }
-                    catch
-                    {
-                        MessageBox.Show("Delete was unsuccessful. The file may be in use.");
-                        return;
-                    }//file seems to be frequently locked.
+                    Storage.Default.DeleteFile(filePath);
+                }
+                catch
+                {
+                    MessageBox.Show(
+                        "Delete was unsuccessful. The file may be in use.");
+
+                    return;
                 }
             }
-            else if (CloudStorage.IsCloudStorage)
-            {
-                CloudStorage.Delete(ODFileUtils.CombinePaths(GetAmdFolder(), amendment.FileName, '/'));
-            }
-            //db
+
             amendment.DateTAppend = DateTime.MinValue;
             amendment.FileName = "";
             amendment.RawBase64 = "";
+
             EhrAmendments.Update(amendment);
         }
 
-        ///<summary>Cleans up unreferenced Amendments</summary>
-        public static void CleanAmdAttach(string amdFileName)
+        public static void CleanAmdAttach(string fileName)
         {
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+            var filePath = Storage.Default.CombinePath(GetAmdFolder(), fileName);
+            if (Storage.Default.FileExists(filePath))
             {
-                string amdFolder = GetAmdFolder();
-                string filePath = ODFileUtils.CombinePaths(amdFolder, amdFileName);
-                if (File.Exists(filePath))
+                try
                 {
-                    try
-                    {
-                        File.Delete(filePath);
-                        //No security log for deletion of AMD Attaches because they don't show up in the images module.
-                    }
-                    catch
-                    {
-                        //MessageBox.Show("Delete was unsuccessful. The file may be in use.");
-                        return;
-                    }//file seems to be frequently locked.
+                    Storage.Default.DeleteFile(filePath);
                 }
-            }
-            else if (CloudStorage.IsCloudStorage)
-            {
-                CloudStorage.Delete(ODFileUtils.CombinePaths(GetAmdFolder(), amdFileName, '/'));
+                catch
+                {
+                    return;
+                }
             }
         }
 
-        ///<summary></summary>
-        public static void DeleteThumbnailImage(Document doc, string patFolder)
+        public static void DeleteThumbnailImage(Document document, string patientPath)
         {
-            /*if(ImageStoreIsDatabase) {
-				using(IDbConnection connection = DataSettings.GetConnection())
-				using(IDbCommand command = connection.CreateCommand()) {
-					command.CommandText =
-					@"UPDATE files SET Thumbnail = NULL WHERE DocNum = ?DocNum";
-
-					IDataParameter docNumParameter = command.CreateParameter();
-					docNumParameter.ParameterName = "?DocNum";
-					docNumParameter.Value = doc.DocNum;
-					command.Parameters.Add(docNumParameter);
-
-					connection.Open();
-					command.ExecuteNonQuery();
-					connection.Close();
-				}
-			}
-			else {*/
-            //string patFolder=GetPatientFolder(pat);
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+            var filePath = Storage.Default.CombinePath(patientPath, "Thumbnails", document.FileName);
+            if (Storage.Default.FileExists(filePath))
             {
-                string thumbnailFile = ODFileUtils.CombinePaths(patFolder, "Thumbnails", doc.FileName);
-                if (File.Exists(thumbnailFile))
+                try
                 {
-                    try
-                    {
-                        File.Delete(thumbnailFile);
-                    }
-                    catch
-                    {
-                        //Two users *might* edit the same image at the same time, so the image might already be deleted.
-                    }
+                    Storage.Default.DeleteFile(filePath);
                 }
-            }
-            else if (CloudStorage.IsCloudStorage)
-            {
-                CloudStorage.Delete(ODFileUtils.CombinePaths(patFolder, "Thumbnails", doc.FileName, '/'));
+                catch
+                {
+                }
             }
         }
 
         public static string GetExtension(Document doc) => Path.GetExtension(doc.FileName).ToLower();
 
-        public static string GetFilePath(Document doc, string patFolder)
-        {
-            //string patFolder=GetPatientFolder(pat);
-            return FileSystem.CombinePaths(patFolder, doc.FileName);
-        }
+        public static string GetFilePath(Document doc, string patFolder) => Storage.Default.CombinePath(patFolder, doc.FileName);
 
-        /// <summary>Returns true if the given filename contains a supported file image extension.</summary>
         public static bool HasImageExtension(string fileName)
         {
             string ext = Path.GetExtension(fileName).ToLower();
-            //The following supported bitmap types were found on a microsoft msdn page:
-            //==02/25/2014 - Added .tig as an accepted image extention for tigerview enhancement.
-            return 
-                ext == ".jpg"  || ext == ".jpeg" || ext == ".tga" || ext == ".bmp" || 
-                ext == ".tif"  || ext == ".tiff" || ext == ".gif" || ext == ".emf" || 
-                ext == ".exif" || ext == ".ico"  || ext == ".png" || ext == ".wmf" || 
+
+            return
+                ext == ".jpg" || ext == ".jpeg" || ext == ".tga" || ext == ".bmp" ||
+                ext == ".tif" || ext == ".tiff" || ext == ".gif" || ext == ".emf" ||
+                ext == ".exif" || ext == ".ico" || ext == ".png" || ext == ".wmf" ||
                 ext == ".tig";
         }
 
-        /// <summary>Makes log entry for documents.  Supply beginning text, permission, document, and the DateTStamp that the document was previously last edited.</summary>
+        /// <summary>
+        /// Makes log entry for documents. Supply beginning text, permission, document, and the DateTStamp that the document was previously last edited.
+        /// </summary>
         public static void LogDocument(string logMsgStart, Permissions perm, Document doc, DateTime secDatePrevious)
         {
             string logMsg = logMsgStart + doc.FileName;
+
             if (doc.Description != "")
             {
                 string descriptDoc = doc.Description;
@@ -1398,10 +697,12 @@ namespace OpenDentBusiness
                 {
                     descriptDoc = descriptDoc.Substring(0, 50);
                 }
-                logMsg += " " + Lans.g("ContrImages", "with description") + " " + descriptDoc;
+                logMsg += " " + "with description " + descriptDoc;
             }
+
             Definition docCat = Defs.GetDef(DefinitionCategory.ImageCats, doc.DocCategory);
-            logMsg += " " + Lans.g("ContrImages", "with category") + " " + docCat.Description;
+            logMsg += " with category " + docCat.Description;
+
             SecurityLogs.MakeLogEntry(perm, doc.PatNum, logMsg, doc.DocNum, secDatePrevious);
         }
     }

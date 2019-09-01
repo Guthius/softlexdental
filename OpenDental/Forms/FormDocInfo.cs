@@ -16,6 +16,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using OpenDentBusiness;
 using CodeBase;
+using SLDental.Storage;
 
 namespace OpenDental{
 ///<summary></summary>
@@ -359,16 +360,13 @@ namespace OpenDental{
 			textTime.Text=DocCur.DateCreated.ToLongTimeString();
 			textDescript.Text=DocCur.Description;
 			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
-				string patFolder=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());
-				textFileName.Text=ODFileUtils.CombinePaths(patFolder,DocCur.FileName);
-				if(File.Exists(textFileName.Text)) {
-					FileInfo fileInfo=new FileInfo(textFileName.Text);
-					textSize.Text=fileInfo.Length.ToString("n0");
+				string patFolder=ImageStore.GetPatientFolder(PatCur);
+				textFileName.Text= Storage.Default.CombinePath(patFolder,DocCur.FileName);
+				if(Storage.Default.FileExists(textFileName.Text)) {
+                    // TODO: Fix me...
+					//FileInfo fileInfo=new FileInfo(textFileName.Text);
+					//textSize.Text=fileInfo.Length.ToString("n0");
 				}
-			}
-			else if(CloudStorage.IsCloudStorage) {
-				string patFolder=ImageStore.GetPatientFolder(PatCur,"");
-				textFileName.Text=ODFileUtils.CombinePaths(patFolder,DocCur.FileName,'/');
 			}
 			else {
 				labelFileName.Visible=false;
@@ -385,31 +383,8 @@ namespace OpenDental{
 		}
 
 		private void butOpen_Click(object sender,EventArgs e) {
-			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
-				System.Diagnostics.Process.Start("Explorer",Path.GetDirectoryName(textFileName.Text));
-			}
-			else if(CloudStorage.IsCloudStorage)
-            {//First download, then open // TODO: Fix me
-             //	FormProgress FormP=new FormProgress();
-             //	FormP.DisplayText="Downloading...";
-             //	FormP.NumberFormat="F";
-             //	FormP.NumberMultiplication=1;
-             //	FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-             //	FormP.TickMS=1000;
-             //	OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(ImageStore.GetPatientFolder(PatCur,"")
-             //		,DocCur.FileName
-             //		,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-             //	FormP.ShowDialog();
-             //	if(FormP.DialogResult==DialogResult.Cancel) {
-             //		state.DoCancel=true;
-             //		return;
-             //	}
-             //	//Create temp file here or create the file with the actual name?  Changes made when opening the file won't be saved, so I think temp file is best.
-             //	string tempFile=Preferences.GetRandomTempFile(Path.GetExtension(DocCur.FileName));
-             //	File.WriteAllBytes(tempFile,state.FileContent);
-             //	System.Diagnostics.Process.Start(tempFile);
-            }
-		}
+            Storage.Default.OpenDirectory(Path.GetDirectoryName(textFileName.Text));
+        }
 
 		private void butOK_Click(object sender, System.EventArgs e){
 			if(textDate.errorProvider1.GetError(textDate)!="") {

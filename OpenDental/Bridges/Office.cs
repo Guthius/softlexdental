@@ -22,14 +22,14 @@ namespace OpenDental.Bridges {
 				return;
 			}
 			string fileName=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Document folder");
-			string oldFileName=ODFileUtils.CombinePaths(fileName,Tidy(pat.LName+pat.FName));
+			string oldFileName= Path.Combine(fileName,Tidy(pat.LName+pat.FName));
 			//ProgramProperties.GetPropVal() is the way to get program properties.
 			if(ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"Enter 0 to use PatientNum, or 1 to use ChartNum")=="0") {
-				fileName=ODFileUtils.CombinePaths(fileName,pat.PatNum.ToString());
+				fileName= Path.Combine(fileName,pat.PatNum.ToString());
 				oldFileName+=pat.PatNum.ToString();
 			}
 			else {
-				fileName=ODFileUtils.CombinePaths(fileName,Tidy(pat.ChartNumber));
+				fileName= Path.Combine(fileName,Tidy(pat.ChartNumber));
 				oldFileName+=Tidy(pat.ChartNumber);
 			}
 			fileName+=ProgramProperties.GetPropVal(ProgramCur.ProgramNum,"File extension");

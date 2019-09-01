@@ -706,7 +706,6 @@
     <Compile Include="Logic\ReferralL.cs" />
     <Compile Include="Logic\RxAlertL.cs" />
     <Compile Include="Logic\SecurityL.cs" />
-    <Compile Include="Logic\WebFormL.cs" />
     <Compile Include="Main Modules\FormOpenDentalThreads.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -2999,12 +2998,6 @@
     <Compile Include="Forms\FormCanadaPaymentReconciliation.designer.cs">
       <DependentUpon>FormCanadaPaymentReconciliation.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormPatientPickWebForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormPatientPickWebForm.designer.cs">
-      <DependentUpon>FormPatientPickWebForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Forms\FormCreditRecurringCharges.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -3118,18 +3111,6 @@
     </Compile>
     <Compile Include="Forms\FormPayConnectSetup.cs">
       <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormWebForms.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormWebForms.designer.cs">
-      <DependentUpon>FormWebForms.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Forms\FormWebFormSetup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormWebFormSetup.designer.cs">
-      <DependentUpon>FormWebFormSetup.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormAutomationConditionEdit.cs">
       <SubType>Form</SubType>
@@ -6220,10 +6201,6 @@
       <DependentUpon>FormCanadaPaymentReconciliation.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormPatientPickWebForm.resx">
-      <DependentUpon>FormPatientPickWebForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormCreditRecurringCharges.resx">
       <DependentUpon>FormCreditRecurringCharges.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -6277,14 +6254,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPayConnectSetup.resx">
       <DependentUpon>FormPayConnectSetup.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormWebForms.resx">
-      <DependentUpon>FormWebForms.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormWebFormSetup.resx">
-      <DependentUpon>FormWebFormSetup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormAccountingLock.resx">

@@ -54,9 +54,9 @@ namespace OpenDental {
 
 		private void butGo_Click(object sender,EventArgs e) {
 			//Refresh the grid contents to show whatever is in the Path textbox.
-			if(!textPath.Text.Contains(ImageStore.GetPreferredAtoZpath())) {
-				textPath.Text=ImageStore.GetPreferredAtoZpath();//They deleted the path for some reason.  It must have at least the base path.
-			}
+			//if(!textPath.Text.Contains(ImageStore.GetPreferredAtoZpath())) {
+			//	textPath.Text=ImageStore.GetPreferredAtoZpath();//They deleted the path for some reason.  It must have at least the base path.
+			//}
 			FillGrid();
 		}
 
@@ -94,7 +94,7 @@ namespace OpenDental {
 				return;
 			}
 			foreach(string fileName in dlg.FileNames) {
-				FileAtoZ.Copy(fileName,FileAtoZ.CombinePaths(textPath.Text,Path.GetFileName(fileName)),FileAtoZSourceDestination.LocalToAtoZ);
+				FileAtoZ.Copy(fileName, Path.Combine(textPath.Text,Path.GetFileName(fileName)));
 			}
 			FillGrid();
 		}
@@ -149,11 +149,11 @@ namespace OpenDental {
 			//If it's a file, return it as the only item selected.
 			if(gridMain.Rows[gridMain.GetSelectedIndex()].Cells[0].Text.Contains(".")) {//They selected a file because there is an extension.
 				SelectedFiles.Clear();
-				SelectedFiles.Add(ODFileUtils.CombinePaths(textPath.Text,gridMain.Rows[gridMain.GetSelectedIndex()].Cells[0].Text,'/'));
+				SelectedFiles.Add(Path.Combine(textPath.Text,gridMain.Rows[gridMain.GetSelectedIndex()].Cells[0].Text));
 				DialogResult=DialogResult.OK;
 			}
 			else {
-				textPath.Text=ODFileUtils.CombinePaths(textPath.Text,gridMain.Rows[gridMain.GetSelectedIndex()].Cells[0].Text,'/');
+				textPath.Text= Path.Combine(textPath.Text,gridMain.Rows[gridMain.GetSelectedIndex()].Cells[0].Text);
 				FillGrid();
 			}
 		}
@@ -174,7 +174,7 @@ namespace OpenDental {
 			//Add all selected files to the list to be returned
 			SelectedFiles.Clear();//Just in case
 			foreach(int idx in gridMain.SelectedIndices) {
-				SelectedFiles.Add(ODFileUtils.CombinePaths(textPath.Text,gridMain.Rows[idx].Cells[0].Text,'/'));
+				SelectedFiles.Add(Path.Combine(textPath.Text,gridMain.Rows[idx].Cells[0].Text));
 			}
 			DialogResult=DialogResult.OK;
 		}

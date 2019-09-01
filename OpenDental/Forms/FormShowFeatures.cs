@@ -41,14 +41,16 @@ namespace OpenDental{
 			}
 		}
 
-		private void checkEhr_Click(object sender,EventArgs e) {
-			if(checkEhr.Checked && !File.Exists(ODFileUtils.CombinePaths(Application.StartupPath,"EHR.dll"))){
-				checkEhr.Checked=false;
-				MsgBox.Show(this,"EHR.dll could not be found.");
-				return;
-			}
-			MsgBox.Show(this,"You will need to restart the program for the change to take effect.");
-		}
+        private void checkEhr_Click(object sender, EventArgs e)
+        {
+            if (checkEhr.Checked && !File.Exists(Path.Combine(Application.StartupPath, "EHR.dll")))
+            {
+                checkEhr.Checked = false;
+                MsgBox.Show(this, "EHR.dll could not be found.");
+                return;
+            }
+            MsgBox.Show(this, "You will need to restart the program for the change to take effect.");
+        }
 
 		private void checkRestart_Click(object sender,EventArgs e) {
 			ODCheckBoxPref checkBox=(ODCheckBoxPref)sender;

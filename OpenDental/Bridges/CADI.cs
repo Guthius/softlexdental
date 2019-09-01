@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 using CodeBase;
 using System.Security.Permissions;
+using SLDental.Storage;
 
 namespace OpenDental.Bridges
 {
@@ -126,7 +127,7 @@ namespace OpenDental.Bridges
                 comObject.OleSetPatientSex(pat.Gender == PatientGender.Female ? "F" : "M");
                 //Send patient images file path
                 string imagePath = ProgramProperties.GetPropVal(ProgramCur.ProgramNum, ProgramProperties.PropertyDescs.ImageFolder);
-                comObject.OleLoadPicLib(CodeBase.ODFileUtils.CombinePaths(imagePath, id));
+                comObject.OleLoadPicLib(Storage.Default.CombinePath(imagePath, id));
                 comObject.OleEndTransaction();
             }
             catch (COMException)

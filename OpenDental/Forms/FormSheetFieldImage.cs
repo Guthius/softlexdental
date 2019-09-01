@@ -9,6 +9,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using CodeBase;
+using SLDental.Storage;
 
 namespace OpenDental {
 	public partial class FormSheetFieldImage:ODForm {
@@ -82,36 +83,15 @@ namespace OpenDental {
 				return;
 			}
 			string newName=dlg.FileName;
-			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
-				newName=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),Path.GetFileName(dlg.FileName));
-				if(File.Exists(newName)) {
+
+				newName= Storage.Default.CombinePath(SheetUtil.GetImagePath(),Path.GetFileName(dlg.FileName));
+				if(Storage.Default.FileExists(newName)) {
 					MsgBox.Show(this,"A file of that name already exists in SheetImages.  Please rename the file before importing.");
 					return;
 				}
 				File.Copy(dlg.FileName,newName);
-			}
-			else if(CloudStorage.IsCloudStorage)
-            { // TODO: Fix me
-              //	if(CloudStorage.FileExists(ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),Path.GetFileName(dlg.FileName)))) {
-              //		MsgBox.Show(this,"A file of that name already exists in SheetImages.  Please rename the file before importing.");
-              //		return;
-              //	}
-              //	FormProgress FormP=new FormProgress();
-              //	FormP.DisplayText=Lan.g(CloudStorage.LanThis,"Uploading...");
-              //	FormP.NumberFormat="F";
-              //	FormP.NumberMultiplication=1;
-              //	FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-              //	FormP.TickMS=1000;
-              //	OpenDentalCloud.Core.TaskStateUpload state=CloudStorage.UploadAsync(SheetUtil.GetImagePath(),Path.GetFileName(dlg.FileName)
-              //		,File.ReadAllBytes(dlg.FileName)
-              //		,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-              //	if(FormP.ShowDialog()==DialogResult.Cancel) {
-              //		state.DoCancel=true;
-              //		return;
-              //	}
-              //	newName=Path.GetFileName(dlg.FileName);
-              //	//It would be nice to save the image somewhere so that we don't have to download it again.
-            }			
+			
+
 			FillCombo();
 			for(int i=0;i<comboFieldName.Items.Count;i++){
 				if(comboFieldName.Items[i].ToString()==Path.GetFileName(newName)){
@@ -134,70 +114,47 @@ namespace OpenDental {
 			ShrinkToFit();
 		}
 
-		private void FillImage(){
-			if(comboFieldName.Text=="") {
-				return;
-			}
-			if(CloudStorage.IsCloudStorage) {
-				textFullPath.Text=CloudStorage.PathTidy(ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),comboFieldName.Text));
-			}
-			else {
-				textFullPath.Text=ODFileUtils.CombinePaths(SheetUtil.GetImagePath(),comboFieldName.Text);
-			}
-			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ && File.Exists(textFullPath.Text)){
-				GC.Collect();
-				try {
-					pictureBox.Image=Image.FromFile(textFullPath.Text);
-				}
-				catch {
-					pictureBox.Image=null;
-					MsgBox.Show(this,"Invalid image type.");
-				}
-			}
-			else if(comboFieldName.Text=="Patient Info.gif") {//Interal image
-				pictureBox.Image=OpenDentBusiness.Properties.Resources.Patient_Info;
-				textFullPath.Text="Patient Info.gif (internal)";
-			}
-			else if(CloudStorage.IsCloudStorage)
-            { // TODO: Fix me
-              //	if(comboFieldName.Text==SheetFieldDefCur.FieldName && SheetFieldDefCur.ImageField != null) {
-              //		pictureBox.Image=SheetFieldDefCur.ImageField;
-              //	}
-              //	else {
-              //		FormProgress FormP=new FormProgress();
-              //		FormP.DisplayText=Lan.g(CloudStorage.LanThis,"Downloading...");
-              //		FormP.NumberFormat="F";
-              //		FormP.NumberMultiplication=1;
-              //		FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-              //		FormP.TickMS=1000;
-              //		OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(SheetUtil.GetImagePath(),comboFieldName.Text,
-              //			new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-              //		if(FormP.ShowDialog()==DialogResult.Cancel) {
-              //			state.DoCancel=true;
-              //			return;
-              //		}
-              //		if(state==null || state.FileContent==null) {
-              //			pictureBox.Image=null;
-              //		}
-              //		else {
-              //			using(MemoryStream stream=new MemoryStream(state.FileContent)) {
-              //				pictureBox.Image=new Bitmap(Image.FromStream(stream));
-              //			}
-              //		}
-              //	}
-            } 
-			else{
-				pictureBox.Image=null;
-			}
-			if(pictureBox.Image==null) {
-				textWidth2.Text="";
-				textHeight2.Text="";
-			}
-			else {
-				textWidth2.Text=pictureBox.Image.Width.ToString();
-				textHeight2.Text=pictureBox.Image.Height.ToString();
-			}
-		}
+        private void FillImage()
+        {
+            if (comboFieldName.Text == "")
+            {
+                return;
+            }
+
+            textFullPath.Text = Storage.Default.CombinePath(SheetUtil.GetImagePath(), comboFieldName.Text);
+            if (Storage.Default.FileExists(textFullPath.Text))
+            {
+                GC.Collect();
+                try
+                {
+                    pictureBox.Image = Image.FromFile(textFullPath.Text);
+                }
+                catch
+                {
+                    pictureBox.Image = null;
+                    MsgBox.Show(this, "Invalid image type.");
+                }
+            }
+            else if (comboFieldName.Text == "Patient Info.gif")
+            {//Interal image
+                pictureBox.Image = OpenDentBusiness.Properties.Resources.Patient_Info;
+                textFullPath.Text = "Patient Info.gif (internal)";
+            }
+            else
+            {
+                pictureBox.Image = null;
+            }
+            if (pictureBox.Image == null)
+            {
+                textWidth2.Text = "";
+                textHeight2.Text = "";
+            }
+            else
+            {
+                textWidth2.Text = pictureBox.Image.Width.ToString();
+                textHeight2.Text = pictureBox.Image.Height.ToString();
+            }
+        }
 
 		private void butShrink_Click(object sender,EventArgs e) {
 			ShrinkToFit();

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using CodeBase;
 using OpenDentBusiness.WebTypes.Shared.XWeb;
+using SLDental.Storage;
 
 namespace OpenDentBusiness
 {
@@ -110,8 +111,6 @@ namespace OpenDentBusiness
         protected DateTime _nowDateTime;
         ///<summary>The program being used to process payments.</summary>
         protected Program _progCur;
-        ///<summary>Interface used to read and write to the AtoZ folder.</summary>
-        private IFileAtoZ _fileAtoZ;
         ///<summary>This action gets called after each card is done being processed.</summary>
         public Action SingleCardFinished;
         ///<summary>True if the Chargerator is currently running cards.</summary>
@@ -143,9 +142,8 @@ namespace OpenDentBusiness
         ///<summary>The number of cards updated by XCharge's Decline Minimizer.</summary>
         public int Updated { get; private set; }
 
-        public RecurringChargerator(IFileAtoZ fileAtoZ, bool useXChargeClientProgram)
+        public RecurringChargerator( bool useXChargeClientProgram)
         {
-            _fileAtoZ = fileAtoZ;
             _nowDateTime = MiscData.GetNowDateTime();
             _useXChargeClientProgram = useXChargeClientProgram;
         }
@@ -298,7 +296,7 @@ namespace OpenDentBusiness
                 try
                 {
                     string xPath = Programs.GetProgramPath(Programs.GetCur(ProgramName.Xcharge));
-                    File.WriteAllText(ODFileUtils.CombinePaths(Path.GetDirectoryName(xPath), "RecurringChargeResult.txt"), strBuilderResultFileXCharge.ToString());
+                    File.WriteAllText(Storage.Default.CombinePath(Path.GetDirectoryName(xPath), "RecurringChargeResult.txt"), strBuilderResultFileXCharge.ToString());
                 }
                 catch 
                 {
@@ -306,15 +304,15 @@ namespace OpenDentBusiness
             }
             if (strBuilderResultFilePayConnect.Length > 0)
             {
-                string payConnectResultDir = _fileAtoZ.CombinePaths(ImageStore.GetPreferredAtoZpath(), "PayConnect");
-                string payConnectResultFile = _fileAtoZ.CombinePaths(payConnectResultDir, "RecurringChargeResult.txt");
+                string payConnectResultDir = "PayConnect";
+                string payConnectResultFile = Storage.Default.CombinePath(payConnectResultDir, "RecurringChargeResult.txt");
                 try
                 {
                     if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(payConnectResultDir))
                     {
                         Directory.CreateDirectory(payConnectResultDir);
                     }
-                    _fileAtoZ.WriteAllText(payConnectResultFile, strBuilderResultFilePayConnect.ToString());
+                    Storage.Default.WriteAllText(payConnectResultFile, strBuilderResultFilePayConnect.ToString());
                 }
                 catch 
                 {
@@ -322,15 +320,15 @@ namespace OpenDentBusiness
             }
             if (strBuilderResultFilePaySimple.Length > 0)
             {
-                string paySimpleResultDir = _fileAtoZ.CombinePaths(ImageStore.GetPreferredAtoZpath(), "PaySimple");
-                string paySimpleResultFile = _fileAtoZ.CombinePaths(paySimpleResultDir, "RecurringChargeResult.txt");
+                string paySimpleResultDir = "PaySimple";
+                string paySimpleResultFile = Storage.Default.CombinePath(paySimpleResultDir, "RecurringChargeResult.txt");
                 try
                 {
                     if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(paySimpleResultDir))
                     {
                         Directory.CreateDirectory(paySimpleResultDir);
                     }
-                    _fileAtoZ.WriteAllText(paySimpleResultFile, strBuilderResultFilePaySimple.ToString());
+                    Storage.Default.WriteAllText(paySimpleResultFile, strBuilderResultFilePaySimple.ToString());
                 }
                 catch
                 {

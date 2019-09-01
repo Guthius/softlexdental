@@ -25,7 +25,7 @@ namespace OpenDental.Bridges{
 				return;
 			}
 			string dir=Path.GetDirectoryName(path);
-			string linkage=CodeBase.ODFileUtils.CombinePaths(dir,"linkage.xml");
+			string linkage= Path.Combine(dir,"linkage.xml");
 			if(File.Exists(linkage)){
 				File.Delete(linkage);
 			}

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using CodeBase;
+using SLDental.Storage;
 
 namespace OpenDentBusiness.HL7 {
 	///<summary>This is the engine that will parse our incoming HL7 messages for MedLab interfaces.</summary>
@@ -948,13 +949,11 @@ namespace OpenDentBusiness.HL7 {
 			else {//Using AtoZ folder (or Cloud)--------------------------------------------------------------------
 				string embeddedFile="";
 				try {
-					string embeddedFilePath=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"MedLabEmbeddedFiles");
-					if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ && !Directory.Exists(embeddedFilePath)) {
-						Directory.CreateDirectory(embeddedFilePath);
+                    string embeddedFilePath = "MedLabEmbeddedFiles";
+					if(!Storage.Default.DirectoryExists(embeddedFilePath)) {
+                        Storage.Default.CreateDirectory(embeddedFilePath);
 					}
-					else {//Cloud, create random temp folder
-						embeddedFilePath=Preferences.GetTempFolderPath();
-					}
+					
 					embeddedFile=ODFileUtils.CreateRandomFile(embeddedFilePath,".pdf");
 					byte[] byteArray=Convert.FromBase64String(sb.ToString());
 					File.WriteAllBytes(embeddedFile,byteArray);

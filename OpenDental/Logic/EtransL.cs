@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows.Forms;
 using CodeBase;
 using OpenDentBusiness;
+using SLDental.Storage;
 
 namespace OpenDental {
 	public class EtransL {
@@ -772,11 +773,11 @@ namespace OpenDental {
 		private static bool MoveFileToArchiveFolder(X834 x834) {
 			try {
 				string dir=Path.GetDirectoryName(x834.FilePath);
-				string dirArchive=ODFileUtils.CombinePaths(dir,"Archive");
+				string dirArchive= Storage.Default.CombinePath(dir,"Archive");
 				if(!Directory.Exists(dirArchive)) {
 					Directory.CreateDirectory(dirArchive);
 				}
-				string destPathBasic=ODFileUtils.CombinePaths(dirArchive,Path.GetFileName(x834.FilePath));
+				string destPathBasic= Storage.Default.CombinePath(dirArchive,Path.GetFileName(x834.FilePath));
 				string destPathExt=Path.GetExtension(destPathBasic);
 				string destPathBasicRoot=destPathBasic.Substring(0,destPathBasic.Length-destPathExt.Length);
 				string destPath=destPathBasic;

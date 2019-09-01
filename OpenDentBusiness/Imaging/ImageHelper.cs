@@ -6,13 +6,14 @@ using System.IO;
 using CodeBase;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
+using SLDental.Storage;
 
 namespace OpenDentBusiness
 {
     public static class ImageHelper
     {
         ///<summary>Takes in a mount object and finds all the images pertaining to the mount, then concatonates them together into one large, unscaled image and returns that image. Set imageSelected=-1 to unselect all images, or set to an image ordinal to highlight the image. The mount is rendered onto the given mountImage, so it must have been appropriately created by CreateBlankMountImage(). One can create a mount template by passing in arrays of zero length.</summary>
-        public static void RenderMountImage(Bitmap mountImage, Bitmap[] originalImages, List<MountItem> mountItems, Document[] documents, int imageSelected)
+        public static void RenderMountImage(Image mountImage, Image[] originalImages, List<MountItem> mountItems, Document[] documents, int imageSelected)
         {
             using (Graphics g = Graphics.FromImage(mountImage))
             {
@@ -29,7 +30,7 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Renders the hallow rectangles which represent the individual image frames into the given mount image.</summary>
-        public static void RenderMountFrames(Bitmap mountImage, List<MountItem> mountItems, int imageSelected)
+        public static void RenderMountFrames(Image mountImage, List<MountItem> mountItems, int imageSelected)
         {
             using (Graphics g = Graphics.FromImage(mountImage))
             {
@@ -53,7 +54,7 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Renders the given image using the settings provided by the given document object into the location of the given mountItem object.</summary>
-        public static void RenderImageIntoMount(Bitmap mountImage, MountItem mountItem, Bitmap mountItemImage, Document mountItemDoc)
+        public static void RenderImageIntoMount(Image mountImage, MountItem mountItem, Image mountItemImage, Document mountItemDoc)
         {
             if (mountItem == null)
             {
@@ -89,7 +90,7 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Applies the document specified cropping, flip, rotation, brightness and contrast transformations to the image and returns the resulting image. Zoom and translation must be handled by the calling code. The returned image is always a new image that can be modified without affecting the original image. The change in the image's center point is returned into deltaCenter, so that rotation offsets can be properly calculated when displaying the returned image.</summary>
-        public static Bitmap ApplyDocumentSettingsToImage(Document doc, Bitmap image, ImageSettingFlags settings)
+        public static Bitmap ApplyDocumentSettingsToImage(Document doc, Image image, ImageSettingFlags settings)
         {
             if (image == null)
             {//Any operation on a non-existant image produces a non-existant image.
@@ -264,7 +265,7 @@ namespace OpenDentBusiness
             {
                 throw new ODException("No image file associated with document.");
             }
-            string fullName = ODFileUtils.CombinePaths(patientFolder, shortFileName);
+            string fullName = Storage.Default.CombinePath(patientFolder, shortFileName);
             //If the document no longer exists, then there is no corresponding thumbnail image.
             if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !File.Exists(fullName))
             {
@@ -275,27 +276,21 @@ namespace OpenDentBusiness
             {
                 throw new ODException("Document is not associated to an image file format.");
             }
+
             Bitmap sourceImage = null;
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+            try
             {
-                sourceImage = new Bitmap(fullName);
-            }
-            else
-            {//Cloud
-                OpenDentalCloud.Core.TaskStateThumbnail state = CloudStorage.GetThumbnail(patientFolder, shortFileName);
-                if (state.FileContent != null)
+                using (var stream = Storage.Default.OpenRead(fullName))
                 {
-                    using (MemoryStream stream = new MemoryStream(state.FileContent))
-                    {
-                        sourceImage = new Bitmap(Image.FromStream(stream));
-                    }
-                }
-                else
-                {
-                    sourceImage = new Bitmap(1, 1);
+                    sourceImage = new Bitmap(Image.FromStream(stream));
                 }
             }
-            Bitmap fullImage = ImageHelper.ApplyDocumentSettingsToImage(doc, sourceImage, ImageSettingFlags.ALL);
+            catch
+            {
+                sourceImage = new Bitmap(1, 1);
+            }
+
+            Bitmap fullImage = ApplyDocumentSettingsToImage(doc, sourceImage, ImageSettingFlags.ALL);
             sourceImage.Dispose();
             return fullImage;
         }

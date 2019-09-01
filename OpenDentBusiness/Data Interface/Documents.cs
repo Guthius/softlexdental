@@ -10,6 +10,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using CodeBase;
+using SLDental.Storage;
 
 namespace OpenDentBusiness
 {
@@ -166,7 +167,7 @@ namespace OpenDentBusiness
                 //making it impossible to launch the form image viewer (the only place this
                 //function is called from).
                 hList.Add(PIn.Long(table.Rows[i][0].ToString()),
-                    ODFileUtils.CombinePaths(new string[] { atoZPath,
+                    Storage.Default.CombinePath(new string[] { atoZPath,
                                                                                                     PIn.String(table.Rows[i][2].ToString()).Substring(0,1).ToUpper(),
                                                                                                     PIn.String(table.Rows[i][2].ToString()),
                                                                                                     PIn.String(table.Rows[i][1].ToString()),}));
@@ -295,24 +296,25 @@ namespace OpenDentBusiness
             {
                 return NoAvailablePhoto(size);
             }
-            string fullName = ODFileUtils.CombinePaths(patFolder, shortFileName);
+            string fullName = Storage.Default.CombinePath(patFolder, shortFileName);
             //If the document no longer exists, then there is no corresponding thumbnail image.
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !File.Exists(fullName))
+            if (!Storage.Default.FileExists(fullName))
             {
                 return NoAvailablePhoto(size);
             }
+
             //If the specified document is not an image return 'not available'.
             if (!ImageHelper.HasImageExtension(fullName))
             {
                 return NoAvailablePhoto(size);
             }
             //Create Thumbnails folder if it does not already exist for this patient folder.
-            string thumbPath = ODFileUtils.CombinePaths(patFolder, "Thumbnails");
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(thumbPath))
+            string thumbPath = Storage.Default.CombinePath(patFolder, "Thumbnails");
+            if (!Storage.Default.DirectoryExists(thumbPath))
             {
                 try
                 {
-                    Directory.CreateDirectory(thumbPath);
+                    Storage.Default.CreateDirectory(thumbPath);
                 }
                 catch
                 {
@@ -321,17 +323,17 @@ namespace OpenDentBusiness
             }
             string thumbFileExt = Path.GetExtension(shortFileName);
             string thumbCoreFileName = shortFileName.Substring(0, shortFileName.Length - thumbFileExt.Length);
-            string thumbFileName = ODFileUtils.CombinePaths(new string[] { patFolder,"Thumbnails",
+            string thumbFileName = Storage.Default.CombinePath(new string[] { patFolder,"Thumbnails",
                 thumbCoreFileName+"_"+size+thumbFileExt});
             //Use the existing thumbnail if it already exists and it was created after the last document modification.
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && File.Exists(thumbFileName))
+            if (Storage.Default.FileExists(thumbFileName))
             {
                 try
                 {
                     DateTime thumbModifiedTime = File.GetLastWriteTime(thumbFileName);
                     if (thumbModifiedTime > doc.DateTStamp)
                     {
-                        return (Bitmap)Bitmap.FromFile(thumbFileName);
+                        return (Bitmap)Image.FromFile(thumbFileName);
                     }
                 }
                 catch 
@@ -753,31 +755,14 @@ namespace OpenDentBusiness
             {
                 return;
             }
+
             Patient patCur = Patients.GetPat(docCur.PatNum);
             if (patCur == null)
             {
                 return;
             }
-            string docPath;
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
-            {
-                docPath = ImageStore.GetFilePath(docCur, ImageStore.GetPatientFolder(patCur, ImageStore.GetPreferredAtoZpath()));
-            }
-            else if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
-            {
-                //Some programs require a file on disk and cannot open in memory files. Save to temp file from DB.
-                docPath = Preferences.GetRandomTempFile(ImageStore.GetExtension(docCur));
-                File.WriteAllBytes(docPath, Convert.FromBase64String(docCur.RawBase64));
-            }
-            else
-            {//Cloud storage
-             //Download file to temp directory
-                OpenDentalCloud.Core.TaskStateDownload state = CloudStorage.Download(ImageStore.GetPatientFolder(patCur, ImageStore.GetPreferredAtoZpath())
-                    , docCur.FileName);
-                docPath = Preferences.GetRandomTempFile(ImageStore.GetExtension(docCur));
-                File.WriteAllBytes(docPath, state.FileContent);
-            }
-            Process.Start(docPath);
+
+            Storage.Default.OpenFile(ImageStore.GetFilePath(docCur, ImageStore.GetPatientFolder(patCur)));
         }
 
         //Checks to see if the document exists in the correct location, or checks DB for stored content.
@@ -788,20 +773,14 @@ namespace OpenDentBusiness
             {
                 return false;
             }
+
             Patient patCur = Patients.GetPat(docCur.PatNum);
             if (patCur == null)
             {
                 return false;
             }
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
-            {
-                return File.Exists(ImageStore.GetFilePath(docCur, ImageStore.GetPatientFolder(patCur, ImageStore.GetPreferredAtoZpath())));
-            }
-            else if (CloudStorage.IsCloudStorage)
-            {
-                return CloudStorage.FileExists(ODFileUtils.CombinePaths(ImageStore.GetPatientFolder(patCur, ImageStore.GetPreferredAtoZpath()), docCur.FileName, '/'));
-            }
-            return !string.IsNullOrEmpty(docCur.RawBase64);
+
+            return Storage.Default.FileExists(ImageStore.GetFilePath(docCur, ImageStore.GetPatientFolder(patCur)));
         }
 
         ///<summary>Returns true if a Document with the external GUID is found in the database.</summary>
@@ -817,40 +796,24 @@ namespace OpenDentBusiness
             return false;
         }
 
-        ///<summary>Returns the filepath of the document if using AtoZfolder. If storing files in DB or third party storage, saves document to local temp file and returns filepath.
-        /// Empty string if not found.</summary>
+        /// <summary>
+        /// Returns the filepath of the document if using AtoZfolder. If storing files in DB or third party storage, saves document to local temp file and returns filepath. Empty string if not found.
+        /// </summary>
         public static string GetPath(long docNum)
         {
-            Document docCur = Documents.GetByNum(docNum);
+            Document docCur = GetByNum(docNum);
             if (docCur.DocNum == 0)
             {
                 return "";
             }
+
             Patient patCur = Patients.GetPat(docCur.PatNum);
             if (patCur == null)
             {
                 return "";
             }
-            string docPath;
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
-            {
-                docPath = ImageStore.GetFilePath(docCur, ImageStore.GetPatientFolder(patCur, ImageStore.GetPreferredAtoZpath()));
-            }
-            else if (Preferences.AtoZfolderUsed == DataStorageType.InDatabase)
-            {
-                //Some programs require a file on disk and cannot open in memory files. Save to temp file from DB.
-                docPath = Preferences.GetRandomTempFile(ImageStore.GetExtension(docCur));
-                File.WriteAllBytes(docPath, Convert.FromBase64String(docCur.RawBase64));
-            }
-            else
-            {//Cloud storage
-             //Download file to temp directory
-                OpenDentalCloud.Core.TaskStateDownload state = CloudStorage.Download(ImageStore.GetPatientFolder(patCur, ImageStore.GetPreferredAtoZpath())
-                    , docCur.FileName);
-                docPath = Preferences.GetRandomTempFile(ImageStore.GetExtension(docCur));
-                File.WriteAllBytes(docPath, state.FileContent);
-            }
-            return docPath;
+
+            return ImageStore.GetFilePath(docCur, ImageStore.GetPatientFolder(patCur));
         }
 
         ///<summary>Zeros securitylog FKey column for rows that are using the matching docNum as FKey and are related to Document.

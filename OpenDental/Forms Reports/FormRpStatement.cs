@@ -257,7 +257,7 @@ namespace OpenDental{
 			sheet.Parameters.Add(new SheetParameter(true,"Statement") { ParamValue=StmtCur });
 			SheetFiller.FillFields(sheet,dataSet,StmtCur,pat: pat,fam: fam);
 			SheetUtil.CalculateHeights(sheet,dataSet,StmtCur,pat: pat,patGuar: fam.Guarantor);
-			string tempPath=CodeBase.ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),StmtCur.PatNum.ToString()+".pdf");
+			string tempPath=Path.Combine(Preferences.GetTempFolderPath(),StmtCur.PatNum.ToString()+".pdf");
 			SheetPrinting.CreatePdf(sheet,tempPath,StmtCur,dataSet,null,pat: pat,patGuar: fam.Guarantor);
 			List<Definition> listImageCatDefs=Definition.GetByCategory(DefinitionCategory.ImageCats);
 			long category=0;

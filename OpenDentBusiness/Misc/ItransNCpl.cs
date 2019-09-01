@@ -41,7 +41,7 @@ namespace OpenDentBusiness
             //If ITRANS2 is fully setup, then use the local ITRANS2 install on server to import carrier data.
             if (clearinghouse.CommBridge == EclaimsCommBridge.ITRANS && !string.IsNullOrEmpty(clearinghouse.ResponsePath))
             {
-                if (!File.Exists(ODFileUtils.CombinePaths(clearinghouse.ResponsePath, "ITRANS Claims Director.exe")))
+                if (!File.Exists(Path.Combine(clearinghouse.ResponsePath, "ITRANS Claims Director.exe")))
                 {
                     return Lans.g("Clearinghouse", "Unable to find 'ITRANS Claims Director.exe'. Make sure the file exists and the path is correct.");
                 }
@@ -54,13 +54,13 @@ namespace OpenDentBusiness
                 {
                     StartInfo = new ProcessStartInfo
                     {
-                        FileName = ODFileUtils.CombinePaths(clearinghouse.ResponsePath, "ITRANS Claims Director.exe"),
+                        FileName = Path.Combine(clearinghouse.ResponsePath, "ITRANS Claims Director.exe"),
                         Arguments = " --getncpl"
                     }
                 };
                 process.Start();
                 process.WaitForExit();
-                string ncplFilePath = ODFileUtils.CombinePaths(clearinghouse.ResponsePath, "n-cpl.json");
+                string ncplFilePath = Path.Combine(clearinghouse.ResponsePath, "n-cpl.json");
                 json = File.ReadAllText(ncplFilePath);//Read n-cpl.json
                 dateTimeTrans = File.GetCreationTime(ncplFilePath);
             }

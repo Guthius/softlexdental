@@ -56,10 +56,10 @@ namespace OpenDental.Bridges{
 				if(patFolder=="") {//exit without displaying any further message.
 					return;
 				}
-				patFolder=ODFileUtils.CombinePaths(storagePath,patFolder);
+				patFolder=Path.Combine(storagePath,patFolder);
 			}
 			else {//pat.TrophyFolder was already previously entered.
-				patFolder=ODFileUtils.CombinePaths(storagePath,pat.TrophyFolder);
+				patFolder= Path.Combine(storagePath,pat.TrophyFolder);
 			}
 			//can't do this because the folder won't exist yet for new patients.
 			//if(!Directory.Exists(patFolder)) {
@@ -86,8 +86,8 @@ namespace OpenDental.Bridges{
 			//Different Trophy might? be organized differently.
 			//But our logic will only cover the one situation that we are aware of.
 			//In numbered mode, the folder numbering scheme is [trophyImageDir]\XX\PatNum.  The two digits XX are obtained by retrieving the 5th and 6th (indexes 4 and 5) digits of the patient's PatNum, left padded with 0's to ensure the PatNum is at least 6 digits long.  Examples: PatNum=103, left pad to 000103, substring to 03, patient's folder location is [trophyDirectory]\03\103.  PatNum=1003457, no need to left pad, substring to 45, pat folder is [trophyDirectory]\45\1003457.
-			string retVal=ODFileUtils.CombinePaths(pat.PatNum.ToString().PadLeft(6,'0').Substring(4,2),pat.PatNum.ToString());//this is our default return value
-			string fullPath=ODFileUtils.CombinePaths(trophyPath,retVal);
+			string retVal= Path.Combine(pat.PatNum.ToString().PadLeft(6,'0').Substring(4,2),pat.PatNum.ToString());//this is our default return value
+			string fullPath= Path.Combine(trophyPath,retVal);
 			if(!Directory.Exists(fullPath)) {
 				try {
 					Directory.CreateDirectory(fullPath);
@@ -108,7 +108,7 @@ namespace OpenDental.Bridges{
 			string retVal="";
 			//try to find the correct trophy folder
 			string rvgPortion=pat.LName.Substring(0,1)+".rvg";
-			string alphaPath=ODFileUtils.CombinePaths(storagePath,rvgPortion);
+			string alphaPath= Path.Combine(storagePath,rvgPortion);
 			if(!Directory.Exists(alphaPath)) {
 				throw new ApplicationException("Could not find expected path: "+alphaPath+".  The enhanced Trophy bridge assumes that folders already exist with that naming convention.");
 			}
@@ -126,7 +126,7 @@ namespace OpenDental.Bridges{
 				if(String.Compare(dirArray[i].Name,maxFolderName) > 0) {//eg, if G0000035 > G0000024
 					maxFolderName=dirArray[i].Name;
 				}
-				datafilePath=ODFileUtils.CombinePaths(dirArray[i].FullName,"FILEDATA.txt");
+				datafilePath= Path.Combine(dirArray[i].FullName,"FILEDATA.txt");
 				if(!File.Exists(datafilePath)){
 					continue;//fail silently.
 				}

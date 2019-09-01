@@ -23,6 +23,7 @@ using OpenDental.UI;
 using OpenDentBusiness;
 using OpenDentBusiness.HL7;
 using OpenDentBusiness.UI;
+using SLDental.Storage;
 
 namespace OpenDental
 {
@@ -3627,14 +3628,13 @@ namespace OpenDental
                     {
                         infoBubble.Controls.Add(PicturePat);
                     }
-                    if (row.ImageFolder != ""
-                        && (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage))//Do not use patient image when A to Z folders are disabled.
+                    if (row.ImageFolder != "")//Do not use patient image when A to Z folders are disabled.
                     {
                         try
                         {
                             Bitmap patPict;
                             Documents.GetPatPict(row.PatNum,
-                                ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),
+                                Storage.Default.CombinePath(
                                     row.ImageFolder.Substring(0, 1).ToUpper(),
                                     row.ImageFolder, ""),
                                     out patPict);

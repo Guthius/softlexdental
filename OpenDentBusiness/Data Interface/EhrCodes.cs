@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Reflection;
-using System.Text;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 
-namespace OpenDentBusiness {
-	///<summary>Never insert or update, use cache pattern only.  This is not referencing a real table in the database, it is a static object filled by the contents of the EHR.dll.</summary>
-	public class EhrCodes {
+namespace OpenDentBusiness
+{
+    ///<summary>Never insert or update, use cache pattern only.  This is not referencing a real table in the database, it is a static object filled by the contents of the EHR.dll.</summary>
+    public class EhrCodes {
 		#region Get Methods
 		#endregion
 
@@ -41,7 +42,7 @@ namespace OpenDentBusiness {
 					if(listt==null) {//instead of refreshing the cache using the normal pattern we must retrieve the cache from the EHR.dll. No call to DB.
 						object ObjEhrCodeList;
 						Assembly AssemblyEHR;
-						string dllPathEHR=CodeBase.ODFileUtils.CombinePaths(System.Windows.Forms.Application.StartupPath,"EHR.dll");
+						string dllPathEHR= Path.Combine(System.Windows.Forms.Application.StartupPath,"EHR.dll");
 						
 						ObjEhrCodeList=null;
 						AssemblyEHR=null;

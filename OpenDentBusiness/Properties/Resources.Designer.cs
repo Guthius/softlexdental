@@ -19,7 +19,7 @@ namespace OpenDentBusiness.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -93,7 +93,7 @@ namespace OpenDentBusiness.Properties {
         ///&lt;SheetDef xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
         ///  &lt;IsNew&gt;false&lt;/IsNew&gt;
         ///  &lt;SheetDefNum&gt;0&lt;/SheetDefNum&gt;
-        ///  &lt;Description&gt;Layout 1 - Base&lt;/Description&gt;
+        ///  &lt;Description&gt;Chart Standard Layout&lt;/Description&gt;
         ///  &lt;SheetType&gt;ChartModule&lt;/SheetType&gt;
         ///  &lt;FontSize&gt;9&lt;/FontSize&gt;
         ///  &lt;FontName&gt;Microsoft Sans Serif&lt;/FontName&gt;
@@ -101,8 +101,7 @@ namespace OpenDentBusiness.Properties {
         ///  &lt;Height&gt;750&lt;/Height&gt;
         ///  &lt;IsLandscape&gt;false&lt;/IsLandscape&gt;
         ///  &lt;PageCount&gt;1&lt;/PageCount&gt;
-        ///  &lt;IsMultiPage&gt;false&lt;/IsMultiPage&gt;
-        ///  &lt; [rest of string was truncated]&quot;;.
+        ///  &lt;IsMultiPage&gt;false&lt;/IsMultiPage [rest of string was truncated]&quot;;.
         /// </summary>
         public static string ChartModuleStandardLayout {
             get {
@@ -913,8 +912,8 @@ namespace OpenDentBusiness.Properties {
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;SheetDef xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
         ///  &lt;IsNew&gt;false&lt;/IsNew&gt;
-        ///  &lt;SheetDefNum&gt;9&lt;/SheetDefNum&gt;
-        ///  &lt;Description&gt;Test&lt;/Description&gt;
+        ///  &lt;SheetDefNum&gt;6131&lt;/SheetDefNum&gt;
+        ///  &lt;Description&gt;Patient Dashboard&lt;/Description&gt;
         ///  &lt;SheetType&gt;PatientDashboardWidget&lt;/SheetType&gt;
         ///  &lt;FontSize&gt;9&lt;/FontSize&gt;
         ///  &lt;FontName&gt;Microsoft Sans Serif&lt;/FontName&gt;
@@ -922,8 +921,7 @@ namespace OpenDentBusiness.Properties {
         ///  &lt;Height&gt;800&lt;/Height&gt;
         ///  &lt;IsLandscape&gt;false&lt;/IsLandscape&gt;
         ///  &lt;PageCount&gt;1&lt;/PageCount&gt;
-        ///  &lt;IsMultiPage&gt;false&lt;/IsMultiPage&gt;
-        ///  &lt;B [rest of string was truncated]&quot;;.
+        ///  &lt;IsMultiPage&gt;false&lt;/Is [rest of string was truncated]&quot;;.
         /// </summary>
         public static string PatientDashboard {
             get {

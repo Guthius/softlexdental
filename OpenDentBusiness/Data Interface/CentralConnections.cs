@@ -19,7 +19,7 @@ namespace OpenDentBusiness
             centralConnection = new CentralConnection();
             noShow = false;
 
-            string xmlPath = ODFileUtils.CombinePaths(Application.StartupPath, "FreeDentalConfig.xml");
+            string xmlPath = Path.Combine(Application.StartupPath, "FreeDentalConfig.xml");
             #region Permission Check
             //Improvement should be made here to avoid requiring admin priv.
             //Search path should be something like this:
@@ -182,7 +182,7 @@ namespace OpenDentBusiness
                 XmlWriterSettings settings = new XmlWriterSettings();
                 settings.Indent = true;
                 settings.IndentChars = ("    ");
-                using (XmlWriter writer = XmlWriter.Create(ODFileUtils.CombinePaths(Application.StartupPath, "FreeDentalConfig.xml"), settings))
+                using (XmlWriter writer = XmlWriter.Create(Path.Combine(Application.StartupPath, "FreeDentalConfig.xml"), settings))
                 {
                     writer.WriteStartElement("ConnectionSettings");
 

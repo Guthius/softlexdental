@@ -42,7 +42,7 @@ namespace OpenDental{
 			InitializeComponent();
 			DocCur=docCur;
 			PatCur=pat;
-			PatFolder=ImageStore.GetPatientFolder(pat,ImageStore.GetPreferredAtoZpath());
+			PatFolder=ImageStore.GetPatientFolder(pat);
 			Lan.F(this);
 		}
 

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using CodeBase;
 using OpenDental.Bridges;
 using OpenDentBusiness;
+using SLDental.Storage;
 
 namespace OpenDental {
 	/// <summary>
@@ -705,7 +706,7 @@ namespace OpenDental {
 			if(browserDlg.ShowDialog()==DialogResult.Cancel){
 				return;
 			}
-			textBackupFromPath.Text=ODFileUtils.CombinePaths(browserDlg.SelectedPath,"");//Add trail slash.
+			textBackupFromPath.Text= Storage.Default.CombinePath(browserDlg.SelectedPath,"");//Add trail slash.
 		}
 
 		private void butBrowseTo_Click(object sender, System.EventArgs e) {
@@ -714,7 +715,7 @@ namespace OpenDental {
 			if(browserDlg.ShowDialog()==DialogResult.Cancel){
 				return;
 			}
-			textBackupToPath.Text=ODFileUtils.CombinePaths(browserDlg.SelectedPath,"");//Add trail slash.
+			textBackupToPath.Text= Storage.Default.CombinePath(browserDlg.SelectedPath,"");//Add trail slash.
 		}
 
 		private void butBrowseRestoreFrom_Click(object sender, System.EventArgs e) {
@@ -723,7 +724,7 @@ namespace OpenDental {
 			if(browserDlg.ShowDialog()==DialogResult.Cancel){
 				return;
 			}
-			textBackupRestoreFromPath.Text=ODFileUtils.CombinePaths(browserDlg.SelectedPath,"");//Add trail slash.
+			textBackupRestoreFromPath.Text= Storage.Default.CombinePath(browserDlg.SelectedPath,"");//Add trail slash.
 		}
 
 		private void butBrowseRestoreTo_Click(object sender, System.EventArgs e) {
@@ -732,7 +733,7 @@ namespace OpenDental {
 			if(browserDlg.ShowDialog()==DialogResult.Cancel){
 				return;
 			}
-			textBackupRestoreToPath.Text=ODFileUtils.CombinePaths(browserDlg.SelectedPath,"");//Add trail slash.
+			textBackupRestoreToPath.Text= Storage.Default.CombinePath(browserDlg.SelectedPath,"");//Add trail slash.
 		}
 
 		private void butBrowseRestoreAtoZTo_Click(object sender, System.EventArgs e) {
@@ -741,7 +742,7 @@ namespace OpenDental {
 			if(browserDlg.ShowDialog()==DialogResult.Cancel){
 				return;
 			}
-			textBackupRestoreAtoZToPath.Text=ODFileUtils.CombinePaths(browserDlg.SelectedPath,"");//Add trail slash.
+			textBackupRestoreAtoZToPath.Text= Storage.Default.CombinePath(browserDlg.SelectedPath,"");//Add trail slash.
 		}
 
 		private void butBackup_Click(object sender, System.EventArgs e) {
@@ -789,7 +790,7 @@ namespace OpenDental {
 				}
 			}
 			string dbName=MiscData.GetCurrentDatabase();
-			if(!Directory.Exists(ODFileUtils.CombinePaths(textBackupFromPath.Text,dbName))){// C:\mysql\data\opendental
+			if(!Directory.Exists(Storage.Default.CombinePath(textBackupFromPath.Text,dbName))){// C:\mysql\data\opendental
 				MsgBox.Show(this,"Backup FROM path is invalid.");
 				return;
 			}
@@ -842,7 +843,7 @@ namespace OpenDental {
 				}
 			}
 			try{
-				string dbtopath=ODFileUtils.CombinePaths(textBackupToPath.Text,dbName);
+				string dbtopath= Storage.Default.CombinePath(textBackupToPath.Text,dbName);
 				if(Directory.Exists(dbtopath)){// D:\opendental
 					int loopCount=1;
 					while(Directory.Exists(dbtopath+"backup_"+loopCount)){
@@ -850,15 +851,15 @@ namespace OpenDental {
 					}
 				  Directory.Move(dbtopath,dbtopath+"backup_"+loopCount);
 				}
-				string fromPath=ODFileUtils.CombinePaths(textBackupFromPath.Text,dbName);
+				string fromPath= Storage.Default.CombinePath(textBackupFromPath.Text,dbName);
 				string toPath=textBackupToPath.Text;
 				DirectoryInfo dirInfo=new DirectoryInfo(fromPath);//does not check to see if dir exists
-				Directory.CreateDirectory(ODFileUtils.CombinePaths(toPath,dirInfo.Name));
+				Directory.CreateDirectory(Storage.Default.CombinePath(toPath,dirInfo.Name));
 				FileInfo[] files=dirInfo.GetFiles();
 				curVal=0;//curVal gets increased
 				for(int i=0;i<files.Length;i++){
 					string fromFile=files[i].FullName;
-					string toFile=ODFileUtils.CombinePaths(new string[] { toPath,dirInfo.Name,files[i].Name });
+					string toFile= Storage.Default.CombinePath(new string[] { toPath,dirInfo.Name,files[i].Name });
 					if(File.Exists(toFile)) {
 						if(files[i].LastWriteTime!=File.GetLastWriteTime(toFile)) {//if modification dates don't match
 							FileAttributes fa=File.GetAttributes(toFile);
@@ -891,13 +892,13 @@ namespace OpenDental {
 			//A to Z folder------------------------------------------------------------------------------------
 			try {
 				if(ShouldUseAtoZFolder()) {
-					string atozFull=ODFileUtils.RemoveTrailingSeparators(ImageStore.GetPreferredAtoZpath());
+					string atozFull="";
 					string atozDir=atozFull.Substring(atozFull.LastIndexOf(Path.DirectorySeparatorChar)+1);//OpenDentalData
 					Invoke(new PassProgressDelegate(PassProgressToDialog),new object[] { 0,
 					Lan.g(this,"Calculating size of files in A to Z folder."),
 					100,"" });//max of 100 keeps dlg from closing
-					long atozSize=GetFileSizes(ODFileUtils.CombinePaths(atozFull,""),
-						ODFileUtils.CombinePaths(new string[] { textBackupToPath.Text,atozDir,"" }))/1024; 
+					long atozSize=GetFileSizes(Path.Combine(atozFull,""),
+                        Path.Combine(new string[] { textBackupToPath.Text,atozDir,"" }))/1024; 
 					driveFreeSpace=0;
 					//Attempt to get the free disk space on the drive or share of the destination folder.
 					//If the free space cannot be determined the backup will be attempted anyway (old behavior).
@@ -909,12 +910,12 @@ namespace OpenDental {
 								+Lan.g(this,"Destination available space:")+" "+driveFreeSpace+"B");
 						}
 					}
-					if(!Directory.Exists(ODFileUtils.CombinePaths(textBackupToPath.Text,atozDir))) {// D:\OpenDentalData
-						Directory.CreateDirectory(ODFileUtils.CombinePaths(textBackupToPath.Text,atozDir));// D:\OpenDentalData
+					if(!Directory.Exists(Path.Combine(textBackupToPath.Text,atozDir))) {// D:\OpenDentalData
+						Directory.CreateDirectory(Path.Combine(textBackupToPath.Text,atozDir));// D:\OpenDentalData
 					}
 					curVal=0;
-					CopyDirectoryIncremental(ODFileUtils.CombinePaths(atozFull,""),// C:\OpenDentalData\
-						ODFileUtils.CombinePaths(new string[] { textBackupToPath.Text,atozDir,"" }),// D:\OpenDentalData\
+					CopyDirectoryIncremental(Path.Combine(atozFull,""),// C:\OpenDentalData\
+                        Path.Combine(new string[] { textBackupToPath.Text,atozDir,"" }),// D:\OpenDentalData\
 						atozSize);
 				}
 			}
@@ -938,14 +939,14 @@ namespace OpenDental {
 			Invoke(new PassProgressDelegate(PassProgressToDialog),new object [] { 0,
 				Lan.g(this,"Database restored.\r\nCalculating size of files in A to Z folder."),
 				100,"" });//max of 100 keeps dlg from closing
-			long atozSize=GetFileSizes(ODFileUtils.CombinePaths(new string[] {textBackupRestoreFromPath.Text,atozDir,""}),
-				ODFileUtils.CombinePaths(atozFull,""))/1024;// C:\OpenDentalData\
+			long atozSize=GetFileSizes(Path.Combine(new string[] {textBackupRestoreFromPath.Text,atozDir,""}),
+                Path.Combine(atozFull,""))/1024;// C:\OpenDentalData\
 			if(!Directory.Exists(atozFull)){// C:\OpenDentalData\
 				Directory.CreateDirectory(atozFull);// C:\OpenDentalData\
 			}
 			curVal=0;
-			CopyDirectoryIncremental(ODFileUtils.CombinePaths(new string[] {textBackupRestoreFromPath.Text,atozDir,""}),
-				ODFileUtils.CombinePaths(atozFull,""),// C:\OpenDentalData\
+			CopyDirectoryIncremental(Path.Combine(new string[] {textBackupRestoreFromPath.Text,atozDir,""}),
+                Path.Combine(atozFull,""),// C:\OpenDentalData\
 				atozSize);
 			//force dlg to close even if no files copied or calculation was slightly off.
 			Invoke(new PassProgressDelegate(PassProgressToDialog),new object[] { 0,"",0,"" });
@@ -970,12 +971,12 @@ namespace OpenDental {
 			DirectoryInfo dirInfo=new DirectoryInfo(fromPath);
 			DirectoryInfo[] dirs=dirInfo.GetDirectories();
 			for(int i=0;i<dirs.Length;i++){
-				retVal+=GetFileSizes(ODFileUtils.CombinePaths(dirs[i].FullName,""),
-					ODFileUtils.CombinePaths(new string[] {toPath,dirs[i].Name,""}));
+				retVal+=GetFileSizes(Path.Combine(dirs[i].FullName,""),
+                    Path.Combine(new string[] {toPath,dirs[i].Name,""}));
 			}
 			FileInfo[] files=dirInfo.GetFiles();//of fromPath
 			for(int i=0;i<files.Length;i++){
-				if(!File.Exists(ODFileUtils.CombinePaths(toPath,files[i].Name))){
+				if(!File.Exists(Path.Combine(toPath,files[i].Name))){
 					retVal+=(long)(files[i].Length/1024);
 				}
 			}
@@ -1004,17 +1005,17 @@ namespace OpenDental {
 			DirectoryInfo dirInfo=new DirectoryInfo(fromPath);
 			DirectoryInfo[] dirs=dirInfo.GetDirectories();
 			for(int i=0;i<dirs.Length;i++){
-				string destPath=ODFileUtils.CombinePaths(toPath,dirs[i].Name);
+				string destPath= Path.Combine(toPath,dirs[i].Name);
 				if(!Directory.Exists(destPath)){
 					Directory.CreateDirectory(destPath);
 				}
-				CopyDirectoryIncremental(ODFileUtils.CombinePaths(dirs[i].FullName,""),
-					ODFileUtils.CombinePaths(destPath,""),maxSize);
+				CopyDirectoryIncremental(Path.Combine(dirs[i].FullName,""),
+                    Path.Combine(destPath,""),maxSize);
 			}
 			FileInfo[] files=dirInfo.GetFiles();//of fromPath
 			for(int i=0;i<files.Length;i++){
 				string fromFile=files[i].FullName;
-				string toFile=ODFileUtils.CombinePaths(toPath,files[i].Name);
+				string toFile= Path.Combine(toPath,files[i].Name);
 				if(File.Exists(toFile)){
 					if(files[i].LastWriteTime!=File.GetLastWriteTime(toFile)){//if modification dates don't match
 						FileAttributes fa=File.GetAttributes(toFile);
@@ -1064,11 +1065,11 @@ namespace OpenDental {
 			}
 			//pointless to save defaults
 			string dbName=MiscData.GetCurrentDatabase();
-			if(!Directory.Exists(ODFileUtils.CombinePaths(textBackupRestoreFromPath.Text,dbName))){// D:\opendental
+			if(!Directory.Exists(Path.Combine(textBackupRestoreFromPath.Text,dbName))){// D:\opendental
 				MessageBox.Show(Lan.g(this,"Restore FROM path is invalid.  Unable to find folder named ")+dbName);
 				return;
 			}
-			if(!Directory.Exists(ODFileUtils.CombinePaths(textBackupRestoreToPath.Text,dbName))) {// C:\mysql\data\opendental
+			if(!Directory.Exists(Path.Combine(textBackupRestoreToPath.Text,dbName))) {// C:\mysql\data\opendental
 				MessageBox.Show(Lan.g(this,"Restore TO path is invalid.  Unable to find folder named ")+dbName);
 				return;
 			}
@@ -1081,12 +1082,12 @@ namespace OpenDental {
 				//remove the trailing \
 				atozFull=atozFull.Substring(0,atozFull.Length-1);// C:\OpenDentalData
 				string atozDir=atozFull.Substring(atozFull.LastIndexOf(Path.DirectorySeparatorChar)+1);// OpenDentalData
-				if(!Directory.Exists(ODFileUtils.CombinePaths(textBackupRestoreFromPath.Text,atozDir))){// D:\OpenDentalData
+				if(!Directory.Exists(Path.Combine(textBackupRestoreFromPath.Text,atozDir))){// D:\OpenDentalData
 					MsgBox.Show(this,"Restore A-Z images FROM path is invalid.");
 					return;
 				}
 			}
-			string fromPath=ODFileUtils.CombinePaths(new string[] {textBackupRestoreFromPath.Text,dbName,""});// D:\opendental\
+			string fromPath= Path.Combine(new string[] {textBackupRestoreFromPath.Text,dbName,""});// D:\opendental\
 			DirectoryInfo dirInfo=new DirectoryInfo(fromPath);//does not check to see if dir exists
 			if(MessageBox.Show(Lan.g(this,"Restore from backup created on")+"\r\n"
 				+dirInfo.LastWriteTime.ToString("dddd")+"  "+dirInfo.LastWriteTime.ToString()
@@ -1104,7 +1105,7 @@ namespace OpenDental {
 			//rename the current database---------------------------------------------------------------------------
 			//Get a name for the new directory
 			string newDb=dbName+"backup_"+DateTime.Today.ToString("MM_dd_yyyy");
-			if(Directory.Exists(ODFileUtils.CombinePaths(textBackupRestoreToPath.Text,newDb))){//if the new database name already exists
+			if(Directory.Exists(Path.Combine(textBackupRestoreToPath.Text,newDb))){//if the new database name already exists
 				//find a unique one
 				int uniqueID=1;
 				string originalNewDb=newDb;
@@ -1112,18 +1113,17 @@ namespace OpenDental {
 					newDb=originalNewDb+"_"+uniqueID.ToString();
 					uniqueID++;
 				}
-				while(Directory.Exists(ODFileUtils.CombinePaths(textBackupRestoreToPath.Text,newDb)));
+				while(Directory.Exists(Storage.Default.CombinePath(textBackupRestoreToPath.Text,newDb)));
 			}
 			//move the current db (rename)
-			Directory.Move(ODFileUtils.CombinePaths(textBackupRestoreToPath.Text,dbName)
-				,ODFileUtils.CombinePaths(textBackupRestoreToPath.Text,newDb));
+			Directory.Move(Path.Combine(textBackupRestoreToPath.Text,dbName), Path.Combine(textBackupRestoreToPath.Text,newDb));
 			//Restore----------------------------------------------------------------------------------------------
 			string toPath=textBackupRestoreToPath.Text;// C:\mysql\data\
-			Directory.CreateDirectory(ODFileUtils.CombinePaths(toPath,dirInfo.Name));
+			Directory.CreateDirectory(Path.Combine(toPath,dirInfo.Name));
 			FileInfo[] files=dirInfo.GetFiles();
 			curVal=0;//curVal gets increased
 			for(int i=0;i<files.Length;i++){
-				File.Copy(files[i].FullName,ODFileUtils.CombinePaths(new string[] {toPath,dirInfo.Name,files[i].Name}));
+				File.Copy(files[i].FullName, Path.Combine(toPath,dirInfo.Name,files[i].Name));
 			}
 			//start the service--------------------------------------------------------------------------------------
 			ServicesHelper.Start(sc);

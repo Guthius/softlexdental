@@ -5,95 +5,125 @@ using OpenDental.UI;
 using OpenDentBusiness;
 using System.Linq;
 
-namespace OpenDental {
-	public partial class FormAdjustSelect:ODForm {
-		public Adjustment SelectedAdj;
-		public PaySplit PaySplitCur;
-		public List<PaySplit> ListSplitsForPayment;
-		public long PatNumCur;
-		public double PaySplitCurAmt;
-		public long PayNumCur;
-		private List<PaySplit> _listSplitsForAdjusts;		
-		private List<AccountEntry> _listAdjusts=new List<AccountEntry>();
+namespace OpenDental
+{
+    public partial class FormAdjustSelect : FormBase
+    {
+        readonly List<AccountEntry> accountEntryList = new List<AccountEntry>();
+        List<PaySplit> paySplitList;
 
-		public FormAdjustSelect() {
-			InitializeComponent();
-			Lan.F(this);
-		}
+        public Adjustment SelectedAdj { get; set; }
 
-		private void FormAdjustSelect_Load(object sender,EventArgs e) {
-			List<Adjustment> listAdjusts=Adjustments.GetAdjustForPats(new List<long>() { PatNumCur }).FindAll(x => x.ProcNum==0);//Get all unallocated adjustments for current pat.
-			foreach(Adjustment adjust in listAdjusts) {
-				_listAdjusts.Add(new AccountEntry(adjust));
-			}
-			_listSplitsForAdjusts=PaySplits.GetForAdjustments(listAdjusts.Select(x => x.Id).ToList());
-			foreach(AccountEntry entry in _listAdjusts) {
-				//Figure out how much each adjustment has left, not counting this payment.
-				entry.AmountStart-=(decimal)Adjustments.GetAmtAllocated(entry.PriKey,PayNumCur,_listSplitsForAdjusts.FindAll(x => x.AdjNum==entry.PriKey));
-				//Reduce adjustments based on current payment's splits as well (this is in-memory list, could be new, could be modified) but not the current split
-				entry.AmountStart-=(decimal)Adjustments.GetAmtAllocated(entry.PriKey,0,ListSplitsForPayment.FindAll(x => x.AdjNum==entry.PriKey && x!=PaySplitCur));
-			}
-			FillGrid();
-		}
+        public PaySplit PaySplitCur;
+        public List<PaySplit> ListSplitsForPayment;
+        public long PatNumCur;
+        public double PaySplitCurAmt;
+        public long PayNumCur;
 
-		private void FillGrid() {
-			gridAdjusts.BeginUpdate();
-			gridAdjusts.Rows.Clear();
-			gridAdjusts.Columns.Clear();
-			ODGridColumn col=new ODGridColumn(Lan.g("TableAdjustSelect","Date"),70);
-			gridAdjusts.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableAdjustSelect","Prov"),55);
-			gridAdjusts.Columns.Add(col);
-			if(Preferences.HasClinicsEnabled) {
-				col=new ODGridColumn(Lan.g("TableAdjustSelect","Clinic"),55);
-				gridAdjusts.Columns.Add(col);
-			}
-			col=new ODGridColumn(Lan.g("TableProcSelect","Amt Orig"),60,HorizontalAlignment.Right);
-			gridAdjusts.Columns.Add(col);
-			col=new ODGridColumn(Lan.g("TableProcSelect","Amt End"),60,HorizontalAlignment.Right);
-			gridAdjusts.Columns.Add(col);
-			ODGridRow row;
-			foreach(AccountEntry entry in _listAdjusts) {
-				row=new ODGridRow();
-				row.Cells.Add(((Adjustment)entry.Tag).AdjDate.ToShortDateString());
-				row.Cells.Add(Providers.GetAbbr(((Adjustment)entry.Tag).ProvNum));
-				if(Preferences.HasClinicsEnabled) {
-					row.Cells.Add(Clinics.GetAbbr(((Adjustment)entry.Tag).ClinicNum));
-				}
-				row.Cells.Add(entry.AmountOriginal.ToString("F"));//Amt Orig
-				row.Cells.Add(entry.AmountStart.ToString("F"));//Amt Available
-				row.Tag=entry;
-				gridAdjusts.Rows.Add(row);
-			}
-			gridAdjusts.EndUpdate();
-		}
+        public FormAdjustSelect() => InitializeComponent();
 
-		private void gridAdjusts_CellClick(object sender,UI.ODGridClickEventArgs e) {
-			//Update text boxes here
-			AccountEntry entry=(AccountEntry)gridAdjusts.SelectedGridRows[0].Tag;//Only one can be selected at a time.
-			labelAmtOriginal.Text=entry.AmountOriginal.ToString("F");//Adjustment's start original - Negative or positive it doesn't matter.
-			labelAmtUsed.Text=(entry.AmountOriginal-entry.AmountStart).ToString("F");//Amount of Adjustment that's been used elsewhere
-			labelAmtAvail.Text=entry.AmountStart.ToString("F");//Amount of Adjustment that's left available
-			labelCurSplitAmt.Text=(-PaySplitCurAmt).ToString("F");//Amount of current PaySplit (We can only access this window from current PaySplitEdit window right now)
-			labelAmtEnd.Text=((double)entry.AmountStart-PaySplitCurAmt).ToString("F");//Amount of Adjustment after everything.
-		}
+        void FormAdjustSelect_Load(object sender, EventArgs e)
+        {
+            // Get all unallocated adjustments for current pat.
+            var adjustmentList = Adjustments.GetAdjustForPats(new List<long>() { PatNumCur }).FindAll(x => x.ProcNum == 0);
+            foreach (var adjustment in adjustmentList)
+            {
+                accountEntryList.Add(new AccountEntry(adjustment));
+            }
 
-		private void gridAdjusts_CellDoubleClick(object sender,UI.ODGridClickEventArgs e) {
-			SelectedAdj=(Adjustment)((AccountEntry)gridAdjusts.SelectedGridRows[0].Tag).Tag;
-			DialogResult=DialogResult.OK;
-		}
+            paySplitList = PaySplits.GetForAdjustments(adjustmentList.Select(x => x.Id).ToList());
+            foreach (var accountEntry in accountEntryList)
+            {
+                // Figure out how much each adjustment has left, not counting this payment.
+                accountEntry.AmountStart -= (decimal)Adjustments.GetAmtAllocated(accountEntry.PriKey, PayNumCur, paySplitList.FindAll(x => x.AdjNum == accountEntry.PriKey));
 
-		private void butOK_Click(object sender,EventArgs e) {
-			if(gridAdjusts.SelectedIndices.Length<1) {
-				MsgBox.Show(this,"Please select an adjustment first or press Cancel.");
-				return;
-			}
-			SelectedAdj=(Adjustment)((AccountEntry)gridAdjusts.SelectedGridRows[0].Tag).Tag;
-			DialogResult=DialogResult.OK;
-		}
+                // Reduce adjustments based on current payment's splits as well (this is in-memory list, could be new, could be modified) but not the current split
+                accountEntry.AmountStart -= (decimal)Adjustments.GetAmtAllocated(accountEntry.PriKey, 0, ListSplitsForPayment.FindAll(x => x.AdjNum == accountEntry.PriKey && x != PaySplitCur));
+            }
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
-	}
+            LoadAdjustments();
+        }
+
+        void LoadAdjustments()
+        {
+            adjustmentGrid.BeginUpdate();
+            
+            adjustmentGrid.Columns.Clear();
+            adjustmentGrid.Columns.Add(new ODGridColumn("Date", 70));
+            adjustmentGrid.Columns.Add(new ODGridColumn("Prov", 55));
+            if (Preferences.HasClinicsEnabled)
+            {
+                adjustmentGrid.Columns.Add(new ODGridColumn("Clinic", 55));
+            }
+            adjustmentGrid.Columns.Add(new ODGridColumn("Amt Orig", 60, HorizontalAlignment.Right));
+            adjustmentGrid.Columns.Add(new ODGridColumn("Amt End", 60, HorizontalAlignment.Right));
+            adjustmentGrid.Rows.Clear();
+
+            foreach (var accountEntry in accountEntryList)
+            {
+                var row = new ODGridRow();
+                row.Cells.Add(((Adjustment)accountEntry.Tag).AdjDate.ToShortDateString());
+                row.Cells.Add(Providers.GetAbbr(((Adjustment)accountEntry.Tag).ProvNum));
+                if (Preferences.HasClinicsEnabled)
+                {
+                    row.Cells.Add(Clinics.GetAbbr(((Adjustment)accountEntry.Tag).ClinicNum));
+                }
+                row.Cells.Add(accountEntry.AmountOriginal.ToString("F"));//Amt Orig
+                row.Cells.Add(accountEntry.AmountStart.ToString("F"));//Amt Available
+                row.Tag = accountEntry;
+                adjustmentGrid.Rows.Add(row);
+            }
+
+            adjustmentGrid.EndUpdate();
+        }
+
+        void AdjustmentGrid_CellClick(object sender, ODGridClickEventArgs e)
+        {
+            if (adjustmentGrid.SelectedGridRows[0].Tag is AccountEntry accountEntry)
+            {
+                amtOriginialLabel.Text = accountEntry.AmountOriginal.ToString("F");                         // Adjustment's start original - Negative or positive it doesn't matter.
+                labelAmtUsed.Text = (accountEntry.AmountOriginal - accountEntry.AmountStart).ToString("F"); // Amount of Adjustment that's been used elsewhere
+                labelAmtAvail.Text = accountEntry.AmountStart.ToString("F");                                // Amount of Adjustment that's left available
+                labelCurSplitAmt.Text = (-PaySplitCurAmt).ToString("F");                                    // Amount of current PaySplit (We can only access this window from current PaySplitEdit window right now)
+                labelAmtEnd.Text = ((double)accountEntry.AmountStart - PaySplitCurAmt).ToString("F");       // Amount of Adjustment after everything.
+            }
+        }
+
+        void AdjustmentGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
+        {
+            if (adjustmentGrid.SelectedGridRows[0].Tag is AccountEntry accountEntry)
+            {
+                if (accountEntry.Tag is Adjustment adjustment)
+                {
+                    SelectedAdj = adjustment;
+
+                    DialogResult = DialogResult.OK;
+                }
+            }
+        }
+
+        void AcceptButton_Click(object sender, EventArgs e)
+        {
+            if (adjustmentGrid.SelectedIndices.Length < 1)
+            {
+                MessageBox.Show(
+                    "Please select an adjustment first or press Cancel.",
+                    "Select Adjustment", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Information);
+
+                return;
+            }
+
+            if (adjustmentGrid.SelectedGridRows[0].Tag is AccountEntry accountEntry)
+            {
+                if (accountEntry.Tag is Adjustment adjustment)
+                {
+                    SelectedAdj = adjustment;
+
+                    DialogResult = DialogResult.OK;
+                }
+            }
+        }
+    }
 }

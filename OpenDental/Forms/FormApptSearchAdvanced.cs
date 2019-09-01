@@ -20,9 +20,11 @@ namespace OpenDental
 {
     public partial class FormApptSearchAdvanced : FormBase
     {
-        #region Private Variables
-        ///<summary>The appointment passed in that we are trying to find a slot for.</summary>
-        private Appointment _appt;
+        /// <summary>
+        /// The appointment passed in that we are trying to find a slot for.
+        /// </summary>
+        private Appointment appointment;
+
         /// <summary>The list of providers possibly set on previous search window before entering advanced search.</summary>
         private List<long> _listProvNums = new List<long>();
         /// <summary>The before time that was possibly set before entering this window. </summary>
@@ -32,24 +34,31 @@ namespace OpenDental
         /// <summary>The after date that was possibly set before entering this window. </summary>
         private DateTime _afterDate;
         private List<ScheduleOpening> _listOpenings = new List<ScheduleOpening>();
-        #endregion
 
         ///<summary>Pass in the currently selected apptNum along with all ApptNums that are associated to the current pinboard.</summary>
         public FormApptSearchAdvanced(long apptNum)
         {
             InitializeComponent();
-            Lan.F(this);
-            _appt = Appointments.GetOneApt(apptNum);
-            if (_appt == null)
-            {
-                MsgBox.Show(this, "Invalid appointment on the Pinboard.");
-                DialogResult = DialogResult.Abort;
-                return;
-            }
+
+            appointment = Appointments.GetOneApt(apptNum);
+
         }
 
-        private void FormApptSearchAdvanced_Load(object sender, EventArgs e)
+        void FormApptSearchAdvanced_Load(object sender, EventArgs e)
         {
+            if (appointment == null)
+            {
+                MessageBox.Show(
+                    "Invalid appointment on the Pinboard.",
+                    "Appointment",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                DialogResult = DialogResult.Abort;
+
+                return;
+            }
+
             if (_afterDate != DateTime.MinValue.Date && _afterDate != null)
             {
                 dateSearchFrom.Text = _afterDate.ToShortDateString();
@@ -126,7 +135,7 @@ namespace OpenDental
                 return;
             }
             labelClinic.Visible = true;
-            butClinicMore.Visible = true;
+            browseClinicButton.Visible = true;
             if (comboBoxClinic.IsNothingSelected)
             {
                 comboBoxClinic.SelectedIndex = 0;
@@ -176,15 +185,15 @@ namespace OpenDental
 
         private void FillGrid()
         {
-            gridMain.BeginUpdate();
-            gridMain.Columns.Clear();
+            resultsGrid.BeginUpdate();
+            resultsGrid.Columns.Clear();
             ODGridColumn col = new ODGridColumn("Day", 85);
-            gridMain.Columns.Add(col);
+            resultsGrid.Columns.Add(col);
             col = new ODGridColumn("Date", 85, HorizontalAlignment.Center);
-            gridMain.Columns.Add(col);
+            resultsGrid.Columns.Add(col);
             col = new ODGridColumn("Time", 85, HorizontalAlignment.Center);
-            gridMain.Columns.Add(col);
-            gridMain.Rows.Clear();
+            resultsGrid.Columns.Add(col);
+            resultsGrid.Rows.Clear();
             ODGridRow row;
             foreach (ScheduleOpening opening in _listOpenings)
             {
@@ -193,9 +202,9 @@ namespace OpenDental
                 row.Cells.Add(opening.DateTimeAvail.Date.ToShortDateString());
                 row.Cells.Add(opening.DateTimeAvail.ToShortTimeString());
                 row.Tag = opening;
-                gridMain.Rows.Add(row);
+                resultsGrid.Rows.Add(row);
             }
-            gridMain.EndUpdate();
+            resultsGrid.EndUpdate();
         }
 
         private void DoSearch()
@@ -286,12 +295,12 @@ namespace OpenDental
             }
             if (blockoutType != 0 && listProvNums.Max() > 0)
             {
-                _listOpenings.AddRange(ApptSearch.GetSearchResultsForBlockoutAndProvider(listProvNums, _appt.AptNum, startDate, endDate, listOpNums, listClinicNums
+                _listOpenings.AddRange(ApptSearch.GetSearchResultsForBlockoutAndProvider(listProvNums, appointment.AptNum, startDate, endDate, listOpNums, listClinicNums
                     , beforeTime, afterTime, blockoutType, 15));
             }
             else
             {
-                _listOpenings = ApptSearch.GetSearchResults(_appt.AptNum, startDate, endDate, listProvNums, listOpNums, listClinicNums
+                _listOpenings = ApptSearch.GetSearchResults(appointment.AptNum, startDate, endDate, listProvNums, listOpNums, listClinicNums
                     , beforeTime, afterTime, blockoutType, resultCount: 15);
             }
             Cursor = Cursors.Default;
@@ -356,17 +365,18 @@ namespace OpenDental
             }
         }
 
-        private void butClinicMore_Click(object sender, EventArgs e)
+        void BrowseClinicButton_Click(object sender, EventArgs e)
         {
-            FormClinics FormC = new FormClinics();
-            FormC.IsMultiSelect = false;
-            FormC.IsSelectionMode = true;
-            FormC.ShowDialog();
-            if (FormC.DialogResult != DialogResult.OK)
+            using (var formClinics = new FormClinics())
             {
-                return;
+                formClinics.IsMultiSelect = false;
+                formClinics.IsSelectionMode = true;
+
+                if (formClinics.ShowDialog() == DialogResult.OK)
+                {
+                    comboBoxClinic.SelectedClinicNum = formClinics.SelectedClinicNum;
+                }
             }
-            comboBoxClinic.SelectedClinicNum = FormC.SelectedClinicNum;
         }
 
         private void comboBoxClinic_SelectionChangeCommitted(object sender, EventArgs e)
@@ -387,16 +397,17 @@ namespace OpenDental
             FillProviders(GetProvidersForSelectedClinic(), listCurProvNums);
         }
 
-        private void gridMain_CellClick(object sender, ODGridClickEventArgs e)
+        private void ResultsGrid_CellClick(object sender, ODGridClickEventArgs e)
         {
             //get the day for the row that was clicked on.
-            DateTime rowDate = ((ScheduleOpening)gridMain.Rows[e.Row].Tag).DateTimeAvail;
+            DateTime rowDate = ((ScheduleOpening)resultsGrid.Rows[e.Row].Tag).DateTimeAvail;
+
             //move the calendar day on the appt module to the day that was clicked on. 
-            GotoModule.GotoAppointment(rowDate.Date, _appt.AptNum);
+            GotoModule.GotoAppointment(rowDate.Date, appointment.AptNum);
             //if clinics, move to the clinic as well? 
         }
 
-        private void butMore_Click(object sender, EventArgs e)
+        void MoreButton_Click(object sender, EventArgs e)
         {
             if (_listOpenings.Count < 1)
             {
@@ -421,22 +432,23 @@ namespace OpenDental
             DoSearch();
         }
 
-        private void butSearch_Click(object sender, EventArgs e)
+        void SearchButton_Click(object sender, EventArgs e)
         {
-            //validate that there is an appointment on the pinboard. 
-            if (_appt.AptNum <= 0)
+            // Validate that there is an appointment on the pinboard. 
+            if (appointment.AptNum <= 0)
             {
-                MsgBox.Show(this, "Invalid appointments on pinboard.");
+                MessageBox.Show(
+                    "Invalid appointments on pinboard.", 
+                    "Appointment",
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+
                 return;
             }
-            DoSearch();
-            butMore.Enabled = true;
-        }
 
-        private void butClose_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
+            DoSearch();
+
+            moreButton.Enabled = true;
         }
 
         private enum ProvMode

@@ -14,6 +14,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using CodeBase;
+using SLDental.Storage;
 
 namespace OpenDental{
 	/// <summary>
@@ -538,8 +539,8 @@ namespace OpenDental{
 			}
 			LetterMerge letterCur=ListForCat[listLetters.SelectedIndex];
 			letterCur.ImageFolder=comboImageCategory.SelectedTag<Definition>().Id;
-			string templateFile=ODFileUtils.CombinePaths(Preference.GetString(PreferenceName.LetterMergePath),letterCur.TemplateName);
-			string dataFile=ODFileUtils.CombinePaths(Preference.GetString(PreferenceName.LetterMergePath),letterCur.DataFileName);
+			string templateFile= Storage.Default.CombinePath(Preference.GetString(PreferenceName.LetterMergePath),letterCur.TemplateName);
+			string dataFile= Storage.Default.CombinePath(Preference.GetString(PreferenceName.LetterMergePath),letterCur.DataFileName);
 			if(!File.Exists(templateFile)){
 				MsgBox.Show(this,"Template file does not exist.");
 				return;
@@ -623,8 +624,8 @@ namespace OpenDental{
 			}
 			LetterMerge letterCur=ListForCat[listLetters.SelectedIndex];
 			letterCur.ImageFolder=comboImageCategory.SelectedTag<Definition>().Id;
-			string templateFile=ODFileUtils.CombinePaths(Preference.GetString(PreferenceName.LetterMergePath),letterCur.TemplateName);
-			string dataFile=ODFileUtils.CombinePaths(Preference.GetString(PreferenceName.LetterMergePath),letterCur.DataFileName);
+			string templateFile= Storage.Default.CombinePath(Preference.GetString(PreferenceName.LetterMergePath),letterCur.TemplateName);
+			string dataFile= Storage.Default.CombinePath(Preference.GetString(PreferenceName.LetterMergePath),letterCur.DataFileName);
 			if(!File.Exists(templateFile)){
 				MsgBox.Show(this,"Template file does not exist.");
 				return;
@@ -678,12 +679,12 @@ namespace OpenDental{
 					Object oFileName=tempFilePath;
 					WrdApp.ActiveDocument.SaveAs(oFileName);//save the document to temp location
 					Document doc=SaveToImageFolder(tempFilePath,letterCur);
-					string patFolder=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());
+					string patFolder=ImageStore.GetPatientFolder(PatCur);
 					string fileName=ImageStore.GetFilePath(doc,patFolder);
-					if(!FileAtoZ.Exists(fileName)) {
+					if(!Storage.Default.FileExists(fileName)) {
 						throw new ApplicationException(Lans.g("LetterMerge","Error opening document"+" "+doc.FileName));
 					}
-					FileAtoZ.StartProcess(fileName);
+                    Storage.Default.OpenFile(fileName);
 					WrdApp.ActiveDocument.Close();//Necessary since we created an extra document
 					try {
 						File.Delete(tempFilePath);//Clean up the temp file
@@ -764,8 +765,8 @@ namespace OpenDental{
 			docSave.Description=letterCur.Description+docSave.DocNum;//no extension.
 			docSave.RawBase64=rawBase64;//blank if using AtoZfolder
 			docSave.FileName=ODFileUtils.CleanFileName(docSave.Description)+GetFileExtensionForWordDoc(fileSourcePath);
-			string fileDestPath=ImageStore.GetFilePath(docSave,ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath()));
-			FileAtoZ.Copy(fileSourcePath,fileDestPath,FileAtoZSourceDestination.LocalToAtoZ);
+			string fileDestPath=ImageStore.GetFilePath(docSave,ImageStore.GetPatientFolder(PatCur));
+			Storage.Default.CopyFile(fileSourcePath,fileDestPath);
 			Documents.Update(docSave);
 			return docSave;
 		}
@@ -777,8 +778,8 @@ namespace OpenDental{
 				return;
 			}
 			LetterMerge letterCur=ListForCat[listLetters.SelectedIndex];
-			string templateFile=ODFileUtils.CombinePaths(Preference.GetString(PreferenceName.LetterMergePath),letterCur.TemplateName);
-			string dataFile=ODFileUtils.CombinePaths(Preference.GetString(PreferenceName.LetterMergePath),letterCur.DataFileName);
+			string templateFile= Storage.Default.CombinePath(Preference.GetString(PreferenceName.LetterMergePath),letterCur.TemplateName);
+			string dataFile= Storage.Default.CombinePath(Preference.GetString(PreferenceName.LetterMergePath),letterCur.DataFileName);
 			if(!File.Exists(templateFile)){
 				MessageBox.Show(Lan.g(this,"Template file does not exist:")+"  "+templateFile);
 				return;

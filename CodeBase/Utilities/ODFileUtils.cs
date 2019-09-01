@@ -14,13 +14,6 @@ namespace CodeBase
         private static extern bool GetDiskFreeSpaceEx(string lpDirectoryName, out ulong lpFreebytesAvailable, out ulong lpTotalNumberOfBytes, out ulong lpTotalNumberOfFreeBytes);
 
         /// <summary>
-        /// This is a class scope variable in order to ensure that the random value is only seeded 
-        /// once for each time OD is launched. Otherwise, if instantiated more often, then the same 
-        /// random numbers are generated over and over again.
-        /// </summary>
-        private static readonly Random _rand = new Random();
-
-        /// <summary>
         /// Removes a trailing path separator from the given string if one exists.
         /// </summary>
         public static string RemoveTrailingSeparators(string path)
@@ -30,60 +23,6 @@ namespace CodeBase
                 path = path.Substring(0, path.Length - 1);
             }
             return path;
-        }
-
-        [Obsolete("Use Path.Combine instead.")]
-        public static string CombinePaths(string path1, string path2) => CombinePaths(new string[] { path1, path2 });
-
-        [Obsolete("Use Path.Combine instead.")]
-        public static string CombinePaths(string path1, string path2, char separator) => CombinePaths(new string[] { path1, path2 }, separator);
-
-        [Obsolete("Use Path.Combine instead.")]
-        public static string CombinePaths(string path1, string path2, string path3) => CombinePaths(new string[] { path1, path2, path3 });
-        
-        [Obsolete("Use Path.Combine instead.")]
-        public static string CombinePaths(string path1, string path2, string path3, char separator) => CombinePaths(new string[] { path1, path2, path3 }, separator);
-
-        [Obsolete("Use Path.Combine instead.")]
-        public static string CombinePaths(string path1, string path2, string path3, string path4) => CombinePaths(new string[] { path1, path2, path3, path4 });
-
-        /// <summary>
-        /// OS independent path cominations. Ensures that each of the given path pieces are
-        /// separated by the correct path separator for the current operating system. There is 
-        /// guaranteed not to be a trailing path separator at the end of the returned string 
-        /// (to accomodate file paths), unless the last specified path piece in the array is the 
-        /// empty string.
-        /// </summary>
-        [Obsolete("Use Path.Combine instead.")]
-        public static string CombinePaths(string[] paths)
-        {
-            string finalPath = "";
-            for (int i = 0; i < paths.Length; i++)
-            {
-                string path = RemoveTrailingSeparators(paths[i]);
-
-                // Add an appropriate slash to divide the path peices, but do not use a trailing slash on the last piece.
-                if (i < paths.Length - 1)
-                {
-                    if (path != null && path.Length > 0)
-                    {
-                        path += Path.DirectorySeparatorChar;
-                    }
-                }
-                finalPath += path;
-            }
-            return finalPath;
-        }
-
-        /// <summary>
-        /// Ensures that each of the given path pieces are separated by the passed in separator character. 
-        /// There is guaranteed not to be a trailing path separator at the end of the returned string (to accomodate file paths), 
-        /// unless the last specified path piece in the array is the empty string.
-        /// </summary>
-        [Obsolete("Use Path.Combine instead.")]
-        public static string CombinePaths(string[] paths, char separator)
-        {
-            return CombinePaths(paths).Replace(Path.DirectorySeparatorChar, separator);
         }
 
         /// <summary>

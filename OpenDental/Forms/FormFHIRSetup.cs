@@ -1,18 +1,17 @@
+using OpenDental.UI;
+using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.XPath;
-using OpenDental.UI;
-using OpenDentBusiness;
-using WebServiceSerializer;
 
-namespace OpenDental {
-	public partial class FormFHIRSetup:ODForm {
+namespace OpenDental
+{
+    public partial class FormFHIRSetup:ODForm {
 		///<summary>A local copy of the API keys obtained from ODHQ.</summary>
 		private List<APIKey> _listApiKeysLocal;
 		///<summary>The keys that are obtained from ODHQ. When closing the form, if any API key information has changed, a call will be made to ODHQ to

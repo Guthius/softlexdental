@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 using CodeBase;
 using System.Collections.Generic;
+using SLDental.Storage;
 
 namespace OpenDental{
 	/// <summary>
@@ -589,8 +590,8 @@ namespace OpenDental{
 				MsgBox.Show(this,"Please enter a template file name first.");
 				return;
 			}
-			string templateFile=ODFileUtils.CombinePaths(Preference.GetString(PreferenceName.LetterMergePath),textTemplateName.Text);
-			if(File.Exists(templateFile)){
+			string templateFile= Storage.Default.CombinePath(Preference.GetString(PreferenceName.LetterMergePath),textTemplateName.Text);
+			if(Storage.Default.FileExists(templateFile)){
 				MsgBox.Show(this,"A file with that name already exists.  Choose a different name, or close this window to edit the template.");
 				return;
 			}

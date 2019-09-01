@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
 using OpenDentBusiness;
-using WebServiceSerializer;
+using System;
+using System.Windows.Forms;
 
-namespace OpenDental {
-	public partial class FormDropboxAuthorize:ODForm {
+namespace OpenDental
+{
+    public partial class FormDropboxAuthorize:ODForm {
 		// TODO: Fix me
 		public ProgramProperty ProgramPropertyAccessToken;
 

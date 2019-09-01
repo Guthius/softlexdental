@@ -8,6 +8,7 @@ using OpenDental.Bridges;
 using OpenDental.Properties;
 using OpenDental.UI;
 using OpenDentBusiness;
+using SLDental.Storage;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -36,7 +37,7 @@ namespace OpenDental
         ///<summary>Set to true when the image in the picture box is currently being translated.</summary>
         private bool IsDragging;
         ///<summary>In-memory copies of the images being viewed/edited. No changes are made to these images in memory, they are just kept resident to avoid having to reload the images from disk each time the screen needs to be redrawn.  If no mount, this will just be one image.  A mount will contain a series of images.</summary>
-        private Bitmap[] ImagesCur = new Bitmap[1];
+        private Image[] ImagesCur = new Image[1];
         ///<summary>Used as a basis for calculating image translations.</summary>
         private PointF PointImageCur;
         ///<summary>The true offset of the document image or mount image.</summary>
@@ -52,7 +53,7 @@ namespace OpenDental
         ///<summary>Used to prevent concurrent access to the current images by multiple threads.  Each item in array corresponds to an image in a mount.</summary>
         private int[] HeightsImagesCur = new int[1];
         ///<summary>The image currently on the screen.  If a mount, this will be an image representing the entire mount.</summary>
-        private Bitmap ImageRenderingNow = null;
+        private Image ImageRenderingNow = null;
         private Rectangle RectCrop = new Rectangle(0, 0, -1, -1);
         ///<summary>Used for performing an xRay image capture on an imaging device.</summary>
         //private SuniDeviceControl xRayImageController = null;
@@ -272,45 +273,21 @@ namespace OpenDental
                 button = new ODToolBarButton("Templates", null, "", "Forms");
                 button.Style = ODToolBarButtonStyle.DropDownButton;
                 menuForms = new ContextMenu();
-                string formDir = FileAtoZ.CombinePaths(ImageStore.GetPreferredAtoZpath(), "Forms");
-                if (CloudStorage.IsCloudStorage)
-                {
-                    // TODO: Fix me
+                string formDir = "Forms";
 
-                    // //Running this asynchronously to not slowdown start up time.
-                    // ODThread odThreadTemplate = new ODThread((o) =>
-                    // {
-                    //     OpenDentalCloud.Core.TaskStateListFolders state = CloudStorage.ListFolderContents(formDir);
-                    //     foreach (string fileName in state.ListFolderPathsDisplay)
-                    //     {
-                    //         if (InvokeRequired)
-                    //         {
-                    //             Invoke((Action)delegate ()
-                    //             {
-                    //                 menuForms.MenuItems.Add(Path.GetFileName(fileName), new EventHandler(menuForms_Click));
-                    //             });
-                    //         }
-                    //     }
-                    // });
-                    // //Swallow all exceptions and allow thread to exit gracefully.
-                    // odThreadTemplate.AddExceptionHandler(new ODThread.ExceptionDelegate((Exception ex) => { }));
-                    // odThreadTemplate.Start(true);
-                }
-                else
-                {//Not cloud
-                    if (Directory.Exists(formDir))
+                if (Storage.Default.DirectoryExists(formDir))
+                {
+                    DirectoryInfo dirInfo = new DirectoryInfo(formDir);
+                    FileInfo[] fileInfos = dirInfo.GetFiles();
+                    for (int i = 0; i < fileInfos.Length; i++)
                     {
-                        DirectoryInfo dirInfo = new DirectoryInfo(formDir);
-                        FileInfo[] fileInfos = dirInfo.GetFiles();
-                        for (int i = 0; i < fileInfos.Length; i++)
+                        if (Documents.IsAcceptableFileName(fileInfos[i].FullName))
                         {
-                            if (Documents.IsAcceptableFileName(fileInfos[i].FullName))
-                            {
-                                menuForms.MenuItems.Add(fileInfos[i].Name, new System.EventHandler(menuForms_Click));
-                            }
+                            menuForms.MenuItems.Add(fileInfos[i].Name, new EventHandler(menuForms_Click));
                         }
                     }
                 }
+                
                 button.DropDownMenu = menuForms;
                 ToolBarMain.Buttons.Add(button);
                 button = new ODToolBarButton("Capture", null, "Capture Image From Device", "Capture");
@@ -498,19 +475,14 @@ namespace OpenDental
             }
             FamCur = Patients.GetFamily(patNum);
             PatCur = FamCur.GetPatient(patNum);
-            PatFolder = ImageStore.GetPatientFolder(PatCur, ImageStore.GetPreferredAtoZpath());//This is where the pat folder gets created if it does not yet exist.
+            PatFolder = ImageStore.GetPatientFolder(PatCur);//This is where the pat folder gets created if it does not yet exist.
             if (_patNumLast != patNum)
             {
                 SecurityLogs.MakeLogEntry(Permissions.ImagesModule, patNum, "");
                 _patNumLast = patNum;
             }
-            Action actionClosing = null;
-            if (CloudStorage.IsCloudStorage)
-            {
-                actionClosing = ODProgress.Show(ODEventType.ContrImages, startingMessage: Lan.g(this, "Loading..."));
-            }
+
             ImageStore.AddMissingFilesToDatabase(PatCur);
-            actionClosing?.Invoke();
         }
 
         private void RefreshModuleScreen()
@@ -704,19 +676,12 @@ namespace OpenDental
             else if (nodeId.NodeType == ImageNodeType.Eob)
             {
                 EobAttach eob = EobAttaches.GetOne(nodeId.PriKey);
-                Action actionCloseDownloadProgress = null;
-                if (CloudStorage.IsCloudStorage)
-                {
-                    actionCloseDownloadProgress = ODProgress.Show(ODEventType.ContrImages, startingMessage: Lan.g("ContrImages", "Downloading..."));
-                }
                 try
                 {
-                    ImagesCur = ImageStore.OpenImagesEob(eob, localPath);
-                    actionCloseDownloadProgress?.Invoke();
+                    ImagesCur = ImageStore.OpenImagesEob(eob).ToArray();
                 }
                 catch (ApplicationException ex)
                 {
-                    actionCloseDownloadProgress?.Invoke();
                     FormFriendlyException.Show(ex.Message, (ex.InnerException == null ? ex : ex.InnerException));
                 }
                 bool isExportable = pictureBoxMain.Visible;
@@ -742,21 +707,17 @@ namespace OpenDental
                     return;
                 }
                 IdxSelectedInMount = 0;
-                Action actionCloseDownloadProgress = null;
-                if (CloudStorage.IsCloudStorage)
-                {
-                    actionCloseDownloadProgress = ODProgress.Show(ODEventType.ContrImages, startingMessage: Lan.g("ContrImages", "Downloading..."));
-                }
+
                 //ImagesCur contains BitMaps of selected images if they are found.  ImagesCur is used to display images in the main window in a later method.
                 //PDF files will always return null.
-                ImagesCur = ImageStore.OpenImages(new Document[] { DocSelected }, PatFolder, localPath);
-                actionCloseDownloadProgress?.Invoke();
+                ImagesCur = ImageStore.OpenImages(new Document[] { DocSelected }, PatFolder).ToArray();
+ 
                 bool isExportable = pictureBoxMain.Visible;
                 if (ImagesCur[0] == null)
                 {
                     if (ImageHelper.HasImageExtension(DocSelected.FileName))
                     {
-                        string srcFileName = ODFileUtils.CombinePaths(PatFolder, DocSelected.FileName);
+                        string srcFileName = Storage.Default.CombinePath(PatFolder, DocSelected.FileName);
                         if (File.Exists(srcFileName))
                         {
                             MessageBox.Show(Lan.g(this, "File found but cannot be opened") + ": " + DocSelected.FileName);
@@ -781,13 +742,7 @@ namespace OpenDental
                 MountItemsForSelected = MountItems.GetItemsForMount(nodeId.PriKey);
                 DocsInMount = Documents.GetDocumentsForMountItems(MountItemsForSelected);
                 IdxSelectedInMount = -1;//No selection to start.
-                Action actionCloseDownloadProgress = null;
-                if (CloudStorage.IsCloudStorage)
-                {
-                    actionCloseDownloadProgress = ODProgress.Show(ODEventType.ContrImages, startingMessage: Lan.g("ContrImages", "Downloading..."));
-                }
-                ImagesCur = ImageStore.OpenImages(DocsInMount, PatFolder, localPath);
-                actionCloseDownloadProgress?.Invoke();
+                ImagesCur = ImageStore.OpenImages(DocsInMount, PatFolder).ToArray();
                 MountSelected = Mounts.GetByNum(nodeId.PriKey);
                 ImageRenderingNow = new Bitmap(MountSelected.Width, MountSelected.Height);
                 ImageHelper.RenderMountImage(ImageRenderingNow, ImagesCur, MountItemsForSelected, DocsInMount, IdxSelectedInMount);
@@ -798,7 +753,7 @@ namespace OpenDental
                 EhrAmendment amd = EhrAmendments.GetOne(nodeId.PriKey);
                 try
                 {
-                    ImagesCur = ImageStore.OpenImagesAmd(amd);
+                    ImagesCur = ImageStore.OpenImagesAmd(amd).ToArray();
                 }
                 catch (ApplicationException ex)
                 {
@@ -859,34 +814,17 @@ namespace OpenDental
                 _webBrowserDocument.Size = pictureBoxMain.Size;
                 _webBrowserDocument.Location = pictureBoxMain.Location;
                 string pdfFilePath = "";
-                if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
-                {
-                    pdfFilePath = ODFileUtils.CombinePaths(atoZFolder, atoZFileName);
-                }
-                else if (CloudStorage.IsCloudStorage)
-                {
-                    if (localPath != "")
-                    {
-                        pdfFilePath = localPath;
-                    }
-                    else
-                    {
-                        //Download PDF into temp directory for displaying.
-                        pdfFilePath = ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(), DocSelected.DocNum + (PatCur != null ? PatCur.PatNum.ToString() : "") + ".pdf");
-                        FileAtoZ.Download(FileAtoZ.CombinePaths(atoZFolder, atoZFileName), pdfFilePath, downloadMessage);
-                    }
-                }
-                else
-                {
-                    pdfFilePath = ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(), DocSelected.DocNum + (PatCur != null ? PatCur.PatNum.ToString() : "") + ".pdf");
-                    File.WriteAllBytes(pdfFilePath, Convert.FromBase64String(DocSelected.RawBase64));
-                }
-                if (!File.Exists(pdfFilePath))
+
+                pdfFilePath = Storage.Default.CombinePath(atoZFolder, atoZFileName);
+                if (!Storage.Default.FileExists(pdfFilePath))
                 {
                     MessageBox.Show(Lan.g(this, "File not found") + ": " + atoZFileName);
                 }
                 else
                 {
+                    // TODO: Get a local path to the pdf file...
+
+
                     Application.DoEvents();//Show the browser control before loading, in case loading a large PDF, so the user can see the preview has started without waiting.
                     _webBrowserDocument.Navigate(pdfFilePath);//The return status of this function doesn't seem to be helpful.
                     pictureBoxMain.Visible = false;
@@ -912,7 +850,7 @@ namespace OpenDental
             Document doc = Documents.GetByNum(docNum, doReturnNullIfNotFound: true);//Get old document.
             if (doc != null && Path.GetExtension(doc.FileName).ToLower() == ".pdf")
             {//Adobe acrobat file.
-                string pdfFilePath = ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(), doc.DocNum + (PatCur != null ? PatCur.PatNum.ToString() : "") + ".pdf");
+                string pdfFilePath = Storage.Default.CombinePath(Preferences.GetTempFolderPath(), doc.DocNum + (PatCur != null ? PatCur.PatNum.ToString() : "") + ".pdf");
                 //if (!xRayImageController.IsDisposed)
                 //{
                 //    xRayImageController.Dispose();
@@ -2258,11 +2196,6 @@ namespace OpenDental
             if (ClaimPaymentNum != 0)
             {//eob
                 EobAttach eob = null;
-                Action actionCloseUploadProgress = null;
-                if (CloudStorage.IsCloudStorage)
-                {
-                    actionCloseUploadProgress = ODProgress.Show(ODEventType.ContrImages, startingMessage: Lan.g("ContrImages", "Uploading..."));
-                }
                 for (int i = 0; i < fileNames.Length; i++)
                 {
                     try
@@ -2271,12 +2204,10 @@ namespace OpenDental
                     }
                     catch (Exception ex)
                     {
-                        actionCloseUploadProgress?.Invoke();
                         MessageBox.Show(Lan.g(this, "Unable to copy file, May be in use: ") + ex.Message + ": " + openFileDialog.FileName);
                         copied = false;
                     }
                 }
-                actionCloseUploadProgress?.Invoke();
                 if (copied)
                 {
                     FillDocList(false);
@@ -2289,11 +2220,6 @@ namespace OpenDental
             else if (EhrAmendmentCur != null)
             {
                 string amdFilename = EhrAmendmentCur.FileName;
-                Action actionCloseUploadProgress = null;
-                if (CloudStorage.IsCloudStorage)
-                {
-                    actionCloseUploadProgress = ODProgress.Show(ODEventType.ContrImages, startingMessage: Lan.g("ContrImages", "Uploading..."));
-                }
                 for (int i = 0; i < fileNames.Length; i++)
                 {
                     try
@@ -2304,12 +2230,11 @@ namespace OpenDental
                     }
                     catch (Exception ex)
                     {
-                        actionCloseUploadProgress?.Invoke();
                         MessageBox.Show(Lan.g(this, "Unable to copy file, May be in use: ") + ex.Message + ": " + openFileDialog.FileName);
                         copied = false;
                     }
                 }
-                actionCloseUploadProgress?.Invoke();
+
                 if (copied)
                 {
                     FillDocList(false);
@@ -2322,11 +2247,6 @@ namespace OpenDental
             else
             {//regular Images module
                 Document doc = null;
-                Action actionCloseUploadProgress = null;
-                if (CloudStorage.IsCloudStorage)
-                {
-                    actionCloseUploadProgress = ODProgress.Show(ODEventType.ContrImages, startingMessage: Lan.g("ContrImages", "Uploading..."));
-                }
                 for (int i = 0; i < fileNames.Length; i++)
                 {
                     try
@@ -2335,7 +2255,6 @@ namespace OpenDental
                     }
                     catch (Exception ex)
                     {
-                        actionCloseUploadProgress?.Invoke();
                         MessageBox.Show(Lan.g(this, "Unable to copy file, May be in use: ") + ex.Message + ": " + openFileDialog.FileName);
                         copied = false;
                     }
@@ -2361,7 +2280,7 @@ namespace OpenDental
                         }
                     }
                 }
-                actionCloseUploadProgress?.Invoke();
+
                 //Reselect the last successfully added node when necessary.
                 if (doc != null && !MakeIdDoc(doc.DocNum).Equals(nodeId))
                 {
@@ -3220,7 +3139,7 @@ namespace OpenDental
                             {
                                 //Done like this so that the ImageRenderingNow is cleared in a single atomic line of code (in case the thread is
                                 //killed during this step), so that we don't end up with a pointer to a disposed image in the ImageRenderingNow.
-                                Bitmap oldRenderImage = ImageRenderingNow;
+                                Image oldRenderImage = ImageRenderingNow;
                                 ImageRenderingNow = null;
                                 oldRenderImage.Dispose();
                                 oldRenderImage = null;
@@ -3260,7 +3179,7 @@ namespace OpenDental
                         {
                             if (ImageRenderingNow != null)
                             {
-                                Bitmap oldRenderImage = ImageRenderingNow;
+                                Image oldRenderImage = ImageRenderingNow;
                                 ImageRenderingNow = null;
                                 oldRenderImage.Dispose();
                                 oldRenderImage = null;
@@ -4172,7 +4091,7 @@ namespace OpenDental
         {
             List<MountItem> mountItems = MountItems.GetItemsForMount(mount.MountNum);
             Document[] documents = Documents.GetDocumentsForMountItems(mountItems);
-            Bitmap[] originalImages = ImageStore.OpenImages(documents, PatFolder);
+            Image[] originalImages = ImageStore.OpenImages(documents, PatFolder).ToArray();
             Bitmap mountImage = new Bitmap(mount.Width, mount.Height);
             ImageHelper.RenderMountImage(mountImage, originalImages, mountItems, documents, -1);
             return mountImage;

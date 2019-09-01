@@ -105,7 +105,7 @@ namespace OpenDentBusiness.Eclaims
 						Match fileNameMatch=Regex.Match(listItem,".*\\s+(.*)$");
 						string getFileName=fileNameMatch.Result("$1");
 						string getFilePath=retrievePath+getFileName;
-						string exportFilePath=CodeBase.ODFileUtils.CombinePaths(clearinghouseClin.ResponsePath,getFileName);						
+						string exportFilePath= Path.Combine(clearinghouseClin.ResponsePath,getFileName);						
 						Tamir.SharpSsh.java.io.InputStream fileStream=null;
 						FileStream exportFileStream=null;
 						try{

@@ -16,6 +16,7 @@ using CodeBase;
 using OpenDentBusiness;
 using System.Linq;
 using OpenDentBusiness.Eclaims;
+using SLDental.Storage;
 
 namespace OpenDental{
 	///<summary></summary>
@@ -1110,46 +1111,22 @@ namespace OpenDental{
 			gridSent.EndUpdate();
 		}
 
-		private void gridSent_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			ClaimAttach claimAttachCur=(ClaimAttach)gridSent.Rows[e.Row].Tag;
-			string patFolder=ImageStore.GetPatientFolder(PatCur,ImageStore.GetPreferredAtoZpath());
-			if(CloudStorage.IsCloudStorage) {
-				string pathAndFileName=ODFileUtils.CombinePaths(patFolder,claimAttachCur.ActualFileName,'/');
-				if(!CloudStorage.FileExists(pathAndFileName)) {
-					//Couldn't find file, display message and return
-					MsgBox.Show(this,"File no longer exists.");
-					return;
-				}
-				//found it, download and display
-				//This chunk of code was pulled from FormFilePicker.cs
+        private void gridSent_CellDoubleClick(object sender, ODGridClickEventArgs e)
+        {
+            ClaimAttach claimAttachCur = (ClaimAttach)gridSent.Rows[e.Row].Tag;
+            string patFolder = ImageStore.GetPatientFolder(PatCur);
 
-            // TODO: Fix me
-				//FormProgress FormP=new FormProgress();
-				//FormP.DisplayText="Downloading...";
-				//FormP.NumberFormat="F";
-				//FormP.NumberMultiplication=1;
-				//FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-				//FormP.TickMS=1000;
-				//TaskStateDownload state=CloudStorage.DownloadAsync(patFolder,claimAttachCur.ActualFileName,
-				//	new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-				//if(FormP.ShowDialog()==DialogResult.Cancel) {
-				//	state.DoCancel=true;
-				//	return;
-				//}
-				//string tempFile=Preferences.GetRandomTempFile(Path.GetExtension(pathAndFileName));
-				//File.WriteAllBytes(tempFile,state.FileContent);
-				//Process.Start(tempFile);
-			}
-			else {//Local storage
-				string pathAndFileName=ODFileUtils.CombinePaths(patFolder,claimAttachCur.ActualFileName);
-				try {
-					Process.Start(pathAndFileName);
-				}
-				catch {
-					MsgBox.Show(this,"Could not open the attachment.");
-				}
-			}
-		}
+            string pathAndFileName = Storage.Default.CombinePath(patFolder, claimAttachCur.ActualFileName);
+            try
+            {
+                Storage.Default.OpenFile(pathAndFileName);
+            }
+            catch
+            {
+                MsgBox.Show(this, "Could not open the attachment.");
+            }
+
+        }
 
 		private void ClaimProcRowHelper(ODGridRow row,ClaimProc claimProcCur) {
 			//List<ProcedureCode> listProcCodes=ProcedureCodes.ListDeep;
@@ -2181,7 +2158,7 @@ namespace OpenDental{
 			Random rnd=new Random();
 			string newName=DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".jpg";
 			string attachPath= EmailAttachment.GetAttachmentPath();
-			string newPath=ODFileUtils.CombinePaths(attachPath,newName);
+			string newPath= Storage.Default.CombinePath(attachPath,newName);
 			try {
                 // TODO: Fix me
 				//if(CloudStorage.IsCloudStorage) {
@@ -2241,16 +2218,16 @@ namespace OpenDental{
 				}
 			}
 			for(int i=0;i<ClaimCur.Attachments.Count;i++){
-				string curAttachPath=FileAtoZ.CombinePaths(EmailAttachment.GetAttachmentPath(),ClaimCur.Attachments[i].ActualFileName);
-				string newFilePath=ODFileUtils.CombinePaths(exportPath,
+				string curAttachPath= Storage.Default.CombinePath(EmailAttachment.GetAttachmentPath(),ClaimCur.Attachments[i].ActualFileName);
+				string newFilePath= Storage.Default.CombinePath(exportPath,
 					PatCur.FName+PatCur.LName+PatCur.PatNum+"_"+i+Path.GetExtension(ClaimCur.Attachments[i].ActualFileName));
-				if(!FileAtoZ.Exists(curAttachPath)) {
-					MessageBox.Show(Lan.g(this,"The attachment file")+" "+curAttachPath+" "+Lan.g(this,"has been moved, deleted or is inaccessible."));
+				if(!Storage.Default.FileExists(curAttachPath)) {
+					MessageBox.Show("The attachment file "+curAttachPath+" has been moved, deleted or is inaccessible.");
 					return;
 				}
 				try {
-					FileAtoZ.Copy(curAttachPath,newFilePath,FileAtoZSourceDestination.AtoZToLocal,"Downloading file...");
-				}
+                    Storage.Default.CopyFile(curAttachPath,newFilePath);// TODO: Status: "Downloading file..."
+                }
 				catch {
 					MessageBox.Show(Lan.g(this,"The attachment")+" "+curAttachPath+" "
 						+Lan.g(this,"could not be copied to the export folder, probably because of an incorrect file permission. Aborting export operation."));
@@ -2274,8 +2251,7 @@ namespace OpenDental{
 		}
 
 		private void menuItemOpen_Click(object sender,EventArgs e) {
-			FileAtoZ.OpenFile(FileAtoZ.CombinePaths(EmailAttachment.GetAttachmentPath(),ClaimCur.Attachments[listAttachments.SelectedIndex].ActualFileName),
-				ClaimCur.Attachments[listAttachments.SelectedIndex].DisplayedFileName);
+            Storage.Default.OpenFile(Storage.Default.CombinePath(EmailAttachment.GetAttachmentPath(),ClaimCur.Attachments[listAttachments.SelectedIndex].ActualFileName));
 		}
 
 		private void menuItemRename_Click(object sender,EventArgs e) {
@@ -2298,8 +2274,7 @@ namespace OpenDental{
 			if(listAttachments.SelectedIndex==-1) {
 				return;
 			}
-			FileAtoZ.OpenFile(FileAtoZ.CombinePaths(EmailAttachment.GetAttachmentPath(),ClaimCur.Attachments[listAttachments.SelectedIndex].ActualFileName),
-				ClaimCur.Attachments[listAttachments.SelectedIndex].DisplayedFileName);
+            Storage.Default.OpenFile(Storage.Default.CombinePath(EmailAttachment.GetAttachmentPath(),ClaimCur.Attachments[listAttachments.SelectedIndex].ActualFileName));
 		}		
 
 		private void listAttachments_MouseDown(object sender,MouseEventArgs e) {

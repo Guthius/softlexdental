@@ -2,6 +2,7 @@ using CodeBase;
 using OpenDental.Properties;
 using OpenDental.UI;
 using OpenDentBusiness;
+using SLDental.Storage;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -737,15 +738,15 @@ namespace OpenDental
             else if (e.Url.ToString().Contains("wikifilecloud:"))
             {
                 string fileName = e.Url.ToString().Substring(e.Url.ToString().LastIndexOf("wikifilecloud:") + 14);
-                if (!FileAtoZ.Exists(fileName))
+                if (!Storage.Default.FileExists(fileName))
                 {
-                    MessageBox.Show(Lan.g(this, "File does not exist: ") + fileName);
+                    MessageBox.Show("File does not exist: " + fileName);
                     e.Cancel = true;
                     return;
                 }
                 try
                 {
-                    FileAtoZ.StartProcess(fileName);
+                    Storage.Default.OpenFile(fileName);
                 }
                 catch 
                 {
@@ -757,15 +758,15 @@ namespace OpenDental
             else if (e.Url.ToString().Contains("foldercloud:"))
             {
                 string folderName = e.Url.ToString().Substring(e.Url.ToString().LastIndexOf("foldercloud:") + 12);
-                if (!FileAtoZ.DirectoryExists(folderName))
+                if (!Storage.Default.DirectoryExists(folderName))
                 {
-                    MessageBox.Show(Lan.g(this, "Folder does not exist: ") + folderName);
+                    MessageBox.Show("Folder does not exist: " + folderName);
                     e.Cancel = true;
                     return;
                 }
                 try
                 {
-                    FileAtoZ.OpenDirectory(folderName);
+                    Storage.Default.OpenDirectory(folderName);
                 }
                 catch 
                 {

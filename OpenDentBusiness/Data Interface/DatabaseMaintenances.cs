@@ -79,7 +79,7 @@ namespace OpenDentBusiness
             strB.AppendLine();//New line.
             strB.Append(logText);
             strB.AppendLine(Lans.g("FormDatabaseMaintenance", "Done"));
-            string path = CodeBase.ODFileUtils.CombinePaths(System.Windows.Forms.Application.StartupPath, "RepairLog.txt");
+            string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "RepairLog.txt");
             try
             {
                 File.AppendAllText(path, strB.ToString());

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using CodeBase;
 using OpenDental.UI;
 using OpenDentBusiness;
+using SLDental.Storage;
 
 namespace OpenDental {
 	public partial class FormMedLabEdit:ODForm {
@@ -320,88 +321,79 @@ namespace OpenDental {
 			textPhysicianID.Text=prov.ProvNum.ToString();
 		}
 
-		///<summary>Uses sheet framework to generate a PDF file, save it to patient's image folder, and attempt to launch file with defualt reader.
-		///If using ImagesStoredInDB it will not launch PDF. If no valid patient is selected you cannot perform this action.</summary>
-		private void butPDF_Click(object sender,EventArgs e) {
-			if(PatCur==null) {//not attached to a patient when form loaded and they haven't selected a patient to attach to yet
-				MsgBox.Show(this,"The Medical Lab must be attached to a patient before the PDF can be saved.");
-				return;
-			}
-			if(PatCur.PatNum>0 && _medLabCur.PatNum!=PatCur.PatNum) {//save the current patient attached to the MedLab if it has been changed
-				MoveLabsAndImagesHelper();
-			}
-			Cursor=Cursors.WaitCursor;
-			SheetDef sheetDef=SheetUtil.GetMedLabResultsSheetDef();
-			Sheet sheet=SheetUtil.CreateSheet(sheetDef,_medLabCur.PatNum);
-			SheetFiller.FillFields(sheet,null,null,_medLabCur);
-			//create the file in the temp folder location, then import so it works when storing images in the db
-			string tempPath=ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),_medLabCur.PatNum.ToString()+".pdf");
-			SheetPrinting.CreatePdf(sheet,tempPath,null,_medLabCur);
-			HL7Def defCur=HL7Defs.GetOneDeepEnabled(true);
-			long category=defCur.LabResultImageCat;
-			if(category==0) {
-				category=Defs.GetFirstForCategory(DefinitionCategory.ImageCats,true).Id;//put it in the first category.
-			}
-			//create doc--------------------------------------------------------------------------------------
-			OpenDentBusiness.Document docc=null;
-			try {
-				docc=ImageStore.Import(tempPath,category,Patients.GetPat(_medLabCur.PatNum));
-			}
-			catch {
-		
-				Cursor=Cursors.Default;
-				MsgBox.Show(this,"Error saving document.");
-				return;
-			}
-			finally {
-				//Delete the temp file since we don't need it anymore.
-				try {
-					File.Delete(tempPath);
-				}
-				catch {
-					//Do nothing.  This file will likely get cleaned up later.
-				}
-			}
-			docc.Description=Lan.g(this,"MedLab Result");
-			docc.DateCreated=DateTime.Now;
-			Documents.Update(docc);
-			string filePathAndName="";
-			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
-				string patFolder=ImageStore.GetPatientFolder(Patients.GetPat(_medLabCur.PatNum),ImageStore.GetPreferredAtoZpath());
-				filePathAndName=ODFileUtils.CombinePaths(patFolder,docc.FileName);
-			}
-			else if(CloudStorage.IsCloudStorage)
-            { // TODO: Fix me
-              //	FormProgress FormP=new FormProgress();
-              //	FormP.DisplayText="Downloading...";
-              //	FormP.NumberFormat="F";
-              //	FormP.NumberMultiplication=1;
-              //	FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-              //	FormP.TickMS=1000;
-              //	OpenDentalCloud.Core.TaskStateDownload state=CloudStorage.DownloadAsync(
-              //		ImageStore.GetPatientFolder(Patients.GetPat(_medLabCur.PatNum),ImageStore.GetPreferredAtoZpath())
-              //		,docc.FileName
-              //		,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-              //	if(FormP.ShowDialog()==DialogResult.Cancel) {
-              //		state.DoCancel=true;
-              //		return;
-              //	}
-              //	filePathAndName=Preferences.GetRandomTempFile(Path.GetExtension(docc.FileName));
-              //	File.WriteAllBytes(filePathAndName,state.FileContent);
+        ///<summary>Uses sheet framework to generate a PDF file, save it to patient's image folder, and attempt to launch file with defualt reader.
+        ///If using ImagesStoredInDB it will not launch PDF. If no valid patient is selected you cannot perform this action.</summary>
+        private void butPDF_Click(object sender, EventArgs e)
+        {
+            if (PatCur == null)
+            {//not attached to a patient when form loaded and they haven't selected a patient to attach to yet
+                MsgBox.Show(this, "The Medical Lab must be attached to a patient before the PDF can be saved.");
+                return;
             }
-			Cursor=Cursors.Default;
-			if(filePathAndName!="") {
-				Process.Start(filePathAndName);
-			}
-			SecurityLogs.MakeLogEntry(Permissions.SheetEdit,sheet.PatNum,sheet.Description+" from "+sheet.DateTimeSheet.ToShortDateString()+" pdf was created");
-			DialogResult=DialogResult.OK;
-		}
+            if (PatCur.PatNum > 0 && _medLabCur.PatNum != PatCur.PatNum)
+            {//save the current patient attached to the MedLab if it has been changed
+                MoveLabsAndImagesHelper();
+            }
+            Cursor = Cursors.WaitCursor;
+            SheetDef sheetDef = SheetUtil.GetMedLabResultsSheetDef();
+            Sheet sheet = SheetUtil.CreateSheet(sheetDef, _medLabCur.PatNum);
+            SheetFiller.FillFields(sheet, null, null, _medLabCur);
+            //create the file in the temp folder location, then import so it works when storing images in the db
+            string tempPath = Storage.Default.CombinePath(Preferences.GetTempFolderPath(), _medLabCur.PatNum.ToString() + ".pdf");
+            SheetPrinting.CreatePdf(sheet, tempPath, null, _medLabCur);
+            HL7Def defCur = HL7Defs.GetOneDeepEnabled(true);
+            long category = defCur.LabResultImageCat;
+            if (category == 0)
+            {
+                category = Defs.GetFirstForCategory(DefinitionCategory.ImageCats, true).Id;//put it in the first category.
+            }
+            //create doc--------------------------------------------------------------------------------------
+            OpenDentBusiness.Document docc = null;
+            try
+            {
+                docc = ImageStore.Import(tempPath, category, Patients.GetPat(_medLabCur.PatNum));
+            }
+            catch
+            {
+
+                Cursor = Cursors.Default;
+                MsgBox.Show(this, "Error saving document.");
+                return;
+            }
+            finally
+            {
+                //Delete the temp file since we don't need it anymore.
+                try
+                {
+                    File.Delete(tempPath);
+                }
+                catch
+                {
+                    //Do nothing.  This file will likely get cleaned up later.
+                }
+            }
+            docc.Description = Lan.g(this, "MedLab Result");
+            docc.DateCreated = DateTime.Now;
+            Documents.Update(docc);
+            string filePathAndName = "";
+
+            string patFolder = ImageStore.GetPatientFolder(Patients.GetPat(_medLabCur.PatNum));
+            filePathAndName = Storage.Default.CombinePath(patFolder, docc.FileName);
+
+            Cursor = Cursors.Default;
+            if (filePathAndName != "")
+            {
+                Storage.Default.OpenFile(filePathAndName);
+            }
+            SecurityLogs.MakeLogEntry(Permissions.SheetEdit, sheet.PatNum, sheet.Description + " from " + sheet.DateTimeSheet.ToShortDateString() + " pdf was created");
+            DialogResult = DialogResult.OK;
+        }
 
 		private void butShowHL7_Click(object sender,EventArgs e) {
 			Cursor=Cursors.WaitCursor;
 			List<string[]> listFileNamesDateMod=new List<string[]>();
 			for(int i=0;i<ListMedLabs.Count;i++) {
-				string filePath=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),ListMedLabs[i].FileName);
+				string filePath= ListMedLabs[i].FileName;
 				bool isFileAdded=false;
 				for(int j=0;j<listFileNamesDateMod.Count;j++) {
 					if(listFileNamesDateMod[j][0]==filePath) {
@@ -442,21 +434,17 @@ namespace OpenDental {
 			MedLabs.UpdateAllPatNums(ListMedLabs.Select(x => x.MedLabNum).ToList(),PatCur.PatNum);
 			string atozFrom="";
 			string atozTo="";
-			if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
-				string atozPath=ImageStore.GetPreferredAtoZpath();
+
+
 				//if patOld is null, the file was placed into the image folder in a directory named MedLabEmbeddedFiles, not a patient's image folder
 				if(patOld==null) {
-					atozFrom=ODFileUtils.CombinePaths(atozPath,"MedLabEmbeddedFiles");
+					atozFrom="MedLabEmbeddedFiles";
 				}
 				else {
-					atozFrom=ImageStore.GetPatientFolder(patOld,atozPath);
+					atozFrom=ImageStore.GetPatientFolder(patOld);
 				}
-				atozTo=ImageStore.GetPatientFolder(PatCur,atozPath);
-			}
-			else if(CloudStorage.IsCloudStorage) {
-				atozFrom=ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(),"MedLabEmbeddedFiles",'/');
-				atozTo=ImageStore.GetPatientFolder(PatCur,"");
-			}
+				atozTo=ImageStore.GetPatientFolder(PatCur);
+
 			//get list of all DocNums of files referenced by MedLabResults which were embedded in the MedLab HL7 message as base64 text
 			//in order to move the file (if not storing images in db) and assign (or reassign) the FileName
 			List<long> listDocNums=ListMedLabs
@@ -466,68 +454,61 @@ namespace OpenDental {
 					.Distinct().ToList();
 			List<Document> listDocs=Documents.GetByNums(listDocNums);
 			int fileMoveFailures=0;
-			for(int i=0;i<listDocs.Count;i++) {
-				Document doc=listDocs[i];
-				string destFileName=Documents.GetUniqueFileNameForPatient(PatCur,doc.DocNum,Path.GetExtension(doc.FileName));
-				if(Preferences.AtoZfolderUsed==DataStorageType.LocalAtoZ) {
-					string fromFilePath=ODFileUtils.CombinePaths(atozFrom,doc.FileName);
-					if(!File.Exists(fromFilePath)) {
-						//the DocNum in the MedLabResults table is pointing to a file that either doesn't exist or is not accessible, can't move/copy it
-						fileMoveFailures++;
-						continue;
-					}
-					string destFilePath=ODFileUtils.CombinePaths(atozTo,destFileName);
-					if(File.Exists(destFilePath)) {//should never happen, since we already got a unique file name, but just in case
-						//The file being copied has the same name as a file that exists in the destination folder, use a unique file name and update document table
-						destFileName=patOld.PatNum.ToString()+"_"+doc.FileName;//try to prepend patient's PatNum to the original file name
-						destFilePath=ODFileUtils.CombinePaths(atozTo,destFileName);
-						while(File.Exists(destFilePath)) {
-							//if still not unique, try appending date/time to seconds precision until the file name is unique
-							destFileName=patOld.PatNum.ToString()+"_"+Path.GetFileNameWithoutExtension(doc.FileName)
-							+"_"+DateTime.Now.ToString("yyyyMMddhhmmss")+Path.GetExtension(doc.FileName);
-							destFilePath=ODFileUtils.CombinePaths(atozTo,destFileName);
-						}
-					}
-					try {
-						File.Copy(fromFilePath,destFilePath);
-					}
-					catch {
-						
-						fileMoveFailures++;
-						continue;
-					}
-					//try to delete the original file
-					try {
-						File.Delete(fromFilePath);
-					}
-					catch {
-						
-						//If we cannot delete the file, could be a permission issue or someone has the file open currently
-						//Just skip deleting the file, which means there could be an image in the old pat's folder that may need to be deleted manually
-						fileMoveFailures++;
-					}
-				}
-				else if(CloudStorage.IsCloudStorage) {
-                    // TODO: Fix me
+            for (int i = 0; i < listDocs.Count; i++)
+            {
+                Document doc = listDocs[i];
+                string destFileName = Documents.GetUniqueFileNameForPatient(PatCur, doc.DocNum, Path.GetExtension(doc.FileName));
 
-                    //move files around in the cloud
-                    // FormProgress FormP=new FormProgress(false);
-                    // FormP.DisplayText="Uploading...";
-                    // FormP.NumberFormat="F";
-                    // FormP.NumberMultiplication=1;
-                    // FormP.MaxVal=100;//Doesn't matter what this value is as long as it is greater than 0
-                    // FormP.TickMS=1000;
-                    // OpenDentalCloud.Core.TaskStateMove state=CloudStorage.MoveAsync(atozFrom
-                    // 	,atozTo
-                    // 	,new OpenDentalCloud.ProgressHandler(FormP.OnProgress));
-                    // FormP.ShowDialog();//Don't allow users to cancel from here due to the limitations of the current feature for figuring out which files were moved successfully.
+                string fromFilePath = Storage.Default.CombinePath(atozFrom, doc.FileName);
+                if (!File.Exists(fromFilePath))
+                {
+                    //the DocNum in the MedLabResults table is pointing to a file that either doesn't exist or is not accessible, can't move/copy it
+                    fileMoveFailures++;
+                    continue;
                 }
+                string destFilePath = Storage.Default.CombinePath(atozTo, destFileName);
+                if (File.Exists(destFilePath))
+                {//should never happen, since we already got a unique file name, but just in case
+                 //The file being copied has the same name as a file that exists in the destination folder, use a unique file name and update document table
+                    destFileName = patOld.PatNum.ToString() + "_" + doc.FileName;//try to prepend patient's PatNum to the original file name
+                    destFilePath = Storage.Default.CombinePath(atozTo, destFileName);
+                    while (Storage.Default.FileExists(destFilePath))
+                    {
+                        //if still not unique, try appending date/time to seconds precision until the file name is unique
+                        destFileName = patOld.PatNum.ToString() + "_" + Path.GetFileNameWithoutExtension(doc.FileName)
+                        + "_" + DateTime.Now.ToString("yyyyMMddhhmmss") + Path.GetExtension(doc.FileName);
+                        destFilePath = Storage.Default.CombinePath(atozTo, destFileName);
+                    }
+                }
+                try
+                {
+                    Storage.Default.CopyFile(fromFilePath, destFilePath);
+                }
+                catch
+                {
+
+                    fileMoveFailures++;
+                    continue;
+                }
+                //try to delete the original file
+                try
+                {
+                    File.Delete(fromFilePath);
+                }
+                catch
+                {
+
+                    //If we cannot delete the file, could be a permission issue or someone has the file open currently
+                    //Just skip deleting the file, which means there could be an image in the old pat's folder that may need to be deleted manually
+                    fileMoveFailures++;
+                }
+
                 //if we get here the file was copied successfully or not storing images in the database, so update the document row
                 //Safe to update the document FileName and PatNum to PatCur and new file name
-                doc.PatNum=PatCur.PatNum;
-				doc.FileName=destFileName;
-				Documents.Update(doc);
-			}
+                doc.PatNum = PatCur.PatNum;
+                doc.FileName = destFileName;
+                Documents.Update(doc);
+            }
 			ListMedLabs.ForEach(x => x.PatNum=PatCur.PatNum);//update local list, done after moving files
 			_medLabCur=ListMedLabs[0];
 			if(fileMoveFailures>0) {//will never be > 0 if storing images in the db

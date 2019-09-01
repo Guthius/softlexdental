@@ -1,4 +1,5 @@
 using CodeBase;
+using SLDental.Storage;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -346,8 +347,8 @@ namespace OpenDentBusiness
             {
                 throw new ApplicationException(Lans.g("WikiPages", "Must be using AtoZ folders."));
             }
-            wikiPath = CloudStorage.PathTidy(Path.Combine(ImageStore.GetPreferredAtoZpath(), "Wiki"));
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !Directory.Exists(wikiPath))
+            wikiPath = "Wiki";
+            if (!Storage.Default.DirectoryExists(wikiPath))
             {
                 Directory.CreateDirectory(wikiPath);
             }

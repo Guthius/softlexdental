@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using OpenDentBusiness;
 using System.Collections.Generic;
+using SLDental.Storage;
 
 namespace OpenDental.Bridges {
 	///<summary></summary>
@@ -227,14 +228,6 @@ namespace OpenDental.Bridges {
 		}
 
 		private static void ProcessFile(string fullPath) {
-			if(Preferences.AtoZfolderUsed==DataStorageType.InDatabase) {
-				MsgBox.Show("TigerView","TigerView is not currently supported when storing images in the database.");
-				return;
-			}
-			if(CloudStorage.IsCloudStorage) {
-				MsgBox.Show("TigerView","TigerView is not currently supported when storing images in the cloud.");
-				return;
-			}
 			string filename=Path.GetFileName(fullPath);
 			//Get the patNum/chartNum from filename.  Example: tmb123.20091119.XXXXXX.tig where X is identifier
 			string[] splitFileName=filename.Split(new char[] { '.' });
@@ -285,7 +278,7 @@ namespace OpenDental.Bridges {
 			string newFileName="TV_"+filename.Substring(0,filename.IndexOf('.')+1)+CodeBase.MiscUtils.CreateRandomAlphaNumericString(4);
 			newFileName=newFileName.Replace('.','_'); //Get rid of any periods in the file name.
 			newFileName+=".tig"; //Add extention on to file name after other '.' were replaced.
-			string newpath=CodeBase.ODFileUtils.CombinePaths(ImageStore.GetPatientFolder(patCur,ImageStore.GetPreferredAtoZpath()),newFileName);
+			string newpath=Storage.Default.CombinePath(ImageStore.GetPatientFolder(patCur),newFileName);
 			Document docCur = new Document();
 			docCur.DocCategory=imageCatDefNum;
 			docCur.FileName=newFileName;

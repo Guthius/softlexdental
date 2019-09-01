@@ -24,6 +24,7 @@ using OpenDentBusiness;
 using PayConnectService = OpenDentBusiness.PayConnectService;
 using OpenDentBusiness.WebTypes.Shared.XWeb;
 using PdfSharp.Pdf;
+using SLDental.Storage;
 
 namespace OpenDental {
 	///<summary></summary>
@@ -4429,13 +4430,13 @@ namespace OpenDental {
 			}
 			string attachPath= EmailAttachment.GetAttachmentPath();
 			Random rnd=new Random();
-			string tempFile=ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),
+			string tempFile= Storage.Default.CombinePath(Preferences.GetTempFolderPath(),
 				DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf");
 			PdfDocumentRenderer pdfRenderer=new PdfDocumentRenderer(true,PdfFontEmbedding.Always);
 			pdfRenderer.Document=CreatePDFDoc(_paymentCur.Receipt);
 			pdfRenderer.RenderDocument();
 			pdfRenderer.PdfDocument.Save(tempFile);
-			FileAtoZ.Copy(tempFile,FileAtoZ.CombinePaths(attachPath,Path.GetFileName(tempFile)),FileAtoZSourceDestination.LocalToAtoZ);
+            Storage.Local.CopyFile(tempFile, Storage.Default.CombinePath(attachPath,Path.GetFileName(tempFile)), Storage.Default);
 			EmailMessage message=new EmailMessage();
 			message.PatientId=_paymentCur.PatNum;
 			message.ToAddress=_patCur.Email;

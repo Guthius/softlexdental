@@ -219,7 +219,7 @@ namespace OpenDentBusiness.Eclaims {
 					return false;
 				}
 				XmlNode nodeResponseFile=xmlDoc.SelectSingleNode(@"content/body/responseData");
-				string exportFilePath=CodeBase.ODFileUtils.CombinePaths(clearinghouseClin.ResponsePath,DateTime.Now.ToString("yyyyMMddhhmmss")+".txt");
+				string exportFilePath=Path.Combine(clearinghouseClin.ResponsePath,DateTime.Now.ToString("yyyyMMddhhmmss")+".txt");
 				byte[] reportFileDataBytes=Encoding.UTF8.GetBytes(nodeResponseFile.InnerText);
 				File.WriteAllBytes(exportFilePath,reportFileDataBytes);
 			}
@@ -264,7 +264,7 @@ namespace OpenDentBusiness.Eclaims {
 				xmlDoc.LoadXml(responseXml);
 				string eraBatchId=xmlDoc.SelectSingleNode(@"content/body/eraBatchId").InnerText;
 				string data835=xmlDoc.SelectSingleNode(@"content/body/eraData").InnerText;
-				string exportFilePath=CodeBase.ODFileUtils.CombinePaths(clearinghouseClin.ResponsePath,DateTime.Now.ToString("yyyyMMddhhmmss")+"-"+eraBatchId+".txt");
+				string exportFilePath=Path.Combine(clearinghouseClin.ResponsePath,DateTime.Now.ToString("yyyyMMddhhmmss")+"-"+eraBatchId+".txt");
 				byte[] reportFileDataBytes=Encoding.UTF8.GetBytes(data835);
 				File.WriteAllBytes(exportFilePath,reportFileDataBytes);
 			}

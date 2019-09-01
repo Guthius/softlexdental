@@ -1,4 +1,5 @@
 using OpenDentBusiness.HL7;
+using SLDental.Storage;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -163,10 +164,7 @@ namespace OpenDentBusiness
                 string fileTextCur = "";
                 try
                 {
-                    if (Preferences.AtoZfolderUsed != DataStorageType.InDatabase)
-                    {
-                        fileTextCur = FileSystem.ReadAllText(FileSystem.CombinePaths(ImageStore.GetPreferredAtoZpath(), relativePath));
-                    }
+                    fileTextCur = Storage.Default.ReadAllText(relativePath);
                 }
                 catch 
                 {
@@ -225,7 +223,7 @@ namespace OpenDentBusiness
                 }
                 try
                 {
-                    ImageStore.DeleteDocuments(new List<Document> { doc }, ImageStore.GetPatientFolder(docPat, ImageStore.GetPreferredAtoZpath()));
+                    ImageStore.DeleteDocuments(new List<Document> { doc }, ImageStore.GetPatientFolder(docPat));
                 }
                 catch 
                 {

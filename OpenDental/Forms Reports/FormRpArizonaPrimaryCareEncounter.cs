@@ -43,7 +43,7 @@ namespace OpenDental {
 			//in Open Dental (but no such calls will likely happen). Thus we always use the same Diagnosis code corresponding to the single
 			//ADA code that we emit in this flat file, just to keep things simple and workable.
 			this.textLog.Text="";
-			string outFile=ODFileUtils.CombinePaths(this.textEncounterFolder.Text,this.textEncounterFile.Text);
+			string outFile= Path.Combine(this.textEncounterFolder.Text,this.textEncounterFile.Text);
 			if(File.Exists(outFile)) {
 				if(MessageBox.Show("The file at "+outFile+" already exists. Overwrite?","Overwrite File?",
 					MessageBoxButtons.YesNo)!=DialogResult.Yes) {

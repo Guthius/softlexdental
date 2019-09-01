@@ -2,6 +2,7 @@ using CodeBase;
 using OpenDental.Properties;
 using OpenDental.UI;
 using OpenDentBusiness;
+using SLDental.Storage;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -3287,7 +3288,7 @@ namespace OpenDental
             sheet.Parameters.Add(new SheetParameter(true, "Statement") { ParamValue = stmt });
             SheetFiller.FillFields(sheet, dataSet, stmt);
             SheetUtil.CalculateHeights(sheet, dataSet, stmt);
-            string tempPath = CodeBase.ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(), stmt.PatNum.ToString() + ".pdf");
+            string tempPath = Storage.Default.CombinePath(Preferences.GetTempFolderPath(), stmt.PatNum.ToString() + ".pdf");
             SheetPrinting.CreatePdf(sheet, tempPath, stmt, dataSet, null);
             long category = 0;
             List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.ImageCats);;
@@ -3323,7 +3324,7 @@ namespace OpenDental
             //	ImageStore.UpdatePatient = new FileStore.UpdatePatientDelegate(Patients.Update);
             //}
             Patient guar = Patients.GetPat(stmt.PatNum);
-            string guarFolder = ImageStore.GetPatientFolder(guar, ImageStore.GetPreferredAtoZpath());
+            string guarFolder = ImageStore.GetPatientFolder(guar);
             //OpenDental.Imaging.ImageStoreBase imageStore = OpenDental.Imaging.ImageStore.GetImageStore(guar);
             if (stmt.Mode_ == StatementMode.Email)
             {
@@ -3335,8 +3336,8 @@ namespace OpenDental
                 string attachPath = EmailAttachment.GetAttachmentPath();
                 Random rnd = new Random();
                 string fileName = DateTime.Now.ToString("yyyyMMdd") + DateTime.Now.TimeOfDay.Ticks.ToString() + rnd.Next(1000).ToString() + ".pdf";
-                string filePathAndName = FileAtoZ.CombinePaths(attachPath, fileName);
-                FileAtoZ.Copy(ImageStore.GetFilePath(Documents.GetByNum(stmt.DocNum), guarFolder), filePathAndName, FileAtoZSourceDestination.AtoZToAtoZ);
+                string filePathAndName = Storage.Default.CombinePath(attachPath, fileName);
+                FileAtoZ.Copy(ImageStore.GetFilePath(Documents.GetByNum(stmt.DocNum), guarFolder), filePathAndName);
                 //Process.Start(filePathAndName);
                 EmailMessage message = Statements.GetEmailMessageForStatement(stmt, guar);
                 EmailAttachment attach = new EmailAttachment();
@@ -3354,7 +3355,7 @@ namespace OpenDental
                     {
                         //delete the pdf
                         pat = Patients.GetPat(stmt.PatNum);
-                        patFolder = ImageStore.GetPatientFolder(pat, ImageStore.GetPreferredAtoZpath());
+                        patFolder = ImageStore.GetPatientFolder(pat);
                         List<Document> listdocs = new List<Document>();
                         listdocs.Add(Documents.GetByNum(stmt.DocNum));
                         try
@@ -3378,13 +3379,13 @@ namespace OpenDental
                 Document doc = Documents.GetByNum(stmt.DocNum);
                 string imgPath = ImageStore.GetFilePath(doc, guarFolder);
                 DateTime now = DateTime.Now;
-                while (DateTime.Now < now.AddSeconds(5) && !FileAtoZ.Exists(imgPath))
+                while (DateTime.Now < now.AddSeconds(5) && !Storage.Default.FileExists(imgPath))
                 {//wait up to 5 seconds.
                     Application.DoEvents();
                 }
                 try
                 {
-                    FileAtoZ.StartProcess(imgPath);
+                    Storage.Default.OpenFile(imgPath);
                 }
                 catch (Exception ex)
                 {

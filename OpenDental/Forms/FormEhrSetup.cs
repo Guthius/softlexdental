@@ -159,7 +159,7 @@ namespace OpenDental {
 			using(ZipFile unzipped=ZipFile.Read(zipFileDestination)) {
 				ZipEntry ze=unzipped[0];
 				ze.Extract(Preferences.GetTempFolderPath(),ExtractExistingFileAction.OverwriteSilently);
-				return ODFileUtils.CombinePaths(Preferences.GetTempFolderPath(),unzipped[0].FileName);
+				return Path.Combine(Preferences.GetTempFolderPath(),unzipped[0].FileName);
 			}
 		}
 

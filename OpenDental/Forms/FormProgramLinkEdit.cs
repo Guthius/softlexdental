@@ -673,7 +673,7 @@ namespace OpenDental{
 
 		private void butOK_Click(object sender, System.EventArgs e) {
 			if(checkEnabled.Checked && textPluginDllName.Text!=""){
-				string dllPath=ODFileUtils.CombinePaths(Application.StartupPath,textPluginDllName.Text);
+				string dllPath= Path.Combine(Application.StartupPath,textPluginDllName.Text);
 				if(dllPath.Contains("[VersionMajMin]")) {
 					Version vers = new Version(Application.ProductVersion);
 					dllPath = dllPath.Replace("[VersionMajMin]","");//now stripped clean

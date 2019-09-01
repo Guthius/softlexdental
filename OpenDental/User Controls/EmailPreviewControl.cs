@@ -1,6 +1,7 @@
 ﻿using CodeBase;
 using OpenDental.UI;
 using OpenDentBusiness;
+using SLDental.Storage;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -293,12 +294,12 @@ namespace OpenDental
         {
             var emailAttachment = _listEmailAttachDisplayed[gridAttachments.SelectedIndices[0]];
 
-            var attachmentPath = FileSystem.Combine(EmailAttachment.GetAttachmentPath(), emailAttachment.FileName);
+            var attachmentPath = Storage.Default.CombinePath(EmailAttachment.GetAttachmentPath(), emailAttachment.FileName);
             try
             {
                 if (EhrCCD.IsCcdEmailAttachment(emailAttachment))
                 {
-                    string attachmentXml = FileAtoZ.ReadAllText(attachmentPath);
+                    string attachmentXml = Storage.Default.ReadAllText(attachmentPath);
                     if (EhrCCD.IsCCD(attachmentXml))
                     {
                         Patient patEmail = null;//Will be null for most email messages.
@@ -311,7 +312,7 @@ namespace OpenDental
                         {
                             if (Path.GetExtension(_listEmailAttachDisplayed[i].FileName).ToLower() == ".xsl")
                             {
-                                strAlterateFilPathXslCCD = FileAtoZ.CombinePaths(EmailAttachment.GetAttachmentPath(), _listEmailAttachDisplayed[i].FileName);
+                                strAlterateFilPathXslCCD = Storage.Default.CombinePath(EmailAttachment.GetAttachmentPath(), _listEmailAttachDisplayed[i].FileName);
                                 break;
                             }
                         }
@@ -324,17 +325,16 @@ namespace OpenDental
                 {
                     using (var formEhrLabOrderImport = new FormEhrLabOrderImport())
                     {
-                        formEhrLabOrderImport.Hl7LabMessage = FileAtoZ.ReadAllText(attachmentPath);
+                        formEhrLabOrderImport.Hl7LabMessage = Storage.Default.ReadAllText(attachmentPath);
                         formEhrLabOrderImport.ShowDialog();
 
                         return;
                     }
                 }
 
-                FileAtoZ.OpenFile(
-                    FileAtoZ.CombinePaths(
-                        EmailAttachment.GetAttachmentPath(), emailAttachment.FileName), 
-                    emailAttachment.Description);
+                Storage.Default.OpenFile(
+                    Storage.Default.CombinePath(
+                        EmailAttachment.GetAttachmentPath(), emailAttachment.FileName));
             }
             catch (Exception ex)
             {
@@ -365,7 +365,7 @@ namespace OpenDental
             }
             try
             {
-                string[] ArrayMSHFields = FileAtoZ.ReadAllText(strFilePathAttach).Split(new string[] { "\r\n" },
+                string[] ArrayMSHFields = Storage.Default.ReadAllText(strFilePathAttach).Split(new string[] { "\r\n" },
                     StringSplitOptions.RemoveEmptyEntries)[0].Split('|');
                 if (ArrayMSHFields[8] != "ORU^R01^ORU_R01")
                 {

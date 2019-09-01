@@ -27,7 +27,6 @@ namespace OpenDental
         void FormEmailTemplateEdit_Load(object sender, EventArgs e)
         {
             descriptionTextBox.Text = Autograph.Description;
-            addressTextBox.Text = Autograph.EmailAddress;
             autographTextBox.Text = Autograph.Autograph;
         }
 
@@ -58,7 +57,6 @@ namespace OpenDental
             }
 
             Autograph.Description = description;
-            Autograph.EmailAddress = addressTextBox.Text;
             Autograph.Autograph = autograph;
 
             if (Autograph.IsNew)

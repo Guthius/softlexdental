@@ -111,7 +111,7 @@ namespace OpenDental {
 				return new string[0];
 			}
 			try {
-				File.Delete(ODFileUtils.CombinePaths(Application.StartupPath,"tempCompNames.txt"));
+				File.Delete(Path.Combine(Application.StartupPath,"tempCompNames.txt"));
 				ArrayList retList = new ArrayList();
 				//string myAdd=Dns.GetHostByName(Dns.GetHostName()).AddressList[0].ToString();//obsolete
 				string myAdd = Dns.GetHostEntry(Dns.GetHostName()).AddressList[0].ToString();
@@ -124,7 +124,7 @@ namespace OpenDental {
 				psi.WindowStyle=ProcessWindowStyle.Hidden;//Hide the window
 				Process.Start(psi);
 				StreamReader sr = null;
-				string filename = ODFileUtils.CombinePaths(Application.StartupPath,"tempCompNames.txt");
+				string filename = Path.Combine(Application.StartupPath,"tempCompNames.txt");
 				Thread.Sleep(200);//sleep for 1/5 second
 				if(!File.Exists(filename)) {
 					return new string[0];
@@ -150,7 +150,7 @@ namespace OpenDental {
 					retList.Add(line.Substring(2,line.Length-2));
 				}
 				sr.Close();
-				File.Delete(ODFileUtils.CombinePaths(Application.StartupPath,"tempCompNames.txt"));
+				File.Delete(Path.Combine(Application.StartupPath,"tempCompNames.txt"));
 				string[] retArray = new string[retList.Count];
 				retList.CopyTo(retArray);
 				return retArray;

@@ -8,7 +8,7 @@
     <ProjectGuid>{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>OpenDentBusiness</RootNamespace>
+    <RootNamespace>SLDental</RootNamespace>
     <AssemblyName>OpenDentBusiness</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -358,6 +358,9 @@
     <Compile Include="PrefNameExtensions.cs" />
     <Compile Include="Reports\RpProcOverpaid.cs" />
     <Compile Include="Reports\RpProdGoal.cs" />
+    <Compile Include="Storage\IStorageDevice.cs" />
+    <Compile Include="Storage\LocalStorageDevice.cs" />
+    <Compile Include="Storage\Storage.cs" />
     <Compile Include="TableTypes\MobileAppDevice.cs" />
     <Compile Include="TableTypes\PayConnectResponseWeb.cs" />
     <Compile Include="TableTypes\PharmClinic.cs" />
@@ -402,9 +405,9 @@
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="WebBridges\AvaTax.cs" />
+    <Compile Include="WebBridges\CloudStorage.cs" />
     <Compile Include="WebBridges\PDMP\PDMP.cs" />
     <Compile Include="WebBridges\PDMP\PDMPScript.cs" />
-    <Compile Include="Misc\IFileAtoZ.cs" />
     <Compile Include="TableTypes\CommOptOut.cs" />
     <Compile Include="TableTypes\DbmLog.cs" />
     <Compile Include="TableTypes\ProviderClinic.cs" />
@@ -924,11 +927,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="Web References\SheetsSynch\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
     <Compile Include="WebBridges\Erx\ErxXml.cs" />
     <Compile Include="WebBridges\Erx\NewCrop\NCScript.cs" />
     <Compile Include="HL7old\EhrADT_A01.cs" />
@@ -947,7 +945,6 @@
     <Compile Include="HL7\MessageParser.cs" />
     <Compile Include="HL7\MessageConstructor.cs" />
     <Compile Include="Misc\EhrCCD.cs" />
-    <Compile Include="Misc\FileAtoZ.cs" />
     <Compile Include="Misc\Mime.cs" />
     <Compile Include="Misc\NTPv4.cs" />
     <Compile Include="Misc\TsiMsgConstructor.cs" />
@@ -1114,7 +1111,6 @@
     <Compile Include="Misc\TimeSpanExtension.cs" />
     <Compile Include="Misc\TrojanQueries.cs" />
     <Compile Include="Plugins\Plugins.cs" />
-    <Compile Include="Remoting\WebSerializer.cs" />
     <Compile Include="Reports\RpCustomAging.cs" />
     <Compile Include="Reports\RpInsAging.cs" />
     <Compile Include="Reports\RpInsCo.cs" />
@@ -1361,8 +1357,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="WebBridges\CloudStorage.cs" />
-    <Compile Include="WebBridges\Dropbox.cs" />
     <Compile Include="WebBridges\Erx\DoseSpot.cs" />
     <Compile Include="WebBridges\Erx\Erx.cs" />
     <Compile Include="WebBridges\Erx\NewCrop\NewCrop.cs" />
@@ -1370,22 +1364,8 @@
     <Compile Include="WebBridges\PaySimple.cs" />
     <Compile Include="WebBridges\Podium.cs" />
     <Compile Include="WebBridges\Sftp.cs" />
-    <Compile Include="WebServices\ISheetsSynch.cs" />
-    <Compile Include="WebServices\PayloadHelper.cs" />
-    <Compile Include="WebServices\SheetsSynchProxy.cs" />
-    <Compile Include="WebServices\SheetsSynchReal.cs" />
     <Compile Include="WebTypes\Shared\XWeb\XWeb.cs" />
     <Compile Include="WebTypes\Shared\XWeb\XWebs.cs" />
-    <Compile Include="WebTypes\WebForms\Data Interface\WebForms_Preferences.cs" />
-    <Compile Include="WebTypes\WebForms\Data Interface\WebForms_SheetDefs.cs" />
-    <Compile Include="WebTypes\WebForms\Data Interface\WebForms_Sheets.cs" />
-    <Compile Include="WebTypes\WebForms\TableTypes\WebForms_Log.cs" />
-    <Compile Include="WebTypes\WebForms\TableTypes\WebForms_Preference.cs" />
-    <Compile Include="WebTypes\WebForms\TableTypes\WebForms_Sheet.cs" />
-    <Compile Include="WebTypes\WebForms\TableTypes\WebForms_SheetDef.cs" />
-    <Compile Include="WebTypes\WebForms\TableTypes\WebForms_SheetField.cs" />
-    <Compile Include="WebTypes\WebForms\TableTypes\WebForms_SheetFieldDef.cs" />
-    <Compile Include="WebTypes\WebForms\WebUtils.cs" />
     <Compile Include="WebTypes\WebSched\TimeSlot\TimeSlot.cs" />
     <Compile Include="WebTypes\WebSched\TimeSlot\TimeSlots.cs" />
     <Compile Include="X12\X834.cs" />
@@ -1584,10 +1564,6 @@
       <Project>{a2ad6ad8-2a7b-41b1-8b1f-df8618ce4263}</Project>
       <Name>OpenDental.Security</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenDentalCloud\OpenDentalCloud.csproj">
-      <Project>{f90d0481-3d97-4c72-af6e-dd81177e3de1}</Project>
-      <Name>OpenDentalCloud</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -1628,7 +1604,19 @@
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\com.dentalxchange.webservices\wsdl.wsdl" />
+    <None Include="Web References\Dentalxchange2016\ClaimPaymentListResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\Dentalxchange2016\PayerListInfoResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Dentalxchange2016\PayerListResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Dentalxchange2016\textResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\Dentalxchange2016\UnProcessedEraResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\DentalxchangePartnerService\AttachmentReferenceResponse.datasource">
@@ -1763,9 +1751,6 @@
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
     <None Include="Web References\customerUpdates\Service1.wsdl" />
-    <None Include="Web References\Dentalxchange2016\ClaimPaymentListResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
     <None Include="Web References\Dentalxchange2016\DwsService.wsdl" />
     <None Include="Web References\Dentalxchange2016\DwsService.xsd">
       <SubType>Designer</SubType>
@@ -1773,18 +1758,9 @@
     <None Include="Web References\Dentalxchange2016\DwsService0.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Web References\Dentalxchange2016\PayerListResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
     <None Include="Web References\Dentalxchange2016\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\Dentalxchange2016\textResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Dentalxchange2016\UnProcessedEraResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\DoseSpotService\RefillRequestsTransmissionErrorsMessageResult1.datasource">
       <DependentUpon>Reference.map</DependentUpon>
@@ -1829,11 +1805,6 @@
     <None Include="Web References\PayConnectService\transResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
-    <None Include="Web References\SheetsSynch\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\SheetsSynch\SheetsSynch.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <WebReferenceUrl Include="http://50.201.161.44:1942/WebServiceCustomerUpdates/Service1.asmx">
@@ -1846,17 +1817,6 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>OpenDentBusiness_customerupdates_Service1</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="http://localhost:2923/SheetsSynch.asmx">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\SheetsSynch\</RelPath>
-      <UpdateFromURL>http://localhost:2923/SheetsSynch.asmx</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>OpenDentBusiness_SheetsSynch_SheetsSynch</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="https://its.changehealthcare.com/ITS/ITSWS.asmx%3fwsdl">
       <UrlBehavior>Dynamic</UrlBehavior>
@@ -1950,7 +1910,6 @@
   <ItemGroup>
     <None Include="Resources\Right.gif" />
     <None Include="Resources\RxInstruction.xml" />
-    <None Include="Web References\SheetsSynch\SheetsSynch.disco" />
     <None Include="Resources\Statement.xml" />
     <None Include="Resources\Screening.xml" />
     <None Include="Resources\RoutingSlip.xml" />

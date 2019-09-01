@@ -691,7 +691,7 @@ namespace OpenDentBusiness
             try
             {
                 files = Directory.GetFiles(clearinghouseClin.ResponsePath);
-                archiveDir = ODFileUtils.CombinePaths(clearinghouseClin.ResponsePath, "Archive" + "_" + DateTime.Now.Year.ToString());
+                archiveDir = Path.Combine(clearinghouseClin.ResponsePath, "Archive" + "_" + DateTime.Now.Year.ToString());
                 if (!Directory.Exists(archiveDir))
                 {
                     Directory.CreateDirectory(archiveDir);
@@ -721,7 +721,7 @@ namespace OpenDentBusiness
                     return Lans.g(progress.LanThis, "Import canceled by user.");
                 }
                 string fileSource = files[i];
-                string fileDestination = ODFileUtils.CombinePaths(archiveDir, Path.GetFileName(files[i]));
+                string fileDestination = Path.Combine(archiveDir, Path.GetFileName(files[i]));
                 try
                 {
                     File.Move(fileSource, fileDestination);

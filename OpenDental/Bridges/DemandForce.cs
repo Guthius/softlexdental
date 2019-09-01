@@ -40,7 +40,7 @@ namespace OpenDental.Bridges {
 			if(_formProg.ShowDialog()==DialogResult.Cancel) {
 				workerThread.Abort();
 				MessageBox.Show(Lan.g("DemandForce","Export cancelled")+". "+Lan.g("DemandForce","Partially created file has been deleted")+".");
-				CheckCreatedFile(CodeBase.ODFileUtils.CombinePaths(Path.GetDirectoryName(_path),"extract.xml"));
+				CheckCreatedFile(Path.Combine(Path.GetDirectoryName(_path),"extract.xml"));
 				_formProg.Dispose();
 				return;
 			}
@@ -57,7 +57,7 @@ namespace OpenDental.Bridges {
 
 		private static void InstanceBridgeExport() {
 			string dir=Path.GetDirectoryName(_path);
-			string extract=CodeBase.ODFileUtils.CombinePaths(dir,"extract.xml");
+			string extract=Path.Combine(dir,"extract.xml");
 			CheckCreatedFile(extract);
 			double linesProcessedCount=0;
 			string licenseKey=ProgramProperties.GetPropVal(Programs.GetProgramNum(ProgramName.DemandForce),"Enter your DemandForce license key (required)");

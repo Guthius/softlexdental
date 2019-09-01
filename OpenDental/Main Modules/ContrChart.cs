@@ -30,6 +30,7 @@ using System.Drawing.Imaging;
 using System.Threading;
 using SharpDX;
 using OpenDental.Properties;
+using SLDental.Storage;
 #if EHRTEST
 using EHR;
 #endif
@@ -3837,13 +3838,9 @@ namespace OpenDental
             _listClaimProcHists = _loadData.ListClaimProcHists;
             //todo: track down where this is altered.  Optimize for eCW:
             PatientNoteCur = _loadData.PatNote;
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage)
-            {
-                ODException.SwallowAnyException(() =>
-                {
-                    _patFolder = ImageStore.GetPatientFolder(PatCur, ImageStore.GetPreferredAtoZpath());
-                });
-            }
+
+            _patFolder = ImageStore.GetPatientFolder(PatCur);
+
             DocumentList = _loadData.ArrDocuments;
             StartXVWebThread();
             //todo: might change for planned appt:
@@ -9171,8 +9168,8 @@ namespace OpenDental
                         MsgBox.Show(this, "Saved sheet no longer exists.");
                         return;
                     }
-                    string patFolder = ImageStore.GetPatientFolder(PatCur, ImageStore.GetPreferredAtoZpath());
-                    FileAtoZ.OpenFile(ImageStore.GetFilePath(sheetDoc, patFolder));
+                    string patFolder = ImageStore.GetPatientFolder(PatCur);
+                    Storage.Default.OpenFile(ImageStore.GetFilePath(sheetDoc, patFolder));
                 }
                 else
                 {
@@ -13382,23 +13379,22 @@ namespace OpenDental
                 g.DrawString(text, subHeadingFont, Brushes.Black, center - g.MeasureString(text, subHeadingFont).Width / 2, yPos);
                 yPos += 20;
                 //Patient images are not shown when the A to Z folders are disabled.
-                if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ || CloudStorage.IsCloudStorage)
-                {
-                    Bitmap picturePat;
-                    bool patientPictExists = Documents.GetPatPict(PatCur.PatNum, ImageStore.GetPatientFolder(PatCur, ImageStore.GetPreferredAtoZpath()), out picturePat);
-                    if (picturePat != null)
-                    {//Successfully loaded a patient picture?
-                        Bitmap thumbnail = ImageHelper.GetThumbnail(picturePat, 80);
-                        g.DrawImage(thumbnail, center - 40, yPos);
-                    }
-                    if (patientPictExists)
-                    {
-                        yPos += 80;
-                    }
-                    yPos += 30;
-                    headingPrinted = true;
-                    headingPrintH = yPos;
+
+                Bitmap picturePat;
+                bool patientPictExists = Documents.GetPatPict(PatCur.PatNum, ImageStore.GetPatientFolder(PatCur), out picturePat);
+                if (picturePat != null)
+                {//Successfully loaded a patient picture?
+                    Bitmap thumbnail = ImageHelper.GetThumbnail(picturePat, 80);
+                    g.DrawImage(thumbnail, center - 40, yPos);
                 }
+                if (patientPictExists)
+                {
+                    yPos += 80;
+                }
+                yPos += 30;
+                headingPrinted = true;
+                headingPrintH = yPos;
+
             }
             #endregion
             yPos = gridProg.PrintPage(g, pagesPrinted, bounds, headingPrintH);
@@ -13660,7 +13656,7 @@ namespace OpenDental
             {
                 try
                 {
-                    Process.Start(ODFileUtils.CombinePaths(_patFolder, docCur.FileName));
+                    Storage.Default.OpenFile(Storage.Default.CombinePath(_patFolder, docCur.FileName));
                 }
                 catch (Exception ex)
                 {

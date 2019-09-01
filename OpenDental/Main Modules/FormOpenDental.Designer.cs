@@ -120,7 +120,6 @@
             this.menuItemSheets = new System.Windows.Forms.MenuItem();
             this.menuItemSpellCheck = new System.Windows.Forms.MenuItem();
             this.menuItemTasks = new System.Windows.Forms.MenuItem();
-            this.menuItemWebForm = new System.Windows.Forms.MenuItem();
             this.menuItem20 = new System.Windows.Forms.MenuItem();
             this.menuItemObsolete = new System.Windows.Forms.MenuItem();
             this.menuItemLetters = new System.Windows.Forms.MenuItem();
@@ -193,7 +192,6 @@
             this.menuItemRepeatingCharges = new System.Windows.Forms.MenuItem();
             this.menuItemSetupWizard = new System.Windows.Forms.MenuItem();
             this.menuItemReqStudents = new System.Windows.Forms.MenuItem();
-            this.menuItemWebForms = new System.Windows.Forms.MenuItem();
             this.menuItemWiki = new System.Windows.Forms.MenuItem();
             this.menuItemXWebTrans = new System.Windows.Forms.MenuItem();
             this.menuClinics = new System.Windows.Forms.MenuItem();
@@ -383,7 +381,6 @@
             this.menuItemSheets,
             this.menuItemSpellCheck,
             this.menuItemTasks,
-            this.menuItemWebForm,
             this.menuItem20,
             this.menuItemObsolete});
             this.menuItemSettings.Shortcut = System.Windows.Forms.Shortcut.CtrlS;
@@ -890,12 +887,6 @@
             this.menuItemTasks.Text = "Tasks";
             this.menuItemTasks.Click += new System.EventHandler(this.menuItemTask_Click);
             // 
-            // menuItemWebForm
-            // 
-            this.menuItemWebForm.Index = 34;
-            this.menuItemWebForm.Text = "Web Forms";
-            this.menuItemWebForm.Click += new System.EventHandler(this.menuItemWebForm_Click);
-            // 
             // menuItem20
             // 
             this.menuItem20.Index = 35;
@@ -1155,7 +1146,6 @@
             this.menuItemRepeatingCharges,
             this.menuItemSetupWizard,
             this.menuItemReqStudents,
-            this.menuItemWebForms,
             this.menuItemWiki,
             this.menuItemXWebTrans});
             this.menuItemTools.Shortcut = System.Windows.Forms.Shortcut.CtrlU;
@@ -1399,12 +1389,6 @@
             this.menuItemReqStudents.Index = 19;
             this.menuItemReqStudents.Text = "Student Requirements";
             this.menuItemReqStudents.Click += new System.EventHandler(this.menuItemReqStudents_Click);
-            // 
-            // menuItemWebForms
-            // 
-            this.menuItemWebForms.Index = 20;
-            this.menuItemWebForms.Text = "Web Forms";
-            this.menuItemWebForms.Click += new System.EventHandler(this.menuItemWebForms_Click);
             // 
             // menuItemWiki
             // 
