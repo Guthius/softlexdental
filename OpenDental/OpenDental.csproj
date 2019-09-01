@@ -626,7 +626,6 @@
     <Compile Include="Forms\FormZipSelect.Designer.cs">
       <DependentUpon>FormZipSelect.cs</DependentUpon>
     </Compile>
-    <Compile Include="Logic\ActionNeededL.cs" />
     <Compile Include="Logic\AppointmentL.cs" />
     <Compile Include="Main Modules\ContrAccount.Designer.cs">
       <DependentUpon>ContrAccount.cs</DependentUpon>
@@ -690,11 +689,9 @@
     <Compile Include="Logic\EmailAttachL.cs" />
     <Compile Include="Logic\EtransL.cs" />
     <Compile Include="Logic\FeeL.cs" />
-    <Compile Include="Logic\InsPlanL.cs" />
     <Compile Include="Logic\Lan.cs" />
     <Compile Include="Logic\MarkupL.cs" />
     <Compile Include="Logic\MedicationL.cs" />
-    <Compile Include="Logic\Modules.cs" />
     <Compile Include="Logic\PatFieldL.cs" />
     <Compile Include="Logic\PatientL.cs" />
     <Compile Include="Logic\PatRestrictionL.cs" />

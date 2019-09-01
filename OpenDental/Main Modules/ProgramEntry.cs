@@ -15,7 +15,6 @@ namespace OpenDental
         {
             Application.EnableVisualStyles();
 
-            // Initialize Open Dental.
             try
             {
                 // The default SecurityProtocol is "Ssl3|Tls". We must add Tls12 in order to support Tls1.2 web reference 
@@ -26,10 +25,11 @@ namespace OpenDental
 
                 Security.CurComputerName = Environment.MachineName;
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
                 FormFriendlyException.Show(
-                    string.Format("A critical error has occurred: {0}", ex.Message), ex, "&Quit");
+                    string.Format("A critical error has occurred: {0}", exception.Message), 
+                    exception, "&Quit");
 
                 return;
             }
@@ -38,16 +38,14 @@ namespace OpenDental
 
             //Register an EventHandler which handles unhandled exceptions.
             //AppDomain.CurrentDomain.UnhandledException+=new UnhandledExceptionEventHandler(OnUnhandeledExceptionPolicy);
-            bool isSecondInstance = false;//or more.
+            bool isSecondInstance = false;
 
-            Process[] processes = Process.GetProcesses();
+            var processes = Process.GetProcesses();
             for (int i = 0; i < processes.Length; i++)
             {
-                if (processes[i].Id == Process.GetCurrentProcess().Id)
-                {
-                    continue;
-                }
-                //we have to do it this way because during debugging, the name has vshost tacked onto the end.
+                if (processes[i].Id == Process.GetCurrentProcess().Id) continue;
+
+                // We have to do it this way because during debugging, the name has vshost tacked onto the end.
                 if (processes[i].ProcessName.StartsWith("OpenDental"))
                 {
                     isSecondInstance = true;
@@ -56,37 +54,23 @@ namespace OpenDental
             }
 
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.DoEvents();
-            string[] cla = new string[args.Length];
-            args.CopyTo(cla, 0);
-            FormOpenDental formOD = new FormOpenDental(cla);
-            Exception submittedException = null;
-            Action<Exception, string> onUnhandled = new Action<Exception, string>((e, threadName) =>
-            {
-                //Try to automatically submit a bug report to HQ.
-                try
-                {
-                    //We want to submit a maximum of one exception per instance of OD.
-                    if (submittedException == null)
-                    {
-                        submittedException = e;
-                        // TODO: Fix me... BugSubmissions.SubmitException(e, threadName, FormOpenDental.CurPatNum, formOD.GetSelectedModuleName());
-                    }
-                }
-                catch
-                {
-                }
-                FormFriendlyException.Show("Critical Error: " + e.Message, e, "Quit");
-                formOD.ProcessKillCommand();
-            });
-            CodeBase.ODThread.RegisterForUnhandledExceptions(formOD, onUnhandled);
-            formOD.IsSecondInstance = isSecondInstance;
             Application.AddMessageFilter(new ODGlobalUserActiveHandler());
-            Application.ThreadException += new ThreadExceptionEventHandler((object s, ThreadExceptionEventArgs e) =>
+            Application.DoEvents();
+
+            var formOpenDental = new FormOpenDental(args);
+
+            Application.ThreadException += (s, e) =>
             {
-                onUnhandled(e.Exception, "ProgramEntry");
-            });
-            Application.Run(formOD);
+                FormFriendlyException.Show(
+                    "Critical Error: " + e.Exception.Message, 
+                    e.Exception, "Quit");
+
+                formOpenDental.ProcessKillCommand();
+            };
+
+            formOpenDental.IsSecondInstance = isSecondInstance;
+
+            Application.Run(formOpenDental);
         }
     }
 }

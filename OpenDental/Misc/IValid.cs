@@ -1,5 +1,7 @@
-﻿namespace OpenDental {
-	public interface IValid {
-		bool IsValid { get; }
-	}
+﻿namespace OpenDental
+{
+    public interface IValid
+    {
+        bool IsValid { get; }
+    }
 }

@@ -36,8 +36,11 @@ namespace CodeBase
             return new DateTime(year, month, Math.Min(day, maxDay));
         }
 
-        ///<summary>Sets the short date format to a standardized format so all dates are interpreted with a four digit year format.  All threads in the 
-        ///application will use this format regardless of the computer's region settings.  Throws an exception if the format could not be normalized.</summary>
+        /// <summary>
+        /// Sets the short date format to a standardized format so all dates are interpreted with a four digit year format.  
+        /// All threads in the application will use this format regardless of the computer's region settings. 
+        /// Throws an exception if the format could not be normalized.
+        /// </summary>
         public static void NormalizeApplicationShortDateFormat()
         {
             CultureInfo cInfo = (CultureInfo)CultureInfo.CurrentCulture.Clone();

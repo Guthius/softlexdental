@@ -1,17 +1,3 @@
-/*=============================================================================================================
-Open Dental is a dental practice management program.
-Copyright 2003-2018  Jordan Sparks, DMD.  http://www.opendental.com
-
-This program is free software; you can redistribute it and/or modify it under the terms of the
-GNU Db Public License as published by the Free Software Foundation; either version 2 of the License,
-or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful, but without any warranty. See the GNU Db Public License
-for more details, available at http://www.opensource.org/licenses/gpl-license.php
-
-Any changes to this program must follow the guidelines of the GPL license if a modified version is to be
-redistributed.
-===============================================================================================================*/
 using CodeBase;
 using Microsoft.Win32;
 using OpenDental.Properties;
@@ -43,47 +29,15 @@ namespace OpenDental
         ///and can be called from anywhere in the program to update FormOpenDental.</summary>
         private static FormOpenDental _formOpenDentalS;
 
-        
-        ///<summary>When user logs out, this keeps track of where they were for when they log back in.</summary>
-        private int LastModule;
-        private System.Windows.Forms.MenuItem menuItemRepeatingCharges;
-        private MenuItem menuItemTimeCards;
-        private MenuItem menuItemApptRules;
-        private MenuItem menuItemAuditTrail;
-        private MenuItem menuItemPatFieldDefs;
-        private MenuItem menuItemTerminal;
-        private MenuItem menuItemTerminalManager;
-        private MenuItem menuItemQuestions;
-        private MenuItem menuItemCustomReports;
-        private MenuItem menuItemMessaging;
-        
-        private MenuItem menuItemMessagingButs;
-        private MenuItem menuItemCreateAtoZFolders;
-        private MenuItem menuItemLaboratories;
         ///<summary>A list of button definitions for this computer.  These button defs display in the lightSignalGrid1 control.</summary>
         private SigButDef[] SigButDefList;
-        private MenuItem menuItemGraphics;
-        private MenuItem menuItemLabCases;
-        private MenuItem menuItemRequirementsNeeded;
-        private MenuItem menuItemReqStudents;
-        private MenuItem menuItemAutoNotes;
-        private MenuItem menuItemDisplayFields;
-        //private string dconnStr;
-        private ImageList imageListMain;
-        private ContextMenu menuPatient;
-        private ContextMenu menuLabel;
-        private ContextMenu menuEmail;
-        private ContextMenu menuLetter;
+
+        ///<summary>When user logs out, this keeps track of where they were for when they log back in.</summary>
+        private int LastModule;
 
         ///<summary>This list will only contain events for this computer where the users clicked to disable a popup for a specified period of time.  So it won't typically have many items in it.</summary>
         private List<PopupEvent> PopupEventList;
-        private MenuItem menuItemPharmacies;
-        private MenuItem menuItemSheets;
-        private MenuItem menuItemModules;
-        private MenuItem menuItemRecallTypes;
-        private MenuItem menuItemFeeScheds;
-        private MenuItem menuItemMobileSetup;
-        private MenuItem menuItemLetters;
+
         //private UserControlPhonePanel phonePanel;
         ///<summary>Command line args passed in when program starts.</summary>
         public string[] CommandLineArgs;
@@ -100,66 +54,16 @@ namespace OpenDental
         private ContrImages ContrImages2;
         private ContrStaff ContrManage2;
         private OutlookBar myOutlookBar;
-        private MenuItem menuItemShutdown;
-        private MenuItem menuItemInsFilingCodes;
-        private MenuItem menuItemReplication;
-        private MenuItem menuItemAutomation;
-        private MenuItem menuItemMergePatients;
-        private MenuItem menuItemDuplicateBlockouts;
-        private OpenDental.UI.ODToolBar ToolBarMain;
-        private MenuItem menuItem3;
-        private MenuItem menuApptFieldDefs;
-        private FormTerminalManager formTerminalManager;
-        private MenuItem menuItemCCRecurring;
-        /////<summary>This will be null if EHR didn't load up.  EHRTEST conditional compilation constant is used because the EHR project is only part of the solution here at HQ.  We need to use late binding in a few places so that it will still compile for people who download our sourcecode.  But late binding prevents us from stepping through for debugging, so the EHRTEST lets us switch to early binding.</summary>
-        //public static object ObjFormEhrMeasures;
-        private MenuItem menuItemEHR;
-        //<summary>This will be null if EHR didn't load up.</summary>
-        //public static Assembly AssemblyEHR;
+        private ODToolBar ToolBarMain;
         private Form FormRecentlyOpenForLogoff;
-        private MenuItem menuItemPayerIDs;
-        private MenuItem menuItemTestLatency;
-        private FormLogOn FormLogOn_;
         ///<summary>When auto log off is in use, we don't want to log off user if they are in the FormLogOn window.  Mostly a problem when using web service because CurUser is not null.</summary>
         private bool IsFormLogOnLastActive;
-        
 
-        private MenuItem menuItemWiki;
-        private MenuItem menuItemProcLockTool;
-        private MenuItem menuItemHL7;
-        private MenuItem menuItemNewCropBilling;
-        private MenuItem menuItemSpellCheck;
-        private MenuItem menuItemXChargeReconcile;
         private FormCreditRecurringCharges FormCRC;
-        private MenuItem menuItemAppointments;
-        private MenuItem menuItem8;
-        private MenuItem menuItemPreferencesAppts;
-        private MenuItem menuItemFamily;
-        private MenuItem menuItem10;
-        private MenuItem menuItemPreferencesFamily;
-        private MenuItem menuItemChart;
-        private MenuItem menuItem13;
-        private MenuItem menuItemPreferencesChart;
-        private MenuItem menuItemImages;
-        private MenuItem menuItemManage;
-        private MenuItem menuItem17;
-        private MenuItem menuItemPreferencesManage;
-        private MenuItem menuItem19;
-        private MenuItem menuItem20;
-        private MenuItem menuItemObsolete;
-        private MenuItem menuItemAdvancedSetup;
-        private MenuItem menuItemAccount;
-        private MenuItem menuItemPreferencesTreatPlan;
-        private MenuItem menuItemPreferencesImages;
-        private MenuItem menuItem2;
-        private MenuItem menuItemImagingPerComp;
-        private MenuItem menuItemAllergies;
-        private MenuItem menuItemProblems;
-        private MenuItem menuItemDentalSchools;
-        private MenuItem menuItemEvaluations;
+
+        private FormTerminalManager formTerminalManager;
+
         private long _previousPatNum;
-        private MenuItem menuItemDispensary;
-        private MenuItem menuItemApptTypes;
         private DateTime _datePopupDelay;
         ///<summary>A secondary cache only used to determine if preferences related to the redrawing of the Chart module have been changed.</summary>
         private Dictionary<string, object> dictChartPrefsCache = new Dictionary<string, object>();
@@ -173,46 +77,21 @@ namespace OpenDental
         ///Replicaiton is NOT broken when this flag is true, because the user can re-enable replicaiton using the START SLAVE SQL without any ill effects.
         ///This flag is used to display a warning to the user, but will not ever block the user from using OD.</summary>
         private bool _isReplicationSlaveStopped = false;
-        private MenuItem menuClinics;
-        ///<summary>HQ only. Keep track of last time triage task labels were filled. Too taxing on the server to perform every 1.6 seconds with the rest of the HQ thread metrics. Triage labels will be refreshed on ProcessSigsIntervalInSecs interval.</summary>
-        DateTime _hqTriageMetricsLastRefreshed = DateTime.MinValue;
-        ///<summary>HQ only. Keep track of last time EServiceMetrics were filled. Server is only updating every 30 seconds so no need to go any faster than that.</summary>
-        DateTime _hqEServiceMetricsLastRefreshed = DateTime.MinValue;
-        private ContextMenu menuText;
-        private MenuItem menuItemTextMessagesReceived;
-        private MenuItem menuItemTextMessagesSent;
-        private MenuItem menuItemTextMessagesAll;
-        private MenuItem menuItemRemoteSupport;
+       
+
         ///<summary>A specific reference to the "Text" button.  This special reference helps us preserve the notification text on the button after setup is modified.</summary>
         private ODToolBarButton _butText;
         ///<summary>A specific reference to the "Task" button.
         ///This special reference helps us refresh the notification text on the button after the user changes.</summary>
         private ODToolBarButton _butTask;
-        private MenuItem menuItemMoveSubscribers;
+
         /// <summary>Command line can pass in show=... "Popup", "Popups", "ApptsForPatient", or "SearchPatient".  Stored here as lowercase.</summary>
         private string _StrCmdLineShow = "";
-        private MenuItem menuItemPreferencesAccount;
-        private MenuItem menuItemCCProcs;
-        private MenuItem menuItem12;
-        private MenuItem menuItemRequiredFields;
-        private MenuItem menuItemStateAbbrs;
-        private MenuItem menuItemMergeReferrals;
-        private MenuItem menuItemMergeProviders;
-        private MenuItem menuItemMergeMedications;
-        private MenuItem menuItemPassword;
-        private MenuItem menuItemUserEmailAddress;
-        private MenuItem menuItemInsVerification;
+
         private FormSmsTextMessaging _formSmsTextMessaging;
         private FormQuery _formUserQuery;
         private OpenDentalGraph.FormDashboardEditTab _formDashboardEditTab;
-        private MenuItem menuItemReportsStandard;
-        private MenuItem menuItemReportsGraphic;
-        private MenuItem menuItemReportsUserQuery;
-        private MenuItem menuItemPendingPayments;
-        private MenuItem menuItemAlerts;
-        private MenuItem menuItemNoAlerts;
-        private MenuItem menuItemAutoClosePayPlans;
-        private MenuItem menuItemServiceManager;
+
         private static Dictionary<long, Dictionary<long, DateTime>> _dicBlockedAutomations;
         
         
@@ -253,10 +132,12 @@ namespace OpenDental
         }
 
 
-        private MenuItem menuItemFHIR;
-        private ContextMenu menuTask;
-        private MenuItem menuItemTaskNewForUser;
-        private MenuItem menuItemTaskReminders;
+
+
+
+
+
+
         ///<summary>Tracks the reminder tasks for the currently logged in user.  Is null until the first signal refresh.  
         ///Includes new and viewed tasks.</summary>
         private List<Task> _listReminderTasks = null;
@@ -272,7 +153,7 @@ namespace OpenDental
         private static int _popupPressureReliefLimit = 20;//20 is chosen arbitrarily.  We could implement a preference for this, with a max of 115.
                                                           ///<summary>The date the appointment module reminders tab was last refreshed.</summary>
         private DateTime _dateReminderRefresh = DateTime.MinValue;
-        private MenuItem menuItemXWebTrans;
+        
         ///<summary>HQ only. Keep track of the last time the office down was checked. Too taxing on the server to perform every 1.6 seconds with the rest 
         ///of the HQ thread metrics. Will be refreshed on ProcessSigsIntervalInSecs interval.</summary>
         private DateTime _hqOfficeDownLastRefreshed = DateTime.MinValue;
@@ -280,39 +161,17 @@ namespace OpenDental
         List<AlertRead> _listAlertReads = new List<AlertRead>();
         ///<summary>List of AlertItems for the current user and clinic.</summary>
         List<AlertItem> _listAlertItems = new List<AlertItem>();
-        private MenuItem menuItemTasks;
+
         private FormXWebTransactions FormXWT;
-        private MenuItem menuItemAbout;
-        private MenuItem menuItem11;
-        private MenuItem menuItemOrtho;
+
         private static bool _isTreatPlanSortByTooth;
-        private MenuItem menuItemOrthoAuto;
+        
         ///<summary>In most cases, CurPatNum should be used instead of _CurPatNum.</summary>
         private static long _curPatNum;
-        private MenuItem menuItemDiscountPlans;
-        private ContextMenu menuCommlog;
-        private MenuItem menuItemCommlogPersistent;
-        private MenuItem menuItemConfirmations;
-        private MenuItem menuItemSetupWizard;
-        private MenuItem menuItemMergeDPs;
-        private MenuItem menuItemAsapList;
-        private MenuItem menuItemReports;
-        private MenuItem menuItemAlertCategory;
-        private MenuItem menuItemQuickPasteNotes;
-        private MenuItem menuItemReportsUnfinalizedPay;
-        private MenuItem menuItemDatabaseMaintenancePat;
-        private MenuItem menuItemUserSettings;
-        private MenuItem menuItemAddUser;
-        private MenuItem menuItemSecuritySettings;
-        private MenuItem menuItemWebinar;
-        //private FormLoginFailed _formLoginFailed = null;
-        private MenuItem menuPatientStatusSetter;
+
         ///<summary>We will send a maximum of 1 exception to HQ that occurs when processing signals.</summary>
         private Exception _signalsTickException;
-        private ImageList imageListFlat;
-        private MenuItem menuItemEnterprise;
-        private MenuItem menuItemMobileAppDevices;
-        private MenuItem menuItemDashboard;
+
         private SplitContainerNoFlicker splitContainerNoFlickerDashboard;
 
         ///<summary>List of tab titles for the TabProc control. Used to get accurate preview in sheet layout design view. 
@@ -6952,55 +6811,77 @@ namespace OpenDental
             Security.IsUserLoggedIn = true;//User is guaranteed to be logged in at this point.
         }
 
-        ///<summary>Show the log on window.</summary>
-        private void ShowLogOn()
+        /// <summary>
+        /// Show the log on window.
+        /// </summary>
+        void ShowLogOn()
         {
             Userods.SetIsCacheAllowed(false);
-            FormLogOn_ = new FormLogOn(doRefreshSecurityCache: false);
-            FormLogOn_.ShowDialog(this);
-            if (FormLogOn_.DialogResult == DialogResult.Cancel)
+
+            using (var formLogOn = new FormLogOn(doRefreshSecurityCache: false))
             {
-                Cursor = Cursors.Default;
-                Application.Exit();
-            }
-            CheckForPasswordReset();
-            Userods.SetIsCacheAllowed(true);
-            if (FormLogOn_.RefreshSecurityCache)
-            {//Refresh the cache if we need to since cache allowed was just set to true
-                DataValid.SetInvalid(InvalidType.Security);
+                if (formLogOn.ShowDialog(this) == DialogResult.OK)
+                {
+                    Cursor = Cursors.Default;
+
+                    Application.Exit();
+
+                    return;
+                }
+
+                CheckForPasswordReset();
+
+                Userods.SetIsCacheAllowed(true);
+
+                //Refresh the cache if we need to since cache allowed was just set to true
+                if (formLogOn.RefreshSecurityCache)
+                {
+                    DataValid.SetInvalid(InvalidType.Security);
+                }
             }
         }
 
-        ///<summary>Checks to see if the currently logged-in user needs to reset their password.
-        ///If they do, then this method will force the user to reset the password otherwise the program will exit.</summary>
-        private void CheckForPasswordReset()
+        /// <summary>
+        /// Checks to see if the currently logged-in user needs to reset their password.
+        /// If they do, then this method will force the user to reset the password otherwise the program will exit.
+        /// </summary>
+        void CheckForPasswordReset()
         {
             if (Security.CurUser.IsPasswordResetRequired)
             {
-                FormUserPassword FormUP = new FormUserPassword(false, Security.CurUser.UserName, true);
-                FormUP.ShowDialog();
-                if (FormUP.DialogResult == DialogResult.Cancel)
-                {//Shouldn't be possible
-                    Cursor = Cursors.Default;
-                    Application.Exit();
-                }
-                bool isPasswordStrong = FormUP.PasswordIsStrong;
-                try
+                using (var formUserPassword = new FormUserPassword(false, Security.CurUser.UserName, true))
                 {
-                    Security.CurUser.IsPasswordResetRequired = false;
-                    Userods.Update(Security.CurUser);
-                    Userods.UpdatePassword(Security.CurUser, FormUP.LoginDetails, isPasswordStrong);
+                    if (formUserPassword.ShowDialog() == DialogResult.Cancel)
+                    {
+                        Cursor = Cursors.Default;
+
+                        Application.Exit();
+
+                        return;
+                    }
+
+                    var isStrongPassword = formUserPassword.PasswordIsStrong;
+                    try
+                    {
+                        Security.CurUser.IsPasswordResetRequired = false;
+
+                        Userods.Update(Security.CurUser);
+                        Userods.UpdatePassword(Security.CurUser, formUserPassword.LoginDetails, isStrongPassword);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+
+                    Security.CurUser.PasswordIsStrong = formUserPassword.PasswordIsStrong;
+                    Security.CurUser.LoginDetails = formUserPassword.LoginDetails;
+                    Security.PasswordTyped = formUserPassword.Password;
+
+                    DataValid.SetInvalid(InvalidType.Security);
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-                Security.CurUser.PasswordIsStrong = FormUP.PasswordIsStrong;
-                Security.CurUser.LoginDetails = FormUP.LoginDetails;
-                Security.PasswordTyped = FormUP.Password;
-                DataValid.SetInvalid(InvalidType.Security);
             }
         }
+
         #endregion LogOn
         #region Logoff
 
@@ -7033,12 +6914,10 @@ namespace OpenDental
         ///<summary>Enumerates open forms and saves work for those forms which have a save handler.  Some forms are closed as part of saving work.</summary>
         private bool SaveWork(bool isForceClose)
         {
-            if (this.InvokeRequired)
-            {
-                return (bool)this.Invoke(new Func<bool>(() => SaveWork(isForceClose)));
-            }
-            List<Form> listOpenForms = GetOpenForms();
-            foreach (Form openForm in listOpenForms)
+            if (InvokeRequired) return (bool)Invoke(new Func<bool>(() => SaveWork(isForceClose)));
+
+            var formList = GetOpenForms();
+            foreach (Form openForm in formList)
             {
                 // If force closing, we HAVE to forcefully close everything related to Open Dental, regardless of plugins.
                 // Otherwise, give plugins a chance to stop the log off event.
@@ -7062,7 +6941,7 @@ namespace OpenDental
                 }
             }
             GeneralProgramEvent.Fire(ODEventType.Shutdown, isForceClose);
-            foreach (Form formToClose in listOpenForms)
+            foreach (Form formToClose in formList)
             {
                 if (formToClose.Name == "FormWikiEdit")
                 {
