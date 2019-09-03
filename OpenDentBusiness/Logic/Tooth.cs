@@ -8,15 +8,8 @@ using System.Linq;
 
 namespace OpenDentBusiness
 {
-    /// <summary></summary>
     public class Tooth
     {
-        ///<summary></summary>
-        public Tooth()
-        {
-
-        }
-
         public static String[] labelsUniversal = new String[] { "1",  "2",  "3",  "4",  "5",  "6",  "7",  "8",  "9", "10", "11", "12", "13", "14", "15", "16",
                                                                 "32", "31", "30", "29", "28", "27", "26", "25", "24", "23", "22", "21", "20", "19", "18", "17",
                                                                                    "A",  "B",  "C",  "D",  "E",  "F",  "G",  "H",  "I",  "J",
@@ -47,7 +40,6 @@ namespace OpenDentBusiness
             "E","D","C","B","A","A","B","C","D","E",
             "E","D","C","B","A","A","B","C","D","E"};
 
-        ///<summary></summary>
         public static bool IsAnterior(string tooth_id)
         {
             if (!IsValidDB(tooth_id))
@@ -66,7 +58,6 @@ namespace OpenDentBusiness
             return false;
         }
 
-        ///<summary></summary>
         public static bool IsAnterior(int intTooth)
         {
             string toothNum = FromInt(intTooth);
@@ -674,14 +665,7 @@ namespace OpenDentBusiness
             }
         }
 
-        ///<summary></summary>
-        public static string FromInt(int intTooth)
-        {
-            //don't need much error checking.
-            string retStr = "";
-            retStr = intTooth.ToString();
-            return retStr;
-        }
+        public static string FromInt(int intTooth) => intTooth.ToString();
 
         ///<summary>Returns true if A-T or AS-TS.  Otherwise, returns false.</summary>
         public static bool IsPrimary(string tooth_id)
@@ -701,7 +685,6 @@ namespace OpenDentBusiness
             return false;
         }
 
-        ///<summary></summary>
         public static string PermToPri(string tooth_id)
         {
             switch (tooth_id)
@@ -750,14 +733,12 @@ namespace OpenDentBusiness
             }
         }
 
-        ///<summary></summary>
         public static string PermToPri(int intTooth)
         {
             string tooth_id = FromInt(intTooth);
             return PermToPri(tooth_id);
         }
 
-        ///<summary></summary>
         public static string PriToPerm(string tooth_id)
         {
             switch (tooth_id)
@@ -806,7 +787,6 @@ namespace OpenDentBusiness
             }
         }
 
-        ///<summary>Converts supernumerary teeth to permanent.</summary>
         public static string SupToPerm(string tooth_id)
         {
             switch (tooth_id)
@@ -917,19 +897,13 @@ namespace OpenDentBusiness
             }
             if (ordinal < 43)
             {
-                return Tooth.PermToPri(ordinal - 29);
+                return PermToPri(ordinal - 29);
             }
-            return Tooth.PermToPri(ordinal - 23);
+            return PermToPri(ordinal - 23);
         }
 
-        ///<summary></summary>
-        public static bool IsMaxillary(int intTooth)
-        {
-            string toothNum = FromInt(intTooth);
-            return IsMaxillary(toothNum);
-        }
+        public static bool IsMaxillary(int intTooth) => IsMaxillary(FromInt(intTooth));
 
-        ///<summary></summary>
         public static bool IsMaxillary(string tooth_id)
         {
             if (!IsValidDB(tooth_id))
@@ -1221,25 +1195,25 @@ namespace OpenDentBusiness
             surfTidy = surfTidy.Replace("F", "V");//USA Facial becomes Vestibular for Canadian display
             return surfTidy;
         }
-
-        /// <summary>This will be deleted as soon as it's no longer in use by DirectX chart.</summary>
-        public static float PerioShiftMm(string tooth_id)
-        {
-            return 0;
-        }
-
-
     }
 
     public enum ToothNumberingNomenclature
     {
-        ///<summary>0- American</summary>
+        /// <summary>
+        /// American
+        /// </summary>
         Universal,
-        ///<summary>1- International</summary>
+
+        /// <summary>
+        /// International
+        /// </summary>
         FDI,
-        ///<summary>2- </summary>
+
         Haderup,
-        ///<summary>3- Ortho</summary>
+
+        /// <summary>
+        /// 3- Ortho
+        /// </summary>
         Palmer
     }
 }
