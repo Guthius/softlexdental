@@ -58,8 +58,8 @@ namespace OpenDentBusiness
             }
             if (listITypes.Contains(InvalidType.AlertCategoryLinks) || isAll)
             {
-                ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.AlertCategoryLinks.ToString());
-                ds.Tables.Add(AlertCategoryLinks.GetTableFromCache(doRefreshServerCache));
+                //ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.AlertCategoryLinks.ToString());
+                //ds.Tables.Add(AlertCategoryLinks.GetTableFromCache(doRefreshServerCache));
             }
             if (listITypes.Contains(InvalidType.AppointmentTypes) || isAll)
             {
@@ -467,7 +467,7 @@ namespace OpenDentBusiness
             if (listITypes.Contains(InvalidType.AlertCategoryLinks) || isAll)
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.AlertCategoryLinks.ToString());
-                AlertCategoryLinks.FillCacheFromTable(ds.Tables["AlertCategoryLink"]);
+                //AlertCategoryLinks.FillCacheFromTable(ds.Tables["AlertCategoryLink"]);
             }
             if (listITypes.Contains(InvalidType.AppointmentTypes) || isAll)
             {

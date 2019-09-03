@@ -288,7 +288,6 @@
     <Compile Include="Crud Interface\CrudColumnAttribute.cs" />
     <Compile Include="Crud Interface\CrudTableAttribute.cs" />
     <Compile Include="Crud Interface\TableBase.cs" />
-    <Compile Include="Crud\AlertCategoryLinkCrud.cs" />
     <Compile Include="Crud\AsapCommCrud.cs" />
     <Compile Include="Crud\MobileAppDeviceCrud.cs" />
     <Compile Include="Crud\PayConnectResponseWebCrud.cs" />
@@ -317,7 +316,6 @@
     <Compile Include="Crud\TsiTransLogCrud.cs" />
     <Compile Include="Crud\UserGroupAttachCrud.cs" />
     <Compile Include="Crud\WebSchedRecallCrud.cs" />
-    <Compile Include="Data Interface\AlertCategoryLinks.cs" />
     <Compile Include="Data Interface\AsapComms.cs" />
     <Compile Include="Data Interface\ClaimTrackings.cs" />
     <Compile Include="Data Interface\ClinicErxs.cs" />
@@ -897,7 +895,8 @@
     <Compile Include="Data Interface\TaskNotes.cs" />
     <Compile Include="Data Interface\TaskUnreads.cs" />
     <Compile Include="Cache\Cache.cs" />
-    <Compile Include="Data\WIP\Preferences.cs" />
+    <Compile Include="Data\AlertType.cs" />
+    <Compile Include="WIP\Preferences.cs" />
     <Compile Include="Data Interface\TimeCardRules.cs" />
     <Compile Include="Data Interface\ToothGridCells.cs" />
     <Compile Include="Data Interface\ToothGridCols.cs" />
@@ -1046,7 +1045,7 @@
     <Compile Include="Data Interface\Pharmacies.cs" />
     <Compile Include="Data Interface\CovCats.cs" />
     <Compile Include="Data Interface\CovSpans.cs" />
-    <Compile Include="Data\WIP\Defs.cs" />
+    <Compile Include="WIP\Defs.cs" />
     <Compile Include="Db Multi Table\FamilyModules.cs" />
     <Compile Include="Data Interface\GroupPermissions.cs" />
     <Compile Include="Data Interface\Operatories.cs" />
@@ -1146,7 +1145,7 @@
     <Compile Include="Reports\RpUnfinalizedInsPay.cs" />
     <Compile Include="Reports\RpRouting.cs" />
     <Compile Include="Reports\RpUnearnedIncome.cs" />
-    <Compile Include="TableTypes\AlertCategoryLink.cs" />
+    <Compile Include="Data\AlertCategoryLink.cs" />
     <Compile Include="Data\AlertCategory.cs" />
     <Compile Include="TableTypes\AsapComm.cs" />
     <Compile Include="TableTypes\DefLink.cs" />

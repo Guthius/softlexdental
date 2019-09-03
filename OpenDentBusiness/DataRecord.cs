@@ -7,9 +7,9 @@ namespace OpenDentBusiness
     public delegate T DataRecordBuilder<T>(MySqlDataReader dataReader);
 
     /// <summary>
-    /// Represents data from the database.
+    /// Represents a data record from the database with a unique ID.
     /// </summary>
-    public class DataRecord
+    public class DataRecord : DataRecordBase
     {
         /// <summary>
         /// Gets or sets the ID of the record.
@@ -20,7 +20,13 @@ namespace OpenDentBusiness
         /// Gets a value indicating whether the record is new (i.e. not saved to the database). A record is considered new when it has not been assigned a ID yet.
         /// </summary>
         public bool IsNew => Id == 0;
+    }
 
+    /// <summary>
+    /// Represents a data record from the database.
+    /// </summary>
+    public class DataRecordBase
+    {
         /// <summary>
         /// Selects a list of records from the database.
         /// </summary>

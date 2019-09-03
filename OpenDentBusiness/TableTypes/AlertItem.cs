@@ -79,75 +79,7 @@ namespace OpenDentBusiness
     }
 
     ///<summary>Enum representing different alert types.</summary>
-    public enum AlertType
-    {
-        ///<summary>0 - Generic. Informational, has no action associated with it</summary>
-        Generic,
-        ///<summary>1 - Opens the Online Payments Window when clicked</summary>
-        [Description("Online Payments Pending")]
-        OnlinePaymentsPending,
-        ///<summary>2 - Only used by Open Dental HQ. The server monitoring incoming voicemails is not working.</summary>
-        [Description("Voice Mail Monitor Issues"), IsODHQ()]
-        VoiceMailMonitor,
-        ///<summary>3 - Opens the Radiology Order List window when clicked.</summary>
-        [Description("Radiology Orders")]
-        RadiologyProcedures,
-        ///<summary>4 - A patient has clicked "Request Callback" on an e-Confirmation.</summary>
-        [Description("Patient Requests Callback")]
-        CallbackRequested,
-        ///<summary>5 - Alerts related to the Web Sched New Pat eService.</summary>
-        [Description("Web Sched New Patient")]
-        WebSchedNewPat,
-        ///<summary>6 - Alerts related to Web Sched New Patient Appointments.</summary>
-        [Description("Web Sched New Patient Appointment Created")]
-        WebSchedNewPatApptCreated,
-        ///<summary>7 - A number is not able to receive text messages.</summary>
-        [Description("Number Barred From Texting")]
-        NumberBarredFromTexting,
-        ///<summary>8 - The number of MySQL connections to the server has exceeded half the allowed number of connections.</summary>
-        [Description("MySQL Maximum Connection Issues")]
-        MaxConnectionsMonitor,
-        ///<summary>9 - Alerts related to new ASAP appointments via web sched.</summary>
-        [Description("Web Sched ASAP Appointment Created")]
-        WebSchedASAPApptCreated,
-        ///<summary>10 - Only used by Open Dental HQ. The Asterisk Server is not processing messages or is getting all blank payloads.</summary>
-        [Description("Phone Tracking Server Issues"), IsODHQ()]
-        AsteriskServerMonitor,
-        ///<summary>11 - Multiple computers are running eConnector services. There should only ever be one.</summary>
-        [Description("Multiple eConnectors")]
-        MultipleEConnectors,
-        ///<summary>12 - The eConnector is in a critical state and not currently turned on. There should only ever be one.</summary>
-        [Description("eConnection Down")]
-        EConnectorDown,
-        ///<summary>13 - The eConnector has an error that is not critical but is worth looking into. There should only ever be one.</summary>
-        [Description("eConnection Error")]
-        EConnectorError,
-        ///<summary>14 - Alerts related to DoseSpot provider registration.</summary>
-        [Description("DoseSpot Provider Registered")]
-        DoseSpotProviderRegistered,
-        ///<summary>15 - Alerts related to DoseSpot clinic registration.</summary>
-        [Description("DoseSpot Clinic Registered")]
-        DoseSpotClinicRegistered,
-        ///<summary>16 - An appointment has been created via Web Sched Recall.</summary>
-        [Description("Web Sched Recall Appointment Created")]
-        WebSchedRecallApptCreated,
-        ///<summary>17 - Alerts related to turning clinics on or off for eServices.</summary>
-        [Description("Clinic Feature Changed")]
-        ClinicsChanged,
-        ///<summary>18 - Alerts related to turning clinics on or off for eServices. Internal, not displayed to the customer.
-        ///Will be processed by the eConnector and then deleted.</summary>
-        [Description("Clinic Feature Changed (internal)")]
-        ClinicsChangedInternal,
-        ///<summary>19 - Multiple computers are running OpenDentalServices. There should only ever be one.</summary>
-        [Description("Multiple OpenDentalServices")]
-        MultipleOpenDentalServices,
-        ///<summary>20 - OpenDentalService is down.</summary>
-        [Description("OpenDentalService Down")]
-        OpenDentalServiceDown,
-        ///<summary>21 - Triggered when a new WebMail is recieved from the patient portal.</summary>
-        [Description("New WebMail")]
-        WebMailRecieved,
-    }
+   
 
     ///<summary>Represents the urgency of the alert.  Also determines the color for the menu item in the main menu.</summary>
     public enum SeverityType

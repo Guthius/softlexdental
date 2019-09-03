@@ -775,7 +775,7 @@ namespace OpenDental.Translation {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete?.
+        ///   Looks up a localized string similar to Are you sure you would like to delete this?.
         /// </summary>
         public static string ConfirmDelete {
             get {

@@ -45,14 +45,14 @@ namespace OpenDentBusiness
 
                 RenderMountFrames(mountImage, mountItems, imageSelected);
 
-                foreach (var mountItem in mountItems)
+                for (int i = 0; i < mountItems.Count; i++)
                 {
-                    graphics.FillRectangle(Brushes.Black, mountItem.Xpos, mountItem.Ypos, mountItem.Width, mountItem.Height);
+                    graphics.FillRectangle(Brushes.Black, mountItems[i].Xpos, mountItems[i].Ypos, mountItems[i].Width, mountItems[i].Height);
 
                     RenderImageIntoMount(
-                        mountImage, 
-                        mountItems[i], 
-                        originalImages[i], 
+                        mountImage,
+                        mountItems[i],
+                        originalImages[i],
                         documents[i]);
                 }
             }

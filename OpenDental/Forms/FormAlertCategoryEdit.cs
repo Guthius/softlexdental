@@ -1,85 +1,127 @@
+/**
+ * Softlex Dental Project
+ * Copyright (C) 2019 Dental Stars SRL
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
+using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using OpenDentBusiness;
 using System.Linq;
-using CodeBase;
+using System.Windows.Forms;
 
-namespace OpenDental {
-	public partial class FormAlertCategoryEdit:ODForm {
+namespace OpenDental
+{
+    public partial class FormAlertCategoryEdit : FormBase
+    {
+        private List<AlertType> alertTypes;
+        private List<AlertCategoryLink> oldAlertCategoryLinks;
 
-		private List<AlertType> listShownAlertTypes;
-		private List<AlertCategoryLink> listOldAlertCategoryLinks;//New list generated on OK click.
-		private AlertCategory _categoryCur;
+        public AlertCategory Category { get; }
 
-		public FormAlertCategoryEdit(AlertCategory category) {
-			InitializeComponent();
-			
-			_categoryCur=category;
-		}
-		
-		private void FormAlertCategoryEdit_Load(object sender,EventArgs e) {
-			textDesc.Text=_categoryCur.Description;
-			listShownAlertTypes=Enum.GetValues(typeof(AlertType)).OfType<AlertType>().ToList();
-			if(_categoryCur.Locked) {
-				textDesc.Enabled=false;
-				butDelete.Enabled=false;
-				butOK.Enabled=false;
-			}
-			listOldAlertCategoryLinks=AlertCategoryLinks.GetForCategory(_categoryCur.Id);
-			InitAlertTypeSelections();
-		}
+        public FormAlertCategoryEdit(AlertCategory category)
+        {
+            InitializeComponent();
 
-		private void InitAlertTypeSelections() {
-			listBoxAlertTypes.Items.Clear();
-			List<AlertType> listCategoryAlertTypes=listOldAlertCategoryLinks.Select(x => x.AlertType).ToList();
-			foreach(AlertType type in listShownAlertTypes) {
-				int index=listBoxAlertTypes.Items.Add(Lans.g(this,type.GetDescription()));
-				listBoxAlertTypes.SetSelected(index,listCategoryAlertTypes.Contains(type));
-			}
-		}
+            Category = category;
+        }
 
-		private void listBoxAlertTypes_MouseClick(object sender,MouseEventArgs e) {
-			if(_categoryCur.Locked) {
-				InitAlertTypeSelections();
-				MsgBox.Show(this,"You can only edit custom alert categories.");
-			}
-		}
+        private void FormAlertCategoryEdit_Load(object sender, EventArgs e)
+        {
+            descriptionTextBox.Text = Category.Description;
 
-		private void butOK_Click(object sender,EventArgs e) {
-			_categoryCur.Description=textDesc.Text;
-			List<AlertType> listSelectedTypes=listBoxAlertTypes.SelectedIndices
-				.OfType<int>()
-				.Select(x => (AlertType)listShownAlertTypes[x])
-				.ToList();
-            List<AlertCategoryLink> listNewAlertCategoryType = new List<AlertCategoryLink>(listOldAlertCategoryLinks);
-			listNewAlertCategoryType.RemoveAll(x => !listSelectedTypes.Contains(x.AlertType));//Remove unselected AlertTypes
-			foreach(AlertType type in listSelectedTypes) {
-				if(!listOldAlertCategoryLinks.Exists(x => x.AlertType==type)) {//Add newly selected AlertTypes.
-					listNewAlertCategoryType.Add(new AlertCategoryLink(_categoryCur.Id,type));
-				}
-			}
-			AlertCategoryLinks.Sync(listNewAlertCategoryType,listOldAlertCategoryLinks);
-            AlertCategory.Update(_categoryCur);
-			DataValid.SetInvalid(InvalidType.AlertCategoryLinks,InvalidType.AlertCategories);
-			DialogResult=DialogResult.OK;
-		}
+            alertTypes = Enum.GetValues(typeof(AlertType)).OfType<AlertType>().ToList();
+            if (Category.Locked)
+            {
+                descriptionTextBox.Enabled = false;
+                deleteButton.Visible = false;
+                acceptButton.Enabled = false;
+            }
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+            oldAlertCategoryLinks = AlertCategoryLink.GetByAlertCategory(Category.Id);
 
-		private void butDelete_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Are you sure you would like to delete this?")) {
-				return;
-			}
-			AlertCategoryLinks.DeleteForCategory(_categoryCur.Id);
-			AlertCategory.Delete(_categoryCur.Id);
-			DataValid.SetInvalid(InvalidType.AlertCategories,InvalidType.AlertCategories);
-			DialogResult=DialogResult.OK;
-		}
-	}
+            LoadAlertTypes();
+        }
+
+        private void LoadAlertTypes()
+        {
+            alertTypesListBox.Items.Clear();
+
+            List<AlertType> listCategoryAlertTypes = oldAlertCategoryLinks.Select(x => x.AlertType).ToList();
+            foreach (var alertType in alertTypes)
+            {
+                int index = alertTypesListBox.Items.Add(alertType);
+
+                alertTypesListBox.SetSelected(index, listCategoryAlertTypes.Contains(alertType));
+            }
+        }
+
+        private void AlertTypesListBox_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (Category.Locked)
+            {
+                LoadAlertTypes();
+
+                MessageBox.Show(
+                    "You can only edit custom alert categories.", 
+                    "Alert Category", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Information);
+            }
+        }
+
+        private void DeleteButton_Click(object sender, EventArgs e)
+        {
+            var result =
+                MessageBox.Show(
+                    Translation.Language.ConfirmDelete,
+                    "Alert Category",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question,
+                    MessageBoxDefaultButton.Button2);
+
+            if (result == DialogResult.No) return;
+
+            AlertCategory.Delete(Category.Id);
+
+            DataValid.SetInvalid(InvalidType.AlertCategories, InvalidType.AlertCategories);
+
+            DialogResult = DialogResult.OK;
+        }
+
+        private void AcceptButton_Click(object sender, EventArgs e)
+        {
+            Category.Description = descriptionTextBox.Text;
+
+            var newAlertCategoryLinks = new List<AlertCategoryLink>();
+            foreach (AlertType alertType in alertTypesListBox.SelectedItems)
+            {
+                newAlertCategoryLinks.Add(
+                    new AlertCategoryLink
+                    {
+                        AlertCategoryId = Category.Id,
+                        AlertType = alertType
+                    });
+            }
+
+            AlertCategoryLink.Synchronize(newAlertCategoryLinks, oldAlertCategoryLinks);
+            AlertCategory.Update(Category);
+
+            DataValid.SetInvalid(InvalidType.AlertCategoryLinks, InvalidType.AlertCategories);
+
+            DialogResult = DialogResult.OK;
+        }
+    }
 }

@@ -517,7 +517,7 @@ Please wait and click 'Try Again'.</value>
     <value>Website</value>
   </data>
   <data name="ConfirmDelete" xml:space="preserve">
-    <value>Delete?</value>
+    <value>Are you sure you would like to delete this?</value>
   </data>
   <data name="EnterAName" xml:space="preserve">
     <value>Please enter a name.</value>

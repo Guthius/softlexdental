@@ -172,23 +172,25 @@ namespace OpenDental
             long userNumCur = Security.CurUser.UserNum;
             ODThread.WorkerDelegate getAlerts = new ODThread.WorkerDelegate((o) =>
             {
-                //List of AlertSubs for current clinic and user combo.
-                List<AlertSub> listUserAlertSubs = AlertSubs.GetAllForUser(userNumCur, clinicNumCur);
-                List<long> listAlertCatNums = listUserAlertSubs.Select(y => y.AlertCategoryNum).ToList();
-                //AlertTypes current user is subscribed to.
-                List<AlertType> listUserAlertLinks = AlertCategoryLinks.GetWhere(x => listAlertCatNums.Contains(x.AlertCategoryNum))
-                .Select(x => x.AlertType).ToList();
-                List<AlertItem> listAlertItems = AlertItems.RefreshForClinicAndTypes(clinicNumCur, listUserAlertLinks);
-                //Update listUserAlertTypes to only those with active AlertItems.
-                listUserAlertLinks = listAlertItems.Select(x => x.Type).ToList();
-                List<AlertRead> listAlertItemReads = AlertReads.RefreshForAlertNums(userNumCur, listAlertItems.Select(x => x.AlertItemNum).ToList());
-                this.InvokeIfRequired(() =>
-                {
-                    //Assigning this inside Invoke so that we don't have to lock _listAlertItems and _listAlertReads.
-                    _listAlertItems = listAlertItems;
-                    _listAlertReads = listAlertItemReads;
-                    AddAlertsToMenu();
-                });
+                // TODO: Fix this...
+
+                // //List of AlertSubs for current clinic and user combo.
+                // List<AlertSub> listUserAlertSubs = AlertSubs.GetAllForUser(userNumCur, clinicNumCur);
+                // List<long> listAlertCatNums = listUserAlertSubs.Select(y => y.AlertCategoryNum).ToList();
+                // //AlertTypes current user is subscribed to.
+                // List<AlertType> listUserAlertLinks = AlertCategoryLinks.GetWhere(x => listAlertCatNums.Contains(x.AlertCategoryId))
+                // .Select(x => x.AlertType).ToList();
+                // List<AlertItem> listAlertItems = AlertItems.RefreshForClinicAndTypes(clinicNumCur, listUserAlertLinks);
+                // //Update listUserAlertTypes to only those with active AlertItems.
+                // listUserAlertLinks = listAlertItems.Select(x => x.Type).ToList();
+                // List<AlertRead> listAlertItemReads = AlertReads.RefreshForAlertNums(userNumCur, listAlertItems.Select(x => x.AlertItemNum).ToList());
+                // this.InvokeIfRequired(() =>
+                // {
+                //     //Assigning this inside Invoke so that we don't have to lock _listAlertItems and _listAlertReads.
+                //     _listAlertItems = listAlertItems;
+                //     _listAlertReads = listAlertItemReads;
+                //     AddAlertsToMenu();
+                // });
             });
             if (!doRunOnThread)
             {
