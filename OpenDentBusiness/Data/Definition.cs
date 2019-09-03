@@ -52,6 +52,12 @@ namespace OpenDentBusiness
         public bool Hidden;
 
         /// <summary>
+        /// Returns a string representation of the definition.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString() => Description ?? "";
+
+        /// <summary>
         /// Constructs a new instance of the <see cref="Definition"/> class.
         /// </summary>
         /// <param name="dataReader">The data reader containing record data.</param>

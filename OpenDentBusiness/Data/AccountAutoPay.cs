@@ -1,12 +1,20 @@
-/*===========================================================================*
- *        ____         __ _   _           ____             _        _        *
- *       / ___|  ___  / _| |_| | _____  _|  _ \  ___ _ __ | |_ __ _| |       *
- *       \___ \ / _ \| |_| __| |/ _ \ \/ / | | |/ _ \ '_ \| __/ _` | |       *
- *        ___) | (_) |  _| |_| |  __/>  <| |_| |  __/ | | | || (_| | |       *
- *       |____/ \___/|_|  \__|_|\___/_/\_\____/ \___|_| |_|\__\__,_|_|       *
- *                                                                           *
- *   This file is covered by the LICENSE file in the root of this project.   *
- *===========================================================================*/
+/**
+ * Softlex Dental Project
+ * Copyright (C) 2019 Dental Stars SRL
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -95,7 +103,7 @@ namespace OpenDentBusiness
         /// Deletes the auto pay with the specified ID from the database.
         /// </summary>
         /// <param name="accountAutoPayId">The ID of the auto pay.</param>
-        public static void Delete(int accountAutoPayId) =>
+        public static void Delete(long accountAutoPayId) =>
             DataConnection.ExecuteNonQuery("DELETE FROM `accounts_autopay` WHERE `id` = " + accountAutoPayId);
 
         /// <summary>

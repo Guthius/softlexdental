@@ -433,8 +433,14 @@
     <Compile Include="Forms\FormAccountEdit.Designer.cs">
       <DependentUpon>FormAccountEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormAccountingAutoPayEdit.Designer.cs">
+      <DependentUpon>FormAccountingAutoPayEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormAccountingLock.Designer.cs">
       <DependentUpon>FormAccountingLock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormAccountingSetup.Designer.cs">
+      <DependentUpon>FormAccountingSetup.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormAccountPick.Designer.cs">
       <DependentUpon>FormAccountPick.cs</DependentUpon>
