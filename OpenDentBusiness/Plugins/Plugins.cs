@@ -81,7 +81,7 @@ namespace OpenDentBusiness
         /// <param name="sender">The object that is triggering the action.</param>
         /// <param name="action">The action to trigger.</param>
         /// <param name="args">Arguments for the action.</param>
-        public static async System.Threading.Tasks.Task<bool> TriggerAsync(object sender, string action, params object[] args)
+        public static async Task<bool> TriggerAsync(object sender, string action, params object[] args)
         {
             return await System.Threading.Tasks.Task.Run(() =>
             {

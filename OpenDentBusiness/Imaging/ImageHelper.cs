@@ -1,106 +1,140 @@
+using CodeBase;
+using SLDental.Storage;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
-using System.IO;
-using CodeBase;
-using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
-using SLDental.Storage;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Linq;
 
 namespace OpenDentBusiness
 {
     public static class ImageHelper
     {
-        ///<summary>Takes in a mount object and finds all the images pertaining to the mount, then concatonates them together into one large, unscaled image and returns that image. Set imageSelected=-1 to unselect all images, or set to an image ordinal to highlight the image. The mount is rendered onto the given mountImage, so it must have been appropriately created by CreateBlankMountImage(). One can create a mount template by passing in arrays of zero length.</summary>
+        static readonly string[] extensions =
+        {
+            ".jpg",
+            ".jpeg",
+            ".tga",
+            ".bmp",
+            ".tif",
+            ".tiff",
+            ".gif",
+            ".emf",
+            ".exif",
+            ".ico",
+            ".png",
+            ".wmf",
+            ".tig"
+        };
+
+        /// <summary>
+        /// Takes in a mount object and finds all the images pertaining to the mount, then 
+        /// concatenates them together into one large, unscaled image and returns that image. 
+        /// Set imageSelected=-1 to unselect all images, or set to an image ordinal to highlight 
+        /// the image. The mount is rendered onto the given mountImage, so it must have been 
+        /// appropriately created by CreateBlankMountImage(). One can create a mount template by 
+        /// passing in arrays of zero length.
+        /// </summary>
         public static void RenderMountImage(Image mountImage, Image[] originalImages, List<MountItem> mountItems, Document[] documents, int imageSelected)
         {
-            using (Graphics g = Graphics.FromImage(mountImage))
+            using (var graphics = Graphics.FromImage(mountImage))
             {
-                //Draw mount encapsulating background rectangle.
-                g.Clear(Pens.SlateGray.Color);
+                graphics.Clear(Pens.SlateGray.Color);
+
                 RenderMountFrames(mountImage, mountItems, imageSelected);
-                for (int i = 0; i < mountItems.Count; i++)
+
+                foreach (var mountItem in mountItems)
                 {
-                    g.FillRectangle(Brushes.Black, mountItems[i].Xpos, mountItems[i].Ypos,
-                        mountItems[i].Width, mountItems[i].Height);//draw box behind image
-                    RenderImageIntoMount(mountImage, mountItems[i], originalImages[i], documents[i]);
+                    graphics.FillRectangle(Brushes.Black, mountItem.Xpos, mountItem.Ypos, mountItem.Width, mountItem.Height);
+
+                    RenderImageIntoMount(
+                        mountImage, 
+                        mountItems[i], 
+                        originalImages[i], 
+                        documents[i]);
                 }
             }
         }
 
-        ///<summary>Renders the hallow rectangles which represent the individual image frames into the given mount image.</summary>
-        public static void RenderMountFrames(Image mountImage, List<MountItem> mountItems, int imageSelected)
+        /// <summary>
+        /// Renders the hallow rectangles which represent the individual image frames into the 
+        /// given mount image.
+        /// </summary>
+        public static void RenderMountFrames(Image mountImage, List<MountItem> mountItemList, int imageSelected)
         {
-            using (Graphics g = Graphics.FromImage(mountImage))
+            using (var graphics = Graphics.FromImage(mountImage))
             {
-                //Draw image encapsulating background rectangles.
-                for (int i = 0; i < mountItems.Count; i++)
+                for (int i = 0; i < mountItemList.Count; i++)
                 {
-                    Pen highlight;
-                    if (i == imageSelected)
-                    {
-                        highlight = (Pen)Pens.Yellow.Clone();//highlight desired image.
-                    }
-                    else
-                    {
-                        highlight = (Pen)Pens.SlateGray.Clone();//just surround other images with standard border.
-                    }
-                    highlight.Width = Math.Max(mountItems[i].Width, mountItems[i].Height) / 100.0f;
-                    g.DrawRectangle(highlight, mountItems[i].Xpos - highlight.Width / 2, mountItems[i].Ypos - highlight.Width / 2,
-                        mountItems[i].Width + highlight.Width, mountItems[i].Height + highlight.Width);
+                    var mountItem = mountItemList[i];
+
+                    Pen highlight =
+                        (i == imageSelected) ?
+                            Pens.Yellow :
+                            Pens.SlateGray;
+
+                    highlight.Width = Math.Max(mountItem.Width, mountItem.Height) / 100.0f;
+
+                    graphics.DrawRectangle(
+                        highlight,
+                        mountItem.Xpos - highlight.Width / 2,
+                        mountItem.Ypos - highlight.Width / 2,
+                        mountItem.Width + highlight.Width,
+                        mountItem.Height + highlight.Width);
                 }
             }
         }
 
-        ///<summary>Renders the given image using the settings provided by the given document object into the location of the given mountItem object.</summary>
-        public static void RenderImageIntoMount(Image mountImage, MountItem mountItem, Image mountItemImage, Document mountItemDoc)
+        /// <summary>
+        /// Renders the given image using the settings provided by the given document object into the location of the given mountItem object.
+        /// </summary>
+        public static void RenderImageIntoMount(Image mountImage, MountItem mountItem, Image itemImage, Document itemDocument)
         {
-            if (mountItem == null)
+            if (mountItem == null) return;
+
+            using (var graphics = Graphics.FromImage(mountImage))
             {
-                return;
-            }
-            using (Graphics g = Graphics.FromImage(mountImage))
-            {
-                g.FillRectangle(Brushes.Black, mountItem.Xpos, mountItem.Ypos, mountItem.Width, mountItem.Height);//draw box behind image
-                Bitmap image = ApplyDocumentSettingsToImage(mountItemDoc, mountItemImage, ImageSettingFlags.ALL);
-                if (image == null)
+                graphics.FillRectangle(Brushes.Black, mountItem.Xpos, mountItem.Ypos, mountItem.Width, mountItem.Height);
+
+                using (var image = ApplyDocumentSettingsToImage(itemDocument, itemImage, ImageSettingFlags.ALL))
                 {
-                    return;
+                    if (image == null) return;
+
+                    float widthScale = ((float)mountItem.Width) / image.Width;
+                    float heightScale = ((float)mountItem.Height) / image.Height;
+                    float scale = widthScale < heightScale ? widthScale : heightScale;
+
+                    var imageRect = new RectangleF(0, 0, scale * image.Width, scale * image.Height);
+                    imageRect.X = mountItem.Xpos + mountItem.Width / 2 - imageRect.Width / 2;
+                    imageRect.Y = mountItem.Ypos + mountItem.Height / 2 - imageRect.Height / 2;
+                    graphics.DrawImage(image, imageRect);
                 }
-                float widthScale = ((float)mountItem.Width) / image.Width;
-                float heightScale = ((float)mountItem.Height) / image.Height;
-                float scale = (widthScale < heightScale ? widthScale : heightScale);
-                RectangleF imageRect = new RectangleF(0, 0, scale * image.Width, scale * image.Height);
-                imageRect.X = mountItem.Xpos + mountItem.Width / 2 - imageRect.Width / 2;
-                imageRect.Y = mountItem.Ypos + mountItem.Height / 2 - imageRect.Height / 2;
-                g.DrawImage(image, imageRect);
-                image.Dispose();
             }
         }
 
-        ///<summary>Returns true if the given filename contains a supported file image extension.</summary>
-        public static bool HasImageExtension(string fileName)
-        {
-            string ext = Path.GetExtension(fileName).ToLower();
-            //The following supported bitmap types were found on a microsoft msdn page:
-            //==02/25/2014 - Added .tig as an accepted image extention for tigerview enhancement.
-            return (ext == ".jpg" || ext == ".jpeg" || ext == ".tga" || ext == ".bmp" || ext == ".tif" ||
-                ext == ".tiff" || ext == ".gif" || ext == ".emf" || ext == ".exif" || ext == ".ico" || ext == ".png" || ext == ".wmf" || ext == ".tig");
-        }
+        /// <summary>
+        /// Returns true if the given filename contains a supported file image extension.
+        /// </summary>
+        public static bool HasImageExtension(string fileName) => extensions.Contains(Path.GetExtension(fileName).ToLower());
 
-        ///<summary>Applies the document specified cropping, flip, rotation, brightness and contrast transformations to the image and returns the resulting image. Zoom and translation must be handled by the calling code. The returned image is always a new image that can be modified without affecting the original image. The change in the image's center point is returned into deltaCenter, so that rotation offsets can be properly calculated when displaying the returned image.</summary>
+        /// <summary>
+        /// Applies the document specified cropping, flip, rotation, brightness and contrast
+        /// transformations to the image and returns the resulting image. Zoom and translation must
+        /// be handled by the calling code. The returned image is always a new image that can be
+        /// modified without affecting the original image. The change in the image's center point
+        /// is returned into deltaCenter, so that rotation offsets can be properly calculated when
+        /// displaying the returned image.
+        /// </summary>
         public static Bitmap ApplyDocumentSettingsToImage(Document doc, Image image, ImageSettingFlags settings)
         {
-            if (image == null)
-            {//Any operation on a non-existant image produces a non-existant image.
-                return null;
-            }
-            if (doc == null)
-            {//No doc implies no operations, implies that the image should be returned "unaltered".
-             //return (Bitmap)image.Clone();//this would keep the original resolution, which causes problems.
-                return new Bitmap(image);//resets the resolution to 96, just like it does for docs 20 lines down.
-            }
+            //Any operation on a non-existant image produces a non-existant image.
+            if (image == null) return null;
+
+            // No doc implies no operations, implies that the image should be returned "unaltered".
+            if (doc == null) return new Bitmap(image); // resets the resolution to 96, just like it does for docs 20 lines down.
+            
             //CROP - Implies that the croping rectangle must be saved in raw-image-space coordinates, 
             //with an origin of that equal to the upper left hand portion of the image.
             Rectangle cropResult;
@@ -113,9 +147,13 @@ namespace OpenDentBusiness
                 {//The entire image has been cropped away.
                     return null;
                 }
-                //Rounds dims up, so that data is not lost, but possibly not removing all of what was expected.
-                cropResult = new Rectangle((int)cropDims[0], (int)cropDims[1],
-                    (int)Math.Ceiling(cropDims[2]), (int)Math.Ceiling(cropDims[3]));
+
+                // Rounds dims up, so that data is not lost, but possibly not removing all of what was expected.
+                cropResult = new Rectangle(
+                    (int)cropDims[0], 
+                    (int)cropDims[1],
+                    (int)Math.Ceiling(cropDims[2]), 
+                    (int)Math.Ceiling(cropDims[3]));
             }
             else
             {
@@ -228,71 +266,74 @@ namespace OpenDentBusiness
             return cropped;
         }
 
-
-        ///<summary>specify the size of the square to return</summary>
+        /// <summary>
+        /// specify the size of the square to return
+        /// </summary>
         public static Bitmap GetThumbnail(Image original, int size)
         {
-            Bitmap retVal = new Bitmap(size, size);
-            Graphics g = Graphics.FromImage(retVal);
-            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            g.CompositingQuality = CompositingQuality.HighQuality;
-            g.SmoothingMode = SmoothingMode.HighQuality;
-            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            if (original.Height > original.Width)
-            {//original is too tall
-                float ratio = size / (float)original.Height;
-                float w = original.Width * ratio;
-                g.DrawImage(original, (size - w) / 2f, 0, w, size);
+            var thumbnail = new Bitmap(size, size);
+
+            using (var graphics = Graphics.FromImage(thumbnail))
+            {
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                if (original.Height > original.Width)
+                {
+                    float ratio = size / (float)original.Height;
+                    float w = original.Width * ratio;
+
+                    graphics.DrawImage(original, (size - w) / 2f, 0, w, size);
+                }
+                else
+                {
+                    float ratio = (float)size / original.Width;
+                    float h = original.Height * ratio;
+
+                    graphics.DrawImage(original, 0, (size - h) / 2f, size, h);
+                }
             }
-            else
-            {//original is too wide
-                float ratio = (float)size / (float)original.Width;
-                float h = (float)original.Height * ratio;
-                g.DrawImage(original, 0, (size - h) / 2f, (float)size, h);
-            }
-            g.Dispose();
-            return retVal;
+
+            return thumbnail;
         }
 
-        ///<summary>Gets the full sized image, with settings applied from doc.  Throws exceptions.</summary>
-        public static Bitmap GetFullImage(Document doc, string patientFolder)
+        /// <summary>
+        /// Gets the full sized image, with settings applied from doc.
+        /// </summary>
+        public static Bitmap GetFullImage(Document document, string patientPath)
         {
-            //No need to check RemotingRole; no call to db.
-            string shortFileName = doc.FileName;
-            //If no file name associated with the document, then there cannot be a thumbnail,
-            //because thumbnails have the same name as the original image document.
-            if (shortFileName.Length < 1)
-            {
-                throw new ODException("No image file associated with document.");
-            }
-            string fullName = Storage.Default.CombinePath(patientFolder, shortFileName);
-            //If the document no longer exists, then there is no corresponding thumbnail image.
-            if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ && !File.Exists(fullName))
-            {
-                throw new ODException("No image file found for document.");
-            }
-            //If the specified document is not an image return 'not available'.
-            if (!ImageHelper.HasImageExtension(fullName))
-            {
-                throw new ODException("Document is not associated to an image file format.");
-            }
+            string fileName = document.FileName;
 
-            Bitmap sourceImage = null;
+            // If no file name associated with the document, then there cannot be a thumbnail, because thumbnails have the same name as the original image document.
+            if (fileName.Length < 1) throw new ODException("No image file associated with document.");
+            
+            string path = Storage.Default.CombinePath(patientPath, fileName);
+
+            //If the document no longer exists, then there is no corresponding thumbnail image.
+            if (!Storage.Default.FileExists(path)) throw new ODException("No image file found for document.");
+
+            // If the specified document is not an image return 'not available'.
+            if (!HasImageExtension(path)) throw new ODException("Document is not associated to an image file format.");
+            
+            Image image = null;
             try
             {
-                using (var stream = Storage.Default.OpenRead(fullName))
+                using (var stream = Storage.Default.OpenRead(path))
                 {
-                    sourceImage = new Bitmap(Image.FromStream(stream));
+                    image = Image.FromStream(stream);
                 }
             }
             catch
             {
-                sourceImage = new Bitmap(1, 1);
+                image = new Bitmap(1, 1);
             }
 
-            Bitmap fullImage = ApplyDocumentSettingsToImage(doc, sourceImage, ImageSettingFlags.ALL);
-            sourceImage.Dispose();
-            return fullImage;
+            using (image)
+            {
+                return ApplyDocumentSettingsToImage(document, image, ImageSettingFlags.ALL);
+            }
         }
     }
 

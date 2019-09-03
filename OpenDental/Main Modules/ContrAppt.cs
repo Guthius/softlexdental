@@ -53,11 +53,6 @@ namespace OpenDental
         public static DateTime WeekStartDate;
         public static DateTime WeekEndDate;
 
-
-        [Category("Data"), Description("Occurs when a user has taken action on an item needing an action taken.")]
-        public event ActionNeededEventHandler ActionTaken = null;
-
-
         private ContextMenu menuWeeklyApt;
         private Panel infoBubble;
         private ODPictureBox PicturePat;

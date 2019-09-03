@@ -26,44 +26,20 @@ namespace CodeBase
             }
         }
 
-        /// <summary>
-        /// Convert an int to an Enum typed ErrorCode. Returns NotDefined if the input errorCode is not defined in ErrorCodes.
-        /// </summary>		
-        public static ErrorCodes GetErrorCodeAsEnum(int errorCode)
+        public ODException(string message) : this(message, 0)
         {
-            if (!Enum.IsDefined(typeof(ErrorCodes), errorCode))
-            {
-                return ErrorCodes.NotDefined;
-            }
-
-            return (ErrorCodes)errorCode;
         }
 
-        /// <summary>
-        /// Gets the pre-defined error code associated to this exception.  
-        /// Defaults to NotDefined if the error code (int) specified is not defined in ErrorCodes enum.
-        /// </summary>		
-        public ErrorCodes ErrorCodeAsEnum
+        public ODException(string message, ErrorCodes errorCodeAsEnum) : this(message, (int)errorCodeAsEnum)
         {
-            get
-            {
-                return GetErrorCodeAsEnum(ErrorCode);
-            }
         }
 
-        public ODException(string message) 
-            : this(message, 0) { }
-
-        public ODException(string message, ErrorCodes errorCodeAsEnum) 
-            : this(message, (int)errorCodeAsEnum) { }
-
-        public ODException(string message, int errorCode)
-            : base(message)
+        public ODException(string message, int errorCode) : base(message)
         {
             ErrorCode = errorCode;
         }
 
-        public ODException(string message, Exception ex) : base(message, ex)
+        public ODException(string message, Exception innerException) : base(message, innerException)
         {
         }
 

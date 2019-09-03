@@ -88,20 +88,11 @@ namespace OpenDentBusiness
         /// Validates the provided postal code is in our list of locales (case insensitive).
         /// </summary>
         public static bool IsValidAbbr(string stateAbbr) => ListAll.Any(x => x.PostalAbbr == stateAbbr.ToUpper());
-
-        /// <summary>
-        /// Checks if the customer's country code is "US", "USA", "United States", or "United States of America" AND that the state abbreviation
-        /// is a valid state, district, or territory code (case insensitive).
-        /// </summary>
-        public static bool IsInUS(string stateAbbr, string country)
-        {
-            string validCountries = "US,USA,UNITED STATES,UNITED STATES OF AMERICA";
-
-            return IsValidAbbr(stateAbbr) && !string.IsNullOrWhiteSpace(country) && validCountries.Contains(country.ToUpper());
-        }
     }
 
-    ///<summary>Just a wrapper for a Tuple(string,string) which stores the locale name as Item1 and the postal abbreviation as Item2.</summary>
+    /// <summary>
+    /// Just a wrapper for a Tuple(string,string) which stores the locale name as Item1 and the postal abbreviation as Item2.
+    /// </summary>
     public class USlocale : Tuple<string, string>
     {
         public string Name => Item1;

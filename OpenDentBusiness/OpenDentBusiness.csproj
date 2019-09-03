@@ -440,7 +440,6 @@
     <Compile Include="Data Interface\UserGroupAttaches.cs" />
     <Compile Include="Data Interface\WebSchedRecalls.cs" />
     <Compile Include="Db Multi Table\TreatmentPlanModules.cs" />
-    <Compile Include="Db\DataAction.cs" />
     <Compile Include="Db\DataConnectionCancelable.cs" />
     <Compile Include="Db\SQLWhere.cs" />
     <Compile Include="Eclaims\AOS.cs" />
@@ -465,7 +464,6 @@
     <Compile Include="Eclaims\Ramq.cs" />
     <Compile Include="Eclaims\RECS.cs" />
     <Compile Include="Eclaims\Renaissance.cs" />
-    <Compile Include="Eclaims\Rs232.cs" />
     <Compile Include="Eclaims\TerminalConnector.cs" />
     <Compile Include="Eclaims\Tesia.cs" />
     <Compile Include="Eclaims\WebMD.cs" />
@@ -1382,8 +1380,6 @@
     <Compile Include="X12\X270.cs" />
     <Compile Include="X12\X837_4010.cs" />
     <Compile Include="X12\X997.cs" />
-    <Compile Include="ODDataSet\ODDataRow.cs" />
-    <Compile Include="ODDataSet\ODDataTable.cs" />
     <Compile Include="Db\PIn.cs" />
     <Compile Include="Db\POut.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
