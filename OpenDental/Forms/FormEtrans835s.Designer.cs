@@ -130,8 +130,8 @@
 			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butRefresh.Autosize = true;
-			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRefresh.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butRefresh.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
 			this.butRefresh.Location = new System.Drawing.Point(947, 54);
 			this.butRefresh.Name = "butRefresh";
@@ -242,8 +242,8 @@
 			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.Location = new System.Drawing.Point(947, 757);
 			this.butClose.Name = "butClose";
@@ -266,8 +266,8 @@
 			// 
 			this.butDropTo.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDropTo.Autosize = true;
-			this.butDropTo.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDropTo.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDropTo.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butDropTo.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butDropTo.CornerRadius = 4F;
 			this.butDropTo.ImageIndex = 0;
 			this.butDropTo.ImageList = this.imageListCalendar;
@@ -300,8 +300,8 @@
 			// 
 			this.butDropFrom.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDropFrom.Autosize = true;
-			this.butDropFrom.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDropFrom.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDropFrom.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butDropFrom.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butDropFrom.CornerRadius = 4F;
 			this.butDropFrom.ImageIndex = 0;
 			this.butDropFrom.ImageList = this.imageListCalendar;
@@ -357,8 +357,8 @@
 			// 
 			this.butWeekPrevious.AdjustImageLocation = new System.Drawing.Point(-3, -1);
 			this.butWeekPrevious.Autosize = true;
-			this.butWeekPrevious.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butWeekPrevious.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butWeekPrevious.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butWeekPrevious.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butWeekPrevious.CornerRadius = 4F;
 			this.butWeekPrevious.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.butWeekPrevious.Image = ((System.Drawing.Image)(resources.GetObject("butWeekPrevious.Image")));
@@ -374,8 +374,8 @@
 			// 
 			this.butWeekNext.AdjustImageLocation = new System.Drawing.Point(5, -1);
 			this.butWeekNext.Autosize = false;
-			this.butWeekNext.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butWeekNext.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butWeekNext.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butWeekNext.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butWeekNext.CornerRadius = 4F;
 			this.butWeekNext.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.butWeekNext.Image = ((System.Drawing.Image)(resources.GetObject("butWeekNext.Image")));

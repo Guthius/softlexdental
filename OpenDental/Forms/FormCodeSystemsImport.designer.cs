@@ -52,8 +52,8 @@ namespace OpenDental{
 			// 
 			this.butCheckUpdates.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCheckUpdates.Autosize = true;
-			this.butCheckUpdates.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCheckUpdates.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCheckUpdates.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCheckUpdates.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCheckUpdates.CornerRadius = 4F;
 			this.butCheckUpdates.Location = new System.Drawing.Point(12, 12);
 			this.butCheckUpdates.Name = "butCheckUpdates";
@@ -67,8 +67,8 @@ namespace OpenDental{
 			this.butDownload.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDownload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butDownload.Autosize = true;
-			this.butDownload.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDownload.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDownload.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butDownload.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butDownload.CornerRadius = 4F;
 			this.butDownload.Enabled = false;
 			this.butDownload.Location = new System.Drawing.Point(550, 370);
@@ -83,8 +83,8 @@ namespace OpenDental{
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(794, 370);
 			this.butCancel.Name = "butCancel";

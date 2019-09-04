@@ -52,8 +52,8 @@ namespace OpenDental
             this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
             this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.butPrint.Autosize = true;
-            this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butPrint.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butPrint.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
             this.butPrint.CornerRadius = 4F;
             this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
             this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -85,8 +85,8 @@ namespace OpenDental
             this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
             this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.butClose.Autosize = true;
-            this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butClose.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butClose.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
             this.butClose.CornerRadius = 4F;
             this.butClose.Location = new System.Drawing.Point(663, 660);
             this.butClose.Name = "butClose";
@@ -124,8 +124,8 @@ namespace OpenDental
             this.butExportGrid.AdjustImageLocation = new System.Drawing.Point(0, 0);
             this.butExportGrid.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.butExportGrid.Autosize = true;
-            this.butExportGrid.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butExportGrid.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butExportGrid.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butExportGrid.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
             this.butExportGrid.CornerRadius = 4F;
             this.butExportGrid.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.butExportGrid.Location = new System.Drawing.Point(431, 660);

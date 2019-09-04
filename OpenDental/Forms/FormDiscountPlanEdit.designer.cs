@@ -46,8 +46,8 @@ namespace OpenDental{
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(235, 141);
 			this.butOK.Name = "butOK";
@@ -61,8 +61,8 @@ namespace OpenDental{
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(318, 141);
 			this.butCancel.Name = "butCancel";
@@ -108,8 +108,8 @@ namespace OpenDental{
 			// 
 			this.butFeeSched.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butFeeSched.Autosize = true;
-			this.butFeeSched.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butFeeSched.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butFeeSched.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butFeeSched.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butFeeSched.CornerRadius = 4F;
 			this.butFeeSched.Location = new System.Drawing.Point(372, 56);
 			this.butFeeSched.Name = "butFeeSched";
@@ -141,8 +141,8 @@ namespace OpenDental{
 			this.butDrop.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDrop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDrop.Autosize = true;
-			this.butDrop.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDrop.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDrop.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butDrop.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butDrop.CornerRadius = 4F;
 			this.butDrop.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butDrop.Location = new System.Drawing.Point(12, 141);
@@ -169,8 +169,8 @@ namespace OpenDental{
 			// 
 			this.butListPatients.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butListPatients.Autosize = true;
-			this.butListPatients.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butListPatients.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butListPatients.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butListPatients.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butListPatients.CornerRadius = 4F;
 			this.butListPatients.Location = new System.Drawing.Point(390, 109);
 			this.butListPatients.Name = "butListPatients";

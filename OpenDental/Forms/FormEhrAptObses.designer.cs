@@ -35,8 +35,8 @@ namespace OpenDental{
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(558, 447);
 			this.butCancel.Name = "butCancel";
@@ -68,8 +68,8 @@ namespace OpenDental{
 			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -85,8 +85,8 @@ namespace OpenDental{
 			this.butExportHL7.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butExportHL7.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butExportHL7.Autosize = true;
-			this.butExportHL7.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butExportHL7.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butExportHL7.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butExportHL7.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butExportHL7.CornerRadius = 4F;
 			this.butExportHL7.Location = new System.Drawing.Point(286, 447);
 			this.butExportHL7.Name = "butExportHL7";

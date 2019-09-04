@@ -302,8 +302,8 @@ namespace OpenDental{
 			// 
 			this.butRemoveProc.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butRemoveProc.Autosize = true;
-			this.butRemoveProc.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRemoveProc.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRemoveProc.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butRemoveProc.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butRemoveProc.CornerRadius = 4F;
 			this.butRemoveProc.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butRemoveProc.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -318,8 +318,8 @@ namespace OpenDental{
 			// 
 			this.butAddProc.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAddProc.Autosize = true;
-			this.butAddProc.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddProc.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddProc.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAddProc.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAddProc.CornerRadius = 4F;
 			this.butAddProc.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddProc.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -377,8 +377,8 @@ namespace OpenDental{
 			// 
 			this.butRemoveTrigger.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butRemoveTrigger.Autosize = true;
-			this.butRemoveTrigger.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRemoveTrigger.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRemoveTrigger.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butRemoveTrigger.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butRemoveTrigger.CornerRadius = 4F;
 			this.butRemoveTrigger.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butRemoveTrigger.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -393,8 +393,8 @@ namespace OpenDental{
 			// 
 			this.butAddTrigger.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAddTrigger.Autosize = true;
-			this.butAddTrigger.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddTrigger.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddTrigger.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAddTrigger.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAddTrigger.CornerRadius = 4F;
 			this.butAddTrigger.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddTrigger.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -410,8 +410,8 @@ namespace OpenDental{
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(540, 622);
 			this.butOK.Name = "butOK";
@@ -425,8 +425,8 @@ namespace OpenDental{
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(631, 622);
 			this.butCancel.Name = "butCancel";
@@ -449,8 +449,8 @@ namespace OpenDental{
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;

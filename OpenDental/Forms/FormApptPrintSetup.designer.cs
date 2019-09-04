@@ -50,8 +50,8 @@ namespace OpenDental{
 			this.butSave.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butSave.Autosize = true;
-			this.butSave.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSave.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSave.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butSave.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butSave.CornerRadius = 4F;
 			this.butSave.Location = new System.Drawing.Point(20, 138);
 			this.butSave.Name = "butSave";
@@ -65,8 +65,8 @@ namespace OpenDental{
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(317, 138);
 			this.butOK.Name = "butOK";
@@ -80,8 +80,8 @@ namespace OpenDental{
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(335, 302);
 			this.butCancel.Name = "butCancel";
@@ -95,8 +95,8 @@ namespace OpenDental{
 			this.butPreview.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butPreview.Autosize = true;
-			this.butPreview.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPreview.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPreview.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPreview.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPreview.CornerRadius = 4F;
 			this.butPreview.Image = global::OpenDental.Properties.Resources.butPreview;
 			this.butPreview.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -122,8 +122,8 @@ namespace OpenDental{
 			// 
 			this.butSelectedView.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butSelectedView.Autosize = true;
-			this.butSelectedView.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSelectedView.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSelectedView.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butSelectedView.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butSelectedView.CornerRadius = 4F;
 			this.butSelectedView.Location = new System.Drawing.Point(21, 54);
 			this.butSelectedView.Name = "butSelectedView";
@@ -137,8 +137,8 @@ namespace OpenDental{
 			// 
 			this.butSelectedDay.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butSelectedDay.Autosize = true;
-			this.butSelectedDay.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSelectedDay.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSelectedDay.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butSelectedDay.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butSelectedDay.CornerRadius = 4F;
 			this.butSelectedDay.Location = new System.Drawing.Point(21, 24);
 			this.butSelectedDay.Name = "butSelectedDay";

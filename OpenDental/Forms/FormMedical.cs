@@ -255,8 +255,8 @@ namespace OpenDental{
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(624, 461);
 			this.butOK.Name = "butOK";
@@ -270,8 +270,8 @@ namespace OpenDental{
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Location = new System.Drawing.Point(717, 461);
@@ -285,8 +285,8 @@ namespace OpenDental{
 			// 
 			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 1);
 			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -301,8 +301,8 @@ namespace OpenDental{
 			// 
 			this.butAddDisease.AdjustImageLocation = new System.Drawing.Point(0, 1);
 			this.butAddDisease.Autosize = true;
-			this.butAddDisease.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddDisease.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddDisease.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAddDisease.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAddDisease.CornerRadius = 4F;
 			this.butAddDisease.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddDisease.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -386,8 +386,8 @@ namespace OpenDental{
 			// 
 			this.butAddAllergy.AdjustImageLocation = new System.Drawing.Point(0, 1);
 			this.butAddAllergy.Autosize = true;
-			this.butAddAllergy.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddAllergy.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddAllergy.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAddAllergy.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAddAllergy.CornerRadius = 4F;
 			this.butAddAllergy.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddAllergy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -414,8 +414,8 @@ namespace OpenDental{
 			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butPrint.Autosize = true;
-			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrint.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPrint.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -465,8 +465,8 @@ namespace OpenDental{
 			// 
 			this.butAddFamilyHistory.AdjustImageLocation = new System.Drawing.Point(0, 1);
 			this.butAddFamilyHistory.Autosize = true;
-			this.butAddFamilyHistory.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddFamilyHistory.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddFamilyHistory.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAddFamilyHistory.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAddFamilyHistory.CornerRadius = 4F;
 			this.butAddFamilyHistory.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddFamilyHistory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -572,8 +572,8 @@ namespace OpenDental{
 			// 
 			this.butPrintMedical.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPrintMedical.Autosize = true;
-			this.butPrintMedical.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrintMedical.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrintMedical.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPrintMedical.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPrintMedical.CornerRadius = 4F;
 			this.butPrintMedical.Image = global::OpenDental.Properties.Resources.butPrintSmall;
 			this.butPrintMedical.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -755,8 +755,8 @@ namespace OpenDental{
 			// 
 			this.butGrowthChart.AdjustImageLocation = new System.Drawing.Point(0, 1);
 			this.butGrowthChart.Autosize = true;
-			this.butGrowthChart.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butGrowthChart.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butGrowthChart.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butGrowthChart.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butGrowthChart.CornerRadius = 4F;
 			this.butGrowthChart.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butGrowthChart.Location = new System.Drawing.Point(122, 6);
@@ -770,8 +770,8 @@ namespace OpenDental{
 			// 
 			this.butAddVitalSign.AdjustImageLocation = new System.Drawing.Point(0, 1);
 			this.butAddVitalSign.Autosize = true;
-			this.butAddVitalSign.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddVitalSign.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddVitalSign.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAddVitalSign.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAddVitalSign.CornerRadius = 4F;
 			this.butAddVitalSign.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddVitalSign.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -936,8 +936,8 @@ namespace OpenDental{
 			// 
 			this.butAddAssessment.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAddAssessment.Autosize = true;
-			this.butAddAssessment.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddAssessment.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddAssessment.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAddAssessment.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAddAssessment.CornerRadius = 4F;
 			this.butAddAssessment.Location = new System.Drawing.Point(104, 110);
 			this.butAddAssessment.Name = "butAddAssessment";
@@ -1129,8 +1129,8 @@ namespace OpenDental{
 			// 
 			this.butAddIntervention.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAddIntervention.Autosize = true;
-			this.butAddIntervention.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddIntervention.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddIntervention.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAddIntervention.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAddIntervention.CornerRadius = 4F;
 			this.butAddIntervention.Location = new System.Drawing.Point(104, 110);
 			this.butAddIntervention.Name = "butAddIntervention";

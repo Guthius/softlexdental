@@ -233,8 +233,8 @@
 			this.butAdvanced.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAdvanced.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butAdvanced.Autosize = true;
-			this.butAdvanced.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdvanced.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdvanced.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAdvanced.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAdvanced.CornerRadius = 4F;
 			this.butAdvanced.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAdvanced.Location = new System.Drawing.Point(830, 472);

@@ -74,8 +74,8 @@ namespace OpenDental{
 			this.butLogin.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butLogin.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butLogin.Autosize = true;
-			this.butLogin.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLogin.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLogin.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butLogin.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butLogin.CornerRadius = 4F;
 			this.butLogin.Location = new System.Drawing.Point(232, 114);
 			this.butLogin.Name = "butLogin";
@@ -97,8 +97,8 @@ namespace OpenDental{
 			this.butExit.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butExit.Autosize = true;
-			this.butExit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butExit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butExit.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butExit.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butExit.CornerRadius = 4F;
 			this.butExit.Location = new System.Drawing.Point(313, 114);
 			this.butExit.Name = "butExit";

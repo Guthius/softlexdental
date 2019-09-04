@@ -42,8 +42,8 @@ namespace OpenDental{
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(877, 625);
 			this.butOK.Name = "butOK";
@@ -57,8 +57,8 @@ namespace OpenDental{
 			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.Location = new System.Drawing.Point(877, 655);
 			this.butClose.Name = "butClose";
@@ -90,8 +90,8 @@ namespace OpenDental{
 			this.butSearch.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butSearch.Autosize = true;
-			this.butSearch.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSearch.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSearch.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butSearch.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butSearch.CornerRadius = 4F;
 			this.butSearch.Location = new System.Drawing.Point(598, 8);
 			this.butSearch.Name = "butSearch";
@@ -122,8 +122,8 @@ namespace OpenDental{
 			this.butMapICD9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.butMapICD9.Autosize = true;
-			this.butMapICD9.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butMapICD9.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butMapICD9.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butMapICD9.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butMapICD9.CornerRadius = 4F;
 			this.butMapICD9.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butMapICD9.Location = new System.Drawing.Point(6, 19);

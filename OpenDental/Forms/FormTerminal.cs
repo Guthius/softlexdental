@@ -131,8 +131,8 @@ namespace OpenDental {
 			this.butDone.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDone.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.butDone.Autosize = true;
-			this.butDone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDone.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butDone.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butDone.CornerRadius = 4F;
 			this.butDone.Location = new System.Drawing.Point(380, 551);
 			this.butDone.Name = "butDone";

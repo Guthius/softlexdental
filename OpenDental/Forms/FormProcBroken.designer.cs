@@ -156,8 +156,8 @@ namespace OpenDental{
 			// 
 			this.butPickProv.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPickProv.Autosize = false;
-			this.butPickProv.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPickProv.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPickProv.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPickProv.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPickProv.CornerRadius = 2F;
 			this.butPickProv.Location = new System.Drawing.Point(307, 97);
 			this.butPickProv.Name = "butPickProv";
@@ -171,8 +171,8 @@ namespace OpenDental{
 			this.button1.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.button1.Autosize = true;
-			this.button1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.button1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.button1.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.button1.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.button1.CornerRadius = 4F;
 			this.button1.Location = new System.Drawing.Point(380, 472);
 			this.button1.Name = "button1";
@@ -185,8 +185,8 @@ namespace OpenDental{
 			// 
 			this.butAutoNoteChart.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAutoNoteChart.Autosize = true;
-			this.butAutoNoteChart.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAutoNoteChart.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAutoNoteChart.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAutoNoteChart.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAutoNoteChart.CornerRadius = 4F;
 			this.butAutoNoteChart.Location = new System.Drawing.Point(245, 130);
 			this.butAutoNoteChart.Name = "butAutoNoteChart";
@@ -199,8 +199,8 @@ namespace OpenDental{
 			// 
 			this.butAutoNoteAccount.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAutoNoteAccount.Autosize = true;
-			this.butAutoNoteAccount.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAutoNoteAccount.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAutoNoteAccount.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAutoNoteAccount.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAutoNoteAccount.CornerRadius = 4F;
 			this.butAutoNoteAccount.Location = new System.Drawing.Point(245, 298);
 			this.butAutoNoteAccount.Name = "butAutoNoteAccount";
@@ -265,8 +265,8 @@ namespace OpenDental{
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Location = new System.Drawing.Point(461, 472);

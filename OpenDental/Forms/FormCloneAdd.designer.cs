@@ -52,8 +52,8 @@ namespace OpenDental{
 			this.butClone.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClone.Autosize = true;
-			this.butClone.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClone.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClone.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butClone.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butClone.CornerRadius = 4F;
 			this.butClone.Location = new System.Drawing.Point(353, 212);
 			this.butClone.Name = "butClone";
@@ -67,8 +67,8 @@ namespace OpenDental{
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Location = new System.Drawing.Point(434, 212);
@@ -241,8 +241,8 @@ namespace OpenDental{
 			// 
 			this.butPickPrimary.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPickPrimary.Autosize = false;
-			this.butPickPrimary.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPickPrimary.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPickPrimary.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPickPrimary.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPickPrimary.CornerRadius = 2F;
 			this.butPickPrimary.Location = new System.Drawing.Point(434, 124);
 			this.butPickPrimary.Name = "butPickPrimary";

@@ -57,8 +57,8 @@ namespace OpenDental{
 			// 
 			this.butViewInsPlanInto.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butViewInsPlanInto.Autosize = true;
-			this.butViewInsPlanInto.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butViewInsPlanInto.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butViewInsPlanInto.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butViewInsPlanInto.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butViewInsPlanInto.CornerRadius = 4F;
 			this.butViewInsPlanInto.Location = new System.Drawing.Point(397, 18);
 			this.butViewInsPlanInto.Name = "butViewInsPlanInto";
@@ -71,8 +71,8 @@ namespace OpenDental{
 			// 
 			this.butPickInsPlanInto.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPickInsPlanInto.Autosize = true;
-			this.butPickInsPlanInto.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPickInsPlanInto.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPickInsPlanInto.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPickInsPlanInto.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPickInsPlanInto.CornerRadius = 4F;
 			this.butPickInsPlanInto.Location = new System.Drawing.Point(369, 18);
 			this.butPickInsPlanInto.Name = "butPickInsPlanInto";
@@ -107,8 +107,8 @@ namespace OpenDental{
 			// 
 			this.butViewInsPlanFrom.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butViewInsPlanFrom.Autosize = true;
-			this.butViewInsPlanFrom.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butViewInsPlanFrom.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butViewInsPlanFrom.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butViewInsPlanFrom.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butViewInsPlanFrom.CornerRadius = 4F;
 			this.butViewInsPlanFrom.Location = new System.Drawing.Point(397, 18);
 			this.butViewInsPlanFrom.Name = "butViewInsPlanFrom";
@@ -121,8 +121,8 @@ namespace OpenDental{
 			// 
 			this.butPickInsPlanFrom.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPickInsPlanFrom.Autosize = true;
-			this.butPickInsPlanFrom.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPickInsPlanFrom.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPickInsPlanFrom.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPickInsPlanFrom.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPickInsPlanFrom.CornerRadius = 4F;
 			this.butPickInsPlanFrom.Location = new System.Drawing.Point(369, 18);
 			this.butPickInsPlanFrom.Name = "butPickInsPlanFrom";
@@ -144,8 +144,8 @@ namespace OpenDental{
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(328, 154);
 			this.butOK.Name = "butOK";
@@ -159,8 +159,8 @@ namespace OpenDental{
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(406, 154);
 			this.butCancel.Name = "butCancel";

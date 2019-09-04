@@ -119,8 +119,8 @@
 			// 
 			this.butCopy.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCopy.Autosize = true;
-			this.butCopy.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCopy.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCopy.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCopy.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCopy.CornerRadius = 4F;
 			this.butCopy.Location = new System.Drawing.Point(518, 125);
 			this.butCopy.Name = "butCopy";
@@ -134,8 +134,8 @@
 			// 
 			this.butEdit.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butEdit.Autosize = true;
-			this.butEdit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEdit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEdit.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butEdit.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butEdit.CornerRadius = 4F;
 			this.butEdit.Location = new System.Drawing.Point(518, 65);
 			this.butEdit.Name = "butEdit";
@@ -149,8 +149,8 @@
 			// 
 			this.butExpander.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butExpander.Autosize = true;
-			this.butExpander.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butExpander.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butExpander.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butExpander.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butExpander.CornerRadius = 4F;
 			this.butExpander.Location = new System.Drawing.Point(2, 2);
 			this.butExpander.Name = "butExpander";

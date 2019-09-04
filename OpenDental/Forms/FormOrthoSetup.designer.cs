@@ -53,8 +53,8 @@ namespace OpenDental{
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(176, 400);
 			this.butOK.Name = "butOK";
@@ -68,8 +68,8 @@ namespace OpenDental{
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(257, 400);
 			this.butCancel.Name = "butCancel";
@@ -104,8 +104,8 @@ namespace OpenDental{
 			// 
 			this.butOrthoDisplayFields.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOrthoDisplayFields.Autosize = true;
-			this.butOrthoDisplayFields.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOrthoDisplayFields.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOrthoDisplayFields.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butOrthoDisplayFields.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butOrthoDisplayFields.CornerRadius = 4F;
 			this.butOrthoDisplayFields.Location = new System.Drawing.Point(258, 250);
 			this.butOrthoDisplayFields.Name = "butOrthoDisplayFields";
@@ -197,8 +197,8 @@ namespace OpenDental{
 			// 
 			this.butPickOrthoProc.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPickOrthoProc.Autosize = false;
-			this.butPickOrthoProc.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPickOrthoProc.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPickOrthoProc.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPickOrthoProc.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPickOrthoProc.CornerRadius = 2F;
 			this.butPickOrthoProc.Location = new System.Drawing.Point(310, 177);
 			this.butPickOrthoProc.Name = "butPickOrthoProc";
@@ -244,8 +244,8 @@ namespace OpenDental{
 			// 
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX10;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -278,8 +278,8 @@ namespace OpenDental{
 			// 
 			this.butPlacementProcsEdit.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPlacementProcsEdit.Autosize = true;
-			this.butPlacementProcsEdit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPlacementProcsEdit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPlacementProcsEdit.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPlacementProcsEdit.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPlacementProcsEdit.CornerRadius = 4F;
 			this.butPlacementProcsEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butPlacementProcsEdit.Location = new System.Drawing.Point(143, 55);

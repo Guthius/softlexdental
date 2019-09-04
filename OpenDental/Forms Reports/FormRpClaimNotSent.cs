@@ -78,8 +78,8 @@ namespace OpenDental{
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Location = new System.Drawing.Point(1049, 591);
@@ -94,8 +94,8 @@ namespace OpenDental{
 			this.butRunReport.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butRunReport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butRunReport.Autosize = true;
-			this.butRunReport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRunReport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRunReport.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butRunReport.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butRunReport.CornerRadius = 4F;
 			this.butRunReport.Location = new System.Drawing.Point(12, 591);
 			this.butRunReport.Name = "butRunReport";
@@ -117,8 +117,8 @@ namespace OpenDental{
 			// 
 			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butRefresh.Autosize = true;
-			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRefresh.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butRefresh.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
 			this.butRefresh.Location = new System.Drawing.Point(1035, 12);
 			this.butRefresh.Name = "butRefresh";

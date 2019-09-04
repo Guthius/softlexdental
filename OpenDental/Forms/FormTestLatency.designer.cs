@@ -71,8 +71,8 @@ namespace OpenDental{
 			this.butLatency.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butLatency.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butLatency.Autosize = true;
-			this.butLatency.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLatency.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLatency.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butLatency.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butLatency.CornerRadius = 4F;
 			this.butLatency.Location = new System.Drawing.Point(8, 100);
 			this.butLatency.Name = "butLatency";
@@ -86,8 +86,8 @@ namespace OpenDental{
 			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.Location = new System.Drawing.Point(314, 162);
 			this.butClose.Name = "butClose";
@@ -136,8 +136,8 @@ namespace OpenDental{
 			this.butSpeed.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butSpeed.Autosize = true;
-			this.butSpeed.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSpeed.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSpeed.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butSpeed.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butSpeed.CornerRadius = 4F;
 			this.butSpeed.Location = new System.Drawing.Point(8, 100);
 			this.butSpeed.Name = "butSpeed";

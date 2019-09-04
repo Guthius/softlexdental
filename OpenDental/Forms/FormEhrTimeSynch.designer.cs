@@ -162,8 +162,8 @@ namespace OpenDental{
 			// 
 			this.butRefreshTime.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butRefreshTime.Autosize = true;
-			this.butRefreshTime.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRefreshTime.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRefreshTime.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butRefreshTime.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butRefreshTime.CornerRadius = 4F;
 			this.butRefreshTime.Location = new System.Drawing.Point(398, 76);
 			this.butRefreshTime.Name = "butRefreshTime";
@@ -190,8 +190,8 @@ namespace OpenDental{
 			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.Location = new System.Drawing.Point(438, 242);
 			this.butClose.Name = "butClose";

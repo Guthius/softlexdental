@@ -473,8 +473,8 @@
 			// 
 			this.butProvPicker.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butProvPicker.Autosize = true;
-			this.butProvPicker.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butProvPicker.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butProvPicker.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butProvPicker.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butProvPicker.CornerRadius = 4F;
 			this.butProvPicker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butProvPicker.Location = new System.Drawing.Point(10, 15);
@@ -867,8 +867,8 @@
 			// 
 			this.butServicePicker.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butServicePicker.Autosize = true;
-			this.butServicePicker.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butServicePicker.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butServicePicker.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butServicePicker.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butServicePicker.CornerRadius = 4F;
 			this.butServicePicker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butServicePicker.Location = new System.Drawing.Point(6, 14);
@@ -1210,8 +1210,8 @@
 			// 
 			this.butViewParent.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butViewParent.Autosize = true;
-			this.butViewParent.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butViewParent.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butViewParent.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butViewParent.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butViewParent.CornerRadius = 4F;
 			this.butViewParent.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butViewParent.Location = new System.Drawing.Point(333, 10);
@@ -1225,8 +1225,8 @@
 			// 
 			this.butParentPicker.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butParentPicker.Autosize = true;
-			this.butParentPicker.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butParentPicker.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butParentPicker.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butParentPicker.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butParentPicker.CornerRadius = 4F;
 			this.butParentPicker.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butParentPicker.Location = new System.Drawing.Point(615, 10);
@@ -1255,8 +1255,8 @@
 			// 
 			this.butPatientPick.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPatientPick.Autosize = true;
-			this.butPatientPick.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPatientPick.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPatientPick.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPatientPick.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPatientPick.CornerRadius = 4F;
 			this.butPatientPick.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butPatientPick.Location = new System.Drawing.Point(294, 9);

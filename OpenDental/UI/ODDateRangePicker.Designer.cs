@@ -78,8 +78,8 @@
 			this.butWeekPrevious.AdjustImageLocation = new System.Drawing.Point(-3, -1);
 			this.butWeekPrevious.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.butWeekPrevious.Autosize = true;
-			this.butWeekPrevious.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butWeekPrevious.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butWeekPrevious.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butWeekPrevious.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butWeekPrevious.CornerRadius = 4F;
 			this.butWeekPrevious.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.butWeekPrevious.Image = ((System.Drawing.Image)(resources.GetObject("butWeekPrevious.Image")));
@@ -96,8 +96,8 @@
 			this.butWeekNext.AdjustImageLocation = new System.Drawing.Point(5, -1);
 			this.butWeekNext.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.butWeekNext.Autosize = false;
-			this.butWeekNext.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butWeekNext.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butWeekNext.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butWeekNext.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butWeekNext.CornerRadius = 4F;
 			this.butWeekNext.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.butWeekNext.Image = ((System.Drawing.Image)(resources.GetObject("butWeekNext.Image")));

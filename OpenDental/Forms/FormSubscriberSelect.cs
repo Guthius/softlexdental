@@ -72,8 +72,8 @@ namespace OpenDental{
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(277,241);
 			this.butCancel.Name = "butCancel";
@@ -87,8 +87,8 @@ namespace OpenDental{
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(277,200);
 			this.butOK.Name = "butOK";
@@ -110,8 +110,8 @@ namespace OpenDental{
 			this.butMore.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butMore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butMore.Autosize = true;
-			this.butMore.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butMore.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butMore.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butMore.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butMore.CornerRadius = 4F;
 			this.butMore.Location = new System.Drawing.Point(277,79);
 			this.butMore.Name = "butMore";

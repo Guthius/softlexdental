@@ -357,8 +357,8 @@
 			this.butEditGroup.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butEditGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butEditGroup.Autosize = true;
-			this.butEditGroup.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEditGroup.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEditGroup.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butEditGroup.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butEditGroup.CornerRadius = 4F;
 			this.butEditGroup.Image = global::OpenDental.Properties.Resources.editPencil;
 			this.butEditGroup.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -374,8 +374,8 @@
 			this.butSetAll.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butSetAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butSetAll.Autosize = true;
-			this.butSetAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSetAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSetAll.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butSetAll.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butSetAll.CornerRadius = 4F;
 			this.butSetAll.Location = new System.Drawing.Point(282, 612);
 			this.butSetAll.Name = "butSetAll";
@@ -389,8 +389,8 @@
 			this.butAddGroup.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAddGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butAddGroup.Autosize = true;
-			this.butAddGroup.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddGroup.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddGroup.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAddGroup.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAddGroup.CornerRadius = 4F;
 			this.butAddGroup.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddGroup.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;

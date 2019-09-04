@@ -104,8 +104,8 @@ namespace OpenDental{
 			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -121,8 +121,8 @@ namespace OpenDental{
 			this.butCombine.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCombine.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCombine.Autosize = true;
-			this.butCombine.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCombine.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCombine.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCombine.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCombine.CornerRadius = 4F;
 			this.butCombine.Location = new System.Drawing.Point(830, 471);
 			this.butCombine.Name = "butCombine";
@@ -136,8 +136,8 @@ namespace OpenDental{
 			// 
 			this.butItransUpdateCarriers.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butItransUpdateCarriers.Autosize = true;
-			this.butItransUpdateCarriers.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butItransUpdateCarriers.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butItransUpdateCarriers.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butItransUpdateCarriers.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butItransUpdateCarriers.CornerRadius = 4F;
 			this.butItransUpdateCarriers.Location = new System.Drawing.Point(8, 94);
 			this.butItransUpdateCarriers.Name = "butItransUpdateCarriers";
@@ -152,8 +152,8 @@ namespace OpenDental{
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(830, 623);
 			this.butCancel.Name = "butCancel";
@@ -225,8 +225,8 @@ namespace OpenDental{
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(830, 587);
 			this.butOK.Name = "butOK";
@@ -257,8 +257,8 @@ namespace OpenDental{
 			// 
 			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butRefresh.Autosize = true;
-			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRefresh.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butRefresh.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
 			this.butRefresh.Location = new System.Drawing.Point(732, 2);
 			this.butRefresh.Name = "butRefresh";

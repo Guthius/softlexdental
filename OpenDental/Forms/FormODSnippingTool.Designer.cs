@@ -46,8 +46,8 @@
 			this.butSnip.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butSnip.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butSnip.Autosize = true;
-			this.butSnip.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSnip.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSnip.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butSnip.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butSnip.CornerRadius = 4F;
 			this.butSnip.Location = new System.Drawing.Point(12, 7);
 			this.butSnip.Name = "butSnip";
@@ -62,8 +62,8 @@
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -80,8 +80,8 @@
 			this.butOk.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOk.Autosize = true;
-			this.butOk.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOk.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOk.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butOk.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butOk.CornerRadius = 4F;
 			this.butOk.Location = new System.Drawing.Point(210, 7);
 			this.butOk.Name = "butOk";

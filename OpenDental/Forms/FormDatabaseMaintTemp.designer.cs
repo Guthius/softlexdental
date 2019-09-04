@@ -138,8 +138,8 @@ namespace OpenDental{
 			// 
 			this.butFix3.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butFix3.Autosize = true;
-			this.butFix3.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butFix3.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butFix3.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butFix3.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butFix3.CornerRadius = 4F;
 			this.butFix3.Enabled = false;
 			this.butFix3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -163,8 +163,8 @@ namespace OpenDental{
 			// 
 			this.butFix2.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butFix2.Autosize = true;
-			this.butFix2.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butFix2.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butFix2.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butFix2.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butFix2.CornerRadius = 4F;
 			this.butFix2.Enabled = false;
 			this.butFix2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -188,8 +188,8 @@ namespace OpenDental{
 			// 
 			this.butFix1.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butFix1.Autosize = true;
-			this.butFix1.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butFix1.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butFix1.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butFix1.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butFix1.CornerRadius = 4F;
 			this.butFix1.Enabled = false;
 			this.butFix1.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -213,8 +213,8 @@ namespace OpenDental{
 			// 
 			this.butBackup.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butBackup.Autosize = true;
-			this.butBackup.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBackup.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBackup.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butBackup.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butBackup.CornerRadius = 4F;
 			this.butBackup.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butBackup.Location = new System.Drawing.Point(138, 14);
@@ -238,8 +238,8 @@ namespace OpenDental{
 			// 
 			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPrint.Autosize = true;
-			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrint.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPrint.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrint;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -254,8 +254,8 @@ namespace OpenDental{
 			// 
 			this.butRun.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butRun.Autosize = true;
-			this.butRun.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRun.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRun.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butRun.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butRun.CornerRadius = 4F;
 			this.butRun.Location = new System.Drawing.Point(87, 83);
 			this.butRun.Name = "butRun";
@@ -269,8 +269,8 @@ namespace OpenDental{
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(646, 658);
 			this.butCancel.Name = "butCancel";

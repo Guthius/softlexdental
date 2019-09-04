@@ -90,8 +90,8 @@ namespace OpenDental{
 			// 
 			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butPrint.Autosize = true;
-			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrint.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPrint.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
 			this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -108,8 +108,8 @@ namespace OpenDental{
 			// 
 			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butClose.Location = new System.Drawing.Point(434,5);
@@ -136,8 +136,8 @@ namespace OpenDental{
 			// 
 			this.butFwd.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butFwd.Autosize = true;
-			this.butFwd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butFwd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butFwd.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butFwd.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butFwd.CornerRadius = 4F;
 			this.butFwd.Image = global::OpenDental.Properties.Resources.Right;
 			this.butFwd.Location = new System.Drawing.Point(195,7);
@@ -150,8 +150,8 @@ namespace OpenDental{
 			// 
 			this.butBack.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butBack.Autosize = true;
-			this.butBack.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBack.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBack.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butBack.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butBack.CornerRadius = 4F;
 			this.butBack.Image = global::OpenDental.Properties.Resources.Left;
 			this.butBack.Location = new System.Drawing.Point(123,7);
@@ -174,8 +174,8 @@ namespace OpenDental{
 			// 
 			this.butZoomIn.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butZoomIn.Autosize = true;
-			this.butZoomIn.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butZoomIn.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butZoomIn.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butZoomIn.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butZoomIn.CornerRadius = 4F;
 			this.butZoomIn.Image = global::OpenDental.Properties.Resources.butZoomIn;
 			this.butZoomIn.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -192,8 +192,8 @@ namespace OpenDental{
 			// 
 			this.butFullPage.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butFullPage.Autosize = true;
-			this.butFullPage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butFullPage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butFullPage.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butFullPage.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butFullPage.CornerRadius = 4F;
 			this.butFullPage.Location = new System.Drawing.Point(9,5);
 			this.butFullPage.Name = "butFullPage";

@@ -972,8 +972,8 @@ namespace OpenDental
 					}
 					button.Enabled=true;
 					button.Autosize=true;
-					button.BtnShape=OpenDental.UI.enumType.BtnShape.Rectangle;
-					button.BtnStyle=OpenDental.UI.enumType.XPStyle.Silver;
+					button.BtnShape=OpenDental.UI.EnumType.BtnShape.Rectangle;
+					button.BtnStyle=OpenDental.UI.EnumType.XPStyle.Silver;
 					button.CornerRadius = 4F;
 					button.Text=(sheetFieldDef.FieldValue);
 					button.Size=new Size(sheetFieldDef.Width,sheetFieldDef.Height);

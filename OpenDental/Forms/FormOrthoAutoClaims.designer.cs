@@ -55,8 +55,8 @@ namespace OpenDental{
 			this.butSelectAll.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butSelectAll.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
 			this.butSelectAll.Autosize = true;
-			this.butSelectAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSelectAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSelectAll.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butSelectAll.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butSelectAll.CornerRadius = 4F;
 			this.butSelectAll.Location = new System.Drawing.Point(427, 474);
 			this.butSelectAll.Name = "butSelectAll";
@@ -70,8 +70,8 @@ namespace OpenDental{
 			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.Location = new System.Drawing.Point(853, 474);
 			this.butClose.Name = "butClose";
@@ -85,8 +85,8 @@ namespace OpenDental{
 			this.butGenerate.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butGenerate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butGenerate.Autosize = true;
-			this.butGenerate.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butGenerate.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butGenerate.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butGenerate.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butGenerate.CornerRadius = 4F;
 			this.butGenerate.Location = new System.Drawing.Point(12, 474);
 			this.butGenerate.Name = "butGenerate";

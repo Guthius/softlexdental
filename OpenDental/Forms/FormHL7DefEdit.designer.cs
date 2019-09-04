@@ -672,8 +672,8 @@ namespace OpenDental{
 			// 
 			this.butBrowseOut.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butBrowseOut.Autosize = true;
-			this.butBrowseOut.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBrowseOut.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBrowseOut.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butBrowseOut.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butBrowseOut.CornerRadius = 4F;
 			this.butBrowseOut.Location = new System.Drawing.Point(340, 38);
 			this.butBrowseOut.Name = "butBrowseOut";
@@ -686,8 +686,8 @@ namespace OpenDental{
 			// 
 			this.butBrowseIn.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butBrowseIn.Autosize = true;
-			this.butBrowseIn.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBrowseIn.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBrowseIn.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butBrowseIn.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butBrowseIn.CornerRadius = 4F;
 			this.butBrowseIn.Location = new System.Drawing.Point(340, 12);
 			this.butBrowseIn.Name = "butBrowseIn";
@@ -701,8 +701,8 @@ namespace OpenDental{
 			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -718,8 +718,8 @@ namespace OpenDental{
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Location = new System.Drawing.Point(650, 656);
 			this.butOK.Name = "butOK";
@@ -733,8 +733,8 @@ namespace OpenDental{
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(736, 656);
 			this.butCancel.Name = "butCancel";
@@ -748,8 +748,8 @@ namespace OpenDental{
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDelete.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butDelete.Autosize = true;
-			this.butDelete.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDelete.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDelete.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butDelete.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butDelete.CornerRadius = 4F;
 			this.butDelete.Image = global::OpenDental.Properties.Resources.deleteX;
 			this.butDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;

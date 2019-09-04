@@ -504,8 +504,8 @@
 			// 
 			this.butSetScanner.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butSetScanner.Autosize = true;
-			this.butSetScanner.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSetScanner.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSetScanner.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butSetScanner.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butSetScanner.CornerRadius = 4F;
 			this.butSetScanner.Location = new System.Drawing.Point(17, 74);
 			this.butSetScanner.Name = "butSetScanner";
@@ -518,8 +518,8 @@
 			// 
 			this.butMounts.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butMounts.Autosize = true;
-			this.butMounts.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butMounts.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butMounts.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butMounts.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butMounts.CornerRadius = 4F;
 			this.butMounts.Location = new System.Drawing.Point(133, 74);
 			this.butMounts.Name = "butMounts";
@@ -555,8 +555,8 @@
 			this.butAdvanced.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAdvanced.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butAdvanced.Autosize = true;
-			this.butAdvanced.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdvanced.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdvanced.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAdvanced.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAdvanced.CornerRadius = 4F;
 			this.butAdvanced.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butAdvanced.Location = new System.Drawing.Point(286, 386);

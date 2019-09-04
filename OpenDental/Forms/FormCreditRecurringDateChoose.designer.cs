@@ -37,8 +37,8 @@ namespace OpenDental{
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(301, 159);
 			this.butCancel.Name = "butCancel";
@@ -51,8 +51,8 @@ namespace OpenDental{
 			// 
 			this.butLastMonth.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butLastMonth.Autosize = true;
-			this.butLastMonth.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butLastMonth.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butLastMonth.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butLastMonth.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butLastMonth.CornerRadius = 4F;
 			this.butLastMonth.Location = new System.Drawing.Point(17, 62);
 			this.butLastMonth.Name = "butLastMonth";
@@ -65,8 +65,8 @@ namespace OpenDental{
 			// 
 			this.butThisMonth.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butThisMonth.Autosize = true;
-			this.butThisMonth.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butThisMonth.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butThisMonth.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butThisMonth.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butThisMonth.CornerRadius = 4F;
 			this.butThisMonth.Location = new System.Drawing.Point(17, 103);
 			this.butThisMonth.Name = "butThisMonth";

@@ -115,8 +115,8 @@ namespace OpenDental{
 			this.butChangeProvInto.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butChangeProvInto.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butChangeProvInto.Autosize = true;
-			this.butChangeProvInto.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butChangeProvInto.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChangeProvInto.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butChangeProvInto.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butChangeProvInto.CornerRadius = 4F;
 			this.butChangeProvInto.Location = new System.Drawing.Point(577, 33);
 			this.butChangeProvInto.Name = "butChangeProvInto";
@@ -217,8 +217,8 @@ namespace OpenDental{
 			this.butChangeProvFrom.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butChangeProvFrom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butChangeProvFrom.Autosize = true;
-			this.butChangeProvFrom.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butChangeProvFrom.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butChangeProvFrom.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butChangeProvFrom.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butChangeProvFrom.CornerRadius = 4F;
 			this.butChangeProvFrom.Location = new System.Drawing.Point(577, 34);
 			this.butChangeProvFrom.Name = "butChangeProvFrom";
@@ -264,8 +264,8 @@ namespace OpenDental{
 			this.butMerge.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butMerge.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butMerge.Autosize = true;
-			this.butMerge.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butMerge.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butMerge.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butMerge.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butMerge.CornerRadius = 4F;
 			this.butMerge.Enabled = false;
 			this.butMerge.Location = new System.Drawing.Point(505, 209);
@@ -280,8 +280,8 @@ namespace OpenDental{
 			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.Location = new System.Drawing.Point(589, 209);
 			this.butClose.Name = "butClose";

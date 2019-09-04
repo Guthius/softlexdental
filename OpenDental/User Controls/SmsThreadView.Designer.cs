@@ -59,8 +59,8 @@
 			this.butForwardPage.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butForwardPage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butForwardPage.Autosize = true;
-			this.butForwardPage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butForwardPage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butForwardPage.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butForwardPage.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butForwardPage.CornerRadius = 4F;
 			this.butForwardPage.Location = new System.Drawing.Point(37, 2);
 			this.butForwardPage.Name = "butForwardPage";
@@ -73,8 +73,8 @@
 			// 
 			this.butBackPage.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butBackPage.Autosize = true;
-			this.butBackPage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBackPage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBackPage.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butBackPage.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butBackPage.CornerRadius = 4F;
 			this.butBackPage.Location = new System.Drawing.Point(185, 2);
 			this.butBackPage.Name = "butBackPage";
@@ -88,8 +88,8 @@
 			this.butBeginning.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butBeginning.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butBeginning.Autosize = true;
-			this.butBeginning.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBeginning.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBeginning.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butBeginning.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butBeginning.CornerRadius = 4F;
 			this.butBeginning.Location = new System.Drawing.Point(3, 2);
 			this.butBeginning.Name = "butBeginning";
@@ -102,8 +102,8 @@
 			// 
 			this.butEnd.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butEnd.Autosize = true;
-			this.butEnd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEnd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEnd.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butEnd.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butEnd.CornerRadius = 4F;
 			this.butEnd.Location = new System.Drawing.Point(219, 2);
 			this.butEnd.Name = "butEnd";

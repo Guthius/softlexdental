@@ -45,8 +45,8 @@
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(497, 326);
 			this.butCancel.Name = "butCancel";
@@ -60,8 +60,8 @@
 			// 
 			this.butRetrieveOIDs.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butRetrieveOIDs.Autosize = true;
-			this.butRetrieveOIDs.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRetrieveOIDs.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRetrieveOIDs.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butRetrieveOIDs.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butRetrieveOIDs.CornerRadius = 4F;
 			this.butRetrieveOIDs.Location = new System.Drawing.Point(12, 12);
 			this.butRetrieveOIDs.Name = "butRetrieveOIDs";
@@ -76,8 +76,8 @@
 			this.butOk.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOk.Autosize = true;
-			this.butOk.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOk.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOk.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butOk.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butOk.CornerRadius = 4F;
 			this.butOk.Location = new System.Drawing.Point(416, 326);
 			this.butOk.Name = "butOk";

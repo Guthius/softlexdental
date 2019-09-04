@@ -39,8 +39,8 @@
 			// 
 			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -70,8 +70,8 @@
 			// 
 			this.butImport.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butImport.Autosize = true;
-			this.butImport.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butImport.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butImport.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butImport.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butImport.CornerRadius = 4F;
 			this.butImport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butImport.Location = new System.Drawing.Point(400, 128);
@@ -85,8 +85,8 @@
 			// 
 			this.butEditFee.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butEditFee.Autosize = true;
-			this.butEditFee.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEditFee.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEditFee.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butEditFee.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butEditFee.CornerRadius = 4F;
 			this.butEditFee.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butEditFee.Location = new System.Drawing.Point(400, 77);

@@ -279,8 +279,8 @@ namespace OpenDental{
 			// 
 			this.butNextUnsent.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butNextUnsent.Autosize = true;
-			this.butNextUnsent.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butNextUnsent.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNextUnsent.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butNextUnsent.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butNextUnsent.CornerRadius = 4F;
 			this.butNextUnsent.Location = new System.Drawing.Point(234, 25);
 			this.butNextUnsent.Name = "butNextUnsent";

@@ -61,8 +61,8 @@ namespace OpenDental {
 			// 
 			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.butClose.Location = new System.Drawing.Point(385, 404);
@@ -134,8 +134,8 @@ namespace OpenDental {
 			// 
 			this.btnPrintPreview.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.btnPrintPreview.Autosize = true;
-			this.btnPrintPreview.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.btnPrintPreview.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.btnPrintPreview.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.btnPrintPreview.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.btnPrintPreview.CornerRadius = 4F;
 			this.btnPrintPreview.Location = new System.Drawing.Point(290, 404);
 			this.btnPrintPreview.Name = "btnPrintPreview";

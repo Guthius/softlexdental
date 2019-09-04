@@ -162,8 +162,8 @@ namespace OpenDental{
 			// 
 			this.butPerm.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPerm.Autosize = true;
-			this.butPerm.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPerm.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPerm.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPerm.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPerm.CornerRadius = 4F;
 			this.butPerm.Location = new System.Drawing.Point(91, 73);
 			this.butPerm.Name = "butPerm";
@@ -175,8 +175,8 @@ namespace OpenDental{
 			// 
 			this.butMinutes.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butMinutes.Autosize = true;
-			this.butMinutes.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butMinutes.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butMinutes.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butMinutes.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butMinutes.CornerRadius = 4F;
 			this.butMinutes.Location = new System.Drawing.Point(91, 19);
 			this.butMinutes.Name = "butMinutes";
@@ -188,8 +188,8 @@ namespace OpenDental{
 			// 
 			this.butHours.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butHours.Autosize = true;
-			this.butHours.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butHours.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butHours.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butHours.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butHours.CornerRadius = 4F;
 			this.butHours.Location = new System.Drawing.Point(91, 46);
 			this.butHours.Name = "butHours";
@@ -238,8 +238,8 @@ namespace OpenDental{
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
 			this.butOK.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butOK.Location = new System.Drawing.Point(323, 195);

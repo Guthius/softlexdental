@@ -37,8 +37,8 @@ namespace OpenDental {
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Location = new System.Drawing.Point(861,663);
@@ -53,8 +53,8 @@ namespace OpenDental {
 			this.butRun.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butRun.Autosize = true;
-			this.butRun.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRun.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRun.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butRun.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butRun.CornerRadius = 4F;
 			this.butRun.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butRun.Location = new System.Drawing.Point(780,663);
@@ -99,8 +99,8 @@ namespace OpenDental {
 			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butRefresh.Autosize = true;
-			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRefresh.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butRefresh.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
 			this.butRefresh.Location = new System.Drawing.Point(860,52);
 			this.butRefresh.Name = "butRefresh";

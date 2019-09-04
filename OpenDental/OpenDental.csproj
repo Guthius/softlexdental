@@ -4573,7 +4573,6 @@
     <Compile Include="UI\ComboBoxOD.Designer.cs">
       <DependentUpon>ComboBoxOD.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\MsgBoxCopyPaste.cs" />
     <Compile Include="UI\ODCodeRangeFilter.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -7690,9 +7689,6 @@
     </Compile>
     <Compile Include="UI\ListBoxClickable.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\ListBoxClickable.Designer.cs">
-      <DependentUpon>ListBoxClickable.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\MsgBox.cs" />
     <Compile Include="UI\ODToolBar.cs">

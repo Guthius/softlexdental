@@ -82,8 +82,8 @@ namespace OpenDental{
 			this.butSelected.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butSelected.Autosize = true;
-			this.butSelected.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSelected.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSelected.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butSelected.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butSelected.CornerRadius = 4F;
 			this.butSelected.Location = new System.Drawing.Point(13, 24);
 			this.butSelected.Name = "butApprove";
@@ -97,8 +97,8 @@ namespace OpenDental{
 			this.butAll.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butAll.Autosize = true;
-			this.butAll.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAll.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAll.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAll.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAll.CornerRadius = 4F;
 			this.butAll.Location = new System.Drawing.Point(13, 59);
 			this.butAll.Name = "butAll";
@@ -112,8 +112,8 @@ namespace OpenDental{
 			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.Location = new System.Drawing.Point(887, 660);
 			this.butClose.Name = "butClose";

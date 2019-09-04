@@ -87,8 +87,8 @@
 			// 
 			this.butPatSelect.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPatSelect.Autosize = true;
-			this.butPatSelect.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPatSelect.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPatSelect.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPatSelect.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPatSelect.CornerRadius = 4F;
 			this.butPatSelect.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butPatSelect.Location = new System.Drawing.Point(325, 9);

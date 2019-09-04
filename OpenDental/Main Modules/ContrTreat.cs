@@ -494,8 +494,8 @@ namespace OpenDental{
 			// 
 			this.butPlannedAppt.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPlannedAppt.Autosize = true;
-			this.butPlannedAppt.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPlannedAppt.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPlannedAppt.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPlannedAppt.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPlannedAppt.CornerRadius = 4F;
 			this.butPlannedAppt.Image = global::OpenDental.Properties.Resources.Add;
 			this.butPlannedAppt.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -510,8 +510,8 @@ namespace OpenDental{
 			// 
 			this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butRefresh.Autosize = true;
-			this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRefresh.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butRefresh.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butRefresh.CornerRadius = 4F;
 			this.butRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.butRefresh.Location = new System.Drawing.Point(429, 125);
@@ -525,8 +525,8 @@ namespace OpenDental{
 			// 
 			this.butSaveTP.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butSaveTP.Autosize = true;
-			this.butSaveTP.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSaveTP.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSaveTP.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butSaveTP.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butSaveTP.CornerRadius = 4F;
 			this.butSaveTP.Image = global::OpenDental.Properties.Resources.butCopy;
 			this.butSaveTP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -541,8 +541,8 @@ namespace OpenDental{
 			// 
 			this.butNewTP.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butNewTP.Autosize = true;
-			this.butNewTP.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butNewTP.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNewTP.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butNewTP.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butNewTP.CornerRadius = 4F;
 			this.butNewTP.Image = global::OpenDental.Properties.Resources.Add;
 			this.butNewTP.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -557,8 +557,8 @@ namespace OpenDental{
 			// 
 			this.butInsRem.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butInsRem.Autosize = true;
-			this.butInsRem.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butInsRem.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butInsRem.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butInsRem.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butInsRem.CornerRadius = 4F;
 			this.butInsRem.Location = new System.Drawing.Point(917, 400);
 			this.butInsRem.Name = "butInsRem";

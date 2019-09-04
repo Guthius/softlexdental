@@ -54,8 +54,8 @@ namespace OpenDental{
 			this.butAddTrigger.AdjustImageLocation = new System.Drawing.Point(0, 1);
 			this.butAddTrigger.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butAddTrigger.Autosize = true;
-			this.butAddTrigger.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddTrigger.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddTrigger.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAddTrigger.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAddTrigger.CornerRadius = 4F;
 			this.butAddTrigger.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAddTrigger.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -71,8 +71,8 @@ namespace OpenDental{
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.Location = new System.Drawing.Point(701, 548);
 			this.butCancel.Name = "butCancel";

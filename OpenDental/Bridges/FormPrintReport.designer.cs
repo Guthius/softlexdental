@@ -66,8 +66,8 @@
 			// 
 			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butPrint.Autosize = true;
-			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrint.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPrint.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
 			this.butPrint.Location = new System.Drawing.Point(101,4);
@@ -82,8 +82,8 @@
 			// 
 			this.butPreviousPage.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butPreviousPage.Autosize = false;
-			this.butPreviousPage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPreviousPage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPreviousPage.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPreviousPage.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPreviousPage.CornerRadius = 4F;
 			this.butPreviousPage.Image = global::OpenDental.Properties.Resources.up;
 			this.butPreviousPage.Location = new System.Drawing.Point(50,4);
@@ -98,8 +98,8 @@
 			// 
 			this.butNextPage.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butNextPage.Autosize = false;
-			this.butNextPage.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butNextPage.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNextPage.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butNextPage.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butNextPage.CornerRadius = 4F;
 			this.butNextPage.Image = global::OpenDental.Properties.Resources.down;
 			this.butNextPage.Location = new System.Drawing.Point(5,4);

@@ -45,8 +45,8 @@ namespace OpenDental{
 			// 
 			this.butBulkEdit.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butBulkEdit.Autosize = true;
-			this.butBulkEdit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butBulkEdit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butBulkEdit.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butBulkEdit.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butBulkEdit.CornerRadius = 4F;
 			this.butBulkEdit.Location = new System.Drawing.Point(84, 65);
 			this.butBulkEdit.Name = "butBulkEdit";
@@ -60,8 +60,8 @@ namespace OpenDental{
 			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.Location = new System.Drawing.Point(496, 458);
 			this.butClose.Name = "butClose";

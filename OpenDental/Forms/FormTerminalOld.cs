@@ -771,8 +771,8 @@ namespace OpenDental{
 			this.butSubmit.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butSubmit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butSubmit.Autosize = true;
-			this.butSubmit.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butSubmit.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butSubmit.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butSubmit.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butSubmit.CornerRadius = 4F;
 			this.butSubmit.Location = new System.Drawing.Point(929,731);
 			this.butSubmit.Name = "butSubmit";
@@ -786,8 +786,8 @@ namespace OpenDental{
 			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.Location = new System.Drawing.Point(501,731);
 			this.butClose.Name = "butClose";

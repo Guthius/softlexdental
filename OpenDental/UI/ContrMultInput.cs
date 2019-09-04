@@ -356,7 +356,7 @@ namespace OpenDental.UI
     }
 
 		/// <summary></summary>
-		public void AddInputItem(string promptingText,FieldValueType valueType,ArrayList currentValues,EnumType enumerationType,DefinitionCategory defCategory,ReportFKType fKType){
+		public void AddInputItem(string promptingText,FieldValueType valueType,ArrayList currentValues, OpenDentBusiness.EnumType enumerationType,DefinitionCategory defCategory,ReportFKType fKType){
 			multInputItems.Add(new MultInputItem(promptingText,valueType,currentValues,enumerationType,defCategory,fKType));
 		}
 
@@ -364,19 +364,19 @@ namespace OpenDental.UI
 		public void AddInputItem(string promptingText,FieldValueType valueType,object currentValue){
 			ArrayList currentValues=new ArrayList();
 			currentValues.Add(currentValue);
-			//the enumtype and defcat are completely arbitrary.
-			multInputItems.Add(new MultInputItem(promptingText,valueType,currentValues,EnumType.ApptStatus,DefinitionCategory.AccountColors,ReportFKType.None));
+            //the enumtype and defcat are completely arbitrary.
+            multInputItems.Add(new MultInputItem(promptingText, valueType, currentValues, OpenDentBusiness.EnumType.ApptStatus, DefinitionCategory.AccountColors, ReportFKType.None));
 		}
 
 		/// <summary>Overload for using DefCat.</summary>
 		public void AddInputItem(string promptingText,FieldValueType valueType,ArrayList currentValues,DefinitionCategory defCategory){
 			if(currentValues==null)
 				currentValues=new ArrayList();
-			multInputItems.Add(new MultInputItem(promptingText,valueType,currentValues,EnumType.ApptStatus,defCategory,ReportFKType.None));
+            multInputItems.Add(new MultInputItem(promptingText, valueType, currentValues, OpenDentBusiness.EnumType.ApptStatus, defCategory, ReportFKType.None));
 		}
 
 		/// <summary>Overload for using Enum.</summary>
-		public void AddInputItem(string promptingText,FieldValueType valueType,ArrayList currentValues,EnumType enumerationType){
+		public void AddInputItem(string promptingText,FieldValueType valueType,ArrayList currentValues, OpenDentBusiness.EnumType enumerationType){
 			if(currentValues==null)
 				currentValues=new ArrayList();
 			multInputItems.Add(new MultInputItem(promptingText,valueType,currentValues,enumerationType,DefinitionCategory.AccountColors,ReportFKType.None));
@@ -470,7 +470,7 @@ namespace OpenDental.UI
 	///<summary>A single input item in the ContrMultInput control.</summary>
 	public struct MultInputItem{
 		/// <summary></summary>
-		public MultInputItem(string promptingText,FieldValueType valueType,ArrayList currentValues,EnumType enumerationType,DefinitionCategory defCategory,ReportFKType fKType){
+		public MultInputItem(string promptingText,FieldValueType valueType,ArrayList currentValues, OpenDentBusiness.EnumType enumerationType,DefinitionCategory defCategory,ReportFKType fKType){
 			PromptingText=promptingText;
 			ValueType=valueType;
 			CurrentValues=currentValues;
@@ -486,7 +486,7 @@ namespace OpenDental.UI
 		///<summary>A collection of the actual values of this item, not just the displayed text.  Any supported type is allowed including string, int, double, bool, datetime, etc. The length of the ArrayList can be set to 0 ahead of time if there are no default values to fill in the input field with.  The result is that the field will initially be blank.  After the user input, if the field is still blank, then the count will still be 0.  If the count is 0, then this parameter will not be included as a filter in the query.</summary>
 		public ArrayList CurrentValues;
 		///<summary>If the ValueKind is EnumField, then this specifies which type of enum.</summary>
-		public EnumType EnumerationType;
+		public OpenDentBusiness.EnumType EnumerationType;
 		///<summary>If ValueKind is DefParameter, then this specifies which DefCat.</summary>
 		public DefinitionCategory DefCategory;
 		///<summary>If ValueKind is Foreign key, then this specifies which table.</summary>

@@ -153,8 +153,8 @@ namespace OpenDental{
 			// 
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Location = new System.Drawing.Point(876,664);
@@ -168,8 +168,8 @@ namespace OpenDental{
 			// 
 			this.butOK.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butOK.Autosize = true;
-			this.butOK.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butOK.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butOK.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butOK.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butOK.CornerRadius = 4F;
 			this.butOK.Enabled = false;
 			this.butOK.Location = new System.Drawing.Point(876,630);
@@ -325,8 +325,8 @@ namespace OpenDental{
 			// 
 			this.butDeleteFilter.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butDeleteFilter.Autosize = true;
-			this.butDeleteFilter.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDeleteFilter.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDeleteFilter.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butDeleteFilter.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butDeleteFilter.CornerRadius = 4F;
 			this.butDeleteFilter.Enabled = false;
 			this.butDeleteFilter.Image = ((System.Drawing.Image)(resources.GetObject("butDeleteFilter.Image")));
@@ -352,8 +352,8 @@ namespace OpenDental{
 			// 
 			this.butAddFilter.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butAddFilter.Autosize = true;
-			this.butAddFilter.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddFilter.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddFilter.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAddFilter.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAddFilter.CornerRadius = 4F;
 			this.butAddFilter.Enabled = false;
 			this.butAddFilter.Location = new System.Drawing.Point(664,40);

@@ -86,8 +86,8 @@ namespace OpenDental {
 			this.butCancel.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butCancel.Autosize = true;
-			this.butCancel.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCancel.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCancel.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCancel.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCancel.CornerRadius = 4F;
 			this.butCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butCancel.Location = new System.Drawing.Point(966, 710);
@@ -102,8 +102,8 @@ namespace OpenDental {
 			this.butRun.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butRun.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butRun.Autosize = true;
-			this.butRun.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRun.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRun.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butRun.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butRun.CornerRadius = 4F;
 			this.butRun.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butRun.Location = new System.Drawing.Point(721, 17);
@@ -152,8 +152,8 @@ namespace OpenDental {
 			this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butPrint.Autosize = true;
-			this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrint.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPrint.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPrint.CornerRadius = 4F;
 			this.butPrint.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;

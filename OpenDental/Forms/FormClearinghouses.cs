@@ -117,8 +117,8 @@ namespace OpenDental{
 			// 
 			this.butEligibility.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butEligibility.Autosize = true;
-			this.butEligibility.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butEligibility.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butEligibility.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butEligibility.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butEligibility.CornerRadius = 4F;
 			this.butEligibility.Location = new System.Drawing.Point(15, 79);
 			this.butEligibility.Name = "butEligibility";
@@ -131,8 +131,8 @@ namespace OpenDental{
 			// 
 			this.butDefaultMedical.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDefaultMedical.Autosize = true;
-			this.butDefaultMedical.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDefaultMedical.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDefaultMedical.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butDefaultMedical.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butDefaultMedical.CornerRadius = 4F;
 			this.butDefaultMedical.Location = new System.Drawing.Point(15, 49);
 			this.butDefaultMedical.Name = "butDefaultMedical";
@@ -145,8 +145,8 @@ namespace OpenDental{
 			// 
 			this.butDefaultDental.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butDefaultDental.Autosize = true;
-			this.butDefaultDental.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butDefaultDental.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butDefaultDental.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butDefaultDental.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butDefaultDental.CornerRadius = 4F;
 			this.butDefaultDental.Location = new System.Drawing.Point(15, 19);
 			this.butDefaultDental.Name = "butDefaultDental";
@@ -180,8 +180,8 @@ namespace OpenDental{
 			this.butAdd.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butAdd.Autosize = true;
-			this.butAdd.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAdd.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAdd.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAdd.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAdd.CornerRadius = 4F;
 			this.butAdd.Image = global::OpenDental.Properties.Resources.Add;
 			this.butAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -197,8 +197,8 @@ namespace OpenDental{
 			this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.Location = new System.Drawing.Point(805, 466);
 			this.butClose.Name = "butClose";
@@ -334,8 +334,8 @@ namespace OpenDental{
 			this.butThisComputer.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butThisComputer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.butThisComputer.Autosize = true;
-			this.butThisComputer.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butThisComputer.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butThisComputer.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butThisComputer.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butThisComputer.CornerRadius = 4F;
 			this.butThisComputer.Location = new System.Drawing.Point(479, 37);
 			this.butThisComputer.Name = "butThisComputer";

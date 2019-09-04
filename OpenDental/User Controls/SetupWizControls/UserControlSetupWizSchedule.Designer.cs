@@ -77,8 +77,8 @@
 			// 
 			this.butPrevProv.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPrevProv.Autosize = true;
-			this.butPrevProv.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPrevProv.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPrevProv.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPrevProv.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPrevProv.CornerRadius = 4F;
 			this.butPrevProv.Location = new System.Drawing.Point(774, 8);
 			this.butPrevProv.Name = "butPrevProv";
@@ -101,8 +101,8 @@
 			// 
 			this.butNextProv.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butNextProv.Autosize = true;
-			this.butNextProv.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butNextProv.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNextProv.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butNextProv.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butNextProv.CornerRadius = 4F;
 			this.butNextProv.Location = new System.Drawing.Point(851, 8);
 			this.butNextProv.Name = "butNextProv";
@@ -210,8 +210,8 @@
 			// 
 			this.butAddMonday.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAddMonday.Autosize = true;
-			this.butAddMonday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddMonday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddMonday.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAddMonday.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAddMonday.CornerRadius = 4F;
 			this.butAddMonday.Location = new System.Drawing.Point(7, 183);
 			this.butAddMonday.Name = "butAddMonday";
@@ -260,8 +260,8 @@
 			// 
 			this.butAddSunday.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAddSunday.Autosize = true;
-			this.butAddSunday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddSunday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddSunday.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAddSunday.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAddSunday.CornerRadius = 4F;
 			this.butAddSunday.Location = new System.Drawing.Point(7, 183);
 			this.butAddSunday.Name = "butAddSunday";
@@ -300,8 +300,8 @@
 			// 
 			this.butAddSaturday.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAddSaturday.Autosize = true;
-			this.butAddSaturday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddSaturday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddSaturday.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAddSaturday.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAddSaturday.CornerRadius = 4F;
 			this.butAddSaturday.Location = new System.Drawing.Point(7, 183);
 			this.butAddSaturday.Name = "butAddSaturday";
@@ -340,8 +340,8 @@
 			// 
 			this.butAddFriday.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAddFriday.Autosize = true;
-			this.butAddFriday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddFriday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddFriday.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAddFriday.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAddFriday.CornerRadius = 4F;
 			this.butAddFriday.Location = new System.Drawing.Point(7, 183);
 			this.butAddFriday.Name = "butAddFriday";
@@ -380,8 +380,8 @@
 			// 
 			this.butAddThursday.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAddThursday.Autosize = true;
-			this.butAddThursday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddThursday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddThursday.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAddThursday.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAddThursday.CornerRadius = 4F;
 			this.butAddThursday.Location = new System.Drawing.Point(7, 183);
 			this.butAddThursday.Name = "butAddThursday";
@@ -420,8 +420,8 @@
 			// 
 			this.butAddWednesday.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAddWednesday.Autosize = true;
-			this.butAddWednesday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddWednesday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddWednesday.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAddWednesday.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAddWednesday.CornerRadius = 4F;
 			this.butAddWednesday.Location = new System.Drawing.Point(7, 183);
 			this.butAddWednesday.Name = "butAddWednesday";
@@ -460,8 +460,8 @@
 			// 
 			this.butAddTuesday.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butAddTuesday.Autosize = true;
-			this.butAddTuesday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butAddTuesday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butAddTuesday.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butAddTuesday.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butAddTuesday.CornerRadius = 4F;
 			this.butAddTuesday.Location = new System.Drawing.Point(7, 183);
 			this.butAddTuesday.Name = "butAddTuesday";

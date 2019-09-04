@@ -126,8 +126,8 @@ namespace OpenDental {
 			// 
 			this.butCopyWeek.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCopyWeek.Autosize = true;
-			this.butCopyWeek.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCopyWeek.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCopyWeek.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCopyWeek.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCopyWeek.CornerRadius = 4F;
 			this.butCopyWeek.Location = new System.Drawing.Point(6, 165);
 			this.butCopyWeek.Name = "butCopyWeek";
@@ -140,8 +140,8 @@ namespace OpenDental {
 			// 
 			this.butCopyDay.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCopyDay.Autosize = true;
-			this.butCopyDay.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCopyDay.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCopyDay.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCopyDay.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCopyDay.CornerRadius = 4F;
 			this.butCopyDay.Location = new System.Drawing.Point(6, 138);
 			this.butCopyDay.Name = "butCopyDay";
@@ -168,8 +168,8 @@ namespace OpenDental {
 			// 
 			this.butRepeat.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butRepeat.Autosize = true;
-			this.butRepeat.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRepeat.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRepeat.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butRepeat.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butRepeat.CornerRadius = 4F;
 			this.butRepeat.Location = new System.Drawing.Point(6, 64);
 			this.butRepeat.Name = "butRepeat";
@@ -210,8 +210,8 @@ namespace OpenDental {
 			// 
 			this.butPaste.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butPaste.Autosize = true;
-			this.butPaste.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butPaste.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butPaste.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butPaste.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butPaste.CornerRadius = 4F;
 			this.butPaste.Location = new System.Drawing.Point(6, 37);
 			this.butPaste.Name = "butPaste";
@@ -233,8 +233,8 @@ namespace OpenDental {
 			// 
 			this.butClearDay.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClearDay.Autosize = true;
-			this.butClearDay.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClearDay.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClearDay.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butClearDay.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butClearDay.CornerRadius = 4F;
 			this.butClearDay.Location = new System.Drawing.Point(32, 12);
 			this.butClearDay.Name = "butClearDay";

@@ -245,8 +245,8 @@ namespace OpenDental {
             this.butClose.AdjustImageLocation = new System.Drawing.Point(0, 0);
             this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.butClose.Autosize = true;
-            this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butClose.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butClose.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
             this.butClose.CornerRadius = 4F;
             this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.butClose.Location = new System.Drawing.Point(967, 576);
@@ -337,8 +337,8 @@ namespace OpenDental {
             this.butPrint.AdjustImageLocation = new System.Drawing.Point(0, 0);
             this.butPrint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.butPrint.Autosize = true;
-            this.butPrint.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butPrint.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butPrint.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butPrint.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
             this.butPrint.CornerRadius = 4F;
             this.butPrint.Image = global::OpenDental.Properties.Resources.butPrintSmall;
             this.butPrint.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -410,8 +410,8 @@ namespace OpenDental {
             this.butText.AdjustImageLocation = new System.Drawing.Point(0, 0);
             this.butText.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.butText.Autosize = false;
-            this.butText.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butText.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butText.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butText.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
             this.butText.CornerRadius = 4F;
             this.butText.Location = new System.Drawing.Point(967, 181);
             this.butText.Name = "butText";
@@ -468,8 +468,8 @@ namespace OpenDental {
             // 
             this.butSendWebSched.AdjustImageLocation = new System.Drawing.Point(0, 0);
             this.butSendWebSched.Autosize = false;
-            this.butSendWebSched.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butSendWebSched.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butSendWebSched.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butSendWebSched.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
             this.butSendWebSched.CornerRadius = 4F;
             this.butSendWebSched.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.butSendWebSched.Location = new System.Drawing.Point(26, 132);
@@ -483,8 +483,8 @@ namespace OpenDental {
             // 
             this.butWebSchedHist.AdjustImageLocation = new System.Drawing.Point(0, 0);
             this.butWebSchedHist.Autosize = false;
-            this.butWebSchedHist.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butWebSchedHist.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butWebSchedHist.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butWebSchedHist.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
             this.butWebSchedHist.CornerRadius = 4F;
             this.butWebSchedHist.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.butWebSchedHist.Location = new System.Drawing.Point(26, 164);
@@ -754,8 +754,8 @@ namespace OpenDental {
             this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0, 0);
             this.butRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.butRefresh.Autosize = true;
-            this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butRefresh.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butRefresh.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
             this.butRefresh.CornerRadius = 4F;
             this.butRefresh.Location = new System.Drawing.Point(966, 48);
             this.butRefresh.Name = "butRefresh";

@@ -37,8 +37,8 @@
 			this.butTopazSign.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butTopazSign.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butTopazSign.Autosize = true;
-			this.butTopazSign.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butTopazSign.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butTopazSign.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butTopazSign.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butTopazSign.CornerRadius = 1F;
 			this.butTopazSign.Image = global::OpenDental.Properties.Resources.topazPen10;
 			this.butTopazSign.Location = new System.Drawing.Point(336, 0);
@@ -53,8 +53,8 @@
 			this.butClearSig.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butClearSig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClearSig.Autosize = true;
-			this.butClearSig.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClearSig.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClearSig.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butClearSig.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butClearSig.CornerRadius = 1F;
 			this.butClearSig.Image = global::OpenDental.Properties.Resources.deleteX10;
 			this.butClearSig.Location = new System.Drawing.Point(350, 0);
@@ -69,8 +69,8 @@
 			this.butESign.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butESign.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.butESign.Autosize = true;
-			this.butESign.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butESign.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butESign.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butESign.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butESign.CornerRadius = 1F;
 			this.butESign.Image = global::OpenDental.Properties.Resources.eSig;
 			this.butESign.Location = new System.Drawing.Point(0, 0);

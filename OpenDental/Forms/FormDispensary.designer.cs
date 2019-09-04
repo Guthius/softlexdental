@@ -353,8 +353,8 @@ namespace OpenDental{
 			this.butScan.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butScan.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.butScan.Autosize = true;
-			this.butScan.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butScan.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butScan.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butScan.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butScan.CornerRadius = 4F;
 			this.butScan.Location = new System.Drawing.Point(449, 124);
 			this.butScan.Name = "butScan";
@@ -367,8 +367,8 @@ namespace OpenDental{
 			this.butCheckOut.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCheckOut.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.butCheckOut.Autosize = true;
-			this.butCheckOut.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCheckOut.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCheckOut.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCheckOut.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCheckOut.CornerRadius = 4F;
 			this.butCheckOut.Location = new System.Drawing.Point(119, 84);
 			this.butCheckOut.Name = "butCheckOut";
@@ -381,8 +381,8 @@ namespace OpenDental{
 			this.butCheckIn.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butCheckIn.Anchor = System.Windows.Forms.AnchorStyles.Top;
 			this.butCheckIn.Autosize = true;
-			this.butCheckIn.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butCheckIn.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butCheckIn.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butCheckIn.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butCheckIn.CornerRadius = 4F;
 			this.butCheckIn.Location = new System.Drawing.Point(9, 84);
 			this.butCheckIn.Name = "butCheckIn";

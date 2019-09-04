@@ -58,8 +58,8 @@ namespace OpenDental{
 			// 
 			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.butClose.Location = new System.Drawing.Point(509,266);
@@ -73,8 +73,8 @@ namespace OpenDental{
 			// 
 			this.butReformat.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butReformat.Autosize = true;
-			this.butReformat.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butReformat.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butReformat.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butReformat.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butReformat.CornerRadius = 4F;
 			this.butReformat.Location = new System.Drawing.Point(17,31);
 			this.butReformat.Name = "butReformat";

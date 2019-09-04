@@ -90,8 +90,8 @@ namespace OpenDental{
 			// 
 			this.butNo.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butNo.Autosize = true;
-			this.butNo.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butNo.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butNo.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butNo.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butNo.CornerRadius = 4F;
 			this.butNo.Location = new System.Drawing.Point(406, 169);
 			this.butNo.Name = "butNo";
@@ -104,8 +104,8 @@ namespace OpenDental{
 			// 
 			this.butYes.AdjustImageLocation = new System.Drawing.Point(0, 0);
 			this.butYes.Autosize = true;
-			this.butYes.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butYes.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butYes.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butYes.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butYes.CornerRadius = 4F;
 			this.butYes.Location = new System.Drawing.Point(406, 128);
 			this.butYes.Name = "butYes";

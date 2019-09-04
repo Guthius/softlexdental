@@ -89,8 +89,8 @@ namespace OpenDental{
 			// 
 			this.butRetrieve.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butRetrieve.Autosize = true;
-			this.butRetrieve.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butRetrieve.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butRetrieve.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butRetrieve.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butRetrieve.CornerRadius = 4F;
 			this.butRetrieve.Location = new System.Drawing.Point(222,29);
 			this.butRetrieve.Name = "butRetrieve";
@@ -104,8 +104,8 @@ namespace OpenDental{
 			this.butClose.AdjustImageLocation = new System.Drawing.Point(0,0);
 			this.butClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.butClose.Autosize = true;
-			this.butClose.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-			this.butClose.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+			this.butClose.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+			this.butClose.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
 			this.butClose.CornerRadius = 4F;
 			this.butClose.Location = new System.Drawing.Point(289,152);
 			this.butClose.Name = "butClose";

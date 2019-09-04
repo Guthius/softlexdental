@@ -154,8 +154,8 @@ namespace OpenDental
             // 
             this.butToday.AdjustImageLocation = new System.Drawing.Point(0, 0);
             this.butToday.Autosize = true;
-            this.butToday.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butToday.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butToday.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butToday.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
             this.butToday.CornerRadius = 4F;
             this.butToday.Location = new System.Drawing.Point(238, 32);
             this.butToday.Name = "butToday";
@@ -169,8 +169,8 @@ namespace OpenDental
             // 
             this.butRefresh.AdjustImageLocation = new System.Drawing.Point(0, 0);
             this.butRefresh.Autosize = true;
-            this.butRefresh.BtnShape = OpenDental.UI.enumType.BtnShape.Rectangle;
-            this.butRefresh.BtnStyle = OpenDental.UI.enumType.XPStyle.Silver;
+            this.butRefresh.BtnShape = OpenDental.UI.EnumType.BtnShape.Rectangle;
+            this.butRefresh.BtnStyle = OpenDental.UI.EnumType.XPStyle.Silver;
             this.butRefresh.CornerRadius = 4F;
             this.butRefresh.Location = new System.Drawing.Point(163, 32);
             this.butRefresh.Name = "butRefresh";

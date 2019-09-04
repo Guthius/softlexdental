@@ -1,3 +1,4 @@
+using CodeBase;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,11 +6,10 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using CodeBase;
-using OpenDentBusiness;
 
-namespace OpenDental.UI {
-	public class ComboBoxMulti : UserControl {
+namespace OpenDental.UI
+{
+    public class ComboBoxMulti : UserControl {
 		private ArrayList _listItems;
 		private TextBox textMain;
 		private ComboMultiDelimiter _comboDelimiter;
