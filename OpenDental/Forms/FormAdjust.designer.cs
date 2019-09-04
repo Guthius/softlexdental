@@ -50,7 +50,7 @@
             this.comboProv = new System.Windows.Forms.ComboBox();
             this.comboClinic = new System.Windows.Forms.ComboBox();
             this.labelClinic = new System.Windows.Forms.Label();
-            this.textNote = new OpenDental.ODtextBox();
+            this.textNote = new System.Windows.Forms.TextBox();
             this.procedureGroupBox = new System.Windows.Forms.GroupBox();
             this.labelProcDisabled = new System.Windows.Forms.Label();
             this.butEditAnyway = new System.Windows.Forms.Button();
@@ -293,17 +293,14 @@
             // 
             // textNote
             // 
-            this.textNote.AcceptsTab = true;
+            this.textNote.AcceptsReturn = true;
             this.textNote.BackColor = System.Drawing.SystemColors.Window;
-            this.textNote.DetectLinksEnabled = false;
-            this.textNote.DetectUrls = false;
             this.textNote.Location = new System.Drawing.Point(130, 438);
+            this.textNote.Multiline = true;
             this.textNote.Name = "textNote";
-            this.textNote.QuickPasteType = OpenDentBusiness.QuickPasteType.Adjustment;
-            this.textNote.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
+            this.textNote.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textNote.Size = new System.Drawing.Size(400, 80);
             this.textNote.TabIndex = 19;
-            this.textNote.Text = "";
             // 
             // procedureGroupBox
             // 
@@ -382,7 +379,7 @@
             this.labelEditAnyway.AutoSize = true;
             this.labelEditAnyway.Location = new System.Drawing.Point(9, 200);
             this.labelEditAnyway.Name = "labelEditAnyway";
-            this.labelEditAnyway.Size = new System.Drawing.Size(367, 15);
+            this.labelEditAnyway.Size = new System.Drawing.Size(366, 15);
             this.labelEditAnyway.TabIndex = 12;
             this.labelEditAnyway.Text = "This adjustment is attached to a procedure and should not be edited";
             this.labelEditAnyway.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -411,7 +408,7 @@
             this.labelProcTooth.AutoSize = true;
             this.labelProcTooth.Location = new System.Drawing.Point(80, 121);
             this.labelProcTooth.Name = "labelProcTooth";
-            this.labelProcTooth.Size = new System.Drawing.Size(38, 15);
+            this.labelProcTooth.Size = new System.Drawing.Size(37, 15);
             this.labelProcTooth.TabIndex = 7;
             this.labelProcTooth.Text = "Tooth";
             this.labelProcTooth.TextAlign = System.Drawing.ContentAlignment.TopRight;
@@ -509,7 +506,7 @@
             this.label13.AutoSize = true;
             this.label13.Location = new System.Drawing.Point(445, 169);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(94, 15);
+            this.label13.Size = new System.Drawing.Size(93, 15);
             this.label13.TabIndex = 25;
             this.label13.Text = "This Adjustment";
             this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -678,7 +675,7 @@
         private OpenDental.ValidDouble textAmount;
         private System.Windows.Forms.ListBox listTypePos;
         private System.Windows.Forms.ListBox listTypeNeg;
-        private OpenDental.ODtextBox textNote;
+        private System.Windows.Forms.TextBox textNote;
         private OpenDental.ValidDate textProcDate;
         private System.Windows.Forms.Label label7;
         private OpenDental.ValidDate textAdjDate;

@@ -14,12 +14,14 @@ namespace OpenDental
     ///<summary></summary>
     public partial class FormAdjust : FormBase
     {
+        private Patient patient;
+        private Adjustment adjustment;
+
         ///<summary></summary>
         public bool IsNew;
         private ArrayList PosIndex = new ArrayList();
         private ArrayList NegIndex = new ArrayList();
-        private Patient _patCur;
-        private Adjustment _adjustmentCur;
+
         ///<summary></summary>
         private DateTime dateLimit = DateTime.MinValue;
         ///<summary>When true, the OK click will not let the user leave the window unless the check amount is 0.</summary>
@@ -40,57 +42,63 @@ namespace OpenDental
         private bool _isTsiAdj;
         private bool _isEditAnyway;
 
-        ///<summary></summary>
-        public FormAdjust(Patient patCur, Adjustment adjustmentCur, bool isTsiAdj = false)
+        public FormAdjust(Patient patient, Adjustment adjustment, bool isTsiAdj = false)
         {
             InitializeComponent();
-            _patCur = patCur;
-            _adjustmentCur = adjustmentCur;
+            this.patient = patient;
+            this.adjustment = adjustment;
             _isTsiAdj = isTsiAdj;
         }
 
-        private void FormAdjust_Load(object sender, System.EventArgs e)
+        private void FormAdjust_Load(object sender, EventArgs e)
         {
             if (AvaTax.IsEnabled())
             {
-                //We do not want to allow the user to make edits or delete SalesTax and SalesTaxReturn Adjustments.  Popup if no permission so user knows why disabled.
-                if (AvaTax.IsEnabled() &&
-                    (_adjustmentCur.AdjType == AvaTax.SalesTaxAdjType || _adjustmentCur.AdjType == AvaTax.SalesTaxReturnAdjType) &&
-                    !Security.IsAuthorized(Permissions.SalesTaxAdjEdit))
+                // We do not want to allow the user to make edits or delete SalesTax and SalesTaxReturn Adjustments.
+                // Popup if no permission so user knows why disabled.
+                if (AvaTax.IsEnabled() && (adjustment.AdjType == AvaTax.SalesTaxAdjType || adjustment.AdjType == AvaTax.SalesTaxReturnAdjType) && !Security.IsAuthorized(Permissions.SalesTaxAdjEdit))
                 {
                     DisableForm(textNote, cancelButton);
-                    textNote.ReadOnly = true;//This will allow the user to copy the note if desired.
+
+                    textNote.ReadOnly = true; // This will allow the user to copy the note if desired.
                 }
             }
+
             if (IsNew)
             {
                 if (!Security.IsAuthorized(Permissions.AdjustmentCreate, true))
-                {//Date not checked here.  Message will show later.
-                    if (!Security.IsAuthorized(Permissions.AdjustmentEditZero, true))
-                    {//Let user create an adjustment of zero if they have this perm.
-                        MessageBox.Show(Lans.g("Security", "Not authorized for") + "\r\n" + GroupPermissions.GetDesc(Permissions.AdjustmentCreate));
+                {
+                    if (!Security.IsAuthorized(Permissions.AdjustmentEditZero, true)) //Let user create an adjustment of zero if they have this perm.
+                    {
+                        MessageBox.Show("Not authorized for\r\n" + GroupPermissions.GetDesc(Permissions.AdjustmentCreate));
+
                         DialogResult = DialogResult.Cancel;
+
                         return;
                     }
+                    
                     //Make sure amount is 0 after OK click.
                     _checkZeroAmount = true;
                 }
             }
             else
             {
-                if (!Security.IsAuthorized(Permissions.AdjustmentEdit, _adjustmentCur.AdjDate))
+                if (!Security.IsAuthorized(Permissions.AdjustmentEdit, adjustment.AdjDate))
                 {
                     acceptButton.Enabled = false;
                     deleteButton.Enabled = false;
-                    //User can't edit but has edit zero amount perm.  Allow delete only if date is today.
+
+                    // User can't edit but has edit zero amount perm.  Allow delete only if date is today.
                     if (Security.IsAuthorized(Permissions.AdjustmentEditZero, true)
-                        && _adjustmentCur.AdjAmt == 0
-                        && _adjustmentCur.DateEntry.Date == MiscData.GetNowDateTime().Date)
+                        && adjustment.AdjAmt == 0
+                        && adjustment.DateEntry.Date == MiscData.GetNowDateTime().Date)
                     {
                         deleteButton.Enabled = true;
                     }
                 }
-                List<PaySplit> listSplits = PaySplits.GetForAdjustments(new List<long>() { _adjustmentCur.Id });
+
+
+                List<PaySplit> listSplits = PaySplits.GetForAdjustments(new List<long>() { adjustment.Id });
                 if (listSplits.Count > 0)
                 {
                     butAttachProc.Enabled = false;
@@ -98,48 +106,48 @@ namespace OpenDental
                     labelProcDisabled.Visible = true;//Do we want to somehow give info on which payments are on this adjustment?
                 }
                 //Do not let the user change the adjustment type if the current adjustment is a "discount plan" adjustment type.
-                if (Defs.GetValue(DefinitionCategory.AdjTypes, _adjustmentCur.AdjType) == "dp")
+                if (Defs.GetValue(DefinitionCategory.AdjTypes, adjustment.AdjType) == "dp")
                 {
-                    labelAdditions.Text = Lan.g(this, "Discount Plan") + ": " + Defs.GetName(DefinitionCategory.AdjTypes, _adjustmentCur.AdjType);
+                    labelAdditions.Text = Lan.g(this, "Discount Plan") + ": " + Defs.GetName(DefinitionCategory.AdjTypes, adjustment.AdjType);
                     labelSubtractions.Visible = false;
                     listTypePos.Visible = false;
                     listTypeNeg.Visible = false;
                 }
             }
-            textDateEntry.Text = _adjustmentCur.DateEntry.ToShortDateString();
-            textAdjDate.Text = _adjustmentCur.AdjDate.ToShortDateString();
-            textProcDate.Text = _adjustmentCur.ProcDate.ToShortDateString();
-            if (Defs.GetValue(DefinitionCategory.AdjTypes, _adjustmentCur.AdjType) == "+")
+            textDateEntry.Text = adjustment.DateEntry.ToShortDateString();
+            textAdjDate.Text = adjustment.AdjDate.ToShortDateString();
+            textProcDate.Text = adjustment.ProcDate.ToShortDateString();
+            if (Defs.GetValue(DefinitionCategory.AdjTypes, adjustment.AdjType) == "+")
             {//pos
-                textAmount.Text = _adjustmentCur.AdjAmt.ToString("F");
+                textAmount.Text = adjustment.AdjAmt.ToString("F");
             }
-            else if (Defs.GetValue(DefinitionCategory.AdjTypes, _adjustmentCur.AdjType) == "-")
+            else if (Defs.GetValue(DefinitionCategory.AdjTypes, adjustment.AdjType) == "-")
             {//neg
-                textAmount.Text = (-_adjustmentCur.AdjAmt).ToString("F");//shows without the neg sign
+                textAmount.Text = (-adjustment.AdjAmt).ToString("F");//shows without the neg sign
             }
-            else if (Defs.GetValue(DefinitionCategory.AdjTypes, _adjustmentCur.AdjType) == "dp")
+            else if (Defs.GetValue(DefinitionCategory.AdjTypes, adjustment.AdjType) == "dp")
             {//Discount Plan (neg)
-                textAmount.Text = (-_adjustmentCur.AdjAmt).ToString("F");//shows without the neg sign
+                textAmount.Text = (-adjustment.AdjAmt).ToString("F");//shows without the neg sign
             }
             if (!Preferences.HasClinicsEnabled)
             {
                 labelClinic.Visible = false;
                 comboClinic.Visible = false;
                 _listClinics = new List<Clinic>();
-                _selectedClinicNum = IsNew ? 0 : _adjustmentCur.ClinicNum;//Only set clinicNum=0 when IsNew. Otherwise, set it equal to the _adjustmentCur.ClinicNum
+                _selectedClinicNum = IsNew ? 0 : adjustment.ClinicNum;//Only set clinicNum=0 when IsNew. Otherwise, set it equal to the _adjustmentCur.ClinicNum
             }
             else
             {
                 _listClinics = new List<Clinic>() { new Clinic() { Abbr = Lan.g(this, "None") } }; //Seed with "None"
                 Clinics.GetForUserod(Security.CurUser).ForEach(x => _listClinics.Add(x));//do not re-organize from cache. They could either be alphabetizeded or sorted by item order.
                 _listClinics.ForEach(x => comboClinic.Items.Add(x.Abbr));
-                _selectedClinicNum = _adjustmentCur.ClinicNum;
+                _selectedClinicNum = adjustment.ClinicNum;
                 comboClinic.IndexSelectOrSetText(_listClinics.FindIndex(x => x.ClinicNum == _selectedClinicNum), () => { return Clinics.GetAbbr(_selectedClinicNum); });
             }
-            _selectedProvNum = _adjustmentCur.ProvNum;
+            _selectedProvNum = adjustment.ProvNum;
             comboProv.SelectedIndex = -1;
             FillComboProvHyg();
-            if (_adjustmentCur.ProcNum != 0 && Preference.GetInt(PreferenceName.RigorousAdjustments) == (int)RigorousAdjustments.EnforceFully)
+            if (adjustment.ProcNum != 0 && Preference.GetInt(PreferenceName.RigorousAdjustments) == (int)RigorousAdjustments.EnforceFully)
             {
                 comboProv.Enabled = false;
                 butPickProv.Enabled = false;
@@ -157,15 +165,15 @@ namespace OpenDental
             //Positive adjustment types
             _listAdjPosCats = adjCat.FindAll(x => x.Value == "+");
             _listAdjPosCats.ForEach(x => listTypePos.Items.Add(x.Description));
-            listTypePos.SelectedIndex = _listAdjPosCats.FindIndex(x => x.Id == _adjustmentCur.AdjType);//can be -1
+            listTypePos.SelectedIndex = _listAdjPosCats.FindIndex(x => x.Id == adjustment.AdjType);//can be -1
                                                                                                            //Negative adjustment types
             _listAdjNegCats = adjCat.FindAll(x => x.Value == "-");
             _listAdjNegCats.ForEach(x => listTypeNeg.Items.Add(x.Description));
-            listTypeNeg.SelectedIndex = _listAdjNegCats.FindIndex(x => x.Id == _adjustmentCur.AdjType);//can be -1
+            listTypeNeg.SelectedIndex = _listAdjNegCats.FindIndex(x => x.Id == adjustment.AdjType);//can be -1
             listTypeNeg.SelectedIndexChanged += listTypeNeg_SelectedIndexChanged;
             listTypePos.SelectedIndexChanged += listTypePos_SelectedIndexChanged;
             FillProcedure();
-            textNote.Text = _adjustmentCur.AdjNote;
+            textNote.Text = adjustment.AdjNote;
         }
 
         private void listTypePos_SelectedIndexChanged(object sender, System.EventArgs e)
@@ -236,7 +244,7 @@ namespace OpenDental
 
         private void FillProcedure()
         {
-            if (_adjustmentCur.ProcNum == 0)
+            if (adjustment.ProcNum == 0)
             {
                 textProcDate2.Text = "";
                 textProcProv.Text = "";
@@ -253,10 +261,10 @@ namespace OpenDental
                 _adjRemAmt = 0;
                 return;
             }
-            Procedure procCur = Procedures.GetOneProc(_adjustmentCur.ProcNum, false);
+            Procedure procCur = Procedures.GetOneProc(adjustment.ProcNum, false);
             List<ClaimProc> listClaimProcs = ClaimProcs.Refresh(procCur.PatNum);
             List<Adjustment> listAdjustments = Adjustments.Refresh(procCur.PatNum)
-                .Where(x => x.ProcNum == procCur.ProcNum && x.Id != _adjustmentCur.Id).ToList();
+                .Where(x => x.ProcNum == procCur.ProcNum && x.Id != adjustment.Id).ToList();
             textProcDate.Text = procCur.ProcDate.ToShortDateString();
             textProcDate2.Text = procCur.ProcDate.ToShortDateString();
             textProcProv.Text = Providers.GetAbbr(procCur.ProvNum);
@@ -283,7 +291,7 @@ namespace OpenDental
                 {//pos
                     procAdjCur = PIn.Double(textAmount.Text);
                 }
-                else if (listTypeNeg.SelectedIndex > -1 || Defs.GetValue(DefinitionCategory.AdjTypes, _adjustmentCur.AdjType) == "dp")
+                else if (listTypeNeg.SelectedIndex > -1 || Defs.GetValue(DefinitionCategory.AdjTypes, adjustment.AdjType) == "dp")
                 {//neg or discount plan
                     procAdjCur = -PIn.Double(textAmount.Text);
                 }
@@ -296,7 +304,7 @@ namespace OpenDental
 
         private void butAttachProc_Click(object sender, System.EventArgs e)
         {
-            FormProcSelect FormPS = new FormProcSelect(_adjustmentCur.PatNum, false);
+            FormProcSelect FormPS = new FormProcSelect(adjustment.PatNum, false);
             FormPS.ShowDialog();
             if (FormPS.DialogResult != DialogResult.OK)
             {
@@ -320,7 +328,7 @@ namespace OpenDental
                     comboClinic.Enabled = false;
                 }
             }
-            _adjustmentCur.ProcNum = FormPS.ListSelectedProcs[0].ProcNum;
+            adjustment.ProcNum = FormPS.ListSelectedProcs[0].ProcNum;
             FillProcedure();
             textProcDate.Text = FormPS.ListSelectedProcs[0].ProcDate.ToShortDateString();
         }
@@ -332,7 +340,7 @@ namespace OpenDental
             comboClinic.Enabled = true;
             labelEditAnyway.Visible = false;
             butEditAnyway.Visible = false;
-            _adjustmentCur.ProcNum = 0;
+            adjustment.ProcNum = 0;
             FillProcedure();
         }
 
@@ -348,7 +356,7 @@ namespace OpenDental
 
         private void butOK_Click(object sender, System.EventArgs e)
         {
-            bool isDiscountPlanAdj = (Defs.GetValue(DefinitionCategory.AdjTypes, _adjustmentCur.AdjType) == "dp");
+            bool isDiscountPlanAdj = (Defs.GetValue(DefinitionCategory.AdjTypes, adjustment.AdjType) == "dp");
             if (textAdjDate.errorProvider1.GetError(textAdjDate) != ""
                 || textProcDate.errorProvider1.GetError(textProcDate) != ""
                 || textAmount.errorProvider1.GetError(textAmount) != "")
@@ -377,7 +385,7 @@ namespace OpenDental
             {
                 return;
             }
-            if (Preference.GetInt(PreferenceName.RigorousAdjustments) == 0 && _adjustmentCur.ProcNum == 0)
+            if (Preference.GetInt(PreferenceName.RigorousAdjustments) == 0 && adjustment.ProcNum == 0)
             {
                 MsgBox.Show(this, "You must attach a procedure to the adjustment.");
                 return;
@@ -411,9 +419,9 @@ namespace OpenDental
                 {
                     return;
                 }
-                if (_adjustmentCur.ProvNum != _selectedProvNum)
+                if (adjustment.ProvNum != _selectedProvNum)
                 {
-                    listPaySplitsForAdjust = PaySplits.GetForAdjustments(new List<long>() { _adjustmentCur.Id });
+                    listPaySplitsForAdjust = PaySplits.GetForAdjustments(new List<long>() { adjustment.Id });
                     foreach (PaySplit paySplit in listPaySplitsForAdjust)
                     {
                         if (!Security.IsAuthorized(Permissions.PaymentEdit, Payments.GetPayment(paySplit.PayNum).PayDate))
@@ -435,46 +443,46 @@ namespace OpenDental
                 }
             }
             //DateEntry not allowed to change
-            DateTime datePreviousChange = _adjustmentCur.SecDateTEdit;
-            _adjustmentCur.AdjDate = PIn.Date(textAdjDate.Text);
-            _adjustmentCur.ProcDate = PIn.Date(textProcDate.Text);
-            _adjustmentCur.ProvNum = _selectedProvNum;
-            _adjustmentCur.ClinicNum = _selectedClinicNum;
+            DateTime datePreviousChange = adjustment.SecDateTEdit;
+            adjustment.AdjDate = PIn.Date(textAdjDate.Text);
+            adjustment.ProcDate = PIn.Date(textProcDate.Text);
+            adjustment.ProvNum = _selectedProvNum;
+            adjustment.ClinicNum = _selectedClinicNum;
             if (listTypePos.SelectedIndex != -1)
             {
-                _adjustmentCur.AdjType = _listAdjPosCats[listTypePos.SelectedIndex].Id;
-                _adjustmentCur.AdjAmt = PIn.Double(textAmount.Text);
+                adjustment.AdjType = _listAdjPosCats[listTypePos.SelectedIndex].Id;
+                adjustment.AdjAmt = PIn.Double(textAmount.Text);
             }
             if (listTypeNeg.SelectedIndex != -1)
             {
-                _adjustmentCur.AdjType = _listAdjNegCats[listTypeNeg.SelectedIndex].Id;
-                _adjustmentCur.AdjAmt = -PIn.Double(textAmount.Text);
+                adjustment.AdjType = _listAdjNegCats[listTypeNeg.SelectedIndex].Id;
+                adjustment.AdjAmt = -PIn.Double(textAmount.Text);
             }
             if (isDiscountPlanAdj)
             {
                 //AdjustmentCur.AdjType is already set to a "discount plan" adj type.
-                _adjustmentCur.AdjAmt = -PIn.Double(textAmount.Text);
+                adjustment.AdjAmt = -PIn.Double(textAmount.Text);
             }
-            if (_checkZeroAmount && _adjustmentCur.AdjAmt != 0)
+            if (_checkZeroAmount && adjustment.AdjAmt != 0)
             {
                 MsgBox.Show(this, "Amount has to be 0.00 due to security permission.");
                 return;
             }
-            _adjustmentCur.AdjNote = textNote.Text;
+            adjustment.AdjNote = textNote.Text;
             try
             {
                 if (IsNew)
                 {
-                    Adjustments.Insert(_adjustmentCur);
-                    SecurityLogs.MakeLogEntry(Permissions.AdjustmentCreate, _adjustmentCur.PatNum,
-                        _patCur.GetNameLF() + ", "
-                        + _adjustmentCur.AdjAmt.ToString("c"));
-                    TsiTransLogs.CheckAndInsertLogsIfAdjTypeExcluded(_adjustmentCur, _patCur.Guarantor, _patCur.ClinicNum, _isTsiAdj);
+                    Adjustments.Insert(adjustment);
+                    SecurityLogs.MakeLogEntry(Permissions.AdjustmentCreate, adjustment.PatNum,
+                        patient.GetNameLF() + ", "
+                        + adjustment.AdjAmt.ToString("c"));
+                    TsiTransLogs.CheckAndInsertLogsIfAdjTypeExcluded(adjustment, patient.Guarantor, patient.ClinicNum, _isTsiAdj);
                 }
                 else
                 {
-                    Adjustments.Update(_adjustmentCur);
-                    SecurityLogs.MakeLogEntry(Permissions.AdjustmentEdit, _adjustmentCur.PatNum, _patCur.GetNameLF() + ", " + _adjustmentCur.AdjAmt.ToString("c"), 0
+                    Adjustments.Update(adjustment);
+                    SecurityLogs.MakeLogEntry(Permissions.AdjustmentEdit, adjustment.PatNum, patient.GetNameLF() + ", " + adjustment.AdjAmt.ToString("c"), 0
                         , datePreviousChange);
                 }
             }
@@ -485,7 +493,7 @@ namespace OpenDental
             }
             if (changeAdjSplit)
             {
-                PaySplits.UpdateProvForAdjust(_adjustmentCur, listPaySplitsForAdjust);
+                PaySplits.UpdateProvForAdjust(adjustment, listPaySplitsForAdjust);
             }
             DialogResult = DialogResult.OK;
         }
@@ -500,12 +508,12 @@ namespace OpenDental
             }
 
             SecurityLogs.MakeLogEntry(
-                Permissions.AdjustmentEdit, _adjustmentCur.PatNum, 
-                "Delete for patient: " + _patCur.GetNameLF() + ", " + _adjustmentCur.AdjAmt.ToString("c"), 
+                Permissions.AdjustmentEdit, adjustment.PatNum, 
+                "Delete for patient: " + patient.GetNameLF() + ", " + adjustment.AdjAmt.ToString("c"), 
                 0, 
-                _adjustmentCur.SecDateTEdit);
+                adjustment.SecDateTEdit);
 
-            Adjustments.Delete(_adjustmentCur);
+            Adjustments.Delete(adjustment);
 
             DialogResult = DialogResult.OK;
         }
