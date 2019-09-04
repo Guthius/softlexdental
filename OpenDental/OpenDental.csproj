@@ -119,15 +119,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\AxInterop.AcroPDFLib.dll</HintPath>
     </Reference>
-    <Reference Include="BouncyCastle.Crypto, Version=1.8.3.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
-      <HintPath>..\packages\BouncyCastle.1.8.3.1\lib\BouncyCastle.Crypto.dll</HintPath>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.5\lib\BouncyCastle.Crypto.dll</HintPath>
     </Reference>
     <Reference Include="DpsPos, Version=1.0.6191.28914, Culture=neutral, PublicKeyToken=fed6c2461985275f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Required dlls\DpsPos.dll</HintPath>
     </Reference>
-    <Reference Include="Google.Protobuf, Version=3.6.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
-      <HintPath>..\packages\Google.Protobuf.3.6.1\lib\net45\Google.Protobuf.dll</HintPath>
+    <Reference Include="Google.Protobuf, Version=3.9.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Protobuf.3.9.1\lib\net45\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="Health.Direct.Common">
       <HintPath>..\Required dlls\Health.Direct.Common.dll</HintPath>
@@ -7681,17 +7681,6 @@
     <Compile Include="SheetFramework\SheetFiller.cs" />
     <Compile Include="SheetFramework\SheetPrinting.cs" />
     <Compile Include="SheetFramework\SheetUtil.cs" />
-    <Compile Include="SmartCards\Belgium\BelgianIdentityCard.cs" />
-    <Compile Include="SmartCards\Belgium\CertifCheck.cs" />
-    <Compile Include="SmartCards\Belgium\CRLPolicyOptions.cs" />
-    <Compile Include="SmartCards\Belgium\ErrorCodeOptions.cs" />
-    <Compile Include="SmartCards\Belgium\IDData.cs" />
-    <Compile Include="SmartCards\Belgium\OCSPPolicyOptions.cs" />
-    <Compile Include="SmartCards\Belgium\Status.cs" />
-    <Compile Include="SmartCards\ISmartCardManager.cs" />
-    <Compile Include="SmartCards\SmartCardState.cs" />
-    <Compile Include="SmartCards\SmartCardStateChangedEventArgs.cs" />
-    <Compile Include="SmartCards\SmartCardStateChangedEventHandler.cs" />
     <Compile Include="Tables Old Grids\ContrPanelTable.cs">
       <SubType>UserControl</SubType>
     </Compile>
