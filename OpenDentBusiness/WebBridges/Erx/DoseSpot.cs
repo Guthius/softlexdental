@@ -796,100 +796,100 @@ namespace OpenDentBusiness
         ///<summary></summary>
         public static void SyncClinicErxsWithHQ()
         {
-            //No need to check RemotingRole; no call to db.
-            MakeClinicErxsForDoseSpot();
-            List<ClinicErx> listClinicErxsToSend = ClinicErxs.GetWhere(x => x.EnabledStatus != ErxStatus.Enabled);
-            //Currently we do not have any intention of disabling clinics from HQ since there is no cost associated to adding a clinic.
-            //Because of this, don't make extra web calls to check if HQ has tried to disable any clinics.
-            XmlWriterSettings settings = new XmlWriterSettings();
-            settings.Indent = true;
-            settings.IndentChars = ("    ");
-            StringBuilder strbuild = new StringBuilder();
-            using (XmlWriter writer = XmlWriter.Create(strbuild, settings))
-            {
-                writer.WriteStartElement("ErxClinicAccessRequest");
-                writer.WriteStartElement("RegistrationKey");
-                writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
-                writer.WriteEndElement();//End reg key
-                writer.WriteStartElement("RegKeyDisabledOverride");
-                //Allow disabled regkeys to use eRx.  This functionality matches how we handle a disabled regkey for providererx
-                //providererx in CustUpdates only cares that the regkey is valid and associated to a patnum in ODHQ
-                writer.WriteString("true");
-                writer.WriteEndElement();//End reg key disabled override
-                foreach (ClinicErx clinicErx in listClinicErxsToSend)
-                {
-                    writer.WriteStartElement("Clinic");
-                    writer.WriteAttributeString("ClinicDesc", clinicErx.ClinicDesc);
-                    writer.WriteAttributeString("EnabledStatus", ((int)clinicErx.EnabledStatus).ToString());
-                    writer.WriteAttributeString("ClinicId", clinicErx.ClinicId);
-                    writer.WriteAttributeString("ClinicKey", clinicErx.ClinicKey);
-                    writer.WriteEndElement();//End Clinic
-                }
-                writer.WriteEndElement();//End ErxAccessRequest
-            }
-
-			OpenDentBusiness.customerUpdates.Service1 updateService=new OpenDentBusiness.customerUpdates.Service1();
-			updateService.Url=Preference.GetString(PreferenceName.UpdateServerAddress);
-
-            try
-            {
-                string result = updateService.GetClinicErxAccess(strbuild.ToString());
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(result);
-                XmlNodeList listNodes = doc.SelectNodes("//Clinic");
-                bool isCacheRefreshNeeded = false;
-                for (int i = 0; i < listNodes.Count; i++)
-                {//Loop through clinics.
-                    XmlNode nodeClinic = listNodes[i];
-                    string clinicDesc = "";
-                    string clinicId = "";
-                    string clinicKey = "";
-                    ErxStatus clinicEnabledStatus = ErxStatus.Disabled;
-                    for (int j = 0; j < nodeClinic.Attributes.Count; j++)
-                    {//Loop through the attributes for the current provider.
-                        XmlAttribute attribute = nodeClinic.Attributes[j];
-                        if (attribute.Name == "ClinicDesc")
-                        {
-                            clinicDesc = attribute.Value;
-                        }
-                        else if (attribute.Name == "EnabledStatus")
-                        {
-                            clinicEnabledStatus = PIn.Enum<ErxStatus>(PIn.Int(attribute.Value));
-                        }
-                        else if (attribute.Name == "ClinicId")
-                        {
-                            clinicId = attribute.Value;
-                        }
-                        else if (attribute.Name == "ClinicKey")
-                        {
-                            clinicKey = attribute.Value;
-                        }
-                    }
-                    ClinicErx oldClinicErx = ClinicErxs.GetByClinicIdAndKey(clinicId, clinicKey);
-                    if (oldClinicErx == null)
-                    {
-                        continue;
-                    }
-                    ClinicErx clinicErxFromHqCur = oldClinicErx.Copy();
-                    clinicErxFromHqCur.EnabledStatus = clinicEnabledStatus;
-                    clinicErxFromHqCur.ClinicId = clinicId;
-                    clinicErxFromHqCur.ClinicKey = clinicKey;
-                    //Dont need to set the ErxType here because it's not something that can be changed by HQ.
-                    if (ClinicErxs.Update(clinicErxFromHqCur, oldClinicErx))
-                    {
-                        isCacheRefreshNeeded = true;
-                    }
-                }
-                if (isCacheRefreshNeeded)
-                {
-                    Cache.Refresh(InvalidType.ClinicErxs);
-                }
-            }
-            catch
-            {
-
-                //Failed to contact server and/or update clinicerx row at ODHQ. We will simply use what we already know in the local database.
-            }
+            ////No need to check RemotingRole; no call to db.
+            //MakeClinicErxsForDoseSpot();
+            //List<ClinicErx> listClinicErxsToSend = ClinicErxs.GetWhere(x => x.EnabledStatus != ErxStatus.Enabled);
+            ////Currently we do not have any intention of disabling clinics from HQ since there is no cost associated to adding a clinic.
+            ////Because of this, don't make extra web calls to check if HQ has tried to disable any clinics.
+            //XmlWriterSettings settings = new XmlWriterSettings();
+            //settings.Indent = true;
+            //settings.IndentChars = ("    ");
+            //StringBuilder strbuild = new StringBuilder();
+            //using (XmlWriter writer = XmlWriter.Create(strbuild, settings))
+            //{
+            //    writer.WriteStartElement("ErxClinicAccessRequest");
+            //    writer.WriteStartElement("RegistrationKey");
+            //    writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
+            //    writer.WriteEndElement();//End reg key
+            //    writer.WriteStartElement("RegKeyDisabledOverride");
+            //    //Allow disabled regkeys to use eRx.  This functionality matches how we handle a disabled regkey for providererx
+            //    //providererx in CustUpdates only cares that the regkey is valid and associated to a patnum in ODHQ
+            //    writer.WriteString("true");
+            //    writer.WriteEndElement();//End reg key disabled override
+            //    foreach (ClinicErx clinicErx in listClinicErxsToSend)
+            //    {
+            //        writer.WriteStartElement("Clinic");
+            //        writer.WriteAttributeString("ClinicDesc", clinicErx.ClinicDesc);
+            //        writer.WriteAttributeString("EnabledStatus", ((int)clinicErx.EnabledStatus).ToString());
+            //        writer.WriteAttributeString("ClinicId", clinicErx.ClinicId);
+            //        writer.WriteAttributeString("ClinicKey", clinicErx.ClinicKey);
+            //        writer.WriteEndElement();//End Clinic
+            //    }
+            //    writer.WriteEndElement();//End ErxAccessRequest
+            //}
+            //
+			//OpenDentBusiness.customerUpdates.Service1 updateService=new OpenDentBusiness.customerUpdates.Service1();
+			//updateService.Url=Preference.GetString(PreferenceName.UpdateServerAddress);
+            //
+            //try
+            //{
+            //    string result = updateService.GetClinicErxAccess(strbuild.ToString());
+            //    XmlDocument doc = new XmlDocument();
+            //    doc.LoadXml(result);
+            //    XmlNodeList listNodes = doc.SelectNodes("//Clinic");
+            //    bool isCacheRefreshNeeded = false;
+            //    for (int i = 0; i < listNodes.Count; i++)
+            //    {//Loop through clinics.
+            //        XmlNode nodeClinic = listNodes[i];
+            //        string clinicDesc = "";
+            //        string clinicId = "";
+            //        string clinicKey = "";
+            //        ErxStatus clinicEnabledStatus = ErxStatus.Disabled;
+            //        for (int j = 0; j < nodeClinic.Attributes.Count; j++)
+            //        {//Loop through the attributes for the current provider.
+            //            XmlAttribute attribute = nodeClinic.Attributes[j];
+            //            if (attribute.Name == "ClinicDesc")
+            //            {
+            //                clinicDesc = attribute.Value;
+            //            }
+            //            else if (attribute.Name == "EnabledStatus")
+            //            {
+            //                clinicEnabledStatus = PIn.Enum<ErxStatus>(PIn.Int(attribute.Value));
+            //            }
+            //            else if (attribute.Name == "ClinicId")
+            //            {
+            //                clinicId = attribute.Value;
+            //            }
+            //            else if (attribute.Name == "ClinicKey")
+            //            {
+            //                clinicKey = attribute.Value;
+            //            }
+            //        }
+            //        ClinicErx oldClinicErx = ClinicErxs.GetByClinicIdAndKey(clinicId, clinicKey);
+            //        if (oldClinicErx == null)
+            //        {
+            //            continue;
+            //        }
+            //        ClinicErx clinicErxFromHqCur = oldClinicErx.Copy();
+            //        clinicErxFromHqCur.EnabledStatus = clinicEnabledStatus;
+            //        clinicErxFromHqCur.ClinicId = clinicId;
+            //        clinicErxFromHqCur.ClinicKey = clinicKey;
+            //        //Dont need to set the ErxType here because it's not something that can be changed by HQ.
+            //        if (ClinicErxs.Update(clinicErxFromHqCur, oldClinicErx))
+            //        {
+            //            isCacheRefreshNeeded = true;
+            //        }
+            //    }
+            //    if (isCacheRefreshNeeded)
+            //    {
+            //        Cache.Refresh(InvalidType.ClinicErxs);
+            //    }
+            //}
+            //catch
+            //{
+            //
+            //    //Failed to contact server and/or update clinicerx row at ODHQ. We will simply use what we already know in the local database.
+            //}
         }
 
         public static UserOdPref GetDoseSpotUserIdFromPref(long userNum, long clinicNum)

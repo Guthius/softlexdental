@@ -1338,11 +1338,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="Web References\customerUpdates\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
     <Compile Include="Web References\Dentalxchange2016\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1740,11 +1735,6 @@
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <None Include="Web References\customerUpdates\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\customerUpdates\Service1.wsdl" />
     <None Include="Web References\Dentalxchange2016\DwsService.wsdl" />
     <None Include="Web References\Dentalxchange2016\DwsService.xsd">
       <SubType>Designer</SubType>
@@ -1801,17 +1791,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <WebReferenceUrl Include="http://50.201.161.44:1942/WebServiceCustomerUpdates/Service1.asmx">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\customerUpdates\</RelPath>
-      <UpdateFromURL>http://50.201.161.44:1942/WebServiceCustomerUpdates/Service1.asmx</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>OpenDentBusiness_customerupdates_Service1</CachedSettingsPropName>
-    </WebReferenceUrl>
     <WebReferenceUrl Include="https://its.changehealthcare.com/ITS/ITSWS.asmx%3fwsdl">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\EmdeonITS\</RelPath>
@@ -1897,9 +1876,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Web References\customerUpdates\Service1.disco" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Right.gif" />
