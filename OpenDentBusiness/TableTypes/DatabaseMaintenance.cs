@@ -1,241 +1,106 @@
-﻿using System;
+﻿/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
 using System.Reflection;
-using System.Data;
 
-namespace OpenDentBusiness {
-	///<summary></summary>
-	[Serializable()]
-	public class DatabaseMaintenance:ODTable {
-		///<summary>Primary key.</summary>
-		[ODTableColumn(PrimaryKey=true)]
-		public long DatabaseMaintenanceNum;
-		///<summary>The name of the databasemaintenance name.</summary>
-		public string MethodName;
-		///<summary>Set to true to indicate that the method is hidden.</summary>
-		public bool IsHidden;
-		///<summary>Set to true to indicate that the method is old.</summary>
-		public bool IsOld;
-		///<summary>Updates the date and time they run the method.</summary>
-		[ODTableColumn(SpecialType=CrudSpecialColType.DateT)]
-		public DateTime DateLastRun;
-
-		///<summary></summary>
-		public DatabaseMaintenance Copy() {
-			return (DatabaseMaintenance)this.MemberwiseClone();
-		}
-	}
-
-	///<summary></summary>
-	public enum DbmMode {
-		///<summary></summary>
-		Check = 0,
-		///<summary></summary>
-		Breakdown = 1,
-		///<summary></summary>
-		Fix = 2
-	}
-
-
-
-
-    public interface IDatabaseMaintenanceCheck
+namespace OpenDentBusiness
+{
+    [Serializable()]
+    public class DatabaseMaintenance : ODTable
     {
-        /// <summary>
-        /// Gets the name of the check.
-        /// </summary>
-        string Name { get;  }
+        [ODTableColumn(PrimaryKey = true)]
+        public long DatabaseMaintenanceNum;
 
         /// <summary>
-        /// Gets a breakdown of the detected issues.
+        /// The name of the databasemaintenance name.
         /// </summary>
-        string Breakdown { get; }
+        public string MethodName;
 
         /// <summary>
-        /// Execute the database check.
+        /// Set to true to indicate that the method is hidden.
         /// </summary>
-        /// <returns>True if issues were detected; otherwise, false.</returns>
-        bool Check();
+        public bool IsHidden;
 
         /// <summary>
-        /// Attempt to resolve the detected issues.
+        /// Set to true to indicate that the method is old.
         /// </summary>
-        /// <returns>True if the issues were resolved; otherwise, false.</returns>
-        bool Resolve(out string result);
+        public bool IsOld;
+
+        /// <summary>
+        /// Updates the date and time they run the method.
+        /// </summary>
+        [ODTableColumn(SpecialType = CrudSpecialColType.DateT)]
+        public DateTime DateLastRun;
     }
 
-    public class DatabaseMaintenanceCheck : IDatabaseMaintenanceCheck
+    public enum DatabaseMaintenanceMode
+    {
+        Check = 0,
+        Breakdown = 1,
+        Fix = 2
+    }
+
+    /// <summary>
+    /// An attribute that should get applied to any method that needs to show up in the main grid
+    /// of FormDatabaseMaintenance. Also, an attribute that identifies methods that require a 
+    /// userNum parameter for sending the current user through the middle tier to set the 
+    /// SecUserNumEntry field.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    public class DatabaseMaintenanceAttribute : Attribute
     {
         /// <summary>
-        /// Gets the name of the check.
+        /// Set to true if this dbm method needs to be able to show the user a list or break down of items that need manual attention.
         /// </summary>
-        public string Name { get; }
+        public bool HasBreakDown { get; set; }
 
         /// <summary>
-        /// Gets a breakdown of the detected issues.
+        /// Set to true if this dbm method needs to be able to run for a specific patient.
         /// </summary>
-        public string Breakdown => OnBreakdown() ?? "";
+        public bool HasPatientId { get; set; }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DatabaseMaintenanceCheck"/> class.
+        /// Set to true if this DBM is only for Canadian customers.
         /// </summary>
-        public DatabaseMaintenanceCheck() => Name = GetType().Name;
+        public bool IsCanada { get; set; }
 
-        /// <summary>
-        /// Execute the database check.
-        /// </summary>
-        /// <returns>True if issues were detected; otherwise, false.</returns>
-        public bool Check() => OnCheck();
-
-        /// <summary>
-        /// Attempt to resolve the detected issues.
-        /// </summary>
-        /// <returns>True if the issues were resolved; otherwise, false.</returns>
-        public bool Resolve(out string result) => OnResolve(out result);
-
-        /// <summary>
-        /// Perform the check.
-        /// </summary>
-        /// <returns>True if issues were detected; otherwise, false.</returns>
-        protected virtual bool OnCheck() => false;
-
-        /// <summary>
-        /// Resolve detected issues.
-        /// </summary>
-        /// <returns>True if the issues were resolved; otherwise, false.</returns>
-        protected virtual bool OnResolve(out string result)
+        public DatabaseMaintenanceAttribute()
         {
-            result = string.Empty;
-            return true;
+            HasBreakDown = false;
+            HasPatientId = false;
+            IsCanada = false;
         }
-        
-        /// <summary>
-        /// Try to get a breakdown of the issues.
-        /// </summary>
-        /// <returns>A breakdown of the issues.</returns>
-        protected virtual string OnBreakdown() => string.Empty;
     }
 
+    /// <summary>
+    /// Sorting class used to sort a MethodInfo list by Name.
+    /// </summary>
+    public class MethodInfoComparer : IComparer<MethodInfo>
+    {
 
-    //class ClaimProcAttachedToPatientPaymentPlans : DatabaseMaintenanceCheck
-    //{
-    //    protected override bool OnCheck()
-    //    {
-    //        DataTable table = GetClaimProcsAttachedToPatientPaymentPlans();
-    //
-    //        return table.Rows.Count > 0;
-    //    }
-    //
-    //    protected override bool OnResolve(out string result)
-    //    {
-    //        DataTable table = GetClaimProcsAttachedToPatientPaymentPlans();
-    //
-    //        result = "";
-    //        if (table.Rows.Count > 0)
-    //        {
-    //            result = "Manual fix needed. Double click to see a break down.";
-    //
-    //            return false;
-    //        }
-    //
-    //        return true;
-    //    }
-    //
-    //    protected override string OnBreakdown()
-    //    {
-    //        DataTable table = GetClaimProcsAttachedToPatientPaymentPlans();
-    //
-    //        var log = "";
-    //        if (table.Rows.Count > 0)
-    //        {
-    //            log = "ClaimProcs attached to insurance payment plans, including:\r\n";
-    //            for (int i = 0; i < table.Rows.Count; i++)
-    //            {
-    //                log += 
-    //                    "\r\n  Patient #" + table.Rows[i]["PatNum"].ToString() + " " +
-    //                    "has a payment amount for" + " " + PIn.Double(table.Rows[i]["InsPayAmt"].ToString()).ToString("c") + " " +
-    //                    "on date" + " " + PIn.Date(table.Rows[i]["DateCP"].ToString()).ToShortDateString() + " " +
-    //                    "attached to patient payment plan #" + table.Rows[i]["PayPlanNum"];
-    //            }
-    //
-    //            log += "\r\nRun 'Pay Plan Payments' in the Tools tab to fix these payments.";
-    //        }
-    //
-    //        return log;
-    //    }
-    //}
+        public MethodInfoComparer()
+        {
+        }
 
-
-
-
-
-
-
-    ///<summary>An attribute that should get applied to any method that needs to show up in the main grid of FormDatabaseMaintenance.
-    ///Also, an attribute that identifies methods that require a userNum parameter for sending the current user through the middle tier to set the
-    ///SecUserNumEntry field.</summary>
-    [System.AttributeUsage(System.AttributeTargets.Method,AllowMultiple = false)]
-	public class DbmMethodAttr:System.Attribute {
-		private bool _hasBreakDown;
-		private bool _hasPatNum;
-		private bool _isCanada;
-
-		///<summary>Set to true if this dbm method needs to be able to show the user a list or break down of items that need manual attention.</summary>
-		public bool HasBreakDown {
-			get {
-				return _hasBreakDown;
-			}
-			set {
-				_hasBreakDown=value;
-			}
-		}
-
-		/////<summary>Not needed anymore. The usernum can be set from Security.CurUser.UserNum on both Middle Tier client and server (and direct connection).</summary>
-		//public bool HasUserNum {
-		//	get { return _hasUserNum; }
-		//	set { _hasUserNum=value; }
-		//}
-
-		///<summary>Set to true if this dbm method needs to be able to run for a specific patient.</summary>
-		public bool HasPatNum {
-			get {
-				return _hasPatNum;
-			}
-			set {
-				_hasPatNum=value;
-			}
-		}
-
-		///<summary>Set to true if this DBM is only for Canadian customers.</summary>
-		public bool IsCanada {
-			get {
-				return _isCanada;
-			}
-			set {
-				_isCanada=value;
-			}
-		}
-
-		public DbmMethodAttr() {
-			this._hasBreakDown=false;
-			this._hasPatNum=false;
-			this._isCanada=false;
-		}
-
-	}
-
-	///<summary>Sorting class used to sort a MethodInfo list by Name.</summary>
-	public class MethodInfoComparer:IComparer<MethodInfo> {
-
-		public MethodInfoComparer() {
-		}
-
-		public int Compare(MethodInfo x,MethodInfo y) {
-			return x.Name.CompareTo(y.Name);
-		}
-	}
+        public int Compare(MethodInfo x, MethodInfo y)
+        {
+            return x.Name.CompareTo(y.Name);
+        }
+    }
 }

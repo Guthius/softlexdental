@@ -1144,11 +1144,11 @@ namespace OpenDental {
 			//We know that this method supports giving the user a break down and shall call the method's fix section where the break down results should be.
 			//TODO: Make sure that DBM methods with break downs ALWAYS have the break down in the fix section.
 			long patNum=0;
-			DbmMethodAttr methodAttributes=(DbmMethodAttr)Attribute.GetCustomAttribute(_listDbmMethodsGrid[e.Row],typeof(DbmMethodAttr));
+			DatabaseMaintenanceAttribute methodAttributes=(DatabaseMaintenanceAttribute)Attribute.GetCustomAttribute(_listDbmMethodsGrid[e.Row],typeof(DatabaseMaintenanceAttribute));
 			//We always send verbose and modeCur into all DBM methods.
-			List<object> parameters=new List<object>() { checkShow.Checked,DbmMode.Breakdown };
+			List<object> parameters=new List<object>() { checkShow.Checked,DatabaseMaintenanceMode.Breakdown };
 			//There are optional paramaters available to some methods and adding them in the following order is very important.
-			if(methodAttributes.HasPatNum) {
+			if(methodAttributes.HasPatientId) {
 				parameters.Add(patNum);
 			}
 			Cursor=Cursors.WaitCursor;
@@ -1449,7 +1449,7 @@ namespace OpenDental {
 			form.ShowDialog();
 		}
 
-		private void Run(ODGrid grid,DbmMode modeCur) {
+		private void Run(ODGrid grid,DatabaseMaintenanceMode modeCur) {
 			ToggleUI(true);//Turn off all UI buttons except the Stop DBM button
 			_isCancelled=false;
 			Cursor=Cursors.WaitCursor;
@@ -1468,18 +1468,6 @@ namespace OpenDental {
 			bool verbose=checkShow.Checked;
 			StringBuilder logText=new StringBuilder();
 			//Create a window that will stay open until the thread doing the work is complete
-			Tuple<string,bool> tableCheckResult=null;
-			ODProgress.ShowAction(() => tableCheckResult=DatabaseMaintenances.MySQLTables(verbose,modeCur),
-				eventType:typeof(DatabaseMaintEvent),
-				odEventType:ODEventType.DatabaseMaint);
-			logText.Append(tableCheckResult.Item1);
-			//No database maintenance methods should be run unless this passes.
-			if(!tableCheckResult.Item2) {
-				Cursor=Cursors.Default;
-				MsgBoxCopyPaste msgBoxCP=new MsgBoxCopyPaste(tableCheckResult.Item1);//tableCheckResult is already translated.
-				msgBoxCP.Show();//Let this window be non-modal so that they can keep it open while they fix their problems.
-				return;
-			}
 			if(grid.SelectedIndices.Length < 1) {
 				//No rows are selected so the user wants to run all checks.
 				grid.SetSelected(true);
@@ -1490,11 +1478,11 @@ namespace OpenDental {
 				for(int i=0;i<selectedIndices.Length;i++) {
 					long patNum=0;
 					MethodInfo method=(MethodInfo)grid.Rows[selectedIndices[i]].Tag;
-					DbmMethodAttr methodAttributes=(DbmMethodAttr)Attribute.GetCustomAttribute(method,typeof(DbmMethodAttr));
+					DatabaseMaintenanceAttribute methodAttributes=(DatabaseMaintenanceAttribute)Attribute.GetCustomAttribute(method,typeof(DatabaseMaintenanceAttribute));
 					//We always send verbose and modeCur into all DBM methods.
 					List<object> parameters=new List<object>() { verbose,modeCur };
 					//There are optional paramaters available to some methods and adding them in the following order is very important.
-					if(methodAttributes.HasPatNum) {
+					if(methodAttributes.HasPatientId) {
 						parameters.Add(patNum);
 					}
 					ScrollToBottom(grid,selectedIndices[i]);
@@ -1529,11 +1517,11 @@ namespace OpenDental {
 		}
 
 		///<summary>Runs a single DBM method.</summary>
-		private string RunMethod(MethodInfo method,List<object> parameters,DbmMode modeCur) {
+		private string RunMethod(MethodInfo method,List<object> parameters,DatabaseMaintenanceMode modeCur) {
 			string result="";
 			try {
 				result=(string)method.Invoke(null,parameters.ToArray());
-				if(modeCur==DbmMode.Fix) {
+				if(modeCur==DatabaseMaintenanceMode.Fix) {
 					DatabaseMaintenances.UpdateDateLastRun(method.Name);
 				}
 			}
@@ -1669,11 +1657,11 @@ namespace OpenDental {
 		}
 
 		private void butCheck_Click(object sender,System.EventArgs e) {
-			Run(gridMain,DbmMode.Check);
+			Run(gridMain,DatabaseMaintenanceMode.Check);
 		}
 
 		private void butCheckOld_Click(object sender,EventArgs e) {
-			Run(gridOld,DbmMode.Check);
+			Run(gridOld,DatabaseMaintenanceMode.Check);
 		}
 
 		private void butFix_Click(object sender,EventArgs e) {
@@ -1705,10 +1693,10 @@ namespace OpenDental {
 				}
 			}
 			if(isOld) {
-				Run(gridOld,DbmMode.Fix);
+				Run(gridOld,DatabaseMaintenanceMode.Fix);
 			}
 			else {
-				Run(gridMain,DbmMode.Fix);
+				Run(gridMain,DatabaseMaintenanceMode.Fix);
 			}
 			_isCacheInvalid=true;//Flag cache to be invalidated on closing.  Some DBM fixes alter cached tables.
 		}

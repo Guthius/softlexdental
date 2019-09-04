@@ -8,26 +8,6 @@ using System.Drawing;
 
 namespace OpenDentBusiness.Crud{
 	public class DatabaseMaintenanceCrud {
-		///<summary>Gets one DatabaseMaintenance object from the database using the primary key.  Returns null if not found.</summary>
-		public static DatabaseMaintenance SelectOne(long databaseMaintenanceNum) {
-			string command="SELECT * FROM databasemaintenance "
-				+"WHERE DatabaseMaintenanceNum = "+POut.Long(databaseMaintenanceNum);
-			List<DatabaseMaintenance> list=TableToList(Db.GetTable(command));
-			if(list.Count==0) {
-				return null;
-			}
-			return list[0];
-		}
-
-		///<summary>Gets one DatabaseMaintenance object from the database using a query.</summary>
-		public static DatabaseMaintenance SelectOne(string command) {
-			
-			List<DatabaseMaintenance> list=TableToList(Db.GetTable(command));
-			if(list.Count==0) {
-				return null;
-			}
-			return list[0];
-		}
 
 		///<summary>Gets a list of DatabaseMaintenance objects from the database using a query.</summary>
 		public static List<DatabaseMaintenance> SelectMany(string command) {
@@ -50,29 +30,6 @@ namespace OpenDentBusiness.Crud{
 				retVal.Add(databaseMaintenance);
 			}
 			return retVal;
-		}
-
-		///<summary>Converts a list of DatabaseMaintenance into a DataTable.</summary>
-		public static DataTable ListToTable(List<DatabaseMaintenance> listDatabaseMaintenances,string tableName="") {
-			if(string.IsNullOrEmpty(tableName)) {
-				tableName="DatabaseMaintenance";
-			}
-			DataTable table=new DataTable(tableName);
-			table.Columns.Add("DatabaseMaintenanceNum");
-			table.Columns.Add("MethodName");
-			table.Columns.Add("IsHidden");
-			table.Columns.Add("IsOld");
-			table.Columns.Add("DateLastRun");
-			foreach(DatabaseMaintenance databaseMaintenance in listDatabaseMaintenances) {
-				table.Rows.Add(new object[] {
-					POut.Long  (databaseMaintenance.DatabaseMaintenanceNum),
-					            databaseMaintenance.MethodName,
-					POut.Bool  (databaseMaintenance.IsHidden),
-					POut.Bool  (databaseMaintenance.IsOld),
-					POut.DateT (databaseMaintenance.DateLastRun,false),
-				});
-			}
-			return table;
 		}
 
 		///<summary>Inserts one DatabaseMaintenance into the database.  Returns the new priKey.</summary>

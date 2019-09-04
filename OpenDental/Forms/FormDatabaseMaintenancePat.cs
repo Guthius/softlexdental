@@ -48,7 +48,7 @@ namespace OpenDental {
 			gridMain.EndUpdate();
 		}
 
-		private void Run(DbmMode modeCur) {
+		private void Run(DatabaseMaintenanceMode modeCur) {
 			if(_patNum < 1) {
 				MsgBox.Show(this,"Select a patient first.");
 				return;
@@ -68,18 +68,18 @@ namespace OpenDental {
 			string result;
 			int[] selectedIndices=gridMain.SelectedIndices;
 			for(int i=0;i<selectedIndices.Length;i++) {
-				DbmMethodAttr methodAttributes=(DbmMethodAttr)Attribute.GetCustomAttribute(_listDbmMethodsGrid[selectedIndices[i]],typeof(DbmMethodAttr));
+				DatabaseMaintenanceAttribute methodAttributes=(DatabaseMaintenanceAttribute)Attribute.GetCustomAttribute(_listDbmMethodsGrid[selectedIndices[i]],typeof(DatabaseMaintenanceAttribute));
 				//We always send verbose and modeCur into all DBM methods.
 				List<object> parameters=new List<object>() { verbose,modeCur };
 				//There are optional paramaters available to some methods and adding them in the following order is very important.
-				if(methodAttributes.HasPatNum) {
+				if(methodAttributes.HasPatientId) {
 					parameters.Add(_patNum);
 				}
 				gridMain.ScrollToIndexBottom(selectedIndices[i]);
 				UpdateResultTextForRow(selectedIndices[i],Lan.g("FormDatabaseMaintenance","Running")+"...");
 				try {
 					result=(string)_listDbmMethodsGrid[selectedIndices[i]].Invoke(null,parameters.ToArray());
-					if(modeCur==DbmMode.Fix) {
+					if(modeCur==DatabaseMaintenanceMode.Fix) {
 						DatabaseMaintenances.UpdateDateLastRun(_listDbmMethodsGrid[selectedIndices[i]].Name);
 					}
 				}
@@ -105,7 +105,7 @@ namespace OpenDental {
 				MessageBox.Show(ex.Message);
 			}
 			Cursor=Cursors.Default;
-			if(modeCur==DbmMode.Fix) {
+			if(modeCur==DatabaseMaintenanceMode.Fix) {
 				//_isCacheInvalid=true;//Flag cache to be invalidated on closing.  Some DBM fixes alter cached tables.
 			}
 		}
@@ -140,11 +140,11 @@ namespace OpenDental {
 				MsgBox.Show(this,"Select a patient first.");
 				return;
 			}
-			DbmMethodAttr methodAttributes=(DbmMethodAttr)Attribute.GetCustomAttribute(_listDbmMethodsGrid[e.Row],typeof(DbmMethodAttr));
+			DatabaseMaintenanceAttribute methodAttributes=(DatabaseMaintenanceAttribute)Attribute.GetCustomAttribute(_listDbmMethodsGrid[e.Row],typeof(DatabaseMaintenanceAttribute));
 			//We always send verbose and modeCur into all DBM methods.
-			List<object> parameters=new List<object>() { checkShow.Checked,DbmMode.Breakdown };
+			List<object> parameters=new List<object>() { checkShow.Checked,DatabaseMaintenanceMode.Breakdown };
 			//There are optional paramaters available to some methods and adding them in the following order is very important.
-			if(methodAttributes.HasPatNum) {
+			if(methodAttributes.HasPatientId) {
 				parameters.Add(_patNum);
 			}
 			Cursor=Cursors.WaitCursor;
@@ -174,11 +174,11 @@ namespace OpenDental {
 		}
 
 		private void butCheck_Click(object sender,EventArgs e) {
-			Run(DbmMode.Check);
+			Run(DatabaseMaintenanceMode.Check);
 		}
 
 		private void butFix_Click(object sender,EventArgs e) {
-			Run(DbmMode.Fix);
+			Run(DatabaseMaintenanceMode.Fix);
 		}
 
 		private void butClose_Click(object sender,EventArgs e) {

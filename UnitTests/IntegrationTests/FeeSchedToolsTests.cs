@@ -47,10 +47,10 @@ namespace UnitTests
         {
             PrefT.UpdateBool(PreferenceName.FeesUseCache, true);
             //Make sure there are no duplicate fees already present within the database.
-            string dbmResult = DatabaseMaintenances.FeeDeleteDuplicates(true, DbmMode.Check);
+            string dbmResult = DatabaseMaintenances.FeeDeleteDuplicates(true, DatabaseMaintenanceMode.Check);
             if (!dbmResult.Trim().EndsWith(": 0"))
             {
-                DatabaseMaintenances.FeeDeleteDuplicates(true, DbmMode.Fix);
+                DatabaseMaintenances.FeeDeleteDuplicates(true, DatabaseMaintenanceMode.Fix);
             }
             //Create two fee schedules; from and to
             long feeSchedNumFrom = FeeSchedT.CreateFeeSched(FeeScheduleType.Normal, MethodBase.GetCurrentMethod().Name + "_FROM");
@@ -78,7 +78,7 @@ namespace UnitTests
             feeCache1.SaveToDb();
             feeCache2.SaveToDb();
             //Make sure that there was NOT a duplicate fee inserted into the database.
-            dbmResult = DatabaseMaintenances.FeeDeleteDuplicates(true, DbmMode.Check);
+            dbmResult = DatabaseMaintenances.FeeDeleteDuplicates(true, DatabaseMaintenanceMode.Check);
             Assert.IsTrue(dbmResult.Trim().EndsWith(": 0"), "Duplicate fees detected due to concurrent copying.");
         }
 
@@ -90,10 +90,10 @@ namespace UnitTests
         {
             PrefT.UpdateBool(PreferenceName.FeesUseCache, true);
             //Make sure there are no duplicate fees already present within the database.
-            string dbmResult = DatabaseMaintenances.FeeDeleteDuplicates(true, DbmMode.Check);
+            string dbmResult = DatabaseMaintenances.FeeDeleteDuplicates(true, DatabaseMaintenanceMode.Check);
             if (!dbmResult.Trim().EndsWith(": 0"))
             {
-                DatabaseMaintenances.FeeDeleteDuplicates(true, DbmMode.Fix);
+                DatabaseMaintenances.FeeDeleteDuplicates(true, DatabaseMaintenanceMode.Fix);
             }
             //Make sure that there are more than six clinics
             ClinicT.ClearClinicTable();
@@ -121,7 +121,7 @@ namespace UnitTests
             //Now act like the user just clicked the "OK" button which simply saves the cache changes to the db.
             feeCache.SaveToDb();
             //Make sure that there was NOT a duplicate fee inserted into the database.
-            dbmResult = DatabaseMaintenances.FeeDeleteDuplicates(true, DbmMode.Check);
+            dbmResult = DatabaseMaintenances.FeeDeleteDuplicates(true, DatabaseMaintenanceMode.Check);
             Assert.IsTrue(dbmResult.Trim().EndsWith(": 0"), "Duplicate fees detected due to concurrent copying.");
         }
 

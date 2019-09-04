@@ -1,4 +1,21 @@
-﻿using CodeBase;
+﻿/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
+using CodeBase;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -9,7 +26,6 @@ using System.Reflection;
 using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace OpenDentBusiness
 {
@@ -78,7 +94,7 @@ namespace OpenDentBusiness
             strB.Append('-', 65);
             strB.AppendLine();//New line.
             strB.Append(logText);
-            strB.AppendLine(Lans.g("FormDatabaseMaintenance", "Done"));
+            strB.AppendLine("Done");
             string path = Path.Combine(System.Windows.Forms.Application.StartupPath, "RepairLog.txt");
             try
             {
@@ -86,13 +102,12 @@ namespace OpenDentBusiness
             }
             catch (SecurityException)
             {
-                throw new SecurityException(Lans.g("FormDatabaseMaintenance", "Log not saved to Repairlog.txt because user does not have permission to access that file."));
+                throw new SecurityException("Log not saved to Repairlog.txt because user does not have permission to access that file.");
             }
             catch (UnauthorizedAccessException)
             {
-                throw new UnauthorizedAccessException(Lans.g("FormDatabaseMaintenance", "Log not saved to Repairlog.txt because user does not have permission to access that file."));
+                throw new UnauthorizedAccessException("Log not saved to Repairlog.txt because user does not have permission to access that file.");
             }
-            //Throw all other types of exceptions like usual.
         }
         #endregion
 
@@ -122,180 +137,65 @@ namespace OpenDentBusiness
                 "securitylog",  "LogText",
             };
         #endregion List of Tables and Columns for null check------------------------------------------------------------------------------------------------
-
         #region Methods That Affect All or Many Tables------------------------------------------------------------------------------------------------------
 
-        ///<summary></summary>
-        [DbmMethodAttr]
-        public static string MySQLServerOptionsValidate(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenance]
+        public static string MySQLServerOptionsValidate(bool verbose, DatabaseMaintenanceMode mode)
         {
-            string command = "SHOW GLOBAL VARIABLES LIKE 'sql_mode'";
-            DataTable table = Db.GetTable(command);
-            if (table.Rows.Count < 1 || table.Columns.Count < 2)
-            {//user may not have permission to access global variables?
-                return Lans.g("FormDatabaseMaintenance", "Unable to access the MySQL server variable 'sql_mode', probably due to permissions") + ".  "
-                    + Lans.g("FormDatabaseMaintenance", "The sql_mode must be blank or NO_AUTO_CREATE_USER") + ".\r\n";
-            }
-            string sqlmode = table.Rows[0][1].ToString();
-            string sqlmodeDisplay = (string.IsNullOrWhiteSpace(sqlmode) ? Lans.g("FormDatabaseMaintenance", "blank") : sqlmode);//translated 'blank' for display
-            if (string.IsNullOrWhiteSpace(sqlmode) || sqlmode.ToUpper() == "NO_AUTO_CREATE_USER")
+            var log = string.Empty;
+
+            using (var table = DataConnection.ExecuteDataTable("SHOW GLOBAL VARIABLES LIKE 'sql_mode'"))
             {
-                if (!verbose)
+                if (table.Rows.Count < 1 || table.Columns.Count < 2)
                 {
-                    //Nothing broken, not verbose, show ""
-                    return "";
+                    return
+                        "Unable to access the MySQL server variable 'sql_mode', probably due to permissions. " +
+                        "The 'sql_mode' must be blank or NO_AUTO_CREATE_USER.\r\n";
                 }
-                else
+
+                string sqlmode = table.Rows[0][1].ToString();
+                string sqlmodeDisplay = string.IsNullOrWhiteSpace(sqlmode) ? "blank" : sqlmode;
+
+                if (string.IsNullOrWhiteSpace(sqlmode) || sqlmode.ToUpper() == "NO_AUTO_CREATE_USER")
                 {
-                    //Nothing is broken, verbose on, show current sql_mode.
-                    return Lans.g("FormDatabaseMaintenance", "The MySQL server variable 'sql_mode' is currently set to") + " " + sqlmodeDisplay + ".\r\n";
+                    if (verbose)
+                    {
+                        log = "The MySQL server variable 'sql_mode' is currently set to " + sqlmodeDisplay + ".\r\n";
+                    }
+
+                    return log;
+                }
+
+                switch (mode)
+                {
+                    case DatabaseMaintenanceMode.Check:
+                        log += "The MySQL server variable 'sql_mode' must be blank or NO_AUTO_CREATE_USER and is currently set to " + sqlmodeDisplay + ".\r\n";
+                        break;
+
+                    case DatabaseMaintenanceMode.Fix:
+                        try
+                        {
+                            DataConnection.ExecuteNonQuery("SET GLOBAL sql_mode=''");
+                            DataConnection.ExecuteNonQuery("SET SESSION sql_mode=''");
+
+                            log +=
+                                "The MySQL server variable 'sql_mode' has been changed from " + sqlmodeDisplay + " to blank.\r\n";
+                        }
+                        catch
+                        {
+                            log +=
+                                "Unable to set the MySQL server variable 'sql_mode', probably due to permissions. " +
+                                "The sql_mode must be blank or NO_AUTO_CREATE_USER and is currently set to " + sqlmodeDisplay + ".\r\n";
+                        }
+                        break;
                 }
             }
-            string log = "";
-            switch (modeCur)
-            {
-                case DbmMode.Check:
-                    log += Lans.g("FormDatabaseMaintenance", "The MySQL server variable 'sql_mode' must be blank or NO_AUTO_CREATE_USER and is currently set to")
-                        + " " + sqlmodeDisplay + ".\r\n";
-                    break;
-                case DbmMode.Fix:
-                    try
-                    {
-                        command = "SET GLOBAL sql_mode=''";
-                        Db.NonQ(command);
-                        command = "SET SESSION sql_mode=''";
-                        Db.NonQ(command);
-                        log += Lans.g("FormDatabaseMaintenance", "The MySQL server variable 'sql_mode' has been changed from") + " " + sqlmodeDisplay + " "
-                            + Lans.g("FormDatabaseMaintenance", "to blank") + ".\r\n";
-                    }
-                    catch 
-                    {
-                        //prevent vs warning
-                        log += Lans.g("FormDatabaseMaintenance", "Unable to set the MySQL server variable 'sql_mode', probably due to permissions") + ".  "
-                            + Lans.g("FormDatabaseMaintenance", "The sql_mode must be blank or NO_AUTO_CREATE_USER and is currently set to")
-                            + " " + sqlmodeDisplay + ".\r\n";
-                    }
-                    break;
-            }//end switch
             return log;
         }
 
-        ///<summary>Returns a Tuple with Item1=log string and Item2=whether the table checks were successful.</summary>
-        public static Tuple<string, bool> MySQLTables(bool verbose, DbmMode modeCur)
-        {
-            string log = "";
-            bool success = true;
-            if (Preference.GetBool(PreferenceName.DatabaseMaintenanceSkipCheckTable))
-            {
-                return new Tuple<string, bool>("", success);
-            }
-            string command = "DROP TABLE IF EXISTS `signal`";//Signal is keyword for MySQL 5.5.  Was renamed to signalod so drop if exists.
-            Db.NonQ(command);
-            command = "SHOW FULL TABLES WHERE Table_type='BASE TABLE'";//Tables, not views.  Does not work in MySQL 4.1, however we test for MySQL version >= 5.0 in PrefL.
-            DataTable table = Db.GetTable(command);
-            string[] tableNames = new string[table.Rows.Count];
-            int lastRow;
-            bool existsCorruptFiles = false;
-            bool existsUnvalidatedTables = false;
-            for (int i = 0; i < table.Rows.Count; i++)
-            {
-                tableNames[i] = table.Rows[i][0].ToString();
-            }
-            string checkingTable = Lans.g(nameof(MiscData), "Checking table");
-            for (int i = 0; i < tableNames.Length; i++)
-            {
-                //Alert the thread we are running this on that we are checking this table.
-                DatabaseMaintEvent.Fire(ODEventType.DatabaseMaint, checkingTable + ": " + tableNames[i]);
-                command = "CHECK TABLE `" + tableNames[i] + "`";
-                try
-                {
-                    table = Db.GetTable(command);
-                    lastRow = table.Rows.Count - 1;
-                    string status = PIn.ByteArray(table.Rows[lastRow][3]);
-                    if (status != "OK")
-                    {
-                        log += Lans.g("FormDatabaseMaintenance", "Corrupt file found for table") + " " + tableNames[i] + "\r\n";
-                        existsCorruptFiles = true;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    log += Lans.g("FormDatabaseMaintenance", "Unable to validate table") + " " + tableNames[i] + "\r\n" + ex.Message + "\r\n";
-                    existsUnvalidatedTables = true;
-                }
-            }
-            if (existsUnvalidatedTables)
-            {
-                success = false;//no other checks should be done until we can successfully get past this.
-                log += Lans.g("FormDatabaseMaintenance", "Tables found that could not be validated.") + "\r\n"
-                    + Lans.g("FormDatabaseMaintenance", "Done.");
-            }
-            if (existsCorruptFiles)
-            {
-                success = false;//no other checks should be done until we can successfully get past this.
-                log += Lans.g("FormDatabaseMaintenance", "Corrupted database files found, please call support immediately or see manual for more details.") + "\r\n"
-                    + Lans.g("FormDatabaseMaintenance", "Done.");
-            }
-            if (!existsUnvalidatedTables && !existsCorruptFiles)
-            {
-                if (verbose)
-                {
-                    log += Lans.g("FormDatabaseMaintenance", "Tables validated successfully.  No corrupted tables.") + "\r\n";
-                }
-            }
-            return new Tuple<string, bool>(log, success);
-        }
 
-        ///<summary>If using MySQL, tries to repair and then optimize each table.
-        ///Developers must make a backup prior to calling this method because repairs have a tendency to delete data.
-        ///Currently called whenever MySQL is upgraded and when users click Optimize in database maintenance.</summary>
-        public static string RepairAndOptimize(bool isLogged = false)
-        {
-            StringBuilder retVal = new StringBuilder();
-            DataTable tableLog = null;
-
-            string command = "SHOW FULL TABLES WHERE Table_type='BASE TABLE';";//Tables, not views.  Does not work in MySQL 4.1, however we test for MySQL version >= 5.0 in PrefL.
-            DataTable table = Db.GetTable(command);
-            string[] tableNames = new string[table.Rows.Count];
-            for (int i = 0; i < table.Rows.Count; i++)
-            {
-                tableNames[i] = table.Rows[i][0].ToString();
-            }
-            for (int i = 0; i < tableNames.Length; i++)
-            {
-                //Alert anyone that cares that we are optimizing this table.
-                MiscDataEvent.Fire(ODEventType.MiscData, "Optimizing table: " + tableNames[i]);
-                string optimizeResult = OptimizeTable(tableNames[i], isLogged);
-                if (isLogged)
-                {
-                    retVal.AppendLine(optimizeResult);
-                }
-            }
-            for (int i = 0; i < tableNames.Length; i++)
-            {
-                //Alert anyone that cares that we are repairing this table.
-                MiscDataEvent.Fire(ODEventType.MiscData, "Repairing table: " + tableNames[i]);
-                command = "REPAIR TABLE `" + tableNames[i] + "`";
-                if (!isLogged)
-                {
-                    Db.NonQ(command);
-                }
-                else
-                {
-                    tableLog = Db.GetTable(command);
-                    for (int r = 0; r < tableLog.Rows.Count; r++)
-                    {//usually only 1 row, unless something abnormal is found.
-                        retVal.AppendLine(tableLog.Rows[r]["Table"].ToString().PadRight(50, ' ')
-                            + " | " + tableLog.Rows[r]["Op"].ToString()
-                            + " | " + tableLog.Rows[r]["Msg_type"].ToString()
-                            + " | " + tableLog.Rows[r]["Msg_text"].ToString());
-                    }
-                }
-            }
-            return retVal.ToString();
-        }
-
-        ///<summary>Optimizes the table passed in.  Set hasResult to true to return a string representation of the query results.
+        /// <summary>
+        /// Optimizes the table passed in. Set hasResult to true to return a string representation of the query results.
         ///Does not attempt the optimize if random PKs is turned on, or if the table is of storage engine InnoDB (unless canOptimizeInnodb is true).
         ///See wiki page [[Database Storage Engine Comparison: InnoDB vs MyISAM]] for reasons why.
         ///As documented online, https://dev.mysql.com/doc/refman/5.6/en/optimize-table.html, MySQL 5.6 supports the optimize
@@ -307,24 +207,10 @@ namespace OpenDentBusiness
             {
                 retVal = tableName + " " + Lans.g("MiscData", "skipped due to using random primary keys.");
             }
-            string command;
-            if (!canOptimizeInnodb)
-            {
-                //Check to see if the table has its storage engine set to InnoDB.
-                command = "SELECT ENGINE FROM information_schema.TABLES "
-                    + "WHERE TABLE_SCHEMA='" + DataConnection.Database + "' "
-                    + "AND TABLE_NAME='" + POut.String(tableName) + "' ";
-                string storageEngine = Db.GetScalar(command);
-                if (storageEngine.ToLower() == "innodb")
-                {
-                    retVal = tableName + " " + Lans.g("MiscData", "skipped due to using the InnoDB storage engine.");
-                }
-            }
-            //Only run OPTIMIZE if random PKs are not used and the table is not using the InnoDB storage engine.
+
             if (retVal == "")
             {
-                command = "OPTIMIZE TABLE `" + tableName + "`";//Ticks used in case user has added custom tables with unusual characters.
-                DataTable tableLog = Db.GetTable(command);
+                DataTable tableLog = Db.GetTable("OPTIMIZE TABLE `" + tableName + "`");
                 if (hasResult)
                 {
                     //Loop through any rows returned and return the results.  Often times will only be one row unless there was a problem with optimizing.
@@ -340,8 +226,8 @@ namespace OpenDentBusiness
             return retVal;
         }
 
-        [DbmMethodAttr]
-        public static string DatesNoZeros(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string DatesNoZeros(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             //dynamically get every single date, datetime, and timestamp column from all tables in the db.
             string command = @"
@@ -397,7 +283,7 @@ namespace OpenDentBusiness
             }
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (countTotal > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Number of dates invalid:") + " " + countTotal + "\r\n";
@@ -405,7 +291,7 @@ namespace OpenDentBusiness
                         log += String.Join("\r\n", listInvalidColNames);
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     if (countTotal > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Number of dates fixed:") + " " + countTotal + "\r\n";
@@ -418,36 +304,10 @@ namespace OpenDentBusiness
             return log;
         }
 
-        ///<summary>Deprecated.</summary>
-        public static string DecimalValues(bool verbose, DbmMode modeCur)
-        {
-            string log = "";
-            //This specific fix is no longer needed, since we are using ROUND(EstBalance,2) in the aging calculation now.
-            //However, it is still a problem in many columns that we will eventually need to deal with.
-            //Maybe add this back when users can control which fixes they make.
-            //One problem is the foreign users do not necessarily use 2 decimal places (Kuwait uses 3).
-            ////Holds columns to be checked. Strings are in pairs in the following order: table-name,column-name
-            //string[] decimalCols=new string[] {
-            //  "patient","EstBalance"
-            //};
-            //int decimalPlacessToRoundTo=8;
-            //long numberFixed=0;
-            //for(int i=0;i<decimalCols.Length;i+=2) {
-            //  string tablename=decimalCols[i];
-            //  string colname=decimalCols[i+1];
-            //  string command="UPDATE "+tablename+" SET "+colname+"=ROUND("+colname+","+decimalPlacessToRoundTo
-            //    +") WHERE "+colname+"!=ROUND("+colname+","+decimalPlacessToRoundTo+")";
-            //  numberFixed+=Db.NonQ(command);
-            //}
-            //if(numberFixed>0 || verbose) {
-            //  log+=Lans.g("FormDatabaseMaintenance","Decimal values fixed: ")+numberFixed.ToString()+"\r\n";
-            //}
-            return log;
-        }
 
         ///<summary>also checks patient.AddrNote</summary>
-        [DbmMethodAttr]
-        public static string SpecialCharactersInNotes(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenance]
+        public static string SpecialCharactersInNotes(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             //this will run for fix or check, but will only fix if the special char button is used 
@@ -535,8 +395,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string NotesWithTooMuchWhiteSpace(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string NotesWithTooMuchWhiteSpace(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
@@ -555,7 +415,7 @@ namespace OpenDentBusiness
                 string tooManyT = string.Join("", Enumerable.Repeat("\t", 30));//Can't think of any good reason to have more than 30 tabs in a row
                 switch (modeCur)
                 {
-                    case DbmMode.Check:
+                    case DatabaseMaintenanceMode.Check:
                         command = "SELECT COUNT(*) FROM " + POut.String(tableName) + " WHERE " + POut.String(colName) + " LIKE '%" + POut.String(tooManyT) + "%'";
                         int numFound = PIn.Int(Db.GetCount(command));
                         if (numFound > 0 || verbose)
@@ -564,7 +424,7 @@ namespace OpenDentBusiness
                                 + " " + numFound.ToString() + "\r\n";
                         }
                         break;
-                    case DbmMode.Fix:
+                    case DatabaseMaintenanceMode.Fix:
                         command = "SELECT " + priKey + "," + colName + " FROM " + POut.String(tableName) + " WHERE " + POut.String(colName) + " LIKE '%" + POut.String(tooManyT) + "%'";
                         DataTable resultTable = Db.GetTable(command);
                         long numFixed = 0;
@@ -590,7 +450,7 @@ namespace OpenDentBusiness
                 string tooManyN = string.Join("", Enumerable.Repeat("\n", 30));// Sometimes we have had newlines encoded as \n
                 switch (modeCur)
                 {
-                    case DbmMode.Check:
+                    case DatabaseMaintenanceMode.Check:
                         command = "SELECT COUNT(*) FROM " + POut.String(tableName) + " "
                             + "WHERE " + POut.String(colName) + " LIKE '%" + POut.String(tooManyRN) + "%' "
                             + "OR " + POut.String(colName) + " LIKE '%" + POut.String(tooManyN) + "%'";
@@ -601,7 +461,7 @@ namespace OpenDentBusiness
                                 + " " + numFound.ToString() + "\r\n";
                         }
                         break;
-                    case DbmMode.Fix:
+                    case DatabaseMaintenanceMode.Fix:
                         command = "SELECT * FROM " + POut.String(tableName) + " "
                             + "WHERE " + POut.String(colName) + " LIKE '%" + POut.String(tooManyRN) + "%' "
                             + "OR " + POut.String(colName) + " LIKE '%" + POut.String(tooManyN) + "%'";
@@ -629,7 +489,7 @@ namespace OpenDentBusiness
                 string tooManySP = string.Join("", Enumerable.Repeat(@" ", 300));//Spaces are very easy to draw so only remove ridiculous amounts of them.
                 switch (modeCur)
                 {
-                    case DbmMode.Check:
+                    case DatabaseMaintenanceMode.Check:
                         command = @"SELECT COUNT(*) FROM " + POut.String(tableName) + " "
                             + @"WHERE " + POut.String(colName) + " LIKE '%" + POut.String(tooManySP) + "%' ";//This is Sparta!
                         int numFound = PIn.Int(Db.GetCount(command));
@@ -639,7 +499,7 @@ namespace OpenDentBusiness
                                 + " " + numFound.ToString() + "\r\n";
                         }
                         break;
-                    case DbmMode.Fix:
+                    case DatabaseMaintenanceMode.Fix:
                         command = "SELECT " + priKey + "," + colName + " FROM " + POut.String(tableName) + " "
                             + "WHERE " + POut.String(colName) + " LIKE '%" + POut.String(tooManySP) + "%' ";
                         DataTable resultTable = Db.GetTable(command);
@@ -665,8 +525,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string TransactionsWithFutureDates(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string TransactionsWithFutureDates(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             bool isFutureTransAllowed = Preference.GetBool(PreferenceName.FutureTransDatesAllowed);
@@ -694,14 +554,14 @@ namespace OpenDentBusiness
             log += Lans.g("FormDatabaseMaintenance", "Future dated transactions found:") + " " + flaggedTransactions.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (flaggedTransactions.Rows.Count > 0 || verbose)
                     {
                         log += "\r\n" + Lans.g("FormDatabaseMaintenance", "Manual fix needed. Double click to see a break down.");
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (flaggedTransactions.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -739,8 +599,8 @@ namespace OpenDentBusiness
 
         #region Appointment-----------------------------------------------------------------------------------------------------------------------------
 
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string AppointmentCompleteWithTpAttached(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string AppointmentCompleteWithTpAttached(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT DISTINCT appointment.PatNum, " + DbHelper.Concat("LName", "\", \"", "FName") + " AS PatName, AptDateTime "
                 + "FROM appointment "
@@ -758,14 +618,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Completed appointments with treatment planned procedures attached") + ": " + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -783,8 +643,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string AppointmentsEndingOnDifferentDay(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string AppointmentsEndingOnDifferentDay(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             //This pulls appointments that extend past the end of the day. CHAR_LENGTH(Pattern)-1 as if the appointment goes to midnight, it does
             //not need to be fixed.
@@ -793,13 +653,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (listAptNums.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Appointments found that span over multiple days: ") + listAptNums.Count.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     if (listAptNums.Count > 0)
                     {
                         //We're going to truncate the appointment to end at midnight. We will grab the substring of the pattern by calculating the
@@ -818,21 +678,21 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string AppointmentsNoPattern(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string AppointmentsNoPattern(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = @"SELECT AptNum FROM appointment WHERE Pattern=''";
             DataTable table = Db.GetTable(command);
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Appointments found with zero length: ") + table.Rows.Count.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count > 0)
                     {
                         //detach all procedures
@@ -899,14 +759,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string AppointmentsNoDateOrProcs(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string AppointmentsNoDateOrProcs(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM appointment "
                         + "WHERE AptStatus=1 "//scheduled 
                         + "AND " + DbHelper.Year("AptDateTime") + "<1880 "//scheduled but no date 
@@ -917,7 +777,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Appointments found with no date and no procs") + ": " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = "SELECT appointment.AptNum FROM appointment "
@@ -968,21 +828,21 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string AppointmentsNoPatients(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string AppointmentsNoPatients(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT Count(*) FROM appointment WHERE PatNum NOT IN (SELECT PatNum FROM patient)";
             int count = PIn.Int(Db.GetCount(command));
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Appointments found with invalid patients: ") + count.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     //Fix is safe because we are not deleting data, we are just attaching abandoned appointments to a dummy patient.
                     long patientsAdded = 0;
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
@@ -1057,14 +917,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string AppointmentPlannedNoPlannedApt(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string AppointmentPlannedNoPlannedApt(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM appointment WHERE AptStatus=6 AND AptNum NOT IN (SELECT AptNum FROM plannedappt)";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound != 0 || verbose)
@@ -1072,7 +932,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Appointments with status set to planned without Planned Appointment: ") + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "SELECT * FROM appointment WHERE AptStatus=6 AND AptNum NOT IN (SELECT AptNum FROM plannedappt)";
                     DataTable appts = Db.GetTable(command);
                     if (appts.Rows.Count > 0 || verbose)
@@ -1098,8 +958,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string AppointmentScheduledWithCompletedProcs(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string AppointmentScheduledWithCompletedProcs(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT DISTINCT appointment.PatNum, " + DbHelper.Concat("LName", "\', \'", "FName") + " AS PatName, appointment.AptDateTime "
                 + "FROM appointment "
@@ -1117,14 +977,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Scheduled appointments with completed procedures attached") + ": " + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -1146,8 +1006,8 @@ namespace OpenDentBusiness
         #region AuditTrail, AutoCode, Automation--------------------------------------------------------------------------------------------------------
 
         ///<summary>For appointments that have more than one AppointmentCreate audit entry, deletes all but the newest.</summary>
-        [DbmMethodAttr]
-        public static string AuditTrailDeleteDuplicateApptCreate(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string AuditTrailDeleteDuplicateApptCreate(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT securitylog.* "
                 + "FROM securitylog "
@@ -1167,14 +1027,14 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = listDupApptCreates.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Appointments found with duplicate Appt Create audit trail entries:") + " " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     if (listDupApptCreates.Count > 0)
                     {
                         string methodName = MethodBase.GetCurrentMethod().Name;
@@ -1195,15 +1055,15 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string AutoCodeItemsWithNoAutoCode(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string AutoCodeItemsWithNoAutoCode(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             DataTable table;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = @"SELECT DISTINCT AutoCodeNum FROM autocodeitem WHERE NOT EXISTS(
 						SELECT * FROM autocode WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
                     table = Db.GetTable(command);
@@ -1213,7 +1073,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Auto codes missing due to invalid auto code items") + ": " + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = @"SELECT DISTINCT AutoCodeNum FROM autocodeitem WHERE NOT EXISTS(
@@ -1243,14 +1103,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string AutoCodesDeleteWithNoItems(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string AutoCodesDeleteWithNoItems(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = @"SELECT COUNT(*) FROM autocode WHERE NOT EXISTS(
 						SELECT * FROM autocodeitem WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
                     int numFound = PIn.Int(Db.GetCount(command));
@@ -1259,7 +1119,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Autocodes found with no items: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = @"SELECT * FROM autocode WHERE NOT EXISTS(SELECT * FROM autocodeitem WHERE autocodeitem.AutoCodeNum=autocode.AutoCodeNum)";
                     List<AutoCode> listAutoCodes = Crud.AutoCodeCrud.SelectMany(command);
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
@@ -1283,14 +1143,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string AutomationTriggersWithNoSheetDefs(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string AutomationTriggersWithNoSheetDefs(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = @"SELECT COUNT(*) FROM automation WHERE automation.SheetDefNum!=0 AND NOT EXISTS(
 					SELECT SheetDefNum FROM sheetdef WHERE automation.SheetDefNum=sheetdef.SheetDefNum)";
                     int numFound = PIn.Int(Db.GetCount(command));
@@ -1299,7 +1159,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Automation triggers found with no sheet defs: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmlogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = @"SELECT * FROM automation WHERE automation.SheetDefNum!=0 AND NOT EXISTS(
@@ -1325,15 +1185,15 @@ namespace OpenDentBusiness
         #region Benefit, BillingType--------------------------------------------------------------------------------------------------------------------
 
         ///<summary>Remove duplicates where all benefit columns match except for BenefitNum.</summary>
-        [DbmMethodAttr]
-        public static string BenefitsWithExactDuplicatesForInsPlan(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string BenefitsWithExactDuplicatesForInsPlan(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             DataTable table;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(DISTINCT ben2.BenefitNum) DuplicateCount "
                         + "FROM benefit ben "
                         + "INNER JOIN benefit ben2 ON ben.PlanNum=ben2.PlanNum "
@@ -1354,7 +1214,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Duplicate benefits found") + ": " + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "SELECT DISTINCT ben2.BenefitNum "
                         + "FROM benefit ben "
                         + "INNER JOIN benefit ben2 ON ben.PlanNum=ben2.PlanNum "
@@ -1391,8 +1251,8 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Identify duplicates where all benefit columns match except for BenefitNum, Percent, and MonetaryAmt.</summary>
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string BenefitsWithPartialDuplicatesForInsPlan(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string BenefitsWithPartialDuplicatesForInsPlan(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT DISTINCT employer.EmpName,carrier.CarrierName,carrier.Phone,carrier.Address,carrier.City,carrier.State,carrier.Zip, "
                 + "insplan.GroupNum,insplan.GroupName, carrier.NoSendElect,carrier.ElectID, "
@@ -1421,14 +1281,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Insurance plans with partial duplicate benefits found") + ": " + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -1466,8 +1326,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string BillingTypesInvalid(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string BillingTypesInvalid(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT ValueString FROM preference WHERE PrefName='PracticeDefaultBillType'";
             long billingType = PIn.Long(Db.GetScalar(command));
@@ -1476,7 +1336,7 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (prefExists != 1)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "No default billing type set.") + "\r\n";
@@ -1493,7 +1353,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Patients with invalid billing type: ") + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     //Fix for default billingtype not being set.
                     if (prefExists != 1)
                     {//invalid billing type
@@ -1525,8 +1385,8 @@ namespace OpenDentBusiness
         #endregion Benefit, BillingType-----------------------------------------------------------------------------------------------------------------
         #region Carrier, Claim--------------------------------------------------------------------------------------------------------------------------
 
-        [DbmMethodAttr(IsCanada = true)]
-        public static string CanadaCarriersCdaMissingInfo(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(IsCanada = true)]
+        public static string CanadaCarriersCdaMissingInfo(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             if (!CultureInfo.CurrentCulture.Name.EndsWith("CA"))
             {//Canadian. en-CA or fr-CA
@@ -1706,7 +1566,7 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = 0;
                     for (int i = 0; i < carrierInfo.Length; i += 5)
                     {
@@ -1724,7 +1584,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "CDANet carriers with incorrect network, encryption method or version, based on carrier identification number: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     long numberFixed = 0;
                     List<DbmLog> listDbmlogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
@@ -1767,14 +1627,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ClaimDeleteWithNoClaimProcs(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimDeleteWithNoClaimProcs(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = @"SELECT COUNT(*) FROM claim WHERE NOT EXISTS(
 						SELECT * FROM claimproc WHERE claim.ClaimNum=claimproc.ClaimNum)";
                     int numFound = PIn.Int(Db.GetCount(command));
@@ -1783,7 +1643,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Claims found with no procedures") + ": " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = "SELECT claim.ClaimNum FROM claim WHERE NOT EXISTS( "
@@ -1819,14 +1679,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string ClaimWithInvalidInsSubNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string ClaimWithInvalidInsSubNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     //Claim.PlanNum is 0 and inssub.plannum is 0 or does not exist.
                     command = "SELECT count(*) FROM claim LEFT JOIN inssub ON claim.InsSubNum=inssub.InsSubNum "
                         + "WHERE claim.PlanNum=0 AND ( inssub.PlanNum=0 OR inssub.PlanNum IS NULL )";
@@ -1837,7 +1697,7 @@ namespace OpenDentBusiness
                     }
                     //situation where PlanNum and InsSubNum are both invalid and not zero is handled in InsSubNumMismatchPlanNum
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     command = "SELECT claim.ClaimNum, claim.PatNum, claim.DateService FROM claim LEFT JOIN inssub ON claim.InsSubNum=inssub.InsSubNum "
                         + "WHERE claim.PlanNum=0 AND ( inssub.PlanNum=0 OR inssub.PlanNum IS NULL )";
                     var dictPatClaims = Db.GetTable(command).Select().Select(x => new
@@ -1861,7 +1721,7 @@ namespace OpenDentBusiness
                         }
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "SELECT claim.ClaimNum, claim.PatNum FROM claim LEFT JOIN inssub ON claim.InsSubNum=inssub.InsSubNum "
                         + "WHERE claim.PlanNum=0 AND ( inssub.PlanNum=0 OR inssub.PlanNum IS NULL )";
                     DataTable table = Db.GetTable(command);
@@ -1919,8 +1779,8 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Also fixes situations where PatNum=0</summary>
-        [DbmMethodAttr]
-        public static string ClaimWithInvalidPatNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimWithInvalidPatNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = @"SELECT claim.ClaimNum, procedurelog.PatNum patNumCorrect
 				FROM claim, claimproc, procedurelog
@@ -1933,13 +1793,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += "Claims found with invalid patients attached: " + table.Rows.Count.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     for (int i = 0; i < table.Rows.Count; i++)
@@ -1963,22 +1823,22 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ClaimWithInvalidProvTreat(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimWithInvalidProvTreat(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT * FROM claim WHERE ProvTreat > 0 AND ProvTreat NOT IN (SELECT ProvNum FROM provider);";
             List<Claim> listClaims = Crud.ClaimCrud.SelectMany(command);
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = listClaims.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Claims with invalid ProvTreat found") + ": " + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = "UPDATE claim SET ProvTreat=" + POut.Long(Preference.GetLong(PreferenceName.PracticeDefaultProv)) +
@@ -1996,8 +1856,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ClaimWriteoffSum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimWriteoffSum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             //Sums for each claim---------------------------------------------------------------------
             string command = @"SELECT claim.ClaimNum,SUM(claimproc.WriteOff) sumwo,claim.WriteOff
@@ -2010,13 +1870,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Claim writeoff sums found incorrect: ") + table.Rows.Count.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     for (int i = 0; i < table.Rows.Count; i++)
@@ -2045,8 +1905,8 @@ namespace OpenDentBusiness
         #region ClaimPayment----------------------------------------------------------------------------------------------------------------------------
 
         ///<summary>Finds claimpayments where the CheckAmt!=SUM(InsPayAmt) for the claimprocs attached to the claimpayment.  Manual fix.</summary>
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string ClaimPaymentCheckAmt(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string ClaimPaymentCheckAmt(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             //because of the way this is grouped, it will just get one of many patients for each
             string command = @"SELECT claimproc.ClaimPaymentNum,ROUND(SUM(InsPayAmt),2) _sumpay,ROUND(CheckAmt,2) _checkamt,claimproc.PatNum
@@ -2063,14 +1923,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Claim payment sums found incorrect: ") + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count != 0)
                     {//Only the fix should show the entire list of items.
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Breakdown:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count > 0)
                     {//Running the fix and there are items to show.
                         List<DbmLog> listDbmLogs = new List<DbmLog>();
@@ -2140,8 +2000,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ClaimPaymentDetachMissingDeposit(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimPaymentDetachMissingDeposit(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT * FROM claimpayment "
@@ -2150,14 +2010,14 @@ namespace OpenDentBusiness
             List<ClaimPayment> listClaimPayments = Crud.ClaimPaymentCrud.SelectMany(command);
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = listClaimPayments.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Claim payments attached to deposits that no longer exist: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = "UPDATE claimpayment SET DepositNum=0 "
@@ -2177,8 +2037,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string ClaimPaymentsNotPartialWithNoClaimProcs(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string ClaimPaymentsNotPartialWithNoClaimProcs(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT claimpayment.CheckDate, definition.ItemName, claimpayment.CheckAmt, " +
                 "claimpayment.CarrierName, clinic.Description, claimpayment.Note " +
@@ -2200,14 +2060,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Insurance payments with no claims attached that are not marked as partial") + ": " + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -2240,8 +2100,8 @@ namespace OpenDentBusiness
         #endregion ClaimPayment-------------------------------------------------------------------------------------------------------------------------
         #region ClaimProc-------------------------------------------------------------------------------------------------------------------------------
         /// <summary>Shows patients that have claim payments attached to patient payment plans.</summary>
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string ClaimProcAttachedToPatientPaymentPlans(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string ClaimProcAttachedToPatientPaymentPlans(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             DataTable table = GetClaimProcsAttachedToPatientPaymentPlans();
             if (table.Rows.Count == 0 && !verbose)
@@ -2251,14 +2111,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "ClaimProcs attached to insurance payment plans") + ": " + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n" + Lans.g("FormDatabaseMaintenance", "Manual fix needed. Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -2277,8 +2137,8 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Deletes claimprocs that are attached to group notes.</summary>
-        [DbmMethodAttr]
-        public static string ClaimProcEstimateAttachedToGroupNote(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimProcEstimateAttachedToGroupNote(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             //It is impossible to attach a group note to a claim, because group notes always have status EC, but status C is required to attach to a claim, or status TP for a preauth.
             //Since the group note cannot be attached to a claim, it also cannot be attached to a claim payment.
@@ -2292,13 +2152,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Estimates attached to group notes") + ": " + table.Rows.Count + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     if (table.Rows.Count > 0)
@@ -2319,22 +2179,22 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ClaimProcDateNotMatchCapComplete(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimProcDateNotMatchCapComplete(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT * FROM claimproc WHERE Status=7 AND DateCP != ProcDate";
             List<ClaimProc> listClaimProcs = Crud.ClaimProcCrud.SelectMany(command);
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = listClaimProcs.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Capitation procs with mismatched dates found: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     //js ok
@@ -2352,15 +2212,15 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ClaimProcDateNotMatchPayment(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimProcDateNotMatchPayment(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             DataTable table;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT claimproc.ClaimProcNum,claimpayment.CheckDate FROM claimproc,claimpayment "
                     + "WHERE claimproc.ClaimPaymentNum=claimpayment.ClaimPaymentNum "
                     + "AND claimproc.DateCP!=claimpayment.CheckDate";
@@ -2370,7 +2230,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Claim payments with mismatched dates found: ") + table.Rows.Count.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     //This is a very strict relationship that has been enforced rigorously for many years.
                     //If there is an error, it is a fairly new error.  All errors must be repaired.
                     //It won't change amounts of history, just dates.  The changes will typically be only a few days or weeks.
@@ -2425,8 +2285,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ClaimProcDeleteDuplicateEstimateForSameInsPlan(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimProcDeleteDuplicateEstimateForSameInsPlan(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command;
 
@@ -2444,13 +2304,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Duplicate ClaimProc estimates for the same InsPlan found: ") + table.Rows.Count + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     if (table.Rows.Count > 0)
@@ -2473,8 +2333,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ClaimProcDeleteInvalidAdjustments(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimProcDeleteInvalidAdjustments(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT ClaimProcNum FROM claimproc WHERE claimproc.ClaimNum=0 "
@@ -2483,14 +2343,14 @@ namespace OpenDentBusiness
             List<long> listClaimProcNums = Db.GetListLong(command);
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = listClaimProcNums.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Claimproc adjustments found with invalid PlanNum:") + " " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = "DELETE FROM claimproc WHERE claimproc.ClaimNum=0 "
@@ -2509,8 +2369,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasPatNum = true)]
-        public static string ClaimProcDeleteWithInvalidClaimNum(bool verbose, DbmMode modeCur, long patNum = 0)
+        [DatabaseMaintenanceAttribute(HasPatientId = true)]
+        public static string ClaimProcDeleteWithInvalidClaimNum(bool verbose, DatabaseMaintenanceMode modeCur, long patNum = 0)
         {
             string log = "";
             string patWhere = (patNum > 0 ? "AND claimproc.PatNum=" + POut.Long(patNum) + " " : "");
@@ -2520,14 +2380,14 @@ namespace OpenDentBusiness
                         + "AND claimproc.InsPayAmt=0 AND claimproc.WriteOff=0";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = Db.GetListLong(command).Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Claimprocs found with invalid ClaimNum: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     List<long> listClaimProcNums = Db.GetListLong(command);
@@ -2548,8 +2408,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ClaimProcDeleteMismatchPatNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimProcDeleteMismatchPatNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT ClaimProcNum FROM claimproc "
                 + "INNER JOIN procedurelog ON procedurelog.ProcNum=claimproc.ProcNum "
@@ -2563,14 +2423,14 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = listClaimProcNums.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Claimprocs found with PatNum that doesn't match the procedure PatNum:") + " " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     if (listClaimProcNums.Count > 0)
                     {
                         List<DbmLog> listDbmLogs = new List<DbmLog>();
@@ -2591,8 +2451,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ClaimProcDeleteEstimateWithInvalidProcNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimProcDeleteEstimateWithInvalidProcNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT ClaimProcNum FROM claimproc WHERE ProcNum>0 "
@@ -2602,14 +2462,14 @@ namespace OpenDentBusiness
             List<long> listClaimProcNums = Db.GetListLong(command);
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = listClaimProcNums.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Estimates found for procedures that no longer exist: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     //These seem to pop up quite regularly due to the program forgetting to delete them
@@ -2630,8 +2490,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ClaimProcDeleteCapEstimateWithProcComplete(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimProcDeleteCapEstimateWithProcComplete(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT ClaimProcNum FROM claimproc WHERE ProcNum>0 "
@@ -2644,14 +2504,14 @@ namespace OpenDentBusiness
             List<long> listClaimProcNums = Db.GetListLong(command);
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = listClaimProcNums.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Capitation estimates found for completed procedures: ") + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = "DELETE FROM claimproc WHERE ProcNum>0 "
@@ -2674,22 +2534,22 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ClaimProcEstNoBillIns(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimProcEstNoBillIns(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT * FROM claimproc WHERE NoBillIns=1 AND InsPayEst !=0";
             List<ClaimProc> listClaimProcs = Crud.ClaimProcCrud.SelectMany(command);
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = listClaimProcs.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Claimprocs found with non-zero estimates marked NoBillIns: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     //This is just estimate info, regardless of the claimproc status, so totally safe.
@@ -2707,22 +2567,22 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ClaimProcEstWithInsPaidAmt(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimProcEstWithInsPaidAmt(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = @"SELECT * FROM claimproc WHERE InsPayAmt > 0 AND ClaimNum=0 AND Status=6";
             List<ClaimProc> listClaimProcs = Crud.ClaimProcCrud.SelectMany(command);
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = listClaimProcs.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "ClaimProc estimates with InsPaidAmt > 0 found: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     //The InsPayAmt is already being ignored due to the status of the claimproc.  So changing its value is harmless.
@@ -2740,21 +2600,21 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ClaimProcPatNumMissing(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimProcPatNumMissing(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT ClaimProcNum FROM claimproc WHERE PatNum=0 AND InsPayAmt=0 AND WriteOff=0";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = Db.GetListLong(command).Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "ClaimProcs with missing patnums found: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     List<long> listClaimProcNums = Db.GetListLong(command);
@@ -2772,22 +2632,22 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ClaimProcProvNumMissing(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimProcProvNumMissing(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT ClaimProcNum FROM claimproc WHERE ProvNum=0 AND Status=" + POut.Int((int)ClaimProcStatus.Estimate);
             List<long> listClaimProcNums = Db.GetListLong(command);
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = listClaimProcNums.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "ClaimProcs with missing provnums found: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     //If estimate, set to default prov (doesn't affect finances)
@@ -2813,8 +2673,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string ClaimProcPreauthNotMatchClaim(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string ClaimProcPreauthNotMatchClaim(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = @"SELECT claim.PatNum,claim.DateService,claimproc.ProcDate,claimproc.CodeSent,claimproc.FeeBilled 
 				FROM claimproc,claim 
@@ -2829,14 +2689,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "ClaimProcs for preauths with status not preauth") + ": " + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -2856,8 +2716,8 @@ namespace OpenDentBusiness
         }
 
         ///<summary>We are only checking mismatched statuses if claim is marked as received.</summary>
-        [DbmMethodAttr(HasBreakDown = true, HasPatNum = true)]
-        public static string ClaimProcStatusNotMatchClaim(bool verbose, DbmMode modeCur, long patNum = 0)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true, HasPatientId = true)]
+        public static string ClaimProcStatusNotMatchClaim(bool verbose, DatabaseMaintenanceMode modeCur, long patNum = 0)
         {
             string patWhere = (patNum > 0 ? "AND claimproc.PatNum=" + POut.Long(patNum) + " " : "");
             string command = @"SELECT claim.PatNum,claim.DateService,claimproc.ProcDate,claimproc.CodeSent,claimproc.FeeBilled
@@ -2878,14 +2738,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "ClaimProcs with status not matching claim found: ") + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -2905,8 +2765,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ClaimProcTotalPaymentWithInvalidDate(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimProcTotalPaymentWithInvalidDate(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT claimproc.ClaimProcNum,claimproc.ProcDate,claim.DateService FROM claimproc,claim"
                 + " WHERE claimproc.ProcNum=0"//Total payments
@@ -2917,13 +2777,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Total claim payments with invalid date found") + ": " + table.Rows.Count + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     if (table.Rows.Count > 0)
@@ -2949,15 +2809,15 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasPatNum = true)]
-        public static string ClaimProcWithInvalidClaimNum(bool verbose, DbmMode modeCur, long patNum = 0)
+        [DatabaseMaintenanceAttribute(HasPatientId = true)]
+        public static string ClaimProcWithInvalidClaimNum(bool verbose, DatabaseMaintenanceMode modeCur, long patNum = 0)
         {
             string log = "";
             string command;
             string patWhere = (patNum > 0 ? "AND claimproc.PatNum=" + POut.Long(patNum) + " " : "");
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM claimproc WHERE claimproc.ClaimNum!=0 "
                         + patWhere
                         + "AND NOT EXISTS(SELECT * FROM claim WHERE claim.ClaimNum=claimproc.ClaimNum) "
@@ -2968,7 +2828,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Claimprocs found with invalid ClaimNum: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     //We can't touch those claimprocs because it would mess up the accounting.
@@ -3013,8 +2873,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasPatNum = true)]
-        public static string ClaimProcWithInvalidClaimPaymentNum(bool verbose, DbmMode modeCur, long patNum = 0)
+        [DatabaseMaintenanceAttribute(HasPatientId = true)]
+        public static string ClaimProcWithInvalidClaimPaymentNum(bool verbose, DatabaseMaintenanceMode modeCur, long patNum = 0)
         {
             string log = "";
             string patWhere = (patNum > 0 ? "AND claimproc.PatNum=" + POut.Long(patNum) + " " : "");
@@ -3024,14 +2884,14 @@ namespace OpenDentBusiness
             List<ClaimProc> listClaimProcs = Crud.ClaimProcCrud.SelectMany(command);
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = listClaimProcs.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "ClaimProcs with with invalid ClaimPaymentNumber found: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     //slightly dangerous.  User will have to create ins check again.  But does not alter financials.
@@ -3052,22 +2912,22 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ClaimProcWithInvalidPayPlanNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimProcWithInvalidPayPlanNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = @"SELECT * FROM claimproc WHERE PayPlanNum>0 AND PayPlanNum NOT IN(SELECT PayPlanNum FROM payplan)";
             List<ClaimProc> listClaimProcs = Crud.ClaimProcCrud.SelectMany(command);
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = listClaimProcs.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "ClaimProcs with with invalid PayPlanNum found") + ": " + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     //safe, if the user wants to attach the claimprocs to a payplan for tracking the ins payments they would just need to attach to a valid payplan
@@ -3085,22 +2945,22 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ClaimProcWithInvalidProvNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimProcWithInvalidProvNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT * FROM claimproc WHERE ProvNum > 0 AND ProvNum NOT IN (SELECT ProvNum FROM provider)";
             List<ClaimProc> listClaimProcs = Crud.ClaimProcCrud.SelectMany(command);
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = listClaimProcs.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Claimprocs with invalid ProvNum found") + ": " + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = "UPDATE claimproc SET ProvNum=" + POut.Long(Preference.GetLong(PreferenceName.PracticeDefaultProv)) +
@@ -3119,22 +2979,22 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ClaimProcWithInvalidSubNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClaimProcWithInvalidSubNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT ClaimProcNum FROM claimproc WHERE claimproc.InsSubNum > 0 AND claimproc.Status=" + POut.Int((int)ClaimProcStatus.Estimate)
                 + " AND claimproc.InsSubNum NOT IN (SELECT inssub.InsSubNum FROM inssub)";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = Db.GetListLong(command).Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Claimprocs with invalid InsSubNum found") + ": " + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     List<long> listClaimProcNums = Db.GetListLong(command);
@@ -3153,8 +3013,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string ClaimProcWriteOffNegative(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string ClaimProcWriteOffNegative(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = @"SELECT patient.LName,patient.FName,patient.MiddleI,claimproc.CodeSent,procedurelog.ProcFee,procedurelog.ProcDate,claimproc.WriteOff
 					FROM claimproc 
@@ -3169,14 +3029,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Negative writeoffs found: ") + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         string patientName;
@@ -3201,8 +3061,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(IsCanada = true)]
-        public static string CanadaClaimProcForWrongPatient(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(IsCanada = true)]
+        public static string CanadaClaimProcForWrongPatient(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             if (!CultureInfo.CurrentCulture.Name.EndsWith("CA"))
             {
@@ -3221,13 +3081,13 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Claimprocs associated to wrong patient") + ":" + listClaimProcs.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (listClaimProcs.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Claimprocs associated to wrong patient") + ": " + listClaimProcs.Count.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     foreach (ClaimProc claimProc in listClaimProcs)
@@ -3244,8 +3104,8 @@ namespace OpenDentBusiness
 
         #endregion ClaimProc----------------------------------------------------------------------------------------------------------------------------
         #region Clearinghouse---------------------------------------------------------------------------------------------------------------------------
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string ClearinghouseInvalidFormat(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string ClearinghouseInvalidFormat(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             int formatEnumCount = Enum.GetNames(typeof(ElectronicClaimFormat)).Length - 1;
             string command = "SELECT clearinghouse.Description,COALESCE(clinic.Abbr,'" + POut.String(Lans.g("FormDatabaseMaintenance", "Unassigned")) + "') Abbr "
@@ -3261,14 +3121,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Clearinghouses with invalid Format found:") + " " + numFound;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (numFound > 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.");
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (numFound > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -3288,8 +3148,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string ClearinghouseInvalidCommBridge(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string ClearinghouseInvalidCommBridge(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             int commBridgeEnumCount = Enum.GetNames(typeof(EclaimsCommBridge)).Length - 1;
             string command = "SELECT clearinghouse.Description,COALESCE(clinic.Abbr,'" + POut.String(Lans.g("FormDatabaseMaintenance", "Unassigned")) + "') Abbr "
@@ -3305,14 +3165,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Clearinghouses with invalid CommBridge found:") + " " + numFound;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (numFound > 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.");
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (numFound > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -3335,8 +3195,8 @@ namespace OpenDentBusiness
         #region Clinic
 
         ///<summary>Inserts missing/invalid clinics.</summary>
-        [DbmMethodAttr]
-        public static string ClinicNumMissingInvalid(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClinicNumMissingInvalid(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             //look at the procedurelog and patient table because they will most likely have all possible clinics.
             string command = @"
@@ -3353,13 +3213,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (listInvalidClinicNums.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Clinics missing") + ": " + listInvalidClinicNums.Count + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     if (listInvalidClinicNums.Count > 0)
                     {
                         List<DbmLog> listDbmLogs = new List<DbmLog>();
@@ -3393,14 +3253,14 @@ namespace OpenDentBusiness
         #endregion
         #region ClockEvent, Deposit, Disease, Document--------------------------------------------------------------------------------------------------
 
-        [DbmMethodAttr]
-        public static string ClockEventInFuture(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ClockEventInFuture(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = @"SELECT COUNT(*) FROM clockevent WHERE TimeDisplayed1 > " + DbHelper.Now() + "+INTERVAL 15 MINUTE";
                     int numFound = PIn.Int(Db.GetCount(command));
                     command = @"SELECT COUNT(*) FROM clockevent WHERE TimeDisplayed2 > " + DbHelper.Now() + "+INTERVAL 15 MINUTE";
@@ -3410,7 +3270,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Time card entries invalid") + ": " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = @"UPDATE clockevent SET TimeDisplayed1=" + DbHelper.Now() + " WHERE TimeDisplayed1 > " + DbHelper.Now() + "+INTERVAL 15 MINUTE";
                     long numberFixed = Db.NonQ(command);
                     command = @"UPDATE clockevent SET TimeDisplayed2=" + DbHelper.Now() + " WHERE TimeDisplayed2 > " + DbHelper.Now() + "+INTERVAL 15 MINUTE";
@@ -3473,8 +3333,8 @@ namespace OpenDentBusiness
 		}*/
 
         ///<summary>Finds deposits where there are attached payments and the deposit amount does not equal the sum of the attached payment amounts.</summary>
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string DepositsWithIncorrectAmount(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string DepositsWithIncorrectAmount(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             //only deposits with payments attached (INNER JOIN) where sum of payment amounts don't match the deposit amount
             //deposits with positive amount but no payments attached (LEFT JOIN...) is handled in a separate DBM above
@@ -3499,14 +3359,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Deposit sums found incorrect: ") + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -3526,8 +3386,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string DiseaseWithInvalidDiseaseDef(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string DiseaseWithInvalidDiseaseDef(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = @"SELECT DiseaseNum,DiseaseDefNum FROM disease WHERE DiseaseDefNum NOT IN(SELECT DiseaseDefNum FROM diseasedef)";
@@ -3535,13 +3395,13 @@ namespace OpenDentBusiness
             int numFound = table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Problems with invalid references found") + ": " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Problems with invalid references found") + ": " + numFound + "\r\n";
@@ -3570,8 +3430,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string DocumentWithInvalidDate(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string DocumentWithInvalidDate(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             //Gets a list of documents with dates that are invalid (0001-01-01). The list should be blank. If not, then the document's date will be set to 001-01-02 which will allow deletion.
             string command = "SELECT COUNT(*) FROM document WHERE DateCreated=" + POut.Date(new DateTime(1, 1, 1));
@@ -3579,13 +3439,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Documents with invalid dates found") + ": " + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     if (numFound > 0)
                     {
                         command = "UPDATE document SET DateCreated=" + POut.Date(new DateTime(1, 1, 2)) + " WHERE DateCreated=" + POut.Date(new DateTime(1, 1, 1));
@@ -3600,21 +3460,21 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string DocumentWithNoCategory(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string DocumentWithNoCategory(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT DocNum FROM document WHERE DocCategory=0";
             DataTable table = Db.GetTable(command);
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Images with no category found: ") + table.Rows.Count + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.ImageCats);
                     for (int i = 0; i < table.Rows.Count; i++)
                     {
@@ -3635,8 +3495,8 @@ namespace OpenDentBusiness
         #endregion ClockEvent, Deposit, Disease, Document-----------------------------------------------------------------------------------------------
         #region Ebill, EduResource, EmailAttach---------------------------------------------------------------------------------------------------------
 
-        [DbmMethodAttr]
-        public static string EbillDuplicates(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string EbillDuplicates(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             //Min may not be the oldest when using random primary keys, but we have to pick one.  In most cases they're identical anyway.
             string command = "SELECT MIN(EbillNum) EbillNum,COUNT(*) Count "
@@ -3646,7 +3506,7 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = tableEbills.Select().Select(x => PIn.Int(x["Count"].ToString()) - 1).Sum();//count duplicates=Sum(# per group-1)
                     if (numFound > 0 || verbose)
                     {
@@ -3654,7 +3514,7 @@ namespace OpenDentBusiness
                             + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     long numberFixed = 0;
                     if (tableEbills.Rows.Count > 0)
                     {
@@ -3673,21 +3533,21 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Inserts an ebill for ClinicNum 0 if it does not exist.</summary>
-        [DbmMethodAttr]
-        public static string EbillMissingDefaultEntry(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string EbillMissingDefaultEntry(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT COUNT(*) FROM ebill WHERE ClinicNum=0";
             int numFound = PIn.Int(Db.GetCount(command));
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (numFound == 0)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Missing default ebill entry.");
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     if (numFound == 0)
                     {
                         long ebillNum = OpenDentBusiness.Crud.EbillCrud.Insert(new Ebill()
@@ -3710,21 +3570,21 @@ namespace OpenDentBusiness
         }
 
         ///<summary>This could be enhanced to validate all foreign keys on the eduresource.</summary>
-        [DbmMethodAttr]
-        public static string EduResourceInvalidDiseaseDefNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string EduResourceInvalidDiseaseDefNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT EduResourceNum FROM eduresource WHERE DiseaseDefNum != 0 AND DiseaseDefNum NOT IN (SELECT DiseaseDefNum FROM diseasedef)";
             DataTable table = Db.GetTable(command);
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "EHR Educational Resources with invalid problem found: ") + table.Rows.Count + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "SELECT DiseaseDefNum FROM diseasedef WHERE ItemOrder=(SELECT MIN(ItemOrder) FROM diseasedef WHERE IsHidden=0)";
                     long defNum = PIn.Long(Db.GetScalar(command));
                     for (int i = 0; i < table.Rows.Count; i++)
@@ -3742,14 +3602,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string EmailAttachWithTemplateNumAndMessageNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string EmailAttachWithTemplateNumAndMessageNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM emailattach WHERE emailattach.EmailTemplateNum!=0 AND emailattach.EmailMessageNum!=0";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -3757,7 +3617,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Email attachments attached to both an email and a template found") + ": " + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "UPDATE emailattach SET EmailTemplateNum=0 WHERE emailattach.EmailTemplateNum!=0 AND emailattach.EmailMessageNum!=0";
                     long numFixed = Db.NonQ(command);
                     if (numFixed > 0 || verbose)
@@ -3772,8 +3632,8 @@ namespace OpenDentBusiness
         #endregion Ebill, EduResource, EmailAttach------------------------------------------------------------------------------------------------------
         #region Fee, FeeSchedule, GroupNote, GroupPermission-------------------------------------------------------------------------------------------------------------
 
-        [DbmMethodAttr]
-        public static string FeeDeleteDuplicates(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string FeeDeleteDuplicates(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT FeeNum,FeeSched,CodeNum,Amount,ClinicNum,ProvNum FROM fee GROUP BY FeeSched,CodeNum,ClinicNum,ProvNum HAVING COUNT(CodeNum)>1";
             DataTable table = Db.GetTable(command);
@@ -3781,13 +3641,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Procedure codes with duplicate fee entries: ") + count + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     long numberFixed = 0;
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
@@ -3823,8 +3683,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string FeeDeleteForInvalidProc(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string FeeDeleteForInvalidProc(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = @"SELECT FeeNum,FeeSched,fee.CodeNum AS 'CodeNum' FROM fee 
 									LEFT JOIN procedurecode ON fee.CodeNum=procedurecode.CodeNum 
@@ -3834,13 +3694,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Procedure codes with invalid procedure codes: ") + count + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     long numberFixed = 0;
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
@@ -3869,8 +3729,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string GroupNoteWithInvalidAptNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string GroupNoteWithInvalidAptNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT * FROM procedurelog "
@@ -3879,14 +3739,14 @@ namespace OpenDentBusiness
             List<Procedure> listProcedures = Crud.ProcedureCrud.SelectMany(command);
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = listProcedures.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Group notes attached to appointments: ") + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = "UPDATE procedurelog SET AptNum=0 "
@@ -3904,8 +3764,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string GroupNoteWithInvalidProcStatus(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string GroupNoteWithInvalidProcStatus(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT * FROM procedurelog "
@@ -3915,14 +3775,14 @@ namespace OpenDentBusiness
             List<Procedure> listProcedures = Crud.ProcedureCrud.SelectMany(command);
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = listProcedures.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Group notes with invalid status: ") + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = "UPDATE procedurelog SET ProcStatus=" + POut.Long((int)ProcStat.EC) + " "
@@ -3942,14 +3802,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string FeeScheduleHiddenWithPatient(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string FeeScheduleHiddenWithPatient(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(DISTINCT(FeeSchedNum)) FROM patient "
                         + "INNER JOIN feesched ON patient.FeeSched=feesched.FeeSchedNum "
                         + "WHERE feesched.IsHidden=1";
@@ -3959,7 +3819,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Hidden Fee Schedules associated to patients: ") + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = "SELECT FeeSchedNum FROM feesched WHERE IsHidden=1 AND FeeSchedNum IN (SELECT FeeSched FROM patient)";
@@ -3979,14 +3839,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string GroupPermissionInvalidNewerDays(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string GroupPermissionInvalidNewerDays(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = $"SELECT COUNT(GroupPermNum) FROM grouppermission WHERE NewerDays<0 OR NewerDays>{GroupPermissions.NewerDaysMax}";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -3994,7 +3854,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Group permissions with invalid NewerDays found: ") + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = $@"UPDATE grouppermission 
 						SET NewerDays=(CASE WHEN NewerDays<0 THEN 0 ELSE {GroupPermissions.NewerDaysMax} END) 
@@ -4011,20 +3871,20 @@ namespace OpenDentBusiness
 
         #endregion Fee, FeeSchedule, GroupNote----------------------------------------------------------------------------------------------------------
         #region Icd9
-        [DbmMethodAttr]
-        public static string Icd9InvalidCodes(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string Icd9InvalidCodes(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             List<long> listIcd9Nums = Db.GetListLong("SELECT ICD9Num FROM icd9 WHERE ICD9Code=''");
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (listIcd9Nums.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Invalid ICD9 codes found") + ": " + listIcd9Nums.Count + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     if (listIcd9Nums.Count > 0)
                     {
                         Db.NonQ("DELETE FROM icd9 WHERE ICD9Num IN(" + String.Join(",", listIcd9Nums) + ")");
@@ -4041,8 +3901,8 @@ namespace OpenDentBusiness
         #endregion
         #region InsPayPlan, InsPlan, InsSub-------------------------------------------------------------------------------------------------------------
 
-        [DbmMethodAttr]
-        public static string InsPayPlanWithPatientPayments(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string InsPayPlanWithPatientPayments(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             //Gets a list of payplans of type insurance that have patient payments attached to them and no insurance payments attached
             string command = @"SELECT payplan.PayPlanNum 
@@ -4060,13 +3920,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (listPayPlanNums.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Ins payment plans with patient payments attached") + ": " + listPayPlanNums.Count + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     if (listPayPlanNums.Count > 0)
@@ -4088,15 +3948,15 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string InsPlanInvalidCarrier(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string InsPlanInvalidCarrier(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             //Gets a list of insurance plans that do not have a carrier attached. The list should be blank. If not, then you need to go to the plan listed and add a carrier. Missing carriers will cause the send claims function to give an error.
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT PlanNum FROM insplan WHERE CarrierNum NOT IN (SELECT CarrierNum FROM carrier)";
                     DataTable table = Db.GetTable(command);
                     if (table.Rows.Count > 0 || verbose)
@@ -4104,7 +3964,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Ins plans with carrier missing found: ") + table.Rows.Count + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     command = "SELECT PlanNum, CarrierNum FROM insplan WHERE CarrierNum NOT IN (SELECT CarrierNum FROM carrier)";
                     var dictCarrierPlans = Db.GetTable(command).Select().Select(x => new
                     {
@@ -4123,7 +3983,7 @@ namespace OpenDentBusiness
                         }
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "SELECT PlanNum,CarrierNum FROM insplan WHERE CarrierNum NOT IN (SELECT CarrierNum FROM carrier)";
                     table = Db.GetTable(command);
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
@@ -4149,8 +4009,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasBreakDown = true, HasPatNum = true)]
-        public static string InsPlanInvalidNum(bool verbose, DbmMode modeCur, long patNum = 0)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true, HasPatientId = true)]
+        public static string InsPlanInvalidNum(bool verbose, DatabaseMaintenanceMode modeCur, long patNum = 0)
         {
             //Many sections removed because they are now fixed in InsSubNumMismatchPlanNum.
             string log = "";
@@ -4191,7 +4051,7 @@ namespace OpenDentBusiness
             }
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     #region CHECK
                     string command = "SELECT COUNT(*) FROM appointment "
                         + "WHERE appointment.InsPlan1 != 0 "
@@ -4240,7 +4100,7 @@ namespace OpenDentBusiness
                     }
                     #endregion CHECK
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     #region BREAKDOWN
                     command = "SELECT PatNum, AptNum, InsPlan1 FROM appointment "
                         + "WHERE appointment.InsPlan1 != 0 "
@@ -4337,7 +4197,7 @@ namespace OpenDentBusiness
                     }
                     #endregion BREAKDOWN
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     #region FIX
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
@@ -4520,14 +4380,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string InsPlanNoClaimForm(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string InsPlanNoClaimForm(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM insplan WHERE ClaimFormNum=0";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -4535,7 +4395,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Insplan claimforms missing: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = "SELECT * FROM insplan WHERE ClaimFormNum=0";
@@ -4555,8 +4415,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string InsSubInvalidSubscriber(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string InsSubInvalidSubscriber(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = @"SELECT inssub.Subscriber,COALESCE(patient.PatStatus,-1) PatStatus FROM inssub 
 				LEFT JOIN patient ON patient.PatNum=inssub.Subscriber
@@ -4567,14 +4427,14 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = table.Rows.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "InsSub subscribers missing: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     long priProv = Preference.GetLong(PreferenceName.PracticeDefaultProv);
                     long billType = Preference.GetLong(PreferenceName.PracticeDefaultBillType);
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
@@ -4623,8 +4483,8 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Checks for situations where there are valid InsSubNums, but mismatched PlanNums.</summary>
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string InsSubNumMismatchPlanNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string InsSubNumMismatchPlanNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             //Not going to validate the following tables because they do not have an InsSubNum column: appointmentx2, benefit.
@@ -4632,7 +4492,7 @@ namespace OpenDentBusiness
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     #region CHECK
                     int numFound = 0;
                     bool hasBreakDown = false;
@@ -4705,7 +4565,7 @@ namespace OpenDentBusiness
                     }
                     break;
                 #endregion CHECK
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     #region BREAKDOWN
                     //In this BREAKDOWN, when user double clicks on this DBM query and show what needs to be fixed/will attempted to be fixed when running Fix.
                     //claim.PlanNum -----------------------------------------------------------------------------------------------------
@@ -4810,7 +4670,7 @@ namespace OpenDentBusiness
                     }
                     break;
                 #endregion BREAKDOWN
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     #region FIX
                     long numFixed = 0;
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
@@ -5050,21 +4910,21 @@ namespace OpenDentBusiness
         #endregion InsPayPlan, InsPlan, InsSub----------------------------------------------------------------------------------------------------------
         #region JournalEntry, LabCase, Laboratory-------------------------------------------------------------------------------------------------------
 
-        [DbmMethodAttr]
-        public static string JournalEntryInvalidAccountNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string JournalEntryInvalidAccountNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT COUNT(*) FROM journalentry WHERE AccountNum NOT IN(SELECT AccountNum FROM account)";
             int numFound = PIn.Int(Db.GetCount(command));
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Transactions found attached to an invalid account") + ": " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Transactions found attached to an invalid account") + ": " + numFound + "\r\n";
@@ -5094,14 +4954,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string LabCaseWithInvalidLaboratory(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string LabCaseWithInvalidLaboratory(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM labcase WHERE laboratoryNum NOT IN(SELECT laboratoryNum FROM laboratory)";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -5109,7 +4969,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Lab cases found with invalid laboratories") + ": " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "SELECT COUNT(*) FROM labcase WHERE laboratoryNum NOT IN(SELECT laboratoryNum FROM laboratory)";
                     long numberFixed = long.Parse(Db.GetCount(command));
                     command = "SELECT * FROM labcase WHERE laboratoryNum NOT IN(SELECT laboratoryNum FROM laboratory) GROUP BY LaboratoryNum";
@@ -5134,14 +4994,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string LaboratoryWithInvalidSlip(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string LaboratoryWithInvalidSlip(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM laboratory WHERE Slip NOT IN(SELECT SheetDefNum FROM sheetdef) AND Slip != 0";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -5149,7 +5009,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Laboratories found with invalid lab slips") + ": " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "UPDATE laboratory SET Slip=0 WHERE Slip NOT IN(SELECT SheetDefNum FROM sheetdef) AND Slip != 0";
                     long numberFixed = Db.NonQ(command);
                     if (numberFixed > 0 || verbose)
@@ -5164,14 +5024,14 @@ namespace OpenDentBusiness
         #endregion JournalEntry, LabCase, Laboratory----------------------------------------------------------------------------------------------------
         #region MedicationPat, Medication, MessageButton------------------------------------------------------------------------------------------------
 
-        [DbmMethodAttr]
-        public static string MedicationPatDeleteWithInvalidMedNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string MedicationPatDeleteWithInvalidMedNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM medicationpat WHERE "//We no longer delete medicationpats where MedicationNum is 0 because we allow MedicationNums to be 0 for use in MU2.
                         + "(medicationpat.MedicationNum<>0 AND NOT EXISTS(SELECT * FROM medication WHERE medication.MedicationNum=medicationpat.MedicationNum))";
                     int numFound = PIn.Int(Db.GetCount(command));
@@ -5180,7 +5040,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Medications found where no defition exists for them: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "DELETE FROM medicationpat WHERE "//We no longer delete medicationpats where MedicationNum is 0 because we allow MedicationNums to be 0 for use in MU2.
                         + "(medicationpat.MedicationNum<>0 AND NOT EXISTS(SELECT * FROM medication WHERE medication.MedicationNum=medicationpat.MedicationNum))";
                     long numberFixed = Db.NonQ(command);
@@ -5193,14 +5053,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string MedicationWithInvalidGenericNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string MedicationWithInvalidGenericNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = @"SELECT COUNT(*) FROM medication WHERE GenericNum NOT IN (SELECT MedicationNum FROM medication)";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -5208,7 +5068,7 @@ namespace OpenDentBusiness
                         log += "Medications with missing generic brand found: " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<Medication> listMeds;
                     //Select into list because the following query is not valid in MySQL
                     //UPDATE medication SET GenericNum=MedicationNum WHERE GenericNum NOT IN (SELECT MedicationNum FROM medication)
@@ -5228,8 +5088,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string MessageButtonDuplicateButtonIndex(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string MessageButtonDuplicateButtonIndex(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string queryStr = "SELECT COUNT(*) NumFound,SigButDefNum,ButtonIndex,ComputerName FROM sigbutdef GROUP BY ComputerName,ButtonIndex HAVING COUNT(*) > 1";
             DataTable table = Db.GetTable(queryStr);
@@ -5238,13 +5098,13 @@ namespace OpenDentBusiness
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Messaging buttons found with invalid button orders") + ": " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     do
                     {
                         //Loop through the messaging buttons and increment the duplicate button index by the max plus one.
@@ -5270,8 +5130,8 @@ namespace OpenDentBusiness
         #endregion MedicationPat, Medication, MessageButton---------------------------------------------------------------------------------------------
         #region Operatory, OrthoChart, PatField---------------------------------------------------------------------------------------------------------
 
-        [DbmMethodAttr]
-        public static string OperatoryInvalidReference(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string OperatoryInvalidReference(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             //Get distinct operatory nums that have been orphaned from appointment, scheduleop, and apptviewitems.  
             //We use a UNION instead of UNION ALL because we want MySQL or Oracle to group duplicate OpNums together.
@@ -5284,13 +5144,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("OperatoryInvalidReference", "Operatory references that are invalid") + ": " + table.Rows.Count + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     for (int i = 0; i < table.Rows.Count; i++)
                     {
                         long opNum = PIn.Long(table.Rows[i]["OpNum"].ToString());
@@ -5312,13 +5172,13 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string OrthoChartDeleteDuplicates(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string OrthoChartDeleteDuplicates(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     string command = @"SELECT SUM(duplicates.CountDup) 
 					FROM (
 						SELECT COUNT(*)-1 CountDup 
@@ -5332,7 +5192,7 @@ namespace OpenDentBusiness
                         log += numFound.ToString() + Lans.g("FormDatabaseMaintenance", " duplicate cell entries found.") + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     //Holds the unique row that we will be keeping. All other rows like this one will be deleted (not copied to the renamed table) below.
                     //The group by clause must use the keyword BINARY because the ortho chart within Open Dental is case sensitive.
                     command = @"RENAME TABLE orthochart TO orthochartbak;
@@ -5368,21 +5228,21 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string OrthoChartFieldsWithoutValues(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string OrthoChartFieldsWithoutValues(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string queryStr = "SELECT COUNT(*) FROM orthochart WHERE FieldValue=''";
             int numFound = PIn.Int(Db.GetCount(queryStr));
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Ortho chart fields without values found") + ": " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     string command = "DELETE FROM orthochart WHERE FieldValue=''";
                     Db.NonQ(command);
                     if (numFound > 0 || verbose)
@@ -5394,8 +5254,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PatFieldsDeleteDuplicates(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PatFieldsDeleteDuplicates(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             //This code is only needed for older db's. New DB's created after 12.2.30 and 12.3.2 shouldn't need this.
             string command = @"DROP TABLE IF EXISTS tempduplicatepatfields";
@@ -5416,13 +5276,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Patients with duplicate field entries found: ") + table.Rows.Count + ".\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "The following patients had corrupt Patient Fields. Please verify the Patient Fields of these patients:") + "\r\n";
@@ -5451,21 +5311,21 @@ namespace OpenDentBusiness
         #endregion Operatory, OrthoChart, PatField------------------------------------------------------------------------------------------------------
         #region Patient---------------------------------------------------------------------------------------------------------------------------------
 
-        [DbmMethodAttr]
-        public static string PatientBadGuarantor(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PatientBadGuarantor(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT p.PatNum,p.Guarantor FROM patient p LEFT JOIN patient p2 ON p.Guarantor=p2.PatNum WHERE p2.PatNum IS NULL";
             DataTable table = Db.GetTable(command);
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Patients with invalid Guarantors found: ") + table.Rows.Count.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     for (int i = 0; i < table.Rows.Count; i++)
@@ -5488,21 +5348,21 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PatientBadGuarantorWithAnotherGuarantor(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PatientBadGuarantorWithAnotherGuarantor(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT p.PatNum,p2.Guarantor FROM patient p LEFT JOIN patient p2 ON p.Guarantor=p2.PatNum WHERE p2.PatNum!=p2.Guarantor";
             DataTable table = Db.GetTable(command);
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Patients with a guarantor who has another guarantor found: ") + table.Rows.Count.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     for (int i = 0; i < table.Rows.Count; i++)
@@ -5525,14 +5385,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PatientDeletedWithClinicNumSet(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PatientDeletedWithClinicNumSet(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM patient WHERE ClinicNum!=0 AND PatStatus=" + POut.Int((int)PatientStatus.Deleted);
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -5540,7 +5400,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Deleted patients with a clinic still set: ") + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     string where = "WHERE ClinicNum!=0 AND PatStatus=" + POut.Int((int)PatientStatus.Deleted);
@@ -5562,14 +5422,14 @@ namespace OpenDentBusiness
 
         ///<summary>Finds any patients that have an invalid BillingType (Billing Type that does not exist as a definition) and sets them to the first
         ///billing type in definitions table.</summary>
-        [DbmMethodAttr]
-        public static string PatientInvalidBillingType(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PatientInvalidBillingType(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM patient "
                         + "LEFT JOIN definition ON BillingType=definition.DefNum "
                             + "AND Category=" + (int)DefinitionCategory.BillingTypes + " "
@@ -5580,7 +5440,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Patients found with invalid billing type") + ": " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = "SELECT PatNum FROM patient "
@@ -5608,14 +5468,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PatientInvalidGradeLevel(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PatientInvalidGradeLevel(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM patient WHERE GradeLevel < 0";//Any negative number is considered invalid.
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -5623,7 +5483,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Patients with invalid GradeLevel set") + ": " + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = "SELECT * FROM patient WHERE GradeLevel < 0";
@@ -5648,8 +5508,8 @@ namespace OpenDentBusiness
         ///of the remaining SuperFamily as the new SuperHead, we use the new Guarantor of the previous SuperHead as the new SuperHead, or in the event 
         ///the old SuperHead has been moved to a new SuperFamily we use the SuperHead of that SuperFamily, effectively merging the SuperFamily into this 
         ///new Family/SuperFamily where the previous SuperHead now resides.</summary>
-        [DbmMethodAttr]
-        public static string PatientInvalidSuperFamilyHead(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PatientInvalidSuperFamilyHead(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT p1.PatNum, p2.PatNum AS OldHead, IF(p2.SuperFamily=0,p2.Guarantor,p2.SuperFamily) AS NewHead "
@@ -5659,14 +5519,14 @@ namespace OpenDentBusiness
             DataTable tablePatientsWithInvalidSuperHead = Db.GetTable(command);
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = tablePatientsWithInvalidSuperHead.Rows.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Patients in a SuperFamily with invalid super head") + ": " + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     List<string> listInvalidSuperFamilyHeadPatNums = new List<string>();
                     long countFixed = 0;
@@ -5754,8 +5614,8 @@ namespace OpenDentBusiness
         //	return log;
         //}
 
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string PatientsNoClinicSet(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string PatientsNoClinicSet(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             if (!Preferences.HasClinicsEnabled)
             {
@@ -5771,14 +5631,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Patients with no Clinic assigned: ") + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -5800,8 +5660,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string PatientPriProvHidden(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string PatientPriProvHidden(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = @"
 				SELECT provider.ProvNum,provider.Abbr
@@ -5817,14 +5677,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Hidden providers with patients: ") + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -5855,14 +5715,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PatientPriProvMissing(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PatientPriProvMissing(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = @"SELECT COUNT(*) FROM patient WHERE PriProv=0";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -5870,7 +5730,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Patient pri provs not set: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = "SELECT PatNum FROM patient WHERE PriProv=0";
@@ -5891,8 +5751,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PatientUnDeleteWithBalance(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PatientUnDeleteWithBalance(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT PatNum FROM patient	WHERE PatStatus=4 "
                 + "AND (Bal_0_30 !=0	OR Bal_31_60 !=0 OR Bal_61_90 !=0	OR BalOver90 !=0 OR InsEst !=0 OR BalTotal !=0)";
@@ -5900,13 +5760,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Patients found who are marked deleted with non-zero balances: ") + table.Rows.Count + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count == 0 && verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "No balances found for deleted patients.") + "\r\n";
@@ -5937,14 +5797,14 @@ namespace OpenDentBusiness
         #endregion Patient------------------------------------------------------------------------------------------------------------------------------
         #region PatPlan, Payment------------------------------------------------------------------------------------------------------------------------
 
-        [DbmMethodAttr]
-        public static string PatPlanDeleteWithInvalidInsSubNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PatPlanDeleteWithInvalidInsSubNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM patplan WHERE InsSubNum NOT IN (SELECT InsSubNum FROM inssub)";
                     string countStr = Db.GetCount(command);
                     if (countStr != "0" || verbose)
@@ -5952,7 +5812,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Pat plans found with invalid InsSubNums: ") + countStr + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = "SELECT PatPlanNum FROM patplan WHERE InsSubNum NOT IN (SELECT InsSubNum FROM inssub)";
@@ -5971,14 +5831,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PatPlanDeleteWithInvalidPatNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PatPlanDeleteWithInvalidPatNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM patplan WHERE PatNum NOT IN (SELECT PatNum FROM patient)";
                     string countStr = Db.GetCount(command);
                     if (countStr != "0" || verbose)
@@ -5986,7 +5846,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Pat plans found with invalid PatNums: ") + countStr + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = "SELECT PatPlanNum FROM patplan WHERE PatNum NOT IN (SELECT PatNum FROM patient)";
@@ -6005,8 +5865,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string PatPlanOrdinalDuplicates(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string PatPlanOrdinalDuplicates(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT patient.PatNum,patient.LName,patient.FName,COUNT(*) "
                 + "FROM patplan "
@@ -6021,14 +5881,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "PatPlan duplicate ordinals: ") + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -6043,21 +5903,21 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PatPlanOrdinalZeroToOne(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PatPlanOrdinalZeroToOne(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT PatPlanNum,PatNum FROM patplan WHERE Ordinal=0";
             DataTable table = Db.GetTable(command);
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "PatPlan ordinals currently zero: ") + table.Rows.Count + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     int numberFixed = 0;
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
@@ -6082,8 +5942,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PatPlanOrdinalTwoToOne(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PatPlanOrdinalTwoToOne(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT PatPlanNum,PatNum FROM patplan patplan1 WHERE Ordinal=2 AND NOT EXISTS("
                 + "SELECT * FROM patplan patplan2 WHERE patplan1.PatNum=patplan2.PatNum AND patplan2.Ordinal=1)";
@@ -6091,13 +5951,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "PatPlans for secondary found where no primary ins: ") + table.Rows.Count + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     int numberFixed = 0;
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
@@ -6124,8 +5984,8 @@ namespace OpenDentBusiness
 
         ///<summary>Shows payments that have a PaymentAmt that doesn't match the sum of all associated PaySplits.  
         ///Payments with no PaySplits are dealt with in PaymentMissingPaySplit()</summary>
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string PaymentAmtNotMatchPaySplitTotal(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string PaymentAmtNotMatchPaySplitTotal(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             //Note that this just returns info for a (seemingly) random patient that has a paysplit for the payment.
             //This is because the payment only shows in the ledger for the patient with the paysplit, not the patient on the payment.
@@ -6148,14 +6008,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Payments with amounts that do not match the total split(s) amounts") + ": " + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -6173,14 +6033,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PaymentDetachMissingDeposit(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PaymentDetachMissingDeposit(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM payment "
                         + "WHERE DepositNum != 0 "
                         + "AND NOT EXISTS(SELECT * FROM deposit WHERE deposit.DepositNum=payment.DepositNum)";
@@ -6190,7 +6050,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Payments attached to deposits that no longer exist: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     string where = "WHERE DepositNum != 0 AND NOT EXISTS(SELECT * FROM deposit WHERE deposit.DepositNum=payment.DepositNum)";
@@ -6211,14 +6071,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PaymentMissingPaySplit(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PaymentMissingPaySplit(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM payment "
                         + "WHERE PayNum NOT IN (SELECT PayNum FROM paysplit) "//Payments with no split that are
                         + "AND ((DepositNum=0) "                              //not attached to a deposit
@@ -6229,7 +6089,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Payments with no attached paysplit: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     string where = "WHERE PayNum NOT IN (SELECT PayNum FROM paysplit) "//Payments with no split that are
@@ -6300,8 +6160,8 @@ namespace OpenDentBusiness
         //	return log;
         //}
 
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string PayPlanChargeProvNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string PayPlanChargeProvNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT pat.PatNum AS 'PatNum',pat.LName AS 'PatLName',pat.FName AS 'PatFName',guar.PatNum AS 'GuarNum',guar.LName AS 'GuarLName',guar.FName AS 'GuarFName',payplan.PayPlanDate "
                 + "FROM payplancharge "
@@ -6318,14 +6178,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Pay plans with charges that have providers missing: ") + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -6342,8 +6202,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PayPlanChargeWithInvalidPayPlanNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PayPlanChargeWithInvalidPayPlanNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT COUNT(DISTINCT PayPlanNum) FROM (SELECT PayPlanNum FROM payplancharge WHERE PayPlanNum NOT IN(SELECT PayPlanNum FROM payplan) "
                 + "UNION SELECT PayPlanNum FROM creditcard WHERE PayPlanNum>0 AND PayPlanNum NOT IN(SELECT PayPlanNum FROM payplan)) A";
@@ -6351,13 +6211,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (count != "0" || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "PayPlan charges or credit cards with an invalid PayPlanNum found") + ": " + count;
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     if (count != "0" || verbose)
                     {
                         List<DbmLog> listDbmLogs = new List<DbmLog>();
@@ -6385,21 +6245,21 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PayPlanSetGuarantorToPatForIns(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PayPlanSetGuarantorToPatForIns(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT COUNT(*) FROM payplan WHERE PlanNum>0 AND Guarantor != PatNum";
             int numFound = PIn.Int(Db.GetCount(command));
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "PayPlan Guarantors not equal to PatNum where used for insurance tracking: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     //Too dangerous to do anything at all.  Just have a very descriptive explanation in the check.
                     //For now, tell the user that a fix is under development.
                     if (numFound > 0 || verbose)
@@ -6412,8 +6272,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string PaySplitAttachedToDeletedProc(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string PaySplitAttachedToDeletedProc(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT CONCAT(pat.LName,' ',pat.FName) AS 'PatientName', payment.PatNum, payment.PayDate, payment.PayAmt, "
                 + "paysplit.DatePay, procedurecode.AbbrDesc, CONCAT(splitpat.FName,' ',splitpat.LName) AS 'SplitPatientName', paysplit.SplitAmt "
@@ -6432,14 +6292,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Paysplits attached to deleted procedures") + ": " + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -6463,8 +6323,8 @@ namespace OpenDentBusiness
         }
 
         /// <summary>Shows patients that have paysplits attached to insurance payment plans.</summary>
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string PaySplitAttachedToInsurancePaymentPlan(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string PaySplitAttachedToInsurancePaymentPlan(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             DataTable table = GetPaySplitsAttachedToInsurancePaymentPlan();
             if (table.Rows.Count == 0 && !verbose)
@@ -6474,14 +6334,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Paysplits attached to insurance payment plans") + ": " + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n" + Lans.g("FormDatabaseMaintenance", "Manual fix needed. Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -6526,15 +6386,15 @@ namespace OpenDentBusiness
         //	return log;
         //}
 
-        [DbmMethodAttr(HasPatNum = true)]
-        public static string PaySplitWithInvalidPayNum(bool verbose, DbmMode modeCur, long patNum = 0)
+        [DatabaseMaintenanceAttribute(HasPatientId = true)]
+        public static string PaySplitWithInvalidPayNum(bool verbose, DatabaseMaintenanceMode modeCur, long patNum = 0)
         {
             string log = "";
             string command;
             string patWhere = (patNum > 0 ? ("paysplit.PatNum=" + POut.Long(patNum) + " AND ") : "");
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM paysplit WHERE "
                         + patWhere
                         + "NOT EXISTS(SELECT * FROM payment WHERE paysplit.PayNum=payment.PayNum)";
@@ -6544,7 +6404,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Paysplits found with invalid PayNum: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = @"SELECT *,SUM(SplitAmt) SplitAmt_ 
@@ -6628,14 +6488,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PaySplitWithInvalidPayPlanNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PaySplitWithInvalidPayPlanNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM paysplit WHERE paysplit.PayPlanNum!=0 AND paysplit.PayPlanNum NOT IN(SELECT payplan.PayPlanNum FROM payplan)";
                     int numFound = PIn.Int(Db.GetScalar(command));
                     if (numFound > 0 || verbose)
@@ -6643,7 +6503,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Paysplits found with invalid PayPlanNum: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     string where = "WHERE paysplit.PayPlanNum!=0 AND paysplit.PayPlanNum NOT IN(SELECT payplan.PayPlanNum FROM payplan)";
@@ -6663,8 +6523,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string PaySplitWithInvalidPrePayNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string PaySplitWithInvalidPrePayNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT ps1.* FROM paysplit ps1 LEFT JOIN paysplit ps2 ON ps1.FSplitNum=ps2.SplitNum WHERE ps1.FSplitNum!=0 AND ps2.SplitNum IS NULL";
             DataTable table = Db.GetTable(command);
@@ -6675,14 +6535,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Paysplits attached to deleted prepayments") + ": " + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -6700,8 +6560,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasBreakDown = false)]
-        public static string PaySplitAttachedToItself(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = false)]
+        public static string PaySplitAttachedToItself(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT * FROM paysplit WHERE FSplitNum=SplitNum";
             DataTable table = Db.GetTable(command);
@@ -6712,10 +6572,10 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     log += Lans.g("FormDatabaseMaintenance", "Paysplits attached to themselves") + ": " + table.Rows.Count + "\r\n";
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     List<long> listPaySplitNums = table.Select().Select(x => PIn.Long(x["SplitNum"].ToString())).ToList();
@@ -6736,14 +6596,14 @@ namespace OpenDentBusiness
         #endregion PayPlanCharge, PayPlan, PaySplit-----------------------------------------------------------------------------------------------------
         #region PerioMeasure, PlannedAppt, Preference---------------------------------------------------------------------------------------------------
 
-        [DbmMethodAttr]
-        public static string PerioMeasureWithInvalidIntTooth(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PerioMeasureWithInvalidIntTooth(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = @"SELECT COUNT(*) FROM periomeasure WHERE IntTooth > 32 OR IntTooth < 1";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -6751,7 +6611,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "PerioMeasures found with invalid tooth number: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = @"DELETE FROM periomeasure WHERE IntTooth > 32 OR IntTooth < 1";
                     long numberFixed = Db.NonQ(command);
                     if (numberFixed > 0 || verbose)
@@ -6763,14 +6623,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PlannedApptsWithInvalidAptNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PlannedApptsWithInvalidAptNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = @"SELECT COUNT(*) FROM plannedappt WHERE AptNum=0";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -6778,7 +6638,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Planned appointments found with invalid AptNum") + ": " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = "SELECT PlannedApptNum FROM plannedappt WHERE AptNum=0";
@@ -6797,14 +6657,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PreferenceAllergiesIndicateNone(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PreferenceAllergiesIndicateNone(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM allergydef where AllergyDefNum=" + POut.Long(Preference.GetLong(PreferenceName.AllergiesIndicateNone));
                     if (PIn.Int(Db.GetCount(command)) == 0 && Preference.GetString(PreferenceName.AllergiesIndicateNone) != "")
                     {
@@ -6815,7 +6675,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Preference \"AllergyIndicatesNone\" checked.") + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "SELECT COUNT(*) FROM allergydef where AllergyDefNum=" + POut.Long(Preference.GetLong(PreferenceName.AllergiesIndicateNone));
                     if (PIn.Int(Db.GetCount(command)) == 0 && Preference.GetString(PreferenceName.AllergiesIndicateNone) != "")
                     {
@@ -6832,15 +6692,15 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PreferenceDateDepositsStarted(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PreferenceDateDepositsStarted(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             DateTime date = Preference.GetDate(PreferenceName.DateDepositsStarted);
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (date < DateTime.Now.AddMonths(-1))
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Deposit start date needs to be reset.") + "\r\n";
@@ -6850,7 +6710,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Deposit start date checked.") + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     //If the program locks up when trying to create a deposit slip, it's because someone removed the start date from the deposit edit window. Run this query to get back in.
                     if (date < DateTime.Now.AddMonths(-1))
                     {
@@ -6869,10 +6729,10 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PreferenceInsBillingProv(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PreferenceInsBillingProv(bool verbose, DatabaseMaintenanceMode modeCur)
         {
-            if (modeCur == DbmMode.Breakdown)
+            if (modeCur == DatabaseMaintenanceMode.Breakdown)
             {
                 return "";
             }
@@ -6889,7 +6749,7 @@ namespace OpenDentBusiness
             else
             {
                 log += Lans.g("FormDatabaseMaintenance", "Invalid default insurance billing provider set.") + "\r\n";
-                if (modeCur != DbmMode.Check)
+                if (modeCur != DatabaseMaintenanceMode.Check)
                 {
                     Preference.Update(PreferenceName.InsBillingProv, 0);//Set it to zero so it can default to the practice provider.
                     log += "  " + Lans.g("FormDatabaseMaintenance", "Fixed.") + "\r\n";
@@ -6898,14 +6758,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PreferenceMedicationsIndicateNone(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PreferenceMedicationsIndicateNone(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM medication where MedicationNum=" + POut.Long(Preference.GetLong(PreferenceName.MedicationsIndicateNone));
                     if (PIn.Int(Db.GetCount(command)) == 0 && Preference.GetString(PreferenceName.MedicationsIndicateNone) != "")
                     {
@@ -6916,7 +6776,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Preference \"MedicationsIndicateNone\" checked.") + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "SELECT COUNT(*) FROM medication where MedicationNum=" + POut.Long(Preference.GetLong(PreferenceName.MedicationsIndicateNone));
                     if (PIn.Int(Db.GetCount(command)) == 0 && Preference.GetString(PreferenceName.MedicationsIndicateNone) != "")
                     {
@@ -6933,14 +6793,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PreferenceProblemsIndicateNone(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PreferenceProblemsIndicateNone(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM diseasedef where DiseaseDefNum=" + POut.Long(Preference.GetLong(PreferenceName.ProblemsIndicateNone));
                     if (PIn.Int(Db.GetCount(command)) == 0 && Preference.GetString(PreferenceName.ProblemsIndicateNone) != "")
                     {
@@ -6951,7 +6811,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Preference \"ProblemsIndicateNone\" checked.") + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "SELECT COUNT(*) FROM diseasedef where DiseaseDefNum=" + POut.Long(Preference.GetLong(PreferenceName.ProblemsIndicateNone));
                     if (PIn.Int(Db.GetCount(command)) == 0 && Preference.GetString(PreferenceName.ProblemsIndicateNone) != "")
                     {
@@ -6968,13 +6828,13 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PreferenceTimeCardOvertimeFirstDayOfWeek(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PreferenceTimeCardOvertimeFirstDayOfWeek(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek) < 0 || Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek) > 6)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Preference \"TimeCardOvertimeFirstDayOfWeek\" is an invalid value.") + "\r\n";
@@ -6984,7 +6844,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Preference \"TimeCardOvertimeFirstDayOfWeek\" checked.") + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     if (Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek) < 0 || Preference.GetInt(PreferenceName.TimeCardOvertimeFirstDayOfWeek) > 6)
                     {
                         Preference.Update(PreferenceName.TimeCardOvertimeFirstDayOfWeek, 0);//0==Sunday
@@ -7000,10 +6860,10 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string PreferencePracticeProv(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string PreferencePracticeProv(bool verbose, DatabaseMaintenanceMode modeCur)
         {
-            if (modeCur == DbmMode.Breakdown)
+            if (modeCur == DatabaseMaintenanceMode.Breakdown)
             {
                 return "";
             }
@@ -7020,7 +6880,7 @@ namespace OpenDentBusiness
             else
             {
                 log += Lans.g("FormDatabaseMaintenance", "No default provider set.") + "\r\n";
-                if (modeCur != DbmMode.Check)
+                if (modeCur != DatabaseMaintenanceMode.Check)
                 {
 
                     command = "SELECT provnum FROM provider WHERE IsHidden=0 ORDER BY itemorder LIMIT 1";
@@ -7037,14 +6897,14 @@ namespace OpenDentBusiness
         #endregion PerioMeasure, PlannedAppt, Preference------------------------------------------------------------------------------------------------
         #region ProcButton, ProcedureCode---------------------------------------------------------------------------------------------------------------
 
-        [DbmMethodAttr]
-        public static string ProcButtonItemsDeleteWithInvalidAutoCode(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ProcButtonItemsDeleteWithInvalidAutoCode(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = @"SELECT COUNT(*) FROM procbuttonitem WHERE CodeNum=0 AND NOT EXISTS(
 						SELECT * FROM autocode WHERE autocode.AutoCodeNum=procbuttonitem.AutoCodeNum)";
                     int numFound = PIn.Int(Db.GetCount(command));
@@ -7053,7 +6913,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "ProcButtonItems found with invalid autocode: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = @"DELETE FROM procbuttonitem WHERE CodeNum=0 AND NOT EXISTS(
 						SELECT * FROM autocode WHERE autocode.AutoCodeNum=procbuttonitem.AutoCodeNum)";
                     long numberFixed = Db.NonQ(command);
@@ -7070,15 +6930,15 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ProcedurecodeCategoryNotSet(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ProcedurecodeCategoryNotSet(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             List<Definition> listProcCodeCats = Definition.GetByCategory(DefinitionCategory.ProcCodeCats);
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM procedurecode WHERE procedurecode.ProcCat=0";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -7091,7 +6951,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Procedure codes with no category found") + ": " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     if (listProcCodeCats.Count == 0)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Procedure codes with no categories cannot be fixed because there are no visible proc code categories.") + "\r\n";
@@ -7112,8 +6972,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ProcedurecodeInvalidProvNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ProcedurecodeInvalidProvNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = @"SELECT procedurecode.CodeNum FROM procedurecode 
 				LEFT JOIN provider ON procedurecode.ProvNumDefault=provider.ProvNum 
@@ -7123,13 +6983,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (listProcNums.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Procedure codes with invalid Default Provider found") + ": " + listProcNums.Count + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     if (listProcNums.Count > 0)
                     {
                         command = "UPDATE procedurecode SET procedurecode.ProvNumDefault=0 WHERE procedurecode.CodeNum IN (" + String.Join(",", listProcNums) + ")";
@@ -7147,22 +7007,22 @@ namespace OpenDentBusiness
         #endregion ProcButton, ProcedureCode------------------------------------------------------------------------------------------------------------
         #region ProcedureLog----------------------------------------------------------------------------------------------------------------------------
 
-        [DbmMethodAttr]
-        public static string ProcedurelogAttachedToApptWithProcStatusDeleted(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ProcedurelogAttachedToApptWithProcStatusDeleted(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT ProcNum FROM procedurelog "
                         + "WHERE ProcStatus=6 AND (AptNum!=0 OR PlannedAptNum!=0)";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = Db.GetListLong(command).Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Deleted procedures still attached to appointments: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     List<long> listProcNums = Db.GetListLong(command);
@@ -7182,22 +7042,22 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ProcedurelogAttachedToWrongAppts(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ProcedurelogAttachedToWrongAppts(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT procedurelog.ProcNum FROM appointment,procedurelog "
                             + "WHERE procedurelog.AptNum=appointment.AptNum AND procedurelog.PatNum != appointment.PatNum";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = Db.GetListLong(command).Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Procedures attached to appointments with incorrect patient: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     List<long> listProcNums = Db.GetListLong(command);
@@ -7216,8 +7076,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ProcedurelogAttachedToWrongApptDate(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ProcedurelogAttachedToWrongApptDate(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = @"SELECT procedurelog.ProcNum FROM procedurelog,appointment
@@ -7226,14 +7086,14 @@ namespace OpenDentBusiness
 							AND procedurelog.ProcStatus=2";//only detach completed procs 
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = Db.GetListLong(command).Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Procedures which are attached to appointments with mismatched dates: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     List<long> listProcNums = Db.GetListLong(command);
@@ -7255,14 +7115,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ProcedurelogBaseUnitsZero(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ProcedurelogBaseUnitsZero(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     //zero--------------------------------------------------------------------------------------
                     command = @"SELECT COUNT(*) FROM procedurelog 
 						WHERE baseunits != (SELECT procedurecode.BaseUnits FROM procedurecode WHERE procedurecode.CodeNum=procedurelog.CodeNum)
@@ -7285,7 +7145,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Procedure BaseUnits not zero, but procedurecode BaseUnits are zero: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = @"SELECT ProcNum FROM procedurelog
@@ -7312,21 +7172,21 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ProcedurelogCodeNumInvalid(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ProcedurelogCodeNumInvalid(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = @"SELECT ProcNum FROM procedurelog WHERE NOT EXISTS(SELECT * FROM procedurecode WHERE procedurecode.CodeNum=procedurelog.CodeNum)";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = Db.GetListLong(command).Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Procedures found with invalid CodeNum") + ": " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     List<long> listProcNums = Db.GetListLong(command);
@@ -7359,8 +7219,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasBreakDown = true, IsCanada = true)]
-        public static string ProcedurelogLabAttachedToDeletedProc(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true, IsCanada = true)]
+        public static string ProcedurelogLabAttachedToDeletedProc(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             if (!CultureInfo.CurrentCulture.Name.EndsWith("CA"))
             {//Canadian. en-CA or fr-CA
@@ -7370,7 +7230,7 @@ namespace OpenDentBusiness
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM procedurelog "
                         + "WHERE ProcStatus=2 AND ProcNumLab IN(SELECT ProcNum FROM procedurelog WHERE ProcStatus=6)";
                     int numFound = PIn.Int(Db.GetCount(command));
@@ -7380,8 +7240,8 @@ namespace OpenDentBusiness
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Double click to run the fix and see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Breakdown:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = "SELECT patient.PatNum,patient.FName,patient.LName,procedurelog.ProcNum FROM procedurelog "
@@ -7413,8 +7273,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string ProcedurelogMultipleClaimProcForInsSub(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string ProcedurelogMultipleClaimProcForInsSub(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT patient.PatNum,patient.LName,patient.FName,procedurelog.ProcDate,procedurecode.ProcCode "
                 + "FROM claimproc "
@@ -7437,14 +7297,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Procedures with multiple claimprocs for the same insurance plan") + ": " + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -7461,16 +7321,16 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ProcedurelogProvNumMissing(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ProcedurelogProvNumMissing(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT COUNT(*) FROM procedurelog WHERE ProvNum=0";
             int numFound = PIn.Int(Db.GetCount(command));
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Procedures with missing provnums found: ") + numFound + "\r\n";
@@ -7481,10 +7341,10 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ProcedurelogToothNums(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ProcedurelogToothNums(bool verbose, DatabaseMaintenanceMode modeCur)
         {
-            if (modeCur == DbmMode.Breakdown)
+            if (modeCur == DatabaseMaintenanceMode.Breakdown)
             {
                 return "";
             }
@@ -7512,7 +7372,7 @@ namespace OpenDentBusiness
                 }
                 if (string.CompareOrdinal(toothNum, "a") >= 0 && string.CompareOrdinal(toothNum, "t") <= 0)
                 {
-                    if (modeCur != DbmMode.Check)
+                    if (modeCur != DatabaseMaintenanceMode.Check)
                     {
                         command = "UPDATE procedurelog SET ToothNum='" + toothNum.ToUpper() + "' WHERE ProcNum=" + table.Rows[i][0].ToString();
                         Db.NonQ(command);
@@ -7525,7 +7385,7 @@ namespace OpenDentBusiness
                 }
                 else
                 {
-                    if (modeCur != DbmMode.Check)
+                    if (modeCur != DatabaseMaintenanceMode.Check)
                     {
                         command = "UPDATE procedurelog SET ToothNum='1' WHERE ProcNum=" + table.Rows[i][0].ToString();
                         Db.NonQ(command);
@@ -7548,8 +7408,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string ProcedurelogTpAttachedToClaim(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string ProcedurelogTpAttachedToClaim(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT procedurelog.ProcNum,claim.ClaimNum,claim.DateService,patient.PatNum,patient.LName,patient.FName,procedurecode.ProcCode "
                 + "FROM procedurelog,claim,claimproc,patient,procedurecode "
@@ -7568,14 +7428,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Procedures attached to claims with status of TP: ") + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -7595,8 +7455,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasBreakDown = true, IsCanada = true)]
-        public static string ProcedurelogNotComplAttachedToComplLabCanada(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true, IsCanada = true)]
+        public static string ProcedurelogNotComplAttachedToComplLabCanada(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             if (!CultureInfo.CurrentCulture.Name.EndsWith("CA"))
             {//Canadian. en-CA or fr-CA
@@ -7616,14 +7476,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Completed lab fees with treatment planned procedures attached") + ": " + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -7641,21 +7501,21 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ProcedurelogUnitQtyZero(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ProcedurelogUnitQtyZero(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT ProcNum FROM procedurelog WHERE UnitQty=0";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = Db.GetListLong(command).Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Procedures with UnitQty=0 found: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     List<long> listProcNums = Db.GetListLong(command);
@@ -7675,21 +7535,21 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ProcedurelogWithInvalidProvNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ProcedurelogWithInvalidProvNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT ProcNum FROM procedurelog WHERE ProvNum > 0 AND ProvNum NOT IN (SELECT ProvNum FROM provider)";
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = Db.GetListLong(command).Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Procedures with invalid ProvNum found") + ": " + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     List<long> listProcNums = Db.GetListLong(command);
@@ -7708,8 +7568,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ProcedurelogWithInvalidAptNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ProcedurelogWithInvalidAptNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT ProcNum "
@@ -7718,14 +7578,14 @@ namespace OpenDentBusiness
                         + "OR (PlannedAptNum NOT IN(SELECT AptNum FROM appointment) AND PlannedAptNum!=0)";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = Db.GetListLong(command).Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Procedures attached to invalid appointments") + ": " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     List<long> listProcNums = Db.GetListLong(command);
@@ -7747,8 +7607,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ProcedurelogWithInvalidClinicNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ProcedurelogWithInvalidClinicNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = "SELECT ProcNum "
@@ -7756,14 +7616,14 @@ namespace OpenDentBusiness
                         + "WHERE ClinicNum NOT IN(SELECT ClinicNum FROM clinic) AND ClinicNum!=0 ";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = Db.GetListLong(command).Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Procedures attached to invalid clinics") + ": " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     List<long> listProcNums = Db.GetListLong(command);
@@ -7784,8 +7644,8 @@ namespace OpenDentBusiness
         #endregion ProcedureLog-------------------------------------------------------------------------------------------------------------------------
         #region ProgramProperty, Provider, QuickPasteNote-----------------------------------------------------------------------------------------------
 
-        [DbmMethodAttr]
-        public static string ProgramPropertiesDuplicatesForHQ(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ProgramPropertiesDuplicatesForHQ(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string progNumStr = POut.Long(Programs.GetProgramNum(ProgramName.Xcharge)) + "," + POut.Long(Programs.GetProgramNum(ProgramName.PayConnect));
             //Min may not be the oldest when using random primary keys, but we have to pick one.  In most all cases theyre identical anyway.
@@ -7798,7 +7658,7 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = tableProgProps.Select().Select(x => PIn.Int(x["Count"].ToString()) - 1).Sum();
                     if (numFound > 0 || verbose)
                     {
@@ -7806,7 +7666,7 @@ namespace OpenDentBusiness
                             + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "DELETE FROM programproperty WHERE ClinicNum=0 AND ProgramNum IN (" + progNumStr + ") "
                         + "AND ProgramPropertyNum NOT IN (" + string.Join(",", tableProgProps.Select().Select(x => PIn.Long(x["ProgramPropertyNum"].ToString()))) + ")";
                     long numberFixed = Db.NonQ(command);
@@ -7820,8 +7680,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ProgramPropertiesMissingForClinic(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ProgramPropertiesMissingForClinic(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             //X-Charge and PayConnect are currently the only program links that use ClinicNum.
             string progNumStr = POut.Long(Programs.GetProgramNum(ProgramName.Xcharge)) + "," + POut.Long(Programs.GetProgramNum(ProgramName.PayConnect));
@@ -7839,7 +7699,7 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = tableProgProps.Rows.Count;
                     if (numFound > 0 || verbose)
                     {
@@ -7847,7 +7707,7 @@ namespace OpenDentBusiness
                             + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<ProgramProperty> listProgProps = Crud.ProgramPropertyCrud.TableToList(tableProgProps);
                     for (int i = 0; i < listProgProps.Count; i++)
                     {
@@ -7865,8 +7725,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string ProviderHiddenWithClaimPayments(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string ProviderHiddenWithClaimPayments(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = @"SELECT MAX(claimproc.ProcDate) ProcDate,provider.ProvNum
 				FROM claimproc,provider
@@ -7882,14 +7742,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Hidden providers with claim payments") + ": " + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count > 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         Provider prov;
@@ -7907,14 +7767,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string ProviderWithInvalidFeeSched(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ProviderWithInvalidFeeSched(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = @"SELECT COUNT(*) FROM provider WHERE FeeSched NOT IN (SELECT FeeSchedNum FROM feesched)";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -7922,7 +7782,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Providers found with invalid FeeSched: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = @"UPDATE provider SET FeeSched=" + POut.Long(FeeScheds.GetFirst(true).FeeSchedNum) + " "
                         + "WHERE FeeSched NOT IN (SELECT FeeSchedNum FROM feesched)";
                     long numberFixed = Db.NonQ(command);
@@ -7936,21 +7796,21 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string QuickPasteNoteWithInvalidCatNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string QuickPasteNoteWithInvalidCatNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = @"SELECT COUNT(*) FROM quickpastenote WHERE QuickPasteCatNum=0";
             int numFound = PIn.Int(Db.GetCount(command));
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Quick Paste Notes with an invalid category num") + ": " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     long numberFixed = 0;
                     if (numFound > 0)
                     {
@@ -7972,8 +7832,8 @@ namespace OpenDentBusiness
         #endregion ProgramProperty, Provider, QuickPasteNote--------------------------------------------------------------------------------------------
         #region Recall, RecallTrigger, RefAttach, RxAlert---------------------------------------------------------------------------------------
 
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string RecallDuplicatesWarn(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string RecallDuplicatesWarn(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             if (RecallTypes.PerioType < 1 || RecallTypes.ProphyType < 1)
             {
@@ -7991,14 +7851,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Number of patients with duplicate recalls: ") + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -8017,8 +7877,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string RecallsWithInvalidRecallType(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string RecallsWithInvalidRecallType(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = @"SELECT recall.RecallTypeNum 
 				FROM recall 
@@ -8028,14 +7888,14 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = listRecallTypeNums.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Recalls found with invalid recall types:") + " " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     //Inserting temporary recall types so that the recalls are no longer orphaned
                     long numberFixed = listRecallTypeNums.Count;
                     listRecallTypeNums = listRecallTypeNums.Distinct().ToList();
@@ -8062,14 +7922,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string RecallTriggerDeleteBadCodeNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string RecallTriggerDeleteBadCodeNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM recalltrigger WHERE NOT EXISTS (SELECT * FROM procedurecode WHERE procedurecode.CodeNum=recalltrigger.CodeNum)";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -8077,7 +7937,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Recall triggers found with bad codenum: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = @"DELETE FROM recalltrigger
 						WHERE NOT EXISTS (SELECT * FROM procedurecode WHERE procedurecode.CodeNum=recalltrigger.CodeNum)";
                     long numberFixed = Db.NonQ(command);
@@ -8094,14 +7954,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string RefAttachDeleteWithInvalidReferral(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string RefAttachDeleteWithInvalidReferral(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM refattach WHERE ReferralNum NOT IN (SELECT ReferralNum FROM referral)";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -8109,7 +7969,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Ref attachments found with invalid referrals: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "DELETE FROM refattach WHERE ReferralNum NOT IN (SELECT ReferralNum FROM referral)";
                     long numberFixed = Db.NonQ(command);
                     if (numberFixed > 0 || verbose)
@@ -8122,14 +7982,14 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Finds patients that have a more than 1 from referral with the same order.</summary>
-        [DbmMethodAttr]
-        public static string RefAttachesWithDuplicateOrder(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string RefAttachesWithDuplicateOrder(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = @"SELECT DISTINCT PatNum 
 						FROM refattach 
 						GROUP BY PatNum,ItemOrder
@@ -8140,7 +8000,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Patients found with multiple referral attachments of the same order:") + " " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = @"SELECT refattach.*
 						FROM (
 							SELECT DISTINCT PatNum
@@ -8171,14 +8031,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string RxAlertBadAllergyDefNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string RxAlertBadAllergyDefNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM rxalert WHERE rxalert.AllergyDefNum!=0 AND NOT EXISTS (SELECT * FROM allergydef WHERE allergydef.AllergyDefNum=rxalert.AllergyDefNum)";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -8186,7 +8046,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Rx alerts with bad allergy definitions: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     //command=@"SELECT * FROM rxalert WHERE NOT EXISTS (SELECT * FROM allergydef WHERE allergydef.AllergyDefNum=rxalert.AllergyDefNum)";
                     //table=Db.GetTable(command);
                     command = "UPDATE rxalert SET AllergyDefNum=0 WHERE rxalert.AllergyDefNum!=0 AND NOT EXISTS (SELECT * FROM allergydef WHERE allergydef.AllergyDefNum=rxalert.AllergyDefNum)";
@@ -8203,14 +8063,14 @@ namespace OpenDentBusiness
         #endregion Recall, RecallTrigger, RefAttach, RxAlert------------------------------------------------------------------------------------
         #region ScheduleOp, Schedule, SecurityLog, Sheet------------------------------------------------------------------------------------------------
 
-        [DbmMethodAttr]
-        public static string ScheduleOpsInvalidScheduleNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string ScheduleOpsInvalidScheduleNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM scheduleop WHERE NOT EXISTS(SELECT * FROM schedule WHERE scheduleop.ScheduleNum=schedule.ScheduleNum)";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -8218,7 +8078,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Scheduleops with invalid ScheduleNums found") + ": " + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "DELETE FROM scheduleop WHERE NOT EXISTS(SELECT * FROM schedule WHERE scheduleop.ScheduleNum=schedule.ScheduleNum)";
                     long numFixed = Db.NonQ(command);
                     if (numFixed > 0 || verbose)
@@ -8230,14 +8090,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string SchedulesBlockoutStopBeforeStart(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string SchedulesBlockoutStopBeforeStart(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM schedule WHERE StopTime<StartTime";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -8245,7 +8105,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Schedules and blockouts having stop time before start time: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "DELETE FROM schedule WHERE StopTime<StartTime";
                     long numFixed = Db.NonQ(command);
                     if (numFixed > 0 || verbose)
@@ -8257,14 +8117,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string SchedulesDeleteHiddenProviders(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string SchedulesDeleteHiddenProviders(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM provider WHERE IsHidden=1 AND ProvNum IN (SELECT ProvNum FROM schedule WHERE SchedDate > " + DbHelper.Now() + " GROUP BY ProvNum)";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -8272,7 +8132,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Hidden providers found on future schedules: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "SELECT ProvNum FROM provider WHERE IsHidden=1 AND ProvNum IN (SELECT ProvNum FROM schedule WHERE SchedDate > " + DbHelper.Now() + " GROUP BY ProvNum)";
                     DataTable table = Db.GetTable(command);
                     List<long> provNums = new List<long>();
@@ -8290,8 +8150,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string SchedulesDeleteShort(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string SchedulesDeleteShort(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command = @"SELECT schedule.ScheduleNum
@@ -8303,14 +8163,14 @@ namespace OpenDentBusiness
             List<long> listSchedulesToDelete = Db.GetListLong(command);
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     int numFound = listSchedulesToDelete.Count;
                     if (numFound > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Schedule blocks invalid:") + " " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     int numberFixed = listSchedulesToDelete.Count;
                     if (listSchedulesToDelete.Count > 0)
                     {
@@ -8326,14 +8186,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string SchedulesDeleteProvClosed(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string SchedulesDeleteProvClosed(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM schedule WHERE SchedType=1 AND Status=1";//type=prov,status=closed
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -8341,7 +8201,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Schedules found which are causing printing issues: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "DELETE FROM schedule WHERE SchedType=1 AND Status=1";//type=prov,status=closed
                     long numberFixed = Db.NonQ(command);
                     if (numberFixed > 0 || verbose)
@@ -8437,21 +8297,21 @@ namespace OpenDentBusiness
         //	return log;
         //}
 
-        [DbmMethodAttr]
-        public static string SheetDepositSlips(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string SheetDepositSlips(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT SheetNum FROM sheet WHERE SheetType=" + POut.Int((int)SheetTypeEnum.DepositSlip);
             DataTable table = Db.GetTable(command);
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Deposit slip sheets") + ": " + table.Rows.Count + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count > 0)
                     {
                         for (int i = 0; i < table.Rows.Count; i++)
@@ -8475,14 +8335,14 @@ namespace OpenDentBusiness
         #endregion ScheduleOp, Schedule, SecurityLog, Sheet---------------------------------------------------------------------------------------------
         #region Signal, SigMessage, Statement, SummaryOfCare--------------------------------------------------------------------------------------------
 
-        [DbmMethodAttr]
-        public static string SignalInFuture(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string SignalInFuture(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = @"SELECT COUNT(*) FROM signalod WHERE SigDateTime > " + DbHelper.Now();
                     long numFound = PIn.Long(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -8490,7 +8350,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Signalod entries with future time:") + " " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = @"DELETE FROM signalod WHERE SigDateTime > " + DbHelper.Now();
                     long numberFixed = Db.NonQ(command);
                     if (numberFixed > 0 || verbose)
@@ -8502,14 +8362,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string SigMessageInFuture(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string SigMessageInFuture(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = @"SELECT COUNT(*) FROM sigmessage WHERE MessageDateTime > " + DbHelper.Now() + " OR AckDateTime > " + DbHelper.Now();
                     long numFound = PIn.Long(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -8517,7 +8377,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Sigmessage entries with future time:") + " " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = @"DELETE FROM sigmessage WHERE MessageDateTime > " + DbHelper.Now() + " OR AckDateTime > " + DbHelper.Now();
                     long numberFixed = Db.NonQ(command);
                     if (numberFixed > 0 || verbose)
@@ -8529,14 +8389,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string StatementDateRangeMax(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string StatementDateRangeMax(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM statement WHERE DateRangeTo='9999-12-31'";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -8544,7 +8404,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Statement DateRangeTo max found: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "UPDATE statement SET DateRangeTo='2200-01-01' WHERE DateRangeTo='9999-12-31'";
                     long numberFixed = Db.NonQ(command);
                     if (numberFixed > 0 || verbose)
@@ -8556,10 +8416,10 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string SummaryOfCaresWithoutReferralsAttached(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string SummaryOfCaresWithoutReferralsAttached(bool verbose, DatabaseMaintenanceMode modeCur)
         {
-            if (modeCur == DbmMode.Breakdown)
+            if (modeCur == DatabaseMaintenanceMode.Breakdown)
             {
                 return "";
             }
@@ -8588,7 +8448,7 @@ namespace OpenDentBusiness
                             && measureEvents[j].DateTEvent >= refAttaches[i].RefDate.AddDays(-3)
                             && measureEvents[j].DateTEvent <= refAttaches[i].RefDate.AddDays(1))
                     {
-                        if (modeCur != DbmMode.Check)
+                        if (modeCur != DatabaseMaintenanceMode.Check)
                         {
                             measureEvents[j].FKey = refAttaches[i].RefAttachNum;
                             EhrMeasureEvents.Update(measureEvents[j]);
@@ -8599,11 +8459,11 @@ namespace OpenDentBusiness
                     }
                 }
             }
-            if (modeCur == DbmMode.Check && (numberFixed > 0 || verbose))
+            if (modeCur == DatabaseMaintenanceMode.Check && (numberFixed > 0 || verbose))
             {
                 log += Lans.g("FormDatabaseMaintenance", "Summary of cares with no referrals attached") + ": " + numberFixed.ToString() + "\r\n";
             }
-            else if (modeCur != DbmMode.Check && (numberFixed > 0 || verbose))
+            else if (modeCur != DatabaseMaintenanceMode.Check && (numberFixed > 0 || verbose))
             {
                 log += Lans.g("FormDatabaseMaintenance", "Summary of cares that had a referral attached") + ": " + numberFixed.ToString() + "\r\n";
             }
@@ -8613,8 +8473,8 @@ namespace OpenDentBusiness
         #endregion Signal, SigMessage, Statement, SummaryOfCare-----------------------------------------------------------------------------------------
         #region Task, TaskList, TimeCardRule, TreatPlan-------------------------------------------------------------------------------------------------
 
-        [DbmMethodAttr]
-        public static string TaskListsWithCircularParentChild(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string TaskListsWithCircularParentChild(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             //In order to figure out a cyclical chain of task lists we need to:
             //1. Get all TaskLists
@@ -8645,13 +8505,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (listAllTaskLists.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Task Lists with circular parent-child relationship") + ": " + listAllTaskLists.Count.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     long taskListNum = 0;
                     if (listAllTaskLists.Count > 0)
                     {
@@ -8673,8 +8533,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string TasksCompletedWithInvalidFinishDateTime(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string TasksCompletedWithInvalidFinishDateTime(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT task.TaskNum,IFNULL(MAX(tasknote.DateTimeNote),task.DateTimeEntry) AS DateTimeNoteMax "
                 + "FROM task "
@@ -8686,13 +8546,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Tasks completed with invalid Finished Date/Time") + ": " + table.Rows.Count.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     foreach (DataRow row in table.Rows)
                     {
                         //Update the DateTimeFinished with either the max note DateTime or the time of the tasks DateTimeEntry.
@@ -8712,14 +8572,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string TaskSubscriptionsInvalid(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string TaskSubscriptionsInvalid(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM tasksubscription "
                         + "WHERE NOT EXISTS(SELECT * FROM tasklist WHERE tasksubscription.TaskListNum=tasklist.TaskListNum)";
                     int numFound = PIn.Int(Db.GetCount(command));
@@ -8728,7 +8588,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Task subscriptions invalid: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "DELETE FROM tasksubscription "
                         + "WHERE NOT EXISTS(SELECT * FROM tasklist WHERE tasksubscription.TaskListNum=tasklist.TaskListNum)";
                     long numberFixed = Db.NonQ(command);
@@ -8741,14 +8601,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string TaskUnreadsWithoutTasksAttached(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string TaskUnreadsWithoutTasksAttached(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM taskunread "
                         + "WHERE taskunread.TaskNum NOT IN(SELECT TaskNum FROM task)";
                     int numFound = PIn.Int(Db.GetCount(command));
@@ -8757,7 +8617,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Unread task notifications for deleted tasks") + ": " + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "DELETE FROM taskunread "
                         + "WHERE taskunread.TaskNum NOT IN(SELECT TaskNum FROM task)";
                     long numberFixed = Db.NonQ(command);
@@ -8770,14 +8630,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string TimeCardRuleEmployeeNumInvalid(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string TimeCardRuleEmployeeNumInvalid(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM timecardrule "
                         + "WHERE timecardrule.EmployeeNum!=0 " //0 is all employees, so it is a 'valid' employee number
                         + "AND timecardrule.EmployeeNum NOT IN(SELECT employee.EmployeeNum FROM employee)";
@@ -8787,7 +8647,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Time card rules found with invalid employee number: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "UPDATE timecardrule "
                         + "SET timecardrule.EmployeeNum=0 "
                         + "WHERE timecardrule.EmployeeNum!=0 " //don't set to 0 if already 0
@@ -8802,8 +8662,8 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string TreatPlansInvalid(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string TreatPlansInvalid(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT treatplan.PatNum FROM procedurelog	"//procs for 1 pat attached to a treatplan for another
                     + "INNER JOIN treatplanattach ON treatplanattach.ProcNum=procedurelog.ProcNum "
@@ -8814,13 +8674,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (listPatNumsForAudit.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Patients found with one or more invalid treatment plans") + ": " + listPatNumsForAudit.Count + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     listPatNumsForAudit.ForEach(x => TreatPlans.AuditPlans(x
                         , (Patients.GetPat(x).DiscountPlanNum == 0 ? TreatPlanType.Insurance : TreatPlanType.Discount)));
                     TreatPlanAttaches.DeleteOrphaned();
@@ -8834,8 +8694,8 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Finds treatplanattaches with the same treatplannum and procnum.</summary>
-        [DbmMethodAttr]
-        public static string TreatPlanAttachDuplicateProc(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string TreatPlanAttachDuplicateProc(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT treatplanattach.TreatPlanNum, MIN(treatplanattach.TreatPlanAttachNum) AS OriginalTPANum, "
             + " ProcNum, "
@@ -8847,13 +8707,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "TreatPlanAttaches with duplicate ProcNums and TreatPlanNums found") + ": " + table.Rows.Count.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     for (int i = 0; i < table.Rows.Count; i++)
                     {
                         command = "DELETE FROM treatplanattach WHERE treatplanattach.TreatPlanNum=" + table.Rows[i]["TreatPlanNum"]
@@ -8871,8 +8731,8 @@ namespace OpenDentBusiness
         }
 
         ///<summary>Finds proctps that have been orphaned and creates dummy treatment plans for DateTime.MinValue so that the orphaned proctps can be viewed.</summary>
-        [DbmMethodAttr]
-        public static string TreatPlanOrphanedProcTps(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string TreatPlanOrphanedProcTps(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = @"SELECT proctp.PatNum,proctp.TreatPlanNum 
 				FROM proctp
@@ -8883,13 +8743,13 @@ namespace OpenDentBusiness
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Treatment Plans with orphaned proctps") + ": " + table.Rows.Count.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     for (int i = 0; i < table.Rows.Count; i++)
                     {
                         TreatPlan tp = new TreatPlan()
@@ -8916,21 +8776,21 @@ namespace OpenDentBusiness
         #endregion Task, TaskList, TimeCardRule, TreatPlan----------------------------------------------------------------------------------------------
         #region UnscheduledAppt, Userod-----------------------------------------------------------------------------------------------------------------
 
-        [DbmMethodAttr]
-        public static string UnscheduledApptsWithInvalidOpNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string UnscheduledApptsWithInvalidOpNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT AptNum FROM appointment WHERE Op != 0 AND AptStatus=3";//UnschedList
             DataTable table = Db.GetTable(command);
             string log = "";
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     if (table.Rows.Count > 0 || verbose)
                     {
                         log += Lans.g("FormDatabaseMaintenance", "Unscheduled appointments with invalid Op nums") + ": " + table.Rows.Count.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     List<DbmLog> listDbmLogs = new List<DbmLog>();
                     string methodName = MethodBase.GetCurrentMethod().Name;
                     command = "UPDATE appointment SET Op=0 WHERE AptStatus=3";//UnschedList
@@ -8948,8 +8808,8 @@ namespace OpenDentBusiness
         }
 
         /// <summary>Only one user of a given UserName may be unhidden at a time. Warn the user and instruct them to hide extras.</summary>
-        [DbmMethodAttr(HasBreakDown = true)]
-        public static string UserodDuplicateUser(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute(HasBreakDown = true)]
+        public static string UserodDuplicateUser(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string command = "SELECT UserName FROM userod WHERE IsHidden=0 GROUP BY UserName HAVING Count(*)>1;";
             DataTable table = Db.GetTable(command);
@@ -8960,14 +8820,14 @@ namespace OpenDentBusiness
             string log = Lans.g("FormDatabaseMaintenance", "Users with duplicates") + ": " + table.Rows.Count;
             switch (modeCur)
             {
-                case DbmMode.Check:
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Check:
+                case DatabaseMaintenanceMode.Fix:
                     if (table.Rows.Count != 0)
                     {
                         log += "\r\n   " + Lans.g("FormDatabaseMaintenance", "Manual fix needed.  Double click to see a break down.") + "\r\n";
                     }
                     break;
-                case DbmMode.Breakdown:
+                case DatabaseMaintenanceMode.Breakdown:
                     if (table.Rows.Count > 0)
                     {
                         log += ", " + Lans.g("FormDatabaseMaintenance", "including") + ":\r\n";
@@ -8982,14 +8842,14 @@ namespace OpenDentBusiness
             return log;
         }
 
-        [DbmMethodAttr]
-        public static string UserodInvalidClinicNum(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string UserodInvalidClinicNum(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT Count(*) FROM userod WHERE ClinicNum<>0 AND ClinicNum NOT IN (SELECT ClinicNum FROM clinic)";
                     long numFound = PIn.Long(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -8997,7 +8857,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Users found with invalid ClinicNum: ") + numFound + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "UPDATE userod SET ClinicNum=0 WHERE ClinicNum<>0 AND ClinicNum NOT IN (SELECT ClinicNum FROM clinic)";
                     long numberFixed = Db.NonQ(command);
                     if (numberFixed > 0 || verbose)
@@ -9049,14 +8909,14 @@ namespace OpenDentBusiness
         //}
 
         /// <summary>userod is restricted to ClinicNum 0 - All.  Restricted to All clinics doesn't make sense.  This will set the ClinicIsRestricted bool to false if ClinicNum=0.</summary>
-        [DbmMethodAttr]
-        public static string UserodInvalidRestrictedClinic(bool verbose, DbmMode modeCur)
+        [DatabaseMaintenanceAttribute]
+        public static string UserodInvalidRestrictedClinic(bool verbose, DatabaseMaintenanceMode modeCur)
         {
             string log = "";
             string command;
             switch (modeCur)
             {
-                case DbmMode.Check:
+                case DatabaseMaintenanceMode.Check:
                     command = "SELECT COUNT(*) FROM userod WHERE ClinicNum=0 AND ClinicIsRestricted=1";
                     int numFound = PIn.Int(Db.GetCount(command));
                     if (numFound > 0 || verbose)
@@ -9064,7 +8924,7 @@ namespace OpenDentBusiness
                         log += Lans.g("FormDatabaseMaintenance", "Users found restricted to an invalid clinic") + ": " + numFound.ToString() + "\r\n";
                     }
                     break;
-                case DbmMode.Fix:
+                case DatabaseMaintenanceMode.Fix:
                     command = "UPDATE userod SET ClinicIsRestricted=0 WHERE ClinicNum=0 AND ClinicIsRestricted=1";
                     long numberFixed = Db.NonQ(command);
                     if (numberFixed > 0 || verbose)
@@ -9809,9 +9669,12 @@ HAVING cnt>1";
 
         #endregion Tool Button and Helper Methods-----------------------------------------------------------------------------------------------------------
 
-        ///<summary>Uses reflection to get all database maintenance methods that are specifically flagged for DBM.
-        ///When clinicNum is set to a medical clinic, all methods that match "tooth" will not be returned.</summary>
-        public static List<MethodInfo> GetMethodsForDisplay(long clinicNum = 0, bool hasOnlyPatNumMethods = false)
+        /// <summary>
+        /// Uses reflection to get all database maintenance methods that are specifically flagged 
+        /// for DBM. When <paramref name="clinicId"/> is set to a medical clinic, all methods that 
+        /// match "tooth" will not be returned.
+        /// </summary>
+        public static List<MethodInfo> GetMethodsForDisplay(long clinicId = 0, bool hasOnlyPatNumMethods = false)
         {
             //No need to check RemotingRole; no call to db.
             List<MethodInfo> listDbmMethodsGrid = new List<MethodInfo>();
@@ -9821,10 +9684,10 @@ HAVING cnt>1";
             MethodInfo[] arrayDbmMethodsAll = (typeof(DatabaseMaintenances)).GetMethods();
             //Sort the methods by name so that they are easier for users to find desired methods to run.
             Array.Sort(arrayDbmMethodsAll, new MethodInfoComparer());
-            bool isMedicalClinic = Clinics.IsMedicalPracticeOrClinic(clinicNum);
+            bool isMedicalClinic = Clinics.IsMedicalPracticeOrClinic(clinicId);
             foreach (MethodInfo meth in arrayDbmMethodsAll)
             {
-                DbmMethodAttr dbmAttribute = (DbmMethodAttr)Attribute.GetCustomAttribute(meth, typeof(DbmMethodAttr));
+                DatabaseMaintenanceAttribute dbmAttribute = (DatabaseMaintenanceAttribute)Attribute.GetCustomAttribute(meth, typeof(DatabaseMaintenanceAttribute));
                 if (dbmAttribute == null)
                 {
                     continue;//This is not a valid DBM method.
@@ -9837,7 +9700,7 @@ HAVING cnt>1";
                 {
                     continue;//This is not a DBM for medical users.
                 }
-                if (hasOnlyPatNumMethods && !dbmAttribute.HasPatNum)
+                if (hasOnlyPatNumMethods && !dbmAttribute.HasPatientId)
                 {
                     continue;//This is not a patient specific DBM method.
                 }
@@ -9847,11 +9710,15 @@ HAVING cnt>1";
             return listDbmMethodsGrid;
         }
 
-        ///<summary>Returns true if the method passed in supports break down.</summary>
-        public static bool MethodHasBreakDown(MethodInfo method)
+        /// <summary>
+        /// Returns true if the method passed in supports break down; otherwise, returns false.
+        /// </summary>
+        public static bool MethodHasBreakDown(MethodInfo methodInfo)
         {
-            //No need to check RemotingRole; no call to db.
-            return method.GetCustomAttributes(typeof(DbmMethodAttr), true).OfType<DbmMethodAttr>().All(x => x.HasBreakDown);
+            return 
+                methodInfo.GetCustomAttributes(typeof(DatabaseMaintenanceAttribute), true)
+                    .OfType<DatabaseMaintenanceAttribute>()
+                        .All(attribute => attribute.HasBreakDown);
         }
     }
 }
