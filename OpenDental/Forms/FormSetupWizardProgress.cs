@@ -10,7 +10,7 @@ namespace OpenDental
 {
     public partial class FormSetupWizardProgress : FormBase
     {
-        readonly List<SetupWizard.SetupWizClass> setupWizardsList;
+        readonly List<SetupWizard.SetupWizardStep> setupWizardsList;
         int setupWizardIndex = 0;
         readonly bool setupAll;
 
@@ -19,7 +19,7 @@ namespace OpenDental
         /// </summary>
         /// <param name="setupWizardsList"></param>
         /// <param name="setupAll"></param>
-        public FormSetupWizardProgress(List<SetupWizard.SetupWizClass> setupWizardsList, bool setupAll)
+        public FormSetupWizardProgress(List<SetupWizard.SetupWizardStep> setupWizardsList, bool setupAll)
         {
             InitializeComponent();
 
@@ -32,7 +32,7 @@ namespace OpenDental
         /// </summary>
         void FormSetupWizardProgress_Load(object sender, EventArgs e)
         {
-            SetCurrentWizardControl(setupWizardsList[setupWizardIndex].SetupControl);
+            SetCurrentWizardControl(setupWizardsList[setupWizardIndex].Control);
 
             nextButton.Focus();
         }
@@ -62,7 +62,7 @@ namespace OpenDental
         /// <summary>
         /// Any validation should be done here.
         /// </summary>
-        bool StepValidate() => setupWizardsList[setupWizardIndex].SetupControl.Validate();
+        bool StepValidate() => setupWizardsList[setupWizardIndex].Control.Validate();
 
         /// <summary>
         /// Any conditional relational setup should be done here.
@@ -70,7 +70,7 @@ namespace OpenDental
         /// </summary>
         void StepDone()
         {
-            setupWizardsList[setupWizardIndex].SetupControl.Done();
+            setupWizardsList[setupWizardIndex].Control.Done();
             if (!setupAll)
             {
                 return;
@@ -93,7 +93,7 @@ namespace OpenDental
                         }
                         endCat++;
                     }
-                    setupWizardsList.Insert(endCat++, new SetupWizard.SetupIntro(clinicSetup.Name, clinicSetup.GetDescript));
+                    setupWizardsList.Insert(endCat++, new SetupWizard.SetupIntro(clinicSetup.Name, clinicSetup.Description));
                     setupWizardsList.Insert(endCat++, clinicSetup);
                     setupWizardsList.Insert(endCat, new SetupWizard.SetupComplete(clinicSetup.Name));
                 }
@@ -108,7 +108,7 @@ namespace OpenDental
         /// <summary>
         /// Move back to the previous wizard.
         /// </summary>
-        void BackButton_Click(object sender, EventArgs e) => SetCurrentWizardControl(setupWizardsList[--setupWizardIndex].SetupControl);
+        void BackButton_Click(object sender, EventArgs e) => SetCurrentWizardControl(setupWizardsList[--setupWizardIndex].Control);
 
         /// <summary>
         /// Move to the next wizard.
@@ -117,12 +117,12 @@ namespace OpenDental
         {
             if (!StepValidate()) return;
             
-            if (!setupWizardsList[setupWizardIndex].SetupControl.IsDone)
+            if (!setupWizardsList[setupWizardIndex].Control.IsDone)
             {
                 MessageBox.Show(
                     string.Format(
                         Translation.Language.SetupStepIncomplete, 
-                        setupWizardsList[setupWizardIndex].SetupControl.Error),
+                        setupWizardsList[setupWizardIndex].Control.Error),
                     Translation.Language.Setup, 
                     MessageBoxButtons.OK, 
                     MessageBoxIcon.Information);
@@ -144,7 +144,7 @@ namespace OpenDental
                 return;
             }
 
-            SetCurrentWizardControl(setupWizardsList[setupWizardIndex].SetupControl);
+            SetCurrentWizardControl(setupWizardsList[setupWizardIndex].Control);
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace OpenDental
                 return;
             }
 
-            SetCurrentWizardControl(setupWizardsList[setupWizardIndex].SetupControl);
+            SetCurrentWizardControl(setupWizardsList[setupWizardIndex].Control);
         }
 
         /// <summary>

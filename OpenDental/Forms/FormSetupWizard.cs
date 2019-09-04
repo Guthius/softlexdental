@@ -11,7 +11,7 @@ namespace OpenDental
 {
     public partial class FormSetupWizard : FormBase
     {
-        List<SetupWizard.SetupWizClass> setupWizardsList;
+        List<SetupWizard.SetupWizardStep> setupWizardsList;
         List<ODGridRow> setupRows = new List<ODGridRow>();
         Dictionary<ODSetupCategory, ODGridRow> setupCategoryRows = new Dictionary<ODSetupCategory, ODGridRow>();
 
@@ -32,7 +32,7 @@ namespace OpenDental
         /// </summary>
         void LoadWizardsList()
         {
-            setupWizardsList = new List<SetupWizard.SetupWizClass>
+            setupWizardsList = new List<SetupWizard.SetupWizardStep>
             {
                 new SetupWizard.RegKeySetup(),
                 new SetupWizard.FeatureSetup(),
@@ -109,12 +109,12 @@ namespace OpenDental
 
             foreach (var setupWizard in setupWizardsList)
             {
-                CreateCategoryRow(setupWizard.GetCategory);
+                CreateCategoryRow(setupWizard.Category);
 
                 var gridRow = new ODGridRow();
                 gridRow.Cells.Add("     " + setupWizard.Name);
-                gridRow.Cells.Add(setupWizard.GetStatus.GetDescription());
-                gridRow.Cells[gridRow.Cells.Count - 1].CellColor = SetupWizard.GetColor(setupWizard.GetStatus);
+                gridRow.Cells.Add(setupWizard.Status.GetDescription());
+                gridRow.Cells[gridRow.Cells.Count - 1].CellColor = SetupWizard.GetColor(setupWizard.Status);
                 gridRow.Cells.Add("0");
                 gridRow.Tag = setupWizard;
 
@@ -125,8 +125,8 @@ namespace OpenDental
             {
                 var completed =
                     setupRows
-                        .Where(row => row.Tag is SetupWizard.SetupWizClass setupWizard && setupWizard.GetCategory == category.Key)
-                        .All(row => row.Tag is SetupWizard.SetupWizClass setupWizard && (setupWizard.GetStatus == ODSetupStatus.Complete || setupWizard.GetStatus == ODSetupStatus.Optional));
+                        .Where(row => row.Tag is SetupWizard.SetupWizardStep setupWizard && setupWizard.Category == category.Key)
+                        .All(row => row.Tag is SetupWizard.SetupWizardStep setupWizard && (setupWizard.Status == ODSetupStatus.Complete || setupWizard.Status == ODSetupStatus.Optional));
 
                 if (completed)
                 {
@@ -154,7 +154,7 @@ namespace OpenDental
                 for (int i = 0; i < wizardsGrid.Rows.Count; i++)
                 {
                     var gridRow = wizardsGrid.Rows[i];
-                    if (gridRow.Tag is SetupWizard.SetupWizClass setupWizard && setupWizard.GetCategory == setupCategory)
+                    if (gridRow.Tag is SetupWizard.SetupWizardStep setupWizard && setupWizard.Category == setupCategory)
                     {
                         wizardsGrid.SetSelected(i, true);
                     }
@@ -163,10 +163,10 @@ namespace OpenDental
             }
             else
             {
-                if (wizardsGrid.Rows[e.Row].Tag is SetupWizard.SetupWizClass setupWizard && wizardsGrid.Columns[e.Col].ImageList != null)
+                if (wizardsGrid.Rows[e.Row].Tag is SetupWizard.SetupWizardStep setupWizard && wizardsGrid.Columns[e.Col].ImageList != null)
                 {
                     MessageBox.Show(
-                        setupWizard.GetDescript,
+                        setupWizard.Description,
                         Translation.Language.Setup,
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Information);
@@ -179,23 +179,23 @@ namespace OpenDental
         /// </summary>
         void WizardsGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
         {
-            var tempWizardsList = new List<SetupWizard.SetupWizClass>();
+            var tempWizardsList = new List<SetupWizard.SetupWizardStep>();
 
             if (wizardsGrid.Rows[e.Row].Tag is ODSetupCategory setupCategory)
             {
                 foreach (var setupWizClass in setupWizardsList)
                 {
-                    if (setupWizClass.GetCategory == setupCategory)
+                    if (setupWizClass.Category == setupCategory)
                     {
-                        tempWizardsList.Add(new SetupWizard.SetupIntro(setupWizClass.Name, setupWizClass.GetDescript));
+                        tempWizardsList.Add(new SetupWizard.SetupIntro(setupWizClass.Name, setupWizClass.Description));
                         tempWizardsList.Add(setupWizClass);
                         tempWizardsList.Add(new SetupWizard.SetupComplete(setupWizClass.Name));
                     }
                 }
             }
-            else if(wizardsGrid.Rows[e.Row].Tag is SetupWizard.SetupWizClass setupWizard)
+            else if(wizardsGrid.Rows[e.Row].Tag is SetupWizard.SetupWizardStep setupWizard)
             { 
-                tempWizardsList.Add(new SetupWizard.SetupIntro(setupWizard.Name, setupWizard.GetDescript));
+                tempWizardsList.Add(new SetupWizard.SetupIntro(setupWizard.Name, setupWizard.Description));
                 tempWizardsList.Add(setupWizard);
                 tempWizardsList.Add(new SetupWizard.SetupComplete(setupWizard.Name));
             }
@@ -216,11 +216,11 @@ namespace OpenDental
         /// </summary>
         void AllButton_Click(object sender, EventArgs e)
         {
-            var tempWizardsList = new List<SetupWizard.SetupWizClass>();
+            var tempWizardsList = new List<SetupWizard.SetupWizardStep>();
 
             foreach (var setupWizard in setupWizardsList)
             {
-                tempWizardsList.Add(new SetupWizard.SetupIntro(setupWizard.Name, setupWizard.GetDescript));
+                tempWizardsList.Add(new SetupWizard.SetupIntro(setupWizard.Name, setupWizard.Description));
                 tempWizardsList.Add(setupWizard);
                 tempWizardsList.Add(new SetupWizard.SetupComplete(setupWizard.Name));
             }
