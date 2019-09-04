@@ -4570,9 +4570,6 @@
     <Compile Include="UI\ComboBoxOD.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\ComboBoxOD.Designer.cs">
-      <DependentUpon>ComboBoxOD.cs</DependentUpon>
-    </Compile>
     <Compile Include="UI\ODCodeRangeFilter.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -7438,19 +7435,12 @@
       <DependentUpon>ODDatePicker.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\LightSignalGrid.resx">
-      <DependentUpon>LightSignalGrid.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UI\ODDateRangePicker.resx">
       <DependentUpon>ODDateRangePicker.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\Button.resx">
       <DependentUpon>Button.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\ComboBoxMulti.resx">
-      <DependentUpon>ComboBoxMulti.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\ContrMultInput.resx">
@@ -7460,10 +7450,6 @@
     <EmbeddedResource Include="UI\ContrYN.resx">
       <DependentUpon>ContrYN.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\ContrWindowingSlider.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>ContrWindowingSlider.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\ODForm.resx">
       <DependentUpon>ODForm.cs</DependentUpon>
@@ -7678,14 +7664,8 @@
     <Compile Include="UI\ContrWindowingSlider.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\ContrWindowingSlider.Designer.cs">
-      <DependentUpon>ContrWindowingSlider.cs</DependentUpon>
-    </Compile>
     <Compile Include="UI\LightSignalGrid.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\LightSignalGrid.Designer.cs">
-      <DependentUpon>LightSignalGrid.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\ListBoxClickable.cs">
       <SubType>Component</SubType>
