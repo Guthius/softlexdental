@@ -2,12 +2,20 @@
 Open Dental GPL license Copyright (C) 2003  Jordan Sparks, DMD.  http://www.open-dent.com,  www.docsparks.com
 See header in FormOpenDental.cs for complete text.  Redistributions must retain this text.
 ===============================================================================================================*/
+using CodeBase;
+using OpenDental.Bridges;
+using OpenDental.Properties;
+using OpenDental.UI;
+using OpenDentBusiness;
+using OpenDentBusiness.HL7;
+using SharpDX;
+using SLDental.Storage;
+using SparksToothChart;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
 using System.Globalization;
@@ -17,20 +25,9 @@ using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
-using CodeBase;
-using OpenDental.UI;
-using OpenDentBusiness;
-using OpenDentBusiness.HL7;
-using SHDocVw;
-using SparksToothChart;
-using OpenDental.Bridges;
-using System.Drawing.Imaging;
-using System.Threading;
-using SharpDX;
-using OpenDental.Properties;
-using SLDental.Storage;
 #if EHRTEST
 using EHR;
 #endif

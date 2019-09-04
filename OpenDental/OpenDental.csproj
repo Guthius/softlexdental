@@ -226,9 +226,8 @@
     <Reference Include="Renci.SshNet, Version=2016.1.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
       <HintPath>..\packages\SSH.NET.2016.1.0\lib\net40\Renci.SshNet.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Required dlls\SharpDX.dll</HintPath>
+    <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SigPlusNET, Version=1.1.4050.24928, Culture=neutral, PublicKeyToken=6aef07010bb0624f, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
@@ -4388,15 +4387,6 @@
     <Compile Include="Forms\FormTransactionEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormTranslation.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormTranslationCat.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Forms\FormTranslationEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\FormTreatPlanEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -7332,18 +7322,6 @@
     <EmbeddedResource Include="Forms\FormTransactionEdit.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormTransactionEdit.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormTranslation.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FormTranslation.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormTranslationCat.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FormTranslationCat.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormTranslationEdit.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FormTranslationEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormTreatPlanEdit.resx">
       <SubType>Designer</SubType>

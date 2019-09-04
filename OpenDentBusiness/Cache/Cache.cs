@@ -216,14 +216,6 @@ namespace OpenDentBusiness
                 ds.Tables.Add(InsFilingCodes.GetTableFromCache(doRefreshServerCache));
                 ds.Tables.Add(InsFilingCodeSubtypes.GetTableFromCache(doRefreshServerCache));
             }
-            if (listITypes.Contains(InvalidType.Languages) || isAll)
-            {
-                ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Languages.ToString());
-                if (CultureInfo.CurrentCulture.Name != "en-US")
-                {
-                    ds.Tables.Add(Lans.GetTableFromCache(doRefreshServerCache));
-                }
-            }
             if (listITypes.Contains(InvalidType.Letters) || isAll)
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Letters.ToString());
@@ -616,11 +608,6 @@ namespace OpenDentBusiness
                 InsFilingCodes.FillCacheFromTable(ds.Tables["InsFilingCode"]);
                 InsFilingCodeSubtypes.FillCacheFromTable(ds.Tables["InsFilingCodeSubtype"]);
             }
-            if (listITypes.Contains(InvalidType.Languages) || isAll)
-            {
-                ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Languages.ToString());
-                Lans.FillCacheFromTable(ds.Tables["Language"]);
-            }
             if (listITypes.Contains(InvalidType.Letters) || isAll)
             {
                 ODEvent.Fire(ODEventType.Cache, suffix + InvalidType.Letters.ToString());
@@ -882,7 +869,6 @@ namespace OpenDentBusiness
             listInvalidTypes.Add(InvalidType.AccountingAutoPays);
             listInvalidTypes.Add(InvalidType.ProcButtons);
             listInvalidTypes.Add(InvalidType.Diseases);
-            listInvalidTypes.Add(InvalidType.Languages);
             listInvalidTypes.Add(InvalidType.AutoNotes);
             listInvalidTypes.Add(InvalidType.ElectIDs);
             listInvalidTypes.Add(InvalidType.Employers);

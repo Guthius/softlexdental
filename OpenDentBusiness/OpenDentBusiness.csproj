@@ -603,8 +603,6 @@
     <Compile Include="Crud\LabPanelCrud.cs" />
     <Compile Include="Crud\LabResultCrud.cs" />
     <Compile Include="Crud\LabTurnaroundCrud.cs" />
-    <Compile Include="Crud\LanguageCrud.cs" />
-    <Compile Include="Crud\LanguageForeignCrud.cs" />
     <Compile Include="Crud\LetterMergeCrud.cs" />
     <Compile Include="Crud\LetterMergeFieldCrud.cs" />
     <Compile Include="Crud\LoincCrud.cs" />
@@ -987,7 +985,6 @@
     <Compile Include="Data Interface\LabCases.cs" />
     <Compile Include="Data Interface\Laboratories.cs" />
     <Compile Include="Data Interface\LabTurnarounds.cs" />
-    <Compile Include="Data Interface\LanguageForeigns.cs" />
     <Compile Include="Data Interface\LetterMergeFields.cs" />
     <Compile Include="Data Interface\LetterMerges.cs" />
     <Compile Include="Data Interface\MedicationPats.cs" />
@@ -1359,6 +1356,8 @@
     <Compile Include="WebTypes\Shared\XWeb\XWebs.cs" />
     <Compile Include="WebTypes\WebSched\TimeSlot\TimeSlot.cs" />
     <Compile Include="WebTypes\WebSched\TimeSlot\TimeSlots.cs" />
+    <Compile Include="X12\X12Segment.cs" />
+    <Compile Include="X12\X12Seperators.cs" />
     <Compile Include="X12\X834.cs" />
     <Compile Include="X12\X835.cs" />
     <Compile Include="X12\X277.cs" />
@@ -1478,8 +1477,6 @@
     <Compile Include="TableTypes\InstructorOld.cs" />
     <Compile Include="Db\Interval.cs" />
     <Compile Include="TableTypes\JournalEntry.cs" />
-    <Compile Include="TableTypes\Language.cs" />
-    <Compile Include="TableTypes\LanguageForeign.cs" />
     <Compile Include="Data\Letter.cs" />
     <Compile Include="TableTypes\LetterMerge.cs" />
     <Compile Include="TableTypes\LetterMergeField.cs" />

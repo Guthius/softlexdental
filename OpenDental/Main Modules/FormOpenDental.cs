@@ -501,7 +501,6 @@ namespace OpenDental
             //and then resume what they were doing.  The purpose of this is to prevent UE's from happening with poor connections or temporary outages.
             DataConnectionEvent.Fired += DataConnection_ConnectionLost;//Hook up the connection lost event. Nothing prior to this point will have LostConnection events fired.
 
-            ODUIExtensions.ItemTranslator = new LansTranslate();
             RefreshLocalData(InvalidType.Prefs);//should only refresh preferences so that SignalLastClearedDate preference can be used in ClearOldSignals()
             Signalods.ClearOldSignals();
             //We no longer do this shotgun approach because it can slow the loading time.
@@ -5537,17 +5536,6 @@ namespace OpenDental
             }
             formTerminalManager.Show();
             formTerminalManager.BringToFront();
-        }
-
-        private void menuItemTranslation_Click(object sender, System.EventArgs e)
-        {
-            if (!Security.IsAuthorized(Permissions.Setup))
-            {
-                return;
-            }
-            FormTranslationCat FormTC = new FormTranslationCat();
-            FormTC.ShowDialog();
-            SecurityLogs.MakeLogEntry(Permissions.Setup, 0, "Translations");
         }
 
         private void menuItemMobileSetup_Click(object sender, EventArgs e)

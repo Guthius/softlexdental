@@ -259,8 +259,6 @@ namespace OpenDentBusiness{
 		ProcButtons,
 		///<summary>40.  Includes ICD9s.</summary>
 		Diseases,
-		///<summary>41</summary>
-		Languages,
 		///<summary>42</summary>
 		AutoNotes,
 		///<summary>43</summary>
