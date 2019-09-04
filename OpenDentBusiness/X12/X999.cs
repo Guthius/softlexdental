@@ -7,24 +7,29 @@ namespace OpenDentBusiness{
 
 		public X999(string messageText):base(messageText){		
 		}
-		
-		///<summary>In X12 lingo, the batchNumber is known as the functional group.</summary>
-		public int GetBatchNumber(){
-			if(this.FunctGroups[0].Transactions.Count!=1) {
-				return 0;
-			}
-			X12Segment seg=FunctGroups[0].Transactions[0].GetSegmentByID("AK1");
-			if(seg==null) {
-				return 0;
-			}
-			string num=seg.Get(2);
-			try{
-				return PIn.Int(num);
-			}
-			catch{
-				return 0;
-			}
-		}
+
+        ///<summary>In X12 lingo, the batchNumber is known as the functional group.</summary>
+        public int GetBatchNumber()
+        {
+            if (this.FunctGroups[0].Transactions.Count != 1)
+            {
+                return 0;
+            }
+            X12Segment seg = FunctGroups[0].Transactions[0].GetSegmentByID("AK1");
+            if (seg == null)
+            {
+                return 0;
+            }
+            string num = seg.Get(2);
+            try
+            {
+                return PIn.Int(num);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
 
 		///<summary>Do this first to get a list of all trans nums that are contained within this 999.  Then, for each trans num, we can later retrieve the AckCode for that single trans num.</summary>
 		public List<int> GetTransNums(){
