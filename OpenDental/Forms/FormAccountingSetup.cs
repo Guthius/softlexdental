@@ -26,7 +26,7 @@ namespace OpenDental
 {
     public partial class FormAccountingSetup : FormBase
     {
-        private readonly List<long> depositAccountIds;
+        private readonly List<long> depositAccountIds = new List<long>();
         private List<AccountAutoPay> autoPayList;
         private long accountingIncomeAccountId;
         private long accountingCashIncomeAccount;
