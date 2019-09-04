@@ -13,7 +13,7 @@ namespace OpenDentBusiness
         /// <summary>
         /// This property is just a shortcut to this pref to make typing faster. This pref is used a lot.
         /// </summary>
-        public static bool RandomKeys => Preference.GetBool(PreferenceName.RandomPrimaryKeys);
+        [Obsolete] public static bool RandomKeys => Preference.GetBool(PreferenceName.RandomPrimaryKeys);
 
         /// <summary>
         /// Logical shortcut to the ClaimPaymentNoShowZeroDate pref.  Returns 0001-01-01 if pref is disabled.
@@ -35,7 +35,7 @@ namespace OpenDentBusiness
         /// <summary>
         /// This property is just a shortcut to this pref to make typing faster.
         /// </summary>
-        public static DataStorageType AtoZfolderUsed => SIn.Enum<DataStorageType>(Preference.GetInt(PreferenceName.AtoZfolderUsed));
+        public static DataStorageType AtoZfolderUsed => (DataStorageType)Preference.GetInt(PreferenceName.AtoZfolderUsed);
 
         /// <summary>
         /// This property returns true if the preference for clinics is on and there is at least one non-hidden clinic.
