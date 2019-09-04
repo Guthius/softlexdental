@@ -1,8 +1,21 @@
-﻿using System;
+﻿/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenDental.Translation
 {
@@ -12,39 +25,38 @@ namespace OpenDental.Translation
     /// </summary>
     public static class Helper
     {
-        public static Dictionary<string, TEnum> Translate<TEnum>() where TEnum : Enum
+        public static List<Tuple<string, TEnum>> Translate<TEnum>() where TEnum : Enum
         {
-            var results = new Dictionary<string, TEnum>();
-
+            var results = new List<Tuple<string, TEnum>>();
             var type = typeof(TEnum);
+            var key = "E_" + type.Name + "_";
 
             foreach (var member in type.GetMembers())
             {
                 var name = member.Name;
 
-                var attributes = member.GetCustomAttributes(typeof(TranslationKeyAttribute), false);
-                if (attributes.Length > 0)
+                var translation = Language.ResourceManager.GetString(key + member.Name);
+                if (string.IsNullOrEmpty(translation))
                 {
-                    var translationKey = ((TranslationKeyAttribute)attributes[0]).Key;
-                    if (!string.IsNullOrEmpty(translationKey))
+                    var attributes = member.GetCustomAttributes(typeof(TranslationAttribute), false);
+                    if (attributes.Length > 0)
                     {
-                        var translation = Language.ResourceManager.GetString(translationKey);
-                        if (!string.IsNullOrEmpty(translation))
-                        {
-                            name = translation;
-                        }
+                        name = ((TranslationAttribute)attributes[0]).Value;
                     }
                 }
 
-                results.Add(name, (TEnum)Enum.Parse(type, member.Name));
+                results.Add(new Tuple<string, TEnum>(name, (TEnum)Enum.Parse(type, member.Name)));
             }
 
             return results;
         }
     }
 
-    public class TranslationKeyAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+    public class TranslationAttribute : Attribute
     {
-        public string Key { get; }
+        public TranslationAttribute(string value) => Value = value;
+
+        public string Value { get; }
     }
 }
