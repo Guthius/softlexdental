@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.21022</ProductVersion>
@@ -26,8 +26,9 @@
     </UpgradeBackupLocation>
     <SignAssembly>false</SignAssembly>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <ResGenToolArchitecture>Managed32Bit</ResGenToolArchitecture>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -567,17 +568,17 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RdlEngine\RdlEngine.csproj">
-      <Project>{C97E91F4-B310-44E2-9B6C-96775395722D}</Project>
-      <Name>RdlEngine</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\RdlViewer\RdlViewer.csproj">
-      <Project>{D99145B1-CB6C-41F5-BA86-723325145FB5}</Project>
-      <Name>RdlViewer</Name>
-    </ProjectReference>
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <ProjectReference Include="..\Reporting.Engine\Reporting.Engine.csproj">
+      <Project>{c97e91f4-b310-44e2-9b6c-96775395722d}</Project>
+      <Name>RdlEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Reporting.Viewer\Reporting.Viewer.csproj">
+      <Project>{d99145b1-cb6c-41f5-ba86-723325145fb5}</Project>
+      <Name>RdlViewer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

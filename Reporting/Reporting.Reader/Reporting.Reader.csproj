@@ -1,36 +1,33 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>8.0.50727</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{D99145B1-CB6C-41F5-BA86-723325145FB5}</ProjectGuid>
+    <ProjectGuid>{2412E381-D3D9-4AB7-A2FA-02D9786260F0}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>App.ico</ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>RdlViewer</AssemblyName>
+    <AssemblyName>RdlReader</AssemblyName>
     <AssemblyOriginatorKeyFile>
     </AssemblyOriginatorKeyFile>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
-    <OutputType>Library</OutputType>
-    <RootNamespace>RdlViewer</RootNamespace>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>RdlReader</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <StartupObject>
-    </StartupObject>
+    <StartupObject>fyiReporting.RdlReader.RdlReader</StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <SignAssembly>false</SignAssembly>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <ResGenToolArchitecture>Managed32Bit</ResGenToolArchitecture>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -54,6 +51,7 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -77,45 +75,7 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>none</DebugType>
     <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'LinuxRelease|AnyCPU' ">
-    <OutputPath>bin\LinuxRelease\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <BaseAddress>285212672</BaseAddress>
-    <Optimize>true</Optimize>
-    <DebugType>
-    </DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <BaseAddress>285212672</BaseAddress>
-    <FileAlignment>4096</FileAlignment>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <BaseAddress>285212672</BaseAddress>
-    <Optimize>true</Optimize>
-    <FileAlignment>4096</FileAlignment>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'LinuxRelease|x86' ">
-    <OutputPath>bin\x86\LinuxRelease\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <BaseAddress>285212672</BaseAddress>
-    <Optimize>true</Optimize>
-    <DebugType>
-    </DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System">
@@ -135,42 +95,47 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App.ico" />
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DataSourcePassword.cs">
+    <Compile Include="DialogAbout.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DialogMessages.cs">
+    <Compile Include="MDIChild.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PageDrawing.cs">
-      <SubType>UserControl</SubType>
+    <Compile Include="RdlReader.cs">
+      <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RdlViewer.cs">
-      <SubType>Component</SubType>
+    <Compile Include="ZoomTo.cs">
+      <SubType>Form</SubType>
     </Compile>
-    <EmbeddedResource Include="DataSourcePassword.resx">
-      <DependentUpon>DataSourcePassword.cs</DependentUpon>
+    <EmbeddedResource Include="DialogAbout.resx">
+      <DependentUpon>DialogAbout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MDIChild.resx">
+      <DependentUpon>MDIChild.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RdlReader.resx">
+      <DependentUpon>RdlReader.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="DialogMessages.resx">
-      <DependentUpon>DialogMessages.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="PageDrawing.resx">
-      <DependentUpon>PageDrawing.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="RdlViewer.resx">
-      <DependentUpon>RdlViewer.cs</DependentUpon>
-      <SubType>Designer</SubType>
+    <EmbeddedResource Include="ZoomTo.resx">
+      <DependentUpon>ZoomTo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RdlEngine\RdlEngine.csproj">
-      <Project>{C97E91F4-B310-44E2-9B6C-96775395722D}</Project>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Reporting.Engine\Reporting.Engine.csproj">
+      <Project>{c97e91f4-b310-44e2-9b6c-96775395722d}</Project>
       <Name>RdlEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Reporting.Viewer\Reporting.Viewer.csproj">
+      <Project>{d99145b1-cb6c-41f5-ba86-723325145fb5}</Project>
+      <Name>RdlViewer</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
