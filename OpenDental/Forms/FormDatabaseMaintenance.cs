@@ -1261,30 +1261,30 @@ namespace OpenDental {
 		}
 
 		private void butOptimize_Click(object sender,EventArgs e) {
-			if(MessageBox.Show(Lan.g("FormDatabaseMaintenance","This tool will backup, optimize, and repair all tables.")+"\r\n"+Lan.g("FormDatabaseMaintenance","Continue?")
-				,Lan.g("FormDatabaseMaintenance","Backup Optimize Repair")
-				,MessageBoxButtons.OKCancel)!=DialogResult.OK) {
-				return;
-			}
-			Cursor=Cursors.WaitCursor;
-			string result="";
-			if(Shared.BackupRepairAndOptimize(true,BackupLocation.OptimizeTool)) {
-				result=DateTime.Now.ToString()+"\r\n"+Lan.g("FormDatabaseMaintenance","Repair and Optimization Complete");
-			}
-			else {
-				result=DateTime.Now.ToString()+"\r\n";
-				result+=Lan.g("FormDatabaseMaintenance","Backup, repair, or optimize has failed.  Your database has not been altered.")+"\r\n";
-				result+=Lan.g("FormDatabaseMaintenance","Please call support for help, a manual backup of your data must be made before trying to fix your database.")+"\r\n";
-			}
-			Cursor=Cursors.Default;
-			MsgBoxCopyPaste msgBoxCP=new MsgBoxCopyPaste(result);
-			msgBoxCP.Show();//Let this window be non-modal so that they can keep it open while they fix their problems.
-			try {
-				DatabaseMaintenances.SaveLogToFile(result);
-			}
-			catch(Exception ex) {
-				MessageBox.Show(ex.Message);
-			}
+			//if(MessageBox.Show(Lan.g("FormDatabaseMaintenance","This tool will backup, optimize, and repair all tables.")+"\r\n"+Lan.g("FormDatabaseMaintenance","Continue?")
+			//	,Lan.g("FormDatabaseMaintenance","Backup Optimize Repair")
+			//	,MessageBoxButtons.OKCancel)!=DialogResult.OK) {
+			//	return;
+			//}
+			//Cursor=Cursors.WaitCursor;
+			//string result="";
+			//if(Shared.BackupRepairAndOptimize(true,BackupLocation.OptimizeTool)) {
+			//	result=DateTime.Now.ToString()+"\r\n"+Lan.g("FormDatabaseMaintenance","Repair and Optimization Complete");
+			//}
+			//else {
+			//	result=DateTime.Now.ToString()+"\r\n";
+			//	result+=Lan.g("FormDatabaseMaintenance","Backup, repair, or optimize has failed.  Your database has not been altered.")+"\r\n";
+			//	result+=Lan.g("FormDatabaseMaintenance","Please call support for help, a manual backup of your data must be made before trying to fix your database.")+"\r\n";
+			//}
+			//Cursor=Cursors.Default;
+			//MsgBoxCopyPaste msgBoxCP=new MsgBoxCopyPaste(result);
+			//msgBoxCP.Show();//Let this window be non-modal so that they can keep it open while they fix their problems.
+			//try {
+			//	DatabaseMaintenances.SaveLogToFile(result);
+			//}
+			//catch(Exception ex) {
+			//	MessageBox.Show(ex.Message);
+			//}
 		}
 
 		private void butApptProcs_Click(object sender,EventArgs e) {

@@ -138,15 +138,6 @@ namespace OpenDentBusiness
         LastSeenHygienist
     }
 
-    ///<summary>How this database is being hosted.</summary>
-    public enum DatabaseModeEnum
-    {
-        ///<summary>Customer is hosting their own database.</summary>
-        Normal,
-        ///<summary>Open Dental is hosting the database.</summary>
-        Cloud,
-    }
-
     public enum PPOWriteoffDateCalc
     {
         /// <summary>0 - Use the insurance payment date when dating writeoff estimates and adjustments in reports. </summary>

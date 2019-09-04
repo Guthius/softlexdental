@@ -102,31 +102,6 @@ namespace OpenDentBusiness
                 }
                 listLogs[i].LogHash = table.Rows[i]["LogHash"].ToString();
             }
-            if (includeArchived)
-            {
-                //This will purposefully throw exceptions.
-                DataTable tableArchive = MiscData.RunFuncOnArchiveDatabase<DataTable>(() =>
-                {
-                    return Db.GetTable(command);
-                });
-                List<SecurityLog> listLogsArchive = Crud.SecurityLogCrud.TableToList(tableArchive);
-                Dictionary<long, Patient> dictPats = Patients.GetMultPats(listLogsArchive.Select(x => (long)x.PatNum).Distinct().ToList())
-                    .ToDictionary(x => (long)x.PatNum);
-                for (int i = 0; i < listLogsArchive.Count; i++)
-                {
-                    Patient pat;
-                    if (listLogsArchive[i].PatNum == 0 || !dictPats.TryGetValue(listLogsArchive[i].PatNum, out pat))
-                    {
-                        listLogsArchive[i].PatientName = "";
-                    }
-                    else
-                    {
-                        listLogsArchive[i].PatientName = listLogsArchive[i].PatNum + "-" + pat.GetNameLF();
-                    }
-                    listLogsArchive[i].LogHash = tableArchive.Rows[i]["LogHash"].ToString();
-                }
-                listLogs.AddRange(listLogsArchive);//Add archived entries to returned list.
-            }
             return listLogs.OrderBy(x => x.LogDateTime).ToArray();
         }
 
@@ -175,14 +150,6 @@ namespace OpenDentBusiness
             }
             command += "ORDER BY LogDateTime";
             List<SecurityLog> listLogs = Crud.SecurityLogCrud.SelectMany(command);
-            if (includeArchived)
-            {
-                //This will purposefully throw exceptions.
-                listLogs.AddRange(MiscData.RunFuncOnArchiveDatabase<List<SecurityLog>>(() =>
-                {
-                    return Crud.SecurityLogCrud.SelectMany(command);
-                }));
-            }
             return listLogs.OrderBy(x => x.LogDateTime).ToArray();
         }
 

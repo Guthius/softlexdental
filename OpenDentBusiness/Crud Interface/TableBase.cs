@@ -8,7 +8,7 @@ namespace OpenDentBusiness
     /// </summary>
     abstract public class ODTable
     {
-        static int maxAllowedPacketCount = 0;
+        static long maxAllowedPacketCount = 0;
 
         /// <summary>
         /// Will only be true if explicitly set to true by programmer.
@@ -29,7 +29,7 @@ namespace OpenDentBusiness
         /// process information from the previous packet while downloading the next packet in 
         /// parallel.
         /// </summary>
-        public static int MaxAllowedPacketCount
+        public static long MaxAllowedPacketCount
         {
             get
             {
@@ -42,7 +42,7 @@ namespace OpenDentBusiness
                 int megabyte = kilobyte * kilobyte;//1MB
 
                 // Minus 8KB to allow for MySQL header information. Ex see PrefL.CopyFromHereToUpdateFiles()
-                int retVal = MiscData.GetMaxAllowedPacket() - 8 * kilobyte;
+                var retVal = MiscData.GetMaxAllowedPacket() - 8 * kilobyte;
 
                 // Minimum of 8K (for network packet headers), maximum of 1MB for parallel.
                 maxAllowedPacketCount = Math.Min(Math.Max(retVal, 8 * kilobyte), megabyte); 

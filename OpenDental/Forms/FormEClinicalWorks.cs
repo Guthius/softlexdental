@@ -687,7 +687,7 @@ namespace OpenDental{
 				//if a def is enabled, the value associated with the def will override this setting
 				checkQuadAsToothNum.Checked=GetProp("IsQuadAsToothNum")=="1";//this property will not exist if using Oracle, eCW will never use Oracle
 			}
-			textODServer.Text=MiscData.GetODServer();
+			textODServer.Text=MiscData.GetServerName();
 			comboDefaultUserGroup.Items.Clear();
 			_listUserGroups=UserGroup.All();
 			for(int i=0;i<_listUserGroups.Count;i++) {

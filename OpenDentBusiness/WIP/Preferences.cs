@@ -236,11 +236,6 @@ namespace OpenDentBusiness
         public static bool IsPayPlanVersion2 => Preference.GetInt(PreferenceName.PayPlansVersion) == (int)PayPlanVersions.AgeCreditsAndDebits;
 
         /// <summary>
-        /// Returns true if the database hosted by Open Dental.
-        /// </summary>
-        public static bool IsCloudMode => Preference.GetInt(PreferenceName.DatabaseMode) == (int)DatabaseModeEnum.Cloud;
-
-        /// <summary>
         /// Returns true if the office has a report server set up.
         /// </summary>
         [Obsolete] public static bool HasReportServer

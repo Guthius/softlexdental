@@ -564,14 +564,15 @@ namespace OpenDental{
 			}
 			bool hasChanged=FeeScheds.Sync(_listFeeScheds,_listFeeSchedsOld);
 			Action actionProgress=ODProgress.Show(ODEventType.HideUnusedFeeSchedules,startingMessage:Lans.g(this,"Backing up database..."));
-			try {
-				MiscData.MakeABackup();
-			}
-			catch(Exception ex) {
-				actionProgress?.Invoke();
-                FormFriendlyException.Show(Lans.g(this,"Unable to make a backup. No fee schedules have been altered."),ex);
-				return;
-			}
+            // TODO: Recomend to make a backup...
+			//try {
+			//	MiscData.MakeABackup();
+			//}
+			//catch(Exception ex) {
+			//	actionProgress?.Invoke();
+            //    FormFriendlyException.Show(Lans.g(this,"Unable to make a backup. No fee schedules have been altered."),ex);
+			//	return;
+			//}
 			ODEvent.Fire(ODEventType.HideUnusedFeeSchedules,Lans.g(this,"Hiding unused fee schedules..."));
 			long countChanged=FeeScheds.HideUnusedScheds();
 			if(hasChanged || countChanged > 0) {

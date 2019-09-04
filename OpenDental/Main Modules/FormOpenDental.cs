@@ -981,21 +981,6 @@ namespace OpenDental
 
             // TODO: Check if there is a recent backup.
 
-            try
-            {
-                MiscData.SetSqlMode();
-            }
-            catch
-            {
-                MessageBox.Show(
-                    "Unable to set global sql mode. User probably does not have enough permission.",
-                    "Open Dental",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-
-                return false;
-            }
-
             string updateComputerName = Preference.GetString(PreferenceName.UpdateInProgressOnComputerName);
             if (updateComputerName != "" && Environment.MachineName.ToUpper() != updateComputerName.ToUpper())
             {

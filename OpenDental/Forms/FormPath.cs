@@ -758,11 +758,11 @@ namespace OpenDental
                     ActiveControl = textLocalPath;//Focus on textLocalPath, since this is the only textbox the user can edit in this case.
                 }
             }
-            if (Preferences.IsCloudMode)
-            {
-                butOK.Enabled = false;
-                DisableMostControls();
-            }
+            //if (Preferences.IsCloudMode)
+            //{
+            //    butOK.Enabled = false;
+            //    DisableMostControls();
+            //}
         }
 
         private void DisableMostControls()

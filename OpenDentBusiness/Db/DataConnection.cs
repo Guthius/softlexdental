@@ -74,7 +74,7 @@ namespace OpenDentBusiness
         }
 
         /// <summary>
-        /// Gets or sets the hostname or IP address of the PostrgreSQL server.
+        /// Gets or sets the hostname or IP address of the MySQL server.
         /// </summary>
         public static string Host
         {

@@ -248,18 +248,18 @@ namespace OpenDentBusiness
         ApptSecondaryProviderConsiderOpOnly,
         ///<summary>Date, MinDate by default.  The Date that was set within the "Archive entries on or before:" field within the Archive tab of the 
         ///Backup window when the archive process was last ran successfully.</summary>
-        ArchiveDate,
+        [Obsolete] ArchiveDate,
         ///<summary>String of random alpha-numeric characters that represents a synced key between an OD database and its specific archive database.</summary>
-        ArchiveKey,
+        [Obsolete] ArchiveKey,
         ///<summary>Encrypted password for the database user that will be used when directly connecting to the archive server.</summary>
-        ArchivePassHash,
+        [Obsolete] ArchivePassHash,
         ///<summary>The name of the server where the archive database should be located.</summary>
-        ArchiveServerName,
+        [Obsolete] ArchiveServerName,
         ///<summary>DEPRECATED.  Archiving with Middle Tier connection never fully implemented.  Here was the original intent behind the preference:
         ///URI to a Middle Tier web service that is connected to the database where archives should be made.</summary>
-        ArchiveServerURI,
+        [Obsolete] ArchiveServerURI,
         ///<summary>The user name for the database user that will be used when directly connecting to the archive server.</summary>
-        ArchiveUserName,
+        [Obsolete] ArchiveUserName,
         ///<summary>Default billing types selected when loading the Unsent Tab of the Accounts Receivable Manager.</summary>
         ArManagerBillingTypes,
         ///<summary>Default state for the exclude if bad address (no zipcode) checkbox when loading the Unsent Tab of the Accounts Receivable Manager.</summary>
@@ -547,8 +547,9 @@ namespace OpenDentBusiness
         DatabaseMaintenanceDisableOptimize,
         ///<summary>bool. Set to false by default. If true, database maintenance will skip table checks.</summary>
         DatabaseMaintenanceSkipCheckTable,
-        ///<summary>Uses <see cref="DatabaseModeEnum"/>. Defaults to 'Normal'.</summary>
-        DatabaseMode,
+
+        [Obsolete] DatabaseMode,
+
         DataBaseVersion,
         DateDepositsStarted,
         DateLastAging,

@@ -1,254 +1,76 @@
-using CodeBase;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
 using System.Net;
-using System.Reflection;
-using Microsoft.VisualBasic.Devices;
-using System.Management;
-using System.Linq;
-using OpenDental;
 
 namespace OpenDentBusiness
 {
-    ///<summary>Miscellaneous database functions.</summary>
     public class MiscData
     {
-        ///<summary>Gets the current date/Time direcly from the server.  Mostly used to prevent uesr from altering the workstation date to bypass security.</summary>
+        /// <summary>
+        /// Gets the current date/Time direcly from the server.
+        /// Mostly used to prevent uesr from altering the workstation date to bypass security.
+        /// </summary>
         public static DateTime GetNowDateTime()
         {
-            string command = "SELECT NOW()";
-            DataTable table = Db.GetTable(command);
-            return PIn.DateT(table.Rows[0][0].ToString());
+            var result = DataConnection.ExecuteScalar("SELECT NOW()");
+
+            return DateTime.Parse(result);
         }
 
-        ///<summary>Gets the current date/Time with milliseconds directly from server.  In Mysql we must query the server until the second rolls over, which may take up to one second.  Used to confirm synchronization in time for EHR.</summary>
+        /// <summary>
+        /// Gets the current date/Time with milliseconds directly from server.
+        /// In Mysql we must query the server until the second rolls over, which may take up to one second.
+        /// Used to confirm synchronization in time for EHR.
+        /// </summary>
         public static DateTime GetNowDateTimeWithMilli()
         {
-            string command;
-            string dbtime;
+            var now = GetNowDateTime();
+            var second = now.Second;
 
-            command = "SELECT NOW()"; //Only up to 1 second precision pre-Mysql 5.6.4.  Does not round milliseconds.
-            dbtime = Db.GetScalar(command);
-            int secondInit = PIn.DateT(dbtime).Second;
-            int secondCur;
-            //Continue querying server for current time until second changes (milliseconds will be close to 0)
             do
             {
-                dbtime = Db.GetScalar(command);
-                secondCur = PIn.DateT(dbtime).Second;
+                now = GetNowDateTime();
             }
-            while (secondInit == secondCur);
+            while (second == now.Second);
 
-            return PIn.DateT(dbtime);
+            return now;
         }
 
-        ///<summary>Backs up the database to the same directory as the original just in case the user did not have sense enough to do a backup first.
-        ///Does not work for Oracle, due to some MySQL specific commands inside.</summary>
-        public static long MakeABackup()
+        public static string GetCurrentDatabase() => 
+            DataConnection.ExecuteString("SELECT DATABASE()");
+
+        /// <summary>
+        /// Returns the major and minor version of MySQL for the current connection.
+        /// Returns a version of 0.0 if the MySQL version cannot be determined.
+        /// </summary>
+        public static string GetMySqlVersion() => DataConnection.ExecuteString("SELECT @@version");
+
+        /// <summary>
+        /// Gets the human readable host name of the database server.
+        /// This will return an empty string if Dns lookup fails.
+        /// </summary>
+        public static string GetServerName()
         {
-            ////This function should always make the backup on the server itself, and since no directories are
-            ////referred to (all handled with MySQL), this function will always be referred to the server from
-            ////client machines.
-            //
-            ////UpdateStreamLinePassword is purposefully named poorly and used in an odd fashion to sort of obfuscate it from our users.
-            ////GetStringNoCache() will return blank if pref does not exist.
-            //if (PrefC.GetStringNoCache(PrefName.UpdateStreamLinePassword) == "abracadabra")
-            //{
-            //    return 0;
-            //}
-            ////only used in two places: upgrading version, and upgrading mysql version.
-            ////Both places check first to make sure user is using mysql.
-            ////we have to be careful to throw an exception if the backup is failing.
-            //DataConnection dcon = new DataConnection();
-            //string command = "SELECT database()";
-            //DataTable table = dcon.GetTable(command);
-            //string oldDb = PIn.String(table.Rows[0][0].ToString());
-            //string newDb = oldDb + "backup_" + DateTime.Today.ToString("MM_dd_yyyy");
-            //command = "SHOW DATABASES";
-            //table = dcon.GetTable(command);
-            //string[] databases = new string[table.Rows.Count];
-            //for (int i = 0; i < table.Rows.Count; i++)
-            //{
-            //    databases[i] = table.Rows[i][0].ToString();
-            //}
-            //if (Contains(databases, newDb))
-            //{//if the new database name already exists
-            // //find a unique one
-            //    int uniqueID = 1;
-            //    string originalNewDb = newDb;
-            //    do
-            //    {
-            //        newDb = originalNewDb + "_" + uniqueID.ToString();
-            //        uniqueID++;
-            //    }
-            //    while (Contains(databases, newDb));
-            //}
-            //command = "CREATE DATABASE `" + newDb + "` CHARACTER SET utf8";
-            //dcon.NonQ(command);
-            //command = "SHOW FULL TABLES WHERE Table_type='BASE TABLE'";//Tables, not views.  Does not work in MySQL 4.1, however we test for MySQL version >= 5.0 in PrefL.
-            //table = dcon.GetTable(command);
-            //string[] tableName = new string[table.Rows.Count];
-            //for (int i = 0; i < table.Rows.Count; i++)
-            //{
-            //    tableName[i] = table.Rows[i][0].ToString();
-            //}
-            ////switch to using the new database
-            //DataConnection newDcon = new DataConnection(newDb);
-            //for (int i = 0; i < tableName.Length; i++)
-            //{
-            //    //Alert anyone that cares that we are backing up this table.
-            //    MiscDataEvent.Fire(ODEventType.MiscData, Lans.g(nameof(MiscData), "Backing up table") + ": " + tableName[i]);
-            //    command = "SHOW CREATE TABLE `" + oldDb + "`.`" + tableName[i] + "`";//also works with views. Added backticks around table name for unusual characters.
-            //    table = newDcon.GetTable(command);
-            //    command = PIn.ByteArray(table.Rows[0][1]);
-            //    newDcon.NonQ(command);//this has to be run using connection with new database
-            //    command = "INSERT INTO `" + newDb + "`.`" + tableName[i] + "` "
-            //        + "SELECT * FROM `" + oldDb + "`.`" + tableName[i] + "`";//Added backticks around table name for unusual characters.
-            //    newDcon.NonQ(command);
-            //}
-            return 0;
-        }
-
-        public static string GetCurrentDatabase()
-        {
-            string command = "SELECT database()";
-            DataTable table = Db.GetTable(command);
-            return PIn.String(table.Rows[0][0].ToString());
-        }
-
-        ///<summary>Returns the name of the archive database based on the current connection settings.
-        ///E.g. if the current database that is connected is called 'opendental182' then the archive name will be 'opendental182_archive'</summary>
-        public static string GetArchiveDatabaseName()
-        {
-            //No need to check RemotingRole; no call to db.
-            return GetCurrentDatabase() + "_archive";
-        }
-
-        ///<summary>Makes a connection to the archive database, validates that the version of the database is the same as the current database version,
-        ///executes the func passed in, and then sets the connection back to the original database before returning the results of the func passed in.
-        ///Optionally pass in connection settings to override the archive preferences.  Throws exceptions.</summary>
-        public static T RunFuncOnArchiveDatabase<T>(Func<T> f)
-        {
-            string connectionStrOrig = DataConnection.ConnectionString;
-
-            DataConnection dcon = new DataConnection();
-            try
-            {
-                //Keep track of the original connection settings so that we can revert back to them once finished archiving.
-                Version versionDbOrig = new Version(Preference.GetString(PreferenceName.DataBaseVersion));
-                string archiveServerName = Preference.GetString(PreferenceName.ArchiveServerName);
-                string archiveUserName = Preference.GetString(PreferenceName.ArchiveUserName);
-                string decryptedPass;
-                Encryption.TryDecrypt(Preference.GetString(PreferenceName.ArchivePassHash), out decryptedPass);
-                //Connect to the archive database.  This can throw many exceptions.
-                DataConnection.Configure(archiveServerName, MiscData.GetArchiveDatabaseName(), archiveUserName, decryptedPass);
-                #region Validate archive database version
-                //At this point there is an active connection to the archive database, validate the DataBaseVersion.
-                string version = Preference.GetStringNoCache(PreferenceName.DataBaseVersion);
-                if (string.IsNullOrEmpty(version))
-                {
-                    //Preference table does not have version information.  Somehow they have a database with proper structure but no data.
-                    //This archive database can't be trusted and we have no idea what version the schema is at.
-                    //They need to call support so that we can take a look or they need to delete the invalid archive (or remove it from the data dir) 
-                    //so that a new archive database can be made from scratch.
-                    throw new ApplicationException("Invalid archive database detected.");
-                }
-                Version versionDbArchive = new Version(version);
-                if (versionDbOrig > versionDbArchive)
-                {
-                    //The archive database needs to be updated before funcs can be invoked against it.
-                    throw new ApplicationException("Archive database is at a lower version than the current database."
-                        + "  Run the Archive tool in order to update the database.");
-                }
-                else if (versionDbArchive > versionDbOrig)
-                {
-                    throw new ApplicationException("Archive database version is higher than the current database.  Process cannot continue.");
-                }
-                #endregion
-                //Invoke the func passed in.
-                return f();
-            }
-            finally
-            {//Always put the connection back to the original no matter what happened above when trying to make an archive.
-                //dcon.SetDb(connectionStrOrig, "");//It is acceptable to crash the program if this fails.
-            }
-        }
-
-        ///<summary>Returns the major and minor version of MySQL for the current connection.  Returns a version of 0.0 if the MySQL version cannot be determined.</summary>
-        public static string GetMySqlVersion()
-        {
-            string command = "SELECT @@version";
-            DataTable table = Db.GetTable(command);
-            return PIn.String(table.Rows[0][0].ToString());
-
-        }
-
-        ///<summary>Gets the human readable host name of the database server, even when using the middle-tier.  This will return an empty string if Dns lookup fails.</summary>
-        public static string GetODServer()
-        {
-            //string command="SELECT @@hostname";//This command fails in MySQL 5.0.22 (the version of MySQL 5.0 we used to use), because the hostname variable was added in MySQL 5.0.38.
-            //string rawHostName=DataConnection.GetServerName();//This could be a human readable name, or it might be "localhost" or "127.0.0.1" or another IP address.
-            //return Dns.GetHostEntry(rawHostName).HostName;//Return the human readable name (full domain name) corresponding to the rawHostName.
-            //Had to strip off the port, caused Dns.GetHostEntry to fail and is not needed to get the hostname
-            string rawHostName = DataConnection.Host;
-            if (rawHostName != null)
-            {//rawHostName will be null if the user used a custom ConnectionString when they chose their database.
-                rawHostName = rawHostName.Split(':')[0];//This could be a human readable name, or it might be "localhost" or "127.0.0.1" or another IP address.
-            }
-            string retval = "";
-            try
-            {
-                retval = Dns.GetHostEntry(rawHostName).HostName;//Return the human readable name (full domain name) corresponding to the rawHostName.
-            }
-            catch
-            {
-               
-            }
-            return retval;
-        }
-
-        ///<summary>Returns the current value in the GLOBAL max_allowed_packet variable.
-        ///max_allowed_packet is stored as an integer in multiples of 1,024 with a min value of 1,024 and a max value of 1,073,741,824.</summary>
-        public static int GetMaxAllowedPacket()
-        {
-            int maxAllowedPacket = 0;
-            //The SHOW command is used because it was able to run with a user that had no permissions whatsoever.
-            string command = "SHOW GLOBAL VARIABLES WHERE Variable_name='max_allowed_packet'";
-            DataTable table = Db.GetTable(command);
-            if (table.Rows.Count > 0)
-            {
-                maxAllowedPacket = PIn.Int(table.Rows[0]["Value"].ToString());
-            }
-            return maxAllowedPacket;
-        }
-
-        public static void SetSqlMode()
-        {
-            return;
+            string hostName = DataConnection.Host;
 
             try
             {
-                if (Preferences.IsCloudMode)
+                var hostEntry = Dns.GetHostEntry(hostName);
+                if (hostEntry != null)
                 {
-                    return;
+                    hostName = hostEntry.HostName;
                 }
             }
-            catch
-            {
-            }
+            catch { }
 
-            //The SHOW command is used because it was able to run with a user that had no permissions whatsoever.
-            string command = "SHOW GLOBAL VARIABLES WHERE Variable_name='sql_mode'";
-            DataTable table = Db.GetTable(command);
-            //We want to run the SET GLOBAL command when no rows were returned (above query failed) or if the sql_mode is not blank or NO_AUTO_CREATE_USER
-            //(set to something that could cause errors).
-            if (table.Rows.Count < 1 || (table.Rows[0]["Value"].ToString() != "" && table.Rows[0]["Value"].ToString().ToUpper() != "NO_AUTO_CREATE_USER"))
-            {
-                command = "SET GLOBAL sql_mode=''";//in case user did not use our my.ini file.  http://www.opendental.com/manual/mysqlservervariables.html
-                Db.NonQ(command);
-            }
+            return hostName;
         }
+
+        /// <summary>
+        /// Returns the current value in the GLOBAL max_allowed_packet variable.
+        /// max_allowed_packet is stored as an integer in multiples of 1,024 with a min 
+        /// value of 1,024 and a max value of 1,073,741,824.
+        /// </summary>
+        public static long GetMaxAllowedPacket() =>
+            DataConnection.ExecuteLong("SHOW GLOBAL VARIABLES WHERE variable_name = 'max_allowed_packet'");
     }
 }

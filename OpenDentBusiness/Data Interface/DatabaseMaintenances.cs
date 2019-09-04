@@ -129,11 +129,6 @@ namespace OpenDentBusiness
         [DbmMethodAttr]
         public static string MySQLServerOptionsValidate(bool verbose, DbmMode modeCur)
         {
-            if (Preferences.IsCloudMode)
-            {
-                return "";//Cloud hosted Open Dental databases don't have permission to call SET GLOBAL, also the MySQL variables can be assumed to be correct, since we host it.
-            }
-
             string command = "SHOW GLOBAL VARIABLES LIKE 'sql_mode'";
             DataTable table = Db.GetTable(command);
             if (table.Rows.Count < 1 || table.Columns.Count < 2)

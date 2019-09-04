@@ -775,9 +775,9 @@ namespace OpenDental {
 			}
 			checkSubmitExceptions.Checked=Preference.GetBool(PreferenceName.SendUnhandledExceptionsToHQ);
 			checkMiddleTierCacheFees.Checked=Preference.GetBool(PreferenceName.MiddleTierCacheFees);
-			if(Preferences.IsCloudMode) {
-				textWebServiceServerName.ReadOnly=true;
-			}
+			//if(Preferences.IsCloudMode) {
+			//	textWebServiceServerName.ReadOnly=true;
+			//}
 		}
 
 		private void butLanguages_Click(object sender,EventArgs e) {

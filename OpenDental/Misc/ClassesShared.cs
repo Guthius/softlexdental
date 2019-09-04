@@ -1,8 +1,6 @@
-using CodeBase;
 using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace OpenDental
 {
@@ -41,90 +39,6 @@ namespace OpenDental
 
             return "";
         }
-
-        /// <summary>
-        /// Returns false if the backup, repair, or the optimze failed.
-        /// </summary>
-        /// <param name="silent">Value indicating whether message boxes should be supressed.</param>
-        /// <param name="backupLocation">The location from were the back-up was started.</param>
-        /// <param name="createSecurityLog">Value indicating whether to create an entry in the security log.</param>
-        public static bool BackupRepairAndOptimize(bool silent, BackupLocation backupLocation, bool createSecurityLog = true)
-        {
-            if (!MakeABackup(silent, backupLocation, createSecurityLog)) return false;
-            
-            try
-            {
-                ODProgress.ShowAction(() => DatabaseMaintenances.RepairAndOptimize(),
-                    eventType: typeof(MiscDataEvent),
-                    odEventType: ODEventType.MiscData);
-            }
-            catch (Exception ex)
-            {
-                if (!silent)
-                {
-                    var errorMessage = "Optimize and Repair failed.";
-                    if (ex.Message != "")
-                    {
-                        errorMessage += "\r\n\r\n" + ex.Message;
-                    }
-
-                    MessageBox.Show(
-                        errorMessage, 
-                        "Maintenance", 
-                        MessageBoxButtons.OK, 
-                        MessageBoxIcon.Error);
-                }
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// This is a wrapper method for MiscData.MakeABackup() that will show a progress window so that the user can see progress.
-        /// Set isSilent to true to suppress the failure message boxes.  However, the progress window will always be shown.
-        /// Returns false if making a backup failed.
-        /// </summary>
-        /// <param name="silent">Value indicating whether message boxes should be supressed.</param>
-        /// <param name="backupLocation">The location from were the back-up was started.</param>
-        /// <param name="createSecurityLog">Value indicating whether to create an entry in the security log.</param>
-        public static bool MakeABackup(bool silent, BackupLocation backupLocation, bool createSecurityLog = true)
-        {
-            try
-            {
-                ODProgress.ShowAction(() => MiscData.MakeABackup(),
-                    eventType: typeof(MiscDataEvent),
-                    odEventType: ODEventType.MiscData);
-            }
-            catch (Exception ex)
-            {
-                if (!silent)
-                {
-                    var errorMessage = "Backup failed. Your database has not been altered.";
-                    if (ex.Message != "")
-                    {
-                        errorMessage += "\r\n\r\n" +  ex.Message;
-                    }
-
-                    MessageBox.Show(
-                        errorMessage, 
-                        "Backup", 
-                        MessageBoxButtons.OK, 
-                        MessageBoxIcon.Error);
-                }
-                return false;
-            }
-
-            if (createSecurityLog)
-            {
-                SecurityLogs.MakeLogEntryNoCache(
-                    Permissions.Backup, 0, 
-                    "A backup was created when running the " + backupLocation.ToString());
-            }
-
-            return true;
-        }
-
     }
 
     /// <summary>
