@@ -1339,7 +1339,7 @@ namespace OpenDental{
 			SheetFiller.FillFields(sheet);
 			SheetUtil.CalculateHeights(sheet);
 			string sheetName=sheet.Description+"_"+DateTime.Now.ToString("yyyyMMdd_hhmmssfff")+".pdf";
-			string tempFile= Storage.Default.CombinePath(Preferences.GetTempFolderPath(),sheetName);
+			string tempFile= Storage.Default.CombinePath(Preferences.GetTempPath(),sheetName);
 			string filePathAndName= Storage.Default.CombinePath(EmailAttachment.GetAttachmentPath(),sheetName);
 			SheetPrinting.CreatePdf(sheet,tempFile,null);
             Storage.Local.CopyFile(tempFile, filePathAndName, Storage.Default);

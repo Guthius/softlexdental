@@ -158,8 +158,8 @@ namespace OpenDental {
 			MemoryStream ms=new MemoryStream();
 			using(ZipFile unzipped=ZipFile.Read(zipFileDestination)) {
 				ZipEntry ze=unzipped[0];
-				ze.Extract(Preferences.GetTempFolderPath(),ExtractExistingFileAction.OverwriteSilently);
-				return Path.Combine(Preferences.GetTempFolderPath(),unzipped[0].FileName);
+				ze.Extract(Preferences.GetTempPath(),ExtractExistingFileAction.OverwriteSilently);
+				return Path.Combine(Preferences.GetTempPath(),unzipped[0].FileName);
 			}
 		}
 

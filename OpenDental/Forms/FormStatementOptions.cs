@@ -1216,7 +1216,7 @@ namespace OpenDental{
 					SheetFiller.FillFields(sheet,dataSet,StmtCur);
 					SheetUtil.CalculateHeights(sheet,dataSet,StmtCur);
 				}
-				tempPath= Storage.Default.CombinePath(Preferences.GetTempFolderPath(),StmtCur.PatNum.ToString()+".pdf");
+				tempPath= Storage.Default.CombinePath(Preferences.GetTempPath(),StmtCur.PatNum.ToString()+".pdf");
 				SheetPrinting.CreatePdf(sheet,tempPath,StmtCur,dataSet,null);
 			}
 			else {
@@ -1364,7 +1364,7 @@ namespace OpenDental{
 			sheet.Parameters.Add(new SheetParameter(true,"Statement") { ParamValue=StmtCur });
 			SheetFiller.FillFields(sheet,dataSet,StmtCur);
 			SheetUtil.CalculateHeights(sheet,dataSet,StmtCur);
-			string tempPath= Storage.Default.CombinePath(Preferences.GetTempFolderPath(),StmtCur.PatNum.ToString()+".pdf");
+			string tempPath= Storage.Default.CombinePath(Preferences.GetTempPath(),StmtCur.PatNum.ToString()+".pdf");
 			SheetPrinting.CreatePdf(sheet,tempPath,StmtCur,dataSet,null);
 			long category=0;
 			for(int i=0;i<_listImageCatDefs.Count;i++) {

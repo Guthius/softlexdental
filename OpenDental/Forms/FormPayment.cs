@@ -4430,7 +4430,7 @@ namespace OpenDental {
 			}
 			string attachPath= EmailAttachment.GetAttachmentPath();
 			Random rnd=new Random();
-			string tempFile= Storage.Default.CombinePath(Preferences.GetTempFolderPath(),
+			string tempFile= Storage.Default.CombinePath(Preferences.GetTempPath(),
 				DateTime.Now.ToString("yyyyMMdd")+"_"+DateTime.Now.TimeOfDay.Ticks.ToString()+rnd.Next(1000).ToString()+".pdf");
 			PdfDocumentRenderer pdfRenderer=new PdfDocumentRenderer(true,PdfFontEmbedding.Always);
 			pdfRenderer.Document=CreatePDFDoc(_paymentCur.Receipt);

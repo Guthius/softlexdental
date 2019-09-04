@@ -151,14 +151,14 @@ namespace OpenDental {
 				XmlProcessingInstruction pi=(XmlProcessingInstruction)node;
 				pi.Value="type=\"text/xsl\" href=\""+xslFileName+"\"";
 			}
-			File.WriteAllText(Path.Combine(Preferences.GetTempFolderPath(),xmlFileName),doc.InnerXml.ToString());
-			File.WriteAllText(Path.Combine(Preferences.GetTempFolderPath(),xslFileName),xslContents);
-			FormEhrSummaryCcdEdit formESCD=new FormEhrSummaryCcdEdit(Storage.Default.CombinePath(Preferences.GetTempFolderPath(),xmlFileName),patCur);
+			File.WriteAllText(Path.Combine(Preferences.GetTempPath(),xmlFileName),doc.InnerXml.ToString());
+			File.WriteAllText(Path.Combine(Preferences.GetTempPath(),xslFileName),xslContents);
+			FormEhrSummaryCcdEdit formESCD=new FormEhrSummaryCcdEdit(Storage.Default.CombinePath(Preferences.GetTempPath(),xmlFileName),patCur);
 			formESCD.ShowDialog();
 			string[] arrayFileNames={"ccd.xml","ccd.xsl","ccr.xml","ccr.xsl"};
 			for(int i=0;i<arrayFileNames.Length;i++) {
 				try {
-					File.Delete(Storage.Default.CombinePath(Preferences.GetTempFolderPath(),arrayFileNames[i]));
+					File.Delete(Storage.Default.CombinePath(Preferences.GetTempPath(),arrayFileNames[i]));
 				}
 				catch {
 					//Do nothing because the file could have been in use or there were not sufficient permissions.

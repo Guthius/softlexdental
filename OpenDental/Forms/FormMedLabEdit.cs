@@ -339,7 +339,7 @@ namespace OpenDental {
             Sheet sheet = SheetUtil.CreateSheet(sheetDef, _medLabCur.PatNum);
             SheetFiller.FillFields(sheet, null, null, _medLabCur);
             //create the file in the temp folder location, then import so it works when storing images in the db
-            string tempPath = Storage.Default.CombinePath(Preferences.GetTempFolderPath(), _medLabCur.PatNum.ToString() + ".pdf");
+            string tempPath = Storage.Default.CombinePath(Preferences.GetTempPath(), _medLabCur.PatNum.ToString() + ".pdf");
             SheetPrinting.CreatePdf(sheet, tempPath, null, _medLabCur);
             HL7Def defCur = HL7Defs.GetOneDeepEnabled(true);
             long category = defCur.LabResultImageCat;

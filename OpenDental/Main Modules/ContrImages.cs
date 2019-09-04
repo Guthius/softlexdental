@@ -850,7 +850,7 @@ namespace OpenDental
             Document doc = Documents.GetByNum(docNum, doReturnNullIfNotFound: true);//Get old document.
             if (doc != null && Path.GetExtension(doc.FileName).ToLower() == ".pdf")
             {//Adobe acrobat file.
-                string pdfFilePath = Storage.Default.CombinePath(Preferences.GetTempFolderPath(), doc.DocNum + (PatCur != null ? PatCur.PatNum.ToString() : "") + ".pdf");
+                string pdfFilePath = Storage.Default.CombinePath(Preferences.GetTempPath(), doc.DocNum + (PatCur != null ? PatCur.PatNum.ToString() : "") + ".pdf");
                 //if (!xRayImageController.IsDisposed)
                 //{
                 //    xRayImageController.Dispose();

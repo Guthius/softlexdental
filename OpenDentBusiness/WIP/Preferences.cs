@@ -128,11 +128,9 @@ namespace OpenDentBusiness
         public static bool IsTreatPlanSortByTooth { get; set; }
 
         /// <summary>
-        /// Returns the path to the temporary opendental directory, temp/opendental. Also performs
-        /// one-time cleanup, if necessary.  In FormOpenDental_FormClosing, the contents of
-        /// temp/opendental get cleaned up.
+        /// Returns the path to the temp directory. Creates the directory if it doesn't exist.
         /// </summary>
-        public static string GetTempFolderPath()
+        public static string GetTempPath()
         {
             var tempPath = Path.Combine(Path.GetTempPath(), "OpenDental");
 
@@ -151,7 +149,7 @@ namespace OpenDentBusiness
         /// <summary>
         /// Creates a new randomly named file in the given directory path with the given extension and returns the full path to the new file.
         /// </summary>
-        public static string GetRandomTempFile(string ext) => ODFileUtils.CreateRandomFile(GetTempFolderPath(), ext);
+        public static string GetRandomTempFile(string ext) => ODFileUtils.CreateRandomFile(GetTempPath(), ext);
 
         public static long GetDefaultSheetDefNum(SheetTypeEnum sheetType)
         {
@@ -225,7 +223,7 @@ namespace OpenDentBusiness
                     retVal = Preference.GetLong(PreferenceName.SheetsDefaultRxInstructions);
                     break;
                 default:
-                    throw new Exception(Lans.g("SheetDefs", "Unsupported SheetTypeEnum") + "\r\n" + sheetType.ToString());
+                    throw new Exception("Unsupported SheetTypeEnum\r\n" + sheetType.ToString());
             }
             return retVal;
         }

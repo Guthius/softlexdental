@@ -44,7 +44,7 @@ namespace OpenDental {
 			}
 			else {//butStart.Text=="Stop"
 				timerRecord.Stop();
-				_tempPath= Path.Combine(Preferences.GetTempFolderPath(),"recsound"+".wav");
+				_tempPath= Path.Combine(Preferences.GetTempPath(),"recsound"+".wav");
 				mciSendString("save recsound "+_tempPath,"",0,0);
 				mciSendString("close recsound ","",0,0);
 				butStart.Text=Lan.g(this,"Record");

@@ -3288,7 +3288,7 @@ namespace OpenDental
             sheet.Parameters.Add(new SheetParameter(true, "Statement") { ParamValue = stmt });
             SheetFiller.FillFields(sheet, dataSet, stmt);
             SheetUtil.CalculateHeights(sheet, dataSet, stmt);
-            string tempPath = Storage.Default.CombinePath(Preferences.GetTempFolderPath(), stmt.PatNum.ToString() + ".pdf");
+            string tempPath = Storage.Default.CombinePath(Preferences.GetTempPath(), stmt.PatNum.ToString() + ".pdf");
             SheetPrinting.CreatePdf(sheet, tempPath, stmt, dataSet, null);
             long category = 0;
             List<Definition> listDefs = Definition.GetByCategory(DefinitionCategory.ImageCats);;

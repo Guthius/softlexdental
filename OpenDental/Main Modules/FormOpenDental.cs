@@ -7220,7 +7220,7 @@ namespace OpenDental
             List<string> listDirectories;
             try
             {
-                tempPath = Preferences.GetTempFolderPath();
+                tempPath = Preferences.GetTempPath();
                 arrayFileNames = Directory.GetFiles(tempPath, "*.*", SearchOption.AllDirectories);//All files in the current directory plus all files in all subdirectories.
                 listDirectories = new List<string>(Directory.GetDirectories(tempPath, "*", SearchOption.AllDirectories));//All subdirectories.
             }
