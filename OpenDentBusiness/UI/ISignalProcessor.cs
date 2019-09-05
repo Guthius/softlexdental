@@ -1,8 +1,9 @@
-﻿using CodeBase.MVC;
+﻿using System.Collections.Generic;
 
-namespace OpenDentBusiness {
-	///<summary>Wrapper interface for IODProcessor that is used by all forms and controls that process Signalod objects.</summary>
-	public interface ISignalProcessor:IODProcessor<Signalod> {
-
-	}
+namespace OpenDentBusiness
+{
+    public interface ISignalProcessor
+    {
+        void ProcessObjects(List<Signalod> signals);
+    }
 }

@@ -70,5 +70,7 @@ namespace SLDental.Storage
 
             return new List<string>();
         }
+
+        public void MoveFile(string sourcePath, string destinationPath) => File.Move(sourcePath, destinationPath);
     }
 }

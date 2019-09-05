@@ -1,6 +1,7 @@
 ﻿using CodeBase;
 using OpenDentBusiness;
 using OpenDentBusiness.HL7;
+using SLDental.Storage;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -289,19 +290,14 @@ namespace OpenDentHL7
             string msgArchivePath = "";
             try
             {
-                if (isMedLab && Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+                if (isMedLab)
                 {//only MedLab HL7 interfaces will archive inbound messages
-                    msgArchivePath = ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(), "MedLabHL7");
-                    msgArchiveProcessedPath = ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(), "MedLabHL7", "Processed");
+                    msgArchivePath = "MedLabHL7";
+                    msgArchiveProcessedPath = Storage.Default.CombinePath("MedLabHL7", "Processed");
                     if (!Directory.Exists(msgArchiveProcessedPath))
                     {
                         Directory.CreateDirectory(msgArchiveProcessedPath);
                     }
-                }
-                else if (isMedLab && CloudStorage.IsCloudStorage)
-                {
-                    msgArchivePath = ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(), "MedLabHL7").Replace("\\", "/");
-                    msgArchiveProcessedPath = ODFileUtils.CombinePaths(ImageStore.GetPreferredAtoZpath(), "MedLabHL7", "Processed").Replace("\\", "/");
                 }
             }
             catch
@@ -494,23 +490,8 @@ namespace OpenDentHL7
                             }
                             try
                             {
-                                if (Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
-                                {
-                                    msgArchiveFilePath = ODFileUtils.CreateRandomFile(msgArchivePath, ".txt");
-                                    File.WriteAllText(msgArchiveFilePath, sb.ToString());
-                                }
-                                else
-                                {//Cloud AtoZ
-                                 //Upload file to the cloud
-                                 //Create random file name, this will create the name in the same manner as ODFileUtils.CreateRandomFile().
-                                    string randChrs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-                                    System.Random rand = new System.Random();
-                                    for (int j = 0; j < 6; j++)
-                                    {
-                                        fileName += randChrs[rand.Next(0, randChrs.Length - 1)];
-                                    }
-                                    CloudStorage.Upload(msgArchivePath, fileName, Encoding.ASCII.GetBytes(sb.ToString()));
-                                }
+                                msgArchiveFilePath = ODFileUtils.CreateRandomFile(msgArchivePath, ".txt");
+                                Storage.Default.WriteAllText(msgArchiveFilePath, sb.ToString());
                             }
                             catch
                             {
@@ -535,23 +516,20 @@ namespace OpenDentHL7
                         {
                             MessageParser.Process(messageHl7Object, IsVerboseLogging);
                         }
-                        if (isMedLab && msgArchiveProcessedPath != "" && msgArchiveFilePath != "" && Preferences.AtoZfolderUsed == DataStorageType.LocalAtoZ)
+                        if (isMedLab && msgArchiveProcessedPath != "" && msgArchiveFilePath != "")
                         {
                             try
                             {
-                                string msgArchiveFilePathProcessed = ODFileUtils.CombinePaths(msgArchiveProcessedPath, Path.GetFileName(msgArchiveFilePath));
-                                File.Move(msgArchiveFilePath, msgArchiveFilePathProcessed);
-                                MedLabs.UpdateFileNames(medLabNumList, ODFileUtils.CombinePaths("MedLabHL7", "Processed", Path.GetFileName(msgArchiveFilePathProcessed)));
+                                string msgArchiveFilePathProcessed = Storage.Default.CombinePath(msgArchiveProcessedPath, Path.GetFileName(msgArchiveFilePath));
+                                Storage.Default.MoveFile(msgArchiveFilePath, msgArchiveFilePathProcessed);
+                                MedLabs.UpdateFileNames(medLabNumList, Storage.Default.CombinePath("MedLabHL7", "Processed", Path.GetFileName(msgArchiveFilePathProcessed)));
                             }
                             catch
                             {
                                 //do nothing, the file will remain in the root location
                             }
                         }
-                        if (isMedLab && msgArchiveProcessedPath != "" && CloudStorage.IsCloudStorage)
-                        {//MsgArchiveFilePath will be blank here
-                            MedLabs.UpdateFileNames(medLabNumList, ODFileUtils.CombinePaths("MedLabHL7", "Processed", fileName).Replace("\\", "/"));
-                        }
+
                         countFilesProcessed++;
                         //chsftp.rm(filePath);//not necessary to remove the file for MedLab, once it is read it is deleted.
                     }

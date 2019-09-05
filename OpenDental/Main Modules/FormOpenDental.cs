@@ -5455,8 +5455,7 @@ namespace OpenDental
             {
                 return;
             }
-            FormAudit FormA = new FormAudit();
-            FormA.CurPatNum = CurPatNum;
+            FormAudit FormA = new FormAudit(CurPatNum);
             FormA.ShowDialog();
             SecurityLogs.MakeLogEntry(Permissions.AuditTrail, 0, "Audit Trail");
         }

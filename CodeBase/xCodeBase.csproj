@@ -178,7 +178,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\MessageBox.cs" />
     <Compile Include="Controls\OpenGLWinFormsControl.cs">
       <SubType>Component</SubType>
     </Compile>

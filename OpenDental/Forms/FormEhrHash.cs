@@ -54,6 +54,8 @@ namespace OpenDental
         {
             byte[] data = Encoding.ASCII.GetBytes(messageTextBox.Text);
 
+            StringBuilder strbuild = new StringBuilder();
+
             using (var sha1 = SHA1.Create())
             {
                 byte[] hashbytes = sha1.ComputeHash(data);
@@ -61,7 +63,7 @@ namespace OpenDental
                 byte digit2;
                 string char1;
                 string char2;
-                StringBuilder strbuild = new StringBuilder();
+                
                 for (int i = 0; i < hashbytes.Length; i++)
                 {
                     if (hashbytes[i] == 0)

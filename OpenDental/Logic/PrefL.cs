@@ -137,7 +137,7 @@ namespace OpenDental
             //They will be automatically restarted once Open Dental has successfully upgraded.
             if (Preference.GetString(PreferenceName.WebServiceServerName) != "" && ODEnvironment.IdIsThisComputer(Preference.GetString(PreferenceName.WebServiceServerName)))
             {
-                Action actionCloseStopServicesProgress = ODProgress.Show(ODEventType.MiscData, typeof(MiscDataEvent), "Stopping services...");
+                Action actionCloseStopServicesProgress = ODProgress.Show(ODEventType.MiscData, null, "Stopping services...");
                 List<ServiceController> listOpenDentServices = ServicesHelper.GetAllOpenDentServices();
                 //Newer versions of Windows have heightened security measures for managing services.
                 //We get lots of calls where users do not have the correct permissions to start and stop Open Dental services.

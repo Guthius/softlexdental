@@ -1386,7 +1386,6 @@ namespace OpenDental {
 				actionException:ex => {
 					results=Lan.g(this,"There was an error cleaning up email bloat:")+"\r\n"+ex.Message;
 				},
-				eventType:typeof(DatabaseMaintEvent),
 				odEventType:ODEventType.DatabaseMaint);
 			MessageBox.Show(results);
 		}

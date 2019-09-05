@@ -45,5 +45,7 @@ namespace SLDental.Storage
         string[] GetDirectories(string path);
 
         List<string> BrowseFile(string path, bool multiselect);
+
+        void MoveFile(string sourcePath, string destinationPath);
     }
 }
