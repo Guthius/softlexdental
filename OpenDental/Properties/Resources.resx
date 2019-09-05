@@ -847,4 +847,19 @@
   <data name="IconUserSwitch" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IconUserSwitch.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Icon32DatabaseRefresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon32DatabaseRefresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon32Printer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon32Printer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon32Refresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon32Refresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon32RefreshSmall" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon32RefreshSmall.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Icon32TableRefresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Icon32TableRefresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

@@ -462,6 +462,9 @@
     <Compile Include="Forms\FormApptViews.Designer.cs">
       <DependentUpon>FormApptViews.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormAudit.Designer.cs">
+      <DependentUpon>FormAudit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormAuditOneType.Designer.cs">
       <DependentUpon>FormAuditOneType.cs</DependentUpon>
     </Compile>
@@ -7918,6 +7921,11 @@
     <None Include="Web References\NewCrop\Update1.wsdl" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Icon32TableRefresh.png" />
+    <None Include="Resources\Icon32RefreshSmall.png" />
+    <None Include="Resources\Icon32Refresh.png" />
+    <None Include="Resources\Icon32Printer.png" />
+    <None Include="Resources\Icon32DatabaseRefresh.png" />
     <None Include="Resources\IconUserEdit.png" />
     <None Include="Resources\IconUserComment.png" />
     <None Include="Resources\IconUpdate.png" />

@@ -689,6 +689,16 @@ namespace OpenDental.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Icon32DatabaseRefresh {
+            get {
+                object obj = ResourceManager.GetObject("Icon32DatabaseRefresh", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Icon32Family {
             get {
                 object obj = ResourceManager.GetObject("Icon32Family", resourceCulture);
@@ -719,9 +729,49 @@ namespace OpenDental.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap Icon32Printer {
+            get {
+                object obj = ResourceManager.GetObject("Icon32Printer", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Icon32Refresh {
+            get {
+                object obj = ResourceManager.GetObject("Icon32Refresh", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Icon32RefreshSmall {
+            get {
+                object obj = ResourceManager.GetObject("Icon32RefreshSmall", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap Icon32Settings {
             get {
                 object obj = ResourceManager.GetObject("Icon32Settings", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap Icon32TableRefresh {
+            get {
+                object obj = ResourceManager.GetObject("Icon32TableRefresh", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
