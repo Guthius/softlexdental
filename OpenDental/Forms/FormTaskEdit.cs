@@ -423,7 +423,7 @@ namespace OpenDental {
             this.textReminderRepeatFrequency.MaxVal = 999999999;
             this.textReminderRepeatFrequency.MinVal = 1;
             this.textReminderRepeatFrequency.Name = "textReminderRepeatFrequency";
-            this.textReminderRepeatFrequency.PrefNameBinding = OpenDentBusiness.PreferenceName.NotApplicable;
+            this.textReminderRepeatFrequency.Preference = OpenDentBusiness.PreferenceName.NotApplicable;
             this.textReminderRepeatFrequency.Size = new System.Drawing.Size(50, 20);
             this.textReminderRepeatFrequency.TabIndex = 1;
             this.textReminderRepeatFrequency.KeyUp += new System.Windows.Forms.KeyEventHandler(this.textReminderRepeatFrequency_KeyUp);

@@ -90,7 +90,7 @@
 			this.comboReactStatus = new System.Windows.Forms.ComboBox();
 			this.butReactSetStatus = new OpenDental.UI.Button();
 			this.groupBox7 = new System.Windows.Forms.GroupBox();
-			this.checkReactGroupFamilies = new OpenDental.ODCheckBoxPref();
+			this.checkReactGroupFamilies = new OpenDental.PreferenceCheckBox();
 			this.comboReactProv = new OpenDental.ODComboBoxProv();
 			this.checkReactShowDNC = new System.Windows.Forms.CheckBox();
 			this.comboBillingTypes = new System.Windows.Forms.ComboBox();
@@ -546,7 +546,7 @@
 			this.comboProv.IsUsingProvAbbr = false;
 			this.comboProv.Location = new System.Drawing.Point(437, 11);
 			this.comboProv.Name = "comboProv";
-			this.comboProv.PrefNameBinding = OpenDentBusiness.PreferenceName.NotApplicable;
+			this.comboProv.Preference = OpenDentBusiness.PreferenceName.NotApplicable;
 			this.comboProv.Size = new System.Drawing.Size(160, 21);
 			this.comboProv.SpecialOption = CodeBase.ComboBoxSpecialValues.All;
 			this.comboProv.TabIndex = 41;
@@ -1113,8 +1113,8 @@
 			this.checkReactGroupFamilies.DoAutoSave = false;
 			this.checkReactGroupFamilies.Location = new System.Drawing.Point(26, 14);
 			this.checkReactGroupFamilies.Name = "checkReactGroupFamilies";
-			this.checkReactGroupFamilies.PrefNameBinding = OpenDentBusiness.PreferenceName.ReactivationGroupByFamily;
-			this.checkReactGroupFamilies.ReverseValue = false;
+			this.checkReactGroupFamilies.Preference = OpenDentBusiness.PreferenceName.ReactivationGroupByFamily;
+			this.checkReactGroupFamilies.Inverted = false;
 			this.checkReactGroupFamilies.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.checkReactGroupFamilies.Size = new System.Drawing.Size(159, 18);
 			this.checkReactGroupFamilies.TabIndex = 44;
@@ -1131,7 +1131,7 @@
 			this.comboReactProv.IsUsingProvAbbr = false;
 			this.comboReactProv.Location = new System.Drawing.Point(437, 11);
 			this.comboReactProv.Name = "comboReactProv";
-			this.comboReactProv.PrefNameBinding = OpenDentBusiness.PreferenceName.NotApplicable;
+			this.comboReactProv.Preference = OpenDentBusiness.PreferenceName.NotApplicable;
 			this.comboReactProv.Size = new System.Drawing.Size(160, 21);
 			this.comboReactProv.SpecialOption = CodeBase.ComboBoxSpecialValues.All;
 			this.comboReactProv.TabIndex = 43;
@@ -1383,7 +1383,7 @@
 		private System.Windows.Forms.ComboBox comboReactStatus;
 		private OpenDental.ODComboBoxProv comboReactProv;
 		private OpenDental.ODComboBoxProv comboProv;
-		private OpenDental.ODCheckBoxPref checkReactGroupFamilies;
+		private OpenDental.PreferenceCheckBox checkReactGroupFamilies;
 		private OpenDental.UI.Button butReactGoToFam;
 		private OpenDental.UI.Button butReactComm;
 		private OpenDental.UI.Button butReactGoToAcct;

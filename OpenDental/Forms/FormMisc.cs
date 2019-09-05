@@ -151,7 +151,7 @@ namespace OpenDental {
 			this.textAuditEntries.MaxVal = 10000;
 			this.textAuditEntries.MinVal = 1;
 			this.textAuditEntries.Name = "textAuditEntries";
-			this.textAuditEntries.PrefNameBinding = OpenDentBusiness.PreferenceName.AccountingCashIncomeAccount;
+			this.textAuditEntries.Preference = OpenDentBusiness.PreferenceName.AccountingCashIncomeAccount;
 			this.textAuditEntries.Size = new System.Drawing.Size(74, 20);
 			this.textAuditEntries.TabIndex = 225;
 			this.textAuditEntries.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;

@@ -53,8 +53,8 @@ namespace OpenDental{
         }
 
 		private void checkRestart_Click(object sender,EventArgs e) {
-			ODCheckBoxPref checkBox=(ODCheckBoxPref)sender;
-			if(checkBox.Checked!=(checkBox.ReverseValue?!Preference.GetBool(checkBox.PrefNameBinding):Preference.GetBool(checkBox.PrefNameBinding))) {
+			PreferenceCheckBox checkBox=(PreferenceCheckBox)sender;
+			if(checkBox.Checked!=(checkBox.Inverted?!Preference.GetBool(checkBox.Preference):Preference.GetBool(checkBox.Preference))) {
 				MsgBox.Show(this,"You will need to restart the program for the change to take effect.");
 			}
 		}

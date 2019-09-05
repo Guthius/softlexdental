@@ -1,22 +1,19 @@
-﻿using System;
+﻿using CodeBase;
+using OpenDentBusiness;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using OpenDentBusiness;
-using CodeBase;
 
 namespace OpenDental
 {
-    public partial class ODComboBoxPrefLong : ComboBox, IPrefBinding
+    [ToolboxItem(false)]
+    public partial class ODComboBoxPrefLong : ComboBox, IPreferenceBinding
     {
+        public PreferenceName Preference { get; set; }
 
-        public PreferenceName PrefNameBinding { get; set; }
         public ComboBoxSpecialValues SpecialOption { get; set; }
+
         public bool DoAutoSave { get; set; }
 
         [Browsable(false)]
@@ -25,31 +22,34 @@ namespace OpenDental
         {
             get
             {
-                if (IsNothingSelected() || IsSpecialOptionSelected())
+                if (SelectedItem is ODBoxItem<long> item)
                 {
-                    return -1;
+                    return item.Tag;
                 }
-                return ((ODBoxItem<long>)SelectedItem).Tag;
+
+                return -1;
             }
             set
             {
-                int selectedIndex = -1;
-                for (int i = 0; i < Items.Count; i++)
+                object selectedItem = null;
+
+                foreach (ODBoxItem<long> item in Items)
                 {
-                    if (value == ((ODBoxItem<long>)Items[i]).Tag)
+                    if (item.Tag == value)
                     {
-                        selectedIndex = i;
+                        selectedItem = item;
+
                         break;
                     }
                 }
-                SelectedIndex = selectedIndex;
+
+                SelectedItem = selectedItem;
             }
         }
 
         public ODComboBoxPrefLong()
         {
-            InitializeComponent();
-            PrefNameBinding = PreferenceName.NotApplicable;//Set this by default, if it's set in the designer it will overwite this later.
+            Preference = PreferenceName.NotApplicable;
         }
 
         public bool IsNothingSelected()
@@ -80,20 +80,18 @@ namespace OpenDental
 
         public void SetSelected()
         {
-            if (PrefNameBinding.GetValueType() == PrefValueType.NONE)
+            if (Preference.GetValueType() == PrefValueType.NONE)
             {
-                this.SelectedIndex = 0;
+                SelectedIndex = 0;
             }
             else
             {
-                string overrideText = (SpecialOption == ComboBoxSpecialValues.NotApplicable ? "" : SpecialOption.GetDescription());
-                this.SetSelectedItem<long>(x => x == Preference.GetLong(PrefNameBinding), overrideText);
+                string overrideText = SpecialOption == ComboBoxSpecialValues.NotApplicable ? "" : SpecialOption.GetDescription();
+
+                this.SetSelectedItem((long x) => x == OpenDentBusiness.Preference.GetLong(Preference), overrideText);
             }
         }
 
-        public bool Save()
-        {
-            return PrefNameBinding.Update(this.SelectedTag<long>());
-        }
+        public bool Save() => Preference.Update(this.SelectedTag<long>());
     }
 }

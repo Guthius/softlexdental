@@ -459,7 +459,7 @@ namespace OpenDental{
 			this.textBillingDay.MaxVal = 31;
 			this.textBillingDay.MinVal = 1;
 			this.textBillingDay.Name = "textBillingDay";
-			this.textBillingDay.PrefNameBinding = OpenDentBusiness.PreferenceName.AccountingCashIncomeAccount;
+			this.textBillingDay.Preference = OpenDentBusiness.PreferenceName.AccountingCashIncomeAccount;
 			this.textBillingDay.Size = new System.Drawing.Size(75, 20);
 			this.textBillingDay.TabIndex = 8;
 			this.textBillingDay.Visible = false;

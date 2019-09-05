@@ -373,30 +373,18 @@
     </Compile>
     <Compile Include="UI\ODGridSortingStrategy.cs" />
     <Compile Include="UI\ODPrintRow.cs" />
-    <Compile Include="UI\PrefBinding\IPrefBinding.cs" />
-    <Compile Include="UI\PrefBinding\ODCheckBoxPref.cs">
+    <Compile Include="UI\PrefBinding\IPreferenceBinding.cs" />
+    <Compile Include="UI\PrefBinding\PreferenceCheckBox.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\PrefBinding\ODCheckBoxPref.Designer.cs">
-      <DependentUpon>ODCheckBoxPref.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\PrefBinding\ODComboBoxPrefLong.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\PrefBinding\ODComboBoxPrefLong.Designer.cs">
-      <DependentUpon>ODComboBoxPrefLong.cs</DependentUpon>
-    </Compile>
     <Compile Include="UI\PrefBinding\ODComboBoxProv.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="UI\PrefBinding\ODComboBoxProv.Designer.cs">
-      <DependentUpon>ODComboBoxProv.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UI\PrefBinding\ODTextBoxPref.cs">
+    <Compile Include="UI\PrefBinding\PreferenceTextBox.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="UI\PrefBinding\ODTextBoxPref.Designer.cs">
-      <DependentUpon>ODTextBoxPref.cs</DependentUpon>
     </Compile>
     <Compile Include="UI\ODGridPageNav.cs">
       <SubType>UserControl</SubType>

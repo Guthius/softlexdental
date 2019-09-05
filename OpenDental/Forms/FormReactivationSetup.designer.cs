@@ -27,10 +27,10 @@ namespace OpenDental {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormReactivationSetup));
 			this.gridMain = new OpenDental.UI.ODGrid();
 			this.label8 = new System.Windows.Forms.Label();
-			this.textPostcardsPerSheet = new OpenDental.ODTextBoxPref();
+			this.textPostcardsPerSheet = new OpenDental.PreferenceTextBox();
 			this.groupBox3 = new System.Windows.Forms.GroupBox();
 			this.textDaysPast = new OpenDental.ValidNumber();
-			this.checkGroupFamilies = new OpenDental.ODCheckBoxPref();
+			this.checkGroupFamilies = new OpenDental.PreferenceCheckBox();
 			this.label14 = new System.Windows.Forms.Label();
 			this.label25 = new System.Windows.Forms.Label();
 			this.comboStatusMailedReactivation = new OpenDental.ODComboBoxPrefLong();
@@ -85,7 +85,7 @@ namespace OpenDental {
 			this.textPostcardsPerSheet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
 			this.textPostcardsPerSheet.Location = new System.Drawing.Point(663, 549);
 			this.textPostcardsPerSheet.Name = "textPostcardsPerSheet";
-			this.textPostcardsPerSheet.PrefNameBinding = PreferenceName.ReactivationPostcardsPerSheet;
+			this.textPostcardsPerSheet.Preference = PreferenceName.ReactivationPostcardsPerSheet;
 			this.textPostcardsPerSheet.Size = new System.Drawing.Size(34, 20);
 			this.textPostcardsPerSheet.TabIndex = 18;
 			// 
@@ -110,7 +110,7 @@ namespace OpenDental {
 			this.textDaysPast.Name = "textDaysPast";
 			this.textDaysPast.Size = new System.Drawing.Size(53, 20);
 			this.textDaysPast.TabIndex = 65;
-			this.textDaysPast.PrefNameBinding = OpenDentBusiness.PreferenceName.ReactivationDaysPast;
+			this.textDaysPast.Preference = OpenDentBusiness.PreferenceName.ReactivationDaysPast;
 			this.textDaysPast.DoAutoSave = true;
 			// 
 			// checkGroupFamilies
@@ -123,7 +123,7 @@ namespace OpenDental {
 			this.checkGroupFamilies.Text = "Group Families";
 			this.checkGroupFamilies.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.checkGroupFamilies.UseVisualStyleBackColor = true;
-			this.checkGroupFamilies.PrefNameBinding=PreferenceName.ReactivationGroupByFamily;
+			this.checkGroupFamilies.Preference=PreferenceName.ReactivationGroupByFamily;
 			this.checkGroupFamilies.DoAutoSave = true;
 			// 
 			// label14
@@ -156,7 +156,7 @@ namespace OpenDental {
 			this.comboStatusMailedReactivation.Name = "comboStatusMailedReactivation";
 			this.comboStatusMailedReactivation.Size = new System.Drawing.Size(261, 21);
 			this.comboStatusMailedReactivation.TabIndex = 58;
-			this.comboStatusMailedReactivation.PrefNameBinding = PreferenceName.ReactivationStatusMailed;
+			this.comboStatusMailedReactivation.Preference = PreferenceName.ReactivationStatusMailed;
 			this.comboStatusMailedReactivation.DoAutoSave = true;
 			// 
 			// label26
@@ -177,7 +177,7 @@ namespace OpenDental {
 			this.textMaxReminders.Name = "textMaxReminders";
 			this.textMaxReminders.Size = new System.Drawing.Size(53, 20);
 			this.textMaxReminders.TabIndex = 68;
-			this.textMaxReminders.PrefNameBinding = PreferenceName.ReactivationCountContactMax;
+			this.textMaxReminders.Preference = PreferenceName.ReactivationCountContactMax;
 			this.textMaxReminders.DoAutoSave = true;
 			// 
 			// label4
@@ -200,7 +200,7 @@ namespace OpenDental {
 			this.comboStatusEmailedReactivation.Name = "comboStatusEmailedReactivation";
 			this.comboStatusEmailedReactivation.Size = new System.Drawing.Size(261, 21);
 			this.comboStatusEmailedReactivation.TabIndex = 60;
-			this.comboStatusEmailedReactivation.PrefNameBinding = PreferenceName.ReactivationStatusEmailed;
+			this.comboStatusEmailedReactivation.Preference = PreferenceName.ReactivationStatusEmailed;
 			this.comboStatusEmailedReactivation.DoAutoSave = true;
 			// 
 			// butOK
@@ -245,7 +245,7 @@ namespace OpenDental {
 			this.comboStatusEmailTextReactivation.Name = "comboStatusEmailTextReactivation";
 			this.comboStatusEmailTextReactivation.Size = new System.Drawing.Size(261, 21);
 			this.comboStatusEmailTextReactivation.TabIndex = 78;
-			this.comboStatusEmailTextReactivation.PrefNameBinding = PreferenceName.ReactivationStatusEmailedTexted;
+			this.comboStatusEmailTextReactivation.Preference = PreferenceName.ReactivationStatusEmailedTexted;
 			this.comboStatusEmailTextReactivation.DoAutoSave = true;
 			// 
 			// label5
@@ -269,7 +269,7 @@ namespace OpenDental {
 			this.comboStatusTextedReactivation.Name = "comboStatusTextedReactivation";
 			this.comboStatusTextedReactivation.Size = new System.Drawing.Size(261, 21);
 			this.comboStatusTextedReactivation.TabIndex = 76;
-			this.comboStatusTextedReactivation.PrefNameBinding = PreferenceName.ReactivationStatusTexted;
+			this.comboStatusTextedReactivation.Preference = PreferenceName.ReactivationStatusTexted;
 			this.comboStatusTextedReactivation.DoAutoSave = true;
 			// 
 			// label6
@@ -299,7 +299,7 @@ namespace OpenDental {
 			this.textDaysContactInterval.Name = "textDaysContactInterval";
 			this.textDaysContactInterval.Size = new System.Drawing.Size(53, 20);
 			this.textDaysContactInterval.TabIndex = 65;
-			this.textDaysContactInterval.PrefNameBinding = PreferenceName.ReactivationContactInterval;
+			this.textDaysContactInterval.Preference = PreferenceName.ReactivationContactInterval;
 			this.textDaysContactInterval.DoAutoSave = true;
 			// 
 			// groupBox1
@@ -356,8 +356,8 @@ namespace OpenDental {
 		private OpenDental.UI.Button butCancel;
 		private OpenDental.UI.Button butOK;
 		private System.Windows.Forms.Label label8;
-		private OpenDental.ODTextBoxPref textPostcardsPerSheet;
-		private OpenDental.ODCheckBoxPref checkGroupFamilies;
+		private OpenDental.PreferenceTextBox textPostcardsPerSheet;
+		private OpenDental.PreferenceCheckBox checkGroupFamilies;
 		private System.Windows.Forms.Label label14;
 		private System.Windows.Forms.GroupBox groupBox3;
 		private System.Windows.Forms.Label label25;

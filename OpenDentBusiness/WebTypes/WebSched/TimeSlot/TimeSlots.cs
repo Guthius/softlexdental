@@ -46,8 +46,7 @@ namespace OpenDentBusiness.WebTypes.WebSched.TimeSlot
         ///The timeslots on and between the Start and End dates passed in will be considered and potentially returned as available.
         ///Optionally pass in a recall object in order to consider all other recalls due for the patient.  This will potentially affect the time pattern.
         ///Throws exceptions.</summary>
-        public static List<TimeSlot> GetAvailableWebSchedTimeSlots(RecallType recallType, List<Provider> listProviders, Clinic clinic
-            , DateTime dateStart, DateTime dateEnd, Recall recallCur = null)
+        public static List<TimeSlot> GetAvailableWebSchedTimeSlots(RecallType recallType, List<Provider> listProviders, Clinic clinic, DateTime dateStart, DateTime dateEnd, Recall recallCur = null)
         {
             if (recallType == null)
             {
@@ -85,38 +84,41 @@ namespace OpenDentBusiness.WebTypes.WebSched.TimeSlot
                 isDoubleBookingAllowed: Preference.GetInt(PreferenceName.WebSchedRecallDoubleBooking) == 0);//is double booking allowed according to the preference
         }
 
-        ///<summary>Gets up to 30 days of open time slots for New Patient Appointments based on the timePattern passed in.
-        ///Open time slots are found by looping through the passed in operatories and finding openings that can hold the entire appointment.
-        ///Passing in a clinicNum of 0 will only consider unassigned operatories.
-        ///The timeslots on and between the Start and End dates passed in will be considered and potentially returned as available.
-        ///Optionally pass in an appt type def num which will only consider operatories with the corresponding appointment type.
-        ///defNumApptType is required and will ONLY consider operatories that are associated to the def's corresponding appointment type.
-        ///The time pattern and procedures on the appointment will be determined via the appointment type as well.
-        ///Throws exceptions.</summary>
+        /// <summary>
+        /// Gets up to 30 days of open time slots for New Patient Appointments based on the 
+        /// timePattern passed in. Open time slots are found by looping through the passed in 
+        /// operatories and finding openings that can hold the entire appointment. Passing in a 
+        /// clinicNum of 0 will only consider unassigned operatories. The timeslots on and between 
+        /// the Start and End dates passed in will be considered and potentially returned as 
+        /// available. Optionally pass in an appt type def num which will only consider operatories 
+        /// with the corresponding appointment type. defNumApptType is required and will ONLY 
+        /// consider operatories that are associated to the def's corresponding appointment type. 
+        /// The time pattern and procedures on the appointment will be determined via the 
+        /// appointment type as well.
+        /// </summary>
         public static List<TimeSlot> GetAvailableNewPatApptTimeSlots(DateTime dateStart, DateTime dateEnd, long clinicNum, long defNumApptType)
         {
-            //No need to check RemotingRole; no call to db.
-            //Get the appointment type that is associated to the def passed in.  This is required for New Pat Appts.
-            AppointmentType appointmentType = AppointmentTypes.GetWebSchedNewPatApptTypeByDef(defNumApptType);
+            var appointmentType = AppointmentTypes.GetWebSchedNewPatApptTypeByDef(defNumApptType);
             if (appointmentType == null)
             {
-                //This message will typically show to a patient and we want them to call in OR to refresh the web app which should no longer show the reason.
-                throw new ODException(Lans.g("WebSched", "The reason for your appointment is no longer available.") + "\r\n"
-                    + Lans.g("WebSched", "Please call us to schedule your appointment."));
+                throw new ODException(
+                    "The reason for your appointment is no longer available.\r\n" +
+                    "Please call us to schedule your appointment.");
             }
-            //Now we need to find all operatories that are associated to the aforementioned appointment type.
-            List<Operatory> listOperatories = Operatories.GetOpsForWebSchedNewPatApptDef(defNumApptType);
-            if (listOperatories.Count < 1)
+
+            var operatories = Operatories.GetOpsForWebSchedNewPatApptDef(defNumApptType);
+            if (operatories.Count < 1)
             {//This is very possible for offices that aren't set up the way that we expect them to be.
                 return new List<TimeSlot>();//Don't throw an exception here to the patient, they can just select another reason.
             }
+
             //Set the timePattern from the appointment type passed in.
             string timePattern = AppointmentTypes.GetTimePatternForAppointmentType(appointmentType);
             List<Provider> listProviders = Providers.GetProvidersForWebSchedNewPatAppt();
             Clinic clinic = Clinics.GetClinic(clinicNum);
             List<long> listProvNums = listProviders.Select(x => x.ProvNum).Distinct().ToList();
             List<Schedule> listSchedules = Schedules.GetSchedulesAndBlockoutsForWebSched(listProvNums, dateStart, dateEnd, false, clinicNum);
-            return GetTimeSlotsForRange(dateStart, dateEnd, timePattern, listProvNums, listOperatories, listSchedules, clinic, defNumApptType,
+            return GetTimeSlotsForRange(dateStart, dateEnd, timePattern, listProvNums, operatories, listSchedules, clinic, defNumApptType,
                 isDoubleBookingAllowed: Preference.GetInt(PreferenceName.WebSchedNewPatApptDoubleBooking) == 0);//is double booking allowed according to the preference
         }
 
@@ -128,8 +130,7 @@ namespace OpenDentBusiness.WebTypes.WebSched.TimeSlot
         ///The timeslots on and between the Start and End dates passed in will be considered and potentially returned as available.
         ///Optionally set defNumApptType if looking for time slots for New Pat Appt which will apply the DefNum to all time slots found.
         ///Throws exceptions.</summary>
-        public static List<TimeSlot> GetTimeSlotsForRange(DateTime dateStart, DateTime dateEnd, string timePattern, List<long> listProvNums
-            , List<Operatory> listOperatories, List<Schedule> listSchedules, Clinic clinic, long defNumApptType = 0, bool isDoubleBookingAllowed = true)
+        public static List<TimeSlot> GetTimeSlotsForRange(DateTime dateStart, DateTime dateEnd, string timePattern, List<long> listProvNums, List<Operatory> listOperatories, List<Schedule> listSchedules, Clinic clinic, long defNumApptType = 0, bool isDoubleBookingAllowed = true)
         {
             //No need to check RemotingRole; no call to db.
             //Order the operatories passed in by their ItemOrder just in case they were passed in all jumbled up.
@@ -454,28 +455,23 @@ namespace OpenDentBusiness.WebTypes.WebSched.TimeSlot
                     }
                 }
             }
-            return false;//No double booking collision.
+            return false;
         }
 
-        ///<summary>Checks if the two times passed in overlap.</summary>
+        /// <summary>
+        /// Checks if the two times passed in overlap.
+        /// </summary>
         private static bool IsTimeOverlapping(TimeSpan timeStartBegin, TimeSpan timeStartEnd, TimeSpan timeStopBegin, TimeSpan timeStopEnd)
         {
-            //No need to check RemotingRole; no call to db and this is a private method.
             //Test start times
-            if (timeStartBegin >= timeStopBegin && timeStartBegin < timeStopEnd)
-            {
-                return true;
-            }
+            if (timeStartBegin >= timeStopBegin && timeStartBegin < timeStopEnd) return true;
+
             //Test end times
-            if (timeStartEnd > timeStopBegin && timeStartEnd <= timeStopEnd)
-            {
-                return true;
-            }
+            if (timeStartEnd > timeStopBegin && timeStartEnd <= timeStopEnd) return true;
+
             //Test engulf
-            if (timeStartBegin <= timeStopBegin && timeStartEnd >= timeStopEnd)
-            {
-                return true;
-            }
+            if (timeStartBegin <= timeStopBegin && timeStartEnd >= timeStopEnd) return true;
+
             return false;
         }
     }

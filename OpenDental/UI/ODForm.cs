@@ -204,7 +204,7 @@ namespace OpenDental
         protected bool AutoSave()
         {
             bool hasChanged = false;
-            foreach (IPrefBinding control in this.GetAllControls().OfType<IPrefBinding>())
+            foreach (IPreferenceBinding control in this.GetAllControls().OfType<IPreferenceBinding>())
             {
                 if (control.DoAutoSave)
                 {

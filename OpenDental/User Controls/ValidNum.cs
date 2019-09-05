@@ -8,7 +8,7 @@ using CodeBase;
 
 namespace OpenDental{
 ///<summary>this differs slightly from ValidNumber.  Use this when default is 0 instead of blank.</summary>
-	public class ValidNum : ODTextBoxPref{
+	public class ValidNum : PreferenceTextBox{
 		private System.ComponentModel.Container components = null;
 		public ErrorProvider errorProvider1=new ErrorProvider();
 		///<summary></summary>

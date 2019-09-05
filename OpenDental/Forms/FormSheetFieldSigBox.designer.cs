@@ -94,7 +94,7 @@ namespace OpenDental{
 			this.textHeight.MaxVal = 2000;
 			this.textHeight.MinVal = 1;
 			this.textHeight.Name = "textHeight";
-			this.textHeight.PrefNameBinding = OpenDentBusiness.PreferenceName.AccountingCashIncomeAccount;
+			this.textHeight.Preference = OpenDentBusiness.PreferenceName.AccountingCashIncomeAccount;
 			this.textHeight.Size = new System.Drawing.Size(69, 20);
 			this.textHeight.TabIndex = 97;
 			// 
@@ -114,7 +114,7 @@ namespace OpenDental{
 			this.textWidth.MaxVal = 2000;
 			this.textWidth.MinVal = 1;
 			this.textWidth.Name = "textWidth";
-			this.textWidth.PrefNameBinding = OpenDentBusiness.PreferenceName.AccountingCashIncomeAccount;
+			this.textWidth.Preference = OpenDentBusiness.PreferenceName.AccountingCashIncomeAccount;
 			this.textWidth.Size = new System.Drawing.Size(69, 20);
 			this.textWidth.TabIndex = 95;
 			// 
@@ -134,7 +134,7 @@ namespace OpenDental{
 			this.textYPos.MaxVal = 2000;
 			this.textYPos.MinVal = -100;
 			this.textYPos.Name = "textYPos";
-			this.textYPos.PrefNameBinding = OpenDentBusiness.PreferenceName.AccountingCashIncomeAccount;
+			this.textYPos.Preference = OpenDentBusiness.PreferenceName.AccountingCashIncomeAccount;
 			this.textYPos.Size = new System.Drawing.Size(69, 20);
 			this.textYPos.TabIndex = 93;
 			// 
@@ -154,7 +154,7 @@ namespace OpenDental{
 			this.textXPos.MaxVal = 2000;
 			this.textXPos.MinVal = -100;
 			this.textXPos.Name = "textXPos";
-			this.textXPos.PrefNameBinding = OpenDentBusiness.PreferenceName.AccountingCashIncomeAccount;
+			this.textXPos.Preference = OpenDentBusiness.PreferenceName.AccountingCashIncomeAccount;
 			this.textXPos.Size = new System.Drawing.Size(69, 20);
 			this.textXPos.TabIndex = 91;
 			// 

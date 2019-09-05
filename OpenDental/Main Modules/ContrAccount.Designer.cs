@@ -1509,7 +1509,7 @@
             this.textOrthoMonthsTreat.MaxVal = 255;
             this.textOrthoMonthsTreat.MinVal = 0;
             this.textOrthoMonthsTreat.Name = "textOrthoMonthsTreat";
-            this.textOrthoMonthsTreat.PrefNameBinding = OpenDentBusiness.PreferenceName.NotApplicable;
+            this.textOrthoMonthsTreat.Preference = OpenDentBusiness.PreferenceName.NotApplicable;
             this.textOrthoMonthsTreat.Size = new System.Drawing.Size(163, 23);
             this.textOrthoMonthsTreat.TabIndex = 119;
             // 

@@ -29,8 +29,8 @@ namespace OpenDental{
 			this.butOK = new OpenDental.UI.Button();
 			this.butCancel = new OpenDental.UI.Button();
 			this.labelProgress = new System.Windows.Forms.Label();
-			this.checkDropExistingIns = new OpenDental.ODCheckBoxPref();
-			this.checkIsPatientCreate = new OpenDental.ODCheckBoxPref();
+			this.checkDropExistingIns = new OpenDental.PreferenceCheckBox();
+			this.checkIsPatientCreate = new OpenDental.PreferenceCheckBox();
 			this.SuspendLayout();
 			// 
 			// gridInsPlans
@@ -107,7 +107,7 @@ namespace OpenDental{
 			this.checkDropExistingIns.DoAutoSave = true;
 			this.checkDropExistingIns.Location = new System.Drawing.Point(12, 117);
 			this.checkDropExistingIns.Name = "checkDropExistingIns";
-			this.checkDropExistingIns.PrefNameBinding = OpenDentBusiness.PreferenceName.Ins834DropExistingPatPlans;
+			this.checkDropExistingIns.Preference = OpenDentBusiness.PreferenceName.Ins834DropExistingPatPlans;
 			this.checkDropExistingIns.Size = new System.Drawing.Size(291, 17);
 			this.checkDropExistingIns.TabIndex = 11;
 			this.checkDropExistingIns.Text = "Drop all existing patient plans when importing new plans.";
@@ -119,7 +119,7 @@ namespace OpenDental{
 			this.checkIsPatientCreate.DoAutoSave = true;
 			this.checkIsPatientCreate.Location = new System.Drawing.Point(12, 96);
 			this.checkIsPatientCreate.Name = "checkIsPatientCreate";
-			this.checkIsPatientCreate.PrefNameBinding = OpenDentBusiness.PreferenceName.Ins834IsPatientCreate;
+			this.checkIsPatientCreate.Preference = OpenDentBusiness.PreferenceName.Ins834IsPatientCreate;
 			this.checkIsPatientCreate.Size = new System.Drawing.Size(688, 17);
 			this.checkIsPatientCreate.TabIndex = 12;
 			this.checkIsPatientCreate.Text = "Automatically create new patients when importing plans for unknown patients.  If " +
@@ -154,7 +154,7 @@ namespace OpenDental{
 		private UI.ODGrid gridInsPlans;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label labelProgress;
-		private ODCheckBoxPref checkDropExistingIns;
-		private ODCheckBoxPref checkIsPatientCreate;
+		private PreferenceCheckBox checkDropExistingIns;
+		private PreferenceCheckBox checkIsPatientCreate;
 	}
 }

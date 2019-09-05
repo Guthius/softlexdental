@@ -881,7 +881,7 @@ namespace OpenDental{
 			this.textApptAutoRefreshRange.MaxVal = 600;
 			this.textApptAutoRefreshRange.MinVal = -1;
 			this.textApptAutoRefreshRange.Name = "textApptAutoRefreshRange";
-			this.textApptAutoRefreshRange.PrefNameBinding = OpenDentBusiness.PreferenceName.NotApplicable;
+			this.textApptAutoRefreshRange.Preference = OpenDentBusiness.PreferenceName.NotApplicable;
 			this.textApptAutoRefreshRange.Size = new System.Drawing.Size(70, 20);
 			this.textApptAutoRefreshRange.TabIndex = 250;
 			// 
@@ -941,7 +941,7 @@ namespace OpenDental{
 			this.textApptWithoutProcsDefaultLength.MaxVal = 600;
 			this.textApptWithoutProcsDefaultLength.MinVal = 0;
 			this.textApptWithoutProcsDefaultLength.Name = "textApptWithoutProcsDefaultLength";
-			this.textApptWithoutProcsDefaultLength.PrefNameBinding = OpenDentBusiness.PreferenceName.NotApplicable;
+			this.textApptWithoutProcsDefaultLength.Preference = OpenDentBusiness.PreferenceName.NotApplicable;
 			this.textApptWithoutProcsDefaultLength.Size = new System.Drawing.Size(100, 20);
 			this.textApptWithoutProcsDefaultLength.TabIndex = 234;
 			// 
@@ -4146,7 +4146,7 @@ namespace OpenDental{
 			this.textClaimsReceivedDays.MaxVal = 999999;
 			this.textClaimsReceivedDays.MinVal = 1;
 			this.textClaimsReceivedDays.Name = "textClaimsReceivedDays";
-			this.textClaimsReceivedDays.PrefNameBinding = OpenDentBusiness.PreferenceName.NotApplicable;
+			this.textClaimsReceivedDays.Preference = OpenDentBusiness.PreferenceName.NotApplicable;
 			this.textClaimsReceivedDays.Size = new System.Drawing.Size(60, 20);
 			this.textClaimsReceivedDays.TabIndex = 248;
 			this.textClaimsReceivedDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -4290,7 +4290,7 @@ namespace OpenDental{
 			this.textBillingElectBatchMax.MaxVal = 255;
 			this.textBillingElectBatchMax.MinVal = 0;
 			this.textBillingElectBatchMax.Name = "textBillingElectBatchMax";
-			this.textBillingElectBatchMax.PrefNameBinding = OpenDentBusiness.PreferenceName.NotApplicable;
+			this.textBillingElectBatchMax.Preference = OpenDentBusiness.PreferenceName.NotApplicable;
 			this.textBillingElectBatchMax.Size = new System.Drawing.Size(60, 20);
 			this.textBillingElectBatchMax.TabIndex = 216;
 			this.textBillingElectBatchMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -4408,7 +4408,7 @@ namespace OpenDental{
 			this.textStatementsCalcDueDate.MaxVal = 255;
 			this.textStatementsCalcDueDate.MinVal = 0;
 			this.textStatementsCalcDueDate.Name = "textStatementsCalcDueDate";
-			this.textStatementsCalcDueDate.PrefNameBinding = OpenDentBusiness.PreferenceName.NotApplicable;
+			this.textStatementsCalcDueDate.Preference = OpenDentBusiness.PreferenceName.NotApplicable;
 			this.textStatementsCalcDueDate.Size = new System.Drawing.Size(60, 20);
 			this.textStatementsCalcDueDate.TabIndex = 205;
 			this.textStatementsCalcDueDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -4420,7 +4420,7 @@ namespace OpenDental{
 			this.textPayPlansBillInAdvanceDays.MaxVal = 255;
 			this.textPayPlansBillInAdvanceDays.MinVal = 0;
 			this.textPayPlansBillInAdvanceDays.Name = "textPayPlansBillInAdvanceDays";
-			this.textPayPlansBillInAdvanceDays.PrefNameBinding = OpenDentBusiness.PreferenceName.NotApplicable;
+			this.textPayPlansBillInAdvanceDays.Preference = OpenDentBusiness.PreferenceName.NotApplicable;
 			this.textPayPlansBillInAdvanceDays.Size = new System.Drawing.Size(60, 20);
 			this.textPayPlansBillInAdvanceDays.TabIndex = 210;
 			this.textPayPlansBillInAdvanceDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;

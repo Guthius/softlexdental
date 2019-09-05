@@ -10,7 +10,7 @@ using OpenDentBusiness;
 namespace OpenDental{
 ///<summary>This differs slightly from ValidNum. Use this to allow a blank entry instead of defaulting to 0.
 ///</summary>
-	public class ValidNumber : ODTextBoxPref,IValid {
+	public class ValidNumber : PreferenceTextBox,IValid {
 		private System.ComponentModel.Container components = null;
 		public ErrorProvider errorProvider1=new ErrorProvider();
 		///<summary></summary>

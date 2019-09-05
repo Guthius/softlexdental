@@ -10,7 +10,7 @@ namespace OpenDentBusiness
 {
     ///<summary>
     /// This is an unusual bridge, currently available for HQ only that will handle sales tax calls to the Avalara API. 
-    ///This is a wrapper class for calling the Avalara SDK, as we are not implementing our own interface for the API. 
+    /// This is a wrapper class for calling the Avalara SDK, as we are not implementing our own interface for the API. 
     /// SDK Documentation: https://github.com/avadev/AvaTax-REST-V2-DotNet-SDK API Documentation: https://developer.avalara.com/avatax/dev-guide/. 
     /// </summary>
     public class AvaTax

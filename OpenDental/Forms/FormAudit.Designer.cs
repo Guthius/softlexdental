@@ -99,7 +99,7 @@
             this.rowsTextBox.MaxVal = 99999;
             this.rowsTextBox.MinVal = 1;
             this.rowsTextBox.Name = "rowsTextBox";
-            this.rowsTextBox.PrefNameBinding = OpenDentBusiness.PreferenceName.NotApplicable;
+            this.rowsTextBox.Preference = OpenDentBusiness.PreferenceName.NotApplicable;
             this.rowsTextBox.Size = new System.Drawing.Size(56, 23);
             this.rowsTextBox.TabIndex = 21;
             // 
