@@ -4644,20 +4644,11 @@
     <Compile Include="User Controls\Dashboard\DashToothChartLegend.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="User Controls\Dashboard\DashToothChartLegend.Designer.cs">
-      <DependentUpon>DashToothChartLegend.cs</DependentUpon>
-    </Compile>
     <Compile Include="User Controls\Dashboard\DashToothChart.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="User Controls\Dashboard\DashToothChart.Designer.cs">
-      <DependentUpon>DashToothChart.cs</DependentUpon>
-    </Compile>
     <Compile Include="User Controls\Dashboard\DashLabel.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="User Controls\Dashboard\DashLabel.Designer.cs">
-      <DependentUpon>DashLabel.cs</DependentUpon>
     </Compile>
     <Compile Include="User Controls\Dashboard\IDashWidgetField.cs" />
     <Compile Include="User Controls\DraggableControl.cs">

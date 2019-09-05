@@ -1,50 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using OpenDentBusiness;
+﻿/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
 using OpenDental.UI;
-using CodeBase;
+using OpenDentBusiness;
+using System;
+using System.Drawing;
 
-namespace OpenDental {
-	public partial class DashPatPicture:ODPictureBox,IDashWidgetField {
-		private Bitmap _patPicture;
-		private Document _docPatPicture;
+namespace OpenDental
+{
+    public partial class DashPatPicture : ODPictureBox, IDashWidgetField
+    {
+        private Bitmap patientImage;
+        private Document document;
 
-		public DashPatPicture() {
-			InitializeComponent();
-		}
+        public void RefreshData(Patient patient, SheetField sheetField)
+        {
+            if (patient == null) return;
 
-		public void RefreshData(Patient pat,SheetField sheetField) {
-			if(pat==null || 
-				Preferences.AtoZfolderUsed==DataStorageType.InDatabase)//Do not use patient image when A to Z folders are disabled.
-			{
-				return;
-			}
-			try{
-				long newDocNum=PIn.Long(sheetField.FieldValue);
-				if(_docPatPicture==null || newDocNum!=_docPatPicture.DocNum) {
-					_docPatPicture=Documents.GetByNum(newDocNum,true);
-					Bitmap fullImage=ImageHelper.GetFullImage(_docPatPicture,ImageStore.GetPatientFolder(pat));
-					_patPicture=ImageHelper.GetThumbnail(fullImage,Math.Min(sheetField.Width,sheetField.Height));
-					fullImage.Dispose();
-				}
-			}
-			catch{
-				_patPicture?.Dispose();
-				_patPicture=null;//Something went wrong retrieving the image.  Default to "Patient Picture Unavailable".
-			}
-		}
+            try
+            {
+                long documentId = long.Parse(sheetField.FieldValue);
+                if (document == null || documentId != document.DocNum)
+                {
+                    document = Documents.GetByNum(documentId, true);
 
-		public void RefreshView() {
-			Image=_patPicture;
-			HasBorder=true;
-			TextNullImage="Patient Picture Unavailable";
-		}
-	}
+                    using (var image = ImageHelper.GetFullImage(document, ImageStore.GetPatientFolder(patient)))
+                    {
+                        patientImage = ImageHelper.GetThumbnail(image, Math.Min(sheetField.Width, sheetField.Height));
+                    }
+                }
+            }
+            catch
+            {
+                patientImage?.Dispose();
+                patientImage = null;
+            }
+        }
+
+        public void RefreshView()
+        {
+            Image = patientImage;
+            HasBorder = true;
+            TextNullImage = "Patient Picture Unavailable";
+        }
+    }
 }
