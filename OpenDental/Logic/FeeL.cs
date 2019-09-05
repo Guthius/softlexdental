@@ -1,14 +1,14 @@
+using CodeBase;
+using OpenDentBusiness;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading;
 using System.Windows.Forms;
-using CodeBase;
-using OpenDentBusiness;
 
-namespace OpenDental {
-	///<summary></summary>
-	public class FeeL {
+namespace OpenDental
+{
+    ///<summary></summary>
+    public class FeeL {
 
 		///<summary>Imports fees into the database from the provided file.</summary>
 		///<param name="fileName">Must be a tab-delimited .xls or .csv file. Each row must have two columns. The first column must be the proc code

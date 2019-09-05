@@ -433,7 +433,7 @@ namespace OpenDentBusiness{
 				throw new Exception("No fee cache.");
 			}
 			//We need to coalesce to a new FeeCache in case GetCopy() doesn't return a FeeCache.
-			return (_Cache.GetCopy() as FeeCache)??new FeeCache(doInitialize: false);
+			return (_Cache.GetCopy() as FeeCache)??new FeeCache(initialize: false);
 		}
 
 		///<summary>Gets from Db.  Returns all fees associated to the procedure code passed in.</summary>

@@ -7,14 +7,14 @@ namespace OpenDentBusiness
         /// <summary>
         /// Returns a formatted name, Last, First.
         /// </summary>
-        public static string GetNameLF(string lastName, string firstName, string preferredName, string MiddleI)
+        public static string GetNameLF(string lastName, string firstName, string preferredName, string middleInitial)
         {
             if (lastName == "") return "";
 
             return
                 (preferredName == "") ?
-                    lastName + ", " + firstName + " " + MiddleI :
-                    lastName + ", '" + preferredName + "' " + firstName + " " + MiddleI;
+                    lastName + ", " + firstName + " " + middleInitial :
+                    lastName + ", '" + preferredName + "' " + firstName + " " + middleInitial;
         }
 
         /// <summary>

@@ -1,41 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 
-namespace OpenDentBusiness {
-	public class FeeNoCache:IFeeCache {
+namespace OpenDentBusiness
+{
+    public class FeeNoCache : IFeeCache
+    {
+        public void Initialize()
+        {
+        }
 
-		///<summary>Does nothing.</summary>
-		public void Initialize() {
-			//No need to initialize anything
-		}
+        public Fee GetFee(long codeId, long feeSchedNum, long clinicId = 0, long providerId = 0, bool getExactMatch = false) => 
+            Fees.GetFeeNoCache(codeId, feeSchedNum, clinicId, providerId, getExactMatch);
+        
+        public IFeeCache GetCopy() => this;
 
-		///<summary>Gets the fee directly from the database every time.</summary>
-		public Fee GetFee(long codeNum,long feeSchedNum,long clinicNum=0,long provNum=0,bool doGetExactMatch=false) {
-			return Fees.GetFeeNoCache(codeNum,feeSchedNum,clinicNum,provNum,doGetExactMatch);	
-		}
+        public void FillCacheFromTable(DataTable dataTable)
+        {
+        }
 
-		///<summary>Returns a reference to itself. This class stores no state, so there is no need to make a deep copy.</summary>
-		public IFeeCache GetCopy() {
-			return this;
-		}
+        public DataTable GetTableFromCache(bool refreshCache) => new DataTable();
 
-		///<summary>Does nothing.</summary>
-		public void FillCacheFromTable(DataTable table) {
-			//No need to fill anything
-		}
-
-		///<summary>Returns an empty DataTable.</summary>
-		public DataTable GetTableFromCache(bool doRefreshCache) {
-			return new DataTable();
-		}
-
-		///<summary>Does nothing.</summary>
-		public void Invalidate(long feeSchedNum) {
-			//No need to invalidate anything since we're not caching anything
-		}
-	}
+        public void Invalidate(long feeSchedNum)
+        {
+        }
+    }
 }
