@@ -78,13 +78,13 @@ namespace OpenDental {
 			}
 			FormEhrLabPanels formL=new FormEhrLabPanels();
 			Patient pat=Patients.GetPat(MedOrderCur.PatNum);
-			formL.PatCur=pat;
+			formL.Patient=pat;
 			formL.IsSelectionMode=true;
 			formL.ShowDialog();
 			if(formL.DialogResult!=DialogResult.OK) {
 				return;
 			}
-			LabPanel panel=LabPanels.GetOne(formL.SelectedLabPanelNum);
+			LabPanel panel=LabPanels.GetOne(formL.SelectedLabPanelId);
 			panel.MedicalOrderNum=MedOrderCur.MedicalOrderNum;
 			LabPanels.Update(panel);
 			FillGrid();

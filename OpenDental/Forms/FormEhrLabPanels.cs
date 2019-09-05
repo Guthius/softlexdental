@@ -1,154 +1,245 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using OpenDentBusiness;
-using System.Drawing.Printing;
-using OpenDental.UI;
+﻿/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
 using CodeBase;
+using OpenDental.UI;
+using OpenDentBusiness;
+using OpenDentBusiness.HL7;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
-namespace OpenDental {
-	public partial class FormEhrLabPanels:ODForm {
-		private List<LabPanel> listLP;
-		public Patient PatCur;
-		public bool IsSelectionMode;
-		public long SelectedLabPanelNum;
+namespace OpenDental
+{
+    public partial class FormEhrLabPanels : FormBase
+    {
+        private List<LabPanel> panels;
 
-		public FormEhrLabPanels() {
-			InitializeComponent();
-		}
+        public Patient Patient { get; set; }
 
-		private void FormLabPanels_Load(object sender,EventArgs e) {
-			if(!IsSelectionMode) {
-				butOK.Visible=false;
-				butCancel.Text="Close";
-			}
-			FillGrid();
-		}
+        public bool IsSelectionMode { get; set; }
 
-		private void FillGrid() {
-			gridMain.BeginUpdate();
-			gridMain.Columns.Clear();
-			ODGridColumn col;
-			col=new ODGridColumn("Date Time",135);
-			gridMain.Columns.Add(col);
-			col=new ODGridColumn("Service",200);
-			gridMain.Columns.Add(col);
-			listLP = LabPanels.Refresh(PatCur.PatNum);
-			List<LabResult> listResults;
-			gridMain.Rows.Clear();
-			ODGridRow row;
-			for(int i=0;i<listLP.Count;i++) {
-				row=new ODGridRow();
-				listResults=LabResults.GetForPanel(listLP[i].LabPanelNum);
-				if(listResults.Count==0) {
-					row.Cells.Add(" ");//to avoid a very short row
-				}
-				else {
-					row.Cells.Add(listResults[0].DateTimeTest.ToString());
-				}
-				row.Cells.Add(listLP[i].ServiceName);
-				gridMain.Rows.Add(row);
-			}
-			gridMain.EndUpdate();
-		}
+        public long SelectedLabPanelId { get; set; }
 
-		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			FormEhrLabPanelEdit FormLPE=new FormEhrLabPanelEdit();
-			FormLPE.PanelCur = listLP[e.Row];
-			FormLPE.ShowDialog();
-			FillGrid();
-		}
+        public FormEhrLabPanels() =>  InitializeComponent();
 
-		private void butAdd_Click(object sender,EventArgs e) {
-			FormEhrLabPanelEdit FormLPE=new FormEhrLabPanelEdit();
-			FormLPE.IsNew=true;
-			FormLPE.PanelCur=new LabPanel();
-			FormLPE.PanelCur.PatNum=PatCur.PatNum;
-			FormLPE.PanelCur.SpecimenSource="";
-			FormLPE.ShowDialog();
-			FillGrid();
-		}
+        private void FormLabPanels_Load(object sender, EventArgs e)
+        {
+            if (!IsSelectionMode)
+            {
+                acceptButton.Visible = false;
+                cancelButton.Text = "Close";
+            }
+            FillGrid();
+        }
 
-		private void butSubmit_Click(object sender,EventArgs e) {
-			if(gridMain.SelectedIndices.Length==0) {
-				MessageBox.Show("Please select lab panels first.");
-				return;
-			}
-			List<LabPanel> panels=new List<LabPanel>();
-			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
-				panels.Add(listLP[gridMain.SelectedIndices[i]]);
-			}
-			OpenDentBusiness.HL7.EhrORU oru=new OpenDentBusiness.HL7.EhrORU();
-			Cursor=Cursors.WaitCursor;
-			try {
-				oru.Initialize(panels);
-			}
-			catch(ApplicationException ex) {
-				Cursor=Cursors.Default;
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			string outputStr=oru.GenerateMessage();
-			try {
-				//EmailMessages.SendTestUnsecure("Public Health","oru.txt",outputStr);
-			}
-			catch(Exception ex) {
-				Cursor=Cursors.Default;
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			Cursor=Cursors.Default;
-			MessageBox.Show("Sent");
-		}
+        private void FillGrid()
+        {
+            panelsGrid.BeginUpdate();
+            panelsGrid.Columns.Clear();
+            panelsGrid.Columns.Add(new ODGridColumn(Translation.Language.ColumnDateTime, 135));
+            panelsGrid.Columns.Add(new ODGridColumn("Service", 200));
+            panelsGrid.Rows.Clear();
 
-		private void butShow_Click(object sender,EventArgs e) {
-			if(gridMain.SelectedIndices.Length==0) {
-				MessageBox.Show("Please select lab panels first.");
-				return;
-			}
-			List<LabPanel> panels=new List<LabPanel>();
-			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {
-				panels.Add(listLP[gridMain.SelectedIndices[i]]);
-			}
-			OpenDentBusiness.HL7.EhrORU oru=new OpenDentBusiness.HL7.EhrORU();
-			Cursor=Cursors.WaitCursor;
-			try {
-				oru.Initialize(panels);
-			}
-			catch(ApplicationException ex) {
-				Cursor=Cursors.Default;
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			string outputStr=oru.GenerateMessage();
-			Cursor=Cursors.Default;
-			MsgBoxCopyPaste msgbox=new MsgBoxCopyPaste(outputStr);
-			msgbox.ShowDialog();
-		}
+            panels = LabPanels.Refresh(Patient.PatNum);
+            foreach (var labPanel in panels)
+            {
+                var row = new ODGridRow();
 
-		private void butOK_Click(object sender,EventArgs e) {
-			//not visible unless in selectionMode
-			if(gridMain.SelectedIndices.Length!=1) {
-				MessageBox.Show("Please select exactly one lab panel.");
-				return;
-			}
-			SelectedLabPanelNum=listLP[gridMain.SelectedIndices[0]].LabPanelNum;
-			DialogResult=DialogResult.OK;
-		}
+                var labResults = LabResults.GetForPanel(labPanel.LabPanelNum);
+                if (labResults.Count == 0)
+                {
+                    row.Cells.Add(" ");
+                }
+                else
+                {
+                    row.Cells.Add(labResults[0].DateTimeTest.ToString());
+                }
 
-		private void butCancel_Click(object sender,EventArgs e) {
-			DialogResult=DialogResult.Cancel;
-		}
+                row.Cells.Add(labPanel.ServiceName);
 
-		
+                panelsGrid.Rows.Add(row);
+            }
 
-		
+            panelsGrid.EndUpdate();
+        }
 
+        private void PanelsGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
+        {
+            using (var formEhrLabPanelEdit = new FormEhrLabPanelEdit())
+            {
+                formEhrLabPanelEdit.PanelCur = panels[e.Row];
+                formEhrLabPanelEdit.ShowDialog();
 
+                FillGrid();
+            }
 
-	}
+        }
+
+        private void AddButton_Click(object sender, EventArgs e)
+        {
+            using (var formEhrLabPanelEdit = new FormEhrLabPanelEdit())
+            {
+                formEhrLabPanelEdit.IsNew = true;
+                formEhrLabPanelEdit.PanelCur = new LabPanel
+                {
+                    PatNum = Patient.PatNum,
+                    SpecimenSource = ""
+                };
+                formEhrLabPanelEdit.ShowDialog();
+
+                FillGrid();
+            }
+        }
+
+        private void SubmitButton_Click(object sender, EventArgs e)
+        {
+            if (panelsGrid.SelectedIndices.Length == 0)
+            {
+                MessageBox.Show(
+                    "Please select lab panels first.",
+                    "Lab Panels",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                return;
+            }
+
+            var selectedPanels = new List<LabPanel>();
+            for (int i = 0; i < panelsGrid.SelectedIndices.Length; i++)
+            {
+                selectedPanels.Add(panels[panelsGrid.SelectedIndices[i]]);
+            }
+
+            EhrORU oru = new EhrORU();
+
+            Cursor = Cursors.WaitCursor;
+            try
+            {
+                oru.Initialize(selectedPanels);
+            }
+            catch (ApplicationException exception)
+            {
+                Cursor = Cursors.Default;
+
+                MessageBox.Show(
+                    exception.Message, 
+                    "Lab Panels", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            // string message = oru.GenerateMessage();
+
+            try
+            {
+                // TODO: Implement me.
+
+                // EmailMessages.SendTestUnsecure("Public Health","oru.txt",outputStr);
+            }
+            catch (Exception exception)
+            {
+                Cursor = Cursors.Default;
+
+                MessageBox.Show(
+                    exception.Message,
+                    "Lab Panels",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            Cursor = Cursors.Default;
+
+            MessageBox.Show(
+                "Sent",
+                "Lab Panels",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+        }
+
+        private void ShowButton_Click(object sender, EventArgs e)
+        {
+            if (panelsGrid.SelectedIndices.Length == 0)
+            {
+                MessageBox.Show(
+                    "Please select lab panels first.",
+                    "Lab Panels",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                return;
+            }
+
+            var selectedPanels = new List<LabPanel>();
+            for (int i = 0; i < panelsGrid.SelectedIndices.Length; i++)
+            {
+                selectedPanels.Add(panels[panelsGrid.SelectedIndices[i]]);
+            }
+
+            EhrORU oru = new EhrORU();
+
+            Cursor = Cursors.WaitCursor;
+            try
+            {
+                oru.Initialize(selectedPanels);
+            }
+            catch (ApplicationException ex)
+            {
+                Cursor = Cursors.Default;
+
+                MessageBox.Show(
+                    ex.Message,
+                    "Lab Panels",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+
+                return;
+            }
+
+            string message = oru.GenerateMessage();
+
+            Cursor = Cursors.Default;
+
+            using (var msgBoxCopyPaste = new MsgBoxCopyPaste(message))
+            {
+                msgBoxCopyPaste.ShowDialog(this);
+            }
+        }
+
+        private void AcceptButton_Click(object sender, EventArgs e)
+        {
+            if (panelsGrid.SelectedIndices.Length != 1)
+            {
+                MessageBox.Show(
+                    "Please select exactly one lab panel.",
+                    "Lab Panels",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+
+                return;
+            }
+
+            SelectedLabPanelId = panels[panelsGrid.SelectedIndices[0]].LabPanelNum;
+
+            DialogResult = DialogResult.OK;
+        }
+    }
 }
