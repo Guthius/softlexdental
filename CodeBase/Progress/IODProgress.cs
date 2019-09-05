@@ -1,35 +1,30 @@
-﻿using System;
-using System.ComponentModel;
-using System.Xml.Serialization;
-
-namespace CodeBase
+﻿namespace CodeBase
 {
     public interface IODProgress
     {
-        ///<summary>Used within translations as the sender object</summary>
+        /// <summary>
+        /// Used within translations as the sender object.
+        /// </summary>
         string LanThis { get; set; }
 
-        ///<summary>Updates the status textbox with a new message.</summary>
+        /// 
+        /// <summary>Updates the status textbox with a new message.
+        /// </summary>
         void UpdateProgress(string message);
 
-        ///<summary>Updates the progress bar with these details.</summary>
+        /// <summary>
+        /// Updates the progress bar with these details.
+        /// </summary>
         void UpdateProgressDetailed(string labelValue, string percentVal = "", string tagString = "", int barVal = 0, int barMax = 100, int marqSpeed = 0, string labelTop = "", bool isLeftHidden = false, bool isTopHidden = false, bool isPercentHidden = false, ProgBarStyle progStyle = ProgBarStyle.Blocks, ProgBarEventType progEvent = ProgBarEventType.ProgressBar);
     }
 
-    ///<summary>Progress bar where all methods do nothing. Can be used when there can be no progress bar due to a lack of UI. 
-    ///This is an implementation of the Null Object Pattern.</summary>
+    /// <summary>
+    /// Progress bar where all methods do nothing. Can be used when there can be no progress bar due to a lack of UI. 
+    /// This is an implementation of the Null Object Pattern.
+    /// </summary>
     public class ODProgressDoNothing : IODProgress
     {
-        ///<summary>A singleton instance of this class that can be used repeatedly so that each consumer doesn't have to create a new object.</summary>
-        private static ODProgressDoNothing _instance = new ODProgressDoNothing();
-        [XmlIgnore]
-        public static ODProgressDoNothing Instance
-        {
-            get
-            {
-                return _instance;
-            }
-        }
+        public static ODProgressDoNothing Instance { get; } = new ODProgressDoNothing();
 
         public string LanThis
         {

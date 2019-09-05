@@ -9,7 +9,7 @@ namespace CodeBase.MVC
     /// >Base class that all forms should extend.  Provides accessibility to features for all forms like Help and object processing.
     /// </summary>
     /// <typeparam name="TProcessor">Processor Type - Typically set to Signalod but can be set to any object type that gets processed by the form.</typeparam>
-    public class ODFormAbs<TProcessor> : Form, IODProcessor<TProcessor>
+    public class ODFormAbs<TProcessor> : Form
     {
         FormWindowState previousWindowState;
 

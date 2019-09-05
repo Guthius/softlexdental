@@ -78,7 +78,7 @@ namespace OpenDentBusiness
             if (msgTextPrev != null && msgTextPrev.MessageText == json)
             {
                 if (isAutomatic ||
-                    ODMessageBox.Show("Carrier list has not changed since last checked.\r\nContinue?", "", MessageBoxButtons.YesNo) != DialogResult.Yes)
+                    MessageBox.Show("Carrier list has not changed since last checked.\r\nContinue?", "", MessageBoxButtons.YesNo) != DialogResult.Yes)
                 {
                     return Lans.g("Clearinghouse", "Carrier list has not changed since last checked.");//json has not changed since we last checked, no need to update.
                 }

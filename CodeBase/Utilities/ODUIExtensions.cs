@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace CodeBase
@@ -245,16 +244,6 @@ namespace CodeBase
             IEnumerable<Control> controls = control.Controls.OfType<Control>();
             return controls.SelectMany(GetAllControls).Concat(controls);
         }
-
-        ///<summary>Sometimes ODProgress can cause other forms to open up behind other applications. Call this method to force this form to the front.
-        ///</summary>
-        public static void ForceBringToFront(this Form form)
-        {
-            form.TopMost = true;
-            Application.DoEvents();
-            form.TopMost = false;
-        }
-
     }
 
     ///<summary>Adds special, non-typed items to combo boxes, such as "None" and "All".</summary>

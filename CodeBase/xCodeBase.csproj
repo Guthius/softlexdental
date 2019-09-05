@@ -188,7 +188,6 @@
     <Compile Include="Controls\PrintPanel.Designer.cs">
       <DependentUpon>PrintPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="MVC\IODProcessor.cs" />
     <Compile Include="MVC\ODFormAbs.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -234,16 +233,12 @@
     <Compile Include="Utilities\ODClassExtensions.cs" />
     <Compile Include="Utilities\ODInitialize.cs" />
     <Compile Include="Utilities\ODInvokeExtensions.cs" />
-    <Compile Include="Utilities\ODNonNullable.cs" />
     <Compile Include="Utilities\DateSpan.cs" />
     <Compile Include="Utilities\LimitedSizeQueue.cs" />
     <Compile Include="Utilities\ODBoxItem.cs" />
     <Compile Include="Utilities\ODMethodsT.cs" />
-    <Compile Include="Utilities\ODNetworkConnection.cs" />
     <Compile Include="Utilities\ODprintout.cs" />
-    <Compile Include="Utilities\PasswordVaultWrapper.cs" />
     <Compile Include="Utilities\ServicesHelper.cs" />
-    <Compile Include="Utilities\WindowsApiWrapper.cs" />
     <Compile Include="Utilities\ODPrimitiveExtensions.cs" />
     <Compile Include="Utilities\MiscUtils.cs" />
     <Compile Include="Utilities\ODEnvironment.cs" />
