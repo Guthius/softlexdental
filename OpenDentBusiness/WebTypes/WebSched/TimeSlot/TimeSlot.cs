@@ -7,11 +7,7 @@ namespace OpenDentBusiness.WebTypes.WebSched.TimeSlot
     {
         public DateTime DateTimeStart;
         public DateTime DateTimeStop;
-        
-        ///<summary>FK to operatory.OperatoryNum</summary>
         public long OperatoryNum;
-        
-        ///<summary>FK to provider.ProvNum</summary>
         public long ProvNum;
         
         ///<summary>FK to definition.DefNum.  This will be a definition of type WebSchedNewPatApptTypes.</summary>

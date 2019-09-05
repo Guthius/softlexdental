@@ -1,26 +1,39 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Text;
-using System.Windows.Forms;
-using CodeBase;
 
 namespace OpenDentBusiness
 {
-    ///<summary>Encapsulates one entire X12 Interchange object, including multiple functional groups and transaction sets. It does not care what type of transactions are contained.  It just stores them.  It does not inherit either.  It is up to other classes to use this as needed.</summary>
+    /// <summary>
+    /// Encapsulates one entire X12 Interchange object, including multiple functional groups and 
+    /// transaction sets. It does not care what type of transactions are contained. It just 
+    /// stores them. It does not inherit either. It is up to other classes to use this as needed.
+    /// </summary>
     public class X12object
     {
-        ///<summary>External reference to the file corresponding to this X12 object.</summary>
+        /// <summary>
+        /// External reference to the file corresponding to this X12 object.
+        /// </summary>
         public string FilePath;
-        ///<summary>The date and time this X12 object was created by the sender.  Relative to sender's time zone.</summary>
+
+        /// <summary>
+        /// The date and time this X12 object was created by the sender. Relative to sender's time zone.
+        /// </summary>
         public DateTime DateInterchange;
-        ///<summary>usually *,:,and ~</summary>
+
+        /// <summary>usually *,:,and ~
+        /// </summary>
         public X12Separators Separators;
-        ///<summary>A collection of X12FunctionalGroups. GS segments.</summary>
+
+        /// <summary>
+        /// A collection of X12FunctionalGroups. GS segments.
+        /// </summary>
         public List<X12FunctionalGroup> FunctGroups;
-        ///<summary>All segments for the entiremessage.</summary>
+
+        /// <summary>
+        /// All segments for the entiremessage.
+        /// </summary>
         public List<X12Segment> Segments;
 
         public static bool IsX12(string messageText)
@@ -32,7 +45,9 @@ namespace OpenDentBusiness
             return false;
         }
 
-        ///<summary>Returns null if the messageText is not X12 or if messageText could not be parsed.</summary>
+        /// <summary>
+        /// Returns null if the messageText is not X12 or if messageText could not be parsed.
+        /// </summary>
         public static X12object ToX12object(string messageText)
         {
             if (messageText == null || messageText.Length < 106)
@@ -390,35 +405,54 @@ namespace OpenDentBusiness
 
     }
 
-
-    ///<summary>GS/GE combination. Contained within an interchange control combination (ISA/IEA). Contains at least one transaction (ST/SE). </summary>
+    /// <summary>
+    /// GS/GE combination.
+    /// Contained within an interchange control combination (ISA/IEA).
+    /// Contains at least one transaction (ST/SE).
+    /// </summary>
     public class X12FunctionalGroup
     {
-        ///<summary>A collection of X12Transactions. ST segments.</summary>
+        /// <summary>
+        /// A collection of X12Transactions. ST segments.
+        /// </summary>
         public List<X12Transaction> Transactions;
-        ///<summary>The segment that identifies this functional group</summary>
+
+        /// <summary>
+        /// The segment that identifies this functional group
+        /// </summary>
         public X12Segment Header;
 
-        ///<summary>This override is never explicitly used.  For serialization.</summary>
+        /// <summary>
+        /// This override is never explicitly used. For serialization.
+        /// </summary>
         public X12FunctionalGroup()
         {
-
         }
 
-        ///<summary>Supply the functional group header(GS) when creating this object.</summary>
+        /// <summary>
+        /// Supply the functional group header(GS) when creating this object.
+        /// </summary>
         public X12FunctionalGroup(X12Segment header)
         {
             Header = header.Copy();
         }
     }
 
-
-    ///<summary>ST/SE combination.  Containted within functional group (GS/GE).  In claims, there will be one transaction per carrier.</summary>
+    /// <summary>
+    /// ST/SE combination.
+    /// Containted within functional group (GS/GE).
+    /// In claims, there will be one transaction per carrier.
+    /// </summary>
     public class X12Transaction
     {
-        ///<summary>A collection of all the X12Segments for this transaction, in the order they originally appeared.</summary>
+        /// <summary>
+        /// A collection of all the X12Segments for this transaction, in the order they originally appeared.
+        /// </summary>
         public List<X12Segment> Segments;
-        ///<summary>The segment that identifies this functional group</summary>
+
+        /// <summary>
+        /// The segment that identifies this functional group
+        /// </summary>
         public X12Segment Header;
 
         ///<summary>This override is never explicitly used.  For serialization.</summary>

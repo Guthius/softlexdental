@@ -7,7 +7,6 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Xml;
-using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace OpenDentBusiness.WebTypes.Shared.XWeb
@@ -84,8 +83,6 @@ namespace OpenDentBusiness.WebTypes.Shared.XWeb
         public static XWebResponse GetOtkStatus(long patientId, string otk, bool blockUntilResponse) => 
             new XWebInputOtkStatus(patientId, otk, blockUntilResponse).GenerateOutput();
         
-
-
         #region Events
 
         public static EventHandler WakeupMonitor;

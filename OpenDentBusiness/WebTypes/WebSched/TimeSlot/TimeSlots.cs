@@ -3,38 +3,39 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OpenDentBusiness.WebTypes.WebSched.TimeSlot
 {
     public class TimeSlots
     {
-
-        ///<summary>Gets up to 30 days of open time slots based on the recall passed in.
-        ///Open time slots are found by looping through operatories flagged for Web Sched and finding openings that can hold the recall.
-        ///The amount of time required to be considered "available" is dictated by the RecallType associated to the recall passed in.
-        ///Throws exceptions.</summary>
-        public static List<TimeSlot> GetAvailableWebSchedTimeSlots(long recallNum, DateTime dateStart, DateTime dateEnd, long provNum = 0,
-            bool allowOtherProv = true)
+        /// <summary>
+        /// Gets up to 30 days of open time slots based on the recall passed in.
+        /// Open time slots are found by looping through operatories flagged for Web Sched and 
+        /// finding openings that can hold the recall. The amount of time required to be 
+        /// considered "available" is dictated by the RecallType associated to the recall passed in.
+        /// </summary>
+        public static List<TimeSlot> GetAvailableWebSchedTimeSlots(long recallNum, DateTime dateStart, DateTime dateEnd, long provNum = 0, bool allowOtherProv = true)
         {
-            //No need to check RemotingRole; no call to db.
-            Clinic clinic = Clinics.GetClinicForRecall(recallNum);
-            Recall recall = Recalls.GetRecall(recallNum);
+            var recall = Recalls.GetRecall(recallNum);
             if (recall == null)
             {
-                throw new ODException(Lans.g("WebSched", "The recall appointment you are trying to schedule is no longer available.") + "\r\n"
-                    + Lans.g("WebSched", "Please call us to schedule your appointment."));
+                throw new Exception(
+                    "The recall appointment you are trying to schedule is no longer available.\r\n" +
+                    "Please call us to schedule your appointment.");
             }
-            List<Provider> listProviders = Providers.GetProvidersForWebSched(recall.PatNum);
+
+            var clinic = Clinics.GetClinicForRecall(recallNum);
+            var providers = Providers.GetProvidersForWebSched(recall.PatNum);
             if (provNum > 0 && !allowOtherProv)
             {
-                listProviders = listProviders.FindAll(x => x.ProvNum == provNum);
+                providers = providers.FindAll(x => x.ProvNum == provNum);
             }
-            Logger.Write(LogLevel.Verbose, "listProviders:\r\n\t" + string.Join(",\r\n\t", listProviders.Select(x => x.ProvNum + " - " + x.Abbr)));
+
+            Logger.Write(LogLevel.Verbose, "listProviders:\r\n\t" + string.Join(",\r\n\t", providers.Select(x => x.ProvNum + " - " + x.Abbr)));
+
             RecallType recallType = RecallTypes.GetFirstOrDefault(x => x.RecallTypeNum == recall.RecallTypeNum);
-            return GetAvailableWebSchedTimeSlots(recallType, listProviders, clinic, dateStart, dateEnd, recall);
+
+            return GetAvailableWebSchedTimeSlots(recallType, providers, clinic, dateStart, dateEnd, recall);
         }
 
         ///<summary>Gets up to 30 days of open time slots based on the RecallType passed in.
@@ -48,20 +49,23 @@ namespace OpenDentBusiness.WebTypes.WebSched.TimeSlot
         public static List<TimeSlot> GetAvailableWebSchedTimeSlots(RecallType recallType, List<Provider> listProviders, Clinic clinic
             , DateTime dateStart, DateTime dateEnd, Recall recallCur = null)
         {
-            //No need to check RemotingRole; no call to db.
             if (recallType == null)
-            {//Validate that recallType is not null.
-                throw new ODException(Lans.g("WebSched", "The recall appointment you are trying to schedule is no longer available.") + "\r\n"
-                    + Lans.g("WebSched", "Please call us to schedule your appointment."));
+            {
+                throw new Exception(
+                    "The recall appointment you are trying to schedule is no longer available.\r\n" +
+                    "Please call us to schedule your appointment.");
             }
-            //Get all the Operatories that are flagged for Web Sched.
-            List<Operatory> listOperatories = Operatories.GetOpsForWebSched();
-            if (listOperatories.Count < 1)
-            {//This is very possible for offices that aren't set up the way that we expect them to be.
-                throw new ODException(Lans.g("WebSched", "There are no operatories set up for Web Sched.") + "\r\n"
-                    + Lans.g("WebSched", "Please call us to schedule your appointment."), ODException.ErrorCodes.NoOperatoriesSetup);
+
+            var operatories = Operatories.GetOpsForWebSched();
+            if (operatories.Count < 1)
+            {
+                throw new ODException(
+                    "There are no operatories set up for Web Sched.\r\n" +
+                    "Please call us to schedule your appointment.", 
+                    ODException.ErrorCodes.NoOperatoriesSetup);
             }
-            Logger.Write(LogLevel.Verbose, "listOperatories:\r\n\t" + string.Join(",\r\n\t", listOperatories.Select(x => x.OperatoryNum + " - " + x.Abbrev)));
+
+            Logger.Write(LogLevel.Verbose, "listOperatories:\r\n\t" + string.Join(",\r\n\t", operatories.Select(x => x.OperatoryNum + " - " + x.Abbrev)));
 
             List<long> listProvNums = listProviders.Select(x => x.ProvNum).Distinct().ToList();
             List<Schedule> listSchedules = Schedules.GetSchedulesAndBlockoutsForWebSched(listProvNums, dateStart, dateEnd, true
@@ -77,7 +81,7 @@ namespace OpenDentBusiness.WebTypes.WebSched.TimeSlot
                 timePatternRecall = Recalls.GetRecallTimePattern(recallCur, listRecalls, patCur, new List<string>());
             }
             string timePatternAppointment = RecallTypes.ConvertTimePattern(timePatternRecall);
-            return GetTimeSlotsForRange(dateStart, dateEnd, timePatternAppointment, listProvNums, listOperatories, listSchedules, clinic,
+            return GetTimeSlotsForRange(dateStart, dateEnd, timePatternAppointment, listProvNums, operatories, listSchedules, clinic,
                 isDoubleBookingAllowed: Preference.GetInt(PreferenceName.WebSchedRecallDoubleBooking) == 0);//is double booking allowed according to the preference
         }
 

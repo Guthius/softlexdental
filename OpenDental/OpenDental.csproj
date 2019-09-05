@@ -4638,9 +4638,6 @@
     <Compile Include="User Controls\Dashboard\DashPatPicture.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="User Controls\Dashboard\DashPatPicture.Designer.cs">
-      <DependentUpon>DashPatPicture.cs</DependentUpon>
-    </Compile>
     <Compile Include="User Controls\Dashboard\DashToothChartLegend.cs">
       <SubType>Component</SubType>
     </Compile>
