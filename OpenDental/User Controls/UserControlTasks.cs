@@ -657,7 +657,7 @@ namespace OpenDental {
 				return new List<Signalod>();
 			}
 			for(int i=listReceivedSignals.Count-1;i>=0;i--) {
-				long receivedSignalNum=listReceivedSignals[i].SignalNum;
+				long receivedSignalNum=listReceivedSignals[i].Id;
 				if(receivedSignalNum.In(_listSentTaskSignalNums)) {
 					_listSentTaskSignalNums.Remove(receivedSignalNum);
 					listReceivedSignals.RemoveAt(i);

@@ -43,7 +43,7 @@ namespace OpenDentBusiness.Crud{
 			Signalod signalod;
 			foreach(DataRow row in table.Rows) {
 				signalod=new Signalod();
-				signalod.SignalNum  = PIn.Long  (row["SignalNum"].ToString());
+				signalod.Id  = PIn.Long  (row["SignalNum"].ToString());
 				signalod.DateViewing= PIn.Date  (row["DateViewing"].ToString());
 				signalod.SigDateTime= PIn.DateT (row["SigDateTime"].ToString());
 				signalod.FKey       = PIn.Long  (row["FKey"].ToString());
@@ -79,7 +79,7 @@ namespace OpenDentBusiness.Crud{
 			table.Columns.Add("MsgValue");
 			foreach(Signalod signalod in listSignalods) {
 				table.Rows.Add(new object[] {
-					POut.Long  (signalod.SignalNum),
+					POut.Long  (signalod.Id),
 					POut.DateT (signalod.DateViewing,false),
 					POut.DateT (signalod.SigDateTime,false),
 					POut.Long  (signalod.FKey),
@@ -99,7 +99,7 @@ namespace OpenDentBusiness.Crud{
 		///<summary>Inserts one Signalod into the database.  Provides option to use the existing priKey.</summary>
 		public static long Insert(Signalod signalod,bool useExistingPK) {
 			if(!useExistingPK && Preferences.RandomKeys) {
-				signalod.SignalNum=ReplicationServers.GetKey("signalod","SignalNum");
+				signalod.Id=ReplicationServers.GetKey("signalod","SignalNum");
 			}
 			string command="INSERT INTO signalod (";
 			if(useExistingPK || Preferences.RandomKeys) {
@@ -107,7 +107,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			command+="DateViewing,SigDateTime,FKey,FKeyType,IType,RemoteRole,MsgValue) VALUES(";
 			if(useExistingPK || Preferences.RandomKeys) {
-				command+=POut.Long(signalod.SignalNum)+",";
+				command+=POut.Long(signalod.Id)+",";
 			}
 			command+=
 				     POut.Date  (signalod.DateViewing)+","
@@ -124,9 +124,9 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command,paramMsgValue);
 			}
 			else {
-				signalod.SignalNum=Db.NonQ(command,true,"SignalNum","signalod",paramMsgValue);
+				signalod.Id=Db.NonQ(command,true,"SignalNum","signalod",paramMsgValue);
 			}
-			return signalod.SignalNum;
+			return signalod.Id;
 		}
 
 		///<summary>Inserts many Signalods into the database.</summary>
@@ -160,7 +160,7 @@ namespace OpenDentBusiness.Crud{
 						hasComma=true;
 					}
 					if(useExistingPK) {
-						sbRow.Append(POut.Long(signalod.SignalNum)); sbRow.Append(",");
+						sbRow.Append(POut.Long(signalod.Id)); sbRow.Append(",");
 					}
 					sbRow.Append(POut.Date(signalod.DateViewing)); sbRow.Append(",");
 					sbRow.Append(POut.DateT(signalod.SigDateTime)); sbRow.Append(",");
@@ -196,14 +196,14 @@ namespace OpenDentBusiness.Crud{
 			bool isRandomKeys=Preference.GetBoolNoCache(PreferenceName.RandomPrimaryKeys);
 			string command="INSERT INTO signalod (";
 			if(!useExistingPK && isRandomKeys) {
-				signalod.SignalNum=ReplicationServers.GetKeyNoCache("signalod","SignalNum");
+				signalod.Id=ReplicationServers.GetKeyNoCache("signalod","SignalNum");
 			}
 			if(isRandomKeys || useExistingPK) {
 				command+="SignalNum,";
 			}
 			command+="DateViewing,SigDateTime,FKey,FKeyType,IType,RemoteRole,MsgValue) VALUES(";
 			if(isRandomKeys || useExistingPK) {
-				command+=POut.Long(signalod.SignalNum)+",";
+				command+=POut.Long(signalod.Id)+",";
 			}
 			command+=
 				     POut.Date  (signalod.DateViewing)+","
@@ -220,9 +220,9 @@ namespace OpenDentBusiness.Crud{
 				Db.NonQ(command,paramMsgValue);
 			}
 			else {
-				signalod.SignalNum=Db.NonQ(command,true,"SignalNum","signalod",paramMsgValue);
+				signalod.Id=Db.NonQ(command,true,"SignalNum","signalod",paramMsgValue);
 			}
-			return signalod.SignalNum;
+			return signalod.Id;
 		}
 
 		///<summary>Updates one Signalod in the database.</summary>
@@ -234,7 +234,7 @@ namespace OpenDentBusiness.Crud{
 				+"FKeyType   = '"+POut.String(signalod.FKeyType.ToString())+"', "
 				+"IType      =  "+POut.Int   ((int)signalod.IType)+", "
 				+"MsgValue   =  "+DbHelper.ParamChar+"paramMsgValue "
-				+"WHERE SignalNum = "+POut.Long(signalod.SignalNum);
+				+"WHERE SignalNum = "+POut.Long(signalod.Id);
 			if(signalod.MsgValue==null) {
 				signalod.MsgValue="";
 			}
@@ -277,7 +277,7 @@ namespace OpenDentBusiness.Crud{
 			}
 			OdSqlParameter paramMsgValue=new OdSqlParameter("paramMsgValue",OdDbType.Text,POut.StringParam(signalod.MsgValue));
 			command="UPDATE signalod SET "+command
-				+" WHERE SignalNum = "+POut.Long(signalod.SignalNum);
+				+" WHERE SignalNum = "+POut.Long(signalod.Id);
 			Db.NonQ(command,paramMsgValue);
 			return true;
 		}

@@ -1,14 +1,14 @@
 using System;
-using System.Collections;
 
 namespace OpenDentBusiness
 {
-
-    ///<summary>An actual signal that gets sent out as part of the messaging functionality.</summary>
+    /// <summary>
+    /// An actual signal that gets sent out as part of the messaging functionality.
+    /// </summary>
     public class Signalod
     {
-        ///<summary>Primary key.</summary>
-        public long SignalNum;
+        public long Id;
+
         ///<summary>If IType=Date, then this is the affected date in the Appointments module.</summary>
         public DateTime DateViewing;
         ///<summary>The exact server time when this signal was entered into db.</summary>
@@ -23,57 +23,34 @@ namespace OpenDentBusiness
         ///<summary>Message value of the signal.</summary>
         public string MsgValue;
 
-        ///<summary></summary>
-        public Signalod Copy()
-        {
-            return (Signalod)this.MemberwiseClone();
-        }
-
-        ///<summary>Necessary for Union() to work when eliminating duplicates.</summary>
+        /// <summary>
+        /// Necessary for Union() to work when eliminating duplicates.
+        /// </summary>
         public override bool Equals(object obj)
         {
-            if (!(obj is Signalod))
+            if (obj is Signalod other)
             {
-                return false;
+                if (Id          != other.Id             ||
+                    DateViewing != other.DateViewing    ||
+                    SigDateTime != other.SigDateTime    ||
+                    FKey        != other.FKey           ||
+                    FKeyType    != other.FKeyType       ||
+                    IType       != other.IType          ||
+                    MsgValue    != other.MsgValue)
+                {
+                    return false;
+                }
+
+                return true;
             }
-            Signalod signalOther = (Signalod)obj;
-            if (SignalNum != signalOther.SignalNum)
-            {
-                return false;
-            }
-            if (DateViewing != signalOther.DateViewing)
-            {
-                return false;
-            }
-            if (SigDateTime != signalOther.SigDateTime)
-            {
-                return false;
-            }
-            if (FKey != signalOther.FKey)
-            {
-                return false;
-            }
-            if (FKeyType != signalOther.FKeyType)
-            {
-                return false;
-            }
-            if (IType != signalOther.IType)
-            {
-                return false;
-            }
-            if (MsgValue != signalOther.MsgValue)
-            {
-                return false;
-            }
-            return true;
+
+            return false;
         }
 
-        ///<summary>We must define GetHashCode() because we defined Equals() above, or else we get a warning message.</summary>
-        public override int GetHashCode()
-        {
-            return (int)SignalNum;//Does not have to be unique, but being as unique as possible makes sorting and union operations more efficient.
-        }
-
+        /// <summary>
+        /// We must define GetHashCode() because we defined Equals() above, or else we get a warning message.
+        /// </summary>
+        public override int GetHashCode() => (int)Id;
     }
 
     ///<summary>Do not combine with SignalType, they must be seperate. Stored as string, safe to reorder enum values.</summary>
