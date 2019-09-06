@@ -66,7 +66,7 @@ namespace OpenDental {
 		}
 
 		private void gridProvProperties_CellLeave(object sender,ODGridClickEventArgs e) {
-			string newDoseSpotID=PIn.String(gridUserProperties.Rows[e.Row].Cells[e.Col].Text);
+			string newDoseSpotID=PIn.String(gridUserProperties.Rows[e.Row].Cells[e.Column].Text);
 			UserOdPref userPref=(UserOdPref)gridUserProperties.Rows[e.Row].Tag;
 			userPref.ValueString=newDoseSpotID;
 		}

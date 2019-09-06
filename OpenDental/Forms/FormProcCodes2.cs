@@ -1550,7 +1550,7 @@ namespace OpenDental{
 			if(!Security.IsAuthorized(Permissions.ProcCodeEdit)) {
 				return;
 			}
-			if(e.Col>3) {
+			if(e.Column>3) {
 				//Do nothing. All columns > 3 are editable (You cannot double click).
 				return;
 			}
@@ -1578,7 +1578,7 @@ namespace OpenDental{
 			long provNum=0;
 			long clinicNum=0;
 			Fee fee=null;
-			if(e.Col==4) {
+			if(e.Column==4) {
 				feeSched=_listFeeScheds[comboFeeSched1.SelectedIndex];
 				if(comboProvider1.SelectedIndex>0) {
 					provNum=_listProviders[comboProvider1.SelectedIndex-1].ProvNum;
@@ -1588,9 +1588,9 @@ namespace OpenDental{
 				}
 				fee=Fees.GetFee(codeNum,feeSched.FeeSchedNum,clinicNum,provNum,_listFees);
 			}
-			else if(e.Col==5) {
+			else if(e.Column==5) {
 				if(comboFeeSched2.SelectedIndex==0) {//It's on the "none" option
-					gridMain.Rows[e.Row].Cells[e.Col].Text="";
+					gridMain.Rows[e.Row].Cells[e.Column].Text="";
 					return;
 				}
 				feeSched=_listFeeScheds[comboFeeSched2.SelectedIndex-1];
@@ -1602,9 +1602,9 @@ namespace OpenDental{
 				}
 				fee=Fees.GetFee(codeNum,feeSched.FeeSchedNum,clinicNum,provNum,_listFees);
 			}
-			else if(e.Col==6) {
+			else if(e.Column==6) {
 				if(comboFeeSched3.SelectedIndex==0) {//It's on the "none" option
-					gridMain.Rows[e.Row].Cells[e.Col].Text="";
+					gridMain.Rows[e.Row].Cells[e.Column].Text="";
 					return;
 				}
 				feeSched=_listFeeScheds[comboFeeSched3.SelectedIndex-1];
@@ -1625,31 +1625,31 @@ namespace OpenDental{
 				feeAmtOld=fee.Amount.ToString("n");
 			}
 			if(!Security.IsAuthorized(Permissions.FeeSchedEdit)) { //Don't do anything if they don't have permission.
-				gridMain.Rows[e.Row].Cells[e.Col].Text=feeAmtOld;
+				gridMain.Rows[e.Row].Cells[e.Column].Text=feeAmtOld;
 				gridMain.Invalidate();//Causes the grid to redraw itself so that the old value comes back.
 				return;
 			}
-			string feeAmtNewStr=gridMain.Rows[e.Row].Cells[e.Col].Text;
+			string feeAmtNewStr=gridMain.Rows[e.Row].Cells[e.Column].Text;
 			double feeAmtNew=0;
 			//Attempt to parse the entered value for errors.
-			if(feeAmtNewStr!="" && !Double.TryParse(gridMain.Rows[e.Row].Cells[e.Col].Text,out feeAmtNew)) {
-				gridMain.SetSelected(new Point(e.Col,e.Row));
-				gridMain.Rows[e.Row].Cells[e.Col].Text=feeAmtOld;
+			if(feeAmtNewStr!="" && !Double.TryParse(gridMain.Rows[e.Row].Cells[e.Column].Text,out feeAmtNew)) {
+				gridMain.SetSelected(new Point(e.Column,e.Row));
+				gridMain.Rows[e.Row].Cells[e.Column].Text=feeAmtOld;
 				MessageBox.Show(Lan.g(this,"Please fix data entry error first."));
 				return;
 			}
 			if(Fees.IsFeeAmtEqual(fee,feeAmtNewStr) || !FeeL.CanEditFee(feeSched,provNum,clinicNum)) {
 				if(fee==null || fee.Amount==-1) {
-					gridMain.Rows[e.Row].Cells[e.Col].Text="";
+					gridMain.Rows[e.Row].Cells[e.Column].Text="";
 				}
 				else {
-					gridMain.Rows[e.Row].Cells[e.Col].Text=feeAmtOld;
+					gridMain.Rows[e.Row].Cells[e.Column].Text=feeAmtOld;
 				}
 				gridMain.Invalidate();
 				return;
 			}
 			if(feeAmtNewStr!="") {
-				gridMain.Rows[e.Row].Cells[e.Col].Text=feeAmtNew.ToString("n"); //Fix the number formatting and display it.
+				gridMain.Rows[e.Row].Cells[e.Column].Text=feeAmtNew.ToString("n"); //Fix the number formatting and display it.
 			}
 			if(feeSched.IsGlobal) { //Global fee schedules have only one fee so blindly insert/update the fee. There will be no more localized copy.
 				if(fee==null) { //Fee doesn't exist, insert

@@ -183,7 +183,7 @@ namespace OpenDental.User_Controls {
 			gridLists.EndUpdate();
 			gridPublicHealth.EndUpdate();
 			if(_selectedGrid != null && _selectedCell.Y != -1) {
-				_selectedGrid.Rows[_selectedCell.Y].ColorBackG=Color.LightCyan;
+				_selectedGrid.Rows[_selectedCell.Y].BackColor=Color.LightCyan;
 				if(_selectedCell.X < _selectedGrid.Columns.Count) {
 					_selectedGrid.SetSelected(_selectedCell);
 				}
@@ -199,7 +199,7 @@ namespace OpenDental.User_Controls {
 				//commit change before the new cell is selected to save the old cell's changes.
 				CommitChange();
 			}
-			_selectedCell.X=e.Col;
+			_selectedCell.X=e.Column;
 			_selectedCell.Y=e.Row;
 			_selectedGrid=(ODGrid)sender;
 			//this label makes sure the user always has some idea of what the selected report is, even if the DisplayName might be incomprehensible.

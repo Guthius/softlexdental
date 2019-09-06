@@ -333,7 +333,7 @@ namespace OpenDental {
 					row.Cells.Add(smsFromMobile.IsHidden?"X":"");//Hidden
 				}
 				if(selectedPatNum!=0 && smsFromMobile.PatNum==selectedPatNum) {
-					row.ColorBackG=_colorSelect;
+					row.BackColor=_colorSelect;
 				}
 				gridMessages.Rows.Add(row);
 			}
@@ -377,7 +377,7 @@ namespace OpenDental {
 						row.Cells.Add(smsToMobile.IsHidden?"X":"");//Hidden
 					}
 					if(selectedPatNum!=0 && smsToMobile.PatNum==selectedPatNum) {
-						row.ColorBackG=_colorSelect;
+						row.BackColor=_colorSelect;
 					}
 					gridMessages.Rows.Add(row);
 				}
@@ -692,7 +692,7 @@ namespace OpenDental {
 				else if(x.Tag is SmsToMobile) {
 					patNum=((SmsToMobile)x.Tag).PatNum;
 				}
-				x.ColorBackG=patNum!=0 && selectedPatNum==patNum ? _colorSelect : Color.White;
+				x.BackColor=patNum!=0 && selectedPatNum==patNum ? _colorSelect : Color.White;
 			});
 			gridMessages.Invalidate();
 			FillGridMessageThread();
@@ -893,7 +893,7 @@ namespace OpenDental {
 			bool isInvalidSelection=false;
 			for(int i=0;i<gridMessages.Rows.Count;i++) {
 				UI.ODGridRow row=gridMessages.Rows[i];
-				if(row.ColorBackG!=_colorSelect) { //Verify that the row the user appears to have selected is actually the selected row.
+				if(row.BackColor!=_colorSelect) { //Verify that the row the user appears to have selected is actually the selected row.
 					continue;
 				}
 				if(row.Tag is TextMessageGrouped) {

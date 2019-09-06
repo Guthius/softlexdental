@@ -210,21 +210,21 @@ namespace OpenDental {
 						row.Cells[dateIndex].Text=_listApptOthers[i].AptDateTime.ToString("d");
 						row.Cells[dateIndex+1].Text=_listApptOthers[i].AptDateTime.ToString("t");
 						if(_listApptOthers[i].AptDateTime < DateTime.Today) { //Past
-							row.ColorBackG=_listProgNoteColorDefs[11].Color;
+							row.BackColor=_listProgNoteColorDefs[11].Color;
 							row.ColorText=_listProgNoteColorDefs[10].Color;
 						}
 						else if(_listApptOthers[i].AptDateTime.Date==DateTime.Today.Date) { //Today
-							row.ColorBackG=_listProgNoteColorDefs[9].Color;
+							row.BackColor=_listProgNoteColorDefs[9].Color;
 							row.ColorText=_listProgNoteColorDefs[8].Color;
 							row.Cells[0].Text=Lan.g(this,"Today");
 						}
 						else if(_listApptOthers[i].AptDateTime > DateTime.Today) { //Future
-							row.ColorBackG=_listProgNoteColorDefs[13].Color;
+							row.BackColor=_listProgNoteColorDefs[13].Color;
 							row.ColorText=_listProgNoteColorDefs[12].Color;
 						}
 					}
 					else if(_listApptOthers[i].AptStatus==ApptStatus.Planned) { //show line for planned appt
-						row.ColorBackG=_listProgNoteColorDefs[17].Color;
+						row.BackColor=_listProgNoteColorDefs[17].Color;
 						row.ColorText=_listProgNoteColorDefs[16].Color;
 						string txt=Lan.g("enumApptStatus","Planned")+" ";
 						int plannedAptIdx=_listPlannedIncompletes.FindIndex(x => x.AptNum==_listApptOthers[i].AptNum);
@@ -254,12 +254,12 @@ namespace OpenDental {
 						row.Cells[0].Text=txt;
 					}
 					else if(_listApptOthers[i].AptStatus==ApptStatus.PtNote) {
-						row.ColorBackG=_listProgNoteColorDefs[19].Color;
+						row.BackColor=_listProgNoteColorDefs[19].Color;
 						row.ColorText=_listProgNoteColorDefs[18].Color;
 						row.Cells[0].Text=Lan.g("enumApptStatus","PtNote");
 					}
 					else if(_listApptOthers[i].AptStatus==ApptStatus.PtNoteCompleted) {
-						row.ColorBackG=_listProgNoteColorDefs[21].Color;
+						row.BackColor=_listProgNoteColorDefs[21].Color;
 						row.ColorText=_listProgNoteColorDefs[20].Color;
 						row.Cells[0].Text=Lan.g("enumApptStatus","PtNoteCompleted");
 					}
@@ -267,12 +267,12 @@ namespace OpenDental {
 						row.Cells[0].Text=Lan.g("enumApptStatus","Broken");
 						row.Cells[dateIndex].Text=_listApptOthers[i].AptDateTime.ToString("d");
 						row.Cells[dateIndex+1].Text=_listApptOthers[i].AptDateTime.ToString("t");
-						row.ColorBackG=_listProgNoteColorDefs[15].Color;
+						row.BackColor=_listProgNoteColorDefs[15].Color;
 						row.ColorText=_listProgNoteColorDefs[14].Color;
 					}
 					else if(_listApptOthers[i].AptStatus==ApptStatus.UnschedList) {
 						row.Cells[0].Text=Lan.g("enumApptStatus","UnschedList");
-						row.ColorBackG=_listProgNoteColorDefs[15].Color;
+						row.BackColor=_listProgNoteColorDefs[15].Color;
 						row.ColorText=_listProgNoteColorDefs[14].Color;
 					}
 				}

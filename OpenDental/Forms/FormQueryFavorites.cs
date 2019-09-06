@@ -360,7 +360,7 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
-			if(e.Col==1) {//Released Column
+			if(e.Column==1) {//Released Column
 				UserQuery query=gridMain.SelectedTag<UserQuery>();
 				query.IsReleased=(!query.IsReleased);
 				UserQueries.Update(query);

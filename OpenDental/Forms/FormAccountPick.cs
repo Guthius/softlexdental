@@ -99,7 +99,7 @@ namespace OpenDental
                 }
 
                 row.Tag = listAccounts[i];
-                row.ColorBackG = listAccounts[i].Color;
+                row.BackColor = listAccounts[i].Color;
 
                 accountsGrid.Rows.Add(row);
             }

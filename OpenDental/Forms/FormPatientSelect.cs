@@ -659,7 +659,7 @@ namespace OpenDental
 
         private void gridMain_CellClick(object sender, ODGridClickEventArgs e)
         {
-            ODGridCell gridCellCur = gridMain.Rows[e.Row].Cells[e.Col];
+            ODGridCell gridCellCur = gridMain.Rows[e.Row].Cells[e.Column];
             //Only grid cells with phone numbers are blue and underlined.
             if (gridCellCur.ColorText == Color.Blue && gridCellCur.Underline == true && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
             {

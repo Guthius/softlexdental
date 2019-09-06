@@ -168,7 +168,7 @@ namespace OpenDental.User_Controls {
 
 		private void gridOptions_CellClick(object sender,ODGridClickEventArgs e) {
 			//Cell coordinates are [e.Row][e.Col]
-			switch(e.Col) {
+			switch(e.Column) {
 				case LAUNCHWF_COL: //This column is not checkable so just return and don't allow anything.
 					return;
 				case VERIFYTXT_COL:
@@ -179,9 +179,9 @@ namespace OpenDental.User_Controls {
 					break;
 				default: break;
 			}
-			string cellTextCur=gridOptions.Rows[e.Row].Cells[e.Col].Text;
+			string cellTextCur=gridOptions.Rows[e.Row].Cells[e.Column].Text;
 			string cellTextNew=(cellTextCur=="X" ? "" : "X");
-			gridOptions.Rows[e.Row].Cells[e.Col].Text=cellTextNew;
+			gridOptions.Rows[e.Row].Cells[e.Column].Text=cellTextNew;
 			gridOptions.Refresh();
 		}
 	}

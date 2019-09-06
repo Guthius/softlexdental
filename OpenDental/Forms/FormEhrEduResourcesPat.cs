@@ -88,7 +88,7 @@ namespace OpenDental
 
         void ResourcesGrid_CellClick(object sender, ODGridClickEventArgs e)
         {
-            if (e.Col != 1) return;
+            if (e.Column != 1) return;
 
             bool didPrint;
             try

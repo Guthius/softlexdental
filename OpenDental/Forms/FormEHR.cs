@@ -168,11 +168,11 @@ namespace OpenDental {
 				}
 				if(listMu[i].Met==MuMet.True) {
 					row.Cells.Add("X");
-					row.ColorBackG=Color.FromArgb(178,255,178);
+					row.BackColor=Color.FromArgb(178,255,178);
 				}
 				else if(listMu[i].Met==MuMet.NA) {
 					row.Cells.Add("N/A");
-					row.ColorBackG=Color.FromArgb(178,255,178);
+					row.BackColor=Color.FromArgb(178,255,178);
 				}
 				else {
 					row.Cells.Add("");
@@ -187,7 +187,7 @@ namespace OpenDental {
 
 		private void gridMu_CellClick(object sender,ODGridClickEventArgs e) {
 			FormMedical FormMed;
-			if(e.Col==3) {
+			if(e.Column==3) {
 				switch(listMu[e.Row].MeasureType) {
 					case EhrMeasureType.ProblemList:
 						FormMed=new FormMedical(PatNotCur,PatCur,"tabProblems");
@@ -422,7 +422,7 @@ namespace OpenDental {
 						break;
 				}
 			}
-			if(e.Col==4) {
+			if(e.Column==4) {
 				switch(listMu[e.Row].MeasureType) {
 					case EhrMeasureType.MedReconcile:
 						int compare=EhrMeasures.CompareReferralsToReconciles(PatNum);

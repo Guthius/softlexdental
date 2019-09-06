@@ -31,14 +31,14 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
-			if(e.Col<2) {
+			if(e.Column<2) {
 				return;//name and group name columns.
 			}
 			for(int i=0;i<_listCdsPermissions.Count;i++) {
 				if(_listCdsPermissions[i].CDSPermissionNum!=(long)gridMain.Rows[e.Row].Tag) {
 					continue;
 				}
-				switch(e.Col){
+				switch(e.Column){
 					case 0:
 					case 1:
 						//should never happen.

@@ -1,3 +1,6 @@
+using CodeBase;
+using OpenDentBusiness;
+using PdfSharp.Drawing;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,23 +8,23 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Drawing.Text;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using CodeBase;
-using OpenDentBusiness;
-using PdfSharp.Drawing;
 
 namespace OpenDental.UI
 {
-    ///<summary>Used for Cell specific events.</summary>
+    /// <summary>
+    /// Used for Cell specific events.
+    /// </summary>
     public delegate void ODGridClickEventHandler(object sender, ODGridClickEventArgs e);
-    ///<summary>Used for Cell specific events.</summary>
+
+    /// <summary>
+    /// Used for Cell specific events.
+    /// </summary>
     public delegate void ODGridKeyEventHandler(object sender, ODGridKeyEventArgs e);
 
     /// <summary>
@@ -252,7 +255,7 @@ namespace OpenDental.UI
         ///<summary>These widths will only vary from the columns[i].ColWidth when ColWidth is 0 or negative (dynamic).</summary>
         private List<int> _listCurColumnWidths = new List<int>();
 
-        private Action _fillGrid = null;
+        private Action fillGridAction = null;
 
         ///<summary>Regular expresion used to help identify URLs in the grid. This is not all encompassing, there will be URLs that do not match 
         ///this but this should work for 99%. May match URLs inside of parenthesis. These should be trimmed on both sides.</summary>
@@ -377,10 +380,7 @@ namespace OpenDental.UI
             }
         }
 
-        private void ODGrid_ParentFormClosing(object sender, EventArgs e)
-        {
-            QuitThread();
-        }
+        private void ODGrid_ParentFormClosing(object sender, EventArgs e) => QuitThread();
 
         protected override void OnResize(EventArgs e)
         {
@@ -403,7 +403,7 @@ namespace OpenDental.UI
         public void AddRow(params string[] cells)
         {
             var row = new ODGridRow();
-            foreach (string cell in cells)
+            foreach (var cell in cells)
             {
                 row.Cells.Add(cell);
             }
@@ -1373,7 +1373,7 @@ namespace OpenDental.UI
             //selected row color
             if (selectedIndices.Contains(rowIndex))
             {
-                g.FillRectangle(new SolidBrush(GetSelectedColor(rowsFiltered[rowIndex].ColorBackG, SelectedRowColor)),
+                g.FillRectangle(new SolidBrush(GetSelectedColor(rowsFiltered[rowIndex].BackColor, SelectedRowColor)),
                     1,
                     -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + 1,
                     GridW,
@@ -1382,9 +1382,9 @@ namespace OpenDental.UI
 
 
             //colored row background
-            else if (rowsFiltered[rowIndex].ColorBackG != Color.White)
+            else if (rowsFiltered[rowIndex].BackColor != Color.White)
             {
-                g.FillRectangle(new SolidBrush(rowsFiltered[rowIndex].ColorBackG),
+                g.FillRectangle(new SolidBrush(rowsFiltered[rowIndex].BackColor),
                     1,
                     -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + 1,
                     GridW,
@@ -1394,7 +1394,7 @@ namespace OpenDental.UI
             //normal row color
             else
             {//need to draw over the gray background
-                g.FillRectangle(new SolidBrush(rowsFiltered[rowIndex].ColorBackG),
+                g.FillRectangle(new SolidBrush(rowsFiltered[rowIndex].BackColor),
                     1,
                     -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + 1,
                     GridW,//this is a really simple width value that always works well
@@ -1423,12 +1423,12 @@ namespace OpenDental.UI
                         (SelectedRowColor.B + cell.CellColor.B) / 2);
                 }
                 //colored row background
-                else if (rowsFiltered[rowIndex].ColorBackG != Color.White)
+                else if (rowsFiltered[rowIndex].BackColor != Color.White)
                 {
                     ColorCell = Color.FromArgb(
-                        (rowsFiltered[rowIndex].ColorBackG.R + cell.CellColor.R) / 2,
-                        (rowsFiltered[rowIndex].ColorBackG.G + cell.CellColor.G) / 2,
-                        (rowsFiltered[rowIndex].ColorBackG.B + cell.CellColor.B) / 2);
+                        (rowsFiltered[rowIndex].BackColor.R + cell.CellColor.R) / 2,
+                        (rowsFiltered[rowIndex].BackColor.G + cell.CellColor.G) / 2,
+                        (rowsFiltered[rowIndex].BackColor.B + cell.CellColor.B) / 2);
                 }
                 //normal row color
                 else
@@ -2101,9 +2101,9 @@ namespace OpenDental.UI
                     Rows[rowI].RowHeight + Rows[rowI].NoteHeight - 1);
             }
             //colored row background
-            else if (Rows[rowI].ColorBackG != Color.White)
+            else if (Rows[rowI].BackColor != Color.White)
             {
-                g.FillRectangle(new SolidBrush(Rows[rowI].ColorBackG),
+                g.FillRectangle(new SolidBrush(Rows[rowI].BackColor),
                     x + 1,
                     y - vScroll.Value + 1,//+titleHeight+headerHeight+rows[rowI].RowLoc+1,
                     GridW,
@@ -2112,7 +2112,7 @@ namespace OpenDental.UI
             //normal row color
             else
             {//need to draw over the gray background
-                g.FillRectangle(new SolidBrush(Rows[rowI].ColorBackG),
+                g.FillRectangle(new SolidBrush(Rows[rowI].BackColor),
                     x + 1,
                     y - vScroll.Value + 1,//+titleHeight+headerHeight+rows[rowI].RowLoc+1,
                     GridW,//this is a really simple width value that always works well
@@ -2353,37 +2353,37 @@ namespace OpenDental.UI
             if (selectedIndices.Contains(rowI))
             {
                 g.DrawRectangle(new XSolidBrush(SelectedRowColor),
-                    p(x + 1),
-                    p(y - vScroll.Value + 1),//+titleHeight+headerHeight+rows[rowI].RowLoc+1,
-                    p(GridW),
-                    p(Rows[rowI].RowHeight + Rows[rowI].NoteHeight - 1));
+                    Px(x + 1),
+                    Px(y - vScroll.Value + 1),//+titleHeight+headerHeight+rows[rowI].RowLoc+1,
+                    Px(GridW),
+                    Px(Rows[rowI].RowHeight + Rows[rowI].NoteHeight - 1));
             }
             //colored row background
-            else if (Rows[rowI].ColorBackG != Color.White)
+            else if (Rows[rowI].BackColor != Color.White)
             {
-                g.DrawRectangle(new XSolidBrush(Rows[rowI].ColorBackG),
-                    p(x + 1),
-                    p(y - vScroll.Value + 1),//+titleHeight+headerHeight+rows[rowI].RowLoc+1,
-                    p(GridW),//this is a really simple width value that always works well
-                    p(Rows[rowI].RowHeight + Rows[rowI].NoteHeight - 1));
+                g.DrawRectangle(new XSolidBrush(Rows[rowI].BackColor),
+                    Px(x + 1),
+                    Px(y - vScroll.Value + 1),//+titleHeight+headerHeight+rows[rowI].RowLoc+1,
+                    Px(GridW),//this is a really simple width value that always works well
+                    Px(Rows[rowI].RowHeight + Rows[rowI].NoteHeight - 1));
             }
             //normal row color
             else
             {//need to draw over the gray background
-                g.DrawRectangle(new XSolidBrush(Rows[rowI].ColorBackG),
-                    p(x + 1),
-                    p(y - vScroll.Value + 1),//+titleHeight+headerHeight+rows[rowI].RowLoc+1,
-                    p(GridW),//this is a really simple width value that always works well
-                    p(Rows[rowI].RowHeight + Rows[rowI].NoteHeight - 1));
+                g.DrawRectangle(new XSolidBrush(Rows[rowI].BackColor),
+                    Px(x + 1),
+                    Px(y - vScroll.Value + 1),//+titleHeight+headerHeight+rows[rowI].RowLoc+1,
+                    Px(GridW),//this is a really simple width value that always works well
+                    Px(Rows[rowI].RowHeight + Rows[rowI].NoteHeight - 1));
             }
             if (selectionMode == GridSelectionMode.OneCell && SelectedCell.X != -1 && SelectedCell.Y != -1
             && SelectedCell.Y == rowI)
             {
                 g.DrawRectangle(new XSolidBrush(SelectedRowColor),
-                    p(x - hScroll.Value + 1 + ColPos[SelectedCell.X]),
-                    p(y - vScroll.Value + 1),//+titleHeight+headerHeight+rows[rowI].RowLoc+1,
-                    p(_listCurColumnWidths[SelectedCell.X]),
-                    p(Rows[rowI].RowHeight + Rows[rowI].NoteHeight - 1));
+                    Px(x - hScroll.Value + 1 + ColPos[SelectedCell.X]),
+                    Px(y - vScroll.Value + 1),//+titleHeight+headerHeight+rows[rowI].RowLoc+1,
+                    Px(_listCurColumnWidths[SelectedCell.X]),
+                    Px(Rows[rowI].RowHeight + Rows[rowI].NoteHeight - 1));
             }
             XPen gridPen = new XPen(ODColorTheme.GridLinePen);
             //lines for note section
@@ -2393,17 +2393,17 @@ namespace OpenDental.UI
                 if (NoteSpanStart != 0)
                 {
                     g.DrawLine(gridPen,
-                        p(x - hScroll.Value + 1 + ColPos[NoteSpanStart]),
-                        p(y - vScroll.Value + 1 + Rows[rowI].RowHeight),//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI],
-                        p(x - hScroll.Value + 1 + ColPos[NoteSpanStart]),
-                        p(y - vScroll.Value + 1 + Rows[rowI].RowHeight + Rows[rowI].NoteHeight));//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI]+rows[rowI].NoteHeight);
+                        Px(x - hScroll.Value + 1 + ColPos[NoteSpanStart]),
+                        Px(y - vScroll.Value + 1 + Rows[rowI].RowHeight),//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI],
+                        Px(x - hScroll.Value + 1 + ColPos[NoteSpanStart]),
+                        Px(y - vScroll.Value + 1 + Rows[rowI].RowHeight + Rows[rowI].NoteHeight));//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI]+rows[rowI].NoteHeight);
                 }
                 //Horizontal line which divides the main part of the row from the notes section of the row
                 g.DrawLine(gridPen,
-                    p(x - hScroll.Value + 1 + ColPos[0] + 1),
-                    p(y - vScroll.Value + 1 + Rows[rowI].RowHeight),//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI],
-                    p(x - hScroll.Value + 1 + ColPos[Columns.Count - 1] + _listCurColumnWidths[Columns.Count - 1]),
-                    p(y - vScroll.Value + 1 + Rows[rowI].RowHeight));//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI]);
+                    Px(x - hScroll.Value + 1 + ColPos[0] + 1),
+                    Px(y - vScroll.Value + 1 + Rows[rowI].RowHeight),//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI],
+                    Px(x - hScroll.Value + 1 + ColPos[Columns.Count - 1] + _listCurColumnWidths[Columns.Count - 1]),
+                    Px(y - vScroll.Value + 1 + Rows[rowI].RowHeight));//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI]);
             }
             XPen lowerPen = new XPen(ODColorTheme.GridLinePen);
             if (rowI == Rows.Count - 1)
@@ -2423,35 +2423,35 @@ namespace OpenDental.UI
                 if (rowI == 0)
                 {
                     g.DrawLine(gridPen,
-                        p(x - hScroll.Value + ColPos[i] + _listCurColumnWidths[i]),
-                        p(y - vScroll.Value + 1),//+rows[rowI].RowLoc,//+titleHeight+headerHeight+rows[rowI].RowLoc,
-                        p(x - hScroll.Value + ColPos[i] + _listCurColumnWidths[i]),
-                        p(y - vScroll.Value + 1 + Rows[rowI].RowHeight));//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI]);
+                        Px(x - hScroll.Value + ColPos[i] + _listCurColumnWidths[i]),
+                        Px(y - vScroll.Value + 1),//+rows[rowI].RowLoc,//+titleHeight+headerHeight+rows[rowI].RowLoc,
+                        Px(x - hScroll.Value + ColPos[i] + _listCurColumnWidths[i]),
+                        Px(y - vScroll.Value + 1 + Rows[rowI].RowHeight));//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI]);
                 }
                 else
                 {
                     g.DrawLine(gridPen,
-                        p(x - hScroll.Value + ColPos[i] + _listCurColumnWidths[i]),
-                        p(y - vScroll.Value + 1),//+rows[rowI].RowLoc,//+titleHeight+headerHeight+rows[rowI].RowLoc+1,
-                        p(x - hScroll.Value + ColPos[i] + _listCurColumnWidths[i]),
-                        p(y - vScroll.Value + 1 + Rows[rowI].RowHeight));//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI]);
+                        Px(x - hScroll.Value + ColPos[i] + _listCurColumnWidths[i]),
+                        Px(y - vScroll.Value + 1),//+rows[rowI].RowLoc,//+titleHeight+headerHeight+rows[rowI].RowLoc+1,
+                        Px(x - hScroll.Value + ColPos[i] + _listCurColumnWidths[i]),
+                        Px(y - vScroll.Value + 1 + Rows[rowI].RowHeight));//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI]);
                 }
                 //lower horizontal gridline
                 if (i == 0)
                 {
                     g.DrawLine(lowerPen,
-                        p(x - hScroll.Value + ColPos[i]),
-                        p(y - vScroll.Value + 1 + Rows[rowI].RowHeight + Rows[rowI].NoteHeight),//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI]+rows[rowI].NoteHeight,
-                        p(x - hScroll.Value + ColPos[i] + _listCurColumnWidths[i]),
-                        p(y - vScroll.Value + 1 + Rows[rowI].RowHeight + Rows[rowI].NoteHeight));//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI]+rows[rowI].NoteHeight);
+                        Px(x - hScroll.Value + ColPos[i]),
+                        Px(y - vScroll.Value + 1 + Rows[rowI].RowHeight + Rows[rowI].NoteHeight),//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI]+rows[rowI].NoteHeight,
+                        Px(x - hScroll.Value + ColPos[i] + _listCurColumnWidths[i]),
+                        Px(y - vScroll.Value + 1 + Rows[rowI].RowHeight + Rows[rowI].NoteHeight));//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI]+rows[rowI].NoteHeight);
                 }
                 else
                 {
                     g.DrawLine(lowerPen,
-                        p(x - hScroll.Value + ColPos[i] + 1),
-                        p(y - vScroll.Value + 1 + Rows[rowI].RowHeight + Rows[rowI].NoteHeight),//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI]+rows[rowI].NoteHeight,
-                        p(x - hScroll.Value + ColPos[i] + _listCurColumnWidths[i]),
-                        p(y - vScroll.Value + 1 + Rows[rowI].RowHeight + Rows[rowI].NoteHeight));//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI]+rows[rowI].NoteHeight);
+                        Px(x - hScroll.Value + ColPos[i] + 1),
+                        Px(y - vScroll.Value + 1 + Rows[rowI].RowHeight + Rows[rowI].NoteHeight),//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI]+rows[rowI].NoteHeight,
+                        Px(x - hScroll.Value + ColPos[i] + _listCurColumnWidths[i]),
+                        Px(y - vScroll.Value + 1 + Rows[rowI].RowHeight + Rows[rowI].NoteHeight));//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI]+rows[rowI].NoteHeight);
                 }
                 //text
                 if (Rows[rowI].Cells.Count - 1 < i)
@@ -2496,7 +2496,7 @@ namespace OpenDental.UI
                         cellW += 2;
                     }
                 }
-                textRect = new XRect(p(horizontal + adjH), p(vertical), p(cellW), p(cellH));
+                textRect = new XRect(Px(horizontal + adjH), Px(vertical), Px(cellW), Px(cellH));
                 if (Rows[rowI].Cells[i].ColorText == Color.Empty)
                 {
                     textBrush = new XSolidBrush(Rows[rowI].ColorText);
@@ -2564,10 +2564,10 @@ namespace OpenDental.UI
                 }
                 textBrush = new XSolidBrush(Rows[rowI].ColorText);
                 textRect = new XRect(
-                    p(x - hScroll.Value + 1 + ColPos[NoteSpanStart] + 1),
-                    p(y - vScroll.Value + 1 + Rows[rowI].RowHeight + 1),//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI]+1,
-                    p(ColPos[NoteSpanStop] + _listCurColumnWidths[NoteSpanStop] - ColPos[NoteSpanStart]),
-                    p(Rows[rowI].NoteHeight));
+                    Px(x - hScroll.Value + 1 + ColPos[NoteSpanStart] + 1),
+                    Px(y - vScroll.Value + 1 + Rows[rowI].RowHeight + 1),//+titleHeight+headerHeight+rows[rowI].RowLoc+rowHeights[rowI]+1,
+                    Px(ColPos[NoteSpanStop] + _listCurColumnWidths[NoteSpanStop] - ColPos[NoteSpanStart]),
+                    Px(Rows[rowI].NoteHeight));
                 _xAlign = XStringAlignment.Near;
                 DrawStringX(g, Rows[rowI].Note, cellFont, textBrush, textRect, _xAlign);
             }
@@ -2579,11 +2579,11 @@ namespace OpenDental.UI
                 pen = new XPen(Color.Black);
             }
             //Draw line from LL to UL to UR to LR. top three sides of a rectangle.
-            g.DrawLine(pen, p(x), p(y), p(x), p(y + Rows[rowI].RowHeight + Rows[rowI].NoteHeight + 1));//left side line
-            g.DrawLine(pen, p(x + Width), p(y), p(x + Width), p(y + Rows[rowI].RowHeight + Rows[rowI].NoteHeight + 1));//right side line
+            g.DrawLine(pen, Px(x), Px(y), Px(x), Px(y + Rows[rowI].RowHeight + Rows[rowI].NoteHeight + 1));//left side line
+            g.DrawLine(pen, Px(x + Width), Px(y), Px(x + Width), Px(y + Rows[rowI].RowHeight + Rows[rowI].NoteHeight + 1));//right side line
             if (isBottom)
             {
-                g.DrawLine(pen, p(x), p(y + Rows[rowI].RowHeight + Rows[rowI].NoteHeight) + 1, p(x + Width), p(y + Rows[rowI].RowHeight + Rows[rowI].NoteHeight + 1));//bottom line.
+                g.DrawLine(pen, Px(x), Px(y + Rows[rowI].RowHeight + Rows[rowI].NoteHeight) + 1, Px(x + Width), Px(y + Rows[rowI].RowHeight + Rows[rowI].NoteHeight + 1));//bottom line.
             }
             tempFont.Dispose();
         }
@@ -2620,7 +2620,7 @@ namespace OpenDental.UI
             Color cTitleText = ODColorTheme.GridTextBrush.Color;
             LinearGradientBrush brushTitleBackground = new LinearGradientBrush(new Rectangle(x, y, Width, titleHeight), cTitleTop, cTitleBottom, LinearGradientMode.Vertical);
             XSolidBrush brushTitleText = new XSolidBrush(cTitleText);
-            g.DrawRectangle(brushTitleBackground, p(x), p(y), p(Width), p(titleHeight));
+            g.DrawRectangle(brushTitleBackground, Px(x), Px(y), Px(Width), Px(titleHeight));
             XFont xTitleFont = new XFont(titleFont.FontFamily.ToString(), titleFont.Size, XFontStyle.Bold);
             //g.DrawString(title,titleFont,brushTitleText,p((float)x+(float)(Width/2-g.MeasureString(title,titleFont).Width/2)),p(y+2));
             DrawStringX(g, title, xTitleFont, brushTitleText, new XRect((float)x + (float)(Width / 2), y, 100, 100), XStringAlignment.Center);
@@ -2709,23 +2709,23 @@ namespace OpenDental.UI
             Color cTitleBottom = Color.FromArgb(213, 213, 223);
             Color cTitleText = Color.Black;
             Color cTitleBackG = Color.LightGray;
-            g.DrawRectangle(new XSolidBrush(cTitleBackG), p(x), p(y), p(Width), p(HeaderHeight));//background
-            g.DrawLine(new XPen(Color.FromArgb(102, 102, 122)), p(x), p(y), p(x + Width), p(y));//line between title and headers
+            g.DrawRectangle(new XSolidBrush(cTitleBackG), Px(x), Px(y), Px(Width), Px(HeaderHeight));//background
+            g.DrawLine(new XPen(Color.FromArgb(102, 102, 122)), Px(x), Px(y), Px(x + Width), Px(y));//line between title and headers
             XFont xHeaderFont = new XFont(titleFont.FontFamily.Name.ToString(), titleFont.Size, XFontStyle.Bold);
             for (int i = 0; i < Columns.Count; i++)
             {
                 if (i != 0)
                 {
-                    g.DrawLine(new XPen(cOutline), p(x + (-hScroll.Value + ColPos[i])), p(y),
-                        p(x + (-hScroll.Value + ColPos[i])), p(y + HeaderHeight));
+                    g.DrawLine(new XPen(cOutline), Px(x + (-hScroll.Value + ColPos[i])), Px(y),
+                        Px(x + (-hScroll.Value + ColPos[i])), Px(y + HeaderHeight));
                 }
                 float xFloat = (float)x + (float)(-hScroll.Value + ColPos[i] + _listCurColumnWidths[i] / 2);//for some reason visual studio would not allow this statement within the DrawString Below.
-                DrawStringX(g, Columns[i].Heading, xHeaderFont, XBrushes.Black, new XRect(p(xFloat), p(y - 3), 100, 100), XStringAlignment.Center);
+                DrawStringX(g, Columns[i].Heading, xHeaderFont, XBrushes.Black, new XRect(Px(xFloat), Px(y - 3), 100, 100), XStringAlignment.Center);
             }//end for columns.Count
              //Outline the Title
             XPen pen = new XPen(cOutline);
-            g.DrawRectangle(pen, p(x), p(y), p(Width), p(HeaderHeight));
-            g.DrawLine(new XPen(cOutline), p(x), p(y + HeaderHeight), p(x + Width), p(y + HeaderHeight));
+            g.DrawRectangle(pen, Px(x), Px(y), Px(Width), Px(HeaderHeight));
+            g.DrawLine(new XPen(cOutline), Px(x), Px(y + HeaderHeight), Px(x + Width), Px(y + HeaderHeight));
         }
 
         ///<summary>(Not used for sheet printing) If there are more pages to print, it returns -1.  If this is the last page, it returns the yPos of where the printing stopped.  Graphics will be paper, pageNumber resets some class level variables at page 0, bounds are used to contain the grid drawing, and marginTopFirstPage leaves room so as to not overwrite the title and subtitle.</summary>
@@ -4326,7 +4326,7 @@ namespace OpenDental.UI
                 editBox = editTextBox;
             }
             //If the cell's color is set manually, that color will also show up for this EditBox.
-            editBox.BackColor = Rows[SelectedCell.Y].ColorBackG;
+            editBox.BackColor = Rows[SelectedCell.Y].BackColor;
             editBox.Font = CellFont;
             editBox.Text = Rows[SelectedCell.Y].Cells[SelectedCell.X].Text;
             editBox.TextChanged += new EventHandler(editBox_TextChanged);
@@ -5166,7 +5166,7 @@ namespace OpenDental.UI
             Graphics g = Graphics.FromImage(new Bitmap(100, 100));//only used for measurements.
             int topPad = 0;// 2;
             int rightPad = 5;//helps get measurements better.
-            double scaleToPix = 1d / p(1);
+            double scaleToPix = 1d / Px(1);
             //There are two coordinate systems here: pixels (used by us) and points (used by PdfSharp).
             //MeasureString and ALL related measurement functions must use pixels.
             //DrawString is the ONLY function that uses points.
@@ -5241,33 +5241,20 @@ namespace OpenDental.UI
             return 1.05f;
         }
 
+        /// <summary>
+        /// Converts pixels used by us to points used by PdfSharp.
+        /// </summary>
+        private static double Px(int pixels) => XUnit.FromInch(pixels / 100d).Point;
 
-
-        ///<summary>Converts pixels used by us to points used by PdfSharp.</summary>
-        private static double p(int pixels)
-        {
-            XUnit xunit = XUnit.FromInch((double)pixels / 100d);//100 ppi
-            return xunit.Point;
-            //XUnit.FromInch((double)pixels/100);
-        }
-
-        ///<summary>Converts pixels used by us to points used by PdfSharp.</summary>
-        private static double p(float pixels)
-        {
-            XUnit xunit = XUnit.FromInch((double)pixels / 100d);//100 ppi
-            return xunit.Point;
-        }
+        /// <summary>
+        /// Converts pixels used by us to points used by PdfSharp.
+        /// </summary>
+        private static double Px(float pixels) => XUnit.FromInch(pixels / 100d).Point;
 
         public delegate void DelegateClickListener();
 
-        public void SetFillGrid(Action action)
-        {
-            _fillGrid = action;
-        }
+        public void SetFillGrid(Action action) => fillGridAction = action;
 
-        public void FillGrid()
-        {
-            _fillGrid?.Invoke();
-        }
+        public void FillGrid() => fillGridAction?.Invoke();
     }
 }

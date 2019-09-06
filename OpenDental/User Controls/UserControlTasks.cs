@@ -1026,7 +1026,7 @@ namespace OpenDental {
 						row.Cells.Add(dateStr+objDesc+_listTasks[i].Descript+notes);
 					}
 				}
-				row.ColorBackG=Defs.GetColor(DefinitionCategory.TaskPriorities,_listTasks[i].PriorityDefNum);//No need to do any text detection for triage priorities, we'll just use the task priority colors.
+				row.BackColor=Defs.GetColor(DefinitionCategory.TaskPriorities,_listTasks[i].PriorityDefNum);//No need to do any text detection for triage priorities, we'll just use the task priority colors.
 				row.Tag=_listTasks[i];
 				gridMain.Rows.Add(row);
 				if(_clickedTask is Task && _listTasks[i].TaskNum==_clickedTask.TaskNum) {//_clickedTask can be a TaskList
@@ -2091,20 +2091,20 @@ namespace OpenDental {
 		///column indexes into class-wide private varaibles.  This way we will have access to the index without performing any logic.
 		///Additionally, each variable could be set to -1 when the column is not present.</summary>
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(e.Col==0) {//check box column
+			if(e.Column==0) {//check box column
 				//no longer allow double click on checkbox, because it's annoying.
 				return;
 			}
-			if(tabContr.SelectedTab==tabNew && e.Col==2 && Preference.GetBool(PreferenceName.TasksNewTrackedByUser)) {//+/- column (an index varaible would help)
+			if(tabContr.SelectedTab==tabNew && e.Column==2 && Preference.GetBool(PreferenceName.TasksNewTrackedByUser)) {//+/- column (an index varaible would help)
 				return;//Don't double click on expand column, because it already has a single click functionality.
 			}
-			else if(tabContr.SelectedTab==tabNew && e.Col==3 && !Preference.GetBool(PreferenceName.TasksNewTrackedByUser)) {//ST column (an index varaible would help)
+			else if(tabContr.SelectedTab==tabNew && e.Column==3 && !Preference.GetBool(PreferenceName.TasksNewTrackedByUser)) {//ST column (an index varaible would help)
 				return;//Don't double click on ST column.
 			}
-			else if(tabContr.SelectedTab==tabNew && e.Col==4 && !Preference.GetBool(PreferenceName.TasksNewTrackedByUser)) {//Job column (an index varaible would help)
+			else if(tabContr.SelectedTab==tabNew && e.Column==4 && !Preference.GetBool(PreferenceName.TasksNewTrackedByUser)) {//Job column (an index varaible would help)
 				return;//Don't double click on Job column.
 			}
-			else if(e.Col==1) {//Task List column (an index varaible would help)
+			else if(e.Column==1) {//Task List column (an index varaible would help)
 				return;//Don't double click on expand column
 			}
 			if(e.Row >= _listTaskLists.Count) {//is task
@@ -2128,7 +2128,7 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
-			int clickedCol=e.Col;
+			int clickedCol=e.Column;
 			if(e.Button!=MouseButtons.Left) {
 				return;
 			}

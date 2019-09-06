@@ -344,7 +344,7 @@ namespace OpenDental
 				{
 					row.ColorLborder=Color.Black;
 				}
-				row.ColorBackG=Color.FromArgb(PIn.Int(table.Rows[i]["color"].ToString()));
+				row.BackColor=Color.FromArgb(PIn.Int(table.Rows[i]["color"].ToString()));
 				gridMain.Rows.Add(row);
 			}
 			/*for(int i=0;i<Accounts.ListLong.Length;i++){

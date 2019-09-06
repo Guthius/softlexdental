@@ -846,7 +846,7 @@ namespace OpenDental
                     row.Cells.Add(_tableComms.Rows[i]["Note"].ToString());
                     if (_tableComms.Rows[i]["CommType"].ToString() == Commlogs.GetTypeAuto(CommItemTypeAuto.APPT).ToString())
                     {
-                        row.ColorBackG = listMiscColorDefs[7].Color;
+                        row.BackColor = listMiscColorDefs[7].Color;
                     }
                 }
                 else if (PIn.Long(_tableComms.Rows[i]["EmailMessageNum"].ToString()) > 0)
@@ -1414,7 +1414,7 @@ namespace OpenDental
 
         private void gridPatient_CellClick(object sender, ODGridClickEventArgs e)
         {
-            ODGridCell gridCellCur = gridPatient.Rows[e.Row].Cells[e.Col];
+            ODGridCell gridCellCur = gridPatient.Rows[e.Row].Cells[e.Column];
             //Only grid cells with phone numbers are blue and underlined.
             if (gridCellCur.ColorText == System.Drawing.Color.Blue && gridCellCur.Underline == true && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
             {
@@ -2373,10 +2373,10 @@ namespace OpenDental
                         row.ColorText = listProgNoteColorDefs[22].Color;
                         break;
                 }
-                row.ColorBackG = System.Drawing.Color.White;
+                row.BackColor = System.Drawing.Color.White;
                 if (proc.ProcDate.Date == DateTime.Today)
                 {
-                    row.ColorBackG = listMiscColorDefs[6].Color;
+                    row.BackColor = listMiscColorDefs[6].Color;
                 }
                 gridProg.Rows.Add(row);
             }

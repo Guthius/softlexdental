@@ -115,7 +115,7 @@ namespace OpenDental.User_Controls.SetupWizard {
 			if(_blink > 5) {
 				pictureAdd.Visible=true;
 				foreach(ODGridRow rowCur in gridMain.Rows) {
-					rowCur.ColorBackG=OpenDental.SetupWizard.GetColor(ODSetupStatus.NeedsAttention);
+					rowCur.BackColor=OpenDental.SetupWizard.GetColor(ODSetupStatus.NeedsAttention);
 				}
 				gridMain.Invalidate();
 				timer1.Stop();
@@ -123,7 +123,7 @@ namespace OpenDental.User_Controls.SetupWizard {
 			}
 			pictureAdd.Visible=!pictureAdd.Visible;
 			foreach(ODGridRow rowCur in gridMain.Rows) {
-				rowCur.ColorBackG=rowCur.ColorBackG==Color.White?OpenDental.SetupWizard.GetColor(ODSetupStatus.NeedsAttention):Color.White;
+				rowCur.BackColor=rowCur.BackColor==Color.White?OpenDental.SetupWizard.GetColor(ODSetupStatus.NeedsAttention):Color.White;
 			}
 			gridMain.Invalidate();
 			_blink++;

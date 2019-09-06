@@ -111,7 +111,7 @@ namespace OpenDental {
 			if(!CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowInfobutton) {//Security.IsAuthorized(Permissions.EhrInfoButton,true)) {
 				return;
 			}
-			if(e.Col!=0) {
+			if(e.Column!=0) {
 				return;
 			}
 			List<KnowledgeRequest> listKnowledgeRequests=EhrTriggers.ConvertToKnowledgeRequests(Snomeds.GetByCode(gridMain.Rows[e.Row].Cells[1].Text));

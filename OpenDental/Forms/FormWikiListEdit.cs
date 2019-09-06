@@ -184,14 +184,14 @@ namespace OpenDental
                 bool isScrollSet = false;
                 for (int i = 0; i < listDataTable.Rows.Count; i++)
                 {
-                    itemsGrid.Rows[i].ColorBackG = Color.White;
+                    itemsGrid.Rows[i].BackColor = Color.White;
                     List<string> listCellVals = listDataTable.Rows[i].ItemArray.Select(x => x.ToString().ToUpper()).ToList();
                     foreach (string searchWord in searchTerms)
                     {
                         //If any of the cell values contains the current search word, color the row yellow and move on.
                         if (listCellVals.Any(x => x.Contains(searchWord.ToUpper())))
                         {
-                            itemsGrid.Rows[i].ColorBackG = Color.Yellow;
+                            itemsGrid.Rows[i].BackColor = Color.Yellow;
                             if (!isScrollSet)
                             {//scroll to the first match in the list.
                                 itemsGrid.ScrollToIndex(i);
@@ -506,7 +506,7 @@ namespace OpenDental
                 {
                     if (itemsGrid.Rows[i].Cells[0].Text == itemNum.ToString())
                     {
-                        itemsGrid.Rows[i].ColorBackG = Color.FromArgb(255, 255, 128);
+                        itemsGrid.Rows[i].BackColor = Color.FromArgb(255, 255, 128);
                         itemsGrid.ScrollToIndex(i);
                     }
                 }

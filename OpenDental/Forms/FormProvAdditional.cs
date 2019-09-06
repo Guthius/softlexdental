@@ -104,17 +104,17 @@ namespace OpenDental {
 				return;
 			}
 			ProviderClinic provClin=(ProviderClinic)selectedRow.Tag;
-			string strNewValue=PIn.String(selectedRow.Cells[e.Col].Text);
-			if(e.Col==1) {
+			string strNewValue=PIn.String(selectedRow.Cells[e.Column].Text);
+			if(e.Column==1) {
 				provClin.DEANum=strNewValue;
 			}
-			else if(e.Col==2) {
+			else if(e.Column==2) {
 				provClin.StateLicense=strNewValue;
 			}
-			else if(e.Col==3) {
+			else if(e.Column==3) {
 				provClin.StateRxID=strNewValue;
 			}
-			else if(e.Col==4) {
+			else if(e.Column==4) {
 				provClin.StateWhereLicensed=strNewValue;
 			}
 		}

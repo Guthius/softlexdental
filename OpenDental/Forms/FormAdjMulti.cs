@@ -720,7 +720,7 @@ namespace OpenDental {
 					row.Cells.Add(cell);
 				}
 				else if(IsUnattachedRowHeader()) {//The row header for unattached adjustments
-					row.ColorBackG=Color.LightYellow;
+					row.BackColor=Color.LightYellow;
 					//Date
 					cell=new ODGridCell("Unassigned");
 					row.Cells.Add(cell);

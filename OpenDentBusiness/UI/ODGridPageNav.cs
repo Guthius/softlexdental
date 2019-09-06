@@ -107,7 +107,7 @@ namespace OpenDental.UI
 
         void PagingChangeEventHandler(object sender, ODGridPageEventArgs e)
         {
-            currentPage = e.PageCur;
+            currentPage = e.CurrentPage;
             jumpToPageTextBox.Text = currentPage.ToString();
 
             // TODO: It seems strange to rely on ODGrid to pass a array of values for the link label

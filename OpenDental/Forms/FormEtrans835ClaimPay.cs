@@ -794,14 +794,14 @@ namespace OpenDental {
 		
 		private void gridPayments_CellClick(object sender,ODGridClickEventArgs e) {
 			HighlightEraProcRow(e.Row);
-			switch(e.Col) {
+			switch(e.Column) {
 				case 0://Split claim column
 					bool isSpliting=false;
-					if(gridPayments.Rows[e.Row].Cells[e.Col].Text=="") {//Row is not selected to split currently, will select for split.
+					if(gridPayments.Rows[e.Row].Cells[e.Column].Text=="") {//Row is not selected to split currently, will select for split.
 						isSpliting=true;
 					}
 					gridPayments.BeginUpdate();
-					gridPayments.Rows[e.Row].Cells[e.Col].Text=(isSpliting?"X":"");
+					gridPayments.Rows[e.Row].Cells[e.Column].Text=(isSpliting?"X":"");
 					gridPayments.EndUpdate();
 					break;
 				case 10://WO column and not including WOs, so do not let them edit.

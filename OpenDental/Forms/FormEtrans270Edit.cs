@@ -191,7 +191,7 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(e.Col<2) {//raw benefit
+			if(e.Column<2) {//raw benefit
 				FormEtrans270EBraw FormE=new FormEtrans270EBraw();
 				FormE.EB271val=listEB[e.Row];
 				FormE.ShowDialog();

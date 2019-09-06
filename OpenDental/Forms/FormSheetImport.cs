@@ -1483,7 +1483,7 @@ namespace OpenDental {
 					row.Cells.Add("");
 					row.Cells.Add("");
 					row.Cells.Add("");
-					row.ColorBackG=Color.DarkSlateGray;
+					row.BackColor=Color.DarkSlateGray;
 					row.ColorText=Color.White;
 				}
 				else {
@@ -1508,7 +1508,7 @@ namespace OpenDental {
 					row.Cells.Add(cell);
 					if(Rows[i].DoImport) {
 						row.Cells.Add("X");
-						row.ColorBackG=Color.FromArgb(225,225,225);
+						row.BackColor=Color.FromArgb(225,225,225);
 					}
 					else {
 						row.Cells.Add("");
@@ -1625,7 +1625,7 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
-			if(e.Col!=4) {
+			if(e.Column!=4) {
 				return;
 			}
 			if(Rows[e.Row].IsSeparator) {
@@ -1668,7 +1668,7 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(e.Col!=3) {
+			if(e.Column!=3) {
 				return;
 			}
 			if(Rows[e.Row].IsSeparator) {

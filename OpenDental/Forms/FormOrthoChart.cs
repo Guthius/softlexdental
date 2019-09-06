@@ -354,7 +354,7 @@ namespace OpenDental {
 		///<summary>Displays the signature for this row when clicking on the Date column or the Signature column. The gridMain_CellEnter event
 		///does not fire when the column is not editable.</summary>
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
-			if(e.Col!=0 && e.Col!=_sigColIdx) {//If not the date column or the signature column, return.
+			if(e.Column!=0 && e.Column!=_sigColIdx) {//If not the date column or the signature column, return.
 				return;
 			}
 			SaveAndSetSignatures(e.Row);
@@ -386,13 +386,13 @@ namespace OpenDental {
 		private void gridMain_CellLeave(object sender,ODGridClickEventArgs e) {
             //Get the date for the ortho chart that was just edited.
             DateTime orthoDate = GetOrthoDate(e.Row);
-            string oldText = GetValueFromDict(orthoDate, (string)gridMain.Columns[e.Col].Tag);
-            string newText = gridMain.Rows[e.Row].Cells[e.Col].Text;
+            string oldText = GetValueFromDict(orthoDate, (string)gridMain.Columns[e.Column].Tag);
+            string newText = gridMain.Rows[e.Row].Cells[e.Column].Text;
             if (CanEditRow(orthoDate))
             {
                 if (newText != oldText)
                 {
-                    SetValueInDict(newText, orthoDate, (string)gridMain.Columns[e.Col].Tag);
+                    SetValueInDict(newText, orthoDate, (string)gridMain.Columns[e.Column].Tag);
                     //Cannot be placed in if statement below as we only want to clear the signature when the grid text has changed.
                     //We cannot use a textchanged event to call the .dll as this causes massive slowness for certain customers.
                     if (_showSigBox)
@@ -413,7 +413,7 @@ namespace OpenDental {
                 if (newText != oldText)
                 {
                     //The user actually changed the cell's value and we need to change it back and warn them that they don't have permission.
-                    gridMain.Rows[e.Row].Cells[e.Col].Text = oldText;
+                    gridMain.Rows[e.Row].Cells[e.Column].Text = oldText;
                     gridMain.Invalidate();
                     MsgBox.Show(this, "You need either Ortho Chart Edit (full) or Ortho Chart Edit (same user, signed) to edit this ortho chart.");
                 }
@@ -440,7 +440,7 @@ namespace OpenDental {
             if (sig.SigString == "")
             {
                 signatureBoxWrapper.ClearSignature(false);
-                gridMain.Rows[gridRow].ColorBackG = SystemColors.Window;
+                gridMain.Rows[gridRow].BackColor = SystemColors.Window;
                 //Empty out the signature column displaying to the user.
                 if (_sigColIdx > 0)
                 {//User might be vieweing a tab that does not have the signature column.  Greater than 0 because index 0 is a Date column.
@@ -464,7 +464,7 @@ namespace OpenDental {
             }
             if (signatureBoxWrapper.IsValid)
             {
-                gridMain.Rows[gridRow].ColorBackG = Color.FromArgb(0, 245, 165);//A lighter version of Color.MediumSpringGreen
+                gridMain.Rows[gridRow].BackColor = Color.FromArgb(0, 245, 165);//A lighter version of Color.MediumSpringGreen
                 if (_sigColIdx > 0)
                 {//User might be vieweing a tab that does not have the signature column.  Greater than 0 because index 0 is a Date column.
                     gridMain.Rows[gridRow].Cells[_sigColIdx].Text = Lan.g(this, "Valid");
@@ -472,7 +472,7 @@ namespace OpenDental {
             }
             else
             {
-                gridMain.Rows[gridRow].ColorBackG = Color.FromArgb(255, 140, 143);//A darker version of Color.LightPink
+                gridMain.Rows[gridRow].BackColor = Color.FromArgb(255, 140, 143);//A darker version of Color.LightPink
                 if (_sigColIdx > 0)
                 {//User might be vieweing a tab that does not have the signature column.  Greater than 0 because index 0 is a Date column.
                     gridMain.Rows[gridRow].Cells[_sigColIdx].Text = Lan.g(this, "Invalid");

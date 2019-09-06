@@ -967,7 +967,7 @@ namespace OpenDental
             }
             row.Cells.Add(dateStr + objDesc + reminderTask.Descript);
             //No need to do any text detection for triage priorities, we'll just use the task priority colors.
-            row.ColorBackG = Defs.GetColor(DefinitionCategory.TaskPriorities, reminderTask.PriorityDefNum);
+            row.BackColor = Defs.GetColor(DefinitionCategory.TaskPriorities, reminderTask.PriorityDefNum);
         }
 
         ///<summary>The logic for this function was copied from UserControlTasks.gridMain_MouseDown() and modified slightly for this scenaro.</summary>
@@ -1041,7 +1041,7 @@ namespace OpenDental
         ///<summary>Logic mimics UserControlTasks.gridMain_CellDoubleClick()</summary>
         private void gridReminders_CellDoubleClick(object sender, ODGridClickEventArgs e)
         {
-            if (e.Col == 0)
+            if (e.Column == 0)
             {
                 //no longer allow double click on checkbox, because it's annoying.
                 return;

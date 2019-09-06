@@ -164,7 +164,7 @@ namespace OpenDental
             {
                 ODGridRow row = new ODGridRow() { Tag = prog };
                 Color color = Color.FromArgb(230, 255, 238);
-                row.ColorBackG = prog.Enabled ? color : row.ColorBackG;
+                row.BackColor = prog.Enabled ? color : row.BackColor;
                 ODGridCell cell = new ODGridCell(prog.Enabled ? "X" : "");
                 row.Cells.Add(cell);
                 row.Cells.Add(prog.ProgDesc);

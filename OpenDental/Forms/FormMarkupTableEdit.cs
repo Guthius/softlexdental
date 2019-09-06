@@ -133,7 +133,7 @@ namespace OpenDental {
 		}
 
 		private void gridMain_CellLeave(object sender,ODGridClickEventArgs e) {
-			Table.Rows[e.Row][e.Col]=gridMain.Rows[e.Row].Cells[e.Col].Text;
+			Table.Rows[e.Row][e.Column]=gridMain.Rows[e.Row].Cells[e.Column].Text;
 		}
 
 		/*No longer necessary because gridMain_CellLeave does this as text is changed.

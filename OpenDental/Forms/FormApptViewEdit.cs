@@ -799,7 +799,7 @@ namespace OpenDental{
 					|| displayedElementsMain[i].ElementDesc=="InsToSend[!]"
 					|| displayedElementsMain[i].ElementDesc=="LateColor")
 				{
-					row.ColorBackG=displayedElementsMain[i].ElementColor;
+					row.BackColor=displayedElementsMain[i].ElementColor;
 				}
 				else{
 					row.ColorText=displayedElementsMain[i].ElementColor;
@@ -829,7 +829,7 @@ namespace OpenDental{
 					|| displayedElementsUR[i].ElementDesc=="InsToSend[!]"
 					|| displayedElementsUR[i].ElementDesc=="LateColor")
 				{
-					row.ColorBackG=displayedElementsUR[i].ElementColor;
+					row.BackColor=displayedElementsUR[i].ElementColor;
 				}
 				else{
 					row.ColorText=displayedElementsUR[i].ElementColor;
@@ -859,7 +859,7 @@ namespace OpenDental{
 					|| displayedElementsLR[i].ElementDesc=="InsToSend[!]"
 					|| displayedElementsLR[i].ElementDesc=="LateColor")
 				{
-					row.ColorBackG=displayedElementsLR[i].ElementColor;
+					row.BackColor=displayedElementsLR[i].ElementColor;
 				}
 				else{
 					row.ColorText=displayedElementsLR[i].ElementColor;

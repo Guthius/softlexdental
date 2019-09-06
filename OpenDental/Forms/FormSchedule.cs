@@ -958,7 +958,7 @@ namespace OpenDental{
 				MsgBox.Show(this,"Schedules cannot be edited in clinic view mode");
 				return;
 			}
-			int clickedCol=e.Col;
+			int clickedCol=e.Column;
 			if(!checkWeekend.Checked) {
 				clickedCol++;
 			}

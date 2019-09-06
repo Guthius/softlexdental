@@ -1463,7 +1463,7 @@ namespace OpenDental
                     { //last row in the insurance info section
                         row.ColorLborder = Color.Black;
                     }
-                    row.ColorBackG = listDefs[0].Color; //same logic as family module insurance colors.
+                    row.BackColor = listDefs[0].Color; //same logic as family module insurance colors.
                     switch (i)
                     {
                         case 0: //primary
@@ -1538,7 +1538,7 @@ namespace OpenDental
             row = new ODGridRow();
             row.Cells.Add(Lan.g(this, "Pat Ortho Info"));
             row.Cells.Add("");
-            row.ColorBackG = Color.LightCyan;
+            row.BackColor = Color.LightCyan;
             row.Bold = true;
             row.ColorLborder = Color.Black;
             gridOrtho.Rows.Add(row);
@@ -4017,7 +4017,7 @@ namespace OpenDental
                     row.Note = table.Rows[i]["note"].ToString();
                 }
                 row.ColorText = Color.FromArgb(PIn.Int(table.Rows[i]["colorText"].ToString()));
-                row.ColorBackG = Color.FromArgb(PIn.Int(table.Rows[i]["colorBackG"].ToString()));
+                row.BackColor = Color.FromArgb(PIn.Int(table.Rows[i]["colorBackG"].ToString()));
                 row.Tag = table.Rows[i];
                 gridProg.Rows.Add(row);
 

@@ -617,7 +617,7 @@ namespace OpenDental{
 
 		private void gridAllMedications_CellClick(object sender,ODGridClickEventArgs e) {
 			Medication med=(Medication)gridAllMedications.Rows[e.Row].Tag;
-			if(CultureInfo.CurrentCulture.Name.EndsWith("US") && e.Col==3) {//United States RxNorm Column
+			if(CultureInfo.CurrentCulture.Name.EndsWith("US") && e.Column==3) {//United States RxNorm Column
 				FormRxNorms formRxNorm=new FormRxNorms();
 				formRxNorm.IsSelectionMode=true;
 				formRxNorm.InitSearchCodeOrDescript=med.Description;
@@ -645,7 +645,7 @@ namespace OpenDental{
 				DialogResult=DialogResult.OK;
 			}
 			else{//normal mode from main menu
-				if(!CultureInfo.CurrentCulture.Name.EndsWith("US") || e.Col!=3) {//Not United States RxNorm Column
+				if(!CultureInfo.CurrentCulture.Name.EndsWith("US") || e.Column!=3) {//Not United States RxNorm Column
 					FormMedicationEdit FormME=new FormMedicationEdit();
 					FormME.MedicationCur=med;
 					FormME.ShowDialog();//This window refreshes the Medication cache if the user clicked OK.

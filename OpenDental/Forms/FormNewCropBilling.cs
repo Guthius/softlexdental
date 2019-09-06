@@ -171,7 +171,7 @@ namespace OpenDental {
 				foreach(NewCropCharge charge in _listNewCropCharges) {
 					ODGridRow gr=new ODGridRow();
 					if(charge.repeatCharge==null) {
-						gr.ColorBackG=System.Drawing.Color.Orange;//highlight new charges
+						gr.BackColor=System.Drawing.Color.Orange;//highlight new charges
 					}
 					if(_listNewCropCharges.FindAll(x => x.AccountId==charge.AccountId && x.NPI==charge.NPI).Count > 1) {
 						gr.ColorText=System.Drawing.Color.Red;

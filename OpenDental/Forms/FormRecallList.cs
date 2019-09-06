@@ -428,7 +428,7 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellDoubleClick(object sender,ODGridClickEventArgs e) {
-			if(gridMain.Columns[e.Col].Tag.ToString()=="WebSched") {//A column's tag is its display field internal name.
+			if(gridMain.Columns[e.Column].Tag.ToString()=="WebSched") {//A column's tag is its display field internal name.
 				MsgBoxCopyPaste msgBox=new MsgBoxCopyPaste(PIn.String(_tableRecalls.Rows[e.Row]["webSchedSendError"].ToString()));
 				msgBox.Text=Lan.g(this,"Web Sched Notification Send Error");
 				msgBox.ShowDialog();
@@ -1647,7 +1647,7 @@ namespace OpenDental{
 			foreach(DataRow row in tableReactivations.Rows) {
 				ODGridRow rowNew=new ODGridRow();
 				if(PIn.Bool(row["DoNotContact"].ToString())) {
-					rowNew.ColorBackG=Color.Orange;
+					rowNew.BackColor=Color.Orange;
 				}
 				rowNew.Cells.Add(PIn.Date(row["DateLastProc"].ToString()).ToShortDateString());
 				rowNew.Cells.Add(Patients.GetNameLF(row["LName"].ToString(),row["FName"].ToString(),row["Preferred"].ToString(),row["MiddleI"].ToString()));

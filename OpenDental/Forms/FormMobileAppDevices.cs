@@ -66,7 +66,7 @@ namespace OpenDental {
 
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
 			//They did not select the right column.
-			if(e.Col!=_indexOfEnabledColumn) {
+			if(e.Column!=_indexOfEnabledColumn) {
 				return;
 			}
 			MobileAppDevice device=gridMain.SelectedTag<MobileAppDevice>();

@@ -144,7 +144,7 @@ namespace OpenDental {
 		///If the user modifies a procedure level substitution code, a new SubstitutionLink will be added for the inplan(override).
 		///The new SubstitutionLink will be added to _listDbSubstLinks</summary>
 		private void gridMain_CellSelectionCommitted(object sender,ODGridClickEventArgs e) {
-			if(e.Col!=2 || e.Row<0 || e.Row>=gridMain.Rows.Count) {//Return if not SubstOnlyIf column or invalid row
+			if(e.Column!=2 || e.Row<0 || e.Row>=gridMain.Rows.Count) {//Return if not SubstOnlyIf column or invalid row
 				return;
 			}
 			//Get the grid tag
@@ -153,7 +153,7 @@ namespace OpenDental {
 				return;
 			}
 			//Get the selected substitution condition.
-			SubstitutionCondition selectedCondition=(SubstitutionCondition)_listSubConditions.IndexOf(gridMain.Rows[e.Row].Cells[e.Col].Text);
+			SubstitutionCondition selectedCondition=(SubstitutionCondition)_listSubConditions.IndexOf(gridMain.Rows[e.Row].Cells[e.Column].Text);
 			//Get the SubstitutionLink if one exist
 			SubstitutionLink subLink=_listSubstLinks.FirstOrDefault(x => x.CodeNum==procCode.CodeNum);
 			if(subLink!=null) {//Ins level sub code
@@ -175,21 +175,21 @@ namespace OpenDental {
 
 		///<summary>Sets _oldText. Used in gridMain_CellLeave to check whether the text changed when leaving the cell.</summary>
 		private void gridMain_CellEnter(object sender,ODGridClickEventArgs e) { 
-			_oldText=gridMain.Rows[e.Row].Cells[e.Col].Text;
+			_oldText=gridMain.Rows[e.Row].Cells[e.Column].Text;
 		}
 
 		///<summary>Changes the SubstitutionCode to what is entered in the cell. 
 		///If the user modifies a procedure level substitution code, a new SubstitutionLink will be added for the inplan(override).
 		///The new SubstitutionLink will be added to _listDbSubstLinks</summary>
 		private void gridMain_CellLeave(object sender,ODGridClickEventArgs e) {
-			if(e.Col!=3 || e.Row<0) {//Return if not substitution code column or invalid row
+			if(e.Column!=3 || e.Row<0) {//Return if not substitution code column or invalid row
 				return;
 			}
 			ProcedureCode procCode=gridMain.Rows[e.Row].Tag as ProcedureCode;
 			if(procCode==null) {
 				return;
 			}
-			string newText=gridMain.Rows[e.Row].Cells[e.Col].Text;
+			string newText=gridMain.Rows[e.Row].Cells[e.Column].Text;
 			if(_oldText==newText) {
 				return;
 			}

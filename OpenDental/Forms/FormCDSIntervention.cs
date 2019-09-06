@@ -61,7 +61,7 @@ namespace OpenDental {
 			if(!CDSPermissions.GetForUser(Security.CurUser.UserNum).ShowInfobutton) {
 				return;
 			}
-			if(e.Col!=0) {
+			if(e.Column!=0) {
 				return;//not infobutton column
 			}
 			FormInfobutton FormIB=new FormInfobutton((List<KnowledgeRequest>)gridMain.Rows[e.Row].Tag);

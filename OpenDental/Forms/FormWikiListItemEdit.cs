@@ -50,7 +50,7 @@ namespace OpenDental
 
                 if (i == 0)
                 {
-                    row.ColorBackG = Color.Gray;
+                    row.BackColor = Color.Gray;
                 }
 
                 itemDataGrid.Rows.Add(row);

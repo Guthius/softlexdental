@@ -248,7 +248,7 @@ namespace OpenDental {
 			for(int i=0;i<_listCovCats.Count;i++) {
 				row=new ODGridRow();
 				row.Tag=_listCovCats[i].Copy();
-				row.ColorBackG=Color.FromArgb(225,225,225);
+				row.BackColor=Color.FromArgb(225,225,225);
 				if(i!=0) {
 					gridMain.Rows[gridMain.Rows.Count-1].ColorLborder=Color.Black;
 				}

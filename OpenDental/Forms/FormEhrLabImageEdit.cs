@@ -134,7 +134,7 @@ namespace OpenDental {
 		private void gridMain_CellClick(object sender,UI.ODGridClickEventArgs e) {
 			try {
 				PaintPreviewPicture();
-				if(e.Col!=0) {
+				if(e.Column!=0) {
 					return;
 				}
 				Document doc=GetSelectedDocument();

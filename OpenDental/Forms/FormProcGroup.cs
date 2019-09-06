@@ -1158,7 +1158,7 @@ namespace OpenDental{
 				}
 				row.Cells.Add(text);
 				row.ColorText=Color.FromArgb(PIn.Int(TablePlanned.Rows[i]["colorText"].ToString()));
-				row.ColorBackG=Color.FromArgb(PIn.Int(TablePlanned.Rows[i]["colorBackG"].ToString()));
+				row.BackColor=Color.FromArgb(PIn.Int(TablePlanned.Rows[i]["colorBackG"].ToString()));
 				gridPlanned.Rows.Add(row);
 			}
 			gridPlanned.EndUpdate();

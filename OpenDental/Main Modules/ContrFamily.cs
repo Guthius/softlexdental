@@ -488,7 +488,7 @@ namespace OpenDental
 
         private void gridPat_CellClick(object sender, ODGridClickEventArgs e)
         {
-            ODGridCell gridCellCur = gridPat.Rows[e.Row].Cells[e.Col];
+            ODGridCell gridCellCur = gridPat.Rows[e.Row].Cells[e.Column];
             //Only grid cells with phone numbers are blue and underlined. 
             //If we support color and underline in the future, this might be changed to a regex of the cell text.
             if (gridCellCur.ColorText == System.Drawing.Color.Blue && gridCellCur.Underline == true && Programs.GetCur(ProgramName.DentalTekSmartOfficePhone).Enabled)
@@ -748,13 +748,13 @@ namespace OpenDental
                     #region ICE Name
                     case "ICE Name":
                         row.Cells.Add(PatNoteCur.ICEName);
-                        row.ColorBackG = listMiscColorDefs[(int)DefCatMiscColors.FamilyModuleICE].Color;
+                        row.BackColor = listMiscColorDefs[(int)DefCatMiscColors.FamilyModuleICE].Color;
                         break;
                     #endregion ICE Name
                     #region ICE Phone
                     case "ICE Phone":
                         row.Cells.Add(PatNoteCur.ICEPhone);
-                        row.ColorBackG = listMiscColorDefs[(int)DefCatMiscColors.FamilyModuleICE].Color;
+                        row.BackColor = listMiscColorDefs[(int)DefCatMiscColors.FamilyModuleICE].Color;
                         break;
                     #endregion ICE Phone
                     #region Language
@@ -811,7 +811,7 @@ namespace OpenDental
                                 row.Cells.Add(fieldCur.Description);
                             }
                             row.Cells.Add(PatRestrictions.GetPatRestrictDesc(listPatRestricts[i].PatRestrictType));
-                            row.ColorBackG = listMiscColorDefs[10].Color;//index 10 is Patient Restrictions (hard coded in convertdatabase4)
+                            row.BackColor = listMiscColorDefs[10].Color;//index 10 is Patient Restrictions (hard coded in convertdatabase4)
                             if (i == listPatRestricts.Count - 1)
                             {//last row added outside of switch statement
                                 break;
@@ -855,13 +855,13 @@ namespace OpenDental
                         {
                             row.Cells.Add(Lan.g("TablePatient", "None"));
                             row.Tag = "References";
-                            row.ColorBackG = listMiscColorDefs[8].Color;
+                            row.BackColor = listMiscColorDefs[8].Color;
                         }
                         else
                         {
                             row.Cells.Add(Lan.g("TablePatient", ""));
                             row.Tag = "References";
-                            row.ColorBackG = listMiscColorDefs[8].Color;
+                            row.BackColor = listMiscColorDefs[8].Color;
                             gridPat.Rows.Add(row);
                         }
                         for (int i = 0; i < custREList.Count; i++)
@@ -878,7 +878,7 @@ namespace OpenDental
                                 row.Cells.Add(CustReferences.GetCustNameFL(custREList[i].PatNumRef));
                             }
                             row.Tag = custREList[i];
-                            row.ColorBackG = listMiscColorDefs[8].Color;
+                            row.BackColor = listMiscColorDefs[8].Color;
                             if (i < custREList.Count - 1)
                             {
                                 gridPat.Rows.Add(row);
@@ -898,7 +898,7 @@ namespace OpenDental
                         {
                             row.Cells.Add(Lan.g("TablePatient", "None"));
                             row.Tag = "Referral";
-                            row.ColorBackG = listMiscColorDefs[8].Color;
+                            row.BackColor = listMiscColorDefs[8].Color;
                         }
                         //else{
                         //	row.Cells.Add("");
@@ -942,7 +942,7 @@ namespace OpenDental
                                 row.Cells.Add("");//if referral is null because using random keys and had bug.
                             }
                             row.Tag = "Referral";
-                            row.ColorBackG = listMiscColorDefs[8].Color;
+                            row.BackColor = listMiscColorDefs[8].Color;
                             if (i < listRefs.Count - 1)
                             {
                                 gridPat.Rows.Add(row);
@@ -960,7 +960,7 @@ namespace OpenDental
                         {
                             row.Cells.Add((_loadData.ResponsibleParty ?? Patients.GetLim(PatCur.ResponsParty)).GetNameLF());
                         }
-                        row.ColorBackG = listMiscColorDefs[8].Color;
+                        row.BackColor = listMiscColorDefs[8].Color;
                         break;
                     #endregion ResponsParty
                     #region Salutation
@@ -2430,7 +2430,7 @@ namespace OpenDental
                 ODGridRow discountRow = new ODGridRow();
                 discountRow.Cells.Add(Lan.g("TableDiscountPlans", "Description"));
                 discountRow.Cells.Add(discountPlan.Description);
-                discountRow.ColorBackG = Defs.GetFirstForCategory(DefinitionCategory.MiscColors).Color;
+                discountRow.BackColor = Defs.GetFirstForCategory(DefinitionCategory.MiscColors).Color;
                 gridIns.Rows.Add(discountRow);
                 discountRow = new ODGridRow();
                 discountRow.Cells.Add(Lan.g("TableDiscountPlans", "Adjustment Type"));
@@ -2506,7 +2506,7 @@ namespace OpenDental
             {
                 row.Cells.Add(FamCur.GetNameInFamFL(subArray[i].Subscriber));
             }
-            row.ColorBackG = listDefs[0].Color;
+            row.BackColor = listDefs[0].Color;
             gridIns.Rows.Add(row);
             //subscriber ID
             row = new ODGridRow();
@@ -2515,7 +2515,7 @@ namespace OpenDental
             {
                 row.Cells.Add(subArray[i].SubscriberID);
             }
-            row.ColorBackG = listDefs[0].Color;
+            row.BackColor = listDefs[0].Color;
             gridIns.Rows.Add(row);
             //relationship
             row = new ODGridRow();
@@ -2524,7 +2524,7 @@ namespace OpenDental
             {
                 row.Cells.Add(Lan.g("enumRelat", PatPlanList[i].Relationship.ToString()));
             }
-            row.ColorBackG = listDefs[0].Color;
+            row.BackColor = listDefs[0].Color;
             gridIns.Rows.Add(row);
             //patient ID
             row = new ODGridRow();
@@ -2533,7 +2533,7 @@ namespace OpenDental
             {
                 row.Cells.Add(PatPlanList[i].PatID);
             }
-            row.ColorBackG = listDefs[0].Color;
+            row.BackColor = listDefs[0].Color;
             gridIns.Rows.Add(row);
             //pending
             row = new ODGridRow();
@@ -2549,7 +2549,7 @@ namespace OpenDental
                     row.Cells.Add("");
                 }
             }
-            row.ColorBackG = listDefs[0].Color;
+            row.BackColor = listDefs[0].Color;
             row.ColorLborder = Color.Black;
             gridIns.Rows.Add(row);
             //employer
@@ -2986,13 +2986,13 @@ namespace OpenDental
                 }
                 return;
             }
-            if (e.Col == 0)
+            if (e.Column == 0)
             {
                 return;
             }
             Cursor = Cursors.WaitCursor;
             //Retrieving information from database due to concurrency issues causing the Family Module to display an insurance plan that has potentially changed.
-            PatPlan patPlan = PatPlans.GetByPatPlanNum(PatPlanList[e.Col - 1].PatPlanNum);
+            PatPlan patPlan = PatPlans.GetByPatPlanNum(PatPlanList[e.Column - 1].PatPlanNum);
             if (patPlan == null)
             {
                 Cursor = Cursors.Default;

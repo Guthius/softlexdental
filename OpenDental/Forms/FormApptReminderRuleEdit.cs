@@ -116,7 +116,7 @@ namespace OpenDental {
 				}
 				if(typeCur==CommType.Text && !SmsPhones.IsIntegratedTextingEnabled()) {
 					gridPriorities.AddRow(Lan.g(this,typeCur.ToString())+" ("+Lan.g(this,"Not Configured")+")");
-					gridPriorities.Rows[gridPriorities.Rows.Count-1].ColorBackG=Color.LightGray;
+					gridPriorities.Rows[gridPriorities.Rows.Count-1].BackColor=Color.LightGray;
 				}
 				else {
 					gridPriorities.AddRow(Lan.g(this,typeCur.ToString()));

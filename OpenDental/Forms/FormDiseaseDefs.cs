@@ -489,7 +489,7 @@ namespace OpenDental{
 				}
 				row.Tag=defCur;
 				if(_listDiseaseDefNumsColored.Contains(defCur.Id)) {
-					row.ColorBackG=Color.LightCyan;
+					row.BackColor=Color.LightCyan;
 				}
 				gridMain.Rows.Add(row);
 			}

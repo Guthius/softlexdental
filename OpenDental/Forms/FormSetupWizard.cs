@@ -163,7 +163,7 @@ namespace OpenDental
             }
             else
             {
-                if (wizardsGrid.Rows[e.Row].Tag is SetupWizard.SetupWizardStep setupWizard && wizardsGrid.Columns[e.Col].ImageList != null)
+                if (wizardsGrid.Rows[e.Row].Tag is SetupWizard.SetupWizardStep setupWizard && wizardsGrid.Columns[e.Column].ImageList != null)
                 {
                     MessageBox.Show(
                         setupWizard.Description,

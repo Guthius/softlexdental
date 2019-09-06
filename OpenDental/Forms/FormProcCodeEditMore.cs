@@ -72,7 +72,7 @@ namespace OpenDental {
 					row.Cells.Add(FeeScheds.GetDescription(_listFees[i].FeeSched));
 					row.Bold=true;
 					lastFeeSched=_listFees[i].FeeSched;
-					row.ColorBackG=Color.LightBlue;
+					row.BackColor=Color.LightBlue;
 					if(_listFees[i].ClinicNum!=0 || _listFees[i].ProvNum!=0) { //FeeSched change, but not with a default fee. Insert placeholder row.
 						if(Preferences.HasClinicsEnabled) {
 							row.Cells.Add("");
