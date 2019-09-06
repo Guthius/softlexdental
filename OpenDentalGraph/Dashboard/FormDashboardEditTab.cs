@@ -101,7 +101,7 @@ Double-click tab header to rename tab.";
 				return;
 			}
 			DashboardDockContainer holder=new GraphQuantityOverTimeFilter(((DashboardListItem)listItems.SelectedItem).CellType).CreateDashboardDockContainer();
-			holder.Contr.DoDragDrop(holder,DragDropEffects.All);
+			holder.Control.DoDragDrop(holder,DragDropEffects.All);
 		}
 				
 		private void setupToolStripMenuItem_Click(object sender,EventArgs e) {

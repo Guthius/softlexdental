@@ -57,7 +57,7 @@ namespace OpenDentalGraph {
 				if(_dockedControlHolder==null) {
 					return null;
 				}
-				return _dockedControlHolder.Contr;
+				return _dockedControlHolder.Control;
 			}
 		}
 		public OpenDentBusiness.ODTable DockedControlTag {
@@ -80,7 +80,7 @@ namespace OpenDentalGraph {
 					butEdit.Enabled=false;
 					return;
 				}
-				if(value.Contr==this) {
+				if(value.Control==this) {
 					return;
 				}
 				if(_dockedControlHolder!=null) {
@@ -194,7 +194,7 @@ namespace OpenDentalGraph {
 				return null;
 			}
 			DashboardDockContainer holder=(DashboardDockContainer)e.Data.GetData(typeof(DashboardDockContainer));
-			if(holder==null||holder.Contr==DockedControl) {
+			if(holder==null||holder.Control==DockedControl) {
 				return null;
 			}
 			return holder;
@@ -218,17 +218,17 @@ namespace OpenDentalGraph {
 			}
 			DashboardDockContainer holder=_dockedControl;
 			if(_onEditClick!=null) {
-				_onEditClick(holder.Contr,new EventArgs());
+				_onEditClick(holder.Control,new EventArgs());
 			}
 			EventHandler onEditOk=_onEditOk;
 			EventHandler onEditCancel=_onEditCancel;
-			FormDashboardEditCell f=new FormDashboardEditCell(holder.Contr,IsEditMode);
+			FormDashboardEditCell f=new FormDashboardEditCell(holder.Control,IsEditMode);
 			if(f.ShowDialog()==DialogResult.OK) {
 				_hasUnsavedChanges=true;
-				onEditOk(holder.Contr,new EventArgs());
+				onEditOk(holder.Control,new EventArgs());
 			}
 			else {
-				onEditCancel(holder.Contr,new EventArgs());
+				onEditCancel(holder.Control,new EventArgs());
 			}
 			_dockedControl=holder;
 		}

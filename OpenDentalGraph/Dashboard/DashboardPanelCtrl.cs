@@ -8,9 +8,8 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace OpenDentalGraph {
 	public partial class DashboardPanelCtrl:UserControl {
-		#region Private Data
-		private DashboardLayout _dbItem;
-		private bool _hasUnsavedChanges=false;
+        #region Private Data
+        private bool _hasUnsavedChanges=false;
 		#endregion
 
 		#region Properties
@@ -134,10 +133,8 @@ namespace OpenDentalGraph {
 			}
 		}
 
-		public DashboardLayout DbItem {
-			get { return _dbItem; }
-		}
-		public bool IsEditMode {
+        public DashboardLayout DbItem { get; }
+        public bool IsEditMode {
 			get { return !splitContainerAddColumn.Panel2Collapsed; }
 			set {
 				splitContainerAddColumn.Panel2Collapsed=!value;
@@ -158,7 +155,7 @@ namespace OpenDentalGraph {
 
 		public DashboardPanelCtrl(DashboardLayout dbItem=null) {
 			InitializeComponent();
-			_dbItem=dbItem;
+			DbItem=dbItem;
 		}
 
 		#region Public Methods
