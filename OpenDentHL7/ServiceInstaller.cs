@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2019 Dental Stars SRL
  * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
  * 
@@ -15,20 +15,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; If not, see <http://www.gnu.org/licenses/>
  */
+using System.ComponentModel;
+using System.Configuration.Install;
 using System.ServiceProcess;
 
-namespace OpenDentHL7
+namespace OpenDentServer
 {
-    static class Program
+    [RunInstaller(true)]
+    public class ServiceInstaller : Installer
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        static void Main(string[] args)
+        public ServiceInstaller()
         {
-            ServiceBase.Run(new ServiceHL7
+            Installers.Add(new System.ServiceProcess.ServiceInstaller
             {
+                StartType = ServiceStartMode.Automatic,
                 ServiceName = "Softlex Dental HL7"
+            });
+
+            Installers.Add(new ServiceProcessInstaller
+            {
+                Account = ServiceAccount.LocalSystem
             });
         }
     }
