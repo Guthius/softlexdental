@@ -4559,50 +4559,50 @@ namespace OpenDental{
 		#region EligibilityCheckDentalXchange
 		//This is not our code.   Added SPK/AAD 10/06 for eligibility check.-------------------------------------------------------------------------
 		private void EligibilityCheckDentalXchange() {
-			Cursor = Cursors.WaitCursor;
-			OpenDental.com.dentalxchange.webservices.WebServiceService DCIService 
-				= new OpenDental.com.dentalxchange.webservices.WebServiceService();
-			OpenDental.com.dentalxchange.webservices.Credentials DCICredential 
-				= new OpenDental.com.dentalxchange.webservices.Credentials();
-			OpenDental.com.dentalxchange.webservices.Request DCIRequest = new OpenDental.com.dentalxchange.webservices.Request();
-			OpenDental.com.dentalxchange.webservices.Response DCIResponse = new OpenDental.com.dentalxchange.webservices.Response();
-			string loginID;
-			string passWord;
-			// Get Login / Password
-			Clearinghouse clearinghouseHq=Clearinghouses.GetDefaultDental();
-			Clearinghouse clearinghouseClin=Clearinghouses.OverrideFields(clearinghouseHq,Clinics.ClinicNum);
-			if(clearinghouseClin!=null) {
-				loginID=clearinghouseClin.LoginID;
-				passWord=clearinghouseClin.Password;
-			}
-			else {
-				loginID = "";
-				passWord = "";
-			}
-			if(loginID == "") {
-				MessageBox.Show("ClaimConnect login ID and password are required to check eligibility.");
-				Cursor = Cursors.Default;
-				return;
-			}
-			// Set Credentials
-			DCICredential.serviceID = "DCI Web Service ID: 001513";
-			DCICredential.username = loginID;   // ABCuser
-			DCICredential.password = passWord;  // testing1
-			DCICredential.client = "Practice-Web";
-			DCICredential.version = "1";
-			// Set Request Document
-			//textAddress.Text = PrepareEligibilityRequest();
-			DCIRequest.content = PrepareEligibilityRequestDentalXchange(loginID,passWord);
-			try {
-				DCIResponse = DCIService.lookupEligibility(DCICredential,DCIRequest);
-				//DisplayEligibilityStatus();
-				ProcessEligibilityResponseDentalXchange(DCIResponse.content.ToString());
-			}
-			catch{//Exception ex) {
-				// SPK /AAD 8/16/08 Display more user friendly error message
-				MessageBox.Show("Error : Inadequate data for response. Payer site may be unavailable.");
-			}
-			Cursor = Cursors.Default;
+			//Cursor = Cursors.WaitCursor;
+			//OpenDental.com.dentalxchange.webservices.WebServiceService DCIService 
+			//	= new OpenDental.com.dentalxchange.webservices.WebServiceService();
+			//OpenDental.com.dentalxchange.webservices.Credentials DCICredential 
+			//	= new OpenDental.com.dentalxchange.webservices.Credentials();
+			//OpenDental.com.dentalxchange.webservices.Request DCIRequest = new OpenDental.com.dentalxchange.webservices.Request();
+			//OpenDental.com.dentalxchange.webservices.Response DCIResponse = new OpenDental.com.dentalxchange.webservices.Response();
+			//string loginID;
+			//string passWord;
+			//// Get Login / Password
+			//Clearinghouse clearinghouseHq=Clearinghouses.GetDefaultDental();
+			//Clearinghouse clearinghouseClin=Clearinghouses.OverrideFields(clearinghouseHq,Clinics.ClinicNum);
+			//if(clearinghouseClin!=null) {
+			//	loginID=clearinghouseClin.LoginID;
+			//	passWord=clearinghouseClin.Password;
+			//}
+			//else {
+			//	loginID = "";
+			//	passWord = "";
+			//}
+			//if(loginID == "") {
+			//	MessageBox.Show("ClaimConnect login ID and password are required to check eligibility.");
+			//	Cursor = Cursors.Default;
+			//	return;
+			//}
+			//// Set Credentials
+			//DCICredential.serviceID = "DCI Web Service ID: 001513";
+			//DCICredential.username = loginID;   // ABCuser
+			//DCICredential.password = passWord;  // testing1
+			//DCICredential.client = "Practice-Web";
+			//DCICredential.version = "1";
+			//// Set Request Document
+			////textAddress.Text = PrepareEligibilityRequest();
+			//DCIRequest.content = PrepareEligibilityRequestDentalXchange(loginID,passWord);
+			//try {
+			//	DCIResponse = DCIService.lookupEligibility(DCICredential,DCIRequest);
+			//	//DisplayEligibilityStatus();
+			//	ProcessEligibilityResponseDentalXchange(DCIResponse.content.ToString());
+			//}
+			//catch{//Exception ex) {
+			//	// SPK /AAD 8/16/08 Display more user friendly error message
+			//	MessageBox.Show("Error : Inadequate data for response. Payer site may be unavailable.");
+			//}
+			//Cursor = Cursors.Default;
 		}
 
 		private string PrepareEligibilityRequestDentalXchange(string loginID,string passWord) {

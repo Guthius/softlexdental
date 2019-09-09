@@ -129,7 +129,7 @@ Double-click tab header to rename tab.";
 			if(dashboardTabControl.TabPageCount==0) {
 				dashboardTabControl.AddDefaultsTabPractice(false);
 				if(Preferences.HasClinicsEnabled) {
-					dashboardTabControl.AddDefaultsTabByGrouping(false,GroupingOptionsControl.Grouping.clinic);
+					dashboardTabControl.AddDefaultsTabByGrouping(false,GroupingOptionsControl.Grouping.Clinic);
 				}
 				dashboardTabControl.AddDefaultsTabByGrouping(false,GroupingOptionsControl.Grouping.Provider);
 			}
@@ -170,7 +170,7 @@ Double-click tab header to rename tab.";
 
 		///<summary>Adds the default clinic tab to the current tabs.  MenuItem only visible in Edit mode.</summary>
 		private void addClinicDefaultToolStripMenuItem_Click(object sender,EventArgs e) {
-			dashboardTabControl.AddDefaultsTabByGrouping(true,GroupingOptionsControl.Grouping.clinic);
+			dashboardTabControl.AddDefaultsTabByGrouping(true,GroupingOptionsControl.Grouping.Clinic);
 		}
 
 		///<summary>Adds the default provider tab to the current tabs.  MenuItem only visible in Edit mode.</summary>

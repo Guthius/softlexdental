@@ -68,43 +68,43 @@ namespace OpenDental {
 		}
 
 		private void butRegisterClinic_Click(object sender,EventArgs e) {
-			Cursor=Cursors.WaitCursor;
-			try {
-				Program programErx=Programs.GetCur(ProgramName.eRx);
-				ProgramProperty ppClinicID=ListProperties
-					.FirstOrDefault(x => x.ClinicNum!=_clinicCur.ClinicNum && x.PropertyDesc==Erx.PropertyDescs.ClinicID && x.PropertyValue!="");
-				ProgramProperty ppClinicKey=null;
-				if(ppClinicID!=null) {
-					ppClinicKey=ListProperties
-						.FirstOrDefault(x => x.ClinicNum==ppClinicID.ClinicNum && x.PropertyDesc==Erx.PropertyDescs.ClinicKey && x.PropertyValue!="");
-				}
-				if(ppClinicID==null || string.IsNullOrWhiteSpace(ppClinicID.PropertyValue)
-					|| ppClinicKey==null || string.IsNullOrWhiteSpace(ppClinicKey.PropertyValue))
-				{
-					//Should never happen since we disable this button if we can't find a valid clinicID/clinicKey combo ahead of time
-					throw new ODException("No registered clinics found.  "
-						+"There must be at least one registered clinic before adding additional clinics.");
-				}
-				string clinicID="";
-				string clinicKey="";
-				DoseSpot.RegisterClinic(_clinicCur.ClinicNum,ppClinicID.PropertyValue,ppClinicKey.PropertyValue
-					,DoseSpot.GetUserID(Security.CurUser,_clinicCur.ClinicNum),out clinicID,out clinicKey);
-				textClinicID.Text=clinicID;
-				textClinicKey.Text=clinicKey;
-			}
-			catch(ODException ex) {
-				MsgBox.Show(this,ex.Message);
-				return;
-			}
-			catch(Exception ex) {
-				MessageBox.Show(Lan.g(this,"Error: ")+ex.Message);
-				return;
-			}
-			finally {
-				Cursor=Cursors.Default;
-			}
-			MsgBox.Show(this,"This clinic has successfully been registered with DoseSpot.\r\n"
-				+"If patients in this clinic can be shared with other clinics, contact DoseSpot to link this clinic before using.");
+			//Cursor=Cursors.WaitCursor;
+			//try {
+			//	Program programErx=Programs.GetCur(ProgramName.eRx);
+			//	ProgramProperty ppClinicID=ListProperties
+			//		.FirstOrDefault(x => x.ClinicNum!=_clinicCur.ClinicNum && x.PropertyDesc==Erx.PropertyDescs.ClinicID && x.PropertyValue!="");
+			//	ProgramProperty ppClinicKey=null;
+			//	if(ppClinicID!=null) {
+			//		ppClinicKey=ListProperties
+			//			.FirstOrDefault(x => x.ClinicNum==ppClinicID.ClinicNum && x.PropertyDesc==Erx.PropertyDescs.ClinicKey && x.PropertyValue!="");
+			//	}
+			//	if(ppClinicID==null || string.IsNullOrWhiteSpace(ppClinicID.PropertyValue)
+			//		|| ppClinicKey==null || string.IsNullOrWhiteSpace(ppClinicKey.PropertyValue))
+			//	{
+			//		//Should never happen since we disable this button if we can't find a valid clinicID/clinicKey combo ahead of time
+			//		throw new ODException("No registered clinics found.  "
+			//			+"There must be at least one registered clinic before adding additional clinics.");
+			//	}
+			//	string clinicID="";
+			//	string clinicKey="";
+			//	DoseSpot.RegisterClinic(_clinicCur.ClinicNum,ppClinicID.PropertyValue,ppClinicKey.PropertyValue
+			//		,DoseSpot.GetUserID(Security.CurUser,_clinicCur.ClinicNum),out clinicID,out clinicKey);
+			//	textClinicID.Text=clinicID;
+			//	textClinicKey.Text=clinicKey;
+			//}
+			//catch(ODException ex) {
+			//	MsgBox.Show(this,ex.Message);
+			//	return;
+			//}
+			//catch(Exception ex) {
+			//	MessageBox.Show(Lan.g(this,"Error: ")+ex.Message);
+			//	return;
+			//}
+			//finally {
+			//	Cursor=Cursors.Default;
+			//}
+			//MsgBox.Show(this,"This clinic has successfully been registered with DoseSpot.\r\n"
+			//	+"If patients in this clinic can be shared with other clinics, contact DoseSpot to link this clinic before using.");
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {

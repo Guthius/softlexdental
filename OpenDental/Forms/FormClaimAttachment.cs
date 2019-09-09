@@ -20,13 +20,13 @@ namespace OpenDental {
 	public partial class FormClaimAttachment:Form {
 		private Claim _claimCur;
 		private Patient _claimPat;
-		private List<ClaimConnect.ImageAttachment> _listImageAttachments;
+		//private List<ClaimConnect.ImageAttachment> _listImageAttachments;
 		private static ODThread _threadFormClaimAttach=null;
 		///<summary>Initialize the form and refresh the claim we are adding attachments to.</summary>
 		private FormClaimAttachment(Claim claim) {
 			InitializeComponent();
 			_claimCur=claim.Copy();
-			_listImageAttachments=new List<ClaimConnect.ImageAttachment>();
+			//_listImageAttachments=new List<ClaimConnect.ImageAttachment>();
 		}
 
 		private void FormClaimAttachment_Load(object sender,EventArgs e) {
@@ -75,15 +75,15 @@ namespace OpenDental {
 			gridAttachedImages.Columns.Add(col);
 			col=new ODGridColumn("File",150);
 			gridAttachedImages.Columns.Add(col);
-			ODGridRow row;
-			for(int i=0;i<_listImageAttachments.Count;i++) {
-				row=new ODGridRow();
-				row.Cells.Add(_listImageAttachments[i].ImageDate.ToShortDateString());
-				row.Cells.Add(_listImageAttachments[i].ImageType.GetDescription());
-				row.Cells.Add(_listImageAttachments[i].ImageFileNameDisplay);
-				row.Tag=_listImageAttachments[i];
-				gridAttachedImages.Rows.Add(row);
-			}
+			//ODGridRow row;
+			//for(int i=0;i<_listImageAttachments.Count;i++) {
+			//	row=new ODGridRow();
+			//	row.Cells.Add(_listImageAttachments[i].ImageDate.ToShortDateString());
+			//	row.Cells.Add(_listImageAttachments[i].ImageType.GetDescription());
+			//	row.Cells.Add(_listImageAttachments[i].ImageFileNameDisplay);
+			//	row.Tag=_listImageAttachments[i];
+			//	gridAttachedImages.Rows.Add(row);
+			//}
 			gridAttachedImages.EndUpdate();
 		}
 
@@ -97,17 +97,17 @@ namespace OpenDental {
 		///Can be called elsewhere in this form.</summary>
 		private bool ValidateClaimHelper() {
 			try {
-				ClaimConnect.ValidateClaimResponse response=ClaimConnect.ValidateClaim(_claimCur,true);
-				if(response._isValidClaim) {
-					textClaimStatus.Text="The claim is valid.";
-					return true;
-				}
-				//Otherwise the claim must have errors, display them to the user.
-				StringBuilder strBuild=new StringBuilder();
-				for(int i=0;i<response.ValidationErrors.Length;i++) {
-					strBuild.AppendLine(response.ValidationErrors[i]);
-				}
-				textClaimStatus.Text=strBuild.ToString();
+				//ClaimConnect.ValidateClaimResponse response=ClaimConnect.ValidateClaim(_claimCur,true);
+				//if(response._isValidClaim) {
+				//	textClaimStatus.Text="The claim is valid.";
+				//	return true;
+				//}
+				////Otherwise the claim must have errors, display them to the user.
+				//StringBuilder strBuild=new StringBuilder();
+				//for(int i=0;i<response.ValidationErrors.Length;i++) {
+				//	strBuild.AppendLine(response.ValidationErrors[i]);
+				//}
+				//textClaimStatus.Text=strBuild.ToString();
 				return false;
 			}
 			catch(ODException ex) {
@@ -138,15 +138,15 @@ namespace OpenDental {
 		}
 
 		private void ShowImageAttachmentItemEdit(Image img) {
-			if(img==null) {
-				return;
-			}
-			FormClaimAttachmentItemEdit form=new FormClaimAttachmentItemEdit(img);
-			form.ShowDialog();
-			if(form.DialogResult==DialogResult.OK) {
-				_listImageAttachments.Add(form.ImageAttachment);
-				FillGrid();
-			}
+			//if(img==null) {
+			//	return;
+			//}
+			//FormClaimAttachmentItemEdit form=new FormClaimAttachmentItemEdit(img);
+			//form.ShowDialog();
+			//if(form.DialogResult==DialogResult.OK) {
+			//	_listImageAttachments.Add(form.ImageAttachment);
+			//	FillGrid();
+			//}
 		}
 
 		private void buttonAddImage_Click(object sender,EventArgs e) {
@@ -184,102 +184,102 @@ namespace OpenDental {
 
 		///<summary>Allows the user to edit an existing ImageAttachment object.</summary>
 		private void CellDoubleClick_EditImage(object sender,ODGridClickEventArgs e) {
-			ODGridRow selectedRow=gridAttachedImages.Rows[gridAttachedImages.GetSelectedIndex()];
-			ClaimConnect.ImageAttachment selectedAttachment=(ClaimConnect.ImageAttachment)selectedRow.Tag;
-			FormClaimAttachmentItemEdit FormCAIE=new FormClaimAttachmentItemEdit(selectedAttachment.Image
-				,selectedAttachment.ImageFileNameDisplay,selectedAttachment.ImageDate,selectedAttachment.ImageType);
-			FormCAIE.ShowDialog();
-			if(FormCAIE.DialogResult==DialogResult.OK) {//Update row
-				_listImageAttachments[gridAttachedImages.GetSelectedIndex()]=FormCAIE.ImageAttachment;
-				FillGrid();
-			}
+			//ODGridRow selectedRow=gridAttachedImages.Rows[gridAttachedImages.GetSelectedIndex()];
+			//ClaimConnect.ImageAttachment selectedAttachment=(ClaimConnect.ImageAttachment)selectedRow.Tag;
+			//FormClaimAttachmentItemEdit FormCAIE=new FormClaimAttachmentItemEdit(selectedAttachment.Image
+			//	,selectedAttachment.ImageFileNameDisplay,selectedAttachment.ImageDate,selectedAttachment.ImageType);
+			//FormCAIE.ShowDialog();
+			//if(FormCAIE.DialogResult==DialogResult.OK) {//Update row
+			//	_listImageAttachments[gridAttachedImages.GetSelectedIndex()]=FormCAIE.ImageAttachment;
+			//	FillGrid();
+			//}
 		}
 
 		private void ContextMenu_ItemClicked(object sender,ToolStripItemClickedEventArgs e) {
-			ToolStripItem item=e.ClickedItem;
-			if(item.Text=="Delete") {
-				//Delete every selected row
-				foreach(int selectedIndex in gridAttachedImages.SelectedIndices) {
-					_listImageAttachments.RemoveAt(selectedIndex);
-				}
-				FillGrid();
-			}
+			//ToolStripItem item=e.ClickedItem;
+			//if(item.Text=="Delete") {
+			//	//Delete every selected row
+			//	foreach(int selectedIndex in gridAttachedImages.SelectedIndices) {
+			//		_listImageAttachments.RemoveAt(selectedIndex);
+			//	}
+			//	FillGrid();
+			//}
 		}
 
 		///<summary>Sends every attachment in the grid to DentalXChange. Sets the claims attachmentID to
 		///the response from Dentalxchange. Will also prompt the user to re-validate the claim.</summary>
 		private void CreateAndSendAttachments() {
-			//Grab all ImageAttachments from the grid.
-			List<ClaimConnect.ImageAttachment> listImagesToSend=new List<ClaimConnect.ImageAttachment>();
-			for(int i=0;i<gridAttachedImages.Rows.Count;i++) {
-				listImagesToSend.Add((ClaimConnect.ImageAttachment)gridAttachedImages.Rows[i].Tag);
-			}
-			if(string.IsNullOrWhiteSpace(_claimCur.AttachmentID)) {
-				//If an attachment has not already been created, create one.
-				string attachmentId=ClaimConnect.CreateAttachment(listImagesToSend,textNarrative.Text,_claimCur);
-				//Update claim if attachmentID was set. Must happen here so that the validation will consider the new attachmentID.
-				_claimCur.AttachmentID=attachmentId;
-				//Set the claims attached flag to 'Misc' so that the attachmentID will write to the PWK segment 
-				//when the claim is generated as an 837.
-				if(string.IsNullOrEmpty(_claimCur.AttachedFlags)) {
-					_claimCur.AttachedFlags="Misc";
-				}
-				else {//Comma delimited
-					_claimCur.AttachedFlags=",Misc";
-				}
-			}
-			else {//An attachment already exists for this claim.
-				ClaimConnect.AddAttachment(_claimCur,listImagesToSend);
-			}
-			Claims.Update(_claimCur);
+			////Grab all ImageAttachments from the grid.
+			//List<ClaimConnect.ImageAttachment> listImagesToSend=new List<ClaimConnect.ImageAttachment>();
+			//for(int i=0;i<gridAttachedImages.Rows.Count;i++) {
+			//	listImagesToSend.Add((ClaimConnect.ImageAttachment)gridAttachedImages.Rows[i].Tag);
+			//}
+			//if(string.IsNullOrWhiteSpace(_claimCur.AttachmentID)) {
+			//	//If an attachment has not already been created, create one.
+			//	string attachmentId=ClaimConnect.CreateAttachment(listImagesToSend,textNarrative.Text,_claimCur);
+			//	//Update claim if attachmentID was set. Must happen here so that the validation will consider the new attachmentID.
+			//	_claimCur.AttachmentID=attachmentId;
+			//	//Set the claims attached flag to 'Misc' so that the attachmentID will write to the PWK segment 
+			//	//when the claim is generated as an 837.
+			//	if(string.IsNullOrEmpty(_claimCur.AttachedFlags)) {
+			//		_claimCur.AttachedFlags="Misc";
+			//	}
+			//	else {//Comma delimited
+			//		_claimCur.AttachedFlags=",Misc";
+			//	}
+			//}
+			//else {//An attachment already exists for this claim.
+			//	ClaimConnect.AddAttachment(_claimCur,listImagesToSend);
+			//}
+			//Claims.Update(_claimCur);
 		}
 
 		///<summary>Saves all images in the grid to the patient on the claim's directory in the images module. Also creates
 		///a list of ClaimAttach objects to associate to the given claim.</summary>
 		private void buttonOK_Click(object sender,EventArgs e) {
-			//Do not let the user continue if they haven't added any images to the grid.
-			if(gridAttachedImages.Rows.Count==0) {
-				MsgBox.Show(this,"Add an image to be sent with the snipping tool or by attaching an existing file.");
-				return;
-			}
-			try {
-				CreateAndSendAttachments();
-			}
-			catch(ODException ex) {
-				//ODExceptions should already be Lans.g when throwing meaningful messages.
-				//If they weren't translated, the message was from a third party and shouldn't be translated anyway.
-				MessageBox.Show(ex.Message);
-				return;
-			}
-			//Validate the claim, if it isn't valid let the user decide if they want to continue
-			if(!ValidateClaimHelper()) {
-				if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"There were errors validating the claim, would you like to continue?")) {
-					return;
-				}
-			}
-			//Used for determining which category to save the image attachments to. 0 will save the image to the first category in the Images module.
-			long imageTypeDefNum=0;
-			Definition defClaimAttachCat=CheckImageCatDefs().FirstOrDefault();
-			if(defClaimAttachCat!=null) {
-				imageTypeDefNum=defClaimAttachCat.Id;
-			}
-			else {//User does not have a Claim Attachment image category, just use the first image category available.
-				imageTypeDefNum= Definition.GetByCategory(DefinitionCategory.ImageCats).FirstOrDefault().Id;
-			}
-			List<ClaimAttach> listClaimAttachments=new List<ClaimAttach>();
-			for(int i=0;i<gridAttachedImages.Rows.Count;i++) {
-				ClaimConnect.ImageAttachment imageRow=((ClaimConnect.ImageAttachment)gridAttachedImages.Rows[i].Tag);
-				if(Preference.GetBool(PreferenceName.SaveDXCAttachments)) {
-					Bitmap imageBitmap=new Bitmap(imageRow.Image);
-					Document docCur=ImageStore.Import(imageBitmap,imageTypeDefNum,ImageType.Document,_claimPat);
-					imageRow.ImageFileNameActual=docCur.FileName;
-				}
-				//Create attachment objects
-				listClaimAttachments.Add(CreateClaimAttachment(imageRow.ImageFileNameDisplay,imageRow.ImageFileNameActual));
-			}
-			//Keep a running list of attachments sent to DXC for the claim. This will show in the attachments listbox.
-			_claimCur.Attachments.AddRange(listClaimAttachments);
-			Claims.Update(_claimCur);
+			////Do not let the user continue if they haven't added any images to the grid.
+			//if(gridAttachedImages.Rows.Count==0) {
+			//	MsgBox.Show(this,"Add an image to be sent with the snipping tool or by attaching an existing file.");
+			//	return;
+			//}
+			//try {
+			//	CreateAndSendAttachments();
+			//}
+			//catch(ODException ex) {
+			//	//ODExceptions should already be Lans.g when throwing meaningful messages.
+			//	//If they weren't translated, the message was from a third party and shouldn't be translated anyway.
+			//	MessageBox.Show(ex.Message);
+			//	return;
+			//}
+			////Validate the claim, if it isn't valid let the user decide if they want to continue
+			//if(!ValidateClaimHelper()) {
+			//	if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"There were errors validating the claim, would you like to continue?")) {
+			//		return;
+			//	}
+			//}
+			////Used for determining which category to save the image attachments to. 0 will save the image to the first category in the Images module.
+			//long imageTypeDefNum=0;
+			//Definition defClaimAttachCat=CheckImageCatDefs().FirstOrDefault();
+			//if(defClaimAttachCat!=null) {
+			//	imageTypeDefNum=defClaimAttachCat.Id;
+			//}
+			//else {//User does not have a Claim Attachment image category, just use the first image category available.
+			//	imageTypeDefNum= Definition.GetByCategory(DefinitionCategory.ImageCats).FirstOrDefault().Id;
+			//}
+			//List<ClaimAttach> listClaimAttachments=new List<ClaimAttach>();
+			//for(int i=0;i<gridAttachedImages.Rows.Count;i++) {
+			//	ClaimConnect.ImageAttachment imageRow=((ClaimConnect.ImageAttachment)gridAttachedImages.Rows[i].Tag);
+			//	if(Preference.GetBool(PreferenceName.SaveDXCAttachments)) {
+			//		Bitmap imageBitmap=new Bitmap(imageRow.Image);
+			//		Document docCur=ImageStore.Import(imageBitmap,imageTypeDefNum,ImageType.Document,_claimPat);
+			//		imageRow.ImageFileNameActual=docCur.FileName;
+			//	}
+			//	//Create attachment objects
+			//	listClaimAttachments.Add(CreateClaimAttachment(imageRow.ImageFileNameDisplay,imageRow.ImageFileNameActual));
+			//}
+			////Keep a running list of attachments sent to DXC for the claim. This will show in the attachments listbox.
+			//_claimCur.Attachments.AddRange(listClaimAttachments);
+			//Claims.Update(_claimCur);
 			DialogResult=DialogResult.OK;
 		}
 

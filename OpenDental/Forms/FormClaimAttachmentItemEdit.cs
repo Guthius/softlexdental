@@ -14,16 +14,16 @@ namespace OpenDental {
 	///<summary>This form takes the image the user wants to send through DentalXChange and gathers the additional information (specified by the user)
 	///that is needed to create the attachment through ClaimConnect's API.</summary>
 	public partial class FormClaimAttachmentItemEdit:ODForm {
-		public ClaimConnect.ImageAttachment ImageAttachment=new ClaimConnect.ImageAttachment();
+		//public ClaimConnect.ImageAttachment ImageAttachment=new ClaimConnect.ImageAttachment();
 		private Image _claimImage;
 		private int _startingHeight;
 
 		///<summary>Used for opening and editing an existing image attachment row in FormClaimAttachment.</summary>
-		public FormClaimAttachmentItemEdit(Image image,string fileName,DateTime date,ClaimConnect.ImageTypeCode imageType) : this(image){
-			textFileName.Text=fileName;
-			textDateCreated.Text=date.ToShortDateString();//Override today's date with the passed in date.
-			comboImageType.SelectedIndex=(int)imageType;
-		}
+		//public FormClaimAttachmentItemEdit(Image image,string fileName,DateTime date,ClaimConnect.ImageTypeCode imageType) : this(image){
+		//	textFileName.Text=fileName;
+		//	textDateCreated.Text=date.ToShortDateString();//Override today's date with the passed in date.
+		//	comboImageType.SelectedIndex=(int)imageType;
+		//}
 
 		///<summary>Takes an image the user has chosen to send with their claim.</summary>
 		public FormClaimAttachmentItemEdit(Image image) {
@@ -37,14 +37,14 @@ namespace OpenDental {
 		}
 
 		private void RelayoutForm() {
-			if(comboImageType.SelectedTag<ClaimConnect.ImageTypeCode>()==ClaimConnect.ImageTypeCode.XRays) {
-				this.Size=new Size(this.Width,_startingHeight);
-				groupBoxOrientationType.Visible=true;
-			}
-			else {
-				this.Size=new Size(this.Width,_startingHeight-groupBoxOrientationType.Height);
-				groupBoxOrientationType.Visible=false;
-			}
+			//if(comboImageType.SelectedTag<ClaimConnect.ImageTypeCode>()==ClaimConnect.ImageTypeCode.XRays) {
+			//	this.Size=new Size(this.Width,_startingHeight);
+			//	groupBoxOrientationType.Visible=true;
+			//}
+			//else {
+			//	this.Size=new Size(this.Width,_startingHeight-groupBoxOrientationType.Height);
+			//	groupBoxOrientationType.Visible=false;
+			//}
 		}
 		private void comboImageType_SelectionChangeCommitted(object sender,EventArgs e) {
 			RelayoutForm();
@@ -52,26 +52,26 @@ namespace OpenDental {
 
 		///<summary>Populates the combobox with the description values of the ClaimConnect.ImageTypeCode enum.</summary>
 		private void FillImageTypeCombo() {
-			comboImageType.Items.Clear();
-			foreach(ClaimConnect.ImageTypeCode type in Enum.GetValues(typeof(ClaimConnect.ImageTypeCode))) {
-				comboImageType.Items.Add(new ODBoxItem<ClaimConnect.ImageTypeCode>(type.GetDescription(),type));
-			}
+			//comboImageType.Items.Clear();
+			//foreach(ClaimConnect.ImageTypeCode type in Enum.GetValues(typeof(ClaimConnect.ImageTypeCode))) {
+			//	comboImageType.Items.Add(new ODBoxItem<ClaimConnect.ImageTypeCode>(type.GetDescription(),type));
+			//}
 		}
 
 		///<summary>Called on OK_Click(). This method takes the user entered data and creates the ClaimConnect.ImageAttachment object
 		///used by FormClaimAttach. This object is eventually used in the ClaimConnect.CreateAttachment() API call to DentalXChange.</summary>
 		private void CreateImageAttachment() {
-			ImageAttachment.ImageFileNameDisplay=textFileName.Text;
-			ImageAttachment.ImageDate=PIn.Date(textDateCreated.Text);
-			ImageAttachment.ImageType=comboImageType.SelectedTag<ClaimConnect.ImageTypeCode>();
-			if(radioButtonLeft.Checked) {
-				ImageAttachment.ImageOrientationType="left";
-			}
-			else {
-				ImageAttachment.ImageOrientationType="right";
-			}
-			ImageAttachment.ImageFileAsBase64=ConvertImageToBytes(_claimImage);
-			ImageAttachment.Image=_claimImage;
+			//ImageAttachment.ImageFileNameDisplay=textFileName.Text;
+			//ImageAttachment.ImageDate=PIn.Date(textDateCreated.Text);
+			//ImageAttachment.ImageType=comboImageType.SelectedTag<ClaimConnect.ImageTypeCode>();
+			//if(radioButtonLeft.Checked) {
+			//	ImageAttachment.ImageOrientationType="left";
+			//}
+			//else {
+			//	ImageAttachment.ImageOrientationType="right";
+			//}
+			//ImageAttachment.ImageFileAsBase64=ConvertImageToBytes(_claimImage);
+			//ImageAttachment.Image=_claimImage;
 		}
 
 		///<summary>Takes the user's image they want to send with their claim and converts it to a base64 byte representation.

@@ -1222,141 +1222,136 @@ namespace OpenDental {
 		}
 
 		private void butImportCanada_Click(object sender,EventArgs e) {
-			if(!MsgBox.Show(this,true,"If you want a clean slate, the current fee schedule should be cleared first.  When imported, any fees that are found in the text file will overwrite values of the current fee schedule showing in the main window.  Are you sure you want to continue?")) {
-				return;
-			}
-			Cursor=Cursors.WaitCursor;
-			FormFeeSchedPickRemote formPick=new FormFeeSchedPickRemote();
-			formPick.Url=@"http://www.opendental.com/feescanada/";//points to index.php file
-			if(formPick.ShowDialog()!=DialogResult.OK) {
-				Cursor=Cursors.Default;
-				return;
-			}
-			Cursor=Cursors.WaitCursor;//original wait cursor seems to go away for some reason.
-			Application.DoEvents();
-			string feeData="";
-			Action actionCloseFeeSchedImportCanadaProgress=ODProgress.Show(ODEventType.FeeSched,typeof(FeeSchedEvent));
-			if(formPick.IsFileChosenProtected) {
-				string memberNumberODA="";
-				string memberPasswordODA="";
-				if(formPick.FileChosenName.StartsWith("ON_")) {//Any and all Ontario fee schedules
-					FormFeeSchedPickAuthOntario formAuth=new FormFeeSchedPickAuthOntario();
-					if(formAuth.ShowDialog()!=DialogResult.OK) {
-						actionCloseFeeSchedImportCanadaProgress?.Invoke();
-						Cursor=Cursors.Default;
-						return;
-					}
-					memberNumberODA=formAuth.ODAMemberNumber;
-					memberPasswordODA=formAuth.ODAMemberPassword;
-				}
-				//prepare the xml document to send--------------------------------------------------------------------------------------
-				XmlWriterSettings settings = new XmlWriterSettings();
-				settings.Indent = true;
-				settings.IndentChars = ("    ");
-				StringBuilder strbuild=new StringBuilder();
-				using(XmlWriter writer=XmlWriter.Create(strbuild,settings)) {
-					writer.WriteStartElement("RequestFeeSched");
-					writer.WriteStartElement("RegistrationKey");
-					writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
-					writer.WriteEndElement();//RegistrationKey
-					writer.WriteStartElement("FeeSchedFileName");
-					writer.WriteString(formPick.FileChosenName);
-					writer.WriteEndElement();//FeeSchedFileName
-					if(memberNumberODA!="") {
-						writer.WriteStartElement("ODAMemberNumber");
-						writer.WriteString(memberNumberODA);
-						writer.WriteEndElement();//ODAMemberNumber
-						writer.WriteStartElement("ODAMemberPassword");
-						writer.WriteString(memberPasswordODA);
-						writer.WriteEndElement();//ODAMemberPassword
-					}
-					writer.WriteEndElement();//RequestFeeSched
-				}
-#if DEBUG
-				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
-#else
-				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
-#endif
-				//Send the message and get the result-------------------------------------------------------------------------------------
-				string result="";
-				try {
-					FeeSchedEvent.Fire(ODEventType.FeeSched,Lan.g(this,"Retrieving fee schedule")+"...");
-					result=updateService.RequestFeeSched(strbuild.ToString());
-				}
-				catch(Exception ex) {
-					actionCloseFeeSchedImportCanadaProgress?.Invoke();
-					Cursor=Cursors.Default;
-					MessageBox.Show("Error: "+ex.Message);
-					return;
-				}
-				Cursor=Cursors.Default;
-				XmlDocument doc=new XmlDocument();
-				doc.LoadXml(result);
-				//Process errors------------------------------------------------------------------------------------------------------------
-				XmlNode node=doc.SelectSingleNode("//Error");
-				if(node!=null) {
-					actionCloseFeeSchedImportCanadaProgress?.Invoke();
-					MessageBox.Show(node.InnerText,"Error");
-					return;
-				}
-				node=doc.SelectSingleNode("//KeyDisabled");
-				if(node==null) {
-					//no error, and no disabled message
-					if(Preference.Update(PreferenceName.RegistrationKeyIsDisabled,false)) {//this is one of three places in the program where this happens.
-						DataValid.SetInvalid(InvalidType.Prefs);
-					}
-				}
-				else {
-					actionCloseFeeSchedImportCanadaProgress?.Invoke();
-					MessageBox.Show(node.InnerText);
-					if(Preference.Update(PreferenceName.RegistrationKeyIsDisabled,true)) {//this is one of three places in the program where this happens.
-						DataValid.SetInvalid(InvalidType.Prefs);
-					}
-					return;
-				}
-				//Process a valid return value------------------------------------------------------------------------------------------------
-				node=doc.SelectSingleNode("//ResultCSV64");
-				string feeData64=node.InnerXml;
-				byte[] feeDataBytes=Convert.FromBase64String(feeData64);
-				feeData=Encoding.UTF8.GetString(feeDataBytes);
-			}
-			else {
-				FeeSchedEvent.Fire(ODEventType.FeeSched,Lan.g(this,"Downloading fee schedule")+"...");
-				string tempFile=Preferences.GetRandomTempFile(".tmp");
-				WebClient myWebClient=new WebClient();
-				try {
-					myWebClient.DownloadFile(formPick.FileChosenUrl,tempFile);
-				}
-				catch(Exception ex) {
-					actionCloseFeeSchedImportCanadaProgress?.Invoke();
-					MessageBox.Show(Lan.g(this,"Failed to download fee schedule file")+": "+ex.Message);
-					Cursor=Cursors.Default;
-					return;
-				}
-				feeData=File.ReadAllText(tempFile);
-				File.Delete(tempFile);
-			}
-			int numImported;
-			int numSkipped;
-			long clinicNum=0;
-			if(comboClinic.SelectedIndex!=0) {
-				clinicNum=_listClinics[comboClinic.SelectedIndex-1].ClinicNum;
-			}
-			long provNum=0;
-			if(comboProvider.SelectedIndex!=0) {
-				provNum=_listProvs[comboProvider.SelectedIndex-1].ProvNum;
-			}
-			FeeSched feeSched=_listFeeScheds[comboFeeSched.SelectedIndex];
-			FeeScheds.ImportCanadaFeeSchedule2(feeSched,feeData,clinicNum,provNum,out numImported,out numSkipped);
-			actionCloseFeeSchedImportCanadaProgress?.Invoke();
-			Cursor=Cursors.Default;
-			DialogResult=DialogResult.OK;
-			string outputMessage="Done. Number imported: "+numImported;
-			if(numSkipped>0) {
-				outputMessage+=" Number skipped: "+numSkipped;
-			}
-			MessageBox.Show(outputMessage);
+			//if(!MsgBox.Show(this,true,"If you want a clean slate, the current fee schedule should be cleared first.  When imported, any fees that are found in the text file will overwrite values of the current fee schedule showing in the main window.  Are you sure you want to continue?")) {
+			//	return;
+			//}
+			//Cursor=Cursors.WaitCursor;
+			//FormFeeSchedPickRemote formPick=new FormFeeSchedPickRemote();
+			//formPick.Url=@"http://www.opendental.com/feescanada/";//points to index.php file
+			//if(formPick.ShowDialog()!=DialogResult.OK) {
+			//	Cursor=Cursors.Default;
+			//	return;
+			//}
+			//Cursor=Cursors.WaitCursor;//original wait cursor seems to go away for some reason.
+			//Application.DoEvents();
+			//string feeData="";
+			//Action actionCloseFeeSchedImportCanadaProgress=ODProgress.Show(ODEventType.FeeSched,typeof(FeeSchedEvent));
+			//if(formPick.IsFileChosenProtected) {
+			//	string memberNumberODA="";
+			//	string memberPasswordODA="";
+			//	if(formPick.FileChosenName.StartsWith("ON_")) {//Any and all Ontario fee schedules
+			//		FormFeeSchedPickAuthOntario formAuth=new FormFeeSchedPickAuthOntario();
+			//		if(formAuth.ShowDialog()!=DialogResult.OK) {
+			//			actionCloseFeeSchedImportCanadaProgress?.Invoke();
+			//			Cursor=Cursors.Default;
+			//			return;
+			//		}
+			//		memberNumberODA=formAuth.ODAMemberNumber;
+			//		memberPasswordODA=formAuth.ODAMemberPassword;
+			//	}
+			//	//prepare the xml document to send--------------------------------------------------------------------------------------
+			//	XmlWriterSettings settings = new XmlWriterSettings();
+			//	settings.Indent = true;
+			//	settings.IndentChars = ("    ");
+			//	StringBuilder strbuild=new StringBuilder();
+			//	using(XmlWriter writer=XmlWriter.Create(strbuild,settings)) {
+			//		writer.WriteStartElement("RequestFeeSched");
+			//		writer.WriteStartElement("RegistrationKey");
+			//		writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
+			//		writer.WriteEndElement();//RegistrationKey
+			//		writer.WriteStartElement("FeeSchedFileName");
+			//		writer.WriteString(formPick.FileChosenName);
+			//		writer.WriteEndElement();//FeeSchedFileName
+			//		if(memberNumberODA!="") {
+			//			writer.WriteStartElement("ODAMemberNumber");
+			//			writer.WriteString(memberNumberODA);
+			//			writer.WriteEndElement();//ODAMemberNumber
+			//			writer.WriteStartElement("ODAMemberPassword");
+			//			writer.WriteString(memberPasswordODA);
+			//			writer.WriteEndElement();//ODAMemberPassword
+			//		}
+			//		writer.WriteEndElement();//RequestFeeSched
+			//	}
+
+			//	//Send the message and get the result-------------------------------------------------------------------------------------
+			//	string result="";
+			//	try {
+			//		FeeSchedEvent.Fire(ODEventType.FeeSched,Lan.g(this,"Retrieving fee schedule")+"...");
+			//		result=updateService.RequestFeeSched(strbuild.ToString());
+			//	}
+			//	catch(Exception ex) {
+			//		actionCloseFeeSchedImportCanadaProgress?.Invoke();
+			//		Cursor=Cursors.Default;
+			//		MessageBox.Show("Error: "+ex.Message);
+			//		return;
+			//	}
+			//	Cursor=Cursors.Default;
+			//	XmlDocument doc=new XmlDocument();
+			//	doc.LoadXml(result);
+			//	//Process errors------------------------------------------------------------------------------------------------------------
+			//	XmlNode node=doc.SelectSingleNode("//Error");
+			//	if(node!=null) {
+			//		actionCloseFeeSchedImportCanadaProgress?.Invoke();
+			//		MessageBox.Show(node.InnerText,"Error");
+			//		return;
+			//	}
+			//	node=doc.SelectSingleNode("//KeyDisabled");
+			//	if(node==null) {
+			//		//no error, and no disabled message
+			//		if(Preference.Update(PreferenceName.RegistrationKeyIsDisabled,false)) {//this is one of three places in the program where this happens.
+			//			DataValid.SetInvalid(InvalidType.Prefs);
+			//		}
+			//	}
+			//	else {
+			//		actionCloseFeeSchedImportCanadaProgress?.Invoke();
+			//		MessageBox.Show(node.InnerText);
+			//		if(Preference.Update(PreferenceName.RegistrationKeyIsDisabled,true)) {//this is one of three places in the program where this happens.
+			//			DataValid.SetInvalid(InvalidType.Prefs);
+			//		}
+			//		return;
+			//	}
+			//	//Process a valid return value------------------------------------------------------------------------------------------------
+			//	node=doc.SelectSingleNode("//ResultCSV64");
+			//	string feeData64=node.InnerXml;
+			//	byte[] feeDataBytes=Convert.FromBase64String(feeData64);
+			//	feeData=Encoding.UTF8.GetString(feeDataBytes);
+			//}
+			//else {
+			//	FeeSchedEvent.Fire(ODEventType.FeeSched,Lan.g(this,"Downloading fee schedule")+"...");
+			//	string tempFile=Preferences.GetRandomTempFile(".tmp");
+			//	WebClient myWebClient=new WebClient();
+			//	try {
+			//		myWebClient.DownloadFile(formPick.FileChosenUrl,tempFile);
+			//	}
+			//	catch(Exception ex) {
+			//		actionCloseFeeSchedImportCanadaProgress?.Invoke();
+			//		MessageBox.Show(Lan.g(this,"Failed to download fee schedule file")+": "+ex.Message);
+			//		Cursor=Cursors.Default;
+			//		return;
+			//	}
+			//	feeData=File.ReadAllText(tempFile);
+			//	File.Delete(tempFile);
+			//}
+			//int numImported;
+			//int numSkipped;
+			//long clinicNum=0;
+			//if(comboClinic.SelectedIndex!=0) {
+			//	clinicNum=_listClinics[comboClinic.SelectedIndex-1].ClinicNum;
+			//}
+			//long provNum=0;
+			//if(comboProvider.SelectedIndex!=0) {
+			//	provNum=_listProvs[comboProvider.SelectedIndex-1].ProvNum;
+			//}
+			//FeeSched feeSched=_listFeeScheds[comboFeeSched.SelectedIndex];
+			//FeeScheds.ImportCanadaFeeSchedule2(feeSched,feeData,clinicNum,provNum,out numImported,out numSkipped);
+			//actionCloseFeeSchedImportCanadaProgress?.Invoke();
+			//Cursor=Cursors.Default;
+			//DialogResult=DialogResult.OK;
+			//string outputMessage="Done. Number imported: "+numImported;
+			//if(numSkipped>0) {
+			//	outputMessage+=" Number skipped: "+numSkipped;
+			//}
+			//MessageBox.Show(outputMessage);
 		}
 
 		private void butUpdate_Click(object sender,EventArgs e) {

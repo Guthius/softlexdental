@@ -21,7 +21,6 @@ using MigraDoc.Rendering.Printing;
 using OpenDental.Bridges;
 using OpenDental.UI;
 using OpenDentBusiness;
-using PayConnectService = OpenDentBusiness.PayConnectService;
 using OpenDentBusiness.WebTypes.Shared.XWeb;
 using PdfSharp.Pdf;
 using SLDental.Storage;
@@ -138,8 +137,8 @@ namespace OpenDental {
 		private List<CreditCard> _listCreditCards;
 		///<summary>Set to true when X-Charge or PayConnect makes a successful transaction, except for voids.</summary>
 		private bool _wasCreditCardSuccessful;
-		private PayConnectService.creditCardRequest _payConnectRequest;
-		private PaySimple.ApiResponse _paySimpleResponse;
+		//private PayConnectService.creditCardRequest _payConnectRequest;
+		//private PaySimple.ApiResponse _paySimpleResponse;
 		private System.Drawing.Printing.PrintDocument _pd2;
 		private Payment _paymentOld;
 		private bool _promptSignature;
@@ -1874,20 +1873,20 @@ namespace OpenDental {
 					}
 				}
 			}
-			if(progPaySimple.Enabled) {
-				//if clinics are disabled, PaySimple is enabled if marked enabled
-				if(!Preferences.HasClinicsEnabled) {
-					butPaySimple.Visible=true;
-				}
-				else {//if clinics are enabled, PaySimple is enabled if the PaymentType is valid and the Username and Key are not blank
-					string paymentType=ProgramProperties.GetPropValForClinicOrDefault(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimplePayTypeCC,_paymentCur.ClinicNum);
-					if(!string.IsNullOrEmpty(ProgramProperties.GetPropValForClinicOrDefault(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiUserName,_paymentCur.ClinicNum))
-						&& !string.IsNullOrEmpty(ProgramProperties.GetPropValForClinicOrDefault(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiKey,_paymentCur.ClinicNum))
-						&& _listPaymentTypeDefs.Any(x => x.Id.ToString()==paymentType)) {
-						butPaySimple.Visible=true;
-					}
-				}
-			}
+			//if(progPaySimple.Enabled) {
+			//	//if clinics are disabled, PaySimple is enabled if marked enabled
+			//	if(!Preferences.HasClinicsEnabled) {
+			//		butPaySimple.Visible=true;
+			//	}
+			//	else {//if clinics are enabled, PaySimple is enabled if the PaymentType is valid and the Username and Key are not blank
+			//		string paymentType=ProgramProperties.GetPropValForClinicOrDefault(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimplePayTypeCC,_paymentCur.ClinicNum);
+			//		if(!string.IsNullOrEmpty(ProgramProperties.GetPropValForClinicOrDefault(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiUserName,_paymentCur.ClinicNum))
+			//			&& !string.IsNullOrEmpty(ProgramProperties.GetPropValForClinicOrDefault(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiKey,_paymentCur.ClinicNum))
+			//			&& _listPaymentTypeDefs.Any(x => x.Id.ToString()==paymentType)) {
+			//			butPaySimple.Visible=true;
+			//		}
+			//	}
+			//}
 			if(panelXcharge.Visible==false && butPayConnect.Visible==false && butPaySimple.Visible==false) {
 				//This is an office with clinics and one of the payment processing bridges is enabled but this particular clinic doesn't have one set up.
 				if(_xProg.Enabled) {
@@ -3264,171 +3263,172 @@ namespace OpenDental {
 		}
 
 		private void butPayConnect_Click(object sender,EventArgs e) {
-			if(!CanAddNewCreditCard(Programs.GetCur(ProgramName.PayConnect),PayConnect.ProgramProperties.PayConnectPreventSavingNewCC)) {
-				return;
-			}
-			MakePayConnectTransaction();
+			//if(!CanAddNewCreditCard(Programs.GetCur(ProgramName.PayConnect),PayConnect.ProgramProperties.PayConnectPreventSavingNewCC)) {
+			//	return;
+			//}
+			//MakePayConnectTransaction();
 		}
 
 		///<summary>Launches the PayConnect transaction window.  Returns null upon failure, otherwise returns the transaction detail as a string.
 		///If prepaidAmt is not zero, then will show the PayConnect window with the given prepaid amount and let the user enter card # and exp.
 		///A patient is not required for prepaid cards.</summary>
 		public string MakePayConnectTransaction(double prepaidAmt=0) {
-			if(!HasPayConnect()) {
-				return null;
-			}
-			if(prepaidAmt==0) {//Validation for regular credit cards (not prepaid cards).
-				if(textAmount.Text=="") {
-					MsgBox.Show(this,"Please enter an amount first.");
-					textAmount.Focus();
-					return null;
-				}
-				if(_listSplitsCur.Count>0 && PIn.Double(textAmount.Text)!=PIn.Double(textSplitTotal.Text)
-					&& (_listSplitsCur.Count!=1 || _listSplitsCur[0].PayPlanNum==0)) //Not one paysplit attached to payplan
-				{
-					MsgBox.Show(this, "Split totals must equal payment amount before running a credit card transaction.");
-					return null;
-				}
-			}
-			if(PIn.Date(textDate.Text).Date > DateTime.Today.Date
-					&& !Preference.GetBool(PreferenceName.FutureTransDatesAllowed) && !Preference.GetBool(PreferenceName.AccountAllowFutureDebits))
-			{
-				MsgBox.Show(this,"Payment date cannot be in the future.");
-				return null;
-			}
-			CreditCard cc=null;
-			List<CreditCard> creditCards=null;
-			decimal amount=Math.Abs(PIn.Decimal(textAmount.Text));//PayConnect always wants a positive number even for voids and returns.
-			if(prepaidAmt==0) {
-				creditCards=CreditCards.Refresh(_patCur.PatNum);
-				if(comboCreditCards.SelectedIndex<creditCards.Count) {
-					cc=creditCards[comboCreditCards.SelectedIndex];
-				}
-			}
-			else {//Prepaid card
-				amount=(decimal)prepaidAmt;
-			}
-			FormPayConnect FormP=new FormPayConnect(_paymentCur.ClinicNum,_patCur,amount,cc);
-			FormP.ShowDialog();
-			if(prepaidAmt==0 && FormP.Response!=null) {//Regular credit cards (not prepaid cards).
-				//If PayConnect response is not null, refresh comboCreditCards and select the index of the card used for this payment if the token was saved
-				creditCards=CreditCards.Refresh(_patCur.PatNum);
-				AddCreditCardsToCombo(creditCards,x => x.PayConnectToken==FormP.Response.PaymentToken
-					&&x.PayConnectTokenExp.Year==FormP.Response.TokenExpiration.Year
-					&&x.PayConnectTokenExp.Month==FormP.Response.TokenExpiration.Month);
-				Program prog=Programs.GetCur(ProgramName.PayConnect);
-				//still need to add functionality for accountingAutoPay
-				string paytype=ProgramProperties.GetPropVal(prog.ProgramNum,"PaymentType",_paymentCur.ClinicNum);//paytype could be an empty string
-				listPayType.SelectedIndex=Defs.GetOrder(DefinitionCategory.PaymentTypes,PIn.Long(paytype));
-				SetComboDepositAccounts();
-			}
-			string resultNote=null;
-			if(FormP.Response!=null) {
-				resultNote=Lan.g(this,"Transaction Type")+": "+Enum.GetName(typeof(PayConnectService.transType),FormP.TranType)+Environment.NewLine+
-					Lan.g(this,"Status")+": "+FormP.Response.Description+Environment.NewLine+
-					Lan.g(this,"Amount")+": "+FormP.AmountCharged+Environment.NewLine+
-					Lan.g(this,"Card Type")+": "+FormP.Response.CardType+Environment.NewLine+
-					Lan.g(this,"Account")+": "+FormP.CardNumber.Right(4).PadLeft(FormP.CardNumber.Length,'X');
-			}
-			if(prepaidAmt!=0) {
-				if(FormP.Response!=null && FormP.Response.StatusCode=="0") { //The transaction succeeded.
-					return resultNote;
-				}
-				return null;
-			}
-			if(FormP.Response!=null) {
-				if(FormP.Response.StatusCode=="0") { //The transaction succeeded.
-					_isCCDeclined=false;
-					resultNote+=Environment.NewLine
-						+Lan.g(this,"Auth Code")+": "+FormP.Response.AuthCode+Environment.NewLine
-						+Lan.g(this,"Ref Number")+": "+FormP.Response.RefNumber;
-					if(FormP.TranType==PayConnectService.transType.RETURN) {
-						textAmount.Text="-"+FormP.AmountCharged;
-						_paymentCur.Receipt=FormP.ReceiptStr;
-					}
-					else if(FormP.TranType==PayConnectService.transType.AUTH) {
-						textAmount.Text=FormP.AmountCharged;
-					}
-					else if(FormP.TranType==PayConnectService.transType.SALE) {
-						textAmount.Text=FormP.AmountCharged;
-						_paymentCur.Receipt=FormP.ReceiptStr;
-					}
-					if(FormP.TranType==PayConnectService.transType.VOID) {//Close FormPayment window now so the user will not have the option to hit Cancel
-						if(IsNew) {
-							if(!_wasCreditCardSuccessful) {
-								textAmount.Text="-"+FormP.AmountCharged;
-								textNote.Text+=((textNote.Text=="")?"":Environment.NewLine)+resultNote;
-							}
-							_paymentCur.Receipt=FormP.ReceiptStr;
-							if(SavePaymentToDb()) {
-								MsgBox.Show(this,"Void successful.");
-								DialogResult=DialogResult.OK;//Close FormPayment window now so the user will not have the option to hit Cancel
-							}
-							return resultNote;
-						}
-						if(!IsNew || _wasCreditCardSuccessful) {//Create a new negative payment if the void is being run from an existing payment
-							if(_listSplitsCur.Count==0) {
-								AddOneSplit();
-								FillGridSplits();
-							}
-							else if(_listSplitsCur.Count==1//if one split
-								&& _listSplitsCur[0].PayPlanNum!=0//and split is on a payment plan
-								&& _listSplitsCur[0].SplitAmt!=_paymentCur.PayAmt)//and amount doesn't match payment
-							{
-								_listSplitsCur[0].SplitAmt=_paymentCur.PayAmt;//make amounts match automatically
-								textSplitTotal.Text=textAmount.Text;
-							}
-							_paymentCur.IsSplit=_listSplitsCur.Count>1;
-							Payment voidPayment=_paymentCur.Clone();
-							voidPayment.PayAmt*=-1;//the negation of the original amount
-							voidPayment.PayNote=resultNote;
-							voidPayment.Receipt=FormP.ReceiptStr;
-							voidPayment.PaymentSource=CreditCardSource.PayConnect;
-							voidPayment.ProcessStatus=ProcessStat.OfficeProcessed;
-							voidPayment.PayNum=Payments.Insert(voidPayment);
-							foreach(PaySplit splitCur in _listSplitsCur) {//Modify the paysplits for the original transaction to work for the void transaction
-								PaySplit split=splitCur.Copy();
-								split.SplitAmt*=-1;
-								split.PayNum=voidPayment.PayNum;
-								PaySplits.Insert(split);
-							}
-							string strErrorMsg=Ledgers.ComputeAgingForPaysplitsAllocatedToDiffPats(_patCur.PatNum,_listSplitsCur);
-							if(!string.IsNullOrEmpty(strErrorMsg)) {
-								MessageBox.Show(strErrorMsg);
-							}
-						}
-						MsgBox.Show(this,"Void successful.");
-						DialogResult=DialogResult.OK;//Close FormPayment window now so the user will not have the option to hit Cancel
-						return resultNote;
-					}
-					else {//Not Void
-						_wasCreditCardSuccessful=true; //Will void the transaction if user cancels out of window.
-					}
-					_payConnectRequest=FormP.Request;
-				}
-				textNote.Text+=((textNote.Text=="")?"":Environment.NewLine)+resultNote;
-				textNote.Select(textNote.Text.Length-1,0);
-				textNote.ScrollToCaret();//Scroll to the end of the text box to see the newest notes.
-				_paymentCur.PayNote=textNote.Text;
-				_paymentCur.PaymentSource=CreditCardSource.PayConnect;
-				_paymentCur.ProcessStatus=ProcessStat.OfficeProcessed;
-				Payments.Update(_paymentOld,true);
-			}
-			if(!string.IsNullOrEmpty(_paymentCur.Receipt)) {
-				butPrintReceipt.Visible=true;
-				if(Preference.GetBool(PreferenceName.AllowEmailCCReceipt)) {
-					butEmailReceipt.Visible=true;
-				}
-			}
-			if(FormP.Response==null || FormP.Response.StatusCode!="0") { //The transaction failed.
-				if(FormP.TranType==PayConnectService.transType.SALE || FormP.TranType==PayConnectService.transType.AUTH) {
-					textAmount.Text=FormP.AmountCharged;//Preserve the amount so the user can try the payment again more easily.
-				}
-				_isCCDeclined=true;
-				_wasCreditCardSuccessful=false;
-				return null;
-			}
-			return resultNote;
+            //if(!HasPayConnect()) {
+            //	return null;
+            //}
+            //if(prepaidAmt==0) {//Validation for regular credit cards (not prepaid cards).
+            //	if(textAmount.Text=="") {
+            //		MsgBox.Show(this,"Please enter an amount first.");
+            //		textAmount.Focus();
+            //		return null;
+            //	}
+            //	if(_listSplitsCur.Count>0 && PIn.Double(textAmount.Text)!=PIn.Double(textSplitTotal.Text)
+            //		&& (_listSplitsCur.Count!=1 || _listSplitsCur[0].PayPlanNum==0)) //Not one paysplit attached to payplan
+            //	{
+            //		MsgBox.Show(this, "Split totals must equal payment amount before running a credit card transaction.");
+            //		return null;
+            //	}
+            //}
+            //if(PIn.Date(textDate.Text).Date > DateTime.Today.Date
+            //		&& !Preference.GetBool(PreferenceName.FutureTransDatesAllowed) && !Preference.GetBool(PreferenceName.AccountAllowFutureDebits))
+            //{
+            //	MsgBox.Show(this,"Payment date cannot be in the future.");
+            //	return null;
+            //}
+            //CreditCard cc=null;
+            //List<CreditCard> creditCards=null;
+            //decimal amount=Math.Abs(PIn.Decimal(textAmount.Text));//PayConnect always wants a positive number even for voids and returns.
+            //if(prepaidAmt==0) {
+            //	creditCards=CreditCards.Refresh(_patCur.PatNum);
+            //	if(comboCreditCards.SelectedIndex<creditCards.Count) {
+            //		cc=creditCards[comboCreditCards.SelectedIndex];
+            //	}
+            //}
+            //else {//Prepaid card
+            //	amount=(decimal)prepaidAmt;
+            //}
+            //FormPayConnect FormP=new FormPayConnect(_paymentCur.ClinicNum,_patCur,amount,cc);
+            //FormP.ShowDialog();
+            //if(prepaidAmt==0 && FormP.Response!=null) {//Regular credit cards (not prepaid cards).
+            //	//If PayConnect response is not null, refresh comboCreditCards and select the index of the card used for this payment if the token was saved
+            //	creditCards=CreditCards.Refresh(_patCur.PatNum);
+            //	AddCreditCardsToCombo(creditCards,x => x.PayConnectToken==FormP.Response.PaymentToken
+            //		&&x.PayConnectTokenExp.Year==FormP.Response.TokenExpiration.Year
+            //		&&x.PayConnectTokenExp.Month==FormP.Response.TokenExpiration.Month);
+            //	Program prog=Programs.GetCur(ProgramName.PayConnect);
+            //	//still need to add functionality for accountingAutoPay
+            //	string paytype=ProgramProperties.GetPropVal(prog.ProgramNum,"PaymentType",_paymentCur.ClinicNum);//paytype could be an empty string
+            //	listPayType.SelectedIndex=Defs.GetOrder(DefinitionCategory.PaymentTypes,PIn.Long(paytype));
+            //	SetComboDepositAccounts();
+            //}
+            //string resultNote=null;
+            //if(FormP.Response!=null) {
+            //	resultNote=Lan.g(this,"Transaction Type")+": "+Enum.GetName(typeof(PayConnectService.transType),FormP.TranType)+Environment.NewLine+
+            //		Lan.g(this,"Status")+": "+FormP.Response.Description+Environment.NewLine+
+            //		Lan.g(this,"Amount")+": "+FormP.AmountCharged+Environment.NewLine+
+            //		Lan.g(this,"Card Type")+": "+FormP.Response.CardType+Environment.NewLine+
+            //		Lan.g(this,"Account")+": "+FormP.CardNumber.Right(4).PadLeft(FormP.CardNumber.Length,'X');
+            //}
+            //if(prepaidAmt!=0) {
+            //	if(FormP.Response!=null && FormP.Response.StatusCode=="0") { //The transaction succeeded.
+            //		return resultNote;
+            //	}
+            //	return null;
+            //}
+            //if(FormP.Response!=null) {
+            //	if(FormP.Response.StatusCode=="0") { //The transaction succeeded.
+            //		_isCCDeclined=false;
+            //		resultNote+=Environment.NewLine
+            //			+Lan.g(this,"Auth Code")+": "+FormP.Response.AuthCode+Environment.NewLine
+            //			+Lan.g(this,"Ref Number")+": "+FormP.Response.RefNumber;
+            //		if(FormP.TranType==PayConnectService.transType.RETURN) {
+            //			textAmount.Text="-"+FormP.AmountCharged;
+            //			_paymentCur.Receipt=FormP.ReceiptStr;
+            //		}
+            //		else if(FormP.TranType==PayConnectService.transType.AUTH) {
+            //			textAmount.Text=FormP.AmountCharged;
+            //		}
+            //		else if(FormP.TranType==PayConnectService.transType.SALE) {
+            //			textAmount.Text=FormP.AmountCharged;
+            //			_paymentCur.Receipt=FormP.ReceiptStr;
+            //		}
+            //		if(FormP.TranType==PayConnectService.transType.VOID) {//Close FormPayment window now so the user will not have the option to hit Cancel
+            //			if(IsNew) {
+            //				if(!_wasCreditCardSuccessful) {
+            //					textAmount.Text="-"+FormP.AmountCharged;
+            //					textNote.Text+=((textNote.Text=="")?"":Environment.NewLine)+resultNote;
+            //				}
+            //				_paymentCur.Receipt=FormP.ReceiptStr;
+            //				if(SavePaymentToDb()) {
+            //					MsgBox.Show(this,"Void successful.");
+            //					DialogResult=DialogResult.OK;//Close FormPayment window now so the user will not have the option to hit Cancel
+            //				}
+            //				return resultNote;
+            //			}
+            //			if(!IsNew || _wasCreditCardSuccessful) {//Create a new negative payment if the void is being run from an existing payment
+            //				if(_listSplitsCur.Count==0) {
+            //					AddOneSplit();
+            //					FillGridSplits();
+            //				}
+            //				else if(_listSplitsCur.Count==1//if one split
+            //					&& _listSplitsCur[0].PayPlanNum!=0//and split is on a payment plan
+            //					&& _listSplitsCur[0].SplitAmt!=_paymentCur.PayAmt)//and amount doesn't match payment
+            //				{
+            //					_listSplitsCur[0].SplitAmt=_paymentCur.PayAmt;//make amounts match automatically
+            //					textSplitTotal.Text=textAmount.Text;
+            //				}
+            //				_paymentCur.IsSplit=_listSplitsCur.Count>1;
+            //				Payment voidPayment=_paymentCur.Clone();
+            //				voidPayment.PayAmt*=-1;//the negation of the original amount
+            //				voidPayment.PayNote=resultNote;
+            //				voidPayment.Receipt=FormP.ReceiptStr;
+            //				voidPayment.PaymentSource=CreditCardSource.PayConnect;
+            //				voidPayment.ProcessStatus=ProcessStat.OfficeProcessed;
+            //				voidPayment.PayNum=Payments.Insert(voidPayment);
+            //				foreach(PaySplit splitCur in _listSplitsCur) {//Modify the paysplits for the original transaction to work for the void transaction
+            //					PaySplit split=splitCur.Copy();
+            //					split.SplitAmt*=-1;
+            //					split.PayNum=voidPayment.PayNum;
+            //					PaySplits.Insert(split);
+            //				}
+            //				string strErrorMsg=Ledgers.ComputeAgingForPaysplitsAllocatedToDiffPats(_patCur.PatNum,_listSplitsCur);
+            //				if(!string.IsNullOrEmpty(strErrorMsg)) {
+            //					MessageBox.Show(strErrorMsg);
+            //				}
+            //			}
+            //			MsgBox.Show(this,"Void successful.");
+            //			DialogResult=DialogResult.OK;//Close FormPayment window now so the user will not have the option to hit Cancel
+            //			return resultNote;
+            //		}
+            //		else {//Not Void
+            //			_wasCreditCardSuccessful=true; //Will void the transaction if user cancels out of window.
+            //		}
+            //		_payConnectRequest=FormP.Request;
+            //	}
+            //	textNote.Text+=((textNote.Text=="")?"":Environment.NewLine)+resultNote;
+            //	textNote.Select(textNote.Text.Length-1,0);
+            //	textNote.ScrollToCaret();//Scroll to the end of the text box to see the newest notes.
+            //	_paymentCur.PayNote=textNote.Text;
+            //	_paymentCur.PaymentSource=CreditCardSource.PayConnect;
+            //	_paymentCur.ProcessStatus=ProcessStat.OfficeProcessed;
+            //	Payments.Update(_paymentOld,true);
+            //}
+            //if(!string.IsNullOrEmpty(_paymentCur.Receipt)) {
+            //	butPrintReceipt.Visible=true;
+            //	if(Preference.GetBool(PreferenceName.AllowEmailCCReceipt)) {
+            //		butEmailReceipt.Visible=true;
+            //	}
+            //}
+            //if(FormP.Response==null || FormP.Response.StatusCode!="0") { //The transaction failed.
+            //	if(FormP.TranType==PayConnectService.transType.SALE || FormP.TranType==PayConnectService.transType.AUTH) {
+            //		textAmount.Text=FormP.AmountCharged;//Preserve the amount so the user can try the payment again more easily.
+            //	}
+            //	_isCCDeclined=true;
+            //	_wasCreditCardSuccessful=false;
+            //	return null;
+            //}
+            //return resultNote;
+            return "";
 		}
 
 		///<summary>Returns true if payconnect is enabled and completely setup.</summary>
@@ -3468,194 +3468,195 @@ namespace OpenDental {
 		}
 
 		private void butPaySimple_Click(object sender,MouseEventArgs e) {
-			if(e.Button!=MouseButtons.Left) {
-				return;
-			}
-			if(!CanAddNewCreditCard(Programs.GetCur(ProgramName.PaySimple),PaySimple.PropertyDescs.PaySimplePreventSavingNewCC)) {
-				return;
-			}
-			MakePaySimpleTransaction();
+			//if(e.Button!=MouseButtons.Left) {
+			//	return;
+			//}
+			//if(!CanAddNewCreditCard(Programs.GetCur(ProgramName.PaySimple),PaySimple.PropertyDescs.PaySimplePreventSavingNewCC)) {
+			//	return;
+			//}
+			//MakePaySimpleTransaction();
 		}
 
 		///<summary>Launches the PaySimple transaction window.  Returns null upon failure, otherwise returns the transaction detail as a string.
 		///If prepaidAmt is not zero, then will show the PaySimple window with the given prepaid amount and let the user enter card # and exp.
 		///A patient is not required for prepaid cards.</summary>
 		public string MakePaySimpleTransaction(double prepaidAmt=0) {
-			if(!HasPaySimple()) {
-				return null;
-			}
-			CreditCard cc=null;
-			List<CreditCard> creditCards=null;
-			decimal amount=Math.Abs(PIn.Decimal(textAmount.Text));//PaySimple always wants a positive number even for voids and returns.
-			if(prepaidAmt==0) {
-				creditCards=CreditCards.Refresh(_patCur.PatNum);
-				if(comboCreditCards.SelectedIndex<creditCards.Count) {
-					cc=creditCards[comboCreditCards.SelectedIndex];
-				}
-			}
-			else {//Prepaid card
-				amount=(decimal)prepaidAmt;
-			}
-			FormPaySimple form=new FormPaySimple(_paymentCur.ClinicNum,_patCur,amount,cc);
-			form.ShowDialog();
-			Program prog=Programs.GetCur(ProgramName.PaySimple);
-			if(prepaidAmt==0) {//Regular credit cards (not prepaid cards).
-				//If PaySimple response is not null, refresh comboCreditCards and select the index of the card used for this payment if the token was saved
-				creditCards=CreditCards.Refresh(_patCur.PatNum);
-				string paySimpleToken=cc==null ? "" : cc.PaySimpleToken;
-				if(form.ApiResponseOut!=null) {
-					paySimpleToken=form.ApiResponseOut.PaySimpleToken;
-				}
-				AddCreditCardsToCombo(creditCards,x => x.PaySimpleToken==paySimpleToken && !string.IsNullOrEmpty(paySimpleToken));
-				//still need to add functionality for accountingAutoPay
-				string paytype=ProgramProperties.GetPropValForClinicOrDefault(prog.ProgramNum,PaySimple.PropertyDescs.PaySimplePayTypeCC,_paymentCur.ClinicNum);//paytype could be an empty string
-				listPayType.SelectedIndex=Defs.GetOrder(DefinitionCategory.PaymentTypes,PIn.Long(paytype));
-				SetComboDepositAccounts();
-			}
-			if(prepaidAmt!=0) {
-				if(form.ApiResponseOut!=null) { //The transaction succeeded.
-					return form.ApiResponseOut.ToNoteString();
-				}
-				return null;
-			}
-			string resultNote=null;
-			if(form.ApiResponseOut!=null) { //The transaction succeeded.
-				_isCCDeclined=false;
-				resultNote=form.ApiResponseOut.ToNoteString();
-				_paymentCur.PaymentSource=form.ApiResponseOut.CCSource;
-				if(form.ApiResponseOut.CCSource==CreditCardSource.PaySimpleACH) {
-					string paytype=ProgramProperties.GetPropValForClinicOrDefault(prog.ProgramNum,PaySimple.PropertyDescs.PaySimplePayTypeACH,
-						_paymentCur.ClinicNum);
-					int defOrder=Defs.GetOrder(DefinitionCategory.PaymentTypes,PIn.Long(paytype));
-					//paytype could be an empty string, so then leave listPayType as it was.
-					if(defOrder>=-1) {
-						listPayType.SelectedIndex=defOrder;
-					}
-				}
-				if(form.ApiResponseOut.TransType==PaySimple.TransType.RETURN) {
-					textAmount.Text="-"+form.ApiResponseOut.Amount.ToString("F");
-					_paymentCur.Receipt=form.ApiResponseOut.TransactionReceipt;
-				}
-				else if(form.ApiResponseOut.TransType==PaySimple.TransType.AUTH) {
-					textAmount.Text=form.ApiResponseOut.Amount.ToString("F");
-				}
-				else if(form.ApiResponseOut.TransType==PaySimple.TransType.SALE) {
-					textAmount.Text=form.ApiResponseOut.Amount.ToString("F");
-					_paymentCur.Receipt=form.ApiResponseOut.TransactionReceipt;
-				}
-				if(form.ApiResponseOut.TransType==PaySimple.TransType.VOID) {//Close FormPayment window now so the user will not have the option to hit Cancel
-					if(IsNew) {
-						if(!_wasCreditCardSuccessful) {
-							textAmount.Text="-"+form.ApiResponseOut.Amount.ToString("F");
-							textNote.Text+=((textNote.Text=="") ? "" : Environment.NewLine)+resultNote;
-						}
-						_paymentCur.Receipt=form.ApiResponseOut.TransactionReceipt;
-						if(SavePaymentToDb()) {
-							MsgBox.Show(this,"Void successful.");
-							DialogResult=DialogResult.OK;//Close FormPayment window now so the user will not have the option to hit Cancel
-						}
-						return resultNote;
-					}
-					if(!IsNew || _wasCreditCardSuccessful) {//Create a new negative payment if the void is being run from an existing payment
-						if(_listSplitsCur.Count==0) {
-							AddOneSplit();
-							FillGridSplits();
-						}
-						else if(_listSplitsCur.Count==1//if one split
-							&& _listSplitsCur[0].PayPlanNum!=0//and split is on a payment plan
-							&& _listSplitsCur[0].SplitAmt!=_paymentCur.PayAmt)//and amount doesn't match payment
-						{
-							_listSplitsCur[0].SplitAmt=_paymentCur.PayAmt;//make amounts match automatically
-							textSplitTotal.Text=textAmount.Text;
-						}
-						_paymentCur.IsSplit=_listSplitsCur.Count>1;
-						Payment voidPayment=_paymentCur.Clone();
-						voidPayment.PayAmt*=-1;//the negation of the original amount
-						voidPayment.PayNote=resultNote;
-						voidPayment.Receipt=form.ApiResponseOut.TransactionReceipt;
-						voidPayment.PaymentSource=CreditCardSource.PaySimple;
-						voidPayment.ProcessStatus=ProcessStat.OfficeProcessed;
-						voidPayment.PayNum=Payments.Insert(voidPayment);
-						foreach(PaySplit splitCur in _listSplitsCur) {//Modify the paysplits for the original transaction to work for the void transaction
-							PaySplit split=splitCur.Copy();
-							split.SplitAmt*=-1;
-							split.PayNum=voidPayment.PayNum;
-							PaySplits.Insert(split);
-						}
-						string strErrorMsg=Ledgers.ComputeAgingForPaysplitsAllocatedToDiffPats(_patCur.PatNum,_listSplitsCur);
-						if(!string.IsNullOrEmpty(strErrorMsg)) {
-							MessageBox.Show(strErrorMsg);
-						}
-					}
-					MsgBox.Show(this,"Void successful.");
-					DialogResult=DialogResult.OK;//Close FormPayment window now so the user will not have the option to hit Cancel
-					return resultNote;
-				}
-				else {//Not Void
-					_wasCreditCardSuccessful=true; //Will void the transaction if user cancels out of window.
-				}
-				_paySimpleResponse=form.ApiResponseOut;
-			}
-			if(!string.IsNullOrWhiteSpace(resultNote)) {
-				textNote.Text+=((textNote.Text=="") ? "" : Environment.NewLine)+resultNote;
-			}
-			textNote.Select(Math.Max(textNote.Text.Length-1,textNote.Text.Length),0);
-			textNote.ScrollToCaret();//Scroll to the end of the text box to see the newest notes.
-			_paymentCur.PayNote=textNote.Text;
-			if(_paymentCur.PaymentSource==CreditCardSource.None) {
-				_paymentCur.PaymentSource=CreditCardSource.PaySimple;
-			}
-			_paymentCur.ProcessStatus=ProcessStat.OfficeProcessed;
-			Payments.Update(_paymentCur,true);
-			if(!string.IsNullOrEmpty(_paymentCur.Receipt)) {
-				butPrintReceipt.Visible=true;
-				if(Preference.GetBool(PreferenceName.AllowEmailCCReceipt)) {
-					butEmailReceipt.Visible=true;
-				}
-			}
-			if(form.ApiResponseOut==null || form.ApiResponseOut.Status.ToLower()=="failed") { //The transaction failed.
-				//PaySimple checks the transaction type here and sets the amount the user chose to the textAmount textbox. 
-				//We don't have that information here so do nothing.
-				_isCCDeclined=true;
-				_wasCreditCardSuccessful=false;
-				return null;
-			}
-			return resultNote;
+            //if(!HasPaySimple()) {
+            //	return null;
+            //}
+            //CreditCard cc=null;
+            //List<CreditCard> creditCards=null;
+            //decimal amount=Math.Abs(PIn.Decimal(textAmount.Text));//PaySimple always wants a positive number even for voids and returns.
+            //if(prepaidAmt==0) {
+            //	creditCards=CreditCards.Refresh(_patCur.PatNum);
+            //	if(comboCreditCards.SelectedIndex<creditCards.Count) {
+            //		cc=creditCards[comboCreditCards.SelectedIndex];
+            //	}
+            //}
+            //else {//Prepaid card
+            //	amount=(decimal)prepaidAmt;
+            //}
+            //FormPaySimple form=new FormPaySimple(_paymentCur.ClinicNum,_patCur,amount,cc);
+            //form.ShowDialog();
+            //Program prog=Programs.GetCur(ProgramName.PaySimple);
+            //if(prepaidAmt==0) {//Regular credit cards (not prepaid cards).
+            //	//If PaySimple response is not null, refresh comboCreditCards and select the index of the card used for this payment if the token was saved
+            //	creditCards=CreditCards.Refresh(_patCur.PatNum);
+            //	string paySimpleToken=cc==null ? "" : cc.PaySimpleToken;
+            //	if(form.ApiResponseOut!=null) {
+            //		paySimpleToken=form.ApiResponseOut.PaySimpleToken;
+            //	}
+            //	AddCreditCardsToCombo(creditCards,x => x.PaySimpleToken==paySimpleToken && !string.IsNullOrEmpty(paySimpleToken));
+            //	//still need to add functionality for accountingAutoPay
+            //	string paytype=ProgramProperties.GetPropValForClinicOrDefault(prog.ProgramNum,PaySimple.PropertyDescs.PaySimplePayTypeCC,_paymentCur.ClinicNum);//paytype could be an empty string
+            //	listPayType.SelectedIndex=Defs.GetOrder(DefinitionCategory.PaymentTypes,PIn.Long(paytype));
+            //	SetComboDepositAccounts();
+            //}
+            //if(prepaidAmt!=0) {
+            //	if(form.ApiResponseOut!=null) { //The transaction succeeded.
+            //		return form.ApiResponseOut.ToNoteString();
+            //	}
+            //	return null;
+            //}
+            //string resultNote=null;
+            //if(form.ApiResponseOut!=null) { //The transaction succeeded.
+            //	_isCCDeclined=false;
+            //	resultNote=form.ApiResponseOut.ToNoteString();
+            //	_paymentCur.PaymentSource=form.ApiResponseOut.CCSource;
+            //	if(form.ApiResponseOut.CCSource==CreditCardSource.PaySimpleACH) {
+            //		string paytype=ProgramProperties.GetPropValForClinicOrDefault(prog.ProgramNum,PaySimple.PropertyDescs.PaySimplePayTypeACH,
+            //			_paymentCur.ClinicNum);
+            //		int defOrder=Defs.GetOrder(DefinitionCategory.PaymentTypes,PIn.Long(paytype));
+            //		//paytype could be an empty string, so then leave listPayType as it was.
+            //		if(defOrder>=-1) {
+            //			listPayType.SelectedIndex=defOrder;
+            //		}
+            //	}
+            //	if(form.ApiResponseOut.TransType==PaySimple.TransType.RETURN) {
+            //		textAmount.Text="-"+form.ApiResponseOut.Amount.ToString("F");
+            //		_paymentCur.Receipt=form.ApiResponseOut.TransactionReceipt;
+            //	}
+            //	else if(form.ApiResponseOut.TransType==PaySimple.TransType.AUTH) {
+            //		textAmount.Text=form.ApiResponseOut.Amount.ToString("F");
+            //	}
+            //	else if(form.ApiResponseOut.TransType==PaySimple.TransType.SALE) {
+            //		textAmount.Text=form.ApiResponseOut.Amount.ToString("F");
+            //		_paymentCur.Receipt=form.ApiResponseOut.TransactionReceipt;
+            //	}
+            //	if(form.ApiResponseOut.TransType==PaySimple.TransType.VOID) {//Close FormPayment window now so the user will not have the option to hit Cancel
+            //		if(IsNew) {
+            //			if(!_wasCreditCardSuccessful) {
+            //				textAmount.Text="-"+form.ApiResponseOut.Amount.ToString("F");
+            //				textNote.Text+=((textNote.Text=="") ? "" : Environment.NewLine)+resultNote;
+            //			}
+            //			_paymentCur.Receipt=form.ApiResponseOut.TransactionReceipt;
+            //			if(SavePaymentToDb()) {
+            //				MsgBox.Show(this,"Void successful.");
+            //				DialogResult=DialogResult.OK;//Close FormPayment window now so the user will not have the option to hit Cancel
+            //			}
+            //			return resultNote;
+            //		}
+            //		if(!IsNew || _wasCreditCardSuccessful) {//Create a new negative payment if the void is being run from an existing payment
+            //			if(_listSplitsCur.Count==0) {
+            //				AddOneSplit();
+            //				FillGridSplits();
+            //			}
+            //			else if(_listSplitsCur.Count==1//if one split
+            //				&& _listSplitsCur[0].PayPlanNum!=0//and split is on a payment plan
+            //				&& _listSplitsCur[0].SplitAmt!=_paymentCur.PayAmt)//and amount doesn't match payment
+            //			{
+            //				_listSplitsCur[0].SplitAmt=_paymentCur.PayAmt;//make amounts match automatically
+            //				textSplitTotal.Text=textAmount.Text;
+            //			}
+            //			_paymentCur.IsSplit=_listSplitsCur.Count>1;
+            //			Payment voidPayment=_paymentCur.Clone();
+            //			voidPayment.PayAmt*=-1;//the negation of the original amount
+            //			voidPayment.PayNote=resultNote;
+            //			voidPayment.Receipt=form.ApiResponseOut.TransactionReceipt;
+            //			voidPayment.PaymentSource=CreditCardSource.PaySimple;
+            //			voidPayment.ProcessStatus=ProcessStat.OfficeProcessed;
+            //			voidPayment.PayNum=Payments.Insert(voidPayment);
+            //			foreach(PaySplit splitCur in _listSplitsCur) {//Modify the paysplits for the original transaction to work for the void transaction
+            //				PaySplit split=splitCur.Copy();
+            //				split.SplitAmt*=-1;
+            //				split.PayNum=voidPayment.PayNum;
+            //				PaySplits.Insert(split);
+            //			}
+            //			string strErrorMsg=Ledgers.ComputeAgingForPaysplitsAllocatedToDiffPats(_patCur.PatNum,_listSplitsCur);
+            //			if(!string.IsNullOrEmpty(strErrorMsg)) {
+            //				MessageBox.Show(strErrorMsg);
+            //			}
+            //		}
+            //		MsgBox.Show(this,"Void successful.");
+            //		DialogResult=DialogResult.OK;//Close FormPayment window now so the user will not have the option to hit Cancel
+            //		return resultNote;
+            //	}
+            //	else {//Not Void
+            //		_wasCreditCardSuccessful=true; //Will void the transaction if user cancels out of window.
+            //	}
+            //	_paySimpleResponse=form.ApiResponseOut;
+            //}
+            //if(!string.IsNullOrWhiteSpace(resultNote)) {
+            //	textNote.Text+=((textNote.Text=="") ? "" : Environment.NewLine)+resultNote;
+            //}
+            //textNote.Select(Math.Max(textNote.Text.Length-1,textNote.Text.Length),0);
+            //textNote.ScrollToCaret();//Scroll to the end of the text box to see the newest notes.
+            //_paymentCur.PayNote=textNote.Text;
+            //if(_paymentCur.PaymentSource==CreditCardSource.None) {
+            //	_paymentCur.PaymentSource=CreditCardSource.PaySimple;
+            //}
+            //_paymentCur.ProcessStatus=ProcessStat.OfficeProcessed;
+            //Payments.Update(_paymentCur,true);
+            //if(!string.IsNullOrEmpty(_paymentCur.Receipt)) {
+            //	butPrintReceipt.Visible=true;
+            //	if(Preference.GetBool(PreferenceName.AllowEmailCCReceipt)) {
+            //		butEmailReceipt.Visible=true;
+            //	}
+            //}
+            //if(form.ApiResponseOut==null || form.ApiResponseOut.Status.ToLower()=="failed") { //The transaction failed.
+            //	//PaySimple checks the transaction type here and sets the amount the user chose to the textAmount textbox. 
+            //	//We don't have that information here so do nothing.
+            //	_isCCDeclined=true;
+            //	_wasCreditCardSuccessful=false;
+            //	return null;
+            //}
+            //return resultNote;
+            return "";
 		}
 
 		///<summary>Returns true if PaySimple is enabled and completely setup.</summary>
 		private bool HasPaySimple() {
-			_listPaymentTypeDefs=_listPaymentTypeDefs??Definition.GetByCategory(DefinitionCategory.PaymentTypes);
-			Program prog=Programs.GetCur(ProgramName.PaySimple);
-			bool isSetupRequired=false;
-			if(prog.Enabled) {
-				//If clinics are disabled, _paymentCur.ClinicNum will be 0 and the Username and Key will be the 'Headquarters' or practice credentials
-				string paymentType=ProgramProperties.GetPropValForClinicOrDefault(prog.ProgramNum,PaySimple.PropertyDescs.PaySimplePayTypeCC,_paymentCur.ClinicNum);
-				if(string.IsNullOrEmpty(ProgramProperties.GetPropValForClinicOrDefault(prog.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiUserName,_paymentCur.ClinicNum))
-					|| string.IsNullOrEmpty(ProgramProperties.GetPropValForClinicOrDefault(prog.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiKey,_paymentCur.ClinicNum))
-					|| !_listPaymentTypeDefs.Any(x => x.Id.ToString()==paymentType)) 
-				{
-					isSetupRequired=true;
-				}
-			}
-			else {//Program link not enabled.  Launch a promo website.
-				ODException.SwallowAnyException(() =>
-					Process.Start("http://www.opendental.com/resources/redirects/redirectpaysimple.html")
-				);
-				return false;
-			}
-			if(isSetupRequired) {
-				if(!Security.IsAuthorized(Permissions.Setup)) {
-					return false;
-				}
-				FormPaySimpleSetup form=new FormPaySimpleSetup();
-				form.ShowDialog();
-				if(form.DialogResult!=DialogResult.OK) {
-					return false;
-				}
-				//The user could have corrected the PaySimple bridge, recursively try again.
-				return HasPaySimple();
-			}
+			//_listPaymentTypeDefs=_listPaymentTypeDefs??Definition.GetByCategory(DefinitionCategory.PaymentTypes);
+			//Program prog=Programs.GetCur(ProgramName.PaySimple);
+			//bool isSetupRequired=false;
+			//if(prog.Enabled) {
+			//	//If clinics are disabled, _paymentCur.ClinicNum will be 0 and the Username and Key will be the 'Headquarters' or practice credentials
+			//	string paymentType=ProgramProperties.GetPropValForClinicOrDefault(prog.ProgramNum,PaySimple.PropertyDescs.PaySimplePayTypeCC,_paymentCur.ClinicNum);
+			//	if(string.IsNullOrEmpty(ProgramProperties.GetPropValForClinicOrDefault(prog.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiUserName,_paymentCur.ClinicNum))
+			//		|| string.IsNullOrEmpty(ProgramProperties.GetPropValForClinicOrDefault(prog.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiKey,_paymentCur.ClinicNum))
+			//		|| !_listPaymentTypeDefs.Any(x => x.Id.ToString()==paymentType)) 
+			//	{
+			//		isSetupRequired=true;
+			//	}
+			//}
+			//else {//Program link not enabled.  Launch a promo website.
+			//	ODException.SwallowAnyException(() =>
+			//		Process.Start("http://www.opendental.com/resources/redirects/redirectpaysimple.html")
+			//	);
+			//	return false;
+			//}
+			//if(isSetupRequired) {
+			//	if(!Security.IsAuthorized(Permissions.Setup)) {
+			//		return false;
+			//	}
+			//	FormPaySimpleSetup form=new FormPaySimpleSetup();
+			//	form.ShowDialog();
+			//	if(form.DialogResult!=DialogResult.OK) {
+			//		return false;
+			//	}
+			//	//The user could have corrected the PaySimple bridge, recursively try again.
+			//	return HasPaySimple();
+			//}
 			return true;
 		}
 
@@ -3688,108 +3689,108 @@ namespace OpenDental {
 		}
 
 		private void VoidPayConnectTransaction(string refNum,string amount) {
-			PayConnectResponse response=null;
-			string receiptStr="";
-			Cursor=Cursors.WaitCursor;
-			if(_payConnectRequest==null) {//The payment was made through the terminal.
-				ODProgress.ShowAction(() => {
-						PosRequest posRequest=PosRequest.CreateVoidByReference(refNum);
-						PosResponse posResponse=DpsPos.ProcessCreditCard(posRequest);
-						response=PayConnectTerminal.ToPayConnectResponse(posResponse);
-						receiptStr=PayConnectTerminal.BuildReceiptString(posRequest,posResponse,null,0);
-					},
-					startingMessage:Lan.g(this,"Processing void on terminal."),
-					actionException:ex => {
-						this.Invoke(() => {
-							Cursor=Cursors.Default;
-							MessageBox.Show(Lan.g(this,"Error voiding payment:")+" "+ex.Message);
-						});
-					});
-			}
-			else {//The payment was made through the web service.
-				_payConnectRequest.TransType=PayConnectService.transType.VOID;
-				_payConnectRequest.RefNumber=refNum;
-				_payConnectRequest.Amount=PIn.Decimal(amount);
-				PayConnectService.transResponse transResponse=PayConnect.ProcessCreditCard(_payConnectRequest,_paymentCur.ClinicNum,x => MessageBox.Show(x));
-				response=new PayConnectResponse(transResponse,_payConnectRequest);
-				receiptStr=PayConnect.BuildReceiptString(_payConnectRequest,transResponse,null,0);
-			}
-			Cursor=Cursors.Default;
-			if(response==null || response.StatusCode!="0") {//error in transaction
-				MsgBox.Show(this,"This credit card payment has already been processed and will have to be voided manually through the web interface.");
-				return;
-			}
-			else {//Record a new payment for the voided transaction
-				Payment voidPayment=_paymentCur.Clone();
-				voidPayment.PayAmt*=-1; //The negated amount of the original payment
-				voidPayment.Receipt=receiptStr;
-				voidPayment.PayNote=Lan.g(this,"Transaction Type")+": "+Enum.GetName(typeof(PayConnectService.transType),PayConnectService.transType.VOID)
-					+Environment.NewLine+Lan.g(this,"Status")+": "+response.Description+Environment.NewLine
-					+Lan.g(this,"Amount")+": "+voidPayment.PayAmt+Environment.NewLine
-					+Lan.g(this,"Auth Code")+": "+response.AuthCode+Environment.NewLine
-					+Lan.g(this,"Ref Number")+": "+response.RefNumber;
-				voidPayment.PaymentSource=CreditCardSource.PayConnect;
-				voidPayment.ProcessStatus=ProcessStat.OfficeProcessed;
-				voidPayment.PayNum=Payments.Insert(voidPayment);
-				for(int i=0;i<_listSplitsCur.Count;i++) {//Modify the paysplits for the original transaction to work for the void transaction
-					PaySplit split=_listSplitsCur[i].Copy();
-					split.SplitAmt*=-1;
-					split.PayNum=voidPayment.PayNum;
-					PaySplits.Insert(split);
-				}
-				SecurityLogs.MakeLogEntry(Permissions.PaymentCreate,voidPayment.PatNum,
-					Patients.GetLim(voidPayment.PatNum).GetNameLF()+", "+voidPayment.PayAmt.ToString("c"));
-			}
+			//PayConnectResponse response=null;
+			//string receiptStr="";
+			//Cursor=Cursors.WaitCursor;
+			//if(_payConnectRequest==null) {//The payment was made through the terminal.
+			//	ODProgress.ShowAction(() => {
+			//			PosRequest posRequest=PosRequest.CreateVoidByReference(refNum);
+			//			PosResponse posResponse=DpsPos.ProcessCreditCard(posRequest);
+			//			response=PayConnectTerminal.ToPayConnectResponse(posResponse);
+			//			receiptStr=PayConnectTerminal.BuildReceiptString(posRequest,posResponse,null,0);
+			//		},
+			//		startingMessage:Lan.g(this,"Processing void on terminal."),
+			//		actionException:ex => {
+			//			this.Invoke(() => {
+			//				Cursor=Cursors.Default;
+			//				MessageBox.Show(Lan.g(this,"Error voiding payment:")+" "+ex.Message);
+			//			});
+			//		});
+			//}
+			//else {//The payment was made through the web service.
+			//	_payConnectRequest.TransType=PayConnectService.transType.VOID;
+			//	_payConnectRequest.RefNumber=refNum;
+			//	_payConnectRequest.Amount=PIn.Decimal(amount);
+			//	PayConnectService.transResponse transResponse=PayConnect.ProcessCreditCard(_payConnectRequest,_paymentCur.ClinicNum,x => MessageBox.Show(x));
+			//	response=new PayConnectResponse(transResponse,_payConnectRequest);
+			//	receiptStr=PayConnect.BuildReceiptString(_payConnectRequest,transResponse,null,0);
+			//}
+			//Cursor=Cursors.Default;
+			//if(response==null || response.StatusCode!="0") {//error in transaction
+			//	MsgBox.Show(this,"This credit card payment has already been processed and will have to be voided manually through the web interface.");
+			//	return;
+			//}
+			//else {//Record a new payment for the voided transaction
+			//	Payment voidPayment=_paymentCur.Clone();
+			//	voidPayment.PayAmt*=-1; //The negated amount of the original payment
+			//	voidPayment.Receipt=receiptStr;
+			//	voidPayment.PayNote=Lan.g(this,"Transaction Type")+": "+Enum.GetName(typeof(PayConnectService.transType),PayConnectService.transType.VOID)
+			//		+Environment.NewLine+Lan.g(this,"Status")+": "+response.Description+Environment.NewLine
+			//		+Lan.g(this,"Amount")+": "+voidPayment.PayAmt+Environment.NewLine
+			//		+Lan.g(this,"Auth Code")+": "+response.AuthCode+Environment.NewLine
+			//		+Lan.g(this,"Ref Number")+": "+response.RefNumber;
+			//	voidPayment.PaymentSource=CreditCardSource.PayConnect;
+			//	voidPayment.ProcessStatus=ProcessStat.OfficeProcessed;
+			//	voidPayment.PayNum=Payments.Insert(voidPayment);
+			//	for(int i=0;i<_listSplitsCur.Count;i++) {//Modify the paysplits for the original transaction to work for the void transaction
+			//		PaySplit split=_listSplitsCur[i].Copy();
+			//		split.SplitAmt*=-1;
+			//		split.PayNum=voidPayment.PayNum;
+			//		PaySplits.Insert(split);
+			//	}
+			//	SecurityLogs.MakeLogEntry(Permissions.PaymentCreate,voidPayment.PatNum,
+			//		Patients.GetLim(voidPayment.PatNum).GetNameLF()+", "+voidPayment.PayAmt.ToString("c"));
+			//}
 		}
 
 		private void VoidPaySimpleTransaction(string refNum,string originalReceipt) {
-			PaySimple.ApiResponse response=null;
-			string receiptStr="";
-			Cursor=Cursors.WaitCursor;
-			try {
-				response=PaySimple.VoidPayment(refNum,_paymentCur.ClinicNum);
-			}
-			catch(ODException wex) {
-				MessageBox.Show(wex.Message);//This should have already been Lans.g if applicable.
-				return;
-			}
-			catch(Exception ex) {
-				MessageBox.Show(Lan.g(this,"Error:")+" "+ex.Message);
-				return;
-			}
-			string[] arrayReceiptFields=originalReceipt.Replace("\r\n","\n").Replace("\r","\n").Split(new string[] { "\n" },StringSplitOptions.RemoveEmptyEntries);
-			string ccNum="";
-			string expDateStr="";
-			string nameOnCard="";
-			for(int i=0;i<arrayReceiptFields.Length;i++) {
-				if(arrayReceiptFields[i].StartsWith("Name")) {
-					nameOnCard=arrayReceiptFields[i].Substring(4).Replace(".","");
-				}
-				if(arrayReceiptFields[i].StartsWith("Account")) {
-					ccNum=arrayReceiptFields[i].Substring(7).Replace(".","");
-				}
-				if(arrayReceiptFields[i].StartsWith("Exp Date")) {
-					expDateStr=arrayReceiptFields[i].Substring(8).Replace(".","");
-				}
-			}
-			response.BuildReceiptString(ccNum,PIn.Int(expDateStr.Substring(0,2)),PIn.Int(expDateStr.Substring(2)),nameOnCard,_paymentCur.ClinicNum);
-			receiptStr=response.TransactionReceipt;
-			Cursor=Cursors.Default;
-			Payment voidPayment=_paymentCur.Clone();
-			voidPayment.PayAmt*=-1; //The negated amount of the original payment
-			voidPayment.Receipt=receiptStr;
-			voidPayment.PayNote=response.ToNoteString();
-			voidPayment.PaymentSource=CreditCardSource.PaySimple;
-			voidPayment.ProcessStatus=ProcessStat.OfficeProcessed;
-			voidPayment.PayNum=Payments.Insert(voidPayment);
-			for(int i=0;i<_listSplitsCur.Count;i++) {//Modify the paysplits for the original transaction to work for the void transaction
-				PaySplit split=_listSplitsCur[i].Copy();
-				split.SplitAmt*=-1;
-				split.PayNum=voidPayment.PayNum;
-				PaySplits.Insert(split);
-			}
-			SecurityLogs.MakeLogEntry(Permissions.PaymentCreate,voidPayment.PatNum,
-				Patients.GetLim(voidPayment.PatNum).GetNameLF()+", "+voidPayment.PayAmt.ToString("c"));
+			//PaySimple.ApiResponse response=null;
+			//string receiptStr="";
+			//Cursor=Cursors.WaitCursor;
+			//try {
+			//	response=PaySimple.VoidPayment(refNum,_paymentCur.ClinicNum);
+			//}
+			//catch(ODException wex) {
+			//	MessageBox.Show(wex.Message);//This should have already been Lans.g if applicable.
+			//	return;
+			//}
+			//catch(Exception ex) {
+			//	MessageBox.Show(Lan.g(this,"Error:")+" "+ex.Message);
+			//	return;
+			//}
+			//string[] arrayReceiptFields=originalReceipt.Replace("\r\n","\n").Replace("\r","\n").Split(new string[] { "\n" },StringSplitOptions.RemoveEmptyEntries);
+			//string ccNum="";
+			//string expDateStr="";
+			//string nameOnCard="";
+			//for(int i=0;i<arrayReceiptFields.Length;i++) {
+			//	if(arrayReceiptFields[i].StartsWith("Name")) {
+			//		nameOnCard=arrayReceiptFields[i].Substring(4).Replace(".","");
+			//	}
+			//	if(arrayReceiptFields[i].StartsWith("Account")) {
+			//		ccNum=arrayReceiptFields[i].Substring(7).Replace(".","");
+			//	}
+			//	if(arrayReceiptFields[i].StartsWith("Exp Date")) {
+			//		expDateStr=arrayReceiptFields[i].Substring(8).Replace(".","");
+			//	}
+			//}
+			//response.BuildReceiptString(ccNum,PIn.Int(expDateStr.Substring(0,2)),PIn.Int(expDateStr.Substring(2)),nameOnCard,_paymentCur.ClinicNum);
+			//receiptStr=response.TransactionReceipt;
+			//Cursor=Cursors.Default;
+			//Payment voidPayment=_paymentCur.Clone();
+			//voidPayment.PayAmt*=-1; //The negated amount of the original payment
+			//voidPayment.Receipt=receiptStr;
+			//voidPayment.PayNote=response.ToNoteString();
+			//voidPayment.PaymentSource=CreditCardSource.PaySimple;
+			//voidPayment.ProcessStatus=ProcessStat.OfficeProcessed;
+			//voidPayment.PayNum=Payments.Insert(voidPayment);
+			//for(int i=0;i<_listSplitsCur.Count;i++) {//Modify the paysplits for the original transaction to work for the void transaction
+			//	PaySplit split=_listSplitsCur[i].Copy();
+			//	split.SplitAmt*=-1;
+			//	split.PayNum=voidPayment.PayNum;
+			//	PaySplits.Insert(split);
+			//}
+			//SecurityLogs.MakeLogEntry(Permissions.PaymentCreate,voidPayment.PatNum,
+			//	Patients.GetLim(voidPayment.PatNum).GetNameLF()+", "+voidPayment.PayAmt.ToString("c"));
 		}
 
 		private void menuXcharge_Click(object sender,EventArgs e) {
@@ -4886,11 +4887,11 @@ namespace OpenDental {
 				VoidXChargeTransaction(transactionID,amount,isDebit);
 			}
 			else if(!string.IsNullOrWhiteSpace(paySimplePaymentId)) {
-				string originalReceipt=_paymentCur.Receipt;
-				if(_paySimpleResponse!=null) {
-					originalReceipt=_paySimpleResponse.TransactionReceipt;
-				}
-				VoidPaySimpleTransaction(paySimplePaymentId,originalReceipt);
+				//string originalReceipt=_paymentCur.Receipt;
+				//if(_paySimpleResponse!=null) {
+				//	originalReceipt=_paySimpleResponse.TransactionReceipt;
+				//}
+				//VoidPaySimpleTransaction(paySimplePaymentId,originalReceipt);
 			}
 			else {
 				MsgBox.Show(this,"Unable to void transaction");

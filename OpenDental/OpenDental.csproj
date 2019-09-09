@@ -4803,16 +4803,6 @@
     <Compile Include="User Controls\ValidTime.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Web References\CallFireService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
-    <Compile Include="Web References\NewCrop\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
     <EmbeddedResource Include="Forms Reports\FormRpProdGoal.resx">
       <DependentUpon>FormRpProdGoal.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -7711,180 +7701,10 @@
     <Compile Include="User Controls\ValidNumber.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Web References\com.dentalxchange.webservices\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
-    <Compile Include="Web References\localhost\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
     <None Include="Resources\DpsPos.dll.config" />
     <None Include="Resources\en_US_aff" />
     <None Include="Resources\en_US_dic" />
     <None Include="Resources\OPENDENTAL.pem" />
-    <None Include="Web References\CallFireService\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\CallFireService\SMSService.wsdl" />
-    <None Include="Web References\NewCrop\AccountStatusDetailV2Result.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\CheckCancelRxStatusResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\CompleteBatchResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\CounselingMessageDetailResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\CreateRxChangeApprovalResponseResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\DigitalSigningBatchResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\DownloadDetailResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\DrugAllergyDetailResultV2.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\DrugDiseaseDetailResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\DrugDiseaseDetailResultV2.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\DrugFormularyDetailResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\DrugFormularyFavoriteDetailResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\DrugHistoryDetailResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\DrugHistoryDetailV3Result.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\DuplicateDrugTherapyResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\EligibilityDetailResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\EligibilityDetailResultV3.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\FormularyCoverageDetailResultV3.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\GetRxChangeDetailResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\GetRxChangesSummaryResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\GetRxFillDetailResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\GetRxFillSummaryResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\HealthplanDetailResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\MessageTransactionStatusResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\PatientAllergyExtendedDetailResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\PatientAllergyExtendedDetailV4Result.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\PatientDrugDetailResult4.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\PatientDrugDetailResult5.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\PatientFreeFormAllergyExtendedDetailResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\PharmacyDetailResultV2.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\PharmacyDetailResultV4.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\NewCrop\RegisterPrescriberDetailV2Result.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\RegistryDetailResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\RenewalDetailResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\RenewalDetailResultV4.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\RenewalDetailResultV5.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\RenewalListDetailResultV4.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\RenewalListSummaryResultV4.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\RenewalResponseDetailResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\RenewalSummaryResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\RenewalSummaryResultV2.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\ReportDetailResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\ReportDownloadResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\Result.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\RxBatchPrescriptionResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\RxBatchRenewalResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\RxBatchRenewalResultV2.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\RxChangeDeliveryStatusResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\SendCancelRxResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\TransmissionSummaryResult.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\NewCrop\Update1.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Icon32TableRefresh.png" />
@@ -8099,7 +7919,6 @@
     <None Include="Resources\HICF2012.jpg" />
     <None Include="Resources\phoneInUse.png" />
     <None Include="Resources\splashCanada.jpg" />
-    <None Include="Web References\NewCrop\Update1.disco" />
     <None Include="Resources\TxtMsg5.gif" />
     <None Include="Resources\TxtMsg2.png" />
     <None Include="Resources\TxtMsg1.png" />
@@ -8573,11 +8392,6 @@
     <None Include="Resources\printPreview20.gif" />
     <None Include="Resources\email1.gif" />
     <None Include="Resources\email.gif" />
-    <None Include="Web References\localhost\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\localhost\Service1.disco" />
     <None Include="Resources\GPL.txt" />
     <None Include="Resources\PaymentsRDL.txt" />
     <None Include="Resources\commlog.gif" />
@@ -8614,64 +8428,6 @@
     <None Include="Resources\Unsched Treat Plans.rdl" />
     <None Include="Resources\up.gif" />
     <None Include="Resources\deleteX.gif" />
-    <None Include="Web References\com.dentalxchange.webservices\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\com.dentalxchange.webservices\Response.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\com.dentalxchange.webservices\wsdl.wsdl" />
-    <None Include="Web References\localhost\Service1.wsdl" />
-  </ItemGroup>
-  <ItemGroup>
-    <WebReferences Include="Web References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WebReferenceUrl Include="http://localhost:3824/Service1.asmx">
-      <UrlBehavior>Static</UrlBehavior>
-      <RelPath>Web References\localhost\</RelPath>
-      <UpdateFromURL>http://localhost:3824/Service1.asmx</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>OpenDental_localhost_Service1</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="https://secure.newcropaccounts.com/v7/WebServices/Update1.asmx">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\NewCrop\</RelPath>
-      <UpdateFromURL>https://secure.newcropaccounts.com/v7/WebServices/Update1.asmx</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>OpenDental_NewCrop_Update1</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="https://webservices.dentalxchange.com/dws/webservice/wsdl.jsp">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\com.dentalxchange.webservices\</RelPath>
-      <UpdateFromURL>https://webservices.dentalxchange.com/dws/webservice/wsdl.jsp</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>OpenDental_com_dentalxchange_webservices_WebServiceService</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="https://www.callfire.com/service/SMSService%3fwsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\CallFireService\</RelPath>
-      <UpdateFromURL>https://www.callfire.com/service/SMSService%3fwsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>OpenDental_CallFireService_SMSService</CachedSettingsPropName>
-    </WebReferenceUrl>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

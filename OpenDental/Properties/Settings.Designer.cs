@@ -25,46 +25,6 @@ namespace OpenDental.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://webservices.dentalxchange.com/dws/services/dciservice.svl")]
-        public string OpenDental_com_dentalxchange_webservices_WebServiceService {
-            get {
-                return ((string)(this["OpenDental_com_dentalxchange_webservices_WebServiceService"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:3824/Service1.asmx")]
-        public string OpenDental_localhost_Service1 {
-            get {
-                return ((string)(this["OpenDental_localhost_Service1"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://www.callfire.com/service/SMSService")]
-        public string OpenDental_CallFireService_SMSService {
-            get {
-                return ((string)(this["OpenDental_CallFireService_SMSService"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://secure.newcropaccounts.com/v7/WebServices/Update1.asmx")]
-        public string OpenDental_NewCrop_Update1 {
-            get {
-                return ((string)(this["OpenDental_NewCrop_Update1"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("https://its.changehealthcare.com/ITS/ITSWS.asmx")]
         public string OpenDental_EmdeonITS_ITSWS {
             get {

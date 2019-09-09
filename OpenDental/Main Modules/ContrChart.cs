@@ -4327,380 +4327,380 @@ namespace OpenDental
         ///<summary>Returns true if new information was pulled back from NewCrop.</summary>
         private bool NewCropRefreshPrescriptions()
         {
-            Program programNewCrop = Programs.GetCur(ProgramName.eRx);
-            if (ToolBarMain.Buttons["eRx"] != null)
-            {//Hidden for eCW
-                ToolBarMain.Buttons["eRx"].IsRed = false; //Set the eRx button back to default color.
-                ToolBarMain.Invalidate();
-            }
-            if (!programNewCrop.Enabled)
-            {
-                return false;
-            }
-            if (PatCur == null)
-            {
-                return false;
-            }
-            ErxOption erxOption = PIn.Enum<ErxOption>(ProgramProperties.GetPropForProgByDesc(programNewCrop.ProgramNum, Erx.PropertyDescs.ErxOption).PropertyValue);
-            if (erxOption != ErxOption.Legacy && erxOption != ErxOption.DoseSpotWithLegacy)
-            {
-                return false;
-            }
-            string newCropAccountId = Preference.GetString(PreferenceName.NewCropAccountId);
-            if (newCropAccountId == "")
-            {//We check for NewCropAccountID validity below, but we also need to be sure to exit this check for resellers if blank.
-                return false;
-            }
-            if (!NewCropIsAccountIdValid())
-            {
-                //The NewCropAccountID will be invalid for resellers, because the checksum will be wrong.
-                //Therefore, resellers should be allowed to continue if both the NewCropName and NewCropPassword are specified. NewCrop does not allow blank passwords.
-                if (Preference.GetString(PreferenceName.NewCropName) == "" || Preference.GetString(PreferenceName.NewCropPassword) == "")
-                {
-                    return false;
-                }
-            }
-            NewCrop.Update1 wsNewCrop = new NewCrop.Update1();//New Crop web services interface.
-            NewCrop.Credentials credentials = new NewCrop.Credentials();
-            NewCrop.AccountRequest accountRequest = new NewCrop.AccountRequest();
-            NewCrop.PatientRequest patientRequest = new NewCrop.PatientRequest();
-            NewCrop.PrescriptionHistoryRequest prescriptionHistoryRequest = new NewCrop.PrescriptionHistoryRequest();
-            NewCrop.PatientInformationRequester patientInfoRequester = new NewCrop.PatientInformationRequester();
-            NewCrop.Result response = new NewCrop.Result();
-#if DEBUG
-            wsNewCrop.Url = "https://preproduction.newcropaccounts.com/v7/WebServices/Update1.asmx";
-#endif
-            credentials.PartnerName = OpenDentBusiness.NewCrop.NewCropPartnerName;
-            credentials.Name = OpenDentBusiness.NewCrop.NewCropAccountName;
-            credentials.Password = OpenDentBusiness.NewCrop.NewCropAccountPasssword;
-            accountRequest.AccountId = newCropAccountId;
-            accountRequest.SiteId = "1";//Accounts are always created with SiteId=1.
-            patientRequest.PatientId = POut.Long(PatCur.PatNum);
-            prescriptionHistoryRequest.StartHistory = new DateTime(2012, 11, 2);//Only used for archived prescriptions. This is the date of first release for NewCrop integration.
-            prescriptionHistoryRequest.EndHistory = DateTime.Now;//Only used for archived prescriptions.
-                                                                 //Prescription Archive Status Values:
-                                                                 //N = Not archived (i.e. Current Medication) 
-                                                                 //Y = Archived (i.e. Previous Mediation)
-                                                                 //% = Both Not Archived and Archived
-                                                                 //Note: This field will contain values other than Y,N in future releases.
-            prescriptionHistoryRequest.PrescriptionArchiveStatus = "N";
-            //Prescription Status Values:
-            //C = Completed Prescription
-            //P = Pending Medication
-            //% = Both C and P.
-            prescriptionHistoryRequest.PrescriptionStatus = "C";
-            //Prescription Sub Status Values:
-            //% = All meds (Returns all meds regardless of the sub status)
-            //A = NS (Returns only meds that have a 'NS' - Needs staff sub status)
-            //U = DR (Returns only meds that have a 'DR' - Needs doctor review sub status)
-            //P = Renewal Request that has been selected for processing on the NewCrop screens - it has not yet been denied, denied and re-written or accepted
-            //S = Standard Rx (Returns only meds that have an 'InProc' - InProcess sub status)
-            //D = DrugSet source - indicates the prescription was created by selecting the medication from the DrugSet selection box on the ComposeRx page
-            //O = Outside Prescription - indicates the prescription was created on the MedEntry page, not prescribed.
-            prescriptionHistoryRequest.PrescriptionSubStatus = "S";
-            patientInfoRequester.UserType = "Staff";//Allowed values: Doctor,Staff
-            if (Security.CurUser.ProvNum != 0)
-            {//If the current OD user is associated to a doctor, then the request is from a doctor, otherwise from a staff member.
-                patientInfoRequester.UserType = "Doctor";
-            }
-            patientInfoRequester.UserId = POut.Long(Security.CurUser.UserNum);
-            //Send the request to NewCrop. Always returns all current medications, and returns medications between the StartHistory and EndHistory dates if requesting archived medications.
-            //The patientIdType parameter was added for another vendor and is not often used. We do not use this field. We must pass empty string.
-            //The includeSchema parameter is useful for first-time debugging, but in release mode, we should pass N for no.
-            wsNewCrop.Timeout = 3000;//3 second. The default is 100 seconds, but we cannot wait that long, because prescriptions are checked each time the Chart is refreshed. 1 second is too little, 2 seconds works most of the time. 3 seconds is safe.
-            try
-            {
-                //throw new Exception("Test communication error in debug mode.");
-                response = wsNewCrop.GetPatientFullMedicationHistory6(credentials, accountRequest, patientRequest, prescriptionHistoryRequest, patientInfoRequester, "", "N");
-            }
-            catch
-            { //An exception is thrown when the timeout is reached, or when the NewCrop servers are not accessible (because the servers are down, or because local internet is down).
-              //We used to show a popup here each time the refresh failed, but users found it annoying when the NewCrop severs were down, because the popup would show each time they visited the Chart and impeded user workflow.
-              //We tried silently logging a warning message into the Application log within system Event Viewer, but we found out that a decent number of users do not have permission to write to the Application log, which causes UEs sometimes.
-              //We tried showing a popup exactly 1 time for each instance of OD launched, to avoid the permission issue, but users were still complaining about it popping up and they didn't know what to do to fix it.
-              //We now change the background color of the eRx button red, and show an error message when user click the eRx button to alert them that interactions may be out of date.
-                if (ToolBarMain.Buttons["eRx"] != null)
-                {//Hidden for eCW
-                    ToolBarMain.Buttons["eRx"].IsRed = true; //Marks the eRx button to be drawn with a red color.
-                    ToolBarMain.Invalidate();
-                }
-                return false;
-            }
-            //response.Message = Error message if error.
-            //response.RowCount = Number of prescription records returned.
-            //response.Status = Status of request. "OK" = success.
-            //response.Timing = Not sure what this is for. Tells us how quickly the server responded to the request?
-            //response.XmlResponse = The XML data returned, encoded in base 64.
-            if (response.Status != NewCrop.StatusType.OK)
-            {//Other statuses include Fail (ex if credentials are invalid), NotFound (ex if patientId invalid or accoundId invalid), Unknown (no known examples yet)
-             //For now we simply abort gracefully.
-                return false;
-            }
-            byte[] xmlResponseBytes = Convert.FromBase64String(response.XmlResponse);
-            string xmlResponse = Encoding.UTF8.GetString(xmlResponseBytes);
-            if (xmlResponse == "")
-            {//An empty result means that the patient does not currently have any active medications in eRx.
-                xmlResponse = "<emptyResult/>";//At least one node is needed below to prevent crashing.
-                                               //We need to continue to the bottom of this function even when there are no active medications,
-                                               //so that we can discontinue any medications in the database which were active that are now discontinued in eRx.
-            }
-#if DEBUG//For capturing the xmlReponse with the newlines properly showing.
-            string tempFile = Preferences.GetRandomTempFile(".txt");
-            File.WriteAllText(tempFile, xmlResponse);
-#endif
-            XmlDocument xml = new XmlDocument();
-            try
-            {
-                xml.LoadXml(xmlResponse);
-            }
-            catch
-            { //In case NewCrop returns invalid XML.
-                return false;//abort gracefully
-            }
-            DateTime rxStartDateT = Preference.GetDateTime(PreferenceName.ElectronicRxDateStartedUsing131);
-            XmlNode nodeNewDataSet = xml.FirstChild;
-            List<long> listActiveMedicationPatNums = new List<long>();
-            List<RxPat> listNewRx = new List<RxPat>();
-            foreach (XmlNode nodeTable in nodeNewDataSet.ChildNodes)
-            {
-                RxPat rxOld = null;
-                MedicationPat medOrderOld = null;
-                RxPat rx = new RxPat();
-                //rx.IsControlled not important.  Only used in sending, but this Rx was already sent.
-                rx.Disp = "";
-                rx.DosageCode = "";
-                rx.Drug = "";
-                rx.Notes = "";
-                rx.Refills = "";
-                rx.SendStatus = RxSendStatus.Unsent;
-                rx.Sig = "";
-                rx.ErxPharmacyInfo = "";
-                string additionalSig = "";
-                bool isProv = true;
-                long rxCui = 0;
-                string strDrugName = "";
-                string strGenericName = "";
-                string strProvNumOrNpi = "";//We used to send ProvNum in LicensedPrescriber.ID to NewCrop, but now we send NPI. We will receive ProvNum for older prescriptions.
-                string drugInfo = "";
-                string externalDrugConcept = "";
-                foreach (XmlNode nodeRxFieldParent in nodeTable.ChildNodes)
-                {
-                    XmlNode nodeRxField = nodeRxFieldParent.FirstChild;
-                    if (nodeRxField == null)
-                    {
-                        continue;
-                    }
-                    switch (nodeRxFieldParent.Name.ToLower())
-                    {
-                        case "deaclasscode":
-                            //According to Brian from NewCrop:
-                            //"Possible values are 0 = unscheduled, schedules 1-5, and 9 = unknown.
-                            //Some states categorize a drug as scheduled, but do not assign a particular level."
-                            rx.IsControlled = false;
-                            if (nodeRxField.Value != "0")
-                            {
-                                rx.IsControlled = true;
-                            }
-                            break;
-                        case "dispense"://ex 5.555
-                            rx.Disp = nodeRxField.Value;
-                            break;
-                        case "druginfo"://ex lisinopril 5 mg Tab
-                            drugInfo = nodeRxField.Value;
-                            break;
-                        case "drugname"://ex lisinopril
-                            strDrugName = nodeRxField.Value;
-                            break;
-                        case "externaldrugconcept":
-                            externalDrugConcept = nodeRxField.Value;//ex "ingredient1, ingredient 2"
-                            break;
-                        case "externalpatientid"://patnum passed back from the compose request that initiated this prescription
-                            rx.PatNum = PIn.Long(nodeRxField.Value);
-                            break;
-                        case "externalphysicianid"://NPI passed back from the compose request that initiated this prescription.  For older prescriptions, this will be ProvNum.
-                            strProvNumOrNpi = nodeRxField.Value;
-                            break;
-                        case "externaluserid"://The person who ordered the prescription. Is a ProvNum when provider, or an EmployeeNum when an employee. If EmployeeNum, then is prepended with "emp" because of how we sent it to NewCrop in the first place.
-                            if (nodeRxField.Value.StartsWith("emp"))
-                            {
-                                isProv = false;
-                            }
-                            break;
-                        case "finaldestinationtype":
-                            //According to Brian from NewCrop:
-                            //FinalDestinationType - Indicates the transmission method from NewCrop to the receiving entity.
-                            //0=Not Transmitted
-                            //1=Print
-                            //2=Fax
-                            //3=Electronic/Surescripts Retail
-                            //4=Electronic/Surescripts Mail Order
-                            //5=Test
-                            if (nodeRxField.Value == "0")
-                            {//Not Transmitted
-                                rx.SendStatus = RxSendStatus.Unsent;
-                            }
-                            else if (nodeRxField.Value == "1")
-                            {//Print
-                                rx.SendStatus = RxSendStatus.Printed;
-                            }
-                            else if (nodeRxField.Value == "2")
-                            {//Fax
-                                rx.SendStatus = RxSendStatus.Faxed;
-                            }
-                            else if (nodeRxField.Value == "3")
-                            {//Electronic/Surescripts Retail
-                                rx.SendStatus = RxSendStatus.SentElect;
-                            }
-                            else if (nodeRxField.Value == "4")
-                            {//Electronic/Surescripts Mail Order
-                                rx.SendStatus = RxSendStatus.SentElect;
-                            }
-                            else if (nodeRxField.Value == "5")
-                            {//Test
-                                rx.SendStatus = RxSendStatus.Unsent;
-                            }
-                            break;
-                        case "genericname":
-                            strGenericName = nodeRxField.Value;
-                            break;
-                        case "patientfriendlysig"://The concat of all the codified fields.
-                            rx.Sig = nodeRxField.Value;
-                            break;
-                        case "pharmacyncpdp"://ex 9998888
-                                             //We will use this information in the future to find a pharmacy already entered into OD, or to create one dynamically if it does not exist.
-                                             //rx.PharmacyNum;//Get the pharmacy where pharmacy.PharmID = node.Value
-                            break;
-                        case "prescriptiondate":
-                            rx.RxDate = PIn.DateT(nodeRxField.Value);
-                            break;
-                        case "prescriptionguid"://32 characters with 4 hyphens. ex ba4d4a84-af0a-4cbf-9437-36feda97d1b6
-                            rx.ErxGuid = nodeRxField.Value;
-                            rxOld = RxPats.GetErxByIdForPat(nodeRxField.Value);
-                            medOrderOld = MedicationPats.GetMedicationOrderByErxIdAndPat(nodeRxField.Value, PatCur.PatNum);
-                            break;
-                        case "prescriptionnotes"://from the Additional Sig box at the bottom
-                            additionalSig = nodeRxField.Value;
-                            break;
-                        case "refills"://ex 1
-                            rx.Refills = nodeRxField.Value;
-                            break;
-                        case "rxcui"://ex 311354
-                            rxCui = PIn.Long(nodeRxField.Value);//The RxCui is not returned with all prescriptions, so it can be zero (not set).
-                            break;
-                        case "pharmacyfullinfo":
-                            rx.ErxPharmacyInfo = nodeRxField.Value;
-                            break;
-                    }
-                }//end inner foreach
-                if (rx.RxDate < rxStartDateT)
-                {//Ignore prescriptions created before version 13.1.14, because those prescriptions were entered manually by the user.
-                    continue;
-                }
-                if (additionalSig != "")
-                {
-                    if (rx.Sig != "")
-                    {//If patient friend SIG is present.
-                        rx.Sig += " ";
-                    }
-                    rx.Sig += additionalSig;
-                }
-                rx.Drug = drugInfo;
-                if ((drugInfo == "" || drugInfo.ToLower() == "none") && externalDrugConcept != "")
-                {
-                    rx.Drug = externalDrugConcept;
-                }
-                //Determine the provider. This is a mess, because we used to send ProvNum in the outgoing XML LicensedPrescriber.ID,
-                //but now we send NPI to avoid multiple billing charges for two provider records with the same NPI
-                //(the same doctor entered multiple times, for example, one provider for each clinic).
-                ErxLog erxLog = ErxLogs.GetLatestForPat(rx.PatNum, rx.RxDate);//Locate the original request corresponding to this prescription.
-                if (erxLog != null && erxLog.ProvNum != 0 && erxLog.DateTStamp.Date == rx.RxDate.Date)
-                {
-                    Provider provErxLog = Providers.GetFirstOrDefault(x => x.ProvNum == erxLog.ProvNum);
-                    if ((strProvNumOrNpi.Length == 10 && provErxLog.NationalProvID == strProvNumOrNpi) || erxLog.ProvNum.ToString() == strProvNumOrNpi)
-                    {
-                        rx.ProvNum = erxLog.ProvNum;
-                    }
-                }
-                if (rx.ProvNum == 0)
-                {//Not found or the provnum is unknown.
-                 //The erxLog.ProvNum will be 0 for prescriptions fetched from NewCrop before version 13.3. Could also happen if
-                 //prescriptions were created when NewCrop was brand new (right before ErxLog was created),
-                 //or if someone lost a database and they are downloading all the prescriptions from scratch again.
-                    if (rxOld == null)
-                    {//The prescription is being dowloaded for the first time, or is being downloaded again after it was deleted manually by the user.
-                        List<Provider> listProviders = Providers.GetDeepCopy(true);
-                        for (int j = 0; j < listProviders.Count; j++)
-                        {//Try to locate a visible provider matching the NPI on the prescription.
-                            if (strProvNumOrNpi.Length == 10 && listProviders[j].NationalProvID == strProvNumOrNpi)
-                            {
-                                rx.ProvNum = listProviders[j].ProvNum;
-                                break;
-                            }
-                        }
-                        if (rx.ProvNum == 0)
-                        {//No visible provider found matching the NPI on the prescription.
-                         //Try finding a hidden provider matching the NPI on the prescription, or a matching provnum.
-                            Provider provider = Providers.GetFirstOrDefault(x => x.NationalProvID == strProvNumOrNpi);
-                            if (provider == null)
-                            {
-                                provider = Providers.GetFirstOrDefault(x => x.ProvNum.ToString() == strProvNumOrNpi);
-                            }
-                            if (provider != null)
-                            {
-                                rx.ProvNum = provider.ProvNum;
-                            }
-                        }
-                        //If rx.ProvNum is still zero, then that means the provider NPI/ProvNum has been modified or somehow deleted (for example, database was lost) for the provider record originally used.
-                        if (rx.ProvNum == 0)
-                        {//Catch all
-                            Provider provUnknown = Providers.GetFirstOrDefault(x => x.FName == "ERX" && x.LName == "UNKNOWN");
-                            if (provUnknown != null)
-                            {
-                                rx.ProvNum = provUnknown.ProvNum;
-                            }
-                            if (provUnknown == null)
-                            {
-                                provUnknown = new Provider();
-                                provUnknown.Abbr = "UNK";
-                                provUnknown.FName = "ERX";
-                                provUnknown.LName = "UNKNOWN";
-                                provUnknown.IsHidden = true;
-                                rx.ProvNum = Providers.Insert(provUnknown);
-                                Providers.RefreshCache();
-                            }
-                        }
-                    }
-                    else
-                    {//The prescription has already been downloaded in the past.
-                        rx.ProvNum = rxOld.ProvNum;//Preserve the provnum if already in the database, because it may have already been corrected by the user after the previous download.
-                    }
-                }
-                long medicationPatNum = Erx.InsertOrUpdateErxMedication(rxOld, rx, rxCui.ToString(), strDrugName, strGenericName, isProv);
-                listActiveMedicationPatNums.Add(medicationPatNum);
-                if (rxOld == null)
-                {//Only add the rx if it is new.  We don't want to trigger automation for existing prescriptions.
-                    listNewRx.Add(rx);
-                }
-            }//end foreach
-            List<MedicationPat> listAllMedicationsForPatient = MedicationPats.Refresh(PatCur.PatNum, false);
-            foreach (MedicationPat medication in listAllMedicationsForPatient)
-            {
-                if (!Erx.IsFromNewCrop(medication.ErxGuid))
-                {
-                    continue;//This medication is not an eRx medicaiton.  It was entered manually inside OD.
-                }
-                if (listActiveMedicationPatNums.Contains(medication.MedicationPatNum))
-                {
-                    continue;//The medication is still active.
-                }
-                //The medication was discontinued inside the eRx interface.
-                medication.DateStop = DateTime.Today.AddDays(-1);//Discontinue the medication as of yesterday so that it will immediately show as discontinued.
-                MedicationPats.Update(medication, false);//Discontinue the medication inside OD to match what shows in the eRx interface.
-            }//end foreach
-            if (listNewRx.Count > 0)
-            {
-                AutomationL.Trigger(AutomationTrigger.RxCreate, new List<string>(), PatCur.PatNum, 0, listNewRx);
-            }
+//            Program programNewCrop = Programs.GetCur(ProgramName.eRx);
+//            if (ToolBarMain.Buttons["eRx"] != null)
+//            {//Hidden for eCW
+//                ToolBarMain.Buttons["eRx"].IsRed = false; //Set the eRx button back to default color.
+//                ToolBarMain.Invalidate();
+//            }
+//            if (!programNewCrop.Enabled)
+//            {
+//                return false;
+//            }
+//            if (PatCur == null)
+//            {
+//                return false;
+//            }
+//            ErxOption erxOption = PIn.Enum<ErxOption>(ProgramProperties.GetPropForProgByDesc(programNewCrop.ProgramNum, Erx.PropertyDescs.ErxOption).PropertyValue);
+//            if (erxOption != ErxOption.Legacy && erxOption != ErxOption.DoseSpotWithLegacy)
+//            {
+//                return false;
+//            }
+//            string newCropAccountId = Preference.GetString(PreferenceName.NewCropAccountId);
+//            if (newCropAccountId == "")
+//            {//We check for NewCropAccountID validity below, but we also need to be sure to exit this check for resellers if blank.
+//                return false;
+//            }
+//            if (!NewCropIsAccountIdValid())
+//            {
+//                //The NewCropAccountID will be invalid for resellers, because the checksum will be wrong.
+//                //Therefore, resellers should be allowed to continue if both the NewCropName and NewCropPassword are specified. NewCrop does not allow blank passwords.
+//                if (Preference.GetString(PreferenceName.NewCropName) == "" || Preference.GetString(PreferenceName.NewCropPassword) == "")
+//                {
+//                    return false;
+//                }
+//            }
+//            NewCrop.Update1 wsNewCrop = new NewCrop.Update1();//New Crop web services interface.
+//            NewCrop.Credentials credentials = new NewCrop.Credentials();
+//            NewCrop.AccountRequest accountRequest = new NewCrop.AccountRequest();
+//            NewCrop.PatientRequest patientRequest = new NewCrop.PatientRequest();
+//            NewCrop.PrescriptionHistoryRequest prescriptionHistoryRequest = new NewCrop.PrescriptionHistoryRequest();
+//            NewCrop.PatientInformationRequester patientInfoRequester = new NewCrop.PatientInformationRequester();
+//            NewCrop.Result response = new NewCrop.Result();
+//#if DEBUG
+//            wsNewCrop.Url = "https://preproduction.newcropaccounts.com/v7/WebServices/Update1.asmx";
+//#endif
+//            credentials.PartnerName = OpenDentBusiness.NewCrop.NewCropPartnerName;
+//            credentials.Name = OpenDentBusiness.NewCrop.NewCropAccountName;
+//            credentials.Password = OpenDentBusiness.NewCrop.NewCropAccountPasssword;
+//            accountRequest.AccountId = newCropAccountId;
+//            accountRequest.SiteId = "1";//Accounts are always created with SiteId=1.
+//            patientRequest.PatientId = POut.Long(PatCur.PatNum);
+//            prescriptionHistoryRequest.StartHistory = new DateTime(2012, 11, 2);//Only used for archived prescriptions. This is the date of first release for NewCrop integration.
+//            prescriptionHistoryRequest.EndHistory = DateTime.Now;//Only used for archived prescriptions.
+//                                                                 //Prescription Archive Status Values:
+//                                                                 //N = Not archived (i.e. Current Medication) 
+//                                                                 //Y = Archived (i.e. Previous Mediation)
+//                                                                 //% = Both Not Archived and Archived
+//                                                                 //Note: This field will contain values other than Y,N in future releases.
+//            prescriptionHistoryRequest.PrescriptionArchiveStatus = "N";
+//            //Prescription Status Values:
+//            //C = Completed Prescription
+//            //P = Pending Medication
+//            //% = Both C and P.
+//            prescriptionHistoryRequest.PrescriptionStatus = "C";
+//            //Prescription Sub Status Values:
+//            //% = All meds (Returns all meds regardless of the sub status)
+//            //A = NS (Returns only meds that have a 'NS' - Needs staff sub status)
+//            //U = DR (Returns only meds that have a 'DR' - Needs doctor review sub status)
+//            //P = Renewal Request that has been selected for processing on the NewCrop screens - it has not yet been denied, denied and re-written or accepted
+//            //S = Standard Rx (Returns only meds that have an 'InProc' - InProcess sub status)
+//            //D = DrugSet source - indicates the prescription was created by selecting the medication from the DrugSet selection box on the ComposeRx page
+//            //O = Outside Prescription - indicates the prescription was created on the MedEntry page, not prescribed.
+//            prescriptionHistoryRequest.PrescriptionSubStatus = "S";
+//            patientInfoRequester.UserType = "Staff";//Allowed values: Doctor,Staff
+//            if (Security.CurUser.ProvNum != 0)
+//            {//If the current OD user is associated to a doctor, then the request is from a doctor, otherwise from a staff member.
+//                patientInfoRequester.UserType = "Doctor";
+//            }
+//            patientInfoRequester.UserId = POut.Long(Security.CurUser.UserNum);
+//            //Send the request to NewCrop. Always returns all current medications, and returns medications between the StartHistory and EndHistory dates if requesting archived medications.
+//            //The patientIdType parameter was added for another vendor and is not often used. We do not use this field. We must pass empty string.
+//            //The includeSchema parameter is useful for first-time debugging, but in release mode, we should pass N for no.
+//            wsNewCrop.Timeout = 3000;//3 second. The default is 100 seconds, but we cannot wait that long, because prescriptions are checked each time the Chart is refreshed. 1 second is too little, 2 seconds works most of the time. 3 seconds is safe.
+//            try
+//            {
+//                //throw new Exception("Test communication error in debug mode.");
+//                response = wsNewCrop.GetPatientFullMedicationHistory6(credentials, accountRequest, patientRequest, prescriptionHistoryRequest, patientInfoRequester, "", "N");
+//            }
+//            catch
+//            { //An exception is thrown when the timeout is reached, or when the NewCrop servers are not accessible (because the servers are down, or because local internet is down).
+//              //We used to show a popup here each time the refresh failed, but users found it annoying when the NewCrop severs were down, because the popup would show each time they visited the Chart and impeded user workflow.
+//              //We tried silently logging a warning message into the Application log within system Event Viewer, but we found out that a decent number of users do not have permission to write to the Application log, which causes UEs sometimes.
+//              //We tried showing a popup exactly 1 time for each instance of OD launched, to avoid the permission issue, but users were still complaining about it popping up and they didn't know what to do to fix it.
+//              //We now change the background color of the eRx button red, and show an error message when user click the eRx button to alert them that interactions may be out of date.
+//                if (ToolBarMain.Buttons["eRx"] != null)
+//                {//Hidden for eCW
+//                    ToolBarMain.Buttons["eRx"].IsRed = true; //Marks the eRx button to be drawn with a red color.
+//                    ToolBarMain.Invalidate();
+//                }
+//                return false;
+//            }
+//            //response.Message = Error message if error.
+//            //response.RowCount = Number of prescription records returned.
+//            //response.Status = Status of request. "OK" = success.
+//            //response.Timing = Not sure what this is for. Tells us how quickly the server responded to the request?
+//            //response.XmlResponse = The XML data returned, encoded in base 64.
+//            if (response.Status != NewCrop.StatusType.OK)
+//            {//Other statuses include Fail (ex if credentials are invalid), NotFound (ex if patientId invalid or accoundId invalid), Unknown (no known examples yet)
+//             //For now we simply abort gracefully.
+//                return false;
+//            }
+//            byte[] xmlResponseBytes = Convert.FromBase64String(response.XmlResponse);
+//            string xmlResponse = Encoding.UTF8.GetString(xmlResponseBytes);
+//            if (xmlResponse == "")
+//            {//An empty result means that the patient does not currently have any active medications in eRx.
+//                xmlResponse = "<emptyResult/>";//At least one node is needed below to prevent crashing.
+//                                               //We need to continue to the bottom of this function even when there are no active medications,
+//                                               //so that we can discontinue any medications in the database which were active that are now discontinued in eRx.
+//            }
+//#if DEBUG//For capturing the xmlReponse with the newlines properly showing.
+//            string tempFile = Preferences.GetRandomTempFile(".txt");
+//            File.WriteAllText(tempFile, xmlResponse);
+//#endif
+//            XmlDocument xml = new XmlDocument();
+//            try
+//            {
+//                xml.LoadXml(xmlResponse);
+//            }
+//            catch
+//            { //In case NewCrop returns invalid XML.
+//                return false;//abort gracefully
+//            }
+//            DateTime rxStartDateT = Preference.GetDateTime(PreferenceName.ElectronicRxDateStartedUsing131);
+//            XmlNode nodeNewDataSet = xml.FirstChild;
+//            List<long> listActiveMedicationPatNums = new List<long>();
+//            List<RxPat> listNewRx = new List<RxPat>();
+//            foreach (XmlNode nodeTable in nodeNewDataSet.ChildNodes)
+//            {
+//                RxPat rxOld = null;
+//                MedicationPat medOrderOld = null;
+//                RxPat rx = new RxPat();
+//                //rx.IsControlled not important.  Only used in sending, but this Rx was already sent.
+//                rx.Disp = "";
+//                rx.DosageCode = "";
+//                rx.Drug = "";
+//                rx.Notes = "";
+//                rx.Refills = "";
+//                rx.SendStatus = RxSendStatus.Unsent;
+//                rx.Sig = "";
+//                rx.ErxPharmacyInfo = "";
+//                string additionalSig = "";
+//                bool isProv = true;
+//                long rxCui = 0;
+//                string strDrugName = "";
+//                string strGenericName = "";
+//                string strProvNumOrNpi = "";//We used to send ProvNum in LicensedPrescriber.ID to NewCrop, but now we send NPI. We will receive ProvNum for older prescriptions.
+//                string drugInfo = "";
+//                string externalDrugConcept = "";
+//                foreach (XmlNode nodeRxFieldParent in nodeTable.ChildNodes)
+//                {
+//                    XmlNode nodeRxField = nodeRxFieldParent.FirstChild;
+//                    if (nodeRxField == null)
+//                    {
+//                        continue;
+//                    }
+//                    switch (nodeRxFieldParent.Name.ToLower())
+//                    {
+//                        case "deaclasscode":
+//                            //According to Brian from NewCrop:
+//                            //"Possible values are 0 = unscheduled, schedules 1-5, and 9 = unknown.
+//                            //Some states categorize a drug as scheduled, but do not assign a particular level."
+//                            rx.IsControlled = false;
+//                            if (nodeRxField.Value != "0")
+//                            {
+//                                rx.IsControlled = true;
+//                            }
+//                            break;
+//                        case "dispense"://ex 5.555
+//                            rx.Disp = nodeRxField.Value;
+//                            break;
+//                        case "druginfo"://ex lisinopril 5 mg Tab
+//                            drugInfo = nodeRxField.Value;
+//                            break;
+//                        case "drugname"://ex lisinopril
+//                            strDrugName = nodeRxField.Value;
+//                            break;
+//                        case "externaldrugconcept":
+//                            externalDrugConcept = nodeRxField.Value;//ex "ingredient1, ingredient 2"
+//                            break;
+//                        case "externalpatientid"://patnum passed back from the compose request that initiated this prescription
+//                            rx.PatNum = PIn.Long(nodeRxField.Value);
+//                            break;
+//                        case "externalphysicianid"://NPI passed back from the compose request that initiated this prescription.  For older prescriptions, this will be ProvNum.
+//                            strProvNumOrNpi = nodeRxField.Value;
+//                            break;
+//                        case "externaluserid"://The person who ordered the prescription. Is a ProvNum when provider, or an EmployeeNum when an employee. If EmployeeNum, then is prepended with "emp" because of how we sent it to NewCrop in the first place.
+//                            if (nodeRxField.Value.StartsWith("emp"))
+//                            {
+//                                isProv = false;
+//                            }
+//                            break;
+//                        case "finaldestinationtype":
+//                            //According to Brian from NewCrop:
+//                            //FinalDestinationType - Indicates the transmission method from NewCrop to the receiving entity.
+//                            //0=Not Transmitted
+//                            //1=Print
+//                            //2=Fax
+//                            //3=Electronic/Surescripts Retail
+//                            //4=Electronic/Surescripts Mail Order
+//                            //5=Test
+//                            if (nodeRxField.Value == "0")
+//                            {//Not Transmitted
+//                                rx.SendStatus = RxSendStatus.Unsent;
+//                            }
+//                            else if (nodeRxField.Value == "1")
+//                            {//Print
+//                                rx.SendStatus = RxSendStatus.Printed;
+//                            }
+//                            else if (nodeRxField.Value == "2")
+//                            {//Fax
+//                                rx.SendStatus = RxSendStatus.Faxed;
+//                            }
+//                            else if (nodeRxField.Value == "3")
+//                            {//Electronic/Surescripts Retail
+//                                rx.SendStatus = RxSendStatus.SentElect;
+//                            }
+//                            else if (nodeRxField.Value == "4")
+//                            {//Electronic/Surescripts Mail Order
+//                                rx.SendStatus = RxSendStatus.SentElect;
+//                            }
+//                            else if (nodeRxField.Value == "5")
+//                            {//Test
+//                                rx.SendStatus = RxSendStatus.Unsent;
+//                            }
+//                            break;
+//                        case "genericname":
+//                            strGenericName = nodeRxField.Value;
+//                            break;
+//                        case "patientfriendlysig"://The concat of all the codified fields.
+//                            rx.Sig = nodeRxField.Value;
+//                            break;
+//                        case "pharmacyncpdp"://ex 9998888
+//                                             //We will use this information in the future to find a pharmacy already entered into OD, or to create one dynamically if it does not exist.
+//                                             //rx.PharmacyNum;//Get the pharmacy where pharmacy.PharmID = node.Value
+//                            break;
+//                        case "prescriptiondate":
+//                            rx.RxDate = PIn.DateT(nodeRxField.Value);
+//                            break;
+//                        case "prescriptionguid"://32 characters with 4 hyphens. ex ba4d4a84-af0a-4cbf-9437-36feda97d1b6
+//                            rx.ErxGuid = nodeRxField.Value;
+//                            rxOld = RxPats.GetErxByIdForPat(nodeRxField.Value);
+//                            medOrderOld = MedicationPats.GetMedicationOrderByErxIdAndPat(nodeRxField.Value, PatCur.PatNum);
+//                            break;
+//                        case "prescriptionnotes"://from the Additional Sig box at the bottom
+//                            additionalSig = nodeRxField.Value;
+//                            break;
+//                        case "refills"://ex 1
+//                            rx.Refills = nodeRxField.Value;
+//                            break;
+//                        case "rxcui"://ex 311354
+//                            rxCui = PIn.Long(nodeRxField.Value);//The RxCui is not returned with all prescriptions, so it can be zero (not set).
+//                            break;
+//                        case "pharmacyfullinfo":
+//                            rx.ErxPharmacyInfo = nodeRxField.Value;
+//                            break;
+//                    }
+//                }//end inner foreach
+//                if (rx.RxDate < rxStartDateT)
+//                {//Ignore prescriptions created before version 13.1.14, because those prescriptions were entered manually by the user.
+//                    continue;
+//                }
+//                if (additionalSig != "")
+//                {
+//                    if (rx.Sig != "")
+//                    {//If patient friend SIG is present.
+//                        rx.Sig += " ";
+//                    }
+//                    rx.Sig += additionalSig;
+//                }
+//                rx.Drug = drugInfo;
+//                if ((drugInfo == "" || drugInfo.ToLower() == "none") && externalDrugConcept != "")
+//                {
+//                    rx.Drug = externalDrugConcept;
+//                }
+//                //Determine the provider. This is a mess, because we used to send ProvNum in the outgoing XML LicensedPrescriber.ID,
+//                //but now we send NPI to avoid multiple billing charges for two provider records with the same NPI
+//                //(the same doctor entered multiple times, for example, one provider for each clinic).
+//                ErxLog erxLog = ErxLogs.GetLatestForPat(rx.PatNum, rx.RxDate);//Locate the original request corresponding to this prescription.
+//                if (erxLog != null && erxLog.ProvNum != 0 && erxLog.DateTStamp.Date == rx.RxDate.Date)
+//                {
+//                    Provider provErxLog = Providers.GetFirstOrDefault(x => x.ProvNum == erxLog.ProvNum);
+//                    if ((strProvNumOrNpi.Length == 10 && provErxLog.NationalProvID == strProvNumOrNpi) || erxLog.ProvNum.ToString() == strProvNumOrNpi)
+//                    {
+//                        rx.ProvNum = erxLog.ProvNum;
+//                    }
+//                }
+//                if (rx.ProvNum == 0)
+//                {//Not found or the provnum is unknown.
+//                 //The erxLog.ProvNum will be 0 for prescriptions fetched from NewCrop before version 13.3. Could also happen if
+//                 //prescriptions were created when NewCrop was brand new (right before ErxLog was created),
+//                 //or if someone lost a database and they are downloading all the prescriptions from scratch again.
+//                    if (rxOld == null)
+//                    {//The prescription is being dowloaded for the first time, or is being downloaded again after it was deleted manually by the user.
+//                        List<Provider> listProviders = Providers.GetDeepCopy(true);
+//                        for (int j = 0; j < listProviders.Count; j++)
+//                        {//Try to locate a visible provider matching the NPI on the prescription.
+//                            if (strProvNumOrNpi.Length == 10 && listProviders[j].NationalProvID == strProvNumOrNpi)
+//                            {
+//                                rx.ProvNum = listProviders[j].ProvNum;
+//                                break;
+//                            }
+//                        }
+//                        if (rx.ProvNum == 0)
+//                        {//No visible provider found matching the NPI on the prescription.
+//                         //Try finding a hidden provider matching the NPI on the prescription, or a matching provnum.
+//                            Provider provider = Providers.GetFirstOrDefault(x => x.NationalProvID == strProvNumOrNpi);
+//                            if (provider == null)
+//                            {
+//                                provider = Providers.GetFirstOrDefault(x => x.ProvNum.ToString() == strProvNumOrNpi);
+//                            }
+//                            if (provider != null)
+//                            {
+//                                rx.ProvNum = provider.ProvNum;
+//                            }
+//                        }
+//                        //If rx.ProvNum is still zero, then that means the provider NPI/ProvNum has been modified or somehow deleted (for example, database was lost) for the provider record originally used.
+//                        if (rx.ProvNum == 0)
+//                        {//Catch all
+//                            Provider provUnknown = Providers.GetFirstOrDefault(x => x.FName == "ERX" && x.LName == "UNKNOWN");
+//                            if (provUnknown != null)
+//                            {
+//                                rx.ProvNum = provUnknown.ProvNum;
+//                            }
+//                            if (provUnknown == null)
+//                            {
+//                                provUnknown = new Provider();
+//                                provUnknown.Abbr = "UNK";
+//                                provUnknown.FName = "ERX";
+//                                provUnknown.LName = "UNKNOWN";
+//                                provUnknown.IsHidden = true;
+//                                rx.ProvNum = Providers.Insert(provUnknown);
+//                                Providers.RefreshCache();
+//                            }
+//                        }
+//                    }
+//                    else
+//                    {//The prescription has already been downloaded in the past.
+//                        rx.ProvNum = rxOld.ProvNum;//Preserve the provnum if already in the database, because it may have already been corrected by the user after the previous download.
+//                    }
+//                }
+//                long medicationPatNum = Erx.InsertOrUpdateErxMedication(rxOld, rx, rxCui.ToString(), strDrugName, strGenericName, isProv);
+//                listActiveMedicationPatNums.Add(medicationPatNum);
+//                if (rxOld == null)
+//                {//Only add the rx if it is new.  We don't want to trigger automation for existing prescriptions.
+//                    listNewRx.Add(rx);
+//                }
+//            }//end foreach
+//            List<MedicationPat> listAllMedicationsForPatient = MedicationPats.Refresh(PatCur.PatNum, false);
+//            foreach (MedicationPat medication in listAllMedicationsForPatient)
+//            {
+//                if (!Erx.IsFromNewCrop(medication.ErxGuid))
+//                {
+//                    continue;//This medication is not an eRx medicaiton.  It was entered manually inside OD.
+//                }
+//                if (listActiveMedicationPatNums.Contains(medication.MedicationPatNum))
+//                {
+//                    continue;//The medication is still active.
+//                }
+//                //The medication was discontinued inside the eRx interface.
+//                medication.DateStop = DateTime.Today.AddDays(-1);//Discontinue the medication as of yesterday so that it will immediately show as discontinued.
+//                MedicationPats.Update(medication, false);//Discontinue the medication inside OD to match what shows in the eRx interface.
+//            }//end foreach
+//            if (listNewRx.Count > 0)
+//            {
+//                AutomationL.Trigger(AutomationTrigger.RxCreate, new List<string>(), PatCur.PatNum, 0, listNewRx);
+//            }
             return true;
         }
 
@@ -5333,229 +5333,229 @@ namespace OpenDental
         ///<summary>Returns an error message upon error.  Otherwise returns empty string.</summary>
         private void UpdateErxAccess(string npi, string userId, long clinicNum, string clinicId, string clinicKey, ErxOption erxOption)
         {
-            ProviderErx provErxCur = ProviderErxs.GetOneForNpiAndOption(npi, erxOption);
-            if (provErxCur == null)
-            {
-                //The provider is not yet part of the providererx table.  This extra refresh will only happen one time for each new provider.
-                //First refresh cache to verify the provider was not added within the last signal interval.  Prevents duplicates for long signal intervals.
-                ProviderErxs.RefreshCache();
-                provErxCur = ProviderErxs.GetOneForNpiAndOption(npi, erxOption);
-            }
-            if (provErxCur == null)
-            {
-                provErxCur = new ProviderErx();
-                provErxCur.PatNum = 0;
-                provErxCur.NationalProviderID = npi;
-                if (erxOption == ErxOption.Legacy)
-                {
-                    provErxCur.IsEnabled = ErxStatus.Disabled;
-                    if (Preference.GetBool(PreferenceName.NewCropIsLegacy))
-                    {
-                        provErxCur.IsEnabled = ErxStatus.Enabled;
-                    }
-                }
-                else
-                {//DoseSpot
-                    provErxCur.IsEnabled = ErxStatus.PendingAccountId;
-                }
-                provErxCur.IsIdentifyProofed = false;
-                provErxCur.IsSentToHq = false;
-                provErxCur.ErxType = erxOption;
-                provErxCur.UserId = userId;
-                ProviderErxs.Insert(provErxCur);
-                DataValid.SetInvalid(InvalidType.ProviderErxs);
-            }
-            //Make sure that there is a UserId associated to the providererx if the erx option utilized these ids (DoseSpot)
-            ProviderErx provOld = provErxCur.Clone();
-            provErxCur.UserId = userId;
-            if (ProviderErxs.Update(provErxCur, provOld))
-            {
-                DataValid.SetInvalid(InvalidType.ProviderErxs);
-            }
-            //if (erxOption == ErxOption.DoseSpot)
-            //{
-            //    DoseSpot.SyncClinicErxsWithHQ();
-            //}
-            bool isDistributorCustomer = false;
-            if (Preference.GetString(PreferenceName.NewCropPartnerName) != "" || Preference.GetString(PreferenceName.NewCropPassword) != "")
-            {
-                isDistributorCustomer = true;
-            }
-            bool isOdUpdateAddress = false;
-            if (Preference.GetString(PreferenceName.UpdateServerAddress).ToLower().Contains("opendentalsoft.com") ||
-                Preference.GetString(PreferenceName.UpdateServerAddress).ToLower().Contains("open-dent.com"))
-            {
-                isOdUpdateAddress = true;
-            }
-            DateTime dateLastAccessMonth = DateTime.MinValue;
-            if (erxOption == ErxOption.Legacy)
-            {
-                dateLastAccessMonth = Preference.GetDate(PreferenceName.NewCropDateLastAccessCheck);
-            }
-            else
-            {//DoseSpot
-                dateLastAccessMonth = Preference.GetDate(PreferenceName.DoseSpotDateLastAccessCheck);
-            }
-            dateLastAccessMonth = new DateTime(dateLastAccessMonth.Year, dateLastAccessMonth.Month, 1);
-            if (isDistributorCustomer && isOdUpdateAddress)
-            {
-                //The distributor forgot to change the "Server Address for Updates" inside of the Update Setup window for this customer.
-                //Do not contact the OD web service.
-            }
-            else if (provErxCur.IsEnabled != ErxStatus.Enabled //If prov is not yet enabled, always check with OD HQ to see if the prov has been enabled yet.
-                || (erxOption == ErxOption.Legacy && !Preference.GetBool(PreferenceName.NewCropIsLegacy) && !provErxCur.IsIdentifyProofed)//If new prov is not yet identity proofed, send to OD HQ.
-                || !provErxCur.IsSentToHq//If prov has not been sent to OD HQ yet, always send to OD HQ so we can track our providers using eRx.
-                || dateLastAccessMonth < new DateTime(DateTimeOD.Today.Year, DateTimeOD.Today.Month, 1))//If it has been over a month since sent to OD HQ, send.
-            {
-                //An OD customer, or a Distributor customer if the distributor has a custom web service for updates.
-                //For distributors who implement this feature, you will be able to use FormErxAccess at your office to control individual provider access.
-                //We compare the last access date by month above, because eRx charges are based on monthly usage.  Avoid extra charges for disabled providers.
-                XmlWriterSettings settings = new XmlWriterSettings();
-                settings.Indent = true;
-                settings.IndentChars = ("    ");
-                StringBuilder strbuild = new StringBuilder();
-                using (XmlWriter writer = XmlWriter.Create(strbuild, settings))
-                {
-                    writer.WriteStartElement("ErxAccessRequest");
-                    writer.WriteStartElement("RegistrationKey");
-                    writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
-                    writer.WriteEndElement();//End reg key
-                    List<ProviderErx> listUnsentProviders = ProviderErxs.GetAllUnsent();
-                    for (int i = 0; i < listUnsentProviders.Count; i++)
-                    {
-                        writer.WriteStartElement("Prov");
-                        writer.WriteAttributeString("NPI", listUnsentProviders[i].NationalProviderID);
-                        writer.WriteAttributeString("IsEna", ((int)listUnsentProviders[i].IsEnabled).ToString());
-                        writer.WriteAttributeString("ErxType", ((int)listUnsentProviders[i].ErxType).ToString());
-                        writer.WriteAttributeString("UserId", listUnsentProviders[i].UserId);
-                        writer.WriteEndElement();//End Prov
-                    }
-                    writer.WriteEndElement();//End ErxAccessRequest
-                }
-#if DEBUG
-                OpenDental.localhost.Service1 updateService = new OpenDental.localhost.Service1();
-#else
-				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-					updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
-#endif
-                if (Preference.GetString(PreferenceName.UpdateWebProxyAddress) != "")
-                {
-                    IWebProxy proxy = new WebProxy(Preference.GetString(PreferenceName.UpdateWebProxyAddress));
-                    ICredentials cred = new NetworkCredential(Preference.GetString(PreferenceName.UpdateWebProxyUserName), Preference.GetString(PreferenceName.UpdateWebProxyPassword));
-                    proxy.Credentials = cred;
-                    updateService.Proxy = proxy;
-                }
-                try
-                {
-                    string result = updateService.GetErxAccess(strbuild.ToString());//may throw error
-                    XmlDocument doc = new XmlDocument();
-                    doc.LoadXml(result);
-                    XmlNodeList listNodes = doc.SelectNodes("//Prov");
-                    List<ProviderErx> listProviderErxs = ProviderErxs.GetDeepCopy();
-                    bool[] arrayIsSentToHq = new bool[listProviderErxs.Count];
-                    bool isCacheRefreshNeeded = false;
-                    for (int i = 0; i < listNodes.Count; i++)
-                    {//Loop through providers.
-                        XmlNode nodeProv = listNodes[i];
-                        string provNpi = "";
-                        string provErxUserId = "";
-                        ErxStatus provEnabledStatus = ErxStatus.Disabled;
-                        bool isProvIdp = false;
-                        bool isCurrentErxType = true;
-                        for (int j = 0; j < nodeProv.Attributes.Count; j++)
-                        {//Loop through the attributes for the current provider.
-                            XmlAttribute attribute = nodeProv.Attributes[j];
-                            if (attribute.Name == "NPI")
-                            {
-                                provNpi = Regex.Replace(attribute.Value, "[^0-9]*", "");//NPI with all non-numeric characters removed.
-                                if (provNpi.Length != 10)
-                                {
-                                    provNpi = "";
-                                    break;//Invalid NPI
-                                }
-                            }
-                            else if (attribute.Name == "IsEna")
-                            {
-                                provEnabledStatus = PIn.Enum<ErxStatus>(attribute.Value, false, ErxStatus.Undefined);
-                            }
-                            else if (attribute.Name == "IsIdp" && attribute.Value == "1")
-                            {
-                                isProvIdp = true;
-                            }
-                            else if (attribute.Name == "ErxType" && PIn.Enum<ErxOption>(PIn.Int(attribute.Value)) != erxOption)
-                            {
-                                isCurrentErxType = false;
-                            }
-                            else if (attribute.Name == "UserId")
-                            {
-                                provErxUserId = attribute.Value;
-                            }
-                        }
-                        if (!isCurrentErxType)
-                        {//We don't want to change records for DoseSpot if the user is using NewCrop and vice versa.
-                            continue;
-                        }
-                        if (provNpi == "")
-                        {
-                            continue;
-                        }
-                        ProviderErx oldProvErx = ProviderErxs.GetOneForNpiAndOption(provNpi, erxOption);
-                        if (oldProvErx == null)
-                        {
-                            continue;
-                        }
-                        arrayIsSentToHq[listProviderErxs.Select(x => x.ProviderErxNum).ToList().IndexOf(oldProvErx.ProviderErxNum)] = true;
-                        ProviderErx provErx = oldProvErx.Clone();
-                        provErx.IsEnabled = provEnabledStatus;
-                        provErx.IsIdentifyProofed = isProvIdp;
-                        provErx.IsSentToHq = true;
-                        provErx.UserId = provErxUserId;
-                        //Dont need to set the ErxType here because it's not something that can be changed by HQ.
-                        if (ProviderErxs.Update(provErx, oldProvErx))
-                        {
-                            isCacheRefreshNeeded = true;
-                        }
-                    }
-                    //Any proverxs which are in the local customer database but not sent to HQ, flag as unsent.
-                    //Providererx records were being deleted from HQ due to a sync issue at HQ.
-                    for (int i = 0; i < arrayIsSentToHq.Length; i++)
-                    {
-                        if (arrayIsSentToHq[i])
-                        {
-                            continue;
-                        }
-                        ProviderErx provErx = listProviderErxs[i];
-                        ProviderErx oldProvErx = provErx.Clone();
-                        provErx.IsSentToHq = false;
-                        if (ProviderErxs.Update(provErx, oldProvErx))
-                        {
-                            isCacheRefreshNeeded = true;
-                        }
-                    }
-                    if (isCacheRefreshNeeded)
-                    {
-                        DataValid.SetInvalid(InvalidType.ProviderErxs);
-                    }
-                    if (erxOption == ErxOption.Legacy)
-                    {
-                        if (Preference.Update(PreferenceName.NewCropDateLastAccessCheck, DateTimeOD.Today))
-                        {
-                            DataValid.SetInvalid(InvalidType.Prefs);
-                        }
-                    }
-                    else
-                    {//DoseSpot
-                        if (Preference.Update(PreferenceName.DoseSpotDateLastAccessCheck, DateTimeOD.Today))
-                        {
-                            DataValid.SetInvalid(InvalidType.Prefs);
-                        }
-                    }
-                }
-                catch
-                {
-                    //Failed to contact server and/or update provider IsEnabled statuses.  We will simply use what we already know in the local database.
-                }
-            }
+//            ProviderErx provErxCur = ProviderErxs.GetOneForNpiAndOption(npi, erxOption);
+//            if (provErxCur == null)
+//            {
+//                //The provider is not yet part of the providererx table.  This extra refresh will only happen one time for each new provider.
+//                //First refresh cache to verify the provider was not added within the last signal interval.  Prevents duplicates for long signal intervals.
+//                ProviderErxs.RefreshCache();
+//                provErxCur = ProviderErxs.GetOneForNpiAndOption(npi, erxOption);
+//            }
+//            if (provErxCur == null)
+//            {
+//                provErxCur = new ProviderErx();
+//                provErxCur.PatNum = 0;
+//                provErxCur.NationalProviderID = npi;
+//                if (erxOption == ErxOption.Legacy)
+//                {
+//                    provErxCur.IsEnabled = ErxStatus.Disabled;
+//                    if (Preference.GetBool(PreferenceName.NewCropIsLegacy))
+//                    {
+//                        provErxCur.IsEnabled = ErxStatus.Enabled;
+//                    }
+//                }
+//                else
+//                {//DoseSpot
+//                    provErxCur.IsEnabled = ErxStatus.PendingAccountId;
+//                }
+//                provErxCur.IsIdentifyProofed = false;
+//                provErxCur.IsSentToHq = false;
+//                provErxCur.ErxType = erxOption;
+//                provErxCur.UserId = userId;
+//                ProviderErxs.Insert(provErxCur);
+//                DataValid.SetInvalid(InvalidType.ProviderErxs);
+//            }
+//            //Make sure that there is a UserId associated to the providererx if the erx option utilized these ids (DoseSpot)
+//            ProviderErx provOld = provErxCur.Clone();
+//            provErxCur.UserId = userId;
+//            if (ProviderErxs.Update(provErxCur, provOld))
+//            {
+//                DataValid.SetInvalid(InvalidType.ProviderErxs);
+//            }
+//            //if (erxOption == ErxOption.DoseSpot)
+//            //{
+//            //    DoseSpot.SyncClinicErxsWithHQ();
+//            //}
+//            bool isDistributorCustomer = false;
+//            if (Preference.GetString(PreferenceName.NewCropPartnerName) != "" || Preference.GetString(PreferenceName.NewCropPassword) != "")
+//            {
+//                isDistributorCustomer = true;
+//            }
+//            bool isOdUpdateAddress = false;
+//            if (Preference.GetString(PreferenceName.UpdateServerAddress).ToLower().Contains("opendentalsoft.com") ||
+//                Preference.GetString(PreferenceName.UpdateServerAddress).ToLower().Contains("open-dent.com"))
+//            {
+//                isOdUpdateAddress = true;
+//            }
+//            DateTime dateLastAccessMonth = DateTime.MinValue;
+//            if (erxOption == ErxOption.Legacy)
+//            {
+//                dateLastAccessMonth = Preference.GetDate(PreferenceName.NewCropDateLastAccessCheck);
+//            }
+//            else
+//            {//DoseSpot
+//                dateLastAccessMonth = Preference.GetDate(PreferenceName.DoseSpotDateLastAccessCheck);
+//            }
+//            dateLastAccessMonth = new DateTime(dateLastAccessMonth.Year, dateLastAccessMonth.Month, 1);
+//            if (isDistributorCustomer && isOdUpdateAddress)
+//            {
+//                //The distributor forgot to change the "Server Address for Updates" inside of the Update Setup window for this customer.
+//                //Do not contact the OD web service.
+//            }
+//            else if (provErxCur.IsEnabled != ErxStatus.Enabled //If prov is not yet enabled, always check with OD HQ to see if the prov has been enabled yet.
+//                || (erxOption == ErxOption.Legacy && !Preference.GetBool(PreferenceName.NewCropIsLegacy) && !provErxCur.IsIdentifyProofed)//If new prov is not yet identity proofed, send to OD HQ.
+//                || !provErxCur.IsSentToHq//If prov has not been sent to OD HQ yet, always send to OD HQ so we can track our providers using eRx.
+//                || dateLastAccessMonth < new DateTime(DateTimeOD.Today.Year, DateTimeOD.Today.Month, 1))//If it has been over a month since sent to OD HQ, send.
+//            {
+//                //An OD customer, or a Distributor customer if the distributor has a custom web service for updates.
+//                //For distributors who implement this feature, you will be able to use FormErxAccess at your office to control individual provider access.
+//                //We compare the last access date by month above, because eRx charges are based on monthly usage.  Avoid extra charges for disabled providers.
+//                XmlWriterSettings settings = new XmlWriterSettings();
+//                settings.Indent = true;
+//                settings.IndentChars = ("    ");
+//                StringBuilder strbuild = new StringBuilder();
+//                using (XmlWriter writer = XmlWriter.Create(strbuild, settings))
+//                {
+//                    writer.WriteStartElement("ErxAccessRequest");
+//                    writer.WriteStartElement("RegistrationKey");
+//                    writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
+//                    writer.WriteEndElement();//End reg key
+//                    List<ProviderErx> listUnsentProviders = ProviderErxs.GetAllUnsent();
+//                    for (int i = 0; i < listUnsentProviders.Count; i++)
+//                    {
+//                        writer.WriteStartElement("Prov");
+//                        writer.WriteAttributeString("NPI", listUnsentProviders[i].NationalProviderID);
+//                        writer.WriteAttributeString("IsEna", ((int)listUnsentProviders[i].IsEnabled).ToString());
+//                        writer.WriteAttributeString("ErxType", ((int)listUnsentProviders[i].ErxType).ToString());
+//                        writer.WriteAttributeString("UserId", listUnsentProviders[i].UserId);
+//                        writer.WriteEndElement();//End Prov
+//                    }
+//                    writer.WriteEndElement();//End ErxAccessRequest
+//                }
+//#if DEBUG
+//                OpenDental.localhost.Service1 updateService = new OpenDental.localhost.Service1();
+//#else
+//				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
+//					updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
+//#endif
+//                if (Preference.GetString(PreferenceName.UpdateWebProxyAddress) != "")
+//                {
+//                    IWebProxy proxy = new WebProxy(Preference.GetString(PreferenceName.UpdateWebProxyAddress));
+//                    ICredentials cred = new NetworkCredential(Preference.GetString(PreferenceName.UpdateWebProxyUserName), Preference.GetString(PreferenceName.UpdateWebProxyPassword));
+//                    proxy.Credentials = cred;
+//                    updateService.Proxy = proxy;
+//                }
+//                try
+//                {
+//                    string result = updateService.GetErxAccess(strbuild.ToString());//may throw error
+//                    XmlDocument doc = new XmlDocument();
+//                    doc.LoadXml(result);
+//                    XmlNodeList listNodes = doc.SelectNodes("//Prov");
+//                    List<ProviderErx> listProviderErxs = ProviderErxs.GetDeepCopy();
+//                    bool[] arrayIsSentToHq = new bool[listProviderErxs.Count];
+//                    bool isCacheRefreshNeeded = false;
+//                    for (int i = 0; i < listNodes.Count; i++)
+//                    {//Loop through providers.
+//                        XmlNode nodeProv = listNodes[i];
+//                        string provNpi = "";
+//                        string provErxUserId = "";
+//                        ErxStatus provEnabledStatus = ErxStatus.Disabled;
+//                        bool isProvIdp = false;
+//                        bool isCurrentErxType = true;
+//                        for (int j = 0; j < nodeProv.Attributes.Count; j++)
+//                        {//Loop through the attributes for the current provider.
+//                            XmlAttribute attribute = nodeProv.Attributes[j];
+//                            if (attribute.Name == "NPI")
+//                            {
+//                                provNpi = Regex.Replace(attribute.Value, "[^0-9]*", "");//NPI with all non-numeric characters removed.
+//                                if (provNpi.Length != 10)
+//                                {
+//                                    provNpi = "";
+//                                    break;//Invalid NPI
+//                                }
+//                            }
+//                            else if (attribute.Name == "IsEna")
+//                            {
+//                                provEnabledStatus = PIn.Enum<ErxStatus>(attribute.Value, false, ErxStatus.Undefined);
+//                            }
+//                            else if (attribute.Name == "IsIdp" && attribute.Value == "1")
+//                            {
+//                                isProvIdp = true;
+//                            }
+//                            else if (attribute.Name == "ErxType" && PIn.Enum<ErxOption>(PIn.Int(attribute.Value)) != erxOption)
+//                            {
+//                                isCurrentErxType = false;
+//                            }
+//                            else if (attribute.Name == "UserId")
+//                            {
+//                                provErxUserId = attribute.Value;
+//                            }
+//                        }
+//                        if (!isCurrentErxType)
+//                        {//We don't want to change records for DoseSpot if the user is using NewCrop and vice versa.
+//                            continue;
+//                        }
+//                        if (provNpi == "")
+//                        {
+//                            continue;
+//                        }
+//                        ProviderErx oldProvErx = ProviderErxs.GetOneForNpiAndOption(provNpi, erxOption);
+//                        if (oldProvErx == null)
+//                        {
+//                            continue;
+//                        }
+//                        arrayIsSentToHq[listProviderErxs.Select(x => x.ProviderErxNum).ToList().IndexOf(oldProvErx.ProviderErxNum)] = true;
+//                        ProviderErx provErx = oldProvErx.Clone();
+//                        provErx.IsEnabled = provEnabledStatus;
+//                        provErx.IsIdentifyProofed = isProvIdp;
+//                        provErx.IsSentToHq = true;
+//                        provErx.UserId = provErxUserId;
+//                        //Dont need to set the ErxType here because it's not something that can be changed by HQ.
+//                        if (ProviderErxs.Update(provErx, oldProvErx))
+//                        {
+//                            isCacheRefreshNeeded = true;
+//                        }
+//                    }
+//                    //Any proverxs which are in the local customer database but not sent to HQ, flag as unsent.
+//                    //Providererx records were being deleted from HQ due to a sync issue at HQ.
+//                    for (int i = 0; i < arrayIsSentToHq.Length; i++)
+//                    {
+//                        if (arrayIsSentToHq[i])
+//                        {
+//                            continue;
+//                        }
+//                        ProviderErx provErx = listProviderErxs[i];
+//                        ProviderErx oldProvErx = provErx.Clone();
+//                        provErx.IsSentToHq = false;
+//                        if (ProviderErxs.Update(provErx, oldProvErx))
+//                        {
+//                            isCacheRefreshNeeded = true;
+//                        }
+//                    }
+//                    if (isCacheRefreshNeeded)
+//                    {
+//                        DataValid.SetInvalid(InvalidType.ProviderErxs);
+//                    }
+//                    if (erxOption == ErxOption.Legacy)
+//                    {
+//                        if (Preference.Update(PreferenceName.NewCropDateLastAccessCheck, DateTimeOD.Today))
+//                        {
+//                            DataValid.SetInvalid(InvalidType.Prefs);
+//                        }
+//                    }
+//                    else
+//                    {//DoseSpot
+//                        if (Preference.Update(PreferenceName.DoseSpotDateLastAccessCheck, DateTimeOD.Today))
+//                        {
+//                            DataValid.SetInvalid(InvalidType.Prefs);
+//                        }
+//                    }
+//                }
+//                catch
+//                {
+//                    //Failed to contact server and/or update provider IsEnabled statuses.  We will simply use what we already know in the local database.
+//                }
+//            }
         }
 
         private void Tool_LabCase_Click()

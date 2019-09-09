@@ -196,56 +196,57 @@ namespace OpenDental {
 		}
 
 		private static string SendAndReceiveDownloadXml(string codeSystemName) {
-			//prepare the xml document to send--------------------------------------------------------------------------------------
-			XmlWriterSettings settings = new XmlWriterSettings();
-			settings.Indent = true;
-			settings.IndentChars = ("    ");
-			StringBuilder strbuild=new StringBuilder();
-			using(XmlWriter writer=XmlWriter.Create(strbuild,settings)) {
-				//TODO: include more user information
-				writer.WriteStartElement("UpdateRequest");
-				writer.WriteStartElement("RegistrationKey");
-				writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
-				writer.WriteEndElement();
-				writer.WriteStartElement("PracticeTitle");
-				writer.WriteString(Preference.GetString(PreferenceName.PracticeTitle));
-				writer.WriteEndElement();
-				writer.WriteStartElement("PracticeAddress");
-				writer.WriteString(Preference.GetString(PreferenceName.PracticeAddress));
-				writer.WriteEndElement();
-				writer.WriteStartElement("PracticePhone");
-				writer.WriteString(Preference.GetString(PreferenceName.PracticePhone));
-				writer.WriteEndElement();
-				writer.WriteStartElement("ProgramVersion");
-				writer.WriteString(Preference.GetString(PreferenceName.ProgramVersion));
-				writer.WriteEndElement();
-				writer.WriteStartElement("CodeSystemRequested");
-				writer.WriteString(codeSystemName);
-				writer.WriteEndElement();
-				writer.WriteEndElement();
-			}
-#if DEBUG
-			OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
-#else
-			OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-			updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
-#endif
-			if(Preference.GetString(PreferenceName.UpdateWebProxyAddress) !="") {
-				IWebProxy proxy = new WebProxy(Preference.GetString(PreferenceName.UpdateWebProxyAddress));
-				ICredentials cred=new NetworkCredential(Preference.GetString(PreferenceName.UpdateWebProxyUserName),Preference.GetString(PreferenceName.UpdateWebProxyPassword));
-				proxy.Credentials=cred;
-				updateService.Proxy=proxy;
-			}
-			string result="";
-			try {
-				result=updateService.RequestCodeSystemDownload(strbuild.ToString());//may throw error
-			}
-			catch(Exception ex) {
-				//Cursor=Cursors.Default;
-				MessageBox.Show("Error: "+ex.Message);
-				return "";
-			}
-			return result;
+            //			//prepare the xml document to send--------------------------------------------------------------------------------------
+            //			XmlWriterSettings settings = new XmlWriterSettings();
+            //			settings.Indent = true;
+            //			settings.IndentChars = ("    ");
+            //			StringBuilder strbuild=new StringBuilder();
+            //			using(XmlWriter writer=XmlWriter.Create(strbuild,settings)) {
+            //				//TODO: include more user information
+            //				writer.WriteStartElement("UpdateRequest");
+            //				writer.WriteStartElement("RegistrationKey");
+            //				writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
+            //				writer.WriteEndElement();
+            //				writer.WriteStartElement("PracticeTitle");
+            //				writer.WriteString(Preference.GetString(PreferenceName.PracticeTitle));
+            //				writer.WriteEndElement();
+            //				writer.WriteStartElement("PracticeAddress");
+            //				writer.WriteString(Preference.GetString(PreferenceName.PracticeAddress));
+            //				writer.WriteEndElement();
+            //				writer.WriteStartElement("PracticePhone");
+            //				writer.WriteString(Preference.GetString(PreferenceName.PracticePhone));
+            //				writer.WriteEndElement();
+            //				writer.WriteStartElement("ProgramVersion");
+            //				writer.WriteString(Preference.GetString(PreferenceName.ProgramVersion));
+            //				writer.WriteEndElement();
+            //				writer.WriteStartElement("CodeSystemRequested");
+            //				writer.WriteString(codeSystemName);
+            //				writer.WriteEndElement();
+            //				writer.WriteEndElement();
+            //			}
+            //#if DEBUG
+            //			OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
+            //#else
+            //			OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
+            //			updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
+            //#endif
+            //			if(Preference.GetString(PreferenceName.UpdateWebProxyAddress) !="") {
+            //				IWebProxy proxy = new WebProxy(Preference.GetString(PreferenceName.UpdateWebProxyAddress));
+            //				ICredentials cred=new NetworkCredential(Preference.GetString(PreferenceName.UpdateWebProxyUserName),Preference.GetString(PreferenceName.UpdateWebProxyPassword));
+            //				proxy.Credentials=cred;
+            //				updateService.Proxy=proxy;
+            //			}
+            //			string result="";
+            //			try {
+            //				result=updateService.RequestCodeSystemDownload(strbuild.ToString());//may throw error
+            //			}
+            //			catch(Exception ex) {
+            //				//Cursor=Cursors.Default;
+            //				MessageBox.Show("Error: "+ex.Message);
+            //				return "";
+            //			}
+            //			return result;
+            return "";
 		}
 
 		private void butCdsTriggers_Click(object sender,EventArgs e) {

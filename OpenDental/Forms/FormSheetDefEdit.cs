@@ -778,7 +778,7 @@ namespace OpenDental
             }
             else if (sheetFieldDef.FieldName == "Patient Info.gif")
             {
-                img = OpenDentBusiness.Properties.Resources.Patient_Info;
+               // TODO: img = OpenDental.Properties.Resources.Patient_Info;
             }
             else if (Storage.Default.FileExists(filePathAndName))
             {

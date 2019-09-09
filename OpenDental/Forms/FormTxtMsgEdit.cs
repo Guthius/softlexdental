@@ -108,34 +108,34 @@ namespace OpenDental {
 
 		///<summary>Sends text message to callfire.  If patNum=0 will not create commlog entry.</summary>
 		private bool SendCallFire(long patNum,string wirelessPhone,string message) {
-			string key=ProgramProperties.GetPropVal(ProgramName.CallFire,"Key From CallFire");
-			string msg=wirelessPhone+","+message.Replace(",","");//ph#,msg Commas in msg cause error.
-			try {
-				CallFireService.SMSService callFire=new CallFireService.SMSService();
-				callFire.sendSMSCampaign(
-					key,
-					new string[] { msg },
-					"Open Dental");
-			}
-			catch(Exception ex) {
-				MsgBox.Show(this,"Error sending text message.\r\n\r\n"+ex.Message);
-				return false;
-			}
-			if(patNum==0) {  //No patient selected, do not make commlog.
-				return true;
-			}
-			Commlog commlog=new Commlog();
-			commlog.CommDateTime=DateTime.Now;
-			commlog.DateTStamp=DateTime.Now;
-			commlog.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.TEXT);
-			commlog.Mode_=CommItemMode.Text;
-			commlog.Note=msg;//phone,note
-			commlog.PatNum=patNum;
-			commlog.SentOrReceived=CommSentOrReceived.Sent;
-			commlog.UserNum=Security.CurUser.UserNum;
-			commlog.DateTimeEnd=DateTime.Now;
-			Commlogs.Insert(commlog);
-			SecurityLogs.MakeLogEntry(Permissions.CommlogEdit,commlog.PatNum,"Insert Text Message");
+			//string key=ProgramProperties.GetPropVal(ProgramName.CallFire,"Key From CallFire");
+			//string msg=wirelessPhone+","+message.Replace(",","");//ph#,msg Commas in msg cause error.
+			//try {
+			//	CallFireService.SMSService callFire=new CallFireService.SMSService();
+			//	callFire.sendSMSCampaign(
+			//		key,
+			//		new string[] { msg },
+			//		"Open Dental");
+			//}
+			//catch(Exception ex) {
+			//	MsgBox.Show(this,"Error sending text message.\r\n\r\n"+ex.Message);
+			//	return false;
+			//}
+			//if(patNum==0) {  //No patient selected, do not make commlog.
+			//	return true;
+			//}
+			//Commlog commlog=new Commlog();
+			//commlog.CommDateTime=DateTime.Now;
+			//commlog.DateTStamp=DateTime.Now;
+			//commlog.CommType=Commlogs.GetTypeAuto(CommItemTypeAuto.TEXT);
+			//commlog.Mode_=CommItemMode.Text;
+			//commlog.Note=msg;//phone,note
+			//commlog.PatNum=patNum;
+			//commlog.SentOrReceived=CommSentOrReceived.Sent;
+			//commlog.UserNum=Security.CurUser.UserNum;
+			//commlog.DateTimeEnd=DateTime.Now;
+			//Commlogs.Insert(commlog);
+			//SecurityLogs.MakeLogEntry(Permissions.CommlogEdit,commlog.PatNum,"Insert Text Message");
 			return true;
 		}
 

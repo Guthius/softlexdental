@@ -174,6 +174,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bridges\IBridge.cs" />
     <Compile Include="Cache\CacheAbs.cs" />
     <Compile Include="Cache\CacheDictAbs.cs" />
     <Compile Include="Cache\CacheDictNonPkAbs.cs" />

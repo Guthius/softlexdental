@@ -438,28 +438,28 @@ namespace OpenDental {
 
 		///<summary>Deletes the PaySimple token if there is one. Returns false if deleting the token failed.</summary>
 		private bool DeletePaySimpleToken() {
-			if(CreditCardCur.PaySimpleToken!="") {
-				Cursor=Cursors.WaitCursor;
-				try {
-					if(CreditCardCur.CCSource==CreditCardSource.PaySimpleACH) {
-						PaySimple.DeleteACHAccount(CreditCardCur);
-					}
-					else if(CreditCardCur.CCSource==CreditCardSource.PaySimple) {//Credit card
-						PaySimple.DeleteCreditCard(CreditCardCur);
-					}
-				}
-				catch(Exception ex) {
-					if(MessageBox.Show(Lans.g(this,"Error when deleting from PaySimple:")+"\r\n"+ex.Message+"\r\n\r\n"
-						+Lans.g(this,"Do you still want to delete the card from ")+Preference.GetString(PreferenceName.SoftwareName)+"?",
-						"",MessageBoxButtons.YesNo)==DialogResult.No) 
-					{
-						return false;
-					}
-				}
-				finally {
-					Cursor=Cursors.Default;
-				}
-			}
+			//if(CreditCardCur.PaySimpleToken!="") {
+			//	Cursor=Cursors.WaitCursor;
+			//	try {
+			//		if(CreditCardCur.CCSource==CreditCardSource.PaySimpleACH) {
+			//			PaySimple.DeleteACHAccount(CreditCardCur);
+			//		}
+			//		else if(CreditCardCur.CCSource==CreditCardSource.PaySimple) {//Credit card
+			//			PaySimple.DeleteCreditCard(CreditCardCur);
+			//		}
+			//	}
+			//	catch(Exception ex) {
+			//		if(MessageBox.Show(Lans.g(this,"Error when deleting from PaySimple:")+"\r\n"+ex.Message+"\r\n\r\n"
+			//			+Lans.g(this,"Do you still want to delete the card from ")+Preference.GetString(PreferenceName.SoftwareName)+"?",
+			//			"",MessageBoxButtons.YesNo)==DialogResult.No) 
+			//		{
+			//			return false;
+			//		}
+			//	}
+			//	finally {
+			//		Cursor=Cursors.Default;
+			//	}
+			//}
 			return true;
 		}
 

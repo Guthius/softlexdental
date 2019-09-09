@@ -30,7 +30,6 @@ namespace OpenDental{
 			this.textCode = new System.Windows.Forms.TextBox();
 			this.buttonDelete = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.service11 = new OpenDental.localhost.Service1();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -99,11 +98,6 @@ namespace OpenDental{
 			this.butClose.Text = "&Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// service11
-			// 
-			this.service11.Url = "http://localhost:3824/Service1.asmx";
-			this.service11.UseDefaultCredentials = true;
-			// 
 			// FormIcd9Edit
 			// 
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -132,6 +126,5 @@ namespace OpenDental{
 		private System.Windows.Forms.TextBox textDescription;
 		private UI.Button buttonDelete;
 		private System.Windows.Forms.TextBox textCode;
-		private localhost.Service1 service11;
 	}
 }

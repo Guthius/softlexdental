@@ -451,7 +451,7 @@ namespace OpenDentalGraph {
 					graph.UseBuiltInColors=false;
 					graph.LegendTitle="Provider";
 					break;
-				case GroupingOptionsControl.Grouping.clinic:
+				case GroupingOptionsControl.Grouping.Clinic:
 					graph.LegendTitle="Clinic";
 					graph.UseBuiltInColors=true;
 					break;
@@ -471,7 +471,7 @@ namespace OpenDentalGraph {
 						Val=x.Val,
 						Count=x.Count
 					};
-				case GroupingOptionsControl.Grouping.clinic:
+				case GroupingOptionsControl.Grouping.Clinic:
 				default:
 					return new GraphQuantityOverTime.GraphDataPointClinic() {
 						DateStamp=x.DateStamp,
@@ -517,7 +517,7 @@ namespace OpenDentalGraph {
 						Val=x.Val,
 						Count=x.Count
 					};
-				case GroupingOptionsControl.Grouping.clinic:
+				case GroupingOptionsControl.Grouping.Clinic:
 				default:
 					return new GraphQuantityOverTime.GraphPointBase() {
 						DateStamp=x.DateStamp,

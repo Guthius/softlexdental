@@ -28,7 +28,6 @@ namespace OpenDental{
 			this.label2 = new System.Windows.Forms.Label();
 			this.textDescription = new System.Windows.Forms.TextBox();
 			this.textCode = new System.Windows.Forms.TextBox();
-			this.service11 = new OpenDental.localhost.Service1();
 			this.butClose = new OpenDental.UI.Button();
 			this.SuspendLayout();
 			// 
@@ -65,11 +64,6 @@ namespace OpenDental{
 			this.textCode.ReadOnly = true;
 			this.textCode.Size = new System.Drawing.Size(100, 20);
 			this.textCode.TabIndex = 0;
-			// 
-			// service11
-			// 
-			this.service11.Url = "http://localhost:3824/Service1.asmx";
-			this.service11.UseDefaultCredentials = true;
 			// 
 			// butClose
 			// 
@@ -112,6 +106,5 @@ namespace OpenDental{
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.TextBox textDescription;
 		private System.Windows.Forms.TextBox textCode;
-		private localhost.Service1 service11;
 	}
 }
