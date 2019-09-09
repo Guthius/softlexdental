@@ -523,7 +523,9 @@ namespace SparksToothChart {
 
         #endregion static functions
 
-        ///<summary>Should only be run on startup for efficiency.</summary>
+        /// <summary>
+        /// Should only be run on startup for efficiency.
+        /// </summary>
         private void ImportObj()
         {
             byte[] buffer = null;
@@ -1375,7 +1377,6 @@ namespace SparksToothChart {
             return retVal;
         }
 
-        ///<summary></summary>
         public LineSimple GetSealantLine()
         {
             if (IsMaxillary(toothID))
@@ -1417,149 +1418,5 @@ namespace SparksToothChart {
                 2.4f, -2.65f, 0f,
                 3.2f, 0f, 0f);
         }
-
-        /*
-		///<summary></summary>
-		public Triangle GetBUpoly() {
-			if(toothID=="1") {
-				return new Triangle(
-					-1.5f,0,0 , 
-					-1.5f,2.3f,0 ,
-					0,1.5f,0,
-					1.4f,2.3f,0 ,
-					1.4f,0,0);
-			}
-			if(toothID=="16") {
-				return new Triangle(
-					1.5f,0,0 , 
-					1.5f,2.3f,0 ,
-					0,1.5f,0,
-					-1.4f,2.3f,0 ,
-					-1.4f,0,0 );
-			}
-			if(toothID=="2") {
-				return new Triangle(
-					-1.8f,0,0 , 
-					-1.8f,2.3f,0 ,
-					0,1.5f,0,
-					1.6f,2.3f,0 ,
-					1.6f,0,0 );
-			}
-			if(toothID=="15") {
-				return new Triangle(
-					1.8f,0,0 , 
-					1.8f,2.3f,0 ,
-					0,1.5f,0,
-					-1.6f,2.3f,0 ,
-					-1.6f,0,0);
-			}
-			if(toothID=="3") {
-				return new Triangle(
-					-2.3f,0,0 , 
-					-2.3f,2.6f,0 ,
-					0,1.7f,0,
-					2.1f,2.6f,0 ,
-					2.1f,0,0 );
-			}
-			if(toothID=="14") {
-				return new Triangle( 
-					2.3f,0,0 , 
-					2.3f,2.6f,0 ,
-					0,1.7f,0,
-					-2.1f,2.6f,0 ,
-					-2.1f,0,0 );
-			}
-			if(toothID=="4"
-				|| toothID=="5"
-				|| toothID=="6"
-				|| toothID=="7"
-				|| toothID=="8"
-				|| toothID=="9"
-				|| toothID=="10"
-				|| toothID=="11"
-				|| toothID=="12"
-				|| toothID=="13"
-				) {
-				return new Triangle(
-					-.8f,0,0 , 
-					-.8f,3.5f,0 ,
-					.8f,3.5f,0 ,
-					.8f,0,0 );
-			}
-			if(toothID=="23"
-				|| toothID=="24"
-				|| toothID=="25"
-				|| toothID=="26"
-				) {
-				return new Triangle(
-					-.7f,0,0 , 
-					-.7f,-3.5f,0 ,
-					.7f,-3.5f,0 ,
-					.7f,0,0);
-			}
-			if(toothID=="20"
-				|| toothID=="21"
-				|| toothID=="22"
-				|| toothID=="27"
-				|| toothID=="28"
-				|| toothID=="29"
-				) {
-				return new Triangle(
-					-.8f,0,0 , 
-					-.8f,-3.5f,0 ,
-					.8f,-3.5f,0 ,
-					.8f,0,0 );
-			}
-			if(toothID=="30") {
-				return new Triangle(
-					-2.8f,0,0 , 
-					-2.8f,-2.4f,0 ,
-					0,-1.5f,0,
-					2.3f,-2.4f,0 ,
-					2.3f,0,0 );
-			}
-			if(toothID=="19") {
-				return new Triangle(
-					2.8f,0,0 , 
-					2.8f,-2.4f,0 ,
-					0,-1.5f,0,
-					-2.3f,-2.4f,0 ,
-					-2.3f,0,0 );
-			}
-			if(toothID=="31") {
-				return new Triangle( 
-					-2.6f,0,0 , 
-					-2.6f,-2.1f,0 ,
-					0,-1.5f,0,
-					2.3f,-2.1f,0 ,
-					2.3f,0.5f,0 );
-			}
-			if(toothID=="18") {
-				return new Triangle(
-					2.6f,0,0 , 
-					2.6f,-2.1f,0 ,
-					0,-1.5f,0,
-					-2.3f,-2.1f,0 ,
-					-2.3f,0.5f,0 );
-			}
-			if(toothID=="32") {
-				return new Triangle(
-					-2.6f,0,0 , 
-					-2.6f,-2.1f,0 ,
-					0,-1.5f,0,
-					2.1f,-2.1f,0 ,
-					2.1f,0,0 );
-			}
-			if(toothID=="17") {
-				return new Triangle(
-					2.6f,0,0 , 
-					2.6f,-2.1f,0 ,
-					0,-1.5f,0,
-					-2.1f,-2.1f,0 ,
-					-2.1f,0,0 );
-			}
-			return new Triangle();
-		}
-		*/
     }
 }

@@ -127,12 +127,6 @@
     <Compile Include="ToothChartDirectX.Designer.cs">
       <DependentUpon>ToothChartDirectX.cs</DependentUpon>
     </Compile>
-    <Compile Include="ToothChartWpf.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ToothChartWpf.Designer.cs">
-      <DependentUpon>ToothChartWpf.cs</DependentUpon>
-    </Compile>
     <Compile Include="Vertex3f.cs" />
     <Compile Include="ToothChartWrapper.cs">
       <SubType>UserControl</SubType>
@@ -141,15 +135,6 @@
       <DependentUpon>ToothChartWrapper.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WPF\D3Helper.cs" />
-    <Compile Include="WPF\D3Object.cs" />
-    <Compile Include="WPF\D3ObjectGroup.cs" />
-    <Compile Include="WPF\Wpf3dControl.xaml.cs">
-      <DependentUpon>Wpf3dControl.xaml</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="ToothChartWpf.resx">
-      <DependentUpon>ToothChartWpf.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="ToothChartWrapper.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ToothChartWrapper.cs</DependentUpon>
@@ -268,12 +253,6 @@
       <DependentUpon>ToothChartDirectX.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <Page Include="WPF\Wpf3dControl.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
