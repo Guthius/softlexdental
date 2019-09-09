@@ -270,14 +270,18 @@ namespace OpenDentBusiness {
 
 		///<summary>Throws exceptions for invalid Patient data.</summary>
 		public static byte[] BuildDoseSpotPostDataBytes(string clinicID,string clinicKey,string userID,string onBehalfOfUserId,Patient pat,out string queryString) {
-			queryString=DoseSpot.GetSingleSignOnQueryString(clinicID,clinicKey,userID,onBehalfOfUserId,pat);
-			return ASCIIEncoding.ASCII.GetBytes(queryString);
-		}
+            queryString = "";
+            //queryString=DoseSpot.GetSingleSignOnQueryString(clinicID,clinicKey,userID,onBehalfOfUserId,pat);
+            //return ASCIIEncoding.ASCII.GetBytes(queryString);
+            return null;
+        }
 
 		///<summary>Throws exceptions for invalid Patient data.</summary>
 		public static byte[] BuildDoseSpotPostDataBytesRefillsErrors(string clinicID,string clinicKey,string userID,out string queryString) {
-			queryString=DoseSpot.GetSingleSignOnQueryString(clinicID,clinicKey,userID,"",null);
-			return ASCIIEncoding.ASCII.GetBytes(queryString);
+            queryString = "";
+            //queryString =DoseSpot.GetSingleSignOnQueryString(clinicID,clinicKey,userID,"",null);
+            //return ASCIIEncoding.ASCII.GetBytes(queryString);
+            return null;
 		}
 
 		///<summary>Cleans supplied string to conform to XML standards.  Certain special characters are problematic for NewCrop even when converted

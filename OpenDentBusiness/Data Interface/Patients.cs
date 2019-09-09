@@ -3680,6 +3680,8 @@ namespace OpenDentBusiness
                 + "SET KeyNum=" + POut.Long(patTo) + " "
                 + "WHERE KeyNum=" + POut.Long(patFrom) + " AND ObjectType=" + ((int)TaskObjectType.Patient);
             Db.NonQ(command);
+
+
             //We have to move over the tasks belonging to the 'patFrom' patient in a seperate step because the IDInternal field of the oidexternal table 
             //  might be a foreign key to something other than a patnum depending on the IDType
             //There are 4 cases:
@@ -3687,18 +3689,19 @@ namespace OpenDentBusiness
             //2) Only patTo has used DoseSpot and patFrom has not.  Nothing to do.
             //3) Only patFrom has used DoseSpot and patTo has not.  Move the DoseSpot OID for patFrom to patTo, to preserve DoseSpot eRx history when clicking through.
             //4) Both patTo and patFrom have used DoseSpot.  Do nothing.  DoseSpot history for patFrom will be archived and no longer used.
-            OIDExternal doseSpotRoot = DoseSpot.GetDoseSpotRootOid();
-            bool hasPatToUsedDoseSpot = false;
-            if (doseSpotRoot != null)
-            {
-                OIDExternal oidPatTo = DoseSpot.GetDoseSpotPatID(patTo);
-                hasPatToUsedDoseSpot = (oidPatTo != null);
-            }
-            command = "UPDATE oidexternal "
-                + "SET IDInternal=" + POut.Long(patTo) + " "
-                + "WHERE IDInternal=" + POut.Long(patFrom) + " AND IDType='" + (IdentifierType.Patient.ToString()) + "' "
-                + (hasPatToUsedDoseSpot ? "AND rootExternal!='" + DoseSpot.GetDoseSpotRoot() + "." + POut.Int((int)IdentifierType.Patient) + "'" : "");
-            Db.NonQ(command);
+            //OIDExternal doseSpotRoot = DoseSpot.GetDoseSpotRootOid();
+            //bool hasPatToUsedDoseSpot = false;
+            //if (doseSpotRoot != null)
+            //{
+            //    OIDExternal oidPatTo = DoseSpot.GetDoseSpotPatID(patTo);
+            //    hasPatToUsedDoseSpot = (oidPatTo != null);
+            //}
+            //command = "UPDATE oidexternal "
+            //    + "SET IDInternal=" + POut.Long(patTo) + " "
+            //    + "WHERE IDInternal=" + POut.Long(patFrom) + " AND IDType='" + (IdentifierType.Patient.ToString()) + "' "
+            //    + (hasPatToUsedDoseSpot ? "AND rootExternal!='" + DoseSpot.GetDoseSpotRoot() + "." + POut.Int((int)IdentifierType.Patient) + "'" : "");
+            //Db.NonQ(command);
+
             //Mark the patient where data was pulled from as archived unless the patient is already marked as deceased.
             //We need to have the patient marked either archived or deceased so that it is hidden by default, and
             //we also need the customer to be able to access the account again in case a particular table gets missed

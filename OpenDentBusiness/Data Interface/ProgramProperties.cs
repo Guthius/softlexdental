@@ -393,32 +393,6 @@ namespace OpenDentBusiness
             xwebProperties.IsPaymentsAllowed = OpenDentBusiness.PIn.Bool(asString);
         }
 
-        ///<summary>Exception means failed. Return means success. paymentsAllowed should be check after return. If false then assume payments cannot be made for this clinic.</summary>
-        public static void GetPayConnectPatPortalCreds(long clinicNum, out PayConnect.WebPaymentProperties payConnectProps)
-        {
-            //No need to check RemotingRole;no call to db.
-            //Secure arguments are held in the db.
-            payConnectProps = new PayConnect.WebPaymentProperties();
-            OpenDentBusiness.Program programPayConnect = OpenDentBusiness.Programs.GetCur(OpenDentBusiness.ProgramName.PayConnect);
-            if (programPayConnect == null)
-            { //PayConnect not setup.
-                throw new ODException("PayConnect program link not found.", ODException.ErrorCodes.PayConnectProgramProperties);
-            }
-            if (!programPayConnect.Enabled)
-            { //PayConnect not turned on.
-                throw new ODException("PayConnect program link is disabled.", ODException.ErrorCodes.PayConnectProgramProperties);
-            }
-            //Validate the online token, since it is requiored for PayConnect online payments to work.
-            List<OpenDentBusiness.ProgramProperty> listPayConnectProperties = OpenDentBusiness.ProgramProperties.GetListForProgramAndClinic(programPayConnect.ProgramNum, clinicNum);
-            payConnectProps.Token = OpenDentBusiness.ProgramProperties.GetPropValFromList(listPayConnectProperties, PayConnect.ProgramProperties.PatientPortalPaymentsToken, clinicNum);
-            if (string.IsNullOrEmpty(payConnectProps.Token))
-            {
-                throw new ODException("PayConnect online token not found.", ODException.ErrorCodes.PayConnectProgramProperties);
-            }
-            string paymentsAllowedVal = OpenDentBusiness.ProgramProperties.GetPropValFromList(listPayConnectProperties, PayConnect.ProgramProperties.PatientPortalPaymentsEnabled, clinicNum);
-            payConnectProps.IsPaymentsAllowed = OpenDentBusiness.PIn.Bool(paymentsAllowedVal);
-        }
-
         public class PropertyDescs
         {
             public const string ImageFolder = "Image Folder";

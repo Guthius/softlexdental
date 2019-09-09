@@ -8718,9 +8718,9 @@
       <Project>{015e240b-23fb-4d91-b20c-ce221ddccb0f}</Project>
       <Name>OpenDentalGraph</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenDentBusiness\OpenDentBusiness.csproj">
+    <ProjectReference Include="..\OpenDentBusiness\OpenDental.Core.csproj">
       <Project>{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}</Project>
-      <Name>OpenDentBusiness</Name>
+      <Name>OpenDental.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\SparksToothChart\SparksToothChart.csproj">
       <Project>{033B77F4-2E98-49A7-901F-5F388DEDF83E}</Project>

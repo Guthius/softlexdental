@@ -195,7 +195,7 @@ namespace OpenDentBusiness
         {
             //No need to check RemotingRole; no call to db.
             List<ClaimForm> listInternalClaimForms = new List<ClaimForm>();
-            ResourceSet resources = OpenDentBusiness.Properties.Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true);
+            ResourceSet resources = OpenDental.Properties.Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentUICulture, true, true);
             foreach (DictionaryEntry item in resources)
             {
                 if (!item.Key.ToString().StartsWith("ClaimForm"))

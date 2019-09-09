@@ -4706,533 +4706,533 @@ namespace OpenDental
 
         private void Tool_eRx_Click(bool isShowRefillsAndErrors = false)
         {
-            if (!Security.IsAuthorized(Permissions.RxCreate))
-            {
-                return;
-            }
-            if (_dictFormErxSessions.ContainsKey(PatCur.PatNum) && _dictFormErxSessions[PatCur.PatNum] != null)
-            {
-                _dictFormErxSessions[PatCur.PatNum].Restore();
-                _dictFormErxSessions[PatCur.PatNum].BringToFront();
-                return;//FormErx is already open for this patient.  Simply bring it to the front to make the user aware that it is still there.
-            }
-            Program programErx = Programs.GetCur(ProgramName.eRx);
-            ProgramProperty ppErxOption = ProgramProperties.GetPropForProgByDesc(programErx.ProgramNum, Erx.PropertyDescs.ErxOption);
-            ErxOption erxOption = PIn.Enum<ErxOption>(ppErxOption.PropertyValue);
-            string doseSpotClinicID = "";
-            string doseSpotClinicKey = "";
-            string doseSpotUserID = "";
-            bool isEmp = Erx.IsUserAnEmployee(Security.CurUser);
-            Provider prov = null;
-            if (!isEmp && Security.CurUser.ProvNum != 0)
-            {
-                prov = Providers.GetProv(Security.CurUser.ProvNum);
-            }
-            else
-            {
-                prov = Providers.GetProv(PatCur.PriProv);
-            }
-            if (erxOption == ErxOption.DoseSpotWithLegacy)
-            {
-                if (prov.IsErxEnabled == ErxEnabledStatus.EnabledWithLegacy)
-                {
-                    InputBox pickErxOption =
-                        new InputBox(Lan.g(this, "Which eRx option would you like to use?"), new List<string>() { "Legacy", "DoseSpot" }, false);
-                    if (pickErxOption.ShowDialog() == DialogResult.Cancel)
-                    {
-                        return;
-                    }
-                    if (pickErxOption.SelectedIndex == 0)
-                    {//Legacy
-                        erxOption = ErxOption.Legacy;
-                    }
-                    else
-                    {
-                        erxOption = ErxOption.DoseSpot;
-                    }
-                }
-                else
-                {//It's fine that the provider might not be enabled.  We will check it later and they will be blocked.
-                    erxOption = ErxOption.DoseSpot;
-                }
-            }
-            #region Provider Term Date Check
-            //Prevents prescriptions from being added that have a provider selected that is past their term date
-            string message = "";
-            List<long> listInvalidProvs = Providers.GetInvalidProvsByTermDate(new List<long> { prov.ProvNum }, DateTime.Now);
-            if (listInvalidProvs.Count > 0)
-            {
-                if (!isEmp && Security.CurUser.ProvNum != 0)
-                {
-                    message = "The provider attached to this user has a Term Date that has expired. "
-                        + "Please select another user or change the provider's term date.";
-                }
-                else
-                {
-                    message = "The primary provider for this patient has a Term Date that has expired. "
-                        + "Please change the primary provider for this patient or change the provider's term date.";
-                }
-                MsgBox.Show(this, message);
-                return;
-            }
-            #endregion Provider Term Date Check
-            if (erxOption == ErxOption.Legacy)
-            {
-                string newCropAccountId = Preference.GetString(PreferenceName.NewCropAccountId);
-                if (newCropAccountId == "")
-                {//NewCrop has not been enabled yet.
-                    if (!MsgBox.Show(this, MsgBoxButtons.YesNo, "Continuing will enable basic Electronic Rx (eRx).  Fees are associated with this secure e-prescribing system.  See our online manual for details.  To enable comprehensive eRx (with drug interaction checks, formulary checks, etc.), contact support.  At this time, eRx only works for the United States and its territories, including Puerto Rico.  Continue?"))
-                    {
-                        return;
-                    }
-                    //prepare the xml document to send--------------------------------------------------------------------------------------
-                    XmlWriterSettings settings = new XmlWriterSettings();
-                    settings.Indent = true;
-                    settings.IndentChars = ("    ");
-                    StringBuilder strbuild = new StringBuilder();
-                    using (XmlWriter writer = XmlWriter.Create(strbuild, settings))
-                    {
-                        writer.WriteStartElement("CustomerIdRequest");
-                        writer.WriteStartElement("RegistrationKey");
-                        writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
-                        writer.WriteEndElement();
-                        writer.WriteEndElement();
-                    }
-#if DEBUG
-                    OpenDental.localhost.Service1 updateService = new OpenDental.localhost.Service1();
-#else
-				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-					updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
-#endif
-                    if (Preference.GetString(PreferenceName.UpdateWebProxyAddress) != "")
-                    {
-                        IWebProxy proxy = new WebProxy(Preference.GetString(PreferenceName.UpdateWebProxyAddress));
-                        ICredentials cred = new NetworkCredential(Preference.GetString(PreferenceName.UpdateWebProxyUserName), Preference.GetString(PreferenceName.UpdateWebProxyPassword));
-                        proxy.Credentials = cred;
-                        updateService.Proxy = proxy;
-                    }
-                    string patNum = "";
-                    try
-                    {
-                        string result = updateService.RequestCustomerID(strbuild.ToString());//may throw error
-                        XmlDocument doc = new XmlDocument();
-                        doc.LoadXml(result);
-                        XmlNode node = doc.SelectSingleNode("//CustomerIdResponse");
-                        if (node != null)
-                        {
-                            patNum = node.InnerText;
-                        }
-                        if (patNum == "")
-                        {
-                            throw new ApplicationException("Failed to validate registration key.");
-                        }
-                        newCropAccountId = patNum;
-                        newCropAccountId += "-" + CodeBase.MiscUtils.CreateRandomAlphaNumericString(3);
-                        long checkSum = PIn.Long(patNum);
-                        checkSum += Convert.ToByte(newCropAccountId[newCropAccountId.IndexOf('-') + 1]) * 3;
-                        checkSum += Convert.ToByte(newCropAccountId[newCropAccountId.IndexOf('-') + 2]) * 5;
-                        checkSum += Convert.ToByte(newCropAccountId[newCropAccountId.IndexOf('-') + 3]) * 7;
-                        newCropAccountId += (checkSum % 100).ToString().PadLeft(2, '0');
-                        Preference.Update(PreferenceName.NewCropAccountId, newCropAccountId);
-                        programErx.Enabled = true;
-                        Programs.Update(programErx);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show(ex.Message);
-                        return;
-                    }
-                }
-                else
-                { //newCropAccountId!=""
-                    if (!programErx.Enabled)
-                    {
-                        MessageBox.Show(Lan.g(this, "eRx is currently disabled.") + "\r\n" + Lan.g(this, "To enable, see our online manual for instructions."));
-                        return;
-                    }
-                    if (!NewCropIsAccountIdValid())
-                    {
-                        string newCropName = Preference.GetString(PreferenceName.NewCropName);
-                        string newCropPassword = Preference.GetString(PreferenceName.NewCropPassword);
-                        if (newCropName == "" || newCropPassword == "")
-                        { //NewCrop does not allow blank passwords.
-                            MsgBox.Show(this, "NewCropName preference and NewCropPassword preference must not be blank when using a NewCrop AccountID provided by a reseller.");
-                            return;
-                        }
-                    }
-                }
-            }
-            else if (erxOption == ErxOption.DoseSpot)
-            {
-                if (!programErx.Enabled)
-                {
-                    MessageBox.Show(Lan.g(this, "eRx is currently disabled.") + "\r\n" + Lan.g(this, "To enable, see our online manual for instructions."));
-                    return;
-                }
-                if (Security.CurUser.EmployeeNum == 0 && Security.CurUser.ProvNum == 0)
-                {
-                    MsgBox.Show(this, "This user must be associated with either a provider or an employee.  The security admin must make this change before this user can submit prescriptions.");
-                    return;
-                }
-                //clinicNum should be 0 for offices not using clinics.
-                //This will work properly when retreiving the clinicKey and clinicID
-                long clinicNum = 0;
-                if (Preferences.HasClinicsEnabled)
-                {
-                    clinicNum = Clinics.ClinicNum;
-                    if (!Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected))
-                    {
-                        clinicNum = PatCur.ClinicNum;
-                    }
-                }
-                List<ProgramProperty> listDoseSpotProperties = ProgramProperties.GetForProgram(programErx.ProgramNum)
-                    .FindAll(x => x.ClinicNum == clinicNum
-                        && (x.PropertyDesc == Erx.PropertyDescs.ClinicID || x.PropertyDesc == Erx.PropertyDescs.ClinicKey));
-                byte[] postData = new byte[1];
-                string queryString = "";
-                bool isDoseSpotAccessAllowed = true;
-                try
-                {
-                    doseSpotUserID = DoseSpot.GetUserID(Security.CurUser, clinicNum);
-                    DoseSpot.GetClinicIdAndKey(clinicNum, doseSpotUserID, programErx, listDoseSpotProperties, out doseSpotClinicID, out doseSpotClinicKey);
-                    //BuildDoseSpotPostDataBytes will validate patient information and throw exceptions.
-                    if (isShowRefillsAndErrors)
-                    {
-                        postData = ErxXml.BuildDoseSpotPostDataBytesRefillsErrors(doseSpotClinicID, doseSpotClinicKey, doseSpotUserID, out queryString);
-                    }
-                    else
-                    {
-                        string onBehalfOfUserId = "";
-                        if (isEmp)
-                        {
-                            List<Provider> listProviders = Providers.GetProvsScheduledToday(clinicNum);
-                            if (!listProviders.Any(x => x.ProvNum == prov.ProvNum))
-                            {
-                                listProviders.Add(prov);
-                            }
-                            FormProviderPick FormPP = new FormProviderPick(listProviders);
-                            FormPP.SelectedProvNum = prov.ProvNum;
-                            FormPP.IsNoneAvailable = false;
-                            FormPP.IsShowAllAvailable = true;
-                            FormPP.ShowDialog();
-                            if (FormPP.DialogResult == DialogResult.Cancel)
-                            {
-                                return;
-                            }
-                            List<User> listDoseUsers = Userods.GetWhere(x => x.ProvNum == FormPP.SelectedProvNum, true);//Only consider non-hidden users.
-                            listDoseUsers = listDoseUsers.FindAll(x =>
-                            {//Finds users that have a DoseSpot ID
-                                try
-                                {
-                                    return !string.IsNullOrWhiteSpace(DoseSpot.GetUserID(x, clinicNum));
-                                }
-                                catch (Exception)
-                                {
-                                    return false;
-                                }
-                            });
-                            User userOnBehalfOf = null;
-                            if (listDoseUsers.Count == 1)
-                            {
-                                userOnBehalfOf = listDoseUsers[0];
-                            }
-                            else if (listDoseUsers.Count == 0)
-                            {
-                                throw new ODException(Lan.g(this, "Could not find DoseSpot User ID for the selected provider."));
-                            }
-                            else
-                            {
-                                throw new ODException(Lan.g(this, "There are too many Open Dental users associated to the selected provider."));
-                            }
-                            prov = Providers.GetProv(FormPP.SelectedProvNum);
-                            #region Provider Term Date Check
-                            //Prevents prescriptions from being added that have a provider selected that is past their term date
-                            listInvalidProvs = Providers.GetInvalidProvsByTermDate(new List<long> { prov.ProvNum }, DateTime.Now);
-                            if (listInvalidProvs.Count > 0)
-                            {
-                                message = "The provider selected has a Term Date that has expired. Please select another provider.";
-                                MsgBox.Show(this, message);
-                                return;
-                            }
-                            #endregion Provider Term Date Check
-                            onBehalfOfUserId = (DoseSpot.GetUserID(userOnBehalfOf, clinicNum));
-                        }
-                        postData = ErxXml.BuildDoseSpotPostDataBytes(doseSpotClinicID, doseSpotClinicKey, doseSpotUserID, onBehalfOfUserId, PatCur, out queryString);
-                    }
-                    if (!isEmp && Security.CurUser.ProvNum != 0)
-                    {//Not a proxy clinician, so we want to validate that they are allowed access.
-                        DoseSpot.ValidateProvider(prov, clinicNum);
-                        //hook for additional authorization before prescription is saved
-                        //bool[] authorized=new bool[1] { false };
-                        //if(Plugins.HookMethod(this,"ContrChart.Tool_eRx_Click_Authorize",authorized,prov)) {
-                        //	if(!authorized[0]) {
-                        //		isDoseSpotAccessAllowed=false;
-                        //	}
-                        //}
-                        string provNpi = Regex.Replace(prov.NationalProvID, "[^0-9]*", "");//NPI with all non-numeric characters removed.
-                        UpdateErxAccess(provNpi, doseSpotUserID, clinicNum, doseSpotClinicID, doseSpotClinicKey, erxOption);
-                        ProviderErx provErxDoseSpot = ProviderErxs.GetOneForNpiAndOption(provNpi, erxOption);
-                        if (provErxDoseSpot.IsEnabled != ErxStatus.Enabled)
-                        {
-                            MessageBox.Show(Lan.g(this, "Contact support to enable eRx for provider") + " " + prov.Abbr);
-                            isDoseSpotAccessAllowed = false;
-                        }
-                    }
-                    else
-                    {
-                        //Proxy users still need to have their clinic synced with ODHQ.
-                        //This call mimics what would happen in UpdateErxAccess above
-                        DoseSpot.SyncClinicErxsWithHQ();
-                    }
-                    ClinicErx clinicErxCur = ClinicErxs.GetByClinicIdAndKey(doseSpotClinicID, doseSpotClinicKey);
-                    if (clinicErxCur.EnabledStatus != ErxStatus.Enabled)
-                    {
-                        string clinicAbbr = "";
-                        if (clinicErxCur.ClinicNum == -1)
-                        {//ClinicErx was inserted from ODHQ, use the ClinicDesc given by an ODHQ staff
-                            clinicAbbr = clinicErxCur.ClinicDesc;
-                        }
-                        else if (clinicErxCur.ClinicNum == 0)
-                        {//Office Headquarters
-                            clinicAbbr = "Headquarters";
-                        }
-                        else
-                        {
-                            clinicAbbr = Clinics.GetAbbr(clinicErxCur.ClinicNum);
-                        }
-                        MessageBox.Show(Lan.g(this, "Contact support to enable eRx for clinic") + " " + clinicAbbr);
-                        isDoseSpotAccessAllowed = false;
-                    }
-                    //Try to add any self reported medications to DoseSpot before the user gets views their list.
-                    DoseSpot.SyncPrescriptionsToDoseSpot(doseSpotClinicID, doseSpotClinicKey, doseSpotUserID, PatCur.PatNum);
-                }
-                catch (ODException odException)
-                {
-                    MessageBox.Show(odException.Message);//The ODExceptions thrown in this context have already been translated.
-                    return;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                    return;
-                }
-                if (isDoseSpotAccessAllowed)
-                {
-                    //The user is either a provider with granted access, or a proxy clinician
-                    FormErx formErx = new FormErx(false);
-                    formErx.PatCur = PatCur;
-                    formErx.PostDataBytes = postData;
-                    formErx.ErxOptionCur = erxOption;
-                    formErx.Show();//Non-modal so user can browse OD while writing prescription.  When form is closed, ErxBrowserClosed() is called below.
-                    _dictFormErxSessions[PatCur.PatNum] = formErx;
-                }
-                ErxLog doseSpotLog = new ErxLog();
-                doseSpotLog.PatNum = PatCur.PatNum;
-                doseSpotLog.MsgText = queryString;
-                doseSpotLog.ProvNum = prov.ProvNum;
-                doseSpotLog.UserNum = Security.CurUser.UserNum;
-                SecurityLogs.MakeLogEntry(Permissions.RxCreate, doseSpotLog.PatNum, Lan.g(this, "eRx DoseSpot entry made for provider") + " " + Providers.GetAbbr(doseSpotLog.ProvNum));
-                ErxLogs.Insert(doseSpotLog);
-                return;
-            }
-            //Validation------------------------------------------------------------------------------------------------------------------------------------------------------
-            if (Security.CurUser.EmployeeNum == 0 && Security.CurUser.ProvNum == 0)
-            {
-                MsgBox.Show(this, "This user must be associated with either a provider or an employee.  The security admin must make this change before this user can submit prescriptions.");
-                return;
-            }
-            if (PatCur == null)
-            {
-                MsgBox.Show(this, "No patient selected.");
-                return;
-            }
-            Employee emp = null;
-            Clinic clinic = null;
-            try
-            {
-                Erx.ValidatePracticeInfo();
-                //Clinic Validation
-                if (Preferences.HasClinicsEnabled)
-                {
-                    if (Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected))
-                    {
-                        clinic = Clinics.GetClinic(Clinics.ClinicNum);
-                    }
-                    else if (PatCur.ClinicNum != 0)
-                    {//Use patient default clinic if the patient has one.
-                        clinic = Clinics.GetClinic(PatCur.ClinicNum);
-                    }
-                    if (clinic != null)
-                    {
-                        Erx.ValidateClinic(clinic);
-                    }
-                }
-                if (isEmp)
-                {
-                    emp = Employee.GetById(Security.CurUser.EmployeeNum);
-                    if (emp.LastName == "")
-                    {//Checked in UI, but check here just in case this database was converted from another software.
-                        MessageBox.Show(Lan.g(this, "Employee last name missing for user") + ": " + Security.CurUser.UserName);
-                        return;
-                    }
-                    if (emp.FirstName == "")
-                    {//Not validated in UI.
-                        MessageBox.Show(Lan.g(this, "Employee first name missing for user") + ": " + Security.CurUser.UserName);
-                        return;
-                    }
-                }
-                Erx.ValidateProv(prov, clinic);
-                //hook for additional authorization before prescription is saved
-                //bool[] authorized=new bool[1] { false };
-                //if(Plugins.HookMethod(this,"ContrChart.Tool_eRx_Click_Authorize2",authorized,prov)) {
-                //	if(!authorized[0]) {
-                //		throw new ODException(Lans.g("Erx","Provider is not authenticated"));
-                //	}
-                //}
-                Erx.ValidatePat(PatCur);
-            }
-            catch (ODException ex)
-            {//Purposefully only catch exceptions we throw due to validation
-                MessageBox.Show(ex.Message);//All ODExceptions thrown in this context should have already been translated.
-                return;
-            }
-            #region ProviderErx Validation
-            string npi = Regex.Replace(prov.NationalProvID, "[^0-9]*", "");//NPI with all non-numeric characters removed.
-            bool isAccessAllowed = true;
-            UpdateErxAccess(npi, "", 0, "", "", erxOption);//0/blank/blank for clinicNum/clinicid/clinickey is fine because we don't enable/disable the clinic for NewCrop.
-            ProviderErx provErx = ProviderErxs.GetOneForNpiAndOption(npi, erxOption);
-            if (!Preference.GetBool(PreferenceName.NewCropIsLegacy) && !provErx.IsIdentifyProofed)
-            {
-                if (Preference.GetString(PreferenceName.NewCropPartnerName) != "" || Preference.GetString(PreferenceName.NewCropPassword) != "")
-                {//Customer of a distributor
-                    MessageBox.Show(Lan.g(this, "Provider") + " " + prov.Abbr + " "
-                        + Lan.g(this, "must complete Identity Proofing (IDP) before using eRx.  Call support for details."));
-                }
-                else
-                {//Customer of OD proper or customer of a reseller
-                    MessageBox.Show(Lan.g(this, "Provider") + " " + prov.Abbr + " " + Lan.g(this, "must complete Identity Proofing (IDP) before using eRx.  "
-                        + "Please call support to schedule an IDP appointment."));
-                }
-                isAccessAllowed = false;
-            }
-            if (provErx.IsEnabled != ErxStatus.Enabled)
-            {
-                MessageBox.Show(Lan.g(this, "Contact support to enable eRx for provider") + " " + prov.Abbr);
-                isAccessAllowed = false;
-            }
-            #endregion ProviderErx Validation
-            string clickThroughXml = "";
-            byte[] postDataBytes = ErxXml.BuildNewCropPostDataBytes(prov, emp, PatCur, out clickThroughXml);
-            #region Launch eRx in external browser window.
-            //			string xmlBase64=System.Web.HttpUtility.HtmlEncode(Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(clickThroughXml)));
-            //			xmlBase64=xmlBase64.Replace("+","%2B");//A common base 64 character which needs to be escaped within URLs.
-            //			xmlBase64=xmlBase64.Replace("/","%2F");//A common base 64 character which needs to be escaped within URLs.
-            //			xmlBase64=xmlBase64.Replace("=","%3D");//Base 64 strings usually end in '=', which could mean a new parameter definition within the URL so we escape.
-            //			String postdata="RxInput=base64:"+xmlBase64;
-            //			byte[] PostDataBytes=System.Text.Encoding.UTF8.GetBytes(postdata);
-            //			string additionalHeaders="Content-Type: application/x-www-form-urlencoded\r\n";
-            //			IWebBrowserApp IE=(IWebBrowserApp)IEControl;
-            //			IE.Visible=true;
-            //#if DEBUG
-            //			string newCropUrl="http://preproduction.newcropaccounts.com/interfaceV7/rxentry.aspx";
-            //#else //Debug
-            //			string newCropUrl="https://secure.newcropaccounts.com/interfacev7/rxentry.aspx";
-            //#endif
-            //			IE.Navigate(newCropUrl,null,null,PostDataBytes,additionalHeaders);
-            #endregion Launch eRx in external browser window.
-            try
-            {
-                //Enforce Latest IE Version Available.
-                if (MiscUtils.TryUpdateIeEmulation())
-                {
-                    MsgBox.Show(this, "Browser emulation version updated.\r\nYou must restart this application before using eRx.");
-                    return;
-                }
-                FormErx formErx = new FormErx();
-                formErx.PatCur = PatCur;
-                formErx.PostDataBytes = postDataBytes;
-                formErx.ErxOptionCur = erxOption;
-                if (isAccessAllowed)
-                {
-                    formErx.Show();//Non-modal so user can browse OD while writing prescription.  When form is closed, ErxBrowserClosed() is called below.
-                    _dictFormErxSessions[PatCur.PatNum] = formErx;
-                }
-                else
-                {
-                    //This is how we send the provider information to NewCrop without allowing the provider to use NewCrop.
-                    //NewCrop requires the provider information on their server in order to complete Identity Proofing (IDP).
-                    formErx.ComposeNewRxLegacy();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(Lan.g(this, "Error launching browser window.  Internet Explorer might not be installed.  ") + ex.Message);
-                return;
-            }
-            ErxLog erxLog = new ErxLog();
-            erxLog.PatNum = PatCur.PatNum;
-            erxLog.MsgText = clickThroughXml;
-            erxLog.ProvNum = prov.ProvNum;
-            erxLog.UserNum = Security.CurUser.UserNum;
-            SecurityLogs.MakeLogEntry(Permissions.RxCreate, erxLog.PatNum, Lan.g(this, "eRx entry made for provider") + " " + Providers.GetAbbr(erxLog.ProvNum));
-            ErxLogs.Insert(erxLog);
+//            if (!Security.IsAuthorized(Permissions.RxCreate))
+//            {
+//                return;
+//            }
+//            if (_dictFormErxSessions.ContainsKey(PatCur.PatNum) && _dictFormErxSessions[PatCur.PatNum] != null)
+//            {
+//                _dictFormErxSessions[PatCur.PatNum].Restore();
+//                _dictFormErxSessions[PatCur.PatNum].BringToFront();
+//                return;//FormErx is already open for this patient.  Simply bring it to the front to make the user aware that it is still there.
+//            }
+//            Program programErx = Programs.GetCur(ProgramName.eRx);
+//            ProgramProperty ppErxOption = ProgramProperties.GetPropForProgByDesc(programErx.ProgramNum, Erx.PropertyDescs.ErxOption);
+//            ErxOption erxOption = PIn.Enum<ErxOption>(ppErxOption.PropertyValue);
+//            string doseSpotClinicID = "";
+//            string doseSpotClinicKey = "";
+//            string doseSpotUserID = "";
+//            bool isEmp = Erx.IsUserAnEmployee(Security.CurUser);
+//            Provider prov = null;
+//            if (!isEmp && Security.CurUser.ProvNum != 0)
+//            {
+//                prov = Providers.GetProv(Security.CurUser.ProvNum);
+//            }
+//            else
+//            {
+//                prov = Providers.GetProv(PatCur.PriProv);
+//            }
+//            if (erxOption == ErxOption.DoseSpotWithLegacy)
+//            {
+//                if (prov.IsErxEnabled == ErxEnabledStatus.EnabledWithLegacy)
+//                {
+//                    InputBox pickErxOption =
+//                        new InputBox(Lan.g(this, "Which eRx option would you like to use?"), new List<string>() { "Legacy", "DoseSpot" }, false);
+//                    if (pickErxOption.ShowDialog() == DialogResult.Cancel)
+//                    {
+//                        return;
+//                    }
+//                    if (pickErxOption.SelectedIndex == 0)
+//                    {//Legacy
+//                        erxOption = ErxOption.Legacy;
+//                    }
+//                    else
+//                    {
+//                        erxOption = ErxOption.DoseSpot;
+//                    }
+//                }
+//                else
+//                {//It's fine that the provider might not be enabled.  We will check it later and they will be blocked.
+//                    erxOption = ErxOption.DoseSpot;
+//                }
+//            }
+//            #region Provider Term Date Check
+//            //Prevents prescriptions from being added that have a provider selected that is past their term date
+//            string message = "";
+//            List<long> listInvalidProvs = Providers.GetInvalidProvsByTermDate(new List<long> { prov.ProvNum }, DateTime.Now);
+//            if (listInvalidProvs.Count > 0)
+//            {
+//                if (!isEmp && Security.CurUser.ProvNum != 0)
+//                {
+//                    message = "The provider attached to this user has a Term Date that has expired. "
+//                        + "Please select another user or change the provider's term date.";
+//                }
+//                else
+//                {
+//                    message = "The primary provider for this patient has a Term Date that has expired. "
+//                        + "Please change the primary provider for this patient or change the provider's term date.";
+//                }
+//                MsgBox.Show(this, message);
+//                return;
+//            }
+//            #endregion Provider Term Date Check
+//            if (erxOption == ErxOption.Legacy)
+//            {
+//                string newCropAccountId = Preference.GetString(PreferenceName.NewCropAccountId);
+//                if (newCropAccountId == "")
+//                {//NewCrop has not been enabled yet.
+//                    if (!MsgBox.Show(this, MsgBoxButtons.YesNo, "Continuing will enable basic Electronic Rx (eRx).  Fees are associated with this secure e-prescribing system.  See our online manual for details.  To enable comprehensive eRx (with drug interaction checks, formulary checks, etc.), contact support.  At this time, eRx only works for the United States and its territories, including Puerto Rico.  Continue?"))
+//                    {
+//                        return;
+//                    }
+//                    //prepare the xml document to send--------------------------------------------------------------------------------------
+//                    XmlWriterSettings settings = new XmlWriterSettings();
+//                    settings.Indent = true;
+//                    settings.IndentChars = ("    ");
+//                    StringBuilder strbuild = new StringBuilder();
+//                    using (XmlWriter writer = XmlWriter.Create(strbuild, settings))
+//                    {
+//                        writer.WriteStartElement("CustomerIdRequest");
+//                        writer.WriteStartElement("RegistrationKey");
+//                        writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
+//                        writer.WriteEndElement();
+//                        writer.WriteEndElement();
+//                    }
+//#if DEBUG
+//                    OpenDental.localhost.Service1 updateService = new OpenDental.localhost.Service1();
+//#else
+//				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
+//					updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
+//#endif
+//                    if (Preference.GetString(PreferenceName.UpdateWebProxyAddress) != "")
+//                    {
+//                        IWebProxy proxy = new WebProxy(Preference.GetString(PreferenceName.UpdateWebProxyAddress));
+//                        ICredentials cred = new NetworkCredential(Preference.GetString(PreferenceName.UpdateWebProxyUserName), Preference.GetString(PreferenceName.UpdateWebProxyPassword));
+//                        proxy.Credentials = cred;
+//                        updateService.Proxy = proxy;
+//                    }
+//                    string patNum = "";
+//                    try
+//                    {
+//                        string result = updateService.RequestCustomerID(strbuild.ToString());//may throw error
+//                        XmlDocument doc = new XmlDocument();
+//                        doc.LoadXml(result);
+//                        XmlNode node = doc.SelectSingleNode("//CustomerIdResponse");
+//                        if (node != null)
+//                        {
+//                            patNum = node.InnerText;
+//                        }
+//                        if (patNum == "")
+//                        {
+//                            throw new ApplicationException("Failed to validate registration key.");
+//                        }
+//                        newCropAccountId = patNum;
+//                        newCropAccountId += "-" + CodeBase.MiscUtils.CreateRandomAlphaNumericString(3);
+//                        long checkSum = PIn.Long(patNum);
+//                        checkSum += Convert.ToByte(newCropAccountId[newCropAccountId.IndexOf('-') + 1]) * 3;
+//                        checkSum += Convert.ToByte(newCropAccountId[newCropAccountId.IndexOf('-') + 2]) * 5;
+//                        checkSum += Convert.ToByte(newCropAccountId[newCropAccountId.IndexOf('-') + 3]) * 7;
+//                        newCropAccountId += (checkSum % 100).ToString().PadLeft(2, '0');
+//                        Preference.Update(PreferenceName.NewCropAccountId, newCropAccountId);
+//                        programErx.Enabled = true;
+//                        Programs.Update(programErx);
+//                    }
+//                    catch (Exception ex)
+//                    {
+//                        MessageBox.Show(ex.Message);
+//                        return;
+//                    }
+//                }
+//                else
+//                { //newCropAccountId!=""
+//                    if (!programErx.Enabled)
+//                    {
+//                        MessageBox.Show(Lan.g(this, "eRx is currently disabled.") + "\r\n" + Lan.g(this, "To enable, see our online manual for instructions."));
+//                        return;
+//                    }
+//                    if (!NewCropIsAccountIdValid())
+//                    {
+//                        string newCropName = Preference.GetString(PreferenceName.NewCropName);
+//                        string newCropPassword = Preference.GetString(PreferenceName.NewCropPassword);
+//                        if (newCropName == "" || newCropPassword == "")
+//                        { //NewCrop does not allow blank passwords.
+//                            MsgBox.Show(this, "NewCropName preference and NewCropPassword preference must not be blank when using a NewCrop AccountID provided by a reseller.");
+//                            return;
+//                        }
+//                    }
+//                }
+//            }
+//            else if (erxOption == ErxOption.DoseSpot)
+//            {
+//                if (!programErx.Enabled)
+//                {
+//                    MessageBox.Show(Lan.g(this, "eRx is currently disabled.") + "\r\n" + Lan.g(this, "To enable, see our online manual for instructions."));
+//                    return;
+//                }
+//                if (Security.CurUser.EmployeeNum == 0 && Security.CurUser.ProvNum == 0)
+//                {
+//                    MsgBox.Show(this, "This user must be associated with either a provider or an employee.  The security admin must make this change before this user can submit prescriptions.");
+//                    return;
+//                }
+//                //clinicNum should be 0 for offices not using clinics.
+//                //This will work properly when retreiving the clinicKey and clinicID
+//                long clinicNum = 0;
+//                if (Preferences.HasClinicsEnabled)
+//                {
+//                    clinicNum = Clinics.ClinicNum;
+//                    if (!Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected))
+//                    {
+//                        clinicNum = PatCur.ClinicNum;
+//                    }
+//                }
+//                List<ProgramProperty> listDoseSpotProperties = ProgramProperties.GetForProgram(programErx.ProgramNum)
+//                    .FindAll(x => x.ClinicNum == clinicNum
+//                        && (x.PropertyDesc == Erx.PropertyDescs.ClinicID || x.PropertyDesc == Erx.PropertyDescs.ClinicKey));
+//                byte[] postData = new byte[1];
+//                string queryString = "";
+//                bool isDoseSpotAccessAllowed = true;
+//                try
+//                {
+//                    doseSpotUserID = DoseSpot.GetUserID(Security.CurUser, clinicNum);
+//                    DoseSpot.GetClinicIdAndKey(clinicNum, doseSpotUserID, programErx, listDoseSpotProperties, out doseSpotClinicID, out doseSpotClinicKey);
+//                    //BuildDoseSpotPostDataBytes will validate patient information and throw exceptions.
+//                    if (isShowRefillsAndErrors)
+//                    {
+//                        postData = ErxXml.BuildDoseSpotPostDataBytesRefillsErrors(doseSpotClinicID, doseSpotClinicKey, doseSpotUserID, out queryString);
+//                    }
+//                    else
+//                    {
+//                        string onBehalfOfUserId = "";
+//                        if (isEmp)
+//                        {
+//                            List<Provider> listProviders = Providers.GetProvsScheduledToday(clinicNum);
+//                            if (!listProviders.Any(x => x.ProvNum == prov.ProvNum))
+//                            {
+//                                listProviders.Add(prov);
+//                            }
+//                            FormProviderPick FormPP = new FormProviderPick(listProviders);
+//                            FormPP.SelectedProvNum = prov.ProvNum;
+//                            FormPP.IsNoneAvailable = false;
+//                            FormPP.IsShowAllAvailable = true;
+//                            FormPP.ShowDialog();
+//                            if (FormPP.DialogResult == DialogResult.Cancel)
+//                            {
+//                                return;
+//                            }
+//                            List<User> listDoseUsers = Userods.GetWhere(x => x.ProvNum == FormPP.SelectedProvNum, true);//Only consider non-hidden users.
+//                            listDoseUsers = listDoseUsers.FindAll(x =>
+//                            {//Finds users that have a DoseSpot ID
+//                                try
+//                                {
+//                                    return !string.IsNullOrWhiteSpace(DoseSpot.GetUserID(x, clinicNum));
+//                                }
+//                                catch (Exception)
+//                                {
+//                                    return false;
+//                                }
+//                            });
+//                            User userOnBehalfOf = null;
+//                            if (listDoseUsers.Count == 1)
+//                            {
+//                                userOnBehalfOf = listDoseUsers[0];
+//                            }
+//                            else if (listDoseUsers.Count == 0)
+//                            {
+//                                throw new ODException(Lan.g(this, "Could not find DoseSpot User ID for the selected provider."));
+//                            }
+//                            else
+//                            {
+//                                throw new ODException(Lan.g(this, "There are too many Open Dental users associated to the selected provider."));
+//                            }
+//                            prov = Providers.GetProv(FormPP.SelectedProvNum);
+//                            #region Provider Term Date Check
+//                            //Prevents prescriptions from being added that have a provider selected that is past their term date
+//                            listInvalidProvs = Providers.GetInvalidProvsByTermDate(new List<long> { prov.ProvNum }, DateTime.Now);
+//                            if (listInvalidProvs.Count > 0)
+//                            {
+//                                message = "The provider selected has a Term Date that has expired. Please select another provider.";
+//                                MsgBox.Show(this, message);
+//                                return;
+//                            }
+//                            #endregion Provider Term Date Check
+//                            onBehalfOfUserId = (DoseSpot.GetUserID(userOnBehalfOf, clinicNum));
+//                        }
+//                        postData = ErxXml.BuildDoseSpotPostDataBytes(doseSpotClinicID, doseSpotClinicKey, doseSpotUserID, onBehalfOfUserId, PatCur, out queryString);
+//                    }
+//                    if (!isEmp && Security.CurUser.ProvNum != 0)
+//                    {//Not a proxy clinician, so we want to validate that they are allowed access.
+//                        DoseSpot.ValidateProvider(prov, clinicNum);
+//                        //hook for additional authorization before prescription is saved
+//                        //bool[] authorized=new bool[1] { false };
+//                        //if(Plugins.HookMethod(this,"ContrChart.Tool_eRx_Click_Authorize",authorized,prov)) {
+//                        //	if(!authorized[0]) {
+//                        //		isDoseSpotAccessAllowed=false;
+//                        //	}
+//                        //}
+//                        string provNpi = Regex.Replace(prov.NationalProvID, "[^0-9]*", "");//NPI with all non-numeric characters removed.
+//                        UpdateErxAccess(provNpi, doseSpotUserID, clinicNum, doseSpotClinicID, doseSpotClinicKey, erxOption);
+//                        ProviderErx provErxDoseSpot = ProviderErxs.GetOneForNpiAndOption(provNpi, erxOption);
+//                        if (provErxDoseSpot.IsEnabled != ErxStatus.Enabled)
+//                        {
+//                            MessageBox.Show(Lan.g(this, "Contact support to enable eRx for provider") + " " + prov.Abbr);
+//                            isDoseSpotAccessAllowed = false;
+//                        }
+//                    }
+//                    else
+//                    {
+//                        //Proxy users still need to have their clinic synced with ODHQ.
+//                        //This call mimics what would happen in UpdateErxAccess above
+//                        DoseSpot.SyncClinicErxsWithHQ();
+//                    }
+//                    ClinicErx clinicErxCur = ClinicErxs.GetByClinicIdAndKey(doseSpotClinicID, doseSpotClinicKey);
+//                    if (clinicErxCur.EnabledStatus != ErxStatus.Enabled)
+//                    {
+//                        string clinicAbbr = "";
+//                        if (clinicErxCur.ClinicNum == -1)
+//                        {//ClinicErx was inserted from ODHQ, use the ClinicDesc given by an ODHQ staff
+//                            clinicAbbr = clinicErxCur.ClinicDesc;
+//                        }
+//                        else if (clinicErxCur.ClinicNum == 0)
+//                        {//Office Headquarters
+//                            clinicAbbr = "Headquarters";
+//                        }
+//                        else
+//                        {
+//                            clinicAbbr = Clinics.GetAbbr(clinicErxCur.ClinicNum);
+//                        }
+//                        MessageBox.Show(Lan.g(this, "Contact support to enable eRx for clinic") + " " + clinicAbbr);
+//                        isDoseSpotAccessAllowed = false;
+//                    }
+//                    //Try to add any self reported medications to DoseSpot before the user gets views their list.
+//                    DoseSpot.SyncPrescriptionsToDoseSpot(doseSpotClinicID, doseSpotClinicKey, doseSpotUserID, PatCur.PatNum);
+//                }
+//                catch (ODException odException)
+//                {
+//                    MessageBox.Show(odException.Message);//The ODExceptions thrown in this context have already been translated.
+//                    return;
+//                }
+//                catch (Exception ex)
+//                {
+//                    MessageBox.Show("Error: " + ex.Message);
+//                    return;
+//                }
+//                if (isDoseSpotAccessAllowed)
+//                {
+//                    //The user is either a provider with granted access, or a proxy clinician
+//                    FormErx formErx = new FormErx(false);
+//                    formErx.PatCur = PatCur;
+//                    formErx.PostDataBytes = postData;
+//                    formErx.ErxOptionCur = erxOption;
+//                    formErx.Show();//Non-modal so user can browse OD while writing prescription.  When form is closed, ErxBrowserClosed() is called below.
+//                    _dictFormErxSessions[PatCur.PatNum] = formErx;
+//                }
+//                ErxLog doseSpotLog = new ErxLog();
+//                doseSpotLog.PatNum = PatCur.PatNum;
+//                doseSpotLog.MsgText = queryString;
+//                doseSpotLog.ProvNum = prov.ProvNum;
+//                doseSpotLog.UserNum = Security.CurUser.UserNum;
+//                SecurityLogs.MakeLogEntry(Permissions.RxCreate, doseSpotLog.PatNum, Lan.g(this, "eRx DoseSpot entry made for provider") + " " + Providers.GetAbbr(doseSpotLog.ProvNum));
+//                ErxLogs.Insert(doseSpotLog);
+//                return;
+//            }
+//            //Validation------------------------------------------------------------------------------------------------------------------------------------------------------
+//            if (Security.CurUser.EmployeeNum == 0 && Security.CurUser.ProvNum == 0)
+//            {
+//                MsgBox.Show(this, "This user must be associated with either a provider or an employee.  The security admin must make this change before this user can submit prescriptions.");
+//                return;
+//            }
+//            if (PatCur == null)
+//            {
+//                MsgBox.Show(this, "No patient selected.");
+//                return;
+//            }
+//            Employee emp = null;
+//            Clinic clinic = null;
+//            try
+//            {
+//                Erx.ValidatePracticeInfo();
+//                //Clinic Validation
+//                if (Preferences.HasClinicsEnabled)
+//                {
+//                    if (Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected))
+//                    {
+//                        clinic = Clinics.GetClinic(Clinics.ClinicNum);
+//                    }
+//                    else if (PatCur.ClinicNum != 0)
+//                    {//Use patient default clinic if the patient has one.
+//                        clinic = Clinics.GetClinic(PatCur.ClinicNum);
+//                    }
+//                    if (clinic != null)
+//                    {
+//                        Erx.ValidateClinic(clinic);
+//                    }
+//                }
+//                if (isEmp)
+//                {
+//                    emp = Employee.GetById(Security.CurUser.EmployeeNum);
+//                    if (emp.LastName == "")
+//                    {//Checked in UI, but check here just in case this database was converted from another software.
+//                        MessageBox.Show(Lan.g(this, "Employee last name missing for user") + ": " + Security.CurUser.UserName);
+//                        return;
+//                    }
+//                    if (emp.FirstName == "")
+//                    {//Not validated in UI.
+//                        MessageBox.Show(Lan.g(this, "Employee first name missing for user") + ": " + Security.CurUser.UserName);
+//                        return;
+//                    }
+//                }
+//                Erx.ValidateProv(prov, clinic);
+//                //hook for additional authorization before prescription is saved
+//                //bool[] authorized=new bool[1] { false };
+//                //if(Plugins.HookMethod(this,"ContrChart.Tool_eRx_Click_Authorize2",authorized,prov)) {
+//                //	if(!authorized[0]) {
+//                //		throw new ODException(Lans.g("Erx","Provider is not authenticated"));
+//                //	}
+//                //}
+//                Erx.ValidatePat(PatCur);
+//            }
+//            catch (ODException ex)
+//            {//Purposefully only catch exceptions we throw due to validation
+//                MessageBox.Show(ex.Message);//All ODExceptions thrown in this context should have already been translated.
+//                return;
+//            }
+//            #region ProviderErx Validation
+//            string npi = Regex.Replace(prov.NationalProvID, "[^0-9]*", "");//NPI with all non-numeric characters removed.
+//            bool isAccessAllowed = true;
+//            UpdateErxAccess(npi, "", 0, "", "", erxOption);//0/blank/blank for clinicNum/clinicid/clinickey is fine because we don't enable/disable the clinic for NewCrop.
+//            ProviderErx provErx = ProviderErxs.GetOneForNpiAndOption(npi, erxOption);
+//            if (!Preference.GetBool(PreferenceName.NewCropIsLegacy) && !provErx.IsIdentifyProofed)
+//            {
+//                if (Preference.GetString(PreferenceName.NewCropPartnerName) != "" || Preference.GetString(PreferenceName.NewCropPassword) != "")
+//                {//Customer of a distributor
+//                    MessageBox.Show(Lan.g(this, "Provider") + " " + prov.Abbr + " "
+//                        + Lan.g(this, "must complete Identity Proofing (IDP) before using eRx.  Call support for details."));
+//                }
+//                else
+//                {//Customer of OD proper or customer of a reseller
+//                    MessageBox.Show(Lan.g(this, "Provider") + " " + prov.Abbr + " " + Lan.g(this, "must complete Identity Proofing (IDP) before using eRx.  "
+//                        + "Please call support to schedule an IDP appointment."));
+//                }
+//                isAccessAllowed = false;
+//            }
+//            if (provErx.IsEnabled != ErxStatus.Enabled)
+//            {
+//                MessageBox.Show(Lan.g(this, "Contact support to enable eRx for provider") + " " + prov.Abbr);
+//                isAccessAllowed = false;
+//            }
+//            #endregion ProviderErx Validation
+//            string clickThroughXml = "";
+//            byte[] postDataBytes = ErxXml.BuildNewCropPostDataBytes(prov, emp, PatCur, out clickThroughXml);
+//            #region Launch eRx in external browser window.
+//            //			string xmlBase64=System.Web.HttpUtility.HtmlEncode(Convert.ToBase64String(ASCIIEncoding.ASCII.GetBytes(clickThroughXml)));
+//            //			xmlBase64=xmlBase64.Replace("+","%2B");//A common base 64 character which needs to be escaped within URLs.
+//            //			xmlBase64=xmlBase64.Replace("/","%2F");//A common base 64 character which needs to be escaped within URLs.
+//            //			xmlBase64=xmlBase64.Replace("=","%3D");//Base 64 strings usually end in '=', which could mean a new parameter definition within the URL so we escape.
+//            //			String postdata="RxInput=base64:"+xmlBase64;
+//            //			byte[] PostDataBytes=System.Text.Encoding.UTF8.GetBytes(postdata);
+//            //			string additionalHeaders="Content-Type: application/x-www-form-urlencoded\r\n";
+//            //			IWebBrowserApp IE=(IWebBrowserApp)IEControl;
+//            //			IE.Visible=true;
+//            //#if DEBUG
+//            //			string newCropUrl="http://preproduction.newcropaccounts.com/interfaceV7/rxentry.aspx";
+//            //#else //Debug
+//            //			string newCropUrl="https://secure.newcropaccounts.com/interfacev7/rxentry.aspx";
+//            //#endif
+//            //			IE.Navigate(newCropUrl,null,null,PostDataBytes,additionalHeaders);
+//            #endregion Launch eRx in external browser window.
+//            try
+//            {
+//                //Enforce Latest IE Version Available.
+//                if (MiscUtils.TryUpdateIeEmulation())
+//                {
+//                    MsgBox.Show(this, "Browser emulation version updated.\r\nYou must restart this application before using eRx.");
+//                    return;
+//                }
+//                FormErx formErx = new FormErx();
+//                formErx.PatCur = PatCur;
+//                formErx.PostDataBytes = postDataBytes;
+//                formErx.ErxOptionCur = erxOption;
+//                if (isAccessAllowed)
+//                {
+//                    formErx.Show();//Non-modal so user can browse OD while writing prescription.  When form is closed, ErxBrowserClosed() is called below.
+//                    _dictFormErxSessions[PatCur.PatNum] = formErx;
+//                }
+//                else
+//                {
+//                    //This is how we send the provider information to NewCrop without allowing the provider to use NewCrop.
+//                    //NewCrop requires the provider information on their server in order to complete Identity Proofing (IDP).
+//                    formErx.ComposeNewRxLegacy();
+//                }
+//            }
+//            catch (Exception ex)
+//            {
+//                MessageBox.Show(Lan.g(this, "Error launching browser window.  Internet Explorer might not be installed.  ") + ex.Message);
+//                return;
+//            }
+//            ErxLog erxLog = new ErxLog();
+//            erxLog.PatNum = PatCur.PatNum;
+//            erxLog.MsgText = clickThroughXml;
+//            erxLog.ProvNum = prov.ProvNum;
+//            erxLog.UserNum = Security.CurUser.UserNum;
+//            SecurityLogs.MakeLogEntry(Permissions.RxCreate, erxLog.PatNum, Lan.g(this, "eRx entry made for provider") + " " + Providers.GetAbbr(erxLog.ProvNum));
+//            ErxLogs.Insert(erxLog);
         }
 
         private void RefreshDoseSpotNotifications()
         {
-            if (_butErx == null || PatCur == null)
-            {
-                return;
-            }
-            Program progErx = Programs.GetCur(ProgramName.eRx);
-            if (progErx == null || !progErx.Enabled)
-            {
-                return;
-            }
-            ErxOption erxOption = PIn.Enum<ErxOption>(ProgramProperties.GetPropForProgByDesc(progErx.ProgramNum, Erx.PropertyDescs.ErxOption).PropertyValue);
-            if (erxOption != ErxOption.DoseSpot && erxOption != ErxOption.DoseSpotWithLegacy)
-            {
-                return;
-            }
-            //Set the menu items for DoseSpot to visible.
-            //Setting the menu items visible before this doesn't matter because this method is the only way to make the menu items valid any ways.
-            menuItemDoseSpotPendingPescr.Visible = true;
-            menuItemDoseSpotRefillReqs.Visible = true;
-            menuItemDoseSpotTransactionErrors.Visible = true;
-            ODThread thread = new ODThread((odThread) =>
-            {
-                long clinicNum = Clinics.ClinicNum;
-                if (Preferences.HasClinicsEnabled && !Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected))
-                {
-                    clinicNum = PatCur.ClinicNum;
-                }
-                string doseSpotClinicID = "";
-                string doseSpotClinicKey = "";
-                string doseSpotUserID = "";
-                int countRefillRequests = 0;
-                int countErrors = 0;
-                int countPendingPrescriptions = 0;
-                try
-                {
-                    doseSpotUserID = DoseSpot.GetUserID(Security.CurUser, clinicNum);
-                    DoseSpot.GetClinicIdAndKey(clinicNum, doseSpotUserID, null, null, out doseSpotClinicID, out doseSpotClinicKey);
-                    DoseSpot.GetPrescriberNotificationCounts(doseSpotClinicID, doseSpotClinicKey, doseSpotUserID, out countRefillRequests, out countErrors, out countPendingPrescriptions);
-                    SetErxButtonNotification(countRefillRequests, countErrors, countPendingPrescriptions, false);
-                    Action<List<RxPat>> onRxAdd = new Action<List<RxPat>>((listRx) =>
-                    {
-                        AutomationL.Trigger(AutomationTrigger.RxCreate, new List<string>(), PatCur.PatNum, 0, listRx);
-                    });
-                    if (DoseSpot.SyncPrescriptionsFromDoseSpot(doseSpotClinicID, doseSpotClinicKey, doseSpotUserID, PatCur.PatNum, onRxAdd))
-                    {
-                        ModuleSelectedDoseSpot();
-                    }
-                }
-                catch
-                {
-                    SetErxButtonNotification(0, 0, 0, true);
-                }
-            });
-            thread.Start();
+            //if (_butErx == null || PatCur == null)
+            //{
+            //    return;
+            //}
+            //Program progErx = Programs.GetCur(ProgramName.eRx);
+            //if (progErx == null || !progErx.Enabled)
+            //{
+            //    return;
+            //}
+            //ErxOption erxOption = PIn.Enum<ErxOption>(ProgramProperties.GetPropForProgByDesc(progErx.ProgramNum, Erx.PropertyDescs.ErxOption).PropertyValue);
+            //if (erxOption != ErxOption.DoseSpot && erxOption != ErxOption.DoseSpotWithLegacy)
+            //{
+            //    return;
+            //}
+            ////Set the menu items for DoseSpot to visible.
+            ////Setting the menu items visible before this doesn't matter because this method is the only way to make the menu items valid any ways.
+            //menuItemDoseSpotPendingPescr.Visible = true;
+            //menuItemDoseSpotRefillReqs.Visible = true;
+            //menuItemDoseSpotTransactionErrors.Visible = true;
+            //ODThread thread = new ODThread((odThread) =>
+            //{
+            //    long clinicNum = Clinics.ClinicNum;
+            //    if (Preferences.HasClinicsEnabled && !Preference.GetBool(PreferenceName.ElectronicRxClinicUseSelected))
+            //    {
+            //        clinicNum = PatCur.ClinicNum;
+            //    }
+            //    string doseSpotClinicID = "";
+            //    string doseSpotClinicKey = "";
+            //    string doseSpotUserID = "";
+            //    int countRefillRequests = 0;
+            //    int countErrors = 0;
+            //    int countPendingPrescriptions = 0;
+            //    try
+            //    {
+            //        doseSpotUserID = DoseSpot.GetUserID(Security.CurUser, clinicNum);
+            //        DoseSpot.GetClinicIdAndKey(clinicNum, doseSpotUserID, null, null, out doseSpotClinicID, out doseSpotClinicKey);
+            //        DoseSpot.GetPrescriberNotificationCounts(doseSpotClinicID, doseSpotClinicKey, doseSpotUserID, out countRefillRequests, out countErrors, out countPendingPrescriptions);
+            //        SetErxButtonNotification(countRefillRequests, countErrors, countPendingPrescriptions, false);
+            //        Action<List<RxPat>> onRxAdd = new Action<List<RxPat>>((listRx) =>
+            //        {
+            //            AutomationL.Trigger(AutomationTrigger.RxCreate, new List<string>(), PatCur.PatNum, 0, listRx);
+            //        });
+            //        if (DoseSpot.SyncPrescriptionsFromDoseSpot(doseSpotClinicID, doseSpotClinicKey, doseSpotUserID, PatCur.PatNum, onRxAdd))
+            //        {
+            //            ModuleSelectedDoseSpot();
+            //        }
+            //    }
+            //    catch
+            //    {
+            //        SetErxButtonNotification(0, 0, 0, true);
+            //    }
+            //});
+            //thread.Start();
         }
 
         ///<summary>Currently only used for DoseSpot.</summary>
@@ -5372,10 +5372,10 @@ namespace OpenDental
             {
                 DataValid.SetInvalid(InvalidType.ProviderErxs);
             }
-            if (erxOption == ErxOption.DoseSpot)
-            {
-                DoseSpot.SyncClinicErxsWithHQ();
-            }
+            //if (erxOption == ErxOption.DoseSpot)
+            //{
+            //    DoseSpot.SyncClinicErxsWithHQ();
+            //}
             bool isDistributorCustomer = false;
             if (Preference.GetString(PreferenceName.NewCropPartnerName) != "" || Preference.GetString(PreferenceName.NewCropPassword) != "")
             {

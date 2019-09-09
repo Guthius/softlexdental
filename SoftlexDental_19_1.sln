@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDental", "OpenDental\Op
 		{033B77F4-2E98-49A7-901F-5F388DEDF83E} = {033B77F4-2E98-49A7-901F-5F388DEDF83E}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDentBusiness", "OpenDentBusiness\OpenDentBusiness.csproj", "{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenDental.Core", "OpenDentBusiness\OpenDental.Core.csproj", "{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{7069E361-5105-4A13-8D66-5D528B582BA6}"
 	ProjectSection(ProjectDependencies) = postProject

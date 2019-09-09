@@ -109,9 +109,9 @@
       <Project>{a2ad6ad8-2a7b-41b1-8b1f-df8618ce4263}</Project>
       <Name>OpenDental.Security</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenDentBusiness\OpenDentBusiness.csproj">
+    <ProjectReference Include="..\OpenDentBusiness\OpenDental.Core.csproj">
       <Project>{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}</Project>
-      <Name>OpenDentBusiness</Name>
+      <Name>OpenDental.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
