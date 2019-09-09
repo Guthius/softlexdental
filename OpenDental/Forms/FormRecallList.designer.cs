@@ -437,7 +437,7 @@
 			this.gridMain.Location = new System.Drawing.Point(3, 93);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMain.Size = new System.Drawing.Size(965, 544);
 			this.gridMain.TabIndex = 126;
 			this.gridMain.Title = "Recall List";
@@ -1038,7 +1038,7 @@
 			this.gridReactivations.Location = new System.Drawing.Point(3, 93);
 			this.gridReactivations.Name = "gridReactivations";
 			this.gridReactivations.ScrollValue = 0;
-			this.gridReactivations.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridReactivations.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridReactivations.Size = new System.Drawing.Size(965, 544);
 			this.gridReactivations.TabIndex = 145;
 			this.gridReactivations.Title = "Reactivation List";

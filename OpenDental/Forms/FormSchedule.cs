@@ -347,7 +347,7 @@ namespace OpenDental{
             this.gridMain.Location = new System.Drawing.Point(207, 8);
             this.gridMain.Name = "gridMain";
             this.gridMain.ScrollValue = 0;
-            this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+            this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Cell;
             this.gridMain.Size = new System.Drawing.Size(761, 652);
             this.gridMain.TabIndex = 0;
             this.gridMain.Title = "Schedule";

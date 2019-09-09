@@ -19,28 +19,28 @@
 namespace OpenDental.UI
 {
     /// <summary>
-    /// Specifies the selection behavior of an ODGrid.
+    /// Specifies the selection behavior of an <see cref="ODGrid"/>.
     /// </summary>
     public enum GridSelectionMode
     {
         /// <summary>
-        /// 0-No items can be selected.
+        /// No items can be selected.
         /// </summary>  
         None,
 
         /// <summary>
-        /// 1-Only one row can be selected.
+        /// Only one row can be selected.
         /// </summary>  
-        One,
+        Row,
 
         /// <summary>
-        /// 2-Only one cell can be selected.
+        /// Only one cell can be selected.
         /// </summary>
-        OneCell,
+        Cell,
 
         /// <summary>
-        /// 3-Multiple items can be selected, and the user can use the SHIFT, CTRL, and arrow keys to make selections
+        /// Multiple items can be selected, and the user can use the SHIFT, CTRL, and arrow keys to make selections
         /// </summary>   
-        MultiExtended,
+        Multiple,
     }
 }

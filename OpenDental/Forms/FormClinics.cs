@@ -424,7 +424,7 @@ namespace OpenDental {
 			if(IsMultiSelect) {
 				butSelectAll.Visible=true;
 				butSelectNone.Visible=true;
-				gridMain.SelectionMode=GridSelectionMode.MultiExtended;
+				gridMain.SelectionMode=GridSelectionMode.Multiple;
 			}
 			FillGrid(false);
 			if(!ListSelectedClinicNums.IsNullOrEmpty()) {

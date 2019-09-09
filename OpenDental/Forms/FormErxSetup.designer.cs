@@ -199,7 +199,7 @@ namespace OpenDental{
 			this.gridProperties.Location = new System.Drawing.Point(6, 26);
 			this.gridProperties.Name = "gridProperties";
 			this.gridProperties.ScrollValue = 0;
-			this.gridProperties.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridProperties.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridProperties.Size = new System.Drawing.Size(510, 174);
 			this.gridProperties.TabIndex = 5;
 			this.gridProperties.Title = "Properties";

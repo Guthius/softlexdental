@@ -432,7 +432,7 @@
 			this.gridObservations.Location = new System.Drawing.Point(624, 384);
 			this.gridObservations.Name = "gridObservations";
 			this.gridObservations.ScrollValue = 0;
-			this.gridObservations.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridObservations.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridObservations.Size = new System.Drawing.Size(254, 110);
 			this.gridObservations.TabIndex = 284;
 			this.gridObservations.Title = "Observations";

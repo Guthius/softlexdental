@@ -486,7 +486,7 @@ namespace OpenDental {
             this.gridMain.Location = new System.Drawing.Point(6, 52);
             this.gridMain.Name = "gridMain";
             this.gridMain.ScrollValue = 0;
-            this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.gridMain.Size = new System.Drawing.Size(790, 421);
             this.gridMain.TabIndex = 0;
             this.gridMain.Title = "Database Methods";
@@ -653,7 +653,7 @@ namespace OpenDental {
             this.gridHidden.Location = new System.Drawing.Point(6, 52);
             this.gridHidden.Name = "gridHidden";
             this.gridHidden.ScrollValue = 0;
-            this.gridHidden.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.gridHidden.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.gridHidden.Size = new System.Drawing.Size(790, 421);
             this.gridHidden.TabIndex = 2;
             this.gridHidden.Title = "Hidden Methods";
@@ -794,7 +794,7 @@ namespace OpenDental {
             this.gridOld.Location = new System.Drawing.Point(6, 52);
             this.gridOld.Name = "gridOld";
             this.gridOld.ScrollValue = 0;
-            this.gridOld.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.gridOld.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.gridOld.Size = new System.Drawing.Size(790, 421);
             this.gridOld.TabIndex = 4;
             this.gridOld.Title = "Old Methods";

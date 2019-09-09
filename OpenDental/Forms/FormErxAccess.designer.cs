@@ -58,7 +58,7 @@ namespace OpenDental{
 			this.gridProviders.Location = new System.Drawing.Point(12, 257);
 			this.gridProviders.Name = "gridProviders";
 			this.gridProviders.ScrollValue = 0;
-			this.gridProviders.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridProviders.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridProviders.Size = new System.Drawing.Size(446, 242);
 			this.gridProviders.TabIndex = 4;
 			this.gridProviders.Title = "Providers";

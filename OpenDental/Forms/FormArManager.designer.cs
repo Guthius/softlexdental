@@ -501,7 +501,7 @@ namespace OpenDental{
 			this.gridUnsent.Location = new System.Drawing.Point(0, 94);
 			this.gridUnsent.Name = "gridUnsent";
 			this.gridUnsent.ScrollValue = 0;
-			this.gridUnsent.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridUnsent.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridUnsent.Size = new System.Drawing.Size(1198, 441);
 			this.gridUnsent.TabIndex = 2;
 			this.gridUnsent.Title = "Guarantors - Not Sent to TSI";
@@ -1187,7 +1187,7 @@ namespace OpenDental{
 			this.gridSent.Location = new System.Drawing.Point(0, 94);
 			this.gridSent.Name = "gridSent";
 			this.gridSent.ScrollValue = 0;
-			this.gridSent.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridSent.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridSent.Size = new System.Drawing.Size(1198, 441);
 			this.gridSent.TabIndex = 2;
 			this.gridSent.Title = "Guarantors - Sent To TSI";

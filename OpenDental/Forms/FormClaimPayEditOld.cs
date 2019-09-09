@@ -279,7 +279,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(8,14);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMain.Size = new System.Drawing.Size(539,641);
 			this.gridMain.TabIndex = 95;
 			this.gridMain.Title = "Claim Payment Splits";

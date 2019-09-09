@@ -103,7 +103,7 @@ namespace OpenDental{
 			this.gridAll.Location = new System.Drawing.Point(485, 129);
 			this.gridAll.Name = "gridAll";
 			this.gridAll.ScrollValue = 0;
-			this.gridAll.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridAll.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridAll.Size = new System.Drawing.Size(426, 469);
 			this.gridAll.TabIndex = 59;
 			this.gridAll.Title = "Available Procedures";
@@ -120,7 +120,7 @@ namespace OpenDental{
 			this.gridTP.Location = new System.Drawing.Point(12, 129);
 			this.gridTP.Name = "gridTP";
 			this.gridTP.ScrollValue = 0;
-			this.gridTP.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridTP.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridTP.Size = new System.Drawing.Size(426, 469);
 			this.gridTP.TabIndex = 56;
 			this.gridTP.Title = "Treatment Planned Procedures";

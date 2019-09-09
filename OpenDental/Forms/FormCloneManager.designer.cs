@@ -78,7 +78,7 @@ namespace OpenDental {
 			this.gridMain.Location = new System.Drawing.Point(40,82);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMain.Size = new System.Drawing.Size(895,572);
 			this.gridMain.TabIndex = 19;
 			this.gridMain.Title = "Possible Clones";

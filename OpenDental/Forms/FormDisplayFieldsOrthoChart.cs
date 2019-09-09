@@ -111,7 +111,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(12, 76);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMain.Size = new System.Drawing.Size(292, 425);
 			this.gridMain.TabIndex = 3;
 			this.gridMain.Title = "Fields Showing";

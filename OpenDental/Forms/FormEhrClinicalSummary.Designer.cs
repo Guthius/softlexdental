@@ -72,7 +72,7 @@
 			this.gridEHRMeasureEvents.Location = new System.Drawing.Point(15, 166);
 			this.gridEHRMeasureEvents.Name = "gridEHRMeasureEvents";
 			this.gridEHRMeasureEvents.ScrollValue = 0;
-			this.gridEHRMeasureEvents.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridEHRMeasureEvents.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridEHRMeasureEvents.Size = new System.Drawing.Size(240, 261);
 			this.gridEHRMeasureEvents.TabIndex = 13;
 			this.gridEHRMeasureEvents.Title = "Clinical Summaries Sent to Patient";

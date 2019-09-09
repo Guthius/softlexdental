@@ -74,7 +74,7 @@
             this.panelsGrid.Location = new System.Drawing.Point(13, 55);
             this.panelsGrid.Name = "panelsGrid";
             this.panelsGrid.ScrollValue = 0;
-            this.panelsGrid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.panelsGrid.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.panelsGrid.Size = new System.Drawing.Size(558, 277);
             this.panelsGrid.TabIndex = 1;
             this.panelsGrid.Title = "Lab Panels";

@@ -606,7 +606,7 @@ namespace OpenDental {
             this.gridAppts.Location = new System.Drawing.Point(1, 33);
             this.gridAppts.Name = "gridAppts";
             this.gridAppts.ScrollValue = 0;
-            this.gridAppts.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.gridAppts.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.gridAppts.Size = new System.Drawing.Size(905, 357);
             this.gridAppts.TabIndex = 8;
             this.gridAppts.Title = "Appointment ASAP List";
@@ -648,7 +648,7 @@ namespace OpenDental {
             this.gridRecalls.Location = new System.Drawing.Point(1, 55);
             this.gridRecalls.Name = "gridRecalls";
             this.gridRecalls.ScrollValue = 0;
-            this.gridRecalls.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.gridRecalls.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.gridRecalls.Size = new System.Drawing.Size(910, 334);
             this.gridRecalls.TabIndex = 9;
             this.gridRecalls.Title = "Recall ASAP List";

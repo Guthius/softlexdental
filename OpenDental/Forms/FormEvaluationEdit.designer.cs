@@ -250,7 +250,7 @@ namespace OpenDental{
 			this.gridCriterion.Location = new System.Drawing.Point(18, 87);
 			this.gridCriterion.Name = "gridMain";
 			this.gridCriterion.ScrollValue = 0;
-			this.gridCriterion.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+			this.gridCriterion.SelectionMode = OpenDental.UI.GridSelectionMode.Cell;
 			this.gridCriterion.Size = new System.Drawing.Size(487, 342);
 			this.gridCriterion.TabIndex = 143;
 			this.gridCriterion.Title = "Criterion";

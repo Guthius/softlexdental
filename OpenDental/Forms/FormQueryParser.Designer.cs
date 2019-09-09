@@ -114,7 +114,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(0, -1);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Cell;
 			this.gridMain.Size = new System.Drawing.Size(791, 181);
 			this.gridMain.TabIndex = 0;
 			this.gridMain.Title = "Set Variables";

@@ -501,7 +501,7 @@ namespace OpenDental{
 			this.gridPlanned.Location = new System.Drawing.Point(0, 28);
 			this.gridPlanned.Name = "gridPlanned";
 			this.gridPlanned.ScrollValue = 0;
-			this.gridPlanned.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridPlanned.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridPlanned.Size = new System.Drawing.Size(400, 131);
 			this.gridPlanned.TabIndex = 204;
 			this.gridPlanned.Title = "Planned Appointments";

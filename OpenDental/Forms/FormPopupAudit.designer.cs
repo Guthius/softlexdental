@@ -52,7 +52,7 @@ namespace OpenDental{
 			this.gridPopupAudit.Location = new System.Drawing.Point(12, 15);
 			this.gridPopupAudit.Name = "gridPopupAudit";
 			this.gridPopupAudit.ScrollValue = 0;
-			this.gridPopupAudit.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridPopupAudit.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridPopupAudit.Size = new System.Drawing.Size(595, 255);
 			this.gridPopupAudit.TabIndex = 4;
 			this.gridPopupAudit.Title = "Audit Trail";

@@ -616,7 +616,7 @@ namespace OpenDental {
 			this.gridSpecialty.Location = new System.Drawing.Point(6, 7);
 			this.gridSpecialty.Name = "gridSpecialty";
 			this.gridSpecialty.ScrollValue = 0;
-			this.gridSpecialty.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridSpecialty.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridSpecialty.Size = new System.Drawing.Size(368, 105);
 			this.gridSpecialty.TabIndex = 0;
 			this.gridSpecialty.Title = "Clinic Specialty";

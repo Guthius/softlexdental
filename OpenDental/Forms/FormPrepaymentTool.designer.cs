@@ -91,7 +91,7 @@ namespace OpenDental {
 			this.GridPrepayment.Location = new System.Drawing.Point(22, 352);
 			this.GridPrepayment.Name = "GridPrepayment";
 			this.GridPrepayment.ScrollValue = 0;
-			this.GridPrepayment.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.GridPrepayment.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.GridPrepayment.Size = new System.Drawing.Size(593, 153);
 			this.GridPrepayment.TabIndex = 9;
 			this.GridPrepayment.Title = "Prepayments";
@@ -187,7 +187,7 @@ namespace OpenDental {
 			this.GridCodes.Location = new System.Drawing.Point(22, 21);
 			this.GridCodes.Name = "GridCodes";
 			this.GridCodes.ScrollValue = 0;
-			this.GridCodes.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.GridCodes.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.GridCodes.Size = new System.Drawing.Size(383, 189);
 			this.GridCodes.TabIndex = 87;
 			this.GridCodes.Title = "Codes";

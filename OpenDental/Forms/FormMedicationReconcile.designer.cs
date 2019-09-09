@@ -147,7 +147,7 @@ namespace OpenDental{
 			this.gridReconcileEvents.Location = new System.Drawing.Point(0, 425);
 			this.gridReconcileEvents.Name = "gridReconcileEvents";
 			this.gridReconcileEvents.ScrollValue = 0;
-			this.gridReconcileEvents.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridReconcileEvents.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridReconcileEvents.Size = new System.Drawing.Size(445, 175);
 			this.gridReconcileEvents.TabIndex = 67;
 			this.gridReconcileEvents.Title = "Reconciles";

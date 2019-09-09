@@ -87,7 +87,7 @@
             this.clinicsGrid.Location = new System.Drawing.Point(43, 73);
             this.clinicsGrid.Name = "clinicsGrid";
             this.clinicsGrid.ScrollValue = 0;
-            this.clinicsGrid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.clinicsGrid.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.clinicsGrid.Size = new System.Drawing.Size(864, 398);
             this.clinicsGrid.TabIndex = 2;
             this.clinicsGrid.Title = "Clinics";

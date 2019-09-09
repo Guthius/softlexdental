@@ -269,7 +269,7 @@
             this.grid.Location = new System.Drawing.Point(13, 77);
             this.grid.Name = "grid";
             this.grid.ScrollValue = 0;
-            this.grid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.grid.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.grid.Size = new System.Drawing.Size(1158, 522);
             this.grid.TabIndex = 19;
             this.grid.Title = "Audit Trail";

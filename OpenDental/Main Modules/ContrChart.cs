@@ -2148,7 +2148,7 @@ namespace OpenDental
             this.gridPlanned.Location = new System.Drawing.Point(0, 25);
             this.gridPlanned.Name = "gridPlanned";
             this.gridPlanned.ScrollValue = 0;
-            this.gridPlanned.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.gridPlanned.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.gridPlanned.Size = new System.Drawing.Size(516, 208);
             this.gridPlanned.TabIndex = 193;
             this.gridPlanned.Title = "Planned Appointments";
@@ -3080,7 +3080,7 @@ namespace OpenDental
             this.gridTreatPlans.MaximumSize = new System.Drawing.Size(430, 200);
             this.gridTreatPlans.Name = "gridTreatPlans";
             this.gridTreatPlans.ScrollValue = 0;
-            this.gridTreatPlans.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.gridTreatPlans.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.gridTreatPlans.Size = new System.Drawing.Size(430, 43);
             this.gridTreatPlans.TabIndex = 214;
             this.gridTreatPlans.Title = "Treatment Plans";
@@ -3100,7 +3100,7 @@ namespace OpenDental
             this.gridTpProcs.Location = new System.Drawing.Point(415, 479);
             this.gridTpProcs.Name = "gridTpProcs";
             this.gridTpProcs.ScrollValue = 0;
-            this.gridTpProcs.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.gridTpProcs.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.gridTpProcs.Size = new System.Drawing.Size(446, 60);
             this.gridTpProcs.TabIndex = 213;
             this.gridTpProcs.Title = "Procedures";
@@ -3349,7 +3349,7 @@ namespace OpenDental
             this.gridProg.Name = "gridProg";
             this.gridProg.PagingMode = OpenDental.UI.ODGrid.GridPagingMode.EnabledBottomUp;
             this.gridProg.ScrollValue = 0;
-            this.gridProg.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.gridProg.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.gridProg.Size = new System.Drawing.Size(520, 109);
             this.gridProg.TabIndex = 192;
             this.gridProg.Title = "Progress Notes";

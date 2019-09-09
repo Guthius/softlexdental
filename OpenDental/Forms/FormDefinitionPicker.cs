@@ -38,7 +38,7 @@ namespace OpenDental {
 				checkShowHidden.Visible=false;
 			}
 			if(!IsMultiSelectionMode) {
-				gridMain.SelectionMode=GridSelectionMode.One;
+				gridMain.SelectionMode=GridSelectionMode.Row;
 			}
 			FillGrid();
 		}

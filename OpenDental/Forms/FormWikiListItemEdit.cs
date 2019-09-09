@@ -103,7 +103,7 @@ namespace OpenDental
             // Determine the correct position for the combobox.
             pickListComboBox.Location =
                 new Point(
-                    itemDataGrid.Rows[e.Row].RowLoc + itemDataGrid.Location.Y + ODGrid.HeaderHeight + itemDataGrid.TitleHeight + 1,
+                    itemDataGrid.Rows[e.Row].YOffset + itemDataGrid.Location.Y + ODGrid.HeaderHeight + itemDataGrid.TitleHeight + 1,
                     itemDataGrid.Columns[0].Width + itemDataGrid.Location.X + 1);
 
             // Set the correct size of the combobox and display it.

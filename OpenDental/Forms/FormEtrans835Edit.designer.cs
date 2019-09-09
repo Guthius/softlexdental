@@ -405,7 +405,7 @@ namespace OpenDental{
 			this.gridProviderAdjustments.Location = new System.Drawing.Point(9, 247);
 			this.gridProviderAdjustments.Name = "gridProviderAdjustments";
 			this.gridProviderAdjustments.ScrollValue = 0;
-			this.gridProviderAdjustments.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridProviderAdjustments.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridProviderAdjustments.Size = new System.Drawing.Size(956, 95);
 			this.gridProviderAdjustments.TabIndex = 170;
 			this.gridProviderAdjustments.TabStop = false;
@@ -425,7 +425,7 @@ namespace OpenDental{
 			this.gridClaimDetails.Location = new System.Drawing.Point(9, 348);
 			this.gridClaimDetails.Name = "gridClaimDetails";
 			this.gridClaimDetails.ScrollValue = 0;
-			this.gridClaimDetails.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridClaimDetails.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridClaimDetails.Size = new System.Drawing.Size(956, 277);
 			this.gridClaimDetails.TabIndex = 0;
 			this.gridClaimDetails.TabStop = false;

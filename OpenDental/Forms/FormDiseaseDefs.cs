@@ -426,7 +426,7 @@ namespace OpenDental{
 				butAlphabetize.Visible=false;
 				checkShowHidden.Visible=false;
 				if(IsMultiSelect) {
-					gridMain.SelectionMode=GridSelectionMode.MultiExtended;
+					gridMain.SelectionMode=GridSelectionMode.Multiple;
 				}
 				//show only non-hidden items.
 				_listDiseaseDefs=DiseaseDef.All(true);

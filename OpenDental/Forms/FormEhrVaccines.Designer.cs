@@ -99,7 +99,7 @@
 			this.gridVaccine.Location = new System.Drawing.Point(12, 12);
 			this.gridVaccine.Name = "gridVaccine";
 			this.gridVaccine.ScrollValue = 0;
-			this.gridVaccine.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridVaccine.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridVaccine.Size = new System.Drawing.Size(547, 469);
 			this.gridVaccine.TabIndex = 0;
 			this.gridVaccine.Title = "Vaccines";

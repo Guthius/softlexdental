@@ -97,7 +97,7 @@ namespace OpenDental
             this.oldRevisionGrid.Location = new System.Drawing.Point(0, 0);
             this.oldRevisionGrid.Name = "oldRevisionGrid";
             this.oldRevisionGrid.ScrollValue = 0;
-            this.oldRevisionGrid.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+            this.oldRevisionGrid.SelectionMode = OpenDental.UI.GridSelectionMode.Cell;
             this.oldRevisionGrid.Size = new System.Drawing.Size(283, 609);
             this.oldRevisionGrid.TabIndex = 1;
             this.oldRevisionGrid.Title = "Old Revision";
@@ -116,7 +116,7 @@ namespace OpenDental
             this.currentRevisionGrid.Location = new System.Drawing.Point(0, 0);
             this.currentRevisionGrid.Name = "currentRevisionGrid";
             this.currentRevisionGrid.ScrollValue = 0;
-            this.currentRevisionGrid.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+            this.currentRevisionGrid.SelectionMode = OpenDental.UI.GridSelectionMode.Cell;
             this.currentRevisionGrid.Size = new System.Drawing.Size(288, 609);
             this.currentRevisionGrid.TabIndex = 2;
             this.currentRevisionGrid.Title = "Current Revision";

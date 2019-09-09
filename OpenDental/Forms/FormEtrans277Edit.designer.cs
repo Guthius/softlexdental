@@ -152,7 +152,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(9,58);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMain.Size = new System.Drawing.Size(966,613);
 			this.gridMain.TabIndex = 114;
 			this.gridMain.Title = "Claim Status and Information";

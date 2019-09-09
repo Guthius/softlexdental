@@ -86,7 +86,7 @@
             this.employeesGrid.Location = new System.Drawing.Point(224, 19);
             this.employeesGrid.Name = "employeesGrid";
             this.employeesGrid.ScrollValue = 0;
-            this.employeesGrid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.employeesGrid.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.employeesGrid.Size = new System.Drawing.Size(460, 472);
             this.employeesGrid.TabIndex = 14;
             this.employeesGrid.Title = "Employees";

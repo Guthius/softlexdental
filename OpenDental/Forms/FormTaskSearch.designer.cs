@@ -407,7 +407,7 @@ namespace OpenDental{
 			this.gridTasks.NoteSpanStart = 2;
 			this.gridTasks.NoteSpanStop = 2;
 			this.gridTasks.ScrollValue = 0;
-			this.gridTasks.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridTasks.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridTasks.Size = new System.Drawing.Size(704, 672);
 			this.gridTasks.TabIndex = 193;
 			this.gridTasks.Title = "Task Results";

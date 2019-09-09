@@ -74,7 +74,7 @@ namespace OpenDental
             this.orderItemsGrid.Location = new System.Drawing.Point(13, 231);
             this.orderItemsGrid.Name = "orderItemsGrid";
             this.orderItemsGrid.ScrollValue = 0;
-            this.orderItemsGrid.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+            this.orderItemsGrid.SelectionMode = OpenDental.UI.GridSelectionMode.Cell;
             this.orderItemsGrid.Size = new System.Drawing.Size(858, 361);
             this.orderItemsGrid.TabIndex = 17;
             this.orderItemsGrid.Title = "Supplies on One Order";

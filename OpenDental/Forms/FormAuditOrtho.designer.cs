@@ -53,7 +53,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(178, 12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMain.Size = new System.Drawing.Size(731, 547);
 			this.gridMain.TabIndex = 3;
 			this.gridMain.Title = "Audit Trail";
@@ -66,7 +66,7 @@ namespace OpenDental{
 			this.gridHist.Location = new System.Drawing.Point(12, 12);
 			this.gridHist.Name = "gridHist";
 			this.gridHist.ScrollValue = 0;
-			this.gridHist.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridHist.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridHist.Size = new System.Drawing.Size(160, 547);
 			this.gridHist.TabIndex = 6;
 			this.gridHist.Title = "Date Service";

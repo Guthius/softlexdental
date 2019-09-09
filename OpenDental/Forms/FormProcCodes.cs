@@ -467,7 +467,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(170, 8);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Cell;
 			this.gridMain.Size = new System.Drawing.Size(604, 686);
 			this.gridMain.TabIndex = 19;
 			this.gridMain.Title = "Procedures";
@@ -1071,7 +1071,7 @@ namespace OpenDental{
 			}
 			else if(AllowMultipleSelections) {
 				//Allow the user to select multiple rows by changing the grid selection mode.
-				gridMain.SelectionMode=GridSelectionMode.MultiExtended;
+				gridMain.SelectionMode=GridSelectionMode.Multiple;
 			}
 			if(_canShowHidden) {
 				checkShowHidden.Checked=Preference.GetBool(PreferenceName.ProcCodeListShowHidden);

@@ -1392,7 +1392,7 @@
             this.gridAccount.Margin = new System.Windows.Forms.Padding(0);
             this.gridAccount.Name = "gridAccount";
             this.gridAccount.ScrollValue = 0;
-            this.gridAccount.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.gridAccount.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.gridAccount.Size = new System.Drawing.Size(741, 168);
             this.gridAccount.TabIndex = 73;
             this.gridAccount.Title = "Patient Account";
@@ -1758,7 +1758,7 @@
             this.gridProg.Location = new System.Drawing.Point(3, 0);
             this.gridProg.Name = "gridProg";
             this.gridProg.ScrollValue = 0;
-            this.gridProg.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.gridProg.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.gridProg.Size = new System.Drawing.Size(511, 259);
             this.gridProg.TabIndex = 211;
             this.gridProg.Title = "Progress Notes";

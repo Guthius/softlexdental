@@ -28,7 +28,7 @@ namespace OpenDental {
 				butCancel.Text="Close";
 			}
 			if(IsMultiSelectMode) {
-				gridMain.SelectionMode=GridSelectionMode.MultiExtended;
+				gridMain.SelectionMode=GridSelectionMode.Multiple;
 			}
 			checkIgnore.Checked=true;
 			if(!String.IsNullOrWhiteSpace(InitSearchCodeOrDescript)) {

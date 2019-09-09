@@ -44,7 +44,7 @@ namespace OpenDental{
 			this.gridMedExisting.Location = new System.Drawing.Point(4, 12);
 			this.gridMedExisting.Name = "gridMedExisting";
 			this.gridMedExisting.ScrollValue = 0;
-			this.gridMedExisting.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMedExisting.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMedExisting.Size = new System.Drawing.Size(480, 245);
 			this.gridMedExisting.TabIndex = 65;
 			this.gridMedExisting.Title = "Current Medications";
@@ -57,7 +57,7 @@ namespace OpenDental{
 			this.gridMedImport.Location = new System.Drawing.Point(497, 12);
 			this.gridMedImport.Name = "gridMedImport";
 			this.gridMedImport.ScrollValue = 0;
-			this.gridMedImport.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMedImport.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMedImport.Size = new System.Drawing.Size(480, 245);
 			this.gridMedImport.TabIndex = 77;
 			this.gridMedImport.Title = "Transition of Care/Referral Summary";
@@ -70,7 +70,7 @@ namespace OpenDental{
 			this.gridMedReconcile.Location = new System.Drawing.Point(4, 293);
 			this.gridMedReconcile.Name = "gridMedReconcile";
 			this.gridMedReconcile.ScrollValue = 0;
-			this.gridMedReconcile.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMedReconcile.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMedReconcile.Size = new System.Drawing.Size(973, 300);
 			this.gridMedReconcile.TabIndex = 67;
 			this.gridMedReconcile.Title = "Reconciled Medications";

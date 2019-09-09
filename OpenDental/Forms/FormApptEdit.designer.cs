@@ -860,7 +860,7 @@
             this.gridProc.Location = new System.Drawing.Point(501, 59);
             this.gridProc.Name = "gridProc";
             this.gridProc.ScrollValue = 0;
-            this.gridProc.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.gridProc.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.gridProc.Size = new System.Drawing.Size(670, 338);
             this.gridProc.TabIndex = 11;
             this.gridProc.Title = "Procedures on this Appointment";

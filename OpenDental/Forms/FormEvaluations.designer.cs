@@ -73,7 +73,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(12, 36);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMain.Size = new System.Drawing.Size(673, 522);
 			this.gridMain.TabIndex = 15;
 			this.gridMain.Title = "Evaluations";

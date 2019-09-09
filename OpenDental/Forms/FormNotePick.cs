@@ -94,7 +94,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(29,40);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMain.Size = new System.Drawing.Size(627,322);
 			this.gridMain.TabIndex = 2;
 			this.gridMain.Title = "Pick Note";

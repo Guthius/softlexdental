@@ -154,7 +154,7 @@ namespace OpenDental {
 			this.gridConditions.Location = new System.Drawing.Point(474, 50);
 			this.gridConditions.Name = "gridConditions";
 			this.gridConditions.ScrollValue = 0;
-			this.gridConditions.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridConditions.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridConditions.Size = new System.Drawing.Size(397, 240);
 			this.gridConditions.TabIndex = 60;
 			this.gridConditions.Title = "Conditions";
@@ -184,7 +184,7 @@ namespace OpenDental {
 			this.gridMain.Location = new System.Drawing.Point(217, 32);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMain.Size = new System.Drawing.Size(236, 484);
 			this.gridMain.TabIndex = 56;
 			this.gridMain.Title = "Required Fields";

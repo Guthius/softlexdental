@@ -3167,7 +3167,7 @@
 			this.gridProc.MinimumSize = new System.Drawing.Size(1087, 200);
 			this.gridProc.Name = "gridProc";
 			this.gridProc.ScrollValue = 0;
-			this.gridProc.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridProc.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridProc.Size = new System.Drawing.Size(1087, 200);
 			this.gridProc.TabIndex = 128;
 			this.gridProc.Title = "Procedures";

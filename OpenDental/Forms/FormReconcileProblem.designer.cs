@@ -44,7 +44,7 @@ namespace OpenDental{
 			this.gridProbExisting.Location = new System.Drawing.Point(4, 12);
 			this.gridProbExisting.Name = "gridProbExisting";
 			this.gridProbExisting.ScrollValue = 0;
-			this.gridProbExisting.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridProbExisting.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridProbExisting.Size = new System.Drawing.Size(477, 245);
 			this.gridProbExisting.TabIndex = 65;
 			this.gridProbExisting.Title = "Current Problems";
@@ -57,7 +57,7 @@ namespace OpenDental{
 			this.gridProbImport.Location = new System.Drawing.Point(497, 12);
 			this.gridProbImport.Name = "gridProbImport";
 			this.gridProbImport.ScrollValue = 0;
-			this.gridProbImport.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridProbImport.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridProbImport.Size = new System.Drawing.Size(480, 245);
 			this.gridProbImport.TabIndex = 77;
 			this.gridProbImport.Title = "Transition of Care/Referral Summary";
@@ -136,7 +136,7 @@ namespace OpenDental{
 			this.gridProbReconcile.Location = new System.Drawing.Point(4, 293);
 			this.gridProbReconcile.Name = "gridProbReconcile";
 			this.gridProbReconcile.ScrollValue = 0;
-			this.gridProbReconcile.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridProbReconcile.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridProbReconcile.Size = new System.Drawing.Size(973, 300);
 			this.gridProbReconcile.TabIndex = 67;
 			this.gridProbReconcile.Title = "Reconciled Problem";

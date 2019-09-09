@@ -159,7 +159,7 @@ namespace OpenDental{
 			this.gridRules.Location = new System.Drawing.Point(305, 27);
 			this.gridRules.Name = "gridRules";
 			this.gridRules.ScrollValue = 0;
-			this.gridRules.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridRules.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridRules.Size = new System.Drawing.Size(687, 523);
 			this.gridRules.TabIndex = 13;
 			this.gridRules.Title = "Rules";
@@ -177,7 +177,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(19, 27);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMain.Size = new System.Drawing.Size(272, 523);
 			this.gridMain.TabIndex = 11;
 			this.gridMain.Title = "Pay Periods";

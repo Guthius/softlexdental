@@ -100,7 +100,7 @@ namespace OpenDental
 
         void AdjustmentGrid_CellClick(object sender, ODGridClickEventArgs e)
         {
-            if (adjustmentGrid.SelectedGridRows[0].Tag is AccountEntry accountEntry)
+            if (adjustmentGrid.SelectedGridRows.ElementAt(0).Tag is AccountEntry accountEntry)
             {
                 amtOriginialLabel.Text = accountEntry.AmountOriginal.ToString("F");                         // Adjustment's start original - Negative or positive it doesn't matter.
                 labelAmtUsed.Text = (accountEntry.AmountOriginal - accountEntry.AmountStart).ToString("F"); // Amount of Adjustment that's been used elsewhere
@@ -112,7 +112,7 @@ namespace OpenDental
 
         void AdjustmentGrid_CellDoubleClick(object sender, ODGridClickEventArgs e)
         {
-            if (adjustmentGrid.SelectedGridRows[0].Tag is AccountEntry accountEntry)
+            if (adjustmentGrid.SelectedGridRows.ElementAt(0).Tag is AccountEntry accountEntry)
             {
                 if (accountEntry.Tag is Adjustment adjustment)
                 {
@@ -136,7 +136,7 @@ namespace OpenDental
                 return;
             }
 
-            if (adjustmentGrid.SelectedGridRows[0].Tag is AccountEntry accountEntry)
+            if (adjustmentGrid.SelectedGridRows.ElementAt(0).Tag is AccountEntry accountEntry)
             {
                 if (accountEntry.Tag is Adjustment adjustment)
                 {
