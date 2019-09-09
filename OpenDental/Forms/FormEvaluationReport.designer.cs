@@ -106,7 +106,7 @@ namespace OpenDental{
 			this.gridCourses.Location = new System.Drawing.Point(12, 68);
 			this.gridCourses.Name = "gridCourses";
 			this.gridCourses.ScrollValue = 0;
-			this.gridCourses.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridCourses.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridCourses.Size = new System.Drawing.Size(308, 362);
 			this.gridCourses.TabIndex = 16;
 			this.gridCourses.Title = "Courses";
@@ -125,7 +125,7 @@ namespace OpenDental{
 			this.gridInstructors.Location = new System.Drawing.Point(333, 68);
 			this.gridInstructors.Name = "gridInstructors";
 			this.gridInstructors.ScrollValue = 0;
-			this.gridInstructors.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridInstructors.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridInstructors.Size = new System.Drawing.Size(308, 362);
 			this.gridInstructors.TabIndex = 15;
 			this.gridInstructors.Title = "Instructors";
@@ -143,7 +143,7 @@ namespace OpenDental{
 			this.gridStudents.Location = new System.Drawing.Point(654, 68);
 			this.gridStudents.Name = "gridStudents";
 			this.gridStudents.ScrollValue = 0;
-			this.gridStudents.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridStudents.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridStudents.Size = new System.Drawing.Size(308, 362);
 			this.gridStudents.TabIndex = 14;
 			this.gridStudents.Title = "Students";

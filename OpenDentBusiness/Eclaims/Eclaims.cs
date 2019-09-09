@@ -83,18 +83,18 @@ namespace OpenDentBusiness.Eclaims
             {
                 AttemptLaunch(clearinghouseClin, batchNum);
             }
-            else if (clearinghouseClin.CommBridge == EclaimsCommBridge.ClaimConnect)
-            {
-                if (ClaimConnect.Launch(clearinghouseClin, batchNum))
-                {
-                    MessageBox.Show("Upload successful.");
-                }
-                else
-                {
-                    MessageBox.Show(Lans.g("Eclaims", "Error sending.") + "\r\n" + ClaimConnect.ErrorMessage);
-                    return;
-                }
-            }
+            //else if (clearinghouseClin.CommBridge == EclaimsCommBridge.ClaimConnect)
+            //{
+            //    if (ClaimConnect.Launch(clearinghouseClin, batchNum))
+            //    {
+            //        MessageBox.Show("Upload successful.");
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show(Lans.g("Eclaims", "Error sending.") + "\r\n" + ClaimConnect.ErrorMessage);
+            //        return;
+            //    }
+            //}
             else if (clearinghouseClin.CommBridge == EclaimsCommBridge.RECS)
             {
                 if (!RECS.Launch(clearinghouseClin, batchNum))
@@ -138,14 +138,14 @@ namespace OpenDentBusiness.Eclaims
                     MessageBox.Show(Lans.g("Eclaims", "Claim file created, but encountered an error while launching ClaimX Client.") + ":\r\n" + ClaimX.ErrorMessage);
                 }
             }
-            else if (clearinghouseClin.CommBridge == EclaimsCommBridge.EmdeonMedical)
-            {
-                if (!EmdeonMedical.Launch(clearinghouseClin, batchNum, medType))
-                {
-                    MessageBox.Show(Lans.g("Eclaims", "Error sending.") + "\r\n" + EmdeonMedical.ErrorMessage);
-                    return;
-                }
-            }
+            //else if (clearinghouseClin.CommBridge == EclaimsCommBridge.EmdeonMedical)
+            //{
+            //    if (!EmdeonMedical.Launch(clearinghouseClin, batchNum, medType))
+            //    {
+            //        MessageBox.Show(Lans.g("Eclaims", "Error sending.") + "\r\n" + EmdeonMedical.ErrorMessage);
+            //        return;
+            //    }
+            //}
             else if (clearinghouseClin.CommBridge == EclaimsCommBridge.DentiCal)
             {
                 if (!DentiCal.Launch(clearinghouseClin, batchNum))

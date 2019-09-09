@@ -25,7 +25,7 @@ namespace OpenDental.UI
     /// <summary>
     /// Used for Cell specific events.
     /// </summary>
-    public delegate void ODGridKeyEventHandler(object sender, ODGridKeyEventArgs e);
+    //public delegate void ODGridKeyEventHandler(object sender, ODGridKeyEventArgs e);
 
     /// <summary>
     /// A new and improved grid control to replace the inherited ContrTable that is used so extensively in the program.
@@ -61,7 +61,7 @@ namespace OpenDental.UI
 
         [Category("Action")]
         [Description("Event used when cells are editable. KeyDown event is passed up from the textbox where the editing is taking place.")]
-        public event ODGridKeyEventHandler CellKeyDown = null;
+        public event EventHandler<ODGridKeyEventArgs> CellKeyDown = null;
 
         [Category("Action")]
         [Description("Occurs when rows are selected or unselected by the user for any reason, including mouse and keyboard clicks. Only works for GridSelectionModes.One for now (enhance later).  Excludes programmatic selection.")]
@@ -166,7 +166,8 @@ namespace OpenDental.UI
         ///<summary>Set at the very beginning of OnPaint.  Uses the column width of each column to set up this array with one element for each column.  Contains the columns Pos for that column.</summary>
         private int[] ColPos;
 
-        private ArrayList selectedIndices;
+        private readonly List<int> selectedIndices = new List<int>();
+
         private int MouseDownRow;
         private int MouseDownCol;
         
@@ -183,7 +184,7 @@ namespace OpenDental.UI
         private TextBoxBase editBox;
         private ComboBox _comboBox = new ComboBox();
         private MouseButtons lastButtonPressed;
-        private ArrayList selectedIndicesWhenMouseDown;
+        private List<int> selectedIndicesWhenMouseDown;
         private bool allowSortingByColumn;
         private bool mouseIsDownInHeader;
 
@@ -314,9 +315,9 @@ namespace OpenDental.UI
             hScroll.MouseMove += new MouseEventHandler(hScroll_MouseMove);
             this.Controls.Add(vScroll);
             this.Controls.Add(hScroll);
-            selectedIndices = new ArrayList();
+
             SelectedCell = new Point(-1, -1);
-            selectionMode = GridSelectionMode.One;
+            selectionMode = GridSelectionMode.Row;
             SelectedRowColor = Color.Silver;
             AllowSelection = true;
             HasLinkDetect = true;
@@ -364,6 +365,7 @@ namespace OpenDental.UI
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
             if (Parent != null)
             {
                 Parent.MouseWheel += new MouseEventHandler(Parent_MouseWheel);
@@ -372,15 +374,13 @@ namespace OpenDental.UI
 
             if (ParentForm != null)
             {
-                ParentForm.FormClosing += ODGrid_ParentFormClosing;
+                ParentForm.FormClosing += (s, _) => QuitThread();
                 if (PagingMode != GridPagingMode.Disabled)
                 {
                     SetPagingData(_listPagingData);
                 }
             }
         }
-
-        private void ODGrid_ParentFormClosing(object sender, EventArgs e) => QuitThread();
 
         protected override void OnResize(EventArgs e)
         {
@@ -457,6 +457,7 @@ namespace OpenDental.UI
             set
             {
                 _hasAddButton = value;
+
                 Refresh();
             }
         }
@@ -479,13 +480,14 @@ namespace OpenDental.UI
             Refresh();
         }
 
-        ///<summary>Gets the collection of ODGridColumns assigned to the ODGrid control.</summary>
-        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-        //[Editor(typeof(System.ComponentModel.Design.CollectionEditor),typeof(System.Drawing.Design.UITypeEditor))]
-        //[Browsable(false)]//only because MS is buggy.
+        /// <summary>
+        /// Gets the collection of ODGridColumns assigned to the ODGrid control.
+        /// </summary>
         public ODGridColumnCollection Columns { get; }
 
-        ///<summary>Gets the collection of ODGridRows assigned to the ODGrid control.</summary>
+        /// <summary>
+        /// Gets the collection of ODGridRows assigned to the ODGrid control.
+        /// </summary>
         [Browsable(false)]
         public ODGridRowCollection Rows { get; }
 
@@ -512,48 +514,57 @@ namespace OpenDental.UI
             }
         }
 
-        ///<summary>Get the collection of ODGridRows that are currently visible to the user.</summary>
-        public ODGridRowCollection VisibleRows
+        /// <summary>
+        /// Get the collection of ODGridRows that are currently visible to the user.
+        /// </summary>
+        public IEnumerable<ODGridRow> VisibleRows
         {
             get
             {
                 // Vertical scroll is greater than total grid height. All rows visible.
-                if (vScroll.Height >= GridH) return Rows;
-                
+                if (vScroll.Height >= GridH)
+                {
+                    foreach (ODGridRow row in Rows)
+                    {
+                        yield return row;
+                    }
 
-                ODGridRowCollection retVal = new ODGridRowCollection();
+                    yield break;
+                }
+
                 foreach (ODGridRow row in Rows)
                 {
-                    //Bottom of row is above top of the scroll bar.
-                    if (row.RowLoc + row.TotalHeight <= vScroll.Value)
-                    {
-                        continue;//Not visible, but other rows may be visible further down.
-                    }
-                    retVal.Add(row);
-                    //Top of row is below end of scroll view.
-                    if (row.RowLoc >= vScroll.Value + vScroll.Height)
-                    {
-                        retVal.Remove(row);
-                        break;
-                    }
+                    // Bottom of row is above top of the scroll bar.
+                    if (row.YOffset + row.Height <= vScroll.Value) continue;
+
+                    // Top of row is below end of scroll view.
+                    if (row.YOffset >= vScroll.Value + vScroll.Height) yield break;
+
+                    yield return row;
                 }
-                return retVal;
             }
         }
 
-        ///<summary>Returns the list of rows selected instead of a list of indices.</summary>
+        /// <summary>
+        /// Returns the list of rows selected instead of a list of indices.
+        /// </summary>
         [Browsable(false)]
         public List<ODGridRow> SelectedGridRows
         {
             get
             {
-                if (SelectionMode == GridSelectionMode.OneCell)
+                if (SelectionMode == GridSelectionMode.Cell)
                 {
                     return new List<ODGridRow>() { RowsFiltered[SelectedCell.Y] };
                 }
                 else
                 {
-                    return selectedIndices.ToArray().Where(x => (int)x > -1 && (int)x < RowsFiltered.Count).Select(x => RowsFiltered[(int)x]).ToList();
+                    return 
+                        selectedIndices
+                            .ToArray()
+                            .Where(x => x > -1 && x < RowsFiltered.Count)
+                            .Select(x => RowsFiltered[x])
+                            .ToList();
                 }
             }
         }
@@ -602,7 +613,7 @@ namespace OpenDental.UI
             {
                 return;
             }
-            ScrollValue = Rows[index].RowLoc;
+            ScrollValue = Rows[index].YOffset;
         }
 
         ///<summary>The index of the row that is the last row to be displayed on the ODGrid. Also sets ScrollValue.</summary>
@@ -612,7 +623,7 @@ namespace OpenDental.UI
             {
                 return;
             }
-            ScrollValue = ((Rows[index].RowLoc + Rows[index].RowHeight + Rows[index].NoteHeight + titleHeight + HeaderHeight) - Height) + 3;//+3 accounts for the grid lines.
+            ScrollValue = ((Rows[index].YOffset + Rows[index].RowHeight + Rows[index].NoteHeight + titleHeight + HeaderHeight) - Height) + 3;//+3 accounts for the grid lines.
         }
 
         ///<summary>Gets or sets the position of the vertical scrollbar.  Does all error checking and invalidates.</summary>
@@ -693,7 +704,7 @@ namespace OpenDental.UI
         {
             get
             {
-                if (SelectionMode == GridSelectionMode.OneCell)
+                if (SelectionMode == GridSelectionMode.Cell)
                 {
                     return (SelectedCell.Y == -1 ? new int[0] : new int[] { SelectedCell.Y });
                 }
@@ -710,43 +721,46 @@ namespace OpenDental.UI
         [Browsable(false)]
         public Point SelectedCell { get; private set; }
 
-        ///<summary></summary>
-        [Category("Behavior"), Description("Just like the listBox.SelectionMode, except no MultiSimple, and added OneCell.")]
-        [DefaultValue(typeof(GridSelectionMode), "One")]
+        /// <summary>
+        /// Gets or sets the selection mode of the <see cref="ODGrid"/> control.
+        /// </summary>
+        [Category("Behavior")]
+        [Description("Just like the listBox.SelectionMode, except no MultiSimple, and added OneCell.")]
+        [DefaultValue(typeof(GridSelectionMode), "Row")]
         public GridSelectionMode SelectionMode
         {
-            get
-            {
-                return selectionMode;
-            }
+            get => selectionMode;
             set
             {
-                //if((GridSelectionMode)value==SelectionMode.MultiSimple){
-                //	MessageBox.Show("MultiSimple not supported.");
-                //	return;
-                //}
-                if ((GridSelectionMode)value == GridSelectionMode.OneCell)
+                if (value == GridSelectionMode.Cell)
                 {
-                    SelectedCell = new Point(-1, -1);//?
-                    selectedIndices = new ArrayList();
+                    SelectedCell = new Point(-1, -1);
+
+                    selectedIndices.Clear();
                 }
+
                 selectionMode = value;
             }
         }
 
-        ///<summary></summary>
-        [Category("Behavior"), Description("Set false to disable row selection when user clicks.  Row selection should then be handled by the form using the cellClick event.")]
+        [Category("Behavior")]
+        [Description("Set false to disable row selection when user clicks. Row selection should then be handled by the form using the cellClick event.")]
         [DefaultValue(true)]
         public bool AllowSelection { get; set; }
 
-        ///<summary>The background color that is used for selected rows.</summary>
-        [Category("Appearance"), Description("The background color that is used for selected rows.")]
+        /// <summary>
+        /// The background color that is used for selected rows.
+        /// </summary>
+        [Category("Appearance")]
+        [Description("The background color that is used for selected rows.")]
         [DefaultValue(typeof(Color), "Silver")]
         public Color SelectedRowColor { get; set; }
 
-
-        ///<summary>Text within each cell will wrap, making some rows taller.</summary>
-        [Category("Behavior"), Description("Text within each cell will wrap, making some rows taller.")]
+        /// <summary>
+        /// Gets or sets a value indicating whether cell text should be wrapped.
+        /// </summary>
+        [Category("Behavior")]
+        [Description("Text within each cell will wrap, making some rows taller.")]
         [DefaultValue(true)]
         public bool WrapText { get; set; }
 
@@ -779,15 +793,15 @@ namespace OpenDental.UI
             }
         }
 
-        ///<summary>Set true to allow user to click on column headers to sort rows, alternating between ascending and descending.</summary>
-        [Category("Behavior"), Description("Set true to allow user to click on column headers to sort rows, alternating between ascending and descending.")]
+        /// <summary>
+        /// Set true to allow user to click on column headers to sort rows, alternating between ascending and descending.
+        /// </summary>
+        [Category("Behavior")]
+        [Description("Set true to allow user to click on column headers to sort rows, alternating between ascending and descending.")]
         [DefaultValue(false)]
         public bool AllowSortingByColumn
         {
-            get
-            {
-                return allowSortingByColumn;
-            }
+            get => allowSortingByColumn;
             set
             {
                 allowSortingByColumn = value;
@@ -1081,11 +1095,11 @@ namespace OpenDental.UI
                     }
                     if (i == 0)
                     {
-                        Rows[i].RowLoc = 0;
+                        Rows[i].YOffset = 0;
                     }
                     else
                     {
-                        Rows[i].RowLoc = Rows[i - 1].RowLoc + Rows[i - 1].RowHeight + Rows[i - 1].NoteHeight;
+                        Rows[i].YOffset = Rows[i - 1].YOffset + Rows[i - 1].RowHeight + Rows[i - 1].NoteHeight;
                     }
                     if (HasDropDowns)
                     {
@@ -1194,7 +1208,7 @@ namespace OpenDental.UI
                 if (Rows[i].DropDownParent == null)
                 { //the row doesn't have a drop down parent, so it must be showing.
                     ODGridRow addRow = Rows[i].Copy();
-                    addRow.RowLoc -= locDiff;
+                    addRow.YOffset -= locDiff;
                     rowsFiltered.Add(addRow);
                 }
                 else
@@ -1223,14 +1237,14 @@ namespace OpenDental.UI
                     { //none of this row's parents are closed.
                       //Add the row to the filtered list to display.
                         ODGridRow addRow = Rows[i].Copy(); //since we're editing the row's RowLoc, take a copy of the row.
-                        addRow.RowLoc -= locDiff;
+                        addRow.YOffset -= locDiff;
                         rowsFiltered.Add(addRow);
                     }
                     else
                     {
                         //otherwise, one of the row's parents were closed
                         //don't add the row to the list of filtered rows and account for the difference in rowLocations for all rows below this one.
-                        locDiff += Rows[i].TotalHeight;
+                        locDiff += Rows[i].Height;
                     }
                 }
             }
@@ -1248,7 +1262,7 @@ namespace OpenDental.UI
             }
             for (int i = 0; i < RowsFiltered.Count; i++)
             {
-                if (y > -vScroll.Value + 1 + titleHeight + HeaderHeight + RowsFiltered[i].RowLoc + RowsFiltered[i].RowHeight + RowsFiltered[i].NoteHeight)
+                if (y > -vScroll.Value + 1 + titleHeight + HeaderHeight + RowsFiltered[i].YOffset + RowsFiltered[i].RowHeight + RowsFiltered[i].NoteHeight)
                 {
                     continue;//clicked below this row.
                 }
@@ -1350,11 +1364,11 @@ namespace OpenDental.UI
         {
             for (int i = 0; i < RowsFiltered.Count; i++)
             {
-                if (-vScroll.Value + RowsFiltered[i].RowLoc + RowsFiltered[i].RowHeight + RowsFiltered[i].NoteHeight < 0)
+                if (-vScroll.Value + RowsFiltered[i].YOffset + RowsFiltered[i].RowHeight + RowsFiltered[i].NoteHeight < 0)
                 {
                     continue; //lower edge of row above top of grid area
                 }
-                if (-vScroll.Value + 1 + titleHeight + HeaderHeight + RowsFiltered[i].RowLoc > Height)
+                if (-vScroll.Value + 1 + titleHeight + HeaderHeight + RowsFiltered[i].YOffset > Height)
                 {
                     return; //row below lower edge of control
                 }
@@ -1375,7 +1389,7 @@ namespace OpenDental.UI
             {
                 g.FillRectangle(new SolidBrush(GetSelectedColor(rowsFiltered[rowIndex].BackColor, SelectedRowColor)),
                     1,
-                    -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + 1,
+                    -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].YOffset + 1,
                     GridW,
                     rowsFiltered[rowIndex].RowHeight + rowsFiltered[rowIndex].NoteHeight - 1);
             }
@@ -1386,7 +1400,7 @@ namespace OpenDental.UI
             {
                 g.FillRectangle(new SolidBrush(rowsFiltered[rowIndex].BackColor),
                     1,
-                    -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + 1,
+                    -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].YOffset + 1,
                     GridW,
                     rowsFiltered[rowIndex].RowHeight + rowsFiltered[rowIndex].NoteHeight - 1);
             }
@@ -1396,7 +1410,7 @@ namespace OpenDental.UI
             {//need to draw over the gray background
                 g.FillRectangle(new SolidBrush(rowsFiltered[rowIndex].BackColor),
                     1,
-                    -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + 1,
+                    -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].YOffset + 1,
                     GridW,//this is a really simple width value that always works well
                     rowsFiltered[rowIndex].RowHeight + rowsFiltered[rowIndex].NoteHeight - 1);
             }
@@ -1439,17 +1453,17 @@ namespace OpenDental.UI
                 {
                     g.FillRectangle(backBrush,
                         -hScroll.Value + _listCurColumnWidths.Take(i).Sum(x => x) + 1,
-                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + 1,
+                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].YOffset + 1,
                         _listCurColumnWidths[i],//this is a really simple width value that always works well
                         rowsFiltered[rowIndex].RowHeight + rowsFiltered[rowIndex].NoteHeight - 1);
                 }
             }
-            if (selectionMode == GridSelectionMode.OneCell && SelectedCell.X != -1 && SelectedCell.Y != -1
+            if (selectionMode == GridSelectionMode.Cell && SelectedCell.X != -1 && SelectedCell.Y != -1
             && SelectedCell.Y == rowIndex)
             {
                 g.FillRectangle(new SolidBrush(SelectedRowColor),
                     -hScroll.Value + 1 + ColPos[SelectedCell.X],
-                    -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + 1,
+                    -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].YOffset + 1,
                     _listCurColumnWidths[SelectedCell.X],
                     rowsFiltered[rowIndex].RowHeight + rowsFiltered[rowIndex].NoteHeight - 1);
             }
@@ -1462,16 +1476,16 @@ namespace OpenDental.UI
                 {
                     g.DrawLine(gridPen,
                         -hScroll.Value + 1 + ColPos[NoteSpanStart],
-                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + rowsFiltered[rowIndex].RowHeight,
+                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].YOffset + rowsFiltered[rowIndex].RowHeight,
                         -hScroll.Value + 1 + ColPos[NoteSpanStart],
-                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + rowsFiltered[rowIndex].RowHeight + rowsFiltered[rowIndex].NoteHeight);
+                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].YOffset + rowsFiltered[rowIndex].RowHeight + rowsFiltered[rowIndex].NoteHeight);
                 }
                 //Horizontal line which divides the main part of the row from the notes section of the row
                 g.DrawLine(gridPen,
                     -hScroll.Value + 1 + ColPos[0] + 1,
-                    -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + rowsFiltered[rowIndex].RowHeight,
+                    -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].YOffset + rowsFiltered[rowIndex].RowHeight,
                     -hScroll.Value + 1 + ColPos[Columns.Count - 1] + _listCurColumnWidths[Columns.Count - 1],
-                    -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + rowsFiltered[rowIndex].RowHeight);
+                    -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].YOffset + rowsFiltered[rowIndex].RowHeight);
 
             }
             Pen lowerPen = new Pen(ODColorTheme.GridLinePen.Color);
@@ -1493,34 +1507,34 @@ namespace OpenDental.UI
                 {
                     g.DrawLine(gridPen,
                         -hScroll.Value + 1 + ColPos[i] + _listCurColumnWidths[i],
-                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc,
+                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].YOffset,
                         -hScroll.Value + 1 + ColPos[i] + _listCurColumnWidths[i],
-                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + rowsFiltered[rowIndex].RowHeight);
+                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].YOffset + rowsFiltered[rowIndex].RowHeight);
                 }
                 else
                 {
                     g.DrawLine(gridPen,
                         -hScroll.Value + 1 + ColPos[i] + _listCurColumnWidths[i],
-                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + 1,
+                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].YOffset + 1,
                         -hScroll.Value + 1 + ColPos[i] + _listCurColumnWidths[i],
-                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + rowsFiltered[rowIndex].RowHeight);
+                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].YOffset + rowsFiltered[rowIndex].RowHeight);
                 }
                 //lower horizontal gridline
                 if (i == 0)
                 {
                     g.DrawLine(lowerPen,
                         -hScroll.Value + 1 + ColPos[i],
-                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + rowsFiltered[rowIndex].RowHeight + rowsFiltered[rowIndex].NoteHeight,
+                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].YOffset + rowsFiltered[rowIndex].RowHeight + rowsFiltered[rowIndex].NoteHeight,
                         -hScroll.Value + 1 + ColPos[i] + _listCurColumnWidths[i],
-                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + rowsFiltered[rowIndex].RowHeight + rowsFiltered[rowIndex].NoteHeight);
+                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].YOffset + rowsFiltered[rowIndex].RowHeight + rowsFiltered[rowIndex].NoteHeight);
                 }
                 else
                 {
                     g.DrawLine(lowerPen,
                         -hScroll.Value + 1 + ColPos[i] + 1,
-                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + rowsFiltered[rowIndex].RowHeight + rowsFiltered[rowIndex].NoteHeight,
+                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].YOffset + rowsFiltered[rowIndex].RowHeight + rowsFiltered[rowIndex].NoteHeight,
                         -hScroll.Value + 1 + ColPos[i] + _listCurColumnWidths[i],
-                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + rowsFiltered[rowIndex].RowHeight + rowsFiltered[rowIndex].NoteHeight);
+                        -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].YOffset + rowsFiltered[rowIndex].RowHeight + rowsFiltered[rowIndex].NoteHeight);
                 }
                 //text
                 if (rowsFiltered[rowIndex].Cells.Count - 1 < i)
@@ -1539,7 +1553,7 @@ namespace OpenDental.UI
                         _format.Alignment = StringAlignment.Far;
                         break;
                 }
-                int vertical = -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + 1;
+                int vertical = -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].YOffset + 1;
                 int horizontal = -hScroll.Value + 1 + ColPos[i] + 1;
                 int cellW = _listCurColumnWidths[i];
                 int cellH = rowsFiltered[rowIndex].RowHeight;
@@ -1668,7 +1682,7 @@ namespace OpenDental.UI
                 textBrush = new SolidBrush(rowsFiltered[rowIndex].ColorText);
                 textRect = new RectangleF(
                     -hScroll.Value + 1 + ColPos[NoteSpanStart] + 1,
-                    -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].RowLoc + rowsFiltered[rowIndex].RowHeight + 1,
+                    -vScroll.Value + 1 + titleHeight + HeaderHeight + rowsFiltered[rowIndex].YOffset + rowsFiltered[rowIndex].RowHeight + 1,
                     ColPos[NoteSpanStop] + _listCurColumnWidths[NoteSpanStop] - ColPos[NoteSpanStart],
                     rowsFiltered[rowIndex].NoteHeight);
                 _format.Alignment = StringAlignment.Near;
@@ -2066,7 +2080,7 @@ namespace OpenDental.UI
             //ScrollValue=0;
             if (!isRecompute)
             {
-                selectedIndices = new ArrayList();
+                selectedIndices.Clear();
                 SelectedCell = new Point(-1, -1);
                 if (editBox != null)
                 {
@@ -2118,7 +2132,7 @@ namespace OpenDental.UI
                     GridW,//this is a really simple width value that always works well
                     Rows[rowI].RowHeight + Rows[rowI].NoteHeight - 1);
             }
-            if (selectionMode == GridSelectionMode.OneCell && SelectedCell.X != -1 && SelectedCell.Y != -1
+            if (selectionMode == GridSelectionMode.Cell && SelectedCell.X != -1 && SelectedCell.Y != -1
             && SelectedCell.Y == rowI)
             {
                 g.FillRectangle(new SolidBrush(SelectedRowColor),
@@ -2376,7 +2390,7 @@ namespace OpenDental.UI
                     Px(GridW),//this is a really simple width value that always works well
                     Px(Rows[rowI].RowHeight + Rows[rowI].NoteHeight - 1));
             }
-            if (selectionMode == GridSelectionMode.OneCell && SelectedCell.X != -1 && SelectedCell.Y != -1
+            if (selectionMode == GridSelectionMode.Cell && SelectedCell.X != -1 && SelectedCell.Y != -1
             && SelectedCell.Y == rowI)
             {
                 g.DrawRectangle(new XSolidBrush(SelectedRowColor),
@@ -3259,7 +3273,7 @@ namespace OpenDental.UI
                 {//check to see if index is within the valid range of values
                     return;//if not, then ignore.
                 }
-                if (selectionMode == GridSelectionMode.One)
+                if (selectionMode == GridSelectionMode.Row)
                 {
                     selectedIndices.Clear();//clear existing selection before assigning the new one.
                 }
@@ -3292,7 +3306,7 @@ namespace OpenDental.UI
             {
                 throw new Exception("Selection mode is none.");
             }
-            if (selectionMode == GridSelectionMode.One)
+            if (selectionMode == GridSelectionMode.Row)
             {
                 throw new Exception("Selection mode is one.");
             }
@@ -3327,11 +3341,11 @@ namespace OpenDental.UI
             {
                 throw new Exception("Selection mode is none.");
             }
-            if (selectionMode == GridSelectionMode.One && setValue == true)
+            if (selectionMode == GridSelectionMode.Row && setValue == true)
             {
                 throw new Exception("Selection mode is one.");
             }
-            if (selectionMode == GridSelectionMode.OneCell)
+            if (selectionMode == GridSelectionMode.Cell)
             {
                 throw new Exception("Selection mode is OneCell.");
             }
@@ -3349,7 +3363,7 @@ namespace OpenDental.UI
         ///<summary>Throws exceptions.</summary>
         public void SetSelected(Point setCell)
         {
-            if (selectionMode != GridSelectionMode.OneCell)
+            if (selectionMode != GridSelectionMode.Cell)
             {
                 throw new Exception("Selection mode must be OneCell.");
             }
@@ -3368,7 +3382,7 @@ namespace OpenDental.UI
         ///<summary>If one row is selected, it returns the index to that row.  If more than one row are selected, it returns the first selected row.  Really only useful for SelectionMode.One.  If no rows selected, returns -1.</summary>
         public int GetSelectedIndex()
         {
-            if (SelectionMode == GridSelectionMode.OneCell)
+            if (SelectionMode == GridSelectionMode.Cell)
             {
                 return SelectedCell.Y;
             }
@@ -4036,11 +4050,11 @@ namespace OpenDental.UI
             {
                 case GridSelectionMode.None:
                     return;
-                case GridSelectionMode.One:
+                case GridSelectionMode.Row:
                     selectedIndices.Clear();
                     SelectionAddedByUser(MouseDownRow);
                     break;
-                case GridSelectionMode.OneCell:
+                case GridSelectionMode.Cell:
                     //The current grid could have another control floating on top of it (edit box, combo box, etc) which may require a LostFocus event to fire.
                     //Setting the ActiveControl to null will cause these controls to lose focus which we use to mimic a CellLeave event.
                     //If there is not a floating control, then the ActiveControl will get reset by the OnClick event after the MouseDown event finishes.
@@ -4067,13 +4081,13 @@ namespace OpenDental.UI
                         OnClick(e);
                     }
                     break;
-                case GridSelectionMode.MultiExtended:
+                case GridSelectionMode.Multiple:
                     if (ControlIsDown)
                     {
                         //we need to remember exactly which rows were selected the moment the mouse down started.
                         //Then, if the mouse gets dragged up or down, the rows between mouse start and mouse end
                         //will be set to the opposite of these remembered values.
-                        selectedIndicesWhenMouseDown = new ArrayList(selectedIndices);
+                        selectedIndicesWhenMouseDown = new List<int>(selectedIndices);
                         if (selectedIndices.Contains(MouseDownRow))
                         {
                             selectedIndices.Remove(MouseDownRow);
@@ -4230,7 +4244,7 @@ namespace OpenDental.UI
             int colWidth = (odGridColumn.DropDownWidth > 0) ? odGridColumn.DropDownWidth + 1 : _listCurColumnWidths[SelectedCell.X] + 1;
             _comboBox.Size = new Size(colWidth, Rows[SelectedCell.Y].RowHeight + 1);
             _comboBox.Location = new Point(-hScroll.Value + 1 + ColPos[SelectedCell.X],
-                -vScroll.Value + 1 + titleHeight + HeaderHeight + Rows[SelectedCell.Y].RowLoc + ((Rows[SelectedCell.Y].RowHeight - _comboBox.Size.Height) / 2));//Centers the combo box vertically.
+                -vScroll.Value + 1 + titleHeight + HeaderHeight + Rows[SelectedCell.Y].YOffset + ((Rows[SelectedCell.Y].RowHeight - _comboBox.Size.Height) / 2));//Centers the combo box vertically.
             _comboBox.Items.Clear();
             for (int i = 0; i < odGridColumn.ListDisplayStrings.Count; i++)
             {
@@ -4281,17 +4295,17 @@ namespace OpenDental.UI
                 hScrollBarHeight = SystemInformation.HorizontalScrollBarHeight;
             }
             //Check if new edit box location is below the display screen
-            int editBoxLocationTop = -vScroll.Value + 1 + titleHeight + HeaderHeight + Rows[SelectedCell.Y].RowLoc + Rows[SelectedCell.Y].RowHeight + hScrollBarHeight;
+            int editBoxLocationTop = -vScroll.Value + 1 + titleHeight + HeaderHeight + Rows[SelectedCell.Y].YOffset + Rows[SelectedCell.Y].RowHeight + hScrollBarHeight;
             if (editBoxLocationTop > this.DisplayRectangle.Bottom)
             {
-                int onScreenPixels = vScroll.Value + DisplayRectangle.Height - titleHeight - HeaderHeight - (Rows[SelectedCell.Y].RowLoc) - hScrollBarHeight;
+                int onScreenPixels = vScroll.Value + DisplayRectangle.Height - titleHeight - HeaderHeight - (Rows[SelectedCell.Y].YOffset) - hScrollBarHeight;
                 int offScreenPixels = Rows[SelectedCell.Y].RowHeight - onScreenPixels;
                 if (offScreenPixels > 0)
                 {
                     ScrollValue += offScreenPixels;//Scrolling down
                 }
             }
-            else if (-vScroll.Value + 1 + titleHeight + HeaderHeight + Rows[SelectedCell.Y].RowLoc < this.DisplayRectangle.Top + titleHeight + HeaderHeight)
+            else if (-vScroll.Value + 1 + titleHeight + HeaderHeight + Rows[SelectedCell.Y].YOffset < this.DisplayRectangle.Top + titleHeight + HeaderHeight)
             {
                 //If new edit box location is above the display screen
                 ScrollToIndex(SelectedCell.Y);//Scrolling up
@@ -4308,7 +4322,7 @@ namespace OpenDental.UI
                 //Rich text boxes have strange borders (3D looking) and so we have to manipulate the size and location differently.
                 editRichBox.Size = new Size(_listCurColumnWidths[SelectedCell.X] - 1, Rows[SelectedCell.Y].RowHeight - 1);
                 editRichBox.Location = new Point(-hScroll.Value + 2 + ColPos[SelectedCell.X],
-                    -vScroll.Value + 2 + titleHeight + HeaderHeight + Rows[SelectedCell.Y].RowLoc);
+                    -vScroll.Value + 2 + titleHeight + HeaderHeight + Rows[SelectedCell.Y].YOffset);
                 editBox = editRichBox;
             }
             else
@@ -4322,7 +4336,7 @@ namespace OpenDental.UI
                 //Rich text boxes have strange borders (3D looking) and so we have to manipulate the size and location differently.
                 editTextBox.Size = new Size(_listCurColumnWidths[SelectedCell.X] + 1, Rows[SelectedCell.Y].RowHeight + 1);
                 editTextBox.Location = new Point(-hScroll.Value + 1 + ColPos[SelectedCell.X],
-                    -vScroll.Value + 1 + titleHeight + HeaderHeight + Rows[SelectedCell.Y].RowLoc);
+                    -vScroll.Value + 1 + titleHeight + HeaderHeight + Rows[SelectedCell.Y].YOffset);
                 editBox = editTextBox;
             }
             //If the cell's color is set manually, that color will also show up for this EditBox.
@@ -4569,7 +4583,7 @@ namespace OpenDental.UI
             {
                 return;
             }
-            if (selectionMode != GridSelectionMode.MultiExtended)
+            if (selectionMode != GridSelectionMode.Multiple)
             {
                 return;
             }
@@ -4589,18 +4603,15 @@ namespace OpenDental.UI
             //because mouse might have moved faster than computer could keep up, we have to loop through all rows between
             if (ControlIsDown)
             {
-                if (selectedIndicesWhenMouseDown == null)
+                selectedIndices.Clear();
+                if (selectedIndicesWhenMouseDown != null)
                 {
-                    selectedIndices = new ArrayList();
-                }
-                else
-                {
-                    selectedIndices = new ArrayList(selectedIndicesWhenMouseDown);
+                    selectedIndices.AddRange(selectedIndicesWhenMouseDown);
                 }
             }
             else
             {
-                selectedIndices = new ArrayList();
+                selectedIndices.Clear();
             }
             if (MouseDownRow < curRow)
             {//dragging down
@@ -4705,7 +4716,7 @@ namespace OpenDental.UI
         /// <summary>If the Ctrl key down is not being captured by the grid because it doesn't have focus, then this automatically handles it.  The only thing you have to do to make it work is to turn on KeyPreview for the parent form.</summary>
         private void Parent_KeyDown(Object sender, KeyEventArgs e)
         {
-            if (selectionMode == GridSelectionMode.One)
+            if (selectionMode == GridSelectionMode.Row)
             {
                 if (e.KeyCode == Keys.Down)
                 {

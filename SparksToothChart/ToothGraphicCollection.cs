@@ -1,10 +1,27 @@
+/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
 using System;
 using System.Collections;
 
 namespace SparksToothChart
 {
     /// <summary>
-    /// A strongly typed collection of type ToothGraphic
+    /// A strongly typed collection of type <see cref="ToothGraphic"/>.
     /// </summary>
     public class ToothGraphicCollection : CollectionBase
     {
@@ -13,10 +30,7 @@ namespace SparksToothChart
         /// </summary>
         public ToothGraphic this[int index]
         {
-            get
-            {
-                return (ToothGraphic)List[index];
-            }
+            get => (ToothGraphic)List[index];
             set
             {
                 List[index] = value;
@@ -49,26 +63,14 @@ namespace SparksToothChart
             }
         }
 
-        public int Add(ToothGraphic value)
-        {
-            return (List.Add(value));
-        }
+        public int Add(ToothGraphic value) => List.Add(value);
 
-        public int IndexOf(ToothGraphic value)
-        {
-            return (List.IndexOf(value));
-        }
+        public int IndexOf(ToothGraphic value) => List.IndexOf(value);
 
-        public void Insert(int index, ToothGraphic value)
-        {
-            List.Insert(index, value);
-        }
+        public void Insert(int index, ToothGraphic value) => List.Insert(index, value);
 
-        public void Remove(ToothGraphic value)
-        {
-            List.Remove(value);
-        }
-
+        public void Remove(ToothGraphic value) => List.Remove(value);
+        
         public bool Contains(ToothGraphic value) => List.Contains(value);
         
         protected override void OnInsert(int index, object value)
@@ -106,12 +108,11 @@ namespace SparksToothChart
         public ToothGraphicCollection Copy()
         {
             ToothGraphicCollection collect = new ToothGraphicCollection();
-            for (int i = 0; i < this.Count; i++)
+            for (int i = 0; i < Count; i++)
             {
                 collect.Add(this[i].Copy());
             }
             return collect;
         }
-
     }
 }

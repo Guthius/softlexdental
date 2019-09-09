@@ -49,13 +49,13 @@ namespace OpenDental {
 				checkForceDuplicates.Checked=false;
 				checkForceDuplicates.Visible=false;//PaySimple always rejects identical transactions made within 5 minutes of eachother.
 			}
-			if(Programs.IsEnabled(ProgramName.PayConnect)) {
-				progCur=Programs.GetCur(ProgramName.PayConnect);
-				labelUpdated.Visible=false;
-				checkForceDuplicates.Visible=true;
-				checkForceDuplicates.Checked=PIn.Bool(ProgramProperties.GetPropValForClinicOrDefault(progCur.ProgramNum,
-					PayConnect.ProgramProperties.PayConnectForceRecurringCharge,Clinics.ClinicNum));
-			}
+			//if(Programs.IsEnabled(ProgramName.PayConnect)) {
+			//	progCur=Programs.GetCur(ProgramName.PayConnect);
+			//	labelUpdated.Visible=false;
+			//	checkForceDuplicates.Visible=true;
+			//	checkForceDuplicates.Checked=PIn.Bool(ProgramProperties.GetPropValForClinicOrDefault(progCur.ProgramNum,
+			//		PayConnect.ProgramProperties.PayConnectForceRecurringCharge,Clinics.ClinicNum));
+			//}
 			if(Programs.IsEnabled(ProgramName.Xcharge)) {
 				progCur=Programs.GetCur(ProgramName.Xcharge);
 				labelUpdated.Visible=true;

@@ -786,23 +786,23 @@ namespace OpenDental{
 			long clinicNum=GetClinicNumSelected();
 			List<Definition> listDefs=Definition.GetByCategory(DefinitionCategory.PaymentTypes);
 			//Show if enabled.  User could have all enabled.
-			if(progPayConnect.Enabled 
-				&& !PIn.Bool(ProgramProperties.GetPropVal(progPayConnect.ProgramNum,PayConnect.ProgramProperties.PayConnectPreventSavingNewCC,clinicNum))) 
-			{
-				//if clinics are disabled, PayConnect is enabled if marked enabled
-				if(!Preferences.HasClinicsEnabled) {
-					butPayConnect.Visible=true;
-				}
-				else {//if clinics are enabled, PayConnect is enabled if the PaymentType is valid and the Username and Password are not blank
-					string paymentType=ProgramProperties.GetPropVal(progPayConnect.ProgramNum,"PaymentType",clinicNum);
-					if(!string.IsNullOrEmpty(ProgramProperties.GetPropVal(progPayConnect.ProgramNum,"Username",clinicNum))
-						&& !string.IsNullOrEmpty(ProgramProperties.GetPropVal(progPayConnect.ProgramNum,"Password",clinicNum))
-						&& listDefs.Any(x => x.Id.ToString()==paymentType))
-					{
-						butPayConnect.Visible=true;
-					}
-				}
-			}
+			//if(progPayConnect.Enabled 
+			//	&& !PIn.Bool(ProgramProperties.GetPropVal(progPayConnect.ProgramNum,PayConnect.ProgramProperties.PayConnectPreventSavingNewCC,clinicNum))) 
+			//{
+			//	//if clinics are disabled, PayConnect is enabled if marked enabled
+			//	if(!Preferences.HasClinicsEnabled) {
+			//		butPayConnect.Visible=true;
+			//	}
+			//	else {//if clinics are enabled, PayConnect is enabled if the PaymentType is valid and the Username and Password are not blank
+			//		string paymentType=ProgramProperties.GetPropVal(progPayConnect.ProgramNum,"PaymentType",clinicNum);
+			//		if(!string.IsNullOrEmpty(ProgramProperties.GetPropVal(progPayConnect.ProgramNum,"Username",clinicNum))
+			//			&& !string.IsNullOrEmpty(ProgramProperties.GetPropVal(progPayConnect.ProgramNum,"Password",clinicNum))
+			//			&& listDefs.Any(x => x.Id.ToString()==paymentType))
+			//		{
+			//			butPayConnect.Visible=true;
+			//		}
+			//	}
+			//}
 			//show if enabled.  User could have both enabled.
 			if(progXcharge.Enabled
 				&& !PIn.Bool(ProgramProperties.GetPropVal(progXcharge.ProgramNum,XCharge.ProgramProperties.XChargePreventSavingNewCC,clinicNum)))
@@ -821,23 +821,23 @@ namespace OpenDental{
 					}
 				}
 			}
-			if(progPaySimple.Enabled
-				&& !PIn.Bool(ProgramProperties.GetPropVal(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimplePreventSavingNewCC,clinicNum)))
-			{
-				//if clinics are disabled, PayConnect is enabled if marked enabled
-				if(!Preferences.HasClinicsEnabled) {
-					butPaySimple.Visible=true;
-				}
-				else {//if clinics are enabled, PayConnect is enabled if the PaymentType is valid and the Username and Password are not blank
-					string paymentType=ProgramProperties.GetPropValForClinicOrDefault(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimplePayTypeCC,clinicNum);
-					if(!string.IsNullOrEmpty(ProgramProperties.GetPropValForClinicOrDefault(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiUserName,clinicNum))
-						&& !string.IsNullOrEmpty(ProgramProperties.GetPropValForClinicOrDefault(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiKey,clinicNum))
-						&& listDefs.Any(x => x.Id.ToString()==paymentType))
-					{
-						butPaySimple.Visible=true;
-					}
-				}
-			}
+			//if(progPaySimple.Enabled
+			//	&& !PIn.Bool(ProgramProperties.GetPropVal(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimplePreventSavingNewCC,clinicNum)))
+			//{
+			//	//if clinics are disabled, PayConnect is enabled if marked enabled
+			//	if(!Preferences.HasClinicsEnabled) {
+			//		butPaySimple.Visible=true;
+			//	}
+			//	else {//if clinics are enabled, PayConnect is enabled if the PaymentType is valid and the Username and Password are not blank
+			//		string paymentType=ProgramProperties.GetPropValForClinicOrDefault(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimplePayTypeCC,clinicNum);
+			//		if(!string.IsNullOrEmpty(ProgramProperties.GetPropValForClinicOrDefault(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiUserName,clinicNum))
+			//			&& !string.IsNullOrEmpty(ProgramProperties.GetPropValForClinicOrDefault(progPaySimple.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiKey,clinicNum))
+			//			&& listDefs.Any(x => x.Id.ToString()==paymentType))
+			//		{
+			//			butPaySimple.Visible=true;
+			//		}
+			//	}
+			//}
 			if(panelXcharge.Visible==false && butPayConnect.Visible==false && butPaySimple.Visible==false) {
 				//This is an office with clinics and one of the payment processing bridges is enabled but this particular clinic doesn't have one set up.
 				if(progXcharge.Enabled) {

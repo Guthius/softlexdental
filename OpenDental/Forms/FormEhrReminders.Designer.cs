@@ -114,7 +114,7 @@
 			this.gridProvided.Location = new System.Drawing.Point(18, 321);
 			this.gridProvided.Name = "gridProvided";
 			this.gridProvided.ScrollValue = 0;
-			this.gridProvided.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridProvided.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridProvided.Size = new System.Drawing.Size(535, 258);
 			this.gridProvided.TabIndex = 7;
 			this.gridProvided.Title = "Reminders Sent";

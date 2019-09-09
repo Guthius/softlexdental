@@ -30,7 +30,7 @@ namespace OpenDental {
 				butOK.Visible=false;
 			}
 			if(IsMultiSelectMode) {
-				gridMain.SelectionMode=GridSelectionMode.MultiExtended;
+				gridMain.SelectionMode=GridSelectionMode.Multiple;
 			}
 			ActiveControl=textCode;
 			//This check is here to prevent Snomeds from being used in non-member nations.

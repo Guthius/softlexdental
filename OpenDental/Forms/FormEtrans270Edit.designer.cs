@@ -172,7 +172,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(9, 137);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMain.Size = new System.Drawing.Size(956, 254);
 			this.gridMain.TabIndex = 114;
 			this.gridMain.Title = "Response Benefit Information";

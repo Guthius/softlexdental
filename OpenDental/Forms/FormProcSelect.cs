@@ -601,7 +601,7 @@ namespace OpenDental{
 
 		private void FormProcSelect_Load(object sender,System.EventArgs e) {
 			if(_isMultiSelect) {
-				gridMain.SelectionMode=OpenDental.UI.GridSelectionMode.MultiExtended;
+				gridMain.SelectionMode=OpenDental.UI.GridSelectionMode.Multiple;
 			}
 			_listSelectedProcs=new List<Procedure>();
 			_listProcedures=Procedures.GetCompleteForPats(new List<long> { _patNumCur });

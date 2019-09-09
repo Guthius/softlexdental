@@ -77,7 +77,7 @@ namespace OpenDental
             this.messageGrid.Location = new System.Drawing.Point(219, 125);
             this.messageGrid.Name = "messageGrid";
             this.messageGrid.ScrollValue = 0;
-            this.messageGrid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.messageGrid.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.messageGrid.Size = new System.Drawing.Size(696, 503);
             this.messageGrid.TabIndex = 140;
             this.messageGrid.Title = "Inbox";

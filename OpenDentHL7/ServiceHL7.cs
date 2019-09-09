@@ -1,4 +1,5 @@
 ﻿using CodeBase;
+using log4net;
 using OpenDentBusiness;
 using OpenDentBusiness.HL7;
 using SLDental.Storage;
@@ -14,14 +15,14 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
-using System.Xml;
-using System.Xml.XPath;
 using Tamir.SharpSsh.jsch;
 
 namespace OpenDentHL7
 {
     public partial class ServiceHL7 : ServiceBase
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(ServiceHL7));
+
         private bool IsVerboseLogging;
         private System.Threading.Timer timerSendFiles;
         private System.Threading.Timer timerReceiveFiles;
@@ -57,60 +58,34 @@ namespace OpenDentHL7
         /// </summary>
         public ServiceHL7()
         {
-            InitializeComponent();
             CanStop = true;
+
             IsSendTCPConnected = true; //bool to keep track of whether connection attempts have failed in the past. At startup, the 'previous' attempt is assumed successful.
-            EventLog.WriteEntry("OpenDentHL7", DateTime.Now.ToLongTimeString() + " - Initialized.");
+
+            Log.Info("Initialized.");
         }
 
         protected override void OnStart(string[] args) => StartManually();
-        
 
         public void StartManually()
         {
-            //connect to OD db.
-            XmlDocument document = new XmlDocument();
-            string pathXml = Path.Combine(Application.StartupPath, "FreeDentalConfig.xml");
-            try
-            {
-                document.Load(pathXml);
-            }
-            catch
-            {
-                EventLog.WriteEntry("OpenDentHL7", DateTime.Now.ToLongTimeString() + " - Could not find " + pathXml, EventLogEntryType.Error);
-                throw new ApplicationException("Could not find " + pathXml);
-            }
-            XPathNavigator Navigator = document.CreateNavigator();
-            XPathNavigator nav;
-            nav = Navigator.SelectSingleNode("//DatabaseConnection");
-            string computerName = nav.SelectSingleNode("ComputerName").Value;
-            string database = nav.SelectSingleNode("Database").Value;
-            string user = nav.SelectSingleNode("User").Value;
-            string password = nav.SelectSingleNode("Password").Value;
-            XPathNavigator encryptedPwdNode = nav.SelectSingleNode("MySQLPassHash");//only use the encrypted pwd node is the password node is empty
-            string decryptedPwd;
-            // TODO: Fix me
-            //if (password == "" && encryptedPwdNode != null && encryptedPwdNode.Value != "" && CDT.Class1.Decrypt(encryptedPwdNode.Value, out decryptedPwd))
-            //{
-            //    password = decryptedPwd;//password will still be blank if a blank password was encrypted
-            //}
-            XPathNavigator verboseNav = Navigator.SelectSingleNode("//HL7verbose");
-            if (verboseNav != null && verboseNav.Value == "True")
-            {
-                IsVerboseLogging = true;
-                EventLog.WriteEntry("OpenDentHL7", "Verbose mode.", EventLogEntryType.Information);
-            }
+            // TODO: Get the configuration for the databse connection.
+
             DataConnection dcon = new DataConnection();
-            //check db version
-            string dbVersion = Preference.GetString(PreferenceName.ProgramVersion);
-            if (Application.ProductVersion.ToString() != dbVersion)
+
+            // Check if the database version is correct.
+            string databaseVersion = Preference.GetString(PreferenceName.ProgramVersion);
+            if (Application.ProductVersion.ToString() != databaseVersion)
             {
-                EventLog.WriteEntry("OpenDentHL7", "Versions do not match.  Db version:" + dbVersion + ".  Application version:" + Application.ProductVersion.ToString(), EventLogEntryType.Error);
-                throw new ApplicationException("Versions do not match.  Db version:" + dbVersion + ".  Application version:" + Application.ProductVersion.ToString());
+                Log.ErrorFormat("Versions do not match. Database version: {0}, Application version: {1}", databaseVersion, Application.ProductVersion);
+
+                return;
             }
+
             //connected to the database, set the current user
             //Security.CurUser=Userods.GetUser(PrefC.GetLong(PrefName.ODServiceSecUserNum));
             Security.CurUser = new User() { UserName = "ODServiceSecUser" };
+
             #region MedLab HL7
             _medLabHL7DefEnabled = HL7Defs.GetOneDeepEnabled(true);
             if (_medLabHL7DefEnabled != null)
@@ -144,41 +119,54 @@ namespace OpenDentHL7
                 _timerMedLabSftpGetFiles = new System.Threading.Timer(timerCallbackLabSftpGetFiles, true, 1000, 60000);//attempt to connect to the sftp server once a minute
             }
             #endregion MedLab HL7
-            #region eCW Send and Receive OLD
+
             if (Programs.IsEnabled(ProgramName.eClinicalWorks) && !HL7Defs.IsExistingHL7Enabled())
-            {//eCW enabled, and no HL7def enabled.
-             //prevent startup:
-                long progNum = Programs.GetProgramNum(ProgramName.eClinicalWorks);
-                string hl7Server = ProgramProperties.GetPropVal(progNum, "HL7Server");//this property will not exist if using Oracle, eCW will never use Oracle
-                string hl7ServiceName = ProgramProperties.GetPropVal(progNum, "HL7ServiceName");//this property will not exist if using Oracle, eCW will never use Oracle
-                if (hl7Server == "")
-                {//for the first time run
-                    ProgramProperties.SetProperty(progNum, "HL7Server", System.Environment.MachineName);//this property will not exist if using Oracle, eCW will never use Oracle
-                    hl7Server = System.Environment.MachineName;
-                }
-                if (hl7ServiceName == "")
-                {//for the first time run
-                    ProgramProperties.SetProperty(progNum, "HL7ServiceName", this.ServiceName);//this property will not exist if using Oracle, eCW will never use Oracle
-                    hl7ServiceName = this.ServiceName;
-                }
-                if (hl7Server.ToLower() != System.Environment.MachineName.ToLower())
+            {
+                long programId = Programs.GetProgramNum(ProgramName.eClinicalWorks);
+
+                string hl7Server = ProgramProperties.GetPropVal(programId, "HL7Server");
+                string hl7ServiceName = ProgramProperties.GetPropVal(programId, "HL7ServiceName");
+
+                // If no server is set, we assume the local machine is the server.
+                if (string.IsNullOrEmpty(hl7Server))
                 {
-                    EventLog.WriteEntry("OpenDentHL7", "The HL7 Server name does not match the name set in Program Links eClinicalWorks Setup.  Server name: " + System.Environment.MachineName
-                        + ", Server name in Program Links: " + hl7Server, EventLogEntryType.Error);
-                    throw new ApplicationException("The HL7 Server name does not match the name set in Program Links eClinicalWorks Setup.  Server name: " + System.Environment.MachineName
-                        + ", Server name in Program Links: " + hl7Server);
+                    ProgramProperties.SetProperty(programId, "HL7Server",
+                        hl7Server = Environment.MachineName);
                 }
+
+
+                if (string.IsNullOrEmpty(hl7ServiceName))
+                {
+                    ProgramProperties.SetProperty(programId, "HL7ServiceName",
+                        hl7ServiceName = ServiceName);
+                }
+
+                if (hl7Server.ToLower() != Environment.MachineName.ToLower())
+                {
+                    Log.ErrorFormat(
+                        "The HL7 server name does not match the name set in the eClinicalWorks link configuration. " +
+                        "Server name: {0}, Server name in program links: {1}", 
+                        Environment.MachineName, hl7Server);
+
+                    return;
+                }
+
                 if (hl7ServiceName.ToLower() != this.ServiceName.ToLower())
                 {
-                    EventLog.WriteEntry("OpenDentHL7", "The HL7 Service Name does not match the name set in Program Links eClinicalWorks Setup.  Service name: " + this.ServiceName + ", Service name in Program Links: "
-                        + hl7ServiceName, EventLogEntryType.Error);
-                    throw new ApplicationException("The HL7 Service Name does not match the name set in Program Links eClinicalWorks Setup.  Service name: " + this.ServiceName + ", Service name in Program Links: "
-                        + hl7ServiceName);
+                    Log.ErrorFormat(
+                        "The HL7 service name does not match the name set in the eClinicalWorks link configuration. " +
+                        "Service name: {0}, Service name in program links: {1}",
+                        ServiceName, hl7ServiceName);
+
+                    return;
                 }
+
                 EcwOldSendAndReceive();
+
                 return;
             }
-            #endregion eCW Send and Receive OLD
+
+
             #region HL7 Send and Receive New Defs
             HL7Def hL7Def = HL7Defs.GetOneDeepEnabled();
             if (hL7Def == null)
@@ -208,6 +196,7 @@ namespace OpenDentHL7
                 throw new ApplicationException("The HL7 Service Name does not match the name in the enabled HL7Def Setup.  Service name: " + this.ServiceName + ", Service name in HL7Def: " + hL7Def.HL7ServiceName);
             }
             HL7DefEnabled = hL7Def;//so we can access it later from other methods
+           
             #region File Mode
             if (HL7DefEnabled.ModeTx == ModeTxHL7.File)
             {
@@ -233,6 +222,7 @@ namespace OpenDentHL7
                 timerSendFiles = new System.Threading.Timer(timercallbackSend, null, 1800, 1800);
             }
             #endregion File Mode
+
             #region TCP/IP Mode
             else if (HL7DefEnabled.ModeTx == ModeTxHL7.TcpIp)
             {
@@ -713,8 +703,20 @@ namespace OpenDentHL7
 
         async void CreateTcpListener()
         {
-            var tcpListener = new TcpListener(IPAddress.Any, int.Parse(HL7DefEnabled.IncomingPort));
-            tcpListener.Start();
+            TcpListener tcpListener;
+            try
+            {
+                tcpListener = new TcpListener(IPAddress.Any, int.Parse(HL7DefEnabled.IncomingPort));
+                tcpListener.Start();
+
+                Log.Info($"Listening on port {HL7DefEnabled.IncomingPort}");
+            }
+            catch (Exception exception)
+            {
+                Log.Error($"Failed to create TcpListener on port {HL7DefEnabled.IncomingPort}", exception);
+
+                return;
+            }
 
             var tcpClient = await tcpListener.AcceptTcpClientAsync();
         }
@@ -1163,31 +1165,37 @@ namespace OpenDentHL7
             _ecwTCPModeIsSending = false;
         }
 
-        private void Send(Socket socketWorker)
+        private void Send(Socket socket)
         {
-            List<HL7Msg> list = HL7Msgs.GetOnePending();
+            var list = HL7Msgs.GetOnePending();
             while (list.Count > 0)
             {
                 string sendMsgControlId = HL7Msgs.GetControlId(list[0]);//could be empty string
                 string data = MLLP_START_CHAR + list[0].MsgText + MLLP_END_CHAR + MLLP_ENDMSG_CHAR;
                 byte[] byteData = Encoding.ASCII.GetBytes(data);
-                socketWorker.SendTimeout = 5000;//timeout in 5 seconds, send will retry after 6 second wait
+                socket.SendTimeout = 5000;//timeout in 5 seconds, send will retry after 6 second wait
                 try
                 {
-                    socketWorker.Send(byteData, byteData.Length, SocketFlags.None);//this is a blocking call, will timeout in 5 seconds
+                    socket.Send(
+                        byteData, 
+                        byteData.Length, 
+                        SocketFlags.None);
                 }
-                catch (Exception ex)
+                catch (Exception exception)
                 {
-                    throw new Exception("The outbound socket encountered a problem sending a message.\r\nException: " + ex.Message);
+                    Log.Error("The outbound socket encountered a problem sending a message.", exception);
+
+                    throw new Exception("The outbound socket encountered a problem sending a message.\r\nException: " + exception.Message);
                 }
+
                 #region RecieveAndProcessAck
                 //For MLLP V2, do a blocking Receive here, along with a timeout.
                 byte[] ackBuffer = new byte[256];//plenty big enough to receive the entire ack/nack response
-                socketWorker.ReceiveTimeout = 5000;//5 second timeout. Database is polled every 6 seconds for a new message to send, but if already sending and waiting for an ack, the new thread will just return
+                socket.ReceiveTimeout = 5000;//5 second timeout. Database is polled every 6 seconds for a new message to send, but if already sending and waiting for an ack, the new thread will just return
                 int byteCountReceived = 0;
                 try
                 {
-                    byteCountReceived = socketWorker.Receive(ackBuffer);//blocking Receive
+                    byteCountReceived = socket.Receive(ackBuffer);//blocking Receive
                 }
                 catch (Exception ex)
                 {
@@ -1271,22 +1279,21 @@ namespace OpenDentHL7
                     return;
                 }
                 #endregion
+
                 list[0].HL7Status = HL7MessageStatus.OutSent;
-                HL7Msgs.Update(list[0]);//set the status to sent and save ack message in Note field.
+
+                HL7Msgs.Update(list[0]);
+
                 if (_ecwDateTimeOldMsgsDeleted.Date < DateTime.Now.Date)
                 {
-                    if (IsVerboseLogging)
-                    {
-                        EventLog.WriteEntry("DeleteOldMsgText Starting");
-                    }
-                    _ecwDateTimeOldMsgsDeleted = DateTime.Now;//If DeleteOldMsgText fails for any reason.  This will cause it to not get called until the next day instead of with every msg.
-                    HL7Msgs.DeleteOldMsgText();//this function deletes if DateTStamp is less than CURDATE-INTERVAL 4 MONTH.  That means it will delete message text only once a day, not time based.
-                    if (IsVerboseLogging)
-                    {
-                        EventLog.WriteEntry("DeleteOldMsgText Finished");
-                    }
+                    Log.Info("Running DeleteOldMsgText");
+
+                    _ecwDateTimeOldMsgsDeleted = DateTime.Now;
+
+                    HL7Msgs.DeleteOldMsgText();
                 }
-                list = HL7Msgs.GetOnePending();//returns 0 or 1 pending message
+
+                list = HL7Msgs.GetOnePending();
             }
         }
         #endregion TCP/IP Mode

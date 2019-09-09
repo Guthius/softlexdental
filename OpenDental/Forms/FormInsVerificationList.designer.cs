@@ -553,7 +553,7 @@ namespace OpenDental{
 			this.gridAssign.Location = new System.Drawing.Point(3, 3);
 			this.gridAssign.Name = "gridAssign";
 			this.gridAssign.ScrollValue = 0;
-			this.gridAssign.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridAssign.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridAssign.Size = new System.Drawing.Size(950, 343);
 			this.gridAssign.TabIndex = 5;
 			this.gridAssign.Title = "Insurance Verification Assignment List";

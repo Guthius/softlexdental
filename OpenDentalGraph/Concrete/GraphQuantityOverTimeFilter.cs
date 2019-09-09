@@ -77,7 +77,7 @@ namespace OpenDentalGraph {
 			get { return _cellType; }
 			set {
 				_cellType=value;
-				BaseGraphOptionsCtrl filterCtrl=null;
+				GraphOptionsBase filterCtrl=null;
 				switch(CellType) {
 					case DashboardCellType.ProductionGraph:
 						filterCtrl=_productionOptionsCtrl;
@@ -131,7 +131,7 @@ namespace OpenDentalGraph {
 						graph.QtyType=QuantityType.money;
 						break;
 					case DashboardCellType.NewPatientsGraph:
-						filterCtrl=new BaseGraphOptionsCtrl();
+						filterCtrl=new GraphOptionsBase();
 						graph.GraphTitle="New Patients";
 						graph.RemoveQuantityType(QuantityType.money);
 						graph.RemoveQuantityType(QuantityType.decimalPoint);
@@ -168,7 +168,7 @@ namespace OpenDentalGraph {
 				}
 			}
 		}
-		public GroupingOptionsCtrl.Grouping CurGrouping
+		public GroupingOptionsControl.Grouping CurGrouping
 		{
 			get
 			{
@@ -445,13 +445,13 @@ namespace OpenDentalGraph {
 			return rawData??new List<GraphQuantityOverTime.GraphPointBase>();
 		}
 		
-		private void SetGroupItems(GroupingOptionsCtrl.Grouping CurGrouping) {			
+		private void SetGroupItems(GroupingOptionsControl.Grouping CurGrouping) {			
 			switch(CurGrouping) {
-				case GroupingOptionsCtrl.Grouping.provider:
+				case GroupingOptionsControl.Grouping.Provider:
 					graph.UseBuiltInColors=false;
 					graph.LegendTitle="Provider";
 					break;
-				case GroupingOptionsCtrl.Grouping.clinic:
+				case GroupingOptionsControl.Grouping.Clinic:
 					graph.LegendTitle="Clinic";
 					graph.UseBuiltInColors=true;
 					break;
@@ -462,16 +462,16 @@ namespace OpenDentalGraph {
 			}
 		}
 
-		private GraphQuantityOverTime.GraphDataPointClinic GetDataPointForGrouping(GraphQuantityOverTime.GraphDataPointClinic x,GroupingOptionsCtrl.Grouping curGrouping) {
+		private GraphQuantityOverTime.GraphDataPointClinic GetDataPointForGrouping(GraphQuantityOverTime.GraphDataPointClinic x,GroupingOptionsControl.Grouping curGrouping) {
 			switch(curGrouping) {
-				case GroupingOptionsCtrl.Grouping.provider:
+				case GroupingOptionsControl.Grouping.Provider:
 					return new GraphQuantityOverTime.GraphDataPointClinic() {
 						DateStamp=x.DateStamp,
 						SeriesName=DashboardCache.Providers.GetProvName(x.ProvNum),
 						Val=x.Val,
 						Count=x.Count
 					};
-				case GroupingOptionsCtrl.Grouping.clinic:
+				case GroupingOptionsControl.Grouping.Clinic:
 				default:
 					return new GraphQuantityOverTime.GraphDataPointClinic() {
 						DateStamp=x.DateStamp,
@@ -510,14 +510,14 @@ namespace OpenDentalGraph {
 		#region GraphDataPoint Conversions
 		private GraphQuantityOverTime.GraphPointBase GetBrokenApptDataPoint(GraphQuantityOverTime.GraphDataPointClinic x) {
 			switch(CurGrouping) {
-				case GroupingOptionsCtrl.Grouping.provider:
+				case GroupingOptionsControl.Grouping.Provider:
 					return new GraphQuantityOverTime.GraphPointBase() {
 						DateStamp=x.DateStamp,
 						SeriesName=DashboardCache.Providers.GetProvName(x.ProvNum),
 						Val=x.Val,
 						Count=x.Count
 					};
-				case GroupingOptionsCtrl.Grouping.clinic:
+				case GroupingOptionsControl.Grouping.Clinic:
 				default:
 					return new GraphQuantityOverTime.GraphPointBase() {
 						DateStamp=x.DateStamp,
@@ -582,7 +582,7 @@ namespace OpenDentalGraph {
 			public bool IncludeWriteoffs { get; set; }
 			public bool IncludePaySplits { get; set; }
 			public bool IncludeInsuranceClaims { get; set; }
-			public GroupingOptionsCtrl.Grouping CurGrouping { get;set;}
+			public GroupingOptionsControl.Grouping CurGrouping { get;set;}
 			public BrokenApptGraphOptionsCtrl.RunFor CurRunFor { get; set; }
 			public long AdjTypeDefNum { get; set; }
 			new public BrokenApptProcedure BrokenApptProcCode { get; set;}

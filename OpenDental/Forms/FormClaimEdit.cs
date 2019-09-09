@@ -2459,32 +2459,32 @@ namespace OpenDental{
 				return;
 			}
 			else if(clearinghouseClin.IsAttachmentSendAllowed && clearinghouseClin.CommBridge==EclaimsCommBridge.ClaimConnect) {
-				//No general missing data, but can send attachments electronically.  Check the clearinghouse for missing data.
-				try {
-					ClaimConnect.ValidateClaimResponse response=ClaimConnect.ValidateClaim(ClaimCur,true);
-					if(response.IsAttachmentRequired) {
-						if(MsgBox.Show(this,MsgBoxButtons.YesNo,"An attachment is required for this claim. Would you like to open the claim attachment form?")) {
-							FormClaimAttachment.Open(ClaimCur);
-							return;
-						}
-						else if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Would you like to continue sending the claim?")) {
-							return;
-						}
-					}
-				}
-				catch(ODException ex) {
-					//ODExceptions should have already been translated to reduce the number of times a message needs translating
-					MessageBox.Show(ex.Message);
-					if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Would you like to continue sending the claim?")) {
-						return;
-					}
-				}
-				catch(Exception ex) {
-                    FormFriendlyException.Show(ex.Message,ex);
-					if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Would you like to continue sending the claim?")) {
-						return;
-					}
-				}
+				////No general missing data, but can send attachments electronically.  Check the clearinghouse for missing data.
+				//try {
+				//	ClaimConnect.ValidateClaimResponse response=ClaimConnect.ValidateClaim(ClaimCur,true);
+				//	if(response.IsAttachmentRequired) {
+				//		if(MsgBox.Show(this,MsgBoxButtons.YesNo,"An attachment is required for this claim. Would you like to open the claim attachment form?")) {
+				//			FormClaimAttachment.Open(ClaimCur);
+				//			return;
+				//		}
+				//		else if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Would you like to continue sending the claim?")) {
+				//			return;
+				//		}
+				//	}
+				//}
+				//catch(ODException ex) {
+				//	//ODExceptions should have already been translated to reduce the number of times a message needs translating
+				//	MessageBox.Show(ex.Message);
+				//	if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Would you like to continue sending the claim?")) {
+				//		return;
+				//	}
+				//}
+				//catch(Exception ex) {
+    //                FormFriendlyException.Show(ex.Message,ex);
+				//	if(!MsgBox.Show(this,MsgBoxButtons.YesNo,"Would you like to continue sending the claim?")) {
+				//		return;
+				//	}
+				//}
 			}
 			Cursor=Cursors.WaitCursor;			
 			if(clearinghouseHq.Eformat==ElectronicClaimFormat.Canadian) {
@@ -3310,21 +3310,21 @@ namespace OpenDental{
 					return;
 				}
 				else if(clearinghouseClin.IsAttachmentSendAllowed && clearinghouseClin.CommBridge==EclaimsCommBridge.ClaimConnect) {//No missing data, but can send attachments electronically
-					//Validating for attachments is currently only supported for ClaimConnect customers
-					try {
-						ClaimConnect.ValidateClaimResponse response=ClaimConnect.ValidateClaim(ClaimCur,true);
-						if(response.IsAttachmentRequired) {
-							if(MsgBox.Show(this,MsgBoxButtons.YesNo,"An attachment is required for this claim. Would you like to open the claim attachment form?")) {
-								FormClaimAttachment.Open(ClaimCur);
-							}
-						}
-					}
-					catch(ODException ex) {
-						MessageBox.Show(ex.Message);
-					}
-					catch(Exception ex) {
-                        FormFriendlyException.Show(ex.Message,ex);
-					}
+					////Validating for attachments is currently only supported for ClaimConnect customers
+					//try {
+					//	ClaimConnect.ValidateClaimResponse response=ClaimConnect.ValidateClaim(ClaimCur,true);
+					//	if(response.IsAttachmentRequired) {
+					//		if(MsgBox.Show(this,MsgBoxButtons.YesNo,"An attachment is required for this claim. Would you like to open the claim attachment form?")) {
+					//			FormClaimAttachment.Open(ClaimCur);
+					//		}
+					//	}
+					//}
+					//catch(ODException ex) {
+					//	MessageBox.Show(ex.Message);
+					//}
+					//catch(Exception ex) {
+     //                   FormFriendlyException.Show(ex.Message,ex);
+					//}
 				}
 				//if(MsgBox.Show(this,true,"Send electronic claim immediately?")){
 				//	List<ClaimSendQueueItem> queueItems=new List<ClaimSendQueueItem>();

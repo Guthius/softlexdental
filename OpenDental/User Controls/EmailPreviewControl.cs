@@ -599,7 +599,7 @@ namespace OpenDental
             //TextBox_LostFocus event fires after the EmailAuto_Click event.
             textBox.Leave += TextBox_LostFocus;
             #region Grid Init
-            gridContacts.SelectionMode = GridSelectionMode.MultiExtended;
+            gridContacts.SelectionMode = GridSelectionMode.Multiple;
             gridContacts.MouseClick += EmailAuto_Click;
             gridContacts.Tag = textBox;
             gridContacts.Parent = this;

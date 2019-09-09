@@ -137,7 +137,8 @@ namespace OpenDental {
             }
             else if (comboFieldName.Text == "Patient Info.gif")
             {//Interal image
-                pictureBox.Image = OpenDentBusiness.Properties.Resources.Patient_Info;
+                // TODO: Fix me...
+                //pictureBox.Image = OpenDentBusiness.Properties.Resources.Patient_Info;
                 textFullPath.Text = "Patient Info.gif (internal)";
             }
             else

@@ -72,7 +72,7 @@ namespace OpenDental{
 			this.gridCharges.Location = new System.Drawing.Point(564, 44);
 			this.gridCharges.Name = "gridCharges";
 			this.gridCharges.ScrollValue = 0;
-			this.gridCharges.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridCharges.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridCharges.Size = new System.Drawing.Size(662, 580);
 			this.gridCharges.TabIndex = 13;
 			this.gridCharges.Title = "Income Sources";
@@ -91,7 +91,7 @@ namespace OpenDental{
 			this.gridSplits.Location = new System.Drawing.Point(7, 44);
 			this.gridSplits.Name = "gridSplits";
 			this.gridSplits.ScrollValue = 0;
-			this.gridSplits.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridSplits.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridSplits.Size = new System.Drawing.Size(548, 580);
 			this.gridSplits.TabIndex = 12;
 			this.gridSplits.Title = "Current Payment Splits";

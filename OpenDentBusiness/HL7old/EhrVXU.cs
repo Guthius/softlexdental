@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using OpenDentBusiness;
 
-namespace OpenDentBusiness.HL7 {
-	///<summary>A VXU message is an Unsolicited Vaccination Record Update.  It is a message sent out from Open Dental detailing vaccinations that were given.
-	///Implementation based on HL7 version 2.5.1 Immunization Messaging Release 1.4 08/01/2012.  Data types defined on page 52.
-	///To view specific HL7 table definitions, see http://hl7.org/implement/standards/fhir/terminologies-v2.html. </summary>
-	public class EhrVXU {
+namespace OpenDentBusiness.HL7
+{
+    ///<summary>A VXU message is an Unsolicited Vaccination Record Update.  It is a message sent out from Open Dental detailing vaccinations that were given.
+    ///Implementation based on HL7 version 2.5.1 Immunization Messaging Release 1.4 08/01/2012.  Data types defined on page 52.
+    ///To view specific HL7 table definitions, see http://hl7.org/implement/standards/fhir/terminologies-v2.html. </summary>
+    public class EhrVXU {
 
 		///<summary>Set in constructor and must not be modified.</summary>
 		private Patient _pat;

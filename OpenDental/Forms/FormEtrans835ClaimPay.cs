@@ -208,7 +208,7 @@ namespace OpenDental {
 			this.gridClaimAdjustments.Location = new System.Drawing.Point(9, 12);
 			this.gridClaimAdjustments.Name = "gridClaimAdjustments";
 			this.gridClaimAdjustments.ScrollValue = 0;
-			this.gridClaimAdjustments.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridClaimAdjustments.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridClaimAdjustments.Size = new System.Drawing.Size(956, 100);
 			this.gridClaimAdjustments.TabIndex = 200;
 			this.gridClaimAdjustments.TabStop = false;
@@ -227,7 +227,7 @@ namespace OpenDental {
 			this.gridProcedureBreakdown.Location = new System.Drawing.Point(9, 118);
 			this.gridProcedureBreakdown.Name = "gridProcedureBreakdown";
 			this.gridProcedureBreakdown.ScrollValue = 0;
-			this.gridProcedureBreakdown.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridProcedureBreakdown.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridProcedureBreakdown.Size = new System.Drawing.Size(956, 168);
 			this.gridProcedureBreakdown.TabIndex = 199;
 			this.gridProcedureBreakdown.TabStop = false;
@@ -246,7 +246,7 @@ namespace OpenDental {
 			this.gridPayments.Location = new System.Drawing.Point(9, 345);
 			this.gridPayments.Name = "gridPayments";
 			this.gridPayments.ScrollValue = 0;
-			this.gridPayments.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+			this.gridPayments.SelectionMode = OpenDental.UI.GridSelectionMode.Cell;
 			this.gridPayments.Size = new System.Drawing.Size(956, 257);
 			this.gridPayments.TabIndex = 125;
 			this.gridPayments.Title = "Enter Payments";

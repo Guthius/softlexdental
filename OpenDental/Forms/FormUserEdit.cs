@@ -658,19 +658,19 @@ namespace OpenDental{
 			if(IsNew) {
 				butUnlock.Visible=false;
 			}
-			_listDoseSpotUserPrefOld=UserOdPrefs.GetByUserAndFkeyAndFkeyType(UserCur.UserNum,
-				Programs.GetCur(ProgramName.eRx).ProgramNum,UserOdFkeyType.Program,
-				Clinics.GetForUserod(Security.CurUser,true).Select(x => x.ClinicNum)
-				.Union(new List<long>() { 0 })//Always include 0 clinic, this is the default, NOT a headquarters only value.
-				.Distinct()
-				.ToList());
-			_listDoseSpotUserPrefNew=_listDoseSpotUserPrefOld.Select(x => x.Clone()).ToList();
-			_doseSpotUserPrefDefault=_listDoseSpotUserPrefNew.Find(x => x.ClinicNum==0);
-			if(_doseSpotUserPrefDefault==null) {
-				_doseSpotUserPrefDefault=DoseSpot.GetDoseSpotUserIdFromPref(UserCur.UserNum,0);
-				_listDoseSpotUserPrefNew.Add(_doseSpotUserPrefDefault);
-			}
-			textDoseSpotUserID.Text=_doseSpotUserPrefDefault.ValueString;
+			//_listDoseSpotUserPrefOld=UserOdPrefs.GetByUserAndFkeyAndFkeyType(UserCur.UserNum,
+			//	Programs.GetCur(ProgramName.eRx).ProgramNum,UserOdFkeyType.Program,
+			//	Clinics.GetForUserod(Security.CurUser,true).Select(x => x.ClinicNum)
+			//	.Union(new List<long>() { 0 })//Always include 0 clinic, this is the default, NOT a headquarters only value.
+			//	.Distinct()
+			//	.ToList());
+			//_listDoseSpotUserPrefNew=_listDoseSpotUserPrefOld.Select(x => x.Clone()).ToList();
+			//_doseSpotUserPrefDefault=_listDoseSpotUserPrefNew.Find(x => x.ClinicNum==0);
+			//if(_doseSpotUserPrefDefault==null) {
+			//	_doseSpotUserPrefDefault=DoseSpot.GetDoseSpotUserIdFromPref(UserCur.UserNum,0);
+			//	_listDoseSpotUserPrefNew.Add(_doseSpotUserPrefDefault);
+			//}
+			//textDoseSpotUserID.Text=_doseSpotUserPrefDefault.ValueString;
 			if(_isFromAddUser && !Security.IsAuthorized(Permissions.SecurityAdmin,true)) {
 				butPassword.Visible=false;
 				checkRequireReset.Checked=true;

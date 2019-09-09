@@ -95,39 +95,39 @@ namespace OpenDental
 
         private void FillFields()
         {
-            long clinicNum = 0;
-            if (Preferences.HasClinicsEnabled)
-            {
-                clinicNum = _listUserClinicNums[comboClinic.SelectedIndex];
-            }
-            textUsername.Text = ProgramProperties.GetPropValFromList(_listProgProps, "Username", clinicNum);
-            textPassword.Text = ProgramProperties.GetPropValFromList(_listProgProps, "Password", clinicNum);
-            string payTypeDefNum = ProgramProperties.GetPropValFromList(_listProgProps, "PaymentType", clinicNum);
-            string processingMethod = ProgramProperties.GetPropValFromList(_listProgProps, PayConnect.ProgramProperties.DefaultProcessingMethod, clinicNum);
-            checkTerminal.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps, "TerminalProcessingEnabled", clinicNum));
-            checkForceRecurring.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps,
-                PayConnect.ProgramProperties.PayConnectForceRecurringCharge, clinicNum));
-            checkPreventSavingNewCC.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps,
-                PayConnect.ProgramProperties.PayConnectPreventSavingNewCC, clinicNum));
-            portalPayEnabledCheckBox.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps, PayConnect.ProgramProperties.PatientPortalPaymentsEnabled, clinicNum));
-            tokenTextBox.Text = PIn.String(ProgramProperties.GetPropValFromList(_listProgProps, PayConnect.ProgramProperties.PatientPortalPaymentsToken, clinicNum));
-            comboPaymentType.Items.Clear();
-            _listPaymentTypeDefs = Definition.GetByCategory(DefinitionCategory.PaymentTypes);;
-            for (int i = 0; i < _listPaymentTypeDefs.Count; i++)
-            {
-                comboPaymentType.Items.Add(_listPaymentTypeDefs[i].Description);
-                if (_listPaymentTypeDefs[i].Id.ToString() == payTypeDefNum)
-                {
-                    comboPaymentType.SelectedIndex = i;
-                }
-            }
-            comboDefaultProcessing.Items.Clear();
-            comboDefaultProcessing.Items.Add(Lan.g(this, PayConnectProcessingMethod.WebService.GetDescription()));
-            comboDefaultProcessing.Items.Add(Lan.g(this, PayConnectProcessingMethod.Terminal.GetDescription()));
-            if (processingMethod == "0" || processingMethod == "1")
-            {
-                comboDefaultProcessing.SelectedIndex = PIn.Int(processingMethod);
-            }
+            //long clinicNum = 0;
+            //if (Preferences.HasClinicsEnabled)
+            //{
+            //    clinicNum = _listUserClinicNums[comboClinic.SelectedIndex];
+            //}
+            //textUsername.Text = ProgramProperties.GetPropValFromList(_listProgProps, "Username", clinicNum);
+            //textPassword.Text = ProgramProperties.GetPropValFromList(_listProgProps, "Password", clinicNum);
+            //string payTypeDefNum = ProgramProperties.GetPropValFromList(_listProgProps, "PaymentType", clinicNum);
+            //string processingMethod = ProgramProperties.GetPropValFromList(_listProgProps, PayConnect.ProgramProperties.DefaultProcessingMethod, clinicNum);
+            //checkTerminal.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps, "TerminalProcessingEnabled", clinicNum));
+            //checkForceRecurring.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps,
+            //    PayConnect.ProgramProperties.PayConnectForceRecurringCharge, clinicNum));
+            //checkPreventSavingNewCC.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps,
+            //    PayConnect.ProgramProperties.PayConnectPreventSavingNewCC, clinicNum));
+            //portalPayEnabledCheckBox.Checked = PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps, PayConnect.ProgramProperties.PatientPortalPaymentsEnabled, clinicNum));
+            //tokenTextBox.Text = PIn.String(ProgramProperties.GetPropValFromList(_listProgProps, PayConnect.ProgramProperties.PatientPortalPaymentsToken, clinicNum));
+            //comboPaymentType.Items.Clear();
+            //_listPaymentTypeDefs = Definition.GetByCategory(DefinitionCategory.PaymentTypes);;
+            //for (int i = 0; i < _listPaymentTypeDefs.Count; i++)
+            //{
+            //    comboPaymentType.Items.Add(_listPaymentTypeDefs[i].Description);
+            //    if (_listPaymentTypeDefs[i].Id.ToString() == payTypeDefNum)
+            //    {
+            //        comboPaymentType.SelectedIndex = i;
+            //    }
+            //}
+            //comboDefaultProcessing.Items.Clear();
+            //comboDefaultProcessing.Items.Add(Lan.g(this, PayConnectProcessingMethod.WebService.GetDescription()));
+            //comboDefaultProcessing.Items.Add(Lan.g(this, PayConnectProcessingMethod.Terminal.GetDescription()));
+            //if (processingMethod == "0" || processingMethod == "1")
+            //{
+            //    comboDefaultProcessing.SelectedIndex = PIn.Int(processingMethod);
+            //}
         }
 
         private void comboClinic_SelectionChangeCommitted(object sender, EventArgs e)
@@ -194,31 +194,31 @@ namespace OpenDental
 
         private void UpdateListProgramPropertiesForClinic(long clinicNum)
         {
-            string payTypeSelected = "";
-            if (comboPaymentType.SelectedIndex > -1)
-            {
-                payTypeSelected = _listPaymentTypeDefs[comboPaymentType.SelectedIndex].Id.ToString();
-            }
-            string processingMethodSelected = comboDefaultProcessing.SelectedIndex.ToString();
-            //set the values in the list for this clinic
-            _listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == "Username")
-                .ForEach(x => x.PropertyValue = textUsername.Text);//always 1 item; null safe
-            _listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == "Password")
-                .ForEach(x => x.PropertyValue = textPassword.Text);//always 1 item; null safe
-            _listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == "PaymentType")
-                .ForEach(x => x.PropertyValue = payTypeSelected);//always 1 item; null safe
-            _listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == PayConnect.ProgramProperties.DefaultProcessingMethod)
-                .ForEach(x => x.PropertyValue = processingMethodSelected);
-            _listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == "TerminalProcessingEnabled")
-                .ForEach(x => x.PropertyValue = POut.Bool(checkTerminal.Checked));//always 1 item; null safe
-            _listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == PayConnect.ProgramProperties.PayConnectForceRecurringCharge)
-                .ForEach(x => x.PropertyValue = POut.Bool(checkForceRecurring.Checked));
-            _listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == PayConnect.ProgramProperties.PayConnectPreventSavingNewCC)
-                .ForEach(x => x.PropertyValue = POut.Bool(checkPreventSavingNewCC.Checked));
-            _listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == PayConnect.ProgramProperties.PatientPortalPaymentsEnabled)
-                .ForEach(x => x.PropertyValue = POut.Bool(portalPayEnabledCheckBox.Checked));
-            _listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == PayConnect.ProgramProperties.PatientPortalPaymentsToken)
-                .ForEach(x => x.PropertyValue = tokenTextBox.Text);
+            //string payTypeSelected = "";
+            //if (comboPaymentType.SelectedIndex > -1)
+            //{
+            //    payTypeSelected = _listPaymentTypeDefs[comboPaymentType.SelectedIndex].Id.ToString();
+            //}
+            //string processingMethodSelected = comboDefaultProcessing.SelectedIndex.ToString();
+            ////set the values in the list for this clinic
+            //_listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == "Username")
+            //    .ForEach(x => x.PropertyValue = textUsername.Text);//always 1 item; null safe
+            //_listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == "Password")
+            //    .ForEach(x => x.PropertyValue = textPassword.Text);//always 1 item; null safe
+            //_listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == "PaymentType")
+            //    .ForEach(x => x.PropertyValue = payTypeSelected);//always 1 item; null safe
+            //_listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == PayConnect.ProgramProperties.DefaultProcessingMethod)
+            //    .ForEach(x => x.PropertyValue = processingMethodSelected);
+            //_listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == "TerminalProcessingEnabled")
+            //    .ForEach(x => x.PropertyValue = POut.Bool(checkTerminal.Checked));//always 1 item; null safe
+            //_listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == PayConnect.ProgramProperties.PayConnectForceRecurringCharge)
+            //    .ForEach(x => x.PropertyValue = POut.Bool(checkForceRecurring.Checked));
+            //_listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == PayConnect.ProgramProperties.PayConnectPreventSavingNewCC)
+            //    .ForEach(x => x.PropertyValue = POut.Bool(checkPreventSavingNewCC.Checked));
+            //_listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == PayConnect.ProgramProperties.PatientPortalPaymentsEnabled)
+            //    .ForEach(x => x.PropertyValue = POut.Bool(portalPayEnabledCheckBox.Checked));
+            //_listProgProps.FindAll(x => x.ClinicNum == clinicNum && x.PropertyDesc == PayConnect.ProgramProperties.PatientPortalPaymentsToken)
+            //    .ForEach(x => x.PropertyValue = tokenTextBox.Text);
         }
 
         private void checkPatientPortalPayEnabled_Click(object sender, EventArgs e)
@@ -300,10 +300,10 @@ namespace OpenDental
 
             try
             {
-                tokenTextBox.Text = 
-                    PayConnectREST.GetAccountToken(
-                        textUsername.Text, 
-                        textPassword.Text);
+                //tokenTextBox.Text = 
+                //    PayConnectREST.GetAccountToken(
+                //        textUsername.Text, 
+                //        textPassword.Text);
             }
             catch (Exception ex)
             {
@@ -414,80 +414,80 @@ namespace OpenDental
 
         void AcceptButton_Click(object sender, System.EventArgs e)
         {
-            #region Validation
-            //if clinics are not enabled and the PayConnect program link is enabled, make sure there is a username and password set
-            //if clinics are enabled, the program link can be enabled with blank username and/or password fields for some clinics
-            //clinics with blank username and/or password will essentially not have PayConnect enabled
-            //if 'Enable terminal processing' is checked then the practice/clinic will not need a username and password.
-            if (enabledCheckBox.Checked && !checkTerminal.Checked && !Preferences.HasClinicsEnabled &&
-                (textUsername.Text == "" || textPassword.Text == ""))
-            {
-                MsgBox.Show(this, "Please enter a username and password first.");
-                return;
-            }
-            if (enabledCheckBox.Checked //if PayConnect is enabled
-                && comboPaymentType.SelectedIndex < 0 //and the payment type is not set
-                && (!Preferences.HasClinicsEnabled  //and either clinics are not enabled (meaning this is the only set of username, password, payment type values)
-                || (textUsername.Text != "" && textPassword.Text != ""))) //or clinics are enabled and this clinic's link has a username and password set
-            {
-                MsgBox.Show(this, "Please select a payment type first.");
-                return;
-            }
-            if (enabledCheckBox.Checked //if PayConnect is enabled
-                && comboDefaultProcessing.SelectedIndex < 0)
-            {
-                MsgBox.Show(this, "Please select a default processing method type first.");
-                return;
-            }
-            SynchWithHQ();//if the user changes the HQ credentials, any clinic that had the same credentials will be kept in synch with HQ
-            long clinicNum = 0;
-            if (Preferences.HasClinicsEnabled)
-            {
-                clinicNum = _listUserClinicNums[comboClinic.SelectedIndex];
-            }
-            UpdateListProgramPropertiesForClinic(clinicNum);
-            string payTypeCur;
-            //make sure any other clinics with PayConnect enabled also have a payment type selected
-            for (int i = 0; i < _listUserClinicNums.Count; i++)
-            {
-                if (!enabledCheckBox.Checked)
-                {//if program link is not enabled, do not bother checking the payment type selected
-                    break;
-                }
-                payTypeCur = ProgramProperties.GetPropValFromList(_listProgProps, "PaymentType", _listUserClinicNums[i]);
-                //if the program is enabled and the username and password fields are not blank,
-                //PayConnect is enabled for this clinic so make sure the payment type is also set
-                if (((ProgramProperties.GetPropValFromList(_listProgProps, "Username", _listUserClinicNums[i]) != "" //if username set
-                    && ProgramProperties.GetPropValFromList(_listProgProps, "Password", _listUserClinicNums[i]) != "") //and password set
-                    || ProgramProperties.GetPropValFromList(_listProgProps, "TerminalProcessingEnabled", _listUserClinicNums[i]) == "1")//or terminal enabled
-                    && !_listPaymentTypeDefs.Any(x => x.Id.ToString() == payTypeCur)) //and paytype is not a valid DefNum
-                {
-                    MsgBox.Show(this, "Please select the payment type for all clinics with PayConnect username and password set.");
-                    return;
-                }
-            }
-            #endregion Validation
-            #region Save
-            if (_progCur.Enabled != enabledCheckBox.Checked)
-            {//only update the program if the IsEnabled flag has changed
-                _progCur.Enabled = enabledCheckBox.Checked;
-                Programs.Update(_progCur);
-            }
-            ProgramProperties.Sync(_listProgProps, _progCur.ProgramNum);
-            //Find all clinics that have PayConnect online payments enabled
-            _listProgProps.FindAll(x => x.PropertyDesc == PayConnect.ProgramProperties.PatientPortalPaymentsEnabled && PIn.Bool(x.PropertyValue)).ForEach(x =>
-            {
-                //Find all XWeb program properties that we saved in this session.  Only clinics that have changes will have an XWeb property in memory.
-                //This is needed to ensure that we don't disable XWeb online payments if someone
-                // checks to use PayConnect online payments and then decides to keep it disabled during the same session.
-                ProgramProperty ppXWebOnlinePayments = _listXWebWebPayProgProps.FirstOrDefault(y => y.ClinicNum == x.ClinicNum);
-                if (ppXWebOnlinePayments != null)
-                {
-                    ProgramProperties.UpdateProgramPropertyWithValue(ppXWebOnlinePayments, POut.Bool(false));
-                }
-            });
-            #endregion Save
-            DataValid.SetInvalid(InvalidType.Programs);
+            //#region Validation
+            ////if clinics are not enabled and the PayConnect program link is enabled, make sure there is a username and password set
+            ////if clinics are enabled, the program link can be enabled with blank username and/or password fields for some clinics
+            ////clinics with blank username and/or password will essentially not have PayConnect enabled
+            ////if 'Enable terminal processing' is checked then the practice/clinic will not need a username and password.
+            //if (enabledCheckBox.Checked && !checkTerminal.Checked && !Preferences.HasClinicsEnabled &&
+            //    (textUsername.Text == "" || textPassword.Text == ""))
+            //{
+            //    MsgBox.Show(this, "Please enter a username and password first.");
+            //    return;
+            //}
+            //if (enabledCheckBox.Checked //if PayConnect is enabled
+            //    && comboPaymentType.SelectedIndex < 0 //and the payment type is not set
+            //    && (!Preferences.HasClinicsEnabled  //and either clinics are not enabled (meaning this is the only set of username, password, payment type values)
+            //    || (textUsername.Text != "" && textPassword.Text != ""))) //or clinics are enabled and this clinic's link has a username and password set
+            //{
+            //    MsgBox.Show(this, "Please select a payment type first.");
+            //    return;
+            //}
+            //if (enabledCheckBox.Checked //if PayConnect is enabled
+            //    && comboDefaultProcessing.SelectedIndex < 0)
+            //{
+            //    MsgBox.Show(this, "Please select a default processing method type first.");
+            //    return;
+            //}
+            //SynchWithHQ();//if the user changes the HQ credentials, any clinic that had the same credentials will be kept in synch with HQ
+            //long clinicNum = 0;
+            //if (Preferences.HasClinicsEnabled)
+            //{
+            //    clinicNum = _listUserClinicNums[comboClinic.SelectedIndex];
+            //}
+            //UpdateListProgramPropertiesForClinic(clinicNum);
+            //string payTypeCur;
+            ////make sure any other clinics with PayConnect enabled also have a payment type selected
+            //for (int i = 0; i < _listUserClinicNums.Count; i++)
+            //{
+            //    if (!enabledCheckBox.Checked)
+            //    {//if program link is not enabled, do not bother checking the payment type selected
+            //        break;
+            //    }
+            //    payTypeCur = ProgramProperties.GetPropValFromList(_listProgProps, "PaymentType", _listUserClinicNums[i]);
+            //    //if the program is enabled and the username and password fields are not blank,
+            //    //PayConnect is enabled for this clinic so make sure the payment type is also set
+            //    if (((ProgramProperties.GetPropValFromList(_listProgProps, "Username", _listUserClinicNums[i]) != "" //if username set
+            //        && ProgramProperties.GetPropValFromList(_listProgProps, "Password", _listUserClinicNums[i]) != "") //and password set
+            //        || ProgramProperties.GetPropValFromList(_listProgProps, "TerminalProcessingEnabled", _listUserClinicNums[i]) == "1")//or terminal enabled
+            //        && !_listPaymentTypeDefs.Any(x => x.Id.ToString() == payTypeCur)) //and paytype is not a valid DefNum
+            //    {
+            //        MsgBox.Show(this, "Please select the payment type for all clinics with PayConnect username and password set.");
+            //        return;
+            //    }
+            //}
+            //#endregion Validation
+            //#region Save
+            //if (_progCur.Enabled != enabledCheckBox.Checked)
+            //{//only update the program if the IsEnabled flag has changed
+            //    _progCur.Enabled = enabledCheckBox.Checked;
+            //    Programs.Update(_progCur);
+            //}
+            //ProgramProperties.Sync(_listProgProps, _progCur.ProgramNum);
+            ////Find all clinics that have PayConnect online payments enabled
+            //_listProgProps.FindAll(x => x.PropertyDesc == PayConnect.ProgramProperties.PatientPortalPaymentsEnabled && PIn.Bool(x.PropertyValue)).ForEach(x =>
+            //{
+            //    //Find all XWeb program properties that we saved in this session.  Only clinics that have changes will have an XWeb property in memory.
+            //    //This is needed to ensure that we don't disable XWeb online payments if someone
+            //    // checks to use PayConnect online payments and then decides to keep it disabled during the same session.
+            //    ProgramProperty ppXWebOnlinePayments = _listXWebWebPayProgProps.FirstOrDefault(y => y.ClinicNum == x.ClinicNum);
+            //    if (ppXWebOnlinePayments != null)
+            //    {
+            //        ProgramProperties.UpdateProgramPropertyWithValue(ppXWebOnlinePayments, POut.Bool(false));
+            //    }
+            //});
+            //#endregion Save
+            //DataValid.SetInvalid(InvalidType.Programs);
             DialogResult = DialogResult.OK;
         }
 

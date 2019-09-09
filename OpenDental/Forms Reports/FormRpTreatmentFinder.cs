@@ -365,7 +365,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(3, 130);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMain.Size = new System.Drawing.Size(1043, 453);
 			this.gridMain.TabIndex = 31;
 			this.gridMain.Title = "Treatment Finder";
@@ -768,7 +768,7 @@ namespace OpenDental{
 		}
 
 		private void gridMain_CellClick(object sender,ODGridClickEventArgs e) {
-			if(gridMain.SelectedGridRows.Count==0) {//When deselecting with CTR+Click.
+			if(gridMain.SelectedGridRows.Count()==0) {//When deselecting with CTR+Click.
 				return;
 			}
 			GotoModule.GotoChart(PIn.Long(gridMain.SelectedTag<DataRow>()["PatNum"].ToString()));

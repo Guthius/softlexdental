@@ -51,30 +51,30 @@ namespace OpenDental {
 
 		public void ComposeNewRxDoseSpot() {
 			string additionalHeaders="Content-Type: application/x-www-form-urlencoded\r\n";
-#if DEBUG
-			string doseSpotUrl="https://my.staging.dosespot.com/LoginSingleSignOn.aspx?b=2";
-#else
-			string doseSpotUrl="https://my.dosespot.com/LoginSingleSignOn.aspx";
-#endif
-			OIDExternal oidPatID=DoseSpot.GetDoseSpotPatID(PatCur.PatNum);
-			if(oidPatID==null) {
-				browser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.GetPatientIdFromWebBrowser);
-			}
-			browser.Navigate(doseSpotUrl,"",PostDataBytes,additionalHeaders);
+//#if DEBUG
+//			string doseSpotUrl="https://my.staging.dosespot.com/LoginSingleSignOn.aspx?b=2";
+//#else
+//			string doseSpotUrl="https://my.dosespot.com/LoginSingleSignOn.aspx";
+//#endif
+//			OIDExternal oidPatID=DoseSpot.GetDoseSpotPatID(PatCur.PatNum);
+//			if(oidPatID==null) {
+//				browser.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.GetPatientIdFromWebBrowser);
+//			}
+//			browser.Navigate(doseSpotUrl,"",PostDataBytes,additionalHeaders);
 		}
 
 		private void GetPatientIdFromWebBrowser(object sender,WebBrowserDocumentCompletedEventArgs e) {
-			WebBrowser myWebBrowser=sender as WebBrowser;
-			if(e.Url!=null && !string.IsNullOrEmpty(e.Url.Query)) {
-				int doseSpotPatID;
-				string patIdStr=DoseSpot.GetQueryParameterFromQueryString(e.Url.Query,"PatientId");
-				if((!string.IsNullOrEmpty(patIdStr)) && int.TryParse(patIdStr.Trim(),out doseSpotPatID)) {
-					if(doseSpotPatID != 0) {
-						DoseSpot.CreateOIDForPatient(doseSpotPatID,PatCur.PatNum);
-					}
-				}
-			}
-			myWebBrowser.DocumentCompleted -= new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.GetPatientIdFromWebBrowser);
+			//WebBrowser myWebBrowser=sender as WebBrowser;
+			//if(e.Url!=null && !string.IsNullOrEmpty(e.Url.Query)) {
+			//	int doseSpotPatID;
+			//	string patIdStr=DoseSpot.GetQueryParameterFromQueryString(e.Url.Query,"PatientId");
+			//	if((!string.IsNullOrEmpty(patIdStr)) && int.TryParse(patIdStr.Trim(),out doseSpotPatID)) {
+			//		if(doseSpotPatID != 0) {
+			//			DoseSpot.CreateOIDForPatient(doseSpotPatID,PatCur.PatNum);
+			//		}
+			//	}
+			//}
+			//myWebBrowser.DocumentCompleted -= new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.GetPatientIdFromWebBrowser);
 		}
 
 		protected override void SetTitle() {

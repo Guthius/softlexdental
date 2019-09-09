@@ -169,7 +169,7 @@ namespace OpenDental{
 			this.gridReqs.Location = new System.Drawing.Point(223,12);
 			this.gridReqs.Name = "gridReqs";
 			this.gridReqs.ScrollValue = 0;
-			this.gridReqs.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridReqs.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridReqs.Size = new System.Drawing.Size(268,637);
 			this.gridReqs.TabIndex = 26;
 			this.gridReqs.Title = "Requirements";
@@ -212,7 +212,7 @@ namespace OpenDental{
 			this.gridAttached.Location = new System.Drawing.Point(497,305);
 			this.gridAttached.Name = "gridAttached";
 			this.gridAttached.ScrollValue = 0;
-			this.gridAttached.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridAttached.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridAttached.Size = new System.Drawing.Size(384,225);
 			this.gridAttached.TabIndex = 23;
 			this.gridAttached.Title = "Currently Attached Requirements";

@@ -104,7 +104,7 @@ namespace OpenDental{
 			this.gridRace.Location = new System.Drawing.Point(12, 45);
 			this.gridRace.Name = "gridRace";
 			this.gridRace.ScrollValue = 0;
-			this.gridRace.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridRace.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridRace.Size = new System.Drawing.Size(321, 222);
 			this.gridRace.TabIndex = 56;
 			this.gridRace.Title = "Race";
@@ -117,7 +117,7 @@ namespace OpenDental{
 			this.gridEthnicity.Location = new System.Drawing.Point(12, 295);
 			this.gridEthnicity.Name = "gridEthnicity";
 			this.gridEthnicity.ScrollValue = 0;
-			this.gridEthnicity.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridEthnicity.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridEthnicity.Size = new System.Drawing.Size(321, 219);
 			this.gridEthnicity.TabIndex = 60;
 			this.gridEthnicity.Title = "Ethnicity";

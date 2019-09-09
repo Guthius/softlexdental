@@ -46,7 +46,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(12, 42);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMain.Size = new System.Drawing.Size(852, 642);
 			this.gridMain.TabIndex = 143;
 			this.gridMain.Title = "Non-CPOE Radiology Orders";

@@ -59,7 +59,7 @@ namespace OpenDental {
 			this.gridProvProperties.Location = new System.Drawing.Point(12, 12);
 			this.gridProvProperties.Name = "gridProvProperties";
 			this.gridProvProperties.ScrollValue = 0;
-			this.gridProvProperties.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+			this.gridProvProperties.SelectionMode = OpenDental.UI.GridSelectionMode.Cell;
 			this.gridProvProperties.Size = new System.Drawing.Size(635, 397);
 			this.gridProvProperties.TabIndex = 4;
 			this.gridProvProperties.Title = "Additional Provider Properties";

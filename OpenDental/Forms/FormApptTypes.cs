@@ -83,7 +83,7 @@ namespace OpenDental
                 if (AllowMultipleSelections)
                 {
                     Text = "Select Appointment Types";
-                    typesGrid.SelectionMode = GridSelectionMode.MultiExtended;
+                    typesGrid.SelectionMode = GridSelectionMode.Multiple;
                 }
                 else
                 {

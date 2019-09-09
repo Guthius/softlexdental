@@ -50,7 +50,7 @@ namespace OpenDental{
 			this.gridTaskHist.Location = new System.Drawing.Point(12, 12);
 			this.gridTaskHist.Name = "gridTaskHist";
 			this.gridTaskHist.ScrollValue = 0;
-			this.gridTaskHist.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridTaskHist.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridTaskHist.Size = new System.Drawing.Size(731, 377);
 			this.gridTaskHist.TabIndex = 5;
 			this.gridTaskHist.Title = "History";

@@ -75,7 +75,7 @@
 			this.gridMedOrders.Location = new System.Drawing.Point(12, 35);
 			this.gridMedOrders.Name = "gridMedOrders";
 			this.gridMedOrders.ScrollValue = 0;
-			this.gridMedOrders.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMedOrders.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMedOrders.Size = new System.Drawing.Size(697, 244);
 			this.gridMedOrders.TabIndex = 5;
 			this.gridMedOrders.Title = "Lab and Radiology Orders";

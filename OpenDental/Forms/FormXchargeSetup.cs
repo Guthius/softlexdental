@@ -665,36 +665,36 @@ namespace OpenDental{
 		}
 
 		private void checkWebPayEnabled_Click(object sender,EventArgs e) {
-			if(!checkWebPayEnabled.Checked) {
-				return;
-			}
-			long clinicNum=0;
-			if(Preferences.HasClinicsEnabled) {
-				clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
-			}
-			PayConnect.WebPaymentProperties payConnectProps=new PayConnect.WebPaymentProperties();
-			try {
-				ProgramProperties.GetPayConnectPatPortalCreds(clinicNum,out payConnectProps);
-			}
-			catch {
-
-			}
-			string msg="Online payments is already enabled for PayConnect and must be disabled in order to use XWeb online payments.  "
-				+"Would you like to disable PayConnect online payments?";
-			if(payConnectProps!=null && payConnectProps.IsPaymentsAllowed && MessageBox.Show(msg,"",MessageBoxButtons.OKCancel)==DialogResult.Cancel) {
-				checkWebPayEnabled.Checked=false;
-				return;
-			}
-			//User wants to disable PayConnect online payments and use XWeb online payments
-			ProgramProperty ppOnlinePaymentEnabled=ProgramProperties.GetWhere(x =>
-				x.ProgramNum==Programs.GetCur(ProgramName.PayConnect).ProgramNum
-				&& x.ClinicNum==clinicNum
-				&& x.PropertyDesc==PayConnect.ProgramProperties.PatientPortalPaymentsEnabled)
-				.FirstOrDefault();
-			if(ppOnlinePaymentEnabled==null) {
-				return;//Should never happen since we successfully found it in the GetPayConnectPatPortalCreds method.
-			}
-			_listPayConnectWebPayProgProps.Add(ppOnlinePaymentEnabled);			
+			//if(!checkWebPayEnabled.Checked) {
+			//	return;
+			//}
+			//long clinicNum=0;
+			//if(Preferences.HasClinicsEnabled) {
+			//	clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
+			//}
+			//PayConnect.WebPaymentProperties payConnectProps=new PayConnect.WebPaymentProperties();
+			//try {
+			//	//ProgramProperties.GetPayConnectPatPortalCreds(clinicNum,out payConnectProps);
+			//}
+			//catch {
+            //
+			//}
+			//string msg="Online payments is already enabled for PayConnect and must be disabled in order to use XWeb online payments.  "
+			//	+"Would you like to disable PayConnect online payments?";
+			//if(payConnectProps!=null && payConnectProps.IsPaymentsAllowed && MessageBox.Show(msg,"",MessageBoxButtons.OKCancel)==DialogResult.Cancel) {
+			//	checkWebPayEnabled.Checked=false;
+			//	return;
+			//}
+			////User wants to disable PayConnect online payments and use XWeb online payments
+			//ProgramProperty ppOnlinePaymentEnabled=ProgramProperties.GetWhere(x =>
+			//	x.ProgramNum==Programs.GetCur(ProgramName.PayConnect).ProgramNum
+			//	&& x.ClinicNum==clinicNum
+			//	&& x.PropertyDesc==PayConnect.ProgramProperties.PatientPortalPaymentsEnabled)
+			//	.FirstOrDefault();
+			//if(ppOnlinePaymentEnabled==null) {
+			//	return;//Should never happen since we successfully found it in the GetPayConnectPatPortalCreds method.
+			//}
+			//_listPayConnectWebPayProgProps.Add(ppOnlinePaymentEnabled);			
 		}
 
 		private void linkLabel1_LinkClicked(object sender,LinkLabelLinkClickedEventArgs e) {

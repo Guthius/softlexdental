@@ -437,7 +437,7 @@ namespace OpenDental{
 			this.gridOut.Location = new System.Drawing.Point(230, 418);
 			this.gridOut.Name = "gridOut";
 			this.gridOut.ScrollValue = 0;
-			this.gridOut.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridOut.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridOut.Size = new System.Drawing.Size(732, 212);
 			this.gridOut.TabIndex = 99;
 			this.gridOut.Title = "All Outstanding Claims";
@@ -680,7 +680,7 @@ namespace OpenDental{
 			this.gridAttached.Location = new System.Drawing.Point(230, 125);
 			this.gridAttached.Name = "gridAttached";
 			this.gridAttached.ScrollValue = 0;
-			this.gridAttached.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridAttached.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridAttached.Size = new System.Drawing.Size(732, 209);
 			this.gridAttached.TabIndex = 95;
 			this.gridAttached.Title = "Attached to this Payment";

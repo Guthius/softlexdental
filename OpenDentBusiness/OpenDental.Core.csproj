@@ -8,8 +8,8 @@
     <ProjectGuid>{3D0FC76E-803C-4DE2-BDB1-47D63A4E2357}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SLDental</RootNamespace>
-    <AssemblyName>OpenDentBusiness</AssemblyName>
+    <RootNamespace>OpenDental</RootNamespace>
+    <AssemblyName>OpenDental.Core</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -41,7 +41,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Release\OpenDentBusiness.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\OpenDental.Core.xml</DocumentationFile>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <OutputType>Library</OutputType>
     <AssemblyName>OpenDentBusiness</AssemblyName>
@@ -59,7 +59,7 @@
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-    <DocumentationFile>bin\Debug\OpenDentBusiness.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\OpenDental.Core.xml</DocumentationFile>
     <WarningLevel>3</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -69,7 +69,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-    <DocumentationFile>bin\Release\OpenDentBusiness.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\OpenDental.Core.xml</DocumentationFile>
     <Optimize>true</Optimize>
     <WarningLevel>3</WarningLevel>
     <DebugType>pdbonly</DebugType>
@@ -174,6 +174,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bridges\IBridge.cs" />
     <Compile Include="Cache\CacheAbs.cs" />
     <Compile Include="Cache\CacheDictAbs.cs" />
     <Compile Include="Cache\CacheDictNonPkAbs.cs" />
@@ -331,14 +332,12 @@
     <Compile Include="Eclaims\CCDerror.cs" />
     <Compile Include="Eclaims\CCDField.cs" />
     <Compile Include="Eclaims\CCDFieldInputter.cs" />
-    <Compile Include="Eclaims\ClaimConnect.cs" />
     <Compile Include="Eclaims\ClaimX.cs" />
     <Compile Include="Eclaims\DentiCal.cs" />
     <Compile Include="Eclaims\DocumentGenerator.cs" />
     <Compile Include="Eclaims\Dutch.cs" />
     <Compile Include="Eclaims\Eclaims.cs" />
     <Compile Include="Eclaims\EDS.cs" />
-    <Compile Include="Eclaims\EmdeonMedical.cs" />
     <Compile Include="Eclaims\Inmediata.cs" />
     <Compile Include="Eclaims\ITerminalConnector.cs" />
     <Compile Include="Eclaims\MercuryDE.cs" />
@@ -793,16 +792,6 @@
     <Compile Include="Db Multi Table\QualityMeasures.cs" />
     <Compile Include="Db\OdDbType.cs" />
     <Compile Include="TableTypes\PatientPortalInvite.cs" />
-    <Compile Include="Web References\DentalxchangePartnerService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
-    <Compile Include="Web References\PayConnectService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
     <Compile Include="WebBridges\Erx\ErxXml.cs" />
     <Compile Include="WebBridges\Erx\NewCrop\NCScript.cs" />
     <Compile Include="HL7old\EhrADT_A01.cs" />
@@ -1205,31 +1194,8 @@
     <Compile Include="UI\ODGridColumnCollection.cs" />
     <Compile Include="UI\ODGridRow.cs" />
     <Compile Include="UI\ODGridRowCollection.cs" />
-    <Compile Include="Web References\com.dentalxchange.webservices\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
-    <Compile Include="Web References\DoseSpotService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
-    <Compile Include="Web References\Dentalxchange2016\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
-    <Compile Include="Web References\EmdeonITS\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
-    <Compile Include="WebBridges\Erx\DoseSpot.cs" />
     <Compile Include="WebBridges\Erx\Erx.cs" />
     <Compile Include="WebBridges\Erx\NewCrop\NewCrop.cs" />
-    <Compile Include="WebBridges\PayConnect.cs" />
-    <Compile Include="WebBridges\PaySimple.cs" />
     <Compile Include="WebBridges\Podium.cs" />
     <Compile Include="WebBridges\Sftp.cs" />
     <Compile Include="WebTypes\Shared\XWeb\XWeb.cs" />
@@ -1455,285 +1421,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <WebReferences Include="Web References\" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
-    <None Include="Web References\com.dentalxchange.webservices\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\com.dentalxchange.webservices\Response.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\com.dentalxchange.webservices\wsdl.wsdl" />
-    <None Include="Web References\Dentalxchange2016\ClaimPaymentListResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Dentalxchange2016\PayerListInfoResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Dentalxchange2016\PayerListResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Dentalxchange2016\textResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\Dentalxchange2016\UnProcessedEraResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DentalxchangePartnerService\AttachmentReferenceResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DentalxchangePartnerService\DeaPartnerService.wsdl" />
-    <None Include="Web References\DentalxchangePartnerService\DeaPartnerService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Web References\DentalxchangePartnerService\DeaPartnerService0.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Web References\DentalxchangePartnerService\DeaResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DentalxchangePartnerService\ImageReferenceResponses.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DentalxchangePartnerService\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\DoseSpotService\AddAllergyResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\AddDetailedSelfReportedMedicationsResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\AddSelfReportedMedicationsResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\AllergyListResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\AllergySearchResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\api.wsdl" />
-    <None Include="Web References\DoseSpotService\CheckAllergyInteractionsResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\CheckClinicianRegistrationResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\CheckClinicianRegistrationStatusDetailedResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\ClinicAddResultMessage1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\ClinicClinicianRemoveResultsMessage1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\ClinicianAddMultipleClinicsResultsMessage1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\ClinicianAddResultsMessage1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\EditAllergyResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\GetMedicationListByDateRangeResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\GetMedicationListMUResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\GetMedicationListResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\GetPrescriberNotificationCountsMUResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\GetPrescriberNotificationCountsResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\GetRefillRequestsDetailsResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\GetStandardDispenseUnitResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\ImportMedicationsResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\MedHistoryConsentResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\MedicationQuickSearchResultsMessage1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\MedicationSelectResultMessage1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\MedicationStatusUpdateResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\MedicationStrengthSearchResultsMessage1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\MedicationStrengthSearchResultsWithNDCMessage1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\MergePatientsResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\PatientUpdateFullMessageResult1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\PatientUpdateMessageMUResult1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\PatientUpdateMessageResult1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\PharmacySearchMessageDetailedResult1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\PharmacySearchMessageResult1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\PharmacyValidateMessageResult1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\Dentalxchange2016\DwsService.wsdl" />
-    <None Include="Web References\Dentalxchange2016\DwsService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Web References\Dentalxchange2016\DwsService0.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Web References\Dentalxchange2016\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\DoseSpotService\RefillRequestsTransmissionErrorsMessageResult1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\DoseSpotService\SelfReportedMedicationSearchResponse1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\EmdeonITS\ItsReturn1.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\EmdeonITS\ITSReturnA.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\EmdeonITS\ITSWS.wsdl" />
-    <None Include="Web References\EmdeonITS\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\PayConnectService\batchInfoResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\PayConnectService\cardType.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\PayConnectService\merchantInfoResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\PayConnectService\MerchantService.wsdl" />
-    <None Include="Web References\PayConnectService\MerchantService.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Web References\PayConnectService\MerchantService0.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Web References\PayConnectService\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
-    <None Include="Web References\PayConnectService\signatureResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-    <None Include="Web References\PayConnectService\transResponse.datasource">
-      <DependentUpon>Reference.map</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <WebReferenceUrl Include="https://its.changehealthcare.com/ITS/ITSWS.asmx%3fwsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\EmdeonITS\</RelPath>
-      <UpdateFromURL>https://its.changehealthcare.com/ITS/ITSWS.asmx%3fwsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>OpenDentBusiness_EmdeonITS_ITSWS</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="https://my.dosespot.com/api/12/api.asmx%3fwsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\DoseSpotService\</RelPath>
-      <UpdateFromURL>https://my.dosespot.com/api/12/api.asmx%3fwsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>OpenDentBusiness_com_dosespot_staging_my_API</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="https://prelive2.dentalxchange.com/dea/DeaPartnerService%3fwsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\DentalxchangePartnerService\</RelPath>
-      <UpdateFromURL>https://prelive2.dentalxchange.com/dea/DeaPartnerService%3fwsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>OpenDentBusiness_DentalxchangePartnerService_DeaPartnerService</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="https://prelive2.dentalxchange.com/merchant/MerchantService%3fwsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\PayConnectService\</RelPath>
-      <UpdateFromURL>https://prelive2.dentalxchange.com/merchant/MerchantService%3fwsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>OpenDentBusiness_PayConnectService_MerchantService</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="https://webservices.dentalxchange.com/dws/DwsService%3fwsdl">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\Dentalxchange2016\</RelPath>
-      <UpdateFromURL>https://webservices.dentalxchange.com/dws/DwsService%3fwsdl</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>OpenDentBusiness_Dentalxchange2016_DwsService</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="https://webservices.dentalxchange.com/dws/webservice/wsdl.jsp">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\com.dentalxchange.webservices\</RelPath>
-      <UpdateFromURL>https://webservices.dentalxchange.com/dws/webservice/wsdl.jsp</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>OpenDentBusiness_com_dentalxchange_webservices_WebServiceService</CachedSettingsPropName>
-    </WebReferenceUrl>
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\Settings.settings">

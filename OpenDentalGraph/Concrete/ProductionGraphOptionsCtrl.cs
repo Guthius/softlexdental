@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 
 namespace OpenDentalGraph {
-	public partial class ProductionGraphOptionsCtrl:BaseGraphOptionsCtrl {
+	public partial class ProductionGraphOptionsCtrl:GraphOptionsBase {
 		public bool IncludeAdjustments {
 			get { return checkIncludeAdjustments.Checked; }
 			set { checkIncludeAdjustments.Checked=value; }

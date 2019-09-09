@@ -216,7 +216,7 @@ namespace OpenDental
             this.suppliesGrid.Location = new System.Drawing.Point(13, 66);
             this.suppliesGrid.Name = "suppliesGrid";
             this.suppliesGrid.ScrollValue = 0;
-            this.suppliesGrid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.suppliesGrid.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.suppliesGrid.Size = new System.Drawing.Size(918, 511);
             this.suppliesGrid.TabIndex = 4;
             this.suppliesGrid.Title = "Supplies";

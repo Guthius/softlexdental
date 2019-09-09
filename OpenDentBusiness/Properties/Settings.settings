@@ -1,24 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="OpenDentBusiness.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)">
   <Profiles />
-  <Settings>
-    <Setting Name="OpenDentBusiness_Dentalxchange2016_DwsService" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">https://webservices.dentalxchange.com:443/dws/DwsService</Value>
-    </Setting>
-    <Setting Name="OpenDentBusiness_com_dentalxchange_webservices_WebServiceService" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">https://webservices.dentalxchange.com/dws/services/dciservice.svl</Value>
-    </Setting>
-    <Setting Name="OpenDentBusiness_EmdeonITS_ITSWS" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">https://its.changehealthcare.com/ITS/ITSWS.asmx</Value>
-    </Setting>
-    <Setting Name="OpenDentBusiness_com_dosespot_staging_my_API" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">https://my.dosespot.com/api/12/api.asmx</Value>
-    </Setting>
-    <Setting Name="OpenDentBusiness_PayConnectService_MerchantService" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">https://prelive2.dentalxchange.com:443/merchant/MerchantService</Value>
-    </Setting>
-    <Setting Name="OpenDentBusiness_DentalxchangePartnerService_DeaPartnerService" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">https://prelive2.dentalxchange.com:443/dea/DeaPartnerService</Value>
-    </Setting>
-  </Settings>
+  <Settings />
 </SettingsFile>

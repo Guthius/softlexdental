@@ -734,7 +734,8 @@ namespace OpenDental
                 #region Load the image into bmpOriginal
                 if (field.FieldName == "Patient Info.gif")
                 {
-                    bmpOriginal = OpenDentBusiness.Properties.Resources.Patient_Info;
+                    // TODO: Fix me...
+                    //bmpOriginal = OpenDentBusiness.Properties.Resources.Patient_Info;
                     bmpOriginalFormat = ImageFormat.Gif;
                 }
                 else if (File.Exists(filePathAndName))
@@ -2988,7 +2989,8 @@ namespace OpenDental
                 #region Load the image into bmpOriginal
                 if (field.FieldName == "Patient Info.gif")
                 {
-                    bmpOriginal = OpenDentBusiness.Properties.Resources.Patient_Info;
+                    // TODO: Fix me...
+                    //bmpOriginal = OpenDentBusiness.Properties.Resources.Patient_Info;
                 }
                 else if (Storage.Default.FileExists(filePathAndName))
                 {

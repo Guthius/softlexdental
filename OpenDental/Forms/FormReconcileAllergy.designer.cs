@@ -54,7 +54,7 @@ namespace OpenDental{
 			this.gridAllergyExisting.Location = new System.Drawing.Point(4, 12);
 			this.gridAllergyExisting.Name = "gridAllergyExisting";
 			this.gridAllergyExisting.ScrollValue = 0;
-			this.gridAllergyExisting.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridAllergyExisting.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridAllergyExisting.Size = new System.Drawing.Size(477, 245);
 			this.gridAllergyExisting.TabIndex = 65;
 			this.gridAllergyExisting.Title = "Current Allergies";
@@ -67,7 +67,7 @@ namespace OpenDental{
 			this.gridAllergyImport.Location = new System.Drawing.Point(497, 12);
 			this.gridAllergyImport.Name = "gridAllergyImport";
 			this.gridAllergyImport.ScrollValue = 0;
-			this.gridAllergyImport.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridAllergyImport.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridAllergyImport.Size = new System.Drawing.Size(480, 245);
 			this.gridAllergyImport.TabIndex = 77;
 			this.gridAllergyImport.Title = "Transition of Care/Referral Summary";
@@ -146,7 +146,7 @@ namespace OpenDental{
 			this.gridAllergyReconcile.Location = new System.Drawing.Point(4, 293);
 			this.gridAllergyReconcile.Name = "gridAllergyReconcile";
 			this.gridAllergyReconcile.ScrollValue = 0;
-			this.gridAllergyReconcile.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridAllergyReconcile.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridAllergyReconcile.Size = new System.Drawing.Size(973, 300);
 			this.gridAllergyReconcile.TabIndex = 67;
 			this.gridAllergyReconcile.Title = "Reconciled Allergies";

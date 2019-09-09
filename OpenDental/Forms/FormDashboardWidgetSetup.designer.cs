@@ -76,7 +76,7 @@ namespace OpenDental{
 			this.gridCustom.Location = new System.Drawing.Point(487, 35);
 			this.gridCustom.Name = "gridCustom";
 			this.gridCustom.ScrollValue = 0;
-			this.gridCustom.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+			this.gridCustom.SelectionMode = OpenDental.UI.GridSelectionMode.Cell;
 			this.gridCustom.Size = new System.Drawing.Size(370, 585);
 			this.gridCustom.TabIndex = 233;
 			this.gridCustom.Title = "Custom";

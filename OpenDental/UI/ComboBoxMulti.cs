@@ -94,7 +94,7 @@ namespace OpenDental.UI
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
 			this.gridMain.SelectedRowColor = System.Drawing.SystemColors.MenuHighlight;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMain.Size = new System.Drawing.Size(120, 70);
 			this.gridMain.TabIndex = 3;
 			this.gridMain.Title = null;

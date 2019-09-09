@@ -578,41 +578,41 @@ namespace OpenDentBusiness
             }
             else if (clearinghouseClin.CommBridge == EclaimsCommBridge.ClaimConnect)
             {
-                if (!Directory.Exists(clearinghouseClin.ResponsePath))
-                {
-                    //The clearinghouse report path is not setup.  Therefore, the customer does not use ClaimConnect reports via web services.
-                    if (isAutomaticMode)
-                    {//The user opened FormClaimsSend, or FormOpenDental called this function automatically.
-                        return "";//Suppress error message.
-                    }
-                    else
-                    {//The user pressed the Get Reports button manually.
-                     //This cannot happen, because the user is blocked by the UI before they get to this point.
-                    }
-                }
-                else if (!ClaimConnect.Retrieve(clearinghouseClin, progress))
-                {
-                    if (ClaimConnect.ErrorMessage.Contains(": 150\r\n"))
-                    {//Error message 150 "Service Not Contracted"
-                        if (isAutomaticMode)
-                        {//The user opened FormClaimsSend, or FormOpenDental called this function automatically.
-                            return "";//Pretend that there is no error when loading FormClaimsSend for those customers who do not pay for ERA service.
-                        }
-                        else
-                        {//The user pressed the Get Reports button manually.
-                         //The old way.  Some customers still prefer to go to the dentalxchange web portal to view reports because the ERA service costs money.
-                            try
-                            {
-                                Process.Start(@"http://www.dentalxchange.com");
-                            }
-                            catch 
-                            {
-                                return Lans.g("FormClaimReports", "Could not locate the site.");
-                            }
-                        }
-                    }
-                    return Lans.g("FormClaimReports", "Error retrieving.") + "\r\n" + ClaimConnect.ErrorMessage;
-                }
+                // if (!Directory.Exists(clearinghouseClin.ResponsePath))
+                // {
+                //     //The clearinghouse report path is not setup.  Therefore, the customer does not use ClaimConnect reports via web services.
+                //     if (isAutomaticMode)
+                //     {//The user opened FormClaimsSend, or FormOpenDental called this function automatically.
+                //         return "";//Suppress error message.
+                //     }
+                //     else
+                //     {//The user pressed the Get Reports button manually.
+                //      //This cannot happen, because the user is blocked by the UI before they get to this point.
+                //     }
+                // }
+                // else if (!ClaimConnect.Retrieve(clearinghouseClin, progress))
+                // {
+                //     if (ClaimConnect.ErrorMessage.Contains(": 150\r\n"))
+                //     {//Error message 150 "Service Not Contracted"
+                //         if (isAutomaticMode)
+                //         {//The user opened FormClaimsSend, or FormOpenDental called this function automatically.
+                //             return "";//Pretend that there is no error when loading FormClaimsSend for those customers who do not pay for ERA service.
+                //         }
+                //         else
+                //         {//The user pressed the Get Reports button manually.
+                //          //The old way.  Some customers still prefer to go to the dentalxchange web portal to view reports because the ERA service costs money.
+                //             try
+                //             {
+                //                 Process.Start(@"http://www.dentalxchange.com");
+                //             }
+                //             catch 
+                //             {
+                //                 return Lans.g("FormClaimReports", "Could not locate the site.");
+                //             }
+                //         }
+                //     }
+                //     return Lans.g("FormClaimReports", "Error retrieving.") + "\r\n" + ClaimConnect.ErrorMessage;
+                // }
             }
             else if (clearinghouseClin.CommBridge == EclaimsCommBridge.AOS)
             {
@@ -633,13 +633,13 @@ namespace OpenDentBusiness
                     return Lans.g("FormClaimReports", "Error retrieving.") + "\r\n" + MercuryDE.ErrorMessage;
                 }
             }
-            else if (clearinghouseClin.CommBridge == EclaimsCommBridge.EmdeonMedical)
-            {
-                if (!EmdeonMedical.Retrieve(clearinghouseClin, progress))
-                {
-                    return Lans.g("FormClaimReports", "Error retrieving.") + "\r\n" + EmdeonMedical.ErrorMessage;
-                }
-            }
+            //else if (clearinghouseClin.CommBridge == EclaimsCommBridge.EmdeonMedical)
+            //{
+            //    if (!EmdeonMedical.Retrieve(clearinghouseClin, progress))
+            //    {
+            //        return Lans.g("FormClaimReports", "Error retrieving.") + "\r\n" + EmdeonMedical.ErrorMessage;
+            //    }
+            //}
             else if (clearinghouseClin.CommBridge == EclaimsCommBridge.DentiCal)
             {
                 if (!DentiCal.Launch(clearinghouseClin, 0, progress))

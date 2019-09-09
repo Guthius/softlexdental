@@ -39,7 +39,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(32, 12);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMain.Size = new System.Drawing.Size(559, 495);
 			this.gridMain.TabIndex = 141;
 			this.gridMain.Title = "Procedures";

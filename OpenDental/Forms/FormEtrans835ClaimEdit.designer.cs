@@ -296,7 +296,7 @@ namespace OpenDental{
 			this.gridClaimAdjustments.Location = new System.Drawing.Point(9, 192);
 			this.gridClaimAdjustments.Name = "gridClaimAdjustments";
 			this.gridClaimAdjustments.ScrollValue = 0;
-			this.gridClaimAdjustments.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridClaimAdjustments.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridClaimAdjustments.Size = new System.Drawing.Size(956, 100);
 			this.gridClaimAdjustments.TabIndex = 198;
 			this.gridClaimAdjustments.TabStop = false;
@@ -315,7 +315,7 @@ namespace OpenDental{
 			this.gridAdjudicationInfo.Location = new System.Drawing.Point(9, 472);
 			this.gridAdjudicationInfo.Name = "gridAdjudicationInfo";
 			this.gridAdjudicationInfo.ScrollValue = 0;
-			this.gridAdjudicationInfo.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridAdjudicationInfo.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridAdjudicationInfo.Size = new System.Drawing.Size(956, 100);
 			this.gridAdjudicationInfo.TabIndex = 197;
 			this.gridAdjudicationInfo.TabStop = false;
@@ -335,7 +335,7 @@ namespace OpenDental{
 			this.gridProcedureBreakdown.Location = new System.Drawing.Point(9, 298);
 			this.gridProcedureBreakdown.Name = "gridProcedureBreakdown";
 			this.gridProcedureBreakdown.ScrollValue = 0;
-			this.gridProcedureBreakdown.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridProcedureBreakdown.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridProcedureBreakdown.Size = new System.Drawing.Size(956, 168);
 			this.gridProcedureBreakdown.TabIndex = 0;
 			this.gridProcedureBreakdown.TabStop = false;
@@ -369,7 +369,7 @@ namespace OpenDental{
 			this.gridSupplementalInfo.Location = new System.Drawing.Point(9, 578);
 			this.gridSupplementalInfo.Name = "gridSupplementalInfo";
 			this.gridSupplementalInfo.ScrollValue = 0;
-			this.gridSupplementalInfo.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridSupplementalInfo.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridSupplementalInfo.Size = new System.Drawing.Size(956, 80);
 			this.gridSupplementalInfo.TabIndex = 211;
 			this.gridSupplementalInfo.TabStop = false;

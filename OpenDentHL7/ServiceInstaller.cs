@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Copyright (C) 2019 Dental Stars SRL
  * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
  * 
@@ -15,32 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; If not, see <http://www.gnu.org/licenses/>
  */
-using System.Collections.Generic;
+using System.ComponentModel;
+using System.Configuration.Install;
+using System.ServiceProcess;
 
-namespace SparksToothChart
+namespace OpenDentServer
 {
-    /// <summary>
-    /// A face is a single polygon, usually a rectangle. 
-    /// Will soon be only triangles.
-    /// </summary>
-    public class Face
+    [RunInstaller(true)]
+    public class ServiceInstaller : Installer
     {
-        /// <summary>
-        /// A list of indices to the VertexNormal list contained in the ToothGraphic object. 
-        /// 0 indexed, unlike the raw files which are 1 indexed. Always exactly 3 for WPF.
-        /// </summary>
-        public List<int> IndexList;
-
-        public Face() => IndexList = new List<int>();
-
-        public override string ToString() => string.Join(",", IndexList);
-
-        public Face Copy()
+        public ServiceInstaller()
         {
-            return new Face
+            Installers.Add(new System.ServiceProcess.ServiceInstaller
             {
-                IndexList = new List<int>(IndexList)
-            };
+                StartType = ServiceStartMode.Automatic,
+                ServiceName = "Softlex Dental HL7"
+            });
+
+            Installers.Add(new ServiceProcessInstaller
+            {
+                Account = ServiceAccount.LocalSystem
+            });
         }
     }
 }

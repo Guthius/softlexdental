@@ -212,7 +212,7 @@ namespace OpenDental{
 			this.gridBill.Location = new System.Drawing.Point(12, 58);
 			this.gridBill.Name = "gridBill";
 			this.gridBill.ScrollValue = 0;
-			this.gridBill.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridBill.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridBill.Size = new System.Drawing.Size(772, 590);
 			this.gridBill.TabIndex = 28;
 			this.gridBill.Title = "Bills";

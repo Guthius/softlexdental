@@ -17,11 +17,11 @@ namespace OpenDental {
 		///<summary>Only to be used outside of the form.  
 		///Set on OK_Click to discourage using it in the form.
 		///Contains the important details of what happened with PaySimple</summary>
-		public PaySimple.ApiResponse ApiResponseOut;
+		//public PaySimple.ApiResponse ApiResponseOut;
 
 		private Patient _patCur;
 		private MagstripCardParser _parser=null;
-		private PaySimple.TransType _trantype=PaySimple.TransType.SALE;
+		//private PaySimple.TransType _trantype=PaySimple.TransType.SALE;
 		private CreditCard _creditCardCur;
 		private bool _isAddingCard;
 		private long _clinicNum;
@@ -43,53 +43,53 @@ namespace OpenDental {
 		}
 
 		private void FormPaySimple_Load(object sender,EventArgs e) {
-			_progCur=Programs.GetCur(ProgramName.PaySimple);
-			if(_progCur==null) {
-				MsgBox.Show(this,"PaySimple does not exist in the database.");
-				DialogResult=DialogResult.Cancel;
-				return;
-			}
-			if(_patCur==null || _patCur.PatNum==0) {//Prepaid card
-				radioAuthorization.Enabled=false;
-				checkOneTimePayment.Checked=true;
-				checkOneTimePayment.Enabled=false;
-				tabControl.TabPages.Remove(tabACH);
-			}
-			else {
-				checkOneTimePayment.Checked=!Preference.GetBool(PreferenceName.StoreCCtokens);
-				checkOneTimePaymentACH.Checked=!Preference.GetBool(PreferenceName.StoreCCtokens);
-				textZipCode.Text=_patCur.Zip;
-				textNameOnCard.Text=_patCur.GetNameFL();
-				if(_creditCardCur!=null) {
-					FillFieldsFromCard();
-				}
-			}
-			if(_isAddingCard) {
-				radioAuthorization.Checked=true;
-				_trantype=PaySimple.TransType.AUTH;
-				groupTransType.Enabled=false;
-				labelAmount.Visible=false;
-				textAmount.Visible=false;
-				labelAmountACH.Visible=false;
-				textAmountACH.Visible=false;
-				checkOneTimePayment.Checked=false;
-				checkOneTimePayment.Enabled=false;
-				checkOneTimePaymentACH.Checked=false;
-				checkOneTimePaymentACH.Enabled=false;
-			}
-			if(_creditCardCur==null || _creditCardCur.CCSource!=CreditCardSource.PaySimpleACH) {
-				textCardNumber.Select();
-			}
-			else {
-				tabControl.SelectedTab=tabACH;
-				textRoutingNumber.Select();
-			}
-			if(PIn.Bool(ProgramProperties.GetPropVal(_progCur.ProgramNum,PaySimple.PropertyDescs.PaySimplePreventSavingNewCC,_clinicNum))) {
-				textCardNumber.ReadOnly=true;
-				textRoutingNumber.ReadOnly=true;
-				textCheckSaveNumber.ReadOnly=true;
-				textBankName.ReadOnly=true;
-			}
+			//_progCur=Programs.GetCur(ProgramName.PaySimple);
+			//if(_progCur==null) {
+			//	MsgBox.Show(this,"PaySimple does not exist in the database.");
+			//	DialogResult=DialogResult.Cancel;
+			//	return;
+			//}
+			//if(_patCur==null || _patCur.PatNum==0) {//Prepaid card
+			//	radioAuthorization.Enabled=false;
+			//	checkOneTimePayment.Checked=true;
+			//	checkOneTimePayment.Enabled=false;
+			//	tabControl.TabPages.Remove(tabACH);
+			//}
+			//else {
+			//	checkOneTimePayment.Checked=!Preference.GetBool(PreferenceName.StoreCCtokens);
+			//	checkOneTimePaymentACH.Checked=!Preference.GetBool(PreferenceName.StoreCCtokens);
+			//	textZipCode.Text=_patCur.Zip;
+			//	textNameOnCard.Text=_patCur.GetNameFL();
+			//	if(_creditCardCur!=null) {
+			//		FillFieldsFromCard();
+			//	}
+			//}
+			//if(_isAddingCard) {
+			//	radioAuthorization.Checked=true;
+			//	_trantype=PaySimple.TransType.AUTH;
+			//	groupTransType.Enabled=false;
+			//	labelAmount.Visible=false;
+			//	textAmount.Visible=false;
+			//	labelAmountACH.Visible=false;
+			//	textAmountACH.Visible=false;
+			//	checkOneTimePayment.Checked=false;
+			//	checkOneTimePayment.Enabled=false;
+			//	checkOneTimePaymentACH.Checked=false;
+			//	checkOneTimePaymentACH.Enabled=false;
+			//}
+			//if(_creditCardCur==null || _creditCardCur.CCSource!=CreditCardSource.PaySimpleACH) {
+			//	textCardNumber.Select();
+			//}
+			//else {
+			//	tabControl.SelectedTab=tabACH;
+			//	textRoutingNumber.Select();
+			//}
+			//if(PIn.Bool(ProgramProperties.GetPropVal(_progCur.ProgramNum,PaySimple.PropertyDescs.PaySimplePreventSavingNewCC,_clinicNum))) {
+			//	textCardNumber.ReadOnly=true;
+			//	textRoutingNumber.ReadOnly=true;
+			//	textCheckSaveNumber.ReadOnly=true;
+			//	textBankName.ReadOnly=true;
+			//}
 		}
 
 		private void FillFieldsFromCard() {
@@ -146,7 +146,7 @@ namespace OpenDental {
 			textRefNumber.Visible=false;
 			labelRefNumber.Visible=false;
 			textAmount.Visible=true;
-			_trantype=PaySimple.TransType.SALE;
+			//_trantype=PaySimple.TransType.SALE;
 			textCardNumber.Focus();//Usually transaction type is chosen before card number is entered, but textCardNumber box must be selected in order for card swipe to work.
 		}
 
@@ -158,7 +158,7 @@ namespace OpenDental {
 			textRefNumber.Visible=false;
 			labelRefNumber.Visible=false;
 			textAmount.Visible=false;
-			_trantype=PaySimple.TransType.AUTH;
+			//_trantype=PaySimple.TransType.AUTH;
 			textCardNumber.Focus();//Usually transaction type is chosen before card number is entered, but textCardNumber box must be selected in order for card swipe to work.
 		}
 
@@ -171,7 +171,7 @@ namespace OpenDental {
 			labelRefNumber.Visible=true;
 			labelRefNumber.Text=Lan.g(this,"Ref Number");
 			textAmount.Visible=false;
-			_trantype=PaySimple.TransType.VOID;
+			//_trantype=PaySimple.TransType.VOID;
 			textCardNumber.Focus();//Usually transaction type is chosen before card number is entered, but textCardNumber box must be selected in order for card swipe to work.
 		}
 
@@ -184,7 +184,7 @@ namespace OpenDental {
 			labelRefNumber.Visible=true;
 			labelRefNumber.Text=Lan.g(this,"Ref Number");
 			textAmount.Visible=false;
-			_trantype=PaySimple.TransType.RETURN;
+			//_trantype=PaySimple.TransType.RETURN;
 			textCardNumber.Focus();//Usually transaction type is chosen before card number is entered, but textCardNumber box must be selected in order for card swipe to work.
 		}
 
@@ -234,183 +234,183 @@ namespace OpenDental {
 		}
 
 		///<summary>Processes a PaySimple payment via the PaySimple API.</summary>
-		private PaySimple.ApiResponse ProcessPayment(int expYear,int expMonth) {
-			PaySimple.ApiResponse retVal=null;
-			string refNumber="";
-			if(_trantype==PaySimple.TransType.VOID || _trantype==PaySimple.TransType.RETURN) {
-				refNumber=textRefNumber.Text;
-			}
-			string magData=null;
-			if(_parser!=null) {
-				magData=_parser.Track2;
-			}
-			string cardNumber=textCardNumber.Text;
-			//if using a stored CC and there is an X-Charge token saved for the CC and the user enters the whole card number to get a PaySimple token
-			//and the number entered doesn't have the same last 4 digits and exp date, then assume it's not the same card and clear out the X-Charge token.
-			if(_creditCardCur!=null //using a saved CC
-				&& !string.IsNullOrEmpty(_creditCardCur.XChargeToken) //there is an X-Charge token saved
-				&& (cardNumber.Right(4)!=_creditCardCur.CCNumberMasked.Right(4) //the card number entered doesn't have the same last 4 digits
-					|| expYear!=_creditCardCur.CCExpiration.Year //the card exp date entered doesn't have the same year
-					|| expMonth!=_creditCardCur.CCExpiration.Month)) //the card exp date entered doesn't have the same month
-			{
-				if(MsgBox.Show(this,MsgBoxButtons.YesNo,"The card number or expiration date entered does not match the X-Charge card on file.  Do you wish "
-					+"to replace the X-Charge card with this one?"))
-				{
-					_creditCardCur.XChargeToken="";
-				}
-				else {
-					Cursor=Cursors.Default;
-					return null;
-				}
-			}
-			//if the user has chosen to store CC tokens and the stored CC has a token and the token is not expired,
-			//then use it instead of the CC number and CC expiration.
-			if(!checkOneTimePayment.Checked
-				&& _creditCardCur!=null //if the user selected a saved CC
-				&& !string.IsNullOrWhiteSpace(_creditCardCur.PaySimpleToken)) //there is a stored token for this card
-			{
-				cardNumber=_creditCardCur.PaySimpleToken;
-				expYear=_creditCardCur.CCExpiration.Year;
-				expMonth=_creditCardCur.CCExpiration.Month;
-			}
-			else if(PIn.Bool(ProgramProperties.GetPropVal(_progCur.ProgramNum,PaySimple.PropertyDescs.PaySimplePreventSavingNewCC,_clinicNum))) {
-				MsgBox.Show(this,"Cannot add a new credit card.");
-				return null;
-			}
-			try {
-				switch(_trantype) {
-					case PaySimple.TransType.SALE:
-						//If _patCur is null or the PatNum is 0, we will make a one time payment for an UNKNOWN patient.  This is currently only intended for prepaid insurance cards.
-						retVal=PaySimple.MakePayment((_patCur==null ? 0 : _patCur.PatNum),_creditCardCur,PIn.Decimal(textAmount.Text),textCardNumber.Text
-							,new DateTime(expYear,expMonth,1),checkOneTimePayment.Checked,textZipCode.Text,textSecurityCode.Text,_clinicNum);
-						break;
-					case PaySimple.TransType.AUTH:
-						//Will retreive a new customer id from PaySimple if the patient doesn't exist already.
-						long paySimpleCustomerId=PaySimple.GetCustomerIdForPat(_patCur.PatNum,_patCur.FName,_patCur.LName,_clinicNum);
-						//I have no idea if an insurance can make an auth payment but incase they can I check for it.
-						if(paySimpleCustomerId==0) {//Insurance payment, make a new customer id every time per Nathan on 04/26/2018
-							if((_patCur==null || _patCur.PatNum==0)) {
-								paySimpleCustomerId=PaySimple.AddCustomer("UNKNOWN","UNKNOWN","",_clinicNum);
-							}
-							else {
-								throw new ODException(Lan.g(this,"Invalid PaySimple Customer Id found."));
-							}
-						}
-						retVal=PaySimple.AddCreditCard(paySimpleCustomerId,textCardNumber.Text,new DateTime(expYear,expMonth,1),textZipCode.Text,_clinicNum);
-						break;
-					case PaySimple.TransType.RETURN:
-						if(string.IsNullOrWhiteSpace(textRefNumber.Text)) {
-							throw new ODException(Lan.g(this,"Invalid PaySimple Payment ID."));
-						}
-						if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"You are about to return a payment.  This action is irreversible.  Continue?")) {
-							throw new ODException(Lan.g(this,"Payment return was cancelled by user."));
-						}
-						retVal=PaySimple.ReversePayment(textRefNumber.Text,_clinicNum);
-						break;
-					case PaySimple.TransType.VOID:
-						if(string.IsNullOrWhiteSpace(textRefNumber.Text)) {
-							throw new ODException(Lan.g(this,"Invalid PaySimple Payment ID."));
-						}
-						if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"You are about to void a payment.  This action is irreversible.  Continue?")) {
-							throw new ODException(Lan.g(this,"Payment void was cancelled by user."));
-						}
-						retVal=PaySimple.VoidPayment(textRefNumber.Text,_clinicNum);
-						break;
-					default:
-						throw new Exception("Invalid transmission type: "+_trantype.ToString());
-				}
-			}
-			catch(ODException wex) {
-				MessageBox.Show(wex.Message);//This should have already been Lans.g if applicable.
-				return null;
-			}
-			catch(Exception ex) {
-				MessageBox.Show(Lan.g(this,"Error:")+" "+ex.Message);
-				return null;
-			}
-			if(_trantype.In(PaySimple.TransType.SALE,PaySimple.TransType.RETURN,PaySimple.TransType.VOID)) {//Only print a receipt if transaction is an approved SALE, RETURN, or VOID			
-				//The isSwiped boolean could be incorrectly set if the user swipes a card and then changes the data that was entered to a different card.
-				retVal.BuildReceiptString(cardNumber,expMonth,expYear,textNameOnCard.Text,_clinicNum,_parser!=null);
-				PrintReceipt(retVal.TransactionReceipt);
-			}
-			if(checkOneTimePayment.Checked) {//not storing the card token
-				return retVal;
-			}
-			UpsertCreditCard(retVal,textCardNumber.Text.Right(4).PadLeft(textCardNumber.Text.Length,'X'),CreditCardSource.PaySimple,
-				new DateTime(expYear,expMonth,DateTime.DaysInMonth(expYear,expMonth)));
-			return retVal;
-		}
+		//private PaySimple.ApiResponse ProcessPayment(int expYear,int expMonth) {
+		//	PaySimple.ApiResponse retVal=null;
+		//	string refNumber="";
+		//	if(_trantype==PaySimple.TransType.VOID || _trantype==PaySimple.TransType.RETURN) {
+		//		refNumber=textRefNumber.Text;
+		//	}
+		//	string magData=null;
+		//	if(_parser!=null) {
+		//		magData=_parser.Track2;
+		//	}
+		//	string cardNumber=textCardNumber.Text;
+		//	//if using a stored CC and there is an X-Charge token saved for the CC and the user enters the whole card number to get a PaySimple token
+		//	//and the number entered doesn't have the same last 4 digits and exp date, then assume it's not the same card and clear out the X-Charge token.
+		//	if(_creditCardCur!=null //using a saved CC
+		//		&& !string.IsNullOrEmpty(_creditCardCur.XChargeToken) //there is an X-Charge token saved
+		//		&& (cardNumber.Right(4)!=_creditCardCur.CCNumberMasked.Right(4) //the card number entered doesn't have the same last 4 digits
+		//			|| expYear!=_creditCardCur.CCExpiration.Year //the card exp date entered doesn't have the same year
+		//			|| expMonth!=_creditCardCur.CCExpiration.Month)) //the card exp date entered doesn't have the same month
+		//	{
+		//		if(MsgBox.Show(this,MsgBoxButtons.YesNo,"The card number or expiration date entered does not match the X-Charge card on file.  Do you wish "
+		//			+"to replace the X-Charge card with this one?"))
+		//		{
+		//			_creditCardCur.XChargeToken="";
+		//		}
+		//		else {
+		//			Cursor=Cursors.Default;
+		//			return null;
+		//		}
+		//	}
+		//	//if the user has chosen to store CC tokens and the stored CC has a token and the token is not expired,
+		//	//then use it instead of the CC number and CC expiration.
+		//	if(!checkOneTimePayment.Checked
+		//		&& _creditCardCur!=null //if the user selected a saved CC
+		//		&& !string.IsNullOrWhiteSpace(_creditCardCur.PaySimpleToken)) //there is a stored token for this card
+		//	{
+		//		cardNumber=_creditCardCur.PaySimpleToken;
+		//		expYear=_creditCardCur.CCExpiration.Year;
+		//		expMonth=_creditCardCur.CCExpiration.Month;
+		//	}
+		//	else if(PIn.Bool(ProgramProperties.GetPropVal(_progCur.ProgramNum,PaySimple.PropertyDescs.PaySimplePreventSavingNewCC,_clinicNum))) {
+		//		MsgBox.Show(this,"Cannot add a new credit card.");
+		//		return null;
+		//	}
+		//	try {
+		//		switch(_trantype) {
+		//			case PaySimple.TransType.SALE:
+		//				//If _patCur is null or the PatNum is 0, we will make a one time payment for an UNKNOWN patient.  This is currently only intended for prepaid insurance cards.
+		//				retVal=PaySimple.MakePayment((_patCur==null ? 0 : _patCur.PatNum),_creditCardCur,PIn.Decimal(textAmount.Text),textCardNumber.Text
+		//					,new DateTime(expYear,expMonth,1),checkOneTimePayment.Checked,textZipCode.Text,textSecurityCode.Text,_clinicNum);
+		//				break;
+		//			case PaySimple.TransType.AUTH:
+		//				//Will retreive a new customer id from PaySimple if the patient doesn't exist already.
+		//				long paySimpleCustomerId=PaySimple.GetCustomerIdForPat(_patCur.PatNum,_patCur.FName,_patCur.LName,_clinicNum);
+		//				//I have no idea if an insurance can make an auth payment but incase they can I check for it.
+		//				if(paySimpleCustomerId==0) {//Insurance payment, make a new customer id every time per Nathan on 04/26/2018
+		//					if((_patCur==null || _patCur.PatNum==0)) {
+		//						paySimpleCustomerId=PaySimple.AddCustomer("UNKNOWN","UNKNOWN","",_clinicNum);
+		//					}
+		//					else {
+		//						throw new ODException(Lan.g(this,"Invalid PaySimple Customer Id found."));
+		//					}
+		//				}
+		//				retVal=PaySimple.AddCreditCard(paySimpleCustomerId,textCardNumber.Text,new DateTime(expYear,expMonth,1),textZipCode.Text,_clinicNum);
+		//				break;
+		//			case PaySimple.TransType.RETURN:
+		//				if(string.IsNullOrWhiteSpace(textRefNumber.Text)) {
+		//					throw new ODException(Lan.g(this,"Invalid PaySimple Payment ID."));
+		//				}
+		//				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"You are about to return a payment.  This action is irreversible.  Continue?")) {
+		//					throw new ODException(Lan.g(this,"Payment return was cancelled by user."));
+		//				}
+		//				retVal=PaySimple.ReversePayment(textRefNumber.Text,_clinicNum);
+		//				break;
+		//			case PaySimple.TransType.VOID:
+		//				if(string.IsNullOrWhiteSpace(textRefNumber.Text)) {
+		//					throw new ODException(Lan.g(this,"Invalid PaySimple Payment ID."));
+		//				}
+		//				if(!MsgBox.Show(this,MsgBoxButtons.OKCancel,"You are about to void a payment.  This action is irreversible.  Continue?")) {
+		//					throw new ODException(Lan.g(this,"Payment void was cancelled by user."));
+		//				}
+		//				retVal=PaySimple.VoidPayment(textRefNumber.Text,_clinicNum);
+		//				break;
+		//			default:
+		//				throw new Exception("Invalid transmission type: "+_trantype.ToString());
+		//		}
+		//	}
+		//	catch(ODException wex) {
+		//		MessageBox.Show(wex.Message);//This should have already been Lans.g if applicable.
+		//		return null;
+		//	}
+		//	catch(Exception ex) {
+		//		MessageBox.Show(Lan.g(this,"Error:")+" "+ex.Message);
+		//		return null;
+		//	}
+		//	if(_trantype.In(PaySimple.TransType.SALE,PaySimple.TransType.RETURN,PaySimple.TransType.VOID)) {//Only print a receipt if transaction is an approved SALE, RETURN, or VOID			
+		//		//The isSwiped boolean could be incorrectly set if the user swipes a card and then changes the data that was entered to a different card.
+		//		retVal.BuildReceiptString(cardNumber,expMonth,expYear,textNameOnCard.Text,_clinicNum,_parser!=null);
+		//		PrintReceipt(retVal.TransactionReceipt);
+		//	}
+		//	if(checkOneTimePayment.Checked) {//not storing the card token
+		//		return retVal;
+		//	}
+		//	UpsertCreditCard(retVal,textCardNumber.Text.Right(4).PadLeft(textCardNumber.Text.Length,'X'),CreditCardSource.PaySimple,
+		//		new DateTime(expYear,expMonth,DateTime.DaysInMonth(expYear,expMonth)));
+		//	return retVal;
+		//}
 
 		///<summary>Processes a PaySimple ACH payment via the PaySimple API.</summary>
-		private PaySimple.ApiResponse ProcessPaymentACH() {
-			PaySimple.ApiResponse retVal=null;
-			string accountNumber=textCheckSaveNumber.Text;
-			//if the user has chosen to store CC tokens and the stored CC has a token and the token is not expired,
-			//then use it instead of the CC number and CC expiration.
-			if(!checkOneTimePaymentACH.Checked
-				&& _creditCardCur!=null //if the user selected a saved CC
-				&& !string.IsNullOrWhiteSpace(_creditCardCur.PaySimpleToken) //there is a stored token for this card
-				&& _creditCardCur.CCSource==CreditCardSource.PaySimpleACH)
-			{
-				accountNumber=_creditCardCur.PaySimpleToken;
-			}
-			else if(PIn.Bool(ProgramProperties.GetPropVal(_progCur.ProgramNum,PaySimple.PropertyDescs.PaySimplePreventSavingNewCC,_clinicNum))) {
-				MsgBox.Show(this,"Cannot add a new ACH payment.");
-				return null;
-			}
-			try {
-				if(_isAddingCard) {
-					retVal=PaySimple.AddACHAccount(_patCur,textRoutingNumber.Text,textCheckSaveNumber.Text,textBankName.Text,radioCheckings.Checked,_clinicNum);
-				}
-				else {
-					retVal=PaySimple.MakePaymentACH(_patCur,_creditCardCur,PIn.Decimal(textAmountACH.Text),textRoutingNumber.Text,textCheckSaveNumber.Text,
-						textBankName.Text,radioCheckings.Checked,checkOneTimePaymentACH.Checked,_clinicNum);
-				}
-			}
-			catch(ODException ex) {
-				MessageBox.Show(ex.Message);//This should have already been Lans.g if applicable.
-				return null;
-			}
-			catch(Exception ex) {
-                FormFriendlyException.Show(Lan.g(this,"Error:")+" "+ex.Message,ex);
-				return null;
-			}
-			if(!_isAddingCard) {
-				retVal.BuildReceiptString(accountNumber,-1,-1,_patCur?.GetNameFL(),_clinicNum,wasSwiped: false,isACH:true);
-				PrintReceipt(retVal.TransactionReceipt);
-			}
-			if(checkOneTimePaymentACH.Checked) {//not storing the account token
-				return retVal;
-			}
-			UpsertCreditCard(retVal,textCheckSaveNumber.Text.Right(4).PadLeft(textCheckSaveNumber.Text.Length,'*'),CreditCardSource.PaySimpleACH,
-				DateTime.MinValue);
-			return retVal;
-		}
+		//private PaySimple.ApiResponse ProcessPaymentACH() {
+		//	PaySimple.ApiResponse retVal=null;
+		//	string accountNumber=textCheckSaveNumber.Text;
+		//	//if the user has chosen to store CC tokens and the stored CC has a token and the token is not expired,
+		//	//then use it instead of the CC number and CC expiration.
+		//	if(!checkOneTimePaymentACH.Checked
+		//		&& _creditCardCur!=null //if the user selected a saved CC
+		//		&& !string.IsNullOrWhiteSpace(_creditCardCur.PaySimpleToken) //there is a stored token for this card
+		//		&& _creditCardCur.CCSource==CreditCardSource.PaySimpleACH)
+		//	{
+		//		accountNumber=_creditCardCur.PaySimpleToken;
+		//	}
+		//	else if(PIn.Bool(ProgramProperties.GetPropVal(_progCur.ProgramNum,PaySimple.PropertyDescs.PaySimplePreventSavingNewCC,_clinicNum))) {
+		//		MsgBox.Show(this,"Cannot add a new ACH payment.");
+		//		return null;
+		//	}
+		//	try {
+		//		if(_isAddingCard) {
+		//			retVal=PaySimple.AddACHAccount(_patCur,textRoutingNumber.Text,textCheckSaveNumber.Text,textBankName.Text,radioCheckings.Checked,_clinicNum);
+		//		}
+		//		else {
+		//			retVal=PaySimple.MakePaymentACH(_patCur,_creditCardCur,PIn.Decimal(textAmountACH.Text),textRoutingNumber.Text,textCheckSaveNumber.Text,
+		//				textBankName.Text,radioCheckings.Checked,checkOneTimePaymentACH.Checked,_clinicNum);
+		//		}
+		//	}
+		//	catch(ODException ex) {
+		//		MessageBox.Show(ex.Message);//This should have already been Lans.g if applicable.
+		//		return null;
+		//	}
+		//	catch(Exception ex) {
+  //              FormFriendlyException.Show(Lan.g(this,"Error:")+" "+ex.Message,ex);
+		//		return null;
+		//	}
+		//	if(!_isAddingCard) {
+		//		retVal.BuildReceiptString(accountNumber,-1,-1,_patCur?.GetNameFL(),_clinicNum,wasSwiped: false,isACH:true);
+		//		PrintReceipt(retVal.TransactionReceipt);
+		//	}
+		//	if(checkOneTimePaymentACH.Checked) {//not storing the account token
+		//		return retVal;
+		//	}
+		//	UpsertCreditCard(retVal,textCheckSaveNumber.Text.Right(4).PadLeft(textCheckSaveNumber.Text.Length,'*'),CreditCardSource.PaySimpleACH,
+		//		DateTime.MinValue);
+		//	return retVal;
+		//}
 
-		private void UpsertCreditCard(PaySimple.ApiResponse apiResponse,string ccNumberMasked,CreditCardSource ccSource,DateTime ccExp) {
-			if(_creditCardCur==null) {//new account
-				_creditCardCur=new CreditCard();
-				_creditCardCur.IsNew=true;
-				_creditCardCur.PatNum=_patCur.PatNum;
-				List<CreditCard> itemOrderCount=CreditCards.Refresh(_patCur.PatNum);
-				_creditCardCur.ItemOrder=itemOrderCount.Count;
-			}
-			if(ccExp.Year > 1880) {
-				_creditCardCur.CCExpiration=ccExp;
-			}
-			_creditCardCur.CCNumberMasked=ccNumberMasked;
-			_creditCardCur.Zip=textZipCode.Text;
-			_creditCardCur.PaySimpleToken=apiResponse.PaySimpleToken;
-			_creditCardCur.CCSource=ccSource;
-			if(_creditCardCur.IsNew) {
-				_creditCardCur.ClinicNum=_clinicNum;
-				_creditCardCur.Procedures=Preference.GetString(PreferenceName.DefaultCCProcs);
-				CreditCards.Insert(_creditCardCur);
-			}
-			else {
-				CreditCards.Update(_creditCardCur);
-			}
-		}
+		//private void UpsertCreditCard(PaySimple.ApiResponse apiResponse,string ccNumberMasked,CreditCardSource ccSource,DateTime ccExp) {
+		//	if(_creditCardCur==null) {//new account
+		//		_creditCardCur=new CreditCard();
+		//		_creditCardCur.IsNew=true;
+		//		_creditCardCur.PatNum=_patCur.PatNum;
+		//		List<CreditCard> itemOrderCount=CreditCards.Refresh(_patCur.PatNum);
+		//		_creditCardCur.ItemOrder=itemOrderCount.Count;
+		//	}
+		//	if(ccExp.Year > 1880) {
+		//		_creditCardCur.CCExpiration=ccExp;
+		//	}
+		//	_creditCardCur.CCNumberMasked=ccNumberMasked;
+		//	_creditCardCur.Zip=textZipCode.Text;
+		//	_creditCardCur.PaySimpleToken=apiResponse.PaySimpleToken;
+		//	_creditCardCur.CCSource=ccSource;
+		//	if(_creditCardCur.IsNew) {
+		//		_creditCardCur.ClinicNum=_clinicNum;
+		//		_creditCardCur.Procedures=Preference.GetString(PreferenceName.DefaultCCProcs);
+		//		CreditCards.Insert(_creditCardCur);
+		//	}
+		//	else {
+		//		CreditCards.Update(_creditCardCur);
+		//	}
+		//}
 
 		private void PrintReceipt(string receiptStr) {
 			string[] receiptLines=receiptStr.Split(new string[] { Environment.NewLine },StringSplitOptions.None);
@@ -453,60 +453,60 @@ namespace OpenDental {
 		private bool VerifyData(out int expYear,out int expMonth) {
 			expYear=0;
 			expMonth=0;
-			if(_trantype==PaySimple.TransType.SALE && !Regex.IsMatch(textAmount.Text,"^[0-9]+$") && !Regex.IsMatch(textAmount.Text,"^[0-9]*\\.[0-9]+$")) {
-				MsgBox.Show(this,"Invalid amount.");
-				return false;
-			}
-			if((_trantype==PaySimple.TransType.VOID || _trantype==PaySimple.TransType.RETURN)//The reference number is optional for terminal returns. 
-				&& textRefNumber.Text=="") 
-			{
-				MsgBox.Show(this,"Ref Number required.");
-				return false;
-			}
-			string paytype=ProgramProperties.GetPropValForClinicOrDefault(_progCur.ProgramNum,PaySimple.PropertyDescs.PaySimplePayTypeCC,_clinicNum);
-			if(!Definition.GetByCategory(DefinitionCategory.PaymentTypes).Any(x => x.Id.ToString()==paytype)) { //paytype is not a valid DefNum
-				MsgBox.Show(this,"The PaySimple payment type has not been set.");
-				return false;
-			}
-			//Processing through Web Service
-			// Consider adding more advanced verification methods using PaySimple validation requests.
-			if(textCardNumber.Text.Trim().Length<5) {
-				MsgBox.Show(this,"Invalid Card Number.");
-				return false;
-			}
-			try {//PIn.Int will throw an exception if not a valid format
-				if(Regex.IsMatch(textExpDate.Text,@"^\d\d[/\- ]\d\d$")) {//08/07 or 08-07 or 08 07
-					expYear=PIn.Int("20"+textExpDate.Text.Substring(3,2));
-					expMonth=PIn.Int(textExpDate.Text.Substring(0,2));
-				}
-				else if(Regex.IsMatch(textExpDate.Text,@"^\d{4}$")) {//0807
-					expYear=PIn.Int("20"+textExpDate.Text.Substring(2,2));
-					expMonth=PIn.Int(textExpDate.Text.Substring(0,2));
-				}
-				else {
-					MsgBox.Show(this,"Expiration format invalid.");
-					return false;
-				}
-			}
-			catch(Exception) {
-				MsgBox.Show(this,"Expiration format invalid.");
-				return false;
-			}
-			if(_creditCardCur==null) {//if the user selected a new CC, verify through PaySimple
-				//using a new CC and the card number entered contains something other than digits
-				if(textCardNumber.Text.Any(x => !char.IsDigit(x))) {
-					MsgBox.Show(this,"Invalid card number.");
-					return false;
-				}
-			}
-			else if(_creditCardCur.PaySimpleToken=="" && Regex.IsMatch(textCardNumber.Text,@"X+[0-9]{4}")) {//using a stored CC
-				MsgBox.Show(this,"There is no saved PaySimple token for this credit card.  The card number and expiration must be re-entered.");
-				return false;
-			}
-			if(textNameOnCard.Text.Trim()=="" && _patCur!=null && _patCur.PatNum>0) {//Name required for patient credit cards, not prepaid cards.
-				MsgBox.Show(this,"Name On Card required.");
-				return false;
-			}
+			//if(_trantype==PaySimple.TransType.SALE && !Regex.IsMatch(textAmount.Text,"^[0-9]+$") && !Regex.IsMatch(textAmount.Text,"^[0-9]*\\.[0-9]+$")) {
+			//	MsgBox.Show(this,"Invalid amount.");
+			//	return false;
+			//}
+			//if((_trantype==PaySimple.TransType.VOID || _trantype==PaySimple.TransType.RETURN)//The reference number is optional for terminal returns. 
+			//	&& textRefNumber.Text=="") 
+			//{
+			//	MsgBox.Show(this,"Ref Number required.");
+			//	return false;
+			//}
+			//string paytype=ProgramProperties.GetPropValForClinicOrDefault(_progCur.ProgramNum,PaySimple.PropertyDescs.PaySimplePayTypeCC,_clinicNum);
+			//if(!Definition.GetByCategory(DefinitionCategory.PaymentTypes).Any(x => x.Id.ToString()==paytype)) { //paytype is not a valid DefNum
+			//	MsgBox.Show(this,"The PaySimple payment type has not been set.");
+			//	return false;
+			//}
+			////Processing through Web Service
+			//// Consider adding more advanced verification methods using PaySimple validation requests.
+			//if(textCardNumber.Text.Trim().Length<5) {
+			//	MsgBox.Show(this,"Invalid Card Number.");
+			//	return false;
+			//}
+			//try {//PIn.Int will throw an exception if not a valid format
+			//	if(Regex.IsMatch(textExpDate.Text,@"^\d\d[/\- ]\d\d$")) {//08/07 or 08-07 or 08 07
+			//		expYear=PIn.Int("20"+textExpDate.Text.Substring(3,2));
+			//		expMonth=PIn.Int(textExpDate.Text.Substring(0,2));
+			//	}
+			//	else if(Regex.IsMatch(textExpDate.Text,@"^\d{4}$")) {//0807
+			//		expYear=PIn.Int("20"+textExpDate.Text.Substring(2,2));
+			//		expMonth=PIn.Int(textExpDate.Text.Substring(0,2));
+			//	}
+			//	else {
+			//		MsgBox.Show(this,"Expiration format invalid.");
+			//		return false;
+			//	}
+			//}
+			//catch(Exception) {
+			//	MsgBox.Show(this,"Expiration format invalid.");
+			//	return false;
+			//}
+			//if(_creditCardCur==null) {//if the user selected a new CC, verify through PaySimple
+			//	//using a new CC and the card number entered contains something other than digits
+			//	if(textCardNumber.Text.Any(x => !char.IsDigit(x))) {
+			//		MsgBox.Show(this,"Invalid card number.");
+			//		return false;
+			//	}
+			//}
+			//else if(_creditCardCur.PaySimpleToken=="" && Regex.IsMatch(textCardNumber.Text,@"X+[0-9]{4}")) {//using a stored CC
+			//	MsgBox.Show(this,"There is no saved PaySimple token for this credit card.  The card number and expiration must be re-entered.");
+			//	return false;
+			//}
+			//if(textNameOnCard.Text.Trim()=="" && _patCur!=null && _patCur.PatNum>0) {//Name required for patient credit cards, not prepaid cards.
+			//	MsgBox.Show(this,"Name On Card required.");
+			//	return false;
+			//}
 			return IsPaySimpleSetup();
 		}
 
@@ -529,42 +529,42 @@ namespace OpenDental {
 		}
 
 		private bool IsPaySimpleSetup() {
-			//verify the selected clinic has a username and API key entered
-			if(string.IsNullOrWhiteSpace(ProgramProperties.GetPropValForClinicOrDefault(_progCur.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiUserName,_clinicNum))
-				|| string.IsNullOrWhiteSpace(ProgramProperties.GetPropValForClinicOrDefault(_progCur.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiKey,_clinicNum))) 
-			{
-				MsgBox.Show(this,"The PaySimple username and/or key has not been set.");
-				return false;
-			}
+			////verify the selected clinic has a username and API key entered
+			//if(string.IsNullOrWhiteSpace(ProgramProperties.GetPropValForClinicOrDefault(_progCur.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiUserName,_clinicNum))
+			//	|| string.IsNullOrWhiteSpace(ProgramProperties.GetPropValForClinicOrDefault(_progCur.ProgramNum,PaySimple.PropertyDescs.PaySimpleApiKey,_clinicNum))) 
+			//{
+			//	MsgBox.Show(this,"The PaySimple username and/or key has not been set.");
+			//	return false;
+			//}
 			return true;
 		}
 
 		private void butOK_Click(object sender,EventArgs e) {
-			Cursor=Cursors.WaitCursor;
-			if(tabControl.SelectedTab==tabCredit) {
-				int expYear;
-				int expMonth;
-				if(!VerifyData(out expYear,out expMonth)) {
-					Cursor=Cursors.Default;
-					return;
-				}
-				ApiResponseOut=ProcessPayment(expYear,expMonth);
-			}
-			else {
-				if(!VerifyDataACH()) {
-					Cursor=Cursors.Default;
-					return;
-				}
-				ApiResponseOut=ProcessPaymentACH();
-			}
-			bool isSuccess=(ApiResponseOut!=null);
-			Cursor=Cursors.Default;
-			if(isSuccess) {
-				DialogResult=DialogResult.OK;
-			}
-			else if(!_isAddingCard) {//If adding the card, leave the window open so the user can try again.
-				DialogResult=DialogResult.Cancel;
-			}
+			//Cursor=Cursors.WaitCursor;
+			//if(tabControl.SelectedTab==tabCredit) {
+			//	int expYear;
+			//	int expMonth;
+			//	if(!VerifyData(out expYear,out expMonth)) {
+			//		Cursor=Cursors.Default;
+			//		return;
+			//	}
+			//	ApiResponseOut=ProcessPayment(expYear,expMonth);
+			//}
+			//else {
+			//	if(!VerifyDataACH()) {
+			//		Cursor=Cursors.Default;
+			//		return;
+			//	}
+			//	ApiResponseOut=ProcessPaymentACH();
+			//}
+			//bool isSuccess=(ApiResponseOut!=null);
+			//Cursor=Cursors.Default;
+			//if(isSuccess) {
+			//	DialogResult=DialogResult.OK;
+			//}
+			//else if(!_isAddingCard) {//If adding the card, leave the window open so the user can try again.
+			//	DialogResult=DialogResult.Cancel;
+			//}
 		}
 
 		private void butCancel_Click(object sender,EventArgs e) {

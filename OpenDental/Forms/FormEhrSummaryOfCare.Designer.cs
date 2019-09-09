@@ -118,7 +118,7 @@
 			this.gridRec.Location = new System.Drawing.Point(240, 65);
 			this.gridRec.Name = "gridRec";
 			this.gridRec.ScrollValue = 0;
-			this.gridRec.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridRec.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridRec.Size = new System.Drawing.Size(178, 323);
 			this.gridRec.TabIndex = 17;
 			this.gridRec.Title = "Received";
@@ -136,7 +136,7 @@
 			this.gridSent.Location = new System.Drawing.Point(28, 154);
 			this.gridSent.Name = "gridSent";
 			this.gridSent.ScrollValue = 0;
-			this.gridSent.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridSent.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridSent.Size = new System.Drawing.Size(185, 234);
 			this.gridSent.TabIndex = 16;
 			this.gridSent.Title = "Sent";

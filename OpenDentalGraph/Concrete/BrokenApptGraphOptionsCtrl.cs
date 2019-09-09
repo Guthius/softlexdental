@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDentalGraph {
-	public partial class BrokenApptGraphOptionsCtrl:BaseGraphOptionsCtrl {
+	public partial class BrokenApptGraphOptionsCtrl:GraphOptionsBase {
 
 		private List<Definition> _listAdjTypes=null;
 		public List<Definition> ListAdjTypes {

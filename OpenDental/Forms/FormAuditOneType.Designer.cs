@@ -28,7 +28,7 @@
             this.logGrid.Location = new System.Drawing.Point(13, 19);
             this.logGrid.Name = "logGrid";
             this.logGrid.ScrollValue = 0;
-            this.logGrid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.logGrid.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.logGrid.Size = new System.Drawing.Size(918, 553);
             this.logGrid.TabIndex = 0;
             this.logGrid.Title = "Audit Trail";

@@ -358,8 +358,10 @@ namespace OpenDental{
 			}
 			ODGrid gridToFill=isPrinting?gridMainPrint:gridMain;
 			long firstVisibleTransNum=0;
-			if(!isPrinting && gridToFill.VisibleRows.Count>0) {//don't scroll into view if printing
-				firstVisibleTransNum=(long)gridToFill.VisibleRows[0].Tag;
+            var visibleRows = gridToFill.VisibleRows.ToList();
+
+            if (!isPrinting && visibleRows.Count>0) {//don't scroll into view if printing
+				firstVisibleTransNum=(long)visibleRows[0].Tag;
 			}
 			long selectedTransNum=0;
 			if(!isPrinting && gridToFill.GetSelectedIndex()>-1) {//no need to reselect an index if printing

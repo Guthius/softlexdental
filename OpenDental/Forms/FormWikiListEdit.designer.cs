@@ -225,7 +225,7 @@ namespace OpenDental
             this.itemsGrid.Location = new System.Drawing.Point(13, 48);
             this.itemsGrid.Name = "itemsGrid";
             this.itemsGrid.ScrollValue = 0;
-            this.itemsGrid.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+            this.itemsGrid.SelectionMode = OpenDental.UI.GridSelectionMode.Cell;
             this.itemsGrid.Size = new System.Drawing.Size(702, 544);
             this.itemsGrid.TabIndex = 6;
             this.itemsGrid.Title = "";

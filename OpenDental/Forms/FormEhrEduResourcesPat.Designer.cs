@@ -98,7 +98,7 @@
             this.providedGrid.Location = new System.Drawing.Point(3, 23);
             this.providedGrid.Name = "providedGrid";
             this.providedGrid.ScrollValue = 0;
-            this.providedGrid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.providedGrid.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.providedGrid.Size = new System.Drawing.Size(952, 193);
             this.providedGrid.TabIndex = 3;
             this.providedGrid.Title = "Education Provided";

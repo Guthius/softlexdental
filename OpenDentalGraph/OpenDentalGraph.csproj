@@ -142,9 +142,6 @@
     <Compile Include="Base\BaseGraphOptionsCtrl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Base\BaseGraphOptionsCtrl.Designer.cs">
-      <DependentUpon>BaseGraphOptionsCtrl.cs</DependentUpon>
-    </Compile>
     <Compile Include="Concrete\HqMessagesRealTimeOptionsCtrl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -235,9 +232,6 @@
     <EmbeddedResource Include="Base\GroupingOptionsCtrl.resx">
       <DependentUpon>GroupingOptionsCtrl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Base\BaseGraphOptionsCtrl.resx">
-      <DependentUpon>BaseGraphOptionsCtrl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Base\GraphIncome.resx">
       <DependentUpon>GraphIncome.cs</DependentUpon>
     </EmbeddedResource>
@@ -296,9 +290,9 @@
       <Project>{18f7bc78-4b99-48d3-a1f1-0d13a63e3cf9}</Project>
       <Name>xCodeBase</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenDentBusiness\OpenDentBusiness.csproj">
+    <ProjectReference Include="..\OpenDentBusiness\OpenDental.Core.csproj">
       <Project>{3d0fc76e-803c-4de2-bdb1-47d63a4e2357}</Project>
-      <Name>OpenDentBusiness</Name>
+      <Name>OpenDental.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -71,7 +71,7 @@ namespace OpenDental
             this.columnHeadersGrid.Location = new System.Drawing.Point(13, 19);
             this.columnHeadersGrid.Name = "columnHeadersGrid";
             this.columnHeadersGrid.ScrollValue = 0;
-            this.columnHeadersGrid.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+            this.columnHeadersGrid.SelectionMode = OpenDental.UI.GridSelectionMode.Cell;
             this.columnHeadersGrid.Size = new System.Drawing.Size(360, 469);
             this.columnHeadersGrid.TabIndex = 0;
             this.columnHeadersGrid.Title = "Wiki List Headers";
@@ -90,7 +90,7 @@ namespace OpenDental
             this.pickListGrid.Location = new System.Drawing.Point(379, 19);
             this.pickListGrid.Name = "pickListGrid";
             this.pickListGrid.ScrollValue = 0;
-            this.pickListGrid.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+            this.pickListGrid.SelectionMode = OpenDental.UI.GridSelectionMode.Cell;
             this.pickListGrid.Size = new System.Drawing.Size(236, 469);
             this.pickListGrid.TabIndex = 1;
             this.pickListGrid.Title = "Pick List Options";

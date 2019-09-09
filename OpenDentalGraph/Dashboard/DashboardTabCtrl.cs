@@ -317,7 +317,7 @@ namespace OpenDentalGraph {
 		///<summary>Will add the pre-defined default clinics tab. 
 		///Only one default clinics tab can exist at a time, but the user may rename it to add multiple.
 		///This method does NOT save the tab to the database. The user will still have to save changes and will have the option of discarding this tab.</summary>
-		public void AddDefaultsTabByGrouping(bool hasPrompt,GroupingOptionsCtrl.Grouping grouping) {
+		public void AddDefaultsTabByGrouping(bool hasPrompt,GroupingOptionsControl.Grouping grouping) {
 			string strGrouping=char.ToUpper(grouping.ToString()[0])+grouping.ToString().Substring(1);
 			if(!ValidateTabName(strGrouping+" Defaults")) {
 				return;

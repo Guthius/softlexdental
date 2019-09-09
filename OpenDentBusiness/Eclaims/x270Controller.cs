@@ -42,9 +42,9 @@ namespace OpenDentBusiness.Eclaims {
 			Etrans etransHtml=null;
 			//a connection error here needs to bubble up
 			try {
-				if(clearinghouseClin.CommBridge==EclaimsCommBridge.ClaimConnect) {
-					x12response=ClaimConnect.Benefits270(clearinghouseClin,x12message);
-				}
+				//if(clearinghouseClin.CommBridge==EclaimsCommBridge.ClaimConnect) {
+				//	x12response=ClaimConnect.Benefits270(clearinghouseClin,x12message);
+				//}
 				if(clearinghouseClin.CommBridge==EclaimsCommBridge.EDS) {
 					x12response=EDS.Benefits270(clearinghouseClin,x12message,out etransHtml);
 				}

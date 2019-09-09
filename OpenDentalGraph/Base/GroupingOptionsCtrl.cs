@@ -1,52 +1,46 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace OpenDentalGraph {
-	public partial class GroupingOptionsCtrl:UserControl {
-		public event EventHandler InputsChanged;
-		public enum Grouping { provider, clinic };
-		public Grouping CurGrouping{
-			get {
-				if(radioGroupProvs.Checked) {
-					return Grouping.provider;
-				}
-				else {
-					return Grouping.clinic;
-				}
-			}
-			set {
-				switch(value) {
-					case Grouping.provider:
-						radioGroupProvs.Checked=true;
-						break;
-					case Grouping.clinic:
-						radioGroupClinics.Checked=true;
-						break;
-				}
-			}
-		}
+namespace OpenDentalGraph
+{
+    public partial class GroupingOptionsControl : OptionsControl
+    {
+        public enum Grouping { Provider, Clinic };
 
-		public GroupingOptionsCtrl() {
-			InitializeComponent();			
-		}
+        public Grouping CurGrouping
+        {
+            get => radioGroupProvs.Checked ? Grouping.Provider : Grouping.Clinic;
+            set
+            {
+                switch (value)
+                {
+                    case Grouping.Provider:
+                        radioGroupProvs.Checked = true;
+                        break;
 
-		protected void OnBaseInputsChanged(object sender,EventArgs e) {
-			if(InputsChanged!=null) {
-				InputsChanged(this,new EventArgs());
-			}
-		}
-		
-		private void radioGroupByChanged(object sender,EventArgs e) {
-			if((sender is RadioButton) && !((RadioButton)sender).Checked) {
-				return;
-			}
-			OnBaseInputsChanged(sender,e);
-		}
-	}
+                    case Grouping.Clinic:
+                        radioGroupClinics.Checked = true;
+                        break;
+                }
+            }
+        }
+
+        public GroupingOptionsControl() => InitializeComponent();
+
+        private void RadioGroupByChanged(object sender, EventArgs e)
+        {
+            if (sender is RadioButton radioButton && !radioButton.Checked)
+            {
+                return;
+            }
+
+            OnOptionsChanged();
+        }
+    }
 }

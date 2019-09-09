@@ -230,7 +230,7 @@
 			this.gridInterventions.MinimumSize = new System.Drawing.Size(559, 160);
 			this.gridInterventions.Name = "gridInterventions";
 			this.gridInterventions.ScrollValue = 0;
-			this.gridInterventions.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridInterventions.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridInterventions.Size = new System.Drawing.Size(559, 160);
 			this.gridInterventions.TabIndex = 9;
 			this.gridInterventions.Title = "Intervention History";
@@ -376,7 +376,7 @@
 			this.gridAssessments.MinimumSize = new System.Drawing.Size(559, 160);
 			this.gridAssessments.Name = "gridAssessments";
 			this.gridAssessments.ScrollValue = 0;
-			this.gridAssessments.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridAssessments.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridAssessments.Size = new System.Drawing.Size(559, 160);
 			this.gridAssessments.TabIndex = 9;
 			this.gridAssessments.Title = "Assessment History";

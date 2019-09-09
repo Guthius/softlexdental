@@ -8,6 +8,7 @@ using System.Xml.Serialization;
 using System.Reflection;
 using CodeBase;
 using System.Linq;
+using OpenDental;
 
 namespace OpenDentBusiness{
 	public class SheetsInternal {
@@ -15,77 +16,77 @@ namespace OpenDentBusiness{
 		public static SheetDef GetSheetDef(SheetInternalType internalType){
 			switch(internalType){
 				case SheetInternalType.LabelPatientMail:
-					return GetSheetFromResource(Properties.Resources.LabelPatientMail);
+					return GetSheetFromResource(OpenDental.Properties.Resources.LabelPatientMail);
 				case SheetInternalType.LabelPatientLFAddress:
-					return GetSheetFromResource(Properties.Resources.LabelPatientLFAddress);
+					return GetSheetFromResource(OpenDental.Properties.Resources.LabelPatientLFAddress);
 				case SheetInternalType.LabelPatientLFChartNumber:
-					return GetSheetFromResource(Properties.Resources.LabelPatientLFChartNumber);
+					return GetSheetFromResource(OpenDental.Properties.Resources.LabelPatientLFChartNumber);
 				case SheetInternalType.LabelPatientLFPatNum:
-					return GetSheetFromResource(Properties.Resources.LabelPatientLFPatNum);
+					return GetSheetFromResource(OpenDental.Properties.Resources.LabelPatientLFPatNum);
 				case SheetInternalType.LabelPatientRadiograph:
-					return GetSheetFromResource(Properties.Resources.LabelPatientRadiograph);
+					return GetSheetFromResource(OpenDental.Properties.Resources.LabelPatientRadiograph);
 				case SheetInternalType.LabelText:
-					return GetSheetFromResource(Properties.Resources.LabelText);
+					return GetSheetFromResource(OpenDental.Properties.Resources.LabelText);
 				case SheetInternalType.LabelCarrier:
-					return GetSheetFromResource(Properties.Resources.LabelCarrier);
+					return GetSheetFromResource(OpenDental.Properties.Resources.LabelCarrier);
 				case SheetInternalType.LabelReferral:
-					return GetSheetFromResource(Properties.Resources.LabelReferral);
+					return GetSheetFromResource(OpenDental.Properties.Resources.LabelReferral);
 				case SheetInternalType.ReferralSlip:
-					return GetSheetFromResource(Properties.Resources.ReferralSlip);
+					return GetSheetFromResource(OpenDental.Properties.Resources.ReferralSlip);
 				case SheetInternalType.LabelAppointment:
-					return GetSheetFromResource(Properties.Resources.LabelAppointment);
+					return GetSheetFromResource(OpenDental.Properties.Resources.LabelAppointment);
 				case SheetInternalType.Rx:
-					return GetSheetFromResource(Properties.Resources.Rx);
+					return GetSheetFromResource(OpenDental.Properties.Resources.Rx);
 				case SheetInternalType.Consent:
-					return GetSheetFromResource(Properties.Resources.Consent);
+					return GetSheetFromResource(OpenDental.Properties.Resources.Consent);
 				case SheetInternalType.PatientLetter:
-					return GetSheetFromResource(Properties.Resources.PatientLetter);
+					return GetSheetFromResource(OpenDental.Properties.Resources.PatientLetter);
 				case SheetInternalType.PatientLetterTxFinder:
-					return GetSheetFromResource(Properties.Resources.PatientLetterTxFinder);
+					return GetSheetFromResource(OpenDental.Properties.Resources.PatientLetterTxFinder);
 				case SheetInternalType.ReferralLetter:
-					return GetSheetFromResource(Properties.Resources.ReferralLetter);
+					return GetSheetFromResource(OpenDental.Properties.Resources.ReferralLetter);
 				case SheetInternalType.PatientRegistration:
-					return GetSheetFromResource(Properties.Resources.PatientRegistration);
+					return GetSheetFromResource(OpenDental.Properties.Resources.PatientRegistration);
 				case SheetInternalType.PatientTransferCEMT:
-					return GetSheetFromResource(Properties.Resources.PatientTransferCEMT);
+					return GetSheetFromResource(OpenDental.Properties.Resources.PatientTransferCEMT);
 				case SheetInternalType.RoutingSlip:
-					return GetSheetFromResource(Properties.Resources.RoutingSlip);
+					return GetSheetFromResource(OpenDental.Properties.Resources.RoutingSlip);
 				case SheetInternalType.FinancialAgreement:
-					return GetSheetFromResource(Properties.Resources.FinancialAgreement);
+					return GetSheetFromResource(OpenDental.Properties.Resources.FinancialAgreement);
 				case SheetInternalType.HIPAA:
-					return GetSheetFromResource(Properties.Resources.HIPAA);
+					return GetSheetFromResource(OpenDental.Properties.Resources.HIPAA);
 				case SheetInternalType.MedicalHistSimple:
-					return GetSheetFromResource(Properties.Resources.MedicalHistSimple);
+					return GetSheetFromResource(OpenDental.Properties.Resources.MedicalHistSimple);
 				case SheetInternalType.MedicalHistNewPat:
-					return GetSheetFromResource(Properties.Resources.MedicalHistNewPat);
+					return GetSheetFromResource(OpenDental.Properties.Resources.MedicalHistNewPat);
 				case SheetInternalType.MedicalHistUpdate:
-					return GetSheetFromResource(Properties.Resources.MedicalHistUpdate);
+					return GetSheetFromResource(OpenDental.Properties.Resources.MedicalHistUpdate);
 				case SheetInternalType.LabSlip:
-					return GetSheetFromResource(Properties.Resources.LabSlip);
+					return GetSheetFromResource(OpenDental.Properties.Resources.LabSlip);
 				case SheetInternalType.ExamSheet:
-					return GetSheetFromResource(Properties.Resources.ExamSheet);
+					return GetSheetFromResource(OpenDental.Properties.Resources.ExamSheet);
 				case SheetInternalType.DepositSlip:
-					return GetSheetFromResource(Properties.Resources.DepositSlip);
+					return GetSheetFromResource(OpenDental.Properties.Resources.DepositSlip);
 				case SheetInternalType.Statement:
-					return GetSheetFromResource(Properties.Resources.Statement);
+					return GetSheetFromResource(OpenDental.Properties.Resources.Statement);
 				case SheetInternalType.MedLabResults:
 					return MedLabResultReport();
 				case SheetInternalType.TreatmentPlan:
-					return GetSheetFromResource(Properties.Resources.TreatmentPlan);
+					return GetSheetFromResource(OpenDental.Properties.Resources.TreatmentPlan);
 				case SheetInternalType.Screening:
-					return GetSheetFromResource(Properties.Resources.Screening);
+					return GetSheetFromResource(OpenDental.Properties.Resources.Screening);
 				case SheetInternalType.PaymentPlan:
-					return GetSheetFromResource(Properties.Resources.PaymentPlan);
+					return GetSheetFromResource(OpenDental.Properties.Resources.PaymentPlan);
 				case SheetInternalType.RxMulti:
-					return GetSheetFromResource(Properties.Resources.RXMulti);
+					return GetSheetFromResource(OpenDental.Properties.Resources.RXMulti);
 				case SheetInternalType.ERA:
-					return GetSheetFromResource(Properties.Resources.ERA);
+					return GetSheetFromResource(OpenDental.Properties.Resources.ERA);
 				case SheetInternalType.ERAGridHeader:
-					return GetSheetFromResource(Properties.Resources.EraGridHeader);
+					return GetSheetFromResource(OpenDental.Properties.Resources.EraGridHeader);
 				case SheetInternalType.RxInstruction:
-					return GetSheetFromResource(Properties.Resources.RxInstruction);
+					return GetSheetFromResource(OpenDental.Properties.Resources.RxInstruction);
 				case SheetInternalType.ChartModule:
-					SheetDef sheetDef=GetSheetFromResource(Properties.Resources.ChartModuleStandardLayout);
+					SheetDef sheetDef=GetSheetFromResource(OpenDental.Properties.Resources.ChartModuleStandardLayout);
 					//if(!Preferences.IsODHQ) {
 						//Exclude HQ specific controls when not HQ.
                         // TODO: Completely remove HQ only fields.....
@@ -93,7 +94,7 @@ namespace OpenDentBusiness{
 					//}
 					return sheetDef;
 				case SheetInternalType.PatientDashboard:
-					sheetDef=GetSheetFromResource(Properties.Resources.PatientDashboard);
+					sheetDef=GetSheetFromResource(OpenDental.Properties.Resources.PatientDashboard);
 					SetPatImageFieldNames(sheetDef);
 					return sheetDef;
 				default:

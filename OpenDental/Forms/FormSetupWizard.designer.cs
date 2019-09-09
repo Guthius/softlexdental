@@ -69,7 +69,7 @@ namespace OpenDental
             this.wizardsGrid.Location = new System.Drawing.Point(13, 79);
             this.wizardsGrid.Name = "wizardsGrid";
             this.wizardsGrid.ScrollValue = 0;
-            this.wizardsGrid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.wizardsGrid.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.wizardsGrid.Size = new System.Drawing.Size(438, 413);
             this.wizardsGrid.TabIndex = 1;
             this.wizardsGrid.Title = "Setup";

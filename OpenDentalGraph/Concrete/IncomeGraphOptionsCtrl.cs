@@ -8,7 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 
 namespace OpenDentalGraph {
-	public partial class IncomeGraphOptionsCtrl:BaseGraphOptionsCtrl {
+	public partial class IncomeGraphOptionsCtrl:GraphOptionsBase {
 		#region Properties
 		public bool IncludePaySplits {
 			get { return checkIncludePaySplits.Checked; }

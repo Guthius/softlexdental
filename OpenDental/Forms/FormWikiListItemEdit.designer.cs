@@ -95,7 +95,7 @@ namespace OpenDental
             this.itemDataGrid.Location = new System.Drawing.Point(13, 19);
             this.itemDataGrid.Name = "itemDataGrid";
             this.itemDataGrid.ScrollValue = 0;
-            this.itemDataGrid.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+            this.itemDataGrid.SelectionMode = OpenDental.UI.GridSelectionMode.Cell;
             this.itemDataGrid.Size = new System.Drawing.Size(598, 613);
             this.itemDataGrid.TabIndex = 0;
             this.itemDataGrid.Title = "";

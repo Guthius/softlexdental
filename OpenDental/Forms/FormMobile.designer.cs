@@ -46,7 +46,6 @@ namespace OpenDental{
 			this.butFullSync = new OpenDental.UI.Button();
 			this.butSync = new OpenDental.UI.Button();
 			this.butClose = new OpenDental.UI.Button();
-			this.service11 = new OpenDental.localhost.Service1();
 			this.butDelete = new OpenDental.UI.Button();
 			this.checkTroubleshooting = new System.Windows.Forms.CheckBox();
 			this.groupPreferences.SuspendLayout();
@@ -287,11 +286,6 @@ namespace OpenDental{
 			this.butClose.Text = "Close";
 			this.butClose.Click += new System.EventHandler(this.butClose_Click);
 			// 
-			// service11
-			// 
-			this.service11.Url = "http://localhost:3824/Service1.asmx";
-			this.service11.UseDefaultCredentials = true;
-			// 
 			// butDelete
 			// 
 			this.butDelete.AdjustImageLocation = new System.Drawing.Point(0, 0);
@@ -365,7 +359,6 @@ namespace OpenDental{
 		private System.Windows.Forms.Label textDateTimeLastRun;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.Label label8;
-		private localhost.Service1 service11;
 		private UI.Button butDelete;
 		private System.Windows.Forms.CheckBox checkTroubleshooting;
 	}

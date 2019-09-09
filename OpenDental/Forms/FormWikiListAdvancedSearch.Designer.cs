@@ -48,7 +48,7 @@
             this.gridMain.Location = new System.Drawing.Point(13, 59);
             this.gridMain.Name = "gridMain";
             this.gridMain.ScrollValue = 0;
-            this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.gridMain.Size = new System.Drawing.Size(358, 313);
             this.gridMain.TabIndex = 1;
             this.gridMain.Title = "Columns";

@@ -26,7 +26,6 @@
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormEtrans835s));
 			this.imageListCalendar = new System.Windows.Forms.ImageList(this.components);
-			this.smsService1 = new OpenDental.CallFireService.SMSService();
 			this.listStatus = new System.Windows.Forms.ListBox();
 			this.calendarTo = new System.Windows.Forms.MonthCalendar();
 			this.calendarFrom = new System.Windows.Forms.MonthCalendar();
@@ -63,12 +62,6 @@
 			this.imageListCalendar.TransparentColor = System.Drawing.Color.Transparent;
 			this.imageListCalendar.Images.SetKeyName(0, "arrowDownTriangle.gif");
 			this.imageListCalendar.Images.SetKeyName(1, "arrowUpTriangle.gif");
-			// 
-			// smsService1
-			// 
-			this.smsService1.Credentials = null;
-			this.smsService1.Url = "https://www.callfire.com/service/SMSService";
-			this.smsService1.UseDefaultCredentials = false;
 			// 
 			// listStatus
 			// 
@@ -453,7 +446,6 @@
 		private System.Windows.Forms.Label labelDaysOldMin;
 		private UI.ComboBoxMulti comboClinics;
 		private ODtextBox textCarrier;
-		private CallFireService.SMSService smsService1;
 		private System.Windows.Forms.ListBox listStatus;
 		private UI.Button butWeekPrevious;
 		private UI.Button butWeekNext;

@@ -157,9 +157,9 @@
       <Project>{18f7bc78-4b99-48d3-a1f1-0d13a63e3cf9}</Project>
       <Name>xCodeBase</Name>
     </ProjectReference>
-    <ProjectReference Include="..\OpenDentBusiness\OpenDentBusiness.csproj">
+    <ProjectReference Include="..\OpenDentBusiness\OpenDental.Core.csproj">
       <Project>{3d0fc76e-803c-4de2-bdb1-47d63a4e2357}</Project>
-      <Name>OpenDentBusiness</Name>
+      <Name>OpenDental.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

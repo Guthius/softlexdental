@@ -1,11 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * Copyright (C) 2003-2019 Jordan S. Sparks, D.M.D.
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
 using System.ServiceProcess;
-using System.Text;
-using System.Windows.Forms;
-using System.IO;
-using Microsoft.Win32;
 
 namespace OpenDentHL7
 {
@@ -16,52 +26,10 @@ namespace OpenDentHL7
         /// </summary>
         static void Main(string[] args)
         {
-#if DEBUG2
-            string serviceName = "OpenDentHL7";
-            ServiceController[] serviceControllersAll = ServiceController.GetServices();
-            for (int i = 0; i < serviceControllersAll.Length; i++)
+            ServiceBase.Run(new ServiceHL7
             {
-                if (serviceControllersAll[i].ServiceName.StartsWith("OpenDent"))
-                {
-                    serviceName = serviceControllersAll[i].ServiceName;
-                    break;
-                }
-            }
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormDebug(serviceName));
-#else
-			EventLog.WriteEntry("OpenDentHL7.Main", DateTime.Now.ToLongTimeString() +" - Service main method starting...");
-			ServiceHL7 serviceHL7=new ServiceHL7();
-			serviceHL7.ServiceName="OpenDentalHL7";//default
-			//Get the executing assembly location directory (location of this OpenDentHL7.exe)
-			string executingDir=Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-			//Get all installed services
-			List<ServiceController> serviceControllersOD=new List<ServiceController>();
-			ServiceController[] serviceControllersAll=ServiceController.GetServices();
-			//Get all installed services that have names that start with "OpenDent"
-			for(int i=0;i<serviceControllersAll.Length;i++) {
-				if(serviceControllersAll[i].ServiceName.StartsWith("OpenDent")) {
-					serviceControllersOD.Add(serviceControllersAll[i]);
-				}
-			}
-			string pathToODHL7exe;
-			//Get the service that is installed from the same directory as the current directory
-			for(int i=0;i<serviceControllersOD.Count;i++) {
-				RegistryKey hklm=Registry.LocalMachine;
-				hklm=hklm.OpenSubKey(@"System\CurrentControlSet\Services\"+serviceControllersOD[i].ServiceName);
-				pathToODHL7exe=hklm.GetValue("ImagePath").ToString();
-				pathToODHL7exe=pathToODHL7exe.Replace("\"","");
-				pathToODHL7exe=Path.GetDirectoryName(pathToODHL7exe);
-				if(pathToODHL7exe==executingDir) {
-					//Set the name of the service to run as the name of the service installed from this directory
-					serviceHL7.ServiceName=serviceControllersOD[i].ServiceName;
-					break;
-				}
-			}
-			ServiceBase.Run(serviceHL7);
-			EventLog.WriteEntry("OpenDentHL7.Main",DateTime.Now.ToLongTimeString() +" - Service main method exiting...");
-#endif
+                ServiceName = "Softlex Dental HL7"
+            });
         }
     }
 }

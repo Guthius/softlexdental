@@ -84,7 +84,7 @@
 			this.gridProdInc.Location = new System.Drawing.Point(3, 35);
 			this.gridProdInc.Name = "gridProdInc";
 			this.gridProdInc.ScrollValue = 0;
-			this.gridProdInc.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+			this.gridProdInc.SelectionMode = OpenDental.UI.GridSelectionMode.Cell;
 			this.gridProdInc.Size = new System.Drawing.Size(255, 151);
 			this.gridProdInc.TabIndex = 214;
 			this.gridProdInc.Title = "Production & Income";
@@ -101,7 +101,7 @@
 			this.gridDaily.Location = new System.Drawing.Point(3, 192);
 			this.gridDaily.Name = "gridDaily";
 			this.gridDaily.ScrollValue = 0;
-			this.gridDaily.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+			this.gridDaily.SelectionMode = OpenDental.UI.GridSelectionMode.Cell;
 			this.gridDaily.Size = new System.Drawing.Size(255, 151);
 			this.gridDaily.TabIndex = 215;
 			this.gridDaily.Title = "Daily";
@@ -118,7 +118,7 @@
 			this.gridMonthly.Location = new System.Drawing.Point(3, 346);
 			this.gridMonthly.Name = "gridMonthly";
 			this.gridMonthly.ScrollValue = 0;
-			this.gridMonthly.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+			this.gridMonthly.SelectionMode = OpenDental.UI.GridSelectionMode.Cell;
 			this.gridMonthly.Size = new System.Drawing.Size(255, 261);
 			this.gridMonthly.TabIndex = 216;
 			this.gridMonthly.Title = "Monthly";
@@ -135,7 +135,7 @@
 			this.gridLists.Location = new System.Drawing.Point(267, 35);
 			this.gridLists.Name = "gridLists";
 			this.gridLists.ScrollValue = 0;
-			this.gridLists.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+			this.gridLists.SelectionMode = OpenDental.UI.GridSelectionMode.Cell;
 			this.gridLists.Size = new System.Drawing.Size(255, 308);
 			this.gridLists.TabIndex = 217;
 			this.gridLists.Title = "Lists";
@@ -168,7 +168,7 @@
 			this.gridPublicHealth.Location = new System.Drawing.Point(267, 346);
 			this.gridPublicHealth.Name = "gridPublicHealth";
 			this.gridPublicHealth.ScrollValue = 0;
-			this.gridPublicHealth.SelectionMode = OpenDental.UI.GridSelectionMode.OneCell;
+			this.gridPublicHealth.SelectionMode = OpenDental.UI.GridSelectionMode.Cell;
 			this.gridPublicHealth.Size = new System.Drawing.Size(255, 103);
 			this.gridPublicHealth.TabIndex = 218;
 			this.gridPublicHealth.Title = "Public Health";

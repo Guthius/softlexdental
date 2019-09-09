@@ -83,7 +83,7 @@ namespace OpenDental{
 			this.gridStudents.Location = new System.Drawing.Point(12, 23);
 			this.gridStudents.Name = "gridStudents";
 			this.gridStudents.ScrollValue = 0;
-			this.gridStudents.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridStudents.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridStudents.Size = new System.Drawing.Size(388, 459);
 			this.gridStudents.TabIndex = 14;
 			this.gridStudents.Title = "Students";

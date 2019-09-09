@@ -160,7 +160,7 @@
             this.employeeGrid.Location = new System.Drawing.Point(6, 22);
             this.employeeGrid.Name = "employeeGrid";
             this.employeeGrid.ScrollValue = 0;
-            this.employeeGrid.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.employeeGrid.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.employeeGrid.Size = new System.Drawing.Size(303, 242);
             this.employeeGrid.TabIndex = 0;
             this.employeeGrid.Title = "Employee";
@@ -331,7 +331,7 @@
             this.gridMessages.Location = new System.Drawing.Point(355, 51);
             this.gridMessages.Name = "gridMessages";
             this.gridMessages.ScrollValue = 0;
-            this.gridMessages.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+            this.gridMessages.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
             this.gridMessages.Size = new System.Drawing.Size(541, 261);
             this.gridMessages.TabIndex = 18;
             this.gridMessages.Title = "Message History";

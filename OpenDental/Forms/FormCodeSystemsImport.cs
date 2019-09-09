@@ -125,162 +125,162 @@ namespace OpenDental {
 		}
 
 		private void Download() {
-			if(gridMain.GetSelectedIndex()==-1) {
-				MsgBox.Show("CodeSystemImporter","No code systems selected.");
-				return;
-			}
-			_mapCodeSystemStatus.Clear();
-			for(int i=0;i<gridMain.SelectedIndices.Length;i++) {		
-				CodeSystem codeSystem=_listCodeSystems[gridMain.SelectedIndices[i]];
-				try {
-					//Show warnings and prompts
-					if(!PreDownloadHelper(codeSystem.CodeSystemName)) {
-						_mapCodeSystemStatus[codeSystem.CodeSystemName]=Lan.g("CodeSystemImporter","Import cancelled");
-						continue;
-					}
-					//CPT codes require user to choose a local file so we will not do this on a thread.
-					//We will handle the CPT import right here on the main thread before we start all other imports in parallel below.
-					if(codeSystem.CodeSystemName=="CPT") {
-						#region Import CPT codes
-						//Default status for CPT codes. We will clear this below if the file is selected and unzipped succesfully.
-						_mapCodeSystemStatus[codeSystem.CodeSystemName]=Lan.g("CodeSystemImporter","To purchase CPT codes go to https://commerce.ama-assn.org/store/");
-						if(!MsgBox.Show("CodeSystemImporter",MsgBoxButtons.OKCancel,"CPT codes must be purchased from the American Medical Association separately in the data file format. "
-							+"Please consult the online manual to help determine if you should purchase these codes and how to purchase them. Most offices are not required to purchase these codes. "
-							+"If you have already purchased the code file click OK to browse to the downloaded file.")) {
-							continue;
-						}
-						OpenFileDialog fdlg=new OpenFileDialog();
-						fdlg.Title=Lan.g("CodeSystemImporter","Choose CPT .zip file");
-						fdlg.InitialDirectory=Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-						fdlg.Filter="zip|*.zip";
-						fdlg.RestoreDirectory=true;
-						fdlg.Multiselect=false;
-						if(fdlg.ShowDialog()!=DialogResult.OK) {
-							continue;
-						}
-						if(!fdlg.FileName.ToLower().EndsWith(".zip")) {
-							_mapCodeSystemStatus[codeSystem.CodeSystemName]=Lan.g("CodeSystemImporter","Could not locate .zip file in specified folder.");
-							continue;
-						}
-						string versionID="";
-						if(fdlg.FileName.ToLower().Contains("cpt-2014-data-files-download.zip")) {
-							versionID="2014";
-						}
-						else if(fdlg.FileName.ToLower().Contains("cpt-2015-data-files.zip")) {
-							versionID="2015";
-						}
-						else if(fdlg.FileName.ToLower().Contains("dl513216_2016.zip")) {
-							versionID="2016";
-						}
-						else if(fdlg.FileName.ToLower().Contains("dl513217.zip")) {
-							versionID="2017";
-						}
-						//Unzip the compressed file-----------------------------------------------------------------------------------------------------
-						bool foundFile=false;
-						string meduFileName="MEDU.txt";//MEDU stands for MEDium desciption Upper case.
-						MemoryStream ms=new MemoryStream();
-						using(ZipFile unzipped=ZipFile.Read(fdlg.FileName)) {
-							for(int unzipIndex=0;unzipIndex<unzipped.Count;unzipIndex++) {//unzip/write all files to the temp directory
-								ZipEntry ze=unzipped[unzipIndex];
-								if(!ze.FileName.ToLower().Contains("medu.txt")) {  //This file used to be called "medu.txt.txt" and is now called "medu.txt".  Uses .Contains() to catch both cases.
-									continue;
-								}
-								meduFileName=ze.FileName;
-								ze.Extract(Preferences.GetTempPath(),ExtractExistingFileAction.OverwriteSilently);
-								foundFile=true;
-							}
-						}
-						if(!foundFile) {
-							_mapCodeSystemStatus[codeSystem.CodeSystemName]=Lan.g("CodeSystemImporter","MEDU.txt file not found in zip archive.");  //Used to be MEDU.txt.txt, For error purposes we'll just show .txt
-							continue;
-						}
-						if(versionID=="") {
-							//This prompt has the chance of allowing users to "corrupt" their data and import codes for one year and identify them as codes from a 
-							//different year. To fix this would require a manual query. If this is a common occurance, consider automating this step based on the codes
-							//detected inside the MEDU file.
-							InputBox input=new InputBox("What year are these CPT codes for?");
-							if(input.ShowDialog()==DialogResult.Cancel || !Regex.IsMatch(input.textResult.Text,@"^\d{4}$")) {//A four digit value was not entered.
-								_mapCodeSystemStatus[codeSystem.CodeSystemName]=Lan.g("CodeSystemImporter","CPT code year must be specified.");
-								continue;
-							}
-							versionID=input.textResult.Text;
-						}
-						//Add a new thread. We will run these all in parallel once we have them all queued.
-						UpdateCodeSystemThread.Add(Path.Combine(Preferences.GetTempPath(),meduFileName),
-							_listCodeSystems[gridMain.SelectedIndices[i]],new UpdateCodeSystemThread.UpdateCodeSystemArgs(UpdateCodeSystemThread_UpdateSafe),
-							versionID,!checkKeepDescriptions.Checked);
-						//We got this far so the local file was retreived successfully. No initial status to report.
-						_mapCodeSystemStatus[codeSystem.CodeSystemName]="";
-						#endregion
-					}
-					else {
-						#region Import all other codes
-						//Add a new thread. We will run these all in parallel once we have them all queued.
-						//This code system file does not exist on the system so it will be downloaded before being imported.
-						if(codeSystem.CodeSystemName=="SNOMEDCT") {//SNOMEDCT codes cannot be given out to non-member nations.  We treat non-USA reg keys as non-member nations.
-							//Ensure customer has a valid USA registration key
-							#if DEBUG
-								OpenDental.localhost.Service1 regService=new OpenDental.localhost.Service1();
-							#else
-								OpenDental.customerUpdates.Service1 regService=new OpenDental.customerUpdates.Service1();
-								regService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
-							#endif
-							if(Preference.GetString(PreferenceName.UpdateWebProxyAddress) !="") {
-								IWebProxy proxy = new WebProxy(Preference.GetString(PreferenceName.UpdateWebProxyAddress));
-								ICredentials cred=new NetworkCredential(Preference.GetString(PreferenceName.UpdateWebProxyUserName),Preference.GetString(PreferenceName.UpdateWebProxyPassword));
-								proxy.Credentials=cred;
-								regService.Proxy=proxy;
-							}
-							XmlWriterSettings settings = new XmlWriterSettings();
-							settings.Indent = true;
-							settings.IndentChars = ("    ");
-							StringBuilder strbuild=new StringBuilder();
-							using(XmlWriter writer=XmlWriter.Create(strbuild,settings)) {
-								writer.WriteStartElement("IsForeignRegKeyRequest");
-								writer.WriteStartElement("RegistrationKey");
-								writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
-								writer.WriteEndElement();
-								writer.WriteEndElement();
-							}
-							string result=regService.IsForeignRegKey(strbuild.ToString());
-							XmlDocument doc=new XmlDocument();
-							doc.LoadXml(result);
-							XmlNode node=doc.SelectSingleNode("//IsForeign");
-							bool isForeignKey=true;
-							if(node!=null) {
-								if(node.InnerText=="false") {
-									isForeignKey=false;
-								}
-							}
-							if(isForeignKey) {
-								string errorMessage=Lan.g(this,"SNOMEDCT has been skipped")+":\r\n";
-								node=doc.SelectSingleNode("//ErrorMessage");
-								if(node!=null) {
-									errorMessage+=node.InnerText;
-								}
-								//The user will have to click OK on this message in order to continue downloading any additional code systems.
-								//In the future we might turn this into calling a delegate in order to update the affected SNOMED row's text instead of stopping the main thread.
-								MessageBox.Show(errorMessage);
-								continue;
-							}
-						}
-						UpdateCodeSystemThread.Add(_listCodeSystems[gridMain.SelectedIndices[i]],
-							new UpdateCodeSystemThread.UpdateCodeSystemArgs(UpdateCodeSystemThread_UpdateSafe),!checkKeepDescriptions.Checked);
-						#endregion
-					}
-				}
-				catch(Exception ex) {
-					//Set status for this code system.
-					_mapCodeSystemStatus[codeSystem.CodeSystemName]=Lan.g("CodeSystemImporter",ex.Message);
-				}
-			}
-			//Threads are all ready to go start them all in parallel. We will re-enable these buttons when we handle the UpdateCodeSystemThread.Finished event.
-			if(UpdateCodeSystemThread.StartAll()) {
-				butDownload.Enabled=false;
-				butCheckUpdates.Enabled=false;
-			}
-			_hasDownloaded=true;
-			FillGrid();
+			//if(gridMain.GetSelectedIndex()==-1) {
+			//	MsgBox.Show("CodeSystemImporter","No code systems selected.");
+			//	return;
+			//}
+			//_mapCodeSystemStatus.Clear();
+			//for(int i=0;i<gridMain.SelectedIndices.Length;i++) {		
+			//	CodeSystem codeSystem=_listCodeSystems[gridMain.SelectedIndices[i]];
+			//	try {
+			//		//Show warnings and prompts
+			//		if(!PreDownloadHelper(codeSystem.CodeSystemName)) {
+			//			_mapCodeSystemStatus[codeSystem.CodeSystemName]=Lan.g("CodeSystemImporter","Import cancelled");
+			//			continue;
+			//		}
+			//		//CPT codes require user to choose a local file so we will not do this on a thread.
+			//		//We will handle the CPT import right here on the main thread before we start all other imports in parallel below.
+			//		if(codeSystem.CodeSystemName=="CPT") {
+			//			#region Import CPT codes
+			//			//Default status for CPT codes. We will clear this below if the file is selected and unzipped succesfully.
+			//			_mapCodeSystemStatus[codeSystem.CodeSystemName]=Lan.g("CodeSystemImporter","To purchase CPT codes go to https://commerce.ama-assn.org/store/");
+			//			if(!MsgBox.Show("CodeSystemImporter",MsgBoxButtons.OKCancel,"CPT codes must be purchased from the American Medical Association separately in the data file format. "
+			//				+"Please consult the online manual to help determine if you should purchase these codes and how to purchase them. Most offices are not required to purchase these codes. "
+			//				+"If you have already purchased the code file click OK to browse to the downloaded file.")) {
+			//				continue;
+			//			}
+			//			OpenFileDialog fdlg=new OpenFileDialog();
+			//			fdlg.Title=Lan.g("CodeSystemImporter","Choose CPT .zip file");
+			//			fdlg.InitialDirectory=Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+			//			fdlg.Filter="zip|*.zip";
+			//			fdlg.RestoreDirectory=true;
+			//			fdlg.Multiselect=false;
+			//			if(fdlg.ShowDialog()!=DialogResult.OK) {
+			//				continue;
+			//			}
+			//			if(!fdlg.FileName.ToLower().EndsWith(".zip")) {
+			//				_mapCodeSystemStatus[codeSystem.CodeSystemName]=Lan.g("CodeSystemImporter","Could not locate .zip file in specified folder.");
+			//				continue;
+			//			}
+			//			string versionID="";
+			//			if(fdlg.FileName.ToLower().Contains("cpt-2014-data-files-download.zip")) {
+			//				versionID="2014";
+			//			}
+			//			else if(fdlg.FileName.ToLower().Contains("cpt-2015-data-files.zip")) {
+			//				versionID="2015";
+			//			}
+			//			else if(fdlg.FileName.ToLower().Contains("dl513216_2016.zip")) {
+			//				versionID="2016";
+			//			}
+			//			else if(fdlg.FileName.ToLower().Contains("dl513217.zip")) {
+			//				versionID="2017";
+			//			}
+			//			//Unzip the compressed file-----------------------------------------------------------------------------------------------------
+			//			bool foundFile=false;
+			//			string meduFileName="MEDU.txt";//MEDU stands for MEDium desciption Upper case.
+			//			MemoryStream ms=new MemoryStream();
+			//			using(ZipFile unzipped=ZipFile.Read(fdlg.FileName)) {
+			//				for(int unzipIndex=0;unzipIndex<unzipped.Count;unzipIndex++) {//unzip/write all files to the temp directory
+			//					ZipEntry ze=unzipped[unzipIndex];
+			//					if(!ze.FileName.ToLower().Contains("medu.txt")) {  //This file used to be called "medu.txt.txt" and is now called "medu.txt".  Uses .Contains() to catch both cases.
+			//						continue;
+			//					}
+			//					meduFileName=ze.FileName;
+			//					ze.Extract(Preferences.GetTempPath(),ExtractExistingFileAction.OverwriteSilently);
+			//					foundFile=true;
+			//				}
+			//			}
+			//			if(!foundFile) {
+			//				_mapCodeSystemStatus[codeSystem.CodeSystemName]=Lan.g("CodeSystemImporter","MEDU.txt file not found in zip archive.");  //Used to be MEDU.txt.txt, For error purposes we'll just show .txt
+			//				continue;
+			//			}
+			//			if(versionID=="") {
+			//				//This prompt has the chance of allowing users to "corrupt" their data and import codes for one year and identify them as codes from a 
+			//				//different year. To fix this would require a manual query. If this is a common occurance, consider automating this step based on the codes
+			//				//detected inside the MEDU file.
+			//				InputBox input=new InputBox("What year are these CPT codes for?");
+			//				if(input.ShowDialog()==DialogResult.Cancel || !Regex.IsMatch(input.textResult.Text,@"^\d{4}$")) {//A four digit value was not entered.
+			//					_mapCodeSystemStatus[codeSystem.CodeSystemName]=Lan.g("CodeSystemImporter","CPT code year must be specified.");
+			//					continue;
+			//				}
+			//				versionID=input.textResult.Text;
+			//			}
+			//			//Add a new thread. We will run these all in parallel once we have them all queued.
+			//			UpdateCodeSystemThread.Add(Path.Combine(Preferences.GetTempPath(),meduFileName),
+			//				_listCodeSystems[gridMain.SelectedIndices[i]],new UpdateCodeSystemThread.UpdateCodeSystemArgs(UpdateCodeSystemThread_UpdateSafe),
+			//				versionID,!checkKeepDescriptions.Checked);
+			//			//We got this far so the local file was retreived successfully. No initial status to report.
+			//			_mapCodeSystemStatus[codeSystem.CodeSystemName]="";
+			//			#endregion
+			//		}
+			//		else {
+			//			#region Import all other codes
+			//			//Add a new thread. We will run these all in parallel once we have them all queued.
+			//			//This code system file does not exist on the system so it will be downloaded before being imported.
+			//			if(codeSystem.CodeSystemName=="SNOMEDCT") {//SNOMEDCT codes cannot be given out to non-member nations.  We treat non-USA reg keys as non-member nations.
+			//				//Ensure customer has a valid USA registration key
+			//				#if DEBUG
+			//					OpenDental.localhost.Service1 regService=new OpenDental.localhost.Service1();
+			//				#else
+			//					OpenDental.customerUpdates.Service1 regService=new OpenDental.customerUpdates.Service1();
+			//					regService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
+			//				#endif
+			//				if(Preference.GetString(PreferenceName.UpdateWebProxyAddress) !="") {
+			//					IWebProxy proxy = new WebProxy(Preference.GetString(PreferenceName.UpdateWebProxyAddress));
+			//					ICredentials cred=new NetworkCredential(Preference.GetString(PreferenceName.UpdateWebProxyUserName),Preference.GetString(PreferenceName.UpdateWebProxyPassword));
+			//					proxy.Credentials=cred;
+			//					regService.Proxy=proxy;
+			//				}
+			//				XmlWriterSettings settings = new XmlWriterSettings();
+			//				settings.Indent = true;
+			//				settings.IndentChars = ("    ");
+			//				StringBuilder strbuild=new StringBuilder();
+			//				using(XmlWriter writer=XmlWriter.Create(strbuild,settings)) {
+			//					writer.WriteStartElement("IsForeignRegKeyRequest");
+			//					writer.WriteStartElement("RegistrationKey");
+			//					writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
+			//					writer.WriteEndElement();
+			//					writer.WriteEndElement();
+			//				}
+			//				string result=regService.IsForeignRegKey(strbuild.ToString());
+			//				XmlDocument doc=new XmlDocument();
+			//				doc.LoadXml(result);
+			//				XmlNode node=doc.SelectSingleNode("//IsForeign");
+			//				bool isForeignKey=true;
+			//				if(node!=null) {
+			//					if(node.InnerText=="false") {
+			//						isForeignKey=false;
+			//					}
+			//				}
+			//				if(isForeignKey) {
+			//					string errorMessage=Lan.g(this,"SNOMEDCT has been skipped")+":\r\n";
+			//					node=doc.SelectSingleNode("//ErrorMessage");
+			//					if(node!=null) {
+			//						errorMessage+=node.InnerText;
+			//					}
+			//					//The user will have to click OK on this message in order to continue downloading any additional code systems.
+			//					//In the future we might turn this into calling a delegate in order to update the affected SNOMED row's text instead of stopping the main thread.
+			//					MessageBox.Show(errorMessage);
+			//					continue;
+			//				}
+			//			}
+			//			UpdateCodeSystemThread.Add(_listCodeSystems[gridMain.SelectedIndices[i]],
+			//				new UpdateCodeSystemThread.UpdateCodeSystemArgs(UpdateCodeSystemThread_UpdateSafe),!checkKeepDescriptions.Checked);
+			//			#endregion
+			//		}
+			//	}
+			//	catch(Exception ex) {
+			//		//Set status for this code system.
+			//		_mapCodeSystemStatus[codeSystem.CodeSystemName]=Lan.g("CodeSystemImporter",ex.Message);
+			//	}
+			//}
+			////Threads are all ready to go start them all in parallel. We will re-enable these buttons when we handle the UpdateCodeSystemThread.Finished event.
+			//if(UpdateCodeSystemThread.StartAll()) {
+			//	butDownload.Enabled=false;
+			//	butCheckUpdates.Enabled=false;
+			//}
+			//_hasDownloaded=true;
+			//FillGrid();
 		}
 
 		///<summary>Used to show EULA or other pre-download actions.  Displays message boxes. Returns false if pre-download checks not satisfied.</summary>
@@ -554,368 +554,422 @@ If the master term dictionary or software program containing the UCUM table, UCU
 			}
 			gridMain.EndUpdate();  //Need to call this instead of gridMain.Invalidate() because we need text wrapping to happen if there was a long error message.
 		}
-		#endregion
+        #endregion
 
-		///<summary>Worker thread class. 1 thread will be spawned for each code sytem being downloaded. All threads will run in parallel.</summary>
-		private class UpdateCodeSystemThread {
-			///<summary>Number of bytes in a kilobyte.</summary>
-			private const int KB_SIZE=1024;
-			///<summary>Number of kilobytes to download in each chunk.</summary>
-			private const int CHUNK_SIZE=10;
-			///<summary>Static lis of threads. All managed internally. Must always be locked by _lock when accessed!!!</summary>
-			private static List<UpdateCodeSystemThread> _threads=new List<UpdateCodeSystemThread>();
-			///<summary>All access of _threads member MUST BE enclosed with lock statement in order to prevent thread-lock and race conditions.</summary>
-			private static object _lock=new object();
-			///<summary>The code system being updated.</summary>
-			private CodeSystem _codeSystem;			
-			///<summary>Download and import functions will check this flag occasionally to see if they should abort prematurely.</summary>
-			private bool _quit=false;
-			///<summary>Function signature required to send an update.  When done==true, percentDone is the number of codes imported.</summary>			
-			public delegate void UpdateCodeSystemArgs(CodeSystem codeSystem,string status,double percentDone,bool done,bool success,int numUpdated);			
-			///<summary>Required by ctor. Used to keep main thread aware of update progress.</summary>			
-			private UpdateCodeSystemArgs _updateHandler;
-			///<summary>Event will be fired when the final thread has finished and all threads have been cleared from the list.</summary>
-			public static EventHandler Finished;
-			///<summary>If this is a CPT import then the file must exist localally and the file location will be provided by the user. All other code system files are held behind the Customer Update web service and will be downloaded to a temp file location in order to be imported.</summary>
-			private string _localFilePath;
-			///<summary>The version of the code system being imported.  Currently only used for CPT codes.</summary>
-			private string _versionID;
-			///<summary>If this code system has been previously imported, this flag will determine whether existing codes are updated.</summary>
-			private bool _updateExisting;
+        ///<summary>Worker thread class. 1 thread will be spawned for each code sytem being downloaded. All threads will run in parallel.</summary>
+        private class UpdateCodeSystemThread
+        {
+            ///<summary>Number of bytes in a kilobyte.</summary>
+            private const int KB_SIZE = 1024;
+            ///<summary>Number of kilobytes to download in each chunk.</summary>
+            private const int CHUNK_SIZE = 10;
+            ///<summary>Static lis of threads. All managed internally. Must always be locked by _lock when accessed!!!</summary>
+            private static List<UpdateCodeSystemThread> _threads = new List<UpdateCodeSystemThread>();
+            ///<summary>All access of _threads member MUST BE enclosed with lock statement in order to prevent thread-lock and race conditions.</summary>
+            private static object _lock = new object();
+            ///<summary>The code system being updated.</summary>
+            private CodeSystem _codeSystem;
+            ///<summary>Download and import functions will check this flag occasionally to see if they should abort prematurely.</summary>
+            private bool _quit = false;
+            ///<summary>Function signature required to send an update.  When done==true, percentDone is the number of codes imported.</summary>			
+            public delegate void UpdateCodeSystemArgs(CodeSystem codeSystem, string status, double percentDone, bool done, bool success, int numUpdated);
+            ///<summary>Required by ctor. Used to keep main thread aware of update progress.</summary>			
+            private UpdateCodeSystemArgs _updateHandler;
+            ///<summary>Event will be fired when the final thread has finished and all threads have been cleared from the list.</summary>
+            public static EventHandler Finished;
+            ///<summary>If this is a CPT import then the file must exist localally and the file location will be provided by the user. All other code system files are held behind the Customer Update web service and will be downloaded to a temp file location in order to be imported.</summary>
+            private string _localFilePath;
+            ///<summary>The version of the code system being imported.  Currently only used for CPT codes.</summary>
+            private string _versionID;
+            ///<summary>If this code system has been previously imported, this flag will determine whether existing codes are updated.</summary>
+            private bool _updateExisting;
 
-			///<summary>Aborts the thread. Only called by StopAll.</summary>
-			private void Quit() {
-				_quit=true;
-			}
+            ///<summary>Aborts the thread. Only called by StopAll.</summary>
+            private void Quit()
+            {
+                _quit = true;
+            }
 
-			///<summary>Indicates if there are still 1 or more active threads.</summary>
-			public static bool IsRunning {
-				get {
-					lock(_lock){
-						return _threads.Count>=1;
-					}					
-				}
-			}
+            ///<summary>Indicates if there are still 1 or more active threads.</summary>
+            public static bool IsRunning
+            {
+                get
+                {
+                    lock (_lock)
+                    {
+                        return _threads.Count >= 1;
+                    }
+                }
+            }
 
-			///<summary>Private ctor. Will only be used internally by Add. If localFilePath is set here then it is assumed that the file exists locally and file download will be skipped before importing data from the file. This will only happen for the CPT code system.</summary>
-			private UpdateCodeSystemThread(string localFilePath,CodeSystem codeSystem,UpdateCodeSystemArgs onUpdateHandler, string versionID,
-				bool updateExisting) 
-			{
-				_localFilePath=localFilePath;
-				_codeSystem=codeSystem;
-				_updateHandler+=onUpdateHandler;
-				_versionID=versionID;
-				_updateExisting=updateExisting;
-			}
-			
-			///<summary>Provide a nice ledgible identifier.</summary>
-			public override string ToString() {
-				return _codeSystem.CodeSystemName;
-			}
+            ///<summary>Private ctor. Will only be used internally by Add. If localFilePath is set here then it is assumed that the file exists locally and file download will be skipped before importing data from the file. This will only happen for the CPT code system.</summary>
+            private UpdateCodeSystemThread(string localFilePath, CodeSystem codeSystem, UpdateCodeSystemArgs onUpdateHandler, string versionID,
+                bool updateExisting)
+            {
+                _localFilePath = localFilePath;
+                _codeSystem = codeSystem;
+                _updateHandler += onUpdateHandler;
+                _versionID = versionID;
+                _updateExisting = updateExisting;
+            }
 
-			///<summary>Thread list manager needs this to remove threads. Required for List.Contains.</summary>
-			public override bool Equals(object obj) {
-				return ((UpdateCodeSystemThread)obj)._codeSystem.CodeSystemNum==_codeSystem.CodeSystemNum;
-			}
+            ///<summary>Provide a nice ledgible identifier.</summary>
+            public override string ToString()
+            {
+                return _codeSystem.CodeSystemName;
+            }
 
-			///<summary>Just to prevent a VS warning.</summary>
-			public override int GetHashCode() {
-				return base.GetHashCode();
-			}
+            ///<summary>Thread list manager needs this to remove threads. Required for List.Contains.</summary>
+            public override bool Equals(object obj)
+            {
+                return ((UpdateCodeSystemThread)obj)._codeSystem.CodeSystemNum == _codeSystem.CodeSystemNum;
+            }
 
-			///<summary>Add a thread to the queue. These threads will not be started until StartAll is called subsequent to adding all necessary threads. If localFilePath is set here then it is assumed that the file exists locally and file download will be skipped before importing data from the file. This will only happen for the CPT code system.</summary>
-			public static void Add(string localFilePath,CodeSystem codeSystem,UpdateCodeSystemArgs onUpdateHandler, string versionID,bool updateExisting) {
-				UpdateCodeSystemThread thread=new UpdateCodeSystemThread(localFilePath,codeSystem,onUpdateHandler,versionID,updateExisting);
-				lock(_lock) {
-					_threads.Add(thread);
-				}
-			}
+            ///<summary>Just to prevent a VS warning.</summary>
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
+            }
 
-			///<summary>Add a thread to the queue. These threads will not be started until StartAll is called subsequent to adding all necessary threads. This version assures that code system file will be downloaded before import. Use for all code system except CPT.</summary>
-			public static void Add(CodeSystem codeSystem,UpdateCodeSystemArgs onUpdateHandler,bool updateExisting) {
-				Add("",codeSystem,onUpdateHandler,"",updateExisting);
-			}
+            ///<summary>Add a thread to the queue. These threads will not be started until StartAll is called subsequent to adding all necessary threads. If localFilePath is set here then it is assumed that the file exists locally and file download will be skipped before importing data from the file. This will only happen for the CPT code system.</summary>
+            public static void Add(string localFilePath, CodeSystem codeSystem, UpdateCodeSystemArgs onUpdateHandler, string versionID, bool updateExisting)
+            {
+                UpdateCodeSystemThread thread = new UpdateCodeSystemThread(localFilePath, codeSystem, onUpdateHandler, versionID, updateExisting);
+                lock (_lock)
+                {
+                    _threads.Add(thread);
+                }
+            }
 
-			///<summary>Use this to start the threads once all threads have been added using Add.</summary>
-			public static bool StartAll() {				
-				bool startedAtLeastOne=false;
-				lock(_lock) {
-					foreach(UpdateCodeSystemThread thread in _threads) {
-						Thread th=new Thread(new ThreadStart(thread.Run));
-						th.Name=thread.ToString();
-						th.Start();
-						startedAtLeastOne=true;
-					}
-				}
-				return startedAtLeastOne;
-			}
+            ///<summary>Add a thread to the queue. These threads will not be started until StartAll is called subsequent to adding all necessary threads. This version assures that code system file will be downloaded before import. Use for all code system except CPT.</summary>
+            public static void Add(CodeSystem codeSystem, UpdateCodeSystemArgs onUpdateHandler, bool updateExisting)
+            {
+                Add("", codeSystem, onUpdateHandler, "", updateExisting);
+            }
 
-			///<summary>Sets the Quit flag for all threads. Use this if early abort is desired.</summary>
-			public static void StopAll() {
-				lock(_lock) {
-					foreach(UpdateCodeSystemThread thread in _threads) {
-						thread.Quit();
-					}
-					_threads.Clear();
-				}
-			}
+            ///<summary>Use this to start the threads once all threads have been added using Add.</summary>
+            public static bool StartAll()
+            {
+                bool startedAtLeastOne = false;
+                lock (_lock)
+                {
+                    foreach (UpdateCodeSystemThread thread in _threads)
+                    {
+                        Thread th = new Thread(new ThreadStart(thread.Run));
+                        th.Name = thread.ToString();
+                        th.Start();
+                        startedAtLeastOne = true;
+                    }
+                }
+                return startedAtLeastOne;
+            }
 
-			///<summary>Called internally each time time a thread has completed. Will trigger the Finished event if this is the last thread to complete.</summary>
-			private void Done(string status,bool success, int numCodesImported,int numCodesUpdated) {
-				_updateHandler(_codeSystem,status,Convert.ToDouble(numCodesImported),true,success,numCodesUpdated);//Pass in the number of codes imported as percentDone.  This was done so can display the number of codes imported withouth having to add a new perameter to the delegate function.
-				bool finished=false;
-				lock(_lock) {
-					if(_threads.Contains(this)) {
-						_threads.Remove(this);
-					}
-					finished=_threads.Count<=0;
-				}
-				if(finished && Finished!=null) {
-					Finished("UpdateCodeSystemThread",new EventArgs());
-				}
-			}
+            ///<summary>Sets the Quit flag for all threads. Use this if early abort is desired.</summary>
+            public static void StopAll()
+            {
+                lock (_lock)
+                {
+                    foreach (UpdateCodeSystemThread thread in _threads)
+                    {
+                        thread.Quit();
+                    }
+                    _threads.Clear();
+                }
+            }
 
-			///<summary>Update the current status of this import thread. Thread owner is required to handle this as the delegat is required in the ctor.</summary>
-			private void Update(string status,int numDone,int numTotal) {
-				double percentDone=0;
-				//Guard against illegal division.
-				if(numTotal>0) {
-					percentDone=100*(numDone/(double)numTotal);
-				}
-				_updateHandler(_codeSystem,status,percentDone,false,true,0);
-			}
+            ///<summary>Called internally each time time a thread has completed. Will trigger the Finished event if this is the last thread to complete.</summary>
+            private void Done(string status, bool success, int numCodesImported, int numCodesUpdated)
+            {
+                _updateHandler(_codeSystem, status, Convert.ToDouble(numCodesImported), true, success, numCodesUpdated);//Pass in the number of codes imported as percentDone.  This was done so can display the number of codes imported withouth having to add a new perameter to the delegate function.
+                bool finished = false;
+                lock (_lock)
+                {
+                    if (_threads.Contains(this))
+                    {
+                        _threads.Remove(this);
+                    }
+                    finished = _threads.Count <= 0;
+                }
+                if (finished && Finished != null)
+                {
+                    Finished("UpdateCodeSystemThread", new EventArgs());
+                }
+            }
 
-			///<summary>Helper used internally.</summary>
-			private void ImportProgress(int numDone,int numTotal) {
-				Update(Lan.g("CodeSystemImporter","Importing"),numDone,numTotal);
-			}
+            ///<summary>Update the current status of this import thread. Thread owner is required to handle this as the delegat is required in the ctor.</summary>
+            private void Update(string status, int numDone, int numTotal)
+            {
+                double percentDone = 0;
+                //Guard against illegal division.
+                if (numTotal > 0)
+                {
+                    percentDone = 100 * (numDone / (double)numTotal);
+                }
+                _updateHandler(_codeSystem, status, percentDone, false, true, 0);
+            }
 
-			///<summary>Helper used internally.</summary>
-			private void DownloadProgress(int numDone,int numTotal) {
-				Update(Lan.g("CodeSystemImporter","Downloading"),numDone,numTotal);
-			}
+            ///<summary>Helper used internally.</summary>
+            private void ImportProgress(int numDone, int numTotal)
+            {
+                Update(Lan.g("CodeSystemImporter", "Importing"), numDone, numTotal);
+            }
 
-			///<summary>The thread function.</summary>
-			private void Run() {
-				try {
-					string failText="";
-					int _numCodesImported=0;
-					int numCodesUpdated=0;
-					if(!RequestCodeSystemDownloadHelper(ref failText,ref _numCodesImported,ref numCodesUpdated)) {
-						throw new Exception(failText);						
-					}
-					//set current version=available version
-					if(_codeSystem.CodeSystemName=="CPT") {
-						CodeSystems.UpdateCurrentVersion(_codeSystem, _versionID);
-					}
-					else {
-						CodeSystems.UpdateCurrentVersion(_codeSystem);
-					}
-					//All good!
-					Done(Lan.g("CodeSystemImporter","Import Complete"),true,_numCodesImported,numCodesUpdated);
-				}
-				catch(Exception ex) {
-					//Something failed!
-					Done(Lan.g("CodeSystemImporter","Error")+": "+ex.Message,false,0,0);
-				}
-			}
+            ///<summary>Helper used internally.</summary>
+            private void DownloadProgress(int numDone, int numTotal)
+            {
+                Update(Lan.g("CodeSystemImporter", "Downloading"), numDone, numTotal);
+            }
 
-			///<summary>Will request, download, and import codeSystem from webservice. Returns false if unsuccessful.</summary>
-			private bool RequestCodeSystemDownloadHelper(ref string failText,ref int numCodesImported,ref int numCodesUpdated) {
-				try {
-					//If local file was not provided then try to download it from Customer Update web service. 
-					//Local file will only be provided for CPT code system.
-					if(string.IsNullOrEmpty(_localFilePath)) { 
-						string result=SendAndReceiveDownloadXml(_codeSystem.CodeSystemName);
-						XmlDocument doc=new XmlDocument();
-						doc.LoadXml(result);
-						string strError=WebServiceRequest.CheckForErrors(doc);
-						if(!string.IsNullOrEmpty(strError)) {
-							throw new Exception(strError);
-						}
-						XmlNode node=doc.SelectSingleNode("//CodeSystemURL");
-						if(node==null) {
-							throw new Exception(Lan.g("CodeSystemImporter","Code System URL is empty for ")+": "+_codeSystem.CodeSystemName);
-						}
-						//Node's inner text contains the URL
-						_localFilePath=DownloadFileHelper(node.InnerText);					
-					}
-					if(!File.Exists(_localFilePath)) {
-						throw new Exception(Lan.g("CodeSystemImporter","Local file not found ")+": "+_localFilePath);
-					}
-					switch(_codeSystem.CodeSystemName) {
-						case "CDCREC":
-							CodeSystems.ImportCdcrec(_localFilePath,new CodeSystems.ProgressArgs(ImportProgress),ref _quit,ref numCodesImported,ref numCodesUpdated,
-								_updateExisting);
-							break;
-						case "CVX":
-							CodeSystems.ImportCvx(_localFilePath,new CodeSystems.ProgressArgs(ImportProgress),ref _quit,ref numCodesImported,ref numCodesUpdated,
-								_updateExisting);
-							break;
-						case "HCPCS":
-							CodeSystems.ImportHcpcs(_localFilePath,new CodeSystems.ProgressArgs(ImportProgress),ref _quit,ref numCodesImported,ref numCodesUpdated,
-								_updateExisting);
-							break;
-						case "ICD10CM":
-							CodeSystems.ImportIcd10(_localFilePath,new CodeSystems.ProgressArgs(ImportProgress),ref _quit,ref numCodesImported,ref numCodesUpdated,
-								_updateExisting);
-							break;
-						case "ICD9CM":
-							CodeSystems.ImportIcd9(_localFilePath,new CodeSystems.ProgressArgs(ImportProgress),ref _quit,ref numCodesImported,ref numCodesUpdated,
-								_updateExisting);
-							break;
-						case "LOINC":
-							CodeSystems.ImportLoinc(_localFilePath,new CodeSystems.ProgressArgs(ImportProgress),ref _quit,ref numCodesImported,ref numCodesUpdated,
-								_updateExisting);
-							break;
-						case "RXNORM":
-							CodeSystems.ImportRxNorm(_localFilePath,new CodeSystems.ProgressArgs(ImportProgress),ref _quit,ref numCodesImported,ref numCodesUpdated,
-								_updateExisting);
-							break;
-						case "SNOMEDCT":
-							CodeSystems.ImportSnomed(_localFilePath,new CodeSystems.ProgressArgs(ImportProgress),ref _quit,ref numCodesImported,ref numCodesUpdated,
-								_updateExisting);
-							break;
-						case "SOP":
-							CodeSystems.ImportSop(_localFilePath,new CodeSystems.ProgressArgs(ImportProgress),ref _quit,ref numCodesImported,ref numCodesUpdated,
-								_updateExisting);
-							break;
-						case "UCUM":
-							CodeSystems.ImportUcum(_localFilePath,new CodeSystems.ProgressArgs(ImportProgress),ref _quit,ref numCodesImported,ref numCodesUpdated,
-								_updateExisting);
-							break;
-						case "CPT":
-							CodeSystems.ImportCpt(_localFilePath,new CodeSystems.ProgressArgs(ImportProgress),ref _quit,ref numCodesImported,ref numCodesUpdated,
-								_versionID);
-							break;
-						case "CDT":  //import not supported
-						case "AdministrativeSex":  //import not supported
-						default:  //new code system perhaps?
-							throw new Exception(Lan.g("CodeSystemImporter","Unsupported Code System")+": "+_codeSystem.CodeSystemName);
-					}
-					//Import succeded so delete the import file where necessary.
-					DeleteImportFileIfNecessary();
-					//We got here so everything succeeded.
-					return true;
-				}
-				catch(Exception ex) {
-					failText=ex.Message;
-				}
-				//We got here so something failed.
-				return false;
-			}
+            ///<summary>The thread function.</summary>
+            private void Run()
+            {
+                try
+                {
+                    string failText = "";
+                    int _numCodesImported = 0;
+                    int numCodesUpdated = 0;
+                    if (!RequestCodeSystemDownloadHelper(ref failText, ref _numCodesImported, ref numCodesUpdated))
+                    {
+                        throw new Exception(failText);
+                    }
+                    //set current version=available version
+                    if (_codeSystem.CodeSystemName == "CPT")
+                    {
+                        CodeSystems.UpdateCurrentVersion(_codeSystem, _versionID);
+                    }
+                    else
+                    {
+                        CodeSystems.UpdateCurrentVersion(_codeSystem);
+                    }
+                    //All good!
+                    Done(Lan.g("CodeSystemImporter", "Import Complete"), true, _numCodesImported, numCodesUpdated);
+                }
+                catch (Exception ex)
+                {
+                    //Something failed!
+                    Done(Lan.g("CodeSystemImporter", "Error") + ": " + ex.Message, false, 0, 0);
+                }
+            }
 
-			///<summary>Delete the import file which was created locally. This file was either downloaded or extracted from a zip archive. Either way it is temporary and can be deleted.</summary>
-			private void DeleteImportFileIfNecessary() {
-				//Don't bother if the file isn't there.
-				if(!File.Exists(_localFilePath)) {
-					return;
-				}				
-				//We got this far so assume the file is safe to delete.
-				File.Delete(_localFilePath);
-			}
+            ///<summary>Will request, download, and import codeSystem from webservice. Returns false if unsuccessful.</summary>
+            private bool RequestCodeSystemDownloadHelper(ref string failText, ref int numCodesImported, ref int numCodesUpdated)
+            {
+                try
+                {
+                    //If local file was not provided then try to download it from Customer Update web service. 
+                    //Local file will only be provided for CPT code system.
+                    if (string.IsNullOrEmpty(_localFilePath))
+                    {
+                        string result = SendAndReceiveDownloadXml(_codeSystem.CodeSystemName);
+                        XmlDocument doc = new XmlDocument();
+                        doc.LoadXml(result);
+                        string strError = WebServiceRequest.CheckForErrors(doc);
+                        if (!string.IsNullOrEmpty(strError))
+                        {
+                            throw new Exception(strError);
+                        }
+                        XmlNode node = doc.SelectSingleNode("//CodeSystemURL");
+                        if (node == null)
+                        {
+                            throw new Exception(Lan.g("CodeSystemImporter", "Code System URL is empty for ") + ": " + _codeSystem.CodeSystemName);
+                        }
+                        //Node's inner text contains the URL
+                        _localFilePath = DownloadFileHelper(node.InnerText);
+                    }
+                    if (!File.Exists(_localFilePath))
+                    {
+                        throw new Exception(Lan.g("CodeSystemImporter", "Local file not found ") + ": " + _localFilePath);
+                    }
+                    switch (_codeSystem.CodeSystemName)
+                    {
+                        case "CDCREC":
+                            CodeSystems.ImportCdcrec(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                                _updateExisting);
+                            break;
+                        case "CVX":
+                            CodeSystems.ImportCvx(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                                _updateExisting);
+                            break;
+                        case "HCPCS":
+                            CodeSystems.ImportHcpcs(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                                _updateExisting);
+                            break;
+                        case "ICD10CM":
+                            CodeSystems.ImportIcd10(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                                _updateExisting);
+                            break;
+                        case "ICD9CM":
+                            CodeSystems.ImportIcd9(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                                _updateExisting);
+                            break;
+                        case "LOINC":
+                            CodeSystems.ImportLoinc(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                                _updateExisting);
+                            break;
+                        case "RXNORM":
+                            CodeSystems.ImportRxNorm(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                                _updateExisting);
+                            break;
+                        case "SNOMEDCT":
+                            CodeSystems.ImportSnomed(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                                _updateExisting);
+                            break;
+                        case "SOP":
+                            CodeSystems.ImportSop(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                                _updateExisting);
+                            break;
+                        case "UCUM":
+                            CodeSystems.ImportUcum(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                                _updateExisting);
+                            break;
+                        case "CPT":
+                            CodeSystems.ImportCpt(_localFilePath, new CodeSystems.ProgressArgs(ImportProgress), ref _quit, ref numCodesImported, ref numCodesUpdated,
+                                _versionID);
+                            break;
+                        case "CDT":  //import not supported
+                        case "AdministrativeSex":  //import not supported
+                        default:  //new code system perhaps?
+                            throw new Exception(Lan.g("CodeSystemImporter", "Unsupported Code System") + ": " + _codeSystem.CodeSystemName);
+                    }
+                    //Import succeded so delete the import file where necessary.
+                    DeleteImportFileIfNecessary();
+                    //We got here so everything succeeded.
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    failText = ex.Message;
+                }
+                //We got here so something failed.
+                return false;
+            }
 
-			///<summary>Returns temp file name used to download file.  Can throw exception.</summary>
-			private string DownloadFileHelper(string codeSystemURL) {
-				string zipFileDestination=Preferences.GetRandomTempFile(".tmp");
-				//Cleanup existing.
-				File.Delete(zipFileDestination);
-				try {
-					//Perform the download
-					DownloadFileWorker(codeSystemURL,zipFileDestination);
-					Thread.Sleep(100);//allow file to be released for use by the unzipper.
-					//Unzip the compressed file-----------------------------------------------------------------------------------------------------
-					using(MemoryStream ms=new MemoryStream())
-					using(ZipFile unzipped=ZipFile.Read(zipFileDestination)) {
-						ZipEntry ze=unzipped[0];
-						ze.Extract(Preferences.GetTempPath(),ExtractExistingFileAction.OverwriteSilently);
-						return Path.Combine(Preferences.GetTempPath(),unzipped[0].FileName);
-					}
-				}
-				finally{
-					//We are done with the zip file.
-					File.Delete(zipFileDestination);
-				}
-			}
+            ///<summary>Delete the import file which was created locally. This file was either downloaded or extracted from a zip archive. Either way it is temporary and can be deleted.</summary>
+            private void DeleteImportFileIfNecessary()
+            {
+                //Don't bother if the file isn't there.
+                if (!File.Exists(_localFilePath))
+                {
+                    return;
+                }
+                //We got this far so assume the file is safe to delete.
+                File.Delete(_localFilePath);
+            }
 
-			///<summary>Download given URI to given local path. Can throw exception.</summary>
-			private void DownloadFileWorker(string codeSystemURL,string destinationPath) {
-				byte[] buffer;
-				int chunkIndex=0;
-				WebRequest wr=WebRequest.Create(codeSystemURL);
-				int fileSize=0;
-				using(WebResponse webResp=wr.GetResponse()) { //Quickly get the size of the entire package to be downloaded.
-					fileSize=(int)webResp.ContentLength;
-				}
-				using(WebClient myWebClient=new WebClient())
-				using(Stream readStream=myWebClient.OpenRead(codeSystemURL))
-				using(BinaryReader br=new BinaryReader(readStream))
-				using(FileStream writeStream=new FileStream(destinationPath,FileMode.Create))
-				using(BinaryWriter bw=new BinaryWriter(writeStream)) {
-					while(true) {
-						if(_quit) {
-							throw new Exception(Lan.g("CodeSystemImporter","Download aborted"));
-						}
-						//Update the progress.
-						DownloadProgress(CHUNK_SIZE*KB_SIZE*chunkIndex,fileSize);
-						//Download another chunk.
-						buffer=br.ReadBytes(CHUNK_SIZE*KB_SIZE);
-						if(buffer.Length==0) { //Nothing left to download so we are done.
-							break;
-						}
-						//Write out to the file.
-						bw.Write(buffer);
-						chunkIndex++;
-					}
-				}
-			}
+            ///<summary>Returns temp file name used to download file.  Can throw exception.</summary>
+            private string DownloadFileHelper(string codeSystemURL)
+            {
+                string zipFileDestination = Preferences.GetRandomTempFile(".tmp");
+                //Cleanup existing.
+                File.Delete(zipFileDestination);
+                try
+                {
+                    //Perform the download
+                    DownloadFileWorker(codeSystemURL, zipFileDestination);
+                    Thread.Sleep(100);//allow file to be released for use by the unzipper.
+                                      //Unzip the compressed file-----------------------------------------------------------------------------------------------------
+                    using (MemoryStream ms = new MemoryStream())
+                    using (ZipFile unzipped = ZipFile.Read(zipFileDestination))
+                    {
+                        ZipEntry ze = unzipped[0];
+                        ze.Extract(Preferences.GetTempPath(), ExtractExistingFileAction.OverwriteSilently);
+                        return Path.Combine(Preferences.GetTempPath(), unzipped[0].FileName);
+                    }
+                }
+                finally
+                {
+                    //We are done with the zip file.
+                    File.Delete(zipFileDestination);
+                }
+            }
 
-			///<summary>Can throw exception.</summary>
-			private static string SendAndReceiveDownloadXml(string codeSystemName) {
-				//prepare the xml document to send--------------------------------------------------------------------------------------
-				XmlWriterSettings settings = new XmlWriterSettings();
-				settings.Indent = true;
-				settings.IndentChars = ("    ");
-				StringBuilder strbuild=new StringBuilder();
-				using(XmlWriter writer=XmlWriter.Create(strbuild,settings)) {
-					//TODO: include more user information
-					writer.WriteStartElement("UpdateRequest");
-					writer.WriteStartElement("RegistrationKey");
-					writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
-					writer.WriteEndElement();
-					writer.WriteStartElement("PracticeTitle");
-					writer.WriteString(Preference.GetString(PreferenceName.PracticeTitle));
-					writer.WriteEndElement();
-					writer.WriteStartElement("PracticeAddress");
-					writer.WriteString(Preference.GetString(PreferenceName.PracticeAddress));
-					writer.WriteEndElement();
-					writer.WriteStartElement("PracticePhone");
-					writer.WriteString(Preference.GetString(PreferenceName.PracticePhone));
-					writer.WriteEndElement();
-					writer.WriteStartElement("ProgramVersion");
-					writer.WriteString(Preference.GetString(PreferenceName.ProgramVersion));
-					writer.WriteEndElement();
-					writer.WriteStartElement("CodeSystemRequested");
-					writer.WriteString(codeSystemName);
-					writer.WriteEndElement();
-					writer.WriteEndElement();
-				}
-#if DEBUG
-				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
-#else
-				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
-				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
-#endif
-				if(Preference.GetString(PreferenceName.UpdateWebProxyAddress) !="") {
-					IWebProxy proxy = new WebProxy(Preference.GetString(PreferenceName.UpdateWebProxyAddress));
-					ICredentials cred=new NetworkCredential(Preference.GetString(PreferenceName.UpdateWebProxyUserName),Preference.GetString(PreferenceName.UpdateWebProxyPassword));
-					proxy.Credentials=cred;
-					updateService.Proxy=proxy;
-				}
-				//may throw error
-				return updateService.RequestCodeSystemDownload(strbuild.ToString());
-			}
-		}
+            ///<summary>Download given URI to given local path. Can throw exception.</summary>
+            private void DownloadFileWorker(string codeSystemURL, string destinationPath)
+            {
+                byte[] buffer;
+                int chunkIndex = 0;
+                WebRequest wr = WebRequest.Create(codeSystemURL);
+                int fileSize = 0;
+                using (WebResponse webResp = wr.GetResponse())
+                { //Quickly get the size of the entire package to be downloaded.
+                    fileSize = (int)webResp.ContentLength;
+                }
+                using (WebClient myWebClient = new WebClient())
+                using (Stream readStream = myWebClient.OpenRead(codeSystemURL))
+                using (BinaryReader br = new BinaryReader(readStream))
+                using (FileStream writeStream = new FileStream(destinationPath, FileMode.Create))
+                using (BinaryWriter bw = new BinaryWriter(writeStream))
+                {
+                    while (true)
+                    {
+                        if (_quit)
+                        {
+                            throw new Exception(Lan.g("CodeSystemImporter", "Download aborted"));
+                        }
+                        //Update the progress.
+                        DownloadProgress(CHUNK_SIZE * KB_SIZE * chunkIndex, fileSize);
+                        //Download another chunk.
+                        buffer = br.ReadBytes(CHUNK_SIZE * KB_SIZE);
+                        if (buffer.Length == 0)
+                        { //Nothing left to download so we are done.
+                            break;
+                        }
+                        //Write out to the file.
+                        bw.Write(buffer);
+                        chunkIndex++;
+                    }
+                }
+            }
+
+            ///<summary>Can throw exception.</summary>
+            private static string SendAndReceiveDownloadXml(string codeSystemName)
+            {
+                //				//prepare the xml document to send--------------------------------------------------------------------------------------
+                //				XmlWriterSettings settings = new XmlWriterSettings();
+                //				settings.Indent = true;
+                //				settings.IndentChars = ("    ");
+                //				StringBuilder strbuild=new StringBuilder();
+                //				using(XmlWriter writer=XmlWriter.Create(strbuild,settings)) {
+                //					//TODO: include more user information
+                //					writer.WriteStartElement("UpdateRequest");
+                //					writer.WriteStartElement("RegistrationKey");
+                //					writer.WriteString(Preference.GetString(PreferenceName.RegistrationKey));
+                //					writer.WriteEndElement();
+                //					writer.WriteStartElement("PracticeTitle");
+                //					writer.WriteString(Preference.GetString(PreferenceName.PracticeTitle));
+                //					writer.WriteEndElement();
+                //					writer.WriteStartElement("PracticeAddress");
+                //					writer.WriteString(Preference.GetString(PreferenceName.PracticeAddress));
+                //					writer.WriteEndElement();
+                //					writer.WriteStartElement("PracticePhone");
+                //					writer.WriteString(Preference.GetString(PreferenceName.PracticePhone));
+                //					writer.WriteEndElement();
+                //					writer.WriteStartElement("ProgramVersion");
+                //					writer.WriteString(Preference.GetString(PreferenceName.ProgramVersion));
+                //					writer.WriteEndElement();
+                //					writer.WriteStartElement("CodeSystemRequested");
+                //					writer.WriteString(codeSystemName);
+                //					writer.WriteEndElement();
+                //					writer.WriteEndElement();
+                //				}
+                //#if DEBUG
+                //				OpenDental.localhost.Service1 updateService=new OpenDental.localhost.Service1();
+                //#else
+                //				OpenDental.customerUpdates.Service1 updateService=new OpenDental.customerUpdates.Service1();
+                //				updateService.Url=PrefC.GetString(PrefName.UpdateServerAddress);
+                //#endif
+                //				if(Preference.GetString(PreferenceName.UpdateWebProxyAddress) !="") {
+                //					IWebProxy proxy = new WebProxy(Preference.GetString(PreferenceName.UpdateWebProxyAddress));
+                //					ICredentials cred=new NetworkCredential(Preference.GetString(PreferenceName.UpdateWebProxyUserName),Preference.GetString(PreferenceName.UpdateWebProxyPassword));
+                //					proxy.Credentials=cred;
+                //					updateService.Proxy=proxy;
+                //				}
+                //				//may throw error
+                //				return updateService.RequestCodeSystemDownload(strbuild.ToString());
+                //			}
+                return "";
+            }
+        }
 		
 		private void butClose_Click(object sender,EventArgs e) {
 			DialogResult=DialogResult.Cancel;

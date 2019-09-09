@@ -48,7 +48,7 @@ namespace OpenDental
 
                 LoadAccountsQuickBooks();
 
-                accountsGrid.SelectionMode = GridSelectionMode.MultiExtended;
+                accountsGrid.SelectionMode = GridSelectionMode.Multiple;
             }
             else
             {

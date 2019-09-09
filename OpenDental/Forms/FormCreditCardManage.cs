@@ -94,182 +94,182 @@ namespace OpenDental {
 		}
 
 		private void butAdd_Click(object sender,EventArgs e) {
-			if(!Preference.GetBool(PreferenceName.StoreCCnumbers)) {
-				bool hasXCharge=false;
-				bool hasPayConnect=false;
-				bool hasPaySimple=false;
-				Dictionary<string,int> dictEnabledProcessors=new Dictionary<string,int>();
-				int idx=0;
-				bool hasXChargePreventCcAdd=PIn.Bool(ProgramProperties.GetPropVal(Programs.GetCur(ProgramName.Xcharge).ProgramNum,
-					XCharge.ProgramProperties.XChargePreventSavingNewCC,Clinics.ClinicNum));
-				if(Programs.IsEnabled(ProgramName.Xcharge) && !hasXChargePreventCcAdd) {
-					dictEnabledProcessors["X-Charge"]=idx++;
-				}
-				bool hasPayConnectPreventCcAdd=PIn.Bool(ProgramProperties.GetPropVal(Programs.GetCur(ProgramName.PayConnect).ProgramNum,
-					PayConnect.ProgramProperties.PayConnectPreventSavingNewCC,Clinics.ClinicNum));
-				if(Programs.IsEnabled(ProgramName.PayConnect) && !hasPayConnectPreventCcAdd) {
-					dictEnabledProcessors["PayConnect"]=idx++;
-				}
-				bool hasPaySimplePreventCCAdd=PIn.Bool(ProgramProperties.GetPropVal(Programs.GetCur(ProgramName.PaySimple).ProgramNum,
-					PaySimple.PropertyDescs.PaySimplePreventSavingNewCC,Clinics.ClinicNum));
-				if(Programs.IsEnabled(ProgramName.PaySimple) && !hasPaySimplePreventCCAdd) {
-					dictEnabledProcessors["PaySimple"]=idx++;
-				}
-				if(dictEnabledProcessors.Count>1) {
-					List<string> listCCProcessors=dictEnabledProcessors.Select(x => x.Key).ToList();
-					InputBox chooseProcessor=
-						new InputBox(Lan.g(this,"For which credit card processing company would you like to add this card?"),listCCProcessors,true);
-					if(chooseProcessor.ShowDialog()==DialogResult.Cancel) {
-						return;
-					}
-					hasXCharge=dictEnabledProcessors.ContainsKey("X-Charge") && chooseProcessor.SelectedIndices.Contains(dictEnabledProcessors["X-Charge"]);
-					hasPayConnect=dictEnabledProcessors.ContainsKey("PayConnect") && chooseProcessor.SelectedIndices.Contains(dictEnabledProcessors["PayConnect"]);
-					hasPaySimple=dictEnabledProcessors.ContainsKey("PaySimple") && chooseProcessor.SelectedIndices.Contains(dictEnabledProcessors["PaySimple"]);
-				}
-				else if(Programs.IsEnabled(ProgramName.Xcharge) && !hasXChargePreventCcAdd) {
-					hasXCharge=true;
-				}
-				else if(Programs.IsEnabled(ProgramName.PayConnect) && !hasPayConnectPreventCcAdd) {
-					hasPayConnect=true;
-				}
-				else if(Programs.IsEnabled(ProgramName.PaySimple) && !hasPaySimplePreventCCAdd) {
-					hasPaySimple=true;
-				}
-				else {//not storing CC numbers and both PayConnect and X-Charge are disabled
-					MsgBox.Show(this,"Not allowed to store credit cards.");
-					return;
-				}
-				CreditCard creditCardCur=null;
-				if(hasXCharge) {
-					Program prog=Programs.GetCur(ProgramName.Xcharge);
-					string path=Programs.GetProgramPath(prog);
-					string xUsername=ProgramProperties.GetPropVal(prog.ProgramNum,"Username",Clinics.ClinicNum).Trim();
-					string xPassword=ProgramProperties.GetPropVal(prog.ProgramNum,"Password",Clinics.ClinicNum).Trim();
-					//Force user to retry entering information until it's correct or they press cancel
-					while(!File.Exists(path) || string.IsNullOrEmpty(xPassword) || string.IsNullOrEmpty(xUsername)) {
-						MsgBox.Show(this,"The Path, Username, and/or Password for X-Charge have not been set or are invalid.");
-						if(!Security.IsAuthorized(Permissions.Setup)) {
-							return;
-						}
-						FormXchargeSetup FormX=new FormXchargeSetup();//refreshes program and program property caches on OK click
-						FormX.ShowDialog();
-						if(FormX.DialogResult!=DialogResult.OK) {//if user presses cancel, return
-							return;
-						}
-						prog=Programs.GetCur(ProgramName.Xcharge);//refresh local variable prog to reflect any changes made in setup window
-						path=Programs.GetProgramPath(prog);
-						xUsername=ProgramProperties.GetPropVal(prog.ProgramNum,"Username",Clinics.ClinicNum).Trim();
-						xPassword=ProgramProperties.GetPropVal(prog.ProgramNum,"Password",Clinics.ClinicNum).Trim();
-					}
-					xPassword=CodeBase.MiscUtils.Decrypt(xPassword);
-					ProcessStartInfo info=new ProcessStartInfo(path);
-					string resultfile=Preferences.GetRandomTempFile("txt");
-					try {
-						File.Delete(resultfile);//delete the old result file.
-					}
-					catch {
-						MsgBox.Show(this,"Could not delete XResult.txt file.  It may be in use by another program, flagged as read-only, or you might not have sufficient permissions.");
-						return;
-					}
-					info.Arguments="";
-					info.Arguments+="/TRANSACTIONTYPE:ArchiveVaultAdd /LOCKTRANTYPE ";
-					info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
-					info.Arguments+="/USERID:"+xUsername+" ";
-					info.Arguments+="/PASSWORD:"+xPassword+" ";
-					info.Arguments+="/VALIDATEARCHIVEVAULTACCOUNT ";
-					info.Arguments+="/STAYONTOP ";
-					info.Arguments+="/SMARTAUTOPROCESS ";
-					info.Arguments+="/AUTOCLOSE ";
-					info.Arguments+="/HIDEMAINWINDOW ";
-					info.Arguments+="/SMALLWINDOW ";
-					info.Arguments+="/NORESULTDIALOG ";
-					info.Arguments+="/TOOLBAREXITBUTTON ";
-					Cursor=Cursors.WaitCursor;
-					Process process=new Process();
-					process.StartInfo=info;
-					process.EnableRaisingEvents=true;
-					process.Start();
-					while(!process.HasExited) {
-						Application.DoEvents();
-					}
-					Thread.Sleep(200);//Wait 2/10 second to give time for file to be created.
-					Cursor=Cursors.Default;
-					string resulttext="";
-					string line="";
-					string xChargeToken="";
-					string accountMasked="";
-					string exp="";;
-					bool insertCard=false;
-					try {
-						using(TextReader reader=new StreamReader(resultfile)) {
-							line=reader.ReadLine();
-							while(line!=null) {
-								if(resulttext!="") {
-									resulttext+="\r\n";
-								}
-								resulttext+=line;
-								if(line.StartsWith("RESULT=")) {
-									if(line!="RESULT=SUCCESS") {
-										throw new Exception();
-									}
-									insertCard=true;
-								}
-								if(line.StartsWith("XCACCOUNTID=")) {
-									xChargeToken=PIn.String(line.Substring(12));
-								}
-								if(line.StartsWith("ACCOUNT=")) {
-									accountMasked=PIn.String(line.Substring(8));
-								}
-								if(line.StartsWith("EXPIRATION=")) {
-									exp=PIn.String(line.Substring(11));
-								}
-								line=reader.ReadLine();
-							}
-							if(insertCard && xChargeToken!="") {//Might not be necessary but we've had successful charges with no tokens returned before.
-								creditCardCur=new CreditCard();
-								List<CreditCard> itemOrderCount=CreditCards.Refresh(PatCur.PatNum);
-								creditCardCur.PatNum=PatCur.PatNum;
-								creditCardCur.ItemOrder=itemOrderCount.Count;
-								creditCardCur.CCNumberMasked=accountMasked;
-								creditCardCur.XChargeToken=xChargeToken;
-								creditCardCur.CCExpiration=new DateTime(Convert.ToInt32("20"+PIn.String(exp.Substring(2,2))),Convert.ToInt32(PIn.String(exp.Substring(0,2))),1);
-								creditCardCur.Procedures=Preference.GetString(PreferenceName.DefaultCCProcs);
-								creditCardCur.CCSource=CreditCardSource.XServer;
-								creditCardCur.ClinicNum=Clinics.ClinicNum;
-								CreditCards.Insert(creditCardCur);
-							}
-						}
-					}
-					catch(Exception) {
-						MsgBox.Show(this,"There was a problem adding the credit card.  Please try again.");
-					}
-				}
-				if(hasPayConnect) {
-					FormPayConnect FormPC=new FormPayConnect(Clinics.ClinicNum,PatCur,(decimal)0.01,creditCardCur,true);
-					FormPC.ShowDialog();
-				}
-				if(hasPaySimple) {
-					FormPaySimple formPS=new FormPaySimple(Clinics.ClinicNum,PatCur,(decimal)0.01,creditCardCur,true);
-					formPS.ShowDialog();
-				}
-				FillGrid();
-				if(gridMain.Rows.Count>0 && creditCardCur!=null) {
-					gridMain.SetSelected(gridMain.Rows.Count-1,true);
-				}
-				return;
-			}
-			//storing CC numbers allowed from here down
-			FormCreditCardEdit FormCCE=new FormCreditCardEdit(PatCur);
-			FormCCE.CreditCardCur=new CreditCard();
-			FormCCE.CreditCardCur.IsNew=true;
-			FormCCE.CreditCardCur.Procedures=Preference.GetString(PreferenceName.DefaultCCProcs);
-			FormCCE.ShowDialog();
-			if(FormCCE.DialogResult==DialogResult.OK) {
-				FillGrid();
-				if(gridMain.Rows.Count>0) {
-					gridMain.SetSelected(gridMain.Rows.Count-1,true);
-				}
-			}
+			//if(!Preference.GetBool(PreferenceName.StoreCCnumbers)) {
+			//	bool hasXCharge=false;
+			//	bool hasPayConnect=false;
+			//	bool hasPaySimple=false;
+			//	Dictionary<string,int> dictEnabledProcessors=new Dictionary<string,int>();
+			//	int idx=0;
+			//	bool hasXChargePreventCcAdd=PIn.Bool(ProgramProperties.GetPropVal(Programs.GetCur(ProgramName.Xcharge).ProgramNum,
+			//		XCharge.ProgramProperties.XChargePreventSavingNewCC,Clinics.ClinicNum));
+			//	if(Programs.IsEnabled(ProgramName.Xcharge) && !hasXChargePreventCcAdd) {
+			//		dictEnabledProcessors["X-Charge"]=idx++;
+			//	}
+			//	bool hasPayConnectPreventCcAdd=PIn.Bool(ProgramProperties.GetPropVal(Programs.GetCur(ProgramName.PayConnect).ProgramNum,
+			//		PayConnect.ProgramProperties.PayConnectPreventSavingNewCC,Clinics.ClinicNum));
+			//	if(Programs.IsEnabled(ProgramName.PayConnect) && !hasPayConnectPreventCcAdd) {
+			//		dictEnabledProcessors["PayConnect"]=idx++;
+			//	}
+			//	bool hasPaySimplePreventCCAdd=PIn.Bool(ProgramProperties.GetPropVal(Programs.GetCur(ProgramName.PaySimple).ProgramNum,
+			//		PaySimple.PropertyDescs.PaySimplePreventSavingNewCC,Clinics.ClinicNum));
+			//	if(Programs.IsEnabled(ProgramName.PaySimple) && !hasPaySimplePreventCCAdd) {
+			//		dictEnabledProcessors["PaySimple"]=idx++;
+			//	}
+			//	if(dictEnabledProcessors.Count>1) {
+			//		List<string> listCCProcessors=dictEnabledProcessors.Select(x => x.Key).ToList();
+			//		InputBox chooseProcessor=
+			//			new InputBox(Lan.g(this,"For which credit card processing company would you like to add this card?"),listCCProcessors,true);
+			//		if(chooseProcessor.ShowDialog()==DialogResult.Cancel) {
+			//			return;
+			//		}
+			//		hasXCharge=dictEnabledProcessors.ContainsKey("X-Charge") && chooseProcessor.SelectedIndices.Contains(dictEnabledProcessors["X-Charge"]);
+			//		hasPayConnect=dictEnabledProcessors.ContainsKey("PayConnect") && chooseProcessor.SelectedIndices.Contains(dictEnabledProcessors["PayConnect"]);
+			//		hasPaySimple=dictEnabledProcessors.ContainsKey("PaySimple") && chooseProcessor.SelectedIndices.Contains(dictEnabledProcessors["PaySimple"]);
+			//	}
+			//	else if(Programs.IsEnabled(ProgramName.Xcharge) && !hasXChargePreventCcAdd) {
+			//		hasXCharge=true;
+			//	}
+			//	else if(Programs.IsEnabled(ProgramName.PayConnect) && !hasPayConnectPreventCcAdd) {
+			//		hasPayConnect=true;
+			//	}
+			//	else if(Programs.IsEnabled(ProgramName.PaySimple) && !hasPaySimplePreventCCAdd) {
+			//		hasPaySimple=true;
+			//	}
+			//	else {//not storing CC numbers and both PayConnect and X-Charge are disabled
+			//		MsgBox.Show(this,"Not allowed to store credit cards.");
+			//		return;
+			//	}
+			//	CreditCard creditCardCur=null;
+			//	if(hasXCharge) {
+			//		Program prog=Programs.GetCur(ProgramName.Xcharge);
+			//		string path=Programs.GetProgramPath(prog);
+			//		string xUsername=ProgramProperties.GetPropVal(prog.ProgramNum,"Username",Clinics.ClinicNum).Trim();
+			//		string xPassword=ProgramProperties.GetPropVal(prog.ProgramNum,"Password",Clinics.ClinicNum).Trim();
+			//		//Force user to retry entering information until it's correct or they press cancel
+			//		while(!File.Exists(path) || string.IsNullOrEmpty(xPassword) || string.IsNullOrEmpty(xUsername)) {
+			//			MsgBox.Show(this,"The Path, Username, and/or Password for X-Charge have not been set or are invalid.");
+			//			if(!Security.IsAuthorized(Permissions.Setup)) {
+			//				return;
+			//			}
+			//			FormXchargeSetup FormX=new FormXchargeSetup();//refreshes program and program property caches on OK click
+			//			FormX.ShowDialog();
+			//			if(FormX.DialogResult!=DialogResult.OK) {//if user presses cancel, return
+			//				return;
+			//			}
+			//			prog=Programs.GetCur(ProgramName.Xcharge);//refresh local variable prog to reflect any changes made in setup window
+			//			path=Programs.GetProgramPath(prog);
+			//			xUsername=ProgramProperties.GetPropVal(prog.ProgramNum,"Username",Clinics.ClinicNum).Trim();
+			//			xPassword=ProgramProperties.GetPropVal(prog.ProgramNum,"Password",Clinics.ClinicNum).Trim();
+			//		}
+			//		xPassword=CodeBase.MiscUtils.Decrypt(xPassword);
+			//		ProcessStartInfo info=new ProcessStartInfo(path);
+			//		string resultfile=Preferences.GetRandomTempFile("txt");
+			//		try {
+			//			File.Delete(resultfile);//delete the old result file.
+			//		}
+			//		catch {
+			//			MsgBox.Show(this,"Could not delete XResult.txt file.  It may be in use by another program, flagged as read-only, or you might not have sufficient permissions.");
+			//			return;
+			//		}
+			//		info.Arguments="";
+			//		info.Arguments+="/TRANSACTIONTYPE:ArchiveVaultAdd /LOCKTRANTYPE ";
+			//		info.Arguments+="/RESULTFILE:\""+resultfile+"\" ";
+			//		info.Arguments+="/USERID:"+xUsername+" ";
+			//		info.Arguments+="/PASSWORD:"+xPassword+" ";
+			//		info.Arguments+="/VALIDATEARCHIVEVAULTACCOUNT ";
+			//		info.Arguments+="/STAYONTOP ";
+			//		info.Arguments+="/SMARTAUTOPROCESS ";
+			//		info.Arguments+="/AUTOCLOSE ";
+			//		info.Arguments+="/HIDEMAINWINDOW ";
+			//		info.Arguments+="/SMALLWINDOW ";
+			//		info.Arguments+="/NORESULTDIALOG ";
+			//		info.Arguments+="/TOOLBAREXITBUTTON ";
+			//		Cursor=Cursors.WaitCursor;
+			//		Process process=new Process();
+			//		process.StartInfo=info;
+			//		process.EnableRaisingEvents=true;
+			//		process.Start();
+			//		while(!process.HasExited) {
+			//			Application.DoEvents();
+			//		}
+			//		Thread.Sleep(200);//Wait 2/10 second to give time for file to be created.
+			//		Cursor=Cursors.Default;
+			//		string resulttext="";
+			//		string line="";
+			//		string xChargeToken="";
+			//		string accountMasked="";
+			//		string exp="";;
+			//		bool insertCard=false;
+			//		try {
+			//			using(TextReader reader=new StreamReader(resultfile)) {
+			//				line=reader.ReadLine();
+			//				while(line!=null) {
+			//					if(resulttext!="") {
+			//						resulttext+="\r\n";
+			//					}
+			//					resulttext+=line;
+			//					if(line.StartsWith("RESULT=")) {
+			//						if(line!="RESULT=SUCCESS") {
+			//							throw new Exception();
+			//						}
+			//						insertCard=true;
+			//					}
+			//					if(line.StartsWith("XCACCOUNTID=")) {
+			//						xChargeToken=PIn.String(line.Substring(12));
+			//					}
+			//					if(line.StartsWith("ACCOUNT=")) {
+			//						accountMasked=PIn.String(line.Substring(8));
+			//					}
+			//					if(line.StartsWith("EXPIRATION=")) {
+			//						exp=PIn.String(line.Substring(11));
+			//					}
+			//					line=reader.ReadLine();
+			//				}
+			//				if(insertCard && xChargeToken!="") {//Might not be necessary but we've had successful charges with no tokens returned before.
+			//					creditCardCur=new CreditCard();
+			//					List<CreditCard> itemOrderCount=CreditCards.Refresh(PatCur.PatNum);
+			//					creditCardCur.PatNum=PatCur.PatNum;
+			//					creditCardCur.ItemOrder=itemOrderCount.Count;
+			//					creditCardCur.CCNumberMasked=accountMasked;
+			//					creditCardCur.XChargeToken=xChargeToken;
+			//					creditCardCur.CCExpiration=new DateTime(Convert.ToInt32("20"+PIn.String(exp.Substring(2,2))),Convert.ToInt32(PIn.String(exp.Substring(0,2))),1);
+			//					creditCardCur.Procedures=Preference.GetString(PreferenceName.DefaultCCProcs);
+			//					creditCardCur.CCSource=CreditCardSource.XServer;
+			//					creditCardCur.ClinicNum=Clinics.ClinicNum;
+			//					CreditCards.Insert(creditCardCur);
+			//				}
+			//			}
+			//		}
+			//		catch(Exception) {
+			//			MsgBox.Show(this,"There was a problem adding the credit card.  Please try again.");
+			//		}
+			//	}
+			//	if(hasPayConnect) {
+			//		FormPayConnect FormPC=new FormPayConnect(Clinics.ClinicNum,PatCur,(decimal)0.01,creditCardCur,true);
+			//		FormPC.ShowDialog();
+			//	}
+			//	if(hasPaySimple) {
+			//		FormPaySimple formPS=new FormPaySimple(Clinics.ClinicNum,PatCur,(decimal)0.01,creditCardCur,true);
+			//		formPS.ShowDialog();
+			//	}
+			//	FillGrid();
+			//	if(gridMain.Rows.Count>0 && creditCardCur!=null) {
+			//		gridMain.SetSelected(gridMain.Rows.Count-1,true);
+			//	}
+			//	return;
+			//}
+			////storing CC numbers allowed from here down
+			//FormCreditCardEdit FormCCE=new FormCreditCardEdit(PatCur);
+			//FormCCE.CreditCardCur=new CreditCard();
+			//FormCCE.CreditCardCur.IsNew=true;
+			//FormCCE.CreditCardCur.Procedures=Preference.GetString(PreferenceName.DefaultCCProcs);
+			//FormCCE.ShowDialog();
+			//if(FormCCE.DialogResult==DialogResult.OK) {
+			//	FillGrid();
+			//	if(gridMain.Rows.Count>0) {
+			//		gridMain.SetSelected(gridMain.Rows.Count-1,true);
+			//	}
+			//}
 		}
 
 		private void butMoveTo_Click(object sender,EventArgs e) {

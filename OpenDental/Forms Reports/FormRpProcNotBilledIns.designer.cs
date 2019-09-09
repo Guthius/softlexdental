@@ -131,7 +131,7 @@
 			this.gridMain.Location = new System.Drawing.Point(25, 71);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMain.Size = new System.Drawing.Size(967, 588);
 			this.gridMain.TabIndex = 69;
 			this.gridMain.Title = "Procedures Not Billed";

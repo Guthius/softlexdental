@@ -84,94 +84,94 @@ namespace OpenDental {
 		}
 
 		private void AddNeededProgramProperties(long clinicNum) {
-			if(!_listProgProps.Any(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiUserName)) {
-				_listProgProps.Add(new ProgramProperty() {
-					ClinicNum=clinicNum,
-					PropertyDesc=PaySimple.PropertyDescs.PaySimpleApiUserName,
-					ProgramNum=_progCur.ProgramNum,
-					PropertyValue=_listProgProps.FirstOrDefault(x => x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiUserName && x.ClinicNum==0).PropertyValue,
-				});
-			}
-			if(!_listProgProps.Any(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiKey)) {
-				_listProgProps.Add(new ProgramProperty() {
-					ClinicNum=clinicNum,
-					PropertyDesc=PaySimple.PropertyDescs.PaySimpleApiKey,
-					ProgramNum=_progCur.ProgramNum,
-					PropertyValue=_listProgProps.FirstOrDefault(x => x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiKey && x.ClinicNum==0).PropertyValue,
-				});
-			}
-			if(!_listProgProps.Any(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeCC)) {
-				_listProgProps.Add(new ProgramProperty() {
-					ClinicNum=clinicNum,
-					PropertyDesc=PaySimple.PropertyDescs.PaySimplePayTypeCC,
-					ProgramNum=_progCur.ProgramNum,
-					PropertyValue=_listProgProps.FirstOrDefault(x => x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeCC && x.ClinicNum==0).PropertyValue,
-				});
-			}
-			if(!_listProgProps.Any(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeACH)) {
-				_listProgProps.Add(new ProgramProperty() {
-					ClinicNum=clinicNum,
-					PropertyDesc=PaySimple.PropertyDescs.PaySimplePayTypeACH,
-					ProgramNum=_progCur.ProgramNum,
-					PropertyValue=_listProgProps.FirstOrDefault(x => x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeACH && x.ClinicNum==0).PropertyValue,
-				});
-			}
-			if(!_listProgProps.Any(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePreventSavingNewCC)) {
-				_listProgProps.Add(new ProgramProperty() {
-					ClinicNum=clinicNum,
-					PropertyDesc=PaySimple.PropertyDescs.PaySimplePreventSavingNewCC,
-					ProgramNum=_progCur.ProgramNum,
-					PropertyValue=_listProgProps.FirstOrDefault(x => x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePreventSavingNewCC && x.ClinicNum==0)?.PropertyValue??"0",
-				});
-			}
+			//if(!_listProgProps.Any(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiUserName)) {
+			//	_listProgProps.Add(new ProgramProperty() {
+			//		ClinicNum=clinicNum,
+			//		PropertyDesc=PaySimple.PropertyDescs.PaySimpleApiUserName,
+			//		ProgramNum=_progCur.ProgramNum,
+			//		PropertyValue=_listProgProps.FirstOrDefault(x => x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiUserName && x.ClinicNum==0).PropertyValue,
+			//	});
+			//}
+			//if(!_listProgProps.Any(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiKey)) {
+			//	_listProgProps.Add(new ProgramProperty() {
+			//		ClinicNum=clinicNum,
+			//		PropertyDesc=PaySimple.PropertyDescs.PaySimpleApiKey,
+			//		ProgramNum=_progCur.ProgramNum,
+			//		PropertyValue=_listProgProps.FirstOrDefault(x => x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiKey && x.ClinicNum==0).PropertyValue,
+			//	});
+			//}
+			//if(!_listProgProps.Any(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeCC)) {
+			//	_listProgProps.Add(new ProgramProperty() {
+			//		ClinicNum=clinicNum,
+			//		PropertyDesc=PaySimple.PropertyDescs.PaySimplePayTypeCC,
+			//		ProgramNum=_progCur.ProgramNum,
+			//		PropertyValue=_listProgProps.FirstOrDefault(x => x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeCC && x.ClinicNum==0).PropertyValue,
+			//	});
+			//}
+			//if(!_listProgProps.Any(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeACH)) {
+			//	_listProgProps.Add(new ProgramProperty() {
+			//		ClinicNum=clinicNum,
+			//		PropertyDesc=PaySimple.PropertyDescs.PaySimplePayTypeACH,
+			//		ProgramNum=_progCur.ProgramNum,
+			//		PropertyValue=_listProgProps.FirstOrDefault(x => x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeACH && x.ClinicNum==0).PropertyValue,
+			//	});
+			//}
+			//if(!_listProgProps.Any(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePreventSavingNewCC)) {
+			//	_listProgProps.Add(new ProgramProperty() {
+			//		ClinicNum=clinicNum,
+			//		PropertyDesc=PaySimple.PropertyDescs.PaySimplePreventSavingNewCC,
+			//		ProgramNum=_progCur.ProgramNum,
+			//		PropertyValue=_listProgProps.FirstOrDefault(x => x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePreventSavingNewCC && x.ClinicNum==0)?.PropertyValue??"0",
+			//	});
+			//}
 		}
 
 		private void FillFields() {
-			long clinicNum=0;
-			if(Preferences.HasClinicsEnabled) {
-				clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
-			}
-			textUsername.Text=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimpleApiUserName,clinicNum);
-			textKey.Text=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimpleApiKey,clinicNum);
-			string payTypeDefNumCC=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimplePayTypeCC,clinicNum);
-			string payTypeDefNumACH=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimplePayTypeACH,clinicNum);
-			checkPreventSavingNewCC.Checked=PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps,
-				PaySimple.PropertyDescs.PaySimplePreventSavingNewCC,clinicNum));
-			_listPaymentTypeDefs=Definition.GetByCategory(DefinitionCategory.PaymentTypes);
-			comboPaymentTypeCC.SetItems(_listPaymentTypeDefs,x => x.Description,x => x.Id.ToString()==payTypeDefNumCC);
-			comboPaymentTypeACH.SetItems(_listPaymentTypeDefs,x => x.Description,x => x.Id.ToString()==payTypeDefNumACH);
+			//long clinicNum=0;
+			//if(Preferences.HasClinicsEnabled) {
+			//	clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
+			//}
+			//textUsername.Text=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimpleApiUserName,clinicNum);
+			//textKey.Text=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimpleApiKey,clinicNum);
+			//string payTypeDefNumCC=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimplePayTypeCC,clinicNum);
+			//string payTypeDefNumACH=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimplePayTypeACH,clinicNum);
+			//checkPreventSavingNewCC.Checked=PIn.Bool(ProgramProperties.GetPropValFromList(_listProgProps,
+			//	PaySimple.PropertyDescs.PaySimplePreventSavingNewCC,clinicNum));
+			//_listPaymentTypeDefs=Definition.GetByCategory(DefinitionCategory.PaymentTypes);
+			//comboPaymentTypeCC.SetItems(_listPaymentTypeDefs,x => x.Description,x => x.Id.ToString()==payTypeDefNumCC);
+			//comboPaymentTypeACH.SetItems(_listPaymentTypeDefs,x => x.Description,x => x.Id.ToString()==payTypeDefNumACH);
 		}
 
 		private void comboClinic_SelectionChangeCommitted(object sender,EventArgs e) {
-			if(comboClinic.SelectedIndex==_indexClinicRevert) {//didn't change the selected clinic
-				return;
-			}
-			//if PaySimple is enabled and the username and key are set for the current clinic,
-			//make the user select a payment type before switching clinics
-			if(checkEnabled.Checked && !IsClinicCurSetupDone()) {
-				comboClinic.SelectedIndex=_indexClinicRevert;
-				MsgBox.Show(this,"Please select a username, key, and/or payment type first.");
-				return;
-			}
-			SynchWithHQ();//if the user just modified the HQ credentials, change any credentials that were the same as HQ to keep them synched
-			//set the values in the list for the clinic we are switching from, at _clinicIndexRevert
-			_listProgProps.FindAll(x => x.ClinicNum==_listUserClinicNums[_indexClinicRevert] && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiUserName)
-				.ForEach(x => x.PropertyValue=textUsername.Text);//always 1 item; null safe
-			_listProgProps.FindAll(x => x.ClinicNum==_listUserClinicNums[_indexClinicRevert] && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiKey)
-				.ForEach(x => x.PropertyValue=textKey.Text);//always 1 item; null safe
-			_listProgProps.FindAll(x => x.ClinicNum==_listUserClinicNums[_indexClinicRevert] 
-					&& x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeCC 
-					&& comboPaymentTypeCC.SelectedIndex>-1)
-				.ForEach(x => x.PropertyValue=comboPaymentTypeCC.SelectedTag<Definition>().Id.ToString());//always 1 item selected
-			_listProgProps.FindAll(x => x.ClinicNum==_listUserClinicNums[_indexClinicRevert]
-					&& x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeACH
-					&& comboPaymentTypeACH.SelectedIndex>-1)
-				.ForEach(x => x.PropertyValue=comboPaymentTypeACH.SelectedTag<Definition>().Id.ToString());//always 1 item selected
-			_listProgProps.FindAll(x => x.ClinicNum==_listUserClinicNums[_indexClinicRevert]
-				&& x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePreventSavingNewCC)
-				.ForEach(x => x.PropertyValue=POut.Bool(checkPreventSavingNewCC.Checked));
-			_indexClinicRevert=comboClinic.SelectedIndex;//now that we've updated the values for the clinic we're switching from, update _indexClinicRevert
-			FillFields();
+			//if(comboClinic.SelectedIndex==_indexClinicRevert) {//didn't change the selected clinic
+			//	return;
+			//}
+			////if PaySimple is enabled and the username and key are set for the current clinic,
+			////make the user select a payment type before switching clinics
+			//if(checkEnabled.Checked && !IsClinicCurSetupDone()) {
+			//	comboClinic.SelectedIndex=_indexClinicRevert;
+			//	MsgBox.Show(this,"Please select a username, key, and/or payment type first.");
+			//	return;
+			//}
+			//SynchWithHQ();//if the user just modified the HQ credentials, change any credentials that were the same as HQ to keep them synched
+			////set the values in the list for the clinic we are switching from, at _clinicIndexRevert
+			//_listProgProps.FindAll(x => x.ClinicNum==_listUserClinicNums[_indexClinicRevert] && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiUserName)
+			//	.ForEach(x => x.PropertyValue=textUsername.Text);//always 1 item; null safe
+			//_listProgProps.FindAll(x => x.ClinicNum==_listUserClinicNums[_indexClinicRevert] && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiKey)
+			//	.ForEach(x => x.PropertyValue=textKey.Text);//always 1 item; null safe
+			//_listProgProps.FindAll(x => x.ClinicNum==_listUserClinicNums[_indexClinicRevert] 
+			//		&& x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeCC 
+			//		&& comboPaymentTypeCC.SelectedIndex>-1)
+			//	.ForEach(x => x.PropertyValue=comboPaymentTypeCC.SelectedTag<Definition>().Id.ToString());//always 1 item selected
+			//_listProgProps.FindAll(x => x.ClinicNum==_listUserClinicNums[_indexClinicRevert]
+			//		&& x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeACH
+			//		&& comboPaymentTypeACH.SelectedIndex>-1)
+			//	.ForEach(x => x.PropertyValue=comboPaymentTypeACH.SelectedTag<Definition>().Id.ToString());//always 1 item selected
+			//_listProgProps.FindAll(x => x.ClinicNum==_listUserClinicNums[_indexClinicRevert]
+			//	&& x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePreventSavingNewCC)
+			//	.ForEach(x => x.PropertyValue=POut.Bool(checkPreventSavingNewCC.Checked));
+			//_indexClinicRevert=comboClinic.SelectedIndex;//now that we've updated the values for the clinic we're switching from, update _indexClinicRevert
+			//FillFields();
 		}
 
 		private bool IsClinicCurSetupDone() {
@@ -191,46 +191,46 @@ namespace OpenDental {
 		///<summary>For each clinic, if the Username and Key are the same as the HQ (ClinicNum=0) Username and Key, update the clinic with the
 		///values in the text boxes.  Only modifies other clinics if _indexClinicRevert=0, meaning user just modified the HQ clinic credentials.</summary>
 		private void SynchWithHQ() {
-			if(!Preferences.HasClinicsEnabled || _listUserClinicNums[_indexClinicRevert]>0) {//using clinics, and modifying the HQ clinic. otherwise return.
-				return;
-			}
-			string hqUsername=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimpleApiUserName,0);//HQ Username before updating to value in textbox
-			string hqKey=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimpleApiKey,0);//HQ Key before updating to value in textbox
-			string hqPayTypeCC=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimplePayTypeCC,0);//HQ PaymentType before updating to combo box selection
-			string payTypeCC="";
-			if(comboPaymentTypeCC.SelectedIndex>-1) {
-				payTypeCC=comboPaymentTypeCC.SelectedTag<Definition>().Id.ToString();
-			}
-			string hqPayTypeACH=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimplePayTypeACH,0);//HQ PaymentType before updating to combo box selection
-			string payTypeACH="";
-			if(comboPaymentTypeACH.SelectedIndex>-1) {
-				payTypeACH=comboPaymentTypeACH.SelectedTag<Definition>().Id.ToString();
-			}
-			//for each distinct ClinicNum in the prog property list for PaySimple except HQ
-			foreach(long clinicNum in _listProgProps.Select(x => x.ClinicNum).Where(x => x>0).Distinct()) {
-				//if this clinic has a different username or key, skip it
-				if(!_listProgProps.Exists(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiUserName && x.PropertyValue==hqUsername)
-					|| !_listProgProps.Exists(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiKey && x.PropertyValue==hqKey)) {
-					continue;
-				}
-				//this clinic had a matching username and key, so update the username and key to keep it synched with HQ
-				_listProgProps.FindAll(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiUserName)
-					.ForEach(x => x.PropertyValue=textUsername.Text);//always 1 item; null safe
-				_listProgProps.FindAll(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiKey)
-					.ForEach(x => x.PropertyValue=textKey.Text);//always 1 item; null safe
-				if(!string.IsNullOrEmpty(payTypeCC)) {
-					//update clinic payment type if it originally matched HQ's payment type and the selected payment type is valid
-					_listProgProps.FindAll(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeCC 
-							&& x.PropertyValue==hqPayTypeCC)
-						.ForEach(x => x.PropertyValue=payTypeCC);
-				}
-				if(!string.IsNullOrEmpty(payTypeACH)) {
-					//update clinic payment type if it originally matched HQ's payment type and the selected payment type is valid
-					_listProgProps.FindAll(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeACH
-							&& x.PropertyValue==hqPayTypeACH)
-						.ForEach(x => x.PropertyValue=payTypeACH);
-				}
-			}
+			//if(!Preferences.HasClinicsEnabled || _listUserClinicNums[_indexClinicRevert]>0) {//using clinics, and modifying the HQ clinic. otherwise return.
+			//	return;
+			//}
+			//string hqUsername=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimpleApiUserName,0);//HQ Username before updating to value in textbox
+			//string hqKey=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimpleApiKey,0);//HQ Key before updating to value in textbox
+			//string hqPayTypeCC=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimplePayTypeCC,0);//HQ PaymentType before updating to combo box selection
+			//string payTypeCC="";
+			//if(comboPaymentTypeCC.SelectedIndex>-1) {
+			//	payTypeCC=comboPaymentTypeCC.SelectedTag<Definition>().Id.ToString();
+			//}
+			//string hqPayTypeACH=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimplePayTypeACH,0);//HQ PaymentType before updating to combo box selection
+			//string payTypeACH="";
+			//if(comboPaymentTypeACH.SelectedIndex>-1) {
+			//	payTypeACH=comboPaymentTypeACH.SelectedTag<Definition>().Id.ToString();
+			//}
+			////for each distinct ClinicNum in the prog property list for PaySimple except HQ
+			//foreach(long clinicNum in _listProgProps.Select(x => x.ClinicNum).Where(x => x>0).Distinct()) {
+			//	//if this clinic has a different username or key, skip it
+			//	if(!_listProgProps.Exists(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiUserName && x.PropertyValue==hqUsername)
+			//		|| !_listProgProps.Exists(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiKey && x.PropertyValue==hqKey)) {
+			//		continue;
+			//	}
+			//	//this clinic had a matching username and key, so update the username and key to keep it synched with HQ
+			//	_listProgProps.FindAll(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiUserName)
+			//		.ForEach(x => x.PropertyValue=textUsername.Text);//always 1 item; null safe
+			//	_listProgProps.FindAll(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiKey)
+			//		.ForEach(x => x.PropertyValue=textKey.Text);//always 1 item; null safe
+			//	if(!string.IsNullOrEmpty(payTypeCC)) {
+			//		//update clinic payment type if it originally matched HQ's payment type and the selected payment type is valid
+			//		_listProgProps.FindAll(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeCC 
+			//				&& x.PropertyValue==hqPayTypeCC)
+			//			.ForEach(x => x.PropertyValue=payTypeCC);
+			//	}
+			//	if(!string.IsNullOrEmpty(payTypeACH)) {
+			//		//update clinic payment type if it originally matched HQ's payment type and the selected payment type is valid
+			//		_listProgProps.FindAll(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeACH
+			//				&& x.PropertyValue==hqPayTypeACH)
+			//			.ForEach(x => x.PropertyValue=payTypeACH);
+			//	}
+			//}
 		}
 
 		private void linkLabel1_LinkClicked(object sender,LinkLabelLinkClickedEventArgs e) {
@@ -247,50 +247,50 @@ namespace OpenDental {
 				return;
 			}
 			SynchWithHQ();//if the user changes the HQ credentials, any clinic that had the same credentials will be kept in synch with HQ
-			long clinicNum=0;
-			if(Preferences.HasClinicsEnabled) {
-				clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
-			}
-			string payTypeCCSelected="";
-			if(comboPaymentTypeCC.SelectedIndex>-1) {
-				payTypeCCSelected=comboPaymentTypeCC.SelectedTag<Definition>().Id.ToString();
-			}
-			string payTypeACHSelected="";
-			if(comboPaymentTypeACH.SelectedIndex>-1) {
-				payTypeACHSelected=comboPaymentTypeACH.SelectedTag<Definition>().Id.ToString();
-			}
-			//set the values in the list for this clinic
-			_listProgProps.FindAll(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiUserName)
-				.ForEach(x => x.PropertyValue=textUsername.Text);//always 1 item; null safe
-			_listProgProps.FindAll(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiKey)
-				.ForEach(x => x.PropertyValue=textKey.Text);//always 1 item; null safe
-			_listProgProps.FindAll(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeCC)
-				.ForEach(x => x.PropertyValue=payTypeCCSelected);//always 1 item
-			_listProgProps.FindAll(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeACH)
-				.ForEach(x => x.PropertyValue=payTypeACHSelected);//always 1 item
-			_listProgProps.FindAll(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePreventSavingNewCC)
-				.ForEach(x => x.PropertyValue=POut.Bool(checkPreventSavingNewCC.Checked));
-			string payTypeCC;
-			string payTypeACH;
-			//make sure any other clinics with PaySimple enabled also have a payment type selected
-			for(int i=0;i<_listUserClinicNums.Count;i++) {
-				if(!checkEnabled.Checked) {//if program link is not enabled, do not bother checking the payment type selected
-					break;
-				}
-				payTypeCC=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimplePayTypeCC,_listUserClinicNums[i]);
-				payTypeACH=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimplePayTypeACH,_listUserClinicNums[i]);
-				//if the program is enabled and the username and key fields are not blank,
-				//PaySimple is enabled for this clinic so make sure the payment type is also set
-				if(ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimpleApiUserName,_listUserClinicNums[i])!="" //if username set
-					&& ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimpleApiKey,_listUserClinicNums[i])!=""//and key set
-					//and either paytype is not a valid DefNum
-					&& (!_listPaymentTypeDefs.Any(x => x.Id.ToString()==payTypeCC)
-						|| !_listPaymentTypeDefs.Any(x => x.Id.ToString()==payTypeACH))) 
-				{
-					MsgBox.Show(this,"Please select payment types for all clinics with PaySimple username and key set.");
-					return;
-				}
-			}
+			//long clinicNum=0;
+			//if(Preferences.HasClinicsEnabled) {
+			//	clinicNum=_listUserClinicNums[comboClinic.SelectedIndex];
+			//}
+			//string payTypeCCSelected="";
+			//if(comboPaymentTypeCC.SelectedIndex>-1) {
+			//	payTypeCCSelected=comboPaymentTypeCC.SelectedTag<Definition>().Id.ToString();
+			//}
+			//string payTypeACHSelected="";
+			//if(comboPaymentTypeACH.SelectedIndex>-1) {
+			//	payTypeACHSelected=comboPaymentTypeACH.SelectedTag<Definition>().Id.ToString();
+			//}
+			////set the values in the list for this clinic
+			//_listProgProps.FindAll(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiUserName)
+			//	.ForEach(x => x.PropertyValue=textUsername.Text);//always 1 item; null safe
+			//_listProgProps.FindAll(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimpleApiKey)
+			//	.ForEach(x => x.PropertyValue=textKey.Text);//always 1 item; null safe
+			//_listProgProps.FindAll(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeCC)
+			//	.ForEach(x => x.PropertyValue=payTypeCCSelected);//always 1 item
+			//_listProgProps.FindAll(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePayTypeACH)
+			//	.ForEach(x => x.PropertyValue=payTypeACHSelected);//always 1 item
+			//_listProgProps.FindAll(x => x.ClinicNum==clinicNum && x.PropertyDesc==PaySimple.PropertyDescs.PaySimplePreventSavingNewCC)
+			//	.ForEach(x => x.PropertyValue=POut.Bool(checkPreventSavingNewCC.Checked));
+			//string payTypeCC;
+			//string payTypeACH;
+			////make sure any other clinics with PaySimple enabled also have a payment type selected
+			//for(int i=0;i<_listUserClinicNums.Count;i++) {
+			//	if(!checkEnabled.Checked) {//if program link is not enabled, do not bother checking the payment type selected
+			//		break;
+			//	}
+			//	payTypeCC=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimplePayTypeCC,_listUserClinicNums[i]);
+			//	payTypeACH=ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimplePayTypeACH,_listUserClinicNums[i]);
+			//	//if the program is enabled and the username and key fields are not blank,
+			//	//PaySimple is enabled for this clinic so make sure the payment type is also set
+			//	if(ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimpleApiUserName,_listUserClinicNums[i])!="" //if username set
+			//		&& ProgramProperties.GetPropValFromList(_listProgProps,PaySimple.PropertyDescs.PaySimpleApiKey,_listUserClinicNums[i])!=""//and key set
+			//		//and either paytype is not a valid DefNum
+			//		&& (!_listPaymentTypeDefs.Any(x => x.Id.ToString()==payTypeCC)
+			//			|| !_listPaymentTypeDefs.Any(x => x.Id.ToString()==payTypeACH))) 
+			//	{
+			//		MsgBox.Show(this,"Please select payment types for all clinics with PaySimple username and key set.");
+			//		return;
+			//	}
+			//}
 			#endregion Validation
 			#region Save
 			if(_progCur.Enabled!=checkEnabled.Checked) {//only update the program if the IsEnabled flag has changed

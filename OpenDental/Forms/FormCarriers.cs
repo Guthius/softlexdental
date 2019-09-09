@@ -175,7 +175,7 @@ namespace OpenDental{
 			this.gridMain.Location = new System.Drawing.Point(11, 29);
 			this.gridMain.Name = "gridMain";
 			this.gridMain.ScrollValue = 0;
-			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.MultiExtended;
+			this.gridMain.SelectionMode = OpenDental.UI.GridSelectionMode.Multiple;
 			this.gridMain.Size = new System.Drawing.Size(796, 620);
 			this.gridMain.TabIndex = 13;
 			this.gridMain.Title = "Carriers";
