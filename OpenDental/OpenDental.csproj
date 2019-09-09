@@ -530,6 +530,12 @@
     <Compile Include="Forms\FormPayConnectSetup.Designer.cs">
       <DependentUpon>FormPayConnectSetup.cs</DependentUpon>
     </Compile>
+    <Compile Include="__WIP\FormClockEventEdit.Designer.cs">
+      <DependentUpon>FormClockEventEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="__WIP\FormPayPeriodEdit.Designer.cs">
+      <DependentUpon>FormPayPeriodEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormPaySplitEdit.designer.cs">
       <DependentUpon>FormPaySplitEdit.cs</DependentUpon>
     </Compile>
@@ -1205,9 +1211,6 @@
     <Compile Include="Forms\FormSheetDefDefaults.designer.cs">
       <DependentUpon>FormSheetDefDefaults.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormTimeCardBenefitsRp.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Forms\FormWikiListAdvancedSearch.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1316,10 +1319,13 @@
     <Compile Include="Forms\FormFHIRSetup.designer.cs">
       <DependentUpon>FormFHIRSetup.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormTimePick.cs">
+    <Compile Include="__WIP\FormTimeAdjustEdit.Designer.cs">
+      <DependentUpon>FormTimeAdjustEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="__WIP\FormTimePick.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormTimePick.designer.cs">
+    <Compile Include="__WIP\FormTimePick.designer.cs">
       <DependentUpon>FormTimePick.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormPendingPayments.cs">
@@ -1379,7 +1385,7 @@
     <Compile Include="Forms\FormDecimalSettings.designer.cs">
       <DependentUpon>FormDecimalSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormPayPeriodManager.cs">
+    <Compile Include="__WIP\FormPayPeriodManager.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormApptReminderRuleEdit.cs">
@@ -2678,10 +2684,10 @@
     <Compile Include="Forms\FormEtrans277Edit.designer.cs">
       <DependentUpon>FormEtrans277Edit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormTimeCardManage.cs">
+    <Compile Include="__WIP\FormTimeCardManage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormTimeCardManage.designer.cs">
+    <Compile Include="__WIP\FormTimeCardManage.designer.cs">
       <DependentUpon>FormTimeCardManage.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormPatFieldCurrencyEdit.cs">
@@ -3101,10 +3107,10 @@
     <Compile Include="Forms\FormAutomationConditionEdit.designer.cs">
       <DependentUpon>FormAutomationConditionEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\FormTimeCardRuleEdit.cs">
+    <Compile Include="__WIP\FormTimeCardRuleEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormTimeCardRuleEdit.designer.cs">
+    <Compile Include="__WIP\FormTimeCardRuleEdit.designer.cs">
       <DependentUpon>FormTimeCardRuleEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\FormPayConnect.cs">
@@ -3924,7 +3930,7 @@
     <Compile Include="Forms\FormClinics.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormClockEventEdit.cs">
+    <Compile Include="__WIP\FormClockEventEdit.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormComputers.cs">
@@ -4140,10 +4146,10 @@
     <Compile Include="Forms\FormPayment.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormPayPeriodEdit.cs">
+    <Compile Include="__WIP\FormPayPeriodEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormTimeCardSetup.cs">
+    <Compile Include="__WIP\FormTimeCardSetup.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormPayPlan.cs">
@@ -4353,10 +4359,10 @@
     <Compile Include="Forms\FormTerminalManager.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormTimeAdjustEdit.cs">
+    <Compile Include="__WIP\FormTimeAdjustEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Forms\FormTimeCard.cs">
+    <Compile Include="__WIP\FormTimeCard.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Forms\FormToothChartBig.cs">
@@ -4813,6 +4819,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Compile Include="__WIP\FormPayPeriodManager.Designer.cs">
+      <DependentUpon>FormPayPeriodManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="__WIP\FormTimeCardSetup.Designer.cs">
+      <DependentUpon>FormTimeCardSetup.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Forms Reports\FormRpProdGoal.resx">
       <DependentUpon>FormRpProdGoal.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -5158,10 +5170,6 @@
     <EmbeddedResource Include="Forms\FormSheetDefDefaults.resx">
       <DependentUpon>FormSheetDefDefaults.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormTimeCardBenefitsRp.resx">
-      <DependentUpon>FormTimeCardBenefitsRp.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormQueryParser.resx">
       <DependentUpon>FormQueryParser.cs</DependentUpon>
     </EmbeddedResource>
@@ -5215,7 +5223,7 @@
       <DependentUpon>FormInCaseOfEmergency.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormTimePick.resx">
+    <EmbeddedResource Include="__WIP\FormTimePick.resx">
       <DependentUpon>FormTimePick.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPendingPayments.resx">
@@ -5249,7 +5257,7 @@
     <EmbeddedResource Include="Forms\FormDecimalSettings.resx">
       <DependentUpon>FormDecimalSettings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormPayPeriodManager.resx">
+    <EmbeddedResource Include="__WIP\FormPayPeriodManager.resx">
       <DependentUpon>FormPayPeriodManager.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -5943,7 +5951,7 @@
       <DependentUpon>FormEtrans277Edit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormTimeCardManage.resx">
+    <EmbeddedResource Include="__WIP\FormTimeCardManage.resx">
       <DependentUpon>FormTimeCardManage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\FormPatFieldCurrencyEdit.resx">
@@ -6700,7 +6708,7 @@
       <DependentUpon>FormClinics.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormClockEventEdit.resx">
+    <EmbeddedResource Include="__WIP\FormClockEventEdit.resx">
       <DependentUpon>FormClockEventEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -6988,11 +6996,11 @@
       <DependentUpon>FormPayment.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormPayPeriodEdit.resx">
+    <EmbeddedResource Include="__WIP\FormPayPeriodEdit.resx">
       <DependentUpon>FormPayPeriodEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormTimeCardSetup.resx">
+    <EmbeddedResource Include="__WIP\FormTimeCardSetup.resx">
       <DependentUpon>FormTimeCardSetup.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -7268,11 +7276,11 @@
       <SubType>Designer</SubType>
       <DependentUpon>FormTerminalManager.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormTimeAdjustEdit.resx">
+    <EmbeddedResource Include="__WIP\FormTimeAdjustEdit.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormTimeAdjustEdit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormTimeCard.resx">
+    <EmbeddedResource Include="__WIP\FormTimeCard.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FormTimeCard.cs</DependentUpon>
     </EmbeddedResource>
@@ -7887,6 +7895,12 @@
     <None Include="Web References\NewCrop\Update1.wsdl" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\IconTimeGo.png" />
+    <None Include="Resources\IconTime.png" />
+    <None Include="Resources\IconClockGo.png" />
+    <None Include="Resources\IconClock.png" />
+    <None Include="Resources\IconArrowLeft.png" />
+    <None Include="Resources\IconArrowRight.png" />
     <None Include="Resources\Icon32TableRefresh.png" />
     <None Include="Resources\Icon32RefreshSmall.png" />
     <None Include="Resources\Icon32Refresh.png" />
@@ -8169,7 +8183,7 @@
       <DependentUpon>FormAutomationConditionEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Forms\FormTimeCardRuleEdit.resx">
+    <EmbeddedResource Include="__WIP\FormTimeCardRuleEdit.resx">
       <DependentUpon>FormTimeCardRuleEdit.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>

@@ -47,12 +47,6 @@ namespace OpenDental {
 			}
 			comboPriority.SelectedIndex=0;
 			checkLimit.Checked=true;
-			if(Preferences.HasReportServer) {
-				checkReportServer.Checked=true;
-			}
-			else {
-				checkReportServer.Visible=false;
-			}
 			List<long> listTaskNums=new List<long>() {};
 			if(_listPreLoadedTaskNums!=null) {
 				listTaskNums=_listPreLoadedTaskNums;

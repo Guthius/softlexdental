@@ -809,6 +809,26 @@ namespace OpenDental.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap IconArrowLeft {
+            get {
+                object obj = ResourceManager.GetObject("IconArrowLeft", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap IconArrowRight {
+            get {
+                object obj = ResourceManager.GetObject("IconArrowRight", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap IconArrowUp {
             get {
                 object obj = ResourceManager.GetObject("IconArrowUp", resourceCulture);
@@ -872,6 +892,26 @@ namespace OpenDental.Properties {
         public static System.Drawing.Bitmap IconChartLine {
             get {
                 object obj = ResourceManager.GetObject("IconChartLine", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap IconClock {
+            get {
+                object obj = ResourceManager.GetObject("IconClock", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap IconClockGo {
+            get {
+                object obj = ResourceManager.GetObject("IconClockGo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -2032,6 +2072,26 @@ namespace OpenDental.Properties {
         public static System.Drawing.Bitmap IconTick {
             get {
                 object obj = ResourceManager.GetObject("IconTick", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap IconTime {
+            get {
+                object obj = ResourceManager.GetObject("IconTime", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap IconTimeGo {
+            get {
+                object obj = ResourceManager.GetObject("IconTimeGo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

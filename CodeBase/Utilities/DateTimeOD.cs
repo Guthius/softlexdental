@@ -10,7 +10,8 @@ namespace CodeBase
         /// <summary>
         /// We are switching to using this method instead of DateTime.Today.
         /// You can track actual Year/Month/Date differences by creating an instance of this class and passing in the two dates to compare.
-        /// The values will be stored in YearsDiff, MonthsDiff, and DaysDiff.</summary> 
+        /// The values will be stored in YearsDiff, MonthsDiff, and DaysDiff.
+        /// </summary> 
         public static DateTime Today
         {
             //The problem is with dotNet serilazation to the middle tier.  It will tack on zulu change for UTC.  Like this:

@@ -34,7 +34,7 @@ namespace OpenDental
 
         long PatCurNum;
         List<Employee> _listEmployees = new List<Employee>();
-        List<TimeClockStatus> _listShownTimeClockStatuses = new List<TimeClockStatus>();
+        List<ClockEventStatus> _listShownTimeClockStatuses = new List<ClockEventStatus>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ContrStaff"/> class.
@@ -547,18 +547,18 @@ namespace OpenDental
             listStatus.Items.Clear();
             _listShownTimeClockStatuses.Clear();
 
-            foreach (TimeClockStatus timeClockStatus in Enum.GetValues(typeof(TimeClockStatus)))
+            foreach (ClockEventStatus timeClockStatus in Enum.GetValues(typeof(ClockEventStatus)))
             {
                 string statusDescript = timeClockStatus.GetDescription();
                 if (!Preference.GetBool(PreferenceName.ClockEventAllowBreak))
                 {
-                    if (timeClockStatus == TimeClockStatus.Break)
+                    if (timeClockStatus == ClockEventStatus.Break)
                     {
                         continue;//Skip Break option.
                     }
-                    else if (timeClockStatus == TimeClockStatus.Lunch)
+                    else if (timeClockStatus == ClockEventStatus.Lunch)
                     {
-                        statusDescript = TimeClockStatus.Break.GetDescription();//Change "Lunch" to "Break", still functions as Lunch.
+                        statusDescript = ClockEventStatus.Break.GetDescription();//Change "Lunch" to "Break", still functions as Lunch.
                     }
                 }
                 _listShownTimeClockStatuses.Add(timeClockStatus);
@@ -583,9 +583,9 @@ namespace OpenDental
         /// </summary>
         string ConvertClockStatus(string status)
         {
-            if (!Preference.GetBool(PreferenceName.ClockEventAllowBreak) && status == TimeClockStatus.Lunch.GetDescription())
+            if (!Preference.GetBool(PreferenceName.ClockEventAllowBreak) && status == ClockEventStatus.Lunch.GetDescription())
             {
-                status = TimeClockStatus.Break.GetDescription();
+                status = ClockEventStatus.Break.GetDescription();
             }
             return status;
         }
@@ -617,10 +617,10 @@ namespace OpenDental
                 butClockOut.Enabled = false;
                 butTimeCard.Enabled = true;
                 butBreaks.Enabled = true;
-                listStatus.SelectedIndex = _listShownTimeClockStatuses.IndexOf(TimeClockStatus.Home);
+                listStatus.SelectedIndex = _listShownTimeClockStatuses.IndexOf(ClockEventStatus.Home);
                 listStatus.Enabled = false;
             }
-            else if (clockEvent.ClockStatus == TimeClockStatus.Break)
+            else if (clockEvent.Status == ClockEventStatus.Break)
             {
                 // Only incomplete breaks will have been returned.
                 // Clocked out for break, but not clocked back in
@@ -630,7 +630,7 @@ namespace OpenDental
                 butBreaks.Enabled = true;
                 if (Preference.GetBool(PreferenceName.ClockEventAllowBreak))
                 {
-                    listStatus.SelectedIndex = _listShownTimeClockStatuses.IndexOf(TimeClockStatus.Break);
+                    listStatus.SelectedIndex = _listShownTimeClockStatuses.IndexOf(ClockEventStatus.Break);
                 }
                 else
                 {
@@ -638,13 +638,13 @@ namespace OpenDental
                     //Because listStatus only contains TimeClockStatus.Home and TimeClockStatus.Lunch(displays as "Break"), we can't choose TimeClockStatus.Break.
                     //Choose TimeClockStatus.Lunch which displays as "Break", and allow normal clocking in/out to handle transition into newly disabled 
                     //preference statuses.
-                    listStatus.SelectedIndex = _listShownTimeClockStatuses.IndexOf(TimeClockStatus.Lunch);
+                    listStatus.SelectedIndex = _listShownTimeClockStatuses.IndexOf(ClockEventStatus.Lunch);
                 }
                 listStatus.Enabled = false;
             }
             else
             {//normal clock in/out
-                if (clockEvent.TimeDisplayed2.Year < 1880)
+                if (clockEvent.Date2Displayed.Year < 1880)
                 {//clocked in to work, but not clocked back out.
                     butClockIn.Enabled = false;
                     butClockOut.Enabled = true;
@@ -658,7 +658,7 @@ namespace OpenDental
                     butClockOut.Enabled = false;
                     butTimeCard.Enabled = true;
                     butBreaks.Enabled = true;
-                    listStatus.SelectedIndex = (int)clockEvent.ClockStatus;
+                    listStatus.SelectedIndex = (int)clockEvent.Status;
                     listStatus.Enabled = false;
                 }
             }

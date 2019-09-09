@@ -10,12 +10,12 @@ namespace UnitTestsCore {
 		public static PayPeriod CreateTwoWeekPayPeriodIfNotExists(DateTime start){
 			PayPeriod ppNew=new PayPeriod();
 			ppNew.DateStart=start;
-			ppNew.DateStop=start.AddDays(13);
+			ppNew.DateEnd=start.AddDays(13);
 			ppNew.DatePaycheck=start.AddDays(16);
 			//check for identical or overlapping pay periods
 			PayPeriods.RefreshCache();
 			foreach(PayPeriod ppInDb in PayPeriods.GetDeepCopy()) {
-				if(ppInDb.DateStart == ppNew.DateStart && ppInDb.DateStop == ppNew.DateStop	&& ppInDb.DatePaycheck == ppNew.DatePaycheck){
+				if(ppInDb.DateStart == ppNew.DateStart && ppInDb.DateEnd == ppNew.DateEnd	&& ppInDb.DatePaycheck == ppNew.DatePaycheck){
 					//identical pay period already exists.
 					return ppInDb;
 				}
@@ -24,7 +24,7 @@ namespace UnitTestsCore {
 				//  //This is a seperate check because it may be important in the future.
 				//  continue;
 				//}
-				if(ppInDb.DateStop > ppNew.DateStart && ppInDb.DateStart < ppNew.DateStop) {
+				if(ppInDb.DateEnd > ppNew.DateStart && ppInDb.DateStart < ppNew.DateEnd) {
 					//pay periods overlap
 					throw new Exception("Error inserting pay period. New Pay period overlaps existing pay period.\r\n");
 				}

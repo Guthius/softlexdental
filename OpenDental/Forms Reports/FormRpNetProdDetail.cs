@@ -416,7 +416,7 @@ namespace OpenDental{
 			}
 			else {
 				dtPickerFrom.Value=_listPayPeriods[_selectedPayPeriodIdx].DateStart;
-				dtPickerTo.Value=_listPayPeriods[_selectedPayPeriodIdx].DateStop;
+				dtPickerTo.Value=_listPayPeriods[_selectedPayPeriodIdx].DateEnd;
 			}
 			butThis.Text=Lan.g(this,"This Period");
 			SetDates();
@@ -492,7 +492,7 @@ namespace OpenDental{
 			if(_selectedPayPeriodIdx>0) {
 				_selectedPayPeriodIdx--;
 				dtPickerFrom.Value=_listPayPeriods[_selectedPayPeriodIdx].DateStart;
-				dtPickerTo.Value=_listPayPeriods[_selectedPayPeriodIdx].DateStop;
+				dtPickerTo.Value=_listPayPeriods[_selectedPayPeriodIdx].DateEnd;
 			}
 		}
 
@@ -502,7 +502,7 @@ namespace OpenDental{
 			if(_selectedPayPeriodIdx<_listPayPeriods.Count-1) {
 				_selectedPayPeriodIdx++;
 				dtPickerFrom.Value=_listPayPeriods[_selectedPayPeriodIdx].DateStart;
-				dtPickerTo.Value=_listPayPeriods[_selectedPayPeriodIdx].DateStop;
+				dtPickerTo.Value=_listPayPeriods[_selectedPayPeriodIdx].DateEnd;
 			}
 		}
 

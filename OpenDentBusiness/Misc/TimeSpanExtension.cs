@@ -46,15 +46,6 @@ namespace OpenDentBusiness
         /// <summary>
         /// Does not work well with negative values.
         /// </summary>
-        public static string ToString(this TimeSpan tspan, string format)
-        {
-            var dt = DateTime.Today + tspan;
-            return dt.ToString(format);
-        }
-
-        /// <summary>
-        /// Does not work well with negative values.
-        /// </summary>
         public static string ToShortTimeString(this TimeSpan tspan)
         {
             var dt = DateTime.Today + tspan;

@@ -695,19 +695,6 @@ namespace OpenDentBusiness{
 		ReportsMenu,
 	}
 
-	///<summary></summary>
-	public enum TimeClockStatus{
-		///<summary>0</summary>
-		[Description("Home")]
-		Home,
-		///<summary>1</summary>
-		[Description("Lunch")]
-		Lunch,
-		///<summary>2</summary>
-		[Description("Break")]
-		Break
-	}
-
 	///<summary>In perio, the type of measurements for a given row.</summary>
 	public enum PerioSequenceType{
 		///<summary>0</summary>

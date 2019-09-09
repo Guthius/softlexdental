@@ -8,31 +8,31 @@ namespace UnitTestsCore {
 
 		public static long InsertWorkPeriod(long emp,DateTime start,DateTime stop,long clinicNum=0,double adjustHours=0) {
 			ClockEvent ce=new ClockEvent();
-			ce.ClockStatus=TimeClockStatus.Home;
-			ce.EmployeeNum=emp;
-			ce.TimeDisplayed1=start;
-			ce.TimeEntered1=start;
-			ce.TimeDisplayed2=stop;
-			ce.TimeEntered2=stop;
-			ce.ClinicNum=clinicNum;
+			ce.Status=ClockEventStatus.Home;
+			ce.EmployeeId=emp;
+			ce.Date1Displayed=start;
+			ce.Date1Entered=start;
+			ce.Date2Displayed=stop;
+			ce.Date2Entered=stop;
+			ce.ClinicId=clinicNum;
 			ce.AdjustAuto=TimeSpan.FromHours(-adjustHours);
-			ce.ClockEventNum = ClockEvents.Insert(ce);
+			ce.Id = ClockEvents.Insert(ce);
 			ClockEvents.Update(ce);//Updates TimeDisplayed1 because it defaults to now().
-			return ce.ClockEventNum;
+			return ce.Id;
 		}
 
 		public static long InsertBreak(long emp,DateTime start,double minutes,long clinicNum=0) {
 			ClockEvent ce=new ClockEvent();
-			ce.ClockStatus=TimeClockStatus.Break;
-			ce.EmployeeNum=emp;
-			ce.TimeDisplayed1=start;
-			ce.TimeEntered1=start;
-			ce.TimeDisplayed2=start.AddMinutes(minutes);
-			ce.TimeEntered2=start.AddMinutes(minutes);
-			ce.ClinicNum=clinicNum;
-			ce.ClockEventNum = ClockEvents.Insert(ce);
+			ce.Status=ClockEventStatus.Break;
+			ce.EmployeeId=emp;
+			ce.Date1Displayed=start;
+			ce.Date1Entered=start;
+			ce.Date2Displayed=start.AddMinutes(minutes);
+			ce.Date2Entered=start.AddMinutes(minutes);
+			ce.ClinicId=clinicNum;
+			ce.Id = ClockEvents.Insert(ce);
 			ClockEvents.Update(ce);//Updates TimeDisplayed1 because it defaults to now().
-			return ce.ClockEventNum;
+			return ce.Id;
 		}
 
 

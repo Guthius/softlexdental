@@ -96,8 +96,10 @@ namespace OpenDentBusiness{
 		///<summary>Defaults to false.  If true, will require procedure be attached to controlled prescriptions written from this clinic.</summary>
 		public bool HasProcOnRx;
 
-		///<summary>List of specialty DefLinks for the clinic.  Not a database column.  Filled when the clinic cache is filled.</summary>
-		[ODTableColumn(IsNotDbColumn=true)]
+        public override string ToString() => Abbr ?? Description ?? "";
+
+        ///<summary>List of specialty DefLinks for the clinic.  Not a database column.  Filled when the clinic cache is filled.</summary>
+        [ODTableColumn(IsNotDbColumn=true)]
 		private List<DefLink> _listClinicSpecialtyDefLinks;
 		
 		///<summary>List of specialty DefLinks for the clinic.  Not a database column.  Filled when the clinic cache is filled.</summary>

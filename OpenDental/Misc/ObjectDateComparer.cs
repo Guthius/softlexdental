@@ -32,11 +32,11 @@ namespace OpenDental
             }
             else if (typex == typeof(ClockEvent))
             {
-                datex = ((ClockEvent)x).TimeDisplayed1;
+                datex = ((ClockEvent)x).Date1Displayed;
             }
-            else if (typex == typeof(TimeAdjust))
+            else if (typex == typeof(TimeAdjustment))
             {
-                datex = ((TimeAdjust)x).TimeEntry;
+                datex = ((TimeAdjustment)x).Date;
             }
             else
             {
@@ -56,11 +56,11 @@ namespace OpenDental
             }
             else if (typey == typeof(ClockEvent))
             {
-                datey = ((ClockEvent)y).TimeDisplayed1;
+                datey = ((ClockEvent)y).Date1Displayed;
             }
-            else if (typey == typeof(TimeAdjust))
+            else if (typey == typeof(TimeAdjustment))
             {
-                datey = ((TimeAdjust)y).TimeEntry;
+                datey = ((TimeAdjustment)y).Date;
             }
             else
             {

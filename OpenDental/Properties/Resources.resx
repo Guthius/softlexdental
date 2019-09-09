@@ -862,4 +862,22 @@
   <data name="Icon32TableRefresh" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Icon32TableRefresh.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="IconArrowLeft" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IconArrowLeft.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconArrowRight" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IconArrowRight.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconClock" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IconClock.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconClockGo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IconClockGo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconTime" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IconTime.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IconTimeGo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IconTimeGo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

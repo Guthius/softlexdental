@@ -56,6 +56,11 @@ namespace OpenDentBusiness
         public string PayrollID;
 
         /// <summary>
+        /// Returns a string representation of the employee.
+        /// </summary>
+        public override string ToString() => $"{FirstName} {LastName}".Trim();
+
+        /// <summary>
         /// Constructs a new instance of the <see cref="Employee"/> class.
         /// </summary>
         /// <param name="dataReader">The data reader containing record data.</param>

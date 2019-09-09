@@ -411,7 +411,7 @@
     <Compile Include="Crud\ClaimValCodeLogCrud.cs" />
     <Compile Include="Crud\ClearinghouseCrud.cs" />
     <Compile Include="Crud\ClinicCrud.cs" />
-    <Compile Include="Crud\ClockEventCrud.cs" />
+    <Compile Include="__WIP\ClockEventCrud.cs" />
     <Compile Include="Crud\CodeSystemCrud.cs" />
     <Compile Include="Crud\CommlogCrud.cs" />
     <Compile Include="Crud\ComputerPrefCrud.cs" />
@@ -519,7 +519,6 @@
     <Compile Include="Crud\PatRestrictionCrud.cs" />
     <Compile Include="Crud\PaymentCrud.cs" />
     <Compile Include="Crud\PayorTypeCrud.cs" />
-    <Compile Include="Crud\PayPeriodCrud.cs" />
     <Compile Include="Crud\PayPlanChargeCrud.cs" />
     <Compile Include="Crud\PayPlanCrud.cs" />
     <Compile Include="Crud\PaySplitCrud.cs" />
@@ -641,8 +640,6 @@
     <Compile Include="Crud\TaskSubscriptionCrud.cs" />
     <Compile Include="Crud\TaskUnreadCrud.cs" />
     <Compile Include="Crud\TerminalActiveCrud.cs" />
-    <Compile Include="Crud\TimeAdjustCrud.cs" />
-    <Compile Include="Crud\TimeCardRuleCrud.cs" />
     <Compile Include="Crud\ToolButItemCrud.cs" />
     <Compile Include="Crud\ToothGridCellCrud.cs" />
     <Compile Include="Crud\ToothGridColCrud.cs" />
@@ -778,8 +775,8 @@
     <Compile Include="Data Interface\TaskUnreads.cs" />
     <Compile Include="Cache\Cache.cs" />
     <Compile Include="Data\AlertType.cs" />
-    <Compile Include="WIP\Preferences.cs" />
-    <Compile Include="Data Interface\TimeCardRules.cs" />
+    <Compile Include="Data\Preferences.cs" />
+    <Compile Include="__WIP\TimeCardRules.cs" />
     <Compile Include="Data Interface\ToothGridCells.cs" />
     <Compile Include="Data Interface\ToothGridCols.cs" />
     <Compile Include="Data Interface\ToothGridDefs.cs" />
@@ -850,7 +847,7 @@
     <Compile Include="Data Interface\ClaimValCodeLogs.cs" />
     <Compile Include="Data Interface\Clearinghouses.cs" />
     <Compile Include="Data Interface\Clinics.cs" />
-    <Compile Include="Data Interface\ClockEvents.cs" />
+    <Compile Include="__WIP\ClockEvents.cs" />
     <Compile Include="Data Interface\Commlogs.cs" />
     <Compile Include="Data Interface\ComputerPrefs.cs" />
     <Compile Include="Data Interface\Counties.cs" />
@@ -877,7 +874,6 @@
     <Compile Include="Data Interface\PatFields.cs" />
     <Compile Include="Data Interface\PatPlans.cs" />
     <Compile Include="Data Interface\Payments.cs" />
-    <Compile Include="Data Interface\PayPeriods.cs" />
     <Compile Include="Data Interface\PayPlanCharges.cs" />
     <Compile Include="Data Interface\PayPlans.cs" />
     <Compile Include="Data Interface\PaySplits.cs" />
@@ -926,7 +922,7 @@
     <Compile Include="Data Interface\Pharmacies.cs" />
     <Compile Include="Data Interface\CovCats.cs" />
     <Compile Include="Data Interface\CovSpans.cs" />
-    <Compile Include="WIP\Defs.cs" />
+    <Compile Include="__WIP\Defs.cs" />
     <Compile Include="Db Multi Table\FamilyModules.cs" />
     <Compile Include="Data Interface\GroupPermissions.cs" />
     <Compile Include="Data Interface\Operatories.cs" />
@@ -954,7 +950,6 @@
     <Compile Include="Data Interface\Tasks.cs" />
     <Compile Include="Data Interface\TaskSubscriptions.cs" />
     <Compile Include="Data Interface\TerminalActives.cs" />
-    <Compile Include="Data Interface\TimeAdjusts.cs" />
     <Compile Include="Data Interface\ToolButItems.cs" />
     <Compile Include="Data Interface\ToothInitials.cs" />
     <Compile Include="Data Interface\Transactions.cs" />
@@ -1194,7 +1189,7 @@
     <Compile Include="TableTypes\EtransMessageText.cs" />
     <Compile Include="TableTypes\InsFilingCode.cs" />
     <Compile Include="TableTypes\InsFilingCodeSubtype.cs" />
-    <Compile Include="TableTypes\TimeCardRule.cs" />
+    <Compile Include="__WIP\TimeCardRule.cs" />
     <Compile Include="TableTypes\VaccineDef.cs" />
     <Compile Include="TableTypes\VaccinePat.cs" />
     <Compile Include="TableTypes\Vitalsign.cs" />
@@ -1308,7 +1303,7 @@
     <Compile Include="TableTypes\ClaimValCodeLog.cs" />
     <Compile Include="TableTypes\Clearinghouse.cs" />
     <Compile Include="TableTypes\Clinic.cs" />
-    <Compile Include="TableTypes\ClockEvent.cs" />
+    <Compile Include="__WIP\ClockEvent.cs" />
     <Compile Include="TableTypes\Commlog.cs" />
     <Compile Include="Data\Computer.cs" />
     <Compile Include="TableTypes\ComputerPref.cs" />
@@ -1374,7 +1369,7 @@
     <Compile Include="TableTypes\PatientNote.cs" />
     <Compile Include="TableTypes\PatPlan.cs" />
     <Compile Include="TableTypes\Payment.cs" />
-    <Compile Include="TableTypes\PayPeriod.cs" />
+    <Compile Include="__WIP\PayPeriod.cs" />
     <Compile Include="TableTypes\PayPlan.cs" />
     <Compile Include="TableTypes\PayPlanCharge.cs" />
     <Compile Include="TableTypes\PaySplit.cs" />
@@ -1415,7 +1410,7 @@
     <Compile Include="TableTypes\Task.cs" />
     <Compile Include="TableTypes\TaskList.cs" />
     <Compile Include="TableTypes\TerminalActive.cs" />
-    <Compile Include="TableTypes\TimeAdjust.cs" />
+    <Compile Include="__WIP\TimeAdjustment.cs" />
     <Compile Include="TableTypes\ToolButItem.cs" />
     <Compile Include="TableTypes\ToothInitial.cs" />
     <Compile Include="TableTypes\Transaction.cs" />
