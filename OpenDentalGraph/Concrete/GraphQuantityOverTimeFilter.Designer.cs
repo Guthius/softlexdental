@@ -25,7 +25,7 @@
 		private void InitializeComponent() {
 			this.splitContainer = new System.Windows.Forms.SplitContainer();
 			this.splitContainerOptions = new System.Windows.Forms.SplitContainer();
-			this.groupingOptionsCtrl1 = new OpenDentalGraph.GroupingOptionsCtrl();
+			this.groupingOptionsCtrl1 = new OpenDentalGraph.GroupingOptionsControl();
 			this.graph = new OpenDentalGraph.GraphQuantityOverTime();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
 			this.splitContainer.Panel1.SuspendLayout();
@@ -73,12 +73,12 @@
 			// 
 			// groupingOptionsCtrl1
 			// 
-			this.groupingOptionsCtrl1.CurGrouping = OpenDentalGraph.GroupingOptionsCtrl.Grouping.provider;
+			this.groupingOptionsCtrl1.CurGrouping = OpenDentalGraph.GroupingOptionsControl.Grouping.Provider;
 			this.groupingOptionsCtrl1.Location = new System.Drawing.Point(5, 0);
 			this.groupingOptionsCtrl1.Name = "groupingOptionsCtrl1";
 			this.groupingOptionsCtrl1.Size = new System.Drawing.Size(112, 60);
 			this.groupingOptionsCtrl1.TabIndex = 0;
-			this.groupingOptionsCtrl1.InputsChanged += new System.EventHandler(this.OnFormInputsChanged);
+			this.groupingOptionsCtrl1.OptionsChanged += new System.EventHandler(this.OnFormInputsChanged);
 			// 
 			// graph
 			// 
@@ -133,6 +133,6 @@
 		private System.Windows.Forms.SplitContainer splitContainer;
 		private GraphQuantityOverTime graph;
 		private System.Windows.Forms.SplitContainer splitContainerOptions;
-		private GroupingOptionsCtrl groupingOptionsCtrl1;
+		private GroupingOptionsControl groupingOptionsCtrl1;
 	}
 }

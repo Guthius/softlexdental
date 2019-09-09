@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using OpenDentBusiness;
 
 namespace OpenDentalGraph {
-	public partial class HqMessagesRealTimeOptionsCtrl:BaseGraphOptionsCtrl {
+	public partial class HqMessagesRealTimeOptionsCtrl:GraphOptionsBase {
 		public enum HQGrouping { country,msgtype,customer};
 
 		public HQGrouping CurHQGroup

@@ -1,5 +1,5 @@
 ﻿namespace OpenDentalGraph {
-	partial class GroupingOptionsCtrl {
+	partial class GroupingOptionsControl {
 		/// <summary> 
 		/// Required designer variable.
 		/// </summary>
@@ -48,7 +48,7 @@
 			this.radioGroupClinics.TabIndex = 2;
 			this.radioGroupClinics.Text = "Clinic";
 			this.radioGroupClinics.UseVisualStyleBackColor = true;
-			this.radioGroupClinics.CheckedChanged += new System.EventHandler(this.radioGroupByChanged);
+			this.radioGroupClinics.CheckedChanged += new System.EventHandler(this.RadioGroupByChanged);
 			// 
 			// radioGroupProvs
 			// 
@@ -60,7 +60,7 @@
 			this.radioGroupProvs.TabStop = true;
 			this.radioGroupProvs.Text = "Provider";
 			this.radioGroupProvs.UseVisualStyleBackColor = true;
-			this.radioGroupProvs.CheckedChanged += new System.EventHandler(this.radioGroupByChanged);
+			this.radioGroupProvs.CheckedChanged += new System.EventHandler(this.RadioGroupByChanged);
 			// 
 			// GroupingOptionsCtrl
 			// 
