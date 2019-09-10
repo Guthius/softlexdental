@@ -314,7 +314,7 @@ namespace OpenDentBusiness
                 throw new Exception(errors);
             }
             //Build return value ----------------------------------------------------------------------------------------------------------
-            List<TimeCardRule> listTimeCardRulesEmp = GetWhere(x => x.EmployeeId == 0 || x.EmployeeId == employeeCur.Id);
+            List<TimeCardRule> listTimeCardRulesEmp = All().Where(x => x.EmployeeId == null || x.EmployeeId == employeeCur.Id).ToList();
             TimeCardRule amRule = listTimeCardRulesEmp.Where(x => x.TimeStart > TimeSpan.Zero).OrderByDescending(x => x.TimeStart).FirstOrDefault();
             TimeCardRule pmRule = listTimeCardRulesEmp.Where(x => x.TimeEnd > TimeSpan.Zero).OrderBy(x => x.TimeEnd).FirstOrDefault();
             TimeCardRule hoursRule = listTimeCardRulesEmp.Where(x => x.Hours > TimeSpan.Zero).OrderBy(x => x.Hours).FirstOrDefault();
@@ -505,7 +505,7 @@ namespace OpenDentBusiness
                 //PM-------------------------------------
                 if (listClockEvent[i].Date2Displayed?.TimeOfDay > tsDifferentialPMRule)
                 {//clocked out after PM differential rule
-                    tsDailyDifferentialTotal += listClockEvent[i].Date2Displayed?.TimeOfDay - tsDifferentialPMRule;
+                    tsDailyDifferentialTotal += (listClockEvent[i].Date2Displayed?.TimeOfDay - tsDifferentialPMRule) ?? TimeSpan.Zero;
                     if (listClockEvent[i].Date1Displayed.TimeOfDay > tsDifferentialPMRule)
                     {//clocked in after PM differential rule also
                         tsDailyDifferentialTotal += tsDifferentialPMRule - listClockEvent[i].Date1Displayed.TimeOfDay;//add a negative timespan
@@ -586,7 +586,7 @@ namespace OpenDentBusiness
                             {
                                 continue;//skip breaks for other dates than current ClockEvent
                             }
-                            tsDailyBreaksTotal += (listClockEventBreak[b].Date2Displayed.TimeOfDay - listClockEventBreak[b].Date1Displayed.TimeOfDay);
+                            tsDailyBreaksTotal += (listClockEventBreak[b].Date2Displayed?.TimeOfDay - listClockEventBreak[b].Date1Displayed.TimeOfDay) ?? TimeSpan.Zero;
                             if (tsDailyBreaksTotal > TimeSpan.FromMinutes(31))
                             {//over 31 to avoid adjustments less than 1 minutes.
                                 listClockEventBreak[b].AdjustAuto = TimeSpan.FromMinutes(30) - tsDailyBreaksTotal;
@@ -614,27 +614,31 @@ namespace OpenDentBusiness
 
         private static TimeSpan calcDifferentialPortion(TimeSpan tsDifferentialAMRule, TimeSpan tsDifferentialPMRule, ClockEvent clockEventBreak)
         {
-            TimeSpan retVal = new TimeSpan();
-            //AM overlap==========================================================
-            //Visual representation
-            //AM Rule      :           X
-            //Entire Break :o-------o  |             Stop-Start == Entire Break
-            //Partial Break:      o----|---o         Rule-Start == Partial Break
-            //No Break     :           |  o------o   Rule-Rule  == No break (won't actually happen in this block)
-            retVal += TimeSpan.FromTicks(
-                Math.Min(clockEventBreak.Date2Displayed.TimeOfDay.Ticks, tsDifferentialAMRule.Ticks)//min of stop or rule
-                - Math.Min(clockEventBreak.Date1Displayed.TimeOfDay.Ticks, tsDifferentialAMRule.Ticks)//min of start or rule
-                );//equals the entire break, part of the break, or non of the break.
-                  //PM overlap==========================================================
-                  //Visual representation
-                  //PM Rule      :           X
-                  //Entire Break :o-------o  |             Rule-Rule   == No Break
-                  //Partial Break:      o----|---o         Stop-Rule   == Partial Break
-                  //No Break     :           |  o------o   Stop-Start  == Entire break
-            retVal += TimeSpan.FromTicks(
-                Math.Max(clockEventBreak.Date2Displayed.TimeOfDay.Ticks, tsDifferentialPMRule.Ticks)//max of stop or rule
-                - Math.Max(clockEventBreak.Date1Displayed.TimeOfDay.Ticks, tsDifferentialPMRule.Ticks)//max of start or rule
-                );//equals the entire break, part of the break, or non of the break.
+            TimeSpan retVal = TimeSpan.Zero;
+
+            if (clockEventBreak.Date2Displayed.HasValue)
+            {
+                //AM overlap==========================================================
+                //Visual representation
+                //AM Rule      :           X
+                //Entire Break :o-------o  |             Stop-Start == Entire Break
+                //Partial Break:      o----|---o         Rule-Start == Partial Break
+                //No Break     :           |  o------o   Rule-Rule  == No break (won't actually happen in this block)
+                retVal += TimeSpan.FromTicks(
+                    Math.Min(clockEventBreak.Date2Displayed.Value.TimeOfDay.Ticks, tsDifferentialAMRule.Ticks)//min of stop or rule
+                    - Math.Min(clockEventBreak.Date1Displayed.TimeOfDay.Ticks, tsDifferentialAMRule.Ticks)//min of start or rule
+                    );//equals the entire break, part of the break, or non of the break.
+                      //PM overlap==========================================================
+                      //Visual representation
+                      //PM Rule      :           X
+                      //Entire Break :o-------o  |             Rule-Rule   == No Break
+                      //Partial Break:      o----|---o         Stop-Rule   == Partial Break
+                      //No Break     :           |  o------o   Stop-Start  == Entire break
+                retVal += TimeSpan.FromTicks(
+                    Math.Max(clockEventBreak.Date2Displayed.Value.TimeOfDay.Ticks, tsDifferentialPMRule.Ticks)//max of stop or rule
+                    - Math.Max(clockEventBreak.Date1Displayed.TimeOfDay.Ticks, tsDifferentialPMRule.Ticks)//max of start or rule
+                    );//equals the entire break, part of the break, or non of the break.
+            }
             return retVal;
         }
 
@@ -678,7 +682,7 @@ namespace OpenDentBusiness
                             {//skip breaks that occured on different days.
                                 continue;
                             }
-                            tsTotalBreaksToday += listClockEventBreak[j].Date2Displayed.TimeOfDay - listClockEventBreak[j].Date1Displayed.TimeOfDay;
+                            tsTotalBreaksToday += (listClockEventBreak[j].Date2Displayed?.TimeOfDay - listClockEventBreak[j].Date1Displayed.TimeOfDay) ?? TimeSpan.Zero;
                         }
                         if (tsTotalBreaksToday > TimeSpan.FromMinutes(31))
                         {
@@ -697,14 +701,14 @@ namespace OpenDentBusiness
                 if (listClockEvent[i].Date1Displayed.TimeOfDay < tsDifferentialAMRule)
                 {//AM, example rule before 8am, work from 5am to 7am
                     listClockEvent[i].Rate2Auto += tsDifferentialAMRule - listClockEvent[i].Date1Displayed.TimeOfDay;//8am-5am=3hrs
-                    if (listClockEvent[i].Date2Displayed.TimeOfDay < tsDifferentialAMRule)
+                    if (listClockEvent[i].Date2Displayed.HasValue && listClockEvent[i].Date2Displayed.Value.TimeOfDay < tsDifferentialAMRule)
                     {
-                        listClockEvent[i].Rate2Auto += listClockEvent[i].Date2Displayed.TimeOfDay - tsDifferentialAMRule;//8am-7am=-1hr =>2hrs total
+                        listClockEvent[i].Rate2Auto += listClockEvent[i].Date2Displayed.Value.TimeOfDay - tsDifferentialAMRule;//8am-7am=-1hr =>2hrs total
                     }
                 }
-                if (listClockEvent[i].Date2Displayed.TimeOfDay > tsDifferentialPMRule)
+                if (listClockEvent[i].Date2Displayed.HasValue && listClockEvent[i].Date2Displayed.Value.TimeOfDay > tsDifferentialPMRule)
                 {//PM, example diffRule after 8pm, work from 9 to 11pm. 
-                    listClockEvent[i].Rate2Auto += listClockEvent[i].Date2Displayed.TimeOfDay - tsDifferentialPMRule;//11pm-8pm = 3hrs 
+                    listClockEvent[i].Rate2Auto += listClockEvent[i].Date2Displayed.Value.TimeOfDay - tsDifferentialPMRule;//11pm-8pm = 3hrs 
                     if (listClockEvent[i].Date1Displayed.TimeOfDay > tsDifferentialPMRule)
                     {
                         listClockEvent[i].Rate2Auto += tsDifferentialPMRule - listClockEvent[i].Date1Displayed.TimeOfDay;//8pm-9pm = -1hr =>2hrs total

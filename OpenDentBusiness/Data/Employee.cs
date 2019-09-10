@@ -84,7 +84,7 @@ namespace OpenDentBusiness
         /// </summary>
         /// <returns>A list of employees.</returns>
         public static List<Employee> All() =>
-            SelectMany("SELECT * FROM `employees`", FromReader); // TODO: Exclude hidden by default...
+            cache.ToList(); // TODO: Exclude hidden by default?...
 
         /// <summary>
         /// Gets the employee with the specified ID.

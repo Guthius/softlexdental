@@ -104,12 +104,12 @@ namespace OpenDentBusiness
             DataConnection.ExecuteNonQuery("DELETE FROM `time_adjustments` WHERE `id` = " + timeAdjustment.Id);
 
         public static TimeAdjustment GetPayPeriodNote(long employeeId, DateTime startDate) =>
-            SelectOne("SELECT * FROM time_adjustments WHERE employee_id = ?employee_id AND time_entry = ?date AND is_auto = 0", FromReader,
+            SelectOne("SELECT * FROM `time_adjustments` WHERE `employee_id` = ?employee_id AND `time_entry` = ?date AND `is_auto` = 0", FromReader,
                 new MySqlParameter("employee_id", employeeId),
                 new MySqlParameter("date", startDate));
         
-        public static TimeAdjustment GetPayPeriodNote(DateTime startDate) =>
-            SelectOne("SELECT * FROM time_adjustments WHERE time_entry = ?date AND is_auto = 0", FromReader,
+        public static List<TimeAdjustment> GetPayPeriodNote(DateTime startDate) =>
+            SelectMany("SELECT * FROM `time_adjustments` WHERE `time_entry` = ?date AND `is_auto` = 0", FromReader,
                 new MySqlParameter("date", startDate));
 
         public static List<TimeAdjustment> Refresh(long employeeId, DateTime fromDate, DateTime toDate) =>
@@ -125,11 +125,11 @@ namespace OpenDentBusiness
                 new MySqlParameter("to_date", toDate));
         
 
-        public static List<TimeAdjustment> GetListForTimeCardManage(long employeeId, long clinicId, DateTime fromDate, DateTime toDate, bool isAll) =>
+        public static List<TimeAdjustment> GetListForTimeCardManage(long employeeId, long? clinicId, DateTime fromDate, DateTime toDate) =>
             SelectMany(
-                "SELECT * FROM `time_adjustments` WHERE `employee_id` = ?employee_id AND DATE(`date`) >= ?from_date AND DATE(`date`) <= ?to_date AND (?clinic_id = 0 OR `clinic_id` = ?clinic_id) ORDER BY `date`", FromReader,
+                "SELECT * FROM `time_adjustments` WHERE `employee_id` = ?employee_id AND DATE(`date`) >= ?from_date AND DATE(`date`) <= ?to_date AND (?clinic_id IS NULL OR `clinic_id` = ?clinic_id) ORDER BY `date`", FromReader,
                     new MySqlParameter("employee_id", employeeId),
-                    new MySqlParameter("clinic_id", isAll ? 0 : clinicId),
+                    new MySqlParameter("clinic_id", clinicId.HasValue ? (object)clinicId.Value : DBNull.Value),
                     new MySqlParameter("from_date", fromDate),
                     new MySqlParameter("to_date", toDate));
         
