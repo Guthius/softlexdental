@@ -94,31 +94,36 @@ namespace OpenDentBusiness.Eclaims {
 			}
 		}
 
-		///<summary>
-		///Currently only used for Claim EOB (MsgType 21) and Predetermination EOB (MsgType 23).
-		///Returns a dictionary such that: Each entry represents a procedure and its associated fields.
-		///Key:		line number
-		///Value:	list of CCDFields pertaining to key/line number.
-		///</summary>
-		public Dictionary<int,List<CCDField>> GetPerformedProcsDict() {
-			Dictionary<int,List<CCDField>> dictProcData=new Dictionary<int, List<CCDField>>();
-			//The following list of fields is in order.
-			string[] arrayFieldIds=new string[] { "F07","G12","G13","G14","G15","G43","G56","G57","G58","G02","G59","G60","G61","G16","G17" };
-			List<CCDField> listFields=GetFieldsByIds(arrayFieldIds);
-			int lineNum=0;
-			for(int i=0;i<listFields.Count;i++) {
-				if(listFields[i].fieldId==arrayFieldIds[0]) {//Beginning of next procedure.  Is a line number, which we use for key.
-					lineNum=PIn.Int(listFields[i].valuestr);
-					if(!dictProcData.ContainsKey(lineNum)) {
-						dictProcData.Add(lineNum,new List<CCDField>());
-					}
-				}
-				else {
-					dictProcData[lineNum].Add(listFields[i]);
-				}
-			}
-			return dictProcData;
-		}
+        ///<summary>
+        ///Currently only used for Claim EOB (MsgType 21) and Predetermination EOB (MsgType 23).
+        ///Returns a dictionary such that: Each entry represents a procedure and its associated fields.
+        ///Key:		line number
+        ///Value:	list of CCDFields pertaining to key/line number.
+        ///</summary>
+        public Dictionary<int, List<CCDField>> GetPerformedProcsDict()
+        {
+            Dictionary<int, List<CCDField>> dictProcData = new Dictionary<int, List<CCDField>>();
+            //The following list of fields is in order.
+            string[] arrayFieldIds = new string[] { "F07", "G12", "G13", "G14", "G15", "G43", "G56", "G57", "G58", "G02", "G59", "G60", "G61", "G16", "G17" };
+            List<CCDField> listFields = GetFieldsByIds(arrayFieldIds);
+            int lineNum = 0;
+            for (int i = 0; i < listFields.Count; i++)
+            {
+                if (listFields[i].fieldId == arrayFieldIds[0])
+                {//Beginning of next procedure.  Is a line number, which we use for key.
+                    lineNum = PIn.Int(listFields[i].valuestr);
+                    if (!dictProcData.ContainsKey(lineNum))
+                    {
+                        dictProcData.Add(lineNum, new List<CCDField>());
+                    }
+                }
+                else
+                {
+                    dictProcData[lineNum].Add(listFields[i]);
+                }
+            }
+            return dictProcData;
+        }
 
 		///<summary>
 		///Currently only used for Claim EOB (MsgType 21) and Predetermination EOB (MsgType 23).

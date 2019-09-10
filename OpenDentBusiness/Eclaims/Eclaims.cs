@@ -1,21 +1,13 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace OpenDentBusiness.Eclaims
 {
     public class Eclaims
     {
-        /// <summary></summary>
-        public Eclaims()
-        {
-
-        }
-
         ///<summary>Supply a list of ClaimSendQueueItems.  Called from FormClaimSend.  Can only send to one clearinghouse at a time.
         ///The queueItems must contain at least one item.  Each item in queueItems must have the same ClinicNum.  Cannot include Canadian.</summary>
         public static void SendBatch(Clearinghouse clearinghouseClin, List<ClaimSendQueueItem> queueItems, EnumClaimMedType medType,
@@ -24,7 +16,7 @@ namespace OpenDentBusiness.Eclaims
             string messageText = "";
             if (clearinghouseClin.Eformat == ElectronicClaimFormat.Canadian)
             {
-                MessageBox.Show(Lans.g("Eclaims", "Cannot send Canadian claims as part of Eclaims.SendBatch."));
+                MessageBox.Show("Cannot send Canadian claims as part of Eclaims.SendBatch.");
                 return;
             }
             //get next batch number for this clearinghouse

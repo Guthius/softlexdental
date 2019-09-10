@@ -54,9 +54,9 @@ namespace OpenDentBusiness.Eclaims
 			Channel channel=null;
 			ChannelSftp ch=null;
 			JSch jsch=new JSch();
-			progress.UpdateProgress(Lans.g(progress.LanThis,"Contacting web server"),"reports","17%",17);
+			progress.UpdateProgress("Contacting web server","reports","17%",17);
 			if(progress.IsPauseOrCancel()) {
-				progress.UpdateProgress(Lans.g(progress.LanThis,"Canceled by user."));
+				progress.UpdateProgress("Canceled by user.");
 				return false;
 			}
 			try{
@@ -72,7 +72,7 @@ namespace OpenDentBusiness.Eclaims
 			}
 			catch(Exception ex){
 				progress.UpdateProgress(Lans.g(progress.LanThis,"Connection Failed"));
-				ErrorMessage=Lans.g("MercuryDE","Connection Failed")+": "+ex.Message;
+				ErrorMessage="Connection Failed: "+ex.Message;
 				return false;
 			}
 			progress.UpdateProgress(Lans.g(progress.LanThis,"Web server contact successful."));
