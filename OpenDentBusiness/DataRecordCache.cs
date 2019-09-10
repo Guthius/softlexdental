@@ -1,4 +1,20 @@
-﻿using System;
+﻿/**
+ * Copyright (C) 2019 Dental Stars SRL
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; If not, see <http://www.gnu.org/licenses/>
+ */
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -63,6 +79,8 @@ namespace OpenDentBusiness
 
             this.fillCommandText = fillCommandText;
             this.dataRecordBuilder = dataRecordBuilder ?? throw new ArgumentNullException(nameof(dataRecordBuilder));
+
+            CacheManager.Register(this);
 
             Refresh();
         }
@@ -195,7 +213,7 @@ namespace OpenDentBusiness
 
     public static class CacheManager
     {
-        static readonly Dictionary<Type, IDataRecordCache> dataRecordCaches = new Dictionary<Type, IDataRecordCache>();
+        static readonly Dictionary<Type, List<IDataRecordCache>> dataRecordCaches = new Dictionary<Type, List<IDataRecordCache>>();
 
         /// <summary>
         /// Invalidates the cache of record type <typeparamref name="T"/>.
@@ -205,9 +223,53 @@ namespace OpenDentBusiness
         {
             lock (dataRecordCaches)
             {
-                if (dataRecordCaches.TryGetValue(typeof(T), out var dataRecordCache))
+                if (dataRecordCaches.TryGetValue(typeof(T), out var dataRecordCacheList))
                 {
-                    dataRecordCache.Refresh();
+                    foreach (var dataRecordCache in dataRecordCacheList)
+                    {
+                        dataRecordCache.Refresh();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets the list of caches for the given data record type.
+        /// </summary>
+        /// <typeparam name="T">The record type.</typeparam>
+        /// <returns></returns>
+        private static List<IDataRecordCache> GetTypeCacheList<T>() where T : DataRecord
+        {
+            lock (dataRecordCaches)
+            {
+                if (!dataRecordCaches.TryGetValue(typeof(T), out var dataRecordCacheList))
+                {
+                    dataRecordCacheList = new List<IDataRecordCache>();
+                    dataRecordCaches[typeof(T)] = dataRecordCacheList;
+                }
+
+                return dataRecordCacheList;
+            }
+        }
+
+        /// <summary>
+        /// Registers the specified cache with the cache manager.
+        /// </summary>
+        /// <typeparam name="T">The record type.</typeparam>
+        /// <param name="dataRecordCache">The cache.</param>
+        /// <exception cref="ArgumentNullException">If <paramref name="dataRecordCache"/> is null.</exception>
+        internal static void Register<T>(DataRecordCache<T> dataRecordCache) where T : DataRecord
+        {
+            if (dataRecordCache == null)
+                throw new ArgumentNullException(nameof(dataRecordCache));
+
+            var dataRecordCacheList = GetTypeCacheList<T>();
+
+            lock (dataRecordCacheList)
+            {
+                if (!dataRecordCacheList.Contains(dataRecordCache))
+                {
+                    dataRecordCacheList.Add(dataRecordCache);
                 }
             }
         }
@@ -219,21 +281,7 @@ namespace OpenDentBusiness
         /// <param name="fillCommandText"></param>
         /// <param name="dataRecordBuilder"></param>
         /// <returns></returns>
-        public static DataRecordCache<T> Register<T>(string fillCommandText, DataRecordBuilder<T> dataRecordBuilder) where T : DataRecord
-        {
-            IDataRecordCache dataRecordCache;
-
-            lock (dataRecordCaches)
-            {
-                if (!dataRecordCaches.TryGetValue(typeof(T), out dataRecordCache))
-                {
-                    dataRecordCache = new DataRecordCache<T>(fillCommandText, dataRecordBuilder);
-
-                    dataRecordCaches[typeof(T)] = dataRecordCache;
-                }
-            }
-
-            return dataRecordCache as DataRecordCache<T>;
-        }
+        public static DataRecordCache<T> Create<T>(string fillCommandText, DataRecordBuilder<T> dataRecordBuilder) where T : DataRecord =>
+            new DataRecordCache<T>(fillCommandText, dataRecordBuilder);
     }
 }

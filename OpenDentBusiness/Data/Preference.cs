@@ -26,7 +26,7 @@ namespace OpenDentBusiness
 {
     public class Preference : DataRecord
     {
-        static readonly DataRecordCache<Preference> cache = CacheManager.Register("SELECT * FROM `preferences`", FromReader);
+        static readonly DataRecordCache<Preference> cache = CacheManager.Create("SELECT * FROM `preferences`", FromReader);
 
         /// <summary>
         /// The key of the preference.

@@ -23,7 +23,7 @@ namespace OpenDentBusiness
 {
     public class Employee : DataRecord
     {
-        static readonly DataRecordCache<Employee> cache = CacheManager.Register("SELECT * FROM employees", FromReader);
+        static readonly DataRecordCache<Employee> cache = CacheManager.Create("SELECT * FROM employees", FromReader);
 
         /// <summary>
         /// The last name of the employee.
