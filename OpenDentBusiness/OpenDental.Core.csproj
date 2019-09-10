@@ -410,7 +410,6 @@
     <Compile Include="Crud\ClaimValCodeLogCrud.cs" />
     <Compile Include="Crud\ClearinghouseCrud.cs" />
     <Compile Include="Crud\ClinicCrud.cs" />
-    <Compile Include="__WIP\ClockEventCrud.cs" />
     <Compile Include="Crud\CodeSystemCrud.cs" />
     <Compile Include="Crud\CommlogCrud.cs" />
     <Compile Include="Crud\ComputerPrefCrud.cs" />
@@ -775,7 +774,6 @@
     <Compile Include="Cache\Cache.cs" />
     <Compile Include="Data\AlertType.cs" />
     <Compile Include="Data\Preferences.cs" />
-    <Compile Include="__WIP\TimeCardRules.cs" />
     <Compile Include="Data Interface\ToothGridCells.cs" />
     <Compile Include="Data Interface\ToothGridCols.cs" />
     <Compile Include="Data Interface\ToothGridDefs.cs" />
@@ -836,7 +834,6 @@
     <Compile Include="Data Interface\ClaimValCodeLogs.cs" />
     <Compile Include="Data Interface\Clearinghouses.cs" />
     <Compile Include="Data Interface\Clinics.cs" />
-    <Compile Include="__WIP\ClockEvents.cs" />
     <Compile Include="Data Interface\Commlogs.cs" />
     <Compile Include="Data Interface\ComputerPrefs.cs" />
     <Compile Include="Data Interface\Counties.cs" />
@@ -1178,6 +1175,7 @@
     <Compile Include="TableTypes\EtransMessageText.cs" />
     <Compile Include="TableTypes\InsFilingCode.cs" />
     <Compile Include="TableTypes\InsFilingCodeSubtype.cs" />
+    <Compile Include="__WIP\PayPeriodInterval.cs" />
     <Compile Include="__WIP\TimeCardRule.cs" />
     <Compile Include="TableTypes\VaccineDef.cs" />
     <Compile Include="TableTypes\VaccinePat.cs" />

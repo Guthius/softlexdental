@@ -28,7 +28,7 @@ namespace OpenDentBusiness
     /// </summary>
     public class TimeAdjustment : DataRecord, IDateTimeStamped
     {
-        public long ClinicId;
+        public long? ClinicId;
         public long EmployeeId;
 
         /// <summary>
@@ -68,6 +68,8 @@ namespace OpenDentBusiness
             return new TimeAdjustment
             {
                 Id = Convert.ToInt64(dataReader["id"])
+
+                // TODO: Fix me...
             };
         }
 
@@ -78,7 +80,7 @@ namespace OpenDentBusiness
                 "INSERT INTO `time_adjustments` (`employee_id`, `clinic_id`, `date`, `hours_regular`, `hours_overtime`, `note`, `is_auto`) " +
                 "VALUES (?employee_id, ?clinic_id, ?date, ?hours_regular, ?hours_overtime, ?note, ?is_auto)",
                     new MySqlParameter("employee_id", timeAdjustment.EmployeeId),
-                    new MySqlParameter("clinic_id", timeAdjustment.ClinicId),
+                    new MySqlParameter("clinic_id", timeAdjustment.ClinicId.HasValue ? (object)timeAdjustment.ClinicId.Value : DBNull.Value),
                     new MySqlParameter("date", timeAdjustment.Date),
                     new MySqlParameter("hours_regular", timeAdjustment.HoursRegular),
                     new MySqlParameter("hours_overtime", timeAdjustment.HoursOvertime),

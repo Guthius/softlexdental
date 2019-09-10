@@ -118,11 +118,4 @@ namespace OpenDentBusiness
             return false;
         }
     }
-
-    public enum PayPeriodInterval
-    {
-        Weekly,
-        BiWeekly,
-        Monthly
-    }
 }
